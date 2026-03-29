@@ -35,7 +35,9 @@
     "verify:auth-db": "tsx scripts/verify-auth-db.ts",
     "disk:audit": "node scripts/disk-audit.mjs",
     "storage:check": "node scripts/storage-guardrails.mjs",
-    "storage:check:strict": "node scripts/storage-guardrails.mjs --strict"
+    "storage:check:strict": "node scripts/storage-guardrails.mjs --strict",
+    "import:audit-nursing": "tsx scripts/audit-nursing-ai-cache.ts",
+    "import:nursing-ai-cache": "tsx scripts/import-nursing-ai-cache.ts"
   },
   "dependencies": {
     "@auth/core": "0.37.2",

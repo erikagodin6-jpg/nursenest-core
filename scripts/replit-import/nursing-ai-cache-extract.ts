@@ -19,6 +19,7 @@ import {
   type EnrichmentAudit,
   type NursingEnrichmentContext,
 } from "./nursing-exam-metadata-enrich";
+import { loadReviewedOverridesCached } from "./nursing-review-metadata";
 
 export type { EnrichmentAudit, NursingEnrichmentContext } from "./nursing-exam-metadata-enrich";
 
@@ -35,6 +36,21 @@ export type ParsedAiCacheItem =
   | { kind: "inconclusive"; mapErrors: string[]; enrichment?: EnrichmentAudit }
   | { kind: "exam_mcq"; value: MappedExamQuestion; enrichment?: EnrichmentAudit };
 
+/**
+ * MCQ takes precedence over flashcard: stem + options + correctAnswer ⇒ treat as exam item,
+ * even if legacy rows also include front/back fields.
+ */
+export function itemLooksLikeNursingMcq(item: Record<string, unknown>): boolean {
+  const stem =
+    typeof item.stem === "string" ? item.stem : typeof item.question === "string" ? item.question : "";
+  if (stem.trim().length < 5) return false;
+  const opts = item.options ?? item.choices;
+  if (opts === undefined || opts === null) return false;
+  const ca = item.correctAnswer ?? item.correct_answer ?? item.correct_answers;
+  if (ca === undefined || ca === null) return false;
+  return true;
+}
+
 /** Parse stringified JSON from some exports into a value suitable for iterateAiCacheOutputItems. */
 export function normalizeAiCacheOutputJson(raw: unknown): unknown {
   if (raw === undefined || raw === null) return null;
@@ -50,15 +66,16 @@ export function normalizeAiCacheOutputJson(raw: unknown): unknown {
 
 /**
  * Classify and map one object from inside output_json (after array iteration).
- * Flashcard-shaped rows are detected first; otherwise we require a successful
- * mapLegacyItemToExamQuestion (same rules as the validator).
+ * MCQ-shaped rows are handled first; only otherwise do we treat front+back as flashcards.
  */
 export function parseAiCacheNursingExamItem(item: Record<string, unknown>, ctx?: NursingParseContext): ParsedAiCacheItem {
-  const front = item.front;
-  const back = item.back;
-  const hasFront = typeof front === "string" && typeof back === "string";
-  if (hasFront && front.length > 2 && back.length > 2) {
-    return { kind: "flashcard" };
+  if (!itemLooksLikeNursingMcq(item)) {
+    const front = item.front;
+    const back = item.back;
+    const hasFront = typeof front === "string" && typeof back === "string";
+    if (hasFront && front.length > 2 && back.length > 2) {
+      return { kind: "flashcard" };
+    }
   }
 
   const repoRoot = ctx?.repoRoot ?? process.cwd();
@@ -66,7 +83,8 @@ export function parseAiCacheNursingExamItem(item: Record<string, unknown>, ctx?:
   let enrichment: EnrichmentAudit | undefined;
   if (ctx) {
     const manual = loadManualMappingCached(repoRoot);
-    const { merged, audit } = enrichNursingExamItemMetadata(item, ctx, manual);
+    const reviewed = loadReviewedOverridesCached(repoRoot);
+    const { merged, audit } = enrichNursingExamItemMetadata(item, ctx, manual, reviewed);
     itemToMap = merged;
     enrichment = audit;
   }

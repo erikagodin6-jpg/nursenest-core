@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local import pipeline output (do not commit)
+nursing-import-quarantine.jsonl
