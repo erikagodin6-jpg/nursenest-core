@@ -1,0 +1,72 @@
+node_modules
+dist
+.DS_Store
+server/public
+vite.config.ts.*
+*.tar.gz
+/backups/
+/exports/
+.env
+.env.local
+.env.production
+.env.*.local
+scripts/i18n-scan-report.json
+scripts/replit-import/nursing-audit-samples.json
+migration-results.json
+# Stale CJS/emit artifacts next to TS sources — shadow bundler resolution; never commit
+client/src/**/*.js
+i18n-violations-report.json
+
+# Logs and local diagnostics
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Temp / cache
+.push-tmp/
+tmp/
+temp/
+.cache/
+.turbo/
+coverage/
+.nyc_output/
+
+# Local tooling / IDE
+.local/
+.idea/
+*.swp
+*.swo
+
+# Keys and local auth artifacts (never commit secrets)
+*.pem
+*.p12
+.id_rsa
+*.key
+
+# Generated i18n diagnostics (large; regenerate with npm run i18n:status or dashboard refresh)
+reports/i18n-status.json
+
+# Large local DB dumps / Replit exports (use data/imports/ + REPLIT_IMPORT_DIR for checked-in samples)
+data/replit-exports/
+
+# Regenerate with npm run audit:replit-exports
+scripts/replit-export-audit-report.json
+scripts/replit-export-audit-report.md
+
+# Local nursing import previews (never commit)
+scripts/replit-import/*-local.json
+scripts/replit-import/nursing-preview-output.json
+
+# Next.js build output (also cleaned by npm run clean:generated)
+nursenest-core/.next/
+
+# Optional local exports / scans (keep out of git)
+artifacts/
+scan.txt
+hardcoded-strings-report.json
+attached_assets/
+attached_assets/
+*.mp4

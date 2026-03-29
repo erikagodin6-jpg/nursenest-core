@@ -1,0 +1,32 @@
+# Fails if non-i18n files under nursenest-core/public exceed 512 KiB (see scripts/storage-guardrails.mjs).
+name: storage-guardrails
+
+on:
+  push:
+    paths:
+      - "nursenest-core/public/**"
+      - "nursenest-core/scripts/storage-guardrails.mjs"
+      - "nursenest-core/package.json"
+      - ".github/workflows/storage-guardrails.yml"
+  pull_request:
+    paths:
+      - "nursenest-core/public/**"
+      - "nursenest-core/scripts/storage-guardrails.mjs"
+      - "nursenest-core/package.json"
+      - ".github/workflows/storage-guardrails.yml"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: nursenest-core
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: nursenest-core/package-lock.json
+      - run: npm ci
+      - run: npm run storage:check:strict

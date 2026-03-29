@@ -1,0 +1,70 @@
+{
+  "description": "Marketing CDN facts and legacy fallbacks. Homepage hero carousel: `src/config/home-hero-carousel.ts` — `screenshot1.png` … `screenshot15.png` at CDN root (nursenest-images.tor1.cdn.digitaloceanspaces.com).",
+  "homepageHeroCarousel": {
+    "notes": "Canonical mapping and captions: `src/config/home-hero-carousel.ts`. Public URL pattern: {digitalOceanSpaces.nursenestImages.publicBaseUrl}/screenshot{N}.png. Default: direct HTTPS; optional /api/marketing-assets/... when NEXT_PUBLIC_MARKETING_USE_SPACES_PROXY=true or FALLBACK=true (see marketing-resolve-image-url.ts).",
+    "canonicalPublicFallbackUrls": [
+      "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot1.png",
+      "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot2.png",
+      "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot3.png",
+      "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot4.png",
+      "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot5.png",
+      "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot6.png",
+      "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot7.png",
+      "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot8.png",
+      "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot9.png",
+      "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot10.png",
+      "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot11.png",
+      "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot12.png",
+      "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot13.png",
+      "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot14.png",
+      "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot15.png"
+    ]
+  },
+  "digitalOceanSpaces": {
+    "nursenestImages": {
+      "publicBaseUrl": "https://nursenest-images.tor1.cdn.digitaloceanspaces.com",
+      "bucket": "nursenest-images",
+      "region": "tor1",
+      "objectUrlPattern": "{publicBaseUrl}/{objectKey}",
+      "notes": "Prefer CDN hostname `*.cdn.digitaloceanspaces.com` for public assets. Private buckets: set NEXT_PUBLIC_MARKETING_USE_SPACES_PROXY=true and SPACES_KEY/SPACES_SECRET so /api/marketing-assets/... can stream objects."
+    }
+  },
+  "committedMarketingAssets": {
+    "origin": "https://www.nursenest.ca",
+    "screenshotsPathPrefix": "/screenshots/",
+    "notes": "Homepage screenshot URLs in committed marketing-assets.generated.ts use digitalOceanSpaces.nursenestImages.publicBaseUrl + /screenshots/ (same paths as legacy site). Logo may still use legacyFallbackUrl until SPACES discovery runs."
+  },
+  "logo": {
+    "generatedPrimary": null,
+    "defaultFallbackThemeId": "lavender",
+    "primaryBrandMarkObjectKey": "bluebrandlogo.png",
+    "primaryBrandMarkThemeTinted": false,
+    "spacesBlueBrandLogoObjectKey": "bluebrandlogo.jpg",
+    "notes": "Per-theme logo keys: `src/config/theme-brand-logo-space-keys.ts` (explicit filenames). Resolver uses proxy-first via `getThemeLogoLoadChain`. Keep `primaryBrandMarkThemeTinted` false. Generic blue mark is last resort after legacy GIF/SVG.",
+    "legacyFallbackUrl": "https://www.nursenest.ca/brand-logo.gif",
+    "discoveryFilenamePattern": "Objects whose key matches /logo/i (see scripts/generate-marketing-assets.mjs CATEGORY_TESTS.LOGO_PRIMARY).",
+    "themeBrandLogoObjectKeys": {}
+  },
+  "homepageScreenshots": {
+    "responsiveFilenameSuffixes": ["-480w.webp", "-768w.webp", "-1200w.webp", "-full.webp", "-thumb-160w.webp", "-thumb-240w.webp"],
+    "slotToLegacyStem": {
+      "screenshot2": { "stem": "screenshot2_1773379293573", "width": 2730, "height": 1588 },
+      "screenshot9": { "stem": "screenshot9_1773379293573", "width": 2282, "height": 1186 },
+      "screenshotTest": { "stem": "screenshottest_1773379293573", "width": 2048, "height": 1590 },
+      "screenshot6": { "stem": "screenshot6_1773379293573", "width": 2524, "height": 1448 },
+      "screenshot11": { "stem": "screenshot11_1773379293573", "width": 2510, "height": 1588 },
+      "screenshot3": { "stem": "screenshot3_1773379293573", "width": 2528, "height": 1602 },
+      "screenshot5": { "stem": "screenshot5_1773379293573", "width": 2538, "height": 1610 },
+      "screenshot10": { "stem": "screenshot10_1773379293573", "width": 2264, "height": 1580 }
+    }
+  },
+  "lessonImages": {
+    "inNursenestCore": "No static DigitalOcean Spaces map. Lesson media is not hard-coded in this package.",
+    "database": {
+      "table": "lesson_images",
+      "pathColumn": "object_path"
+    },
+    "monolithUrlPattern": "/api/object-storage/{bucketId}/{objectPath}",
+    "notes": "The main application server resolves stored object_path values to this relative API path (see server/routes.ts). Bucket id comes from deployment env (e.g. Replit object storage), not from marketing-cdn.catalog.json."
+  }
+}

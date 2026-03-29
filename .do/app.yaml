@@ -1,0 +1,55 @@
+name: nursenest
+region: tor
+
+services:
+  - name: web
+    # Use Dockerfile build (not a buildpack slug — environment_slug is for node-js, go, etc.)
+    dockerfile_path: Dockerfile
+    source_dir: /
+    run_command: node scripts/start-production.mjs
+    http_port: 8080
+    internal_ports:
+      - 8080
+    instance_count: 1
+    instance_size_slug: basic-xxs
+    routes:
+      - path: /
+    health_check:
+      # Lightweight endpoint; matches root Express server/index.ts
+      http_path: /healthz
+      port: 8080
+      # basic-xxs + large bundle: allow slow cold start before failing the deploy
+      initial_delay_seconds: 180
+      period_seconds: 10
+      timeout_seconds: 10
+      success_threshold: 1
+      failure_threshold: 12
+    liveness_health_check:
+      http_path: /healthz
+      port: 8080
+      initial_delay_seconds: 180
+      period_seconds: 10
+      timeout_seconds: 10
+      success_threshold: 1
+      failure_threshold: 12
+    envs:
+      - key: NODE_ENV
+        value: production
+        scope: RUN_TIME
+      - key: PORT
+        value: "8080"
+        scope: RUN_TIME
+      # Cap V8 heap on small instances so the kernel OOM killer does not silently kill the process.
+      - key: NODE_OPTIONS
+        value: --max-old-space-size=384
+        scope: RUN_TIME
+      - key: ADMIN_JWT_SECRET
+        scope: RUN_TIME
+        type: SECRET
+      - key: DATABASE_URL
+        scope: RUN_TIME
+        type: SECRET
+      # Auth.js (nursenest-core): required when Next.js is deployed behind a proxy
+      - key: AUTH_TRUST_HOST
+        value: "true"
+        scope: RUN_TIME

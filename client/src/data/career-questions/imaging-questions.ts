@@ -1,0 +1,7514 @@
+export interface CareerQuestion {
+    id: string;
+    stem: string;
+    options: string[];
+    correctIndex: number;
+    rationale: string;
+    difficulty: number;
+    category: string;
+    topic: string;
+  }
+
+  export const imagingQuestions: CareerQuestion[] = [
+  {
+    "id": "arrt-001",
+    "stem": "A patient presents with findings consistent with skeletal anatomy. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because skeletal anatomy requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Radiographic Anatomy",
+    "topic": "skeletal anatomy"
+  },
+  {
+    "id": "arrt-002",
+    "stem": "Which of the following best describes the primary indication for skeletal anatomy?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for skeletal anatomy. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Radiographic Anatomy",
+    "topic": "skeletal anatomy"
+  },
+  {
+    "id": "arrt-003",
+    "stem": "A healthcare professional is evaluating skeletal anatomy. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for skeletal anatomy. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Radiographic Anatomy",
+    "topic": "skeletal anatomy"
+  },
+  {
+    "id": "arrt-004",
+    "stem": "During assessment related to skeletal anatomy, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of skeletal anatomy requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Radiographic Anatomy",
+    "topic": "skeletal anatomy"
+  },
+  {
+    "id": "arrt-005",
+    "stem": "Which of the following is a contraindication associated with skeletal anatomy?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in skeletal anatomy. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Radiographic Anatomy",
+    "topic": "skeletal anatomy"
+  },
+  {
+    "id": "arrt-006",
+    "stem": "A patient presents with findings consistent with organ systems. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because organ systems requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Radiographic Anatomy",
+    "topic": "organ systems"
+  },
+  {
+    "id": "arrt-007",
+    "stem": "Which of the following best describes the primary indication for organ systems?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for organ systems. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Radiographic Anatomy",
+    "topic": "organ systems"
+  },
+  {
+    "id": "arrt-008",
+    "stem": "A healthcare professional is evaluating organ systems. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for organ systems. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Radiographic Anatomy",
+    "topic": "organ systems"
+  },
+  {
+    "id": "arrt-009",
+    "stem": "During assessment related to organ systems, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of organ systems requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Radiographic Anatomy",
+    "topic": "organ systems"
+  },
+  {
+    "id": "arrt-010",
+    "stem": "Which of the following is a contraindication associated with organ systems?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in organ systems. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Radiographic Anatomy",
+    "topic": "organ systems"
+  },
+  {
+    "id": "arrt-011",
+    "stem": "A patient presents with findings consistent with cross-sectional anatomy. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because cross-sectional anatomy requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Radiographic Anatomy",
+    "topic": "cross-sectional anatomy"
+  },
+  {
+    "id": "arrt-012",
+    "stem": "Which of the following best describes the primary indication for cross-sectional anatomy?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for cross-sectional anatomy. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Radiographic Anatomy",
+    "topic": "cross-sectional anatomy"
+  },
+  {
+    "id": "arrt-013",
+    "stem": "A healthcare professional is evaluating cross-sectional anatomy. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for cross-sectional anatomy. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Radiographic Anatomy",
+    "topic": "cross-sectional anatomy"
+  },
+  {
+    "id": "arrt-014",
+    "stem": "During assessment related to cross-sectional anatomy, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of cross-sectional anatomy requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Radiographic Anatomy",
+    "topic": "cross-sectional anatomy"
+  },
+  {
+    "id": "arrt-015",
+    "stem": "Which of the following is a contraindication associated with cross-sectional anatomy?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in cross-sectional anatomy. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Radiographic Anatomy",
+    "topic": "cross-sectional anatomy"
+  },
+  {
+    "id": "arrt-016",
+    "stem": "A patient presents with findings consistent with anatomic landmarks. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because anatomic landmarks requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Radiographic Anatomy",
+    "topic": "anatomic landmarks"
+  },
+  {
+    "id": "arrt-017",
+    "stem": "Which of the following best describes the primary indication for anatomic landmarks?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for anatomic landmarks. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Radiographic Anatomy",
+    "topic": "anatomic landmarks"
+  },
+  {
+    "id": "arrt-018",
+    "stem": "A healthcare professional is evaluating anatomic landmarks. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for anatomic landmarks. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Radiographic Anatomy",
+    "topic": "anatomic landmarks"
+  },
+  {
+    "id": "arrt-019",
+    "stem": "During assessment related to anatomic landmarks, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of anatomic landmarks requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Radiographic Anatomy",
+    "topic": "anatomic landmarks"
+  },
+  {
+    "id": "arrt-020",
+    "stem": "Which of the following is a contraindication associated with anatomic landmarks?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in anatomic landmarks. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Radiographic Anatomy",
+    "topic": "anatomic landmarks"
+  },
+  {
+    "id": "arrt-021",
+    "stem": "A patient presents with findings consistent with bony thorax. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because bony thorax requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Radiographic Anatomy",
+    "topic": "bony thorax"
+  },
+  {
+    "id": "arrt-022",
+    "stem": "Which of the following best describes the primary indication for bony thorax?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for bony thorax. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Radiographic Anatomy",
+    "topic": "bony thorax"
+  },
+  {
+    "id": "arrt-023",
+    "stem": "A healthcare professional is evaluating bony thorax. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for bony thorax. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Radiographic Anatomy",
+    "topic": "bony thorax"
+  },
+  {
+    "id": "arrt-024",
+    "stem": "During assessment related to bony thorax, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of bony thorax requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Radiographic Anatomy",
+    "topic": "bony thorax"
+  },
+  {
+    "id": "arrt-025",
+    "stem": "Which of the following is a contraindication associated with bony thorax?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in bony thorax. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Radiographic Anatomy",
+    "topic": "bony thorax"
+  },
+  {
+    "id": "arrt-026",
+    "stem": "A patient presents with findings consistent with abdominal organs. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because abdominal organs requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Radiographic Anatomy",
+    "topic": "abdominal organs"
+  },
+  {
+    "id": "arrt-027",
+    "stem": "Which of the following best describes the primary indication for abdominal organs?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for abdominal organs. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Radiographic Anatomy",
+    "topic": "abdominal organs"
+  },
+  {
+    "id": "arrt-028",
+    "stem": "A healthcare professional is evaluating abdominal organs. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for abdominal organs. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Radiographic Anatomy",
+    "topic": "abdominal organs"
+  },
+  {
+    "id": "arrt-029",
+    "stem": "During assessment related to abdominal organs, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of abdominal organs requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Radiographic Anatomy",
+    "topic": "abdominal organs"
+  },
+  {
+    "id": "arrt-030",
+    "stem": "Which of the following is a contraindication associated with abdominal organs?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in abdominal organs. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Radiographic Anatomy",
+    "topic": "abdominal organs"
+  },
+  {
+    "id": "arrt-031",
+    "stem": "A patient presents with findings consistent with pelvic anatomy. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because pelvic anatomy requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Radiographic Anatomy",
+    "topic": "pelvic anatomy"
+  },
+  {
+    "id": "arrt-032",
+    "stem": "Which of the following best describes the primary indication for pelvic anatomy?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for pelvic anatomy. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Radiographic Anatomy",
+    "topic": "pelvic anatomy"
+  },
+  {
+    "id": "arrt-033",
+    "stem": "A healthcare professional is evaluating pelvic anatomy. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for pelvic anatomy. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Radiographic Anatomy",
+    "topic": "pelvic anatomy"
+  },
+  {
+    "id": "arrt-034",
+    "stem": "During assessment related to pelvic anatomy, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of pelvic anatomy requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Radiographic Anatomy",
+    "topic": "pelvic anatomy"
+  },
+  {
+    "id": "arrt-035",
+    "stem": "Which of the following is a contraindication associated with pelvic anatomy?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in pelvic anatomy. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Radiographic Anatomy",
+    "topic": "pelvic anatomy"
+  },
+  {
+    "id": "arrt-036",
+    "stem": "A patient presents with findings consistent with cranial anatomy. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because cranial anatomy requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Radiographic Anatomy",
+    "topic": "cranial anatomy"
+  },
+  {
+    "id": "arrt-037",
+    "stem": "Which of the following best describes the primary indication for cranial anatomy?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for cranial anatomy. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Radiographic Anatomy",
+    "topic": "cranial anatomy"
+  },
+  {
+    "id": "arrt-038",
+    "stem": "A healthcare professional is evaluating cranial anatomy. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for cranial anatomy. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Radiographic Anatomy",
+    "topic": "cranial anatomy"
+  },
+  {
+    "id": "arrt-039",
+    "stem": "During assessment related to cranial anatomy, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of cranial anatomy requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Radiographic Anatomy",
+    "topic": "cranial anatomy"
+  },
+  {
+    "id": "arrt-040",
+    "stem": "Which of the following is a contraindication associated with cranial anatomy?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in cranial anatomy. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Radiographic Anatomy",
+    "topic": "cranial anatomy"
+  },
+  {
+    "id": "arrt-041",
+    "stem": "A patient presents with findings consistent with spinal anatomy. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because spinal anatomy requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Radiographic Anatomy",
+    "topic": "spinal anatomy"
+  },
+  {
+    "id": "arrt-042",
+    "stem": "Which of the following best describes the primary indication for spinal anatomy?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for spinal anatomy. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Radiographic Anatomy",
+    "topic": "spinal anatomy"
+  },
+  {
+    "id": "arrt-043",
+    "stem": "A healthcare professional is evaluating spinal anatomy. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for spinal anatomy. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Radiographic Anatomy",
+    "topic": "spinal anatomy"
+  },
+  {
+    "id": "arrt-044",
+    "stem": "During assessment related to spinal anatomy, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of spinal anatomy requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Radiographic Anatomy",
+    "topic": "spinal anatomy"
+  },
+  {
+    "id": "arrt-045",
+    "stem": "Which of the following is a contraindication associated with spinal anatomy?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in spinal anatomy. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Radiographic Anatomy",
+    "topic": "spinal anatomy"
+  },
+  {
+    "id": "arrt-046",
+    "stem": "A patient presents with findings consistent with upper extremity anatomy. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because upper extremity anatomy requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Radiographic Anatomy",
+    "topic": "upper extremity anatomy"
+  },
+  {
+    "id": "arrt-047",
+    "stem": "Which of the following best describes the primary indication for upper extremity anatomy?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for upper extremity anatomy. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Radiographic Anatomy",
+    "topic": "upper extremity anatomy"
+  },
+  {
+    "id": "arrt-048",
+    "stem": "A healthcare professional is evaluating upper extremity anatomy. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for upper extremity anatomy. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Radiographic Anatomy",
+    "topic": "upper extremity anatomy"
+  },
+  {
+    "id": "arrt-049",
+    "stem": "During assessment related to upper extremity anatomy, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of upper extremity anatomy requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Radiographic Anatomy",
+    "topic": "upper extremity anatomy"
+  },
+  {
+    "id": "arrt-050",
+    "stem": "Which of the following is a contraindication associated with upper extremity anatomy?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in upper extremity anatomy. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Radiographic Anatomy",
+    "topic": "upper extremity anatomy"
+  },
+  {
+    "id": "arrt-051",
+    "stem": "A patient presents with findings consistent with AP chest technique. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because AP chest technique requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Patient Positioning",
+    "topic": "AP chest technique"
+  },
+  {
+    "id": "arrt-052",
+    "stem": "Which of the following best describes the primary indication for AP chest technique?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for AP chest technique. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Patient Positioning",
+    "topic": "AP chest technique"
+  },
+  {
+    "id": "arrt-053",
+    "stem": "A healthcare professional is evaluating AP chest technique. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for AP chest technique. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Patient Positioning",
+    "topic": "AP chest technique"
+  },
+  {
+    "id": "arrt-054",
+    "stem": "During assessment related to AP chest technique, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of AP chest technique requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Patient Positioning",
+    "topic": "AP chest technique"
+  },
+  {
+    "id": "arrt-055",
+    "stem": "Which of the following is a contraindication associated with AP chest technique?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in AP chest technique. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Patient Positioning",
+    "topic": "AP chest technique"
+  },
+  {
+    "id": "arrt-056",
+    "stem": "A patient presents with findings consistent with PA chest positioning. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because PA chest positioning requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Patient Positioning",
+    "topic": "PA chest positioning"
+  },
+  {
+    "id": "arrt-057",
+    "stem": "Which of the following best describes the primary indication for PA chest positioning?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for PA chest positioning. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Patient Positioning",
+    "topic": "PA chest positioning"
+  },
+  {
+    "id": "arrt-058",
+    "stem": "A healthcare professional is evaluating PA chest positioning. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for PA chest positioning. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Patient Positioning",
+    "topic": "PA chest positioning"
+  },
+  {
+    "id": "arrt-059",
+    "stem": "During assessment related to PA chest positioning, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of PA chest positioning requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Patient Positioning",
+    "topic": "PA chest positioning"
+  },
+  {
+    "id": "arrt-060",
+    "stem": "Which of the following is a contraindication associated with PA chest positioning?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in PA chest positioning. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Patient Positioning",
+    "topic": "PA chest positioning"
+  },
+  {
+    "id": "arrt-061",
+    "stem": "A patient presents with findings consistent with lateral positioning. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because lateral positioning requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Patient Positioning",
+    "topic": "lateral positioning"
+  },
+  {
+    "id": "arrt-062",
+    "stem": "Which of the following best describes the primary indication for lateral positioning?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for lateral positioning. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Patient Positioning",
+    "topic": "lateral positioning"
+  },
+  {
+    "id": "arrt-063",
+    "stem": "A healthcare professional is evaluating lateral positioning. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for lateral positioning. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Patient Positioning",
+    "topic": "lateral positioning"
+  },
+  {
+    "id": "arrt-064",
+    "stem": "During assessment related to lateral positioning, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of lateral positioning requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Patient Positioning",
+    "topic": "lateral positioning"
+  },
+  {
+    "id": "arrt-065",
+    "stem": "Which of the following is a contraindication associated with lateral positioning?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in lateral positioning. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Patient Positioning",
+    "topic": "lateral positioning"
+  },
+  {
+    "id": "arrt-066",
+    "stem": "A patient presents with findings consistent with oblique views. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because oblique views requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Patient Positioning",
+    "topic": "oblique views"
+  },
+  {
+    "id": "arrt-067",
+    "stem": "Which of the following best describes the primary indication for oblique views?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for oblique views. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Patient Positioning",
+    "topic": "oblique views"
+  },
+  {
+    "id": "arrt-068",
+    "stem": "A healthcare professional is evaluating oblique views. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for oblique views. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Patient Positioning",
+    "topic": "oblique views"
+  },
+  {
+    "id": "arrt-069",
+    "stem": "During assessment related to oblique views, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of oblique views requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Patient Positioning",
+    "topic": "oblique views"
+  },
+  {
+    "id": "arrt-070",
+    "stem": "Which of the following is a contraindication associated with oblique views?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in oblique views. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Patient Positioning",
+    "topic": "oblique views"
+  },
+  {
+    "id": "arrt-071",
+    "stem": "A patient presents with findings consistent with extremity positioning. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because extremity positioning requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Patient Positioning",
+    "topic": "extremity positioning"
+  },
+  {
+    "id": "arrt-072",
+    "stem": "Which of the following best describes the primary indication for extremity positioning?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for extremity positioning. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Patient Positioning",
+    "topic": "extremity positioning"
+  },
+  {
+    "id": "arrt-073",
+    "stem": "A healthcare professional is evaluating extremity positioning. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for extremity positioning. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Patient Positioning",
+    "topic": "extremity positioning"
+  },
+  {
+    "id": "arrt-074",
+    "stem": "During assessment related to extremity positioning, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of extremity positioning requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Patient Positioning",
+    "topic": "extremity positioning"
+  },
+  {
+    "id": "arrt-075",
+    "stem": "Which of the following is a contraindication associated with extremity positioning?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in extremity positioning. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Patient Positioning",
+    "topic": "extremity positioning"
+  },
+  {
+    "id": "arrt-076",
+    "stem": "A patient presents with findings consistent with spine positioning. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because spine positioning requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Patient Positioning",
+    "topic": "spine positioning"
+  },
+  {
+    "id": "arrt-077",
+    "stem": "Which of the following best describes the primary indication for spine positioning?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for spine positioning. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Patient Positioning",
+    "topic": "spine positioning"
+  },
+  {
+    "id": "arrt-078",
+    "stem": "A healthcare professional is evaluating spine positioning. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for spine positioning. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Patient Positioning",
+    "topic": "spine positioning"
+  },
+  {
+    "id": "arrt-079",
+    "stem": "During assessment related to spine positioning, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of spine positioning requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Patient Positioning",
+    "topic": "spine positioning"
+  },
+  {
+    "id": "arrt-080",
+    "stem": "Which of the following is a contraindication associated with spine positioning?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in spine positioning. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Patient Positioning",
+    "topic": "spine positioning"
+  },
+  {
+    "id": "arrt-081",
+    "stem": "A patient presents with findings consistent with skull positioning. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because skull positioning requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Patient Positioning",
+    "topic": "skull positioning"
+  },
+  {
+    "id": "arrt-082",
+    "stem": "Which of the following best describes the primary indication for skull positioning?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for skull positioning. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Patient Positioning",
+    "topic": "skull positioning"
+  },
+  {
+    "id": "arrt-083",
+    "stem": "A healthcare professional is evaluating skull positioning. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for skull positioning. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Patient Positioning",
+    "topic": "skull positioning"
+  },
+  {
+    "id": "arrt-084",
+    "stem": "During assessment related to skull positioning, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of skull positioning requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Patient Positioning",
+    "topic": "skull positioning"
+  },
+  {
+    "id": "arrt-085",
+    "stem": "Which of the following is a contraindication associated with skull positioning?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in skull positioning. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Patient Positioning",
+    "topic": "skull positioning"
+  },
+  {
+    "id": "arrt-086",
+    "stem": "A patient presents with findings consistent with abdominal series. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because abdominal series requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Patient Positioning",
+    "topic": "abdominal series"
+  },
+  {
+    "id": "arrt-087",
+    "stem": "Which of the following best describes the primary indication for abdominal series?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for abdominal series. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Patient Positioning",
+    "topic": "abdominal series"
+  },
+  {
+    "id": "arrt-088",
+    "stem": "A healthcare professional is evaluating abdominal series. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for abdominal series. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Patient Positioning",
+    "topic": "abdominal series"
+  },
+  {
+    "id": "arrt-089",
+    "stem": "During assessment related to abdominal series, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of abdominal series requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Patient Positioning",
+    "topic": "abdominal series"
+  },
+  {
+    "id": "arrt-090",
+    "stem": "Which of the following is a contraindication associated with abdominal series?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in abdominal series. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Patient Positioning",
+    "topic": "abdominal series"
+  },
+  {
+    "id": "arrt-091",
+    "stem": "A patient presents with findings consistent with pediatric positioning. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because pediatric positioning requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Patient Positioning",
+    "topic": "pediatric positioning"
+  },
+  {
+    "id": "arrt-092",
+    "stem": "Which of the following best describes the primary indication for pediatric positioning?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for pediatric positioning. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Patient Positioning",
+    "topic": "pediatric positioning"
+  },
+  {
+    "id": "arrt-093",
+    "stem": "A healthcare professional is evaluating pediatric positioning. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for pediatric positioning. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Patient Positioning",
+    "topic": "pediatric positioning"
+  },
+  {
+    "id": "arrt-094",
+    "stem": "During assessment related to pediatric positioning, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of pediatric positioning requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Patient Positioning",
+    "topic": "pediatric positioning"
+  },
+  {
+    "id": "arrt-095",
+    "stem": "Which of the following is a contraindication associated with pediatric positioning?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in pediatric positioning. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Patient Positioning",
+    "topic": "pediatric positioning"
+  },
+  {
+    "id": "arrt-096",
+    "stem": "A patient presents with findings consistent with trauma positioning. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because trauma positioning requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Patient Positioning",
+    "topic": "trauma positioning"
+  },
+  {
+    "id": "arrt-097",
+    "stem": "Which of the following best describes the primary indication for trauma positioning?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for trauma positioning. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Patient Positioning",
+    "topic": "trauma positioning"
+  },
+  {
+    "id": "arrt-098",
+    "stem": "A healthcare professional is evaluating trauma positioning. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for trauma positioning. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Patient Positioning",
+    "topic": "trauma positioning"
+  },
+  {
+    "id": "arrt-099",
+    "stem": "During assessment related to trauma positioning, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of trauma positioning requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Patient Positioning",
+    "topic": "trauma positioning"
+  },
+  {
+    "id": "arrt-100",
+    "stem": "Which of the following is a contraindication associated with trauma positioning?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in trauma positioning. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Patient Positioning",
+    "topic": "trauma positioning"
+  },
+  {
+    "id": "arrt-101",
+    "stem": "A patient presents with findings consistent with ALARA principle. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because ALARA principle requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Radiation Safety",
+    "topic": "ALARA principle"
+  },
+  {
+    "id": "arrt-102",
+    "stem": "Which of the following best describes the primary indication for ALARA principle?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for ALARA principle. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Radiation Safety",
+    "topic": "ALARA principle"
+  },
+  {
+    "id": "arrt-103",
+    "stem": "A healthcare professional is evaluating ALARA principle. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for ALARA principle. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Radiation Safety",
+    "topic": "ALARA principle"
+  },
+  {
+    "id": "arrt-104",
+    "stem": "During assessment related to ALARA principle, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of ALARA principle requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Radiation Safety",
+    "topic": "ALARA principle"
+  },
+  {
+    "id": "arrt-105",
+    "stem": "Which of the following is a contraindication associated with ALARA principle?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in ALARA principle. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Radiation Safety",
+    "topic": "ALARA principle"
+  },
+  {
+    "id": "arrt-106",
+    "stem": "A patient presents with findings consistent with shielding types. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because shielding types requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Radiation Safety",
+    "topic": "shielding types"
+  },
+  {
+    "id": "arrt-107",
+    "stem": "Which of the following best describes the primary indication for shielding types?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for shielding types. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Radiation Safety",
+    "topic": "shielding types"
+  },
+  {
+    "id": "arrt-108",
+    "stem": "A healthcare professional is evaluating shielding types. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for shielding types. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Radiation Safety",
+    "topic": "shielding types"
+  },
+  {
+    "id": "arrt-109",
+    "stem": "During assessment related to shielding types, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of shielding types requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Radiation Safety",
+    "topic": "shielding types"
+  },
+  {
+    "id": "arrt-110",
+    "stem": "Which of the following is a contraindication associated with shielding types?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in shielding types. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Radiation Safety",
+    "topic": "shielding types"
+  },
+  {
+    "id": "arrt-111",
+    "stem": "A patient presents with findings consistent with dose limits. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because dose limits requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Radiation Safety",
+    "topic": "dose limits"
+  },
+  {
+    "id": "arrt-112",
+    "stem": "Which of the following best describes the primary indication for dose limits?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for dose limits. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Radiation Safety",
+    "topic": "dose limits"
+  },
+  {
+    "id": "arrt-113",
+    "stem": "A healthcare professional is evaluating dose limits. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for dose limits. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Radiation Safety",
+    "topic": "dose limits"
+  },
+  {
+    "id": "arrt-114",
+    "stem": "During assessment related to dose limits, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of dose limits requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Radiation Safety",
+    "topic": "dose limits"
+  },
+  {
+    "id": "arrt-115",
+    "stem": "Which of the following is a contraindication associated with dose limits?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in dose limits. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Radiation Safety",
+    "topic": "dose limits"
+  },
+  {
+    "id": "arrt-116",
+    "stem": "A patient presents with findings consistent with exposure factors. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because exposure factors requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Radiation Safety",
+    "topic": "exposure factors"
+  },
+  {
+    "id": "arrt-117",
+    "stem": "Which of the following best describes the primary indication for exposure factors?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for exposure factors. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Radiation Safety",
+    "topic": "exposure factors"
+  },
+  {
+    "id": "arrt-118",
+    "stem": "A healthcare professional is evaluating exposure factors. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for exposure factors. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Radiation Safety",
+    "topic": "exposure factors"
+  },
+  {
+    "id": "arrt-119",
+    "stem": "During assessment related to exposure factors, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of exposure factors requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Radiation Safety",
+    "topic": "exposure factors"
+  },
+  {
+    "id": "arrt-120",
+    "stem": "Which of the following is a contraindication associated with exposure factors?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in exposure factors. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Radiation Safety",
+    "topic": "exposure factors"
+  },
+  {
+    "id": "arrt-121",
+    "stem": "A patient presents with findings consistent with pregnant patient protocol. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because pregnant patient protocol requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Radiation Safety",
+    "topic": "pregnant patient protocol"
+  },
+  {
+    "id": "arrt-122",
+    "stem": "Which of the following best describes the primary indication for pregnant patient protocol?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for pregnant patient protocol. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Radiation Safety",
+    "topic": "pregnant patient protocol"
+  },
+  {
+    "id": "arrt-123",
+    "stem": "A healthcare professional is evaluating pregnant patient protocol. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for pregnant patient protocol. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Radiation Safety",
+    "topic": "pregnant patient protocol"
+  },
+  {
+    "id": "arrt-124",
+    "stem": "During assessment related to pregnant patient protocol, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of pregnant patient protocol requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Radiation Safety",
+    "topic": "pregnant patient protocol"
+  },
+  {
+    "id": "arrt-125",
+    "stem": "Which of the following is a contraindication associated with pregnant patient protocol?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in pregnant patient protocol. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Radiation Safety",
+    "topic": "pregnant patient protocol"
+  },
+  {
+    "id": "arrt-126",
+    "stem": "A patient presents with findings consistent with dosimetry badges. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because dosimetry badges requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Radiation Safety",
+    "topic": "dosimetry badges"
+  },
+  {
+    "id": "arrt-127",
+    "stem": "Which of the following best describes the primary indication for dosimetry badges?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for dosimetry badges. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Radiation Safety",
+    "topic": "dosimetry badges"
+  },
+  {
+    "id": "arrt-128",
+    "stem": "A healthcare professional is evaluating dosimetry badges. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for dosimetry badges. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Radiation Safety",
+    "topic": "dosimetry badges"
+  },
+  {
+    "id": "arrt-129",
+    "stem": "During assessment related to dosimetry badges, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of dosimetry badges requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Radiation Safety",
+    "topic": "dosimetry badges"
+  },
+  {
+    "id": "arrt-130",
+    "stem": "Which of the following is a contraindication associated with dosimetry badges?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in dosimetry badges. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Radiation Safety",
+    "topic": "dosimetry badges"
+  },
+  {
+    "id": "arrt-131",
+    "stem": "A patient presents with findings consistent with scatter radiation. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because scatter radiation requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Radiation Safety",
+    "topic": "scatter radiation"
+  },
+  {
+    "id": "arrt-132",
+    "stem": "Which of the following best describes the primary indication for scatter radiation?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for scatter radiation. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Radiation Safety",
+    "topic": "scatter radiation"
+  },
+  {
+    "id": "arrt-133",
+    "stem": "A healthcare professional is evaluating scatter radiation. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for scatter radiation. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Radiation Safety",
+    "topic": "scatter radiation"
+  },
+  {
+    "id": "arrt-134",
+    "stem": "During assessment related to scatter radiation, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of scatter radiation requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Radiation Safety",
+    "topic": "scatter radiation"
+  },
+  {
+    "id": "arrt-135",
+    "stem": "Which of the following is a contraindication associated with scatter radiation?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in scatter radiation. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Radiation Safety",
+    "topic": "scatter radiation"
+  },
+  {
+    "id": "arrt-136",
+    "stem": "A patient presents with findings consistent with distance rule. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because distance rule requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Radiation Safety",
+    "topic": "distance rule"
+  },
+  {
+    "id": "arrt-137",
+    "stem": "Which of the following best describes the primary indication for distance rule?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for distance rule. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Radiation Safety",
+    "topic": "distance rule"
+  },
+  {
+    "id": "arrt-138",
+    "stem": "A healthcare professional is evaluating distance rule. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for distance rule. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Radiation Safety",
+    "topic": "distance rule"
+  },
+  {
+    "id": "arrt-139",
+    "stem": "During assessment related to distance rule, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of distance rule requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Radiation Safety",
+    "topic": "distance rule"
+  },
+  {
+    "id": "arrt-140",
+    "stem": "Which of the following is a contraindication associated with distance rule?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in distance rule. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Radiation Safety",
+    "topic": "distance rule"
+  },
+  {
+    "id": "arrt-141",
+    "stem": "A patient presents with findings consistent with time reduction. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because time reduction requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Radiation Safety",
+    "topic": "time reduction"
+  },
+  {
+    "id": "arrt-142",
+    "stem": "Which of the following best describes the primary indication for time reduction?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for time reduction. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Radiation Safety",
+    "topic": "time reduction"
+  },
+  {
+    "id": "arrt-143",
+    "stem": "A healthcare professional is evaluating time reduction. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for time reduction. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Radiation Safety",
+    "topic": "time reduction"
+  },
+  {
+    "id": "arrt-144",
+    "stem": "During assessment related to time reduction, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of time reduction requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Radiation Safety",
+    "topic": "time reduction"
+  },
+  {
+    "id": "arrt-145",
+    "stem": "Which of the following is a contraindication associated with time reduction?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in time reduction. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Radiation Safety",
+    "topic": "time reduction"
+  },
+  {
+    "id": "arrt-146",
+    "stem": "A patient presents with findings consistent with monitoring requirements. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because monitoring requirements requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Radiation Safety",
+    "topic": "monitoring requirements"
+  },
+  {
+    "id": "arrt-147",
+    "stem": "Which of the following best describes the primary indication for monitoring requirements?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for monitoring requirements. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Radiation Safety",
+    "topic": "monitoring requirements"
+  },
+  {
+    "id": "arrt-148",
+    "stem": "A healthcare professional is evaluating monitoring requirements. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for monitoring requirements. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Radiation Safety",
+    "topic": "monitoring requirements"
+  },
+  {
+    "id": "arrt-149",
+    "stem": "During assessment related to monitoring requirements, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of monitoring requirements requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Radiation Safety",
+    "topic": "monitoring requirements"
+  },
+  {
+    "id": "arrt-150",
+    "stem": "Which of the following is a contraindication associated with monitoring requirements?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in monitoring requirements. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Radiation Safety",
+    "topic": "monitoring requirements"
+  },
+  {
+    "id": "arrt-151",
+    "stem": "A patient presents with findings consistent with kVp selection. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because kVp selection requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Image Production",
+    "topic": "kVp selection"
+  },
+  {
+    "id": "arrt-152",
+    "stem": "Which of the following best describes the primary indication for kVp selection?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for kVp selection. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Image Production",
+    "topic": "kVp selection"
+  },
+  {
+    "id": "arrt-153",
+    "stem": "A healthcare professional is evaluating kVp selection. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for kVp selection. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Image Production",
+    "topic": "kVp selection"
+  },
+  {
+    "id": "arrt-154",
+    "stem": "During assessment related to kVp selection, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of kVp selection requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Image Production",
+    "topic": "kVp selection"
+  },
+  {
+    "id": "arrt-155",
+    "stem": "Which of the following is a contraindication associated with kVp selection?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in kVp selection. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Image Production",
+    "topic": "kVp selection"
+  },
+  {
+    "id": "arrt-156",
+    "stem": "A patient presents with findings consistent with mAs calculation. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because mAs calculation requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Image Production",
+    "topic": "mAs calculation"
+  },
+  {
+    "id": "arrt-157",
+    "stem": "Which of the following best describes the primary indication for mAs calculation?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for mAs calculation. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Image Production",
+    "topic": "mAs calculation"
+  },
+  {
+    "id": "arrt-158",
+    "stem": "A healthcare professional is evaluating mAs calculation. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for mAs calculation. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Image Production",
+    "topic": "mAs calculation"
+  },
+  {
+    "id": "arrt-159",
+    "stem": "During assessment related to mAs calculation, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of mAs calculation requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Image Production",
+    "topic": "mAs calculation"
+  },
+  {
+    "id": "arrt-160",
+    "stem": "Which of the following is a contraindication associated with mAs calculation?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in mAs calculation. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Image Production",
+    "topic": "mAs calculation"
+  },
+  {
+    "id": "arrt-161",
+    "stem": "A patient presents with findings consistent with exposure index. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because exposure index requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Image Production",
+    "topic": "exposure index"
+  },
+  {
+    "id": "arrt-162",
+    "stem": "Which of the following best describes the primary indication for exposure index?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for exposure index. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Image Production",
+    "topic": "exposure index"
+  },
+  {
+    "id": "arrt-163",
+    "stem": "A healthcare professional is evaluating exposure index. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for exposure index. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Image Production",
+    "topic": "exposure index"
+  },
+  {
+    "id": "arrt-164",
+    "stem": "During assessment related to exposure index, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of exposure index requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Image Production",
+    "topic": "exposure index"
+  },
+  {
+    "id": "arrt-165",
+    "stem": "Which of the following is a contraindication associated with exposure index?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in exposure index. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Image Production",
+    "topic": "exposure index"
+  },
+  {
+    "id": "arrt-166",
+    "stem": "A patient presents with findings consistent with grid ratios. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because grid ratios requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Image Production",
+    "topic": "grid ratios"
+  },
+  {
+    "id": "arrt-167",
+    "stem": "Which of the following best describes the primary indication for grid ratios?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for grid ratios. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Image Production",
+    "topic": "grid ratios"
+  },
+  {
+    "id": "arrt-168",
+    "stem": "A healthcare professional is evaluating grid ratios. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for grid ratios. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Image Production",
+    "topic": "grid ratios"
+  },
+  {
+    "id": "arrt-169",
+    "stem": "During assessment related to grid ratios, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of grid ratios requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Image Production",
+    "topic": "grid ratios"
+  },
+  {
+    "id": "arrt-170",
+    "stem": "Which of the following is a contraindication associated with grid ratios?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in grid ratios. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Image Production",
+    "topic": "grid ratios"
+  },
+  {
+    "id": "arrt-171",
+    "stem": "A patient presents with findings consistent with SID effects. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because SID effects requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Image Production",
+    "topic": "SID effects"
+  },
+  {
+    "id": "arrt-172",
+    "stem": "Which of the following best describes the primary indication for SID effects?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for SID effects. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Image Production",
+    "topic": "SID effects"
+  },
+  {
+    "id": "arrt-173",
+    "stem": "A healthcare professional is evaluating SID effects. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for SID effects. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Image Production",
+    "topic": "SID effects"
+  },
+  {
+    "id": "arrt-174",
+    "stem": "During assessment related to SID effects, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of SID effects requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Image Production",
+    "topic": "SID effects"
+  },
+  {
+    "id": "arrt-175",
+    "stem": "Which of the following is a contraindication associated with SID effects?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in SID effects. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Image Production",
+    "topic": "SID effects"
+  },
+  {
+    "id": "arrt-176",
+    "stem": "A patient presents with findings consistent with OID effects. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because OID effects requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Image Production",
+    "topic": "OID effects"
+  },
+  {
+    "id": "arrt-177",
+    "stem": "Which of the following best describes the primary indication for OID effects?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for OID effects. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Image Production",
+    "topic": "OID effects"
+  },
+  {
+    "id": "arrt-178",
+    "stem": "A healthcare professional is evaluating OID effects. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for OID effects. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Image Production",
+    "topic": "OID effects"
+  },
+  {
+    "id": "arrt-179",
+    "stem": "During assessment related to OID effects, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of OID effects requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Image Production",
+    "topic": "OID effects"
+  },
+  {
+    "id": "arrt-180",
+    "stem": "Which of the following is a contraindication associated with OID effects?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in OID effects. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Image Production",
+    "topic": "OID effects"
+  },
+  {
+    "id": "arrt-181",
+    "stem": "A patient presents with findings consistent with digital imaging. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because digital imaging requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Image Production",
+    "topic": "digital imaging"
+  },
+  {
+    "id": "arrt-182",
+    "stem": "Which of the following best describes the primary indication for digital imaging?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for digital imaging. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Image Production",
+    "topic": "digital imaging"
+  },
+  {
+    "id": "arrt-183",
+    "stem": "A healthcare professional is evaluating digital imaging. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for digital imaging. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Image Production",
+    "topic": "digital imaging"
+  },
+  {
+    "id": "arrt-184",
+    "stem": "During assessment related to digital imaging, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of digital imaging requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Image Production",
+    "topic": "digital imaging"
+  },
+  {
+    "id": "arrt-185",
+    "stem": "Which of the following is a contraindication associated with digital imaging?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in digital imaging. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Image Production",
+    "topic": "digital imaging"
+  },
+  {
+    "id": "arrt-186",
+    "stem": "A patient presents with findings consistent with image receptor. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because image receptor requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Image Production",
+    "topic": "image receptor"
+  },
+  {
+    "id": "arrt-187",
+    "stem": "Which of the following best describes the primary indication for image receptor?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for image receptor. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Image Production",
+    "topic": "image receptor"
+  },
+  {
+    "id": "arrt-188",
+    "stem": "A healthcare professional is evaluating image receptor. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for image receptor. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Image Production",
+    "topic": "image receptor"
+  },
+  {
+    "id": "arrt-189",
+    "stem": "During assessment related to image receptor, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of image receptor requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Image Production",
+    "topic": "image receptor"
+  },
+  {
+    "id": "arrt-190",
+    "stem": "Which of the following is a contraindication associated with image receptor?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in image receptor. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Image Production",
+    "topic": "image receptor"
+  },
+  {
+    "id": "arrt-191",
+    "stem": "A patient presents with findings consistent with automatic exposure. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because automatic exposure requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Image Production",
+    "topic": "automatic exposure"
+  },
+  {
+    "id": "arrt-192",
+    "stem": "Which of the following best describes the primary indication for automatic exposure?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for automatic exposure. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Image Production",
+    "topic": "automatic exposure"
+  },
+  {
+    "id": "arrt-193",
+    "stem": "A healthcare professional is evaluating automatic exposure. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for automatic exposure. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Image Production",
+    "topic": "automatic exposure"
+  },
+  {
+    "id": "arrt-194",
+    "stem": "During assessment related to automatic exposure, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of automatic exposure requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Image Production",
+    "topic": "automatic exposure"
+  },
+  {
+    "id": "arrt-195",
+    "stem": "Which of the following is a contraindication associated with automatic exposure?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in automatic exposure. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Image Production",
+    "topic": "automatic exposure"
+  },
+  {
+    "id": "arrt-196",
+    "stem": "A patient presents with findings consistent with contrast resolution. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because contrast resolution requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Image Production",
+    "topic": "contrast resolution"
+  },
+  {
+    "id": "arrt-197",
+    "stem": "Which of the following best describes the primary indication for contrast resolution?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for contrast resolution. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Image Production",
+    "topic": "contrast resolution"
+  },
+  {
+    "id": "arrt-198",
+    "stem": "A healthcare professional is evaluating contrast resolution. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for contrast resolution. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Image Production",
+    "topic": "contrast resolution"
+  },
+  {
+    "id": "arrt-199",
+    "stem": "During assessment related to contrast resolution, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of contrast resolution requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Image Production",
+    "topic": "contrast resolution"
+  },
+  {
+    "id": "arrt-200",
+    "stem": "Which of the following is a contraindication associated with contrast resolution?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in contrast resolution. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Image Production",
+    "topic": "contrast resolution"
+  },
+  {
+    "id": "arrt-201",
+    "stem": "A patient presents with findings consistent with fracture types. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because fracture types requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Pathology Recognition",
+    "topic": "fracture types"
+  },
+  {
+    "id": "arrt-202",
+    "stem": "Which of the following best describes the primary indication for fracture types?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for fracture types. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Pathology Recognition",
+    "topic": "fracture types"
+  },
+  {
+    "id": "arrt-203",
+    "stem": "A healthcare professional is evaluating fracture types. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for fracture types. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Pathology Recognition",
+    "topic": "fracture types"
+  },
+  {
+    "id": "arrt-204",
+    "stem": "During assessment related to fracture types, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of fracture types requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Pathology Recognition",
+    "topic": "fracture types"
+  },
+  {
+    "id": "arrt-205",
+    "stem": "Which of the following is a contraindication associated with fracture types?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in fracture types. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Pathology Recognition",
+    "topic": "fracture types"
+  },
+  {
+    "id": "arrt-206",
+    "stem": "A patient presents with findings consistent with pneumonia patterns. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because pneumonia patterns requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Pathology Recognition",
+    "topic": "pneumonia patterns"
+  },
+  {
+    "id": "arrt-207",
+    "stem": "Which of the following best describes the primary indication for pneumonia patterns?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for pneumonia patterns. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Pathology Recognition",
+    "topic": "pneumonia patterns"
+  },
+  {
+    "id": "arrt-208",
+    "stem": "A healthcare professional is evaluating pneumonia patterns. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for pneumonia patterns. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Pathology Recognition",
+    "topic": "pneumonia patterns"
+  },
+  {
+    "id": "arrt-209",
+    "stem": "During assessment related to pneumonia patterns, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of pneumonia patterns requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Pathology Recognition",
+    "topic": "pneumonia patterns"
+  },
+  {
+    "id": "arrt-210",
+    "stem": "Which of the following is a contraindication associated with pneumonia patterns?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in pneumonia patterns. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Pathology Recognition",
+    "topic": "pneumonia patterns"
+  },
+  {
+    "id": "arrt-211",
+    "stem": "A patient presents with findings consistent with COPD findings. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because COPD findings requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Pathology Recognition",
+    "topic": "COPD findings"
+  },
+  {
+    "id": "arrt-212",
+    "stem": "Which of the following best describes the primary indication for COPD findings?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for COPD findings. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Pathology Recognition",
+    "topic": "COPD findings"
+  },
+  {
+    "id": "arrt-213",
+    "stem": "A healthcare professional is evaluating COPD findings. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for COPD findings. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Pathology Recognition",
+    "topic": "COPD findings"
+  },
+  {
+    "id": "arrt-214",
+    "stem": "During assessment related to COPD findings, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of COPD findings requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Pathology Recognition",
+    "topic": "COPD findings"
+  },
+  {
+    "id": "arrt-215",
+    "stem": "Which of the following is a contraindication associated with COPD findings?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in COPD findings. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Pathology Recognition",
+    "topic": "COPD findings"
+  },
+  {
+    "id": "arrt-216",
+    "stem": "A patient presents with findings consistent with mass identification. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because mass identification requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Pathology Recognition",
+    "topic": "mass identification"
+  },
+  {
+    "id": "arrt-217",
+    "stem": "Which of the following best describes the primary indication for mass identification?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for mass identification. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Pathology Recognition",
+    "topic": "mass identification"
+  },
+  {
+    "id": "arrt-218",
+    "stem": "A healthcare professional is evaluating mass identification. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for mass identification. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Pathology Recognition",
+    "topic": "mass identification"
+  },
+  {
+    "id": "arrt-219",
+    "stem": "During assessment related to mass identification, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of mass identification requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Pathology Recognition",
+    "topic": "mass identification"
+  },
+  {
+    "id": "arrt-220",
+    "stem": "Which of the following is a contraindication associated with mass identification?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in mass identification. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Pathology Recognition",
+    "topic": "mass identification"
+  },
+  {
+    "id": "arrt-221",
+    "stem": "A patient presents with findings consistent with foreign bodies. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because foreign bodies requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Pathology Recognition",
+    "topic": "foreign bodies"
+  },
+  {
+    "id": "arrt-222",
+    "stem": "Which of the following best describes the primary indication for foreign bodies?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for foreign bodies. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Pathology Recognition",
+    "topic": "foreign bodies"
+  },
+  {
+    "id": "arrt-223",
+    "stem": "A healthcare professional is evaluating foreign bodies. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for foreign bodies. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Pathology Recognition",
+    "topic": "foreign bodies"
+  },
+  {
+    "id": "arrt-224",
+    "stem": "During assessment related to foreign bodies, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of foreign bodies requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Pathology Recognition",
+    "topic": "foreign bodies"
+  },
+  {
+    "id": "arrt-225",
+    "stem": "Which of the following is a contraindication associated with foreign bodies?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in foreign bodies. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Pathology Recognition",
+    "topic": "foreign bodies"
+  },
+  {
+    "id": "arrt-226",
+    "stem": "A patient presents with findings consistent with dislocation signs. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because dislocation signs requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Pathology Recognition",
+    "topic": "dislocation signs"
+  },
+  {
+    "id": "arrt-227",
+    "stem": "Which of the following best describes the primary indication for dislocation signs?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for dislocation signs. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Pathology Recognition",
+    "topic": "dislocation signs"
+  },
+  {
+    "id": "arrt-228",
+    "stem": "A healthcare professional is evaluating dislocation signs. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for dislocation signs. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Pathology Recognition",
+    "topic": "dislocation signs"
+  },
+  {
+    "id": "arrt-229",
+    "stem": "During assessment related to dislocation signs, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of dislocation signs requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Pathology Recognition",
+    "topic": "dislocation signs"
+  },
+  {
+    "id": "arrt-230",
+    "stem": "Which of the following is a contraindication associated with dislocation signs?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in dislocation signs. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Pathology Recognition",
+    "topic": "dislocation signs"
+  },
+  {
+    "id": "arrt-231",
+    "stem": "A patient presents with findings consistent with atelectasis. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because atelectasis requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Pathology Recognition",
+    "topic": "atelectasis"
+  },
+  {
+    "id": "arrt-232",
+    "stem": "Which of the following best describes the primary indication for atelectasis?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for atelectasis. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Pathology Recognition",
+    "topic": "atelectasis"
+  },
+  {
+    "id": "arrt-233",
+    "stem": "A healthcare professional is evaluating atelectasis. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for atelectasis. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Pathology Recognition",
+    "topic": "atelectasis"
+  },
+  {
+    "id": "arrt-234",
+    "stem": "During assessment related to atelectasis, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of atelectasis requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Pathology Recognition",
+    "topic": "atelectasis"
+  },
+  {
+    "id": "arrt-235",
+    "stem": "Which of the following is a contraindication associated with atelectasis?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in atelectasis. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Pathology Recognition",
+    "topic": "atelectasis"
+  },
+  {
+    "id": "arrt-236",
+    "stem": "A patient presents with findings consistent with pleural effusion. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because pleural effusion requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Pathology Recognition",
+    "topic": "pleural effusion"
+  },
+  {
+    "id": "arrt-237",
+    "stem": "Which of the following best describes the primary indication for pleural effusion?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for pleural effusion. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Pathology Recognition",
+    "topic": "pleural effusion"
+  },
+  {
+    "id": "arrt-238",
+    "stem": "A healthcare professional is evaluating pleural effusion. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for pleural effusion. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Pathology Recognition",
+    "topic": "pleural effusion"
+  },
+  {
+    "id": "arrt-239",
+    "stem": "During assessment related to pleural effusion, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of pleural effusion requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Pathology Recognition",
+    "topic": "pleural effusion"
+  },
+  {
+    "id": "arrt-240",
+    "stem": "Which of the following is a contraindication associated with pleural effusion?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in pleural effusion. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Pathology Recognition",
+    "topic": "pleural effusion"
+  },
+  {
+    "id": "arrt-241",
+    "stem": "A patient presents with findings consistent with cardiomegaly. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because cardiomegaly requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Pathology Recognition",
+    "topic": "cardiomegaly"
+  },
+  {
+    "id": "arrt-242",
+    "stem": "Which of the following best describes the primary indication for cardiomegaly?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for cardiomegaly. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Pathology Recognition",
+    "topic": "cardiomegaly"
+  },
+  {
+    "id": "arrt-243",
+    "stem": "A healthcare professional is evaluating cardiomegaly. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for cardiomegaly. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Pathology Recognition",
+    "topic": "cardiomegaly"
+  },
+  {
+    "id": "arrt-244",
+    "stem": "During assessment related to cardiomegaly, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of cardiomegaly requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Pathology Recognition",
+    "topic": "cardiomegaly"
+  },
+  {
+    "id": "arrt-245",
+    "stem": "Which of the following is a contraindication associated with cardiomegaly?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in cardiomegaly. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Pathology Recognition",
+    "topic": "cardiomegaly"
+  },
+  {
+    "id": "arrt-246",
+    "stem": "A patient presents with findings consistent with bowel obstruction. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because bowel obstruction requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Pathology Recognition",
+    "topic": "bowel obstruction"
+  },
+  {
+    "id": "arrt-247",
+    "stem": "Which of the following best describes the primary indication for bowel obstruction?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for bowel obstruction. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Pathology Recognition",
+    "topic": "bowel obstruction"
+  },
+  {
+    "id": "arrt-248",
+    "stem": "A healthcare professional is evaluating bowel obstruction. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for bowel obstruction. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Pathology Recognition",
+    "topic": "bowel obstruction"
+  },
+  {
+    "id": "arrt-249",
+    "stem": "During assessment related to bowel obstruction, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of bowel obstruction requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Pathology Recognition",
+    "topic": "bowel obstruction"
+  },
+  {
+    "id": "arrt-250",
+    "stem": "Which of the following is a contraindication associated with bowel obstruction?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in bowel obstruction. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Pathology Recognition",
+    "topic": "bowel obstruction"
+  },
+  {
+    "id": "arrt-251",
+    "stem": "A patient presents with findings consistent with Hounsfield units. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because Hounsfield units requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "CT Imaging",
+    "topic": "Hounsfield units"
+  },
+  {
+    "id": "arrt-252",
+    "stem": "Which of the following best describes the primary indication for Hounsfield units?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for Hounsfield units. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "CT Imaging",
+    "topic": "Hounsfield units"
+  },
+  {
+    "id": "arrt-253",
+    "stem": "A healthcare professional is evaluating Hounsfield units. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for Hounsfield units. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "CT Imaging",
+    "topic": "Hounsfield units"
+  },
+  {
+    "id": "arrt-254",
+    "stem": "During assessment related to Hounsfield units, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of Hounsfield units requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "CT Imaging",
+    "topic": "Hounsfield units"
+  },
+  {
+    "id": "arrt-255",
+    "stem": "Which of the following is a contraindication associated with Hounsfield units?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in Hounsfield units. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "CT Imaging",
+    "topic": "Hounsfield units"
+  },
+  {
+    "id": "arrt-256",
+    "stem": "A patient presents with findings consistent with windowing technique. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because windowing technique requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "CT Imaging",
+    "topic": "windowing technique"
+  },
+  {
+    "id": "arrt-257",
+    "stem": "Which of the following best describes the primary indication for windowing technique?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for windowing technique. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "CT Imaging",
+    "topic": "windowing technique"
+  },
+  {
+    "id": "arrt-258",
+    "stem": "A healthcare professional is evaluating windowing technique. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for windowing technique. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "CT Imaging",
+    "topic": "windowing technique"
+  },
+  {
+    "id": "arrt-259",
+    "stem": "During assessment related to windowing technique, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of windowing technique requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "CT Imaging",
+    "topic": "windowing technique"
+  },
+  {
+    "id": "arrt-260",
+    "stem": "Which of the following is a contraindication associated with windowing technique?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in windowing technique. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "CT Imaging",
+    "topic": "windowing technique"
+  },
+  {
+    "id": "arrt-261",
+    "stem": "A patient presents with findings consistent with contrast protocols. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because contrast protocols requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "CT Imaging",
+    "topic": "contrast protocols"
+  },
+  {
+    "id": "arrt-262",
+    "stem": "Which of the following best describes the primary indication for contrast protocols?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for contrast protocols. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "CT Imaging",
+    "topic": "contrast protocols"
+  },
+  {
+    "id": "arrt-263",
+    "stem": "A healthcare professional is evaluating contrast protocols. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for contrast protocols. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "CT Imaging",
+    "topic": "contrast protocols"
+  },
+  {
+    "id": "arrt-264",
+    "stem": "During assessment related to contrast protocols, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of contrast protocols requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "CT Imaging",
+    "topic": "contrast protocols"
+  },
+  {
+    "id": "arrt-265",
+    "stem": "Which of the following is a contraindication associated with contrast protocols?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in contrast protocols. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "CT Imaging",
+    "topic": "contrast protocols"
+  },
+  {
+    "id": "arrt-266",
+    "stem": "A patient presents with findings consistent with artifact correction. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because artifact correction requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "CT Imaging",
+    "topic": "artifact correction"
+  },
+  {
+    "id": "arrt-267",
+    "stem": "Which of the following best describes the primary indication for artifact correction?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for artifact correction. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "CT Imaging",
+    "topic": "artifact correction"
+  },
+  {
+    "id": "arrt-268",
+    "stem": "A healthcare professional is evaluating artifact correction. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for artifact correction. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "CT Imaging",
+    "topic": "artifact correction"
+  },
+  {
+    "id": "arrt-269",
+    "stem": "During assessment related to artifact correction, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of artifact correction requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "CT Imaging",
+    "topic": "artifact correction"
+  },
+  {
+    "id": "arrt-270",
+    "stem": "Which of the following is a contraindication associated with artifact correction?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in artifact correction. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "CT Imaging",
+    "topic": "artifact correction"
+  },
+  {
+    "id": "arrt-271",
+    "stem": "A patient presents with findings consistent with CT anatomy. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because CT anatomy requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "CT Imaging",
+    "topic": "CT anatomy"
+  },
+  {
+    "id": "arrt-272",
+    "stem": "Which of the following best describes the primary indication for CT anatomy?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for CT anatomy. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "CT Imaging",
+    "topic": "CT anatomy"
+  },
+  {
+    "id": "arrt-273",
+    "stem": "A healthcare professional is evaluating CT anatomy. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for CT anatomy. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "CT Imaging",
+    "topic": "CT anatomy"
+  },
+  {
+    "id": "arrt-274",
+    "stem": "During assessment related to CT anatomy, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of CT anatomy requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "CT Imaging",
+    "topic": "CT anatomy"
+  },
+  {
+    "id": "arrt-275",
+    "stem": "Which of the following is a contraindication associated with CT anatomy?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in CT anatomy. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "CT Imaging",
+    "topic": "CT anatomy"
+  },
+  {
+    "id": "arrt-276",
+    "stem": "A patient presents with findings consistent with scan parameters. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because scan parameters requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "CT Imaging",
+    "topic": "scan parameters"
+  },
+  {
+    "id": "arrt-277",
+    "stem": "Which of the following best describes the primary indication for scan parameters?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for scan parameters. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "CT Imaging",
+    "topic": "scan parameters"
+  },
+  {
+    "id": "arrt-278",
+    "stem": "A healthcare professional is evaluating scan parameters. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for scan parameters. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "CT Imaging",
+    "topic": "scan parameters"
+  },
+  {
+    "id": "arrt-279",
+    "stem": "During assessment related to scan parameters, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of scan parameters requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "CT Imaging",
+    "topic": "scan parameters"
+  },
+  {
+    "id": "arrt-280",
+    "stem": "Which of the following is a contraindication associated with scan parameters?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in scan parameters. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "CT Imaging",
+    "topic": "scan parameters"
+  },
+  {
+    "id": "arrt-281",
+    "stem": "A patient presents with findings consistent with reconstruction algorithms. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because reconstruction algorithms requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "CT Imaging",
+    "topic": "reconstruction algorithms"
+  },
+  {
+    "id": "arrt-282",
+    "stem": "Which of the following best describes the primary indication for reconstruction algorithms?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for reconstruction algorithms. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "CT Imaging",
+    "topic": "reconstruction algorithms"
+  },
+  {
+    "id": "arrt-283",
+    "stem": "A healthcare professional is evaluating reconstruction algorithms. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for reconstruction algorithms. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "CT Imaging",
+    "topic": "reconstruction algorithms"
+  },
+  {
+    "id": "arrt-284",
+    "stem": "During assessment related to reconstruction algorithms, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of reconstruction algorithms requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "CT Imaging",
+    "topic": "reconstruction algorithms"
+  },
+  {
+    "id": "arrt-285",
+    "stem": "Which of the following is a contraindication associated with reconstruction algorithms?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in reconstruction algorithms. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "CT Imaging",
+    "topic": "reconstruction algorithms"
+  },
+  {
+    "id": "arrt-286",
+    "stem": "A patient presents with findings consistent with dose reduction. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because dose reduction requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "CT Imaging",
+    "topic": "dose reduction"
+  },
+  {
+    "id": "arrt-287",
+    "stem": "Which of the following best describes the primary indication for dose reduction?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for dose reduction. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "CT Imaging",
+    "topic": "dose reduction"
+  },
+  {
+    "id": "arrt-288",
+    "stem": "A healthcare professional is evaluating dose reduction. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for dose reduction. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "CT Imaging",
+    "topic": "dose reduction"
+  },
+  {
+    "id": "arrt-289",
+    "stem": "During assessment related to dose reduction, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of dose reduction requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "CT Imaging",
+    "topic": "dose reduction"
+  },
+  {
+    "id": "arrt-290",
+    "stem": "Which of the following is a contraindication associated with dose reduction?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in dose reduction. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "CT Imaging",
+    "topic": "dose reduction"
+  },
+  {
+    "id": "arrt-291",
+    "stem": "A patient presents with findings consistent with 3D reformatting. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because 3D reformatting requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "CT Imaging",
+    "topic": "3D reformatting"
+  },
+  {
+    "id": "arrt-292",
+    "stem": "Which of the following best describes the primary indication for 3D reformatting?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for 3D reformatting. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "CT Imaging",
+    "topic": "3D reformatting"
+  },
+  {
+    "id": "arrt-293",
+    "stem": "A healthcare professional is evaluating 3D reformatting. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for 3D reformatting. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "CT Imaging",
+    "topic": "3D reformatting"
+  },
+  {
+    "id": "arrt-294",
+    "stem": "During assessment related to 3D reformatting, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of 3D reformatting requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "CT Imaging",
+    "topic": "3D reformatting"
+  },
+  {
+    "id": "arrt-295",
+    "stem": "Which of the following is a contraindication associated with 3D reformatting?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in 3D reformatting. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "CT Imaging",
+    "topic": "3D reformatting"
+  },
+  {
+    "id": "arrt-296",
+    "stem": "A patient presents with findings consistent with CT angiography. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because CT angiography requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "CT Imaging",
+    "topic": "CT angiography"
+  },
+  {
+    "id": "arrt-297",
+    "stem": "Which of the following best describes the primary indication for CT angiography?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for CT angiography. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "CT Imaging",
+    "topic": "CT angiography"
+  },
+  {
+    "id": "arrt-298",
+    "stem": "A healthcare professional is evaluating CT angiography. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for CT angiography. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "CT Imaging",
+    "topic": "CT angiography"
+  },
+  {
+    "id": "arrt-299",
+    "stem": "During assessment related to CT angiography, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of CT angiography requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "CT Imaging",
+    "topic": "CT angiography"
+  },
+  {
+    "id": "arrt-300",
+    "stem": "Which of the following is a contraindication associated with CT angiography?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in CT angiography. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "CT Imaging",
+    "topic": "CT angiography"
+  },
+  {
+    "id": "arrt-301",
+    "stem": "A patient presents with findings consistent with T1 weighting. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because T1 weighting requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "MRI Physics",
+    "topic": "T1 weighting"
+  },
+  {
+    "id": "arrt-302",
+    "stem": "Which of the following best describes the primary indication for T1 weighting?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for T1 weighting. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "MRI Physics",
+    "topic": "T1 weighting"
+  },
+  {
+    "id": "arrt-303",
+    "stem": "A healthcare professional is evaluating T1 weighting. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for T1 weighting. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "MRI Physics",
+    "topic": "T1 weighting"
+  },
+  {
+    "id": "arrt-304",
+    "stem": "During assessment related to T1 weighting, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of T1 weighting requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "MRI Physics",
+    "topic": "T1 weighting"
+  },
+  {
+    "id": "arrt-305",
+    "stem": "Which of the following is a contraindication associated with T1 weighting?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in T1 weighting. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "MRI Physics",
+    "topic": "T1 weighting"
+  },
+  {
+    "id": "arrt-306",
+    "stem": "A patient presents with findings consistent with T2 weighting. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because T2 weighting requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "MRI Physics",
+    "topic": "T2 weighting"
+  },
+  {
+    "id": "arrt-307",
+    "stem": "Which of the following best describes the primary indication for T2 weighting?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for T2 weighting. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "MRI Physics",
+    "topic": "T2 weighting"
+  },
+  {
+    "id": "arrt-308",
+    "stem": "A healthcare professional is evaluating T2 weighting. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for T2 weighting. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "MRI Physics",
+    "topic": "T2 weighting"
+  },
+  {
+    "id": "arrt-309",
+    "stem": "During assessment related to T2 weighting, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of T2 weighting requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "MRI Physics",
+    "topic": "T2 weighting"
+  },
+  {
+    "id": "arrt-310",
+    "stem": "Which of the following is a contraindication associated with T2 weighting?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in T2 weighting. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "MRI Physics",
+    "topic": "T2 weighting"
+  },
+  {
+    "id": "arrt-311",
+    "stem": "A patient presents with findings consistent with pulse sequences. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because pulse sequences requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "MRI Physics",
+    "topic": "pulse sequences"
+  },
+  {
+    "id": "arrt-312",
+    "stem": "Which of the following best describes the primary indication for pulse sequences?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for pulse sequences. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "MRI Physics",
+    "topic": "pulse sequences"
+  },
+  {
+    "id": "arrt-313",
+    "stem": "A healthcare professional is evaluating pulse sequences. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for pulse sequences. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "MRI Physics",
+    "topic": "pulse sequences"
+  },
+  {
+    "id": "arrt-314",
+    "stem": "During assessment related to pulse sequences, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of pulse sequences requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "MRI Physics",
+    "topic": "pulse sequences"
+  },
+  {
+    "id": "arrt-315",
+    "stem": "Which of the following is a contraindication associated with pulse sequences?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in pulse sequences. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "MRI Physics",
+    "topic": "pulse sequences"
+  },
+  {
+    "id": "arrt-316",
+    "stem": "A patient presents with findings consistent with RF coils. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because RF coils requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "MRI Physics",
+    "topic": "RF coils"
+  },
+  {
+    "id": "arrt-317",
+    "stem": "Which of the following best describes the primary indication for RF coils?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for RF coils. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "MRI Physics",
+    "topic": "RF coils"
+  },
+  {
+    "id": "arrt-318",
+    "stem": "A healthcare professional is evaluating RF coils. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for RF coils. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "MRI Physics",
+    "topic": "RF coils"
+  },
+  {
+    "id": "arrt-319",
+    "stem": "During assessment related to RF coils, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of RF coils requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "MRI Physics",
+    "topic": "RF coils"
+  },
+  {
+    "id": "arrt-320",
+    "stem": "Which of the following is a contraindication associated with RF coils?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in RF coils. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "MRI Physics",
+    "topic": "RF coils"
+  },
+  {
+    "id": "arrt-321",
+    "stem": "A patient presents with findings consistent with contrast agents. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because contrast agents requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "MRI Physics",
+    "topic": "contrast agents"
+  },
+  {
+    "id": "arrt-322",
+    "stem": "Which of the following best describes the primary indication for contrast agents?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for contrast agents. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "MRI Physics",
+    "topic": "contrast agents"
+  },
+  {
+    "id": "arrt-323",
+    "stem": "A healthcare professional is evaluating contrast agents. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for contrast agents. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "MRI Physics",
+    "topic": "contrast agents"
+  },
+  {
+    "id": "arrt-324",
+    "stem": "During assessment related to contrast agents, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of contrast agents requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "MRI Physics",
+    "topic": "contrast agents"
+  },
+  {
+    "id": "arrt-325",
+    "stem": "Which of the following is a contraindication associated with contrast agents?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in contrast agents. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "MRI Physics",
+    "topic": "contrast agents"
+  },
+  {
+    "id": "arrt-326",
+    "stem": "A patient presents with findings consistent with MRI safety. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because MRI safety requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "MRI Physics",
+    "topic": "MRI safety"
+  },
+  {
+    "id": "arrt-327",
+    "stem": "Which of the following best describes the primary indication for MRI safety?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for MRI safety. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "MRI Physics",
+    "topic": "MRI safety"
+  },
+  {
+    "id": "arrt-328",
+    "stem": "A healthcare professional is evaluating MRI safety. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for MRI safety. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "MRI Physics",
+    "topic": "MRI safety"
+  },
+  {
+    "id": "arrt-329",
+    "stem": "During assessment related to MRI safety, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of MRI safety requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "MRI Physics",
+    "topic": "MRI safety"
+  },
+  {
+    "id": "arrt-330",
+    "stem": "Which of the following is a contraindication associated with MRI safety?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in MRI safety. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "MRI Physics",
+    "topic": "MRI safety"
+  },
+  {
+    "id": "arrt-331",
+    "stem": "A patient presents with findings consistent with gradient coils. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because gradient coils requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "MRI Physics",
+    "topic": "gradient coils"
+  },
+  {
+    "id": "arrt-332",
+    "stem": "Which of the following best describes the primary indication for gradient coils?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for gradient coils. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "MRI Physics",
+    "topic": "gradient coils"
+  },
+  {
+    "id": "arrt-333",
+    "stem": "A healthcare professional is evaluating gradient coils. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for gradient coils. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "MRI Physics",
+    "topic": "gradient coils"
+  },
+  {
+    "id": "arrt-334",
+    "stem": "During assessment related to gradient coils, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of gradient coils requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "MRI Physics",
+    "topic": "gradient coils"
+  },
+  {
+    "id": "arrt-335",
+    "stem": "Which of the following is a contraindication associated with gradient coils?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in gradient coils. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "MRI Physics",
+    "topic": "gradient coils"
+  },
+  {
+    "id": "arrt-336",
+    "stem": "A patient presents with findings consistent with signal-to-noise. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because signal-to-noise requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "MRI Physics",
+    "topic": "signal-to-noise"
+  },
+  {
+    "id": "arrt-337",
+    "stem": "Which of the following best describes the primary indication for signal-to-noise?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for signal-to-noise. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "MRI Physics",
+    "topic": "signal-to-noise"
+  },
+  {
+    "id": "arrt-338",
+    "stem": "A healthcare professional is evaluating signal-to-noise. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for signal-to-noise. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "MRI Physics",
+    "topic": "signal-to-noise"
+  },
+  {
+    "id": "arrt-339",
+    "stem": "During assessment related to signal-to-noise, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of signal-to-noise requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "MRI Physics",
+    "topic": "signal-to-noise"
+  },
+  {
+    "id": "arrt-340",
+    "stem": "Which of the following is a contraindication associated with signal-to-noise?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in signal-to-noise. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "MRI Physics",
+    "topic": "signal-to-noise"
+  },
+  {
+    "id": "arrt-341",
+    "stem": "A patient presents with findings consistent with flow artifacts. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because flow artifacts requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "MRI Physics",
+    "topic": "flow artifacts"
+  },
+  {
+    "id": "arrt-342",
+    "stem": "Which of the following best describes the primary indication for flow artifacts?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for flow artifacts. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "MRI Physics",
+    "topic": "flow artifacts"
+  },
+  {
+    "id": "arrt-343",
+    "stem": "A healthcare professional is evaluating flow artifacts. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for flow artifacts. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "MRI Physics",
+    "topic": "flow artifacts"
+  },
+  {
+    "id": "arrt-344",
+    "stem": "During assessment related to flow artifacts, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of flow artifacts requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "MRI Physics",
+    "topic": "flow artifacts"
+  },
+  {
+    "id": "arrt-345",
+    "stem": "Which of the following is a contraindication associated with flow artifacts?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in flow artifacts. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "MRI Physics",
+    "topic": "flow artifacts"
+  },
+  {
+    "id": "arrt-346",
+    "stem": "A patient presents with findings consistent with susceptibility effects. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because susceptibility effects requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "MRI Physics",
+    "topic": "susceptibility effects"
+  },
+  {
+    "id": "arrt-347",
+    "stem": "Which of the following best describes the primary indication for susceptibility effects?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for susceptibility effects. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "MRI Physics",
+    "topic": "susceptibility effects"
+  },
+  {
+    "id": "arrt-348",
+    "stem": "A healthcare professional is evaluating susceptibility effects. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for susceptibility effects. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "MRI Physics",
+    "topic": "susceptibility effects"
+  },
+  {
+    "id": "arrt-349",
+    "stem": "During assessment related to susceptibility effects, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of susceptibility effects requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "MRI Physics",
+    "topic": "susceptibility effects"
+  },
+  {
+    "id": "arrt-350",
+    "stem": "Which of the following is a contraindication associated with susceptibility effects?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in susceptibility effects. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "MRI Physics",
+    "topic": "susceptibility effects"
+  },
+  {
+    "id": "arrt-351",
+    "stem": "A patient presents with findings consistent with transducer types. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because transducer types requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Ultrasound Physics",
+    "topic": "transducer types"
+  },
+  {
+    "id": "arrt-352",
+    "stem": "Which of the following best describes the primary indication for transducer types?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for transducer types. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Ultrasound Physics",
+    "topic": "transducer types"
+  },
+  {
+    "id": "arrt-353",
+    "stem": "A healthcare professional is evaluating transducer types. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for transducer types. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Ultrasound Physics",
+    "topic": "transducer types"
+  },
+  {
+    "id": "arrt-354",
+    "stem": "During assessment related to transducer types, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of transducer types requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Ultrasound Physics",
+    "topic": "transducer types"
+  },
+  {
+    "id": "arrt-355",
+    "stem": "Which of the following is a contraindication associated with transducer types?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in transducer types. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Ultrasound Physics",
+    "topic": "transducer types"
+  },
+  {
+    "id": "arrt-356",
+    "stem": "A patient presents with findings consistent with frequency selection. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because frequency selection requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Ultrasound Physics",
+    "topic": "frequency selection"
+  },
+  {
+    "id": "arrt-357",
+    "stem": "Which of the following best describes the primary indication for frequency selection?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for frequency selection. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Ultrasound Physics",
+    "topic": "frequency selection"
+  },
+  {
+    "id": "arrt-358",
+    "stem": "A healthcare professional is evaluating frequency selection. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for frequency selection. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Ultrasound Physics",
+    "topic": "frequency selection"
+  },
+  {
+    "id": "arrt-359",
+    "stem": "During assessment related to frequency selection, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of frequency selection requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Ultrasound Physics",
+    "topic": "frequency selection"
+  },
+  {
+    "id": "arrt-360",
+    "stem": "Which of the following is a contraindication associated with frequency selection?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in frequency selection. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Ultrasound Physics",
+    "topic": "frequency selection"
+  },
+  {
+    "id": "arrt-361",
+    "stem": "A patient presents with findings consistent with Doppler principles. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because Doppler principles requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Ultrasound Physics",
+    "topic": "Doppler principles"
+  },
+  {
+    "id": "arrt-362",
+    "stem": "Which of the following best describes the primary indication for Doppler principles?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for Doppler principles. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Ultrasound Physics",
+    "topic": "Doppler principles"
+  },
+  {
+    "id": "arrt-363",
+    "stem": "A healthcare professional is evaluating Doppler principles. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for Doppler principles. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Ultrasound Physics",
+    "topic": "Doppler principles"
+  },
+  {
+    "id": "arrt-364",
+    "stem": "During assessment related to Doppler principles, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of Doppler principles requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Ultrasound Physics",
+    "topic": "Doppler principles"
+  },
+  {
+    "id": "arrt-365",
+    "stem": "Which of the following is a contraindication associated with Doppler principles?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in Doppler principles. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Ultrasound Physics",
+    "topic": "Doppler principles"
+  },
+  {
+    "id": "arrt-366",
+    "stem": "A patient presents with findings consistent with acoustic impedance. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because acoustic impedance requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Ultrasound Physics",
+    "topic": "acoustic impedance"
+  },
+  {
+    "id": "arrt-367",
+    "stem": "Which of the following best describes the primary indication for acoustic impedance?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for acoustic impedance. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Ultrasound Physics",
+    "topic": "acoustic impedance"
+  },
+  {
+    "id": "arrt-368",
+    "stem": "A healthcare professional is evaluating acoustic impedance. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for acoustic impedance. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Ultrasound Physics",
+    "topic": "acoustic impedance"
+  },
+  {
+    "id": "arrt-369",
+    "stem": "During assessment related to acoustic impedance, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of acoustic impedance requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Ultrasound Physics",
+    "topic": "acoustic impedance"
+  },
+  {
+    "id": "arrt-370",
+    "stem": "Which of the following is a contraindication associated with acoustic impedance?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in acoustic impedance. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Ultrasound Physics",
+    "topic": "acoustic impedance"
+  },
+  {
+    "id": "arrt-371",
+    "stem": "A patient presents with findings consistent with ultrasound artifacts. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because ultrasound artifacts requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Ultrasound Physics",
+    "topic": "ultrasound artifacts"
+  },
+  {
+    "id": "arrt-372",
+    "stem": "Which of the following best describes the primary indication for ultrasound artifacts?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for ultrasound artifacts. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Ultrasound Physics",
+    "topic": "ultrasound artifacts"
+  },
+  {
+    "id": "arrt-373",
+    "stem": "A healthcare professional is evaluating ultrasound artifacts. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for ultrasound artifacts. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Ultrasound Physics",
+    "topic": "ultrasound artifacts"
+  },
+  {
+    "id": "arrt-374",
+    "stem": "During assessment related to ultrasound artifacts, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of ultrasound artifacts requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Ultrasound Physics",
+    "topic": "ultrasound artifacts"
+  },
+  {
+    "id": "arrt-375",
+    "stem": "Which of the following is a contraindication associated with ultrasound artifacts?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in ultrasound artifacts. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Ultrasound Physics",
+    "topic": "ultrasound artifacts"
+  },
+  {
+    "id": "arrt-376",
+    "stem": "A patient presents with findings consistent with real-time scanning. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because real-time scanning requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Ultrasound Physics",
+    "topic": "real-time scanning"
+  },
+  {
+    "id": "arrt-377",
+    "stem": "Which of the following best describes the primary indication for real-time scanning?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for real-time scanning. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Ultrasound Physics",
+    "topic": "real-time scanning"
+  },
+  {
+    "id": "arrt-378",
+    "stem": "A healthcare professional is evaluating real-time scanning. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for real-time scanning. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Ultrasound Physics",
+    "topic": "real-time scanning"
+  },
+  {
+    "id": "arrt-379",
+    "stem": "During assessment related to real-time scanning, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of real-time scanning requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Ultrasound Physics",
+    "topic": "real-time scanning"
+  },
+  {
+    "id": "arrt-380",
+    "stem": "Which of the following is a contraindication associated with real-time scanning?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in real-time scanning. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Ultrasound Physics",
+    "topic": "real-time scanning"
+  },
+  {
+    "id": "arrt-381",
+    "stem": "A patient presents with findings consistent with harmonic imaging. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because harmonic imaging requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Ultrasound Physics",
+    "topic": "harmonic imaging"
+  },
+  {
+    "id": "arrt-382",
+    "stem": "Which of the following best describes the primary indication for harmonic imaging?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for harmonic imaging. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Ultrasound Physics",
+    "topic": "harmonic imaging"
+  },
+  {
+    "id": "arrt-383",
+    "stem": "A healthcare professional is evaluating harmonic imaging. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for harmonic imaging. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Ultrasound Physics",
+    "topic": "harmonic imaging"
+  },
+  {
+    "id": "arrt-384",
+    "stem": "During assessment related to harmonic imaging, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of harmonic imaging requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Ultrasound Physics",
+    "topic": "harmonic imaging"
+  },
+  {
+    "id": "arrt-385",
+    "stem": "Which of the following is a contraindication associated with harmonic imaging?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in harmonic imaging. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Ultrasound Physics",
+    "topic": "harmonic imaging"
+  },
+  {
+    "id": "arrt-386",
+    "stem": "A patient presents with findings consistent with B-mode imaging. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because B-mode imaging requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Ultrasound Physics",
+    "topic": "B-mode imaging"
+  },
+  {
+    "id": "arrt-387",
+    "stem": "Which of the following best describes the primary indication for B-mode imaging?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for B-mode imaging. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Ultrasound Physics",
+    "topic": "B-mode imaging"
+  },
+  {
+    "id": "arrt-388",
+    "stem": "A healthcare professional is evaluating B-mode imaging. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for B-mode imaging. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Ultrasound Physics",
+    "topic": "B-mode imaging"
+  },
+  {
+    "id": "arrt-389",
+    "stem": "During assessment related to B-mode imaging, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of B-mode imaging requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Ultrasound Physics",
+    "topic": "B-mode imaging"
+  },
+  {
+    "id": "arrt-390",
+    "stem": "Which of the following is a contraindication associated with B-mode imaging?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in B-mode imaging. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Ultrasound Physics",
+    "topic": "B-mode imaging"
+  },
+  {
+    "id": "arrt-391",
+    "stem": "A patient presents with findings consistent with M-mode imaging. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because M-mode imaging requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Ultrasound Physics",
+    "topic": "M-mode imaging"
+  },
+  {
+    "id": "arrt-392",
+    "stem": "Which of the following best describes the primary indication for M-mode imaging?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for M-mode imaging. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Ultrasound Physics",
+    "topic": "M-mode imaging"
+  },
+  {
+    "id": "arrt-393",
+    "stem": "A healthcare professional is evaluating M-mode imaging. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for M-mode imaging. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Ultrasound Physics",
+    "topic": "M-mode imaging"
+  },
+  {
+    "id": "arrt-394",
+    "stem": "During assessment related to M-mode imaging, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of M-mode imaging requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Ultrasound Physics",
+    "topic": "M-mode imaging"
+  },
+  {
+    "id": "arrt-395",
+    "stem": "Which of the following is a contraindication associated with M-mode imaging?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in M-mode imaging. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Ultrasound Physics",
+    "topic": "M-mode imaging"
+  },
+  {
+    "id": "arrt-396",
+    "stem": "A patient presents with findings consistent with probe orientation. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because probe orientation requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Ultrasound Physics",
+    "topic": "probe orientation"
+  },
+  {
+    "id": "arrt-397",
+    "stem": "Which of the following best describes the primary indication for probe orientation?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for probe orientation. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Ultrasound Physics",
+    "topic": "probe orientation"
+  },
+  {
+    "id": "arrt-398",
+    "stem": "A healthcare professional is evaluating probe orientation. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for probe orientation. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Ultrasound Physics",
+    "topic": "probe orientation"
+  },
+  {
+    "id": "arrt-399",
+    "stem": "During assessment related to probe orientation, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of probe orientation requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Ultrasound Physics",
+    "topic": "probe orientation"
+  },
+  {
+    "id": "arrt-400",
+    "stem": "Which of the following is a contraindication associated with probe orientation?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in probe orientation. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Ultrasound Physics",
+    "topic": "probe orientation"
+  },
+  {
+    "id": "arrt-401",
+    "stem": "A patient presents with findings consistent with venipuncture technique. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because venipuncture technique requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Patient Care",
+    "topic": "venipuncture technique"
+  },
+  {
+    "id": "arrt-402",
+    "stem": "Which of the following best describes the primary indication for venipuncture technique?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for venipuncture technique. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Patient Care",
+    "topic": "venipuncture technique"
+  },
+  {
+    "id": "arrt-403",
+    "stem": "A healthcare professional is evaluating venipuncture technique. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for venipuncture technique. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Patient Care",
+    "topic": "venipuncture technique"
+  },
+  {
+    "id": "arrt-404",
+    "stem": "During assessment related to venipuncture technique, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of venipuncture technique requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Patient Care",
+    "topic": "venipuncture technique"
+  },
+  {
+    "id": "arrt-405",
+    "stem": "Which of the following is a contraindication associated with venipuncture technique?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in venipuncture technique. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Patient Care",
+    "topic": "venipuncture technique"
+  },
+  {
+    "id": "arrt-406",
+    "stem": "A patient presents with findings consistent with contrast reactions. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because contrast reactions requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Patient Care",
+    "topic": "contrast reactions"
+  },
+  {
+    "id": "arrt-407",
+    "stem": "Which of the following best describes the primary indication for contrast reactions?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for contrast reactions. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Patient Care",
+    "topic": "contrast reactions"
+  },
+  {
+    "id": "arrt-408",
+    "stem": "A healthcare professional is evaluating contrast reactions. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for contrast reactions. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Patient Care",
+    "topic": "contrast reactions"
+  },
+  {
+    "id": "arrt-409",
+    "stem": "During assessment related to contrast reactions, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of contrast reactions requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Patient Care",
+    "topic": "contrast reactions"
+  },
+  {
+    "id": "arrt-410",
+    "stem": "Which of the following is a contraindication associated with contrast reactions?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in contrast reactions. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Patient Care",
+    "topic": "contrast reactions"
+  },
+  {
+    "id": "arrt-411",
+    "stem": "A patient presents with findings consistent with emergency procedures. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because emergency procedures requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Patient Care",
+    "topic": "emergency procedures"
+  },
+  {
+    "id": "arrt-412",
+    "stem": "Which of the following best describes the primary indication for emergency procedures?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for emergency procedures. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Patient Care",
+    "topic": "emergency procedures"
+  },
+  {
+    "id": "arrt-413",
+    "stem": "A healthcare professional is evaluating emergency procedures. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for emergency procedures. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Patient Care",
+    "topic": "emergency procedures"
+  },
+  {
+    "id": "arrt-414",
+    "stem": "During assessment related to emergency procedures, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of emergency procedures requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Patient Care",
+    "topic": "emergency procedures"
+  },
+  {
+    "id": "arrt-415",
+    "stem": "Which of the following is a contraindication associated with emergency procedures?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in emergency procedures. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Patient Care",
+    "topic": "emergency procedures"
+  },
+  {
+    "id": "arrt-416",
+    "stem": "A patient presents with findings consistent with vital signs monitoring. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because vital signs monitoring requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Patient Care",
+    "topic": "vital signs monitoring"
+  },
+  {
+    "id": "arrt-417",
+    "stem": "Which of the following best describes the primary indication for vital signs monitoring?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for vital signs monitoring. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Patient Care",
+    "topic": "vital signs monitoring"
+  },
+  {
+    "id": "arrt-418",
+    "stem": "A healthcare professional is evaluating vital signs monitoring. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for vital signs monitoring. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Patient Care",
+    "topic": "vital signs monitoring"
+  },
+  {
+    "id": "arrt-419",
+    "stem": "During assessment related to vital signs monitoring, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of vital signs monitoring requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Patient Care",
+    "topic": "vital signs monitoring"
+  },
+  {
+    "id": "arrt-420",
+    "stem": "Which of the following is a contraindication associated with vital signs monitoring?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in vital signs monitoring. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Patient Care",
+    "topic": "vital signs monitoring"
+  },
+  {
+    "id": "arrt-421",
+    "stem": "A patient presents with findings consistent with infection control. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because infection control requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Patient Care",
+    "topic": "infection control"
+  },
+  {
+    "id": "arrt-422",
+    "stem": "Which of the following best describes the primary indication for infection control?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for infection control. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Patient Care",
+    "topic": "infection control"
+  },
+  {
+    "id": "arrt-423",
+    "stem": "A healthcare professional is evaluating infection control. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for infection control. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Patient Care",
+    "topic": "infection control"
+  },
+  {
+    "id": "arrt-424",
+    "stem": "During assessment related to infection control, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of infection control requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Patient Care",
+    "topic": "infection control"
+  },
+  {
+    "id": "arrt-425",
+    "stem": "Which of the following is a contraindication associated with infection control?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in infection control. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Patient Care",
+    "topic": "infection control"
+  },
+  {
+    "id": "arrt-426",
+    "stem": "A patient presents with findings consistent with patient transfer. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because patient transfer requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Patient Care",
+    "topic": "patient transfer"
+  },
+  {
+    "id": "arrt-427",
+    "stem": "Which of the following best describes the primary indication for patient transfer?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for patient transfer. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Patient Care",
+    "topic": "patient transfer"
+  },
+  {
+    "id": "arrt-428",
+    "stem": "A healthcare professional is evaluating patient transfer. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for patient transfer. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Patient Care",
+    "topic": "patient transfer"
+  },
+  {
+    "id": "arrt-429",
+    "stem": "During assessment related to patient transfer, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of patient transfer requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Patient Care",
+    "topic": "patient transfer"
+  },
+  {
+    "id": "arrt-430",
+    "stem": "Which of the following is a contraindication associated with patient transfer?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in patient transfer. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Patient Care",
+    "topic": "patient transfer"
+  },
+  {
+    "id": "arrt-431",
+    "stem": "A patient presents with findings consistent with oxygen administration. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because oxygen administration requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Patient Care",
+    "topic": "oxygen administration"
+  },
+  {
+    "id": "arrt-432",
+    "stem": "Which of the following best describes the primary indication for oxygen administration?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for oxygen administration. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Patient Care",
+    "topic": "oxygen administration"
+  },
+  {
+    "id": "arrt-433",
+    "stem": "A healthcare professional is evaluating oxygen administration. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for oxygen administration. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Patient Care",
+    "topic": "oxygen administration"
+  },
+  {
+    "id": "arrt-434",
+    "stem": "During assessment related to oxygen administration, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of oxygen administration requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Patient Care",
+    "topic": "oxygen administration"
+  },
+  {
+    "id": "arrt-435",
+    "stem": "Which of the following is a contraindication associated with oxygen administration?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in oxygen administration. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Patient Care",
+    "topic": "oxygen administration"
+  },
+  {
+    "id": "arrt-436",
+    "stem": "A patient presents with findings consistent with medication administration. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because medication administration requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Patient Care",
+    "topic": "medication administration"
+  },
+  {
+    "id": "arrt-437",
+    "stem": "Which of the following best describes the primary indication for medication administration?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for medication administration. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Patient Care",
+    "topic": "medication administration"
+  },
+  {
+    "id": "arrt-438",
+    "stem": "A healthcare professional is evaluating medication administration. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for medication administration. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Patient Care",
+    "topic": "medication administration"
+  },
+  {
+    "id": "arrt-439",
+    "stem": "During assessment related to medication administration, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of medication administration requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Patient Care",
+    "topic": "medication administration"
+  },
+  {
+    "id": "arrt-440",
+    "stem": "Which of the following is a contraindication associated with medication administration?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in medication administration. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Patient Care",
+    "topic": "medication administration"
+  },
+  {
+    "id": "arrt-441",
+    "stem": "A patient presents with findings consistent with patient assessment. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because patient assessment requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Patient Care",
+    "topic": "patient assessment"
+  },
+  {
+    "id": "arrt-442",
+    "stem": "Which of the following best describes the primary indication for patient assessment?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for patient assessment. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Patient Care",
+    "topic": "patient assessment"
+  },
+  {
+    "id": "arrt-443",
+    "stem": "A healthcare professional is evaluating patient assessment. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for patient assessment. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Patient Care",
+    "topic": "patient assessment"
+  },
+  {
+    "id": "arrt-444",
+    "stem": "During assessment related to patient assessment, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of patient assessment requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Patient Care",
+    "topic": "patient assessment"
+  },
+  {
+    "id": "arrt-445",
+    "stem": "Which of the following is a contraindication associated with patient assessment?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in patient assessment. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Patient Care",
+    "topic": "patient assessment"
+  },
+  {
+    "id": "arrt-446",
+    "stem": "A patient presents with findings consistent with communication skills. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because communication skills requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Patient Care",
+    "topic": "communication skills"
+  },
+  {
+    "id": "arrt-447",
+    "stem": "Which of the following best describes the primary indication for communication skills?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for communication skills. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Patient Care",
+    "topic": "communication skills"
+  },
+  {
+    "id": "arrt-448",
+    "stem": "A healthcare professional is evaluating communication skills. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for communication skills. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Patient Care",
+    "topic": "communication skills"
+  },
+  {
+    "id": "arrt-449",
+    "stem": "During assessment related to communication skills, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of communication skills requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Patient Care",
+    "topic": "communication skills"
+  },
+  {
+    "id": "arrt-450",
+    "stem": "Which of the following is a contraindication associated with communication skills?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in communication skills. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Patient Care",
+    "topic": "communication skills"
+  },
+  {
+    "id": "arrt-451",
+    "stem": "A patient presents with findings consistent with phantom testing. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because phantom testing requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Quality Control",
+    "topic": "phantom testing"
+  },
+  {
+    "id": "arrt-452",
+    "stem": "Which of the following best describes the primary indication for phantom testing?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for phantom testing. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Quality Control",
+    "topic": "phantom testing"
+  },
+  {
+    "id": "arrt-453",
+    "stem": "A healthcare professional is evaluating phantom testing. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for phantom testing. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Quality Control",
+    "topic": "phantom testing"
+  },
+  {
+    "id": "arrt-454",
+    "stem": "During assessment related to phantom testing, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of phantom testing requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Quality Control",
+    "topic": "phantom testing"
+  },
+  {
+    "id": "arrt-455",
+    "stem": "Which of the following is a contraindication associated with phantom testing?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in phantom testing. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Quality Control",
+    "topic": "phantom testing"
+  },
+  {
+    "id": "arrt-456",
+    "stem": "A patient presents with findings consistent with reject analysis. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because reject analysis requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Quality Control",
+    "topic": "reject analysis"
+  },
+  {
+    "id": "arrt-457",
+    "stem": "Which of the following best describes the primary indication for reject analysis?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for reject analysis. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Quality Control",
+    "topic": "reject analysis"
+  },
+  {
+    "id": "arrt-458",
+    "stem": "A healthcare professional is evaluating reject analysis. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for reject analysis. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Quality Control",
+    "topic": "reject analysis"
+  },
+  {
+    "id": "arrt-459",
+    "stem": "During assessment related to reject analysis, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of reject analysis requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Quality Control",
+    "topic": "reject analysis"
+  },
+  {
+    "id": "arrt-460",
+    "stem": "Which of the following is a contraindication associated with reject analysis?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in reject analysis. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Quality Control",
+    "topic": "reject analysis"
+  },
+  {
+    "id": "arrt-461",
+    "stem": "A patient presents with findings consistent with artifact identification. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because artifact identification requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Quality Control",
+    "topic": "artifact identification"
+  },
+  {
+    "id": "arrt-462",
+    "stem": "Which of the following best describes the primary indication for artifact identification?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for artifact identification. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Quality Control",
+    "topic": "artifact identification"
+  },
+  {
+    "id": "arrt-463",
+    "stem": "A healthcare professional is evaluating artifact identification. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for artifact identification. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Quality Control",
+    "topic": "artifact identification"
+  },
+  {
+    "id": "arrt-464",
+    "stem": "During assessment related to artifact identification, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of artifact identification requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Quality Control",
+    "topic": "artifact identification"
+  },
+  {
+    "id": "arrt-465",
+    "stem": "Which of the following is a contraindication associated with artifact identification?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in artifact identification. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Quality Control",
+    "topic": "artifact identification"
+  },
+  {
+    "id": "arrt-466",
+    "stem": "A patient presents with findings consistent with equipment maintenance. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because equipment maintenance requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Quality Control",
+    "topic": "equipment maintenance"
+  },
+  {
+    "id": "arrt-467",
+    "stem": "Which of the following best describes the primary indication for equipment maintenance?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for equipment maintenance. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Quality Control",
+    "topic": "equipment maintenance"
+  },
+  {
+    "id": "arrt-468",
+    "stem": "A healthcare professional is evaluating equipment maintenance. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for equipment maintenance. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Quality Control",
+    "topic": "equipment maintenance"
+  },
+  {
+    "id": "arrt-469",
+    "stem": "During assessment related to equipment maintenance, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of equipment maintenance requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Quality Control",
+    "topic": "equipment maintenance"
+  },
+  {
+    "id": "arrt-470",
+    "stem": "Which of the following is a contraindication associated with equipment maintenance?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in equipment maintenance. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Quality Control",
+    "topic": "equipment maintenance"
+  },
+  {
+    "id": "arrt-471",
+    "stem": "A patient presents with findings consistent with resolution testing. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because resolution testing requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Quality Control",
+    "topic": "resolution testing"
+  },
+  {
+    "id": "arrt-472",
+    "stem": "Which of the following best describes the primary indication for resolution testing?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for resolution testing. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Quality Control",
+    "topic": "resolution testing"
+  },
+  {
+    "id": "arrt-473",
+    "stem": "A healthcare professional is evaluating resolution testing. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for resolution testing. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Quality Control",
+    "topic": "resolution testing"
+  },
+  {
+    "id": "arrt-474",
+    "stem": "During assessment related to resolution testing, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of resolution testing requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Quality Control",
+    "topic": "resolution testing"
+  },
+  {
+    "id": "arrt-475",
+    "stem": "Which of the following is a contraindication associated with resolution testing?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in resolution testing. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Quality Control",
+    "topic": "resolution testing"
+  },
+  {
+    "id": "arrt-476",
+    "stem": "A patient presents with findings consistent with processor QC. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because processor QC requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Quality Control",
+    "topic": "processor QC"
+  },
+  {
+    "id": "arrt-477",
+    "stem": "Which of the following best describes the primary indication for processor QC?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for processor QC. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Quality Control",
+    "topic": "processor QC"
+  },
+  {
+    "id": "arrt-478",
+    "stem": "A healthcare professional is evaluating processor QC. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for processor QC. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Quality Control",
+    "topic": "processor QC"
+  },
+  {
+    "id": "arrt-479",
+    "stem": "During assessment related to processor QC, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of processor QC requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Quality Control",
+    "topic": "processor QC"
+  },
+  {
+    "id": "arrt-480",
+    "stem": "Which of the following is a contraindication associated with processor QC?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in processor QC. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Quality Control",
+    "topic": "processor QC"
+  },
+  {
+    "id": "arrt-481",
+    "stem": "A patient presents with findings consistent with digital system QC. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because digital system QC requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Quality Control",
+    "topic": "digital system QC"
+  },
+  {
+    "id": "arrt-482",
+    "stem": "Which of the following best describes the primary indication for digital system QC?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for digital system QC. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Quality Control",
+    "topic": "digital system QC"
+  },
+  {
+    "id": "arrt-483",
+    "stem": "A healthcare professional is evaluating digital system QC. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for digital system QC. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Quality Control",
+    "topic": "digital system QC"
+  },
+  {
+    "id": "arrt-484",
+    "stem": "During assessment related to digital system QC, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of digital system QC requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Quality Control",
+    "topic": "digital system QC"
+  },
+  {
+    "id": "arrt-485",
+    "stem": "Which of the following is a contraindication associated with digital system QC?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in digital system QC. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Quality Control",
+    "topic": "digital system QC"
+  },
+  {
+    "id": "arrt-486",
+    "stem": "A patient presents with findings consistent with dose audits. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because dose audits requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Quality Control",
+    "topic": "dose audits"
+  },
+  {
+    "id": "arrt-487",
+    "stem": "Which of the following best describes the primary indication for dose audits?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for dose audits. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Quality Control",
+    "topic": "dose audits"
+  },
+  {
+    "id": "arrt-488",
+    "stem": "A healthcare professional is evaluating dose audits. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for dose audits. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Quality Control",
+    "topic": "dose audits"
+  },
+  {
+    "id": "arrt-489",
+    "stem": "During assessment related to dose audits, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of dose audits requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Quality Control",
+    "topic": "dose audits"
+  },
+  {
+    "id": "arrt-490",
+    "stem": "Which of the following is a contraindication associated with dose audits?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in dose audits. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Quality Control",
+    "topic": "dose audits"
+  },
+  {
+    "id": "arrt-491",
+    "stem": "A patient presents with findings consistent with image evaluation. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because image evaluation requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Quality Control",
+    "topic": "image evaluation"
+  },
+  {
+    "id": "arrt-492",
+    "stem": "Which of the following best describes the primary indication for image evaluation?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for image evaluation. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Quality Control",
+    "topic": "image evaluation"
+  },
+  {
+    "id": "arrt-493",
+    "stem": "A healthcare professional is evaluating image evaluation. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for image evaluation. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Quality Control",
+    "topic": "image evaluation"
+  },
+  {
+    "id": "arrt-494",
+    "stem": "During assessment related to image evaluation, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of image evaluation requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Quality Control",
+    "topic": "image evaluation"
+  },
+  {
+    "id": "arrt-495",
+    "stem": "Which of the following is a contraindication associated with image evaluation?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in image evaluation. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Quality Control",
+    "topic": "image evaluation"
+  },
+  {
+    "id": "arrt-496",
+    "stem": "A patient presents with findings consistent with regulatory standards. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because regulatory standards requires systematic assessment to ensure patient safety and optimal outcomes. The correct answer follows established clinical guidelines.",
+    "difficulty": 1,
+    "category": "Quality Control",
+    "topic": "regulatory standards"
+  },
+  {
+    "id": "arrt-497",
+    "stem": "Which of the following best describes the primary indication for regulatory standards?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for regulatory standards. Understanding the underlying principles ensures competent clinical decision-making.",
+    "difficulty": 2,
+    "category": "Quality Control",
+    "topic": "regulatory standards"
+  },
+  {
+    "id": "arrt-498",
+    "stem": "A healthcare professional is evaluating regulatory standards. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for regulatory standards. Clinical competency requires knowledge of both the procedure and its clinical implications.",
+    "difficulty": 3,
+    "category": "Quality Control",
+    "topic": "regulatory standards"
+  },
+  {
+    "id": "arrt-499",
+    "stem": "During assessment related to regulatory standards, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of regulatory standards requires understanding of the physiological basis and clinical significance. The correct answer demonstrates this comprehensive knowledge.",
+    "difficulty": 4,
+    "category": "Quality Control",
+    "topic": "regulatory standards"
+  },
+  {
+    "id": "arrt-500",
+    "stem": "Which of the following is a contraindication associated with regulatory standards?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale for this answer is based on current clinical evidence supporting best practices in regulatory standards. Patient safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Quality Control",
+    "topic": "regulatory standards"
+  }
+];
+  

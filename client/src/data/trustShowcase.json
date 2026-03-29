@@ -1,0 +1,50 @@
+[
+  {
+    "id": "ts-1",
+    "type": "snippet",
+    "title": "Flashcard Decks",
+    "excerpt": "Master nursing concepts with spaced-repetition flashcards across all major body systems and pharmacology topics.",
+    "href": "/flashcards",
+    "tag": "Flashcards"
+  },
+  {
+    "id": "ts-2",
+    "type": "snippet",
+    "title": "REx-PN Question Bank",
+    "excerpt": "Practice with 1,200+ exam-aligned questions featuring detailed rationales and performance tracking by domain.",
+    "href": "/mock-exams",
+    "tag": "QBank"
+  },
+  {
+    "id": "ts-3",
+    "type": "snippet",
+    "title": "Blood Transfusion Simulator",
+    "excerpt": "Interactive clinical simulation covering blood product verification, transfusion reactions, and nursing interventions.",
+    "href": "/blood-transfusion-simulator",
+    "tag": "Simulator"
+  },
+  {
+    "id": "ts-4",
+    "type": "snippet",
+    "title": "Cardiac Pathophysiology",
+    "excerpt": "Deep-dive lesson covering myocardial perfusion, valve disorders, heart failure pathways, and critical assessment findings.",
+    "href": "/lessons",
+    "tag": "Lessons"
+  },
+  {
+    "id": "ts-5",
+    "type": "snippet",
+    "title": "Med Math Calculator",
+    "excerpt": "Practice dosage calculations, IV drip rates, and weight-based dosing with step-by-step solutions and instant feedback.",
+    "href": "/med-math",
+    "tag": "Tools"
+  },
+  {
+    "id": "ts-6",
+    "type": "snippet",
+    "title": "Clinical Case Simulations",
+    "excerpt": "Work through realistic patient scenarios with branching decisions, priority-setting, and clinical reasoning practice.",
+    "href": "/case-simulation",
+    "tag": "Simulator"
+  }
+]

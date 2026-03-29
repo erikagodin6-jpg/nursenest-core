@@ -1,0 +1,680 @@
+{
+  "$schema": "nursenest-ui-contract/1.0",
+  "name": "NurseNest UI Contract",
+  "description": "Structured UI contract for the NurseNest healthcare education platform, capturing theme tokens, component specs, auth screen layout, and asset references for external UI generation (Emergent).",
+
+  "themeApplication": {
+    "summary": "The NurseNest theme system uses CSS custom properties defined on :root and [data-theme] selectors. These variables are consumed via Tailwind CSS utility classes configured in tailwind.config.ts. Component variants are managed with class-variance-authority (CVA), which maps variant props to sets of Tailwind classes. The default theme is 'lavender'. Other themes override --theme-* variables to re-skin the UI without changing component markup. Switching themes simply sets a data-theme attribute on the root element, and all components re-render with the new palette.",
+    "flow": [
+      "CSS custom properties defined in client/src/index.css on :root and [data-theme] selectors",
+      "Tailwind config maps these properties to utility classes (e.g., bg-primary → var(--theme-primary))",
+      "Components use Tailwind utilities directly or via CVA variant definitions",
+      "Theme switching sets data-theme attribute, causing all --theme-* variables to resolve to new values"
+    ]
+  },
+
+  "themeTokens": {
+    "colors": {
+      "primary": {
+        "value": "#9d82dd",
+        "cssVar": "--theme-primary",
+        "usage": "Primary brand color, buttons, links, active states"
+      },
+      "primaryForeground": {
+        "value": "#ffffff",
+        "cssVar": "--theme-primary-foreground",
+        "usage": "Text/icons on primary-colored backgrounds"
+      },
+      "secondary": {
+        "value": "#f3efff",
+        "cssVar": "--theme-secondary",
+        "usage": "Secondary backgrounds, subtle highlights"
+      },
+      "secondaryForeground": {
+        "value": "#9d82dd",
+        "cssVar": "--theme-secondary-foreground",
+        "usage": "Text on secondary backgrounds"
+      },
+      "accent": {
+        "value": "#faf8ff",
+        "cssVar": "--theme-accent",
+        "usage": "Accent backgrounds, hover states"
+      },
+      "accentForeground": {
+        "value": "#9d82dd",
+        "cssVar": "--theme-accent-foreground",
+        "usage": "Text on accent backgrounds"
+      },
+      "background": {
+        "value": "#fdfcfa",
+        "cssVar": "--theme-page-bg",
+        "usage": "Page background (warm white)"
+      },
+      "textPrimary": {
+        "value": "#111827",
+        "cssVar": "--theme-heading-text",
+        "usage": "Headings, primary text"
+      },
+      "textSecondary": {
+        "value": "#6b7280",
+        "cssVar": "--theme-body-text",
+        "usage": "Body text, descriptions"
+      },
+      "textMuted": {
+        "value": "#9ca3af",
+        "cssVar": "--theme-muted-text",
+        "usage": "Placeholder text, disabled states"
+      },
+      "border": {
+        "value": "#e9e2ff",
+        "cssVar": "--theme-border",
+        "usage": "Default border color with theme tint"
+      },
+      "ring": {
+        "value": "#d4c7f7",
+        "cssVar": "--theme-ring",
+        "usage": "Focus ring color"
+      },
+      "cardBackground": {
+        "value": "#ffffff",
+        "cssVar": "--theme-card-bg",
+        "usage": "Card backgrounds"
+      },
+      "cardBorder": {
+        "value": "color-mix(in srgb, var(--theme-border) 60%, transparent)",
+        "cssVar": "--theme-card-border",
+        "usage": "Card border with reduced opacity"
+      },
+      "cardText": {
+        "value": "#6b7280",
+        "cssVar": "--theme-card-text",
+        "usage": "Card body text"
+      },
+      "inputBackground": {
+        "value": "#ffffff",
+        "cssVar": "--theme-input-bg",
+        "usage": "Input field backgrounds"
+      },
+      "inputBorder": {
+        "value": "#e5e7eb",
+        "cssVar": "--theme-input-border",
+        "usage": "Input field borders"
+      },
+      "navBackground": {
+        "value": "#ffffff",
+        "cssVar": "--theme-nav-bg",
+        "usage": "Navigation background"
+      },
+      "navText": {
+        "value": "#6b7280",
+        "cssVar": "--theme-nav-text",
+        "usage": "Navigation text"
+      },
+      "navBorder": {
+        "value": "color-mix(in srgb, var(--theme-primary) 10%, transparent)",
+        "cssVar": "--theme-nav-border",
+        "usage": "Navigation border"
+      },
+      "topbarBackground": {
+        "value": "var(--theme-primary)",
+        "cssVar": "--theme-topbar-bg",
+        "usage": "Top bar background"
+      },
+      "topbarText": {
+        "value": "#ffffff",
+        "cssVar": "--theme-topbar-text",
+        "usage": "Top bar text"
+      },
+      "menuText": {
+        "value": "#374151",
+        "cssVar": "--theme-menu-text",
+        "usage": "Menu item text"
+      },
+      "menuHoverBackground": {
+        "value": "color-mix(in srgb, var(--theme-primary) 8%, transparent)",
+        "cssVar": "--theme-menu-hover-bg",
+        "usage": "Menu item hover background"
+      },
+      "menuHoverText": {
+        "value": "var(--theme-primary)",
+        "cssVar": "--theme-menu-hover-text",
+        "usage": "Menu item hover text"
+      },
+      "menuActiveBackground": {
+        "value": "color-mix(in srgb, var(--theme-primary) 12%, transparent)",
+        "cssVar": "--theme-menu-active-bg",
+        "usage": "Menu item active/selected background"
+      },
+      "separator": {
+        "value": "#f3f4f6",
+        "cssVar": "--theme-separator",
+        "usage": "Separator/divider lines"
+      },
+      "focusRing": {
+        "value": "var(--theme-primary)",
+        "cssVar": "--theme-focus-ring",
+        "usage": "Focus ring on interactive elements"
+      },
+      "warmWhite": {
+        "value": "#fdfcfa",
+        "cssVar": "--color-warmwhite",
+        "usage": "Base warm white background"
+      },
+      "softGray": {
+        "value": "#6b7280",
+        "cssVar": "--color-softgray",
+        "usage": "Soft gray for secondary text"
+      },
+      "examChrome": {
+        "value": "#C7B8FF",
+        "cssVar": "--exam-chrome-color",
+        "usage": "Exam mode chrome/border accent"
+      }
+    },
+    "brandPalette": {
+      "description": "Fixed brand colors used in infographics, study materials, and brand identity. Not affected by theme switching.",
+      "values": {
+        "primary": { "value": "#BFA6F6", "usage": "Primary headers, lavender brand identity" },
+        "secondary": { "value": "#AEE3E1", "usage": "Clinical info blocks, soft teal" },
+        "accent": { "value": "#FFD6A5", "usage": "Warnings, peak values, peach" },
+        "highlight": { "value": "#FFF3B0", "usage": "Key highlights, light yellow" },
+        "text": { "value": "#2E3A59", "usage": "All body text in brand materials, deep slate" },
+        "border": { "value": "#E5E7EB", "usage": "Table borders and dividers" },
+        "white": { "value": "#FFFFFF", "usage": "Backgrounds" },
+        "lightGray": { "value": "#F9FAFB", "usage": "Alternating row tints" }
+      }
+    },
+    "radius": {
+      "base": {
+        "value": "0.75rem",
+        "cssVar": "--radius",
+        "usage": "Default border radius for buttons, inputs, and small components"
+      },
+      "card": {
+        "value": "rounded-2xl (1rem)",
+        "usage": "Card component border radius"
+      }
+    },
+    "spacing": {
+      "section": {
+        "value": "clamp(4rem, 8vw, 6rem)",
+        "cssVar": "--space-section",
+        "usage": "Vertical spacing between major page sections"
+      },
+      "heroTop": {
+        "value": "clamp(2rem, 4vw, 3rem)",
+        "cssVar": "--space-hero-top",
+        "note": "Desktop override: clamp(1.5rem, 2.5vw, 2rem)"
+      },
+      "heroBottom": {
+        "value": "clamp(3rem, 6vw, 5rem)",
+        "cssVar": "--space-hero-bottom",
+        "note": "Desktop override: clamp(2.5rem, 5vw, 4rem)"
+      },
+      "block": {
+        "value": "clamp(2rem, 4vw, 3rem)",
+        "cssVar": "--space-block",
+        "usage": "Spacing between content blocks"
+      },
+      "element": {
+        "value": "clamp(1rem, 2vw, 1.5rem)",
+        "cssVar": "--space-element",
+        "usage": "Spacing between individual elements"
+      }
+    },
+    "typography": {
+      "fontFamily": {
+        "value": "\"DM Sans\", \"system-ui\", \"sans-serif\"",
+        "cssVar": "--font-sans",
+        "usage": "Primary font family for all UI text"
+      },
+      "sizes": {
+        "hero": {
+          "value": "clamp(2.25rem, 5vw, 3.5rem)",
+          "cssVar": "--text-hero",
+          "usage": "Hero section headings"
+        },
+        "section": {
+          "value": "clamp(1.75rem, 3.5vw, 2.5rem)",
+          "cssVar": "--text-section",
+          "usage": "Section headings"
+        },
+        "cardTitle": {
+          "value": "1.125rem",
+          "cssVar": "--text-card-title",
+          "usage": "Card title text"
+        },
+        "body": {
+          "value": "1rem",
+          "cssVar": "--text-body",
+          "usage": "Body text"
+        },
+        "secondary": {
+          "value": "0.875rem",
+          "cssVar": "--text-secondary",
+          "usage": "Secondary/supporting text"
+        },
+        "caption": {
+          "value": "0.75rem",
+          "cssVar": "--text-caption",
+          "usage": "Captions, fine print"
+        }
+      }
+    },
+    "shadows": {
+      "card": {
+        "value": "0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02)",
+        "cssVar": "--shadow-card",
+        "usage": "Default card shadow"
+      },
+      "cardHover": {
+        "value": "0 8px 30px -8px rgba(0,0,0,0.08), 0 4px 12px -4px rgba(0,0,0,0.04)",
+        "cssVar": "--shadow-card-hover",
+        "usage": "Card shadow on hover"
+      },
+      "elevated": {
+        "value": "0 12px 40px -12px rgba(0,0,0,0.12), 0 4px 16px -4px rgba(0,0,0,0.06)",
+        "cssVar": "--shadow-elevated",
+        "usage": "Elevated elements, modals, dropdowns"
+      },
+      "pricing": {
+        "value": "0 4px 24px -4px rgba(0,0,0,0.06), 0 2px 8px -2px rgba(0,0,0,0.03)",
+        "cssVar": "--shadow-pricing",
+        "usage": "Pricing cards"
+      },
+      "pricingHover": {
+        "value": "0 12px 40px -8px rgba(0,0,0,0.1), 0 4px 16px -4px rgba(0,0,0,0.05)",
+        "cssVar": "--shadow-pricing-hover",
+        "usage": "Pricing cards on hover"
+      }
+    },
+    "alternateThemes": {
+      "description": "NurseNest supports additional themes beyond the default 'lavender'. Each theme overrides --theme-* CSS variables via [data-theme] selectors. Only the primary accent colors change; layout, typography, and spacing remain constant.",
+      "available": ["mint", "blush", "slate", "midnight", "ocean", "forest", "clinical-light", "dark-clinical"]
+    }
+  },
+
+  "componentContracts": {
+    "Button": {
+      "source": "client/src/components/ui/button.tsx",
+      "library": "class-variance-authority (CVA)",
+      "baseClasses": "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 active:scale-[0.97] hover-elevate active-elevate-2",
+      "variants": {
+        "default": {
+          "classes": "bg-primary text-primary-foreground border border-primary-border",
+          "description": "Solid primary button with themed background and border. No hover color change."
+        },
+        "destructive": {
+          "classes": "bg-destructive text-destructive-foreground shadow-sm border-destructive-border",
+          "description": "Red/danger action button with shadow"
+        },
+        "outline": {
+          "classes": "border [border-color:var(--button-outline)] shadow-xs active:shadow-none",
+          "description": "Transparent background, inherits context background color. Outline border with subtle shadow."
+        },
+        "secondary": {
+          "classes": "border bg-secondary text-secondary-foreground border border-secondary-border",
+          "description": "Secondary themed button with border, no hover, no shadow."
+        },
+        "ghost": {
+          "classes": "border border-transparent",
+          "description": "Transparent button with no visible border or background. No hover state."
+        },
+        "link": {
+          "classes": "text-primary underline-offset-4 hover:underline",
+          "description": "Text-only link-styled button with underline on hover."
+        }
+      },
+      "sizes": {
+        "default": {
+          "classes": "min-h-9 px-4 py-2",
+          "description": "Standard 36px min-height button"
+        },
+        "sm": {
+          "classes": "min-h-8 rounded-md px-3 text-xs",
+          "description": "Small 32px min-height button with smaller text"
+        },
+        "lg": {
+          "classes": "min-h-10 rounded-md px-8",
+          "description": "Large 40px min-height button with wider padding"
+        },
+        "icon": {
+          "classes": "h-9 w-9",
+          "description": "Square 36x36px icon-only button"
+        }
+      },
+      "defaultVariants": {
+        "variant": "default",
+        "size": "default"
+      },
+      "props": {
+        "asChild": {
+          "type": "boolean",
+          "default": false,
+          "description": "When true, renders as Radix Slot, merging props into the child element"
+        },
+        "variant": {
+          "type": "enum",
+          "values": ["default", "destructive", "outline", "secondary", "ghost", "link"]
+        },
+        "size": {
+          "type": "enum",
+          "values": ["default", "sm", "lg", "icon"]
+        }
+      }
+    },
+    "Input": {
+      "source": "client/src/components/ui/input.tsx",
+      "element": "input",
+      "classes": "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+      "resolvedStyles": {
+        "height": "36px (h-9)",
+        "borderRadius": "0.375rem (rounded-md)",
+        "border": "1px solid var(--theme-input-border)",
+        "padding": "0.75rem horizontal, 0.25rem vertical (px-3 py-1)",
+        "fontSize": "1rem base, 0.875rem on md+ screens",
+        "focusRing": "1px ring using --theme-ring color"
+      }
+    },
+    "Card": {
+      "source": "client/src/components/ui/card.tsx",
+      "element": "div",
+      "classes": "rounded-2xl border bg-card text-card-foreground shadow-[var(--shadow-card)] transition-all duration-200",
+      "resolvedStyles": {
+        "borderRadius": "1rem (rounded-2xl)",
+        "border": "1px solid var(--theme-card-border)",
+        "background": "var(--theme-card-bg) → #ffffff",
+        "shadow": "var(--shadow-card) → 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02)",
+        "transition": "all 200ms"
+      },
+      "subComponents": {
+        "CardHeader": {
+          "classes": "flex flex-col space-y-1.5 p-6",
+          "description": "Flex column container with 6-unit padding and 0.375rem vertical gap"
+        },
+        "CardTitle": {
+          "classes": "font-semibold leading-none tracking-tight",
+          "description": "Semibold title with tight tracking"
+        },
+        "CardDescription": {
+          "classes": "text-sm text-muted-foreground",
+          "description": "Small muted description text"
+        },
+        "CardContent": {
+          "classes": "p-6 pt-0",
+          "description": "Content area with 6-unit padding, no top padding"
+        },
+        "CardFooter": {
+          "classes": "flex items-center p-6 pt-0",
+          "description": "Flex row footer with 6-unit padding, no top padding"
+        }
+      }
+    }
+  },
+
+  "authScreenStructure": {
+    "route": "/login",
+    "source": "client/src/pages/login.tsx",
+    "description": "Login/Register page with tabbed form interface",
+    "layout": {
+      "root": {
+        "element": "div",
+        "classes": "min-h-screen bg-warmwhite flex flex-col font-sans text-gray-900",
+        "children": [
+          {
+            "component": "Navigation",
+            "source": "client/src/components/navigation.tsx",
+            "description": "Top navigation bar with logo and links"
+          },
+          {
+            "element": "main",
+            "classes": "flex-1 flex items-center justify-center px-4 py-12",
+            "children": [
+              {
+                "component": "Card",
+                "classes": "w-full max-w-md border-none shadow-xl",
+                "children": [
+                  {
+                    "component": "CardHeader",
+                    "classes": "text-center pb-2",
+                    "children": [
+                      {
+                        "element": "div",
+                        "classes": "w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4",
+                        "description": "Icon container circle",
+                        "children": [
+                          {
+                            "component": "GraduationCap",
+                            "library": "lucide-react",
+                            "classes": "w-8 h-8 text-primary",
+                            "description": "Graduation cap icon in primary color"
+                          }
+                        ]
+                      },
+                      {
+                        "component": "CardTitle",
+                        "classes": "text-2xl",
+                        "content": "i18n:login.welcome",
+                        "description": "Welcome title heading"
+                      },
+                      {
+                        "element": "p",
+                        "classes": "text-gray-500 text-sm mt-1",
+                        "content": "i18n:login.subtitle",
+                        "description": "Subtitle text"
+                      }
+                    ]
+                  },
+                  {
+                    "component": "CardContent",
+                    "children": [
+                      {
+                        "component": "Tabs",
+                        "defaultValue": "login",
+                        "children": [
+                          {
+                            "component": "TabsList",
+                            "classes": "grid w-full grid-cols-2 mb-6",
+                            "children": [
+                              {
+                                "component": "TabsTrigger",
+                                "value": "login",
+                                "testId": "tab-login",
+                                "content": "i18n:login.signIn"
+                              },
+                              {
+                                "component": "TabsTrigger",
+                                "value": "register",
+                                "testId": "tab-register",
+                                "content": "i18n:login.createAccount"
+                              }
+                            ]
+                          },
+                          {
+                            "component": "TabsContent",
+                            "value": "login",
+                            "children": [
+                              {
+                                "element": "form",
+                                "classes": "space-y-4",
+                                "onSubmit": "handleLogin",
+                                "fields": [
+                                  {
+                                    "name": "username",
+                                    "label": "i18n:login.username",
+                                    "type": "text",
+                                    "icon": "User",
+                                    "iconClasses": "absolute left-3 top-3 w-4 h-4 text-gray-400",
+                                    "inputClasses": "pl-10",
+                                    "placeholder": "i18n:login.usernamePlaceholder",
+                                    "required": true,
+                                    "testId": "input-login-username"
+                                  },
+                                  {
+                                    "name": "password",
+                                    "label": "i18n:login.password",
+                                    "type": "password",
+                                    "icon": "Lock",
+                                    "iconClasses": "absolute left-3 top-3 w-4 h-4 text-gray-400",
+                                    "inputClasses": "pl-10",
+                                    "placeholder": "i18n:login.passwordPlaceholder",
+                                    "required": true,
+                                    "testId": "input-login-password"
+                                  }
+                                ],
+                                "submitButton": {
+                                  "component": "Button",
+                                  "type": "submit",
+                                  "classes": "w-full",
+                                  "content": "i18n:login.signIn",
+                                  "loadingContent": "i18n:login.signingIn",
+                                  "testId": "button-login"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "component": "TabsContent",
+                            "value": "register",
+                            "children": [
+                              {
+                                "element": "form",
+                                "classes": "space-y-4",
+                                "onSubmit": "handleRegister",
+                                "fields": [
+                                  {
+                                    "name": "username",
+                                    "label": "i18n:login.username",
+                                    "type": "text",
+                                    "icon": "User",
+                                    "iconClasses": "absolute left-3 top-3 w-4 h-4 text-gray-400",
+                                    "inputClasses": "pl-10",
+                                    "placeholder": "i18n:login.chooseUsername",
+                                    "required": true,
+                                    "testId": "input-register-username"
+                                  },
+                                  {
+                                    "name": "email",
+                                    "label": "i18n:login.email",
+                                    "type": "email",
+                                    "icon": "Mail",
+                                    "iconClasses": "absolute left-3 top-3 w-4 h-4 text-gray-400",
+                                    "inputClasses": "pl-10",
+                                    "placeholder": "i18n:login.emailPlaceholder",
+                                    "required": false,
+                                    "testId": "input-register-email"
+                                  },
+                                  {
+                                    "name": "password",
+                                    "label": "i18n:login.password",
+                                    "type": "password",
+                                    "icon": "Lock",
+                                    "iconClasses": "absolute left-3 top-3 w-4 h-4 text-gray-400",
+                                    "inputClasses": "pl-10",
+                                    "placeholder": "i18n:login.createPassword",
+                                    "required": true,
+                                    "testId": "input-register-password"
+                                  },
+                                  {
+                                    "name": "inviteCode",
+                                    "label": "i18n:pages.login.inviteCodeOptional",
+                                    "labelClasses": "text-gray-500 text-xs",
+                                    "type": "text",
+                                    "icon": "Ticket",
+                                    "iconClasses": "absolute left-3 top-3 w-4 h-4 text-gray-400",
+                                    "inputClasses": "pl-10",
+                                    "placeholder": "i18n:pages.login.enterBetaInviteCode",
+                                    "required": false,
+                                    "testId": "input-register-invite-code"
+                                  },
+                                  {
+                                    "name": "referralCode",
+                                    "label": "i18n:pages.login.referralCodeOptional",
+                                    "labelClasses": "text-gray-500 text-xs",
+                                    "type": "text",
+                                    "icon": "Gift",
+                                    "iconClasses": "absolute left-3 top-3 w-4 h-4 text-gray-400",
+                                    "inputClasses": "pl-10",
+                                    "placeholder": "i18n:pages.login.nnrefxxxxxx",
+                                    "required": false,
+                                    "testId": "input-register-referral-code",
+                                    "note": "Pre-filled from ?ref= URL parameter if present. Shows confirmation message when pre-filled."
+                                  }
+                                ],
+                                "submitButton": {
+                                  "component": "Button",
+                                  "type": "submit",
+                                  "classes": "w-full",
+                                  "content": "i18n:login.createAccount",
+                                  "loadingContent": "i18n:login.creatingAccount",
+                                  "testId": "button-register"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "component": "Footer",
+            "source": "client/src/components/footer.tsx",
+            "description": "Page footer"
+          }
+        ]
+      }
+    }
+  },
+
+  "assets": {
+    "logos": [
+      {
+        "name": "Brand Logo",
+        "path": "/brand-logo.gif",
+        "type": "image/gif",
+        "usage": "Full brand logo with text, used in navigation and marketing sections",
+        "exportedFrom": "client/src/lib/theme-logos.ts"
+      },
+      {
+        "name": "Logo Icon",
+        "path": "/logo-icon.gif",
+        "type": "image/gif",
+        "usage": "Icon-only logo mark, used in compact layouts and mobile navigation",
+        "exportedFrom": "client/src/lib/theme-logos.ts"
+      }
+    ],
+    "favicons": [
+      {
+        "path": "/favicon.svg",
+        "type": "image/svg+xml",
+        "usage": "Primary favicon (SVG), linked in index.html as rel='icon'"
+      },
+      {
+        "path": "/favicon.png",
+        "type": "image/png",
+        "usage": "Fallback raster favicon for browsers that don't support SVG favicons"
+      },
+      {
+        "path": "/favicon.gif",
+        "type": "image/gif",
+        "usage": "Animated favicon variant"
+      }
+    ]
+  },
+
+  "fileReferences": {
+    "theme": "client/src/index.css",
+    "themeLines": "25-54 (root variables), 64-94 (lavender default theme), 96+ (alternate theme selectors)",
+    "loginPage": "client/src/pages/login.tsx",
+    "button": "client/src/components/ui/button.tsx",
+    "input": "client/src/components/ui/input.tsx",
+    "card": "client/src/components/ui/card.tsx",
+    "brandPalette": "client/src/lib/brand-palette.ts",
+    "themeLogos": "client/src/lib/theme-logos.ts",
+    "indexHtml": "client/index.html"
+  }
+}

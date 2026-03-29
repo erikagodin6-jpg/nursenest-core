@@ -1,0 +1,190 @@
+[
+  {
+    "front": "What is the standard SID for a PA chest radiograph?",
+    "back": "72 inches (180 cm). Minimizes cardiac magnification.",
+    "category": "Positioning",
+    "bodyPart": "Chest",
+    "difficulty": 1
+  },
+  {
+    "front": "How many posterior ribs should be visible on a properly inspired PA chest?",
+    "back": "Minimum of 10 posterior ribs above the diaphragm.",
+    "category": "Positioning",
+    "bodyPart": "Chest",
+    "difficulty": 1
+  },
+  {
+    "front": "What indicates rotation on a PA chest radiograph?",
+    "back": "Unequal distances between medial clavicle ends and spinous processes.",
+    "category": "Positioning",
+    "bodyPart": "Chest",
+    "difficulty": 2
+  },
+  {
+    "front": "What is the CR direction for a PA hand?",
+    "back": "Perpendicular to the third MCP joint.",
+    "category": "Positioning",
+    "bodyPart": "Upper Extremity",
+    "difficulty": 1
+  },
+  {
+    "front": "Which wrist view best demonstrates the scaphoid bone?",
+    "back": "PA with ulnar deviation. Elongates the scaphoid, reducing foreshortening.",
+    "category": "Positioning",
+    "bodyPart": "Upper Extremity",
+    "difficulty": 2
+  },
+  {
+    "front": "How much should the leg be internally rotated for an ankle mortise view?",
+    "back": "15-20 degrees. Places intermalleolar line parallel to IR.",
+    "category": "Positioning",
+    "bodyPart": "Lower Extremity",
+    "difficulty": 2
+  },
+  {
+    "front": "For an AP pelvis, how much should the legs be internally rotated?",
+    "back": "15-20 degrees. Demonstrates femoral necks without foreshortening.",
+    "category": "Positioning",
+    "bodyPart": "Pelvis/Hip",
+    "difficulty": 1
+  },
+  {
+    "front": "For AP lumbar spine, why are the knees flexed?",
+    "back": "To reduce lumbar lordosis and open intervertebral disc spaces.",
+    "category": "Positioning",
+    "bodyPart": "Spine",
+    "difficulty": 2
+  },
+  {
+    "front": "What is bremsstrahlung radiation?",
+    "back": "Radiation produced when an electron is decelerated by the nuclear force field. Produces continuous spectrum, 80-90% of beam.",
+    "category": "Physics",
+    "difficulty": 1
+  },
+  {
+    "front": "What is the K-shell binding energy of tungsten?",
+    "back": "69.5 keV. Incident electrons must exceed this energy for K-characteristic X-rays.",
+    "category": "Physics",
+    "difficulty": 3
+  },
+  {
+    "front": "What determines the maximum photon energy in an X-ray beam?",
+    "back": "The kVp setting. Maximum energy in keV equals the peak kilovoltage.",
+    "category": "Physics",
+    "difficulty": 1
+  },
+  {
+    "front": "How does photoelectric absorption probability change with atomic number?",
+    "back": "Proportional to Z^3. Full relationship: Z^3/E^3.",
+    "category": "Physics",
+    "difficulty": 3
+  },
+  {
+    "front": "What is the primary source of scatter radiation in diagnostic radiology?",
+    "back": "Compton scattering. Predominant in the diagnostic energy range.",
+    "category": "Physics",
+    "difficulty": 2
+  },
+  {
+    "front": "State the inverse square law.",
+    "back": "I1/I2 = (D2/D1)^2. Doubling distance reduces intensity to one-quarter.",
+    "category": "Physics",
+    "difficulty": 2
+  },
+  {
+    "front": "What is the anode heel effect?",
+    "back": "Greater beam intensity on cathode side. Thicker body parts should be placed cathode-side.",
+    "category": "Physics",
+    "difficulty": 2
+  },
+  {
+    "front": "What is the line-focus principle?",
+    "back": "Angling the anode target makes the effective focal spot smaller than actual, improving resolution while maintaining heat capacity.",
+    "category": "Physics",
+    "difficulty": 2
+  },
+  {
+    "front": "What is the annual occupational whole-body dose limit in Canada (CNSC)?",
+    "back": "50 mSv per year, with 100 mSv cumulative over 5 years.",
+    "category": "Radiation Safety",
+    "difficulty": 1
+  },
+  {
+    "front": "What is the annual occupational dose limit in the USA (NCRP)?",
+    "back": "50 mSv (5 rem) per year. Cumulative: 10 mSv x age.",
+    "category": "Radiation Safety",
+    "difficulty": 1
+  },
+  {
+    "front": "What are the three cardinal principles of radiation protection?",
+    "back": "Time (minimize), Distance (maximize), and Shielding (use appropriate barriers).",
+    "category": "Radiation Safety",
+    "difficulty": 1
+  },
+  {
+    "front": "What does ALARA stand for?",
+    "back": "As Low As Reasonably Achievable. The guiding principle for all radiation exposures.",
+    "category": "Radiation Safety",
+    "difficulty": 1
+  },
+  {
+    "front": "What is the 15% kVp rule?",
+    "back": "Increasing kVp by 15% approximately doubles receptor exposure, equivalent to doubling mAs.",
+    "category": "Image Production",
+    "difficulty": 2
+  },
+  {
+    "front": "What controls contrast in digital radiography?",
+    "back": "Window width. Narrow = high contrast. Wide = low contrast. Window level controls brightness.",
+    "category": "Image Production",
+    "difficulty": 2
+  },
+  {
+    "front": "What does Deviation Index (DI) = 0 indicate?",
+    "back": "Exposure matched the target exactly. Positive = overexposure, Negative = underexposure.",
+    "category": "Image Production",
+    "difficulty": 2
+  },
+  {
+    "front": "What technical factor primarily controls X-ray quantity?",
+    "back": "mAs (milliampere-seconds). Directly controls number of photons produced.",
+    "category": "Image Production",
+    "difficulty": 1
+  },
+  {
+    "front": "What is the purpose of the rotating anode?",
+    "back": "Distributes heat over a larger area (focal track), allowing higher tube loading without melting.",
+    "category": "Equipment",
+    "difficulty": 1
+  },
+  {
+    "front": "What is the most effective method to prevent infection spread in radiology?",
+    "back": "Proper hand hygiene (handwashing or alcohol-based sanitizer).",
+    "category": "Patient Care",
+    "difficulty": 1
+  },
+  {
+    "front": "When is water-soluble iodinated contrast preferred over barium?",
+    "back": "When bowel perforation is suspected. Barium causes severe peritonitis if it leaks.",
+    "category": "Patient Care",
+    "difficulty": 2
+  },
+  {
+    "front": "What is the first drug for anaphylactic contrast reaction?",
+    "back": "Epinephrine. Reverses bronchospasm, vasodilation, and increases cardiac output.",
+    "category": "Patient Care",
+    "difficulty": 3
+  },
+  {
+    "front": "What must be verified before any radiographic exam?",
+    "back": "Patient identity and requisition. First step to prevent wrong-patient errors.",
+    "category": "Patient Care",
+    "difficulty": 1
+  },
+  {
+    "front": "What target material is used in diagnostic X-ray tubes?",
+    "back": "Tungsten (Z=74). High atomic number, high melting point (3370 C).",
+    "category": "Equipment",
+    "difficulty": 1
+  }
+]

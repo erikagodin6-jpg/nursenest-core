@@ -1,0 +1,199 @@
+import type { CareerQuestion } from "./rrt-questions";
+
+export const ptaQuestionsBatch18: CareerQuestion[] = [
+  {
+    "id": "pta-b18-001",
+    "stem": "The deltoid ligament of the ankle resists:",
+    "options": [
+      "Inversion",
+      "Eversion (valgus) stress — strong ligament on the medial ankle",
+      "Plantar flexion",
+      "Dorsiflexion"
+    ],
+    "correctIndex": 1,
+    "rationale": "Deltoid: strong medial ankle ligament complex. Resists eversion/valgus, some ER, and anterior/posterior translation. Rarely injured in isolation (usually with associated fracture).",
+    "difficulty": 1,
+    "category": "Biomechanics & Kinesiology",
+    "topic": "Ankle Anatomy"
+  },
+  {
+    "id": "pta-b18-002",
+    "stem": "Cardiac output at rest is approximately:",
+    "options": [
+      "1 L/min",
+      "5 L/min (HR ~70 × SV ~70 mL)",
+      "10 L/min",
+      "20 L/min"
+    ],
+    "correctIndex": 1,
+    "rationale": "Resting CO: ~5 L/min. During maximal exercise: 20-25 L/min (untrained) to 35-40 L/min (trained). CO = HR × SV. Increases via increased HR and SV during exercise.",
+    "difficulty": 1,
+    "category": "Cardiopulmonary Physical Therapy",
+    "topic": "Cardiac Physiology"
+  },
+  {
+    "id": "pta-b18-003",
+    "stem": "Maximum heart rate is estimated by:",
+    "options": [
+      "200 - age",
+      "220 - age (simple estimation, may underestimate in younger, overestimate in older adults)",
+      "180 - age",
+      "250 - age"
+    ],
+    "correctIndex": 1,
+    "rationale": "HRmax estimate: 220 - age. Simple but has standard deviation of ±10-12 bpm. Alternative: 208 - (0.7 × age). True HRmax determined by maximal exercise test.",
+    "difficulty": 1,
+    "category": "Cardiopulmonary Physical Therapy",
+    "topic": "Exercise Prescription"
+  },
+  {
+    "id": "pta-b18-004",
+    "stem": "A TENS unit for chronic pain management typically uses:",
+    "options": [
+      "High frequency, sensory level",
+      "Low frequency (2-4 Hz), high intensity motor level (endorphin release for prolonged effect)",
+      "Maximum intensity at all times",
+      "No specific settings"
+    ],
+    "correctIndex": 1,
+    "rationale": "Chronic pain TENS: low frequency (acupuncture-like, 2-4 Hz), motor-level intensity (visible twitch). Stimulates endorphin release. Slower onset but longer-lasting pain relief than conventional.",
+    "difficulty": 2,
+    "category": "Therapeutic Modalities",
+    "topic": "TENS for Chronic Pain"
+  },
+  {
+    "id": "pta-b18-005",
+    "stem": "Hydrocolloid dressings are appropriate for:",
+    "options": [
+      "Heavily draining wounds",
+      "Wounds with light to moderate exudate, providing autolytic debridement in a moist environment",
+      "Infected wounds requiring frequent monitoring",
+      "Deep cavitary wounds"
+    ],
+    "correctIndex": 1,
+    "rationale": "Hydrocolloid: occlusive/semi-occlusive, light-moderate exudate. Promotes autolytic debridement. Water-resistant (showering). Change every 3-7 days. Not for infected wounds (occlusive trap bacteria).",
+    "difficulty": 1,
+    "category": "Integumentary & Wound Care",
+    "topic": "Wound Dressings"
+  },
+  {
+    "id": "pta-b18-006",
+    "stem": "Alginate dressings are derived from:",
+    "options": [
+      "Cotton",
+      "Seaweed (calcium alginate fibers) and are highly absorbent for moderate to heavily draining wounds",
+      "Synthetic polymers",
+      "Animal collagen"
+    ],
+    "correctIndex": 1,
+    "rationale": "Alginate: seaweed-derived calcium alginate. Highly absorbent (moderate-heavy exudate). Conforms to wound shape. Promotes hemostasis. Requires secondary dressing. Change when saturated.",
+    "difficulty": 1,
+    "category": "Integumentary & Wound Care",
+    "topic": "Wound Dressings"
+  },
+  {
+    "id": "pta-b18-007",
+    "stem": "Foam dressings are BEST for:",
+    "options": [
+      "Dry wounds",
+      "Wounds with moderate to heavy exudate requiring absorption while maintaining moisture balance",
+      "Eschar-covered wounds",
+      "Skin tears with no drainage"
+    ],
+    "correctIndex": 1,
+    "rationale": "Foam dressings: absorbent, maintain moist environment, thermal insulation. Available with adhesive borders and non-adhesive. Good for pressure injuries, venous ulcers with moderate-heavy drainage.",
+    "difficulty": 1,
+    "category": "Integumentary & Wound Care",
+    "topic": "Wound Dressings"
+  },
+  {
+    "id": "pta-b18-008",
+    "stem": "A transparent film dressing is appropriate for:",
+    "options": [
+      "Heavily draining wounds",
+      "Superficial wounds, IV sites, and Stage I pressure injuries with minimal exudate",
+      "Deep cavity wounds",
+      "Wounds requiring compression"
+    ],
+    "correctIndex": 1,
+    "rationale": "Transparent film: semi-permeable (O2/moisture vapor passes). Minimal/no exudate wounds. Allows visual monitoring. Autolytic debridement. IV sites. Secondary dressing. Change every 5-7 days.",
+    "difficulty": 1,
+    "category": "Integumentary & Wound Care",
+    "topic": "Wound Dressings"
+  },
+  {
+    "id": "pta-b18-009",
+    "stem": "Silver-impregnated dressings are used for:",
+    "options": [
+      "All wounds regardless of infection",
+      "Wounds with critical colonization or local infection (antimicrobial properties)",
+      "Only clean wounds",
+      "Only surgical incisions"
+    ],
+    "correctIndex": 1,
+    "rationale": "Silver dressings: broad-spectrum antimicrobial. For critically colonized/locally infected wounds. Available in multiple forms (alginate, foam, hydrofiber). Not for routine use in clean wounds.",
+    "difficulty": 2,
+    "category": "Integumentary & Wound Care",
+    "topic": "Antimicrobial Dressings"
+  },
+  {
+    "id": "pta-b18-010",
+    "stem": "Collagen dressings promote wound healing by:",
+    "options": [
+      "Debridement",
+      "Providing a scaffold for cellular migration and new tissue formation in stalled wounds",
+      "Applying compression",
+      "Reducing infection only"
+    ],
+    "correctIndex": 1,
+    "rationale": "Collagen dressings: biological scaffold attracting fibroblasts and supporting granulation tissue. For stalled/chronic wounds. Available as sheets, particles, and gels. Requires moist environment.",
+    "difficulty": 2,
+    "category": "Integumentary & Wound Care",
+    "topic": "Advanced Dressings"
+  },
+  {
+    "id": "pta-b18-011",
+    "stem": "Range of motion exercises can be classified as:",
+    "options": [
+      "Only active",
+      "Passive (PROM), active-assisted (AAROM), and active (AROM) based on who provides the force for movement",
+      "Only passive",
+      "Only resistance-based"
+    ],
+    "correctIndex": 1,
+    "rationale": "PROM: external force (therapist/gravity/device), no patient muscle contraction. AAROM: patient + external assist. AROM: patient muscle force alone through full available ROM.",
+    "difficulty": 1,
+    "category": "Therapeutic Exercise",
+    "topic": "ROM Exercise Types"
+  },
+  {
+    "id": "pta-b18-012",
+    "stem": "The WHO analgesic ladder for pain management progresses from:",
+    "options": [
+      "Strong opioids first",
+      "Non-opioids → weak opioids → strong opioids (step-up approach based on pain severity)",
+      "Only non-pharmacological",
+      "Only nerve blocks"
+    ],
+    "correctIndex": 1,
+    "rationale": "WHO ladder: Step 1 (mild): non-opioids (acetaminophen, NSAIDs). Step 2 (moderate): weak opioids + non-opioids. Step 3 (severe): strong opioids ± non-opioids. Adjuvants at all steps.",
+    "difficulty": 1,
+    "category": "Pain Management",
+    "topic": "Pain Management Approach"
+  },
+  {
+    "id": "pta-b18-013",
+    "stem": "Interferential current therapy (IFC) differs from TENS by:",
+    "options": [
+      "Being the same modality",
+      "Using two medium-frequency currents that cross in tissue to produce a low-frequency beat frequency at depth with less skin discomfort",
+      "Using direct current",
+      "Not providing pain relief"
+    ],
+    "correctIndex": 1,
+    "rationale": "IFC advantages over TENS: deeper penetration (medium frequency passes through skin more easily), less skin impedance, more comfortable at therapeutic intensities. Beat frequency mimics TENS effects at depth.",
+    "difficulty": 2,
+    "category": "Therapeutic Modalities",
+    "topic": "IFC vs TENS"
+  }
+];

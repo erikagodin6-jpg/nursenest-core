@@ -1,0 +1,9 @@
+# https://docs.railway.com/reference/config-as-code
+# Aligns with Render: same shell build script and npm start.
+
+[build]
+builder = "NIXPACKS"
+buildCommand = "chmod +x scripts/production-build.sh && ./scripts/production-build.sh"
+
+[deploy]
+startCommand = "TZ=America/Toronto npm start"

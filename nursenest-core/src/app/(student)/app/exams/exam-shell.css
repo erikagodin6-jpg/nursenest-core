@@ -1,0 +1,18 @@
+/* Exam-only: local token lock so global dark-theme utility overrides never flatten stems/options. */
+.nn-exam-surface {
+  --theme-page-bg: #fdfcfa;
+  --theme-card-bg: #ffffff;
+  --theme-card-border: #e5e7eb;
+  --theme-heading-text: #111827;
+  --theme-body-text: #1f2937;
+  --theme-muted-text: #6b7280;
+  --color-warmwhite: #fdfcfa;
+  background-color: var(--theme-page-bg);
+  color: var(--theme-body-text);
+}
+
+.nn-exam-surface .nn-card {
+  background: var(--theme-card-bg);
+  border-color: var(--theme-card-border);
+  color: var(--theme-body-text);
+}

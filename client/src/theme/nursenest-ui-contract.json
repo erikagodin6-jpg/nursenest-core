@@ -1,0 +1,125 @@
+{
+  "contract": "NurseNest UI Design Contract",
+  "version": "1.0.0",
+  "lastUpdated": "2026-03-18",
+  "brand": {
+    "name": "NurseNest",
+    "tagline": "Canadian Nursing & Allied Health Exam Prep",
+    "domain": "nursenest.ca",
+    "logoAsset": "/brand-logo.gif",
+    "logoIconAsset": "/logo-icon.gif",
+    "logoComponent": "client/src/components/themed-logo.tsx",
+    "logoThemeFile": "client/src/lib/theme-logos.ts"
+  },
+  "colors": {
+    "primary": "#CDB4DB",
+    "secondary": "#FFC8DD",
+    "accent": "#BDE0FE",
+    "background": "#FAF7FD",
+    "cardBackground": "#FFFFFF",
+    "textPrimary": "#2B2B2B",
+    "textSecondary": "#6B6B6B",
+    "inputBorder": "#E6DFF2",
+    "inputBorderFocus": "#CDB4DB",
+    "buttonShadow": "0 4px 14px rgba(205,180,219,0.25)",
+    "tabActiveBackground": "#CDB4DB",
+    "tabActiveText": "#FFFFFF",
+    "tabInactiveBackground": "rgba(205,180,219,0.08)",
+    "divider": "#E6DFF2",
+    "success": "#22c55e",
+    "error": "#ef4444",
+    "warning": "#f59e0b"
+  },
+  "typography": {
+    "fontFamily": "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif",
+    "heading": { "weight": 600, "color": "#2B2B2B" },
+    "body": { "weight": 400, "color": "#2B2B2B" },
+    "caption": { "weight": 400, "color": "#6B6B6B" },
+    "label": { "weight": 500, "color": "#2B2B2B" },
+    "link": { "weight": 600, "color": "#CDB4DB" }
+  },
+  "spacing": {
+    "cardPadding": "24px",
+    "inputGap": "16px",
+    "sectionGap": "24px"
+  },
+  "borderRadius": {
+    "card": "16px",
+    "input": "12px",
+    "button": "12px",
+    "tab": "10px"
+  },
+  "components": {
+    "input": {
+      "height": "44px",
+      "borderWidth": "1.5px",
+      "borderColor": "#E6DFF2",
+      "borderRadius": "12px",
+      "backgroundColor": "#FFFFFF",
+      "focusRingColor": "#CDB4DB",
+      "iconColor": "#CDB4DB",
+      "iconSize": "16px",
+      "paddingLeft": "40px"
+    },
+    "button": {
+      "height": "44px",
+      "borderRadius": "12px",
+      "fontWeight": 600,
+      "backgroundColor": "#CDB4DB",
+      "textColor": "#FFFFFF",
+      "shadow": "0 4px 14px rgba(205,180,219,0.25)",
+      "hoverOpacity": 0.9
+    },
+    "tabs": {
+      "height": "44px",
+      "borderRadius": "12px",
+      "activeBackground": "#CDB4DB",
+      "activeText": "#FFFFFF",
+      "inactiveBackground": "transparent",
+      "inactiveText": "#6B6B6B",
+      "containerBackground": "rgba(205,180,219,0.08)"
+    },
+    "card": {
+      "borderRadius": "16px",
+      "shadow": "0 8px 30px rgba(0,0,0,0.08)",
+      "border": "none",
+      "backgroundColor": "#FFFFFF",
+      "maxWidth": "420px"
+    }
+  },
+  "authScreens": {
+    "layout": "centered-card",
+    "background": "#FAF7FD",
+    "showNavigation": true,
+    "showFooter": true,
+    "logoWidth": 180,
+    "sections": {
+      "login": {
+        "fields": ["username", "password"],
+        "actions": ["signIn", "forgotPassword", "switchToRegister"]
+      },
+      "register": {
+        "fields": ["username", "email", "password", "inviteCode", "referralCode"],
+        "actions": ["createAccount"]
+      }
+    }
+  },
+  "rules": {
+    "noEmoji": true,
+    "noAILabel": true,
+    "primaryColorOnly": "lavender palette (#CDB4DB family)",
+    "textColorOnly": "slate (#2B2B2B / #6B6B6B)",
+    "noGenericHospitalIcons": true,
+    "useThemedLogoComponent": true
+  },
+  "files": {
+    "contractFile": "client/src/theme/nursenest-ui-contract.json",
+    "themeFile": "client/src/theme/nursenestTheme.ts",
+    "authThemeFile": "client/src/lib/auth-theme.ts",
+    "loginPage": "client/src/pages/login.tsx",
+    "logoComponent": "client/src/components/themed-logo.tsx",
+    "logoAssets": "client/src/lib/theme-logos.ts",
+    "brandLogoPath": "client/public/brand-logo.gif",
+    "logoIconPath": "client/public/logo-icon.gif"
+  }
+}

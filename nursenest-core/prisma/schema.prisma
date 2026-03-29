@@ -1,0 +1,512 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum CountryCode {
+  CA
+  US
+}
+
+enum TierCode {
+  RPN
+  LVN_LPN
+  RN
+  NP
+  ALLIED
+}
+
+enum UserRole {
+  LEARNER
+  ADMIN
+}
+
+enum ContentStatus {
+  DRAFT
+  IN_REVIEW
+  PUBLISHED
+  ARCHIVED
+}
+
+enum ExamFamily {
+  NCLEX_RN
+  NCLEX_PN
+  REX_PN
+  NP
+  ALLIED
+  GENERIC
+}
+
+enum DifficultyBand {
+  FOUNDATION
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum QuestionType {
+  MCQ
+  SATA
+  NGN_CASE
+  ORDERING
+  FIB_NUMERIC
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  GRACE
+  CANCELLED
+  PAST_DUE
+}
+
+enum JobStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum ExamSessionStatus {
+  IN_PROGRESS
+  COMPLETED
+}
+
+/** AI-generated content review workflow — never auto-published to learner pools. */
+enum DraftReviewStatus {
+  PENDING_REVIEW
+  APPROVED
+  REJECTED
+  PROMOTED
+}
+
+model User {
+  id                      String         @id @default(cuid())
+  email                   String         @unique
+  /** Lowercase login handle; optional. PostgreSQL allows multiple NULLs under UNIQUE. */
+  username                String?        @unique
+  name                    String
+  passwordHash            String?
+  role                    UserRole       @default(LEARNER)
+  country                 CountryCode
+  tier                    TierCode
+  examFocus               String?
+  studyGoal               String?
+  dailyStudyMinutes       Int?
+  learnerPath             String?
+  onboardingCompletedAt   DateTime?
+  freeQuestionViews       Int            @default(0)
+  freeLessonOpens         Int            @default(0)
+  createdAt               DateTime       @default(now())
+  updatedAt               DateTime       @updatedAt
+  subscriptions           Subscription[]
+  attempts                ExamAttempt[]
+  examSessions            ExamSession[]
+  progress                Progress[]
+  aiGenerationJobs        AiGenerationJob[]           @relation("AiJobCreatedBy")
+  questionDraftsCreated   GeneratedQuestionDraft[]    @relation("QuestionDraftCreatedBy")
+  questionDraftsReviewed  GeneratedQuestionDraft[]    @relation("QuestionDraftReviewedBy")
+  flashcardDraftsCreated  GeneratedFlashcardDraft[]   @relation("FlashcardDraftCreatedBy")
+  flashcardDraftsReviewed GeneratedFlashcardDraft[]   @relation("FlashcardDraftReviewedBy")
+  lessonDraftsCreated     GeneratedLessonDraft[]      @relation("LessonDraftCreatedBy")
+  lessonDraftsReviewed    GeneratedLessonDraft[]      @relation("LessonDraftReviewedBy")
+  passwordResetTokens     PasswordResetToken[]
+}
+
+/** One-time password reset tokens; raw token is never stored (only SHA-256 hex). */
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model Subscription {
+  id                   String             @id @default(cuid())
+  userId               String
+  user                 User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status               SubscriptionStatus @default(ACTIVE)
+  stripeCustomerId     String?
+  stripeSubscriptionId String             @unique
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+}
+
+model Category {
+  id        String     @id @default(cuid())
+  name      String
+  slug      String     @unique
+  topicCode String?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  flashcards Flashcard[]
+  generatedQuestionDrafts  GeneratedQuestionDraft[]
+  generatedFlashcardDrafts GeneratedFlashcardDraft[]
+}
+
+/** Public SEO blog posts (migrated from legacy content_items / static allied data). Not the same rows as `content_items.type = 'lesson'`. */
+model BlogPost {
+  id           String   @id @default(cuid())
+  slug         String   @unique
+  title        String
+  excerpt      String
+  body         String   @db.Text
+  coverImage   String?
+  tags         String[] @default([])
+  category     String?
+  published    Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  /** e.g. content_items, paramedic-static, legacy-json */
+  legacySource String?
+
+  @@index([published, createdAt])
+}
+
+/** Production `content_items` — lessons are `type = "lesson"`. */
+model ContentItem {
+  id                   String    @id @default(uuid()) @db.VarChar
+  title                String
+  slug                 String    @unique
+  type                 String    @default("lesson")
+  category             String?
+  bodySystem           String?   @map("body_system")
+  tier                 String?
+  status               String?   @default("draft")
+  tags                 String[]  @default([])
+  summary              String?
+  content              Json      @default("[]")
+  seoTitle             String?   @map("seo_title")
+  seoDescription       String?   @map("seo_description")
+  seoKeywords          String[]  @default([]) @map("seo_keywords")
+  primaryKeyword       String?   @map("primary_keyword")
+  secondaryKeywords    String[]  @default([]) @map("secondary_keywords")
+  scheduledAt          DateTime? @map("scheduled_at")
+  clinicalSafetyReview Boolean   @default(false) @map("clinical_safety_review")
+  autoPublish          Boolean   @default(false) @map("auto_publish")
+  createdAt            DateTime  @default(now()) @map("created_at")
+  updatedAt            DateTime  @updatedAt @map("updated_at")
+  publishedAt          DateTime? @map("published_at")
+  authorId             String?   @map("author_id")
+  authorName           String?   @map("author_name")
+  regionScope          String?   @default("BOTH") @map("region_scope")
+  versionKey           String?   @map("version_key")
+  updatedByAi          Boolean   @default(false) @map("updated_by_ai")
+  protectedFields      String[]  @default([]) @map("protected_fields")
+  sourceVersion        Int       @default(1) @map("source_version")
+
+  generatedQuestionDrafts  GeneratedQuestionDraft[]
+  generatedFlashcardDrafts GeneratedFlashcardDraft[]
+  lessonEnhancementTargets GeneratedLessonDraft[] @relation("LessonEnhancementTarget")
+
+  @@map("content_items")
+  @@index([type, status])
+}
+
+/** Production `exam_questions` question bank. */
+model ExamQuestion {
+  id                         String    @id @default(uuid()) @db.VarChar
+  tier                       String
+  exam                       String
+  questionType               String    @map("question_type")
+  status                     String?   @default("draft")
+  publishAt                  DateTime? @map("publish_at")
+  stem                       String
+  options                    Json?     @default("[]")
+  correctAnswer              Json?     @map("correct_answer")
+  rationale                  String?
+  difficulty                 Int?      @default(3)
+  tags                       String[]  @default([])
+  bodySystem                 String?   @map("body_system")
+  topic                      String?
+  subtopic                   String?
+  caseId                     String?   @map("case_id")
+  exhibitData                Json?     @map("exhibit_data")
+  regionScope                String?   @default("BOTH") @map("region_scope")
+  stemHash                   String?   @map("stem_hash")
+  careerType                 String?   @default("nursing") @map("career_type")
+  scenario                   String?
+  clinicalPearl              String?   @map("clinical_pearl")
+  examStrategy               String?   @map("exam_strategy")
+  memoryHook                 String?   @map("memory_hook")
+  frameworkUsed              String?   @map("framework_used")
+  clinicalTrap               String?   @map("clinical_trap")
+  distractorRationales       Json?     @map("distractor_rationales")
+  qualityScores              Json?     @map("quality_scores")
+  qualityFeedback            Json?     @map("quality_feedback")
+  qualityScore               Int?      @map("quality_score")
+  countryCode                String?   @map("country_code")
+  regionCode                 String?   @map("region_code")
+  licensingBody              String?   @map("licensing_body")
+  languageCode               String?   @default("en") @map("language_code")
+  cognitiveLevel             String?   @map("cognitive_level")
+  questionFormat             String?   @map("question_format")
+  isScenario                 Boolean   @default(false) @map("is_scenario")
+  isMockExamEligible         Boolean   @default(true) @map("is_mock_exam_eligible")
+  isAdaptiveEligible         Boolean   @default(true) @map("is_adaptive_eligible")
+  isFlashcardSource          Boolean   @default(false) @map("is_flashcard_source")
+  isStudyGuideLinked         Boolean   @default(false) @map("is_study_guide_linked")
+  isTutorReady               Boolean   @default(false) @map("is_tutor_ready")
+  correctAnswerExplanation   String?   @map("correct_answer_explanation")
+  incorrectAnswerRationale   Json?     @map("incorrect_answer_rationale")
+  clinicalReasoning          String?   @map("clinical_reasoning")
+  keyTakeaway                String?   @map("key_takeaway")
+  mnemonic                   String?
+  referenceSource            String?   @map("reference_source")
+  labUnitVariant             String?   @map("lab_unit_variant")
+  medicationNamingVariant    String?   @map("medication_naming_variant")
+  caseContext                String?   @map("case_context")
+  vitals                     Json?
+  labs                       Json?
+  images                     Json?
+  scenarioId                 String?   @map("scenario_id")
+  blueprintWeight            Float?    @map("blueprint_weight")
+  createdAt                  DateTime  @default(now()) @map("created_at")
+  updatedAt                  DateTime  @updatedAt @map("updated_at")
+  publishedAt                DateTime? @map("published_at")
+  sourceVersion              Int       @default(1) @map("source_version")
+
+  @@map("exam_questions")
+  @@index([status, tier])
+  @@index([exam])
+  @@index([stemHash])
+}
+
+model Flashcard {
+  id          String        @id @default(cuid())
+  front       String
+  back        String
+  country     CountryCode
+  tier        TierCode
+  status      ContentStatus @default(DRAFT)
+  examFamily  ExamFamily    @default(GENERIC)
+  categoryId  String
+  category    Category      @relation(fields: [categoryId], references: [id])
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([status, country, tier])
+}
+
+model Exam {
+  id          String         @id @default(cuid())
+  title       String
+  country     CountryCode
+  tier        TierCode
+  status      ContentStatus  @default(DRAFT)
+  examFamily  ExamFamily     @default(GENERIC)
+  attempts    ExamAttempt[]
+  sessions    ExamSession[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@index([status, country, tier])
+}
+
+model ExamAttempt {
+  id          String        @id @default(cuid())
+  userId      String
+  examId      String
+  score       Int
+  total       Int
+  createdAt   DateTime      @default(now())
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exam        Exam          @relation(fields: [examId], references: [id], onDelete: Cascade)
+  examSession ExamSession?  @relation("ExamSessionAttempt")
+
+  @@index([examId])
+  @@index([userId, createdAt])
+}
+
+model ExamSession {
+  id           String            @id @default(cuid())
+  userId       String
+  user         User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  examId       String?
+  exam         Exam?             @relation(fields: [examId], references: [id], onDelete: SetNull)
+  questionIds  Json
+  answers      Json              @default("{}")
+  currentIndex Int               @default(0)
+  status       ExamSessionStatus @default(IN_PROGRESS)
+  attemptId    String?           @unique
+  attempt      ExamAttempt?      @relation("ExamSessionAttempt", fields: [attemptId], references: [id], onDelete: SetNull)
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  @@index([userId, status])
+  @@index([examId])
+}
+
+model Progress {
+  id        String   @id @default(cuid())
+  userId    String
+  lessonId  String
+  completed Boolean  @default(false)
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+}
+
+model BackgroundJob {
+  id           String    @id @default(cuid())
+  type         String
+  payload      Json
+  status       JobStatus @default(PENDING)
+  attempts     Int       @default(0)
+  maxAttempts  Int       @default(3)
+  lastError    String?
+  scheduledFor DateTime  @default(now())
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([status, scheduledFor])
+  @@index([type])
+}
+
+/** One admin AI generation run (batch). */
+model AiGenerationJob {
+  id             String    @id @default(cuid())
+  tool           String
+  status         JobStatus @default(COMPLETED)
+  model          String?
+  sourcePrompt   String    @db.Text
+  inputPayload   Json
+  resultSummary  Json?
+  error          String?   @db.Text
+  tokensUsed     Int?
+  createdById    String
+  createdBy      User      @relation("AiJobCreatedBy", fields: [createdById], references: [id])
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  logs           AiGenerationLog[]
+  questionDrafts GeneratedQuestionDraft[]
+  flashcardDrafts GeneratedFlashcardDraft[]
+  lessonDrafts   GeneratedLessonDraft[]
+
+  @@index([tool, createdAt])
+  @@index([createdById])
+}
+
+/** Audit trail for AI steps (granular events under a job). */
+model AiGenerationLog {
+  id        String          @id @default(cuid())
+  jobId     String
+  job       AiGenerationJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  step      String
+  detail    Json?
+  createdAt DateTime        @default(now())
+
+  @@index([jobId])
+}
+
+model GeneratedQuestionDraft {
+  id               String   @id @default(cuid())
+  jobId            String?
+  job              AiGenerationJob? @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  tool             String
+  batchId          String?
+  payloadJson      Json
+  normalizedJson   Json?
+  validationJson   Json
+  reviewStatus     DraftReviewStatus @default(PENDING_REVIEW)
+  reviewNotes      String?  @db.Text
+  reviewedById     String?
+  reviewedBy       User?    @relation("QuestionDraftReviewedBy", fields: [reviewedById], references: [id])
+  reviewedAt       DateTime?
+  promotedEntityId String?
+  promotedAt       DateTime?
+  stemHash         String?
+  stemPreview      String?
+  lessonId         String?
+  linkedContent    ContentItem? @relation(fields: [lessonId], references: [id], onDelete: SetNull)
+  categoryId       String?
+  category         Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  examFamily       ExamFamily @default(GENERIC)
+  tier             TierCode
+  country          CountryCode
+  sourcePrompt     String   @db.Text
+  model            String
+  createdById      String
+  createdBy        User     @relation("QuestionDraftCreatedBy", fields: [createdById], references: [id])
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([reviewStatus, createdAt])
+  @@index([stemHash])
+  @@index([jobId])
+  @@index([lessonId])
+}
+
+model GeneratedFlashcardDraft {
+  id               String   @id @default(cuid())
+  jobId            String?
+  job              AiGenerationJob? @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  tool             String
+  batchId          String?
+  payloadJson      Json
+  normalizedJson   Json?
+  validationJson   Json
+  reviewStatus     DraftReviewStatus @default(PENDING_REVIEW)
+  reviewNotes      String?  @db.Text
+  reviewedById     String?
+  reviewedBy       User?    @relation("FlashcardDraftReviewedBy", fields: [reviewedById], references: [id])
+  reviewedAt       DateTime?
+  promotedEntityId String?
+  promotedAt       DateTime?
+  frontPreview     String?
+  lessonId         String?
+  linkedContent    ContentItem? @relation(fields: [lessonId], references: [id], onDelete: SetNull)
+  categoryId       String?
+  category         Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  examFamily       ExamFamily @default(GENERIC)
+  tier             TierCode
+  country          CountryCode
+  sourcePrompt     String   @db.Text
+  model            String
+  createdById      String
+  createdBy        User     @relation("FlashcardDraftCreatedBy", fields: [createdById], references: [id])
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([reviewStatus, createdAt])
+  @@index([jobId])
+  @@index([lessonId])
+}
+
+/** Optional: lesson enhancement / repair drafts — not promoted until review. */
+model GeneratedLessonDraft {
+  id               String   @id @default(cuid())
+  jobId            String?
+  job              AiGenerationJob? @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  tool             String
+  payloadJson      Json
+  normalizedJson   Json?
+  validationJson   Json
+  reviewStatus     DraftReviewStatus @default(PENDING_REVIEW)
+  reviewNotes      String?  @db.Text
+  reviewedById     String?
+  reviewedBy       User?    @relation("LessonDraftReviewedBy", fields: [reviewedById], references: [id])
+  reviewedAt       DateTime?
+  promotedEntityId String?
+  promotedAt       DateTime?
+  titlePreview     String?
+  targetLessonId   String?
+  targetContent      ContentItem? @relation("LessonEnhancementTarget", fields: [targetLessonId], references: [id], onDelete: SetNull)
+  sourcePrompt     String   @db.Text
+  model            String
+  createdById      String
+  createdBy        User     @relation("LessonDraftCreatedBy", fields: [createdById], references: [id])
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([reviewStatus, createdAt])
+  @@index([jobId])
+}

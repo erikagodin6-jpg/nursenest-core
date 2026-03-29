@@ -1,0 +1,192 @@
+@import "tailwindcss";
+@import "./theme-palettes.css";
+
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/*
+ * Theme tokens (`--theme-*`) live ONLY in `theme-palettes.css` under `[data-theme="…"]`
+ * (mirrors legacy `client/src/index.css`). Do not redefine them on `:root` here — a later
+ * `:root { --theme-primary: … }` block was overriding every `[data-theme]` block and
+ * prevented theme switching from changing page colors.
+ */
+:root {
+  --font-sans: "DM Sans", system-ui, sans-serif;
+  --radius: 0.75rem;
+  --color-warmwhite: #fdfcfa;
+  --color-softgray: #6b7280;
+
+  --text-hero: clamp(2.1rem, 4.6vw, 3.45rem);
+  --text-section: clamp(1.7rem, 3.4vw, 2.4rem);
+  --space-hero-top: clamp(2rem, 4vw, 3rem);
+  --space-hero-bottom: clamp(3rem, 6vw, 5rem);
+  --space-block: clamp(2rem, 4vw, 3rem);
+
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-card-hover: 0 8px 30px -8px rgba(0, 0, 0, 0.08), 0 4px 12px -4px rgba(0, 0, 0, 0.04);
+  --shadow-elevated: 0 12px 40px -12px rgba(0, 0, 0, 0.12), 0 4px 16px -4px rgba(0, 0, 0, 0.06);
+}
+
+/* Subtle tinted surface + legacy aliases — only when a theme palette is active on `html` */
+:where([data-theme]) {
+  --theme-muted-surface: color-mix(in srgb, var(--theme-primary) 8%, var(--theme-page-bg));
+  --color-card-base: var(--theme-card-bg);
+  --color-card-fg-base: var(--theme-card-text);
+  --color-popover-base: var(--theme-card-bg);
+  --color-popover-fg-base: var(--theme-body-text);
+}
+
+@theme inline {
+  --font-sans: var(--font-sans);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  /* Match legacy `client/src/index.css` token names (`bg-warmwhite`, `text-softgray`, etc.) */
+  --color-warmwhite: var(--color-warmwhite);
+  --color-softgray: var(--color-softgray);
+  /* Page surface follows active theme (lavender default + data-theme overrides) */
+  --color-background: var(--theme-page-bg);
+  --color-foreground: var(--theme-body-text);
+  /* Single chain: Tailwind semantic tokens track `--theme-*` so bg-card / text-primary move with the picker */
+  --color-card: var(--theme-card-bg);
+  --color-card-foreground: var(--theme-card-text);
+  --color-popover: var(--theme-card-bg);
+  --color-popover-foreground: var(--theme-body-text);
+  --color-primary: var(--theme-primary);
+  --color-primary-foreground: var(--theme-primary-foreground);
+  --color-secondary: var(--theme-secondary);
+  --color-secondary-foreground: var(--theme-secondary-foreground);
+  --color-accent: var(--theme-accent);
+  --color-accent-foreground: var(--theme-accent-foreground);
+  --color-border: var(--theme-border);
+  --color-ring: var(--theme-ring);
+  /* Muted surfaces/text — Tailwind `bg-muted`, `text-muted-foreground` track active theme */
+  --color-muted: color-mix(in srgb, var(--theme-body-text) 6%, var(--theme-page-bg));
+  --color-muted-foreground: var(--theme-muted-text);
+}
+
+* {
+  box-sizing: border-box;
+  border-color: var(--theme-border);
+}
+
+body {
+  margin: 0;
+  background: var(--theme-page-bg);
+  color: var(--theme-body-text);
+  font-family: var(--font-dm-sans), Arial, Helvetica, sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.nn-card {
+  background: var(--theme-card-bg);
+  border: 1px solid var(--theme-card-border);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-card);
+}
+
+.nn-card-interactive {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.nn-card-interactive:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-card-hover);
+  border-color: color-mix(in srgb, var(--theme-primary) 32%, transparent);
+}
+
+/* Accent surfaces — use instead of scattered bg-*-50 / text-*-600 Tailwind palettes */
+.nn-accent-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  background: color-mix(in srgb, var(--theme-primary) 13%, var(--theme-card-bg));
+}
+.nn-accent-icon {
+  color: var(--theme-primary);
+}
+.nn-accent-pill {
+  background: color-mix(in srgb, var(--theme-primary) 10%, var(--theme-card-bg));
+  border: 1px solid color-mix(in srgb, var(--theme-primary) 22%, transparent);
+  color: color-mix(in srgb, var(--theme-primary) 88%, var(--theme-heading-text));
+}
+.nn-accent-soft-ring {
+  border-color: color-mix(in srgb, var(--theme-primary) 28%, transparent);
+  background: color-mix(in srgb, var(--theme-primary) 8%, var(--theme-card-bg));
+}
+.nn-theme-gradient-br {
+  background-image: linear-gradient(
+    to bottom right,
+    var(--theme-primary),
+    color-mix(in srgb, var(--theme-primary) 68%, var(--theme-heading-text))
+  );
+}
+.nn-trust-check {
+  color: color-mix(in srgb, var(--theme-primary) 92%, #0f172a);
+}
+
+.nn-btn-primary {
+  background: var(--theme-primary);
+  color: var(--theme-primary-foreground);
+  border-radius: 9999px;
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--theme-primary) 35%, transparent);
+}
+
+.nn-btn-primary:hover {
+  filter: brightness(1.07);
+}
+
+.nn-btn-secondary {
+  background: var(--theme-card-bg);
+  border: 1px solid var(--theme-input-border);
+  color: var(--theme-menu-text);
+  border-radius: 9999px;
+}
+
+.nn-btn-secondary:hover {
+  background: color-mix(in srgb, var(--theme-primary) 6%, var(--theme-card-bg));
+  border-color: color-mix(in srgb, var(--theme-primary) 22%, var(--theme-input-border));
+}
+
+.animate-page-enter {
+  animation: pageEnter 0.34s ease-out;
+}
+
+/* Legacy hero column motion (replaces tailwindcss-animate utilities not bundled in Core) */
+@media (min-width: 768px) {
+  .hero-motion-enter {
+    animation: heroFadeUp 0.7s ease-out both;
+  }
+}
+
+@keyframes heroFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

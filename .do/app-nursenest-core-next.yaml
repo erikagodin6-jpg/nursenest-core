@@ -1,0 +1,59 @@
+# Next.js app only (Auth.js lives here). Use this spec OR mirror these settings in the DO UI.
+# The repo root is the Express+Vite monolith; building "/" runs that heavy build and can hit
+# the ~60m App Platform job limit or post-build hangs. Point the component at nursenest-core/.
+#
+# Apply: App Platform → Settings → App Spec, or: doctl apps update --spec .do/app-nursenest-core-next.yaml
+#
+name: nursenest-core-next
+region: tor
+
+services:
+  - name: web
+    environment_slug: node-js
+    instance_count: 1
+    instance_size_slug: basic-xs
+    github:
+      repo: erikagodin6-jpg/nursenest-core
+      branch: main
+      deploy_on_push: true
+    source_dir: nursenest-core
+    # DB: set `DATABASE_URL` (SECRET) to DigitalOcean Managed Postgres URI. Prisma uses this only.
+    # Migrations: GitHub Actions → “Prisma migrate” workflow with secret `DATABASE_URL` (same URI as here).
+    # Drop .next/cache after build; prune devDependencies to shrink the slug (runtime uses production deps only).
+    build_command: npm ci && npm run build:deploy && npm prune --omit=dev
+    run_command: npm run start
+    http_port: 8080
+    routes:
+      - path: /
+    # Liveness: GET /healthz (no DB). Next cold start + first-route compile can exceed short delays.
+    health_check:
+      http_path: /healthz
+      initial_delay_seconds: 120
+      period_seconds: 10
+      timeout_seconds: 10
+      success_threshold: 1
+      failure_threshold: 9
+    envs:
+      - key: NODE_ENV
+        value: production
+        scope: RUN_TIME
+      - key: PORT
+        value: "8080"
+        scope: RUN_TIME
+      - key: HOSTNAME
+        value: "0.0.0.0"
+        scope: RUN_TIME
+      - key: AUTH_TRUST_HOST
+        value: "true"
+        scope: RUN_TIME
+      - key: AUTH_SECRET
+        scope: RUN_TIME
+        type: SECRET
+      # Canonical production DB connection (DigitalOcean Managed PostgreSQL). Do not set a second conflicting URL.
+      - key: DATABASE_URL
+        scope: RUN_TIME
+        type: SECRET
+      # Optional: canonical public URL (your custom domain or *.ondigitalocean.app)
+      - key: AUTH_URL
+        scope: RUN_TIME
+        type: GENERAL

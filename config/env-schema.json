@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NurseNest Environment Variables",
+  "description": "Documentation of all required and optional environment variables for NurseNest",
+  "variables": {
+    "DATABASE_URL": {
+      "required": true,
+      "type": "string",
+      "description": "PostgreSQL connection string for the primary database",
+      "example": "postgresql://user:password@localhost:5432/nursenest",
+      "category": "database"
+    },
+    "PROD_DATABASE_URL": {
+      "required": false,
+      "type": "string",
+      "description": "Separate production database URL (if different from DATABASE_URL)",
+      "category": "database"
+    },
+    "SESSION_SECRET": {
+      "required": true,
+      "type": "string",
+      "description": "Random string used to sign session cookies. Must be kept secret.",
+      "example": "a-long-random-string-at-least-32-chars",
+      "category": "security"
+    },
+    "STRIPE_SECRET_KEY": {
+      "required": true,
+      "type": "string",
+      "description": "Stripe secret API key for server-side payment operations",
+      "example": "sk_test_...",
+      "category": "payments"
+    },
+    "STRIPE_PUBLISHABLE_KEY": {
+      "required": true,
+      "type": "string",
+      "description": "Stripe publishable key for client-side payment forms",
+      "example": "pk_test_...",
+      "category": "payments"
+    },
+    "STRIPE_WEBHOOK_SECRET": {
+      "required": false,
+      "type": "string",
+      "description": "Stripe webhook signing secret for verifying webhook events",
+      "example": "whsec_...",
+      "category": "payments"
+    },
+    "OPENAI_API_KEY": {
+      "required": false,
+      "type": "string",
+      "description": "OpenAI API key for AI-powered features (tutor, content generation)",
+      "example": "sk-...",
+      "category": "ai"
+    },
+    "PUBLIC_OBJECT_SEARCH_PATHS": {
+      "required": false,
+      "type": "string",
+      "description": "Comma-separated search paths for public assets in object storage",
+      "category": "storage"
+    },
+    "PRIVATE_OBJECT_DIR": {
+      "required": false,
+      "type": "string",
+      "description": "Object storage directory for private files",
+      "category": "storage"
+    },
+    "SMTP_HOST": {
+      "required": false,
+      "type": "string",
+      "description": "SMTP server hostname for sending emails",
+      "category": "email"
+    },
+    "SMTP_PORT": {
+      "required": false,
+      "type": "number",
+      "description": "SMTP server port",
+      "example": "587",
+      "category": "email"
+    },
+    "SMTP_USER": {
+      "required": false,
+      "type": "string",
+      "description": "SMTP authentication username",
+      "category": "email"
+    },
+    "SMTP_PASS": {
+      "required": false,
+      "type": "string",
+      "description": "SMTP authentication password",
+      "category": "email"
+    },
+    "GOOGLE_ANALYTICS_ID": {
+      "required": false,
+      "type": "string",
+      "description": "Google Analytics measurement ID",
+      "example": "G-XXXXXXXXXX",
+      "category": "analytics"
+    },
+    "DOMAIN": {
+      "required": false,
+      "type": "string",
+      "description": "Primary domain for the application",
+      "example": "www.nursenest.ca",
+      "category": "domain"
+    },
+    "BASE_URL": {
+      "required": false,
+      "type": "string",
+      "description": "Full base URL including protocol",
+      "example": "https://www.nursenest.ca",
+      "category": "domain"
+    },
+    "PAYPAL_CLIENT_ID": {
+      "required": false,
+      "type": "string",
+      "description": "PayPal client ID for alternative payment processing",
+      "category": "payments"
+    },
+    "PAYPAL_CLIENT_SECRET": {
+      "required": false,
+      "type": "string",
+      "description": "PayPal client secret",
+      "category": "payments"
+    },
+    "NODE_ENV": {
+      "required": false,
+      "type": "string",
+      "description": "Node.js environment (development, production, test)",
+      "default": "development",
+      "category": "runtime"
+    }
+  }
+}

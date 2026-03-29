@@ -1,0 +1,7514 @@
+export interface CareerQuestion {
+    id: string;
+    stem: string;
+    options: string[];
+    correctIndex: number;
+    rationale: string;
+    difficulty: number;
+    category: string;
+    topic: string;
+  }
+
+  export const addictionsCounsellorQuestions: CareerQuestion[] = [
+  {
+    "id": "cac-001",
+    "stem": "A patient presents with findings consistent with alcohol pharmacology. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because alcohol pharmacology requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Pharmacology of Substances",
+    "topic": "alcohol pharmacology"
+  },
+  {
+    "id": "cac-002",
+    "stem": "Which of the following best describes the primary indication for alcohol pharmacology?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for alcohol pharmacology. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Pharmacology of Substances",
+    "topic": "alcohol pharmacology"
+  },
+  {
+    "id": "cac-003",
+    "stem": "A healthcare professional is evaluating alcohol pharmacology. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for alcohol pharmacology. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Pharmacology of Substances",
+    "topic": "alcohol pharmacology"
+  },
+  {
+    "id": "cac-004",
+    "stem": "During assessment related to alcohol pharmacology, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of alcohol pharmacology requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Pharmacology of Substances",
+    "topic": "alcohol pharmacology"
+  },
+  {
+    "id": "cac-005",
+    "stem": "Which of the following is a contraindication associated with alcohol pharmacology?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in alcohol pharmacology. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Pharmacology of Substances",
+    "topic": "alcohol pharmacology"
+  },
+  {
+    "id": "cac-006",
+    "stem": "A patient presents with findings consistent with opioid mechanisms. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because opioid mechanisms requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Pharmacology of Substances",
+    "topic": "opioid mechanisms"
+  },
+  {
+    "id": "cac-007",
+    "stem": "Which of the following best describes the primary indication for opioid mechanisms?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for opioid mechanisms. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Pharmacology of Substances",
+    "topic": "opioid mechanisms"
+  },
+  {
+    "id": "cac-008",
+    "stem": "A healthcare professional is evaluating opioid mechanisms. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for opioid mechanisms. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Pharmacology of Substances",
+    "topic": "opioid mechanisms"
+  },
+  {
+    "id": "cac-009",
+    "stem": "During assessment related to opioid mechanisms, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of opioid mechanisms requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Pharmacology of Substances",
+    "topic": "opioid mechanisms"
+  },
+  {
+    "id": "cac-010",
+    "stem": "Which of the following is a contraindication associated with opioid mechanisms?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in opioid mechanisms. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Pharmacology of Substances",
+    "topic": "opioid mechanisms"
+  },
+  {
+    "id": "cac-011",
+    "stem": "A patient presents with findings consistent with stimulant effects. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because stimulant effects requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Pharmacology of Substances",
+    "topic": "stimulant effects"
+  },
+  {
+    "id": "cac-012",
+    "stem": "Which of the following best describes the primary indication for stimulant effects?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for stimulant effects. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Pharmacology of Substances",
+    "topic": "stimulant effects"
+  },
+  {
+    "id": "cac-013",
+    "stem": "A healthcare professional is evaluating stimulant effects. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for stimulant effects. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Pharmacology of Substances",
+    "topic": "stimulant effects"
+  },
+  {
+    "id": "cac-014",
+    "stem": "During assessment related to stimulant effects, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of stimulant effects requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Pharmacology of Substances",
+    "topic": "stimulant effects"
+  },
+  {
+    "id": "cac-015",
+    "stem": "Which of the following is a contraindication associated with stimulant effects?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in stimulant effects. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Pharmacology of Substances",
+    "topic": "stimulant effects"
+  },
+  {
+    "id": "cac-016",
+    "stem": "A patient presents with findings consistent with cannabis pharmacology. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because cannabis pharmacology requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Pharmacology of Substances",
+    "topic": "cannabis pharmacology"
+  },
+  {
+    "id": "cac-017",
+    "stem": "Which of the following best describes the primary indication for cannabis pharmacology?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for cannabis pharmacology. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Pharmacology of Substances",
+    "topic": "cannabis pharmacology"
+  },
+  {
+    "id": "cac-018",
+    "stem": "A healthcare professional is evaluating cannabis pharmacology. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for cannabis pharmacology. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Pharmacology of Substances",
+    "topic": "cannabis pharmacology"
+  },
+  {
+    "id": "cac-019",
+    "stem": "During assessment related to cannabis pharmacology, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of cannabis pharmacology requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Pharmacology of Substances",
+    "topic": "cannabis pharmacology"
+  },
+  {
+    "id": "cac-020",
+    "stem": "Which of the following is a contraindication associated with cannabis pharmacology?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in cannabis pharmacology. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Pharmacology of Substances",
+    "topic": "cannabis pharmacology"
+  },
+  {
+    "id": "cac-021",
+    "stem": "A patient presents with findings consistent with hallucinogen actions. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because hallucinogen actions requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Pharmacology of Substances",
+    "topic": "hallucinogen actions"
+  },
+  {
+    "id": "cac-022",
+    "stem": "Which of the following best describes the primary indication for hallucinogen actions?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for hallucinogen actions. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Pharmacology of Substances",
+    "topic": "hallucinogen actions"
+  },
+  {
+    "id": "cac-023",
+    "stem": "A healthcare professional is evaluating hallucinogen actions. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for hallucinogen actions. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Pharmacology of Substances",
+    "topic": "hallucinogen actions"
+  },
+  {
+    "id": "cac-024",
+    "stem": "During assessment related to hallucinogen actions, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of hallucinogen actions requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Pharmacology of Substances",
+    "topic": "hallucinogen actions"
+  },
+  {
+    "id": "cac-025",
+    "stem": "Which of the following is a contraindication associated with hallucinogen actions?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in hallucinogen actions. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Pharmacology of Substances",
+    "topic": "hallucinogen actions"
+  },
+  {
+    "id": "cac-026",
+    "stem": "A patient presents with findings consistent with benzodiazepine effects. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because benzodiazepine effects requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Pharmacology of Substances",
+    "topic": "benzodiazepine effects"
+  },
+  {
+    "id": "cac-027",
+    "stem": "Which of the following best describes the primary indication for benzodiazepine effects?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for benzodiazepine effects. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Pharmacology of Substances",
+    "topic": "benzodiazepine effects"
+  },
+  {
+    "id": "cac-028",
+    "stem": "A healthcare professional is evaluating benzodiazepine effects. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for benzodiazepine effects. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Pharmacology of Substances",
+    "topic": "benzodiazepine effects"
+  },
+  {
+    "id": "cac-029",
+    "stem": "During assessment related to benzodiazepine effects, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of benzodiazepine effects requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Pharmacology of Substances",
+    "topic": "benzodiazepine effects"
+  },
+  {
+    "id": "cac-030",
+    "stem": "Which of the following is a contraindication associated with benzodiazepine effects?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in benzodiazepine effects. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Pharmacology of Substances",
+    "topic": "benzodiazepine effects"
+  },
+  {
+    "id": "cac-031",
+    "stem": "A patient presents with findings consistent with nicotine addiction. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because nicotine addiction requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Pharmacology of Substances",
+    "topic": "nicotine addiction"
+  },
+  {
+    "id": "cac-032",
+    "stem": "Which of the following best describes the primary indication for nicotine addiction?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for nicotine addiction. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Pharmacology of Substances",
+    "topic": "nicotine addiction"
+  },
+  {
+    "id": "cac-033",
+    "stem": "A healthcare professional is evaluating nicotine addiction. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for nicotine addiction. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Pharmacology of Substances",
+    "topic": "nicotine addiction"
+  },
+  {
+    "id": "cac-034",
+    "stem": "During assessment related to nicotine addiction, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of nicotine addiction requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Pharmacology of Substances",
+    "topic": "nicotine addiction"
+  },
+  {
+    "id": "cac-035",
+    "stem": "Which of the following is a contraindication associated with nicotine addiction?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in nicotine addiction. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Pharmacology of Substances",
+    "topic": "nicotine addiction"
+  },
+  {
+    "id": "cac-036",
+    "stem": "A patient presents with findings consistent with synthetic drugs. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because synthetic drugs requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Pharmacology of Substances",
+    "topic": "synthetic drugs"
+  },
+  {
+    "id": "cac-037",
+    "stem": "Which of the following best describes the primary indication for synthetic drugs?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for synthetic drugs. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Pharmacology of Substances",
+    "topic": "synthetic drugs"
+  },
+  {
+    "id": "cac-038",
+    "stem": "A healthcare professional is evaluating synthetic drugs. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for synthetic drugs. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Pharmacology of Substances",
+    "topic": "synthetic drugs"
+  },
+  {
+    "id": "cac-039",
+    "stem": "During assessment related to synthetic drugs, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of synthetic drugs requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Pharmacology of Substances",
+    "topic": "synthetic drugs"
+  },
+  {
+    "id": "cac-040",
+    "stem": "Which of the following is a contraindication associated with synthetic drugs?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in synthetic drugs. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Pharmacology of Substances",
+    "topic": "synthetic drugs"
+  },
+  {
+    "id": "cac-041",
+    "stem": "A patient presents with findings consistent with polysubstance use. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because polysubstance use requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Pharmacology of Substances",
+    "topic": "polysubstance use"
+  },
+  {
+    "id": "cac-042",
+    "stem": "Which of the following best describes the primary indication for polysubstance use?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for polysubstance use. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Pharmacology of Substances",
+    "topic": "polysubstance use"
+  },
+  {
+    "id": "cac-043",
+    "stem": "A healthcare professional is evaluating polysubstance use. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for polysubstance use. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Pharmacology of Substances",
+    "topic": "polysubstance use"
+  },
+  {
+    "id": "cac-044",
+    "stem": "During assessment related to polysubstance use, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of polysubstance use requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Pharmacology of Substances",
+    "topic": "polysubstance use"
+  },
+  {
+    "id": "cac-045",
+    "stem": "Which of the following is a contraindication associated with polysubstance use?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in polysubstance use. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Pharmacology of Substances",
+    "topic": "polysubstance use"
+  },
+  {
+    "id": "cac-046",
+    "stem": "A patient presents with findings consistent with withdrawal mechanisms. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because withdrawal mechanisms requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Pharmacology of Substances",
+    "topic": "withdrawal mechanisms"
+  },
+  {
+    "id": "cac-047",
+    "stem": "Which of the following best describes the primary indication for withdrawal mechanisms?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for withdrawal mechanisms. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Pharmacology of Substances",
+    "topic": "withdrawal mechanisms"
+  },
+  {
+    "id": "cac-048",
+    "stem": "A healthcare professional is evaluating withdrawal mechanisms. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for withdrawal mechanisms. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Pharmacology of Substances",
+    "topic": "withdrawal mechanisms"
+  },
+  {
+    "id": "cac-049",
+    "stem": "During assessment related to withdrawal mechanisms, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of withdrawal mechanisms requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Pharmacology of Substances",
+    "topic": "withdrawal mechanisms"
+  },
+  {
+    "id": "cac-050",
+    "stem": "Which of the following is a contraindication associated with withdrawal mechanisms?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in withdrawal mechanisms. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Pharmacology of Substances",
+    "topic": "withdrawal mechanisms"
+  },
+  {
+    "id": "cac-051",
+    "stem": "A patient presents with findings consistent with CAGE questionnaire. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because CAGE questionnaire requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Assessment/Screening",
+    "topic": "CAGE questionnaire"
+  },
+  {
+    "id": "cac-052",
+    "stem": "Which of the following best describes the primary indication for CAGE questionnaire?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for CAGE questionnaire. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Assessment/Screening",
+    "topic": "CAGE questionnaire"
+  },
+  {
+    "id": "cac-053",
+    "stem": "A healthcare professional is evaluating CAGE questionnaire. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for CAGE questionnaire. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Assessment/Screening",
+    "topic": "CAGE questionnaire"
+  },
+  {
+    "id": "cac-054",
+    "stem": "During assessment related to CAGE questionnaire, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of CAGE questionnaire requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Assessment/Screening",
+    "topic": "CAGE questionnaire"
+  },
+  {
+    "id": "cac-055",
+    "stem": "Which of the following is a contraindication associated with CAGE questionnaire?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in CAGE questionnaire. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Assessment/Screening",
+    "topic": "CAGE questionnaire"
+  },
+  {
+    "id": "cac-056",
+    "stem": "A patient presents with findings consistent with AUDIT screening. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because AUDIT screening requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Assessment/Screening",
+    "topic": "AUDIT screening"
+  },
+  {
+    "id": "cac-057",
+    "stem": "Which of the following best describes the primary indication for AUDIT screening?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for AUDIT screening. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Assessment/Screening",
+    "topic": "AUDIT screening"
+  },
+  {
+    "id": "cac-058",
+    "stem": "A healthcare professional is evaluating AUDIT screening. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for AUDIT screening. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Assessment/Screening",
+    "topic": "AUDIT screening"
+  },
+  {
+    "id": "cac-059",
+    "stem": "During assessment related to AUDIT screening, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of AUDIT screening requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Assessment/Screening",
+    "topic": "AUDIT screening"
+  },
+  {
+    "id": "cac-060",
+    "stem": "Which of the following is a contraindication associated with AUDIT screening?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in AUDIT screening. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Assessment/Screening",
+    "topic": "AUDIT screening"
+  },
+  {
+    "id": "cac-061",
+    "stem": "A patient presents with findings consistent with DAST assessment. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because DAST assessment requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Assessment/Screening",
+    "topic": "DAST assessment"
+  },
+  {
+    "id": "cac-062",
+    "stem": "Which of the following best describes the primary indication for DAST assessment?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for DAST assessment. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Assessment/Screening",
+    "topic": "DAST assessment"
+  },
+  {
+    "id": "cac-063",
+    "stem": "A healthcare professional is evaluating DAST assessment. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for DAST assessment. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Assessment/Screening",
+    "topic": "DAST assessment"
+  },
+  {
+    "id": "cac-064",
+    "stem": "During assessment related to DAST assessment, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of DAST assessment requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Assessment/Screening",
+    "topic": "DAST assessment"
+  },
+  {
+    "id": "cac-065",
+    "stem": "Which of the following is a contraindication associated with DAST assessment?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in DAST assessment. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Assessment/Screening",
+    "topic": "DAST assessment"
+  },
+  {
+    "id": "cac-066",
+    "stem": "A patient presents with findings consistent with ASI evaluation. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because ASI evaluation requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Assessment/Screening",
+    "topic": "ASI evaluation"
+  },
+  {
+    "id": "cac-067",
+    "stem": "Which of the following best describes the primary indication for ASI evaluation?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for ASI evaluation. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Assessment/Screening",
+    "topic": "ASI evaluation"
+  },
+  {
+    "id": "cac-068",
+    "stem": "A healthcare professional is evaluating ASI evaluation. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for ASI evaluation. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Assessment/Screening",
+    "topic": "ASI evaluation"
+  },
+  {
+    "id": "cac-069",
+    "stem": "During assessment related to ASI evaluation, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of ASI evaluation requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Assessment/Screening",
+    "topic": "ASI evaluation"
+  },
+  {
+    "id": "cac-070",
+    "stem": "Which of the following is a contraindication associated with ASI evaluation?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in ASI evaluation. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Assessment/Screening",
+    "topic": "ASI evaluation"
+  },
+  {
+    "id": "cac-071",
+    "stem": "A patient presents with findings consistent with ASAM criteria. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because ASAM criteria requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Assessment/Screening",
+    "topic": "ASAM criteria"
+  },
+  {
+    "id": "cac-072",
+    "stem": "Which of the following best describes the primary indication for ASAM criteria?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for ASAM criteria. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Assessment/Screening",
+    "topic": "ASAM criteria"
+  },
+  {
+    "id": "cac-073",
+    "stem": "A healthcare professional is evaluating ASAM criteria. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for ASAM criteria. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Assessment/Screening",
+    "topic": "ASAM criteria"
+  },
+  {
+    "id": "cac-074",
+    "stem": "During assessment related to ASAM criteria, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of ASAM criteria requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Assessment/Screening",
+    "topic": "ASAM criteria"
+  },
+  {
+    "id": "cac-075",
+    "stem": "Which of the following is a contraindication associated with ASAM criteria?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in ASAM criteria. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Assessment/Screening",
+    "topic": "ASAM criteria"
+  },
+  {
+    "id": "cac-076",
+    "stem": "A patient presents with findings consistent with stages of change. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because stages of change requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Assessment/Screening",
+    "topic": "stages of change"
+  },
+  {
+    "id": "cac-077",
+    "stem": "Which of the following best describes the primary indication for stages of change?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for stages of change. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Assessment/Screening",
+    "topic": "stages of change"
+  },
+  {
+    "id": "cac-078",
+    "stem": "A healthcare professional is evaluating stages of change. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for stages of change. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Assessment/Screening",
+    "topic": "stages of change"
+  },
+  {
+    "id": "cac-079",
+    "stem": "During assessment related to stages of change, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of stages of change requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Assessment/Screening",
+    "topic": "stages of change"
+  },
+  {
+    "id": "cac-080",
+    "stem": "Which of the following is a contraindication associated with stages of change?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in stages of change. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Assessment/Screening",
+    "topic": "stages of change"
+  },
+  {
+    "id": "cac-081",
+    "stem": "A patient presents with findings consistent with readiness assessment. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because readiness assessment requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Assessment/Screening",
+    "topic": "readiness assessment"
+  },
+  {
+    "id": "cac-082",
+    "stem": "Which of the following best describes the primary indication for readiness assessment?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for readiness assessment. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Assessment/Screening",
+    "topic": "readiness assessment"
+  },
+  {
+    "id": "cac-083",
+    "stem": "A healthcare professional is evaluating readiness assessment. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for readiness assessment. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Assessment/Screening",
+    "topic": "readiness assessment"
+  },
+  {
+    "id": "cac-084",
+    "stem": "During assessment related to readiness assessment, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of readiness assessment requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Assessment/Screening",
+    "topic": "readiness assessment"
+  },
+  {
+    "id": "cac-085",
+    "stem": "Which of the following is a contraindication associated with readiness assessment?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in readiness assessment. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Assessment/Screening",
+    "topic": "readiness assessment"
+  },
+  {
+    "id": "cac-086",
+    "stem": "A patient presents with findings consistent with urine drug screen. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because urine drug screen requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Assessment/Screening",
+    "topic": "urine drug screen"
+  },
+  {
+    "id": "cac-087",
+    "stem": "Which of the following best describes the primary indication for urine drug screen?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for urine drug screen. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Assessment/Screening",
+    "topic": "urine drug screen"
+  },
+  {
+    "id": "cac-088",
+    "stem": "A healthcare professional is evaluating urine drug screen. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for urine drug screen. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Assessment/Screening",
+    "topic": "urine drug screen"
+  },
+  {
+    "id": "cac-089",
+    "stem": "During assessment related to urine drug screen, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of urine drug screen requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Assessment/Screening",
+    "topic": "urine drug screen"
+  },
+  {
+    "id": "cac-090",
+    "stem": "Which of the following is a contraindication associated with urine drug screen?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in urine drug screen. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Assessment/Screening",
+    "topic": "urine drug screen"
+  },
+  {
+    "id": "cac-091",
+    "stem": "A patient presents with findings consistent with clinical interview. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because clinical interview requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Assessment/Screening",
+    "topic": "clinical interview"
+  },
+  {
+    "id": "cac-092",
+    "stem": "Which of the following best describes the primary indication for clinical interview?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for clinical interview. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Assessment/Screening",
+    "topic": "clinical interview"
+  },
+  {
+    "id": "cac-093",
+    "stem": "A healthcare professional is evaluating clinical interview. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for clinical interview. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Assessment/Screening",
+    "topic": "clinical interview"
+  },
+  {
+    "id": "cac-094",
+    "stem": "During assessment related to clinical interview, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of clinical interview requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Assessment/Screening",
+    "topic": "clinical interview"
+  },
+  {
+    "id": "cac-095",
+    "stem": "Which of the following is a contraindication associated with clinical interview?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in clinical interview. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Assessment/Screening",
+    "topic": "clinical interview"
+  },
+  {
+    "id": "cac-096",
+    "stem": "A patient presents with findings consistent with comprehensive assessment. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because comprehensive assessment requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Assessment/Screening",
+    "topic": "comprehensive assessment"
+  },
+  {
+    "id": "cac-097",
+    "stem": "Which of the following best describes the primary indication for comprehensive assessment?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for comprehensive assessment. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Assessment/Screening",
+    "topic": "comprehensive assessment"
+  },
+  {
+    "id": "cac-098",
+    "stem": "A healthcare professional is evaluating comprehensive assessment. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for comprehensive assessment. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Assessment/Screening",
+    "topic": "comprehensive assessment"
+  },
+  {
+    "id": "cac-099",
+    "stem": "During assessment related to comprehensive assessment, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of comprehensive assessment requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Assessment/Screening",
+    "topic": "comprehensive assessment"
+  },
+  {
+    "id": "cac-100",
+    "stem": "Which of the following is a contraindication associated with comprehensive assessment?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in comprehensive assessment. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Assessment/Screening",
+    "topic": "comprehensive assessment"
+  },
+  {
+    "id": "cac-101",
+    "stem": "A patient presents with findings consistent with individualized plans. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because individualized plans requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Treatment Planning",
+    "topic": "individualized plans"
+  },
+  {
+    "id": "cac-102",
+    "stem": "Which of the following best describes the primary indication for individualized plans?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for individualized plans. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Treatment Planning",
+    "topic": "individualized plans"
+  },
+  {
+    "id": "cac-103",
+    "stem": "A healthcare professional is evaluating individualized plans. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for individualized plans. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Treatment Planning",
+    "topic": "individualized plans"
+  },
+  {
+    "id": "cac-104",
+    "stem": "During assessment related to individualized plans, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of individualized plans requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Treatment Planning",
+    "topic": "individualized plans"
+  },
+  {
+    "id": "cac-105",
+    "stem": "Which of the following is a contraindication associated with individualized plans?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in individualized plans. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Treatment Planning",
+    "topic": "individualized plans"
+  },
+  {
+    "id": "cac-106",
+    "stem": "A patient presents with findings consistent with SMART goals. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because SMART goals requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Treatment Planning",
+    "topic": "SMART goals"
+  },
+  {
+    "id": "cac-107",
+    "stem": "Which of the following best describes the primary indication for SMART goals?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for SMART goals. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Treatment Planning",
+    "topic": "SMART goals"
+  },
+  {
+    "id": "cac-108",
+    "stem": "A healthcare professional is evaluating SMART goals. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for SMART goals. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Treatment Planning",
+    "topic": "SMART goals"
+  },
+  {
+    "id": "cac-109",
+    "stem": "During assessment related to SMART goals, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of SMART goals requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Treatment Planning",
+    "topic": "SMART goals"
+  },
+  {
+    "id": "cac-110",
+    "stem": "Which of the following is a contraindication associated with SMART goals?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in SMART goals. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Treatment Planning",
+    "topic": "SMART goals"
+  },
+  {
+    "id": "cac-111",
+    "stem": "A patient presents with findings consistent with level of care determination. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because level of care determination requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Treatment Planning",
+    "topic": "level of care determination"
+  },
+  {
+    "id": "cac-112",
+    "stem": "Which of the following best describes the primary indication for level of care determination?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for level of care determination. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Treatment Planning",
+    "topic": "level of care determination"
+  },
+  {
+    "id": "cac-113",
+    "stem": "A healthcare professional is evaluating level of care determination. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for level of care determination. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Treatment Planning",
+    "topic": "level of care determination"
+  },
+  {
+    "id": "cac-114",
+    "stem": "During assessment related to level of care determination, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of level of care determination requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Treatment Planning",
+    "topic": "level of care determination"
+  },
+  {
+    "id": "cac-115",
+    "stem": "Which of the following is a contraindication associated with level of care determination?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in level of care determination. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Treatment Planning",
+    "topic": "level of care determination"
+  },
+  {
+    "id": "cac-116",
+    "stem": "A patient presents with findings consistent with treatment modalities. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because treatment modalities requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Treatment Planning",
+    "topic": "treatment modalities"
+  },
+  {
+    "id": "cac-117",
+    "stem": "Which of the following best describes the primary indication for treatment modalities?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for treatment modalities. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Treatment Planning",
+    "topic": "treatment modalities"
+  },
+  {
+    "id": "cac-118",
+    "stem": "A healthcare professional is evaluating treatment modalities. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for treatment modalities. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Treatment Planning",
+    "topic": "treatment modalities"
+  },
+  {
+    "id": "cac-119",
+    "stem": "During assessment related to treatment modalities, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of treatment modalities requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Treatment Planning",
+    "topic": "treatment modalities"
+  },
+  {
+    "id": "cac-120",
+    "stem": "Which of the following is a contraindication associated with treatment modalities?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in treatment modalities. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Treatment Planning",
+    "topic": "treatment modalities"
+  },
+  {
+    "id": "cac-121",
+    "stem": "A patient presents with findings consistent with continuing care planning. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because continuing care planning requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Treatment Planning",
+    "topic": "continuing care planning"
+  },
+  {
+    "id": "cac-122",
+    "stem": "Which of the following best describes the primary indication for continuing care planning?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for continuing care planning. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Treatment Planning",
+    "topic": "continuing care planning"
+  },
+  {
+    "id": "cac-123",
+    "stem": "A healthcare professional is evaluating continuing care planning. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for continuing care planning. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Treatment Planning",
+    "topic": "continuing care planning"
+  },
+  {
+    "id": "cac-124",
+    "stem": "During assessment related to continuing care planning, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of continuing care planning requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Treatment Planning",
+    "topic": "continuing care planning"
+  },
+  {
+    "id": "cac-125",
+    "stem": "Which of the following is a contraindication associated with continuing care planning?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in continuing care planning. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Treatment Planning",
+    "topic": "continuing care planning"
+  },
+  {
+    "id": "cac-126",
+    "stem": "A patient presents with findings consistent with recovery capital. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because recovery capital requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Treatment Planning",
+    "topic": "recovery capital"
+  },
+  {
+    "id": "cac-127",
+    "stem": "Which of the following best describes the primary indication for recovery capital?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for recovery capital. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Treatment Planning",
+    "topic": "recovery capital"
+  },
+  {
+    "id": "cac-128",
+    "stem": "A healthcare professional is evaluating recovery capital. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for recovery capital. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Treatment Planning",
+    "topic": "recovery capital"
+  },
+  {
+    "id": "cac-129",
+    "stem": "During assessment related to recovery capital, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of recovery capital requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Treatment Planning",
+    "topic": "recovery capital"
+  },
+  {
+    "id": "cac-130",
+    "stem": "Which of the following is a contraindication associated with recovery capital?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in recovery capital. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Treatment Planning",
+    "topic": "recovery capital"
+  },
+  {
+    "id": "cac-131",
+    "stem": "A patient presents with findings consistent with treatment matching. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because treatment matching requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Treatment Planning",
+    "topic": "treatment matching"
+  },
+  {
+    "id": "cac-132",
+    "stem": "Which of the following best describes the primary indication for treatment matching?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for treatment matching. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Treatment Planning",
+    "topic": "treatment matching"
+  },
+  {
+    "id": "cac-133",
+    "stem": "A healthcare professional is evaluating treatment matching. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for treatment matching. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Treatment Planning",
+    "topic": "treatment matching"
+  },
+  {
+    "id": "cac-134",
+    "stem": "During assessment related to treatment matching, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of treatment matching requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Treatment Planning",
+    "topic": "treatment matching"
+  },
+  {
+    "id": "cac-135",
+    "stem": "Which of the following is a contraindication associated with treatment matching?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in treatment matching. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Treatment Planning",
+    "topic": "treatment matching"
+  },
+  {
+    "id": "cac-136",
+    "stem": "A patient presents with findings consistent with progress monitoring. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because progress monitoring requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Treatment Planning",
+    "topic": "progress monitoring"
+  },
+  {
+    "id": "cac-137",
+    "stem": "Which of the following best describes the primary indication for progress monitoring?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for progress monitoring. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Treatment Planning",
+    "topic": "progress monitoring"
+  },
+  {
+    "id": "cac-138",
+    "stem": "A healthcare professional is evaluating progress monitoring. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for progress monitoring. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Treatment Planning",
+    "topic": "progress monitoring"
+  },
+  {
+    "id": "cac-139",
+    "stem": "During assessment related to progress monitoring, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of progress monitoring requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Treatment Planning",
+    "topic": "progress monitoring"
+  },
+  {
+    "id": "cac-140",
+    "stem": "Which of the following is a contraindication associated with progress monitoring?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in progress monitoring. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Treatment Planning",
+    "topic": "progress monitoring"
+  },
+  {
+    "id": "cac-141",
+    "stem": "A patient presents with findings consistent with discharge planning. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because discharge planning requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Treatment Planning",
+    "topic": "discharge planning"
+  },
+  {
+    "id": "cac-142",
+    "stem": "Which of the following best describes the primary indication for discharge planning?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for discharge planning. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Treatment Planning",
+    "topic": "discharge planning"
+  },
+  {
+    "id": "cac-143",
+    "stem": "A healthcare professional is evaluating discharge planning. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for discharge planning. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Treatment Planning",
+    "topic": "discharge planning"
+  },
+  {
+    "id": "cac-144",
+    "stem": "During assessment related to discharge planning, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of discharge planning requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Treatment Planning",
+    "topic": "discharge planning"
+  },
+  {
+    "id": "cac-145",
+    "stem": "Which of the following is a contraindication associated with discharge planning?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in discharge planning. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Treatment Planning",
+    "topic": "discharge planning"
+  },
+  {
+    "id": "cac-146",
+    "stem": "A patient presents with findings consistent with aftercare planning. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because aftercare planning requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Treatment Planning",
+    "topic": "aftercare planning"
+  },
+  {
+    "id": "cac-147",
+    "stem": "Which of the following best describes the primary indication for aftercare planning?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for aftercare planning. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Treatment Planning",
+    "topic": "aftercare planning"
+  },
+  {
+    "id": "cac-148",
+    "stem": "A healthcare professional is evaluating aftercare planning. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for aftercare planning. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Treatment Planning",
+    "topic": "aftercare planning"
+  },
+  {
+    "id": "cac-149",
+    "stem": "During assessment related to aftercare planning, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of aftercare planning requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Treatment Planning",
+    "topic": "aftercare planning"
+  },
+  {
+    "id": "cac-150",
+    "stem": "Which of the following is a contraindication associated with aftercare planning?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in aftercare planning. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Treatment Planning",
+    "topic": "aftercare planning"
+  },
+  {
+    "id": "cac-151",
+    "stem": "A patient presents with findings consistent with motivational interviewing. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because motivational interviewing requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Counseling Approaches",
+    "topic": "motivational interviewing"
+  },
+  {
+    "id": "cac-152",
+    "stem": "Which of the following best describes the primary indication for motivational interviewing?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for motivational interviewing. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Counseling Approaches",
+    "topic": "motivational interviewing"
+  },
+  {
+    "id": "cac-153",
+    "stem": "A healthcare professional is evaluating motivational interviewing. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for motivational interviewing. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Counseling Approaches",
+    "topic": "motivational interviewing"
+  },
+  {
+    "id": "cac-154",
+    "stem": "During assessment related to motivational interviewing, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of motivational interviewing requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Counseling Approaches",
+    "topic": "motivational interviewing"
+  },
+  {
+    "id": "cac-155",
+    "stem": "Which of the following is a contraindication associated with motivational interviewing?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in motivational interviewing. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Counseling Approaches",
+    "topic": "motivational interviewing"
+  },
+  {
+    "id": "cac-156",
+    "stem": "A patient presents with findings consistent with CBT for addiction. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because CBT for addiction requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Counseling Approaches",
+    "topic": "CBT for addiction"
+  },
+  {
+    "id": "cac-157",
+    "stem": "Which of the following best describes the primary indication for CBT for addiction?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for CBT for addiction. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Counseling Approaches",
+    "topic": "CBT for addiction"
+  },
+  {
+    "id": "cac-158",
+    "stem": "A healthcare professional is evaluating CBT for addiction. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for CBT for addiction. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Counseling Approaches",
+    "topic": "CBT for addiction"
+  },
+  {
+    "id": "cac-159",
+    "stem": "During assessment related to CBT for addiction, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of CBT for addiction requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Counseling Approaches",
+    "topic": "CBT for addiction"
+  },
+  {
+    "id": "cac-160",
+    "stem": "Which of the following is a contraindication associated with CBT for addiction?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in CBT for addiction. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Counseling Approaches",
+    "topic": "CBT for addiction"
+  },
+  {
+    "id": "cac-161",
+    "stem": "A patient presents with findings consistent with contingency management. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because contingency management requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Counseling Approaches",
+    "topic": "contingency management"
+  },
+  {
+    "id": "cac-162",
+    "stem": "Which of the following best describes the primary indication for contingency management?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for contingency management. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Counseling Approaches",
+    "topic": "contingency management"
+  },
+  {
+    "id": "cac-163",
+    "stem": "A healthcare professional is evaluating contingency management. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for contingency management. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Counseling Approaches",
+    "topic": "contingency management"
+  },
+  {
+    "id": "cac-164",
+    "stem": "During assessment related to contingency management, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of contingency management requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Counseling Approaches",
+    "topic": "contingency management"
+  },
+  {
+    "id": "cac-165",
+    "stem": "Which of the following is a contraindication associated with contingency management?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in contingency management. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Counseling Approaches",
+    "topic": "contingency management"
+  },
+  {
+    "id": "cac-166",
+    "stem": "A patient presents with findings consistent with 12-step facilitation. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because 12-step facilitation requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Counseling Approaches",
+    "topic": "12-step facilitation"
+  },
+  {
+    "id": "cac-167",
+    "stem": "Which of the following best describes the primary indication for 12-step facilitation?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for 12-step facilitation. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Counseling Approaches",
+    "topic": "12-step facilitation"
+  },
+  {
+    "id": "cac-168",
+    "stem": "A healthcare professional is evaluating 12-step facilitation. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for 12-step facilitation. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Counseling Approaches",
+    "topic": "12-step facilitation"
+  },
+  {
+    "id": "cac-169",
+    "stem": "During assessment related to 12-step facilitation, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of 12-step facilitation requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Counseling Approaches",
+    "topic": "12-step facilitation"
+  },
+  {
+    "id": "cac-170",
+    "stem": "Which of the following is a contraindication associated with 12-step facilitation?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in 12-step facilitation. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Counseling Approaches",
+    "topic": "12-step facilitation"
+  },
+  {
+    "id": "cac-171",
+    "stem": "A patient presents with findings consistent with harm reduction. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because harm reduction requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Counseling Approaches",
+    "topic": "harm reduction"
+  },
+  {
+    "id": "cac-172",
+    "stem": "Which of the following best describes the primary indication for harm reduction?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for harm reduction. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Counseling Approaches",
+    "topic": "harm reduction"
+  },
+  {
+    "id": "cac-173",
+    "stem": "A healthcare professional is evaluating harm reduction. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for harm reduction. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Counseling Approaches",
+    "topic": "harm reduction"
+  },
+  {
+    "id": "cac-174",
+    "stem": "During assessment related to harm reduction, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of harm reduction requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Counseling Approaches",
+    "topic": "harm reduction"
+  },
+  {
+    "id": "cac-175",
+    "stem": "Which of the following is a contraindication associated with harm reduction?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in harm reduction. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Counseling Approaches",
+    "topic": "harm reduction"
+  },
+  {
+    "id": "cac-176",
+    "stem": "A patient presents with findings consistent with brief interventions. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because brief interventions requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Counseling Approaches",
+    "topic": "brief interventions"
+  },
+  {
+    "id": "cac-177",
+    "stem": "Which of the following best describes the primary indication for brief interventions?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for brief interventions. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Counseling Approaches",
+    "topic": "brief interventions"
+  },
+  {
+    "id": "cac-178",
+    "stem": "A healthcare professional is evaluating brief interventions. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for brief interventions. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Counseling Approaches",
+    "topic": "brief interventions"
+  },
+  {
+    "id": "cac-179",
+    "stem": "During assessment related to brief interventions, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of brief interventions requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Counseling Approaches",
+    "topic": "brief interventions"
+  },
+  {
+    "id": "cac-180",
+    "stem": "Which of the following is a contraindication associated with brief interventions?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in brief interventions. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Counseling Approaches",
+    "topic": "brief interventions"
+  },
+  {
+    "id": "cac-181",
+    "stem": "A patient presents with findings consistent with SBIRT model. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because SBIRT model requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Counseling Approaches",
+    "topic": "SBIRT model"
+  },
+  {
+    "id": "cac-182",
+    "stem": "Which of the following best describes the primary indication for SBIRT model?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for SBIRT model. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Counseling Approaches",
+    "topic": "SBIRT model"
+  },
+  {
+    "id": "cac-183",
+    "stem": "A healthcare professional is evaluating SBIRT model. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for SBIRT model. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Counseling Approaches",
+    "topic": "SBIRT model"
+  },
+  {
+    "id": "cac-184",
+    "stem": "During assessment related to SBIRT model, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of SBIRT model requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Counseling Approaches",
+    "topic": "SBIRT model"
+  },
+  {
+    "id": "cac-185",
+    "stem": "Which of the following is a contraindication associated with SBIRT model?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in SBIRT model. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Counseling Approaches",
+    "topic": "SBIRT model"
+  },
+  {
+    "id": "cac-186",
+    "stem": "A patient presents with findings consistent with therapeutic community. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because therapeutic community requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Counseling Approaches",
+    "topic": "therapeutic community"
+  },
+  {
+    "id": "cac-187",
+    "stem": "Which of the following best describes the primary indication for therapeutic community?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for therapeutic community. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Counseling Approaches",
+    "topic": "therapeutic community"
+  },
+  {
+    "id": "cac-188",
+    "stem": "A healthcare professional is evaluating therapeutic community. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for therapeutic community. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Counseling Approaches",
+    "topic": "therapeutic community"
+  },
+  {
+    "id": "cac-189",
+    "stem": "During assessment related to therapeutic community, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of therapeutic community requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Counseling Approaches",
+    "topic": "therapeutic community"
+  },
+  {
+    "id": "cac-190",
+    "stem": "Which of the following is a contraindication associated with therapeutic community?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in therapeutic community. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Counseling Approaches",
+    "topic": "therapeutic community"
+  },
+  {
+    "id": "cac-191",
+    "stem": "A patient presents with findings consistent with family therapy. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because family therapy requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Counseling Approaches",
+    "topic": "family therapy"
+  },
+  {
+    "id": "cac-192",
+    "stem": "Which of the following best describes the primary indication for family therapy?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for family therapy. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Counseling Approaches",
+    "topic": "family therapy"
+  },
+  {
+    "id": "cac-193",
+    "stem": "A healthcare professional is evaluating family therapy. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for family therapy. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Counseling Approaches",
+    "topic": "family therapy"
+  },
+  {
+    "id": "cac-194",
+    "stem": "During assessment related to family therapy, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of family therapy requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Counseling Approaches",
+    "topic": "family therapy"
+  },
+  {
+    "id": "cac-195",
+    "stem": "Which of the following is a contraindication associated with family therapy?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in family therapy. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Counseling Approaches",
+    "topic": "family therapy"
+  },
+  {
+    "id": "cac-196",
+    "stem": "A patient presents with findings consistent with dialectical approaches. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because dialectical approaches requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Counseling Approaches",
+    "topic": "dialectical approaches"
+  },
+  {
+    "id": "cac-197",
+    "stem": "Which of the following best describes the primary indication for dialectical approaches?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for dialectical approaches. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Counseling Approaches",
+    "topic": "dialectical approaches"
+  },
+  {
+    "id": "cac-198",
+    "stem": "A healthcare professional is evaluating dialectical approaches. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for dialectical approaches. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Counseling Approaches",
+    "topic": "dialectical approaches"
+  },
+  {
+    "id": "cac-199",
+    "stem": "During assessment related to dialectical approaches, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of dialectical approaches requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Counseling Approaches",
+    "topic": "dialectical approaches"
+  },
+  {
+    "id": "cac-200",
+    "stem": "Which of the following is a contraindication associated with dialectical approaches?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in dialectical approaches. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Counseling Approaches",
+    "topic": "dialectical approaches"
+  },
+  {
+    "id": "cac-201",
+    "stem": "A patient presents with findings consistent with trigger identification. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because trigger identification requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Relapse Prevention",
+    "topic": "trigger identification"
+  },
+  {
+    "id": "cac-202",
+    "stem": "Which of the following best describes the primary indication for trigger identification?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for trigger identification. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Relapse Prevention",
+    "topic": "trigger identification"
+  },
+  {
+    "id": "cac-203",
+    "stem": "A healthcare professional is evaluating trigger identification. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for trigger identification. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Relapse Prevention",
+    "topic": "trigger identification"
+  },
+  {
+    "id": "cac-204",
+    "stem": "During assessment related to trigger identification, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of trigger identification requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Relapse Prevention",
+    "topic": "trigger identification"
+  },
+  {
+    "id": "cac-205",
+    "stem": "Which of the following is a contraindication associated with trigger identification?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in trigger identification. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Relapse Prevention",
+    "topic": "trigger identification"
+  },
+  {
+    "id": "cac-206",
+    "stem": "A patient presents with findings consistent with coping skill development. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because coping skill development requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Relapse Prevention",
+    "topic": "coping skill development"
+  },
+  {
+    "id": "cac-207",
+    "stem": "Which of the following best describes the primary indication for coping skill development?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for coping skill development. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Relapse Prevention",
+    "topic": "coping skill development"
+  },
+  {
+    "id": "cac-208",
+    "stem": "A healthcare professional is evaluating coping skill development. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for coping skill development. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Relapse Prevention",
+    "topic": "coping skill development"
+  },
+  {
+    "id": "cac-209",
+    "stem": "During assessment related to coping skill development, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of coping skill development requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Relapse Prevention",
+    "topic": "coping skill development"
+  },
+  {
+    "id": "cac-210",
+    "stem": "Which of the following is a contraindication associated with coping skill development?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in coping skill development. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Relapse Prevention",
+    "topic": "coping skill development"
+  },
+  {
+    "id": "cac-211",
+    "stem": "A patient presents with findings consistent with Marlatt model. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because Marlatt model requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Relapse Prevention",
+    "topic": "Marlatt model"
+  },
+  {
+    "id": "cac-212",
+    "stem": "Which of the following best describes the primary indication for Marlatt model?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for Marlatt model. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Relapse Prevention",
+    "topic": "Marlatt model"
+  },
+  {
+    "id": "cac-213",
+    "stem": "A healthcare professional is evaluating Marlatt model. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for Marlatt model. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Relapse Prevention",
+    "topic": "Marlatt model"
+  },
+  {
+    "id": "cac-214",
+    "stem": "During assessment related to Marlatt model, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of Marlatt model requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Relapse Prevention",
+    "topic": "Marlatt model"
+  },
+  {
+    "id": "cac-215",
+    "stem": "Which of the following is a contraindication associated with Marlatt model?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in Marlatt model. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Relapse Prevention",
+    "topic": "Marlatt model"
+  },
+  {
+    "id": "cac-216",
+    "stem": "A patient presents with findings consistent with HALT awareness. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because HALT awareness requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Relapse Prevention",
+    "topic": "HALT awareness"
+  },
+  {
+    "id": "cac-217",
+    "stem": "Which of the following best describes the primary indication for HALT awareness?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for HALT awareness. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Relapse Prevention",
+    "topic": "HALT awareness"
+  },
+  {
+    "id": "cac-218",
+    "stem": "A healthcare professional is evaluating HALT awareness. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for HALT awareness. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Relapse Prevention",
+    "topic": "HALT awareness"
+  },
+  {
+    "id": "cac-219",
+    "stem": "During assessment related to HALT awareness, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of HALT awareness requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Relapse Prevention",
+    "topic": "HALT awareness"
+  },
+  {
+    "id": "cac-220",
+    "stem": "Which of the following is a contraindication associated with HALT awareness?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in HALT awareness. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Relapse Prevention",
+    "topic": "HALT awareness"
+  },
+  {
+    "id": "cac-221",
+    "stem": "A patient presents with findings consistent with recovery capital building. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because recovery capital building requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Relapse Prevention",
+    "topic": "recovery capital building"
+  },
+  {
+    "id": "cac-222",
+    "stem": "Which of the following best describes the primary indication for recovery capital building?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for recovery capital building. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Relapse Prevention",
+    "topic": "recovery capital building"
+  },
+  {
+    "id": "cac-223",
+    "stem": "A healthcare professional is evaluating recovery capital building. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for recovery capital building. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Relapse Prevention",
+    "topic": "recovery capital building"
+  },
+  {
+    "id": "cac-224",
+    "stem": "During assessment related to recovery capital building, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of recovery capital building requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Relapse Prevention",
+    "topic": "recovery capital building"
+  },
+  {
+    "id": "cac-225",
+    "stem": "Which of the following is a contraindication associated with recovery capital building?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in recovery capital building. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Relapse Prevention",
+    "topic": "recovery capital building"
+  },
+  {
+    "id": "cac-226",
+    "stem": "A patient presents with findings consistent with lifestyle balance. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because lifestyle balance requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Relapse Prevention",
+    "topic": "lifestyle balance"
+  },
+  {
+    "id": "cac-227",
+    "stem": "Which of the following best describes the primary indication for lifestyle balance?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for lifestyle balance. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Relapse Prevention",
+    "topic": "lifestyle balance"
+  },
+  {
+    "id": "cac-228",
+    "stem": "A healthcare professional is evaluating lifestyle balance. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for lifestyle balance. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Relapse Prevention",
+    "topic": "lifestyle balance"
+  },
+  {
+    "id": "cac-229",
+    "stem": "During assessment related to lifestyle balance, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of lifestyle balance requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Relapse Prevention",
+    "topic": "lifestyle balance"
+  },
+  {
+    "id": "cac-230",
+    "stem": "Which of the following is a contraindication associated with lifestyle balance?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in lifestyle balance. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Relapse Prevention",
+    "topic": "lifestyle balance"
+  },
+  {
+    "id": "cac-231",
+    "stem": "A patient presents with findings consistent with cognitive restructuring. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because cognitive restructuring requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Relapse Prevention",
+    "topic": "cognitive restructuring"
+  },
+  {
+    "id": "cac-232",
+    "stem": "Which of the following best describes the primary indication for cognitive restructuring?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for cognitive restructuring. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Relapse Prevention",
+    "topic": "cognitive restructuring"
+  },
+  {
+    "id": "cac-233",
+    "stem": "A healthcare professional is evaluating cognitive restructuring. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for cognitive restructuring. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Relapse Prevention",
+    "topic": "cognitive restructuring"
+  },
+  {
+    "id": "cac-234",
+    "stem": "During assessment related to cognitive restructuring, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of cognitive restructuring requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Relapse Prevention",
+    "topic": "cognitive restructuring"
+  },
+  {
+    "id": "cac-235",
+    "stem": "Which of the following is a contraindication associated with cognitive restructuring?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in cognitive restructuring. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Relapse Prevention",
+    "topic": "cognitive restructuring"
+  },
+  {
+    "id": "cac-236",
+    "stem": "A patient presents with findings consistent with social support networks. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because social support networks requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Relapse Prevention",
+    "topic": "social support networks"
+  },
+  {
+    "id": "cac-237",
+    "stem": "Which of the following best describes the primary indication for social support networks?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for social support networks. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Relapse Prevention",
+    "topic": "social support networks"
+  },
+  {
+    "id": "cac-238",
+    "stem": "A healthcare professional is evaluating social support networks. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for social support networks. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Relapse Prevention",
+    "topic": "social support networks"
+  },
+  {
+    "id": "cac-239",
+    "stem": "During assessment related to social support networks, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of social support networks requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Relapse Prevention",
+    "topic": "social support networks"
+  },
+  {
+    "id": "cac-240",
+    "stem": "Which of the following is a contraindication associated with social support networks?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in social support networks. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Relapse Prevention",
+    "topic": "social support networks"
+  },
+  {
+    "id": "cac-241",
+    "stem": "A patient presents with findings consistent with mindfulness techniques. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because mindfulness techniques requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Relapse Prevention",
+    "topic": "mindfulness techniques"
+  },
+  {
+    "id": "cac-242",
+    "stem": "Which of the following best describes the primary indication for mindfulness techniques?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for mindfulness techniques. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Relapse Prevention",
+    "topic": "mindfulness techniques"
+  },
+  {
+    "id": "cac-243",
+    "stem": "A healthcare professional is evaluating mindfulness techniques. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for mindfulness techniques. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Relapse Prevention",
+    "topic": "mindfulness techniques"
+  },
+  {
+    "id": "cac-244",
+    "stem": "During assessment related to mindfulness techniques, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of mindfulness techniques requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Relapse Prevention",
+    "topic": "mindfulness techniques"
+  },
+  {
+    "id": "cac-245",
+    "stem": "Which of the following is a contraindication associated with mindfulness techniques?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in mindfulness techniques. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Relapse Prevention",
+    "topic": "mindfulness techniques"
+  },
+  {
+    "id": "cac-246",
+    "stem": "A patient presents with findings consistent with warning sign recognition. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because warning sign recognition requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Relapse Prevention",
+    "topic": "warning sign recognition"
+  },
+  {
+    "id": "cac-247",
+    "stem": "Which of the following best describes the primary indication for warning sign recognition?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for warning sign recognition. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Relapse Prevention",
+    "topic": "warning sign recognition"
+  },
+  {
+    "id": "cac-248",
+    "stem": "A healthcare professional is evaluating warning sign recognition. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for warning sign recognition. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Relapse Prevention",
+    "topic": "warning sign recognition"
+  },
+  {
+    "id": "cac-249",
+    "stem": "During assessment related to warning sign recognition, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of warning sign recognition requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Relapse Prevention",
+    "topic": "warning sign recognition"
+  },
+  {
+    "id": "cac-250",
+    "stem": "Which of the following is a contraindication associated with warning sign recognition?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in warning sign recognition. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Relapse Prevention",
+    "topic": "warning sign recognition"
+  },
+  {
+    "id": "cac-251",
+    "stem": "A patient presents with findings consistent with dual diagnosis treatment. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because dual diagnosis treatment requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Co-occurring Disorders",
+    "topic": "dual diagnosis treatment"
+  },
+  {
+    "id": "cac-252",
+    "stem": "Which of the following best describes the primary indication for dual diagnosis treatment?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for dual diagnosis treatment. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Co-occurring Disorders",
+    "topic": "dual diagnosis treatment"
+  },
+  {
+    "id": "cac-253",
+    "stem": "A healthcare professional is evaluating dual diagnosis treatment. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for dual diagnosis treatment. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Co-occurring Disorders",
+    "topic": "dual diagnosis treatment"
+  },
+  {
+    "id": "cac-254",
+    "stem": "During assessment related to dual diagnosis treatment, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of dual diagnosis treatment requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Co-occurring Disorders",
+    "topic": "dual diagnosis treatment"
+  },
+  {
+    "id": "cac-255",
+    "stem": "Which of the following is a contraindication associated with dual diagnosis treatment?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in dual diagnosis treatment. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Co-occurring Disorders",
+    "topic": "dual diagnosis treatment"
+  },
+  {
+    "id": "cac-256",
+    "stem": "A patient presents with findings consistent with integrated treatment. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because integrated treatment requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Co-occurring Disorders",
+    "topic": "integrated treatment"
+  },
+  {
+    "id": "cac-257",
+    "stem": "Which of the following best describes the primary indication for integrated treatment?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for integrated treatment. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Co-occurring Disorders",
+    "topic": "integrated treatment"
+  },
+  {
+    "id": "cac-258",
+    "stem": "A healthcare professional is evaluating integrated treatment. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for integrated treatment. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Co-occurring Disorders",
+    "topic": "integrated treatment"
+  },
+  {
+    "id": "cac-259",
+    "stem": "During assessment related to integrated treatment, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of integrated treatment requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Co-occurring Disorders",
+    "topic": "integrated treatment"
+  },
+  {
+    "id": "cac-260",
+    "stem": "Which of the following is a contraindication associated with integrated treatment?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in integrated treatment. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Co-occurring Disorders",
+    "topic": "integrated treatment"
+  },
+  {
+    "id": "cac-261",
+    "stem": "A patient presents with findings consistent with trauma and addiction. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because trauma and addiction requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Co-occurring Disorders",
+    "topic": "trauma and addiction"
+  },
+  {
+    "id": "cac-262",
+    "stem": "Which of the following best describes the primary indication for trauma and addiction?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for trauma and addiction. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Co-occurring Disorders",
+    "topic": "trauma and addiction"
+  },
+  {
+    "id": "cac-263",
+    "stem": "A healthcare professional is evaluating trauma and addiction. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for trauma and addiction. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Co-occurring Disorders",
+    "topic": "trauma and addiction"
+  },
+  {
+    "id": "cac-264",
+    "stem": "During assessment related to trauma and addiction, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of trauma and addiction requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Co-occurring Disorders",
+    "topic": "trauma and addiction"
+  },
+  {
+    "id": "cac-265",
+    "stem": "Which of the following is a contraindication associated with trauma and addiction?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in trauma and addiction. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Co-occurring Disorders",
+    "topic": "trauma and addiction"
+  },
+  {
+    "id": "cac-266",
+    "stem": "A patient presents with findings consistent with mood disorders. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because mood disorders requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Co-occurring Disorders",
+    "topic": "mood disorders"
+  },
+  {
+    "id": "cac-267",
+    "stem": "Which of the following best describes the primary indication for mood disorders?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for mood disorders. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Co-occurring Disorders",
+    "topic": "mood disorders"
+  },
+  {
+    "id": "cac-268",
+    "stem": "A healthcare professional is evaluating mood disorders. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for mood disorders. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Co-occurring Disorders",
+    "topic": "mood disorders"
+  },
+  {
+    "id": "cac-269",
+    "stem": "During assessment related to mood disorders, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of mood disorders requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Co-occurring Disorders",
+    "topic": "mood disorders"
+  },
+  {
+    "id": "cac-270",
+    "stem": "Which of the following is a contraindication associated with mood disorders?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in mood disorders. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Co-occurring Disorders",
+    "topic": "mood disorders"
+  },
+  {
+    "id": "cac-271",
+    "stem": "A patient presents with findings consistent with anxiety disorders. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because anxiety disorders requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Co-occurring Disorders",
+    "topic": "anxiety disorders"
+  },
+  {
+    "id": "cac-272",
+    "stem": "Which of the following best describes the primary indication for anxiety disorders?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for anxiety disorders. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Co-occurring Disorders",
+    "topic": "anxiety disorders"
+  },
+  {
+    "id": "cac-273",
+    "stem": "A healthcare professional is evaluating anxiety disorders. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for anxiety disorders. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Co-occurring Disorders",
+    "topic": "anxiety disorders"
+  },
+  {
+    "id": "cac-274",
+    "stem": "During assessment related to anxiety disorders, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of anxiety disorders requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Co-occurring Disorders",
+    "topic": "anxiety disorders"
+  },
+  {
+    "id": "cac-275",
+    "stem": "Which of the following is a contraindication associated with anxiety disorders?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in anxiety disorders. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Co-occurring Disorders",
+    "topic": "anxiety disorders"
+  },
+  {
+    "id": "cac-276",
+    "stem": "A patient presents with findings consistent with psychotic disorders. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because psychotic disorders requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Co-occurring Disorders",
+    "topic": "psychotic disorders"
+  },
+  {
+    "id": "cac-277",
+    "stem": "Which of the following best describes the primary indication for psychotic disorders?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for psychotic disorders. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Co-occurring Disorders",
+    "topic": "psychotic disorders"
+  },
+  {
+    "id": "cac-278",
+    "stem": "A healthcare professional is evaluating psychotic disorders. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for psychotic disorders. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Co-occurring Disorders",
+    "topic": "psychotic disorders"
+  },
+  {
+    "id": "cac-279",
+    "stem": "During assessment related to psychotic disorders, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of psychotic disorders requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Co-occurring Disorders",
+    "topic": "psychotic disorders"
+  },
+  {
+    "id": "cac-280",
+    "stem": "Which of the following is a contraindication associated with psychotic disorders?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in psychotic disorders. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Co-occurring Disorders",
+    "topic": "psychotic disorders"
+  },
+  {
+    "id": "cac-281",
+    "stem": "A patient presents with findings consistent with personality disorders. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because personality disorders requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Co-occurring Disorders",
+    "topic": "personality disorders"
+  },
+  {
+    "id": "cac-282",
+    "stem": "Which of the following best describes the primary indication for personality disorders?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for personality disorders. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Co-occurring Disorders",
+    "topic": "personality disorders"
+  },
+  {
+    "id": "cac-283",
+    "stem": "A healthcare professional is evaluating personality disorders. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for personality disorders. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Co-occurring Disorders",
+    "topic": "personality disorders"
+  },
+  {
+    "id": "cac-284",
+    "stem": "During assessment related to personality disorders, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of personality disorders requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Co-occurring Disorders",
+    "topic": "personality disorders"
+  },
+  {
+    "id": "cac-285",
+    "stem": "Which of the following is a contraindication associated with personality disorders?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in personality disorders. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Co-occurring Disorders",
+    "topic": "personality disorders"
+  },
+  {
+    "id": "cac-286",
+    "stem": "A patient presents with findings consistent with PTSD treatment. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because PTSD treatment requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Co-occurring Disorders",
+    "topic": "PTSD treatment"
+  },
+  {
+    "id": "cac-287",
+    "stem": "Which of the following best describes the primary indication for PTSD treatment?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for PTSD treatment. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Co-occurring Disorders",
+    "topic": "PTSD treatment"
+  },
+  {
+    "id": "cac-288",
+    "stem": "A healthcare professional is evaluating PTSD treatment. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for PTSD treatment. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Co-occurring Disorders",
+    "topic": "PTSD treatment"
+  },
+  {
+    "id": "cac-289",
+    "stem": "During assessment related to PTSD treatment, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of PTSD treatment requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Co-occurring Disorders",
+    "topic": "PTSD treatment"
+  },
+  {
+    "id": "cac-290",
+    "stem": "Which of the following is a contraindication associated with PTSD treatment?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in PTSD treatment. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Co-occurring Disorders",
+    "topic": "PTSD treatment"
+  },
+  {
+    "id": "cac-291",
+    "stem": "A patient presents with findings consistent with medication management. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because medication management requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Co-occurring Disorders",
+    "topic": "medication management"
+  },
+  {
+    "id": "cac-292",
+    "stem": "Which of the following best describes the primary indication for medication management?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for medication management. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Co-occurring Disorders",
+    "topic": "medication management"
+  },
+  {
+    "id": "cac-293",
+    "stem": "A healthcare professional is evaluating medication management. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for medication management. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Co-occurring Disorders",
+    "topic": "medication management"
+  },
+  {
+    "id": "cac-294",
+    "stem": "During assessment related to medication management, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of medication management requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Co-occurring Disorders",
+    "topic": "medication management"
+  },
+  {
+    "id": "cac-295",
+    "stem": "Which of the following is a contraindication associated with medication management?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in medication management. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Co-occurring Disorders",
+    "topic": "medication management"
+  },
+  {
+    "id": "cac-296",
+    "stem": "A patient presents with findings consistent with sequential treatment. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because sequential treatment requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Co-occurring Disorders",
+    "topic": "sequential treatment"
+  },
+  {
+    "id": "cac-297",
+    "stem": "Which of the following best describes the primary indication for sequential treatment?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for sequential treatment. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Co-occurring Disorders",
+    "topic": "sequential treatment"
+  },
+  {
+    "id": "cac-298",
+    "stem": "A healthcare professional is evaluating sequential treatment. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for sequential treatment. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Co-occurring Disorders",
+    "topic": "sequential treatment"
+  },
+  {
+    "id": "cac-299",
+    "stem": "During assessment related to sequential treatment, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of sequential treatment requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Co-occurring Disorders",
+    "topic": "sequential treatment"
+  },
+  {
+    "id": "cac-300",
+    "stem": "Which of the following is a contraindication associated with sequential treatment?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in sequential treatment. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Co-occurring Disorders",
+    "topic": "sequential treatment"
+  },
+  {
+    "id": "cac-301",
+    "stem": "A patient presents with findings consistent with 42 CFR Part 2. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because 42 CFR Part 2 requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Ethics/Professional Practice",
+    "topic": "42 CFR Part 2"
+  },
+  {
+    "id": "cac-302",
+    "stem": "Which of the following best describes the primary indication for 42 CFR Part 2?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for 42 CFR Part 2. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Ethics/Professional Practice",
+    "topic": "42 CFR Part 2"
+  },
+  {
+    "id": "cac-303",
+    "stem": "A healthcare professional is evaluating 42 CFR Part 2. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for 42 CFR Part 2. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Ethics/Professional Practice",
+    "topic": "42 CFR Part 2"
+  },
+  {
+    "id": "cac-304",
+    "stem": "During assessment related to 42 CFR Part 2, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of 42 CFR Part 2 requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Ethics/Professional Practice",
+    "topic": "42 CFR Part 2"
+  },
+  {
+    "id": "cac-305",
+    "stem": "Which of the following is a contraindication associated with 42 CFR Part 2?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in 42 CFR Part 2. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Ethics/Professional Practice",
+    "topic": "42 CFR Part 2"
+  },
+  {
+    "id": "cac-306",
+    "stem": "A patient presents with findings consistent with confidentiality rules. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because confidentiality rules requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Ethics/Professional Practice",
+    "topic": "confidentiality rules"
+  },
+  {
+    "id": "cac-307",
+    "stem": "Which of the following best describes the primary indication for confidentiality rules?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for confidentiality rules. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Ethics/Professional Practice",
+    "topic": "confidentiality rules"
+  },
+  {
+    "id": "cac-308",
+    "stem": "A healthcare professional is evaluating confidentiality rules. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for confidentiality rules. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Ethics/Professional Practice",
+    "topic": "confidentiality rules"
+  },
+  {
+    "id": "cac-309",
+    "stem": "During assessment related to confidentiality rules, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of confidentiality rules requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Ethics/Professional Practice",
+    "topic": "confidentiality rules"
+  },
+  {
+    "id": "cac-310",
+    "stem": "Which of the following is a contraindication associated with confidentiality rules?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in confidentiality rules. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Ethics/Professional Practice",
+    "topic": "confidentiality rules"
+  },
+  {
+    "id": "cac-311",
+    "stem": "A patient presents with findings consistent with boundary maintenance. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because boundary maintenance requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Ethics/Professional Practice",
+    "topic": "boundary maintenance"
+  },
+  {
+    "id": "cac-312",
+    "stem": "Which of the following best describes the primary indication for boundary maintenance?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for boundary maintenance. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Ethics/Professional Practice",
+    "topic": "boundary maintenance"
+  },
+  {
+    "id": "cac-313",
+    "stem": "A healthcare professional is evaluating boundary maintenance. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for boundary maintenance. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Ethics/Professional Practice",
+    "topic": "boundary maintenance"
+  },
+  {
+    "id": "cac-314",
+    "stem": "During assessment related to boundary maintenance, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of boundary maintenance requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Ethics/Professional Practice",
+    "topic": "boundary maintenance"
+  },
+  {
+    "id": "cac-315",
+    "stem": "Which of the following is a contraindication associated with boundary maintenance?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in boundary maintenance. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Ethics/Professional Practice",
+    "topic": "boundary maintenance"
+  },
+  {
+    "id": "cac-316",
+    "stem": "A patient presents with findings consistent with scope of practice. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because scope of practice requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Ethics/Professional Practice",
+    "topic": "scope of practice"
+  },
+  {
+    "id": "cac-317",
+    "stem": "Which of the following best describes the primary indication for scope of practice?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for scope of practice. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Ethics/Professional Practice",
+    "topic": "scope of practice"
+  },
+  {
+    "id": "cac-318",
+    "stem": "A healthcare professional is evaluating scope of practice. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for scope of practice. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Ethics/Professional Practice",
+    "topic": "scope of practice"
+  },
+  {
+    "id": "cac-319",
+    "stem": "During assessment related to scope of practice, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of scope of practice requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Ethics/Professional Practice",
+    "topic": "scope of practice"
+  },
+  {
+    "id": "cac-320",
+    "stem": "Which of the following is a contraindication associated with scope of practice?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in scope of practice. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Ethics/Professional Practice",
+    "topic": "scope of practice"
+  },
+  {
+    "id": "cac-321",
+    "stem": "A patient presents with findings consistent with impaired professionals. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because impaired professionals requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Ethics/Professional Practice",
+    "topic": "impaired professionals"
+  },
+  {
+    "id": "cac-322",
+    "stem": "Which of the following best describes the primary indication for impaired professionals?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for impaired professionals. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Ethics/Professional Practice",
+    "topic": "impaired professionals"
+  },
+  {
+    "id": "cac-323",
+    "stem": "A healthcare professional is evaluating impaired professionals. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for impaired professionals. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Ethics/Professional Practice",
+    "topic": "impaired professionals"
+  },
+  {
+    "id": "cac-324",
+    "stem": "During assessment related to impaired professionals, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of impaired professionals requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Ethics/Professional Practice",
+    "topic": "impaired professionals"
+  },
+  {
+    "id": "cac-325",
+    "stem": "Which of the following is a contraindication associated with impaired professionals?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in impaired professionals. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Ethics/Professional Practice",
+    "topic": "impaired professionals"
+  },
+  {
+    "id": "cac-326",
+    "stem": "A patient presents with findings consistent with informed consent. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because informed consent requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Ethics/Professional Practice",
+    "topic": "informed consent"
+  },
+  {
+    "id": "cac-327",
+    "stem": "Which of the following best describes the primary indication for informed consent?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for informed consent. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Ethics/Professional Practice",
+    "topic": "informed consent"
+  },
+  {
+    "id": "cac-328",
+    "stem": "A healthcare professional is evaluating informed consent. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for informed consent. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Ethics/Professional Practice",
+    "topic": "informed consent"
+  },
+  {
+    "id": "cac-329",
+    "stem": "During assessment related to informed consent, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of informed consent requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Ethics/Professional Practice",
+    "topic": "informed consent"
+  },
+  {
+    "id": "cac-330",
+    "stem": "Which of the following is a contraindication associated with informed consent?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in informed consent. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Ethics/Professional Practice",
+    "topic": "informed consent"
+  },
+  {
+    "id": "cac-331",
+    "stem": "A patient presents with findings consistent with documentation standards. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because documentation standards requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Ethics/Professional Practice",
+    "topic": "documentation standards"
+  },
+  {
+    "id": "cac-332",
+    "stem": "Which of the following best describes the primary indication for documentation standards?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for documentation standards. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Ethics/Professional Practice",
+    "topic": "documentation standards"
+  },
+  {
+    "id": "cac-333",
+    "stem": "A healthcare professional is evaluating documentation standards. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for documentation standards. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Ethics/Professional Practice",
+    "topic": "documentation standards"
+  },
+  {
+    "id": "cac-334",
+    "stem": "During assessment related to documentation standards, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of documentation standards requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Ethics/Professional Practice",
+    "topic": "documentation standards"
+  },
+  {
+    "id": "cac-335",
+    "stem": "Which of the following is a contraindication associated with documentation standards?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in documentation standards. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Ethics/Professional Practice",
+    "topic": "documentation standards"
+  },
+  {
+    "id": "cac-336",
+    "stem": "A patient presents with findings consistent with supervision requirements. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because supervision requirements requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Ethics/Professional Practice",
+    "topic": "supervision requirements"
+  },
+  {
+    "id": "cac-337",
+    "stem": "Which of the following best describes the primary indication for supervision requirements?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for supervision requirements. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Ethics/Professional Practice",
+    "topic": "supervision requirements"
+  },
+  {
+    "id": "cac-338",
+    "stem": "A healthcare professional is evaluating supervision requirements. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for supervision requirements. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Ethics/Professional Practice",
+    "topic": "supervision requirements"
+  },
+  {
+    "id": "cac-339",
+    "stem": "During assessment related to supervision requirements, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of supervision requirements requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Ethics/Professional Practice",
+    "topic": "supervision requirements"
+  },
+  {
+    "id": "cac-340",
+    "stem": "Which of the following is a contraindication associated with supervision requirements?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in supervision requirements. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Ethics/Professional Practice",
+    "topic": "supervision requirements"
+  },
+  {
+    "id": "cac-341",
+    "stem": "A patient presents with findings consistent with cultural considerations. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because cultural considerations requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Ethics/Professional Practice",
+    "topic": "cultural considerations"
+  },
+  {
+    "id": "cac-342",
+    "stem": "Which of the following best describes the primary indication for cultural considerations?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for cultural considerations. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Ethics/Professional Practice",
+    "topic": "cultural considerations"
+  },
+  {
+    "id": "cac-343",
+    "stem": "A healthcare professional is evaluating cultural considerations. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for cultural considerations. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Ethics/Professional Practice",
+    "topic": "cultural considerations"
+  },
+  {
+    "id": "cac-344",
+    "stem": "During assessment related to cultural considerations, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of cultural considerations requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Ethics/Professional Practice",
+    "topic": "cultural considerations"
+  },
+  {
+    "id": "cac-345",
+    "stem": "Which of the following is a contraindication associated with cultural considerations?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in cultural considerations. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Ethics/Professional Practice",
+    "topic": "cultural considerations"
+  },
+  {
+    "id": "cac-346",
+    "stem": "A patient presents with findings consistent with professional development. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because professional development requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Ethics/Professional Practice",
+    "topic": "professional development"
+  },
+  {
+    "id": "cac-347",
+    "stem": "Which of the following best describes the primary indication for professional development?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for professional development. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Ethics/Professional Practice",
+    "topic": "professional development"
+  },
+  {
+    "id": "cac-348",
+    "stem": "A healthcare professional is evaluating professional development. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for professional development. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Ethics/Professional Practice",
+    "topic": "professional development"
+  },
+  {
+    "id": "cac-349",
+    "stem": "During assessment related to professional development, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of professional development requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Ethics/Professional Practice",
+    "topic": "professional development"
+  },
+  {
+    "id": "cac-350",
+    "stem": "Which of the following is a contraindication associated with professional development?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in professional development. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Ethics/Professional Practice",
+    "topic": "professional development"
+  },
+  {
+    "id": "cac-351",
+    "stem": "A patient presents with findings consistent with health disparities. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because health disparities requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Cultural Competence",
+    "topic": "health disparities"
+  },
+  {
+    "id": "cac-352",
+    "stem": "Which of the following best describes the primary indication for health disparities?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for health disparities. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Cultural Competence",
+    "topic": "health disparities"
+  },
+  {
+    "id": "cac-353",
+    "stem": "A healthcare professional is evaluating health disparities. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for health disparities. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Cultural Competence",
+    "topic": "health disparities"
+  },
+  {
+    "id": "cac-354",
+    "stem": "During assessment related to health disparities, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of health disparities requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Cultural Competence",
+    "topic": "health disparities"
+  },
+  {
+    "id": "cac-355",
+    "stem": "Which of the following is a contraindication associated with health disparities?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in health disparities. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Cultural Competence",
+    "topic": "health disparities"
+  },
+  {
+    "id": "cac-356",
+    "stem": "A patient presents with findings consistent with indigenous populations. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because indigenous populations requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Cultural Competence",
+    "topic": "indigenous populations"
+  },
+  {
+    "id": "cac-357",
+    "stem": "Which of the following best describes the primary indication for indigenous populations?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for indigenous populations. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Cultural Competence",
+    "topic": "indigenous populations"
+  },
+  {
+    "id": "cac-358",
+    "stem": "A healthcare professional is evaluating indigenous populations. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for indigenous populations. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Cultural Competence",
+    "topic": "indigenous populations"
+  },
+  {
+    "id": "cac-359",
+    "stem": "During assessment related to indigenous populations, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of indigenous populations requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Cultural Competence",
+    "topic": "indigenous populations"
+  },
+  {
+    "id": "cac-360",
+    "stem": "Which of the following is a contraindication associated with indigenous populations?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in indigenous populations. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Cultural Competence",
+    "topic": "indigenous populations"
+  },
+  {
+    "id": "cac-361",
+    "stem": "A patient presents with findings consistent with LGBTQ considerations. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because LGBTQ considerations requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Cultural Competence",
+    "topic": "LGBTQ considerations"
+  },
+  {
+    "id": "cac-362",
+    "stem": "Which of the following best describes the primary indication for LGBTQ considerations?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for LGBTQ considerations. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Cultural Competence",
+    "topic": "LGBTQ considerations"
+  },
+  {
+    "id": "cac-363",
+    "stem": "A healthcare professional is evaluating LGBTQ considerations. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for LGBTQ considerations. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Cultural Competence",
+    "topic": "LGBTQ considerations"
+  },
+  {
+    "id": "cac-364",
+    "stem": "During assessment related to LGBTQ considerations, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of LGBTQ considerations requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Cultural Competence",
+    "topic": "LGBTQ considerations"
+  },
+  {
+    "id": "cac-365",
+    "stem": "Which of the following is a contraindication associated with LGBTQ considerations?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in LGBTQ considerations. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Cultural Competence",
+    "topic": "LGBTQ considerations"
+  },
+  {
+    "id": "cac-366",
+    "stem": "A patient presents with findings consistent with harm reduction approach. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because harm reduction approach requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Cultural Competence",
+    "topic": "harm reduction approach"
+  },
+  {
+    "id": "cac-367",
+    "stem": "Which of the following best describes the primary indication for harm reduction approach?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for harm reduction approach. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Cultural Competence",
+    "topic": "harm reduction approach"
+  },
+  {
+    "id": "cac-368",
+    "stem": "A healthcare professional is evaluating harm reduction approach. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for harm reduction approach. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Cultural Competence",
+    "topic": "harm reduction approach"
+  },
+  {
+    "id": "cac-369",
+    "stem": "During assessment related to harm reduction approach, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of harm reduction approach requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Cultural Competence",
+    "topic": "harm reduction approach"
+  },
+  {
+    "id": "cac-370",
+    "stem": "Which of the following is a contraindication associated with harm reduction approach?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in harm reduction approach. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Cultural Competence",
+    "topic": "harm reduction approach"
+  },
+  {
+    "id": "cac-371",
+    "stem": "A patient presents with findings consistent with cultural humility. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because cultural humility requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Cultural Competence",
+    "topic": "cultural humility"
+  },
+  {
+    "id": "cac-372",
+    "stem": "Which of the following best describes the primary indication for cultural humility?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for cultural humility. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Cultural Competence",
+    "topic": "cultural humility"
+  },
+  {
+    "id": "cac-373",
+    "stem": "A healthcare professional is evaluating cultural humility. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for cultural humility. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Cultural Competence",
+    "topic": "cultural humility"
+  },
+  {
+    "id": "cac-374",
+    "stem": "During assessment related to cultural humility, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of cultural humility requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Cultural Competence",
+    "topic": "cultural humility"
+  },
+  {
+    "id": "cac-375",
+    "stem": "Which of the following is a contraindication associated with cultural humility?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in cultural humility. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Cultural Competence",
+    "topic": "cultural humility"
+  },
+  {
+    "id": "cac-376",
+    "stem": "A patient presents with findings consistent with race and addiction. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because race and addiction requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Cultural Competence",
+    "topic": "race and addiction"
+  },
+  {
+    "id": "cac-377",
+    "stem": "Which of the following best describes the primary indication for race and addiction?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for race and addiction. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Cultural Competence",
+    "topic": "race and addiction"
+  },
+  {
+    "id": "cac-378",
+    "stem": "A healthcare professional is evaluating race and addiction. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for race and addiction. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Cultural Competence",
+    "topic": "race and addiction"
+  },
+  {
+    "id": "cac-379",
+    "stem": "During assessment related to race and addiction, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of race and addiction requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Cultural Competence",
+    "topic": "race and addiction"
+  },
+  {
+    "id": "cac-380",
+    "stem": "Which of the following is a contraindication associated with race and addiction?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in race and addiction. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Cultural Competence",
+    "topic": "race and addiction"
+  },
+  {
+    "id": "cac-381",
+    "stem": "A patient presents with findings consistent with gender considerations. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because gender considerations requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Cultural Competence",
+    "topic": "gender considerations"
+  },
+  {
+    "id": "cac-382",
+    "stem": "Which of the following best describes the primary indication for gender considerations?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for gender considerations. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Cultural Competence",
+    "topic": "gender considerations"
+  },
+  {
+    "id": "cac-383",
+    "stem": "A healthcare professional is evaluating gender considerations. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for gender considerations. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Cultural Competence",
+    "topic": "gender considerations"
+  },
+  {
+    "id": "cac-384",
+    "stem": "During assessment related to gender considerations, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of gender considerations requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Cultural Competence",
+    "topic": "gender considerations"
+  },
+  {
+    "id": "cac-385",
+    "stem": "Which of the following is a contraindication associated with gender considerations?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in gender considerations. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Cultural Competence",
+    "topic": "gender considerations"
+  },
+  {
+    "id": "cac-386",
+    "stem": "A patient presents with findings consistent with age-specific treatment. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because age-specific treatment requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Cultural Competence",
+    "topic": "age-specific treatment"
+  },
+  {
+    "id": "cac-387",
+    "stem": "Which of the following best describes the primary indication for age-specific treatment?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for age-specific treatment. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Cultural Competence",
+    "topic": "age-specific treatment"
+  },
+  {
+    "id": "cac-388",
+    "stem": "A healthcare professional is evaluating age-specific treatment. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for age-specific treatment. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Cultural Competence",
+    "topic": "age-specific treatment"
+  },
+  {
+    "id": "cac-389",
+    "stem": "During assessment related to age-specific treatment, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of age-specific treatment requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Cultural Competence",
+    "topic": "age-specific treatment"
+  },
+  {
+    "id": "cac-390",
+    "stem": "Which of the following is a contraindication associated with age-specific treatment?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in age-specific treatment. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Cultural Competence",
+    "topic": "age-specific treatment"
+  },
+  {
+    "id": "cac-391",
+    "stem": "A patient presents with findings consistent with faith-based recovery. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because faith-based recovery requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Cultural Competence",
+    "topic": "faith-based recovery"
+  },
+  {
+    "id": "cac-392",
+    "stem": "Which of the following best describes the primary indication for faith-based recovery?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for faith-based recovery. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Cultural Competence",
+    "topic": "faith-based recovery"
+  },
+  {
+    "id": "cac-393",
+    "stem": "A healthcare professional is evaluating faith-based recovery. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for faith-based recovery. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Cultural Competence",
+    "topic": "faith-based recovery"
+  },
+  {
+    "id": "cac-394",
+    "stem": "During assessment related to faith-based recovery, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of faith-based recovery requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Cultural Competence",
+    "topic": "faith-based recovery"
+  },
+  {
+    "id": "cac-395",
+    "stem": "Which of the following is a contraindication associated with faith-based recovery?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in faith-based recovery. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Cultural Competence",
+    "topic": "faith-based recovery"
+  },
+  {
+    "id": "cac-396",
+    "stem": "A patient presents with findings consistent with socioeconomic factors. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because socioeconomic factors requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Cultural Competence",
+    "topic": "socioeconomic factors"
+  },
+  {
+    "id": "cac-397",
+    "stem": "Which of the following best describes the primary indication for socioeconomic factors?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for socioeconomic factors. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Cultural Competence",
+    "topic": "socioeconomic factors"
+  },
+  {
+    "id": "cac-398",
+    "stem": "A healthcare professional is evaluating socioeconomic factors. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for socioeconomic factors. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Cultural Competence",
+    "topic": "socioeconomic factors"
+  },
+  {
+    "id": "cac-399",
+    "stem": "During assessment related to socioeconomic factors, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of socioeconomic factors requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Cultural Competence",
+    "topic": "socioeconomic factors"
+  },
+  {
+    "id": "cac-400",
+    "stem": "Which of the following is a contraindication associated with socioeconomic factors?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in socioeconomic factors. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Cultural Competence",
+    "topic": "socioeconomic factors"
+  },
+  {
+    "id": "cac-401",
+    "stem": "A patient presents with findings consistent with psychoeducation groups. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because psychoeducation groups requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Group Counseling",
+    "topic": "psychoeducation groups"
+  },
+  {
+    "id": "cac-402",
+    "stem": "Which of the following best describes the primary indication for psychoeducation groups?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for psychoeducation groups. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Group Counseling",
+    "topic": "psychoeducation groups"
+  },
+  {
+    "id": "cac-403",
+    "stem": "A healthcare professional is evaluating psychoeducation groups. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for psychoeducation groups. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Group Counseling",
+    "topic": "psychoeducation groups"
+  },
+  {
+    "id": "cac-404",
+    "stem": "During assessment related to psychoeducation groups, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of psychoeducation groups requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Group Counseling",
+    "topic": "psychoeducation groups"
+  },
+  {
+    "id": "cac-405",
+    "stem": "Which of the following is a contraindication associated with psychoeducation groups?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in psychoeducation groups. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Group Counseling",
+    "topic": "psychoeducation groups"
+  },
+  {
+    "id": "cac-406",
+    "stem": "A patient presents with findings consistent with process groups. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because process groups requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Group Counseling",
+    "topic": "process groups"
+  },
+  {
+    "id": "cac-407",
+    "stem": "Which of the following best describes the primary indication for process groups?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for process groups. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Group Counseling",
+    "topic": "process groups"
+  },
+  {
+    "id": "cac-408",
+    "stem": "A healthcare professional is evaluating process groups. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for process groups. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Group Counseling",
+    "topic": "process groups"
+  },
+  {
+    "id": "cac-409",
+    "stem": "During assessment related to process groups, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of process groups requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Group Counseling",
+    "topic": "process groups"
+  },
+  {
+    "id": "cac-410",
+    "stem": "Which of the following is a contraindication associated with process groups?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in process groups. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Group Counseling",
+    "topic": "process groups"
+  },
+  {
+    "id": "cac-411",
+    "stem": "A patient presents with findings consistent with peer support groups. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because peer support groups requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Group Counseling",
+    "topic": "peer support groups"
+  },
+  {
+    "id": "cac-412",
+    "stem": "Which of the following best describes the primary indication for peer support groups?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for peer support groups. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Group Counseling",
+    "topic": "peer support groups"
+  },
+  {
+    "id": "cac-413",
+    "stem": "A healthcare professional is evaluating peer support groups. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for peer support groups. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Group Counseling",
+    "topic": "peer support groups"
+  },
+  {
+    "id": "cac-414",
+    "stem": "During assessment related to peer support groups, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of peer support groups requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Group Counseling",
+    "topic": "peer support groups"
+  },
+  {
+    "id": "cac-415",
+    "stem": "Which of the following is a contraindication associated with peer support groups?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in peer support groups. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Group Counseling",
+    "topic": "peer support groups"
+  },
+  {
+    "id": "cac-416",
+    "stem": "A patient presents with findings consistent with 12-step programs. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because 12-step programs requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Group Counseling",
+    "topic": "12-step programs"
+  },
+  {
+    "id": "cac-417",
+    "stem": "Which of the following best describes the primary indication for 12-step programs?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for 12-step programs. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Group Counseling",
+    "topic": "12-step programs"
+  },
+  {
+    "id": "cac-418",
+    "stem": "A healthcare professional is evaluating 12-step programs. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for 12-step programs. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Group Counseling",
+    "topic": "12-step programs"
+  },
+  {
+    "id": "cac-419",
+    "stem": "During assessment related to 12-step programs, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of 12-step programs requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Group Counseling",
+    "topic": "12-step programs"
+  },
+  {
+    "id": "cac-420",
+    "stem": "Which of the following is a contraindication associated with 12-step programs?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in 12-step programs. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Group Counseling",
+    "topic": "12-step programs"
+  },
+  {
+    "id": "cac-421",
+    "stem": "A patient presents with findings consistent with group dynamics. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because group dynamics requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Group Counseling",
+    "topic": "group dynamics"
+  },
+  {
+    "id": "cac-422",
+    "stem": "Which of the following best describes the primary indication for group dynamics?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for group dynamics. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Group Counseling",
+    "topic": "group dynamics"
+  },
+  {
+    "id": "cac-423",
+    "stem": "A healthcare professional is evaluating group dynamics. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for group dynamics. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Group Counseling",
+    "topic": "group dynamics"
+  },
+  {
+    "id": "cac-424",
+    "stem": "During assessment related to group dynamics, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of group dynamics requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Group Counseling",
+    "topic": "group dynamics"
+  },
+  {
+    "id": "cac-425",
+    "stem": "Which of the following is a contraindication associated with group dynamics?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in group dynamics. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Group Counseling",
+    "topic": "group dynamics"
+  },
+  {
+    "id": "cac-426",
+    "stem": "A patient presents with findings consistent with facilitation skills. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because facilitation skills requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Group Counseling",
+    "topic": "facilitation skills"
+  },
+  {
+    "id": "cac-427",
+    "stem": "Which of the following best describes the primary indication for facilitation skills?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for facilitation skills. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Group Counseling",
+    "topic": "facilitation skills"
+  },
+  {
+    "id": "cac-428",
+    "stem": "A healthcare professional is evaluating facilitation skills. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for facilitation skills. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Group Counseling",
+    "topic": "facilitation skills"
+  },
+  {
+    "id": "cac-429",
+    "stem": "During assessment related to facilitation skills, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of facilitation skills requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Group Counseling",
+    "topic": "facilitation skills"
+  },
+  {
+    "id": "cac-430",
+    "stem": "Which of the following is a contraindication associated with facilitation skills?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in facilitation skills. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Group Counseling",
+    "topic": "facilitation skills"
+  },
+  {
+    "id": "cac-431",
+    "stem": "A patient presents with findings consistent with group selection criteria. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because group selection criteria requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Group Counseling",
+    "topic": "group selection criteria"
+  },
+  {
+    "id": "cac-432",
+    "stem": "Which of the following best describes the primary indication for group selection criteria?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for group selection criteria. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Group Counseling",
+    "topic": "group selection criteria"
+  },
+  {
+    "id": "cac-433",
+    "stem": "A healthcare professional is evaluating group selection criteria. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for group selection criteria. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Group Counseling",
+    "topic": "group selection criteria"
+  },
+  {
+    "id": "cac-434",
+    "stem": "During assessment related to group selection criteria, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of group selection criteria requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Group Counseling",
+    "topic": "group selection criteria"
+  },
+  {
+    "id": "cac-435",
+    "stem": "Which of the following is a contraindication associated with group selection criteria?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in group selection criteria. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Group Counseling",
+    "topic": "group selection criteria"
+  },
+  {
+    "id": "cac-436",
+    "stem": "A patient presents with findings consistent with family groups. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because family groups requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Group Counseling",
+    "topic": "family groups"
+  },
+  {
+    "id": "cac-437",
+    "stem": "Which of the following best describes the primary indication for family groups?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for family groups. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Group Counseling",
+    "topic": "family groups"
+  },
+  {
+    "id": "cac-438",
+    "stem": "A healthcare professional is evaluating family groups. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for family groups. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Group Counseling",
+    "topic": "family groups"
+  },
+  {
+    "id": "cac-439",
+    "stem": "During assessment related to family groups, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of family groups requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Group Counseling",
+    "topic": "family groups"
+  },
+  {
+    "id": "cac-440",
+    "stem": "Which of the following is a contraindication associated with family groups?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in family groups. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Group Counseling",
+    "topic": "family groups"
+  },
+  {
+    "id": "cac-441",
+    "stem": "A patient presents with findings consistent with gender-specific groups. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because gender-specific groups requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Group Counseling",
+    "topic": "gender-specific groups"
+  },
+  {
+    "id": "cac-442",
+    "stem": "Which of the following best describes the primary indication for gender-specific groups?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for gender-specific groups. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Group Counseling",
+    "topic": "gender-specific groups"
+  },
+  {
+    "id": "cac-443",
+    "stem": "A healthcare professional is evaluating gender-specific groups. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for gender-specific groups. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Group Counseling",
+    "topic": "gender-specific groups"
+  },
+  {
+    "id": "cac-444",
+    "stem": "During assessment related to gender-specific groups, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of gender-specific groups requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Group Counseling",
+    "topic": "gender-specific groups"
+  },
+  {
+    "id": "cac-445",
+    "stem": "Which of the following is a contraindication associated with gender-specific groups?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in gender-specific groups. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Group Counseling",
+    "topic": "gender-specific groups"
+  },
+  {
+    "id": "cac-446",
+    "stem": "A patient presents with findings consistent with stage-matched groups. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because stage-matched groups requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Group Counseling",
+    "topic": "stage-matched groups"
+  },
+  {
+    "id": "cac-447",
+    "stem": "Which of the following best describes the primary indication for stage-matched groups?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for stage-matched groups. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Group Counseling",
+    "topic": "stage-matched groups"
+  },
+  {
+    "id": "cac-448",
+    "stem": "A healthcare professional is evaluating stage-matched groups. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for stage-matched groups. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Group Counseling",
+    "topic": "stage-matched groups"
+  },
+  {
+    "id": "cac-449",
+    "stem": "During assessment related to stage-matched groups, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of stage-matched groups requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Group Counseling",
+    "topic": "stage-matched groups"
+  },
+  {
+    "id": "cac-450",
+    "stem": "Which of the following is a contraindication associated with stage-matched groups?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in stage-matched groups. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Group Counseling",
+    "topic": "stage-matched groups"
+  },
+  {
+    "id": "cac-451",
+    "stem": "A patient presents with findings consistent with overdose management. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because overdose management requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Crisis Intervention",
+    "topic": "overdose management"
+  },
+  {
+    "id": "cac-452",
+    "stem": "Which of the following best describes the primary indication for overdose management?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for overdose management. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Crisis Intervention",
+    "topic": "overdose management"
+  },
+  {
+    "id": "cac-453",
+    "stem": "A healthcare professional is evaluating overdose management. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for overdose management. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Crisis Intervention",
+    "topic": "overdose management"
+  },
+  {
+    "id": "cac-454",
+    "stem": "During assessment related to overdose management, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of overdose management requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Crisis Intervention",
+    "topic": "overdose management"
+  },
+  {
+    "id": "cac-455",
+    "stem": "Which of the following is a contraindication associated with overdose management?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in overdose management. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Crisis Intervention",
+    "topic": "overdose management"
+  },
+  {
+    "id": "cac-456",
+    "stem": "A patient presents with findings consistent with naloxone administration. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because naloxone administration requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Crisis Intervention",
+    "topic": "naloxone administration"
+  },
+  {
+    "id": "cac-457",
+    "stem": "Which of the following best describes the primary indication for naloxone administration?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for naloxone administration. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Crisis Intervention",
+    "topic": "naloxone administration"
+  },
+  {
+    "id": "cac-458",
+    "stem": "A healthcare professional is evaluating naloxone administration. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for naloxone administration. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Crisis Intervention",
+    "topic": "naloxone administration"
+  },
+  {
+    "id": "cac-459",
+    "stem": "During assessment related to naloxone administration, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of naloxone administration requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Crisis Intervention",
+    "topic": "naloxone administration"
+  },
+  {
+    "id": "cac-460",
+    "stem": "Which of the following is a contraindication associated with naloxone administration?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in naloxone administration. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Crisis Intervention",
+    "topic": "naloxone administration"
+  },
+  {
+    "id": "cac-461",
+    "stem": "A patient presents with findings consistent with suicidal ideation. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because suicidal ideation requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Crisis Intervention",
+    "topic": "suicidal ideation"
+  },
+  {
+    "id": "cac-462",
+    "stem": "Which of the following best describes the primary indication for suicidal ideation?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for suicidal ideation. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Crisis Intervention",
+    "topic": "suicidal ideation"
+  },
+  {
+    "id": "cac-463",
+    "stem": "A healthcare professional is evaluating suicidal ideation. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for suicidal ideation. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Crisis Intervention",
+    "topic": "suicidal ideation"
+  },
+  {
+    "id": "cac-464",
+    "stem": "During assessment related to suicidal ideation, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of suicidal ideation requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Crisis Intervention",
+    "topic": "suicidal ideation"
+  },
+  {
+    "id": "cac-465",
+    "stem": "Which of the following is a contraindication associated with suicidal ideation?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in suicidal ideation. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Crisis Intervention",
+    "topic": "suicidal ideation"
+  },
+  {
+    "id": "cac-466",
+    "stem": "A patient presents with findings consistent with withdrawal management. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because withdrawal management requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Crisis Intervention",
+    "topic": "withdrawal management"
+  },
+  {
+    "id": "cac-467",
+    "stem": "Which of the following best describes the primary indication for withdrawal management?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for withdrawal management. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Crisis Intervention",
+    "topic": "withdrawal management"
+  },
+  {
+    "id": "cac-468",
+    "stem": "A healthcare professional is evaluating withdrawal management. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for withdrawal management. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Crisis Intervention",
+    "topic": "withdrawal management"
+  },
+  {
+    "id": "cac-469",
+    "stem": "During assessment related to withdrawal management, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of withdrawal management requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Crisis Intervention",
+    "topic": "withdrawal management"
+  },
+  {
+    "id": "cac-470",
+    "stem": "Which of the following is a contraindication associated with withdrawal management?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in withdrawal management. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Crisis Intervention",
+    "topic": "withdrawal management"
+  },
+  {
+    "id": "cac-471",
+    "stem": "A patient presents with findings consistent with detox protocols. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because detox protocols requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Crisis Intervention",
+    "topic": "detox protocols"
+  },
+  {
+    "id": "cac-472",
+    "stem": "Which of the following best describes the primary indication for detox protocols?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for detox protocols. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Crisis Intervention",
+    "topic": "detox protocols"
+  },
+  {
+    "id": "cac-473",
+    "stem": "A healthcare professional is evaluating detox protocols. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for detox protocols. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Crisis Intervention",
+    "topic": "detox protocols"
+  },
+  {
+    "id": "cac-474",
+    "stem": "During assessment related to detox protocols, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of detox protocols requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Crisis Intervention",
+    "topic": "detox protocols"
+  },
+  {
+    "id": "cac-475",
+    "stem": "Which of the following is a contraindication associated with detox protocols?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in detox protocols. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Crisis Intervention",
+    "topic": "detox protocols"
+  },
+  {
+    "id": "cac-476",
+    "stem": "A patient presents with findings consistent with medical emergencies. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because medical emergencies requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Crisis Intervention",
+    "topic": "medical emergencies"
+  },
+  {
+    "id": "cac-477",
+    "stem": "Which of the following best describes the primary indication for medical emergencies?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for medical emergencies. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Crisis Intervention",
+    "topic": "medical emergencies"
+  },
+  {
+    "id": "cac-478",
+    "stem": "A healthcare professional is evaluating medical emergencies. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for medical emergencies. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Crisis Intervention",
+    "topic": "medical emergencies"
+  },
+  {
+    "id": "cac-479",
+    "stem": "During assessment related to medical emergencies, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of medical emergencies requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Crisis Intervention",
+    "topic": "medical emergencies"
+  },
+  {
+    "id": "cac-480",
+    "stem": "Which of the following is a contraindication associated with medical emergencies?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in medical emergencies. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Crisis Intervention",
+    "topic": "medical emergencies"
+  },
+  {
+    "id": "cac-481",
+    "stem": "A patient presents with findings consistent with CIWA protocol. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because CIWA protocol requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Crisis Intervention",
+    "topic": "CIWA protocol"
+  },
+  {
+    "id": "cac-482",
+    "stem": "Which of the following best describes the primary indication for CIWA protocol?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for CIWA protocol. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Crisis Intervention",
+    "topic": "CIWA protocol"
+  },
+  {
+    "id": "cac-483",
+    "stem": "A healthcare professional is evaluating CIWA protocol. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for CIWA protocol. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Crisis Intervention",
+    "topic": "CIWA protocol"
+  },
+  {
+    "id": "cac-484",
+    "stem": "During assessment related to CIWA protocol, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of CIWA protocol requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Crisis Intervention",
+    "topic": "CIWA protocol"
+  },
+  {
+    "id": "cac-485",
+    "stem": "Which of the following is a contraindication associated with CIWA protocol?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in CIWA protocol. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Crisis Intervention",
+    "topic": "CIWA protocol"
+  },
+  {
+    "id": "cac-486",
+    "stem": "A patient presents with findings consistent with COWS assessment. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because COWS assessment requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Crisis Intervention",
+    "topic": "COWS assessment"
+  },
+  {
+    "id": "cac-487",
+    "stem": "Which of the following best describes the primary indication for COWS assessment?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for COWS assessment. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Crisis Intervention",
+    "topic": "COWS assessment"
+  },
+  {
+    "id": "cac-488",
+    "stem": "A healthcare professional is evaluating COWS assessment. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for COWS assessment. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Crisis Intervention",
+    "topic": "COWS assessment"
+  },
+  {
+    "id": "cac-489",
+    "stem": "During assessment related to COWS assessment, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of COWS assessment requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Crisis Intervention",
+    "topic": "COWS assessment"
+  },
+  {
+    "id": "cac-490",
+    "stem": "Which of the following is a contraindication associated with COWS assessment?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in COWS assessment. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Crisis Intervention",
+    "topic": "COWS assessment"
+  },
+  {
+    "id": "cac-491",
+    "stem": "A patient presents with findings consistent with aggression management. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because aggression management requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Crisis Intervention",
+    "topic": "aggression management"
+  },
+  {
+    "id": "cac-492",
+    "stem": "Which of the following best describes the primary indication for aggression management?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for aggression management. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Crisis Intervention",
+    "topic": "aggression management"
+  },
+  {
+    "id": "cac-493",
+    "stem": "A healthcare professional is evaluating aggression management. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for aggression management. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Crisis Intervention",
+    "topic": "aggression management"
+  },
+  {
+    "id": "cac-494",
+    "stem": "During assessment related to aggression management, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of aggression management requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Crisis Intervention",
+    "topic": "aggression management"
+  },
+  {
+    "id": "cac-495",
+    "stem": "Which of the following is a contraindication associated with aggression management?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in aggression management. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Crisis Intervention",
+    "topic": "aggression management"
+  },
+  {
+    "id": "cac-496",
+    "stem": "A patient presents with findings consistent with mandated reporting. Which of the following is the most appropriate initial action?",
+    "options": [
+      "Perform immediate assessment and document findings",
+      "Notify the supervising provider for further orders",
+      "Continue monitoring and reassess in 30 minutes",
+      "Administer the prescribed intervention as ordered"
+    ],
+    "correctIndex": 0,
+    "rationale": "This is correct because mandated reporting requires systematic assessment to ensure patient safety and optimal outcomes.",
+    "difficulty": 1,
+    "category": "Crisis Intervention",
+    "topic": "mandated reporting"
+  },
+  {
+    "id": "cac-497",
+    "stem": "Which of the following best describes the primary indication for mandated reporting?",
+    "options": [
+      "Initiate the standard protocol per institutional guidelines",
+      "Defer action until additional diagnostic results are available",
+      "Contact the interprofessional team for collaborative planning",
+      "Document the finding and continue with the care plan"
+    ],
+    "correctIndex": 1,
+    "rationale": "The correct response aligns with evidence-based practice for mandated reporting. Understanding the underlying principles ensures competent decision-making.",
+    "difficulty": 2,
+    "category": "Crisis Intervention",
+    "topic": "mandated reporting"
+  },
+  {
+    "id": "cac-498",
+    "stem": "A healthcare professional is evaluating mandated reporting. Which finding requires immediate intervention?",
+    "options": [
+      "Verify the clinical indication before proceeding",
+      "Ensure proper equipment is available and functioning",
+      "Review the patient's relevant history and allergies",
+      "Confirm the provider's orders match the clinical situation"
+    ],
+    "correctIndex": 2,
+    "rationale": "This answer reflects the current standard of care for mandated reporting. Clinical competency requires knowledge of both the procedure and its implications.",
+    "difficulty": 3,
+    "category": "Crisis Intervention",
+    "topic": "mandated reporting"
+  },
+  {
+    "id": "cac-499",
+    "stem": "During assessment related to mandated reporting, which parameter is most critical to monitor?",
+    "options": [
+      "Assess the patient's tolerance and adjust as needed",
+      "Follow the established evidence-based protocol",
+      "Seek guidance from a more experienced clinician",
+      "Apply the appropriate safety measures before proceeding"
+    ],
+    "correctIndex": 3,
+    "rationale": "Proper management of mandated reporting requires understanding of the physiological basis and clinical significance.",
+    "difficulty": 4,
+    "category": "Crisis Intervention",
+    "topic": "mandated reporting"
+  },
+  {
+    "id": "cac-500",
+    "stem": "Which of the following is a contraindication associated with mandated reporting?",
+    "options": [
+      "Document the intervention and expected outcomes",
+      "Evaluate effectiveness within the appropriate timeframe",
+      "Communicate findings to the healthcare team",
+      "Ensure patient understanding through teach-back method"
+    ],
+    "correctIndex": 0,
+    "rationale": "The rationale is based on current clinical evidence supporting best practices in mandated reporting. Safety is the primary consideration.",
+    "difficulty": 5,
+    "category": "Crisis Intervention",
+    "topic": "mandated reporting"
+  }
+];
+  

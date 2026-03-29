@@ -1,0 +1,829 @@
+import type { CareerQuestion } from "./rrt-questions";
+
+export const ptaQuestionsBatch24: CareerQuestion[] = [
+  {
+    id: "pta-b24-001",
+    stem: "A 45-year-old construction worker presents 8 weeks post-arthroscopic rotator cuff repair (supraspinatus). He has achieved 140° passive flexion and 50° external rotation. Active flexion is 110° with substitution patterns. The supervising PT's plan of care indicates progression to Phase III. Which intervention combination is MOST appropriate?",
+    options: [
+      "Rhythmic stabilization exercises at 90° flexion and light isotonic strengthening in pain-free range",
+      "Maximum resistance bench press and overhead military press",
+      "Passive ROM stretching to full overhead range with aggressive end-range mobilizations",
+      "Continue Phase I pendulum exercises and PROM only"
+    ],
+    correctIndex: 0,
+    rationale: "Phase III rotator cuff rehab focuses on dynamic stabilization and progressive isotonic strengthening. Rhythmic stabilization at 90° challenges the rotator cuff as a dynamic stabilizer without excessive stress. Light isotonics in pain-free range promote controlled strength gains. Heavy resistance exercises (bench press, military press) are premature and risk re-tear. Aggressive end-range stretching may compromise the repair. Continuing Phase I is insufficient at 8 weeks with adequate passive ROM. The PTA must monitor for substitution patterns (shoulder hiking, trunk lean) that indicate the rotator cuff is not adequately controlling the movement.",
+    difficulty: 3,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "Rotator Cuff Phase III Progression"
+  },
+  {
+    id: "pta-b24-002",
+    stem: "A patient 12 weeks post-ACLR (hamstring autograft) demonstrates 5/5 quadriceps strength but only 3+/5 hamstring strength. Single-leg hop test is 72% of the uninvolved side. Which exercise should the PTA prioritize to address the PRIMARY deficit?",
+    options: [
+      "Nordic hamstring curls and prone hamstring curls with progressive resistance",
+      "Leg press at maximum weight bilateral",
+      "Plyometric box jumps at maximum height",
+      "Open kinetic chain knee extension 0-90°"
+    ],
+    correctIndex: 0,
+    rationale: "With hamstring autograft ACLR, hamstring weakness is expected due to donor site morbidity. The 3+/5 hamstring strength is the primary deficit limiting functional performance (72% hop test). Nordic hamstring curls provide eccentric loading that is highly effective for hamstring strengthening and injury prevention. Prone hamstring curls with progressive resistance target the specific weakness. Bilateral leg press doesn't address the hamstring deficit. Plyometric box jumps are premature with significant strength asymmetry. OKC knee extension doesn't target the weak muscle group and may stress the graft. Return-to-sport criteria typically require >90% limb symmetry index.",
+    difficulty: 3,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "ACL Hamstring Graft Rehab"
+  },
+  {
+    id: "pta-b24-003",
+    stem: "A 62-year-old female is 6 weeks post-posterior approach total hip arthroplasty. She demonstrates Trendelenburg gait on the surgical side. Which exercise progression BEST addresses this gait deviation?",
+    options: [
+      "Sidelying hip abduction progressing to standing hip abduction with resistance band, maintaining posterior hip precautions",
+      "Deep squats past 90° of hip flexion to strengthen gluteals",
+      "Seated hip adduction machine at maximum resistance",
+      "Prone hip internal rotation stretching to end range"
+    ],
+    correctIndex: 0,
+    rationale: "Trendelenburg gait results from gluteus medius weakness on the stance leg. The surgical approach (posterior) disrupts the short external rotators and may weaken the hip abductors. Progressive hip abduction strengthening from sidelying (gravity-eliminated to antigravity) to standing with resistance directly targets the deficit. Posterior hip precautions (no flexion >90°, no adduction past midline, no internal rotation) must be maintained at 6 weeks. Deep squats violate flexion precautions. Hip adduction strengthens the wrong muscle group. Prone internal rotation violates rotational precautions.",
+    difficulty: 2,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "THA Gait Deviation Correction"
+  },
+  {
+    id: "pta-b24-004",
+    stem: "A patient with chronic lateral epicondylitis has failed 6 weeks of conservative treatment including ice, NSAIDs, and activity modification. The PT's plan of care now includes an eccentric exercise protocol. Which exercise technique is MOST appropriate?",
+    options: [
+      "Wrist extension with slow lowering (eccentric phase emphasized) using a 1-2 lb dumbbell, 3 sets of 15 reps",
+      "Rapid concentric-eccentric wrist curls at maximum speed",
+      "Isometric wrist extension hold for 60 seconds with no movement",
+      "Passive wrist flexion stretching for 30 minutes continuously"
+    ],
+    correctIndex: 0,
+    rationale: "The Tyler Twist or eccentric wrist extension protocol is evidence-based for chronic lateral epicondylitis. The eccentric phase (slow controlled lowering) promotes tendon remodeling through mechanotransduction. The 3x15 protocol with light weight (1-2 lbs) provides adequate loading without excessive strain. Rapid concentric-eccentric movements can worsen tendinopathy. Pure isometrics, while useful for pain management, do not provide the eccentric stimulus needed for tendon restructuring. Prolonged passive stretching can aggravate the condition. Eccentric loading stimulates collagen synthesis and tendon healing in the degenerative tendon.",
+    difficulty: 2,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "Eccentric Exercise for Tendinopathy"
+  },
+  {
+    id: "pta-b24-005",
+    stem: "A 28-year-old soccer player is 16 weeks post-ACLR and wants to return to sport. The PTA performs functional testing. Which set of criteria MUST be met before recommending return to full sport participation?",
+    options: [
+      "Limb symmetry index >90% on single-leg hop tests, quadriceps strength >90% of uninvolved, no effusion, and full ROM",
+      "Patient feels confident and has no pain during walking",
+      "Ability to perform straight-line jogging for 10 minutes",
+      "Full passive ROM only, regardless of strength"
+    ],
+    correctIndex: 0,
+    rationale: "Evidence-based return-to-sport criteria after ACLR include: limb symmetry index (LSI) >90% on hop tests (single hop, triple hop, crossover hop, timed hop), quadriceps and hamstring strength >90% of the uninvolved side, no effusion, full ROM, and successful completion of sport-specific agility drills. Subjective confidence alone is insufficient and may lead to premature return and re-injury. Straight-line jogging does not test cutting, pivoting, or deceleration demands of soccer. Passive ROM without functional testing ignores the neuromuscular control requirements. Re-injury rates are significantly higher when athletes return before meeting objective criteria.",
+    difficulty: 3,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "ACL Return-to-Sport Criteria"
+  },
+  {
+    id: "pta-b24-006",
+    stem: "A patient presents with a positive anterior drawer test and positive Lachman test of the right knee after a non-contact pivoting injury. MRI confirms a complete ACL tear. The patient opts for conservative management. Which rehabilitation approach is MOST appropriate?",
+    options: [
+      "Progressive strengthening of quadriceps and hamstrings, proprioceptive training, and functional bracing for pivoting activities",
+      "Complete immobilization in a long leg cast for 8 weeks",
+      "Immediate return to all activities without restriction",
+      "Only passive ROM exercises with no strengthening for 6 months"
+    ],
+    correctIndex: 0,
+    rationale: "Conservative management of ACL tears focuses on building dynamic knee stability through strengthening (especially hamstrings as ACL agonists), proprioceptive/neuromuscular training, and functional bracing during pivoting activities. The goal is to become a 'coper' through compensatory muscle stabilization. Complete immobilization leads to muscle atrophy and joint stiffness without addressing the instability. Unrestricted activity risks giving-way episodes, meniscal damage, and cartilage injury. Passive ROM alone fails to develop the dynamic stability needed to compensate for the absent ACL. Activity modification (avoiding cutting/pivoting sports) may also be recommended.",
+    difficulty: 2,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "ACL Conservative Management"
+  },
+  {
+    id: "pta-b24-007",
+    stem: "A patient 4 weeks post-distal radius ORIF presents with significant dorsal hand edema and stiffness. Active wrist extension is 15° and flexion is 25°. Which intervention sequence is MOST appropriate?",
+    options: [
+      "Retrograde massage for edema reduction, followed by active ROM exercises, then ice application",
+      "Aggressive passive stretching into full extension immediately",
+      "Heavy grip strengthening with a hand dynamometer",
+      "Ultrasound at 3 W/cm² directly over the surgical hardware"
+    ],
+    correctIndex: 0,
+    rationale: "Post-ORIF distal radius rehabilitation at 4 weeks prioritizes edema management before ROM exercises. Retrograde massage (distal to proximal stroking) promotes lymphatic drainage and reduces dorsal hand edema. Active ROM exercises within tolerance improve mobility without overstressing healing tissue. Ice application post-exercise controls inflammation. Aggressive passive stretching risks hardware failure and fracture re-displacement. Heavy grip strengthening is premature at 4 weeks. Ultrasound at high intensity directly over metal hardware is contraindicated as metal can concentrate thermal energy and cause periosteal burns.",
+    difficulty: 2,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "Post-ORIF Fracture Rehab"
+  },
+  {
+    id: "pta-b24-008",
+    stem: "A patient with chronic low back pain and a diagnosis of lumbar spinal stenosis reports increased symptoms with standing and walking but relief with sitting and forward flexion. Which exercise program is MOST appropriate?",
+    options: [
+      "Flexion-based exercises (posterior pelvic tilts, knee-to-chest, stationary cycling) and aquatic therapy",
+      "Sustained lumbar extension exercises and prone press-ups",
+      "Maximum effort deadlifts and back squats",
+      "Complete bed rest for 2 weeks"
+    ],
+    correctIndex: 0,
+    rationale: "Lumbar spinal stenosis narrows the spinal canal, compressing neural structures. Extension worsens narrowing; flexion opens the canal and reduces symptoms. Flexion-based exercises (Williams flexion exercises: posterior pelvic tilts, knee-to-chest stretches) increase canal space. Stationary cycling maintains the spine in mild flexion. Aquatic therapy provides buoyancy that reduces axial loading. Extension exercises (McKenzie approach) would worsen stenosis symptoms. Heavy lifting increases axial load and intradiscal pressure. Bed rest leads to deconditioning. Patients typically present with neurogenic claudication relieved by the 'shopping cart sign' (leaning forward).",
+    difficulty: 2,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "Lumbar Stenosis Exercise Selection"
+  },
+  {
+    id: "pta-b24-009",
+    stem: "A PTA is treating a patient with adhesive capsulitis in the 'frozen' stage. The patient has 80° flexion, 40° abduction, and 10° external rotation. Which joint mobilization grade is MOST appropriate at this stage?",
+    options: [
+      "Grade I-II oscillations for pain modulation before gentle active-assisted ROM",
+      "Grade V thrust manipulation to restore full ROM immediately",
+      "Grade IV sustained mobilization at end-range for 5 minutes",
+      "No mobilization; only aggressive passive stretching under anesthesia"
+    ],
+    correctIndex: 0,
+    rationale: "In the frozen stage of adhesive capsulitis, the joint capsule is inflamed and fibrotic, and pain is significant. Grade I-II oscillations (small amplitude at beginning/mid-range) stimulate mechanoreceptors for pain modulation without stressing the inflamed capsule. This prepares the joint for gentle active-assisted ROM exercises. Grade V manipulation is beyond PTA scope and inappropriate for an inflamed capsule. Grade IV sustained end-range mobilization would exacerbate inflammation and pain. Manipulation under anesthesia is a physician procedure. Treatment should respect the inflammatory process and focus on pain management while maintaining available ROM. Aggressive intervention in the frozen stage can worsen and prolong symptoms.",
+    difficulty: 3,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "Adhesive Capsulitis Mobilization"
+  },
+  {
+    id: "pta-b24-010",
+    stem: "A patient 3 days post-medial meniscal repair (red-red zone) is in the clinic. The surgeon's protocol specifies partial weight bearing with crutches and ROM 0-90° for the first 4 weeks. The patient asks to remove the brace and perform full squats. The PTA should:",
+    options: [
+      "Explain the healing constraints, maintain the surgical protocol, and document the patient education provided",
+      "Allow full squats since the patient feels no pain",
+      "Remove the brace and allow full ROM since the repair was in the vascular zone",
+      "Discharge the patient for non-compliance"
+    ],
+    correctIndex: 0,
+    rationale: "Meniscal repairs, even in the vascular red-red zone, require protection during healing. The surgeon's protocol (PWB, ROM 0-90° for 4 weeks) is designed to protect the repair from shear forces that occur with deep flexion. The PTA must adhere to surgical protocols regardless of patient requests. Patient education about healing timeframes and the rationale for restrictions is essential. Allowing full squats risks disrupting the repair despite being in the vascular zone. Pain absence does not indicate tissue healing completion. Discharge for non-compliance is premature; education and redirection are the appropriate first steps. The PTA should document the education provided and the patient's response.",
+    difficulty: 2,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "Meniscal Repair Protocol Adherence"
+  },
+  {
+    id: "pta-b24-011",
+    stem: "A 55-year-old patient with bilateral knee osteoarthritis and a BMI of 34 reports 6/10 pain with stair climbing and prolonged standing. Which comprehensive exercise program is MOST appropriate?",
+    options: [
+      "Aquatic exercise program, low-impact cycling, quadriceps strengthening, and flexibility training with weight management counseling referral",
+      "High-impact running program to lose weight quickly",
+      "Only passive modalities (hot packs and TENS) with no exercise",
+      "Maximum resistance leg press and deep squats daily"
+    ],
+    correctIndex: 0,
+    rationale: "OA management follows evidence-based guidelines: low-impact aerobic exercise (aquatic therapy reduces joint loading by 50-90%, cycling is non-weight bearing), quadriceps strengthening (weak quadriceps is a risk factor for OA progression), flexibility to maintain ROM, and weight management (every 1 lb lost reduces 4 lbs of knee joint force). High-impact running increases joint loading and may accelerate cartilage degeneration. Passive modalities alone do not address the underlying deconditioning and muscle weakness. Maximum resistance deep squats create excessive tibiofemoral compressive forces in arthritic joints. A multimodal approach addressing exercise, weight, and pain management provides the best outcomes.",
+    difficulty: 2,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "Knee OA Exercise Prescription"
+  },
+  {
+    id: "pta-b24-012",
+    stem: "During treatment of a patient with shoulder impingement, the PTA notices the patient consistently demonstrates scapular winging during shoulder flexion above 120°. Which muscle is MOST likely weak, and what exercise should be prioritized?",
+    options: [
+      "Serratus anterior; wall push-ups with plus (protraction) and prone serratus punches",
+      "Upper trapezius; heavy shoulder shrugs",
+      "Pectoralis major; bench press",
+      "Latissimus dorsi; pull-ups"
+    ],
+    correctIndex: 0,
+    rationale: "Scapular winging during overhead movement indicates serratus anterior weakness, which prevents adequate upward rotation and posterior tilt of the scapula. This contributes to subacromial impingement by failing to clear the acromion during elevation. Wall push-ups with plus (pushing beyond the regular end position to protract the scapula) and prone serratus punches directly target serratus anterior activation. Upper trapezius shrugs strengthen elevation, not upward rotation. Bench press and pull-ups do not specifically target serratus anterior in the pattern needed for scapular control. Restoring scapulohumeral rhythm through serratus anterior strengthening is essential for resolving impingement.",
+    difficulty: 3,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "Scapular Stabilization Exercises"
+  },
+  {
+    id: "pta-b24-013",
+    stem: "A patient with a grade II lateral ankle sprain is 2 weeks post-injury. Swelling has decreased significantly, and the patient can bear weight with mild discomfort. Which intervention is MOST appropriate at this stage?",
+    options: [
+      "Proprioceptive training on a wobble board, ankle strengthening with resistance bands (eversion emphasis), and progressive weight bearing",
+      "Complete immobilization in a walking boot for 6 more weeks",
+      "Return to full sport participation immediately",
+      "Only ice and elevation with complete non-weight bearing"
+    ],
+    correctIndex: 0,
+    rationale: "At 2 weeks post-grade II lateral ankle sprain with decreased swelling and weight-bearing tolerance, rehabilitation should progress to proprioceptive training, peroneal strengthening (eversion resists inversion injury mechanism), and progressive weight bearing. The peroneal muscles are the primary dynamic stabilizers against inversion. Proprioceptive training on a wobble board restores position sense lost from ligament damage. Prolonged immobilization leads to muscle atrophy, joint stiffness, and chronic ankle instability. Full sport return is premature without adequate strength and proprioception. Continued complete non-weight bearing delays functional recovery at this healing stage.",
+    difficulty: 2,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "Ankle Sprain Rehabilitation"
+  },
+  {
+    id: "pta-b24-014",
+    stem: "A patient 10 weeks post-Achilles tendon repair is transitioning from a walking boot to regular footwear. The patient has 10° of ankle dorsiflexion and 30° of plantarflexion. Which exercise progression is MOST appropriate?",
+    options: [
+      "Double-leg heel raises progressing to single-leg heel raises, gentle dorsiflexion stretching, and gait training without the boot",
+      "Immediate single-leg plyometric hopping",
+      "Aggressive passive dorsiflexion stretching to 20° immediately",
+      "Only seated ankle pumps with no weight-bearing exercises"
+    ],
+    correctIndex: 0,
+    rationale: "At 10 weeks post-Achilles repair, the tendon has sufficient healing for progressive loading but not maximal stress. Double-leg heel raises (bilateral calf raise) distribute load across both tendons, progressing to single-leg as strength improves. Gentle dorsiflexion stretching addresses the expected ROM limitation. Gait training focuses on normalizing heel-toe pattern. Single-leg plyometrics generate peak loads that exceed tendon healing capacity at 10 weeks. Aggressive dorsiflexion stretching risks tendon re-rupture or elongation. Seated ankle pumps alone provide insufficient loading for functional progression. The Alfredson protocol for eccentric loading is typically introduced around 12 weeks.",
+    difficulty: 2,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "Achilles Repair Progression"
+  },
+  {
+    id: "pta-b24-015",
+    stem: "A PTA is performing a manual muscle test on the middle trapezius. The patient is prone with the shoulder abducted to 90° and externally rotated. The patient can hold the position against gravity but breaks with minimal resistance. What grade should be recorded?",
+    options: [
+      "3+/5 (Fair+)",
+      "5/5 (Normal)",
+      "2/5 (Poor)",
+      "4/5 (Good)"
+    ],
+    correctIndex: 0,
+    rationale: "Manual muscle testing grades: Grade 3 (Fair) = completes full ROM against gravity without resistance. Grade 3+ (Fair+) = holds against gravity but breaks with minimal resistance (this patient). Grade 4 (Good) = holds against moderate resistance. Grade 5 (Normal) = holds against maximum resistance. Grade 2 (Poor) = completes ROM with gravity eliminated. The middle trapezius is tested in prone with the arm abducted to 90° and externally rotated, performing horizontal abduction (scapular retraction). The patient completing the motion against gravity but failing with minimal resistance indicates 3+/5.",
+    difficulty: 1,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "Manual Muscle Testing Grading"
+  },
+  {
+    id: "pta-b24-016",
+    stem: "A 70-year-old patient with a stable, non-displaced L1 compression fracture is referred for rehabilitation. The patient is wearing a TLSO brace. Which exercise is CONTRAINDICATED?",
+    options: [
+      "Trunk flexion exercises such as sit-ups and toe touches",
+      "Prone lumbar extension exercises within brace tolerance",
+      "Standing hip abduction with support",
+      "Seated upper extremity ergometer (arm bike)"
+    ],
+    correctIndex: 0,
+    rationale: "Trunk flexion (sit-ups, toe touches) is contraindicated with vertebral compression fractures because it increases anterior vertebral body loading and may worsen the compression or cause additional fractures, especially in osteoporotic bone. The TLSO brace limits flexion to protect the fracture. Extension exercises are generally safe and encouraged as they unload the anterior vertebral body. Standing hip abduction strengthens the lower extremity without spinal flexion. Seated arm bike maintains cardiovascular fitness without spinal stress. Patient education about avoiding flexion, twisting, and heavy lifting is essential.",
+    difficulty: 1,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "Compression Fracture Contraindications"
+  },
+  {
+    id: "pta-b24-017",
+    stem: "A patient with patellofemoral pain syndrome demonstrates excessive dynamic knee valgus during single-leg squat. Which muscle group should the PTA prioritize for strengthening?",
+    options: [
+      "Hip abductors and external rotators (gluteus medius and maximus)",
+      "Ankle plantarflexors (gastrocnemius and soleus)",
+      "Cervical spine stabilizers",
+      "Wrist extensors"
+    ],
+    correctIndex: 0,
+    rationale: "Dynamic knee valgus (knee collapsing inward) during functional activities is a key contributor to patellofemoral pain. Weakness of the hip abductors (gluteus medius) and external rotators (gluteus maximus) allows femoral adduction and internal rotation, increasing the Q-angle and lateral patellar tracking forces. Strengthening these muscles controls femoral mechanics during weight bearing, reducing patellofemoral joint stress. Ankle plantarflexors, cervical stabilizers, and wrist extensors do not influence knee valgus mechanics. Evidence strongly supports proximal hip strengthening as a primary intervention for patellofemoral pain syndrome.",
+    difficulty: 2,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "Patellofemoral Pain Hip Strengthening"
+  },
+  {
+    id: "pta-b24-018",
+    stem: "A patient with a recent diagnosis of thoracic outlet syndrome (TOS) involving compression of the brachial plexus reports numbness in the C8-T1 distribution. Which postural correction exercise is MOST appropriate?",
+    options: [
+      "Scapular retraction exercises, pectoralis minor stretching, and scalene stretching to open the thoracic outlet",
+      "Shoulder shrugs with heavy weights to build upper trapezius bulk",
+      "Cervical flexion exercises with neck weights",
+      "Trunk flexion exercises to round the thorax"
+    ],
+    correctIndex: 0,
+    rationale: "TOS involves compression of the brachial plexus and/or subclavian vessels in the thoracic outlet (scalene triangle, costoclavicular space, or subcoracoid space). Postural correction targets the anatomic spaces: scapular retraction opens the costoclavicular space, pectoralis minor stretching relieves subcoracoid compression, and scalene stretching opens the scalene triangle. Heavy shoulder shrugs may worsen compression by increasing scalene tension. Cervical flexion with weights adds cervical strain. Trunk flexion promotes forward head posture that exacerbates TOS. The goal is to 'open' the thoracic outlet through improved posture and muscle balance.",
+    difficulty: 3,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "Thoracic Outlet Syndrome Rehab"
+  },
+  {
+    id: "pta-b24-019",
+    stem: "A patient 6 weeks post-total shoulder arthroplasty (anatomic) has achieved 120° passive flexion and 30° passive external rotation. Active ROM lags significantly behind. The PTA should NEXT progress to:",
+    options: [
+      "Active-assisted ROM exercises using a pulley system and wand exercises to bridge the gap between passive and active ROM",
+      "Aggressive strengthening with resistance bands at maximum tension",
+      "Passive ROM only, continuing to defer all active motion",
+      "Sport-specific overhead throwing drills"
+    ],
+    correctIndex: 0,
+    rationale: "At 6 weeks post-anatomic total shoulder arthroplasty, the subscapularis repair (common with this approach) has sufficient healing to begin active-assisted ROM. Pulley systems and wand exercises provide mechanical assistance to bridge the passive-to-active ROM gap while minimizing stress on healing tissues. The patient actively contributes to the motion with external assistance. Aggressive resistance band strengthening is premature and risks subscapularis repair disruption. Continuing only passive ROM at 6 weeks delays functional recovery. Overhead throwing involves extreme forces beyond tissue healing capacity. Active-assisted exercises are the critical transitional step in shoulder arthroplasty rehab.",
+    difficulty: 2,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "Total Shoulder Arthroplasty Rehab"
+  },
+  {
+    id: "pta-b24-020",
+    stem: "A patient with chronic myofascial pain syndrome of the upper trapezius has multiple trigger points. During treatment, the PTA applies ischemic compression to an active trigger point. The expected physiological response is:",
+    options: [
+      "Initial increase in local discomfort followed by pain reduction as the trigger point releases, with referred pain pattern diminishing",
+      "Immediate complete pain elimination that is permanent",
+      "Increased muscle spasm that persists for weeks",
+      "No physiological response occurs with manual pressure"
+    ],
+    correctIndex: 0,
+    rationale: "Ischemic compression (sustained deep pressure) to an active trigger point creates local ischemia that, upon release, produces reactive hyperemia (increased blood flow). During compression, the patient typically experiences increased local discomfort and reproduction of the referred pain pattern (confirming the trigger point). As the trigger point releases, pain diminishes. The technique disrupts the pain-spasm cycle and promotes metabolic waste removal. Results are gradual, not immediate and permanent. Properly applied compression should not cause prolonged spasm. Manual pressure on trigger points consistently produces measurable physiological responses including decreased EMG activity and increased pain pressure thresholds.",
+    difficulty: 2,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "Trigger Point Treatment"
+  },
+  {
+    id: "pta-b24-021",
+    stem: "A PTA is treating a patient with cervical radiculopathy at C7. Which combination of findings is MOST consistent with this nerve root involvement?",
+    options: [
+      "Weakness of triceps and wrist flexors, diminished triceps reflex, and numbness in the middle finger",
+      "Weakness of biceps, diminished biceps reflex, and numbness in the thumb",
+      "Weakness of deltoid, diminished brachioradialis reflex, and numbness in the lateral arm",
+      "Weakness of hand intrinsics, no reflex change, and numbness in the ring finger"
+    ],
+    correctIndex: 0,
+    rationale: "C7 radiculopathy: C7 is the most commonly affected cervical nerve root. Motor findings include triceps weakness (elbow extension) and wrist flexor weakness. The triceps reflex (C7-C8) is diminished. Sensory changes follow the C7 dermatome, affecting the middle finger and dorsum of the hand. C5-C6 affects biceps/deltoid/brachioradialis. C6 affects wrist extensors, biceps reflex, and thumb/index finger. C8 affects hand intrinsics and ring/little finger. Understanding dermatomal patterns and myotomal distributions is essential for correlating clinical findings with diagnostic imaging.",
+    difficulty: 2,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "Cervical Radiculopathy Patterns"
+  },
+  {
+    id: "pta-b24-022",
+    stem: "A patient with bilateral hip osteoarthritis presents with an antalgic gait pattern favoring the right leg. Hip ROM testing reveals: right hip flexion 95°, extension 5°, IR 10°, ER 25°. Left hip flexion 110°, extension 10°, IR 20°, ER 30°. Which ROM finding is MOST significant for gait performance?",
+    options: [
+      "Limited right hip extension to 5°, as inadequate extension reduces push-off and stride length during terminal stance",
+      "Right hip flexion of 95°, as this limits initial swing",
+      "Right internal rotation of 10°, as this limits toe-off",
+      "Left external rotation of 30°, as this causes excessive out-toeing"
+    ],
+    correctIndex: 0,
+    rationale: "Hip extension is critical during terminal stance/pre-swing for adequate push-off and stride length. Normal hip extension is 10-20°. Only 5° of right hip extension forces compensatory strategies: shortened stride length, anterior pelvic tilt, increased lumbar lordosis, or early heel-off. This directly contributes to the antalgic gait pattern. Flexion of 95° is adequate for most functional activities (90° needed for stair climbing). Internal rotation of 10° is reduced but less impactful on gait. Left ER of 30° is near normal. The capsular pattern of the hip (IR > flexion > abduction) supports that IR loss occurs early in OA, but extension loss most significantly affects gait mechanics.",
+    difficulty: 3,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "Hip OA ROM and Gait Analysis"
+  },
+  {
+    id: "pta-b24-023",
+    stem: "A PTA is treating a patient with a proximal humerus fracture managed non-operatively with a sling. The fracture is 3 weeks old and stable on imaging. Which exercise is MOST appropriate?",
+    options: [
+      "Pendulum (Codman) exercises to maintain glenohumeral joint mobility while minimizing stress on the fracture site",
+      "Active overhead shoulder press against gravity",
+      "Passive external rotation stretching to end range",
+      "Resisted internal rotation with resistance band"
+    ],
+    correctIndex: 0,
+    rationale: "Pendulum exercises are the gold standard early intervention for proximal humerus fractures managed non-operatively. The patient leans forward, letting the arm hang with gravity traction, and performs small circular or linear motions. This maintains glenohumeral joint mobility and prevents adhesive capsulitis without significant stress on the fracture site. Active overhead pressing creates compressive and shear forces at the fracture. End-range passive ER stretching may displace fracture fragments. Resisted internal rotation generates rotational torque through the fracture site. Pendulums use gravity-assisted motion that distracts rather than compresses the joint, making them safe for early fracture rehabilitation.",
+    difficulty: 1,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "Proximal Humerus Fracture Rehab"
+  },
+  {
+    id: "pta-b24-024",
+    stem: "A patient presents with suspected carpal tunnel syndrome. The PTA performs provocative tests as part of data collection. A positive Phalen test is indicated by:",
+    options: [
+      "Reproduction of numbness and tingling in the median nerve distribution within 60 seconds of sustained wrist flexion",
+      "Pain at the anatomical snuffbox with thumb ulnar deviation",
+      "Numbness in the ulnar nerve distribution with elbow flexion",
+      "Shoulder pain with arm elevation above 90°"
+    ],
+    correctIndex: 0,
+    rationale: "Phalen test: sustained maximal wrist flexion for 60 seconds compresses the median nerve within the carpal tunnel. A positive test reproduces paresthesias (numbness, tingling) in the median nerve distribution (thumb, index, middle, and lateral half of ring finger). The anatomical snuffbox test (scaphoid fracture) and Finkelstein test involve the thumb/wrist but test different structures. Elbow flexion test assesses cubital tunnel (ulnar nerve). Overhead arm elevation tests shoulder impingement. Tinel sign at the wrist (tapping over the carpal tunnel) is another provocative test for CTS. Sensitivity of Phalen test is approximately 68% and specificity approximately 73%.",
+    difficulty: 1,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "Carpal Tunnel Special Tests"
+  },
+  {
+    id: "pta-b24-025",
+    stem: "A patient 14 weeks post-ACLR is performing single-leg balance exercises on a BOSU ball. The patient demonstrates consistent medial knee collapse. Before progressing to more challenging balance activities, the PTA should FIRST:",
+    options: [
+      "Address the underlying hip abductor and external rotator weakness with targeted strengthening before continuing dynamic balance progression",
+      "Progress to single-leg plyometrics immediately to challenge the patient",
+      "Discontinue all balance training",
+      "Switch to bilateral stance exercises only for the remainder of rehab"
+    ],
+    correctIndex: 0,
+    rationale: "Medial knee collapse (dynamic valgus) during single-leg activities indicates inadequate proximal neuromuscular control, specifically hip abductor and external rotator weakness. Progressing to more challenging activities before correcting this movement pattern reinforces faulty mechanics and increases ACL re-injury risk. Targeted hip strengthening (clamshells, sidelying hip abduction, monster walks) builds the proximal stability foundation needed for safe dynamic balance progression. Plyometrics with poor mechanics dramatically increase injury risk. Discontinuing balance training removes an essential rehab component. Bilateral-only exercises do not prepare the patient for single-leg functional demands. The movement quality must be addressed before movement difficulty increases.",
+    difficulty: 3,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "ACL Dynamic Valgus Correction"
+  },
+  {
+    id: "pta-b24-026",
+    stem: "A 40-year-old runner presents with medial tibial stress syndrome (shin splints). Which combination of interventions is MOST appropriate?",
+    options: [
+      "Posterior tibialis and calf stretching, eccentric calf raises, activity modification (reduce running volume), and assessment of running footwear",
+      "Complete cessation of all physical activity for 6 months",
+      "Only hot pack application to the tibial region before running",
+      "Immediate return to pre-injury running mileage with NSAIDs"
+    ],
+    correctIndex: 0,
+    rationale: "Medial tibial stress syndrome involves periostitis of the posteromedial tibia from overuse of the posterior tibialis and soleus muscles. Evidence-based management includes: calf and posterior tibialis stretching to reduce traction on the tibial periosteum, eccentric calf raises to strengthen the involved musculotendinous structures, activity modification (reducing running volume by 25-50%, cross-training with low-impact activities), and footwear assessment (excessive pronation increases medial tibial stress). Complete activity cessation is excessive. Hot packs alone do not address the underlying biomechanical cause. Running through pain with only NSAID management risks progression to stress fracture.",
+    difficulty: 2,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "Shin Splints Management"
+  },
+  {
+    id: "pta-b24-027",
+    stem: "A patient with rheumatoid arthritis of the hands demonstrates significant MCP joint ulnar drift. During treatment, the PTA should avoid:",
+    options: [
+      "Forceful gripping activities and any exercise that promotes ulnar deviation force at the MCP joints",
+      "Gentle active ROM within pain-free range",
+      "Paraffin bath to reduce joint stiffness before exercise",
+      "Joint protection education and adaptive equipment instruction"
+    ],
+    correctIndex: 0,
+    rationale: "Rheumatoid arthritis causes progressive joint destruction with characteristic MCP joint ulnar drift (ulnar deviation of the fingers). Forceful gripping and activities that apply ulnar deviation forces at the MCP joints accelerate deformity progression. Treatment should protect joint integrity: gentle AROM maintains mobility, paraffin reduces stiffness before exercise (thermal modality appropriate for chronic inflammation), joint protection principles minimize deforming forces, and adaptive equipment (built-up handles, ergonomic tools) reduces joint stress. The PTA must understand the pathomechanics of RA deformities to avoid worsening them during treatment.",
+    difficulty: 2,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "RA Hand Joint Protection"
+  },
+  {
+    id: "pta-b24-028",
+    stem: "During goniometric measurement of knee flexion, the PTA identifies the following landmarks: fulcrum at the lateral epicondyle of the femur, stationary arm aligned with the greater trochanter, and moving arm aligned with the lateral malleolus. The measurement reads 125°. This measurement is:",
+    options: [
+      "Performed with correct technique and the result is within normal limits for knee flexion",
+      "Incorrect because the fulcrum should be at the medial epicondyle",
+      "Incorrect because the stationary arm should align with the lateral malleolus",
+      "Abnormally low, indicating severe joint restriction"
+    ],
+    correctIndex: 0,
+    rationale: "Knee flexion goniometry: axis at the lateral epicondyle of the femur, stationary arm aligned with the lateral midline of the femur (toward the greater trochanter), moving arm aligned with the lateral midline of the fibula (toward the lateral malleolus). This technique follows standard goniometric measurement procedures. Normal knee flexion is 130-150°. A measurement of 125° is slightly below normal but within functional range (120° needed for squatting, 115° for stair climbing, 90° for walking). The technique described is correct per standardized goniometric protocols.",
+    difficulty: 1,
+    category: "Data Collection & Measurement",
+    topic: "Goniometric Measurement Technique"
+  },
+  {
+    id: "pta-b24-029",
+    stem: "A patient with a surgically repaired Bankart lesion (anterior labral repair) is 4 weeks postoperative. The surgeon's protocol restricts external rotation to 20°. During PROM, the PTA feels the patient approaching the end of the allowed range. The PTA should:",
+    options: [
+      "Stop at 20° of external rotation as specified in the surgical protocol, regardless of tissue end-feel, and document the ROM achieved",
+      "Push past 20° since the tissue feels like it can stretch further",
+      "Perform Grade IV mobilizations at end-range to improve ROM",
+      "Apply a sustained stretch at maximum external rotation for 5 minutes"
+    ],
+    correctIndex: 0,
+    rationale: "Surgical protocol restrictions override clinical findings about tissue pliability. The Bankart repair reattaches the torn anterior labrum, and excessive external rotation in the early postoperative period can stress or disrupt the repair. The PTA must respect the 20° ER limit regardless of what the tissue end-feel suggests. Documentation should record the ROM achieved within the allowed parameters. Exceeding the protocol risks repair failure. Grade IV mobilizations at end-range are contraindicated post-surgery within restricted parameters. Sustained stretching at maximum ER violates the protocol. The PTA's role is to work within the established plan of care and surgical guidelines.",
+    difficulty: 2,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "Bankart Repair Protocol Compliance"
+  },
+  {
+    id: "pta-b24-030",
+    stem: "A patient with fibromyalgia reports widespread musculoskeletal pain (7/10), fatigue, and sleep disturbance. Which exercise prescription is MOST consistent with current evidence?",
+    options: [
+      "Low-to-moderate intensity aerobic exercise (walking, aquatic therapy) 20-30 minutes, 2-3 times per week, with gradual progression based on symptom response",
+      "High-intensity interval training at maximum effort daily",
+      "No exercise; complete rest is recommended for fibromyalgia",
+      "Heavy resistance training 6 days per week"
+    ],
+    correctIndex: 0,
+    rationale: "Current evidence strongly supports low-to-moderate intensity aerobic exercise for fibromyalgia. Walking and aquatic therapy are well-tolerated modalities that improve pain, fatigue, function, and quality of life. Starting at low intensity and gradually progressing prevents symptom flares ('start low, go slow' principle). Aquatic therapy is particularly beneficial as warm water reduces pain and buoyancy decreases joint stress. High-intensity training and heavy resistance training typically cause symptom exacerbation in fibromyalgia patients. Complete rest leads to deconditioning that worsens symptoms. The exercise prescription must be individualized based on symptom response and patient tolerance, with the understanding that some post-exercise soreness may occur but should resolve within 24 hours.",
+    difficulty: 2,
+    category: "Pain Management",
+    topic: "Fibromyalgia Exercise Prescription"
+  },
+  {
+    id: "pta-b24-031",
+    stem: "A patient 2 weeks post-anterior cervical discectomy and fusion (ACDF) at C5-C6 presents for initial outpatient therapy. The patient is wearing a cervical collar. Which activity is SAFE at this stage?",
+    options: [
+      "Gentle shoulder AROM (pendulum exercises and shrugs) and postural education while maintaining the cervical collar",
+      "Cervical rotation stretching to end range bilaterally",
+      "Cervical isometric resistance exercises against the collar",
+      "Aggressive upper trapezius deep tissue massage"
+    ],
+    correctIndex: 0,
+    rationale: "Two weeks post-ACDF, the fusion is not yet solid, and the cervical collar must be maintained per surgeon protocol. Safe activities include gentle shoulder AROM that does not challenge cervical stability (pendulum exercises, shoulder shrugs within pain tolerance), postural education (avoiding forward head posture), and walking. Cervical rotation stretching at end range stresses the fusion site. Cervical isometric resistance exercises may be premature and create forces across the fusion. Aggressive deep tissue massage near the surgical site risks tissue damage and is contraindicated in the acute postoperative period. The PTA should focus on patient education and gentle peripheral exercises.",
+    difficulty: 2,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "Post-ACDF Early Rehab"
+  },
+  {
+    id: "pta-b24-032",
+    stem: "A PTA is assessing a patient's lower extremity sensation using a Semmes-Weinstein monofilament test on the plantar surface of the foot. This test is MOST commonly used for patients with:",
+    options: [
+      "Diabetic peripheral neuropathy to assess protective sensation and risk of foot ulceration",
+      "Acute ankle sprain to assess ligament integrity",
+      "Meniscal tear to evaluate joint stability",
+      "Rotator cuff tear to assess shoulder function"
+    ],
+    correctIndex: 0,
+    rationale: "The Semmes-Weinstein monofilament test assesses cutaneous protective sensation, primarily used for patients with diabetic peripheral neuropathy. The 5.07 (10g) monofilament is the standard screening tool; inability to detect this monofilament indicates loss of protective sensation and significantly increased risk of plantar ulceration. Testing sites include the hallux, metatarsal heads, and midfoot. This test guides footwear recommendations, skin inspection protocols, and foot care education. It is not used for ligament integrity (Lachman, anterior drawer), joint stability (pivot shift), or shoulder function (Neer, Hawkins-Kennedy). Early detection of neuropathy allows preventive interventions.",
+    difficulty: 1,
+    category: "Data Collection & Measurement",
+    topic: "Sensory Testing Diabetic Neuropathy"
+  },
+  {
+    id: "pta-b24-033",
+    stem: "A patient with complex regional pain syndrome (CRPS) Type I of the right hand demonstrates allodynia, edema, color changes, and temperature asymmetry. Which treatment approach is MOST appropriate?",
+    options: [
+      "Graded motor imagery program, stress loading (scrubbing and carrying), desensitization techniques, and edema management",
+      "Complete immobilization of the affected hand for 3 months",
+      "Aggressive passive stretching to restore full ROM immediately",
+      "Only pharmacological management with no physical therapy"
+    ],
+    correctIndex: 0,
+    rationale: "CRPS Type I (formerly reflex sympathetic dystrophy) requires a multimodal rehabilitation approach. Graded motor imagery (laterality recognition, imagined movements, mirror therapy) activates cortical motor representations without triggering pain. Stress loading (scrubbing: compressive force; carrying: distraction force) provides proprioceptive input without painful ROM. Desensitization (progressive exposure to textures) addresses allodynia. Edema management prevents tissue fibrosis. Complete immobilization worsens CRPS by promoting disuse and cortical reorganization. Aggressive stretching exacerbates the hyperalgesic state. CRPS requires active rehabilitation; pharmacology alone is insufficient. Treatment must be gentle, progressive, and pain-sensitive.",
+    difficulty: 3,
+    category: "Pain Management",
+    topic: "CRPS Rehabilitation"
+  },
+  {
+    id: "pta-b24-034",
+    stem: "During a home exercise program review, a patient demonstrates the prone press-up exercise for McKenzie extension protocol. The patient lifts the upper body using the arms while keeping the pelvis on the table, then reports centralization of symptoms. This indicates:",
+    options: [
+      "The extension exercise is moving symptoms from the periphery toward the spine, which is a positive response supporting continued use of extension-based treatment",
+      "The exercise is worsening the condition and should be stopped immediately",
+      "The patient has a spinal fracture",
+      "The exercise has no clinical significance"
+    ],
+    correctIndex: 0,
+    rationale: "Centralization is a key concept in the McKenzie method (Mechanical Diagnosis and Therapy). When repeated movements cause symptoms to move from a distal location (leg/buttock) toward the midline (central spine), this is centralization, which indicates the exercise is reducing the nuclear displacement. Centralization is a positive prognostic sign predicting good outcomes with directional preference exercises. The prone press-up promotes lumbar extension, which often centralizes symptoms in patients with posterior disc displacement. Peripheralization (symptoms moving distally) would be a negative response requiring directional change. Centralization does not indicate fracture and has significant clinical implications for treatment selection.",
+    difficulty: 2,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "McKenzie Centralization Concept"
+  },
+  {
+    id: "pta-b24-035",
+    stem: "A patient with a posterior hip replacement is being discharged home. The PTA reviews hip precautions. Which instruction is CORRECT for this surgical approach?",
+    options: [
+      "Avoid hip flexion beyond 90°, avoid hip adduction past midline, and avoid internal rotation of the hip",
+      "Avoid hip extension, avoid abduction, and avoid external rotation",
+      "No movement precautions are needed after posterior hip replacement",
+      "Only avoid hip flexion; adduction and rotation are unrestricted"
+    ],
+    correctIndex: 0,
+    rationale: "Posterior hip replacement precautions protect the repaired posterior capsule and short external rotators from dislocation. The three key restrictions are: no hip flexion beyond 90° (avoid low seats, bending forward excessively), no hip adduction past midline (avoid crossing legs, keep an abduction pillow between legs in bed), and no internal rotation (avoid pivoting on the operated leg). These movements combined create the mechanism for posterior dislocation. Anterior approach precautions are different (avoid extension, ER, and abduction). Elevated toilet seats, long-handled reachers, and sock aids help maintain precautions during ADLs. Precautions are typically maintained for 6-12 weeks.",
+    difficulty: 1,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "Posterior THA Precautions"
+  },
+  {
+    id: "pta-b24-036",
+    stem: "A PTA observes that a patient performing a squat exercise demonstrates excessive forward trunk lean, heel rise, and bilateral knee valgus. These compensations MOST likely indicate:",
+    options: [
+      "Ankle dorsiflexion limitation, hip extensor weakness, and poor hip abductor/external rotator control",
+      "Excessive ankle dorsiflexion flexibility",
+      "Strong gluteal muscles",
+      "Perfect squat biomechanics that require no correction"
+    ],
+    correctIndex: 0,
+    rationale: "Squat compensation analysis: excessive forward trunk lean compensates for hip extensor (gluteus maximus) weakness by shifting the center of mass forward. Heel rise during squat indicates limited ankle dorsiflexion ROM (tight gastrocnemius/soleus), preventing the tibia from translating forward over the foot. Bilateral knee valgus indicates weak hip abductors/external rotators allowing femoral internal rotation and adduction. These three compensations commonly coexist and represent a predictable movement system impairment pattern. Assessment of these compensations guides exercise prescription targeting the specific deficits. This movement analysis is fundamental to corrective exercise programming.",
+    difficulty: 2,
+    category: "Biomechanics & Kinesiology",
+    topic: "Squat Compensation Analysis"
+  },
+  {
+    id: "pta-b24-037",
+    stem: "A patient with a midshaft femur fracture stabilized with an intramedullary nail is 6 weeks post-surgery. Weight-bearing status has been progressed to weight bearing as tolerated (WBAT). The patient reports pain with ambulation rated 4/10. Which progression is MOST appropriate?",
+    options: [
+      "Progressive weight bearing with an assistive device, closed-chain exercises (partial squats, leg press at reduced weight), and hip/knee AROM",
+      "Full-speed running on a treadmill",
+      "Continue non-weight bearing with bilateral crutches",
+      "Maximum resistance open kinetic chain knee extension"
+    ],
+    correctIndex: 0,
+    rationale: "At 6 weeks post-IM nail fixation with WBAT status, progressive loading promotes callus formation through Wolff's law (bone remodels in response to mechanical stress). An assistive device (cane or crutch) allows partial loading while managing pain. Closed-chain exercises provide axial loading through the femur without excessive shear. Pain at 4/10 during weight bearing is acceptable and does not indicate regression. Full-speed running creates impact forces exceeding safe loading limits at 6 weeks. Continuing NWB ignores the physician's progression and delays healing. Maximum OKC knee extension creates bending moments through the fracture site without providing the axial loading beneficial for bone healing.",
+    difficulty: 2,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "Femur Fracture Progressive Loading"
+  },
+  {
+    id: "pta-b24-038",
+    stem: "A patient with subacromial bursitis demonstrates a painful arc between 60° and 120° of shoulder abduction. Pain decreases above 120°. The PTA should focus strengthening exercises in which range?",
+    options: [
+      "Below 60° and above 120°, avoiding the painful arc zone, while treating inflammation with appropriate modalities",
+      "Only within the 60-120° painful arc to desensitize the area",
+      "At maximum overhead positions exclusively",
+      "No strengthening should be performed with subacromial bursitis"
+    ],
+    correctIndex: 0,
+    rationale: "The painful arc (60-120°) corresponds to the range where the supraspinatus tendon and subacromial bursa are maximally compressed between the greater tuberosity and the coracoacromial arch. Strengthening below 60° and above 120° avoids this compression zone while still building rotator cuff and scapular stabilizer strength. Exercising through the painful arc exacerbates inflammation and impingement. Maximum overhead positions only misses the opportunity to strengthen through available pain-free ranges. Avoiding all strengthening leads to progressive weakness and deconditioning. Anti-inflammatory modalities (ice, ultrasound) complement the exercise program. Scapular stabilization exercises and rotator cuff strengthening in neutral are key components.",
+    difficulty: 2,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "Painful Arc Exercise Modification"
+  },
+  {
+    id: "pta-b24-039",
+    stem: "A patient with a history of bilateral below-knee amputations is being fitted for prostheses. During the preprosthetic phase, which exercise is MOST important?",
+    options: [
+      "Prone hip extension and knee extension stretching to prevent hip and knee flexion contractures that would impair prosthetic fit",
+      "Seated hip flexion exercises only",
+      "Prolonged sitting in a wheelchair with legs elevated",
+      "Upper body strengthening only with no lower extremity focus"
+    ],
+    correctIndex: 0,
+    rationale: "Hip and knee flexion contractures are the primary barriers to successful prosthetic fitting and ambulation after transtibial amputation. Prone positioning with hip extension exercises stretches the hip flexors (preventing hip flexion contractures). Knee extension exercises maintain full extension needed for prosthetic alignment. Contractures >15° at the hip or >10° at the knee significantly compromise prosthetic socket fit and gait biomechanics. Seated hip flexion promotes the contractures being prevented. Prolonged sitting with legs elevated encourages knee flexion contracture. Upper body strengthening is important for transfers and crutch walking but does not address the critical contracture prevention need.",
+    difficulty: 2,
+    category: "Prosthetics & Orthotics",
+    topic: "Preprosthetic Contracture Prevention"
+  },
+  {
+    id: "pta-b24-040",
+    stem: "A PTA is documenting a patient encounter using the SOAP note format. The patient reports 'My knee feels much better today, I can go up stairs without holding the railing.' Under which section should this information be recorded?",
+    options: [
+      "Subjective (S) section, as it represents the patient's self-report of symptoms and functional status",
+      "Objective (O) section, as it describes functional ability",
+      "Assessment (A) section, as it evaluates progress",
+      "Plan (P) section, as it describes future activities"
+    ],
+    correctIndex: 0,
+    rationale: "SOAP documentation: Subjective = patient's self-reported information including symptoms, pain levels, functional complaints, and perceived improvements. The patient's statement about how their knee feels and their perceived stair-climbing ability is subjective data. Objective would include measurable clinical findings (ROM, strength grades, gait parameters observed by the PTA). Assessment reflects the clinician's professional judgment about the patient's progress. Plan describes the intended interventions and future treatment direction. The PTA should quote or paraphrase the patient's words in the subjective section to accurately capture their perspective.",
+    difficulty: 1,
+    category: "Documentation & Communication",
+    topic: "SOAP Note Documentation"
+  },
+  {
+    id: "pta-b24-041",
+    stem: "A patient with a diagnosis of piriformis syndrome reports buttock pain radiating down the posterior thigh that worsens with prolonged sitting and hip internal rotation. Which stretch is MOST targeted for this condition?",
+    options: [
+      "Supine figure-4 stretch (ankle on opposite knee, pulling the bottom leg toward the chest) to stretch the piriformis muscle",
+      "Standing quadriceps stretch pulling the heel toward the buttock",
+      "Seated hamstring stretch with the knee extended",
+      "Standing calf stretch against a wall"
+    ],
+    correctIndex: 0,
+    rationale: "Piriformis syndrome involves compression of the sciatic nerve by the piriformis muscle in the deep buttock. The supine figure-4 stretch (also called the piriformis stretch or FAIR position) places the hip in flexion, adduction, and internal rotation, which lengthens the piriformis muscle specifically. This position stretches the piriformis as it crosses from the sacrum to the greater trochanter. Quadriceps stretch targets the anterior thigh. Hamstring stretch targets the posterior thigh muscles, not the deep external rotators. Calf stretch targets the gastrocnemius/soleus. Other interventions include avoiding prolonged sitting, self-myofascial release with a tennis ball, and hip external rotator strengthening.",
+    difficulty: 1,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "Piriformis Syndrome Stretching"
+  },
+  {
+    id: "pta-b24-042",
+    stem: "A patient 8 weeks post-total knee arthroplasty has 105° of knee flexion. The goal per the surgeon's protocol is 120° by 12 weeks. The patient reports stiffness but minimal pain (2/10). Which intervention is MOST appropriate to progress ROM?",
+    options: [
+      "Stationary cycling with gradual seat height reduction, wall slides, and prone hang for extension, with heel slides for flexion progression",
+      "Manipulation under anesthesia immediately",
+      "Discontinue all ROM exercises since 105° is sufficient",
+      "Apply a serial casting protocol to force full ROM"
+    ],
+    correctIndex: 0,
+    rationale: "At 8 weeks post-TKA with 105° flexion and a 120° goal, progressive ROM techniques are appropriate. Stationary cycling with gradually lowering the seat increases flexion demands. Wall slides use gravity-assisted flexion in a controlled manner. Prone hang promotes terminal knee extension. Heel slides provide active-assisted flexion. Manipulation under anesthesia is considered only when ROM plateaus significantly below functional levels despite adequate rehabilitation (usually after 3-6 months). 105° at 8 weeks with a 12-week goal shows progress is achievable. Serial casting is unnecessarily aggressive. The minimum functional knee flexion for most ADLs is 110-115° (stair climbing requires 115°, rising from a standard chair requires 105°).",
+    difficulty: 2,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "TKA ROM Progression"
+  },
+  {
+    id: "pta-b24-043",
+    stem: "A PTA notices a patient with a transfemoral prosthesis demonstrates lateral trunk lean toward the prosthetic side during stance phase. The MOST likely cause is:",
+    options: [
+      "The prosthetic limb is too short or the patient has weak hip abductors on the prosthetic side",
+      "The prosthetic limb is too long",
+      "The patient has excessive knee flexion in the prosthetic knee",
+      "The prosthetic foot is set in excessive dorsiflexion"
+    ],
+    correctIndex: 0,
+    rationale: "Lateral trunk lean toward the prosthetic side during stance phase is a common transfemoral prosthetic gait deviation caused by: prosthetic limb that is too short (compensatory lean to shift weight over the short limb), weak hip abductors on the prosthetic side (gluteus medius insufficiency mimicking Trendelenburg pattern), or a laterally displaced socket. The patient compensates by shifting the trunk over the prosthetic limb to reduce the demand on the hip abductors. A prosthesis that is too long would cause vaulting on the sound side. Excessive knee flexion causes a different gait pattern. Dorsiflexion setting affects heel contact mechanics, not lateral trunk lean.",
+    difficulty: 3,
+    category: "Prosthetics & Orthotics",
+    topic: "Transfemoral Prosthetic Gait Deviations"
+  },
+  {
+    id: "pta-b24-044",
+    stem: "A PTA is treating a patient with bilateral lower extremity lymphedema. Which intervention sequence is MOST appropriate for complete decongestive therapy?",
+    options: [
+      "Manual lymphatic drainage, followed by short-stretch bandaging, exercise with bandages in place, and skin care",
+      "Hot pack application to increase blood flow, then vigorous massage",
+      "Long-stretch (elastic) bandaging applied as tightly as possible",
+      "Elevation only with no manual techniques or compression"
+    ],
+    correctIndex: 0,
+    rationale: "Complete decongestive therapy (CDT) for lymphedema follows a specific sequence: manual lymphatic drainage (MLD) uses gentle, rhythmic strokes to redirect lymph fluid toward functioning lymph nodes. Short-stretch bandages provide high working pressure during exercise and low resting pressure to maintain drainage. Exercise with bandages enhances the muscle pump effect. Skin care prevents infection (cellulitis is a major lymphedema complication). Hot packs increase capillary filtration, worsening edema. Vigorous massage can damage fragile lymphatic vessels. Long-stretch (elastic) bandages create high resting pressure that can impede lymph flow and are contraindicated. Elevation alone is insufficient for chronic lymphedema.",
+    difficulty: 3,
+    category: "Integumentary & Wound Care",
+    topic: "Lymphedema Complete Decongestive Therapy"
+  },
+  {
+    id: "pta-b24-045",
+    stem: "A patient being treated for a stage III pressure injury on the sacrum is positioned in supine. The PTA should implement a repositioning schedule of:",
+    options: [
+      "Turning the patient every 2 hours to offload the sacral region and using a pressure-redistributing support surface",
+      "Keeping the patient supine continuously to avoid disturbing the wound",
+      "Repositioning once every 8 hours at shift change",
+      "Positioning the patient directly on the wound with a standard hospital mattress"
+    ],
+    correctIndex: 0,
+    rationale: "Evidence-based pressure injury management requires repositioning every 2 hours maximum to offload the affected area and prevent additional tissue damage. A pressure-redistributing support surface (alternating pressure mattress, low-air-loss mattress) distributes forces over a larger area. Keeping the patient supine continuously maintains pressure on the sacral wound and prevents healing. Eight-hour repositioning intervals are insufficient and allow prolonged ischemia. Direct pressure on the wound with a standard mattress concentrates forces and worsens tissue damage. A 30° lateral tilt position offloads the sacrum. The Braden Scale assesses risk factors including mobility, moisture, nutrition, and friction/shear.",
+    difficulty: 1,
+    category: "Integumentary & Wound Care",
+    topic: "Pressure Injury Repositioning"
+  },
+  {
+    id: "pta-b24-046",
+    stem: "A PTA is reviewing a patient's medication list and notes the patient takes warfarin (Coumadin). Which precaution is MOST important during physical therapy treatment?",
+    options: [
+      "Monitor for signs of excessive bleeding (bruising, petechiae, hematuria) and avoid aggressive soft tissue mobilization and deep tissue massage",
+      "No precautions are needed with warfarin",
+      "Avoid all exercise as warfarin prevents physical activity",
+      "Increase exercise intensity because warfarin improves exercise tolerance"
+    ],
+    correctIndex: 0,
+    rationale: "Warfarin is an anticoagulant that increases bleeding risk. PTAs must monitor for signs of excessive anticoagulation: unusual bruising, petechiae (small red dots on skin), bleeding gums, hematuria (blood in urine), and dark/tarry stools. Aggressive soft tissue mobilization and deep tissue massage should be avoided or modified due to risk of hematoma formation. INR levels should be checked (therapeutic range typically 2.0-3.0). Exercise is not contraindicated but should avoid high-impact activities and excessive risk of falls. The PTA should communicate with the healthcare team if signs of bleeding are observed. Exercise does not need to be eliminated or intensified based on warfarin use alone.",
+    difficulty: 1,
+    category: "Pharmacology for PTAs",
+    topic: "Anticoagulant Precautions"
+  },
+  {
+    id: "pta-b24-047",
+    stem: "A PTA is providing patient education about a home exercise program for a patient with osteoporosis. Which exercise recommendation is MOST appropriate?",
+    options: [
+      "Weight-bearing exercises (walking, stair climbing), resistance training targeting major muscle groups, and balance exercises for fall prevention",
+      "High-impact jumping exercises and trunk flexion exercises (sit-ups)",
+      "Only non-weight-bearing exercises such as swimming",
+      "Complete avoidance of all physical activity to prevent fractures"
+    ],
+    correctIndex: 0,
+    rationale: "Osteoporosis exercise prescription follows Wolff's law: weight-bearing activities (walking, stair climbing) and resistance training stimulate osteoblast activity and bone remodeling. Balance exercises (tandem stance, single-leg balance, tai chi) reduce fall risk, the primary cause of osteoporotic fractures. High-impact jumping may cause fractures in significantly osteoporotic bone. Trunk flexion (sit-ups) increases anterior vertebral loading and compression fracture risk. Swimming, while beneficial for cardiovascular fitness, does not provide the axial loading needed to stimulate bone formation. Physical activity avoidance leads to further bone density loss. Extension-based exercises are preferred over flexion.",
+    difficulty: 1,
+    category: "Patient Education & Home Programs",
+    topic: "Osteoporosis Exercise Education"
+  },
+  {
+    id: "pta-b24-048",
+    stem: "A patient with a peripheral nerve injury (radial nerve palsy) demonstrates wrist drop. While awaiting nerve recovery, the PTA should provide:",
+    options: [
+      "A wrist cock-up splint to maintain the wrist in functional extension, electrical stimulation to prevent muscle atrophy, and passive ROM exercises",
+      "Maximum resistance wrist extension exercises against gravity",
+      "No intervention until nerve recovery occurs spontaneously",
+      "Aggressive tendon transfer surgery referral as the first intervention"
+    ],
+    correctIndex: 0,
+    rationale: "Radial nerve palsy causes wrist drop (inability to extend the wrist and fingers) due to denervation of the wrist and finger extensors. A wrist cock-up splint maintains the wrist in 20-30° of extension, preserving functional hand use and preventing overstretching of the denervated extensors. Electrical stimulation (NMES) to the denervated muscles prevents muscle atrophy and maintains muscle bulk during nerve recovery. Passive ROM prevents joint contractures. Resistance exercises are impossible with denervated muscles. Waiting without intervention allows contractures and severe muscle atrophy. Tendon transfer is considered only after failure of nerve recovery, typically after 6-12 months.",
+    difficulty: 2,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "Radial Nerve Palsy Management"
+  },
+  {
+    id: "pta-b24-049",
+    stem: "A PTA observes a patient performing a deadlift during a functional strengthening program. The patient demonstrates excessive lumbar flexion (loss of neutral spine) at the bottom of the movement. The MOST appropriate response is:",
+    options: [
+      "Stop the exercise, cue the patient on maintaining a neutral spine, reduce the weight, and ensure the patient can demonstrate proper form before progressing",
+      "Allow the patient to continue since the weight is light",
+      "Increase the weight to challenge the patient further",
+      "Switch to an overhead press instead without addressing the form issue"
+    ],
+    correctIndex: 0,
+    rationale: "Loss of neutral spine (lumbar flexion rounding) during deadlift places excessive stress on the posterior disc and ligamentous structures, significantly increasing injury risk. The PTA must immediately correct the technique: stop the exercise, provide tactile and verbal cues for maintaining lumbar lordosis (chest up, hips hinge), reduce the weight to a level where proper form can be maintained, and ensure the patient demonstrates correct mechanics before progression. Allowing poor form risks disc injury. Increasing weight worsens the faulty pattern. Switching exercises without addressing the underlying movement dysfunction (hip hinge pattern) misses a teachable moment. Movement quality always takes priority over movement quantity.",
+    difficulty: 2,
+    category: "Therapeutic Exercise",
+    topic: "Exercise Form Correction"
+  },
+  {
+    id: "pta-b24-050",
+    stem: "A PTA is asked to measure a patient's leg length. Using the true (direct) method of leg length measurement, the landmarks used are:",
+    options: [
+      "Anterior superior iliac spine (ASIS) to the medial malleolus on each side",
+      "Umbilicus to the medial malleolus on each side",
+      "Greater trochanter to the lateral malleolus",
+      "Iliac crest to the fifth metatarsal head"
+    ],
+    correctIndex: 0,
+    rationale: "True (direct/actual) leg length measurement: ASIS to medial malleolus. This measures the actual anatomic length of the lower extremity. Apparent leg length is measured from the umbilicus to the medial malleolus and includes the contribution of pelvic obliquity. If true leg lengths are equal but apparent lengths differ, the discrepancy is due to pelvic alignment (sacroiliac dysfunction, hip contracture). Greater trochanter to lateral malleolus measures thigh length only. Iliac crest to the fifth metatarsal is not a standardized measurement. A difference >1 cm may require a heel lift. True leg length discrepancy results from fracture malunion, growth plate injury, or congenital factors.",
+    difficulty: 1,
+    category: "Data Collection & Measurement",
+    topic: "Leg Length Measurement"
+  },
+  {
+    id: "pta-b24-051",
+    stem: "A patient with a recent diagnosis of ankylosing spondylitis is referred for physical therapy. Which exercise approach is MOST appropriate?",
+    options: [
+      "Spinal extension exercises, deep breathing exercises to maintain chest wall mobility, and postural training to counteract the flexion tendency",
+      "Prolonged trunk flexion stretching and sit-up exercises",
+      "Complete spinal immobilization with a rigid brace",
+      "Only aquatic therapy with no land-based exercise"
+    ],
+    correctIndex: 0,
+    rationale: "Ankylosing spondylitis (AS) is a progressive inflammatory condition that leads to spinal fusion in a flexed posture. Treatment goals counteract the flexion tendency: spinal extension exercises maintain erect posture, deep breathing exercises preserve rib cage mobility (costovertebral joint involvement reduces chest expansion), and postural training promotes extension. Prone lying (extension position) is recommended. Trunk flexion exercises worsen the kyphotic tendency. Complete immobilization accelerates ankylosis. Aquatic therapy is beneficial but should supplement, not replace, land-based extension and breathing exercises. AS patients should sleep on a firm mattress without a pillow to maintain cervical extension.",
+    difficulty: 2,
+    category: "Musculoskeletal Rehabilitation",
+    topic: "Ankylosing Spondylitis Exercise"
+  },
+  {
+    id: "pta-b24-052",
+    stem: "A PTA is teaching a patient to use a front-wheeled walker. The proper height adjustment ensures that the handles are at the level of:",
+    options: [
+      "The patient's greater trochanters (hip level), allowing approximately 20-30° of elbow flexion when grasping the handles",
+      "The patient's axillae (armpits) to maximize support",
+      "The patient's knees for stability during walking",
+      "The patient's shoulders to allow full arm extension"
+    ],
+    correctIndex: 0,
+    rationale: "Proper walker height: handles at the level of the greater trochanters or wrist crease when arms hang naturally at the sides. This allows 20-30° of elbow flexion when grasping the handles, which provides optimal upper extremity biomechanics for push-off. Handles at armpit height forces shoulder elevation and promotes poor posture. Handles at knee level requires excessive trunk flexion. Handles at shoulder level prevents effective weight bearing through the arms. Incorrect walker height contributes to postural deviations, upper extremity strain, and inefficient gait patterns. The same height principles apply to canes and crutches (wrist crease level).",
+    difficulty: 1,
+    category: "Gait Training & Assistive Devices",
+    topic: "Walker Height Adjustment"
+  },
+  {
+    id: "pta-b24-053",
+    stem: "A patient is performing a closed kinetic chain exercise. Which of the following is an example of a closed kinetic chain exercise for the lower extremity?",
+    options: [
+      "Wall sit (wall squat) with the feet fixed on the ground",
+      "Seated knee extension machine (open chain)",
+      "Prone hamstring curl machine",
+      "Supine straight leg raise"
+    ],
+    correctIndex: 0,
+    rationale: "Closed kinetic chain (CKC) exercises have the distal segment fixed (foot on the ground for LE). Wall sits keep the feet planted while the body moves, creating compressive forces through the joint (more stable, functional, and joint-friendly). Seated knee extension is open kinetic chain (distal segment free, foot moves through space). Prone hamstring curl is also OKC. Supine SLR involves the distal segment moving freely. CKC exercises offer advantages: co-contraction of agonists and antagonists, joint compression for stability, more functional movement patterns, and reduced shear forces. CKC exercises are preferred early in ACL rehab because they reduce anterior tibial translation compared to OKC exercises.",
+    difficulty: 1,
+    category: "Therapeutic Exercise",
+    topic: "CKC vs OKC Exercise Classification"
+  },
+  {
+    id: "pta-b24-054",
+    stem: "A PTA is using the Timed Up and Go (TUG) test with an 80-year-old patient. The patient completes the test in 16 seconds. This result indicates:",
+    options: [
+      "The patient is at increased risk for falls and may require an assistive device or balance intervention program",
+      "The patient has normal mobility with no fall risk",
+      "The test result is invalid for this age group",
+      "The patient should be immediately referred to the emergency department"
+    ],
+    correctIndex: 0,
+    rationale: "The Timed Up and Go (TUG) test measures functional mobility: the patient rises from a chair, walks 3 meters, turns, walks back, and sits down. Normal for community-dwelling older adults is <12 seconds. Scores >14 seconds indicate increased fall risk. This patient's score of 16 seconds exceeds the fall risk threshold, indicating the need for balance intervention, possible assistive device assessment, and fall prevention strategies. The TUG is a valid and reliable screening tool for this age group. While concerning, this does not require emergency referral. Interventions include balance training, strengthening, and environmental safety assessment.",
+    difficulty: 1,
+    category: "Data Collection & Measurement",
+    topic: "TUG Test Interpretation"
+  },
+  {
+    id: "pta-b24-055",
+    stem: "A PTA is assisting with a research study and needs to understand evidence levels. A systematic review of randomized controlled trials represents which level of evidence?",
+    options: [
+      "Level I - the highest level of evidence in the evidence hierarchy",
+      "Level V - the lowest level of evidence",
+      "Level III - moderate evidence",
+      "Evidence levels do not apply to systematic reviews"
+    ],
+    correctIndex: 0,
+    rationale: "The evidence hierarchy ranks study designs by strength: Level I = systematic reviews/meta-analyses of RCTs (strongest evidence); Level II = individual RCTs; Level III = non-randomized controlled studies, cohort studies; Level IV = case series, case-control studies; Level V = expert opinion, case reports (weakest evidence). Systematic reviews synthesize multiple RCTs, reducing bias and increasing generalizability, making them the gold standard for clinical decision-making. Evidence-based practice integrates the best available evidence with clinical expertise and patient values. PTAs should understand evidence levels to appropriately apply research findings to clinical practice.",
+    difficulty: 1,
+    category: "Evidence-Based Practice",
+    topic: "Evidence Hierarchy Levels"
+  }
+];

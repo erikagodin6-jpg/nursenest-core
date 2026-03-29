@@ -1,0 +1,166 @@
+[
+  {
+    "projectionName": "PA Erect Chest",
+    "bodyPart": "Chest",
+    "patientPosition": "Patient stands upright facing the image receptor with chin extended. Arms internally rotated with backs of hands on hips.",
+    "centralRay": "Perpendicular to T7, entering at the level of the inferior angle of the scapulae. 72-inch SID.",
+    "sid": "72 inches (180 cm)",
+    "anatomyDemonstrated": "Both lung fields, costophrenic angles, cardiac silhouette, trachea, mediastinum",
+    "tips": "Ensure scapulae are rotated out of lung fields. Check for rotation by comparing medial clavicle ends to spinous processes. Minimum 10 posterior ribs should be visible above diaphragm."
+  },
+  {
+    "projectionName": "Lateral Chest",
+    "bodyPart": "Chest",
+    "patientPosition": "Patient stands with left side against image receptor. Arms raised overhead and crossed.",
+    "centralRay": "Perpendicular to T7 at the level of the inferior angle of the scapulae, midcoronal plane",
+    "sid": "72 inches (180 cm)",
+    "anatomyDemonstrated": "Retrosternal and retrocardiac spaces, thoracic spine, sternum, diaphragm",
+    "tips": "Left lateral preferred to minimize cardiac magnification. Arms must be elevated sufficiently."
+  },
+  {
+    "projectionName": "PA Hand",
+    "bodyPart": "Upper Extremity",
+    "patientPosition": "Patient seated at end of table with hand pronated, fingers extended and slightly separated on image receptor.",
+    "centralRay": "Perpendicular to the third MCP joint",
+    "anatomyDemonstrated": "All phalanges, metacarpals, carpals, and distal radius and ulna",
+    "tips": "Ensure fingers are separated to prevent overlap. Remove rings and jewelry."
+  },
+  {
+    "projectionName": "PA Wrist",
+    "bodyPart": "Upper Extremity",
+    "patientPosition": "Patient seated, forearm pronated with wrist centered on image receptor. Fingers slightly flexed.",
+    "centralRay": "Perpendicular to the midcarpal area",
+    "anatomyDemonstrated": "All 8 carpal bones, distal radius and ulna, proximal metacarpals",
+    "tips": "For scaphoid view, use ulnar deviation to elongate the scaphoid."
+  },
+  {
+    "projectionName": "AP Knee",
+    "bodyPart": "Lower Extremity",
+    "patientPosition": "Patient supine with knee extended. Leg internally rotated 3-5 degrees.",
+    "centralRay": "5 degrees caudad to a point 1 cm below the patellar apex",
+    "anatomyDemonstrated": "Distal femur, proximal tibia and fibula, patella, joint space, intercondylar eminence",
+    "tips": "Internal rotation of 3-5 degrees opens the joint space evenly."
+  },
+  {
+    "projectionName": "Ankle Mortise (AP)",
+    "bodyPart": "Lower Extremity",
+    "patientPosition": "Patient supine, leg internally rotated 15-20 degrees until intermalleolar line is parallel to IR.",
+    "centralRay": "Perpendicular to midpoint between malleoli",
+    "anatomyDemonstrated": "Tibiotalar joint (ankle mortise), medial and lateral malleoli, talus",
+    "tips": "15-20 degrees internal rotation opens the mortise joint."
+  },
+  {
+    "projectionName": "Lateral Cervical Spine",
+    "bodyPart": "Spine",
+    "patientPosition": "Patient standing or seated in lateral position. Shoulders depressed, chin slightly elevated.",
+    "centralRay": "Horizontal beam perpendicular to C4 (level of thyroid cartilage). 72-inch SID.",
+    "sid": "72 inches (180 cm)",
+    "anatomyDemonstrated": "C1-C7 vertebral bodies, intervertebral disc spaces, spinous processes",
+    "tips": "Must demonstrate C7-T1. Patient may need to hold weights to depress shoulders."
+  },
+  {
+    "projectionName": "AP Open Mouth (C1-C2)",
+    "bodyPart": "Spine",
+    "patientPosition": "Patient supine or erect. Mouth wide open, line from lower edge of upper incisors to mastoid tips perpendicular to IR.",
+    "centralRay": "Perpendicular through the center of the open mouth",
+    "anatomyDemonstrated": "C1 (atlas) lateral masses, C2 (axis) odontoid process (dens), atlantoaxial joints",
+    "tips": "Mouth must be wide open. Upper incisors and base of skull should not superimpose on the dens."
+  },
+  {
+    "projectionName": "AP Supine Abdomen (KUB)",
+    "bodyPart": "Abdomen",
+    "patientPosition": "Patient supine, MSP centered. Arms at sides, knees may be slightly flexed for comfort.",
+    "centralRay": "Perpendicular to the iliac crests at the level of L4",
+    "anatomyDemonstrated": "Kidneys, liver shadow, spleen, psoas muscles, bowel gas pattern, bony pelvis",
+    "tips": "Must include pubic symphysis inferiorly. Check for rotation by comparing iliac wings."
+  },
+  {
+    "projectionName": "AP External Rotation Shoulder",
+    "bodyPart": "Shoulder",
+    "patientPosition": "Patient erect or supine. Arm externally rotated with palm facing forward.",
+    "centralRay": "Perpendicular to a point 1 inch inferior and lateral to the coracoid process",
+    "anatomyDemonstrated": "Greater tuberosity in profile, humeral head, glenoid cavity",
+    "tips": "Ensure sufficient external rotation to profile the greater tuberosity."
+  },
+  {
+    "projectionName": "AP Pelvis",
+    "bodyPart": "Pelvis/Hip",
+    "patientPosition": "Patient supine, MSP centered, both legs internally rotated 15-20 degrees.",
+    "centralRay": "Perpendicular midway between ASIS and pubic symphysis",
+    "anatomyDemonstrated": "Both hip joints, femoral necks, greater and lesser trochanters, iliac wings, sacrum",
+    "tips": "Internal rotation of 15-20 degrees demonstrates femoral necks without foreshortening."
+  },
+  {
+    "projectionName": "PA Caldwell (Skull)",
+    "bodyPart": "Skull",
+    "patientPosition": "Patient prone or erect facing image receptor. OML perpendicular to receptor.",
+    "centralRay": "15 degrees caudad to exit the nasion",
+    "anatomyDemonstrated": "Frontal bone, frontal sinuses, superior orbital margins, petrous ridges in lower third of orbits",
+    "tips": "OML must be perpendicular to IR. Check that petrous ridges project into lower third of orbits."
+  },
+  {
+    "projectionName": "AP Portable Chest",
+    "bodyPart": "Chest",
+    "patientPosition": "Patient supine or semi-upright in bed. Arms away from thorax if possible.",
+    "centralRay": "Perpendicular to the sternum at T7, minimum 40-inch SID",
+    "sid": "40 inches minimum",
+    "anatomyDemonstrated": "Lung fields, heart (magnified), mediastinum, tubes and lines positions",
+    "tips": "Heart appears magnified due to increased OID and shorter SID."
+  },
+  {
+    "projectionName": "AP Forearm",
+    "bodyPart": "Upper Extremity",
+    "patientPosition": "Patient seated, arm extended on table with forearm supinated.",
+    "centralRay": "Perpendicular to midpoint of forearm",
+    "anatomyDemonstrated": "Radius, ulna, proximal and distal radioulnar joints, elbow joint, wrist joint",
+    "tips": "Forearm must be fully supinated to separate radius and ulna. Include both joints."
+  },
+  {
+    "projectionName": "AP Lumbar Spine",
+    "bodyPart": "Spine",
+    "patientPosition": "Patient supine, MSP centered. Knees flexed with feet flat on table.",
+    "centralRay": "Perpendicular to L3 (level of the lower costal margin or umbilicus)",
+    "anatomyDemonstrated": "L1-L5 vertebral bodies, disc spaces, pedicles, spinous and transverse processes",
+    "tips": "Flex knees to reduce lumbar lordosis and open disc spaces."
+  },
+  {
+    "projectionName": "AP Internal Rotation Shoulder",
+    "bodyPart": "Shoulder",
+    "patientPosition": "Patient erect or supine. Arm internally rotated with palm against thigh.",
+    "centralRay": "Perpendicular to coracoid process, 1 inch inferior",
+    "anatomyDemonstrated": "Lesser tuberosity in profile, humeral head, glenohumeral joint space",
+    "tips": "Sufficient internal rotation profiles the lesser tuberosity."
+  },
+  {
+    "projectionName": "Cross-Table Lateral Hip",
+    "bodyPart": "Pelvis/Hip",
+    "patientPosition": "Patient supine, unaffected leg elevated and flexed. Affected leg remains as found.",
+    "centralRay": "Horizontal beam perpendicular to femoral neck, entering at the groin crease",
+    "anatomyDemonstrated": "Femoral head, femoral neck, greater and lesser trochanters, acetabulum",
+    "tips": "IR must be positioned firmly against lateral hip. Do not move affected limb."
+  },
+  {
+    "projectionName": "Towne (AP Axial Skull)",
+    "bodyPart": "Skull",
+    "patientPosition": "Patient supine or erect facing tube. OML perpendicular to IR.",
+    "centralRay": "30 degrees caudad (to OML) through foramen magnum",
+    "anatomyDemonstrated": "Occipital bone, foramen magnum, dorsum sellae projected within foramen magnum",
+    "tips": "30-degree CR angle projects dorsum sellae within foramen magnum."
+  },
+  {
+    "projectionName": "Lateral Knee",
+    "bodyPart": "Lower Extremity",
+    "patientPosition": "Patient lateral recumbent, knee flexed 20-30 degrees.",
+    "centralRay": "5 degrees cephalad to knee joint",
+    "anatomyDemonstrated": "Distal femur, proximal tibia and fibula, patella, patellofemoral joint",
+    "tips": "20-30 degrees flexion relaxes muscles for optimal positioning."
+  },
+  {
+    "projectionName": "AP Foot",
+    "bodyPart": "Lower Extremity",
+    "patientPosition": "Patient supine or seated, plantar surface of foot flat on IR.",
+    "centralRay": "10 degrees posteriorly, directed to base of third metatarsal",
+    "anatomyDemonstrated": "Phalanges, metatarsals, cuneiforms, cuboid, navicular, tarsometatarsal joints",
+    "tips": "10-degree posterior angle opens tarsometatarsal joint spaces."
+  }
+]

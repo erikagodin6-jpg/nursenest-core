@@ -1,0 +1,189 @@
+[
+  {
+    "title": "X-ray Production",
+    "category": "Radiation Physics",
+    "difficulty": 2,
+    "content": "X-rays are produced when high-speed electrons strike a target material (tungsten, Z=74). Two types: Bremsstrahlung (braking) radiation and Characteristic radiation. Maximum photon energy equals kVp.",
+    "keyConcepts": [
+      "Bremsstrahlung radiation",
+      "Characteristic radiation",
+      "Tungsten target Z=74",
+      "K-shell binding energy 69.5 keV",
+      "Maximum energy = kVp"
+    ],
+    "formulas": [
+      {
+        "name": "Maximum Photon Energy",
+        "formula": "E_max = kVp (in keV)"
+      },
+      {
+        "name": "Beam Intensity",
+        "formula": "I proportional to kVp^2 x mAs x Z"
+      }
+    ]
+  },
+  {
+    "title": "Radiation Interactions with Matter",
+    "category": "Radiation Physics",
+    "difficulty": 3,
+    "content": "Compton Scattering: photon interacts with outer-shell electron, producing scatter. Photoelectric Absorption: photon completely absorbed, probability proportional to Z^3/E^3.",
+    "keyConcepts": [
+      "Compton scattering",
+      "Photoelectric absorption",
+      "Z^3/E^3 relationship",
+      "Subject contrast",
+      "30 keV crossover"
+    ],
+    "formulas": [
+      {
+        "name": "Compton Probability",
+        "formula": "Proportional to electron density"
+      },
+      {
+        "name": "Photoelectric Probability",
+        "formula": "Proportional to Z^3 / E^3"
+      }
+    ]
+  },
+  {
+    "title": "Image Quality Factors",
+    "category": "Image Production",
+    "difficulty": 2,
+    "content": "Spatial Resolution: ability to distinguish closely spaced objects. Contrast Resolution: ability to distinguish similar tissues. Window width controls contrast, window level controls brightness.",
+    "keyConcepts": [
+      "Spatial resolution",
+      "Contrast resolution",
+      "Focal spot size",
+      "Window width",
+      "Window level"
+    ],
+    "formulas": [
+      {
+        "name": "Magnification Factor",
+        "formula": "MF = SID / SOD"
+      },
+      {
+        "name": "mAs Reciprocity",
+        "formula": "mA x time(s) = mAs"
+      }
+    ]
+  },
+  {
+    "title": "Radiation Protection Principles",
+    "category": "Radiation Safety",
+    "difficulty": 2,
+    "content": "ALARA Principle. Three cardinal principles: Time, Distance, Shielding. Canada dose limits: 50 mSv/year occupational. USA: 50 mSv/year, cumulative 10 mSv x age.",
+    "keyConcepts": [
+      "ALARA",
+      "Time distance shielding",
+      "CNSC dose limits",
+      "NCRP dose limits",
+      "Inverse square law"
+    ],
+    "formulas": [
+      {
+        "name": "Inverse Square Law",
+        "formula": "I1/I2 = (D2/D1)^2"
+      },
+      {
+        "name": "Half-Value Layer",
+        "formula": "Reduces beam intensity to 50%"
+      }
+    ]
+  },
+  {
+    "title": "X-ray Tube Components",
+    "category": "Radiation Physics",
+    "difficulty": 2,
+    "content": "Cathode: negative electrode with tungsten filament. Anode: positive electrode where X-rays produced. Rotating anodes distribute heat. Line-focus principle and anode heel effect.",
+    "keyConcepts": [
+      "Cathode",
+      "Anode",
+      "Thermionic emission",
+      "Focal spot",
+      "Line-focus principle",
+      "Anode heel effect"
+    ],
+    "formulas": [
+      {
+        "name": "Heat Units (single phase)",
+        "formula": "HU = kVp x mA x time"
+      },
+      {
+        "name": "Heat Units (HF)",
+        "formula": "HU = kVp x mA x time x 1.40"
+      }
+    ]
+  },
+  {
+    "title": "Digital Image Processing",
+    "category": "Image Production",
+    "difficulty": 2,
+    "content": "CR uses PSP plates scanned by laser. DR uses flat-panel detectors. Direct DR uses amorphous selenium. DR has higher DQE than CR.",
+    "keyConcepts": [
+      "CR PSP plates",
+      "DR flat panel",
+      "Direct vs indirect DR",
+      "DQE",
+      "Exposure Index",
+      "Deviation Index"
+    ],
+    "formulas": [
+      {
+        "name": "Exposure Index",
+        "formula": "EI = c x log10(Exposure)"
+      },
+      {
+        "name": "Deviation Index",
+        "formula": "DI = 10 x log10(EI / EI_target)"
+      }
+    ]
+  },
+  {
+    "title": "Radiation Biology",
+    "category": "Radiation Safety",
+    "difficulty": 3,
+    "content": "Law of Bergonie and Tribondeau: rapidly dividing, undifferentiated cells are most radiosensitive. Lymphocytes most radiosensitive blood cells. LNT model for radiation protection.",
+    "keyConcepts": [
+      "Bergonie and Tribondeau",
+      "Radiosensitivity",
+      "LNT model",
+      "Stochastic effects",
+      "Deterministic effects"
+    ],
+    "formulas": [
+      {
+        "name": "Effective Dose",
+        "formula": "E = sum of (w_T x H_T)"
+      },
+      {
+        "name": "Equivalent Dose",
+        "formula": "H = D x w_R"
+      }
+    ]
+  },
+  {
+    "title": "Exposure Factors and Technique",
+    "category": "Image Production",
+    "difficulty": 1,
+    "content": "kVp controls beam quality and contrast. mAs controls quantity and has direct relationship with patient dose. 15% rule: 15% kVp increase doubles exposure.",
+    "keyConcepts": [
+      "kVp controls quality",
+      "mAs controls quantity",
+      "15% rule",
+      "SID and inverse square law",
+      "Grid ratio",
+      "AEC"
+    ],
+    "formulas": [
+      {
+        "name": "15% Rule",
+        "formula": "15% increase in kVp = doubling of mAs"
+      },
+      {
+        "name": "Direct Square Law",
+        "formula": "New mAs = old mAs x (new SID / old SID)^2"
+      }
+    ]
+  }
+]

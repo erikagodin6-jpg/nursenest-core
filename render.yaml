@@ -1,0 +1,32 @@
+# Minimal Render blueprint: single Node web service (Express + built Vite client).
+# Set env vars in the Render dashboard; do not commit secrets.
+services:
+  - type: web
+    name: nursenest-web
+    runtime: node
+    plan: starter
+    # Fast deploy defaults:
+    # - production-only dependency install
+    # - required build only (server + client)
+    # - heavy artifacts run only when RUN_HEAVY_BUILD_TASKS=1
+    # - optional prebuilt-dist path via USE_PREBUILT_DIST=1
+    buildCommand: chmod +x scripts/production-build.sh && ./scripts/production-build.sh
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: TZ
+        value: America/Toronto
+      - key: SKIP_I18N_VALIDATION
+        value: "1"
+      - key: SKIP_I18N_COMPILE
+        value: "1"
+      - key: SKIP_BUILD_REPORTS
+        value: "1"
+      - key: VITE_SKIP_CIRCULAR_CHECK
+        value: "1"
+      - key: RUN_HEAVY_BUILD_TASKS
+        value: "0"
+      - key: USE_PREBUILT_DIST
+        value: "0"

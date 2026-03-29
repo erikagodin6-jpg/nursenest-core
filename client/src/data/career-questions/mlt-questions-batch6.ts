@@ -1,0 +1,1244 @@
+import type { CareerQuestion } from "./rrt-questions";
+
+export const mltQuestionsBatch6: CareerQuestion[] = [
+  {
+    id: "mlt-batch-301",
+    stem: "Which immunoglobulin class is most abundant in serum and provides the majority of antibody-based immunity against invading pathogens?",
+    options: ["IgA", "IgG", "IgM", "IgE"],
+    correctIndex: 1,
+    rationale: "IgG is the most abundant immunoglobulin in serum, comprising approximately 75-80% of total serum immunoglobulins. It is the primary antibody in the secondary immune response and can cross the placenta to provide passive immunity to the fetus.",
+    difficulty: 5,
+    category: "Immunology",
+    topic: "Immunoglobulin Classes"
+  },
+  {
+    id: "mlt-batch-302",
+    stem: "A patient presents with recurrent sinopulmonary infections and low serum IgA levels. Which condition is most likely?",
+    options: ["Common variable immunodeficiency", "Selective IgA deficiency", "X-linked agammaglobulinemia", "DiGeorge syndrome"],
+    correctIndex: 1,
+    rationale: "Selective IgA deficiency is the most common primary immunodeficiency, characterized by low or absent serum IgA with normal levels of other immunoglobulins. It often presents with recurrent sinopulmonary and gastrointestinal infections.",
+    difficulty: 5,
+    category: "Immunology",
+    topic: "Immunodeficiency Disorders"
+  },
+  {
+    id: "mlt-batch-303",
+    stem: "What is the principle of the enzyme-linked immunosorbent assay (ELISA)?",
+    options: [
+      "Radioactive isotopes label antigens for detection",
+      "Enzyme-labeled antibodies bind to antigens, producing a measurable color change",
+      "Fluorescent dyes directly stain cells for microscopy",
+      "Complement fixation causes cell lysis"
+    ],
+    correctIndex: 1,
+    rationale: "ELISA uses enzyme-labeled antibodies or antigens. When the enzyme substrate is added, a color change occurs proportional to the amount of analyte present. This is widely used for detecting antibodies, antigens, hormones, and other proteins.",
+    difficulty: 5,
+    category: "Immunology",
+    topic: "Serological Methods"
+  },
+  {
+    id: "mlt-batch-304",
+    stem: "Which complement pathway is activated by antigen-antibody complexes?",
+    options: ["Alternative pathway", "Lectin pathway", "Classical pathway", "Terminal pathway"],
+    correctIndex: 2,
+    rationale: "The classical complement pathway is activated by antigen-antibody complexes (IgG or IgM). C1q binds to the Fc region of antibodies, initiating the cascade. The alternative pathway is activated by microbial surfaces, and the lectin pathway by mannose-binding lectin.",
+    difficulty: 5,
+    category: "Immunology",
+    topic: "Complement System"
+  },
+  {
+    id: "mlt-batch-305",
+    stem: "In a direct antiglobulin test (DAT), what does a positive result indicate?",
+    options: [
+      "Free antibodies are present in the patient's serum",
+      "Antibodies or complement are bound to the surface of red blood cells in vivo",
+      "The patient has produced alloantibodies against donor cells",
+      "Complement levels are elevated in the serum"
+    ],
+    correctIndex: 1,
+    rationale: "A positive DAT indicates that antibodies (IgG) or complement (C3d) are already bound to the patient's red blood cells in vivo. This is seen in autoimmune hemolytic anemia, hemolytic disease of the fetus/newborn, and transfusion reactions.",
+    difficulty: 5,
+    category: "Immunology",
+    topic: "Antiglobulin Testing"
+  },
+  {
+    id: "mlt-batch-306",
+    stem: "Which type of hypersensitivity reaction is responsible for allergic asthma and anaphylaxis?",
+    options: ["Type I (immediate)", "Type II (cytotoxic)", "Type III (immune complex)", "Type IV (delayed)"],
+    correctIndex: 0,
+    rationale: "Type I hypersensitivity involves IgE-mediated reactions. Allergens cross-link IgE on mast cells and basophils, causing degranulation and release of histamine and other mediators. This results in rapid onset allergic reactions including asthma and anaphylaxis.",
+    difficulty: 5,
+    category: "Immunology",
+    topic: "Hypersensitivity Reactions"
+  },
+  {
+    id: "mlt-batch-307",
+    stem: "PCR amplification of a target DNA sequence requires all of the following EXCEPT:",
+    options: ["DNA polymerase", "Primers", "Reverse transcriptase", "Deoxynucleotide triphosphates (dNTPs)"],
+    correctIndex: 2,
+    rationale: "Standard PCR requires a thermostable DNA polymerase (Taq), forward and reverse primers, dNTPs, template DNA, and buffer with MgCl2. Reverse transcriptase is only needed in RT-PCR when converting RNA to cDNA before amplification.",
+    difficulty: 5,
+    category: "Molecular Diagnostics",
+    topic: "PCR Fundamentals"
+  },
+  {
+    id: "mlt-batch-308",
+    stem: "What is the purpose of the denaturation step in PCR?",
+    options: [
+      "To allow primers to anneal to the template",
+      "To separate double-stranded DNA into single strands",
+      "To extend the primers along the template",
+      "To degrade RNA contaminants"
+    ],
+    correctIndex: 1,
+    rationale: "Denaturation at 94-98°C separates double-stranded DNA into single strands, making the template accessible for primer annealing. This is typically the first step in each PCR cycle.",
+    difficulty: 5,
+    category: "Molecular Diagnostics",
+    topic: "PCR Fundamentals"
+  },
+  {
+    id: "mlt-batch-309",
+    stem: "A Western blot is used as a confirmatory test for HIV. What does this technique detect?",
+    options: [
+      "Viral RNA in the patient's blood",
+      "Specific antibodies against viral proteins separated by electrophoresis",
+      "Viral DNA integrated into the host genome",
+      "CD4+ T cell counts"
+    ],
+    correctIndex: 1,
+    rationale: "Western blot separates HIV viral proteins by gel electrophoresis and transfers them to a membrane. Patient serum is applied, and if specific antibodies are present, they bind to the viral proteins and are detected with enzyme-labeled secondary antibodies.",
+    difficulty: 4,
+    category: "Immunology",
+    topic: "Serological Methods"
+  },
+  {
+    id: "mlt-batch-310",
+    stem: "Which immunoglobulin is the first to be produced during a primary immune response?",
+    options: ["IgG", "IgA", "IgM", "IgD"],
+    correctIndex: 2,
+    rationale: "IgM is the first immunoglobulin produced during a primary immune response. It is a pentamer with 10 antigen-binding sites and is very efficient at agglutination and complement activation. IgG predominates in the secondary response.",
+    difficulty: 1,
+    category: "Immunology",
+    topic: "Immunoglobulin Classes"
+  },
+  {
+    id: "mlt-batch-311",
+    stem: "In flow cytometry, what is the purpose of the fluorescence-activated cell sorter (FACS)?",
+    options: [
+      "To amplify DNA from sorted cells",
+      "To physically separate cells based on their fluorescent labeling",
+      "To measure cell mass and density",
+      "To culture isolated cell populations"
+    ],
+    correctIndex: 1,
+    rationale: "FACS physically separates cells based on their fluorescent characteristics. Cells labeled with fluorescent antibodies pass through a laser beam, and based on fluorescence properties, the instrument sorts individual cells into different collection tubes.",
+    difficulty: 3,
+    category: "Immunology",
+    topic: "Flow Cytometry"
+  },
+  {
+    id: "mlt-batch-312",
+    stem: "Which molecular technique is used to detect specific RNA sequences and involves converting RNA to cDNA before amplification?",
+    options: ["Standard PCR", "RT-PCR", "Southern blot", "Northern blot"],
+    correctIndex: 1,
+    rationale: "RT-PCR (reverse transcription PCR) uses reverse transcriptase to convert RNA into complementary DNA (cDNA), which is then amplified by standard PCR. This is essential for detecting RNA viruses and measuring gene expression.",
+    difficulty: 4,
+    category: "Molecular Diagnostics",
+    topic: "RT-PCR"
+  },
+  {
+    id: "mlt-batch-313",
+    stem: "A laboratorian observes a speckled pattern on an ANA (antinuclear antibody) test by indirect immunofluorescence. Which autoimmune condition is most commonly associated with this pattern?",
+    options: ["Systemic lupus erythematosus", "Mixed connective tissue disease", "Drug-induced lupus", "Scleroderma"],
+    correctIndex: 1,
+    rationale: "A speckled ANA pattern is associated with antibodies to extractable nuclear antigens (ENA) such as anti-Sm, anti-RNP, anti-SSA, and anti-SSB. While seen in several conditions, it is most characteristic of mixed connective tissue disease (anti-RNP).",
+    difficulty: 3,
+    category: "Immunology",
+    topic: "Autoimmune Serology"
+  },
+  {
+    id: "mlt-batch-314",
+    stem: "What type of immunity is conferred when a patient receives preformed antibodies, such as immunoglobulin therapy?",
+    options: ["Active natural immunity", "Active artificial immunity", "Passive natural immunity", "Passive artificial immunity"],
+    correctIndex: 3,
+    rationale: "Passive artificial immunity involves receiving preformed antibodies through medical intervention such as immunoglobulin injections or antiserum. It provides immediate but temporary protection. Passive natural immunity occurs through maternal antibody transfer.",
+    difficulty: 1,
+    category: "Immunology",
+    topic: "Types of Immunity"
+  },
+  {
+    id: "mlt-batch-315",
+    stem: "In gel electrophoresis, which serum protein fraction migrates fastest toward the anode?",
+    options: ["Albumin", "Alpha-1 globulin", "Beta globulin", "Gamma globulin"],
+    correctIndex: 0,
+    rationale: "Albumin has the highest negative charge at physiological pH and therefore migrates fastest toward the positively charged anode in serum protein electrophoresis. Gamma globulins migrate slowest and are located closest to the cathode.",
+    difficulty: 4,
+    category: "Immunology",
+    topic: "Protein Electrophoresis"
+  },
+  {
+    id: "mlt-batch-316",
+    stem: "Which of the following is a characteristic of Type IV hypersensitivity reactions?",
+    options: [
+      "IgE-mediated mast cell degranulation",
+      "Antibody-dependent cell-mediated cytotoxicity",
+      "T-cell mediated delayed response occurring 48-72 hours after exposure",
+      "Immune complex deposition in blood vessel walls"
+    ],
+    correctIndex: 2,
+    rationale: "Type IV hypersensitivity is T-cell mediated and delayed, typically occurring 48-72 hours after antigen exposure. Examples include tuberculin skin test reactions, contact dermatitis, and transplant rejection. It does not involve antibodies.",
+    difficulty: 4,
+    category: "Immunology",
+    topic: "Hypersensitivity Reactions"
+  },
+  {
+    id: "mlt-batch-317",
+    stem: "A real-time PCR (qPCR) assay uses a fluorescent probe that is cleaved during amplification, releasing fluorescence. What is this probe called?",
+    options: ["Molecular beacon", "TaqMan probe", "SYBR Green", "Scorpion primer"],
+    correctIndex: 1,
+    rationale: "TaqMan probes (hydrolysis probes) contain a fluorophore and quencher. During PCR extension, the 5' exonuclease activity of Taq polymerase cleaves the probe, separating the fluorophore from the quencher and generating a fluorescent signal proportional to amplification.",
+    difficulty: 3,
+    category: "Molecular Diagnostics",
+    topic: "Real-Time PCR"
+  },
+  {
+    id: "mlt-batch-318",
+    stem: "Which marker is most commonly used to identify T-helper cells by flow cytometry?",
+    options: ["CD3", "CD4", "CD8", "CD19"],
+    correctIndex: 1,
+    rationale: "CD4 is the surface marker for T-helper cells. CD3 is a pan-T cell marker found on all T cells. CD8 identifies cytotoxic T cells. CD19 is a B cell marker. CD4 counts are critical for monitoring HIV/AIDS progression.",
+    difficulty: 1,
+    category: "Immunology",
+    topic: "Flow Cytometry"
+  },
+  {
+    id: "mlt-batch-319",
+    stem: "What is the function of restriction enzymes in molecular diagnostics?",
+    options: [
+      "They synthesize new DNA strands",
+      "They cut DNA at specific recognition sequences",
+      "They join DNA fragments together",
+      "They convert RNA to DNA"
+    ],
+    correctIndex: 1,
+    rationale: "Restriction enzymes (restriction endonucleases) recognize specific palindromic DNA sequences and cut the DNA at those sites. They are essential tools in molecular biology for cloning, RFLP analysis, and genetic testing.",
+    difficulty: 4,
+    category: "Molecular Diagnostics",
+    topic: "Restriction Enzymes"
+  },
+  {
+    id: "mlt-batch-320",
+    stem: "Which condition is characterized by the presence of anti-double-stranded DNA (anti-dsDNA) antibodies?",
+    options: ["Rheumatoid arthritis", "Systemic lupus erythematosus", "Hashimoto thyroiditis", "Myasthenia gravis"],
+    correctIndex: 1,
+    rationale: "Anti-dsDNA antibodies are highly specific for systemic lupus erythematosus (SLE) and correlate with disease activity, particularly lupus nephritis. They are part of the diagnostic criteria for SLE.",
+    difficulty: 4,
+    category: "Immunology",
+    topic: "Autoimmune Serology"
+  },
+  {
+    id: "mlt-batch-321",
+    stem: "In Southern blotting, what type of molecule is being detected?",
+    options: ["RNA", "DNA", "Protein", "Lipid"],
+    correctIndex: 1,
+    rationale: "Southern blotting detects specific DNA sequences. DNA is separated by gel electrophoresis, transferred to a membrane, and hybridized with a labeled probe. Northern blotting detects RNA, and Western blotting detects proteins.",
+    difficulty: 1,
+    category: "Molecular Diagnostics",
+    topic: "Blotting Techniques"
+  },
+  {
+    id: "mlt-batch-322",
+    stem: "A monoclonal gammopathy seen on serum protein electrophoresis as a sharp, narrow band in the gamma region is called:",
+    options: ["Polyclonal hypergammaglobulinemia", "M-spike", "Hypoalbuminemia", "Beta-gamma bridging"],
+    correctIndex: 1,
+    rationale: "An M-spike (monoclonal spike or M-protein) appears as a sharp, discrete band in the gamma region of serum protein electrophoresis. It indicates monoclonal proliferation of a single clone of plasma cells, as seen in multiple myeloma or MGUS.",
+    difficulty: 3,
+    category: "Immunology",
+    topic: "Protein Electrophoresis"
+  },
+  {
+    id: "mlt-batch-323",
+    stem: "Which technique is used for prenatal detection of chromosomal abnormalities by analyzing fetal DNA from amniotic fluid?",
+    options: ["ELISA", "Flow cytometry", "Fluorescence in situ hybridization (FISH)", "Nephelometry"],
+    correctIndex: 2,
+    rationale: "FISH uses fluorescent-labeled probes that hybridize to specific chromosomal regions, allowing rapid detection of aneuploidies (trisomy 21, 18, 13) and other chromosomal abnormalities from amniotic fluid or chorionic villus samples.",
+    difficulty: 3,
+    category: "Molecular Diagnostics",
+    topic: "Cytogenetics"
+  },
+  {
+    id: "mlt-batch-324",
+    stem: "What is the role of antigen-presenting cells (APCs) in the immune response?",
+    options: [
+      "They directly kill infected cells through cytotoxic mechanisms",
+      "They process and display antigens on MHC molecules to activate T cells",
+      "They produce antibodies against foreign antigens",
+      "They release histamine during allergic reactions"
+    ],
+    correctIndex: 1,
+    rationale: "APCs (dendritic cells, macrophages, B cells) process antigens and present them on MHC class II molecules to CD4+ T-helper cells, initiating the adaptive immune response. This is essential for T cell activation and subsequent immune cascade.",
+    difficulty: 4,
+    category: "Immunology",
+    topic: "Cellular Immunity"
+  },
+  {
+    id: "mlt-batch-325",
+    stem: "A laboratory performs next-generation sequencing (NGS) on a tumor biopsy. What advantage does NGS offer over Sanger sequencing?",
+    options: [
+      "NGS can only sequence one gene at a time",
+      "NGS allows massively parallel sequencing of millions of fragments simultaneously",
+      "NGS uses chain-terminating dideoxynucleotides",
+      "NGS is less sensitive than Sanger sequencing"
+    ],
+    correctIndex: 1,
+    rationale: "NGS enables massively parallel sequencing, allowing millions of DNA fragments to be sequenced simultaneously. This makes it possible to sequence entire genomes, exomes, or large gene panels in a single run, with higher throughput and lower cost per base than Sanger sequencing.",
+    difficulty: 3,
+    category: "Molecular Diagnostics",
+    topic: "Next-Generation Sequencing"
+  },
+  {
+    id: "mlt-batch-326",
+    stem: "Which immunoglobulin class is primarily found in mucosal secretions such as saliva, tears, and breast milk?",
+    options: ["IgG", "IgM", "IgA", "IgD"],
+    correctIndex: 2,
+    rationale: "Secretory IgA (sIgA) is the predominant immunoglobulin in mucosal secretions. It exists as a dimer joined by a J chain and secretory component, which protects it from proteolytic degradation. It provides mucosal immunity against pathogens.",
+    difficulty: 1,
+    category: "Immunology",
+    topic: "Immunoglobulin Classes"
+  },
+  {
+    id: "mlt-batch-327",
+    stem: "In a sandwich ELISA, the antigen is captured between which two components?",
+    options: [
+      "Two identical enzymes",
+      "A capture antibody and an enzyme-labeled detection antibody",
+      "Two antigens of different specificity",
+      "A fluorescent dye and a quencher"
+    ],
+    correctIndex: 1,
+    rationale: "In sandwich ELISA, a capture antibody is immobilized on the plate, which binds the target antigen. An enzyme-labeled detection antibody then binds to a different epitope on the captured antigen, creating a 'sandwich.' Substrate addition produces a measurable signal.",
+    difficulty: 3,
+    category: "Immunology",
+    topic: "Serological Methods"
+  },
+  {
+    id: "mlt-batch-328",
+    stem: "Which molecular technique uses labeled nucleic acid probes to detect specific sequences on intact chromosomes or tissue sections?",
+    options: ["PCR", "FISH", "Western blot", "Gel electrophoresis"],
+    correctIndex: 1,
+    rationale: "Fluorescence in situ hybridization (FISH) uses fluorescent-labeled DNA probes that hybridize to complementary sequences on chromosomes or tissue sections. It allows visualization of specific genetic abnormalities in their chromosomal context.",
+    difficulty: 3,
+    category: "Molecular Diagnostics",
+    topic: "FISH"
+  },
+  {
+    id: "mlt-batch-329",
+    stem: "Anti-cyclic citrullinated peptide (anti-CCP) antibodies are highly specific for which autoimmune disease?",
+    options: ["Systemic lupus erythematosus", "Rheumatoid arthritis", "Sjögren syndrome", "Polymyositis"],
+    correctIndex: 1,
+    rationale: "Anti-CCP antibodies have approximately 95% specificity for rheumatoid arthritis (RA). They can be detected early in the disease and are associated with more aggressive, erosive disease. They are more specific than rheumatoid factor for RA diagnosis.",
+    difficulty: 3,
+    category: "Immunology",
+    topic: "Autoimmune Serology"
+  },
+  {
+    id: "mlt-batch-330",
+    stem: "What is the annealing temperature in PCR critical for?",
+    options: [
+      "Denaturing the template DNA",
+      "Determining primer specificity and binding to the template",
+      "Activating the DNA polymerase",
+      "Degrading any RNA present in the sample"
+    ],
+    correctIndex: 1,
+    rationale: "The annealing temperature determines how specifically primers bind to the template DNA. Too low a temperature allows non-specific binding and spurious products; too high prevents primer binding entirely. The optimal annealing temperature is typically 5°C below the primer melting temperature (Tm).",
+    difficulty: 3,
+    category: "Molecular Diagnostics",
+    topic: "PCR Optimization"
+  },
+  {
+    id: "mlt-batch-331",
+    stem: "Which cells are the primary effectors of the innate immune system and are the first to arrive at sites of infection?",
+    options: ["B lymphocytes", "Neutrophils", "Plasma cells", "Memory T cells"],
+    correctIndex: 1,
+    rationale: "Neutrophils are the most abundant white blood cells and primary effectors of innate immunity. They are the first cells to migrate to sites of infection through chemotaxis and kill pathogens through phagocytosis and release of antimicrobial granules.",
+    difficulty: 1,
+    category: "Immunology",
+    topic: "Innate Immunity"
+  },
+  {
+    id: "mlt-batch-332",
+    stem: "A patient with celiac disease would most likely have elevated levels of which antibody?",
+    options: ["Anti-Smith (anti-Sm)", "Anti-tissue transglutaminase (anti-tTG) IgA", "Anti-mitochondrial antibody", "Anti-centromere antibody"],
+    correctIndex: 1,
+    rationale: "Anti-tissue transglutaminase IgA antibodies are the most sensitive and specific serological marker for celiac disease. They are recommended as the first-line screening test. Anti-Sm is for SLE, anti-mitochondrial for primary biliary cholangitis.",
+    difficulty: 3,
+    category: "Immunology",
+    topic: "Autoimmune Serology"
+  },
+  {
+    id: "mlt-batch-333",
+    stem: "What does SYBR Green detect in real-time PCR?",
+    options: [
+      "Only specific target sequences",
+      "Any double-stranded DNA present in the reaction",
+      "Single-stranded RNA only",
+      "Protein-DNA interactions"
+    ],
+    correctIndex: 1,
+    rationale: "SYBR Green is a fluorescent dye that intercalates into any double-stranded DNA, emitting fluorescence when bound. It is less specific than probe-based methods (TaqMan) because it detects all dsDNA, including non-specific products and primer dimers.",
+    difficulty: 3,
+    category: "Molecular Diagnostics",
+    topic: "Real-Time PCR"
+  },
+  {
+    id: "mlt-batch-334",
+    stem: "Which type of transplant rejection occurs within minutes to hours and is mediated by preformed antibodies?",
+    options: ["Hyperacute rejection", "Acute rejection", "Chronic rejection", "Graft-versus-host disease"],
+    correctIndex: 0,
+    rationale: "Hyperacute rejection occurs within minutes to hours after transplantation due to preformed donor-specific antibodies (e.g., ABO incompatibility). It causes rapid thrombosis and graft necrosis. Pre-transplant crossmatching helps prevent this type of rejection.",
+    difficulty: 3,
+    category: "Immunology",
+    topic: "Transplant Immunology"
+  },
+  {
+    id: "mlt-batch-335",
+    stem: "In microarray technology, what is hybridized to the array surface?",
+    options: [
+      "Proteins from patient serum",
+      "Labeled nucleic acid from the sample that binds to immobilized probes",
+      "Restriction enzymes for DNA digestion",
+      "Fluorescent antibodies for protein detection"
+    ],
+    correctIndex: 1,
+    rationale: "DNA microarrays have thousands of immobilized probes on a solid surface. Labeled nucleic acid (cDNA or cRNA) from the sample hybridizes to complementary probes, allowing simultaneous analysis of expression levels of thousands of genes.",
+    difficulty: 3,
+    category: "Molecular Diagnostics",
+    topic: "Microarray Technology"
+  },
+  {
+    id: "mlt-batch-336",
+    stem: "Which complement component is common to all three activation pathways and is considered the central component of the complement system?",
+    options: ["C1", "C3", "C5", "C9"],
+    correctIndex: 1,
+    rationale: "C3 is the central component where all three complement pathways (classical, alternative, and lectin) converge. C3 convertase cleaves C3 into C3a (anaphylatoxin) and C3b (opsonin), which continues the cascade leading to the membrane attack complex.",
+    difficulty: 3,
+    category: "Immunology",
+    topic: "Complement System"
+  },
+  {
+    id: "mlt-batch-337",
+    stem: "A laboratorian needs to quantify viral load in an HIV-positive patient. Which molecular method is most appropriate?",
+    options: ["Southern blot", "Western blot", "Real-time RT-PCR", "FISH"],
+    correctIndex: 2,
+    rationale: "Real-time RT-PCR (quantitative RT-PCR) is the standard method for quantifying HIV viral load. It converts viral RNA to cDNA via reverse transcription and then amplifies and quantifies the target in real time, providing accurate viral copy numbers.",
+    difficulty: 3,
+    category: "Molecular Diagnostics",
+    topic: "Viral Load Testing"
+  },
+  {
+    id: "mlt-batch-338",
+    stem: "Natural killer (NK) cells are part of which branch of the immune system?",
+    options: ["Adaptive humoral immunity", "Adaptive cellular immunity", "Innate immunity", "Passive immunity"],
+    correctIndex: 2,
+    rationale: "NK cells are part of the innate immune system. They can kill virus-infected cells and tumor cells without prior sensitization or MHC restriction. They recognize target cells through a balance of activating and inhibitory receptors.",
+    difficulty: 1,
+    category: "Immunology",
+    topic: "Innate Immunity"
+  },
+  {
+    id: "mlt-batch-339",
+    stem: "What is the purpose of a melting curve analysis in real-time PCR?",
+    options: [
+      "To determine the size of the PCR product",
+      "To verify the specificity of the amplified product based on its melting temperature",
+      "To quantify the initial amount of template",
+      "To separate DNA fragments by size"
+    ],
+    correctIndex: 1,
+    rationale: "Melting curve analysis determines the specificity of PCR products by gradually increasing temperature and monitoring fluorescence changes. Each product has a characteristic melting temperature (Tm). Multiple peaks indicate non-specific products or primer dimers.",
+    difficulty: 3,
+    category: "Molecular Diagnostics",
+    topic: "Real-Time PCR"
+  },
+  {
+    id: "mlt-batch-340",
+    stem: "Which autoantibody is most specific for limited cutaneous systemic sclerosis (CREST syndrome)?",
+    options: ["Anti-Scl-70", "Anti-centromere", "Anti-Jo-1", "Anti-histone"],
+    correctIndex: 1,
+    rationale: "Anti-centromere antibodies are highly specific for limited cutaneous systemic sclerosis (CREST syndrome: Calcinosis, Raynaud phenomenon, Esophageal dysmotility, Sclerodactyly, Telangiectasia). Anti-Scl-70 is associated with diffuse systemic sclerosis.",
+    difficulty: 3,
+    category: "Immunology",
+    topic: "Autoimmune Serology"
+  },
+  {
+    id: "mlt-batch-341",
+    stem: "In molecular diagnostics, what does the term 'amplicon' refer to?",
+    options: [
+      "The original template DNA",
+      "The product of PCR amplification",
+      "The primer used in the reaction",
+      "The fluorescent label on the probe"
+    ],
+    correctIndex: 1,
+    rationale: "An amplicon is the specific DNA fragment produced by PCR amplification, defined by the primer binding sites. It is the targeted product of the reaction and its size is determined by the distance between the forward and reverse primers on the template.",
+    difficulty: 1,
+    category: "Molecular Diagnostics",
+    topic: "PCR Fundamentals"
+  },
+  {
+    id: "mlt-batch-342",
+    stem: "Which class of MHC molecules presents endogenous antigens to CD8+ cytotoxic T cells?",
+    options: ["MHC class I", "MHC class II", "MHC class III", "Beta-2 microglobulin alone"],
+    correctIndex: 0,
+    rationale: "MHC class I molecules are expressed on virtually all nucleated cells and present endogenous (intracellular) antigens to CD8+ cytotoxic T cells. MHC class II molecules are expressed on antigen-presenting cells and present exogenous antigens to CD4+ T-helper cells.",
+    difficulty: 3,
+    category: "Immunology",
+    topic: "MHC/HLA System"
+  },
+  {
+    id: "mlt-batch-343",
+    stem: "A laboratory is validating a new molecular assay. The limit of detection (LOD) refers to:",
+    options: [
+      "The highest concentration that can be accurately measured",
+      "The lowest concentration of analyte that can be reliably detected",
+      "The range within which results are reproducible",
+      "The percentage of true positive results"
+    ],
+    correctIndex: 1,
+    rationale: "The limit of detection (LOD) is the lowest concentration of analyte that can be reliably detected (typically with 95% probability) but not necessarily quantified. It is a critical validation parameter for molecular assays, especially for detecting low-level pathogens.",
+    difficulty: 3,
+    category: "Molecular Diagnostics",
+    topic: "Assay Validation"
+  },
+  {
+    id: "mlt-batch-344",
+    stem: "Immunofixation electrophoresis (IFE) is used to:",
+    options: [
+      "Quantify total serum protein",
+      "Identify the type of monoclonal immunoglobulin (heavy and light chain)",
+      "Measure complement levels",
+      "Detect anti-nuclear antibodies"
+    ],
+    correctIndex: 1,
+    rationale: "IFE identifies and characterizes monoclonal proteins by determining the heavy chain class (IgG, IgA, IgM) and light chain type (kappa or lambda). It is more sensitive and specific than standard protein electrophoresis for detecting monoclonal gammopathies.",
+    difficulty: 3,
+    category: "Immunology",
+    topic: "Protein Electrophoresis"
+  },
+  {
+    id: "mlt-batch-345",
+    stem: "Which nucleic acid extraction method uses silica-based membrane columns to bind DNA?",
+    options: ["Phenol-chloroform extraction", "Spin column extraction", "Cesium chloride gradient", "Alkaline lysis"],
+    correctIndex: 1,
+    rationale: "Spin column extraction uses silica membranes that selectively bind DNA in the presence of chaotropic salts. After washing to remove contaminants, purified DNA is eluted with a low-salt buffer. This method is widely used for its simplicity and consistency.",
+    difficulty: 3,
+    category: "Molecular Diagnostics",
+    topic: "Nucleic Acid Extraction"
+  },
+  {
+    id: "mlt-batch-346",
+    stem: "The indirect antiglobulin test (IAT) is primarily used to detect:",
+    options: [
+      "Antibodies bound to red blood cells in vivo",
+      "Free antibodies in the patient's serum that can bind to red blood cells",
+      "Complement components in serum",
+      "White blood cell antibodies"
+    ],
+    correctIndex: 1,
+    rationale: "The IAT detects free (unbound) antibodies in the patient's serum by incubating the serum with reagent red blood cells in vitro. If antibodies bind, the addition of anti-human globulin causes agglutination. This is used in antibody screening and crossmatching.",
+    difficulty: 2,
+    category: "Immunology",
+    topic: "Antiglobulin Testing"
+  },
+  {
+    id: "mlt-batch-347",
+    stem: "CRISPR-Cas9 technology is used in molecular diagnostics primarily for:",
+    options: [
+      "Protein purification",
+      "Targeted gene editing and detection of specific nucleic acid sequences",
+      "Culturing bacterial colonies",
+      "Serum protein separation"
+    ],
+    correctIndex: 1,
+    rationale: "CRISPR-Cas9 is a revolutionary gene-editing tool that uses guide RNA to direct the Cas9 nuclease to specific DNA sequences for cutting. In diagnostics, CRISPR-based methods like SHERLOCK and DETECTR enable rapid, highly specific detection of pathogen nucleic acids.",
+    difficulty: 4,
+    category: "Molecular Diagnostics",
+    topic: "CRISPR Technology"
+  },
+  {
+    id: "mlt-batch-348",
+    stem: "Which immunoglobulin is responsible for mediating allergic reactions by binding to mast cells and basophils?",
+    options: ["IgA", "IgG", "IgM", "IgE"],
+    correctIndex: 3,
+    rationale: "IgE binds to high-affinity Fc receptors (FcεRI) on mast cells and basophils. When allergens cross-link bound IgE molecules, it triggers degranulation and release of histamine, leukotrienes, and other inflammatory mediators, causing allergic symptoms.",
+    difficulty: 1,
+    category: "Immunology",
+    topic: "Immunoglobulin Classes"
+  },
+  {
+    id: "mlt-batch-349",
+    stem: "What is the purpose of an internal control in a molecular diagnostic assay?",
+    options: [
+      "To increase the sensitivity of the assay",
+      "To monitor for PCR inhibition and ensure the assay performed correctly",
+      "To identify the specific pathogen present",
+      "To calibrate the instrument"
+    ],
+    correctIndex: 1,
+    rationale: "An internal control is a known nucleic acid target added to each sample or inherently present. It monitors the entire analytical process from extraction through amplification, detecting inhibition or assay failure that could cause false-negative results.",
+    difficulty: 3,
+    category: "Molecular Diagnostics",
+    topic: "Quality Control"
+  },
+  {
+    id: "mlt-batch-350",
+    stem: "Nephelometry measures immunoglobulin levels by detecting:",
+    options: [
+      "Fluorescence emitted by labeled antibodies",
+      "Light scattered by antigen-antibody complexes in solution",
+      "Color change from enzyme-substrate reactions",
+      "Radioactive decay from labeled antigens"
+    ],
+    correctIndex: 1,
+    rationale: "Nephelometry measures the intensity of light scattered by antigen-antibody complexes formed in solution. The amount of scattered light is proportional to the concentration of the analyte. It is commonly used to quantify immunoglobulins, complement components, and acute phase proteins.",
+    difficulty: 2,
+    category: "Immunology",
+    topic: "Serological Methods"
+  },
+  {
+    id: "mlt-batch-351",
+    stem: "A homogeneous ANA pattern on indirect immunofluorescence is associated with antibodies to which nuclear component?",
+    options: ["Extractable nuclear antigens", "dsDNA and histones", "Nucleolar RNA", "Centromere proteins"],
+    correctIndex: 1,
+    rationale: "A homogeneous (diffuse) ANA pattern is associated with antibodies against dsDNA and histones. This pattern is commonly seen in systemic lupus erythematosus (anti-dsDNA) and drug-induced lupus (anti-histone antibodies).",
+    difficulty: 3,
+    category: "Immunology",
+    topic: "Autoimmune Serology"
+  },
+  {
+    id: "mlt-batch-352",
+    stem: "Which step in nucleic acid extraction removes proteins and cellular debris from the sample?",
+    options: ["Lysis", "Precipitation", "Purification/washing", "Elution"],
+    correctIndex: 2,
+    rationale: "The purification/washing step removes proteins, lipids, and other contaminants from the nucleic acid. In column-based methods, wash buffers containing ethanol remove impurities while DNA remains bound to the silica membrane. In organic methods, phenol-chloroform partitions proteins away.",
+    difficulty: 2,
+    category: "Molecular Diagnostics",
+    topic: "Nucleic Acid Extraction"
+  },
+  {
+    id: "mlt-batch-353",
+    stem: "Opsonization enhances phagocytosis by:",
+    options: [
+      "Directly killing the pathogen",
+      "Coating the pathogen with molecules like C3b or IgG that are recognized by phagocyte receptors",
+      "Inhibiting the pathogen's ability to replicate",
+      "Activating the coagulation cascade"
+    ],
+    correctIndex: 1,
+    rationale: "Opsonization coats pathogens with opsonins (C3b, IgG, mannose-binding lectin) that are recognized by specific receptors on phagocytes (complement receptors, Fc receptors). This greatly enhances phagocytic uptake and killing of the pathogen.",
+    difficulty: 2,
+    category: "Immunology",
+    topic: "Innate Immunity"
+  },
+  {
+    id: "mlt-batch-354",
+    stem: "Digital PCR differs from conventional qPCR in that it:",
+    options: [
+      "Uses gel electrophoresis for detection",
+      "Partitions the sample into thousands of individual reactions for absolute quantification",
+      "Requires radioactive labels",
+      "Can only detect RNA targets"
+    ],
+    correctIndex: 1,
+    rationale: "Digital PCR partitions a sample into thousands to millions of individual reactions. After PCR, each partition is scored as positive or negative. Poisson statistics are applied to determine absolute copy numbers without requiring standard curves, providing superior precision for low-abundance targets.",
+    difficulty: 4,
+    category: "Molecular Diagnostics",
+    topic: "Digital PCR"
+  },
+  {
+    id: "mlt-batch-355",
+    stem: "Which cytokine is primarily responsible for inducing fever as part of the acute phase response?",
+    options: ["IL-4", "IL-10", "IL-1", "IL-5"],
+    correctIndex: 2,
+    rationale: "IL-1 (interleukin-1) is a major pro-inflammatory cytokine that acts on the hypothalamus to induce fever. Along with TNF-alpha and IL-6, it is a key mediator of the acute phase response, stimulating hepatic production of acute phase proteins.",
+    difficulty: 2,
+    category: "Immunology",
+    topic: "Cytokines"
+  },
+  {
+    id: "mlt-batch-356",
+    stem: "A multiplex PCR assay differs from a standard PCR in that it:",
+    options: [
+      "Uses only one primer pair per reaction",
+      "Amplifies multiple target sequences simultaneously in a single reaction",
+      "Does not require a thermal cycler",
+      "Only works with RNA templates"
+    ],
+    correctIndex: 1,
+    rationale: "Multiplex PCR uses multiple primer pairs in a single reaction to simultaneously amplify several target sequences. This is useful for detecting multiple pathogens, screening for multiple mutations, or performing multiple genotyping reactions in one tube.",
+    difficulty: 2,
+    category: "Molecular Diagnostics",
+    topic: "PCR Variants"
+  },
+  {
+    id: "mlt-batch-357",
+    stem: "In immunology, what is the difference between sensitivity and specificity of an antibody?",
+    options: [
+      "Sensitivity refers to antibody concentration; specificity refers to antibody class",
+      "Sensitivity is the ability to detect true positives; specificity is the ability to correctly identify true negatives",
+      "Both terms refer to the same immunological concept",
+      "Sensitivity is how fast antibodies bind; specificity is how strongly they bind"
+    ],
+    correctIndex: 1,
+    rationale: "Sensitivity (true positive rate) measures the assay's ability to correctly identify individuals with the condition. Specificity (true negative rate) measures its ability to correctly identify those without. High sensitivity minimizes false negatives; high specificity minimizes false positives.",
+    difficulty: 3,
+    category: "Immunology",
+    topic: "Assay Performance"
+  },
+  {
+    id: "mlt-batch-358",
+    stem: "Which mutation detection method involves using short synthetic oligonucleotides to probe for specific point mutations?",
+    options: ["Allele-specific oligonucleotide (ASO) hybridization", "Southern blotting", "Gel electrophoresis", "Cell culture"],
+    correctIndex: 0,
+    rationale: "ASO hybridization uses short synthetic oligonucleotide probes designed to match normal or mutant sequences. Under stringent conditions, the probe only hybridizes to its perfectly complementary sequence, enabling detection of specific point mutations.",
+    difficulty: 4,
+    category: "Molecular Diagnostics",
+    topic: "Mutation Detection"
+  },
+  {
+    id: "mlt-batch-359",
+    stem: "C-reactive protein (CRP) is an acute phase reactant produced by the liver in response to:",
+    options: ["Elevated blood glucose", "IL-6 and other pro-inflammatory cytokines", "Decreased albumin levels", "Increased platelet production"],
+    correctIndex: 1,
+    rationale: "CRP is produced by hepatocytes primarily in response to IL-6. It is a sensitive but non-specific marker of inflammation, infection, and tissue damage. CRP activates complement and enhances phagocytosis by opsonizing pathogens.",
+    difficulty: 1,
+    category: "Immunology",
+    topic: "Acute Phase Reactants"
+  },
+  {
+    id: "mlt-batch-360",
+    stem: "Sanger sequencing uses which modified nucleotides to terminate DNA chain elongation?",
+    options: [
+      "Ribonucleotides",
+      "Dideoxynucleotide triphosphates (ddNTPs)",
+      "Locked nucleic acids",
+      "Peptide nucleic acids"
+    ],
+    correctIndex: 1,
+    rationale: "Sanger sequencing uses fluorescently labeled ddNTPs that lack the 3'-OH group needed for phosphodiester bond formation. When incorporated, they terminate chain elongation, producing fragments of different lengths that reveal the DNA sequence.",
+    difficulty: 2,
+    category: "Molecular Diagnostics",
+    topic: "DNA Sequencing"
+  },
+  {
+    id: "mlt-batch-361",
+    stem: "Which HLA (human leukocyte antigen) class is most important for matching in kidney transplantation?",
+    options: ["HLA-A, B, and DR", "HLA-C only", "HLA-E and F", "HLA-G only"],
+    correctIndex: 0,
+    rationale: "HLA-A, HLA-B (class I), and HLA-DR (class II) are the most important antigens matched in kidney transplantation. Matching at these loci significantly improves graft survival and reduces rejection risk. HLA-DR matching has the greatest impact on outcomes.",
+    difficulty: 3,
+    category: "Immunology",
+    topic: "Transplant Immunology"
+  },
+  {
+    id: "mlt-batch-362",
+    stem: "What is the function of a housekeeping gene in gene expression studies using RT-qPCR?",
+    options: [
+      "It serves as the target gene being measured",
+      "It acts as an endogenous reference for normalization of expression data",
+      "It is the gene responsible for the disease being studied",
+      "It prevents contamination in the PCR reaction"
+    ],
+    correctIndex: 1,
+    rationale: "Housekeeping genes (e.g., GAPDH, beta-actin) are constitutively expressed at relatively constant levels across different tissues and conditions. They serve as endogenous references to normalize target gene expression data, controlling for variations in RNA quality and quantity.",
+    difficulty: 3,
+    category: "Molecular Diagnostics",
+    topic: "Gene Expression Analysis"
+  },
+  {
+    id: "mlt-batch-363",
+    stem: "Which component of the membrane attack complex (MAC) forms pores in the target cell membrane?",
+    options: ["C3b", "C5a", "C5b-9 complex", "C1q"],
+    correctIndex: 2,
+    rationale: "The membrane attack complex (MAC) consists of C5b, C6, C7, C8, and multiple C9 molecules. C9 polymerizes to form a transmembrane pore in the target cell membrane, leading to osmotic lysis and cell death.",
+    difficulty: 3,
+    category: "Immunology",
+    topic: "Complement System"
+  },
+  {
+    id: "mlt-batch-364",
+    stem: "Bisulfite sequencing is used in molecular diagnostics to analyze:",
+    options: ["DNA copy number variations", "DNA methylation patterns", "mRNA expression levels", "Protein folding patterns"],
+    correctIndex: 1,
+    rationale: "Bisulfite treatment converts unmethylated cytosines to uracil while methylated cytosines remain unchanged. Subsequent sequencing reveals the methylation pattern. This is important in cancer diagnostics where aberrant DNA methylation is a common epigenetic alteration.",
+    difficulty: 4,
+    category: "Molecular Diagnostics",
+    topic: "Epigenetics"
+  },
+  {
+    id: "mlt-batch-365",
+    stem: "Anti-mitochondrial antibodies (AMA) are the hallmark serological marker for which condition?",
+    options: ["Autoimmune hepatitis", "Primary biliary cholangitis", "Systemic lupus erythematosus", "Celiac disease"],
+    correctIndex: 1,
+    rationale: "Anti-mitochondrial antibodies, particularly against the E2 component of pyruvate dehydrogenase complex (PDC-E2), are found in over 90% of patients with primary biliary cholangitis (formerly primary biliary cirrhosis) and are highly specific for this condition.",
+    difficulty: 3,
+    category: "Immunology",
+    topic: "Autoimmune Serology"
+  },
+  {
+    id: "mlt-batch-366",
+    stem: "Which of the following best describes the principle of loop-mediated isothermal amplification (LAMP)?",
+    options: [
+      "DNA amplification at a constant temperature using strand-displacing polymerase and 4-6 primers",
+      "DNA amplification using thermal cycling like standard PCR",
+      "RNA amplification requiring reverse transcriptase at varying temperatures",
+      "Protein amplification using enzyme cascades"
+    ],
+    correctIndex: 0,
+    rationale: "LAMP amplifies DNA at a constant temperature (typically 60-65°C) using a strand-displacing DNA polymerase (Bst) and 4-6 primers. It is rapid, highly sensitive, and suitable for point-of-care testing since it does not require a thermal cycler.",
+    difficulty: 4,
+    category: "Molecular Diagnostics",
+    topic: "Isothermal Amplification"
+  },
+  {
+    id: "mlt-batch-367",
+    stem: "Toll-like receptors (TLRs) are components of which immune system?",
+    options: ["Adaptive humoral immunity", "Adaptive cellular immunity", "Innate immunity", "Passive immunity"],
+    correctIndex: 2,
+    rationale: "TLRs are pattern recognition receptors (PRRs) of the innate immune system. They recognize pathogen-associated molecular patterns (PAMPs) on microorganisms, triggering signaling cascades that activate inflammatory responses and help initiate adaptive immunity.",
+    difficulty: 2,
+    category: "Immunology",
+    topic: "Innate Immunity"
+  },
+  {
+    id: "mlt-batch-368",
+    stem: "What is the Ct (cycle threshold) value in real-time PCR?",
+    options: [
+      "The total number of cycles in the PCR program",
+      "The cycle at which fluorescence exceeds the background threshold, inversely proportional to initial template amount",
+      "The temperature at which DNA denatures",
+      "The number of primer pairs used"
+    ],
+    correctIndex: 1,
+    rationale: "The Ct value is the PCR cycle number at which the fluorescent signal crosses the set threshold above background. Lower Ct values indicate higher initial template concentrations, while higher Ct values indicate lower template amounts. This is the basis for quantification in qPCR.",
+    difficulty: 2,
+    category: "Molecular Diagnostics",
+    topic: "Real-Time PCR"
+  },
+  {
+    id: "mlt-batch-369",
+    stem: "Which immunoglobulin class can cross the placenta and provide passive immunity to the fetus?",
+    options: ["IgA", "IgM", "IgG", "IgE"],
+    correctIndex: 2,
+    rationale: "IgG is the only immunoglobulin class that crosses the placenta via neonatal Fc receptor (FcRn) transport. This provides the fetus and newborn with passive immunity during the first few months of life until the infant's own immune system matures.",
+    difficulty: 1,
+    category: "Immunology",
+    topic: "Immunoglobulin Classes"
+  },
+  {
+    id: "mlt-batch-370",
+    stem: "Capillary electrophoresis in molecular diagnostics is used for:",
+    options: [
+      "Growing cell cultures",
+      "Separating DNA fragments by size for fragment analysis and sequencing",
+      "Measuring enzyme activity",
+      "Culturing bacteria"
+    ],
+    correctIndex: 1,
+    rationale: "Capillary electrophoresis separates DNA fragments by size through a polymer-filled capillary under an electric field. It is used for Sanger sequencing readouts, microsatellite analysis, MLPA, and fragment analysis with high resolution and automated detection.",
+    difficulty: 3,
+    category: "Molecular Diagnostics",
+    topic: "Electrophoresis"
+  },
+  {
+    id: "mlt-batch-371",
+    stem: "Type II hypersensitivity reactions involve:",
+    options: [
+      "IgE-mediated mast cell degranulation",
+      "Antibody-mediated destruction of cells bearing foreign antigens",
+      "T-cell mediated delayed reactions",
+      "Immune complex deposition in tissues"
+    ],
+    correctIndex: 1,
+    rationale: "Type II (cytotoxic) hypersensitivity involves IgG or IgM antibodies directed against antigens on cell surfaces or extracellular matrix. Cell destruction occurs through complement activation, ADCC, or phagocytosis. Examples include hemolytic transfusion reactions and autoimmune hemolytic anemia.",
+    difficulty: 2,
+    category: "Immunology",
+    topic: "Hypersensitivity Reactions"
+  },
+  {
+    id: "mlt-batch-372",
+    stem: "Which molecular method is used to detect chromosomal translocations such as BCR-ABL in chronic myeloid leukemia?",
+    options: ["Urine dipstick", "RT-PCR", "Gram stain", "Culture and sensitivity"],
+    correctIndex: 1,
+    rationale: "RT-PCR detects the BCR-ABL fusion transcript resulting from the t(9;22) Philadelphia chromosome translocation in CML. It is highly sensitive and is used for diagnosis, monitoring treatment response, and detecting minimal residual disease.",
+    difficulty: 3,
+    category: "Molecular Diagnostics",
+    topic: "Oncology Diagnostics"
+  },
+  {
+    id: "mlt-batch-373",
+    stem: "Which cell type is responsible for producing antibodies?",
+    options: ["T-helper cells", "Macrophages", "Plasma cells", "Natural killer cells"],
+    correctIndex: 2,
+    rationale: "Plasma cells are terminally differentiated B lymphocytes that are the primary antibody-producing cells. Upon antigen stimulation, B cells differentiate into plasma cells that secrete large quantities of antigen-specific immunoglobulins.",
+    difficulty: 1,
+    category: "Immunology",
+    topic: "Humoral Immunity"
+  },
+  {
+    id: "mlt-batch-374",
+    stem: "What contamination risk is most critical to control in a PCR laboratory?",
+    options: [
+      "Bacterial contamination of reagents",
+      "Amplicon carryover from previous reactions causing false positives",
+      "Protein contamination affecting enzyme activity",
+      "RNA degradation by RNases"
+    ],
+    correctIndex: 1,
+    rationale: "Amplicon carryover is the most critical contamination concern in PCR labs. Previously amplified products can contaminate new reactions, causing false-positive results. Prevention strategies include physical separation of pre- and post-amplification areas, UNG/dUTP systems, and unidirectional workflow.",
+    difficulty: 3,
+    category: "Molecular Diagnostics",
+    topic: "Quality Control"
+  },
+  {
+    id: "mlt-batch-375",
+    stem: "Serum free light chain (FLC) assay is most useful for detecting and monitoring:",
+    options: [
+      "Iron deficiency anemia",
+      "Light chain multiple myeloma and AL amyloidosis",
+      "Acute viral hepatitis",
+      "Thyroid disorders"
+    ],
+    correctIndex: 1,
+    rationale: "Serum FLC assay measures kappa and lambda free light chains and their ratio. It is essential for detecting and monitoring light chain multiple myeloma, AL amyloidosis, and other plasma cell disorders, especially those that do not produce intact immunoglobulin.",
+    difficulty: 4,
+    category: "Immunology",
+    topic: "Monoclonal Gammopathies"
+  },
+  {
+    id: "mlt-batch-376",
+    stem: "Which technique allows visualization of gene expression patterns across an entire tissue section?",
+    options: ["Western blot", "In situ hybridization (ISH)", "ELISA", "Nephelometry"],
+    correctIndex: 1,
+    rationale: "In situ hybridization uses labeled nucleic acid probes to detect specific mRNA or DNA sequences within intact tissue sections or cells, preserving spatial and morphological context. It reveals where specific genes are expressed within tissue architecture.",
+    difficulty: 3,
+    category: "Molecular Diagnostics",
+    topic: "In Situ Hybridization"
+  },
+  {
+    id: "mlt-batch-377",
+    stem: "Type III hypersensitivity reactions are caused by:",
+    options: [
+      "IgE cross-linking on mast cells",
+      "Deposition of antigen-antibody (immune) complexes in tissues",
+      "Direct T-cell cytotoxicity",
+      "Antibodies against cell surface antigens"
+    ],
+    correctIndex: 1,
+    rationale: "Type III hypersensitivity involves formation and deposition of antigen-antibody (immune) complexes in tissues, particularly blood vessel walls, joints, and kidneys. This activates complement and recruits neutrophils, causing inflammation. Examples include serum sickness and lupus nephritis.",
+    difficulty: 2,
+    category: "Immunology",
+    topic: "Hypersensitivity Reactions"
+  },
+  {
+    id: "mlt-batch-378",
+    stem: "What is the advantage of using locked nucleic acids (LNA) in molecular probes?",
+    options: [
+      "They are cheaper to synthesize than standard probes",
+      "They increase binding affinity and specificity to complementary sequences",
+      "They can replicate autonomously",
+      "They eliminate the need for PCR amplification"
+    ],
+    correctIndex: 1,
+    rationale: "LNA modifications lock the ribose in a C3'-endo conformation, increasing the melting temperature and binding affinity to complementary sequences. LNA-modified probes have enhanced specificity, particularly useful for detecting single nucleotide polymorphisms and short target sequences.",
+    difficulty: 5,
+    category: "Molecular Diagnostics",
+    topic: "Probe Chemistry"
+  },
+  {
+    id: "mlt-batch-379",
+    stem: "Rheumatoid factor (RF) is an autoantibody directed against the Fc portion of which immunoglobulin?",
+    options: ["IgA", "IgM", "IgG", "IgE"],
+    correctIndex: 2,
+    rationale: "Rheumatoid factor is typically an IgM autoantibody that binds to the Fc region of IgG. While associated with rheumatoid arthritis, RF is not specific and can be found in other autoimmune diseases, chronic infections, and even in healthy elderly individuals.",
+    difficulty: 2,
+    category: "Immunology",
+    topic: "Autoimmune Serology"
+  },
+  {
+    id: "mlt-batch-380",
+    stem: "Whole exome sequencing (WES) targets which portion of the genome?",
+    options: [
+      "The entire genome including non-coding regions",
+      "Only the protein-coding regions (exons) of the genome",
+      "Only mitochondrial DNA",
+      "Only regulatory regions"
+    ],
+    correctIndex: 1,
+    rationale: "WES targets exons, which comprise approximately 1-2% of the genome but contain about 85% of known disease-causing variants. It is more cost-effective than whole genome sequencing while capturing the majority of clinically relevant mutations.",
+    difficulty: 3,
+    category: "Molecular Diagnostics",
+    topic: "Next-Generation Sequencing"
+  },
+  {
+    id: "mlt-batch-381",
+    stem: "Which test is used to measure total complement activity through the classical pathway?",
+    options: ["CH50", "AH50", "C-reactive protein", "Anti-nuclear antibody"],
+    correctIndex: 0,
+    rationale: "The CH50 (total hemolytic complement) assay measures the functional activity of all components of the classical complement pathway (C1-C9). It is based on the ability of the patient's serum to lyse antibody-coated sheep red blood cells. A decreased CH50 suggests consumption or deficiency of complement components.",
+    difficulty: 3,
+    category: "Immunology",
+    topic: "Complement System"
+  },
+  {
+    id: "mlt-batch-382",
+    stem: "Liquid biopsy in molecular oncology refers to:",
+    options: [
+      "Traditional tissue biopsy preserved in formalin",
+      "Analysis of circulating tumor DNA (ctDNA) and other biomarkers from blood samples",
+      "Culture of tumor cells in liquid media",
+      "Flow cytometric analysis of bone marrow aspirates"
+    ],
+    correctIndex: 1,
+    rationale: "Liquid biopsy analyzes circulating tumor DNA, circulating tumor cells, and exosomes from blood samples. It provides a minimally invasive method to detect tumor mutations, monitor treatment response, and identify resistance mechanisms without surgical tissue biopsy.",
+    difficulty: 4,
+    category: "Molecular Diagnostics",
+    topic: "Oncology Diagnostics"
+  },
+  {
+    id: "mlt-batch-383",
+    stem: "Antibody affinity refers to:",
+    options: [
+      "The total binding strength of a multivalent antibody to a multivalent antigen",
+      "The strength of binding between a single antigen-binding site and a single epitope",
+      "The number of antibodies produced per B cell",
+      "The speed at which antibodies are produced"
+    ],
+    correctIndex: 1,
+    rationale: "Affinity is the strength of the interaction between a single antibody-binding site (paratope) and a single antigenic determinant (epitope). Avidity, in contrast, refers to the overall binding strength of a multivalent antibody to a multivalent antigen.",
+    difficulty: 3,
+    category: "Immunology",
+    topic: "Antibody-Antigen Interactions"
+  },
+  {
+    id: "mlt-batch-384",
+    stem: "Which molecular technique is used to determine if a lymphoid proliferation is monoclonal or polyclonal?",
+    options: [
+      "Complete blood count",
+      "Gene rearrangement studies (T-cell receptor or immunoglobulin gene)",
+      "Gram stain",
+      "Urinalysis"
+    ],
+    correctIndex: 1,
+    rationale: "Gene rearrangement studies using PCR detect clonal rearrangements of immunoglobulin (B-cell) or T-cell receptor genes. A monoclonal population produces a dominant single band, while polyclonal populations show a Gaussian distribution. This helps distinguish lymphoma from reactive processes.",
+    difficulty: 4,
+    category: "Molecular Diagnostics",
+    topic: "Clonality Assessment"
+  },
+  {
+    id: "mlt-batch-385",
+    stem: "Which cytokine promotes differentiation of naive T cells into Th2 cells?",
+    options: ["IL-12", "IFN-gamma", "IL-4", "IL-17"],
+    correctIndex: 2,
+    rationale: "IL-4 drives the differentiation of naive CD4+ T cells into Th2 cells, which promote humoral immunity and IgE class switching. IL-12 promotes Th1 differentiation. Th2 cells are involved in allergic responses and defense against parasites.",
+    difficulty: 3,
+    category: "Immunology",
+    topic: "Cytokines"
+  },
+  {
+    id: "mlt-batch-386",
+    stem: "What is the primary purpose of agarose gel electrophoresis in a molecular laboratory?",
+    options: [
+      "To amplify DNA sequences",
+      "To separate DNA fragments by size for visualization and analysis",
+      "To extract DNA from cells",
+      "To sequence DNA"
+    ],
+    correctIndex: 1,
+    rationale: "Agarose gel electrophoresis separates DNA fragments by size as they migrate through the gel matrix under an electric field. Smaller fragments migrate faster. DNA is visualized using intercalating dyes (ethidium bromide, SYBR Safe) under UV light.",
+    difficulty: 1,
+    category: "Molecular Diagnostics",
+    topic: "Electrophoresis"
+  },
+  {
+    id: "mlt-batch-387",
+    stem: "Anti-SSA (Ro) and anti-SSB (La) antibodies are most commonly associated with which condition?",
+    options: ["Rheumatoid arthritis", "Sjögren syndrome", "Crohn disease", "Graves disease"],
+    correctIndex: 1,
+    rationale: "Anti-SSA (Ro) and anti-SSB (La) are most characteristic of Sjögren syndrome. Anti-SSA is also found in neonatal lupus and subacute cutaneous lupus. Anti-SSB is more specific for Sjögren syndrome. Both can cross the placenta and cause neonatal heart block.",
+    difficulty: 3,
+    category: "Immunology",
+    topic: "Autoimmune Serology"
+  },
+  {
+    id: "mlt-batch-388",
+    stem: "What is the function of a DNA ladder (molecular weight marker) in gel electrophoresis?",
+    options: [
+      "To amplify the sample DNA",
+      "To provide size reference standards for estimating the size of unknown DNA fragments",
+      "To stain the gel for visualization",
+      "To prevent DNA degradation"
+    ],
+    correctIndex: 1,
+    rationale: "A DNA ladder contains fragments of known sizes that serve as reference standards. By comparing the migration distance of unknown fragments to the ladder bands, the approximate size of PCR products or restriction fragments can be determined.",
+    difficulty: 1,
+    category: "Molecular Diagnostics",
+    topic: "Electrophoresis"
+  },
+  {
+    id: "mlt-batch-389",
+    stem: "Which immunodeficiency is characterized by absent thymus development and defective T-cell immunity?",
+    options: ["X-linked agammaglobulinemia", "DiGeorge syndrome", "Selective IgA deficiency", "Chronic granulomatous disease"],
+    correctIndex: 1,
+    rationale: "DiGeorge syndrome (22q11.2 deletion) is characterized by thymic hypoplasia or aplasia, resulting in deficient T-cell development. Patients present with recurrent infections, hypocalcemia (parathyroid hypoplasia), cardiac defects, and characteristic facial features.",
+    difficulty: 2,
+    category: "Immunology",
+    topic: "Immunodeficiency Disorders"
+  },
+  {
+    id: "mlt-batch-390",
+    stem: "Comparative genomic hybridization (CGH) microarray is used to detect:",
+    options: [
+      "Point mutations in specific genes",
+      "Copy number variations (gains and losses) across the genome",
+      "Protein expression levels",
+      "Bacterial identification"
+    ],
+    correctIndex: 1,
+    rationale: "CGH microarray compares patient DNA to reference DNA to detect chromosomal gains (duplications) and losses (deletions) across the entire genome. It is widely used in constitutional cytogenetics and oncology for detecting copy number variations associated with genetic disorders and cancer.",
+    difficulty: 4,
+    category: "Molecular Diagnostics",
+    topic: "Cytogenetics"
+  },
+  {
+    id: "mlt-batch-391",
+    stem: "Which test is most appropriate for confirming Helicobacter pylori infection using a serological approach?",
+    options: ["ANA test", "Anti-H. pylori IgG ELISA", "Anti-dsDNA test", "Complement fixation test"],
+    correctIndex: 1,
+    rationale: "Anti-H. pylori IgG ELISA detects antibodies against H. pylori, indicating current or past infection. While useful for initial screening, it cannot distinguish active from past infection. Urea breath test or stool antigen test are preferred for confirming active infection.",
+    difficulty: 2,
+    category: "Immunology",
+    topic: "Infectious Disease Serology"
+  },
+  {
+    id: "mlt-batch-392",
+    stem: "Pharmacogenomics testing for CYP2D6 polymorphisms helps determine:",
+    options: [
+      "Blood type compatibility",
+      "How a patient metabolizes certain medications",
+      "Susceptibility to autoimmune diseases",
+      "Cancer staging"
+    ],
+    correctIndex: 1,
+    rationale: "CYP2D6 polymorphism testing identifies patients as poor, intermediate, extensive, or ultra-rapid metabolizers. This guides drug selection and dosing for medications like codeine, tamoxifen, and many antidepressants, reducing adverse drug reactions and improving therapeutic outcomes.",
+    difficulty: 3,
+    category: "Molecular Diagnostics",
+    topic: "Pharmacogenomics"
+  },
+  {
+    id: "mlt-batch-393",
+    stem: "An elevated erythrocyte sedimentation rate (ESR) indicates:",
+    options: [
+      "A specific diagnosis of rheumatoid arthritis",
+      "Non-specific inflammation, infection, or tissue damage",
+      "Iron deficiency anemia",
+      "Platelet dysfunction"
+    ],
+    correctIndex: 1,
+    rationale: "ESR is a non-specific marker of inflammation. It measures the rate at which red blood cells settle in a tube over one hour. Increased fibrinogen and immunoglobulins during inflammation promote rouleaux formation, increasing the sedimentation rate.",
+    difficulty: 1,
+    category: "Immunology",
+    topic: "Inflammatory Markers"
+  },
+  {
+    id: "mlt-batch-394",
+    stem: "What is the principle behind pyrosequencing?",
+    options: [
+      "Chain termination using ddNTPs",
+      "Detection of pyrophosphate released during nucleotide incorporation, converted to light via enzymatic reactions",
+      "Fluorescent labeling of DNA fragments",
+      "Hybridization of DNA to microarray probes"
+    ],
+    correctIndex: 1,
+    rationale: "Pyrosequencing detects pyrophosphate (PPi) released when a nucleotide is incorporated into a growing DNA strand. PPi is converted to ATP by sulfurylase, which drives luciferase to produce light proportional to the number of nucleotides incorporated. It is used for short-read sequencing applications.",
+    difficulty: 4,
+    category: "Molecular Diagnostics",
+    topic: "DNA Sequencing"
+  },
+  {
+    id: "mlt-batch-395",
+    stem: "Interferon-gamma release assays (IGRAs) such as QuantiFERON-TB Gold are used to detect:",
+    options: [
+      "Active tuberculosis in sputum",
+      "T-cell immune response to Mycobacterium tuberculosis antigens",
+      "Anti-TB antibodies in serum",
+      "TB DNA in blood"
+    ],
+    correctIndex: 1,
+    rationale: "IGRAs measure interferon-gamma released by T cells when stimulated with M. tuberculosis-specific antigens (ESAT-6, CFP-10). Unlike the tuberculin skin test, IGRAs are not affected by prior BCG vaccination and require only one patient visit.",
+    difficulty: 3,
+    category: "Immunology",
+    topic: "Infectious Disease Immunology"
+  },
+  {
+    id: "mlt-batch-396",
+    stem: "Which molecular technique is used to detect minimal residual disease (MRD) in leukemia patients after treatment?",
+    options: ["Standard microscopy", "Real-time quantitative PCR", "Gram stain", "Urinalysis"],
+    correctIndex: 1,
+    rationale: "Real-time qPCR detects minimal residual disease by quantifying disease-specific molecular markers (e.g., BCR-ABL, PML-RARA) with very high sensitivity (detecting 1 leukemic cell among 100,000 normal cells). It is critical for monitoring treatment response and predicting relapse.",
+    difficulty: 4,
+    category: "Molecular Diagnostics",
+    topic: "Oncology Diagnostics"
+  },
+  {
+    id: "mlt-batch-397",
+    stem: "Which class of pattern recognition receptors detects viral double-stranded RNA inside cells?",
+    options: ["Toll-like receptors on cell surface", "RIG-I-like receptors (RLRs)", "Fc receptors", "Complement receptors"],
+    correctIndex: 1,
+    rationale: "RIG-I-like receptors (RLRs) are cytoplasmic PRRs that detect viral double-stranded RNA and 5'-triphosphate RNA inside cells. Upon activation, they trigger type I interferon production and antiviral gene expression through signaling via MAVS.",
+    difficulty: 4,
+    category: "Immunology",
+    topic: "Innate Immunity"
+  },
+  {
+    id: "mlt-batch-398",
+    stem: "Methylation-specific PCR (MSP) is used to determine:",
+    options: [
+      "The size of DNA fragments",
+      "Whether specific CpG sites in a gene promoter are methylated or unmethylated",
+      "The protein expression of a gene",
+      "The number of chromosomes in a cell"
+    ],
+    correctIndex: 1,
+    rationale: "MSP uses bisulfite-treated DNA and two primer sets: one specific for methylated DNA and one for unmethylated DNA. After bisulfite conversion, methylation status determines the DNA sequence, allowing specific amplification based on methylation patterns at CpG sites.",
+    difficulty: 5,
+    category: "Molecular Diagnostics",
+    topic: "Epigenetics"
+  },
+  {
+    id: "mlt-batch-399",
+    stem: "Antibody-dependent cell-mediated cytotoxicity (ADCC) is primarily mediated by which cell type?",
+    options: ["B lymphocytes", "Platelets", "Natural killer cells", "Red blood cells"],
+    correctIndex: 2,
+    rationale: "ADCC is primarily mediated by NK cells that bind to the Fc portion of IgG antibodies coating target cells via CD16 (FcγRIII). Upon binding, NK cells release cytotoxic granules (perforin, granzymes) that kill the antibody-coated target cell.",
+    difficulty: 2,
+    category: "Immunology",
+    topic: "Cellular Immunity"
+  },
+  {
+    id: "mlt-batch-400",
+    stem: "What is the purpose of variant calling in next-generation sequencing data analysis?",
+    options: [
+      "Aligning reads to a reference genome",
+      "Identifying differences (mutations, SNPs, indels) between the sample and reference sequence",
+      "Extracting DNA from the sample",
+      "Preparing sequencing libraries"
+    ],
+    correctIndex: 1,
+    rationale: "Variant calling is the bioinformatics step that identifies differences between the sequenced sample and a reference genome. This includes single nucleotide variants (SNVs), insertions/deletions (indels), and structural variants. Accurate variant calling is essential for clinical interpretation of sequencing results.",
+    difficulty: 4,
+    category: "Molecular Diagnostics",
+    topic: "Bioinformatics"
+  }
+];

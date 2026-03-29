@@ -1,0 +1,83 @@
+# Legacy monolith image (root Dockerfile). Production Next.js deploy uses DigitalOcean App Platform:
+# repo erikagodin6-jpg/nursenest-core, branch main, source_dir nursenest-core (see .do/app-nursenest-core-next.yaml).
+# This workflow runs only in the canonical nursenest-core monorepo; it does not create or sync a second GitHub repo.
+# Canonical remote: https://github.com/erikagodin6-jpg/nursenest-core — verify with `git remote -v` before pushing.
+name: Build and Push GHCR Image
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: ghcr-build-main
+  cancel-in-progress: true
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            Dockerfile
+            Dockerfile.runtime
+            .dockerignore
+            package.json
+            package-lock.json
+            tsconfig.json
+            tsconfig.server.json
+            vite.config.ts
+            postcss.config.js
+            components.json
+            drizzle.config.ts
+            i18n-scan.config.json
+            vite-plugin-meta-images.ts
+            client/**
+            !client/src/assets/**
+            server
+            shared
+            script
+            scripts
+            config
+            migrations
+            backup-system
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Build app artifacts on runner
+        run: |
+          set -euxo pipefail
+          npm ci --no-audit --no-fund
+          npm run build
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push image
+        env:
+          DOCKER_BUILDKIT: "0"
+        run: |
+          set -euxo pipefail
+          IMAGE="ghcr.io/${{ github.repository_owner }}/nursenest"
+          SHORT_SHA="${GITHUB_SHA::7}"
+          docker build -f Dockerfile.runtime -t "${IMAGE}:latest" -t "${IMAGE}:sha-${SHORT_SHA}" .
+          docker push "${IMAGE}:latest"
+          docker push "${IMAGE}:sha-${SHORT_SHA}"

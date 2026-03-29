@@ -1,0 +1,25 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": [
+    "server/**/*.ts",
+    "shared/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "client/**/*",
+    "build",
+    "dist",
+    "**/*.test.ts",
+    "tools/i18n/**",
+    ".local/**",
+    "server/replit_integrations/**",
+    "backup-system/**",
+    "scripts/**",
+    "server/seeds/**",
+    "server/sitemap/**",
+    "server/seed-replit-json-imports.ts"
+  ]
+}

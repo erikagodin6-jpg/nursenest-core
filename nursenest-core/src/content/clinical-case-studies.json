@@ -1,0 +1,30 @@
+[
+  {
+    "id": "sepsis-prioritization",
+    "title": "Tachycardia and hypotension after surgery",
+    "summary": "Early recognition of sepsis vs hypovolemia using a focused assessment and safe escalation.",
+    "vignette": "A 68-year-old post-op day 2 has HR 118, BP 102/58, RR 22, T 38.6°C, and SpO₂ 94% on RA. They report fatigue and mild confusion. Urine output has been 15 mL/hr for two hours.",
+    "question": "Which action best matches initial stabilization and scope?",
+    "options": [
+      "Activate rapid response / provider notification, obtain IV access if needed, begin ordered fluids/antibiotics per protocol, and reassess frequently.",
+      "Encourage oral fluids only and recheck in 4 hours.",
+      "Discharge home with follow-up since surgery was uncomplicated."
+    ],
+    "correctIndex": 0,
+    "takeaway": "Unexplained hypotension with infection concern needs timely escalation, perfusion-focused care, and repeat assessment—not watchful waiting."
+  },
+  {
+    "id": "hyperkalemia-ecg",
+    "title": "Peaked T waves and weakness",
+    "summary": "Linking ECG changes and labs when potassium may be critically high.",
+    "vignette": "A patient with CKD reports generalized weakness. ECG shows peaked T waves. Stat potassium is pending.",
+    "question": "While awaiting the lab, what is the most appropriate immediate priority?",
+    "options": [
+      "Follow institutional protocols for suspected hyperkalemia stabilization (including cardiac monitoring and ordered therapies) and notify the provider.",
+      "Send the patient to the waiting room to reduce hallway noise.",
+      "Hold all fluids because potassium might be high."
+    ],
+    "correctIndex": 0,
+    "takeaway": "Suspected symptomatic hyperkalemia is treated as an emergency; use protocol-driven stabilization and continuous monitoring."
+  }
+]
