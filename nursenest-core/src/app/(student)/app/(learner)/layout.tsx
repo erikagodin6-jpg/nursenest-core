@@ -5,7 +5,7 @@ import { CheckoutSuccessBanner } from "@/components/student/checkout-success-ban
 import { LearnerThemeControl } from "@/components/student/learner-theme-control";
 import { SentryLearnerShell } from "@/components/observability/sentry-learner-shell";
 
-/** Auth is enforced in `src/middleware.ts` so this layout never calls `redirect()` for missing session. */
+/** Auth is enforced in `src/proxy.ts` (Next.js 16+) so this layout never calls `redirect()` for missing session. */
 export const dynamic = "force-dynamic";
 
 export default async function LearnerShellLayout({ children }: { children: React.ReactNode }) {

@@ -2,18 +2,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
-import {
-  getExamPathwayByRoute,
-  listPublicExamPathways,
-} from "@/lib/exam-pathways/exam-product-registry";
+import { getExamPathwayByRoute } from "@/lib/exam-pathways/exam-product-registry";
 import { pathwayQuestionsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 
+export const dynamicParams = true;
+export const revalidate = 86400;
+
 export function generateStaticParams() {
-  return listPublicExamPathways().map((p) => ({
-    countrySlug: p.countrySlug,
-    roleTrack: p.roleTrack,
-    examCode: p.examCode,
-  }));
+  return [];
 }
 
 type Props = { params: Promise<{ countrySlug: string; roleTrack: string; examCode: string }> };

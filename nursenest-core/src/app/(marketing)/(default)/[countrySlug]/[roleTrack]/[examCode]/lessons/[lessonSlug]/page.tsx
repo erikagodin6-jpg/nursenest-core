@@ -5,13 +5,9 @@ import { auth } from "@/lib/auth";
 import { PathwayLessonBody } from "@/components/lessons/pathway-lesson-body";
 import { PathwayLessonActions } from "@/components/lessons/pathway-lesson-actions";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import {
-  buildExamPathwayPath,
-  getExamPathwayByRoute,
-  listPublicExamPathways,
-} from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath, getExamPathwayByRoute } from "@/lib/exam-pathways/exam-product-registry";
 import { canViewFullPathwayLesson, visibleSectionsForLesson } from "@/lib/lessons/pathway-lesson-access";
-import { getPathwayLesson, getPathwayLessons, listPathwayIdsWithLessons } from "@/lib/lessons/pathway-lesson-loader";
+import { getPathwayLesson, getPathwayLessons } from "@/lib/lessons/pathway-lesson-loader";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { prisma } from "@/lib/db";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
@@ -21,21 +17,11 @@ import { pathwayLessonDetailBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 
 export const dynamic = "force-dynamic";
 
+/** Avoid enumerating every lesson at build (large `.next` output + ENOSPC on small disks). */
+export const dynamicParams = true;
+
 export function generateStaticParams() {
-  const out: { countrySlug: string; roleTrack: string; examCode: string; lessonSlug: string }[] = [];
-  for (const id of listPathwayIdsWithLessons()) {
-    const p = listPublicExamPathways().find((x) => x.id === id);
-    if (!p) continue;
-    for (const l of getPathwayLessons(id)) {
-      out.push({
-        countrySlug: p.countrySlug,
-        roleTrack: p.roleTrack,
-        examCode: p.examCode,
-        lessonSlug: l.slug,
-      });
-    }
-  }
-  return out;
+  return [];
 }
 
 type Props = {

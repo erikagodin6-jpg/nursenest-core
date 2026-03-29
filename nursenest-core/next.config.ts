@@ -1,6 +1,9 @@
 /**
  * Build context: run `npm run build` from this directory (`nursenest-core`), or set DigitalOcean App Platform
  * **Source directory** to `nursenest-core` so `process.cwd()` and `@shared/*` → `../shared` resolve like local dev.
+ *
+ * **Disk / TMPDIR:** `package.json` sets `TMPDIR=${TMPDIR:-/tmp}` for `next build` so Turbopack/Next write
+ * temp artifacts to a writable path when the default location is full (avoids ENOSPC during `.next` writes).
  * `turbopack.root` / `outputFileTracingRoot` point at the **repo root** (parent of this package), not at
  * `nursenest-core` alone — the latter breaks `@shared/*` resolution; the parent matches the primary lockfile
  * and silences “multiple lockfiles” warnings without changing import paths.

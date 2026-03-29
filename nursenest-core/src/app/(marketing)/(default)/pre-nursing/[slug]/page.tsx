@@ -11,8 +11,12 @@ const dict = strings as Record<string, string>;
 
 type Props = { params: Promise<{ slug: string }> };
 
-export async function generateStaticParams() {
-  return PRE_NURSING_MODULE_REGISTRY.map((m) => ({ slug: m.slug }));
+/** Avoid prerendering every module at build (disk pressure on CI / small volumes). */
+export const dynamicParams = true;
+export const revalidate = 86400;
+
+export function generateStaticParams() {
+  return [];
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

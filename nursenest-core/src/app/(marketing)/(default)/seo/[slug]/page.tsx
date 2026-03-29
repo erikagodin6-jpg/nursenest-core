@@ -3,10 +3,14 @@ import { notFound } from "next/navigation";
 import { ProgrammaticSeoPage } from "@/components/seo/programmatic-seo-page";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { buildProgrammaticMetadata } from "@/lib/seo/programmatic-metadata";
-import { getAllProgrammaticSlugs, getProgrammaticSeoPage } from "@/lib/seo/programmatic-registry";
+import { getProgrammaticSeoPage } from "@/lib/seo/programmatic-registry";
+
+/** Build-time prerender disabled: full slug list inflates `.next` on disk-limited hosts; pages are ISR on demand. */
+export const dynamicParams = true;
+export const revalidate = 86400;
 
 export function generateStaticParams(): { slug: string }[] {
-  return getAllProgrammaticSlugs().map((slug) => ({ slug }));
+  return [];
 }
 
 export async function generateMetadata({

@@ -2,25 +2,15 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
-import { buildExamPathwayPath, getExamPathwayByRoute, listPublicExamPathways } from "@/lib/exam-pathways/exam-product-registry";
-import { getLessonsForTopic, listPathwayIdsWithLessons, listTopicClusters } from "@/lib/lessons/pathway-lesson-loader";
+import { buildExamPathwayPath, getExamPathwayByRoute } from "@/lib/exam-pathways/exam-product-registry";
+import { getLessonsForTopic, listTopicClusters } from "@/lib/lessons/pathway-lesson-loader";
 import { pathwayTopicClusterBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 
+export const dynamicParams = true;
+export const revalidate = 86400;
+
 export function generateStaticParams() {
-  const out: { countrySlug: string; roleTrack: string; examCode: string; topicSlug: string }[] = [];
-  for (const id of listPathwayIdsWithLessons()) {
-    const p = listPublicExamPathways().find((x) => x.id === id);
-    if (!p) continue;
-    for (const t of listTopicClusters(id)) {
-      out.push({
-        countrySlug: p.countrySlug,
-        roleTrack: p.roleTrack,
-        examCode: p.examCode,
-        topicSlug: t.topicSlug,
-      });
-    }
-  }
-  return out;
+  return [];
 }
 
 type Props = {

@@ -2,23 +2,15 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
-import {
-  buildExamPathwayPath,
-  getExamPathwayById,
-  getExamPathwayByRoute,
-} from "@/lib/exam-pathways/exam-product-registry";
-import { listPathwayIdsWithLessons, listTopicClusters, getPathwayLessons } from "@/lib/lessons/pathway-lesson-loader";
+import { buildExamPathwayPath, getExamPathwayByRoute } from "@/lib/exam-pathways/exam-product-registry";
+import { listTopicClusters, getPathwayLessons } from "@/lib/lessons/pathway-lesson-loader";
 import { pathwayLessonsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 
+export const dynamicParams = true;
+export const revalidate = 86400;
+
 export function generateStaticParams() {
-  return listPathwayIdsWithLessons()
-    .map((id) => getExamPathwayById(id))
-    .filter((p): p is NonNullable<typeof p> => !!p && p.status !== "hidden")
-    .map((p) => ({
-      countrySlug: p.countrySlug,
-      roleTrack: p.roleTrack,
-      examCode: p.examCode,
-    }));
+  return [];
 }
 
 type Props = { params: Promise<{ countrySlug: string; roleTrack: string; examCode: string }> };

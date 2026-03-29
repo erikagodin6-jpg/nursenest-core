@@ -1,13 +1,12 @@
 import { notFound } from "next/navigation";
 import { ExamPathwayHub } from "@/components/exam-pathways/exam-pathway-hub";
-import { getExamPathwayByRoute, listPublicExamPathways } from "@/lib/exam-pathways/exam-product-registry";
+import { getExamPathwayByRoute } from "@/lib/exam-pathways/exam-product-registry";
+
+export const dynamicParams = true;
+export const revalidate = 86400;
 
 export function generateStaticParams() {
-  return listPublicExamPathways().map((p) => ({
-    countrySlug: p.countrySlug,
-    roleTrack: p.roleTrack,
-    examCode: p.examCode,
-  }));
+  return [];
 }
 
 type Props = { params: Promise<{ countrySlug: string; roleTrack: string; examCode: string }> };

@@ -5,7 +5,7 @@ import "./exam-shell.css";
 /**
  * Isolated exam surface: no marketing chrome, no ThemePicker, no learner nav.
  * Theme tokens are locked to a light, high-contrast baseline for item readability.
- * Session for `/app/exams` is enforced in `src/middleware.ts` (avoid auth `redirect()` in RSC layouts).
+ * Session for `/app/exams` is enforced in `src/proxy.ts` (avoid auth `redirect()` in RSC layouts).
  */
 export const dynamic = "force-dynamic";
 

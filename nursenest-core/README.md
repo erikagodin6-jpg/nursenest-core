@@ -15,6 +15,14 @@ Growing content (**questions, flashcards, lessons, blog, media**) must not bloat
 
 Commands: `npm run disk:audit`, `npm run storage:check` (use `storage:check:strict` in CI).
 
+## Disk & build (avoid ENOSPC)
+
+- **Symptom:** `ENOSPC` while writing `.next` — usually the host volume is nearly full (check with `df -h`).
+- **Clean:** `npm run clean:build` removes `.next`, `dist`, `build`, and `out` under this package.
+- **Build:** `npm run build` sets `TMPDIR=${TMPDIR:-/tmp}` so Turbopack/Next temp files use a writable path when defaults are tight.
+- **Deploy:** `build:deploy` runs the same build, then `scripts/post-build-prune.mjs` (drops `.next/cache` in the artifact).
+- **Monitor:** keep several GB free on the volume that holds the repo and `~/.npm`; prune old `node_modules` copies if needed.
+
 ## Stability-First Architecture
 
 - Route isolation:

@@ -34,6 +34,9 @@ import {
   getMarketingHeroImageUrlChain,
   MARKETING_HERO_LOCAL_FALLBACK,
 } from "@/lib/marketing-hero-image";
+import { getHomepageLessonTeasers } from "@/lib/marketing/homepage-lesson-teasers";
+
+const HOMEPAGE_LESSON_TEASERS = getHomepageLessonTeasers();
 
 const HeroFeatureStrip = dynamic(() => import("@/legacy/marketing/hero-feature-strip"), {
   loading: () => <div className="min-h-[60px]" />,
@@ -670,6 +673,46 @@ export default function HomeRestoredClient() {
                 </div>
               ))}
             </div>
+          </div>
+        </section>
+
+        <section
+          className="border-t border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]"
+          style={{ paddingTop: "var(--space-block)", paddingBottom: "var(--space-block)" }}
+          data-testid="section-start-lessons"
+        >
+          <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <h2 className="text-lg font-bold text-[var(--theme-heading-text)] sm:text-xl">Start with Lessons</h2>
+                <p className="mt-1 max-w-xl text-sm text-[var(--theme-muted-text)]">
+                  Choose your exam pathway and open the lesson hub—browse by topic, then pair with practice questions in the same
+                  track.
+                </p>
+              </div>
+              <Link
+                href={withMarketingLocale(locale, "/exam-lessons")}
+                className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-primary hover:underline"
+              >
+                <BookOpen className="h-4 w-4" />
+                All pathways
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+            <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {HOMEPAGE_LESSON_TEASERS.map((item) => (
+                <li key={item.id}>
+                  <Link
+                    href={withMarketingLocale(locale, item.lessonsHref)}
+                    className="flex h-full flex-col rounded-xl border border-[var(--theme-card-border)] bg-card p-4 shadow-sm transition hover:border-primary/30"
+                  >
+                    <span className="text-xs font-semibold uppercase text-primary">{item.shortLabel}</span>
+                    <span className="mt-1 text-sm font-semibold text-[var(--theme-heading-text)]">{item.title}</span>
+                    <span className="mt-3 text-xs font-medium text-primary">Lesson hub →</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
 
