@@ -9,6 +9,7 @@ import { isEmailLikeIdentifier, normalizeLoginIdentifier } from "@/lib/auth/norm
 import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
 import { SubscriptionStatus, UserRole } from "@prisma/client";
 import { prisma } from "@/lib/db";
+import * as Sentry from "@sentry/nextjs";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 
 function clientIpFromRequest(req: Request): string {
@@ -64,6 +65,10 @@ export const authConfig: NextAuthConfig = {
         const rl = checkRateLimit(`login:${ip}`, { windowMs: 60_000, max: 40 });
         if (!rl.ok) {
           safeServerLog("auth", "login_rate_limited", { ip: ip.slice(0, 64) });
+          Sentry.captureMessage("login_rate_limited", {
+            level: "warning",
+            tags: { flow: "auth", kind: "rate_limit" },
+          });
           return null;
         }
 

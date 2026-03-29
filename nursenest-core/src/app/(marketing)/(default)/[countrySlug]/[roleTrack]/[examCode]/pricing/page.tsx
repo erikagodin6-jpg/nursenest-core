@@ -42,10 +42,10 @@ export default async function ExamPathwayPricingPage({ params }: Props) {
       ) : (
         <div className="mt-8 space-y-4">
           <p className="text-sm text-muted">
-            Stripe checkout currently keys off <strong className="text-foreground">country + tier</strong>. Select{" "}
+            Stripe checkout uses <strong className="text-foreground">country + tier</strong>. Choose{" "}
             <strong className="text-foreground">{pathway.stripeTier}</strong> with billing country{" "}
-            <strong className="text-foreground">{pathway.countryCode}</strong>, then set your learner pathway to this exam in
-            your profile so content stays on {pathway.shortName}.
+            <strong className="text-foreground">{pathway.countryCode}</strong>—after payment, your NurseNest profile tier and
+            country update from that plan so lessons, questions, and exams match this pathway.
           </p>
           <Link
             href="/pricing"

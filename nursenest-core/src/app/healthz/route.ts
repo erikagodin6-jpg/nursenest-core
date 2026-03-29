@@ -5,6 +5,7 @@ let loggedFirstProbe = false;
 /**
  * Liveness for App Platform / load balancers. No DB, auth, or Prisma — always fast 200.
  * Configure `health_check.http_path: /healthz` (not `/api/health`).
+ * Readiness (optional DB ping): `GET /api/health/ready`.
  */
 export async function GET() {
   if (process.env.NODE_ENV === "production" && !loggedFirstProbe) {

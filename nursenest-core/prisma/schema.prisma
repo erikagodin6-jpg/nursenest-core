@@ -275,6 +275,7 @@ model ExamQuestion {
 
   @@map("exam_questions")
   @@index([status, tier])
+  @@index([exam])
   @@index([stemHash])
 }
 

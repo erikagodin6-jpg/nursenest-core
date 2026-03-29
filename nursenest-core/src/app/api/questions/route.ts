@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
   try {
     entitlement = await resolveEntitlement(userId);
   } catch (e) {
-    safeServerLogCritical("api_questions", "entitlement_resolve_failed", { page }, e);
+    safeServerLogCritical("api_questions", "entitlement_resolve_failed", { page }, e, { flow: "questions_load" });
     return NextResponse.json({ error: "Unable to verify access. Try again shortly." }, { status: 503 });
   }
 
@@ -117,7 +117,7 @@ export async function GET(req: NextRequest) {
         topicRelaxed,
       });
     } catch (e) {
-      safeServerLogCritical("api_questions", "prisma_find_failed", { page }, e);
+      safeServerLogCritical("api_questions", "prisma_find_failed", { page }, e, { flow: "questions_load" });
       return NextResponse.json({ error: "Unable to load questions. Try again shortly." }, { status: 503 });
     }
   }
@@ -210,7 +210,7 @@ export async function GET(req: NextRequest) {
       freemiumRemainingAfterBatch: remaining,
     });
   } catch (e) {
-    safeServerLogCritical("api_questions", "prisma_find_failed_freemium", { page }, e);
+    safeServerLogCritical("api_questions", "prisma_find_failed_freemium", { page }, e, { flow: "questions_load" });
     return NextResponse.json({ error: "Unable to load questions. Try again shortly." }, { status: 503 });
   }
 }

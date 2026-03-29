@@ -12,11 +12,7 @@ function getPostHog(): PostHog | null {
   return posthogSingleton;
 }
 
-/** Short stable id for analytics (not reversible to full user id in logs). */
-export function analyticsDistinctId(userId: string | undefined): string {
-  if (!userId) return "anonymous";
-  return `u_${userId.slice(0, 12)}`;
-}
+export { analyticsDistinctId } from "@/lib/observability/posthog-distinct-id";
 
 export async function captureServerEvent(
   distinctId: string,

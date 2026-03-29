@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import * as Sentry from "@sentry/nextjs";
 import { initPosthogClient, posthog, trackClientEvent } from "@/lib/observability/posthog-client";
@@ -41,7 +41,9 @@ function PostHogPageViews() {
 export function AnalyticsProvider({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <PostHogPageViews />
+      <Suspense fallback={null}>
+        <PostHogPageViews />
+      </Suspense>
       {children}
     </>
   );

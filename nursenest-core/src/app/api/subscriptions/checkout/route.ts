@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
+import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
+import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { findPriceEntry, type BillingDuration } from "@/lib/stripe/pricing-map";
 import type { TierCode } from "@prisma/client";
 
@@ -34,6 +37,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  setSentryServerContext({ route: "/api/subscriptions/checkout", feature: "payment", userId });
+
   const parsed = bodySchema.safeParse(await req.json());
   if (!parsed.success) {
     return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
@@ -52,20 +57,35 @@ export async function POST(req: Request) {
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ?? "http://localhost:3000";
 
-  const checkoutSession = await stripe.checkout.sessions.create({
-    mode: "subscription",
-    line_items: [{ price: price.priceId, quantity: 1 }],
-    success_url: `${appUrl}/app?checkout=success`,
-    cancel_url: `${appUrl}/pricing?checkout=cancelled`,
-    client_reference_id: userId,
-    metadata: {
-      userId,
-      country,
-      tier,
-      duration,
-      app: "nursenest-core",
-    },
-  });
+  try {
+    const checkoutSession = await stripe.checkout.sessions.create({
+      mode: "subscription",
+      line_items: [{ price: price.priceId, quantity: 1 }],
+      success_url: `${appUrl}/app?checkout=success`,
+      cancel_url: `${appUrl}/pricing?checkout=cancelled`,
+      client_reference_id: userId,
+      metadata: {
+        userId,
+        country,
+        tier,
+        duration,
+        app: "nursenest-core",
+      },
+    });
 
-  return NextResponse.json({ url: checkoutSession.url });
+    await captureServerEvent(analyticsDistinctId(userId), "checkout_session_created", {
+      country,
+      tier: String(tier),
+      duration: String(duration),
+    });
+    return NextResponse.json({ url: checkoutSession.url });
+  } catch (e) {
+    safeServerLogCritical(
+      "checkout",
+      "stripe_checkout_session_failed",
+      { country, tier: String(tier), duration },
+      e,
+    );
+    return NextResponse.json({ error: "Unable to start checkout. Try again shortly." }, { status: 503 });
+  }
 }

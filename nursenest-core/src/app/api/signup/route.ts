@@ -1,4 +1,5 @@
 import { hash } from "bcryptjs";
+import * as Sentry from "@sentry/nextjs";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { Prisma } from "@prisma/client";
@@ -7,8 +8,10 @@ import { validateUsernameForSignup } from "@/lib/auth/username-rules";
 import { isTurnstileEnforced, verifyTurnstileToken } from "@/lib/captcha/verify-turnstile";
 import { prisma } from "@/lib/db";
 import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
+import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { productEvent } from "@/lib/observability/product-events";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
 
 function clientIp(req: Request): string {
   return (
@@ -38,10 +41,15 @@ const schema = z.object({
 });
 
 export async function POST(req: Request) {
+  setSentryServerContext({ route: "/api/signup", feature: "signup" });
   const ip = clientIp(req);
   const rl = checkRateLimit(`signup:${ip}`, { windowMs: 60_000, max: 10 });
   if (!rl.ok) {
     productEvent("signup_rate_limited", {});
+    Sentry.captureMessage("signup_rate_limited", {
+      level: "warning",
+      tags: { flow: "auth", kind: "signup_rate_limit" },
+    });
     return NextResponse.json({ error: "Too many requests. Try again shortly." }, { status: 429 });
   }
 
@@ -104,7 +112,7 @@ export async function POST(req: Request) {
       select: { id: true },
     });
   } catch (e) {
-    safeServerLogCritical("signup", "email_lookup_failed", { surface: "api" }, e);
+    safeServerLogCritical("signup", "email_lookup_failed", { surface: "api" }, e, { flow: "signup" });
     return NextResponse.json({ error: "Unable to sign up. Try again shortly.", code: "db" }, { status: 503 });
   }
   if (exists) {
@@ -118,7 +126,7 @@ export async function POST(req: Request) {
       select: { id: true },
     });
   } catch (e) {
-    safeServerLogCritical("signup", "username_lookup_failed", { surface: "api" }, e);
+    safeServerLogCritical("signup", "username_lookup_failed", { surface: "api" }, e, { flow: "signup" });
     return NextResponse.json({ error: "Unable to sign up. Try again shortly.", code: "db" }, { status: 503 });
   }
   if (usernameTaken) {
@@ -128,8 +136,9 @@ export async function POST(req: Request) {
   const { email, name, password, country, tier, examFocus, studyGoal, dailyStudyMinutes, learnerPath } = parsed.data;
   const passwordHash = await hash(password, 12);
 
+  let createdId: string;
   try {
-    await prisma.user.create({
+    const created = await prisma.user.create({
       data: {
         email: email.toLowerCase(),
         username: normalizedUsername,
@@ -145,7 +154,9 @@ export async function POST(req: Request) {
         onboardingCompletedAt:
           examFocus && studyGoal && dailyStudyMinutes && learnerPath ? new Date() : null,
       },
+      select: { id: true },
     });
+    createdId = created.id;
   } catch (e) {
     const prismaCode = e instanceof Prisma.PrismaClientKnownRequestError ? e.code : undefined;
     const prismaMeta = e instanceof Prisma.PrismaClientKnownRequestError ? e.meta : undefined;
@@ -154,6 +165,7 @@ export async function POST(req: Request) {
       "user_create_failed",
       { surface: "api", prismaCode, prismaMeta: prismaMeta ? JSON.stringify(prismaMeta).slice(0, 400) : undefined },
       e,
+      { flow: "signup" },
     );
     if (e instanceof Error) {
       safeServerLog("signup", "user_create_failed_message", { detail: e.message.slice(0, 800) });
@@ -181,6 +193,10 @@ export async function POST(req: Request) {
 
   productEvent("signup_ok", {});
   safeServerLog("signup", "user_created_ok", {
+    tier: String(parsed.data.tier),
+    country: String(parsed.data.country),
+  });
+  await captureServerEvent(analyticsDistinctId(createdId), "signup_completed", {
     tier: String(parsed.data.tier),
     country: String(parsed.data.country),
   });

@@ -2,6 +2,7 @@ import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { NextResponse } from "next/server";
 import { getMissingSpacesProxyEnvKeys } from "@/lib/marketing/spaces-proxy-env";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
 
 /** Avoid sticky caches for JSON error bodies (404/502/503). Successful images use long-lived immutable caching. */
 const NO_STORE = { "Cache-Control": "no-store" } as const;
@@ -71,6 +72,7 @@ export async function GET(
   _req: Request,
   ctx: { params: Promise<{ path: string[] }> },
 ): Promise<Response> {
+  setSentryServerContext({ route: "/api/marketing-assets/[...path]", feature: "image" });
   const { path: segments } = await ctx.params;
   const key = segments.map((s) => decodeURIComponent(s)).join("/");
 

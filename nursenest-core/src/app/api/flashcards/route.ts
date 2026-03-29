@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { flashcardAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
-import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
 import { prisma } from "@/lib/db";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
@@ -21,22 +20,10 @@ export async function GET(req: NextRequest) {
   const page = Math.max(1, Number(req.nextUrl.searchParams.get("page") ?? "1"));
   const pageSize = Math.min(30, Math.max(5, Number(req.nextUrl.searchParams.get("pageSize") ?? "12")));
 
-  let entitlement;
-  try {
-    entitlement = await resolveEntitlement(userId);
-  } catch (e) {
-    safeServerLogCritical("api_flashcards", "entitlement_resolve_failed", { page }, e);
-    return NextResponse.json({ error: "Unable to verify access. Try again shortly." }, { status: 503 });
-  }
-
-  if (!entitlement.hasAccess) {
-    return NextResponse.json({ error: "Subscription required", code: "paywall" }, { status: 403 });
-  }
-
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
-  setSentryServerContext({ route: "/api/flashcards", feature: "lesson", userId: gate.userId });
+  setSentryServerContext({ route: "/api/flashcards", feature: "flashcard", userId: gate.userId });
 
   try {
     const flashcards = await withRetry(() =>

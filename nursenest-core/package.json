@@ -8,9 +8,9 @@
     }
   },
   "scripts": {
-    "dev": "next dev",
-    "build": "prisma generate && TMPDIR=${TMPDIR:-/tmp} next build",
-    "build:deploy": "prisma generate && TMPDIR=${TMPDIR:-/tmp} next build && node scripts/post-build-prune.mjs",
+    "dev": "TMPDIR=${TMPDIR:-/tmp} next dev",
+    "build": "node scripts/check-disk-before-build.mjs && prisma generate && TMPDIR=${TMPDIR:-/tmp} next build",
+    "build:deploy": "node scripts/check-disk-before-build.mjs && prisma generate && TMPDIR=${TMPDIR:-/tmp} next build && node scripts/post-build-prune.mjs",
     "start": "NODE_ENV=production next start -H 0.0.0.0 -p ${PORT:-3000}",
     "lint": "eslint",
     "generate:marketing-assets": "node scripts/generate-marketing-assets.mjs",
@@ -36,6 +36,7 @@
     "clean:build": "rm -rf .next dist build out",
     "verify:auth-db": "tsx scripts/verify-auth-db.ts",
     "disk:audit": "node scripts/disk-audit.mjs",
+    "build:risk-audit": "tsx scripts/build-risk-audit.ts",
     "storage:check": "node scripts/storage-guardrails.mjs",
     "storage:check:strict": "node scripts/storage-guardrails.mjs --strict",
     "import:audit-nursing": "tsx scripts/audit-nursing-ai-cache.ts",

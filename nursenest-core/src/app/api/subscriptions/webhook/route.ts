@@ -1,11 +1,16 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
+import * as Sentry from "@sentry/nextjs";
 import type Stripe from "stripe";
 import { SubscriptionStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { productEvent } from "@/lib/observability/product-events";
 import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import {
+  syncUserFromCheckoutSessionMetadata,
+  syncUserFromStripePriceId,
+} from "@/lib/stripe/sync-user-from-stripe-subscription";
 
 /** Dynamic import so Next build (collect page data) never loads Stripe without a key. */
 async function getStripeClient(): Promise<Stripe | null> {
@@ -15,7 +20,11 @@ async function getStripeClient(): Promise<Stripe | null> {
   return new Stripe(key);
 }
 
-function mapStripeSubscriptionStatus(status: Stripe.Subscription.Status): SubscriptionStatus {
+/**
+ * Maps Stripe subscription status to DB. Returns `null` when we should **not** overwrite the row
+ * (e.g. `incomplete` during Checkout can arrive after `checkout.session.completed` already set ACTIVE).
+ */
+function mapStripeSubscriptionStatus(status: Stripe.Subscription.Status): SubscriptionStatus | null {
   switch (status) {
     case "active":
     case "trialing":
@@ -26,9 +35,18 @@ function mapStripeSubscriptionStatus(status: Stripe.Subscription.Status): Subscr
     case "canceled":
     case "incomplete_expired":
       return SubscriptionStatus.CANCELLED;
+    case "incomplete":
+    case "paused":
+      return null;
     default:
       return SubscriptionStatus.CANCELLED;
   }
+}
+
+function firstSubscriptionPriceId(sub: Stripe.Subscription): string | undefined {
+  const item = sub.items?.data?.[0];
+  if (!item?.price) return undefined;
+  return typeof item.price === "string" ? item.price : item.price.id;
 }
 
 function warnIfStripeKeyModeMismatch(): void {
@@ -65,6 +83,10 @@ export async function POST(req: Request) {
   try {
     event = stripe.webhooks.constructEvent(body, signature, process.env.STRIPE_WEBHOOK_SECRET);
   } catch {
+    Sentry.captureMessage("stripe_webhook_invalid_signature", {
+      level: "warning",
+      tags: { flow: "stripe_webhook", kind: "signature" },
+    });
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
   }
 
@@ -88,18 +110,29 @@ export async function POST(req: Request) {
             },
           });
         });
+        await syncUserFromCheckoutSessionMetadata(userId, session.metadata ?? undefined);
       }
     }
 
     if (event.type === "customer.subscription.updated") {
       const sub = event.data.object as Stripe.Subscription;
       const status = mapStripeSubscriptionStatus(sub.status);
-      await prisma.$transaction(async (tx) => {
-        await tx.subscription.updateMany({
-          where: { stripeSubscriptionId: sub.id },
-          data: { status },
-        });
+      const row = await prisma.subscription.findUnique({
+        where: { stripeSubscriptionId: sub.id },
+        select: { userId: true },
       });
+      const priceId = firstSubscriptionPriceId(sub);
+      if (row?.userId && priceId) {
+        await syncUserFromStripePriceId(row.userId, priceId);
+      }
+      if (status !== null) {
+        await prisma.$transaction(async (tx) => {
+          await tx.subscription.updateMany({
+            where: { stripeSubscriptionId: sub.id },
+            data: { status },
+          });
+        });
+      }
     }
 
     if (event.type === "customer.subscription.deleted") {

@@ -21,11 +21,13 @@ export function safeServerLogCritical(
   event: string,
   meta?: SafeLogMeta,
   error?: unknown,
+  /** Optional Sentry tags (e.g. `flow: questions_load`) */
+  flowTags?: Record<string, string>,
 ): void {
   safeServerLog(scope, event, meta);
   const err = error instanceof Error ? error : error ? new Error(String(error)) : new Error(`${scope}:${event}`);
   Sentry.captureException(err, {
-    tags: { scope, event, critical: "true" },
+    tags: { scope, event, critical: "true", ...flowTags },
     extra: (meta ?? {}) as Record<string, unknown>,
     level: "error",
   });

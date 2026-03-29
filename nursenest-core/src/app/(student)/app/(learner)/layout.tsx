@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { signOut } from "@/lib/auth";
 import { CheckoutSuccessBanner } from "@/components/student/checkout-success-banner";
 import { LearnerThemeControl } from "@/components/student/learner-theme-control";
+import { LearnerAppSectionAnalytics } from "@/components/observability/learner-app-section-analytics";
 import { SentryLearnerShell } from "@/components/observability/sentry-learner-shell";
 
 /** Auth is enforced in `src/proxy.ts` (Next.js 16+) so this layout never calls `redirect()` for missing session. */
@@ -28,6 +29,7 @@ export default async function LearnerShellLayout({ children }: { children: React
   return (
     <SentryLearnerShell userId={userId}>
     <div className="mx-auto w-full max-w-6xl px-6 py-8">
+      <LearnerAppSectionAnalytics />
       <header className="nn-card mb-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl p-4">
         <nav className="flex flex-wrap items-center gap-2 text-sm font-medium">
           <Link className="rounded-full border border-primary/15 bg-primary/8 px-3 py-2 text-primary" href="/app">

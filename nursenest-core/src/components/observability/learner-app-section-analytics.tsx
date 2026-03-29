@@ -1,0 +1,23 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
+import { trackClientEvent } from "@/lib/observability/posthog-client";
+import { appSectionFromPathname, PH } from "@/lib/observability/posthog-conversion-events";
+
+/** Emits `app_section_view` when the learner navigates under `/app` (feature usage breakdown). */
+export function LearnerAppSectionAnalytics() {
+  const pathname = usePathname();
+  const last = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!pathname?.startsWith("/app")) return;
+    const section = appSectionFromPathname(pathname);
+    const key = `${section}:${pathname}`;
+    if (last.current === key) return;
+    last.current = key;
+    trackClientEvent(PH.appSectionView, { section, path: pathname });
+  }, [pathname]);
+
+  return null;
+}

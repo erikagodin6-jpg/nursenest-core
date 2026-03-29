@@ -7,6 +7,7 @@ import { getPathwayLesson } from "@/lib/lessons/pathway-lesson-loader";
 import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
 
 const bodySchema = z.object({
   pathwayId: z.string().min(3),
@@ -20,6 +21,8 @@ export async function POST(req: Request) {
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+
+  setSentryServerContext({ route: "/api/lessons/pathway-progress", feature: "lesson", userId });
 
   const parsed = bodySchema.safeParse(await req.json());
   if (!parsed.success) {

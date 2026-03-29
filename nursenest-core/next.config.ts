@@ -9,6 +9,7 @@
  * and silences “multiple lockfiles” warnings without changing import paths.
  */
 import { fileURLToPath } from "url";
+import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
 import { PROGRAMMATIC_SLUG_TO_PATHWAY_PATH } from "./src/lib/exam-pathways/programmatic-slug-redirects";
 import { CORE_HOSTED_MARKETING_LOCALES } from "./src/lib/i18n/marketing-locale-policy";
@@ -97,4 +98,17 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+const sentryWebpackPluginEnabled = Boolean(process.env.SENTRY_AUTH_TOKEN?.trim());
+
+export default withSentryConfig(nextConfig, {
+  org: process.env.SENTRY_ORG,
+  project: process.env.SENTRY_PROJECT,
+  silent: true,
+  ...(sentryWebpackPluginEnabled
+    ? {}
+    : {
+        sourcemaps: {
+          disable: true,
+        },
+      }),
+});

@@ -3,6 +3,8 @@
 import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import { TurnstileSignup } from "@/components/auth/turnstile-signup";
+import { trackClientEvent } from "@/lib/observability/posthog-client";
+import { PH } from "@/lib/observability/posthog-conversion-events";
 
 export function SignupForm() {
   const router = useRouter();
@@ -12,6 +14,7 @@ export function SignupForm() {
 
   async function onSubmit(formData: FormData) {
     setError(null);
+    trackClientEvent(PH.signupSubmitAttempt, {});
     const payload = {
       name: String(formData.get("name") ?? ""),
       username: String(formData.get("username") ?? ""),
@@ -38,6 +41,7 @@ export function SignupForm() {
       setError(typeof data.error === "string" ? data.error : "Unable to create account. Please check your details.");
       return;
     }
+    trackClientEvent(PH.signupSuccessClient, {});
     router.push("/login");
   }
 

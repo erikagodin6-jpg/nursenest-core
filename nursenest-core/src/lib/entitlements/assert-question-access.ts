@@ -7,16 +7,24 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 /**
  * Preserves session order; drops question IDs the current entitlement no longer allows (downgrade / tier change).
  */
+/** Keeps `IN (...)` clauses bounded for memory and planner stability on huge sessions. */
+const SESSION_ID_CHUNK = 400;
+
 export async function filterSessionQuestionIdsInScope(
   sessionIds: string[],
   entitlement: AccessScope,
 ): Promise<string[]> {
   if (sessionIds.length === 0) return [];
-  const rows = await prisma.examQuestion.findMany({
-    where: { AND: [{ id: { in: sessionIds } }, questionAccessWhere(entitlement)] },
-    select: { id: true },
-  });
-  const allowed = new Set(rows.map((r) => r.id));
+  const allowed = new Set<string>();
+  const baseWhere = questionAccessWhere(entitlement);
+  for (let i = 0; i < sessionIds.length; i += SESSION_ID_CHUNK) {
+    const chunk = sessionIds.slice(i, i + SESSION_ID_CHUNK);
+    const rows = await prisma.examQuestion.findMany({
+      where: { AND: [{ id: { in: chunk } }, baseWhere] },
+      select: { id: true },
+    });
+    for (const r of rows) allowed.add(r.id);
+  }
   return sessionIds.filter((id) => allowed.has(id));
 }
 

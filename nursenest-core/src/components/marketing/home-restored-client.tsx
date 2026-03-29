@@ -414,7 +414,7 @@ export default function HomeRestoredClient() {
                   ).map((feat) => (
                     <div
                       key={feat.key}
-                      className="flex items-start gap-2.5 rounded-xl border border-[var(--theme-card-border)] bg-card p-3 shadow-[var(--shadow-card)]"
+                      className="nn-card flex items-start gap-2.5 rounded-xl p-3"
                       data-testid={`feature-${feat.key}`}
                     >
                       <div className="nn-accent-icon-wrap mt-0.5 h-8 w-8 shrink-0">

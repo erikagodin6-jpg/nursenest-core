@@ -5,7 +5,8 @@ const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 
 /**
  * Connection pool sizing: prefer `DATABASE_URL` query params, e.g.
- * `postgresql://...?connection_limit=15&pool_timeout=20` (values depend on host + traffic).
+ * `postgresql://...?connection_limit=15&pool_timeout=20&statement_timeout=30000` (values depend on host + traffic).
+ * `statement_timeout` (ms) caps runaway queries at the server — pair with app-level retries/timeouts on hot paths.
  * Prisma does not set a universal default; tune alongside your Postgres max_connections.
  */
 export const prisma =

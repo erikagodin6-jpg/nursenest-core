@@ -4,6 +4,8 @@ import type { TierCode } from "@prisma/client";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { SOCIAL_PROOF, TRUST_BLOCK, getTierPricingNarrative } from "@/lib/conversion/pricing-catalog";
+import { trackClientEvent } from "@/lib/observability/posthog-client";
+import { PH } from "@/lib/observability/posthog-conversion-events";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import type { BillingDuration } from "@/lib/stripe/pricing-map";
@@ -90,6 +92,11 @@ export function PricingPageClient({
     async (duration: BillingDuration) => {
       setCheckoutError(null);
       setCheckoutLoading(true);
+      trackClientEvent(PH.checkoutStarted, {
+        country: effectiveCountry,
+        tier: String(tier),
+        duration: String(duration),
+      });
       try {
         const res = await fetch("/api/subscriptions/checkout", {
           method: "POST",
@@ -119,9 +126,9 @@ export function PricingPageClient({
   return (
     <main className="mx-auto w-full max-w-6xl px-6 py-12">
       <p className="text-xs font-semibold uppercase tracking-wide text-primary">Pricing</p>
-      <h1 className="mt-2 text-4xl font-bold">{heading}</h1>
+      <h1 className="mt-2 text-4xl font-bold text-[var(--theme-heading-text)]">{heading}</h1>
       <p className="mt-3 max-w-2xl text-muted">{intro}</p>
-      <div className="mt-4 rounded-xl border border-primary/25 bg-primary/5 px-4 py-3 text-sm text-muted">
+      <div className="nn-accent-soft-ring mt-4 rounded-xl border px-4 py-3 text-sm text-muted">
         <p>{t("pages.pricing.institutionalBanner")}</p>
         <Link href={institutionalHref} className="mt-2 inline-block font-semibold text-primary hover:underline">
           {t("pages.pricing.institutionalLink")} →
@@ -174,7 +181,7 @@ export function PricingPageClient({
 
       <section className="mt-10 grid gap-8 lg:grid-cols-2">
         <div>
-          <h2 className="text-2xl font-bold">{narrative.headline}</h2>
+          <h2 className="text-2xl font-bold text-[var(--theme-heading-text)]">{narrative.headline}</h2>
           {narrative.urgencyLine ? <p className="mt-2 text-sm font-medium text-primary">{narrative.urgencyLine}</p> : null}
           <p className="mt-3 text-muted">{narrative.subhead}</p>
           <h3 className="mt-6 text-sm font-semibold uppercase tracking-wide text-muted">Outcomes you will feel</h3>
@@ -214,7 +221,7 @@ export function PricingPageClient({
       </section>
 
       <section className="mt-12">
-        <h2 className="text-xl font-bold">Choose billing rhythm</h2>
+        <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">Choose billing rhythm</h2>
         <p className="mt-2 text-sm text-muted">
           Suggested totals help you compare savings; Stripe shows the exact charged amount at checkout.
         </p>
@@ -234,7 +241,7 @@ export function PricingPageClient({
                     Best value
                   </p>
                 ) : null}
-                <h3 className="text-lg font-semibold">{DURATION_LABEL[dur]}</h3>
+                <h3 className="text-lg font-semibold text-[var(--theme-heading-text)]">{DURATION_LABEL[dur]}</h3>
                 {row ? (
                   <>
                     <p className="mt-2 text-2xl font-bold">{row.totalLabel}</p>

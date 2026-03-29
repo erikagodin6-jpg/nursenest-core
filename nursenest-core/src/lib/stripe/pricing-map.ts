@@ -45,3 +45,12 @@ export function findPriceEntry(
 ): PriceEntry | undefined {
   return priceMap.find((p) => p.country === country && p.tier === tier && p.duration === duration);
 }
+
+/** Reverse lookup: Stripe Price id → plan identity (first match wins; each id should be unique per env). */
+export function findTierCountryByPriceId(
+  priceId: string,
+): { tier: TierCode; country: "CA" | "US"; duration: BillingDuration } | undefined {
+  const row = priceMap.find((p) => p.priceId === priceId);
+  if (!row) return undefined;
+  return { tier: row.tier, country: row.country, duration: row.duration };
+}

@@ -14,9 +14,12 @@ export default async function DashboardPage() {
   if (entitlement === "error") {
     return (
       <main className="space-y-5">
-        <h1 className="text-3xl font-bold">Learner dashboard</h1>
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wide text-primary">Dashboard</p>
+          <h1 className="mt-1 text-3xl font-bold text-[var(--theme-heading-text)]">Learner dashboard</h1>
+        </div>
         <section className="nn-card p-6">
-          <h2 className="text-xl font-semibold">Access Status</h2>
+          <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Access status</h2>
           <p className="mt-2 text-sm text-muted">Subscription status could not be loaded. Refresh the page.</p>
         </section>
       </main>
@@ -92,11 +95,14 @@ export default async function DashboardPage() {
 
   return (
     <main className="space-y-5">
-      <h1 className="text-3xl font-bold">Learner dashboard</h1>
-      <p className="text-sm text-muted">{SOCIAL_PROOF.passRateLine}</p>
+      <div>
+        <p className="text-xs font-semibold uppercase tracking-wide text-primary">Dashboard</p>
+        <h1 className="mt-1 text-3xl font-bold text-[var(--theme-heading-text)]">Learner dashboard</h1>
+        <p className="mt-2 text-sm text-muted">{SOCIAL_PROOF.passRateLine}</p>
+      </div>
 
       <section className="nn-card p-6">
-        <h2 className="text-xl font-semibold">Access status</h2>
+        <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Access status</h2>
         <p className="mt-2 text-sm text-muted">
           {entitlement.hasAccess ? "Active subscription — full bank, lessons, and mocks." : "No active subscription — previews may still be available on lessons/questions."}
         </p>
@@ -110,7 +116,7 @@ export default async function DashboardPage() {
       {entitlement.hasAccess ? (
         <>
           <section className="nn-card p-6">
-            <h2 className="text-xl font-semibold">Continue where you left off</h2>
+            <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Continue where you left off</h2>
             {nextLessonTitle ? (
               <p className="mt-2 text-sm text-muted">
                 Next open lesson: <span className="font-medium text-foreground">{nextLessonTitle}</span>
@@ -119,20 +125,29 @@ export default async function DashboardPage() {
               <p className="mt-2 text-sm text-muted">Pick a lesson or jump to the question bank for a timed block.</p>
             )}
             <div className="mt-4 flex flex-wrap gap-2">
-              <Link className="rounded-full border border-border bg-white px-4 py-2 text-sm font-semibold hover:bg-gray-50" href="/app/lessons">
+              <Link
+                className="rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold text-[var(--theme-menu-text)] transition-colors hover:bg-muted/80"
+                href="/app/lessons"
+              >
                 Open lessons
               </Link>
-              <Link className="rounded-full border border-border bg-white px-4 py-2 text-sm font-semibold hover:bg-gray-50" href="/app/questions">
+              <Link
+                className="rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold text-[var(--theme-menu-text)] transition-colors hover:bg-muted/80"
+                href="/app/questions"
+              >
                 Question bank
               </Link>
-              <Link className="rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary" href="/app/exams">
+              <Link
+                className="rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary/15"
+                href="/app/exams"
+              >
                 Mock exams
               </Link>
             </div>
           </section>
 
           <section className="nn-card p-6">
-            <h2 className="text-xl font-semibold">Readiness snapshot</h2>
+            <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Readiness snapshot</h2>
             <p className="mt-2 text-xs text-muted">
               Informative only—not a pass prediction. Use it to steer study time toward practice and review.
             </p>
@@ -156,7 +171,7 @@ export default async function DashboardPage() {
           </section>
 
           <section className="nn-card p-6">
-            <h2 className="text-xl font-semibold">Features to use this week</h2>
+            <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Features to use this week</h2>
             <ul className="mt-3 list-inside list-disc space-y-1 text-sm text-muted">
               <li>Timed mock exams with autosave and score history</li>
               <li>SATA and NGN-style judgment stems in the question bank</li>
@@ -169,7 +184,7 @@ export default async function DashboardPage() {
 
       {userPrefs && (userPrefs.examFocus || userPrefs.studyGoal || userPrefs.dailyStudyMinutes) ? (
         <section className="nn-card p-6">
-          <h2 className="text-xl font-semibold">Your onboarding targets</h2>
+          <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Your onboarding targets</h2>
           <ul className="mt-2 text-sm text-muted">
             {userPrefs.examFocus ? <li>Exam focus: {userPrefs.examFocus}</li> : null}
             {userPrefs.studyGoal ? <li>Goal: {userPrefs.studyGoal}</li> : null}

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 /**
  * Liveness: **no Prisma, DB, i18n, or env validation** — App Platform / probes must not depend on schema or secrets.
- * For DB readiness details, use your metrics stack or a separate internal-only route behind auth.
+ * DB readiness: `GET /api/health/ready` (optional `SELECT 1` with timeout).
  */
 export async function GET() {
   const mem = process.memoryUsage();

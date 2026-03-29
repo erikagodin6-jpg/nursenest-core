@@ -95,7 +95,7 @@ export async function POST(req: Request) {
       hydrate: "full" as const,
     });
   } catch (e) {
-    safeServerLogCritical("api_exams_start", "failed", {}, e);
+    safeServerLogCritical("api_exams_start", "failed", {}, e, { flow: "exam_start" });
     return NextResponse.json(
       { error: "Unable to start exam session. Try again shortly.", questions: [], total: 0, poolEmpty: true },
       { status: 503 },

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 import Script from "next/script";
 import { AuthSessionProvider } from "@/components/auth/auth-session-provider";
+import { AnalyticsProvider } from "@/components/providers/analytics-provider";
 import { AppThemeProvider } from "@/components/theme/app-theme-provider";
 import { marketingOpenGraphImageUrl } from "@/lib/marketing-assets";
 import { MARKETING_SITE_ORIGIN } from "@/lib/seo/site-origin";
@@ -72,7 +73,9 @@ export default function RootLayout({
           {themeBoot}
         </Script>
         <AppThemeProvider>
-          <AuthSessionProvider>{children}</AuthSessionProvider>
+          <AuthSessionProvider>
+            <AnalyticsProvider>{children}</AnalyticsProvider>
+          </AuthSessionProvider>
         </AppThemeProvider>
       </body>
     </html>

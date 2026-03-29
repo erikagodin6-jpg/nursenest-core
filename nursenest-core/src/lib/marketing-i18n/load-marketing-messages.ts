@@ -1,5 +1,5 @@
 import "server-only";
-import { existsSync, readFileSync } from "fs";
+import { existsSync, readFileSync, statSync } from "fs";
 import path from "path";
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
@@ -36,6 +36,8 @@ const cdnResolved = new Map<string, MarketingMessages>();
 
 let enBundleCache: MarketingMessages | null = null;
 
+const MAX_MERGED_BUNDLE_BYTES = 12 * 1024 * 1024;
+
 function loadEnglishBundleFromDisk(): MarketingMessages {
   if (enBundleCache) return enBundleCache;
   const fp = resolveMergedI18nPath(DEFAULT_MARKETING_LOCALE);
@@ -43,6 +45,17 @@ function loadEnglishBundleFromDisk(): MarketingMessages {
     safeServerLog("i18n", "merged_bundle_missing", { locale: DEFAULT_MARKETING_LOCALE });
     enBundleCache = {} as MarketingMessages;
     return enBundleCache;
+  }
+  try {
+    const st = statSync(fp);
+    if (st.size > MAX_MERGED_BUNDLE_BYTES) {
+      safeServerLog("i18n", "merged_bundle_unusually_large", {
+        locale: DEFAULT_MARKETING_LOCALE,
+        bytes: st.size,
+      });
+    }
+  } catch {
+    /* best-effort stat */
   }
   const raw = readFileSync(fp, "utf8");
   enBundleCache = JSON.parse(raw) as MarketingMessages;

@@ -4,10 +4,13 @@ import { sentryUserHash } from "@/lib/observability/sentry-user-hash";
 export type ServerFeatureTag =
   | "exam"
   | "lesson"
+  | "flashcard"
   | "question"
   | "entitlement"
   | "payment"
   | "auth"
+  | "signup"
+  | "image"
   | "api"
   | "other";
 
