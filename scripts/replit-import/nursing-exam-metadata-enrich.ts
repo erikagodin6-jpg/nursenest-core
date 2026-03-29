@@ -2,22 +2,32 @@
  * Deterministic tier/exam enrichment for legacy ai_cache MCQ line items **before** mapLegacyItemToExamQuestion.
  * No silent defaults to NCLEX-RN or free tier. Low-confidence cases remain missing → strict mapper rejects.
  *
- * Priority: explicit item → parent row → deterministic cache_key inference →
- * generation_jobs pipeline hash resolution → manual mapping → path/filename signals.
+ * Priority: explicit item → parent row → reviewed overrides file → manual mapping →
+ * deterministic cache_key substring rules → path/filename hints.
+ * Opaque hashed cache_keys are not reverse-decoded; use reviewed overrides or manual mapping.
  */
 import * as fs from "fs";
 import * as path from "path";
-import { clearPipelineCacheKeyIndexCache, resolveCacheKeyFromExportBundle } from "./nursing-cache-key-source-resolve";
+import { clearPipelineCacheKeyIndexCache } from "./nursing-cache-key-source-resolve";
+import {
+  applyReviewedOverride,
+  clearReviewedOverridesCache,
+  type ReviewedMetadataOverridesFileV1,
+} from "./nursing-review-metadata";
 
 export type MetadataProvenanceSource =
   | "explicit_item_field"
   | "parent_metadata"
-  | "filename"
+  | "reviewed_override"
+  | "manual_mapping"
+  | "cache_rule"
+  | "filename_hint"
   | "path_segment"
+  /** @deprecated use cache_rule */
   | "cache_key"
+  /** @deprecated use cache_rule */
   | "inferred_rule"
-  | "resolved_origin"
-  | "manual_mapping";
+  | "filename";
 
 export type NursingEnrichmentContext = {
   sourceFileName: string;
@@ -39,10 +49,25 @@ export type EnrichmentAudit = {
   tierDetail?: string;
   examDetail?: string;
   manualMappingKey?: string;
+  reviewedOverrideKey?: string;
   inferredRuleIds: string[];
   ambiguous: boolean;
   ambiguousReasons: string[];
+  /** True when tier+exam present and mapper can run. */
+  importable: boolean;
+  /** True when tier or exam still missing after enrichment. */
+  reviewRequired: boolean;
 };
+
+/** Single label for reporting: how this row was resolved, or `unresolved` / `mixed`. */
+export function resolutionCategoryForAudit(audit: EnrichmentAudit): string {
+  if (!audit.importable) return "unresolved";
+  const t = audit.tierSource;
+  const e = audit.examSource;
+  if (t && e && t === e) return t;
+  if (audit.originalTier && audit.originalExam) return "explicit_item_field";
+  return "mixed";
+}
 
 export type ManualMappingFileV1 = {
   version: 1;
@@ -102,6 +127,7 @@ export function loadManualMappingCached(repoRoot: string = process.cwd()): Manua
 /** For tests / CLI that reset module state. */
 export function clearManualMappingCache(): void {
   cachedManual = undefined;
+  clearReviewedOverridesCache();
   clearPipelineCacheKeyIndexCache();
 }
 
@@ -186,10 +212,18 @@ function applyManualMapping(
   return null;
 }
 
+function mapProvenanceToDisplay(src: MetadataProvenanceSource | null): string | null {
+  if (!src) return null;
+  if (src === "inferred_rule" || src === "cache_key") return "cache_rule";
+  if (src === "filename") return "filename_hint";
+  return src;
+}
+
 export function enrichNursingExamItemMetadata(
   item: Record<string, unknown>,
   ctx: NursingEnrichmentContext,
   manual: ManualMappingFileV1 | null,
+  reviewedOverrides: ReviewedMetadataOverridesFileV1 | null = null,
 ): { merged: Record<string, unknown>; audit: EnrichmentAudit } {
   const inferredRuleIds: string[] = [];
   const ambiguousReasons: string[] = [];
@@ -204,6 +238,7 @@ export function enrichNursingExamItemMetadata(
   let tierDetail: string | undefined = origTier ? "item.tier" : undefined;
   let examDetail: string | undefined = origExam ? "item.exam" : undefined;
   let manualMappingKey: string | undefined;
+  let reviewedOverrideKey: string | undefined;
 
   const merged: Record<string, unknown> = { ...item };
 
@@ -223,41 +258,26 @@ export function enrichNursingExamItemMetadata(
     }
   }
 
-  /** Deterministic cache_key substring rules (readable keys only). */
+  /** Reviewed operator overrides (config/nursing-reviewed-metadata-overrides.json). */
   if (!tier || !exam) {
-    const inf = inferFromCacheKey(ctx.cacheKey);
-    if (inf) {
+    const rev = applyReviewedOverride(ctx.cacheKey, reviewedOverrides);
+    if (rev) {
       if (!tier) {
-        tier = inf.tier;
-        tierSource = "inferred_rule";
-        tierDetail = `cache_key:${inf.ruleId}`;
-        inferredRuleIds.push(inf.ruleId);
+        tier = rev.tier;
+        tierSource = "reviewed_override";
+        tierDetail = rev.key;
+        reviewedOverrideKey = rev.key;
       }
       if (!exam) {
-        exam = inf.exam;
-        examSource = "inferred_rule";
-        examDetail = `cache_key:${inf.ruleId}`;
-        if (!inferredRuleIds.includes(inf.ruleId)) inferredRuleIds.push(inf.ruleId);
+        exam = rev.exam;
+        examSource = "reviewed_override";
+        examDetail = rev.key;
+        reviewedOverrideKey = rev.key;
       }
     }
   }
 
-  /**
-   * Verifiable tier from recomputed pipeline keys + generation_jobs.json (same export dir).
-   * Does not set exam from tier (no NCLEX/RN/PN defaults).
-   */
-  if (!tier || !exam) {
-    const ro = resolveCacheKeyFromExportBundle(ctx.cacheKey, ctx.exportDirAbs);
-    if (ro) {
-      if (!tier && ro.tier) {
-        tier = ro.tier;
-        tierSource = "resolved_origin";
-        tierDetail = ro.detail;
-      }
-    }
-  }
-
-  /** Manual mapping (reviewed file only). */
+  /** Legacy manual mapping file (config/nursing-export-metadata-mapping.json). */
   if (!tier || !exam) {
     const man = applyManualMapping(ctx.cacheKey, manual);
     if (man) {
@@ -275,7 +295,26 @@ export function enrichNursingExamItemMetadata(
     }
   }
 
-  /** Optional: export bundle folder name — only when segment matches strict inference rules. */
+  /** Deterministic cache_key substring rules (readable keys only). */
+  if (!tier || !exam) {
+    const inf = inferFromCacheKey(ctx.cacheKey);
+    if (inf) {
+      if (!tier) {
+        tier = inf.tier;
+        tierSource = "cache_rule";
+        tierDetail = `cache_key:${inf.ruleId}`;
+        inferredRuleIds.push(inf.ruleId);
+      }
+      if (!exam) {
+        exam = inf.exam;
+        examSource = "cache_rule";
+        examDetail = `cache_key:${inf.ruleId}`;
+        if (!inferredRuleIds.includes(inf.ruleId)) inferredRuleIds.push(inf.ruleId);
+      }
+    }
+  }
+
+  /** Export bundle folder basename — strict inference only. */
   if (!tier || !exam) {
     const base = path.basename(ctx.exportDirAbs);
     const sub = inferFromCacheKey(base);
@@ -294,18 +333,19 @@ export function enrichNursingExamItemMetadata(
     }
   }
 
+  /** Source file name — strict inference only. */
   if (!tier || !exam) {
     const fn = ctx.sourceFileName;
     const sub = inferFromCacheKey(fn);
     if (sub) {
       if (!tier) {
         tier = sub.tier;
-        tierSource = "filename";
+        tierSource = "filename_hint";
         tierDetail = `file:${fn}:${sub.ruleId}`;
       }
       if (!exam) {
         exam = sub.exam;
-        examSource = "filename";
+        examSource = "filename_hint";
         examDetail = `file:${fn}:${sub.ruleId}`;
       }
     }
@@ -317,6 +357,8 @@ export function enrichNursingExamItemMetadata(
   if (!tier) ambiguousReasons.push("missing_tier_after_enrichment");
   if (!exam) ambiguousReasons.push("missing_exam_after_enrichment");
   const ambiguous = Boolean(!tier || !exam);
+  const importable = Boolean(tier && exam);
+  const reviewRequired = ambiguous;
 
   const audit: EnrichmentAudit = {
     originalTier: origTier,
@@ -328,9 +370,12 @@ export function enrichNursingExamItemMetadata(
     tierDetail,
     examDetail,
     manualMappingKey,
+    reviewedOverrideKey,
     inferredRuleIds,
     ambiguous,
     ambiguousReasons,
+    importable,
+    reviewRequired,
   };
 
   return { merged, audit };

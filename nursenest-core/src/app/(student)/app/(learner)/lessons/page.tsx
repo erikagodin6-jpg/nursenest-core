@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { lessonAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
@@ -27,7 +28,11 @@ export default async function LessonsPage() {
       <main>
         <h1 className="text-3xl font-bold">Lessons</h1>
         <p className="mt-2 text-sm text-muted">
-          Structured modules connect pathophysiology to the same-week question practice.
+          Structured modules connect pathophysiology to the same-week question practice. Browse{" "}
+          <Link className="font-medium text-primary underline" href="/exam-lessons">
+            exam-specific lessons
+          </Link>{" "}
+          on the marketing site anytime.
         </p>
         <div className="mt-6">
           <SubscriptionPaywall context="lessons" freemiumRemainingLessons={snap?.lessonRemaining ?? 0} />
@@ -66,6 +71,13 @@ export default async function LessonsPage() {
     <main>
       <h1 className="text-3xl font-bold">Lessons</h1>
       <p className="mt-2 text-sm text-muted">Continue modules, then lock in retention with the question bank the same day.</p>
+      <p className="mt-2 text-sm text-muted">
+        Prefer exam-scoped study? Open{" "}
+        <Link className="font-medium text-primary underline" href="/exam-lessons">
+          lessons by exam pathway
+        </Link>{" "}
+        (NCLEX-RN, REx-PN, FNP, …).
+      </p>
       <aside className="nn-card mt-4 border-primary/15 bg-primary/5 p-4 text-sm text-muted">
         <p className="font-semibold text-foreground">Study rhythm</p>
         <p className="mt-1">Finish a lesson → apply it in 10 timed questions → review rationales. Repeat tomorrow.</p>
@@ -78,8 +90,18 @@ export default async function LessonsPage() {
       <div className="mt-4 space-y-3">
         {lessons.map((lesson) => (
           <article className="nn-card p-4" key={lesson.id}>
-            <h2 className="font-semibold">{lesson.title}</h2>
+            <h2 className="font-semibold">
+              <Link href={`/app/lessons/${lesson.id}`} className="hover:text-primary hover:underline">
+                {lesson.title}
+              </Link>
+            </h2>
             <p className="mt-2 text-sm text-muted">{lesson.summary}</p>
+            <Link
+              href={`/app/lessons/${lesson.id}`}
+              className="mt-3 inline-block text-sm font-semibold text-primary"
+            >
+              Open lesson →
+            </Link>
           </article>
         ))}
       </div>

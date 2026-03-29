@@ -9,6 +9,10 @@ import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
 import type { CountryCode, TierCode } from "@prisma/client";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { questionAccessWhereWithPathway } from "@/lib/exam-pathways/pathway-content-scope";
+import { subscriptionCoversPathwayBase } from "@/lib/exam-pathways/pathway-entitlements";
+import { seedMinimalQuestionBankIfEmpty } from "@/lib/exams/seed-minimal-question-bank";
 
 export async function GET(req: NextRequest) {
   const session = await auth();
@@ -20,6 +24,8 @@ export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
   const page = Math.max(1, Number(searchParams.get("page") ?? "1"));
   const pageSize = Math.min(25, Math.max(5, Number(searchParams.get("pageSize") ?? "10")));
+  const topicFilter = searchParams.get("topic")?.trim();
+  const pathwayIdParam = searchParams.get("pathwayId")?.trim();
   /** summary = card metadata only; full = stem + rationale + options (larger payloads). */
   const mode = searchParams.get("mode") === "full" ? "full" : "summary";
 
@@ -35,6 +41,7 @@ export async function GET(req: NextRequest) {
     const gate = await requireSubscriberSession();
     if (!gate.ok) return gate.response;
     setSentryServerContext({ route: "/api/questions", feature: "question", userId: gate.userId });
+    await seedMinimalQuestionBankIfEmpty();
     try {
       const summarySelect = {
         id: true,
@@ -55,15 +62,41 @@ export async function GET(req: NextRequest) {
         exam: true,
       } as const;
 
-      const questions = await withRetry(() =>
+      let pathway: ReturnType<typeof getExamPathwayById> | null = pathwayIdParam
+        ? getExamPathwayById(pathwayIdParam) ?? null
+        : null;
+      if (pathway && !subscriptionCoversPathwayBase(gate.entitlement, pathway)) {
+        pathway = null;
+      }
+      const baseWhere = questionAccessWhereWithPathway(gate.entitlement, pathway);
+      const whereWithTopic =
+        topicFilter && topicFilter.length > 0
+          ? { AND: [baseWhere, { topic: topicFilter }] }
+          : baseWhere;
+
+      let questions = await withRetry(() =>
         prisma.examQuestion.findMany({
-          where: questionAccessWhere(gate.entitlement),
+          where: whereWithTopic,
           select: mode === "full" ? fullSelect : summarySelect,
           orderBy: { updatedAt: "desc" },
           skip: (page - 1) * pageSize,
           take: pageSize,
         }),
       );
+
+      let topicRelaxed = false;
+      if (questions.length === 0 && topicFilter && topicFilter.length > 0) {
+        questions = await withRetry(() =>
+          prisma.examQuestion.findMany({
+            where: baseWhere,
+            select: mode === "full" ? fullSelect : summarySelect,
+            orderBy: { updatedAt: "desc" },
+            skip: (page - 1) * pageSize,
+            take: pageSize,
+          }),
+        );
+        if (questions.length > 0) topicRelaxed = true;
+      }
 
       const payload =
         mode === "summary"
@@ -79,6 +112,9 @@ export async function GET(req: NextRequest) {
         questions: payload,
         mode: "subscriber" as const,
         fields: mode,
+        pathwayIdApplied: pathway?.id ?? null,
+        topicRequested: topicFilter && topicFilter.length > 0 ? topicFilter : null,
+        topicRelaxed,
       });
     } catch (e) {
       safeServerLogCritical("api_questions", "prisma_find_failed", { page }, e);
@@ -95,6 +131,8 @@ export async function GET(req: NextRequest) {
   }
 
   setSentryServerContext({ route: "/api/questions", feature: "question", userId });
+
+  await seedMinimalQuestionBankIfEmpty();
 
   const snap = await getFreemiumSnapshot(userId);
   if (!snap || snap.questionRemaining <= 0) {

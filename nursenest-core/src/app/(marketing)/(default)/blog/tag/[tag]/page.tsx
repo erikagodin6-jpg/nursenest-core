@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
+import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import {
   BLOG_LIST_PAGE_SIZE,
   countPublishedPostsWithTag,
   getPublishedBlogPostsByTagPage,
 } from "@/lib/blog/safe-blog-queries";
+import { blogTagBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 
 type Props = { params: Promise<{ tag: string }>; searchParams: Promise<{ page?: string }> };
 
@@ -34,9 +37,14 @@ export default async function BlogTagPage({ params, searchParams }: Props) {
   const { posts, total, pageSize } = await getPublishedBlogPostsByTagPage(decoded, page, BLOG_LIST_PAGE_SIZE);
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const base = `/blog/tag/${encodeURIComponent(decoded)}`;
+  const { crumbs, schemaItems } = blogTagBreadcrumbs(decoded);
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
+      {total > 0 ? <BreadcrumbJsonLd items={schemaItems} /> : null}
+      <div className="mb-6">
+        <BreadcrumbTrail items={crumbs} />
+      </div>
       <Link href="/blog" className="text-sm font-medium text-primary hover:underline">
         ← Blog
       </Link>

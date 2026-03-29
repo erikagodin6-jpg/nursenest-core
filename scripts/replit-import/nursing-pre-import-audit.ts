@@ -15,7 +15,8 @@ import {
   buildNursingParseContext,
   type MappedExamQuestion,
 } from "./nursing-ai-cache-extract";
-import type { EnrichmentAudit } from "./nursing-exam-metadata-enrich";
+import { resolutionCategoryForAudit, type EnrichmentAudit } from "./nursing-exam-metadata-enrich";
+import { computeHeuristicSuggestion } from "./nursing-review-metadata";
 
 function getDbUrl(): string | null {
   return process.env.PROD_DATABASE_URL?.trim() || process.env.DATABASE_URL?.trim() || null;
@@ -145,6 +146,9 @@ async function main() {
   const seenStemForDup = new Set<string>();
   /** Per cache_key: exam MCQ items; items that are 2nd+ occurrence of same stem (batch dup). */
   const cacheKeyStats: Record<string, { examMcqItems: number; inExportBatchDuplicateItems: number }> = {};
+  const provenanceTotals: Record<string, number> = {};
+  let sentToReview = 0;
+  let suggestionOnlyRows = 0;
 
   function touchCk(ck: string | null) {
     const key = ck ?? "__null_cache_key__";
@@ -189,11 +193,16 @@ async function main() {
         rejected += 1;
         const key = parsed.mapErrors.join(",") || "unknown";
         bump(rejectionReasons, key);
+        sentToReview += 1;
+        bump(provenanceTotals, "unresolved");
+        const sug = computeHeuristicSuggestion(item as Record<string, unknown>, ctx);
+        if (sug.suggestion_reasons.length) suggestionOnlyRows += 1;
         continue;
       }
 
       examMcqCandidates += 1;
       const v = parsed.value;
+      if (parsed.enrichment) bump(provenanceTotals, resolutionCategoryForAudit(parsed.enrichment));
       cacheKeyStats[ckLabel].examMcqItems += 1;
 
       if (seenStemForDup.has(v.stemHash)) {

@@ -125,12 +125,16 @@ export function SiteHeader() {
 
           <NavDetails label={t("nav.study")}>
             <NavLinkItem href={localizeHref("/lessons")}>{t("nav.lessons")}</NavLinkItem>
+            <NavLinkItem href={localizeHref("/exam-lessons")}>Lessons by exam</NavLinkItem>
             <NavLinkItem href={localizeHref("/test-bank")}>{t("nav.questionBank")}</NavLinkItem>
             <NavLinkItem href={localizeHref("/mock-exams")}>{t("nav.practiceExams")}</NavLinkItem>
             <NavLinkItem href={localizeHref("/flashcards")}>{t("nav.flashcards")}</NavLinkItem>
           </NavDetails>
 
           <NavDetails label={t("nav.resources")}>
+            <NavLinkItem href={localizeHref("/blog")}>{t("nav.blog")}</NavLinkItem>
+            <NavLinkItem href={localizeHref("/tools")}>{t("nav.clinicalTools")}</NavLinkItem>
+            <NavLinkItem href={localizeHref("/case-studies")}>{t("nav.caseStudies")}</NavLinkItem>
             <NavLinkItem href={localizeHref("/pricing")}>{t("nav.pricing")}</NavLinkItem>
             <NavLinkItem href={localizeHref("/faq")}>{t("footer.faq")}</NavLinkItem>
             <NavLinkItem href={localizeHref("/shop")}>{t("nav.store")}</NavLinkItem>
@@ -234,8 +238,11 @@ export function SiteHeader() {
         <div className="mx-auto flex h-9 max-w-7xl flex-wrap items-center gap-x-1 gap-y-1 px-2 sm:px-4 lg:px-8">
           <NavDetails label={t("nav.learningTools")} subBar>
             <NavLinkItem href={localizeHref("/lessons")}>{t("nav.lessons")}</NavLinkItem>
+            <NavLinkItem href={localizeHref("/exam-lessons")}>Lessons by exam</NavLinkItem>
             <NavLinkItem href={localizeHref("/flashcards")}>{t("nav.flashcards")}</NavLinkItem>
             <NavLinkItem href={localizeHref("/test-bank")}>{t("nav.questionBank")}</NavLinkItem>
+            <NavLinkItem href={localizeHref("/case-studies")}>{t("nav.caseStudies")}</NavLinkItem>
+            <NavLinkItem href={localizeHref("/tools")}>{t("nav.clinicalTools")}</NavLinkItem>
           </NavDetails>
           <NavDetails label={t("nav.examPrepShort")} subBar>
             <NavLinkItem href={localizeHref("/mock-exams")}>{t("nav.practiceExams")}</NavLinkItem>
@@ -319,8 +326,13 @@ export function SiteHeader() {
               {[
                 { href: localizeHref("/"), label: t("nav.home") },
                 { href: localizeHref("/lessons"), label: t("nav.lessons") },
+                { href: localizeHref("/exam-lessons"), label: "Lessons by exam" },
+                { href: localizeHref("/flashcards"), label: t("nav.flashcards") },
                 { href: localizeHref("/test-bank"), label: t("nav.questionBank") },
                 { href: localizeHref("/mock-exams"), label: t("nav.practiceExams") },
+                { href: localizeHref("/blog"), label: t("nav.blog") },
+                { href: localizeHref("/tools"), label: t("nav.clinicalTools") },
+                { href: localizeHref("/case-studies"), label: t("nav.caseStudies") },
                 { href: localizeHref("/pricing"), label: t("nav.pricing") },
               ].map((item) => (
                 <Link

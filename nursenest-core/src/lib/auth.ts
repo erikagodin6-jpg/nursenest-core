@@ -7,6 +7,7 @@ import { NextRequest } from "next/server";
 import { authCallbacks } from "@/lib/auth-callbacks";
 import { isEmailLikeIdentifier, normalizeLoginIdentifier } from "@/lib/auth/normalize-login-identifier";
 import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
+import { SubscriptionStatus, UserRole } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 
@@ -105,6 +106,23 @@ export const authConfig: NextAuthConfig = {
           mode: isEmailLikeIdentifier(identifier) ? "email" : "username",
         });
 
+        let subscriptionStatus: "active" | "grace" | "none" = "none";
+        if (user.role === UserRole.ADMIN) {
+          subscriptionStatus = "active";
+        } else {
+          try {
+            const sub = await prisma.subscription.findFirst({
+              where: { userId: user.id, status: { in: [SubscriptionStatus.ACTIVE, SubscriptionStatus.GRACE] } },
+              orderBy: { createdAt: "desc" },
+              select: { status: true },
+            });
+            if (sub?.status === SubscriptionStatus.ACTIVE) subscriptionStatus = "active";
+            else if (sub?.status === SubscriptionStatus.GRACE) subscriptionStatus = "grace";
+          } catch {
+            /* DB unavailable — session still usable; entitlements resolve server-side */
+          }
+        }
+
         return {
           id: user.id,
           email: user.email,
@@ -112,6 +130,7 @@ export const authConfig: NextAuthConfig = {
           role: user.role,
           country: user.country,
           tier: user.tier,
+          subscriptionStatus,
         };
       },
     }),

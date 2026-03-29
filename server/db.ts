@@ -55,7 +55,7 @@ function shouldUseSsl(connectionString: string): boolean {
   if (forceSsl === "true") return true;
   if (forceSsl === "false") return false;
 
-  return /render\.com|supabase\.co|neon\.tech|railway\.app|amazonaws\.com|azure\.com/i.test(
+  return /render\.com|supabase\.co|neon\.tech|railway\.app|amazonaws\.com|azure\.com|ondigitalocean\.com/i.test(
     connectionString,
   );
 }

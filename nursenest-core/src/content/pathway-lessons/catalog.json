@@ -1,0 +1,201 @@
+{
+  "version": 1,
+  "pathways": {
+    "ca-rn-nclex-rn": {
+      "lessons": [
+        {
+          "slug": "fluid-balance-acute-care",
+          "title": "Fluid balance & IV therapy judgment (NCLEX-RN, Canada)",
+          "topic": "Fluids & electrolytes",
+          "topicSlug": "fluids-electrolytes",
+          "bodySystem": "Renal",
+          "previewSectionCount": 1,
+          "seoTitle": "Fluid balance & IV therapy for NCLEX-RN | Canada clinical lesson",
+          "seoDescription": "Canada RN context: assess volume status, interpret IV orders, and prioritize complications—aligned to NCLEX-RN clinical judgment expectations.",
+          "sections": [
+            {
+              "id": "intro",
+              "heading": "Introduction",
+              "kind": "intro",
+              "body": "Fluid and electrolyte questions on the NCLEX-RN reward **prioritization**: who needs assessment first, what complication is emerging, and which order is unsafe in context. This lesson uses **Canadian acute care** language (units, common protocols) without mixing US-only scope statements."
+            },
+            {
+              "id": "core",
+              "heading": "Core concepts",
+              "kind": "core",
+              "body": "Tie **intake and output**, **vitals**, and **labs** together before choosing interventions. For IV therapy, verify **indication**, **rate**, **line type**, and **monitoring**—then connect early signs of fluid overload or deficit to your next action."
+            },
+            {
+              "id": "clinical",
+              "heading": "Clinical application",
+              "kind": "clinical_application",
+              "body": "When stem length increases, separate **data** from **noise**: abnormal findings that change risk in the next minutes belong in your first move. Practice stating a one-sentence **clinical concern** before picking an option."
+            },
+            {
+              "id": "examtips",
+              "heading": "Exam tips",
+              "kind": "exam_tips",
+              "body": "Use **elimination** on dosage or IV rate items when one option ignores assessment, another skips monitoring, or a third assumes stability you have not established. Pair this lesson with a **timed block** in your bank filtered to fluids/electrolytes."
+            }
+          ]
+        },
+        {
+          "slug": "cardiovascular-prioritization",
+          "title": "Cardiovascular prioritization for Canadian NCLEX-RN",
+          "topic": "Cardiovascular",
+          "topicSlug": "cardiovascular",
+          "bodySystem": "Cardiovascular",
+          "previewSectionCount": 1,
+          "seoTitle": "Cardiovascular prioritization | NCLEX-RN Canada lesson",
+          "seoDescription": "Practice stable vs unstable presentations, ischemia red flags, and safe sequencing for Canadian RN candidates preparing for NCLEX-RN.",
+          "sections": [
+            {
+              "id": "intro",
+              "heading": "Introduction",
+              "kind": "intro",
+              "body": "Cardiovascular items often test whether you recognize **time-sensitive deterioration**—chest discomfort with diaphoresis, sudden hypotension with tachycardia, or new arrhythmia patterns that need escalation now, not later."
+            },
+            {
+              "id": "core",
+              "heading": "Core concepts",
+              "kind": "core",
+              "body": "Anchor on **perfusion** and **oxygen delivery**: connect blood pressure, heart rate, mentation, and skin findings before choosing teaching, discharge, or medication actions."
+            },
+            {
+              "id": "clinical",
+              "heading": "Clinical application",
+              "kind": "clinical_application",
+              "body": "For multi-patient prioritization, choose the client whose **condition is most likely to worsen without immediate nursing action**—not the longest task list."
+            },
+            {
+              "id": "examtips",
+              "heading": "Exam tips",
+              "kind": "exam_tips",
+              "body": "After this lesson, run a **question bank** session filtered to cardiovascular topics, then a **mock exam** segment to rehearse stamina."
+            }
+          ]
+        }
+      ]
+    },
+    "ca-rpn-rex-pn": {
+      "lessons": [
+        {
+          "slug": "pn-scope-safety-basics",
+          "title": "PN scope & safety foundations (REx-PN, Canada)",
+          "topic": "Safety & scope",
+          "topicSlug": "safety-scope",
+          "bodySystem": "General",
+          "previewSectionCount": 1,
+          "seoTitle": "PN scope & safety for REx-PN | Canada practical nursing",
+          "seoDescription": "Canada practical nurse pathway: delegation boundaries, scope-aware communication, and safety-first sequencing aligned to REx-PN-style judgment items.",
+          "sections": [
+            {
+              "id": "intro",
+              "heading": "Introduction",
+              "kind": "intro",
+              "body": "REx-PN items frequently test **what the PN can do independently**, **what needs clarification**, and **what must be escalated**. Keep **provincial scope** in mind—this lesson uses general PN-safe framing without substituting regulator guidance."
+            },
+            {
+              "id": "core",
+              "heading": "Core concepts",
+              "kind": "core",
+              "body": "Separate **assessment** from **intervention**: know when your role is to report, observe, or carry out a provider-ordered skill—and when to pause for orders."
+            },
+            {
+              "id": "clinical",
+              "heading": "Clinical application",
+              "kind": "clinical_application",
+              "body": "In communication stems, choose responses that **protect the client**, **clarify orders appropriately**, and **avoid practicing outside scope**."
+            },
+            {
+              "id": "examtips",
+              "heading": "Exam tips",
+              "kind": "exam_tips",
+              "body": "Pair with **PN-tier** question bank blocks and short **practice exams** to build speed without skipping rationales."
+            }
+          ]
+        }
+      ]
+    },
+    "us-rn-nclex-rn": {
+      "lessons": [
+        {
+          "slug": "respiratory-assessment-ngn",
+          "title": "Respiratory assessment & oxygenation (NCLEX-RN, US)",
+          "topic": "Respiratory",
+          "topicSlug": "respiratory",
+          "bodySystem": "Respiratory",
+          "previewSectionCount": 1,
+          "seoTitle": "Respiratory assessment for NCLEX-RN | US lesson",
+          "seoDescription": "US RN candidates: oxygen delivery, work of breathing, and early escalation patterns for NCLEX-RN clinical judgment practice.",
+          "sections": [
+            {
+              "id": "intro",
+              "heading": "Introduction",
+              "kind": "intro",
+              "body": "US NCLEX-RN stems often embed **oxygenation risk** in routine data: subtle SpO₂ changes, accessory muscle use, or altered mental status with lung findings."
+            },
+            {
+              "id": "core",
+              "heading": "Core concepts",
+              "kind": "core",
+              "body": "Link **airway**, **breathing**, and **circulation** decisions: choose interventions that match the primary threat and the monitoring you will perform next."
+            },
+            {
+              "id": "clinical",
+              "heading": "Clinical application",
+              "kind": "clinical_application",
+              "body": "When answers include teaching or discharge, confirm **stability** and **understanding** first—do not select education if assessment is incomplete."
+            },
+            {
+              "id": "examtips",
+              "heading": "Exam tips",
+              "kind": "exam_tips",
+              "body": "Use **topic filters** in the question bank for respiratory items, then schedule a **timed mock** to consolidate pacing."
+            }
+          ]
+        }
+      ]
+    },
+    "us-np-fnp": {
+      "lessons": [
+        {
+          "slug": "fnp-differential-primary-care",
+          "title": "Differential reasoning in primary care (FNP track)",
+          "topic": "Clinical reasoning",
+          "topicSlug": "clinical-reasoning",
+          "bodySystem": "General",
+          "previewSectionCount": 1,
+          "seoTitle": "FNP differential reasoning | primary care | NurseNest",
+          "seoDescription": "Family NP track: structured differentials, red flags, and follow-up planning—scoped to FNP preparation, not other NP specialties.",
+          "sections": [
+            {
+              "id": "intro",
+              "heading": "Introduction",
+              "kind": "intro",
+              "body": "FNP items emphasize **breadth** across ages with **depth** in safe prescribing, screening, and escalation. This lesson is **FNP-specific**—do not substitute PMHNP or AGPCNP hubs for specialty-scoped study."
+            },
+            {
+              "id": "core",
+              "heading": "Core concepts",
+              "kind": "core",
+              "body": "Build a **problem representation**, then test competing diagnoses with **targeted history**, **exam**, and **initial workup**—avoid premature closure."
+            },
+            {
+              "id": "clinical",
+              "heading": "Clinical application",
+              "kind": "clinical_application",
+              "body": "For chronic disease follow-up, align medication changes with **organ function**, **risk**, and **patient capacity**—document reasoning you could defend to a preceptor."
+            },
+            {
+              "id": "examtips",
+              "heading": "exam tips",
+              "kind": "exam_tips",
+              "body": "Cross-link to **NP-tier** bank items tagged for primary care and complete **longer case blocks** to mirror certification pacing."
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

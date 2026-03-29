@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Calculator, Droplets, Activity } from "lucide-react";
+import { Calculator, Droplets, Activity, Shield } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { getAllToolSlugs } from "@/lib/tools/tool-registry";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
@@ -10,6 +10,8 @@ function cardKeyPrefix(slug: string): string {
   if (slug === "med-math") return "medMath";
   if (slug === "lab-values") return "labValues";
   if (slug === "electrolyte-abg") return "electrolyteAbg";
+  if (slug === "iv-infusion") return "ivInfusion";
+  if (slug === "transfusion-safety") return "transfusionSafety";
   return slug.replace(/-([a-z])/g, (_, c: string) => c.toUpperCase());
 }
 
@@ -17,6 +19,8 @@ const ICONS = {
   "med-math": Calculator,
   "lab-values": Droplets,
   "electrolyte-abg": Activity,
+  "iv-infusion": Droplets,
+  "transfusion-safety": Shield,
 } as const;
 
 export function ToolsHubClient() {

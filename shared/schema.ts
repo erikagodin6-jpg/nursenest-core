@@ -3288,6 +3288,8 @@ export const questionBank = pgTable("question_bank", {
   clientNeeds: text("client_needs").notNull(),
   topic: text("topic").notNull(),
   status: text("status").notNull().default("active"),
+  /** Nursing ladder: rpn | rn | np (lowercase). Learner access denied when null after backfill. */
+  contentTier: text("content_tier"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -6252,6 +6254,7 @@ export type InsertEmailVerificationCode = z.infer<typeof insertEmailVerification
 export const passwordResetTokens = pgTable("password_reset_tokens", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: varchar("user_id").notNull(),
+  /** SHA-256 hex digest of the raw token (raw token is only sent via email/link). */
   token: text("token").notNull().unique(),
   expiresAt: timestamp("expires_at").notNull(),
   usedAt: timestamp("used_at"),

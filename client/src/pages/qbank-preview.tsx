@@ -47,6 +47,7 @@ type Question = {
   topic: string;
   clientNeeds: string;
   status: string;
+  contentTier?: string | null;
 };
 
 type AnalyticsItem = {
@@ -190,6 +191,9 @@ export default function QBankPreviewPage() {
                       </div>
                       <div className="flex flex-wrap gap-1 mb-2">
                         <Badge variant="outline" className="text-xs">{q.examType}</Badge>
+                        {q.contentTier ? (
+                          <Badge variant="outline" className="text-xs uppercase">{q.contentTier}</Badge>
+                        ) : null}
                         <Badge variant="outline" className="text-xs">{q.category}</Badge>
                         <Badge variant="outline" className="text-xs">{q.difficulty}</Badge>
                         <Badge variant="outline" className="text-xs">{q.topic}</Badge>

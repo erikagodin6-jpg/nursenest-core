@@ -8,6 +8,19 @@ const VALID_COUNTRIES = ["US", "CA"];
 const VALID_QUESTION_TYPES = ["MCQ"];
 const VALID_STATUSES = ["active", "disabled"];
 
+/** Stored lowercase; aligns with `allowedNursingExamQuestionTiersForUser` ladder (rpn/rn/np). */
+export const QUESTION_BANK_CONTENT_TIERS = ["rpn", "rn", "np"] as const;
+export type QuestionBankContentTier = (typeof QUESTION_BANK_CONTENT_TIERS)[number];
+
+/**
+ * Product rule: domestic PN bank items validated as NCLEX-PN / REx-PN map to the `rpn` content tier.
+ * Future RN/NP-only exam types must add an explicit mapping here (no inference from category text).
+ */
+export function deriveQuestionBankContentTierFromExamType(examType: string): QuestionBankContentTier | null {
+  if (examType === "NCLEX-PN" || examType === "REx-PN") return "rpn";
+  return null;
+}
+
 const VALID_CATEGORIES = [
   "Foundations of Practice",
   "Collaborative Practice",
@@ -211,6 +224,35 @@ export function validateQuestionBankImport(rows: any[]): ValidationResult {
       rowErrors.push({ row: rowNum, field: "country", message: "REx-PN questions must have country=CA" });
     }
 
+    const defaultContentTier = deriveQuestionBankContentTierFromExamType(examType);
+    const explicitRaw = (row.content_tier ?? row.contentTier ?? "").toString().trim().toLowerCase();
+    let resolvedContentTier: string | undefined;
+    if (explicitRaw) {
+      if (!QUESTION_BANK_CONTENT_TIERS.includes(explicitRaw as QuestionBankContentTier)) {
+        rowErrors.push({
+          row: rowNum,
+          field: "content_tier",
+          message: `content_tier must be one of: ${QUESTION_BANK_CONTENT_TIERS.join(", ")}`,
+        });
+      } else if (defaultContentTier && explicitRaw !== defaultContentTier) {
+        rowErrors.push({
+          row: rowNum,
+          field: "content_tier",
+          message: `For ${examType}, content_tier must be ${defaultContentTier}`,
+        });
+      } else {
+        resolvedContentTier = explicitRaw;
+      }
+    } else if (defaultContentTier) {
+      resolvedContentTier = defaultContentTier;
+    } else {
+      rowErrors.push({
+        row: rowNum,
+        field: "content_tier",
+        message: "content_tier is required when exam_type has no default mapping",
+      });
+    }
+
     const questionType = (row.question_type || row.questionType || "MCQ").toString().toUpperCase().trim();
     if (!VALID_QUESTION_TYPES.includes(questionType)) {
       rowErrors.push({ row: rowNum, field: "question_type", message: `question_type must be one of: ${VALID_QUESTION_TYPES.join(", ")}` });
@@ -266,6 +308,7 @@ export function validateQuestionBankImport(rows: any[]): ValidationResult {
         clientNeeds: (row.client_needs || row.clientNeeds).trim(),
         topic: row.topic.trim(),
         status: "active",
+        contentTier: resolvedContentTier!,
       });
     }
   }
@@ -292,9 +335,10 @@ export function getExamTypeForCountry(country: string): string {
 }
 
 /**
- * Legacy `question_bank` rows have no subscription-tier column. Non-admin learners may only
- * receive rows for their profile region's exam (US → NCLEX-PN, CA → REx-PN). Cross-region and
- * IDOR access must be blocked server-side until tier metadata exists.
+ * Legacy `question_bank` rows: non-admin learners may only receive rows for their profile
+ * region's exam (US → NCLEX-PN, CA → REx-PN) and for `content_tier` values allowed by their
+ * subscription (`allowedNursingExamQuestionTiersForUser`). Cross-region / IDOR / out-of-tier
+ * access is blocked server-side.
  */
 export type LegacyQuestionBankScope = { country: string; examType: string };
 

@@ -2,6 +2,8 @@
 
 Production-focused NurseNest rebuild using Next.js App Router, TypeScript, Tailwind, Prisma, NextAuth, and Stripe.
 
+**Canonical Git remote:** [github.com/erikagodin6-jpg/nursenest-core](https://github.com/erikagodin6-jpg/nursenest-core) — branch `main`. Deploys (e.g. DigitalOcean App Platform) use this repository with **`source_dir: nursenest-core`**. Do not push production work to any other GitHub repo.
+
 ## Storage & content (scalability)
 
 Growing content (**questions, flashcards, lessons, blog, media**) must not bloat the **deploy container**. See:

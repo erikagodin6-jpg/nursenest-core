@@ -1,4 +1,5 @@
 import { CountryCode, TierCode } from "@/lib/domain/exam";
+import { getMonthlyListLabel } from "@/lib/pricing/display-catalog";
 
 export type PlanCard = {
   slug: string;
@@ -16,7 +17,7 @@ export const publicPlanCards: PlanCard[] = [
     description: "REx-PN focused lessons, question bank, and practice exams.",
     country: "CA",
     tier: "RPN",
-    monthlyPriceLabel: "$24.99 CAD/mo",
+    monthlyPriceLabel: getMonthlyListLabel("CA", "RPN"),
   },
   {
     slug: "us-lvn",
@@ -24,7 +25,7 @@ export const publicPlanCards: PlanCard[] = [
     description: "NCLEX-PN style prep with guided practice and rationales.",
     country: "US",
     tier: "LVN_LPN",
-    monthlyPriceLabel: "$24.99 USD/mo",
+    monthlyPriceLabel: getMonthlyListLabel("US", "LVN_LPN"),
   },
   {
     slug: "rn-np",
@@ -32,7 +33,7 @@ export const publicPlanCards: PlanCard[] = [
     description: "Advanced clinical reasoning paths for RN and NP learners.",
     country: "CA",
     tier: "NP",
-    monthlyPriceLabel: "$39.99 CAD/mo",
+    monthlyPriceLabel: getMonthlyListLabel("CA", "NP"),
   },
   {
     slug: "allied",
@@ -40,6 +41,6 @@ export const publicPlanCards: PlanCard[] = [
     description: "Reasoning-heavy prep for RT, paramedic, lab, and imaging pathways.",
     country: "CA",
     tier: "ALLIED",
-    monthlyPriceLabel: "From RN-tier billing until dedicated SKUs ship",
+    monthlyPriceLabel: getMonthlyListLabel("CA", "ALLIED"),
   },
 ];

@@ -8,6 +8,8 @@ const loaders: Record<ToolSlug, () => Promise<{ default: ComponentType }>> = {
   "med-math": () => import("./calculators/med-math-tool"),
   "lab-values": () => import("./calculators/lab-values-tool"),
   "electrolyte-abg": () => import("./calculators/electrolyte-abg-tool"),
+  "iv-infusion": () => import("./calculators/iv-infusion-tool"),
+  "transfusion-safety": () => import("./calculators/transfusion-safety-tool"),
 };
 
 export function ToolLazyView({ slug }: { slug: ToolSlug }) {

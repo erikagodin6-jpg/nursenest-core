@@ -16,7 +16,7 @@ alwaysApply: true
 
 ## Before writing or pasting new logic
 
-1. **Search for the original implementation** in-repo: `nursenest-core/src/legacy/`, `client/src/components/`, `server/`, shared packages, and related paths. Use `git log -p -- <path>` or fetch/diff a `subrepl-*` remote if the canonical version lives only there.
+1. **Search for the original implementation** in-repo: `nursenest-core/src/legacy/`, `client/src/components/`, `server/`, shared packages, and related paths. Use `git log -p -- <path>` on **this repo** (`origin` = `github.com/erikagodin6-jpg/nursenest-core` only). Do not configure extra remotes to old hosts—use local branches or history in this clone.
 2. **Open and compare** the old implementation with the current one (behavior, edge cases, error paths).
 3. If the **old code is more complete or production-proven**, **adapt and restore** it: merge into current patterns (imports, types, lazy loading), do not duplicate a second parallel implementation without cause.
 4. **Avoid** greenfield rewrites of features that already exist in legacy or monolith code unless blocked by documented performance or security requirements—and then prefer a minimal refactor over a from-scratch rewrite.

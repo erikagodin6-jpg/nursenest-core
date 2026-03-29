@@ -204,6 +204,12 @@ export function registerAdminSeedRoutes(app: Express) {
       await seedWaveforms();
     });
 
+    await runSeed("replitJsonImports", async () => {
+      const { seedReplitJsonImports } = await import("./seed-replit-json-imports");
+      const { pool } = await import("./storage");
+      await seedReplitJsonImports(pool);
+    });
+
     await runSeed("echoQuestionBank", async () => {
       const { seedEchoQuestionBank } = await import("./seed-echo-question-bank");
       await seedEchoQuestionBank();

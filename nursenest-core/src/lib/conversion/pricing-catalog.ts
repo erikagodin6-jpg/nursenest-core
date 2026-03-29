@@ -1,7 +1,8 @@
 import type { TierCode } from "@prisma/client";
 import { getConversionVariant } from "@/lib/conversion/experiment-config";
+import type { BillingDuration } from "@/lib/pricing/billing-types";
 
-export type BillingDuration = "monthly" | "3-month" | "6-month" | "yearly";
+export type { BillingDuration };
 
 export type TierPricingNarrative = {
   tier: TierCode;
@@ -142,6 +143,7 @@ export const TRUST_BLOCK = {
 export const SOCIAL_PROOF = {
   passRateLine:
     "Candidates who complete weekly timed practice and review every rationale tend to report higher confidence approaching their authorization-to-test window.",
-  testimonialPlaceholder:
-    "Add your first cohort testimonial here when ready—structure is wired for a rotating quote slot.",
+  /** Honest workflow line (not a fabricated testimonial). */
+  pricingFooterLine:
+    "Subscriptions bundle the question bank, lessons, timed practice, and score history so you can study in one place—without juggling separate tools.",
 } as const;

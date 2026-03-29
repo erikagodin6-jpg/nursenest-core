@@ -7,6 +7,7 @@
  */
 import { fileURLToPath } from "url";
 import type { NextConfig } from "next";
+import { PROGRAMMATIC_SLUG_TO_PATHWAY_PATH } from "./src/lib/exam-pathways/programmatic-slug-redirects";
 import { CORE_HOSTED_MARKETING_LOCALES } from "./src/lib/i18n/marketing-locale-policy";
 import { getAllProgrammaticSlugs } from "./src/lib/seo/programmatic-registry";
 
@@ -27,6 +28,12 @@ const legacyMedMathRedirect = {
 const seoCanonicalRedirects = getAllProgrammaticSlugs().map((slug) => ({
   source: `/seo/${slug}`,
   destination: `/${slug}`,
+  permanent: true,
+}));
+
+const examPathwayFromProgrammaticRedirects = Object.entries(PROGRAMMATIC_SLUG_TO_PATHWAY_PATH).map(([slug, dest]) => ({
+  source: `/${slug}`,
+  destination: dest,
   permanent: true,
 }));
 
@@ -75,6 +82,7 @@ const nextConfig: NextConfig = {
       { source: "/institutional-pricing", destination: "/for-institutions", permanent: true },
       { source: "/pricing/institutional", destination: "/for-institutions", permanent: true },
       { source: "/for-schools", destination: "/for-institutions", permanent: true },
+      ...examPathwayFromProgrammaticRedirects,
     ];
   },
   async rewrites() {

@@ -15,6 +15,10 @@ function titleKey(slug: ToolSlug): string {
       return "tools.labValues.title";
     case "electrolyte-abg":
       return "tools.electrolyteAbg.title";
+    case "iv-infusion":
+      return "tools.ivInfusion.title";
+    case "transfusion-safety":
+      return "tools.transfusionSafety.title";
     default:
       return "tools.hub.title";
   }

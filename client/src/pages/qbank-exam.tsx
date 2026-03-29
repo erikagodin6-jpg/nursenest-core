@@ -111,6 +111,14 @@ export default function QBankExamPage() {
     return `qbank-${questions.map(q => q.id).sort().slice(0, 3).join("-")}`;
   }, [questions]);
 
+  /** Domestic PN bank is server-scoped to profile region; exam picker misled users into thinking they could switch RN/PN pools. */
+  const domesticLearnerNonAdmin =
+    user?.tier !== "admin" && (user?.region === "US" || user?.region === "CA");
+
+  useEffect(() => {
+    if (domesticLearnerNonAdmin) setFilterExam("");
+  }, [domesticLearnerNonAdmin]);
+
   useEffect(() => {
     if (phase !== "setup" || !user?.id) return;
     const headers: Record<string, string> = {};
@@ -390,19 +398,30 @@ export default function QBankExamPage() {
                 </div>
                 <div>
                   <label className="text-sm font-medium text-gray-600 mb-1.5 block">{t("pages.qbankExam.examCountry")}</label>
-                  <select value={filterExam} onChange={(e) => setFilterExam(e.target.value)} className="w-full border border-gray-200 rounded-xl px-3 py-2.5 bg-white text-sm" data-testid="select-exam-type">
-                    <option value="">{t("pages.qbankExam.allExamsDefaultRegion")}</option>
-                    <optgroup label={t("pages.qbankExam.northAmerica")}>
-                      <option value="NCLEX-RN">{t("pages.qbankExam.nclexrnUscanada")}</option>
-                      <option value="REx-PN">{t("pages.qbankExam.rexpnCanada")}</option>
-                      <option value="NCLEX-PN">{t("pages.qbankExam.nclexpnUs")}</option>
-                    </optgroup>
-                    <optgroup label={t("pages.qbankExam.international")}>
-                      <option value="NMC-CBT">{t("pages.qbankExam.nmcCbtUnitedKingdom")}</option>
-                      <option value="AHPRA-RN">{t("pages.qbankExam.ahpraRnAustralia")}</option>
-                      <option value="GULF-NURSING">{t("pages.qbankExam.gulfNursingDhahaadmoh")}</option>
-                    </optgroup>
-                  </select>
+                  {domesticLearnerNonAdmin ? (
+                    <p
+                      className="w-full border border-gray-200 rounded-xl px-3 py-2.5 bg-gray-50 text-sm text-gray-700"
+                      data-testid="text-exam-bank-region-locked"
+                    >
+                      {user?.region === "CA"
+                        ? `${t("pages.qbankExam.rexpnCanada")} (${t("pages.qbankExam.northAmerica")})`
+                        : `${t("pages.qbankExam.nclexpnUs")} (${t("pages.qbankExam.northAmerica")})`}
+                    </p>
+                  ) : (
+                    <select value={filterExam} onChange={(e) => setFilterExam(e.target.value)} className="w-full border border-gray-200 rounded-xl px-3 py-2.5 bg-white text-sm" data-testid="select-exam-type">
+                      <option value="">{t("pages.qbankExam.allExamsDefaultRegion")}</option>
+                      <optgroup label={t("pages.qbankExam.northAmerica")}>
+                        <option value="NCLEX-RN">{t("pages.qbankExam.nclexrnUscanada")}</option>
+                        <option value="REx-PN">{t("pages.qbankExam.rexpnCanada")}</option>
+                        <option value="NCLEX-PN">{t("pages.qbankExam.nclexpnUs")}</option>
+                      </optgroup>
+                      <optgroup label={t("pages.qbankExam.international")}>
+                        <option value="NMC-CBT">{t("pages.qbankExam.nmcCbtUnitedKingdom")}</option>
+                        <option value="AHPRA-RN">{t("pages.qbankExam.ahpraRnAustralia")}</option>
+                        <option value="GULF-NURSING">{t("pages.qbankExam.gulfNursingDhahaadmoh")}</option>
+                      </optgroup>
+                    </select>
+                  )}
                 </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

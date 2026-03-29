@@ -3,6 +3,12 @@
  * Split into index + child sitemaps by route family for GSC reliability.
  */
 
+import { buildExamPathwayPath, getExamPathwayById, listPublicExamPathways } from "@/lib/exam-pathways/exam-product-registry";
+import {
+  getPathwayLessons,
+  listPathwayIdsWithLessons,
+  listTopicClusters,
+} from "@/lib/lessons/pathway-lesson-loader";
 import { resolveCanonicalSiteOrigin } from "@/lib/seo/canonical-site";
 import { CORE_HOSTED_MARKETING_LOCALES } from "@/lib/i18n/marketing-locale-policy";
 import { getAllProgrammaticSlugs } from "@/lib/seo/programmatic-registry";
@@ -16,6 +22,37 @@ export function resolveSitemapOrigin(): string {
 
 export function normalizeOrigin(origin: string): string {
   return origin.endsWith("/") ? origin.slice(0, -1) : origin;
+}
+
+/** Exam hub URLs: /{country}/{role}/{exam} + pricing + questions landing */
+export function collectExamPathwayUrls(origin: string): string[] {
+  const o = normalizeOrigin(origin);
+  const urls: string[] = [];
+  for (const p of listPublicExamPathways()) {
+    urls.push(`${o}${buildExamPathwayPath(p)}`);
+    urls.push(`${o}${buildExamPathwayPath(p, "pricing")}`);
+    urls.push(`${o}${buildExamPathwayPath(p, "questions")}`);
+  }
+  return urls;
+}
+
+/** Pathway lesson hubs, topic clusters, and lesson detail pages (JSON catalog). */
+export function collectPathwayLessonSeoUrls(origin: string): string[] {
+  const o = normalizeOrigin(origin);
+  const urls: string[] = [];
+  urls.push(`${o}/exam-lessons`);
+  for (const pid of listPathwayIdsWithLessons()) {
+    const p = getExamPathwayById(pid);
+    if (!p || p.status === "hidden") continue;
+    urls.push(`${o}${buildExamPathwayPath(p, "lessons")}`);
+    for (const t of listTopicClusters(pid)) {
+      urls.push(`${o}${buildExamPathwayPath(p, `lessons/topics/${t.topicSlug}`)}`);
+    }
+    for (const l of getPathwayLessons(pid)) {
+      urls.push(`${o}${buildExamPathwayPath(p, `lessons/${l.slug}`)}`);
+    }
+  }
+  return urls;
 }
 
 /** Child sitemap `<loc>` entries (stable order for deterministic index). */
@@ -102,13 +139,17 @@ export function collectCoreUrls(origin: string): string[] {
     const p = path.startsWith("/") ? path : `/${path}`;
     return `${o}${p}`;
   };
-  return [
+  const base = [
     add("/"),
     add("/pricing"),
     add("/for-institutions"),
     add("/blog"),
+    add("/faq"),
+    add("/tools"),
     add("/pre-nursing"),
+    add("/case-studies"),
   ];
+  return [...base, ...collectExamPathwayUrls(o), ...collectPathwayLessonSeoUrls(o)];
 }
 
 /** seo-pages.xml — English canonical programmatic URLs at `/{slug}` (rewritten to /seo/[slug] internally). */

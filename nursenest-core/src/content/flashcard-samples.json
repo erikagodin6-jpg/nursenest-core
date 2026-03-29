@@ -1,0 +1,22 @@
+[
+  {
+    "front": "Signs of fluid volume deficit (early)",
+    "back": "Tachycardia, orthostatic BP changes, dry mucosa, decreased urine output, concentrated urine—always interpret in clinical context."
+  },
+  {
+    "front": "SBAR handoff: what does S stand for?",
+    "back": "Situation—a concise statement of what is going on right now."
+  },
+  {
+    "front": "Before a blood transfusion at the bedside",
+    "back": "Two qualified identifiers, product verification, vital signs per policy, and line confirmation—follow institutional transfusion protocol."
+  },
+  {
+    "front": "mL/hr from total volume and minutes",
+    "back": "Rate (mL/hr) = volume (mL) ÷ time in hours. Convert minutes to hours when needed."
+  },
+  {
+    "front": "Priority in airway + breathing crisis",
+    "back": "Establish a patent airway, support breathing, and provide oxygen/ventilation as indicated before focusing on detailed history."
+  }
+]

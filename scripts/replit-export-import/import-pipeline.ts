@@ -25,6 +25,7 @@ import {
   parseAiCacheNursingExamItem,
   buildNursingParseContext,
 } from "../replit-import/nursing-ai-cache-extract";
+import { buildNursingUnresolvedReviewEntry } from "../replit-import/nursing-review-artifact-shared";
 
 function asStringArray(v: unknown): string[] | null {
   if (v === undefined || v === null) return null;
@@ -63,6 +64,11 @@ export type ImportOptions = {
   exportDirAbs?: string;
   /** Repo root for config/nursing-export-metadata-mapping.json */
   repoRoot?: string;
+  /**
+   * When set, inconclusive nursing exam rows are written here (default: `<exportDirAbs>/review/nursing-import-sent-to-review.json`).
+   * Pass `null` to disable writing.
+   */
+  nursingReviewQueueOutPath?: string | null;
 };
 
 async function rowExists(pool: pg.Pool, table: string, whereSql: string, params: unknown[]): Promise<boolean> {
@@ -112,6 +118,8 @@ export async function extractFromAiCacheOutputs(pool: pg.Pool, rows: Record<stri
   let examInsertCount = 0;
   const exportDirAbs = opts.exportDirAbs ?? process.cwd();
   const repoRoot = opts.repoRoot ?? process.cwd();
+  const reviewQueue: ReturnType<typeof buildNursingUnresolvedReviewEntry>[] = [];
+  const unresolvedKeys = new Set<string>();
   let rowIndex = -1;
   outer: for (const row of rows) {
     rowIndex += 1;
@@ -178,6 +186,15 @@ export async function extractFromAiCacheOutputs(pool: pg.Pool, rows: Record<stri
 
       if (parsed.kind === "inconclusive") {
         bumpSkip(stats, parsed.mapErrors.join(";") || "unrecognized_ai_output_shape");
+        const rec = buildNursingUnresolvedReviewEntry(
+          item as Record<string, unknown>,
+          ctx,
+          parsed.mapErrors,
+          parsed.enrichment ?? null,
+          "ai_cache.json",
+        );
+        reviewQueue.push(rec);
+        unresolvedKeys.add(ctx.cacheKey ?? "__null_cache_key__");
         continue;
       }
 
@@ -226,6 +243,45 @@ export async function extractFromAiCacheOutputs(pool: pg.Pool, rows: Record<stri
       }
     }
   }
+
+  let reviewQueuePath: string | null = null;
+  const defaultReviewPath = path.join(exportDirAbs, "review", "nursing-import-sent-to-review.json");
+  const outOpt = opts.nursingReviewQueueOutPath;
+  const targetPath = outOpt === null ? null : outOpt ?? defaultReviewPath;
+  if (targetPath && reviewQueue.length) {
+    reviewQueuePath = path.resolve(targetPath);
+    fs.mkdirSync(path.dirname(reviewQueuePath), { recursive: true });
+    fs.writeFileSync(
+      reviewQueuePath,
+      JSON.stringify(
+        {
+          version: 1,
+          kind: "nursing_import_sent_to_review_queue",
+          generatedAt: new Date().toISOString(),
+          exportDirAbs,
+          counts: {
+            sentToReview: reviewQueue.length,
+            unresolvedUniqueCacheKeys: unresolvedKeys.size,
+          },
+          entries: reviewQueue,
+        },
+        null,
+        2,
+      ),
+      "utf8",
+    );
+  } else if (targetPath && reviewQueue.length === 0) {
+    reviewQueuePath = null;
+  }
+
+  stats.nursingAiCacheExtract = {
+    examQuestionsInserted: examInsertCount,
+    skippedInvalid: reviewQueue.length,
+    sentToReview: reviewQueue.length,
+    unresolvedUniqueCacheKeys: unresolvedKeys.size,
+    reviewQueuePath: reviewQueue.length ? reviewQueuePath : null,
+  };
+
   return stats;
 }
 

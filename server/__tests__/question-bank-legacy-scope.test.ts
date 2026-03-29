@@ -4,7 +4,7 @@ import {
   legacyQuestionBankItemMatchesUserScope,
 } from "../question-bank-validation";
 
-describe("legacy question_bank scope (no tier column on table)", () => {
+describe("legacy question_bank region/exam scope helpers", () => {
   test("US learner gets NCLEX-PN + US", () => {
     const scope = getLegacyQuestionBankScopeForUser({ region: "US" });
     expect(scope).toEqual({ country: "US", examType: "NCLEX-PN" });

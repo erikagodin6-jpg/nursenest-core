@@ -9,6 +9,8 @@ declare module "next-auth" {
       role: "LEARNER" | "ADMIN";
       country: "CA" | "US";
       tier: "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED";
+      /** Mirrors last login; server routes still use resolveEntitlement — never trust alone for gating. */
+      subscriptionStatus?: "active" | "grace" | "none";
     };
   }
 }
@@ -18,5 +20,6 @@ declare module "next-auth/jwt" {
     role?: "LEARNER" | "ADMIN";
     country?: "CA" | "US";
     tier?: "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED";
+    subscriptionStatus?: "active" | "grace" | "none";
   }
 }

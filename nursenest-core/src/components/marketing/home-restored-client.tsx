@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { getEnabledCareers } from "@shared/careers";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { LazySection } from "@/legacy/marketing/lazy-section";
@@ -290,7 +291,7 @@ type HomeStatsPayload = {
 };
 
 export default function HomeRestoredClient() {
-  const { t } = useMarketingI18n();
+  const { t, locale } = useMarketingI18n();
   const { region, setRegion } = useNursenestRegion();
   const [lessonCount, setLessonCount] = useState(0);
   const [questionCount, setQuestionCount] = useState(0);
@@ -669,6 +670,43 @@ export default function HomeRestoredClient() {
                 </div>
               ))}
             </div>
+          </div>
+        </section>
+
+        <section
+          className="border-t border-[var(--theme-card-border)] bg-[var(--theme-card-bg)]"
+          style={{ paddingTop: "var(--space-block)", paddingBottom: "var(--space-block)" }}
+          data-testid="section-explore-hubs"
+        >
+          <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+            <h2 className="text-center text-base font-bold text-[var(--theme-heading-text)] sm:text-lg">
+              Exam prep hubs & resources
+            </h2>
+            <p className="mt-2 text-center text-sm text-[var(--theme-muted-text)]">
+              Deep guides for RN, PN, and NP pathways—plus tools and pricing when you are ready to start studying.
+            </p>
+            <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {(
+                [
+                  { href: "/nclex-rn-practice-questions", label: "NCLEX-RN practice questions" },
+                  { href: "/rex-pn-practice-questions", label: "REx-PN & NCLEX-PN prep" },
+                  { href: "/np-exam-practice-questions", label: "NP exam prep" },
+                  { href: "/tools", label: "Clinical tools" },
+                  { href: "/blog", label: "Blog & study guides" },
+                  { href: "/pricing", label: "Plans & pricing" },
+                ] as const
+              ).map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={withMarketingLocale(locale, item.href)}
+                    className="flex items-center justify-between rounded-xl border border-[var(--theme-card-border)] bg-card px-4 py-3 text-sm font-medium text-[var(--theme-heading-text)] shadow-sm transition hover:border-primary/30 hover:bg-[var(--theme-muted-surface)]"
+                  >
+                    {item.label}
+                    <ArrowRight className="h-4 w-4 shrink-0 text-primary" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
 

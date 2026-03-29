@@ -4,6 +4,7 @@ import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlemen
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { SOCIAL_PROOF } from "@/lib/conversion/pricing-catalog";
+import { SubscriberPracticeRollups } from "@/components/student/subscriber-practice-rollups";
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -24,7 +25,9 @@ export default async function DashboardPage() {
 
   let nextLessonTitle: string | null = null;
   let completedLessons = 0;
+  let pathwayLessonsDone = 0;
   let attemptCount = 0;
+  let lastMockPct: number | null = null;
   let userPrefs: {
     examFocus: string | null;
     studyGoal: string | null;
@@ -33,21 +36,48 @@ export default async function DashboardPage() {
 
   if (userId && isDatabaseUrlConfigured()) {
     try {
-      const [userRow, progressCount, incomplete, attemptsN] = await Promise.all([
-        prisma.user.findUnique({
-          where: { id: userId },
-          select: { examFocus: true, studyGoal: true, dailyStudyMinutes: true },
-        }),
-        prisma.progress.count({ where: { userId, completed: true } }),
-        prisma.progress.findFirst({
-          where: { userId, completed: false },
-          orderBy: { updatedAt: "desc" },
-          select: { lessonId: true },
-        }),
-        prisma.examAttempt.count({ where: { userId } }),
-      ]);
-      userPrefs = userRow;
-      completedLessons = progressCount;
+      userPrefs = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { examFocus: true, studyGoal: true, dailyStudyMinutes: true },
+      });
+    } catch {
+      /* optional */
+    }
+    try {
+      completedLessons = await prisma.progress.count({ where: { userId, completed: true } });
+    } catch {
+      completedLessons = 0;
+    }
+    try {
+      attemptCount = await prisma.examAttempt.count({ where: { userId } });
+    } catch {
+      attemptCount = 0;
+    }
+    try {
+      pathwayLessonsDone = await prisma.progress.count({
+        where: { userId, completed: true, lessonId: { startsWith: "pathway:" } },
+      });
+    } catch {
+      pathwayLessonsDone = 0;
+    }
+    try {
+      const last = await prisma.examAttempt.findFirst({
+        where: { userId },
+        orderBy: { createdAt: "desc" },
+        select: { score: true, total: true },
+      });
+      if (last && last.total > 0) {
+        lastMockPct = Math.round((last.score / last.total) * 100);
+      }
+    } catch {
+      lastMockPct = null;
+    }
+    try {
+      const incomplete = await prisma.progress.findFirst({
+        where: { userId, completed: false },
+        orderBy: { updatedAt: "desc" },
+        select: { lessonId: true },
+      });
       const lessonRow = incomplete?.lessonId
         ? await prisma.contentItem.findFirst({
             where: { id: incomplete.lessonId, type: "lesson" },
@@ -55,9 +85,8 @@ export default async function DashboardPage() {
           })
         : null;
       nextLessonTitle = lessonRow?.title ?? null;
-      attemptCount = attemptsN;
     } catch {
-      /* keep dashboard usable */
+      nextLessonTitle = null;
     }
   }
 
@@ -103,18 +132,33 @@ export default async function DashboardPage() {
           </section>
 
           <section className="nn-card p-6">
-            <h2 className="text-xl font-semibold">Progress snapshot</h2>
+            <h2 className="text-xl font-semibold">Readiness snapshot</h2>
+            <p className="mt-2 text-xs text-muted">
+              Informative only—not a pass prediction. Use it to steer study time toward practice and review.
+            </p>
             <ul className="mt-3 list-inside list-disc space-y-1 text-sm text-muted">
-              <li>Lessons completed: {completedLessons}</li>
-              <li>Mock exam attempts logged: {attemptCount}</li>
-              <li>Weak-area nudges: review your latest mock score on the exams page.</li>
+              <li>Activity: {completedLessons} lesson(s) completed</li>
+              <li>Mock exams taken: {attemptCount}</li>
+              {lastMockPct !== null ? (
+                <li>Latest mock score: {lastMockPct}% — keep mixing timed sets until scores hold steady week over week.</li>
+              ) : (
+                <li>Latest mock score: not recorded yet — start a session on the exams page when you are ready.</li>
+              )}
+              <li>
+                Weak areas: use question bank misses and mock review notes; open{" "}
+                <Link className="font-medium text-primary underline" href="/exam-lessons">
+                  exam-specific lessons
+                </Link>{" "}
+                for targeted review.
+              </li>
             </ul>
+            {userId ? <SubscriberPracticeRollups userId={userId} /> : null}
           </section>
 
           <section className="nn-card p-6">
             <h2 className="text-xl font-semibold">Features to use this week</h2>
             <ul className="mt-3 list-inside list-disc space-y-1 text-sm text-muted">
-              <li>CAT / adaptive-style practice where enabled for your tier</li>
+              <li>Timed mock exams with autosave and score history</li>
               <li>SATA and NGN-style judgment stems in the question bank</li>
               <li>Full rationales after each block</li>
               <li>Exam report card on the exams page</li>

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { QuestionType } from "@prisma/client";
 
@@ -245,11 +246,32 @@ export function ExamPracticeClient({
 
   if (done) {
     return (
-      <div className="nn-card mt-4 p-6">
+      <div className="nn-card mt-4 space-y-4 p-6">
         <p className="font-semibold">Attempt recorded</p>
-        <p className="mt-2 text-sm text-muted">
+        <p className="text-sm text-muted">
           Score: {done.score}/{done.total}
         </p>
+        <p className="text-sm text-muted">
+          Review misses in the question bank, then reinforce weak systems with{" "}
+          <Link href="/exam-lessons" className="font-medium text-primary underline">
+            exam-specific lessons
+          </Link>{" "}
+          for your pathway.
+        </p>
+        <div className="flex flex-wrap gap-2">
+          <Link
+            href="/app/questions"
+            className="inline-flex rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+          >
+            Open question bank
+          </Link>
+          <Link
+            href="/exam-lessons"
+            className="inline-flex rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-gray-50"
+          >
+            Browse lessons by exam
+          </Link>
+        </div>
       </div>
     );
   }

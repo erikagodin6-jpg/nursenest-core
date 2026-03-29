@@ -114,6 +114,7 @@ import { incrementSourceVersionAndMarkStale, getLocaleConfig, clearLocaleConfigC
 import { checkAiLimits, recordAiUsageFireAndForget, getAiConfig, setAiConfig, ACTIVE_BUILD_PRIORITY } from "./ai-safety";
 import { emitStructuredLog } from "./log-sink";
 import { requireAdmin, requireAdminRole, signAdminToken, signUserToken, verifyAdminToken, resolveAuthUser, requireExactTier, requireAnyPaidTier, verifyPassword, migratePasswordIfNeeded, hashPassword, recordFailedLogin, logSecurityAudit, logAdminAudit, logOperatorAction, issueConfirmationToken, validateConfirmationToken, signReAuthToken, generateCsrfToken, csrfProtection, adminApiRateLimit, requirePermission, requireDestructiveAction, hasPermission } from "./admin-auth";
+import { hashPasswordResetToken, getPasswordResetExpiryDate, isResendEmailConfigured } from "./password-reset";
 import { parseAdminPaginationParams, buildAdminPaginationMeta } from "./pagination-query";
 import type { AdminRole, OperatorActionParams } from "./admin-auth";
 import { requireEntitlement, requireAnyPremium, requireAuthenticated, handleEntitlementDebug, handleEntitlementResolve, resolveEntitlementSync } from "./entitlements";
@@ -4464,36 +4465,44 @@ Return ONLY a JSON array of flashcard objects, no other text.`;
         return res.json({ success: true, message: "If an account exists with this email, a reset link has been sent." });
       }
 
-      const token = crypto.randomBytes(32).toString("hex");
-      const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
+      const rawToken = crypto.randomBytes(32).toString("hex");
+      const tokenHash = hashPasswordResetToken(rawToken);
+      const expiresAt = getPasswordResetExpiryDate();
 
-      await pool.query(
-        `DELETE FROM password_reset_tokens WHERE user_id = $1`,
-        [user.id]
-      );
-      await pool.query(
-        `INSERT INTO password_reset_tokens (user_id, token, expires_at) VALUES ($1, $2, $3)`,
-        [user.id, token, expiresAt]
-      );
+      await pool.query(`DELETE FROM password_reset_tokens WHERE user_id = $1`, [user.id]);
+      await pool.query(`INSERT INTO password_reset_tokens (user_id, token, expires_at) VALUES ($1, $2, $3)`, [
+        user.id,
+        tokenHash,
+        expiresAt,
+      ]);
 
-      const { getResendClient } = await import("./resend-client");
-      const { client, fromEmail } = await getResendClient();
       const baseUrl = process.env.REPLIT_DEV_DOMAIN
         ? `https://${process.env.REPLIT_DEV_DOMAIN}`
-        : (process.env.BASE_URL || "https://nursenest.app");
-      const resetLink = `${baseUrl}/reset-password?token=${token}`;
+        : process.env.BASE_URL || "https://nursenest.app";
+      const resetLink = `${baseUrl.replace(/\/$/, "")}/reset-password?token=${encodeURIComponent(rawToken)}`;
 
-      try {
-        await client.emails.send({
-          from: fromEmail,
-          to: normalizedEmail,
-          subject: "NurseNest - Reset Your Password",
-          html: `<h2>Password Reset</h2><p>Click the link below to reset your password. This link expires in 1 hour.</p><p><a href="${resetLink}">Reset Password</a></p><p>If you didn't request this, please ignore this email.</p>`,
-        });
-      } catch (emailErr) {
-        console.error("[ForgotPassword] CRITICAL: Failed to send reset email to user:", user.id, emailErr);
-        await pool.query(`DELETE FROM password_reset_tokens WHERE user_id = $1 AND token = $2`, [user.id, token]);
-        return res.status(503).json({ error: "Unable to send reset email. Please try again later." });
+      let emailSent = false;
+      if (isResendEmailConfigured()) {
+        try {
+          const { getResendClient } = await import("./resend-client");
+          const { client, fromEmail } = await getResendClient();
+          await client.emails.send({
+            from: fromEmail,
+            to: normalizedEmail,
+            subject: "NurseNest - Reset Your Password",
+            html: `<h2>Password Reset</h2><p>Click the link below to reset your password. This link expires in 30 minutes.</p><p><a href="${resetLink}">Reset Password</a></p><p>If you didn't request this, please ignore this email.</p>`,
+          });
+          emailSent = true;
+        } catch (emailErr) {
+          console.error("[PasswordReset] Resend send failed for user", user.id, emailErr);
+        }
+      }
+
+      if (!emailSent) {
+        if (process.env.NODE_ENV === "development") {
+          console.warn("[PasswordReset] Email not configured or send failed; logging reset link once for debugging.");
+        }
+        console.log("[PasswordReset] Password reset link (trusted operators / local dev only):", resetLink);
       }
 
       res.json({ success: true, message: "If an account exists with this email, a reset link has been sent." });
@@ -4511,10 +4520,15 @@ Return ONLY a JSON array of flashcard objects, no other text.`;
       if (typeof newPassword !== "string" || newPassword.length < 6) {
         return res.status(400).json({ error: "Password must be at least 6 characters" });
       }
+      if (typeof token !== "string" || !token.trim()) {
+        return res.status(400).json({ error: "Invalid reset token" });
+      }
+
+      const tokenHash = hashPasswordResetToken(token.trim());
 
       const result = await pool.query(
         `SELECT * FROM password_reset_tokens WHERE token = $1 AND used_at IS NULL AND expires_at > NOW() LIMIT 1`,
-        [token]
+        [tokenHash],
       );
 
       if (!result.rows[0]) {
@@ -4526,6 +4540,12 @@ Return ONLY a JSON array of flashcard objects, no other text.`;
 
       await pool.query(`UPDATE users SET password = $1 WHERE id = $2`, [hashedPassword, resetToken.user_id]);
       await pool.query(`UPDATE password_reset_tokens SET used_at = NOW() WHERE id = $1`, [resetToken.id]);
+
+      try {
+        await logSecurityAudit("password_reset_completed", { userId: resetToken.user_id });
+      } catch {
+        /* non-fatal */
+      }
 
       res.json({ success: true, message: "Password has been reset successfully" });
     } catch (e: any) {

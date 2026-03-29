@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
+import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import {
   BLOG_LIST_PAGE_SIZE,
   getPublishedBlogPostsPage,
 } from "@/lib/blog/safe-blog-queries";
+import { blogIndexBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 
 export const metadata: Metadata = {
   title: "Clinical education blog | NurseNest",
@@ -21,15 +24,22 @@ export default async function BlogIndexPage({ searchParams }: Props) {
   const page = Number.isFinite(raw) && raw >= 1 ? Math.floor(raw) : 1;
   const { posts, total, pageSize } = await getPublishedBlogPostsPage(page, BLOG_LIST_PAGE_SIZE);
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const { crumbs, schemaItems } = blogIndexBreadcrumbs();
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
+      <BreadcrumbJsonLd items={schemaItems} />
+      <div className="mb-6">
+        <BreadcrumbTrail items={crumbs} />
+      </div>
       <header className="mb-10">
         <h1 className="text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)]">Clinical education blog</h1>
         <p className="mt-2 text-[var(--theme-muted-text)]">Scholarly articles for nursing and allied health exam preparation.</p>
       </header>
       {posts.length === 0 ? (
-        <p className="text-sm text-[var(--theme-muted-text)]">No posts yet. Run <code className="rounded bg-[var(--theme-page-bg)] px-1">npx tsx scripts/import-blog.ts</code> after migrating content.</p>
+        <p className="text-sm text-[var(--theme-muted-text)]">
+          New clinical articles are added regularly. Check back soon, or explore lessons and the question bank in your account.
+        </p>
       ) : (
         <>
           <ul className="space-y-6">

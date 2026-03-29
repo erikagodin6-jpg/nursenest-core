@@ -75,6 +75,15 @@ export function SiteFooter() {
               <li>
                 <FLink href="/free-practice">{t("footer.testBank")}</FLink>
               </li>
+              <li>
+                <FLink href="/case-studies">{t("footer.caseStudies")}</FLink>
+              </li>
+              <li>
+                <FLink href="/tools">{t("footer.clinicalTools")}</FLink>
+              </li>
+              <li>
+                <FLink href="/blog">{t("footer.blog")}</FLink>
+              </li>
             </ul>
           </div>
 

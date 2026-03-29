@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
+import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { getBlogPostMetaBySlug, getPublishedBlogPostBySlug } from "@/lib/blog/safe-blog-queries";
+import { getStaticBlogPost, staticRecordToBlogDisplay } from "@/lib/blog/static-blog-posts";
+import { blogPostBreadcrumbsWithOptionalCategory } from "@/lib/seo/pathway-breadcrumbs";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -21,11 +25,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
-  const post = await getPublishedBlogPostBySlug(slug);
-  if (!post?.published) notFound();
+  const dbPost = await getPublishedBlogPostBySlug(slug);
+  let post: Awaited<ReturnType<typeof getPublishedBlogPostBySlug>> | ReturnType<typeof staticRecordToBlogDisplay> | null =
+    null;
+  if (dbPost) {
+    if (!dbPost.published) notFound();
+    post = dbPost;
+  } else {
+    const s = getStaticBlogPost(slug);
+    post = s ? staticRecordToBlogDisplay(s) : null;
+  }
+  if (!post) notFound();
+
+  const { crumbs, schemaItems } = blogPostBreadcrumbsWithOptionalCategory(post.title, slug, post.category);
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-12">
+      <BreadcrumbJsonLd items={schemaItems} />
+      <div className="mb-6">
+        <BreadcrumbTrail items={crumbs} />
+      </div>
       <Link href="/blog" className="text-sm font-medium text-primary hover:underline">
         ← Blog
       </Link>

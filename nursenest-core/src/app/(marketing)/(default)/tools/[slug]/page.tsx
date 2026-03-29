@@ -33,6 +33,20 @@ async function metaForSlug(
       canonical: `/tools/${slug}`,
     };
   }
+  if (slug === "iv-infusion") {
+    return {
+      title: enMessages["tools.ivInfusion.metaTitle"] ?? "IV & infusion",
+      description: enMessages["tools.ivInfusion.metaDescription"] ?? "",
+      canonical: `/tools/${slug}`,
+    };
+  }
+  if (slug === "transfusion-safety") {
+    return {
+      title: enMessages["tools.transfusionSafety.metaTitle"] ?? "Transfusion safety",
+      description: enMessages["tools.transfusionSafety.metaDescription"] ?? "",
+      canonical: `/tools/${slug}`,
+    };
+  }
   return null;
 }
 

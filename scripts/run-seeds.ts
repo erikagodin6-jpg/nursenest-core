@@ -5,7 +5,11 @@ import "../server/load-env";
 import type { Pool } from "pg";
 import { logStartupDatabaseResolution } from "../server/db";
 
-/** Whitelisted tables touched by one or more seeds in this runner; counts are diagnostic only. */
+/**
+ * Whitelisted tables touched by one or more seeds in this runner.
+ * Note: `run-seeds` does **not** run `seed:career-questions` or `seed:mlt-lessons`; use those npm scripts separately.
+ * Row counts here are **final totals**, not deltas (per-step inserted/updated/skipped is not tracked in this runner).
+ */
 const POST_SEED_COUNT_TABLES = [
   "pricing_plans",
   "allied_questions",
@@ -21,22 +25,47 @@ const POST_SEED_COUNT_TABLES = [
   "imaging_flashcards",
   "imaging_positioning_entries",
   "imaging_physics_topics",
+  "imaging_blog_articles",
+  "imaging_seo_pages",
+  "ai_cache",
+  "kill_switches",
   "mlt_lessons",
   "mlt_flashcards",
 ] as const;
 
-async function logPostSeedTableCounts(pool: Pool) {
+async function logPostSeedTableCounts(pool: Pool): Promise<{
+  tables: Record<string, string>;
+  failedTables: string[];
+  ok: boolean;
+}> {
   const tables: Record<string, string> = {};
+  const failedTables: string[] = [];
   for (const table of POST_SEED_COUNT_TABLES) {
     try {
       const r = await pool.query(`SELECT COUNT(*)::bigint AS c FROM ${table}`);
       tables[table] = String(r.rows[0].c);
-    } catch {
-      tables[table] = "(query failed or table missing)";
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      tables[table] = `(query failed: ${msg})`;
+      failedTables.push(table);
     }
   }
-  console.log("\n=== Post-seed verification (row counts) ===");
-  console.log(JSON.stringify({ type: "run_seeds_verification", tables }));
+  const ok = failedTables.length === 0;
+  console.log("\n=== Post-seed verification (final row counts; not per-seed deltas) ===");
+  console.log(
+    JSON.stringify({
+      type: "run_seeds_verification",
+      success: ok,
+      failedTables,
+      tables,
+    }),
+  );
+  console.log(
+    ok
+      ? "\n✓ Post-seed verification: all listed tables queried successfully."
+      : `\n✗ Post-seed verification: ${failedTables.length} table(s) failed (missing migration, wrong DB, or permissions).`,
+  );
+  return { tables, failedTables, ok };
 }
 
 async function main() {
@@ -218,6 +247,13 @@ async function main() {
     await seedWaveforms();
   });
 
+  /** Recovered Replit JSON under data/imports/ — requires REPLIT_IMPORT_ENABLED=1 */
+  await runSeed("replitJsonImports", async () => {
+    const { seedReplitJsonImports } = await import("../server/seed-replit-json-imports");
+    const { pool } = await import("../server/storage");
+    await seedReplitJsonImports(pool);
+  });
+
   await runSeed("echoQuestionBank", async () => {
     const { seedEchoQuestionBank } = await import("../server/seed-echo-question-bank");
     await seedEchoQuestionBank();
@@ -239,25 +275,37 @@ async function main() {
   }
 
   const { pool } = await import("../server/storage");
+  let postSeedVerificationOk = false;
   try {
-    await logPostSeedTableCounts(pool);
+    const v = await logPostSeedTableCounts(pool);
+    postSeedVerificationOk = v.ok;
   } catch (e: unknown) {
     const message = e instanceof Error ? e.message : String(e);
     console.error("\nPost-seed verification failed:", message);
   }
 
+  const overallSuccess = errorCount === 0 && postSeedVerificationOk;
   console.log(
     JSON.stringify({
       type: "run_seeds_summary",
-      success: errorCount === 0,
+      success: overallSuccess,
+      seedStepsOk: errorCount === 0,
+      postSeedVerificationOk,
       totalSeeds: results.length,
       succeeded: successCount,
       failed: errorCount,
     }),
   );
+  if (!overallSuccess) {
+    console.log(
+      "\nSummary: FAILURE — fix failed seed steps and/or DB table access, then rerun. Allied questions & MLT structured lessons require separate npm scripts (see package.json).",
+    );
+  } else {
+    console.log("\nSummary: SUCCESS — all seed steps completed and post-seed table counts queried.");
+  }
 
   await pool.end();
-  process.exit(errorCount > 0 ? 1 : 0);
+  process.exit(overallSuccess ? 0 : 1);
 }
 
 main().catch((err) => {

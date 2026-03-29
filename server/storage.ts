@@ -1,6 +1,6 @@
 import { type ContentVersion, type InsertContentVersion, type User, type InsertUser, type Note, type InsertNote, type TestResult, type InsertTestResult, type UserProgress, type InsertUserProgress, type ContentItem, type InsertContentItem, type FeatureUsage, type UserFlashcard, type InsertUserFlashcard, type BlogConfig, type PageView, type InsertPageView, type UserFeedback, type InsertUserFeedback, type QotdHistory, type QotdUserAnswer, type InsertQotdUserAnswer, type QotdStreak, type EmailSubscriber, type InsertEmailSubscriber, type SocialPost, type InsertSocialPost, type DashboardWidget, type InsertDashboardWidget, type SiteImage, type InsertSiteImage, type CustomPageModule, type InsertCustomPageModule, type AudioClip, type InsertAudioClip, type LessonAudioLink, type InsertLessonAudioLink, type ExamQuestion, type InsertExamQuestion, type QuestionTypeRegistryEntry, type InsertQuestionTypeRegistryEntry, type QuestionScheduleLog, type DigitalProduct, type InsertDigitalProduct, type ProductPurchase, type InsertProductPurchase, type QbankDraft, type InsertQbankDraft, type QbankRecipe, type InsertQbankRecipe, type DiagnosticAssessment, type InsertDiagnosticAssessment, type UserStats, type InsertUserStats, type StudyGroup, type InsertStudyGroup, type StudyGroupMember, type InsertStudyGroupMember, type QuestionAnalytics, type InsertQuestionAnalytics, type FriendRequest, type InsertFriendRequest, type FriendConnection, type InsertFriendConnection, type ProductGeneration, type InsertProductGeneration, type GeneratedQuestion, type InsertGeneratedQuestion, type GeneratorV2PresentationSettings, type InsertGeneratorV2PresentationSettings, type TesterInviteCode, type InsertTesterInviteCode, type TesterFeedback, type InsertTesterFeedback, type PricingPlan, type InsertPricingPlan, type FreeTrialUsage, type InsertFreeTrialUsage, type UserSubscription, type InsertUserSubscription, type MltLabImage, type InsertMltLabImage, type MltLabImageLink, type InsertMltLabImageLink, type MltImageDrillAttempt, type InsertMltImageDrillAttempt, type QuestionExplanation, type InsertQuestionExplanation, type ImagingQuestion, type InsertImagingQuestion, type ImageAsset, type InsertImageAsset, type ImagingFlashcard, type InsertImagingFlashcard, type ImagingCaseStudy, type InsertImagingCaseStudy, type ImagingArtifactImage, type InsertImagingArtifactImage, type ImagingComparisonSet, type InsertImagingComparisonSet, type ImagingAnatomyImage, type InsertImagingAnatomyImage, type ImagingPhysicsVisual, type InsertImagingPhysicsVisual, type ImagingImageBrief, type InsertImagingImageBrief, type ImagingExamAttempt, type InsertImagingExamAttempt, type ImagingExamAttemptQuestion, type InsertImagingExamAttemptQuestion, type ImagingPositioningEntry, type CaseStudy, type InsertCaseStudy, type CaseStudyStep, type InsertCaseStudyStep, type CaseStudyQuestion, type InsertCaseStudyQuestion, type InsertImagingPositioningEntry, type ImagingPhysicsTopic, type InsertImagingPhysicsTopic, type QuestionBankItem, type InsertQuestionBankItem, type QuestionBankResult, type InsertQuestionBankResult, users, notes, testResults, userProgress, contentItems, featureUsage, userFlashcards, blogConfig, pageViews, userFeedback, qotdHistory, qotdUserAnswers, qotdStreaks, emailSubscribers, socialPosts, dashboardWidgets, siteImages, customPageModules, audioClips, lessonAudioLinks, examQuestions, questionTypeRegistry, questionScheduleLog, digitalProducts, productPurchases, couponCodes, qbankDrafts, qbankRecipes, diagnosticAssessments, userStats, studyGroups, studyGroupMembers, questionAnalytics, friendRequests, friendConnections, productGenerations, generatedQuestions, generatorV2PresentationSettings, generationEvents, v2ContentBlocks, testerInviteCodes, testerFeedback, imagingQuestions, imageAssets, imagingFlashcards, imagingCaseStudies, imagingExamAttempts, imagingExamAttemptQuestions, imagingPositioningEntries, imagingPhysicsTopics, questionBank, questionBankResults, mltLabImages, mltLabImageLinks, mltImageDrillAttempts, imagingArtifactImages, imagingComparisonSets, imagingAnatomyImages, imagingPhysicsVisuals, imagingImageBriefs, type ProblemReport, type InsertProblemReport, type TestBankCollection, type InsertTestBankCollection, type TestBankProgress, type InsertTestBankProgress, type QuestionHistory, type InsertQuestionHistory, type CatSession, type InsertCatSession, type UserActivityLog, type InsertUserActivityLog, type DashboardResumeState, type InsertDashboardResumeState, type AnalyticsEvent, type InsertAnalyticsEvent, testBankCollections, testBankProgress, questionHistory, catSessions, userActivityLog, dashboardResumeState , type LessonBookmark, type InsertLessonBookmark, type MockExamSessionProgress, type InsertMockExamSessionProgress, lessonBookmarks, mockExamSessionProgress } from "@shared/schema";
 import { drizzle } from "drizzle-orm/node-postgres";
-import { eq, and, or, desc, sql, lte, ne, ilike, gte, count } from "drizzle-orm";
+import { eq, and, or, desc, sql, lte, ne, ilike, gte, count, inArray, isNotNull } from "drizzle-orm";
 import pg from "pg";
 
 export const MAX_QUERY_LIMIT = 2000;
@@ -271,13 +271,32 @@ export interface IStorage {
   updateImagingImageBrief(id: string, updates: Partial<InsertImagingImageBrief>): Promise<ImagingImageBrief>;
   deleteImagingImageBrief(id: string): Promise<void>;
 
-  getQuestionBankItems(filters?: { country?: string; examType?: string; category?: string; difficulty?: string; topic?: string; status?: string }): Promise<QuestionBankItem[]>;
+  getQuestionBankItems(filters?: {
+    country?: string;
+    examType?: string;
+    category?: string;
+    difficulty?: string;
+    topic?: string;
+    status?: string;
+    contentTiersIn?: string[];
+    requireNonNullContentTier?: boolean;
+  }): Promise<QuestionBankItem[]>;
   getQuestionBankItem(id: string): Promise<QuestionBankItem | undefined>;
   createQuestionBankItem(item: InsertQuestionBankItem): Promise<QuestionBankItem>;
   createQuestionBankItemsBulk(items: InsertQuestionBankItem[]): Promise<QuestionBankItem[]>;
   updateQuestionBankItem(id: string, updates: Partial<InsertQuestionBankItem>): Promise<QuestionBankItem>;
   toggleQuestionBankItemStatus(id: string): Promise<QuestionBankItem>;
-  getQuestionBankRandomSubset(filters: { country: string; examType: string; category?: string; difficulty?: string }, count: number): Promise<QuestionBankItem[]>;
+  getQuestionBankRandomSubset(
+    filters: {
+      country: string;
+      examType: string;
+      category?: string;
+      difficulty?: string;
+      contentTiersIn?: string[];
+      requireNonNullContentTier?: boolean;
+    },
+    count: number,
+  ): Promise<QuestionBankItem[]>;
   createQuestionBankResult(result: InsertQuestionBankResult): Promise<QuestionBankResult>;
   getUserQuestionBankResults(userId: string): Promise<QuestionBankResult[]>;
   getQuestionBankAnalytics(): Promise<{ category: string; difficulty: string; totalAttempts: number; correctRate: number }[]>;
@@ -2212,7 +2231,16 @@ export class DatabaseStorage implements IStorage {
     await db.delete(imagingImageBriefs).where(eq(imagingImageBriefs.id, id));
   }
 
-  async getQuestionBankItems(filters?: { country?: string; examType?: string; category?: string; difficulty?: string; topic?: string; status?: string }): Promise<QuestionBankItem[]> {
+  async getQuestionBankItems(filters?: {
+    country?: string;
+    examType?: string;
+    category?: string;
+    difficulty?: string;
+    topic?: string;
+    status?: string;
+    contentTiersIn?: string[];
+    requireNonNullContentTier?: boolean;
+  }): Promise<QuestionBankItem[]> {
     const LIMIT = 500;
     const conditions = [];
     if (filters?.country) conditions.push(eq(questionBank.country, filters.country));
@@ -2221,6 +2249,10 @@ export class DatabaseStorage implements IStorage {
     if (filters?.difficulty) conditions.push(eq(questionBank.difficulty, filters.difficulty));
     if (filters?.topic) conditions.push(eq(questionBank.topic, filters.topic));
     if (filters?.status) conditions.push(eq(questionBank.status, filters.status));
+    if (filters?.requireNonNullContentTier && filters.contentTiersIn && filters.contentTiersIn.length > 0) {
+      conditions.push(isNotNull(questionBank.contentTier));
+      conditions.push(inArray(questionBank.contentTier, filters.contentTiersIn));
+    }
     if (conditions.length > 0) {
       return db.select().from(questionBank).where(and(...conditions)).orderBy(desc(questionBank.createdAt)).limit(LIMIT);
     }
@@ -2256,7 +2288,17 @@ export class DatabaseStorage implements IStorage {
     return updated;
   }
 
-  async getQuestionBankRandomSubset(filters: { country: string; examType: string; category?: string; difficulty?: string }, count: number): Promise<QuestionBankItem[]> {
+  async getQuestionBankRandomSubset(
+    filters: {
+      country: string;
+      examType: string;
+      category?: string;
+      difficulty?: string;
+      contentTiersIn?: string[];
+      requireNonNullContentTier?: boolean;
+    },
+    count: number,
+  ): Promise<QuestionBankItem[]> {
     const conditions = [
       eq(questionBank.country, filters.country),
       eq(questionBank.examType, filters.examType),
@@ -2264,6 +2306,10 @@ export class DatabaseStorage implements IStorage {
     ];
     if (filters.category) conditions.push(eq(questionBank.category, filters.category));
     if (filters.difficulty) conditions.push(eq(questionBank.difficulty, filters.difficulty));
+    if (filters.requireNonNullContentTier && filters.contentTiersIn && filters.contentTiersIn.length > 0) {
+      conditions.push(isNotNull(questionBank.contentTier));
+      conditions.push(inArray(questionBank.contentTier, filters.contentTiersIn));
+    }
     return db.select().from(questionBank).where(and(...conditions)).orderBy(sql`RANDOM()`).limit(count);
   }
 

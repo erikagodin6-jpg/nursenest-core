@@ -15,7 +15,8 @@ import {
   parseAiCacheNursingExamItem,
   buildNursingParseContext,
 } from "./nursing-ai-cache-extract";
-import type { EnrichmentAudit } from "./nursing-exam-metadata-enrich";
+import { resolutionCategoryForAudit, type EnrichmentAudit } from "./nursing-exam-metadata-enrich";
+import { computeHeuristicSuggestion } from "./nursing-review-metadata";
 
 export type NursingPreviewRow = {
   sourceFile: string;
@@ -26,12 +27,24 @@ export type NursingPreviewRow = {
   stemHash: string;
   examType: string;
   tier: string;
+  mergedTier: string | null;
+  mergedExam: string | null;
+  provenanceTier: string | null;
+  provenanceExam: string | null;
+  importable: boolean;
+  reviewRequired: boolean;
   track: string;
   targetTable: string;
   would: "insert" | "skip";
   reason: string;
   enrichment?: EnrichmentAudit | null;
+  /** True when text heuristics matched an exam label but row is still not importable. */
+  suggestionHintsPresent?: boolean;
 };
+
+function bump(m: Record<string, number>, k: string): void {
+  m[k] = (m[k] ?? 0) + 1;
+}
 
 function getDuplicateCheckDatabaseUrl(): string | null {
   const u = process.env.PROD_DATABASE_URL?.trim() || process.env.DATABASE_URL?.trim();
@@ -151,6 +164,12 @@ Examples:
             stemHash: "",
             examType: "",
             tier: "",
+            mergedTier: null,
+            mergedExam: null,
+            provenanceTier: null,
+            provenanceExam: null,
+            importable: false,
+            reviewRequired: false,
             track: "flashcard",
             targetTable: "flashcard_bank",
             would: "skip",
@@ -161,6 +180,8 @@ Examples:
           continue;
         }
         if (parsed.kind === "inconclusive") {
+          const en = parsed.enrichment ?? null;
+          const sug = computeHeuristicSuggestion(item as Record<string, unknown>, ctx);
           preview.push({
             sourceFile: "ai_cache.json",
             cacheKey,
@@ -170,11 +191,18 @@ Examples:
             stemHash: "",
             examType: "",
             tier: "",
+            mergedTier: en?.mergedTier ?? null,
+            mergedExam: en?.mergedExam ?? null,
+            provenanceTier: en?.tierSource ?? null,
+            provenanceExam: en?.examSource ?? null,
+            importable: false,
+            reviewRequired: true,
             track: "unknown",
             targetTable: NURSING_EXAM_TARGET_TABLE,
             would: "skip",
             reason: `map_failed:${parsed.mapErrors.join(",")}`,
-            enrichment: parsed.enrichment ?? null,
+            enrichment: en,
+            suggestionHintsPresent: sug.suggestion_reasons.length > 0,
           });
           if (limit !== undefined && preview.length >= limit) break outer;
           continue;
@@ -206,6 +234,7 @@ Examples:
           }
         }
 
+        const en = parsed.enrichment ?? null;
         preview.push({
           sourceFile: "ai_cache.json",
           cacheKey,
@@ -215,14 +244,33 @@ Examples:
           stemHash: v.stemHash,
           examType: v.exam,
           tier: v.tier,
+          mergedTier: en?.mergedTier ?? v.tier,
+          mergedExam: en?.mergedExam ?? v.exam,
+          provenanceTier: en?.tierSource ?? null,
+          provenanceExam: en?.examSource ?? null,
+          importable: en?.importable ?? true,
+          reviewRequired: en?.reviewRequired ?? false,
           track: v.careerType === "nursing" ? "nursing" : v.careerType,
           targetTable: NURSING_EXAM_TARGET_TABLE,
           would,
           reason,
-          enrichment: parsed.enrichment ?? null,
+          enrichment: en,
         });
         if (limit !== undefined && preview.length >= limit) break outer;
         if (stoppedByExamInsertCap) break outer;
+      }
+    }
+
+    const provenanceTotals: Record<string, number> = {};
+    let sentToReview = 0;
+    let suggestionOnly = 0;
+    for (const r of preview) {
+      if (r.reviewRequired && r.targetTable === NURSING_EXAM_TARGET_TABLE) {
+        sentToReview += 1;
+        bump(provenanceTotals, "unresolved");
+        if (r.suggestionHintsPresent) suggestionOnly += 1;
+      } else if (r.enrichment) {
+        bump(provenanceTotals, resolutionCategoryForAudit(r.enrichment));
       }
     }
 
@@ -239,6 +287,11 @@ Examples:
           maxExamInserts: maxExamInserts ?? null,
           examSuccessfulInsertsSimulated: examSuccessfulInserts,
           stoppedEarlyByMaxExamInserts: stoppedByExamInsertCap,
+          summary: {
+            sentToReview,
+            provenanceTotals,
+            suggestionOnly,
+          },
           rows: preview,
         },
         null,

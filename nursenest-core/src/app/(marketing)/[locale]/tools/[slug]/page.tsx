@@ -10,6 +10,8 @@ function keysForSlug(slug: string): { title: string; desc: string } | null {
   if (slug === "med-math") return { title: "tools.medMath.metaTitle", desc: "tools.medMath.metaDescription" };
   if (slug === "lab-values") return { title: "tools.labValues.metaTitle", desc: "tools.labValues.metaDescription" };
   if (slug === "electrolyte-abg") return { title: "tools.electrolyteAbg.metaTitle", desc: "tools.electrolyteAbg.metaDescription" };
+  if (slug === "iv-infusion") return { title: "tools.ivInfusion.metaTitle", desc: "tools.ivInfusion.metaDescription" };
+  if (slug === "transfusion-safety") return { title: "tools.transfusionSafety.metaTitle", desc: "tools.transfusionSafety.metaDescription" };
   return null;
 }
 

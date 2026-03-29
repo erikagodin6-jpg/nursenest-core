@@ -1,6 +1,11 @@
 import type { BlogPost, Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured, withDatabaseFallback } from "@/lib/db/safe-database";
+import {
+  countStaticBlogPosts,
+  getStaticBlogPost,
+  listStaticBlogPostsForIndex,
+} from "@/lib/blog/static-blog-posts";
 
 /** @deprecated Use `isDatabaseUrlConfigured` from `@/lib/db/safe-database`. */
 export const isBlogDatabaseConfigured = isDatabaseUrlConfigured;
@@ -36,7 +41,7 @@ export async function getPublishedBlogPostsPage(
   const safePage = Math.max(1, page);
   const safeSize = Math.min(100, Math.max(1, Math.floor(pageSize)));
   const where = { published: true as const };
-  const [posts, total] = await Promise.all([
+  const [dbPosts, dbTotal] = await Promise.all([
     withBlogFallback(
       () =>
         prisma.blogPost.findMany({
@@ -48,8 +53,20 @@ export async function getPublishedBlogPostsPage(
         }),
       [],
     ),
-    countPublishedBlogPosts(),
+    withBlogFallback(() => prisma.blogPost.count({ where }), 0),
   ]);
+  if (dbTotal > 0) {
+    return { posts: dbPosts, total: dbTotal, page: safePage, pageSize: safeSize };
+  }
+  const all = listStaticBlogPostsForIndex().map((p) => ({
+    slug: p.slug,
+    title: p.title,
+    excerpt: p.excerpt,
+    category: p.category,
+    createdAt: new Date(p.createdAt + "T12:00:00Z"),
+  }));
+  const total = all.length;
+  const posts = all.slice((safePage - 1) * safeSize, (safePage - 1) * safeSize + safeSize);
   return { posts, total, page: safePage, pageSize: safeSize };
 }
 
@@ -62,7 +79,7 @@ const metaSelect = {
 export type BlogPostMeta = Prisma.BlogPostGetPayload<{ select: typeof metaSelect }>;
 
 export async function getBlogPostMetaBySlug(slug: string): Promise<BlogPostMeta | null> {
-  return withBlogFallback(
+  const db = await withBlogFallback(
     () =>
       prisma.blogPost.findUnique({
         where: { slug },
@@ -70,6 +87,10 @@ export async function getBlogPostMetaBySlug(slug: string): Promise<BlogPostMeta 
       }),
     null,
   );
+  if (db) return db;
+  const s = getStaticBlogPost(slug);
+  if (!s) return null;
+  return { title: s.title, excerpt: s.excerpt, published: true };
 }
 
 export async function getPublishedBlogPostBySlug(slug: string): Promise<BlogPost | null> {
@@ -124,7 +145,7 @@ export async function getPublishedBlogPostsByTagPage(
 const SITEMAP_BLOG_ROW_CAP = 50_000;
 
 export async function getSitemapPublishedBlogSlugs(): Promise<{ slug: string; updatedAt: Date }[]> {
-  return withBlogFallback(
+  const rows = await withBlogFallback(
     () =>
       prisma.blogPost.findMany({
         where: { published: true },
@@ -134,6 +155,12 @@ export async function getSitemapPublishedBlogSlugs(): Promise<{ slug: string; up
       }),
     [],
   );
+  if (rows.length > 0) return rows;
+  const now = new Date();
+  return listStaticBlogPostsForIndex().map((p) => ({
+    slug: p.slug,
+    updatedAt: now,
+  }));
 }
 
 export async function getSitemapBlogTagRows(): Promise<{ tags: string[] }[]> {

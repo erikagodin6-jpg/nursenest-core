@@ -1,3 +1,6 @@
+# Legacy monolith image (root Dockerfile). Production Next.js deploy uses DigitalOcean App Platform:
+# repo erikagodin6-jpg/nursenest-core, branch main, source_dir nursenest-core (see .do/app-nursenest-core-next.yaml).
+# This workflow still runs in THIS repo only; it does not push code to any other GitHub repository.
 name: Build and Push GHCR Image
 
 on:

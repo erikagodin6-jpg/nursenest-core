@@ -16,7 +16,7 @@ import { trackEvent } from "@/lib/analytics";
 
 export default function LoginPage() {
   const [, navigate] = useLocation();
-  const { login, register } = useAuth();
+  const { login, register, forgotPassword } = useAuth();
   const { toast } = useToast();
   const { t } = useI18n();
   const [isLoading, setIsLoading] = useState(false);
@@ -24,7 +24,6 @@ export default function LoginPage() {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [forgotEmail, setForgotEmail] = useState("");
   const [forgotSent, setForgotSent] = useState(false);
-  const { forgotPassword } = useAuth();
 
   const refCodeFromUrl = useMemo(() => {
     const params = new URLSearchParams(window.location.search);
@@ -172,6 +171,18 @@ export default function LoginPage() {
                     >
                       {isLoading ? "Sending..." : "Send Reset Link"}
                     </Button>
+                    <p className="text-center text-xs" style={{ color: "var(--theme-muted-text)" }}>
+                      <a
+                        href="mailto:support@nursenest.ca?subject=NurseNest%20account%20recovery%20-%20forgot%20email"
+                        className="font-medium hover:underline"
+                        style={{ color: "var(--theme-primary)" }}
+                        data-testid="link-forgot-email-from-reset"
+                      >
+                        {t("login.forgotEmailHelp")}
+                      </a>
+                      {" · "}
+                      {t("login.forgotEmailHelpTitle")}
+                    </p>
                     <div className="text-center">
                       <button
                         type="button"
@@ -249,16 +260,24 @@ export default function LoginPage() {
                         data-testid="input-login-password"
                       />
                     </div>
-                    <div className="text-right">
+                    <div className="text-right space-y-1">
                       <button
                         type="button"
                         onClick={handleForgotPassword}
-                        className="text-xs font-medium hover:underline transition-colors"
+                        className="text-xs font-medium hover:underline transition-colors block w-full"
                         style={{ color: "var(--theme-primary)" }}
                         data-testid="link-forgot-password"
                       >
                         {t("login.forgotPassword")}
                       </button>
+                      <a
+                        href="mailto:support@nursenest.ca?subject=NurseNest%20account%20recovery%20-%20forgot%20email"
+                        className="text-xs font-medium hover:underline transition-colors inline-block"
+                        style={{ color: "var(--theme-muted-text)" }}
+                        data-testid="link-forgot-email-help"
+                      >
+                        {t("login.forgotEmailHelp")}
+                      </a>
                     </div>
                   </div>
                   <Button

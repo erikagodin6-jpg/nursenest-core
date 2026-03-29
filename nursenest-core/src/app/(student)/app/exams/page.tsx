@@ -1,24 +1,33 @@
 import Link from "next/link";
-import { ContentStatus } from "@prisma/client";
-import { auth } from "@/lib/auth";
-import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
-import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import { prisma } from "@/lib/db";
-import { withDatabaseFallback } from "@/lib/db/safe-database";
-import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { ExamPracticeClient } from "@/components/student/exam-practice-client";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/db";
+import { withDatabaseFallback } from "@/lib/db/safe-database";
+import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
+import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
+import { resolveDefaultExamForUser } from "@/lib/exams/resolve-default-exam";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 
 export default async function ExamsPage() {
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
 
+  const examCrumbs = appShellBreadcrumbs("exams");
+
   if (entitlement === "error") {
     return (
-      <p className="nn-card p-6 text-sm text-muted">
-        We could not verify your subscription right now. Refresh the page or try again in a moment.
-      </p>
+      <main>
+        <div className="mb-4">
+          <BreadcrumbTrail items={examCrumbs} />
+        </div>
+        <p className="nn-card p-6 text-sm text-muted">
+          We could not verify your subscription right now. Refresh the page or try again in a moment.
+        </p>
+      </main>
     );
   }
 
@@ -26,10 +35,13 @@ export default async function ExamsPage() {
     const snap = userId ? await getFreemiumSnapshot(userId) : null;
     return (
       <main>
+        <div className="mb-4">
+          <BreadcrumbTrail items={examCrumbs} />
+        </div>
         <h1 className="text-3xl font-bold">Practice exams</h1>
         <p className="mt-2 text-sm text-muted">
-          Soft gate: you are seeing what exams unlock. Hard gate: starting an attempt requires an active subscription—enforced on the
-          server.
+          Timed practice pulls from the same server-filtered pool as your question bank. Subscribe to start full sessions and save
+          attempts to your history.
         </p>
         <div className="mt-6">
           <SubscriptionPaywall
@@ -42,7 +54,7 @@ export default async function ExamsPage() {
           <ul className="mt-2 list-inside list-disc space-y-1">
             <li>Full-length mocks with server-filtered item pools</li>
             <li>Score history for readiness tracking</li>
-            <li>CAT-style sessions when enabled for your tier</li>
+            <li>Resumable sessions with autosaved progress</li>
           </ul>
         </section>
       </main>
@@ -64,6 +76,9 @@ export default async function ExamsPage() {
     safeServerLog("page_exams", "attempts_find_failed", {});
     return (
       <main>
+        <div className="mb-4">
+          <BreadcrumbTrail items={examCrumbs} />
+        </div>
         <h1 className="text-3xl font-bold">Practice exams</h1>
         <p className="nn-card mt-4 p-6 text-sm text-muted">
           Past attempts could not be loaded. Refresh or try again shortly.
@@ -77,56 +92,46 @@ export default async function ExamsPage() {
   const last = attempts[0];
   const pct = last && last.total > 0 ? Math.round((last.score / last.total) * 100) : null;
 
-  const examContext = await withDatabaseFallback(
-    async () => {
-      const userRow = await prisma.user.findUnique({
-        where: { id: userId },
-        select: { country: true, tier: true },
-      });
-      if (!userRow) return { primaryExam: null };
-      const primaryExam = await prisma.exam.findFirst({
-        where: {
-          status: ContentStatus.PUBLISHED,
-          country: userRow.country,
-          tier: userRow.tier,
-        },
-        orderBy: { updatedAt: "desc" },
-        select: { id: true, title: true },
-      });
-      return { primaryExam };
-    },
-    { primaryExam: null },
-  );
-  const primaryExam = examContext.primaryExam;
+  const defaultExam = userId ? await resolveDefaultExamForUser(userId) : null;
 
   return (
     <main>
+      <div className="mb-4">
+        <BreadcrumbTrail items={examCrumbs} />
+      </div>
       <h1 className="text-3xl font-bold">Practice exams</h1>
-      <p className="mt-2 text-muted">Exam generation uses server-side filtered question pools only.</p>
+      <p className="mt-2 text-muted">
+        Timed linear practice exams use your subscription pool (filtered by country and tier). Submit at the end for a score—
+        rationales are not shown between items so the run mirrors test-day pacing.
+      </p>
       {pct !== null ? (
         <p className="mt-3 text-sm font-medium text-foreground">
-          Latest attempt: {last?.score}/{last?.total} ({pct}%) — {pct >= 75 ? "you are approaching passing-band practice." : "add timed blocks this week to lift accuracy."}
+          Latest attempt: {last?.score}/{last?.total} ({pct}%) —{" "}
+          {pct >= 75 ? "strong practice band—keep mixing timed sets." : "add timed blocks this week to lift accuracy."}
         </p>
       ) : (
-        <p className="mt-3 text-sm text-muted">No attempts yet—start a mock when your question bank accuracy feels stable.</p>
+        <p className="mt-3 text-sm text-muted">No attempts yet—start a session below when you are ready.</p>
       )}
       <aside className="nn-card mt-4 border-primary/15 bg-primary/5 p-4 text-sm text-muted">
         <p className="font-semibold text-foreground">Report card & analytics</p>
-        <p className="mt-1">Use exam results plus question bank misses to steer your next three study sessions.</p>
+        <p className="mt-1">Pair exam scores with question bank misses to plan your next study blocks.</p>
       </aside>
-      {primaryExam ? (
-        <ExamPracticeClient examId={primaryExam.id} examTitle={primaryExam.title} />
+
+      {defaultExam ? (
+        <ExamPracticeClient examId={defaultExam.id} examTitle={defaultExam.title} />
       ) : (
         <aside className="nn-card mt-4 border-amber-200/80 bg-amber-50/50 p-4 text-sm text-foreground">
-          <p className="font-semibold">No published exam for your region and tier yet</p>
+          <p className="font-semibold">Setting up your practice exam</p>
           <p className="mt-1 text-muted">
-            Practice questions are still available — your tier filter is enforced on the server.
+            We could not attach a default exam profile to your account yet. You can still use the question bank while we finish loading
+            exam metadata.
           </p>
           <Link href="/app/questions" className="mt-3 inline-flex text-sm font-semibold text-primary underline underline-offset-2">
             Open question bank →
           </Link>
         </aside>
       )}
+
       <div className="mt-4 space-y-3">
         {attempts.map((attempt) => (
           <article className="nn-card p-4" key={attempt.id}>

@@ -10,6 +10,7 @@ export const authCallbacks: NonNullable<NextAuthConfig["callbacks"]> = {
       token.role = (user as any).role;
       token.country = (user as any).country;
       token.tier = (user as any).tier;
+      token.subscriptionStatus = (user as any).subscriptionStatus;
     }
     return token;
   },
@@ -19,6 +20,7 @@ export const authCallbacks: NonNullable<NextAuthConfig["callbacks"]> = {
       (session.user as any).role = token.role;
       (session.user as any).country = token.country;
       (session.user as any).tier = token.tier;
+      (session.user as any).subscriptionStatus = token.subscriptionStatus;
     }
     return session;
   },

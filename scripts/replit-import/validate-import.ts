@@ -9,6 +9,8 @@ import {
   parseAiCacheNursingExamItem,
   buildNursingParseContext,
 } from "./nursing-ai-cache-extract";
+import { resolutionCategoryForAudit } from "./nursing-exam-metadata-enrich";
+import { computeHeuristicSuggestion } from "./nursing-review-metadata";
 
 export type FileValidationResult = {
   fileName: string;
@@ -49,6 +51,10 @@ export type ValidationReport = {
     stillRejectedMissingTier: number;
     stillRejectedMissingExam: number;
     ambiguousAfterEnrichment: number;
+    sentToReview: number;
+    suggestionOnlyRows: number;
+    /** Counts by resolutionCategoryForAudit (successful rows) plus `unresolved` for inconclusive. */
+    provenanceTotals: Record<string, number>;
     topAmbiguousKeyPatterns: [string, number][];
   };
 };
@@ -143,6 +149,10 @@ export function validateStagedExports(repoRoot: string, sourceDirRel: string): V
             bump(result.skipReasons, parsed.mapErrors.join(",") || "map_failed");
             pushErr(`${fileName}: ${parsed.mapErrors.join(",")}`);
             const en = parsed.enrichment;
+            ne.sentToReview += 1;
+            bump(provenanceTotals, "unresolved");
+            const sug = computeHeuristicSuggestion(item as Record<string, unknown>, ctx);
+            if (sug.suggestion_reasons.length) ne.suggestionOnlyRows += 1;
             if (en?.ambiguous) {
               ne.ambiguousAfterEnrichment += 1;
               const ck = ctx.cacheKey ?? "__null_cache_key__";
@@ -155,6 +165,7 @@ export function validateStagedExports(repoRoot: string, sourceDirRel: string): V
           ne.examMapSucceeded += 1;
           const en = parsed.enrichment;
           if (en) {
+            bump(provenanceTotals, resolutionCategoryForAudit(en));
             if (en.originalTier && en.originalExam) ne.alreadyHadTierExamOnItem += 1;
             else if (en.mergedTier && en.mergedExam) ne.enrichedSuccessfully += 1;
           }
@@ -231,6 +242,7 @@ export function validateStagedExports(repoRoot: string, sourceDirRel: string): V
     nursingStemHashesSeen: globalStemHashes.size,
     nursingEnrichmentSummary: {
       ...ne,
+      provenanceTotals,
       topAmbiguousKeyPatterns: topAmbiguous,
     },
   };

@@ -20,7 +20,7 @@ const EXACT: Record<string, string> = {
   "/newgrad": `${PUBLIC_SITE}/newgrad`,
   "/new-grad": `${PUBLIC_SITE}/new-grad`,
   "/lessons": "/app/lessons",
-  "/flashcards": "/app/questions",
+  "/flashcards": "/app/flashcards",
   "/mock-exams": "/app/exams",
   "/mock-exam": "/app/exams",
   "/study": "/app/questions",
@@ -34,11 +34,11 @@ const EXACT: Record<string, string> = {
   "/career-journey": `${PUBLIC_SITE}/career-journey`,
   "/career-journey/nursing": `${PUBLIC_SITE}/career-journey/nursing`,
   "/start-free": "/signup",
-  "/faq": `${PUBLIC_SITE}/faq`,
+  "/faq": "/faq",
   "/rex-pn-guide": `${PUBLIC_SITE}/rex-pn-guide`,
   "/nclex-rn-guide": `${PUBLIC_SITE}/nclex-rn-guide`,
   "/shop": `${PUBLIC_SITE}/shop`,
-  "/pre-nursing": "/app/lessons",
+  "/pre-nursing": "/pre-nursing",
   "/rex-pn-practice-questions": "/rex-pn-practice-questions",
   "/nclex-rn-practice-questions": "/nclex-rn-practice-questions",
   "/nursing-specialties": "/app/lessons",
@@ -46,6 +46,7 @@ const EXACT: Record<string, string> = {
   "/healthcare-careers": `${PUBLIC_SITE}/healthcare-careers`,
   "/allied-health": `${PUBLIC_SITE}/allied-health`,
   "/blog": "/blog",
+  "/case-studies": "/case-studies",
   "/paramedic": `${PUBLIC_SITE}/allied-health/paramedic`,
   "/rrt": `${PUBLIC_SITE}/allied-health/rrt`,
   "/mlt": `${PUBLIC_SITE}/allied-health/mlt`,
@@ -76,6 +77,13 @@ export function resolveMarketingHref(href: string): string {
     mapped === "/app" ||
     mapped === "/pricing" ||
     mapped === "/for-institutions" ||
+    mapped === "/case-studies" ||
+    mapped === "/pre-nursing" ||
+    mapped.startsWith("/pre-nursing/") ||
+    mapped === "/faq" ||
+    mapped === "/exam-lessons" ||
+    mapped === "/tools" ||
+    mapped.startsWith("/tools/") ||
     mapped === "/login" ||
     mapped === "/signup" ||
     mapped === "/forgot-password" ||

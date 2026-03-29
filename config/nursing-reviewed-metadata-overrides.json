@@ -1,0 +1,6 @@
+{
+  "version": 1,
+  "description": "Human-reviewed cache_key → tier/exam for nursing imports. Generated or merged via nursing:apply-reviewed-metadata. Never autoguess.",
+  "reviewed": false,
+  "cacheKeyExact": {}
+}

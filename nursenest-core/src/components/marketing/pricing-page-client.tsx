@@ -12,8 +12,8 @@ type PlanRow = {
   tier: TierCode;
   country: "CA" | "US";
   duration: BillingDuration;
-  priceId: string;
-  suggestedTotalLabel: string;
+  checkoutAvailable: boolean;
+  totalLabel: string;
   monthlyEquivalentLabel: string;
   savingsVsMonthlyPercent: number;
   isBestValue: boolean;
@@ -237,25 +237,31 @@ export function PricingPageClient({
                 <h3 className="text-lg font-semibold">{DURATION_LABEL[dur]}</h3>
                 {row ? (
                   <>
-                    <p className="mt-2 text-2xl font-bold">{row.suggestedTotalLabel}</p>
+                    <p className="mt-2 text-2xl font-bold">{row.totalLabel}</p>
                     <p className="text-sm text-muted">{row.monthlyEquivalentLabel} avg</p>
                     {row.savingsVsMonthlyPercent > 0 ? (
                       <p className="mt-2 text-xs font-semibold text-primary">Save ~{row.savingsVsMonthlyPercent}% vs monthly pace</p>
                     ) : null}
                     <button
                       type="button"
-                      disabled={checkoutLoading}
+                      disabled={checkoutLoading || !row.checkoutAvailable}
                       onClick={() => startCheckout(dur)}
                       className="mt-4 w-full rounded-full bg-primary py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
                     >
-                      Continue to secure checkout
+                      {row.checkoutAvailable ? "Continue to secure checkout" : "Coming soon"}
                     </button>
                   </>
                 ) : (
-                  <p className="mt-3 text-sm text-muted">
-                    Not configured yet. Add matching Stripe price IDs for this tier, country, and duration (see
-                    server pricing map), or choose monthly.
-                  </p>
+                  <>
+                    <p className="mt-3 text-sm font-medium text-muted">Coming soon</p>
+                    <button
+                      type="button"
+                      disabled
+                      className="mt-4 w-full rounded-full border border-border bg-muted/50 py-2.5 text-sm font-semibold text-muted-foreground"
+                    >
+                      Coming soon
+                    </button>
+                  </>
                 )}
               </article>
             );
@@ -263,7 +269,7 @@ export function PricingPageClient({
         </div>
       </section>
 
-      <p className="mt-10 text-center text-xs text-muted">{SOCIAL_PROOF.testimonialPlaceholder}</p>
+      <p className="mt-10 text-center text-xs text-muted">{SOCIAL_PROOF.pricingFooterLine}</p>
     </main>
   );
 }
