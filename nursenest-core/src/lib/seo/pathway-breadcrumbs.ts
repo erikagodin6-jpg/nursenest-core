@@ -1,67 +1,49 @@
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import type { BreadcrumbCrumb, BreadcrumbSchemaItem } from "@/lib/seo/breadcrumb-types";
-import { countryLabelFromSlug, formatRoleTrackLabel, toAbsoluteSiteUrl } from "@/lib/seo/breadcrumb-utils";
+import { toAbsoluteSiteUrl } from "@/lib/seo/breadcrumb-utils";
 
 export type { BreadcrumbCrumb, BreadcrumbSchemaItem } from "@/lib/seo/breadcrumb-types";
 
 const HOME: BreadcrumbCrumb = { name: "Home", href: "/" };
 const HOME_ITEM: BreadcrumbSchemaItem = { name: "Home", item: "/" };
 
-function countryCrumb(pathway: ExamPathwayDefinition): BreadcrumbCrumb {
-  return { name: countryLabelFromSlug(pathway.countrySlug), href: "/exam-lessons" };
+/**
+ * Public index of all exam-scoped lesson hubs. Label matches the `h1` on `/exam-lessons`.
+ * There is no standalone `/canada` (or other country) page — do not label a crumb “Canada” and link here.
+ */
+export const EXAM_LESSONS_INDEX = {
+  path: "/exam-lessons" as const,
+  label: "Lessons by exam pathway",
+};
+
+function examLessonsIndexCrumb(linked: boolean): BreadcrumbCrumb {
+  return linked
+    ? { name: EXAM_LESSONS_INDEX.label, href: EXAM_LESSONS_INDEX.path }
+    : { name: EXAM_LESSONS_INDEX.label, href: undefined };
 }
 
-function countrySchema(pathway: ExamPathwayDefinition): BreadcrumbSchemaItem {
-  return {
-    name: countryLabelFromSlug(pathway.countrySlug),
-    item: toAbsoluteSiteUrl("/exam-lessons"),
-  };
+function examLessonsIndexSchema(): BreadcrumbSchemaItem {
+  return { name: EXAM_LESSONS_INDEX.label, item: toAbsoluteSiteUrl(EXAM_LESSONS_INDEX.path) };
 }
 
-function roleCrumb(pathway: ExamPathwayDefinition): BreadcrumbCrumb {
+function pathwayHubCrumb(pathway: ExamPathwayDefinition, linked: boolean): BreadcrumbCrumb {
   const base = buildExamPathwayPath(pathway);
-  return { name: formatRoleTrackLabel(pathway.roleTrack, pathway.countrySlug), href: `${base}#role` };
+  return linked ? { name: pathway.shortName, href: base } : { name: pathway.shortName, href: undefined };
 }
 
-function roleSchema(pathway: ExamPathwayDefinition): BreadcrumbSchemaItem {
-  const base = buildExamPathwayPath(pathway);
-  return {
-    name: formatRoleTrackLabel(pathway.roleTrack, pathway.countrySlug),
-    item: toAbsoluteSiteUrl(`${base}#role`),
-  };
-}
-
-function examCrumb(pathway: ExamPathwayDefinition): BreadcrumbCrumb {
-  const base = buildExamPathwayPath(pathway);
-  return { name: pathway.shortName, href: `${base}#exam` };
-}
-
-function examSchema(pathway: ExamPathwayDefinition): BreadcrumbSchemaItem {
-  const base = buildExamPathwayPath(pathway);
-  return {
-    name: pathway.shortName,
-    item: toAbsoluteSiteUrl(`${base}#exam`),
-  };
-}
-
-function examHubSchema(pathway: ExamPathwayDefinition): BreadcrumbSchemaItem {
+function pathwayHubSchema(pathway: ExamPathwayDefinition): BreadcrumbSchemaItem {
   const base = buildExamPathwayPath(pathway);
   return { name: pathway.shortName, item: toAbsoluteSiteUrl(base) };
 }
 
-/** Exam pathway overview: Home → country → role → exam (current). */
+/** Exam pathway overview: Home → lessons index → pathway hub (current). */
 export function pathwayOverviewBreadcrumbs(pathway: ExamPathwayDefinition): {
   crumbs: BreadcrumbCrumb[];
   schemaItems: BreadcrumbSchemaItem[];
 } {
-  const crumbs: BreadcrumbCrumb[] = [
-    HOME,
-    countryCrumb(pathway),
-    roleCrumb(pathway),
-    { name: pathway.shortName, href: undefined },
-  ];
-  const schemaItems: BreadcrumbSchemaItem[] = [HOME_ITEM, countrySchema(pathway), roleSchema(pathway), examHubSchema(pathway)];
+  const crumbs: BreadcrumbCrumb[] = [HOME, examLessonsIndexCrumb(true), pathwayHubCrumb(pathway, false)];
+  const schemaItems: BreadcrumbSchemaItem[] = [HOME_ITEM, examLessonsIndexSchema(), pathwayHubSchema(pathway)];
   return { crumbs, schemaItems };
 }
 
@@ -73,16 +55,14 @@ export function pathwayLessonsHubBreadcrumbs(pathway: ExamPathwayDefinition): {
   const lessons = buildExamPathwayPath(pathway, "lessons");
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
-    countryCrumb(pathway),
-    roleCrumb(pathway),
-    examCrumb(pathway),
+    examLessonsIndexCrumb(true),
+    pathwayHubCrumb(pathway, true),
     { name: "Lessons", href: undefined },
   ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
-    countrySchema(pathway),
-    roleSchema(pathway),
-    examSchema(pathway),
+    examLessonsIndexSchema(),
+    pathwayHubSchema(pathway),
     { name: "Lessons", item: toAbsoluteSiteUrl(lessons) },
   ];
   return { crumbs, schemaItems };
@@ -98,17 +78,15 @@ export function pathwayTopicClusterBreadcrumbs(
   const topicPath = buildExamPathwayPath(pathway, `lessons/topics/${topicSlug}`);
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
-    countryCrumb(pathway),
-    roleCrumb(pathway),
-    examCrumb(pathway),
+    examLessonsIndexCrumb(true),
+    pathwayHubCrumb(pathway, true),
     { name: "Lessons", href: lessonsPath },
     { name: topicLabel, href: undefined },
   ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
-    countrySchema(pathway),
-    roleSchema(pathway),
-    examSchema(pathway),
+    examLessonsIndexSchema(),
+    pathwayHubSchema(pathway),
     { name: "Lessons", item: toAbsoluteSiteUrl(lessonsPath) },
     { name: topicLabel, item: toAbsoluteSiteUrl(topicPath) },
   ];
@@ -125,17 +103,15 @@ export function pathwayLessonDetailBreadcrumbs(
   const lessonPath = buildExamPathwayPath(pathway, `lessons/${lessonSlug}`);
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
-    countryCrumb(pathway),
-    roleCrumb(pathway),
-    examCrumb(pathway),
+    examLessonsIndexCrumb(true),
+    pathwayHubCrumb(pathway, true),
     { name: "Lessons", href: lessonsPath },
     { name: lessonTitle, href: undefined },
   ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
-    countrySchema(pathway),
-    roleSchema(pathway),
-    examSchema(pathway),
+    examLessonsIndexSchema(),
+    pathwayHubSchema(pathway),
     { name: "Lessons", item: toAbsoluteSiteUrl(lessonsPath) },
     { name: lessonTitle, item: toAbsoluteSiteUrl(lessonPath) },
   ];
@@ -150,16 +126,14 @@ export function pathwayQuestionsHubBreadcrumbs(pathway: ExamPathwayDefinition): 
   const qPath = buildExamPathwayPath(pathway, "questions");
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
-    countryCrumb(pathway),
-    roleCrumb(pathway),
-    examCrumb(pathway),
+    examLessonsIndexCrumb(true),
+    pathwayHubCrumb(pathway, true),
     { name: "Question bank", href: undefined },
   ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
-    countrySchema(pathway),
-    roleSchema(pathway),
-    examSchema(pathway),
+    examLessonsIndexSchema(),
+    pathwayHubSchema(pathway),
     { name: "Question bank", item: toAbsoluteSiteUrl(qPath) },
   ];
   return { crumbs, schemaItems };
@@ -173,16 +147,14 @@ export function pathwayPricingBreadcrumbs(pathway: ExamPathwayDefinition): {
   const pricingPath = buildExamPathwayPath(pathway, "pricing");
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
-    countryCrumb(pathway),
-    roleCrumb(pathway),
-    examCrumb(pathway),
+    examLessonsIndexCrumb(true),
+    pathwayHubCrumb(pathway, true),
     { name: "Pricing", href: undefined },
   ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
-    countrySchema(pathway),
-    roleSchema(pathway),
-    examSchema(pathway),
+    examLessonsIndexSchema(),
+    pathwayHubSchema(pathway),
     { name: "Pricing", item: toAbsoluteSiteUrl(pricingPath) },
   ];
   return { crumbs, schemaItems };
@@ -190,8 +162,8 @@ export function pathwayPricingBreadcrumbs(pathway: ExamPathwayDefinition): {
 
 /** Exam lessons index (all pathways). */
 export function examLessonsIndexBreadcrumbs(): { crumbs: BreadcrumbCrumb[]; schemaItems: BreadcrumbSchemaItem[] } {
-  const crumbs: BreadcrumbCrumb[] = [HOME, { name: "Lessons by exam", href: undefined }];
-  const schemaItems: BreadcrumbSchemaItem[] = [HOME_ITEM, { name: "Lessons by exam", item: toAbsoluteSiteUrl("/exam-lessons") }];
+  const crumbs: BreadcrumbCrumb[] = [HOME, examLessonsIndexCrumb(false)];
+  const schemaItems: BreadcrumbSchemaItem[] = [HOME_ITEM, examLessonsIndexSchema()];
   return { crumbs, schemaItems };
 }
 
@@ -235,16 +207,12 @@ export function blogPostBreadcrumbsWithOptionalCategory(
 /** Blog tag page. */
 export function blogTagBreadcrumbs(tag: string): { crumbs: BreadcrumbCrumb[]; schemaItems: BreadcrumbSchemaItem[] } {
   const tagPath = `/blog/tag/${encodeURIComponent(tag)}`;
-  const crumbs: BreadcrumbCrumb[] = [
-    HOME,
-    { name: "Blog", href: "/blog" },
-    { name: `Tag: ${tag}`, href: undefined },
-  ];
+  const tagLabel = `Tag: ${tag}`;
+  const crumbs: BreadcrumbCrumb[] = [HOME, { name: "Blog", href: "/blog" }, { name: tagLabel, href: undefined }];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
     { name: "Blog", item: toAbsoluteSiteUrl("/blog") },
-    { name: tag, item: toAbsoluteSiteUrl(tagPath) },
+    { name: tagLabel, item: toAbsoluteSiteUrl(tagPath) },
   ];
   return { crumbs, schemaItems };
 }
-

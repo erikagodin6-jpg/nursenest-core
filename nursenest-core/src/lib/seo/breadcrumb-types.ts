@@ -3,6 +3,7 @@
  *
  * Route classes (audit):
  * - **A — Public indexable:** home, pricing, pathway hubs, lessons, blog, exam-lessons, pre-nursing, case-studies, tools, for-institutions, programmatic SEO slugs (see registry).
+ * - **Pathway marketing:** trails are built in `pathway-breadcrumbs.ts` as Home → `/exam-lessons` (label matches that page’s h1) → pathway hub → section → current — never label “Canada”/country and link to `/exam-lessons`.
  * - **B — Public low-priority:** login, signup, forgot/reset password (optional/minimal crumbs).
  * - **C — Protected /app:** question bank, exams, dashboard, lessons — **visible crumbs only; no BreadcrumbList schema** (layout uses robots noindex).
  */
