@@ -7,6 +7,7 @@ import { getPathwayLesson } from "@/lib/lessons/pathway-lesson-loader";
 import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
 
 const bodySchema = z.object({
@@ -53,6 +54,12 @@ export async function POST(req: Request) {
   });
 
   if (!canViewFullPathwayLesson(entitlement, pathway, user?.learnerPath)) {
+    safeServerLog("pathway_lesson", "pathway_progress_denied", {
+      pathwayId,
+      lessonSlug,
+      hasAccess: entitlement.hasAccess,
+      reason: entitlement.reason,
+    });
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 

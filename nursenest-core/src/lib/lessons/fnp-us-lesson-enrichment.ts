@@ -160,10 +160,12 @@ export function fnpLessonClinicalPreview(l: PathwayLessonRecord): {
   rationaleSnippet: string;
 } {
   const h = haystack(l);
-  const intro = l.sections.find((s) => s.kind === "intro")?.body ?? "";
-  const clinical = l.sections.find((s) => s.kind === "clinical_application")?.body ?? "";
-  const core = l.sections.find((s) => s.kind === "core")?.body ?? "";
-  const examTips = l.sections.find((s) => s.kind === "exam_tips")?.body ?? "";
+  const intro =
+    l.sections.find((s) => s.kind === "intro" || s.kind === "clinical_meaning")?.body ?? "";
+  const clinical =
+    l.sections.find((s) => s.kind === "clinical_application" || s.kind === "clinical_scenario")?.body ?? "";
+  const core = l.sections.find((s) => s.kind === "core" || s.kind === "core_concept")?.body ?? "";
+  const examTips = l.sections.find((s) => s.kind === "exam_tips" || s.kind === "exam_relevance")?.body ?? "";
 
   let providerTasks =
     "Interpret data in a primary-care stem, narrow the differential, and commit to a defensible next step (including referral when scope or risk demands).";
@@ -225,6 +227,76 @@ export function fnpLessonClinicalPreview(l: PathwayLessonRecord): {
     sampleDecision,
     rationaleSnippet,
   };
+}
+
+export type FnpClinicalPreviewBlock = ReturnType<typeof fnpLessonClinicalPreview>;
+
+/** Hub cards only: no `sections` — full bodies stay server-side. Safe to pass to client components. */
+export type FnpExplorerLesson = {
+  meta: {
+    slug: string;
+    title: string;
+    topic: string;
+    topicSlug: string;
+    bodySystem: string;
+    seoDescription: string;
+  };
+  primaryLifespan: FnpLifespanGroup;
+  domains: FnpClinicalDomain[];
+  clinicalPreview: FnpClinicalPreviewBlock;
+};
+
+export function buildFnpExplorerPayload(lessons: PathwayLessonRecord[]): FnpExplorerLesson[] {
+  return lessons.map((lesson) => ({
+    meta: {
+      slug: lesson.slug,
+      title: lesson.title,
+      topic: lesson.topic,
+      topicSlug: lesson.topicSlug,
+      bodySystem: lesson.bodySystem,
+      seoDescription: lesson.seoDescription,
+    },
+    primaryLifespan: fnpPrimaryLifespanForLesson(lesson),
+    domains: fnpDomainsForLesson(lesson),
+    clinicalPreview: fnpLessonClinicalPreview(lesson),
+  }));
+}
+
+export function fnpExplorerCounts(payload: FnpExplorerLesson[]): {
+  countsLife: Record<FnpLifespanGroup, number>;
+  countsDom: Record<FnpClinicalDomain, number>;
+} {
+  const countsLife: Record<FnpLifespanGroup, number> = {
+    prenatal_womens: 0,
+    pediatric: 0,
+    adolescent: 0,
+    adult: 0,
+    geriatric: 0,
+    lifespan_mixed: 0,
+  };
+  const countsDom: Record<FnpClinicalDomain, number> = {
+    assessment: 0,
+    diagnosis: 0,
+    management: 0,
+    evaluation: 0,
+  };
+  for (const e of payload) {
+    countsLife[e.primaryLifespan] += 1;
+    for (const dom of e.domains) {
+      countsDom[dom] += 1;
+    }
+  }
+  return { countsLife, countsDom };
+}
+
+export function fnpExplorerMatchesFilters(
+  e: FnpExplorerLesson,
+  lifespan: FnpLifespanFilter,
+  domain: FnpDomainFilter,
+): boolean {
+  if (lifespan !== "all" && e.primaryLifespan !== lifespan) return false;
+  if (domain !== "all" && !e.domains.includes(domain)) return false;
+  return true;
 }
 
 export const FNP_NP_COMMON_MISTAKES: { heading: string; items: string[] }[] = [

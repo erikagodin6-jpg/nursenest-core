@@ -21,9 +21,9 @@ export class PricingPageErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, info: ErrorInfo): void {
-    safeClientLog("pricing_page", "react_error_boundary", {
-      message: error.message,
-      componentStack: info.componentStack?.slice(0, 500),
+    Sentry.captureException(error, {
+      tags: { feature: "marketing_pricing", boundary: "PricingPageErrorBoundary" },
+      extra: { componentStack: info.componentStack?.slice(0, 800) },
     });
   }
 

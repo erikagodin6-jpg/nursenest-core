@@ -1,5 +1,5 @@
 import catalog from "@/content/pathway-lessons/catalog.json";
-import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
+import type { PathwayLessonRecord, PathwayLessonSection, PathwayLessonSectionKind } from "@/lib/lessons/pathway-lesson-types";
 
 type CatalogShape = {
   version: number;
@@ -23,20 +23,64 @@ type CatalogShape = {
 
 const data = catalog as CatalogShape;
 
-/** Fixed lesson structure for every pathway lesson: clinical meaning, exam relevance, core, scenario, takeaways. */
-function expandToStandardFiveSections(
-  sections: PathwayLessonRecord["sections"],
-): PathwayLessonRecord["sections"] {
-  if (
-    sections.length >= 5 &&
-    sections.some((s) => s.kind === "takeaways") &&
-    sections.some((s) => s.kind === "clinical_meaning")
-  ) {
-    return sections.slice(0, 5);
+/**
+ * Pathway lessons are loaded from a repo JSON catalog (bundled server-side only).
+ * Full lesson bodies are rendered in HTML only for entitled users; locked users receive
+ * preview sections only. See docs/pathway-lesson-catalog-security.md.
+ */
+
+const CANONICAL_ORDER: PathwayLessonSectionKind[] = [
+  "clinical_meaning",
+  "exam_relevance",
+  "core_concept",
+  "clinical_scenario",
+  "takeaways",
+];
+
+function hasAllCanonicalKinds(sections: PathwayLessonSection[]): boolean {
+  return CANONICAL_ORDER.every((k) => sections.some((s) => s.kind === k));
+}
+
+function sanitizeSectionBody(body: unknown): string {
+  if (typeof body !== "string") return "";
+  return body.trim();
+}
+
+function sanitizeSection(raw: Partial<PathwayLessonSection>, index: number): PathwayLessonSection {
+  const kind = (raw.kind ?? "intro") as PathwayLessonSectionKind;
+  const heading = typeof raw.heading === "string" && raw.heading.trim().length > 0 ? raw.heading.trim() : "Section";
+  const id = typeof raw.id === "string" && raw.id.trim().length > 0 ? raw.id : `${kind}-${index}`;
+  return {
+    id,
+    heading,
+    kind,
+    body: sanitizeSectionBody(raw.body),
+  };
+}
+
+function sanitizeIncomingSections(sections: unknown): PathwayLessonSection[] {
+  if (!Array.isArray(sections)) return [];
+  return sections.map((s, i) => sanitizeSection(s as Partial<PathwayLessonSection>, i));
+}
+
+/** Fixed lesson structure: clinical meaning, exam relevance, core, scenario, takeaways. */
+function expandToStandardFiveSections(sections: PathwayLessonSection[]): PathwayLessonSection[] {
+  const cleaned = sanitizeIncomingSections(sections);
+
+  if (cleaned.length >= 5 && hasAllCanonicalKinds(cleaned)) {
+    const ordered = CANONICAL_ORDER.map((k) => cleaned.find((s) => s.kind === k)).filter(
+      (s): s is PathwayLessonSection => Boolean(s),
+    );
+    if (ordered.length === 5) {
+      return ordered.map((s) => ({
+        ...s,
+        body: s.body || defaultBodyFor(s.kind),
+      }));
+    }
   }
 
-  const byKind = Object.fromEntries(sections.map((s) => [s.kind, s])) as Partial<
-    Record<PathwayLessonRecord["sections"][number]["kind"], PathwayLessonRecord["sections"][number]>
+  const byKind = Object.fromEntries(cleaned.map((s) => [s.kind, s])) as Partial<
+    Record<PathwayLessonSectionKind, PathwayLessonSection>
   >;
 
   const intro = byKind.intro ?? byKind.clinical_meaning;
@@ -100,23 +144,49 @@ function expandToStandardFiveSections(
   ];
 }
 
+function defaultBodyFor(kind: PathwayLessonSectionKind): string {
+  switch (kind) {
+    case "clinical_meaning":
+      return "Read the stem as a safety and prioritization problem first, then match your action to the risk you can justify.";
+    case "exam_relevance":
+      return "Examiners use these topics to test whether you can prioritize, sequence safely, and justify your next action.";
+    case "core_concept":
+      return "Anchor pathophysiology to assessment findings, then tie interventions to monitoring and escalation rules.";
+    case "clinical_scenario":
+      return "Picture one client whose data forces a fork: stable monitoring versus urgent escalation. Choose the branch the stem supports.";
+    case "takeaways":
+      return "Before your next question block, restate one rule you will not violate on prioritization or scope.";
+    default:
+      return "";
+  }
+}
+
 function normalizeLesson(raw: CatalogShape["pathways"][string]["lessons"][number]): PathwayLessonRecord {
+  const title = typeof raw.title === "string" ? raw.title : "Lesson";
+  const seoTitle = typeof raw.seoTitle === "string" ? raw.seoTitle : title;
+  const seoDescription = typeof raw.seoDescription === "string" ? raw.seoDescription : "";
+  const rawPc = raw.previewSectionCount;
+  const previewCandidate =
+    typeof rawPc === "number" && Number.isFinite(rawPc) && rawPc > 0 ? Math.floor(rawPc) : 1;
+
   const base: PathwayLessonRecord = {
     slug: raw.slug,
-    title: raw.title,
-    topic: raw.topic,
-    topicSlug: raw.topicSlug,
-    bodySystem: raw.bodySystem,
-    previewSectionCount: Math.max(1, Math.min(raw.previewSectionCount ?? 1, 5)),
-    seoTitle: raw.seoTitle,
-    seoDescription: raw.seoDescription,
+    title,
+    topic: typeof raw.topic === "string" ? raw.topic : "",
+    topicSlug: typeof raw.topicSlug === "string" ? raw.topicSlug : "",
+    bodySystem: typeof raw.bodySystem === "string" ? raw.bodySystem : "",
+    previewSectionCount: Math.max(1, Math.min(previewCandidate, 5)),
+    seoTitle,
+    seoDescription,
     sections: raw.sections as PathwayLessonRecord["sections"],
   };
-  const expanded = expandToStandardFiveSections(base.sections);
+  const expanded = expandToStandardFiveSections(base.sections as PathwayLessonSection[]);
+  const maxPreview = Math.min(expanded.length, 5);
+  const preview = Math.max(1, Math.min(base.previewSectionCount, maxPreview || 1));
   return {
     ...base,
     sections: expanded,
-    previewSectionCount: Math.max(1, Math.min(base.previewSectionCount, expanded.length)),
+    previewSectionCount: preview,
   };
 }
 

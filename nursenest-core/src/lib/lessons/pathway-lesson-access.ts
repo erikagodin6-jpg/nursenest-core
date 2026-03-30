@@ -1,7 +1,34 @@
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { subscriptionCoversPathwayBase } from "@/lib/exam-pathways/pathway-entitlements";
-import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
+
+/** Why the learner sees a preview-only pathway lesson (marketing page). */
+export type PathwayLessonPreviewKind =
+  | "anonymous"
+  | "inactive_subscription"
+  | "wrong_plan_country"
+  | "np_specialty_mismatch"
+  | "default_preview";
+
+/**
+ * Drives unlock / upgrade messaging. Call only when `fullAccess` is false.
+ * Signed-out users are always `anonymous` regardless of `scope` (no PII in scope).
+ */
+export function getPathwayLessonPreviewKind(
+  scope: AccessScope,
+  pathway: ExamPathwayDefinition,
+  learnerPath: string | null | undefined,
+  userId: string,
+): PathwayLessonPreviewKind {
+  if (!userId.trim()) return "anonymous";
+  if (!scope.hasAccess) return "inactive_subscription";
+  if (!subscriptionCoversPathwayBase(scope, pathway)) return "wrong_plan_country";
+  if (pathway.roleTrack === "np") {
+    const lp = learnerPath?.trim();
+    if (lp && lp !== pathway.id) return "np_specialty_mismatch";
+  }
+  return "default_preview";
+}
 
 /**
  * Full lesson body requires tier+country match + NP specialty match when learnerPath is set.
@@ -19,11 +46,4 @@ export function canViewFullPathwayLesson(
   return lp === pathway.id;
 }
 
-export function visibleSectionsForLesson(
-  lesson: PathwayLessonRecord,
-  fullAccess: boolean,
-): PathwayLessonRecord["sections"] {
-  if (fullAccess) return lesson.sections;
-  const n = lesson.previewSectionCount;
-  return lesson.sections.slice(0, n);
-}
+export { visibleSectionsForLesson } from "@/lib/lessons/pathway-lesson-visible-sections";

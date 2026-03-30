@@ -2,12 +2,14 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import * as Sentry from "@sentry/nextjs";
 import type Stripe from "stripe";
-import { SubscriptionStatus } from "@prisma/client";
+import { Prisma, SubscriptionStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { productEvent } from "@/lib/observability/product-events";
 import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { findTierCountryByPriceId } from "@/lib/stripe/pricing-map";
 import {
+  planFromCheckoutMetadata,
   syncUserFromCheckoutSessionMetadata,
   syncUserFromStripePriceId,
 } from "@/lib/stripe/sync-user-from-stripe-subscription";
@@ -92,21 +94,38 @@ export async function POST(req: Request) {
 
   setSentryServerContext({ route: "/api/subscriptions/webhook", feature: "payment" });
 
+  let claimedEventId = false;
+  try {
+    await prisma.stripeWebhookEvent.create({ data: { id: event.id } });
+    claimedEventId = true;
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2002") {
+      return NextResponse.json({ ok: true, duplicate: true });
+    }
+    throw e;
+  }
+
   try {
     if (event.type === "checkout.session.completed") {
       const session = event.data.object as Stripe.Checkout.Session;
       const userId = session.metadata?.userId ?? session.client_reference_id ?? undefined;
       const subId = typeof session.subscription === "string" ? session.subscription : session.subscription?.id;
       if (userId && subId) {
+        const plan = planFromCheckoutMetadata(session.metadata ?? undefined);
         await prisma.$transaction(async (tx) => {
           await tx.subscription.upsert({
             where: { stripeSubscriptionId: subId },
-            update: { status: SubscriptionStatus.ACTIVE },
+            update: {
+              status: SubscriptionStatus.ACTIVE,
+              ...(plan ? { planTier: plan.tier, planCountry: plan.country } : {}),
+            },
             create: {
               userId,
               status: SubscriptionStatus.ACTIVE,
               stripeSubscriptionId: subId,
               stripeCustomerId: typeof session.customer === "string" ? session.customer : session.customer?.id ?? "",
+              planTier: plan?.tier,
+              planCountry: plan?.country,
             },
           });
         });
@@ -122,14 +141,21 @@ export async function POST(req: Request) {
         select: { userId: true },
       });
       const priceId = firstSubscriptionPriceId(sub);
+      const mapped = priceId ? findTierCountryByPriceId(priceId) : undefined;
       if (row?.userId && priceId) {
         await syncUserFromStripePriceId(row.userId, priceId);
       }
-      if (status !== null) {
+      const data: Prisma.SubscriptionUpdateManyMutationInput = {};
+      if (status !== null) data.status = status;
+      if (mapped) {
+        data.planTier = mapped.tier;
+        data.planCountry = mapped.country;
+      }
+      if (Object.keys(data).length > 0) {
         await prisma.$transaction(async (tx) => {
           await tx.subscription.updateMany({
             where: { stripeSubscriptionId: sub.id },
-            data: { status },
+            data,
           });
         });
       }
@@ -177,6 +203,9 @@ export async function POST(req: Request) {
   } catch (e) {
     productEvent("stripe_webhook_failed", { eventType: event.type });
     safeServerLogCritical("stripe_webhook", "handler_failed", { type: event.type }, e);
+    if (claimedEventId) {
+      await prisma.stripeWebhookEvent.delete({ where: { id: event.id } }).catch(() => {});
+    }
     return NextResponse.json({ error: "Webhook processing failed" }, { status: 500 });
   }
 

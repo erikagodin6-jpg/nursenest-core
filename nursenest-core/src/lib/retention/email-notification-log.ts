@@ -1,3 +1,4 @@
+import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 
 export const EMAIL_KIND = {
@@ -27,6 +28,10 @@ export async function canSendWithinCooldown(userId: string, kind: string, within
 
 export async function recordEmailSent(userId: string, kind: string, meta?: Record<string, unknown>): Promise<void> {
   await prisma.emailNotificationLog.create({
-    data: { userId, kind, meta: meta ?? undefined },
+    data: {
+      userId,
+      kind,
+      ...(meta !== undefined ? { meta: meta as Prisma.InputJsonValue } : {}),
+    },
   });
 }

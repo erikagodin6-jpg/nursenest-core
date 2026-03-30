@@ -3,10 +3,9 @@ import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { FnpLessonExplorer } from "@/components/pathway-lessons/fnp-lesson-explorer";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import {
-  enrichFnpLessons,
+  buildFnpExplorerPayload,
+  fnpExplorerCounts,
   fnpLessonClinicalPreview,
-  fnpLessonCountsByDomain,
-  fnpLessonCountsByLifespan,
   FNP_DOMAIN_ORDER,
   FNP_LIFESPAN_ORDER,
   FNP_NP_COMMON_MISTAKES,
@@ -38,9 +37,8 @@ const HASH_BY_LIFESPAN: Record<string, string> = {
 };
 
 export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters }: Props) {
-  const enriched = enrichFnpLessons(lessons);
-  const countsLife = fnpLessonCountsByLifespan(enriched);
-  const countsDom = fnpLessonCountsByDomain(enriched);
+  const explorerPayload = buildFnpExplorerPayload(lessons);
+  const { countsLife, countsDom } = fnpExplorerCounts(explorerPayload);
   const featured = lessons.length > 0 ? [...lessons].sort((a, b) => a.slug.localeCompare(b.slug))[0] : null;
   const featuredPreview = featured ? fnpLessonClinicalPreview(featured) : null;
   const questionsHub = buildExamPathwayPath(pathway, "questions");
@@ -207,7 +205,7 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
           <FnpLessonExplorer
             pathway={pathway}
             lessonsBasePath={lessonsBasePath}
-            enriched={enriched}
+            explorerLessons={explorerPayload}
             excludeSlug={lessons.length > 1 ? featured?.slug ?? null : null}
           />
         </div>

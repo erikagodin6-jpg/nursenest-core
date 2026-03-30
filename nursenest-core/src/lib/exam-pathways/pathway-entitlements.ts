@@ -27,6 +27,9 @@ export function listPathwaysCompatibleWithSubscription(scope: AccessScope): Exam
  * True if the learner may access this pathway hub: same country, active subscription (or admin),
  * and pathway tier is within the learner's ladder (e.g. RN may open RPN or LVN/LPN hubs, not vice versa).
  * NP includes all nursing tiers; allied stays isolated to allied pathways.
+ *
+ * If `scope.country` is null or not CA/US (see {@link resolveEntitlement}), access is denied.
+ * That avoids false matches when profile country is missing or malformed.
  */
 export function subscriptionCoversPathwayBase(scope: AccessScope, pathway: ExamPathwayDefinition): boolean {
   if (!scope.hasAccess) return false;

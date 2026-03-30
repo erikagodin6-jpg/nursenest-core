@@ -1,6 +1,9 @@
 import { SubscriptionStatus, UserRole } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { normalizeCountryCodeForEntitlement } from "@/lib/entitlements/country-code";
+import { effectiveTierCountryForAccess } from "@/lib/entitlements/subscription-plan";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { withRetry } from "@/lib/resilience/with-retry";
 
 export type AccessScope = {
@@ -31,7 +34,7 @@ export async function resolveEntitlement(userId: string): Promise<AccessScope> {
       hasAccess: true,
       reason: "admin_override",
       tier: user.tier,
-      country: user.country,
+      country: normalizeCountryCodeForEntitlement(user.country),
     };
   }
 
@@ -39,17 +42,37 @@ export async function resolveEntitlement(userId: string): Promise<AccessScope> {
     prisma.subscription.findFirst({
       where: { userId, status: { in: [SubscriptionStatus.ACTIVE, SubscriptionStatus.GRACE] } },
       orderBy: { createdAt: "desc" },
-      select: { status: true },
+      select: { status: true, planTier: true, planCountry: true },
     }),
   );
 
+  const baseCountry = normalizeCountryCodeForEntitlement(user.country);
+  const { tier: effectiveTier, country: effectiveCountry } = effectiveTierCountryForAccess(user, subscription);
+
+  if (subscription?.planTier && subscription.planTier !== user.tier) {
+    safeServerLog("entitlement", "user_tier_subscription_plan_mismatch", {
+      userTier: String(user.tier),
+      planTier: String(subscription.planTier),
+    });
+  }
+
   if (subscription?.status === SubscriptionStatus.ACTIVE) {
-    return { hasAccess: true, reason: "active_subscription", tier: user.tier, country: user.country };
+    return {
+      hasAccess: true,
+      reason: "active_subscription",
+      tier: effectiveTier as string,
+      country: effectiveCountry,
+    };
   }
 
   if (subscription?.status === SubscriptionStatus.GRACE) {
-    return { hasAccess: true, reason: "grace_period", tier: user.tier, country: user.country };
+    return {
+      hasAccess: true,
+      reason: "grace_period",
+      tier: effectiveTier as string,
+      country: effectiveCountry,
+    };
   }
 
-  return { hasAccess: false, reason: "no_access", tier: user.tier, country: user.country };
+  return { hasAccess: false, reason: "no_access", tier: user.tier as string, country: baseCountry };
 }

@@ -6,13 +6,12 @@ import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import {
   type FnpClinicalDomain,
   type FnpDomainFilter,
-  type FnpEnrichedLesson,
+  type FnpExplorerLesson,
   type FnpLifespanFilter,
   type FnpLifespanGroup,
   FNP_DOMAIN_ORDER,
   FNP_LIFESPAN_ORDER,
-  fnpEnrichedMatchesFilters,
-  fnpLessonClinicalPreview,
+  fnpExplorerMatchesFilters,
 } from "@/lib/lessons/fnp-us-lesson-enrichment";
 
 function appQuestionsHref(pathwayId: string, topic?: string): string {
@@ -25,7 +24,8 @@ function appQuestionsHref(pathwayId: string, topic?: string): string {
 type Props = {
   pathway: ExamPathwayDefinition;
   lessonsBasePath: string;
-  enriched: FnpEnrichedLesson[];
+  /** Server-built: metadata + short preview snippets only (no full lesson sections). */
+  explorerLessons: FnpExplorerLesson[];
   excludeSlug?: string | null;
 };
 

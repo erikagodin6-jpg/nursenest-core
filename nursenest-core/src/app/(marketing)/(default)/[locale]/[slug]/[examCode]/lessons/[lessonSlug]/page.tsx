@@ -6,7 +6,12 @@ import { PathwayLessonBody } from "@/components/lessons/pathway-lesson-body";
 import { PathwayLessonActions } from "@/components/lessons/pathway-lesson-actions";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { buildExamPathwayPath, getExamPathwayByRoute } from "@/lib/exam-pathways/exam-product-registry";
-import { canViewFullPathwayLesson, visibleSectionsForLesson } from "@/lib/lessons/pathway-lesson-access";
+import { PathwayLessonPreviewBanner } from "@/components/lessons/pathway-lesson-preview-banner";
+import {
+  canViewFullPathwayLesson,
+  getPathwayLessonPreviewKind,
+  visibleSectionsForLesson,
+} from "@/lib/lessons/pathway-lesson-access";
 import { getPathwayLesson, getPathwayLessons } from "@/lib/lessons/pathway-lesson-loader";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { prisma } from "@/lib/db";
@@ -92,30 +97,38 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
       </p>
 
       {!fullAccess ? (
-        <aside className="nn-card mt-6 border-primary/20 bg-primary/5 p-4 text-sm text-[var(--theme-body-text)]">
-          <p className="font-semibold">Preview mode</p>
-          <p className="mt-1 text-muted">
-            You see the first section only. Full explanations, scenarios, and takeaways unlock with a subscription that
-            matches this exam pathway and country. NP learners: set your learner pathway in profile to the same NP hub
-            you are studying so specialty content stays aligned.
-          </p>
-          <div className="mt-3 flex flex-wrap gap-2">
-            <Link href="/signup" className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">
-              Start free trial
-            </Link>
-            <Link href="/pricing" className="rounded-full border border-border px-4 py-2 text-sm font-semibold">
-              View plans
-            </Link>
-          </div>
-        </aside>
+        entitlement === "error" ? (
+          <>
+            <aside className="nn-card mt-6 border-amber-200 bg-amber-50 p-4 text-sm text-[var(--theme-body-text)] dark:border-amber-900/40 dark:bg-amber-950/30">
+              <p className="font-semibold">Could not verify subscription</p>
+              <p className="mt-1 text-muted">
+                Refresh in a moment. You can still read the preview sections below. If this keeps happening, sign in again
+                or contact support.
+              </p>
+            </aside>
+            <PathwayLessonPreviewBanner
+              kind="default_preview"
+              pathwayShortName={pathway.shortName}
+              pathwayCountryLabel={pathway.countryCode === "CA" ? "Canada" : "United States"}
+            />
+          </>
+        ) : (
+          <PathwayLessonPreviewBanner
+            kind={getPathwayLessonPreviewKind(scope, pathway, learnerPath, userId)}
+            pathwayShortName={pathway.shortName}
+            pathwayCountryLabel={pathway.countryCode === "CA" ? "Canada" : "United States"}
+          />
+        )
       ) : null}
 
       <article className="mt-8 space-y-8">
         {visible.map((section) => (
           <section key={section.id} className="border-b border-[var(--theme-separator)] pb-8 last:border-0">
-            <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">{section.heading}</h2>
+            <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">
+              {section.heading?.trim() || "Section"}
+            </h2>
             <div className="mt-3">
-              <PathwayLessonBody text={section.body} />
+              <PathwayLessonBody text={typeof section.body === "string" ? section.body : ""} />
             </div>
           </section>
         ))}

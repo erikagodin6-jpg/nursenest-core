@@ -608,7 +608,7 @@ export default function HomeRestoredClient() {
 
         <LazySection minHeight="200px" rootMargin="300px">
           <Suspense fallback={<div className="min-h-[200px]" />}>
-            <HomeHeroFeatures />
+            <HomeMarketingFeaturesStack region={region} />
           </Suspense>
         </LazySection>
 
@@ -620,13 +620,13 @@ export default function HomeRestoredClient() {
 
         <LazySection minHeight="280px" rootMargin="300px">
           <Suspense fallback={<div className="min-h-[280px]" />}>
-            <HomeChoosePath />
+            <HomeMarketingSixtySeconds region={region} />
           </Suspense>
         </LazySection>
 
         <LazySection minHeight="400px" rootMargin="300px">
           <Suspense fallback={<div className="min-h-[400px]" />}>
-            <HeroFeaturesGrid />
+            <HomeMarketingProductProof />
           </Suspense>
         </LazySection>
 

@@ -11,7 +11,15 @@ function inlineBold(text: string): ReactNode {
 }
 
 export function PathwayLessonBody({ text }: { text: string }) {
-  const paragraphs = text.split(/\n\n/).filter(Boolean);
+  const safe = typeof text === "string" ? text : "";
+  const paragraphs = safe.split(/\n\n/).filter((p) => p.trim().length > 0);
+  if (paragraphs.length === 0) {
+    return (
+      <p className="text-sm italic text-muted-foreground">
+        This section has no content yet. Check back after the next content update.
+      </p>
+    );
+  }
   return (
     <div className="space-y-3 text-sm leading-relaxed text-[var(--theme-body-text)]">
       {paragraphs.map((p, i) => (
