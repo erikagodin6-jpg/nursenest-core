@@ -95,13 +95,13 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
         <aside className="nn-card mt-6 border-primary/20 bg-primary/5 p-4 text-sm text-[var(--theme-body-text)]">
           <p className="font-semibold">Preview mode</p>
           <p className="mt-1 text-muted">
-            You are seeing the public preview. Unlock the full lesson with a subscription that matches this exam pathway
-            (country + tier). NP tracks: set your learner pathway in your profile to match this hub to avoid specialty
-            mismatch.
+            You see the first section only. Full explanations, scenarios, and takeaways unlock with a subscription that
+            matches this exam pathway and country. NP learners: set your learner pathway in profile to the same NP hub
+            you are studying so specialty content stays aligned.
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
             <Link href="/signup" className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">
-              Start studying
+              Start free trial
             </Link>
             <Link href="/pricing" className="rounded-full border border-border px-4 py-2 text-sm font-semibold">
               View plans
@@ -123,12 +123,13 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
 
       {!fullAccess && lesson.sections.length > visible.length ? (
         <div className="nn-card mt-8 border-dashed border-primary/40 bg-[var(--theme-muted-surface)] p-6 text-center">
-          <p className="font-semibold text-foreground">Unlock full lesson</p>
+          <p className="font-semibold text-foreground">See the full explanation and examples</p>
           <p className="mt-2 text-sm text-muted">
-            {lesson.sections.length - visible.length} more section(s) include advanced application and exam-specific tips.
+            {lesson.sections.length - visible.length} more sections cover exam relevance, a full scenario, and key
+            takeaways. Unlock full lesson access with a matching plan.
           </p>
           <Link href="/pricing" className="mt-4 inline-flex rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground">
-            Unlock with a plan
+            Unlock full lesson access
           </Link>
         </div>
       ) : null}

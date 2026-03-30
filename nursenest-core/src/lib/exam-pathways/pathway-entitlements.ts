@@ -1,5 +1,6 @@
 import type { CountryCode, TierCode } from "@prisma/client";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import { accessibleTiersForUserTier } from "@/lib/entitlements/content-access-scope";
 import { EXAM_PATHWAYS, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 
@@ -16,18 +17,25 @@ export function listPathwaysCompatibleWithSubscription(scope: AccessScope): Exam
   const tier = scope.tier as TierCode | null;
   const country = scope.country as CountryCode | null;
   if (!tier || !country) return [];
+  const allowedTiers = accessibleTiersForUserTier(tier);
   return EXAM_PATHWAYS.filter(
-    (p) => p.stripeTier === tier && p.countryCode === country && p.status !== "hidden",
+    (p) => allowedTiers.includes(p.stripeTier) && p.countryCode === country && p.status !== "hidden",
   );
 }
 
-/** True if the user's subscription tier/country could include this pathway (not specialty-specific yet). */
+/**
+ * True if the learner may access this pathway hub: same country, active subscription (or admin),
+ * and pathway tier is within the learner's ladder (e.g. RN may open RPN or LVN/LPN hubs, not vice versa).
+ * NP includes all nursing tiers; allied stays isolated to allied pathways.
+ */
 export function subscriptionCoversPathwayBase(scope: AccessScope, pathway: ExamPathwayDefinition): boolean {
   if (!scope.hasAccess) return false;
   if (scope.reason === "admin_override") return pathway.status !== "hidden";
   const tier = scope.tier as TierCode | null;
   const country = scope.country as CountryCode | null;
-  return tier === pathway.stripeTier && country === pathway.countryCode;
+  if (!tier || !country) return false;
+  if (country !== pathway.countryCode) return false;
+  return accessibleTiersForUserTier(tier).includes(pathway.stripeTier);
 }
 
 /**

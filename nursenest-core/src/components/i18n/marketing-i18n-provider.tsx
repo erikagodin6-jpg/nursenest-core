@@ -7,6 +7,8 @@ type Params = Record<string, string | number | undefined>;
 
 type MarketingI18nContextValue = {
   locale: string;
+  /** Optional English (or default-locale) bundle for keys missing in the active locale. */
+  fallbackMessages?: MarketingMessages;
   t: (key: string, params?: Params) => string;
 };
 
@@ -24,18 +26,22 @@ function HtmlLangSync({ locale }: { locale: string }) {
 export function MarketingI18nProvider({
   locale,
   messages,
+  fallbackMessages,
   children,
 }: {
   locale: string;
   messages: MarketingMessages;
+  /** When set, missing keys in `messages` resolve from this bundle (usually English). */
+  fallbackMessages?: MarketingMessages;
   children: ReactNode;
 }) {
   const value = useMemo<MarketingI18nContextValue>(
     () => ({
       locale,
-      t: (key: string, params?: Params) => formatMarketingMessage(messages, key, params),
+      fallbackMessages,
+      t: (key: string, params?: Params) => formatMarketingMessage(messages, key, params, fallbackMessages),
     }),
-    [locale, messages],
+    [locale, messages, fallbackMessages],
   );
   return (
     <MarketingI18nContext.Provider value={value}>

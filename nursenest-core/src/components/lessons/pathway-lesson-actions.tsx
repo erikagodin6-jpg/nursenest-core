@@ -45,7 +45,7 @@ export function PathwayLessonActions({
         href={qbHref}
         className="inline-flex justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground"
       >
-        Practice questions for this exam pathway
+        Test this topic in the question bank
       </Link>
       <Link
         href="/app/flashcards"

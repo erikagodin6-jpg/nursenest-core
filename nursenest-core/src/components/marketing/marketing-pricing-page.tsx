@@ -1,7 +1,27 @@
 import { PricingPageClient } from "@/components/marketing/pricing-page-client";
+import { PricingPageErrorBoundary } from "@/components/marketing/pricing-page-error-boundary";
+import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { resolveMarketingCopy } from "@/lib/marketing-i18n-core";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 
 export async function MarketingPricingPage({ locale }: { locale: string }) {
   const m = await loadMarketingMessages(locale);
-  return <PricingPageClient heading={m["pages.pricing.h1"]} intro={m["pages.pricing.intro"]} />;
+  const en = locale !== DEFAULT_MARKETING_LOCALE ? await loadMarketingMessages(DEFAULT_MARKETING_LOCALE) : undefined;
+  const heading = resolveMarketingCopy(
+    m,
+    "pages.pricing.h1",
+    en,
+    "Know exactly what to study before your exam",
+  );
+  const intro = resolveMarketingCopy(
+    m,
+    "pages.pricing.intro",
+    en,
+    "Pathway-aligned practice, lessons, and timed exams in one place. Pick your exam track and choose a plan that matches your timeline.",
+  );
+  return (
+    <PricingPageErrorBoundary>
+      <PricingPageClient heading={heading} intro={intro} />
+    </PricingPageErrorBoundary>
+  );
 }

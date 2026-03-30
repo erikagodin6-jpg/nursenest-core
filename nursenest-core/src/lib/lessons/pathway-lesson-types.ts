@@ -1,4 +1,10 @@
+/** Canonical five-block structure (render order). Legacy catalog kinds are normalized into these. */
 export type PathwayLessonSectionKind =
+  | "clinical_meaning"
+  | "exam_relevance"
+  | "core_concept"
+  | "clinical_scenario"
+  | "takeaways"
   | "intro"
   | "core"
   | "clinical_application"
