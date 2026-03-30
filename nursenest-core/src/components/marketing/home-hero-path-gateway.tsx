@@ -7,17 +7,6 @@ import { buildHeroGatewayClusters } from "@/lib/marketing/home-hero-gateway-conf
 import type { HeroGatewayLink, NursenestMarketingRegion } from "@/lib/marketing/home-hero-gateway-config";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 
-const GATEWAY_COPY = {
-  title: "Choose your path",
-  subtitle:
-    "Pick a role, then open questions, lessons, or timed exams. Paths follow the region toggle above.",
-  regionHint: "links match this region",
-  badgePrimary: "Most common entry",
-  quickLinks: "Shortcuts",
-  frictionNote:
-    "Short bank passes and previews run before a full subscription. Longer sessions may ask you to sign in.",
-} as const;
-
 type Props = {
   region: NursenestMarketingRegion;
 };
@@ -37,17 +26,17 @@ export function HomeHeroPathGateway({ region }: Props) {
     >
       <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h2 className="text-base font-bold text-[var(--theme-heading-text)] sm:text-lg">{GATEWAY_COPY.title}</h2>
-          <p className="mt-1 max-w-2xl text-sm text-[var(--theme-muted-text)]">{GATEWAY_COPY.subtitle}</p>
+          <h2 className="text-base font-bold text-[var(--theme-heading-text)] sm:text-lg">{t("home.gateway.title")}</h2>
+          <p className="mt-1 max-w-2xl text-sm text-[var(--theme-muted-text)]">{t("home.gateway.subtitle")}</p>
         </div>
         <p className="text-xs font-medium uppercase tracking-wide text-[var(--theme-muted-text)]">
-          {region === "US" ? t("home.region.us") : t("home.region.ca")} · {GATEWAY_COPY.regionHint}
+          {region === "US" ? t("home.region.us") : t("home.region.ca")} · {t("home.gateway.regionHint")}
         </p>
       </div>
 
       <div className="rounded-xl border border-[var(--theme-card-border)] bg-card p-4 shadow-sm sm:p-5 lg:grid lg:grid-cols-12 lg:gap-6" data-testid="hero-gateway-nursing">
         <div className="lg:col-span-5">
-          <p className="text-[11px] font-bold uppercase tracking-wide text-primary">{GATEWAY_COPY.badgePrimary}</p>
+          <p className="text-[11px] font-bold uppercase tracking-wide text-primary">{t("home.gateway.badgePrimary")}</p>
           <h3 className="mt-1 text-lg font-bold text-[var(--theme-heading-text)]">{rn.title}</h3>
           {rn.intro && <p className="mt-2 text-sm text-[var(--theme-muted-text)]">{rn.intro}</p>}
           {rn.primaryCta && (
@@ -63,7 +52,7 @@ export function HomeHeroPathGateway({ region }: Props) {
           )}
         </div>
         <div className="mt-4 border-t border-[var(--theme-card-border)] pt-4 lg:col-span-7 lg:mt-0 lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0">
-          <p className="text-xs font-semibold text-[var(--theme-heading-text)]">{GATEWAY_COPY.quickLinks}</p>
+          <p className="text-xs font-semibold text-[var(--theme-heading-text)]">{t("home.gateway.quickLinks")}</p>
           <ul className="mt-3 grid gap-2 sm:grid-cols-2">
             {rn.links.map((link) => (
               <li key={link.id}>
@@ -84,7 +73,7 @@ export function HomeHeroPathGateway({ region }: Props) {
         <ClusterCard cluster={newGrad} localize={localize} testId="hero-gateway-newgrad" />
       </div>
 
-      <p className="mt-4 text-center text-xs text-[var(--theme-muted-text)] sm:text-left">{GATEWAY_COPY.frictionNote}</p>
+      <p className="mt-4 text-center text-xs text-[var(--theme-muted-text)] sm:text-left">{t("home.gateway.frictionNote")}</p>
     </div>
   );
 }

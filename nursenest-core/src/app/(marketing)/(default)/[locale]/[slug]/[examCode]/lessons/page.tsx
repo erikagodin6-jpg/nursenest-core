@@ -7,6 +7,7 @@ import { NclexRnLessonsHub } from "@/components/pathway-lessons/nclex-rn-lessons
 import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-lesson-pagination";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
 import { buildExamPathwayPath, getExamPathwayByRoute } from "@/lib/exam-pathways/exam-product-registry";
 import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
 import {
@@ -172,6 +173,8 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
           </section>
         </>
       )}
+
+      <MarketingStudyCrossLinks className="mt-14" />
 
       <PathwayLessonPagination
         basePath={base}

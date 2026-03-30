@@ -33,6 +33,7 @@ export default async function AdminPage() {
     jobPending,
     userCount,
     flashcardPublished,
+    flashcardDecksPublished,
     examsPublished,
   ] = await withDatabaseFallback(
     () =>
@@ -44,9 +45,10 @@ export default async function AdminPage() {
         prisma.backgroundJob.count({ where: { status: JobStatus.PENDING } }).catch(() => 0),
         prisma.user.count(),
         prisma.flashcard.count({ where: { status: ContentStatus.PUBLISHED } }),
+        prisma.flashcardDeck.count({ where: { status: ContentStatus.PUBLISHED } }).catch(() => 0),
         prisma.exam.count({ where: { status: ContentStatus.PUBLISHED } }),
       ]),
-    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
   );
 
   const api = [
@@ -58,6 +60,8 @@ export default async function AdminPage() {
     { href: "/api/admin/lessons?page=1&pageSize=20", label: "Lessons (paged)" },
     { href: "/api/admin/exams?page=1&pageSize=20", label: "Exams (paged)" },
     { href: "/api/admin/flashcards", label: "Flashcards" },
+    { href: "/api/admin/flashcards/summary", label: "Flashcards summary (JSON)" },
+    { href: "/api/admin/flashcards/decks", label: "POST create deck (admin)" },
     { href: "/api/admin/jobs", label: "Background jobs" },
     { href: "/api/admin/export/content?take=100", label: "Export sample" },
   ];
@@ -102,6 +106,11 @@ export default async function AdminPage() {
         />
         <MetricCard label="Lessons (total)" value={t?.lessonsTotal ?? "—"} hint="App lessons + pathway lessons (published)" />
         <MetricCard label="Flashcards (published)" value={t?.flashcardsPublished ?? flashcardPublished} />
+        <MetricCard
+          label="Flashcard decks (published)"
+          value={flashcardDecksPublished}
+          hint="Learner deck browser"
+        />
       </section>
 
       {t ? (

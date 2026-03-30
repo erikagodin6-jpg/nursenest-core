@@ -3,14 +3,39 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 
 function Inner() {
   const sp = useSearchParams();
+  const { update } = useSession();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (sp.get("checkout") === "success") setOpen(true);
-  }, [sp]);
+    if (sp.get("checkout") !== "success") return;
+    setOpen(true);
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/auth/sync-session", { credentials: "include" });
+        if (!res.ok || cancelled) return;
+        const data = (await res.json()) as {
+          tier?: string;
+          country?: string;
+          subscriptionStatus?: string;
+        };
+        await update({
+          tier: data.tier,
+          country: data.country,
+          subscriptionStatus: data.subscriptionStatus,
+        });
+      } catch {
+        /* JWT still valid; server routes use DB entitlements */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [sp, update]);
 
   if (!open) return null;
 

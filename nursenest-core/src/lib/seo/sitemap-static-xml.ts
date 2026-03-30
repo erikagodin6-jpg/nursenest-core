@@ -23,6 +23,7 @@
  */
 export const SITEMAP_SINGLE_URLSET_SOFT_WARN_URLS = 45_000;
 
+import { PROGRAMMATIC_SLUG_TO_PATHWAY_PATH } from "@/lib/exam-pathways/programmatic-slug-redirects";
 import { buildExamPathwayPath, getExamPathwayById, listPublicExamPathways } from "@/lib/exam-pathways/exam-product-registry";
 import {
   PATHWAY_LESSON_SITEMAP_BATCH,
@@ -212,7 +213,9 @@ export async function collectCoreUrls(origin: string): Promise<string[]> {
 /** seo-pages.xml — English canonical programmatic URLs at `/{slug}` (rewritten to /seo/[slug] internally). */
 export function collectSeoPagesUrls(origin: string): string[] {
   const o = normalizeOrigin(origin);
-  return getAllProgrammaticSlugs().map((slug) => `${o}/${slug}`);
+  return getAllProgrammaticSlugs()
+    .filter((slug) => !(slug in PROGRAMMATIC_SLUG_TO_PATHWAY_PATH))
+    .map((slug) => `${o}/${slug}`);
 }
 
 /**
@@ -230,6 +233,7 @@ export function collectLocaleMarketingUrls(origin: string, locale: string): stri
   urls.push(add(`/${locale}/pricing`));
   urls.push(add(`/${locale}/for-institutions`));
   for (const slug of getAllProgrammaticSlugs()) {
+    if (slug in PROGRAMMATIC_SLUG_TO_PATHWAY_PATH) continue;
     urls.push(add(`/${locale}/${slug}`));
   }
   return urls;

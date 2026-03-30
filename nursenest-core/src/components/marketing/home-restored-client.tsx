@@ -34,11 +34,12 @@ import { buildHomepageHeroSlides, HOMEPAGE_HERO_SLIDE_METADATA } from "@/lib/mar
 import { MarketingHeroCarousel } from "@/components/marketing/marketing-hero-carousel";
 import type { HomepageLessonTeaser } from "@/lib/marketing/homepage-lesson-teasers";
 import { HomeHeroPathGateway } from "@/components/marketing/home-hero-path-gateway";
+import { HomeMarketingConversionBlocks } from "@/components/marketing/home-marketing-conversion-blocks";
 import { HomeMarketingSixtySeconds } from "@/components/marketing/home-marketing-sixty-seconds";
 import { HomeMarketingProductProof } from "@/components/marketing/home-marketing-product-proof";
 import { HomeMarketingFeaturesStack } from "@/components/marketing/home-marketing-features-stack";
 import { heroQuickEntryLinks } from "@/lib/marketing/home-hero-gateway-config";
-import { HUB, NP, PN, RN, alliedCareersMarketingUrl } from "@/lib/marketing/marketing-entry-routes";
+import { HUB, NP, PN, RN, alliedCareersMarketingUrl, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
 
 const HeroFeatureStrip = dynamic(() => import("@/legacy/marketing/hero-feature-strip"), {
   loading: () => <div className="min-h-[60px]" />,
@@ -331,7 +332,7 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
                     <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
                   </Link>
                   <Link
-                    href={mapLegacyMarketingHref("/exam-prep")}
+                    href={withMarketingLocale(locale, rnQuestions(region))}
                     className="flex min-h-[52px] w-full items-center justify-center rounded-full border border-[var(--theme-input-border)] bg-card px-7 py-3 text-base font-medium text-[var(--theme-body-text)] hover:border-[color-mix(in_srgb,var(--theme-primary)_22%,var(--theme-input-border))] hover:bg-[var(--theme-muted-surface)] sm:min-h-[56px] sm:w-auto sm:px-9 sm:text-lg"
                     data-testid="button-hero-browse"
                   >
@@ -341,7 +342,7 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
                 </div>
 
                 <div className="space-y-2" data-testid="hero-quick-entry-links">
-                  <p className="text-xs font-medium text-[var(--theme-muted-text)]">Quick entry — try a pathway-timed bank pass first</p>
+                  <p className="text-xs font-medium text-[var(--theme-muted-text)]">{t("home.hero.quickEntryLabel")}</p>
                   <div className="flex flex-wrap gap-2">
                     {heroQuickLinks.map((item) => (
                       <Link
@@ -603,6 +604,8 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
             </ul>
           </div>
         </section>
+
+        <HomeMarketingConversionBlocks region={region} />
 
         <LazySection minHeight="60px" rootMargin="400px">
           <Suspense fallback={<div className="min-h-[60px]" />}>

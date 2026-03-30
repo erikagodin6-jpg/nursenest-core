@@ -4,6 +4,7 @@ import type { BillingDuration } from "@/lib/pricing/billing-types";
 /**
  * Single source of truth for **list prices** shown in UI (CAD or USD major units).
  * Stripe charge amounts must match Prices configured in Stripe for the env `STRIPE_PRICE_*` IDs.
+ * Full matrix (country + tier + duration → env key + resolved Price id): `eachStripePriceMatrixRow` in `@/lib/stripe/pricing-map`.
  */
 const CA_LIST_PRICE_MAJOR: Partial<Record<TierCode, Record<BillingDuration, number>>> = {
   RPN: { monthly: 24.99, "3-month": 64.99, "6-month": 109.99, yearly: 169.99 },

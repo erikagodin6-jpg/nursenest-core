@@ -8,19 +8,33 @@ import {
   countPublishedPostsWithTag,
   getPublishedBlogPostsByTagPage,
 } from "@/lib/blog/safe-blog-queries";
+import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
 import { blogTagBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
+import { absoluteUrl } from "@/lib/seo/site-origin";
 
 type Props = { params: Promise<{ tag: string }>; searchParams: Promise<{ page?: string }> };
 
 export const revalidate = 120;
 
-export async function generateMetadata({ params }: { params: Promise<{ tag: string }> }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ tag: string }>;
+  searchParams: Promise<{ page?: string }>;
+}): Promise<Metadata> {
   const { tag } = await params;
   const decoded = decodeURIComponent(tag).trim();
   const count = await countPublishedPostsWithTag(decoded);
+  const sp = await searchParams;
+  const raw = Number(sp.page ?? "1");
+  const page = Number.isFinite(raw) && raw >= 1 ? Math.floor(raw) : 1;
+  const path = `/blog/tag/${encodeURIComponent(decoded)}`;
+  const canonicalPath = page <= 1 ? path : `${path}?page=${page}`;
   return {
     title: `Posts tagged “${decoded}” | NurseNest blog`,
-    alternates: { canonical: `/blog/tag/${encodeURIComponent(decoded)}` },
+    alternates: { canonical: absoluteUrl(canonicalPath) },
+    openGraph: { url: absoluteUrl(canonicalPath) },
     ...(count === 0 ? { robots: { index: false, follow: true } } : {}),
   };
 }
@@ -95,6 +109,7 @@ export default async function BlogTagPage({ params, searchParams }: Props) {
               </div>
             </nav>
           ) : null}
+          <MarketingStudyCrossLinks className="mt-14" />
         </>
       )}
     </div>

@@ -5,7 +5,7 @@ import type { NextAuthConfig } from "next-auth";
  * auth instance. Both must stay identical so session tokens validate everywhere.
  */
 export const authCallbacks: NonNullable<NextAuthConfig["callbacks"]> = {
-  async jwt({ token, user }) {
+  async jwt({ token, user, trigger, session }) {
     if (user) {
       const u = user as {
         id?: string;
@@ -19,6 +19,16 @@ export const authCallbacks: NonNullable<NextAuthConfig["callbacks"]> = {
       token.country = u.country as typeof token.country;
       token.tier = u.tier as typeof token.tier;
       token.subscriptionStatus = u.subscriptionStatus as typeof token.subscriptionStatus;
+    }
+    if (trigger === "update" && session && typeof session === "object") {
+      const s = session as Partial<{
+        tier: typeof token.tier;
+        country: typeof token.country;
+        subscriptionStatus: typeof token.subscriptionStatus;
+      }>;
+      if (s.tier !== undefined) token.tier = s.tier;
+      if (s.country !== undefined) token.country = s.country;
+      if (s.subscriptionStatus !== undefined) token.subscriptionStatus = s.subscriptionStatus;
     }
     return token;
   },

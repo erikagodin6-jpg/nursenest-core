@@ -29,6 +29,7 @@ export async function register() {
       `[nursenest-core] instrumentation: nodejs runtime registered PORT=${process.env.PORT ?? "(unset)"}`,
     );
     validateAuthEnv();
+    logStripeProductionPricingMisconfiguration();
     await import("./sentry.server.config");
     process.on("unhandledRejection", (reason) => {
       const msg = reason instanceof Error ? reason.message : String(reason);

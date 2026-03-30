@@ -12,6 +12,8 @@ const createSchema = z.object({
   categoryId: z.string().min(3),
   status: z.nativeEnum(ContentStatus).default(ContentStatus.DRAFT),
   examFamily: z.enum(["NCLEX_RN", "NCLEX_PN", "REX_PN", "NP", "ALLIED", "GENERIC"]).optional(),
+  deckId: z.string().min(3).optional(),
+  positionInDeck: z.number().int().min(0).optional(),
 });
 
 export async function GET(req: NextRequest) {
@@ -51,8 +53,33 @@ export async function POST(req: Request) {
     }
   }
 
-  const card = await prisma.flashcard.create({
-    data: { ...parsed.data, examFamily: parsed.data.examFamily ?? "GENERIC" },
+  const { deckId, positionInDeck, examFamily, ...cardFields } = parsed.data;
+
+  const card = await prisma.$transaction(async (tx) => {
+    const nextPos =
+      positionInDeck ??
+      (deckId
+        ? ((await tx.flashcard.aggregate({ where: { deckId }, _max: { positionInDeck: true } }))._max.positionInDeck ?? -1) + 1
+        : 0);
+
+    const created = await tx.flashcard.create({
+      data: {
+        ...cardFields,
+        examFamily: examFamily ?? "GENERIC",
+        deckId: deckId ?? null,
+        positionInDeck: deckId ? nextPos : 0,
+      },
+    });
+
+    if (deckId) {
+      await tx.flashcardDeck.update({
+        where: { id: deckId },
+        data: { cardCount: { increment: 1 } },
+      });
+    }
+
+    return created;
   });
+
   return NextResponse.json({ flashcard: card }, { status: 201 });
 }

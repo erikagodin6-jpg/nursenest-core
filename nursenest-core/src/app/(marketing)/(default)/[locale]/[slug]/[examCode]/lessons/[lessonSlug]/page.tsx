@@ -21,8 +21,9 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { prisma } from "@/lib/db";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
-import { resolveCanonicalSiteOrigin } from "@/lib/seo/canonical-site";
 import { pathwayLessonDetailBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
+import { absoluteUrl } from "@/lib/seo/site-origin";
+import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
 
 export const dynamic = "force-dynamic";
 
@@ -45,12 +46,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const lesson = pathway ? await getPathwayLesson(pathway.id, lessonSlug, contentLocale) : undefined;
   if (!pathway || !lesson) return {};
   const path = buildExamPathwayPath(pathway, `lessons/${lesson.slug}`);
-  const origin = resolveCanonicalSiteOrigin().replace(/\/$/, "");
+  const canonical = absoluteUrl(path);
   return {
     title: lesson.seoTitle,
     description: lesson.seoDescription,
-    alternates: { canonical: `${origin}${path}` },
-    openGraph: { title: lesson.seoTitle, description: lesson.seoDescription, url: path },
+    alternates: { canonical },
+    openGraph: { title: lesson.seoTitle, description: lesson.seoDescription, url: canonical, type: "article" },
   };
 }
 
@@ -193,8 +194,16 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
         Also see:{" "}
         <Link href="/blog" className="font-medium text-primary hover:underline">
           clinical blog
-        </Link>{" "}
-        for related topics.
+        </Link>
+        ,{" "}
+        <Link href="/tools" className="font-medium text-primary hover:underline">
+          free tools
+        </Link>
+        , and{" "}
+        <Link href="/exam-lessons" className="font-medium text-primary hover:underline">
+          other lesson hubs
+        </Link>
+        .
       </p>
 
       {related.length > 0 ? (
@@ -221,6 +230,8 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
           {lesson.topic} cluster
         </Link>
       </div>
+
+      <MarketingStudyCrossLinks className="mt-12" />
     </div>
   );
 }

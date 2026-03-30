@@ -76,6 +76,10 @@ export function pnLessons(region: MarketingRegionToggle): string {
   return region === "US" ? PN.usLessons : PN.caLessons;
 }
 
+export function pnQuestions(region: MarketingRegionToggle): string {
+  return region === "US" ? PN.usQuestions : PN.caQuestions;
+}
+
 export function pnPrimaryHub(region: MarketingRegionToggle): string {
   return region === "US" ? "/us/lpn/nclex-pn" : PN.caHub;
 }

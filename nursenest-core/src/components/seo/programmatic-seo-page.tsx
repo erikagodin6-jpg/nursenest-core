@@ -39,26 +39,63 @@ export function ProgrammaticSeoPage({ page, locale }: { page: SeoPageDefinition;
           <p className="text-sm font-medium text-primary">NurseNest exam prep</p>
           <h1 className="mt-2 text-3xl font-bold tracking-tight text-[var(--theme-body-text)] sm:text-4xl">{page.h1}</h1>
           <p className="mt-4 text-lg leading-relaxed text-[var(--theme-body-text)]/90">{introLead}</p>
+          <p className="mt-3 text-sm font-medium text-[var(--theme-body-text)]/85">
+            Turn reading into reps: pathway-scoped questions, lessons, and timed exams—so you study what your authorization
+            actually covers.
+          </p>
+          <nav className="mt-3 text-sm text-primary" aria-label="Related hubs">
+            <Link href={withMarketingLocale(locale, "/exam-lessons")} className="underline-offset-4 hover:underline">
+              Lesson hubs
+            </Link>
+            <span className="mx-2 text-[var(--theme-body-text)]/40" aria-hidden>
+              ·
+            </span>
+            <Link href={withMarketingLocale(locale, "/blog")} className="underline-offset-4 hover:underline">
+              Blog
+            </Link>
+            <span className="mx-2 text-[var(--theme-body-text)]/40" aria-hidden>
+              ·
+            </span>
+            <Link href={withMarketingLocale(locale, "/tools")} className="underline-offset-4 hover:underline">
+              Free tools
+            </Link>
+          </nav>
 
           {page.practiceConversion && practiceConfig ? (
-            <ProgrammaticPracticeHeroActions locale={locale} slug={page.slug} />
+            <div className="mt-8 space-y-6">
+              <ProgrammaticPracticeHeroActions locale={locale} slug={page.slug} />
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href={signup}
+                  className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] px-5 py-2.5 text-sm font-semibold text-[var(--theme-body-text)] hover:border-primary/40"
+                >
+                  Create free account
+                </Link>
+                <Link
+                  href={pricing}
+                  className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-primary/30 px-5 py-2.5 text-sm font-semibold text-primary hover:bg-primary/5"
+                >
+                  Compare plans
+                </Link>
+              </div>
+            </div>
           ) : (
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href={signup}
-                className="inline-flex items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-90"
+                className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-90"
               >
                 Start free (create account)
               </Link>
               <Link
                 href={pricing}
-                className="inline-flex items-center justify-center rounded-full border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] px-5 py-2.5 text-sm font-semibold text-[var(--theme-body-text)] hover:border-primary/40"
+                className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] px-5 py-2.5 text-sm font-semibold text-[var(--theme-body-text)] hover:border-primary/40"
               >
                 View plans
               </Link>
               <Link
                 href={questions}
-                className="inline-flex items-center justify-center rounded-full border border-primary/30 px-5 py-2.5 text-sm font-semibold text-primary hover:bg-primary/5"
+                className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-primary/30 px-5 py-2.5 text-sm font-semibold text-primary hover:bg-primary/5"
               >
                 Start practice questions
               </Link>

@@ -44,6 +44,37 @@ export function WebSiteJsonLd() {
   );
 }
 
+export function BlogPostingJsonLd({
+  slug,
+  title,
+  description,
+  datePublished,
+  coverImage,
+}: {
+  slug: string;
+  title: string;
+  description: string;
+  datePublished: string;
+  coverImage?: string | null;
+}) {
+  const url = absoluteUrl(`/blog/${slug}`);
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        headline: title,
+        description,
+        datePublished,
+        url,
+        mainEntityOfPage: url,
+        publisher: { "@id": ORG_ID },
+        ...(coverImage ? { image: coverImage } : {}),
+      }}
+    />
+  );
+}
+
 export function ProgrammaticPageJsonLd({
   page,
   locale,

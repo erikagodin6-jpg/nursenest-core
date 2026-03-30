@@ -12,6 +12,7 @@ import {
   npNpQuestionsForRegion,
   pnLessons,
   pnPrimaryHub,
+  pnQuestions,
   rnLessons,
   rnQuestions,
   type MarketingRegionToggle,
@@ -46,13 +47,15 @@ export function buildHeroGatewayClusters(region: NursenestMarketingRegion): Hero
   return [
     {
       id: "nursing",
-      title: isUs ? "Registered Nurse (NCLEX-RN)" : "Registered Nurse (NCLEX-RN, Canada)",
+      title: isUs ? "NCLEX-RN (US)" : "NCLEX-RN (Canada)",
       tier: "primary",
-      intro: "Clinical judgment items, lesson hubs, and timed mocks in one pathway. Start with questions or open lessons.",
+      intro: isUs
+        ? "Clinical judgment practice for US RN candidates: NGN-style stems, rationales per option, and full-length mocks when you are ready."
+        : "Canadian RN registration: same high-stakes reasoning skills, scoped to your NCLEX-RN track and Canadian lesson hubs.",
       primaryCta: {
         id: "rn-start",
-        label: "Start RN practice questions",
-        description: "Pathway-scoped bank",
+        label: "Run NCLEX-RN questions",
+        description: "Starts in your selected region",
         href: rnQuestions(region),
       },
       links: [
@@ -63,33 +66,34 @@ export function buildHeroGatewayClusters(region: NursenestMarketingRegion): Hero
     },
     {
       id: "practical-nursing",
-      title: isUs ? "Practical nurse (NCLEX-PN)" : "Practical nurse (REx-PN)",
+      title: isUs ? "NCLEX-PN (LVN/LPN)" : "REx-PN (Canada PN)",
       tier: "primary",
       intro: isUs
-        ? "LVN/LPN: safety-first stems and topic-tagged lessons."
-        : "Canadian PN: REx-PN scope, lessons, and bank.",
+        ? "PN-level safety and pharmacology stems with lesson support—not RN material squeezed into an LPN label."
+        : "REx-PN is its own exam. Use the Canadian PN bank and lessons built for REx-PN, not a relabeled US mix.",
       primaryCta: {
-        id: "pn-lessons",
-        label: "Explore LPN / PN lessons",
-        description: "Lesson hubs by topic",
-        href: pnLessons(region),
+        id: "pn-questions",
+        label: isUs ? "Run NCLEX-PN questions" : "Run REx-PN questions",
+        description: "Pathway-filtered bank",
+        href: pnQuestions(region),
       },
       links: [
+        { id: "pn-lessons", label: "PN lessons", href: pnLessons(region) },
         { id: "pn-hub", label: "PN exam hub", href: pnPrimaryHub(region) },
         { id: "pn-seo", label: "PN prep overview", href: PN.practiceProgrammatic },
       ],
     },
     {
       id: "np",
-      title: "Nurse practitioner (FNP & AGPCNP)",
+      title: "Nurse practitioner",
       tier: "primary",
       intro: isUs
-        ? "FNP and AGPCNP stay in separate hubs. Open the one that matches your exam."
-        : "CNPLE hub for Canada; US FNP and AGPCNP lessons stay available if you sit US boards.",
+        ? "FNP and AGPCNP each have dedicated lessons and banks. Pick the board you are sitting—do not cross-train on the wrong blueprint."
+        : "Canadian NP: start from the CNPLE hub. US FNP/AGPCNP stays available if you sit US certification exams.",
       primaryCta: {
         id: "np-practice",
-        label: "Try NP clinical cases",
-        description: isUs ? "FNP question bank" : "CNPLE bank",
+        label: isUs ? "Open FNP question bank" : "Open CNPLE questions",
+        description: isUs ? "US NP clinical cases" : "Canadian NP track",
         href: npNpQuestionsForRegion(region),
       },
       links: isUs
@@ -107,9 +111,9 @@ export function buildHeroGatewayClusters(region: NursenestMarketingRegion): Hero
     },
     {
       id: "allied",
-      title: "Allied health",
+      title: "Allied health exams",
       tier: "secondary",
-      intro: "In-app bank plus the allied careers overview. Country follows your toggle.",
+      intro: "Separate from nursing tiers: pick your exam family, then drill in the allied hub and pathway bank for your country.",
       primaryCta: {
         id: "allied-browse",
         label: "Browse allied careers",
@@ -125,7 +129,7 @@ export function buildHeroGatewayClusters(region: NursenestMarketingRegion): Hero
       id: "tools-newgrad",
       title: "Tools & new grad",
       tier: "secondary",
-      intro: "Calculators, lesson index, and first-year roadmaps. Career support opens in a new tab.",
+      intro: "Dose calculators, lesson index, timed exams (sign in), and first-year roadmaps when you need a break from board mode.",
       primaryCta: {
         id: "tools",
         label: "Use study tools",
@@ -148,11 +152,12 @@ export function buildHeroGatewayClusters(region: NursenestMarketingRegion): Hero
 }
 
 export function heroQuickEntryLinks(region: NursenestMarketingRegion): { label: string; href: string }[] {
+  const isUs = region === "US";
   return [
-    { label: "Start RN practice questions", href: rnQuestions(region) },
-    { label: "Explore LPN / PN lessons", href: pnLessons(region) },
-    { label: "Try NP clinical cases", href: npNpQuestionsForRegion(region) },
-    { label: "Browse allied careers", href: alliedCareersMarketingUrl() },
-    { label: "Use study tools", href: HUB.tools },
+    { label: isUs ? "NCLEX-RN questions" : "Canada RN questions", href: rnQuestions(region) },
+    { label: isUs ? "NCLEX-PN questions" : "REx-PN questions", href: pnQuestions(region) },
+    { label: isUs ? "FNP question bank" : "CNPLE questions", href: npNpQuestionsForRegion(region) },
+    { label: "Allied question bank", href: alliedQuestions(region) },
+    { label: "Study tools", href: HUB.tools },
   ];
 }

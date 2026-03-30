@@ -7,6 +7,7 @@ import { prisma } from "@/lib/db";
 
 const bodySchema = z.object({
   categoryId: z.string().min(5).optional(),
+  deckId: z.string().min(3).optional(),
 });
 
 type Props = { params: Promise<{ id: string }> };
@@ -44,25 +45,44 @@ export async function POST(req: Request, ctx: Props) {
 
   const n = draft.normalizedJson as unknown as NormalizedFlashcardDraft;
 
-  const fc = await prisma.flashcard.create({
-    data: {
-      front: n.front,
-      back: n.back,
-      country: draft.country,
-      tier: draft.tier,
-      status: ContentStatus.DRAFT,
-      examFamily: draft.examFamily,
-      categoryId,
-    },
-  });
+  const deckId = parsed.data.deckId;
 
-  await prisma.generatedFlashcardDraft.update({
-    where: { id },
-    data: {
-      reviewStatus: DraftReviewStatus.PROMOTED,
-      promotedEntityId: fc.id,
-      promotedAt: new Date(),
-    },
+  const fc = await prisma.$transaction(async (tx) => {
+    const nextPos = deckId
+      ? ((await tx.flashcard.aggregate({ where: { deckId }, _max: { positionInDeck: true } }))._max.positionInDeck ?? -1) + 1
+      : 0;
+
+    const created = await tx.flashcard.create({
+      data: {
+        front: n.front,
+        back: n.back,
+        country: draft.country,
+        tier: draft.tier,
+        status: ContentStatus.DRAFT,
+        examFamily: draft.examFamily,
+        categoryId,
+        deckId: deckId ?? null,
+        positionInDeck: deckId ? nextPos : 0,
+      },
+    });
+
+    if (deckId) {
+      await tx.flashcardDeck.update({
+        where: { id: deckId },
+        data: { cardCount: { increment: 1 } },
+      });
+    }
+
+    await tx.generatedFlashcardDraft.update({
+      where: { id },
+      data: {
+        reviewStatus: DraftReviewStatus.PROMOTED,
+        promotedEntityId: created.id,
+        promotedAt: new Date(),
+      },
+    });
+
+    return created;
   });
 
   return NextResponse.json({ ok: true, flashcardId: fc.id });

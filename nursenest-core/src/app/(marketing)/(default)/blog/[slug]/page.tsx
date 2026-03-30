@@ -5,7 +5,10 @@ import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { getBlogPostMetaBySlug, getPublishedBlogPostBySlug } from "@/lib/blog/safe-blog-queries";
 import { getStaticBlogPost, staticRecordToBlogDisplay } from "@/lib/blog/static-blog-posts";
+import { BlogPostingJsonLd } from "@/components/seo/seo-json-ld";
+import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
 import { blogPostBreadcrumbsWithOptionalCategory } from "@/lib/seo/pathway-breadcrumbs";
+import { absoluteUrl } from "@/lib/seo/site-origin";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -19,7 +22,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: post.title,
     description: post.excerpt.slice(0, 160),
-    alternates: { canonical: `/blog/${slug}` },
+    alternates: { canonical: absoluteUrl(`/blog/${slug}`) },
+    openGraph: {
+      title: post.title,
+      description: post.excerpt.slice(0, 160),
+      url: absoluteUrl(`/blog/${slug}`),
+      type: "article",
+    },
   };
 }
 
@@ -41,6 +50,13 @@ export default async function BlogPostPage({ params }: Props) {
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-12">
+      <BlogPostingJsonLd
+        slug={slug}
+        title={post.title}
+        description={post.excerpt.slice(0, 320)}
+        datePublished={post.createdAt.toISOString()}
+        coverImage={post.coverImage ?? null}
+      />
       <BreadcrumbJsonLd items={schemaItems} />
       <div className="mb-6">
         <BreadcrumbTrail items={crumbs} />
@@ -76,6 +92,7 @@ export default async function BlogPostPage({ params }: Props) {
           ))}
         </footer>
       ) : null}
+      <MarketingStudyCrossLinks className="mt-12" />
     </article>
   );
 }

@@ -2,17 +2,35 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
 import {
   BLOG_LIST_PAGE_SIZE,
   getPublishedBlogPostsPage,
 } from "@/lib/blog/safe-blog-queries";
 import { blogIndexBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
+import { absoluteUrl } from "@/lib/seo/site-origin";
 
-export const metadata: Metadata = {
-  title: "Clinical education blog | NurseNest",
-  description: "Evidence-based nursing articles on clinical reasoning, pharmacology, lab interpretation, and exam preparation.",
-  alternates: { canonical: "/blog" },
-};
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}): Promise<Metadata> {
+  const sp = await searchParams;
+  const raw = Number(sp.page ?? "1");
+  const page = Number.isFinite(raw) && raw >= 1 ? Math.floor(raw) : 1;
+  const canonicalPath = page <= 1 ? "/blog" : `/blog?page=${page}`;
+  return {
+    title: "Clinical education blog | NurseNest",
+    description:
+      "Evidence-based nursing articles on clinical reasoning, pharmacology, lab interpretation, and exam preparation.",
+    alternates: { canonical: absoluteUrl(canonicalPath) },
+    openGraph: {
+      title: "Clinical education blog | NurseNest",
+      url: absoluteUrl(canonicalPath),
+      type: "website",
+    },
+  };
+}
 
 /** ISR: list is bounded (page size); new posts visible within a few minutes without full dynamic SSR. */
 export const revalidate = 120;
@@ -38,9 +56,12 @@ export default async function BlogIndexPage({ searchParams }: Props) {
         <p className="mt-2 text-[var(--theme-muted-text)]">Scholarly articles for nursing and allied health exam preparation.</p>
       </header>
       {posts.length === 0 ? (
-        <p className="text-sm text-[var(--theme-muted-text)]">
-          New clinical articles are added regularly. Check back soon, or explore lessons and the question bank in your account.
-        </p>
+        <>
+          <p className="text-sm text-[var(--theme-muted-text)]">
+            New clinical articles are added regularly. Check back soon, or explore lessons and the question bank in your account.
+          </p>
+          <MarketingStudyCrossLinks className="mt-10" />
+        </>
       ) : (
         <>
           <ul className="space-y-6">
@@ -83,6 +104,7 @@ export default async function BlogIndexPage({ searchParams }: Props) {
               </div>
             </nav>
           ) : null}
+          <MarketingStudyCrossLinks className="mt-14" />
         </>
       )}
     </div>

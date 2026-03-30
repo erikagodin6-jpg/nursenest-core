@@ -3,17 +3,19 @@ import { MarketingPricingPage } from "@/components/marketing/marketing-pricing-p
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { marketingPricingBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
+import { absoluteUrl } from "@/lib/seo/site-origin";
 
 export const metadata: Metadata = {
   title: "Pricing and plans | NurseNest",
   description:
     "NurseNest plans by exam pathway: practice questions, lessons, timed exams, and score history. Try free questions before you subscribe.",
-  alternates: { canonical: "/pricing" },
+  alternates: { canonical: absoluteUrl("/pricing") },
   openGraph: {
     title: "Pricing and plans | NurseNest",
     description:
       "Choose a pathway-aligned plan. Questions, lessons, and mock exams stay in one subscription with Stripe checkout.",
-    url: "/pricing",
+    url: absoluteUrl("/pricing"),
+    type: "website",
   },
 };
 

@@ -147,6 +147,11 @@ export async function POST(req: Request) {
       });
       const priceId = firstSubscriptionPriceId(sub);
       const mapped = priceId ? findTierCountryByPriceId(priceId) : undefined;
+      if (priceId && !mapped) {
+        safeServerLog("stripe_webhook", "unknown_subscription_price_id", {
+          priceIdPrefix: priceId.slice(0, 28),
+        });
+      }
       if (row?.userId && priceId) {
         await syncUserFromStripePriceId(row.userId, priceId);
       }
