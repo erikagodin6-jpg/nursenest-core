@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useLayoutEffect, useRef, useState, Suspense } from "react";
+import { useCallback, useEffect, useState, Suspense } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import {
@@ -30,10 +30,7 @@ import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { LazySection } from "@/legacy/marketing/lazy-section";
 import { HOMEPAGE_HERO_SLIDES } from "@/lib/marketing-assets";
-import {
-  getMarketingHeroImageUrlChain,
-  MARKETING_HERO_LOCAL_FALLBACK,
-} from "@/lib/marketing-hero-image";
+import { MarketingHeroCarousel } from "@/components/marketing/marketing-hero-carousel";
 import { getHomepageLessonTeasers } from "@/lib/marketing/homepage-lesson-teasers";
 
 const HOMEPAGE_LESSON_TEASERS = getHomepageLessonTeasers();
@@ -83,192 +80,6 @@ const HomeCareerCta = dynamic(() => import("@/legacy/marketing/home-career-cta")
 const HomeBottomSections = dynamic(() => import("@/legacy/marketing/home-bottom-sections"), {
   loading: () => <div className="min-h-[800px]" />,
 });
-
-function HeroCarousel({ onMediaUnavailable }: { onMediaUnavailable?: () => void }) {
-  const slides = HOMEPAGE_HERO_SLIDES;
-  const [current, setCurrent] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
-  const [failed, setFailed] = useState<Set<number>>(() => new Set());
-  const failedRef = useRef(failed);
-  /** 0 = direct CDN; 1 = local SVG fallback (`getHeroSlideSrc`). */
-  const [heroTierByIndex, setHeroTierByIndex] = useState<Record<number, number>>({});
-  const [hasLoaded, setHasLoaded] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const unavailableReported = useRef(false);
-
-  useEffect(() => {
-    failedRef.current = failed;
-  }, [failed]);
-
-  const validCount = slides.length - failed.size;
-  const currentSlide = slides[current];
-
-  const startTimer = useCallback(() => {
-    if (timerRef.current) clearInterval(timerRef.current);
-    if (slides.length === 0) return;
-    timerRef.current = setInterval(() => {
-      setCurrent((prev) => {
-        const f = failedRef.current;
-        for (let step = 1; step <= slides.length; step++) {
-          const idx = (prev + step) % slides.length;
-          if (!f.has(idx)) return idx;
-        }
-        return prev;
-      });
-    }, 5000);
-  }, [slides.length]);
-
-  useEffect(() => {
-    if (!hasLoaded || validCount === 0) return;
-    if (!isHovered) startTimer();
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, [isHovered, startTimer, hasLoaded, validCount, slides.length]);
-
-  const handleMouseEnter = useCallback(() => {
-    setIsHovered(true);
-    if (timerRef.current) clearInterval(timerRef.current);
-  }, []);
-
-  const handleMouseLeave = useCallback(() => {
-    setIsHovered(false);
-  }, []);
-
-  useEffect(() => {
-    if (slides.length === 0 || !failed.has(current)) return;
-    for (let step = 0; step < slides.length; step++) {
-      const idx = (current + step) % slides.length;
-      if (!failed.has(idx)) {
-        setCurrent(idx);
-        return;
-      }
-    }
-  }, [failed, current, slides.length]);
-
-  useLayoutEffect(() => {
-    if (slides.length === 0) return;
-    if (validCount > 0) return;
-    if (!unavailableReported.current) {
-      unavailableReported.current = true;
-      onMediaUnavailable?.();
-    }
-  }, [validCount, slides.length, onMediaUnavailable]);
-
-  const handleImgError = useCallback((index: number) => {
-    setFailed((prev) => new Set(prev).add(index));
-  }, []);
-
-  const handleImgLoad = useCallback(() => {
-    setHasLoaded(true);
-  }, []);
-
-  if (validCount === 0) {
-    return (
-      <div className="relative w-full min-w-0" data-testid="hero-carousel-fallback">
-        <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] shadow-[var(--shadow-elevated)]">
-          <img
-            src={MARKETING_HERO_LOCAL_FALLBACK}
-            alt=""
-            width={1200}
-            height={750}
-            className="pointer-events-none absolute inset-0 h-full w-full object-cover"
-            loading="eager"
-            decoding="async"
-          />
-        </div>
-      </div>
-    );
-  }
-
-  const mediaOk = validCount > 0;
-
-  return (
-    <div
-      className="relative w-full min-w-0 min-h-0"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      data-testid="hero-carousel"
-    >
-      <div
-        className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] shadow-[var(--shadow-elevated)]"
-        style={{ overflowAnchor: "none" }}
-        aria-busy={!hasLoaded && mediaOk}
-      >
-        {!hasLoaded && mediaOk ? (
-          <div
-            className="absolute inset-0 animate-pulse bg-gradient-to-br from-[var(--theme-separator)] via-[var(--theme-muted-surface)] to-[var(--theme-input-border)]"
-            aria-hidden
-          />
-        ) : null}
-        {slides.map((slide, index) => {
-          if (failed.has(index)) return null;
-          const chain = getMarketingHeroImageUrlChain({
-            objectKey: slide.objectKey,
-            publicCdnUrl: slide.publicUrl,
-          });
-          const tier = Math.min(heroTierByIndex[index] ?? 0, chain.length - 1);
-          const src = chain[tier];
-          const active = index === current;
-          return (
-            <img
-              key={`${slide.objectKey}-${tier}`}
-              src={src}
-              alt={slide.alt}
-              width={1200}
-              height={750}
-              decoding={index === 0 ? "sync" : "async"}
-              className={`pointer-events-none absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-in-out will-change-[opacity] ${
-                active ? "opacity-100" : "opacity-0"
-              }`}
-              loading={index === 0 ? "eager" : "lazy"}
-              fetchPriority={index === 0 ? "high" : "low"}
-              data-testid={`img-hero-slide-${index}`}
-              aria-hidden={!active}
-              referrerPolicy="no-referrer"
-              onError={() => {
-                console.error("[hero-carousel] image failed", { index, tier, src, objectKey: slide.objectKey, chain });
-                if (tier < chain.length - 1) {
-                  setHeroTierByIndex((prev) => ({ ...prev, [index]: tier + 1 }));
-                  return;
-                }
-                handleImgError(index);
-              }}
-              onLoad={handleImgLoad}
-            />
-          );
-        })}
-      </div>
-      {hasLoaded && mediaOk ? (
-        <>
-          {currentSlide ? (
-            <div className="mt-3 space-y-1 text-center px-1" data-testid="hero-carousel-caption">
-              <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{currentSlide.title}</p>
-              <p className="text-xs leading-relaxed text-[var(--theme-body-text)]">{currentSlide.caption}</p>
-            </div>
-          ) : null}
-          <div className="mt-3 flex flex-wrap justify-center gap-2" data-testid="hero-carousel-dots">
-            {slides.map((_, index) => (
-              <button
-                key={index}
-                type="button"
-                disabled={failed.has(index)}
-                onClick={() => {
-                  if (!failed.has(index)) setCurrent(index);
-                }}
-                className={`h-2 rounded-full transition-all duration-300 ${
-                  index === current ? "w-6 bg-primary" : "w-2 bg-[var(--theme-muted-text)]/35 hover:bg-[var(--theme-muted-text)]/55"
-                } ${failed.has(index) ? "cursor-not-allowed opacity-40" : ""}`}
-                aria-label={`Go to slide ${index + 1}`}
-                data-testid={`button-carousel-dot-${index}`}
-              />
-            ))}
-          </div>
-        </>
-      ) : null}
-    </div>
-  );
-}
 
 function formatCount(n: number | undefined): string {
   if (n === undefined || n === 0) return "---";
@@ -581,7 +392,10 @@ export default function HomeRestoredClient() {
                 className={heroMediaVisible ? "relative hidden min-w-0 md:block" : "hidden"}
                 style={{ overflowAnchor: "none" }}
               >
-                <HeroCarousel onMediaUnavailable={() => setHeroMediaVisible(false)} />
+                <MarketingHeroCarousel
+                  slides={HOMEPAGE_HERO_SLIDES}
+                  onMediaUnavailable={() => setHeroMediaVisible(false)}
+                />
                 <div className="absolute -bottom-5 -left-5 z-10 flex items-center gap-3 rounded-2xl border border-[var(--theme-card-border)]/80 bg-card px-5 py-3.5 shadow-[var(--shadow-card-hover)]">
                   <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10">
                     <CheckCircle2 className="h-4.5 w-4.5 text-primary" />

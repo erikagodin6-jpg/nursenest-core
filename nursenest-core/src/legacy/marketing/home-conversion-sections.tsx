@@ -1,14 +1,13 @@
 "use client";
 
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
-import { MARKETING_SCREENSHOT_SOURCES, resolveMarketingSrcSet } from "@/lib/marketing-assets";
-import {
-  getMarketingHeroImageUrlChain,
-  objectKeyFromPublicCdnUrl,
-} from "@/lib/marketing-hero-image";
+import type { HomeHeroSlide } from "@/config/home-hero-carousel";
+import { MarketingHeroCarousel } from "@/components/marketing/marketing-hero-carousel";
+import { HOMEPAGE_HERO_SLIDES, MARKETING_SCREENSHOT_SOURCES } from "@/lib/marketing-assets";
+import { objectKeyFromPublicCdnUrl } from "@/lib/marketing-hero-image";
 import {
   ArrowRight,
   Star,
@@ -22,8 +21,6 @@ import {
   ClipboardCheck,
   Lightbulb,
   Trophy,
-  ChevronLeft,
-  ChevronRight,
   Stethoscope,
   Wind,
   Ambulance,
@@ -68,27 +65,57 @@ function formatMarketingCount(n: number): string {
   return `${n}+`;
 }
 
-interface ScreenshotSources {
-  srcSet: string;
-  thumbSrcSet: string;
-  fallback: string;
-  thumbFallback: string;
-  width: number;
-  height: number;
+const screenshotData = MARKETING_SCREENSHOT_SOURCES;
+
+const PLATFORM_SLIDE_DEFS = [
+  { imageKey: "screenshot2", titleKey: "components.homeConversionSections.platformSlide.adaptivePerformance.title", blurbKey: "components.homeConversionSections.platformSlide.adaptivePerformance.blurb" },
+  { imageKey: "screenshot9", titleKey: "components.homeConversionSections.platformSlide.ngnCaseStudy.title", blurbKey: "components.homeConversionSections.platformSlide.ngnCaseStudy.blurb" },
+  { imageKey: "screenshotTest", titleKey: "components.homeConversionSections.platformSlide.examStyleQuestions.title", blurbKey: "components.homeConversionSections.platformSlide.examStyleQuestions.blurb" },
+  { imageKey: "screenshot6", titleKey: "components.homeConversionSections.platformSlide.flashcardMastery.title", blurbKey: "components.homeConversionSections.platformSlide.flashcardMastery.blurb" },
+  { imageKey: "screenshot11", titleKey: "components.homeConversionSections.platformSlide.studyPlan.title", blurbKey: "components.homeConversionSections.platformSlide.studyPlan.blurb" },
+  { imageKey: "screenshot3", titleKey: "components.homeConversionSections.platformSlide.categoryPerformance.title", blurbKey: "components.homeConversionSections.platformSlide.categoryPerformance.blurb" },
+  { imageKey: "screenshot5", titleKey: "components.homeConversionSections.platformSlide.sessionAnalysis.title", blurbKey: "components.homeConversionSections.platformSlide.sessionAnalysis.blurb" },
+  { imageKey: "screenshot10", titleKey: "components.homeConversionSections.platformSlide.progressComparison.title", blurbKey: "components.homeConversionSections.platformSlide.progressComparison.blurb" },
+] as const;
+
+/** Map curated “Platform in Action” picks to `HomeHeroSlide` — same shape as hero; URLs via `getMarketingHeroImageUrlChain` in `MarketingHeroCarousel`. */
+function buildPlatformActionSlides(t: (key: string) => string): readonly HomeHeroSlide[] {
+  return PLATFORM_SLIDE_DEFS.map((item, i) => {
+    const title = t(item.titleKey);
+    const blurb = t(item.blurbKey);
+    const bundle = screenshotData[item.imageKey];
+    if (bundle) {
+      return {
+        index: i + 1,
+        objectKey: objectKeyFromPublicCdnUrl(bundle.fallback),
+        publicUrl: bundle.fallback,
+        title,
+        caption: blurb,
+        alt: `${title}. ${blurb}`.slice(0, 220),
+      };
+    }
+    const heroFromKey = /^screenshot(\d+)$/.exec(item.imageKey);
+    if (heroFromKey) {
+      const n = Number(heroFromKey[1]);
+      const hero = HOMEPAGE_HERO_SLIDES[n - 1];
+      if (hero) {
+        return {
+          ...hero,
+          title,
+          caption: blurb,
+          alt: `${title}. ${blurb}`.slice(0, 220),
+        };
+      }
+    }
+    const fallback = HOMEPAGE_HERO_SLIDES[i % HOMEPAGE_HERO_SLIDES.length];
+    return {
+      ...fallback,
+      title,
+      caption: blurb,
+      alt: `${title}. ${blurb}`.slice(0, 220),
+    };
+  });
 }
-
-const screenshotData: Record<string, ScreenshotSources> = MARKETING_SCREENSHOT_SOURCES;
-
-const screenshotItems = [
-  { id: "adaptive-performance", imageKey: "screenshot2", title: "See exactly where you stand", blurb: "Real-time readiness insights help learners identify strengths, weak areas, and next steps." },
-  { id: "ngn-case-study", imageKey: "screenshot9", title: "Strengthen clinical judgment", blurb: "Interactive case studies connect patient data, prioritization, and nursing decision-making." },
-  { id: "exam-style-questions", imageKey: "screenshotTest", title: "Exam-style practice", blurb: "Realistic nursing questions with timed sets and detailed rationale review." },
-  { id: "flashcard-mastery", imageKey: "screenshot6", title: "Spaced repetition flashcards", blurb: "Smart flashcard tracking helps review high-yield concepts and strengthen memory." },
-  { id: "study-plan", imageKey: "screenshot11", title: "Personalized study plans", blurb: "Weekly plans turn weak areas into structured action steps." },
-  { id: "category-performance", imageKey: "screenshot3", title: "Target weak areas faster", blurb: "Domain-level breakdowns help focus study time where it matters most." },
-  { id: "session-analysis", imageKey: "screenshot5", title: "Detailed session analytics", blurb: "Score trends, percentile performance, and category-level results." },
-  { id: "progress-comparison", imageKey: "screenshot10", title: "Track improvement over time", blurb: "Comparison views show growth across sessions and recurring problem areas." },
-];
 
 const sampleQuestion = {
   stem: "A nurse is caring for a client with heart failure who has been prescribed furosemide (Lasix) 40mg IV. The client's morning lab results show: K+ 3.1 mEq/L, Na+ 138 mEq/L, BUN 28 mg/dL. Which action should the nurse take FIRST?",
@@ -615,183 +642,52 @@ function FeatureCardsSection({ questionCount }: { questionCount: number }) {
 }
 
 function ScreenshotCarouselSection() {
-  const { t } = useMarketingI18n();
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const [featuredTier, setFeaturedTier] = useState(0);
-  const [thumbTiers, setThumbTiers] = useState<Record<string, number>>({});
-  const thumbnailStripRef = useRef<HTMLDivElement>(null);
-
-  const goTo = useCallback(
-    (index: number) => {
-      if (isTransitioning || index === activeIndex) return;
-      setIsTransitioning(true);
-      setTimeout(() => {
-        setActiveIndex(index);
-        setIsTransitioning(false);
-      }, 200);
-    },
-    [isTransitioning, activeIndex],
-  );
-
-  const goNext = useCallback(() => {
-    goTo((activeIndex + 1) % screenshotItems.length);
-  }, [activeIndex, goTo]);
-
-  const goPrev = useCallback(() => {
-    goTo((activeIndex - 1 + screenshotItems.length) % screenshotItems.length);
-  }, [activeIndex, goTo]);
-
-  const isInitialRender = useRef(true);
-  useEffect(() => {
-    if (isInitialRender.current) {
-      isInitialRender.current = false;
-      return;
-    }
-    if (thumbnailStripRef.current) {
-      const thumb = thumbnailStripRef.current.children[activeIndex] as HTMLElement;
-      if (thumb) {
-        const container = thumbnailStripRef.current;
-        const thumbLeft = thumb.offsetLeft;
-        const thumbWidth = thumb.offsetWidth;
-        const containerWidth = container.offsetWidth;
-        const scrollTarget = thumbLeft - containerWidth / 2 + thumbWidth / 2;
-        container.scrollTo({ left: scrollTarget, behavior: "smooth" });
-      }
-    }
-  }, [activeIndex]);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % screenshotItems.length);
-    }, 6000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const current = screenshotItems[activeIndex];
-  const currentSrc = screenshotData[current.imageKey];
-
-  const featuredChain = getMarketingHeroImageUrlChain({
-    objectKey: objectKeyFromPublicCdnUrl(currentSrc.fallback),
-    publicCdnUrl: currentSrc.fallback,
-  });
-  const featuredTierSafe = Math.min(featuredTier, featuredChain.length - 1);
-  const featuredImgSrc = featuredChain[featuredTierSafe];
-  const featuredCanUseSrcSet =
-    featuredTierSafe === 0 && (featuredChain[0]?.startsWith("https://") ?? false);
-
-  useEffect(() => {
-    setFeaturedTier(0);
-  }, [activeIndex]);
+  const { t, locale } = useMarketingI18n();
+  const platformSlides = useMemo(() => buildPlatformActionSlides(t), [t, locale]);
+  const hasSlides = platformSlides.length > 0;
 
   return (
-    <section className="overflow-hidden border-t border-[var(--theme-card-border)]" style={{ paddingTop: 'var(--space-section)', paddingBottom: 'var(--space-section)' }} data-testid="section-screenshot-carousel">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="font-bold text-[var(--theme-heading-text)] mb-3" style={{ fontSize: 'var(--text-section)' }} data-testid="text-screenshots-heading">
-            See the Platform in Action
+    <section
+      className="overflow-hidden border-t border-gray-100 py-16 md:py-20"
+      data-testid="section-screenshot-carousel"
+    >
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-3xl text-center">
+          <div className="mb-4 inline-flex max-w-full flex-wrap items-center justify-center gap-2 rounded-full border border-primary/15 bg-primary/8 px-4 py-1.5 text-center shadow-[var(--shadow-card)]">
+            <Sparkles className="h-3.5 w-3.5 shrink-0 text-primary" />
+            <span className="text-balance text-xs font-bold uppercase tracking-wider text-primary">
+              {t("components.homeConversionSections.platformPreviewBadge")}
+            </span>
+          </div>
+          <h2
+            className="mb-4 text-balance font-bold text-[var(--theme-heading-text)]"
+            style={{ fontSize: "var(--text-section)" }}
+            data-testid="text-screenshots-heading"
+          >
+            {t("components.homeConversionSections.platformCarouselHeading")}
           </h2>
-          <p className="text-base lg:text-lg text-[var(--theme-muted-text)] max-w-2xl mx-auto">
-            From adaptive analytics to exam-style practice, explore what NurseNest looks like inside.
+          <p className="mb-8 text-balance text-base leading-relaxed text-muted-foreground">
+            {t("components.homeConversionSections.platformCarouselSubcopy")}
           </p>
         </div>
 
-        <div className="max-w-4xl mx-auto">
-          <div className="relative group">
-            <div className="relative rounded-2xl overflow-hidden bg-white shadow-[var(--shadow-elevated)] border border-[var(--theme-card-border)]/80">
-              <div className="relative aspect-[16/10] overflow-hidden bg-[var(--theme-muted-surface)]">
-                <img
-                  srcSet={featuredCanUseSrcSet ? resolveMarketingSrcSet(currentSrc.srcSet) : undefined}
-                  sizes="(max-width: 640px) 480px, (max-width: 1024px) 768px, 1200px"
-                  src={featuredImgSrc}
-                  alt={current.title}
-                  width={currentSrc.width}
-                  height={currentSrc.height}
-                  className={`w-full h-full object-cover object-top transition-opacity duration-200 ${
-                    isTransitioning ? "opacity-0" : "opacity-100"
-                  }`}
-                  loading="lazy"
-                  decoding="async"
-                  data-testid="img-carousel-featured"
-                  onError={() => {
-                    if (featuredTierSafe < featuredChain.length - 1) {
-                      setFeaturedTier((t) => t + 1);
-                    }
-                  }}
-                />
-              </div>
-
-              <button
-                onClick={goPrev}
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm shadow-[var(--shadow-card)] border border-[var(--theme-card-border)] flex items-center justify-center hover:bg-white transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
-                aria-label={t("components.homeConversionSections.previousScreenshot")}
-                data-testid="button-carousel-prev"
-              >
-                <ChevronLeft className="w-5 h-5 text-[var(--theme-body-text)]" />
-              </button>
-              <button
-                onClick={goNext}
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm shadow-[var(--shadow-card)] border border-[var(--theme-card-border)] flex items-center justify-center hover:bg-white transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
-                aria-label={t("components.homeConversionSections.nextScreenshot")}
-                data-testid="button-carousel-next"
-              >
-                <ChevronRight className="w-5 h-5 text-[var(--theme-body-text)]" />
-              </button>
-            </div>
-
-            <div className="mt-5 text-center">
-              <h3 className="font-bold text-[var(--theme-heading-text)]" style={{ fontSize: 'var(--text-card-title)' }} data-testid="text-carousel-title">
-                {current.title}
-              </h3>
-              <p className="text-sm text-[var(--theme-muted-text)] mt-1.5">{current.blurb}</p>
-            </div>
+        {hasSlides ? (
+          <div className="mx-auto w-full max-w-5xl">
+            <MarketingHeroCarousel
+              slides={platformSlides}
+              testIdPrefix="platform-carousel"
+              imgTestIdPrefix="platform"
+              logPrefix="platform-carousel"
+            />
           </div>
-
+        ) : (
           <div
-            ref={thumbnailStripRef}
-            className="flex gap-2.5 overflow-x-auto pb-2 mt-5 scrollbar-thin scrollbar-thumb-[var(--theme-muted-text)] scrollbar-track-transparent -mx-1 px-1 snap-x snap-mandatory justify-center"
+            className="mx-auto max-w-md rounded-xl border border-dashed border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)] px-4 py-5 text-center text-sm text-muted-foreground"
+            data-testid="platform-carousel-empty-section"
           >
-            {screenshotItems.map((item, idx) => {
-              const thumbSrc = screenshotData[item.imageKey];
-              const thumbChain = getMarketingHeroImageUrlChain({
-                objectKey: objectKeyFromPublicCdnUrl(thumbSrc.thumbFallback),
-                publicCdnUrl: thumbSrc.thumbFallback,
-              });
-              const tt = Math.min(thumbTiers[item.id] ?? 0, thumbChain.length - 1);
-              const thumbCanUseSrcSet = tt === 0 && (thumbChain[0]?.startsWith("https://") ?? false);
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => goTo(idx)}
-                  aria-label={`View ${item.title}`}
-                  className={`shrink-0 w-16 h-12 sm:w-20 sm:h-14 rounded-xl overflow-hidden border-2 transition-all duration-200 snap-start ${
-                    idx === activeIndex
-                      ? "border-primary ring-2 ring-primary/20 shadow-[var(--shadow-card)] scale-105"
-                      : "border-[var(--theme-input-border)] hover:border-primary/30 opacity-70 hover:opacity-100"
-                  }`}
-                  data-testid={`thumb-carousel-${item.id}`}
-                >
-                  <img
-                    src={thumbChain[tt]}
-                    srcSet={thumbCanUseSrcSet ? resolveMarketingSrcSet(thumbSrc.thumbSrcSet) : undefined}
-                    sizes="80px"
-                    alt={item.title}
-                    width={80}
-                    height={56}
-                    className="w-full h-full object-cover object-top"
-                    loading="lazy"
-                    decoding="async"
-                    onError={() => {
-                      if (tt < thumbChain.length - 1) {
-                        setThumbTiers((prev) => ({ ...prev, [item.id]: tt + 1 }));
-                      }
-                    }}
-                  />
-                </button>
-              );
-            })}
+            {t("components.homeConversionSections.platformCarouselEmpty")}
           </div>
-        </div>
+        )}
       </div>
     </section>
   );
