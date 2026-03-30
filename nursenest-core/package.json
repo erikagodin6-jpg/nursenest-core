@@ -20,9 +20,15 @@
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx prisma/seed.ts",
+    "db:seed-pathway-lessons": "tsx scripts/seed-pathway-lessons-from-catalog.ts",
+    "ops:pathway-lesson-sources": "tsx scripts/report-pathway-lesson-sources.ts",
+    "ops:pathway-lesson-translations": "tsx scripts/report-pathway-lesson-translations.ts",
+    "ops:question-bank-diagnostics": "tsx scripts/report-question-bank-diagnostics.ts",
+    "ops:admin-dashboard": "tsx scripts/report-admin-operations-dashboard.ts",
     "db:ensure-admin": "tsx scripts/ensure-admin-user.ts",
     "db:bootstrap-if-empty": "tsx scripts/bootstrap-admin-if-empty.ts",
     "db:sanity": "tsx scripts/db-sanity-check.ts",
+    "db:verify-indexes": "tsx scripts/verify-required-db-indexes.ts",
     "admin:promote": "tsx scripts/ensure-admin-user.ts",
     "content:inventory": "tsx scripts/content-inventory.ts",
     "content:audit": "tsx scripts/content-audit-authoritative.ts",
@@ -41,7 +47,8 @@
     "storage:check": "node scripts/storage-guardrails.mjs",
     "storage:check:strict": "node scripts/storage-guardrails.mjs --strict",
     "import:audit-nursing": "tsx scripts/audit-nursing-ai-cache.ts",
-    "import:nursing-ai-cache": "tsx scripts/import-nursing-ai-cache.ts"
+    "import:nursing-ai-cache": "tsx scripts/import-nursing-ai-cache.ts",
+    "replit:spaces-pipeline": "node scripts/replit-export-spaces-pipeline.mjs"
   },
   "dependencies": {
     "@auth/core": "0.37.2",
@@ -72,6 +79,7 @@
     "dotenv": "^17.3.1",
     "eslint": "^9",
     "eslint-config-next": "16.2.1",
+    "mime-types": "^2.1.35",
     "pg": "^8.20.0",
     "prisma": "^6.7.0",
     "tailwindcss": "^4",

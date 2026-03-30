@@ -8,7 +8,7 @@ export async function MarketingSignupPage({ locale }: { locale: string }) {
     <main className="mx-auto w-full max-w-md px-6 py-16">
       <div className="nn-card p-8">
         <div className="mb-6 flex justify-center">
-          <SiteBrandLogoMark className="h-10 w-auto max-w-[12rem] object-contain md:h-12" />
+          <SiteBrandLogoMark />
         </div>
         <h1 className="text-3xl font-bold">{m["pages.signup.h1"]}</h1>
         <p className="mt-2 text-sm text-muted">{m["pages.signup.subtitle"]}</p>

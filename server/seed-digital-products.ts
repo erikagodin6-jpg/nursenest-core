@@ -2,6 +2,13 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import type { Pool } from "pg";
+import { replitLegacyStorageUrlToCdnUrl } from "../shared/replit-object-storage-cdn";
+
+function normalizeDigitalProductAssetUrl(raw: string | null | undefined): string | null {
+  if (raw == null || typeof raw !== "string") return null;
+  const mapped = replitLegacyStorageUrlToCdnUrl(raw);
+  return mapped ?? raw;
+}
 
 const __filename_esm = typeof __filename !== "undefined" ? __filename : fileURLToPath(import.meta.url);
 const __dirname_esm = path.dirname(__filename_esm);
@@ -73,9 +80,9 @@ export async function seedDigitalProducts(pool: Pool): Promise<void> {
           p.short_description || null,
           p.price,
           p.compare_at_price || null,
-          p.file_url || null,
-          p.cover_image_url || null,
-          p.preview_url || null,
+          normalizeDigitalProductAssetUrl(p.file_url),
+          normalizeDigitalProductAssetUrl(p.cover_image_url),
+          normalizeDigitalProductAssetUrl(p.preview_url),
           p.preview_page_count || 3,
           p.category,
           p.tier_target || "all",

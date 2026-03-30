@@ -13,8 +13,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/exam-lessons" },
 };
 
-export default function ExamLessonsIndexPage() {
-  const rows = listPathwayIdsWithLessons()
+export default async function ExamLessonsIndexPage() {
+  const pathwayIds = await listPathwayIdsWithLessons();
+  const rows = pathwayIds
     .map((id) => getExamPathwayById(id))
     .filter((p): p is NonNullable<typeof p> => !!p && p.status !== "hidden");
 

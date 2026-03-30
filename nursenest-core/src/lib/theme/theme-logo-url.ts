@@ -12,9 +12,9 @@ import {
 } from "@/config/marketing-cdn.catalog";
 import { FALLBACK_LOGO_PATH, PRIMARY_LOGO_URL } from "@/lib/branding/logo-config";
 import {
-  getThemeBrandLogoCdnUrlForCanonicalId,
   getThemeLogoObjectKeyFromNormalizedId,
   getThemeLogoPublicPath,
+  getThemeLogoUrl,
 } from "@/lib/branding/theme-brand-logo-cdn";
 import {
   marketingImageUsesProxy,
@@ -44,13 +44,12 @@ export function getThemeLogoObjectKey(themeId: string): string {
   return getThemeLogoObjectKeyFromNormalizedId(id);
 }
 
-/** Public CDN URL for the active theme’s pre-colored logo raster. */
+/** Public CDN URL for the active theme’s pre-colored logo raster (alias of {@link getThemeLogoUrl}). */
 export function getThemeLogoPublicUrl(themeId: string): string {
-  const id = normalizeThemeIdForLogo(themeId);
-  return getThemeBrandLogoCdnUrlForCanonicalId(id);
+  return getThemeLogoUrl(themeId);
 }
 
-export { getThemeLogo } from "@/lib/branding/theme-brand-logo-cdn";
+export { getThemeLogo, getThemeLogoUrl } from "@/lib/branding/theme-brand-logo-cdn";
 
 /**
  * Ordered URLs for `<img src>`: theme-specific asset, then lavender fallback, with optional proxy variants.
@@ -58,8 +57,8 @@ export { getThemeLogo } from "@/lib/branding/theme-brand-logo-cdn";
 export function getThemeLogoLoadChain(themeId?: string | null): string[] {
   const id = normalizeThemeIdForLogo(themeId ?? NURSENEST_DEFAULT_THEME);
   const defId = NURSENEST_DEFAULT_THEME;
-  const pub = getThemeBrandLogoCdnUrlForCanonicalId(id);
-  const pubFb = getThemeBrandLogoCdnUrlForCanonicalId(defId);
+  const pub = getThemeLogoUrl(id);
+  const pubFb = getThemeLogoUrl(defId);
   const proxy = marketingProxyPathForKey(getThemeLogoObjectKeyFromNormalizedId(id));
   const proxyFb = marketingProxyPathForKey(getThemeLogoObjectKeyFromNormalizedId(defId));
   const sameOrigin = getThemeLogoPublicPath(id);

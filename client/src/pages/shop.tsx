@@ -33,6 +33,10 @@ function getEffectivePrice(product: DigitalProduct) {
   return saleActive ? product.salePrice! : product.price;
 }
 
+function hasDigitalProductPreviewUrl(p: DigitalProduct): boolean {
+  return typeof p.previewUrl === "string" && p.previewUrl.trim().length > 0;
+}
+
 function ProductCard({ product }: { product: DigitalProduct }) {
   const { t } = useI18n();
   const effectivePrice = getEffectivePrice(product);
@@ -91,7 +95,7 @@ function ProductCard({ product }: { product: DigitalProduct }) {
             {product.tierTarget && product.tierTarget !== "all" && (
               <Badge variant="outline" className="text-xs">{product.tierTarget.toUpperCase()}</Badge>
             )}
-            {(product as any).previewUrl && (
+            {hasDigitalProductPreviewUrl(product) && (
               <Badge variant="outline" className="text-xs text-blue-600 border-blue-200">{t("shop.product.preview")}</Badge>
             )}
           </div>

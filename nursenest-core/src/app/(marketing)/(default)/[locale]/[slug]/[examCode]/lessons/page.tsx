@@ -1,12 +1,19 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
+import { PathwayLessonContentLocaleBanner } from "@/components/lessons/pathway-lesson-content-locale-banner";
 import { FnpLessonsHub } from "@/components/pathway-lessons/fnp-lessons-hub";
 import { NclexPnLessonsHub } from "@/components/pathway-lessons/nclex-pn-lessons-hub";
 import { NclexRnLessonsHub } from "@/components/pathway-lessons/nclex-rn-lessons-hub";
+import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-lesson-pagination";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { buildExamPathwayPath, getExamPathwayByRoute } from "@/lib/exam-pathways/exam-product-registry";
-import { listTopicClusters, getPathwayLessons } from "@/lib/lessons/pathway-lesson-loader";
+import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
+import {
+  PATHWAY_HUB_PAGE_SIZE_DEFAULT,
+  getPathwayLessonsPage,
+  listTopicClusters,
+} from "@/lib/lessons/pathway-lesson-loader";
 import { pathwayLessonsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 
 export const dynamicParams = true;
@@ -16,18 +23,30 @@ export function generateStaticParams() {
   return [];
 }
 
-type Props = { params: Promise<{ locale: string; slug: string; examCode: string }> };
+type Props = {
+  params: Promise<{ locale: string; slug: string; examCode: string }>;
+  searchParams: Promise<{ page?: string; pageSize?: string }>;
+};
 
-export default async function PathwayLessonsHubPage({ params }: Props) {
-  const { locale, slug, examCode } = await params;
-  const pathway = getExamPathwayByRoute(locale, slug, examCode);
+export default async function PathwayLessonsHubPage({ params, searchParams }: Props) {
+  const { locale: countrySlug, slug: roleTrack, examCode } = await params;
+  const lessonContentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
+  const pathway = getExamPathwayByRoute(countrySlug, roleTrack, examCode);
   if (!pathway) notFound();
 
-  const lessons = getPathwayLessons(pathway.id);
-  if (lessons.length === 0) notFound();
-
-  const topics = listTopicClusters(pathway.id);
   const base = buildExamPathwayPath(pathway, "lessons");
+  const sp = await searchParams;
+  const pageRequested = Math.max(1, Number(sp.page ?? "1") || 1);
+  const pageSizeRequested = Number(sp.pageSize ?? String(PATHWAY_HUB_PAGE_SIZE_DEFAULT)) || PATHWAY_HUB_PAGE_SIZE_DEFAULT;
+
+  const pageResult = await getPathwayLessonsPage(pathway.id, pageRequested, pageSizeRequested, lessonContentLocale);
+  if (pageResult.total === 0) notFound();
+  if (pageRequested !== pageResult.page) {
+    redirect(pageResult.page > 1 ? `${base}?page=${pageResult.page}` : base);
+  }
+
+  const lessons = pageResult.items;
+  const topics = await listTopicClusters(pathway.id, lessonContentLocale);
   const { crumbs, schemaItems } = pathwayLessonsHubBreadcrumbs(pathway);
   const isNclexRnHub = pathway.id === "us-rn-nclex-rn" || pathway.id === "ca-rn-nclex-rn";
   const nclexRnRegion = pathway.id === "ca-rn-nclex-rn" ? "ca" : "us";
@@ -80,6 +99,8 @@ export default async function PathwayLessonsHubPage({ params }: Props) {
           </>
         )}
       </p>
+
+      {pageResult.locale ? <PathwayLessonContentLocaleBanner listLocale={pageResult.locale} /> : null}
 
       {isUsNclexPnHub ? (
         <NclexPnLessonsHub pathway={pathway} lessons={lessons} lessonsBasePath={base} topicClusters={topics} />
@@ -151,6 +172,14 @@ export default async function PathwayLessonsHubPage({ params }: Props) {
           </section>
         </>
       )}
+
+      <PathwayLessonPagination
+        basePath={base}
+        page={pageResult.page}
+        pageCount={pageResult.pageCount}
+        total={pageResult.total}
+        pageSize={pageResult.pageSize}
+      />
     </div>
   );
 }

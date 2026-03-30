@@ -39,7 +39,7 @@ export function ReviewQueueClient() {
   }, [loadList]);
 
   useEffect(() => {
-    void fetch("/api/admin/categories", { credentials: "include" })
+    void fetch("/api/admin/categories?page=1&pageSize=500", { credentials: "include" })
       .then((r) => r.json())
       .then((d: { categories?: { id: string; name: string; slug: string }[] }) => setCategories(d.categories ?? []))
       .catch(() => {});

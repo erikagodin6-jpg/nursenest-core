@@ -31,8 +31,8 @@ export function PathwayLessonPreviewBanner({ kind, pathwayShortName, pathwayCoun
       body: `This lesson belongs to a specific NP certification hub. In your profile, set your learner pathway to the same NP track you are studying so lessons, questions, and mocks stay consistent.`,
     },
     default_preview: {
-      title: "Preview mode",
-      body: `You see the first section only. Full explanations, scenarios, and takeaways unlock with a subscription that matches this exam pathway and country.`,
+      title: "Preview-only content",
+      body: `You see the first section only because of subscription preview rules—not because the lesson is missing from our catalog or untranslated. If a separate notice mentions language, that is about translation; this banner is about access. Full sections unlock with a plan that matches this pathway and country.`,
     },
   };
 

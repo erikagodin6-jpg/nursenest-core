@@ -10,5 +10,6 @@ export {
   getThemeLogo,
   getThemeLogoObjectKeyFromNormalizedId,
   getThemeLogoPublicPath,
+  getThemeLogoUrl,
   themeBrandLogoObjectKey,
 } from "@/lib/branding/theme-brand-logo-cdn";

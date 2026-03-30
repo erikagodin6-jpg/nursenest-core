@@ -35,6 +35,14 @@ function formatPrice(cents: number) {
   return `$${(cents / 100).toFixed(2)}`;
 }
 
+function hasDigitalProductFileUrl(p: DigitalProduct): boolean {
+  return typeof p.fileUrl === "string" && p.fileUrl.trim().length > 0;
+}
+
+function hasDigitalProductPreviewUrl(p: DigitalProduct): boolean {
+  return typeof p.previewUrl === "string" && p.previewUrl.trim().length > 0;
+}
+
 export default function ShopProductPage() {
   const { slug } = useParams<{ slug: string }>();
   const { t } = useI18n();
@@ -173,6 +181,7 @@ export default function ShopProductPage() {
   const hasDiscount = saleActive ? true : (product.compareAtPrice && product.compareAtPrice > product.price);
   const savings = saleActive ? (product.price - effectivePrice) : (product.compareAtPrice && product.compareAtPrice > product.price ? product.compareAtPrice! - product.price : 0);
   const strikethroughPrice = saleActive ? product.price : (product.compareAtPrice && product.compareAtPrice > product.price ? product.compareAtPrice! : 0);
+  const deliverable = hasDigitalProductFileUrl(product);
 
   return (
     <div className="min-h-screen bg-warmwhite flex flex-col font-sans text-gray-900">
@@ -270,6 +279,16 @@ export default function ShopProductPage() {
                 const maxDl = purchase.maxDownloads || 5;
                 const remaining = maxDl - downloadsUsed;
                 const limitReached = remaining <= 0;
+                if (!deliverable) {
+                  return (
+                    <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900" data-testid="div-no-file-after-purchase">
+                      <p className="font-medium">{t("pages.shopProduct.purchased")}</p>
+                      <p className="mt-1 text-amber-800">
+                        The downloadable file for this product is not available yet. Please contact support with your order details.
+                      </p>
+                    </div>
+                  );
+                }
                 return (
                   <div className="space-y-3" data-testid="div-purchased-section">
                     <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 space-y-2">
@@ -331,7 +350,7 @@ export default function ShopProductPage() {
                     </p>
                   </div>
                 );
-              })() : (
+              })() : deliverable ? (
                 <>
                   <Button
                     size="lg"
@@ -348,11 +367,18 @@ export default function ShopProductPage() {
                     <Clock className="w-3 h-3" /> Secure checkout powered by Stripe
                   </p>
                 </>
+              ) : (
+                <div className="rounded-xl border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700" data-testid="div-product-unavailable">
+                  <p className="font-medium text-gray-900">Temporarily unavailable</p>
+                  <p className="mt-1 text-gray-600">
+                    This product does not have a downloadable file attached yet. Please check back later or browse other packs in the store.
+                  </p>
+                </div>
               )}
             </div>
           </div>
 
-          {product.previewUrl && (
+          {hasDigitalProductPreviewUrl(product) && (
             <section className="mt-10" data-testid="section-preview">
               <h2 className="text-xl font-bold mb-2 flex items-center gap-2">
                 <FileText className="w-5 h-5 text-primary" /> Preview

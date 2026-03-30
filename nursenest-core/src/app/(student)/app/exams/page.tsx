@@ -11,7 +11,17 @@ import { resolveDefaultExamForUser } from "@/lib/exams/resolve-default-exam";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 
-export default async function ExamsPage() {
+const HISTORY_PAGE_SIZE = 15;
+const MAX_HISTORY_PAGE_INDEX = 400;
+
+type ExamsPageProps = { searchParams: Promise<{ historyPage?: string }> };
+
+export default async function ExamsPage({ searchParams }: ExamsPageProps) {
+  const sp = await searchParams;
+  let requestedHistoryPage = Math.max(1, Number(sp.historyPage ?? "1"));
+  if (!Number.isFinite(requestedHistoryPage)) requestedHistoryPage = 1;
+  requestedHistoryPage = Math.min(MAX_HISTORY_PAGE_INDEX, requestedHistoryPage);
+
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
@@ -25,7 +35,8 @@ export default async function ExamsPage() {
           <BreadcrumbTrail items={examCrumbs} />
         </div>
         <p className="nn-card p-6 text-sm text-muted">
-          We could not verify your subscription right now. Refresh the page or try again in a moment.
+          We couldn’t finish checking your subscription (database or billing lookup failed). This is not the same as “no
+          plan”—refresh shortly, or sign in again if it keeps happening.
         </p>
       </main>
     );
@@ -62,13 +73,26 @@ export default async function ExamsPage() {
   }
 
   const attemptsLoad = await withDatabaseFallback(
-    () =>
-      prisma.examAttempt.findMany({
-        where: { userId },
-        select: { id: true, score: true, total: true, createdAt: true },
-        orderBy: { createdAt: "desc" },
-        take: 10,
-      }),
+    async () => {
+      const totalAttempts = await prisma.examAttempt.count({ where: { userId } });
+      const totalPages = Math.max(1, Math.ceil(totalAttempts / HISTORY_PAGE_SIZE));
+      const historyPage = Math.min(requestedHistoryPage, totalPages);
+      const [latestAttempt, attemptsPage] = await Promise.all([
+        prisma.examAttempt.findFirst({
+          where: { userId },
+          select: { id: true, score: true, total: true, createdAt: true },
+          orderBy: { createdAt: "desc" },
+        }),
+        prisma.examAttempt.findMany({
+          where: { userId },
+          select: { id: true, score: true, total: true, createdAt: true },
+          orderBy: { createdAt: "desc" },
+          skip: (historyPage - 1) * HISTORY_PAGE_SIZE,
+          take: HISTORY_PAGE_SIZE,
+        }),
+      ]);
+      return { latestAttempt, attemptsPage, totalAttempts, historyPage, totalPages };
+    },
     null,
   );
 
@@ -81,16 +105,20 @@ export default async function ExamsPage() {
         </div>
         <h1 className="text-3xl font-bold">Practice exams</h1>
         <p className="nn-card mt-4 p-6 text-sm text-muted">
-          Past attempts could not be loaded. Refresh or try again shortly.
+          Exam history couldn’t load—the database was unreachable or the request failed. Your subscription status is
+          unchanged; refresh or try again shortly.
         </p>
       </main>
     );
   }
 
-  const attempts = attemptsLoad;
+  const { latestAttempt, attemptsPage, totalAttempts, historyPage, totalPages } = attemptsLoad;
 
-  const last = attempts[0];
+  const last = latestAttempt;
   const pct = last && last.total > 0 ? Math.round((last.score / last.total) * 100) : null;
+
+  const historyFrom = totalAttempts === 0 ? 0 : (historyPage - 1) * HISTORY_PAGE_SIZE + 1;
+  const historyTo = totalAttempts === 0 ? 0 : Math.min(historyPage * HISTORY_PAGE_SIZE, totalAttempts);
 
   const defaultExam = userId ? await resolveDefaultExamForUser(userId) : null;
 
@@ -132,8 +160,15 @@ export default async function ExamsPage() {
         </aside>
       )}
 
+      {totalAttempts > 0 ? (
+        <p className="mt-4 text-sm text-muted">
+          History: showing {historyFrom}–{historyTo} of {totalAttempts} attempt{totalAttempts === 1 ? "" : "s"}
+          {totalPages > 1 ? ` (page ${historyPage} of ${totalPages})` : ""}.
+        </p>
+      ) : null}
+
       <div className="mt-4 space-y-3">
-        {attempts.map((attempt) => (
+        {attemptsPage.map((attempt) => (
           <article className="nn-card p-4" key={attempt.id}>
             <p className="font-semibold">
               Score: {attempt.score}/{attempt.total}
@@ -142,6 +177,27 @@ export default async function ExamsPage() {
           </article>
         ))}
       </div>
+
+      {totalPages > 1 ? (
+        <nav className="mt-6 flex flex-wrap items-center gap-3 text-sm" aria-label="Attempt history pages">
+          {historyPage > 1 ? (
+            <Link
+              href={`/app/exams?historyPage=${historyPage - 1}`}
+              className="font-semibold text-primary underline underline-offset-2"
+            >
+              ← Newer attempts
+            </Link>
+          ) : null}
+          {historyPage < totalPages ? (
+            <Link
+              href={`/app/exams?historyPage=${historyPage + 1}`}
+              className="font-semibold text-primary underline underline-offset-2"
+            >
+              Older attempts →
+            </Link>
+          ) : null}
+        </nav>
+      ) : null}
     </main>
   );
 }

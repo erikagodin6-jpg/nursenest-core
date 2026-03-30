@@ -244,7 +244,7 @@ export function SiteFooter() {
 
         <div className="flex flex-col items-center justify-between gap-4 border-t border-[var(--theme-separator)] pt-6 md:flex-row">
           <div className="flex items-center gap-2">
-            <SiteBrandLogoMark className="h-10 w-auto max-w-[11rem] object-contain md:h-12" />
+            <SiteBrandLogoMark />
             <p className="text-xl font-extrabold tracking-tight text-primary">NurseNest</p>
           </div>
           <div className="text-sm text-[var(--theme-muted-text)]">

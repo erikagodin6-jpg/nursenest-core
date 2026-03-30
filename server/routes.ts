@@ -2,6 +2,8 @@ import type { Express, Request, Response, NextFunction } from "express";
 import type { Server } from "http";
 import { sql } from "drizzle-orm";
 import crypto from "crypto";
+import { Readable } from "stream";
+import { pipeline } from "stream/promises";
 import fs from "fs";
 import nodePath from "path";
 import multer from "multer";
@@ -15,6 +17,7 @@ import { requireLanguage } from "./middleware/requireLanguage";
 import { blockMixedLanguageRender } from "./middleware/blockMixedLanguageRender";
 import { generateWithLanguageEnforcement } from "./services/generatorEnforcement";
 import { routeParamString } from "./route-params";
+import { isNursenestImagesCdnUrl } from "../shared/replit-object-storage-cdn";
 
 function examRequestTimeout(timeoutMs: number = 60000) {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -46,6 +49,51 @@ function parseStoragePath(path: string): { bucketName: string; objectName: strin
   const parts = path.split("/");
   if (parts.length < 3) throw new Error("Invalid storage path");
   return { bucketName: parts[1], objectName: parts.slice(2).join("/") };
+}
+
+/**
+ * Stream a public nursenest-images CDN object through this response (admin / shop PDF routes).
+ * Returns true if the path was handled (including error responses).
+ */
+async function tryStreamNursenestImagesCdn(
+  storagePath: string,
+  res: Response,
+  opts: { contentDisposition?: string; contentTypeFallback?: string; cacheControl?: string },
+): Promise<boolean> {
+  const trimmed = storagePath.trim();
+  if (!isNursenestImagesCdnUrl(trimmed)) return false;
+  let upstream: globalThis.Response;
+  try {
+    upstream = await fetch(trimmed);
+  } catch (err: any) {
+    console.error("CDN fetch error:", err);
+    if (!res.headersSent) res.status(502).json({ error: "Failed to reach CDN" });
+    return true;
+  }
+  if (!upstream.ok) {
+    if (!res.headersSent) {
+      res
+        .status(upstream.status === 404 ? 404 : 502)
+        .json({ error: upstream.status === 404 ? "File not found on CDN" : "CDN returned an error" });
+    }
+    return true;
+  }
+  const ct = opts.contentTypeFallback || upstream.headers.get("content-type") || "application/octet-stream";
+  res.setHeader("Content-Type", ct);
+  if (opts.contentDisposition) res.setHeader("Content-Disposition", opts.contentDisposition);
+  if (opts.cacheControl) res.setHeader("Cache-Control", opts.cacheControl);
+  if (!upstream.body) {
+    if (!res.headersSent) res.status(500).json({ error: "Empty CDN response" });
+    return true;
+  }
+  try {
+    const nodeStream = Readable.fromWeb(upstream.body as import("stream/web").ReadableStream);
+    await pipeline(nodeStream, res);
+  } catch (err: any) {
+    console.error("CDN stream pipeline error:", err);
+    if (!res.headersSent) res.status(500).json({ error: "Error streaming file" });
+  }
+  return true;
 }
 
 function snakeToCamel(obj: any): any {
@@ -19769,6 +19817,9 @@ Return ONLY valid JSON with this exact structure:
 
       const product = await storage.getDigitalProduct(productId);
       if (!product || !product.isActive) return res.status(404).json({ error: "Product not found" });
+      if (!product.fileUrl?.trim()) {
+        return res.status(400).json({ error: "This product is not available for purchase yet (no file attached)." });
+      }
 
       const now = new Date();
       const saleActive = product.salePrice && product.saleStartsAt && product.saleEndsAt
@@ -20205,6 +20256,13 @@ Return ONLY valid JSON with this exact structure:
       const product = await storage.getDigitalProduct(req.params.id);
       if (!product) return res.status(404).json({ error: "Product not found" });
       if (!product.fileUrl) return res.status(404).json({ error: "No file attached to this product" });
+      if (
+        await tryStreamNursenestImagesCdn(product.fileUrl, res, {
+          contentDisposition: `attachment; filename="${product.slug || "product"}.pdf"`,
+          contentTypeFallback: "application/pdf",
+        })
+      )
+        return;
       res.setHeader("Content-Disposition", `attachment; filename="${product.slug || "product"}.pdf"`);
       res.setHeader("Content-Type", "application/pdf");
       const { bucketName, objectName } = parseStoragePath(product.fileUrl);
@@ -20235,6 +20293,14 @@ Return ONLY valid JSON with this exact structure:
       const product = await storage.getDigitalProduct(req.params.id);
       if (!product) return res.status(404).json({ error: "Product not found" });
       if (!product.fileUrl) return res.status(404).json({ error: "No file attached to this product" });
+      if (
+        await tryStreamNursenestImagesCdn(product.fileUrl, res, {
+          contentDisposition: "inline",
+          contentTypeFallback: "application/pdf",
+          cacheControl: "private, max-age=300",
+        })
+      )
+        return;
       res.setHeader("Content-Disposition", "inline");
       res.setHeader("Content-Type", "application/pdf");
       res.setHeader("Cache-Control", "private, max-age=300");
@@ -20265,10 +20331,21 @@ Return ONLY valid JSON with this exact structure:
 
       const pageCount = Math.max(1, Math.min(10, Number(req.body?.pageCount ?? 3)));
 
-      const { default: nodeFetch } = await import("node-fetch");
-      const fileRes = await nodeFetch(product.fileUrl);
-      if (!fileRes.ok) return res.status(502).json({ error: "Failed to fetch source PDF" });
-      const fullPdfBytes = new Uint8Array(await fileRes.arrayBuffer());
+      let fullPdfBytes: Uint8Array;
+      if (isNursenestImagesCdnUrl(product.fileUrl)) {
+        const fileRes = await fetch(product.fileUrl);
+        if (!fileRes.ok) return res.status(502).json({ error: "Failed to fetch source PDF" });
+        fullPdfBytes = new Uint8Array(await fileRes.arrayBuffer());
+      } else {
+        const { bucketName, objectName } = parseStoragePath(product.fileUrl);
+        const { objectStorageClient } = await import("./replit_integrations/object_storage/objectStorage");
+        const bucket = objectStorageClient.bucket(bucketName);
+        const file = bucket.file(objectName);
+        const [exists] = await file.exists();
+        if (!exists) return res.status(404).json({ error: "Source PDF not found in storage" });
+        const [buf] = await file.download();
+        fullPdfBytes = new Uint8Array(buf);
+      }
 
       const { PDFDocument, StandardFonts, rgb, degrees } = await import("pdf-lib");
       const src = await PDFDocument.load(fullPdfBytes);
@@ -20333,6 +20410,15 @@ Return ONLY valid JSON with this exact structure:
       const product = await storage.getDigitalProductBySlug(req.params.slug);
       if (!product || !product.isActive) return res.status(404).json({ error: "Product not found" });
       if (!product.previewUrl) return res.status(404).json({ error: "No preview available" });
+
+      if (
+        await tryStreamNursenestImagesCdn(product.previewUrl, res, {
+          contentDisposition: "inline",
+          contentTypeFallback: "application/pdf",
+          cacheControl: "public, max-age=3600",
+        })
+      )
+        return;
 
       const { bucketName: pvBucket, objectName: pvObject } = parseStoragePath(product.previewUrl);
       const { objectStorageClient } = await import("./replit_integrations/object_storage/objectStorage");

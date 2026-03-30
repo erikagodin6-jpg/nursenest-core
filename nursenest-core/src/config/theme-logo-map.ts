@@ -1,5 +1,5 @@
 /**
- * Theme logo URLs: canonical paths in `src/lib/branding/theme-logo-map.ts`; CDN map in `theme-brand-logo-cdn`.
+ * Theme logo URLs: legacy path map in `src/lib/branding/theme-logo-map.ts`; full CDN URLs via `getThemeLogoUrl` / `THEME_BRAND_LOGO_CDN_BY_ID` in `theme-brand-logo-cdn`.
  */
 import { NURSENEST_DEFAULT_THEME } from "@/lib/theme/theme-registry";
 import { MARKETING_CDN_PUBLIC_BASE, THEME_BRAND_LOGO_CDN_BY_ID } from "@/config/theme-brand-logo-cdn";

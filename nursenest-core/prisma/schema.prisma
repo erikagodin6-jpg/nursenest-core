@@ -231,6 +231,41 @@ model ContentItem {
 
   @@map("content_items")
   @@index([type, status])
+  @@index([type, status, updatedAt])
+}
+
+/**
+ * Marketing exam-pathway lessons (`/[locale]/[slug]/[exam]/lessons/...`).
+ * The loader prefers published rows for each `pathwayId` and falls back to `catalog.json` when that pathway has no DB rows.
+ */
+model PathwayLesson {
+  id                  String        @id @default(cuid())
+  pathwayId           String        @map("pathway_id")
+  slug                String
+  title               String
+  topic               String
+  topicSlug           String        @map("topic_slug")
+  bodySystem          String        @map("body_system")
+  previewSectionCount Int           @default(1) @map("preview_section_count")
+  seoTitle            String        @map("seo_title") @db.Text
+  seoDescription      String        @map("seo_description") @db.Text
+  /** Array of { id, heading, kind, body } — normalized to five canonical sections at read time. */
+  sections            Json
+  /** Optional row-level filter; null means “follow pathway registry” (country implied by pathway). */
+  countryCode         CountryCode?  @map("country_code")
+  tierCode            TierCode?     @map("tier_code")
+  status              ContentStatus @default(PUBLISHED)
+  sortOrder           Int           @default(0) @map("sort_order")
+  /** BCP 47-style language tag (`en`, `fr`, …). Default `en` for catalog imports. */
+  locale              String        @default("en")
+  createdAt           DateTime      @default(now()) @map("created_at")
+  updatedAt           DateTime      @updatedAt @map("updated_at")
+
+  @@unique([pathwayId, slug, locale])
+  @@index([pathwayId, status, sortOrder])
+  @@index([pathwayId, locale, status, sortOrder])
+  @@index([pathwayId, topicSlug, locale, status])
+  @@map("pathway_lessons")
 }
 
 /** Production `exam_questions` question bank. */
@@ -300,6 +335,8 @@ model ExamQuestion {
   @@index([status, tier])
   @@index([exam])
   @@index([stemHash])
+  @@index([status, updatedAt])
+  @@index([status, exam, tier, countryCode])
 }
 
 model Flashcard {
@@ -379,6 +416,7 @@ model Progress {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, lessonId])
+  @@index([userId, updatedAt])
 }
 
 model BackgroundJob {

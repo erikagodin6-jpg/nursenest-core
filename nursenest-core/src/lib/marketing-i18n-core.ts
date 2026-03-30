@@ -2,7 +2,16 @@ export type MarketingMessages = Record<string, string>;
 
 type Params = Record<string, string | number | undefined>;
 
-const missingToken = (key: string) => `[missing:${key}]`;
+/** Last-resort label when no locale (including English) defines the key — readable, not blank. */
+export function humanizeMarketingKey(key: string): string {
+  const segment = key.includes(".") ? key.slice(key.lastIndexOf(".") + 1) : key;
+  const spaced = segment
+    .replace(/_/g, " ")
+    .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+    .trim();
+  if (!spaced) return key;
+  return spaced.replace(/\b\w/g, (c) => c.toUpperCase());
+}
 
 /**
  * Resolves copy for a flat key. When `fallbackMessages` is provided (typically English),
@@ -20,7 +29,7 @@ export function formatMarketingMessage(
   }
   if (raw === undefined) {
     console.error(`[marketing-i18n] missing key: ${key} (locale bundle)`);
-    return missingToken(key);
+    return humanizeMarketingKey(key);
   }
   let s = raw;
   if (params) {

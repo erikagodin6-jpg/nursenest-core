@@ -3,7 +3,7 @@ import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { canViewFullPathwayLesson } from "@/lib/lessons/pathway-lesson-access";
-import { getPathwayLesson } from "@/lib/lessons/pathway-lesson-loader";
+import { getPathwayLessonForProgress } from "@/lib/lessons/pathway-lesson-loader";
 import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
@@ -32,7 +32,7 @@ export async function POST(req: Request) {
 
   const { pathwayId, lessonSlug, completed } = parsed.data;
   const pathway = getExamPathwayById(pathwayId);
-  const lesson = pathway ? getPathwayLesson(pathway.id, lessonSlug) : undefined;
+  const lesson = pathway ? await getPathwayLessonForProgress(pathway.id, lessonSlug) : undefined;
   if (!pathway || !lesson) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }

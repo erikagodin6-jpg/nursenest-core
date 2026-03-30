@@ -1,10 +1,13 @@
 /**
- * Single source of truth: theme-variant → public path (served from `/public` or Spaces under the same key).
- * Cache buster avoids stale browser/CDN assets after logo updates.
+ * Local same-origin mark used when remote theme rasters fail.
+ * CDN URLs are built from `theme-brand-logo-space-keys.ts` via `getThemeLogoUrl` in `theme-brand-logo-cdn.ts`.
  */
+import { LOCAL_BRAND_MARK_PATH } from "@/lib/branding/logo-config";
+
+/** @deprecated All variants resolve to the committed local SVG; kept for older imports. */
 export const THEME_LOGO_MAP: Record<string, string> = {
-  default: "/branding/themes/logo-default.png?v=2",
-  blue: "/branding/themes/logo-blue.png?v=2",
-  berry: "/branding/themes/logo-berry.png?v=2",
-  dark: "/branding/themes/logo-dark.png?v=2",
+  default: LOCAL_BRAND_MARK_PATH,
+  blue: LOCAL_BRAND_MARK_PATH,
+  berry: LOCAL_BRAND_MARK_PATH,
+  dark: LOCAL_BRAND_MARK_PATH,
 };

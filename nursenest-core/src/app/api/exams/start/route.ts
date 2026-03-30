@@ -8,9 +8,12 @@ import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { productEvent } from "@/lib/observability/product-events";
 import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
+import { MAX_SESSION_QUESTION_IDS } from "@/lib/exams/exam-session-bounds";
 import { seedMinimalQuestionBankIfEmpty } from "@/lib/exams/seed-minimal-question-bank";
+import { diagnoseExamStartEmpty } from "@/lib/questions/exam-start-empty-diagnostics";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
-const POOL_LIMIT = 20;
+const POOL_LIMIT = Math.min(20, MAX_SESSION_QUESTION_IDS);
 
 export async function POST(req: Request) {
   const gate = await requireSubscriberSession();
@@ -38,11 +41,14 @@ export async function POST(req: Request) {
       }),
     );
     if (!exam || exam.status !== ContentStatus.PUBLISHED) {
-      return NextResponse.json({ error: "Exam not found" }, { status: 404 });
+      return NextResponse.json({ error: "Exam not found", code: "exam_not_found" }, { status: 404 });
     }
     if (!userCanAccessExam(gate.entitlement, exam)) {
       logPaywallDeny("/api/exams/start", "exam_out_of_scope", { examId: examId ?? "" });
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      return NextResponse.json(
+        { error: "Forbidden", code: "exam_not_in_plan" },
+        { status: 403 },
+      );
     }
   }
 
@@ -66,8 +72,18 @@ export async function POST(req: Request) {
       },
     });
 
+    const poolDiagnostics =
+      questionPool.length === 0 ? await diagnoseExamStartEmpty(gate.entitlement) : undefined;
+
     if (questionPool.length === 0) {
       productEvent("exam_pool_empty", { hasExamId: !!examId });
+      if (poolDiagnostics) {
+        safeServerLog("api_exams_start", "pool_empty", {
+          code: poolDiagnostics.code,
+          publishedGlobal: poolDiagnostics.counts.publishedGlobal,
+          entitlementPublished: poolDiagnostics.counts.entitlementPublished,
+        });
+      }
     }
     productEvent("exam_start", { total: questionPool.length });
 
@@ -82,6 +98,7 @@ export async function POST(req: Request) {
         questions: questionPool.length ? [questionPool[0]] : [],
         poolEmpty: questionPool.length === 0,
         hydrate: "window" as const,
+        ...(poolDiagnostics ? { diagnostics: poolDiagnostics } : {}),
       });
     }
 
@@ -93,11 +110,18 @@ export async function POST(req: Request) {
       questions: questionPool,
       poolEmpty: questionPool.length === 0,
       hydrate: "full" as const,
+      ...(poolDiagnostics ? { diagnostics: poolDiagnostics } : {}),
     });
   } catch (e) {
     safeServerLogCritical("api_exams_start", "failed", {}, e, { flow: "exam_start" });
     return NextResponse.json(
-      { error: "Unable to start exam session. Try again shortly.", questions: [], total: 0, poolEmpty: true },
+      {
+        error: "Unable to start exam session. Try again shortly.",
+        code: "service_unavailable",
+        questions: [],
+        total: 0,
+        poolEmpty: true,
+      },
       { status: 503 },
     );
   }

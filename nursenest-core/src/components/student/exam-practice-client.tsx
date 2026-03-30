@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { QuestionType } from "@prisma/client";
+import type { ExamStartEmptyDiagnostics } from "@/lib/questions/exam-start-empty-diagnostics";
+import { examPoolEmptyCopy, examStartFailureMessage } from "@/lib/student/gated-state-messages";
 
 type ExamQuestion = {
   id: string;
@@ -36,6 +38,8 @@ export function ExamPracticeClient({
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState<{ score: number; total: number } | null>(null);
   const [qLoading, setQLoading] = useState(false);
+  const [blockingError, setBlockingError] = useState<string | null>(null);
+  const [poolEmptyCopy, setPoolEmptyCopy] = useState<{ title: string; body: string } | null>(null);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const cacheRef = useRef<Record<string, ExamQuestion>>({});
   cacheRef.current = cache;
@@ -84,7 +88,12 @@ export function ExamPracticeClient({
     void (async () => {
       const q = await fetchQuestion(sessionId, currentIndex, ac.signal);
       if (!q) {
-        if (!ac.signal.aborted) setPhase("error");
+        if (!ac.signal.aborted) {
+          setBlockingError(
+            "We couldn’t load this question (connection or temporary server issue). Refresh the page or try again shortly.",
+          );
+          setPhase("error");
+        }
         setQLoading(false);
         return;
       }
@@ -130,7 +139,14 @@ export function ExamPracticeClient({
             setCurrentIndex(data.currentIndex);
             setAnswers(data.answers ?? {});
             setCache({});
-            setPhase(data.questionIds.length > 0 ? "ready" : "empty");
+            setBlockingError(null);
+            if (data.questionIds.length > 0) {
+              setPoolEmptyCopy(null);
+              setPhase("ready");
+            } else {
+              setPoolEmptyCopy(examPoolEmptyCopy(undefined));
+              setPhase("empty");
+            }
             return;
           }
         }
@@ -141,22 +157,35 @@ export function ExamPracticeClient({
           body: JSON.stringify({ examId: examId ?? undefined, hydrate: "window" }),
           signal: ac.signal,
         });
-        const payload = (await start.json()) as {
+        let payload = {} as {
           sessionId?: string;
           examId?: string | null;
           questionIds?: string[];
           questions?: ExamQuestion[];
           poolEmpty?: boolean;
+          code?: string;
+          diagnostics?: ExamStartEmptyDiagnostics;
         };
+        try {
+          payload = (await start.json()) as typeof payload;
+        } catch {
+          /* ignore */
+        }
         if (!start.ok) {
-          if (!cancelled) setPhase("error");
+          if (!cancelled) {
+            setBlockingError(examStartFailureMessage(start.status, payload.code));
+            setPhase("error");
+          }
           return;
         }
         if (cancelled) return;
         if (!payload.sessionId || payload.poolEmpty || !payload.questionIds?.length) {
+          setPoolEmptyCopy(examPoolEmptyCopy(payload.diagnostics));
           setPhase("empty");
           return;
         }
+        setBlockingError(null);
+        setPoolEmptyCopy(null);
         setSessionId(payload.sessionId);
         setResolvedExamId(payload.examId ?? examId);
         setQuestionIds(payload.questionIds);
@@ -172,6 +201,7 @@ export function ExamPracticeClient({
         localStorage.setItem(STORAGE_EXAM, payload.examId ?? examId ?? "");
       } catch (e) {
         if (cancelled || (e instanceof DOMException && e.name === "AbortError")) return;
+        setBlockingError("Could not reach the server to start this session. Check your connection and retry.");
         setPhase("error");
       }
     }
@@ -202,6 +232,7 @@ export function ExamPracticeClient({
       });
       const data = (await res.json()) as { attempt?: { score: number; total: number }; error?: string };
       if (!res.ok) {
+        setBlockingError("We couldn’t record this attempt. Check your connection or try again shortly.");
         setPhase("error");
         return;
       }
@@ -223,7 +254,8 @@ export function ExamPracticeClient({
     return (
       <div className="nn-card mt-4 space-y-3 p-6">
         <p className="text-sm text-muted">
-          We could not load the exam session. Check your connection and retry.
+          {blockingError ??
+            "We could not load the exam session. Check your connection and retry."}
         </p>
         <button
           type="button"
@@ -237,10 +269,18 @@ export function ExamPracticeClient({
   }
 
   if (phase === "empty") {
+    const { title, body } = poolEmptyCopy ?? examPoolEmptyCopy(undefined);
     return (
-      <p className="text-sm text-muted">
-        No questions matched your profile for this session. Try the question bank or contact support if this persists.
-      </p>
+      <div className="mt-4 space-y-2 text-sm text-muted">
+        <p className="font-medium text-foreground">{title}</p>
+        <p>
+          {body}{" "}
+          <Link href="/app/questions" className="font-medium text-primary underline">
+            Open the question bank
+          </Link>{" "}
+          or contact support if this doesn’t match what you expect.
+        </p>
+      </div>
     );
   }
 

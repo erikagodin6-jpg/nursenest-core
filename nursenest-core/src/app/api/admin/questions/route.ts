@@ -73,7 +73,12 @@ export async function GET(req: NextRequest) {
     }),
   ]);
 
-  return NextResponse.json({ page, pageSize, total, questions });
+  const questionsTrimmed = questions.map((q) => ({
+    ...q,
+    stem: q.stem.length > 360 ? `${q.stem.slice(0, 360).trim()}…` : q.stem,
+  }));
+
+  return NextResponse.json({ page, pageSize, total, questions: questionsTrimmed });
 }
 
 export async function POST(req: Request) {

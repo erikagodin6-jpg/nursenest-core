@@ -42,3 +42,8 @@ next-env.d.ts
 
 # local import pipeline output (do not commit)
 nursing-import-quarantine.jsonl
+
+# Replit → Spaces pipeline (extract + upload manifests)
+.replit-export-staging/
+.replit-spaces-upload-manifest.json
+.replit-spaces-pipeline-report.json

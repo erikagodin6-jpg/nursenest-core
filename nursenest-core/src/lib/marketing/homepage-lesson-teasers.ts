@@ -19,10 +19,10 @@ function pathwaySortKey(p: ExamPathwayDefinition): number {
 }
 
 /**
- * Home marketing strip: active pathways that have at least one catalog lesson (avoids 404 lesson hubs).
+ * Home marketing strip: active pathways that have at least one lesson in DB or catalog (avoids 404 lesson hubs).
  */
-export function getHomepageLessonTeasers(): HomepageLessonTeaser[] {
-  const lessonIds = new Set(listPathwayIdsWithLessons());
+export async function getHomepageLessonTeasers(): Promise<HomepageLessonTeaser[]> {
+  const lessonIds = new Set(await listPathwayIdsWithLessons());
   return listPublicExamPathways()
     .filter((p) => p.status === "active" && lessonIds.has(p.id))
     .sort((a, b) => {

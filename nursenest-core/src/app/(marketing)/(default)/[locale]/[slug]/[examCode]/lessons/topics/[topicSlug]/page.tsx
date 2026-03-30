@@ -1,9 +1,16 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
+import { PathwayLessonContentLocaleBanner } from "@/components/lessons/pathway-lesson-content-locale-banner";
+import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-lesson-pagination";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { buildExamPathwayPath, getExamPathwayByRoute } from "@/lib/exam-pathways/exam-product-registry";
-import { getLessonsForTopic, listTopicClusters } from "@/lib/lessons/pathway-lesson-loader";
+import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
+import {
+  PATHWAY_HUB_PAGE_SIZE_DEFAULT,
+  getLessonsForTopicPage,
+  listTopicClusters,
+} from "@/lib/lessons/pathway-lesson-loader";
 import { pathwayTopicClusterBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 
 export const dynamicParams = true;
@@ -15,18 +22,36 @@ export function generateStaticParams() {
 
 type Props = {
   params: Promise<{ locale: string; slug: string; examCode: string; topicSlug: string }>;
+  searchParams: Promise<{ page?: string; pageSize?: string }>;
 };
 
-export default async function PathwayLessonTopicClusterPage({ params }: Props) {
-  const { locale, slug, examCode, topicSlug } = await params;
-  const pathway = getExamPathwayByRoute(locale, slug, examCode);
+export default async function PathwayLessonTopicClusterPage({ params, searchParams }: Props) {
+  const { locale: countrySlug, slug: roleTrack, examCode, topicSlug } = await params;
+  const lessonContentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
+  const pathway = getExamPathwayByRoute(countrySlug, roleTrack, examCode);
   if (!pathway) notFound();
 
-  const lessons = getLessonsForTopic(pathway.id, topicSlug);
-  if (lessons.length === 0) notFound();
-
-  const label = listTopicClusters(pathway.id).find((t) => t.topicSlug === topicSlug)?.label ?? topicSlug;
   const base = buildExamPathwayPath(pathway, "lessons");
+  const topicBase = `${base}/topics/${topicSlug}`;
+  const sp = await searchParams;
+  const pageRequested = Math.max(1, Number(sp.page ?? "1") || 1);
+  const pageSizeRequested = Number(sp.pageSize ?? String(PATHWAY_HUB_PAGE_SIZE_DEFAULT)) || PATHWAY_HUB_PAGE_SIZE_DEFAULT;
+
+  const pageResult = await getLessonsForTopicPage(
+    pathway.id,
+    topicSlug,
+    pageRequested,
+    pageSizeRequested,
+    lessonContentLocale,
+  );
+  if (pageResult.total === 0) notFound();
+  if (pageRequested !== pageResult.page) {
+    redirect(pageResult.page > 1 ? `${topicBase}?page=${pageResult.page}` : topicBase);
+  }
+
+  const lessons = pageResult.items;
+  const topicClusters = await listTopicClusters(pathway.id, lessonContentLocale);
+  const label = topicClusters.find((t) => t.topicSlug === topicSlug)?.label ?? topicSlug;
   const { crumbs, schemaItems } = pathwayTopicClusterBreadcrumbs(pathway, topicSlug, label);
 
   return (
@@ -44,6 +69,8 @@ export default async function PathwayLessonTopicClusterPage({ params }: Props) {
         SEO cluster for {pathway.shortName}: lessons in this topic stay in the {pathway.countryCode} / {pathway.roleTrack}{" "}
         track—no cross-mix with other exams or countries.
       </p>
+
+      {pageResult.locale ? <PathwayLessonContentLocaleBanner listLocale={pageResult.locale} /> : null}
 
       <ul className="mt-8 space-y-4">
         {lessons.map((l) => (
@@ -75,6 +102,14 @@ export default async function PathwayLessonTopicClusterPage({ params }: Props) {
           </Link>
         </p>
       </div>
+
+      <PathwayLessonPagination
+        basePath={topicBase}
+        page={pageResult.page}
+        pageCount={pageResult.pageCount}
+        total={pageResult.total}
+        pageSize={pageResult.pageSize}
+      />
     </div>
   );
 }

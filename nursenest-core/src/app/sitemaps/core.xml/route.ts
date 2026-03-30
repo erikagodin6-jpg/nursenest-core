@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    const xml = buildCoreSitemapXml();
+    const xml = await buildCoreSitemapXml();
     if (!xml || typeof xml !== "string" || xml.length < 50) {
       return sitemapXmlResponse(minimalUrlsetSingleHome());
     }

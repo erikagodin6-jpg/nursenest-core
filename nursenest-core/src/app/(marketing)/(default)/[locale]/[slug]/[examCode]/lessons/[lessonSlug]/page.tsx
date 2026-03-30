@@ -12,7 +12,11 @@ import {
   getPathwayLessonPreviewKind,
   visibleSectionsForLesson,
 } from "@/lib/lessons/pathway-lesson-access";
-import { getPathwayLesson, getPathwayLessons } from "@/lib/lessons/pathway-lesson-loader";
+import {
+  defaultPathwayLessonContentLocaleForExamHubRoute,
+  normalizePathwayLessonLocale,
+} from "@/lib/lessons/pathway-lesson-locale";
+import { getPathwayLesson, getRelatedPathwayLessons } from "@/lib/lessons/pathway-lesson-loader";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { prisma } from "@/lib/db";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
@@ -30,13 +34,15 @@ export function generateStaticParams() {
 }
 
 type Props = {
+  /** `locale` is pathway countrySlug (`us` / `canada`), not BCP-47 lesson content. */
   params: Promise<{ locale: string; slug: string; examCode: string; lessonSlug: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { locale, slug, examCode, lessonSlug } = await params;
-  const pathway = getExamPathwayByRoute(locale, slug, examCode);
-  const lesson = pathway ? getPathwayLesson(pathway.id, lessonSlug) : undefined;
+  const { locale: countrySlug, slug: roleTrack, examCode, lessonSlug } = await params;
+  const pathway = getExamPathwayByRoute(countrySlug, roleTrack, examCode);
+  const contentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
+  const lesson = pathway ? await getPathwayLesson(pathway.id, lessonSlug, contentLocale) : undefined;
   if (!pathway || !lesson) return {};
   const path = buildExamPathwayPath(pathway, `lessons/${lesson.slug}`);
   const origin = resolveCanonicalSiteOrigin().replace(/\/$/, "");
@@ -49,10 +55,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function PathwayLessonDetailPage({ params }: Props) {
-  const { locale, slug, examCode, lessonSlug } = await params;
-  const pathway = getExamPathwayByRoute(locale, slug, examCode);
+  const { locale: countrySlug, slug: roleTrack, examCode, lessonSlug } = await params;
+  const pathway = getExamPathwayByRoute(countrySlug, roleTrack, examCode);
   if (!pathway) notFound();
-  const lesson = getPathwayLesson(pathway.id, lessonSlug);
+  const lessonContentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
+  const lesson = await getPathwayLesson(pathway.id, lessonSlug, lessonContentLocale);
   if (!lesson) notFound();
 
   const session = await auth();
@@ -78,8 +85,14 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
   const visible = visibleSectionsForLesson(lesson, fullAccess);
 
   const base = buildExamPathwayPath(pathway, "lessons");
-  const related = getPathwayLessons(pathway.id).filter((l) => l.slug !== lesson.slug && l.topicSlug === lesson.topicSlug);
+  const related = await getRelatedPathwayLessons(pathway.id, lesson.topicSlug, lesson.slug, undefined, lessonContentLocale);
   const { crumbs, schemaItems } = pathwayLessonDetailBreadcrumbs(pathway, lesson.slug, lesson.title);
+  const requestedNorm = normalizePathwayLessonLocale(lessonContentLocale);
+  const showLocaleFallbackNotice = Boolean(
+    lesson.localeMeta &&
+      (lesson.localeMeta.usedLocaleFallback ||
+        (lesson.localeMeta.isCatalogEnglishSource && requestedNorm !== "en")),
+  );
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
@@ -95,15 +108,37 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
       <p className="mt-2 text-sm text-muted">
         {pathway.countrySlug === "canada" ? "Canada" : "United States"} · {lesson.topic} · {lesson.bodySystem}
       </p>
+      {showLocaleFallbackNotice ? (
+        <aside
+          className="nn-card mt-4 border-border bg-[var(--theme-muted-surface)] p-3 text-sm text-muted"
+          data-testid="aside-pathway-lesson-locale-en"
+        >
+          {lesson.localeMeta?.isCatalogEnglishSource ? (
+            <>
+              This lesson body is <span className="font-medium text-foreground">English</span> (bundled catalog or seed
+              data). A <span className="font-medium text-foreground">{lesson.localeMeta.requestedContentLocale}</span>{" "}
+              version will appear here once a matching row is published in{" "}
+              <span className="font-medium text-foreground">pathway_lessons</span>.
+            </>
+          ) : lesson.localeMeta?.usedLocaleFallback ? (
+            <>
+              No published lesson was found for{" "}
+              <span className="font-medium text-foreground">{lesson.localeMeta.requestedContentLocale}</span>; showing the{" "}
+              <span className="font-medium text-foreground">{lesson.localeMeta.contentLocale}</span> version instead.
+            </>
+          ) : null}
+        </aside>
+      ) : null}
 
       {!fullAccess ? (
         entitlement === "error" ? (
           <>
             <aside className="nn-card mt-6 border-amber-200 bg-amber-50 p-4 text-sm text-[var(--theme-body-text)] dark:border-amber-900/40 dark:bg-amber-950/30">
-              <p className="font-semibold">Could not verify subscription</p>
+              <p className="font-semibold">Access check didn’t complete</p>
               <p className="mt-1 text-muted">
-                Refresh in a moment. You can still read the preview sections below. If this keeps happening, sign in again
-                or contact support.
+                We couldn’t confirm your plan (temporary server or data issue)—this is not the same as being denied access.
+                Refresh in a moment; you can still read the preview sections below. Sign in again or contact support if it
+                persists.
               </p>
             </aside>
             <PathwayLessonPreviewBanner

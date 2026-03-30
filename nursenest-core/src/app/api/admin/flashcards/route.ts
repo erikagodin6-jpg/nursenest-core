@@ -34,7 +34,9 @@ export async function GET(req: NextRequest) {
     }),
   ]);
 
-  return NextResponse.json({ page, pageSize, total, flashcards });
+  const pageCount = Math.max(1, Math.ceil(total / pageSize));
+
+  return NextResponse.json({ page, pageSize, total, pageCount, flashcards });
 }
 
 export async function POST(req: Request) {

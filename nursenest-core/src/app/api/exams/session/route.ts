@@ -5,14 +5,24 @@ import { prisma } from "@/lib/db";
 import { filterSessionQuestionIdsInScope } from "@/lib/entitlements/assert-question-access";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
-import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
+import {
+  MAX_SESSION_ANSWER_KEYS,
+  MAX_SESSION_QUESTION_IDS,
+  sanitizeSessionQuestionIds,
+} from "@/lib/exams/exam-session-bounds";
+
+/** Default `mode=full` loads every question in one response; align with {@link MAX_SESSION_QUESTION_IDS}. */
+const SESSION_FULL_HYDRATE_MAX_QUESTIONS = MAX_SESSION_QUESTION_IDS;
 
 const patchSchema = z.object({
   sessionId: z.string().min(5),
   currentIndex: z.number().int().min(0),
-  answers: z.record(z.string(), z.unknown()),
+  answers: z
+    .record(z.string(), z.unknown())
+    .refine((r) => Object.keys(r).length <= MAX_SESSION_ANSWER_KEYS, "too many answer entries"),
 });
 
 /** Resume in-progress session (questions + progress). */
@@ -48,15 +58,34 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Session not found or completed" }, { status: 404 });
     }
 
-    const rawIds = row.questionIds as string[];
-    const ids = await filterSessionQuestionIdsInScope(rawIds, gate.entitlement);
-    const dropped = rawIds.length - ids.length;
+    const sanitized = sanitizeSessionQuestionIds(row.questionIds);
+    if (sanitized.coercedFromInvalid || sanitized.truncated) {
+      safeServerLog("api_exams_session", "session_question_ids_sanitized", {
+        sessionId: row.id,
+        coercedFromInvalid: sanitized.coercedFromInvalid,
+        truncated: sanitized.truncated,
+        sourceLength: sanitized.sourceLength,
+        cap: MAX_SESSION_QUESTION_IDS,
+      });
+    }
+
+    let ids = await filterSessionQuestionIdsInScope(sanitized.ids, gate.entitlement);
+    const dropped = sanitized.ids.length - ids.length;
     if (dropped > 0) {
       safeServerLogCritical("api_exams_session", "session_question_ids_filtered", {
         sessionId: row.id,
         dropped,
         remaining: ids.length,
       });
+    }
+
+    if (sanitized.coercedFromInvalid || sanitized.truncated) {
+      void prisma.examSession
+        .update({
+          where: { id: row.id },
+          data: { questionIds: ids },
+        })
+        .catch(() => {});
     }
 
     if (mode === "minimal") {
@@ -71,16 +100,35 @@ export async function GET(req: NextRequest) {
         mode: "minimal" as const,
         poolEmpty: ids.length === 0,
         entitlementFiltered: dropped > 0,
+        sessionQuestionIdsSanitized: sanitized.truncated || sanitized.coercedFromInvalid,
       });
     }
 
-    const questions = await withRetry(() =>
-      prisma.examQuestion.findMany({
-        where: { AND: [{ id: { in: ids } }, questionAccessWhere(gate.entitlement)] },
-        select: { id: true, stem: true, options: true, questionType: true },
-      }),
-    );
-    const order = new Map(ids.map((id, i) => [id, i]));
+    const ID_CHUNK = 400;
+    const accessWhere = questionAccessWhere(gate.entitlement);
+    const fullHydrationCapped = ids.length > SESSION_FULL_HYDRATE_MAX_QUESTIONS;
+    const idsToHydrate = fullHydrationCapped ? ids.slice(0, SESSION_FULL_HYDRATE_MAX_QUESTIONS) : ids;
+    if (fullHydrationCapped) {
+      safeServerLog("api_exams_session", "full_hydrate_capped", {
+        sessionId: row.id,
+        questionIdCount: ids.length,
+        cap: SESSION_FULL_HYDRATE_MAX_QUESTIONS,
+      });
+    }
+
+    const questions = await withRetry(async () => {
+      const acc: { id: string; stem: string; options: unknown; questionType: string }[] = [];
+      for (let i = 0; i < idsToHydrate.length; i += ID_CHUNK) {
+        const chunk = idsToHydrate.slice(i, i + ID_CHUNK);
+        const part = await prisma.examQuestion.findMany({
+          where: { AND: [{ id: { in: chunk } }, accessWhere] },
+          select: { id: true, stem: true, options: true, questionType: true },
+        });
+        acc.push(...part);
+      }
+      return acc;
+    });
+    const order = new Map(idsToHydrate.map((id, i) => [id, i]));
     questions.sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
 
     return NextResponse.json({
@@ -94,6 +142,10 @@ export async function GET(req: NextRequest) {
       updatedAt: row.updatedAt,
       mode: "full" as const,
       entitlementFiltered: dropped > 0,
+      fullHydrationCapped,
+      questionsHydrated: questions.length,
+      fullHydrationCap: SESSION_FULL_HYDRATE_MAX_QUESTIONS,
+      sessionQuestionIdsSanitized: sanitized.truncated || sanitized.coercedFromInvalid,
     });
   } catch (e) {
     safeServerLogCritical("api_exams_session", "get_failed", {}, e);
@@ -116,7 +168,12 @@ export async function PATCH(req: Request) {
   }
 
   const parsed = patchSchema.safeParse(body);
-  if (!parsed.success) return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: "Invalid payload", details: parsed.error.flatten(), maxAnswerKeys: MAX_SESSION_ANSWER_KEYS },
+      { status: 400 },
+    );
+  }
 
   try {
     const existing = await prisma.examSession.findFirst({

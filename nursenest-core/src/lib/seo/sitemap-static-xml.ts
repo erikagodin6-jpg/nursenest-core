@@ -1,20 +1,46 @@
 /**
- * Synchronous sitemap URL lists: no Prisma, no filesystem i18n, no network.
+ * Mostly synchronous sitemap URL lists (no filesystem i18n, no network).
+ * Pathway lesson URLs may query Postgres via the shared loader (DB-first, catalog fallback).
  * Split into index + child sitemaps by route family for GSC reliability.
+ *
+ * ## When to split `core.xml` further (implementation plan — not urgent until thresholds hit)
+ *
+ * **Trigger:** Combined URL count in a *single* urlset approaches **50,000** (search engine limit) or XML generation
+ * routinely exceeds **~20–30s** / memory spikes in production.
+ *
+ * **Current mitigations:** `MAX_PATHWAY_DERIVED_SITEMAP_URLS` caps pathway-derived URLs; blog uses `take` cap;
+ * child sitemaps already separate core / seo-pages / blog / tools / per-locale.
+ *
+ * **Planned steps when needed:**
+ * 1. Add `sitemaps/core-pathway-lessons-0.xml`, `…-1.xml`, … each emitting ≤45k `<url>` entries, chunked by pathway id
+ *    or by batched slug ranges from `listPathwayLessonSlugBatch`.
+ * 2. Extend `getChildSitemapLocs()` to register each chunk (or a small index of chunk URLs).
+ * 3. Keep `collectCoreUrls` for the non-lesson slice only, or rename and compose: static core + N lesson chunk routes.
+ * 4. Preserve stable ordering within chunks for diff-friendly regeneration.
+ * 5. Load-test: cold request latency and peak RSS on the Node process generating the largest chunk.
+ *
+ * Export below is for monitoring / future routing only (no behavior change today).
  */
+export const SITEMAP_SINGLE_URLSET_SOFT_WARN_URLS = 45_000;
 
 import { buildExamPathwayPath, getExamPathwayById, listPublicExamPathways } from "@/lib/exam-pathways/exam-product-registry";
 import {
-  getPathwayLessons,
+  PATHWAY_LESSON_SITEMAP_BATCH,
   listPathwayIdsWithLessons,
+  listPathwayLessonSlugBatch,
   listTopicClusters,
 } from "@/lib/lessons/pathway-lesson-loader";
+import { PATHWAY_LESSON_SITEMAP_LOCALE } from "@/lib/lessons/pathway-lesson-locale";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { resolveCanonicalSiteOrigin } from "@/lib/seo/canonical-site";
 import { CORE_HOSTED_MARKETING_LOCALES } from "@/lib/i18n/marketing-locale-policy";
 import { getAllProgrammaticSlugs } from "@/lib/seo/programmatic-registry";
 import { getAllToolSlugs } from "@/lib/tools/tool-registry";
 
 const SORTED_LOCALES = [...CORE_HOSTED_MARKETING_LOCALES].sort();
+
+/** Hard cap for pathway lesson + topic URLs in core sitemap (prevents multi‑GB XML / OOM). */
+const MAX_PATHWAY_DERIVED_SITEMAP_URLS = 48_000;
 
 export function resolveSitemapOrigin(): string {
   return resolveCanonicalSiteOrigin();
@@ -36,20 +62,50 @@ export function collectExamPathwayUrls(origin: string): string[] {
   return urls;
 }
 
-/** Pathway lesson hubs, topic clusters, and lesson detail pages (JSON catalog). */
-export function collectPathwayLessonSeoUrls(origin: string): string[] {
+/** Pathway lesson hubs, topic clusters, and lesson detail pages (DB-first loader). */
+export async function collectPathwayLessonSeoUrls(origin: string): Promise<string[]> {
   const o = normalizeOrigin(origin);
   const urls: string[] = [];
-  urls.push(`${o}/exam-lessons`);
-  for (const pid of listPathwayIdsWithLessons()) {
+  let pathwayDerived = 0;
+  const push = (loc: string): boolean => {
+    if (pathwayDerived >= MAX_PATHWAY_DERIVED_SITEMAP_URLS) return false;
+    urls.push(loc);
+    pathwayDerived += 1;
+    return true;
+  };
+
+  if (!push(`${o}/exam-lessons`)) {
+    safeServerLog("seo", "sitemap_pathway_derived_cap", { cap: MAX_PATHWAY_DERIVED_SITEMAP_URLS, phase: "exam-lessons-index" });
+    return urls;
+  }
+
+  const pathwayIds = await listPathwayIdsWithLessons();
+  for (const pid of pathwayIds) {
     const p = getExamPathwayById(pid);
     if (!p || p.status === "hidden") continue;
-    urls.push(`${o}${buildExamPathwayPath(p, "lessons")}`);
-    for (const t of listTopicClusters(pid)) {
-      urls.push(`${o}${buildExamPathwayPath(p, `lessons/topics/${t.topicSlug}`)}`);
+    if (!push(`${o}${buildExamPathwayPath(p, "lessons")}`)) {
+      safeServerLog("seo", "sitemap_pathway_derived_cap", { cap: MAX_PATHWAY_DERIVED_SITEMAP_URLS, phase: "pathway-hub" });
+      return urls;
     }
-    for (const l of getPathwayLessons(pid)) {
-      urls.push(`${o}${buildExamPathwayPath(p, `lessons/${l.slug}`)}`);
+    const topics = await listTopicClusters(pid, PATHWAY_LESSON_SITEMAP_LOCALE);
+    for (const t of topics) {
+      if (!push(`${o}${buildExamPathwayPath(p, `lessons/topics/${t.topicSlug}`)}`)) {
+        safeServerLog("seo", "sitemap_pathway_derived_cap", { cap: MAX_PATHWAY_DERIVED_SITEMAP_URLS, phase: "topic" });
+        return urls;
+      }
+    }
+    let skip = 0;
+    for (;;) {
+      const batch = await listPathwayLessonSlugBatch(pid, skip, PATHWAY_LESSON_SITEMAP_BATCH, PATHWAY_LESSON_SITEMAP_LOCALE);
+      if (batch.length === 0) break;
+      for (const l of batch) {
+        if (!push(`${o}${buildExamPathwayPath(p, `lessons/${l.slug}`)}`)) {
+          safeServerLog("seo", "sitemap_pathway_derived_cap", { cap: MAX_PATHWAY_DERIVED_SITEMAP_URLS, phase: "lesson-detail" });
+          return urls;
+        }
+      }
+      skip += batch.length;
+      if (batch.length < PATHWAY_LESSON_SITEMAP_BATCH) break;
     }
   }
   return urls;
@@ -133,7 +189,7 @@ ${body}
 /**
  * core.xml — Default-locale marketing shell only (no locale prefix, no programmatic slugs).
  */
-export function collectCoreUrls(origin: string): string[] {
+export async function collectCoreUrls(origin: string): Promise<string[]> {
   const o = normalizeOrigin(origin);
   const add = (path: string) => {
     const p = path.startsWith("/") ? path : `/${path}`;
@@ -149,7 +205,8 @@ export function collectCoreUrls(origin: string): string[] {
     add("/pre-nursing"),
     add("/case-studies"),
   ];
-  return [...base, ...collectExamPathwayUrls(o), ...collectPathwayLessonSeoUrls(o)];
+  const lessonUrls = await collectPathwayLessonSeoUrls(o);
+  return [...base, ...collectExamPathwayUrls(o), ...lessonUrls];
 }
 
 /** seo-pages.xml — English canonical programmatic URLs at `/{slug}` (rewritten to /seo/[slug] internally). */
@@ -198,9 +255,10 @@ export function collectToolsUrls(origin: string): string[] {
   return urls;
 }
 
-export function buildCoreSitemapXml(): string {
+export async function buildCoreSitemapXml(): Promise<string> {
   try {
-    return buildSitemapUrlsetFromAbsoluteUrls(collectCoreUrls(resolveSitemapOrigin()));
+    const urls = await collectCoreUrls(resolveSitemapOrigin());
+    return buildSitemapUrlsetFromAbsoluteUrls(urls);
   } catch {
     return minimalUrlsetSingleHome();
   }

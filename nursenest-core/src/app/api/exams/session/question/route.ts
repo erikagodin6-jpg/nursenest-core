@@ -6,6 +6,8 @@ import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
+import { MAX_SESSION_QUESTION_IDS, sanitizeSessionQuestionIds } from "@/lib/exams/exam-session-bounds";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 /**
  * Fetch a single exam question by session + index (avoids loading full pool in one response).
@@ -38,8 +40,26 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Session not found" }, { status: 404 });
     }
 
-    const rawIds = row.questionIds as string[];
-    const ids = await filterSessionQuestionIdsInScope(rawIds, gate.entitlement);
+    const sanitized = sanitizeSessionQuestionIds(row.questionIds);
+    if (sanitized.coercedFromInvalid || sanitized.truncated) {
+      safeServerLog("api_exams_session_question", "session_question_ids_sanitized", {
+        coercedFromInvalid: sanitized.coercedFromInvalid,
+        truncated: sanitized.truncated,
+        sourceLength: sanitized.sourceLength,
+        cap: MAX_SESSION_QUESTION_IDS,
+      });
+    }
+
+    let ids = await filterSessionQuestionIdsInScope(sanitized.ids, gate.entitlement);
+    if (sanitized.coercedFromInvalid || sanitized.truncated) {
+      void prisma.examSession
+        .update({
+          where: { id: sessionId },
+          data: { questionIds: ids },
+        })
+        .catch(() => {});
+    }
+
     if (ids.length === 0) {
       return NextResponse.json({ error: "No questions in scope for current access" }, { status: 404 });
     }
@@ -59,7 +79,12 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Question not available" }, { status: 404 });
     }
 
-    return NextResponse.json({ index, total: ids.length, question, entitlementFiltered: rawIds.length !== ids.length });
+    return NextResponse.json({
+      index,
+      total: ids.length,
+      question,
+      entitlementFiltered: sanitized.ids.length !== ids.length,
+    });
   } catch (e) {
     safeServerLogCritical("api_exams_session_question", "failed", {}, e);
     return NextResponse.json({ error: "Unable to load question" }, { status: 503 });

@@ -26,23 +26,36 @@ export async function GET(req: NextRequest) {
   setSentryServerContext({ route: "/api/flashcards", feature: "flashcard", userId: gate.userId });
 
   try {
-    const flashcards = await withRetry(() =>
-      prisma.flashcard.findMany({
-        where: flashcardAccessWhere(gate.entitlement),
-        select: {
-          id: true,
-          front: true,
-          back: true,
-          examFamily: true,
-          category: { select: { name: true, slug: true } },
-        },
-        orderBy: { updatedAt: "desc" },
-        skip: (page - 1) * pageSize,
-        take: pageSize,
-      }),
-    );
+    const where = flashcardAccessWhere(gate.entitlement);
+    const [flashcards, total] = await Promise.all([
+      withRetry(() =>
+        prisma.flashcard.findMany({
+          where,
+          select: {
+            id: true,
+            front: true,
+            back: true,
+            examFamily: true,
+            category: { select: { name: true, slug: true } },
+          },
+          orderBy: { updatedAt: "desc" },
+          skip: (page - 1) * pageSize,
+          take: pageSize,
+        }),
+      ),
+      withRetry(() => prisma.flashcard.count({ where })),
+    ]);
 
-    return NextResponse.json({ page, pageSize, flashcards, mode: "subscriber" as const });
+    const pageCount = Math.max(1, Math.ceil(total / pageSize));
+
+    return NextResponse.json({
+      page,
+      pageSize,
+      total,
+      pageCount,
+      flashcards,
+      mode: "subscriber" as const,
+    });
   } catch (e) {
     safeServerLogCritical("api_flashcards", "find_failed", { page }, e);
     return NextResponse.json({ error: "Unable to load flashcards" }, { status: 503 });

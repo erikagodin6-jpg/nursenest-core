@@ -1,18 +1,18 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { BRAND_NAME, SITE_LOGO_FALLBACK_PATH } from "@/lib/branding/logo-config";
-import { THEME_LOGO_MAP } from "@/lib/branding/theme-logo-map";
+import { BRAND_NAME, DEFAULT_BRAND_LOGO_MARK_CLASSNAME, LOCAL_BRAND_MARK_PATH } from "@/lib/branding/logo-config";
+import { logBrandLogoLoadFailure } from "@/lib/observability/brand-logo-client-log";
 import { useThemeLogo } from "@/lib/theme/use-theme-logo";
 
 export type BrandMarkLoadState = "loading" | "ready" | "error";
 
 /**
- * Theme-aware header mark: `useThemeLogo` → `getHeaderBrandLogoLoadChain` (per-theme raster + fallbacks).
- * Advances through the chain on `onError` (bounded); then same-origin default raster, then SVG.
+ * Theme-aware brand mark: `useThemeLogo` → `getHeaderBrandLogoLoadChain` (Spaces CDN → proxy → local SVG → legacy).
+ * Uses {@link DEFAULT_BRAND_LOGO_MARK_CLASSNAME} for consistent header/footer sizing and reserved height (reduces CLS).
  */
 export function SiteBrandLogoMark({
-  className = "",
+  className = DEFAULT_BRAND_LOGO_MARK_CLASSNAME,
   onMarkState,
 }: {
   className?: string;
@@ -20,21 +20,16 @@ export function SiteBrandLogoMark({
 }) {
   const { themeId, mappedSpaceKey, loadChain } = useThemeLogo();
   const [candidateIndex, setCandidateIndex] = useState(0);
-  const [extraFallbackStep, setExtraFallbackStep] = useState(0);
+  const [showTextFallback, setShowTextFallback] = useState(false);
 
   useEffect(() => {
     setCandidateIndex(0);
-    setExtraFallbackStep(0);
+    setShowTextFallback(false);
   }, [themeId, loadChain]);
 
   const safeIndex = Math.min(candidateIndex, Math.max(0, loadChain.length - 1));
-  const chainSrc = loadChain[safeIndex] ?? loadChain[0];
-  const src =
-    extraFallbackStep === 0
-      ? chainSrc
-      : extraFallbackStep === 1
-        ? THEME_LOGO_MAP.default
-        : SITE_LOGO_FALLBACK_PATH;
+  const chainSrc = loadChain[safeIndex] ?? loadChain[0] ?? LOCAL_BRAND_MARK_PATH;
+  const src = chainSrc;
 
   useEffect(() => {
     if (process.env.NODE_ENV === "development") {
@@ -58,32 +53,39 @@ export function SiteBrandLogoMark({
   }, [onMarkState]);
 
   const handleError = useCallback(() => {
+    logBrandLogoLoadFailure(src, themeId, safeIndex);
     if (candidateIndex < loadChain.length - 1) {
       setCandidateIndex((i) => i + 1);
       return;
     }
-    if (extraFallbackStep === 0) {
-      setExtraFallbackStep(1);
-      return;
-    }
-    if (extraFallbackStep === 1) {
-      setExtraFallbackStep(2);
-      return;
-    }
+    setShowTextFallback(true);
     onMarkState?.("error");
-  }, [candidateIndex, loadChain.length, extraFallbackStep, onMarkState]);
+  }, [candidateIndex, loadChain.length, onMarkState, src, themeId, safeIndex]);
+
+  if (showTextFallback) {
+    return (
+      <span
+        className={`inline-flex min-h-[40px] min-w-0 max-w-[min(100%,16rem)] shrink-0 items-center md:min-h-[56px] ${className}`}
+        aria-label={BRAND_NAME}
+      >
+        <span className="text-xl font-extrabold tracking-tight text-primary md:text-2xl">{BRAND_NAME}</span>
+      </span>
+    );
+  }
 
   return (
-    <span className="inline-flex h-[40px] w-auto min-w-0 max-w-[min(100%,16rem)] shrink-0 items-center p-0 md:h-14 md:min-h-[56px] [&>img]:block">
+    <span
+      className={`inline-flex w-auto min-w-0 max-w-[min(100%,16rem)] shrink-0 items-center justify-start ${className}`}
+    >
       <img
-        key={`${themeId}-${safeIndex}-${extraFallbackStep}-${src}`}
+        key={`${themeId}-${safeIndex}-${src}`}
         src={src}
         alt={BRAND_NAME}
         width={180}
         height={56}
         loading="eager"
-        decoding="sync"
-        className={`h-full max-h-[42px] w-auto max-w-[min(100%,16rem)] object-contain object-left md:max-h-[56px] ${className}`}
+        decoding="async"
+        className="h-full max-h-full w-auto min-w-0 object-contain object-left"
         onLoad={handleLoad}
         onError={handleError}
       />

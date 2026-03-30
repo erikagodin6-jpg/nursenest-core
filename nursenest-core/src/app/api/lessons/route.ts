@@ -35,17 +35,30 @@ export async function GET(req: NextRequest) {
     setSentryServerContext({ route: "/api/lessons", feature: "lesson", userId: gate.userId });
 
     try {
-      const lessons = await withRetry(() =>
-        prisma.contentItem.findMany({
-          where: lessonAccessWhere(gate.entitlement),
-          select: { id: true, slug: true, title: true, summary: true },
-          orderBy: { updatedAt: "desc" },
-          skip: (page - 1) * pageSize,
-          take: pageSize,
-        }),
-      );
+      const where = lessonAccessWhere(gate.entitlement);
+      const [lessons, total] = await Promise.all([
+        withRetry(() =>
+          prisma.contentItem.findMany({
+            where,
+            select: { id: true, slug: true, title: true, summary: true },
+            orderBy: { updatedAt: "desc" },
+            skip: (page - 1) * pageSize,
+            take: pageSize,
+          }),
+        ),
+        withRetry(() => prisma.contentItem.count({ where })),
+      ]);
 
-      return NextResponse.json({ page, pageSize, lessons, mode: "subscriber" as const });
+      const pageCount = Math.max(1, Math.ceil(total / pageSize));
+
+      return NextResponse.json({
+        page,
+        pageSize,
+        total,
+        pageCount,
+        lessons,
+        mode: "subscriber" as const,
+      });
     } catch (e) {
       safeServerLogCritical("api_lessons", "prisma_find_failed", { page }, e);
       return NextResponse.json({ error: "Unable to load lessons. Try again shortly." }, { status: 503 });

@@ -1,17 +1,25 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import type { Prisma } from "@prisma/client";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { enqueueJob } from "@/lib/jobs/enqueue";
 import { prisma } from "@/lib/db";
 
-export async function GET() {
+const DEFAULT_TAKE = 50;
+const MAX_TAKE = 100;
+const MAX_OFFSET = 20_000;
+
+export async function GET(req: NextRequest) {
   const gate = await requireAdmin();
   if (!gate.ok) return gate.response;
 
+  const take = Math.min(MAX_TAKE, Math.max(1, Number(req.nextUrl.searchParams.get("take") ?? String(DEFAULT_TAKE))));
+  const offset = Math.min(MAX_OFFSET, Math.max(0, Number(req.nextUrl.searchParams.get("offset") ?? "0")));
+
   const jobs = await prisma.backgroundJob.findMany({
     orderBy: { createdAt: "desc" },
-    take: 50,
+    skip: offset,
+    take,
     select: {
       id: true,
       type: true,
@@ -24,7 +32,7 @@ export async function GET() {
     },
   });
 
-  return NextResponse.json({ jobs });
+  return NextResponse.json({ jobs, take, offset, maxTake: MAX_TAKE, maxOffset: MAX_OFFSET });
 }
 
 const enqueueSchema = z.object({

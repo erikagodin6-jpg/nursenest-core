@@ -1,5 +1,7 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
+import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-lesson-pagination";
 import { lessonAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
@@ -9,7 +11,11 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { FreemiumLessonPeek } from "@/components/student/freemium-lesson-peek";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 
-export default async function LessonsPage() {
+const APP_LESSONS_PAGE_SIZE = 15;
+
+type Props = { searchParams: Promise<{ page?: string }> };
+
+export default async function LessonsPage({ searchParams }: Props) {
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
@@ -17,7 +23,8 @@ export default async function LessonsPage() {
   if (entitlement === "error") {
     return (
       <p className="nn-card p-6 text-sm text-muted">
-        We could not verify your subscription right now. Refresh the page or try again in a moment.
+        We couldn’t finish checking your subscription (database or billing lookup failed). This is not the same as “no
+        plan”—refresh shortly, or sign in again if it keeps happening.
       </p>
     );
   }
@@ -42,41 +49,55 @@ export default async function LessonsPage() {
     );
   }
 
-  const lessonsLoad = await withDatabaseFallback(
-    () =>
-      prisma.contentItem.findMany({
-        where: lessonAccessWhere(entitlement),
-        select: { id: true, title: true, summary: true },
-        orderBy: { updatedAt: "desc" },
-        take: 15,
-      }),
-    null,
-  );
+  const sp = await searchParams;
+  const pageRequested = Math.max(1, Number(sp.page ?? "1") || 1);
 
-  if (lessonsLoad === null) {
+  const lessonsBlock = await withDatabaseFallback(async () => {
+    const where = lessonAccessWhere(entitlement);
+    const total = await prisma.contentItem.count({ where });
+    const pageCount = Math.max(1, Math.ceil(total / APP_LESSONS_PAGE_SIZE) || 1);
+    const safePage = Math.min(pageRequested, pageCount);
+    const rows = await prisma.contentItem.findMany({
+      where,
+      select: { id: true, title: true, summary: true },
+      orderBy: { updatedAt: "desc" },
+      skip: (safePage - 1) * APP_LESSONS_PAGE_SIZE,
+      take: APP_LESSONS_PAGE_SIZE,
+    });
+    return { total, page: safePage, pageCount, rows };
+  }, null);
+
+  if (lessonsBlock === null) {
     safeServerLog("page_lessons", "prisma_find_failed", {});
     return (
       <main>
         <h1 className="text-3xl font-bold">Lessons</h1>
         <p className="nn-card mt-4 p-6 text-sm text-muted">
-          Lessons could not be loaded. Please refresh or try again shortly.
+          Lessons couldn’t load because the database was unreachable or the request failed—not because your list is empty.
+          Refresh or try again shortly.
         </p>
       </main>
     );
   }
 
-  const lessons = lessonsLoad;
+  if (pageRequested !== lessonsBlock.page) {
+    redirect(lessonsBlock.page > 1 ? `/app/lessons?page=${lessonsBlock.page}` : "/app/lessons");
+  }
+
+  const lessons = lessonsBlock.rows;
 
   return (
     <main>
       <h1 className="text-3xl font-bold">Lessons</h1>
       <p className="mt-2 text-sm text-muted">Continue modules, then lock in retention with the question bank the same day.</p>
       <p className="mt-2 text-sm text-muted">
-        Prefer exam-scoped study? Open{" "}
+        Paginated list: <strong className="text-foreground">{APP_LESSONS_PAGE_SIZE}</strong> app lessons per page (newest
+        first) scoped to your region and plan—use Next below when you have more. Exam pathway lessons (NCLEX-RN, REx-PN,
+        FNP, …) live under{" "}
         <Link className="font-medium text-primary underline" href="/exam-lessons">
           lessons by exam pathway
-        </Link>{" "}
-        (NCLEX-RN, REx-PN, FNP, …).
+        </Link>
+        .
       </p>
       <aside className="nn-card mt-4 border-primary/15 bg-primary/5 p-4 text-sm text-muted">
         <p className="font-semibold text-foreground">Study rhythm</p>
@@ -84,7 +105,8 @@ export default async function LessonsPage() {
       </aside>
       {lessons.length === 0 ? (
         <p className="nn-card mt-4 p-6 text-sm text-muted">
-          No lessons match your region and tier yet. If you expect content here, confirm your profile country/tier or contact support.
+          The list loaded successfully: there are no app lessons in your plan’s region and tier right now (not a loading
+          glitch). If you expected rows here, check your profile country/tier or contact support.
         </p>
       ) : null}
       <div className="mt-4 space-y-3">
@@ -105,6 +127,14 @@ export default async function LessonsPage() {
           </article>
         ))}
       </div>
+
+      <PathwayLessonPagination
+        basePath="/app/lessons"
+        page={lessonsBlock.page}
+        pageCount={lessonsBlock.pageCount}
+        total={lessonsBlock.total}
+        pageSize={APP_LESSONS_PAGE_SIZE}
+      />
     </main>
   );
 }

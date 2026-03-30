@@ -16,7 +16,10 @@ export async function requireSubscriberSession(): Promise<SubscriberSessionResul
   const session = await auth();
   const userId = (session?.user as { id?: string } | undefined)?.id;
   if (!userId) {
-    return { ok: false, response: NextResponse.json({ error: "Unauthorized" }, { status: 401 }) };
+    return {
+      ok: false,
+      response: NextResponse.json({ error: "Unauthorized", code: "unauthorized" }, { status: 401 }),
+    };
   }
 
   setSentryServerContext({ route: "requireSubscriberSession", feature: "entitlement", userId });
@@ -28,13 +31,22 @@ export async function requireSubscriberSession(): Promise<SubscriberSessionResul
     safeServerLogCritical("entitlement", "resolve_failed", { api: "subscriber_gate" }, e);
     return {
       ok: false,
-      response: NextResponse.json({ error: "Unable to verify access. Try again shortly." }, { status: 503 }),
+      response: NextResponse.json(
+        { error: "Unable to verify access. Try again shortly.", code: "access_verify_failed" },
+        { status: 503 },
+      ),
     };
   }
 
   if (!entitlement.hasAccess) {
     safeServerLog("access", "denied", { reason: "no_active_entitlement", surface: "subscriber_gate" });
-    return { ok: false, response: NextResponse.json({ error: "Subscription required" }, { status: 403 }) };
+    return {
+      ok: false,
+      response: NextResponse.json(
+        { error: "Subscription required", code: "no_active_subscription" },
+        { status: 403 },
+      ),
+    };
   }
 
   return { ok: true, userId, entitlement };

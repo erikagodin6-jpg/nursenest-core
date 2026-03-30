@@ -2,6 +2,7 @@ import type { Prisma } from "@prisma/client";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { prisma } from "@/lib/db";
+import { sanitizeSessionQuestionIds } from "@/lib/exams/exam-session-bounds";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 function asStringArray(v: Prisma.JsonValue): string[] {
@@ -47,13 +48,29 @@ export async function scoreSessionAnswers(
   if (!session) return null;
   if (session.examId && session.examId !== examId) return null;
 
-  const ids = session.questionIds as string[];
+  const sanitized = sanitizeSessionQuestionIds(session.questionIds);
+  if (sanitized.coercedFromInvalid || sanitized.truncated) {
+    safeServerLog("score_session_answers", "session_question_ids_sanitized", {
+      sessionId,
+      coercedFromInvalid: sanitized.coercedFromInvalid,
+      truncated: sanitized.truncated,
+      sourceLength: sanitized.sourceLength,
+    });
+  }
+  const ids = sanitized.ids;
   if (ids.length === 0) return { score: 0, total: 0 };
 
-  const qs = await prisma.examQuestion.findMany({
-    where: { AND: [{ id: { in: ids } }, questionAccessWhere(entitlement)] },
-    select: { id: true, correctAnswer: true, questionType: true },
-  });
+  const ID_CHUNK = 400;
+  const baseWhere = questionAccessWhere(entitlement);
+  const qs: { id: string; correctAnswer: Prisma.JsonValue; questionType: string }[] = [];
+  for (let i = 0; i < ids.length; i += ID_CHUNK) {
+    const chunk = ids.slice(i, i + ID_CHUNK);
+    const part = await prisma.examQuestion.findMany({
+      where: { AND: [{ id: { in: chunk } }, baseWhere] },
+      select: { id: true, correctAnswer: true, questionType: true },
+    });
+    qs.push(...part);
+  }
   const allowedIds = new Set(qs.map((q) => q.id));
   const dropped = ids.filter((id) => !allowedIds.has(id)).length;
   if (dropped > 0) {

@@ -17,6 +17,18 @@ export type PathwayLessonSection = {
   body: string;
 };
 
+/** How localized pathway lesson content was resolved for this response. */
+export type PathwayLessonLocaleMeta = {
+  /** BCP-47-style key the caller asked for (normalized). */
+  requestedContentLocale: string;
+  /** Locale of the DB row or catalog source actually rendered (normalized). */
+  contentLocale: string;
+  /** Requested locale had no published row; English (or another available locale) was used instead. */
+  usedLocaleFallback: boolean;
+  /** Narrative comes from bundled English catalog (not `pathway_lessons`). */
+  isCatalogEnglishSource: boolean;
+};
+
 export type PathwayLessonRecord = {
   slug: string;
   title: string;
@@ -27,4 +39,5 @@ export type PathwayLessonRecord = {
   seoTitle: string;
   seoDescription: string;
   sections: PathwayLessonSection[];
+  localeMeta?: PathwayLessonLocaleMeta;
 };

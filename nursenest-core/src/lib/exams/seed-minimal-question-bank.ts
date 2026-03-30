@@ -175,8 +175,11 @@ export async function seedMinimalQuestionBankIfEmpty(): Promise<{ seeded: boolea
   if (!isDatabaseUrlConfigured()) return { seeded: false };
 
   try {
-    const n = await prisma.examQuestion.count({ where: { status: DB_PUBLISHED } });
-    if (n > 0) return { seeded: false };
+    const anyPublished = await prisma.examQuestion.findFirst({
+      where: { status: DB_PUBLISHED },
+      select: { id: true },
+    });
+    if (anyPublished) return { seeded: false };
   } catch (e) {
     if (isNonFatalPrismaSchemaError(e)) {
       safeServerLog("seed_bank", "skip_schema", {});

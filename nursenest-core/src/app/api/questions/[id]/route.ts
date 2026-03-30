@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { freemiumQuestionWhereForProfile, questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
@@ -10,8 +10,11 @@ import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
 import type { CountryCode, TierCode } from "@prisma/client";
+import { QUESTION_PAYLOAD_WARN_BYTES } from "@/lib/questions/question-api-limits";
+import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
-export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> }) {
+export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
   const { id } = await ctx.params;
   if (!id || id.length < 5) {
     return NextResponse.json({ error: "Invalid id" }, { status: 400 });
@@ -37,6 +40,10 @@ export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> 
 
     setSentryServerContext({ route: "/api/questions/[id]", feature: "question", userId: gate.userId });
 
+    const includeRationale =
+      req.nextUrl.searchParams.get("includeRationale") === "1" ||
+      req.nextUrl.searchParams.get("includeRationale") === "true";
+
     try {
       const q = await withRetry(() =>
         prisma.examQuestion.findFirst({
@@ -45,7 +52,7 @@ export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> 
             id: true,
             stem: true,
             questionType: true,
-            rationale: true,
+            ...(includeRationale ? { rationale: true } : {}),
             options: true,
             difficulty: true,
             exam: true,
@@ -60,7 +67,22 @@ export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> 
         return NextResponse.json({ error: "Not found" }, { status: 404 });
       }
 
-      return NextResponse.json({ question: q, mode: "subscriber" as const });
+      const body = { question: q, mode: "subscriber" as const, fields: includeRationale ? ("full" as const) : ("preview" as const) };
+      const approxPayloadBytes = estimateJsonUtf8Bytes(body);
+      safeServerLog("api_questions_id", "single_payload", {
+        approxPayloadBytes,
+        payloadLarge: approxPayloadBytes >= QUESTION_PAYLOAD_WARN_BYTES ? 1 : 0,
+        includeRationale: includeRationale ? 1 : 0,
+      });
+      if (approxPayloadBytes >= QUESTION_PAYLOAD_WARN_BYTES) {
+        safeServerLog("api_questions_id", "single_payload_warn", {
+          approxPayloadBytes,
+          threshold: QUESTION_PAYLOAD_WARN_BYTES,
+          questionId: id,
+        });
+      }
+
+      return NextResponse.json(body);
     } catch (e) {
       safeServerLogCritical("api_questions_id", "fetch_failed", {}, e);
       return NextResponse.json({ error: "Unable to load question" }, { status: 503 });

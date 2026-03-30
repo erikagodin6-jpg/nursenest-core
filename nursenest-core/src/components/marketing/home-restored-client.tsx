@@ -32,15 +32,13 @@ import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { LazySection } from "@/legacy/marketing/lazy-section";
 import { buildHomepageHeroSlides, HOMEPAGE_HERO_SLIDE_METADATA } from "@/lib/marketing-assets";
 import { MarketingHeroCarousel } from "@/components/marketing/marketing-hero-carousel";
-import { getHomepageLessonTeasers } from "@/lib/marketing/homepage-lesson-teasers";
+import type { HomepageLessonTeaser } from "@/lib/marketing/homepage-lesson-teasers";
 import { HomeHeroPathGateway } from "@/components/marketing/home-hero-path-gateway";
 import { HomeMarketingSixtySeconds } from "@/components/marketing/home-marketing-sixty-seconds";
 import { HomeMarketingProductProof } from "@/components/marketing/home-marketing-product-proof";
 import { HomeMarketingFeaturesStack } from "@/components/marketing/home-marketing-features-stack";
 import { heroQuickEntryLinks } from "@/lib/marketing/home-hero-gateway-config";
 import { HUB, NP, PN, RN, alliedCareersMarketingUrl } from "@/lib/marketing/marketing-entry-routes";
-
-const HOMEPAGE_LESSON_TEASERS = getHomepageLessonTeasers();
 
 const HeroFeatureStrip = dynamic(() => import("@/legacy/marketing/hero-feature-strip"), {
   loading: () => <div className="min-h-[60px]" />,
@@ -102,7 +100,11 @@ type HomeStatsPayload = {
   storeProductCount: number;
 };
 
-export default function HomeRestoredClient() {
+type HomeRestoredClientProps = {
+  lessonTeasers: HomepageLessonTeaser[];
+};
+
+export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClientProps) {
   const { t, locale } = useMarketingI18n();
   const { region, setRegion } = useNursenestRegion();
   const [lessonCount, setLessonCount] = useState(0);
@@ -542,7 +544,7 @@ export default function HomeRestoredClient() {
               </Link>
             </div>
             <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {HOMEPAGE_LESSON_TEASERS.map((item) => (
+              {lessonTeasers.map((item) => (
                 <li key={item.id}>
                   <Link
                     href={withMarketingLocale(locale, item.lessonsHref)}

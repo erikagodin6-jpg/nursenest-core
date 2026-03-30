@@ -53,7 +53,7 @@ import {
   HOMEPAGE_SCREENSHOT_SLOT_STEMS,
   LOGO_LEGACY_FALLBACK_URL,
 } from "@/config/marketing-cdn.catalog";
-import { getThemeLogo } from "@/lib/theme/theme-logo-url";
+import { getThemeLogoUrl } from "@/lib/theme/theme-logo-url";
 
 /** Legacy brand mark when generated discovery has not set `LOGO_PRIMARY` yet (matches monolith SEO references). */
 const LOGO_PRIMARY_FALLBACK = LOGO_LEGACY_FALLBACK_URL;
@@ -79,9 +79,9 @@ export {
   themeBrandLogoObjectKey,
 } from "@/config/theme-brand-logo-cdn";
 
-/** @deprecated Use `getThemeLogo` from `@/lib/theme/theme-logo-url` */
+/** @deprecated Use `getThemeLogoUrl` from `@/lib/theme/theme-logo-url` */
 export function getResolvedThemeLogoUrl(themeId: string): string {
-  return getThemeLogo(themeId);
+  return getThemeLogoUrl(themeId);
 }
 
 export {
@@ -90,6 +90,7 @@ export {
   getThemeLogoLoadChain,
   getThemeLogoObjectKey,
   getThemeLogoPublicUrl,
+  getThemeLogoUrl,
 } from "@/lib/theme/theme-logo-url";
 export { useThemeLogo } from "@/lib/theme/use-theme-logo";
 export { normalizeThemeIdForLogo, THEME_LOGO_ALIASES } from "@/lib/theme/theme-logo-resolve";

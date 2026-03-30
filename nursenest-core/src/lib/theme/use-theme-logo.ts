@@ -3,6 +3,7 @@
 import { useTheme } from "next-themes";
 import { useMemo, useSyncExternalStore } from "react";
 import { getThemeLogoObjectKeyFromNormalizedId } from "@/lib/branding/theme-brand-logo-cdn";
+import { LOCAL_BRAND_MARK_PATH } from "@/lib/branding/logo-config";
 import { getHeaderBrandLogoLoadChain } from "@/lib/theme/theme-logo-url";
 import { normalizeThemeIdForLogo } from "@/lib/theme/theme-logo-resolve";
 import { NURSENEST_DEFAULT_THEME, THEME_STORAGE_KEY } from "@/lib/theme/theme-registry";
@@ -48,7 +49,7 @@ function getServerSnapshot(): string {
 export function useThemeLogo(): {
   /** Canonical theme id used for logo mapping. */
   themeId: string;
-  /** Spaces object key for the active theme mark (`branding/themes/logo-*.png`). */
+  /** Spaces object key for the active theme mark (e.g. `lavenderbrandlogo.png`). */
   mappedSpaceKey: string;
   /** Ordered URLs: same-origin proxy first, then public CDN, then fallbacks. */
   loadChain: string[];
@@ -58,7 +59,10 @@ export function useThemeLogo(): {
   const raw = resolvedTheme ?? theme ?? domThemeId;
   const activeId = normalizeThemeIdForLogo(raw);
   const mappedSpaceKey = useMemo(() => getThemeLogoObjectKeyFromNormalizedId(activeId), [activeId]);
-  const loadChain = useMemo(() => getHeaderBrandLogoLoadChain(activeId), [activeId]);
+  const loadChain = useMemo(() => {
+    const chain = getHeaderBrandLogoLoadChain(activeId);
+    return chain.length > 0 ? chain : [LOCAL_BRAND_MARK_PATH];
+  }, [activeId]);
 
   return {
     themeId: activeId,

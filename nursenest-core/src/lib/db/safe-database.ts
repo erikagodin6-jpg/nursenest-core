@@ -26,3 +26,28 @@ export async function withDatabaseFallback<T>(run: () => Promise<T>, fallback: T
     return fallback;
   }
 }
+
+/**
+ * Same as `withDatabaseFallback`, but rejects long-running queries so request paths cannot hang on huge scans.
+ * Use on hot marketing / SEO paths; keep timeouts conservative to avoid false negatives on cold DBs.
+ */
+export async function withDatabaseFallbackTimeout<T>(
+  run: () => Promise<T>,
+  fallback: T,
+  timeoutMs: number,
+): Promise<T> {
+  if (!isDatabaseUrlConfigured()) return fallback;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    return await Promise.race([
+      run(),
+      new Promise<T>((_, reject) => {
+        timer = setTimeout(() => reject(new Error("database_timeout")), timeoutMs);
+      }),
+    ]);
+  } catch {
+    return fallback;
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+}

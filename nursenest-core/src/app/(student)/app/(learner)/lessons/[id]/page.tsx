@@ -55,10 +55,13 @@ export default async function LessonDetailPage({ params }: Props) {
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
 
-  if (entitlement === "error" || !entitlement.hasAccess) {
+  if (entitlement === "error") {
     return (
       <main className="space-y-4">
-        <p className="text-sm text-muted">You need an active subscription to open this lesson.</p>
+        <p className="text-sm text-muted">
+          We couldn’t finish checking your subscription (temporary data issue). This is not the same as being out of
+          plan—refresh, then reopen this lesson; sign in again if it persists.
+        </p>
         <Link className="text-sm font-semibold text-primary underline" href="/app/lessons">
           Back to lessons
         </Link>
@@ -66,31 +69,79 @@ export default async function LessonDetailPage({ params }: Props) {
     );
   }
 
-  const row = await withDatabaseFallback(
-    () =>
-      prisma.contentItem.findFirst({
-        where: { AND: [{ id }, { type: "lesson" }, lessonAccessWhere(entitlement)] },
-        select: {
-          id: true,
-          title: true,
-          summary: true,
-          content: true,
-        },
-      }),
-    null,
-  );
-
-  if (row === null) {
-    safeServerLog("page_lesson_detail", "lesson_unavailable", { id });
+  if (!entitlement.hasAccess) {
     return (
       <main className="space-y-4">
-        <p className="text-sm text-muted">This lesson is not available or could not be loaded.</p>
+        <p className="text-sm text-muted">You need an active subscription to open full app lessons.</p>
         <Link className="text-sm font-semibold text-primary underline" href="/app/lessons">
           Back to lessons
         </Link>
       </main>
     );
   }
+
+  const resolved = await withDatabaseFallback(async () => {
+    const exists = await prisma.contentItem.findFirst({
+      where: { id, type: "lesson" },
+      select: { id: true },
+    });
+    if (!exists) return { kind: "not_found" as const };
+    const row = await prisma.contentItem.findFirst({
+      where: { AND: [{ id }, { type: "lesson" }, lessonAccessWhere(entitlement)] },
+      select: {
+        id: true,
+        title: true,
+        summary: true,
+        content: true,
+      },
+    });
+    if (!row) return { kind: "out_of_plan" as const };
+    return { kind: "ok" as const, row };
+  }, null);
+
+  if (resolved === null) {
+    safeServerLog("page_lesson_detail", "db_unavailable", { id });
+    return (
+      <main className="space-y-4">
+        <p className="text-sm text-muted">
+          We couldn’t load this lesson because the database was unreachable or the request failed—not because the lesson is
+          missing. Try again in a moment.
+        </p>
+        <Link className="text-sm font-semibold text-primary underline" href="/app/lessons">
+          Back to lessons
+        </Link>
+      </main>
+    );
+  }
+
+  if (resolved.kind === "not_found") {
+    safeServerLog("page_lesson_detail", "lesson_not_found", { id });
+    return (
+      <main className="space-y-4">
+        <p className="text-sm text-muted">No lesson exists at this link. It may have been removed or the URL is incorrect.</p>
+        <Link className="text-sm font-semibold text-primary underline" href="/app/lessons">
+          Back to lessons
+        </Link>
+      </main>
+    );
+  }
+
+  if (resolved.kind === "out_of_plan") {
+    safeServerLog("page_lesson_detail", "lesson_out_of_entitlement", { id });
+    return (
+      <main className="space-y-4">
+        <p className="text-sm text-muted">
+          This lesson is not included in your current region or plan. Update your profile country and tier, or choose a plan that
+          matches the content library you need.
+        </p>
+        <Link className="text-sm font-semibold text-primary underline" href="/app/lessons">
+          Back to lessons
+        </Link>
+      </main>
+    );
+  }
+
+  const row = resolved.row;
 
   return (
     <main>

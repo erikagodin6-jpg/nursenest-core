@@ -20,7 +20,8 @@ export default async function QuestionBankPage() {
           <BreadcrumbTrail items={appShellBreadcrumbs("questions")} />
         </div>
         <p className="nn-card p-6 text-sm text-muted">
-          We could not verify your subscription right now. Refresh the page or try again in a moment.
+          We couldn’t finish checking your subscription (database or billing lookup failed). This is not the same as “no
+          plan”—refresh shortly, or sign in again if it keeps happening.
         </p>
       </main>
     );

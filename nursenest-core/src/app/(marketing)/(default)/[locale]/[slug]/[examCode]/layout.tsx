@@ -5,6 +5,7 @@ import { resolveCanonicalSiteOrigin } from "@/lib/seo/canonical-site";
 
 type Props = {
   children: React.ReactNode;
+  /** `locale` = pathway countrySlug (`us` / `canada`); `slug` = roleTrack; `examCode` = exam segment. */
   params: Promise<{ locale: string; slug: string; examCode: string }>;
 };
 

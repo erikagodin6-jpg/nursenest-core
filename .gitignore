@@ -52,6 +52,9 @@ reports/i18n-status.json
 # Large local DB dumps / Replit exports (use data/imports/ + REPLIT_IMPORT_DIR for checked-in samples)
 data/replit-exports/
 
+# Local Replit Object Storage extract (upload source; never commit)
+/replit-export/
+
 # Regenerate with npm run audit:replit-exports
 scripts/replit-export-audit-report.json
 scripts/replit-export-audit-report.md

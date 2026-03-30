@@ -2,6 +2,12 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import type { QuestionListEmptyDiagnostics } from "@/lib/questions/question-list-empty-diagnostics";
+import {
+  messageForDiscoveryFailure,
+  messageForQuestionsApiFailure,
+  questionBankEmptyCopy,
+} from "@/lib/student/gated-state-messages";
 
 type QFull = {
   id: string;
@@ -50,6 +56,9 @@ export function QuestionBankPracticeClient({ userId }: { userId: string }) {
   const [topic, setTopic] = useState<string | null>(null);
   const [pathwayIdFilter, setPathwayIdFilter] = useState<string | null>(null);
   const [topics, setTopics] = useState<{ topic: string; count: number }[]>([]);
+  const [topicMenuTruncationNotice, setTopicMenuTruncationNotice] = useState<string | null>(null);
+  const [discoveryNotice, setDiscoveryNotice] = useState<string | null>(null);
+  const [emptyCopy, setEmptyCopy] = useState<{ title: string; body: string } | null>(null);
   const [idx, setIdx] = useState(0);
   const [answer, setAnswer] = useState<unknown>(null);
   const [graded, setGraded] = useState<Record<string, { correct: boolean; rationale: string | null }>>({});
@@ -71,15 +80,23 @@ export function QuestionBankPracticeClient({ userId }: { userId: string }) {
         if (t) qs.set("topic", t);
         if (pathwayId) qs.set("pathwayId", pathwayId);
         const res = await fetch(`/api/questions?${qs.toString()}`);
-        const data = (await res.json()) as {
+        let data = {} as {
           questions?: QFull[];
           error?: string;
+          code?: string;
           topicRelaxed?: boolean;
           topicRequested?: string | null;
+          diagnostics?: QuestionListEmptyDiagnostics;
         };
+        try {
+          data = (await res.json()) as typeof data;
+        } catch {
+          /* non-JSON body */
+        }
         if (!res.ok) {
           setPhase("error");
-          setError(data.error ?? "Could not load questions.");
+          setEmptyCopy(null);
+          setError(messageForQuestionsApiFailure(res.status, data.code) || data.error || "Could not load questions.");
           return;
         }
         if (data.topicRelaxed && data.topicRequested) {
@@ -90,9 +107,11 @@ export function QuestionBankPracticeClient({ userId }: { userId: string }) {
         const list = data.questions ?? [];
         if (list.length === 0) {
           setQuestions([]);
+          setEmptyCopy(questionBankEmptyCopy(data.diagnostics));
           setPhase("empty");
           return;
         }
+        setEmptyCopy(null);
         setQuestions(list);
         setIdx(0);
         setAnswer(null);
@@ -126,6 +145,7 @@ export function QuestionBankPracticeClient({ userId }: { userId: string }) {
         setPhase("ready");
       } catch {
         setPhase("error");
+        setEmptyCopy(null);
         setError("Network error loading questions.");
       }
     },
@@ -144,9 +164,40 @@ export function QuestionBankPracticeClient({ userId }: { userId: string }) {
     (async () => {
       try {
         const res = await fetch("/api/questions/discovery");
-        if (!res.ok) return;
-        const data = (await res.json()) as { buckets?: { topic: string; count: number }[] };
-        if (!cancelled && data.buckets) setTopics(data.buckets);
+        if (!res.ok) {
+          let code: string | undefined;
+          try {
+            const err = (await res.json()) as { code?: string };
+            code = err.code;
+          } catch {
+            /* ignore */
+          }
+          if (!cancelled) {
+            setTopicMenuTruncationNotice(null);
+            setDiscoveryNotice(messageForDiscoveryFailure(res.status, code));
+          }
+          return;
+        }
+        const data = (await res.json()) as {
+          buckets?: { topic: string; count: number }[];
+          limits?: {
+            topicsTruncated?: boolean;
+            topicsOmittedCount?: number;
+            topicBucketCap?: number;
+          };
+        };
+        if (cancelled) return;
+        setDiscoveryNotice(null);
+        if (data.buckets) setTopics(data.buckets);
+        if (data.limits?.topicsTruncated) {
+          const cap = data.limits.topicBucketCap ?? 250;
+          const omitted = data.limits.topicsOmittedCount ?? 0;
+          setTopicMenuTruncationNotice(
+            `Showing the ${cap} most common topics in your bank (${omitted} question${omitted === 1 ? "" : "s"} in additional topics are not listed). Choose “All topics” to study across the full pool.`,
+          );
+        } else {
+          setTopicMenuTruncationNotice(null);
+        }
       } catch {
         /* optional */
       }
@@ -243,13 +294,11 @@ export function QuestionBankPracticeClient({ userId }: { userId: string }) {
   }
 
   if (phase === "empty") {
+    const { title, body } = emptyCopy ?? questionBankEmptyCopy(undefined);
     return (
       <div className="nn-card mt-4 p-6 text-sm text-muted">
-        <p className="font-medium text-foreground">No questions in your pool yet</p>
-        <p className="mt-2">
-          If you just subscribed, refresh in a moment. Otherwise confirm your profile country and tier match the content
-          library, or contact support.
-        </p>
+        <p className="font-medium text-foreground">{title}</p>
+        <p className="mt-2">{body}</p>
       </div>
     );
   }
@@ -266,6 +315,14 @@ export function QuestionBankPracticeClient({ userId }: { userId: string }) {
 
   return (
     <div className="mt-6 space-y-4">
+      {discoveryNotice ? (
+        <p className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-950">{discoveryNotice}</p>
+      ) : null}
+      {topicMenuTruncationNotice ? (
+        <p className="rounded-lg border border-border bg-muted/40 px-3 py-2 text-sm text-muted-foreground">
+          {topicMenuTruncationNotice}
+        </p>
+      ) : null}
       {softNotice ? (
         <p className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-950">{softNotice}</p>
       ) : null}
