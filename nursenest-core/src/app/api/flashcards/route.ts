@@ -8,6 +8,15 @@ import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
 import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
+import {
+  FLASHCARD_PAGE,
+  MAX_LIST_SKIP_ROWS_DEFAULT,
+  isSkipBeyondLimit,
+  listSkipRows,
+  parseBoundedPageSize,
+  parseListPage,
+} from "@/lib/api/api-pagination-limits";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 /**
  * Subscriber-only flashcard list (backend-enforced; no freemium bypass of full backs).
@@ -19,8 +28,43 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const page = Math.max(1, Number(req.nextUrl.searchParams.get("page") ?? "1"));
-  const pageSize = Math.min(30, Math.max(5, Number(req.nextUrl.searchParams.get("pageSize") ?? "12")));
+  const pageParsed = parseListPage(req.nextUrl.searchParams.get("page"));
+  if (!pageParsed.ok) {
+    return NextResponse.json({ error: pageParsed.error, code: "invalid_page" }, { status: 400 });
+  }
+  const page = pageParsed.page;
+
+  const sizeParsed = parseBoundedPageSize(req.nextUrl.searchParams.get("pageSize"), FLASHCARD_PAGE);
+  if (!sizeParsed.ok) {
+    return NextResponse.json(
+      {
+        error: sizeParsed.error.message,
+        code: sizeParsed.error.code,
+        ...(sizeParsed.error.maxPageSize !== undefined ? { maxPageSize: sizeParsed.error.maxPageSize } : {}),
+      },
+      { status: 400 },
+    );
+  }
+  const pageSize = sizeParsed.pageSize;
+
+  const skipRows = listSkipRows(page, pageSize);
+  if (isSkipBeyondLimit(skipRows)) {
+    safeServerLog("api_flashcards", "pagination_depth_rejected", {
+      skipRows,
+      maxSkipRows: MAX_LIST_SKIP_ROWS_DEFAULT,
+      page,
+      pageSize,
+      userId,
+    });
+    return NextResponse.json(
+      {
+        error: `Pagination too deep; use filters or a smaller page (max offset ${MAX_LIST_SKIP_ROWS_DEFAULT} rows).`,
+        code: "pagination_depth_limit",
+        maxSkipRows: MAX_LIST_SKIP_ROWS_DEFAULT,
+      },
+      { status: 400 },
+    );
+  }
 
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
@@ -41,7 +85,7 @@ export async function GET(req: NextRequest) {
             category: { select: { name: true, slug: true } },
           },
           orderBy: { updatedAt: "desc" },
-          skip: (page - 1) * pageSize,
+          skip: skipRows,
           take: pageSize,
         }),
       ),

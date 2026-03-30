@@ -11,6 +11,15 @@ import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics"
 import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
 import type { CountryCode, TierCode } from "@prisma/client";
+import {
+  LESSON_PAGE,
+  MAX_LIST_SKIP_ROWS_DEFAULT,
+  isSkipBeyondLimit,
+  listSkipRows,
+  parseBoundedPageSize,
+  parseListPage,
+} from "@/lib/api/api-pagination-limits";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export async function GET(req: NextRequest) {
   const session = await auth();
@@ -19,8 +28,43 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const page = Math.max(1, Number(req.nextUrl.searchParams.get("page") ?? "1"));
-  const pageSize = Math.min(20, Math.max(5, Number(req.nextUrl.searchParams.get("pageSize") ?? "10")));
+  const pageParsed = parseListPage(req.nextUrl.searchParams.get("page"));
+  if (!pageParsed.ok) {
+    return NextResponse.json({ error: pageParsed.error, code: "invalid_page" }, { status: 400 });
+  }
+  const page = pageParsed.page;
+
+  const sizeParsed = parseBoundedPageSize(req.nextUrl.searchParams.get("pageSize"), LESSON_PAGE);
+  if (!sizeParsed.ok) {
+    return NextResponse.json(
+      {
+        error: sizeParsed.error.message,
+        code: sizeParsed.error.code,
+        ...(sizeParsed.error.maxPageSize !== undefined ? { maxPageSize: sizeParsed.error.maxPageSize } : {}),
+      },
+      { status: 400 },
+    );
+  }
+  const pageSize = sizeParsed.pageSize;
+
+  const skipRows = listSkipRows(page, pageSize);
+  if (isSkipBeyondLimit(skipRows)) {
+    safeServerLog("api_lessons", "pagination_depth_rejected", {
+      skipRows,
+      maxSkipRows: MAX_LIST_SKIP_ROWS_DEFAULT,
+      page,
+      pageSize,
+      userId,
+    });
+    return NextResponse.json(
+      {
+        error: `Pagination too deep; use filters or a smaller page (max offset ${MAX_LIST_SKIP_ROWS_DEFAULT} rows).`,
+        code: "pagination_depth_limit",
+        maxSkipRows: MAX_LIST_SKIP_ROWS_DEFAULT,
+      },
+      { status: 400 },
+    );
+  }
 
   let entitlement;
   try {
@@ -44,7 +88,7 @@ export async function GET(req: NextRequest) {
             where,
             select: { id: true, slug: true, title: true, summary: true },
             orderBy: { updatedAt: "desc" },
-            skip: (page - 1) * pageSize,
+            skip: skipRows,
             take: pageSize,
           }),
         ),

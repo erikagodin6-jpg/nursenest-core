@@ -1,5 +1,6 @@
 #!/usr/bin/env npx tsx
 import "../../server/load-env";
+import * as fs from "fs";
 import * as path from "path";
 import { getPool, logStartupDatabaseResolution } from "../../server/db";
 import { listJsonFiles, loadJsonRows } from "./helpers";
@@ -13,7 +14,11 @@ function parseArgs(argv: string[]) {
   const extractAiCache = !argv.includes("--no-ai-cache-extract");
   const dirIdx = argv.indexOf("--dir");
   const dir =
-    dirIdx >= 0 && argv[dirIdx + 1] ? path.resolve(argv[dirIdx + 1]) : path.resolve("data/replit-exports");
+    dirIdx >= 0 && argv[dirIdx + 1]
+      ? path.resolve(argv[dirIdx + 1])
+      : fs.existsSync(path.resolve("nursenest-core/data/replit-exports"))
+        ? path.resolve("nursenest-core/data/replit-exports")
+        : path.resolve("data/replit-exports");
   const ownerIdx = argv.indexOf("--deck-owner-id");
   const deckOwnerFallback =
     ownerIdx >= 0 && argv[ownerIdx + 1]
@@ -27,6 +32,8 @@ function parseArgs(argv: string[]) {
     if (Number.isFinite(n) && n >= 0) maxExamInserts = n;
   }
 
+  const skipOperationalPipeline = argv.includes("--skip-operational-imports");
+
   return {
     isInventory,
     apply,
@@ -35,6 +42,7 @@ function parseArgs(argv: string[]) {
     dir,
     deckOwnerFallback,
     maxExamInserts,
+    skipOperationalPipeline,
   };
 }
 
@@ -55,6 +63,7 @@ Options:
                          (or set REPLIT_IMPORT_DECK_OWNER_ID)
   --no-ai-cache-extract  Skip extracting flashcard_bank / exam_questions from ai_cache.output_json
   --max-exam-inserts N    Cap successful exam_questions rows from ai_cache extract (default: unlimited)
+  --skip-operational-imports  Skip ai_cache raw rows, generation_jobs, generation_events (recommended for prod content-only).
   --apply-kill-switch-state  Import kill_switches.enabled as exported (DANGEROUS).
                          Default: import kill switch rows with enabled=false.
 
@@ -98,6 +107,7 @@ Examples:
     applyKillSwitchState: opts.applyKillSwitchState,
     deckOwnerFallback: opts.deckOwnerFallback,
     maxExamInserts: opts.maxExamInserts,
+    skipOperationalPipeline: opts.skipOperationalPipeline,
   });
 
   console.log(

@@ -14,6 +14,7 @@ import type { CountryCode, TierCode } from "@prisma/client";
 import { QUESTION_PAYLOAD_WARN_BYTES } from "@/lib/questions/question-api-limits";
 import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { logLargeApiResponse } from "@/lib/observability/perf-log";
 
 export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
   const { id } = await ctx.params;
@@ -105,6 +106,7 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
         });
       }
 
+      logLargeApiResponse("/api/questions/[id]", approxPayloadBytes);
       return NextResponse.json(body);
     } catch (e) {
       safeServerLogCritical("api_questions_id", "fetch_failed", {}, e);
@@ -158,10 +160,9 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
       data: { freeQuestionViews: { increment: 1 } },
     });
 
-    return NextResponse.json({
-      question: q,
-      mode: "freemium" as const,
-    });
+    const freemiumBody = { question: q, mode: "freemium" as const };
+    logLargeApiResponse("/api/questions/[id]", estimateJsonUtf8Bytes(freemiumBody));
+    return NextResponse.json(freemiumBody);
   } catch (e) {
     safeServerLogCritical("api_questions_id", "fetch_failed_freemium", {}, e);
     return NextResponse.json({ error: "Unable to load question" }, { status: 503 });

@@ -1,19 +1,29 @@
 #!/usr/bin/env node
 /**
- * Recursively upload a local folder to DigitalOcean Spaces (S3-compatible).
+ * Recursively upload a local folder (e.g. replit-export/) to DigitalOcean Spaces.
+ * Preserves directory structure as object key prefixes (public/..., private-products/...).
  *
- * Env (required): SPACES_KEY, SPACES_SECRET
- * Env (optional):
- *   REPLIT_EXPORT_DIR — absolute or relative path to folder to upload (default: ./replit-export)
- *   SPACES_BUCKET     — default: nursenest-images
- *   SPACES_REGION     — default: tor1
- *   SPACES_PREFIX     — optional key prefix (no leading slash; trailing slash optional)
+ * Required env:
+ *   SPACES_KEY, SPACES_SECRET
  *
- * Idempotency: skips when HeadObject reports same size and ETag matches MD5 (single-part objects).
+ * Optional env:
+ *   REPLIT_EXPORT_DIR     — path to folder to upload (default: ./replit-export)
+ *   SPACES_BUCKET         — default: nursenest-images
+ *   SPACES_REGION         — default: tor1 (used for endpoint + CDN hostname in logs)
+ *   SPACES_ENDPOINT       — override API endpoint (default: https://{SPACES_REGION}.digitaloceanspaces.com)
+ *   SPACES_PREFIX         — optional key prefix (no leading slash)
+ *   SPACES_PROGRESS_EVERY — log after every N successful uploads (default: 50)
+ *   SPACES_FAST_SKIP      — if "1", skip when remote size matches only (no local MD5 read; faster, weaker idempotency)
+ *   SPACES_FORCE_UPLOAD   — if "1", always PutObject (no Head skip)
+ *   SPACES_UPLOAD_MANIFEST — if set, write JSON report to this path
  *
- * CDN URL shape: https://<bucket>.<region>.cdn.digitaloceanspaces.com/<key>
+ * Idempotency (default): HeadObject → same ContentLength + ETag equals local MD5 (single-part uploads only).
  *
- * Env (optional): SPACES_UPLOAD_MANIFEST — if set, write JSON summary + per-file rows here.
+ * Public URL shape:
+ *   https://nursenest-images.tor1.cdn.digitaloceanspaces.com/<key>
+ *
+ * Run from nursenest-core:
+ *   node scripts/upload-replit-export-to-spaces.mjs
  */
 
 import { createHash } from "node:crypto";
@@ -25,14 +35,16 @@ import { HeadObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s
 import mime from "mime-types";
 
 const PROGRESS_EVERY = Number(process.env.SPACES_PROGRESS_EVERY || "50") || 50;
+const FAST_SKIP = ["1", "true", "yes"].includes(String(process.env.SPACES_FAST_SKIP || "").toLowerCase());
+const FORCE = ["1", "true", "yes"].includes(String(process.env.SPACES_FORCE_UPLOAD || "").toLowerCase());
 
 function requireEnv(name) {
   const v = process.env[name];
-  if (!v) {
+  if (!v?.trim()) {
     console.error(`Missing required environment variable: ${name}`);
     process.exit(1);
   }
-  return v;
+  return v.trim();
 }
 
 function walkFiles(dir, acc) {
@@ -75,16 +87,25 @@ function contentTypeFor(filePath) {
   return ct || "application/octet-stream";
 }
 
+function isNotFoundError(e) {
+  const status = e?.$metadata?.httpStatusCode;
+  const name = e?.name || "";
+  const code = e?.Code || e?.code || "";
+  return name === "NotFound" || name === "NoSuchKey" || code === "NoSuchKey" || status === 404;
+}
+
 async function main() {
   const accessKeyId = requireEnv("SPACES_KEY");
   const secretAccessKey = requireEnv("SPACES_SECRET");
-  const bucket = process.env.SPACES_BUCKET || "nursenest-images";
-  const region = process.env.SPACES_REGION || "tor1";
+  const bucket = (process.env.SPACES_BUCKET || "nursenest-images").trim();
+  const spacesRegion = (process.env.SPACES_REGION || "tor1").trim();
+  const endpoint = (
+    process.env.SPACES_ENDPOINT?.trim() || `https://${spacesRegion}.digitaloceanspaces.com`
+  ).replace(/\/$/, "");
+
   const prefixRaw = process.env.SPACES_PREFIX || "";
   const prefix =
-    prefixRaw === ""
-      ? ""
-      : prefixRaw.replace(/^\/+/, "").replace(/\/+$/, "") + "/";
+    prefixRaw === "" ? "" : prefixRaw.replace(/^\/+/, "").replace(/\/+$/, "") + "/";
 
   const localRoot = path.resolve(
     process.cwd(),
@@ -96,9 +117,8 @@ async function main() {
     process.exit(1);
   }
 
-  const endpoint = `https://${region}.digitaloceanspaces.com`;
   const client = new S3Client({
-    region,
+    region: "us-east-1",
     endpoint,
     credentials: { accessKeyId, secretAccessKey },
     forcePathStyle: false,
@@ -116,11 +136,15 @@ async function main() {
   const manifestRows = [];
 
   console.log(`Local root: ${localRoot}`);
-  console.log(`Bucket: ${bucket}  Region: ${region}`);
-  console.log(`Endpoint: ${endpoint}`);
+  console.log(`Bucket: ${bucket}`);
+  console.log(`Spaces region (CDN): ${spacesRegion}`);
+  console.log(`API endpoint: ${endpoint}`);
   console.log(`Files found: ${files.length}`);
   if (prefix) console.log(`Key prefix: ${prefix}`);
-  console.log(`CDN base: https://${bucket}.${region}.cdn.digitaloceanspaces.com/`);
+  console.log(`CDN base: https://${bucket}.${spacesRegion}.cdn.digitaloceanspaces.com/`);
+  console.log(`Fast skip (size-only): ${FAST_SKIP}  Force upload: ${FORCE}`);
+  console.log(`Upload progress log every: ${PROGRESS_EVERY} successful uploads`);
+  console.log("---");
 
   for (const filePath of files) {
     const relKey = toObjectKey(localRoot, filePath);
@@ -132,39 +156,36 @@ async function main() {
     let shouldUpload = true;
     let rowStatus = "pending";
 
-    try {
-      const head = await client.send(
-        new HeadObjectCommand({ Bucket: bucket, Key }),
-      );
-      const remoteLen = head.ContentLength ?? -1;
-      const etagNorm = normalizeEtag(head.ETag);
+    if (!FORCE) {
+      try {
+        const head = await client.send(new HeadObjectCommand({ Bucket: bucket, Key }));
+        const remoteLen = head.ContentLength ?? -1;
+        const etagNorm = normalizeEtag(head.ETag);
 
-      if (
-        remoteLen === ContentLength &&
-        etagNorm &&
-        !etagLooksMultipart(etagNorm)
-      ) {
-        const localMd5 = await md5HexOfFile(filePath);
-        if (localMd5 === etagNorm) {
-          shouldUpload = false;
+        if (remoteLen === ContentLength) {
+          if (FAST_SKIP) {
+            shouldUpload = false;
+          } else if (etagNorm && !etagLooksMultipart(etagNorm)) {
+            const localMd5 = await md5HexOfFile(filePath);
+            if (localMd5 === etagNorm) {
+              shouldUpload = false;
+            }
+          }
         }
-      }
-      // Multipart ETags are not raw MD5; re-upload those objects if you need a strict match.
-    } catch (e) {
-      const status = e?.$metadata?.httpStatusCode;
-      const name = e?.name || "";
-      if (name !== "NotFound" && name !== "NoSuchKey" && status !== 404) {
-        console.error(`HeadObject failed for ${Key}:`, e?.message || e);
-        failed += 1;
-        rowStatus = "failed_head";
-        processed += 1;
-        manifestRows.push({ objectKey: Key, localPath: filePath, contentType: ContentType, status: rowStatus });
-        if (processed % PROGRESS_EVERY === 0) {
-          console.log(
-            `[${processed}/${files.length}] uploaded=${uploaded} skipped=${skipped} failed=${failed} — last: ${Key}`,
-          );
+      } catch (e) {
+        if (!isNotFoundError(e)) {
+          console.error(`HeadObject failed for ${Key}:`, e?.message || e);
+          failed += 1;
+          rowStatus = "failed_head";
+          processed += 1;
+          manifestRows.push({
+            objectKey: Key,
+            localPath: filePath,
+            contentType: ContentType,
+            status: rowStatus,
+          });
+          continue;
         }
-        continue;
       }
     }
 
@@ -172,12 +193,12 @@ async function main() {
       skipped += 1;
       rowStatus = "skipped";
       processed += 1;
-      manifestRows.push({ objectKey: Key, localPath: filePath, contentType: ContentType, status: rowStatus });
-      if (processed % PROGRESS_EVERY === 0) {
-        console.log(
-          `[${processed}/${files.length}] uploaded=${uploaded} skipped=${skipped} failed=${failed} — last: ${Key}`,
-        );
-      }
+      manifestRows.push({
+        objectKey: Key,
+        localPath: filePath,
+        contentType: ContentType,
+        status: rowStatus,
+      });
       continue;
     }
 
@@ -190,24 +211,31 @@ async function main() {
           ContentLength,
           ContentType,
           ACL: "public-read",
+          CacheControl: "public, max-age=31536000, immutable",
         }),
       );
       uploaded += 1;
       rowStatus = "uploaded";
+      if (uploaded % PROGRESS_EVERY === 0) {
+        console.log(
+          `[upload progress] ${uploaded} uploads complete — skipped=${skipped} failed=${failed} — last key: ${Key}`,
+        );
+      }
     } catch (e) {
       console.error(`PutObject failed for ${Key}:`, e?.message || e);
       failed += 1;
       rowStatus = "failed_put";
     }
     processed += 1;
-    manifestRows.push({ objectKey: Key, localPath: filePath, contentType: ContentType, status: rowStatus });
-    if (processed % PROGRESS_EVERY === 0) {
-      console.log(
-        `[${processed}/${files.length}] uploaded=${uploaded} skipped=${skipped} failed=${failed} — last: ${Key}`,
-      );
-    }
+    manifestRows.push({
+      objectKey: Key,
+      localPath: filePath,
+      contentType: ContentType,
+      status: rowStatus,
+    });
   }
 
+  console.log("---");
   console.log("Done.");
   console.log(`Uploaded: ${uploaded}  Skipped (unchanged): ${skipped}  Failed: ${failed}`);
 
@@ -216,13 +244,16 @@ async function main() {
       generatedAt: new Date().toISOString(),
       localRoot,
       bucket,
-      region,
+      spacesRegion,
+      endpoint,
       summary: { total: files.length, uploaded, skipped, failed },
       files: manifestRows,
     };
     fs.writeFileSync(manifestPath, JSON.stringify(report, null, 2), "utf8");
     console.log(`Wrote manifest: ${manifestPath}`);
   }
+
+  if (failed > 0) process.exit(1);
 }
 
 main().catch((err) => {

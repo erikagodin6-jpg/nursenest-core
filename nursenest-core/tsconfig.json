@@ -31,5 +31,15 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    ".next/cache",
+    ".next/static",
+    ".next/server",
+    ".next/build",
+    "coverage",
+    "dist",
+    "out",
+    ".turbo"
+  ]
 }

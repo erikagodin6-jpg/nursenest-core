@@ -1,4 +1,5 @@
 import "./load-env";
+import * as fs from "node:fs";
 import pg from "pg";
 
 export type DatabaseTarget = "production" | "development";
@@ -58,6 +59,91 @@ function shouldUseSsl(connectionString: string): boolean {
   return /render\.com|supabase\.co|neon\.tech|railway\.app|amazonaws\.com|azure\.com|ondigitalocean\.com/i.test(
     connectionString,
   );
+}
+
+/**
+ * pg merges `parse(connectionString)` over Pool options. If the URL contains `sslmode=require`
+ * (or similar), pg-connection-string sets `ssl: {}`, which enables TLS with Node's default
+ * `rejectUnauthorized: true` and overwrites an explicit `ssl: { rejectUnauthorized: false }`.
+ * We strip SSL-related query params and pass a single explicit `ssl` object instead.
+ *
+ * @see https://github.com/brianc/node-postgres/issues/2375
+ */
+function stripSslParamsFromConnectionString(connectionString: string): {
+  cleaned: string;
+  sslModeFromUrl: string | null;
+} {
+  try {
+    const u = new URL(connectionString);
+    const sslModeFromUrl = u.searchParams.get("sslmode");
+    const stripKeys = ["sslmode", "ssl", "sslrootcert", "sslcert", "sslkey", "uselibpqcompat"];
+    for (const k of stripKeys) {
+      u.searchParams.delete(k);
+    }
+    return { cleaned: u.toString(), sslModeFromUrl };
+  } catch {
+    return { cleaned: connectionString, sslModeFromUrl: null };
+  }
+}
+
+function readSslCaBundle(): string | null {
+  const pathEnv = process.env.DB_SSL_CA?.trim() || process.env.PGSSLROOTCERT?.trim();
+  if (!pathEnv) return null;
+  try {
+    if (!fs.existsSync(pathEnv)) {
+      console.warn(`[DB] SSL CA file not found at ${pathEnv} (DB_SSL_CA / PGSSLROOTCERT)`);
+      return null;
+    }
+    return fs.readFileSync(pathEnv, "utf8");
+  } catch (e) {
+    console.warn(`[DB] Failed to read SSL CA file: ${e instanceof Error ? e.message : String(e)}`);
+    return null;
+  }
+}
+
+type PgSslConfig = false | { rejectUnauthorized: boolean; ca?: string };
+
+/**
+ * Explicit TLS options for `pg` (never rely on empty `ssl: {}` from URL parsing).
+ * - With CA file: verify server cert (recommended for production).
+ * - Non-production-like runtime: relax verification for managed DBs (local/staging against DO/Neon).
+ * - Production-like without CA: strict by default; opt-in via DB_SSL_INSECURE_NO_CA=true only if you accept risk.
+ */
+function resolvePgSslConfig(connectionString: string, sslModeFromUrl: string | null): PgSslConfig {
+  const mode = (sslModeFromUrl || "").toLowerCase();
+  if (mode === "disable") {
+    return false;
+  }
+
+  const wantTls =
+    shouldUseSsl(connectionString) ||
+    mode === "require" ||
+    mode === "verify-ca" ||
+    mode === "verify-full" ||
+    mode === "prefer";
+
+  if (!wantTls) {
+    return false;
+  }
+
+  const ca = readSslCaBundle();
+  if (ca) {
+    return { rejectUnauthorized: true, ca };
+  }
+
+  if (!IS_PROD_RUNTIME) {
+    return { rejectUnauthorized: false };
+  }
+
+  if (String(process.env.DB_SSL_INSECURE_NO_CA || "").toLowerCase() === "true") {
+    console.warn(
+      "[DB] DB_SSL_INSECURE_NO_CA=true: TLS to Postgres without CA verification in a production-like runtime. Prefer DB_SSL_CA (e.g. DigitalOcean ca-certificate.crt).",
+    );
+    return { rejectUnauthorized: false };
+  }
+
+  // Production-like, no CA: try strict verify (works if chain is in system trust store).
+  return { rejectUnauthorized: true };
 }
 
 function getRequiredUrl(target: DatabaseTarget): string {
@@ -146,8 +232,10 @@ function wrapPoolQuery(pool: pg.Pool, target: DatabaseTarget): void {
 }
 
 function createPool(target: DatabaseTarget): pg.Pool {
-  const connectionString = getRequiredUrl(target);
-  const sslEnabled = shouldUseSsl(connectionString);
+  const rawConnectionString = getRequiredUrl(target);
+  const { cleaned: connectionString, sslModeFromUrl } = stripSslParamsFromConnectionString(rawConnectionString);
+  const ssl = resolvePgSslConfig(rawConnectionString, sslModeFromUrl);
+  const sslEnabled = ssl !== false;
 
   const pool = new pg.Pool({
     connectionString,
@@ -156,7 +244,7 @@ function createPool(target: DatabaseTarget): pg.Pool {
     idleTimeoutMillis: DEFAULT_IDLE_TIMEOUT_MS,
     max: DEFAULT_MAX_POOL_SIZE,
     application_name: getApplicationName(target),
-    ssl: sslEnabled ? { rejectUnauthorized: false } : false,
+    ssl,
   });
 
   wrapPoolQuery(pool, target);
@@ -171,12 +259,14 @@ function createPool(target: DatabaseTarget): pg.Pool {
     console.error(`[DB:${target}] Unexpected pool error`, err);
   });
 
+  const sslVerify =
+    ssl && typeof ssl === "object" ? (ssl.rejectUnauthorized ? "verify" : "tls_no_ca_verify") : "off";
   console.log(
     `[DB] ${getPoolLabel(target)} pool created → ${maskUrl(connectionString)} ` +
       `(statement_timeout=${DEFAULT_STATEMENT_TIMEOUT_MS}ms, ` +
       `connection_timeout=${DEFAULT_CONNECTION_TIMEOUT_MS}ms, ` +
       `idle_timeout=${DEFAULT_IDLE_TIMEOUT_MS}ms, ` +
-      `max=${DEFAULT_MAX_POOL_SIZE}, ssl=${sslEnabled}, app=${getApplicationName(target)})`,
+      `max=${DEFAULT_MAX_POOL_SIZE}, ssl=${sslEnabled}, ssl_verify=${sslVerify}, app=${getApplicationName(target)})`,
   );
 
   return pool;
@@ -316,7 +406,7 @@ export async function testDatabaseConnection(
   const started = Date.now();
 
   try {
-    const result = await pool.query("SELECT NOW() AS now");
+    const result = await pool.query("SELECT 1 AS ok, NOW() AS now");
     return {
       ok: true,
       target: resolved,

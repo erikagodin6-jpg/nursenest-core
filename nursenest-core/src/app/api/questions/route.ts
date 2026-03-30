@@ -25,9 +25,10 @@ import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics"
 import { diagnoseSubscriberQuestionListEmpty } from "@/lib/questions/question-list-empty-diagnostics";
 import { logLargeApiResponse } from "@/lib/observability/perf-log";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { MAX_LIST_SKIP_ROWS_DEFAULT } from "@/lib/api/api-pagination-limits";
 
 /** Deep offset pagination is expensive on large tables; reject before issuing heavy skip scans. */
-const MAX_QUESTION_LIST_SKIP_ROWS = 4_000;
+const MAX_QUESTION_LIST_SKIP_ROWS = MAX_LIST_SKIP_ROWS_DEFAULT;
 
 function logSubscriberPayload(
   approxPayloadBytes: number,

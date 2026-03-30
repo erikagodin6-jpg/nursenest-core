@@ -15,6 +15,7 @@ import {
 } from "@/lib/exams/exam-session-bounds";
 import { QUESTION_PAYLOAD_WARN_BYTES } from "@/lib/questions/question-api-limits";
 import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
+import { logLargeApiResponse } from "@/lib/observability/perf-log";
 
 /** Max questions hydrated when `mode=full` — align with {@link MAX_SESSION_QUESTION_IDS}. */
 const SESSION_FULL_HYDRATE_MAX_QUESTIONS = MAX_SESSION_QUESTION_IDS;
@@ -92,7 +93,7 @@ export async function GET(req: NextRequest) {
     }
 
     if (mode === "minimal") {
-      return NextResponse.json({
+      const minimalBody = {
         sessionId: row.id,
         examId: row.examId,
         currentIndex: Math.min(row.currentIndex, Math.max(0, ids.length - 1)),
@@ -104,7 +105,9 @@ export async function GET(req: NextRequest) {
         poolEmpty: ids.length === 0,
         entitlementFiltered: dropped > 0,
         sessionQuestionIdsSanitized: sanitized.truncated || sanitized.coercedFromInvalid,
-      });
+      };
+      logLargeApiResponse("/api/exams/session", estimateJsonUtf8Bytes(minimalBody));
+      return NextResponse.json(minimalBody);
     }
 
     const ID_CHUNK = 400;
@@ -164,6 +167,7 @@ export async function GET(req: NextRequest) {
         sessionId: row.id,
       });
     }
+    logLargeApiResponse("/api/exams/session", approxPayloadBytes);
     return NextResponse.json(fullJson);
   } catch (e) {
     safeServerLogCritical("api_exams_session", "get_failed", {}, e);

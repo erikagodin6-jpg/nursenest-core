@@ -10,6 +10,15 @@ import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { withRetry } from "@/lib/resilience/with-retry";
 import { ExamFamily, type Prisma } from "@prisma/client";
 import { logFlashcardLargePayload } from "@/lib/observability/flashcard-log";
+import {
+  FLASHCARD_DECK_PAGE,
+  MAX_LIST_SKIP_ROWS_DEFAULT,
+  isSkipBeyondLimit,
+  listSkipRows,
+  parseBoundedPageSize,
+  parseListPage,
+} from "@/lib/api/api-pagination-limits";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export const dynamic = "force-dynamic";
 
@@ -17,8 +26,43 @@ export async function GET(req: NextRequest) {
   const session = await auth();
   const userId = (session?.user as { id?: string } | undefined)?.id;
 
-  const page = Math.max(1, Number(req.nextUrl.searchParams.get("page") ?? "1"));
-  const pageSize = Math.min(30, Math.max(6, Number(req.nextUrl.searchParams.get("pageSize") ?? "18")));
+  const pageParsed = parseListPage(req.nextUrl.searchParams.get("page"));
+  if (!pageParsed.ok) {
+    return NextResponse.json({ error: pageParsed.error, code: "invalid_page" }, { status: 400 });
+  }
+  const page = pageParsed.page;
+
+  const sizeParsed = parseBoundedPageSize(req.nextUrl.searchParams.get("pageSize"), FLASHCARD_DECK_PAGE);
+  if (!sizeParsed.ok) {
+    return NextResponse.json(
+      {
+        error: sizeParsed.error.message,
+        code: sizeParsed.error.code,
+        ...(sizeParsed.error.maxPageSize !== undefined ? { maxPageSize: sizeParsed.error.maxPageSize } : {}),
+      },
+      { status: 400 },
+    );
+  }
+  const pageSize = sizeParsed.pageSize;
+
+  const skipRows = listSkipRows(page, pageSize);
+  if (isSkipBeyondLimit(skipRows)) {
+    safeServerLog("api_flashcards_decks", "pagination_depth_rejected", {
+      skipRows,
+      maxSkipRows: MAX_LIST_SKIP_ROWS_DEFAULT,
+      page,
+      pageSize,
+      userId: userId ?? "",
+    });
+    return NextResponse.json(
+      {
+        error: `Pagination too deep; use filters or a smaller page (max offset ${MAX_LIST_SKIP_ROWS_DEFAULT} rows).`,
+        code: "pagination_depth_limit",
+        maxSkipRows: MAX_LIST_SKIP_ROWS_DEFAULT,
+      },
+      { status: 400 },
+    );
+  }
 
   const examFamily = req.nextUrl.searchParams.get("examFamily")?.trim();
   const pathwayId = req.nextUrl.searchParams.get("pathwayId")?.trim();
@@ -67,7 +111,7 @@ export async function GET(req: NextRequest) {
             cardCount: true,
           },
           orderBy: [{ sortOrder: "asc" }, { title: "asc" }],
-          skip: (page - 1) * pageSize,
+          skip: skipRows,
           take: pageSize,
         }),
       ),

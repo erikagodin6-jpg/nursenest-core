@@ -1,6 +1,6 @@
 import { recordRouteHttpFailure } from "@/lib/observability/route-failure-tracker";
 import { logApiPayloadAlert, logLargeApiResponse } from "@/lib/observability/perf-log";
-import { safeServerLogEvent } from "@/lib/observability/safe-server-log";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export type ApiUserClass = "guest" | "subscriber" | "admin" | "unknown";
 
@@ -25,7 +25,7 @@ export function logNodeApiRequestSummary(opts: ApiRequestSummaryOpts): void {
   const clIn = opts.request.headers.get("content-length");
   const requestContentLength = clIn ? Number(clIn) : undefined;
 
-  safeServerLogEvent("api_request_summary", {
+  safeServerLog("api", "api_request_summary", {
     route,
     method: opts.request.method.slice(0, 16),
     status: opts.response.status,
@@ -38,14 +38,14 @@ export function logNodeApiRequestSummary(opts: ApiRequestSummaryOpts): void {
   if (opts.response.status >= 400) {
     recordRouteHttpFailure(route, opts.response.status);
     if (opts.response.status >= 500) {
-      safeServerLogEvent("api_error_response", {
+      safeServerLog("api", "api_error_response", {
         route,
         status: opts.response.status,
         durationMs,
         userType: opts.userType,
       });
     } else {
-      safeServerLogEvent("api_client_error", {
+      safeServerLog("api", "api_client_error", {
         route,
         status: opts.response.status,
         durationMs,

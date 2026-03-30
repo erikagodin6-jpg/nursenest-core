@@ -22,7 +22,6 @@ import {
   Briefcase,
   Award,
   Sparkles,
-  BadgeDollarSign,
 } from "lucide-react";
 import { getEnabledCareers } from "@shared/careers";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
@@ -39,7 +38,7 @@ import { HomeMarketingSixtySeconds } from "@/components/marketing/home-marketing
 import { HomeMarketingProductProof } from "@/components/marketing/home-marketing-product-proof";
 import { HomeMarketingFeaturesStack } from "@/components/marketing/home-marketing-features-stack";
 import { heroQuickEntryLinks } from "@/lib/marketing/home-hero-gateway-config";
-import { HUB, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
+import { rnQuestions } from "@/lib/marketing/marketing-entry-routes";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 
@@ -136,7 +135,7 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
   const [flashcardCount, setFlashcardCount] = useState(10_000);
   const [heroMediaVisible, setHeroMediaVisible] = useState(() => HOMEPAGE_HERO_SLIDE_METADATA.length > 0);
 
-  const heroSlides = useMemo(() => buildHomepageHeroSlides(t), [t, locale]);
+  const heroSlides = useMemo(() => buildHomepageHeroSlides(t), [t]);
 
   const heroQuickLinks = useMemo(() => heroQuickEntryLinks(region), [region]);
 

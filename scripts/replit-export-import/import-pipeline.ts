@@ -69,6 +69,11 @@ export type ImportOptions = {
    * Pass `null` to disable writing.
    */
   nursingReviewQueueOutPath?: string | null;
+  /**
+   * Skip operational / audit tables from the SQL pipeline: ai_cache (raw rows), generation_jobs, generation_events.
+   * ai_cache.output_json extraction to exam_questions / flashcard_bank still runs when the file exists and extractAiCache is true.
+   */
+  skipOperationalPipeline?: boolean;
 };
 
 async function rowExists(pool: pg.Pool, table: string, whereSql: string, params: unknown[]): Promise<boolean> {
@@ -1448,7 +1453,7 @@ export async function runImportPipeline(
     return loadJsonRows(p);
   };
 
-  const order = [
+  const allSteps: [string, () => Promise<ImportStats>][] = [
     ["allied_blueprints.json", () => importAlliedBlueprints(pool, read("allied_blueprints.json"), opts)],
     ["ai_cache.json", () => importAiCache(pool, read("ai_cache.json"), opts)],
     ["generation_jobs.json", () => importGenerationJobs(pool, read("generation_jobs.json"), opts)],
@@ -1466,7 +1471,11 @@ export async function runImportPipeline(
     ["flashcard_decks.json", () => importFlashcardDecks(pool, read("flashcard_decks.json"), opts)],
     ["deck_flashcards.json", () => importDeckFlashcards(pool, read("deck_flashcards.json"), opts)],
     ["kill_switches.json", () => importKillSwitches(pool, read("kill_switches.json"), opts)],
-  ] as const;
+  ];
+
+  const skipOps = Boolean(opts.skipOperationalPipeline);
+  const operationalFiles = new Set(["ai_cache.json", "generation_jobs.json", "generation_events.json"]);
+  const order = allSteps.filter(([name]) => !skipOps || !operationalFiles.has(name));
 
   for (const [, fn] of order) {
     stats.push(await fn());

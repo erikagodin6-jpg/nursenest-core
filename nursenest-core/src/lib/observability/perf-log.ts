@@ -6,6 +6,17 @@ export const SLOW_PRISMA_QUERY_MS = 500;
 /** Log JSON API bodies estimated above this (UTF-8 bytes). */
 export const LARGE_API_RESPONSE_BYTES = 500_000;
 
+/** Earlier warning threshold (still below `LARGE_API_RESPONSE_BYTES`) for noisy routes. */
+export const ALERT_API_PAYLOAD_BYTES = 250_000;
+
+export function logApiPayloadAlert(route: string, approxUtf8Bytes: number): void {
+  if (approxUtf8Bytes <= ALERT_API_PAYLOAD_BYTES) return;
+  safeServerLog("perf", "api_payload_alert", {
+    route: route.slice(0, 120),
+    approxUtf8Bytes,
+  });
+}
+
 /** When heap exceeds this during a slow query or interval sample, emit high_memory. */
 export const HIGH_HEAP_BYTES = 768 * 1024 * 1024;
 

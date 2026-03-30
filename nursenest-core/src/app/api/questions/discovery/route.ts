@@ -9,6 +9,8 @@ import {
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
+import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
+import { logLargeApiResponse } from "@/lib/observability/perf-log";
 
 /** Cap grouped rows returned to the client (must match SQL LIMITs in subscriber-discovery-aggregates). */
 const DISCOVERY_TOPIC_BUCKET_CAP = DISCOVERY_SQL_TOPIC_LIMIT;
@@ -68,7 +70,7 @@ export async function GET() {
       });
     }
 
-    return NextResponse.json({
+    const discoveryBody = {
       total,
       buckets,
       examFamily,
@@ -82,7 +84,9 @@ export async function GET() {
         aggregateStrategy: "sql_top_n" as const,
       },
       ...(discoveryDiagnostics ? { diagnostics: discoveryDiagnostics } : {}),
-    });
+    };
+    logLargeApiResponse("/api/questions/discovery", estimateJsonUtf8Bytes(discoveryBody));
+    return NextResponse.json(discoveryBody);
   } catch (e) {
     safeServerLogCritical("api_questions_discovery", "failed", {}, e);
     return NextResponse.json(

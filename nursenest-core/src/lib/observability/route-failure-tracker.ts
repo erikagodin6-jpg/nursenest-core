@@ -1,4 +1,4 @@
-import { safeServerLogEvent } from "@/lib/observability/safe-server-log";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 const WINDOW_MS = 60_000;
 const ALERT_THRESHOLD = 5;
@@ -18,7 +18,7 @@ export function recordRouteHttpFailure(route: string, status: number): void {
   pruned.push(now);
   failureTimestamps.set(key, pruned);
   if (pruned.length >= ALERT_THRESHOLD) {
-    safeServerLogEvent("alert_repeated_route_failures", {
+    safeServerLog("api", "alert_repeated_route_failures", {
       route: key,
       failureCount: pruned.length,
       windowMs: WINDOW_MS,
