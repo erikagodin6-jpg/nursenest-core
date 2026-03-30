@@ -337,6 +337,9 @@ model ExamSession {
   status       ExamSessionStatus @default(IN_PROGRESS)
   attemptId    String?           @unique
   attempt      ExamAttempt?      @relation("ExamSessionAttempt", fields: [attemptId], references: [id], onDelete: SetNull)
+  /** Linear vs CAT; CAT uses `adaptiveState` for theta, difficulty history, incidents. */
+  examMode     String            @default("linear") @map("exam_mode")
+  adaptiveState Json?            @map("adaptive_state")
   createdAt    DateTime          @default(now())
   updatedAt    DateTime          @updatedAt
 

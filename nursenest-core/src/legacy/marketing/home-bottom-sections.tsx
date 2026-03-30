@@ -122,16 +122,16 @@ export function HomeBottomSections({
     <>
                 <section className="border-t border-border" style={{ paddingTop: 'var(--space-section)', paddingBottom: 'var(--space-section)' }} data-testid="section-study-tools">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-10">
+            <div className="mb-12 text-left md:max-w-3xl">
               <div className="nn-accent-soft-ring mb-4 inline-flex items-center gap-2 rounded-full border px-4 py-1.5">
                 <Sparkles className="h-3.5 w-3.5 text-primary" />
                 <span className="text-xs font-bold uppercase tracking-wider text-primary">{t("components.homeBottomSections.builtForYou")}</span>
               </div>
               <h2 className="font-bold text-[var(--theme-heading-text)] mb-3" style={{ fontSize: 'var(--text-section)' }} data-testid="text-study-tools-heading">
-                Your Personalized Exam Toolkit
+                {t("components.homeBottomSections.studyToolsHeading")}
               </h2>
-              <p className="text-lg text-foreground max-w-3xl mx-auto">
-                Every student's journey is unique. NurseNest adapts to your strengths, targets your weak areas, and tracks your progress toward exam readiness.
+              <p className="text-lg text-foreground">
+                {t("components.homeBottomSections.studyToolsSubcopy")}
               </p>
             </div>
 
@@ -141,7 +141,6 @@ export function HomeBottomSections({
                 onClick={() => router.push(mapLegacyMarketingHref("/study-plan"))}
                 data-testid="card-promo-study-planner"
               >
-                <div className="absolute top-0 right-0 h-24 w-24 rounded-bl-full bg-gradient-to-bl from-primary/15 to-transparent" />
                 <div className="absolute top-3 right-3 z-10 rounded-full bg-primary px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-primary-foreground">
                   {t("components.homeBottomSections.personalized")}
                 </div>
@@ -149,9 +148,7 @@ export function HomeBottomSections({
                   <Brain className="nn-accent-icon h-6 w-6" />
                 </div>
                 <h3 className="text-lg font-bold text-[var(--theme-heading-text)] mb-2">{t("components.homeBottomSections.customStudyPlanner")}</h3>
-                <p className="text-sm text-foreground leading-relaxed mb-3">
-                  Get a personalized study schedule built around your exam date, available hours, and weak areas. Your plan adapts as you progress.
-                </p>
+                <p className="text-sm text-foreground leading-relaxed mb-3">{t("components.homeBottomSections.studyPlannerBody")}</p>
                 <div className="flex flex-wrap gap-1.5 mb-3">
                   <span className="rounded-full border border-primary/15 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">{t("components.homeBottomSections.dailyTasks")}</span>
                   <span className="rounded-full border border-primary/15 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">{t("components.homeBottomSections.adaptive")}</span>
@@ -168,7 +165,6 @@ export function HomeBottomSections({
                 onClick={() => router.push(mapLegacyMarketingHref("/mock-exams"))}
                 data-testid="card-promo-readiness-exam"
               >
-                <div className="absolute top-0 right-0 h-24 w-24 rounded-bl-full bg-gradient-to-bl from-primary/15 to-transparent" />
                 <div className="absolute top-3 right-3 z-10 rounded-full bg-primary px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-primary-foreground">
                   {t("components.homeBottomSections.free")}
                 </div>
@@ -176,9 +172,7 @@ export function HomeBottomSections({
                   <ShieldCheck className="nn-accent-icon h-6 w-6" />
                 </div>
                 <h3 className="text-lg font-bold text-[var(--theme-heading-text)] mb-2">{t("components.homeBottomSections.freeReadinessExam")}</h3>
-                <p className="text-sm text-foreground leading-relaxed mb-3">
-                  Take a 25-question readiness check to gauge your exam preparedness. Instant results with a detailed performance breakdown. No account required.
-                </p>
+                <p className="text-sm text-foreground leading-relaxed mb-3">{t("components.homeBottomSections.readinessExamBody")}</p>
                 <div className="mb-3 flex flex-wrap gap-1.5">
                   <span className="rounded-full border border-primary/15 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">{t("components.homeBottomSections.25Questions")}</span>
                   <span className="rounded-full border border-primary/15 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">{t("components.homeBottomSections.instantResults")}</span>
@@ -195,14 +189,11 @@ export function HomeBottomSections({
                 onClick={() => router.push(mapLegacyMarketingHref("/reports"))}
                 data-testid="card-promo-report-card"
               >
-                <div className="absolute top-0 right-0 h-24 w-24 rounded-bl-full bg-gradient-to-bl from-primary/15 to-transparent" />
                 <div className="nn-accent-icon-wrap mb-4 flex h-12 w-12 items-center justify-center rounded-xl transition-transform group-hover:scale-110">
                   <BarChart3 className="nn-accent-icon h-6 w-6" />
                 </div>
                 <h3 className="text-lg font-bold text-[var(--theme-heading-text)] mb-2">{t("components.homeBottomSections.performanceReportCard")}</h3>
-                <p className="text-sm text-foreground leading-relaxed mb-3">
-                  Track your progress across every body system and competency domain. Identify strengths, target weaknesses, and watch your readiness score climb.
-                </p>
+                <p className="text-sm text-foreground leading-relaxed mb-3">{t("components.homeBottomSections.reportCardBody")}</p>
                 <div className="mb-3 flex flex-wrap gap-1.5">
                   <span className="rounded-full border border-primary/15 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">{t("components.homeBottomSections.scoreTrends")}</span>
                   <span className="rounded-full border border-primary/15 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">{t("components.homeBottomSections.domainAnalysis")}</span>
@@ -222,7 +213,7 @@ export function HomeBottomSections({
                 onClick={() => router.push(mapLegacyMarketingHref("/free-practice"))}
                 data-testid="button-promo-get-started"
               >
-                Start Free - Build Your Study Plan
+                {t("components.homeBottomSections.studyToolsCta")}
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
             </div>

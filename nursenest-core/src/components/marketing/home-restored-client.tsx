@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState, Suspense } from "react";
+import { useCallback, useEffect, useMemo, useState, Suspense } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import {
@@ -22,6 +22,7 @@ import {
   Briefcase,
   Award,
   Sparkles,
+  BadgeDollarSign,
 } from "lucide-react";
 import { getEnabledCareers } from "@shared/careers";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
@@ -29,9 +30,15 @@ import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { LazySection } from "@/legacy/marketing/lazy-section";
-import { HOMEPAGE_HERO_SLIDES } from "@/lib/marketing-assets";
+import { buildHomepageHeroSlides, HOMEPAGE_HERO_SLIDE_METADATA } from "@/lib/marketing-assets";
 import { MarketingHeroCarousel } from "@/components/marketing/marketing-hero-carousel";
 import { getHomepageLessonTeasers } from "@/lib/marketing/homepage-lesson-teasers";
+import { HomeHeroPathGateway } from "@/components/marketing/home-hero-path-gateway";
+import { HomeMarketingSixtySeconds } from "@/components/marketing/home-marketing-sixty-seconds";
+import { HomeMarketingProductProof } from "@/components/marketing/home-marketing-product-proof";
+import { HomeMarketingFeaturesStack } from "@/components/marketing/home-marketing-features-stack";
+import { heroQuickEntryLinks } from "@/lib/marketing/home-hero-gateway-config";
+import { HUB, NP, PN, RN, alliedCareersMarketingUrl } from "@/lib/marketing/marketing-entry-routes";
 
 const HOMEPAGE_LESSON_TEASERS = getHomepageLessonTeasers();
 
@@ -41,17 +48,8 @@ const HeroFeatureStrip = dynamic(() => import("@/legacy/marketing/hero-feature-s
 const HeroTrustIndicator = dynamic(() => import("@/legacy/marketing/hero-trust-indicator"), {
   loading: () => <div className="min-h-[50px]" />,
 });
-const HomeHeroFeatures = dynamic(() => import("@/legacy/marketing/home-hero-features"), {
-  loading: () => <div className="min-h-[200px]" />,
-});
 const HeroPlatformStats = dynamic(() => import("@/legacy/marketing/hero-platform-stats"), {
   loading: () => <div className="min-h-[300px]" />,
-});
-const HomeChoosePath = dynamic(() => import("@/legacy/marketing/home-choose-path"), {
-  loading: () => <div className="min-h-[280px]" />,
-});
-const HeroFeaturesGrid = dynamic(() => import("@/legacy/marketing/hero-features-grid"), {
-  loading: () => <div className="min-h-[400px]" />,
 });
 const HeroGlobalCoverage = dynamic(() => import("@/legacy/marketing/hero-global-coverage"), {
   loading: () => <div className="min-h-[300px]" />,
@@ -111,7 +109,23 @@ export default function HomeRestoredClient() {
   const [questionCount, setQuestionCount] = useState(0);
   const [storeProductCount, setStoreProductCount] = useState(0);
   const [flashcardCount, setFlashcardCount] = useState(10_000);
-  const [heroMediaVisible, setHeroMediaVisible] = useState(() => HOMEPAGE_HERO_SLIDES.length > 0);
+  const [heroMediaVisible, setHeroMediaVisible] = useState(() => HOMEPAGE_HERO_SLIDE_METADATA.length > 0);
+
+  const heroSlides = useMemo(() => buildHomepageHeroSlides(t), [t, locale]);
+
+  const heroQuickLinks = useMemo(() => heroQuickEntryLinks(region), [region]);
+
+  const exploreHubLinks = useMemo(() => {
+    const allied = alliedCareersMarketingUrl();
+    return [
+      { href: RN.practiceProgrammatic, labelKey: "home.exploreHubs.link.nclexRn" as const },
+      { href: PN.practiceProgrammatic, labelKey: "home.exploreHubs.link.rexPn" as const },
+      { href: NP.practiceProgrammatic, labelKey: "home.exploreHubs.link.np" as const },
+      { href: allied, labelKey: "home.exploreHubs.link.allied" as const, external: true },
+      { href: HUB.examLessons, labelKey: "home.exploreHubs.link.examLessons" as const },
+      { href: HUB.tools, labelKey: "home.exploreHubs.link.tools" as const },
+    ];
+  }, []);
 
   const [email, setEmail] = useState("");
   const [emailFrequency, setEmailFrequency] = useState("weekly");
@@ -304,6 +318,21 @@ export default function HomeRestoredClient() {
                   </Link>
                 </div>
 
+                <div className="space-y-2" data-testid="hero-quick-entry-links">
+                  <p className="text-xs font-medium text-[var(--theme-muted-text)]">Quick entry — try a pathway-timed bank pass first</p>
+                  <div className="flex flex-wrap gap-2">
+                    {heroQuickLinks.map((item) => (
+                      <Link
+                        key={item.label}
+                        href={withMarketingLocale(locale, item.href)}
+                        className="inline-flex items-center rounded-full border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)] px-3 py-1.5 text-xs font-semibold text-[var(--theme-heading-text)] transition hover:border-primary/35 hover:bg-card"
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
                 <p className="text-center text-xs text-[var(--theme-body-text)] sm:text-left" data-testid="text-urgency-microcopy">
                   {t("home.hero.urgencyMicrocopy")}
                 </p>
@@ -393,7 +422,7 @@ export default function HomeRestoredClient() {
                 style={{ overflowAnchor: "none" }}
               >
                 <MarketingHeroCarousel
-                  slides={HOMEPAGE_HERO_SLIDES}
+                  slides={heroSlides}
                   onMediaUnavailable={() => setHeroMediaVisible(false)}
                 />
                 <div className="absolute -bottom-5 -left-5 z-10 flex items-center gap-3 rounded-2xl border border-[var(--theme-card-border)]/80 bg-card px-5 py-3.5 shadow-[var(--shadow-card-hover)]">
@@ -454,6 +483,8 @@ export default function HomeRestoredClient() {
                 )}
               </div>
             </div>
+
+            <HomeHeroPathGateway region={region} />
           </div>
         </section>
 
@@ -498,18 +529,15 @@ export default function HomeRestoredClient() {
           <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <h2 className="text-lg font-bold text-[var(--theme-heading-text)] sm:text-xl">Start with Lessons</h2>
-                <p className="mt-1 max-w-xl text-sm text-[var(--theme-muted-text)]">
-                  Choose your exam pathway and open the lesson hub—browse by topic, then pair with practice questions in the same
-                  track.
-                </p>
+                <h2 className="text-lg font-bold text-[var(--theme-heading-text)] sm:text-xl">{t("home.lessons.title")}</h2>
+                <p className="mt-1 max-w-xl text-sm text-[var(--theme-muted-text)]">{t("home.lessons.subtitle")}</p>
               </div>
               <Link
                 href={withMarketingLocale(locale, "/exam-lessons")}
                 className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-primary hover:underline"
               >
                 <BookOpen className="h-4 w-4" />
-                All pathways
+                {t("home.lessons.allPathwaysCta")}
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
@@ -522,7 +550,7 @@ export default function HomeRestoredClient() {
                   >
                     <span className="text-xs font-semibold uppercase text-primary">{item.shortLabel}</span>
                     <span className="mt-1 text-sm font-semibold text-[var(--theme-heading-text)]">{item.title}</span>
-                    <span className="mt-3 text-xs font-medium text-primary">Lesson hub →</span>
+                    <span className="mt-3 text-xs font-medium text-primary">{t("home.lessons.lessonHubCta")}</span>
                   </Link>
                 </li>
               ))}
@@ -536,21 +564,21 @@ export default function HomeRestoredClient() {
           data-testid="section-explore-hubs"
         >
           <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-            <h2 className="text-center text-base font-bold text-[var(--theme-heading-text)] sm:text-lg">
-              Exam prep hubs & resources
+            <h2 className="text-left text-base font-bold text-[var(--theme-heading-text)] sm:text-lg md:text-center">
+              {t("home.exploreHubs.title")}
             </h2>
-            <p className="mt-2 text-center text-sm text-[var(--theme-muted-text)]">
-              Deep guides for RN, PN, and NP pathways—plus tools and pricing when you are ready to start studying.
+            <p className="mt-2 text-left text-sm text-[var(--theme-muted-text)] md:text-center">
+              {t("home.exploreHubs.subtitle")}
             </p>
             <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {(
                 [
-                  { href: "/nclex-rn-practice-questions", label: "NCLEX-RN practice questions" },
-                  { href: "/rex-pn-practice-questions", label: "REx-PN & NCLEX-PN prep" },
-                  { href: "/np-exam-practice-questions", label: "NP exam prep" },
-                  { href: "/tools", label: "Clinical tools" },
-                  { href: "/blog", label: "Blog & study guides" },
-                  { href: "/pricing", label: "Plans & pricing" },
+                  { href: "/nclex-rn-practice-questions", labelKey: "home.exploreHubs.link.nclexRn" },
+                  { href: "/rex-pn-practice-questions", labelKey: "home.exploreHubs.link.rexPn" },
+                  { href: "/np-exam-practice-questions", labelKey: "home.exploreHubs.link.np" },
+                  { href: "/tools", labelKey: "home.exploreHubs.link.tools" },
+                  { href: "/blog", labelKey: "home.exploreHubs.link.blog" },
+                  { href: "/pricing", labelKey: "home.exploreHubs.link.pricing" },
                 ] as const
               ).map((item) => (
                 <li key={item.href}>
@@ -558,7 +586,7 @@ export default function HomeRestoredClient() {
                     href={withMarketingLocale(locale, item.href)}
                     className="flex items-center justify-between rounded-xl border border-[var(--theme-card-border)] bg-card px-4 py-3 text-sm font-medium text-[var(--theme-heading-text)] shadow-sm transition hover:border-primary/30 hover:bg-[var(--theme-muted-surface)]"
                   >
-                    {item.label}
+                    {t(item.labelKey)}
                     <ArrowRight className="h-4 w-4 shrink-0 text-primary" />
                   </Link>
                 </li>

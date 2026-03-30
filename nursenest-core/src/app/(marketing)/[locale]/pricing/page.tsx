@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { MarketingPricingPage } from "@/components/marketing/marketing-pricing-page";
+import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
+import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { marketingPricingBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -16,5 +19,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function LocalizedPricingPage({ params }: Props) {
   const { locale } = await params;
-  return <MarketingPricingPage locale={locale} />;
+  const { crumbs, schemaItems } = marketingPricingBreadcrumbs();
+  return (
+    <>
+      <BreadcrumbJsonLd items={schemaItems} />
+      <div className="mx-auto max-w-6xl px-4 pt-4 sm:px-6 lg:px-8">
+        <BreadcrumbTrail items={crumbs} />
+      </div>
+      <MarketingPricingPage locale={locale} />
+    </>
+  );
 }

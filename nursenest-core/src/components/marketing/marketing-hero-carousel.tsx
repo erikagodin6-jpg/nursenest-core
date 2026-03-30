@@ -205,8 +205,8 @@ export function MarketingHeroCarousel({
         <>
           {currentSlide ? (
             <div className="mt-3 space-y-1 px-2 text-center sm:px-1" data-testid={captionTestId}>
-              <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{currentSlide.title}</p>
-              <p className="text-xs leading-relaxed text-[var(--theme-body-text)]">{currentSlide.caption}</p>
+              <p className="text-balance text-sm font-semibold text-[var(--theme-heading-text)]">{currentSlide.title}</p>
+              <p className="text-balance text-xs leading-relaxed text-[var(--theme-body-text)]">{currentSlide.caption}</p>
             </div>
           ) : null}
           <div className="mt-3 flex flex-wrap justify-center gap-2" data-testid={dotsTestId}>

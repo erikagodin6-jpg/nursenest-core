@@ -3,10 +3,13 @@ import { auth } from "@/lib/auth";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
-import { SOCIAL_PROOF } from "@/lib/conversion/pricing-catalog";
+import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
+import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { SubscriberPracticeRollups } from "@/components/student/subscriber-practice-rollups";
 
 export default async function DashboardPage() {
+  const messages = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
@@ -98,7 +101,9 @@ export default async function DashboardPage() {
       <div>
         <p className="text-xs font-semibold uppercase tracking-wide text-primary">Dashboard</p>
         <h1 className="mt-1 text-3xl font-bold text-[var(--theme-heading-text)]">Learner dashboard</h1>
-        <p className="mt-2 text-sm text-muted">{SOCIAL_PROOF.passRateLine}</p>
+        <p className="mt-2 text-sm text-muted">
+          {formatMarketingMessage(messages, "pages.pricing.social.passRateLine")}
+        </p>
       </div>
 
       <section className="nn-card p-6">

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { TRUST_BLOCK } from "@/lib/conversion/pricing-catalog";
 import { resolveMarketingHref } from "@/lib/legacy-marketing-routes";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
@@ -46,8 +45,8 @@ export async function MarketingForInstitutionsPage({ locale }: { locale: string 
             ))}
           </ul>
           <div className="mt-6 border-t border-border pt-6">
-            <p className="text-sm font-semibold">{TRUST_BLOCK.guaranteeTitle}</p>
-            <p className="mt-2 text-sm text-muted">{TRUST_BLOCK.guaranteeBody}</p>
+            <p className="text-sm font-semibold">{m["pages.pricing.trust.guaranteeTitle"]}</p>
+            <p className="mt-2 text-sm text-muted">{m["pages.pricing.trust.guaranteeBody"]}</p>
           </div>
         </section>
       </div>

@@ -74,7 +74,7 @@ export function SiteBrandLogoMark({
   }, [candidateIndex, loadChain.length, extraFallbackStep, onMarkState]);
 
   return (
-    <span className="inline-flex h-10 min-h-10 w-auto min-w-[7.5rem] max-w-[min(100%,14rem)] shrink-0 items-center md:h-12 md:min-h-12 [&>img]:block">
+    <span className="inline-flex h-[40px] w-auto min-w-0 max-w-[min(100%,16rem)] shrink-0 items-center p-0 md:h-14 md:min-h-[56px] [&>img]:block">
       <img
         key={`${themeId}-${safeIndex}-${extraFallbackStep}-${src}`}
         src={src}
@@ -83,7 +83,7 @@ export function SiteBrandLogoMark({
         height={56}
         loading="eager"
         decoding="sync"
-        className={`h-10 w-auto max-h-10 max-w-[min(100%,14rem)] object-contain object-left md:h-12 md:max-h-12 ${className}`}
+        className={`h-full max-h-[42px] w-auto max-w-[min(100%,16rem)] object-contain object-left md:max-h-[56px] ${className}`}
         onLoad={handleLoad}
         onError={handleError}
       />

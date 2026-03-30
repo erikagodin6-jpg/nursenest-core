@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import HomeRestoredClient from "@/components/marketing/home-restored-client";
+import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
+import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { marketingHomeSurfaceBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -20,5 +23,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default function LocalizedHomePage() {
-  return <HomeRestoredClient />;
+  const { crumbs, schemaItems } = marketingHomeSurfaceBreadcrumbs();
+  return (
+    <>
+      <BreadcrumbJsonLd items={schemaItems} />
+      <div className="mx-auto max-w-7xl px-4 pt-4 sm:px-6 lg:px-8">
+        <BreadcrumbTrail items={crumbs} />
+      </div>
+      <HomeRestoredClient />
+    </>
+  );
 }

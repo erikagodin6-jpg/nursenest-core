@@ -1,5 +1,5 @@
 /**
- * Programmatic SEO definitions — single source for routes, metadata, sitemap, and internal links.
+ * Programmatic SEO definitions: single source for routes, metadata, sitemap, and internal links.
  * Add new entries here to scale indexable pages without new route files.
  */
 
@@ -10,7 +10,9 @@ export type SeoCluster =
   | "allied"
   | "category"
   | "hub"
-  | "study-format";
+  | "study-format"
+  /** Shared cluster for lab, pharmacology, prioritization, and study plan guides */
+  | "study-guide";
 
 export type SeoPageDefinition = {
   slug: string;
@@ -22,6 +24,15 @@ export type SeoPageDefinition = {
   keywords: string[];
   sections: { heading: string; level: 2 | 3; body: string[] }[];
   faq?: { question: string; answer: string }[];
+  /** Optional 3-level breadcrumb: Home → hub → current */
+  breadcrumb?: { midLabel: string; midPath: string; currentLabel: string };
+  /** Render practice conversion blocks (see `programmatic-practice-config.ts`) */
+  practiceConversion?: boolean;
+  /**
+   * Optional pathway pack for product links (lessons, questions, test bank, CAT, tools, flashcards).
+   * When omitted, links are inferred from `cluster` for exam pages, otherwise general test bank routing applies.
+   */
+  linkPack?: "nclex-rn" | "nclex-pn" | "np" | "allied" | "general";
 };
 
 const SITE = "NurseNest";
@@ -29,34 +40,33 @@ const SITE = "NurseNest";
 export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
   {
     slug: "nclex-rn-practice-questions",
-    title: "NCLEX-RN Practice Questions | High-Yield Clinical Items",
+    title: "NCLEX-RN Practice Questions | Rationales and Weak-Area Feedback",
     description:
-      "Build readiness for the NCLEX-RN with exam-style practice questions, rationales, and adaptive review—mapped to Canadian and US RN expectations.",
-    h1: "NCLEX-RN practice questions built for real exam pressure",
+      "Practice NCLEX-style questions and see where you lose marks. Rationales, client-need categories, and score feedback for US and Canadian RN candidates.",
+    h1: "NCLEX-RN practice questions",
     cluster: "exam-nclex",
     keywords: ["NCLEX-RN", "practice questions", "RN"],
+    breadcrumb: {
+      midLabel: "NCLEX-RN prep",
+      midPath: "/nclex-rn-exam-prep",
+      currentLabel: "Practice questions",
+    },
+    practiceConversion: true,
     sections: [
       {
-        heading: "Why question practice drives NCLEX-RN pass readiness",
+        heading: "What makes NCLEX-RN practice different from reading alone",
         level: 2,
         body: [
-          "The NCLEX-RN rewards clinical judgment under time pressure—not memorization alone. Short, targeted question blocks help you spot patterns in prioritization, safety, pharmacology, and therapeutic communication.",
-          `${SITE} groups items by cognitive demand so you spend more cycles on weak systems instead of repeating strengths.`,
+          "The exam rewards judgment under time pressure, not recognition from notes. Questions force you to commit, then the rationale shows whether your rule matched the board’s rule.",
+          `${SITE} keeps items pathway-scoped so you are not training on RN noise if your authorization does not include it.`,
         ],
       },
       {
-        heading: "How to use a practice question bank effectively",
+        heading: "When to add lessons and mocks",
         level: 2,
         body: [
-          "Aim for consistent daily volume with spaced review. After each block, read rationales even when you answer correctly—misaligned reasoning will resurface on exam day.",
-          "Pair questions with lessons on fluid balance, infection control, and acute care transitions when those domains trend weak in your analytics.",
-        ],
-      },
-      {
-        heading: "Start RN prep inside NurseNest",
-        level: 2,
-        body: [
-          "Open the question bank for timed sets, then move into mock exams when your accuracy stabilizes. Subscription unlocks the full pool for your region and tier.",
+          "When a category keeps flagging weak, pair that block with a lesson on the same system, then return to questions within a few days.",
+          "When rolling accuracy holds steady for two weeks, sit timed practice exams to test stamina, not just knowledge.",
         ],
       },
     ],
@@ -64,7 +74,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
       {
         question: "Are NCLEX-RN practice questions aligned to the current test plan?",
         answer:
-          "Items are written for clinical judgment and safety emphasis consistent with NCLEX-style preparation; always cross-check with your regulatory body's latest bulletin.",
+          "Items target clinical judgment and safety emphasis consistent with NCLEX-style preparation. Always confirm details with your regulatory body’s latest bulletin.",
       },
       {
         question: "Can Canadian RN candidates use the same bank as US candidates?",
@@ -120,19 +130,25 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
   },
   {
     slug: "rex-pn-practice-questions",
-    title: "REx-PN & NCLEX-PN Style Practice Questions",
+    title: "REx-PN and NCLEX-PN Practice Questions | Scope and Safety",
     description:
-      "Practical nursing practice questions for Canadian REx-PN and PN pathways—safety-first scenarios with clear rationales.",
-    h1: "REx-PN practice questions with safety and scope at the center",
+      "PN practice questions for REx-PN and NCLEX-PN paths. Rationales, category feedback, and scope-aware stems for Canada and the US.",
+    h1: "REx-PN and NCLEX-PN practice questions",
     cluster: "exam-pn",
     keywords: ["REx-PN", "PN", "LPN"],
+    breadcrumb: {
+      midLabel: "PN exam prep",
+      midPath: "/rex-pn-exam-prep",
+      currentLabel: "Practice questions",
+    },
+    practiceConversion: true,
     sections: [
       {
-        heading: "PN exams reward scope-aware decisions",
+        heading: "Why PN items hinge on scope and stability",
         level: 2,
         body: [
-          "Practical nursing items often hinge on delegation, scope, and stable-versus-unstable judgments. Practice should stress those forks explicitly.",
-          `${SITE} helps you drill PN-appropriate scenarios without mixing in RN-only scope unless your pathway allows.`,
+          "Exams love delegation edges, infection control sequence, and which client you see first. Questions train those forks faster than re-reading slides.",
+          `${SITE} keeps PN banks separate from RN-only scope unless your tier includes crossover.`,
         ],
       },
     ],
@@ -158,19 +174,25 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
   },
   {
     slug: "np-exam-practice-questions",
-    title: "NP Exam Practice Questions | Clinical Reasoning",
+    title: "NP Exam Practice Questions | Differentials and Management",
     description:
-      "Advanced practice questions emphasizing differential reasoning, diagnostics, and therapeutics for NP exam preparation.",
-    h1: "NP exam practice questions for differential and management depth",
+      "NP-level practice questions with rationales across assessment, diagnosis, and management. Track weak domains instead of rereading slides.",
+    h1: "NP exam practice questions",
     cluster: "exam-np",
     keywords: ["NP", "nurse practitioner", "practice questions"],
+    breadcrumb: {
+      midLabel: "NP exam prep",
+      midPath: "/np-exam-prep",
+      currentLabel: "Practice questions",
+    },
+    practiceConversion: true,
     sections: [
       {
-        heading: "Why NP items feel different from RN banks",
+        heading: "How NP stems differ from RN banks",
         level: 2,
         body: [
-          "NP-level preparation expects broader synthesis across lifespan presentations, prescribing considerations, and follow-up planning.",
-          `${SITE} supports deeper rationales when your tier includes NP pathways—keep review notes tied to each miss.`,
+          "Expect longer cases, more differentials, and medication safety in context. Your job is staged reasoning, not the fastest click.",
+          `${SITE} ties misses to categories so you repeat the same reasoning gap until it closes.`,
         ],
       },
     ],
@@ -497,8 +519,8 @@ export function getRelatedProgrammaticPages(slug: string, limit = 5): SeoPageDef
 export function getCrossClusterLinks(slug: string): SeoPageDefinition[] {
   const page = getProgrammaticSeoPage(slug);
   if (!page) return [];
-  const want: SeoCluster[] = ["hub", "study-format", "exam-nclex"];
-  return PROGRAMMATIC_SEO_PAGES.filter((p) => p.slug !== slug && want.includes(p.cluster)).slice(0, 4);
+  const want: SeoCluster[] = ["hub", "study-format", "exam-nclex", "study-guide"];
+  return PROGRAMMATIC_SEO_PAGES.filter((p) => p.slug !== slug && want.includes(p.cluster)).slice(0, 6);
 }
 
 export function isProgrammaticSeoSlug(slug: string): boolean {

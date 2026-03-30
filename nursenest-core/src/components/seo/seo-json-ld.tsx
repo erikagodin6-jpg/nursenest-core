@@ -56,15 +56,6 @@ export function ProgrammaticPageJsonLd({
       ? absoluteUrl(`/${page.slug}`)
       : absoluteUrl(`/${locale}/${page.slug}`);
 
-  const breadcrumb = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
-      { "@type": "ListItem", position: 2, name: page.h1, item: url },
-    ],
-  };
-
   const learningResource = {
     "@context": "https://schema.org",
     "@type": "LearningResource",
@@ -73,11 +64,12 @@ export function ProgrammaticPageJsonLd({
     url,
     educationalLevel: "Professional nursing and allied health",
     learningResourceType: "Study guide",
-    isAccessibleForFree: false,
+    isAccessibleForFree: Boolean(page.practiceConversion),
     provider: { "@id": ORG_ID },
   };
 
-  const nodes: Record<string, unknown>[] = [breadcrumb, learningResource];
+  /** Breadcrumb JSON-LD is emitted with `BreadcrumbJsonLd` in `programmatic-seo-page.tsx` for crawlable alignment with visible crumbs. */
+  const nodes: Record<string, unknown>[] = [learningResource];
 
   if (page.faq?.length) {
     nodes.push({

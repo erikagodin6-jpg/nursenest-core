@@ -33,12 +33,16 @@ export {
 import { LOGO_PRIMARY as LOGO_PRIMARY_GENERATED, HERO_DASHBOARD_SCREENSHOT } from "./marketing-assets.generated";
 
 export {
-  HOMEPAGE_HERO_SLIDES,
+  HOMEPAGE_HERO_SLIDE_METADATA,
+  buildHomepageHeroSlides,
   homeHeroOgImageUrl,
   homeHeroScreenshotPublicUrl,
   homeHeroScreenshotObjectKey,
+  homeHeroSlideTitleKey,
+  homeHeroSlideCaptionKey,
   HOME_HERO_SCREENSHOT_COUNT,
   type HomeHeroSlide,
+  type HomeHeroSlideMetadata,
 } from "@/config/home-hero-carousel";
 
 import { homeHeroOgImageUrl } from "@/config/home-hero-carousel";

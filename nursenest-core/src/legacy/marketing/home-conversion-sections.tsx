@@ -6,7 +6,7 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import type { HomeHeroSlide } from "@/config/home-hero-carousel";
 import { MarketingHeroCarousel } from "@/components/marketing/marketing-hero-carousel";
-import { HOMEPAGE_HERO_SLIDES, MARKETING_SCREENSHOT_SOURCES } from "@/lib/marketing-assets";
+import { HOMEPAGE_HERO_SLIDE_METADATA, MARKETING_SCREENSHOT_SOURCES } from "@/lib/marketing-assets";
 import { objectKeyFromPublicCdnUrl } from "@/lib/marketing-hero-image";
 import {
   ArrowRight,
@@ -97,19 +97,23 @@ function buildPlatformActionSlides(t: (key: string) => string): readonly HomeHer
     const heroFromKey = /^screenshot(\d+)$/.exec(item.imageKey);
     if (heroFromKey) {
       const n = Number(heroFromKey[1]);
-      const hero = HOMEPAGE_HERO_SLIDES[n - 1];
-      if (hero) {
+      const heroMeta = HOMEPAGE_HERO_SLIDE_METADATA[n - 1];
+      if (heroMeta) {
         return {
-          ...hero,
+          index: i + 1,
+          objectKey: heroMeta.objectKey,
+          publicUrl: heroMeta.publicUrl,
           title,
           caption: blurb,
           alt: `${title}. ${blurb}`.slice(0, 220),
         };
       }
     }
-    const fallback = HOMEPAGE_HERO_SLIDES[i % HOMEPAGE_HERO_SLIDES.length];
+    const fallback = HOMEPAGE_HERO_SLIDE_METADATA[i % HOMEPAGE_HERO_SLIDE_METADATA.length];
     return {
-      ...fallback,
+      index: i + 1,
+      objectKey: fallback.objectKey,
+      publicUrl: fallback.publicUrl,
       title,
       caption: blurb,
       alt: `${title}. ${blurb}`.slice(0, 220),
@@ -209,16 +213,16 @@ function DynamicTrustCounters({
 }) {
   const { t } = useMarketingI18n();
   const counters = [
-    { icon: Target, value: formatMarketingCount(questions), label: "Practice Questions" },
-    { icon: Layers, value: formatMarketingCount(flashcards), label: "Flashcards" },
-    { icon: BookOpen, value: formatMarketingCount(decks), label: "Study Decks" },
-    { icon: Stethoscope, value: formatMarketingCount(lessons), label: "Clinical Lessons" },
+    { icon: Target, value: formatMarketingCount(questions), labelKey: "components.homeConversionSections.trustCounterLabel.questions" },
+    { icon: Layers, value: formatMarketingCount(flashcards), labelKey: "components.homeConversionSections.trustCounterLabel.flashcards" },
+    { icon: BookOpen, value: formatMarketingCount(decks), labelKey: "components.homeConversionSections.trustCounterLabel.decks" },
+    { icon: Stethoscope, value: formatMarketingCount(lessons), labelKey: "components.homeConversionSections.trustCounterLabel.lessons" },
   ];
 
   const badges = [
-    ...(hasCatExams ? [{ icon: ClipboardCheck, label: "Adaptive CAT Exams" }] : []),
-    ...(hasClinicalImages ? [{ icon: ImageIcon, label: "Clinical Images" }] : []),
-    ...(hasMultiTier ? [{ icon: Users, label: "Multi-Tier Support" }] : []),
+    ...(hasCatExams ? [{ icon: ClipboardCheck, labelKey: "components.homeConversionSections.trustBadge.catExams" }] : []),
+    ...(hasClinicalImages ? [{ icon: ImageIcon, labelKey: "components.homeConversionSections.trustBadge.clinicalImages" }] : []),
+    ...(hasMultiTier ? [{ icon: Users, labelKey: "components.homeConversionSections.trustBadge.multiTier" }] : []),
   ];
 
   return (
@@ -228,50 +232,48 @@ function DynamicTrustCounters({
       data-testid="section-trust-counters"
     >
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/8 border border-primary/15 shadow-[var(--shadow-card)] mb-5">
-            <BarChart3 className="w-3.5 h-3.5 text-primary" />
-            <span className="text-xs font-bold text-primary uppercase tracking-wider">{t("components.homeConversionSections.platformScale")}</span>
+        <div className="mb-10 text-left md:max-w-3xl">
+          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/8 px-4 py-1.5 shadow-[var(--shadow-card)]">
+            <BarChart3 className="h-3.5 w-3.5 text-primary" />
+            <span className="text-xs font-bold uppercase tracking-wider text-primary">{t("components.homeConversionSections.platformScale")}</span>
           </div>
           <h2
-            className="font-bold text-[var(--theme-heading-text)] mb-3"
+            className="mb-3 font-bold text-[var(--theme-heading-text)]"
             style={{ fontSize: 'var(--text-section)' }}
             data-testid="text-trust-counters-heading"
           >
-            Built for Serious Healthcare Exam Preparation
+            {t("components.homeConversionSections.trustCountersHeading")}
           </h2>
-          <p className="text-[var(--theme-muted-text)] max-w-2xl mx-auto text-base lg:text-lg">
-            A growing library of questions, flashcards, lessons, and study tools for nursing, NP, allied health, and certification exams — all in one place.
-          </p>
+          <p className="text-base text-[var(--theme-muted-text)] lg:text-lg">{t("components.homeConversionSections.trustCountersSubcopy")}</p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mb-10">
+        <div className="mb-10 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-5">
           {isLoading
             ? Array.from({ length: 4 }).map((_, i) => <TrustCounterSkeleton key={i} />)
             : counters.map((counter) => (
                 <div
-                  key={counter.label}
-                  className="text-center p-6 rounded-2xl bg-white border border-[var(--theme-card-border)]/80 shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-shadow duration-200"
-                  data-testid={`trust-counter-${counter.label.toLowerCase().replace(/\s+/g, "-")}`}
+                  key={counter.labelKey}
+                  className="rounded-2xl border border-[var(--theme-card-border)]/80 bg-white p-5 shadow-[var(--shadow-card)] transition-shadow duration-200 first:md:border-l-4 first:md:border-l-primary md:hover:shadow-[var(--shadow-card-hover)]"
+                  data-testid={`trust-counter-${counter.labelKey.split(".").pop()}`}
                 >
-                  <div className="nn-theme-gradient-br mx-auto mb-4 flex h-11 w-11 items-center justify-center rounded-xl shadow-sm">
+                  <div className="nn-theme-gradient-br mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-xl shadow-sm md:mx-0">
                     <counter.icon className="h-5 w-5 text-white" />
                   </div>
-                  <div className="text-2xl sm:text-3xl font-extrabold text-[var(--theme-heading-text)]">{counter.value}</div>
-                  <div className="text-xs font-semibold text-[var(--theme-muted-text)] uppercase tracking-wide mt-1.5">{counter.label}</div>
+                  <div className="text-2xl font-extrabold text-[var(--theme-heading-text)] sm:text-3xl">{counter.value}</div>
+                  <div className="mt-1.5 text-[11px] font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">{t(counter.labelKey)}</div>
                 </div>
               ))}
         </div>
 
-        <div className="flex flex-wrap items-center justify-center gap-3">
+        <div className="flex flex-wrap gap-3 md:justify-start">
           {badges.map((badge) => (
             <div
-              key={badge.label}
-              className="nn-accent-soft-ring flex items-center gap-2 rounded-full px-3.5 py-2 text-xs font-medium text-primary shadow-[var(--shadow-card)]"
-              data-testid={`badge-trust-${badge.label.toLowerCase().replace(/\s+/g, "-")}`}
+              key={badge.labelKey}
+              className="flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-2 text-xs font-medium text-[var(--theme-body-text)] shadow-sm"
+              data-testid={`badge-trust-${badge.labelKey.split(".").pop()}`}
             >
-              <badge.icon className="h-3.5 w-3.5" />
-              <span>{badge.label}</span>
+              <badge.icon className="h-3.5 w-3.5 text-primary" />
+              <span>{t(badge.labelKey)}</span>
             </div>
           ))}
         </div>
@@ -292,90 +294,72 @@ function ConversionProofBlock({
   const { t } = useMarketingI18n();
   const router = useRouter();
 
+  const proofIds = [
+    { id: "examQuestions", icon: Target },
+    { id: "flashcards", icon: Layers },
+    { id: "catExams", icon: Brain },
+    { id: "clinicalImages", icon: ImageIcon },
+    { id: "lessons", icon: BookOpen },
+    { id: "multiDiscipline", icon: GraduationCap },
+  ] as const;
+
   return (
     <section
       className="border-t border-[var(--theme-card-border)]"
       style={{ paddingTop: 'var(--space-section)', paddingBottom: 'var(--space-section)' }}
       data-testid="section-conversion-proof"
     >
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <div className="nn-accent-soft-ring mb-5 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 shadow-[var(--shadow-card)]">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-12 text-left md:max-w-3xl">
+          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/8 px-4 py-1.5 shadow-[var(--shadow-card)]">
             <Sparkles className="h-3.5 w-3.5 text-primary" />
             <span className="text-xs font-bold uppercase tracking-wider text-primary">{t("components.homeConversionSections.everythingYouNeed")}</span>
           </div>
           <h2
-            className="font-bold text-[var(--theme-heading-text)] mb-3"
+            className="mb-3 font-bold text-[var(--theme-heading-text)]"
             style={{ fontSize: 'var(--text-section)' }}
             data-testid="text-conversion-proof-heading"
           >
-            Thousands of questions. Thousands of flashcards. One platform for every healthcare exam.
+            {t("components.homeConversionSections.conversionProofHeading")}
           </h2>
-          <p className="text-[var(--theme-muted-text)] max-w-2xl mx-auto text-base lg:text-lg leading-relaxed">
-            Stop juggling scattered resources. NurseNest brings {formatMarketingCount(questions)} exam-style questions,
-            {" "}{formatMarketingCount(flashcards)} flashcards across {formatMarketingCount(decks)} decks, adaptive CAT exams,
-            clinical images, and detailed rationales into a single study environment — covering nursing, NP certification, allied health, and more.
+          <p className="text-base leading-relaxed text-[var(--theme-muted-text)] lg:text-lg">
+            {t("components.homeConversionSections.conversionProofSubcopy", {
+              questions: formatMarketingCount(questions),
+              flashcards: formatMarketingCount(flashcards),
+              decks: formatMarketingCount(decks),
+            })}
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto mb-12">
-          {[
-            {
-              icon: Target,
-              title: "Exam-Ready Questions",
-              desc: "Realistic questions across nursing, NP, and allied health scopes with step-by-step rationales that teach you how to think — not just what to memorize.",
-            },
-            {
-              icon: Layers,
-              title: "Flashcards & Decks",
-              desc: "Organized flashcard decks for pharmacology, pathophysiology, clinical concepts, and allied health topics — built for spaced repetition and active recall.",
-            },
-            {
-              icon: Brain,
-              title: "Adaptive CAT Exams",
-              desc: "Computer-adaptive testing that mirrors real licensure and certification exams. Questions adjust to your performance in real time.",
-            },
-            {
-              icon: ImageIcon,
-              title: "Clinical Images & Visuals",
-              desc: "Visual learning resources including clinical images, diagrams, and illustrated rationales for hands-on readiness across all disciplines.",
-            },
-            {
-              icon: BookOpen,
-              title: "Lessons & Rationales",
-              desc: "In-depth clinical lessons organized by body system and discipline — each with pre-tests, post-tests, and detailed explanations.",
-            },
-            {
-              icon: GraduationCap,
-              title: "Multi-Discipline Coverage",
-              desc: "Purpose-built content for every healthcare path — practical nursing, registered nursing, nurse practitioner, respiratory therapy, paramedics, and more.",
-            },
-          ].map((item) => (
+        <div className="mx-auto mb-12 grid max-w-4xl grid-cols-1 gap-5 sm:grid-cols-2">
+          {proofIds.map((item) => (
             <div
-              key={item.title}
-              className="bg-white rounded-2xl border border-[var(--theme-card-border)]/80 shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-all duration-300 hover:-translate-y-1 p-7"
-              data-testid={`card-proof-${item.title.toLowerCase().replace(/\s+/g, "-")}`}
+              key={item.id}
+              className="rounded-2xl border border-[var(--theme-card-border)]/80 bg-white p-7 shadow-[var(--shadow-card)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-card-hover)]"
+              data-testid={`card-proof-${item.id}`}
             >
               <div className="nn-theme-gradient-br mb-4 flex h-11 w-11 items-center justify-center rounded-xl shadow-sm">
                 <item.icon className="h-5 w-5 text-white" />
               </div>
-              <h3 className="font-bold text-[var(--theme-heading-text)] mb-2" style={{ fontSize: 'var(--text-card-title)' }}>{item.title}</h3>
-              <p className="text-sm text-[var(--theme-muted-text)] leading-relaxed">{item.desc}</p>
+              <h3 className="mb-2 font-bold text-[var(--theme-heading-text)]" style={{ fontSize: 'var(--text-card-title)' }}>
+                {t(`components.homeConversionSections.proofCard.${item.id}.title`)}
+              </h3>
+              <p className="text-sm leading-relaxed text-[var(--theme-muted-text)]">{t(`components.homeConversionSections.proofCard.${item.id}.desc`)}</p>
             </div>
           ))}
         </div>
 
-        <div className="text-center">
+        <div className="text-center sm:text-left">
           <button
             type="button"
             className="inline-flex items-center justify-center rounded-full bg-primary px-9 py-3 text-lg font-semibold text-primary-foreground shadow-[var(--shadow-elevated)] shadow-primary/25 hover:brightness-110"
             onClick={() => router.push(mapLegacyMarketingHref("/register"))}
             data-testid="button-conversion-proof-cta"
           >
-            Start Free — Explore the Full Library
+            {t("components.homeConversionSections.conversionProofCta")}
             <ArrowRight className="ml-2 w-5 h-5" />
           </button>
-          <p className="text-xs text-[var(--theme-muted-text)] mt-4">{t("components.homeConversionSections.noCreditCardRequiredFree")}</p>
+          <p className="mt-4 text-xs text-[var(--theme-muted-text)]">{t("components.homeConversionSections.noCreditCardRequiredFree")}</p>
         </div>
       </div>
     </section>
@@ -393,43 +377,13 @@ function CompetitivePositioningSection({
   const router = useRouter();
 
   const comparisons = [
-    {
-      feature: "Question Volume",
-      ours: `${formatMarketingCount(questions)} exam-style questions across all tiers`,
-      typical: "Limited test banks, often under 2,000",
-      icon: Target,
-    },
-    {
-      feature: "Flashcards Included",
-      ours: `${formatMarketingCount(flashcards)} flashcards organized into study decks`,
-      typical: "Flashcards sold separately or not available",
-      icon: Layers,
-    },
-    {
-      feature: "Multi-Discipline Support",
-      ours: "Dedicated content for RPN, RN, NP, and allied health professions",
-      typical: "One-size-fits-all content for a single exam",
-      icon: Users,
-    },
-    {
-      feature: "Integrated Study Tools",
-      ours: "Questions + flashcards + CAT exams + lessons + study plans",
-      typical: "Only one type of study resource available",
-      icon: Zap,
-    },
-    {
-      feature: "Allied Health & Beyond",
-      ours: "Full allied health coverage: RT, MLT, paramedic, imaging, social work, OT/PT",
-      typical: "Nursing-only with no expansion path",
-      icon: Activity,
-    },
-    {
-      feature: "Adaptive Analytics",
-      ours: "Real-time readiness tracking with domain-level insights",
-      typical: "Basic score tracking without targeted recommendations",
-      icon: BarChart3,
-    },
-  ];
+    { id: "competitiveRow0", icon: Target },
+    { id: "competitiveRow1", icon: Layers },
+    { id: "competitiveRow2", icon: Users },
+    { id: "competitiveRow3", icon: Zap },
+    { id: "competitiveRow4", icon: Activity },
+    { id: "competitiveRow5", icon: BarChart3 },
+  ] as const;
 
   return (
     <section
@@ -437,59 +391,63 @@ function CompetitivePositioningSection({
       style={{ paddingTop: 'var(--space-section)', paddingBottom: 'var(--space-section)' }}
       data-testid="section-competitive-positioning"
     >
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-12 text-left md:max-w-3xl">
           <div className="nn-accent-soft-ring mb-5 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 shadow-[var(--shadow-card)]">
             <Shield className="h-3.5 w-3.5 text-primary" />
             <span className="text-xs font-bold uppercase tracking-wider text-primary">{t("components.homeConversionSections.whyNursenest")}</span>
           </div>
           <h2
-            className="font-bold text-[var(--theme-heading-text)] mb-3"
+            className="mb-3 font-bold text-[var(--theme-heading-text)]"
             style={{ fontSize: 'var(--text-section)' }}
             data-testid="text-competitive-heading"
           >
-            More content. More disciplines. One subscription.
+            {t("components.homeConversionSections.competitiveHeading")}
           </h2>
-          <p className="text-[var(--theme-muted-text)] max-w-2xl mx-auto text-base lg:text-lg">
-            Most study platforms cover one exam. NurseNest combines questions, flashcards, CAT exams, lessons, and analytics for nursing, NP, and allied health into a single study ecosystem.
-          </p>
+          <p className="text-base text-[var(--theme-muted-text)] lg:text-lg">{t("components.homeConversionSections.competitiveSubcopy")}</p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto mb-12">
+        <div className="mx-auto mb-12 grid max-w-4xl grid-cols-1 gap-5 sm:grid-cols-2">
           {comparisons.map((item) => (
             <div
-              key={item.feature}
-              className="bg-white rounded-2xl border border-[var(--theme-card-border)]/80 shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-shadow duration-200 p-6"
-              data-testid={`card-compare-${item.feature.toLowerCase().replace(/\s+/g, "-")}`}
+              key={item.id}
+              className="rounded-2xl border border-[var(--theme-card-border)]/80 bg-white p-6 shadow-[var(--shadow-card)] transition-shadow duration-200 hover:shadow-[var(--shadow-card-hover)]"
+              data-testid={`card-compare-${item.id}`}
             >
-              <div className="flex items-center gap-2.5 mb-4">
+              <div className="mb-4 flex items-center gap-2.5">
                 <div className="nn-accent-icon-wrap flex h-9 w-9 shrink-0 items-center justify-center rounded-xl">
                   <item.icon className="nn-accent-icon h-4 w-4" />
                 </div>
-                <h3 className="font-bold text-[var(--theme-heading-text)] text-sm">{item.feature}</h3>
+                <h3 className="text-sm font-bold text-[var(--theme-heading-text)]">{t(`components.homeConversionSections.${item.id}.feature`)}</h3>
               </div>
               <div className="space-y-2.5">
                 <div className="flex items-start gap-2">
                   <CheckCircle2 className="nn-trust-check mt-0.5 h-4 w-4 shrink-0" />
-                  <p className="text-sm text-[var(--theme-body-text)] leading-relaxed">{item.ours}</p>
+                  <p className="text-sm leading-relaxed text-[var(--theme-body-text)]">
+                    {item.id === "competitiveRow0"
+                      ? t(`components.homeConversionSections.${item.id}.ours`, { count: formatMarketingCount(questions) })
+                      : item.id === "competitiveRow1"
+                        ? t(`components.homeConversionSections.${item.id}.ours`, { count: formatMarketingCount(flashcards) })
+                        : t(`components.homeConversionSections.${item.id}.ours`)}
+                  </p>
                 </div>
                 <div className="flex items-start gap-2 opacity-50">
-                  <div className="w-4 h-4 rounded-full border-2 border-[var(--theme-input-border)] shrink-0 mt-0.5" />
-                  <p className="text-sm text-[var(--theme-muted-text)] leading-relaxed">{item.typical}</p>
+                  <div className="mt-0.5 h-4 w-4 shrink-0 rounded-full border-2 border-[var(--theme-input-border)]" />
+                  <p className="text-sm leading-relaxed text-[var(--theme-muted-text)]">{t(`components.homeConversionSections.${item.id}.typical`)}</p>
                 </div>
               </div>
             </div>
           ))}
         </div>
 
-        <div className="text-center">
+        <div className="text-center sm:text-left">
           <button
             type="button"
             className="inline-flex items-center justify-center rounded-full border border-primary/25 bg-white px-9 py-3 font-medium text-primary shadow-[var(--shadow-card)] hover:border-primary/40 hover:bg-primary/5"
             onClick={() => router.push(mapLegacyMarketingHref("/pricing"))}
             data-testid="button-competitive-cta"
           >
-            See Plans & Pricing
+            {t("components.homeConversionSections.competitiveCta")}
             <ArrowRight className="ml-2 h-4 w-4" />
           </button>
         </div>
@@ -501,52 +459,38 @@ function CompetitivePositioningSection({
 function HowItWorksSection() {
   const { t } = useMarketingI18n();
   const steps = [
-    {
-      step: "1",
-      icon: BookOpen,
-      title: "Learn",
-      desc: "Study thousands of pathophysiology lessons, pharmacology guides, and clinical content organized by body system and exam tier.",
-    },
-    {
-      step: "2",
-      icon: Target,
-      title: "Practice",
-      desc: "Test your knowledge with exam-style questions, mock exams, flashcards, and interactive case studies with detailed rationales.",
-    },
-    {
-      step: "3",
-      icon: Trophy,
-      title: "Track Progress",
-      desc: "Monitor your readiness score, identify weak areas, and follow a personalized study plan that adapts as you improve.",
-    },
-  ];
+    { step: "1", icon: BookOpen, titleKey: "components.homeConversionSections.howStep1.title", descKey: "components.homeConversionSections.howStep1.desc" },
+    { step: "2", icon: Target, titleKey: "components.homeConversionSections.howStep2.title", descKey: "components.homeConversionSections.howStep2.desc" },
+    { step: "3", icon: Trophy, titleKey: "components.homeConversionSections.howStep3.title", descKey: "components.homeConversionSections.howStep3.desc" },
+  ] as const;
 
   return (
     <section id="how-it-works" className="border-t border-[var(--theme-card-border)]" style={{ paddingTop: 'var(--space-section)', paddingBottom: 'var(--space-section)' }} data-testid="section-how-it-works">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-14">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/8 border border-primary/15 shadow-[var(--shadow-card)] mb-5">
-            <Zap className="w-3.5 h-3.5 text-primary" />
-            <span className="text-xs font-bold text-primary uppercase tracking-wider">{t("components.homeConversionSections.howItWorks")}</span>
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-12 text-left md:max-w-2xl">
+          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/8 px-4 py-1.5 shadow-[var(--shadow-card)]">
+            <Zap className="h-3.5 w-3.5 text-primary" />
+            <span className="text-xs font-bold uppercase tracking-wider text-primary">{t("components.homeConversionSections.howItWorks")}</span>
           </div>
-          <h2 className="font-bold text-[var(--theme-heading-text)] mb-3" style={{ fontSize: 'var(--text-section)' }} data-testid="text-how-it-works-heading">
-            Three Steps to Exam Readiness
+          <h2 className="mb-3 font-bold text-[var(--theme-heading-text)]" style={{ fontSize: 'var(--text-section)' }} data-testid="text-how-it-works-heading">
+            {t("components.homeConversionSections.howItWorksHeading")}
           </h2>
-          <p className="text-base lg:text-lg text-[var(--theme-muted-text)]">{t("components.homeConversionSections.aProvenSystemToPrepare")}</p>
+          <p className="text-base text-[var(--theme-muted-text)] lg:text-lg">{t("components.homeConversionSections.howItWorksIntro")}</p>
         </div>
-        <div className="grid md:grid-cols-3 gap-10">
+        <div className="mx-auto max-w-2xl space-y-10 border-l-2 border-primary/15 pl-6 md:pl-8">
           {steps.map((item, i) => (
-            <div key={i} className="relative text-center" data-testid={`step-how-it-works-${i}`}>
-              {i < 2 && (
-                <div className="hidden md:block absolute top-12 left-[60%] w-[80%] h-px bg-gradient-to-r from-[var(--theme-input-border)] to-transparent z-0" />
-              )}
-              <div className="relative z-10">
-                <div className="nn-theme-gradient-br mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl shadow-[var(--shadow-elevated)]">
-                  <item.icon className="h-9 w-9 text-white" />
+            <div key={item.step} className="relative" data-testid={`step-how-it-works-${i}`}>
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-5">
+                <div className="nn-theme-gradient-br flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl shadow-md sm:h-16 sm:w-16">
+                  <item.icon className="h-7 w-7 text-white sm:h-8 sm:w-8" />
                 </div>
-                <div className="mb-3 inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">{item.step}</div>
-                <h3 className="text-xl font-bold text-[var(--theme-heading-text)] mb-2">{item.title}</h3>
-                <p className="text-sm text-[var(--theme-muted-text)] leading-relaxed max-w-xs mx-auto">{item.desc}</p>
+                <div className="min-w-0 flex-1">
+                  <div className="mb-1 inline-flex h-6 min-w-[1.5rem] items-center justify-center rounded-full bg-primary px-2 text-xs font-bold text-primary-foreground">{item.step}</div>
+                  <h3 className="font-bold text-[var(--theme-heading-text)]" style={{ fontSize: "var(--text-card-title)" }}>
+                    {t(item.titleKey)}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-[var(--theme-muted-text)]">{t(item.descKey)}</p>
+                </div>
               </div>
             </div>
           ))}
@@ -558,79 +502,55 @@ function HowItWorksSection() {
 
 function FeatureCardsSection({ questionCount }: { questionCount: number }) {
   const router = useRouter();
+  const { t } = useMarketingI18n();
 
   const features = [
-    {
-      icon: Target,
-      title: "Exam Questions",
-      desc: `${formatCount(questionCount)} practice questions covering all exam domains with detailed rationales that teach clinical reasoning — not just the right answer.`,
-      tags: ["Multiple Choice", "SATA", "NGN", "Rationales"],
-      href: "/free-practice",
-    },
-    {
-      icon: Layers,
-      title: "Flashcards",
-      desc: "140+ pre-built decks with learn mode, test mode, and spaced repetition. Create your own decks or import from CSV. Track mastery across every topic.",
-      tags: ["Learn Mode", "Test Mode", "Spaced Repetition"],
-      href: "/flashcards",
-    },
-    {
-      icon: ClipboardCheck,
-      title: "Mock Exams",
-      desc: "Full-length timed exams that mirror the real test format. Strict mode, auto-save, and instant score breakdowns show you exactly where you stand.",
-      tags: ["Timed", "Strict Mode", "Score Trends"],
-      href: "/mock-exams",
-    },
-    {
-      icon: Lightbulb,
-      title: "Detailed Rationales",
-      desc: "Every question includes a comprehensive rationale explaining why each answer is correct or incorrect, building the clinical judgment skills exams test.",
-      tags: ["Clinical Reasoning", "Evidence-Based", "Learning Focus"],
-      href: "/free-practice",
-    },
+    { id: "rationales" as const, icon: Lightbulb, href: "/free-practice", layout: "full" as const },
+    { id: "questions" as const, icon: Target, href: "/free-practice", layout: "normal" as const },
+    { id: "flashcards" as const, icon: Layers, href: "/flashcards", layout: "normal" as const },
+    { id: "mocks" as const, icon: ClipboardCheck, href: "/mock-exams", layout: "normal" as const },
   ];
 
   return (
-    <section style={{ paddingTop: 'var(--space-section)', paddingBottom: 'var(--space-section)' }} data-testid="section-feature-cards">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="font-bold text-[var(--theme-heading-text)] mb-3" style={{ fontSize: 'var(--text-section)' }} data-testid="text-feature-cards-heading">
-            Everything You Need to Pass
+    <section style={{ paddingTop: "var(--space-section)", paddingBottom: "var(--space-section)" }} data-testid="section-feature-cards">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-12 text-left md:max-w-3xl">
+          <h2 className="mb-3 font-bold text-[var(--theme-heading-text)]" style={{ fontSize: "var(--text-section)" }} data-testid="text-feature-cards-heading">
+            {t("components.homeConversionSections.featureStripHeading")}
           </h2>
-          <p className="text-base lg:text-lg text-[var(--theme-muted-text)] max-w-3xl mx-auto">
-            A complete exam prep toolkit built for nursing, NP, and allied health students.
-          </p>
+          <p className="text-base text-[var(--theme-muted-text)] lg:text-lg">{t("components.homeConversionSections.featureStripSubcopy")}</p>
         </div>
-        <div className="grid sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
-          {features.map((feature, i) => (
+        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-3">
+          {features.map((feature) => (
             <div
-              key={i}
+              key={feature.id}
               role="button"
               tabIndex={0}
-              className="group cursor-pointer overflow-hidden rounded-xl border border-[var(--theme-card-border)]/80 bg-white shadow-[var(--shadow-card)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-card-hover)]"
+              className={`group cursor-pointer overflow-hidden rounded-xl border border-[var(--theme-card-border)]/80 bg-white shadow-[var(--shadow-card)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-card-hover)] ${
+                feature.layout === "full" ? "md:col-span-3" : ""
+              }`}
               onClick={() => router.push(mapLegacyMarketingHref(feature.href))}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") router.push(mapLegacyMarketingHref(feature.href));
               }}
-              data-testid={`card-feature-${i}`}
+              data-testid={`card-feature-${feature.id}`}
             >
-              <div className="p-7">
-                <div className="nn-accent-icon-wrap mb-5 flex h-12 w-12 items-center justify-center transition-transform group-hover:scale-110">
+              <div className={`p-7 ${feature.layout === "full" ? "md:flex md:items-start md:gap-10" : ""}`}>
+                <div className="nn-accent-icon-wrap mb-5 flex h-12 w-12 shrink-0 items-center justify-center transition-transform group-hover:scale-105 md:mb-0">
                   <feature.icon className="nn-accent-icon h-6 w-6" />
                 </div>
-                <h3 className="mb-2 font-bold text-[var(--theme-heading-text)]" style={{ fontSize: "var(--text-card-title)" }}>
-                  {feature.title}
-                </h3>
-                <p className="mb-4 text-sm leading-relaxed text-[var(--theme-muted-text)]">{feature.desc}</p>
-                <div className="flex flex-wrap gap-1.5">
-                  {feature.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]/80 px-2.5 py-1 text-[10px] font-semibold text-[var(--theme-muted-text)]"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+                <div className="min-w-0 flex-1">
+                  <h3 className="mb-2 font-bold text-[var(--theme-heading-text)]" style={{ fontSize: "var(--text-card-title)" }}>
+                    {t(`components.homeConversionSections.featureCard.${feature.id}.title`)}
+                  </h3>
+                  <p className="mb-3 text-sm leading-relaxed text-[var(--theme-muted-text)]">
+                    {feature.id === "questions"
+                      ? t(`components.homeConversionSections.featureCard.${feature.id}.desc`, { count: formatCount(questionCount) })
+                      : t(`components.homeConversionSections.featureCard.${feature.id}.desc`)}
+                  </p>
+                  <p className="text-[11px] font-medium uppercase tracking-wide text-[var(--theme-muted-text)]">
+                    {t(`components.homeConversionSections.featureCard.${feature.id}.tags`)}
+                  </p>
                 </div>
               </div>
             </div>
@@ -716,14 +636,14 @@ function ProfessionSelectorSection() {
             <span className="text-xs font-bold text-primary uppercase tracking-wider">{t("components.homeConversionSections.chooseYourPath")}</span>
           </div>
           <h2 className="font-bold text-[var(--theme-heading-text)] mb-3" style={{ fontSize: 'var(--text-section)' }} data-testid="text-profession-heading">
-            Exam Prep for Every Healthcare Career
+            {t("components.homeConversionSections.professionHeading")}
           </h2>
           <p className="text-base lg:text-lg text-[var(--theme-muted-text)] max-w-3xl mx-auto">
-            Select your profession to access tailored content, practice questions, and study plans.
+            {t("components.homeConversionSections.professionSubcopy")}
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 max-w-5xl mx-auto">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-5xl mx-auto">
           {professions.map((prof) => {
             const IconComp = prof.icon;
             const isAllied = ["paramedic", "rrt", "mlt", "imaging"].includes(prof.id);
@@ -798,11 +718,9 @@ function SampleQuestionSection() {
             <span className="text-xs font-bold uppercase tracking-wider text-primary">{t("components.homeConversionSections.tryItFree")}</span>
           </div>
           <h2 className="font-bold text-[var(--theme-heading-text)] mb-3" style={{ fontSize: 'var(--text-section)' }} data-testid="text-sample-question-heading">
-            Sample Exam Question
+            {t("components.homeConversionSections.sampleQuestionHeading")}
           </h2>
-          <p className="text-base lg:text-lg text-[var(--theme-muted-text)]">
-            Experience the quality of our questions and rationales — no signup required.
-          </p>
+          <p className="text-base lg:text-lg text-[var(--theme-muted-text)]">{t("components.homeConversionSections.sampleQuestionSubcopy")}</p>
         </div>
 
         <div className="bg-white rounded-2xl border border-[var(--theme-card-border)]/80 shadow-[var(--shadow-elevated)] overflow-hidden" data-testid="card-sample-question">
@@ -868,7 +786,7 @@ function SampleQuestionSection() {
                   className="rounded-full bg-primary px-8 py-2 text-primary-foreground disabled:opacity-50"
                   data-testid="button-reveal-answer"
                 >
-                  Check Answer
+                  {t("components.homeConversionSections.sampleCheckAnswer")}
                 </button>
               </div>
             )}
@@ -890,7 +808,9 @@ function SampleQuestionSection() {
                       <Lightbulb className="h-5 w-5 text-primary" />
                     )}
                     <span className="font-bold text-[var(--theme-heading-text)]">
-                      {selectedAnswer === sampleQuestion.correctAnswer ? "Correct!" : `Correct Answer: ${sampleQuestion.correctAnswer}`}
+                      {selectedAnswer === sampleQuestion.correctAnswer
+                        ? t("components.homeConversionSections.sampleCorrect")
+                        : t("components.homeConversionSections.sampleCorrectAnswerLabel", { letter: sampleQuestion.correctAnswer })}
                     </span>
                   </div>
                   <p className="text-sm text-[var(--theme-body-text)] leading-relaxed">{sampleQuestion.rationale}</p>
@@ -903,7 +823,7 @@ function SampleQuestionSection() {
                     className="rounded-full border border-[var(--theme-input-border)] bg-white px-6 py-2"
                     data-testid="button-try-again"
                   >
-                    Try Again
+                    {t("components.homeConversionSections.sampleTryAgain")}
                   </button>
                   <button
                     type="button"
@@ -911,7 +831,7 @@ function SampleQuestionSection() {
                     className="inline-flex items-center rounded-full bg-primary px-6 py-2 text-primary-foreground"
                     data-testid="button-sample-signup"
                   >
-                    Start Practicing Free
+                    {t("components.homeConversionSections.sampleStartPractice")}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </button>
                 </div>
@@ -930,7 +850,7 @@ function TestimonialsSection() {
     { name: "Priya S.", role: "RPN Student, Ontario", rating: 5, text: "I passed my practical nursing exam on the first attempt. The question bank and clinical lessons covered everything I saw on exam day. The rationales actually teach you how to think through each question.", tier: "RPN" },
     { name: "James K.", role: "RN Student, British Columbia", rating: 5, text: "The mock exams with strict mode were a game changer. I felt completely prepared walking into the NCLEX-RN. The flashcard decks helped me memorize medications faster than any textbook.", tier: "RN" },
     { name: "Dr. Aisha M.", role: "NP Student, Alberta", rating: 5, text: "The NP question bank is incredibly thorough. Pharmacology questions, clinical management scenarios, and differential diagnosis content were all directly relevant to my AANP certification exam.", tier: "NP" },
-    { name: "Sophie L.", role: "RPN Student, Manitoba", rating: 5, text: "Having everything in one place saved me so much time. The pre-test and post-test system for each lesson showed me exactly where my weak spots were so I could focus my study time.", tier: "RPN" },
+    { name: "Sophie L.", role: "RPN Student, Manitoba", rating: 5, text: "I stopped guessing what to open after night shifts—the lesson checks and miss categories pointed me to the next block instead of re-reading the same chapters.", tier: "RPN" },
     { name: "Marcus T.", role: "RN Student, Nova Scotia", rating: 4, text: "The pathophysiology lessons broke down complex topics into clear, digestible sections. Being able to switch languages to French was a huge plus for me as a bilingual student.", tier: "RN" },
     { name: "Dr. Fatima R.", role: "NP Student, Ontario", rating: 5, text: "I recommended NurseNest to my entire cohort. The clinical pearls and medication safety content go beyond surface-level review. This platform genuinely prepares you for advanced practice.", tier: "NP" },
   ];
@@ -944,14 +864,14 @@ function TestimonialsSection() {
             <span className="text-xs font-bold uppercase tracking-wider text-primary">{t("components.homeConversionSections.studentReviews")}</span>
           </div>
           <h2 className="font-bold text-[var(--theme-heading-text)] mb-3" style={{ fontSize: 'var(--text-section)' }} data-testid="text-testimonials-heading">
-            Trusted by Nursing Students Across North America
+            {t("components.homeConversionSections.testimonialsHeading")}
           </h2>
           <p className="text-base lg:text-lg text-[var(--theme-muted-text)] max-w-2xl mx-auto">
-            Real results from real students preparing for their nursing exams.
+            {t("components.homeConversionSections.testimonialsSubcopy")}
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+        <div className="grid sm:grid-cols-2 gap-6 mb-10">
           {reviews.map((review, i) => (
             <div
               key={i}
@@ -1009,10 +929,10 @@ function FinalCTASection() {
     <section className="relative overflow-hidden" style={{ paddingTop: 'var(--space-section)', paddingBottom: 'var(--space-section)' }} data-testid="section-final-cta">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
         <h2 className="font-bold text-[var(--theme-heading-text)] mb-5" style={{ fontSize: 'var(--text-section)' }} data-testid="text-final-cta-heading">
-          Ready to Start Your Exam Prep Journey?
+          {t("components.homeConversionSections.finalCtaHeading")}
         </h2>
         <p className="text-lg lg:text-xl text-[var(--theme-muted-text)] mb-10 max-w-2xl mx-auto leading-relaxed">
-          Join thousands of nursing students who passed their exams with NurseNest. Start for free — no credit card required.
+          {t("components.homeConversionSections.finalCtaSubcopy")}
         </p>
         <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
           <button
@@ -1021,7 +941,7 @@ function FinalCTASection() {
             onClick={() => router.push(mapLegacyMarketingHref("/register"))}
             data-testid="button-final-cta-start"
           >
-            Start Practicing Free
+            {t("components.homeConversionSections.finalCtaPrimary")}
             <ArrowRight className="ml-2 h-5 w-5" />
           </button>
           <button
@@ -1030,7 +950,7 @@ function FinalCTASection() {
             onClick={() => router.push(mapLegacyMarketingHref("/pricing"))}
             data-testid="button-final-cta-pricing"
           >
-            View Pricing
+            {t("components.homeConversionSections.finalCtaSecondary")}
           </button>
         </div>
         <div className="flex items-center justify-center gap-2 mt-8 mb-2">
@@ -1040,7 +960,7 @@ function FinalCTASection() {
         <p className="text-sm text-[var(--theme-muted-text)]">{t("components.homeConversionSections.freeAccountIncludesPracticeQuestions")}</p>
       </div>
 
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-primary/4 to-accent-foreground/4 rounded-full blur-[100px] -z-10 opacity-40" />
+      <div className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/[0.03] blur-[80px]" aria-hidden />
     </section>
   );
 }

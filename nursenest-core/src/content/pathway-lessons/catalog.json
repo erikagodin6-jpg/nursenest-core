@@ -157,6 +157,46 @@
         }
       ]
     },
+    "us-lpn-nclex-pn": {
+      "lessons": [
+        {
+          "slug": "lpn-scope-delegation-priority",
+          "title": "PN scope, delegation & prioritization (NCLEX-PN, US)",
+          "topic": "Coordinated care",
+          "topicSlug": "coordinated-care",
+          "bodySystem": "General",
+          "previewSectionCount": 1,
+          "seoTitle": "LVN/LPN scope & delegation for NCLEX-PN | US lesson",
+          "seoDescription": "US practical nurse track: delegation to UAP, RN escalation, and safe sequencing for NCLEX-PN clinical judgment—no RN-scope tasks disguised as PN items.",
+          "sections": [
+            {
+              "id": "intro",
+              "heading": "Introduction",
+              "kind": "intro",
+              "body": "NCLEX-PN frequently tests **what the LVN/LPN may do independently**, **what must be verified with an RN or provider**, and **what to do first** when multiple patients need attention. The wrong answers often look productive—they are just unsafe or outside scope."
+            },
+            {
+              "id": "core",
+              "heading": "Core concepts",
+              "kind": "core",
+              "body": "Separate **assessment you are authorized to report**, **skills you may perform with a clear order**, and **situations that require immediate RN notification** (sudden change, unclear orders, potential harm)."
+            },
+            {
+              "id": "clinical",
+              "heading": "Clinical application",
+              "kind": "clinical_application",
+              "body": "When prioritizing multiple clients, choose the person at **highest risk of rapid harm** if unattended—then delegate stable tasks to the UAP only when delegation rules and facility policy allow."
+            },
+            {
+              "id": "examtips",
+              "heading": "Exam tips",
+              "kind": "exam_tips",
+              "body": "After reading, run a **PN-pathway** bank block mixed with **delegation** and **medication administration** tags, then review rationales for any option where you picked speed over safety."
+            }
+          ]
+        }
+      ]
+    },
     "us-np-fnp": {
       "lessons": [
         {
@@ -192,6 +232,186 @@
               "heading": "exam tips",
               "kind": "exam_tips",
               "body": "Cross-link to **NP-tier** bank items tagged for primary care and complete **longer case blocks** to mirror certification pacing."
+            }
+          ]
+        },
+        {
+          "slug": "fnp-womens-prenatal-anemia-workup",
+          "title": "Prenatal anemia: interpretation and escalation (FNP)",
+          "topic": "Women’s health",
+          "topicSlug": "womens-health",
+          "bodySystem": "Hematologic",
+          "previewSectionCount": 1,
+          "seoTitle": "FNP prenatal anemia workup | women’s health | NurseNest",
+          "seoDescription": "Family NP: trimester-aware CBC/iron interpretation, IV iron vs oral therapy, and OB referral thresholds—FNP-scoped primary care.",
+          "sections": [
+            {
+              "id": "intro",
+              "heading": "Introduction",
+              "kind": "intro",
+              "body": "First-line FNP role is **risk stratification** in pregnancy: distinguish physiologic dilution from iron deficiency, B12/folate patterns, and hemoglobinopathies suggested by history."
+            },
+            {
+              "id": "core",
+              "heading": "Core concepts",
+              "kind": "core",
+              "body": "Match **trimester-specific thresholds** where guidelines apply; pair ferritin with CBC; document fetal movement concerns and bleeding as **red flags** requiring OB escalation."
+            },
+            {
+              "id": "clinical",
+              "heading": "Clinical application",
+              "kind": "clinical_application",
+              "body": "A 24-week patient with Hgb 9.2 g/dL and ferritin 8 ng/mL: initiate **oral iron** with tolerance plan; schedule **reassessment**; consider **IV iron** when oral fails or third-trimester urgency—coordinate with OB when protocols demand."
+            },
+            {
+              "id": "examtips",
+              "heading": "Exam tips",
+              "kind": "exam_tips",
+              "body": "Boards test **next step** vs **referral**—know when anemia management stays in primary care and when the stem implies **immediate OB** or ED evaluation."
+            }
+          ]
+        },
+        {
+          "slug": "fnp-pediatric-fever-urgency",
+          "title": "Pediatric fever: risk stratification without over-testing (FNP)",
+          "topic": "Pediatrics",
+          "topicSlug": "pediatrics",
+          "bodySystem": "General",
+          "previewSectionCount": 1,
+          "seoTitle": "FNP pediatric fever urgency | NurseNest",
+          "seoDescription": "Family NP: age-specific fever thresholds, appearance-based risk, when to culture vs observe, and parent safety-netting for FNP boards.",
+          "sections": [
+            {
+              "id": "intro",
+              "heading": "Introduction",
+              "kind": "intro",
+              "body": "Infants **under 3 months** with fever demand a different risk calculus than the well-appearing school-age child—items exploit that contrast."
+            },
+            {
+              "id": "core",
+              "heading": "Core concepts",
+              "kind": "core",
+              "body": "Integrate **vital trends**, **hydration**, **respiratory effort**, and **source** (otitis, UTI risk by age) before ordering broad panels."
+            },
+            {
+              "id": "clinical",
+              "heading": "Clinical application",
+              "kind": "clinical_application",
+              "body": "A 9-month-old, T 39.1°C, consolable, drinking well: likely viral syndrome—**supportive care**, clear return precautions; reserve empiric antibiotics for focal bacterial findings or high-risk hosts per guidelines."
+            },
+            {
+              "id": "examtips",
+              "heading": "Exam tips",
+              "kind": "exam_tips",
+              "body": "Watch for **occult bacteremia era** distractors vs current **risk scores** and **observation** pathways—pick the answer that matches the stem’s age and appearance."
+            }
+          ]
+        },
+        {
+          "slug": "fnp-adolescent-mental-health-screening",
+          "title": "Adolescent depression and safety: screening within scope (FNP)",
+          "topic": "Adolescent health",
+          "topicSlug": "adolescent-health",
+          "bodySystem": "Psychiatric",
+          "previewSectionCount": 1,
+          "seoTitle": "FNP adolescent mental health screening | NurseNest",
+          "seoDescription": "Family NP: PHQ-A, safety assessment, confidentiality limits, and referral—board-style adolescent primary care.",
+          "sections": [
+            {
+              "id": "intro",
+              "heading": "Introduction",
+              "kind": "intro",
+              "body": "FNP primary care must **screen** where evidence supports it, then **risk-stratify** suicidality—documentation and follow-up interval are part of the correct answer."
+            },
+            {
+              "id": "core",
+              "heading": "Core concepts",
+              "kind": "core",
+              "body": "Validated tools (e.g., PHQ-9/PHQ-A) **quantify severity**; they do not replace a **direct safety inquiry** when the stem gives concerning cues."
+            },
+            {
+              "id": "clinical",
+              "heading": "Clinical application",
+              "kind": "clinical_application",
+              "body": "Positive screen + passive suicidal ideation without plan: **safety plan**, caregiver involvement when appropriate, **urgent psychiatry/ crisis** referral per acuity, and **short-interval follow-up** in clinic."
+            },
+            {
+              "id": "examtips",
+              "heading": "Exam tips",
+              "kind": "exam_tips",
+              "body": "Items pit **confidentiality** against **imminent harm**—choose the pathway that protects life while respecting adolescent rights where the stem allows."
+            }
+          ]
+        },
+        {
+          "slug": "fnp-adult-hypertension-intensification",
+          "title": "Adult hypertension: intensification and follow-up (FNP)",
+          "topic": "Cardiovascular",
+          "topicSlug": "cardiovascular",
+          "bodySystem": "Cardiovascular",
+          "previewSectionCount": 1,
+          "seoTitle": "FNP hypertension management intensification | NurseNest",
+          "seoDescription": "Family NP: JNC-style thresholds, comorbidity-driven targets, combo therapy, labs after ACE/ARB, and follow-up intervals for boards.",
+          "sections": [
+            {
+              "id": "intro",
+              "heading": "Introduction",
+              "kind": "intro",
+              "body": "Hypertension items test **who** gets **how many** agents, **which class**, and **when** to recheck labs—not memorizing a single universal goal."
+            },
+            {
+              "id": "core",
+              "heading": "Core concepts",
+              "kind": "core",
+              "body": "CKD, diabetes, and ASCVD shift **targets** and **preferred classes**; pregnancy and bilateral renal artery stenosis change what is safe."
+            },
+            {
+              "id": "clinical",
+              "heading": "Clinical application",
+              "kind": "clinical_application",
+              "body": "Uncontrolled Stage 2 on one agent: **add complementary class** (e.g., ACE/ARB + CCB/thiazide) rather than maxing a single drug without rationale; schedule **2–4 week** follow-up after change."
+            },
+            {
+              "id": "examtips",
+              "heading": "Exam tips",
+              "kind": "exam_tips",
+              "body": "Eliminate options that **skip baseline labs** when starting ACE/ARB or that **defer therapy** when the stem shows sustained severe elevation without contraindication."
+            }
+          ]
+        },
+        {
+          "slug": "fnp-geriatric-falls-syncope",
+          "title": "Geriatric falls and syncope: medication and rhythm (FNP)",
+          "topic": "Geriatrics",
+          "topicSlug": "geriatrics",
+          "bodySystem": "Neurologic",
+          "previewSectionCount": 1,
+          "seoTitle": "FNP geriatric falls syncope | NurseNest",
+          "seoDescription": "Family NP: orthostasis, polypharmacy, rhythm risk, bone injury, and coordinated fall prevention for certification-level reasoning.",
+          "sections": [
+            {
+              "id": "intro",
+              "heading": "Introduction",
+              "kind": "intro",
+              "body": "Geriatric falls are **multifactorial**; boards reward **medication review**, **orthostatic vitals**, and **ECG** when syncope is unexplained—not a single imaging order by default."
+            },
+            {
+              "id": "core",
+              "heading": "Core concepts",
+              "kind": "core",
+              "body": "Deprescribe **sedatives**, **hypnotics**, and **anticholinergics** when possible; address **vision**, **footwear**, and **home hazards** alongside medical causes."
+            },
+            {
+              "id": "clinical",
+              "heading": "Clinical application",
+              "kind": "clinical_application",
+              "body": "Witnessed arrhythmia or exertional syncope: **ED/cardiology** pathway; mechanical fall with hip pain: **imaging**; recurrent near-falls with polypharmacy: **med reconciliation** and **PT referral**."
+            },
+            {
+              "id": "examtips",
+              "heading": "Exam tips",
+              "kind": "exam_tips",
+              "body": "Avoid picking **head CT** when the stem lacks neuro deficit and points to **perfusion/medication** causes unless guidelines in the item support it."
             }
           ]
         }

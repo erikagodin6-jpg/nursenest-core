@@ -13,11 +13,12 @@ import { getPoolStats } from "@/lib/question-pool";
 import { SILO_CONFIGS } from "@/lib/silo-config";
 import { useI18n } from "@/lib/i18n";
 import { readApiJsonResponse } from "@/lib/api-error";
+import { NclexRnPracticePrepSections } from "@/components/nclex-rn-practice-sections";
 import {
   ArrowRight, Target, BookOpen, Layers, Stethoscope, FileText,
   ChevronDown, ChevronUp, FlaskConical, Brain, Activity, Shield,
   ClipboardList, GraduationCap, Link2, Pill, Sparkles, BookMarked,
-  BarChart3, Download,
+  BarChart3, Download, Zap,
 } from "lucide-react";
 
 type ExamType = "nclex-rn" | "nclex-pn" | "rex-pn" | "np";
@@ -46,7 +47,7 @@ const EXAM_DATA: Record<ExamType, {
       { icon: BookOpen, title: "Flashcard Decks", desc: "High-yield pharmacology, lab values, and pathophysiology flashcards for rapid review.", href: "/flashcards", cta: "Study Flashcards" },
     ],
     faqs: [
-      { q: "How many questions are on the NCLEX-RN?", a: "The NCLEX-RN uses computerized adaptive testing (CAT) and can range from 75 to 145 questions. The exam ends when the algorithm determines with 95% confidence whether you meet the passing standard." },
+      { q: "How many questions are on the NCLEX-RN?", a: "The NCLEX-RN uses computerized adaptive testing (CAT). Exam length is variable; many administrations fall in the 85–150 item range depending on the form and when the pass/fail decision rules are met. The exam ends when the algorithm has enough evidence about whether you meet the passing standard." },
       { q: "What topics does the NCLEX-RN cover?", a: "The NCLEX-RN test plan covers eight client needs categories: Safe and Effective Care Environment (Management of Care, Safety and Infection Control), Health Promotion and Maintenance, Psychosocial Integrity, Physiological Integrity (Basic Care, Pharmacological Therapies, Reduction of Risk Potential, Physiological Adaptation)." },
       { q: "What is the Next Generation NCLEX (NGN)?", a: "The NGN includes clinical judgment measurement items such as extended multiple response, drag-and-drop, cloze (drop-down), matrix/grid, and enhanced hot spot questions. These items assess clinical judgment using the NCSBN Clinical Judgment Measurement Model." },
       { q: "How do NurseNest questions compare to the real NCLEX-RN?", a: "NurseNest questions are written at the application and analysis cognitive levels, mirroring the higher-order thinking required on the actual exam. Each question includes detailed rationales explaining why each option is correct or incorrect." },
@@ -123,7 +124,6 @@ const EXAM_DATA: Record<ExamType, {
 };
 
 function FAQAccordion({ faqs }: { faqs: { q: string; a: string }[] }) {
-  const { t } = useI18n();
   const [open, setOpen] = useState<number | null>(null);
   return (
     <div className="space-y-3">
@@ -149,6 +149,7 @@ function FAQAccordion({ faqs }: { faqs: { q: string; a: string }[] }) {
 }
 
 function QuestionBankStats({ tier }: { tier: string }) {
+  const { t } = useI18n();
   const [stats, setStats] = useState<{ total: number; systems: Record<string, number> }>({ total: 0, systems: {} });
   useEffect(() => { getPoolStats(tier).then(setStats); }, [tier]);
   const systemEntries = Object.entries(stats.systems).sort((a, b) => b[1] - a[1]);
@@ -186,6 +187,7 @@ function formatLessonTitle(id: string): string {
 }
 
 function LessonSection({ sections }: { sections: { title: string; lessons: string[] }[] }) {
+  const { t } = useI18n();
   const validSections = sections.filter(section => section.lessons.length > 0);
 
   const { data: lessonMeta = [] } = useQuery<{ id: string; title: string }[]>({
@@ -249,6 +251,7 @@ function LessonSection({ sections }: { sections: { title: string; lessons: strin
 }
 
 function PharmSection({ systems }: { systems: string[] }) {
+  const { t } = useI18n();
   return (
     <div data-testid="section-pharmacology">
       <div className="flex items-center gap-2 mb-4">
@@ -274,6 +277,7 @@ function PharmSection({ systems }: { systems: string[] }) {
 }
 
 function MockExamSection({ examName }: { examName: string }) {
+  const { t } = useI18n();
   return (
     <div data-testid="section-mock-exams">
       <div className="flex items-center gap-2 mb-4">
@@ -301,6 +305,7 @@ function MockExamSection({ examName }: { examName: string }) {
 }
 
 function PrintableSection() {
+  const { t } = useI18n();
   return (
     <div data-testid="section-printables">
       <div className="flex items-center gap-2 mb-4">

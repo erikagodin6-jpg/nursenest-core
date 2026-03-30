@@ -70,6 +70,14 @@ export function forInstitutionsBreadcrumbs(): BreadcrumbResolution {
   return simpleMarketingBreadcrumbs("For institutions", "/for-institutions");
 }
 
+/** Public homepage: single current crumb + JSON-LD (canonical `/`). */
+export function marketingHomeSurfaceBreadcrumbs(): BreadcrumbResolution {
+  return {
+    crumbs: [{ name: "Home", href: undefined }],
+    schemaItems: [{ name: "Home", item: abs("/") }],
+  };
+}
+
 /** App shell: UX only — no schema items. */
 export function appShellBreadcrumbs(section: "dashboard" | "lessons" | "questions" | "exams"): BreadcrumbCrumb[] {
   switch (section) {

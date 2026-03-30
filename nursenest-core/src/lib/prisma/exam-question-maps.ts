@@ -1,4 +1,4 @@
-import type { ContentStatus, ExamFamily, TierCode } from "@prisma/client";
+import type { ContentStatus, ExamFamily, QuestionType, TierCode } from "@prisma/client";
 import { contentStatusToDb } from "@/lib/prisma/content-status";
 
 export function tierCodeToExamDbTier(tier: TierCode): string {
@@ -26,6 +26,17 @@ export function tierCodeToContentItemTier(tier: TierCode): string {
 export function examFamilyToExamColumn(family: ExamFamily | string | undefined): string {
   if (!family || family === "GENERIC") return "NCLEX_RN";
   return String(family);
+}
+
+/** Map free-form `exam_questions.question_type` strings to Prisma enum for validation. */
+export function dbQuestionTypeToPrismaEnum(db: string): QuestionType {
+  const t = db.toLowerCase();
+  if (t === "multiple_choice" || t === "mcq") return "MCQ" as QuestionType;
+  if (t === "sata" || t === "select_all_that_apply") return "SATA" as QuestionType;
+  if (t === "ngn_case" || t === "ngn") return "NGN_CASE" as QuestionType;
+  if (t === "ordered" || t === "ordering") return "ORDERING" as QuestionType;
+  if (t === "fill-in-blank" || t === "fib_numeric" || t === "fib") return "FIB_NUMERIC" as QuestionType;
+  return "MCQ" as QuestionType;
 }
 
 /** Map admin UI question types to `exam_questions.question_type` strings. */
