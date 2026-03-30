@@ -9,8 +9,8 @@ import { blogPostBreadcrumbsWithOptionalCategory } from "@/lib/seo/pathway-bread
 
 type Props = { params: Promise<{ slug: string }> };
 
-/** DB-backed posts; avoid build-time Prisma when DATABASE_URL is unset. */
-export const dynamic = "force-dynamic";
+/** ISR: slug pages are public; revalidate balances freshness vs load. */
+export const revalidate = 120;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;

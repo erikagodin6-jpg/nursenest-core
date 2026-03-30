@@ -5,7 +5,9 @@ import { auth } from "@/lib/auth";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { stripePriceEnvKey } from "@/lib/pricing/display-catalog";
 import { findPriceEntry, type BillingDuration } from "@/lib/stripe/pricing-map";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 import type { TierCode } from "@prisma/client";
 
 /** Dynamic import so Next build (collect page data) never loads Stripe without a key. */
@@ -45,13 +47,22 @@ export async function POST(req: Request) {
   }
 
   const { country, tier, duration } = parsed.data;
-  const price = findPriceEntry(country, tier as TierCode, duration as BillingDuration);
+  const tierCode = tier as TierCode;
+  const durationCode = duration as BillingDuration;
+  const price = findPriceEntry(country, tierCode, durationCode);
   if (!price) {
+    safeServerLog("stripe_checkout", "rejected_missing_stripe_price_env", {
+      country,
+      tier: String(tier),
+      duration: String(duration),
+      envKey: stripePriceEnvKey(country, tierCode, durationCode).slice(0, 80),
+    });
     return NextResponse.json({ error: "Plan unavailable" }, { status: 400 });
   }
 
   const stripe = await getStripeClient();
   if (!stripe) {
+    safeServerLog("stripe_checkout", "stripe_client_unavailable", {});
     return NextResponse.json({ error: "Billing unavailable" }, { status: 503 });
   }
 
@@ -80,10 +91,15 @@ export async function POST(req: Request) {
     });
     return NextResponse.json({ url: checkoutSession.url });
   } catch (e) {
+    safeServerLog("stripe_checkout", "checkout_session_create_failed", {
+      country,
+      tier: String(tier),
+      duration: String(duration),
+    });
     safeServerLogCritical(
-      "checkout",
+      "stripe_checkout",
       "stripe_checkout_session_failed",
-      { country, tier: String(tier), duration },
+      { country, tier: String(tier), duration: String(duration) },
       e,
     );
     return NextResponse.json({ error: "Unable to start checkout. Try again shortly." }, { status: 503 });

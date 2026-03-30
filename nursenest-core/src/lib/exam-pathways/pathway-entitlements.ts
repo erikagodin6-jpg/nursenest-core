@@ -1,6 +1,6 @@
 import type { CountryCode, TierCode } from "@prisma/client";
-import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { accessibleTiersForUserTier } from "@/lib/entitlements/content-access-scope";
+import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { EXAM_PATHWAYS, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 
@@ -11,11 +11,12 @@ import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
  */
 export function listPathwaysCompatibleWithSubscription(scope: AccessScope): ExamPathwayDefinition[] {
   if (!scope.hasAccess || scope.reason === "no_access") return [];
-  if (scope.reason === "admin_override") {
-    return EXAM_PATHWAYS.filter((p) => p.status !== "hidden");
-  }
   const tier = scope.tier as TierCode | null;
   const country = scope.country as CountryCode | null;
+  if (scope.reason === "admin_override") {
+    if (!country) return EXAM_PATHWAYS.filter((p) => p.status !== "hidden");
+    return EXAM_PATHWAYS.filter((p) => p.status !== "hidden" && p.countryCode === country);
+  }
   if (!tier || !country) return [];
   const allowedTiers = accessibleTiersForUserTier(tier);
   return EXAM_PATHWAYS.filter(
@@ -33,9 +34,13 @@ export function listPathwaysCompatibleWithSubscription(scope: AccessScope): Exam
  */
 export function subscriptionCoversPathwayBase(scope: AccessScope, pathway: ExamPathwayDefinition): boolean {
   if (!scope.hasAccess) return false;
-  if (scope.reason === "admin_override") return pathway.status !== "hidden";
+  if (pathway.status === "hidden") return false;
   const tier = scope.tier as TierCode | null;
   const country = scope.country as CountryCode | null;
+  if (scope.reason === "admin_override") {
+    if (!country) return true;
+    return pathway.countryCode === country;
+  }
   if (!tier || !country) return false;
   if (country !== pathway.countryCode) return false;
   return accessibleTiersForUserTier(tier).includes(pathway.stripeTier);

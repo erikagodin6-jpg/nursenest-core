@@ -12,7 +12,7 @@ import { blogTagBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 
 type Props = { params: Promise<{ tag: string }>; searchParams: Promise<{ page?: string }> };
 
-export const dynamic = "force-dynamic";
+export const revalidate = 120;
 
 export async function generateMetadata({ params }: { params: Promise<{ tag: string }> }): Promise<Metadata> {
   const { tag } = await params;

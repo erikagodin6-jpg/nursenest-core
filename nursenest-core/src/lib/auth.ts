@@ -5,12 +5,29 @@ import NextAuth, { type NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { NextRequest } from "next/server";
 import { authCallbacks } from "@/lib/auth-callbacks";
+import { JWT_SESSION_MAX_AGE_SEC, JWT_SESSION_UPDATE_AGE_SEC } from "@/lib/auth/auth-session-constants";
+import { hashLoginIdentifierForLog } from "@/lib/auth/log-auth-identifier";
 import { isEmailLikeIdentifier, normalizeLoginIdentifier } from "@/lib/auth/normalize-login-identifier";
 import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
 import { SubscriptionStatus, UserRole } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import * as Sentry from "@sentry/nextjs";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
+
+if (process.env.NODE_ENV === "production") {
+  const hasSecret = Boolean(
+    (process.env.AUTH_SECRET && process.env.AUTH_SECRET.trim().length > 0) ||
+      (process.env.NEXTAUTH_SECRET && process.env.NEXTAUTH_SECRET.trim().length > 0),
+  );
+  if (!hasSecret) {
+    safeServerLogCritical(
+      "auth",
+      "missing_auth_secret",
+      { surface: "startup" },
+      new Error("AUTH_SECRET (or NEXTAUTH_SECRET) must be set in production for JWT signing"),
+    );
+  }
+}
 
 function clientIpFromRequest(req: Request): string {
   return (
@@ -40,8 +57,8 @@ export const authConfig: NextAuthConfig = {
   trustHost: true,
   session: {
     strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60,
-    updateAge: 24 * 60 * 60,
+    maxAge: JWT_SESSION_MAX_AGE_SEC,
+    updateAge: JWT_SESSION_UPDATE_AGE_SEC,
   },
   cookies: {
     sessionToken: {
@@ -74,8 +91,14 @@ export const authConfig: NextAuthConfig = {
 
         const identifier = normalizeLoginIdentifier(String(credentials.email ?? ""));
         const password = String(credentials.password ?? "");
+        const idHash = identifier ? hashLoginIdentifierForLog(identifier) : "";
+        const authMode = isEmailLikeIdentifier(identifier) ? "email" : "username";
+
         if (!identifier || !password) {
-          safeServerLog("auth", "credentials_rejected", { reason: "missing_fields" });
+          safeServerLog("auth", "login_failed", {
+            reason: "missing_fields",
+            ip: ip.slice(0, 64),
+          });
           return null;
         }
 
@@ -93,22 +116,40 @@ export const authConfig: NextAuthConfig = {
         } catch (e) {
           const detail = e instanceof Error ? e.message.slice(0, 800) : String(e).slice(0, 800);
           safeServerLogCritical("auth", "user_lookup_failed", { surface: "credentials", detail }, e);
+          safeServerLog("auth", "login_failed", {
+            reason: "db_error",
+            authMode,
+            idHash,
+            ip: ip.slice(0, 64),
+          });
           return null;
         }
 
         if (!user?.passwordHash) {
-          safeServerLog("auth", "credentials_rejected", { reason: "no_account_or_no_password" });
+          safeServerLog("auth", "login_failed", {
+            reason: "no_account_or_no_password",
+            authMode,
+            idHash,
+            ip: ip.slice(0, 64),
+          });
           return null;
         }
 
         const ok = await compare(password, user.passwordHash);
         if (!ok) {
-          safeServerLog("auth", "credentials_rejected", { reason: "invalid_password" });
+          safeServerLog("auth", "login_failed", {
+            reason: "invalid_password",
+            authMode,
+            idHash,
+            ip: ip.slice(0, 64),
+          });
           return null;
         }
 
-        safeServerLog("auth", "credentials_ok", {
-          mode: isEmailLikeIdentifier(identifier) ? "email" : "username",
+        safeServerLog("auth", "login_success", {
+          authMode,
+          role: user.role,
+          userIdPrefix: user.id.slice(0, 8),
         });
 
         let subscriptionStatus: "active" | "grace" | "none" = "none";

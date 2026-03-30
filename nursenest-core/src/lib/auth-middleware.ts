@@ -2,6 +2,7 @@ import "./auth-trust-env";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { authCallbacks } from "@/lib/auth-callbacks";
+import { JWT_SESSION_MAX_AGE_SEC, JWT_SESSION_UPDATE_AGE_SEC } from "@/lib/auth/auth-session-constants";
 
 /**
  * Edge-only NextAuth instance: no Prisma, bcrypt, or PrismaAdapter.
@@ -13,7 +14,11 @@ import { authCallbacks } from "@/lib/auth-callbacks";
  */
 export const { auth: middlewareAuth } = NextAuth({
   trustHost: true,
-  session: { strategy: "jwt" },
+  session: {
+    strategy: "jwt",
+    maxAge: JWT_SESSION_MAX_AGE_SEC,
+    updateAge: JWT_SESSION_UPDATE_AGE_SEC,
+  },
   pages: { signIn: "/login" },
   providers: [
     Credentials({

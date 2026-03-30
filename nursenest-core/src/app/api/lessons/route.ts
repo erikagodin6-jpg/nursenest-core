@@ -5,7 +5,9 @@ import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
 import { prisma } from "@/lib/db";
+import { logLargeApiResponse } from "@/lib/observability/perf-log";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
 import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
 import type { CountryCode, TierCode } from "@prisma/client";
@@ -51,14 +53,16 @@ export async function GET(req: NextRequest) {
 
       const pageCount = Math.max(1, Math.ceil(total / pageSize));
 
-      return NextResponse.json({
+      const subscriberBody = {
         page,
         pageSize,
         total,
         pageCount,
         lessons,
         mode: "subscriber" as const,
-      });
+      };
+      logLargeApiResponse("/api/lessons", estimateJsonUtf8Bytes(subscriberBody));
+      return NextResponse.json(subscriberBody);
     } catch (e) {
       safeServerLogCritical("api_lessons", "prisma_find_failed", { page }, e);
       return NextResponse.json({ error: "Unable to load lessons. Try again shortly." }, { status: 503 });
@@ -119,13 +123,15 @@ export async function GET(req: NextRequest) {
           : l.summary ?? "",
     }));
 
-    return NextResponse.json({
+    const freemiumBody = {
       page: 1,
       pageSize: take,
       lessons: trimmedSummary,
       mode: "freemium" as const,
       freemiumRemainingAfterBatch: remaining,
-    });
+    };
+    logLargeApiResponse("/api/lessons", estimateJsonUtf8Bytes(freemiumBody));
+    return NextResponse.json(freemiumBody);
   } catch (e) {
     safeServerLogCritical("api_lessons", "prisma_find_failed_freemium", { page }, e);
     return NextResponse.json({ error: "Unable to load lessons. Try again shortly." }, { status: 503 });

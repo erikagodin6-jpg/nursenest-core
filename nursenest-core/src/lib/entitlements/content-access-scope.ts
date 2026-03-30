@@ -1,53 +1,37 @@
 import type { CountryCode, Prisma, TierCode } from "@prisma/client";
 import { ContentStatus } from "@prisma/client";
+import {
+  contentItemTierStringsForProfileTier,
+  examQuestionTierStringsForProfileTier,
+  prismaTierCodesForProfileTier,
+} from "@/lib/entitlements/accessible-tiers";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 
 /** Production DB uses lowercase status strings on `exam_questions` / `content_items`. */
 export const DB_PUBLISHED = "published" as const;
 
+export { getAccessibleTiers } from "@/lib/entitlements/accessible-tiers";
+
 /**
  * Tier ladder for `exam_questions.tier` (lowercase), aligned with main app pools.
+ * @deprecated Prefer {@link getAccessibleTiers} or {@link examQuestionTierStringsForProfileTier}.
  */
 export function examQuestionTiersForUserTier(userTier: TierCode): string[] {
-  switch (userTier) {
-    case "RPN":
-      return ["rpn"];
-    case "LVN_LPN":
-      return ["rpn", "lvn"];
-    case "RN":
-      return ["rpn", "lvn", "rn"];
-    case "NP":
-      return ["rpn", "lvn", "rn", "np"];
-    case "ALLIED":
-      return ["allied"];
-    default:
-      return [];
-  }
+  return examQuestionTierStringsForProfileTier(userTier);
 }
 
-/** `content_items.tier` allowlist (matches Express `allowedTiers` for lessons). */
+/** `content_items.tier` allowlist — same ladder as questions (not only the subscriber’s nominal tier). */
 export function contentItemTiersForUserTier(userTier: TierCode): string[] {
-  const t = tierCodeToContentTier(userTier);
-  if (t === "admin") return ["free", "general", "rpn", "rn", "np"];
-  if (t === "free") return ["free", "general"];
-  return ["free", "general", t];
+  return contentItemTierStringsForProfileTier(userTier);
 }
 
-function tierCodeToContentTier(tier: TierCode): string {
-  switch (tier) {
-    case "RPN":
-      return "rpn";
-    case "LVN_LPN":
-      return "lvn";
-    case "RN":
-      return "rn";
-    case "NP":
-      return "np";
-    case "ALLIED":
-      return "allied";
-    default:
-      return "free";
-  }
+/** Region gate: Canada subscribers never see US_ONLY rows (and vice versa). */
+export function regionScopeOrForCountry(country: CountryCode): Prisma.ContentItemWhereInput[] {
+  return [{ regionScope: "BOTH" }, { regionScope: country === "CA" ? "CA_ONLY" : "US_ONLY" }];
+}
+
+function examQuestionRegionOr(country: CountryCode) {
+  return [{ regionScope: "BOTH" }, { regionScope: country === "CA" ? "CA_ONLY" : "US_ONLY" }];
 }
 
 function lessonPublishedWhere(): Prisma.ContentItemWhereInput {
@@ -61,7 +45,11 @@ function lessonPublishedWhere(): Prisma.ContentItemWhereInput {
 export function lessonAccessWhere(entitlement: AccessScope): Prisma.ContentItemWhereInput {
   if (!entitlement.hasAccess) return { id: { in: [] } };
   if (entitlement.reason === "admin_override") {
-    return lessonPublishedWhere();
+    const country = entitlement.country as CountryCode | null;
+    if (!country) return lessonPublishedWhere();
+    return {
+      AND: [lessonPublishedWhere(), { OR: regionScopeOrForCountry(country) }],
+    };
   }
   const country = entitlement.country as CountryCode | null;
   const tier = entitlement.tier as TierCode | null;
@@ -71,7 +59,7 @@ export function lessonAccessWhere(entitlement: AccessScope): Prisma.ContentItemW
     AND: [
       lessonPublishedWhere(),
       {
-        OR: [{ regionScope: "BOTH" }, { regionScope: country === "CA" ? "CA_ONLY" : "US_ONLY" }],
+        OR: regionScopeOrForCountry(country),
       },
       {
         OR: [{ tier: null }, { tier: { in: tiers } }],
@@ -90,7 +78,7 @@ export function lessonBankWhereForProfile(country: CountryCode, tier: TierCode):
     AND: [
       lessonPublishedWhere(),
       {
-        OR: [{ regionScope: "BOTH" }, { regionScope: country === "CA" ? "CA_ONLY" : "US_ONLY" }],
+        OR: regionScopeOrForCountry(country),
       },
       {
         OR: [{ tier: null }, { tier: { in: tiers } }],
@@ -112,7 +100,7 @@ export function freemiumLessonWhereForProfile(country: CountryCode, tier: TierCo
     AND: [
       lessonPublishedWhere(),
       {
-        OR: [{ regionScope: "BOTH" }, { regionScope: country === "CA" ? "CA_ONLY" : "US_ONLY" }],
+        OR: regionScopeOrForCountry(country),
       },
       {
         OR: [{ tier: null }, { tier: { in: [...tiers] } }],
@@ -148,7 +136,12 @@ export function publicMarketingExamQuestionWhere(): Prisma.ExamQuestionWhereInpu
 export function questionAccessWhere(entitlement: AccessScope): Prisma.ExamQuestionWhereInput {
   if (!entitlement.hasAccess) return { id: { in: [] } };
   if (entitlement.reason === "admin_override") {
-    return { status: DB_PUBLISHED };
+    const country = entitlement.country as CountryCode | null;
+    if (!country) return { status: DB_PUBLISHED };
+    return {
+      status: DB_PUBLISHED,
+      OR: examQuestionRegionOr(country),
+    };
   }
   const country = entitlement.country as CountryCode | null;
   const tier = entitlement.tier as TierCode | null;
@@ -156,7 +149,7 @@ export function questionAccessWhere(entitlement: AccessScope): Prisma.ExamQuesti
   return {
     status: DB_PUBLISHED,
     tier: { in: examQuestionTiersForUserTier(tier) },
-    OR: [{ regionScope: "BOTH" }, { regionScope: country === "CA" ? "CA_ONLY" : "US_ONLY" }],
+    OR: examQuestionRegionOr(country),
   };
 }
 
@@ -168,7 +161,7 @@ export function questionBankWhereForProfile(country: CountryCode, tier: TierCode
   return {
     status: DB_PUBLISHED,
     tier: { in: examQuestionTiersForUserTier(tier) },
-    OR: [{ regionScope: "BOTH" }, { regionScope: country === "CA" ? "CA_ONLY" : "US_ONLY" }],
+    OR: examQuestionRegionOr(country),
   };
 }
 
@@ -181,7 +174,7 @@ export function freemiumQuestionWhereForProfile(country: CountryCode, tier: Tier
   return {
     status: DB_PUBLISHED,
     tier: { in: tiers },
-    OR: [{ regionScope: "BOTH" }, { regionScope: country === "CA" ? "CA_ONLY" : "US_ONLY" }],
+    OR: examQuestionRegionOr(country),
   };
 }
 
@@ -189,7 +182,9 @@ export function freemiumQuestionWhereForProfile(country: CountryCode, tier: Tier
 export function flashcardAccessWhere(entitlement: AccessScope): Prisma.FlashcardWhereInput {
   if (!entitlement.hasAccess) return { id: { in: [] } };
   if (entitlement.reason === "admin_override") {
-    return { status: ContentStatus.PUBLISHED };
+    const country = entitlement.country as CountryCode | null;
+    if (!country) return { status: ContentStatus.PUBLISHED };
+    return { status: ContentStatus.PUBLISHED, country };
   }
   const country = entitlement.country as CountryCode | null;
   const tier = entitlement.tier as TierCode | null;
@@ -197,7 +192,7 @@ export function flashcardAccessWhere(entitlement: AccessScope): Prisma.Flashcard
   return {
     status: ContentStatus.PUBLISHED,
     country,
-    tier: { in: accessibleTiersForUserTier(tier) },
+    tier: { in: prismaTierCodesForProfileTier(tier) },
   };
 }
 
@@ -205,29 +200,15 @@ export function flashcardBankWhereForProfile(country: CountryCode, tier: TierCod
   return {
     status: ContentStatus.PUBLISHED,
     country,
-    tier: { in: accessibleTiersForUserTier(tier) },
+    tier: { in: prismaTierCodesForProfileTier(tier) },
   };
 }
 
 /**
- * Tier scope for live content: learners see their tier plus lower tiers in the same country
- * (e.g. RN can study RPN/LVN fundamentals); RPN/LVN do not see RN/NP-only pools.
+ * Prisma `TierCode` ladder for flashcards / exams (matches {@link examQuestionTiersForUserTier}).
  */
 export function accessibleTiersForUserTier(userTier: TierCode): TierCode[] {
-  switch (userTier) {
-    case "RPN":
-      return ["RPN"];
-    case "LVN_LPN":
-      return ["LVN_LPN"];
-    case "RN":
-      return ["RPN", "LVN_LPN", "RN"];
-    case "NP":
-      return ["RPN", "LVN_LPN", "RN", "NP"];
-    case "ALLIED":
-      return ["ALLIED"];
-    default:
-      return [];
-  }
+  return prismaTierCodesForProfileTier(userTier);
 }
 
 /** Whether the learner may record an attempt for this exam row (backend paywall). */
@@ -236,9 +217,12 @@ export function userCanAccessExam(
   exam: { status: ContentStatus; country: CountryCode; tier: TierCode },
 ): boolean {
   if (exam.status !== ContentStatus.PUBLISHED || !entitlement.hasAccess) return false;
-  if (entitlement.reason === "admin_override") return true;
   const country = entitlement.country as CountryCode | null;
   const tier = entitlement.tier as TierCode | null;
+  if (entitlement.reason === "admin_override") {
+    if (!country) return true;
+    return exam.country === country;
+  }
   if (!country || !tier) return false;
   if (exam.country !== country) return false;
   return accessibleTiersForUserTier(tier).includes(exam.tier);

@@ -57,7 +57,14 @@ export function LoginForm({
   }
 
   return (
-    <form action={onSubmit} className="mt-6 space-y-4">
+    <form
+      className="mt-6 space-y-4"
+      onSubmit={(e) => {
+        e.preventDefault();
+        const fd = new FormData(e.currentTarget);
+        void onSubmit(fd);
+      }}
+    >
       <div className="space-y-1.5">
         <label htmlFor="login-identifier" className="text-sm font-medium text-foreground">
           Email or username

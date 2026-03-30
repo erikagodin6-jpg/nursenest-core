@@ -7,6 +7,8 @@ import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
 import { MAX_SESSION_QUESTION_IDS, sanitizeSessionQuestionIds } from "@/lib/exams/exam-session-bounds";
+import { QUESTION_PAYLOAD_WARN_BYTES } from "@/lib/questions/question-api-limits";
+import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 /**
@@ -79,12 +81,21 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Question not available" }, { status: 404 });
     }
 
-    return NextResponse.json({
+    const jsonBody = {
       index,
       total: ids.length,
       question,
       entitlementFiltered: sanitized.ids.length !== ids.length,
-    });
+    };
+    const approxPayloadBytes = estimateJsonUtf8Bytes(jsonBody);
+    if (approxPayloadBytes >= QUESTION_PAYLOAD_WARN_BYTES) {
+      safeServerLog("api_exams_session_question", "payload_warn", {
+        approxPayloadBytes,
+        threshold: QUESTION_PAYLOAD_WARN_BYTES,
+        questionId: qid,
+      });
+    }
+    return NextResponse.json(jsonBody);
   } catch (e) {
     safeServerLogCritical("api_exams_session_question", "failed", {}, e);
     return NextResponse.json({ error: "Unable to load question" }, { status: 503 });

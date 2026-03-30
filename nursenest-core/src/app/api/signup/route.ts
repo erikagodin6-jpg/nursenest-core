@@ -24,7 +24,7 @@ function clientIp(req: Request): string {
 const emptyToUndef = (v: unknown) => (v === "" || v === null ? undefined : v);
 
 const schema = z.object({
-  email: z.string().email(),
+  email: z.preprocess((v) => (typeof v === "string" ? v.trim().toLowerCase() : v), z.string().email()),
   password: strongPasswordSchema,
   username: z.string(),
   name: z.preprocess((v) => (typeof v === "string" ? v.trim() : v), z.string().min(1).max(200)),

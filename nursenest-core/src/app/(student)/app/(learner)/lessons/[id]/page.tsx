@@ -4,6 +4,7 @@ import { lessonAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallback } from "@/lib/db/safe-database";
+import { logBlockedAccess, logEntitlementMismatch } from "@/lib/entitlements/entitlement-logging";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 function LessonBody({ content }: { content: unknown }) {
@@ -128,6 +129,30 @@ export default async function LessonDetailPage({ params }: Props) {
 
   if (resolved.kind === "out_of_plan") {
     safeServerLog("page_lesson_detail", "lesson_out_of_entitlement", { id });
+    logBlockedAccess({
+      surface: "page_lesson_detail",
+      reason: "lesson_out_of_plan",
+      lessonIdPrefix: id.slice(0, 8),
+      userTier: String(entitlement.tier ?? ""),
+      userCountry: String(entitlement.country ?? ""),
+    });
+    const meta = await withDatabaseFallback(
+      async () =>
+        prisma.contentItem.findFirst({
+          where: { id, type: "lesson" },
+          select: { tier: true, regionScope: true, status: true },
+        }),
+      null,
+    );
+    if (meta?.status === "published") {
+      logEntitlementMismatch({
+        surface: "page_lesson_detail",
+        reason: "published_lesson_excluded_by_entitlement",
+        lessonIdPrefix: id.slice(0, 8),
+        contentTier: meta.tier ?? "",
+        contentRegionScope: meta.regionScope ?? "",
+      });
+    }
     return (
       <main className="space-y-4">
         <p className="text-sm text-muted">

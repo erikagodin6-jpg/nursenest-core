@@ -1,10 +1,19 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { unstable_cache } from "next/cache";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { listPathwayIdsWithLessons } from "@/lib/lessons/pathway-lesson-loader";
 import { examLessonsIndexBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
+
+export const revalidate = 600;
+
+const cachedPathwayIdsWithLessons = unstable_cache(
+  () => listPathwayIdsWithLessons(),
+  ["exam-lessons-pathway-ids-v1"],
+  { revalidate: 600, tags: ["pathway-lesson-index"] },
+);
 
 export const metadata: Metadata = {
   title: "Exam-scoped clinical lessons | NurseNest",
@@ -14,7 +23,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ExamLessonsIndexPage() {
-  const pathwayIds = await listPathwayIdsWithLessons();
+  const pathwayIds = await cachedPathwayIdsWithLessons();
   const rows = pathwayIds
     .map((id) => getExamPathwayById(id))
     .filter((p): p is NonNullable<typeof p> => !!p && p.status !== "hidden");

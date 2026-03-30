@@ -2,6 +2,8 @@ import * as Sentry from "@sentry/nextjs";
 import "@/lib/db/env-bootstrap";
 import { logDatabaseEnvOnce } from "@/lib/db/database-env";
 import { logStartupContext } from "@/lib/env/server-env";
+import { logHighMemory } from "@/lib/observability/perf-log";
+import { logStripeProductionPricingMisconfiguration } from "@/lib/stripe/pricing-map";
 
 function validateAuthEnv(): void {
   if (process.env.NODE_ENV !== "production") return;
@@ -35,6 +37,19 @@ export async function register() {
     process.on("uncaughtException", (err) => {
       console.error(`[nursenest-core] process_uncaughtException ${err?.message ?? err}`);
     });
+
+    const memIntervalMs = Number(process.env.PERF_MEMORY_LOG_INTERVAL_MS ?? "0");
+    if (process.env.NODE_ENV === "production" && Number.isFinite(memIntervalMs) && memIntervalMs >= 120_000) {
+      const id = setInterval(() => {
+        const heap = process.memoryUsage().heapUsed;
+        if (heap >= 512 * 1024 * 1024) {
+          logHighMemory("process_interval");
+        }
+      }, memIntervalMs);
+      if (typeof (id as ReturnType<typeof setInterval>).unref === "function") {
+        (id as ReturnType<typeof setInterval> & { unref: () => void }).unref();
+      }
+    }
   }
   if (process.env.NEXT_RUNTIME === "edge") {
     await import("./sentry.edge.config");

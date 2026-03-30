@@ -14,7 +14,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/blog" },
 };
 
-export const dynamic = "force-dynamic";
+/** ISR: list is bounded (page size); new posts visible within a few minutes without full dynamic SSR. */
+export const revalidate = 120;
 
 type Props = { searchParams: Promise<{ page?: string }> };
 

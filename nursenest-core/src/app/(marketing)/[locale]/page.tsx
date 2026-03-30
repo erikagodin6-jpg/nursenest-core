@@ -8,6 +8,8 @@ import { isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { marketingHomeSurfaceBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 
+export const revalidate = 600;
+
 type Props = { params: Promise<{ locale: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

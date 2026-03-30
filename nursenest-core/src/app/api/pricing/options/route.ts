@@ -9,11 +9,12 @@ import {
   formatPerMonthLabel,
   getDisplayTotalMajorUnits,
 } from "@/lib/pricing/display-catalog";
-import { findPriceEntry } from "@/lib/stripe/pricing-map";
+import { findPriceEntry, logStripePricingConfigurationGaps } from "@/lib/stripe/pricing-map";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
+  logStripePricingConfigurationGaps();
   const tiers = Array.from(
     new Set(
       Array.from(eachPricedCombination(), (c) => c.tier),

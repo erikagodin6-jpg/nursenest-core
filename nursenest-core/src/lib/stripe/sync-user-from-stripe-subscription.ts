@@ -36,7 +36,12 @@ export async function syncUserFromCheckoutSessionMetadata(
 
 export async function syncUserFromStripePriceId(userId: string, priceId: string): Promise<void> {
   const mapped = findTierCountryByPriceId(priceId);
-  if (!mapped) return;
+  if (!mapped) {
+    safeServerLog("stripe_sync", "unknown_price_id_skip_user_tier", {
+      priceIdPrefix: priceId.slice(0, 28),
+    });
+    return;
+  }
   await prisma.user.update({
     where: { id: userId },
     data: { tier: mapped.tier, country: mapped.country },

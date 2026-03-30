@@ -3,7 +3,9 @@ import { auth } from "@/lib/auth";
 import { flashcardAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { prisma } from "@/lib/db";
+import { logLargeApiResponse } from "@/lib/observability/perf-log";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
 import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
 
@@ -48,14 +50,16 @@ export async function GET(req: NextRequest) {
 
     const pageCount = Math.max(1, Math.ceil(total / pageSize));
 
-    return NextResponse.json({
+    const body = {
       page,
       pageSize,
       total,
       pageCount,
       flashcards,
       mode: "subscriber" as const,
-    });
+    };
+    logLargeApiResponse("/api/flashcards", estimateJsonUtf8Bytes(body));
+    return NextResponse.json(body);
   } catch (e) {
     safeServerLogCritical("api_flashcards", "find_failed", { page }, e);
     return NextResponse.json({ error: "Unable to load flashcards" }, { status: 503 });

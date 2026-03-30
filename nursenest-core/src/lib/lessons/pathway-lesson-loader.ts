@@ -785,7 +785,7 @@ async function listPathwayIdsWithDbLessons(): Promise<string[]> {
         where: { status: ContentStatus.PUBLISHED },
         _count: { _all: true },
       });
-      return groups.filter((g) => g._count._all > 0).map((g) => g.pathwayId);
+      return groups.map((g) => g.pathwayId);
     },
     [],
   );

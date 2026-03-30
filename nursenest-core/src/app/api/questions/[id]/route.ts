@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { freemiumQuestionWhereForProfile, questionAccessWhere } from "@/lib/entitlements/content-access-scope";
+import { DB_PUBLISHED, freemiumQuestionWhereForProfile, questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { logPaywallDeny, questionIdWhereIfAllowed } from "@/lib/entitlements/assert-question-access";
+import { logBlockedAccess, logEntitlementMismatch } from "@/lib/entitlements/entitlement-logging";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
 import { prisma } from "@/lib/db";
@@ -64,6 +65,28 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
 
       if (!q) {
         logPaywallDeny("/api/questions/[id]", "question_not_in_scope_or_missing", { id });
+        logBlockedAccess({
+          surface: "api_questions_id",
+          reason: "question_not_in_subscriber_scope",
+          questionIdPrefix: id.slice(0, 8),
+          userTier: String(gate.entitlement.tier ?? ""),
+          userCountry: String(gate.entitlement.country ?? ""),
+        });
+        const published = await withRetry(() =>
+          prisma.examQuestion.findFirst({
+            where: { id, status: DB_PUBLISHED },
+            select: { tier: true, regionScope: true },
+          }),
+        );
+        if (published) {
+          logEntitlementMismatch({
+            surface: "api_questions_id",
+            reason: "published_question_excluded_by_entitlement",
+            questionIdPrefix: id.slice(0, 8),
+            contentTier: published.tier,
+            contentRegionScope: published.regionScope ?? "",
+          });
+        }
         return NextResponse.json({ error: "Not found" }, { status: 404 });
       }
 

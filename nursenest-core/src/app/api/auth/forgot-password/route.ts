@@ -3,7 +3,8 @@ import { z } from "zod";
 import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
 import { prisma } from "@/lib/db";
 import { generatePasswordResetRawToken, hashPasswordResetToken } from "@/lib/password-reset-crypto";
-import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { PASSWORD_RESET_TOKEN_TTL_MS } from "@/lib/auth/password-reset-constants";
+import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { buildPasswordResetUrl, sendPasswordResetEmail } from "@/lib/send-password-reset-email";
 
 export const runtime = "nodejs";
@@ -11,8 +12,6 @@ export const runtime = "nodejs";
 const bodySchema = z.object({
   email: z.string().min(3).max(320),
 });
-
-const RESET_TTL_MS = 60 * 60 * 1000;
 
 function clientIp(req: Request): string {
   return (
@@ -87,14 +86,22 @@ export async function POST(req: Request) {
 
     const rawToken = generatePasswordResetRawToken();
     const tokenHash = hashPasswordResetToken(rawToken);
-    const expiresAt = new Date(Date.now() + RESET_TTL_MS);
+    const expiresAt = new Date(Date.now() + PASSWORD_RESET_TOKEN_TTL_MS);
 
-    await prisma.passwordResetToken.create({
+    const created = await prisma.passwordResetToken.create({
       data: {
         tokenHash,
         userId: user.id,
         expiresAt,
       },
+      select: { id: true },
+    });
+
+    safeServerLog("auth", "password_reset_token_issued", {
+      userIdPrefix: user.id.slice(0, 8),
+      tokenIdPrefix: created.id.slice(0, 8),
+      ttlMin: Math.round(PASSWORD_RESET_TOKEN_TTL_MS / 60_000),
+      ip: ip.slice(0, 64),
     });
 
     const resetUrl = buildPasswordResetUrl(rawToken);

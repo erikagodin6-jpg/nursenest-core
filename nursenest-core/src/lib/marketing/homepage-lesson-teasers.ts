@@ -1,3 +1,4 @@
+import { unstable_cache } from "next/cache";
 import { buildExamPathwayPath, listPublicExamPathways } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { listPathwayIdsWithLessons } from "@/lib/lessons/pathway-lesson-loader";
@@ -18,10 +19,7 @@ function pathwaySortKey(p: ExamPathwayDefinition): number {
   return 9;
 }
 
-/**
- * Home marketing strip: active pathways that have at least one lesson in DB or catalog (avoids 404 lesson hubs).
- */
-export async function getHomepageLessonTeasers(): Promise<HomepageLessonTeaser[]> {
+async function getHomepageLessonTeasersUncached(): Promise<HomepageLessonTeaser[]> {
   const lessonIds = new Set(await listPathwayIdsWithLessons());
   return listPublicExamPathways()
     .filter((p) => p.status === "active" && lessonIds.has(p.id))
@@ -37,3 +35,12 @@ export async function getHomepageLessonTeasers(): Promise<HomepageLessonTeaser[]
       lessonsHref: buildExamPathwayPath(p, "lessons"),
     }));
 }
+
+/**
+ * Home marketing strip: active pathways that have at least one lesson in DB or catalog (avoids 404 lesson hubs).
+ * Cached (ISR-style) to cut DB + loader work on hot marketing traffic.
+ */
+export const getHomepageLessonTeasers = unstable_cache(getHomepageLessonTeasersUncached, ["homepage-lesson-teasers-v1"], {
+  revalidate: 600,
+  tags: ["homepage-teasers"],
+});

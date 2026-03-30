@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import HomeRestoredClient from "@/components/marketing/home-restored-client";
+
+/** ISR: homepage shell + cached lesson teaser strip (see getHomepageLessonTeasers). */
+export const revalidate = 600;
 import { getHomepageLessonTeasers } from "@/lib/marketing/homepage-lesson-teasers";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";

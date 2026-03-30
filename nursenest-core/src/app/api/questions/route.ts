@@ -23,6 +23,7 @@ import {
 } from "@/lib/questions/question-api-limits";
 import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
 import { diagnoseSubscriberQuestionListEmpty } from "@/lib/questions/question-list-empty-diagnostics";
+import { logLargeApiResponse } from "@/lib/observability/perf-log";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 /** Deep offset pagination is expensive on large tables; reject before issuing heavy skip scans. */
@@ -243,7 +244,7 @@ export async function GET(req: NextRequest) {
         });
       }
 
-      return NextResponse.json({
+      const subscriberBody = {
         page,
         pageSize,
         questions: payload,
@@ -253,8 +254,17 @@ export async function GET(req: NextRequest) {
         pathwayIdRequested: pathwayIdParam && pathwayIdParam.length > 0 ? pathwayIdParam : null,
         topicRequested: topicFilter && topicFilter.length > 0 ? topicFilter : null,
         topicRelaxed,
-        ...(listEmptyDiagnostics ? { diagnostics: listEmptyDiagnostics } : {}),
-      });
+        ...(listEmptyDiagnostics
+          ? {
+              diagnostics:
+                process.env.NODE_ENV === "production"
+                  ? { code: listEmptyDiagnostics.code }
+                  : listEmptyDiagnostics,
+            }
+          : {}),
+      };
+      logLargeApiResponse("/api/questions", estimateJsonUtf8Bytes(subscriberBody));
+      return NextResponse.json(subscriberBody);
     } catch (e) {
       safeServerLogCritical("api_questions", "prisma_find_failed", { page }, e, { flow: "questions_load" });
       return NextResponse.json(
@@ -376,14 +386,16 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    return NextResponse.json({
+    const freemiumBody = {
       page: 1,
       pageSize: take,
       questions: sanitized,
       mode: "freemium" as const,
       fields: responseMode,
       freemiumRemainingAfterBatch: remaining,
-    });
+    };
+    logLargeApiResponse("/api/questions", estimateJsonUtf8Bytes(freemiumBody));
+    return NextResponse.json(freemiumBody);
   } catch (e) {
     safeServerLogCritical("api_questions", "prisma_find_failed_freemium", { page }, e, { flow: "questions_load" });
     return NextResponse.json(

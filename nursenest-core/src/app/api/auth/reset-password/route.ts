@@ -5,7 +5,8 @@ import { strongPasswordSchema } from "@/lib/auth/password-policy";
 import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
 import { prisma } from "@/lib/db";
 import { hashPasswordResetToken } from "@/lib/password-reset-crypto";
-import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { PASSWORD_RESET_TOKEN_TTL_MS } from "@/lib/auth/password-reset-constants";
+import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 
 export const runtime = "nodejs";
 
@@ -58,7 +59,29 @@ export async function POST(req: Request) {
       select: { id: true, userId: true, expiresAt: true },
     });
 
-    if (!row || row.expiresAt.getTime() < Date.now()) {
+    const tokenHashPrefix = tokenHash.slice(0, 12);
+    const now = Date.now();
+
+    if (!row) {
+      safeServerLog("auth", "password_reset_token_rejected", {
+        reason: "not_found",
+        tokenHashPrefix,
+        ip: ip.slice(0, 64),
+      });
+      return NextResponse.json(
+        { ok: false, error: "This reset link is invalid or has expired." },
+        { status: 400 },
+      );
+    }
+
+    if (row.expiresAt.getTime() < now) {
+      safeServerLog("auth", "password_reset_token_rejected", {
+        reason: "expired",
+        tokenHashPrefix,
+        ttlMin: Math.round(PASSWORD_RESET_TOKEN_TTL_MS / 60_000),
+        ip: ip.slice(0, 64),
+      });
+      await prisma.passwordResetToken.delete({ where: { id: row.id } }).catch(() => {});
       return NextResponse.json(
         { ok: false, error: "This reset link is invalid or has expired." },
         { status: 400 },
@@ -74,6 +97,13 @@ export async function POST(req: Request) {
       }),
       prisma.passwordResetToken.deleteMany({ where: { userId: row.userId } }),
     ]);
+
+    safeServerLog("auth", "password_reset_token_consumed", {
+      userIdPrefix: row.userId.slice(0, 8),
+      tokenIdPrefix: row.id.slice(0, 8),
+      tokenHashPrefix,
+      ip: ip.slice(0, 64),
+    });
 
     return NextResponse.json({ ok: true, message: "Password updated. You can sign in now." });
   } catch (e) {

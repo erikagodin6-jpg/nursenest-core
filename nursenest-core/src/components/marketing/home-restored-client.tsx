@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState, Suspense } from "react";
+import { memo, useCallback, useEffect, useMemo, useState, Suspense } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import {
@@ -103,6 +103,26 @@ type HomeStatsPayload = {
 type HomeRestoredClientProps = {
   lessonTeasers: HomepageLessonTeaser[];
 };
+
+const MemoLessonTeaserGrid = memo(function MemoLessonTeaserGrid({ items }: { items: HomepageLessonTeaser[] }) {
+  const { t, locale } = useMarketingI18n();
+  return (
+    <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {items.map((item) => (
+        <li key={item.id}>
+          <Link
+            href={withMarketingLocale(locale, item.lessonsHref)}
+            className="flex h-full flex-col rounded-xl border border-[var(--theme-card-border)] bg-card p-4 shadow-sm transition hover:border-primary/30"
+          >
+            <span className="text-xs font-semibold uppercase text-primary">{item.shortLabel}</span>
+            <span className="mt-1 text-sm font-semibold text-[var(--theme-heading-text)]">{item.title}</span>
+            <span className="mt-3 text-xs font-medium text-primary">{t("home.lessons.lessonHubCta")}</span>
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
+});
 
 export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClientProps) {
   const { t, locale } = useMarketingI18n();
@@ -543,20 +563,7 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
-            <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {lessonTeasers.map((item) => (
-                <li key={item.id}>
-                  <Link
-                    href={withMarketingLocale(locale, item.lessonsHref)}
-                    className="flex h-full flex-col rounded-xl border border-[var(--theme-card-border)] bg-card p-4 shadow-sm transition hover:border-primary/30"
-                  >
-                    <span className="text-xs font-semibold uppercase text-primary">{item.shortLabel}</span>
-                    <span className="mt-1 text-sm font-semibold text-[var(--theme-heading-text)]">{item.title}</span>
-                    <span className="mt-3 text-xs font-medium text-primary">{t("home.lessons.lessonHubCta")}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <MemoLessonTeaserGrid items={lessonTeasers} />
           </div>
         </section>
 

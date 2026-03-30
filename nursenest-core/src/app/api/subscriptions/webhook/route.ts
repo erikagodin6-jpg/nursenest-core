@@ -112,6 +112,11 @@ export async function POST(req: Request) {
       const subId = typeof session.subscription === "string" ? session.subscription : session.subscription?.id;
       if (userId && subId) {
         const plan = planFromCheckoutMetadata(session.metadata ?? undefined);
+        if (!plan) {
+          safeServerLog("stripe_webhook", "checkout_missing_plan_metadata", {
+            hasMetadata: session.metadata && Object.keys(session.metadata).length > 0 ? 1 : 0,
+          });
+        }
         await prisma.$transaction(async (tx) => {
           await tx.subscription.upsert({
             where: { stripeSubscriptionId: subId },

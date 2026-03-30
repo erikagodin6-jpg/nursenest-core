@@ -30,6 +30,7 @@
     "db:sanity": "tsx scripts/db-sanity-check.ts",
     "db:verify-indexes": "tsx scripts/verify-required-db-indexes.ts",
     "admin:promote": "tsx scripts/ensure-admin-user.ts",
+    "create-admin": "tsx scripts/create-admin.ts",
     "content:inventory": "tsx scripts/content-inventory.ts",
     "content:audit": "tsx scripts/content-audit-authoritative.ts",
     "import:blog": "tsx scripts/import-blog.ts",
@@ -46,11 +47,15 @@
     "build:risk-audit": "tsx scripts/build-risk-audit.ts",
     "storage:check": "node scripts/storage-guardrails.mjs",
     "storage:check:strict": "node scripts/storage-guardrails.mjs --strict",
+    "ops:storage-report": "tsx scripts/storage-report.ts",
+    "ops:cleanup-spaces-orphans": "tsx scripts/cleanup-spaces-orphans.ts",
     "import:audit-nursing": "tsx scripts/audit-nursing-ai-cache.ts",
     "import:nursing-ai-cache": "tsx scripts/import-nursing-ai-cache.ts",
-    "replit:spaces-pipeline": "node scripts/replit-export-spaces-pipeline.mjs"
+    "replit:spaces-pipeline": "node scripts/replit-export-spaces-pipeline.mjs",
+    "import:replit-questions": "tsx scripts/import-replit-question-bank.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1019.0",
     "@auth/core": "0.37.2",
     "@prisma/client": "^6.7.0",
     "@radix-ui/react-accordion": "^1.2.12",
@@ -65,11 +70,11 @@
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "server-only": "^0.0.1",
+    "sharp": "^0.34.1",
     "stripe": "^18.0.0",
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@aws-sdk/client-s3": "^3.1019.0",
     "@tailwindcss/postcss": "^4",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",

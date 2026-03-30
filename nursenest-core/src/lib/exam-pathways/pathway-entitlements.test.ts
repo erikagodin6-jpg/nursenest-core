@@ -61,8 +61,24 @@ describe("subscriptionCoversPathwayBase", () => {
     assert.equal(subscriptionCoversPathwayBase(s, caRn), false);
   });
 
-  it("admin override allows visible pathways", () => {
+  it("admin override allows visible pathways in profile country", () => {
     const s = scope({ hasAccess: true, reason: "admin_override", tier: "NP", country: "US" });
     assert.equal(subscriptionCoversPathwayBase(s, usRn), true);
+  });
+
+  it("admin override does not cross country for pathway access", () => {
+    const s = scope({ hasAccess: true, reason: "admin_override", tier: "NP", country: "CA" });
+    assert.equal(subscriptionCoversPathwayBase(s, usRn), false);
+    assert.equal(subscriptionCoversPathwayBase(s, caRn), true);
+  });
+
+  it("LVN_LPN can access RPN pathway in same country (shared PN ladder)", () => {
+    const s = scope({ hasAccess: true, reason: "active_subscription", tier: "LVN_LPN", country: "CA" });
+    assert.equal(subscriptionCoversPathwayBase(s, caRpn), true);
+  });
+
+  it("RPN cannot access LVN_LPN stripe pathway", () => {
+    const s = scope({ hasAccess: true, reason: "active_subscription", tier: "RPN", country: "US" });
+    assert.equal(subscriptionCoversPathwayBase(s, usLpn), false);
   });
 });
