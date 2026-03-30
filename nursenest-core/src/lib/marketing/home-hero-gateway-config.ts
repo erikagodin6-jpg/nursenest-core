@@ -113,16 +113,22 @@ export function buildHeroGatewayClusters(region: NursenestMarketingRegion): Hero
       id: "allied",
       title: "Allied health exams",
       tier: "secondary",
-      intro: "Separate from nursing tiers: pick your exam family, then drill in the allied hub and pathway bank for your country.",
+      intro:
+        "Same pathway model as nursing: open your regional question bank first, then use the hub for lessons and context. The careers brochure lists supported certifications if you are still choosing an exam.",
       primaryCta: {
-        id: "allied-browse",
-        label: "Browse allied careers",
-        href: alliedBrochure,
-        external: true,
+        id: "allied-questions",
+        label: "Open allied question bank",
+        description: "Region-scoped bank",
+        href: alliedQuestions(region),
       },
       links: [
         { id: "allied-in", label: "Allied exam hub", href: alliedHub(region) },
-        { id: "allied-q", label: "Allied question bank", href: alliedQuestions(region) },
+        {
+          id: "allied-brochure",
+          label: "Supported careers & exams (brochure)",
+          href: alliedBrochure,
+          external: true,
+        },
       ],
     },
     {

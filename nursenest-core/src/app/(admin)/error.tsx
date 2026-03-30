@@ -1,5 +1,7 @@
 "use client";
 
+import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
+
 export default function AdminError({
   error,
   reset,
@@ -9,6 +11,9 @@ export default function AdminError({
 }) {
   return (
     <main className="mx-auto max-w-lg px-6 py-16 text-center">
+      <a href="/" className="mb-6 inline-flex justify-center" aria-label="NurseNest home">
+        <SiteBrandLogoMark />
+      </a>
       <h1 className="text-xl font-semibold text-foreground">Admin area unavailable</h1>
       <p className="mt-2 text-sm text-muted">
         {error.message || "Something went wrong loading this page."}

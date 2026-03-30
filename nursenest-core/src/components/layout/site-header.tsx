@@ -269,9 +269,9 @@ export function SiteHeader() {
           {/* h-[100dvh] + min-h-0 scroll region: avoids clipped menu on mobile browsers with dynamic toolbars */}
           <div className="absolute right-0 top-0 flex h-[100dvh] max-h-[100dvh] w-[min(100%,20rem)] flex-col border-l border-[var(--theme-separator)] bg-[var(--theme-card-bg)] shadow-[var(--shadow-elevated)]">
             <div className="flex shrink-0 items-center justify-between border-b border-[var(--theme-separator)] p-4 pt-[max(1rem,env(safe-area-inset-top))]">
-              <span className="flex items-center gap-2">
+              <Link href={localizeHref("/")} className="flex min-w-0 items-center gap-2" aria-label="NurseNest home">
                 <SiteBrandLogoMark />
-              </span>
+              </Link>
               <Button type="button" variant="ghost" className="h-9 w-9 p-0" aria-label={t("nav.closeMenu")} onClick={() => setMobileOpen(false)}>
                 <X className="h-5 w-5" />
               </Button>

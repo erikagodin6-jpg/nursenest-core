@@ -3,7 +3,16 @@ import { getProgrammaticSeoPage } from "@/lib/seo/programmatic-registry";
 
 /**
  * Primary indexable programmatic URL for each product pathway (`/{slug}`).
- * Used for internal links and breadcrumbs so `/us/...` and `/canada/...` hubs connect to the same SEO entry points that attract search traffic.
+ * Labels come from `getProgrammaticSeoPage(slug).h1` so breadcrumbs match the public page title.
+ *
+ * **US NCLEX-PN → `rex-pn-practice-questions`:** there is no separate NCLEX-PN-only slug in
+ * `programmatic-registry`; that page’s h1 explicitly includes NCLEX-PN alongside REx-PN.
+ *
+ * **Allied → `allied-health-career-guides`:** only allied-themed programmatic entry today;
+ * it leans career context while hubs are exam prep. Still the closest registry parent.
+ *
+ * **NP + CNPLE → `np-exam-practice-questions`:** shared umbrella for all NP tracks until
+ * per-specialty programmatic pages exist.
  */
 const PATHWAY_ID_TO_PROGRAMMATIC_SLUG: Record<string, string> = {
   "ca-rpn-rex-pn": "rex-pn-practice-questions",

@@ -17,6 +17,9 @@ export default async function LearnerShellLayout({ children }: { children: React
   if (!userId) {
     return (
       <div className="mx-auto w-full max-w-6xl px-6 py-8">
+        <Link href="/" className="mb-6 inline-flex" aria-label="NurseNest home">
+          <SiteBrandLogoMark />
+        </Link>
         <p className="text-sm text-[var(--theme-muted-text)]">
           <Link className="font-medium text-primary underline" href="/login">
             Sign in

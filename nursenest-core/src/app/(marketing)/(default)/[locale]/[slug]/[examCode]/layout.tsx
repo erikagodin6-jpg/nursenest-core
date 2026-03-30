@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getExamPathwayByRoute } from "@/lib/exam-pathways/exam-product-registry";
-import { resolveCanonicalSiteOrigin } from "@/lib/seo/canonical-site";
+import { absoluteUrl } from "@/lib/seo/site-origin";
 
 type Props = {
   children: React.ReactNode;
@@ -13,16 +13,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug, examCode } = await params;
   const pathway = getExamPathwayByRoute(locale, slug, examCode);
   if (!pathway) return {};
-  const origin = resolveCanonicalSiteOrigin().replace(/\/$/, "");
   const path = `/${pathway.countrySlug}/${pathway.roleTrack}/${pathway.examCode}`;
   return {
     title: pathway.seoTitle,
     description: pathway.seoDescription,
-    alternates: { canonical: path },
+    alternates: { canonical: absoluteUrl(path) },
     openGraph: {
       title: pathway.seoTitle,
       description: pathway.seoDescription,
-      url: path,
+      url: absoluteUrl(path),
     },
   };
 }

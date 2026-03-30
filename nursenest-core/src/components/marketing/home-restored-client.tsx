@@ -39,7 +39,9 @@ import { HomeMarketingSixtySeconds } from "@/components/marketing/home-marketing
 import { HomeMarketingProductProof } from "@/components/marketing/home-marketing-product-proof";
 import { HomeMarketingFeaturesStack } from "@/components/marketing/home-marketing-features-stack";
 import { heroQuickEntryLinks } from "@/lib/marketing/home-hero-gateway-config";
-import { HUB, NP, PN, RN, alliedCareersMarketingUrl, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
+import { HUB, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
+import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
+import { PH } from "@/lib/observability/posthog-conversion-events";
 
 const HeroFeatureStrip = dynamic(() => import("@/legacy/marketing/hero-feature-strip"), {
   loading: () => <div className="min-h-[60px]" />,
@@ -137,18 +139,6 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
   const heroSlides = useMemo(() => buildHomepageHeroSlides(t), [t, locale]);
 
   const heroQuickLinks = useMemo(() => heroQuickEntryLinks(region), [region]);
-
-  const exploreHubLinks = useMemo(() => {
-    const allied = alliedCareersMarketingUrl();
-    return [
-      { href: RN.practiceProgrammatic, labelKey: "home.exploreHubs.link.nclexRn" as const },
-      { href: PN.practiceProgrammatic, labelKey: "home.exploreHubs.link.rexPn" as const },
-      { href: NP.practiceProgrammatic, labelKey: "home.exploreHubs.link.np" as const },
-      { href: allied, labelKey: "home.exploreHubs.link.allied" as const, external: true },
-      { href: HUB.examLessons, labelKey: "home.exploreHubs.link.examLessons" as const },
-      { href: HUB.tools, labelKey: "home.exploreHubs.link.tools" as const },
-    ];
-  }, []);
 
   const [email, setEmail] = useState("");
   const [emailFrequency, setEmailFrequency] = useState("weekly");
@@ -323,35 +313,41 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
                 </div>
 
                 <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
-                  <Link
+                  <MarketingTrackedLink
                     href="/signup"
+                    event={PH.marketingHomeHeroPrimaryCta}
+                    eventProps={{ region }}
                     className="shadow-primary/25 flex min-h-[52px] w-full items-center justify-center rounded-full bg-primary px-7 py-3 text-base font-semibold text-white shadow-[var(--shadow-elevated)] transition-transform hover:-translate-y-0.5 hover:brightness-110 sm:min-h-[56px] sm:w-auto sm:px-9 sm:text-lg"
                     data-testid="button-hero-start-free"
                   >
                     {t("home.hero.ctaPrimary")}
                     <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
-                  </Link>
-                  <Link
+                  </MarketingTrackedLink>
+                  <MarketingTrackedLink
                     href={withMarketingLocale(locale, rnQuestions(region))}
+                    event={PH.marketingHomeHeroSecondaryCta}
+                    eventProps={{ region, destination: "rn_questions" }}
                     className="flex min-h-[52px] w-full items-center justify-center rounded-full border border-[var(--theme-input-border)] bg-card px-7 py-3 text-base font-medium text-[var(--theme-body-text)] hover:border-[color-mix(in_srgb,var(--theme-primary)_22%,var(--theme-input-border))] hover:bg-[var(--theme-muted-surface)] sm:min-h-[56px] sm:w-auto sm:px-9 sm:text-lg"
                     data-testid="button-hero-browse"
                   >
                     <BookOpen className="mr-2 h-4 w-4 text-primary sm:h-5 sm:w-5" />
                     {t("home.hero.ctaSecondary")}
-                  </Link>
+                  </MarketingTrackedLink>
                 </div>
 
                 <div className="space-y-2" data-testid="hero-quick-entry-links">
                   <p className="text-xs font-medium text-[var(--theme-muted-text)]">{t("home.hero.quickEntryLabel")}</p>
                   <div className="flex flex-wrap gap-2">
                     {heroQuickLinks.map((item) => (
-                      <Link
+                      <MarketingTrackedLink
                         key={item.label}
                         href={withMarketingLocale(locale, item.href)}
+                        event={PH.marketingHomeQuickEntryClick}
+                        eventProps={{ region, link_label: item.label }}
                         className="inline-flex items-center rounded-full border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)] px-3 py-1.5 text-xs font-semibold text-[var(--theme-heading-text)] transition hover:border-primary/35 hover:bg-card"
                       >
                         {item.label}
-                      </Link>
+                      </MarketingTrackedLink>
                     ))}
                   </div>
                 </div>
@@ -583,22 +579,24 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
             <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {(
                 [
-                  { href: "/nclex-rn-practice-questions", labelKey: "home.exploreHubs.link.nclexRn" },
-                  { href: "/rex-pn-practice-questions", labelKey: "home.exploreHubs.link.rexPn" },
-                  { href: "/np-exam-practice-questions", labelKey: "home.exploreHubs.link.np" },
-                  { href: "/tools", labelKey: "home.exploreHubs.link.tools" },
-                  { href: "/blog", labelKey: "home.exploreHubs.link.blog" },
-                  { href: "/pricing", labelKey: "home.exploreHubs.link.pricing" },
+                  { href: "/nclex-rn-practice-questions", labelKey: "home.exploreHubs.link.nclexRn", hub: "nclex_rn_programmatic" },
+                  { href: "/rex-pn-practice-questions", labelKey: "home.exploreHubs.link.rexPn", hub: "pn_programmatic" },
+                  { href: "/np-exam-practice-questions", labelKey: "home.exploreHubs.link.np", hub: "np_programmatic" },
+                  { href: "/tools", labelKey: "home.exploreHubs.link.tools", hub: "tools" },
+                  { href: "/blog", labelKey: "home.exploreHubs.link.blog", hub: "blog" },
+                  { href: "/pricing", labelKey: "home.exploreHubs.link.pricing", hub: "pricing" },
                 ] as const
               ).map((item) => (
                 <li key={item.href}>
-                  <Link
+                  <MarketingTrackedLink
                     href={withMarketingLocale(locale, item.href)}
+                    event={PH.marketingHomeExploreHubClick}
+                    eventProps={{ hub: item.hub }}
                     className="flex items-center justify-between rounded-xl border border-[var(--theme-card-border)] bg-card px-4 py-3 text-sm font-medium text-[var(--theme-heading-text)] shadow-sm transition hover:border-primary/30 hover:bg-[var(--theme-muted-surface)]"
                   >
                     {t(item.labelKey)}
                     <ArrowRight className="h-4 w-4 shrink-0 text-primary" />
-                  </Link>
+                  </MarketingTrackedLink>
                 </li>
               ))}
             </ul>

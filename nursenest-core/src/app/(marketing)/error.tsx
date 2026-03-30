@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 
 /**
  * Marketing-route error surface: never a blank screen; keeps layout chrome via parent when possible.
@@ -19,6 +20,9 @@ export default function MarketingSegmentError({
   return (
     <div className="flex min-h-[50vh] flex-col items-center justify-center px-6 py-16">
       <div className="nn-card max-w-md p-8 text-center">
+        <a href="/" className="mb-5 inline-flex justify-center" aria-label="NurseNest home">
+          <SiteBrandLogoMark />
+        </a>
         <h1 className="text-xl font-bold text-[var(--theme-heading-text)]">Something went wrong</h1>
         <p className="mt-2 text-sm text-[var(--theme-muted-text)]">Please try again. If this continues, refresh the page.</p>
         <button

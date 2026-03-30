@@ -28,7 +28,7 @@ Adding a pathway = add a row + deploy (no route rewrite).
 | `.../pricing` | Pathway-specific pricing / waitlist copy |
 | `.../questions` | SEO landing → app bank |
 
-Legacy programmatic URLs (`/{slug}`) can **redirect** to hubs via `programmatic-slug-redirects.ts` + `next.config.ts` (only when unambiguous).
+Legacy programmatic URLs (`/{slug}`) can **redirect** to hubs via `programmatic-slug-redirects.ts` + `next.config.ts` when a single canonical hub exists; the map may be empty when slugs serve multi-country or multi-pathway audiences at `/{slug}` instead.
 
 ## 4. Entitlements
 

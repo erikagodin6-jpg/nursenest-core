@@ -6,6 +6,8 @@ import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { buildHeroGatewayClusters } from "@/lib/marketing/home-hero-gateway-config";
 import type { HeroGatewayLink, NursenestMarketingRegion } from "@/lib/marketing/home-hero-gateway-config";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { trackClientEvent } from "@/lib/observability/posthog-client";
+import { PH } from "@/lib/observability/posthog-conversion-events";
 
 type Props = {
   region: NursenestMarketingRegion;
@@ -41,6 +43,8 @@ export function HomeHeroPathGateway({ region }: Props) {
           {rn.intro && <p className="mt-2 text-sm text-[var(--theme-muted-text)]">{rn.intro}</p>}
           {rn.primaryCta && (
             <PrimaryCtaButton
+              clusterId="nursing"
+              region={region}
               cta={rn.primaryCta}
               localize={localize}
               className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:brightness-110 sm:w-auto"
@@ -56,7 +60,7 @@ export function HomeHeroPathGateway({ region }: Props) {
           <ul className="mt-3 grid gap-2 sm:grid-cols-2">
             {rn.links.map((link) => (
               <li key={link.id}>
-                <GatewayLink link={link} localize={localize} />
+                <GatewayLink clusterId="nursing" region={region} link={link} localize={localize} />
               </li>
             ))}
           </ul>
@@ -64,13 +68,13 @@ export function HomeHeroPathGateway({ region }: Props) {
       </div>
 
       <div className="mt-4 grid gap-4 lg:grid-cols-2">
-        <ClusterCard cluster={lpn} localize={localize} testId="hero-gateway-lpn" />
-        <ClusterCard cluster={np} localize={localize} testId="hero-gateway-np" />
+        <ClusterCard cluster={lpn} localize={localize} testId="hero-gateway-lpn" region={region} />
+        <ClusterCard cluster={np} localize={localize} testId="hero-gateway-np" region={region} />
       </div>
 
       <div className="mt-4 grid gap-4 lg:grid-cols-2">
-        <ClusterCard cluster={allied} localize={localize} testId="hero-gateway-allied" />
-        <ClusterCard cluster={newGrad} localize={localize} testId="hero-gateway-newgrad" />
+        <ClusterCard cluster={allied} localize={localize} testId="hero-gateway-allied" region={region} />
+        <ClusterCard cluster={newGrad} localize={localize} testId="hero-gateway-newgrad" region={region} />
       </div>
 
       <p className="mt-4 text-center text-xs text-[var(--theme-muted-text)] sm:text-left">{t("home.gateway.frictionNote")}</p>
@@ -82,10 +86,12 @@ function ClusterCard({
   cluster,
   localize,
   testId,
+  region,
 }: {
   cluster: ReturnType<typeof buildHeroGatewayClusters>[number];
   localize: (h: string) => string;
   testId: string;
+  region: NursenestMarketingRegion;
 }) {
   return (
     <div
@@ -99,6 +105,8 @@ function ClusterCard({
         </div>
         {cluster.primaryCta && (
           <PrimaryCtaButton
+            clusterId={cluster.id}
+            region={region}
             cta={cluster.primaryCta}
             localize={localize}
             className="inline-flex shrink-0 items-center rounded-full border border-primary/25 bg-primary/5 px-3 py-1.5 text-xs font-semibold text-primary hover:bg-primary/10"
@@ -109,7 +117,7 @@ function ClusterCard({
       <ul className="mt-4 grid flex-1 gap-1.5 sm:grid-cols-2">
         {cluster.links.map((link) => (
           <li key={link.id}>
-            <GatewayLink link={link} localize={localize} compact />
+            <GatewayLink clusterId={cluster.id} region={region} link={link} localize={localize} compact />
           </li>
         ))}
       </ul>
@@ -118,11 +126,15 @@ function ClusterCard({
 }
 
 function PrimaryCtaButton({
+  clusterId,
+  region,
   cta,
   localize,
   className,
   icon,
 }: {
+  clusterId: string;
+  region: NursenestMarketingRegion;
   cta: HeroGatewayLink;
   localize: (h: string) => string;
   className: string;
@@ -130,6 +142,13 @@ function PrimaryCtaButton({
 }) {
   const external = Boolean(cta.external || cta.href.startsWith("http"));
   const href = external ? cta.href : localize(cta.href);
+  const track = () =>
+    trackClientEvent(PH.marketingPathGatewayPrimaryCta, {
+      cluster_id: clusterId,
+      cta_id: cta.id,
+      region,
+      external,
+    });
   const inner = (
     <>
       {cta.label}
@@ -138,24 +157,38 @@ function PrimaryCtaButton({
   );
   if (external) {
     return (
-      <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
+      <a href={href} target="_blank" rel="noopener noreferrer" className={className} onClick={track}>
         {inner}
       </a>
     );
   }
-  return <Link href={href} className={className}>{inner}</Link>;
+  return (
+    <Link href={href} className={className} onClick={track}>
+      {inner}
+    </Link>
+  );
 }
 
 function GatewayLink({
+  clusterId,
+  region,
   link,
   localize,
   compact,
 }: {
+  clusterId: string;
+  region: NursenestMarketingRegion;
   link: { id: string; label: string; href: string; external?: boolean };
   localize: (h: string) => string;
   compact?: boolean;
 }) {
   const href = link.external || link.href.startsWith("http") ? link.href : localize(link.href);
+  const track = () =>
+    trackClientEvent(PH.marketingPathGatewayLinkClick, {
+      cluster_id: clusterId,
+      link_id: link.id,
+      region,
+    });
   const className = compact
     ? "group flex items-center gap-1 text-sm font-medium text-primary hover:underline"
     : "group flex items-start gap-2 rounded-lg border border-transparent px-2 py-1.5 text-sm font-medium text-[var(--theme-heading-text)] hover:border-[var(--theme-card-border)] hover:bg-[var(--theme-muted-surface)]";
@@ -169,14 +202,14 @@ function GatewayLink({
 
   if (link.external || link.href.startsWith("http")) {
     return (
-      <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
+      <a href={href} target="_blank" rel="noopener noreferrer" className={className} onClick={track}>
         {inner}
       </a>
     );
   }
 
   return (
-    <Link href={href} className={className}>
+    <Link href={href} className={className} onClick={track}>
       {inner}
     </Link>
   );

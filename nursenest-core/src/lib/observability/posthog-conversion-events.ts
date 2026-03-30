@@ -14,6 +14,19 @@ export const PH = {
    * Complements $pageview with a single dimension for breakdowns.
    */
   appSectionView: "app_section_view",
+  /** Marketing homepage and pathway hub CTAs (funnel diagnostics). */
+  marketingHomeHeroPrimaryCta: "marketing_home_hero_primary_cta",
+  marketingHomeHeroSecondaryCta: "marketing_home_hero_secondary_cta",
+  marketingHomeQuickEntryClick: "marketing_home_quick_entry_click",
+  marketingHomeExploreHubClick: "marketing_home_explore_hub_click",
+  marketingHomePathwayCardPrimary: "marketing_home_pathway_card_primary",
+  marketingHomePathwayCardSecondary: "marketing_home_pathway_card_secondary",
+  marketingHomeSampleContentClick: "marketing_home_sample_content_click",
+  marketingHomeFinalCta: "marketing_home_final_cta",
+  marketingHomePreviewSignupHint: "marketing_home_preview_signup_hint",
+  marketingPathGatewayPrimaryCta: "marketing_path_gateway_primary_cta",
+  marketingPathGatewayLinkClick: "marketing_path_gateway_link_click",
+  marketingPathwayHubCta: "marketing_pathway_hub_cta",
 } as const;
 
 export type AppSection =

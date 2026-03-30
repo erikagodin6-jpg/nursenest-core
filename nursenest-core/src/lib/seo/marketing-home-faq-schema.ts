@@ -15,7 +15,7 @@ export const MARKETING_HOME_FAQ_JSONLD: FaqJsonLdItem[] = [
   {
     question: "How is this different from flashcard-only apps?",
     answer:
-      "NurseNest is built around exam-style stems, rationales that explain incorrect options, and timed practice so you rehearse clinical judgment—not isolated definitions. Lessons and question banks stay aligned to your track.",
+      "NurseNest is built around exam-style stems, rationales that explain incorrect options, and timed practice so you rehearse clinical judgment, not isolated definitions. Lessons and question banks stay aligned to your track.",
   },
   {
     question: "Does NP content cover FNP and AGPCNP?",

@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import * as Sentry from "@sentry/nextjs";
+import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 
 export default function LearnerError({
   error,
@@ -19,6 +20,9 @@ export default function LearnerError({
 
   return (
     <main className="space-y-4">
+      <a href="/app" className="inline-flex" aria-label="NurseNest learner home">
+        <SiteBrandLogoMark />
+      </a>
       <h1 className="text-2xl font-bold">This section hit a snag</h1>
       <p className="text-sm text-muted">
         Your session is unchanged. Retry the page or return to the dashboard.

@@ -69,13 +69,13 @@ export function pathwayLessonsHubBreadcrumbs(pathway: ExamPathwayDefinition): {
   const lessons = buildExamPathwayPath(pathway, "lessons");
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
-    examLessonsIndexCrumb(true),
+    pathwayProgrammaticParentCrumb(pathway, true),
     pathwayHubCrumb(pathway, true),
     { name: "Lessons", href: undefined },
   ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
-    examLessonsIndexSchema(),
+    pathwayProgrammaticParentSchema(pathway),
     pathwayHubSchema(pathway),
     { name: "Lessons", item: toAbsoluteSiteUrl(lessons) },
   ];
@@ -92,14 +92,14 @@ export function pathwayTopicClusterBreadcrumbs(
   const topicPath = buildExamPathwayPath(pathway, `lessons/topics/${topicSlug}`);
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
-    examLessonsIndexCrumb(true),
+    pathwayProgrammaticParentCrumb(pathway, true),
     pathwayHubCrumb(pathway, true),
     { name: "Lessons", href: lessonsPath },
     { name: topicLabel, href: undefined },
   ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
-    examLessonsIndexSchema(),
+    pathwayProgrammaticParentSchema(pathway),
     pathwayHubSchema(pathway),
     { name: "Lessons", item: toAbsoluteSiteUrl(lessonsPath) },
     { name: topicLabel, item: toAbsoluteSiteUrl(topicPath) },
@@ -117,14 +117,14 @@ export function pathwayLessonDetailBreadcrumbs(
   const lessonPath = buildExamPathwayPath(pathway, `lessons/${lessonSlug}`);
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
-    examLessonsIndexCrumb(true),
+    pathwayProgrammaticParentCrumb(pathway, true),
     pathwayHubCrumb(pathway, true),
     { name: "Lessons", href: lessonsPath },
     { name: lessonTitle, href: undefined },
   ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
-    examLessonsIndexSchema(),
+    pathwayProgrammaticParentSchema(pathway),
     pathwayHubSchema(pathway),
     { name: "Lessons", item: toAbsoluteSiteUrl(lessonsPath) },
     { name: lessonTitle, item: toAbsoluteSiteUrl(lessonPath) },
@@ -140,13 +140,13 @@ export function pathwayQuestionsHubBreadcrumbs(pathway: ExamPathwayDefinition): 
   const qPath = buildExamPathwayPath(pathway, "questions");
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
-    examLessonsIndexCrumb(true),
+    pathwayProgrammaticParentCrumb(pathway, true),
     pathwayHubCrumb(pathway, true),
     { name: "Question bank", href: undefined },
   ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
-    examLessonsIndexSchema(),
+    pathwayProgrammaticParentSchema(pathway),
     pathwayHubSchema(pathway),
     { name: "Question bank", item: toAbsoluteSiteUrl(qPath) },
   ];
@@ -161,13 +161,13 @@ export function pathwayPricingBreadcrumbs(pathway: ExamPathwayDefinition): {
   const pricingPath = buildExamPathwayPath(pathway, "pricing");
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
-    examLessonsIndexCrumb(true),
+    pathwayProgrammaticParentCrumb(pathway, true),
     pathwayHubCrumb(pathway, true),
     { name: "Pricing", href: undefined },
   ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
-    examLessonsIndexSchema(),
+    pathwayProgrammaticParentSchema(pathway),
     pathwayHubSchema(pathway),
     { name: "Pricing", item: toAbsoluteSiteUrl(pricingPath) },
   ];
