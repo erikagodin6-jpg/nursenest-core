@@ -74,23 +74,19 @@ function WhyNurseNestGrid({ headline, subtitle, context = "general" }: WhyNurseN
     "NurseNest is a clinical learning system — not a study app. Every feature is designed to build the clinical reasoning skills tested on modern healthcare exams.";
 
   return (
-    <section
-      className="border-t border-gray-100"
-      style={{ paddingTop: "var(--space-section)", paddingBottom: "var(--space-section)" }}
-      data-testid="section-why-nursenest-grid"
-    >
+    <section className="border-t border-gray-100 py-16 md:py-20" data-testid="section-why-nursenest-grid">
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-12 text-center">
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/8 px-4 py-1.5 shadow-[var(--shadow-card)]">
+        <div className="mx-auto max-w-3xl text-center">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/8 px-4 py-1.5 shadow-[var(--shadow-card)]">
             <Sparkles className="h-3.5 w-3.5 text-primary" />
             <span className="text-xs font-bold uppercase tracking-wider text-primary">
               {t("components.competitiveDifferentiation.clinicalLearningSystem")}
             </span>
           </div>
-          <h2 className="mb-3 font-bold text-[var(--theme-heading-text)]" style={{ fontSize: "var(--text-section)" }} data-testid="text-why-grid-heading">
+          <h2 className="mb-4 font-bold text-[var(--theme-heading-text)]" style={{ fontSize: "var(--text-section)" }} data-testid="text-why-grid-heading">
             {headline || defaultHeadline}
           </h2>
-          <p className="mx-auto max-w-2xl text-base text-gray-500 lg:text-lg" data-testid="text-why-grid-subtitle">
+          <p className="mb-8 text-base leading-relaxed text-muted-foreground" data-testid="text-why-grid-subtitle">
             {subtitle || defaultSubtitle}
           </p>
         </div>

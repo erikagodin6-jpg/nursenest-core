@@ -80,29 +80,27 @@ export function WhyNurseNestGrid({ headline, subtitle, context = "general" }: Wh
   const defaultSubtitle = "NurseNest is a clinical learning system — not a study app. Every feature is designed to build the clinical reasoning skills tested on modern healthcare exams.";
 
   return (
-    <section
-      className="border-t border-gray-100"
-      style={{ paddingTop: "var(--space-section)", paddingBottom: "var(--space-section)" }}
-      data-testid="section-why-nursenest-grid"
-    >
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/8 border border-primary/15 shadow-[var(--shadow-card)] mb-5">
-            <Sparkles className="w-3.5 h-3.5 text-primary" />
-            <span className="text-xs font-bold text-primary uppercase tracking-wider">{t("components.competitiveDifferentiation.clinicalLearningSystem")}</span>
+    <section className="border-t border-gray-100 py-16 md:py-20" data-testid="section-why-nursenest-grid">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-3xl text-center">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/8 px-4 py-1.5 shadow-[var(--shadow-card)]">
+            <Sparkles className="h-3.5 w-3.5 text-primary" />
+            <span className="text-xs font-bold uppercase tracking-wider text-primary">
+              {t("components.competitiveDifferentiation.clinicalLearningSystem")}
+            </span>
           </div>
           <h2
-            className="font-bold text-gray-900 mb-3"
+            className="mb-4 font-bold text-gray-900"
             style={{ fontSize: "var(--text-section)" }}
             data-testid="text-why-grid-heading"
           >
             {headline || defaultHeadline}
           </h2>
-          <p className="text-gray-500 max-w-2xl mx-auto text-base lg:text-lg" data-testid="text-why-grid-subtitle">
+          <p className="mb-8 text-base leading-relaxed text-gray-500" data-testid="text-why-grid-subtitle">
             {subtitle || defaultSubtitle}
           </p>
         </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
+        <div className="mx-auto grid max-w-4xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {GRID_ITEMS.map((item) => (
             <div
               key={item.title}

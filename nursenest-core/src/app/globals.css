@@ -69,6 +69,16 @@ body {
   --color-muted-foreground: var(--theme-muted-text);
 }
 
+@layer utilities {
+  /**
+   * Solid primary fills: body copy is gray — buttons/links with only `bg-primary` otherwise
+   * inherit gray-on-purple and fail WCAG. `--color-primary-foreground` is white on brand purple.
+   */
+  .bg-primary {
+    color: var(--color-primary-foreground);
+  }
+}
+
 * {
   box-sizing: border-box;
   border-color: var(--theme-border);
@@ -137,13 +147,26 @@ a {
 
 .nn-btn-primary {
   background: var(--theme-primary);
-  color: var(--theme-primary-foreground);
+  color: #ffffff;
   border-radius: 9999px;
   box-shadow: 0 8px 24px color-mix(in srgb, var(--theme-primary) 35%, transparent);
 }
 
-.nn-btn-primary:hover {
+.nn-btn-primary:hover:not(:disabled):not([aria-disabled="true"]) {
   filter: brightness(1.07);
+}
+
+.nn-btn-primary:active:not(:disabled):not([aria-disabled="true"]) {
+  filter: brightness(0.96);
+}
+
+.nn-btn-primary:disabled,
+.nn-btn-primary[aria-disabled="true"] {
+  cursor: not-allowed;
+  filter: none;
+  background: color-mix(in srgb, var(--theme-primary) 42%, var(--theme-card-bg));
+  color: rgb(255 255 255 / 0.72);
+  box-shadow: none;
 }
 
 .nn-btn-secondary {
