@@ -38,7 +38,7 @@ const HASH_TO_LIFESPAN: Record<string, FnpLifespanGroup> = {
   "#fnp-lifespan": "lifespan_mixed",
 };
 
-export function FnpLessonExplorer({ pathway, lessonsBasePath, enriched, excludeSlug }: Props) {
+export function FnpLessonExplorer({ pathway, lessonsBasePath, explorerLessons, excludeSlug }: Props) {
   const [lifespan, setLifespan] = useState<FnpLifespanFilter>("all");
   const [domain, setDomain] = useState<FnpDomainFilter>("all");
 
@@ -49,11 +49,11 @@ export function FnpLessonExplorer({ pathway, lessonsBasePath, enriched, excludeS
   }, []);
 
   const filtered = useMemo(() => {
-    return enriched.filter((e) => {
-      if (excludeSlug && e.lesson.slug === excludeSlug) return false;
-      return fnpEnrichedMatchesFilters(e, lifespan, domain);
+    return explorerLessons.filter((e) => {
+      if (excludeSlug && e.meta.slug === excludeSlug) return false;
+      return fnpExplorerMatchesFilters(e, lifespan, domain);
     });
-  }, [enriched, lifespan, domain, excludeSlug]);
+  }, [explorerLessons, lifespan, domain, excludeSlug]);
 
   return (
     <div id="fnp-explorer" className="scroll-mt-24 space-y-5">
@@ -121,7 +121,7 @@ export function FnpLessonExplorer({ pathway, lessonsBasePath, enriched, excludeS
         <ul className="space-y-6">
           {filtered.map((e) => (
             <FnpLessonCard
-              key={e.lesson.slug}
+              key={e.meta.slug}
               pathway={pathway}
               lessonsBasePath={lessonsBasePath}
               enriched={e}
@@ -168,10 +168,10 @@ function FnpLessonCard({
 }: {
   pathway: ExamPathwayDefinition;
   lessonsBasePath: string;
-  enriched: FnpEnrichedLesson;
+  enriched: FnpExplorerLesson;
 }) {
-  const l = enriched.lesson;
-  const p = fnpLessonClinicalPreview(l);
+  const l = enriched.meta;
+  const p = enriched.clinicalPreview;
   return (
     <li className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
@@ -210,7 +210,7 @@ function FnpLessonCard({
           <p className="mt-1 italic text-[var(--theme-muted-text)]">&ldquo;{p.rationaleSnippet}&rdquo;</p>
         </div>
         <div className="sm:col-span-2 flex flex-wrap gap-1.5">
-          {enriched.domains.map((d) => (
+          {enriched.domains.map((d: FnpClinicalDomain) => (
             <span key={d} className="rounded-md border border-border px-2 py-0.5 text-xs text-muted">
               {FNP_DOMAIN_ORDER.find((x) => x.id === d)?.label ?? d}
             </span>
