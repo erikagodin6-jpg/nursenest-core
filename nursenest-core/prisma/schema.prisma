@@ -114,6 +114,20 @@ model User {
   lessonDraftsCreated     GeneratedLessonDraft[]      @relation("LessonDraftCreatedBy")
   lessonDraftsReviewed    GeneratedLessonDraft[]      @relation("LessonDraftReviewedBy")
   passwordResetTokens     PasswordResetToken[]
+  emailNotificationLogs   EmailNotificationLog[]
+}
+
+/** Idempotency and cooldown tracking for retention and transactional emails. */
+model EmailNotificationLog {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kind      String
+  meta      Json?
+  createdAt DateTime @default(now())
+
+  @@index([userId, kind, createdAt])
+  @@index([createdAt])
 }
 
 /** One-time password reset tokens; raw token is never stored (only SHA-256 hex). */
