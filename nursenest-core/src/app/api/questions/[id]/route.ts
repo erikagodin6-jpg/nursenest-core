@@ -45,20 +45,20 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
       req.nextUrl.searchParams.get("includeRationale") === "true";
 
     try {
+      const baseSelect = {
+        id: true,
+        stem: true,
+        questionType: true,
+        options: true,
+        difficulty: true,
+        exam: true,
+        topic: true,
+        bodySystem: true,
+      } as const;
       const q = await withRetry(() =>
         prisma.examQuestion.findFirst({
           where: questionIdWhereIfAllowed(id, gate.entitlement),
-          select: {
-            id: true,
-            stem: true,
-            questionType: true,
-            ...(includeRationale ? { rationale: true } : {}),
-            options: true,
-            difficulty: true,
-            exam: true,
-            topic: true,
-            bodySystem: true,
-          },
+          select: includeRationale ? { ...baseSelect, rationale: true } : { ...baseSelect },
         }),
       );
 

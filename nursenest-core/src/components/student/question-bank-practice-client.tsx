@@ -73,7 +73,7 @@ export function QuestionBankPracticeClient({ userId }: { userId: string }) {
       setError(null);
       try {
         const qs = new URLSearchParams({
-          mode: "full",
+          mode: "preview",
           page: "1",
           pageSize: "20",
         });

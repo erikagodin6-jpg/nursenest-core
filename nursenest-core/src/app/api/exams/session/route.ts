@@ -13,8 +13,10 @@ import {
   MAX_SESSION_QUESTION_IDS,
   sanitizeSessionQuestionIds,
 } from "@/lib/exams/exam-session-bounds";
+import { QUESTION_PAYLOAD_WARN_BYTES } from "@/lib/questions/question-api-limits";
+import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
 
-/** Default `mode=full` loads every question in one response; align with {@link MAX_SESSION_QUESTION_IDS}. */
+/** Max questions hydrated when `mode=full` — align with {@link MAX_SESSION_QUESTION_IDS}. */
 const SESSION_FULL_HYDRATE_MAX_QUESTIONS = MAX_SESSION_QUESTION_IDS;
 
 const patchSchema = z.object({
@@ -35,7 +37,8 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "sessionId required" }, { status: 400 });
   }
 
-  const mode = req.nextUrl.searchParams.get("mode") === "minimal" ? "minimal" : "full";
+  /** Default `minimal` (ids + metadata only). `full` hydrates question stems/options — use sparingly. */
+  const mode = req.nextUrl.searchParams.get("mode") === "full" ? "full" : "minimal";
 
   setSentryServerContext({ route: "/api/exams/session", feature: "exam", userId: gate.userId });
 
@@ -131,7 +134,7 @@ export async function GET(req: NextRequest) {
     const order = new Map(idsToHydrate.map((id, i) => [id, i]));
     questions.sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
 
-    return NextResponse.json({
+    const fullJson = {
       sessionId: row.id,
       examId: row.examId,
       currentIndex: Math.min(row.currentIndex, Math.max(0, ids.length - 1)),
@@ -146,7 +149,22 @@ export async function GET(req: NextRequest) {
       questionsHydrated: questions.length,
       fullHydrationCap: SESSION_FULL_HYDRATE_MAX_QUESTIONS,
       sessionQuestionIdsSanitized: sanitized.truncated || sanitized.coercedFromInvalid,
+    };
+    const approxPayloadBytes = estimateJsonUtf8Bytes(fullJson);
+    safeServerLog("api_exams_session", "full_hydrate_payload", {
+      approxPayloadBytes,
+      questionsHydrated: questions.length,
+      questionIdCount: ids.length,
+      payloadLarge: approxPayloadBytes >= QUESTION_PAYLOAD_WARN_BYTES ? 1 : 0,
     });
+    if (approxPayloadBytes >= QUESTION_PAYLOAD_WARN_BYTES) {
+      safeServerLog("api_exams_session", "full_hydrate_payload_warn", {
+        approxPayloadBytes,
+        threshold: QUESTION_PAYLOAD_WARN_BYTES,
+        sessionId: row.id,
+      });
+    }
+    return NextResponse.json(fullJson);
   } catch (e) {
     safeServerLogCritical("api_exams_session", "get_failed", {}, e);
     return NextResponse.json({ error: "Unable to load session" }, { status: 503 });

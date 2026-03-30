@@ -11,6 +11,8 @@ import { withRetry } from "@/lib/resilience/with-retry";
 import { MAX_SESSION_QUESTION_IDS } from "@/lib/exams/exam-session-bounds";
 import { seedMinimalQuestionBankIfEmpty } from "@/lib/exams/seed-minimal-question-bank";
 import { diagnoseExamStartEmpty } from "@/lib/questions/exam-start-empty-diagnostics";
+import { QUESTION_PAYLOAD_WARN_BYTES } from "@/lib/questions/question-api-limits";
+import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 const POOL_LIMIT = Math.min(20, MAX_SESSION_QUESTION_IDS);
@@ -90,7 +92,7 @@ export async function POST(req: Request) {
     const questionIds = questionPool.map((q) => q.id);
 
     if (hydrate === "window") {
-      return NextResponse.json({
+      const windowBody = {
         sessionId: session.id,
         examId,
         total: questionPool.length,
@@ -99,10 +101,24 @@ export async function POST(req: Request) {
         poolEmpty: questionPool.length === 0,
         hydrate: "window" as const,
         ...(poolDiagnostics ? { diagnostics: poolDiagnostics } : {}),
+      };
+      const approxPayloadBytes = estimateJsonUtf8Bytes(windowBody);
+      safeServerLog("api_exams_start", "response_payload", {
+        hydrate: "window",
+        approxPayloadBytes,
+        poolSize: questionPool.length,
+        payloadLarge: approxPayloadBytes >= QUESTION_PAYLOAD_WARN_BYTES ? 1 : 0,
       });
+      if (approxPayloadBytes >= QUESTION_PAYLOAD_WARN_BYTES) {
+        safeServerLog("api_exams_start", "response_payload_warn", {
+          approxPayloadBytes,
+          threshold: QUESTION_PAYLOAD_WARN_BYTES,
+        });
+      }
+      return NextResponse.json(windowBody);
     }
 
-    return NextResponse.json({
+    const fullBody = {
       sessionId: session.id,
       examId,
       total: questionPool.length,
@@ -111,7 +127,21 @@ export async function POST(req: Request) {
       poolEmpty: questionPool.length === 0,
       hydrate: "full" as const,
       ...(poolDiagnostics ? { diagnostics: poolDiagnostics } : {}),
+    };
+    const approxFullBytes = estimateJsonUtf8Bytes(fullBody);
+    safeServerLog("api_exams_start", "response_payload", {
+      hydrate: "full",
+      approxPayloadBytes: approxFullBytes,
+      poolSize: questionPool.length,
+      payloadLarge: approxFullBytes >= QUESTION_PAYLOAD_WARN_BYTES ? 1 : 0,
     });
+    if (approxFullBytes >= QUESTION_PAYLOAD_WARN_BYTES) {
+      safeServerLog("api_exams_start", "response_payload_warn", {
+        approxPayloadBytes: approxFullBytes,
+        threshold: QUESTION_PAYLOAD_WARN_BYTES,
+      });
+    }
+    return NextResponse.json(fullBody);
   } catch (e) {
     safeServerLogCritical("api_exams_start", "failed", {}, e, { flow: "exam_start" });
     return NextResponse.json(
