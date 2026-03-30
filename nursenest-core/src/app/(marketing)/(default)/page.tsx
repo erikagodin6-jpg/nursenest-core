@@ -12,12 +12,12 @@ import { absoluteUrl } from "@/lib/seo/site-origin";
 export const revalidate = 600;
 
 export const metadata: Metadata = {
-  title: "NurseNest: NCLEX, REx-PN, NP, and allied exam prep",
+  title: "NurseNest | NCLEX-RN, NCLEX-PN, REx-PN, NP & allied exam prep",
   description:
-    "Clinical practice questions, lessons, and timed exams for RPN or LPN, RN, NCLEX, REx-PN, NP, and allied health. Built for Canada and the US.",
+    "Exam-specific practice for US and Canada: NCLEX-RN, NCLEX-PN, REx-PN, nurse practitioner tracks, and allied health. Questions, lessons, and timed mocks scoped to your pathway.",
   alternates: { canonical: absoluteUrl("/") },
   openGraph: {
-    title: "NurseNest: NCLEX, REx-PN, NP, and allied exam prep",
+    title: "NurseNest | NCLEX-RN, NCLEX-PN, REx-PN, NP & allied exam prep",
     url: absoluteUrl("/"),
     type: "website",
   },

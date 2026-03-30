@@ -2,6 +2,7 @@ import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import type { BreadcrumbCrumb, BreadcrumbSchemaItem } from "@/lib/seo/breadcrumb-types";
 import { toAbsoluteSiteUrl } from "@/lib/seo/breadcrumb-utils";
+import { getPathwayProgrammaticSeoLanding } from "@/lib/seo/pathway-programmatic-seo";
 
 export type { BreadcrumbCrumb, BreadcrumbSchemaItem } from "@/lib/seo/breadcrumb-types";
 
@@ -27,6 +28,19 @@ function examLessonsIndexSchema(): BreadcrumbSchemaItem {
   return { name: EXAM_LESSONS_INDEX.label, item: toAbsoluteSiteUrl(EXAM_LESSONS_INDEX.path) };
 }
 
+/** Second crumb: programmatic SEO landing when mapped, else lessons index (all pathways). */
+function pathwayProgrammaticParentCrumb(pathway: ExamPathwayDefinition, linked: boolean): BreadcrumbCrumb {
+  const land = getPathwayProgrammaticSeoLanding(pathway);
+  if (!land) return examLessonsIndexCrumb(linked);
+  return linked ? { name: land.label, href: land.path } : { name: land.label, href: undefined };
+}
+
+function pathwayProgrammaticParentSchema(pathway: ExamPathwayDefinition): BreadcrumbSchemaItem {
+  const land = getPathwayProgrammaticSeoLanding(pathway);
+  if (!land) return examLessonsIndexSchema();
+  return { name: land.label, item: toAbsoluteSiteUrl(land.path) };
+}
+
 function pathwayHubCrumb(pathway: ExamPathwayDefinition, linked: boolean): BreadcrumbCrumb {
   const base = buildExamPathwayPath(pathway);
   return linked ? { name: pathway.shortName, href: base } : { name: pathway.shortName, href: undefined };
@@ -37,13 +51,13 @@ function pathwayHubSchema(pathway: ExamPathwayDefinition): BreadcrumbSchemaItem 
   return { name: pathway.shortName, item: toAbsoluteSiteUrl(base) };
 }
 
-/** Exam pathway overview: Home → lessons index → pathway hub (current). */
+/** Exam pathway overview: Home → programmatic SEO (or lessons index) → pathway hub (current). */
 export function pathwayOverviewBreadcrumbs(pathway: ExamPathwayDefinition): {
   crumbs: BreadcrumbCrumb[];
   schemaItems: BreadcrumbSchemaItem[];
 } {
-  const crumbs: BreadcrumbCrumb[] = [HOME, examLessonsIndexCrumb(true), pathwayHubCrumb(pathway, false)];
-  const schemaItems: BreadcrumbSchemaItem[] = [HOME_ITEM, examLessonsIndexSchema(), pathwayHubSchema(pathway)];
+  const crumbs: BreadcrumbCrumb[] = [HOME, pathwayProgrammaticParentCrumb(pathway, true), pathwayHubCrumb(pathway, false)];
+  const schemaItems: BreadcrumbSchemaItem[] = [HOME_ITEM, pathwayProgrammaticParentSchema(pathway), pathwayHubSchema(pathway)];
   return { crumbs, schemaItems };
 }
 
