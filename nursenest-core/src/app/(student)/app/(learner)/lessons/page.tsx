@@ -7,11 +7,26 @@ import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallback } from "@/lib/db/safe-database";
+import { pathwayLessonsAppListWhere } from "@/lib/lessons/app-pathway-lesson-list-scope";
+import { paginateLegacyContentMapLessons } from "@/lib/lessons/legacy-content-map-lessons";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { FreemiumLessonPeek } from "@/components/student/freemium-lesson-peek";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 
 const APP_LESSONS_PAGE_SIZE = 15;
+
+type AppLessonListRow = { id: string; title: string; summary: string | null };
+
+function pathwayLessonCardSummary(row: {
+  seoDescription: string;
+  topic: string;
+  bodySystem: string;
+}): string | null {
+  const d = row.seoDescription?.trim();
+  if (d) return d.length > 220 ? `${d.slice(0, 217)}…` : d;
+  const parts = [row.topic?.trim(), row.bodySystem?.trim()].filter(Boolean);
+  return parts.length ? parts.join(" · ") : null;
+}
 
 type Props = { searchParams: Promise<{ page?: string }> };
 
@@ -53,18 +68,85 @@ export default async function LessonsPage({ searchParams }: Props) {
   const pageRequested = Math.max(1, Number(sp.page ?? "1") || 1);
 
   const lessonsBlock = await withDatabaseFallback(async () => {
-    const where = lessonAccessWhere(entitlement);
-    const total = await prisma.contentItem.count({ where });
-    const pageCount = Math.max(1, Math.ceil(total / APP_LESSONS_PAGE_SIZE) || 1);
-    const safePage = Math.min(pageRequested, pageCount);
-    const rows = await prisma.contentItem.findMany({
-      where,
-      select: { id: true, title: true, summary: true },
-      orderBy: { updatedAt: "desc" },
-      skip: (safePage - 1) * APP_LESSONS_PAGE_SIZE,
-      take: APP_LESSONS_PAGE_SIZE,
-    });
-    return { total, page: safePage, pageCount, rows };
+    const learnerPathRow = userId
+      ? await prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } })
+      : null;
+    const learnerPath = learnerPathRow?.learnerPath ?? null;
+
+    const contentWhere = lessonAccessWhere(entitlement);
+    const contentTotal = await prisma.contentItem.count({ where: contentWhere });
+
+    if (contentTotal > 0) {
+      const pageCount = Math.max(1, Math.ceil(contentTotal / APP_LESSONS_PAGE_SIZE) || 1);
+      const safePage = Math.min(pageRequested, pageCount);
+      const rowsRaw = await prisma.contentItem.findMany({
+        where: contentWhere,
+        select: { id: true, title: true, summary: true },
+        orderBy: { updatedAt: "desc" },
+        skip: (safePage - 1) * APP_LESSONS_PAGE_SIZE,
+        take: APP_LESSONS_PAGE_SIZE,
+      });
+      const rows: AppLessonListRow[] = rowsRaw.map((r) => ({
+        id: r.id,
+        title: r.title,
+        summary: r.summary ?? null,
+      }));
+      return {
+        source: "content_items" as const,
+        total: contentTotal,
+        page: safePage,
+        pageCount,
+        rows,
+      };
+    }
+
+    const pathwayWhere = pathwayLessonsAppListWhere(entitlement, learnerPath);
+    const pathwayTotal = await prisma.pathwayLesson.count({ where: pathwayWhere });
+
+    if (pathwayTotal > 0) {
+      const pageCount = Math.max(1, Math.ceil(pathwayTotal / APP_LESSONS_PAGE_SIZE) || 1);
+      const safePage = Math.min(pageRequested, pageCount);
+      const pathwayRows = await prisma.pathwayLesson.findMany({
+        where: pathwayWhere,
+        select: {
+          id: true,
+          title: true,
+          seoDescription: true,
+          topic: true,
+          bodySystem: true,
+          updatedAt: true,
+        },
+        orderBy: { updatedAt: "desc" },
+        skip: (safePage - 1) * APP_LESSONS_PAGE_SIZE,
+        take: APP_LESSONS_PAGE_SIZE,
+      });
+      const rows: AppLessonListRow[] = pathwayRows.map((r) => ({
+        id: r.id,
+        title: r.title,
+        summary: pathwayLessonCardSummary(r),
+      }));
+      return {
+        source: "pathway_lessons" as const,
+        total: pathwayTotal,
+        page: safePage,
+        pageCount,
+        rows,
+      };
+    }
+
+    const legacy = await paginateLegacyContentMapLessons(entitlement, pageRequested, APP_LESSONS_PAGE_SIZE);
+    const rows: AppLessonListRow[] = legacy.rows.map((r) => ({
+      id: r.id,
+      title: r.title,
+      summary: r.summary,
+    }));
+    return {
+      source: "legacy_content_map" as const,
+      total: legacy.total,
+      page: legacy.page,
+      pageCount: legacy.pageCount,
+      rows,
+    };
   }, null);
 
   if (lessonsBlock === null) {
@@ -105,7 +187,7 @@ export default async function LessonsPage({ searchParams }: Props) {
       </aside>
       {lessons.length === 0 ? (
         <p className="nn-card mt-4 p-6 text-sm text-muted">
-          The list loaded successfully: there are no app lessons in your plan’s region and tier right now (not a loading
+          The list loaded successfully: there are no lessons in your plan’s region and tier right now (not a loading
           glitch). If you expected rows here, check your profile country/tier or contact support.
         </p>
       ) : null}

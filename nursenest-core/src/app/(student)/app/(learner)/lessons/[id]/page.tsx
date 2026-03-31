@@ -1,10 +1,20 @@
 import Link from "next/link";
 import { auth } from "@/lib/auth";
+import { PathwayLessonBody } from "@/components/lessons/pathway-lesson-body";
 import { lessonAccessWhere } from "@/lib/entitlements/content-access-scope";
+import { logBlockedAccess, logEntitlementMismatch } from "@/lib/entitlements/entitlement-logging";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallback } from "@/lib/db/safe-database";
-import { logBlockedAccess, logEntitlementMismatch } from "@/lib/entitlements/entitlement-logging";
+import { appPathwayLessonVisibleToSubscriber } from "@/lib/lessons/app-pathway-lesson-list-scope";
+import { visibleSectionsForLesson } from "@/lib/lessons/pathway-lesson-access";
+import {
+  canAccessLegacyContentMapLesson,
+  getLegacyContentMapLessonById,
+  legacyContentMapLessonTitle,
+} from "@/lib/lessons/legacy-content-map-lessons";
+import { getPublishedPathwayLessonRecordById } from "@/lib/lessons/pathway-lesson-loader";
+import { LegacyMonolithLessonBody } from "@/components/lessons/legacy-monolith-lesson-body";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 function LessonBody({ content }: { content: unknown }) {
@@ -82,22 +92,45 @@ export default async function LessonDetailPage({ params }: Props) {
   }
 
   const resolved = await withDatabaseFallback(async () => {
-    const exists = await prisma.contentItem.findFirst({
+    const learnerPathRow = userId
+      ? await prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } })
+      : null;
+    const learnerPath = learnerPathRow?.learnerPath ?? null;
+
+    const contentLesson = await prisma.contentItem.findFirst({
       where: { id, type: "lesson" },
       select: { id: true },
     });
-    if (!exists) return { kind: "not_found" as const };
-    const row = await prisma.contentItem.findFirst({
-      where: { AND: [{ id }, { type: "lesson" }, lessonAccessWhere(entitlement)] },
-      select: {
-        id: true,
-        title: true,
-        summary: true,
-        content: true,
-      },
-    });
-    if (!row) return { kind: "out_of_plan" as const };
-    return { kind: "ok" as const, row };
+    if (contentLesson) {
+      const row = await prisma.contentItem.findFirst({
+        where: { AND: [{ id }, { type: "lesson" }, lessonAccessWhere(entitlement)] },
+        select: {
+          id: true,
+          title: true,
+          summary: true,
+          content: true,
+        },
+      });
+      if (!row) return { kind: "out_of_plan" as const };
+      return { kind: "content_ok" as const, row };
+    }
+
+    const pwRow = await prisma.pathwayLesson.findUnique({ where: { id } });
+    if (pwRow) {
+      if (!appPathwayLessonVisibleToSubscriber(entitlement, pwRow, learnerPath)) {
+        return { kind: "out_of_plan" as const };
+      }
+      const record = await getPublishedPathwayLessonRecordById(id);
+      if (!record) return { kind: "not_found" as const };
+      return { kind: "pathway_ok" as const, record };
+    }
+
+    const legacyLesson = await getLegacyContentMapLessonById(id);
+    if (!legacyLesson) return { kind: "not_found" as const };
+    if (!canAccessLegacyContentMapLesson(entitlement, id, legacyLesson)) {
+      return { kind: "out_of_plan" as const };
+    }
+    return { kind: "legacy_ok" as const, lesson: legacyLesson };
   }, null);
 
   if (resolved === null) {
@@ -162,6 +195,73 @@ export default async function LessonDetailPage({ params }: Props) {
         <Link className="text-sm font-semibold text-primary underline" href="/app/lessons">
           Back to lessons
         </Link>
+      </main>
+    );
+  }
+
+  if (resolved.kind === "legacy_ok") {
+    const title = legacyContentMapLessonTitle(resolved.lesson, id);
+    return (
+      <main>
+        <Link href="/app/lessons" className="text-sm font-medium text-primary hover:underline">
+          ← All lessons
+        </Link>
+        <h1 className="mt-4 text-3xl font-bold">{title}</h1>
+        <LegacyMonolithLessonBody lesson={resolved.lesson} />
+        <div className="mt-10 flex flex-wrap gap-2 border-t border-border pt-6">
+          <Link
+            href="/app/questions"
+            className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+          >
+            Apply in question bank
+          </Link>
+          <Link
+            href="/app/exams"
+            className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-gray-50"
+          >
+            Timed practice exam
+          </Link>
+        </div>
+      </main>
+    );
+  }
+
+  if (resolved.kind === "pathway_ok") {
+    const record = resolved.record;
+    const visible = visibleSectionsForLesson(record, true);
+    return (
+      <main>
+        <Link href="/app/lessons" className="text-sm font-medium text-primary hover:underline">
+          ← All lessons
+        </Link>
+        <h1 className="mt-4 text-3xl font-bold">{record.title}</h1>
+        {record.seoDescription ? <p className="mt-2 text-sm text-muted">{record.seoDescription}</p> : null}
+        <article className="mt-6 space-y-8">
+          {visible.map((section) => (
+            <section key={section.id} className="border-b border-border pb-8 last:border-0">
+              <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">
+                {section.heading?.trim() || "Section"}
+              </h2>
+              <div className="mt-3">
+                <PathwayLessonBody text={typeof section.body === "string" ? section.body : ""} />
+              </div>
+            </section>
+          ))}
+        </article>
+        <div className="mt-10 flex flex-wrap gap-2 border-t border-border pt-6">
+          <Link
+            href="/app/questions"
+            className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+          >
+            Apply in question bank
+          </Link>
+          <Link
+            href="/app/exams"
+            className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-gray-50"
+          >
+            Timed practice exam
+          </Link>
+        </div>
       </main>
     );
   }

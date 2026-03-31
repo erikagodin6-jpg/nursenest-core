@@ -55,18 +55,18 @@ function parseArgs() {
   };
 }
 
-function readJsonArray(filePath: string | undefined, label: string): unknown[] {
+function readJsonArray(filePath: string | undefined, _label: string): unknown[] {
   if (!filePath?.trim()) {
     return [];
   }
   const p = path.resolve(filePath);
   if (!fs.existsSync(p)) {
-    throw new Error(`Missing file (${label}): ${p}`);
+    throw new Error(`Missing file (${_label}): ${p}`);
   }
   const raw = fs.readFileSync(p, "utf8");
   const data = JSON.parse(raw) as unknown;
   if (!Array.isArray(data)) {
-    throw new Error(`Expected top-level JSON array for ${label}, got ${typeof data}`);
+    throw new Error(`Expected top-level JSON array for ${_label}, got ${typeof data}`);
   }
   return data;
 }

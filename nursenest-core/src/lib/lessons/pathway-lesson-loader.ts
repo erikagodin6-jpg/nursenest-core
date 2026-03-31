@@ -734,6 +734,16 @@ export async function getPathwayLessonForProgress(pathwayId: string, slug: strin
   return hit ? normalizeLesson(hit) : undefined;
 }
 
+/**
+ * App shell `/app/lessons/[id]`: load a published DB row by primary key (no catalog fallback).
+ * Callers must enforce access with {@link appPathwayLessonVisibleToSubscriber}.
+ */
+export async function getPublishedPathwayLessonRecordById(id: string): Promise<PathwayLessonRecord | undefined> {
+  const row = await dbCall(() => prisma.pathwayLesson.findUnique({ where: { id } }), null);
+  if (!row || row.status !== ContentStatus.PUBLISHED) return undefined;
+  return normalizeLesson(pathwayLessonRowToInput(row));
+}
+
 /** Related lessons (same topic) for detail page — capped list, bounded query on DB. */
 export async function getRelatedPathwayLessons(
   pathwayId: string,
