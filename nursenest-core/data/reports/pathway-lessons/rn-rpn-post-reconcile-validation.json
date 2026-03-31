@@ -1,42 +1,12 @@
 {
-  "generatedAt": "2026-03-31T16:47:16.443Z",
-  "currentTotalsBeforeRecovery": {
-    "us-rn-nclex-rn": 122,
-    "ca-rn-nclex-rn": 123,
-    "us-lpn-nclex-pn": 61,
-    "ca-rpn-rex-pn": 61
-  },
-  "finalPublishedDbByPathway": {
-    "ca-rn-nclex-rn": 708,
-    "ca-rpn-rex-pn": 983,
-    "us-lpn-nclex-pn": 994,
-    "us-rn-nclex-rn": 718
-  },
-  "countSemantics": {
-    "historicalUniqueLegacyLessonsInContentMap": {
-      "rnTier": 587,
-      "rpnPnTier": 922,
-      "note": "Unique legacy contentMap keys per tier — not the same unit as pathway row counts (each key maps to US+CA rows)."
-    },
-    "recoveredFromSourceOperations": 3088,
-    "recoveredFromSourceOperationsNote": "inserted+updated in recovery run; counts DB operations per pathway+slug, not unique lessons. See rn-rpn-count-reconciliation.json.",
-    "finalLivePublishedRowsCombinedRn": 1426,
-    "finalLivePublishedRowsCombinedRpnPn": 1977,
-    "reconciliationReport": "data/reports/pathway-lessons/rn-rpn-count-reconciliation.json"
-  },
-  "historicalEstimate": {
-    "rn": 587,
-    "rpnPn": 922
-  },
-  "recoveredFromSource": 3088,
-  "generatedTrueGapLessons": 0,
-  "hubTotals": {
+  "generatedAt": "2026-03-31T17:19:30.216Z",
+  "hubTotalsByPathway": {
     "us-rn-nclex-rn": 718,
     "ca-rn-nclex-rn": 708,
     "us-lpn-nclex-pn": 994,
     "ca-rpn-rex-pn": 983
   },
-  "detailRouteTotals": {
+  "detailRouteTotalsByPathway": {
     "us-rn-nclex-rn": 718,
     "ca-rn-nclex-rn": 708,
     "us-lpn-nclex-pn": 994,
@@ -209,23 +179,24 @@
     ]
   },
   "adminOpsCountMatch": true,
-  "sampleUrls": [
-    {
-      "pathwayId": "us-rn-nclex-rn",
-      "hub": "/us/rn/nclex-rn/lessons"
-    },
-    {
-      "pathwayId": "ca-rn-nclex-rn",
-      "hub": "/canada/rn/nclex-rn/lessons"
-    },
-    {
-      "pathwayId": "us-lpn-nclex-pn",
-      "hub": "/us/lpn/nclex-pn/lessons"
-    },
-    {
-      "pathwayId": "ca-rpn-rex-pn",
-      "hub": "/canada/rpn/rex-pn/lessons"
-    }
-  ],
-  "blockers": []
+  "pathwayLessonsPublishedEn": 3693,
+  "staticParams": {
+    "lessonDetailDynamicParams": "generateStaticParams returns [] for lesson detail; dynamicParams=true — routes validated via loader + random checks, not build-time enumeration."
+  },
+  "orphanChecks": {
+    "publishedNonTargetPathways": 290,
+    "draftOrNonPublishedInRnRpnTargetPathways": 0
+  },
+  "targetedBuildingAfterReconciliation": {
+    "note": "True gaps are only after consolidation — thin duplicates are not topic gaps.",
+    "legacyUniqueRn": 587,
+    "legacyUniqueRpnPn": 922,
+    "approximateDistinctTopicsRn": 746,
+    "approximateDistinctTopicsRpnPn": 1021,
+    "suggestedNextBatchOrder": [
+      "consolidation: review duplicate-candidate + same-title groups in rn-rpn-content-quality-audit.json",
+      "enrichment: imported-thin + needs-enrichment rows",
+      "true-gap lesson building: only where union slug coverage is still below exam needs after enrichment"
+    ]
+  }
 }

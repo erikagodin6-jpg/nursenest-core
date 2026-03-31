@@ -1,0 +1,15 @@
+{
+  "generatedAt": "2026-03-31T17:43:58.690Z",
+  "causes": [
+    "NP lessons in legacy TS modules were not fully normalized into pathway_lessons (catalog had only us-np-fnp; other tracks were thin/seeded).",
+    "contentMap NP keys use -np / np- heuristics and were outside the RN/RPN-only historical importer.",
+    "Materialized NP overlays existed separately and required explicit merge + DB upsert.",
+    "Product registry lists four NP pathways but catalog.json historically carried FNP-only structured lessons."
+  ],
+  "checks": {
+    "importerCatalogSubsetBias": true,
+    "legacyNpModuleDiscovery": true,
+    "contentItemsNpTaggedLessons": true,
+    "routeExclusion": false
+  }
+}

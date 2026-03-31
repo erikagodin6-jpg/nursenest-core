@@ -1,0 +1,219 @@
+{
+  "generatedAt": "2026-03-31T17:44:17.653Z",
+  "totalsBeforeRun": {
+    "us-np-fnp": 39,
+    "us-np-agpcnp": 24,
+    "us-np-pmhnp": 24,
+    "ca-np-cnple": 24
+  },
+  "finalPublishedDbByPathway": {
+    "ca-np-cnple": 24,
+    "us-np-agpcnp": 24,
+    "us-np-fnp": 39,
+    "us-np-pmhnp": 24
+  },
+  "npPublishedTotal": 111,
+  "historicalNpUniqueInContentMapApprox": 1409,
+  "recoveredFromSourceOperations": 5647,
+  "generatedNpGapLessons": 0,
+  "hubTotalsMatchDb": true,
+  "detailRouteTotals": {
+    "us-np-fnp": 39,
+    "us-np-agpcnp": 24,
+    "us-np-pmhnp": 24,
+    "ca-np-cnple": 24
+  },
+  "randomResolutionChecks": {
+    "total": 32,
+    "failed": 0,
+    "rows": [
+      {
+        "pathwayId": "us-np-fnp",
+        "slug": "fnp-differential-primary-care",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-np-fnp",
+        "slug": "fnp-womens-prenatal-anemia-workup",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-np-fnp",
+        "slug": "fnp-pediatric-fever-urgency",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-np-fnp",
+        "slug": "fnp-adolescent-mental-health-screening",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-np-fnp",
+        "slug": "fnp-adult-hypertension-intensification",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-np-fnp",
+        "slug": "fnp-geriatric-falls-syncope",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-np-fnp",
+        "slug": "fnp-overlay-heart-failure",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-np-fnp",
+        "slug": "fnp-overlay-myocardial-infarction",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-np-agpcnp",
+        "slug": "htn-guideline-based-plans",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-np-agpcnp",
+        "slug": "diabetes-a1c-medication-escalation",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-np-agpcnp",
+        "slug": "hyperlipidemia-risk-discussion",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-np-agpcnp",
+        "slug": "women-s-health-screening-ages",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-np-agpcnp",
+        "slug": "pediatric-well-visits-red-flags",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-np-agpcnp",
+        "slug": "acute-chest-pain-workup-outline",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-np-agpcnp",
+        "slug": "shortness-of-breath-triage",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-np-agpcnp",
+        "slug": "abdominal-pain-ddx-framework",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-np-pmhnp",
+        "slug": "htn-guideline-based-plans",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-np-pmhnp",
+        "slug": "diabetes-a1c-medication-escalation",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-np-pmhnp",
+        "slug": "hyperlipidemia-risk-discussion",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-np-pmhnp",
+        "slug": "women-s-health-screening-ages",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-np-pmhnp",
+        "slug": "pediatric-well-visits-red-flags",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-np-pmhnp",
+        "slug": "acute-chest-pain-workup-outline",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-np-pmhnp",
+        "slug": "shortness-of-breath-triage",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-np-pmhnp",
+        "slug": "abdominal-pain-ddx-framework",
+        "resolved": true
+      },
+      {
+        "pathwayId": "ca-np-cnple",
+        "slug": "htn-guideline-based-plans",
+        "resolved": true
+      },
+      {
+        "pathwayId": "ca-np-cnple",
+        "slug": "diabetes-a1c-medication-escalation",
+        "resolved": true
+      },
+      {
+        "pathwayId": "ca-np-cnple",
+        "slug": "hyperlipidemia-risk-discussion",
+        "resolved": true
+      },
+      {
+        "pathwayId": "ca-np-cnple",
+        "slug": "women-s-health-screening-ages",
+        "resolved": true
+      },
+      {
+        "pathwayId": "ca-np-cnple",
+        "slug": "pediatric-well-visits-red-flags",
+        "resolved": true
+      },
+      {
+        "pathwayId": "ca-np-cnple",
+        "slug": "acute-chest-pain-workup-outline",
+        "resolved": true
+      },
+      {
+        "pathwayId": "ca-np-cnple",
+        "slug": "shortness-of-breath-triage",
+        "resolved": true
+      },
+      {
+        "pathwayId": "ca-np-cnple",
+        "slug": "abdominal-pain-ddx-framework",
+        "resolved": true
+      }
+    ]
+  },
+  "adminOpsCountMatch": true,
+  "staticParamsNote": "Lesson detail uses dynamicParams; validation via loader + random checks.",
+  "sampleHubs": [
+    {
+      "pathwayId": "us-np-fnp",
+      "hub": "/us/np/fnp/lessons"
+    },
+    {
+      "pathwayId": "us-np-agpcnp",
+      "hub": "/us/np/agpcnp/lessons"
+    },
+    {
+      "pathwayId": "us-np-pmhnp",
+      "hub": "/us/np/pmhnp/lessons"
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "hub": "/canada/np/cnple/lessons"
+    }
+  ],
+  "readinessVsRnRpn": {
+    "note": "NP row counts should approach RN/RPN per-pathway depth after legacy import; remaining gap = targeted NP-specific generation (Phase 6), not pre-Phase-5.",
+    "compareReports": [
+      "data/reports/pathway-lessons/rn-rpn-count-reconciliation.json"
+    ]
+  },
+  "blockers": []
+}

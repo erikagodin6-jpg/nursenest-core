@@ -1,0 +1,86 @@
+{
+  "generatedAt": "2026-03-31T17:44:17.211Z",
+  "totalRows": 16,
+  "rows": [
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "bph-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "bph-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "bph-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "bph-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "major-depressive-disorder-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "major-depressive-disorder-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "major-depressive-disorder-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "major-depressive-disorder-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "generalized-anxiety-disorder-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "generalized-anxiety-disorder-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "generalized-anxiety-disorder-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "generalized-anxiety-disorder-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "ocd-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "ocd-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "ocd-np",
+      "reason": "insufficient_title_or_content"
+    },
+    {
+      "source": "legacy-np-content-map",
+      "sourceId": "ocd-np",
+      "reason": "insufficient_title_or_content"
+    }
+  ]
+}

@@ -1,0 +1,2819 @@
+{
+  "generatedAt": "2026-03-31T17:19:29.449Z",
+  "thresholds": {
+    "thinBodyCharsMax": 2500,
+    "duplicateCandidateRequiresSameNormalizedTitle": true
+  },
+  "summaryCounts": {
+    "importedRich": 2896,
+    "importedThin": 90,
+    "curatedModern": 363,
+    "generated": 0,
+    "duplicateCandidate": 32,
+    "needsEnrichment": 22
+  },
+  "consolidationRules": "Do not merge across pathways. Prefer richer body when titles collide within pathway. Demote thin duplicates only when clearly redundant.",
+  "sampleRows": [
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "cardiovascular-prioritization",
+      "classification": "curated-modern",
+      "bodyChars": 686,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-pulmonary-embolism",
+      "classification": "curated-modern",
+      "bodyChars": 1391,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-dysrhythmias",
+      "classification": "curated-modern",
+      "bodyChars": 1379,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "pn-scope-safety-basics",
+      "classification": "curated-modern",
+      "bodyChars": 659,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "heart-sounds-rpn",
+      "classification": "duplicate-candidate",
+      "bodyChars": 1558,
+      "rationale": "same normalized title as another row in this pathway with thin body — review before merge"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-ards",
+      "classification": "curated-modern",
+      "bodyChars": 1363,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-acid-base-advanced",
+      "classification": "curated-modern",
+      "bodyChars": 1403,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-copd-respiratory",
+      "classification": "curated-modern",
+      "bodyChars": 1354,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "fluid-balance-acute-care",
+      "classification": "curated-modern",
+      "bodyChars": 1008,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-heart-failure",
+      "classification": "curated-modern",
+      "bodyChars": 1381,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "copd-exacerbation-oxygen",
+      "classification": "curated-modern",
+      "bodyChars": 1553,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "anticoagulants-bleeding-risk",
+      "classification": "curated-modern",
+      "bodyChars": 1583,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "oncology-rpn-exp",
+      "classification": "imported-rich",
+      "bodyChars": 3027,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "oncology-rn-exp",
+      "classification": "imported-rich",
+      "bodyChars": 3601,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-angina",
+      "classification": "curated-modern",
+      "bodyChars": 1367,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-hypertension",
+      "classification": "curated-modern",
+      "bodyChars": 1379,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "hypo-vs-hyperkalemia-hy",
+      "classification": "curated-modern",
+      "bodyChars": 1561,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "calcium-tetany",
+      "classification": "curated-modern",
+      "bodyChars": 1546,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "oncology-rn-exp",
+      "classification": "imported-rich",
+      "bodyChars": 3601,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "toxicology-rpn-exp",
+      "classification": "imported-rich",
+      "bodyChars": 3399,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "thyroid-storm-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 2996,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-asthma",
+      "classification": "curated-modern",
+      "bodyChars": 1367,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-pneumonia",
+      "classification": "curated-modern",
+      "bodyChars": 1373,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "increased-icp-positioning",
+      "classification": "curated-modern",
+      "bodyChars": 1600,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "parkinson-disease-med-timing",
+      "classification": "curated-modern",
+      "bodyChars": 1599,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "toxicology-rpn-exp",
+      "classification": "imported-rich",
+      "bodyChars": 3399,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "toxicology-rn-exp",
+      "classification": "imported-rich",
+      "bodyChars": 3797,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-abg-interpretation",
+      "classification": "curated-modern",
+      "bodyChars": 1391,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-sodium-imbalance",
+      "classification": "curated-modern",
+      "bodyChars": 1387,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "toxicology-rn-exp",
+      "classification": "imported-rich",
+      "bodyChars": 3797,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "critical-care-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 6477,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-insulin-hypoglycemia",
+      "classification": "duplicate-candidate",
+      "bodyChars": 1397,
+      "rationale": "same normalized title as another row in this pathway with thin body — review before merge"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-sepsis",
+      "classification": "curated-modern",
+      "bodyChars": 1367,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "critical-care-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 6477,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "critical-care-rn",
+      "classification": "imported-rich",
+      "bodyChars": 3741,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "critical-care-rn",
+      "classification": "imported-rich",
+      "bodyChars": 3741,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-infection-control",
+      "classification": "curated-modern",
+      "bodyChars": 1389,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-antibiotics",
+      "classification": "curated-modern",
+      "bodyChars": 1377,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "hemodialysis-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 7843,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "hemodialysis-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 7843,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "hemodialysis-rn",
+      "classification": "imported-rich",
+      "bodyChars": 3945,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-pain-management",
+      "classification": "curated-modern",
+      "bodyChars": 1385,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-prioritization-abcs",
+      "classification": "curated-modern",
+      "bodyChars": 1524,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-general-nursing-clinical",
+      "classification": "curated-modern",
+      "bodyChars": 1533,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hemodialysis-rn",
+      "classification": "imported-rich",
+      "bodyChars": 3945,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "patient-positioning-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 9438,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-wound-care",
+      "classification": "curated-modern",
+      "bodyChars": 1375,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "shock-recognition-fluids",
+      "classification": "curated-modern",
+      "bodyChars": 1613,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hypertensive-crisis-vs-urgency",
+      "classification": "curated-modern",
+      "bodyChars": 1619,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "patient-positioning-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 9438,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ca-rn-fluid-balance",
+      "classification": "curated-modern",
+      "bodyChars": 1391,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pericarditis-ecg-clues",
+      "classification": "curated-modern",
+      "bodyChars": 1604,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "dvt-pe-nursing-priorities",
+      "classification": "curated-modern",
+      "bodyChars": 1613,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "patient-positioning-rn",
+      "classification": "imported-rich",
+      "bodyChars": 4053,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "heart-failure-nursing-priorities-hy",
+      "classification": "curated-modern",
+      "bodyChars": 1628,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "asthma-status-asthmaticus",
+      "classification": "curated-modern",
+      "bodyChars": 1567,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ards-ventilation-basics",
+      "classification": "curated-modern",
+      "bodyChars": 1563,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "patient-positioning-rn",
+      "classification": "imported-rich",
+      "bodyChars": 4053,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "acute-myocardial-infarction-troponin",
+      "classification": "curated-modern",
+      "bodyChars": 1637,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "tb-isolation-compliance",
+      "classification": "curated-modern",
+      "bodyChars": 1562,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pleural-effusion-chest-tubes",
+      "classification": "curated-modern",
+      "bodyChars": 1577,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "ethics-rpn-comprehensive",
+      "classification": "imported-rich",
+      "bodyChars": 3381,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "endocarditis-blood-cultures",
+      "classification": "curated-modern",
+      "bodyChars": 1619,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "antibiotic-classes-allergies-hy",
+      "classification": "curated-modern",
+      "bodyChars": 1595,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "opioids-respiratory-depression",
+      "classification": "curated-modern",
+      "bodyChars": 1599,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ethics-rpn-comprehensive",
+      "classification": "imported-rich",
+      "bodyChars": 3381,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "copd-exacerbation-oxygen",
+      "classification": "curated-modern",
+      "bodyChars": 1565,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "antihypertensive-combos",
+      "classification": "curated-modern",
+      "bodyChars": 1574,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "chemo-safe-handling-extravasation",
+      "classification": "curated-modern",
+      "bodyChars": 1610,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "ethics-rn-comprehensive",
+      "classification": "imported-rich",
+      "bodyChars": 4276,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pulmonary-embolism-clues",
+      "classification": "curated-modern",
+      "bodyChars": 1559,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "fluid-volume-deficit",
+      "classification": "curated-modern",
+      "bodyChars": 1564,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "fluid-volume-excess",
+      "classification": "curated-modern",
+      "bodyChars": 1562,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ethics-rn-comprehensive",
+      "classification": "imported-rich",
+      "bodyChars": 4276,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "insulin-hypoglycemia-hy",
+      "classification": "duplicate-candidate",
+      "bodyChars": 1571,
+      "rationale": "same normalized title as another row in this pathway with thin body — review before merge"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "phosphate-shifts-in-renal",
+      "classification": "curated-modern",
+      "bodyChars": 1585,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "mixed-acid-base-patterns",
+      "classification": "curated-modern",
+      "bodyChars": 1582,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "therapeutic-comm-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 4278,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "anticoagulants-bleeding-risk",
+      "classification": "curated-modern",
+      "bodyChars": 1595,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "bowel-obstruction-vs-paralytic-ileus",
+      "classification": "curated-modern",
+      "bodyChars": 1624,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "gerd-pud-bleeding-clues",
+      "classification": "curated-modern",
+      "bodyChars": 1604,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "thyroid-storm-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 2996,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "diuretics-electrolyte-shifts",
+      "classification": "curated-modern",
+      "bodyChars": 1595,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ostomy-skin-protection",
+      "classification": "curated-modern",
+      "bodyChars": 1600,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "stroke-assessment-tpa-window",
+      "classification": "curated-modern",
+      "bodyChars": 1618,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "vancomycin-therapy-rn",
+      "classification": "imported-rich",
+      "bodyChars": 3743,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hypo-vs-hyperkalemia-hy",
+      "classification": "curated-modern",
+      "bodyChars": 1573,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "spinal-cord-injury-autonomic-dysreflexia",
+      "classification": "curated-modern",
+      "bodyChars": 1636,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "meningitis-isolation-assessment",
+      "classification": "curated-modern",
+      "bodyChars": 1624,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "therapeutic-comm-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 4278,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "calcium-tetany",
+      "classification": "curated-modern",
+      "bodyChars": 1558,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "dka-vs-hhs-priorities-hy",
+      "classification": "curated-modern",
+      "bodyChars": 1552,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "thyroid-storm-myxedema-clues",
+      "classification": "curated-modern",
+      "bodyChars": 1569,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "therapeutic-comm-rn",
+      "classification": "imported-rich",
+      "bodyChars": 4095,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "liver-failure-hepatic-encephalopathy",
+      "classification": "curated-modern",
+      "bodyChars": 1630,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "diabetes-self-management-teaching",
+      "classification": "curated-modern",
+      "bodyChars": 1573,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "siadh-vs-di-basics",
+      "classification": "curated-modern",
+      "bodyChars": 1543,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "therapeutic-comm-rn",
+      "classification": "imported-rich",
+      "bodyChars": 4095,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "acute-pancreatitis-nursing-care",
+      "classification": "curated-modern",
+      "bodyChars": 1614,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "peritoneal-dialysis-complications",
+      "classification": "curated-modern",
+      "bodyChars": 1589,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "kidney-stones-strain-management",
+      "classification": "curated-modern",
+      "bodyChars": 1591,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "labs-diagnostics-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3624,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "c-diff-infection-control",
+      "classification": "curated-modern",
+      "bodyChars": 1603,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "anemia-types-transfusion-thresholds",
+      "classification": "curated-modern",
+      "bodyChars": 1565,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "transfusion-reaction-recognition",
+      "classification": "curated-modern",
+      "bodyChars": 1553,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "labs-diagnostics-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3624,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "increased-icp-positioning",
+      "classification": "curated-modern",
+      "bodyChars": 1612,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hip-fracture-fall-risk",
+      "classification": "curated-modern",
+      "bodyChars": 1492,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ra-flare-immune-modulators",
+      "classification": "curated-modern",
+      "bodyChars": 1500,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "labs-diagnostics-rn",
+      "classification": "imported-rich",
+      "bodyChars": 4384,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "parkinson-disease-med-timing",
+      "classification": "curated-modern",
+      "bodyChars": 1611,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hiv-confidentiality-pep-basics",
+      "classification": "curated-modern",
+      "bodyChars": 1558,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "isolation-precautions-in-practice",
+      "classification": "curated-modern",
+      "bodyChars": 1558,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "labs-diagnostics-rn",
+      "classification": "imported-rich",
+      "bodyChars": 4384,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "addisonian-crisis",
+      "classification": "curated-modern",
+      "bodyChars": 1541,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pressure-injury-staging",
+      "classification": "curated-modern",
+      "bodyChars": 1495,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "severe-dermatitis-skin-care",
+      "classification": "curated-modern",
+      "bodyChars": 1503,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "leadership-mgmt-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3712,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "cushing-syndrome-assessment",
+      "classification": "curated-modern",
+      "bodyChars": 1561,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "alcohol-withdrawal-ciwa",
+      "classification": "curated-modern",
+      "bodyChars": 1479,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "preeclampsia-vs-eclampsia",
+      "classification": "curated-modern",
+      "bodyChars": 1534,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "leadership-mgmt-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3712,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "hemodialysis-access-care",
+      "classification": "curated-modern",
+      "bodyChars": 1571,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "newborn-thermoregulation-feeding",
+      "classification": "curated-modern",
+      "bodyChars": 1554,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "rh-incompatibility-basics",
+      "classification": "curated-modern",
+      "bodyChars": 1534,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "leadership-mgmt-rn",
+      "classification": "imported-rich",
+      "bodyChars": 3458,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "indwelling-catheter-risks",
+      "classification": "curated-modern",
+      "bodyChars": 1573,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "immunization-schedule-essentials",
+      "classification": "curated-modern",
+      "bodyChars": 1566,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "growth-failure-red-flags",
+      "classification": "curated-modern",
+      "bodyChars": 1550,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "leadership-mgmt-rn",
+      "classification": "imported-rich",
+      "bodyChars": 3458,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "sickle-cell-pain-acs",
+      "classification": "curated-modern",
+      "bodyChars": 1535,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "ethical-distress-advocacy",
+      "classification": "curated-modern",
+      "bodyChars": 1533,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "legal-nurse-practice-act",
+      "classification": "curated-modern",
+      "bodyChars": 1528,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "health-promotion-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3923,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "immobility-dvt-prophylaxis",
+      "classification": "curated-modern",
+      "bodyChars": 1500,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "restraint-alternatives-policy",
+      "classification": "curated-modern",
+      "bodyChars": 1548,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "medication-error-disclosure",
+      "classification": "curated-modern",
+      "bodyChars": 1538,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "health-promotion-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3923,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "sepsis-early-recognition-hy",
+      "classification": "curated-modern",
+      "bodyChars": 1568,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-infection-control",
+      "classification": "curated-modern",
+      "bodyChars": 1347,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "tpn-line-care-basics",
+      "classification": "curated-modern",
+      "bodyChars": 1461,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-pulmonary-embolism",
+      "classification": "curated-modern",
+      "bodyChars": 1424,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "health-promotion-rn",
+      "classification": "imported-rich",
+      "bodyChars": 4345,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "health-promotion-rn",
+      "classification": "imported-rich",
+      "bodyChars": 4345,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "burn-depth-fluid-resuscitation-basics",
+      "classification": "curated-modern",
+      "bodyChars": 1529,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "psychotropic-side-effects",
+      "classification": "curated-modern",
+      "bodyChars": 1483,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-dysrhythmias",
+      "classification": "curated-modern",
+      "bodyChars": 1412,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-anticoagulants",
+      "classification": "curated-modern",
+      "bodyChars": 1341,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "legal-edge-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 4589,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "legal-edge-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 4589,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "late-decelerations-fhr",
+      "classification": "curated-modern",
+      "bodyChars": 1534,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "pediatric-fever-dehydration",
+      "classification": "curated-modern",
+      "bodyChars": 1562,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-ards",
+      "classification": "curated-modern",
+      "bodyChars": 1396,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-general-nursing-clinical",
+      "classification": "curated-modern",
+      "bodyChars": 1370,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "tumor-lysis-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 4514,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "rotavirus-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3121,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "rsv-pediatric-resp-distress",
+      "classification": "curated-modern",
+      "bodyChars": 1562,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "assignment-vs-delegation",
+      "classification": "curated-modern",
+      "bodyChars": 1525,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-acid-base-advanced",
+      "classification": "curated-modern",
+      "bodyChars": 1436,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "us-pn-dysrhythmias",
+      "classification": "curated-modern",
+      "bodyChars": 1505,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "respiratory-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 17142,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "respiratory-rn",
+      "classification": "imported-rich",
+      "bodyChars": 18172,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "falls-hourly-rounding",
+      "classification": "curated-modern",
+      "bodyChars": 1532,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "enteral-feeding-tube-safety",
+      "classification": "curated-modern",
+      "bodyChars": 1475,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-sepsis",
+      "classification": "curated-modern",
+      "bodyChars": 1400,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "us-pn-hypertension",
+      "classification": "curated-modern",
+      "bodyChars": 1505,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "respiratory-rn",
+      "classification": "imported-rich",
+      "bodyChars": 18172,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "abg-interpretation-rn",
+      "classification": "imported-rich",
+      "bodyChars": 6815,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-heart-failure",
+      "classification": "curated-modern",
+      "bodyChars": 1414,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-myocardial-infarction",
+      "classification": "curated-modern",
+      "bodyChars": 1430,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-pain-management",
+      "classification": "curated-modern",
+      "bodyChars": 1418,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "us-pn-asthma",
+      "classification": "curated-modern",
+      "bodyChars": 1493,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "abg-interpretation-rn",
+      "classification": "imported-rich",
+      "bodyChars": 6815,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "rhonchi-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 5041,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "cirrhosis-management-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3056,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-hypertension",
+      "classification": "curated-modern",
+      "bodyChars": 1412,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-fluid-balance",
+      "classification": "curated-modern",
+      "bodyChars": 1424,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "us-pn-pneumonia",
+      "classification": "curated-modern",
+      "bodyChars": 1499,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "us-pn-acid-base-advanced",
+      "classification": "curated-modern",
+      "bodyChars": 1529,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "rhonchi-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 5041,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "cholecystectomy-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3213,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-shock",
+      "classification": "curated-modern",
+      "bodyChars": 1398,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "therapeutic-communication",
+      "classification": "curated-modern",
+      "bodyChars": 1428,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "us-pn-infection-control",
+      "classification": "curated-modern",
+      "bodyChars": 1515,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "us-pn-fluid-balance",
+      "classification": "curated-modern",
+      "bodyChars": 1517,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "cholecystectomy-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3213,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "glomerulonephritis-basics-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3107,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-pneumonia",
+      "classification": "curated-modern",
+      "bodyChars": 1406,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-copd-respiratory",
+      "classification": "curated-modern",
+      "bodyChars": 1429,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "edema-daily-weights",
+      "classification": "curated-modern",
+      "bodyChars": 1378,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "glomerulonephritis-basics-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3107,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "siadh-basics-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 4576,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-sodium-imbalance",
+      "classification": "curated-modern",
+      "bodyChars": 1420,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-potassium-imbalance",
+      "classification": "curated-modern",
+      "bodyChars": 1426,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "insulin-administration-checks",
+      "classification": "curated-modern",
+      "bodyChars": 1402,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "siadh-basics-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 4576,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "acromegaly-basics-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 4373,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "acromegaly-basics-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 4373,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-infection-control",
+      "classification": "curated-modern",
+      "bodyChars": 1422,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "i-o-fluid-restriction-teaching",
+      "classification": "curated-modern",
+      "bodyChars": 1426,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "hypokalemia-symptoms",
+      "classification": "curated-modern",
+      "bodyChars": 1400,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "blood-transfusion-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 4370,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "blood-transfusion-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 4370,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-anticoagulants",
+      "classification": "curated-modern",
+      "bodyChars": 1416,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-wound-care",
+      "classification": "curated-modern",
+      "bodyChars": 1408,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "stroke-sequela-mobility-assist",
+      "classification": "curated-modern",
+      "bodyChars": 1375,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "hemolytic-transfusion-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 4014,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "hemolytic-transfusion-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 4014,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "anaphylactic-transfusion-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 4083,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-delegation",
+      "classification": "curated-modern",
+      "bodyChars": 1542,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ca-rpn-prioritization-abcs",
+      "classification": "curated-modern",
+      "bodyChars": 1557,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "catheter-care-cauti-prevention",
+      "classification": "curated-modern",
+      "bodyChars": 1370,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "anaphylactic-transfusion-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 4083,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "febrile-transfusion-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 4599,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "pn-scope-boundaries-delegation-rules-hy",
+      "classification": "curated-modern",
+      "bodyChars": 1496,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "vital-signs-escalation",
+      "classification": "curated-modern",
+      "bodyChars": 1428,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "growth-chart-basics",
+      "classification": "curated-modern",
+      "bodyChars": 1331,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "febrile-transfusion-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 4599,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "separation-anxiety-rn",
+      "classification": "imported-rich",
+      "bodyChars": 4175,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "documentation-do-nots",
+      "classification": "curated-modern",
+      "bodyChars": 1420,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "heart-failure-monitoring",
+      "classification": "curated-modern",
+      "bodyChars": 1382,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "suicide-precautions-observation",
+      "classification": "curated-modern",
+      "bodyChars": 1387,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "separation-anxiety-rn",
+      "classification": "imported-rich",
+      "bodyChars": 4175,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "androgen-insensitivity-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3262,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "oxygen-devices-for-pn-care",
+      "classification": "curated-modern",
+      "bodyChars": 1379,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "inhaler-technique-teaching",
+      "classification": "curated-modern",
+      "bodyChars": 1379,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-pulmonary-embolism",
+      "classification": "curated-modern",
+      "bodyChars": 1349,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "androgen-insensitivity-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3262,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "necrotizing-enterocolitis-basics-rpn",
+      "classification": "imported-thin",
+      "bodyChars": 2490,
+      "rationale": "legacy marker but body below richness threshold"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "oral-hypoglycemics",
+      "classification": "curated-modern",
+      "bodyChars": 1380,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "antibiotic-side-effect-reporting",
+      "classification": "curated-modern",
+      "bodyChars": 1408,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-dysrhythmias",
+      "classification": "curated-modern",
+      "bodyChars": 1337,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "necrotizing-enterocolitis-basics-rpn",
+      "classification": "imported-thin",
+      "bodyChars": 2490,
+      "rationale": "legacy marker but body below richness threshold"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "meconium-aspiration-basics-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 2598,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "cirrhosis-management-rn",
+      "classification": "imported-rich",
+      "bodyChars": 4225,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "npo-post-op-diet-progression",
+      "classification": "curated-modern",
+      "bodyChars": 1357,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "stool-assessment-report",
+      "classification": "curated-modern",
+      "bodyChars": 1347,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-ards",
+      "classification": "curated-modern",
+      "bodyChars": 1321,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "meconium-aspiration-basics-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 2598,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "meconium-ileus-rpn",
+      "classification": "imported-thin",
+      "bodyChars": 2449,
+      "rationale": "legacy marker but body below richness threshold"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "meconium-ileus-rpn",
+      "classification": "imported-thin",
+      "bodyChars": 2449,
+      "rationale": "legacy marker but body below richness threshold"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "cirrhosis-management-rn",
+      "classification": "imported-rich",
+      "bodyChars": 4225,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "fingerstick-hypoglycemia-response",
+      "classification": "curated-modern",
+      "bodyChars": 1380,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "foot-inspection-teaching",
+      "classification": "curated-modern",
+      "bodyChars": 1356,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-acid-base-advanced",
+      "classification": "curated-modern",
+      "bodyChars": 1361,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "fetal-monitoring-rn",
+      "classification": "imported-rich",
+      "bodyChars": 2875,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "fetal-monitoring-rn",
+      "classification": "imported-rich",
+      "bodyChars": 2875,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "postpartum-fundus-lochia",
+      "classification": "curated-modern",
+      "bodyChars": 1348,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "newborn-safety-bath",
+      "classification": "curated-modern",
+      "bodyChars": 1338,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-sepsis",
+      "classification": "curated-modern",
+      "bodyChars": 1325,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "methotrexate-safety-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 2541,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "methotrexate-safety-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 2541,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "oxybutynin-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3130,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ppe-transmission-basics",
+      "classification": "curated-modern",
+      "bodyChars": 1370,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "c-diff-contact-precautions",
+      "classification": "curated-modern",
+      "bodyChars": 1373,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-pain-management",
+      "classification": "curated-modern",
+      "bodyChars": 1343,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "oxybutynin-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3130,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "levetiracetam-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3634,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "gout-management-rpn",
+      "classification": "imported-thin",
+      "bodyChars": 2301,
+      "rationale": "legacy marker but body below richness threshold"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "falls-risk-side-rails-policy",
+      "classification": "curated-modern",
+      "bodyChars": 1365,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "restraint-monitoring-requirements",
+      "classification": "curated-modern",
+      "bodyChars": 1369,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-prioritization-abcs",
+      "classification": "curated-modern",
+      "bodyChars": 2069,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-neurological-acute-care",
+      "classification": "needs-enrichment",
+      "bodyChars": 1359,
+      "rationale": "thin body, not clearly legacy/catalog"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "levetiracetam-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3634,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-heart-failure",
+      "classification": "curated-modern",
+      "bodyChars": 2047,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "shock-recognition-fluids",
+      "classification": "curated-modern",
+      "bodyChars": 1601,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "acute-myocardial-infarction-troponin",
+      "classification": "curated-modern",
+      "bodyChars": 1625,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "short-acting-insulin-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3658,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "short-acting-insulin-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3658,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "oral-candidiasis-rn",
+      "classification": "imported-rich",
+      "bodyChars": 4814,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "oral-candidiasis-rn",
+      "classification": "imported-rich",
+      "bodyChars": 4814,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "head-to-toe-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3865,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "head-to-toe-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3865,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-myocardial-infarction",
+      "classification": "curated-modern",
+      "bodyChars": 2063,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "pericarditis-ecg-clues",
+      "classification": "curated-modern",
+      "bodyChars": 1592,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "endocarditis-blood-cultures",
+      "classification": "curated-modern",
+      "bodyChars": 1607,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "pain-assessment-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3578,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "pain-assessment-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3578,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "gcs-assessment-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3819,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "gcs-assessment-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3819,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "braden-scale-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3407,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "gout-management-rpn",
+      "classification": "imported-thin",
+      "bodyChars": 2301,
+      "rationale": "legacy marker but body below richness threshold"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-hypertension",
+      "classification": "curated-modern",
+      "bodyChars": 1337,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "asthma-status-asthmaticus",
+      "classification": "curated-modern",
+      "bodyChars": 1555,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "braden-scale-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3407,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "primary-survey-rn",
+      "classification": "imported-rich",
+      "bodyChars": 4515,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "gout-management-rn",
+      "classification": "imported-rich",
+      "bodyChars": 3878,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-shock",
+      "classification": "curated-modern",
+      "bodyChars": 1323,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-mental-health-crisis",
+      "classification": "needs-enrichment",
+      "bodyChars": 1358,
+      "rationale": "thin body, not clearly legacy/catalog"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "pulmonary-embolism-clues",
+      "classification": "curated-modern",
+      "bodyChars": 1547,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "primary-survey-rn",
+      "classification": "imported-rich",
+      "bodyChars": 4515,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "sepsis-screening-rn",
+      "classification": "imported-rich",
+      "bodyChars": 4604,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "sepsis-screening-rn",
+      "classification": "imported-rich",
+      "bodyChars": 4604,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-pneumonia",
+      "classification": "curated-modern",
+      "bodyChars": 1331,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "antibiotic-classes-allergies-hy",
+      "classification": "curated-modern",
+      "bodyChars": 1583,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "isolation-precautions-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3415,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "isolation-precautions-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3415,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "cervical-cancer-basics-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3042,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "cervical-cancer-basics-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3042,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "antihypertensive-combos",
+      "classification": "curated-modern",
+      "bodyChars": 1562,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "diuretics-electrolyte-shifts",
+      "classification": "curated-modern",
+      "bodyChars": 1583,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "tumor-lysis-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 4514,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "legal-edge-rn",
+      "classification": "imported-rich",
+      "bodyChars": 3596,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "legal-edge-rn",
+      "classification": "imported-rich",
+      "bodyChars": 3596,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "maternal-newborn-edge-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 4423,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "maternal-newborn-edge-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 4423,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "maternal-newborn-edge-rn",
+      "classification": "imported-rich",
+      "bodyChars": 5096,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-sodium-imbalance",
+      "classification": "curated-modern",
+      "bodyChars": 1345,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "fluid-volume-deficit",
+      "classification": "curated-modern",
+      "bodyChars": 1552,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "rotavirus-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3121,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "biliary-atresia-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3316,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "biliary-atresia-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3316,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-potassium-imbalance",
+      "classification": "curated-modern",
+      "bodyChars": 1351,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "phosphate-shifts-in-renal",
+      "classification": "curated-modern",
+      "bodyChars": 1573,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "eosinophilic-esophagitis-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3615,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "eosinophilic-esophagitis-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3615,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "meckel-diverticulum-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3828,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "bowel-obstruction-vs-paralytic-ileus",
+      "classification": "curated-modern",
+      "bodyChars": 1612,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "acute-pancreatitis-nursing-care",
+      "classification": "curated-modern",
+      "bodyChars": 1602,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "meckel-diverticulum-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3828,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "ulcerative-colitis-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3079,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "ulcerative-colitis-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3079,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "sucralfate-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3002,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "sucralfate-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3002,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "vaginal-hematoma-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 5466,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "vaginal-hematoma-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 5466,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "ostomy-skin-protection",
+      "classification": "curated-modern",
+      "bodyChars": 1588,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "c-diff-infection-control",
+      "classification": "curated-modern",
+      "bodyChars": 1591,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "mastitis-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 2671,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "mastitis-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 2671,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "infant-reflexes-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3215,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "infant-reflexes-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3215,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "potassium-imbalance-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 8131,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "potassium-imbalance-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 8131,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-wound-care",
+      "classification": "curated-modern",
+      "bodyChars": 1333,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "spinal-cord-injury-autonomic-dysreflexia",
+      "classification": "curated-modern",
+      "bodyChars": 1624,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "delayed-puberty-rpn",
+      "classification": "imported-thin",
+      "bodyChars": 2485,
+      "rationale": "legacy marker but body below richness threshold"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "delayed-puberty-rpn",
+      "classification": "imported-thin",
+      "bodyChars": 2485,
+      "rationale": "legacy marker but body below richness threshold"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "precocious-puberty-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 2527,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-delegation",
+      "classification": "curated-modern",
+      "bodyChars": 2054,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "dka-vs-hhs-priorities-hy",
+      "classification": "curated-modern",
+      "bodyChars": 1540,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "us-rn-pediatrics-care",
+      "classification": "needs-enrichment",
+      "bodyChars": 1351,
+      "rationale": "thin body, not clearly legacy/catalog"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "precocious-puberty-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 2527,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "dysmenorrhea-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 2704,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "dysmenorrhea-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 2704,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "diabetes-self-management-teaching",
+      "classification": "curated-modern",
+      "bodyChars": 1561,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "cushing-syndrome-assessment",
+      "classification": "curated-modern",
+      "bodyChars": 1549,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "abnormal-uterine-bleeding-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 2771,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "abnormal-uterine-bleeding-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 2771,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "pcos-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 2730,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "pcos-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 2730,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "pid-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 2685,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "pid-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 2685,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "vaginitis-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 2930,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "peritoneal-dialysis-complications",
+      "classification": "curated-modern",
+      "bodyChars": 1577,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "heart-failure-nursing-priorities-hy",
+      "classification": "curated-modern",
+      "bodyChars": 1616,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "hemodialysis-access-care",
+      "classification": "curated-modern",
+      "bodyChars": 1559,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "vaginitis-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 2930,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "anemia-types-transfusion-thresholds",
+      "classification": "curated-modern",
+      "bodyChars": 1553,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "atrial-fibrillation-rate-control",
+      "classification": "curated-modern",
+      "bodyChars": 1617,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "indwelling-catheter-risks",
+      "classification": "curated-modern",
+      "bodyChars": 1561,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "gout-management-rn",
+      "classification": "imported-rich",
+      "bodyChars": 3878,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "bacterial-vaginosis-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 2831,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "hip-fracture-fall-risk",
+      "classification": "curated-modern",
+      "bodyChars": 1480,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "abg-interpretation-basics-hy",
+      "classification": "curated-modern",
+      "bodyChars": 1550,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "sickle-cell-pain-acs",
+      "classification": "curated-modern",
+      "bodyChars": 1523,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "bacterial-vaginosis-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 2831,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "cervicitis-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 2870,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "hiv-confidentiality-pep-basics",
+      "classification": "curated-modern",
+      "bodyChars": 1546,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "pneumonia-oxygenation",
+      "classification": "curated-modern",
+      "bodyChars": 1547,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "sepsis-early-recognition-hy",
+      "classification": "curated-modern",
+      "bodyChars": 1556,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "cervicitis-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 2870,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "vulvodynia-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3081,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "pressure-injury-staging",
+      "classification": "curated-modern",
+      "bodyChars": 1483,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "tb-isolation-compliance",
+      "classification": "curated-modern",
+      "bodyChars": 1550,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "burn-depth-fluid-resuscitation-basics",
+      "classification": "curated-modern",
+      "bodyChars": 1517,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "vulvodynia-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3081,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "bartholinitis-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 2888,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "alcohol-withdrawal-ciwa",
+      "classification": "curated-modern",
+      "bodyChars": 1467,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "pleural-effusion-chest-tubes",
+      "classification": "curated-modern",
+      "bodyChars": 1565,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "psychotropic-side-effects",
+      "classification": "curated-modern",
+      "bodyChars": 1471,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "bartholinitis-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 2888,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "uterine-prolapse-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 2896,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "newborn-thermoregulation-feeding",
+      "classification": "curated-modern",
+      "bodyChars": 1542,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "insulin-hypoglycemia-hy",
+      "classification": "duplicate-candidate",
+      "bodyChars": 1559,
+      "rationale": "same normalized title as another row in this pathway with thin body — review before merge"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "late-decelerations-fhr",
+      "classification": "curated-modern",
+      "bodyChars": 1522,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "uterine-prolapse-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 2896,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "benign-ovarian-cysts-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3145,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "immunization-schedule-essentials",
+      "classification": "curated-modern",
+      "bodyChars": 1554,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "cardiac-glycosides-toxicity",
+      "classification": "curated-modern",
+      "bodyChars": 1581,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "rsv-pediatric-resp-distress",
+      "classification": "curated-modern",
+      "bodyChars": 1550,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "benign-ovarian-cysts-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 3145,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "ethical-distress-advocacy",
+      "classification": "curated-modern",
+      "bodyChars": 1521,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "hyponatremia-vs-hypernatremia-hy",
+      "classification": "curated-modern",
+      "bodyChars": 1585,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "assignment-vs-delegation",
+      "classification": "curated-modern",
+      "bodyChars": 1513,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "slug": "endometrial-polyp-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 2876,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "slug": "endometrial-polyp-rpn",
+      "classification": "imported-rich",
+      "bodyChars": 2876,
+      "rationale": "legacy marker + substantive body"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "restraint-alternatives-policy",
+      "classification": "curated-modern",
+      "bodyChars": 1536,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "magnesium-arrhythmia-risk",
+      "classification": "curated-modern",
+      "bodyChars": 1568,
+      "rationale": "catalog slug, no legacy marker"
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "slug": "falls-hourly-rounding",
+      "classification": "curated-modern",
+      "bodyChars": 1520,
+      "rationale": "catalog slug, no legacy marker"
+    }
+  ],
+  "totalRowsClassified": 3403
+}

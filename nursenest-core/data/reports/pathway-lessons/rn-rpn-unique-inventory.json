@@ -1,0 +1,71 @@
+{
+  "generatedAt": "2026-03-31T17:19:29.427Z",
+  "note": "unionSlugCountAcrossCountryPair is identical for both pathways in the RN pair (or PN pair): distinct slugs when US+CA hubs are merged by slug identity.",
+  "duplicateTitleGroupsTotalAcrossRnRpn": 254,
+  "pathways": {
+    "us-rn-nclex-rn": {
+      "pathwayId": "us-rn-nclex-rn",
+      "publishedDbTotal": 718,
+      "uniqueSlugCount": 718,
+      "duplicateSlugWithinPathway": 0,
+      "uniqueConceptCountDerivable": {
+        "identicalSlugCountInSiblingCountryPathway": 680,
+        "unionSlugCountAcrossCountryPair": 746
+      },
+      "nearDuplicateTitleGroupsInPathway": 18,
+      "importedHistoricalCount": 585,
+      "curatedCatalogSlugOverlapCount": 122,
+      "curatedModernCount": 122,
+      "generatedHeuristicCount": 0,
+      "otherUncategorizedCount": 11
+    },
+    "ca-rn-nclex-rn": {
+      "pathwayId": "ca-rn-nclex-rn",
+      "publishedDbTotal": 708,
+      "uniqueSlugCount": 708,
+      "duplicateSlugWithinPathway": 0,
+      "uniqueConceptCountDerivable": {
+        "identicalSlugCountInSiblingCountryPathway": 680,
+        "unionSlugCountAcrossCountryPair": 746
+      },
+      "nearDuplicateTitleGroupsInPathway": 18,
+      "importedHistoricalCount": 585,
+      "curatedCatalogSlugOverlapCount": 123,
+      "curatedModernCount": 123,
+      "generatedHeuristicCount": 0,
+      "otherUncategorizedCount": 0
+    },
+    "us-lpn-nclex-pn": {
+      "pathwayId": "us-lpn-nclex-pn",
+      "publishedDbTotal": 994,
+      "uniqueSlugCount": 994,
+      "duplicateSlugWithinPathway": 0,
+      "uniqueConceptCountDerivable": {
+        "identicalSlugCountInSiblingCountryPathway": 956,
+        "unionSlugCountAcrossCountryPair": 1021
+      },
+      "nearDuplicateTitleGroupsInPathway": 109,
+      "importedHistoricalCount": 922,
+      "curatedCatalogSlugOverlapCount": 61,
+      "curatedModernCount": 61,
+      "generatedHeuristicCount": 0,
+      "otherUncategorizedCount": 11
+    },
+    "ca-rpn-rex-pn": {
+      "pathwayId": "ca-rpn-rex-pn",
+      "publishedDbTotal": 983,
+      "uniqueSlugCount": 983,
+      "duplicateSlugWithinPathway": 0,
+      "uniqueConceptCountDerivable": {
+        "identicalSlugCountInSiblingCountryPathway": 956,
+        "unionSlugCountAcrossCountryPair": 1021
+      },
+      "nearDuplicateTitleGroupsInPathway": 109,
+      "importedHistoricalCount": 922,
+      "curatedCatalogSlugOverlapCount": 61,
+      "curatedModernCount": 61,
+      "generatedHeuristicCount": 0,
+      "otherUncategorizedCount": 0
+    }
+  }
+}

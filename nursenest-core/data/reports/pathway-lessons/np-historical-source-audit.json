@@ -1,0 +1,53 @@
+{
+  "generatedAt": "2026-03-31T17:43:58.686Z",
+  "historicalNpInventoryEstimate": {
+    "uniqueLegacyNpLessonIdsInContentMap": 1409,
+    "note": "Heuristic ids: not RN/RPN tier and match -np / np- / np-testbank patterns. Expanded rows = unique × 4 pathways when imported."
+  },
+  "rows": [
+    {
+      "sourcePath": "../client/src/data/lessons/index.ts (contentMap)",
+      "sourceType": "ts-module",
+      "rawLessonCount": 1409,
+      "validLessonCount": 1409,
+      "invalidLessonCount": 0,
+      "uniqueLegacyNpIdsApprox": 1409,
+      "pathwayMapping": "legacy NP keys → all four NP pathways (us-np-fnp, us-np-agpcnp, us-np-pmhnp, ca-np-cnple)",
+      "rowsExpandedToPathways": 5636,
+      "currentlyImportedIntoPathwayLessons": 0,
+      "currentlySurfacedInRuntime": true,
+      "sourceQualityClass": "historical/high-value"
+    },
+    {
+      "sourcePath": "src/content/pathway-lessons/catalog.json",
+      "sourceType": "json",
+      "pathwayId": "us-np-fnp",
+      "rawLessonCount": 15,
+      "validLessonCount": 15,
+      "pathwayMapping": "only us-np-fnp entries (other NP pathways are DB-seeded today)",
+      "currentlyImportedIntoPathwayLessons": 15,
+      "currentlySurfacedInRuntime": true,
+      "sourceQualityClass": "curated/FNP-specific"
+    },
+    {
+      "sourcePath": "data/materialized/np-clinical-layer-2026/catalog-np-overlays.json",
+      "sourceType": "json",
+      "rawLessonCount": 9,
+      "validLessonCount": 36,
+      "pathwayMapping": "usNpFnp overlays replicated to all four NP pathways",
+      "currentlyImportedIntoPathwayLessons": 9,
+      "currentlySurfacedInRuntime": true,
+      "sourceQualityClass": "materialized/NP-overlays"
+    },
+    {
+      "sourcePath": "data/replit-exports/content_items.json",
+      "sourceType": "json",
+      "rawLessonCount": 52,
+      "npLikeLessonRows": 0,
+      "pathwayMapping": "none reliable without NP pathway tags",
+      "currentlyImportedIntoPathwayLessons": 0,
+      "currentlySurfacedInRuntime": false,
+      "sourceQualityClass": "not-applicable"
+    }
+  ]
+}

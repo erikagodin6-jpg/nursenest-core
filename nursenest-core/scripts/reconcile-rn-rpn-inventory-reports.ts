@@ -514,7 +514,7 @@ async function main() {
     finalAuthoritativeRnTotal: combinedRn,
     finalAuthoritativeRpnPnTotal: combinedPn,
     explanation:
-      "Authoritative totals = sum of published EN rows in US+CA RN pathways (and US+CA PN pathways). Unique legacy lesson counts are 587 RN / 922 RPN-tier — see rn-rpn-count-reconciliation.json.",
+      "Authoritative totals = sum of published EN rows in US+CA RN pathways (and US+CA PN pathways). Compare unique legacy IDs vs row totals using rn-rpn-count-reconciliation.json (not the same units).",
     rawRecoveredSourceRowCount: importSummary?.candidateRows ?? null,
     uniqueRecoveredLessonEstimate: {
       legacyRnUnique: legacyRnValid,

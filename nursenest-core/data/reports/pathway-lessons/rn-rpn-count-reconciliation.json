@@ -1,0 +1,75 @@
+{
+  "generatedAt": "2026-03-31T17:19:29.409Z",
+  "authoritativeModel": {
+    "description": "Use one vocabulary per metric. Do not compare 'unique legacy lessons' directly to 'total published DB rows' without accounting for US+CA pathway duplication.",
+    "definitions": {
+      "historicalUniqueRnLessonsInLegacyContentMap": "Count of distinct legacy contentMap keys whose id matches RN tier (regex). Same lesson is intentionally materialized as TWO pathway_lessons rows (US + CA).",
+      "historicalUniqueRpnPnLessonsInLegacyContentMap": "Count of distinct legacy contentMap keys whose id matches RPN tier. Same lesson is TWO rows (US LPN + CA REx-PN).",
+      "legacySourceRowsForImporter": "historical RN unique × 2 pathways + historical RPN unique × 2 pathways = valid legacy rows fed to importer (after body-length filter), plus catalog + materialized candidates.",
+      "recoveredFromSourceOperations": "Sum of inserted + updated rows in the recovery run (one operation per pathway+slug key). Comparable to 'import batch touches', not unique canonical lessons.",
+      "recoveredInserted": "New pathway_lessons rows created by recovery (from import summary when present).",
+      "recoveredUpdated": "Existing rows replaced when incoming legacy content scored higher quality.",
+      "recoveredSkipped": "Existing row kept because incoming was not materially richer.",
+      "finalLivePublishedRowsByPathway": "Count of PUBLISHED rows in pathway_lessons for locale=en per pathwayId — this is what hubs and routes surface.",
+      "finalLivePublishedRowsCombinedRn": "us-rn + ca-rn published row counts. Expect ~2× unique RN lessons if US/CA slugs align, plus catalog-only rows.",
+      "finalLivePublishedRowsCombinedRpnPn": "us-lpn + ca-rpn published row counts.",
+      "uniqueSlugWithinPathway": "Equals published count per pathway (slug unique per pathway+locale).",
+      "uniqueCanonicalSlugAcrossCountryPair": "Union of slugs across the two RN pathways (or PN pair) — approximates distinct topics when US/CA use identical slugs."
+    }
+  },
+  "legacyContentMap": {
+    "rawRnKeysCount": 587,
+    "rawRpnKeysCount": 922,
+    "validRnLessonsAfterRecoveryFilter": 587,
+    "validRpnPnLessonsAfterRecoveryFilter": 922,
+    "note": "valid* matches the recovery script's body-length >= 200 rule for legacy assembly."
+  },
+  "importer": {
+    "candidateRows": 3403,
+    "inserted": 3036,
+    "updated": 52,
+    "skipped": 315,
+    "recoveredFromSourceOperations": 3088,
+    "explanation": "recoveredFromSourceOperations (3088) is NOT comparable to 587+922. It counts DB upserts per pathway+slug. 587/922 are unique legacy IDs per tier."
+  },
+  "publishedDatabase": {
+    "byPathway": {
+      "us-rn-nclex-rn": 718,
+      "ca-rn-nclex-rn": 708,
+      "us-lpn-nclex-pn": 994,
+      "ca-rpn-rex-pn": 983
+    },
+    "combinedRnPublishedRows": 1426,
+    "combinedRpnPnPublishedRows": 1977,
+    "combinedFourPathways": 3403
+  },
+  "crossPathwaySlugAlignment": {
+    "rn": {
+      "usSlugCount": 718,
+      "caSlugCount": 708,
+      "identicalSlugPairCount": 680,
+      "unionSlugCount": 746,
+      "normalizedSlugGroupsWithMultipleRows": 706
+    },
+    "pn": {
+      "usSlugCount": 994,
+      "caSlugCount": 983,
+      "identicalSlugPairCount": 956,
+      "unionSlugCount": 1021,
+      "normalizedSlugGroupsWithMultipleRows": 956
+    },
+    "whyMismatchWithHistoricalEstimate": [
+      "587 + 922 count unique legacy IDs, not DB rows.",
+      "Importer maps each legacy lesson to two pathway rows (US + CA), so expected minimum DB rows from legacy alone ≈ 2×(587+922) = 3018 if every slug pairs.",
+      "Additional rows come from catalog.json and materialized JSON that are not in legacy contentMap.",
+      "recoveredFromSourceOperations ≈ inserted+updated counts each pathway+slug once per operation — not unique lessons."
+    ]
+  },
+  "reconcileCheck": {
+    "legacyValidRnTimesTwoApprox": 1174,
+    "legacyValidRpnTimesTwoApprox": 1844,
+    "legacyDoubledTotalApprox": 3018,
+    "publishedFourPathwaysTotal": 3403,
+    "deltaExplainedBy": "catalog/materialized-only lessons, slug mismatches, pre-existing rows, and counting operations vs rows"
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "generatedAt": "2026-03-31T17:44:17.211Z",
+  "totalRows": 9,
+  "rows": [
+    {
+      "key": "us-np-fnp::fnp-overlay-heart-failure",
+      "keptSource": "materialized-np",
+      "droppedSource": "catalog-json",
+      "reason": "richer_or_higher_priority_source"
+    },
+    {
+      "key": "us-np-fnp::fnp-overlay-myocardial-infarction",
+      "keptSource": "materialized-np",
+      "droppedSource": "catalog-json",
+      "reason": "richer_or_higher_priority_source"
+    },
+    {
+      "key": "us-np-fnp::fnp-overlay-shock",
+      "keptSource": "materialized-np",
+      "droppedSource": "catalog-json",
+      "reason": "richer_or_higher_priority_source"
+    },
+    {
+      "key": "us-np-fnp::fnp-overlay-abg-acid-base",
+      "keptSource": "materialized-np",
+      "droppedSource": "catalog-json",
+      "reason": "richer_or_higher_priority_source"
+    },
+    {
+      "key": "us-np-fnp::fnp-overlay-respiratory-acute",
+      "keptSource": "materialized-np",
+      "droppedSource": "catalog-json",
+      "reason": "richer_or_higher_priority_source"
+    },
+    {
+      "key": "us-np-fnp::fnp-overlay-diabetes-metabolic",
+      "keptSource": "materialized-np",
+      "droppedSource": "catalog-json",
+      "reason": "richer_or_higher_priority_source"
+    },
+    {
+      "key": "us-np-fnp::fnp-overlay-sepsis-infection",
+      "keptSource": "materialized-np",
+      "droppedSource": "catalog-json",
+      "reason": "richer_or_higher_priority_source"
+    },
+    {
+      "key": "us-np-fnp::fnp-overlay-electrolytes-volume",
+      "keptSource": "materialized-np",
+      "droppedSource": "catalog-json",
+      "reason": "richer_or_higher_priority_source"
+    },
+    {
+      "key": "us-np-fnp::fnp-overlay-np-differential-prescribing-chronic",
+      "keptSource": "materialized-np",
+      "droppedSource": "catalog-json",
+      "reason": "richer_or_higher_priority_source"
+    }
+  ]
+}
