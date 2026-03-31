@@ -23,9 +23,12 @@ export const FALLBACK_LOGO_PATH = SITE_LOGO_FALLBACK_PATH;
 
 export const BRAND_NAME = "NurseNest" as const;
 
-/** Inner `<img>` — height-driven scale; width follows aspect ratio (`w-auto`, no intrinsic Next/Image caps). */
+/**
+ * Inner `<img>` — `!h-*` / `!max-w-none` beat Tailwind preflight `img { max-width: 100%; height: auto }`, which
+ * otherwise caps the mark to the link column and ignores intended header height.
+ */
 export const HEADER_BRAND_LOGO_IMG_CLASSNAME =
-  "nn-brand-header-logo block h-20 w-auto max-h-none max-w-none shrink-0 object-contain object-left sm:h-24 md:h-28 lg:h-36 xl:h-40" as const;
+  "nn-brand-header-logo block !h-12 !w-auto !max-w-none !shrink-0 !object-contain object-left sm:!h-14 md:!h-[72px] lg:!h-20 xl:!h-24 2xl:!h-28" as const;
 
 /**
  * Wrapper for `<SiteBrandLogoMark />` — no height/width clamps here; sizing lives on {@link HEADER_BRAND_LOGO_IMG_CLASSNAME}.

@@ -111,7 +111,7 @@ export function SiteHeader() {
         </div>
       </div>
 
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-2 py-3 sm:gap-4 sm:px-4 sm:py-4 lg:px-8">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-2 py-3 sm:gap-4 sm:px-4 md:py-4 lg:px-8 lg:py-5">
         <Link
           href={localizeHref("/")}
           className="group flex shrink-0 items-center gap-2 overflow-visible"

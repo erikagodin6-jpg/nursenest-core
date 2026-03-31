@@ -102,6 +102,11 @@ a {
   text-decoration: none;
 }
 
+/* NurseNest header wordmark: preflight constrains all `img` to parent width + height:auto; keep width uncapped. */
+img.nn-brand-header-logo {
+  max-width: none !important;
+}
+
 .nn-card {
   background: var(--theme-card-bg);
   border: 1px solid var(--theme-card-border);
