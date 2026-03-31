@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 import { auth } from "@/lib/auth";
-import { signOut } from "@/lib/auth";
+import { LearnerShellUserBar } from "@/components/auth/learner-shell-user-bar";
 import { CheckoutSuccessBanner } from "@/components/student/checkout-success-banner";
 import { LearnerThemeControl } from "@/components/student/learner-theme-control";
 import { LearnerAppSectionAnalytics } from "@/components/observability/learner-app-section-analytics";
@@ -73,17 +73,8 @@ export default async function LearnerShellLayout({ children }: { children: React
           </nav>
         </div>
         <div className="flex flex-wrap items-center gap-3">
+          <LearnerShellUserBar />
           <LearnerThemeControl />
-          <form
-            action={async () => {
-              "use server";
-              await signOut({ redirectTo: "/" });
-            }}
-          >
-            <button type="submit" className="rounded-full border border-border bg-white px-3 py-2 text-sm hover:bg-gray-50">
-              Logout
-            </button>
-          </form>
         </div>
       </header>
       <CheckoutSuccessBanner />

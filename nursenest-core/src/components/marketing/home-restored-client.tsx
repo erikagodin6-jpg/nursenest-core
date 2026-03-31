@@ -80,7 +80,8 @@ const HomeBottomSections = dynamic(() => import("@/legacy/marketing/home-bottom-
 });
 
 function formatCount(n: number | undefined): string {
-  if (n === undefined || n === 0) return "---";
+  if (n === undefined) return "—";
+  if (n === 0) return "0";
   if (n < 10) return `${n}`;
   if (n >= 1000) {
     const hundreds = Math.floor(n / 100) * 100;
@@ -100,6 +101,8 @@ type HomeStatsPayload = {
   totalFlashcards: number;
   totalDecks: number;
   storeProductCount: number;
+  questionsByTier?: Record<string, number>;
+  scenarioCount?: number;
 };
 
 type HomeRestoredClientProps = {

@@ -4,10 +4,8 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
-import type { HomeHeroSlide } from "@/config/home-hero-carousel";
 import { MarketingHeroCarousel } from "@/components/marketing/marketing-hero-carousel";
-import { HOMEPAGE_HERO_SLIDE_METADATA, MARKETING_SCREENSHOT_SOURCES } from "@/lib/marketing-assets";
-import { objectKeyFromPublicCdnUrl } from "@/lib/marketing-hero-image";
+import { buildHomepageHeroSlides } from "@/lib/marketing-assets";
 import {
   ArrowRight,
   Star,
@@ -37,8 +35,8 @@ import {
 } from "lucide-react";
 
 function formatCount(n: number | undefined): string {
-
-  if (n === undefined || n === 0) return "---";
+  if (n === undefined) return "—";
+  if (n === 0) return "0";
   if (n < 10) return `${n}`;
   if (n >= 1000) {
     const hundreds = Math.floor(n / 100) * 100;
@@ -63,62 +61,6 @@ function formatMarketingCount(n: number): string {
     return `${tens}+`;
   }
   return `${n}+`;
-}
-
-const screenshotData = MARKETING_SCREENSHOT_SOURCES;
-
-const PLATFORM_SLIDE_DEFS = [
-  { imageKey: "screenshot2", titleKey: "components.homeConversionSections.platformSlide.adaptivePerformance.title", blurbKey: "components.homeConversionSections.platformSlide.adaptivePerformance.blurb" },
-  { imageKey: "screenshot9", titleKey: "components.homeConversionSections.platformSlide.ngnCaseStudy.title", blurbKey: "components.homeConversionSections.platformSlide.ngnCaseStudy.blurb" },
-  { imageKey: "screenshotTest", titleKey: "components.homeConversionSections.platformSlide.examStyleQuestions.title", blurbKey: "components.homeConversionSections.platformSlide.examStyleQuestions.blurb" },
-  { imageKey: "screenshot6", titleKey: "components.homeConversionSections.platformSlide.flashcardMastery.title", blurbKey: "components.homeConversionSections.platformSlide.flashcardMastery.blurb" },
-  { imageKey: "screenshot11", titleKey: "components.homeConversionSections.platformSlide.studyPlan.title", blurbKey: "components.homeConversionSections.platformSlide.studyPlan.blurb" },
-  { imageKey: "screenshot3", titleKey: "components.homeConversionSections.platformSlide.categoryPerformance.title", blurbKey: "components.homeConversionSections.platformSlide.categoryPerformance.blurb" },
-  { imageKey: "screenshot5", titleKey: "components.homeConversionSections.platformSlide.sessionAnalysis.title", blurbKey: "components.homeConversionSections.platformSlide.sessionAnalysis.blurb" },
-  { imageKey: "screenshot10", titleKey: "components.homeConversionSections.platformSlide.progressComparison.title", blurbKey: "components.homeConversionSections.platformSlide.progressComparison.blurb" },
-] as const;
-
-/** Map curated “Platform in Action” picks to `HomeHeroSlide` — same shape as hero; URLs via `getMarketingHeroImageUrlChain` in `MarketingHeroCarousel`. */
-function buildPlatformActionSlides(t: (key: string) => string): readonly HomeHeroSlide[] {
-  return PLATFORM_SLIDE_DEFS.map((item, i) => {
-    const title = t(item.titleKey);
-    const blurb = t(item.blurbKey);
-    const bundle = screenshotData[item.imageKey];
-    if (bundle) {
-      return {
-        index: i + 1,
-        objectKey: objectKeyFromPublicCdnUrl(bundle.fallback),
-        publicUrl: bundle.fallback,
-        title,
-        caption: blurb,
-        alt: `${title}. ${blurb}`.slice(0, 220),
-      };
-    }
-    const heroFromKey = /^screenshot(\d+)$/.exec(item.imageKey);
-    if (heroFromKey) {
-      const n = Number(heroFromKey[1]);
-      const heroMeta = HOMEPAGE_HERO_SLIDE_METADATA[n - 1];
-      if (heroMeta) {
-        return {
-          index: i + 1,
-          objectKey: heroMeta.objectKey,
-          publicUrl: heroMeta.publicUrl,
-          title,
-          caption: blurb,
-          alt: `${title}. ${blurb}`.slice(0, 220),
-        };
-      }
-    }
-    const fallback = HOMEPAGE_HERO_SLIDE_METADATA[i % HOMEPAGE_HERO_SLIDE_METADATA.length];
-    return {
-      index: i + 1,
-      objectKey: fallback.objectKey,
-      publicUrl: fallback.publicUrl,
-      title,
-      caption: blurb,
-      alt: `${title}. ${blurb}`.slice(0, 220),
-    };
-  });
 }
 
 const sampleQuestion = {
@@ -563,7 +505,7 @@ function FeatureCardsSection({ questionCount }: { questionCount: number }) {
 
 function ScreenshotCarouselSection() {
   const { t, locale } = useMarketingI18n();
-  const platformSlides = useMemo(() => buildPlatformActionSlides(t), [t, locale]);
+  const platformSlides = useMemo(() => buildHomepageHeroSlides(t), [t]);
   const hasSlides = platformSlides.length > 0;
 
   return (

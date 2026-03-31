@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
 import {
+  DB_PUBLISHED,
   publicMarketingExamQuestionWhere,
   publicMarketingLessonWhere,
 } from "@/lib/entitlements/content-access-scope";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import { safePrismaCount } from "@/lib/prisma/safe-reads";
+import { safePrismaCount, withPrismaReadFallback } from "@/lib/prisma/safe-reads";
 
 /** Public marketing stats — freemium-visible scope only. Tolerates missing `content_items` / `exam_questions` in prod. */
 export async function GET() {
@@ -17,6 +18,8 @@ export async function GET() {
       totalFlashcards: 0,
       totalDecks: 0,
       storeProductCount: 0,
+      questionsByTier: {} as Record<string, number>,
+      scenarioCount: 0,
       degraded: true,
     });
   }
@@ -28,14 +31,44 @@ export async function GET() {
     prisma.examQuestion.count({ where: publicMarketingExamQuestionWhere() }),
   );
 
+  const tierAgg = await withPrismaReadFallback(
+    "home_stats.exam_questions_by_tier",
+    () =>
+      prisma.examQuestion.groupBy({
+        by: ["tier"],
+        where: { status: DB_PUBLISHED },
+        _count: { _all: true },
+      }),
+    [],
+  );
+
+  const scenariosR = await safePrismaCount("home_stats.exam_questions_scenarios", () =>
+    prisma.examQuestion.count({
+      where: { status: DB_PUBLISHED, isScenario: true },
+    }),
+  );
+
   if (lessonsR.warning) {
     safeServerLog("prisma", "home_stats_optional_read_failed", { target: "content_items" });
   }
   if (questionsR.warning) {
     safeServerLog("prisma", "home_stats_optional_read_failed", { target: "exam_questions" });
   }
+  if (tierAgg.warning) {
+    safeServerLog("prisma", "home_stats_optional_read_failed", { target: "exam_questions_by_tier" });
+  }
+  if (scenariosR.warning) {
+    safeServerLog("prisma", "home_stats_optional_read_failed", { target: "exam_questions_scenarios" });
+  }
 
-  const degraded = Boolean(lessonsR.warning || questionsR.warning);
+  const questionsByTier: Record<string, number> = {};
+  for (const row of tierAgg.value) {
+    questionsByTier[row.tier] = row._count._all;
+  }
+
+  const degraded = Boolean(
+    lessonsR.warning || questionsR.warning || tierAgg.warning || scenariosR.warning,
+  );
 
   return NextResponse.json({
     totalLessons: lessonsR.value,
@@ -43,6 +76,8 @@ export async function GET() {
     totalFlashcards: 0,
     totalDecks: 0,
     storeProductCount: 0,
+    questionsByTier,
+    scenarioCount: scenariosR.value,
     ...(degraded ? { degraded: true } : {}),
   });
 }

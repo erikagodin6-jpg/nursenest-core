@@ -21,6 +21,7 @@ import { MARKETING_LANGUAGES } from "@/lib/i18n/marketing-languages";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
+import { MarketingHeaderAuthDesktop, MarketingHeaderAuthMobile } from "@/components/auth/marketing-header-auth";
 import { ThemePicker } from "@/components/theme/theme-picker";
 import { Button } from "@/components/ui/button";
 
@@ -110,8 +111,8 @@ export function SiteHeader() {
         </div>
       </div>
 
-      <div className="mx-auto flex h-11 max-w-7xl items-center justify-between gap-2 px-2 sm:h-16 sm:px-4 lg:px-8">
-        <Link href={localizeHref("/")} className="group flex min-w-0 items-center gap-2" aria-label="NurseNest home">
+      <div className="mx-auto flex min-h-[88px] max-w-7xl items-center justify-between gap-2 px-2 sm:px-4 lg:px-8">
+        <Link href={localizeHref("/")} className="group flex shrink-0 items-center gap-2" aria-label="NurseNest home">
           <SiteBrandLogoMark />
         </Link>
 
@@ -213,15 +214,7 @@ export function SiteHeader() {
               themeGroupDark: t("nav.themeGroupDark"),
             }}
           />
-          <Link
-            href={localizeHref("/login")}
-            className="hidden rounded-full px-3 py-2 text-sm font-medium text-[var(--theme-menu-text)] hover:bg-[var(--theme-menu-hover-bg)] hover:text-[var(--theme-menu-hover-text)] sm:inline-flex"
-          >
-            {t("nav.logIn")}
-          </Link>
-          <Link href={localizeHref("/signup")} className="hidden nn-btn-primary px-4 py-2 text-sm font-bold sm:inline-flex">
-            {t("nav.signUp")}
-          </Link>
+          <MarketingHeaderAuthDesktop />
           <Button
             type="button"
             variant="ghost"
@@ -269,7 +262,7 @@ export function SiteHeader() {
           {/* h-[100dvh] + min-h-0 scroll region: avoids clipped menu on mobile browsers with dynamic toolbars */}
           <div className="absolute right-0 top-0 flex h-[100dvh] max-h-[100dvh] w-[min(100%,20rem)] flex-col border-l border-[var(--theme-separator)] bg-[var(--theme-card-bg)] shadow-[var(--shadow-elevated)]">
             <div className="flex shrink-0 items-center justify-between border-b border-[var(--theme-separator)] p-4 pt-[max(1rem,env(safe-area-inset-top))]">
-              <Link href={localizeHref("/")} className="flex min-w-0 items-center gap-2" aria-label="NurseNest home">
+              <Link href={localizeHref("/")} className="flex shrink-0 items-center gap-2" aria-label="NurseNest home">
                 <SiteBrandLogoMark />
               </Link>
               <Button type="button" variant="ghost" className="h-9 w-9 p-0" aria-label={t("nav.closeMenu")} onClick={() => setMobileOpen(false)}>
@@ -344,22 +337,7 @@ export function SiteHeader() {
                   {item.label}
                 </Link>
               ))}
-              <div className="mt-4 flex gap-2">
-                <Link
-                  href={localizeHref("/login")}
-                  className="flex-1 rounded-full border border-[var(--theme-nav-border)] py-2 text-center text-sm font-semibold"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  {t("nav.logIn")}
-                </Link>
-                <Link
-                  href={localizeHref("/signup")}
-                  className="nn-btn-primary flex-1 py-2 text-center text-sm font-bold"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  {t("nav.signUp")}
-                </Link>
-              </div>
+              <MarketingHeaderAuthMobile onNavigate={() => setMobileOpen(false)} />
             </div>
           </div>
         </div>

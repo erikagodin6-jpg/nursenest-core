@@ -1,8 +1,16 @@
 "use client";
 
+import { useEffect, useMemo, useState } from "react";
 import { NURSING_TIERS, PRE_NURSING_GOAL, NEW_GRAD_GOAL, ALLIED_HEALTH_CAREERS } from "@shared/platform-manifest";
 import { TrendingUp } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+
+type HomeStatsResponse = {
+  totalLessons?: number;
+  questionCount?: number;
+  questionsByTier?: Record<string, number>;
+  scenarioCount?: number;
+};
 
 function ProgressRow({
   label,
@@ -15,43 +23,72 @@ function ProgressRow({
   goal: number;
   color: string;
 }) {
-  const pct = Math.min(100, Math.round((current / goal) * 100));
+  const pct = goal > 0 ? Math.min(100, Math.round((current / goal) * 100)) : 0;
+  const barW = goal > 0 && current > 0 ? Math.max(pct, 3) : 0;
   return (
     <div className="space-y-1.5" data-testid={`tracker-row-${label.toLowerCase().replace(/[\s()/]+/g, "-")}`}>
       <div className="flex items-center justify-between text-sm">
         <span className="font-medium text-[var(--theme-body-text)]">{label}</span>
-        <span className="text-xs text-[var(--theme-muted-text)]">
-          {current > 0 ? current.toLocaleString() : "---"} / {goal.toLocaleString()}
+        <span className="tabular-nums text-xs text-[var(--theme-muted-text)]">
+          {current.toLocaleString()} / {goal.toLocaleString()}
         </span>
       </div>
       <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
-        <div className={`h-full rounded-full ${color} transition-all duration-700`} style={{ width: `${current > 0 ? Math.max(pct, 3) : 0}%` }} />
+        <div className={`h-full rounded-full ${color} transition-all duration-700`} style={{ width: `${barW}%` }} />
       </div>
-      {current > 0 && <div className="text-right text-[10px] text-[var(--theme-muted-text)]">{pct}% of goal</div>}
+      {goal > 0 ? (
+        <div className="text-right text-[10px] text-[var(--theme-muted-text)]">{pct}% of goal</div>
+      ) : null}
     </div>
   );
 }
 
 export default function HeroExpansionTracker() {
   const { t } = useMarketingI18n();
-  const rpnQ = 0;
-  const rnQ = 0;
-  const npQ = 0;
+  const [stats, setStats] = useState<HomeStatsResponse | null>(null);
 
-  const tierRows = [
-    { label: `${NURSING_TIERS.rpn.shortLabel} Question Bank`, current: rpnQ, goal: NURSING_TIERS.rpn.goalQuestions, color: "bg-primary" },
-    { label: `${NURSING_TIERS.rn.shortLabel} Question Bank`, current: rnQ, goal: NURSING_TIERS.rn.goalQuestions, color: "bg-primary" },
-    { label: `${NURSING_TIERS.np.shortLabel} Question Bank`, current: npQ, goal: NURSING_TIERS.np.goalQuestions, color: "bg-primary" },
-    { label: "Pre-Nursing", current: 0, goal: PRE_NURSING_GOAL.goalQuestions, color: "bg-primary" },
-    { label: "New Grad Scenarios", current: 0, goal: NEW_GRAD_GOAL.goalScenarios, color: "bg-primary" },
-  ];
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/public/home-stats")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d: HomeStatsResponse | null) => {
+        if (cancelled || !d) return;
+        setStats(d);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
-  const alliedRows = ALLIED_HEALTH_CAREERS.filter((c) => c.tier === "major").map((c) => ({
-    label: c.label.replace(/ \(.*\)/, ""),
-    current: 0,
-    goal: c.goalQuestions,
-    color: "bg-primary",
-  }));
+  const { tierRows, alliedRows } = useMemo(() => {
+    const by = stats?.questionsByTier ?? {};
+    const rpnQ = (by.rpn ?? 0) + (by.lvn ?? 0);
+    const rnQ = by.rn ?? 0;
+    const npQ = by.np ?? 0;
+    const preNursing = Math.min(stats?.totalLessons ?? 0, PRE_NURSING_GOAL.goalQuestions);
+    const newGrad = Math.min(stats?.scenarioCount ?? 0, NEW_GRAD_GOAL.goalScenarios);
+
+    const tr = [
+      { label: `${NURSING_TIERS.rpn.shortLabel} Question Bank`, current: rpnQ, goal: NURSING_TIERS.rpn.goalQuestions, color: "bg-primary" },
+      { label: `${NURSING_TIERS.rn.shortLabel} Question Bank`, current: rnQ, goal: NURSING_TIERS.rn.goalQuestions, color: "bg-primary" },
+      { label: `${NURSING_TIERS.np.shortLabel} Question Bank`, current: npQ, goal: NURSING_TIERS.np.goalQuestions, color: "bg-primary" },
+      { label: "Pre-Nursing", current: preNursing, goal: PRE_NURSING_GOAL.goalQuestions, color: "bg-primary" },
+      { label: "New Grad Scenarios", current: newGrad, goal: NEW_GRAD_GOAL.goalScenarios, color: "bg-primary" },
+    ];
+
+    const alliedTotal = by.allied ?? 0;
+    const majors = ALLIED_HEALTH_CAREERS.filter((c) => c.tier === "major");
+    const sumGoals = majors.reduce((s, c) => s + c.goalQuestions, 0);
+    const ar = majors.map((c) => ({
+      label: c.label.replace(/ \(.*\)/, ""),
+      current: sumGoals > 0 ? Math.round((alliedTotal * c.goalQuestions) / sumGoals) : 0,
+      goal: c.goalQuestions,
+      color: "bg-primary",
+    }));
+
+    return { tierRows: tr, alliedRows: ar };
+  }, [stats]);
 
   return (
     <section

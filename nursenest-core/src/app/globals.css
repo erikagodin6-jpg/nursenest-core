@@ -73,9 +73,10 @@ body {
   /**
    * Solid primary fills: body copy is gray — buttons/links with only `bg-primary` otherwise
    * inherit gray-on-purple and fail WCAG. `--color-primary-foreground` is white on brand purple.
+   * `!important` wins over `text-muted-foreground` / `text-foreground` on the same node.
    */
   .bg-primary {
-    color: var(--color-primary-foreground);
+    color: var(--color-primary-foreground) !important;
   }
 }
 

@@ -1,7 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { BRAND_NAME, DEFAULT_BRAND_LOGO_MARK_CLASSNAME, LOCAL_BRAND_MARK_PATH } from "@/lib/branding/logo-config";
+import {
+  BRAND_NAME,
+  DEFAULT_BRAND_LOGO_MARK_CLASSNAME,
+  HEADER_BRAND_LOGO_IMG_CLASSNAME,
+  LOCAL_BRAND_MARK_PATH,
+} from "@/lib/branding/logo-config";
 import { logBrandLogoLoadFailure } from "@/lib/observability/brand-logo-client-log";
 import { useThemeLogo } from "@/lib/theme/use-theme-logo";
 
@@ -9,7 +14,7 @@ export type BrandMarkLoadState = "loading" | "ready" | "error";
 
 /**
  * Theme-aware brand mark: `useThemeLogo` (tracks `data-theme`) → `getHeaderBrandLogoLoadChain` (CDN/proxy → default-theme rasters → local SVG → legacy).
- * Uses {@link DEFAULT_BRAND_LOGO_MARK_CLASSNAME} for consistent header/footer sizing and reserved height (reduces CLS).
+ * Uses {@link DEFAULT_BRAND_LOGO_MARK_CLASSNAME} on the wrapper; raster uses {@link HEADER_BRAND_LOGO_IMG_CLASSNAME} on the `<img>`.
  */
 export function SiteBrandLogoMark({
   className = DEFAULT_BRAND_LOGO_MARK_CLASSNAME,
@@ -65,27 +70,23 @@ export function SiteBrandLogoMark({
   if (showTextFallback) {
     return (
       <span
-        className={`inline-flex min-h-[40px] min-w-0 max-w-[min(100%,16rem)] shrink-0 items-center md:min-h-[56px] ${className}`}
+        className={`inline-flex min-h-[3.5rem] shrink-0 items-center ${className}`}
         aria-label={BRAND_NAME}
       >
-        <span className="text-xl font-extrabold tracking-tight text-primary md:text-2xl">{BRAND_NAME}</span>
+        <span className="text-2xl font-extrabold tracking-tight text-primary sm:text-3xl md:text-4xl">{BRAND_NAME}</span>
       </span>
     );
   }
 
   return (
-    <span
-      className={`inline-flex w-auto min-w-0 max-w-[min(100%,16rem)] shrink-0 items-center justify-start ${className}`}
-    >
+    <span className={`inline-flex w-auto shrink-0 items-center justify-start ${className}`}>
       <img
         key={`${themeId}-${safeIndex}-${src}`}
         src={src}
         alt={BRAND_NAME}
-        width={180}
-        height={56}
         loading="eager"
         decoding="async"
-        className="h-full max-h-full w-auto min-w-0 object-contain object-left"
+        className={HEADER_BRAND_LOGO_IMG_CLASSNAME}
         onLoad={handleLoad}
         onError={handleError}
       />

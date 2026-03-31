@@ -17,6 +17,14 @@ const APP_LESSONS_PAGE_SIZE = 15;
 
 type AppLessonListRow = { id: string; title: string; summary: string | null };
 
+type LessonsListBlock = {
+  source: "content_items" | "pathway_lessons" | "legacy_content_map";
+  total: number;
+  page: number;
+  pageCount: number;
+  rows: AppLessonListRow[];
+};
+
 function pathwayLessonCardSummary(row: {
   seoDescription: string;
   topic: string;
@@ -67,7 +75,7 @@ export default async function LessonsPage({ searchParams }: Props) {
   const sp = await searchParams;
   const pageRequested = Math.max(1, Number(sp.page ?? "1") || 1);
 
-  const lessonsBlock = await withDatabaseFallback(async () => {
+  const lessonsBlockFromDb = await withDatabaseFallback(async () => {
     const learnerPathRow = userId
       ? await prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } })
       : null;
@@ -149,17 +157,24 @@ export default async function LessonsPage({ searchParams }: Props) {
     };
   }, null);
 
-  if (lessonsBlock === null) {
-    safeServerLog("page_lessons", "prisma_find_failed", {});
-    return (
-      <main>
-        <h1 className="text-3xl font-bold">Lessons</h1>
-        <p className="nn-card mt-4 p-6 text-sm text-muted">
-          Lessons couldn’t load because the database was unreachable or the request failed—not because your list is empty.
-          Refresh or try again shortly.
-        </p>
-      </main>
-    );
+  let lessonsBlock: LessonsListBlock;
+  if (lessonsBlockFromDb !== null) {
+    lessonsBlock = lessonsBlockFromDb;
+  } else {
+    safeServerLog("page_lessons", "lesson_list_db_unavailable_fallback_legacy", {});
+    const legacy = await paginateLegacyContentMapLessons(entitlement, pageRequested, APP_LESSONS_PAGE_SIZE);
+    const rows: AppLessonListRow[] = legacy.rows.map((r) => ({
+      id: r.id,
+      title: r.title,
+      summary: r.summary,
+    }));
+    lessonsBlock = {
+      source: "legacy_content_map",
+      total: legacy.total,
+      page: legacy.page,
+      pageCount: legacy.pageCount,
+      rows,
+    };
   }
 
   if (pageRequested !== lessonsBlock.page) {

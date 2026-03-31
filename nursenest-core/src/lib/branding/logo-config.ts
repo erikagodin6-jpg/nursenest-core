@@ -23,9 +23,11 @@ export const FALLBACK_LOGO_PATH = SITE_LOGO_FALLBACK_PATH;
 
 export const BRAND_NAME = "NurseNest" as const;
 
+/** Inner `<img>` — responsive height only via Tailwind; no fixed pixel props on the element. */
+export const HEADER_BRAND_LOGO_IMG_CLASSNAME =
+  "block h-14 w-auto min-h-[3.5rem] sm:h-16 md:h-[4.25rem] lg:h-[4.5rem] max-h-none object-contain object-left" as const;
+
 /**
- * Default classes for `<SiteBrandLogoMark />` — use on marketing, app shell, and footer for consistent header height and responsive scaling.
- * Reserved vertical space reduces layout shift when the raster loads.
+ * Wrapper for `<SiteBrandLogoMark />` — do not set h-/max-w- here; sizing lives on {@link HEADER_BRAND_LOGO_IMG_CLASSNAME}.
  */
-export const DEFAULT_BRAND_LOGO_MARK_CLASSNAME =
-  "h-10 w-auto max-w-[min(100%,14rem)] object-contain object-left md:h-14" as const;
+export const DEFAULT_BRAND_LOGO_MARK_CLASSNAME = "object-left" as const;

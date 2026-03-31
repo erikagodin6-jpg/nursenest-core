@@ -17,6 +17,8 @@ declare module "next-auth" {
 
 declare module "next-auth/jwt" {
   interface JWT {
+    email?: string | null;
+    name?: string | null;
     role?: "LEARNER" | "ADMIN";
     country?: "CA" | "US";
     tier?: "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED";

@@ -11,11 +11,7 @@ import {
   nursenestImagesSpaceObjectUrl,
 } from "@/config/marketing-cdn.catalog";
 import { FALLBACK_LOGO_PATH, PRIMARY_LOGO_URL } from "@/lib/branding/logo-config";
-import {
-  getThemeLogoObjectKeyFromNormalizedId,
-  getThemeLogoPublicPath,
-  getThemeLogoUrl,
-} from "@/lib/branding/theme-brand-logo-cdn";
+import { getThemeLogoObjectKeyFromNormalizedId, getThemeLogoUrl } from "@/lib/branding/theme-brand-logo-cdn";
 import {
   marketingImageUsesProxy,
   marketingProxyFallbackEnabled,
@@ -61,13 +57,10 @@ export function getThemeLogoLoadChain(themeId?: string | null): string[] {
   const pubFb = getThemeLogoUrl(defId);
   const proxy = marketingProxyPathForKey(getThemeLogoObjectKeyFromNormalizedId(id));
   const proxyFb = marketingProxyPathForKey(getThemeLogoObjectKeyFromNormalizedId(defId));
-  const sameOrigin = getThemeLogoPublicPath(id);
-  const sameOriginFb = getThemeLogoPublicPath(defId);
 
-  // Try active theme rasters, then default-theme rasters, then the shared local SVG last.
-  // `getThemeLogoPublicPath` is the same lavender-tinted SVG for every id — inserting it before
-  // default-theme CDN/proxy URLs hid `lavenderbrandlogo.png` when the theme asset failed.
-  return uniqueStrings([proxy, pub, proxyFb, pubFb, sameOrigin, sameOriginFb]);
+  // Active theme raster → proxy → default theme raster → proxy. Local SVG / legacy / generic URL are appended only in
+  // `getHeaderBrandLogoLoadChain` so ocean (etc.) never falls through to a purple same-origin wordmark before theme URLs are exhausted.
+  return uniqueStrings([pub, proxy, pubFb, proxyFb]);
 }
 
 const PRIMARY_BRAND_MARK_EXTENSIONS = [".svg", ".png", ".webp", ".jpg"] as const;
@@ -108,8 +101,7 @@ export function getBlueBrandMarkLoadChain(): string[] {
 }
 
 /**
- * Header mark load order: per-theme assets first (proxy → CDN → default theme), then legacy GIF/SVG,
- * then optional mask-tinted blue stems if enabled, then `PRIMARY_LOGO_URL` (generic blue) last only if needed.
+ * Header mark load order: active theme rasters → default theme rasters → legacy URL → local SVG → optional tinted stems → generic CDN last.
  */
 export function getHeaderBrandLogoLoadChain(themeId?: string | null): string[] {
   const id = normalizeThemeIdForLogo(themeId ?? NURSENEST_DEFAULT_THEME);

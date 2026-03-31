@@ -133,22 +133,20 @@ export default async function LessonDetailPage({ params }: Props) {
     return { kind: "legacy_ok" as const, lesson: legacyLesson };
   }, null);
 
-  if (resolved === null) {
-    safeServerLog("page_lesson_detail", "db_unavailable", { id });
-    return (
-      <main className="space-y-4">
-        <p className="text-sm text-muted">
-          We couldn’t load this lesson because the database was unreachable or the request failed—not because the lesson is
-          missing. Try again in a moment.
-        </p>
-        <Link className="text-sm font-semibold text-primary underline" href="/app/lessons">
-          Back to lessons
-        </Link>
-      </main>
-    );
+  let resolvedLesson = resolved;
+  if (resolvedLesson === null) {
+    safeServerLog("page_lesson_detail", "db_unavailable_attempting_legacy_only", { id });
+    const legacyLesson = await getLegacyContentMapLessonById(id);
+    if (!legacyLesson) {
+      resolvedLesson = { kind: "not_found" as const };
+    } else if (!canAccessLegacyContentMapLesson(entitlement, id, legacyLesson)) {
+      resolvedLesson = { kind: "out_of_plan" as const };
+    } else {
+      resolvedLesson = { kind: "legacy_ok" as const, lesson: legacyLesson };
+    }
   }
 
-  if (resolved.kind === "not_found") {
+  if (resolvedLesson.kind === "not_found") {
     safeServerLog("page_lesson_detail", "lesson_not_found", { id });
     return (
       <main className="space-y-4">
@@ -160,7 +158,7 @@ export default async function LessonDetailPage({ params }: Props) {
     );
   }
 
-  if (resolved.kind === "out_of_plan") {
+  if (resolvedLesson.kind === "out_of_plan") {
     safeServerLog("page_lesson_detail", "lesson_out_of_entitlement", { id });
     logBlockedAccess({
       surface: "page_lesson_detail",
@@ -199,15 +197,15 @@ export default async function LessonDetailPage({ params }: Props) {
     );
   }
 
-  if (resolved.kind === "legacy_ok") {
-    const title = legacyContentMapLessonTitle(resolved.lesson, id);
+  if (resolvedLesson.kind === "legacy_ok") {
+    const title = legacyContentMapLessonTitle(resolvedLesson.lesson, id);
     return (
       <main>
         <Link href="/app/lessons" className="text-sm font-medium text-primary hover:underline">
           ← All lessons
         </Link>
         <h1 className="mt-4 text-3xl font-bold">{title}</h1>
-        <LegacyMonolithLessonBody lesson={resolved.lesson} />
+        <LegacyMonolithLessonBody lesson={resolvedLesson.lesson} />
         <div className="mt-10 flex flex-wrap gap-2 border-t border-border pt-6">
           <Link
             href="/app/questions"
@@ -226,8 +224,8 @@ export default async function LessonDetailPage({ params }: Props) {
     );
   }
 
-  if (resolved.kind === "pathway_ok") {
-    const record = resolved.record;
+  if (resolvedLesson.kind === "pathway_ok") {
+    const record = resolvedLesson.record;
     const visible = visibleSectionsForLesson(record, true);
     return (
       <main>
@@ -266,7 +264,7 @@ export default async function LessonDetailPage({ params }: Props) {
     );
   }
 
-  const row = resolved.row;
+  const row = resolvedLesson.row;
 
   return (
     <main>
