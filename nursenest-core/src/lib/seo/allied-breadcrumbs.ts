@@ -4,8 +4,8 @@ import { toAbsoluteSiteUrl } from "@/lib/seo/breadcrumb-utils";
 const HOME: BreadcrumbCrumb = { name: "Home", href: "/" };
 const HOME_ITEM: BreadcrumbSchemaItem = { name: "Home", item: "/" };
 
-const HUB_PATH = "/allied-health-exam-prep";
-const HUB_LABEL = "Allied health exam prep";
+const HUB_PATH = "/allied-health";
+const HUB_LABEL = "Allied health";
 
 export function alliedHubBreadcrumbs(): { crumbs: BreadcrumbCrumb[]; schemaItems: BreadcrumbSchemaItem[] } {
   return {
@@ -14,7 +14,7 @@ export function alliedHubBreadcrumbs(): { crumbs: BreadcrumbCrumb[]; schemaItems
   };
 }
 
-export function alliedProfessionBreadcrumbs(professionLabel: string, professionPath: string): {
+export function alliedProfessionBreadcrumbs(professionLabel: string, professionHeroPath: string): {
   crumbs: BreadcrumbCrumb[];
   schemaItems: BreadcrumbSchemaItem[];
 } {
@@ -23,53 +23,57 @@ export function alliedProfessionBreadcrumbs(professionLabel: string, professionP
     schemaItems: [
       HOME_ITEM,
       { name: HUB_LABEL, item: toAbsoluteSiteUrl(HUB_PATH) },
-      { name: professionLabel, item: toAbsoluteSiteUrl(professionPath) },
+      { name: professionLabel, item: toAbsoluteSiteUrl(professionHeroPath) },
     ],
   };
 }
 
-export function alliedLessonsHubBreadcrumbs(professionLabel: string, professionPath: string, page: number): {
+export function alliedLessonsHubBreadcrumbs(
+  professionLabel: string,
+  professionHeroPath: string,
+  lessonsBasePath: string,
+  page: number,
+): {
   crumbs: BreadcrumbCrumb[];
   schemaItems: BreadcrumbSchemaItem[];
 } {
-  const lessonsPath = `${professionPath}/lessons`;
   const label = page > 1 ? `Lessons (page ${page})` : "Lessons";
   return {
     crumbs: [
       HOME,
       { name: HUB_LABEL, href: HUB_PATH },
-      { name: professionLabel, href: professionPath },
+      { name: professionLabel, href: professionHeroPath },
       { name: label, href: undefined },
     ],
     schemaItems: [
       HOME_ITEM,
       { name: HUB_LABEL, item: toAbsoluteSiteUrl(HUB_PATH) },
-      { name: professionLabel, item: toAbsoluteSiteUrl(professionPath) },
-      { name: "Lessons", item: toAbsoluteSiteUrl(lessonsPath) },
+      { name: professionLabel, item: toAbsoluteSiteUrl(professionHeroPath) },
+      { name: "Lessons", item: toAbsoluteSiteUrl(lessonsBasePath) },
     ],
   };
 }
 
 export function alliedLessonDetailBreadcrumbs(
   professionLabel: string,
-  professionPath: string,
+  professionHeroPath: string,
+  lessonsBasePath: string,
   lessonTitle: string,
   lessonPath: string,
 ): { crumbs: BreadcrumbCrumb[]; schemaItems: BreadcrumbSchemaItem[] } {
-  const lessonsPath = `${professionPath}/lessons`;
   return {
     crumbs: [
       HOME,
       { name: HUB_LABEL, href: HUB_PATH },
-      { name: professionLabel, href: professionPath },
-      { name: "Lessons", href: lessonsPath },
+      { name: professionLabel, href: professionHeroPath },
+      { name: "Lessons", href: lessonsBasePath },
       { name: lessonTitle, href: undefined },
     ],
     schemaItems: [
       HOME_ITEM,
       { name: HUB_LABEL, item: toAbsoluteSiteUrl(HUB_PATH) },
-      { name: professionLabel, item: toAbsoluteSiteUrl(professionPath) },
-      { name: "Lessons", item: toAbsoluteSiteUrl(lessonsPath) },
+      { name: professionLabel, item: toAbsoluteSiteUrl(professionHeroPath) },
+      { name: "Lessons", item: toAbsoluteSiteUrl(lessonsBasePath) },
       { name: lessonTitle, item: toAbsoluteSiteUrl(lessonPath) },
     ],
   };

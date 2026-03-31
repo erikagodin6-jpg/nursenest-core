@@ -67,10 +67,10 @@ export function collectExamPathwayUrls(origin: string): string[] {
 /** Allied marketing hub + profession guides + lesson index pages (not every paginated query string). */
 export function collectAlliedMarketingUrls(origin: string): string[] {
   const o = normalizeOrigin(origin);
-  const urls: string[] = [`${o}/allied-health-exam-prep`];
+  const urls: string[] = [`${o}/allied-health`];
   for (const p of ALLIED_PROFESSIONS) {
     urls.push(`${o}/allied-health/${p.segment}`);
-    urls.push(`${o}/allied-health/${p.segment}/lessons`);
+    urls.push(`${o}/allied-health/${p.professionKey}/lessons`);
   }
   return urls;
 }

@@ -1,10 +1,12 @@
-import { ContentStatus } from "@prisma/client";
+import { ContentStatus, TierCode } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { lessonAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import { pathwayLessonsAppListWhere } from "@/lib/lessons/app-pathway-lesson-list-scope";
+import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
+import { filterWeakTopicsForAlliedProfession } from "@/lib/allied/allied-weak-topic-filter";
 import { computeReadiness, type ReadinessResult } from "@/lib/learner/readiness-score";
 import { loadSessionGradingAggregate, type SessionGradingAggregate } from "@/lib/learner/session-grading-aggregate";
 import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
@@ -63,7 +65,7 @@ export async function loadLearnerDashboard(
 
   const user = await prisma.user.findUnique({
     where: { id: userId },
-    select: { learnerPath: true },
+    select: { learnerPath: true, tier: true, alliedProfessionKey: true },
   });
   const learnerPath = user?.learnerPath ?? null;
 
@@ -122,6 +124,12 @@ export async function loadLearnerDashboard(
   } catch {
     weakTopics = [];
     recommendedQuizTopic = null;
+  }
+
+  if (user?.tier === TierCode.ALLIED && user.alliedProfessionKey) {
+    const ap = getAlliedProfessionByProfessionKey(user.alliedProfessionKey);
+    weakTopics = filterWeakTopicsForAlliedProfession(weakTopics, ap);
+    recommendedQuizTopic = weakTopics[0]?.topic ?? null;
   }
   try {
     practiceAgg = await loadSessionGradingAggregate(userId, entitlement, 8);

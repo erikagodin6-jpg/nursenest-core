@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { PathwayLessonBody } from "@/components/lessons/pathway-lesson-body";
 import { PathwayLessonQuizzes } from "@/components/lessons/pathway-lesson-quizzes";
@@ -9,7 +9,12 @@ import { PathwayLessonActions } from "@/components/lessons/pathway-lesson-action
 import { PathwayLessonPreviewBanner } from "@/components/lessons/pathway-lesson-preview-banner";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { alliedLessonMatchesProfessionFilter } from "@/lib/allied/allied-lesson-access";
-import { getAlliedProfessionBySegment, getPathwayOrThrow } from "@/lib/allied/allied-professions-registry";
+import {
+  getAlliedProfessionByHeroSegment,
+  getAlliedProfessionByProfessionKey,
+  getPathwayOrThrow,
+  isAlliedHeroExamPrepSlug,
+} from "@/lib/allied/allied-professions-registry";
 import {
   canViewFullPathwayLesson,
   getPathwayLessonPreviewKind,
@@ -40,17 +45,27 @@ export function generateStaticParams() {
   return [];
 }
 
-type Props = { params: Promise<{ professionSegment: string; lessonSlug: string }> };
+type Props = { params: Promise<{ slug: string; lessonSlug: string }> };
+
+function resolveProfession(slug: string) {
+  if (isAlliedHeroExamPrepSlug(slug)) {
+    const byHero = getAlliedProfessionByHeroSegment(slug);
+    return byHero ? { prof: byHero, mode: "hero" as const } : null;
+  }
+  const byKey = getAlliedProfessionByProfessionKey(slug);
+  return byKey ? { prof: byKey, mode: "key" as const } : null;
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { professionSegment, lessonSlug } = await params;
-  const prof = getAlliedProfessionBySegment(professionSegment);
+  const { slug, lessonSlug } = await params;
+  const resolved = resolveProfession(slug);
+  const prof = resolved?.prof;
   const pathway = prof ? getPathwayOrThrow(prof.pathwayId) : undefined;
   const lessonContentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
   const lesson = pathway ? await getPathwayLesson(pathway.id, lessonSlug, lessonContentLocale) : undefined;
   if (!prof || !pathway || !lesson) return {};
   if (!alliedLessonMatchesProfessionFilter(lesson, prof.topicSlugsIn)) return {};
-  const path = `/allied-health/${prof.segment}/lessons/${lesson.slug}`;
+  const path = `/allied-health/${prof.professionKey}/lessons/${lesson.slug}`;
   const canonical = absoluteUrl(path);
   return {
     title: lesson.seoTitle,
@@ -60,10 +75,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function AlliedProfessionLessonDetailPage({ params }: Props) {
-  const { professionSegment, lessonSlug } = await params;
-  const prof = getAlliedProfessionBySegment(professionSegment);
-  if (!prof) notFound();
+export default async function AlliedHealthSlugLessonDetailPage({ params }: Props) {
+  const { slug, lessonSlug } = await params;
+  const resolved = resolveProfession(slug);
+  if (!resolved) notFound();
+  const { prof, mode } = resolved;
+
+  if (mode === "hero") {
+    redirect(`/allied-health/${prof.professionKey}/lessons/${encodeURIComponent(lessonSlug)}`);
+  }
 
   const pathway = getPathwayOrThrow(prof.pathwayId);
   if (!pathway) notFound();
@@ -97,7 +117,8 @@ export default async function AlliedProfessionLessonDetailPage({ params }: Props
   const lockedSections =
     !fullAccess && lesson.sections.length > visible.length ? lesson.sections.slice(visible.length) : [];
 
-  const base = `/allied-health/${prof.segment}/lessons`;
+  const professionHeroPath = `/allied-health/${prof.segment}`;
+  const base = `/allied-health/${prof.professionKey}/lessons`;
   const lessonPath = `${base}/${lesson.slug}`;
 
   let related: Awaited<ReturnType<typeof getRelatedPathwayLessons>> = [];
@@ -108,7 +129,13 @@ export default async function AlliedProfessionLessonDetailPage({ params }: Props
     related = [];
   }
 
-  const { crumbs, schemaItems } = alliedLessonDetailBreadcrumbs(prof.h1, `/allied-health/${prof.segment}`, lesson.title, lessonPath);
+  const { crumbs, schemaItems } = alliedLessonDetailBreadcrumbs(
+    prof.h1,
+    professionHeroPath,
+    base,
+    lesson.title,
+    lessonPath,
+  );
   const lessonQuality = classifyPathwayLesson(lesson);
   const requestedNorm = normalizePathwayLessonLocale(lessonContentLocale);
   const showLocaleFallbackNotice = Boolean(
@@ -200,7 +227,7 @@ export default async function AlliedProfessionLessonDetailPage({ params }: Props
           clinical blog
         </Link>{" "}
         and{" "}
-        <Link href="/allied-health-exam-prep" className="font-medium text-primary hover:underline">
+        <Link href="/allied-health" className="font-medium text-primary hover:underline">
           allied hub
         </Link>
         .
@@ -226,7 +253,7 @@ export default async function AlliedProfessionLessonDetailPage({ params }: Props
           Exam hub
         </Link>
         {" · "}
-        <Link href={`/allied-health/${prof.segment}`} className="font-medium text-primary">
+        <Link href={professionHeroPath} className="font-medium text-primary">
           Profession overview
         </Link>
       </div>

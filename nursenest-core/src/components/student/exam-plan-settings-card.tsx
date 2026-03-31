@@ -5,13 +5,18 @@ import Link from "next/link";
 
 type PathwayOpt = { id: string; label: string; shortLabel: string };
 
+type AlliedProfessionOpt = { key: string; label: string };
+
 type ExamPlanPayload = {
   examDate: string | null;
   examDatePlanType: string | null;
   examGoalSetAt: string | null;
   targetExamPathwayId: string | null;
   studyCadencePreference: string | null;
+  alliedProfessionKey: string | null;
+  tier: string;
   pathways: PathwayOpt[];
+  alliedProfessionOptions?: AlliedProfessionOpt[];
 };
 
 function ymdFromIso(iso: string | null): string {
@@ -29,6 +34,7 @@ export function ExamPlanSettingsCard() {
   const [examDate, setExamDate] = useState("");
   const [pathwayId, setPathwayId] = useState("");
   const [cadence, setCadence] = useState<"" | "light" | "steady" | "intensive">("");
+  const [alliedProfessionKey, setAlliedProfessionKey] = useState("");
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -46,6 +52,7 @@ export function ExamPlanSettingsCard() {
       setPlanType(["unsure", "proposed", "confirmed"].includes(t) ? t : "unsure");
       setExamDate(ymdFromIso(j.examDate));
       setPathwayId(j.targetExamPathwayId ?? "");
+      setAlliedProfessionKey(j.alliedProfessionKey ?? "");
       setCadence(
         j.studyCadencePreference === "light" || j.studyCadencePreference === "steady" || j.studyCadencePreference === "intensive"
           ? j.studyCadencePreference
@@ -75,6 +82,7 @@ export function ExamPlanSettingsCard() {
           examDate: planType === "unsure" ? null : examDate || null,
           targetExamPathwayId: pathwayId || null,
           studyCadencePreference: cadence || null,
+          alliedProfessionKey: alliedProfessionKey.trim() ? alliedProfessionKey.trim().toLowerCase() : null,
         }),
       });
       const j = await res.json().catch(() => ({}));
@@ -101,6 +109,8 @@ export function ExamPlanSettingsCard() {
   }
 
   const pathways = data?.pathways ?? [];
+  const alliedOptions = data?.alliedProfessionOptions ?? [];
+  const showAlliedProfession = data?.tier === "allied";
 
   return (
     <section className="nn-card p-6">
@@ -145,6 +155,30 @@ export function ExamPlanSettingsCard() {
             We’ll use mastery-style pacing until you add a date. You can still use every study tool.
           </p>
         )}
+
+        {showAlliedProfession ? (
+          <div>
+            <label className="text-sm font-medium text-foreground" htmlFor="exam-plan-allied-profession">
+              Allied profession (optional)
+            </label>
+            <select
+              id="exam-plan-allied-profession"
+              className="mt-1 w-full max-w-md rounded-lg border border-border bg-card px-3 py-2 text-sm"
+              value={alliedProfessionKey}
+              onChange={(e) => setAlliedProfessionKey(e.target.value)}
+            >
+              <option value="">Not set</option>
+              {alliedOptions.map((o) => (
+                <option key={o.key} value={o.key}>
+                  {o.label}
+                </option>
+              ))}
+            </select>
+            <p className="mt-1 text-xs text-muted">
+              Keeps weak-area suggestions and study copy aligned with your discipline (allied tier only).
+            </p>
+          </div>
+        ) : null}
 
         {pathways.length > 0 ? (
           <div>

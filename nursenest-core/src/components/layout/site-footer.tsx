@@ -178,7 +178,7 @@ export function SiteFooter() {
             <h3 className="mb-3 mt-6 text-sm font-semibold text-[var(--theme-heading-text)]">{t("footer.alliedHealth")}</h3>
             <ul className="space-y-2 text-sm text-[var(--theme-muted-text)]">
               <li>
-                <FLink href="/allied-health-exam-prep">{t("footer.alliedHealthExamPrep")}</FLink>
+                <FLink href="/allied-health">{t("footer.alliedHealthExamPrep")}</FLink>
               </li>
               <li>
                 <FLink href="/allied-health/rrt-exam-prep">{t("components.footer.respiratoryTherapist")}</FLink>

@@ -11,7 +11,7 @@ import { absoluteUrl } from "@/lib/seo/site-origin";
 
 export const revalidate = 86400;
 
-const BASE = "/allied-health-exam-prep";
+const BASE = "/allied-health";
 
 type Props = { searchParams: Promise<{ page?: string }> };
 
@@ -34,7 +34,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   };
 }
 
-export default async function AlliedHealthExamPrepHubPage({ searchParams }: Props) {
+export default async function AlliedHealthHubPage({ searchParams }: Props) {
   const sp = await searchParams;
   const pageRequested = Math.max(1, Number(sp.page ?? "1") || 1);
   const all = listAlliedProfessionsSorted();

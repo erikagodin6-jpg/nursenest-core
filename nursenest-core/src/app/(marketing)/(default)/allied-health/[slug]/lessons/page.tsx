@@ -7,7 +7,12 @@ import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { ALLIED_LESSON_HUB_PAGE_SIZE } from "@/lib/allied/allied-marketing-constants";
 import { countPublishedPathwayLessonsForAlliedMarketing } from "@/lib/allied/count-allied-pathway-lessons";
-import { getAlliedProfessionBySegment, getPathwayOrThrow } from "@/lib/allied/allied-professions-registry";
+import {
+  getAlliedProfessionByHeroSegment,
+  getAlliedProfessionByProfessionKey,
+  getPathwayOrThrow,
+  isAlliedHeroExamPrepSlug,
+} from "@/lib/allied/allied-professions-registry";
 import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
 import { getPathwayLessonsPage, PATHWAY_HUB_PAGE_SIZE_MAX } from "@/lib/lessons/pathway-lesson-loader";
 import { alliedLessonsHubBreadcrumbs } from "@/lib/seo/allied-breadcrumbs";
@@ -21,16 +26,26 @@ export function generateStaticParams() {
 }
 
 type Props = {
-  params: Promise<{ professionSegment: string }>;
+  params: Promise<{ slug: string }>;
   searchParams: Promise<{ page?: string; pageSize?: string }>;
 };
 
+function resolveProfession(slug: string) {
+  if (isAlliedHeroExamPrepSlug(slug)) {
+    const byHero = getAlliedProfessionByHeroSegment(slug);
+    return byHero ? { prof: byHero, mode: "hero" as const } : null;
+  }
+  const byKey = getAlliedProfessionByProfessionKey(slug);
+  return byKey ? { prof: byKey, mode: "key" as const } : null;
+}
+
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
-  const { professionSegment } = await params;
-  const prof = getAlliedProfessionBySegment(professionSegment);
+  const { slug } = await params;
+  const resolved = resolveProfession(slug);
   const sp = await searchParams;
   const page = Math.max(1, Number(sp.page ?? "1") || 1);
-  if (!prof) return { title: "Not found" };
+  if (!resolved) return { title: "Not found" };
+  const { prof } = resolved;
   const pathway = getPathwayOrThrow(prof.pathwayId);
   const loc = defaultPathwayLessonContentLocaleForExamHubRoute();
   const lessonTotal =
@@ -42,7 +57,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
         )
       : null;
   const emptyHub = lessonTotal === 0;
-  const basePath = `/allied-health/${prof.segment}/lessons`;
+  const basePath = `/allied-health/${prof.professionKey}/lessons`;
   const canonical = page > 1 ? `${basePath}?page=${page}` : basePath;
   const title =
     page > 1
@@ -58,16 +73,22 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   };
 }
 
-export default async function AlliedProfessionLessonsPage({ params, searchParams }: Props) {
-  const { professionSegment } = await params;
-  const prof = getAlliedProfessionBySegment(professionSegment);
-  if (!prof) notFound();
+export default async function AlliedHealthSlugLessonsPage({ params, searchParams }: Props) {
+  const { slug } = await params;
+  const resolved = resolveProfession(slug);
+  if (!resolved) notFound();
+  const { prof, mode } = resolved;
+
+  if (mode === "hero") {
+    redirect(`/allied-health/${prof.professionKey}/lessons`);
+  }
 
   const pathway = getPathwayOrThrow(prof.pathwayId);
   if (!pathway) notFound();
 
+  const professionHeroPath = `/allied-health/${prof.segment}`;
   const lessonContentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
-  const base = `/allied-health/${prof.segment}/lessons`;
+  const base = `/allied-health/${prof.professionKey}/lessons`;
   const sp = await searchParams;
   const pageRequested = Math.max(1, Number(sp.page ?? "1") || 1);
   const rawSize = Number(sp.pageSize ?? String(ALLIED_LESSON_HUB_PAGE_SIZE)) || ALLIED_LESSON_HUB_PAGE_SIZE;
@@ -90,7 +111,7 @@ export default async function AlliedProfessionLessonsPage({ params, searchParams
     return (
       <div className="nn-marketing-surface mx-auto max-w-3xl px-4 py-12">
         <p className="text-muted">We couldn’t load lessons right now. Try again shortly.</p>
-        <Link href={`/allied-health/${prof.segment}`} className="mt-4 inline-block text-primary hover:underline">
+        <Link href={professionHeroPath} className="mt-4 inline-block text-primary hover:underline">
           Back to profession
         </Link>
       </div>
@@ -101,21 +122,21 @@ export default async function AlliedProfessionLessonsPage({ params, searchParams
     if (pageRequested > 1) {
       redirect(base);
     }
-    const { crumbs, schemaItems } = alliedLessonsHubBreadcrumbs(prof.h1, `/allied-health/${prof.segment}`, 1);
+    const { crumbs, schemaItems } = alliedLessonsHubBreadcrumbs(prof.h1, professionHeroPath, base, 1);
     return (
       <div className="nn-marketing-surface mx-auto max-w-3xl px-4 py-12">
         <BreadcrumbJsonLd items={schemaItems} />
         <div className="mb-6">
           <BreadcrumbTrail items={crumbs} />
         </div>
-        <Link href={`/allied-health/${prof.segment}`} className="text-sm font-medium text-primary hover:underline">
+        <Link href={professionHeroPath} className="text-sm font-medium text-primary hover:underline">
           ← {prof.h1}
         </Link>
         <h1 className="mt-4 text-3xl font-bold text-[var(--theme-heading-text)]">Lessons</h1>
         <p className="mt-3 text-muted">
           No published lessons for this filter yet. Check back after import, or browse the full pathway hub.
         </p>
-        <Link href={`/allied-health/${prof.segment}`} className="mt-4 inline-block font-semibold text-primary hover:underline">
+        <Link href={professionHeroPath} className="mt-4 inline-block font-semibold text-primary hover:underline">
           Back to overview
         </Link>
         <p className="mt-4 text-xs text-muted">
@@ -130,7 +151,7 @@ export default async function AlliedProfessionLessonsPage({ params, searchParams
   }
 
   const lessons = pageResult.items;
-  const { crumbs, schemaItems } = alliedLessonsHubBreadcrumbs(prof.h1, `/allied-health/${prof.segment}`, pageResult.page);
+  const { crumbs, schemaItems } = alliedLessonsHubBreadcrumbs(prof.h1, professionHeroPath, base, pageResult.page);
 
   return (
     <div className="nn-marketing-surface">
@@ -139,7 +160,7 @@ export default async function AlliedProfessionLessonsPage({ params, searchParams
         <div className="mb-6">
           <BreadcrumbTrail items={crumbs} />
         </div>
-        <Link href={`/allied-health/${prof.segment}`} className="text-sm font-medium text-primary hover:underline">
+        <Link href={professionHeroPath} className="text-sm font-medium text-primary hover:underline">
           ← {prof.h1}
         </Link>
         <h1 className="mt-4 text-3xl font-extrabold text-[var(--theme-heading-text)]">Lessons · {prof.h1}</h1>

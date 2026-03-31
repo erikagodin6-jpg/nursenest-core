@@ -1,5 +1,6 @@
-import { ExamDatePlanType } from "@prisma/client";
+import { ExamDatePlanType, TierCode } from "@prisma/client";
 import { NextResponse } from "next/server";
+import { ALLIED_PROFESSION_KEYS, listAlliedProfessionsSorted } from "@/lib/allied/allied-professions-registry";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import { prisma } from "@/lib/db";
@@ -25,6 +26,8 @@ function serializeExamPlan(user: {
   examGoalSetAt: Date | null;
   targetExamPathwayId: string | null;
   studyCadencePreference: string | null;
+  alliedProfessionKey: string | null;
+  tier: TierCode;
 }) {
   return {
     examDate: user.examDate?.toISOString() ?? null,
@@ -34,6 +37,8 @@ function serializeExamPlan(user: {
     examGoalSetAt: user.examGoalSetAt?.toISOString() ?? null,
     targetExamPathwayId: user.targetExamPathwayId,
     studyCadencePreference: user.studyCadencePreference,
+    alliedProfessionKey: user.alliedProfessionKey,
+    tier: user.tier.toLowerCase(),
   };
 }
 
@@ -52,6 +57,8 @@ export async function GET() {
         examGoalSetAt: true,
         targetExamPathwayId: true,
         studyCadencePreference: true,
+        alliedProfessionKey: true,
+        tier: true,
       },
     });
     if (!user) {
@@ -64,9 +71,15 @@ export async function GET() {
       shortLabel: p.shortName || p.displayName,
     }));
 
+    const alliedProfessionOptions = listAlliedProfessionsSorted().map((p) => ({
+      key: p.professionKey,
+      label: p.h1,
+    }));
+
     return NextResponse.json({
       ...serializeExamPlan(user),
       pathways,
+      alliedProfessionOptions,
     });
   } catch {
     return NextResponse.json({ error: "Unable to load exam plan." }, { status: 503 });
@@ -141,6 +154,32 @@ export async function PATCH(req: Request) {
     }
   }
 
+  let alliedProfessionKey: string | null | undefined = undefined;
+  if (b.alliedProfessionKey !== undefined) {
+    if (b.alliedProfessionKey === null) {
+      alliedProfessionKey = null;
+    } else if (typeof b.alliedProfessionKey !== "string") {
+      return NextResponse.json({ error: "alliedProfessionKey invalid" }, { status: 400 });
+    } else {
+      const trimmed = b.alliedProfessionKey.trim().toLowerCase();
+      if (trimmed.length === 0) {
+        alliedProfessionKey = null;
+      } else {
+        const allowedKeys = new Set(ALLIED_PROFESSION_KEYS);
+        if (!allowedKeys.has(trimmed)) {
+          return NextResponse.json({ error: "Unknown allied profession key." }, { status: 400 });
+        }
+        if (String(gate.entitlement.tier) !== TierCode.ALLIED) {
+          return NextResponse.json(
+            { error: "Allied profession can only be set for allied-tier learners." },
+            { status: 400 },
+          );
+        }
+        alliedProfessionKey = trimmed;
+      }
+    }
+  }
+
   let studyCadencePreference: string | null | undefined = undefined;
   if (b.studyCadencePreference !== undefined) {
     if (b.studyCadencePreference === null) {
@@ -170,6 +209,7 @@ export async function PATCH(req: Request) {
         examGoalSetAt: now,
         ...(targetExamPathwayId !== undefined ? { targetExamPathwayId } : {}),
         ...(studyCadencePreference !== undefined ? { studyCadencePreference } : {}),
+        ...(alliedProfessionKey !== undefined ? { alliedProfessionKey } : {}),
       },
       select: {
         examDate: true,
@@ -177,6 +217,8 @@ export async function PATCH(req: Request) {
         examGoalSetAt: true,
         targetExamPathwayId: true,
         studyCadencePreference: true,
+        alliedProfessionKey: true,
+        tier: true,
       },
     });
 
@@ -186,10 +228,16 @@ export async function PATCH(req: Request) {
       shortLabel: p.shortName || p.displayName,
     }));
 
+    const alliedProfessionOptions = listAlliedProfessionsSorted().map((p) => ({
+      key: p.professionKey,
+      label: p.h1,
+    }));
+
     return NextResponse.json({
       ok: true,
       ...serializeExamPlan(updated),
       pathways,
+      alliedProfessionOptions,
     });
   } catch {
     return NextResponse.json({ error: "Unable to save exam plan." }, { status: 503 });

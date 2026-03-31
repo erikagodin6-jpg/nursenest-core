@@ -130,6 +130,8 @@ model User {
   examGoalSetAt           DateTime?
   /** Optional pathway id from exam registry when the goal is pathway-specific (NP tracks, etc.). */
   targetExamPathwayId     String?        @db.VarChar(64)
+  /** When tier is ALLIED, optional short profession key (e.g. paramedic, mlt) for scoped UX and recommendations. */
+  alliedProfessionKey     String?        @db.VarChar(64)
   /** Optional learner preference: light | steady | intensive — used for copy only, not hours math. */
   studyCadencePreference  String?        @db.VarChar(32)
   onboardingCompletedAt   DateTime?
@@ -163,6 +165,8 @@ model User {
   topicStats              UserTopicStat[]
   /** User-authored study notes (never stores premium HTML bodies). */
   learnerNotes            LearnerNote[]
+
+  @@index([alliedProfessionKey])
 }
 
 enum LearnerNoteScope {

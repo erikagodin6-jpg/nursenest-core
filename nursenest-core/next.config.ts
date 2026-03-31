@@ -86,6 +86,9 @@ const nextConfig: NextConfig = {
       { source: "/institutional-pricing", destination: "/for-institutions", permanent: true },
       { source: "/pricing/institutional", destination: "/for-institutions", permanent: true },
       { source: "/for-schools", destination: "/for-institutions", permanent: true },
+      /** Allied hub canonical URL. */
+      { source: "/allied-health-exam-prep", destination: "/allied-health", permanent: true },
+      { source: "/allied-health-exam-prep/:path*", destination: "/allied-health/:path*", permanent: true },
       ...examPathwayFromProgrammaticRedirects,
     ];
   },

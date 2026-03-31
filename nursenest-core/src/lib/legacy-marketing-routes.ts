@@ -44,7 +44,6 @@ const EXACT: Record<string, string> = {
   "/nursing-specialties": "/app/lessons",
   "/new-graduate-support": `${PUBLIC_SITE}/new-graduate-support`,
   "/healthcare-careers": `${PUBLIC_SITE}/healthcare-careers`,
-  "/allied-health": `${PUBLIC_SITE}/allied-health`,
   "/blog": "/blog",
   "/case-studies": "/case-studies",
   "/paramedic": `${PUBLIC_SITE}/allied-health/paramedic`,
@@ -55,12 +54,8 @@ const EXACT: Record<string, string> = {
 
 /** Core-hosted Allied marketing (must not be rewritten to the legacy public site). */
 export function isCoreAlliedMarketingPath(href: string): boolean {
+  if (href === "/allied-health" || href.startsWith("/allied-health/")) return true;
   if (href === "/allied-health-exam-prep" || href.startsWith("/allied-health-exam-prep/")) return true;
-  if (href.startsWith("/allied-health/")) {
-    const rest = href.slice("/allied-health/".length);
-    const first = rest.split("/")[0] ?? "";
-    return first.endsWith("-exam-prep");
-  }
   return false;
 }
 
