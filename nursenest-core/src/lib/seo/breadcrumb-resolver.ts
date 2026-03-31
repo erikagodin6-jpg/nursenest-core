@@ -70,10 +70,10 @@ export function forInstitutionsBreadcrumbs(): BreadcrumbResolution {
   return simpleMarketingBreadcrumbs("For institutions", "/for-institutions");
 }
 
-/** Public homepage: single current crumb + JSON-LD (canonical `/`). */
+/** Public homepage: no visible trail (root is obvious); JSON-LD still lists Home for SEO. */
 export function marketingHomeSurfaceBreadcrumbs(): BreadcrumbResolution {
   return {
-    crumbs: [{ name: "Home", href: undefined }],
+    crumbs: [],
     schemaItems: [{ name: "Home", item: abs("/") }],
   };
 }

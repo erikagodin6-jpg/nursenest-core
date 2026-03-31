@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
-import { MarketingHeroCarousel } from "@/components/marketing/marketing-hero-carousel";
+import { MarketingScreenshotStack } from "@/components/marketing/marketing-screenshot-stack";
 import { buildHomepageHeroSlides } from "@/lib/marketing-assets";
 import {
   ArrowRight,

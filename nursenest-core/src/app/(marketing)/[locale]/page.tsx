@@ -31,9 +31,11 @@ export default async function LocalizedHomePage() {
   return (
     <>
       <BreadcrumbJsonLd items={schemaItems} />
-      <div className="mx-auto max-w-7xl px-4 pt-4 sm:px-6 lg:px-8">
-        <BreadcrumbTrail items={crumbs} />
-      </div>
+      {crumbs.length > 0 ? (
+        <div className="mx-auto max-w-7xl px-4 pt-4 sm:px-6 lg:px-8">
+          <BreadcrumbTrail items={crumbs} />
+        </div>
+      ) : null}
       <HomeRestoredClient lessonTeasers={lessonTeasers} />
     </>
   );

@@ -94,7 +94,10 @@ function formatCount(n: number | undefined): string {
 
 function formatLearnerCount(n: number): string {
   if (n <= 0) return "";
-  if (n >= 1000) return `${Math.floor(n / 100) * 100}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "+";
+  if (n >= 1000) {
+    const hundreds = Math.floor(n / 100) * 100;
+    return `${hundreds.toLocaleString("en-US")}+`;
+  }
   return `${n.toLocaleString("en-US")}+`;
 }
 
@@ -672,7 +675,12 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
 
         <LazySection minHeight="400px" rootMargin="200px">
           <Suspense fallback={<div className="min-h-[400px]" />}>
-            <HomeConversionSections lessonCount={lessonCount} questionCount={questionCount} />
+            <HomeConversionSections
+              lessonCount={lessonCount}
+              questionCount={questionCount}
+              flashcardCount={flashcardCount}
+              deckCount={deckCount}
+            />
           </Suspense>
         </LazySection>
 
