@@ -151,7 +151,7 @@ function alliedPathwayCountrySql(countryCode: CountryCode): Prisma.Sql {
 async function loadTopicGroups(examKeys: string[], alliedCountry?: CountryCode): Promise<TopicGroupRow[]> {
   if (examKeys.length === 0) return [];
   const allied = alliedCountry ? alliedPathwayCountrySql(alliedCountry) : Prisma.empty;
-  return prisma.$queryRaw<TopicGroupRow>`
+  return prisma.$queryRaw<TopicGroupRow[]>`
     SELECT topic, subtopic, body_system, exam, COUNT(*)::bigint AS cnt
     FROM exam_questions
     WHERE status = ${DB_PUBLISHED} AND exam IN (${Prisma.join(examKeys)}) ${allied}
@@ -225,7 +225,7 @@ async function buildBucket(
   if (groups.length > GROUP_ROW_WARN) {
     /* keep query as-is; surface in notes at caller */
   }
-  const { distribution, weak } = rollupCanonical(family, groups, publishedTotal, minTotalExpected);
+  const { distribution, weak } = rollupCanonical(pathwayFamily, groups, publishedTotal, minTotalExpected);
   return {
     id,
     label,
