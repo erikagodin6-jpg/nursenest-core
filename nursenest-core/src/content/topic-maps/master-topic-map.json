@@ -2330,14 +2330,14 @@
           "name": "Scope & Foundations",
           "topics": [
             {
-              "id": "pn-scope-delegation-hy",
-              "name": "PN Scope & Delegation",
+              "id": "pn-scope-boundaries-delegation-rules-hy",
+              "name": "PN scope boundaries & delegation rules",
               "priority": "high_yield",
               "difficultyDefault": 4,
               "prerequisiteTopicIds": [],
               "advancedTopicIds": [],
               "questionTopicHints": [
-                "PN Scope & Delegation",
+                "PN scope boundaries & delegation rules",
                 "Scope & Foundations",
                 "PN"
               ],
@@ -2345,7 +2345,7 @@
                 "med-math-dosage"
               ],
               "autoRelatedTopicIds": [
-                "pn-scope-delegation",
+                "pn-scope-boundaries-delegation-rules",
                 "therapeutic-communication",
                 "vital-signs-escalation",
                 "documentation-do-nots"
@@ -2367,7 +2367,7 @@
                 "med-math-dosage"
               ],
               "autoRelatedTopicIds": [
-                "pn-scope-delegation",
+                "pn-scope-boundaries-delegation-rules",
                 "vital-signs-escalation",
                 "documentation-do-nots"
               ]
@@ -2388,7 +2388,7 @@
                 "med-math-dosage"
               ],
               "autoRelatedTopicIds": [
-                "pn-scope-delegation",
+                "pn-scope-boundaries-delegation-rules",
                 "therapeutic-communication",
                 "documentation-do-nots"
               ]
@@ -2409,7 +2409,7 @@
                 "med-math-dosage"
               ],
               "autoRelatedTopicIds": [
-                "pn-scope-delegation",
+                "pn-scope-boundaries-delegation-rules",
                 "therapeutic-communication",
                 "vital-signs-escalation"
               ]

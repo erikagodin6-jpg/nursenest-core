@@ -33,6 +33,8 @@
     "admin:promote": "tsx scripts/ensure-admin-user.ts",
     "create-admin": "tsx scripts/create-admin.ts",
     "content:inventory": "tsx scripts/content-inventory.ts",
+    "content:topic-map": "node scripts/generate-master-topic-map.mjs",
+    "content:validate-topic-map": "node scripts/validate-master-topic-map.mjs",
     "content:audit": "tsx scripts/content-audit-authoritative.ts",
     "import:blog": "tsx scripts/import-blog.ts",
     "import:content-items": "tsx scripts/import-content-items-json.ts",

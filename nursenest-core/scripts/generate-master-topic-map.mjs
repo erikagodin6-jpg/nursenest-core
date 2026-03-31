@@ -305,7 +305,7 @@ const PN = buildExam("PN", "Practical Nursing (NCLEX-PN / REx-PN)", "NCLEX_PN", 
     name: "Scope & Foundations",
     priorityDefault: "high_yield",
     topics: [
-      "PN Scope & Delegation (HY)",
+      "PN scope boundaries & delegation rules (HY)",
       "Therapeutic Communication",
       "Vital Signs & Escalation",
       "Documentation Do-Nots",

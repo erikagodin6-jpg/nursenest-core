@@ -1,15 +1,26 @@
+import { NCLEX_RN_US_EXAM_CONFIG } from "@/lib/exams/exam-config";
+
 const rawMin = process.env.CAT_RELAX_MIN_QUESTIONS;
-/** Default 85; set CAT_RELAX_MIN_QUESTIONS (e.g. 10) for local/CI with small banks. */
+/**
+ * Defaults follow NCLEX-RN US simulation bounds ({@link NCLEX_RN_US_EXAM_CONFIG}).
+ * Set CAT_RELAX_MIN_QUESTIONS / CAT_MAX_QUESTIONS for local/CI with small banks.
+ */
 export const CAT_MIN_QUESTIONS =
   rawMin != null && rawMin !== ""
-    ? Math.max(5, Math.min(150, Number.parseInt(rawMin, 10) || 85))
-    : 85;
+    ? Math.max(
+        5,
+        Math.min(NCLEX_RN_US_EXAM_CONFIG.maxQuestions, Number.parseInt(rawMin, 10) || NCLEX_RN_US_EXAM_CONFIG.minQuestions),
+      )
+    : NCLEX_RN_US_EXAM_CONFIG.minQuestions;
 
 const rawMax = process.env.CAT_MAX_QUESTIONS;
 export const CAT_MAX_QUESTIONS =
   rawMax != null && rawMax !== ""
-    ? Math.max(CAT_MIN_QUESTIONS, Math.min(200, Number.parseInt(rawMax, 10) || 150))
-    : 150;
+    ? Math.max(
+        CAT_MIN_QUESTIONS,
+        Math.min(200, Number.parseInt(rawMax, 10) || NCLEX_RN_US_EXAM_CONFIG.maxQuestions),
+      )
+    : NCLEX_RN_US_EXAM_CONFIG.maxQuestions;
 
 export const CAT_START_THETA = 0;
 export const CAT_START_TARGET_DIFFICULTY = 3;

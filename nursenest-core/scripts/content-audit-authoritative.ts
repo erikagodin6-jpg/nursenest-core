@@ -15,6 +15,7 @@ loadEnv({ path: path.join(__dirname, "../../.env") });
 
 import { CountryCode, TierCode } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
+import { blogLiveWhere } from "../src/lib/blog/blog-visibility";
 import { questionBankWhereForProfile } from "../src/lib/entitlements/content-access-scope";
 
 const prisma = new PrismaClient();
@@ -29,7 +30,7 @@ async function main() {
     questionsByStatus,
     questionsByTierPublished,
     blogTotal,
-    blogPublished,
+    blogLivePublic,
   ] = await Promise.all([
     prisma.contentItem.count({ where: { type: "lesson" } }),
     prisma.contentItem.groupBy({ by: ["status"], where: { type: "lesson" }, _count: { _all: true } }),
@@ -41,7 +42,7 @@ async function main() {
       _count: { _all: true },
     }),
     prisma.blogPost.count(),
-    prisma.blogPost.count({ where: { published: true } }),
+    prisma.blogPost.count({ where: blogLiveWhere(new Date()) }),
   ]);
 
   const allPublished = await prisma.contentItem.count({ where: { type: "lesson", status: PUBLISHED } });
@@ -108,7 +109,8 @@ async function main() {
     },
     blog: {
       totalRows: blogTotal,
-      publishedRows: blogPublished,
+      /** Publicly visible on `/blog` (published + scheduled whose publishAt has passed). */
+      livePublicRows: blogPublished,
     },
   };
 

@@ -2,6 +2,7 @@ import "server-only";
 
 import { prisma } from "@/lib/db";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { blogLiveWhere } from "@/lib/blog/blog-visibility";
 import {
   buildSitemapUrlsetFromAbsoluteUrls,
   minimalUrlsetSingleHome,
@@ -21,7 +22,7 @@ export async function buildBlogSitemapXmlSafe(): Promise<string> {
   const SITEMAP_BLOG_CAP = 50_000;
   try {
     const rows = await prisma.blogPost.findMany({
-      where: { published: true },
+      where: blogLiveWhere(new Date()),
       select: { slug: true },
       orderBy: { slug: "asc" },
       take: SITEMAP_BLOG_CAP,

@@ -184,6 +184,21 @@ model Category {
   generatedFlashcardDrafts GeneratedFlashcardDraft[]
 }
 
+enum BlogPostStatus {
+  DRAFT
+  SCHEDULED
+  PUBLISHED
+}
+
+/** Editorial templates for generation + internal linking (not shown as raw enum in UI). */
+enum BlogPostTemplate {
+  HOW_TO_PASS
+  TOPIC_EXPLAINED
+  TOP_MISTAKES
+  PRACTICE_QUESTIONS
+  STUDY_PLAN
+}
+
 /** Public SEO blog posts (migrated from legacy content_items / static allied data). Not the same rows as `content_items.type = 'lesson'`. */
 model BlogPost {
   id           String   @id @default(cuid())
@@ -194,13 +209,30 @@ model BlogPost {
   coverImage   String?
   tags         String[] @default([])
   category     String?
-  published    Boolean  @default(false)
+  /** Visibility: DRAFT never public; SCHEDULED goes live when publishAt <= now; PUBLISHED always public (after publishAt if set). */
+  postStatus   BlogPostStatus @default(DRAFT)
+  /** When status is SCHEDULED, this is the go-live instant (UTC). Also used as canonical “publish” time for SEO when set. */
+  publishAt    DateTime?
+  /** RN | PN | NP | Allied — drives cross-links and topic hubs (string for flexibility vs exam registry keys). */
+  exam         String?
+  /** Optional: overrides <title> / OG when set. */
+  seoTitle     String?
+  seoDescription String? @db.Text
+  /** Structured template for generators and footer CTAs. */
+  postTemplate BlogPostTemplate?
+  /** Internal paths e.g. `/us/rn/nclex-rn/lessons/slug` — no full lesson HTML stored here. */
+  relatedLessonPaths String[] @default([])
+  /** Exam question UUIDs for deep links (public pages never expose rationales). */
+  relatedQuestionIds String[] @default([])
+  /** Tool route slugs e.g. `labs`, `med-math` resolved under /tools. */
+  relatedTools       String[] @default([])
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   /** e.g. content_items, paramedic-static, legacy-json */
   legacySource String?
 
-  @@index([published, createdAt])
+  @@index([postStatus, publishAt])
+  @@index([createdAt])
 }
 
 /** Production `content_items` — lessons are `type = "lesson"`. */
