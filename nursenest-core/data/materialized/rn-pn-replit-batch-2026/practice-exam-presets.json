@@ -26,15 +26,7 @@
     "id": "preset_us_rn_full_2026",
     "examId": "exam_us_rn_full_2026",
     "tag": "exam-preset-us-rn-full-2026",
-    "title": "US NCLEX-RN full practice (75)",
-    "questionCount": 75,
-    "tierFilter": "rn"
-  },
-  {
-    "id": "preset_ca_rn_full_2026",
-    "examId": "exam_ca_rn_full_2026",
-    "tag": "exam-preset-ca-rn-full-2026",
-    "title": "Canada NCLEX-RN full practice (75)",
+    "title": "NCLEX-RN full practice (75)",
     "questionCount": 75,
     "tierFilter": "rn"
   },
@@ -42,15 +34,7 @@
     "id": "preset_us_pn_full_2026",
     "examId": "exam_us_pn_full_2026",
     "tag": "exam-preset-us-pn-full-2026",
-    "title": "US NCLEX-PN full practice (75)",
-    "questionCount": 75,
-    "tierFilter": "rpn"
-  },
-  {
-    "id": "preset_ca_rpn_full_2026",
-    "examId": "exam_ca_rpn_full_2026",
-    "tag": "exam-preset-ca-rpn-full-2026",
-    "title": "Canada REx-PN / RPN full practice (75)",
+    "title": "NCLEX-PN full practice (75)",
     "questionCount": 75,
     "tierFilter": "rpn"
   }

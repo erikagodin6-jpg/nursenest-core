@@ -9,13 +9,7 @@ import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { resolveDefaultExamForUser } from "@/lib/exams/resolve-default-exam";
 import {
-  EXAM_CA_RN_FULL_2026_ID,
-  EXAM_CA_RPN_FULL_2026_ID,
-  EXAM_NP_CLINICAL_PRACTICE_2026_ID,
   EXAM_PN_MIXED_PRACTICE_2026_ID,
-  EXAM_PRESET_CA_RN_FULL_2026_TAG,
-  EXAM_PRESET_CA_RPN_FULL_2026_TAG,
-  EXAM_PRESET_NP_CLINICAL_2026_TAG,
   EXAM_PRESET_PN_MIXED_2026_TAG,
   EXAM_PRESET_RN_MIXED_2026_TAG,
   EXAM_PRESET_US_PN_FULL_2026_TAG,
@@ -42,15 +36,6 @@ function canUseRnFullExams(e: AccessScope): boolean {
 function canUsePnFullExams(e: AccessScope): boolean {
   if (e.reason === "admin_override") return true;
   return e.tier === "RPN" || e.tier === "LVN_LPN" || e.tier === "RN" || e.tier === "NP";
-}
-
-/** When country is unset (e.g. some admin profiles), show both regional full exams. */
-function showUsRegionalExams(e: AccessScope): boolean {
-  return !e.country || e.country === "US";
-}
-
-function showCaRegionalExams(e: AccessScope): boolean {
-  return !e.country || e.country === "CA";
 }
 
 type ExamsPageProps = { searchParams: Promise<{ historyPage?: string }> };
@@ -168,8 +153,8 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
       </div>
       <h1 className="text-3xl font-bold">Practice exams</h1>
       <p className="mt-2 text-muted">
-        Timed linear practice exams use your subscription pool (filtered by country and tier). Submit at the end for a score—
-        rationales are not shown between items so the run mirrors test-day pacing.
+        US <strong>NCLEX-RN</strong> and <strong>NCLEX-PN</strong> timed runs use your subscription pool. Answers stay hidden until you
+        submit; you get a score at the end (no rationales between items—same pacing as test day).
       </p>
       {pct !== null ? (
         <p className="mt-3 text-sm font-medium text-foreground">
@@ -202,10 +187,9 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
       <section className="mt-10 space-y-2">
         <h2 className="text-xl font-semibold">Mixed clinical practice (20 questions)</h2>
         <p className="text-sm text-muted">
-          Draws a shuffled set from the RN/PN Replit materialization batch (med–surg topics: heart failure, MI, shock, ABGs,
-          COPD, insulin, sepsis, infection control, fluids, prioritization). Requires published rows tagged{" "}
-          <span className="font-mono text-xs">{MIXED_PRACTICE_2026_RN_PN_TAG}</span>—run{" "}
-          <code className="rounded bg-muted px-1 text-xs">npx tsx scripts/apply-materialized-rn-pn-batch.ts</code> after migrate.
+          Shuffled US NCLEX-style items across RN and PN tiers (20 items). Tag{" "}
+          <span className="font-mono text-xs">{MIXED_PRACTICE_2026_RN_PN_TAG}</span>. Apply the materialized batch after migrate:{" "}
+          <code className="rounded bg-muted px-1 text-xs">npx tsx scripts/apply-materialized-rn-pn-batch.ts</code>.
         </p>
         <ExamPracticeClient
           examId={MIXED_PRACTICE_2026_EXAM_ID}
@@ -243,91 +227,42 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
         />
       </section>
 
-      <section className="mt-10 space-y-2">
-        <h2 className="text-xl font-semibold">NP clinical practice (25 questions)</h2>
-        <p className="text-sm text-muted">
-          Draws from Replit <strong>NP-tier</strong> items tagged for the clinical layer (diagnosis, management, prescribing,
-          follow-up). Requires an <strong>NP</strong> subscription tier. Tag{" "}
-          <span className="font-mono text-xs">{EXAM_PRESET_NP_CLINICAL_2026_TAG}</span>—run{" "}
-          <code className="rounded bg-muted px-1 text-xs">npx tsx scripts/apply-np-clinical-layer.ts</code> after generate.
-        </p>
-        <ExamPracticeClient
-          examId={EXAM_NP_CLINICAL_PRACTICE_2026_ID}
-          examTitle="NP clinical practice"
-          questionTag={EXAM_PRESET_NP_CLINICAL_2026_TAG}
-          sessionNamespace="npClinical2026"
-        />
-      </section>
-
       <section className="mt-10 space-y-6">
         <div>
-          <h2 className="text-xl font-semibold">Full practice ({FULL_EXAM_2026_QUESTION_TARGET} questions)</h2>
+          <h2 className="text-xl font-semibold">Full NCLEX practice ({FULL_EXAM_2026_QUESTION_TARGET} questions)</h2>
           <p className="mt-1 text-sm text-muted">
-            Country-specific draws from preset-tagged pools (US NCLEX-RN / NCLEX-PN; Canada NCLEX-RN / REx-PN). Shown for your
-            subscription country and tier; RN/NP can open PN-style full exams via the ladder.
+            Mixed-topic draws with balanced difficulty bands, then a final shuffle. RN full exams emphasize prioritization,
+            unstable clients, and delegation; PN full exams emphasize stable clients, tasks, and scope. RN/NP subscribers can
+            still open PN full practice via the tier ladder.
           </p>
         </div>
 
-        {showUsRegionalExams(entitlement) && canUseRnFullExams(entitlement) ? (
+        {canUseRnFullExams(entitlement) ? (
           <div className="space-y-2">
-            <h3 className="text-lg font-semibold">US — NCLEX-RN full</h3>
+            <h3 className="text-lg font-semibold">NCLEX-RN full</h3>
             <p className="text-sm text-muted">
-              Prioritization and delegation-style framing; tag{" "}
-              <span className="font-mono text-xs">{EXAM_PRESET_US_RN_FULL_2026_TAG}</span>.
+              Tag <span className="font-mono text-xs">{EXAM_PRESET_US_RN_FULL_2026_TAG}</span>.
             </p>
             <ExamPracticeClient
               examId={EXAM_US_RN_FULL_2026_ID}
-              examTitle="US NCLEX-RN full practice"
+              examTitle="NCLEX-RN full practice"
               questionTag={EXAM_PRESET_US_RN_FULL_2026_TAG}
               sessionNamespace="usRnFull2026"
             />
           </div>
         ) : null}
 
-        {showCaRegionalExams(entitlement) && canUseRnFullExams(entitlement) ? (
+        {canUsePnFullExams(entitlement) ? (
           <div className="space-y-2">
-            <h3 className="text-lg font-semibold">Canada — NCLEX-RN full</h3>
+            <h3 className="text-lg font-semibold">NCLEX-PN full</h3>
             <p className="text-sm text-muted">
-              Canadian terminology and guideline emphasis; tag{" "}
-              <span className="font-mono text-xs">{EXAM_PRESET_CA_RN_FULL_2026_TAG}</span>.
-            </p>
-            <ExamPracticeClient
-              examId={EXAM_CA_RN_FULL_2026_ID}
-              examTitle="Canada NCLEX-RN full practice"
-              questionTag={EXAM_PRESET_CA_RN_FULL_2026_TAG}
-              sessionNamespace="caRnFull2026"
-            />
-          </div>
-        ) : null}
-
-        {showUsRegionalExams(entitlement) && canUsePnFullExams(entitlement) ? (
-          <div className="space-y-2">
-            <h3 className="text-lg font-semibold">US — NCLEX-PN full</h3>
-            <p className="text-sm text-muted">
-              Task-based, stable-patient care emphasis; tag{" "}
-              <span className="font-mono text-xs">{EXAM_PRESET_US_PN_FULL_2026_TAG}</span>.
+              Tag <span className="font-mono text-xs">{EXAM_PRESET_US_PN_FULL_2026_TAG}</span>.
             </p>
             <ExamPracticeClient
               examId={EXAM_US_PN_FULL_2026_ID}
-              examTitle="US NCLEX-PN full practice"
+              examTitle="NCLEX-PN full practice"
               questionTag={EXAM_PRESET_US_PN_FULL_2026_TAG}
               sessionNamespace="usPnFull2026"
-            />
-          </div>
-        ) : null}
-
-        {showCaRegionalExams(entitlement) && canUsePnFullExams(entitlement) ? (
-          <div className="space-y-2">
-            <h3 className="text-lg font-semibold">Canada — REx-PN / RPN full</h3>
-            <p className="text-sm text-muted">
-              Scope, assignment, and safety framing for Canadian PN; tag{" "}
-              <span className="font-mono text-xs">{EXAM_PRESET_CA_RPN_FULL_2026_TAG}</span>.
-            </p>
-            <ExamPracticeClient
-              examId={EXAM_CA_RPN_FULL_2026_ID}
-              examTitle="Canada REx-PN full practice"
-              questionTag={EXAM_PRESET_CA_RPN_FULL_2026_TAG}
-              sessionNamespace="caRpnFull2026"
             />
           </div>
         ) : null}

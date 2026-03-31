@@ -1,60 +1,73 @@
 {
   "sourceFile": "data/replit-exports/exam_questions.json",
   "rawRows": 13375,
-  "emittedQuestions": 7795,
+  "emittedQuestions": 7304,
   "emittedByMaterializedTier": {
-    "rn": 3583,
-    "rpn": 4212,
+    "rn": 3574,
+    "rpn": 3730,
     "lvn": 0
   },
   "presetPoolCounts": {
-    "usRnFull": 3574,
-    "caRnFull": 3560,
-    "usPnFull": 76,
-    "caRpnFull": 4136
+    "usRnFull": 1979,
+    "caRnFull": 0,
+    "usPnFull": 2028,
+    "caRpnFull": 0
   },
   "countryTagDistribution": {
-    "taggedBothCountries": 7230,
-    "usTagOnly": 74,
-    "caTagOnly": 491
+    "taggedBothCountries": 0,
+    "usTagOnly": 7304,
+    "caTagOnly": 0
   },
   "skippedNotPublished": 53,
   "skippedInvalidMcq": 1591,
   "skippedNonNursingTier": 3580,
-  "skippedStemDedupe": 356,
+  "skippedStemDedupe": 347,
+  "skippedCanadaOnly": 500,
+  "questionsWithQualityFlags": 346,
+  "nclexEnhancedLessonTopicKeys": [
+    "heart-failure",
+    "myocardial-infarction",
+    "prioritization-abcs",
+    "delegation",
+    "insulin-hypoglycemia"
+  ],
   "catchAllTopicKey": "general-nursing-clinical",
-  "catchAllMappedCount": 3635,
+  "catchAllMappedCount": 3297,
   "topicQuestionCounts": {
-    "pulmonary-embolism": 104,
-    "heart-failure": 329,
-    "myocardial-infarction": 166,
-    "angina": 32,
-    "dysrhythmias": 214,
-    "hypertension": 397,
-    "shock": 131,
+    "pulmonary-embolism": 101,
+    "heart-failure": 312,
+    "myocardial-infarction": 145,
+    "angina": 30,
+    "dysrhythmias": 213,
+    "hypertension": 390,
+    "shock": 120,
     "asthma": 187,
     "ards": 42,
-    "pneumonia": 164,
-    "copd-respiratory": 129,
+    "pneumonia": 145,
+    "copd-respiratory": 128,
     "abg-interpretation": 81,
-    "acid-base-advanced": 20,
-    "sodium-imbalance": 93,
+    "acid-base-advanced": 19,
+    "sodium-imbalance": 92,
     "potassium-imbalance": 124,
-    "insulin-hypoglycemia": 280,
-    "sepsis": 65,
-    "infection-control": 652,
-    "anticoagulants": 156,
-    "antibiotics": 117,
-    "pain-management": 160,
-    "wound-care": 175,
+    "insulin-hypoglycemia": 278,
+    "sepsis": 46,
+    "infection-control": 649,
+    "anticoagulants": 150,
+    "antibiotics": 101,
+    "pain-management": 158,
+    "wound-care": 157,
     "delegation": 37,
-    "fluid-balance": 143,
+    "fluid-balance": 140,
     "prioritization-abcs": 162,
-    "general-nursing-clinical": 3635
+    "general-nursing-clinical": 3297
   },
   "dedupe": {
     "method": "stemHash(trim+lowercase)",
     "note": "first row by stable id sort wins"
   },
-  "flashcardTarget": 649
+  "flashcardTarget": 608,
+  "weakAreasRemaining": [
+    "Many items still classify to general-nursing-clinical; refine TOPICS regexes over time to sharpen quizzes.",
+    "346 questions carry quality:* tags (short stem, duplicate options, or synthetic rationale)—curate incrementally."
+  ]
 }

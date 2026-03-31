@@ -11,8 +11,6 @@ import fs from "node:fs";
 import path from "node:path";
 import { ContentStatus, CountryCode, ExamFamily, PrismaClient, TierCode } from "@prisma/client";
 import {
-  EXAM_CA_RN_FULL_2026_ID,
-  EXAM_CA_RPN_FULL_2026_ID,
   EXAM_PN_MIXED_PRACTICE_2026_ID,
   EXAM_RN_MIXED_PRACTICE_2026_ID,
   EXAM_US_PN_FULL_2026_ID,
@@ -121,35 +119,16 @@ async function main() {
     where: { id: EXAM_US_RN_FULL_2026_ID },
     create: {
       id: EXAM_US_RN_FULL_2026_ID,
-      title: `US NCLEX-RN full practice (${FULL_EXAM_2026_QUESTION_TARGET} items)`,
+      title: `NCLEX-RN full practice (${FULL_EXAM_2026_QUESTION_TARGET} items)`,
       country: CountryCode.US,
       tier: TierCode.RN,
       status: ContentStatus.PUBLISHED,
       examFamily: ExamFamily.NCLEX_RN,
     },
     update: {
-      title: `US NCLEX-RN full practice (${FULL_EXAM_2026_QUESTION_TARGET} items)`,
+      title: `NCLEX-RN full practice (${FULL_EXAM_2026_QUESTION_TARGET} items)`,
       status: ContentStatus.PUBLISHED,
       country: CountryCode.US,
-      tier: TierCode.RN,
-      examFamily: ExamFamily.NCLEX_RN,
-    },
-  });
-
-  await prisma.exam.upsert({
-    where: { id: EXAM_CA_RN_FULL_2026_ID },
-    create: {
-      id: EXAM_CA_RN_FULL_2026_ID,
-      title: `Canada NCLEX-RN full practice (${FULL_EXAM_2026_QUESTION_TARGET} items)`,
-      country: CountryCode.CA,
-      tier: TierCode.RN,
-      status: ContentStatus.PUBLISHED,
-      examFamily: ExamFamily.NCLEX_RN,
-    },
-    update: {
-      title: `Canada NCLEX-RN full practice (${FULL_EXAM_2026_QUESTION_TARGET} items)`,
-      status: ContentStatus.PUBLISHED,
-      country: CountryCode.CA,
       tier: TierCode.RN,
       examFamily: ExamFamily.NCLEX_RN,
     },
@@ -159,37 +138,18 @@ async function main() {
     where: { id: EXAM_US_PN_FULL_2026_ID },
     create: {
       id: EXAM_US_PN_FULL_2026_ID,
-      title: `US NCLEX-PN full practice (${FULL_EXAM_2026_QUESTION_TARGET} items)`,
+      title: `NCLEX-PN full practice (${FULL_EXAM_2026_QUESTION_TARGET} items)`,
       country: CountryCode.US,
       tier: TierCode.RPN,
       status: ContentStatus.PUBLISHED,
       examFamily: ExamFamily.NCLEX_PN,
     },
     update: {
-      title: `US NCLEX-PN full practice (${FULL_EXAM_2026_QUESTION_TARGET} items)`,
+      title: `NCLEX-PN full practice (${FULL_EXAM_2026_QUESTION_TARGET} items)`,
       status: ContentStatus.PUBLISHED,
       country: CountryCode.US,
       tier: TierCode.RPN,
       examFamily: ExamFamily.NCLEX_PN,
-    },
-  });
-
-  await prisma.exam.upsert({
-    where: { id: EXAM_CA_RPN_FULL_2026_ID },
-    create: {
-      id: EXAM_CA_RPN_FULL_2026_ID,
-      title: `Canada REx-PN / RPN full practice (${FULL_EXAM_2026_QUESTION_TARGET} items)`,
-      country: CountryCode.CA,
-      tier: TierCode.RPN,
-      status: ContentStatus.PUBLISHED,
-      examFamily: ExamFamily.REX_PN,
-    },
-    update: {
-      title: `Canada REx-PN / RPN full practice (${FULL_EXAM_2026_QUESTION_TARGET} items)`,
-      status: ContentStatus.PUBLISHED,
-      country: CountryCode.CA,
-      tier: TierCode.RPN,
-      examFamily: ExamFamily.REX_PN,
     },
   });
 
@@ -293,9 +253,7 @@ async function main() {
           EXAM_RN_MIXED_PRACTICE_2026_ID,
           EXAM_PN_MIXED_PRACTICE_2026_ID,
           EXAM_US_RN_FULL_2026_ID,
-          EXAM_CA_RN_FULL_2026_ID,
           EXAM_US_PN_FULL_2026_ID,
-          EXAM_CA_RPN_FULL_2026_ID,
         ],
         examQuestionsUpserted: qOk,
         flashcardsUpserted: fOk,

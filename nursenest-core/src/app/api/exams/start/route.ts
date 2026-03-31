@@ -49,6 +49,57 @@ function shuffleIds<T extends { id: string }>(rows: T[]): T[] {
   return copy;
 }
 
+/** Map Prisma difficulty (typically 1–5) to NCLEX-style bands for mixed-difficulty full exams. */
+function difficultyBand(d: number | null | undefined): "low" | "mid" | "high" {
+  const x = typeof d === "number" && Number.isFinite(d) ? Math.round(d) : 3;
+  const clamped = Math.min(5, Math.max(1, x));
+  if (clamped <= 2) return "low";
+  if (clamped >= 4) return "high";
+  return "mid";
+}
+
+/**
+ * Build a ~balanced pool across difficulty bands (e.g. 75 Q) before a final shuffle so mocks are not all one level.
+ */
+function pickStratifiedByDifficulty<T extends { id: string; difficulty: number | null }>(
+  rows: T[],
+  limit: number,
+): T[] {
+  if (rows.length <= limit) return shuffleIds([...rows]);
+  const buckets = { low: [] as T[], mid: [] as T[], high: [] as T[] };
+  for (const r of rows) {
+    buckets[difficultyBand(r.difficulty)].push(r);
+  }
+  shuffleIds(buckets.low);
+  shuffleIds(buckets.mid);
+  shuffleIds(buckets.high);
+  const base = Math.floor(limit / 3);
+  const quotas = { low: base, mid: base, high: base };
+  let rem = limit - base * 3;
+  const order: ("low" | "mid" | "high")[] = ["mid", "low", "high"];
+  let o = 0;
+  while (rem > 0) {
+    quotas[order[o % 3]!] += 1;
+    o += 1;
+    rem -= 1;
+  }
+  const out: T[] = [];
+  function take(bucket: T[], n: number) {
+    let k = n;
+    while (k > 0 && bucket.length > 0 && out.length < limit) {
+      out.push(bucket.shift()!);
+      k -= 1;
+    }
+  }
+  take(buckets.low, quotas.low);
+  take(buckets.mid, quotas.mid);
+  take(buckets.high, quotas.high);
+  const rest = [...buckets.low, ...buckets.mid, ...buckets.high];
+  shuffleIds(rest);
+  while (out.length < limit && rest.length > 0) out.push(rest.shift()!);
+  return shuffleIds(out).slice(0, limit);
+}
+
 export async function POST(req: Request) {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
@@ -198,8 +249,17 @@ export async function POST(req: Request) {
       }),
     );
 
+    const useStratifiedFullExam =
+      isFull75Preset &&
+      (questionTag === EXAM_PRESET_US_RN_FULL_2026_TAG ||
+        questionTag === EXAM_PRESET_US_PN_FULL_2026_TAG ||
+        questionTag === EXAM_PRESET_CA_RN_FULL_2026_TAG ||
+        questionTag === EXAM_PRESET_CA_RPN_FULL_2026_TAG);
+
     const questionPool = questionTag
-      ? shuffleIds(questionPoolRaw).slice(0, poolLimit)
+      ? useStratifiedFullExam
+        ? pickStratifiedByDifficulty(questionPoolRaw, poolLimit)
+        : shuffleIds(questionPoolRaw).slice(0, poolLimit)
       : questionPoolRaw.slice(0, poolLimit);
 
     const session = await prisma.examSession.create({
