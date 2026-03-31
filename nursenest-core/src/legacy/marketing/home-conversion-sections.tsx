@@ -47,19 +47,8 @@ function formatCount(n: number | undefined): string {
 }
 
 function formatMarketingCount(n: number): string {
-  if (n <= 0) return "---";
-  if (n >= 10000) {
-    const thousands = Math.floor(n / 1000) * 1000;
-    return `${thousands.toLocaleString()}+`;
-  }
-  if (n >= 1000) {
-    const hundreds = Math.floor(n / 100) * 100;
-    return `${hundreds.toLocaleString()}+`;
-  }
-  if (n >= 100) {
-    const tens = Math.floor(n / 10) * 10;
-    return `${tens}+`;
-  }
+  if (n <= 0) return "—";
+  if (n >= 1000) return `${Math.floor(n).toLocaleString("en-US")}+`;
   return `${n}+`;
 }
 
@@ -80,16 +69,20 @@ const sampleQuestion = {
 interface HomeConversionSectionsProps {
   lessonCount: number;
   questionCount: number;
+  flashcardCount: number;
+  deckCount: number;
 }
 
 export function HomeConversionSections({
   lessonCount,
   questionCount,
+  flashcardCount,
+  deckCount,
 }: HomeConversionSectionsProps) {
-  const displayQuestions = questionCount || 10000;
-  const displayFlashcards = 10000;
-  const displayDecks = 140;
-  const displayLessons = lessonCount || 6000;
+  const displayQuestions = questionCount;
+  const displayFlashcards = flashcardCount;
+  const displayDecks = deckCount;
+  const displayLessons = lessonCount;
   const proofLoading = false;
 
   return (
@@ -535,11 +528,10 @@ function ScreenshotCarouselSection() {
 
         {hasSlides ? (
           <div className="mx-auto w-full max-w-5xl">
-            <MarketingHeroCarousel
+            <MarketingScreenshotStack
               slides={platformSlides}
-              testIdPrefix="platform-carousel"
-              imgTestIdPrefix="platform"
-              logPrefix="platform-carousel"
+              pickIndices={[3, 4, 5].filter((i) => i < platformSlides.length)}
+              testIdPrefix="platform-screenshot-stack"
             />
           </div>
         ) : (

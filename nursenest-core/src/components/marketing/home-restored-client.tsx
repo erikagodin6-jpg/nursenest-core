@@ -152,7 +152,7 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
   const [deckCount, setDeckCount] = useState(0);
   const [registeredLearners, setRegisteredLearners] = useState(0);
   const [topicCategoryCount, setTopicCategoryCount] = useState<number | undefined>(undefined);
-  const [heroMediaVisible, setHeroMediaVisible] = useState(() => HOMEPAGE_HERO_SLIDE_METADATA.length > 0);
+  const showHeroMediaColumn = HOMEPAGE_HERO_SLIDE_METADATA.length > 0;
 
   const heroSlides = useMemo(() => buildHomepageHeroSlides(t), [t]);
 
@@ -230,7 +230,7 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
 
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div
-              className={`grid items-center gap-8 md:items-stretch md:gap-10 lg:gap-12 ${heroMediaVisible ? "md:grid-cols-2" : "md:grid-cols-1"}`}
+              className={`grid items-center gap-8 md:items-stretch md:gap-10 lg:gap-12 ${showHeroMediaColumn ? "md:grid-cols-2" : "md:grid-cols-1"}`}
             >
               <div className="hero-motion-enter min-w-0 space-y-6 md:space-y-5">
                 <div className="flex flex-wrap items-center gap-2">
@@ -462,7 +462,7 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
 
               <div
                 className={
-                  heroMediaVisible
+                  showHeroMediaColumn
                     ? "relative mt-8 flex min-h-0 w-full min-w-0 flex-col justify-center md:mt-0 md:max-h-[min(40rem,78vh)]"
                     : "hidden"
                 }

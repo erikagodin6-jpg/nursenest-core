@@ -1,79 +1,98 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import {
   HelpCircle,
-  FileText,
   Layers,
   BookOpen,
   Stethoscope,
   Globe,
   Languages,
   ClipboardCheck,
+  Users,
 } from "lucide-react";
 
+type HomeStatsPayload = {
+  totalLessons: number;
+  questionCount: number;
+  totalFlashcards: number;
+  totalDecks: number;
+  scenarioCount?: number;
+  registeredLearners?: number;
+};
+
 function formatStat(n: number | undefined): string {
-  if (!n || n === 0) return "---";
-  if (n >= 10000) {
-    const thousands = Math.floor(n / 1000);
-    return `${thousands.toLocaleString()},000+`;
-  }
-  if (n >= 1000) {
-    const hundreds = Math.floor(n / 100) * 100;
-    return `${hundreds.toLocaleString()}+`;
-  }
-  const tens = Math.floor(n / 10) * 10;
-  return `${tens}+`;
+  if (n === undefined || n <= 0) return "—";
+  return Math.floor(n).toLocaleString("en-US");
 }
 
 /**
- * Restored from `client/src/components/hero-platform-stats.tsx`.
- * React Query removed: stats use the same fallbacks as the legacy app when proof is unavailable (no extra deps).
+ * Live counts from `GET /api/public/home-stats` (aggregate, paywall-safe).
  */
 export default function HeroPlatformStats() {
-  const stats = [
-    { icon: HelpCircle, label: "Practice Questions", value: formatStat(undefined) },
-    { icon: ClipboardCheck, label: "Mock Exams", value: "50+" },
-    { icon: Layers, label: "Flashcards", value: formatStat(undefined) },
-    { icon: BookOpen, label: "Lessons", value: formatStat(undefined) },
-    { icon: Stethoscope, label: "Clinical Simulations", value: "25+" },
-    { icon: FileText, label: "Supported Exams", value: "30+" },
-    { icon: Globe, label: "Countries", value: "10+" },
-    { icon: Languages, label: "Languages", value: "20" },
+  const [stats, setStats] = useState<HomeStatsPayload | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/public/home-stats")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d: HomeStatsPayload | null) => {
+        if (!cancelled && d) setStats(d);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const rows = [
+    { icon: HelpCircle, label: "Practice questions", value: formatStat(stats?.questionCount) },
+    { icon: Layers, label: "Flashcards", value: formatStat(stats?.totalFlashcards) },
+    { icon: BookOpen, label: "Lessons", value: formatStat(stats?.totalLessons) },
+    { icon: ClipboardCheck, label: "Study decks", value: formatStat(stats?.totalDecks) },
+    { icon: Stethoscope, label: "Clinical scenarios", value: formatStat(stats?.scenarioCount) },
+    { icon: Users, label: "Learners", value: formatStat(stats?.registeredLearners) },
+    { icon: Globe, label: "Regions", value: "US & CA" },
+    { icon: Languages, label: "Languages", value: "20+" },
   ];
 
   return (
     <section
-      className="border-y border-gray-100 bg-gradient-to-b from-gray-50 to-white"
+      className="border-y border-[var(--theme-card-border)] bg-gradient-to-b from-[var(--theme-muted-surface)] to-[var(--theme-card-bg)]"
       style={{ paddingTop: "var(--space-block)", paddingBottom: "var(--space-block)" }}
       data-testid="section-platform-stats"
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="mb-8 text-center">
-          <h2 className="mb-2 font-bold text-[var(--theme-heading-text)]" style={{ fontSize: "var(--text-section)" }} data-testid="text-platform-stats-heading">
+          <h2
+            className="mb-2 font-bold text-[var(--theme-heading-text)]"
+            style={{ fontSize: "var(--text-section)" }}
+            data-testid="text-platform-stats-heading"
+          >
             Your Complete Healthcare Exam Preparation Platform
           </h2>
-          <p className="mx-auto max-w-2xl text-base text-gray-500 lg:text-lg">
+          <p className="mx-auto max-w-2xl text-base text-[var(--theme-muted-text)] lg:text-lg">
             Everything you need to pass your nursing, NP, or allied health exam — built by educators, backed by evidence.
           </p>
         </div>
 
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:gap-6">
-          {stats.map((stat) => (
+          {rows.map((stat) => (
             <div
               key={stat.label}
-              className="rounded-2xl border border-gray-100 bg-white p-5 text-center shadow-[var(--shadow-card)] transition-shadow duration-200 hover:shadow-[var(--shadow-card-hover)]"
+              className="rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] p-5 text-center shadow-[var(--shadow-card)] transition-shadow duration-200 hover:shadow-[var(--shadow-card-hover)]"
               data-testid={`stat-card-${stat.label.toLowerCase().replace(/\s+/g, "-")}`}
             >
               <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10">
                 <stat.icon className="h-5 w-5 text-primary" />
               </div>
               <div
-                className="mb-1 text-2xl font-extrabold text-[var(--theme-heading-text)] sm:text-3xl"
+                className="mb-1 text-2xl font-extrabold tabular-nums text-[var(--theme-heading-text)] sm:text-3xl"
                 data-testid={`stat-value-${stat.label.toLowerCase().replace(/\s+/g, "-")}`}
               >
                 {stat.value}
               </div>
-              <div className="text-xs font-medium text-gray-500 sm:text-sm">{stat.label}</div>
+              <div className="text-xs font-medium text-[var(--theme-muted-text)] sm:text-sm">{stat.label}</div>
             </div>
           ))}
         </div>
