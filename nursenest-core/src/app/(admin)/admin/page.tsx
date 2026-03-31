@@ -350,6 +350,7 @@ export default async function AdminPage() {
     { href: "/api/admin/operations-dashboard", label: "Operations dashboard JSON" },
     { href: "/api/admin/scalability-report", label: "Scalability report JSON" },
     { href: "/api/admin/question-bank-diagnostics", label: "Question diagnostics JSON" },
+    { href: "/api/admin/question-bank-coverage", label: "Question bank coverage (taxonomy + quality)" },
     { href: "/api/admin/pathway-lesson-translations", label: "Pathway translation coverage JSON" },
     { href: "/api/admin/questions?page=1&pageSize=20", label: "Questions (paged)" },
     { href: "/api/admin/lessons?page=1&pageSize=20", label: "Lessons (paged)" },

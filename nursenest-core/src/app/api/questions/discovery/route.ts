@@ -1,4 +1,6 @@
+import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { enforceDiscoveryProtection } from "@/lib/http/api-protection";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { diagnoseDiscoveryEmpty } from "@/lib/questions/discovery-empty-diagnostics";
 import {
@@ -20,9 +22,12 @@ const DISCOVERY_EXAM_BUCKET_CAP = DISCOVERY_SQL_EXAM_LIMIT;
  * Lightweight bank discovery: topic buckets + counts + exam code breakdown (no question bodies).
  * Aggregates use SQL LIMITs so the database never materializes unbounded distinct groups for the app.
  */
-export async function GET() {
+export async function GET(req: NextRequest) {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
+
+  const blocked = enforceDiscoveryProtection(req, gate.userId);
+  if (blocked) return blocked;
 
   setSentryServerContext({ route: "/api/questions/discovery", feature: "question", userId: gate.userId });
 
