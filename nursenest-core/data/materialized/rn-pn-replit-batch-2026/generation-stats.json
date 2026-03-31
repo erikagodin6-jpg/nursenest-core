@@ -1,0 +1,48 @@
+{
+  "sourceFile": "data/replit-exports/exam_questions.json",
+  "rawRows": 13375,
+  "emittedQuestions": 7795,
+  "emittedByMaterializedTier": {
+    "rn": 3583,
+    "lvn_lpn": 4212
+  },
+  "skippedNotPublished": 53,
+  "skippedInvalidMcq": 1591,
+  "skippedNonNursingTier": 3580,
+  "skippedStemDedupe": 356,
+  "catchAllTopicKey": "general-nursing-clinical",
+  "catchAllMappedCount": 3635,
+  "topicQuestionCounts": {
+    "pulmonary-embolism": 104,
+    "heart-failure": 329,
+    "myocardial-infarction": 166,
+    "angina": 32,
+    "dysrhythmias": 214,
+    "hypertension": 397,
+    "shock": 131,
+    "asthma": 187,
+    "ards": 42,
+    "pneumonia": 164,
+    "copd-respiratory": 129,
+    "abg-interpretation": 81,
+    "acid-base-advanced": 20,
+    "sodium-imbalance": 93,
+    "potassium-imbalance": 124,
+    "insulin-hypoglycemia": 280,
+    "sepsis": 65,
+    "infection-control": 652,
+    "anticoagulants": 156,
+    "antibiotics": 117,
+    "pain-management": 160,
+    "wound-care": 175,
+    "delegation": 37,
+    "fluid-balance": 143,
+    "prioritization-abcs": 162,
+    "general-nursing-clinical": 3635
+  },
+  "dedupe": {
+    "method": "stemHash(trim+lowercase)",
+    "note": "first row by stable id sort wins"
+  },
+  "flashcardTarget": 649
+}

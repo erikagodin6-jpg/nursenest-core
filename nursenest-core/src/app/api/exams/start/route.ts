@@ -10,9 +10,16 @@ import { setSentryServerContext } from "@/lib/observability/sentry-server-contex
 import { withRetry } from "@/lib/resilience/with-retry";
 import { MAX_SESSION_QUESTION_IDS } from "@/lib/exams/exam-session-bounds";
 import {
+  EXAM_NP_CLINICAL_PRACTICE_2026_ID,
+  EXAM_PN_MIXED_PRACTICE_2026_ID,
+  EXAM_PRESET_NP_CLINICAL_2026_TAG,
+  EXAM_PRESET_PN_MIXED_2026_TAG,
+  EXAM_PRESET_RN_MIXED_2026_TAG,
+  EXAM_RN_MIXED_PRACTICE_2026_ID,
   MIXED_PRACTICE_2026_EXAM_ID,
   MIXED_PRACTICE_2026_QUESTION_TARGET,
   MIXED_PRACTICE_2026_RN_PN_TAG,
+  NP_CLINICAL_2026_QUESTION_TARGET,
 } from "@/lib/exams/practice-exam-presets";
 import { seedMinimalQuestionBankIfEmpty } from "@/lib/exams/seed-minimal-question-bank";
 import { diagnoseExamStartEmpty } from "@/lib/questions/exam-start-empty-diagnostics";
@@ -21,7 +28,7 @@ import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics"
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 const DEFAULT_POOL_LIMIT = Math.min(20, MAX_SESSION_QUESTION_IDS);
-const TAG_POOL_FETCH = Math.min(120, MAX_SESSION_QUESTION_IDS);
+const TAG_POOL_FETCH = Math.min(400, MAX_SESSION_QUESTION_IDS);
 
 function shuffleIds<T extends { id: string }>(rows: T[]): T[] {
   const copy = [...rows];
@@ -55,7 +62,13 @@ export async function POST(req: Request) {
   }
 
   const effectiveExamId =
-    questionTag === MIXED_PRACTICE_2026_RN_PN_TAG ? MIXED_PRACTICE_2026_EXAM_ID : examId;
+    questionTag === MIXED_PRACTICE_2026_RN_PN_TAG
+      ? MIXED_PRACTICE_2026_EXAM_ID
+      : questionTag === EXAM_PRESET_RN_MIXED_2026_TAG
+        ? EXAM_RN_MIXED_PRACTICE_2026_ID
+        : questionTag === EXAM_PRESET_PN_MIXED_2026_TAG
+          ? EXAM_PN_MIXED_PRACTICE_2026_ID
+          : examId;
 
   if (effectiveExamId) {
     const exam = await withRetry(() =>
@@ -81,13 +94,41 @@ export async function POST(req: Request) {
     const presetWhere =
       questionTag === MIXED_PRACTICE_2026_RN_PN_TAG
         ? { AND: [baseWhere, { tags: { has: MIXED_PRACTICE_2026_RN_PN_TAG } }] }
-        : questionTag
-          ? { AND: [baseWhere, { tags: { has: questionTag } }] }
-          : baseWhere;
+        : questionTag === EXAM_PRESET_RN_MIXED_2026_TAG
+          ? {
+              AND: [
+                baseWhere,
+                { tags: { has: EXAM_PRESET_RN_MIXED_2026_TAG } },
+                { tier: "rn" },
+              ],
+            }
+          : questionTag === EXAM_PRESET_PN_MIXED_2026_TAG
+            ? {
+                AND: [
+                  baseWhere,
+                  { tags: { has: EXAM_PRESET_PN_MIXED_2026_TAG } },
+                  { tier: { in: ["rpn", "lvn"] } },
+                ],
+              }
+            : questionTag === EXAM_PRESET_NP_CLINICAL_2026_TAG
+              ? {
+                  AND: [
+                    baseWhere,
+                    { tags: { has: EXAM_PRESET_NP_CLINICAL_2026_TAG } },
+                    { tier: "np" },
+                  ],
+                }
+              : questionTag
+                ? { AND: [baseWhere, { tags: { has: questionTag } }] }
+                : baseWhere;
     const poolLimit =
-      questionTag === MIXED_PRACTICE_2026_RN_PN_TAG
+      questionTag === MIXED_PRACTICE_2026_RN_PN_TAG ||
+      questionTag === EXAM_PRESET_RN_MIXED_2026_TAG ||
+      questionTag === EXAM_PRESET_PN_MIXED_2026_TAG
         ? Math.min(MIXED_PRACTICE_2026_QUESTION_TARGET, MAX_SESSION_QUESTION_IDS)
-        : DEFAULT_POOL_LIMIT;
+        : questionTag === EXAM_PRESET_NP_CLINICAL_2026_TAG
+          ? Math.min(NP_CLINICAL_2026_QUESTION_TARGET, MAX_SESSION_QUESTION_IDS)
+          : DEFAULT_POOL_LIMIT;
 
     const questionPoolRaw = await withRetry(() =>
       prisma.examQuestion.findMany({

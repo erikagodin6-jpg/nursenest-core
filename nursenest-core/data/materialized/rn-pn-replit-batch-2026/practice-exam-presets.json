@@ -1,0 +1,25 @@
+[
+  {
+    "id": "preset_mixed_2026_rn_pn",
+    "examId": "exam_mixed_practice_2026_rn_pn",
+    "tag": "mixed-practice-2026-rn-pn",
+    "title": "Mixed RN/PN — full batch (20)",
+    "questionCount": 20
+  },
+  {
+    "id": "preset_rn_mixed_2026",
+    "examId": "exam_rn_mixed_practice_2026",
+    "tag": "exam-preset-rn-mixed-2026",
+    "title": "RN mixed practice (20)",
+    "questionCount": 20,
+    "tierFilter": "rn"
+  },
+  {
+    "id": "preset_pn_mixed_2026",
+    "examId": "exam_pn_mixed_practice_2026",
+    "tag": "exam-preset-pn-mixed-2026",
+    "title": "PN mixed practice (20)",
+    "questionCount": 20,
+    "tierFilter": "pn"
+  }
+]

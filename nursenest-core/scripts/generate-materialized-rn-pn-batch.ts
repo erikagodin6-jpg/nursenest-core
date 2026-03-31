@@ -1,5 +1,9 @@
 #!/usr/bin/env npx tsx
 /**
+ * @deprecated **Do not use for production banks.** This script intentionally caps output at
+ * **10 topics × (7 RN + 5 PN) = 120 questions** (`takeRn = slice(0,7)`, `takePn = slice(0,5)` per topic).
+ * The Replit export holds **thousands** of valid items; use {@link ../generate-rn-pn-sprint2-batch.ts} instead.
+ *
  * One-off content generator: reads Replit `exam_questions.json`, writes materialized batch files under
  * `data/materialized/rn-pn-replit-batch-2026/` (questions + flashcards + catalog lesson payloads).
  *

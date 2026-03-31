@@ -1,0 +1,382 @@
+{
+  "usNpFnp": [
+    {
+      "slug": "fnp-overlay-heart-failure",
+      "title": "Heart failure — NP diagnosis & management (FNP)",
+      "topic": "Heart failure",
+      "topicSlug": "heart-failure",
+      "bodySystem": "General",
+      "previewSectionCount": 1,
+      "seoTitle": "Heart failure — NP diagnosis & management (FNP) | NurseNest",
+      "seoDescription": "FNP NP overlay paired with RN lesson slug us-rn-heart-failure; APRN diagnosis, management, prescribing, and follow-up.",
+      "sections": [
+        {
+          "id": "intro",
+          "heading": "Introduction",
+          "kind": "intro",
+          "body": "This is an **NP overlay** for **Heart failure**—not a repeat of the full RN lesson. Pair with the RN depth lesson `us-rn-heart-failure` in your pathway catalog for pathophys and NCLEX-style drills, then use this block for **APRN-level** decisions."
+        },
+        {
+          "id": "diagnosis_np",
+          "heading": "Diagnosis considerations",
+          "kind": "clinical_meaning",
+          "body": "Frame **problem representation**, **red flags**, and **must-not-miss** diagnoses. Boards favor **next diagnostic step** vs **premature treatment**—tie history, exam, and targeted testing to pre-test probability."
+        },
+        {
+          "id": "management_np",
+          "heading": "Management plans",
+          "kind": "core_concept",
+          "body": "Outline **initial stabilization** (when implied), **guideline-concordant** therapy where the stem allows, **consult triggers**, and **when to defer** to specialty or ED. Prefer the option that matches **severity** and **comorbid constraints**."
+        },
+        {
+          "id": "meds_np",
+          "heading": "Medication adjustments",
+          "kind": "exam_relevance",
+          "body": "Expect **dose adjustment** for renal/hepatic function, **interaction** and **contraindication** traps, **deprescribing** when appropriate, and **monitoring** after a change (labs, vitals, toxicity screens)."
+        },
+        {
+          "id": "followup_np",
+          "heading": "Follow-up & monitoring",
+          "kind": "clinical_scenario",
+          "body": "Choose **follow-up interval**, **patient education**, **safety netting**, and **reassessment targets** (symptoms, labs, adherence). NP items often test whether you **close the loop** on risk—not only the first visit action."
+        }
+      ]
+    },
+    {
+      "slug": "fnp-overlay-myocardial-infarction",
+      "title": "MI / ACS — NP overlay (FNP)",
+      "topic": "MI / ACS",
+      "topicSlug": "myocardial-infarction",
+      "bodySystem": "General",
+      "previewSectionCount": 1,
+      "seoTitle": "MI / ACS — NP overlay (FNP) | NurseNest",
+      "seoDescription": "FNP NP overlay paired with RN lesson slug us-rn-myocardial-infarction; APRN diagnosis, management, prescribing, and follow-up.",
+      "sections": [
+        {
+          "id": "intro",
+          "heading": "Introduction",
+          "kind": "intro",
+          "body": "This is an **NP overlay** for **MI / ACS**—not a repeat of the full RN lesson. Pair with the RN depth lesson `us-rn-myocardial-infarction` in your pathway catalog for pathophys and NCLEX-style drills, then use this block for **APRN-level** decisions."
+        },
+        {
+          "id": "diagnosis_np",
+          "heading": "Diagnosis considerations",
+          "kind": "clinical_meaning",
+          "body": "Frame **problem representation**, **red flags**, and **must-not-miss** diagnoses. Boards favor **next diagnostic step** vs **premature treatment**—tie history, exam, and targeted testing to pre-test probability."
+        },
+        {
+          "id": "management_np",
+          "heading": "Management plans",
+          "kind": "core_concept",
+          "body": "Outline **initial stabilization** (when implied), **guideline-concordant** therapy where the stem allows, **consult triggers**, and **when to defer** to specialty or ED. Prefer the option that matches **severity** and **comorbid constraints**."
+        },
+        {
+          "id": "meds_np",
+          "heading": "Medication adjustments",
+          "kind": "exam_relevance",
+          "body": "Expect **dose adjustment** for renal/hepatic function, **interaction** and **contraindication** traps, **deprescribing** when appropriate, and **monitoring** after a change (labs, vitals, toxicity screens)."
+        },
+        {
+          "id": "followup_np",
+          "heading": "Follow-up & monitoring",
+          "kind": "clinical_scenario",
+          "body": "Choose **follow-up interval**, **patient education**, **safety netting**, and **reassessment targets** (symptoms, labs, adherence). NP items often test whether you **close the loop** on risk—not only the first visit action."
+        }
+      ]
+    },
+    {
+      "slug": "fnp-overlay-shock",
+      "title": "Shock — NP resuscitation reasoning (FNP)",
+      "topic": "Shock",
+      "topicSlug": "shock",
+      "bodySystem": "General",
+      "previewSectionCount": 1,
+      "seoTitle": "Shock — NP resuscitation reasoning (FNP) | NurseNest",
+      "seoDescription": "FNP NP overlay paired with RN lesson slug us-rn-shock; APRN diagnosis, management, prescribing, and follow-up.",
+      "sections": [
+        {
+          "id": "intro",
+          "heading": "Introduction",
+          "kind": "intro",
+          "body": "This is an **NP overlay** for **Shock**—not a repeat of the full RN lesson. Pair with the RN depth lesson `us-rn-shock` in your pathway catalog for pathophys and NCLEX-style drills, then use this block for **APRN-level** decisions."
+        },
+        {
+          "id": "diagnosis_np",
+          "heading": "Diagnosis considerations",
+          "kind": "clinical_meaning",
+          "body": "Frame **problem representation**, **red flags**, and **must-not-miss** diagnoses. Boards favor **next diagnostic step** vs **premature treatment**—tie history, exam, and targeted testing to pre-test probability."
+        },
+        {
+          "id": "management_np",
+          "heading": "Management plans",
+          "kind": "core_concept",
+          "body": "Outline **initial stabilization** (when implied), **guideline-concordant** therapy where the stem allows, **consult triggers**, and **when to defer** to specialty or ED. Prefer the option that matches **severity** and **comorbid constraints**."
+        },
+        {
+          "id": "meds_np",
+          "heading": "Medication adjustments",
+          "kind": "exam_relevance",
+          "body": "Expect **dose adjustment** for renal/hepatic function, **interaction** and **contraindication** traps, **deprescribing** when appropriate, and **monitoring** after a change (labs, vitals, toxicity screens)."
+        },
+        {
+          "id": "followup_np",
+          "heading": "Follow-up & monitoring",
+          "kind": "clinical_scenario",
+          "body": "Choose **follow-up interval**, **patient education**, **safety netting**, and **reassessment targets** (symptoms, labs, adherence). NP items often test whether you **close the loop** on risk—not only the first visit action."
+        }
+      ]
+    },
+    {
+      "slug": "fnp-overlay-abg-acid-base",
+      "title": "ABG & acid–base — NP interpretation (FNP)",
+      "topic": "ABG & acid–base",
+      "topicSlug": "abg-acid-base",
+      "bodySystem": "General",
+      "previewSectionCount": 1,
+      "seoTitle": "ABG & acid–base — NP interpretation (FNP) | NurseNest",
+      "seoDescription": "FNP NP overlay paired with RN lesson slug us-rn-abg-interpretation; APRN diagnosis, management, prescribing, and follow-up.",
+      "sections": [
+        {
+          "id": "intro",
+          "heading": "Introduction",
+          "kind": "intro",
+          "body": "This is an **NP overlay** for **ABG & acid–base**—not a repeat of the full RN lesson. Pair with the RN depth lesson `us-rn-abg-interpretation` in your pathway catalog for pathophys and NCLEX-style drills, then use this block for **APRN-level** decisions."
+        },
+        {
+          "id": "diagnosis_np",
+          "heading": "Diagnosis considerations",
+          "kind": "clinical_meaning",
+          "body": "Frame **problem representation**, **red flags**, and **must-not-miss** diagnoses. Boards favor **next diagnostic step** vs **premature treatment**—tie history, exam, and targeted testing to pre-test probability."
+        },
+        {
+          "id": "management_np",
+          "heading": "Management plans",
+          "kind": "core_concept",
+          "body": "Outline **initial stabilization** (when implied), **guideline-concordant** therapy where the stem allows, **consult triggers**, and **when to defer** to specialty or ED. Prefer the option that matches **severity** and **comorbid constraints**."
+        },
+        {
+          "id": "meds_np",
+          "heading": "Medication adjustments",
+          "kind": "exam_relevance",
+          "body": "Expect **dose adjustment** for renal/hepatic function, **interaction** and **contraindication** traps, **deprescribing** when appropriate, and **monitoring** after a change (labs, vitals, toxicity screens)."
+        },
+        {
+          "id": "followup_np",
+          "heading": "Follow-up & monitoring",
+          "kind": "clinical_scenario",
+          "body": "Choose **follow-up interval**, **patient education**, **safety netting**, and **reassessment targets** (symptoms, labs, adherence). NP items often test whether you **close the loop** on risk—not only the first visit action."
+        }
+      ]
+    },
+    {
+      "slug": "fnp-overlay-respiratory-acute",
+      "title": "COPD, asthma, ARDS, pneumonia, PE — NP respiratory overlay (FNP)",
+      "topic": "COPD, asthma, ARDS, pneumonia, PE",
+      "topicSlug": "respiratory-acute",
+      "bodySystem": "General",
+      "previewSectionCount": 1,
+      "seoTitle": "COPD, asthma, ARDS, pneumonia, PE — NP respiratory overlay (FNP) | NurseNest",
+      "seoDescription": "FNP NP overlay paired with RN lesson slug us-rn-copd-respiratory; APRN diagnosis, management, prescribing, and follow-up.",
+      "sections": [
+        {
+          "id": "intro",
+          "heading": "Introduction",
+          "kind": "intro",
+          "body": "This is an **NP overlay** for **COPD, asthma, ARDS, pneumonia, PE**—not a repeat of the full RN lesson. Pair with the RN depth lesson `us-rn-copd-respiratory` in your pathway catalog for pathophys and NCLEX-style drills, then use this block for **APRN-level** decisions."
+        },
+        {
+          "id": "diagnosis_np",
+          "heading": "Diagnosis considerations",
+          "kind": "clinical_meaning",
+          "body": "Frame **problem representation**, **red flags**, and **must-not-miss** diagnoses. Boards favor **next diagnostic step** vs **premature treatment**—tie history, exam, and targeted testing to pre-test probability."
+        },
+        {
+          "id": "management_np",
+          "heading": "Management plans",
+          "kind": "core_concept",
+          "body": "Outline **initial stabilization** (when implied), **guideline-concordant** therapy where the stem allows, **consult triggers**, and **when to defer** to specialty or ED. Prefer the option that matches **severity** and **comorbid constraints**."
+        },
+        {
+          "id": "meds_np",
+          "heading": "Medication adjustments",
+          "kind": "exam_relevance",
+          "body": "Expect **dose adjustment** for renal/hepatic function, **interaction** and **contraindication** traps, **deprescribing** when appropriate, and **monitoring** after a change (labs, vitals, toxicity screens)."
+        },
+        {
+          "id": "followup_np",
+          "heading": "Follow-up & monitoring",
+          "kind": "clinical_scenario",
+          "body": "Choose **follow-up interval**, **patient education**, **safety netting**, and **reassessment targets** (symptoms, labs, adherence). NP items often test whether you **close the loop** on risk—not only the first visit action."
+        }
+      ]
+    },
+    {
+      "slug": "fnp-overlay-diabetes-metabolic",
+      "title": "Diabetes & complications — NP overlay (FNP)",
+      "topic": "Diabetes & complications",
+      "topicSlug": "diabetes-metabolic",
+      "bodySystem": "General",
+      "previewSectionCount": 1,
+      "seoTitle": "Diabetes & complications — NP overlay (FNP) | NurseNest",
+      "seoDescription": "FNP NP overlay paired with RN lesson slug us-rn-insulin-hypoglycemia; APRN diagnosis, management, prescribing, and follow-up.",
+      "sections": [
+        {
+          "id": "intro",
+          "heading": "Introduction",
+          "kind": "intro",
+          "body": "This is an **NP overlay** for **Diabetes & complications**—not a repeat of the full RN lesson. Pair with the RN depth lesson `us-rn-insulin-hypoglycemia` in your pathway catalog for pathophys and NCLEX-style drills, then use this block for **APRN-level** decisions."
+        },
+        {
+          "id": "diagnosis_np",
+          "heading": "Diagnosis considerations",
+          "kind": "clinical_meaning",
+          "body": "Frame **problem representation**, **red flags**, and **must-not-miss** diagnoses. Boards favor **next diagnostic step** vs **premature treatment**—tie history, exam, and targeted testing to pre-test probability."
+        },
+        {
+          "id": "management_np",
+          "heading": "Management plans",
+          "kind": "core_concept",
+          "body": "Outline **initial stabilization** (when implied), **guideline-concordant** therapy where the stem allows, **consult triggers**, and **when to defer** to specialty or ED. Prefer the option that matches **severity** and **comorbid constraints**."
+        },
+        {
+          "id": "meds_np",
+          "heading": "Medication adjustments",
+          "kind": "exam_relevance",
+          "body": "Expect **dose adjustment** for renal/hepatic function, **interaction** and **contraindication** traps, **deprescribing** when appropriate, and **monitoring** after a change (labs, vitals, toxicity screens)."
+        },
+        {
+          "id": "followup_np",
+          "heading": "Follow-up & monitoring",
+          "kind": "clinical_scenario",
+          "body": "Choose **follow-up interval**, **patient education**, **safety netting**, and **reassessment targets** (symptoms, labs, adherence). NP items often test whether you **close the loop** on risk—not only the first visit action."
+        }
+      ]
+    },
+    {
+      "slug": "fnp-overlay-sepsis-infection",
+      "title": "Sepsis & infection control — NP overlay (FNP)",
+      "topic": "Sepsis & infection control",
+      "topicSlug": "sepsis-infection",
+      "bodySystem": "General",
+      "previewSectionCount": 1,
+      "seoTitle": "Sepsis & infection control — NP overlay (FNP) | NurseNest",
+      "seoDescription": "FNP NP overlay paired with RN lesson slug us-rn-sepsis; APRN diagnosis, management, prescribing, and follow-up.",
+      "sections": [
+        {
+          "id": "intro",
+          "heading": "Introduction",
+          "kind": "intro",
+          "body": "This is an **NP overlay** for **Sepsis & infection control**—not a repeat of the full RN lesson. Pair with the RN depth lesson `us-rn-sepsis` in your pathway catalog for pathophys and NCLEX-style drills, then use this block for **APRN-level** decisions."
+        },
+        {
+          "id": "diagnosis_np",
+          "heading": "Diagnosis considerations",
+          "kind": "clinical_meaning",
+          "body": "Frame **problem representation**, **red flags**, and **must-not-miss** diagnoses. Boards favor **next diagnostic step** vs **premature treatment**—tie history, exam, and targeted testing to pre-test probability."
+        },
+        {
+          "id": "management_np",
+          "heading": "Management plans",
+          "kind": "core_concept",
+          "body": "Outline **initial stabilization** (when implied), **guideline-concordant** therapy where the stem allows, **consult triggers**, and **when to defer** to specialty or ED. Prefer the option that matches **severity** and **comorbid constraints**."
+        },
+        {
+          "id": "meds_np",
+          "heading": "Medication adjustments",
+          "kind": "exam_relevance",
+          "body": "Expect **dose adjustment** for renal/hepatic function, **interaction** and **contraindication** traps, **deprescribing** when appropriate, and **monitoring** after a change (labs, vitals, toxicity screens)."
+        },
+        {
+          "id": "followup_np",
+          "heading": "Follow-up & monitoring",
+          "kind": "clinical_scenario",
+          "body": "Choose **follow-up interval**, **patient education**, **safety netting**, and **reassessment targets** (symptoms, labs, adherence). NP items often test whether you **close the loop** on risk—not only the first visit action."
+        }
+      ]
+    },
+    {
+      "slug": "fnp-overlay-electrolytes-volume",
+      "title": "Electrolytes & volume — NP overlay (FNP)",
+      "topic": "Electrolytes & volume",
+      "topicSlug": "electrolytes-volume",
+      "bodySystem": "General",
+      "previewSectionCount": 1,
+      "seoTitle": "Electrolytes & volume — NP overlay (FNP) | NurseNest",
+      "seoDescription": "FNP NP overlay paired with RN lesson slug us-rn-fluid-balance; APRN diagnosis, management, prescribing, and follow-up.",
+      "sections": [
+        {
+          "id": "intro",
+          "heading": "Introduction",
+          "kind": "intro",
+          "body": "This is an **NP overlay** for **Electrolytes & volume**—not a repeat of the full RN lesson. Pair with the RN depth lesson `us-rn-fluid-balance` in your pathway catalog for pathophys and NCLEX-style drills, then use this block for **APRN-level** decisions."
+        },
+        {
+          "id": "diagnosis_np",
+          "heading": "Diagnosis considerations",
+          "kind": "clinical_meaning",
+          "body": "Frame **problem representation**, **red flags**, and **must-not-miss** diagnoses. Boards favor **next diagnostic step** vs **premature treatment**—tie history, exam, and targeted testing to pre-test probability."
+        },
+        {
+          "id": "management_np",
+          "heading": "Management plans",
+          "kind": "core_concept",
+          "body": "Outline **initial stabilization** (when implied), **guideline-concordant** therapy where the stem allows, **consult triggers**, and **when to defer** to specialty or ED. Prefer the option that matches **severity** and **comorbid constraints**."
+        },
+        {
+          "id": "meds_np",
+          "heading": "Medication adjustments",
+          "kind": "exam_relevance",
+          "body": "Expect **dose adjustment** for renal/hepatic function, **interaction** and **contraindication** traps, **deprescribing** when appropriate, and **monitoring** after a change (labs, vitals, toxicity screens)."
+        },
+        {
+          "id": "followup_np",
+          "heading": "Follow-up & monitoring",
+          "kind": "clinical_scenario",
+          "body": "Choose **follow-up interval**, **patient education**, **safety netting**, and **reassessment targets** (symptoms, labs, adherence). NP items often test whether you **close the loop** on risk—not only the first visit action."
+        }
+      ]
+    },
+    {
+      "slug": "fnp-overlay-np-differential-prescribing-chronic",
+      "title": "Differential, prescribing & chronic care — NP core (FNP)",
+      "topic": "Differential, prescribing & chronic care",
+      "topicSlug": "np-differential-prescribing-chronic",
+      "bodySystem": "General",
+      "previewSectionCount": 1,
+      "seoTitle": "Differential, prescribing & chronic care — NP core (FNP) | NurseNest",
+      "seoDescription": "FNP NP overlay paired with RN lesson slug fnp-differential-primary-care; APRN diagnosis, management, prescribing, and follow-up.",
+      "sections": [
+        {
+          "id": "intro",
+          "heading": "Introduction",
+          "kind": "intro",
+          "body": "This is an **NP overlay** for **Differential, prescribing & chronic care**—not a repeat of the full RN lesson. Pair with the RN depth lesson `fnp-differential-primary-care` in your pathway catalog for pathophys and NCLEX-style drills, then use this block for **APRN-level** decisions."
+        },
+        {
+          "id": "diagnosis_np",
+          "heading": "Diagnosis considerations",
+          "kind": "clinical_meaning",
+          "body": "Frame **problem representation**, **red flags**, and **must-not-miss** diagnoses. Boards favor **next diagnostic step** vs **premature treatment**—tie history, exam, and targeted testing to pre-test probability."
+        },
+        {
+          "id": "management_np",
+          "heading": "Management plans",
+          "kind": "core_concept",
+          "body": "Outline **initial stabilization** (when implied), **guideline-concordant** therapy where the stem allows, **consult triggers**, and **when to defer** to specialty or ED. Prefer the option that matches **severity** and **comorbid constraints**."
+        },
+        {
+          "id": "meds_np",
+          "heading": "Medication adjustments",
+          "kind": "exam_relevance",
+          "body": "Expect **dose adjustment** for renal/hepatic function, **interaction** and **contraindication** traps, **deprescribing** when appropriate, and **monitoring** after a change (labs, vitals, toxicity screens)."
+        },
+        {
+          "id": "followup_np",
+          "heading": "Follow-up & monitoring",
+          "kind": "clinical_scenario",
+          "body": "Choose **follow-up interval**, **patient education**, **safety netting**, and **reassessment targets** (symptoms, labs, adherence). NP items often test whether you **close the loop** on risk—not only the first visit action."
+        }
+      ]
+    }
+  ]
+}

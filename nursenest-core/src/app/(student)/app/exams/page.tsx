@@ -9,6 +9,10 @@ import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { resolveDefaultExamForUser } from "@/lib/exams/resolve-default-exam";
 import {
+  EXAM_PN_MIXED_PRACTICE_2026_ID,
+  EXAM_PRESET_PN_MIXED_2026_TAG,
+  EXAM_PRESET_RN_MIXED_2026_TAG,
+  EXAM_RN_MIXED_PRACTICE_2026_ID,
   MIXED_PRACTICE_2026_EXAM_ID,
   MIXED_PRACTICE_2026_RN_PN_TAG,
 } from "@/lib/exams/practice-exam-presets";
@@ -177,6 +181,50 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
           examTitle="Mixed clinical — RN/PN batch"
           questionTag={MIXED_PRACTICE_2026_RN_PN_TAG}
           sessionNamespace="mixed2026"
+        />
+      </section>
+
+      <section className="mt-10 space-y-2">
+        <h2 className="text-xl font-semibold">RN mixed practice (20 questions)</h2>
+        <p className="text-sm text-muted">
+          Shuffled draw from items tagged with the RN preset batch—RN-tier subscribers only. Tag{" "}
+          <span className="font-mono text-xs">{EXAM_PRESET_RN_MIXED_2026_TAG}</span>.
+        </p>
+        <ExamPracticeClient
+          examId={EXAM_RN_MIXED_PRACTICE_2026_ID}
+          examTitle="RN mixed practice"
+          questionTag={EXAM_PRESET_RN_MIXED_2026_TAG}
+          sessionNamespace="rnMixed2026"
+        />
+      </section>
+
+      <section className="mt-10 space-y-2">
+        <h2 className="text-xl font-semibold">PN mixed practice (20 questions)</h2>
+        <p className="text-sm text-muted">
+          Shuffled draw from items tagged with the PN preset batch (PN ladder tiers). Tag{" "}
+          <span className="font-mono text-xs">{EXAM_PRESET_PN_MIXED_2026_TAG}</span>.
+        </p>
+        <ExamPracticeClient
+          examId={EXAM_PN_MIXED_PRACTICE_2026_ID}
+          examTitle="PN mixed practice"
+          questionTag={EXAM_PRESET_PN_MIXED_2026_TAG}
+          sessionNamespace="pnMixed2026"
+        />
+      </section>
+
+      <section className="mt-10 space-y-2">
+        <h2 className="text-xl font-semibold">NP clinical practice (25 questions)</h2>
+        <p className="text-sm text-muted">
+          Draws from Replit <strong>NP-tier</strong> items tagged for the clinical layer (diagnosis, management, prescribing,
+          follow-up). Requires an <strong>NP</strong> subscription tier. Tag{" "}
+          <span className="font-mono text-xs">{EXAM_PRESET_NP_CLINICAL_2026_TAG}</span>—run{" "}
+          <code className="rounded bg-muted px-1 text-xs">npx tsx scripts/apply-np-clinical-layer.ts</code> after generate.
+        </p>
+        <ExamPracticeClient
+          examId={EXAM_NP_CLINICAL_PRACTICE_2026_ID}
+          examTitle="NP clinical practice"
+          questionTag={EXAM_PRESET_NP_CLINICAL_2026_TAG}
+          sessionNamespace="npClinical2026"
         />
       </section>
 
