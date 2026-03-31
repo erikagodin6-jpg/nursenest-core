@@ -30,7 +30,7 @@ import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { LazySection } from "@/legacy/marketing/lazy-section";
 import { buildHomepageHeroSlides, HOMEPAGE_HERO_SLIDE_METADATA } from "@/lib/marketing-assets";
-import { MarketingScreenshotStack } from "@/components/marketing/marketing-screenshot-stack";
+import { HomeHeroMediaPanel } from "@/components/marketing/home-hero-media-panel";
 import type { HomepageLessonTeaser } from "@/lib/marketing/homepage-lesson-teasers";
 import { HomeHeroPathGateway } from "@/components/marketing/home-hero-path-gateway";
 import { HomeMarketingConversionBlocks } from "@/components/marketing/home-marketing-conversion-blocks";
@@ -462,18 +462,11 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
 
               <div
                 className={
-                  showHeroMediaColumn
-                    ? "relative mt-8 flex min-h-0 w-full min-w-0 flex-col justify-center md:mt-0 md:max-h-[min(40rem,78vh)]"
-                    : "hidden"
+                  showHeroMediaColumn ? "relative mt-8 w-full min-w-0 md:mt-0 md:flex md:flex-col md:justify-center" : "hidden"
                 }
                 style={{ overflowAnchor: "none" }}
               >
-                <MarketingScreenshotStack
-                  slides={heroSlides}
-                  pickIndices={[0, 1, 2]}
-                  testIdPrefix="hero-screenshot-stack"
-                  className="md:max-h-[min(40rem,78vh)] md:overflow-y-auto md:pr-1"
-                />
+                <HomeHeroMediaPanel slides={heroSlides} primaryIndex={0} secondaryIndices={[1, 2]} />
               </div>
             </div>
 
