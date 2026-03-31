@@ -9,7 +9,11 @@ import { productEvent } from "@/lib/observability/product-events";
 import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
 import { MAX_SESSION_QUESTION_IDS } from "@/lib/exams/exam-session-bounds";
-import { MIXED_PRACTICE_2026_QUESTION_TARGET, MIXED_PRACTICE_2026_RN_PN_TAG } from "@/lib/exams/practice-exam-presets";
+import {
+  MIXED_PRACTICE_2026_EXAM_ID,
+  MIXED_PRACTICE_2026_QUESTION_TARGET,
+  MIXED_PRACTICE_2026_RN_PN_TAG,
+} from "@/lib/exams/practice-exam-presets";
 import { seedMinimalQuestionBankIfEmpty } from "@/lib/exams/seed-minimal-question-bank";
 import { diagnoseExamStartEmpty } from "@/lib/questions/exam-start-empty-diagnostics";
 import { QUESTION_PAYLOAD_WARN_BYTES } from "@/lib/questions/question-api-limits";
@@ -50,10 +54,13 @@ export async function POST(req: Request) {
     /* optional body */
   }
 
-  if (examId) {
+  const effectiveExamId =
+    questionTag === MIXED_PRACTICE_2026_RN_PN_TAG ? MIXED_PRACTICE_2026_EXAM_ID : examId;
+
+  if (effectiveExamId) {
     const exam = await withRetry(() =>
       prisma.exam.findUnique({
-        where: { id: examId! },
+        where: { id: effectiveExamId },
         select: { id: true, status: true, country: true, tier: true },
       }),
     );
@@ -61,7 +68,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Exam not found", code: "exam_not_found" }, { status: 404 });
     }
     if (!userCanAccessExam(gate.entitlement, exam)) {
-      logPaywallDeny("/api/exams/start", "exam_out_of_scope", { examId: examId ?? "" });
+      logPaywallDeny("/api/exams/start", "exam_out_of_scope", { examId: effectiveExamId });
       return NextResponse.json(
         { error: "Forbidden", code: "exam_not_in_plan" },
         { status: 403 },
@@ -97,7 +104,7 @@ export async function POST(req: Request) {
     const session = await prisma.examSession.create({
       data: {
         userId: gate.userId,
-        examId,
+        examId: effectiveExamId,
         questionIds: questionPool.map((q) => q.id),
         answers: {},
         currentIndex: 0,
@@ -109,7 +116,7 @@ export async function POST(req: Request) {
       questionPool.length === 0 ? await diagnoseExamStartEmpty(gate.entitlement) : undefined;
 
     if (questionPool.length === 0) {
-      productEvent("exam_pool_empty", { hasExamId: !!examId });
+      productEvent("exam_pool_empty", { hasExamId: !!effectiveExamId });
       if (poolDiagnostics) {
         safeServerLog("api_exams_start", "pool_empty", {
           code: poolDiagnostics.code,
@@ -125,7 +132,7 @@ export async function POST(req: Request) {
     if (hydrate === "window") {
       const windowBody = {
         sessionId: session.id,
-        examId,
+        examId: effectiveExamId,
         total: questionPool.length,
         questionIds,
         questions: questionPool.length ? [questionPool[0]] : [],
@@ -151,7 +158,7 @@ export async function POST(req: Request) {
 
     const fullBody = {
       sessionId: session.id,
-      examId,
+      examId: effectiveExamId,
       total: questionPool.length,
       questionIds,
       questions: questionPool,

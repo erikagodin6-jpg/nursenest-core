@@ -13,8 +13,13 @@ type ExamQuestion = {
   questionType: QuestionType;
 };
 
-const STORAGE_SESSION = "nursenest_exam_session_id";
-const STORAGE_EXAM = "nursenest_exam_session_exam_id";
+function storageKeys(namespace?: string) {
+  const sfx = namespace ? `_${namespace}` : "";
+  return {
+    session: `nursenest_exam_session_id${sfx}`,
+    exam: `nursenest_exam_session_exam_id${sfx}`,
+  };
+}
 
 function parseOptions(raw: unknown): string[] {
   if (Array.isArray(raw)) return raw.map((x) => String(x));
@@ -24,10 +29,17 @@ function parseOptions(raw: unknown): string[] {
 export function ExamPracticeClient({
   examId,
   examTitle,
+  questionTag,
+  sessionNamespace,
 }: {
   examId: string | null;
   examTitle?: string | null;
+  /** When set, server draws a shuffled pool of published questions with this tag (e.g. mixed practice preset). */
+  questionTag?: string | null;
+  /** Suffix for localStorage keys when multiple exam widgets exist on one page. */
+  sessionNamespace?: string;
 }) {
+  const { session: STORAGE_SESSION, exam: STORAGE_EXAM } = storageKeys(sessionNamespace);
   const [phase, setPhase] = useState<"loading" | "ready" | "empty" | "error">("loading");
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [resolvedExamId, setResolvedExamId] = useState<string | null>(examId);
@@ -154,7 +166,11 @@ export function ExamPracticeClient({
         const start = await fetch("/api/exams/start", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ examId: examId ?? undefined, hydrate: "window" }),
+          body: JSON.stringify({
+            examId: examId ?? undefined,
+            questionTag: questionTag ?? undefined,
+            hydrate: "window",
+          }),
           signal: ac.signal,
         });
         let payload = {} as {
@@ -211,7 +227,7 @@ export function ExamPracticeClient({
       cancelled = true;
       ac.abort();
     };
-  }, [examId]);
+  }, [examId, questionTag, sessionNamespace]);
 
   const qid = questionIds[currentIndex];
   const q = qid ? cache[qid] : undefined;

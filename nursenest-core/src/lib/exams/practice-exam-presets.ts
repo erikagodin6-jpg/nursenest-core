@@ -3,3 +3,6 @@ export const MIXED_PRACTICE_2026_RN_PN_TAG = "mixed-practice-2026-rn-pn";
 
 /** Default length for the mixed practice session when using {@link MIXED_PRACTICE_2026_RN_PN_TAG}. */
 export const MIXED_PRACTICE_2026_QUESTION_TARGET = 20;
+
+/** `Exam` row id (upserted by `scripts/apply-materialized-rn-pn-batch.ts`). Tier `RPN` so RN and PN ladders can record attempts. */
+export const MIXED_PRACTICE_2026_EXAM_ID = "exam_mixed_practice_2026_rn_pn";

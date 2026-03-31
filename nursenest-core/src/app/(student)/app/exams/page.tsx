@@ -8,6 +8,10 @@ import { withDatabaseFallback } from "@/lib/db/safe-database";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { resolveDefaultExamForUser } from "@/lib/exams/resolve-default-exam";
+import {
+  MIXED_PRACTICE_2026_EXAM_ID,
+  MIXED_PRACTICE_2026_RN_PN_TAG,
+} from "@/lib/exams/practice-exam-presets";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 
@@ -159,6 +163,22 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
           </Link>
         </aside>
       )}
+
+      <section className="mt-10 space-y-2">
+        <h2 className="text-xl font-semibold">Mixed clinical practice (20 questions)</h2>
+        <p className="text-sm text-muted">
+          Draws a shuffled set from the RN/PN Replit materialization batch (med–surg topics: heart failure, MI, shock, ABGs,
+          COPD, insulin, sepsis, infection control, fluids, prioritization). Requires published rows tagged{" "}
+          <span className="font-mono text-xs">{MIXED_PRACTICE_2026_RN_PN_TAG}</span>—run{" "}
+          <code className="rounded bg-muted px-1 text-xs">npx tsx scripts/apply-materialized-rn-pn-batch.ts</code> after migrate.
+        </p>
+        <ExamPracticeClient
+          examId={MIXED_PRACTICE_2026_EXAM_ID}
+          examTitle="Mixed clinical — RN/PN batch"
+          questionTag={MIXED_PRACTICE_2026_RN_PN_TAG}
+          sessionNamespace="mixed2026"
+        />
+      </section>
 
       {totalAttempts > 0 ? (
         <p className="mt-4 text-sm text-muted">

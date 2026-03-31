@@ -10,6 +10,7 @@ import "../src/lib/db/env-bootstrap";
 import fs from "node:fs";
 import path from "node:path";
 import { ContentStatus, CountryCode, ExamFamily, PrismaClient, TierCode } from "@prisma/client";
+import { MIXED_PRACTICE_2026_EXAM_ID } from "@/lib/exams/practice-exam-presets";
 
 const prisma = new PrismaClient();
 const DIR = path.join(process.cwd(), "data/materialized/rn-pn-replit-batch-2026");
@@ -49,6 +50,25 @@ async function main() {
     console.error("Missing category slug=fundamentals — run prisma seed first.");
     process.exit(1);
   }
+
+  await prisma.exam.upsert({
+    where: { id: MIXED_PRACTICE_2026_EXAM_ID },
+    create: {
+      id: MIXED_PRACTICE_2026_EXAM_ID,
+      title: "Mixed clinical practice — RN/PN core batch (20 items)",
+      country: CountryCode.US,
+      tier: TierCode.RPN,
+      status: ContentStatus.PUBLISHED,
+      examFamily: ExamFamily.NCLEX_PN,
+    },
+    update: {
+      title: "Mixed clinical practice — RN/PN core batch (20 items)",
+      status: ContentStatus.PUBLISHED,
+      country: CountryCode.US,
+      tier: TierCode.RPN,
+      examFamily: ExamFamily.NCLEX_PN,
+    },
+  });
 
   const qPath = path.join(DIR, "questions.json");
   const fPath = path.join(DIR, "flashcards.json");
@@ -135,7 +155,7 @@ async function main() {
     }
   }
 
-  console.log(JSON.stringify({ examQuestionsUpserted: qOk, flashcardsUpserted: fOk }, null, 2));
+  console.log(JSON.stringify({ examId: MIXED_PRACTICE_2026_EXAM_ID, examQuestionsUpserted: qOk, flashcardsUpserted: fOk }, null, 2));
 }
 
 main()
