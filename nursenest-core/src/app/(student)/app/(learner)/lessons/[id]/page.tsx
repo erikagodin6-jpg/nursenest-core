@@ -1,6 +1,10 @@
 import Link from "next/link";
+import { LearnerNoteScope } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { PathwayLessonBody } from "@/components/lessons/pathway-lesson-body";
+import { PremiumLessonShell } from "@/components/student/premium-lesson-shell";
+import { getServerPremiumProtectionFlags } from "@/lib/premium-protection/config";
+import { maskUserLabelForWatermark } from "@/lib/premium-protection/mask-user-label";
 import { lessonAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { logBlockedAccess, logEntitlementMismatch } from "@/lib/entitlements/entitlement-logging";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
@@ -15,6 +19,8 @@ import {
 } from "@/lib/lessons/legacy-content-map-lessons";
 import { getPublishedPathwayLessonRecordById } from "@/lib/lessons/pathway-lesson-loader";
 import { LegacyMonolithLessonBody } from "@/components/lessons/legacy-monolith-lesson-body";
+import { LessonQualityNotice } from "@/components/lessons/lesson-quality-notice";
+import { classifyContentItemLesson, classifyPathwayLesson } from "@/lib/content-quality/classify-lesson";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 function LessonBody({ content }: { content: unknown }) {
@@ -90,6 +96,10 @@ export default async function LessonDetailPage({ params }: Props) {
       </main>
     );
   }
+
+  const flags = getServerPremiumProtectionFlags();
+  const email = (session?.user as { email?: string | null })?.email ?? null;
+  const userLabel = maskUserLabelForWatermark(email, userId || "unknown");
 
   const resolved = await withDatabaseFallback(async () => {
     const learnerPathRow = userId
@@ -205,7 +215,16 @@ export default async function LessonDetailPage({ params }: Props) {
           ← All lessons
         </Link>
         <h1 className="mt-4 text-3xl font-bold">{title}</h1>
-        <LegacyMonolithLessonBody lesson={resolvedLesson.lesson} />
+        <PremiumLessonShell
+          userId={userId}
+          userLabel={userLabel}
+          flags={flags}
+          scope={LearnerNoteScope.CONTENT_LESSON}
+          contextId={id}
+          sourceLabel={title}
+        >
+          <LegacyMonolithLessonBody lesson={resolvedLesson.lesson} />
+        </PremiumLessonShell>
         <div className="mt-10 flex flex-wrap gap-2 border-t border-border pt-6">
           <Link
             href="/app/questions"
@@ -227,6 +246,11 @@ export default async function LessonDetailPage({ params }: Props) {
   if (resolvedLesson.kind === "pathway_ok") {
     const record = resolvedLesson.record;
     const visible = visibleSectionsForLesson(record, true);
+    const pathwayRow = await withDatabaseFallback(
+      () => prisma.pathwayLesson.findUnique({ where: { id }, select: { pathwayId: true } }),
+      null,
+    );
+    const pathwayQuality = classifyPathwayLesson(record);
     return (
       <main>
         <Link href="/app/lessons" className="text-sm font-medium text-primary hover:underline">
@@ -234,18 +258,32 @@ export default async function LessonDetailPage({ params }: Props) {
         </Link>
         <h1 className="mt-4 text-3xl font-bold">{record.title}</h1>
         {record.seoDescription ? <p className="mt-2 text-sm text-muted">{record.seoDescription}</p> : null}
-        <article className="mt-6 space-y-8">
-          {visible.map((section) => (
-            <section key={section.id} className="border-b border-border pb-8 last:border-0">
-              <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">
-                {section.heading?.trim() || "Section"}
-              </h2>
-              <div className="mt-3">
-                <PathwayLessonBody text={typeof section.body === "string" ? section.body : ""} />
-              </div>
-            </section>
-          ))}
-        </article>
+        <div className="mt-6">
+          <PremiumLessonShell
+            userId={userId}
+            userLabel={userLabel}
+            flags={flags}
+            scope={LearnerNoteScope.PATHWAY_LESSON}
+            contextId={id}
+            pathwayId={pathwayRow?.pathwayId ?? undefined}
+            topic={record.topic}
+            sourceLabel={record.title}
+            qualityNotice={<LessonQualityNotice tier={pathwayQuality.tier} wordCount={pathwayQuality.wordCount} />}
+          >
+            <article className="space-y-8">
+              {visible.map((section) => (
+                <section key={section.id} className="border-b border-border pb-8 last:border-0">
+                  <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">
+                    {section.heading?.trim() || "Section"}
+                  </h2>
+                  <div className="mt-3">
+                    <PathwayLessonBody text={typeof section.body === "string" ? section.body : ""} />
+                  </div>
+                </section>
+              ))}
+            </article>
+          </PremiumLessonShell>
+        </div>
         <div className="mt-10 flex flex-wrap gap-2 border-t border-border pt-6">
           <Link
             href="/app/questions"
@@ -265,6 +303,7 @@ export default async function LessonDetailPage({ params }: Props) {
   }
 
   const row = resolvedLesson.row;
+  const contentQ = classifyContentItemLesson(row.content);
 
   return (
     <main>
@@ -273,7 +312,17 @@ export default async function LessonDetailPage({ params }: Props) {
       </Link>
       <h1 className="mt-4 text-3xl font-bold">{row.title}</h1>
       {row.summary ? <p className="mt-2 text-sm text-muted">{row.summary}</p> : null}
-      <LessonBody content={row.content as unknown} />
+      <PremiumLessonShell
+        userId={userId}
+        userLabel={userLabel}
+        flags={flags}
+        scope={LearnerNoteScope.CONTENT_LESSON}
+        contextId={id}
+        sourceLabel={row.title}
+        qualityNotice={<LessonQualityNotice tier={contentQ.tier} wordCount={contentQ.wordCount} />}
+      >
+        <LessonBody content={row.content as unknown} />
+      </PremiumLessonShell>
       <div className="mt-10 flex flex-wrap gap-2 border-t border-border pt-6">
         <Link
           href="/app/questions"

@@ -1,3 +1,4 @@
+import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { PracticeTestStatus } from "@prisma/client";
 import { z } from "zod";
@@ -9,6 +10,10 @@ import { advanceCatPracticeTest, finalizeCatPracticeTest } from "@/lib/practice-
 import { recordTopicOutcomesFromPracticeTest } from "@/lib/learner/topic-performance";
 import { computePracticeTestResults } from "@/lib/practice-tests/score-practice-test";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
+import {
+  enforcePracticeTestDetailProtection,
+  enforcePracticeTestMutationProtection,
+} from "@/lib/http/api-protection";
 
 const previewSelect = {
   id: true,
@@ -27,9 +32,12 @@ function asIdList(raw: unknown): string[] {
   return raw.filter((x): x is string => typeof x === "string" && x.length > 4);
 }
 
-export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> }) {
+export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
+
+  const limited = enforcePracticeTestDetailProtection(req, gate.userId);
+  if (limited) return limited;
 
   const { id } = await ctx.params;
   if (!id || id.length < 8) {
@@ -90,9 +98,12 @@ const patchSchema = z.object({
   elapsedMs: z.number().int().min(0).max(48 * 60 * 60 * 1000).optional(),
 });
 
-export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }> }) {
+export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
+
+  const mutateLimited = enforcePracticeTestMutationProtection(req, gate.userId);
+  if (mutateLimited) return mutateLimited;
 
   const { id } = await ctx.params;
   if (!id || id.length < 8) {

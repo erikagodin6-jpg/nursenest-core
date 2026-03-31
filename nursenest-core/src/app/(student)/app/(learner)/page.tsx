@@ -13,7 +13,10 @@ import {
   loadPremiumDashboardSnapshot,
   type PremiumDashboardSnapshot,
 } from "@/lib/learner/premium-dashboard-snapshot";
+import { buildAdaptiveRecommendations } from "@/lib/learner/adaptive-recommendations";
 import { loadUnifiedTopicPerformance, type TopicPerformanceSnapshot } from "@/lib/learner/topic-performance";
+import { ExamPlanSettingsCard } from "@/components/student/exam-plan-settings-card";
+import { AdaptiveStudyOverview } from "@/components/student/adaptive-study-overview";
 
 export default async function DashboardPage() {
   const messages = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
@@ -45,6 +48,7 @@ export default async function DashboardPage() {
 
   let topicPerfInitial: TopicPerformanceSnapshot | null = null;
   let premiumSnapshot: PremiumDashboardSnapshot | null = null;
+  let adaptiveRecommendations: ReturnType<typeof buildAdaptiveRecommendations> | null = null;
 
   if (userId && isDatabaseUrlConfigured()) {
     try {
@@ -84,6 +88,30 @@ export default async function DashboardPage() {
     } catch {
       premiumSnapshot = null;
     }
+    if (premiumSnapshot && topicPerfInitial) {
+      try {
+        const userExam = await prisma.user.findUnique({
+          where: { id: userId },
+          select: { examDate: true, examDatePlanType: true },
+        });
+        if (userExam) {
+          adaptiveRecommendations = buildAdaptiveRecommendations({
+            examDatePlanType: userExam.examDatePlanType,
+            examDate: userExam.examDate,
+            readiness: premiumSnapshot.readiness,
+            weakTopics: topicPerfInitial.weakTopics,
+            streakDays: premiumSnapshot.studyStreakDays,
+            lessonPct: premiumSnapshot.overallLessons.pct,
+            continueLesson: premiumSnapshot.continueLesson,
+            recommendedQuizTopic: premiumSnapshot.recommendedQuizTopic,
+            mockCount: premiumSnapshot.mockCount,
+            practiceSessionCount: premiumSnapshot.practice.sessionCount,
+          });
+        }
+      } catch {
+        adaptiveRecommendations = null;
+      }
+    }
   }
 
   return (
@@ -110,6 +138,10 @@ export default async function DashboardPage() {
 
       {entitlement.hasAccess ? (
         <>
+          <ExamPlanSettingsCard />
+
+          {adaptiveRecommendations ? <AdaptiveStudyOverview adaptive={adaptiveRecommendations} /> : null}
+
           <section className="nn-card p-6">
             <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Continue where you left off</h2>
             {nextLessonTitle ? (

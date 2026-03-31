@@ -53,7 +53,19 @@ const EXACT: Record<string, string> = {
   "/imaging": `${PUBLIC_SITE}/allied-health/imaging`,
 };
 
+/** Core-hosted Allied marketing (must not be rewritten to the legacy public site). */
+export function isCoreAlliedMarketingPath(href: string): boolean {
+  if (href === "/allied-health-exam-prep" || href.startsWith("/allied-health-exam-prep/")) return true;
+  if (href.startsWith("/allied-health/")) {
+    const rest = href.slice("/allied-health/".length);
+    const first = rest.split("/")[0] ?? "";
+    return first.endsWith("-exam-prep");
+  }
+  return false;
+}
+
 export function mapLegacyMarketingHref(href: string): string {
+  if (isCoreAlliedMarketingPath(href)) return href;
   if (href.startsWith("/allied-health") || href.startsWith("/shop")) {
     return `${PUBLIC_SITE}${href}`;
   }
@@ -88,7 +100,8 @@ export function resolveMarketingHref(href: string): string {
     mapped === "/signup" ||
     mapped === "/forgot-password" ||
     mapped === "/reset-password" ||
-    mapped === "/"
+    mapped === "/" ||
+    isCoreAlliedMarketingPath(mapped)
   ) {
     return mapped;
   }

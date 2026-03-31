@@ -14,6 +14,7 @@ import { loadAdminDashboardStats } from "@/lib/admin/load-admin-dashboard-stats"
 import { buildQuestionBankCoverageReport } from "@/lib/questions/build-question-bank-diagnostics";
 import { buildContentScalabilityReport } from "@/lib/scalability/build-content-scalability-report";
 import { loadAdminQaIssueSnapshot } from "@/lib/admin/admin-qa-snapshot";
+import { loadContentQualitySnapshot } from "@/lib/admin/content-quality-snapshot";
 import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-product-registry";
 import {
   EXAM_PRESET_PN_MIXED_2026_TAG,
@@ -87,6 +88,7 @@ export default async function AdminPage() {
   const stats = await loadAdminDashboardStats();
 
   const qaSnapshot = await loadAdminQaIssueSnapshot();
+  const contentQuality = await loadContentQualitySnapshot();
   const questionDiag = await buildQuestionBankCoverageReport();
   const scalability = await buildContentScalabilityReport();
   let lessonCount = 0;
@@ -446,6 +448,27 @@ export default async function AdminPage() {
             <MetricMini label="Duplicate stem groups" value={qaSnapshot?.duplicateStemHashGroups ?? "—"} />
             <MetricMini label="Needs review" value={qaSnapshot?.questionsFlaggedNeedsReview ?? reviewQuestions} />
             <MetricMini label="Invalid rationale flags" value={qaSnapshot?.questionsEmptyOrSuspiciousRationale ?? "—"} />
+          </div>
+          <h3 className="mt-5 text-sm font-semibold">Content depth (published, reporting)</h3>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Word-count thresholds: rationales &lt;120w flagged thin; lessons &lt;500w thin (pathway/content sampled). JSON:{" "}
+            <code className="rounded bg-muted px-1">GET /api/admin/content-quality</code>
+          </p>
+          <div className="mt-2 grid grid-cols-2 gap-2 text-xs">
+            <MetricMini
+              label="Published Q · thin rationale (&lt;120w)"
+              value={contentQuality.examQuestionsPublished.rationaleThinWords}
+            />
+            <MetricMini
+              label="Published Q · missing/empty rationale"
+              value={contentQuality.examQuestionsPublished.rationaleMissingOrEmpty}
+            />
+            <MetricMini label="Published Q · OK rationale (≥120w)" value={contentQuality.examQuestionsPublished.rationaleAcceptableOrStrong} />
+            <MetricMini label="Pathway lessons (total)" value={contentQuality.pathwayLessonsPublished.total} />
+            <MetricMini label="Pathway sample · thin" value={contentQuality.pathwayLessonsPublished.sampleThin} />
+            <MetricMini label="Pathway sample · strong" value={contentQuality.pathwayLessonsPublished.sampleStrong} />
+            <MetricMini label="Content-item lessons (total)" value={contentQuality.contentItemLessonsPublished.total} />
+            <MetricMini label="Content sample · thin" value={contentQuality.contentItemLessonsPublished.sampleThin} />
           </div>
           <h3 className="mt-5 text-sm font-semibold">Top weak topics (low count)</h3>
           <ul className="mt-2 space-y-1 text-xs">

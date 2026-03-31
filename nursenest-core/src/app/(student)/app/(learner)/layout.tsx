@@ -3,9 +3,12 @@ import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 import { auth } from "@/lib/auth";
 import { LearnerShellUserBar } from "@/components/auth/learner-shell-user-bar";
 import { CheckoutSuccessBanner } from "@/components/student/checkout-success-banner";
+import { LearnerAdaptiveStrip } from "@/components/student/learner-adaptive-strip";
 import { LearnerThemeControl } from "@/components/student/learner-theme-control";
 import { LearnerAppSectionAnalytics } from "@/components/observability/learner-app-section-analytics";
 import { SentryLearnerShell } from "@/components/observability/sentry-learner-shell";
+import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
+import { loadLearnerAdaptiveStrip } from "@/lib/learner/load-learner-adaptive-strip";
 
 /** Auth is enforced in `src/proxy.ts` (Next.js 16+) so this layout never calls `redirect()` for missing session. */
 export const dynamic = "force-dynamic";
@@ -13,6 +16,14 @@ export const dynamic = "force-dynamic";
 export default async function LearnerShellLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id ?? "";
+
+  let adaptiveStrip = null;
+  if (userId) {
+    const ent = await resolveEntitlementForPage(userId);
+    if (ent !== "error" && ent.hasAccess) {
+      adaptiveStrip = await loadLearnerAdaptiveStrip(userId, ent);
+    }
+  }
 
   if (!userId) {
     return (
@@ -80,6 +91,11 @@ export default async function LearnerShellLayout({ children }: { children: React
           <LearnerThemeControl />
         </div>
       </header>
+      {adaptiveStrip ? (
+        <div className="mb-4">
+          <LearnerAdaptiveStrip model={adaptiveStrip} />
+        </div>
+      ) : null}
       <CheckoutSuccessBanner />
       {children}
     </div>

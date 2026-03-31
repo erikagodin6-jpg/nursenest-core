@@ -210,6 +210,9 @@ export type PremiumDashboardSnapshot = {
   examReadyHeadline: string | null;
   milestones: string[];
   mockCount: number;
+  /** Next incomplete lesson in tier/country scope (for adaptive next-step). */
+  continueLesson: { title: string; href: string } | null;
+  recommendedQuizTopic: string | null;
 };
 
 export async function loadPremiumDashboardSnapshot(
@@ -280,5 +283,7 @@ export async function loadPremiumDashboardSnapshot(
     examReadyHeadline: headline,
     milestones,
     mockCount,
+    continueLesson: dash.continueLesson ? { title: dash.continueLesson.title, href: dash.continueLesson.href } : null,
+    recommendedQuizTopic: dash.recommendedQuizTopic,
   };
 }

@@ -26,6 +26,10 @@ import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { pathwayLessonDetailBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
+import { LessonQualityNotice } from "@/components/lessons/lesson-quality-notice";
+import { PathwayLessonQuickReview } from "@/components/lessons/pathway-lesson-quick-review";
+import { classifyPathwayLesson } from "@/lib/content-quality/classify-lesson";
+import { buildQuickReviewBullets } from "@/lib/lessons/pathway-lesson-quick-review";
 
 export const dynamic = "force-dynamic";
 
@@ -92,6 +96,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
   const base = buildExamPathwayPath(pathway, "lessons");
   const related = await getRelatedPathwayLessons(pathway.id, lesson.topicSlug, lesson.slug, undefined, lessonContentLocale);
   const { crumbs, schemaItems } = pathwayLessonDetailBreadcrumbs(pathway, lesson.slug, lesson.title);
+  const lessonQuality = classifyPathwayLesson(lesson);
   const requestedNorm = normalizePathwayLessonLocale(lessonContentLocale);
   const showLocaleFallbackNotice = Boolean(
     lesson.localeMeta &&
@@ -113,6 +118,10 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
       <p className="mt-2 text-sm text-muted">
         {pathway.countrySlug === "canada" ? "Canada" : "United States"} · {lesson.topic} · {lesson.bodySystem}
       </p>
+      <div className="mt-4 space-y-3">
+        <LessonQualityNotice tier={lessonQuality.tier} wordCount={lessonQuality.wordCount} />
+        <PathwayLessonQuickReview bullets={buildQuickReviewBullets(lesson)} />
+      </div>
       {showLocaleFallbackNotice ? (
         <aside
           className="nn-card mt-4 border-border bg-[var(--theme-muted-surface)] p-3 text-sm text-muted"

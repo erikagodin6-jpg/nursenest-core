@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { PathwayLessonContentLocaleBanner } from "@/components/lessons/pathway-lesson-content-locale-banner";
@@ -16,6 +17,7 @@ import {
   listTopicClusters,
 } from "@/lib/lessons/pathway-lesson-loader";
 import { pathwayLessonsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
+import { absoluteUrl } from "@/lib/seo/site-origin";
 
 export const dynamicParams = true;
 export const revalidate = 86400;
@@ -28,6 +30,22 @@ type Props = {
   params: Promise<{ locale: string; slug: string; examCode: string }>;
   searchParams: Promise<{ page?: string; pageSize?: string }>;
 };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale: countrySlug, slug: roleTrack, examCode } = await params;
+  const pathway = getExamPathwayByRoute(countrySlug, roleTrack, examCode);
+  if (!pathway) return {};
+  const path = buildExamPathwayPath(pathway, "lessons");
+  const canonical = absoluteUrl(path);
+  const title = `Lessons · ${pathway.displayName} | NurseNest`;
+  const description = `Clinical lessons for ${pathway.shortName} (${pathway.countrySlug === "canada" ? "Canada" : "US"}). Structured teaching, exam relevance, and practice links — preview sections are indexable; full depth unlocks with a matching plan.`;
+  return {
+    title,
+    description,
+    alternates: { canonical },
+    openGraph: { title, description, url: canonical, type: "website" },
+  };
+}
 
 export default async function PathwayLessonsHubPage({ params, searchParams }: Props) {
   const { locale: countrySlug, slug: roleTrack, examCode } = await params;

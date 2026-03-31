@@ -4,6 +4,8 @@ import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { auth } from "@/lib/auth";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
+import { getServerPremiumProtectionFlags } from "@/lib/premium-protection/config";
+import { maskUserLabelForWatermark } from "@/lib/premium-protection/mask-user-label";
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 
 type Props = { params: Promise<{ id: string }> };
@@ -26,6 +28,10 @@ export default async function PracticeTestRunPage({ params }: Props) {
       </main>
     );
   }
+
+  const email = (session?.user as { email?: string | null })?.email ?? null;
+  const protectionFlags = getServerPremiumProtectionFlags();
+  const userLabel = maskUserLabelForWatermark(email, userId || "unknown");
 
   if (!entitlement.hasAccess) {
     const snap = userId ? await getFreemiumSnapshot(userId) : null;
@@ -55,7 +61,12 @@ export default async function PracticeTestRunPage({ params }: Props) {
         </a>
       </p>
       <div className="mt-6">
-        <PracticeTestRunnerClient testId={id} />
+        <PracticeTestRunnerClient
+          testId={id}
+          userId={userId}
+          userLabel={userLabel}
+          protectionFlags={protectionFlags}
+        />
       </div>
     </main>
   );

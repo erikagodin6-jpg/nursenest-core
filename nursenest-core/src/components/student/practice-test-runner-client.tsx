@@ -1,9 +1,13 @@
 "use client";
 
+import { LearnerNoteScope } from "@prisma/client";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { difficultyBandLabel } from "@/lib/questions/difficulty-label";
+import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
+import { ProtectedPremiumContent } from "@/components/student/protected-premium-content";
+import { StudyNotesPanel } from "@/components/student/study-notes-panel";
 
 type QRow = {
   id: string;
@@ -21,7 +25,17 @@ function parseOptions(raw: unknown): string[] {
   return [];
 }
 
-export function PracticeTestRunnerClient({ testId }: { testId: string }) {
+export function PracticeTestRunnerClient({
+  testId,
+  userId,
+  userLabel,
+  protectionFlags,
+}: {
+  testId: string;
+  userId: string;
+  userLabel: string;
+  protectionFlags: PremiumProtectionFlags;
+}) {
   const [phase, setPhase] = useState<"loading" | "ready" | "error">("loading");
   const [error, setError] = useState<string | null>(null);
   const [questions, setQuestions] = useState<QRow[]>([]);
@@ -407,83 +421,97 @@ export function PracticeTestRunnerClient({ testId }: { testId: string }) {
         )}
       </div>
 
-      {catMode && (adaptiveTheta != null || adaptiveSe != null) ? (
-        <div className="nn-card border-primary/20 bg-primary/[0.06] px-4 py-3 text-sm">
-          <p className="font-semibold text-foreground">Adaptive estimate</p>
-          <p className="mt-1 text-muted-foreground">
-            θ (ability):{" "}
-            <span className="font-mono tabular-nums text-foreground">
-              {adaptiveTheta != null ? adaptiveTheta.toFixed(2) : "—"}
-            </span>
-            {" · "}
-            Confidence (SE):{" "}
-            <span className="font-mono tabular-nums text-foreground">{adaptiveSe != null ? adaptiveSe.toFixed(2) : "—"}</span>
-          </p>
-          <p className="mt-1 text-xs text-muted-foreground">
-            Difficulty shifts after each item; weak areas from recent exams get extra priority in the pool.
-          </p>
-        </div>
-      ) : null}
+      <ProtectedPremiumContent userLabel={userLabel} flags={protectionFlags}>
+        <div className="space-y-4">
+          {catMode && (adaptiveTheta != null || adaptiveSe != null) ? (
+            <div className="nn-card border-primary/20 bg-primary/[0.06] px-4 py-3 text-sm">
+              <p className="font-semibold text-foreground">Adaptive estimate</p>
+              <p className="mt-1 text-muted-foreground">
+                θ (ability):{" "}
+                <span className="font-mono tabular-nums text-foreground">
+                  {adaptiveTheta != null ? adaptiveTheta.toFixed(2) : "—"}
+                </span>
+                {" · "}
+                Confidence (SE):{" "}
+                <span className="font-mono tabular-nums text-foreground">{adaptiveSe != null ? adaptiveSe.toFixed(2) : "—"}</span>
+              </p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Difficulty shifts after each item; weak areas from recent exams get extra priority in the pool.
+              </p>
+            </div>
+          ) : null}
 
-      <div className="overflow-hidden rounded-2xl border border-border bg-[var(--theme-card-bg)] shadow-sm">
-        <div className="border-b border-border bg-muted/30 px-4 py-3">
-          <div className="flex flex-wrap gap-2 text-xs">
-            {current.topic ? (
-              <span className="rounded-full bg-primary/15 px-2.5 py-0.5 font-medium text-primary">{current.topic}</span>
-            ) : null}
-            {current.subtopic ? (
-              <span className="rounded-full bg-sky-500/10 px-2.5 py-0.5 text-sky-900 dark:text-sky-100">{current.subtopic}</span>
-            ) : null}
-            {current.difficulty != null ? (
-              <span className="rounded-full bg-amber-500/10 px-2.5 py-0.5">{difficultyBandLabel(current.difficulty)}</span>
-            ) : null}
-            {current.exam ? <span className="text-muted-foreground">{current.exam}</span> : null}
+          <div className="overflow-hidden rounded-2xl border border-border bg-[var(--theme-card-bg)] shadow-sm">
+            <div className="border-b border-border bg-muted/30 px-4 py-3">
+              <div className="flex flex-wrap gap-2 text-xs">
+                {current.topic ? (
+                  <span className="rounded-full bg-primary/15 px-2.5 py-0.5 font-medium text-primary">{current.topic}</span>
+                ) : null}
+                {current.subtopic ? (
+                  <span className="rounded-full bg-sky-500/10 px-2.5 py-0.5 text-sky-900 dark:text-sky-100">{current.subtopic}</span>
+                ) : null}
+                {current.difficulty != null ? (
+                  <span className="rounded-full bg-amber-500/10 px-2.5 py-0.5">{difficultyBandLabel(current.difficulty)}</span>
+                ) : null}
+                {current.exam ? <span className="text-muted-foreground">{current.exam}</span> : null}
+              </div>
+            </div>
+            <div className="space-y-4 p-5 md:p-6">
+              <p className="text-base font-medium leading-relaxed">{current.stem}</p>
+              {isSata ? (
+                <ul className="space-y-2">
+                  {opts.map((label) => {
+                    const selected = Array.isArray(raw) ? raw.includes(label) : false;
+                    return (
+                      <li key={label}>
+                        <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-border px-4 py-3 text-sm hover:bg-muted/40">
+                          <input
+                            type="checkbox"
+                            checked={selected}
+                            onChange={(e) => {
+                              const prev = Array.isArray(raw) ? [...raw] : [];
+                              const next = e.target.checked ? [...prev, label] : prev.filter((x) => x !== label);
+                              setAnswerForCurrent(next);
+                            }}
+                            className="mt-1"
+                          />
+                          <span>{label}</span>
+                        </label>
+                      </li>
+                    );
+                  })}
+                </ul>
+              ) : (
+                <ul className="space-y-2">
+                  {opts.map((label) => (
+                    <li key={label}>
+                      <button
+                        type="button"
+                        onClick={() => setAnswerForCurrent(label)}
+                        className={`w-full rounded-xl border px-4 py-3 text-left text-sm transition ${
+                          raw === label ? "border-2 border-primary bg-primary/10" : "border border-border hover:bg-muted/40"
+                        }`}
+                      >
+                        {label}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           </div>
         </div>
-        <div className="space-y-4 p-5 md:p-6">
-          <p className="text-base font-medium leading-relaxed">{current.stem}</p>
-          {isSata ? (
-            <ul className="space-y-2">
-              {opts.map((label) => {
-                const selected = Array.isArray(raw) ? raw.includes(label) : false;
-                return (
-                  <li key={label}>
-                    <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-border px-4 py-3 text-sm hover:bg-muted/40">
-                      <input
-                        type="checkbox"
-                        checked={selected}
-                        onChange={(e) => {
-                          const prev = Array.isArray(raw) ? [...raw] : [];
-                          const next = e.target.checked ? [...prev, label] : prev.filter((x) => x !== label);
-                          setAnswerForCurrent(next);
-                        }}
-                        className="mt-1"
-                      />
-                      <span>{label}</span>
-                    </label>
-                  </li>
-                );
-              })}
-            </ul>
-          ) : (
-            <ul className="space-y-2">
-              {opts.map((label) => (
-                <li key={label}>
-                  <button
-                    type="button"
-                    onClick={() => setAnswerForCurrent(label)}
-                    className={`w-full rounded-xl border px-4 py-3 text-left text-sm transition ${
-                      raw === label ? "border-2 border-primary bg-primary/10" : "border border-border hover:bg-muted/40"
-                    }`}
-                  >
-                    {label}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </div>
+      </ProtectedPremiumContent>
+
+      <StudyNotesPanel
+        userId={userId}
+        scope={LearnerNoteScope.PRACTICE_TEST}
+        contextId={testId}
+        topic={current.topic}
+        sourceLabel={`Practice test · question ${current.id.slice(0, 8)}…`}
+        userLabel={userLabel}
+        flags={protectionFlags}
+      />
 
       <div className="flex flex-wrap gap-2">
         <button

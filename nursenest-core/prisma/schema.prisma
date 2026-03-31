@@ -103,6 +103,13 @@ enum DraftReviewStatus {
   PROMOTED
 }
 
+/** Learner-declared exam timing for pacing and countdown (not a booking record). */
+enum ExamDatePlanType {
+  UNSURE
+  PROPOSED
+  CONFIRMED
+}
+
 model User {
   id                      String         @id @default(cuid())
   email                   String         @unique
@@ -117,6 +124,14 @@ model User {
   studyGoal               String?
   dailyStudyMinutes       Int?
   learnerPath             String?
+  /** Calendar date the learner is targeting (UTC midnight stored). */
+  examDate                DateTime?
+  examDatePlanType        ExamDatePlanType?
+  examGoalSetAt           DateTime?
+  /** Optional pathway id from exam registry when the goal is pathway-specific (NP tracks, etc.). */
+  targetExamPathwayId     String?        @db.VarChar(64)
+  /** Optional learner preference: light | steady | intensive — used for copy only, not hours math. */
+  studyCadencePreference  String?        @db.VarChar(32)
   onboardingCompletedAt   DateTime?
   freeQuestionViews       Int            @default(0)
   freeLessonOpens         Int            @default(0)
@@ -146,6 +161,34 @@ model User {
   trialDeviceBindings     TrialDeviceBinding[]
   /** Aggregated per-topic accuracy / streaks from graded bank, mocks, and practice tests. */
   topicStats              UserTopicStat[]
+  /** User-authored study notes (never stores premium HTML bodies). */
+  learnerNotes            LearnerNote[]
+}
+
+enum LearnerNoteScope {
+  PATHWAY_LESSON
+  CONTENT_LESSON
+  QUESTION_BANK
+  PRACTICE_TEST
+  FLASHCARD_DECK
+}
+
+/** Subscriber-authored notes; source references only (ids/titles), not lesson/question bodies. */
+model LearnerNote {
+  id         String           @id @default(cuid())
+  userId     String
+  user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  scope      LearnerNoteScope
+  contextId  String           @db.VarChar(128)
+  pathwayId  String?          @db.VarChar(64)
+  topic      String?          @db.VarChar(200)
+  title      String?          @db.VarChar(200)
+  body       String           @db.Text
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+
+  @@unique([userId, scope, contextId])
+  @@index([userId, updatedAt])
 }
 
 /** Per-user topic performance for weak-area recommendations (question bank, mocks, practice tests). */

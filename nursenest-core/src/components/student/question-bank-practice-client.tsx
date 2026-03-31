@@ -1,7 +1,13 @@
 "use client";
 
+import { LearnerNoteScope } from "@prisma/client";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
+import { ProtectedPremiumContent } from "@/components/student/protected-premium-content";
+import { StudyNotesPanel } from "@/components/student/study-notes-panel";
+import type { RationaleQualityClient } from "@/components/student/premium-rationale-panel";
+import { PremiumRationalePanel } from "@/components/student/premium-rationale-panel";
 import type { QuestionListEmptyDiagnostics } from "@/lib/questions/question-list-empty-diagnostics";
 import {
   messageForDiscoveryFailure,
@@ -47,7 +53,15 @@ function appendRollup(userId: string, topic: string | null | undefined, correct:
   }
 }
 
-export function QuestionBankPracticeClient({ userId }: { userId: string }) {
+export function QuestionBankPracticeClient({
+  userId,
+  userLabel,
+  protectionFlags,
+}: {
+  userId: string;
+  userLabel: string;
+  protectionFlags: PremiumProtectionFlags;
+}) {
   const searchParams = useSearchParams();
   const [phase, setPhase] = useState<"loading" | "ready" | "empty" | "error">("loading");
   const [error, setError] = useState<string | null>(null);
@@ -61,7 +75,17 @@ export function QuestionBankPracticeClient({ userId }: { userId: string }) {
   const [emptyCopy, setEmptyCopy] = useState<{ title: string; body: string } | null>(null);
   const [idx, setIdx] = useState(0);
   const [answer, setAnswer] = useState<unknown>(null);
-  const [graded, setGraded] = useState<Record<string, { correct: boolean; rationale: string | null }>>({});
+  const [graded, setGraded] = useState<
+    Record<
+      string,
+      {
+        correct: boolean;
+        rationale: string | null;
+        rationaleQuality?: RationaleQualityClient | null;
+        rationaleSections?: Array<{ heading: string; body: string }> | null;
+      }
+    >
+  >({});
   const [grading, setGrading] = useState(false);
 
   const current = questions[idx];
@@ -126,7 +150,15 @@ export function QuestionBankPracticeClient({ userId }: { userId: string }) {
               idx?: number;
               topic?: string | null;
               pathwayId?: string | null;
-              graded?: Record<string, { correct: boolean; rationale: string | null }>;
+              graded?: Record<
+                string,
+                {
+                  correct: boolean;
+                  rationale: string | null;
+                  rationaleQuality?: RationaleQualityClient | null;
+                  rationaleSections?: Array<{ heading: string; body: string }> | null;
+                }
+              >;
             };
             if (
               saved.ids?.[0] === list[0]?.id &&
@@ -247,6 +279,8 @@ export function QuestionBankPracticeClient({ userId }: { userId: string }) {
       const data = (await res.json()) as {
         correct?: boolean;
         rationale?: string | null;
+        rationaleQuality?: RationaleQualityClient | null;
+        rationaleSections?: Array<{ heading: string; body: string }> | null;
         error?: string;
       };
       if (!res.ok) {
@@ -256,7 +290,12 @@ export function QuestionBankPracticeClient({ userId }: { userId: string }) {
       const correct = Boolean(data.correct);
       setGraded((prev) => ({
         ...prev,
-        [current.id]: { correct, rationale: data.rationale ?? null },
+        [current.id]: {
+          correct,
+          rationale: data.rationale ?? null,
+          rationaleQuality: data.rationaleQuality ?? null,
+          rationaleSections: data.rationaleSections ?? null,
+        },
       }));
       appendRollup(userId, current.topic, correct);
       if (typeof window !== "undefined") {
@@ -350,79 +389,109 @@ export function QuestionBankPracticeClient({ userId }: { userId: string }) {
         </p>
       </div>
 
-      <div className="nn-card space-y-4 p-6">
-        <div className="flex flex-wrap gap-2 text-xs text-muted">
-          <span>
-            Question {idx + 1} of {total}
-          </span>
-          {current.topic ? <span className="rounded-full bg-primary/10 px-2 py-0.5 text-primary">{current.topic}</span> : null}
-          {current.exam ? <span>{current.exam}</span> : null}
-          <span className="uppercase">{current.questionType}</span>
-        </div>
+      <ProtectedPremiumContent userLabel={userLabel} flags={protectionFlags}>
+        <div className="nn-card space-y-4 p-6">
+          <div className="flex flex-wrap gap-2 text-xs text-muted">
+            <span>
+              Question {idx + 1} of {total}
+            </span>
+            {current.topic ? <span className="rounded-full bg-primary/10 px-2 py-0.5 text-primary">{current.topic}</span> : null}
+            {current.exam ? <span>{current.exam}</span> : null}
+            <span className="uppercase">{current.questionType}</span>
+          </div>
 
-        <p className="text-base font-medium leading-relaxed">{current.stem}</p>
+          <p className="text-base font-medium leading-relaxed">{current.stem}</p>
 
-        {isSata ? (
-          <ul className="space-y-2">
-            {opts.map((label) => {
-              const selected = Array.isArray(raw) ? raw.includes(label) : false;
-              return (
+          {isSata ? (
+            <ul className="space-y-2">
+              {opts.map((label) => {
+                const selected = Array.isArray(raw) ? raw.includes(label) : false;
+                return (
+                  <li key={label}>
+                    <label className="flex cursor-pointer items-start gap-2 text-sm">
+                      <input
+                        type="checkbox"
+                        checked={selected}
+                        disabled={!!g}
+                        onChange={(e) => {
+                          const prev = Array.isArray(raw) ? [...raw] : [];
+                          const next = e.target.checked ? [...prev, label] : prev.filter((x) => x !== label);
+                          setAnswer(next);
+                        }}
+                        className="mt-1"
+                      />
+                      <span>{label}</span>
+                    </label>
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <ul className="space-y-2">
+              {opts.map((label) => (
                 <li key={label}>
-                  <label className="flex cursor-pointer items-start gap-2 text-sm">
-                    <input
-                      type="checkbox"
-                      checked={selected}
-                      disabled={!!g}
-                      onChange={(e) => {
-                        const prev = Array.isArray(raw) ? [...raw] : [];
-                        const next = e.target.checked ? [...prev, label] : prev.filter((x) => x !== label);
-                        setAnswer(next);
-                      }}
-                      className="mt-1"
-                    />
-                    <span>{label}</span>
-                  </label>
+                  <button
+                    type="button"
+                    disabled={!!g}
+                    onClick={() => setAnswer(label)}
+                    className={`w-full rounded-xl border px-4 py-3 text-left text-sm transition ${
+                      raw === label ? "border-primary bg-primary/10" : "border-border hover:bg-primary/5"
+                    }`}
+                  >
+                    {label}
+                  </button>
                 </li>
-              );
-            })}
-          </ul>
-        ) : (
-          <ul className="space-y-2">
-            {opts.map((label) => (
-              <li key={label}>
+              ))}
+            </ul>
+          )}
+
+          {!g ? (
+            <div className="flex flex-wrap gap-2 pt-2">
+              <button
+                type="button"
+                disabled={grading || answer === null || (Array.isArray(answer) && answer.length === 0)}
+                className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
+                onClick={() => void checkAnswer()}
+              >
+                {grading ? "Checking…" : "Check answer"}
+              </button>
+            </div>
+          ) : (
+            <>
+              <PremiumRationalePanel
+                correct={g.correct}
+                rationale={g.rationale}
+                rationaleQuality={g.rationaleQuality}
+                rationaleSections={g.rationaleSections}
+              />
+              <div className="mt-4 flex flex-wrap gap-2">
                 <button
                   type="button"
-                  disabled={!!g}
-                  onClick={() => setAnswer(label)}
-                  className={`w-full rounded-xl border px-4 py-3 text-left text-sm transition ${
-                    raw === label ? "border-primary bg-primary/10" : "border-border hover:bg-primary/5"
-                  }`}
+                  disabled={idx === 0}
+                  className="rounded-full border border-border px-4 py-2 text-sm disabled:opacity-40"
+                  onClick={prev}
                 >
-                  {label}
+                  Previous
                 </button>
-              </li>
-            ))}
-          </ul>
-        )}
+                {idx < total - 1 ? (
+                  <button type="button" className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white" onClick={next}>
+                    Next question
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className="rounded-full border border-primary px-4 py-2 text-sm font-semibold text-primary"
+                    onClick={() => void loadBatch(topic, pathwayIdFilter)}
+                  >
+                    Load more
+                  </button>
+                )}
+              </div>
+            </>
+          )}
 
-        {!g ? (
-          <div className="flex flex-wrap gap-2 pt-2">
-            <button
-              type="button"
-              disabled={grading || answer === null || (Array.isArray(answer) && answer.length === 0)}
-              className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
-              onClick={() => void checkAnswer()}
-            >
-              {grading ? "Checking…" : "Check answer"}
-            </button>
-          </div>
-        ) : (
-          <div className="rounded-xl border border-border bg-[var(--theme-muted-surface)] p-4 text-sm">
-            <p className={`font-semibold ${g.correct ? "text-emerald-700" : "text-amber-800"}`}>
-              {g.correct ? "Correct" : "Incorrect"}
-            </p>
-            {g.rationale ? <p className="mt-2 text-muted leading-relaxed">{g.rationale}</p> : null}
-            <div className="mt-4 flex flex-wrap gap-2">
+          {g ? null : (
+            <div className="flex flex-wrap gap-2 border-t border-border pt-4">
               <button
                 type="button"
                 disabled={idx === 0}
@@ -431,49 +500,32 @@ export function QuestionBankPracticeClient({ userId }: { userId: string }) {
               >
                 Previous
               </button>
-              {idx < total - 1 ? (
-                <button type="button" className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white" onClick={next}>
-                  Next question
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  className="rounded-full border border-primary px-4 py-2 text-sm font-semibold text-primary"
-                  onClick={() => void loadBatch(topic, pathwayIdFilter)}
-                >
-                  Load more
-                </button>
-              )}
+              <button
+                type="button"
+                disabled={idx >= total - 1}
+                className="rounded-full border border-border px-4 py-2 text-sm disabled:opacity-40"
+                onClick={next}
+              >
+                Skip for now
+              </button>
             </div>
-          </div>
-        )}
+          )}
 
-        {g ? null : (
-          <div className="flex flex-wrap gap-2 border-t border-border pt-4">
-            <button
-              type="button"
-              disabled={idx === 0}
-              className="rounded-full border border-border px-4 py-2 text-sm disabled:opacity-40"
-              onClick={prev}
-            >
-              Previous
-            </button>
-            <button
-              type="button"
-              disabled={idx >= total - 1}
-              className="rounded-full border border-border px-4 py-2 text-sm disabled:opacity-40"
-              onClick={next}
-            >
-              Skip for now
-            </button>
-          </div>
-        )}
-
-        <p className="text-xs text-muted">
-          Progress for this batch is saved in your browser so you can refresh and continue. Scoring runs on the server—answers
-          are not graded in the page alone.
-        </p>
-      </div>
+          <p className="text-xs text-muted">
+            Progress for this batch is saved in your browser so you can refresh and continue. Scoring runs on the server—answers
+            are not graded in the page alone.
+          </p>
+        </div>
+      </ProtectedPremiumContent>
+      <StudyNotesPanel
+        userId={userId}
+        scope={LearnerNoteScope.QUESTION_BANK}
+        contextId={current.id}
+        topic={current.topic}
+        sourceLabel={`Question ${current.id.slice(0, 8)}…${current.topic ? ` · ${current.topic}` : ""}`}
+        userLabel={userLabel}
+        flags={protectionFlags}
+      />
     </div>
   );
 }

@@ -1,0 +1,194 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound, redirect } from "next/navigation";
+import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-lesson-pagination";
+import { PathwayLessonContentLocaleBanner } from "@/components/lessons/pathway-lesson-content-locale-banner";
+import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
+import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { ALLIED_LESSON_HUB_PAGE_SIZE } from "@/lib/allied/allied-marketing-constants";
+import { countPublishedPathwayLessonsForAlliedMarketing } from "@/lib/allied/count-allied-pathway-lessons";
+import { getAlliedProfessionBySegment, getPathwayOrThrow } from "@/lib/allied/allied-professions-registry";
+import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
+import { getPathwayLessonsPage, PATHWAY_HUB_PAGE_SIZE_MAX } from "@/lib/lessons/pathway-lesson-loader";
+import { alliedLessonsHubBreadcrumbs } from "@/lib/seo/allied-breadcrumbs";
+import { absoluteUrl } from "@/lib/seo/site-origin";
+
+export const revalidate = 86400;
+export const dynamicParams = true;
+
+export function generateStaticParams() {
+  return [];
+}
+
+type Props = {
+  params: Promise<{ professionSegment: string }>;
+  searchParams: Promise<{ page?: string; pageSize?: string }>;
+};
+
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
+  const { professionSegment } = await params;
+  const prof = getAlliedProfessionBySegment(professionSegment);
+  const sp = await searchParams;
+  const page = Math.max(1, Number(sp.page ?? "1") || 1);
+  if (!prof) return { title: "Not found" };
+  const pathway = getPathwayOrThrow(prof.pathwayId);
+  const loc = defaultPathwayLessonContentLocaleForExamHubRoute();
+  const lessonTotal =
+    pathway != null
+      ? await countPublishedPathwayLessonsForAlliedMarketing(
+          pathway.id,
+          loc,
+          prof.topicSlugsIn,
+        )
+      : null;
+  const emptyHub = lessonTotal === 0;
+  const basePath = `/allied-health/${prof.segment}/lessons`;
+  const canonical = page > 1 ? `${basePath}?page=${page}` : basePath;
+  const title =
+    page > 1
+      ? `Lessons (${prof.h1}) — page ${page} | NurseNest`
+      : `Lessons · ${prof.h1} | NurseNest`;
+  const description = `Paginated allied health lessons for ${prof.h1}. Only metadata and one page of rows load per request.`;
+  return {
+    title,
+    description,
+    alternates: { canonical: absoluteUrl(canonical) },
+    openGraph: { title, description, url: absoluteUrl(canonical), type: "website" },
+    ...(page > 1 || emptyHub ? { robots: { index: false, follow: true } } : {}),
+  };
+}
+
+export default async function AlliedProfessionLessonsPage({ params, searchParams }: Props) {
+  const { professionSegment } = await params;
+  const prof = getAlliedProfessionBySegment(professionSegment);
+  if (!prof) notFound();
+
+  const pathway = getPathwayOrThrow(prof.pathwayId);
+  if (!pathway) notFound();
+
+  const lessonContentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
+  const base = `/allied-health/${prof.segment}/lessons`;
+  const sp = await searchParams;
+  const pageRequested = Math.max(1, Number(sp.page ?? "1") || 1);
+  const rawSize = Number(sp.pageSize ?? String(ALLIED_LESSON_HUB_PAGE_SIZE)) || ALLIED_LESSON_HUB_PAGE_SIZE;
+  const pageSizeRequested = Math.min(PATHWAY_HUB_PAGE_SIZE_MAX, Math.max(8, Math.floor(rawSize)));
+
+  let pageResult;
+  try {
+    pageResult = await getPathwayLessonsPage(
+      pathway.id,
+      pageRequested,
+      pageSizeRequested,
+      lessonContentLocale,
+      prof.topicSlugsIn ? { topicSlugsIn: prof.topicSlugsIn } : undefined,
+    );
+  } catch {
+    pageResult = null;
+  }
+
+  if (!pageResult) {
+    return (
+      <div className="nn-marketing-surface mx-auto max-w-3xl px-4 py-12">
+        <p className="text-muted">We couldn’t load lessons right now. Try again shortly.</p>
+        <Link href={`/allied-health/${prof.segment}`} className="mt-4 inline-block text-primary hover:underline">
+          Back to profession
+        </Link>
+      </div>
+    );
+  }
+
+  if (pageResult.total === 0) {
+    if (pageRequested > 1) {
+      redirect(base);
+    }
+    const { crumbs, schemaItems } = alliedLessonsHubBreadcrumbs(prof.h1, `/allied-health/${prof.segment}`, 1);
+    return (
+      <div className="nn-marketing-surface mx-auto max-w-3xl px-4 py-12">
+        <BreadcrumbJsonLd items={schemaItems} />
+        <div className="mb-6">
+          <BreadcrumbTrail items={crumbs} />
+        </div>
+        <Link href={`/allied-health/${prof.segment}`} className="text-sm font-medium text-primary hover:underline">
+          ← {prof.h1}
+        </Link>
+        <h1 className="mt-4 text-3xl font-bold text-[var(--theme-heading-text)]">Lessons</h1>
+        <p className="mt-3 text-muted">
+          No published lessons for this filter yet. Check back after import, or browse the full pathway hub.
+        </p>
+        <Link href={`/allied-health/${prof.segment}`} className="mt-4 inline-block font-semibold text-primary hover:underline">
+          Back to overview
+        </Link>
+        <p className="mt-4 text-xs text-muted">
+          This page is not indexed for search until content exists.
+        </p>
+      </div>
+    );
+  }
+
+  if (pageRequested !== pageResult.page) {
+    redirect(pageResult.page > 1 ? `${base}?page=${pageResult.page}` : base);
+  }
+
+  const lessons = pageResult.items;
+  const { crumbs, schemaItems } = alliedLessonsHubBreadcrumbs(prof.h1, `/allied-health/${prof.segment}`, pageResult.page);
+
+  return (
+    <div className="nn-marketing-surface">
+      <div className="mx-auto max-w-3xl px-4 py-12">
+        <BreadcrumbJsonLd items={schemaItems} />
+        <div className="mb-6">
+          <BreadcrumbTrail items={crumbs} />
+        </div>
+        <Link href={`/allied-health/${prof.segment}`} className="text-sm font-medium text-primary hover:underline">
+          ← {prof.h1}
+        </Link>
+        <h1 className="mt-4 text-3xl font-extrabold text-[var(--theme-heading-text)]">Lessons · {prof.h1}</h1>
+        <p className="mt-3 text-sm text-muted">
+          Paginated list — only {lessons.length} lesson{lessons.length === 1 ? "" : "s"} on this screen. Pathway:{" "}
+          <span className="font-medium text-foreground">{pathway.shortName}</span>.
+        </p>
+
+        {pageResult.locale ? <PathwayLessonContentLocaleBanner listLocale={pageResult.locale} /> : null}
+
+        <section className="mt-10">
+          <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">All lessons</h2>
+          <ul className="mt-4 space-y-4">
+            {lessons.map((l) => (
+              <li key={l.slug} className="nn-card p-4">
+                <p className="text-xs font-medium uppercase text-muted">{l.topic}</p>
+                <Link
+                  href={`${base}/${l.slug}`}
+                  className="mt-1 block text-lg font-semibold text-primary hover:underline"
+                >
+                  {l.title}
+                </Link>
+                <p className="mt-2 line-clamp-2 text-sm text-muted">{l.seoDescription}</p>
+                <Link href={`${base}/${l.slug}`} className="mt-3 inline-block text-sm font-semibold text-primary">
+                  Open lesson →
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <PathwayLessonPagination
+          basePath={base}
+          page={pageResult.page}
+          pageCount={pageResult.pageCount}
+          total={pageResult.total}
+          pageSize={pageResult.pageSize}
+        />
+
+        <section className="mt-10 rounded-xl border border-border bg-[var(--theme-muted-surface)] p-4 text-sm text-muted">
+          <p className="font-semibold text-foreground">Official pathway</p>
+          <p className="mt-1">
+            <Link className="text-primary hover:underline" href={`/us/allied/allied-health/lessons`}>
+              Open the canonical US allied lessons hub
+            </Link>{" "}
+            for the same underlying catalog with full routing.
+          </p>
+        </section>
+      </div>
+    </div>
+  );
+}

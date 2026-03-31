@@ -16,6 +16,7 @@ import {
   logFlashcardAccessDenied,
   logFlashcardLargePayload,
 } from "@/lib/observability/flashcard-log";
+import { enforceFlashcardStudyProtection } from "@/lib/http/api-protection";
 import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { withRetry } from "@/lib/resilience/with-retry";
@@ -109,6 +110,9 @@ export async function GET(req: NextRequest, { params }: Props) {
       logFlashcardAccessDenied({ deckId: deck.id.slice(0, 12), reason: "subscription_required" });
       return NextResponse.json({ error: "Subscription required", code: "no_active_subscription" }, { status: 403 });
     }
+
+    const studyLimited = enforceFlashcardStudyProtection(req, userId);
+    if (studyLimited) return studyLimited;
 
     const cardWhere: Prisma.FlashcardWhereInput = {
       AND: [{ deckId: deck.id, status: ContentStatus.PUBLISHED }, flashcardAccessWhere(entitlement)],

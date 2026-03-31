@@ -262,6 +262,13 @@ function listCatalogPathwayIdsWithLessonsSync(): string[] {
   return Object.keys(data.pathways).filter((id) => (data.pathways[id]?.lessons?.length ?? 0) > 0);
 }
 
+function filterCatalogLessonsByTopicSlugs(raw: LessonInput[], topicSlugsIn?: string[]): LessonInput[] {
+  if (!topicSlugsIn) return raw;
+  if (topicSlugsIn.length === 0) return [];
+  const set = new Set(topicSlugsIn);
+  return raw.filter((l) => set.has(l.topicSlug));
+}
+
 function getCatalogLessonsRaw(pathwayId: string): LessonInput[] {
   const bucket = data.pathways[pathwayId];
   if (!bucket?.lessons?.length) return [];
@@ -334,12 +341,22 @@ async function pathwayHasPublishedDbLessons(pathwayId: string): Promise<boolean>
   return !!row;
 }
 
-/** Count published rows for pathway in one locale (bounded index). */
-async function countPublishedDbLessonsForPathwayLocale(pathwayId: string, locale: string): Promise<number> {
+/** Count published rows for pathway in one locale (bounded index). Optional topic filter for allied / scoped hubs. */
+async function countPublishedDbLessonsForPathwayLocale(
+  pathwayId: string,
+  locale: string,
+  topicSlugsIn?: string[],
+): Promise<number> {
+  if (topicSlugsIn && topicSlugsIn.length === 0) return 0;
   return dbCall(
     () =>
       prisma.pathwayLesson.count({
-        where: { pathwayId, status: ContentStatus.PUBLISHED, locale },
+        where: {
+          pathwayId,
+          status: ContentStatus.PUBLISHED,
+          locale,
+          ...(topicSlugsIn && topicSlugsIn.length > 0 ? { topicSlug: { in: topicSlugsIn } } : {}),
+        },
       }),
     0,
   );
@@ -393,10 +410,17 @@ async function loadPublishedLessonRowsPage(
   locale: string,
   skip: number,
   take: number,
+  topicSlugsIn?: string[],
 ): Promise<LessonInput[]> {
+  if (topicSlugsIn && topicSlugsIn.length === 0) return [];
   return dbCall(async () => {
     const rows = await prisma.pathwayLesson.findMany({
-      where: { pathwayId, status: ContentStatus.PUBLISHED, locale },
+      where: {
+        pathwayId,
+        status: ContentStatus.PUBLISHED,
+        locale,
+        ...(topicSlugsIn && topicSlugsIn.length > 0 ? { topicSlug: { in: topicSlugsIn } } : {}),
+      },
       orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
       skip,
       take,
@@ -440,26 +464,29 @@ function clampPage(page: number): number {
  * Catalog fallback uses a capped in-memory slice (see PATHWAY_CATALOG_LIST_HARD_CAP).
  *
  * @param marketingLocale Requested **lesson content** locale (BCP-47 base), not the exam URL country segment.
+ * @param listOptions.topicSlugsIn When set, restrict to these topic slugs (empty array = no matches). Omit for full pathway.
  */
 export async function getPathwayLessonsPage(
   pathwayId: string,
   page: number = 1,
   pageSize: number = PATHWAY_HUB_PAGE_SIZE_DEFAULT,
   marketingLocale?: string,
+  listOptions?: { topicSlugsIn?: string[] },
 ): Promise<PathwayLessonsPageResult> {
   const ps = clampPageSize(pageSize);
   const p = clampPage(page);
   const requested = normalizePathwayLessonLocale(marketingLocale);
+  const topicSlugsIn = listOptions?.topicSlugsIn;
 
   const dbAny = await pathwayHasPublishedDbLessons(pathwayId);
   if (dbAny) {
     const t0 = performance.now();
     const effective = await resolveEffectiveListLocale(pathwayId, requested);
-    const total = await countPublishedDbLessonsForPathwayLocale(pathwayId, effective);
-    const pageCount = Math.max(1, Math.ceil(total / ps));
-    const safePage = Math.min(p, pageCount);
+    const total = await countPublishedDbLessonsForPathwayLocale(pathwayId, effective, topicSlugsIn);
+    const pageCount = total === 0 ? 1 : Math.max(1, Math.ceil(total / ps));
+    const safePage = total === 0 ? 1 : Math.min(p, pageCount);
     const skip = (safePage - 1) * ps;
-    const raw = await loadPublishedLessonRowsPage(pathwayId, effective, skip, ps);
+    const raw = await loadPublishedLessonRowsPage(pathwayId, effective, skip, ps, topicSlugsIn);
     const durationMs = Math.round(performance.now() - t0);
     safeServerLog("pathway_lessons", "hub_list_db_timing", {
       pathwayId,
@@ -485,7 +512,7 @@ export async function getPathwayLessonsPage(
     };
   }
 
-  const allRaw = getCatalogLessonsRaw(pathwayId);
+  const allRaw = filterCatalogLessonsByTopicSlugs(getCatalogLessonsRaw(pathwayId), topicSlugsIn);
   const total = allRaw.length;
   const pageCount = Math.max(1, Math.ceil(total / ps));
   const safePage = Math.min(p, pageCount);

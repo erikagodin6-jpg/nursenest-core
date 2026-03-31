@@ -165,6 +165,101 @@ export function enforceQuestionGradeProtection(req: NextRequest, userId: string)
   return null;
 }
 
+/** GET/POST/DELETE /api/learner/notes — note save/load; throttle bulk abuse. */
+export function enforceLearnerNotesProtection(req: NextRequest, userId: string): NextResponse | null {
+  const ip = getTrustedClientIp(req);
+  const route = "learner_notes";
+  checkDeviceMismatch(req, route, userId, ip);
+
+  if (!checkRateLimit(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 120 }).ok) {
+    logAbuse("ip_rate_limit", route, userId, ip);
+    return tooMany("rate_limited", 60);
+  }
+
+  if (!checkRateLimit(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 90 }).ok) {
+    logAbuse("user_rate_limit", route, userId, ip);
+    return tooMany("rate_limited", 60);
+  }
+
+  return null;
+}
+
+/** GET /api/practice-tests/[id] — full question payloads for review. */
+export function enforcePracticeTestDetailProtection(req: NextRequest, userId: string): NextResponse | null {
+  const ip = getTrustedClientIp(req);
+  const route = "practice_test_detail";
+  checkDeviceMismatch(req, route, userId, ip);
+
+  if (!checkRateLimit(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 90 }).ok) {
+    logAbuse("ip_rate_limit", route, userId, ip);
+    return tooMany("rate_limited", 60);
+  }
+
+  if (!checkRateLimit(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 120 }).ok) {
+    logAbuse("user_rate_limit", route, userId, ip);
+    return tooMany("rate_limited", 60);
+  }
+
+  return null;
+}
+
+/** PATCH /api/practice-tests/[id] — save, complete, CAT advance, abandon. */
+export function enforcePracticeTestMutationProtection(req: NextRequest, userId: string): NextResponse | null {
+  const ip = getTrustedClientIp(req);
+  const route = "practice_test_mutate";
+  checkDeviceMismatch(req, route, userId, ip);
+
+  if (!checkRateLimit(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 120 }).ok) {
+    logAbuse("ip_rate_limit", route, userId, ip);
+    return tooMany("rate_limited", 60);
+  }
+
+  if (!checkRateLimit(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 180 }).ok) {
+    logAbuse("user_rate_limit", route, userId, ip);
+    return tooMany("rate_limited", 60);
+  }
+
+  return null;
+}
+
+/** GET /api/flashcards/decks/[deckRef]/study — subscriber card batches. */
+export function enforceFlashcardStudyProtection(req: NextRequest, userId: string): NextResponse | null {
+  const ip = getTrustedClientIp(req);
+  const route = "flashcard_study";
+  checkDeviceMismatch(req, route, userId, ip);
+
+  if (!checkRateLimit(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 120 }).ok) {
+    logAbuse("ip_rate_limit", route, userId, ip);
+    return tooMany("rate_limited", 60);
+  }
+
+  if (!checkRateLimit(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 90 }).ok) {
+    logAbuse("user_rate_limit", route, userId, ip);
+    return tooMany("rate_limited", 60);
+  }
+
+  return null;
+}
+
+/** POST /api/flashcards/decks/[deckRef]/review */
+export function enforceFlashcardReviewProtection(req: NextRequest, userId: string): NextResponse | null {
+  const ip = getTrustedClientIp(req);
+  const route = "flashcard_review";
+  checkDeviceMismatch(req, route, userId, ip);
+
+  if (!checkRateLimit(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 180 }).ok) {
+    logAbuse("ip_rate_limit", route, userId, ip);
+    return tooMany("rate_limited", 60);
+  }
+
+  if (!checkRateLimit(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 240 }).ok) {
+    logAbuse("user_rate_limit", route, userId, ip);
+    return tooMany("rate_limited", 60);
+  }
+
+  return null;
+}
+
 /** POST /api/exams/start — heavy session build. */
 export function enforceExamStartProtection(req: NextRequest, userId: string): NextResponse | null {
   const ip = getTrustedClientIp(req);

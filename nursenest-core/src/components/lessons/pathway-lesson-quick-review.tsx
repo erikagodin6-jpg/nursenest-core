@@ -10,7 +10,12 @@ export function PathwayLessonQuickReview({ bullets }: { bullets: string[] }) {
   return (
     <div className="nn-card border-amber-200/60 bg-amber-50/40 p-4 dark:border-amber-900/40 dark:bg-amber-950/20">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm font-semibold text-foreground">Quick review mode</p>
+        <div>
+          <p className="text-sm font-semibold text-foreground">Quick review (condensed)</p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Short revision bullets only — not a replacement for the full lesson sections below.
+          </p>
+        </div>
         <button
           type="button"
           onClick={() => setOn((v) => !v)}

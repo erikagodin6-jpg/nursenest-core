@@ -1,7 +1,11 @@
 "use client";
 
+import { LearnerNoteScope } from "@prisma/client";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
+import { ProtectedPremiumContent } from "@/components/student/protected-premium-content";
+import { StudyNotesPanel } from "@/components/student/study-notes-panel";
+import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
 
 type CardPayload = { id: string; front: string; back: string; fullBackAvailable: boolean };
 
@@ -15,7 +19,17 @@ type StudyResponse = {
 
 const RATINGS = ["again", "hard", "good", "easy"] as const;
 
-export function FlashcardStudyClient({ deckRef }: { deckRef: string }) {
+export function FlashcardStudyClient({
+  deckRef,
+  userId,
+  userLabel,
+  protectionFlags,
+}: {
+  deckRef: string;
+  userId: string;
+  userLabel: string;
+  protectionFlags: PremiumProtectionFlags;
+}) {
   const [title, setTitle] = useState<string>("");
   const [mode, setMode] = useState<"preview" | "subscriber" | null>(null);
   const [queue, setQueue] = useState<CardPayload[]>([]);
@@ -178,24 +192,67 @@ export function FlashcardStudyClient({ deckRef }: { deckRef: string }) {
 
       {error ? <p className="mt-3 text-sm text-red-600">{error}</p> : null}
 
-      <button
-        type="button"
-        className="mt-8 w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-        onClick={() => setFlipped(!flipped)}
-        aria-label={flipped ? "Show front" : "Show back"}
-      >
-        <div
-          className={`relative min-h-[220px] rounded-2xl border-2 border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] p-6 shadow-sm transition duration-200 ${
-            flipped ? "ring-2 ring-primary/30" : ""
-          }`}
+      {mode === "subscriber" ? (
+        <p className="mt-4 text-xs text-[var(--theme-muted-text)]">
+          Premium content is for individual subscriber use. Notes are printable; protected card text is not.
+        </p>
+      ) : null}
+
+      {mode === "subscriber" ? (
+        <ProtectedPremiumContent userLabel={userLabel} flags={protectionFlags} className="mt-6">
+          <button
+            type="button"
+            className="w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            onClick={() => setFlipped(!flipped)}
+            aria-label={flipped ? "Show front" : "Show back"}
+          >
+            <div
+              className={`relative min-h-[220px] rounded-2xl border-2 border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] p-6 shadow-sm transition duration-200 ${
+                flipped ? "ring-2 ring-primary/30" : ""
+              }`}
+            >
+              <p className="text-xs font-semibold uppercase tracking-wide text-primary">{flipped ? "Back" : "Front"}</p>
+              <p className="mt-4 whitespace-pre-wrap text-base leading-relaxed text-[var(--theme-heading-text)]">
+                {flipped ? current.back : current.front}
+              </p>
+              <p className="mt-6 text-center text-xs text-[var(--theme-muted-text)]">Tap to flip</p>
+            </div>
+          </button>
+        </ProtectedPremiumContent>
+      ) : (
+        <button
+          type="button"
+          className="mt-8 w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          onClick={() => setFlipped(!flipped)}
+          aria-label={flipped ? "Show front" : "Show back"}
         >
-          <p className="text-xs font-semibold uppercase tracking-wide text-primary">{flipped ? "Back" : "Front"}</p>
-          <p className="mt-4 whitespace-pre-wrap text-base leading-relaxed text-[var(--theme-heading-text)]">
-            {flipped ? current.back : current.front}
-          </p>
-          <p className="mt-6 text-center text-xs text-[var(--theme-muted-text)]">Tap to flip</p>
+          <div
+            className={`relative min-h-[220px] rounded-2xl border-2 border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] p-6 shadow-sm transition duration-200 ${
+              flipped ? "ring-2 ring-primary/30" : ""
+            }`}
+          >
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary">{flipped ? "Back" : "Front"}</p>
+            <p className="mt-4 whitespace-pre-wrap text-base leading-relaxed text-[var(--theme-heading-text)]">
+              {flipped ? current.back : current.front}
+            </p>
+            <p className="mt-6 text-center text-xs text-[var(--theme-muted-text)]">Tap to flip</p>
+          </div>
+        </button>
+      )}
+
+      {mode === "subscriber" ? (
+        <div className="mt-6">
+          <StudyNotesPanel
+            userId={userId}
+            scope={LearnerNoteScope.FLASHCARD_DECK}
+            contextId={deckRef}
+            topic={title || null}
+            sourceLabel={title ? `Flashcards · ${title}` : `Flashcards · ${deckRef.slice(0, 12)}`}
+            userLabel={userLabel}
+            flags={protectionFlags}
+          />
         </div>
-      </button>
+      ) : null}
 
       {mode === "subscriber" ? (
         <div className="fixed bottom-0 left-0 right-0 border-t border-border bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/80">

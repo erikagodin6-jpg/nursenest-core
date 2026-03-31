@@ -23,6 +23,7 @@
  */
 export const SITEMAP_SINGLE_URLSET_SOFT_WARN_URLS = 45_000;
 
+import { ALLIED_PROFESSIONS } from "@/lib/allied/allied-professions-registry";
 import { PROGRAMMATIC_SLUG_TO_PATHWAY_PATH } from "@/lib/exam-pathways/programmatic-slug-redirects";
 import { buildExamPathwayPath, getExamPathwayById, listPublicExamPathways } from "@/lib/exam-pathways/exam-product-registry";
 import {
@@ -59,6 +60,17 @@ export function collectExamPathwayUrls(origin: string): string[] {
     urls.push(`${o}${buildExamPathwayPath(p)}`);
     urls.push(`${o}${buildExamPathwayPath(p, "pricing")}`);
     urls.push(`${o}${buildExamPathwayPath(p, "questions")}`);
+  }
+  return urls;
+}
+
+/** Allied marketing hub + profession guides + lesson index pages (not every paginated query string). */
+export function collectAlliedMarketingUrls(origin: string): string[] {
+  const o = normalizeOrigin(origin);
+  const urls: string[] = [`${o}/allied-health-exam-prep`];
+  for (const p of ALLIED_PROFESSIONS) {
+    urls.push(`${o}/allied-health/${p.segment}`);
+    urls.push(`${o}/allied-health/${p.segment}/lessons`);
   }
   return urls;
 }
@@ -207,7 +219,7 @@ export async function collectCoreUrls(origin: string): Promise<string[]> {
     add("/case-studies"),
   ];
   const lessonUrls = await collectPathwayLessonSeoUrls(o);
-  return [...base, ...collectExamPathwayUrls(o), ...lessonUrls];
+  return [...base, ...collectExamPathwayUrls(o), ...collectAlliedMarketingUrls(o), ...lessonUrls];
 }
 
 /** seo-pages.xml — English canonical programmatic URLs at `/{slug}` (rewritten to /seo/[slug] internally). */

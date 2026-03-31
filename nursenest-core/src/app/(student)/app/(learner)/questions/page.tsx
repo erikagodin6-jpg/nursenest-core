@@ -6,12 +6,17 @@ import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { auth } from "@/lib/auth";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
+import { getServerPremiumProtectionFlags } from "@/lib/premium-protection/config";
+import { maskUserLabelForWatermark } from "@/lib/premium-protection/mask-user-label";
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 
 export default async function QuestionBankPage() {
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
+  const email = (session?.user as { email?: string | null })?.email ?? null;
+  const protectionFlags = getServerPremiumProtectionFlags();
+  const userLabel = maskUserLabelForWatermark(email, userId || "unknown");
 
   if (entitlement === "error") {
     return (
@@ -65,10 +70,18 @@ export default async function QuestionBankPage() {
           <li>Select answers, then use <strong className="text-foreground">Check answer</strong> for instant feedback.</li>
           <li>Pair with <strong className="text-foreground">Practice exams</strong> when you want timed, full-set rehearsal.</li>
         </ul>
+        <p className="mt-3 text-xs">
+          Premium items and rationales are for individual subscriber use. Copying is limited on-screen; use{" "}
+          <strong className="text-foreground">My notes</strong> for text you can print or export.
+        </p>
       </aside>
       {userId ? (
         <Suspense fallback={<p className="text-sm text-muted">Loading question bank…</p>}>
-          <QuestionBankPracticeClient userId={userId} />
+          <QuestionBankPracticeClient
+            userId={userId}
+            userLabel={userLabel}
+            protectionFlags={protectionFlags}
+          />
         </Suspense>
       ) : null}
     </main>
