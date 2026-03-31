@@ -1,0 +1,168 @@
+{
+  "generatedAt": "2026-03-31T16:22:52.383Z",
+  "authoritativePublishedDbTotal": 143,
+  "pathwayLessonsTableTotalEn": 143,
+  "countsByCourse": {
+    "anatomy-physiology": 25,
+    "chemistry": 25,
+    "math": 18,
+    "medical-terminology": 17,
+    "microbiology": 18,
+    "pathophysiology": 27,
+    "pharmacology-foundations": 13
+  },
+  "countsBySource": {
+    "generated": 70,
+    "importedExisting": 73,
+    "unknown": 0
+  },
+  "countsByQuality": {
+    "importedRich": 1,
+    "importedFragmentary": 72,
+    "generated": 70,
+    "needsEnrichment": 0
+  },
+  "canonicalSeedRowsStillPresent": {
+    "published": 70,
+    "anyStatus": 70,
+    "expectedCanonical": 70
+  },
+  "historicalRunContext": {
+    "seedSummary": {
+      "generatedAt": "2026-03-31T14:12:34.672Z",
+      "apply": true,
+      "sourceRows": 70,
+      "inserted": 70,
+      "updated": 0,
+      "skipped": 0,
+      "failed": 0,
+      "byPathway": [
+        {
+          "pathwayId": "pre-nursing-anatomy-physiology",
+          "count": 10
+        },
+        {
+          "pathwayId": "pre-nursing-chemistry",
+          "count": 10
+        },
+        {
+          "pathwayId": "pre-nursing-math",
+          "count": 10
+        },
+        {
+          "pathwayId": "pre-nursing-medical-terminology",
+          "count": 10
+        },
+        {
+          "pathwayId": "pre-nursing-microbiology",
+          "count": 10
+        },
+        {
+          "pathwayId": "pre-nursing-pathophysiology",
+          "count": 10
+        },
+        {
+          "pathwayId": "pre-nursing-pharmacology",
+          "count": 10
+        }
+      ]
+    },
+    "existingImportSummary": {
+      "generatedAt": "2026-03-31T16:09:25.306Z",
+      "apply": true,
+      "sourceRows": 73,
+      "importedExisting": 73,
+      "inserted": 0,
+      "updated": 73,
+      "skipped": 0,
+      "failed": 0,
+      "byPathway": [
+        {
+          "pathwayId": "pre-nursing-anatomy-physiology",
+          "count": 25
+        },
+        {
+          "pathwayId": "pre-nursing-chemistry",
+          "count": 25
+        },
+        {
+          "pathwayId": "pre-nursing-math",
+          "count": 18
+        },
+        {
+          "pathwayId": "pre-nursing-medical-terminology",
+          "count": 17
+        },
+        {
+          "pathwayId": "pre-nursing-microbiology",
+          "count": 18
+        },
+        {
+          "pathwayId": "pre-nursing-pathophysiology",
+          "count": 27
+        },
+        {
+          "pathwayId": "pre-nursing-pharmacology-foundations",
+          "count": 13
+        }
+      ]
+    },
+    "interpretation": "The original 70 canonical rows still exist; the later import added/updated additional existing-source rows, producing a larger consolidated DB total."
+  },
+  "timestamps": {
+    "createdByDate": {
+      "2026-03-31": 143
+    },
+    "updatedByDate": {
+      "2026-03-31": 143
+    }
+  },
+  "routeValidation": {
+    "hubRouteCount": 7,
+    "detailRouteCount": 143,
+    "failedDetailRoutes": 0,
+    "sampleUrlsByCourse": [
+      {
+        "course": "anatomy-physiology",
+        "hub": "/pre-nursing/anatomy-physiology",
+        "sampleDetail": "/pre-nursing/anatomy-physiology/cardiovascular-system-basics"
+      },
+      {
+        "course": "chemistry",
+        "hub": "/pre-nursing/chemistry",
+        "sampleDetail": "/pre-nursing/chemistry/atomic-structure-periodic-trends"
+      },
+      {
+        "course": "microbiology",
+        "hub": "/pre-nursing/microbiology",
+        "sampleDetail": "/pre-nursing/microbiology/microbial-cell-structure"
+      },
+      {
+        "course": "pharmacology-foundations",
+        "hub": "/pre-nursing/pharmacology-foundations",
+        "sampleDetail": "/pre-nursing/pharmacology-foundations/pharmacokinetics-adme"
+      },
+      {
+        "course": "math",
+        "hub": "/pre-nursing/math",
+        "sampleDetail": "/pre-nursing/math/units-conversions-metric-household"
+      },
+      {
+        "course": "pathophysiology",
+        "hub": "/pre-nursing/pathophysiology",
+        "sampleDetail": "/pre-nursing/pathophysiology/cell-injury-adaptation"
+      },
+      {
+        "course": "medical-terminology",
+        "hub": "/pre-nursing/medical-terminology",
+        "sampleDetail": "/pre-nursing/medical-terminology/roots-prefixes-suffixes"
+      }
+    ]
+  },
+  "sitemapValidation": {
+    "missingHubUrls": 0,
+    "missingDetailUrls": 0,
+    "missingHubUrlSamples": [],
+    "missingDetailUrlSamples": []
+  }
+}
