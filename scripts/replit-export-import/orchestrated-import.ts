@@ -16,6 +16,7 @@
  *   --include-operational-imports   Also import ai_cache rows, generation_jobs, generation_events (off by default).
  *   --include-generated-questions Import generated_questions.json → legacy generated_questions table (off by default).
  *   --max-generated-questions=N    Cap rows for generated_questions import.
+ *   --fail-fast                    Abort remaining phases if a monolith/pipeline file hits fatal DB errors (missing table, SQL shape mismatch, etc.).
  */
 import * as fs from "fs";
 import * as path from "path";
@@ -58,6 +59,7 @@ function parseArgs(argv: string[]) {
   const includeOperationalImports = argv.includes("--include-operational-imports");
   const skipOperationalPipeline = !includeOperationalImports;
   const includeGeneratedQuestions = argv.includes("--include-generated-questions");
+  const failFast = argv.includes("--fail-fast");
   const maxGenRaw = get("max-generated-questions");
   let maxGeneratedQuestions: number | null = null;
   if (maxGenRaw !== undefined) {
@@ -71,7 +73,54 @@ function parseArgs(argv: string[]) {
     skipOperationalPipeline,
     includeGeneratedQuestions,
     maxGeneratedQuestions,
+    failFast,
   };
+}
+
+/** Schema/SQL-level failures: stop so later phases do not run on a broken catalog. */
+const FATAL_IMPORT_ERROR =
+  /does not exist|42P01|42601|42703|42P16|incompatible types|syntax error at|INSERT has more expressions than target columns|INSERT has more target columns than expressions|cannot insert multiple commands|permission denied for table|must be owner of/i;
+
+function findFatalImportErrors(errors: string[]): string[] {
+  const out: string[] = [];
+  const cap = 50;
+  for (let i = 0; i < errors.length && i < cap; i++) {
+    if (FATAL_IMPORT_ERROR.test(errors[i]!)) out.push(errors[i]!);
+  }
+  if (out.length === 0 && errors.length > cap) {
+    for (let i = cap; i < errors.length; i++) {
+      if (FATAL_IMPORT_ERROR.test(errors[i]!)) {
+        out.push(errors[i]!);
+        break;
+      }
+    }
+  }
+  return out;
+}
+
+function checkFailFast(
+  phase: string,
+  st: ImportStats,
+  failFast: boolean,
+): { abort: true; reasons: string[] } | { abort: false } {
+  if (!failFast || st.errors.length === 0) return { abort: false };
+  const fatal = findFatalImportErrors(st.errors);
+  if (fatal.length === 0) return { abort: false };
+  console.error(
+    JSON.stringify(
+      {
+        type: "replit_import_fail_fast",
+        phase,
+        file: st.file,
+        table: st.table,
+        fatalErrorSample: fatal.slice(0, 3),
+        totalErrorsRecorded: st.errors.length,
+      },
+      null,
+      2,
+    ),
+  );
+  return { abort: true, reasons: fatal };
 }
 
 function resolveExportDir(dirArg: string | null): string {
@@ -174,6 +223,7 @@ Sub-steps:
   - flashcard_bank.json + replit-export-import pipeline + digital_products + pricing_plans
 
 Defaults skip operational JSON imports (generation_jobs/events, raw ai_cache rows). Pass --include-operational-imports for full parity.
+  --fail-fast            Stop before later phases if a step hits fatal DB/catalog errors (see orchestrator header).
 `);
     return 0;
   }
@@ -185,6 +235,7 @@ Defaults skip operational JSON imports (generation_jobs/events, raw ai_cache row
     skipOperationalPipeline,
     includeGeneratedQuestions,
     maxGeneratedQuestions,
+    failFast,
   } = parseArgs(argv);
   const exportDir = resolveExportDir(dirArg);
 
@@ -212,6 +263,7 @@ Defaults skip operational JSON imports (generation_jobs/events, raw ai_cache row
       skipOperationalPipeline: boolean;
       includeGeneratedQuestions: boolean;
       maxGeneratedQuestions: number | null;
+      failFast: boolean;
     };
     phases: unknown[];
     verify?: Record<string, number | null>;
@@ -224,6 +276,7 @@ Defaults skip operational JSON imports (generation_jobs/events, raw ai_cache row
       skipOperationalPipeline,
       includeGeneratedQuestions,
       maxGeneratedQuestions,
+      failFast,
     },
     phases: [],
     ok: true,
@@ -233,6 +286,8 @@ Defaults skip operational JSON imports (generation_jobs/events, raw ai_cache row
 
   const beforeCounts = await verifyTableCounts(pool);
   report.phases.push({ phase: "verify_before", counts: beforeCounts });
+
+  let failFastAbort: { phase: string; detail: string } | null = null;
 
   // 1 — content_items (Prisma)
   if (contentItemsFile) {
@@ -247,28 +302,41 @@ Defaults skip operational JSON imports (generation_jobs/events, raw ai_cache row
       subprocessOk: r.ok,
     });
     if (!r.ok) report.ok = false;
+    if (failFast && apply && !r.ok) {
+      failFastAbort = { phase: "content_items_prisma", detail: "subprocess_failed" };
+    }
   } else {
     report.phases.push({ phase: "content_items_prisma", skipped: true, reason: "no_file" });
   }
 
   // 2 — translations
-  if (translationsFile) {
+  if (!failFastAbort && translationsFile) {
     const st = await importContentTranslations(pool, translationsFile, apply);
     report.phases.push({ phase: "content_translations", ...summarizeStats(st) });
-  } else {
+    const ff = checkFailFast("content_translations", st, failFast);
+    if (ff.abort) {
+      failFastAbort = { phase: "content_translations", detail: ff.reasons[0] ?? "fatal_errors" };
+      report.ok = false;
+    }
+  } else if (!failFastAbort) {
     report.phases.push({ phase: "content_translations", skipped: true, reason: "no_file" });
   }
 
   // 3 — exam_questions (monolith export)
-  if (examQuestionsFile) {
+  if (!failFastAbort && examQuestionsFile) {
     const st = await importExamQuestionsMonolith(pool, examQuestionsFile, apply);
     report.phases.push({ phase: "exam_questions_monolith", ...summarizeStats(st) });
-  } else {
+    const ff = checkFailFast("exam_questions_monolith", st, failFast);
+    if (ff.abort) {
+      failFastAbort = { phase: "exam_questions_monolith", detail: ff.reasons[0] ?? "fatal_errors" };
+      report.ok = false;
+    }
+  } else if (!failFastAbort) {
     report.phases.push({ phase: "exam_questions_monolith", skipped: true, reason: "no_file" });
   }
 
   // 3a — optional legacy generated_questions (AI batch artifacts; not live exam bank)
-  if (includeGeneratedQuestions && generatedQuestionsFile) {
+  if (!failFastAbort && includeGeneratedQuestions && generatedQuestionsFile) {
     const st = await importGeneratedQuestionsMonolith(
       pool,
       generatedQuestionsFile,
@@ -276,7 +344,12 @@ Defaults skip operational JSON imports (generation_jobs/events, raw ai_cache row
       maxGeneratedQuestions,
     );
     report.phases.push({ phase: "generated_questions_monolith", ...summarizeStats(st) });
-  } else {
+    const ff = checkFailFast("generated_questions_monolith", st, failFast);
+    if (ff.abort) {
+      failFastAbort = { phase: "generated_questions_monolith", detail: ff.reasons[0] ?? "fatal_errors" };
+      report.ok = false;
+    }
+  } else if (!failFastAbort) {
     report.phases.push({
       phase: "generated_questions_monolith",
       skipped: true,
@@ -285,7 +358,7 @@ Defaults skip operational JSON imports (generation_jobs/events, raw ai_cache row
   }
 
   // 3b — allied questions → Prisma exam_questions (dedupe by stem hash)
-  if (alliedQuestionsFile) {
+  if (!failFastAbort && alliedQuestionsFile) {
     const r = runNursenestScript(
       "scripts/import-allied-json-to-prisma.ts",
       [`--questions=${alliedQuestionsFile}`, `--flashcards=${emptyArrayPath}`],
@@ -297,33 +370,60 @@ Defaults skip operational JSON imports (generation_jobs/events, raw ai_cache row
       subprocessOk: r.ok,
     });
     if (!r.ok) report.ok = false;
-  } else {
+    if (failFast && apply && !r.ok) {
+      failFastAbort = { phase: "allied_questions_prisma", detail: "subprocess_failed" };
+    }
+  } else if (!failFastAbort) {
     report.phases.push({ phase: "allied_questions_prisma", skipped: true, reason: "no_file" });
   }
 
   // 4 — flashcard_bank + replit pipeline (decks, imaging, …)
-  if (flashcardBankFile) {
+  if (!failFastAbort && flashcardBankFile) {
     const st = await importFlashcardBank(pool, flashcardBankFile, apply);
     report.phases.push({ phase: "flashcard_bank", ...summarizeStats(st) });
-  } else {
+    const ff = checkFailFast("flashcard_bank", st, failFast);
+    if (ff.abort) {
+      failFastAbort = { phase: "flashcard_bank", detail: ff.reasons[0] ?? "fatal_errors" };
+      report.ok = false;
+    }
+  } else if (!failFastAbort) {
     report.phases.push({ phase: "flashcard_bank", skipped: true, reason: "no_file" });
   }
 
-  const pipelineResult = await runImportPipeline(pool, exportDir, {
-    apply,
-    extractAiCache: true,
-    applyKillSwitchState: false,
-    deckOwnerFallback,
-    skipOperationalPipeline,
-  });
-  report.phases.push({
-    phase: "replit_sql_pipeline",
-    inventory: pipelineResult.inventory,
-    stats: pipelineResult.stats.map(summarizeStats),
-  });
+  let pipelineResult: Awaited<ReturnType<typeof runImportPipeline>> | null = null;
+  if (!failFastAbort) {
+    pipelineResult = await runImportPipeline(pool, exportDir, {
+      apply,
+      extractAiCache: true,
+      applyKillSwitchState: false,
+      deckOwnerFallback,
+      skipOperationalPipeline,
+    });
+    report.phases.push({
+      phase: "replit_sql_pipeline",
+      inventory: pipelineResult.inventory,
+      stats: pipelineResult.stats.map(summarizeStats),
+    });
+    if (failFast) {
+      for (const st of pipelineResult.stats) {
+        const ff = checkFailFast(`replit_sql_pipeline:${st.file}`, st, failFast);
+        if (ff.abort) {
+          failFastAbort = { phase: "replit_sql_pipeline", detail: `${st.file}: ${ff.reasons[0] ?? ""}` };
+          report.ok = false;
+          break;
+        }
+      }
+    }
+  } else {
+    report.phases.push({
+      phase: "replit_sql_pipeline",
+      skipped: true,
+      reason: "fail_fast_prior_phase",
+    });
+  }
 
   // 4b — allied Prisma flashcards
-  if (alliedFlashcardsFile) {
+  if (!failFastAbort && alliedFlashcardsFile) {
     const r = runNursenestScript(
       "scripts/import-allied-json-to-prisma.ts",
       [`--questions=${emptyArrayPath}`, `--flashcards=${alliedFlashcardsFile}`],
@@ -335,23 +435,40 @@ Defaults skip operational JSON imports (generation_jobs/events, raw ai_cache row
       subprocessOk: r.ok,
     });
     if (!r.ok) report.ok = false;
-  } else {
+    if (failFast && apply && !r.ok) {
+      failFastAbort = { phase: "allied_flashcards_prisma", detail: "subprocess_failed" };
+    }
+  } else if (!failFastAbort) {
     report.phases.push({ phase: "allied_flashcards_prisma", skipped: true, reason: "no_file" });
   }
 
   // 5 — products
-  if (digitalProductsFile) {
+  if (!failFastAbort && digitalProductsFile) {
     const st = await importDigitalProducts(pool, digitalProductsFile, apply);
     report.phases.push({ phase: "digital_products", ...summarizeStats(st) });
-  } else {
+    const ff = checkFailFast("digital_products", st, failFast);
+    if (ff.abort) {
+      failFastAbort = { phase: "digital_products", detail: ff.reasons[0] ?? "fatal_errors" };
+      report.ok = false;
+    }
+  } else if (!failFastAbort) {
     report.phases.push({ phase: "digital_products", skipped: true, reason: "no_file" });
   }
 
-  if (pricingPlansFile) {
+  if (!failFastAbort && pricingPlansFile) {
     const st = await importPricingPlans(pool, pricingPlansFile, apply);
     report.phases.push({ phase: "pricing_plans", ...summarizeStats(st) });
-  } else {
+    const ff = checkFailFast("pricing_plans", st, failFast);
+    if (ff.abort) {
+      failFastAbort = { phase: "pricing_plans", detail: ff.reasons[0] ?? "fatal_errors" };
+      report.ok = false;
+    }
+  } else if (!failFastAbort) {
     report.phases.push({ phase: "pricing_plans", skipped: true, reason: "no_file" });
+  }
+
+  if (failFastAbort) {
+    report.phases.push({ phase: "aborted_fail_fast", ...failFastAbort });
   }
 
   const afterCounts = await verifyTableCounts(pool);
