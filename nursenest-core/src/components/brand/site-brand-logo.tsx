@@ -8,7 +8,7 @@ import { useThemeLogo } from "@/lib/theme/use-theme-logo";
 export type BrandMarkLoadState = "loading" | "ready" | "error";
 
 /**
- * Theme-aware brand mark: `useThemeLogo` → `getHeaderBrandLogoLoadChain` (Spaces CDN → proxy → local SVG → legacy).
+ * Theme-aware brand mark: `useThemeLogo` (tracks `data-theme`) → `getHeaderBrandLogoLoadChain` (CDN/proxy → default-theme rasters → local SVG → legacy).
  * Uses {@link DEFAULT_BRAND_LOGO_MARK_CLASSNAME} for consistent header/footer sizing and reserved height (reduces CLS).
  */
 export function SiteBrandLogoMark({
