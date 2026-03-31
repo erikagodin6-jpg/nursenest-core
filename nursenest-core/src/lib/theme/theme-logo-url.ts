@@ -64,8 +64,10 @@ export function getThemeLogoLoadChain(themeId?: string | null): string[] {
   const sameOrigin = getThemeLogoPublicPath(id);
   const sameOriginFb = getThemeLogoPublicPath(defId);
 
-  // Proxy first when bucket is private; then CDN; then same-origin `/public/branding/themes/...`.
-  return uniqueStrings([proxy, pub, sameOrigin, proxyFb, pubFb, sameOriginFb]);
+  // Try active theme rasters, then default-theme rasters, then the shared local SVG last.
+  // `getThemeLogoPublicPath` is the same lavender-tinted SVG for every id — inserting it before
+  // default-theme CDN/proxy URLs hid `lavenderbrandlogo.png` when the theme asset failed.
+  return uniqueStrings([proxy, pub, proxyFb, pubFb, sameOrigin, sameOriginFb]);
 }
 
 const PRIMARY_BRAND_MARK_EXTENSIONS = [".svg", ".png", ".webp", ".jpg"] as const;

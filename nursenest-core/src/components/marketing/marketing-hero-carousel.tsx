@@ -11,6 +11,13 @@ import {
 export type MarketingHeroCarouselProps = {
   slides: readonly HomeHeroSlide[];
   onMediaUnavailable?: () => void;
+  /**
+   * `hero` — tall, viewport-aware frame for the homepage column (fills beside long copy).
+   * `default` — fixed 16:10 box (e.g. “Platform in Action”).
+   */
+  mediaFrame?: "default" | "hero";
+  /** Merged onto the outer wrapper (layout flex/min-height). */
+  className?: string;
   /** Root `data-testid` (default `hero-carousel`). */
   testIdPrefix?: string;
   /** Slide images: `img-${imgTestIdPrefix}-slide-{i}` (default `hero` → `img-hero-slide-0`). */
@@ -25,9 +32,14 @@ export type MarketingHeroCarouselProps = {
  * autoplay with hover pause, dot navigation, skeleton until first load, full fallback if all slides fail.
  * Used by the hero and by “See the Platform in Action” with different `slides` only.
  */
+const heroMediaFrameClass =
+  "relative min-h-[min(18rem,52vw)] w-full flex-1 overflow-hidden md:min-h-[min(24rem,52vh)] lg:min-h-[min(28rem,58vh)] xl:min-h-[min(32rem,62vh)]";
+
 export function MarketingHeroCarousel({
   slides,
   onMediaUnavailable,
+  mediaFrame = "default",
+  className,
   testIdPrefix = "hero-carousel",
   imgTestIdPrefix = "hero",
   autoplayIntervalMs = 5000,
@@ -125,10 +137,17 @@ export function MarketingHeroCarousel({
   const dotsTestId = testIdPrefix === "hero-carousel" ? "hero-carousel-dots" : `${testIdPrefix}-dots`;
   const fallbackWrapperTestId = testIdPrefix === "hero-carousel" ? "hero-carousel-fallback" : `${testIdPrefix}-fallback`;
 
+  const frameShell =
+    mediaFrame === "hero"
+      ? heroMediaFrameClass
+      : "relative aspect-[16/10] w-full";
+
   if (validCount === 0) {
     return (
       <div className="relative w-full min-w-0" data-testid={fallbackWrapperTestId}>
-        <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] shadow-[var(--shadow-elevated)]">
+        <div
+          className={`${frameShell} overflow-hidden rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] shadow-[var(--shadow-elevated)]`}
+        >
           <img
             src={MARKETING_HERO_LOCAL_FALLBACK}
             alt=""
@@ -147,13 +166,13 @@ export function MarketingHeroCarousel({
 
   return (
     <div
-      className="relative w-full min-w-0 min-h-0"
+      className={`relative flex min-h-0 w-full min-w-0 flex-col ${mediaFrame === "hero" ? "flex-1" : ""} ${className ?? ""}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       data-testid={testIdPrefix}
     >
       <div
-        className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] shadow-[var(--shadow-elevated)]"
+        className={`${frameShell} overflow-hidden rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] shadow-[var(--shadow-elevated)]`}
         style={{ overflowAnchor: "none" }}
         aria-busy={!hasLoaded && mediaOk}
       >

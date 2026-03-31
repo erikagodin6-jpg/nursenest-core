@@ -209,7 +209,7 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
 
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div
-              className={`grid items-center gap-8 md:items-start md:gap-10 lg:gap-12 ${heroMediaVisible ? "md:grid-cols-2" : "md:grid-cols-1"}`}
+              className={`grid items-center gap-8 md:items-stretch md:gap-10 lg:gap-12 ${heroMediaVisible ? "md:grid-cols-2" : "md:grid-cols-1"}`}
             >
               <div className="hero-motion-enter min-w-0 space-y-6 md:space-y-5">
                 <div className="flex flex-wrap items-center gap-2">
@@ -436,10 +436,16 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
               </div>
 
               <div
-                className={heroMediaVisible ? "relative hidden min-w-0 md:block" : "hidden"}
+                className={
+                  heroMediaVisible
+                    ? "relative hidden min-h-0 min-w-0 md:flex md:h-full md:max-h-none md:flex-col"
+                    : "hidden"
+                }
                 style={{ overflowAnchor: "none" }}
               >
                 <MarketingHeroCarousel
+                  mediaFrame="hero"
+                  className="min-h-0 flex-1"
                   slides={heroSlides}
                   onMediaUnavailable={() => setHeroMediaVisible(false)}
                 />

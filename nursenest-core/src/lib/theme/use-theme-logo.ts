@@ -1,6 +1,5 @@
 "use client";
 
-import { useTheme } from "next-themes";
 import { useMemo, useSyncExternalStore } from "react";
 import { getThemeLogoObjectKeyFromNormalizedId } from "@/lib/branding/theme-brand-logo-cdn";
 import { LOCAL_BRAND_MARK_PATH } from "@/lib/branding/logo-config";
@@ -43,8 +42,9 @@ function getServerSnapshot(): string {
 }
 
 /**
- * Active theme logo: `resolvedTheme ?? theme` from next-themes when hydrated, otherwise
- * `data-theme` / localStorage (via sync external store) so the first paint matches the boot script.
+ * Active theme logo follows `data-theme` (and the same localStorage key as the boot script), not
+ * next-themes React state alone. That keeps the raster aligned with CSS variables and avoids a
+ * brief lavender logo when the DOM is already `ocean` (or similar) after `beforeInteractive` boot.
  */
 export function useThemeLogo(): {
   /** Canonical theme id used for logo mapping. */
@@ -54,10 +54,8 @@ export function useThemeLogo(): {
   /** Ordered URLs: same-origin proxy first, then public CDN, then fallbacks. */
   loadChain: string[];
 } {
-  const { resolvedTheme, theme } = useTheme();
   const domThemeId = useSyncExternalStore(subscribe, readDomThemeId, getServerSnapshot);
-  const raw = resolvedTheme ?? theme ?? domThemeId;
-  const activeId = normalizeThemeIdForLogo(raw);
+  const activeId = normalizeThemeIdForLogo(domThemeId);
   const mappedSpaceKey = useMemo(() => getThemeLogoObjectKeyFromNormalizedId(activeId), [activeId]);
   const loadChain = useMemo(() => {
     const chain = getHeaderBrandLogoLoadChain(activeId);
