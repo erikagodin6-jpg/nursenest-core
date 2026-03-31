@@ -9,13 +9,24 @@ import { productEvent } from "@/lib/observability/product-events";
 import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
 import { MAX_SESSION_QUESTION_IDS } from "@/lib/exams/exam-session-bounds";
+import { MIXED_PRACTICE_2026_QUESTION_TARGET, MIXED_PRACTICE_2026_RN_PN_TAG } from "@/lib/exams/practice-exam-presets";
 import { seedMinimalQuestionBankIfEmpty } from "@/lib/exams/seed-minimal-question-bank";
 import { diagnoseExamStartEmpty } from "@/lib/questions/exam-start-empty-diagnostics";
 import { QUESTION_PAYLOAD_WARN_BYTES } from "@/lib/questions/question-api-limits";
 import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
-const POOL_LIMIT = Math.min(20, MAX_SESSION_QUESTION_IDS);
+const DEFAULT_POOL_LIMIT = Math.min(20, MAX_SESSION_QUESTION_IDS);
+const TAG_POOL_FETCH = Math.min(120, MAX_SESSION_QUESTION_IDS);
+
+function shuffleIds<T extends { id: string }>(rows: T[]): T[] {
+  const copy = [...rows];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j]!, copy[i]!];
+  }
+  return copy;
+}
 
 export async function POST(req: Request) {
   const gate = await requireSubscriberSession();
@@ -27,10 +38,14 @@ export async function POST(req: Request) {
 
   let examId: string | null = null;
   let hydrate: "full" | "window" = "window";
+  let questionTag: string | null = null;
   try {
-    const b = (await req.json()) as { examId?: string; hydrate?: string };
+    const b = (await req.json()) as { examId?: string; hydrate?: string; questionTag?: string };
     examId = typeof b?.examId === "string" && b.examId.length > 4 ? b.examId : null;
     if (b?.hydrate === "full") hydrate = "full";
+    if (typeof b?.questionTag === "string" && b.questionTag.trim().length > 2) {
+      questionTag = b.questionTag.trim();
+    }
   } catch {
     /* optional body */
   }
@@ -55,13 +70,29 @@ export async function POST(req: Request) {
   }
 
   try {
-    const questionPool = await withRetry(() =>
+    const baseWhere = questionAccessWhere(gate.entitlement);
+    const presetWhere =
+      questionTag === MIXED_PRACTICE_2026_RN_PN_TAG
+        ? { AND: [baseWhere, { tags: { has: MIXED_PRACTICE_2026_RN_PN_TAG } }] }
+        : questionTag
+          ? { AND: [baseWhere, { tags: { has: questionTag } }] }
+          : baseWhere;
+    const poolLimit =
+      questionTag === MIXED_PRACTICE_2026_RN_PN_TAG
+        ? Math.min(MIXED_PRACTICE_2026_QUESTION_TARGET, MAX_SESSION_QUESTION_IDS)
+        : DEFAULT_POOL_LIMIT;
+
+    const questionPoolRaw = await withRetry(() =>
       prisma.examQuestion.findMany({
-        where: questionAccessWhere(gate.entitlement),
-        select: { id: true, stem: true, options: true, questionType: true },
-        take: POOL_LIMIT,
+        where: presetWhere,
+        select: { id: true, stem: true, options: true, questionType: true, difficulty: true },
+        take: questionTag ? TAG_POOL_FETCH : poolLimit,
       }),
     );
+
+    const questionPool = questionTag
+      ? shuffleIds(questionPoolRaw).slice(0, poolLimit)
+      : questionPoolRaw.slice(0, poolLimit);
 
     const session = await prisma.examSession.create({
       data: {
@@ -87,7 +118,7 @@ export async function POST(req: Request) {
         });
       }
     }
-    productEvent("exam_start", { total: questionPool.length });
+    productEvent("exam_start", { total: questionPool.length, tagged: questionTag ? 1 : 0 });
 
     const questionIds = questionPool.map((q) => q.id);
 

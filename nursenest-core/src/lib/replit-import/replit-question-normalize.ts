@@ -34,14 +34,23 @@ function optionsFrom(raw: Record<string, unknown>): string[] | null {
 }
 
 function correctAnswerFrom(raw: Record<string, unknown>, options: string[]): Prisma.InputJsonValue | null {
-  if (raw.correctAnswer !== undefined || raw.correctAnswers !== undefined) {
-    const ca = raw.correctAnswer ?? raw.correctAnswers;
-    if (Array.isArray(ca)) {
-      const arr = asStringArray(ca);
+  const caRaw = raw.correctAnswer ?? raw.correctAnswers ?? raw.correct_answer;
+  if (caRaw !== undefined) {
+    if (Array.isArray(caRaw) && caRaw.length > 0) {
+      const allNums = caRaw.every((x) => typeof x === "number" && Number.isInteger(x));
+      if (allNums) {
+        const texts: string[] = [];
+        for (const idx of caRaw as number[]) {
+          if (idx < 0 || idx >= options.length) return null;
+          texts.push(options[idx]!);
+        }
+        return texts as unknown as Prisma.InputJsonValue;
+      }
+      const arr = asStringArray(caRaw);
       if (arr) return arr as unknown as Prisma.InputJsonValue;
     }
-    if (typeof ca === "string" || typeof ca === "number") {
-      return [String(ca)] as unknown as Prisma.InputJsonValue;
+    if (typeof caRaw === "string" || typeof caRaw === "number") {
+      return [String(caRaw)] as unknown as Prisma.InputJsonValue;
     }
   }
   if (typeof raw.answerKey === "string" || typeof raw.answerKey === "number") {

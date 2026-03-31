@@ -34,5 +34,12 @@ export function staticRecordToBlogDisplay(s: StaticBlogPostRecord) {
     body: s.bodyHtml,
     tags: s.tags,
     coverImage: null as string | null,
+    exam: null as string | null,
+    relatedLessonPaths: [] as string[],
+    relatedQuestionIds: [] as string[],
+    relatedTools: [] as string[],
+    publishAt: null as Date | null,
+    seoTitle: null as string | null,
+    seoDescription: null as string | null,
   };
 }

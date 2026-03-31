@@ -1,0 +1,522 @@
+[
+  {
+    "id": "fc20260330_heart-failure_0",
+    "front": "A 77-year-old client with heart failure is being evaluated for a left ventricular assist device (LVAD). The nurse exp…",
+    "back": "LVADs are mechanical circulatory support devices used in end-stage heart failure either as a bridge to transplant (keeping the client alive until a donor heart is available) or as destination therapy (permanent support for clients ineligible for transplant). They are not first-line therapy. They are implanted devices, not temporary surgical tools. Clients still require medications.",
+    "country": "US",
+    "tier": "RN",
+    "topicKey": "heart-failure",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "0129942c-83bb-45b6-87fa-bb207e318bd4"
+  },
+  {
+    "id": "fc20260330_heart-failure_1",
+    "front": "A 70-year-old client with heart failure is being discharged on enalapril and carvedilol. During discharge teaching, t…",
+    "back": "Daily weight monitoring is the cornerstone of heart failure self-management. A gain of more than 1 kg in a day or 2 kg in a week may indicate fluid retention requiring diuretic adjustment. Early detection prevents acute decompensation and hospitalization. The other options are either incorrect rationales or secondary considerations.",
+    "country": "US",
+    "tier": "LVN_LPN",
+    "topicKey": "heart-failure",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "016cc45b-8bd8-409e-9443-e7a14c3d2677"
+  },
+  {
+    "id": "fc20260330_heart-failure_2",
+    "front": "A nurse is assessing a client with suspected pulmonary embolism. Which set of findings is most consistent with this d…",
+    "back": "Classic manifestations of pulmonary embolism include sudden onset of dyspnea, sharp pleuritic chest pain that worsens with deep breathing, tachycardia, and tachypnea. The sudden onset differentiates PE from other respiratory conditions. Productive cough with purulent sputum suggests pneumonia. Bilateral edema with JVD suggests heart failure. Wheezing with barrel chest suggests COPD.",
+    "country": "US",
+    "tier": "RN",
+    "topicKey": "heart-failure",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "01b81351-4215-421c-a1b4-1df082c2e3f2"
+  },
+  {
+    "id": "fc20260330_heart-failure_3",
+    "front": "A 75-year-old female with a history of heart failure is admitted with acute pulmonary edema. What is the priority nur…",
+    "back": "In acute pulmonary edema, the priority is to ensure adequate oxygenation. Initiating oxygen therapy helps alleviate hypoxia and improves the patient's breathing. While administering diuretics and elevating the head of the bed are important subsequent actions, they do not address the immediate need for oxygenation. Assessing vital signs is essential but is secondary to ensuring the patient can breathe effectively and maintain adequate oxygen levels.",
+    "country": "US",
+    "tier": "LVN_LPN",
+    "topicKey": "heart-failure",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "02ae3ec7-17fc-4fe8-8af9-253be9458960"
+  },
+  {
+    "id": "fc20260330_heart-failure_4",
+    "front": "A 74-year-old client with PAD takes cilostazol. The client asks about the medication's purpose. Which explanation by …",
+    "back": "Cilostazol is a phosphodiesterase III inhibitor with vasodilatory and antiplatelet properties used to improve walking distance in intermittent claudication. It is not an antibiotic. While it has mild antiplatelet effects, it does not require INR monitoring like warfarin. It does not directly affect cardiac contractility. Note: it is contraindicated in heart failure.",
+    "country": "US",
+    "tier": "RN",
+    "topicKey": "heart-failure",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "02cc1b9b-7d2a-49ef-a05d-3147970e7ab1"
+  },
+  {
+    "id": "fc20260330_heart-failure_5",
+    "front": "A client with heart failure is admitted with acute pulmonary edema. The healthcare provider orders morphine sulfate 2…",
+    "back": "In acute pulmonary edema, morphine produces venodilation that reduces preload (venous return to the heart), decreasing pulmonary congestion. It also reduces anxiety and the sensation of dyspnea. Morphine does not increase contractility or specifically prevent AFib. While it has mild afterload effects, the primary benefit is preload reduction.",
+    "country": "US",
+    "tier": "LVN_LPN",
+    "topicKey": "heart-failure",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "0323bcc3-a6da-4a65-9f71-e84bdae0ad6b"
+  },
+  {
+    "id": "fc20260330_myocardial-infarction_6",
+    "front": "A nurse is caring for a 50-year-old male patient who has been admitted with a suspected myocardial infarction. The pa…",
+    "back": "In the case of a suspected myocardial infarction with ST-segment elevation, preparing the patient for cardiac catheterization is critical as it is often necessary for intervention such as percutaneous coronary intervention (PCI). While administering aspirin is also crucial, it is typically ordered as part of the initial treatment protocol, and thus the priority is to prepare for further intervention. Obtaining a history and monitoring vital signs are important but secondary to immediate treatment preparation.",
+    "country": "US",
+    "tier": "RN",
+    "topicKey": "myocardial-infarction",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "03ad9589-7520-40ea-a79f-a5f3006b6c6e"
+  },
+  {
+    "id": "fc20260330_myocardial-infarction_7",
+    "front": "A client with Takotsubo cardiomyopathy (stress cardiomyopathy) presents after emotional stress with chest pain mimick…",
+    "back": "Takotsubo (broken heart syndrome) shows transient apical ballooning with wall motion abnormalities mimicking MI, but coronary arteries are normal on catheterization. It is triggered by emotional or physical stress and typically resolves within weeks.",
+    "country": "US",
+    "tier": "LVN_LPN",
+    "topicKey": "myocardial-infarction",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "090155ad-5036-4cbf-94ac-dff44be88b2d"
+  },
+  {
+    "id": "fc20260330_myocardial-infarction_8",
+    "front": "A client is admitted with a blood pressure of 198/112 and no symptoms of acute target organ damage. The nurse should …",
+    "back": "Hypertensive urgency (severely elevated BP without acute target organ damage) is managed with gradual reduction over 24-48 hours using oral medications. Rapid reduction can cause cerebral hypoperfusion, stroke, or MI. IV nitroprusside is for hypertensive emergency with organ damage. An asymptomatic but severely elevated BP still requires treatment.",
+    "country": "US",
+    "tier": "RN",
+    "topicKey": "myocardial-infarction",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "09481d66-9b7f-4e1d-b98b-264a6cf52a3a"
+  },
+  {
+    "id": "fc20260330_myocardial-infarction_9",
+    "front": "In the emergency department, which client should the nurse assess first?",
+    "back": "Chest pain with diaphoresis suggests acute coronary syndrome, which is a life-threatening emergency requiring immediate assessment and intervention. This follows triage principles of assessing the most critical client first.",
+    "country": "US",
+    "tier": "LVN_LPN",
+    "topicKey": "myocardial-infarction",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "0ac7f971-9a3b-43d3-b803-13b3c715e54a"
+  },
+  {
+    "id": "fc20260330_myocardial-infarction_10",
+    "front": "A nurse is caring for a 58-year-old female patient who is recovering from a myocardial infarction. The patient is pre…",
+    "back": "Monitoring for signs of bradycardia is the most critical teaching point for patients on beta-blockers, as these medications can significantly lower heart rate and lead to complications if not monitored. Educating patients to recognize signs of bradycardia, such as dizziness or fatigue, is vital for safety. While taking medications with food may help with gastric irritation, it is not as critical as monitoring heart rate. Avoiding sudden position changes is important for preventing orthostatic hypotension but is secondary to bradycardia concerns. Reporting weight gain is important for fluid status but is not specific to beta-blocker therapy.",
+    "country": "US",
+    "tier": "RN",
+    "topicKey": "myocardial-infarction",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "0b0cc926-f047-4900-9c78-347b61e8c606"
+  },
+  {
+    "id": "fc20260330_shock_11",
+    "front": "A nurse is caring for a client newly diagnosed with breast cancer who is scheduled for a modified radical mastectomy.…",
+    "back": "Reflection restates the client's feelings in a way that validates their emotional experience and encourages further expression. The client is in the denial/shock phase of grief, and therapeutic communication requires acknowledging their feelings without judgment. Giving advice minimizes their experience. False reassurance is non-therapeutic and dishonest. Changing the subject communicates that their feelings are unimportant and prevents emotional processing.",
+    "country": "US",
+    "tier": "LVN_LPN",
+    "topicKey": "shock",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "00d0f666-b989-4511-9b2f-af6f77619a8a"
+  },
+  {
+    "id": "fc20260330_shock_12",
+    "front": "A client on an SSRI antidepressant suddenly stops the medication. The nurse should teach about:",
+    "back": "Abrupt SSRI discontinuation causes withdrawal-like symptoms: dizziness, nausea, headache, electric shock sensations (brain zaps), irritability, and insomnia. SSRIs should be tapered gradually over weeks under provider guidance.",
+    "country": "US",
+    "tier": "RN",
+    "topicKey": "shock",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "015d9a9b-b7e6-4f5e-9f95-73408077efe9"
+  },
+  {
+    "id": "fc20260330_shock_13",
+    "front": "A 62-year-old male in septic shock has been stabilized with norepinephrine and vasopressin, achieving a MAP of 68 mmH…",
+    "back": "Blanching and coolness around a peripheral IV site during vasopressor infusion indicates extravasation. Norepinephrine is a potent vasoconstrictor that causes severe tissue ischemia and necrosis if it infiltrates into surrounding tissue. The infusion must be stopped immediately at that site. Phentolamine (an alpha-adrenergic antagonist) 5-10 mg diluted in 10-15 mL normal saline should be injected subcutaneously around the extravasation site within 12 hours to reverse vasoconstriction. Vasopressors should ideally be infused through a central venous catheter. Continuing the infusion, slowing the rate, or flushing would worsen tissue damage.",
+    "country": "US",
+    "tier": "LVN_LPN",
+    "topicKey": "shock",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "03cb4842-d810-4fb3-a8d8-d58ad8a4fffd"
+  },
+  {
+    "id": "fc20260330_shock_14",
+    "front": "A client with diabetes insipidus has a urine specific gravity of 1.001, urine output of 800 mL/hour, and serum sodium…",
+    "back": "Diabetes insipidus results from deficient ADH (central DI) or renal resistance to ADH (nephrogenic DI). The hallmarks are massive dilute urine output and hypernatremia from water loss. Desmopressin (DDAVP) is a synthetic ADH analog that is first-line treatment for central DI. It promotes water reabsorption in the collecting ducts. Fluid replacement is also critical to prevent hypovolemic shock.",
+    "country": "US",
+    "tier": "RN",
+    "topicKey": "shock",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "042513e6-724d-4f93-a179-91ab8232855b"
+  },
+  {
+    "id": "fc20260330_shock_15",
+    "front": "What is the MOST important intervention to improve survival in cardiogenic shock due to acute MI?",
+    "back": "The SHOCK trial demonstrated that early revascularization reduces 6-month mortality from 63% to 50% compared to medical stabilization alone. Restoring coronary flow breaks the death spiral.",
+    "country": "US",
+    "tier": "LVN_LPN",
+    "topicKey": "shock",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "102ef0c9-ecd4-4edf-a8f9-8a4dbaf6c971"
+  },
+  {
+    "id": "fc20260330_abg-interpretation_16",
+    "front": "A client who attempted suicide by ingesting a large amount of aspirin presents with tinnitus, tachypnea, and confusio…",
+    "back": "Early salicylate toxicity causes direct stimulation of the respiratory center, producing respiratory alkalosis (initial finding). As toxicity progresses, salicylate interferes with cellular metabolism, causing accumulation of lactic acid and ketoacids, resulting in metabolic acidosis. The classic ABG pattern of aspirin overdose is mixed respiratory alkalosis and metabolic acidosis. Treatment includes alkalinization of urine with sodium bicarbonate, activated charcoal if within the ingestion window, and hemodialysis for severe toxicity.",
+    "country": "US",
+    "tier": "RN",
+    "topicKey": "abg-interpretation",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "03416710-8576-488a-8ca6-b8b7b9b878af"
+  },
+  {
+    "id": "fc20260330_abg-interpretation_17",
+    "front": "A nurse is caring for a newborn at 2 hours of life. Assessment reveals: axillary temperature 36.0C, acrocyanosis of h…",
+    "back": "Normal newborn axillary temperature is 36.5-37.5C. A temperature of 36.0C indicates cold stress, which can lead to hypoglycemia, metabolic acidosis, and respiratory distress if not corrected. Immediate warming interventions (skin-to-skin, radiant warmer, warm blankets, hat) are needed. Acrocyanosis (blue hands and feet) is normal in the first 24-48 hours. RR of 52 (normal 30-60) and HR of 138 (normal 110-160) are within expected newborn ranges.",
+    "country": "US",
+    "tier": "LVN_LPN",
+    "topicKey": "abg-interpretation",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "03f30f14-4e8f-4f45-a700-4d43042e7e92"
+  },
+  {
+    "id": "fc20260330_abg-interpretation_18",
+    "front": "A nurse is analyzing ABG results for a client on mechanical ventilation: pH 7.28, PaCO2 62 mmHg, HCO3 25 mEq/L, PaO2 …",
+    "back": "The ABG shows acute respiratory acidosis: acidotic pH with elevated PaCO2 and normal HCO3 (no renal compensation yet, indicating an acute process). The client is hypoventilating and retaining CO2. Increasing the respiratory rate or tidal volume on the ventilator will increase minute ventilation and blow off more CO2, correcting the acidosis. The HCO3 is normal, ruling out metabolic compensation. The PaO2 of 70 is low but the priority is correcting the ventilation problem.",
+    "country": "US",
+    "tier": "RN",
+    "topicKey": "abg-interpretation",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "0575b1ec-6a3c-4800-857e-1c61f3d38d07"
+  },
+  {
+    "id": "fc20260330_abg-interpretation_19",
+    "front": "A practical nurse is caring for an elderly client who has been vomiting for 24 hours. Which electrolyte imbalance sho…",
+    "back": "Prolonged vomiting causes loss of potassium and hydrochloric acid from the stomach, leading to hypokalemia and metabolic alkalosis. The loss of acidic gastric contents shifts the blood pH toward alkaline. Hyperkalemia is not associated with vomiting. Respiratory acid-base disturbances are caused by changes in ventilation, not GI losses.",
+    "country": "US",
+    "tier": "LVN_LPN",
+    "topicKey": "abg-interpretation",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "073544b2-4246-4573-ac24-62e748e96327"
+  },
+  {
+    "id": "fc20260330_abg-interpretation_20",
+    "front": "A nurse is caring for a client who develops malignant hyperthermia during surgery. The client's temperature is 40.5°C…",
+    "back": "Malignant hyperthermia is a life-threatening genetic condition triggered by volatile anesthetic agents or succinylcholine, causing uncontrolled skeletal muscle metabolism with rapid temperature elevation, muscle rigidity, tachycardia, hypercarbia, and metabolic acidosis. Dantrolene sodium is the only specific treatment and acts as a skeletal muscle relaxant by inhibiting calcium release from the sarcoplasmic reticulum. The initial dose is 2.5 mg/kg IV, and it may be repeated up to 10 mg/kg. Acetaminophen does not address the underlying pathophysiology. Succinylcholine is a triggering agent and would worsen the crisis. Propranolol treats the symptom but not the cause and could worsen hemodynamic instability.",
+    "country": "US",
+    "tier": "RN",
+    "topicKey": "abg-interpretation",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "09805104-909e-428c-96e5-66f97c227817"
+  },
+  {
+    "id": "fc20260330_copd-respiratory_21",
+    "front": "A nurse is caring for a client post-bronchoscopy who develops subcutaneous emphysema in the neck and chest area. Vita…",
+    "back": "Subcutaneous emphysema (air trapped under the skin producing a crackling sensation on palpation, known as crepitus) developing after bronchoscopy indicates perforation of the trachea or bronchus, allowing air to escape into the surrounding tissues. This is a serious complication requiring immediate provider notification, chest X-ray, and possible CT imaging to determine the extent of perforation. The client may develop a pneumothorax or pneumomediastinum. The nurse should monitor respiratory status closely, maintain oxygen therapy, and prepare for possible chest tube insertion. Allergic reactions present with urticaria, bronchospasm, or anaphylaxis, not subcutaneous emphysema. This is never normal after bronchoscopy. Aspiration would present with fever, infiltrates, and productive cough, not subcutaneous air.",
+    "country": "US",
+    "tier": "LVN_LPN",
+    "topicKey": "copd-respiratory",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "003254f5-b6d2-4e7f-b27b-56b7c3e120f3"
+  },
+  {
+    "id": "fc20260330_copd-respiratory_22",
+    "front": "A nurse is caring for a 60-year-old female patient with chronic obstructive pulmonary disease (COPD) who is receiving…",
+    "back": "In this scenario, the best initial action is to increase the oxygen flow rate. The patient’s increased respiratory rate and anxiety indicate potential hypoxia, and providing more oxygen can help alleviate these symptoms. Encouraging pursed-lip breathing is beneficial but should follow the immediate oxygen intervention. Notifying the provider and administering sedatives are secondary actions.",
+    "country": "US",
+    "tier": "RN",
+    "topicKey": "copd-respiratory",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "003cee3b-e678-4ae7-9bbd-0770131cef9f"
+  },
+  {
+    "id": "fc20260330_copd-respiratory_23",
+    "front": "A nurse is teaching a client with newly diagnosed COPD about pursed-lip breathing. What is the primary purpose of thi…",
+    "back": "Pursed-lip breathing creates positive back-pressure in the airways, which prevents premature airway collapse during exhalation. This technique prolongs expiration, promotes complete exhalation of trapped air, improves gas exchange, and reduces dyspnoea. It does not increase respiratory rate; rather, it slows and controls breathing. While diaphragmatic breathing strengthens the diaphragm, pursed-lip breathing specifically addresses airway collapse. It is a complementary technique and does not replace supplemental oxygen when prescribed.",
+    "country": "US",
+    "tier": "LVN_LPN",
+    "topicKey": "copd-respiratory",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "028f70fe-8c41-41ac-a3d2-0355d72642e9"
+  },
+  {
+    "id": "fc20260330_copd-respiratory_24",
+    "front": "A nurse is caring for a 65-year-old client with COPD exacerbation. Which interventions should the nurse implement? Se…",
+    "back": "COPD management includes low-flow oxygen (to prevent CO2 retention from suppressing the hypoxic drive), upright positioning (high Fowler's or tripod to maximize lung expansion), prescribed bronchodilators, and continuous respiratory monitoring. Supine positioning worsens dyspnea. High-flow oxygen at 15 L/min can suppress the ventilatory drive in COPD clients.",
+    "country": "US",
+    "tier": "RN",
+    "topicKey": "copd-respiratory",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "06863e6d-4d34-4d8c-bcce-08cda664b9de"
+  },
+  {
+    "id": "fc20260330_copd-respiratory_25",
+    "front": "A nurse is educating a patient with newly diagnosed emphysema about the importance of smoking cessation. Why is this …",
+    "back": "Smoking cessation (D) is critical because it significantly improves overall lung function and quality of life in patients with emphysema. While it is true that quitting can potentially delay the progression of the disease (A), it does not prevent the need for oxygen therapy if the disease is advanced. Smoking cessation cannot reverse the damage to lung tissue (B), and while it may reduce the risk of lung infections (C), the most compelling reason in this context is the overall improvement in lung function.",
+    "country": "US",
+    "tier": "LVN_LPN",
+    "topicKey": "copd-respiratory",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "07dee900-dacb-490b-ae15-8fef3d651445"
+  },
+  {
+    "id": "fc20260330_insulin-hypoglycemia_26",
+    "front": "A patient with a history of alcohol abuse is admitted with acute pancreatitis. What is the most important nursing int…",
+    "back": "Providing nutritional support is critical for a patient with acute pancreatitis as they may require enteral feeding to maintain nutritional status and promote recovery. While monitoring for hypoglycemia and assessing for alcohol withdrawal are important, ensuring adequate nutrition takes precedence in managing pancreatitis.",
+    "country": "US",
+    "tier": "RN",
+    "topicKey": "insulin-hypoglycemia",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "007d3ff4-be6c-496b-9de5-507be1abf440"
+  },
+  {
+    "id": "fc20260330_insulin-hypoglycemia_27",
+    "front": "A client with diabetic ketoacidosis has a potassium level of 3.2 mEq/L. Before starting insulin, the nurse should:",
+    "back": "In DKA, insulin drives potassium into cells, worsening hypokalemia and causing potentially fatal cardiac arrhythmias. Potassium must be replaced to > 3.3 mEq/L before insulin is started. Once K > 3.3, insulin and potassium are administered concurrently.",
+    "country": "US",
+    "tier": "LVN_LPN",
+    "topicKey": "insulin-hypoglycemia",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "00a090c2-dab5-4d81-9ee9-8a46d5efb787"
+  },
+  {
+    "id": "fc20260330_insulin-hypoglycemia_28",
+    "front": "A nurse is caring for a 65-year-old male patient with a history of diabetes and hypertension who is being treated for…",
+    "back": "Administering prescribed insulin is the priority action for a patient with hyperglycemia of 15 mmol/L, as elevated blood glucose can hinder wound healing and increase the risk of infection. While assessing the ulcer for infection is important, it should follow the stabilization of the patient's glucose levels. Notifying the healthcare provider may be necessary, but the immediate focus should be on managing the hyperglycemia. Elevating the foot is beneficial for comfort but does not address the underlying issue of glucose control.",
+    "country": "US",
+    "tier": "RN",
+    "topicKey": "insulin-hypoglycemia",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "00ad6dfa-f1f8-4b86-8f08-92f9523b6b40"
+  },
+  {
+    "id": "fc20260330_insulin-hypoglycemia_29",
+    "front": "A practical nurse is teaching a newly diagnosed diabetic client about insulin self-injection. Which teaching method i…",
+    "back": "Return demonstration is the most effective method for teaching psychomotor skills because it allows the nurse to evaluate the client's technique and correct errors in real time. Written materials and videos are supplementary tools but do not assess competency. Verbal-only instruction during the busy discharge period is least likely to ensure skill acquisition.",
+    "country": "US",
+    "tier": "LVN_LPN",
+    "topicKey": "insulin-hypoglycemia",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "01f93231-9445-4d2a-b093-f04f7f00635f"
+  },
+  {
+    "id": "fc20260330_sepsis_30",
+    "front": "A client receiving IV vancomycin develops facial flushing, erythema of the neck and upper torso, and hypotension duri…",
+    "back": "Red man syndrome is a histamine-mediated reaction caused by too-rapid infusion of vancomycin. It presents with flushing, erythema of the face, neck, and upper body, and hypotension. Treatment includes slowing or stopping the infusion and administering diphenhydramine. It is not a true allergy. It is preventable by infusing over at least 60 minutes.",
+    "country": "US",
+    "tier": "RN",
+    "topicKey": "sepsis",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "0310ad2e-5448-48ab-bd3c-89b556c9f925"
+  },
+  {
+    "id": "fc20260330_sepsis_31",
+    "front": "A nurse is triaging clients in the emergency department. Which client should the nurse assess first?",
+    "back": "Stevens-Johnson syndrome (SJS) is a life-threatening dermatologic emergency caused by an immune-mediated reaction, most commonly to medications (sulfonamides, anticonvulsants, allopurinol, NSAIDs), resulting in widespread epidermal necrosis and detachment. With bullous skin lesions, mucosal erosions, high fever, and tachycardia, this client is at risk for sepsis, massive fluid loss (similar to burns), airway compromise from mucosal involvement, and multi-organ dysfunction. SJS with greater than 10% body surface area detachment carries significant mortality (up to 30% in toxic epidermal necrolysis). This client requires immediate stabilization including IV access, fluid resuscitation, wound care in a burn-unit setting, and discontinuation of the causative medication. Cellulitis, venous ulcers, and contact dermatitis are important but not immediately life-threatening.",
+    "country": "US",
+    "tier": "LVN_LPN",
+    "topicKey": "sepsis",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "04884a8a-2de6-4a7a-8698-655b0eea7629"
+  },
+  {
+    "id": "fc20260330_sepsis_32",
+    "front": "A 72-year-old female is admitted with sepsis from a urinary tract infection. She is on IV fluids and broad-spectrum a…",
+    "back": "Monitoring the white blood cell count is crucial in this patient with sepsis as it provides insight into the body’s response to infection and effectiveness of treatment. While blood cultures are important for identifying the causative organism, they do not give immediate feedback on treatment efficacy. Creatinine and liver function tests are important for overall monitoring but are not as directly related to sepsis management.",
+    "country": "US",
+    "tier": "RN",
+    "topicKey": "sepsis",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "08c4df0b-9bdc-4ce3-9215-6be4dd0da763"
+  },
+  {
+    "id": "fc20260330_sepsis_33",
+    "front": "A client with severe sepsis has a procalcitonin level of 8.5 ng/mL. The nurse should understand this indicates:",
+    "back": "Procalcitonin > 2 ng/mL strongly suggests bacterial infection (not viral or inflammatory). PCT-guided antibiotic therapy reduces antibiotic duration without worsening outcomes. Serial levels help guide antibiotic de-escalation: decreasing PCT by 80% suggests adequate treatment response.",
+    "country": "US",
+    "tier": "LVN_LPN",
+    "topicKey": "sepsis",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "0e315200-5785-48b6-ace2-1ec109284dd7"
+  },
+  {
+    "id": "fc20260330_sepsis_34",
+    "front": "A client with Sepsis develops a common complication. Which assessment finding indicates this progression?",
+    "back": "Early detection of complications in Sepsis allows timely intervention and prevents further deterioration.",
+    "country": "US",
+    "tier": "RN",
+    "topicKey": "sepsis",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "1349a0ce-84d4-40a4-a70a-b774713e162c"
+  },
+  {
+    "id": "fc20260330_infection-control_35",
+    "front": "A client with asthma should use their peak flow meter to:",
+    "back": "Peak flow monitoring: establishes personal best, identifies early airflow decline before symptoms appear. Green zone (80-100% personal best: well-controlled), Yellow zone (50-80%: caution, take quick-relief medication), Red zone (< 50%: medical emergency). Track trends and use to guide action plan.",
+    "country": "US",
+    "tier": "LVN_LPN",
+    "topicKey": "infection-control",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "00ee9317-8918-43b6-b866-b462207ce145"
+  },
+  {
+    "id": "fc20260330_infection-control_36",
+    "front": "A 65-year-old female patient presents to the clinic with a rash on her arms and trunk. The rash is red, scaly, and it…",
+    "back": "Psoriasis is characterized by red, scaly patches that can be itchy and are often found on the elbows, knees, and trunk. Eczema (B) typically presents with more vesicular lesions and oozing, particularly in flexural areas. Contact Dermatitis (C) usually arises from an allergen or irritant exposure, with well-defined borders, while Seborrheic Dermatitis (D) appears as greasy, yellowish scales, often on the scalp. Therefore, A is the correct answer.",
+    "country": "US",
+    "tier": "RN",
+    "topicKey": "infection-control",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "014d466d-ca6c-472c-bf26-e2936e174314"
+  },
+  {
+    "id": "fc20260330_infection-control_37",
+    "front": "A 65-year-old female patient is admitted with pneumonia and is receiving IV antibiotics. What finding would indicate …",
+    "back": "A skin rash and itching are indicative of a potential allergic reaction to the antibiotics being administered. This warrants immediate assessment and possibly discontinuation of the medication. While increased respiratory rate, decreased appetite, and mild fever can occur with pneumonia, they are not specific indicators of an adverse drug reaction.",
+    "country": "US",
+    "tier": "LVN_LPN",
+    "topicKey": "infection-control",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "01c5c710-bb96-4228-90f4-93d0d8b99df0"
+  },
+  {
+    "id": "fc20260330_infection-control_38",
+    "front": "A nurse is providing care for a patient on neutropenic precautions due to chemotherapy. Which intervention is the hig…",
+    "back": "Ensuring the patient has a private room is the highest priority for a patient on neutropenic precautions to minimize exposure to potential infections. This isolation protects the immunocompromised patient from pathogens in the environment. Monitoring temperature (Option A) is important but secondary to ensuring isolation. Limiting fresh fruits and vegetables (Option C) is necessary for dietary safety but is not as immediate as providing a private room. Educating the patient on signs of infection (Option D) is valuable but does not provide immediate physical protection.",
+    "country": "US",
+    "tier": "RN",
+    "topicKey": "infection-control",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "01d2daa6-b5e6-433c-b846-89c6ac48ccea"
+  },
+  {
+    "id": "fc20260330_infection-control_39",
+    "front": "A nurse is performing surgical hand scrub before assisting in the operating room. Which action demonstrates correct s…",
+    "back": "Correct surgical hand antisepsis requires scrubbing from the cleanest area (fingertips) to the least clean area (elbows) while keeping the hands elevated above the elbows at all times. This ensures that contaminated water flows away from the clean surgical field toward the elbows and drains off at the most contaminated point. The minimum scrub time is 2-5 minutes depending on the antiseptic agent used and institutional protocol. Scrubbing from elbows to fingers would direct contaminated water toward the clean hands. While alcohol-based surgical hand rubs exist, they require a specific protocol and are not a 30-second substitute. Both hands and forearms must be scrubbed because the gown may become contaminated or the forearms may come into contact with the sterile field.",
+    "country": "US",
+    "tier": "LVN_LPN",
+    "topicKey": "infection-control",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "02665b3d-76f1-44b6-8bad-7c4e116844e7"
+  },
+  {
+    "id": "fc20260330_fluid-balance_40",
+    "front": "A nurse is caring for a client with increased intracranial pressure who is prescribed IV mannitol. Which assessment f…",
+    "back": "Mannitol is an osmotic diuretic used to reduce intracranial pressure. It should be held when serum osmolality exceeds 310-320 mOsm/kg (normal 275-295) to prevent renal damage and severe dehydration. The blood pressure and heart rate are not contraindications. A urine output of 100 mL/hour indicates the medication is working as expected.",
+    "country": "US",
+    "tier": "RN",
+    "topicKey": "fluid-balance",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "01d0b8f8-c075-4c0f-ae83-cd77f1534d12"
+  },
+  {
+    "id": "fc20260330_fluid-balance_41",
+    "front": "A client with cirrhosis develops hepatic encephalopathy with ammonia level of 142 mcg/dL. Which medication should the…",
+    "back": "Lactulose is the first-line treatment for hepatic encephalopathy. It works by converting ammonia to ammonium in the colon, which cannot be reabsorbed, and acts as an osmotic laxative to promote fecal excretion of ammonia. The goal is 2-3 soft stools per day. Rifaximin is often added as adjunct therapy. The other medications do not address the elevated ammonia causing encephalopathy.",
+    "country": "US",
+    "tier": "LVN_LPN",
+    "topicKey": "fluid-balance",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "0312a1e9-2578-4674-aa01-9e02043937a9"
+  },
+  {
+    "id": "fc20260330_fluid-balance_42",
+    "front": "A 65-year-old patient with chronic kidney disease (CKD) presents to the clinic for routine follow-up. The nurse notes…",
+    "back": "Excess fluid volume is a priority nursing diagnosis in patients with CKD as they are at risk for fluid overload due to reduced kidney function. Elevated serum creatinine also indicates impaired renal function, which can lead to fluid retention. Impaired skin integrity, ineffective coping, and knowledge deficit are important but are not immediate physiological concerns compared to potential fluid overload.",
+    "country": "US",
+    "tier": "RN",
+    "topicKey": "fluid-balance",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "03457ae6-09b8-44ae-87ab-bc3f035affe3"
+  },
+  {
+    "id": "fc20260330_fluid-balance_43",
+    "front": "A 74-year-old female patient with heart failure is being discharged home with a prescription for furosemide (Lasix). …",
+    "back": "Furosemide is a loop diuretic that can cause potassium loss, so monitoring for signs of hypokalemia (option B) is crucial. Increasing sodium intake (A) contradicts the dietary recommendations for heart failure patients. Discontinuing the medication if the patient feels better (C) is not advised, as it can lead to fluid overload. Taking the medication at bedtime (D) may not be the best practice due to potential nocturia, which could disrupt sleep.",
+    "country": "US",
+    "tier": "LVN_LPN",
+    "topicKey": "fluid-balance",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "049d197e-13dc-4678-8eaa-c60a68a15cdb"
+  },
+  {
+    "id": "fc20260330_fluid-balance_44",
+    "front": "A nurse is teaching a patient about the importance of hydration during exercise. What is the most critical point to c…",
+    "back": "Hydration plays a crucial role in maintaining performance levels during exercise and preventing heat-related illnesses, which can be serious. Waiting until thirsty often leads to dehydration. While short workouts may require less hydration, it's important to maintain fluid balance. Sports drinks may be beneficial in some circumstances but are not necessary for everyone.",
+    "country": "US",
+    "tier": "RN",
+    "topicKey": "fluid-balance",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "0587193f-56a0-43d2-b539-8f9c568e7936"
+  },
+  {
+    "id": "fc20260330_fluid-balance_45",
+    "front": "A 25-year-old male presents to the emergency department with severe abdominal pain and vomiting. He mentions he has b…",
+    "back": "A focused abdominal assessment is the priority to identify potential causes of the severe pain. Assessing for dehydration is also important but should follow the abdominal assessment. Obtaining a history of alcohol use is necessary but not the immediate priority. Checking for signs of pancreatitis is relevant, but first, the nurse must assess the abdomen comprehensively.",
+    "country": "US",
+    "tier": "LVN_LPN",
+    "topicKey": "fluid-balance",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "05ace70c-b4cc-422c-97d5-4f316410107c"
+  },
+  {
+    "id": "fc20260330_prioritization-abcs_46",
+    "front": "A nurse is caring for a 70-year-old male patient who was admitted with pneumonia and is currently on oxygen therapy. …",
+    "back": "Placing the patient in a high Fowler's position facilitates lung expansion and improves oxygenation. The low oxygen saturation indicates a need for immediate intervention to improve respiratory status. Increasing the oxygen flow could be appropriate but should follow the positioning intervention. Administering a bronchodilator may be necessary, but positioning is the immediate priority. Notifying the physician is important but should not be the first action when a non-invasive intervention can be applied.",
+    "country": "US",
+    "tier": "RN",
+    "topicKey": "prioritization-abcs",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "01100154-8426-4af0-b4bc-304fd010b2ff"
+  },
+  {
+    "id": "fc20260330_prioritization-abcs_47",
+    "front": "A nurse is caring for a patient with a severe allergic reaction who was brought to the emergency department. The pati…",
+    "back": "In a patient experiencing a severe allergic reaction (anaphylaxis) with hypotension and tachycardia, the priority action is to administer epinephrine as prescribed. Epinephrine is the first-line treatment for anaphylaxis and acts quickly to stabilize blood pressure and improve cardiac output. Initiating IV fluids is also important (option B), but epinephrine should be given first to address the life-threatening symptoms. Obtaining an allergy history (option C) is important but should occur after stabilizing the patient. Preparing for intubation (option D) is necessary if respiratory distress is evident, but it is not the immediate first action.",
+    "country": "US",
+    "tier": "LVN_LPN",
+    "topicKey": "prioritization-abcs",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "01fd3ab1-3b53-4559-8109-de9d76431204"
+  },
+  {
+    "id": "fc20260330_prioritization-abcs_48",
+    "front": "A 64-year-old male patient with a history of hypertension and hyperlipidemia is prescribed atorvastatin. What is the …",
+    "back": "The most important teaching point for the patient taking atorvastatin is to report any muscle pain immediately, as this could indicate a serious side effect known as rhabdomyolysis. While taking the medication in the evening and monitoring liver function are relevant, the risk of muscle-related side effects is the most urgent concern, which requires immediate action if it occurs. Interactions with over-the-counter medications are also a consideration, but they are less critical than understanding the significance of muscle symptoms.",
+    "country": "US",
+    "tier": "RN",
+    "topicKey": "prioritization-abcs",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "034ca62a-929f-44c9-9550-c9cfeef47ba2"
+  },
+  {
+    "id": "fc20260330_prioritization-abcs_49",
+    "front": "A client with aplastic anemia has pancytopenia. The nurse should prioritize:",
+    "back": "Pancytopenia requires addressing all three lineages: neutropenia (meticulous hand hygiene, avoid crowds, monitor temperature), thrombocytopenia (bleeding precautions, soft toothbrush, no aspirin), anemia (rest periods, oxygen as needed). Definitive treatment may include bone marrow transplant.",
+    "country": "US",
+    "tier": "LVN_LPN",
+    "topicKey": "prioritization-abcs",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "04c96b3a-7a23-4692-85c2-4e2b57e5c017"
+  },
+  {
+    "id": "fc20260330_prioritization-abcs_50",
+    "front": "A nurse is managing care for a 70-year-old male patient with chronic kidney disease (CKD) who is scheduled for a hemo…",
+    "back": "Assessing the patient's vital signs and performing a neurological check is crucial because the patient has reported weakness and dizziness, which may indicate hypotension or other complications related to CKD and missed dialysis. This assessment will help determine if immediate medical intervention is needed. Administering antihypertensive medication (Option A) could further lower blood pressure and exacerbate dizziness. Providing a high-protein snack (Option B) is inappropriate as the patient may need dietary restrictions due to CKD. Encouraging fluid intake (Option D) is contraindicated, as patients with CKD often require fluid restrictions to prevent overload.",
+    "country": "US",
+    "tier": "RN",
+    "topicKey": "prioritization-abcs",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "05bfbf64-283e-4d17-8b00-e78bcfdbb170"
+  },
+  {
+    "id": "fc20260330_prioritization-abcs_51",
+    "front": "A client with a tracheostomy accidentally dislodges the tube. The nurse's first action should be:",
+    "back": "When a tracheostomy is dislodged, the nurse should maintain airway patency through the stoma, call for help, and attempt reinsertion using an obturator. If unable to reinsert, ventilate through the stoma or orally if the upper airway is patent.",
+    "country": "US",
+    "tier": "LVN_LPN",
+    "topicKey": "prioritization-abcs",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "06178ee4-88ef-41cf-9309-8c1739c7fce4"
+  }
+]

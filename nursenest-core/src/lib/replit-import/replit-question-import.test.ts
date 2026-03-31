@@ -81,4 +81,20 @@ describe("normalizeRawQuestionRecord", () => {
     });
     assert.equal(n.ok, false);
   });
+
+  it("maps Replit correct_answer numeric indices to option strings", () => {
+    const n = normalizeRawQuestionRecord(
+      {
+        stem: "Which option reflects safe nursing practice for this client?",
+        options: ["Delay assessment", "Assess airway and breathing first", "Complete paperwork"],
+        correct_answer: [1],
+        rationale: "ABCs and safety precede documentation.",
+      },
+      { defaultCountry: "US", defaultTrack: "RN", statusPublished: true },
+    );
+    assert.equal(n.ok, true);
+    if (n.ok) {
+      assert.deepEqual(n.row.correctAnswer, ["Assess airway and breathing first"]);
+    }
+  });
 });

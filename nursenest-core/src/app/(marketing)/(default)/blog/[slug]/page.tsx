@@ -1,14 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { BlogPostDistributionFooter } from "@/components/blog/blog-post-distribution-footer";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
-import { getBlogPostMetaBySlug, getPublishedBlogPostBySlug } from "@/lib/blog/safe-blog-queries";
+import { applyAutoLinksToHtml } from "@/lib/blog/blog-auto-link-html";
+import {
+  getBlogPostMetaBySlug,
+  getPublishedBlogPostBySlug,
+  isBlogPostMetaVisible,
+} from "@/lib/blog/safe-blog-queries";
 import { getStaticBlogPost, staticRecordToBlogDisplay } from "@/lib/blog/static-blog-posts";
 import { BlogPostingJsonLd } from "@/components/seo/seo-json-ld";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
 import { blogPostBreadcrumbsWithOptionalCategory } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
+import type { BlogPost } from "@prisma/client";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -17,28 +24,34 @@ export const revalidate = 120;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+  const visible = await isBlogPostMetaVisible(slug);
+  if (!visible) return {};
   const post = await getBlogPostMetaBySlug(slug);
-  if (!post?.published) return {};
+  if (!post) return {};
+  const title = post.seoTitle?.trim() || post.title;
+  const description = (post.seoDescription?.trim() || post.excerpt).slice(0, 160);
   return {
-    title: post.title,
-    description: post.excerpt.slice(0, 160),
+    title,
+    description,
     alternates: { canonical: absoluteUrl(`/blog/${slug}`) },
     openGraph: {
-      title: post.title,
-      description: post.excerpt.slice(0, 160),
+      title,
+      description,
       url: absoluteUrl(`/blog/${slug}`),
       type: "article",
     },
   };
 }
 
+function isDbPost(p: BlogPost | ReturnType<typeof staticRecordToBlogDisplay>): p is BlogPost {
+  return "postStatus" in p;
+}
+
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
   const dbPost = await getPublishedBlogPostBySlug(slug);
-  let post: Awaited<ReturnType<typeof getPublishedBlogPostBySlug>> | ReturnType<typeof staticRecordToBlogDisplay> | null =
-    null;
+  let post: BlogPost | ReturnType<typeof staticRecordToBlogDisplay> | null = null;
   if (dbPost) {
-    if (!dbPost.published) notFound();
     post = dbPost;
   } else {
     const s = getStaticBlogPost(slug);
@@ -48,13 +61,22 @@ export default async function BlogPostPage({ params }: Props) {
 
   const { crumbs, schemaItems } = blogPostBreadcrumbsWithOptionalCategory(post.title, slug, post.category);
 
+  const publishedAt = isDbPost(post) ? post.publishAt ?? post.createdAt : post.publishAt ?? post.createdAt;
+  const bodyHtml = isDbPost(post)
+    ? applyAutoLinksToHtml(post.body, {
+        exam: post.exam,
+        relatedLessonPaths: post.relatedLessonPaths,
+        relatedTools: post.relatedTools,
+      })
+    : post.body;
+
   return (
     <article className="mx-auto max-w-3xl px-4 py-12">
       <BlogPostingJsonLd
         slug={slug}
-        title={post.title}
-        description={post.excerpt.slice(0, 320)}
-        datePublished={post.createdAt.toISOString()}
+        title={post.seoTitle?.trim() || post.title}
+        description={(post.seoDescription?.trim() || post.excerpt).slice(0, 320)}
+        datePublished={publishedAt.toISOString()}
         coverImage={post.coverImage ?? null}
       />
       <BreadcrumbJsonLd items={schemaItems} />
@@ -68,8 +90,11 @@ export default async function BlogPostPage({ params }: Props) {
         {post.category ? (
           <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">{post.category}</p>
         ) : null}
+        {isDbPost(post) && post.exam ? (
+          <p className="text-xs font-medium text-primary">Exam focus: {post.exam}</p>
+        ) : null}
         <h1 className="text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)]">{post.title}</h1>
-        <p className="text-sm text-[var(--theme-muted-text)]">{post.createdAt.toISOString().slice(0, 10)}</p>
+        <p className="text-sm text-[var(--theme-muted-text)]">{publishedAt.toISOString().slice(0, 10)}</p>
       </header>
       {post.coverImage ? (
         // eslint-disable-next-line @next/next/no-img-element
@@ -77,8 +102,16 @@ export default async function BlogPostPage({ params }: Props) {
       ) : null}
       <div
         className="prose prose-neutral mt-8 max-w-none dark:prose-invert [&_a]:text-primary [&_h2]:text-[var(--theme-heading-text)] [&_h3]:text-[var(--theme-heading-text)]"
-        dangerouslySetInnerHTML={{ __html: post.body }}
+        dangerouslySetInnerHTML={{ __html: bodyHtml }}
       />
+      {isDbPost(post) ? (
+        <BlogPostDistributionFooter
+          exam={post.exam}
+          relatedLessonPaths={post.relatedLessonPaths}
+          relatedQuestionIds={post.relatedQuestionIds}
+          relatedTools={post.relatedTools}
+        />
+      ) : null}
       {post.tags.length > 0 ? (
         <footer className="mt-10 flex flex-wrap gap-2 border-t border-[var(--theme-separator)] pt-6">
           {post.tags.map((t) => (

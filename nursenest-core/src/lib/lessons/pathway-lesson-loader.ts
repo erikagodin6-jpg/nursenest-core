@@ -4,6 +4,7 @@ import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { normalizePathwayLessonLocale, PATHWAY_LESSON_SITEMAP_LOCALE } from "@/lib/lessons/pathway-lesson-locale";
 import type {
   PathwayLessonLocaleMeta,
+  PathwayLessonQuizItem,
   PathwayLessonRecord,
   PathwayLessonSection,
   PathwayLessonSectionKind,
@@ -26,6 +27,8 @@ type CatalogShape = {
         seoTitle: string;
         seoDescription: string;
         sections: PathwayLessonRecord["sections"];
+        preTest?: PathwayLessonQuizItem[];
+        postTest?: PathwayLessonQuizItem[];
       }>;
     }
   >;
@@ -204,7 +207,25 @@ function normalizeLessonForHubList(raw: LessonInput): PathwayLessonRecord {
   };
 }
 
-export function normalizeLesson(raw: LessonInput): PathwayLessonRecord {
+export function sanitizeQuizItems(raw: unknown): PathwayLessonQuizItem[] | undefined {
+  if (!Array.isArray(raw)) return undefined;
+  const out: PathwayLessonQuizItem[] = [];
+  for (const x of raw) {
+    if (!x || typeof x !== "object") continue;
+    const o = x as Record<string, unknown>;
+    const question = typeof o.question === "string" ? o.question.trim() : "";
+    const options = Array.isArray(o.options)
+      ? o.options.filter((y): y is string => typeof y === "string" && y.trim().length > 0)
+      : [];
+    const correct = typeof o.correct === "number" && Number.isInteger(o.correct) ? o.correct : -1;
+    if (question.length < 5 || options.length < 2 || correct < 0 || correct >= options.length) continue;
+    const rationale = typeof o.rationale === "string" ? o.rationale.trim() : undefined;
+    out.push({ question, options, correct, ...(rationale ? { rationale } : {}) });
+  }
+  return out.length ? out : undefined;
+}
+
+function normalizeLesson(raw: LessonInput): PathwayLessonRecord {
   const title = typeof raw.title === "string" ? raw.title : "Lesson";
   const seoTitle = typeof raw.seoTitle === "string" ? raw.seoTitle : title;
   const seoDescription = typeof raw.seoDescription === "string" ? raw.seoDescription : "";
@@ -226,10 +247,14 @@ export function normalizeLesson(raw: LessonInput): PathwayLessonRecord {
   const expanded = expandToStandardFiveSections(base.sections as PathwayLessonSection[]);
   const maxPreview = Math.min(expanded.length, 5);
   const preview = Math.max(1, Math.min(base.previewSectionCount, maxPreview || 1));
+  const preTest = sanitizeQuizItems((raw as { preTest?: unknown }).preTest);
+  const postTest = sanitizeQuizItems((raw as { postTest?: unknown }).postTest);
   return {
     ...base,
     sections: expanded,
     previewSectionCount: preview,
+    ...(preTest ? { preTest } : {}),
+    ...(postTest ? { postTest } : {}),
   };
 }
 

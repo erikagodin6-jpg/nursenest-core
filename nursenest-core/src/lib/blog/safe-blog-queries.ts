@@ -85,6 +85,7 @@ const metaSelect = {
   publishAt: true,
   seoTitle: true,
   seoDescription: true,
+  createdAt: true,
 } satisfies Prisma.BlogPostSelect;
 
 export type BlogPostMeta = Prisma.BlogPostGetPayload<{ select: typeof metaSelect }>;
@@ -108,6 +109,7 @@ export async function getBlogPostMetaBySlug(slug: string): Promise<BlogPostMeta 
     publishAt: null,
     seoTitle: null,
     seoDescription: null,
+    createdAt: new Date(s.createdAt + "T12:00:00Z"),
   };
 }
 

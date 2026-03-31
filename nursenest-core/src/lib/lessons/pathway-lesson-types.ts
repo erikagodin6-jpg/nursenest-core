@@ -17,6 +17,15 @@ export type PathwayLessonSection = {
   body: string;
 };
 
+/** Inline pre/post checks for pathway lessons (catalog or DB JSON). */
+export type PathwayLessonQuizItem = {
+  question: string;
+  options: string[];
+  /** Zero-based index of correct option (aligned with legacy monolith lessons). */
+  correct: number;
+  rationale?: string;
+};
+
 /** How localized pathway lesson content was resolved for this response. */
 export type PathwayLessonLocaleMeta = {
   /** BCP-47-style key the caller asked for (normalized). */
@@ -39,5 +48,7 @@ export type PathwayLessonRecord = {
   seoTitle: string;
   seoDescription: string;
   sections: PathwayLessonSection[];
+  preTest?: PathwayLessonQuizItem[];
+  postTest?: PathwayLessonQuizItem[];
   localeMeta?: PathwayLessonLocaleMeta;
 };

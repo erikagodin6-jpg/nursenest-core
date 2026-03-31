@@ -99,10 +99,10 @@ export function applyAutoLinksToHtml(html: string, ctx: BlogAutoLinkContext): st
     if (!token) continue;
     if (token.startsWith("<")) {
       const low = token.toLowerCase();
-      if (low.startsWith("<a") && !low.startsWith("</a")) inA += 1;
-      if (low === "</a>") inA = Math.max(0, inA - 1);
+      if (/^<a[\s>]/.test(low) && !low.startsWith("</a")) inA += 1;
+      if (low === "</a>" || low.startsWith("</a>")) inA = Math.max(0, inA - 1);
       if (low.startsWith("<pre")) inPre += 1;
-      if (low === "</pre>") inPre = Math.max(0, inPre - 1);
+      if (low === "</pre>" || low.startsWith("</pre>")) inPre = Math.max(0, inPre - 1);
       if (low.startsWith("<script")) inScript += 1;
       if (low.startsWith("</script")) inScript = Math.max(0, inScript - 1);
       result.push(token);
