@@ -37,7 +37,7 @@ export default async function QuestionBankPage() {
 
   let pathwayOptions: { id: string; label: string }[] = [];
   let defaultPathwayId: string | null = null;
-  if (userId && entitlement !== "error" && entitlement.hasAccess && isDatabaseUrlConfigured()) {
+  if (userId && entitlement.hasAccess && isDatabaseUrlConfigured()) {
     try {
       pathwayOptions = listPathwaysCompatibleWithSubscription(entitlement).map((p) => ({
         id: p.id,
