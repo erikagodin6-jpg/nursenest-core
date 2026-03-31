@@ -78,6 +78,10 @@ body {
   .bg-primary {
     color: var(--color-primary-foreground) !important;
   }
+  /* Lucide / inline icons often set stroke via currentColor; force contrast on solid primary CTAs. */
+  .bg-primary svg {
+    color: var(--color-primary-foreground) !important;
+  }
 }
 
 * {

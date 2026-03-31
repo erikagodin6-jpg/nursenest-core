@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { PathwayLessonBody } from "@/components/lessons/pathway-lesson-body";
+import { PathwayLessonLockedSectionsPreview } from "@/components/lessons/pathway-lesson-locked-sections-preview";
 import { PathwayLessonActions } from "@/components/lessons/pathway-lesson-actions";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { buildExamPathwayPath, getExamPathwayByRoute } from "@/lib/exam-pathways/exam-product-registry";
@@ -84,6 +85,8 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
 
   const fullAccess = canViewFullPathwayLesson(scope, pathway, learnerPath);
   const visible = visibleSectionsForLesson(lesson, fullAccess);
+  const lockedSections =
+    !fullAccess && lesson.sections.length > visible.length ? lesson.sections.slice(visible.length) : [];
 
   const base = buildExamPathwayPath(pathway, "lessons");
   const related = await getRelatedPathwayLessons(pathway.id, lesson.topicSlug, lesson.slug, undefined, lessonContentLocale);
@@ -170,18 +173,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
         ))}
       </article>
 
-      {!fullAccess && lesson.sections.length > visible.length ? (
-        <div className="nn-card mt-8 border-dashed border-primary/40 bg-[var(--theme-muted-surface)] p-6 text-center">
-          <p className="font-semibold text-foreground">See the full explanation and examples</p>
-          <p className="mt-2 text-sm text-muted">
-            {lesson.sections.length - visible.length} more sections cover exam relevance, a full scenario, and key
-            takeaways. Unlock full lesson access with a matching plan.
-          </p>
-          <Link href="/pricing" className="mt-4 inline-flex rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground">
-            Unlock full lesson access
-          </Link>
-        </div>
-      ) : null}
+      {lockedSections.length > 0 ? <PathwayLessonLockedSectionsPreview sections={lockedSections} /> : null}
 
       <PathwayLessonActions
         pathwayId={pathway.id}

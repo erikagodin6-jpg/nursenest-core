@@ -27,6 +27,18 @@ export const PH = {
   marketingPathGatewayPrimaryCta: "marketing_path_gateway_primary_cta",
   marketingPathGatewayLinkClick: "marketing_path_gateway_link_click",
   marketingPathwayHubCta: "marketing_pathway_hub_cta",
+  /** First paint of global marketing trust strip (homepage). */
+  marketingTrustBarView: "marketing_trust_bar_view",
+  /** Homepage sample question: user unlocked teaching rationale. */
+  marketingSampleRationaleUnlock: "marketing_sample_rationale_unlock",
+  /** Homepage sample question: primary “unlock explanations / sign up” CTA. */
+  marketingSampleUnlockFullCta: "marketing_sample_unlock_full_cta",
+  /** Generic conversion CTA (placement label for dashboards). */
+  conversionCtaClick: "conversion_cta_click",
+  /** Pathway lesson preview: user clicked unlock / pricing from locked remainder. */
+  lessonPreviewUnlockCta: "lesson_preview_unlock_cta",
+  /** Freemium question peek: user clicked upgrade to see rationale path. */
+  freemiumSeeRationaleCta: "freemium_see_rationale_cta",
 } as const;
 
 export type AppSection =

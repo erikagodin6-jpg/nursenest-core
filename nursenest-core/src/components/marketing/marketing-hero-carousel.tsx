@@ -32,9 +32,9 @@ export type MarketingHeroCarouselProps = {
  * autoplay with hover pause, dot navigation, skeleton until first load, full fallback if all slides fail.
  * Used by the hero and by “See the Platform in Action” with different `slides` only.
  */
-/** Compact hero column: capped height on large screens; avoids oversized preview cards. */
+/** Hero column: bounded height (parent also caps with md:max-h-*); avoid flex-1 stretch filling the grid row. */
 const heroMediaFrameClass =
-  "relative w-full min-h-0 flex-1 overflow-hidden max-h-[min(22rem,52vh)] min-h-[min(11rem,40vw)] md:max-h-[min(24rem,50vh)] md:min-h-[min(13rem,36vh)] lg:max-h-[min(26rem,48vh)] lg:min-h-[min(14rem,34vh)]";
+  "relative aspect-[16/10] w-full max-h-[min(18rem,48vh)] min-h-[10rem] shrink-0 overflow-hidden sm:max-h-[min(19rem,50vh)] md:aspect-auto md:max-h-[min(20rem,56vh)] md:min-h-[12rem]";
 
 export function MarketingHeroCarousel({
   slides,
@@ -56,11 +56,20 @@ export function MarketingHeroCarousel({
   const loadedOnceRef = useRef(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const unavailableReported = useRef(false);
+  const lastSlideFingerprintRef = useRef<string | null>(null);
+
+  const slideFingerprint = slides.map((s) => `${s.objectKey}\u0001${s.publicUrl}`).join("\u0002");
 
   useEffect(() => {
+    if (lastSlideFingerprintRef.current === slideFingerprint) return;
+    lastSlideFingerprintRef.current = slideFingerprint;
     loadedOnceRef.current = false;
+    unavailableReported.current = false;
     setHasLoaded(false);
-  }, [slides]);
+    setHeroTierByIndex({});
+    setFailed(new Set());
+    setCurrent(0);
+  }, [slideFingerprint, slides.length]);
 
   useEffect(() => {
     failedRef.current = failed;
@@ -150,7 +159,7 @@ export function MarketingHeroCarousel({
   const frameShell =
     mediaFrame === "hero"
       ? heroMediaFrameClass
-      : "relative aspect-[16/10] w-full max-h-[min(17rem,46vh)] min-h-[9.5rem] sm:min-h-[10.5rem]";
+      : "relative aspect-[16/10] w-full max-h-[min(15rem,42vh)] min-h-[9rem] sm:min-h-[9.5rem]";
 
   if (validCount === 0) {
     return (
@@ -176,7 +185,7 @@ export function MarketingHeroCarousel({
 
   return (
     <div
-      className={`relative flex min-h-0 w-full min-w-0 flex-col ${mediaFrame === "hero" ? "flex-1" : ""} ${className ?? ""}`}
+      className={`relative flex min-h-0 w-full min-w-0 flex-col ${className ?? ""}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       data-testid={testIdPrefix}
@@ -212,15 +221,12 @@ export function MarketingHeroCarousel({
               className={`pointer-events-none absolute inset-0 h-full w-full object-contain bg-[var(--theme-muted-surface)] transition-opacity duration-700 ease-in-out will-change-[opacity] ${
                 active ? "opacity-100" : "opacity-0"
               }`}
-              loading={index === 0 ? "eager" : "lazy"}
+              loading="eager"
               fetchPriority={index === 0 ? "high" : "low"}
               data-testid={`img-${imgTestIdPrefix}-slide-${index}`}
               aria-hidden={!active}
               referrerPolicy="no-referrer"
               onError={() => {
-                if (process.env.NODE_ENV === "development") {
-                  console.warn(`[${logPrefix}] image failed`, { index, tier, src, objectKey: slide.objectKey });
-                }
                 if (tier < chain.length - 1) {
                   setHeroTierByIndex((prev) => ({ ...prev, [index]: tier + 1 }));
                   return;

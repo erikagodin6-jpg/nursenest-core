@@ -36,6 +36,7 @@ import { HomeHeroPathGateway } from "@/components/marketing/home-hero-path-gatew
 import { HomeMarketingConversionBlocks } from "@/components/marketing/home-marketing-conversion-blocks";
 import { HomeMarketingSixtySeconds } from "@/components/marketing/home-marketing-sixty-seconds";
 import { HomeMarketingProductProof } from "@/components/marketing/home-marketing-product-proof";
+import { MarketingTrustSection } from "@/components/marketing/marketing-trust-section";
 import { HomeMarketingFeaturesStack } from "@/components/marketing/home-marketing-features-stack";
 import { heroQuickEntryLinks } from "@/lib/marketing/home-hero-gateway-config";
 import { rnQuestions } from "@/lib/marketing/marketing-entry-routes";
@@ -136,6 +137,7 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
   const [questionCount, setQuestionCount] = useState(0);
   const [storeProductCount, setStoreProductCount] = useState(0);
   const [flashcardCount, setFlashcardCount] = useState(10_000);
+  const [topicCategoryCount, setTopicCategoryCount] = useState<number | undefined>(undefined);
   const [heroMediaVisible, setHeroMediaVisible] = useState(() => HOMEPAGE_HERO_SLIDE_METADATA.length > 0);
 
   const heroSlides = useMemo(() => buildHomepageHeroSlides(t), [t]);
@@ -441,14 +443,14 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
               <div
                 className={
                   heroMediaVisible
-                    ? "relative hidden min-h-0 min-w-0 md:flex md:h-full md:max-h-none md:flex-col"
+                    ? "relative mt-8 flex min-h-0 w-full min-w-0 flex-col md:mt-0 md:max-h-[min(26rem,72vh)] md:justify-center"
                     : "hidden"
                 }
                 style={{ overflowAnchor: "none" }}
               >
                 <MarketingHeroCarousel
                   mediaFrame="hero"
-                  className="min-h-0 flex-1"
+                  className="min-h-0 w-full"
                   slides={heroSlides}
                   onMediaUnavailable={() => setHeroMediaVisible(false)}
                 />

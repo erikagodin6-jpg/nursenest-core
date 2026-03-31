@@ -62,8 +62,14 @@ export default function HeroExpansionTracker() {
   }, []);
 
   const { tierRows, alliedRows } = useMemo(() => {
-    const by = stats?.questionsByTier ?? {};
-    const rpnQ = (by.rpn ?? 0) + (by.lvn ?? 0);
+    const raw = stats?.questionsByTier ?? {};
+    const by: Record<string, number> = {};
+    for (const [k, v] of Object.entries(raw)) {
+      const key = k.trim().toLowerCase();
+      if (!key || typeof v !== "number" || Number.isNaN(v)) continue;
+      by[key] = (by[key] ?? 0) + v;
+    }
+    const rpnQ = (by.rpn ?? 0) + (by.lvn ?? 0) + (by.lvn_lpn ?? 0);
     const rnQ = by.rn ?? 0;
     const npQ = by.np ?? 0;
     const preNursing = Math.min(stats?.totalLessons ?? 0, PRE_NURSING_GOAL.goalQuestions);

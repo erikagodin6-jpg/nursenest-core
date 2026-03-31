@@ -1,0 +1,4094 @@
+{
+  "version": 1,
+  "description": "Master topic map for NurseNest content production. Each topic is one lesson unit (5 canonical sections + pre/post tests in pipeline). IDs are stable slugs for SEO and linking.",
+  "qualityRules": [
+    "Prioritize exam decisions: what to assess first, what to delegate, what to escalate.",
+    "Every lesson must name common distractors / traps the NCLEX uses.",
+    "No fluff or generic nursing-school overview; tutor-in-the-room tone."
+  ],
+  "taggingModel": {
+    "exam": "RN | PN | NP | ALLIED",
+    "category": "category.id from this file",
+    "topic": "topic.id",
+    "difficulty": "1-5 scale mapped to content difficultyDefault",
+    "priority": "high_yield | secondary"
+  },
+  "exams": {
+    "RN": {
+      "exam": "RN",
+      "label": "NCLEX-RN (Registered Nurse)",
+      "examFamily": "NCLEX_RN",
+      "pathwayIds": [
+        "ca-rn-nclex-rn",
+        "us-rn-nclex-rn"
+      ],
+      "categories": [
+        {
+          "id": "cardiovascular",
+          "name": "Cardiovascular",
+          "topics": [
+            {
+              "id": "heart-failure-nursing-priorities-hy",
+              "name": "Heart Failure Nursing Priorities",
+              "priority": "high_yield",
+              "difficultyDefault": 4,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Heart Failure Nursing Priorities",
+                "Cardiovascular",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "ekg-basics",
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "heart-failure-nursing-priorities",
+                "acute-myocardial-infarction-troponin",
+                "shock-recognition-fluids",
+                "hypertensive-crisis-vs-urgency",
+                "atrial-fibrillation-rate-control"
+              ]
+            },
+            {
+              "id": "acute-myocardial-infarction-troponin",
+              "name": "Acute Myocardial Infarction & Troponin",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Acute Myocardial Infarction & Troponin",
+                "Cardiovascular",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "ekg-basics",
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "heart-failure-nursing-priorities",
+                "shock-recognition-fluids",
+                "hypertensive-crisis-vs-urgency",
+                "atrial-fibrillation-rate-control",
+                "endocarditis-blood-cultures"
+              ]
+            },
+            {
+              "id": "shock-recognition-fluids",
+              "name": "Shock Recognition & Fluids",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Shock Recognition & Fluids",
+                "Cardiovascular",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "ekg-basics",
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "heart-failure-nursing-priorities",
+                "acute-myocardial-infarction-troponin",
+                "hypertensive-crisis-vs-urgency",
+                "atrial-fibrillation-rate-control",
+                "endocarditis-blood-cultures"
+              ]
+            },
+            {
+              "id": "hypertensive-crisis-vs-urgency",
+              "name": "Hypertensive Crisis vs Urgency",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Hypertensive Crisis vs Urgency",
+                "Cardiovascular",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "ekg-basics",
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "heart-failure-nursing-priorities",
+                "acute-myocardial-infarction-troponin",
+                "shock-recognition-fluids",
+                "atrial-fibrillation-rate-control",
+                "endocarditis-blood-cultures"
+              ]
+            },
+            {
+              "id": "atrial-fibrillation-rate-control",
+              "name": "Atrial Fibrillation & Rate Control",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Atrial Fibrillation & Rate Control",
+                "Cardiovascular",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "ekg-basics",
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "heart-failure-nursing-priorities",
+                "acute-myocardial-infarction-troponin",
+                "shock-recognition-fluids",
+                "hypertensive-crisis-vs-urgency",
+                "endocarditis-blood-cultures"
+              ]
+            },
+            {
+              "id": "endocarditis-blood-cultures",
+              "name": "Endocarditis & Blood Cultures",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Endocarditis & Blood Cultures",
+                "Cardiovascular",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "ekg-basics",
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "heart-failure-nursing-priorities",
+                "acute-myocardial-infarction-troponin",
+                "shock-recognition-fluids",
+                "hypertensive-crisis-vs-urgency",
+                "atrial-fibrillation-rate-control"
+              ]
+            },
+            {
+              "id": "pericarditis-ecg-clues",
+              "name": "Pericarditis & ECG Clues",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Pericarditis & ECG Clues",
+                "Cardiovascular",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "ekg-basics",
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "heart-failure-nursing-priorities",
+                "acute-myocardial-infarction-troponin",
+                "shock-recognition-fluids",
+                "hypertensive-crisis-vs-urgency",
+                "atrial-fibrillation-rate-control"
+              ]
+            },
+            {
+              "id": "dvt-pe-nursing-priorities",
+              "name": "DVT & PE Nursing Priorities",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "DVT & PE Nursing Priorities",
+                "Cardiovascular",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "ekg-basics",
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "heart-failure-nursing-priorities",
+                "acute-myocardial-infarction-troponin",
+                "shock-recognition-fluids",
+                "hypertensive-crisis-vs-urgency",
+                "atrial-fibrillation-rate-control"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "respiratory",
+          "name": "Respiratory",
+          "topics": [
+            {
+              "id": "abg-interpretation-basics-hy",
+              "name": "ABG Interpretation Basics",
+              "priority": "high_yield",
+              "difficultyDefault": 4,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "ABG Interpretation Basics",
+                "Respiratory",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "abg-quick-reference",
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "abg-interpretation-basics",
+                "copd-exacerbation-oxygen",
+                "asthma-status-asthmaticus",
+                "ards-ventilation-basics",
+                "pneumonia-oxygenation"
+              ]
+            },
+            {
+              "id": "copd-exacerbation-oxygen",
+              "name": "COPD Exacerbation & Oxygen",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "COPD Exacerbation & Oxygen",
+                "Respiratory",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "abg-quick-reference",
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "abg-interpretation-basics",
+                "asthma-status-asthmaticus",
+                "ards-ventilation-basics",
+                "pneumonia-oxygenation",
+                "pulmonary-embolism-clues"
+              ]
+            },
+            {
+              "id": "asthma-status-asthmaticus",
+              "name": "Asthma & Status Asthmaticus",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Asthma & Status Asthmaticus",
+                "Respiratory",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "abg-quick-reference",
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "abg-interpretation-basics",
+                "copd-exacerbation-oxygen",
+                "ards-ventilation-basics",
+                "pneumonia-oxygenation",
+                "pulmonary-embolism-clues"
+              ]
+            },
+            {
+              "id": "ards-ventilation-basics",
+              "name": "ARDS & Ventilation Basics",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "ARDS & Ventilation Basics",
+                "Respiratory",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "abg-quick-reference",
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "abg-interpretation-basics",
+                "copd-exacerbation-oxygen",
+                "asthma-status-asthmaticus",
+                "pneumonia-oxygenation",
+                "pulmonary-embolism-clues"
+              ]
+            },
+            {
+              "id": "pneumonia-oxygenation",
+              "name": "Pneumonia & Oxygenation",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Pneumonia & Oxygenation",
+                "Respiratory",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "abg-quick-reference",
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "abg-interpretation-basics",
+                "copd-exacerbation-oxygen",
+                "asthma-status-asthmaticus",
+                "ards-ventilation-basics",
+                "pulmonary-embolism-clues"
+              ]
+            },
+            {
+              "id": "pulmonary-embolism-clues",
+              "name": "Pulmonary Embolism Clues",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Pulmonary Embolism Clues",
+                "Respiratory",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "abg-quick-reference",
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "abg-interpretation-basics",
+                "copd-exacerbation-oxygen",
+                "asthma-status-asthmaticus",
+                "ards-ventilation-basics",
+                "pneumonia-oxygenation"
+              ]
+            },
+            {
+              "id": "tb-isolation-compliance",
+              "name": "TB Isolation & Compliance",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "TB Isolation & Compliance",
+                "Respiratory",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "abg-quick-reference",
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "abg-interpretation-basics",
+                "copd-exacerbation-oxygen",
+                "asthma-status-asthmaticus",
+                "ards-ventilation-basics",
+                "pneumonia-oxygenation"
+              ]
+            },
+            {
+              "id": "pleural-effusion-chest-tubes",
+              "name": "Pleural Effusion & Chest Tubes",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Pleural Effusion & Chest Tubes",
+                "Respiratory",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "abg-quick-reference",
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "abg-interpretation-basics",
+                "copd-exacerbation-oxygen",
+                "asthma-status-asthmaticus",
+                "ards-ventilation-basics",
+                "pneumonia-oxygenation"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pharmacology",
+          "name": "Pharmacology",
+          "topics": [
+            {
+              "id": "insulin-hypoglycemia-hy",
+              "name": "Insulin & Hypoglycemia",
+              "priority": "high_yield",
+              "difficultyDefault": 4,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Insulin & Hypoglycemia",
+                "Pharmacology",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "med-math-dosage",
+                "interaction-checklist"
+              ],
+              "autoRelatedTopicIds": [
+                "insulin-hypoglycemia",
+                "anticoagulants-bleeding-risk",
+                "antibiotic-classes-allergies",
+                "opioids-respiratory-depression",
+                "cardiac-glycosides-toxicity"
+              ]
+            },
+            {
+              "id": "anticoagulants-bleeding-risk",
+              "name": "Anticoagulants & Bleeding Risk",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Anticoagulants & Bleeding Risk",
+                "Pharmacology",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "med-math-dosage",
+                "interaction-checklist"
+              ],
+              "autoRelatedTopicIds": [
+                "insulin-hypoglycemia",
+                "antibiotic-classes-allergies",
+                "opioids-respiratory-depression",
+                "cardiac-glycosides-toxicity",
+                "diuretics-electrolyte-shifts"
+              ]
+            },
+            {
+              "id": "antibiotic-classes-allergies-hy",
+              "name": "Antibiotic Classes & Allergies",
+              "priority": "high_yield",
+              "difficultyDefault": 4,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Antibiotic Classes & Allergies",
+                "Pharmacology",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "med-math-dosage",
+                "interaction-checklist"
+              ],
+              "autoRelatedTopicIds": [
+                "insulin-hypoglycemia",
+                "anticoagulants-bleeding-risk",
+                "antibiotic-classes-allergies",
+                "opioids-respiratory-depression",
+                "cardiac-glycosides-toxicity"
+              ]
+            },
+            {
+              "id": "opioids-respiratory-depression",
+              "name": "Opioids & Respiratory Depression",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Opioids & Respiratory Depression",
+                "Pharmacology",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "med-math-dosage",
+                "interaction-checklist"
+              ],
+              "autoRelatedTopicIds": [
+                "insulin-hypoglycemia",
+                "anticoagulants-bleeding-risk",
+                "antibiotic-classes-allergies",
+                "cardiac-glycosides-toxicity",
+                "diuretics-electrolyte-shifts"
+              ]
+            },
+            {
+              "id": "cardiac-glycosides-toxicity",
+              "name": "Cardiac Glycosides & Toxicity",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Cardiac Glycosides & Toxicity",
+                "Pharmacology",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "med-math-dosage",
+                "interaction-checklist"
+              ],
+              "autoRelatedTopicIds": [
+                "insulin-hypoglycemia",
+                "anticoagulants-bleeding-risk",
+                "antibiotic-classes-allergies",
+                "opioids-respiratory-depression",
+                "diuretics-electrolyte-shifts"
+              ]
+            },
+            {
+              "id": "diuretics-electrolyte-shifts",
+              "name": "Diuretics & Electrolyte Shifts",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Diuretics & Electrolyte Shifts",
+                "Pharmacology",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "med-math-dosage",
+                "interaction-checklist"
+              ],
+              "autoRelatedTopicIds": [
+                "insulin-hypoglycemia",
+                "anticoagulants-bleeding-risk",
+                "antibiotic-classes-allergies",
+                "opioids-respiratory-depression",
+                "cardiac-glycosides-toxicity"
+              ]
+            },
+            {
+              "id": "antihypertensive-combos",
+              "name": "Antihypertensive Combos",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Antihypertensive Combos",
+                "Pharmacology",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "med-math-dosage",
+                "interaction-checklist"
+              ],
+              "autoRelatedTopicIds": [
+                "insulin-hypoglycemia",
+                "anticoagulants-bleeding-risk",
+                "antibiotic-classes-allergies",
+                "opioids-respiratory-depression",
+                "cardiac-glycosides-toxicity"
+              ]
+            },
+            {
+              "id": "chemo-safe-handling-extravasation",
+              "name": "Chemo Safe Handling & Extravasation",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Chemo Safe Handling & Extravasation",
+                "Pharmacology",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "med-math-dosage",
+                "interaction-checklist"
+              ],
+              "autoRelatedTopicIds": [
+                "insulin-hypoglycemia",
+                "anticoagulants-bleeding-risk",
+                "antibiotic-classes-allergies",
+                "opioids-respiratory-depression",
+                "cardiac-glycosides-toxicity"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "fluids-electrolytes",
+          "name": "Fluids & Electrolytes",
+          "topics": [
+            {
+              "id": "hyponatremia-vs-hypernatremia-hy",
+              "name": "Hyponatremia vs Hypernatremia",
+              "priority": "high_yield",
+              "difficultyDefault": 4,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Hyponatremia vs Hypernatremia",
+                "Fluids & Electrolytes",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel",
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "hyponatremia-vs-hypernatremia",
+                "hypo-vs-hyperkalemia",
+                "fluid-volume-deficit",
+                "fluid-volume-excess",
+                "magnesium-arrhythmia-risk"
+              ]
+            },
+            {
+              "id": "hypo-vs-hyperkalemia-hy",
+              "name": "Hypo- vs Hyperkalemia",
+              "priority": "high_yield",
+              "difficultyDefault": 4,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Hypo- vs Hyperkalemia",
+                "Fluids & Electrolytes",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel",
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "hyponatremia-vs-hypernatremia",
+                "hypo-vs-hyperkalemia",
+                "fluid-volume-deficit",
+                "fluid-volume-excess",
+                "magnesium-arrhythmia-risk"
+              ]
+            },
+            {
+              "id": "fluid-volume-deficit",
+              "name": "Fluid Volume Deficit",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Fluid Volume Deficit",
+                "Fluids & Electrolytes",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel",
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "hyponatremia-vs-hypernatremia",
+                "hypo-vs-hyperkalemia",
+                "fluid-volume-excess",
+                "magnesium-arrhythmia-risk",
+                "calcium-tetany"
+              ]
+            },
+            {
+              "id": "fluid-volume-excess",
+              "name": "Fluid Volume Excess",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Fluid Volume Excess",
+                "Fluids & Electrolytes",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel",
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "hyponatremia-vs-hypernatremia",
+                "hypo-vs-hyperkalemia",
+                "fluid-volume-deficit",
+                "magnesium-arrhythmia-risk",
+                "calcium-tetany"
+              ]
+            },
+            {
+              "id": "magnesium-arrhythmia-risk",
+              "name": "Magnesium & Arrhythmia Risk",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Magnesium & Arrhythmia Risk",
+                "Fluids & Electrolytes",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel",
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "hyponatremia-vs-hypernatremia",
+                "hypo-vs-hyperkalemia",
+                "fluid-volume-deficit",
+                "fluid-volume-excess",
+                "calcium-tetany"
+              ]
+            },
+            {
+              "id": "calcium-tetany",
+              "name": "Calcium & Tetany",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Calcium & Tetany",
+                "Fluids & Electrolytes",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel",
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "hyponatremia-vs-hypernatremia",
+                "hypo-vs-hyperkalemia",
+                "fluid-volume-deficit",
+                "fluid-volume-excess",
+                "magnesium-arrhythmia-risk"
+              ]
+            },
+            {
+              "id": "phosphate-shifts-in-renal",
+              "name": "Phosphate Shifts in Renal",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Phosphate Shifts in Renal",
+                "Fluids & Electrolytes",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel",
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "hyponatremia-vs-hypernatremia",
+                "hypo-vs-hyperkalemia",
+                "fluid-volume-deficit",
+                "fluid-volume-excess",
+                "magnesium-arrhythmia-risk"
+              ]
+            },
+            {
+              "id": "mixed-acid-base-patterns",
+              "name": "Mixed Acid-Base Patterns",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Mixed Acid-Base Patterns",
+                "Fluids & Electrolytes",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel",
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "hyponatremia-vs-hypernatremia",
+                "hypo-vs-hyperkalemia",
+                "fluid-volume-deficit",
+                "fluid-volume-excess",
+                "magnesium-arrhythmia-risk"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "gastrointestinal",
+          "name": "Gastrointestinal",
+          "topics": [
+            {
+              "id": "liver-failure-hepatic-encephalopathy",
+              "name": "Liver Failure & Hepatic Encephalopathy",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Liver Failure & Hepatic Encephalopathy",
+                "Gastrointestinal",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "acute-pancreatitis-nursing-care",
+                "bowel-obstruction-vs-paralytic-ileus",
+                "gerd-pud-bleeding-clues",
+                "gi-bleed-assessment",
+                "c-diff-infection-control"
+              ]
+            },
+            {
+              "id": "acute-pancreatitis-nursing-care",
+              "name": "Acute Pancreatitis Nursing Care",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Acute Pancreatitis Nursing Care",
+                "Gastrointestinal",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "liver-failure-hepatic-encephalopathy",
+                "bowel-obstruction-vs-paralytic-ileus",
+                "gerd-pud-bleeding-clues",
+                "gi-bleed-assessment",
+                "c-diff-infection-control"
+              ]
+            },
+            {
+              "id": "bowel-obstruction-vs-paralytic-ileus",
+              "name": "Bowel Obstruction vs Paralytic Ileus",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Bowel Obstruction vs Paralytic Ileus",
+                "Gastrointestinal",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "liver-failure-hepatic-encephalopathy",
+                "acute-pancreatitis-nursing-care",
+                "gerd-pud-bleeding-clues",
+                "gi-bleed-assessment",
+                "c-diff-infection-control"
+              ]
+            },
+            {
+              "id": "gerd-pud-bleeding-clues",
+              "name": "GERD & PUD Bleeding Clues",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "GERD & PUD Bleeding Clues",
+                "Gastrointestinal",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "liver-failure-hepatic-encephalopathy",
+                "acute-pancreatitis-nursing-care",
+                "bowel-obstruction-vs-paralytic-ileus",
+                "gi-bleed-assessment",
+                "c-diff-infection-control"
+              ]
+            },
+            {
+              "id": "gi-bleed-assessment",
+              "name": "GI Bleed Assessment",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "GI Bleed Assessment",
+                "Gastrointestinal",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "liver-failure-hepatic-encephalopathy",
+                "acute-pancreatitis-nursing-care",
+                "bowel-obstruction-vs-paralytic-ileus",
+                "gerd-pud-bleeding-clues",
+                "c-diff-infection-control"
+              ]
+            },
+            {
+              "id": "c-diff-infection-control",
+              "name": "C. diff Infection Control",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "C. diff Infection Control",
+                "Gastrointestinal",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "liver-failure-hepatic-encephalopathy",
+                "acute-pancreatitis-nursing-care",
+                "bowel-obstruction-vs-paralytic-ileus",
+                "gerd-pud-bleeding-clues",
+                "gi-bleed-assessment"
+              ]
+            },
+            {
+              "id": "ostomy-skin-protection",
+              "name": "Ostomy & Skin Protection",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Ostomy & Skin Protection",
+                "Gastrointestinal",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "liver-failure-hepatic-encephalopathy",
+                "acute-pancreatitis-nursing-care",
+                "bowel-obstruction-vs-paralytic-ileus",
+                "gerd-pud-bleeding-clues",
+                "gi-bleed-assessment"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "neurological",
+          "name": "Neurological",
+          "topics": [
+            {
+              "id": "stroke-assessment-tpa-window",
+              "name": "Stroke Assessment & tPA Window",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Stroke Assessment & tPA Window",
+                "Neurological",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "seizure-precautions-rescue-meds",
+                "increased-icp-positioning",
+                "spinal-cord-injury-autonomic-dysreflexia",
+                "meningitis-isolation-assessment",
+                "migraine-vs-red-flag-headache"
+              ]
+            },
+            {
+              "id": "seizure-precautions-rescue-meds",
+              "name": "Seizure Precautions & Rescue Meds",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Seizure Precautions & Rescue Meds",
+                "Neurological",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "stroke-assessment-tpa-window",
+                "increased-icp-positioning",
+                "spinal-cord-injury-autonomic-dysreflexia",
+                "meningitis-isolation-assessment",
+                "migraine-vs-red-flag-headache"
+              ]
+            },
+            {
+              "id": "increased-icp-positioning",
+              "name": "Increased ICP & Positioning",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Increased ICP & Positioning",
+                "Neurological",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "stroke-assessment-tpa-window",
+                "seizure-precautions-rescue-meds",
+                "spinal-cord-injury-autonomic-dysreflexia",
+                "meningitis-isolation-assessment",
+                "migraine-vs-red-flag-headache"
+              ]
+            },
+            {
+              "id": "spinal-cord-injury-autonomic-dysreflexia",
+              "name": "Spinal Cord Injury Autonomic Dysreflexia",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Spinal Cord Injury Autonomic Dysreflexia",
+                "Neurological",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "stroke-assessment-tpa-window",
+                "seizure-precautions-rescue-meds",
+                "increased-icp-positioning",
+                "meningitis-isolation-assessment",
+                "migraine-vs-red-flag-headache"
+              ]
+            },
+            {
+              "id": "meningitis-isolation-assessment",
+              "name": "Meningitis Isolation & Assessment",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Meningitis Isolation & Assessment",
+                "Neurological",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "stroke-assessment-tpa-window",
+                "seizure-precautions-rescue-meds",
+                "increased-icp-positioning",
+                "spinal-cord-injury-autonomic-dysreflexia",
+                "migraine-vs-red-flag-headache"
+              ]
+            },
+            {
+              "id": "migraine-vs-red-flag-headache",
+              "name": "Migraine vs Red-Flag Headache",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Migraine vs Red-Flag Headache",
+                "Neurological",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "stroke-assessment-tpa-window",
+                "seizure-precautions-rescue-meds",
+                "increased-icp-positioning",
+                "spinal-cord-injury-autonomic-dysreflexia",
+                "meningitis-isolation-assessment"
+              ]
+            },
+            {
+              "id": "parkinson-disease-med-timing",
+              "name": "Parkinson Disease Med Timing",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Parkinson Disease Med Timing",
+                "Neurological",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "stroke-assessment-tpa-window",
+                "seizure-precautions-rescue-meds",
+                "increased-icp-positioning",
+                "spinal-cord-injury-autonomic-dysreflexia",
+                "meningitis-isolation-assessment"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "endocrine",
+          "name": "Endocrine",
+          "topics": [
+            {
+              "id": "dka-vs-hhs-priorities-hy",
+              "name": "DKA vs HHS Priorities",
+              "priority": "high_yield",
+              "difficultyDefault": 4,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "DKA vs HHS Priorities",
+                "Endocrine",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel",
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "dka-vs-hhs-priorities",
+                "thyroid-storm-myxedema-clues",
+                "addisonian-crisis",
+                "cushing-syndrome-assessment",
+                "diabetes-self-management-teaching"
+              ]
+            },
+            {
+              "id": "thyroid-storm-myxedema-clues",
+              "name": "Thyroid Storm & Myxedema Clues",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Thyroid Storm & Myxedema Clues",
+                "Endocrine",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel",
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "dka-vs-hhs-priorities",
+                "addisonian-crisis",
+                "cushing-syndrome-assessment",
+                "diabetes-self-management-teaching",
+                "siadh-vs-di-basics"
+              ]
+            },
+            {
+              "id": "addisonian-crisis",
+              "name": "Addisonian Crisis",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Addisonian Crisis",
+                "Endocrine",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel",
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "dka-vs-hhs-priorities",
+                "thyroid-storm-myxedema-clues",
+                "cushing-syndrome-assessment",
+                "diabetes-self-management-teaching",
+                "siadh-vs-di-basics"
+              ]
+            },
+            {
+              "id": "cushing-syndrome-assessment",
+              "name": "Cushing Syndrome Assessment",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Cushing Syndrome Assessment",
+                "Endocrine",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel",
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "dka-vs-hhs-priorities",
+                "thyroid-storm-myxedema-clues",
+                "addisonian-crisis",
+                "diabetes-self-management-teaching",
+                "siadh-vs-di-basics"
+              ]
+            },
+            {
+              "id": "diabetes-self-management-teaching",
+              "name": "Diabetes Self-Management Teaching",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Diabetes Self-Management Teaching",
+                "Endocrine",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel",
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "dka-vs-hhs-priorities",
+                "thyroid-storm-myxedema-clues",
+                "addisonian-crisis",
+                "cushing-syndrome-assessment",
+                "siadh-vs-di-basics"
+              ]
+            },
+            {
+              "id": "siadh-vs-di-basics",
+              "name": "SIADH vs DI Basics",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "SIADH vs DI Basics",
+                "Endocrine",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel",
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "dka-vs-hhs-priorities",
+                "thyroid-storm-myxedema-clues",
+                "addisonian-crisis",
+                "cushing-syndrome-assessment",
+                "diabetes-self-management-teaching"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "renal-gu",
+          "name": "Renal & GU",
+          "topics": [
+            {
+              "id": "aki-prerenal-vs-intrarenal",
+              "name": "AKI: Prerenal vs Intrarenal",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "AKI: Prerenal vs Intrarenal",
+                "Renal & GU",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "hemodialysis-access-care",
+                "peritoneal-dialysis-complications",
+                "kidney-stones-strain-management",
+                "uti-vs-pyelonephritis",
+                "indwelling-catheter-risks"
+              ]
+            },
+            {
+              "id": "hemodialysis-access-care",
+              "name": "Hemodialysis Access Care",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Hemodialysis Access Care",
+                "Renal & GU",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "aki-prerenal-vs-intrarenal",
+                "peritoneal-dialysis-complications",
+                "kidney-stones-strain-management",
+                "uti-vs-pyelonephritis",
+                "indwelling-catheter-risks"
+              ]
+            },
+            {
+              "id": "peritoneal-dialysis-complications",
+              "name": "Peritoneal Dialysis Complications",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Peritoneal Dialysis Complications",
+                "Renal & GU",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "aki-prerenal-vs-intrarenal",
+                "hemodialysis-access-care",
+                "kidney-stones-strain-management",
+                "uti-vs-pyelonephritis",
+                "indwelling-catheter-risks"
+              ]
+            },
+            {
+              "id": "kidney-stones-strain-management",
+              "name": "Kidney Stones & Strain Management",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Kidney Stones & Strain Management",
+                "Renal & GU",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "aki-prerenal-vs-intrarenal",
+                "hemodialysis-access-care",
+                "peritoneal-dialysis-complications",
+                "uti-vs-pyelonephritis",
+                "indwelling-catheter-risks"
+              ]
+            },
+            {
+              "id": "uti-vs-pyelonephritis",
+              "name": "UTI vs Pyelonephritis",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "UTI vs Pyelonephritis",
+                "Renal & GU",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "aki-prerenal-vs-intrarenal",
+                "hemodialysis-access-care",
+                "peritoneal-dialysis-complications",
+                "kidney-stones-strain-management",
+                "indwelling-catheter-risks"
+              ]
+            },
+            {
+              "id": "indwelling-catheter-risks",
+              "name": "Indwelling Catheter Risks",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Indwelling Catheter Risks",
+                "Renal & GU",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "aki-prerenal-vs-intrarenal",
+                "hemodialysis-access-care",
+                "peritoneal-dialysis-complications",
+                "kidney-stones-strain-management",
+                "uti-vs-pyelonephritis"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "hematology",
+          "name": "Hematology & Oncology",
+          "topics": [
+            {
+              "id": "anemia-types-transfusion-thresholds",
+              "name": "Anemia Types & Transfusion Thresholds",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Anemia Types & Transfusion Thresholds",
+                "Hematology & Oncology",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "transfusion-reaction-recognition",
+                "neutropenic-precautions",
+                "sickle-cell-pain-acs"
+              ]
+            },
+            {
+              "id": "transfusion-reaction-recognition",
+              "name": "Transfusion Reaction Recognition",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Transfusion Reaction Recognition",
+                "Hematology & Oncology",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "anemia-types-transfusion-thresholds",
+                "neutropenic-precautions",
+                "sickle-cell-pain-acs"
+              ]
+            },
+            {
+              "id": "neutropenic-precautions",
+              "name": "Neutropenic Precautions",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Neutropenic Precautions",
+                "Hematology & Oncology",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "anemia-types-transfusion-thresholds",
+                "transfusion-reaction-recognition",
+                "sickle-cell-pain-acs"
+              ]
+            },
+            {
+              "id": "sickle-cell-pain-acs",
+              "name": "Sickle Cell Pain & ACS",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Sickle Cell Pain & ACS",
+                "Hematology & Oncology",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "anemia-types-transfusion-thresholds",
+                "transfusion-reaction-recognition",
+                "neutropenic-precautions"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "musculoskeletal",
+          "name": "Musculoskeletal",
+          "topics": [
+            {
+              "id": "hip-fracture-fall-risk",
+              "name": "Hip Fracture & Fall Risk",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Hip Fracture & Fall Risk",
+                "Musculoskeletal",
+                "RN"
+              ],
+              "relatedToolSlugs": [],
+              "autoRelatedTopicIds": [
+                "ra-flare-immune-modulators",
+                "immobility-dvt-prophylaxis"
+              ]
+            },
+            {
+              "id": "ra-flare-immune-modulators",
+              "name": "RA Flare & Immune Modulators",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "RA Flare & Immune Modulators",
+                "Musculoskeletal",
+                "RN"
+              ],
+              "relatedToolSlugs": [],
+              "autoRelatedTopicIds": [
+                "hip-fracture-fall-risk",
+                "immobility-dvt-prophylaxis"
+              ]
+            },
+            {
+              "id": "immobility-dvt-prophylaxis",
+              "name": "Immobility & DVT Prophylaxis",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Immobility & DVT Prophylaxis",
+                "Musculoskeletal",
+                "RN"
+              ],
+              "relatedToolSlugs": [],
+              "autoRelatedTopicIds": [
+                "hip-fracture-fall-risk",
+                "ra-flare-immune-modulators"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "infectious",
+          "name": "Infectious Disease",
+          "topics": [
+            {
+              "id": "sepsis-early-recognition-hy",
+              "name": "Sepsis Early Recognition",
+              "priority": "high_yield",
+              "difficultyDefault": 4,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Sepsis Early Recognition",
+                "Infectious Disease",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "sepsis-early-recognition",
+                "hiv-confidentiality-pep-basics",
+                "isolation-precautions-in-practice",
+                "wound-infection-vs-colonization"
+              ]
+            },
+            {
+              "id": "hiv-confidentiality-pep-basics",
+              "name": "HIV Confidentiality & PEP Basics",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "HIV Confidentiality & PEP Basics",
+                "Infectious Disease",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "sepsis-early-recognition",
+                "isolation-precautions-in-practice",
+                "wound-infection-vs-colonization"
+              ]
+            },
+            {
+              "id": "isolation-precautions-in-practice",
+              "name": "Isolation Precautions in Practice",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Isolation Precautions in Practice",
+                "Infectious Disease",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "sepsis-early-recognition",
+                "hiv-confidentiality-pep-basics",
+                "wound-infection-vs-colonization"
+              ]
+            },
+            {
+              "id": "wound-infection-vs-colonization",
+              "name": "Wound Infection vs Colonization",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Wound Infection vs Colonization",
+                "Infectious Disease",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "sepsis-early-recognition",
+                "hiv-confidentiality-pep-basics",
+                "isolation-precautions-in-practice"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "integumentary",
+          "name": "Integumentary",
+          "topics": [
+            {
+              "id": "burn-depth-fluid-resuscitation-basics",
+              "name": "Burn Depth & Fluid Resuscitation Basics",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Burn Depth & Fluid Resuscitation Basics",
+                "Integumentary",
+                "RN"
+              ],
+              "relatedToolSlugs": [],
+              "autoRelatedTopicIds": [
+                "pressure-injury-staging",
+                "severe-dermatitis-skin-care"
+              ]
+            },
+            {
+              "id": "pressure-injury-staging",
+              "name": "Pressure Injury Staging",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Pressure Injury Staging",
+                "Integumentary",
+                "RN"
+              ],
+              "relatedToolSlugs": [],
+              "autoRelatedTopicIds": [
+                "burn-depth-fluid-resuscitation-basics",
+                "severe-dermatitis-skin-care"
+              ]
+            },
+            {
+              "id": "severe-dermatitis-skin-care",
+              "name": "Severe Dermatitis Skin Care",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Severe Dermatitis Skin Care",
+                "Integumentary",
+                "RN"
+              ],
+              "relatedToolSlugs": [],
+              "autoRelatedTopicIds": [
+                "burn-depth-fluid-resuscitation-basics",
+                "pressure-injury-staging"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "mental-health",
+          "name": "Mental Health",
+          "topics": [
+            {
+              "id": "suicide-risk-assessment-hy",
+              "name": "Suicide Risk Assessment",
+              "priority": "high_yield",
+              "difficultyDefault": 4,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Suicide Risk Assessment",
+                "Mental Health",
+                "RN"
+              ],
+              "relatedToolSlugs": [],
+              "autoRelatedTopicIds": [
+                "suicide-risk-assessment",
+                "psychotropic-side-effects",
+                "alcohol-withdrawal-ciwa"
+              ]
+            },
+            {
+              "id": "psychotropic-side-effects",
+              "name": "Psychotropic Side Effects",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Psychotropic Side Effects",
+                "Mental Health",
+                "RN"
+              ],
+              "relatedToolSlugs": [],
+              "autoRelatedTopicIds": [
+                "suicide-risk-assessment",
+                "alcohol-withdrawal-ciwa"
+              ]
+            },
+            {
+              "id": "alcohol-withdrawal-ciwa",
+              "name": "Alcohol Withdrawal CIWA",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Alcohol Withdrawal CIWA",
+                "Mental Health",
+                "RN"
+              ],
+              "relatedToolSlugs": [],
+              "autoRelatedTopicIds": [
+                "suicide-risk-assessment",
+                "psychotropic-side-effects"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "maternity",
+          "name": "Maternity",
+          "topics": [
+            {
+              "id": "preeclampsia-vs-eclampsia",
+              "name": "Preeclampsia vs Eclampsia",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Preeclampsia vs Eclampsia",
+                "Maternity",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "postpartum-hemorrhage",
+                "late-decelerations-fhr",
+                "newborn-thermoregulation-feeding",
+                "rh-incompatibility-basics"
+              ]
+            },
+            {
+              "id": "postpartum-hemorrhage",
+              "name": "Postpartum Hemorrhage",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Postpartum Hemorrhage",
+                "Maternity",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "preeclampsia-vs-eclampsia",
+                "late-decelerations-fhr",
+                "newborn-thermoregulation-feeding",
+                "rh-incompatibility-basics"
+              ]
+            },
+            {
+              "id": "late-decelerations-fhr",
+              "name": "Late Decelerations & FHR",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Late Decelerations & FHR",
+                "Maternity",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "preeclampsia-vs-eclampsia",
+                "postpartum-hemorrhage",
+                "newborn-thermoregulation-feeding",
+                "rh-incompatibility-basics"
+              ]
+            },
+            {
+              "id": "newborn-thermoregulation-feeding",
+              "name": "Newborn Thermoregulation & Feeding",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Newborn Thermoregulation & Feeding",
+                "Maternity",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "preeclampsia-vs-eclampsia",
+                "postpartum-hemorrhage",
+                "late-decelerations-fhr",
+                "rh-incompatibility-basics"
+              ]
+            },
+            {
+              "id": "rh-incompatibility-basics",
+              "name": "Rh Incompatibility Basics",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Rh Incompatibility Basics",
+                "Maternity",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "preeclampsia-vs-eclampsia",
+                "postpartum-hemorrhage",
+                "late-decelerations-fhr",
+                "newborn-thermoregulation-feeding"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pediatrics",
+          "name": "Pediatrics",
+          "topics": [
+            {
+              "id": "pediatric-fever-dehydration",
+              "name": "Pediatric Fever & Dehydration",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Pediatric Fever & Dehydration",
+                "Pediatrics",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel",
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "rsv-pediatric-resp-distress",
+                "immunization-schedule-essentials",
+                "growth-failure-red-flags",
+                "non-accidental-trauma-suspicion"
+              ]
+            },
+            {
+              "id": "rsv-pediatric-resp-distress",
+              "name": "RSV & Pediatric Resp Distress",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "RSV & Pediatric Resp Distress",
+                "Pediatrics",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel",
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "pediatric-fever-dehydration",
+                "immunization-schedule-essentials",
+                "growth-failure-red-flags",
+                "non-accidental-trauma-suspicion"
+              ]
+            },
+            {
+              "id": "immunization-schedule-essentials",
+              "name": "Immunization Schedule Essentials",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Immunization Schedule Essentials",
+                "Pediatrics",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel",
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "pediatric-fever-dehydration",
+                "rsv-pediatric-resp-distress",
+                "growth-failure-red-flags",
+                "non-accidental-trauma-suspicion"
+              ]
+            },
+            {
+              "id": "growth-failure-red-flags",
+              "name": "Growth Failure Red Flags",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Growth Failure Red Flags",
+                "Pediatrics",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel",
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "pediatric-fever-dehydration",
+                "rsv-pediatric-resp-distress",
+                "immunization-schedule-essentials",
+                "non-accidental-trauma-suspicion"
+              ]
+            },
+            {
+              "id": "non-accidental-trauma-suspicion",
+              "name": "Non-Accidental Trauma Suspicion",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Non-Accidental Trauma Suspicion",
+                "Pediatrics",
+                "RN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel",
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "pediatric-fever-dehydration",
+                "rsv-pediatric-resp-distress",
+                "immunization-schedule-essentials",
+                "growth-failure-red-flags"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "leadership",
+          "name": "Leadership & Management",
+          "topics": [
+            {
+              "id": "assignment-vs-delegation",
+              "name": "Assignment vs Delegation",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Assignment vs Delegation",
+                "Leadership & Management",
+                "RN"
+              ],
+              "relatedToolSlugs": [],
+              "autoRelatedTopicIds": [
+                "ethical-distress-advocacy",
+                "legal-nurse-practice-act",
+                "qi-incident-reporting"
+              ]
+            },
+            {
+              "id": "ethical-distress-advocacy",
+              "name": "Ethical Distress & Advocacy",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Ethical Distress & Advocacy",
+                "Leadership & Management",
+                "RN"
+              ],
+              "relatedToolSlugs": [],
+              "autoRelatedTopicIds": [
+                "assignment-vs-delegation",
+                "legal-nurse-practice-act",
+                "qi-incident-reporting"
+              ]
+            },
+            {
+              "id": "legal-nurse-practice-act",
+              "name": "Legal: Nurse Practice Act",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Legal: Nurse Practice Act",
+                "Leadership & Management",
+                "RN"
+              ],
+              "relatedToolSlugs": [],
+              "autoRelatedTopicIds": [
+                "assignment-vs-delegation",
+                "ethical-distress-advocacy",
+                "qi-incident-reporting"
+              ]
+            },
+            {
+              "id": "qi-incident-reporting",
+              "name": "QI & Incident Reporting",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "QI & Incident Reporting",
+                "Leadership & Management",
+                "RN"
+              ],
+              "relatedToolSlugs": [],
+              "autoRelatedTopicIds": [
+                "assignment-vs-delegation",
+                "ethical-distress-advocacy",
+                "legal-nurse-practice-act"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "safety",
+          "name": "Safety & Infection Control",
+          "topics": [
+            {
+              "id": "falls-hourly-rounding",
+              "name": "Falls & Hourly Rounding",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Falls & Hourly Rounding",
+                "Safety & Infection Control",
+                "RN"
+              ],
+              "relatedToolSlugs": [],
+              "autoRelatedTopicIds": [
+                "restraint-alternatives-policy",
+                "medication-error-disclosure",
+                "sharp-safety-exposure"
+              ]
+            },
+            {
+              "id": "restraint-alternatives-policy",
+              "name": "Restraint Alternatives & Policy",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Restraint Alternatives & Policy",
+                "Safety & Infection Control",
+                "RN"
+              ],
+              "relatedToolSlugs": [],
+              "autoRelatedTopicIds": [
+                "falls-hourly-rounding",
+                "medication-error-disclosure",
+                "sharp-safety-exposure"
+              ]
+            },
+            {
+              "id": "medication-error-disclosure",
+              "name": "Medication Error Disclosure",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Medication Error Disclosure",
+                "Safety & Infection Control",
+                "RN"
+              ],
+              "relatedToolSlugs": [],
+              "autoRelatedTopicIds": [
+                "falls-hourly-rounding",
+                "restraint-alternatives-policy",
+                "sharp-safety-exposure"
+              ]
+            },
+            {
+              "id": "sharp-safety-exposure",
+              "name": "Sharp Safety & Exposure",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Sharp Safety & Exposure",
+                "Safety & Infection Control",
+                "RN"
+              ],
+              "relatedToolSlugs": [],
+              "autoRelatedTopicIds": [
+                "falls-hourly-rounding",
+                "restraint-alternatives-policy",
+                "medication-error-disclosure"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "nutrition",
+          "name": "Nutrition & Elimination",
+          "topics": [
+            {
+              "id": "enteral-feeding-tube-safety",
+              "name": "Enteral Feeding Tube Safety",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Enteral Feeding Tube Safety",
+                "Nutrition & Elimination",
+                "RN"
+              ],
+              "relatedToolSlugs": [],
+              "autoRelatedTopicIds": [
+                "tpn-line-care-basics"
+              ]
+            },
+            {
+              "id": "tpn-line-care-basics",
+              "name": "TPN Line Care Basics",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "TPN Line Care Basics",
+                "Nutrition & Elimination",
+                "RN"
+              ],
+              "relatedToolSlugs": [],
+              "autoRelatedTopicIds": [
+                "enteral-feeding-tube-safety"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "PN": {
+      "exam": "PN",
+      "label": "Practical Nursing (NCLEX-PN / REx-PN)",
+      "examFamily": "NCLEX_PN",
+      "pathwayIds": [
+        "ca-rpn-rex-pn",
+        "us-lvn-nclex-pn"
+      ],
+      "categories": [
+        {
+          "id": "pn-foundation",
+          "name": "Scope & Foundations",
+          "topics": [
+            {
+              "id": "pn-scope-delegation-hy",
+              "name": "PN Scope & Delegation",
+              "priority": "high_yield",
+              "difficultyDefault": 4,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "PN Scope & Delegation",
+                "Scope & Foundations",
+                "PN"
+              ],
+              "relatedToolSlugs": [
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "pn-scope-delegation",
+                "therapeutic-communication",
+                "vital-signs-escalation",
+                "documentation-do-nots"
+              ]
+            },
+            {
+              "id": "therapeutic-communication",
+              "name": "Therapeutic Communication",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Therapeutic Communication",
+                "Scope & Foundations",
+                "PN"
+              ],
+              "relatedToolSlugs": [
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "pn-scope-delegation",
+                "vital-signs-escalation",
+                "documentation-do-nots"
+              ]
+            },
+            {
+              "id": "vital-signs-escalation",
+              "name": "Vital Signs & Escalation",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Vital Signs & Escalation",
+                "Scope & Foundations",
+                "PN"
+              ],
+              "relatedToolSlugs": [
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "pn-scope-delegation",
+                "therapeutic-communication",
+                "documentation-do-nots"
+              ]
+            },
+            {
+              "id": "documentation-do-nots",
+              "name": "Documentation Do-Nots",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Documentation Do-Nots",
+                "Scope & Foundations",
+                "PN"
+              ],
+              "relatedToolSlugs": [
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "pn-scope-delegation",
+                "therapeutic-communication",
+                "vital-signs-escalation"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "cardiovascular",
+          "name": "Cardiovascular (PN)",
+          "topics": [
+            {
+              "id": "heart-failure-monitoring",
+              "name": "Heart Failure Monitoring",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Heart Failure Monitoring",
+                "Cardiovascular (PN)",
+                "PN"
+              ],
+              "relatedToolSlugs": [
+                "ekg-basics",
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "hypertension-teaching",
+                "edema-daily-weights"
+              ]
+            },
+            {
+              "id": "hypertension-teaching",
+              "name": "Hypertension Teaching",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Hypertension Teaching",
+                "Cardiovascular (PN)",
+                "PN"
+              ],
+              "relatedToolSlugs": [
+                "ekg-basics",
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "heart-failure-monitoring",
+                "edema-daily-weights"
+              ]
+            },
+            {
+              "id": "edema-daily-weights",
+              "name": "Edema & Daily Weights",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Edema & Daily Weights",
+                "Cardiovascular (PN)",
+                "PN"
+              ],
+              "relatedToolSlugs": [
+                "ekg-basics",
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "heart-failure-monitoring",
+                "hypertension-teaching"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "respiratory",
+          "name": "Respiratory (PN)",
+          "topics": [
+            {
+              "id": "oxygen-devices-for-pn-care",
+              "name": "Oxygen Devices for PN Care",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Oxygen Devices for PN Care",
+                "Respiratory (PN)",
+                "PN"
+              ],
+              "relatedToolSlugs": [
+                "abg-quick-reference",
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "inhaler-technique-teaching",
+                "copd-home-care"
+              ]
+            },
+            {
+              "id": "inhaler-technique-teaching",
+              "name": "Inhaler Technique Teaching",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Inhaler Technique Teaching",
+                "Respiratory (PN)",
+                "PN"
+              ],
+              "relatedToolSlugs": [
+                "abg-quick-reference",
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "oxygen-devices-for-pn-care",
+                "copd-home-care"
+              ]
+            },
+            {
+              "id": "copd-home-care",
+              "name": "COPD Home Care",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "COPD Home Care",
+                "Respiratory (PN)",
+                "PN"
+              ],
+              "relatedToolSlugs": [
+                "abg-quick-reference",
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "oxygen-devices-for-pn-care",
+                "inhaler-technique-teaching"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pharmacology",
+          "name": "Pharmacology (PN)",
+          "topics": [
+            {
+              "id": "insulin-administration-checks",
+              "name": "Insulin Administration Checks",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Insulin Administration Checks",
+                "Pharmacology (PN)",
+                "PN"
+              ],
+              "relatedToolSlugs": [
+                "med-math-dosage",
+                "interaction-checklist"
+              ],
+              "autoRelatedTopicIds": [
+                "oral-hypoglycemics",
+                "antibiotic-side-effect-reporting"
+              ]
+            },
+            {
+              "id": "oral-hypoglycemics",
+              "name": "Oral Hypoglycemics",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Oral Hypoglycemics",
+                "Pharmacology (PN)",
+                "PN"
+              ],
+              "relatedToolSlugs": [
+                "med-math-dosage",
+                "interaction-checklist"
+              ],
+              "autoRelatedTopicIds": [
+                "insulin-administration-checks",
+                "antibiotic-side-effect-reporting"
+              ]
+            },
+            {
+              "id": "antibiotic-side-effect-reporting",
+              "name": "Antibiotic Side Effect Reporting",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Antibiotic Side Effect Reporting",
+                "Pharmacology (PN)",
+                "PN"
+              ],
+              "relatedToolSlugs": [
+                "med-math-dosage",
+                "interaction-checklist"
+              ],
+              "autoRelatedTopicIds": [
+                "insulin-administration-checks",
+                "oral-hypoglycemics"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "fluids-electrolytes",
+          "name": "Fluids & Electrolytes (PN)",
+          "topics": [
+            {
+              "id": "i-o-fluid-restriction-teaching",
+              "name": "I&O & Fluid Restriction Teaching",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "I&O & Fluid Restriction Teaching",
+                "Fluids & Electrolytes (PN)",
+                "PN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel",
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "hypokalemia-symptoms",
+                "daily-weights-pattern"
+              ]
+            },
+            {
+              "id": "hypokalemia-symptoms",
+              "name": "Hypokalemia Symptoms",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Hypokalemia Symptoms",
+                "Fluids & Electrolytes (PN)",
+                "PN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel",
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "i-o-fluid-restriction-teaching",
+                "daily-weights-pattern"
+              ]
+            },
+            {
+              "id": "daily-weights-pattern",
+              "name": "Daily Weights Pattern",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Daily Weights Pattern",
+                "Fluids & Electrolytes (PN)",
+                "PN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel",
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "i-o-fluid-restriction-teaching",
+                "hypokalemia-symptoms"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "gastrointestinal",
+          "name": "GI (PN)",
+          "topics": [
+            {
+              "id": "npo-post-op-diet-progression",
+              "name": "NPO & Post-Op Diet Progression",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "NPO & Post-Op Diet Progression",
+                "GI (PN)",
+                "PN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "stool-assessment-report"
+              ]
+            },
+            {
+              "id": "stool-assessment-report",
+              "name": "Stool Assessment & Report",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Stool Assessment & Report",
+                "GI (PN)",
+                "PN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "npo-post-op-diet-progression"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "neurological",
+          "name": "Neurological (PN)",
+          "topics": [
+            {
+              "id": "stroke-sequela-mobility-assist",
+              "name": "Stroke Sequela & Mobility Assist",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Stroke Sequela & Mobility Assist",
+                "Neurological (PN)",
+                "PN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "seizure-observation"
+              ]
+            },
+            {
+              "id": "seizure-observation",
+              "name": "Seizure Observation",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Seizure Observation",
+                "Neurological (PN)",
+                "PN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "stroke-sequela-mobility-assist"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "endocrine",
+          "name": "Endocrine (PN)",
+          "topics": [
+            {
+              "id": "fingerstick-hypoglycemia-response",
+              "name": "Fingerstick & Hypoglycemia Response",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Fingerstick & Hypoglycemia Response",
+                "Endocrine (PN)",
+                "PN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel",
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "foot-inspection-teaching"
+              ]
+            },
+            {
+              "id": "foot-inspection-teaching",
+              "name": "Foot Inspection Teaching",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Foot Inspection Teaching",
+                "Endocrine (PN)",
+                "PN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel",
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "fingerstick-hypoglycemia-response"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "renal-gu",
+          "name": "Renal & GU (PN)",
+          "topics": [
+            {
+              "id": "catheter-care-cauti-prevention",
+              "name": "Catheter Care & CAUTI Prevention",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Catheter Care & CAUTI Prevention",
+                "Renal & GU (PN)",
+                "PN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "dialysis-diet-teaching"
+              ]
+            },
+            {
+              "id": "dialysis-diet-teaching",
+              "name": "Dialysis Diet Teaching",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Dialysis Diet Teaching",
+                "Renal & GU (PN)",
+                "PN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "catheter-care-cauti-prevention"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "maternity",
+          "name": "Maternity (PN)",
+          "topics": [
+            {
+              "id": "postpartum-fundus-lochia",
+              "name": "Postpartum Fundus & Lochia",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Postpartum Fundus & Lochia",
+                "Maternity (PN)",
+                "PN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "newborn-safety-bath"
+              ]
+            },
+            {
+              "id": "newborn-safety-bath",
+              "name": "Newborn Safety & Bath",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Newborn Safety & Bath",
+                "Maternity (PN)",
+                "PN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "postpartum-fundus-lochia"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pediatrics",
+          "name": "Pediatrics (PN)",
+          "topics": [
+            {
+              "id": "growth-chart-basics",
+              "name": "Growth Chart Basics",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Growth Chart Basics",
+                "Pediatrics (PN)",
+                "PN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel",
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "immunization-consent"
+              ]
+            },
+            {
+              "id": "immunization-consent",
+              "name": "Immunization Consent",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Immunization Consent",
+                "Pediatrics (PN)",
+                "PN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel",
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "growth-chart-basics"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "infectious",
+          "name": "Infection Control (PN)",
+          "topics": [
+            {
+              "id": "ppe-transmission-basics",
+              "name": "PPE & Transmission Basics",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "PPE & Transmission Basics",
+                "Infection Control (PN)",
+                "PN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "c-diff-contact-precautions"
+              ]
+            },
+            {
+              "id": "c-diff-contact-precautions",
+              "name": "C. diff Contact Precautions",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "C. diff Contact Precautions",
+                "Infection Control (PN)",
+                "PN"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "ppe-transmission-basics"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "mental-health",
+          "name": "Mental Health (PN)",
+          "topics": [
+            {
+              "id": "suicide-precautions-observation",
+              "name": "Suicide Precautions Observation",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Suicide Precautions Observation",
+                "Mental Health (PN)",
+                "PN"
+              ],
+              "relatedToolSlugs": [],
+              "autoRelatedTopicIds": [
+                "behavioral-escalation-reporting"
+              ]
+            },
+            {
+              "id": "behavioral-escalation-reporting",
+              "name": "Behavioral Escalation Reporting",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Behavioral Escalation Reporting",
+                "Mental Health (PN)",
+                "PN"
+              ],
+              "relatedToolSlugs": [],
+              "autoRelatedTopicIds": [
+                "suicide-precautions-observation"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "safety",
+          "name": "Safety (PN)",
+          "topics": [
+            {
+              "id": "falls-risk-side-rails-policy",
+              "name": "Falls Risk & Side Rails Policy",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Falls Risk & Side Rails Policy",
+                "Safety (PN)",
+                "PN"
+              ],
+              "relatedToolSlugs": [],
+              "autoRelatedTopicIds": [
+                "restraint-monitoring-requirements"
+              ]
+            },
+            {
+              "id": "restraint-monitoring-requirements",
+              "name": "Restraint Monitoring Requirements",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Restraint Monitoring Requirements",
+                "Safety (PN)",
+                "PN"
+              ],
+              "relatedToolSlugs": [],
+              "autoRelatedTopicIds": [
+                "falls-risk-side-rails-policy"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "NP": {
+      "exam": "NP",
+      "label": "Nurse Practitioner",
+      "examFamily": "NP",
+      "pathwayIds": [
+        "ca-np-cnple",
+        "us-np-fnp",
+        "us-np-agpcnp",
+        "us-np-pmhnp"
+      ],
+      "categories": [
+        {
+          "id": "np-primary-care",
+          "name": "Primary Care",
+          "topics": [
+            {
+              "id": "htn-guideline-based-plans",
+              "name": "HTN Guideline-Based Plans",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "HTN Guideline-Based Plans",
+                "Primary Care",
+                "NP"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel",
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "diabetes-a1c-medication-escalation",
+                "hyperlipidemia-risk-discussion",
+                "women-s-health-screening-ages",
+                "pediatric-well-visits-red-flags"
+              ]
+            },
+            {
+              "id": "diabetes-a1c-medication-escalation",
+              "name": "Diabetes A1c & Medication Escalation",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Diabetes A1c & Medication Escalation",
+                "Primary Care",
+                "NP"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel",
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "htn-guideline-based-plans",
+                "hyperlipidemia-risk-discussion",
+                "women-s-health-screening-ages",
+                "pediatric-well-visits-red-flags"
+              ]
+            },
+            {
+              "id": "hyperlipidemia-risk-discussion",
+              "name": "Hyperlipidemia Risk Discussion",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Hyperlipidemia Risk Discussion",
+                "Primary Care",
+                "NP"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel",
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "htn-guideline-based-plans",
+                "diabetes-a1c-medication-escalation",
+                "women-s-health-screening-ages",
+                "pediatric-well-visits-red-flags"
+              ]
+            },
+            {
+              "id": "women-s-health-screening-ages",
+              "name": "Women's Health Screening Ages",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Women's Health Screening Ages",
+                "Primary Care",
+                "NP"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel",
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "htn-guideline-based-plans",
+                "diabetes-a1c-medication-escalation",
+                "hyperlipidemia-risk-discussion",
+                "pediatric-well-visits-red-flags"
+              ]
+            },
+            {
+              "id": "pediatric-well-visits-red-flags",
+              "name": "Pediatric Well Visits Red Flags",
+              "priority": "high_yield",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Pediatric Well Visits Red Flags",
+                "Primary Care",
+                "NP"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel",
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "htn-guideline-based-plans",
+                "diabetes-a1c-medication-escalation",
+                "hyperlipidemia-risk-discussion",
+                "women-s-health-screening-ages"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "np-acute",
+          "name": "Acute & Urgent",
+          "topics": [
+            {
+              "id": "acute-chest-pain-workup-outline",
+              "name": "Acute Chest Pain Workup Outline",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Acute Chest Pain Workup Outline",
+                "Acute & Urgent",
+                "NP"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "shortness-of-breath-triage",
+                "abdominal-pain-ddx-framework"
+              ]
+            },
+            {
+              "id": "shortness-of-breath-triage",
+              "name": "Shortness of Breath Triage",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Shortness of Breath Triage",
+                "Acute & Urgent",
+                "NP"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "acute-chest-pain-workup-outline",
+                "abdominal-pain-ddx-framework"
+              ]
+            },
+            {
+              "id": "abdominal-pain-ddx-framework",
+              "name": "Abdominal Pain DDx Framework",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Abdominal Pain DDx Framework",
+                "Acute & Urgent",
+                "NP"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "acute-chest-pain-workup-outline",
+                "shortness-of-breath-triage"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "cardiovascular",
+          "name": "Cardiovascular (NP)",
+          "topics": [
+            {
+              "id": "heart-failure-gdmt-basics",
+              "name": "Heart Failure GDMT Basics",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Heart Failure GDMT Basics",
+                "Cardiovascular (NP)",
+                "NP"
+              ],
+              "relatedToolSlugs": [
+                "ekg-basics",
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "afib-rate-vs-rhythm-decisions"
+              ]
+            },
+            {
+              "id": "afib-rate-vs-rhythm-decisions",
+              "name": "Afib Rate vs Rhythm Decisions",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Afib Rate vs Rhythm Decisions",
+                "Cardiovascular (NP)",
+                "NP"
+              ],
+              "relatedToolSlugs": [
+                "ekg-basics",
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "heart-failure-gdmt-basics"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "respiratory",
+          "name": "Respiratory (NP)",
+          "topics": [
+            {
+              "id": "copd-gold-overview",
+              "name": "COPD GOLD Overview",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "COPD GOLD Overview",
+                "Respiratory (NP)",
+                "NP"
+              ],
+              "relatedToolSlugs": [
+                "abg-quick-reference",
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "asthma-step-up-therapy"
+              ]
+            },
+            {
+              "id": "asthma-step-up-therapy",
+              "name": "Asthma Step-Up Therapy",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Asthma Step-Up Therapy",
+                "Respiratory (NP)",
+                "NP"
+              ],
+              "relatedToolSlugs": [
+                "abg-quick-reference",
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "copd-gold-overview"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pharmacology",
+          "name": "Pharmacology (NP)",
+          "topics": [
+            {
+              "id": "polypharmacy-deprescribing",
+              "name": "Polypharmacy & Deprescribing",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Polypharmacy & Deprescribing",
+                "Pharmacology (NP)",
+                "NP"
+              ],
+              "relatedToolSlugs": [
+                "med-math-dosage",
+                "interaction-checklist"
+              ],
+              "autoRelatedTopicIds": [
+                "renal-dose-adjustment-awareness"
+              ]
+            },
+            {
+              "id": "renal-dose-adjustment-awareness",
+              "name": "Renal Dose Adjustment Awareness",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Renal Dose Adjustment Awareness",
+                "Pharmacology (NP)",
+                "NP"
+              ],
+              "relatedToolSlugs": [
+                "med-math-dosage",
+                "interaction-checklist"
+              ],
+              "autoRelatedTopicIds": [
+                "polypharmacy-deprescribing"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "infectious",
+          "name": "Infectious (NP)",
+          "topics": [
+            {
+              "id": "uti-vs-asymptomatic-bacteriuria",
+              "name": "UTI vs Asymptomatic Bacteriuria",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "UTI vs Asymptomatic Bacteriuria",
+                "Infectious (NP)",
+                "NP"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "outpatient-pneumonia-antibiotics"
+              ]
+            },
+            {
+              "id": "outpatient-pneumonia-antibiotics",
+              "name": "Outpatient Pneumonia Antibiotics",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Outpatient Pneumonia Antibiotics",
+                "Infectious (NP)",
+                "NP"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "uti-vs-asymptomatic-bacteriuria"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "mental-health",
+          "name": "Mental Health (NP)",
+          "topics": [
+            {
+              "id": "phq-9-safety-planning",
+              "name": "PHQ-9 & Safety Planning",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "PHQ-9 & Safety Planning",
+                "Mental Health (NP)",
+                "NP"
+              ],
+              "relatedToolSlugs": [],
+              "autoRelatedTopicIds": [
+                "anxiety-first-line-med-selection"
+              ]
+            },
+            {
+              "id": "anxiety-first-line-med-selection",
+              "name": "Anxiety First-Line Med Selection",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Anxiety First-Line Med Selection",
+                "Mental Health (NP)",
+                "NP"
+              ],
+              "relatedToolSlugs": [],
+              "autoRelatedTopicIds": [
+                "phq-9-safety-planning"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "endocrine",
+          "name": "Endocrine (NP)",
+          "topics": [
+            {
+              "id": "subclinical-hypothyroidism",
+              "name": "Subclinical Hypothyroidism",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Subclinical Hypothyroidism",
+                "Endocrine (NP)",
+                "NP"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel",
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "osteoporosis-frax-basics"
+              ]
+            },
+            {
+              "id": "osteoporosis-frax-basics",
+              "name": "Osteoporosis FRAX Basics",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Osteoporosis FRAX Basics",
+                "Endocrine (NP)",
+                "NP"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel",
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "subclinical-hypothyroidism"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "renal-gu",
+          "name": "Renal & GU (NP)",
+          "topics": [
+            {
+              "id": "ckd-staging-med-avoid-list",
+              "name": "CKD Staging & Med Avoid List",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "CKD Staging & Med Avoid List",
+                "Renal & GU (NP)",
+                "NP"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "bph-vs-cancer-screening-talk"
+              ]
+            },
+            {
+              "id": "bph-vs-cancer-screening-talk",
+              "name": "BPH vs Cancer Screening Talk",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "BPH vs Cancer Screening Talk",
+                "Renal & GU (NP)",
+                "NP"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "ckd-staging-med-avoid-list"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "hematology",
+          "name": "Hematology (NP)",
+          "topics": [
+            {
+              "id": "iron-deficiency-workup",
+              "name": "Iron Deficiency Workup",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Iron Deficiency Workup",
+                "Hematology (NP)",
+                "NP"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "anticoag-bridging-concepts"
+              ]
+            },
+            {
+              "id": "anticoag-bridging-concepts",
+              "name": "Anticoag Bridging Concepts",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Anticoag Bridging Concepts",
+                "Hematology (NP)",
+                "NP"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "iron-deficiency-workup"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "ALLIED": {
+      "exam": "ALLIED",
+      "label": "Allied Health",
+      "examFamily": "ALLIED",
+      "pathwayIds": [
+        "ca-allied-core",
+        "us-allied-core"
+      ],
+      "categories": [
+        {
+          "id": "allied-respiratory",
+          "name": "Respiratory Therapy",
+          "topics": [
+            {
+              "id": "vent-modes-overview",
+              "name": "Vent Modes Overview",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Vent Modes Overview",
+                "Respiratory Therapy",
+                "ALLIED"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "abg-sampling-errors",
+                "airway-emergencies"
+              ]
+            },
+            {
+              "id": "abg-sampling-errors",
+              "name": "ABG Sampling Errors",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "ABG Sampling Errors",
+                "Respiratory Therapy",
+                "ALLIED"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "vent-modes-overview",
+                "airway-emergencies"
+              ]
+            },
+            {
+              "id": "airway-emergencies",
+              "name": "Airway Emergencies",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Airway Emergencies",
+                "Respiratory Therapy",
+                "ALLIED"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "vent-modes-overview",
+                "abg-sampling-errors"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "allied-lab",
+          "name": "Medical Laboratory",
+          "topics": [
+            {
+              "id": "critical-value-reporting",
+              "name": "Critical Value Reporting",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Critical Value Reporting",
+                "Medical Laboratory",
+                "ALLIED"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "hemolysis-specimen-reject",
+                "coag-sample-handling"
+              ]
+            },
+            {
+              "id": "hemolysis-specimen-reject",
+              "name": "Hemolysis Specimen Reject",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Hemolysis Specimen Reject",
+                "Medical Laboratory",
+                "ALLIED"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "critical-value-reporting",
+                "coag-sample-handling"
+              ]
+            },
+            {
+              "id": "coag-sample-handling",
+              "name": "Coag Sample Handling",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Coag Sample Handling",
+                "Medical Laboratory",
+                "ALLIED"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "critical-value-reporting",
+                "hemolysis-specimen-reject"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "allied-imaging",
+          "name": "Diagnostic Imaging",
+          "topics": [
+            {
+              "id": "contrast-reaction-preparedness",
+              "name": "Contrast Reaction Preparedness",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Contrast Reaction Preparedness",
+                "Diagnostic Imaging",
+                "ALLIED"
+              ],
+              "relatedToolSlugs": [],
+              "autoRelatedTopicIds": [
+                "pregnancy-screening-before-imaging"
+              ]
+            },
+            {
+              "id": "pregnancy-screening-before-imaging",
+              "name": "Pregnancy Screening Before Imaging",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Pregnancy Screening Before Imaging",
+                "Diagnostic Imaging",
+                "ALLIED"
+              ],
+              "relatedToolSlugs": [],
+              "autoRelatedTopicIds": [
+                "contrast-reaction-preparedness"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "allied-pharmacy",
+          "name": "Pharmacy Technician",
+          "topics": [
+            {
+              "id": "high-alert-med-storage",
+              "name": "High-Alert Med Storage",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "High-Alert Med Storage",
+                "Pharmacy Technician",
+                "ALLIED"
+              ],
+              "relatedToolSlugs": [
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "look-alike-sound-alike-controls"
+              ]
+            },
+            {
+              "id": "look-alike-sound-alike-controls",
+              "name": "Look-Alike Sound-Alike Controls",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Look-Alike Sound-Alike Controls",
+                "Pharmacy Technician",
+                "ALLIED"
+              ],
+              "relatedToolSlugs": [
+                "med-math-dosage"
+              ],
+              "autoRelatedTopicIds": [
+                "high-alert-med-storage"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "allied-therapy",
+          "name": "Rehab & Therapy",
+          "topics": [
+            {
+              "id": "aspiration-precautions-ot-pt",
+              "name": "Aspiration Precautions OT/PT",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Aspiration Precautions OT/PT",
+                "Rehab & Therapy",
+                "ALLIED"
+              ],
+              "relatedToolSlugs": [],
+              "autoRelatedTopicIds": [
+                "functional-mobility-screening"
+              ]
+            },
+            {
+              "id": "functional-mobility-screening",
+              "name": "Functional Mobility Screening",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Functional Mobility Screening",
+                "Rehab & Therapy",
+                "ALLIED"
+              ],
+              "relatedToolSlugs": [],
+              "autoRelatedTopicIds": [
+                "aspiration-precautions-ot-pt"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "allied-emergency",
+          "name": "EMS / Prehospital",
+          "topics": [
+            {
+              "id": "trauma-triage-basics",
+              "name": "Trauma Triage Basics",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Trauma Triage Basics",
+                "EMS / Prehospital",
+                "ALLIED"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "stroke-pre-notification"
+              ]
+            },
+            {
+              "id": "stroke-pre-notification",
+              "name": "Stroke Pre-Notification",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Stroke Pre-Notification",
+                "EMS / Prehospital",
+                "ALLIED"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "trauma-triage-basics"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "infectious",
+          "name": "Infection Control (Allied)",
+          "topics": [
+            {
+              "id": "sterile-field-breaks",
+              "name": "Sterile Field Breaks",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Sterile Field Breaks",
+                "Infection Control (Allied)",
+                "ALLIED"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "ppe-sequence"
+              ]
+            },
+            {
+              "id": "ppe-sequence",
+              "name": "PPE Sequence",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "PPE Sequence",
+                "Infection Control (Allied)",
+                "ALLIED"
+              ],
+              "relatedToolSlugs": [
+                "labs-reference",
+                "electrolyte-panel"
+              ],
+              "autoRelatedTopicIds": [
+                "sterile-field-breaks"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "safety",
+          "name": "Safety (Allied)",
+          "topics": [
+            {
+              "id": "radiation-alara",
+              "name": "Radiation ALARA",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Radiation ALARA",
+                "Safety (Allied)",
+                "ALLIED"
+              ],
+              "relatedToolSlugs": [],
+              "autoRelatedTopicIds": [
+                "chemical-spill-initial-steps"
+              ]
+            },
+            {
+              "id": "chemical-spill-initial-steps",
+              "name": "Chemical Spill Initial Steps",
+              "priority": "secondary",
+              "difficultyDefault": 3,
+              "prerequisiteTopicIds": [],
+              "advancedTopicIds": [],
+              "questionTopicHints": [
+                "Chemical Spill Initial Steps",
+                "Safety (Allied)",
+                "ALLIED"
+              ],
+              "relatedToolSlugs": [],
+              "autoRelatedTopicIds": [
+                "radiation-alara"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

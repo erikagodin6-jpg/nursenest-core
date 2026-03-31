@@ -20,6 +20,7 @@ export async function GET() {
       storeProductCount: 0,
       questionsByTier: {} as Record<string, number>,
       scenarioCount: 0,
+      topicCategoryCount: 0,
       degraded: true,
     });
   }
@@ -48,6 +49,21 @@ export async function GET() {
     }),
   );
 
+  const topicGroupsR = await withPrismaReadFallback(
+    "home_stats.exam_questions_topics_distinct",
+    () =>
+      prisma.examQuestion.groupBy({
+        by: ["topic"],
+        where: {
+          ...publicMarketingExamQuestionWhere(),
+          topic: { not: null },
+          NOT: { topic: "" },
+        },
+        _count: { _all: true },
+      }),
+    [],
+  );
+
   if (lessonsR.warning) {
     safeServerLog("prisma", "home_stats_optional_read_failed", { target: "content_items" });
   }
@@ -63,12 +79,16 @@ export async function GET() {
 
   const questionsByTier: Record<string, number> = {};
   for (const row of tierAgg.value) {
-    questionsByTier[row.tier] = row._count._all;
+    const k = String(row.tier).trim().toLowerCase();
+    if (!k) continue;
+    questionsByTier[k] = (questionsByTier[k] ?? 0) + row._count._all;
   }
 
   const degraded = Boolean(
-    lessonsR.warning || questionsR.warning || tierAgg.warning || scenariosR.warning,
+    lessonsR.warning || questionsR.warning || tierAgg.warning || scenariosR.warning || topicGroupsR.warning,
   );
+
+  const topicCategoryCount = topicGroupsR.value.length;
 
   return NextResponse.json({
     totalLessons: lessonsR.value,
@@ -78,6 +98,7 @@ export async function GET() {
     storeProductCount: 0,
     questionsByTier,
     scenarioCount: scenariosR.value,
+    topicCategoryCount,
     ...(degraded ? { degraded: true } : {}),
   });
 }
