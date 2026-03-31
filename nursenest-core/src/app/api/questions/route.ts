@@ -240,7 +240,7 @@ export async function GET(req: NextRequest) {
       };
 
       let topicRelaxed = false;
-      let questions: Awaited<ReturnType<typeof prisma.examQuestion.findMany>>;
+      let questions;
 
       if (sort === "random") {
         const accessSql = examQuestionAccessWhereSql(gate.entitlement);
@@ -437,7 +437,7 @@ export async function GET(req: NextRequest) {
       exam: true,
     } as const;
 
-    let questions: Awaited<ReturnType<typeof prisma.examQuestion.findMany>>;
+    let questions;
 
     if (sort === "random") {
       const freeSql = freemiumExamQuestionWhereSql(country, tier);

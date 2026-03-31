@@ -20,7 +20,7 @@ export function FreemiumQuestionPeek() {
     const ac = new AbortController();
     (async () => {
       try {
-        const res = await fetch("/api/questions?pageSize=5", { signal: ac.signal });
+        const res = await fetch("/api/questions?pageSize=5&sort=random&page=1", { signal: ac.signal });
         const data = await res.json();
         if (!res.ok) {
           if (!cancelled) setError(data.message ?? "Preview unavailable.");

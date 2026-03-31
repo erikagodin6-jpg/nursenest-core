@@ -4,8 +4,11 @@ import { FreemiumQuestionPeek } from "@/components/student/freemium-question-pee
 import { QuestionBankPracticeClient } from "@/components/student/question-bank-practice-client";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/db";
+import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
+import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import { getServerPremiumProtectionFlags } from "@/lib/premium-protection/config";
 import { maskUserLabelForWatermark } from "@/lib/premium-protection/mask-user-label";
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
@@ -30,6 +33,26 @@ export default async function QuestionBankPage() {
         </p>
       </main>
     );
+  }
+
+  let pathwayOptions: { id: string; label: string }[] = [];
+  let defaultPathwayId: string | null = null;
+  if (userId && entitlement !== "error" && entitlement.hasAccess && isDatabaseUrlConfigured()) {
+    try {
+      pathwayOptions = listPathwaysCompatibleWithSubscription(entitlement).map((p) => ({
+        id: p.id,
+        label: p.displayName,
+      }));
+      const u = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { learnerPath: true },
+      });
+      const lp = u?.learnerPath?.trim();
+      defaultPathwayId =
+        lp && pathwayOptions.some((o) => o.id === lp) ? lp : (pathwayOptions[0]?.id ?? null);
+    } catch {
+      /* optional */
+    }
   }
 
   if (!entitlement.hasAccess) {
@@ -81,6 +104,8 @@ export default async function QuestionBankPage() {
             userId={userId}
             userLabel={userLabel}
             protectionFlags={protectionFlags}
+            pathwayOptions={pathwayOptions}
+            defaultPathwayId={defaultPathwayId}
           />
         </Suspense>
       ) : null}

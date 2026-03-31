@@ -1,7 +1,7 @@
 "use client";
 
 import { LearnerNoteScope } from "@prisma/client";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
 import { ProtectedPremiumContent } from "@/components/student/protected-premium-content";
@@ -24,6 +24,9 @@ type QFull = {
   topic?: string | null;
   exam?: string | null;
 };
+
+/** Study preset: matches product “random quiz”, “topic drill”, “pathway mixed exam”. */
+export type QuestionBankPreset = "random_bank" | "topic_drill" | "pathway_mixed";
 
 function parseOptions(raw: unknown): string[] {
   if (Array.isArray(raw)) return raw.map((x) => String(x));
@@ -53,14 +56,25 @@ function appendRollup(userId: string, topic: string | null | undefined, correct:
   }
 }
 
+function sameIdListOrderIndependent(a: string[], b: string[]): boolean {
+  if (a.length !== b.length) return false;
+  const sa = [...a].sort();
+  const sb = [...b].sort();
+  return sa.every((v, i) => v === sb[i]);
+}
+
 export function QuestionBankPracticeClient({
   userId,
   userLabel,
   protectionFlags,
+  pathwayOptions = [],
+  defaultPathwayId = null,
 }: {
   userId: string;
   userLabel: string;
   protectionFlags: PremiumProtectionFlags;
+  pathwayOptions?: { id: string; label: string }[];
+  defaultPathwayId?: string | null;
 }) {
   const searchParams = useSearchParams();
   const [phase, setPhase] = useState<"loading" | "ready" | "empty" | "error">("loading");
@@ -69,6 +83,8 @@ export function QuestionBankPracticeClient({
   const [questions, setQuestions] = useState<QFull[]>([]);
   const [topic, setTopic] = useState<string | null>(null);
   const [pathwayIdFilter, setPathwayIdFilter] = useState<string | null>(null);
+  const [preset, setPreset] = useState<QuestionBankPreset>("pathway_mixed");
+  const seenIdsRef = useRef<string[]>([]);
   const [topics, setTopics] = useState<{ topic: string; count: number }[]>([]);
   const [topicMenuTruncationNotice, setTopicMenuTruncationNotice] = useState<string | null>(null);
   const [discoveryNotice, setDiscoveryNotice] = useState<string | null>(null);
@@ -91,18 +107,40 @@ export function QuestionBankPracticeClient({
   const current = questions[idx];
   const total = questions.length;
 
+  const topicForApi = preset === "topic_drill" ? topic : null;
+  const sortForApi = preset === "topic_drill" ? "recent" : "random";
+
+  /** Avoid one request without pathway when mixed mode will apply learner pathway on next tick. */
+  const pathwayMixedReady =
+    preset !== "pathway_mixed" || pathwayOptions.length === 0 || pathwayIdFilter != null;
+
   const loadBatch = useCallback(
-    async (t: string | null, pathwayId: string | null) => {
+    async (append: boolean) => {
       setPhase("loading");
       setError(null);
       try {
+        if (preset === "topic_drill" && !topic) {
+          setQuestions([]);
+          setEmptyCopy({
+            title: "Pick a topic",
+            body: "Choose a topic from the menu below to start a topic-based quiz (recent items first).",
+          });
+          setPhase("empty");
+          return;
+        }
+
         const qs = new URLSearchParams({
           mode: "preview",
           page: "1",
           pageSize: "20",
+          sort: sortForApi,
         });
-        if (t) qs.set("topic", t);
-        if (pathwayId) qs.set("pathwayId", pathwayId);
+        if (topicForApi) qs.set("topic", topicForApi);
+        if (pathwayIdFilter) qs.set("pathwayId", pathwayIdFilter);
+        if (append && seenIdsRef.current.length > 0) {
+          qs.set("excludeIds", seenIdsRef.current.join(","));
+        }
+
         const res = await fetch(`/api/questions?${qs.toString()}`);
         let data = {} as {
           questions?: QFull[];
@@ -127,51 +165,76 @@ export function QuestionBankPracticeClient({
           setSoftNotice(
             `No exact matches for topic “${data.topicRequested}”. Showing questions for your pathway instead — use the topic menu to narrow further.`,
           );
+        } else {
+          setSoftNotice(null);
         }
         const list = data.questions ?? [];
         if (list.length === 0) {
-          setQuestions([]);
-          setEmptyCopy(questionBankEmptyCopy(data.diagnostics));
-          setPhase("empty");
+          if (!append) {
+            setQuestions([]);
+            setEmptyCopy(questionBankEmptyCopy(data.diagnostics));
+            setPhase("empty");
+            seenIdsRef.current = [];
+          }
           return;
         }
         setEmptyCopy(null);
-        setQuestions(list);
-        setIdx(0);
-        setAnswer(null);
-        setGraded({});
 
-        try {
-          const sk = sessionKey(userId);
-          const raw = localStorage.getItem(sk);
-          if (raw) {
-            const saved = JSON.parse(raw) as {
-              ids?: string[];
-              idx?: number;
-              topic?: string | null;
-              pathwayId?: string | null;
-              graded?: Record<
-                string,
-                {
-                  correct: boolean;
-                  rationale: string | null;
-                  rationaleQuality?: RationaleQualityClient | null;
-                  rationaleSections?: Array<{ heading: string; body: string }> | null;
-                }
-              >;
-            };
-            if (
-              saved.ids?.[0] === list[0]?.id &&
-              (saved.topic ?? null) === (t ?? null) &&
-              (saved.pathwayId ?? null) === (pathwayId ?? null) &&
-              typeof saved.idx === "number"
-            ) {
-              setIdx(Math.min(saved.idx, list.length - 1));
-              if (saved.graded) setGraded(saved.graded);
+        if (append) {
+          setQuestions((prev) => {
+            const prevIds = new Set(prev.map((q) => q.id));
+            const merged = [...prev];
+            for (const q of list) {
+              if (!prevIds.has(q.id)) {
+                merged.push(q);
+                prevIds.add(q.id);
+              }
             }
+            return merged;
+          });
+          seenIdsRef.current = [...new Set([...seenIdsRef.current, ...list.map((q) => q.id)])];
+        } else {
+          setQuestions(list);
+          seenIdsRef.current = list.map((q) => q.id);
+          setIdx(0);
+          setAnswer(null);
+          setGraded({});
+
+          try {
+            const sk = sessionKey(userId);
+            const raw = localStorage.getItem(sk);
+            if (raw) {
+              const saved = JSON.parse(raw) as {
+                ids?: string[];
+                idx?: number;
+                topic?: string | null;
+                pathwayId?: string | null;
+                preset?: QuestionBankPreset;
+                graded?: Record<
+                  string,
+                  {
+                    correct: boolean;
+                    rationale: string | null;
+                    rationaleQuality?: RationaleQualityClient | null;
+                    rationaleSections?: Array<{ heading: string; body: string }> | null;
+                  }
+                >;
+              };
+              const listIds = list.map((q) => q.id);
+              if (
+                saved.preset === preset &&
+                (saved.topic ?? null) === (topicForApi ?? null) &&
+                (saved.pathwayId ?? null) === (pathwayIdFilter ?? null) &&
+                saved.ids &&
+                sameIdListOrderIndependent(saved.ids, listIds)
+              ) {
+                setIdx(Math.min(saved.idx ?? 0, list.length - 1));
+                if (saved.graded) setGraded(saved.graded);
+              }
+            }
+          } catch {
+            /* ignore */
           }
-        } catch {
-          /* ignore */
         }
 
         setPhase("ready");
@@ -181,15 +244,32 @@ export function QuestionBankPracticeClient({
         setError("Network error loading questions.");
       }
     },
-    [userId],
+    [userId, preset, topicForApi, topic, pathwayIdFilter, pathwayOptions, sortForApi],
   );
 
   useEffect(() => {
     const tp = searchParams.get("topic")?.trim();
     const pid = searchParams.get("pathwayId")?.trim();
+    const pr = searchParams.get("preset")?.trim();
     if (tp) setTopic(tp);
     if (pid) setPathwayIdFilter(pid);
+    if (pr === "random" || pr === "random_bank") setPreset("random_bank");
+    else if (pr === "topic" || pr === "topic_drill") setPreset("topic_drill");
+    else if (pr === "mixed" || pr === "pathway_mixed") setPreset("pathway_mixed");
   }, [searchParams]);
+
+  useEffect(() => {
+    if (preset === "random_bank") return;
+    if (defaultPathwayId && pathwayIdFilter === null) {
+      setPathwayIdFilter(defaultPathwayId);
+    }
+  }, [defaultPathwayId, pathwayIdFilter, preset]);
+
+  useEffect(() => {
+    if (preset !== "pathway_mixed") return;
+    if (pathwayIdFilter) return;
+    if (pathwayOptions.length > 0) setPathwayIdFilter(pathwayOptions[0]!.id);
+  }, [preset, pathwayIdFilter, pathwayOptions]);
 
   useEffect(() => {
     let cancelled = false;
@@ -225,7 +305,7 @@ export function QuestionBankPracticeClient({
           const cap = data.limits.topicBucketCap ?? 250;
           const omitted = data.limits.topicsOmittedCount ?? 0;
           setTopicMenuTruncationNotice(
-            `Showing the ${cap} most common topics in your bank (${omitted} question${omitted === 1 ? "" : "s"} in additional topics are not listed). Choose “All topics” to study across the full pool.`,
+            `Showing the ${cap} most common topics in your bank (${omitted} question${omitted === 1 ? "" : "s"} in additional topics are not listed). Choose “All topics” in topic drill to browse discovery buckets.`,
           );
         } else {
           setTopicMenuTruncationNotice(null);
@@ -240,8 +320,9 @@ export function QuestionBankPracticeClient({
   }, []);
 
   useEffect(() => {
-    void loadBatch(topic, pathwayIdFilter);
-  }, [loadBatch, topic, pathwayIdFilter]);
+    if (!pathwayMixedReady) return;
+    void loadBatch(false);
+  }, [loadBatch, pathwayMixedReady]);
 
   useEffect(() => {
     if (phase !== "ready" || questions.length === 0) return;
@@ -251,8 +332,9 @@ export function QuestionBankPracticeClient({
         JSON.stringify({
           ids: questions.map((q) => q.id),
           idx,
-          topic,
+          topic: topicForApi,
           pathwayId: pathwayIdFilter,
+          preset,
           graded,
           savedAt: Date.now(),
         }),
@@ -260,7 +342,7 @@ export function QuestionBankPracticeClient({
     } catch {
       /* ignore */
     }
-  }, [phase, questions, idx, topic, pathwayIdFilter, graded, userId]);
+  }, [phase, questions, idx, topicForApi, pathwayIdFilter, preset, graded, userId]);
 
   const opts = useMemo(() => (current ? parseOptions(current.options) : []), [current]);
 
@@ -327,7 +409,7 @@ export function QuestionBankPracticeClient({
         <button
           type="button"
           className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white"
-          onClick={() => void loadBatch(topic, pathwayIdFilter)}
+          onClick={() => void loadBatch(false)}
         >
           Retry
         </button>
@@ -368,15 +450,57 @@ export function QuestionBankPracticeClient({
       {softNotice ? (
         <p className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-950">{softNotice}</p>
       ) : null}
-      <div className="flex flex-wrap items-end justify-between gap-3">
+
+      <div className="flex flex-wrap items-end gap-4">
         <label className="block text-sm">
-          <span className="text-muted">Filter by topic</span>
+          <span className="text-muted">Study mode</span>
           <select
             className="ml-2 rounded-lg border border-border bg-white px-2 py-1.5 text-sm"
+            value={preset}
+            onChange={(e) => {
+              const v = e.target.value as QuestionBankPreset;
+              setPreset(v);
+              if (v === "random_bank") {
+                setTopic(null);
+                setPathwayIdFilter(null);
+              }
+              if (v === "pathway_mixed" && pathwayOptions[0]) setPathwayIdFilter(pathwayOptions[0].id);
+            }}
+          >
+            <option value="pathway_mixed">Pathway mixed exam (random, exam-aligned)</option>
+            <option value="topic_drill">Topic drill (recent)</option>
+            <option value="random_bank">Random (full tier pool)</option>
+          </select>
+        </label>
+        {pathwayOptions.length > 0 ? (
+          <label className="block text-sm">
+            <span className="text-muted">Pathway / exam mix</span>
+            <select
+              className="ml-2 max-w-[min(100%,280px)] rounded-lg border border-border bg-white px-2 py-1.5 text-sm"
+              value={pathwayIdFilter ?? ""}
+              onChange={(e) => setPathwayIdFilter(e.target.value === "" ? null : e.target.value)}
+              disabled={preset === "random_bank"}
+            >
+              {preset === "random_bank" || preset === "topic_drill" ? (
+                <option value="">All pathways (tier + country)</option>
+              ) : null}
+              {pathwayOptions.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.label}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : null}
+        <label className="block text-sm">
+          <span className="text-muted">Topic (topic drill)</span>
+          <select
+            className="ml-2 max-w-[min(100%,260px)] rounded-lg border border-border bg-white px-2 py-1.5 text-sm"
             value={topic ?? ""}
             onChange={(e) => setTopic(e.target.value === "" ? null : e.target.value)}
+            disabled={preset !== "topic_drill"}
           >
-            <option value="">All topics</option>
+            <option value="">Select topic…</option>
             {topics.map((b) => (
               <option key={b.topic} value={b.topic}>
                 {b.topic} ({b.count})
@@ -398,6 +522,9 @@ export function QuestionBankPracticeClient({
             {current.topic ? <span className="rounded-full bg-primary/10 px-2 py-0.5 text-primary">{current.topic}</span> : null}
             {current.exam ? <span>{current.exam}</span> : null}
             <span className="uppercase">{current.questionType}</span>
+            <span className="rounded-full bg-muted px-2 py-0.5 text-muted-foreground">
+              {sortForApi === "random" ? "Random" : "Recent"}
+            </span>
           </div>
 
           <p className="text-base font-medium leading-relaxed">{current.stem}</p>
@@ -481,9 +608,9 @@ export function QuestionBankPracticeClient({
                   <button
                     type="button"
                     className="rounded-full border border-primary px-4 py-2 text-sm font-semibold text-primary"
-                    onClick={() => void loadBatch(topic, pathwayIdFilter)}
+                    onClick={() => void loadBatch(true)}
                   >
-                    Load more
+                    Load more (no repeats)
                   </button>
                 )}
               </div>
@@ -512,8 +639,9 @@ export function QuestionBankPracticeClient({
           )}
 
           <p className="text-xs text-muted">
-            Progress for this batch is saved in your browser so you can refresh and continue. Scoring runs on the server—answers
-            are not graded in the page alone.
+            Progress for this batch is saved in your browser so you can refresh and continue. Random and mixed modes exclude
+            questions you have already seen this session when you load more. Scoring runs on the server—answers are not graded in
+            the page alone.
           </p>
         </div>
       </ProtectedPremiumContent>
