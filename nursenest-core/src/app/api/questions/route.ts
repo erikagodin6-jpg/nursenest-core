@@ -227,33 +227,82 @@ export async function GET(req: NextRequest) {
         pathway = null;
       }
       const baseWhere = questionAccessWhereWithPathway(gate.entitlement, pathway);
-      const whereWithTopic =
-        topicFilter && topicFilter.length > 0
-          ? { AND: [baseWhere, { topic: topicFilter }] }
-          : baseWhere;
 
-      let questions = await withRetry(() =>
-        prisma.examQuestion.findMany({
-          where: whereWithTopic,
-          select: responseMode === "full" ? fullSelect : previewSelect,
-          orderBy: { updatedAt: "desc" },
-          skip: (page - 1) * pageSize,
-          take: pageSize,
-        }),
-      );
+      const buildWhereParts = (includeTopic: boolean): Prisma.ExamQuestionWhereInput => {
+        const parts: Prisma.ExamQuestionWhereInput[] = [baseWhere];
+        if (includeTopic && topicFilter && topicFilter.length > 0) {
+          parts.push({ topic: topicFilter });
+        }
+        if (excludeIds.length > 0) {
+          parts.push({ id: { notIn: excludeIds } });
+        }
+        return parts.length === 1 ? parts[0]! : { AND: parts };
+      };
 
       let topicRelaxed = false;
-      if (questions.length === 0 && topicFilter && topicFilter.length > 0) {
+      let questions: Awaited<ReturnType<typeof prisma.examQuestion.findMany>>;
+
+      if (sort === "random") {
+        const accessSql = examQuestionAccessWhereSql(gate.entitlement);
+        const pathSql = pathwayExamKeysSql(pathway);
+        const exSql = excludeQuestionIdsSql(excludeIds);
+        let topicSql =
+          topicFilter && topicFilter.length > 0 ? topicEqualsSql(topicFilter) : Prisma.empty;
+
+        let idRows = await withRetry(() =>
+          prisma.$queryRaw<{ id: string }[]>`
+            SELECT id FROM exam_questions
+            WHERE ${accessSql} ${pathSql} ${topicSql} ${exSql}
+            ORDER BY random()
+            LIMIT ${pageSize}
+          `,
+        );
+
+        if (idRows.length === 0 && topicFilter && topicFilter.length > 0) {
+          topicSql = Prisma.empty;
+          idRows = await withRetry(() =>
+            prisma.$queryRaw<{ id: string }[]>`
+              SELECT id FROM exam_questions
+              WHERE ${accessSql} ${pathSql} ${topicSql} ${exSql}
+              ORDER BY random()
+              LIMIT ${pageSize}
+            `,
+          );
+          if (idRows.length > 0) topicRelaxed = true;
+        }
+
+        const ids = idRows.map((r) => r.id);
+        const rows = await withRetry(() =>
+          prisma.examQuestion.findMany({
+            where: { id: { in: ids } },
+            select: responseMode === "full" ? fullSelect : previewSelect,
+          }),
+        );
+        const order = new Map(ids.map((id, i) => [id, i]));
+        questions = [...rows].sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
+      } else {
+        const whereWithTopic = buildWhereParts(true);
         questions = await withRetry(() =>
           prisma.examQuestion.findMany({
-            where: baseWhere,
+            where: whereWithTopic,
             select: responseMode === "full" ? fullSelect : previewSelect,
             orderBy: { updatedAt: "desc" },
             skip: (page - 1) * pageSize,
             take: pageSize,
           }),
         );
-        if (questions.length > 0) topicRelaxed = true;
+        if (questions.length === 0 && topicFilter && topicFilter.length > 0) {
+          questions = await withRetry(() =>
+            prisma.examQuestion.findMany({
+              where: buildWhereParts(false),
+              select: responseMode === "full" ? fullSelect : previewSelect,
+              orderBy: { updatedAt: "desc" },
+              skip: (page - 1) * pageSize,
+              take: pageSize,
+            }),
+          );
+          if (questions.length > 0) topicRelaxed = true;
+        }
       }
 
       const payload =
@@ -295,6 +344,8 @@ export async function GET(req: NextRequest) {
         questions: payload,
         mode: "subscriber" as const,
         fields: responseMode,
+        sort,
+        excludeIdsCount: excludeIds.length,
         pathwayIdApplied: pathway?.id ?? null,
         pathwayIdRequested: pathwayIdParam && pathwayIdParam.length > 0 ? pathwayIdParam : null,
         topicRequested: topicFilter && topicFilter.length > 0 ? topicFilter : null,
@@ -350,6 +401,9 @@ export async function GET(req: NextRequest) {
 
   const take = Math.min(pageSize, snap.questionRemaining);
 
+  const freemiumRateLimited = enforceQuestionsListProtection(req, userId, take);
+  if (freemiumRateLimited) return freemiumRateLimited;
+
   if (responseMode === "full" && !acquireQuestionFullModeSlot(userId)) {
     safeServerLog("api_questions", "full_mode_concurrency_limit_freemium", { userId });
     return NextResponse.json(
@@ -359,34 +413,63 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const where = freemiumQuestionWhereForProfile(user.country as CountryCode, user.tier as TierCode);
-    const questions = await withRetry(() =>
-      prisma.examQuestion.findMany({
-        where,
-        select:
-          responseMode === "full"
-            ? {
-                id: true,
-                stem: true,
-                questionType: true,
-                options: true,
-                topic: true,
-                exam: true,
-              }
-            : {
-                id: true,
-                stem: true,
-                questionType: true,
-                difficulty: true,
-                exam: true,
-                topic: true,
-                bodySystem: true,
-              },
-        orderBy: { updatedAt: "desc" },
-        skip: 0,
-        take,
-      }),
-    );
+    const country = user.country as CountryCode;
+    const tier = user.tier as TierCode;
+    const baseFreemium = freemiumQuestionWhereForProfile(country, tier);
+    const freeWhere =
+      excludeIds.length > 0 ? { AND: [baseFreemium, { id: { notIn: excludeIds } }] } : baseFreemium;
+
+    const previewFreemiumSelect = {
+      id: true,
+      stem: true,
+      questionType: true,
+      difficulty: true,
+      exam: true,
+      topic: true,
+      bodySystem: true,
+    } as const;
+    const fullFreemiumSelect = {
+      id: true,
+      stem: true,
+      questionType: true,
+      options: true,
+      topic: true,
+      exam: true,
+    } as const;
+
+    let questions: Awaited<ReturnType<typeof prisma.examQuestion.findMany>>;
+
+    if (sort === "random") {
+      const freeSql = freemiumExamQuestionWhereSql(country, tier);
+      const exSql = excludeQuestionIdsSql(excludeIds);
+      const idRows = await withRetry(() =>
+        prisma.$queryRaw<{ id: string }[]>`
+          SELECT id FROM exam_questions
+          WHERE ${freeSql} ${exSql}
+          ORDER BY random()
+          LIMIT ${take}
+        `,
+      );
+      const ids = idRows.map((r) => r.id);
+      const rows = await withRetry(() =>
+        prisma.examQuestion.findMany({
+          where: { id: { in: ids } },
+          select: responseMode === "full" ? fullFreemiumSelect : previewFreemiumSelect,
+        }),
+      );
+      const order = new Map(ids.map((id, i) => [id, i]));
+      questions = [...rows].sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
+    } else {
+      questions = await withRetry(() =>
+        prisma.examQuestion.findMany({
+          where: freeWhere,
+          select: responseMode === "full" ? fullFreemiumSelect : previewFreemiumSelect,
+          orderBy: { updatedAt: "desc" },
+          skip: 0,
+          take,
+        }),
+      );
+    }
 
     const used = questions.length;
     if (used > 0) {
@@ -437,6 +520,8 @@ export async function GET(req: NextRequest) {
       questions: sanitized,
       mode: "freemium" as const,
       fields: responseMode,
+      sort,
+      excludeIdsCount: excludeIds.length,
       freemiumRemainingAfterBatch: remaining,
     };
     logLargeApiResponse("/api/questions", estimateJsonUtf8Bytes(freemiumBody));
