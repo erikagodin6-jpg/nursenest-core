@@ -570,9 +570,13 @@ function main() {
       if (regionScope === "US_ONLY" || regionScope === "BOTH") tags.add(PRESET_US_RN_FULL_TAG);
       if (regionScope === "CA_ONLY" || regionScope === "BOTH") tags.add(PRESET_CA_RN_FULL_TAG);
     }
-    if (mTier === "rpn" && track) {
+    if ((mTier === "rpn" || mTier === "lvn") && track) {
       if (track === "nclex-pn-us") tags.add(PRESET_US_PN_FULL_TAG);
       if (track === "rex-pn-ca") tags.add(PRESET_CA_RPN_FULL_TAG);
+      if (track === "pn-transnational") {
+        tags.add(PRESET_US_PN_FULL_TAG);
+        tags.add(PRESET_CA_RPN_FULL_TAG);
+      }
     }
 
     const rowOut: Record<string, unknown> = {
@@ -718,6 +722,22 @@ function main() {
   const withCaRnPreset = questionsOut.filter((q) => (q.tags as string[]).includes(PRESET_CA_RN_FULL_TAG)).length;
   const withUsPnPreset = questionsOut.filter((q) => (q.tags as string[]).includes(PRESET_US_PN_FULL_TAG)).length;
   const withCaRpnPreset = questionsOut.filter((q) => (q.tags as string[]).includes(PRESET_CA_RPN_FULL_TAG)).length;
+  const tagSet = (q: Record<string, unknown>) => new Set<string>((q.tags as string[]) ?? []);
+  const countryDistribution = {
+    /** Both `country:US` and `country:CA` tags (BOTH region_scope). */
+    taggedBothCountries: questionsOut.filter((q) => {
+      const t = tagSet(q);
+      return t.has("country:US") && t.has("country:CA");
+    }).length,
+    usTagOnly: questionsOut.filter((q) => {
+      const t = tagSet(q);
+      return t.has("country:US") && !t.has("country:CA");
+    }).length,
+    caTagOnly: questionsOut.filter((q) => {
+      const t = tagSet(q);
+      return t.has("country:CA") && !t.has("country:US");
+    }).length,
+  };
   const generationStats = {
     sourceFile: "data/replit-exports/exam_questions.json",
     rawRows: rawList.length,
@@ -729,6 +749,7 @@ function main() {
       usPnFull: withUsPnPreset,
       caRpnFull: withCaRpnPreset,
     },
+    countryTagDistribution: countryDistribution,
     skippedNotPublished,
     skippedInvalidMcq,
     skippedNonNursingTier,

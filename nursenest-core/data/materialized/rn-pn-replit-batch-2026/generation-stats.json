@@ -13,6 +13,11 @@
     "usPnFull": 76,
     "caRpnFull": 4136
   },
+  "countryTagDistribution": {
+    "taggedBothCountries": 7230,
+    "usTagOnly": 74,
+    "caTagOnly": 491
+  },
   "skippedNotPublished": 53,
   "skippedInvalidMcq": 1591,
   "skippedNonNursingTier": 3580,
