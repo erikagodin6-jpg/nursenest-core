@@ -349,6 +349,26 @@ model ExamQuestion {
   @@index([status, exam, tier, countryCode])
 }
 
+/**
+ * Allied exam blueprint definitions (legacy monolith `allied_blueprints` / Replit export).
+ * Referenced by import pipelines; no FK from `exam_questions` required.
+ */
+model AlliedBlueprint {
+  id                       String   @id @default(uuid()) @db.VarChar
+  careerType               String   @map("career_type")
+  version                  Int      @default(1)
+  domains                  Json
+  difficultyDistribution   Json     @map("difficulty_distribution")
+  cognitiveDistribution    Json     @map("cognitive_distribution")
+  allowedQuestionTypes     Json     @map("allowed_question_types")
+  isActive                 Boolean? @default(true) @map("is_active")
+  createdAt                DateTime @default(now()) @map("created_at")
+
+  @@index([careerType, isActive])
+  @@index([careerType, version])
+  @@map("allied_blueprints")
+}
+
 model FlashcardDeck {
   id          String                   @id @default(cuid())
   slug        String                   @unique

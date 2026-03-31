@@ -1,5 +1,9 @@
--- AlterEnum: add ALLIED to TierCode
-ALTER TYPE "TierCode" ADD VALUE 'ALLIED';
+-- AlterEnum: add ALLIED to TierCode (idempotent; safe if migration is re-tried after partial apply)
+DO $tiercode_allied$ BEGIN
+  ALTER TYPE "TierCode" ADD VALUE 'ALLIED';
+EXCEPTION
+  WHEN duplicate_object THEN NULL;
+END $tiercode_allied$;
 
 -- AlterTable User: onboarding + freemium counters
 ALTER TABLE "User" ADD COLUMN IF NOT EXISTS "examFocus" TEXT;
