@@ -34,14 +34,63 @@ export function preNursingHubBreadcrumbs(): BreadcrumbResolution {
   return simpleMarketingBreadcrumbs("Pre-nursing", "/pre-nursing");
 }
 
-export function preNursingModuleBreadcrumbs(moduleTitle: string, slug: string): BreadcrumbResolution {
-  const path = `/pre-nursing/${slug}`;
+export function preNursingLessonsHubBreadcrumbs(page: number): BreadcrumbResolution {
+  const safePage = Math.max(1, page);
+  if (safePage <= 1) {
+    return {
+      crumbs: [HOME, { name: "Pre-nursing", href: "/pre-nursing" }, { name: "Lessons", href: undefined }],
+      schemaItems: [
+        { name: "Home", item: abs("/") },
+        { name: "Pre-nursing", item: abs("/pre-nursing") },
+        { name: "Lessons", item: abs("/pre-nursing/lessons") },
+      ],
+    };
+  }
   return {
-    crumbs: [HOME, { name: "Pre-nursing", href: "/pre-nursing" }, { name: moduleTitle, href: undefined }],
+    crumbs: [
+      HOME,
+      { name: "Pre-nursing", href: "/pre-nursing" },
+      { name: "Lessons", href: "/pre-nursing/lessons" },
+      { name: `Page ${safePage}`, href: undefined },
+    ],
     schemaItems: [
       { name: "Home", item: abs("/") },
       { name: "Pre-nursing", item: abs("/pre-nursing") },
+      { name: "Lessons", item: abs("/pre-nursing/lessons") },
+      { name: `Page ${safePage}`, item: abs(`/pre-nursing/lessons?page=${safePage}`) },
+    ],
+  };
+}
+
+export function preNursingModuleBreadcrumbs(moduleTitle: string, slug: string): BreadcrumbResolution {
+  const path = `/pre-nursing/lessons/${slug}`;
+  return {
+    crumbs: [
+      HOME,
+      { name: "Pre-nursing", href: "/pre-nursing" },
+      { name: "Lessons", href: "/pre-nursing/lessons" },
+      { name: moduleTitle, href: undefined },
+    ],
+    schemaItems: [
+      { name: "Home", item: abs("/") },
+      { name: "Pre-nursing", item: abs("/pre-nursing") },
+      { name: "Lessons", item: abs("/pre-nursing/lessons") },
       { name: moduleTitle, item: abs(path) },
+    ],
+  };
+}
+
+export function preNursingStudyPlanBreadcrumbs(): BreadcrumbResolution {
+  return {
+    crumbs: [
+      HOME,
+      { name: "Pre-nursing", href: "/pre-nursing" },
+      { name: "Study planning", href: undefined },
+    ],
+    schemaItems: [
+      { name: "Home", item: abs("/") },
+      { name: "Pre-nursing", item: abs("/pre-nursing") },
+      { name: "Study planning", item: abs("/pre-nursing/study-plan") },
     ],
   };
 }

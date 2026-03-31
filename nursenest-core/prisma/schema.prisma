@@ -110,6 +110,12 @@ enum ExamDatePlanType {
   CONFIRMED
 }
 
+/** Target readiness / program start for free Pre-Nursing pacing (not a licensure exam date). */
+enum PreNursingDatePlanType {
+  UNSURE
+  PROPOSED
+}
+
 model User {
   id                      String         @id @default(cuid())
   email                   String         @unique
@@ -132,6 +138,12 @@ model User {
   targetExamPathwayId     String?        @db.VarChar(64)
   /** When tier is ALLIED, optional short profession key (e.g. paramedic, mlt) for scoped UX and recommendations. */
   alliedProfessionKey     String?        @db.VarChar(64)
+  /** Free Pre-Nursing: optional target readiness / school start date (UTC midnight). */
+  preNursingTargetDate      DateTime?
+  preNursingDatePlanType    PreNursingDatePlanType?
+  preNursingGoalSetAt       DateTime?
+  /** Soft hint for marketing CTAs: rn | rpn | pn | np | unsure */
+  preNursingFuturePathwayHint String?    @db.VarChar(16)
   /** Optional learner preference: light | steady | intensive — used for copy only, not hours math. */
   studyCadencePreference  String?        @db.VarChar(32)
   onboardingCompletedAt   DateTime?

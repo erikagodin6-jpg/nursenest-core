@@ -24,6 +24,7 @@
 export const SITEMAP_SINGLE_URLSET_SOFT_WARN_URLS = 45_000;
 
 import { ALLIED_PROFESSIONS } from "@/lib/allied/allied-professions-registry";
+import { PRE_NURSING_MODULE_REGISTRY } from "@/content/pre-nursing/pre-nursing-registry";
 import { PROGRAMMATIC_SLUG_TO_PATHWAY_PATH } from "@/lib/exam-pathways/programmatic-slug-redirects";
 import { buildExamPathwayPath, getExamPathwayById, listPublicExamPathways } from "@/lib/exam-pathways/exam-product-registry";
 import {
@@ -71,6 +72,16 @@ export function collectAlliedMarketingUrls(origin: string): string[] {
   for (const p of ALLIED_PROFESSIONS) {
     urls.push(`${o}/allied-health/${p.segment}`);
     urls.push(`${o}/allied-health/${p.professionKey}/lessons`);
+  }
+  return urls;
+}
+
+/** Pre-Nursing public hub, lesson index, study planning, and module pages (registry-backed). */
+export function collectPreNursingSeoUrls(origin: string): string[] {
+  const o = normalizeOrigin(origin);
+  const urls = [`${o}/pre-nursing`, `${o}/pre-nursing/lessons`, `${o}/pre-nursing/study-plan`];
+  for (const m of PRE_NURSING_MODULE_REGISTRY) {
+    urls.push(`${o}/pre-nursing/lessons/${m.slug}`);
   }
   return urls;
 }
@@ -215,11 +226,16 @@ export async function collectCoreUrls(origin: string): Promise<string[]> {
     add("/blog"),
     add("/faq"),
     add("/tools"),
-    add("/pre-nursing"),
     add("/case-studies"),
   ];
   const lessonUrls = await collectPathwayLessonSeoUrls(o);
-  return [...base, ...collectExamPathwayUrls(o), ...collectAlliedMarketingUrls(o), ...lessonUrls];
+  return [
+    ...base,
+    ...collectExamPathwayUrls(o),
+    ...collectAlliedMarketingUrls(o),
+    ...collectPreNursingSeoUrls(o),
+    ...lessonUrls,
+  ];
 }
 
 /** seo-pages.xml — English canonical programmatic URLs at `/{slug}` (rewritten to /seo/[slug] internally). */
