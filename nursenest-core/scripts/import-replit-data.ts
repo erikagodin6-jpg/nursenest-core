@@ -684,11 +684,18 @@ async function main() {
   if (args.analyzeOnly) return;
 
   const log = { invalid: [] as { reason: string; count: number }[] };
-  const report: Record<string, unknown> = {
+  const report: {
+    ok: boolean;
+    dryRun: boolean;
+    exportDir: string;
+    phases: unknown[];
+    invalid_samples?: typeof log.invalid;
+    allied_subprocess?: unknown;
+  } = {
     ok: true,
     dryRun: args.dryRun,
     exportDir,
-    phases: [] as unknown[],
+    phases: [],
   };
 
   if (args.dryRun) {

@@ -71,13 +71,13 @@ function MedicationCard({ m }: { m: MedicationEntry }) {
         {m.sideEffects ? (
           <div className="whitespace-pre-wrap">
             <span className="font-medium text-foreground">Side effects: </span>
-            {m.sideEffects}
+            {Array.isArray(m.sideEffects) ? m.sideEffects.join("; ") : m.sideEffects}
           </div>
         ) : null}
         {m.contra ? (
           <div className="whitespace-pre-wrap">
             <span className="font-medium text-foreground">Contraindications: </span>
-            {m.contra}
+            {Array.isArray(m.contra) ? m.contra.join("; ") : m.contra}
           </div>
         ) : null}
         {m.pearl ? (
@@ -91,12 +91,13 @@ function MedicationCard({ m }: { m: MedicationEntry }) {
   );
 }
 
-function QuizBlock({ title, questions }: { title: string; questions: QuizQuestion[] }) {
-  if (!questions?.length) return null;
+function QuizBlock({ title, questions }: { title: string; questions: Array<QuizQuestion | undefined> | undefined }) {
+  const filtered = questions?.filter((q): q is QuizQuestion => Boolean(q?.question && q.options?.length));
+  if (!filtered?.length) return null;
   return (
     <Section title={title}>
       <ol className="mt-2 list-decimal space-y-4 pl-5 text-sm text-[var(--theme-body-text)]">
-        {questions.map((q, i) => {
+        {filtered.map((q, i) => {
           const correctIdx = q.correct ?? q.correctIndex ?? 0;
           return (
           <li key={i} className="marker:font-semibold">
@@ -111,7 +112,7 @@ function QuizBlock({ title, questions }: { title: string; questions: QuizQuestio
             {q.rationale ? (
               <p className="mt-2 text-xs text-muted-foreground whitespace-pre-wrap">
                 <span className="font-semibold text-foreground">Rationale: </span>
-                {q.rationale}
+                {Array.isArray(q.rationale) ? q.rationale.join(" ") : q.rationale}
               </p>
             ) : null}
           </li>

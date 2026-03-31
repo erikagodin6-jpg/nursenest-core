@@ -1,23 +1,39 @@
-export type QuizQuestion = { question: string; options: string[]; correct: number; rationale: string };
+export type QuizQuestion = {
+  question: string;
+  options: string[];
+  /** Zero-based index of the correct option */
+  correct?: number;
+  /** Alias used in some allied-health lesson bundles */
+  correctIndex?: number;
+  rationale: string | string[];
+};
 
 export type MedicationEntry =
-  | { name: string; type: string; action: string; sideEffects: string; contra: string; pearl: string }
+  | {
+      name: string;
+      type: string;
+      action: string;
+      sideEffects: string | string[];
+      contra: string | string[];
+      pearl: string;
+    }
   | { name: string; dose: string; route: string; purpose: string };
 
 export type LessonContent = {
   title: string;
-  cellular: { title: string; content: string } | string;
+  cellular: { title: string; content: string; image?: string } | string;
   riskFactors?: string[];
   diagnostics?: string[];
   management?: string[];
   nursingActions?: string[];
   assessmentFindings?: string[];
-  signs: { left: string[]; right: string[] } | string[];
-  medications: MedicationEntry[];
-  pearls: string[];
+  signs?: { left: string[]; right: string[] } | string[];
+  medications?: MedicationEntry[];
+  pearls?: string[];
   lifespan?: { title: string; content: string };
-  quiz: QuizQuestion[];
-  preTest?: QuizQuestion[];
-  postTest?: QuizQuestion[];
+  /** Some generated bundles use sparse arrays; renderers should skip empty slots. */
+  quiz?: Array<QuizQuestion | undefined>;
+  preTest?: Array<QuizQuestion | undefined>;
+  postTest?: Array<QuizQuestion | undefined>;
   image?: string;
 };

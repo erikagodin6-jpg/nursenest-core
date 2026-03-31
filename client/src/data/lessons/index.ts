@@ -562,8 +562,8 @@ function isPlaceholder(lesson: LessonContent): boolean {
   if (boilerplateMgmtCount >= 3) return true;
 
   for (const med of meds) {
-    if (typeof med.type === "string" && med.type.startsWith("First-Line Agent for")) return true;
-    if (typeof med.type === "string" && med.type.startsWith("Second-Line/Adjunctive Agent for")) return true;
+    if (med && "type" in med && typeof med.type === "string" && med.type.startsWith("First-Line Agent for")) return true;
+    if (med && "type" in med && typeof med.type === "string" && med.type.startsWith("Second-Line/Adjunctive Agent for")) return true;
   }
 
   const genericQuizPatterns = [
@@ -574,7 +574,7 @@ function isPlaceholder(lesson: LessonContent): boolean {
   const quiz = lesson.quiz || [];
   if (quiz.length > 0) {
     const genericQuizCount = quiz.filter((q) =>
-      genericQuizPatterns.some(p => q.question.includes(p))
+      q ? genericQuizPatterns.some((p) => q.question.includes(p)) : false
     ).length;
     if (genericQuizCount >= 2 && quiz.length <= 3) return true;
   }
@@ -622,8 +622,13 @@ function isPlaceholder(lesson: LessonContent): boolean {
     return true;
   }
 
-  if (quiz.length === 1 && quiz[0].question.includes("A 58-year-old patient presents with symptoms consistent with")) {
-    const opts = quiz[0].options || [];
+  const firstQuiz = quiz[0];
+  if (
+    quiz.length === 1 &&
+    firstQuiz &&
+    firstQuiz.question.includes("A 58-year-old patient presents with symptoms consistent with")
+  ) {
+    const opts = firstQuiz.options || [];
     if (opts.some((o: string) => o === "Prescribe empiric treatment without further evaluation")) return true;
   }
 
