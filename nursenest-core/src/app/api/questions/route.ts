@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { freemiumQuestionWhereForProfile, questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
@@ -26,9 +27,36 @@ import { diagnoseSubscriberQuestionListEmpty } from "@/lib/questions/question-li
 import { logLargeApiResponse } from "@/lib/observability/perf-log";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { MAX_LIST_SKIP_ROWS_DEFAULT } from "@/lib/api/api-pagination-limits";
+import { enforceQuestionsListProtection } from "@/lib/http/api-protection";
+import {
+  examQuestionAccessWhereSql,
+  excludeQuestionIdsSql,
+  freemiumExamQuestionWhereSql,
+  pathwayExamKeysSql,
+  topicEqualsSql,
+} from "@/lib/questions/exam-question-access-sql";
 
 /** Deep offset pagination is expensive on large tables; reject before issuing heavy skip scans. */
 const MAX_QUESTION_LIST_SKIP_ROWS = MAX_LIST_SKIP_ROWS_DEFAULT;
+const MAX_EXCLUDE_IDS = 400;
+
+function parseExcludeIdsParam(raw: string | null): string[] {
+  if (!raw || raw.trim().length === 0) return [];
+  const parts = raw
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  const out: string[] = [];
+  const seen = new Set<string>();
+  for (const p of parts) {
+    if (p.length < 8 || p.length > 64) continue;
+    if (seen.has(p)) continue;
+    seen.add(p);
+    out.push(p);
+    if (out.length >= MAX_EXCLUDE_IDS) break;
+  }
+  return out;
+}
 
 function logSubscriberPayload(
   approxPayloadBytes: number,
@@ -109,8 +137,21 @@ export async function GET(req: NextRequest) {
   const topicFilter = searchParams.get("topic")?.trim();
   const pathwayIdParam = searchParams.get("pathwayId")?.trim();
   const responseMode = parseQuestionListMode(searchParams.get("mode"));
+  const sortRaw = searchParams.get("sort")?.trim().toLowerCase() ?? "recent";
+  const sort = sortRaw === "random" ? "random" : "recent";
+  const excludeIds = parseExcludeIdsParam(searchParams.get("excludeIds"));
 
-  const skipRows = (page - 1) * pageSize;
+  if (sort === "random" && page > 1 && excludeIds.length === 0) {
+    return NextResponse.json(
+      {
+        error: "Random mode uses page=1, or pass excludeIds for additional batches.",
+        code: "random_page_invalid",
+      },
+      { status: 400 },
+    );
+  }
+
+  const skipRows = sort === "random" ? 0 : (page - 1) * pageSize;
   if (skipRows > MAX_QUESTION_LIST_SKIP_ROWS) {
     safeServerLog("api_questions", "pagination_depth_rejected", {
       skipRows,
@@ -145,6 +186,9 @@ export async function GET(req: NextRequest) {
     const gate = await requireSubscriberSession();
     if (!gate.ok) return gate.response;
     setSentryServerContext({ route: "/api/questions", feature: "question", userId: gate.userId });
+
+    const rateLimited = enforceQuestionsListProtection(req, gate.userId, pageSize);
+    if (rateLimited) return rateLimited;
 
     await seedMinimalQuestionBankIfEmpty();
 
