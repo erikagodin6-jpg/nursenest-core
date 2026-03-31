@@ -75,6 +75,12 @@ enum ExamSessionStatus {
   COMPLETED
 }
 
+enum PracticeTestStatus {
+  IN_PROGRESS
+  COMPLETED
+  ABANDONED
+}
+
 /** Who can browse/study a flashcard deck from marketing vs subscriber surfaces. */
 enum FlashcardDeckVisibility {
   PUBLIC_PREVIEW
@@ -125,6 +131,7 @@ model User {
   flashcardProgress       FlashcardProgress[]
   flashcardStudySessions  FlashcardStudySession[]
   flashcardUserStats      FlashcardUserStats?
+  practiceTests           PracticeTest[]
 }
 
 /** Idempotency and cooldown tracking for retention and transactional emails. */
@@ -569,6 +576,31 @@ model ExamSession {
 
   @@index([userId, status])
   @@index([examId])
+}
+
+/** Learner-built timed/untimed practice tests with saved progress and results. */
+model PracticeTest {
+  id           String             @id @default(cuid())
+  userId       String
+  user         User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title        String?
+  /** Build params: topics, selectionMode, difficulty bounds, pathwayId, etc. */
+  config       Json
+  questionIds  Json
+  answers      Json               @default("{}")
+  cursorIndex  Int                @default(0)
+  status       PracticeTestStatus @default(IN_PROGRESS)
+  timedMode    Boolean            @default(false)
+  timeLimitSec Int?
+  elapsedMs    Int?
+  startedAt    DateTime           @default(now())
+  completedAt  DateTime?
+  /** Score, topic breakdown, weak areas — set when status = COMPLETED. */
+  results      Json?
+  updatedAt    DateTime           @updatedAt
+
+  @@index([userId, status, updatedAt])
+  @@map("practice_tests")
 }
 
 model Progress {
