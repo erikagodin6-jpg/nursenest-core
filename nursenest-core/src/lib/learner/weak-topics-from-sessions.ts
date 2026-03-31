@@ -6,12 +6,23 @@ import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { answerMatches } from "@/lib/exams/score-session-answers";
 import { sanitizeSessionQuestionIds } from "@/lib/exams/exam-session-bounds";
 
+/** Derived tier for dashboard / planner copy (centralized weak-area system). */
+export type TopicStrength = "strong" | "moderate" | "weak";
+
 export type WeakTopicRow = {
   topic: string;
   missed: number;
   attempted: number;
   missRate: number;
+  strength?: TopicStrength;
+  /** ISO timestamp of last incorrect attempt when known. */
+  lastWrongAt?: string | null;
+  wrongStreak?: number;
 };
+
+export function normalizeTopicLabel(topic: string | null | undefined): string {
+  return (topic?.trim() || "General").slice(0, 80);
+}
 
 /**
  * Aggregates missed items by topic from recent completed exam sessions (tier + country scoped questions only).
@@ -52,7 +63,7 @@ export async function loadWeakTopicsFromExamSessions(
     });
 
     for (const q of qs) {
-      const label = (q.topic?.trim() || "General").slice(0, 80);
+      const label = normalizeTopicLabel(q.topic);
       attempted.set(label, (attempted.get(label) ?? 0) + 1);
       const ok = answerMatches(q.questionType, q.correctAnswer as Prisma.JsonValue, answers[q.id]);
       if (!ok) {

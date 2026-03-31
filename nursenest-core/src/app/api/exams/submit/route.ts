@@ -7,7 +7,8 @@ import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
-import { scoreSessionAnswers } from "@/lib/exams/score-session-answers";
+import { collectSessionTopicOutcomes, scoreSessionAnswers } from "@/lib/exams/score-session-answers";
+import { recordTopicOutcomesSequential } from "@/lib/learner/topic-performance";
 import { productEvent } from "@/lib/observability/product-events";
 
 const schema = z
@@ -153,6 +154,22 @@ export async function POST(req: Request) {
         return NextResponse.json({ attempt: result.attempt, idempotent: true });
       }
       if (result.kind === "created" && result.attempt) {
+        if (parsed.data.sessionId && parsed.data.answers) {
+          try {
+            const outcomes = await collectSessionTopicOutcomes(
+              parsed.data.sessionId,
+              gate.userId,
+              parsed.data.examId,
+              parsed.data.answers,
+              gate.entitlement,
+            );
+            if (outcomes?.length) {
+              await recordTopicOutcomesSequential(gate.userId, outcomes);
+            }
+          } catch {
+            /* best-effort */
+          }
+        }
         return NextResponse.json({ attempt: result.attempt });
       }
     } catch (e) {

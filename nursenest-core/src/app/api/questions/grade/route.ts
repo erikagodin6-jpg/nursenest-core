@@ -6,6 +6,8 @@ import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
 import type { Prisma } from "@prisma/client";
+import { recordTopicOutcomesSequential } from "@/lib/learner/topic-performance";
+import { normalizeTopicLabel } from "@/lib/learner/weak-topics-from-sessions";
 
 function normalizeCorrect(correctAnswer: Prisma.JsonValue | null | undefined): string[] {
   if (correctAnswer == null) return [];
@@ -73,12 +75,21 @@ export async function POST(req: Request) {
 
     const correct = gradeMatches(row.questionType, expected, body.answer);
 
+    try {
+      await recordTopicOutcomesSequential(gate.userId, [
+        { topic: normalizeTopicLabel(row.topic), correct },
+      ]);
+    } catch {
+      /* ledger is best-effort */
+    }
+
     return NextResponse.json({
       correct,
       rationale: row.rationale ?? null,
       topic: row.topic ?? null,
       bodySystem: row.bodySystem ?? null,
       questionType: row.questionType,
+      topicStatsUpdated: true,
     });
   } catch (e) {
     safeServerLogCritical("api_questions_grade", "failed", { questionId }, e);

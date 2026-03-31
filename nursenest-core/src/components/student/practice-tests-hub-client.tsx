@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import type { PracticeTestSelectionMode } from "@/lib/practice-tests/types";
+import type { CatSelectionBasis, PracticeTestSelectionMode } from "@/lib/practice-tests/types";
 
 type TestListRow = {
   id: string;
@@ -22,6 +23,7 @@ type TestListRow = {
 };
 
 export function PracticeTestsHubClient() {
+  const searchParams = useSearchParams();
   const [topics, setTopics] = useState<{ topic: string; count: number }[]>([]);
   const [loading, setLoading] = useState(true);
   const [list, setList] = useState<TestListRow[]>([]);
@@ -31,6 +33,7 @@ export function PracticeTestsHubClient() {
   const [title, setTitle] = useState("");
   const [questionCount, setQuestionCount] = useState(20);
   const [selectionMode, setSelectionMode] = useState<PracticeTestSelectionMode>("random");
+  const [catSelectionBasis, setCatSelectionBasis] = useState<CatSelectionBasis>("random");
   const [topicPicks, setTopicPicks] = useState<string[]>([]);
   const [topicInput, setTopicInput] = useState("");
   const [difficultyMin, setDifficultyMin] = useState<number | "">("");
@@ -55,6 +58,17 @@ export function PracticeTestsHubClient() {
   useEffect(() => {
     void loadList();
   }, [loadList]);
+
+  useEffect(() => {
+    if (searchParams.get("focus") !== "weak") return;
+    setSelectionMode((prev) => {
+      if (prev === "cat") {
+        setCatSelectionBasis("weak");
+        return prev;
+      }
+      return "weak";
+    });
+  }, [searchParams]);
 
   useEffect(() => {
     let cancelled = false;
@@ -98,11 +112,12 @@ export function PracticeTestsHubClient() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           title: title.trim() || undefined,
-          questionCount,
+          questionCount: selectionMode === "cat" ? Math.max(10, questionCount) : questionCount,
           topicNames: topicPicks,
           difficultyMin: difficultyMin === "" ? null : difficultyMin,
           difficultyMax: difficultyMax === "" ? null : difficultyMax,
           selectionMode,
+          ...(selectionMode === "cat" ? { catSelectionBasis } : {}),
           pathwayId: null,
           timedMode,
           timeLimitSec: timedMode ? Math.round(timeLimitMin * 60) : null,
@@ -133,8 +148,9 @@ export function PracticeTestsHubClient() {
       <section className="nn-card p-6">
         <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Build a practice test</h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          Questions are drawn only from your plan’s tier and region. Choose random mix, target topics, or focus weak areas
-          from recent practice exams.
+          Questions are drawn only from your plan’s tier and region. Choose a linear test or{" "}
+          <strong className="text-foreground">adaptive (CAT)</strong> that adjusts difficulty from your performance and
+          weak-area history.
         </p>
 
         <div className="mt-6 grid gap-4 md:grid-cols-2">
@@ -148,10 +164,12 @@ export function PracticeTestsHubClient() {
             />
           </label>
           <label className="block text-sm">
-            <span className="text-muted-foreground">Number of questions (5–75)</span>
+            <span className="text-muted-foreground">
+              {selectionMode === "cat" ? "Maximum questions (cap, 10–75)" : "Number of questions (5–75)"}
+            </span>
             <input
               type="number"
-              min={5}
+              min={selectionMode === "cat" ? 10 : 5}
               max={75}
               className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm"
               value={questionCount}
@@ -168,6 +186,7 @@ export function PracticeTestsHubClient() {
                 ["random", "Random mix"],
                 ["targeted", "Targeted topics"],
                 ["weak", "Target weak areas"],
+                ["cat", "Adaptive (CAT)"],
               ] as const
             ).map(([v, label]) => (
               <button
@@ -187,11 +206,42 @@ export function PracticeTestsHubClient() {
               ? "Pick one or more topics below (required)."
               : selectionMode === "weak"
                 ? "Uses topics you’ve missed on recent scored practice exams."
-                : "Optional topic filters narrow the pool; leave empty for a broad mix."}
+                : selectionMode === "cat"
+                  ? "CAT starts near mid difficulty, then moves up or down; may stop early when the estimate stabilizes."
+                  : "Optional topic filters narrow the pool; leave empty for a broad mix."}
           </p>
         </div>
 
-        {(selectionMode === "random" || selectionMode === "targeted") && (
+        {selectionMode === "cat" ? (
+          <div className="mt-4">
+            <span className="text-sm text-muted-foreground">Pool for adaptive draws</span>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {(
+                [
+                  ["random", "Broad mix"],
+                  ["targeted", "Filtered topics"],
+                  ["weak", "Weak areas first"],
+                ] as const
+              ).map(([v, label]) => (
+                <button
+                  key={v}
+                  type="button"
+                  onClick={() => setCatSelectionBasis(v)}
+                  className={`rounded-full px-4 py-1.5 text-sm font-medium ${
+                    catSelectionBasis === v ? "bg-sky-600 text-white dark:bg-sky-700" : "border border-border hover:bg-muted"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Same tier rules apply. Weak-area mode needs prior scored exam history.
+            </p>
+          </div>
+        ) : null}
+
+        {(selectionMode === "random" || selectionMode === "targeted" || selectionMode === "cat") && (
           <div className="mt-4 space-y-2">
             <span className="text-sm text-muted-foreground">Topics (optional unless targeted)</span>
             <div className="flex flex-wrap gap-2">

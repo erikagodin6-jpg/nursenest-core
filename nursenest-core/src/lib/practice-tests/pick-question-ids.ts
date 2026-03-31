@@ -5,8 +5,11 @@ import { questionAccessWhereWithPathway } from "@/lib/exam-pathways/pathway-cont
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { subscriptionCoversPathwayBase } from "@/lib/exam-pathways/pathway-entitlements";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
-import { loadWeakTopicsFromExamSessions } from "@/lib/learner/weak-topics-from-sessions";
+import { getWeakTopicNamesForPractice } from "@/lib/learner/topic-performance";
 import type { PracticeTestConfigJson, PracticeTestSelectionMode } from "@/lib/practice-tests/types";
+
+/** Linear pool selection — CAT uses {@link createCatPracticeTestPayload} instead. */
+export type LinearPoolSelectionMode = Exclude<PracticeTestSelectionMode, "cat">;
 
 const MAX_POOL = 4000;
 export const PRACTICE_TEST_MIN_Q = 5;
@@ -21,7 +24,7 @@ function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
-function difficultyWhere(min: number | null, max: number | null): Prisma.ExamQuestionWhereInput | null {
+export function difficultyWhere(min: number | null, max: number | null): Prisma.ExamQuestionWhereInput | null {
   if (min == null && max == null) return null;
   const lo = min ?? 1;
   const hi = max ?? 5;
@@ -35,7 +38,7 @@ export type PickQuestionsInput = {
   topicNames: string[];
   difficultyMin: number | null;
   difficultyMax: number | null;
-  selectionMode: PracticeTestSelectionMode;
+  selectionMode: LinearPoolSelectionMode;
   pathwayId: string | null;
 };
 
@@ -66,13 +69,12 @@ export async function pickPracticeQuestionIds(
     }
     parts.push({ OR: input.topicNames.map((t) => ({ topic: t })) });
   } else if (input.selectionMode === "weak") {
-    const weak = await loadWeakTopicsFromExamSessions(userId, entitlement, 12);
-    const names = [...new Set(weak.map((w) => w.topic).filter(Boolean))];
+    const names = await getWeakTopicNamesForPractice(userId, entitlement, 16);
     if (names.length === 0) {
       return {
         ok: false,
         message:
-          "No weak areas detected yet. Complete a scored practice exam first, or switch to random/targeted mode.",
+          "No weak areas yet. Answer graded questions, finish a mock, or complete a practice test—then try weak mode again.",
       };
     }
     parts.push({ topic: { in: names } });

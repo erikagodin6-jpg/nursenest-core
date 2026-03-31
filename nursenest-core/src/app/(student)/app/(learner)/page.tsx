@@ -6,7 +6,9 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { WeakAreasDashboardClient } from "@/components/student/weak-areas-dashboard-client";
 import { SubscriberPracticeRollups } from "@/components/student/subscriber-practice-rollups";
+import { loadUnifiedTopicPerformance, type TopicPerformanceSnapshot } from "@/lib/learner/topic-performance";
 
 export default async function DashboardPage() {
   const messages = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
@@ -39,6 +41,8 @@ export default async function DashboardPage() {
     studyGoal: string | null;
     dailyStudyMinutes: number | null;
   } | null = null;
+
+  let topicPerfInitial: TopicPerformanceSnapshot | null = null;
 
   if (userId && isDatabaseUrlConfigured()) {
     try {
@@ -96,6 +100,14 @@ export default async function DashboardPage() {
     }
   }
 
+  if (userId && entitlement.hasAccess && isDatabaseUrlConfigured()) {
+    try {
+      topicPerfInitial = await loadUnifiedTopicPerformance(userId, entitlement, 12);
+    } catch {
+      topicPerfInitial = null;
+    }
+  }
+
   return (
     <main className="space-y-5">
       <div>
@@ -150,6 +162,8 @@ export default async function DashboardPage() {
               </Link>
             </div>
           </section>
+
+          {userId ? <WeakAreasDashboardClient initial={topicPerfInitial} /> : null}
 
           <section className="nn-card p-6">
             <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Readiness snapshot</h2>

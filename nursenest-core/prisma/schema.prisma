@@ -144,6 +144,27 @@ model User {
   flashcardUserStats      FlashcardUserStats?
   practiceTests           PracticeTest[]
   trialDeviceBindings     TrialDeviceBinding[]
+  /** Aggregated per-topic accuracy / streaks from graded bank, mocks, and practice tests. */
+  topicStats              UserTopicStat[]
+}
+
+/** Per-user topic performance for weak-area recommendations (question bank, mocks, practice tests). */
+model UserTopicStat {
+  id             String    @id @default(cuid())
+  userId         String
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  topic          String    @db.VarChar(80)
+  correctCount   Int       @default(0)
+  wrongCount     Int       @default(0)
+  /** Consecutive wrong answers for this topic; resets on a correct attempt. */
+  wrongStreak    Int       @default(0)
+  lastWrongAt    DateTime?
+  lastAttemptAt  DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@unique([userId, topic])
+  @@index([userId, updatedAt])
 }
 
 model TrialDeviceBinding {
@@ -617,6 +638,8 @@ model PracticeTest {
   completedAt  DateTime?
   /** Score, topic breakdown, weak areas — set when status = COMPLETED. */
   results      Json?
+  /** CAT: theta, SE, item history, stop reason — updated each adaptive step. */
+  adaptiveState Json?
   updatedAt    DateTime           @updatedAt
 
   @@index([userId, status, updatedAt])

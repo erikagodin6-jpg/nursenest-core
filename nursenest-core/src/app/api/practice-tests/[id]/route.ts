@@ -5,6 +5,8 @@ import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-
 import { prisma } from "@/lib/db";
 import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
+import { advanceCatPracticeTest, finalizeCatPracticeTest } from "@/lib/practice-tests/cat-session";
+import { recordTopicOutcomesFromPracticeTest } from "@/lib/learner/topic-performance";
 import { computePracticeTestResults } from "@/lib/practice-tests/score-practice-test";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
 
@@ -57,11 +59,13 @@ export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> 
       ? (row.answers as Record<string, unknown>)
       : {};
 
+  const cfg = row.config as PracticeTestConfigJson;
+
   return NextResponse.json({
     id: row.id,
     title: row.title,
     status: row.status,
-    config: row.config as PracticeTestConfigJson,
+    config: cfg,
     timedMode: row.timedMode,
     timeLimitSec: row.timeLimitSec,
     elapsedMs: row.elapsedMs,
@@ -74,11 +78,13 @@ export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> 
     results: row.results as PracticeTestResultsJson | null,
     startedAt: row.startedAt.toISOString(),
     completedAt: row.completedAt?.toISOString() ?? null,
+    adaptiveState: row.adaptiveState ?? null,
+    catMode: cfg.selectionMode === "cat",
   });
 }
 
 const patchSchema = z.object({
-  action: z.enum(["save", "complete", "abandon"]),
+  action: z.enum(["save", "complete", "abandon", "cat_advance"]),
   answers: z.record(z.string(), z.unknown()).optional(),
   cursorIndex: z.number().int().min(0).optional(),
   elapsedMs: z.number().int().min(0).max(48 * 60 * 60 * 1000).optional(),
@@ -128,6 +134,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     parsed.data.answers != null ? { ...prevAnswers, ...parsed.data.answers } : prevAnswers;
   const cursorIndex = parsed.data.cursorIndex ?? row.cursorIndex;
   const elapsedMs = parsed.data.elapsedMs ?? row.elapsedMs ?? undefined;
+  const cfg = row.config as PracticeTestConfigJson;
 
   if (parsed.data.action === "save") {
     await prisma.practiceTest.update({
@@ -155,19 +162,93 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     return NextResponse.json({ ok: true });
   }
 
-  const results = await computePracticeTestResults(ids, merged, gate.entitlement);
+  if (parsed.data.action === "cat_advance") {
+    if (cfg.selectionMode !== "cat") {
+      return NextResponse.json({ error: "Not a CAT session" }, { status: 400 });
+    }
 
-  await prisma.practiceTest.update({
-    where: { id },
-    data: {
-      status: PracticeTestStatus.COMPLETED,
-      answers: merged as object,
+    const adv = await advanceCatPracticeTest({
+      questionIds: ids,
+      adaptiveState: row.adaptiveState,
+      mergedAnswers: merged,
       cursorIndex,
-      completedAt: new Date(),
-      results: results as object,
-      ...(elapsedMs !== undefined ? { elapsedMs } : {}),
-    },
-  });
+      config: cfg,
+      userId: gate.userId,
+      entitlement: gate.entitlement,
+    });
 
-  return NextResponse.json({ ok: true, results });
+    if (adv.kind === "error") {
+      return NextResponse.json({ error: adv.message }, { status: 400 });
+    }
+
+    if (adv.kind === "completed") {
+      await prisma.practiceTest.update({
+        where: { id },
+        data: {
+          status: PracticeTestStatus.COMPLETED,
+          answers: merged as object,
+          cursorIndex,
+          completedAt: new Date(),
+          results: adv.results as object,
+          adaptiveState: adv.adaptiveState as object,
+          questionIds: ids as object,
+          ...(elapsedMs !== undefined ? { elapsedMs } : {}),
+        },
+      });
+      void recordTopicOutcomesFromPracticeTest(gate.userId, ids, merged, gate.entitlement).catch(() => {});
+      return NextResponse.json({ ok: true, results: adv.results, catCompleted: true });
+    }
+
+    await prisma.practiceTest.update({
+      where: { id },
+      data: {
+        answers: merged as object,
+        cursorIndex: adv.cursorIndex,
+        questionIds: adv.questionIds as object,
+        adaptiveState: adv.adaptiveState as object,
+        ...(elapsedMs !== undefined ? { elapsedMs } : {}),
+      },
+    });
+    return NextResponse.json({ ok: true, catAdvanced: true });
+  }
+
+  if (parsed.data.action === "complete") {
+    if (cfg.selectionMode === "cat") {
+      const fin = await finalizeCatPracticeTest(ids, merged, gate.entitlement);
+      await prisma.practiceTest.update({
+        where: { id },
+        data: {
+          status: PracticeTestStatus.COMPLETED,
+          answers: merged as object,
+          cursorIndex,
+          completedAt: new Date(),
+          results: fin.results as object,
+          adaptiveState: fin.adaptiveState as object,
+          ...(elapsedMs !== undefined ? { elapsedMs } : {}),
+        },
+      });
+      void recordTopicOutcomesFromPracticeTest(gate.userId, ids, merged, gate.entitlement).catch(() => {});
+      return NextResponse.json({ ok: true, results: fin.results });
+    }
+
+    const results = await computePracticeTestResults(ids, merged, gate.entitlement);
+
+    await prisma.practiceTest.update({
+      where: { id },
+      data: {
+        status: PracticeTestStatus.COMPLETED,
+        answers: merged as object,
+        cursorIndex,
+        completedAt: new Date(),
+        results: results as object,
+        ...(elapsedMs !== undefined ? { elapsedMs } : {}),
+      },
+    });
+
+    void recordTopicOutcomesFromPracticeTest(gate.userId, ids, merged, gate.entitlement).catch(() => {});
+
+    return NextResponse.json({ ok: true, results });
+  }
+
+  return NextResponse.json({ error: "Unsupported action" }, { status: 400 });
 }

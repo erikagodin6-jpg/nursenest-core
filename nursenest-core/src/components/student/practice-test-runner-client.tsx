@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { difficultyBandLabel } from "@/lib/questions/difficulty-label";
-import type { PracticeTestResultsJson } from "@/lib/practice-tests/types";
+import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
 
 type QRow = {
   id: string;
@@ -34,6 +34,10 @@ export function PracticeTestRunnerClient({ testId }: { testId: string }) {
   const [remainingSec, setRemainingSec] = useState<number | null>(null);
   const [sessionStartMs, setSessionStartMs] = useState<number | null>(null);
   const [savedElapsedMs, setSavedElapsedMs] = useState<number | null>(null);
+  const [testConfig, setTestConfig] = useState<PracticeTestConfigJson | null>(null);
+  const [catMode, setCatMode] = useState(false);
+  const [adaptiveTheta, setAdaptiveTheta] = useState<number | null>(null);
+  const [adaptiveSe, setAdaptiveSe] = useState<number | null>(null);
   const [saving, setSaving] = useState(false);
   const autoSubmitRef = useRef(false);
   const answersRef = useRef<Record<string, unknown>>({});
@@ -63,6 +67,9 @@ export function PracticeTestRunnerClient({ testId }: { testId: string }) {
         timeLimitSec?: number | null;
         elapsedMs?: number | null;
         startedAt?: string;
+        config?: PracticeTestConfigJson;
+        catMode?: boolean;
+        adaptiveState?: { theta?: number; se?: number } | null;
       };
       if (!res.ok) throw new Error(data.error ?? "Could not load test.");
       setQuestions(data.questions ?? []);
@@ -74,6 +81,11 @@ export function PracticeTestRunnerClient({ testId }: { testId: string }) {
       setTimeLimitSec(data.timeLimitSec ?? null);
       setSavedElapsedMs(typeof data.elapsedMs === "number" ? data.elapsedMs : null);
       setSessionStartMs(data.startedAt ? new Date(data.startedAt).getTime() : Date.now());
+      setTestConfig(data.config ?? null);
+      setCatMode(Boolean(data.catMode));
+      const ast = data.adaptiveState;
+      setAdaptiveTheta(typeof ast?.theta === "number" ? ast.theta : null);
+      setAdaptiveSe(typeof ast?.se === "number" ? ast.se : null);
       if (data.status === "IN_PROGRESS" && data.timedMode && data.timeLimitSec) {
         const usedSec = data.elapsedMs != null ? Math.floor(data.elapsedMs / 1000) : 0;
         setRemainingSec(Math.max(0, data.timeLimitSec - usedSec));
@@ -199,7 +211,47 @@ export function PracticeTestRunnerClient({ testId }: { testId: string }) {
     void persistSave(nextAnswers, idx);
   }
 
+  async function catAdvance() {
+    setSaving(true);
+    try {
+      const elapsedMs =
+        sessionStartMs != null ? Math.max(0, Date.now() - sessionStartMs) : undefined;
+      const res = await fetch(`/api/practice-tests/${testId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "cat_advance",
+          answers,
+          cursorIndex: idx,
+          ...(elapsedMs !== undefined ? { elapsedMs } : {}),
+        }),
+      });
+      const data = (await res.json()) as {
+        results?: PracticeTestResultsJson;
+        error?: string;
+        catAdvanced?: boolean;
+        catCompleted?: boolean;
+      };
+      if (!res.ok) throw new Error(data.error ?? "Could not advance.");
+      if (data.results) {
+        setResults(data.results);
+        setStatus("COMPLETED");
+        setSavedElapsedMs(elapsedMs ?? null);
+      } else if (data.catAdvanced) {
+        await load();
+      }
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Advance failed");
+    } finally {
+      setSaving(false);
+    }
+  }
+
   async function goNext() {
+    if (catMode && idx >= total - 1) {
+      await catAdvance();
+      return;
+    }
     if (idx >= total - 1) return;
     const nextIdx = idx + 1;
     setIdx(nextIdx);
@@ -207,6 +259,7 @@ export function PracticeTestRunnerClient({ testId }: { testId: string }) {
   }
 
   async function goPrev() {
+    if (catMode) return;
     if (idx <= 0) return;
     const nextIdx = idx - 1;
     setIdx(nextIdx);
@@ -248,6 +301,24 @@ export function PracticeTestRunnerClient({ testId }: { testId: string }) {
               <> · Untimed</>
             )}
           </p>
+          {results.readinessLabel != null ? (
+            <p className="mt-3 text-lg font-semibold text-foreground">
+              Readiness: {results.readinessLabel}
+            </p>
+          ) : null}
+          {results.estimatedAbility != null ? (
+            <p className="mt-1 text-sm text-muted-foreground">
+              Estimated ability (θ):{" "}
+              <span className="font-medium tabular-nums text-foreground">{results.estimatedAbility.toFixed(2)}</span>
+              {results.abilityStdError != null ? (
+                <>
+                  {" "}
+                  · Standard error:{" "}
+                  <span className="font-medium tabular-nums text-foreground">{results.abilityStdError.toFixed(2)}</span>
+                </>
+              ) : null}
+            </p>
+          ) : null}
         </div>
         <div className="nn-card p-6">
           <h3 className="font-semibold text-foreground">Breakdown by topic</h3>
@@ -313,7 +384,18 @@ export function PracticeTestRunnerClient({ testId }: { testId: string }) {
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="text-sm text-muted-foreground">
-          Question {idx + 1} of {total}
+          {catMode ? (
+            <>
+              Adaptive item {idx + 1} of {total} delivered
+              {testConfig?.catMaxQuestions != null ? (
+                <span className="text-muted-foreground"> · up to {testConfig.catMaxQuestions} max</span>
+              ) : null}
+            </>
+          ) : (
+            <>
+              Question {idx + 1} of {total}
+            </>
+          )}
           {saving ? <span className="ml-2 text-xs">Saving…</span> : null}
         </p>
         {timedMode && remainingSec != null ? (
@@ -324,6 +406,24 @@ export function PracticeTestRunnerClient({ testId }: { testId: string }) {
           <p className="text-xs text-muted-foreground">Untimed</p>
         )}
       </div>
+
+      {catMode && (adaptiveTheta != null || adaptiveSe != null) ? (
+        <div className="nn-card border-primary/20 bg-primary/[0.06] px-4 py-3 text-sm">
+          <p className="font-semibold text-foreground">Adaptive estimate</p>
+          <p className="mt-1 text-muted-foreground">
+            θ (ability):{" "}
+            <span className="font-mono tabular-nums text-foreground">
+              {adaptiveTheta != null ? adaptiveTheta.toFixed(2) : "—"}
+            </span>
+            {" · "}
+            Confidence (SE):{" "}
+            <span className="font-mono tabular-nums text-foreground">{adaptiveSe != null ? adaptiveSe.toFixed(2) : "—"}</span>
+          </p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Difficulty shifts after each item; weak areas from recent exams get extra priority in the pool.
+          </p>
+        </div>
+      ) : null}
 
       <div className="overflow-hidden rounded-2xl border border-border bg-[var(--theme-card-bg)] shadow-sm">
         <div className="border-b border-border bg-muted/30 px-4 py-3">
@@ -388,13 +488,42 @@ export function PracticeTestRunnerClient({ testId }: { testId: string }) {
       <div className="flex flex-wrap gap-2">
         <button
           type="button"
-          disabled={idx === 0}
+          disabled={idx === 0 || catMode}
           className="rounded-full border border-border px-4 py-2 text-sm disabled:opacity-40"
           onClick={() => void goPrev()}
         >
           Previous
         </button>
-        {idx < total - 1 ? (
+        {catMode ? (
+          idx < total - 1 ? (
+            <button
+              type="button"
+              className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+              onClick={() => void goNext()}
+            >
+              Next
+            </button>
+          ) : (
+            <>
+              <button
+                type="button"
+                disabled={saving}
+                className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+                onClick={() => void catAdvance()}
+              >
+                {saving ? "Working…" : "Next question"}
+              </button>
+              <button
+                type="button"
+                disabled={saving}
+                className="rounded-full border border-border px-4 py-2 text-sm font-medium"
+                onClick={() => void submitTest()}
+              >
+                End session
+              </button>
+            </>
+          )
+        ) : idx < total - 1 ? (
           <button
             type="button"
             className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"

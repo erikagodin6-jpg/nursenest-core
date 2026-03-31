@@ -7,7 +7,8 @@ import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/path
 import { pathwayLessonsAppListWhere } from "@/lib/lessons/app-pathway-lesson-list-scope";
 import { computeReadiness, type ReadinessResult } from "@/lib/learner/readiness-score";
 import { loadSessionGradingAggregate } from "@/lib/learner/session-grading-aggregate";
-import { loadWeakTopicsFromExamSessions, type WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
+import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
+import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
 
 export type ContinueLesson = {
   title: string;
@@ -110,11 +111,15 @@ export async function loadLearnerDashboard(
   }));
 
   let weakTopics: WeakTopicRow[] = [];
+  let recommendedQuizTopic: string | null = null;
   let practiceAgg = { correct: 0, total: 0, sessionCount: 0 };
   try {
-    weakTopics = await loadWeakTopicsFromExamSessions(userId, entitlement, 6);
+    const perf = await loadUnifiedTopicPerformance(userId, entitlement, 8);
+    weakTopics = perf.weakTopics;
+    recommendedQuizTopic = perf.recommendedQuizTopic ?? perf.weakTopics[0]?.topic ?? null;
   } catch {
     weakTopics = [];
+    recommendedQuizTopic = null;
   }
   try {
     practiceAgg = await loadSessionGradingAggregate(userId, entitlement, 8);
@@ -175,8 +180,6 @@ export async function loadLearnerDashboard(
       continueLesson = null;
     }
   }
-
-  const recommendedQuizTopic = weakTopics[0]?.topic ?? null;
 
   const readiness = computeReadiness({
     practiceCorrect: practiceAgg.correct,

@@ -259,6 +259,9 @@ export function QuestionBankPracticeClient({ userId }: { userId: string }) {
         [current.id]: { correct, rationale: data.rationale ?? null },
       }));
       appendRollup(userId, current.topic, correct);
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("nn-topic-stats-updated"));
+      }
     } finally {
       setGrading(false);
     }

@@ -134,12 +134,58 @@ export function validateCatQuestionPool(rows: CatPoolRow[]): CatPoolValidation {
   return { ok: true };
 }
 
+/** Relaxed validation for learner practice CAT (smaller banks than full NCLEX sim). */
+export function validatePracticeCatPool(rows: CatPoolRow[]): CatPoolValidation {
+  const minPool = 8;
+  if (rows.length < minPool) {
+    return {
+      ok: false,
+      error: `Adaptive practice needs at least ${minPool} eligible questions in the filtered pool (found ${rows.length}). Broaden topics or difficulty.`,
+    };
+  }
+
+  const byDiff = new Map<number, number>();
+  const categories = new Set<string>();
+  for (const r of rows) {
+    const d = clampDifficulty(r.difficulty);
+    byDiff.set(d, (byDiff.get(d) ?? 0) + 1);
+    categories.add(categoryKeyForQuestion(r));
+  }
+
+  if (byDiff.size < 2) {
+    return {
+      ok: false,
+      error:
+        "Adaptive practice needs at least two distinct difficulty levels (1–5). Add more varied items or relax filters.",
+    };
+  }
+
+  if (categories.size < 2) {
+    return {
+      ok: false,
+      error:
+        "Adaptive practice needs at least two distinct categories (body system or topic) in the pool. Broaden topic filters.",
+    };
+  }
+
+  return { ok: true };
+}
+
 function hashPickStable(candidates: CatPoolRow[], salt: string): CatPoolRow {
   let h = 0;
   for (let i = 0; i < salt.length; i++) h = (h * 31 + salt.charCodeAt(i)) >>> 0;
   const idx = h % candidates.length;
   return candidates[idx]!;
 }
+
+/** Optional tuning for next-item selection (weak-area priority, etc.). */
+export type CatSelectOptions = {
+  /**
+   * Category keys (body system / topic / General) that should be sampled more often.
+   * Lower returned value = higher priority in the sort.
+   */
+  categoryPriorityBoost?: (categoryKey: string, row: CatPoolRow) => number;
+};
 
 /**
  * Blueprint-style: prefer categories with fewer delivered items; match difficulty band; no repeats.
@@ -149,6 +195,7 @@ export function selectNextQuestion(
   usedIds: Set<string>,
   targetDifficulty: number,
   deliveredCountsByCategory: Map<string, number>,
+  options?: CatSelectOptions,
 ): { selected: CatPoolRow | null; fallback: boolean; detail?: string } {
   const unused = pool.filter((p) => !usedIds.has(p.id));
   if (unused.length === 0) {
@@ -162,7 +209,8 @@ export function selectNextQuestion(
     const cat = categoryKeyForQuestion(row);
     const delivered = deliveredCountsByCategory.get(cat) ?? 0;
     const deficit = delivered; // lower is better for balance — invert
-    const score = band(row.difficulty) * 12 + deficit * 3 + Math.random() * 0.01;
+    const boost = options?.categoryPriorityBoost?.(cat, row) ?? 0;
+    const score = band(row.difficulty) * 12 + deficit * 3 - boost + Math.random() * 0.01;
     return { row, score };
   });
 
@@ -183,9 +231,15 @@ export function selectNextQuestion(
   return { selected: pick, fallback: true, detail: "closest_available" };
 }
 
-export function shouldStopAfterAnswer(state: CatAdaptiveState, nAnswered: number): CatAdaptiveState["stoppedReason"] {
-  if (nAnswered >= CAT_MAX_QUESTIONS) return "max_length";
-  if (nAnswered < CAT_MIN_QUESTIONS) return null;
+export function shouldStopAfterAnswer(
+  state: CatAdaptiveState,
+  nAnswered: number,
+  bounds?: { min: number; max: number },
+): CatAdaptiveState["stoppedReason"] {
+  const minQ = bounds?.min ?? CAT_MIN_QUESTIONS;
+  const maxQ = bounds?.max ?? CAT_MAX_QUESTIONS;
+  if (nAnswered >= maxQ) return "max_length";
+  if (nAnswered < minQ) return null;
   if (state.se <= CAT_EARLY_STOP_SE && state.theta >= CAT_EARLY_PASS_THETA) return "confidence_pass";
   if (state.se <= CAT_EARLY_STOP_SE && state.theta <= CAT_EARLY_FAIL_THETA) return "confidence_fail";
   return null;
