@@ -1,3 +1,10 @@
+/** Structured “exam focus” block for pathway lessons (how tested, traps, prioritization). */
+export type PathwayLessonExamFocus = {
+  howTested?: string;
+  commonTraps?: string;
+  prioritizationCues?: string;
+};
+
 /** Canonical five-block structure (render order). Legacy catalog kinds are normalized into these. */
 export type PathwayLessonSectionKind =
   | "clinical_meaning"
@@ -8,13 +15,16 @@ export type PathwayLessonSectionKind =
   | "intro"
   | "core"
   | "clinical_application"
-  | "exam_tips";
+  | "exam_tips"
+  | "exam_focus";
 
 export type PathwayLessonSection = {
   id: string;
   heading: string;
   kind: PathwayLessonSectionKind;
   body: string;
+  /** Present when `kind === "exam_focus"`. */
+  examFocus?: PathwayLessonExamFocus;
 };
 
 /** Inline pre/post checks for pathway lessons (catalog or DB JSON). */
@@ -24,13 +34,6 @@ export type PathwayLessonQuizItem = {
   /** Zero-based index of correct option (aligned with legacy monolith lessons). */
   correct: number;
   rationale?: string;
-};
-
-/** Structured “exam focus” block for pathway lessons (how tested, traps, prioritization). */
-export type PathwayLessonExamFocus = {
-  howTested?: string;
-  commonTraps?: string;
-  prioritizationCues?: string;
 };
 
 /** How localized pathway lesson content was resolved for this response. */
