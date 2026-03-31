@@ -26,6 +26,8 @@ const patchSchema = z.object({
   answers: z
     .record(z.string(), z.unknown())
     .refine((r) => Object.keys(r).length <= MAX_SESSION_ANSWER_KEYS, "too many answer entries"),
+  /** Elapsed time in ms (for timed + resume). Capped at 8 hours. */
+  elapsedMs: z.number().int().min(0).max(28_800_000).optional(),
 });
 
 /** Resume in-progress session (questions + progress). */
@@ -54,6 +56,10 @@ export async function GET(req: NextRequest) {
           answers: true,
           questionIds: true,
           updatedAt: true,
+          timedMode: true,
+          timeLimitSec: true,
+          elapsedMs: true,
+          createdAt: true,
         },
       }),
     );
@@ -105,6 +111,10 @@ export async function GET(req: NextRequest) {
         poolEmpty: ids.length === 0,
         entitlementFiltered: dropped > 0,
         sessionQuestionIdsSanitized: sanitized.truncated || sanitized.coercedFromInvalid,
+        timedMode: row.timedMode,
+        timeLimitSec: row.timeLimitSec,
+        elapsedMs: row.elapsedMs,
+        createdAt: row.createdAt,
       };
       logLargeApiResponse("/api/exams/session", estimateJsonUtf8Bytes(minimalBody));
       return NextResponse.json(minimalBody);
@@ -152,6 +162,10 @@ export async function GET(req: NextRequest) {
       questionsHydrated: questions.length,
       fullHydrationCap: SESSION_FULL_HYDRATE_MAX_QUESTIONS,
       sessionQuestionIdsSanitized: sanitized.truncated || sanitized.coercedFromInvalid,
+      timedMode: row.timedMode,
+      timeLimitSec: row.timeLimitSec,
+      elapsedMs: row.elapsedMs,
+      createdAt: row.createdAt,
     };
     const approxPayloadBytes = estimateJsonUtf8Bytes(fullJson);
     safeServerLog("api_exams_session", "full_hydrate_payload", {
@@ -210,6 +224,7 @@ export async function PATCH(req: Request) {
       data: {
         currentIndex: parsed.data.currentIndex,
         answers: parsed.data.answers as object,
+        ...(parsed.data.elapsedMs !== undefined ? { elapsedMs: parsed.data.elapsedMs } : {}),
       },
       select: { id: true, currentIndex: true, updatedAt: true },
     });

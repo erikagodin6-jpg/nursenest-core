@@ -647,6 +647,8 @@ model ExamAttempt {
   examId      String
   score       Int
   total       Int
+  /** Topic breakdown, per-item flags, timing — set on graded submits. */
+  results     Json?
   createdAt   DateTime      @default(now())
   user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   exam        Exam          @relation(fields: [examId], references: [id], onDelete: Cascade)
@@ -671,6 +673,9 @@ model ExamSession {
   /** Linear vs CAT; CAT uses `adaptiveState` for theta, difficulty history, incidents. */
   examMode     String            @default("linear") @map("exam_mode")
   adaptiveState Json?            @map("adaptive_state")
+  timedMode    Boolean           @default(false)
+  timeLimitSec Int?
+  elapsedMs    Int?
   createdAt    DateTime          @default(now())
   updatedAt    DateTime          @updatedAt
 

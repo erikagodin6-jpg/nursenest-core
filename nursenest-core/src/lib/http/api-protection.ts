@@ -222,6 +222,25 @@ export function enforcePracticeTestMutationProtection(req: NextRequest, userId: 
   return null;
 }
 
+/** GET /api/exams/attempt/[id] — graded review snapshot. */
+export function enforceExamAttemptDetailProtection(req: NextRequest, userId: string): NextResponse | null {
+  const ip = getTrustedClientIp(req);
+  const route = "exam_attempt_detail";
+  checkDeviceMismatch(req, route, userId, ip);
+
+  if (!checkRateLimit(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 90 }).ok) {
+    logAbuse("ip_rate_limit", route, userId, ip);
+    return tooMany("rate_limited", 60);
+  }
+
+  if (!checkRateLimit(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 120 }).ok) {
+    logAbuse("user_rate_limit", route, userId, ip);
+    return tooMany("rate_limited", 60);
+  }
+
+  return null;
+}
+
 /** GET /api/practice-tests — list user sessions (bounded take in handler). */
 export function enforcePracticeTestsListProtection(req: NextRequest, userId: string): NextResponse | null {
   const ip = getTrustedClientIp(req);

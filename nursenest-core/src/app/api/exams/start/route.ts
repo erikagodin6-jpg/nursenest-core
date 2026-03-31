@@ -111,15 +111,34 @@ export async function POST(req: Request) {
   let examId: string | null = null;
   let hydrate: "full" | "window" = "window";
   let questionTag: string | null = null;
+  let timedMode = false;
+  let timeLimitSec: number | null = null;
   try {
-    const b = (await req.json()) as { examId?: string; hydrate?: string; questionTag?: string };
+    const b = (await req.json()) as {
+      examId?: string;
+      hydrate?: string;
+      questionTag?: string;
+      timedMode?: boolean;
+      timeLimitSec?: number | null;
+    };
     examId = typeof b?.examId === "string" && b.examId.length > 4 ? b.examId : null;
     if (b?.hydrate === "full") hydrate = "full";
     if (typeof b?.questionTag === "string" && b.questionTag.trim().length > 2) {
       questionTag = b.questionTag.trim();
     }
+    if (typeof b?.timedMode === "boolean") timedMode = b.timedMode;
+    if (typeof b?.timeLimitSec === "number" && Number.isFinite(b.timeLimitSec)) {
+      timeLimitSec = Math.min(Math.max(60, Math.floor(b.timeLimitSec)), 28_800);
+    }
   } catch {
     /* optional body */
+  }
+
+  if (timedMode && timeLimitSec == null) {
+    timeLimitSec = 90 * 60;
+  }
+  if (!timedMode) {
+    timeLimitSec = null;
   }
 
   const effectiveExamId =
@@ -270,6 +289,9 @@ export async function POST(req: Request) {
         answers: {},
         currentIndex: 0,
         status: ExamSessionStatus.IN_PROGRESS,
+        timedMode,
+        timeLimitSec,
+        elapsedMs: 0,
       },
     });
 
@@ -299,6 +321,9 @@ export async function POST(req: Request) {
         questions: questionPool.length ? [questionPool[0]] : [],
         poolEmpty: questionPool.length === 0,
         hydrate: "window" as const,
+        timedMode,
+        timeLimitSec,
+        elapsedMs: 0,
         ...(poolDiagnostics ? { diagnostics: poolDiagnostics } : {}),
       };
       const approxPayloadBytes = estimateJsonUtf8Bytes(windowBody);
@@ -325,6 +350,9 @@ export async function POST(req: Request) {
       questions: questionPool,
       poolEmpty: questionPool.length === 0,
       hydrate: "full" as const,
+      timedMode,
+      timeLimitSec,
+      elapsedMs: 0,
       ...(poolDiagnostics ? { diagnostics: poolDiagnostics } : {}),
     };
     const approxFullBytes = estimateJsonUtf8Bytes(fullBody);
