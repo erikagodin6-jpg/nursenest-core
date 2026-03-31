@@ -20,16 +20,27 @@ export function logApiPayloadAlert(route: string, approxUtf8Bytes: number): void
 /** When heap exceeds this during a slow query or interval sample, emit high_memory. */
 export const HIGH_HEAP_BYTES = 768 * 1024 * 1024;
 
+function safeMemoryUsage(): NodeJS.MemoryUsage | null {
+  try {
+    const g = globalThis as unknown as { process?: { memoryUsage?: () => NodeJS.MemoryUsage } };
+    const mu = g.process?.memoryUsage;
+    if (typeof mu !== "function") return null;
+    return mu.call(g.process);
+  } catch {
+    return null;
+  }
+}
+
 export function logSlowPrismaQuery(meta: { model: string; operation: string; durationMs: number }): void {
   if (meta.durationMs <= SLOW_PRISMA_QUERY_MS) return;
-  const mem = process.memoryUsage();
-  const heapHigh = mem.heapUsed >= HIGH_HEAP_BYTES;
+  const mem = safeMemoryUsage();
+  const heapHigh = mem !== null && mem.heapUsed >= HIGH_HEAP_BYTES;
   safeServerLog("perf", "slow_prisma_query", {
     model: meta.model.slice(0, 64),
     operation: meta.operation.slice(0, 64),
     durationMs: meta.durationMs,
     heapHigh: heapHigh ? 1 : 0,
-    heapUsedMb: Math.round(mem.heapUsed / 1024 / 1024),
+    heapUsedMb: mem ? Math.round(mem.heapUsed / 1024 / 1024) : 0,
   });
   if (heapHigh) {
     logHighMemory("with_slow_prisma_query");
@@ -45,7 +56,8 @@ export function logLargeApiResponse(route: string, approxUtf8Bytes: number): voi
 }
 
 export function logHighMemory(context: string): void {
-  const m = process.memoryUsage();
+  const m = safeMemoryUsage();
+  if (!m) return;
   safeServerLog("perf", "high_memory", {
     context: context.slice(0, 80),
     heapUsedMb: Math.round(m.heapUsed / 1024 / 1024),

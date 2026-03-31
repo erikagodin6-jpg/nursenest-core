@@ -325,6 +325,17 @@ async function main() {
     NP_PATHWAYS.map((pid) => [pid, dbRows.filter((r) => r.pathwayId === pid && r.status === ContentStatus.PUBLISHED).length]),
   );
 
+  const baselineFile = path.join(REPORT_DIR, "np-import-baseline.json");
+  if (!fs.existsSync(baselineFile)) {
+    fs.writeFileSync(
+      baselineFile,
+      JSON.stringify({ generatedAt: new Date().toISOString(), publishedByPathwayBeforeRecovery: dbPublishedByPathway }, null, 2),
+    );
+  }
+  const baselinePublished = JSON.parse(fs.readFileSync(baselineFile, "utf8")) as {
+    publishedByPathwayBeforeRecovery: Record<string, number>;
+  };
+
   const legacyNp = await loadLegacyNpFromContentMap();
   const catalogNp = loadCatalogNpOnly();
   const materializedNp = loadMaterializedNpOverlays();
@@ -695,7 +706,7 @@ async function main() {
     JSON.stringify(
       {
         generatedAt: new Date().toISOString(),
-        totalsBeforeRun: dbPublishedByPathway,
+        totalsBeforeRun: baselinePublished.publishedByPathwayBeforeRecovery,
         finalPublishedDbByPathway: finalByPathway,
         npPublishedTotal: npTotal,
         historicalNpUniqueInContentMapApprox: uniqueLegacyNpIdCount,

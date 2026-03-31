@@ -42,9 +42,13 @@ export async function register() {
     const memIntervalMs = Number(process.env.PERF_MEMORY_LOG_INTERVAL_MS ?? "0");
     if (process.env.NODE_ENV === "production" && Number.isFinite(memIntervalMs) && memIntervalMs >= 120_000) {
       const id = setInterval(() => {
-        const heap = process.memoryUsage().heapUsed;
-        if (heap >= 512 * 1024 * 1024) {
-          logHighMemory("process_interval");
+        try {
+          const heap = typeof process.memoryUsage === "function" ? process.memoryUsage().heapUsed : 0;
+          if (heap >= 512 * 1024 * 1024) {
+            logHighMemory("process_interval");
+          }
+        } catch {
+          /* ignore — Edge / constrained runtimes */
         }
       }, memIntervalMs);
       if (typeof (id as ReturnType<typeof setInterval>).unref === "function") {

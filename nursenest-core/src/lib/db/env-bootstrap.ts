@@ -21,8 +21,20 @@ function withDefaultQueryParam(urlString: string, key: string, value: string): s
   }
 }
 
+/** Avoid direct `process.argv` references so Edge bundles do not flag Node-only APIs (Turbopack). */
+function safeArgvJoin(): string {
+  try {
+    const g = globalThis as unknown as { process?: { argv?: readonly string[] } };
+    const argv = g.process?.argv;
+    if (!Array.isArray(argv)) return "";
+    return argv.join(" ");
+  } catch {
+    return "";
+  }
+}
+
 function tuneDatabaseUrlForProcess(rawUrl: string): string {
-  const argv = process.argv.join(" ");
+  const argv = safeArgvJoin();
   const lifecycle = process.env.npm_lifecycle_event ?? "";
   const isBuildProcess = lifecycle === "build" || argv.includes("next build");
   const isScriptProcess = argv.includes("/scripts/") || argv.includes("tsx scripts/");

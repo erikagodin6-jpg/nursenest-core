@@ -258,12 +258,22 @@ export default async function AdminPage() {
         take: 40,
         select: { id: true, title: true, examFamily: true, tier: true, country: true, status: true, updatedAt: true },
       }),
-      prisma.examQuestion.findMany({
-        where: { status: "published", tags: { hasSome: [...QUALITY_FLAG_TAGS] } },
-        orderBy: { id: "asc" },
-        take: 500,
-        select: { id: true, tier: true, topic: true, tags: true, stem: true },
-      }),
+      prisma.examQuestion
+        .findMany({
+          where: { status: "published", tags: { hasSome: [...QUALITY_FLAG_TAGS] } },
+          orderBy: { id: "asc" },
+          take: 500,
+          select: { id: true, tier: true, topic: true, tags: true, stem: true },
+        })
+        .then((rows) =>
+          rows.map((r) => ({
+            id: r.id,
+            tier: r.tier as TierCode,
+            topic: r.topic ?? "",
+            tags: r.tags,
+            stem: r.stem,
+          })),
+        ),
     ]);
   } catch {
     // Keep defaults and rendered diagnostics from builder fallbacks.
