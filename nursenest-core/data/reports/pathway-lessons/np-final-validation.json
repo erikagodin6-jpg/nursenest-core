@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-03-31T17:50:37.560Z",
+  "generatedAt": "2026-03-31T17:53:28.188Z",
   "totalsBeforeRun": {
-    "us-np-fnp": 39,
-    "us-np-agpcnp": 24,
-    "us-np-pmhnp": 24,
-    "ca-np-cnple": 24
+    "us-np-fnp": 1444,
+    "us-np-agpcnp": 1438,
+    "us-np-pmhnp": 1438,
+    "ca-np-cnple": 1438
   },
   "finalPublishedDbByPathway": {
     "ca-np-cnple": 1438,
@@ -14,7 +14,7 @@
   },
   "npPublishedTotal": 5758,
   "historicalNpUniqueInContentMapApprox": 1409,
-  "recoveredFromSourceOperations": 5647,
+  "recoveredFromSourceOperations": 0,
   "generatedNpGapLessons": 0,
   "hubTotalsMatchDb": true,
   "detailRouteTotals": {

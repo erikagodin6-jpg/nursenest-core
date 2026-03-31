@@ -1,8 +1,9 @@
 {
-  "generatedAt": "2026-03-31T17:49:42.276Z",
+  "generatedAt": "2026-03-31T17:53:26.408Z",
+  "note": "Post-import snapshot: currentlyImported counts reflect published pathway_lessons keys after recovery.",
   "historicalNpInventoryEstimate": {
     "uniqueLegacyNpLessonIdsInContentMap": 1409,
-    "note": "Heuristic ids: not RN/RPN tier and match -np / np- / np-testbank patterns. Expanded rows = unique × 4 pathways when imported."
+    "note": "Heuristic ids: not RN/RPN tier and match -np / np- / np-testbank patterns. Review false positives if counts seem high."
   },
   "rows": [
     {
@@ -12,9 +13,9 @@
       "validLessonCount": 1409,
       "invalidLessonCount": 0,
       "uniqueLegacyNpIdsApprox": 1409,
-      "pathwayMapping": "legacy NP keys → all four NP pathways (us-np-fnp, us-np-agpcnp, us-np-pmhnp, ca-np-cnple)",
+      "pathwayMapping": "legacy NP keys → all four NP pathways",
       "rowsExpandedToPathways": 5636,
-      "currentlyImportedIntoPathwayLessons": 0,
+      "currentlyImportedIntoPathwayLessons": 5620,
       "currentlySurfacedInRuntime": true,
       "sourceQualityClass": "historical/high-value"
     },
@@ -24,7 +25,7 @@
       "pathwayId": "us-np-fnp",
       "rawLessonCount": 15,
       "validLessonCount": 15,
-      "pathwayMapping": "only us-np-fnp entries (other NP pathways are DB-seeded today)",
+      "pathwayMapping": "us-np-fnp only",
       "currentlyImportedIntoPathwayLessons": 15,
       "currentlySurfacedInRuntime": true,
       "sourceQualityClass": "curated/FNP-specific"
@@ -34,8 +35,8 @@
       "sourceType": "json",
       "rawLessonCount": 9,
       "validLessonCount": 36,
-      "pathwayMapping": "usNpFnp overlays replicated to all four NP pathways",
-      "currentlyImportedIntoPathwayLessons": 9,
+      "pathwayMapping": "usNpFnp overlays × four pathways",
+      "currentlyImportedIntoPathwayLessons": 36,
       "currentlySurfacedInRuntime": true,
       "sourceQualityClass": "materialized/NP-overlays"
     },
@@ -44,7 +45,7 @@
       "sourceType": "json",
       "rawLessonCount": 52,
       "npLikeLessonRows": 0,
-      "pathwayMapping": "none reliable without NP pathway tags",
+      "pathwayMapping": "none reliable",
       "currentlyImportedIntoPathwayLessons": 0,
       "currentlySurfacedInRuntime": false,
       "sourceQualityClass": "not-applicable"

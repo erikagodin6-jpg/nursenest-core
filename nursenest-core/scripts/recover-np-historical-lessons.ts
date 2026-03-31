@@ -423,6 +423,7 @@ async function main() {
   const processed = new Set(resumeData.processedKeys ?? []);
   const toProcess = valid.filter((r) => !processed.has(`${r.pathwayId}::${r.slug}`));
   const grouped = chunks(toProcess, batchSize);
+  const hadWorkQueued = grouped.length > 0;
 
   const pathwayMaxSort = new Map<string, number>();
   for (const pid of NP_PATHWAYS) {
@@ -600,27 +601,29 @@ async function main() {
     ),
   );
 
-  const importSummary = {
-    generatedAt: new Date().toISOString(),
-    apply,
-    batchSize,
-    candidateRows: valid.length,
-    processedRows: toProcess.length,
-    inserted,
-    updated,
-    skipped,
-    failed,
-    generatedNpGapLessons: 0,
-  };
-  fs.writeFileSync(path.join(REPORT_DIR, "np-import-summary.json"), JSON.stringify(importSummary, null, 2));
-  fs.writeFileSync(
-    path.join(REPORT_DIR, "np-duplicate-audit.json"),
-    JSON.stringify({ generatedAt: new Date().toISOString(), totalRows: duplicateAudit.length, rows: duplicateAudit.slice(0, 8000) }, null, 2),
-  );
-  fs.writeFileSync(
-    path.join(REPORT_DIR, "np-quarantine.json"),
-    JSON.stringify({ generatedAt: new Date().toISOString(), totalRows: quarantine.length, rows: quarantine.slice(0, 2000) }, null, 2),
-  );
+  if (hadWorkQueued) {
+    const importSummary = {
+      generatedAt: new Date().toISOString(),
+      apply,
+      batchSize,
+      candidateRows: valid.length,
+      processedRows: toProcess.length,
+      inserted,
+      updated,
+      skipped,
+      failed,
+      generatedNpGapLessons: 0,
+    };
+    fs.writeFileSync(path.join(REPORT_DIR, "np-import-summary.json"), JSON.stringify(importSummary, null, 2));
+    fs.writeFileSync(
+      path.join(REPORT_DIR, "np-duplicate-audit.json"),
+      JSON.stringify({ generatedAt: new Date().toISOString(), totalRows: duplicateAudit.length, rows: duplicateAudit.slice(0, 8000) }, null, 2),
+    );
+    fs.writeFileSync(
+      path.join(REPORT_DIR, "np-quarantine.json"),
+      JSON.stringify({ generatedAt: new Date().toISOString(), totalRows: quarantine.length, rows: quarantine.slice(0, 2000) }, null, 2),
+    );
+  }
 
   const THIN = 2500;
   const qualitySummary = { importedRich: 0, importedThin: 0, curated: 0, generated: 0, needsEnrichment: 0 };
