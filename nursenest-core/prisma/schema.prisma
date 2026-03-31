@@ -25,6 +25,13 @@ enum UserRole {
   ADMIN
 }
 
+enum TrialStatus {
+  NONE
+  ACTIVE
+  EXPIRED
+  EXHAUSTED
+}
+
 enum ContentStatus {
   DRAFT
   IN_REVIEW
@@ -113,6 +120,10 @@ model User {
   onboardingCompletedAt   DateTime?
   freeQuestionViews       Int            @default(0)
   freeLessonOpens         Int            @default(0)
+  trialStatus             TrialStatus    @default(NONE)
+  trialUsedAt             DateTime?
+  trialStartedAt          DateTime?
+  trialEndsAt             DateTime?
   createdAt               DateTime       @default(now())
   updatedAt               DateTime       @updatedAt
   subscriptions           Subscription[]
@@ -132,6 +143,15 @@ model User {
   flashcardStudySessions  FlashcardStudySession[]
   flashcardUserStats      FlashcardUserStats?
   practiceTests           PracticeTest[]
+  trialDeviceBindings     TrialDeviceBinding[]
+}
+
+model TrialDeviceBinding {
+  id              String   @id @default(cuid())
+  fingerprintHash String   @unique
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt       DateTime @default(now())
 }
 
 /** Idempotency and cooldown tracking for retention and transactional emails. */

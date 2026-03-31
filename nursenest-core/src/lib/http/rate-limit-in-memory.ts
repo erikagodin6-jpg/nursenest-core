@@ -33,3 +33,23 @@ export function checkRateLimit(
   b.count += 1;
   return { ok: true, remaining: opts.max - b.count };
 }
+
+/** Increment bucket by `cost` (e.g. page size) against a shared max in the window. */
+export function consumeRateLimit(
+  key: string,
+  cost: number,
+  opts: { windowMs: number; max: number },
+): { ok: boolean; remaining: number } {
+  pruneIfNeeded();
+  const now = Date.now();
+  let b = buckets.get(key);
+  if (!b || b.resetAt <= now) {
+    b = { count: 0, resetAt: now + opts.windowMs };
+    buckets.set(key, b);
+  }
+  if (b.count + cost > opts.max) {
+    return { ok: false, remaining: Math.max(0, opts.max - b.count) };
+  }
+  b.count += cost;
+  return { ok: true, remaining: opts.max - b.count };
+}

@@ -26,6 +26,13 @@ export type PathwayLessonQuizItem = {
   rationale?: string;
 };
 
+/** Structured “exam focus” block for pathway lessons (how tested, traps, prioritization). */
+export type PathwayLessonExamFocus = {
+  howTested?: string;
+  commonTraps?: string;
+  prioritizationCues?: string;
+};
+
 /** How localized pathway lesson content was resolved for this response. */
 export type PathwayLessonLocaleMeta = {
   /** BCP-47-style key the caller asked for (normalized). */
