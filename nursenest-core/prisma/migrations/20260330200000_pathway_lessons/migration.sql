@@ -1,6 +1,6 @@
 -- Pathway-scoped marketing lessons (DB-first loader; catalog.json fallback per pathway).
 
-CREATE TABLE "pathway_lessons" (
+CREATE TABLE IF NOT EXISTS "pathway_lessons" (
     "id" TEXT NOT NULL,
     "pathway_id" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
@@ -22,5 +22,5 @@ CREATE TABLE "pathway_lessons" (
     CONSTRAINT "pathway_lessons_pkey" PRIMARY KEY ("id")
 );
 
-CREATE UNIQUE INDEX "pathway_lessons_pathway_id_slug_key" ON "pathway_lessons"("pathway_id", "slug");
-CREATE INDEX "pathway_lessons_pathway_id_status_sort_order_idx" ON "pathway_lessons"("pathway_id", "status", "sort_order");
+CREATE UNIQUE INDEX IF NOT EXISTS "pathway_lessons_pathway_id_slug_key" ON "pathway_lessons"("pathway_id", "slug");
+CREATE INDEX IF NOT EXISTS "pathway_lessons_pathway_id_status_sort_order_idx" ON "pathway_lessons"("pathway_id", "status", "sort_order");

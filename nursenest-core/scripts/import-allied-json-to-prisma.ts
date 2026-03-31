@@ -7,7 +7,7 @@
  *
  * Default: dry-run (no writes). Use `--apply` to insert (requires DATABASE_URL).
  *
- * Blueprint rows have **no Prisma target yet** — parsed, validated, counted, optional `--blueprints-out=` snapshot only.
+ * Blueprint rows persist to `allied_blueprints` when `--apply` is set (requires migration applied).
  *
  * Run from nursenest-core/:
  *   npx tsx scripts/import-allied-json-to-prisma.ts \
@@ -55,7 +55,7 @@ function parseArgs() {
   };
 }
 
-function readJsonArray(filePath: string | undefined, _label: string): unknown[] {
+function readJsonArray(filePath: string | undefined, label: string): unknown[] {
   if (!filePath?.trim()) {
     return [];
   }
@@ -88,6 +88,23 @@ function asInt(v: unknown, fallback: number): number {
   if (typeof v === "number" && Number.isFinite(v)) return Math.trunc(v);
   if (typeof v === "string" && v.trim() !== "") return parseInt(v, 10) || fallback;
   return fallback;
+}
+
+function parseDateField(v: unknown): Date | undefined {
+  if (v === null || v === undefined) return undefined;
+  if (v instanceof Date) return v;
+  const s = asString(v, "");
+  if (!s) return undefined;
+  const d = new Date(s);
+  return Number.isNaN(d.getTime()) ? undefined : d;
+}
+
+function toJsonValue(v: unknown): Prisma.InputJsonValue {
+  if (v === null || v === undefined) return {};
+  if (typeof v === "string" || typeof v === "number" || typeof v === "boolean") return v;
+  if (Array.isArray(v)) return v as Prisma.InputJsonValue;
+  if (typeof v === "object") return v as Prisma.InputJsonValue;
+  return String(v);
 }
 
 /** Normalize options to Prisma JSON: array of option label strings (matches seed style). */
@@ -246,6 +263,44 @@ function alliedFlashcardRow(
   return { ok: true, value };
 }
 
+function alliedBlueprintToUpsert(
+  row: Record<string, unknown>,
+): { ok: true; id: string; data: Prisma.AlliedBlueprintCreateInput } | { ok: false; reason: string } {
+  const id = asString(pick(row, "id", "id"), "").trim();
+  if (!id) return { ok: false, reason: "missing_id" };
+  const careerType = asString(pick(row, "careerType", "career_type"), "").trim();
+  if (!careerType) return { ok: false, reason: "missing_career_type" };
+  const domains = pick(row, "domains", "domains");
+  const difficultyDistribution = pick(row, "difficultyDistribution", "difficulty_distribution");
+  const cognitiveDistribution = pick(row, "cognitiveDistribution", "cognitive_distribution");
+  const allowedQuestionTypes = pick(row, "allowedQuestionTypes", "allowed_question_types");
+  if (domains === undefined || domains === null) return { ok: false, reason: "missing_domains" };
+  if (difficultyDistribution === undefined || difficultyDistribution === null) {
+    return { ok: false, reason: "missing_difficulty_distribution" };
+  }
+  if (cognitiveDistribution === undefined || cognitiveDistribution === null) {
+    return { ok: false, reason: "missing_cognitive_distribution" };
+  }
+  if (allowedQuestionTypes === undefined || allowedQuestionTypes === null) {
+    return { ok: false, reason: "missing_allowed_question_types" };
+  }
+  const version = asInt(pick(row, "version", "version"), 1);
+  const isActive = pick(row, "isActive", "is_active");
+  const createdAt = parseDateField(pick(row, "createdAt", "created_at"));
+  const data: Prisma.AlliedBlueprintCreateInput = {
+    id,
+    careerType,
+    version,
+    domains: toJsonValue(domains),
+    difficultyDistribution: toJsonValue(difficultyDistribution),
+    cognitiveDistribution: toJsonValue(cognitiveDistribution),
+    allowedQuestionTypes: toJsonValue(allowedQuestionTypes),
+    isActive: isActive === undefined || isActive === null ? true : Boolean(isActive),
+    ...(createdAt ? { createdAt } : {}),
+  };
+  return { ok: true, id, data };
+}
+
 async function main() {
   const args = parseArgs();
   const qRows = readJsonArray(args.questionsPath, "questions").map((r) => r as Record<string, unknown>);
@@ -262,7 +317,7 @@ async function main() {
     },
     questions: { valid: 0, invalid: 0, reasons: {} as Record<string, number> },
     flashcards: { valid: 0, invalid: 0, reasons: {} as Record<string, number> },
-    blueprints: { valid: 0, note: "No Prisma table — snapshot only or future migration." },
+    blueprints: { valid: 0, invalid: 0, reasons: {} as Record<string, number> },
     exam_questions_would_insert: 0,
     exam_questions_would_skip_dup: 0,
     flashcards_would_insert: 0,
@@ -293,8 +348,16 @@ async function main() {
     normalizedFlashcards.push(n.value);
   }
 
-  for (const _b of bRows) {
+  const normalizedBlueprints: Prisma.AlliedBlueprintCreateInput[] = [];
+  for (const row of bRows) {
+    const n = alliedBlueprintToUpsert(row as Record<string, unknown>);
+    if (!n.ok) {
+      report.blueprints.invalid++;
+      report.blueprints.reasons[n.reason] = (report.blueprints.reasons[n.reason] ?? 0) + 1;
+      continue;
+    }
     report.blueprints.valid++;
+    normalizedBlueprints.push(n.data);
   }
 
   if (args.blueprintsOut && bRows.length > 0) {
@@ -304,7 +367,17 @@ async function main() {
   if (!args.apply) {
     report.exam_questions_would_insert = normalizedQuestions.length;
     report.flashcards_would_insert = normalizedFlashcards.length;
-    console.log(JSON.stringify({ ...report, message: "Dry-run only. Pass --apply to write exam_questions + Flashcard." }, null, 2));
+    console.log(
+      JSON.stringify(
+        {
+          ...report,
+          allied_blueprints_would_upsert: normalizedBlueprints.length,
+          message: "Dry-run only. Pass --apply to write exam_questions, Flashcard, allied_blueprints.",
+        },
+        null,
+        2,
+      ),
+    );
     return;
   }
 
@@ -413,6 +486,23 @@ async function main() {
       }
     }
 
+    for (const data of normalizedBlueprints) {
+      const id = (data as { id: string }).id;
+      await prisma.alliedBlueprint.upsert({
+        where: { id },
+        create: data,
+        update: {
+          careerType: data.careerType,
+          version: data.version,
+          domains: data.domains,
+          difficultyDistribution: data.difficultyDistribution,
+          cognitiveDistribution: data.cognitiveDistribution,
+          allowedQuestionTypes: data.allowedQuestionTypes,
+          isActive: data.isActive ?? true,
+        },
+      });
+    }
+
     console.log(
       JSON.stringify(
         {
@@ -421,10 +511,7 @@ async function main() {
           exam_questions_skipped: skippedQ,
           flashcards_inserted: insertedF,
           flashcards_skipped: skippedF,
-          blueprints: {
-            json_rows: bRows.length,
-            db_target: "none (add Prisma model + migration to persist blueprints)",
-          },
+          allied_blueprints_upserted: normalizedBlueprints.length,
         },
         null,
         2,

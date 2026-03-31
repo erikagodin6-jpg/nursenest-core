@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "BlogPost" (
+CREATE TABLE IF NOT EXISTS "BlogPost" (
     "id" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
     "title" TEXT NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE "BlogPost" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "BlogPost_slug_key" ON "BlogPost"("slug");
+CREATE UNIQUE INDEX IF NOT EXISTS "BlogPost_slug_key" ON "BlogPost"("slug");
 
 -- CreateIndex
-CREATE INDEX "BlogPost_published_createdAt_idx" ON "BlogPost"("published", "createdAt");
+CREATE INDEX IF NOT EXISTS "BlogPost_published_createdAt_idx" ON "BlogPost"("published", "createdAt");

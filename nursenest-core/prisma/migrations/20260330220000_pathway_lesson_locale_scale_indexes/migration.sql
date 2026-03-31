@@ -10,12 +10,23 @@ CREATE INDEX IF NOT EXISTS "pathway_lessons_pathway_locale_status_sort_idx" ON "
 CREATE INDEX IF NOT EXISTS "pathway_lessons_pathway_topic_locale_status_idx" ON "pathway_lessons"("pathway_id", "topic_slug", "locale", "status");
 
 -- Question bank: common entitlement list sorts / filters
-CREATE INDEX IF NOT EXISTS "exam_questions_status_updated_at_idx" ON "exam_questions"("status", "updated_at");
-
-CREATE INDEX IF NOT EXISTS "exam_questions_status_exam_tier_country_idx" ON "exam_questions"("status", "exam", "tier", "country_code");
+DO $$ BEGIN
+  IF to_regclass('public.exam_questions') IS NOT NULL THEN
+    EXECUTE 'CREATE INDEX IF NOT EXISTS "exam_questions_status_updated_at_idx" ON "exam_questions"("status", "updated_at")';
+    EXECUTE 'CREATE INDEX IF NOT EXISTS "exam_questions_status_exam_tier_country_idx" ON "exam_questions"("status", "exam", "tier", "country_code")';
+  END IF;
+END $$;
 
 -- App lessons (content_items): paginated subscriber lists
-CREATE INDEX IF NOT EXISTS "content_items_type_status_updated_at_idx" ON "content_items"("type", "status", "updated_at");
+DO $$ BEGIN
+  IF to_regclass('public.content_items') IS NOT NULL THEN
+    EXECUTE 'CREATE INDEX IF NOT EXISTS "content_items_type_status_updated_at_idx" ON "content_items"("type", "status", "updated_at")';
+  END IF;
+END $$;
 
--- Learner progress history (skip manually if `Progress` table not present in a fork DB).
-CREATE INDEX IF NOT EXISTS "Progress_userId_updatedAt_idx" ON "Progress"("userId", "updatedAt");
+-- Learner progress history (skip if `Progress` table not present).
+DO $$ BEGIN
+  IF to_regclass('public."Progress"') IS NOT NULL THEN
+    EXECUTE 'CREATE INDEX IF NOT EXISTS "Progress_userId_updatedAt_idx" ON "Progress"("userId", "updatedAt")';
+  END IF;
+END $$;

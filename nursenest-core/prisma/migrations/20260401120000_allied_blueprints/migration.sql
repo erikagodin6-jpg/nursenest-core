@@ -1,6 +1,6 @@
 -- CreateTable: allied_blueprints (legacy monolith / Replit import; aligns with shared/schema.ts alliedBlueprints)
 CREATE TABLE IF NOT EXISTS "allied_blueprints" (
-    "id" VARCHAR NOT NULL DEFAULT gen_random_uuid(),
+    "id" VARCHAR NOT NULL,
     "career_type" TEXT NOT NULL,
     "version" INTEGER NOT NULL DEFAULT 1,
     "domains" JSONB NOT NULL,
