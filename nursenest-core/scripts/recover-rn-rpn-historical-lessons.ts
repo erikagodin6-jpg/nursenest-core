@@ -305,52 +305,58 @@ async function main() {
   const contentItems = JSON.parse(fs.readFileSync(contentItemsPath, "utf8")) as Array<Record<string, unknown>>;
   const contentItemLessons = contentItems.filter((r) => String(r.type ?? "").toLowerCase() === "lesson");
 
-  const sourceAuditRows = [
-    {
-      sourcePath: "../client/src/data/lessons/index.ts (contentMap)",
-      sourceType: "ts-module",
-      rawLessonCount: legacy.sourceAudit.raw,
-      validLessonCount: legacy.sourceAudit.valid,
-      invalidLessonCount: legacy.sourceAudit.invalid,
-      pathwayMapping: "RN->us-rn+ca-rn, RPN->us-lpn+ca-rpn",
-      currentlyImportedIntoPathwayLessons: legacy.sourceRows.filter((r) => dbKeySet.has(`${r.pathwayId}::${r.slug}`)).length,
-      currentlySurfacedInRuntime: true,
-      sourceQualityClass: "historical/high-value",
-    },
-    {
-      sourcePath: "src/content/pathway-lessons/catalog.json",
-      sourceType: "json",
-      rawLessonCount: catalog.sourceAudit.raw,
-      validLessonCount: catalog.sourceAudit.valid,
-      invalidLessonCount: catalog.sourceAudit.invalid,
-      pathwayMapping: "direct",
-      currentlyImportedIntoPathwayLessons: catalog.sourceRows.filter((r) => dbKeySet.has(`${r.pathwayId}::${r.slug}`)).length,
-      currentlySurfacedInRuntime: true,
-      sourceQualityClass: "current/curated",
-    },
-    {
-      sourcePath: "data/materialized/rn-pn-replit-batch-2026/catalog-lessons.json",
-      sourceType: "json",
-      rawLessonCount: materialized.sourceAudit.raw,
-      validLessonCount: materialized.sourceAudit.valid,
-      invalidLessonCount: materialized.sourceAudit.invalid,
-      pathwayMapping: "bucket->pathway map",
-      currentlyImportedIntoPathwayLessons: materialized.sourceRows.filter((r) => dbKeySet.has(`${r.pathwayId}::${r.slug}`)).length,
-      currentlySurfacedInRuntime: true,
-      sourceQualityClass: "historical/high-value",
-    },
-    {
-      sourcePath: "data/replit-exports/content_items.json",
-      sourceType: "json",
-      rawLessonCount: contentItems.length,
-      validLessonCount: contentItemLessons.length,
-      invalidLessonCount: contentItems.length - contentItemLessons.length,
-      pathwayMapping: "none (no RN/RPN lesson rows found)",
-      currentlyImportedIntoPathwayLessons: 0,
-      currentlySurfacedInRuntime: false,
-      sourceQualityClass: "not-applicable",
-    },
-  ];
+  function buildSourceAuditRows(keySet: Set<string>) {
+    return [
+      {
+        sourcePath: "../client/src/data/lessons/index.ts (contentMap)",
+        sourceType: "ts-module",
+        rawLessonCount: legacy.sourceAudit.raw,
+        validLessonCount: legacy.sourceAudit.valid,
+        invalidLessonCount: legacy.sourceAudit.invalid,
+        pathwayMapping: "RN->us-rn+ca-rn, RPN->us-lpn+ca-rpn",
+        currentlyImportedIntoPathwayLessons: legacy.sourceRows.filter((r) => keySet.has(`${r.pathwayId}::${r.slug}`)).length,
+        currentlySurfacedInRuntime: true,
+        sourceQualityClass: "historical/high-value",
+        note:
+          "Per-pathway rows mirror legacy RN/RPN lessons (US+CA tiers); unique historical lesson count is ~587 RN + ~922 RPN tier lessons in contentMap, not 4x.",
+      },
+      {
+        sourcePath: "src/content/pathway-lessons/catalog.json",
+        sourceType: "json",
+        rawLessonCount: catalog.sourceAudit.raw,
+        validLessonCount: catalog.sourceAudit.valid,
+        invalidLessonCount: catalog.sourceAudit.invalid,
+        pathwayMapping: "direct",
+        currentlyImportedIntoPathwayLessons: catalog.sourceRows.filter((r) => keySet.has(`${r.pathwayId}::${r.slug}`)).length,
+        currentlySurfacedInRuntime: true,
+        sourceQualityClass: "current/curated",
+      },
+      {
+        sourcePath: "data/materialized/rn-pn-replit-batch-2026/catalog-lessons.json",
+        sourceType: "json",
+        rawLessonCount: materialized.sourceAudit.raw,
+        validLessonCount: materialized.sourceAudit.valid,
+        invalidLessonCount: materialized.sourceAudit.invalid,
+        pathwayMapping: "bucket->pathway map",
+        currentlyImportedIntoPathwayLessons: materialized.sourceRows.filter((r) => keySet.has(`${r.pathwayId}::${r.slug}`)).length,
+        currentlySurfacedInRuntime: true,
+        sourceQualityClass: "historical/high-value",
+      },
+      {
+        sourcePath: "data/replit-exports/content_items.json",
+        sourceType: "json",
+        rawLessonCount: contentItems.length,
+        validLessonCount: contentItemLessons.length,
+        invalidLessonCount: contentItems.length - contentItemLessons.length,
+        pathwayMapping: "none (no RN/RPN lesson rows found)",
+        currentlyImportedIntoPathwayLessons: 0,
+        currentlySurfacedInRuntime: false,
+        sourceQualityClass: "not-applicable",
+      },
+    ];
+  }
+
+  const sourceAuditRows = buildSourceAuditRows(dbKeySet);
   fs.writeFileSync(path.join(REPORT_DIR, "rn-rpn-historical-source-audit.json"), JSON.stringify({ generatedAt: new Date().toISOString(), rows: sourceAuditRows }, null, 2));
 
   const historicalEstimateBySource = {
@@ -522,6 +528,42 @@ async function main() {
     console.log(JSON.stringify({ phase: "import-batch", batch: batchIdx, totalBatches: grouped.length, inserted: bInserted, updated: bUpdated, skipped: bSkipped, failed: bFailed }, null, 2));
   }
 
+  const dbRowsPostImport = await prisma.pathwayLesson.findMany({
+    where: { pathwayId: { in: [...TARGET_PATHWAYS] }, locale: "en" },
+    select: { pathwayId: true, slug: true, status: true },
+  });
+  const dbKeySetPostImport = new Set(dbRowsPostImport.map((r) => `${r.pathwayId}::${r.slug}`));
+  const dbPublishedByPathwayPostImport = Object.fromEntries(
+    TARGET_PATHWAYS.map((pid) => [
+      pid,
+      dbRowsPostImport.filter((r) => r.pathwayId === pid && r.status === ContentStatus.PUBLISHED).length,
+    ]),
+  );
+  fs.writeFileSync(
+    path.join(REPORT_DIR, "rn-rpn-historical-source-audit.json"),
+    JSON.stringify({ generatedAt: new Date().toISOString(), rows: buildSourceAuditRows(dbKeySetPostImport) }, null, 2),
+  );
+  const missingByPathwayPostImport = Object.fromEntries(
+    TARGET_PATHWAYS.map((pid) => [pid, Math.max(0, expectedByPathwayFromLegacy[pid] - dbPublishedByPathwayPostImport[pid])]),
+  );
+  fs.writeFileSync(
+    path.join(REPORT_DIR, "rn-rpn-gap-analysis.json"),
+    JSON.stringify(
+      {
+        generatedAt: new Date().toISOString(),
+        note: "Post-import snapshot. Compare to pre-import totals in git history if needed.",
+        currentDbPublishedByPathway: dbPublishedByPathwayPostImport,
+        historicalEstimateBySource,
+        expectedByPathwayFromLegacy,
+        missingLessonCountByPathway: missingByPathwayPostImport,
+        missingStillExistsInSourceByPathway: missingByPathwayPostImport,
+        trulyAbsentFromSourceByPathway: Object.fromEntries(TARGET_PATHWAYS.map((pid) => [pid, 0])),
+      },
+      null,
+      2,
+    ),
+  );
+
   const importSummary = {
     generatedAt: new Date().toISOString(),
     apply,
@@ -576,10 +618,28 @@ async function main() {
   const pathwayPublishedDbTotal = await prisma.pathwayLesson.count({ where: { status: ContentStatus.PUBLISHED, locale: "en" } });
   const adminMatchesDb = stats?.totals.pathwayLessonsPublished === pathwayPublishedDbTotal;
 
+  const combinedRnPublished =
+    (finalByPathway["us-rn-nclex-rn"] ?? 0) + (finalByPathway["ca-rn-nclex-rn"] ?? 0);
+  const combinedRpnPnPublished =
+    (finalByPathway["us-lpn-nclex-pn"] ?? 0) + (finalByPathway["ca-rpn-rex-pn"] ?? 0);
+
   const finalValidation = {
     generatedAt: new Date().toISOString(),
     currentTotalsBeforeRecovery: dbPublishedByPathway,
     finalPublishedDbByPathway: finalByPathway,
+    countSemantics: {
+      historicalUniqueLegacyLessonsInContentMap: {
+        rnTier: historicalEstimateBySource.legacyContentMapRN,
+        rpnPnTier: historicalEstimateBySource.legacyContentMapRPN,
+        note: "Unique legacy IDs per tier — not comparable to summed pathway row counts without reconciliation (each ID maps to US+CA rows).",
+      },
+      recoveredFromSourceOperations: inserted + updated,
+      recoveredFromSourceOperationsNote:
+        "DB insert/update operations on pathway+slug keys — equals inserted+updated, not unique canonical lessons.",
+      finalLivePublishedRowsCombinedRn: combinedRnPublished,
+      finalLivePublishedRowsCombinedRpnPn: combinedRpnPnPublished,
+      reconciliationReport: "data/reports/pathway-lessons/rn-rpn-count-reconciliation.json",
+    },
     historicalEstimate: {
       rn: historicalEstimateBySource.legacyContentMapRN,
       rpnPn: historicalEstimateBySource.legacyContentMapRPN,

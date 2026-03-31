@@ -1,0 +1,12 @@
+{
+  "generatedAt": "2026-03-31T16:47:15.766Z",
+  "apply": true,
+  "batchSize": 150,
+  "candidateRows": 3403,
+  "processedRows": 3403,
+  "inserted": 3036,
+  "updated": 52,
+  "skipped": 315,
+  "failed": 0,
+  "generatedTrueGapLessons": 0
+}

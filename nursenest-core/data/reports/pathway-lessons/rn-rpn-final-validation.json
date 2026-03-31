@@ -1,0 +1,219 @@
+{
+  "generatedAt": "2026-03-31T16:47:16.443Z",
+  "currentTotalsBeforeRecovery": {
+    "us-rn-nclex-rn": 122,
+    "ca-rn-nclex-rn": 123,
+    "us-lpn-nclex-pn": 61,
+    "ca-rpn-rex-pn": 61
+  },
+  "finalPublishedDbByPathway": {
+    "ca-rn-nclex-rn": 708,
+    "ca-rpn-rex-pn": 983,
+    "us-lpn-nclex-pn": 994,
+    "us-rn-nclex-rn": 718
+  },
+  "historicalEstimate": {
+    "rn": 587,
+    "rpnPn": 922
+  },
+  "recoveredFromSource": 3088,
+  "generatedTrueGapLessons": 0,
+  "hubTotals": {
+    "us-rn-nclex-rn": 718,
+    "ca-rn-nclex-rn": 708,
+    "us-lpn-nclex-pn": 994,
+    "ca-rpn-rex-pn": 983
+  },
+  "detailRouteTotals": {
+    "us-rn-nclex-rn": 718,
+    "ca-rn-nclex-rn": 708,
+    "us-lpn-nclex-pn": 994,
+    "ca-rpn-rex-pn": 983
+  },
+  "randomResolutionChecks": {
+    "total": 32,
+    "failed": 0,
+    "rows": [
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "respiratory-assessment-ngn",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "us-rn-pulmonary-embolism",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "us-rn-heart-failure",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "us-rn-myocardial-infarction",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "us-rn-angina",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "us-rn-dysrhythmias",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "us-rn-hypertension",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-rn-nclex-rn",
+        "slug": "us-rn-shock",
+        "resolved": true
+      },
+      {
+        "pathwayId": "ca-rn-nclex-rn",
+        "slug": "fluid-balance-acute-care",
+        "resolved": true
+      },
+      {
+        "pathwayId": "ca-rn-nclex-rn",
+        "slug": "cardiovascular-prioritization",
+        "resolved": true
+      },
+      {
+        "pathwayId": "ca-rn-nclex-rn",
+        "slug": "ca-rn-pulmonary-embolism",
+        "resolved": true
+      },
+      {
+        "pathwayId": "ca-rn-nclex-rn",
+        "slug": "ca-rn-heart-failure",
+        "resolved": true
+      },
+      {
+        "pathwayId": "ca-rn-nclex-rn",
+        "slug": "ca-rn-myocardial-infarction",
+        "resolved": true
+      },
+      {
+        "pathwayId": "ca-rn-nclex-rn",
+        "slug": "ca-rn-angina",
+        "resolved": true
+      },
+      {
+        "pathwayId": "ca-rn-nclex-rn",
+        "slug": "ca-rn-dysrhythmias",
+        "resolved": true
+      },
+      {
+        "pathwayId": "ca-rn-nclex-rn",
+        "slug": "ca-rn-hypertension",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-lpn-nclex-pn",
+        "slug": "lpn-scope-delegation-priority",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-lpn-nclex-pn",
+        "slug": "us-pn-pulmonary-embolism",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-lpn-nclex-pn",
+        "slug": "us-pn-heart-failure",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-lpn-nclex-pn",
+        "slug": "us-pn-myocardial-infarction",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-lpn-nclex-pn",
+        "slug": "us-pn-angina",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-lpn-nclex-pn",
+        "slug": "us-pn-dysrhythmias",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-lpn-nclex-pn",
+        "slug": "us-pn-hypertension",
+        "resolved": true
+      },
+      {
+        "pathwayId": "us-lpn-nclex-pn",
+        "slug": "us-pn-shock",
+        "resolved": true
+      },
+      {
+        "pathwayId": "ca-rpn-rex-pn",
+        "slug": "pn-scope-safety-basics",
+        "resolved": true
+      },
+      {
+        "pathwayId": "ca-rpn-rex-pn",
+        "slug": "ca-rpn-pulmonary-embolism",
+        "resolved": true
+      },
+      {
+        "pathwayId": "ca-rpn-rex-pn",
+        "slug": "ca-rpn-heart-failure",
+        "resolved": true
+      },
+      {
+        "pathwayId": "ca-rpn-rex-pn",
+        "slug": "ca-rpn-myocardial-infarction",
+        "resolved": true
+      },
+      {
+        "pathwayId": "ca-rpn-rex-pn",
+        "slug": "ca-rpn-angina",
+        "resolved": true
+      },
+      {
+        "pathwayId": "ca-rpn-rex-pn",
+        "slug": "ca-rpn-dysrhythmias",
+        "resolved": true
+      },
+      {
+        "pathwayId": "ca-rpn-rex-pn",
+        "slug": "ca-rpn-hypertension",
+        "resolved": true
+      },
+      {
+        "pathwayId": "ca-rpn-rex-pn",
+        "slug": "ca-rpn-shock",
+        "resolved": true
+      }
+    ]
+  },
+  "adminOpsCountMatch": true,
+  "sampleUrls": [
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "hub": "/us/rn/nclex-rn/lessons"
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "hub": "/canada/rn/nclex-rn/lessons"
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "hub": "/us/lpn/nclex-pn/lessons"
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "hub": "/canada/rpn/rex-pn/lessons"
+    }
+  ],
+  "blockers": []
+}
