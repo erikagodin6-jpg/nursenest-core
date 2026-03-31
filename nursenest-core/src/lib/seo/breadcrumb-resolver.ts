@@ -79,7 +79,9 @@ export function marketingHomeSurfaceBreadcrumbs(): BreadcrumbResolution {
 }
 
 /** App shell: UX only — no schema items. */
-export function appShellBreadcrumbs(section: "dashboard" | "lessons" | "questions" | "exams"): BreadcrumbCrumb[] {
+export function appShellBreadcrumbs(
+  section: "dashboard" | "lessons" | "questions" | "exams" | "practice-tests",
+): BreadcrumbCrumb[] {
   switch (section) {
     case "dashboard":
       return [HOME, { name: "Dashboard", href: undefined }];
@@ -89,6 +91,8 @@ export function appShellBreadcrumbs(section: "dashboard" | "lessons" | "question
       return [HOME, { name: "Question bank", href: undefined }];
     case "exams":
       return [HOME, { name: "Practice exams", href: undefined }];
+    case "practice-tests":
+      return [HOME, { name: "Practice tests", href: undefined }];
     default:
       return [HOME];
   }

@@ -1,0 +1,175 @@
+import type Stripe from "stripe";
+import { Prisma, TrialStatus } from "@prisma/client";
+import { prisma } from "@/lib/db";
+import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
+import { hashTrialDeviceFingerprint } from "@/lib/trial/trial-fingerprint";
+import { TRIAL_DURATION_MS } from "@/lib/trial/trial-constants";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { expireStaleTrialForUser } from "@/lib/trial/expire-stale-trial";
+
+export type StartTrialResult =
+  | { ok: true; trialEndsAt: string }
+  | { ok: false; code: string; message: string; status: number };
+
+async function getStripeClient(): Promise<Stripe | null> {
+  const key = process.env.STRIPE_SECRET_KEY?.trim();
+  if (!key) return null;
+  const { default: Stripe } = await import("stripe");
+  return new Stripe(key);
+}
+
+/**
+ * If Stripe finds any subscription (past or present) on this email, deny trial
+ * (payment / customer reuse — paid checkout remains available).
+ */
+async function stripeEmailHasSubscriptionHistory(email: string): Promise<boolean> {
+  if (process.env.TRIAL_STRIPE_EMAIL_CHECK === "false") return false;
+  const stripe = await getStripeClient();
+  if (!stripe) return false;
+  try {
+    const customers = await stripe.customers.list({ email: email.toLowerCase(), limit: 20 });
+    for (const c of customers.data) {
+      const subs = await stripe.subscriptions.list({ customer: c.id, status: "all", limit: 5 });
+      if (subs.data.length > 0) return true;
+    }
+  } catch (e) {
+    safeServerLog("trial", "stripe_email_probe_failed", { detail: e instanceof Error ? e.message.slice(0, 120) : "unknown" });
+  }
+  return false;
+}
+
+/**
+ * Starts a one-time 24h trial: full subscriber-equivalent entitlement for the user’s profile tier + country.
+ */
+export async function attemptStartTrial(args: {
+  userId: string;
+  deviceId: string;
+  ip: string;
+}): Promise<StartTrialResult> {
+  const { userId, deviceId, ip } = args;
+
+  if (!isDatabaseUrlConfigured()) {
+    return { ok: false, code: "db_unavailable", message: "Service unavailable.", status: 503 };
+  }
+
+  const ipRl = checkRateLimit(`trial-start:ip:${ip}`, { windowMs: 86_400_000, max: 20 });
+  if (!ipRl.ok) {
+    return { ok: false, code: "rate_limit_ip", message: "Too many attempts from this network. Try again tomorrow.", status: 429 };
+  }
+
+  const userRl = checkRateLimit(`trial-start:user:${userId}`, { windowMs: 3_600_000, max: 5 });
+  if (!userRl.ok) {
+    return { ok: false, code: "rate_limit_user", message: "Too many attempts. Try again later.", status: 429 };
+  }
+
+  const fpHash = hashTrialDeviceFingerprint(deviceId);
+
+  await expireStaleTrialForUser(userId);
+
+  const existingBinding = await prisma.trialDeviceBinding.findUnique({
+    where: { fingerprintHash: fpHash },
+    select: { userId: true },
+  });
+  if (existingBinding && existingBinding.userId !== userId) {
+    return {
+      ok: false,
+      code: "device_already_trialed",
+      message: "This device already used a free trial. You can still subscribe below.",
+      status: 403,
+    };
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      email: true,
+      trialStatus: true,
+      trialUsedAt: true,
+      trialEndsAt: true,
+      _count: { select: { subscriptions: true } },
+    },
+  });
+
+  if (!user) {
+    return { ok: false, code: "user_not_found", message: "Account not found.", status: 404 };
+  }
+
+  if (user._count.subscriptions > 0) {
+    return {
+      ok: false,
+      code: "has_subscription_history",
+      message: "Trial is for new members only. Use checkout to subscribe.",
+      status: 403,
+    };
+  }
+
+  if (user.trialUsedAt != null || user.trialStatus === TrialStatus.EXHAUSTED) {
+    return { ok: false, code: "trial_already_used", message: "You already used your free trial.", status: 403 };
+  }
+
+  if (user.trialStatus === TrialStatus.ACTIVE && user.trialEndsAt && user.trialEndsAt > new Date()) {
+    return {
+      ok: true,
+      trialEndsAt: user.trialEndsAt.toISOString(),
+    };
+  }
+
+  if (user.trialUsedAt != null) {
+    return { ok: false, code: "trial_already_used", message: "You already used your free trial.", status: 403 };
+  }
+
+  if (await stripeEmailHasSubscriptionHistory(user.email)) {
+    return {
+      ok: false,
+      code: "stripe_email_in_use",
+      message: "This email has billing history. Use checkout to subscribe.",
+      status: 403,
+    };
+  }
+
+  const now = new Date();
+  const ends = new Date(now.getTime() + TRIAL_DURATION_MS);
+
+  try {
+    await prisma.$transaction(async (tx) => {
+      const bind = await tx.trialDeviceBinding.findUnique({ where: { fingerprintHash: fpHash } });
+      if (bind && bind.userId !== userId) {
+        throw new Error("device_race");
+      }
+      if (!bind) {
+        await tx.trialDeviceBinding.create({ data: { fingerprintHash: fpHash, userId } });
+      }
+      await tx.user.update({
+        where: { id: userId },
+        data: {
+          trialStatus: TrialStatus.ACTIVE,
+          trialUsedAt: now,
+          trialStartedAt: now,
+          trialEndsAt: ends,
+        },
+      });
+    });
+  } catch (e) {
+    if (e instanceof Error && e.message === "device_race") {
+      return {
+        ok: false,
+        code: "device_already_trialed",
+        message: "This device already used a free trial. You can still subscribe below.",
+        status: 403,
+      };
+    }
+    if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2002") {
+      return {
+        ok: false,
+        code: "device_already_trialed",
+        message: "This device already used a free trial. You can still subscribe below.",
+        status: 403,
+      };
+    }
+    throw e;
+  }
+
+  safeServerLog("trial", "trial_started", { userIdPrefix: userId.slice(0, 8) });
+  return { ok: true, trialEndsAt: ends.toISOString() };
+}

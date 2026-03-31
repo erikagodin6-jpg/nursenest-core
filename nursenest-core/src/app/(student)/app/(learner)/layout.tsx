@@ -49,6 +49,9 @@ export default async function LearnerShellLayout({ children }: { children: React
           <Link className="rounded-full border border-border bg-white px-3 py-2 hover:bg-gray-50" href="/app/questions">
             Question Bank
           </Link>
+          <Link className="rounded-full border border-border bg-white px-3 py-2 hover:bg-gray-50" href="/app/practice-tests">
+            Practice tests
+          </Link>
           <Link className="rounded-full border border-border bg-white px-3 py-2 hover:bg-gray-50" href="/app/exams">
             Practice Exams
           </Link>
