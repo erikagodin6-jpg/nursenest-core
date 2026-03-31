@@ -23,7 +23,10 @@ interface FileCountResult {
 
 const CAREER_QUESTIONS_DIR = path.resolve(__dirname, "../client/src/data/career-questions");
 const EXAM_QUESTIONS_DIR = path.resolve(__dirname, "../client/src/data/exam-questions");
+/** Advanced RN/RPN/NP formats (bowtie, SATA, etc.) — sibling module to `exam-questions`. */
+const ADVANCED_QUESTIONS_DIR = path.resolve(__dirname, "../client/src/data/advanced-questions");
 const SERVER_DATA_DIR = path.resolve(__dirname, "../server/data");
+const REPO_ROOT = path.resolve(__dirname, "..");
 
 const ALLIED_HEALTH_FILE_MAP: Record<string, string[]> = {
   rrt: [
@@ -124,7 +127,7 @@ const NURSING_CERT_FILE_MAP: Record<string, string[]> = {
   pediatricCert: ["pediatric-cert-questions.ts"],
 };
 
-function discoverNursingTierFiles(dir: string): Record<string, string[]> {
+function discoverNursingTierFiles(dirs: string[]): Record<string, string[]> {
   const tiers: Record<string, string[]> = {
     rn: [],
     rpn: [],
@@ -132,19 +135,23 @@ function discoverNursingTierFiles(dir: string): Record<string, string[]> {
     preNursing: [],
   };
 
-  if (!fs.existsSync(dir)) return tiers;
+  for (const dir of dirs) {
+    if (!fs.existsSync(dir)) continue;
+    const files = fs
+      .readdirSync(dir)
+      .filter((f) => f.endsWith(".ts") && f !== "types.ts" && f !== "index.ts");
 
-  const files = fs.readdirSync(dir).filter((f) => f.endsWith(".ts") && f !== "types.ts");
-
-  for (const file of files) {
-    if (file.startsWith("rn-")) {
-      tiers.rn.push(file);
-    } else if (file.startsWith("rpn-")) {
-      tiers.rpn.push(file);
-    } else if (file.startsWith("np-")) {
-      tiers.np.push(file);
-    } else if (file.startsWith("prenursing")) {
-      tiers.preNursing.push(file);
+    for (const file of files) {
+      const full = path.join(dir, file);
+      if (file.startsWith("rn-")) {
+        tiers.rn.push(full);
+      } else if (file.startsWith("rpn-")) {
+        tiers.rpn.push(full);
+      } else if (file.startsWith("np-")) {
+        tiers.np.push(full);
+      } else if (file.startsWith("prenursing")) {
+        tiers.preNursing.push(full);
+      }
     }
   }
 
@@ -441,6 +448,44 @@ function countTier(
   return { tierCount, failures };
 }
 
+/** Like {@link countTier} but accepts absolute file paths (used for `advanced-questions` + `exam-questions`). */
+function countTierByPaths(
+  filePaths: string[],
+  countFn: (fp: string) => FileCountResult = countExamQuestions
+): { tierCount: TierQuestionCount; failures: string[] } {
+  const tierCount: TierQuestionCount = {
+    total: 0,
+    byCategory: {},
+    byFormat: {},
+    files: [],
+  };
+  const failures: string[] = [];
+
+  for (const filePath of filePaths) {
+    if (!fs.existsSync(filePath)) {
+      failures.push(`${filePath}: file not found`);
+      continue;
+    }
+
+    const result = countFn(filePath);
+    if (result.error) {
+      failures.push(`${filePath}: ${result.error}`);
+      continue;
+    }
+
+    tierCount.total += result.count;
+    tierCount.files.push(path.relative(REPO_ROOT, filePath));
+    for (const [cat, n] of Object.entries(result.categories)) {
+      tierCount.byCategory[cat] = (tierCount.byCategory[cat] || 0) + n;
+    }
+    for (const [fmt, n] of Object.entries(result.formats)) {
+      tierCount.byFormat[fmt] = (tierCount.byFormat[fmt] || 0) + n;
+    }
+  }
+
+  return { tierCount, failures };
+}
+
 function countServerDataDir(
   dirName: string,
   excludeFiles: string[]
@@ -561,10 +606,10 @@ async function main() {
     console.log(`  ${key}: ${tierCount.total} questions (${tierCount.files.length} files)`);
   }
 
-  console.log("\nScanning nursing tier question files (exam-questions)...");
-  const nursingTierFiles = discoverNursingTierFiles(EXAM_QUESTIONS_DIR);
+  console.log("\nScanning nursing tier question files (exam-questions + advanced-questions)...");
+  const nursingTierFiles = discoverNursingTierFiles([EXAM_QUESTIONS_DIR, ADVANCED_QUESTIONS_DIR]);
   for (const [tier, files] of Object.entries(nursingTierFiles)) {
-    const { tierCount, failures } = countTier(EXAM_QUESTIONS_DIR, files, countExamQuestions);
+    const { tierCount, failures } = countTierByPaths(files, countExamQuestions);
     nursing[tier] = tierCount;
     allFailures.push(...failures);
     totalFileCount += tierCount.files.length;

@@ -98,7 +98,7 @@ function QuizBlock({ title, questions }: { title: string; questions: Array<QuizQ
     <Section title={title}>
       <ol className="mt-2 list-decimal space-y-4 pl-5 text-sm text-[var(--theme-body-text)]">
         {filtered.map((q, i) => {
-          const correctIdx = q.correct ?? q.correctIndex ?? 0;
+          const correctIdx = q.correct ?? 0;
           return (
           <li key={i} className="marker:font-semibold">
             <p className="font-medium text-foreground">{q.question}</p>

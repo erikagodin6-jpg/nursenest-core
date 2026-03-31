@@ -1,10 +1,9 @@
+/** Quiz item shape used across monolith lesson bundles (MCQ / SATA metadata). */
 export type QuizQuestion = {
   question: string;
   options: string[];
   /** Zero-based index of the correct option */
-  correct?: number;
-  /** Alias used in some allied-health lesson bundles */
-  correctIndex?: number;
+  correct: number;
   rationale: string | string[];
 };
 
