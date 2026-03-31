@@ -20,6 +20,11 @@ const BATCH_TAG = "mixed-practice-2026-rn-pn";
 const SPRINT_TAG = "batch-rn-pn-2026-sprint2";
 const PRESET_RN_TAG = "exam-preset-rn-mixed-2026";
 const PRESET_PN_TAG = "exam-preset-pn-mixed-2026";
+const PRESET_US_RN_FULL_TAG = "exam-preset-us-rn-full-2026";
+const PRESET_CA_RN_FULL_TAG = "exam-preset-ca-rn-full-2026";
+const PRESET_US_PN_FULL_TAG = "exam-preset-us-pn-full-2026";
+const PRESET_CA_RPN_FULL_TAG = "exam-preset-ca-rpn-full-2026";
+const FULL_EXAM_QUESTION_TARGET = 75;
 
 /** Minimum flashcards to emit; also scales up lightly with bank size (capped). */
 const TARGET_FLASHCARDS_MIN = 150;
@@ -340,29 +345,41 @@ function toQuiz(row: RawQ, options: string[]): { question: string; options: stri
 function caOverlayParagraph(spec: TopicSpec, role: "rn" | "pn"): string {
   const base =
     role === "rn"
-      ? `**Canada RN:** Use **SI labs where stems show mmol/L** (e.g. glucose, electrolytes) and interpret alongside clinical context. Provincial practice standards and employer policy still govern delegation and independent actions.`
-      : `**Canada PN (REx-PN-style):** Emphasize **stable** client care, **task-level** actions with clear orders, and **timely RN communication** when assessment findings exceed PN scope or orders are unclear.`;
+      ? `**Canada RN (NCLEX-RN):** Prefer **SI/metric** labs in stems (mmol/L glucose, etc.), **Canadian guideline** phrasing where present, and **provincial** scope language—not US-only statutes. Provincial standards and employer policy govern delegation.`
+      : `**Canada RPN (REx-PN-style):** Frame **decision-making within RPN scope**: assignment clarity, **who to notify**, when findings exceed scope, and **safety** over task completion. REx-PN items stress **judgment within role**, not independent medical diagnosis.`;
   const scope =
     spec.bodySystem === "General" || spec.key === "delegation"
-      ? ` **Scope:** Follow your **provincial college** practice standards—not US state nurse practice act wording in distractors.`
+      ? role === "pn"
+        ? ` **Assignment:** Know what may be **delegated** vs **retained** under college standards; unclear orders → **clarify** before acting.`
+        : ` **Scope:** Follow **provincial college** expectations—not US **Nurse Practice Act** distractors verbatim.`
       : "";
   return `${base}${scope}`;
 }
 
+function usRnOverlayBlock(): string {
+  return `\n\n**US RN (NCLEX-RN):** Prioritize **airway–breathing–circulation** and **unstable vs stable** framing. Watch **delegation** traps: what must stay with the RN when the client is **deteriorating** vs what is appropriate for the **UAP/LPN** when stable and within competency.`;
+}
+
+function usPnOverlayBlock(): string {
+  return `\n\n**US PN (NCLEX-PN):** Expect **task-based** care for **stable** clients, **clear orders**, and **prompt RN report** when assessment exceeds PN scope. Favor **concrete nursing actions** over independent diagnostic or prescribing decisions.`;
+}
+
 function fiveSections(spec: TopicSpec, role: "us" | "ca", track: "rn" | "pn"): Record<string, unknown>[] {
   const caBlock = role === "ca" ? `\n\n${caOverlayParagraph(spec, track)}` : "";
+  const usRn = role === "us" && track === "rn" ? usRnOverlayBlock() : "";
+  const usPn = role === "us" && track === "pn" ? usPnOverlayBlock() : "";
   return [
     {
       id: "clinical_meaning",
       heading: "Clinical meaning",
       kind: "clinical_meaning",
-      body: `**${spec.label}** items test whether you connect assessment data to risk: what changes first, what needs escalation, and what teaching or orders are unsafe in context.${caBlock}`,
+      body: `**${spec.label}** items test whether you connect assessment data to risk: what changes first, what needs escalation, and what teaching or orders are unsafe in context.${caBlock}${usRn}${usPn}`,
     },
     {
       id: "exam_relevance",
       heading: "Exam relevance",
       kind: "exam_relevance",
-      body: `Expect **prioritization**, **monitoring**, and **safety**—especially when the stem adds routine tasks alongside an abnormal finding.${role === "ca" ? " Canadian items may use metric units and Canadian care settings; the judgment pattern is the same." : ""}`,
+      body: `Expect **prioritization**, **monitoring**, and **safety**—especially when the stem adds routine tasks alongside an abnormal finding.${role === "ca" ? " Canadian items may use metric units and Canadian care settings; the judgment pattern is the same." : ""}${role === "us" && track === "rn" ? " **US:** NCLEX-style **who to see first** and **which order to question**." : ""}${role === "us" && track === "pn" ? " **US:** NCLEX-PN stresses **safe sequencing** of delegated care." : ""}${role === "ca" && track === "pn" ? " **Canada:** REx-PN may emphasize **assignment**, **communication**, and **scope boundaries**." : ""}`,
     },
     {
       id: "core_concept",
@@ -376,14 +393,14 @@ function fiveSections(spec: TopicSpec, role: "us" | "ca", track: "rn" | "pn"): R
       kind: "clinical_scenario",
       body:
         track === "pn"
-          ? `You have multiple tasks; one client shows a **new finding** that could worsen without action. Choose the **scope-safe** move: assess/report per order, delegate only what policy allows, and escalate when instability is likely.${role === "ca" ? " In Canada, match **RPN** expectations for reporting and collaboration." : ""}`
+          ? `You have multiple tasks; one client shows a **new finding** that could worsen without action. Choose the **scope-safe** move: assess/report per order, delegate only what policy allows, and escalate when instability is likely.${role === "ca" ? " **RPN:** clarify **assignment**, document **concerns**, and escalate per college expectations—not autonomous medical decisions." : " **PN:** stay within **NCLEX-PN** task and reporting expectations."}`
           : `You are managing competing priorities. Choose the client whose **risk rises fastest** without nursing intervention—then the assessment or order that matches that risk.${role === "ca" ? " Use Canadian acute-care context when the stem references units or roles." : ""}`,
     },
     {
       id: "takeaways",
       heading: "Takeaways",
       kind: "takeaways",
-      body: `- Link **vitals + labs + story** before teaching or discharge.\n- Eliminate options that **skip assessment** or **delay escalation** when data show instability.\n- **Bank:** drill items tagged \`topic:${spec.key}\` from imported Replit MCQs.${role === "ca" ? "\n- **Canada:** watch for **metric labs** and **college scope** language in PN stems." : ""}`,
+      body: `- Link **vitals + labs + story** before teaching or discharge.\n- Eliminate options that **skip assessment** or **delay escalation** when data show instability.\n- **Bank:** drill items tagged \`topic:${spec.key}\` from imported Replit MCQs.${role === "ca" ? "\n- **Canada:** watch for **metric labs** and **college / REx-PN** scope language in PN stems." : "\n- **US RN:** review **delegation** and **prioritization** rules for unstable presentations."}${role === "us" && track === "pn" ? "\n- **US PN:** rehearse **stable-client** tasks and **when to stop and notify** the RN." : ""}`,
     },
   ];
 }
@@ -393,8 +410,55 @@ function normalizeRegionScope(rs: string | null | undefined): "US_ONLY" | "CA_ON
     .trim()
     .toUpperCase()
     .replace(/-/g, "_");
-  if (u === "US_ONLY" || u === "CA_ONLY" || u === "BOTH") return u as "US_ONLY" | "CA_ONLY" | "BOTH";
+  if (u === "US" || u === "US_ONLY") return "US_ONLY";
+  if (u === "CA" || u === "CAN" || u === "CA_ONLY") return "CA_ONLY";
+  if (u === "BOTH") return "BOTH";
   return "BOTH";
+}
+
+/**
+ * Classify PN rows for preset pools (Replit uses tier `rpn` for both US and Canada).
+ * `pn-transnational`: BOTH-region rows without explicit exam hint — tagged for **both** full PN presets so US and CA
+ * 75-Q draws stay viable without duplicating lesson rows or dropping bank items.
+ */
+function pnTrack(row: RawQ): "nclex-pn-us" | "rex-pn-ca" | "pn-transnational" {
+  const raw = String(row.region_scope ?? "BOTH").trim().toUpperCase();
+  const ex = String(row.exam ?? "");
+  if (raw === "US") return "nclex-pn-us";
+  if (raw === "CA" || raw === "CAN") return "rex-pn-ca";
+  if (/NCLEX-PN/i.test(ex)) return "nclex-pn-us";
+  if (/REX-PN|REx-PN|RPN-CAT/i.test(ex)) return "rex-pn-ca";
+  if (raw === "BOTH") return "pn-transnational";
+  return "rex-pn-ca";
+}
+
+function materializedQuestionTier(row: RawQ): "rn" | "rpn" | "lvn" {
+  const t = String(row.tier).toLowerCase();
+  if (t === "rn") return "rn";
+  if (t === "rpn") return "rpn";
+  if (t === "lvn" || t === "lpn") return "lvn";
+  return "rn";
+}
+
+function examTagForRow(
+  mTier: "rn" | "rpn" | "lvn",
+  track: "nclex-pn-us" | "rex-pn-ca" | "pn-transnational" | null,
+): string {
+  if (mTier === "rn") return "NCLEX-RN";
+  if (mTier === "rpn" || mTier === "lvn") {
+    if (track === "nclex-pn-us") return "NCLEX-PN";
+    if (track === "rex-pn-ca") return "REx-PN";
+    if (track === "pn-transnational") return "PN-TRANSNATIONAL";
+    return "REx-PN";
+  }
+  return "NCLEX-RN";
+}
+
+function flashTierLabel(row: RawQ): "RN" | "RPN" | "LVN_LPN" {
+  const m = materializedQuestionTier(row);
+  if (m === "rn") return "RN";
+  if (m === "rpn") return "RPN";
+  return "LVN_LPN";
 }
 
 function examLabelForRow(row: RawQ, isPn: boolean): string {
@@ -456,29 +520,60 @@ function main() {
 
     const tierLower = tierStr.toLowerCase();
     const isPn = isPnTier(tierLower);
+    const mTier = materializedQuestionTier(row);
+    const track = isPn ? pnTrack(row) : null;
+    const examNorm = examTagForRow(mTier, track);
     const exam = examLabelForRow(row, isPn);
-    const tierDb = isPn ? "lvn" : "rn";
     const diff = typeof row.difficulty === "number" ? row.difficulty : 3;
     const presetTag = isPn ? PRESET_PN_TAG : PRESET_RN_TAG;
     const priority = spec.key === CATCH_ALL_SPEC.key ? "priority:medium" : "priority:high";
     const regionScope = normalizeRegionScope(row.region_scope);
-    const tags = Array.from(
-      new Set([
-        BATCH_TAG,
-        SPRINT_TAG,
-        presetTag,
-        `topic:${spec.key}`,
-        `category:${spec.categorySlug}`,
-        `exam:${isPn ? "NCLEX-PN" : "NCLEX-RN"}`,
-        `difficulty:${diff}`,
-        priority,
-        "source:replit-exam_questions.json",
-        "materialization:full-bank",
-        `sourceExam:${sourceExamTagFragment(row)}`,
-        isPn ? "overlay:pn-scope" : "overlay:rn-prioritization",
-        regionScope === "BOTH" ? "overlay:region-both" : `overlay:region-${regionScope.toLowerCase().replace("_", "-")}`,
-      ]),
-    );
+
+    const countryTags: string[] = [];
+    if (regionScope === "US_ONLY") countryTags.push("country:US");
+    else if (regionScope === "CA_ONLY") countryTags.push("country:CA");
+    else {
+      countryTags.push("country:US", "country:CA");
+    }
+
+    const overlayExam =
+      mTier === "rn"
+        ? regionScope === "CA_ONLY"
+          ? "overlay:ca-nclex-rn"
+          : regionScope === "US_ONLY"
+            ? "overlay:us-nclex-rn"
+            : "overlay:nclex-rn-transnational"
+        : track === "nclex-pn-us"
+          ? "overlay:nclex-pn-us"
+          : track === "pn-transnational"
+            ? "overlay:pn-transnational"
+            : "overlay:rex-pn-ca";
+
+    const tags = new Set<string>([
+      BATCH_TAG,
+      SPRINT_TAG,
+      presetTag,
+      `topic:${spec.key}`,
+      `category:${spec.categorySlug}`,
+      `exam:${examNorm}`,
+      `difficulty:${diff}`,
+      priority,
+      "source:replit-exam_questions.json",
+      "materialization:full-bank",
+      `sourceExam:${sourceExamTagFragment(row)}`,
+      overlayExam,
+      regionScope === "BOTH" ? "overlay:region-both" : `overlay:region-${regionScope.toLowerCase().replace("_", "-")}`,
+      ...countryTags,
+    ]);
+
+    if (mTier === "rn") {
+      if (regionScope === "US_ONLY" || regionScope === "BOTH") tags.add(PRESET_US_RN_FULL_TAG);
+      if (regionScope === "CA_ONLY" || regionScope === "BOTH") tags.add(PRESET_CA_RN_FULL_TAG);
+    }
+    if (mTier === "rpn" && track) {
+      if (track === "nclex-pn-us") tags.add(PRESET_US_PN_FULL_TAG);
+      if (track === "rex-pn-ca") tags.add(PRESET_CA_RPN_FULL_TAG);
+    }
 
     const rowOut: Record<string, unknown> = {
       id: row.id,
@@ -486,7 +581,7 @@ function main() {
       options: opts,
       correctAnswer: correctTexts(row, opts)!,
       questionType: "multiple_choice",
-      tier: tierDb,
+      tier: mTier,
       exam,
       status: "published",
       regionScope,
@@ -494,7 +589,7 @@ function main() {
       rationale: row.rationale ?? "",
       topic: spec.label,
       bodySystem: row.body_system ?? spec.bodySystem,
-      tags,
+      tags: Array.from(tags),
       difficulty: diff,
       stemHash: sh,
     };
@@ -600,12 +695,13 @@ function main() {
       if (seenFlashFront.has(fp)) continue;
       seenFlashFront.add(fp);
       const stemShort = r.stem.length > 120 ? `${r.stem.slice(0, 117)}…` : r.stem;
+      const rs = normalizeRegionScope(r.region_scope);
       flashcards.push({
         id: `fc2026s2_${spec.key}_${fidx}`,
         front: stemShort,
         back: rat.slice(0, 900),
-        country: "US",
-        tier: fidx % 2 === 0 ? "RN" : "LVN_LPN",
+        country: rs === "CA_ONLY" ? "CA" : "US",
+        tier: flashTierLabel(r),
         topicKey: spec.key,
         categorySlug: spec.categorySlug,
         sourceQuestionId: r.id,
@@ -616,12 +712,23 @@ function main() {
 
   const topicCounts = Object.fromEntries(ALL_LESSON_SPECS.map((s) => [s.key, (sourceMap[s.key] ?? []).length]));
   const emittedRn = questionsOut.filter((q) => q.tier === "rn").length;
-  const emittedPn = questionsOut.filter((q) => q.tier === "lvn").length;
+  const emittedRpn = questionsOut.filter((q) => q.tier === "rpn").length;
+  const emittedLvn = questionsOut.filter((q) => q.tier === "lvn").length;
+  const withUsRnPreset = questionsOut.filter((q) => (q.tags as string[]).includes(PRESET_US_RN_FULL_TAG)).length;
+  const withCaRnPreset = questionsOut.filter((q) => (q.tags as string[]).includes(PRESET_CA_RN_FULL_TAG)).length;
+  const withUsPnPreset = questionsOut.filter((q) => (q.tags as string[]).includes(PRESET_US_PN_FULL_TAG)).length;
+  const withCaRpnPreset = questionsOut.filter((q) => (q.tags as string[]).includes(PRESET_CA_RPN_FULL_TAG)).length;
   const generationStats = {
     sourceFile: "data/replit-exports/exam_questions.json",
     rawRows: rawList.length,
     emittedQuestions: questionsOut.length,
-    emittedByMaterializedTier: { rn: emittedRn, lvn_lpn: emittedPn },
+    emittedByMaterializedTier: { rn: emittedRn, rpn: emittedRpn, lvn: emittedLvn },
+    presetPoolCounts: {
+      usRnFull: withUsRnPreset,
+      caRnFull: withCaRnPreset,
+      usPnFull: withUsPnPreset,
+      caRpnFull: withCaRpnPreset,
+    },
     skippedNotPublished,
     skippedInvalidMcq,
     skippedNonNursingTier,
@@ -682,6 +789,38 @@ function main() {
           title: "PN mixed practice (20)",
           questionCount: 20,
           tierFilter: "pn",
+        },
+        {
+          id: "preset_us_rn_full_2026",
+          examId: "exam_us_rn_full_2026",
+          tag: PRESET_US_RN_FULL_TAG,
+          title: "US NCLEX-RN full practice (75)",
+          questionCount: FULL_EXAM_QUESTION_TARGET,
+          tierFilter: "rn",
+        },
+        {
+          id: "preset_ca_rn_full_2026",
+          examId: "exam_ca_rn_full_2026",
+          tag: PRESET_CA_RN_FULL_TAG,
+          title: "Canada NCLEX-RN full practice (75)",
+          questionCount: FULL_EXAM_QUESTION_TARGET,
+          tierFilter: "rn",
+        },
+        {
+          id: "preset_us_pn_full_2026",
+          examId: "exam_us_pn_full_2026",
+          tag: PRESET_US_PN_FULL_TAG,
+          title: "US NCLEX-PN full practice (75)",
+          questionCount: FULL_EXAM_QUESTION_TARGET,
+          tierFilter: "rpn",
+        },
+        {
+          id: "preset_ca_rpn_full_2026",
+          examId: "exam_ca_rpn_full_2026",
+          tag: PRESET_CA_RPN_FULL_TAG,
+          title: "Canada REx-PN / RPN full practice (75)",
+          questionCount: FULL_EXAM_QUESTION_TARGET,
+          tierFilter: "rpn",
         },
       ],
       null,

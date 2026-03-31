@@ -27,3 +27,14 @@ export const NP_CLINICAL_2026_QUESTION_TARGET = 25;
 
 /** NP-only exam — tier `NP` on `Exam` (NP subscribers only). */
 export const EXAM_NP_CLINICAL_PRACTICE_2026_ID = "exam_np_clinical_practice_2026";
+
+/** Country + track full exams (75 Q), tagged in materialized batch. */
+export const FULL_EXAM_2026_QUESTION_TARGET = 75;
+export const EXAM_PRESET_US_RN_FULL_2026_TAG = "exam-preset-us-rn-full-2026";
+export const EXAM_PRESET_CA_RN_FULL_2026_TAG = "exam-preset-ca-rn-full-2026";
+export const EXAM_PRESET_US_PN_FULL_2026_TAG = "exam-preset-us-pn-full-2026";
+export const EXAM_PRESET_CA_RPN_FULL_2026_TAG = "exam-preset-ca-rpn-full-2026";
+export const EXAM_US_RN_FULL_2026_ID = "exam_us_rn_full_2026";
+export const EXAM_CA_RN_FULL_2026_ID = "exam_ca_rn_full_2026";
+export const EXAM_US_PN_FULL_2026_ID = "exam_us_pn_full_2026";
+export const EXAM_CA_RPN_FULL_2026_ID = "exam_ca_rpn_full_2026";

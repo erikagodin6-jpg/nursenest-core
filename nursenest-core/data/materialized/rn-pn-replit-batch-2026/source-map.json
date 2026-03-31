@@ -7,7 +7,14 @@
     "emittedQuestions": 7795,
     "emittedByMaterializedTier": {
       "rn": 3583,
-      "lvn_lpn": 4212
+      "rpn": 4212,
+      "lvn": 0
+    },
+    "presetPoolCounts": {
+      "usRnFull": 3574,
+      "caRnFull": 3560,
+      "usPnFull": 76,
+      "caRpnFull": 4136
     },
     "skippedNotPublished": 53,
     "skippedInvalidMcq": 1591,

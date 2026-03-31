@@ -11,8 +11,13 @@ import fs from "node:fs";
 import path from "node:path";
 import { ContentStatus, CountryCode, ExamFamily, PrismaClient, TierCode } from "@prisma/client";
 import {
+  EXAM_CA_RN_FULL_2026_ID,
+  EXAM_CA_RPN_FULL_2026_ID,
   EXAM_PN_MIXED_PRACTICE_2026_ID,
   EXAM_RN_MIXED_PRACTICE_2026_ID,
+  EXAM_US_PN_FULL_2026_ID,
+  EXAM_US_RN_FULL_2026_ID,
+  FULL_EXAM_2026_QUESTION_TARGET,
   MIXED_PRACTICE_2026_EXAM_ID,
 } from "@/lib/exams/practice-exam-presets";
 
@@ -112,6 +117,82 @@ async function main() {
     },
   });
 
+  await prisma.exam.upsert({
+    where: { id: EXAM_US_RN_FULL_2026_ID },
+    create: {
+      id: EXAM_US_RN_FULL_2026_ID,
+      title: `US NCLEX-RN full practice (${FULL_EXAM_2026_QUESTION_TARGET} items)`,
+      country: CountryCode.US,
+      tier: TierCode.RN,
+      status: ContentStatus.PUBLISHED,
+      examFamily: ExamFamily.NCLEX_RN,
+    },
+    update: {
+      title: `US NCLEX-RN full practice (${FULL_EXAM_2026_QUESTION_TARGET} items)`,
+      status: ContentStatus.PUBLISHED,
+      country: CountryCode.US,
+      tier: TierCode.RN,
+      examFamily: ExamFamily.NCLEX_RN,
+    },
+  });
+
+  await prisma.exam.upsert({
+    where: { id: EXAM_CA_RN_FULL_2026_ID },
+    create: {
+      id: EXAM_CA_RN_FULL_2026_ID,
+      title: `Canada NCLEX-RN full practice (${FULL_EXAM_2026_QUESTION_TARGET} items)`,
+      country: CountryCode.CA,
+      tier: TierCode.RN,
+      status: ContentStatus.PUBLISHED,
+      examFamily: ExamFamily.NCLEX_RN,
+    },
+    update: {
+      title: `Canada NCLEX-RN full practice (${FULL_EXAM_2026_QUESTION_TARGET} items)`,
+      status: ContentStatus.PUBLISHED,
+      country: CountryCode.CA,
+      tier: TierCode.RN,
+      examFamily: ExamFamily.NCLEX_RN,
+    },
+  });
+
+  await prisma.exam.upsert({
+    where: { id: EXAM_US_PN_FULL_2026_ID },
+    create: {
+      id: EXAM_US_PN_FULL_2026_ID,
+      title: `US NCLEX-PN full practice (${FULL_EXAM_2026_QUESTION_TARGET} items)`,
+      country: CountryCode.US,
+      tier: TierCode.RPN,
+      status: ContentStatus.PUBLISHED,
+      examFamily: ExamFamily.NCLEX_PN,
+    },
+    update: {
+      title: `US NCLEX-PN full practice (${FULL_EXAM_2026_QUESTION_TARGET} items)`,
+      status: ContentStatus.PUBLISHED,
+      country: CountryCode.US,
+      tier: TierCode.RPN,
+      examFamily: ExamFamily.NCLEX_PN,
+    },
+  });
+
+  await prisma.exam.upsert({
+    where: { id: EXAM_CA_RPN_FULL_2026_ID },
+    create: {
+      id: EXAM_CA_RPN_FULL_2026_ID,
+      title: `Canada REx-PN / RPN full practice (${FULL_EXAM_2026_QUESTION_TARGET} items)`,
+      country: CountryCode.CA,
+      tier: TierCode.RPN,
+      status: ContentStatus.PUBLISHED,
+      examFamily: ExamFamily.REX_PN,
+    },
+    update: {
+      title: `Canada REx-PN / RPN full practice (${FULL_EXAM_2026_QUESTION_TARGET} items)`,
+      status: ContentStatus.PUBLISHED,
+      country: CountryCode.CA,
+      tier: TierCode.RPN,
+      examFamily: ExamFamily.REX_PN,
+    },
+  });
+
   const qPath = path.join(DIR, "questions.json");
   const fPath = path.join(DIR, "flashcards.json");
   if (!fs.existsSync(qPath)) {
@@ -169,15 +250,22 @@ async function main() {
   if (fs.existsSync(fPath)) {
     const flashcards = JSON.parse(fs.readFileSync(fPath, "utf8")) as FRow[];
     for (const f of flashcards) {
-      const tier = f.tier === "RN" ? TierCode.RN : TierCode.LVN_LPN;
-      const examFamily = tier === TierCode.RN ? ExamFamily.NCLEX_RN : ExamFamily.NCLEX_PN;
+      const country = f.country === "CA" ? CountryCode.CA : CountryCode.US;
+      const tier: TierCode =
+        f.tier === "RN" ? TierCode.RN : f.tier === "RPN" ? TierCode.RPN : TierCode.LVN_LPN;
+      const examFamily =
+        tier === TierCode.RN
+          ? ExamFamily.NCLEX_RN
+          : tier === TierCode.RPN && country === CountryCode.CA
+            ? ExamFamily.REX_PN
+            : ExamFamily.NCLEX_PN;
       await prisma.flashcard.upsert({
         where: { id: f.id },
         create: {
           id: f.id,
           front: f.front,
           back: f.back,
-          country: CountryCode.US,
+          country,
           tier,
           status: ContentStatus.PUBLISHED,
           examFamily,
@@ -186,7 +274,7 @@ async function main() {
         update: {
           front: f.front,
           back: f.back,
-          country: CountryCode.US,
+          country,
           tier,
           status: ContentStatus.PUBLISHED,
           examFamily,
@@ -204,6 +292,10 @@ async function main() {
           MIXED_PRACTICE_2026_EXAM_ID,
           EXAM_RN_MIXED_PRACTICE_2026_ID,
           EXAM_PN_MIXED_PRACTICE_2026_ID,
+          EXAM_US_RN_FULL_2026_ID,
+          EXAM_CA_RN_FULL_2026_ID,
+          EXAM_US_PN_FULL_2026_ID,
+          EXAM_CA_RPN_FULL_2026_ID,
         ],
         examQuestionsUpserted: qOk,
         flashcardsUpserted: fOk,

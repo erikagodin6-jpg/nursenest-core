@@ -9,20 +9,49 @@ import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { resolveDefaultExamForUser } from "@/lib/exams/resolve-default-exam";
 import {
+  EXAM_CA_RN_FULL_2026_ID,
+  EXAM_CA_RPN_FULL_2026_ID,
   EXAM_NP_CLINICAL_PRACTICE_2026_ID,
   EXAM_PN_MIXED_PRACTICE_2026_ID,
+  EXAM_PRESET_CA_RN_FULL_2026_TAG,
+  EXAM_PRESET_CA_RPN_FULL_2026_TAG,
   EXAM_PRESET_NP_CLINICAL_2026_TAG,
   EXAM_PRESET_PN_MIXED_2026_TAG,
   EXAM_PRESET_RN_MIXED_2026_TAG,
+  EXAM_PRESET_US_PN_FULL_2026_TAG,
+  EXAM_PRESET_US_RN_FULL_2026_TAG,
   EXAM_RN_MIXED_PRACTICE_2026_ID,
+  EXAM_US_PN_FULL_2026_ID,
+  EXAM_US_RN_FULL_2026_ID,
+  FULL_EXAM_2026_QUESTION_TARGET,
   MIXED_PRACTICE_2026_EXAM_ID,
   MIXED_PRACTICE_2026_RN_PN_TAG,
 } from "@/lib/exams/practice-exam-presets";
+import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 
 const HISTORY_PAGE_SIZE = 15;
 const MAX_HISTORY_PAGE_INDEX = 400;
+
+function canUseRnFullExams(e: AccessScope): boolean {
+  if (e.reason === "admin_override") return true;
+  return e.tier === "RN" || e.tier === "NP";
+}
+
+function canUsePnFullExams(e: AccessScope): boolean {
+  if (e.reason === "admin_override") return true;
+  return e.tier === "RPN" || e.tier === "LVN_LPN" || e.tier === "RN" || e.tier === "NP";
+}
+
+/** When country is unset (e.g. some admin profiles), show both regional full exams. */
+function showUsRegionalExams(e: AccessScope): boolean {
+  return !e.country || e.country === "US";
+}
+
+function showCaRegionalExams(e: AccessScope): boolean {
+  return !e.country || e.country === "CA";
+}
 
 type ExamsPageProps = { searchParams: Promise<{ historyPage?: string }> };
 
@@ -228,6 +257,80 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
           questionTag={EXAM_PRESET_NP_CLINICAL_2026_TAG}
           sessionNamespace="npClinical2026"
         />
+      </section>
+
+      <section className="mt-10 space-y-6">
+        <div>
+          <h2 className="text-xl font-semibold">Full practice ({FULL_EXAM_2026_QUESTION_TARGET} questions)</h2>
+          <p className="mt-1 text-sm text-muted">
+            Country-specific draws from preset-tagged pools (US NCLEX-RN / NCLEX-PN; Canada NCLEX-RN / REx-PN). Shown for your
+            subscription country and tier; RN/NP can open PN-style full exams via the ladder.
+          </p>
+        </div>
+
+        {showUsRegionalExams(entitlement) && canUseRnFullExams(entitlement) ? (
+          <div className="space-y-2">
+            <h3 className="text-lg font-semibold">US — NCLEX-RN full</h3>
+            <p className="text-sm text-muted">
+              Prioritization and delegation-style framing; tag{" "}
+              <span className="font-mono text-xs">{EXAM_PRESET_US_RN_FULL_2026_TAG}</span>.
+            </p>
+            <ExamPracticeClient
+              examId={EXAM_US_RN_FULL_2026_ID}
+              examTitle="US NCLEX-RN full practice"
+              questionTag={EXAM_PRESET_US_RN_FULL_2026_TAG}
+              sessionNamespace="usRnFull2026"
+            />
+          </div>
+        ) : null}
+
+        {showCaRegionalExams(entitlement) && canUseRnFullExams(entitlement) ? (
+          <div className="space-y-2">
+            <h3 className="text-lg font-semibold">Canada — NCLEX-RN full</h3>
+            <p className="text-sm text-muted">
+              Canadian terminology and guideline emphasis; tag{" "}
+              <span className="font-mono text-xs">{EXAM_PRESET_CA_RN_FULL_2026_TAG}</span>.
+            </p>
+            <ExamPracticeClient
+              examId={EXAM_CA_RN_FULL_2026_ID}
+              examTitle="Canada NCLEX-RN full practice"
+              questionTag={EXAM_PRESET_CA_RN_FULL_2026_TAG}
+              sessionNamespace="caRnFull2026"
+            />
+          </div>
+        ) : null}
+
+        {showUsRegionalExams(entitlement) && canUsePnFullExams(entitlement) ? (
+          <div className="space-y-2">
+            <h3 className="text-lg font-semibold">US — NCLEX-PN full</h3>
+            <p className="text-sm text-muted">
+              Task-based, stable-patient care emphasis; tag{" "}
+              <span className="font-mono text-xs">{EXAM_PRESET_US_PN_FULL_2026_TAG}</span>.
+            </p>
+            <ExamPracticeClient
+              examId={EXAM_US_PN_FULL_2026_ID}
+              examTitle="US NCLEX-PN full practice"
+              questionTag={EXAM_PRESET_US_PN_FULL_2026_TAG}
+              sessionNamespace="usPnFull2026"
+            />
+          </div>
+        ) : null}
+
+        {showCaRegionalExams(entitlement) && canUsePnFullExams(entitlement) ? (
+          <div className="space-y-2">
+            <h3 className="text-lg font-semibold">Canada — REx-PN / RPN full</h3>
+            <p className="text-sm text-muted">
+              Scope, assignment, and safety framing for Canadian PN; tag{" "}
+              <span className="font-mono text-xs">{EXAM_PRESET_CA_RPN_FULL_2026_TAG}</span>.
+            </p>
+            <ExamPracticeClient
+              examId={EXAM_CA_RPN_FULL_2026_ID}
+              examTitle="Canada REx-PN full practice"
+              questionTag={EXAM_PRESET_CA_RPN_FULL_2026_TAG}
+              sessionNamespace="caRpnFull2026"
+            />
+          </div>
+        ) : null}
       </section>
 
       {totalAttempts > 0 ? (
