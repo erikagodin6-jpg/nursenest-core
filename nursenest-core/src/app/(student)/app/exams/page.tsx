@@ -9,7 +9,9 @@ import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { resolveDefaultExamForUser } from "@/lib/exams/resolve-default-exam";
 import {
+  EXAM_NP_CLINICAL_PRACTICE_2026_ID,
   EXAM_PN_MIXED_PRACTICE_2026_ID,
+  EXAM_PRESET_NP_CLINICAL_2026_TAG,
   EXAM_PRESET_PN_MIXED_2026_TAG,
   EXAM_PRESET_RN_MIXED_2026_TAG,
   EXAM_RN_MIXED_PRACTICE_2026_ID,
