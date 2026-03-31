@@ -518,5 +518,15 @@
     "topicKey": "prioritization-abcs",
     "categorySlug": "fundamentals",
     "sourceQuestionId": "06178ee4-88ef-41cf-9309-8c1739c7fce4"
+  },
+  {
+    "id": "fc20260330_insulin-hypoglycemia_52",
+    "front": "A nurse is caring for a patient with diabetes who expresses frustration about managing their condition. Which intervention should the nurse prioritize to support the patient?",
+    "back": "Encouraging attendance at a diabetes support group is a prioritized intervention as it can provide emotional support, shared experiences, and practical coping strategies from peers. This can significantly enhance the patient’s motivation and adherence to management strategies. While providing dietary guidelines, teaching insulin adjustment, and promoting regular glucose monitoring are all important, the immediate emotional support and community connection can help alleviate frustration and improve overall management.",
+    "country": "US",
+    "tier": "RN",
+    "topicKey": "insulin-hypoglycemia",
+    "categorySlug": "fundamentals",
+    "sourceQuestionId": "0227b847-c94a-4ca4-8d43-2593fe011e8b"
   }
 ]
