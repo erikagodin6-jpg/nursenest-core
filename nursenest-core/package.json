@@ -21,6 +21,7 @@
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx prisma/seed.ts",
     "db:seed-pathway-lessons": "tsx scripts/seed-pathway-lessons-from-catalog.ts",
+    "db:append-topic-map-lessons": "tsx scripts/bulk-append-topic-map-lessons-to-catalog.ts",
     "ops:pathway-lesson-sources": "tsx scripts/report-pathway-lesson-sources.ts",
     "ops:pathway-lesson-translations": "tsx scripts/report-pathway-lesson-translations.ts",
     "ops:question-bank-diagnostics": "tsx scripts/report-question-bank-diagnostics.ts",
