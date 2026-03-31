@@ -110,7 +110,7 @@ async function main() {
     blog: {
       totalRows: blogTotal,
       /** Publicly visible on `/blog` (published + scheduled whose publishAt has passed). */
-      livePublicRows: blogPublished,
+      livePublicRows: blogLivePublic,
     },
   };
 

@@ -17,7 +17,7 @@ import { config as loadEnv } from "dotenv";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { PrismaClient } from "@prisma/client";
+import { BlogPostStatus, PrismaClient } from "@prisma/client";
 import { PARAMEDIC_BLOG_ARTICLES } from "../../client/src/allied/data/paramedic-blog-data";
 import { excerptFromParamedic, paramedicArticleToHtml } from "../src/lib/blog/serialize-paramedic";
 import { legacyBlogHtmlFromRow, normalizeBlogAssetUrls } from "../src/lib/blog/serialize-content";
@@ -124,7 +124,7 @@ async function main() {
         coverImage: null,
         tags,
         category: article.category || "allied-health",
-        published: true,
+        postStatus: BlogPostStatus.PUBLISHED,
         legacySource: "paramedic-static",
         createdAt: created,
       },
@@ -168,7 +168,7 @@ async function main() {
         coverImage: row.cover_image || null,
         tags: row.tags ?? [],
         category: row.category ?? null,
-        published: true,
+        postStatus: BlogPostStatus.PUBLISHED,
         legacySource,
         createdAt: pickCreatedAt(row),
       },
@@ -196,7 +196,7 @@ async function main() {
   }
 
   const total = await prisma.blogPost.count();
-  const published = await prisma.blogPost.count({ where: { published: true } });
+  const published = await prisma.blogPost.count({ where: { postStatus: BlogPostStatus.PUBLISHED } });
 
   console.log(
     JSON.stringify(
