@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-31T17:43:58.686Z",
+  "generatedAt": "2026-03-31T17:49:42.276Z",
   "historicalNpInventoryEstimate": {
     "uniqueLegacyNpLessonIdsInContentMap": 1409,
     "note": "Heuristic ids: not RN/RPN tier and match -np / np- / np-testbank patterns. Expanded rows = unique × 4 pathways when imported."

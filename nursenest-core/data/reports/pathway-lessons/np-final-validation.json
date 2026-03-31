@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-31T17:44:17.653Z",
+  "generatedAt": "2026-03-31T17:50:37.560Z",
   "totalsBeforeRun": {
     "us-np-fnp": 39,
     "us-np-agpcnp": 24,
@@ -7,21 +7,21 @@
     "ca-np-cnple": 24
   },
   "finalPublishedDbByPathway": {
-    "ca-np-cnple": 24,
-    "us-np-agpcnp": 24,
-    "us-np-fnp": 39,
-    "us-np-pmhnp": 24
+    "ca-np-cnple": 1438,
+    "us-np-agpcnp": 1438,
+    "us-np-fnp": 1444,
+    "us-np-pmhnp": 1438
   },
-  "npPublishedTotal": 111,
+  "npPublishedTotal": 5758,
   "historicalNpUniqueInContentMapApprox": 1409,
   "recoveredFromSourceOperations": 5647,
   "generatedNpGapLessons": 0,
   "hubTotalsMatchDb": true,
   "detailRouteTotals": {
-    "us-np-fnp": 39,
-    "us-np-agpcnp": 24,
-    "us-np-pmhnp": 24,
-    "ca-np-cnple": 24
+    "us-np-fnp": 1444,
+    "us-np-agpcnp": 1438,
+    "us-np-pmhnp": 1438,
+    "ca-np-cnple": 1438
   },
   "randomResolutionChecks": {
     "total": 32,

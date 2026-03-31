@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-03-31T17:44:17.210Z",
+  "generatedAt": "2026-03-31T17:50:35.305Z",
   "note": "Post-import snapshot after recovery run.",
   "currentDbPublishedByPathway": {
-    "us-np-fnp": 39,
-    "us-np-agpcnp": 24,
-    "us-np-pmhnp": 24,
-    "ca-np-cnple": 24
+    "us-np-fnp": 1444,
+    "us-np-agpcnp": 1438,
+    "us-np-pmhnp": 1438,
+    "ca-np-cnple": 1438
   },
   "historicalLegacyNpUniqueIdsApprox": 1409,
   "expectedRowsPerPathwayIfLegacyFullyImported": {
@@ -15,9 +15,9 @@
     "ca-np-cnple": 1409
   },
   "missingLessonCountByPathway": {
-    "us-np-fnp": 1370,
-    "us-np-agpcnp": 1385,
-    "us-np-pmhnp": 1385,
-    "ca-np-cnple": 1385
+    "us-np-fnp": 0,
+    "us-np-agpcnp": 0,
+    "us-np-pmhnp": 0,
+    "ca-np-cnple": 0
   }
 }

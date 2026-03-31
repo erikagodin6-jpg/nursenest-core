@@ -339,69 +339,6 @@ async function main() {
 
   const uniqueLegacyNpIdCount = new Set(legacyNp.sourceRows.map((r) => r.sourceId)).size;
 
-  const auditRows = [
-    {
-      sourcePath: "../client/src/data/lessons/index.ts (contentMap)",
-      sourceType: "ts-module",
-      rawLessonCount: legacyNp.sourceAudit.raw,
-      validLessonCount: legacyNp.sourceAudit.valid,
-      invalidLessonCount: legacyNp.sourceAudit.invalid,
-      uniqueLegacyNpIdsApprox: uniqueLegacyNpIdCount,
-      pathwayMapping: "legacy NP keys → all four NP pathways (us-np-fnp, us-np-agpcnp, us-np-pmhnp, ca-np-cnple)",
-      rowsExpandedToPathways: legacyNp.sourceRows.length,
-      currentlyImportedIntoPathwayLessons: legacyNp.sourceRows.filter((r) => dbKeySet.has(`${r.pathwayId}::${r.slug}`)).length,
-      currentlySurfacedInRuntime: true,
-      sourceQualityClass: "historical/high-value",
-    },
-    {
-      sourcePath: "src/content/pathway-lessons/catalog.json",
-      sourceType: "json",
-      pathwayId: "us-np-fnp",
-      rawLessonCount: catalogNp.sourceAudit.raw,
-      validLessonCount: catalogNp.sourceAudit.valid,
-      pathwayMapping: "only us-np-fnp entries (other NP pathways are DB-seeded today)",
-      currentlyImportedIntoPathwayLessons: catalogNp.sourceRows.filter((r) => dbKeySet.has(`${r.pathwayId}::${r.slug}`)).length,
-      currentlySurfacedInRuntime: true,
-      sourceQualityClass: "curated/FNP-specific",
-    },
-    {
-      sourcePath: "data/materialized/np-clinical-layer-2026/catalog-np-overlays.json",
-      sourceType: "json",
-      rawLessonCount: materializedNp.sourceAudit.raw,
-      validLessonCount: materializedNp.sourceAudit.valid,
-      pathwayMapping: "usNpFnp overlays replicated to all four NP pathways",
-      currentlyImportedIntoPathwayLessons: materializedNp.sourceRows.filter((r) => dbKeySet.has(`${r.pathwayId}::${r.slug}`)).length,
-      currentlySurfacedInRuntime: true,
-      sourceQualityClass: "materialized/NP-overlays",
-    },
-    {
-      sourcePath: "data/replit-exports/content_items.json",
-      sourceType: "json",
-      rawLessonCount: contentItems.length,
-      npLikeLessonRows: contentItemNp.length,
-      pathwayMapping: "none reliable without NP pathway tags",
-      currentlyImportedIntoPathwayLessons: 0,
-      currentlySurfacedInRuntime: false,
-      sourceQualityClass: "not-applicable",
-    },
-  ];
-
-  fs.writeFileSync(
-    path.join(REPORT_DIR, "np-historical-source-audit.json"),
-    JSON.stringify(
-      {
-        generatedAt: new Date().toISOString(),
-        historicalNpInventoryEstimate: {
-          uniqueLegacyNpLessonIdsInContentMap: uniqueLegacyNpIdCount,
-          note: "Heuristic ids: not RN/RPN tier and match -np / np- / np-testbank patterns. Expanded rows = unique × 4 pathways when imported.",
-        },
-        rows: auditRows,
-      },
-      null,
-      2,
-    ),
-  );
-
   const expectedByPathwayFromLegacy = Object.fromEntries(
     NP_PATHWAYS.map((pid) => [pid, legacyNp.sourceRows.filter((r) => r.pathwayId === pid).length]),
   );
@@ -578,6 +515,68 @@ async function main() {
     select: { pathwayId: true, slug: true, status: true },
   });
   const dbKeyPost = new Set(dbRowsPost.map((r) => `${r.pathwayId}::${r.slug}`));
+
+  fs.writeFileSync(
+    path.join(REPORT_DIR, "np-historical-source-audit.json"),
+    JSON.stringify(
+      {
+        generatedAt: new Date().toISOString(),
+        note: "Post-import snapshot: currentlyImported counts reflect published pathway_lessons keys after recovery.",
+        historicalNpInventoryEstimate: {
+          uniqueLegacyNpLessonIdsInContentMap: uniqueLegacyNpIdCount,
+          note: "Heuristic ids: not RN/RPN tier and match -np / np- / np-testbank patterns. Review false positives if counts seem high.",
+        },
+        rows: [
+          {
+            sourcePath: "../client/src/data/lessons/index.ts (contentMap)",
+            sourceType: "ts-module",
+            rawLessonCount: legacyNp.sourceAudit.raw,
+            validLessonCount: legacyNp.sourceAudit.valid,
+            invalidLessonCount: legacyNp.sourceAudit.invalid,
+            uniqueLegacyNpIdsApprox: uniqueLegacyNpIdCount,
+            pathwayMapping: "legacy NP keys → all four NP pathways",
+            rowsExpandedToPathways: legacyNp.sourceRows.length,
+            currentlyImportedIntoPathwayLessons: legacyNp.sourceRows.filter((r) => dbKeyPost.has(`${r.pathwayId}::${r.slug}`)).length,
+            currentlySurfacedInRuntime: true,
+            sourceQualityClass: "historical/high-value",
+          },
+          {
+            sourcePath: "src/content/pathway-lessons/catalog.json",
+            sourceType: "json",
+            pathwayId: "us-np-fnp",
+            rawLessonCount: catalogNp.sourceAudit.raw,
+            validLessonCount: catalogNp.sourceAudit.valid,
+            pathwayMapping: "us-np-fnp only",
+            currentlyImportedIntoPathwayLessons: catalogNp.sourceRows.filter((r) => dbKeyPost.has(`${r.pathwayId}::${r.slug}`)).length,
+            currentlySurfacedInRuntime: true,
+            sourceQualityClass: "curated/FNP-specific",
+          },
+          {
+            sourcePath: "data/materialized/np-clinical-layer-2026/catalog-np-overlays.json",
+            sourceType: "json",
+            rawLessonCount: materializedNp.sourceAudit.raw,
+            validLessonCount: materializedNp.sourceAudit.valid,
+            pathwayMapping: "usNpFnp overlays × four pathways",
+            currentlyImportedIntoPathwayLessons: materializedNp.sourceRows.filter((r) => dbKeyPost.has(`${r.pathwayId}::${r.slug}`)).length,
+            currentlySurfacedInRuntime: true,
+            sourceQualityClass: "materialized/NP-overlays",
+          },
+          {
+            sourcePath: "data/replit-exports/content_items.json",
+            sourceType: "json",
+            rawLessonCount: contentItems.length,
+            npLikeLessonRows: contentItemNp.length,
+            pathwayMapping: "none reliable",
+            currentlyImportedIntoPathwayLessons: 0,
+            currentlySurfacedInRuntime: false,
+            sourceQualityClass: "not-applicable",
+          },
+        ],
+      },
+      null,
+      2,
+    ),
+  );
   const dbPublishedPost = Object.fromEntries(
     NP_PATHWAYS.map((pid) => [pid, dbRowsPost.filter((r) => r.pathwayId === pid && r.status === ContentStatus.PUBLISHED).length]),
   );

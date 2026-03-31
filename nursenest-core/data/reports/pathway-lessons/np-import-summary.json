@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-03-31T17:44:17.211Z",
-  "apply": false,
+  "generatedAt": "2026-03-31T17:50:35.305Z",
+  "apply": true,
   "batchSize": 120,
   "candidateRows": 5662,
   "processedRows": 5662,
