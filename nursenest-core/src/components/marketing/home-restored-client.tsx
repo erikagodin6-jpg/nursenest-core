@@ -30,7 +30,7 @@ import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { LazySection } from "@/legacy/marketing/lazy-section";
 import { buildHomepageHeroSlides, HOMEPAGE_HERO_SLIDE_METADATA } from "@/lib/marketing-assets";
-import { MarketingHeroCarousel } from "@/components/marketing/marketing-hero-carousel";
+import { MarketingScreenshotStack } from "@/components/marketing/marketing-screenshot-stack";
 import type { HomepageLessonTeaser } from "@/lib/marketing/homepage-lesson-teasers";
 import { HomeHeroPathGateway } from "@/components/marketing/home-hero-path-gateway";
 import { HomeMarketingConversionBlocks } from "@/components/marketing/home-marketing-conversion-blocks";
@@ -92,16 +92,25 @@ function formatCount(n: number | undefined): string {
   return `${tens}+`;
 }
 
+function formatLearnerCount(n: number): string {
+  if (n <= 0) return "";
+  if (n >= 1000) return `${Math.floor(n / 100) * 100}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "+";
+  return `${n.toLocaleString("en-US")}+`;
+}
+
 /**
  * Restored from `client/src/pages/home.tsx` (structure, classes, i18n keys).
  * Navigation/footer remain in root layout; below-fold sections use legacy copies + dynamic import.
  */
 type HomeStatsPayload = {
   totalLessons: number;
+  pathwayLessonsPublished?: number;
+  contentItemsLessonCount?: number;
   questionCount: number;
   totalFlashcards: number;
   totalDecks: number;
   storeProductCount: number;
+  registeredLearners?: number;
   questionsByTier?: Record<string, number>;
   scenarioCount?: number;
 };
@@ -136,7 +145,9 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
   const [lessonCount, setLessonCount] = useState(0);
   const [questionCount, setQuestionCount] = useState(0);
   const [storeProductCount, setStoreProductCount] = useState(0);
-  const [flashcardCount, setFlashcardCount] = useState(10_000);
+  const [flashcardCount, setFlashcardCount] = useState(0);
+  const [deckCount, setDeckCount] = useState(0);
+  const [registeredLearners, setRegisteredLearners] = useState(0);
   const [topicCategoryCount, setTopicCategoryCount] = useState<number | undefined>(undefined);
   const [heroMediaVisible, setHeroMediaVisible] = useState(() => HOMEPAGE_HERO_SLIDE_METADATA.length > 0);
 
@@ -163,6 +174,8 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
         setQuestionCount(d.questionCount ?? 0);
         setStoreProductCount(d.storeProductCount ?? 0);
         if (typeof d.totalFlashcards === "number") setFlashcardCount(d.totalFlashcards);
+        if (typeof d.totalDecks === "number") setDeckCount(d.totalDecks);
+        if (typeof d.registeredLearners === "number") setRegisteredLearners(d.registeredLearners);
       })
       .catch(() => {});
     return () => {
@@ -410,7 +423,11 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
                   </span>
                   <div className="flex items-center gap-1.5">
                     <Users className="h-3.5 w-3.5 shrink-0" />
-                    <span data-testid="text-trust-students">{t("home.hero.trustStudents")}</span>
+                    <span data-testid="text-trust-students">
+                      {registeredLearners > 0
+                        ? `${formatLearnerCount(registeredLearners)} learners`
+                        : t("home.hero.trustStudents")}
+                    </span>
                   </div>
                 </div>
 
@@ -443,50 +460,17 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
               <div
                 className={
                   heroMediaVisible
-                    ? "relative mt-8 flex min-h-0 w-full min-w-0 flex-col md:mt-0 md:max-h-[min(26rem,72vh)] md:justify-center"
+                    ? "relative mt-8 flex min-h-0 w-full min-w-0 flex-col justify-center md:mt-0 md:max-h-[min(40rem,78vh)]"
                     : "hidden"
                 }
                 style={{ overflowAnchor: "none" }}
               >
-                <MarketingHeroCarousel
-                  mediaFrame="hero"
-                  className="min-h-0 w-full"
+                <MarketingScreenshotStack
                   slides={heroSlides}
-                  onMediaUnavailable={() => setHeroMediaVisible(false)}
+                  pickIndices={[0, 1, 2]}
+                  testIdPrefix="hero-screenshot-stack"
+                  className="md:max-h-[min(40rem,78vh)] md:overflow-y-auto md:pr-1"
                 />
-                <div className="absolute -bottom-5 -left-5 z-10 flex items-center gap-3 rounded-2xl border border-[var(--theme-card-border)]/80 bg-card px-5 py-3.5 shadow-[var(--shadow-card-hover)]">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10">
-                    <CheckCircle2 className="h-4.5 w-4.5 text-primary" />
-                  </div>
-                  <div>
-                    <div className="text-sm font-bold text-[var(--theme-heading-text)]">{t("home.hero.passRate")}</div>
-                    <div className="text-xs text-[var(--theme-body-text)]">{t("home.hero.firstAttempt")}</div>
-                  </div>
-                </div>
-                <div className="absolute -right-3 -top-3 z-10 flex items-center gap-2 rounded-2xl border border-[var(--theme-card-border)]/80 bg-card px-4 py-2.5 shadow-[var(--shadow-card-hover)]">
-                  <div className="flex -space-x-1.5">
-                    {["bg-primary/60", "bg-primary/45", "bg-primary/70"].map((bg, i) => (
-                      <div
-                        key={bg}
-                        className={`flex h-6 w-6 items-center justify-center rounded-full border-2 border-white text-[9px] font-bold text-white ${bg}`}
-                      >
-                        {["P", "J", "A"][i]}
-                      </div>
-                    ))}
-                  </div>
-                  <span className="text-xs font-semibold text-[var(--theme-body-text)]">{t("home.hero.studentCount")}</span>
-                </div>
-                <div
-                  className="nn-accent-soft-ring pointer-events-none absolute -bottom-10 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2 rounded-full px-4 py-2 shadow-sm"
-                  data-testid="badge-students-studying"
-                >
-                  <div className="flex -space-x-1">
-                    {["bg-primary/55", "bg-primary/40", "bg-primary/65"].map((bg) => (
-                      <div key={bg} className={`h-4 w-4 rounded-full border-[1.5px] border-white ${bg}`} />
-                    ))}
-                  </div>
-                  <span className="text-xs font-medium text-primary">{t("home.hero.studentsStudying")}</span>
-                </div>
               </div>
             </div>
 

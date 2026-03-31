@@ -1,5 +1,5 @@
 import type { CountryCode, Prisma, TierCode } from "@prisma/client";
-import { ContentStatus } from "@prisma/client";
+import { ContentStatus, FlashcardDeckVisibility, TierCode as TierCodeEnum } from "@prisma/client";
 import {
   contentItemTierStringsForProfileTier,
   examQuestionTierStringsForProfileTier,
@@ -129,6 +129,22 @@ export function publicMarketingExamQuestionWhere(): Prisma.ExamQuestionWhereInpu
   return {
     status: DB_PUBLISHED,
     tier: { in: ["rpn", "lvn", "allied"] },
+  };
+}
+
+/** Published flashcards in public-marketing tiers (no RN/NP-only depth). */
+export function publicMarketingFlashcardWhere(): Prisma.FlashcardWhereInput {
+  return {
+    status: ContentStatus.PUBLISHED,
+    tier: { in: [TierCodeEnum.RPN, TierCodeEnum.LVN_LPN, TierCodeEnum.ALLIED] },
+  };
+}
+
+/** Published decks visible for aggregate marketing counts (exclude hidden). */
+export function publicMarketingFlashcardDeckWhere(): Prisma.FlashcardDeckWhereInput {
+  return {
+    status: ContentStatus.PUBLISHED,
+    visibility: { not: FlashcardDeckVisibility.HIDDEN },
   };
 }
 
