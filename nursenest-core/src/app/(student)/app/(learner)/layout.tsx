@@ -17,7 +17,7 @@ export default async function LearnerShellLayout({ children }: { children: React
   if (!userId) {
     return (
       <div className="mx-auto w-full max-w-6xl px-6 py-8">
-        <Link href="/" className="mb-6 inline-flex" aria-label="NurseNest home">
+        <Link href="/" className="mb-6 inline-flex overflow-visible" aria-label="NurseNest home">
           <SiteBrandLogoMark />
         </Link>
         <p className="text-sm text-[var(--theme-muted-text)]">
@@ -36,7 +36,7 @@ export default async function LearnerShellLayout({ children }: { children: React
       <LearnerAppSectionAnalytics />
       <header className="nn-card mb-6 flex flex-col gap-4 rounded-2xl p-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex min-w-0 flex-wrap items-center gap-4">
-          <Link href="/" className="inline-flex shrink-0">
+          <Link href="/" className="inline-flex shrink-0 overflow-visible">
             <SiteBrandLogoMark />
           </Link>
           <nav className="flex flex-wrap items-center gap-2 text-sm font-medium">

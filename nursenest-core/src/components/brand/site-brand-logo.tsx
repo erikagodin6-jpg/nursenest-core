@@ -70,16 +70,16 @@ export function SiteBrandLogoMark({
   if (showTextFallback) {
     return (
       <span
-        className={`inline-flex min-h-[3.5rem] shrink-0 items-center ${className}`}
+        className={`inline-flex min-h-[5rem] shrink-0 items-center overflow-visible ${className}`}
         aria-label={BRAND_NAME}
       >
-        <span className="text-2xl font-extrabold tracking-tight text-primary sm:text-3xl md:text-4xl">{BRAND_NAME}</span>
+        <span className="text-3xl font-extrabold tracking-tight text-primary sm:text-4xl md:text-5xl">{BRAND_NAME}</span>
       </span>
     );
   }
 
   return (
-    <span className={`inline-flex w-auto shrink-0 items-center justify-start ${className}`}>
+    <span className={`inline-flex w-auto max-w-none shrink-0 items-center justify-start overflow-visible ${className}`}>
       <img
         key={`${themeId}-${safeIndex}-${src}`}
         src={src}

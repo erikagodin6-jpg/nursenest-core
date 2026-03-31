@@ -12,6 +12,11 @@ const CANONICAL_IDS = new Set(THEME_OPTIONS.map((t) => t.id));
  */
 export const THEME_LOGO_ALIASES: Readonly<Record<string, string>> = {
   black: "midnight",
+  /** Ocean theme: common labels so CDN `oceanbrandlogo.png` loads instead of default lavender raster */
+  sea: "ocean",
+  aquatic: "ocean",
+  turquoise: "ocean",
+  cyan: "ocean",
   /** Common spoken labels */
   pink: "blush",
   blue: "clinical-light",
