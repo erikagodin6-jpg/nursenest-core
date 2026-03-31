@@ -2,6 +2,7 @@
  * Run: npx tsx scripts/content-inventory.ts
  * Requires DATABASE_URL. Outputs JSON inventory for gap analysis (no auto-publish).
  */
+import "../src/lib/db/env-bootstrap";
 import { ContentStatus, PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -13,20 +14,18 @@ async function main() {
   const tiers = ["rpn", "lvn", "rn", "np", "allied"] as const;
   const exams = ["NCLEX_RN", "NCLEX_PN", "REX_PN", "NP", "ALLIED", "GENERIC"] as const;
 
-  const byTier = await Promise.all(
-    tiers.map(async (tier) => ({
-      tier,
-      published: await prisma.examQuestion.count({ where: { status: PUBLISHED, tier } }),
-      draft: await prisma.examQuestion.count({ where: { status: DRAFT, tier } }),
-    })),
-  );
+  const byTier: Array<{ tier: (typeof tiers)[number]; published: number; draft: number }> = [];
+  for (const tier of tiers) {
+    const published = await prisma.examQuestion.count({ where: { status: PUBLISHED, tier } });
+    const draft = await prisma.examQuestion.count({ where: { status: DRAFT, tier } });
+    byTier.push({ tier, published, draft });
+  }
 
-  const byExam = await Promise.all(
-    exams.map(async (exam) => ({
-      exam,
-      published: await prisma.examQuestion.count({ where: { status: PUBLISHED, exam } }),
-    })),
-  );
+  const byExam: Array<{ exam: (typeof exams)[number]; published: number }> = [];
+  for (const exam of exams) {
+    const published = await prisma.examQuestion.count({ where: { status: PUBLISHED, exam } });
+    byExam.push({ exam, published });
+  }
 
   const rationaleMissing = await prisma.examQuestion.count({
     where: { status: PUBLISHED, OR: [{ rationale: null }, { rationale: "" }] },

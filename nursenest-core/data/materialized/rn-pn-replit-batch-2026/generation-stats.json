@@ -8,9 +8,9 @@
     "lvn": 0
   },
   "presetPoolCounts": {
-    "usRnFull": 1979,
+    "usRnFull": 3328,
     "caRnFull": 0,
-    "usPnFull": 2028,
+    "usPnFull": 3494,
     "caRpnFull": 0
   },
   "countryTagDistribution": {
@@ -32,10 +32,10 @@
     "insulin-hypoglycemia"
   ],
   "catchAllTopicKey": "general-nursing-clinical",
-  "catchAllMappedCount": 3297,
+  "catchAllMappedCount": 482,
   "topicQuestionCounts": {
     "pulmonary-embolism": 101,
-    "heart-failure": 312,
+    "heart-failure": 408,
     "myocardial-infarction": 145,
     "angina": 30,
     "dysrhythmias": 213,
@@ -44,14 +44,14 @@
     "asthma": 187,
     "ards": 42,
     "pneumonia": 145,
-    "copd-respiratory": 128,
+    "copd-respiratory": 266,
     "abg-interpretation": 81,
     "acid-base-advanced": 19,
-    "sodium-imbalance": 92,
-    "potassium-imbalance": 124,
-    "insulin-hypoglycemia": 278,
-    "sepsis": 46,
-    "infection-control": 649,
+    "sodium-imbalance": 97,
+    "potassium-imbalance": 134,
+    "insulin-hypoglycemia": 312,
+    "sepsis": 47,
+    "infection-control": 651,
     "anticoagulants": 150,
     "antibiotics": 101,
     "pain-management": 158,
@@ -59,7 +59,18 @@
     "delegation": 37,
     "fluid-balance": 140,
     "prioritization-abcs": 162,
-    "general-nursing-clinical": 3297
+    "neurological-acute-care": 287,
+    "mental-health-crisis": 335,
+    "pediatrics-care": 445,
+    "maternal-newborn-care": 181,
+    "gastrointestinal-acute-care": 265,
+    "renal-genitourinary-care": 267,
+    "hematology-oncology-care": 186,
+    "musculoskeletal-care": 233,
+    "integumentary-burn-wound": 118,
+    "emergency-triage-disaster": 100,
+    "fundamentals-patient-safety": 112,
+    "general-nursing-clinical": 482
   },
   "dedupe": {
     "method": "stemHash(trim+lowercase)",
@@ -67,7 +78,6 @@
   },
   "flashcardTarget": 608,
   "weakAreasRemaining": [
-    "Many items still classify to general-nursing-clinical; refine TOPICS regexes over time to sharpen quizzes.",
     "346 questions carry quality:* tags (short stem, duplicate options, or synthetic rationale)—curate incrementally."
   ]
 }

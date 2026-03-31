@@ -43,7 +43,7 @@ function ScreenshotFrame({
           decoding={priority ? "sync" : "async"}
           fetchPriority={priority ? "high" : "low"}
           referrerPolicy="no-referrer"
-          className="h-full w-full object-contain bg-[var(--theme-muted-surface)]"
+          className="h-full w-full object-cover object-top bg-[var(--theme-muted-surface)]"
           data-testid={testId}
           onError={onError}
         />

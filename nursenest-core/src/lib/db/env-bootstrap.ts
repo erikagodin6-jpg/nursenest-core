@@ -9,6 +9,36 @@ export type DatabaseUrlSource = "prod_override" | "database_url" | "missing";
 
 export let databaseUrlSource: DatabaseUrlSource = "missing";
 
+function withDefaultQueryParam(urlString: string, key: string, value: string): string {
+  try {
+    const url = new URL(urlString);
+    if (!url.searchParams.has(key)) {
+      url.searchParams.set(key, value);
+    }
+    return url.toString();
+  } catch {
+    return urlString;
+  }
+}
+
+function tuneDatabaseUrlForProcess(rawUrl: string): string {
+  const argv = process.argv.join(" ");
+  const lifecycle = process.env.npm_lifecycle_event ?? "";
+  const isBuildProcess = lifecycle === "build" || argv.includes("next build");
+  const isScriptProcess = argv.includes("/scripts/") || argv.includes("tsx scripts/");
+
+  // Allow explicit override from env; otherwise pick conservative defaults by process type.
+  const connectionLimit =
+    process.env.PRISMA_CONNECTION_LIMIT ??
+    (isBuildProcess || isScriptProcess ? "2" : process.env.NODE_ENV === "production" ? "5" : "8");
+  const poolTimeout = process.env.PRISMA_POOL_TIMEOUT ?? (isBuildProcess ? "25" : "15");
+
+  let tuned = rawUrl;
+  tuned = withDefaultQueryParam(tuned, "connection_limit", connectionLimit);
+  tuned = withDefaultQueryParam(tuned, "pool_timeout", poolTimeout);
+  return tuned;
+}
+
 export function applyDatabaseUrlFromEnv(): void {
   const direct = process.env.DATABASE_URL?.trim();
   const prod = process.env.PROD_DATABASE_URL?.trim();
@@ -20,11 +50,12 @@ export function applyDatabaseUrlFromEnv(): void {
       );
     }
     if (direct) {
+      process.env.DATABASE_URL = tuneDatabaseUrlForProcess(direct);
       databaseUrlSource = "database_url";
       return;
     }
     if (prod) {
-      process.env.DATABASE_URL = prod;
+      process.env.DATABASE_URL = tuneDatabaseUrlForProcess(prod);
       databaseUrlSource = "prod_override";
       return;
     }
@@ -32,7 +63,12 @@ export function applyDatabaseUrlFromEnv(): void {
     return;
   }
 
-  databaseUrlSource = direct ? "database_url" : "missing";
+  if (direct) {
+    process.env.DATABASE_URL = tuneDatabaseUrlForProcess(direct);
+    databaseUrlSource = "database_url";
+  } else {
+    databaseUrlSource = "missing";
+  }
 }
 
 applyDatabaseUrlFromEnv();

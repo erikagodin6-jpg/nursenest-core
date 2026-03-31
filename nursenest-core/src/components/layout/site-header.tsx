@@ -130,7 +130,7 @@ export function SiteHeader() {
 
           <NavDetails label={t("nav.study")}>
             <NavLinkItem href={localizeHref("/lessons")}>{t("nav.lessons")}</NavLinkItem>
-            <NavLinkItem href={localizeHref("/exam-lessons")}>Lessons by exam</NavLinkItem>
+            <NavLinkItem href={localizeHref("/exam-lessons")}>{t("nav.lessonsByExam")}</NavLinkItem>
             <NavLinkItem href={localizeHref("/test-bank")}>{t("nav.questionBank")}</NavLinkItem>
             <NavLinkItem href={localizeHref("/mock-exams")}>{t("nav.practiceExams")}</NavLinkItem>
             <NavLinkItem href={localizeHref("/flashcards")}>{t("nav.flashcards")}</NavLinkItem>
@@ -233,14 +233,27 @@ export function SiteHeader() {
 
       <div className="hidden border-t border-primary/10 bg-primary/5 md:block">
         <div className="mx-auto flex h-9 max-w-7xl flex-wrap items-center gap-x-1 gap-y-1 px-2 sm:px-4 lg:px-8">
-          <NavDetails label={t("nav.learningTools")} subBar>
-            <NavLinkItem href={localizeHref("/lessons")}>{t("nav.lessons")}</NavLinkItem>
-            <NavLinkItem href={localizeHref("/exam-lessons")}>Lessons by exam</NavLinkItem>
-            <NavLinkItem href={localizeHref("/flashcards")}>{t("nav.flashcards")}</NavLinkItem>
-            <NavLinkItem href={localizeHref("/test-bank")}>{t("nav.questionBank")}</NavLinkItem>
-            <NavLinkItem href={localizeHref("/case-studies")}>{t("nav.caseStudies")}</NavLinkItem>
-            <NavLinkItem href={localizeHref("/tools")}>{t("nav.clinicalTools")}</NavLinkItem>
-          </NavDetails>
+          <Link
+            href={localizeHref("/exam-lessons")}
+            className="px-1.5 py-1 text-xs font-medium text-primary/80 hover:text-primary lg:px-2"
+          >
+            {t("nav.lessonsByExam")}
+          </Link>
+          <span className="hidden text-[var(--theme-muted-text)] sm:inline" aria-hidden="true">
+            |
+          </span>
+          <Link
+            href={localizeHref("/nclex-rn-practice-questions")}
+            className="px-1.5 py-1 text-xs font-medium text-primary/80 hover:text-primary lg:px-2"
+          >
+            {t("home.hero.nclexRn")}
+          </Link>
+          <Link
+            href={localizeHref("/rex-pn-practice-questions")}
+            className="px-1.5 py-1 text-xs font-medium text-primary/80 hover:text-primary lg:px-2"
+          >
+            {t("home.hero.rexPn")}
+          </Link>
           <NavDetails label={t("nav.examPrepShort")} subBar>
             <NavLinkItem href={localizeHref("/mock-exams")}>{t("nav.practiceExams")}</NavLinkItem>
             <NavLinkItem href={localizeHref("/pricing")}>{t("nav.pricing")}</NavLinkItem>
@@ -327,7 +340,7 @@ export function SiteHeader() {
               {[
                 { href: localizeHref("/"), label: t("nav.home") },
                 { href: localizeHref("/lessons"), label: t("nav.lessons") },
-                { href: localizeHref("/exam-lessons"), label: "Lessons by exam" },
+                { href: localizeHref("/exam-lessons"), label: t("nav.lessonsByExam") },
                 { href: localizeHref("/flashcards"), label: t("nav.flashcards") },
                 { href: localizeHref("/test-bank"), label: t("nav.questionBank") },
                 { href: localizeHref("/mock-exams"), label: t("nav.practiceExams") },

@@ -34,6 +34,14 @@ export async function GET() {
     prisma.contentItem.count({ where: { type: "lesson" } }),
   );
   pushWarn(lessonsR.warning);
+  const pathwayLessonsR = await safePrismaCount("pathway_lessons_published", () =>
+    prisma.pathwayLesson.count({ where: { status: ContentStatus.PUBLISHED } }),
+  );
+  pushWarn(pathwayLessonsR.warning);
+  const appLessonsPublishedR = await safePrismaCount("content_items_lessons_published", () =>
+    prisma.contentItem.count({ where: { type: "lesson", status: ContentStatus.PUBLISHED } }),
+  );
+  pushWarn(appLessonsPublishedR.warning);
 
   const questionsR = await safePrismaCount("exam_questions", () => prisma.examQuestion.count());
   pushWarn(questionsR.warning);
@@ -85,7 +93,10 @@ export async function GET() {
     users: usersR.value,
     activeSubscriptions: subsR.value,
     content: {
-      lessonsPublished: lessonsR.value,
+      lessonsPublished: appLessonsPublishedR.value + pathwayLessonsR.value,
+      contentItemsLessonsTotal: lessonsR.value,
+      contentItemsLessonsPublished: appLessonsPublishedR.value,
+      pathwayLessonsPublished: pathwayLessonsR.value,
       questionsPublished: questionsR.value,
       questionsNursingPublished: questionsNursingR.value,
       questionsAlliedPublished: questionsAlliedR.value,

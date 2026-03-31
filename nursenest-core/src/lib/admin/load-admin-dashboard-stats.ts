@@ -5,6 +5,9 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 
 const LIST_LIMIT = 15;
 const DAU_WINDOW_MS = 24 * 60 * 60 * 1000;
+const STATS_CACHE_MS = 30_000;
+let cachedStats: { at: number; value: AdminDashboardStats | null } | null = null;
+let inFlightStats: Promise<AdminDashboardStats | null> | null = null;
 
 export type QuestionTierBucket = "RN" | "PN" | "NP" | "Allied" | "Other";
 
@@ -81,56 +84,44 @@ async function dailyActiveUsersCount(since: Date): Promise<number> {
  */
 export async function loadAdminDashboardStats(): Promise<AdminDashboardStats | null> {
   if (!isDatabaseUrlConfigured()) return null;
+  const now = Date.now();
+  if (cachedStats && now - cachedStats.at < STATS_CACHE_MS) return cachedStats.value;
+  if (inFlightStats) return inFlightStats;
 
   const sinceDau = new Date(Date.now() - DAU_WINDOW_MS);
 
-  try {
-    const [
-      users,
-      learners,
-      activePayingSubscriptions,
-      questionsPublished,
-      appLessonsPublished,
-      pathwayLessonsPublished,
-      flashcardsPublished,
-      learnersEverSubscribed,
-      examGroups,
-      tierGroups,
-      dau,
-      recentUsers,
-      recentSignups,
-      recentPurchases,
-    ] = await Promise.all([
-      prisma.user.count(),
-      prisma.user.count({ where: { role: UserRole.LEARNER } }),
-      prisma.subscription.count({
+  inFlightStats = (async () => {
+    try {
+      const users = await prisma.user.count();
+      const learners = await prisma.user.count({ where: { role: UserRole.LEARNER } });
+      const activePayingSubscriptions = await prisma.subscription.count({
         where: { status: { in: [SubscriptionStatus.ACTIVE, SubscriptionStatus.GRACE] } },
-      }),
-      prisma.examQuestion.count({ where: { status: DB_PUBLISHED } }),
-      prisma.contentItem.count({ where: { type: "lesson", status: DB_PUBLISHED } }),
-      prisma.pathwayLesson.count({ where: { status: ContentStatus.PUBLISHED } }),
-      prisma.flashcard.count({ where: { status: ContentStatus.PUBLISHED } }),
-      prisma.user.count({
+      });
+      const questionsPublished = await prisma.examQuestion.count({ where: { status: DB_PUBLISHED } });
+      const appLessonsPublished = await prisma.contentItem.count({ where: { type: "lesson", status: DB_PUBLISHED } });
+      const pathwayLessonsPublished = await prisma.pathwayLesson.count({ where: { status: ContentStatus.PUBLISHED } });
+      const flashcardsPublished = await prisma.flashcard.count({ where: { status: ContentStatus.PUBLISHED } });
+      const learnersEverSubscribed = await prisma.user.count({
         where: {
           role: UserRole.LEARNER,
           subscriptions: { some: {} },
         },
-      }),
-      prisma.examQuestion.groupBy({
+      });
+      const examGroups = await prisma.examQuestion.groupBy({
         by: ["exam"],
         where: { status: DB_PUBLISHED },
         _count: { _all: true },
-      }),
-      prisma.examQuestion.groupBy({
+      });
+      const tierGroups = await prisma.examQuestion.groupBy({
         by: ["tier"],
         where: { status: DB_PUBLISHED },
         _count: { _all: true },
-      }),
-      dailyActiveUsersCount(sinceDau).catch((e) => {
+      });
+      const dau = await dailyActiveUsersCount(sinceDau).catch((e) => {
         console.error("[admin-dashboard] dau", e);
         return 0;
-      }),
-      prisma.user.findMany({
+      });
+      const recentUsers = await prisma.user.findMany({
         orderBy: { updatedAt: "desc" },
         take: LIST_LIMIT,
         select: {
@@ -141,8 +132,8 @@ export async function loadAdminDashboardStats(): Promise<AdminDashboardStats | n
           updatedAt: true,
           createdAt: true,
         },
-      }),
-      prisma.user.findMany({
+      });
+      const recentSignups = await prisma.user.findMany({
         where: { role: UserRole.LEARNER },
         orderBy: { createdAt: "desc" },
         take: LIST_LIMIT,
@@ -152,8 +143,8 @@ export async function loadAdminDashboardStats(): Promise<AdminDashboardStats | n
           name: true,
           createdAt: true,
         },
-      }),
-      prisma.subscription.findMany({
+      });
+      const recentPurchases = await prisma.subscription.findMany({
         orderBy: { createdAt: "desc" },
         take: LIST_LIMIT,
         select: {
@@ -164,20 +155,19 @@ export async function loadAdminDashboardStats(): Promise<AdminDashboardStats | n
           createdAt: true,
           user: { select: { email: true, name: true } },
         },
-      }),
-    ]);
+      });
 
-    const tierBuckets: Record<QuestionTierBucket, number> = {
-      RN: 0,
-      PN: 0,
-      NP: 0,
-      Allied: 0,
-      Other: 0,
-    };
-    for (const row of tierGroups) {
-      const b = bucketExamQuestionTier(row.tier);
-      tierBuckets[b] += row._count._all;
-    }
+      const tierBuckets: Record<QuestionTierBucket, number> = {
+        RN: 0,
+        PN: 0,
+        NP: 0,
+        Allied: 0,
+        Other: 0,
+      };
+      for (const row of tierGroups) {
+        const b = bucketExamQuestionTier(row.tier);
+        tierBuckets[b] += row._count._all;
+      }
 
     const questionsByExam = examGroups
       .map((g) => ({
@@ -192,7 +182,7 @@ export async function loadAdminDashboardStats(): Promise<AdminDashboardStats | n
 
     const lessonsTotal = appLessonsPublished + pathwayLessonsPublished;
 
-    return {
+      const result = {
       generatedAt: new Date().toISOString(),
       totals: {
         users,
@@ -232,10 +222,18 @@ export async function loadAdminDashboardStats(): Promise<AdminDashboardStats | n
         planTier: s.planTier,
         createdAt: s.createdAt.toISOString(),
       })),
-    };
-  } catch (e) {
-    console.error("[loadAdminDashboardStats]", e);
-    return null;
-  }
+      };
+      cachedStats = { at: Date.now(), value: result };
+      return result;
+    } catch (e) {
+      console.error("[loadAdminDashboardStats]", e);
+      cachedStats = { at: Date.now(), value: null };
+      return null;
+    } finally {
+      inFlightStats = null;
+    }
+  })();
+
+  return inFlightStats;
 }
 

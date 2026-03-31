@@ -21,29 +21,16 @@ const usRnSubscriber: AccessScope = {
 };
 
 async function main() {
-  const [
-    contentByType,
-    lessonsPublished,
-    lessonsApp,
-    examPub,
-    examApp,
-    decksPub,
-    decksAll,
-    fcPub,
-    fcApp,
-    pathwayPub,
-  ] = await Promise.all([
-    prisma.contentItem.groupBy({ by: ["type", "status"], _count: true }),
-    prisma.contentItem.count({ where: { type: "lesson", status: "published" } }),
-    prisma.contentItem.count({ where: lessonAccessWhere(usRnSubscriber) }),
-    prisma.examQuestion.count({ where: { status: "published" } }),
-    prisma.examQuestion.count({ where: questionAccessWhere(usRnSubscriber) }),
-    prisma.flashcardDeck.count({ where: { status: ContentStatus.PUBLISHED } }),
-    prisma.flashcardDeck.count(),
-    prisma.flashcard.count({ where: { status: ContentStatus.PUBLISHED } }),
-    prisma.flashcard.count({ where: flashcardAccessWhere(usRnSubscriber) }),
-    prisma.pathwayLesson.count({ where: { status: ContentStatus.PUBLISHED } }),
-  ]);
+  const contentByType = await prisma.contentItem.groupBy({ by: ["type", "status"], _count: true });
+  const lessonsPublished = await prisma.contentItem.count({ where: { type: "lesson", status: "published" } });
+  const lessonsApp = await prisma.contentItem.count({ where: lessonAccessWhere(usRnSubscriber) });
+  const examPub = await prisma.examQuestion.count({ where: { status: "published" } });
+  const examApp = await prisma.examQuestion.count({ where: questionAccessWhere(usRnSubscriber) });
+  const decksPub = await prisma.flashcardDeck.count({ where: { status: ContentStatus.PUBLISHED } });
+  const decksAll = await prisma.flashcardDeck.count();
+  const fcPub = await prisma.flashcard.count({ where: { status: ContentStatus.PUBLISHED } });
+  const fcApp = await prisma.flashcard.count({ where: flashcardAccessWhere(usRnSubscriber) });
+  const pathwayPub = await prisma.pathwayLesson.count({ where: { status: ContentStatus.PUBLISHED } });
 
   console.log(
     JSON.stringify(

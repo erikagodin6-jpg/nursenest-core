@@ -16,6 +16,7 @@ import { stemHash } from "@/lib/content/stem-hash";
 
 const REPLIT = path.join(process.cwd(), "data/replit-exports/exam_questions.json");
 const OUT_DIR = path.join(process.cwd(), "data/materialized/rn-pn-replit-batch-2026");
+const MASTER_TOPIC_MAP = path.join(process.cwd(), "src/content/topic-maps/master-topic-map.json");
 
 const BATCH_TAG = "mixed-practice-2026-rn-pn";
 const SPRINT_TAG = "batch-rn-pn-2026-sprint2";
@@ -270,6 +271,94 @@ const TOPICS: TopicSpec[] = [
     categorySlug: "safety",
     test: /\bprioritiz|ABCs\b|Airway.*Breathing|Maslow|first action|see first|most urgent/i,
   },
+  {
+    key: "neurological-acute-care",
+    label: "Neurological acute care",
+    topicSlug: "neurological-acute-care",
+    bodySystem: "Neurological",
+    categorySlug: "neurology",
+    test: /\bstroke\b|TIA\b|seizure|postictal|status epilepticus|increased ICP|intracranial|autonomic dysreflexia|cranial|neuro\b/i,
+  },
+  {
+    key: "mental-health-crisis",
+    label: "Mental health crisis care",
+    topicSlug: "mental-health-crisis",
+    bodySystem: "Mental Health",
+    categorySlug: "mental-health",
+    test: /\bsuicid|homicid|psychosis|mania|schizo|bipolar|depression|withdrawal|CIWA|hallucinat|delirium tremens|anxi|behavioral/i,
+  },
+  {
+    key: "pediatrics-care",
+    label: "Pediatrics nursing care",
+    topicSlug: "pediatrics-care",
+    bodySystem: "Pediatrics",
+    categorySlug: "pediatrics",
+    test: /\bpediatric|infant|newborn|child|toddler|adolescent|growth percentile|fontanel|immuniz|RSV|croup|febrile seizure/i,
+  },
+  {
+    key: "maternal-newborn-care",
+    label: "Maternal and newborn care",
+    topicSlug: "maternal-newborn-care",
+    bodySystem: "Maternal/Newborn",
+    categorySlug: "maternity",
+    test: /\bpostpartum|antepartum|labor|delivery|oxytocin|fetal|placenta|eclampsia|preeclampsia|lochia|uterine|newborn/i,
+  },
+  {
+    key: "gastrointestinal-acute-care",
+    label: "Gastrointestinal acute care",
+    topicSlug: "gastrointestinal-acute-care",
+    bodySystem: "Gastrointestinal",
+    categorySlug: "gastrointestinal",
+    test: /\bpancreatitis|hepatic|liver|GI bleed|hematemesis|melena|bowel obstruction|ileus|ostomy|ascites|cirrhosis|C\.? diff|diarrhea/i,
+  },
+  {
+    key: "renal-genitourinary-care",
+    label: "Renal and genitourinary care",
+    topicSlug: "renal-genitourinary-care",
+    bodySystem: "Renal",
+    categorySlug: "renal-gu",
+    test: /\bAKI\b|CKD\b|dialysis|oliguria|anuria|creatinine|BUN\b|urinary|catheter|pyelonephritis|renal/i,
+  },
+  {
+    key: "hematology-oncology-care",
+    label: "Hematology and oncology care",
+    topicSlug: "hematology-oncology-care",
+    bodySystem: "Hematology",
+    categorySlug: "hematology",
+    test: /\banemia|thrombocytopenia|neutropenia|transfusion|hemoglobin|platelet|sickle|leukemia|lymphoma|oncology|chemo/i,
+  },
+  {
+    key: "musculoskeletal-care",
+    label: "Musculoskeletal care",
+    topicSlug: "musculoskeletal-care",
+    bodySystem: "Musculoskeletal",
+    categorySlug: "musculoskeletal",
+    test: /\bfracture|cast\b|traction|arthrit|osteoporosis|hip replacement|joint|mobility|amputation/i,
+  },
+  {
+    key: "integumentary-burn-wound",
+    label: "Integumentary, burn, and wound care",
+    topicSlug: "integumentary-burn-wound",
+    bodySystem: "Integumentary",
+    categorySlug: "integumentary",
+    test: /\bburn\b|pressure (ulcer|injury)|skin integrity|wound|dressing|debridement|cellulitis|dermat/i,
+  },
+  {
+    key: "emergency-triage-disaster",
+    label: "Emergency triage and disaster care",
+    topicSlug: "emergency-triage-disaster",
+    bodySystem: "Emergency",
+    categorySlug: "emergency",
+    test: /\btriage|disaster|mass casualty|emergency department|trauma|rapid response|code blue/i,
+  },
+  {
+    key: "fundamentals-patient-safety",
+    label: "Fundamentals and patient safety",
+    topicSlug: "fundamentals-patient-safety",
+    bodySystem: "Fundamentals",
+    categorySlug: "fundamentals",
+    test: /\bpatient safety|fall risk|safe transfer|aseptic|sterile|documentation|informed consent|restraint|home safety|teaching plan/i,
+  },
 ];
 
 /** Fallback when no {@link TOPICS} regex matches (still a usable NCLEX-style item). */
@@ -335,10 +424,90 @@ function matchesTopic(row: RawQ, re: RegExp): boolean {
   return re.test(blob);
 }
 
+type MasterTopicMap = {
+  exams?: Record<string, { categories?: Array<{ topics?: Array<{ questionTopicHints?: string[] }> }> }>;
+};
+
+function loadMasterTopicHints(): string[] {
+  try {
+    const raw = JSON.parse(fs.readFileSync(MASTER_TOPIC_MAP, "utf8")) as MasterTopicMap;
+    const out = new Set<string>();
+    for (const exam of Object.values(raw.exams ?? {})) {
+      for (const cat of exam.categories ?? []) {
+        for (const topic of cat.topics ?? []) {
+          for (const hint of topic.questionTopicHints ?? []) {
+            const h = hint.trim().toLowerCase();
+            if (h.length >= 4) out.add(h);
+          }
+        }
+      }
+    }
+    return [...out];
+  } catch {
+    return [];
+  }
+}
+
+const MASTER_HINTS = loadMasterTopicHints();
+
+function topicByKey(key: string): TopicSpec | null {
+  return TOPICS.find((t) => t.key === key) ?? null;
+}
+
+function classifyByFallbackSignals(row: RawQ, blobLower: string): TopicSpec | null {
+  const body = String(row.body_system ?? "").toLowerCase();
+  const topic = String(row.topic ?? "").toLowerCase();
+  const subtopic = String(row.subtopic ?? "").toLowerCase();
+  const merged = `${body} ${topic} ${subtopic} ${blobLower}`;
+
+  const byDirectRegex: Array<{ key: string; test: RegExp }> = [
+    { key: "neurological-acute-care", test: /\b(neuro|stroke|seizure|icp|head injury)\b/ },
+    { key: "mental-health-crisis", test: /\b(mental|psych|suicid|depress|mania|withdrawal)\b/ },
+    { key: "pediatrics-care", test: /\b(pediatric|infant|child|adolescent|newborn)\b/ },
+    { key: "maternal-newborn-care", test: /\b(maternal|postpartum|labor|obstetric|newborn|antepartum)\b/ },
+    { key: "gastrointestinal-acute-care", test: /\b(gastro|gi|hepatic|pancrea|bowel|ostomy)\b/ },
+    { key: "renal-genitourinary-care", test: /\b(renal|gu|urinary|dialysis|ckd|aki)\b/ },
+    { key: "hematology-oncology-care", test: /\b(hematolog|anemia|platelet|neutropen|oncolog|transfusion)\b/ },
+    { key: "musculoskeletal-care", test: /\b(musculoskeletal|fracture|joint|arthrit|mobility)\b/ },
+    { key: "integumentary-burn-wound", test: /\b(integument|wound|burn|pressure injury|skin)\b/ },
+    { key: "emergency-triage-disaster", test: /\b(emergency|triage|trauma|mass casualty|rapid response)\b/ },
+    { key: "fundamentals-patient-safety", test: /\b(fundamentals|patient safety|aseptic|sterile|documentation)\b/ },
+    { key: "sepsis", test: /\bsepsis|septic\b/ },
+    { key: "infection-control", test: /\binfection control|isolation|ppe|airborne|droplet|contact precautions\b/ },
+    { key: "fluid-balance", test: /\bfluid (volume )?(deficit|excess|overload)|dehydration|hypervolemia|hypovolemia\b/ },
+    { key: "potassium-imbalance", test: /\bpotassium|hypokal|hyperkal|K\+\b/ },
+    { key: "sodium-imbalance", test: /\bsodium|hyponat|hypernat|Na\+\b/ },
+    { key: "insulin-hypoglycemia", test: /\binsulin|hypogly|hypergly|dka|hhs|diabetes\b/ },
+  ];
+
+  for (const rule of byDirectRegex) {
+    if (rule.test.test(merged)) return topicByKey(rule.key);
+  }
+
+  // Lightweight master-topic-map hint pass for additional precision.
+  for (const hint of MASTER_HINTS) {
+    if (!merged.includes(hint)) continue;
+    if (/\b(cardiovascular|heart|myocard|afib|hyperten|shock)\b/.test(hint)) return topicByKey("heart-failure");
+    if (/\b(respiratory|abg|copd|asthma|pneumonia|pe)\b/.test(hint)) return topicByKey("copd-respiratory");
+    if (/\b(delegation|prioritization|first action|safety)\b/.test(hint)) return topicByKey("prioritization-abcs");
+    if (/\b(maternity|postpartum|labor|newborn)\b/.test(hint)) return topicByKey("maternal-newborn-care");
+    if (/\b(pediatric|child|infant|adolescent)\b/.test(hint)) return topicByKey("pediatrics-care");
+    if (/\b(mental|psych|suicide)\b/.test(hint)) return topicByKey("mental-health-crisis");
+    if (/\b(renal|dialysis|urinary)\b/.test(hint)) return topicByKey("renal-genitourinary-care");
+  }
+  return null;
+}
+
 function classifyTopic(row: RawQ): TopicSpec {
+  const blobLower = [row.stem, row.rationale, row.topic, row.subtopic, row.body_system]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
   for (const spec of TOPICS) {
     if (matchesTopic(row, spec.test)) return spec;
   }
+  const fallback = classifyByFallbackSignals(row, blobLower);
+  if (fallback) return fallback;
   return CATCH_ALL_SPEC;
 }
 
@@ -784,26 +953,33 @@ function main() {
   const flashcards: Record<string, unknown>[] = [];
   let fidx = 0;
   const seenFlashFront = new Set<string>();
+  const questionById = new Map(
+    questionsOut.map((q) => [String(q.id), q as { rationale?: string; tags?: string[]; stem: string }]),
+  );
   const topicByKey = new Map(ALL_LESSON_SPECS.map((s) => [s.key, s] as const));
   const flashSpecsOrder: TopicSpec[] = [
     ...FLASHCARD_PRIORITY_KEYS.map((k) => topicByKey.get(k)).filter((x): x is TopicSpec => !!x),
     ...ALL_LESSON_SPECS.filter((s) => !FLASHCARD_PRIORITY_KEYS.includes(s.key)),
   ];
 
-  outerFc: for (const spec of flashSpecsOrder) {
-    if (flashcards.length >= flashcardTarget) break outerFc;
+  function pushFlashcardsForTopic(spec: TopicSpec, includeSyntheticRationale: boolean) {
     const ids = sourceMap[spec.key] ?? [];
     const rowsForTopic = ids
       .map((id) => rawList.find((r) => r.id === id))
       .filter((r): r is RawQ => !!r);
     for (const r of rowsForTopic) {
-      if (flashcards.length >= flashcardTarget) break outerFc;
-      const rat = typeof r.rationale === "string" ? r.rationale.trim() : "";
+      if (flashcards.length >= flashcardTarget) return;
+      const materialized = questionById.get(r.id);
+      if (!materialized) continue;
+      const qTags = new Set(materialized.tags ?? []);
+      const synthetic = qTags.has("quality:synthetic-rationale");
+      if (synthetic && !includeSyntheticRationale) continue;
+      const rat = typeof materialized.rationale === "string" ? materialized.rationale.trim() : "";
       if (rat.length < 40) continue;
-      const fp = r.stem.slice(0, 48);
+      const stemUse = polishStem(materialized.stem);
+      const fp = stemUse.slice(0, 48).toLowerCase();
       if (seenFlashFront.has(fp)) continue;
       seenFlashFront.add(fp);
-      const stemUse = polishStem(r.stem);
       const stemShort = stemUse.length > 120 ? `${stemUse.slice(0, 117)}…` : stemUse;
       const rs = normalizeRegionScope(r.region_scope);
       flashcards.push({
@@ -818,6 +994,17 @@ function main() {
       });
       fidx += 1;
     }
+  }
+
+  // Pass 1: prefer strongest non-synthetic rationales.
+  for (const spec of flashSpecsOrder) {
+    if (flashcards.length >= flashcardTarget) break;
+    pushFlashcardsForTopic(spec, false);
+  }
+  // Pass 2: preserve target counts with synthetic fallback only if needed.
+  for (const spec of flashSpecsOrder) {
+    if (flashcards.length >= flashcardTarget) break;
+    pushFlashcardsForTopic(spec, true);
   }
 
   const topicCounts = Object.fromEntries(ALL_LESSON_SPECS.map((s) => [s.key, (sourceMap[s.key] ?? []).length]));

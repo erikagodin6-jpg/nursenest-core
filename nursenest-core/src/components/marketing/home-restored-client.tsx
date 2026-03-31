@@ -9,7 +9,6 @@ import {
   BookOpen,
   CheckCircle2,
   MapPin,
-  Trophy,
   HelpCircle,
   Layers,
   Users,
@@ -36,7 +35,6 @@ import { HomeHeroPathGateway } from "@/components/marketing/home-hero-path-gatew
 import { HomeMarketingConversionBlocks } from "@/components/marketing/home-marketing-conversion-blocks";
 import { HomeMarketingSixtySeconds } from "@/components/marketing/home-marketing-sixty-seconds";
 import { HomeMarketingProductProof } from "@/components/marketing/home-marketing-product-proof";
-import { MarketingTrustSection } from "@/components/marketing/marketing-trust-section";
 import { HomeMarketingFeaturesStack } from "@/components/marketing/home-marketing-features-stack";
 import { heroQuickEntryLinks } from "@/lib/marketing/home-hero-gateway-config";
 import { rnQuestions } from "@/lib/marketing/marketing-entry-routes";
@@ -80,25 +78,10 @@ const HomeBottomSections = dynamic(() => import("@/legacy/marketing/home-bottom-
   loading: () => <div className="min-h-[800px]" />,
 });
 
-function formatCount(n: number | undefined): string {
-  if (n === undefined) return "—";
-  if (n === 0) return "0";
-  if (n < 10) return `${n}`;
-  if (n >= 1000) {
-    const hundreds = Math.floor(n / 100) * 100;
-    return `${hundreds.toLocaleString()}+`;
-  }
-  const tens = Math.floor(n / 10) * 10;
-  return `${tens}+`;
-}
-
-function formatLearnerCount(n: number): string {
-  if (n <= 0) return "";
-  if (n >= 1000) {
-    const hundreds = Math.floor(n / 100) * 100;
-    return `${hundreds.toLocaleString("en-US")}+`;
-  }
-  return `${n.toLocaleString("en-US")}+`;
+/** Comma-separated counts from `GET /api/public/home-stats` (exact aggregates, marketing scope). */
+function formatStatExact(n: number | undefined, locale: string): string {
+  if (n === undefined || n <= 0) return "";
+  return n.toLocaleString(locale.replace(/_/g, "-"));
 }
 
 /**
@@ -215,9 +198,19 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
 
   const enabledCareers = getEnabledCareers();
 
+  const trustStatsFormatted = useMemo(
+    () => ({
+      questions: formatStatExact(questionCount, locale),
+      flashcards: formatStatExact(flashcardCount, locale),
+      lessons: formatStatExact(lessonCount, locale),
+      learners: formatStatExact(registeredLearners, locale),
+    }),
+    [questionCount, flashcardCount, lessonCount, registeredLearners, locale],
+  );
+
   return (
     <div className="font-sans md:animate-page-enter flex min-h-screen flex-col overflow-x-hidden bg-[var(--theme-page-bg)]">
-      <main className="flex-grow overflow-x-hidden">
+      <div className="flex-grow overflow-x-hidden">
         <section
           className="relative overflow-hidden"
           style={{ paddingTop: "var(--space-hero-top)", paddingBottom: "var(--space-hero-bottom)" }}
@@ -391,46 +384,52 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
                   </div>
                 </div>
 
-                <div
-                  className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-xs text-[var(--theme-body-text)] sm:justify-start sm:gap-x-4"
-                  data-testid="hero-trust-indicators"
-                >
-                  <div className="flex items-center gap-1.5">
-                    <Trophy className="h-3.5 w-3.5 shrink-0" />
-                    <span data-testid="text-trust-pass-rate">{t("home.hero.trustPassRate")}</span>
-                  </div>
-                  <span className="hidden text-[var(--theme-muted-text)] sm:inline" aria-hidden="true">
-                    ·
-                  </span>
-                  <div className="flex items-center gap-1.5">
-                    <HelpCircle className="h-3.5 w-3.5 shrink-0" />
-                    <span data-testid="text-trust-questions">
-                      {questionCount > 0
-                        ? `${formatCount(questionCount)} ${t("home.hero.trustQuestionsLabel")}`
-                        : t("home.hero.trustQuestions")}
+                <div className="space-y-2" data-testid="hero-trust-indicators">
+                  <p className="text-[11px] font-medium leading-snug text-[var(--theme-muted-text)]" data-testid="text-trust-tagline">
+                    {t("home.hero.trustPassRate")}
+                  </p>
+                  <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-xs text-[var(--theme-body-text)] sm:justify-start sm:gap-x-4">
+                    <div className="flex items-center gap-1.5">
+                      <HelpCircle className="h-3.5 w-3.5 shrink-0" />
+                      <span data-testid="text-trust-questions">
+                        {trustStatsFormatted.questions
+                          ? `${trustStatsFormatted.questions} ${t("home.hero.trustQuestionsLabel")}`
+                          : t("home.hero.trustQuestions")}
+                      </span>
+                    </div>
+                    <span className="hidden text-[var(--theme-muted-text)] sm:inline" aria-hidden="true">
+                      ·
                     </span>
-                  </div>
-                  <span className="hidden text-[var(--theme-muted-text)] sm:inline" aria-hidden="true">
-                    ·
-                  </span>
-                  <div className="flex items-center gap-1.5">
-                    <Layers className="h-3.5 w-3.5 shrink-0" />
-                    <span data-testid="text-trust-flashcards">
-                      {flashcardCount > 0
-                        ? `${formatCount(flashcardCount)} ${t("home.hero.trustFlashcardsLabel")}`
-                        : t("home.hero.trustFlashcards")}
+                    <div className="flex items-center gap-1.5">
+                      <Layers className="h-3.5 w-3.5 shrink-0" />
+                      <span data-testid="text-trust-flashcards">
+                        {trustStatsFormatted.flashcards
+                          ? `${trustStatsFormatted.flashcards} ${t("home.hero.trustFlashcardsLabel")}`
+                          : t("home.hero.trustFlashcards")}
+                      </span>
+                    </div>
+                    <span className="hidden text-[var(--theme-muted-text)] sm:inline" aria-hidden="true">
+                      ·
                     </span>
-                  </div>
-                  <span className="hidden text-[var(--theme-muted-text)] sm:inline" aria-hidden="true">
-                    ·
-                  </span>
-                  <div className="flex items-center gap-1.5">
-                    <Users className="h-3.5 w-3.5 shrink-0" />
-                    <span data-testid="text-trust-students">
-                      {registeredLearners > 0
-                        ? `${formatLearnerCount(registeredLearners)} learners`
-                        : t("home.hero.trustStudents")}
+                    <div className="flex items-center gap-1.5">
+                      <BookOpen className="h-3.5 w-3.5 shrink-0" />
+                      <span data-testid="text-trust-lessons">
+                        {trustStatsFormatted.lessons
+                          ? `${trustStatsFormatted.lessons} ${t("home.hero.trustLessonsLabel")}`
+                          : t("home.hero.trustLessons")}
+                      </span>
+                    </div>
+                    <span className="hidden text-[var(--theme-muted-text)] sm:inline" aria-hidden="true">
+                      ·
                     </span>
+                    <div className="flex items-center gap-1.5">
+                      <Users className="h-3.5 w-3.5 shrink-0" />
+                      <span data-testid="text-trust-students">
+                        {trustStatsFormatted.learners
+                          ? `${trustStatsFormatted.learners} ${t("home.hero.trustLearnersLabel")}`
+                          : t("home.hero.trustStudents")}
+                      </span>
+                    </div>
                   </div>
                 </div>
 
@@ -715,7 +714,7 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
             <span aria-hidden="true">→</span>
           </Link>
         </div>
-      </main>
+      </div>
     </div>
   );
 }

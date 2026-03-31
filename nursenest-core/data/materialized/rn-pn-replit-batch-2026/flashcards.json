@@ -3491,6 +3491,16 @@
   },
   {
     "id": "fc2026s2_infection-control_349",
+    "front": "A 40-year-old client with active pulmonary TB is being discharged on a four-drug regimen. BP 118/72, HR 74, RR 16, Sp…",
+    "back": "Medication adherence for the full treatment duration (6 to 9 months) is the most critical instruction, as incomplete treatment is the primary cause of multidrug-resistant TB (MDR-TB). Symptoms may improve within weeks, but the bacilli require prolonged treatment for eradication. N95 masks are for healthcare workers. Social isolation for the entire course is unnecessary once non-infectious.",
+    "country": "US",
+    "tier": "RPN",
+    "topicKey": "infection-control",
+    "categorySlug": "infection",
+    "sourceQuestionId": "3e70e5d1-abe8-4f6b-97bc-95d8dbb37264"
+  },
+  {
+    "id": "fc2026s2_infection-control_350",
     "front": "A client receiving lactulose for hepatic encephalopathy has had 5 liquid stools today. The client's ammonia level has…",
     "back": "Lactulose works by trapping ammonia in the colon for fecal elimination. The therapeutic goal is 2-3 soft stools daily. Five stools may indicate overaggressive dosing, risking dehydration and electrolyte imbalances. The dose may need adjustment, but the medication should not be stopped while ammonia is still elevated. Antidiarrheals would negate lactulose's mechanism. Increasing the dose would worsen diarrhea.",
     "country": "US",
@@ -3500,7 +3510,7 @@
     "sourceQuestionId": "3f1b3c90-6a49-4108-b7cf-d4951ba4ce84"
   },
   {
-    "id": "fc2026s2_infection-control_350",
+    "id": "fc2026s2_infection-control_351",
     "front": "A client receiving chemotherapy develops mucositis. The nurse should implement:",
     "back": "Chemotherapy-induced mucositis causes painful oral mucosal inflammation. Gentle oral care with soft toothbrush, alcohol-free mouth rinse, and bland/soft/cool foods reduces pain and prevents secondary infection. Oral cryotherapy during chemotherapy may prevent mucositis.",
     "country": "US",
@@ -3510,7 +3520,7 @@
     "sourceQuestionId": "3f2198b0-d1fa-42a3-804f-20c702a7d210"
   },
   {
-    "id": "fc2026s2_infection-control_351",
+    "id": "fc2026s2_infection-control_352",
     "front": "A 74-year-old male client with a known 5.8 cm abdominal aortic aneurysm (AAA) presents with sudden, severe, tearing a…",
     "back": "Sudden severe abdominal/back pain with hemodynamic instability (BP 78/42, HR 132) and abdominal rigidity in a client with known large AAA strongly suggests rupture. This is a surgical emergency with high mortality. Appendicitis does not typically cause this hemodynamic picture. A 5.8 cm aneurysm with these symptoms is not stable. Pancreatitis presents differently.",
     "country": "US",
@@ -3520,7 +3530,7 @@
     "sourceQuestionId": "3fe3043a-4b77-4bc9-b413-241e2e127f15"
   },
   {
-    "id": "fc2026s2_infection-control_352",
+    "id": "fc2026s2_infection-control_353",
     "front": "A nurse is preparing to administer IV heparin to a client with deep vein thrombosis. The baseline aPTT is 28 seconds.…",
     "back": "An aPTT of 95 seconds exceeds the therapeutic range and indicates over-anticoagulation, increasing bleeding risk. Per most heparin protocols, the infusion should be stopped, the provider notified, and aPTT rechecked after a specified interval. Continuing risks hemorrhage. Decreasing without stopping may not adequately correct levels. Protamine is the antidote but reserved for active bleeding.",
     "country": "US",
@@ -3530,7 +3540,7 @@
     "sourceQuestionId": "3ff94e3c-aaf8-4444-a7cf-5d935869c541"
   },
   {
-    "id": "fc2026s2_infection-control_353",
+    "id": "fc2026s2_infection-control_354",
     "front": "A practical nurse receives an order that appears to have an incorrect medication dosage. What should the nurse do?",
     "back": "When an order appears incorrect, the nurse must clarify with the prescriber before administration. Administering a potentially incorrect dose violates the nurse's duty to question and clarify orders. Adjusting a dose independently exceeds the nurse's scope of practice. Asking a colleague to administer does not resolve the potential error and transfers the liability without addressing the concern.",
     "country": "US",
@@ -3540,7 +3550,7 @@
     "sourceQuestionId": "403d8e31-31e4-4151-9b17-583d76266621"
   },
   {
-    "id": "fc2026s2_infection-control_354",
+    "id": "fc2026s2_infection-control_355",
     "front": "A nurse is performing wound care on a client with a surgical site infection. In which order should personal protectiv…",
     "back": "The correct PPE donning sequence is: hand hygiene first, then gown (covers the body), mask (protects the respiratory tract), eye protection (protects the mucous membranes), and gloves last (placed over the gown cuffs to create a seal). This sequence ensures complete coverage before patient contact. Gloves are always applied last and removed first during doffing.",
     "country": "US",
@@ -3550,7 +3560,7 @@
     "sourceQuestionId": "40523dea-cd9a-4aff-b13e-8f7bc7b94eaa"
   },
   {
-    "id": "fc2026s2_infection-control_355",
+    "id": "fc2026s2_infection-control_356",
     "front": "A nurse is providing care to a patient diagnosed with clostridium difficile infection (CDI). Which intervention is mo…",
     "back": "Ensuring the patient is placed on contact precautions is the most important intervention to prevent the spread of CDI. Contact precautions help minimize the risk of transmission to other patients and healthcare staff. While using disposable utensils, administering antibiotics, and encouraging masks can be helpful, they are not as critical in preventing the spread of CDI as placing the patient on appropriate precautions.",
     "country": "US",
@@ -3560,7 +3570,7 @@
     "sourceQuestionId": "412fe184-931c-4fe7-9f3b-68f92eac8d45"
   },
   {
-    "id": "fc2026s2_infection-control_356",
+    "id": "fc2026s2_infection-control_357",
     "front": "A 62-year-old client with a 40-pack-year smoking history presents with a persistent cough, hemoptysis, and unintentio…",
     "back": "Persistent cough, hemoptysis, significant unintentional weight loss, and a lung mass in a client with a 40-pack-year smoking history are classic warning signs of lung cancer. Smoking is the leading risk factor. The BP, SpO2, and RR are all within acceptable ranges and are not the primary concern in this clinical picture.",
     "country": "US",
@@ -3570,7 +3580,7 @@
     "sourceQuestionId": "41923b37-6a16-4ef8-a2e1-aa4e27b03838"
   },
   {
-    "id": "fc2026s2_infection-control_357",
+    "id": "fc2026s2_infection-control_358",
     "front": "A nurse is providing care to a patient who is on contact precautions due to a Clostridium difficile infection. Which …",
     "back": "Performing hand hygiene with soap and water after leaving the room is crucial in preventing the spread of Clostridium difficile, as alcohol-based sanitizers are not effective against this organism. While wearing a mask is standard in certain situations, it is not required for contact precautions. Limiting visitors can be helpful but does not directly relate to the safety protocols for infection control in this scenario.",
     "country": "US",
@@ -3580,7 +3590,7 @@
     "sourceQuestionId": "41926fd2-5034-496b-aabb-acf8b2aeb998"
   },
   {
-    "id": "fc2026s2_infection-control_358",
+    "id": "fc2026s2_infection-control_359",
     "front": "A nurse is preparing to administer IV vincristine. During administration, the client reports burning pain at the IV s…",
     "back": "Vincristine is a vesicant chemotherapy agent that causes severe tissue necrosis if it extravasates. Burning pain and swelling at the IV site are classic signs of extravasation. The infusion must be stopped immediately. Aspirate any residual drug, and follow institutional extravasation protocols. Continuing the infusion in any form would cause further tissue damage.",
     "country": "US",
@@ -3590,7 +3600,7 @@
     "sourceQuestionId": "419c8bde-b839-4af6-b60d-61e00e76eb24"
   },
   {
-    "id": "fc2026s2_infection-control_359",
+    "id": "fc2026s2_infection-control_360",
     "front": "A nurse is caring for a neonate who is 2 days old and presents with jaundice. Which of the following findings would i…",
     "back": "Pathological jaundice is indicated by additional signs such as lethargy and poor feeding, which can suggest underlying issues. Jaundice appearing after 24 hours and a bilirubin level above 12 mg/dL are concerning but alone do not confirm pathological jaundice. The fading of jaundice by the fifth day suggests physiological jaundice.",
     "country": "US",
@@ -3600,7 +3610,7 @@
     "sourceQuestionId": "41ac4a02-9286-4a40-b4bf-d8ae863172a0"
   },
   {
-    "id": "fc2026s2_infection-control_360",
+    "id": "fc2026s2_infection-control_361",
     "front": "A 45-year-old woman diagnosed with chronic lymphocytic leukemia (CLL) is undergoing active treatment. Which of the fo…",
     "back": "Lymphadenopathy is a common sign of disease progression in chronic lymphocytic leukemia as the disease often leads to the proliferation of abnormal lymphocytes, causing lymph nodes to enlarge. Increased appetite (A), increased energy levels (C), and weight gain (D) are not typically associated with CLL progression; rather, patients usually experience fatigue, weight loss, and decreased appetite.",
     "country": "US",
@@ -3610,7 +3620,7 @@
     "sourceQuestionId": "41b2f9c1-140b-472e-8934-35b84e016b3f"
   },
   {
-    "id": "fc2026s2_infection-control_361",
+    "id": "fc2026s2_infection-control_362",
     "front": "A 30-year-old healthcare worker has a positive TST with 11 mm of induration. A chest X-ray is clear. BP 114/68, HR 68…",
     "back": "For healthcare workers, 10 mm or greater induration is positive. A positive TST with a clear chest X-ray and no symptoms indicates latent TB infection (LTBI). The client has been exposed and infected but does not have active disease. Treatment of LTBI (typically isoniazid for 9 months) is recommended to prevent future reactivation.",
     "country": "US",
@@ -3620,7 +3630,7 @@
     "sourceQuestionId": "42228c98-3b18-4b85-93e4-a640c3d5fa39"
   },
   {
-    "id": "fc2026s2_infection-control_362",
+    "id": "fc2026s2_infection-control_363",
     "front": "A nurse is notified that a client has tested positive for influenza A. The client is in a semi-private room. What sho…",
     "back": "Influenza is transmitted via respiratory droplets. Droplet precautions require a private room (or cohorting with another influenza-positive client), surgical mask when within 3 feet, and hand hygiene. A curtain is insufficient protection for the roommate. Airborne precautions with N95 are for aerosol-generating procedures only. Discharge decisions depend on clinical status, not just isolation needs.",
     "country": "US",
@@ -3630,7 +3640,7 @@
     "sourceQuestionId": "4225f4c2-a0f0-403c-8529-f8f852450dcf"
   },
   {
-    "id": "fc2026s2_infection-control_363",
+    "id": "fc2026s2_infection-control_364",
     "front": "The nurse is caring for a client on droplet precautions. Which PPE is required?",
     "back": "Droplet precautions require a surgical mask when within 3 feet (or upon room entry per some facilities) of the client. Droplet-transmitted organisms include influenza, pertussis, meningococcal disease, and SARS-CoV-2 (though some also use airborne precautions for COVID-19).",
     "country": "US",
@@ -3640,7 +3650,7 @@
     "sourceQuestionId": "422a392e-33a6-40ce-a0a3-af286ae10016"
   },
   {
-    "id": "fc2026s2_infection-control_364",
+    "id": "fc2026s2_infection-control_365",
     "front": "A nurse is caring for a pediatric patient who has been hospitalized for severe dehydration due to gastroenteritis. Th…",
     "back": "The priority action is B, to use personal protective equipment (PPE) when providing care. This is critical in preventing the spread of infection to healthcare providers and other patients. While hand hygiene (option A) is also important, the immediate need is to ensure the nurse is protected while delivering care. Limiting visitors (option C) is beneficial but less critical than ensuring staff protection. Option D, implementing contact precautions for staff, is necessary but using PPE directly during care is the immediate action.",
     "country": "US",
@@ -3650,7 +3660,7 @@
     "sourceQuestionId": "42a136c3-8078-44c5-b965-e15a930a4d1c"
   },
   {
-    "id": "fc2026s2_infection-control_365",
+    "id": "fc2026s2_infection-control_366",
     "front": "A nurse is assessing a 5-year-old with a suspected ear infection. Which symptom is most indicative of otitis media in…",
     "back": "Tugging at the ear and irritability are classic signs of otitis media in young children, indicating discomfort or pain. Severe headache and vomiting could be associated with many conditions and are not specific to otitis media. While persistent high fever may occur, the rash is not a typical symptom. Nasal congestion and sneezing point more towards upper respiratory infection than otitis media.",
     "country": "US",
@@ -3660,7 +3670,7 @@
     "sourceQuestionId": "42e3e22a-a3f1-4a43-9353-fd3893fdd2fd"
   },
   {
-    "id": "fc2026s2_infection-control_366",
+    "id": "fc2026s2_infection-control_367",
     "front": "A practical nurse is teaching a client with gout about dietary modifications. Which food should the client be instruc…",
     "back": "Organ meats including liver, kidney, and sweetbreads are extremely high in purines. Purines are metabolized to uric acid, which accumulates in the joints of clients with gout causing painful inflammatory arthritis. A low-purine diet is a key component of gout management. Other high-purine foods to avoid include shellfish, red meat, and certain fish like sardines and anchovies. Fresh fruits and vegetables are generally low in purines and encouraged for their overall health benefits and alkalinizing effect on urine. Low-fat dairy products actually appear to have a protective effect against gout. Whole grain breads and cereals contain moderate amounts of purines and are generally acceptable in the gout diet when consumed in moderation.",
     "country": "US",
@@ -3670,7 +3680,7 @@
     "sourceQuestionId": "43308271-825a-4f8e-9c62-3991d8ad5705"
   },
   {
-    "id": "fc2026s2_infection-control_367",
+    "id": "fc2026s2_infection-control_368",
     "front": "During a health assessment, a nurse observes several small, raised, waxy lesions on a patient’s face and neck. The le…",
     "back": "Basal cell carcinoma often presents as small, raised, pearly lesions and is typically painless. Squamous cell carcinoma (B) may present as a rough, scaly patch; actinic keratosis (C) appears as rough, scaly patches that can progress to squamous cell carcinoma; melanoma (D) typically has irregular borders and color. This clinical presentation aligns with basal cell carcinoma.",
     "country": "US",
@@ -3680,7 +3690,7 @@
     "sourceQuestionId": "43ac78a3-1d68-4237-87f9-6b1a631a4c58"
   },
   {
-    "id": "fc2026s2_infection-control_368",
+    "id": "fc2026s2_infection-control_369",
     "front": "A practical nurse is caring for a client on airborne precautions for suspected tuberculosis. Which personal protectiv…",
     "back": "Airborne precautions for tuberculosis require the use of an N95 respirator mask, which filters at least 95 percent of airborne particles including the small droplet nuclei that carry Mycobacterium tuberculosis. These particles remain suspended in the air for extended periods and can travel long distances on air currents. A surgical mask does not provide adequate filtration for airborne particles and is used only for droplet precautions. A face shield protects against splash exposure but does not filter airborne organisms. Double gowning and shoe covers are not required for tuberculosis transmission prevention. The client should be placed in a negative-pressure isolation room, and the door must remain closed. Anyone entering must wear a properly fitted N95 respirator.",
     "country": "US",
@@ -3690,7 +3700,7 @@
     "sourceQuestionId": "43bb6b09-9f86-453b-b426-f13fe0d53703"
   },
   {
-    "id": "fc2026s2_infection-control_369",
+    "id": "fc2026s2_infection-control_370",
     "front": "A nurse is assessing a newborn immediately after birth using the Apgar scoring system. Which parameters are evaluated?",
     "back": "The Apgar score evaluates five parameters at 1 and 5 minutes after birth: heart rate (Pulse), respiratory effort (Respiration), muscle tone (Activity), reflex irritability (Grimace), and skin color (Appearance). The other answer choices describe routine newborn measurements or assessments that are not part of the Apgar scoring system.",
     "country": "US",
@@ -3700,7 +3710,7 @@
     "sourceQuestionId": "4472d4dd-8611-4e70-a257-662a928c673e"
   },
   {
-    "id": "fc2026s2_infection-control_370",
+    "id": "fc2026s2_infection-control_371",
     "front": "A client with a cervical spinal cord injury at C4 will likely need:",
     "back": "The phrenic nerve (C3-C5) innervates the diaphragm. A C4 injury may compromise diaphragmatic function, requiring mechanical ventilation. Injuries at C5 and below typically preserve spontaneous breathing.",
     "country": "US",
@@ -3710,7 +3720,7 @@
     "sourceQuestionId": "44e8ce1c-7259-44ce-bf13-b37004d36ba7"
   },
   {
-    "id": "fc2026s2_infection-control_371",
+    "id": "fc2026s2_infection-control_372",
     "front": "A home health nurse is teaching wound care to a client's family member who will be changing dressings at home. Which …",
     "back": "Hand hygiene before and after wound care is the most important infection prevention principle. Clean technique (medical asepsis) is appropriate for most home wound care. Gloves should be changed between wound cleaning and dressing application to prevent contamination. Supplies should be stored in a clean, dry area, not the bathroom. Used dressings should be double-bagged and disposed of properly.",
     "country": "US",
@@ -3720,7 +3730,7 @@
     "sourceQuestionId": "44f87ad6-a622-4a86-aceb-94eaf3cfc7e3"
   },
   {
-    "id": "fc2026s2_infection-control_372",
+    "id": "fc2026s2_infection-control_373",
     "front": "A nurse is assessing an 8-year-old boy with attention-deficit/hyperactivity disorder (ADHD) who is prescribed methylp…",
     "back": "The correct answer is C. Insomnia is a common adverse effect of methylphenidate due to its stimulant properties. A is incorrect; stimulants typically lead to decreased appetite, not increased. B is not usually associated with this medication; it can actually cause tachycardia. D is misleading as weight loss is more common than weight gain in children taking stimulants.",
     "country": "US",
@@ -3730,7 +3740,7 @@
     "sourceQuestionId": "455e3308-9ed5-4015-b167-dfb99b6703b0"
   },
   {
-    "id": "fc2026s2_infection-control_373",
+    "id": "fc2026s2_infection-control_374",
     "front": "A nurse is caring for a client with a new diagnosis of malignant melanoma on the upper back. The pathology report sho…",
     "back": "Breslow depth is the single most important prognostic factor in melanoma and measures tumor thickness from the granular layer of the epidermis to the deepest point of invasion. A depth of 3.2 mm is classified as thick melanoma (greater than 2 mm is thick; greater than 4 mm is very thick) with significant metastatic potential. Treatment includes wide local excision with 2 cm margins and sentinel lymph node biopsy to assess for microscopic spread to regional lymph nodes. If the sentinel node is positive, further staging (CT, PET scan) and adjuvant therapy (immunotherapy with checkpoint inhibitors such as pembrolizumab or nivolumab) may be indicated. Five-year survival for melanomas greater than 3 mm decreases significantly compared to thin melanomas. Topical treatment is only appropriate for melanoma in situ. The client will need lifelong dermatological surveillance for recurrence and new ",
     "country": "US",
@@ -3740,7 +3750,7 @@
     "sourceQuestionId": "4572a62c-3ea6-404a-b3fd-5ba68a8c9395"
   },
   {
-    "id": "fc2026s2_infection-control_374",
+    "id": "fc2026s2_infection-control_375",
     "front": "A nursing student observes a patient in an acute psychiatric unit pacing back and forth, mumbling to themselves. The …",
     "back": "The priority nursing action is to ensure the patient is in a safe environment (C) to prevent potential harm due to agitation. Engaging the patient in conversation (A) may escalate their agitation. Documenting the behavior (B) is important but not the priority action at this moment. Administering medication (D) may be necessary but should not take precedence over safety.",
     "country": "US",
@@ -3750,7 +3760,7 @@
     "sourceQuestionId": "45798539-10bb-4601-b0cc-0dee4020efed"
   },
   {
-    "id": "fc2026s2_infection-control_375",
+    "id": "fc2026s2_infection-control_376",
     "front": "A client with bacterial meningitis has an opening pressure of 300 mmH2O on lumbar puncture. The CSF shows:",
     "back": "Bacterial meningitis CSF: cloudy/turbid appearance, elevated WBCs (predominantly neutrophils), decreased glucose (< 40 mg/dL), elevated protein (> 45 mg/dL), and positive gram stain/culture. Viral meningitis has clear CSF with lymphocytic pleocytosis and normal glucose.",
     "country": "US",
@@ -3760,7 +3770,7 @@
     "sourceQuestionId": "460a22b7-e47a-4035-86fe-4dc584b98825"
   },
   {
-    "id": "fc2026s2_infection-control_376",
+    "id": "fc2026s2_infection-control_377",
     "front": "A healthcare worker sustains a needlestick injury from a patient known to be HIV-positive. The nurse should:",
     "back": "After a needlestick injury, immediately wash the site with soap and water, report to occupational health, and begin post-exposure prophylaxis (PEP) ideally within 1-2 hours. PEP with antiretroviral medications reduces HIV transmission risk.",
     "country": "US",
@@ -3770,7 +3780,7 @@
     "sourceQuestionId": "469b0fe2-c5c9-4a97-9607-09824d2bd4da"
   },
   {
-    "id": "fc2026s2_infection-control_377",
+    "id": "fc2026s2_infection-control_378",
     "front": "A nurse is caring for a client who underwent a right upper lobectomy for lung cancer 6 hours ago. The chest tube drai…",
     "back": "Chest tube drainage exceeding 100-200 mL/hr for consecutive hours following thoracic surgery suggests active hemorrhage from a surgical site, intercostal vessel, or major vessel injury. The surgeon must be notified immediately for potential re-exploration. The nurse should also monitor for hemodynamic instability (tachycardia, hypotension), decreasing hemoglobin, and assess the drainage color for increasing sanguineous content. Expected postoperative drainage is typically 100-300 mL in the first 2-3 hours with a gradual decrease. Continued high-volume output is abnormal. Clamping a chest tube after thoracic surgery can cause tension pneumothorax from trapped air. Standard suction pressure is -20 cm H2O; excessive suction can damage lung tissue and cause air leaks.",
     "country": "US",
@@ -3780,7 +3790,7 @@
     "sourceQuestionId": "46fddab4-bef7-4629-b7da-c8fad601249b"
   },
   {
-    "id": "fc2026s2_infection-control_378",
+    "id": "fc2026s2_infection-control_379",
     "front": "A 50-year-old client requires nasotracheal suctioning. The client is alert and oriented with BP 118/72, HR 76, RR 22,…",
     "back": "Patient anxiety often results from inadequate understanding of the procedure. The nurse should provide clear, calm explanations about what will happen and why it is needed. Restraining is inappropriate and violates client autonomy. Documentation without intervention may be unsafe if suctioning is clinically needed. Sedation for a routine procedure is excessive.",
     "country": "US",
@@ -3790,7 +3800,7 @@
     "sourceQuestionId": "476e0480-c43c-4ece-b67c-8032984b1dfd"
   },
   {
-    "id": "fc2026s2_infection-control_379",
+    "id": "fc2026s2_infection-control_380",
     "front": "A patient has been admitted with a diagnosis of Guillain-Barré syndrome and is experiencing ascending paralysis. Whic…",
     "back": "The correct answer is D. Bilateral facial weakness can occur in Guillain-Barré syndrome as it can affect cranial nerves. Hyperreflexia (A) is not typical; patients usually demonstrate hyporeflexia. Decreased sensation in the upper extremities (B) can occur, but it is more common to see it in the lower extremities first. Normal strength in the lower extremities (C) is not expected, as the syndrome is characterized by ascending weakness.",
     "country": "US",
@@ -3800,7 +3810,7 @@
     "sourceQuestionId": "479fb15a-ed16-4619-9e57-f5e66bf1b520"
   },
   {
-    "id": "fc2026s2_infection-control_380",
+    "id": "fc2026s2_infection-control_381",
     "front": "A client receiving chemotherapy develops neutropenia (ANC < 1000). The nurse should implement:",
     "back": "Neutropenic precautions: private room, meticulous hand hygiene, no fresh flowers/plants (mold spores), no raw fruits/vegetables (bacteria), mask for symptomatic visitors, avoid rectal temperatures and suppositories, monitor temperature frequently. ANC < 500 = severe neutropenia with high infection risk. Report fever > 100.4F immediately.",
     "country": "US",
@@ -3810,7 +3820,7 @@
     "sourceQuestionId": "480cab13-d9c4-42f9-8b7d-f1adedbd2950"
   },
   {
-    "id": "fc2026s2_infection-control_381",
+    "id": "fc2026s2_infection-control_382",
     "front": "A nurse receives a telephone order from a physician to administer morphine 10 mg IV push to a postoperative client. T…",
     "back": "Nurses have an independent professional and legal obligation to question any order that appears unsafe, regardless of who prescribed it. Morphine 10 mg IV push is a high dose for an 82-year-old client weighing 55 kg, as elderly clients have decreased hepatic and renal clearance, increased sensitivity to opioids, and higher risk of respiratory depression. The typical starting IV morphine dose for elderly patients is 2-4 mg. The nurse should contact the prescriber, clearly state the concern with specific clinical rationale, and request clarification or dose modification. If the physician insists on the original order, the nurse should escalate through the chain of command. Administering a medication the nurse believes to be unsafe constitutes negligence. Administering an altered dose without authorization is practicing medicine without a license. Simply refusing without follow-up abandons ",
     "country": "US",
@@ -3820,7 +3830,7 @@
     "sourceQuestionId": "487072f9-5804-4e13-ac49-d8034e10abc5"
   },
   {
-    "id": "fc2026s2_infection-control_382",
+    "id": "fc2026s2_infection-control_383",
     "front": "A client on mechanical ventilation develops auto-PEEP. The nurse should:",
     "back": "Auto-PEEP (intrinsic PEEP) occurs when air is trapped due to incomplete exhalation, common in obstructive lung disease. Management: decrease rate, increase expiratory time (decrease I:E ratio), bronchodilators, and possible sedation to reduce breathing effort.",
     "country": "US",
@@ -3830,7 +3840,7 @@
     "sourceQuestionId": "4889ea78-9f60-48f2-9541-4345731c88f3"
   },
   {
-    "id": "fc2026s2_infection-control_383",
+    "id": "fc2026s2_infection-control_384",
     "front": "A 30-year-old woman is diagnosed with breast cancer and is discussing her treatment options with her healthcare provi…",
     "back": "Hair loss (A) is a common side effect of chemotherapy that the nurse should inform the patient about, as it can significantly affect the patient’s emotional well-being. Increased appetite (B) and enhanced immune response (C) are not expected effects of chemotherapy; instead, appetite may decrease. Weight gain (D) is also not a common side effect and may occur in some cases, but hair loss is more universally experienced. Difficulty: 2, Topic: Breast Cancer and Chemotherapy",
     "country": "US",
@@ -3840,7 +3850,7 @@
     "sourceQuestionId": "4898b497-f50e-48be-b7ef-198073117fbe"
   },
   {
-    "id": "fc2026s2_infection-control_384",
+    "id": "fc2026s2_infection-control_385",
     "front": "A nurse is administering doxorubicin (Adriamycin) to a client. The client reports burning and pain at the IV site. Th…",
     "back": "Doxorubicin is a vesicant chemotherapy agent that causes severe tissue necrosis if it extravasates. Signs of extravasation include pain, burning, swelling at the IV site, and lack of blood return. The infusion must be stopped immediately. Attempts to aspirate residual drug should be made, and the specific antidote (dexrazoxane) should be administered per protocol. Never flush a suspected extravasation as it spreads the vesicant.",
     "country": "US",
@@ -3850,7 +3860,7 @@
     "sourceQuestionId": "495f4809-fbd0-4280-a676-3a3eb28fb4e1"
   },
   {
-    "id": "fc2026s2_infection-control_385",
+    "id": "fc2026s2_infection-control_386",
     "front": "A nurse is caring for a 33-year-old male patient who is receiving chemotherapy for leukemia. He reports feeling fatig…",
     "back": "Monitoring the patient's temperature regularly is crucial due to his low white blood cell count (1.5 x 10^9/L), which increases his risk for infection. Early detection of fever can prompt timely intervention to prevent complications. While avoiding crowds is important for infection control, it is a preventive measure rather than an immediate intervention. Encouraging a high-protein diet is beneficial for recovery but not as critical as monitoring for signs of infection. Providing emotional support is valuable but should not take precedence over physical assessments.",
     "country": "US",
@@ -3860,7 +3870,7 @@
     "sourceQuestionId": "49800dc0-9398-4d22-824c-d246fb62334a"
   },
   {
-    "id": "fc2026s2_infection-control_386",
+    "id": "fc2026s2_infection-control_387",
     "front": "A nurse is caring for a client undergoing electroconvulsive therapy (ECT) for severe treatment-resistant depression. …",
     "back": "Post-ECT, the client has received general anesthesia and a neuromuscular blocking agent. Airway patency and respiratory status are the immediate priority in the recovery phase (as with any procedure involving general anesthesia). The client should be positioned on their side, monitored for gag reflex return, and vital signs assessed. Confusion and short-term memory loss are expected and temporary. Assessing depression response happens over the course of treatment. NPO status should continue until gag reflex returns to prevent aspiration.",
     "country": "US",
@@ -3870,7 +3880,7 @@
     "sourceQuestionId": "4999123a-a80b-4b3d-a53f-714147bcf485"
   },
   {
-    "id": "fc2026s2_infection-control_387",
+    "id": "fc2026s2_infection-control_388",
     "front": "A nurse is teaching a client about seizure precautions at home. Which instruction is most important?",
     "back": "Drowning and falls from heights are leading causes of seizure-related death and injury. Clients with epilepsy should never swim alone, avoid bathing in a locked bathroom (shower preferred), and take precautions at heights. Medications should never be self-adjusted and require gradual tapering under medical supervision, not abrupt discontinuation.",
     "country": "US",
@@ -3880,7 +3890,7 @@
     "sourceQuestionId": "4a8e8789-68ae-45e4-b699-c296bd367995"
   },
   {
-    "id": "fc2026s2_infection-control_388",
+    "id": "fc2026s2_infection-control_389",
     "front": "A heart transplant recipient is being discharged. Which topics should the nurse include in discharge education? Selec…",
     "back": "Post-transplant education includes medication adherence, infection reporting, follow-up compliance, avoiding live vaccines (which can cause disease in immunosuppressed clients), and infection prevention measures. Diet modifications are typically recommended (low sodium, heart-healthy foods), so resuming a completely unrestricted diet is inappropriate.",
     "country": "US",
@@ -3890,7 +3900,7 @@
     "sourceQuestionId": "4a966d5e-ba51-468b-8497-5fbdb991eca7"
   },
   {
-    "id": "fc2026s2_infection-control_389",
+    "id": "fc2026s2_infection-control_390",
     "front": "A nurse is orienting a new graduate nurse who makes a clinical error by administering potassium chloride IV at an uns…",
     "back": "When a new graduate nurse makes a clinical error, the preceptor should address it as a learning opportunity within a just culture framework. The private discussion should include what happened, why it happened, the potential consequences (potassium administered too rapidly can cause fatal cardiac arrhythmias), and the correct procedure for safe IV potassium administration (never faster than 10 mEq/hour peripherally, always on an infusion pump, continuous cardiac monitoring for rates exceeding 10 mEq/hour). An incident report documents the near-miss for quality improvement purposes. Reporting to the board of nursing is disproportionate for a correctable learning issue. Ignoring the error allows the unsafe practice to continue. Public discussion violates the new nurse's dignity and creates a punitive culture that discourages error reporting.",
     "country": "US",
@@ -3900,7 +3910,7 @@
     "sourceQuestionId": "4ab03077-a383-466b-900c-6b80e9bd4e9e"
   },
   {
-    "id": "fc2026s2_infection-control_390",
+    "id": "fc2026s2_infection-control_391",
     "front": "A nurse is caring for a client with schizophrenia who states that the television is sending them secret messages. How…",
     "back": "The therapeutic approach to delusions is to acknowledge the client's feelings and experience without agreeing with or challenging the false belief. Challenging directly increases anxiety and damages trust. Agreeing reinforces the delusion. Turning off the TV does not address the underlying thought disorder and may provoke agitation. The nurse should present reality gently while maintaining the therapeutic relationship.",
     "country": "US",
@@ -3910,7 +3920,7 @@
     "sourceQuestionId": "4ad16f59-7c6b-4207-ac4d-abb3f4172b3c"
   },
   {
-    "id": "fc2026s2_infection-control_391",
+    "id": "fc2026s2_infection-control_392",
     "front": "A nurse is reviewing the infection control policy in a long-term care facility. What is the most important component …",
     "back": "Employee training on hand hygiene is the most important component of infection control policies. Hand hygiene is the single most effective way to prevent the spread of infections in healthcare settings. While environmental cleaning, isolation procedures, and surveillance are all important aspects of infection control, they depend on staff adherence to proper hand hygiene protocols to be effective.",
     "country": "US",
@@ -3920,7 +3930,7 @@
     "sourceQuestionId": "4afc76f8-43eb-45fa-9531-be5e69234e02"
   },
   {
-    "id": "fc2026s2_infection-control_392",
+    "id": "fc2026s2_infection-control_393",
     "front": "The nurse assessing a newborn immediately after birth should use the APGAR score, which evaluates:",
     "back": "APGAR scored at 1 and 5 minutes: Appearance (color: blue/pale=0, body pink/extremities blue=1, all pink=2), Pulse (absent=0, <100=1, >=100=2), Grimace (no response=0, grimace=1, cry=2), Activity (limp=0, some flexion=1, active=2), Respiration (absent=0, slow/irregular=1, good cry=2).",
     "country": "US",
@@ -3930,7 +3940,7 @@
     "sourceQuestionId": "4b131105-6b7d-497a-8076-62cc79e80e1d"
   },
   {
-    "id": "fc2026s2_infection-control_393",
+    "id": "fc2026s2_infection-control_394",
     "front": "A PN is monitoring a client who received a blood transfusion of packed red blood cells 15 minutes ago. The client rep…",
     "back": "Chills, fever, and low back pain occurring shortly after transfusion initiation are classic signs of an acute hemolytic transfusion reaction. The transfusion must be stopped immediately to prevent further reaction. The IV line is kept open with normal saline for fluid resuscitation. Slowing the rate still exposes the client to incompatible blood. The RN and provider must be notified immediately.",
     "country": "US",
@@ -3940,7 +3950,7 @@
     "sourceQuestionId": "4b51c0c8-8e56-4b01-8289-451a85e46256"
   },
   {
-    "id": "fc2026s2_infection-control_394",
+    "id": "fc2026s2_infection-control_395",
     "front": "A nurse is assessing a client receiving IV vancomycin. The client's face and neck suddenly become flushed and red, an…",
     "back": "Red Man Syndrome is a histamine-mediated reaction to rapid vancomycin infusion, causing flushing, erythema, and pruritus of the face, neck, and upper body. The nurse must stop the infusion and notify the provider. Treatment includes slowing the rate and possibly administering antihistamines before restarting. Continuing or increasing the rate can worsen the reaction and potentially cause hypotension.",
     "country": "US",
@@ -3950,7 +3960,7 @@
     "sourceQuestionId": "4bddb72b-9959-41fd-aecf-12d6c80ca721"
   },
   {
-    "id": "fc2026s2_infection-control_395",
+    "id": "fc2026s2_infection-control_396",
     "front": "A client with obstructive sleep apnea and an AHI of 22 should be prescribed:",
     "back": "CPAP is first-line for moderate-severe OSA (AHI >= 15 or >= 5 with symptoms). CPAP splints the upper airway open, preventing collapse during sleep. Benefits: reduces daytime somnolence, improves cardiovascular outcomes, and reduces accident risk. Alternatives: oral appliances (mild-moderate), surgery (selected cases), or hypoglossal nerve stimulator.",
     "country": "US",
@@ -3960,7 +3970,7 @@
     "sourceQuestionId": "4c279fb5-ad0a-4d69-b49e-b33dd475aab1"
   },
   {
-    "id": "fc2026s2_infection-control_396",
+    "id": "fc2026s2_infection-control_397",
     "front": "A nurse is caring for a 2-year-old child who has just been diagnosed with chickenpox. What is the most important nurs…",
     "back": "Isolating the child from others is crucial to prevent the spread of chickenpox, which is highly contagious. Administering the varicella vaccine is not appropriate once the child is diagnosed. Antibiotics are not indicated since chickenpox is viral, and while educating the parents is important, it does not take priority over infection control.",
     "country": "US",
@@ -3970,7 +3980,7 @@
     "sourceQuestionId": "4c5d11cc-de70-447c-822e-79d89a50d03e"
   },
   {
-    "id": "fc2026s2_infection-control_397",
+    "id": "fc2026s2_infection-control_398",
     "front": "A patient with a history of substance use disorder is admitted for detoxification. Which behavior should the RPN moni…",
     "back": "Monitoring for withdrawal symptoms is crucial during detoxification, as these symptoms can indicate the severity of withdrawal and require immediate intervention. Identifying withdrawal allows for timely treatment to ensure the patient's safety. While increased appetite, sleep disturbances, and mood swings may also be present, they are not as critical to monitor as withdrawal symptoms.",
     "country": "US",
@@ -3980,7 +3990,7 @@
     "sourceQuestionId": "4cc45f0a-7ec0-4763-8545-52df35823210"
   },
   {
-    "id": "fc2026s2_infection-control_398",
+    "id": "fc2026s2_infection-control_399",
     "front": "A practical nurse is preparing to enter the room of a client diagnosed with pulmonary tuberculosis. Which personal pr…",
     "back": "Pulmonary tuberculosis is spread via airborne droplet nuclei, requiring airborne precautions including an N95 respirator mask. A surgical mask does not filter airborne particles smaller than 5 microns. A face shield alone is insufficient. Gown and gloves are used for contact precautions but do not protect against airborne transmission.",
     "country": "US",
@@ -3990,7 +4000,7 @@
     "sourceQuestionId": "4d3c27e2-c4bd-4596-bfd4-ed1c79fa9885"
   },
   {
-    "id": "fc2026s2_infection-control_399",
+    "id": "fc2026s2_infection-control_400",
     "front": "A practical nurse is caring for a client with varicella (chickenpox). Which type of transmission precaution is requir…",
     "back": "Varicella is transmitted via airborne route and through direct contact with vesicular fluid. Both airborne and contact precautions are required. Droplet precautions alone are insufficient as varicella particles can remain suspended in the air. Contact precautions alone do not address the airborne component. Protective isolation is used for immunocompromised clients, not for containing infection.",
     "country": "US",
@@ -4000,7 +4010,7 @@
     "sourceQuestionId": "4d606875-a635-4587-a464-672b3cf0b26f"
   },
   {
-    "id": "fc2026s2_infection-control_400",
+    "id": "fc2026s2_infection-control_401",
     "front": "A client with PE is on anticoagulation therapy. Which signs should the nurse teach the client to report immediately? …",
     "back": "Anticoagulant bleeding complications requiring immediate reporting include haematuria, GI bleeding (blood in stool), prolonged bleeding from cuts, sudden severe headache (possible intracranial hemorrhage), unexplained bruising, and hematemesis/coffee-ground emesis (upper GI bleed). Mild injection site soreness is expected with subcutaneous anticoagulants.",
     "country": "US",
@@ -4010,7 +4020,7 @@
     "sourceQuestionId": "4d9d29f5-c244-4136-9824-2f90ea1892b9"
   },
   {
-    "id": "fc2026s2_infection-control_401",
+    "id": "fc2026s2_infection-control_402",
     "front": "A practical nurse is caring for a client in contact isolation for Clostridioides difficile infection. Which hand hygi…",
     "back": "C. difficile produces spores that are resistant to alcohol-based hand sanitizers. Handwashing with soap and water is the only effective method to physically remove C. difficile spores from the hands through mechanical friction and rinsing. This is a critical exception to the general recommendation for alcohol-based sanitizers in healthcare settings. Antibacterial lotion and chlorhexidine wipes are also ineffective against C. difficile spores.",
     "country": "US",
@@ -4020,7 +4030,7 @@
     "sourceQuestionId": "4dc2099c-e59f-4afe-9c88-1c58a25c0667"
   },
   {
-    "id": "fc2026s2_infection-control_402",
+    "id": "fc2026s2_infection-control_403",
     "front": "A nurse is caring for a patient recovering from a stroke who has developed a pressure ulcer. What is the most importa…",
     "back": "Encouraging the patient to change positions frequently is the most important action to prevent further pressure ulcers and associated infections. This action reduces pressure on susceptible areas and promotes blood flow. While cleaning the ulcer (B) and applying dressings (C) are important, they do not address the underlying issue of pressure. Teaching about hygiene (D) is beneficial but secondary to preventing new ulcers.",
     "country": "US",
@@ -4030,7 +4040,7 @@
     "sourceQuestionId": "4de036c6-9676-4113-8197-85e0a8e5e6a3"
   },
   {
-    "id": "fc2026s2_infection-control_403",
+    "id": "fc2026s2_infection-control_404",
     "front": "A nurse is assessing a 4-year-old child who presents with a fever, rash, and conjunctivitis. The child’s mother menti…",
     "back": "Isolating the child is the priority to prevent the potential spread of an infectious disease, especially given the symptoms and recent exposure in daycare. This child may have a contagious illness such as viral conjunctivitis or measles, which can spread quickly in group settings. Performing a throat culture (Option A) may help with diagnosis but is not a priority for immediate infection control. Educating about antibiotics (Option C) is premature without a confirmed bacterial infection, and documenting and notifying (Option D) should follow but is not the immediate action required.",
     "country": "US",
@@ -4040,7 +4050,7 @@
     "sourceQuestionId": "4e3d559f-0af6-4d0c-9255-fd58e78859d9"
   },
   {
-    "id": "fc2026s2_infection-control_404",
+    "id": "fc2026s2_infection-control_405",
     "front": "A client with obstructive sleep apnea is prescribed CPAP. The nurse teaches that CPAP:",
     "back": "CPAP delivers continuous pressurized air through a mask to splint the upper airway open during sleep, preventing the soft tissue collapse that causes obstructive apnea episodes. Regular use improves oxygenation and reduces daytime sleepiness.",
     "country": "US",
@@ -4050,7 +4060,7 @@
     "sourceQuestionId": "4e4924c1-44e9-405a-b313-8286a1f52ae1"
   },
   {
-    "id": "fc2026s2_infection-control_405",
+    "id": "fc2026s2_infection-control_406",
     "front": "A client with acute pancreatitis has a serum lipase level 5 times the upper limit of normal and severe epigastric pai…",
     "back": "The forward-leaning or fetal position reduces tension on the peritoneum and decreases pancreatic duct pressure, providing pain relief in acute pancreatitis. Lying supine often increases pain. Management includes NPO status, IV fluid resuscitation, IV analgesics (hydromorphone or morphine), and monitoring for complications such as pancreatic necrosis, pseudocyst formation, and multiorgan failure. Serum lipase is the most specific marker for pancreatitis.",
     "country": "US",
@@ -4060,7 +4070,7 @@
     "sourceQuestionId": "4e930db0-31a7-4e56-b816-8b794997d597"
   },
   {
-    "id": "fc2026s2_infection-control_406",
+    "id": "fc2026s2_infection-control_407",
     "front": "A nurse is caring for a patient with hyperthyroidism. Which clinical manifestation should the nurse monitor for that …",
     "back": "Hyperthyroidism is characterized by an increased metabolic rate, which often leads to increased appetite (D), as well as weight loss rather than gain (A), heat intolerance rather than cold (B), and tachycardia rather than bradycardia (C). Therefore, D is the correct answer.",
     "country": "US",
@@ -4070,7 +4080,7 @@
     "sourceQuestionId": "4ef32132-7f2e-43dd-9efa-61ec477c3988"
   },
   {
-    "id": "fc2026s2_infection-control_407",
+    "id": "fc2026s2_infection-control_408",
     "front": "A client has a positive Babinski sign (upgoing plantar response). In adults, this indicates:",
     "back": "Babinski sign (dorsiflexion of the great toe with fanning of other toes upon stroking the lateral sole) is normal in infants up to 12-24 months. In adults, it indicates upper motor neuron damage (corticospinal tract lesion) and warrants neurological investigation.",
     "country": "US",
@@ -4080,7 +4090,7 @@
     "sourceQuestionId": "4f4ee8cc-a938-439b-a9af-a34645eabfde"
   },
   {
-    "id": "fc2026s2_infection-control_408",
+    "id": "fc2026s2_infection-control_409",
     "front": "A nurse is performing central line maintenance on a client with a triple-lumen central venous catheter. Which evidenc…",
     "back": "CLABSI prevention follows evidence-based bundles that include: hand hygiene before and after access, scrubbing the needleless connector hub with 70% alcohol for at least 15 seconds and allowing it to dry before access ('scrub the hub'), using chlorhexidine-impregnated dressings or transparent semi-permeable dressings changed every 7 days (or every 48 hours for gauze dressings), daily assessment of line necessity with prompt removal when no longer needed, and aseptic technique for all access and dressing changes. Central line dressings are changed every 7 days for transparent dressings (not daily), unless soiled, damp, or loose. Routine catheter replacement increases infection risk through repeated insertion site trauma and new skin flora introduction. Antibiotic ointment at the insertion site promotes fungal colonization and antibiotic resistance and is not recommended except for hemodia",
     "country": "US",
@@ -4090,7 +4100,7 @@
     "sourceQuestionId": "506c931c-6875-40be-b6b0-3b382428a17c"
   },
   {
-    "id": "fc2026s2_infection-control_409",
+    "id": "fc2026s2_infection-control_410",
     "front": "The nurse should teach a client on isoniazid for TB prophylaxis to report:",
     "back": "INH side effects: hepatotoxicity (monitor LFTs monthly, increased risk > age 35), peripheral neuropathy (prevented by pyridoxine/B6 supplementation). Report signs of hepatitis immediately. Drug interactions with phenytoin and alcohol increase hepatotoxicity risk.",
     "country": "US",
@@ -4100,7 +4110,7 @@
     "sourceQuestionId": "506df830-0638-4cdf-bf50-b308e7df3bda"
   },
   {
-    "id": "fc2026s2_infection-control_410",
+    "id": "fc2026s2_infection-control_411",
     "front": "A 14-year-old presents to the emergency department with right lower quadrant pain, nausea, and a low-grade fever of 3…",
     "back": "The classic presentation of acute appendicitis includes periumbilical pain that migrates to the right lower quadrant (McBurney's point), nausea, anorexia, and low-grade fever. This migration pattern is highly specific for appendicitis. Gastroenteritis typically presents with diffuse pain and diarrhea. UTI presents with dysuria. Ovarian torsion presents with sudden onset unilateral pelvic pain.",
     "country": "US",
@@ -4110,7 +4120,7 @@
     "sourceQuestionId": "50dab520-c020-4b5f-acb5-78202b8378cb"
   },
   {
-    "id": "fc2026s2_infection-control_411",
+    "id": "fc2026s2_infection-control_412",
     "front": "The nurse identifies which level of prevention when administering a mammography screening?",
     "back": "Mammography screening is secondary prevention: early detection of disease before symptoms appear. Primary prevention prevents disease occurrence (vaccination). Tertiary prevention manages established disease (rehabilitation). Early detection improves treatment outcomes.",
     "country": "US",
@@ -4120,7 +4130,7 @@
     "sourceQuestionId": "51632092-50e4-4454-b43b-568b2f45f005"
   },
   {
-    "id": "fc2026s2_infection-control_412",
+    "id": "fc2026s2_infection-control_413",
     "front": "A nurse is providing education about standard precautions to nursing students. Which statement by a student requires …",
     "back": "Standard precautions must be used for ALL clients regardless of their known infection status, because many infections can be transmitted before diagnosis. This is the fundamental principle of standard precautions. Hand hygiene before and after contact, glove use for blood and body fluids, and proper sharps disposal are all correct components of standard precautions.",
     "country": "US",
@@ -4130,7 +4140,7 @@
     "sourceQuestionId": "530d496e-03ea-45fb-b56b-18c62c301b11"
   },
   {
-    "id": "fc2026s2_infection-control_413",
+    "id": "fc2026s2_infection-control_414",
     "front": "A client with suspected meningitis is admitted from the emergency department. Which intervention should the nurse imp…",
     "back": "Suspected bacterial meningitis requires prompt droplet precautions to reduce transmission risk. Hydration may be important later, but infection control is the first priority. Trendelenburg is not indicated, and completely banning visitors is not the primary immediate intervention.",
     "country": "US",
@@ -4140,7 +4150,7 @@
     "sourceQuestionId": "5315e81a-5cd2-4b69-a0fc-db288e503722"
   },
   {
-    "id": "fc2026s2_infection-control_414",
+    "id": "fc2026s2_infection-control_415",
     "front": "A nurse is caring for a patient with a surgical wound that is healing poorly. The patient is a 65-year-old male with …",
     "back": "Ensuring the patient has adequate nutrition is the most critical intervention for promoting wound healing and preventing infection, especially in patients with diabetes, who are at higher risk for poor healing. Proper nutrition supports immune function and tissue repair. While changing the dressing daily (Option B) is important, it is not as critical as ensuring overall nutritional status. Frequent wound assessments (Option C) are necessary for monitoring but do not enhance healing directly. Encouraging smoking cessation (Option D) is beneficial for overall health but is not an immediate intervention for wound care.",
     "country": "US",
@@ -4150,7 +4160,7 @@
     "sourceQuestionId": "537af928-201d-486e-bf6f-a6ee9e7ecf60"
   },
   {
-    "id": "fc2026s2_infection-control_415",
+    "id": "fc2026s2_infection-control_416",
     "front": "When administering eye drops, the nurse should instill the medication into the:",
     "back": "Eye drops are instilled into the lower conjunctival sac to prevent corneal damage and allow proper distribution. The client should look up, the nurse gently pulls down the lower lid, and drops are placed in the pocket without touching the dropper to the eye.",
     "country": "US",
@@ -4160,7 +4170,7 @@
     "sourceQuestionId": "53a20e6a-41d6-4ec6-bb7a-c373cba40fda"
   },
   {
-    "id": "fc2026s2_infection-control_416",
+    "id": "fc2026s2_infection-control_417",
     "front": "A 56-year-old client with a large pleural effusion on the left side is scheduled for CPT. BP 122/76, HR 84, RR 22, Sp…",
     "back": "Percussion over a pleural effusion is ineffective because the fluid prevents the mechanical energy from reaching and mobilizing airway secretions. It may also cause pain. CPT should focus on lung segments that can benefit from secretion clearance. The nurse should also avoid percussion over the spine, sternum, kidneys, and liver.",
     "country": "US",
@@ -4170,7 +4180,7 @@
     "sourceQuestionId": "54cdf1d3-9a6c-4d61-b09d-53b9d2c03e6f"
   },
   {
-    "id": "fc2026s2_infection-control_417",
+    "id": "fc2026s2_infection-control_418",
     "front": "A client diagnosed with chlamydia should be instructed that:",
     "back": "Chlamydia requires treatment of both the client and all sexual partners to prevent reinfection. Treatment typically involves azithromycin or doxycycline. Many cases are asymptomatic, so partner notification is essential.",
     "country": "US",
@@ -4180,7 +4190,7 @@
     "sourceQuestionId": "54dae1e9-f182-45ac-a32e-f1fa0fee7494"
   },
   {
-    "id": "fc2026s2_infection-control_418",
+    "id": "fc2026s2_infection-control_419",
     "front": "A 12-year-old girl presents to the clinic with complaints of severe abdominal pain and nausea. After assessment, the …",
     "back": "Rebound tenderness in the right lower quadrant is a classic sign of appendicitis and indicates irritation of the peritoneum. While fever, heart rate, and vomiting are also relevant, the rebound tenderness directly points to possible appendicitis and helps guide further interventions. Monitoring vital signs is essential, but immediate assessment of abdominal pain characteristics is crucial.",
     "country": "US",
@@ -4190,7 +4200,7 @@
     "sourceQuestionId": "54f0b133-4a83-409b-bd86-1f6a7d425325"
   },
   {
-    "id": "fc2026s2_infection-control_419",
+    "id": "fc2026s2_infection-control_420",
     "front": "A nurse is caring for a client with leukemia whose laboratory results show WBC 800/mm³ with an absolute neutrophil co…",
     "back": "An ANC of 200/mm³ represents severe neutropenia (less than 500/mm³ is severe; less than 100/mm³ is profound) placing the client at extreme risk for life-threatening infection. Neutropenic precautions include private room with positive-pressure airflow if available, strict hand hygiene by all persons entering the room, no fresh flowers or plants (harbor Aspergillus and other fungi), no raw or uncooked fruits and vegetables (harbor bacteria), daily assessment for signs of infection (the client may not develop typical inflammatory signs due to lack of neutrophils), and limiting visitors. The critically low platelets (18,000/mm³) also require bleeding precautions (no aspirin, soft toothbrush, electric razor, no IM injections). Ambulation must be supervised due to severe anemia (Hgb 7.2 g/dL) and fall risk from potential orthostatic hypotension.",
     "country": "US",
@@ -4200,7 +4210,7 @@
     "sourceQuestionId": "55d0eee4-28c9-4ed3-857b-d0fc6c394168"
   },
   {
-    "id": "fc2026s2_infection-control_420",
+    "id": "fc2026s2_infection-control_421",
     "front": "A nurse is assessing a 4-year-old child who is experiencing abdominal pain. The child has a fever and is holding thei…",
     "back": "Pain that worsens with movement or touch is indicative of appendicitis, as it suggests irritation of the peritoneum. Pain relief when lying still is less likely in appendicitis. Positive rebound tenderness in the left lower quadrant does not support appendicitis, which typically presents with tenderness in the right lower quadrant. Nausea without vomiting is non-specific and could apply to many conditions.",
     "country": "US",
@@ -4210,7 +4220,7 @@
     "sourceQuestionId": "55f5874d-675f-43ea-b98a-2ee232c5b58d"
   },
   {
-    "id": "fc2026s2_infection-control_421",
+    "id": "fc2026s2_infection-control_422",
     "front": "The nurse is teaching a parent about introducing solid foods to an infant. Solid foods should be introduced at approx…",
     "back": "Solid foods are introduced at 4-6 months when developmental readiness signs appear: good head control, sitting with support, loss of tongue thrust reflex, and showing interest in food. Start with iron-fortified cereal, then single-ingredient purees.",
     "country": "US",
@@ -4220,7 +4230,7 @@
     "sourceQuestionId": "563df8c2-5587-422d-a71f-e9b47e3e22d0"
   },
   {
-    "id": "fc2026s2_infection-control_422",
+    "id": "fc2026s2_infection-control_423",
     "front": "A nurse is assessing a newborn at 12 hours of life who appears jaundiced. The total serum bilirubin is 14.2 mg/dL. Wh…",
     "back": "Jaundice appearing within the first 24 hours of life is ALWAYS pathological and usually indicates hemolytic disease (ABO or Rh incompatibility, G6PD deficiency). Pathological jaundice requires urgent investigation (Coombs test, blood type, reticulocyte count) and likely phototherapy or exchange transfusion. Physiological jaundice appears at 2-4 days of life. Breast milk jaundice appears at 4-7 days. A bilirubin of 14.2 mg/dL at 12 hours is dangerously high and requires immediate treatment to prevent kernicterus (bilirubin encephalopathy).",
     "country": "US",
@@ -4230,7 +4240,7 @@
     "sourceQuestionId": "566c186c-cf69-41c4-9541-c0d94de47d30"
   },
   {
-    "id": "fc2026s2_infection-control_423",
+    "id": "fc2026s2_infection-control_424",
     "front": "A nurse is caring for a client in the intensive care unit who is mechanically ventilated and develops sudden oxygen d…",
     "back": "The triad of sudden desaturation, absent breath sounds on one side, and tracheal deviation to the opposite side with elevated peak pressures indicates a tension pneumothorax, which is a life-threatening emergency. In mechanically ventilated patients, positive pressure ventilation can cause or worsen a pneumothorax, converting it to a tension pneumothorax where trapped air increases intrapleural pressure, compressing the heart and great vessels, leading to cardiovascular collapse and death. Emergency needle decompression at the second intercostal space, midclavicular line is required immediately. Suctioning addresses mucus plugs but not pneumothorax. Increasing FiO2 without addressing the cause delays critical treatment. A right mainstem intubation would cause absent sounds on the left side, not the right.",
     "country": "US",
@@ -4240,7 +4250,7 @@
     "sourceQuestionId": "573ebd1f-7c04-4131-822e-fbf2cfab7dc0"
   },
   {
-    "id": "fc2026s2_infection-control_424",
+    "id": "fc2026s2_infection-control_425",
     "front": "A postoperative client with an epidural catheter for pain management reports sudden onset of bilateral leg weakness a…",
     "back": "Bilateral leg weakness with urinary retention following epidural analgesia may indicate epidural hematoma or abscess causing spinal cord compression, which is a neurosurgical emergency. The infusion must be stopped and the anesthesiologist notified immediately for urgent assessment (MRI) and possible decompressive surgery. While some motor block is expected, bilateral weakness with bladder dysfunction is abnormal. Naloxone reverses opioid effects but does not address cord compression.",
     "country": "US",
@@ -4250,7 +4260,7 @@
     "sourceQuestionId": "57ff0fc3-abac-4d94-8886-7afe79ce82ca"
   },
   {
-    "id": "fc2026s2_infection-control_425",
+    "id": "fc2026s2_infection-control_426",
     "front": "A patient presents with a suspicious lesion on the forearm that has an irregular border and multiple colors. What is …",
     "back": "Scheduling the patient for a biopsy is the priority action to determine if the lesion is malignant. Documenting the appearance (A) is important but secondary to obtaining a definitive diagnosis. Educating on prevention (C) is relevant but not immediate care. Applying antiseptic (D) is not appropriate as it could interfere with the biopsy process.",
     "country": "US",
@@ -4260,7 +4270,7 @@
     "sourceQuestionId": "5851b262-72d1-4bbb-a69f-dbaf6b0294dd"
   },
   {
-    "id": "fc2026s2_infection-control_426",
+    "id": "fc2026s2_infection-control_427",
     "front": "A healthcare worker exposed to hepatitis B from a needlestick should receive:",
     "back": "HBV needlestick PEP depends on vaccination status: unvaccinated: HBIG + start HBV vaccine series. Previously vaccinated with known adequate response (anti-HBs >= 10): no treatment. Non-responder: HBIG x2 or HBIG + revaccination. Test source patient for HBsAg. PEP should be given within 24 hours of exposure.",
     "country": "US",
@@ -4270,7 +4280,7 @@
     "sourceQuestionId": "58ecedbf-2cc7-419a-a981-06bdf6f3b5f8"
   },
   {
-    "id": "fc2026s2_infection-control_427",
+    "id": "fc2026s2_infection-control_428",
     "front": "A 50-year-old client with OSA asks about lifestyle modifications that may help. BMI is 36, BP 144/90, HR 80, RR 16, S…",
     "back": "Weight loss is the most effective lifestyle modification for OSA, as excess tissue in the upper airway contributes to obstruction. Alcohol relaxes pharyngeal muscles and worsens apneic episodes, so it should be avoided before sleep. Lateral sleeping reduces gravitational collapse of the soft palate and tongue. Supine positioning worsens OSA.",
     "country": "US",
@@ -4280,7 +4290,7 @@
     "sourceQuestionId": "58fd7e55-74c2-4169-8215-db5d5ea3cf6b"
   },
   {
-    "id": "fc2026s2_infection-control_428",
+    "id": "fc2026s2_infection-control_429",
     "front": "A client undergoing chemotherapy has a white blood cell count of 1,200/mm³ and an absolute neutrophil count (ANC) of …",
     "back": "An ANC below 500/mm³ indicates severe neutropenia, placing the client at critical risk for infection. Neutropenic precautions include strict hand hygiene, no fresh flowers (harbor mold spores), no raw or uncooked foods, protective isolation, and monitoring for subtle signs of infection. Fresh fruits and raw salads harbor bacteria. Visitors may be limited and must perform hand hygiene.",
     "country": "US",
@@ -4290,7 +4300,7 @@
     "sourceQuestionId": "5986104b-c39b-4377-86ad-4b07ada51654"
   },
   {
-    "id": "fc2026s2_infection-control_429",
+    "id": "fc2026s2_infection-control_430",
     "front": "A nurse witnesses a coworker diverting a controlled substance by scanning the medication for a patient but pocketing …",
     "back": "Drug diversion is a serious legal and ethical violation that endangers patients (who do not receive prescribed pain medication) and indicates a potential substance use disorder in the coworker. Nurses have a mandatory professional and legal obligation to report suspected diversion immediately through the proper chain of command, which includes the nurse manager, supervisor, or compliance hotline. This protects patients from harm and may help the impaired colleague access treatment programs. Confronting privately delays official reporting and gives the coworker opportunity to destroy evidence. Ignoring the situation makes the witnessing nurse complicit in patient harm and violates their professional duty. Waiting for repeated incidents allows ongoing patient harm and continued diversion of controlled substances.",
     "country": "US",
@@ -4300,7 +4310,7 @@
     "sourceQuestionId": "5a618896-2a12-4a5e-9558-157a88e24ff7"
   },
   {
-    "id": "fc2026s2_infection-control_430",
+    "id": "fc2026s2_infection-control_431",
     "front": "A client is placed on contact precautions for methicillin-resistant Staphylococcus aureus (MRSA) wound infection. Whi…",
     "back": "Equipment used for a client on contact precautions must be dedicated to that client or disinfected between uses to prevent MRSA transmission. Sharing equipment without disinfection is a breach of contact precautions. Gown and gloves, private room placement, and proper PPE removal are all correct practices for contact isolation.",
     "country": "US",
@@ -4310,7 +4320,7 @@
     "sourceQuestionId": "5ab5e3ac-de8c-49be-97d8-879a6e71f812"
   },
   {
-    "id": "fc2026s2_infection-control_431",
+    "id": "fc2026s2_infection-control_432",
     "front": "A nurse is assessing a client who attempted suicide by acetaminophen overdose approximately 4 hours ago. The client a…",
     "back": "Acetaminophen toxicity has four distinct phases. Phase 1 (0-24 hours) is often asymptomatic or has only mild GI symptoms, giving a false sense of security. Phase 2 (24-72 hours) shows rising liver enzymes and right upper quadrant pain. Phase 3 (72-96 hours) is peak hepatotoxicity with potential liver failure, coagulopathy, and multi-organ failure. N-acetylcysteine (NAC) is most effective when given within 8 hours of ingestion. The current well-appearing state does NOT indicate safety.",
     "country": "US",
@@ -4320,7 +4330,7 @@
     "sourceQuestionId": "5abb22de-a3c7-40a9-9a0a-847950ee7b97"
   },
   {
-    "id": "fc2026s2_infection-control_432",
+    "id": "fc2026s2_infection-control_433",
     "front": "A child with suspected intussusception has a sausage-shaped abdominal mass. The nurse should prepare for:",
     "back": "Air or barium enema is both diagnostic and therapeutic for intussusception. The hydrostatic pressure can reduce the telescoped bowel in approximately 80-90% of cases. If unsuccessful or if perforation is suspected, surgery is required.",
     "country": "US",
@@ -4330,7 +4340,7 @@
     "sourceQuestionId": "5aeffed2-6a10-4b71-9b85-ca22c7f9f0ab"
   },
   {
-    "id": "fc2026s2_infection-control_433",
+    "id": "fc2026s2_infection-control_434",
     "front": "A nurse is caring for a 25-year-old female patient who has been diagnosed with appendicitis and is scheduled for an a…",
     "back": "A temperature of 38.5°C indicates a potential infection or inflammatory process that could complicate surgery, and it requires immediate reporting to the physician. While other symptoms are concerning, a fever in this context is particularly significant as it may indicate perforation or peritonitis, which could necessitate a change in surgical approach. Nausea and vomiting, increased heart rate, and localized pain are all part of the appendicitis picture but are not as urgent as the fever.",
     "country": "US",
@@ -4340,7 +4350,7 @@
     "sourceQuestionId": "5b405256-e7ad-4333-9b96-d07daa2439bb"
   },
   {
-    "id": "fc2026s2_infection-control_434",
+    "id": "fc2026s2_infection-control_435",
     "front": "Vancomycin-resistant enterococcus (VRE) requires which isolation precautions?",
     "back": "VRE requires contact precautions: gown and gloves upon room entry, dedicated equipment (stethoscope, BP cuff), enhanced environmental cleaning. Hand hygiene with soap and water is preferred. Duration of precautions varies by facility policy.",
     "country": "US",
@@ -4350,7 +4360,7 @@
     "sourceQuestionId": "5be87cd7-fb62-4daa-ba94-6caefe2a6353"
   },
   {
-    "id": "fc2026s2_infection-control_435",
+    "id": "fc2026s2_infection-control_436",
     "front": "A 56-year-old male presents to the emergency department with severe right upper quadrant pain, nausea, and vomiting a…",
     "back": "An ultrasound of the abdomen is the most appropriate initial diagnostic test to evaluate for gallbladder disease, given the patient's symptoms of right upper quadrant pain after a fatty meal. Ultrasound is non-invasive, does not use radiation, and is effective in visualizing gallstones. A CT scan may be used later for further evaluation, but ultrasound is the first-line test.",
     "country": "US",
@@ -4360,7 +4370,7 @@
     "sourceQuestionId": "5cb0e982-9667-4f05-9343-2e6ecf92701c"
   },
   {
-    "id": "fc2026s2_infection-control_436",
+    "id": "fc2026s2_infection-control_437",
     "front": "A nurse preparing to administer a subcutaneous injection should insert the needle at:",
     "back": "Subcutaneous injection: 45-90 degree angle depending on patient size and needle length. For most adults with adequate SC tissue and a 5/8 inch needle: 90 degrees. Thin patients or short needle: 45 degrees. Pinch the skin, inject slowly, do not aspirate (per CDC guidelines). Common sites: abdomen, upper arm, thigh.",
     "country": "US",
@@ -4370,7 +4380,7 @@
     "sourceQuestionId": "5dc8aec7-2bd5-43b2-8668-a1de67361621"
   },
   {
-    "id": "fc2026s2_infection-control_437",
+    "id": "fc2026s2_infection-control_438",
     "front": "A nurse is teaching parents about iron deficiency anemia prevention in toddlers. Which dietary recommendation is most…",
     "back": "Excessive cow's milk intake (more than 500-720 mL/day) is a common cause of iron deficiency anemia in toddlers because milk is low in iron and can decrease appetite for iron-rich foods. Cow's milk also interferes with iron absorption. Limiting milk and offering iron-rich foods such as fortified cereals, lean meats, and beans is the recommended approach. Supplements may be needed but dietary modification is the first-line intervention.",
     "country": "US",
@@ -4380,7 +4390,7 @@
     "sourceQuestionId": "5e5b9810-790c-41d1-8062-3c88be125f1c"
   },
   {
-    "id": "fc2026s2_infection-control_438",
+    "id": "fc2026s2_infection-control_439",
     "front": "During a routine check, a nurse finds that a patient with C. difficile infection has been placed in a shared room wit…",
     "back": "Transferring the patient with C. difficile to a private room is the best action to prevent the spread of this highly contagious infection. C. difficile spores can survive on surfaces, and sharing a room increases the risk of transmission. While instructing staff on PPE (B) is important, it does not eliminate the risk of cross-contamination. Notifying the physician (C) is unnecessary if the immediate action can be taken. Educating the other patient (D) does not resolve the risk of infection transmission.",
     "country": "US",
@@ -4390,7 +4400,7 @@
     "sourceQuestionId": "5e89a057-7c0a-4bee-8b13-83227225ded2"
   },
   {
-    "id": "fc2026s2_infection-control_439",
+    "id": "fc2026s2_infection-control_440",
     "front": "A 68-year-old female is 1 day post-right total hip replacement. She is on bed rest with an abduction pillow in place.…",
     "back": "Shortening and external rotation of the affected leg after total hip replacement with sudden onset of severe pain is the classic presentation of posterior hip dislocation. The PN should not attempt to manipulate the leg, as this could worsen the dislocation and cause neurovascular damage. The abduction pillow must remain in place to prevent further displacement. Immediate notification of the RN is essential so the surgeon can be contacted for closed or open reduction. Removing the abduction pillow removes the protection against further displacement. Pain medication alone delays recognition of a surgical emergency.",
     "country": "US",
@@ -4400,7 +4410,7 @@
     "sourceQuestionId": "5eaa8ea1-aed6-4c18-88f1-8942c9b66bd9"
   },
   {
-    "id": "fc2026s2_infection-control_440",
+    "id": "fc2026s2_infection-control_441",
     "front": "A client presents to the clinic with symptoms of an upper respiratory infection. The practical nurse assesses the cli…",
     "back": "Upper respiratory infections are most commonly viral and are managed with supportive care including rest, adequate fluid intake, and symptom relief with over-the-counter medications. A low-grade fever with mild symptoms does not warrant a chest X-ray, antibiotics (which treat bacterial infections), or emergency department referral.",
     "country": "US",
@@ -4410,7 +4420,7 @@
     "sourceQuestionId": "5f222053-e489-4d81-bbbd-85ad0dd552ea"
   },
   {
-    "id": "fc2026s2_infection-control_441",
+    "id": "fc2026s2_infection-control_442",
     "front": "A client with a nasogastric (NG) tube returns 600 mL of coffee-ground emesis. Which intervention is the priority?",
     "back": "Coffee-ground emesis indicates upper GI bleeding where blood has been partially digested by gastric acid. This is an urgent finding requiring immediate provider notification and hemodynamic assessment (vital signs, orthostatic blood pressure, urine output). The client may need emergency endoscopy, blood transfusion, or surgical intervention depending on the severity of bleeding.",
     "country": "US",
@@ -4420,7 +4430,7 @@
     "sourceQuestionId": "5f60dd22-cc40-48e1-ac54-745a8a1d02ed"
   },
   {
-    "id": "fc2026s2_infection-control_442",
+    "id": "fc2026s2_infection-control_443",
     "front": "A client who underwent cardiac catheterization via the radial artery has a TR Band (compression device) in place. The…",
     "back": "Tingling and pallor distal to the compression device indicate the TR Band is too tight, compromising arterial and venous flow. Loosening slightly should restore perfusion while maintaining hemostasis. Tightening further would worsen ischemia. Complete removal risks bleeding. Tingling with pallor is not expected and indicates compromised circulation.",
     "country": "US",
@@ -4430,7 +4440,7 @@
     "sourceQuestionId": "605d1a11-4ce0-4e00-a421-d9bec0038ef1"
   },
   {
-    "id": "fc2026s2_infection-control_443",
+    "id": "fc2026s2_infection-control_444",
     "front": "A client with Clostridioides difficile infection should have the room cleaned with:",
     "back": "C. diff spores survive on surfaces for months and are resistant to alcohol-based sanitizers and most standard disinfectants. Bleach (sodium hypochlorite) or EPA-registered sporicidal disinfectant is required. Hand hygiene: soap and water (not alcohol-based sanitizer). Contact precautions, single room, and dedicated equipment.",
     "country": "US",
@@ -4440,7 +4450,7 @@
     "sourceQuestionId": "60ef36cc-abcb-4314-916c-cdc4f068b657"
   },
   {
-    "id": "fc2026s2_infection-control_444",
+    "id": "fc2026s2_infection-control_445",
     "front": "A client taking ciprofloxacin (Cipro) reports new-onset Achilles tendon pain. The nurse should take which action?",
     "back": "Fluoroquinolones carry a Black Box Warning for tendinitis and tendon rupture, particularly of the Achilles tendon. The medication should be stopped immediately and the provider notified. The client should rest the affected tendon. Exercising through the pain could cause rupture. This is not a harmless side effect; it can result in permanent disability.",
     "country": "US",
@@ -4450,7 +4460,7 @@
     "sourceQuestionId": "61e06f22-5421-45db-b747-a39eb91f1ef8"
   },
   {
-    "id": "fc2026s2_infection-control_445",
+    "id": "fc2026s2_infection-control_446",
     "front": "A 25-year-old male presents to the emergency department with severe abdominal pain and is diagnosed with acute append…",
     "back": "Rebound tenderness in the right lower quadrant is a critical sign indicating possible peritoneal irritation, which can lead to perforation and peritonitis if not addressed promptly. While tachycardia, fever, and nausea are concerning, rebound tenderness is a direct indicator of the severity of the appendicitis and warrants immediate attention by the physician.",
     "country": "US",
@@ -4460,7 +4470,7 @@
     "sourceQuestionId": "6239ec37-9f55-4935-8cf0-4bd5e856523f"
   },
   {
-    "id": "fc2026s2_infection-control_446",
+    "id": "fc2026s2_infection-control_447",
     "front": "A licensed practical nurse (LPN) is caring for a client who had a total hip replacement 2 days ago. Which finding req…",
     "back": "Leg length discrepancy after total hip replacement indicates possible hip dislocation, which is a serious postoperative complication requiring immediate assessment and intervention. The operative leg appearing shorter, along with internal or external rotation, are hallmark signs of prosthetic dislocation. A pain level of 3/10 is expected postoperatively. A mild temperature elevation of 99.2F can be normal within the first 48 hours post-surgery. Requesting help with the commode demonstrates appropriate safety behavior. Dislocation requires urgent medical attention to prevent vascular and nerve damage.",
     "country": "US",
@@ -4470,7 +4480,7 @@
     "sourceQuestionId": "626c552b-214b-4fef-bf50-fe45d3eb0635"
   },
   {
-    "id": "fc2026s2_infection-control_447",
+    "id": "fc2026s2_infection-control_448",
     "front": "Eye drops are properly administered by instilling medication into:",
     "back": "Eye drops are placed into the lower conjunctival sac to prevent corneal damage and ensure proper distribution. The client looks up, the nurse gently pulls down the lower lid, and drops are instilled without touching the dropper to the eye.",
     "country": "US",
@@ -4480,7 +4490,7 @@
     "sourceQuestionId": "62773ac7-7a50-4919-8c66-a05c2d984d67"
   },
   {
-    "id": "fc2026s2_infection-control_448",
+    "id": "fc2026s2_infection-control_449",
     "front": "A child with patent ductus arteriosus has a continuous machinery-like murmur best heard at:",
     "back": "PDA murmur: continuous (systolic and diastolic) machinery-like murmur best heard at the left upper sternal border or left infraclavicular area. The ductus connects the pulmonary artery to the aorta. Treatment: indomethacin/ibuprofen (closes the ductus in premature infants) or surgical/catheter closure.",
     "country": "US",
@@ -4490,7 +4500,7 @@
     "sourceQuestionId": "62fbb47c-8147-4770-b22b-136f07bb7758"
   },
   {
-    "id": "fc2026s2_infection-control_449",
+    "id": "fc2026s2_infection-control_450",
     "front": "A nurse is caring for a client receiving chemotherapy who has developed mucositis with painful oral ulcers. Which int…",
     "back": "Chemotherapy-induced mucositis requires gentle oral care with soft-bristle or foam toothbrushes and soothing rinses (normal saline or baking soda solution). This reduces bacterial colonization and promotes comfort. Alcohol-based mouthwashes cause pain and dry fragile mucosa. Hot and spicy foods irritate ulcerated tissue. Deferring oral care allows bacterial overgrowth, worsens infection risk, and delays healing. Cool bland soft foods and adequate hydration are also recommended.",
     "country": "US",
@@ -4500,7 +4510,7 @@
     "sourceQuestionId": "635c012f-42a7-4826-b8c2-144acd64f750"
   },
   {
-    "id": "fc2026s2_infection-control_450",
+    "id": "fc2026s2_infection-control_451",
     "front": "A nurse is educating a group of caregivers about infection control measures for a patient with tuberculosis (TB). Whi…",
     "back": "The statement that a caregiver can share the patient's room if they are healthy indicates a significant misunderstanding of infection control practices in the context of tuberculosis. TB is highly contagious, and patients should be placed in a negative pressure room to prevent airborne transmission. The other statements reflect correct understanding of necessary precautions.",
     "country": "US",
@@ -4510,7 +4520,7 @@
     "sourceQuestionId": "6387b9be-d44b-4e5e-bb73-a717f5183753"
   },
   {
-    "id": "fc2026s2_infection-control_451",
+    "id": "fc2026s2_infection-control_452",
     "front": "The chain of infection includes which components in sequence?",
     "back": "The chain of infection requires all six links for disease transmission. Breaking any link prevents infection. Nurses intervene at multiple points: hand hygiene (transmission), PPE (portal of entry), immunization (susceptible host), environmental cleaning (reservoir).",
     "country": "US",
@@ -4520,7 +4530,7 @@
     "sourceQuestionId": "63af40b8-ab3b-47e8-87b6-77e48bc8649f"
   },
   {
-    "id": "fc2026s2_infection-control_452",
+    "id": "fc2026s2_infection-control_453",
     "front": "A nurse is caring for a client with C. difficile infection. Which isolation precaution is specific and critical for t…",
     "back": "C. difficile forms spores that are resistant to alcohol-based hand sanitizers. Soap and water with friction is the only effective hand hygiene method for C. difficile because it physically removes the spores. Contact precautions (gown and gloves) are required. Dedicated equipment should be used. Environmental cleaning with bleach-based (sporicidal) products is essential. Droplet and airborne precautions are for respiratory pathogens. C. difficile is not normal flora in adults and is a serious HAI.",
     "country": "US",
@@ -4530,7 +4540,7 @@
     "sourceQuestionId": "63ec3296-e798-40a1-950b-d60805bb2173"
   },
   {
-    "id": "fc2026s2_infection-control_453",
+    "id": "fc2026s2_infection-control_454",
     "front": "A client on prolonged broad-spectrum antibiotic therapy develops watery diarrhea, abdominal cramping, and a fever of …",
     "back": "Prolonged antibiotic use disrupts normal intestinal flora, creating an environment favorable for Clostridioides difficile overgrowth. Watery diarrhea, cramping, and fever are classic signs. Contact precautions should be initiated and a stool sample sent for C. difficile toxin testing. This is a known complication of broad-spectrum antibiotics, not non-adherence, lactose intolerance, or unrelated viral illness.",
     "country": "US",
@@ -4540,7 +4550,7 @@
     "sourceQuestionId": "645b338b-89d6-480a-aae2-2bc369338397"
   },
   {
-    "id": "fc2026s2_infection-control_454",
+    "id": "fc2026s2_infection-control_455",
     "front": "When prioritizing client care, the nurse should attend to which client first?",
     "back": "Prioritization uses the ABCs (Airway, Breathing, Circulation). SpO2 of 88% indicates hypoxemia requiring immediate assessment and intervention (apply supplemental oxygen, assess respiratory status). This is a breathing/oxygenation priority. Pain, elimination, and nutrition are important but not immediately life-threatening.",
     "country": "US",
@@ -4550,7 +4560,7 @@
     "sourceQuestionId": "646fcd23-84f0-4f5c-a6b1-0706356d1183"
   },
   {
-    "id": "fc2026s2_infection-control_455",
+    "id": "fc2026s2_infection-control_456",
     "front": "The nurse should wash hands for at least:",
     "back": "CDC recommends at least 20 seconds of handwashing with soap and water (sing Happy Birthday twice). Alcohol-based hand sanitizer (60%+ alcohol) is acceptable when hands are not visibly soiled. Hand hygiene is the most important infection prevention measure.",
     "country": "US",
@@ -4560,7 +4570,7 @@
     "sourceQuestionId": "64bd42fe-a0bd-4393-8ed3-9914491cdf36"
   },
   {
-    "id": "fc2026s2_infection-control_456",
+    "id": "fc2026s2_infection-control_457",
     "front": "The correct sequence for removing PPE upon exiting an isolation room is:",
     "back": "PPE removal order minimizes self-contamination: gloves (most contaminated) first, gown, eye protection, then mask/respirator (removed outside the room). Hand hygiene after removing gloves and again after all PPE is removed.",
     "country": "US",
@@ -4570,7 +4580,7 @@
     "sourceQuestionId": "65461111-0e0c-4c15-ac23-d5bcdd890ba4"
   },
   {
-    "id": "fc2026s2_infection-control_457",
+    "id": "fc2026s2_infection-control_458",
     "front": "A client receiving IV magnesium sulfate for severe preeclampsia becomes lethargic, with a respiratory rate of 10 brea…",
     "back": "Absent deep tendon reflexes, respiratory depression, and lethargy are signs of magnesium toxicity. The infusion must be stopped immediately, and calcium gluconate (the specific antidote for magnesium toxicity) should be administered to counteract cardiac and respiratory effects. Continuing or increasing the infusion could cause respiratory arrest. Oxytocin is unrelated to this emergency.",
     "country": "US",
@@ -4580,7 +4590,7 @@
     "sourceQuestionId": "661235f9-521c-46fb-966a-ecddd1bfb081"
   },
   {
-    "id": "fc2026s2_infection-control_458",
+    "id": "fc2026s2_infection-control_459",
     "front": "A client post-thyroidectomy reports numbness and tingling around the mouth and fingertips. The nurse taps the facial …",
     "back": "Facial twitching when the facial nerve is tapped (positive Chvostek sign) indicates hypocalcemia, which occurs when the parathyroid glands are accidentally damaged or removed during thyroidectomy. The parathyroid glands regulate calcium. The nurse should also check for Trousseau sign (carpopedal spasm with BP cuff inflation) and have IV calcium gluconate at the bedside.",
     "country": "US",
@@ -4590,7 +4600,7 @@
     "sourceQuestionId": "66450995-4474-47b8-9d32-c01fc5f1b9a0"
   },
   {
-    "id": "fc2026s2_infection-control_459",
+    "id": "fc2026s2_infection-control_460",
     "front": "A nurse is providing care for a patient who is undergoing chemotherapy and is at high risk for infection. Which inter…",
     "back": "Providing education on hand hygiene is the most important intervention for a patient undergoing chemotherapy, as they are immunocompromised and highly susceptible to infections. Teaching the patient and family about proper handwashing techniques can significantly reduce the risk of infection. While a high-protein diet (Option A) supports overall health, it does not directly prevent infection. Monitoring for fever (Option C) is crucial but comes after ensuring proper education on prevention. Limiting visitors (Option D) helps but is not as impactful as teaching hand hygiene practices.",
     "country": "US",
@@ -4600,7 +4610,7 @@
     "sourceQuestionId": "66edca7b-0af2-4e6d-9d00-3f43d7c17eb4"
   },
   {
-    "id": "fc2026s2_infection-control_460",
+    "id": "fc2026s2_infection-control_461",
     "front": "A nurse is conducting a health education session on infection control for a group of new parents. Which statement ind…",
     "back": "The statement indicating a need for further teaching is, 'I can skip vaccinations if my baby seems healthy.' This is incorrect because vaccinations are crucial in preventing serious infections, regardless of the child's apparent health. Handwashing, using antibacterial wipes, and avoiding sick individuals are all correct practices for infection prevention. Ensuring timely vaccinations is essential to protect infants from preventable diseases.",
     "country": "US",
@@ -4610,7 +4620,7 @@
     "sourceQuestionId": "687ced31-df44-4c43-9774-91ae108d5f7e"
   },
   {
-    "id": "fc2026s2_infection-control_461",
+    "id": "fc2026s2_infection-control_462",
     "front": "A practical nurse is caring for a client with Clostridioides difficile (C. diff) infection. Which hand hygiene method…",
     "back": "C. difficile produces spores that are resistant to alcohol-based sanitizers. Soap and water with mechanical friction is required to physically remove spores from the hands. Alcohol-based sanitizer is ineffective against C. diff spores. Disinfectant wipes are for surfaces, not hand hygiene. Hand lotion does not provide antimicrobial action.",
     "country": "US",
@@ -4620,7 +4630,7 @@
     "sourceQuestionId": "689887dc-3370-42d1-8c0c-15f044992308"
   },
   {
-    "id": "fc2026s2_infection-control_462",
+    "id": "fc2026s2_infection-control_463",
     "front": "A nurse is assessing a client with acute pancreatitis. Which finding is most characteristic of this condition?",
     "back": "Acute pancreatitis causes severe, boring epigastric pain that radiates to the back. Pain is characteristically relieved by leaning forward (knee-chest position), which takes pressure off the inflamed pancreas. RLQ pain with rebound suggests appendicitis. Cramping relieved by bowel movement suggests IBS. Diffuse tenderness in all quadrants suggests peritonitis.",
     "country": "US",
@@ -4630,7 +4640,7 @@
     "sourceQuestionId": "6931dff4-643a-4375-ad8a-62f5e7e0b115"
   },
   {
-    "id": "fc2026s2_infection-control_463",
+    "id": "fc2026s2_infection-control_464",
     "front": "A nurse is assessing a client 4 days after a surgical procedure. The client has a temperature of 38.8°C, increasing i…",
     "back": "Signs of surgical site infection (fever, redness, warmth, purulent drainage) require wound culture collection before starting antibiotics to identify the causative organism and guide targeted therapy. Starting antibiotics before culture collection can yield false-negative results. Simply covering the wound delays treatment. Suture removal is a provider decision, not an independent nursing action.",
     "country": "US",
@@ -4640,7 +4650,7 @@
     "sourceQuestionId": "6a53acc4-e5ae-45e3-93e1-32291867b89d"
   },
   {
-    "id": "fc2026s2_infection-control_464",
+    "id": "fc2026s2_infection-control_465",
     "front": "A client with cancer develops superior vena cava syndrome. The nurse assesses for:",
     "back": "SVC syndrome occurs when a tumor compresses the superior vena cava, obstructing venous return from the upper body. Signs include facial/neck/arm edema, JVD, dyspnea, and cyanosis of the upper body. This is an oncologic emergency.",
     "country": "US",
@@ -4650,7 +4660,7 @@
     "sourceQuestionId": "6b00c1bd-8ca8-49f5-88b4-a33e313448ec"
   },
   {
-    "id": "fc2026s2_infection-control_465",
+    "id": "fc2026s2_infection-control_466",
     "front": "A patient is recovering from a laparoscopic appendectomy. The nurse observes serous drainage from the incision site. …",
     "back": "In a post-operative setting, serous drainage is often expected. The best action is to reinforce the dressing and monitor for any changes. Notifying the physician would be necessary if the drainage becomes excessive or purulent. Documentation is important but not the immediate priority. Simply applying a dry dressing without monitoring is insufficient.",
     "country": "US",
@@ -4660,7 +4670,7 @@
     "sourceQuestionId": "6bd8e36a-fbe7-43f9-98bc-712cde7d3ec7"
   },
   {
-    "id": "fc2026s2_infection-control_466",
+    "id": "fc2026s2_infection-control_467",
     "front": "A nurse caring for a client with MRSA wound infection should use:",
     "back": "MRSA requires contact precautions: gown and gloves upon entering the room, dedicated equipment, and enhanced hand hygiene with soap and water or alcohol-based sanitizer. Single room preferred. Remove PPE before leaving the room. MRSA is spread by direct contact with infected wounds or contaminated surfaces.",
     "country": "US",
@@ -4670,7 +4680,7 @@
     "sourceQuestionId": "6d92a29b-8dde-4bd6-84ac-579dc3118c54"
   },
   {
-    "id": "fc2026s2_infection-control_467",
+    "id": "fc2026s2_infection-control_468",
     "front": "A newborn with respiratory distress syndrome has 'ground glass' appearance on chest X-ray. Treatment includes:",
     "back": "RDS (surfactant deficiency in premature neonates) shows diffuse reticulogranular (ground glass) pattern on CXR. Exogenous surfactant instillation through the ETT and respiratory support (CPAP or ventilation) are mainstays. Antenatal steroids prevent RDS.",
     "country": "US",
@@ -4680,7 +4690,7 @@
     "sourceQuestionId": "6dce9b86-c2dd-4ebc-bea3-2d513f14bd4e"
   },
   {
-    "id": "fc2026s2_infection-control_468",
+    "id": "fc2026s2_infection-control_469",
     "front": "A nurse is caring for a 4-year-old child with a diagnosis of chickenpox who has been admitted for dehydration. Which …",
     "back": "Placing the child in a private room is the priority intervention for infection control because chickenpox is highly contagious and can spread through airborne particles. A private room will minimize the risk of transmission to other patients. While other interventions are important, the immediate priority is to isolate the patient from others.",
     "country": "US",
@@ -4690,7 +4700,7 @@
     "sourceQuestionId": "6deafb73-3875-4c11-a367-8c12b8a39dc2"
   },
   {
-    "id": "fc2026s2_infection-control_469",
+    "id": "fc2026s2_infection-control_470",
     "front": "A 72-year-old male with a history of chronic pain is prescribed a new opioid medication. What should the RPN monitor …",
     "back": "Opioids can cause respiratory depression, which is a serious and potentially life-threatening adverse effect. Monitoring the respiratory rate is crucial, especially in older adults who may be more sensitive to the effects of these medications. Increased appetite is not a typical effect of opioids, while increased blood pressure is not commonly associated. Improved mobility might occur due to pain relief, but monitoring for respiratory depression is the priority.",
     "country": "US",
@@ -4700,7 +4710,7 @@
     "sourceQuestionId": "6e688a92-ed01-44ae-a795-18ddbe40ee83"
   },
   {
-    "id": "fc2026s2_infection-control_470",
+    "id": "fc2026s2_infection-control_471",
     "front": "A client with acute upper GI hemorrhage has an estimated blood loss of 30% of total blood volume. The nurse should pr…",
     "back": "30% blood loss (Class III hemorrhage) causes tachycardia, hypotension, and altered mental status. Massive transfusion protocol (1:1:1 ratio of pRBCs:FFP:platelets) should be activated. Simultaneous resuscitation and source control (endoscopy or surgery) are critical.",
     "country": "US",
@@ -4710,7 +4720,7 @@
     "sourceQuestionId": "70505fda-4a1e-417f-8331-59f6badf75b1"
   },
   {
-    "id": "fc2026s2_infection-control_471",
+    "id": "fc2026s2_infection-control_472",
     "front": "A client receiving chemotherapy has a neutrophil count of 400/mm3. The nurse should implement:",
     "back": "A neutrophil count below 500/mm3 indicates severe neutropenia. Neutropenic precautions include private room, no fresh flowers or fruits, strict hand hygiene, avoiding invasive procedures, and monitoring for infection signs.",
     "country": "US",
@@ -4720,7 +4730,7 @@
     "sourceQuestionId": "70708146-8378-4c7a-a879-5a5f581cc381"
   },
   {
-    "id": "fc2026s2_infection-control_472",
+    "id": "fc2026s2_infection-control_473",
     "front": "A client with a surgical wound healing by secondary intention should expect:",
     "back": "Secondary intention healing: wound left open to fill from the base with granulation tissue (red, moist, beefy appearance), then wound contracts (wound edges draw together), and finally epithelial cells migrate across the surface. Takes longer than primary intention. Keep wound moist and clean.",
     "country": "US",
@@ -4730,7 +4740,7 @@
     "sourceQuestionId": "70afd436-b264-4938-90fb-71c5ab5ee526"
   },
   {
-    "id": "fc2026s2_infection-control_473",
+    "id": "fc2026s2_infection-control_474",
     "front": "N95 respirators are required when caring for clients with:",
     "back": "N95 respirators filter >= 95% of airborne particles and are required for airborne precautions (TB, measles, varicella, disseminated herpes zoster). The nurse must be fit-tested annually for proper seal verification.",
     "country": "US",
@@ -4740,7 +4750,7 @@
     "sourceQuestionId": "71e1e00a-d870-4020-b703-c335ad515db7"
   },
   {
-    "id": "fc2026s2_infection-control_474",
+    "id": "fc2026s2_infection-control_475",
     "front": "A nurse is caring for a client with PTSD who experiences a flashback during a therapy session. The client appears dis…",
     "back": "During a flashback/dissociative episode, the client is psychologically reliving the trauma and has lost awareness of the present. Grounding techniques reconnect the client to the here and now: speak calmly and clearly, state the client's name, identify the current location and time, encourage focusing on sensory input (5 senses technique), and guide slow breathing. Restraints are traumatizing and contraindicated. Leaving the client alone is abandonment. Detailed questioning about the trauma can worsen the dissociative episode.",
     "country": "US",
@@ -4750,7 +4760,7 @@
     "sourceQuestionId": "71f1adde-602e-4ecb-aeda-5bc46199c4f7"
   },
   {
-    "id": "fc2026s2_infection-control_475",
+    "id": "fc2026s2_infection-control_476",
     "front": "A client with sleep apnea is prescribed CPAP therapy. The nurse teaches that CPAP works by:",
     "back": "CPAP delivers a continuous stream of pressurized air through a mask, splinting the upper airway open during sleep and preventing the soft tissue collapse that causes obstructive sleep apnea. It reduces apnea episodes and improves oxygenation during sleep.",
     "country": "US",
@@ -4760,7 +4770,7 @@
     "sourceQuestionId": "72000f85-fd2b-440b-9a3d-160def5adcd0"
   },
   {
-    "id": "fc2026s2_infection-control_476",
+    "id": "fc2026s2_infection-control_477",
     "front": "A client with neutropenic fever (ANC < 500, temp > 38.3C) should have antibiotics started within:",
     "back": "Neutropenic fever is a medical emergency. Empiric broad-spectrum antibiotics (cefepime, piperacillin-tazobactam, or meropenem) must be started within 60 minutes of presentation, even before culture results. Delays in antibiotic administration increase mortality significantly.",
     "country": "US",
@@ -4770,7 +4780,7 @@
     "sourceQuestionId": "72253ebe-ab83-4588-8fc4-dfc3418de873"
   },
   {
-    "id": "fc2026s2_infection-control_477",
+    "id": "fc2026s2_infection-control_478",
     "front": "A nurse is caring for a client diagnosed with major depressive disorder who has been taking sertraline for 3 weeks. T…",
     "back": "A client who suddenly appears calm and states they have made peace with everything after a period of depression may have made a decision to attempt suicide. The initial energy boost from antidepressants (2-4 weeks) can give a previously immobilized depressed client the energy to act on suicidal thoughts. This is a critical warning sign. Immediate suicide risk assessment, 1:1 observation, environmental safety check, and provider notification are essential. This is NOT simply improvement.",
     "country": "US",
@@ -4780,7 +4790,7 @@
     "sourceQuestionId": "7253b827-3acb-43fb-933d-ce4dd5a80e61"
   },
   {
-    "id": "fc2026s2_infection-control_478",
+    "id": "fc2026s2_infection-control_479",
     "front": "Superior vena cava syndrome in a cancer client presents with:",
     "back": "SVC syndrome results from tumor compression of the superior vena cava, obstructing venous return from the upper body. Classic presentation includes facial/neck/arm edema, JVD, dyspnea, and upper body cyanosis. This is an oncologic emergency.",
     "country": "US",
@@ -4790,7 +4800,7 @@
     "sourceQuestionId": "732a573e-64da-42a9-ab6f-cda25f483b4e"
   },
   {
-    "id": "fc2026s2_infection-control_479",
+    "id": "fc2026s2_infection-control_480",
     "front": "Which wound healing stage is characterized by formation of granulation tissue?",
     "back": "The proliferative phase (days 3-21) involves formation of granulation tissue, collagen deposition, angiogenesis, and wound contraction. Granulation tissue appears pink/red and beefy with a granular appearance.",
     "country": "US",
@@ -4800,7 +4810,7 @@
     "sourceQuestionId": "73f332bf-3ab4-470e-a315-15d860e6aea4"
   },
   {
-    "id": "fc2026s2_infection-control_480",
+    "id": "fc2026s2_infection-control_481",
     "front": "During a community mental health outreach, a nurse encounters a 55-year-old male who displays signs of depression. He…",
     "back": "The best initial intervention is to conduct a comprehensive assessment (C) to understand the extent of the man's depression, which guides further care. Referrals (A) may be necessary later, but assessment is foundational. Encouraging participation (B) may not be effective without understanding his condition, and while lifestyle changes (D) are beneficial, they should follow a thorough evaluation.",
     "country": "US",
@@ -4810,7 +4820,7 @@
     "sourceQuestionId": "747ce649-1552-4948-9297-e6ddc1f6b7df"
   },
   {
-    "id": "fc2026s2_infection-control_481",
+    "id": "fc2026s2_infection-control_482",
     "front": "A 45-year-old female patient is admitted with severe abdominal pain, and her vital signs show hypotension. Laboratory…",
     "back": "The combination of severe abdominal pain, hypotension, elevated white blood cells, and increased amylase indicates pancreatitis, which is often characterized by these symptoms. Acute appendicitis typically presents with right lower quadrant pain, cholecystitis usually involves gallbladder pain, and diverticulitis often includes left lower quadrant pain.",
     "country": "US",
@@ -4820,7 +4830,7 @@
     "sourceQuestionId": "7489a7d9-1785-452b-af14-ef1ccc5faabc"
   },
   {
-    "id": "fc2026s2_infection-control_482",
+    "id": "fc2026s2_infection-control_483",
     "front": "A patient is recovering from a laparoscopic cholecystectomy. Which assessment finding should the LPN/RPN report to th…",
     "back": "The LPN/RPN should report a fever of 101.5°F (38.6°C) (C) immediately, as this could indicate an infection or complication post-surgery. Moderate abdominal pain (A) is expected but should be monitored. Serous drainage (B) is typically normal as long as it does not appear infected. Nausea and vomiting (D) can occur but are common post-operative symptoms that are not as critical as a fever.",
     "country": "US",
@@ -4830,7 +4840,7 @@
     "sourceQuestionId": "74c37566-0235-490e-b057-bd2f60235b2a"
   },
   {
-    "id": "fc2026s2_infection-control_483",
+    "id": "fc2026s2_infection-control_484",
     "front": "A client with suspected Ebola virus disease requires:",
     "back": "Ebola requires maximum barrier precautions: fluid-resistant coveralls, double gloves, shoe covers, PAPR or N95 with full face shield, supervised donning/doffing with trained observer. The virus is transmitted through direct contact with infected body fluids. Dedicated equipment and strict protocols are essential.",
     "country": "US",
@@ -4840,7 +4850,7 @@
     "sourceQuestionId": "7565d3bb-677a-45a9-8f63-45fcb70458e2"
   },
   {
-    "id": "fc2026s2_infection-control_484",
+    "id": "fc2026s2_infection-control_485",
     "front": "A newborn is being assessed at 24 hours of age. The nurse notes yellowish discoloration of the skin and sclera. Which…",
     "back": "Jaundice appearing within the first 24 hours of life is considered pathological and requires prompt evaluation with serum bilirubin levels. It may indicate hemolytic disease or other serious conditions. While physiological jaundice is common after 24 hours, early-onset jaundice requires investigation. Phototherapy decisions depend on bilirubin levels. Breastfeeding should continue as it helps with bilirubin excretion.",
     "country": "US",
@@ -4850,7 +4860,7 @@
     "sourceQuestionId": "76df2f1f-b092-417c-9acb-3e8e08bfee75"
   },
   {
-    "id": "fc2026s2_infection-control_485",
+    "id": "fc2026s2_infection-control_486",
     "front": "A nurse is teaching a group of nursing students about the importance of hand hygiene in infection control. Which stat…",
     "back": "The statement that alcohol-based hand sanitizers are effective against all types of pathogens is incorrect. While they are effective against many bacteria and viruses, they are not effective against certain pathogens like Clostridium difficile. This indicates a need for further clarification on the appropriate use of hand hygiene products. The other statements about hand hygiene are accurate and reflect best practices.",
     "country": "US",
@@ -4860,7 +4870,7 @@
     "sourceQuestionId": "770a71e0-35f6-419e-8312-a812466ac8b7"
   },
   {
-    "id": "fc2026s2_infection-control_486",
+    "id": "fc2026s2_infection-control_487",
     "front": "A nurse is caring for a client with scabies. Which statement about transmission is correct?",
     "back": "Scabies is caused by the Sarcoptes scabiei mite and is transmitted through prolonged direct skin-to-skin contact. Contact precautions (gown and gloves) are required until 24 hours after treatment begins. It is not transmitted through the airborne route or through food/water. Scabies is highly contagious and requires treatment and contact tracing.",
     "country": "US",
@@ -4870,7 +4880,7 @@
     "sourceQuestionId": "780d4fcb-3113-41d5-8510-adde5de39420"
   },
   {
-    "id": "fc2026s2_infection-control_487",
+    "id": "fc2026s2_infection-control_488",
     "front": "A 74-year-old female admitted for a urinary tract infection is on IV ceftriaxone. The nurse notes she has developed w…",
     "back": "Antibiotic-associated diarrhoea with fever, cramping, and frequent watery stools is highly suspicious for C. difficile infection. Cephalosporins are a known risk factor. This is not a benign side effect and requires stool testing, contact precautions, and possible treatment change. Food-borne illness is less likely in the hospital setting. UTI does not typically cause diarrhoea.",
     "country": "US",
@@ -4880,7 +4890,7 @@
     "sourceQuestionId": "7a167990-5185-4aff-a4b3-669c96f73df9"
   },
   {
-    "id": "fc2026s2_infection-control_488",
+    "id": "fc2026s2_infection-control_489",
     "front": "A nurse is caring for a patient with a suspected viral meningitis. Which precaution should the nurse implement to pre…",
     "back": "For a patient with suspected viral meningitis, droplet precautions should be implemented to prevent transmission of the virus through respiratory droplets. Standard precautions alone may not suffice due to the potential for droplet spread. Airborne precautions are not necessary for viral meningitis, and contact precautions are not the primary concern for this type of illness.",
     "country": "US",
@@ -4890,7 +4900,7 @@
     "sourceQuestionId": "7ab9f25c-e883-41c4-b25d-f9caad641b46"
   },
   {
-    "id": "fc2026s2_infection-control_489",
+    "id": "fc2026s2_infection-control_490",
     "front": "A client on a statin medication should be taught to report:",
     "back": "Unexplained myalgia with dark urine suggests rhabdomyolysis, a rare but serious statin side effect involving muscle breakdown. CK levels should be checked. Statins can also cause hepatotoxicity, so liver function monitoring is recommended.",
     "country": "US",
@@ -4900,7 +4910,7 @@
     "sourceQuestionId": "7bb528ea-792d-45e0-937f-52541a8391f5"
   },
   {
-    "id": "fc2026s2_infection-control_490",
+    "id": "fc2026s2_infection-control_491",
     "front": "A 10-month-old presents with episodic crying, drawing up the knees, and currant jelly stools. The nurse suspects:",
     "back": "Intussusception (telescoping of bowel) presents with sudden episodic colicky pain (drawing up knees), currant jelly stools (blood and mucus), and a sausage-shaped abdominal mass. Peak incidence is 5-10 months. Air or barium enema is both diagnostic and therapeutic.",
     "country": "US",
@@ -4910,7 +4920,7 @@
     "sourceQuestionId": "7cab885d-80ac-4ef6-bd79-4cd8e56c54d8"
   },
   {
-    "id": "fc2026s2_infection-control_491",
+    "id": "fc2026s2_infection-control_492",
     "front": "A nurse is caring for a client taking carbamazepine for seizure management who is also prescribed erythromycin for a …",
     "back": "Erythromycin is a potent inhibitor of the cytochrome P450 3A4 (CYP3A4) enzyme, which is the primary enzyme responsible for metabolizing carbamazepine. When erythromycin inhibits CYP3A4, carbamazepine metabolism is significantly reduced, causing serum levels to rise rapidly. Carbamazepine toxicity manifests as ataxia, diplopia, nystagmus, dizziness, drowsiness, and in severe cases, cardiac conduction abnormalities and seizures. The nurse should notify the prescriber so an alternative antibiotic can be selected (azithromycin is a safer macrolide option as it has minimal CYP3A4 inhibition). If the combination cannot be avoided, carbamazepine dose reduction and therapeutic drug monitoring are essential. This is a classic and clinically significant drug interaction that appears frequently on nursing licensure examinations.",
     "country": "US",
@@ -4920,7 +4930,17 @@
     "sourceQuestionId": "7dc8ab92-57a7-43cc-b36a-bfcfacc52f5d"
   },
   {
-    "id": "fc2026s2_infection-control_492",
+    "id": "fc2026s2_infection-control_493",
+    "front": "A 6-year-old boy presents with a high fever and a rash. The RPN suspects measles. What is the most appropriate immedi…",
+    "back": "In cases of suspected measles, isolation of the patient is critical to prevent the spread of this highly contagious viral infection. This helps protect other patients and healthcare staff from exposure. While administering antipyretics may help with fever, it does not address the infection's contagious nature. Scheduling follow-up and performing blood tests are necessary but not immediate actions in this context.",
+    "country": "US",
+    "tier": "RPN",
+    "topicKey": "infection-control",
+    "categorySlug": "infection",
+    "sourceQuestionId": "7deb2fb3-238e-46dc-80cc-bbb3f04171c0"
+  },
+  {
+    "id": "fc2026s2_infection-control_494",
     "front": "A patient presents with a rash characterized by red, scaly patches and silvery scales on their elbows and knees. What…",
     "back": "The rash is most consistent with psoriasis (B), which features red patches with silvery scales, particularly on extensor surfaces like elbows and knees. Eczema (A) typically appears as dry, itchy, and inflamed skin. Contact dermatitis (C) is caused by exposure to an irritant or allergen, and tinea corporis (D) is a fungal infection that presents differently. Accurate diagnosis is critical for appropriate treatment.",
     "country": "US",
@@ -4930,7 +4950,7 @@
     "sourceQuestionId": "7f70c3c0-651a-46ab-8eda-f399ee54f37c"
   },
   {
-    "id": "fc2026s2_infection-control_493",
+    "id": "fc2026s2_infection-control_495",
     "front": "A nurse is caring for a patient with a draining wound. The patient asks how to care for their wound at home. What is …",
     "back": "Cleaning the wound daily with soap and water is the most effective advice to prevent infection and promote healing. This practice helps remove debris and bacteria. Keeping the wound covered tightly (A) can trap moisture and bacteria, potentially leading to infection. Changing the dressing when wet (B) is important, but routine cleaning should be prioritized. Avoiding hand contact (D) is wise, but it does not replace the necessity of regular cleaning.",
     "country": "US",
@@ -4940,7 +4960,7 @@
     "sourceQuestionId": "7fccce0d-ba11-4b06-8b5b-1bdaf3368c01"
   },
   {
-    "id": "fc2026s2_infection-control_494",
+    "id": "fc2026s2_infection-control_496",
     "front": "A nurse is caring for a patient undergoing treatment for HIV who has developed oral thrush. Which nursing interventio…",
     "back": "Administering antifungal medication as prescribed is the most important intervention to treat oral thrush and prevent further complications. Oral thrush can lead to systemic infections if untreated, making prompt medication administration critical. While maintaining good oral hygiene (Option A) is important, it does not treat the underlying infection. Educating the patient on medication adherence (Option C) is vital for long-term management of HIV, but it does not address the immediate complication. Monitoring CD4 count (Option D) is necessary for ongoing care but is not an immediate intervention.",
     "country": "US",
@@ -4950,7 +4970,7 @@
     "sourceQuestionId": "8016e175-eb3b-4635-a8aa-473ba1a6f8d4"
   },
   {
-    "id": "fc2026s2_infection-control_495",
+    "id": "fc2026s2_infection-control_497",
     "front": "A patient with a history of seizures is being discharged with a prescription for phenytoin. Which statement by the pa…",
     "back": "The statement 'I can stop taking this medication if my seizures stop' (B) indicates a need for further education. Antiepileptic medications like phenytoin should not be stopped abruptly, as this can lead to withdrawal seizures. Regular blood level checks (A) are necessary to avoid toxicity. Taking with food (C) is a common recommendation, and avoiding alcohol (D) is crucial to prevent interactions and increased seizure risk.",
     "country": "US",
@@ -4960,7 +4980,7 @@
     "sourceQuestionId": "81e44148-986f-42ea-8d49-0005604ac5d8"
   },
   {
-    "id": "fc2026s2_infection-control_496",
+    "id": "fc2026s2_infection-control_498",
     "front": "A nurse is caring for a client with a tension pneumothorax. The client presents with severe dyspnea, absent breath so…",
     "back": "Tension pneumothorax is immediately life-threatening and requires emergent treatment without waiting for radiographic confirmation. The diagnosis is made clinically: absent breath sounds on the affected side, tracheal deviation away from the affected side, distended neck veins (from impaired venous return), and hemodynamic instability. Emergent needle decompression (large-bore needle, 14-16 gauge, inserted at the second intercostal space, midclavicular line on the affected side) converts the tension pneumothorax to a simple pneumothorax by releasing trapped air. A chest tube is then inserted for definitive management. Waiting for imaging delays life-saving treatment and can lead to cardiac arrest from mediastinal shift compressing the great vessels and opposite lung. Positioning on the affected side would not resolve the air pressure buildup.",
     "country": "US",
@@ -4970,7 +4990,7 @@
     "sourceQuestionId": "8321b325-cb92-4643-9c35-47c036080d60"
   },
   {
-    "id": "fc2026s2_infection-control_497",
+    "id": "fc2026s2_infection-control_499",
     "front": "A nurse is caring for a client with cancer who is receiving chemotherapy. The client's absolute neutrophil count (ANC…",
     "back": "An ANC below 500 indicates severe neutropenia with high infection risk. Neutropenic precautions include restricting fresh flowers (harbor fungi/bacteria), raw produce (potential pathogen source), and limiting visitors. Private room, strict hand hygiene, and monitoring for infection signs are essential. Fresh fruit brings pathogens. Contact isolation is for different organisms. Live vaccines are absolutely contraindicated in immunosuppressed clients.",
     "country": "US",
@@ -4980,7 +5000,7 @@
     "sourceQuestionId": "8322732b-4fc8-4a70-b23b-4fd6a507e315"
   },
   {
-    "id": "fc2026s2_infection-control_498",
+    "id": "fc2026s2_infection-control_500",
     "front": "A nurse is caring for a client in the emergency department who presents with severe epigastric pain radiating to the …",
     "back": "Severe epigastric pain radiating to the back with markedly elevated serum lipase (normal less than 160 U/L) is the classic presentation of acute pancreatitis. Lipase is more specific for pancreatic inflammation than amylase. Peptic ulcer disease causes epigastric pain but does not typically elevate lipase significantly. Cholecystitis causes right upper quadrant pain. Appendicitis causes periumbilical pain migrating to the right lower quadrant. Management includes NPO status, IV fluids, and pain management.",
     "country": "US",
@@ -4990,7 +5010,7 @@
     "sourceQuestionId": "83c1518b-4e35-459a-b86f-cfe052265bc3"
   },
   {
-    "id": "fc2026s2_infection-control_499",
+    "id": "fc2026s2_infection-control_501",
     "front": "A client is receiving a granulocyte colony-stimulating factor (G-CSF, filgrastim) after chemotherapy. Which assessmen…",
     "back": "Filgrastim (G-CSF) stimulates the bone marrow to produce and release neutrophils, the primary defense against bacterial infections. The therapeutic effect is demonstrated by a rising ANC. G-CSF does not directly affect platelet production (that is oprelvekin/IL-11) or hemoglobin (that is erythropoietin). A decreasing WBC differential would indicate the medication is not working.",
     "country": "US",
@@ -5000,7 +5020,7 @@
     "sourceQuestionId": "83db215d-bf4d-47e1-b7dc-a34f67c4ddff"
   },
   {
-    "id": "fc2026s2_infection-control_500",
+    "id": "fc2026s2_infection-control_502",
     "front": "A nurse is observing a nursing assistant who is preparing to bathe a patient with a lower extremity ulcer. What is th…",
     "back": "Reminding the assistant to wear gloves is essential for infection control when dealing with a patient with an ulcer. While using warm water is appropriate, it is not the priority intervention. Advising to avoid scrubbing is important but secondary to ensuring proper hand hygiene and protection. Suggesting a topical antibiotic may be necessary but should follow the bath and assessment.",
     "country": "US",
@@ -5010,7 +5030,7 @@
     "sourceQuestionId": "84b71869-6ad8-487d-ba42-e8f4b7e9a80b"
   },
   {
-    "id": "fc2026s2_infection-control_501",
+    "id": "fc2026s2_infection-control_503",
     "front": "A 72-year-old female receiving her second unit of packed RBCs suddenly reports chills, back pain, and nausea. Her vit…",
     "back": "The patient's symptoms suggest an acute hemolytic transfusion reaction, which is a medical emergency. The transfusion must be stopped immediately, and the blood tubing should be disconnected to prevent further exposure. Administering acetaminophen or flushing the line does not address the reaction and increases risk.",
     "country": "US",
@@ -5020,7 +5040,7 @@
     "sourceQuestionId": "84d58e32-f72a-4b62-87fd-2f41fc165fbc"
   },
   {
-    "id": "fc2026s2_infection-control_502",
+    "id": "fc2026s2_infection-control_504",
     "front": "A client with major depression who has been withdrawn and non-communicative suddenly appears cheerful and gives away …",
     "back": "Sudden mood improvement with giving away possessions is a warning sign of suicide. The client may have made a decision and plan, leading to a sense of relief. Immediate suicide precautions, one-to-one observation, and comprehensive safety assessment are critical.",
     "country": "US",
@@ -5030,7 +5050,7 @@
     "sourceQuestionId": "84fdfb06-9cab-407b-bce2-4de7ccff0373"
   },
   {
-    "id": "fc2026s2_infection-control_503",
+    "id": "fc2026s2_infection-control_505",
     "front": "A client with anaphylaxis should receive epinephrine administered:",
     "back": "IM epinephrine in the anterolateral thigh provides the fastest absorption and peak blood levels. Auto-injector dose: 0.3mg adults, 0.15mg children < 30kg. Can repeat every 5-15 minutes. IV epinephrine is reserved for refractory anaphylaxis or cardiac arrest, requiring cardiac monitoring.",
     "country": "US",
@@ -5040,7 +5060,7 @@
     "sourceQuestionId": "86ad10eb-90a3-4a20-b37e-eb10b5b761c6"
   },
   {
-    "id": "fc2026s2_infection-control_504",
+    "id": "fc2026s2_infection-control_506",
     "front": "The nurse should wear an N95 respirator when caring for a client with:",
     "back": "N95 respirators filter at least 95% of airborne particles and are required for airborne precautions. Active pulmonary TB, measles, varicella, and disseminated herpes zoster require N95 use. The nurse must be fit-tested annually.",
     "country": "US",
@@ -5050,7 +5070,7 @@
     "sourceQuestionId": "878b93de-70ef-4abc-8510-831e4f3b6e95"
   },
   {
-    "id": "fc2026s2_infection-control_505",
+    "id": "fc2026s2_infection-control_507",
     "front": "A client with acute variceal hemorrhage should have the nurse prepare for which initial intervention?",
     "back": "Acute variceal bleeding management: airway protection (intubation if altered consciousness), volume resuscitation (blood products, restrictive transfusion strategy Hb target 7-8), IV octreotide/somatostatin (splanchnic vasoconstriction), IV proton pump inhibitor, prophylactic antibiotics (ceftriaxone), emergent EGD with band ligation (within 12 hours). If uncontrolled: balloon tamponade (Sengstaken-Blakemore), TIPS procedure.",
     "country": "US",
@@ -5060,7 +5080,7 @@
     "sourceQuestionId": "87f23627-7fcb-4eee-a717-342dc9a33ff4"
   },
   {
-    "id": "fc2026s2_infection-control_506",
+    "id": "fc2026s2_infection-control_508",
     "front": "When assessing cyanosis in a dark-skinned client, the nurse should examine:",
     "back": "In dark-skinned clients, cyanosis is best assessed in areas with less melanin: oral mucosa (becomes gray/blue), nail beds, palms, soles, and conjunctivae. These sites also better reveal pallor and jaundice.",
     "country": "US",
@@ -5070,7 +5090,7 @@
     "sourceQuestionId": "8934ce42-701e-488b-9d86-c3fc095ecbd2"
   },
   {
-    "id": "fc2026s2_infection-control_507",
+    "id": "fc2026s2_infection-control_509",
     "front": "A 64-year-old female with a history of chronic pain is prescribed gabapentin for neuropathic pain management. Which o…",
     "back": "Gabapentin can cause central nervous system side effects, particularly drowsiness and dizziness, which can significantly impact the patient's ability to perform daily activities. Educating the patient about these potential side effects is important for ensuring safety and adherence to the medication regimen. While changes in appetite and gastrointestinal effects can occur, they are less common than CNS side effects.",
     "country": "US",
@@ -5080,7 +5100,7 @@
     "sourceQuestionId": "895a574e-ad3a-40e0-947b-5786c6f169b4"
   },
   {
-    "id": "fc2026s2_infection-control_508",
+    "id": "fc2026s2_infection-control_510",
     "front": "A nurse is assessing a 68-year-old client with suspected PAD. The right foot is cool, pale, and has diminished pedal …",
     "back": "Absent hair growth and thick, dystrophic nails are classic signs of chronic arterial insufficiency due to poor perfusion to the skin and appendages. Brown discolouration and stasis dermatitis indicate venous insufficiency. Warm, edematous legs with intact pulses also suggest venous disease. Varicose veins are a venous condition.",
     "country": "US",
@@ -5090,7 +5110,7 @@
     "sourceQuestionId": "89ec46de-b1df-4614-a0a6-1125c6455c95"
   },
   {
-    "id": "fc2026s2_infection-control_509",
+    "id": "fc2026s2_infection-control_511",
     "front": "A nurse is monitoring a patient who has just been extubated after surgery. Which assessment finding would warrant imm…",
     "back": "Stridor is a high-pitched sound indicating upper airway obstruction and requires immediate intervention, likely indicating that the patient may need to be re-intubated or provided with supplemental oxygen and steroids. Mild respiratory distress may be monitored but does not require immediate action. An oxygen saturation of 93% can be considered acceptable post-extubation in some cases, and a productive cough may be expected as the airway clears.",
     "country": "US",
@@ -5100,7 +5120,7 @@
     "sourceQuestionId": "8a143eeb-7137-4090-93ec-b0cb33d05bd2"
   },
   {
-    "id": "fc2026s2_infection-control_510",
+    "id": "fc2026s2_infection-control_512",
     "front": "A nurse is assessing a 2-day-old breastfed newborn. The infant has lost 8% of birth weight and has had 2 wet diapers …",
     "back": "Weight loss up to 7% in the first few days is normal for breastfed newborns, but 8% is at the upper limit and warrants closer monitoring. Only 2 wet diapers in 24 hours suggests suboptimal intake (by day 2, expect 2-3 wet diapers, increasing to 6-8 by day 5). Assessment of latch, feeding frequency, and maternal milk supply is needed. A lactation consultant should be involved. Supplementation may be needed if weight loss continues.",
     "country": "US",
@@ -5110,7 +5130,7 @@
     "sourceQuestionId": "8a6f4ee5-ca11-4c27-be46-c9d9a95d6a6b"
   },
   {
-    "id": "fc2026s2_infection-control_511",
+    "id": "fc2026s2_infection-control_513",
     "front": "A nurse is caring for a patient with a pressure ulcer on the sacrum. The nurse is preparing to change the dressing. W…",
     "back": "Washing hands thoroughly before and after the procedure is essential to prevent the introduction of pathogens and control infection risk. Hand hygiene is a fundamental practice in infection prevention, especially in wound care. Applying antibiotic ointment (Option B) may be beneficial but is not universally required for every dressing change. Using non-sterile gauze (Option C) is inappropriate for open wounds, and instructing the patient to refrain from moving (Option D) is not necessary and might cause discomfort.",
     "country": "US",
@@ -5120,7 +5140,7 @@
     "sourceQuestionId": "8aa57d34-2c23-45e5-ad1f-a17b05834181"
   },
   {
-    "id": "fc2026s2_infection-control_512",
+    "id": "fc2026s2_infection-control_514",
     "front": "The nurse is caring for a client with varicella (chickenpox). Which isolation precautions are required?",
     "back": "Varicella (chickenpox) requires both airborne precautions (negative-pressure room, N95 respirator) because the virus is transmitted via small airborne particles, and contact precautions because the vesicle fluid is also infectious.",
     "country": "US",
@@ -5130,7 +5150,7 @@
     "sourceQuestionId": "8b446630-864b-4099-8334-f94243b6e7b1"
   },
   {
-    "id": "fc2026s2_infection-control_513",
+    "id": "fc2026s2_infection-control_515",
     "front": "A nurse is caring for a newborn at 12 hours of age. The nurse notes yellowing of the skin and sclera. What should the…",
     "back": "Jaundice appearing within the first 24 hours of life is always considered pathological and requires immediate evaluation. It may indicate hemolytic disease (ABO or Rh incompatibility), infection, or other serious conditions. Physiological jaundice typically appears after 24 hours (day 2-3) and peaks by day 5. Breast milk jaundice occurs later (after day 5-7). Jaundice within 24 hours is never normal.",
     "country": "US",
@@ -5140,7 +5160,7 @@
     "sourceQuestionId": "8b9a5ec1-3192-47a4-8ef4-263495c4daa8"
   },
   {
-    "id": "fc2026s2_infection-control_514",
+    "id": "fc2026s2_infection-control_516",
     "front": "A nurse is caring for a critically ill client and notes that the mixed venous oxygen saturation (SvO2) has dropped fr…",
     "back": "SvO2 reflects the balance between oxygen delivery and oxygen consumption. Normal SvO2 is 60-80%. A drop to 45% indicates that tissues are extracting more oxygen than usual, which can occur with increased oxygen demand (fever, shivering, seizures, pain) or decreased oxygen delivery (low cardiac output, anemia, hypoxemia). Improved cardiac output would increase SvO2. Hypothermia and supplemental oxygen would also increase SvO2.",
     "country": "US",
@@ -5150,7 +5170,7 @@
     "sourceQuestionId": "8bfb91b1-0bf8-405c-a3b4-8b7c76413d5b"
   },
   {
-    "id": "fc2026s2_infection-control_515",
+    "id": "fc2026s2_infection-control_517",
     "front": "A client receiving heparin has an aPTT of 120 seconds (control 30 seconds). The nurse should:",
     "back": "An aPTT of 120 seconds is significantly elevated (therapeutic range is 1.5-2.5 times control, or 45-75 seconds). The infusion should be stopped and the provider notified. Protamine sulfate is the antidote but requires a provider order.",
     "country": "US",
@@ -5160,7 +5180,7 @@
     "sourceQuestionId": "8c04ec86-7e32-40dc-abba-bd9a54ce69e6"
   },
   {
-    "id": "fc2026s2_infection-control_516",
+    "id": "fc2026s2_infection-control_518",
     "front": "A nurse is monitoring a client who received IV alteplase for acute ischemic stroke. Which finding requires the nurse …",
     "back": "Severe headache with decreasing level of consciousness after tPA administration suggests hemorrhagic transformation, the most feared complication. The infusion must be stopped immediately, the provider notified, and a stat CT scan obtained. Blood pressure up to 180/105 is acceptable post-tPA. Minor bleeding (gum, IV site) is expected. A metallic taste is a known but benign side effect. Hemorrhagic transformation occurs in approximately 6% of clients receiving tPA.",
     "country": "US",
@@ -5170,7 +5190,7 @@
     "sourceQuestionId": "8cb811a8-2ba8-49b8-a2ef-b5dc0f3cd8f1"
   },
   {
-    "id": "fc2026s2_infection-control_517",
+    "id": "fc2026s2_infection-control_519",
     "front": "A client with bacterial meningitis is placed on droplet precautions. The nurse should wear:",
     "back": "Bacterial meningitis (N. meningitidis) requires droplet precautions: surgical mask within 3-6 feet of the client. Precautions can be discontinued after 24 hours of effective antibiotic therapy. Close contacts should receive chemoprophylaxis (rifampin, ciprofloxacin, or ceftriaxone).",
     "country": "US",
@@ -5180,7 +5200,7 @@
     "sourceQuestionId": "8cb8cbc6-e11e-4030-9cb9-ee6aa6502510"
   },
   {
-    "id": "fc2026s2_infection-control_518",
+    "id": "fc2026s2_infection-control_520",
     "front": "A nurse is caring for a patient who has just received a live attenuated vaccine. What is the most important instructi…",
     "back": "Patients who receive live attenuated vaccines should avoid contact with immunocompromised individuals to prevent transmitting the live virus to those at risk of complications. This instruction is vital for patient safety. Returning to work immediately (A) may not be appropriate depending on the vaccine type and individual health. Continuing usual medications (C) is generally acceptable but should be confirmed with healthcare providers. The booster shot timing (D) depends on the specific vaccine and is not a blanket instruction.",
     "country": "US",
@@ -5190,7 +5210,7 @@
     "sourceQuestionId": "8d50fefa-587e-405c-9bb7-aebcc80c0928"
   },
   {
-    "id": "fc2026s2_infection-control_519",
+    "id": "fc2026s2_infection-control_521",
     "front": "A 30-year-old female patient arrives at the emergency department with acute abdominal pain and vomiting. She has a po…",
     "back": "In this scenario, the positive Murphy's sign is indicative of cholecystitis, which is inflammation of the gallbladder. The acute abdominal pain and vomiting further support this diagnosis. Appendicitis typically presents with pain in the right lower quadrant and does not elicit a Murphy's sign. Pancreatitis usually presents with severe, constant abdominal pain, and diverticulitis is associated with changes in bowel habits.",
     "country": "US",
@@ -5200,7 +5220,7 @@
     "sourceQuestionId": "8e6885c0-9360-4592-9c54-e29f9423431d"
   },
   {
-    "id": "fc2026s2_infection-control_520",
+    "id": "fc2026s2_infection-control_522",
     "front": "A nurse is caring for a client who reports hearing voices telling them to harm themselves. The client appears distres…",
     "back": "Command auditory hallucinations directing self-harm require immediate therapeutic intervention. The nurse should acknowledge the client's experience without validating the hallucination as real, assess the content and frequency of the voices, and evaluate the risk of the client acting on the commands. Saying the voices are not real dismisses the client's subjective experience and breaks therapeutic rapport. Avoiding the topic leaves the nurse uninformed about immediate safety risks. Agreeing that voices are real reinforces the psychotic experience. The nurse should ensure safety, remain calm, and initiate appropriate safety protocols.",
     "country": "US",
@@ -5210,7 +5230,7 @@
     "sourceQuestionId": "8e8fc69d-ba3e-41b8-88d4-70bcd2052362"
   },
   {
-    "id": "fc2026s2_infection-control_521",
+    "id": "fc2026s2_infection-control_523",
     "front": "A client with tuberculosis can be removed from airborne isolation after:",
     "back": "TB isolation discontinuation criteria: three consecutive negative sputum AFB smears (collected 8-24 hours apart, at least one morning specimen), clinical improvement, and adherence to effective treatment regimen. Culture results take weeks and are not required for isolation removal.",
     "country": "US",
@@ -5220,7 +5240,7 @@
     "sourceQuestionId": "8e94c34f-7c85-4cb8-9300-9b6c6aee42ff"
   },
   {
-    "id": "fc2026s2_infection-control_522",
+    "id": "fc2026s2_infection-control_524",
     "front": "A nurse is assessing a 28-year-old male patient who presents with abdominal pain and diarrhea. The patient reports a …",
     "back": "Monitoring for Clostridium difficile infection (CDI) is critical in this scenario due to the recent antibiotic use, which disrupts normal gut flora and can lead to CDI. Symptoms such as abdominal pain and diarrhea are common indicators of this infection. GERD, IBS, and IBD are less likely complications in the context of recent antibiotic therapy.",
     "country": "US",
@@ -5230,7 +5250,7 @@
     "sourceQuestionId": "8eaef7e4-8e3d-40b1-9863-eacca355c005"
   },
   {
-    "id": "fc2026s2_infection-control_523",
+    "id": "fc2026s2_infection-control_525",
     "front": "A client with cancer has a white blood cell count of 1,200/mm3. The nurse should educate the client to:",
     "back": "With a WBC of 1,200 (normal 4,500-11,000), the client is immunocompromised. Temperature monitoring is essential as fever may be the only sign of infection. Clients should avoid raw foods, live vaccines, and crowded places. Strict hand hygiene is critical.",
     "country": "US",
@@ -5240,7 +5260,7 @@
     "sourceQuestionId": "8f131bf0-822b-489e-bc33-4b872c74fea6"
   },
   {
-    "id": "fc2026s2_infection-control_524",
+    "id": "fc2026s2_infection-control_526",
     "front": "A nurse is performing surgical hand antisepsis. The minimum scrub time is:",
     "back": "Surgical hand scrub: 2-5 minutes (varies by product and facility protocol). Use antimicrobial soap or alcohol-based surgical hand rub. Scrub all surfaces including between fingers and under nails. Keep hands above elbows during scrub and rinse (water drains from clean to less clean areas). Do not touch anything after scrubbing.",
     "country": "US",
@@ -5250,7 +5270,7 @@
     "sourceQuestionId": "8f30aae3-ab88-41ed-8879-30750131b598"
   },
   {
-    "id": "fc2026s2_infection-control_525",
+    "id": "fc2026s2_infection-control_527",
     "front": "A client undergoing radiation therapy to the chest develops esophagitis. The nurse should recommend:",
     "back": "Radiation esophagitis causes pain and difficulty swallowing. Soft, bland, cool or room-temperature foods minimize irritation. Avoid hot, spicy, acidic, or rough-textured foods. Liquid supplements may be necessary if oral intake is inadequate.",
     "country": "US",
@@ -5260,7 +5280,7 @@
     "sourceQuestionId": "8ff323bb-7e4c-407e-b941-942ac9afcf92"
   },
   {
-    "id": "fc2026s2_infection-control_526",
+    "id": "fc2026s2_infection-control_528",
     "front": "The nurse should perform hand hygiene for a minimum of how many seconds when using soap and water?",
     "back": "CDC guidelines recommend hand washing with soap and water for at least 20 seconds. This allows adequate time for mechanical removal of transient microorganisms. Alcohol-based hand rub should be applied until hands are dry.",
     "country": "US",
@@ -5270,7 +5290,7 @@
     "sourceQuestionId": "90304735-e680-4122-b616-eef799ce3a2f"
   },
   {
-    "id": "fc2026s2_infection-control_527",
+    "id": "fc2026s2_infection-control_529",
     "front": "A nurse is assessing a client who was found in a house fire. The client has singed nasal hairs, a hoarse voice, and c…",
     "back": "Singed nasal hairs, hoarse voice, and carbonaceous (soot-containing) sputum are cardinal signs of inhalation injury. Upper airway edema can rapidly progress to complete obstruction within hours. Early intubation may be necessary before edema makes it impossible. While carbon monoxide poisoning may coexist, the described signs specifically indicate thermal/chemical airway injury requiring airway management priority.",
     "country": "US",
@@ -5280,7 +5300,7 @@
     "sourceQuestionId": "903d9e61-ea3a-4dc1-8b30-86e9561b5ca1"
   },
   {
-    "id": "fc2026s2_infection-control_528",
+    "id": "fc2026s2_infection-control_530",
     "front": "A nurse is monitoring a patient who has just received a blood transfusion. The patient suddenly develops chills and a…",
     "back": "The priority nursing action is to stop the transfusion immediately upon noticing signs of a transfusion reaction, such as chills and fever. Stopping the transfusion prevents further complications and allows for assessment and treatment of the reaction. While notifying the physician and assessing vital signs are important, they should occur after the transfusion is stopped to ensure patient safety.",
     "country": "US",
@@ -5290,7 +5310,7 @@
     "sourceQuestionId": "910e3630-6253-4c38-ba4b-5a4c338ab429"
   },
   {
-    "id": "fc2026s2_infection-control_529",
+    "id": "fc2026s2_infection-control_531",
     "front": "A nurse is caring for a postoperative client whose wound culture results show methicillin-resistant Staphylococcus au…",
     "back": "MRSA is transmitted through direct contact with colonized or infected skin, wounds, or contaminated surfaces and equipment. Contact precautions require the nurse to don a gown and gloves before entering the room and for all interactions where contact with the client or the client's environment may occur. The client should be placed in a private room or cohorted with another MRSA-positive client. Dedicated equipment (stethoscope, blood pressure cuff, thermometer) should remain in the room. Hand hygiene with soap and water or alcohol-based hand rub is essential upon glove removal and room exit. MRSA is not airborne (no N95 or negative pressure needed) and is not transmitted via respiratory droplets (no surgical mask required). Standard precautions alone are insufficient as MRSA can survive on environmental surfaces for days to weeks and is easily transmitted via healthcare worker hands.",
     "country": "US",
@@ -5300,7 +5320,7 @@
     "sourceQuestionId": "917fc9b1-93c3-4713-8f0f-4a9e91ecb478"
   },
   {
-    "id": "fc2026s2_infection-control_530",
+    "id": "fc2026s2_infection-control_532",
     "front": "A nurse is caring for a patient who is on airborne precautions due to suspected tuberculosis (TB). Which action is es…",
     "back": "Using an N95 respirator is essential when entering the room of a patient on airborne precautions for tuberculosis. This type of mask is designed to filter out small airborne pathogens, providing adequate protection. A standard surgical mask is not sufficient for airborne pathogens. Limiting time spent in the room is not a substitute for proper protective equipment. While ensuring the patient wears a mask is important, it does not replace the need for the nurse to use an N95 respirator.",
     "country": "US",
@@ -5310,7 +5330,7 @@
     "sourceQuestionId": "91fa58df-aa2f-4657-986a-fb1385ff77ae"
   },
   {
-    "id": "fc2026s2_infection-control_531",
+    "id": "fc2026s2_infection-control_533",
     "front": "A nurse is caring for a diabetic patient with a foot ulcer. Which intervention is essential for preventing infection …",
     "back": "Inspecting the foot daily for signs of infection is crucial for early detection and intervention. This practice is vital for diabetic patients, as they have an increased risk of infection due to neuropathy and poor circulation. Encouraging the patient to walk barefoot (A) increases the risk of injury and infection. Applying lotion (C) can be beneficial but must be done cautiously, as excess moisture can lead to skin breakdown. Covering the ulcer tightly (D) may trap moisture and become a breeding ground for bacteria.",
     "country": "US",
@@ -5320,7 +5340,7 @@
     "sourceQuestionId": "92126444-eb5d-4185-a69d-b7316eb7a59c"
   },
   {
-    "id": "fc2026s2_infection-control_532",
+    "id": "fc2026s2_infection-control_534",
     "front": "A nurse is educating a client about proper food safety to prevent foodborne illness during immunosuppressive therapy.…",
     "back": "Immunosuppressed clients are at high risk for foodborne infections. They should avoid raw or undercooked meats, fish, eggs, unpasteurized dairy products, and unwashed fruits and vegetables to prevent exposure to Salmonella, E. coli, Listeria, and other pathogens. Microwaving for 30 seconds is insufficient for food safety. A varied, properly cooked diet is preferred over only canned foods.",
     "country": "US",
@@ -5330,7 +5350,7 @@
     "sourceQuestionId": "946653f8-0e97-4aeb-aa17-ad4ec02c8936"
   },
   {
-    "id": "fc2026s2_infection-control_533",
+    "id": "fc2026s2_infection-control_535",
     "front": "A child with fever develops a rapidly spreading petechial/purpuric rash. The nurse should:",
     "back": "Meningococcemia with purpura fulminans is a medical emergency with rapid deterioration. Immediate IV antibiotics (ceftriaxone), droplet precautions, and aggressive supportive care are essential. Delay in antibiotic treatment increases mortality significantly.",
     "country": "US",
@@ -5340,7 +5360,7 @@
     "sourceQuestionId": "9503e405-e49d-4736-a1e3-f36feaa35bcd"
   },
   {
-    "id": "fc2026s2_infection-control_534",
+    "id": "fc2026s2_infection-control_536",
     "front": "A nurse is providing discharge teaching to a client diagnosed with gastroesophageal reflux disease (GERD). Which stat…",
     "back": "Effective GERD management includes eating smaller, more frequent meals to avoid gastric distension, avoiding recumbency for 2-3 hours after eating to prevent reflux, and elevating the head of the bed 6-8 inches using blocks or a wedge pillow (not extra pillows, which only flex the neck). These measures use gravity to reduce esophageal acid exposure. Lying down immediately after eating increases reflux by eliminating the gravitational barrier. Citrus juices are acidic and irritate the esophageal mucosa, worsening symptoms. Antacids should be taken as directed, not discontinued when symptoms improve, and they work best when taken after meals, not before. Other modifications include avoiding caffeine, chocolate, peppermint, alcohol, and fatty foods.",
     "country": "US",
@@ -5350,7 +5370,7 @@
     "sourceQuestionId": "952a488c-b152-4416-9d4c-d048db1ea6bf"
   },
   {
-    "id": "fc2026s2_infection-control_535",
+    "id": "fc2026s2_infection-control_537",
     "front": "A client scheduled for surgery should have anticoagulant medications:",
     "back": "Preoperative anticoagulant management: warfarin stopped 5 days before (INR < 1.5), DOACs stopped 24-48 hours before (depending on drug and renal function), aspirin may be continued or held based on bleeding risk. Bridging anticoagulation with LMWH may be needed for high-risk patients.",
     "country": "US",
@@ -5360,7 +5380,7 @@
     "sourceQuestionId": "9570fdda-5b25-44e1-8fd9-cc5422e649f7"
   },
   {
-    "id": "fc2026s2_infection-control_536",
+    "id": "fc2026s2_infection-control_538",
     "front": "A 58-year-old client with pulmonary fibrosis desaturates from SpO2 94% to 82% during a 6-minute walk test. BP 118/72,…",
     "back": "A drop in SpO2 to 82% during exertion is a significant desaturation that indicates impaired gas exchange. The test should be stopped, oxygen applied, and the finding reported. This level of desaturation during activity may indicate the need for supplemental oxygen during exertion. Continuing the test could be dangerous.",
     "country": "US",
@@ -5370,7 +5390,7 @@
     "sourceQuestionId": "96d74c19-623b-4bf7-b50e-ea9a1db9f6db"
   },
   {
-    "id": "fc2026s2_infection-control_537",
+    "id": "fc2026s2_infection-control_539",
     "front": "A client in the post-anesthesia care unit (PACU) after general anesthesia develops stridor, intercostal retractions, …",
     "back": "Stridor with retractions and desaturation post-general anesthesia indicates upper airway obstruction, likely from laryngospasm or residual neuromuscular blockade. Immediate airway management with jaw thrust, high-flow oxygen, and expert assistance is essential. Morphine can worsen respiratory depression. Supine positioning worsens obstruction. Deep breathing cannot be performed effectively with airway obstruction.",
     "country": "US",
@@ -5380,7 +5400,7 @@
     "sourceQuestionId": "974d41c7-25dc-44a3-840c-8258e27cdb71"
   },
   {
-    "id": "fc2026s2_infection-control_538",
+    "id": "fc2026s2_infection-control_540",
     "front": "A patient is being assessed for possible tuberculosis (TB). Which symptom would be most significant in supporting thi…",
     "back": "A persistent cough lasting more than three weeks (A) is a classic symptom of tuberculosis and is significant in supporting the diagnosis. While intermittent fevers (B), loss of appetite (C), and unintentional weight loss (D) can also occur with TB, the duration and nature of the cough are key indicators for further investigation.",
     "country": "US",
@@ -5390,7 +5410,7 @@
     "sourceQuestionId": "975dd578-37c2-4a5a-9c26-e314c8b7fd0e"
   },
   {
-    "id": "fc2026s2_infection-control_539",
+    "id": "fc2026s2_infection-control_541",
     "front": "A nurse is teaching parents of a child newly diagnosed with type 1 diabetes about recognising hypoglycaemia. Which si…",
     "back": "Hypoglycaemia (blood glucose below 4.0 mmol/L) in children with type 1 diabetes presents with sympathetic nervous system activation: trembling, sweating, tachycardia, pallor, and hunger. Neuroglycopaenic signs include irritability, confusion, difficulty concentrating, and seizures if untreated. Parents should be taught to administer 15 grams of fast-acting glucose (juice, glucose tablets) and recheck in 15 minutes. Excessive thirst, polyuria, and fruity breath are signs of hyperglycaemia and diabetic ketoacidosis. Fever and respiratory symptoms suggest infection. Weight gain with decreased appetite is not characteristic of hypoglycaemia.",
     "country": "US",
@@ -5400,7 +5420,7 @@
     "sourceQuestionId": "979bec20-dc7c-40d2-b083-7c8cc0f8ba6e"
   },
   {
-    "id": "fc2026s2_infection-control_540",
+    "id": "fc2026s2_infection-control_542",
     "front": "A client is placed on droplet precautions. The nurse should wear which personal protective equipment when entering th…",
     "back": "Droplet precautions: surgical mask when within 3-6 feet of the client (or upon room entry per facility policy). Used for influenza, pertussis, meningococcal disease, and streptococcal pharyngitis. Droplets travel short distances and do not remain airborne. Patient may wear a mask during transport.",
     "country": "US",
@@ -5410,7 +5430,7 @@
     "sourceQuestionId": "97ef2936-750e-4cd9-8ce0-1a384b1a9192"
   },
   {
-    "id": "fc2026s2_infection-control_541",
+    "id": "fc2026s2_infection-control_543",
     "front": "A nurse is caring for an elderly patient who is experiencing confusion and agitation. The patient’s family reports th…",
     "back": "Assessing for a urinary tract infection (UTI) is the most critical first step, as UTIs are common in elderly patients and can present with confusion and agitation. Identifying and treating a UTI can significantly improve the patient’s condition. While dehydration is important, UTIs can often cause rapid changes in mental status. Medication adherence and depression are relevant but are secondary assessments after ruling out acute illness like a UTI.",
     "country": "US",
@@ -5420,7 +5440,7 @@
     "sourceQuestionId": "9887ffb0-0658-45de-a156-a2cedfbbd4a0"
   },
   {
-    "id": "fc2026s2_infection-control_542",
+    "id": "fc2026s2_infection-control_544",
     "front": "A client prescribed an antibiotic for a suspected bacterial infection should understand that antibiotics:",
     "back": "Antibiotic stewardship: antibiotics treat bacterial infections only (ineffective against viruses). Complete the prescribed course. Do not share medications. Report side effects (diarrhea may indicate C. diff). Misuse contributes to antibiotic resistance, a global health threat.",
     "country": "US",
@@ -5430,7 +5450,7 @@
     "sourceQuestionId": "98a7d41a-6621-4d65-97dd-a35d69c7ccc1"
   },
   {
-    "id": "fc2026s2_infection-control_543",
+    "id": "fc2026s2_infection-control_545",
     "front": "A nurse is caring for a client with active shingles (herpes zoster) with disseminated lesions. Which precautions are …",
     "back": "Disseminated herpes zoster (shingles with widespread lesions beyond a single dermatome) requires both airborne and contact precautions because the virus can become aerosolized and is also present in vesicular fluid. Precautions continue until all lesions have crusted over. Localized shingles requires only contact precautions. Shingles is contagious and can cause varicella in non-immune individuals.",
     "country": "US",
@@ -5440,7 +5460,7 @@
     "sourceQuestionId": "98de89d8-d729-4fd7-b69b-1a6340f1929a"
   },
   {
-    "id": "fc2026s2_infection-control_544",
+    "id": "fc2026s2_infection-control_546",
     "front": "A 45-year-old male presents with severe abdominal pain, nausea, and vomiting. On examination, his abdomen is distende…",
     "back": "B is correct. An abdominal ultrasound is a non-invasive and effective diagnostic tool for detecting gallstones and assessing gallbladder inflammation in acute cholecystitis. A. An EGD is used to visualize the upper gastrointestinal tract but is not appropriate for diagnosing gallbladder issues. C. A colonoscopy examines the lower GI tract and is not relevant here. D. While a CT scan can be used, it is usually not the first-line choice for cholecystitis due to cost and radiation exposure.",
     "country": "US",
@@ -5450,7 +5470,7 @@
     "sourceQuestionId": "995474d6-1329-4289-9e4d-d27c28d6aba4"
   },
   {
-    "id": "fc2026s2_infection-control_545",
+    "id": "fc2026s2_infection-control_547",
     "front": "A client with hereditary hemochromatosis should have phlebotomy therapy to maintain:",
     "back": "Phlebotomy is the mainstay of hemochromatosis treatment. Induction: weekly phlebotomy (500 mL each) until ferritin < 50 ng/mL. Maintenance: phlebotomy every 2-4 months to keep ferritin 50-100. Early treatment prevents organ damage (cirrhosis, cardiomyopathy, diabetes, arthropathy).",
     "country": "US",
@@ -5460,7 +5480,7 @@
     "sourceQuestionId": "995df4e1-73bc-4cfd-9b39-de97278efa85"
   },
   {
-    "id": "fc2026s2_infection-control_546",
+    "id": "fc2026s2_infection-control_548",
     "front": "A client rates their pain as 8/10 but is laughing with visitors. The nurse should:",
     "back": "Pain is whatever the client says it is. The nurse should accept the client's self-report and provide appropriate interventions. Behavioral cues like laughing do not negate a client's subjective pain experience.",
     "country": "US",
@@ -5470,7 +5490,7 @@
     "sourceQuestionId": "9a2752cd-f2a9-4375-9ee8-5d98e628b593"
   },
   {
-    "id": "fc2026s2_infection-control_547",
+    "id": "fc2026s2_infection-control_549",
     "front": "A nurse is educating staff about the proper storage of multi-dose medication vials. Which practice is correct?",
     "back": "Multi-dose vials must be labeled with the date first opened and discarded within 28 days (or per manufacturer guidelines) to prevent contamination and infection transmission. Appearance alone does not ensure sterility. Storage requirements vary by medication and must be followed. Multi-dose vials should not be shared between patient areas due to infection control risks.",
     "country": "US",
@@ -5480,7 +5500,7 @@
     "sourceQuestionId": "9a89d77e-7445-42de-809e-8deac4b70fd5"
   },
   {
-    "id": "fc2026s2_infection-control_548",
+    "id": "fc2026s2_infection-control_550",
     "front": "A 60-year-old woman presents with dry, flaky skin and reports intense itching. Upon assessment, you note that her ski…",
     "back": "Hypothyroidism (B) can lead to dry, flaky skin and itching due to decreased metabolism. Diabetes Mellitus (A) can also cause skin changes, but the description is more indicative of hypothyroidism. Psoriasis (C) typically presents with scaly patches rather than overall dryness, and contact dermatitis (D) usually presents with localized inflammation rather than diffuse skin changes.",
     "country": "US",
@@ -5490,7 +5510,7 @@
     "sourceQuestionId": "9b444f1d-ccb0-4da1-b194-55441824010b"
   },
   {
-    "id": "fc2026s2_infection-control_549",
+    "id": "fc2026s2_infection-control_551",
     "front": "When obtaining a blood pressure measurement, the cuff should cover:",
     "back": "Proper BP cuff sizing is essential: bladder width should be 40% of arm circumference, bladder length should encircle 80% of the arm. Too-small cuff falsely elevates readings, too-large falsely lowers. Document cuff size used.",
     "country": "US",
@@ -5500,7 +5520,7 @@
     "sourceQuestionId": "9c24bf7e-87e4-4926-9fea-c4351949e36e"
   },
   {
-    "id": "fc2026s2_infection-control_550",
+    "id": "fc2026s2_infection-control_552",
     "front": "A nurse is preparing to administer an IV vesicant chemotherapy agent. During infusion, the client reports burning pai…",
     "back": "Extravasation of a vesicant agent causes severe tissue damage and necrosis. The infusion must be stopped immediately, and residual drug aspirated through the catheter before removal. Slowing the rate allows continued tissue exposure. Flushing forces more drug into tissues. Continuing the infusion worsens tissue injury. Specific antidotes (dexrazoxane for anthracyclines, hyaluronidase for vinca alkaloids) should then be administered per protocol.",
     "country": "US",
@@ -5510,7 +5530,7 @@
     "sourceQuestionId": "9c431406-d7a0-4992-a71a-548d13c7250e"
   },
   {
-    "id": "fc2026s2_infection-control_551",
+    "id": "fc2026s2_infection-control_553",
     "front": "A nurse is assessing a newborn infant 1 minute after birth. The infant has a heart rate of 130 bpm, strong cry, activ…",
     "back": "The APGAR score assesses five criteria each scored 0, 1, or 2. Heart rate above 100 bpm scores 2. Strong cry (good respiratory effort) scores 2. Active flexion (muscle tone) scores 2. Grimace with withdrawal (reflex irritability) scores 2. Body pink with blue extremities (acrocyanosis) scores 1 for appearance/colour. Total score is 2+2+2+2+1 = 9. However, reviewing more carefully: acrocyanosis (blue hands and feet) is extremely common in the first minutes and scores 1, not 0. The total is 9. Wait, the options do not include 9. Let me reconsider: grimace and pulling away scores 2, strong cry scores 2, HR 130 scores 2, active flexion scores 2, acrocyanosis scores 1. Total = 9. Since 9 is not an option, and the closest is 8, the grimace response may be interpreted as a score of 1 (grimace only without vigorous cry during stimulation), giving a total of 8. The APGAR of 8 indicates a healthy ",
     "country": "US",
@@ -5520,7 +5540,7 @@
     "sourceQuestionId": "9cf59f95-b3fd-4ebd-adab-56ba50aac2d9"
   },
   {
-    "id": "fc2026s2_infection-control_552",
+    "id": "fc2026s2_infection-control_554",
     "front": "A nurse is preparing to administer a medication through a client's peripheral IV. Upon assessment, the nurse notes th…",
     "back": "Peripheral IV catheters should be replaced every 72-96 hours per CDC and INS guidelines to reduce the risk of phlebitis and catheter-related bloodstream infections. A catheter in place for 96 hours with a damp dressing has exceeded the recommended dwell time and the compromised dressing increases infection risk. The nurse should discontinue the existing IV, assess the site for signs of complications, start a new IV at a different anatomical location, and then administer the medication through the new line. Administering medication through a compromised IV risks introducing infection or delivering medication into infiltrated tissue. Reinforcing a damp dressing does not address the contamination. Changing only the dressing does not address the expired catheter dwell time.",
     "country": "US",
@@ -5530,7 +5550,7 @@
     "sourceQuestionId": "9d2ef4e3-aadd-45ab-85cd-f72ef70d9148"
   },
   {
-    "id": "fc2026s2_infection-control_553",
+    "id": "fc2026s2_infection-control_555",
     "front": "A 50-year-old female patient is being treated for an anxiety disorder and is prescribed a selective serotonin reuptak…",
     "back": "A decrease in appetite (B) is a common side effect of SSRIs, and the LPN/RPN should monitor this as it can lead to nutritional deficiencies if significant. Increased energy (A) can be a positive sign of improvement in mood. Difficulty sleeping (C) and increased anxiety (D) may occur but are not as directly associated with SSRIs as weight changes are.",
     "country": "US",
@@ -5540,7 +5560,7 @@
     "sourceQuestionId": "9d5babcc-0351-4c4a-a779-3c765912fbd1"
   },
   {
-    "id": "fc2026s2_infection-control_554",
+    "id": "fc2026s2_infection-control_556",
     "front": "A nurse is assessing a 2-day-old newborn and notes a cephalohematoma on the right parietal bone. The parents ask if t…",
     "back": "A cephalohematoma is a collection of blood between the periosteum and the skull bone that does not cross suture lines, distinguishing it from caput succedaneum, which is edema of the soft tissue that crosses suture lines. Cephalohematomas appear several hours after birth, may increase in size initially, and typically resolve over 2 weeks to 3 months through reabsorption. While the breakdown of the collected blood can contribute to hyperbilirubinemia, surgical drainage is not indicated as it increases infection risk. Caput succedaneum crosses suture lines and resolves within 24-48 hours. Although a cephalohematoma can be associated with a linear skull fracture, it does not automatically indicate one, and CT scanning is not routine unless neurological symptoms are present.",
     "country": "US",
@@ -5550,7 +5570,7 @@
     "sourceQuestionId": "9d7c0b06-5f34-49a5-8cef-80ad4e156713"
   },
   {
-    "id": "fc2026s2_infection-control_555",
+    "id": "fc2026s2_infection-control_557",
     "front": "A client with bacterial meningitis has positive Kernig and Brudzinski signs. The nurse should implement which precaut…",
     "back": "Bacterial meningitis (Neisseria meningitidis): droplet precautions until 24 hours after appropriate antibiotic therapy. Kernig sign: resistance to knee extension with hip flexed. Brudzinski sign: involuntary hip flexion when neck is flexed. Treatment: empiric IV antibiotics (ceftriaxone + vancomycin), dexamethasone, and close contacts receive chemoprophylaxis.",
     "country": "US",
@@ -5560,7 +5580,7 @@
     "sourceQuestionId": "9dcd67fa-44ae-46e6-9063-3c918469e264"
   },
   {
-    "id": "fc2026s2_infection-control_556",
+    "id": "fc2026s2_infection-control_558",
     "front": "The nurse is caring for a client on contact precautions. Which PPE should be donned before entering the room?",
     "back": "Contact precautions require gown and gloves to be donned before entering the room and removed before leaving. Hand hygiene is performed after removing PPE. Contact precautions are used for MRSA, VRE, C. diff, and other organisms spread by direct contact.",
     "country": "US",
@@ -5570,7 +5590,7 @@
     "sourceQuestionId": "9edc5ec9-9d48-479a-8490-7e29d4fe7f7f"
   },
   {
-    "id": "fc2026s2_infection-control_557",
+    "id": "fc2026s2_infection-control_559",
     "front": "A nurse is caring for an elderly patient with a respiratory infection who is on isolation precautions. What is the mo…",
     "back": "Ensuring that the patient receives all prescribed medications on time is the most important aspect of care. Timely medication administration is critical for managing infections and preventing complications. While family visits (A) may provide emotional support, they can compromise isolation protocols. Monitoring nutritional intake (B) is important, but it does not address immediate infection management. Educating the patient (D) is necessary but secondary to administering medications.",
     "country": "US",
@@ -5580,7 +5600,7 @@
     "sourceQuestionId": "9f377ce6-6f09-489d-9271-08842e522835"
   },
   {
-    "id": "fc2026s2_infection-control_558",
+    "id": "fc2026s2_infection-control_560",
     "front": "A nurse is supervising a team of nurses on a busy surgical unit. One nurse reports feeling overwhelmed with her patie…",
     "back": "The most immediate and effective action is to reassign some of the overwhelmed nurse's patients to other team members to ensure that all patients receive safe and adequate care. Although encouraging a break and discussing time management techniques are supportive, they do not address the immediate concern of patient safety. Reviewing assignments is important but should happen concurrently with patient reassignments to ensure effective management.",
     "country": "US",
@@ -5590,7 +5610,7 @@
     "sourceQuestionId": "9fa5dff1-a5dd-43c1-bca6-093ccb926901"
   },
   {
-    "id": "fc2026s2_infection-control_559",
+    "id": "fc2026s2_infection-control_561",
     "front": "A client with aortic stenosis is scheduled for aortic valve replacement. During preoperative assessment, the nurse id…",
     "back": "Aortic stenosis produces a characteristic systolic crescendo-decrescendo (diamond-shaped) murmur best heard at the right second intercostal space (right upper sternal border), often radiating to the carotid arteries. Diastolic blowing murmur suggests aortic regurgitation. Holosystolic murmur radiating to the axilla suggests mitral regurgitation. Continuous machinery murmur suggests patent ductus arteriosus.",
     "country": "US",
@@ -5600,7 +5620,7 @@
     "sourceQuestionId": "a08b6450-5bdf-42be-b4c0-07bef693a4d3"
   },
   {
-    "id": "fc2026s2_infection-control_560",
+    "id": "fc2026s2_infection-control_562",
     "front": "A patient with a history of inflammatory bowel disease (IBD) presents with severe abdominal pain, diarrhea, and fever…",
     "back": "Patients with IBD, particularly ulcerative colitis and Crohn's disease, are at increased risk for intestinal obstruction due to inflammation, strictures, or scar tissue. Appendicitis (B) can occur but is not as common in IBD patients. While there is an increased risk for colon cancer (C) with long-standing IBD, the patient's acute symptoms align more closely with obstruction. Diverticulitis (D) is not specifically associated with IBD.",
     "country": "US",
@@ -5610,7 +5630,7 @@
     "sourceQuestionId": "a19f774f-a925-4e75-8ae7-c320d8bd0a3e"
   },
   {
-    "id": "fc2026s2_infection-control_561",
+    "id": "fc2026s2_infection-control_563",
     "front": "A client with colon cancer has a colostomy created during surgery. On postoperative day 2, the nurse assesses the sto…",
     "back": "A dark purple to black stoma indicates ischemia and necrosis, requiring immediate surgical intervention. A healthy stoma should be pink to red, moist, and slightly edematous postoperatively. A small amount of bloody mucus is normal after surgery. Slight protrusion above the skin surface is the normal, expected appearance.",
     "country": "US",
@@ -5620,7 +5640,7 @@
     "sourceQuestionId": "a1f433be-16da-41cb-a7b6-f26af57c69d7"
   },
   {
-    "id": "fc2026s2_infection-control_562",
+    "id": "fc2026s2_infection-control_564",
     "front": "A client on a norepinephrine drip has a blood pressure of 78/42. The nurse notices the peripheral IV is infiltrated. …",
     "back": "Infiltration of norepinephrine (a potent vasoconstrictor) can cause severe tissue necrosis. The infusion must be stopped immediately and restarted in a new site. Phentolamine may be injected into the infiltrated area to prevent necrosis.",
     "country": "US",
@@ -5630,7 +5650,7 @@
     "sourceQuestionId": "a2cba282-6782-451a-acc4-1bdeb139a76f"
   },
   {
-    "id": "fc2026s2_infection-control_563",
+    "id": "fc2026s2_infection-control_565",
     "front": "A nurse is caring for a patient diagnosed with Graves’ disease. Which assessment finding should the nurse monitor tha…",
     "back": "Graves' disease is characterized by hyperthyroidism which leads to weight loss despite increased appetite. Bradycardia, cold intolerance, and decreased appetite are not consistent with hyperthyroidism; they are more indicative of hypothyroid states.",
     "country": "US",
@@ -5640,7 +5660,7 @@
     "sourceQuestionId": "a2eb43ce-628e-43bf-b0fb-fca66e81ca9d"
   },
   {
-    "id": "fc2026s2_infection-control_564",
+    "id": "fc2026s2_infection-control_566",
     "front": "A nurse is caring for a client with suspected necrotizing fasciitis of the left lower leg. Which initial assessment f…",
     "back": "Necrotizing fasciitis is a life-threatening soft tissue infection characterized by severe pain that is disproportionate to the visible skin findings, rapidly spreading edema and erythema, crepitus (indicating subcutaneous gas from anaerobic organisms), systemic toxicity (fever, tachycardia, hypotension), and rapid clinical deterioration. This is a surgical emergency requiring immediate broad-spectrum antibiotics and emergent surgical debridement. Mortality is high without prompt intervention. The hallmark distinguishing feature from cellulitis is pain out of proportion to appearance and crepitus.",
     "country": "US",
@@ -5650,7 +5670,7 @@
     "sourceQuestionId": "a305212f-882b-4cc4-a9ac-46e1b173a7c6"
   },
   {
-    "id": "fc2026s2_infection-control_565",
+    "id": "fc2026s2_infection-control_567",
     "front": "A patient presents with a severe burn to the right arm after an accident involving boiling water. The nurse notes tha…",
     "back": "B is correct because second-degree burns involve both the epidermis and part of the dermis, leading to redness, blistering, and significant pain. A is incorrect as first-degree burns only affect the outer layer and are less painful. C is incorrect since third-degree burns are characterized by a lack of pain in the burned area due to nerve damage. D is incorrect as fourth-degree burns extend through deeper tissues and would not present primarily with blisters.",
     "country": "US",
@@ -5660,7 +5680,7 @@
     "sourceQuestionId": "a32516a4-c056-4813-80c5-d648e3229267"
   },
   {
-    "id": "fc2026s2_infection-control_566",
+    "id": "fc2026s2_infection-control_568",
     "front": "The most important intervention to prevent catheter-associated urinary tract infections (CAUTI) is:",
     "back": "CAUTI prevention bundle: remove the catheter as early as possible (daily reassessment of need), maintain a closed drainage system, keep the bag below bladder level, perform hand hygiene before and after catheter care, perform perineal hygiene, and secure the catheter to prevent pulling. Catheter duration is the strongest risk factor for CAUTI.",
     "country": "US",
@@ -5670,7 +5690,7 @@
     "sourceQuestionId": "a45e9e66-dfc5-4045-9df8-78a4b86bad9d"
   },
   {
-    "id": "fc2026s2_infection-control_567",
+    "id": "fc2026s2_infection-control_569",
     "front": "A nurse is caring for a client with a multidrug-resistant organism (MDRO) wound infection. The client is on contact p…",
     "back": "Contact precautions require all persons entering the room to wear gown and gloves to prevent transmission of multidrug-resistant organisms. Visitors are not exempt from isolation precautions and must be educated about the reason for precautions and proper PPE use. The nurse should tactfully explain that the gown and gloves protect both the visitor from acquiring the organism and other patients from cross-contamination. The visitor should be provided with PPE and instructed on proper donning and doffing procedures. Family members are never exempt from isolation precautions. Hand hygiene alone is insufficient for contact precautions. Reporting to security is unnecessary and damages the therapeutic relationship; education is the appropriate nursing response.",
     "country": "US",
@@ -5680,7 +5700,7 @@
     "sourceQuestionId": "a4b9bf15-afa3-4461-8c40-ef5a0045cc54"
   },
   {
-    "id": "fc2026s2_infection-control_568",
+    "id": "fc2026s2_infection-control_570",
     "front": "A nurse is teaching a 52-year-old client how to take their blood pressure at home. Which instruction ensures the most…",
     "back": "Accurate home BP measurement requires 5 minutes of quiet rest, supported arm at heart level, feet flat on the floor, and back supported. Exercise immediately before falsely elevates readings. Crossing legs increases BP by 2 to 8 mmHg. Wrist cuffs are less accurate than upper arm cuffs, and lying position is not the standard.",
     "country": "US",
@@ -5690,7 +5710,7 @@
     "sourceQuestionId": "a4c49ba3-97c8-45dc-8a00-b727313ea0e0"
   },
   {
-    "id": "fc2026s2_infection-control_569",
+    "id": "fc2026s2_infection-control_571",
     "front": "A nurse discovers that a colleague made a medication error but did not report it. The client appears unharmed. What i…",
     "back": "All medication errors must be reported regardless of whether harm occurred. Reporting through the incident reporting system allows root cause analysis, process improvement, and ensures the client is properly assessed for delayed effects. Concealing errors violates professional standards, legal obligations, and places the client at risk. Waiting for symptoms delays assessment and intervention. The nurse has an independent obligation to report; the colleague's willingness to self-report does not eliminate this duty.",
     "country": "US",
@@ -5700,7 +5720,7 @@
     "sourceQuestionId": "a4f4b0a3-ec3d-453e-a21d-50c39fe52797"
   },
   {
-    "id": "fc2026s2_infection-control_570",
+    "id": "fc2026s2_infection-control_572",
     "front": "A practical nurse is caring for a pediatric client with suspected appendicitis. Which assessment finding most strongl…",
     "back": "McBurney's point is located in the right lower quadrant, one-third of the distance from the anterior superior iliac spine to the umbilicus. Rebound tenderness at this specific location is a hallmark sign of appendicitis, indicating peritoneal irritation from an inflamed appendix. Generalized tenderness without localization is nonspecific and could indicate many conditions. Hyperactive bowel sounds suggest increased peristalsis, which is more commonly associated with gastroenteritis or early bowel obstruction. A soft, non-distended abdomen is a normal finding that does not support appendicitis. Rebound tenderness at McBurney's point, along with fever and elevated white blood cell count, forms the classic clinical presentation.",
     "country": "US",
@@ -5710,7 +5730,7 @@
     "sourceQuestionId": "a5784909-5267-42b4-8e8d-e6aa8ced891a"
   },
   {
-    "id": "fc2026s2_infection-control_571",
+    "id": "fc2026s2_infection-control_573",
     "front": "A nurse is caring for a patient with a herniated lumbar disc. Which assessment finding should the nurse expect?",
     "back": "Option B is correct; patients with a herniated lumbar disc often experience radiating pain down the leg due to nerve compression. Option A is incorrect; range of motion is typically decreased. Option C would suggest cervical involvement, not lumbar. Option D is not a typical finding associated with a lumbar disc herniation.",
     "country": "US",
@@ -5720,7 +5740,7 @@
     "sourceQuestionId": "a58d2861-758d-407b-98b4-13ea4873929d"
   },
   {
-    "id": "fc2026s2_infection-control_572",
+    "id": "fc2026s2_infection-control_574",
     "front": "An LPN is assessing a newborn at 1 minute after birth using the APGAR scoring system. The newborn has a heart rate of…",
     "back": "The APGAR score evaluates five criteria, each scored 0, 1, or 2: Heart rate of 110 scores 2 (above 100). Slow irregular respirations score 1 (slow, irregular, or weak cry). Some flexion of extremities scores 1 (some flexion). Grimace in response to stimulation scores 1 (grimace only, not active withdrawal or cry). Pink body with blue extremities (acrocyanosis) scores 2 for appearance in some interpretations but more commonly scores 1 because only the body is pink while extremities are blue. Using standard scoring: Heart rate=2, Respirations=1, Muscle tone=1, Reflex irritability=1, Color=1, totaling 6. However, the accepted answer considers the criteria more liberally with color scoring 2 for acrocyanosis being normal in newborns, yielding a score of 7.",
     "country": "US",
@@ -5730,7 +5750,7 @@
     "sourceQuestionId": "a5ab337f-3ead-475f-aefb-20ed667ebe40"
   },
   {
-    "id": "fc2026s2_infection-control_573",
+    "id": "fc2026s2_infection-control_575",
     "front": "Airborne precautions require:",
     "back": "Airborne precautions (TB, measles, varicella, disseminated zoster): N95 respirator (fit-tested), negative-pressure room with 6-12 air exchanges/hour, door closed, and HEPA filtration. The patient wears a surgical mask during transport.",
     "country": "US",
@@ -5740,7 +5760,7 @@
     "sourceQuestionId": "a600f9d3-daed-4526-86f2-860d0722fdb7"
   },
   {
-    "id": "fc2026s2_infection-control_574",
+    "id": "fc2026s2_infection-control_576",
     "front": "A nurse is caring for a patient with a severe burn covering 30% of the body surface area. The patient is at high risk…",
     "back": "Maintaining strict hand hygiene before and after care is the most critical intervention to prevent infection in burn patients. Burn wounds are susceptible to bacterial colonization, and effective hand hygiene reduces the risk of introducing pathogens. While changing dressings, administering antibiotics, and keeping the area covered are also important, they are secondary to the foundational practice of hand hygiene.",
     "country": "US",
@@ -5750,7 +5770,7 @@
     "sourceQuestionId": "a6029d91-f532-4907-8c97-2aae45865b04"
   },
   {
-    "id": "fc2026s2_infection-control_575",
+    "id": "fc2026s2_infection-control_577",
     "front": "A nurse on a medical-surgical unit learns that a client has been diagnosed with Clostridium difficile infection. Whic…",
     "back": "Clostridium difficile (C. diff) produces spores that are resistant to alcohol-based hand sanitizers. Alcohol does not kill bacterial spores, so handwashing with soap and water is the only effective method for physically removing C. diff spores from the hands through friction and rinsing. The CDC recommends soap and water handwashing for at least 20 seconds when caring for clients with known or suspected C. diff infection. This recommendation supersedes the general preference for alcohol-based sanitizers. Using sanitizer alone leaves spores on the hands, potentially spreading the infection to other patients and surfaces. Disinfectant towelettes are not a substitute for proper handwashing. Combination use wastes time without added benefit over soap and water alone.",
     "country": "US",
@@ -5760,7 +5780,7 @@
     "sourceQuestionId": "a60674bb-0c43-47aa-8c73-9882dc2b69d2"
   },
   {
-    "id": "fc2026s2_infection-control_576",
+    "id": "fc2026s2_infection-control_578",
     "front": "A nurse is caring for a 7-year-old child with attention-deficit hyperactivity disorder (ADHD) who is starting on meth…",
     "back": "Methylphenidate can increase heart rate and blood pressure, so assessing blood pressure is a priority after administration. While monitoring weight (Option B) is important due to potential appetite suppression, it is not immediate. Evaluating hyperactivity (Option C) is not a direct physiological assessment. Assessing gastrointestinal discomfort (Option D) is less critical compared to cardiovascular monitoring.",
     "country": "US",
@@ -5770,7 +5790,7 @@
     "sourceQuestionId": "a73f3e0c-d42d-48a2-9294-40d6d3acd975"
   },
   {
-    "id": "fc2026s2_infection-control_577",
+    "id": "fc2026s2_infection-control_579",
     "front": "A client with Takayasu arteritis has diminished upper extremity pulses. This condition involves:",
     "back": "Takayasu arteritis: granulomatous inflammation of the aorta and its branches causing stenosis, occlusion, and aneurysms. Primarily affects young women. Pulseless disease (diminished arm pulses), BP discrepancies between arms, bruits, and claudication. Treatment: corticosteroids and immunosuppressants.",
     "country": "US",
@@ -5780,7 +5800,7 @@
     "sourceQuestionId": "a7f1d723-9550-4701-b6a7-8bf973e25445"
   },
   {
-    "id": "fc2026s2_infection-control_578",
+    "id": "fc2026s2_infection-control_580",
     "front": "A client with vancomycin-resistant enterococci should be placed on:",
     "back": "VRE requires contact precautions: gown and gloves upon room entry, dedicated equipment (stethoscope, BP cuff), single room (or cohort with other VRE patients), and enhanced environmental cleaning. Hand hygiene with soap and water or alcohol-based sanitizer. Treatment options limited: linezolid, daptomycin, tigecycline.",
     "country": "US",
@@ -5790,7 +5810,7 @@
     "sourceQuestionId": "a801c942-43c6-4d9e-b24c-7c53ad50491b"
   },
   {
-    "id": "fc2026s2_infection-control_579",
+    "id": "fc2026s2_infection-control_581",
     "front": "A nurse is providing discharge instructions for a patient diagnosed with a urinary tract infection (UTI). Which state…",
     "back": "The statement about stopping fluid intake if the patient feels better indicates a need for further teaching. Adequate hydration is essential for flushing bacteria from the urinary tract, even if the patient feels improved. Drinking cranberry juice (Option A) is a common practice for prevention, while completing antibiotics (Option B) is crucial to ensure the infection is fully treated. Wiping from front to back (Option D) is a correct practice to minimize the risk of introducing bacteria.",
     "country": "US",
@@ -5800,7 +5820,7 @@
     "sourceQuestionId": "a8c07fa6-83cd-44f3-9fc3-73c74c3c9c6e"
   },
   {
-    "id": "fc2026s2_infection-control_580",
+    "id": "fc2026s2_infection-control_582",
     "front": "A client with a permanent tracheostomy should be taught to:",
     "back": "Tracheostomy clients must protect the stoma from water entry as the bypassed upper airway means water can directly enter the lungs. Stoma covers/shields during bathing are essential. Continued humidification replaces the natural warming and moistening function.",
     "country": "US",
@@ -5810,7 +5830,7 @@
     "sourceQuestionId": "a8d433d6-3f64-4c84-a984-03499e4b5a71"
   },
   {
-    "id": "fc2026s2_infection-control_581",
+    "id": "fc2026s2_infection-control_583",
     "front": "A client with Parkinson disease who develops on-off motor fluctuations on levodopa should have the nurse understand:",
     "back": "Motor fluctuations in PD: wearing off (return of symptoms before next dose), on-off (unpredictable symptom fluctuation), and dyskinesias (involuntary movements during peak dose). Management: fractionate levodopa doses, add COMT inhibitor (entacapone), MAO-B inhibitor (rasagiline), or consider deep brain stimulation.",
     "country": "US",
@@ -5820,7 +5840,7 @@
     "sourceQuestionId": "a8f91f87-d26e-4ad1-8052-fa7dc45b9df3"
   },
   {
-    "id": "fc2026s2_infection-control_582",
+    "id": "fc2026s2_infection-control_584",
     "front": "A nurse is caring for a patient receiving immunotherapy for a newly diagnosed malignancy. Which of the following find…",
     "back": "Diarrhea and abdominal cramping can indicate gastrointestinal toxicity, which is a common adverse effect of immunotherapy, particularly with agents that stimulate the immune response. Hypotension and tachycardia could indicate anaphylaxis but are less specifically associated with immunotherapy. A localized rash at the site of injection is generally expected and not concerning, while increased appetite and weight gain are not typical adverse effects of immunotherapy. Therefore, A is the correct answer.",
     "country": "US",
@@ -5830,7 +5850,7 @@
     "sourceQuestionId": "a9eea001-8c9d-4def-a5c5-66f01ba30361"
   },
   {
-    "id": "fc2026s2_infection-control_583",
+    "id": "fc2026s2_infection-control_585",
     "front": "A nurse is managing a potential norovirus outbreak on a medical unit. Three clients have developed acute vomiting and…",
     "back": "Norovirus is highly contagious and resistant to alcohol-based sanitizers. Contact precautions with soap and water hand hygiene and cleaning with bleach-based (sodium hypochlorite) disinfectant are essential for containment. Alcohol-based sanitizer is ineffective against norovirus. Grouping ill clients can spread infection. Antibiotics are ineffective against viral infections.",
     "country": "US",
@@ -5840,7 +5860,7 @@
     "sourceQuestionId": "aa52c804-456e-4715-acef-8e38e2220d29"
   },
   {
-    "id": "fc2026s2_infection-control_584",
+    "id": "fc2026s2_infection-control_586",
     "front": "A 55-year-old male patient diagnosed with rheumatoid arthritis is being treated with methotrexate. Which side effect …",
     "back": "C is correct as methotrexate can lead to hepatotoxicity, necessitating liver function monitoring. A is incorrect; methotrexate typically does not cause increased urination. B is a possibility but less common compared to liver issues. D is not associated with methotrexate use; it often leads to decreased appetite instead.",
     "country": "US",
@@ -5850,7 +5870,7 @@
     "sourceQuestionId": "aaeae507-60d6-46c0-8f09-931a8d043a82"
   },
   {
-    "id": "fc2026s2_infection-control_585",
+    "id": "fc2026s2_infection-control_587",
     "front": "A nurse is caring for a client who had an upper GI endoscopy with biopsy 1 hour ago. Which assessment finding require…",
     "back": "Hematemesis (vomiting blood), abdominal rigidity, and severe throat pain following endoscopy with biopsy suggest esophageal or gastric perforation, a rare but life-threatening complication. The nurse must notify the provider immediately, withhold oral intake, and prepare for possible surgical intervention. A mild sore throat is expected from endoscope passage. A diminished gag reflex is expected from topical anaesthetic and the client should remain NPO until it returns. Mild bloating from air insufflation during the procedure is common and resolves spontaneously.",
     "country": "US",
@@ -5860,7 +5880,7 @@
     "sourceQuestionId": "ab48d7bc-298e-49e6-b092-32c84620cd1c"
   },
   {
-    "id": "fc2026s2_infection-control_586",
+    "id": "fc2026s2_infection-control_588",
     "front": "A 40-year-old male patient is diagnosed with alcohol use disorder and is undergoing detoxification. Which assessment …",
     "back": "Hallucinations and confusion are potential complications of alcohol withdrawal, indicating the need for close monitoring and possible medical intervention. Increased appetite (A) is not typically associated with withdrawal; instead, patients may have decreased appetite. Improved mood and energy levels (C) may not be expected during detoxification, and decreased blood pressure (D) is not a common complication in this context. Therefore, B is the correct answer.",
     "country": "US",
@@ -5870,7 +5890,7 @@
     "sourceQuestionId": "ab6aaf70-82a3-4d25-b5fd-dff39ae3f365"
   },
   {
-    "id": "fc2026s2_infection-control_587",
+    "id": "fc2026s2_infection-control_589",
     "front": "A 45-year-old client is admitted with suspected active pulmonary tuberculosis. BP 118/74, HR 82, RR 20, SpO2 95% on r…",
     "back": "Active pulmonary TB is transmitted via airborne droplet nuclei that remain suspended in the air. Airborne precautions include a private negative pressure room and fitted N95 respirators for staff. Droplet precautions are insufficient as TB particles are smaller than droplets. Precautions are implemented based on suspicion, not only after confirmation.",
     "country": "US",
@@ -5880,7 +5900,7 @@
     "sourceQuestionId": "aba27ed8-93e3-46bf-8e76-fc83fb0ec978"
   },
   {
-    "id": "fc2026s2_infection-control_588",
+    "id": "fc2026s2_infection-control_590",
     "front": "A client with Guillain-Barré syndrome reports tingling in the feet that has progressed to weakness in both legs over …",
     "back": "GBS causes ascending paralysis that can progress to respiratory muscles (diaphragm via phrenic nerve C3-C5, intercostals). Respiratory failure is the most life-threatening complication. Vital capacity less than 20 mL/kg or NIF less than -30 cmH2O indicates impending respiratory failure requiring intubation. Respiratory monitoring every 4-6 hours is essential during the progressive phase.",
     "country": "US",
@@ -5890,7 +5910,7 @@
     "sourceQuestionId": "ac07a0a4-771c-44b8-a89e-22e63848ccd7"
   },
   {
-    "id": "fc2026s2_infection-control_589",
+    "id": "fc2026s2_infection-control_591",
     "front": "A patient with a spinal cord injury at C6 is being discharged. Which of the following should the nurse include in the…",
     "back": "Patients with a C6 spinal cord injury typically have partial control of their arms but are generally unable to walk; they will need to use a wheelchair for mobility. They may have some bladder control but likely will need an intermittent catheterization program. Normal upper limb function is not expected. Therefore, the correct answer is B.",
     "country": "US",
@@ -5900,7 +5920,7 @@
     "sourceQuestionId": "ad30564e-6c05-440b-befe-88086c8b5a41"
   },
   {
-    "id": "fc2026s2_infection-control_590",
+    "id": "fc2026s2_infection-control_592",
     "front": "The practical nurse is educating a client about preventing surgical site infections after discharge. Which client sta…",
     "back": "Hand hygiene before and after touching the incision site is a key infection prevention measure. Removing the dressing prematurely or leaving wounds open increases infection risk. Applying antibiotic ointment every hour is excessive and not typically recommended. Soaking a fresh surgical incision can introduce bacteria and impair wound healing.",
     "country": "US",
@@ -5910,7 +5930,7 @@
     "sourceQuestionId": "ae09957a-4aa9-4dd7-bd8e-ff188e65145c"
   },
   {
-    "id": "fc2026s2_infection-control_591",
+    "id": "fc2026s2_infection-control_593",
     "front": "A client taking amlodipine should be warned about:",
     "back": "Amlodipine (calcium channel blocker, dihydropyridine): common side effects include peripheral edema (dose-related ankle swelling from arteriolar vasodilation), dizziness, flushing, headache, and palpitations. Monitor blood pressure. Rise slowly to prevent orthostatic hypotension. Avoid grapefruit juice (increases drug levels).",
     "country": "US",
@@ -5920,7 +5940,7 @@
     "sourceQuestionId": "aec7f76c-1ab4-4e60-8542-b835b7b1571d"
   },
   {
-    "id": "fc2026s2_infection-control_592",
+    "id": "fc2026s2_infection-control_594",
     "front": "A client with microscopic colitis has chronic watery diarrhea with normal-appearing mucosa on colonoscopy. Treatment …",
     "back": "Microscopic colitis (collagenous or lymphocytic): chronic watery diarrhea, normal colonoscopic appearance but abnormal histology. First-line: oral budesonide (80-90% response rate). Maintenance budesonide for relapsing disease. Bismuth subsalicylate and cholestyramine are alternatives for mild cases.",
     "country": "US",
@@ -5930,7 +5950,7 @@
     "sourceQuestionId": "af140c6c-4915-4cc1-8b18-aab50f5ea5fc"
   },
   {
-    "id": "fc2026s2_infection-control_593",
+    "id": "fc2026s2_infection-control_595",
     "front": "A nurse is caring for a client receiving IV vancomycin for MRSA bacteraemia. The infusion has been running for 15 min…",
     "back": "Red man syndrome is a histamine-mediated reaction caused by rapid vancomycin infusion. It presents with flushing, erythema of the face/neck/upper trunk, pruritus, and sometimes hypotension. The nurse should stop the infusion immediately. After stopping, diphenhydramine can be administered, and the infusion can be restarted at a slower rate (typically over 2 hours minimum). This is not true anaphylaxis (no angioedema, bronchospasm, or urticaria), though the distinction can be challenging. Continuing or increasing the rate would worsen the reaction.",
     "country": "US",
@@ -5940,7 +5960,7 @@
     "sourceQuestionId": "af194c2e-8e02-4cc0-93c9-a6f442146e44"
   },
   {
-    "id": "fc2026s2_infection-control_594",
+    "id": "fc2026s2_infection-control_596",
     "front": "A nurse is preparing to care for a client with Clostridium difficile infection. Which personal protective equipment i…",
     "back": "C. difficile requires contact precautions (gown and gloves) because the spores are transmitted by direct contact. Critically, handwashing must use soap and water because alcohol-based sanitizers do NOT kill C. difficile spores. An N95 respirator is for airborne precautions. A surgical mask alone is inadequate. Standard precautions with alcohol sanitizer will not eliminate the spores.",
     "country": "US",
@@ -5950,7 +5970,7 @@
     "sourceQuestionId": "af3d9528-df71-4f9c-a1a6-46022e7a7d0f"
   },
   {
-    "id": "fc2026s2_infection-control_595",
+    "id": "fc2026s2_infection-control_597",
     "front": "A nurse is teaching a pregnant client about danger signs that require immediate medical attention during the third tr…",
     "back": "Severe persistent headache, visual disturbances (blurred vision, scotomata), and right upper quadrant or epigastric pain in the third trimester are warning signs of preeclampsia with severe features or HELLP syndrome (Hemolysis, Elevated Liver enzymes, Low Platelets). These conditions can progress rapidly to eclampsia (seizures), placental abruption, liver rupture, and maternal death. Immediate evaluation including blood pressure measurement, urine protein, and blood work is essential. Braxton Hicks contractions are normal preparatory contractions. Increased urination is normal from uterine pressure on the bladder. Mild dependent edema is a common pregnancy finding.",
     "country": "US",
@@ -5960,7 +5980,7 @@
     "sourceQuestionId": "af41e922-8129-4fb2-8ec8-17fa882622e6"
   },
   {
-    "id": "fc2026s2_infection-control_596",
+    "id": "fc2026s2_infection-control_598",
     "front": "A nurse is monitoring a 10-year-old girl who recently started taking methylphenidate for attention-deficit hyperactiv…",
     "back": "Insomnia is a common side effect of methylphenidate and should be monitored closely. Weight gain and increased appetite are more often associated with other medications used for ADHD, while constipation can occur but is not as prominent as insomnia with this medication.",
     "country": "US",
@@ -5970,7 +5990,7 @@
     "sourceQuestionId": "b01fb984-0712-432f-acba-5fa7d204d13c"
   },
   {
-    "id": "fc2026s2_infection-control_597",
+    "id": "fc2026s2_infection-control_599",
     "front": "A nurse is providing education to a client newly diagnosed with hepatitis B. Which statement by the client indicates …",
     "back": "Hepatitis B is transmitted through blood and body fluids (sexual contact, sharing needles, contaminated sharps, perinatal transmission). Clients should not share personal items that may have blood on them (razors, toothbrushes, nail clippers). All household contacts and sexual partners should be vaccinated. HBV can become chronic, so precautions extend beyond the acute phase. Eating utensils are not a significant transmission route (that is hepatitis A). Contaminated food/water spreads hepatitis A and E, not B.",
     "country": "US",
@@ -5980,7 +6000,7 @@
     "sourceQuestionId": "b14e3058-44f0-438d-890a-619c41bb608d"
   },
   {
-    "id": "fc2026s2_infection-control_598",
+    "id": "fc2026s2_infection-control_600",
     "front": "A nurse is assessing a wound and documents granulation tissue. This tissue appears:",
     "back": "Granulation tissue: red, beefy, moist, and slightly bumpy tissue filling the wound bed from the base upward. Indicates healthy wound healing (proliferative phase). Slough (yellow/white stringy tissue) requires debridement. Eschar (black/brown hard tissue) indicates necrotic tissue requiring removal for healing.",
     "country": "US",
@@ -5990,7 +6010,7 @@
     "sourceQuestionId": "b15b45b0-ae2d-4bb7-bd67-7ad8f1c2ad3b"
   },
   {
-    "id": "fc2026s2_infection-control_599",
+    "id": "fc2026s2_infection-control_601",
     "front": "A 48-year-old client with active pulmonary TB has been on treatment for two weeks and asks when the airborne precauti…",
     "back": "Airborne precautions for TB are discontinued when the client has three consecutive negative AFB sputum smears collected 8 to 24 hours apart, shows clinical improvement, and has been on effective therapy for at least 2 weeks. A single timeframe or chest X-ray normalization alone is not sufficient. Treatment continues for 6 to 9 months but isolation does not.",
     "country": "US",
@@ -6000,7 +6020,7 @@
     "sourceQuestionId": "b1ff22ff-3a47-4ef5-99b2-692898c78ef2"
   },
   {
-    "id": "fc2026s2_infection-control_600",
+    "id": "fc2026s2_infection-control_602",
     "front": "Sundowning in dementia clients refers to:",
     "back": "Sundowning describes increased confusion, agitation, wandering, and behavioral changes occurring in late afternoon and evening. Management includes maintaining a consistent routine, adequate daytime lighting, reducing evening stimulation, and ensuring adequate sleep.",
     "country": "US",
@@ -6010,7 +6030,7 @@
     "sourceQuestionId": "b2faa66f-57c9-4273-bd0c-d182c1bdde84"
   },
   {
-    "id": "fc2026s2_infection-control_601",
+    "id": "fc2026s2_infection-control_603",
     "front": "A child with suspected appendicitis should NOT receive:",
     "back": "Laxatives and enemas are contraindicated in suspected appendicitis: can increase intraluminal pressure and precipitate appendiceal perforation. Pain management should NOT be withheld (old practice of withholding analgesia to preserve physical exam findings is no longer supported - studies show analgesia does not reduce diagnostic accuracy).",
     "country": "US",
@@ -6020,7 +6040,7 @@
     "sourceQuestionId": "b3dd62cf-103f-4e9c-8e25-ce3add8d07b2"
   },
   {
-    "id": "fc2026s2_infection-control_602",
+    "id": "fc2026s2_infection-control_604",
     "front": "A client with hepatic encephalopathy is prescribed lactulose 30 mL three times daily. The nurse evaluates the medicat…",
     "back": "Lactulose works by converting ammonia (NH3) to ammonium (NH4+) in the colon, which cannot be reabsorbed. It also has an osmotic laxative effect that promotes excretion of ammonia through stool. The therapeutic goal is 2-3 soft stools per day. Too few stools means the ammonia is not being adequately cleared; too many cause dehydration.",
     "country": "US",
@@ -6030,7 +6050,7 @@
     "sourceQuestionId": "b3eb7fc2-9fbe-418d-9cbe-a92fe3be38c9"
   },
   {
-    "id": "fc2026s2_infection-control_603",
+    "id": "fc2026s2_infection-control_605",
     "front": "A neonate born at 34 weeks gestation develops grunting, nasal flaring, and retractions within 2 hours of birth. The n…",
     "back": "Neonatal RDS (hyaline membrane disease): surfactant deficiency in premature infants. Risk increases with earlier gestational age. Signs: grunting (auto-PEEP to maintain alveolar expansion), nasal flaring, intercostal/subcostal retractions, tachypnea, cyanosis. Diagnosis: chest X-ray (ground-glass appearance, air bronchograms). Treatment: exogenous surfactant replacement (intratracheal), CPAP or mechanical ventilation, thermoregulation. Prevention: antenatal corticosteroids (betamethasone) given to mother before preterm delivery.",
     "country": "US",
@@ -6040,7 +6060,7 @@
     "sourceQuestionId": "b4b344cc-ca3b-4537-873f-3358c13e2456"
   },
   {
-    "id": "fc2026s2_infection-control_604",
+    "id": "fc2026s2_infection-control_606",
     "front": "A nurse is assessing an adolescent during a health visit. Which behavior indicates a normal developmental task for th…",
     "back": "According to Erikson, adolescents are in the identity vs. role confusion stage, which involves establishing a sense of self, seeking independence from parents, and forming strong peer relationships. Preferring solitary play is more characteristic of younger children. Complete financial independence is an adult milestone. Adolescents typically show increased interest in personal appearance.",
     "country": "US",
@@ -6050,7 +6070,7 @@
     "sourceQuestionId": "b5642622-19b6-41ea-9c9a-f5a5e518b094"
   },
   {
-    "id": "fc2026s2_infection-control_605",
+    "id": "fc2026s2_infection-control_607",
     "front": "A client with hereditary spherocytosis has chronic hemolytic anemia and splenomegaly. The treatment of choice is:",
     "back": "Hereditary spherocytosis: defective RBC membrane proteins cause sphere-shaped cells trapped and destroyed in the spleen. Splenectomy eliminates the primary site of hemolysis, improving anemia. Vaccinate against encapsulated organisms (pneumococcus, meningococcus, H. influenzae) before splenectomy.",
     "country": "US",
@@ -6058,25 +6078,5 @@
     "topicKey": "infection-control",
     "categorySlug": "infection",
     "sourceQuestionId": "b57d9b60-6fe3-4c38-b726-1c6177691153"
-  },
-  {
-    "id": "fc2026s2_infection-control_606",
-    "front": "A nurse is responsible for educating a group of nursing students about hand hygiene in a healthcare setting. Which st…",
-    "back": "The statement that hand hygiene is not essential if gloves are worn indicates a need for further teaching. Gloves do not eliminate the need for hand hygiene, as they can become contaminated. Proper hand hygiene is crucial regardless of glove use, as it reduces the risk of transmitting infections. The other statements are accurate and reflect correct practices.",
-    "country": "US",
-    "tier": "RN",
-    "topicKey": "infection-control",
-    "categorySlug": "infection",
-    "sourceQuestionId": "b60a1c32-3115-4141-b926-6a71ffcf1520"
-  },
-  {
-    "id": "fc2026s2_infection-control_607",
-    "front": "A nurse is assessing a 10-year-old child with suspected appendicitis. The child reports abdominal pain, nausea, and a…",
-    "back": "Rebound tenderness in the right lower quadrant is a classic sign of appendicitis. This finding occurs when the peritoneum is inflamed, indicating irritation often associated with an inflamed appendix. A palpable mass in the right upper quadrant is not typical for appendicitis, as the appendix is located in the right lower quadrant. Borborygmi and decreased bowel sounds are gastrointestinal findings but are not specific indicators of appendicitis.",
-    "country": "US",
-    "tier": "RPN",
-    "topicKey": "infection-control",
-    "categorySlug": "infection",
-    "sourceQuestionId": "b64a456c-54c6-48d0-ac98-8f12dfc3e3e8"
   }
 ]

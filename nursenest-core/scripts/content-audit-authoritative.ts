@@ -12,6 +12,7 @@ import { config as loadEnv } from "dotenv";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 loadEnv({ path: path.join(__dirname, "../.env") });
 loadEnv({ path: path.join(__dirname, "../../.env") });
+import "../src/lib/db/env-bootstrap";
 
 import { CountryCode, TierCode } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
@@ -23,27 +24,21 @@ const prisma = new PrismaClient();
 const PUBLISHED = "published";
 
 async function main() {
-  const [
-    lessonsTotal,
-    lessonsByStatus,
-    questionsTotal,
-    questionsByStatus,
-    questionsByTierPublished,
-    blogTotal,
-    blogLivePublic,
-  ] = await Promise.all([
-    prisma.contentItem.count({ where: { type: "lesson" } }),
-    prisma.contentItem.groupBy({ by: ["status"], where: { type: "lesson" }, _count: { _all: true } }),
-    prisma.examQuestion.count(),
-    prisma.examQuestion.groupBy({ by: ["status"], _count: { _all: true } }),
-    prisma.examQuestion.groupBy({
-      by: ["tier"],
-      where: { status: PUBLISHED },
-      _count: { _all: true },
-    }),
-    prisma.blogPost.count(),
-    prisma.blogPost.count({ where: blogLiveWhere(new Date()) }),
-  ]);
+  const lessonsTotal = await prisma.contentItem.count({ where: { type: "lesson" } });
+  const lessonsByStatus = await prisma.contentItem.groupBy({
+    by: ["status"],
+    where: { type: "lesson" },
+    _count: { _all: true },
+  });
+  const questionsTotal = await prisma.examQuestion.count();
+  const questionsByStatus = await prisma.examQuestion.groupBy({ by: ["status"], _count: { _all: true } });
+  const questionsByTierPublished = await prisma.examQuestion.groupBy({
+    by: ["tier"],
+    where: { status: PUBLISHED },
+    _count: { _all: true },
+  });
+  const blogTotal = await prisma.blogPost.count();
+  const blogLivePublic = await prisma.blogPost.count({ where: blogLiveWhere(new Date()) });
 
   const allPublished = await prisma.contentItem.count({ where: { type: "lesson", status: PUBLISHED } });
 

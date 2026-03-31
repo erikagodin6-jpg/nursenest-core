@@ -9,11 +9,7 @@ import { PH } from "@/lib/observability/posthog-conversion-events";
 function formatStat(n: number | undefined): string {
   if (n === undefined || Number.isNaN(n)) return "—";
   if (n === 0) return "0";
-  if (n >= 1000) {
-    const hundreds = Math.floor(n / 100) * 100;
-    return `${hundreds.toLocaleString()}+`;
-  }
-  return `${n}+`;
+  return n.toLocaleString("en-US");
 }
 
 export function MarketingTrustSection({
