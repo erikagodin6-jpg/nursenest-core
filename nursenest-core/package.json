@@ -35,6 +35,7 @@
     "content:audit": "tsx scripts/content-audit-authoritative.ts",
     "import:blog": "tsx scripts/import-blog.ts",
     "import:content-items": "tsx scripts/import-content-items-json.ts",
+    "import:replit-data": "tsx scripts/import-replit-data.ts",
     "export:blog-json": "tsx scripts/export-monolith-blog-to-json.ts",
     "db:rewrite-lesson-screenshots": "tsx scripts/rewrite-lesson-screenshot-urls.ts",
     "test:entitlements": "tsx --test src/lib/entitlements/*.test.ts",
