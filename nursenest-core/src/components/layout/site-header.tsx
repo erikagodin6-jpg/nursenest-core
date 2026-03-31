@@ -88,7 +88,7 @@ export function SiteHeader() {
     { href: localizeHref("/exam-prep"), label: t("nav.examPrep"), icon: BookOpen },
     { href: localizeHref("/new-graduate-support"), label: t("nav.newGradSupport"), icon: GraduationCap },
     { href: localizeHref("/healthcare-careers"), label: t("nav.healthcareCareers"), icon: Briefcase },
-    { href: localizeHref("/allied-health"), label: t("nav.alliedHealth"), icon: Heart },
+    { href: localizeHref("/allied-health-exam-prep"), label: t("nav.alliedHealth"), icon: Heart },
   ];
 
   return (

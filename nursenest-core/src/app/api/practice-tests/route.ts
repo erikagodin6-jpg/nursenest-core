@@ -1,7 +1,8 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { PracticeTestStatus } from "@prisma/client";
 import { z } from "zod";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
+import { enforcePracticeTestsListProtection } from "@/lib/http/api-protection";
 import { prisma } from "@/lib/db";
 import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
 import { createCatPracticeTestPayload } from "@/lib/practice-tests/cat-session";
@@ -27,9 +28,12 @@ const createSchema = z
     path: ["questionCount"],
   });
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
+
+  const rl = enforcePracticeTestsListProtection(req, gate.userId);
+  if (rl) return rl;
 
   setSentryServerContext({ route: "/api/practice-tests", feature: "practice_test", userId: gate.userId });
 
