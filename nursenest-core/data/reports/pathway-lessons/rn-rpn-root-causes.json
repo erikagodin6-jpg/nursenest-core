@@ -1,0 +1,16 @@
+{
+  "generatedAt": "2026-03-31T16:44:00.085Z",
+  "causes": [
+    "Legacy RN/RPN corpus in contentMap was not part of the active pathway_lessons importer.",
+    "Historical lesson structures live in TS modules and were excluded by catalog-only import paths.",
+    "content_items export no longer contains RN/RPN lesson rows to migrate, so relying on content_items misses historical corpus.",
+    "DB inventory reflected curated catalog + selected imports, not full historical contentMap corpus."
+  ],
+  "checks": {
+    "sourceDiscoveryExcludingLegacy": true,
+    "importerCatalogOnlyBias": true,
+    "contentItemsMigrationGap": true,
+    "routeExclusion": false,
+    "dedupeCollisionPrimaryIssue": false
+  }
+}

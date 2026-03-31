@@ -64,7 +64,8 @@
     "copy:career-questions-from-downloads": "tsx scripts/copy-career-questions-from-downloads.ts",
     "import:nursing-ai-cache": "tsx scripts/import-nursing-ai-cache.ts",
     "replit:spaces-pipeline": "node scripts/replit-export-spaces-pipeline.mjs",
-    "import:replit-questions": "tsx scripts/import-replit-question-bank.ts"
+    "import:replit-questions": "tsx scripts/import-replit-question-bank.ts",
+    "ops:recover-rn-rpn-historical": "tsx scripts/recover-rn-rpn-historical-lessons.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1019.0",

@@ -1,0 +1,41 @@
+{
+  "generatedAt": "2026-03-31T16:44:00.085Z",
+  "currentDbPublishedByPathway": {
+    "us-rn-nclex-rn": 122,
+    "ca-rn-nclex-rn": 123,
+    "us-lpn-nclex-pn": 61,
+    "ca-rpn-rex-pn": 61
+  },
+  "historicalEstimateBySource": {
+    "legacyContentMapRN": 587,
+    "legacyContentMapRPN": 922,
+    "catalogRN": 245,
+    "catalogRPN": 122,
+    "materializedRN": 37,
+    "materializedRPN": 37
+  },
+  "expectedByPathwayFromLegacy": {
+    "us-rn-nclex-rn": 587,
+    "ca-rn-nclex-rn": 587,
+    "us-lpn-nclex-pn": 922,
+    "ca-rpn-rex-pn": 922
+  },
+  "missingLessonCountByPathway": {
+    "us-rn-nclex-rn": 465,
+    "ca-rn-nclex-rn": 464,
+    "us-lpn-nclex-pn": 861,
+    "ca-rpn-rex-pn": 861
+  },
+  "missingStillExistsInSourceByPathway": {
+    "us-rn-nclex-rn": 465,
+    "ca-rn-nclex-rn": 464,
+    "us-lpn-nclex-pn": 861,
+    "ca-rpn-rex-pn": 861
+  },
+  "trulyAbsentFromSourceByPathway": {
+    "us-rn-nclex-rn": 0,
+    "ca-rn-nclex-rn": 0,
+    "us-lpn-nclex-pn": 0,
+    "ca-rpn-rex-pn": 0
+  }
+}
