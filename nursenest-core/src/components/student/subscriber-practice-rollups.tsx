@@ -33,11 +33,10 @@ export function SubscriberPracticeRollups({ userId }: { userId: string }) {
     }
   }, [userId]);
 
-  if (!line) return null;
-
   return (
     <p className="mt-2 text-sm text-muted" data-testid="subscriber-qbank-rollups">
-      {line}
+      {line ??
+        "No graded bank activity in this browser in the last 7 days yet. Use the question bank here and the Topic performance card will reflect account-wide stats."}
     </p>
   );
 }

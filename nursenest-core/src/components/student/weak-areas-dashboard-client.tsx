@@ -55,6 +55,7 @@ export function WeakAreasDashboardClient({ initial }: Props) {
     <section className="nn-card p-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-primary/80">Member insight</p>
           <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Topic performance</h2>
           <p className="mt-1 text-xs text-muted">
             Based on graded question bank attempts, practice tests, and scored mocks. Updates after each graded item.

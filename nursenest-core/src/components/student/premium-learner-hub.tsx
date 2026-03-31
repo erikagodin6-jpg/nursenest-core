@@ -1,0 +1,290 @@
+import Link from "next/link";
+import { Award, ChevronRight, Crown, Flame, Sparkles, Target } from "lucide-react";
+import type { PremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
+import { readinessBandLabel } from "@/lib/learner/readiness-score";
+
+function Bar({
+  value,
+  max = 100,
+  label,
+  sublabel,
+  compact,
+}: {
+  value: number;
+  max?: number;
+  label?: string;
+  sublabel?: string;
+  /** Pathway-style row: bar + percent only (title lives outside). */
+  compact?: boolean;
+}) {
+  const pct = max > 0 ? Math.min(100, Math.round((value / max) * 100)) : 0;
+  return (
+    <div className="space-y-1.5">
+      {compact ? (
+        <div className="flex justify-end">
+          <span className="text-xs tabular-nums text-muted">{pct}% complete</span>
+        </div>
+      ) : (
+        <div className="flex items-baseline justify-between gap-2">
+          {label ? <span className="text-sm font-medium text-foreground">{label}</span> : <span />}
+          <span className="text-xs tabular-nums text-muted">{pct}%</span>
+        </div>
+      )}
+      {sublabel && !compact ? <p className="text-xs text-muted">{sublabel}</p> : null}
+      <div
+        className="h-2.5 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10"
+        role="progressbar"
+        aria-valuenow={pct}
+        aria-valuemin={0}
+        aria-valuemax={100}
+      >
+        <div
+          className="h-full rounded-full bg-gradient-to-r from-amber-500/90 via-primary to-emerald-500/85 transition-[width] duration-500 ease-out"
+          style={{ width: `${pct}%` }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function FactorBar({ label, points, maxPoints, detail }: { label: string; points: number; maxPoints: number; detail: string }) {
+  if (maxPoints <= 0) {
+    return (
+      <div className="rounded-lg border border-border/60 bg-muted/20 px-3 py-2">
+        <p className="text-xs font-medium text-foreground">{label}</p>
+        <p className="mt-1 text-xs text-muted">{detail}</p>
+      </div>
+    );
+  }
+  const pct = Math.round((points / maxPoints) * 100);
+  return (
+    <div className="space-y-1">
+      <div className="flex justify-between text-xs">
+        <span className="font-medium text-foreground">{label}</span>
+        <span className="tabular-nums text-muted">
+          {points}/{maxPoints}
+        </span>
+      </div>
+      <div className="h-1.5 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
+        <div className="h-full rounded-full bg-primary/80" style={{ width: `${pct}%` }} />
+      </div>
+      <p className="text-[11px] leading-snug text-muted">{detail}</p>
+    </div>
+  );
+}
+
+export function PremiumLearnerHub({ snapshot }: { snapshot: PremiumDashboardSnapshot }) {
+  const { readiness, overallLessons, pathways, practice, recentMocks, momentumMessages, examReadyHeadline, milestones } =
+    snapshot;
+
+  return (
+    <div className="space-y-5">
+      <section className="relative overflow-hidden rounded-2xl border border-amber-500/25 bg-gradient-to-br from-amber-500/[0.08] via-[var(--theme-card-bg)] to-primary/[0.06] p-6 shadow-sm">
+        <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-amber-400/10 blur-3xl" aria-hidden />
+        <div className="relative flex flex-wrap items-start gap-4">
+          <div className="flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-amber-950 dark:text-amber-100">
+            <Crown className="h-3.5 w-3.5" aria-hidden />
+            Full member experience
+          </div>
+          <div className="min-w-0 flex-1">
+            {examReadyHeadline ? (
+              <p className="text-lg font-semibold tracking-tight text-[var(--theme-heading-text)]">{examReadyHeadline}</p>
+            ) : (
+              <p className="text-lg font-semibold tracking-tight text-[var(--theme-heading-text)]">
+                Your progress is personal—we surface it clearly so every session counts.
+              </p>
+            )}
+            <p className="mt-1 flex flex-wrap items-center gap-2 text-sm text-muted">
+              <span className="inline-flex items-center gap-1 rounded-md bg-black/5 px-2 py-0.5 dark:bg-white/10">
+                <Target className="h-3.5 w-3.5 text-primary" aria-hidden />
+                Readiness: {readinessBandLabel(readiness.band)}
+              </span>
+              {readiness.score != null ? (
+                <span className="tabular-nums text-foreground/90">Score {readiness.score}/100</span>
+              ) : (
+                <span>Score unlocks after a bit more scored practice</span>
+              )}
+            </p>
+          </div>
+        </div>
+
+        {momentumMessages.length > 0 ? (
+          <ul className="relative mt-5 space-y-2 border-t border-border/50 pt-4">
+            {momentumMessages.map((line) => (
+              <li key={line} className="flex gap-2 text-sm text-foreground/90">
+                <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
+                <span>{line}</span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="relative mt-5 border-t border-border/50 pt-4 text-sm text-muted">
+            Complete a lesson, graded bank block, or mock—personal feedback will show here as soon as we have a trend to
+            compare.
+          </p>
+        )}
+      </section>
+
+      <section className="nn-card p-6">
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Pathway progress</h2>
+            <p className="mt-1 text-xs text-muted">
+              Completion is measured against lessons available in your subscription scope.
+            </p>
+          </div>
+          <Link
+            href="/app/lessons"
+            className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline"
+          >
+            Continue lessons
+            <ChevronRight className="h-4 w-4" aria-hidden />
+          </Link>
+        </div>
+        <ul className="mt-5 space-y-5">
+          {pathways.length === 0 ? (
+            <li className="rounded-lg border border-dashed border-border bg-muted/20 px-4 py-3 text-sm text-muted">
+              Pathway lessons for your plan will list here when the catalog is available for your tier and region.
+            </li>
+          ) : (
+            pathways.map((p) => (
+              <li key={p.pathwayId}>
+                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                  <span className="font-medium text-foreground">{p.shortLabel}</span>
+                  <span className="text-xs tabular-nums text-muted">
+                    {p.lessonsTotal === 0
+                      ? "No published lessons in scope yet"
+                      : `${p.lessonsCompleted} / ${p.lessonsTotal} lessons`}
+                  </span>
+                </div>
+                {p.lessonsTotal > 0 ? (
+                  <div className="mt-2">
+                    <Bar compact value={p.pct} />
+                  </div>
+                ) : (
+                  <p className="mt-2 text-xs text-muted">
+                    When lessons publish to your pathway, a completion bar will appear automatically.
+                  </p>
+                )}
+              </li>
+            ))
+          )}
+        </ul>
+      </section>
+
+      <section className="nn-card p-6">
+        <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Performance summary</h2>
+        <p className="mt-1 text-xs text-muted">Blended signals from your plan—indicative, not a pass guarantee.</p>
+
+        <div className="mt-5 space-y-6">
+          <Bar
+            value={overallLessons.pct}
+            label="Overall lesson completion"
+            sublabel={
+              overallLessons.total > 0
+                ? `${overallLessons.completed} of ${overallLessons.total} lessons in your pool`
+                : "Lesson pool is still loading for your scope—we will show a target count soon."
+            }
+          />
+
+          {practice.gradedTotal > 0 ? (
+            <Bar
+              value={practice.accuracyPct ?? 0}
+              label="Recent scored session accuracy"
+              sublabel={`${practice.gradedCorrect} correct of ${practice.gradedTotal} graded items across ${practice.sessionCount} completed session(s) in your tier scope.`}
+            />
+          ) : (
+            <div className="rounded-lg border border-border/70 bg-muted/15 px-4 py-3">
+              <p className="text-sm font-medium text-foreground">Recent scored session accuracy</p>
+              <p className="mt-1 text-xs text-muted">
+                Finish a timed exam session or mock so we can chart accuracy from graded items in your plan. The question
+                bank also updates your topic ledger on each grade.
+              </p>
+            </div>
+          )}
+
+          <div className="rounded-xl border border-border/60 bg-muted/10 p-4">
+            <p className="text-sm font-semibold text-foreground">Readiness breakdown</p>
+            <p className="mt-1 text-xs text-muted">{readiness.summary}</p>
+            <div className="mt-4 space-y-4">
+              {readiness.factors.length > 0 ? (
+                readiness.factors.map((f) => (
+                  <FactorBar key={f.id} label={f.label} points={f.points} maxPoints={f.maxPoints} detail={f.detail} />
+                ))
+              ) : (
+                <p className="text-sm text-muted">
+                  We will chart practice accuracy, mocks, topic load, and lesson completion here once you have enough scored
+                  activity—see the checklist in your readiness band above.
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="nn-card p-6">
+        <div className="flex flex-wrap items-center gap-2">
+          <Flame className="h-5 w-5 text-orange-500" aria-hidden />
+          <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Milestones and streaks</h2>
+        </div>
+        <p className="mt-1 text-xs text-muted">
+          Activity streak counts days with lessons, graded mocks, or completed practice tests. It rewards showing up, not
+          perfection.
+        </p>
+        <div className="mt-4 flex flex-wrap gap-2">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-orange-500/30 bg-orange-500/10 px-3 py-1.5 text-xs font-semibold text-orange-950 dark:text-orange-100">
+            <Flame className="h-3.5 w-3.5" aria-hidden />
+            {snapshot.studyStreakDays > 0
+              ? `${snapshot.studyStreakDays}-day activity streak`
+              : "Start a streak—any study day counts"}
+          </span>
+          {milestones.map((m) => (
+            <span
+              key={m}
+              className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground"
+            >
+              <Award className="h-3.5 w-3.5 text-primary" aria-hidden />
+              {m}
+            </span>
+          ))}
+        </div>
+        {milestones.length === 0 && snapshot.studyStreakDays === 0 ? (
+          <p className="mt-3 text-sm text-muted">
+            Milestones appear as you hit lesson thresholds, longer streaks, and more scored volume—your next win is one
+            focused session away.
+          </p>
+        ) : null}
+      </section>
+
+      <section className="nn-card p-6">
+        <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Recent mocks</h2>
+        <p className="mt-1 text-xs text-muted">Last five attempts—watch the trend, not a single score.</p>
+        {recentMocks.length > 0 ? (
+          <ul className="mt-4 divide-y divide-border/60">
+            {recentMocks.map((m) => (
+              <li key={m.id} className="flex flex-wrap items-center justify-between gap-2 py-3 text-sm first:pt-0">
+                <span className="font-medium text-foreground">{m.examTitle}</span>
+                <span className="tabular-nums text-muted">
+                  {m.pct}% ({m.score}/{m.total})
+                </span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="mt-4 rounded-lg border border-dashed border-border bg-muted/15 px-4 py-3 text-sm text-muted">
+            No mocks logged yet. When you complete one from the exams page, scores and trends will appear here for a
+            high-level view.
+          </p>
+        )}
+        <div className="mt-4 flex flex-wrap gap-4">
+          <Link href="/app/exams" className="inline-flex text-sm font-semibold text-primary hover:underline">
+            Open mock exams
+          </Link>
+          <Link href="/exam-lessons" className="inline-flex text-sm font-semibold text-primary hover:underline">
+            Exam-specific lessons
+          </Link>
+        </div>
+      </section>
+    </div>
+  );
+}

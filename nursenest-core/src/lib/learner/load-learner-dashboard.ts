@@ -6,7 +6,7 @@ import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import { pathwayLessonsAppListWhere } from "@/lib/lessons/app-pathway-lesson-list-scope";
 import { computeReadiness, type ReadinessResult } from "@/lib/learner/readiness-score";
-import { loadSessionGradingAggregate } from "@/lib/learner/session-grading-aggregate";
+import { loadSessionGradingAggregate, type SessionGradingAggregate } from "@/lib/learner/session-grading-aggregate";
 import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
 
@@ -35,6 +35,8 @@ export type LearnerDashboardModel = {
   continueLesson: ContinueLesson | null;
   recommendedQuizTopic: string | null;
   readiness: ReadinessResult;
+  /** Recent completed exam-session grading (tier-scoped); reused by premium snapshot. */
+  sessionGrading: SessionGradingAggregate;
 };
 
 function parsePathwaySyntheticId(lessonId: string): { pathwayId: string; slug: string } | null {
@@ -200,6 +202,7 @@ export async function loadLearnerDashboard(
     continueLesson,
     recommendedQuizTopic,
     readiness,
+    sessionGrading: practiceAgg,
   };
 }
 

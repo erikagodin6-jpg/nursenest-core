@@ -6,8 +6,13 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { PremiumLearnerHub } from "@/components/student/premium-learner-hub";
 import { WeakAreasDashboardClient } from "@/components/student/weak-areas-dashboard-client";
 import { SubscriberPracticeRollups } from "@/components/student/subscriber-practice-rollups";
+import {
+  loadPremiumDashboardSnapshot,
+  type PremiumDashboardSnapshot,
+} from "@/lib/learner/premium-dashboard-snapshot";
 import { loadUnifiedTopicPerformance, type TopicPerformanceSnapshot } from "@/lib/learner/topic-performance";
 
 export default async function DashboardPage() {
@@ -32,10 +37,6 @@ export default async function DashboardPage() {
   }
 
   let nextLessonTitle: string | null = null;
-  let completedLessons = 0;
-  let pathwayLessonsDone = 0;
-  let attemptCount = 0;
-  let lastMockPct: number | null = null;
   let userPrefs: {
     examFocus: string | null;
     studyGoal: string | null;
@@ -43,6 +44,7 @@ export default async function DashboardPage() {
   } | null = null;
 
   let topicPerfInitial: TopicPerformanceSnapshot | null = null;
+  let premiumSnapshot: PremiumDashboardSnapshot | null = null;
 
   if (userId && isDatabaseUrlConfigured()) {
     try {
@@ -52,35 +54,6 @@ export default async function DashboardPage() {
       });
     } catch {
       /* optional */
-    }
-    try {
-      completedLessons = await prisma.progress.count({ where: { userId, completed: true } });
-    } catch {
-      completedLessons = 0;
-    }
-    try {
-      attemptCount = await prisma.examAttempt.count({ where: { userId } });
-    } catch {
-      attemptCount = 0;
-    }
-    try {
-      pathwayLessonsDone = await prisma.progress.count({
-        where: { userId, completed: true, lessonId: { startsWith: "pathway:" } },
-      });
-    } catch {
-      pathwayLessonsDone = 0;
-    }
-    try {
-      const last = await prisma.examAttempt.findFirst({
-        where: { userId },
-        orderBy: { createdAt: "desc" },
-        select: { score: true, total: true },
-      });
-      if (last && last.total > 0) {
-        lastMockPct = Math.round((last.score / last.total) * 100);
-      }
-    } catch {
-      lastMockPct = null;
     }
     try {
       const incomplete = await prisma.progress.findFirst({
@@ -105,6 +78,11 @@ export default async function DashboardPage() {
       topicPerfInitial = await loadUnifiedTopicPerformance(userId, entitlement, 12);
     } catch {
       topicPerfInitial = null;
+    }
+    try {
+      premiumSnapshot = await loadPremiumDashboardSnapshot(userId, entitlement);
+    } catch {
+      premiumSnapshot = null;
     }
   }
 
@@ -163,29 +141,25 @@ export default async function DashboardPage() {
             </div>
           </section>
 
+          {premiumSnapshot ? (
+            <PremiumLearnerHub snapshot={premiumSnapshot} />
+          ) : (
+            <section className="nn-card p-6">
+              <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Progress overview</h2>
+              <p className="mt-2 text-sm text-muted">
+                We could not load your full member progress summary (temporary data issue). Topic performance and lessons
+                below still work—refresh in a moment or continue studying.
+              </p>
+            </section>
+          )}
+
           {userId ? <WeakAreasDashboardClient initial={topicPerfInitial} /> : null}
 
           <section className="nn-card p-6">
-            <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Readiness snapshot</h2>
-            <p className="mt-2 text-xs text-muted">
-              Informative only—not a pass prediction. Use it to steer study time toward practice and review.
+            <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Question bank on this device</h2>
+            <p className="mt-1 text-xs text-muted">
+              Optional local summary from your browser. Account-wide topic stats and readiness use the sections above.
             </p>
-            <ul className="mt-3 list-inside list-disc space-y-1 text-sm text-muted">
-              <li>Activity: {completedLessons} lesson(s) completed</li>
-              <li>Mock exams taken: {attemptCount}</li>
-              {lastMockPct !== null ? (
-                <li>Latest mock score: {lastMockPct}% — keep mixing timed sets until scores hold steady week over week.</li>
-              ) : (
-                <li>Latest mock score: not recorded yet — start a session on the exams page when you are ready.</li>
-              )}
-              <li>
-                Weak areas: use question bank misses and mock review notes; open{" "}
-                <Link className="font-medium text-primary underline" href="/exam-lessons">
-                  exam-specific lessons
-                </Link>{" "}
-                for targeted review.
-              </li>
-            </ul>
             {userId ? <SubscriberPracticeRollups userId={userId} /> : null}
           </section>
 

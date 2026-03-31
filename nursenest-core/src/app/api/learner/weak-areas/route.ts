@@ -7,7 +7,7 @@ export async function GET() {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
-  setSentryServerContext({ route: "/api/learner/weak-areas", feature: "learner", userId: gate.userId });
+  setSentryServerContext({ route: "/api/learner/weak-areas", feature: "question", userId: gate.userId });
 
   try {
     const snap = await loadUnifiedTopicPerformance(gate.userId, gate.entitlement, 12);

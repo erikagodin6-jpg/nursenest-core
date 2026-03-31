@@ -9,7 +9,7 @@ import {
   type TopicStrength,
   type WeakTopicRow,
 } from "@/lib/learner/weak-topics-from-sessions";
-import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 
 function classifyTopicStrength(args: {
   correctCount: number;
@@ -104,7 +104,7 @@ export async function recordTopicOutcomesSequential(
         });
       });
     } catch (e) {
-      safeServerLog("topic_performance", "record_failed", { userId, topic }, e);
+      safeServerLogCritical("topic_performance", "record_failed", { userId, topic }, e);
     }
   }
 }
