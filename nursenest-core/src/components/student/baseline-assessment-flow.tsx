@@ -27,7 +27,12 @@ export function BaselineAssessmentFlow() {
   const [questions, setQuestions] = useState<Q[]>([]);
   const [idx, setIdx] = useState(0);
   const [answers, setAnswers] = useState<Record<string, unknown>>({});
-  const [result, setResult] = useState<{ correctCount: number; total: number; weakTopics: string[] } | null>(null);
+  const [result, setResult] = useState<{
+    correctCount: number;
+    total: number;
+    weakTopics: string[];
+    weakTopicsDisplay: string[];
+  } | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -95,16 +100,23 @@ export function BaselineAssessmentFlow() {
         correctCount?: number;
         total?: number;
         weakTopics?: string[];
+        weakTopicsDisplay?: string[];
       };
       if (!res.ok) {
         setError(data.error ?? "Could not save results.");
         setPhase("ready");
         return;
       }
+      const weakTopics = data.weakTopics ?? [];
+      const weakTopicsDisplay =
+        data.weakTopicsDisplay?.length === weakTopics.length && data.weakTopicsDisplay?.length
+          ? data.weakTopicsDisplay
+          : weakTopics;
       setResult({
         correctCount: data.correctCount ?? 0,
         total: data.total ?? questions.length,
-        weakTopics: data.weakTopics ?? [],
+        weakTopics,
+        weakTopicsDisplay,
       });
       setPhase("done");
       router.refresh();
@@ -130,23 +142,76 @@ export function BaselineAssessmentFlow() {
   }
 
   if (phase === "done" && result) {
+    const pct =
+      result.total > 0 ? Math.round((result.correctCount / result.total) * 100) : 0;
+    const firstWeakTopic =
+      result.weakTopicsDisplay[0] ?? result.weakTopics[0] ?? "";
+    const qbankHref =
+      firstWeakTopic.length > 0
+        ? `/app/questions?preset=topic_drill&topic=${encodeURIComponent(firstWeakTopic)}`
+        : "/app/questions?preset=topic_drill";
+
     return (
-      <div className="nn-card space-y-4 p-6">
-        <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Baseline complete</h2>
-        <p className="text-sm text-[var(--theme-body-text)]">
-          You scored {result.correctCount} of {result.total} correct. We have updated your topic practice signals—open the question bank with
-          weak-area mode anytime.
-        </p>
+      <div className="nn-card space-y-5 p-6">
+        <div>
+          <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Your baseline snapshot</h2>
+          <p className="mt-2 text-sm text-[var(--theme-body-text)]">
+            You answered <strong>{result.correctCount}</strong> of <strong>{result.total}</strong> questions correctly (
+            <strong>{pct}%</strong>). This is a quick orientation check—not a pass/fail exam.
+          </p>
+        </div>
+
+        <div className="rounded-lg border border-border bg-muted/30 p-4 text-sm text-[var(--theme-body-text)]">
+          <p className="font-medium text-[var(--theme-heading-text)]">What this means</p>
+          <p className="mt-2 leading-relaxed">
+            Your answers update topic practice signals in NurseNest. Topics you missed here are highlighted so drills and
+            reviews can target real gaps. This is a starting point and will refine as you practice more.
+          </p>
+        </div>
+
         {result.weakTopics.length > 0 ? (
           <div>
-            <p className="text-sm font-medium text-[var(--theme-heading-text)]">Topics to watch from this run</p>
+            <p className="text-sm font-medium text-[var(--theme-heading-text)]">Topics to focus on first</p>
             <ul className="mt-2 list-inside list-disc text-sm text-muted">
-              {result.weakTopics.slice(0, 6).map((t) => (
-                <li key={t}>{t}</li>
+              {result.weakTopicsDisplay.slice(0, 8).map((label, i) => (
+                <li key={result.weakTopics[i] ?? label}>{label}</li>
               ))}
             </ul>
           </div>
-        ) : null}
+        ) : (
+          <p className="text-sm text-muted">
+            No single topic stood out from missed items this time—your pathway mix still guides what you see next.
+          </p>
+        )}
+
+        <div>
+          <p className="text-sm font-medium text-[var(--theme-heading-text)]">Recommended next steps</p>
+          <ul className="mt-3 space-y-2 text-sm">
+            <li>
+              <Link href="/app/lessons" className="font-medium text-primary hover:underline">
+                Review lessons
+              </Link>
+              <span className="text-muted"> — align with your exam blueprint.</span>
+            </li>
+            <li>
+              <Link href={qbankHref} className="font-medium text-primary hover:underline">
+                Question bank (topic drill)
+              </Link>
+              <span className="text-muted">
+                {firstWeakTopic
+                  ? ` — start with “${firstWeakTopic}” or pick another topic in the menu.`
+                  : " — pick a topic from the menu to drill recent items."}
+              </span>
+            </li>
+            <li>
+              <Link href="/app/flashcards/weak-areas" className="font-medium text-primary hover:underline">
+                Weak-area flashcards
+              </Link>
+              <span className="text-muted"> — short bursts on high-yield facts.</span>
+            </li>
+          </ul>
+        </div>
+
         <Link
           href="/app"
           className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground"

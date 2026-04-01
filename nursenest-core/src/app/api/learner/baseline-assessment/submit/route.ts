@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { recordTopicOutcomesSequential } from "@/lib/learner/topic-performance";
+import { formatTopicLabelForDisplay } from "@/lib/learner/topic-normalize";
 import { normalizeTopicLabel } from "@/lib/learner/weak-topics-from-sessions";
 import { withRetry } from "@/lib/resilience/with-retry";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
@@ -140,6 +141,7 @@ export async function POST(req: Request) {
       correctCount,
       total: ids.length,
       weakTopics,
+      weakTopicsDisplay: weakTopics.map((t) => formatTopicLabelForDisplay(t)),
     });
   } catch (e) {
     safeServerLogCritical("baseline_submit", "failed", { attemptId }, e);
