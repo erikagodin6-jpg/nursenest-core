@@ -1,4 +1,4 @@
-import { BlogPostStatus, BlogPostTemplate } from "@prisma/client";
+import { BlogFunnelStage, BlogImageStatus, BlogPostIntent, BlogPostStatus, BlogPostTemplate, BlogWorkflowStatus } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
@@ -15,6 +15,17 @@ const createSchema = z.object({
   seoTitle: z.string().max(220).optional().nullable(),
   seoDescription: z.string().max(500).optional().nullable(),
   postTemplate: z.nativeEnum(BlogPostTemplate).optional().nullable(),
+  intent: z.nativeEnum(BlogPostIntent).optional().nullable(),
+  funnelStage: z.nativeEnum(BlogFunnelStage).optional().nullable(),
+  workflowStatus: z.nativeEnum(BlogWorkflowStatus).optional(),
+  targetKeyword: z.string().max(200).optional().nullable(),
+  keywordCluster: z.string().max(200).optional().nullable(),
+  coverImage: z.string().url().optional().nullable(),
+  coverImageAlt: z.string().max(240).optional().nullable(),
+  coverImageCaption: z.string().max(300).optional().nullable(),
+  imageStatus: z.nativeEnum(BlogImageStatus).optional(),
+  apaReferences: z.array(z.string().max(600)).max(40).optional(),
+  requiresReferences: z.boolean().optional(),
   postStatus: z.nativeEnum(BlogPostStatus).optional(),
   publishAt: z.string().datetime().optional().nullable(),
 });
@@ -45,6 +56,16 @@ export async function GET(req: NextRequest) {
       tags: true,
       seoTitle: true,
       seoDescription: true,
+      targetKeyword: true,
+      keywordCluster: true,
+      intent: true,
+      funnelStage: true,
+      workflowStatus: true,
+      coverImage: true,
+      coverImageAlt: true,
+      imageStatus: true,
+      apaReferences: true,
+      requiresReferences: true,
       postStatus: true,
       publishAt: true,
       updatedAt: true,
@@ -64,7 +85,7 @@ export async function GET(req: NextRequest) {
   ]);
 
   const warnings = posts
-    .filter((p) => !p.title.trim() || !p.excerpt.trim() || !p.seoTitle?.trim() || !p.seoDescription?.trim())
+    .filter((p) => !p.title.trim() || !p.excerpt.trim() || !p.seoTitle?.trim() || !p.seoDescription?.trim() || (p.requiresReferences && p.apaReferences.length === 0))
     .map((p) => ({
       id: p.id,
       slug: p.slug,
@@ -72,6 +93,8 @@ export async function GET(req: NextRequest) {
       excerptMissing: !p.excerpt.trim(),
       seoTitleMissing: !p.seoTitle?.trim(),
       seoDescriptionMissing: !p.seoDescription?.trim(),
+      referencesMissing: p.requiresReferences && p.apaReferences.length === 0,
+      altTextMissing: Boolean(p.coverImage) && !p.coverImageAlt?.trim(),
     }));
 
   return NextResponse.json({
@@ -104,6 +127,17 @@ export async function POST(req: Request) {
       seoTitle: d.seoTitle ?? null,
       seoDescription: d.seoDescription ?? null,
       postTemplate: d.postTemplate ?? null,
+      intent: d.intent ?? null,
+      funnelStage: d.funnelStage ?? null,
+      workflowStatus: d.workflowStatus ?? BlogWorkflowStatus.GENERATED,
+      targetKeyword: d.targetKeyword ?? null,
+      keywordCluster: d.keywordCluster ?? null,
+      coverImage: d.coverImage ?? null,
+      coverImageAlt: d.coverImageAlt ?? null,
+      coverImageCaption: d.coverImageCaption ?? null,
+      imageStatus: d.imageStatus ?? BlogImageStatus.NONE,
+      apaReferences: d.apaReferences ?? [],
+      requiresReferences: d.requiresReferences ?? false,
       postStatus: d.postStatus ?? (d.publishAt ? BlogPostStatus.SCHEDULED : BlogPostStatus.DRAFT),
       publishAt: d.publishAt ? new Date(d.publishAt) : null,
     },

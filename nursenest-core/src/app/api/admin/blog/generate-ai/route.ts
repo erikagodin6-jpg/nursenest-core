@@ -1,4 +1,4 @@
-import { BlogPostStatus, BlogPostTemplate } from "@prisma/client";
+import { BlogFunnelStage, BlogImageStatus, BlogPostIntent, BlogPostStatus, BlogPostTemplate, BlogWorkflowStatus } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
@@ -6,6 +6,8 @@ import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
 import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
 import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
 import { BLOG_TEMPLATE_TITLE_PATTERNS } from "@/lib/blog/blog-template-copy";
+import { buildApa7References, type BlogSourceRecord, validateSources } from "@/lib/blog/apa7";
+import { buildOutline, ctaFor, detectRiskFlags, thinDraftWarning } from "@/lib/blog/seo-campaign-engine";
 import { prisma } from "@/lib/db";
 
 const schema = z.object({
@@ -14,7 +16,26 @@ const schema = z.object({
   exam: z.string().min(2).max(80),
   country: z.enum(["US", "CA", "unspecified"]).optional(),
   template: z.nativeEnum(BlogPostTemplate),
+  intent: z.nativeEnum(BlogPostIntent).optional(),
+  funnelStage: z.nativeEnum(BlogFunnelStage).optional(),
   tone: z.enum(["professional", "supportive", "direct"]).optional(),
+  includeImage: z.boolean().optional(),
+  includeAiImage: z.boolean().optional(),
+  targetKeyword: z.string().max(200).optional(),
+  keywordCluster: z.string().max(200).optional(),
+  countryTarget: z.enum(["CA", "US"]).optional(),
+  sourceRecords: z.array(
+    z.object({
+      authors: z.array(z.string()).optional(),
+      year: z.string().optional(),
+      title: z.string().optional(),
+      source: z.string().optional(),
+      publisher: z.string().optional(),
+      url: z.string().url().optional(),
+      doi: z.string().optional(),
+      authority: z.enum(["regulator", "guideline_body", "peer_reviewed", "academic_hospital", "association", "general_web", "low_authority"]).optional(),
+    }),
+  ).optional(),
   slug: z
     .string()
     .min(3)
@@ -66,15 +87,21 @@ export async function POST(req: Request) {
       return candidate;
     })());
 
-  const system = `You write SEO-aware HTML for NurseNest nursing education blog posts. Output valid HTML only: use <h2>, <h3>, <p>, <ul>, <li>, <strong>. No markdown. No fabricated statistics or pass-rate claims. Be accurate and conservative. Audience: nursing students preparing for licensure exams.`;
+  const system = `You write SEO-aware HTML for NurseNest nursing education blog posts. Output valid HTML only: use <h2>, <h3>, <p>, <ul>, <li>, <strong>. No markdown. No fabricated statistics or pass-rate claims. Be accurate and conservative. Audience: nursing students preparing for licensure exams.
+Include a short "Key takeaways" section and a short FAQ section when natural.
+Do not include medical treatment advice beyond educational exam prep framing.`;
 
   const user = `Write the article body (HTML only, no outer <html>).
 
 Template: ${d.template}
+Intent: ${d.intent ?? "EXAM_PREP"}
+Funnel stage: ${d.funnelStage ?? "CONSIDERATION"}
 Exam focus: ${d.exam}
 ${d.country && d.country !== "unspecified" ? `Country context: ${d.country}` : ""}
 Topic: ${d.topic}
 ${d.keywords ? `Keywords / phrases: ${d.keywords}` : ""}
+${d.targetKeyword ? `Primary target keyword: ${d.targetKeyword}` : ""}
+${d.keywordCluster ? `Keyword cluster: ${d.keywordCluster}` : ""}
 Tone: ${d.tone ?? "professional"}
 
 Include:
@@ -108,6 +135,23 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
 
   const excerpt = bodyHtml.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 480);
   const seoDescription = excerpt.slice(0, 320);
+  const sources = (d.sourceRecords ?? []) as BlogSourceRecord[];
+  const apaReferences = buildApa7References(sources);
+  const sourceCheck = validateSources(sources);
+  const outline = buildOutline({
+    title,
+    targetKeyword: d.targetKeyword ?? d.topic,
+    intent: d.intent ?? BlogPostIntent.EXAM_PREP,
+    template: d.template,
+  });
+  const cta = ctaFor({ intent: d.intent, funnel: d.funnelStage, template: d.template });
+  const riskFlags = detectRiskFlags({ template: d.template, keyword: d.targetKeyword ?? d.topic });
+  const thinWarning = thinDraftWarning(bodyHtml);
+  const workflowStatus =
+    !seoDescription || !title ? BlogWorkflowStatus.NEEDS_METADATA :
+    (sources.length === 0 && riskFlags.length > 0) ? BlogWorkflowStatus.NEEDS_SOURCE_REVIEW :
+    riskFlags.length > 0 ? BlogWorkflowStatus.NEEDS_MEDICAL_REVIEW :
+    BlogWorkflowStatus.GENERATED;
 
   const post = await prisma.blogPost.create({
     data: {
@@ -116,14 +160,44 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
       excerpt: excerpt.length >= 10 ? excerpt : `${title.slice(0, 200)} — draft excerpt; edit before publish.`,
       body: bodyHtml,
       exam: d.exam,
+      targetKeyword: d.targetKeyword ?? d.topic,
+      keywordCluster: d.keywordCluster ?? null,
+      countryTarget: d.countryTarget ?? null,
+      intent: d.intent ?? BlogPostIntent.EXAM_PREP,
+      funnelStage: d.funnelStage ?? BlogFunnelStage.CONSIDERATION,
       postTemplate: d.template,
       postStatus: BlogPostStatus.DRAFT,
       seoTitle: title.slice(0, 200),
       seoDescription,
       tags: d.keywords ? d.keywords.split(",").map((s) => s.trim()).filter(Boolean).slice(0, 12) : [],
+      outlineJson: outline,
+      keyQuestions: [
+        `What matters most about ${d.topic} on ${d.exam}?`,
+        `What mistakes should students avoid for ${d.topic}?`,
+      ],
+      keywordPlan: [d.targetKeyword ?? d.topic, ...(d.keywords ? d.keywords.split(",").map((s) => s.trim()).filter(Boolean).slice(0, 8) : [])],
+      ctaType: cta.type,
+      ctaText: cta.text,
+      ctaHref: cta.href,
+      workflowStatus,
+      sourcesJson: sources.length ? sources : null,
+      apaReferences,
+      requiresReferences: Boolean(sources.length || riskFlags.length > 0),
+      sourceReliabilityScore: sourceCheck.reliabilityScore,
+      medicalRiskFlags: riskFlags,
+      imageStatus: d.includeImage ? (d.includeAiImage ? BlogImageStatus.REQUESTED : BlogImageStatus.NONE) : BlogImageStatus.NONE,
+      coverImagePrompt: d.includeAiImage ? `Educational nursing blog hero image about ${d.topic}. Focus keyword: ${d.targetKeyword ?? d.topic}.` : null,
+      shortSummary: excerpt.slice(0, 220),
+      socialCaption: `${title} — ${excerpt.slice(0, 120)}...`,
+      promoBlurb: cta.text,
+      updateNeeded: Boolean(thinWarning),
+      rankingNote: thinWarning ?? null,
     },
     select: { id: true, slug: true, title: true, postStatus: true, updatedAt: true },
   });
 
-  return NextResponse.json({ post }, { status: 201 });
+  return NextResponse.json({
+    post,
+    warnings: [...sourceCheck.warnings, ...(thinWarning ? [thinWarning] : [])],
+  }, { status: 201 });
 }

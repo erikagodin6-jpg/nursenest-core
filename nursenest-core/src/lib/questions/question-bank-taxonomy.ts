@@ -93,31 +93,43 @@ export function mapRowToCanonicalTopic(
   const h = haystack(row.topic, row.subtopic, row.bodySystem, row.exam);
 
   if (family === "allied") {
-    if (/(lab|cbc|bmp|troponin|culture|imaging|x-ray|mri|ct\b)/.test(h)) return "lab_diagnostics";
-    if (/(infection|ppe|sterile|hand hygiene|isolation)/.test(h)) return "safety_infection";
-    if (/(ethics|scope|regulation|law|licensure|osha)/.test(h)) return "regulation_ethics";
-    if (/(priorit|triage|first|urgent|emerg)/.test(h)) return "clinical_judgment";
-    if (/(procedure|equipment|device|technique|specimen)/.test(h)) return "procedures_equipment";
+    if (/(lab|cbc|bmp|troponin|culture|imaging|x-ray|mri|ct\b|ultrasound|ecg|ekg|pcr|pathology|panel)/.test(h))
+      return "lab_diagnostics";
+    if (/(infection|ppe|sterile|hand hygiene|isolation|aseptic|cross.?contamin|cleaning|disinfect)/.test(h))
+      return "safety_infection";
+    if (/(ethics|scope|regulation|law|licensure|osha|privacy|consent|documentation|professional standard)/.test(h))
+      return "regulation_ethics";
+    if (/(priorit|triage|first|urgent|emerg|clinical judgment|escalat|stabiliz|rapid response)/.test(h))
+      return "clinical_judgment";
+    if (/(procedure|equipment|device|technique|specimen|venipuncture|catheter|ventilator|iv\b|pump)/.test(h))
+      return "procedures_equipment";
     return "uncategorized";
   }
 
   if (family === "np") {
-    if (/(assess|exam|history|physical|pe\b|vitals)/.test(h)) return "advanced_assessment";
-    if (/(diagnos|differential|ddx|workup|plan)/.test(h)) return "differential_diagnosis";
-    if (/(pharm|prescri|dose|medication|drug|contraindic)/.test(h)) return "pharmacotherapy";
-    if (/(role|collaborat|ethic|legal|consent|standard)/.test(h)) return "professional_role";
-    if (/(fnp|agpcnp|pmhnp|psych|gero|peds|women|adult)/.test(h)) return "specialty_focus";
+    if (/(assess|exam|history|physical|pe\b|vitals|review of systems|ros\b|screening)/.test(h))
+      return "advanced_assessment";
+    if (/(diagnos|differential|ddx|workup|plan|red flag|rule out|clinical reasoning)/.test(h))
+      return "differential_diagnosis";
+    if (/(pharm|prescri|dose|medication|drug|contraindic|titrate|adverse effect|interaction)/.test(h))
+      return "pharmacotherapy";
+    if (/(role|collaborat|ethic|legal|consent|standard|scope|policy|documentation)/.test(h))
+      return "professional_role";
+    if (/(fnp|agpcnp|pmhnp|psych|gero|peds|women|adult|acute care|family practice|primary care)/.test(h))
+      return "specialty_focus";
     return "uncategorized";
   }
 
   // nclex_rn / nclex_pn — NCSBN-style client need categories (approximate via keywords)
-  if (/(pharm|medication|drug|dosage|adverse)/.test(h)) return "pharmacology";
-  if (/(priorit|delegat|assign|first action|most appropriate)/.test(h)) return "prioritization_delegation";
-  if (/(psych|mental health|therap|grief|abuse|violence|cultural)/.test(h)) return "psychosocial";
-  if (/(infection|ppe|isolation|sterile|hand hygiene|contact precaution)/.test(h)) return "infection_control";
-  if (/(ob|maternity|labor|pregnan|neonat|pediatr|child)/.test(h)) return "maternity_pediatrics";
-  if (/(fundamentals|assessment|vital|nursing process|admission)/.test(h)) return "fundamentals_assessment";
-  if (/(safe|environment|ergonomic|restraint|hazard)/.test(h)) return "safe_effective_care";
+  if (/(pharm|medication|drug|dosage|adverse|interaction|contraindic|med admin)/.test(h)) return "pharmacology";
+  if (/(priorit|delegat|assign|first action|most appropriate|triage|which patient)/.test(h)) return "prioritization_delegation";
+  if (/(psych|mental health|therap|grief|abuse|violence|cultural|coping|substance use)/.test(h)) return "psychosocial";
+  if (/(infection|ppe|isolation|sterile|hand hygiene|contact precaution|transmission|precaution)/.test(h))
+    return "infection_control";
+  if (/(ob|maternity|labor|pregnan|neonat|pediatr|child|postpartum|newborn)/.test(h)) return "maternity_pediatrics";
+  if (/(fundamentals|assessment|vital|nursing process|admission|documentation|health promotion)/.test(h))
+    return "fundamentals_assessment";
+  if (/(safe|environment|ergonomic|restraint|hazard|delegation|management of care)/.test(h)) return "safe_effective_care";
   if (/(cardio|resp|renal|gi|neuro|endo|hematolog|fluid|electrolyte|perfusion|immun)/.test(h))
     return "physiological_integrity";
 

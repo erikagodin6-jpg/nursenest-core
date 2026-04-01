@@ -57,13 +57,6 @@ const DURATION_KEYS: Record<BillingDuration, string> = {
   yearly: "pages.pricing.duration.yearly",
 };
 
-const DURATION_POSITION_KEYS: Record<BillingDuration, string> = {
-  monthly: "pages.pricing.duration.position.monthly",
-  "3-month": "pages.pricing.duration.position.3month",
-  "6-month": "pages.pricing.duration.position.6month",
-  yearly: "pages.pricing.duration.position.yearly",
-};
-
 type HomeStatsPayload = {
   totalLessons?: number;
   questionCount?: number;
@@ -198,33 +191,99 @@ export function PricingPageClient({
     [t],
   );
 
+  const heroHeadline = "Pass with a plan, not guesswork";
+  const heroSubheadline =
+    "NurseNest adapts to your weak areas, tracks readiness, and tells you what to do next so your final weeks are focused and calm.";
+
+  const planPositioning: Record<BillingDuration, string> = {
+    monthly: "Most popular",
+    "3-month": "Best for final weeks",
+    "6-month": "Best for quick review",
+    yearly: "Best for comprehensive prep",
+  };
+
+  const planPersona: Record<BillingDuration, string> = {
+    monthly: "For students who want flexibility while building consistent weekly momentum.",
+    "3-month": "For learners in the last 8-12 weeks who need focused, high-yield readiness work.",
+    "6-month": "For busy schedules that need a practical runway without rushing.",
+    yearly: "For comprehensive prep across lessons, question bank depth, and exam-day confidence.",
+  };
+
+  const planOutcomeLines: Record<BillingDuration, string[]> = {
+    monthly: [
+      "Start today and get immediate weak-area targeting.",
+      "Build confidence with realistic question flow and rationales.",
+      "Keep pressure low with a month-to-month commitment.",
+    ],
+    "3-month": [
+      "Tighten your weakest topics before exam day.",
+      "Use readiness trends to prioritize the next best study block.",
+      "Convert study time into exam-style decision speed.",
+    ],
+    "6-month": [
+      "Cover fundamentals thoroughly, then sharpen with mocks.",
+      "Improve consistency before entering final exam stretch.",
+      "Reduce last-minute cramming with a structured timeline.",
+    ],
+    yearly: [
+      "Build deep clinical reasoning over a full prep cycle.",
+      "Track progress from baseline to exam-ready readiness bands.",
+      "Study with a complete system, not disconnected resources.",
+    ],
+  };
+
+  const pricingFaqs = [
+    {
+      q: "Can I cancel anytime?",
+      a: "Yes. You can cancel from your billing portal anytime. Your access remains active until the end of the current paid period.",
+    },
+    {
+      q: "What if I choose the wrong plan length?",
+      a: "Choose based on your timeline: final weeks = shorter plans, broader prep runway = longer plans. All plans use the same core study system.",
+    },
+    {
+      q: "Do you offer refunds?",
+      a: "Please review the refund policy before checkout. We keep pricing and billing terms transparent so you can choose with confidence.",
+    },
+    {
+      q: "What is the difference between plans?",
+      a: "The core platform is the same; plan duration changes your runway. Longer plans are best when you need deeper coverage and repetition before exam day.",
+    },
+    {
+      q: "How long do I keep access?",
+      a: "Access lasts for your selected billing period and renews automatically unless cancelled.",
+    },
+  ];
+
   return (
     <main className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
       <header className="border-b border-[var(--theme-card-border)] pb-10">
+        <p className="sr-only">{heading}</p>
         <p className="text-xs font-semibold uppercase tracking-wide text-primary">{t("pages.pricing.title")}</p>
         <h1 className="mt-2 text-balance text-3xl font-bold leading-tight text-[var(--theme-heading-text)] sm:text-4xl">
-          {heading}
+          {heroHeadline}
         </h1>
-        <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">{intro}</p>
+        <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">{heroSubheadline}</p>
+        <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{intro}</p>
 
         <p className="mt-4 text-sm text-[var(--theme-body-text)]">{t("pages.pricing.hero.trustLine")}</p>
+        <p className="mt-2 inline-flex rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+          Most students choose a plan that matches their time-to-exam window.
+        </p>
 
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
           <Link
             href={tryQuestionsHref}
             className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition hover:brightness-110"
           >
-            {t("pages.pricing.hero.ctaTry5")}
+            Start today
             <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
-          <Link
-            href={tryQuestionsHref}
-            className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-[var(--theme-card-border)] bg-card px-6 py-3 text-sm font-semibold text-[var(--theme-heading-text)] hover:border-primary/35"
-          >
-            {t("pages.pricing.hero.ctaWeak")}
+          <Link href={tryQuestionsHref} className="inline-flex items-center text-sm font-semibold text-primary hover:underline">
+            See weak-area targeting first
           </Link>
         </div>
-        <p className="mt-3 text-xs font-medium text-muted-foreground">{t("pages.pricing.hero.ctaTry5Sub")}</p>
+        <p className="mt-3 text-xs font-medium text-muted-foreground">No pressure: secure checkout, cancel anytime.</p>
         <p className="mt-2 text-xs text-muted-foreground">{t("pages.pricing.hero.regionHint")}</p>
       </header>
 
@@ -471,13 +530,31 @@ export function PricingPageClient({
         </div>
       </section>
 
+      <section className="mt-14 rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]/40 p-6">
+        <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">Student outcomes and trust</h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Built for realistic nursing decision-making with clinically grounded rationales and targeted review loops.
+        </p>
+        <div className="mt-5 grid gap-4 md:grid-cols-3">
+          <blockquote className="rounded-xl border border-[var(--theme-card-border)] bg-card p-4 text-sm">
+            “I stopped random reviewing and finally knew what to focus on each week.”
+          </blockquote>
+          <blockquote className="rounded-xl border border-[var(--theme-card-border)] bg-card p-4 text-sm">
+            “The readiness trend helped me decide when to switch from content review to timed sets.”
+          </blockquote>
+          <blockquote className="rounded-xl border border-[var(--theme-card-border)] bg-card p-4 text-sm">
+            “Questions felt close to exam pressure, but with clearer next steps after every session.”
+          </blockquote>
+        </div>
+      </section>
+
       <section className="mt-14">
-        <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">{t("pages.pricing.objections.title")}</h2>
+        <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">Pricing FAQ</h2>
         <dl className="mt-6 space-y-6">
-          {[0, 1, 2, 3].map((i) => (
-            <div key={i} className="border-b border-[var(--theme-card-border)] pb-6 last:border-0 last:pb-0">
-              <dt className="font-semibold text-[var(--theme-heading-text)]">{t(`pages.pricing.objections.q${i}`)}</dt>
-              <dd className="mt-2 text-sm leading-relaxed text-muted-foreground">{t(`pages.pricing.objections.a${i}`)}</dd>
+          {pricingFaqs.map((item) => (
+            <div key={item.q} className="border-b border-[var(--theme-card-border)] pb-6 last:border-0 last:pb-0">
+              <dt className="font-semibold text-[var(--theme-heading-text)]">{item.q}</dt>
+              <dd className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.a}</dd>
             </div>
           ))}
         </dl>
@@ -487,7 +564,7 @@ export function PricingPageClient({
         <h2 className="sr-only">{t("pages.pricing.compare.title")}</h2>
         <table className="w-full min-w-[520px] text-left text-sm">
           <caption className="border-b border-[var(--theme-card-border)] px-4 py-3 text-left text-base font-bold text-[var(--theme-heading-text)]">
-            {t("pages.pricing.compare.title")}
+            NurseNest vs UWorld-style qbank
           </caption>
           <thead>
             <tr className="border-b border-[var(--theme-card-border)] bg-muted/40">
@@ -495,10 +572,10 @@ export function PricingPageClient({
                 {" "}
               </th>
               <th className="px-4 py-3 font-semibold text-primary" scope="col">
-                {t("pages.pricing.compare.colNn")}
+                NurseNest
               </th>
               <th className="px-4 py-3 font-semibold text-muted-foreground" scope="col">
-                {t("pages.pricing.compare.colTypical")}
+                UWorld-style qbank
               </th>
             </tr>
           </thead>
@@ -521,6 +598,7 @@ export function PricingPageClient({
         <p className="mt-2 text-sm text-muted-foreground">{t("pages.pricing.billing.helper")}</p>
         <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{t("pages.pricing.billing.recurringDisclosure")}</p>
         <p className="mt-2 text-xs text-muted-foreground">{t("pages.pricing.checkout.recurringShort")}</p>
+        <p className="mt-2 text-xs font-medium text-primary">Choose the shortest plan that matches your exam timeline and comfort level.</p>
         {loadError ? <p className="mt-4 text-sm text-red-600">{loadError}</p> : null}
         {checkoutError ? <p className="mt-4 text-sm text-red-600">{checkoutError}</p> : null}
 
@@ -560,30 +638,18 @@ export function PricingPageClient({
                   row?.isBestValue ? "ring-2 ring-primary md:scale-[1.02]" : row?.isMostPopular ? "ring-2 ring-primary/40" : ""
                 }`}
               >
-                {row?.isBestValue ? (
-                  <p className="mb-2 inline-block w-fit rounded-full bg-primary px-2 py-0.5 text-xs font-bold text-primary-foreground">
-                    {t("pages.pricing.plan.bestValue")}
-                  </p>
-                ) : row?.isMostPopular ? (
-                  <p className="mb-2 inline-block w-fit rounded-full bg-primary/15 px-2 py-0.5 text-xs font-bold text-primary">
-                    {t("pages.pricing.plan.mostPopular")}
-                  </p>
-                ) : null}
+                <p className="mb-2 inline-block w-fit rounded-full bg-primary/15 px-2 py-0.5 text-xs font-bold text-primary">
+                  {planPositioning[dur]}
+                </p>
                 <h3 className="text-lg font-semibold text-[var(--theme-heading-text)]">{t(DURATION_KEYS[dur])}</h3>
-                <p className="mt-2 text-xs leading-snug text-muted-foreground">{t(DURATION_POSITION_KEYS[dur])}</p>
+                <p className="mt-2 text-xs leading-snug text-muted-foreground">{planPersona[dur]}</p>
                 <ul className="mt-3 space-y-1.5 text-xs text-[var(--theme-body-text)]">
-                  <li className="flex gap-1.5">
-                    <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />
-                    {t("pages.pricing.plan.outcomeA")}
-                  </li>
-                  <li className="flex gap-1.5">
-                    <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />
-                    {t("pages.pricing.plan.outcomeB")}
-                  </li>
-                  <li className="flex gap-1.5">
-                    <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />
-                    {t("pages.pricing.plan.outcomeC")}
-                  </li>
+                  {planOutcomeLines[dur].map((line) => (
+                    <li key={line} className="flex gap-1.5">
+                      <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />
+                      {line}
+                    </li>
+                  ))}
                 </ul>
                 {row ? (
                   <>
@@ -596,19 +662,13 @@ export function PricingPageClient({
                         {t("pages.pricing.plan.saveVsMonthly", { pct: row.savingsVsMonthlyPercent })}
                       </p>
                     ) : null}
-                    <Link
-                      href={tryQuestionsHref}
-                      className="mt-3 inline-block text-center text-xs font-semibold text-primary underline-offset-4 hover:underline"
-                    >
-                      Try 5 questions first
-                    </Link>
                     <button
                       type="button"
                       disabled={checkoutLoading || !row.checkoutAvailable || !policiesAccepted}
                       onClick={() => startCheckout(dur)}
                       className="mt-4 w-full rounded-full bg-primary py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
                     >
-                      {row.checkoutAvailable ? t("pages.pricing.checkout.startPlan") : t("pages.pricing.checkout.comingSoon")}
+                      {row.checkoutAvailable ? "Start this plan" : t("pages.pricing.checkout.comingSoon")}
                     </button>
                   </>
                 ) : (

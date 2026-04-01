@@ -15,7 +15,7 @@ function utcDayBounds(d: Date): { start: Date; end: Date } {
 }
 
 /**
- * Scoped SRS snapshot: due by end of UTC today, overdue before UTC today, “learning” (low repetition ladder).
+ * Scoped SRS snapshot: due within UTC today, overdue before UTC today, “learning” (low repetition ladder).
  */
 export async function GET() {
   const gate = await requireSubscriberSession();
@@ -42,7 +42,7 @@ export async function GET() {
       prisma.flashcardProgress.count({
         where: {
           userId,
-          nextReviewAt: { lte: todayEnd },
+          nextReviewAt: { gte: todayStart, lte: todayEnd },
           flashcard: cardScope,
         },
       }),
