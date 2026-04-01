@@ -26,12 +26,17 @@ export const PN = {
   caHub: "/canada/rpn/rex-pn",
   caLessons: "/canada/rpn/rex-pn/lessons",
   caQuestions: "/canada/rpn/rex-pn/questions",
+  /** Canadian PN programmatic SEO landing (REx-PN). */
   practiceProgrammatic: "/rex-pn-practice-questions",
+  /** US LVN/LPN programmatic SEO landing (NCLEX-PN). */
+  practiceProgrammaticUs: "/nclex-pn-practice-questions",
 } as const;
 
 /** NP (US tracks in product) */
 export const NP = {
   practiceProgrammatic: "/np-exam-practice-questions",
+  /** Canadian NP programmatic SEO landing (CNPLE). */
+  practiceProgrammaticCa: "/cnple-practice-questions",
   fnpLessons: "/us/np/fnp/lessons",
   agpcnpLessons: "/us/np/agpcnp/lessons",
   fnpQuestions: "/us/np/fnp/questions",
@@ -82,6 +87,16 @@ export function pnQuestions(region: MarketingRegionToggle): string {
 
 export function pnPrimaryHub(region: MarketingRegionToggle): string {
   return region === "US" ? "/us/lpn/nclex-pn" : PN.caHub;
+}
+
+/** Programmatic practice hub slug for PN — NCLEX-PN (US) vs REx-PN (Canada). */
+export function pnPracticeProgrammatic(region: MarketingRegionToggle): string {
+  return region === "US" ? PN.practiceProgrammaticUs : PN.practiceProgrammatic;
+}
+
+/** Programmatic practice hub slug for NP — US NP overview vs Canadian CNPLE. */
+export function npPracticeProgrammatic(region: MarketingRegionToggle): string {
+  return region === "US" ? NP.practiceProgrammatic : NP.practiceProgrammaticCa;
 }
 
 export function alliedHub(region: MarketingRegionToggle): string {

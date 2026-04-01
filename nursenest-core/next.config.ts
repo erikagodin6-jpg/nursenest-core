@@ -113,6 +113,15 @@ const nextConfig: NextConfig = {
         source: "/_next/static/:path*",
         headers: [{ key: "Cache-Control", value: STATIC_ASSET_CACHE_CONTROL }],
       },
+      /** Public marketing fallbacks + static marks (`/marketing/*`); complements long TTL on `/_next/static`. */
+      {
+        source: "/marketing/:path*",
+        headers: [{ key: "Cache-Control", value: STATIC_ASSET_CACHE_CONTROL }],
+      },
+      {
+        source: "/favicon.ico",
+        headers: [{ key: "Cache-Control", value: STATIC_ASSET_CACHE_CONTROL }],
+      },
     ];
   },
 };

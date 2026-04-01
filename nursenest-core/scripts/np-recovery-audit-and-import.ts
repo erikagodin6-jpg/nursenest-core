@@ -5,6 +5,10 @@ import fs from "node:fs";
 import path from "node:path";
 import { prisma } from "@/lib/db";
 import { buildQuestionBankCoverageAnalysis } from "@/lib/questions/build-question-bank-coverage-analysis";
+import {
+  applyExamQuestionsJsonNpRecovery,
+  isExamQuestionsJsonNpCandidate,
+} from "@/lib/replit-import/exam-questions-json-np-recovery";
 import { extractQuestionLikeRecords } from "@/lib/replit-import/replit-json-extract";
 import { normalizeRawQuestionRecord, toPrismaCreateInput } from "@/lib/replit-import/replit-question-normalize";
 
@@ -99,15 +103,37 @@ async function main() {
   const raw = JSON.parse(fs.readFileSync(activeSource.absolutePath, "utf8")) as unknown;
   const records = extractQuestionLikeRecords(raw, activeSource.absolutePath);
 
-  const normalized: ReturnType<typeof normalizeRawQuestionRecord>[] = records.map((r) =>
-    normalizeRawQuestionRecord(r, {
-      defaultCountry: "CA",
+  const defaultCountry = "CA" as const;
+  const rawNpCandidates = records.filter((rec) => {
+    if (!rec || typeof rec !== "object") return false;
+    return isExamQuestionsJsonNpCandidate(rec as Record<string, unknown>);
+  }).length;
+
+  const normalized: ReturnType<typeof normalizeRawQuestionRecord>[] = records.map((r) => {
+    const base = normalizeRawQuestionRecord(r, {
+      defaultCountry,
       defaultTrack: "NP",
       statusPublished: statusDb === "published",
-    }),
-  );
+    });
+    if (!r || typeof r !== "object") return base;
+    return applyExamQuestionsJsonNpRecovery(r as Record<string, unknown>, base, defaultCountry);
+  });
 
-  const validNp = normalized.flatMap((n) => (n.ok ? [n.row] : [])).filter((r) => r.tier === "NP");
+  const rawNpNormalizeFailures = records.filter((rec, i) => {
+    if (!rec || typeof rec !== "object") return false;
+    if (!isExamQuestionsJsonNpCandidate(rec as Record<string, unknown>)) return false;
+    return !normalized[i]?.ok;
+  }).length;
+
+  /** Only rows that are NP in source signals — do not treat `defaultTrack: NP` fallback as importable for non-NP questions. */
+  const validNp = records.flatMap((rec, i) => {
+    const n = normalized[i];
+    if (!n?.ok || !rec || typeof rec !== "object") return [];
+    const raw = rec as Record<string, unknown>;
+    if (!isExamQuestionsJsonNpCandidate(raw)) return [];
+    if (n.row.tier.toLowerCase() !== "np") return [];
+    return [n.row];
+  });
 
   const uniqueByHash = new Map<string, (typeof validNp)[number]>();
   for (const r of validNp) {
@@ -146,9 +172,14 @@ async function main() {
     sourceAudit,
     npRecovery: {
       rawRecordsSeen: records.length,
+      rawNpCandidates,
+      rawNpCandidatesNormalizeFailed: rawNpNormalizeFailures,
+      /** Classify NP: raw `tier` (case-insensitive) === `np`, or raw `exam` matches NP registry / AANP-style boards (see `exam-questions-json-np-recovery.ts`). */
+      npClassificationSignals: "tier=np | exam in pathway NP keys or AANP/ANCC/FNP/AGPCNP/PMHNP-style labels",
       normalizedNpRows: validNp.length,
       uniqueNpRows: uniqueRows.length,
       skippedDuplicatesInDb: dbDupCount,
+      duplicateProtection: "stemHash pre-check + skip existing hashes in DB; apply mode also skips in-run duplicates",
       inserted,
     },
     coverage: {

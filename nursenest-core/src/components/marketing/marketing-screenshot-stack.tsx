@@ -97,12 +97,7 @@ export function MarketingScreenshotStack({
       data-testid={testIdPrefix}
     >
       {picks.map((slide, i) => (
-        <ScreenshotFrame
-          key={`${slide.objectKey}-${i}`}
-          slide={slide}
-          priority={i === 0}
-          testId={`img-${testIdPrefix}-${i}`}
-        />
+        <ScreenshotFrame key={`${slide.objectKey}-${i}`} slide={slide} testId={`img-${testIdPrefix}-${i}`} />
       ))}
     </div>
   );
