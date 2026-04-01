@@ -16,6 +16,7 @@ import {
   loginWithCallback,
   rnQuestions,
 } from "@/lib/marketing/marketing-entry-routes";
+import { LEGAL_POLICY_BUNDLE_VERSION } from "@/lib/legal/legal-config";
 import type { BillingDuration } from "@/lib/stripe/pricing-map";
 
 type PlanRow = {
@@ -82,6 +83,7 @@ export function PricingPageClient({
   const [loadError, setLoadError] = useState<string | null>(null);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [policiesAccepted, setPoliciesAccepted] = useState(false);
   const [stats, setStats] = useState<HomeStatsPayload | null>(null);
   const { locale, t } = useMarketingI18n();
   const { region } = useNursenestRegion();
@@ -132,9 +134,17 @@ export function PricingPageClient({
   const lessonsHubHref = localize(HUB.examLessons);
   const toolsHref = localize(HUB.tools);
 
+  const termsHref = localize("/terms");
+  const privacyHref = localize("/privacy");
+  const refundHref = localize("/refund-policy");
+
   const startCheckout = useCallback(
     async (duration: BillingDuration) => {
       setCheckoutError(null);
+      if (!policiesAccepted) {
+        setCheckoutError(t("pages.pricing.checkout.mustAcceptPolicies"));
+        return;
+      }
       setCheckoutLoading(true);
       trackClientEvent(PH.checkoutStarted, {
         country: effectiveCountry,
@@ -145,7 +155,13 @@ export function PricingPageClient({
         const res = await fetch("/api/subscriptions/checkout", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ country: effectiveCountry, tier, duration }),
+          body: JSON.stringify({
+            country: effectiveCountry,
+            tier,
+            duration,
+            acceptPolicies: true,
+            policyVersion: LEGAL_POLICY_BUNDLE_VERSION,
+          }),
         });
         const data = await res.json();
         if (res.status === 401) {
@@ -168,7 +184,7 @@ export function PricingPageClient({
         setCheckoutLoading(false);
       }
     },
-    [effectiveCountry, tier, t],
+    [effectiveCountry, policiesAccepted, tier, t],
   );
 
   const compareRows = useMemo(
@@ -503,8 +519,36 @@ export function PricingPageClient({
       <section className="mt-14">
         <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">{t("pages.pricing.billing.heading")}</h2>
         <p className="mt-2 text-sm text-muted-foreground">{t("pages.pricing.billing.helper")}</p>
+        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{t("pages.pricing.billing.recurringDisclosure")}</p>
+        <p className="mt-2 text-xs text-muted-foreground">{t("pages.pricing.checkout.recurringShort")}</p>
         {loadError ? <p className="mt-4 text-sm text-red-600">{loadError}</p> : null}
         {checkoutError ? <p className="mt-4 text-sm text-red-600">{checkoutError}</p> : null}
+
+        <div className="mt-6 rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]/40 p-4 text-sm leading-relaxed text-[var(--theme-body-text)]">
+          <label className="flex cursor-pointer gap-3">
+            <input
+              type="checkbox"
+              className="mt-1 h-4 w-4 shrink-0 rounded border-border"
+              checked={policiesAccepted}
+              onChange={(e) => setPoliciesAccepted(e.target.checked)}
+            />
+            <span>
+              {t("pages.pricing.checkout.policyAckStart")}
+              <Link href={termsHref} className="font-semibold text-primary underline-offset-4 hover:underline">
+                {t("pages.pricing.checkout.policyTermsLabel")}
+              </Link>
+              {t("pages.pricing.checkout.policyAckBetween1")}
+              <Link href={privacyHref} className="font-semibold text-primary underline-offset-4 hover:underline">
+                {t("pages.pricing.checkout.policyPrivacyLabel")}
+              </Link>
+              {t("pages.pricing.checkout.policyAckBetween2")}
+              <Link href={refundHref} className="font-semibold text-primary underline-offset-4 hover:underline">
+                {t("pages.pricing.checkout.policyRefundLabel")}
+              </Link>
+              {t("pages.pricing.checkout.policyAckEnd")}
+            </span>
+          </label>
+        </div>
 
         <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {(["monthly", "3-month", "6-month", "yearly"] as BillingDuration[]).map((dur) => {
@@ -560,7 +604,7 @@ export function PricingPageClient({
                     </Link>
                     <button
                       type="button"
-                      disabled={checkoutLoading || !row.checkoutAvailable}
+                      disabled={checkoutLoading || !row.checkoutAvailable || !policiesAccepted}
                       onClick={() => startCheckout(dur)}
                       className="mt-4 w-full rounded-full bg-primary py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
                     >

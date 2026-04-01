@@ -163,6 +163,10 @@ model User {
   trialUsedAt             DateTime?
   trialStartedAt          DateTime?
   trialEndsAt             DateTime?
+  /** When the user last acknowledged legal policies at subscription checkout (server timestamp). */
+  legalPoliciesAcceptedAt DateTime?
+  /** Bundle id from `LEGAL_POLICY_BUNDLE_VERSION` at acceptance time. */
+  legalPoliciesVersion    String?        @db.VarChar(32)
   createdAt               DateTime       @default(now())
   updatedAt               DateTime       @updatedAt
   subscriptions           Subscription[]

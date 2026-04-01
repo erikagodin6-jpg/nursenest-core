@@ -174,6 +174,9 @@ export function SiteFooter() {
               <li>
                 <FLink href="/refund-policy">{t("footer.refundPolicy")}</FLink>
               </li>
+              <li>
+                <FLink href="/acceptable-use">{t("footer.acceptableUse")}</FLink>
+              </li>
             </ul>
             <h3 className="mb-3 mt-6 text-sm font-semibold text-[var(--theme-heading-text)]">{t("footer.alliedHealth")}</h3>
             <ul className="space-y-2 text-sm text-[var(--theme-muted-text)]">

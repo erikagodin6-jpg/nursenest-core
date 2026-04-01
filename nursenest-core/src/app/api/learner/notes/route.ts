@@ -6,6 +6,7 @@ import { prisma } from "@/lib/db";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { enforceLearnerNotesProtection } from "@/lib/http/api-protection";
+import { recordLearnerNoteMutationRollup } from "@/lib/premium-protection/telemetry-db";
 
 const scopeSchema = z.nativeEnum(LearnerNoteScope);
 
@@ -99,6 +100,7 @@ export async function POST(req: NextRequest) {
       },
       select: { id: true, updatedAt: true },
     });
+    void recordLearnerNoteMutationRollup("note_upsert", gate.userId).catch(() => {});
     return NextResponse.json({ ok: true, id: row.id, updatedAt: row.updatedAt.toISOString() });
   } catch {
     return NextResponse.json({ error: "Unable to save notes" }, { status: 503 });
@@ -128,6 +130,7 @@ export async function DELETE(req: NextRequest) {
         contextId: parsed.data.contextId,
       },
     });
+    void recordLearnerNoteMutationRollup("note_delete", gate.userId).catch(() => {});
     return NextResponse.json({ ok: true });
   } catch {
     return NextResponse.json({ error: "Unable to delete" }, { status: 503 });

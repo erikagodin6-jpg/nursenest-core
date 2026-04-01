@@ -36,6 +36,7 @@ export type InsightBuildOverrides = {
   mockCount?: number;
   examDate?: Date | null;
   examDatePlanType?: import("@prisma/client").ExamDatePlanType | null;
+  studyCadencePreference?: string | null;
 };
 
 /**
@@ -66,6 +67,7 @@ export async function buildLearnerInsightSnapshot(
         ? Promise.resolve({
             examDate: overrides.examDate ?? null,
             examDatePlanType: overrides.examDatePlanType ?? null,
+            studyCadencePreference: overrides.studyCadencePreference ?? null,
           })
         : prisma.user
             .findUnique({

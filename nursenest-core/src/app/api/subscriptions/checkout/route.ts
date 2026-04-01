@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/db";
+import { LEGAL_POLICY_BUNDLE_VERSION } from "@/lib/legal/legal-config";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
@@ -22,6 +24,8 @@ const bodySchema = z.object({
   country: z.enum(["CA", "US"]),
   tier: z.enum(["RPN", "LVN_LPN", "RN", "NP", "ALLIED"]),
   duration: z.enum(["monthly", "3-month", "6-month", "yearly"]),
+  acceptPolicies: z.literal(true),
+  policyVersion: z.string().min(1).max(64),
 });
 
 function sessionUserId(session: { user?: unknown } | null): string | undefined {
@@ -46,7 +50,10 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
   }
 
-  const { country, tier, duration } = parsed.data;
+  const { country, tier, duration, policyVersion } = parsed.data;
+  if (policyVersion !== LEGAL_POLICY_BUNDLE_VERSION) {
+    return NextResponse.json({ error: "Policy version outdated. Refresh the page and try again." }, { status: 400 });
+  }
   const tierCode = tier as TierCode;
   const durationCode = duration as BillingDuration;
   const price = findPriceEntry(country, tierCode, durationCode);
@@ -69,6 +76,15 @@ export async function POST(req: Request) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ?? "http://localhost:3000";
 
   try {
+    const acceptedAt = new Date();
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        legalPoliciesAcceptedAt: acceptedAt,
+        legalPoliciesVersion: policyVersion,
+      },
+    });
+
     const checkoutSession = await stripe.checkout.sessions.create({
       mode: "subscription",
       line_items: [{ price: price.priceId, quantity: 1 }],
@@ -81,6 +97,8 @@ export async function POST(req: Request) {
         tier,
         duration,
         app: "nursenest-core",
+        legalPolicyVersion: policyVersion,
+        legalPoliciesAcceptedAt: acceptedAt.toISOString(),
       },
     });
 

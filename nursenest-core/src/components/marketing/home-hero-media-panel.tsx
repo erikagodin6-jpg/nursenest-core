@@ -100,7 +100,7 @@ export function HomeHeroMediaPanel({
   }
 
   return (
-    <div className="flex w-full min-w-0 flex-col gap-4" data-testid="hero-media-panel">
+    <div className="flex w-full min-w-0 flex-col gap-3 md:gap-3.5" data-testid="hero-media-panel">
       <div className="relative">
         <div
           className="pointer-events-none absolute -inset-1 -z-10 rounded-[1.35rem] bg-gradient-to-br from-primary/[0.12] via-transparent to-secondary/[0.15] blur-2xl md:-inset-3"
@@ -108,7 +108,7 @@ export function HomeHeroMediaPanel({
         />
         <BrowserChrome>
           <div className="relative w-full overflow-hidden bg-[var(--theme-muted-surface)]">
-            <div className="aspect-[16/10] w-full min-h-[14rem] sm:min-h-[17rem] md:min-h-[18rem] lg:min-h-[20rem]">
+            <div className="aspect-[16/10] w-full min-h-[15.5rem] sm:min-h-[18.25rem] md:min-h-[19.5rem] lg:min-h-[22rem]">
               <HeroImage
                 slide={primary}
                 priority
@@ -119,20 +119,20 @@ export function HomeHeroMediaPanel({
             </div>
           </div>
         </BrowserChrome>
-        <div className="mt-3 px-1">
+        <div className="mt-2 px-1">
           <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{primary.title}</p>
           <p className="mt-0.5 text-xs leading-relaxed text-[var(--theme-body-text)]">{primary.caption}</p>
         </div>
       </div>
 
       {secondaries.length > 0 ? (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-3.5">
           {secondaries.map((slide, i) => (
             <div
               key={`${slide.objectKey}-sec-${i}`}
               className="overflow-hidden rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] shadow-[var(--shadow-card)]"
             >
-              <div className="aspect-[16/10] w-full min-h-[7.5rem] overflow-hidden bg-[var(--theme-muted-surface)] sm:min-h-[8rem]">
+              <div className="aspect-[16/10] w-full min-h-[8.25rem] overflow-hidden bg-[var(--theme-muted-surface)] sm:min-h-[8.75rem]">
                 <HeroImage
                   slide={slide}
                   priority={false}

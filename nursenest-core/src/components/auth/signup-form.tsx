@@ -1,12 +1,29 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { TurnstileSignup } from "@/components/auth/turnstile-signup";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 
-export function SignupForm() {
+export function SignupForm({
+  termsHref = "/terms",
+  privacyHref = "/privacy",
+  legalBefore = "By creating an account, you agree to our ",
+  legalAnd = " and ",
+  legalAfter = ".",
+  termsLabel = "Terms of Service",
+  privacyLabel = "Privacy Policy",
+}: {
+  termsHref?: string;
+  privacyHref?: string;
+  legalBefore?: string;
+  legalAnd?: string;
+  legalAfter?: string;
+  termsLabel?: string;
+  privacyLabel?: string;
+} = {}) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
@@ -100,6 +117,17 @@ export function SignupForm() {
         </div>
       </div>
       <TurnstileSignup onToken={onCaptcha} />
+      <p className="text-xs leading-relaxed text-muted-foreground">
+        {legalBefore}
+        <Link href={termsHref} className="font-semibold text-primary underline-offset-4 hover:underline">
+          {termsLabel}
+        </Link>
+        {legalAnd}
+        <Link href={privacyHref} className="font-semibold text-primary underline-offset-4 hover:underline">
+          {privacyLabel}
+        </Link>
+        {legalAfter}
+      </p>
       {error ? <p className="text-sm text-red-600">{error}</p> : null}
       <button className="w-full rounded-xl bg-primary px-4 py-2 font-semibold" type="submit">
         Create account

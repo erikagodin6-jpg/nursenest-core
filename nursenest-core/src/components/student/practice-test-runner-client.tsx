@@ -496,7 +496,7 @@ export function PracticeTestRunnerClient({
 
   return (
     <div className="space-y-4">
-      <ProtectedPremiumContent userLabel={userLabel} flags={protectionFlags}>
+      <ProtectedPremiumContent userLabel={userLabel} flags={protectionFlags} telemetrySurface="practice_test">
         <ExamSessionShell neutralPalette>
           <ExamSessionTopBar
             left={

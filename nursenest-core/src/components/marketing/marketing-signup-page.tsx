@@ -1,5 +1,6 @@
 import { SignupForm } from "@/components/auth/signup-form";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
+import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 
 export async function MarketingSignupPage({ locale }: { locale: string }) {
@@ -12,7 +13,15 @@ export async function MarketingSignupPage({ locale }: { locale: string }) {
         </div>
         <h1 className="text-3xl font-bold">{m["pages.signup.h1"]}</h1>
         <p className="mt-2 text-sm text-muted">{m["pages.signup.subtitle"]}</p>
-        <SignupForm />
+        <SignupForm
+          termsHref={withMarketingLocale(locale, "/terms")}
+          privacyHref={withMarketingLocale(locale, "/privacy")}
+          legalBefore={m["pages.signup.legalBefore"]}
+          legalAnd={m["pages.signup.legalAnd"]}
+          legalAfter={m["pages.signup.legalAfter"]}
+          termsLabel={m["pages.signup.termsLink"]}
+          privacyLabel={m["pages.signup.privacyLink"]}
+        />
       </div>
     </main>
   );

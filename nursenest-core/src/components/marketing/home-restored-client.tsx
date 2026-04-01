@@ -223,9 +223,9 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
 
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div
-              className={`grid items-start gap-5 md:gap-8 lg:gap-10 ${showHeroMediaColumn ? "md:grid-cols-2" : "md:grid-cols-1"}`}
+              className={`grid items-center gap-5 md:gap-8 lg:gap-10 ${showHeroMediaColumn ? "md:grid-cols-[1fr_1.08fr]" : "md:grid-cols-1"}`}
             >
-              <div className="hero-motion-enter min-w-0 space-y-4 md:space-y-5">
+              <div className="hero-motion-enter min-w-0 max-w-[min(100%,45rem)] space-y-3.5 md:space-y-4">
                 <div className="flex flex-wrap items-center gap-2">
                   <div
                     className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/5 px-3 py-1.5 sm:px-4"
@@ -240,21 +240,24 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
                   </div>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-3">
                   <h1
-                    className="font-bold leading-[1.08] tracking-tight text-[var(--theme-heading-text)]"
+                    className="text-balance font-bold leading-[1.08] tracking-tight text-[var(--theme-heading-text)]"
                     style={{ fontSize: "var(--text-hero)" }}
                     data-testid="text-hero-heading"
                   >
                     {t("home.hero.mainTitle")}
                   </h1>
 
-                  <p className="max-w-xl text-base leading-relaxed text-[var(--theme-body-text)] lg:text-lg" data-testid="text-hero-subheading">
+                  <p
+                    className="text-pretty max-w-none text-base leading-relaxed text-[var(--theme-body-text)] lg:text-lg"
+                    data-testid="text-hero-subheading"
+                  >
                     {t("home.hero.newSubheadline")}
                   </p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3" data-testid="hero-feature-strip">
+                <div className="grid grid-cols-2 gap-2 sm:gap-2.5" data-testid="hero-feature-strip">
                   {(
                     [
                       { icon: Brain, key: "featureActiveRecall", descKey: "featureActiveRecallDesc" },
@@ -265,15 +268,17 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
                   ).map((feat) => (
                     <div
                       key={feat.key}
-                      className="nn-card flex items-start gap-2.5 rounded-xl p-3"
+                      className="nn-card flex items-start gap-2 rounded-xl p-2.5"
                       data-testid={`feature-${feat.key}`}
                     >
-                      <div className="nn-accent-icon-wrap mt-0.5 h-8 w-8 shrink-0">
-                        <feat.icon className="nn-accent-icon h-4 w-4" />
+                      <div className="nn-accent-icon-wrap mt-0.5 h-7 w-7 shrink-0">
+                        <feat.icon className="nn-accent-icon h-3.5 w-3.5 sm:h-4 sm:w-4" />
                       </div>
                       <div className="min-w-0">
-                        <p className="text-xs font-semibold leading-tight text-[var(--theme-heading-text)] sm:text-sm">{t(`home.hero.${feat.key}`)}</p>
-                        <p className="mt-0.5 hidden text-[11px] leading-snug text-[var(--theme-body-text)] sm:block">{t(`home.hero.${feat.descKey}`)}</p>
+                        <p className="text-xs font-semibold leading-snug text-[var(--theme-heading-text)] sm:text-sm">{t(`home.hero.${feat.key}`)}</p>
+                        <p className="mt-0.5 hidden text-[10px] leading-snug text-[var(--theme-body-text)] sm:line-clamp-2 sm:block sm:text-[11px]">
+                          {t(`home.hero.${feat.descKey}`)}
+                        </p>
                       </div>
                     </div>
                   ))}
@@ -460,9 +465,7 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
               </div>
 
               <div
-                className={
-                  showHeroMediaColumn ? "relative mt-5 w-full min-w-0 md:mt-0 md:flex md:flex-col md:justify-start md:pt-0" : "hidden"
-                }
+                className={showHeroMediaColumn ? "relative w-full min-w-0" : "hidden"}
                 style={{ overflowAnchor: "none" }}
               >
                 <HomeHeroMediaPanel slides={heroSlides} primaryIndex={0} secondaryIndices={[1, 2]} />

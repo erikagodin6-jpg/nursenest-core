@@ -225,6 +225,12 @@ export async function collectCoreUrls(origin: string): Promise<string[]> {
     add("/for-institutions"),
     add("/blog"),
     add("/faq"),
+    add("/terms"),
+    add("/privacy"),
+    add("/refund-policy"),
+    add("/acceptable-use"),
+    add("/disclaimer"),
+    add("/contact"),
     add("/tools"),
     add("/case-studies"),
   ];
@@ -260,6 +266,13 @@ export function collectLocaleMarketingUrls(origin: string, locale: string): stri
   urls.push(add(`/${locale}`));
   urls.push(add(`/${locale}/pricing`));
   urls.push(add(`/${locale}/for-institutions`));
+  urls.push(add(`/${locale}/faq`));
+  urls.push(add(`/${locale}/terms`));
+  urls.push(add(`/${locale}/privacy`));
+  urls.push(add(`/${locale}/refund-policy`));
+  urls.push(add(`/${locale}/acceptable-use`));
+  urls.push(add(`/${locale}/disclaimer`));
+  urls.push(add(`/${locale}/contact`));
   for (const slug of getAllProgrammaticSlugs()) {
     if (slug in PROGRAMMATIC_SLUG_TO_PATHWAY_PATH) continue;
     urls.push(add(`/${locale}/${slug}`));

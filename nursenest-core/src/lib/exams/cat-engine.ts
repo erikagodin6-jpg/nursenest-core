@@ -10,11 +10,19 @@ import {
   CAT_START_THETA,
 } from "@/lib/exams/cat-config";
 import {
+  confidenceLevelFromSe,
+  confidenceText,
+  readinessHeadlineFromSignals,
+  readinessScoreFromTheta,
+  trajectorySummary,
+} from "@/lib/exams/cat-readiness";
+import {
   CAT_STATE_VERSION,
   type CatAdaptiveState,
   type CatAnswerResult,
   type CatExamReport,
   type CatIncident,
+  type CatStoppedReason,
 } from "@/lib/exams/cat-types";
 
 export type CatPoolRow = {
@@ -43,8 +51,10 @@ export function createInitialAdaptiveState(): CatAdaptiveState {
     theta: CAT_START_THETA,
     targetDifficulty: CAT_START_TARGET_DIFFICULTY,
     se: 1.25,
+    totalInformation: 0,
     results: [],
     difficultyHistory: [],
+    thetaHistory: [],
     incidents: [],
     stoppedReason: null,
     decision: null,
@@ -61,11 +71,14 @@ export function parseAdaptiveState(raw: unknown): CatAdaptiveState | null {
     theta: o.theta,
     targetDifficulty: clampDifficulty(o.targetDifficulty),
     se: typeof o.se === "number" ? o.se : 1.25,
+    totalInformation: typeof o.totalInformation === "number" ? o.totalInformation : 0,
     results: Array.isArray(o.results) ? (o.results as CatAnswerResult[]) : [],
     difficultyHistory: Array.isArray(o.difficultyHistory) ? o.difficultyHistory.map(Number) : [],
+    thetaHistory: Array.isArray(o.thetaHistory) ? o.thetaHistory.map(Number) : [],
     incidents: Array.isArray(o.incidents) ? (o.incidents as CatIncident[]) : [],
     stoppedReason: o.stoppedReason ?? null,
     decision: o.decision ?? null,
+    catPresentationMode: o.catPresentationMode,
   };
 }
 
@@ -89,13 +102,21 @@ export function appendScoredResult(state: CatAdaptiveState, result: CatAnswerRes
   const n = state.results.length + 1;
   const se = Math.min(1.2, 2.0 / Math.sqrt(Math.max(1, n)));
 
+  const info =
+    typeof result.itemInformation === "number" && Number.isFinite(result.itemInformation)
+      ? result.itemInformation
+      : 0.25;
+  const thetaHistory = [...state.thetaHistory, theta].slice(-30);
+
   return {
     ...state,
     theta,
     targetDifficulty: clampDifficulty(target),
     se,
+    totalInformation: state.totalInformation + info,
     difficultyHistory: [...state.difficultyHistory, d],
     results: [...state.results, result],
+    thetaHistory,
   };
 }
 
@@ -256,6 +277,12 @@ export function finalizeThetaDecision(theta: number): "pass" | "fail" | "uncerta
   return "uncertain";
 }
 
+function reportStoppedReason(raw: CatStoppedReason | null): CatExamReport["stoppedReason"] {
+  if (raw === null || raw === "pool_exhausted") return "completed";
+  if (raw === "max_length") return "max_length_reached";
+  return raw;
+}
+
 export function buildCatReport(state: CatAdaptiveState): CatExamReport {
   const byCat = new Map<string, { correct: number; total: number }>();
   for (const r of state.results) {
@@ -305,21 +332,30 @@ export function buildCatReport(state: CatAdaptiveState): CatExamReport {
     suggestedNextSteps.push("Keep mixing systems and prioritization items in the question bank.");
   }
 
+  const readinessScore = readinessScoreFromTheta(state.theta);
+  const confidenceLevel = confidenceLevelFromSe(state.se);
+  const trajectory = trajectorySummary(state.results.map((r) => r.correct));
+  const readinessHeadline = readinessHeadlineFromSignals({
+    readinessScore,
+    confidenceLevel,
+    decision,
+  });
+
   return {
     decision,
     theta: state.theta,
     se: state.se,
     totalQuestions,
     correctCount,
-    stoppedReason:
-      state.stoppedReason === null
-        ? "completed"
-        : state.stoppedReason === "pool_exhausted"
-          ? "completed"
-          : state.stoppedReason,
+    stoppedReason: reportStoppedReason(state.stoppedReason),
     categoryBreakdown,
     weakAreas,
     suggestedNextSteps,
+    readinessScore,
+    confidenceLevel,
+    confidenceText: confidenceText(confidenceLevel),
+    trajectory,
+    readinessHeadline,
   };
 }
 

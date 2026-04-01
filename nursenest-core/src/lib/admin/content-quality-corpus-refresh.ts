@@ -103,7 +103,7 @@ export async function refreshContentQualityCorpusSnapshot(): Promise<ContentQual
   let scannedCi = 0;
   cursor = undefined;
   for (;;) {
-    const batch = await prisma.contentItem.findMany({
+    const batch: Array<{ id: string; content: unknown }> = await prisma.contentItem.findMany({
       where: { type: "lesson", status: ContentStatus.PUBLISHED },
       select: { id: true, content: true },
       take: BATCH,

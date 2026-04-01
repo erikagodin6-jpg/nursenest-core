@@ -615,7 +615,7 @@ export function QuestionBankPracticeClient({
         </label>
       </div>
 
-      <ProtectedPremiumContent userLabel={userLabel} flags={protectionFlags}>
+      <ProtectedPremiumContent userLabel={userLabel} flags={protectionFlags} telemetrySurface="question_bank">
         <div className="nn-card space-y-4 p-6">
           <div className="flex flex-wrap gap-2 text-xs text-muted">
             <span>

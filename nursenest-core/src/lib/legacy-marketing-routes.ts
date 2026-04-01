@@ -87,6 +87,12 @@ export function resolveMarketingHref(href: string): string {
     mapped === "/case-studies" ||
     mapped === "/pre-nursing" ||
     mapped.startsWith("/pre-nursing/") ||
+    mapped === "/terms" ||
+    mapped === "/privacy" ||
+    mapped === "/refund-policy" ||
+    mapped === "/acceptable-use" ||
+    mapped === "/disclaimer" ||
+    mapped === "/contact" ||
     mapped === "/faq" ||
     mapped === "/exam-lessons" ||
     mapped === "/tools" ||

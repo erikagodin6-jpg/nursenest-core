@@ -263,7 +263,7 @@ export function FlashcardStudyClient({
       </div>
 
       {mode === "subscriber" ? (
-        <ProtectedPremiumContent userLabel={userLabel} flags={protectionFlags} className="mt-6">
+        <ProtectedPremiumContent userLabel={userLabel} flags={protectionFlags} className="mt-6" telemetrySurface="flashcards">
           <button
             type="button"
             className="w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"

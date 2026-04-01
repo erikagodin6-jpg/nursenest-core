@@ -3,6 +3,94 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
 
+/** Must match `surfaceSchema` in `/api/learner/protection-telemetry`. */
+export type PremiumProtectionTelemetrySurface =
+  | "question_bank"
+  | "practice_test"
+  | "flashcards"
+  | "pathway_lesson"
+  | "content_lesson"
+  | "unknown";
+
+const TELEMETRY_FLUSH_MS = 22_000;
+const PRINT_TELEMETRY_COOLDOWN_MS = 12_000;
+const BLUR_TELEMETRY_COOLDOWN_MS = 45_000;
+
+function usePremiumProtectionTelemetry(surface: PremiumProtectionTelemetrySurface | undefined) {
+  const bufferRef = useRef(new Map<string, number>());
+  const flushTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const surfaceRef = useRef(surface);
+  surfaceRef.current = surface;
+
+  const flush = useCallback(async () => {
+    const surf = surfaceRef.current;
+    if (!surf) return;
+    const buf = bufferRef.current;
+    if (buf.size === 0) return;
+    const items = [...buf.entries()].map(([key, count]) => {
+      const [metricKey, s] = key.split("\t");
+      return { metricKey, surface: s as PremiumProtectionTelemetrySurface, count };
+    });
+    buf.clear();
+    try {
+      await fetch("/api/learner/protection-telemetry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify({ items }),
+      });
+    } catch {
+      /* non-blocking */
+    }
+  }, []);
+
+  const queue = useCallback(
+    (metricKey: string, add = 1) => {
+      const surf = surfaceRef.current;
+      if (!surf) return;
+      const key = `${metricKey}\t${surf}`;
+      bufferRef.current.set(key, (bufferRef.current.get(key) ?? 0) + add);
+      if (!flushTimerRef.current) {
+        flushTimerRef.current = setTimeout(() => {
+          flushTimerRef.current = null;
+          void flush();
+        }, TELEMETRY_FLUSH_MS);
+      }
+    },
+    [flush],
+  );
+
+  useEffect(() => {
+    if (!surface) return;
+    const beaconFlush = () => {
+      const surf = surfaceRef.current;
+      if (!surf) return;
+      const buf = bufferRef.current;
+      if (buf.size === 0) return;
+      const items = [...buf.entries()].map(([key, count]) => {
+        const [metricKey, s] = key.split("\t");
+        return { metricKey, surface: s, count };
+      });
+      buf.clear();
+      const body = JSON.stringify({ items });
+      if (typeof navigator !== "undefined" && navigator.sendBeacon) {
+        navigator.sendBeacon("/api/learner/protection-telemetry", new Blob([body], { type: "application/json" }));
+      }
+    };
+    window.addEventListener("pagehide", beaconFlush);
+    return () => {
+      window.removeEventListener("pagehide", beaconFlush);
+      if (flushTimerRef.current) {
+        clearTimeout(flushTimerRef.current);
+        flushTimerRef.current = null;
+      }
+      void flush();
+    };
+  }, [surface, flush]);
+
+  return { queue, flush };
+}
+
 function isNotesEditorTarget(target: EventTarget | null): boolean {
   if (!target || !(target instanceof Element)) return false;
   return Boolean(target.closest("[data-notes-editor]"));
@@ -23,6 +111,8 @@ type Props = {
   className?: string;
   /** Screen-reader-only label for the protected region. */
   ariaLabel?: string;
+  /** When set, aggregates anonymous deterrence counters for admin rollups (debounced). */
+  telemetrySurface?: PremiumProtectionTelemetrySurface;
 };
 
 /**
@@ -34,11 +124,15 @@ export function ProtectedPremiumContent({
   flags,
   className = "",
   ariaLabel = "Premium study content",
+  telemetrySurface,
 }: Props) {
   const rootRef = useRef<HTMLDivElement>(null);
   const [toast, setToast] = useState<string | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const headingId = useId();
+  const lastPrintTelemetryAt = useRef(0);
+  const lastBlurTelemetryAt = useRef(0);
+  const { queue } = usePremiumProtectionTelemetry(telemetrySurface);
 
   const showToast = useCallback((msg: string) => {
     setToast(msg);
@@ -55,6 +149,7 @@ export function ProtectedPremiumContent({
       if (!root || !(e.target instanceof Node) || !root.contains(e.target)) return;
       if (isFormControl(e.target) && isNotesEditorTarget(e.target)) return;
       e.preventDefault();
+      queue("copy_blocked");
       showToast("Copying is disabled for premium study content. You can save notes instead.");
     };
 
@@ -63,6 +158,7 @@ export function ProtectedPremiumContent({
       const root = rootRef.current;
       if (!root || !(e.target instanceof Node) || !root.contains(e.target)) return;
       e.preventDefault();
+      queue("cut_blocked");
       showToast("Copying is disabled for premium study content. You can save notes instead.");
     };
 
@@ -86,6 +182,8 @@ export function ProtectedPremiumContent({
       if (!root || !(e.target instanceof Node) || !root.contains(e.target)) return;
       if ((e.ctrlKey || e.metaKey) && (e.key === "c" || e.key === "C" || e.key === "x" || e.key === "X")) {
         e.preventDefault();
+        if (e.key === "x" || e.key === "X") queue("cut_blocked");
+        else queue("copy_blocked");
         showToast("Copying is disabled for premium study content. You can save notes instead.");
       }
     };
@@ -103,7 +201,7 @@ export function ProtectedPremiumContent({
       document.removeEventListener("dragstart", onDragStart, true);
       document.removeEventListener("keydown", onKeyDownCapture, true);
     };
-  }, [flags.copyDeterrence, showToast]);
+  }, [flags.copyDeterrence, queue, showToast]);
 
   useEffect(() => {
     if (!flags.copyDeterrence) return;
@@ -122,11 +220,16 @@ export function ProtectedPremiumContent({
   useEffect(() => {
     if (!flags.hideProtectedOnPrint) return;
     const onBeforePrint = () => {
+      const now = Date.now();
+      if (now - lastPrintTelemetryAt.current >= PRINT_TELEMETRY_COOLDOWN_MS) {
+        lastPrintTelemetryAt.current = now;
+        queue("print_prompt");
+      }
       showToast("Protected lesson and rationale content cannot be printed. You can print your notes.");
     };
     window.addEventListener("beforeprint", onBeforePrint);
     return () => window.removeEventListener("beforeprint", onBeforePrint);
-  }, [flags.hideProtectedOnPrint, showToast]);
+  }, [flags.hideProtectedOnPrint, queue, showToast]);
 
   useEffect(() => {
     if (!flags.blurOnHiddenTab) return;
@@ -136,13 +239,18 @@ export function ProtectedPremiumContent({
       if (document.visibilityState === "hidden") {
         root.style.filter = "blur(6px)";
         root.style.transition = "filter 0.2s ease";
+        const now = Date.now();
+        if (now - lastBlurTelemetryAt.current >= BLUR_TELEMETRY_COOLDOWN_MS) {
+          lastBlurTelemetryAt.current = now;
+          queue("tab_blur_applied");
+        }
       } else {
         root.style.filter = "";
       }
     };
     document.addEventListener("visibilitychange", onVis);
     return () => document.removeEventListener("visibilitychange", onVis);
-  }, [flags.blurOnHiddenTab]);
+  }, [flags.blurOnHiddenTab, queue]);
 
   const ts = new Date().toISOString().slice(0, 19).replace("T", " ");
 

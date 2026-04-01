@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import type { LearnerNoteScope } from "@prisma/client";
+import { LearnerNoteScope } from "@prisma/client";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
 import { ProtectedPremiumContent } from "@/components/student/protected-premium-content";
 import { StudyNotesPanel } from "@/components/student/study-notes-panel";
@@ -39,7 +39,11 @@ export function PremiumLessonShell({
         limited on lesson text—this is deterrence only, not DRM.
       </p>
       {qualityNotice}
-      <ProtectedPremiumContent userLabel={userLabel} flags={flags}>
+      <ProtectedPremiumContent
+        userLabel={userLabel}
+        flags={flags}
+        telemetrySurface={scope === LearnerNoteScope.PATHWAY_LESSON ? "pathway_lesson" : "content_lesson"}
+      >
         {children}
       </ProtectedPremiumContent>
       <StudyNotesPanel

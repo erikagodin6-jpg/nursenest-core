@@ -4,6 +4,7 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { checkRateLimit, consumeRateLimit } from "@/lib/http/rate-limit-in-memory";
 import { getTrustedClientIp, ipRateLimitKey } from "@/lib/http/client-ip";
 import { readDeviceRequestContext } from "@/lib/http/device-request";
+import { recordPremiumProtectionAbuseFromLog } from "@/lib/premium-protection/telemetry-db";
 
 function userPrefix(userId: string): string {
   return userId.slice(0, 8);
@@ -17,6 +18,7 @@ function logAbuse(kind: string, route: string, userId: string, ip: string, extra
     ipSample: ip.length > 16 ? `${ip.slice(0, 12)}…` : ip,
     ...extra,
   });
+  void recordPremiumProtectionAbuseFromLog({ kind, route, userId }).catch(() => {});
 }
 
 function tooMany(
@@ -162,6 +164,19 @@ export function enforceQuestionGradeProtection(req: NextRequest, userId: string)
     return tooMany("rate_limited", 60);
   }
 
+  return null;
+}
+
+/** POST /api/learner/protection-telemetry — batched client deterrence counters. */
+export function enforceProtectionTelemetryPost(req: NextRequest, userId: string): NextResponse | null {
+  const ip = getTrustedClientIp(req);
+  const route = "protection_telemetry";
+  if (!checkRateLimit(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 120 }).ok) {
+    return tooMany("rate_limited", 60);
+  }
+  if (!checkRateLimit(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 48 }).ok) {
+    return tooMany("rate_limited", 60);
+  }
   return null;
 }
 
