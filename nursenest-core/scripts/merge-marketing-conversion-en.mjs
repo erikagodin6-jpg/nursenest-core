@@ -56,6 +56,7 @@ const patch = {
     "Blends recent accuracy, volume, and pacing—so you know what to study next, not a black-box score.",
   "home.featuresStack.ctaQuestions": "Open practice questions",
   "home.featuresStack.ctaPricing": "Compare plans",
+  "home.featuresStack.ctaSignIn": "Sign in to continue",
 
   "home.gateway.title": "Start from the exam you are registered for",
   "home.gateway.subtitle":

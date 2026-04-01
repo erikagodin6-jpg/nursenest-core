@@ -335,6 +335,135 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
     ],
   },
   {
+    slug: "canada-np-exam-prep",
+    title: "Canadian NP Exam Prep | Clinical Decision Training",
+    description:
+      "How to prepare for Canadian nurse practitioner exams with case-based questions, guideline-linked lessons, and readiness that tracks reasoning gaps—not recall-only drills.",
+    h1: "Canadian NP exam prep for advanced clinical judgment",
+    cluster: "exam-np",
+    keywords: ["Canadian NP", "CNPLE", "exam prep", "nurse practitioner Canada"],
+    linkPack: "np",
+    breadcrumb: {
+      midLabel: "NP exam prep",
+      midPath: "/np-exam-prep",
+      currentLabel: "Canada NP prep",
+    },
+    sections: [
+      {
+        heading: "Why NP prep cannot mirror RN volume tactics",
+        level: 2,
+        body: [
+          "Advanced practice exams reward differential reasoning, pharmacology in context, and guideline edges. Memorizing isolated facts without case framing under-tests the skills regulators assess.",
+          `${SITE} routes NP work into longer stems and management forks so you rehearse decisions, not recognition speed alone.`,
+        ],
+      },
+      {
+        heading: "What to expect in case-based blocks",
+        level: 2,
+        body: [
+          "Look for multi-step data: history, vitals, labs, and contraindications that change the safest next action. Your study plan should alternate new presentations with review of prior misses.",
+        ],
+      },
+      {
+        heading: "Related resources",
+        level: 2,
+        body: [
+          "Use the CNPLE practice questions guide for item style, the NP clinical cases page for reasoning patterns, and your pathway hub for lessons scoped to Canada.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "cnple-practice-questions",
+    title: "CNPLE Practice Questions | Canadian NP Clinical Cases",
+    description:
+      "Practice for the Canadian NP exam (CNPLE) with management-focused stems, pharmacology in context, and rationales tied to clinical reasoning—not undergraduate trivia.",
+    h1: "CNPLE practice questions for Canadian NP candidates",
+    cluster: "exam-np",
+    keywords: ["CNPLE", "Canadian NP", "practice questions"],
+    linkPack: "np",
+    breadcrumb: {
+      midLabel: "Canadian NP prep",
+      midPath: "/canada-np-exam-prep",
+      currentLabel: "CNPLE practice",
+    },
+    practiceConversion: true,
+    sections: [
+      {
+        heading: "Stem length and reasoning load",
+        level: 2,
+        body: [
+          "Expect vignettes that require you to interpret incomplete data, weigh comorbidities, and choose diagnostics or therapies appropriate to autonomous practice within regulatory scope.",
+          "If a stem feels short and recall-only, it is probably not representative of the decision density regulators target at the NP level.",
+        ],
+      },
+      {
+        heading: "How to review misses",
+        level: 2,
+        body: [
+          "For each error, name whether you missed a diagnosis fork, a contraindication, a monitoring step, or a follow-up interval. That label becomes your next study unit—not re-reading the whole chapter.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "np-study-guide-canada",
+    title: "NP Study Guide for Canada | Guidelines, Cases, and Pace",
+    description:
+      "A practical NP study guide for Canada: sequencing guidelines, case practice, pharmacology depth, and exam-week pacing without generic checklists.",
+    h1: "NP study guide for Canadian candidates",
+    cluster: "study-guide",
+    keywords: ["NP Canada", "study guide", "CNPLE"],
+    linkPack: "np",
+    breadcrumb: {
+      midLabel: "Canadian NP prep",
+      midPath: "/canada-np-exam-prep",
+      currentLabel: "Study guide",
+    },
+    sections: [
+      {
+        heading: "Anchor to guidelines, then to cases",
+        level: 2,
+        body: [
+          "Pick two references you will actually open during study blocks. Summarize decision thresholds in your own words, then answer cases that force you to apply them under time pressure.",
+        ],
+      },
+      {
+        heading: "Weekly rhythm for working clinicians",
+        level: 2,
+        body: [
+          "Three shorter case blocks beat one exhausted midnight marathon. Keep one session per week purely for weak-domain remediation based on your last session report.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "np-clinical-cases",
+    title: "NP Clinical Cases | Decision Patterns for Exam Prep",
+    description:
+      "Train NP-level clinical reasoning with case patterns: red flags, diagnostic forks, treatment sequencing, and when to escalate—mapped to how advanced practice exams are written.",
+    h1: "NP clinical cases for exam-style reasoning",
+    cluster: "exam-np",
+    keywords: ["NP cases", "clinical reasoning", "nurse practitioner"],
+    linkPack: "np",
+    sections: [
+      {
+        heading: "Cases versus isolated facts",
+        level: 2,
+        body: [
+          "A case ties symptoms, meds, comorbidities, and monitoring into one trajectory. Your job is to choose the next best action, not to list every possible intervention.",
+        ],
+      },
+      {
+        heading: "Build a personal miss taxonomy",
+        level: 2,
+        body: [
+          "Track whether errors cluster in diagnosis, medication choice, monitoring, or follow-up. Feed that taxonomy back into your next case block so repetition fixes reasoning, not luck.",
+        ],
+      },
+    ],
+  },
+  {
     slug: "respiratory-therapy-exam-prep",
     title: "Respiratory Therapy Exam Prep | RRT-Style Review",
     description:
