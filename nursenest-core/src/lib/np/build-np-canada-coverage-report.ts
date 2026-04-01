@@ -1,3 +1,4 @@
+import type { Prisma } from "@prisma/client";
 import { CountryCode } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { withPrismaReadFallback } from "@/lib/prisma/safe-reads";
@@ -14,7 +15,7 @@ const PUBLISHED = "published";
 const NP_TIER = "NP";
 
 /** Qualified = has non-empty explanatory text in any primary rationale field (aligns with grading payload). */
-function qualifiedWhere() {
+function qualifiedWhere(): Prisma.ExamQuestionWhereInput {
   return {
     OR: [
       { rationale: { not: null } },
@@ -22,7 +23,7 @@ function qualifiedWhere() {
       { clinicalReasoning: { not: null } },
       { keyTakeaway: { not: null } },
     ],
-  } as const;
+  };
 }
 
 export type NpCanadaCoverageReport = {
