@@ -10,6 +10,8 @@ import { recordTopicOutcomesSequential } from "@/lib/learner/topic-performance";
 import { normalizeTopicLabel } from "@/lib/learner/weak-topics-from-sessions";
 import { buildRationalePayloadForGradeResponse } from "@/lib/content-quality/rationale-display";
 import { buildNormalizedTeachingPayload, buildTeachingMediaBundle } from "@/lib/content-quality/teaching-payload";
+import { deriveTopicCode } from "@/lib/learner/topic-linking";
+import { ContentStatus } from "@prisma/client";
 
 function normalizeCorrect(correctAnswer: Prisma.JsonValue | null | undefined): string[] {
   if (correctAnswer == null) return [];
@@ -101,6 +103,52 @@ export async function POST(req: Request) {
     const rationaleBundle = buildRationalePayloadForGradeResponse(row);
     const teaching = buildNormalizedTeachingPayload(row);
     const teachingMedia = buildTeachingMediaBundle(row);
+    const topicCode = deriveTopicCode({ topic: row.topic, subtopic: row.subtopic, bodySystem: row.bodySystem });
+
+    const [linkedPathwayLesson, linkedContentLesson, linkedDeck] = topicCode
+      ? await Promise.all([
+          prisma.pathwayLesson.findFirst({
+            where: { topicSlug: topicCode, status: ContentStatus.PUBLISHED, locale: "en" },
+            select: { id: true },
+            orderBy: { sortOrder: "asc" },
+          }),
+          prisma.contentItem.findFirst({
+            where: { type: "lesson", status: "published", bodySystem: topicCode },
+            select: { id: true },
+            orderBy: { updatedAt: "desc" },
+          }),
+          prisma.flashcardDeck.findFirst({
+            where: {
+              status: ContentStatus.PUBLISHED,
+              cards: {
+                some: {
+                  status: ContentStatus.PUBLISHED,
+                  category: { topicCode },
+                },
+              },
+            },
+            select: { slug: true },
+            orderBy: { sortOrder: "asc" },
+          }),
+        ])
+      : [null, null, null];
+
+    const lessonHref = linkedPathwayLesson
+      ? `/app/lessons/${linkedPathwayLesson.id}`
+      : linkedContentLesson
+        ? `/app/lessons/${linkedContentLesson.id}`
+        : null;
+    const flashcardsHref = topicCode
+      ? linkedDeck
+        ? `/app/flashcards/${linkedDeck.slug}/study?topicCode=${encodeURIComponent(topicCode)}`
+        : `/app/flashcards?topicCode=${encodeURIComponent(topicCode)}`
+      : null;
+    const topicDrillHref =
+      topicCode && row.topic
+        ? `/app/questions?preset=topic_drill&topic=${encodeURIComponent(row.topic)}`
+        : topicCode
+          ? `/app/questions?preset=topic_drill&topic=${encodeURIComponent(topicCode)}`
+          : null;
 
     return NextResponse.json({
       correct,
@@ -112,9 +160,17 @@ export async function POST(req: Request) {
       referenceMedia: teachingMedia.referenceMedia,
       matchedConceptImage: teachingMedia.matchedConceptImage,
       topic: row.topic ?? null,
+      topicCode,
       subtopic: row.subtopic ?? null,
       bodySystem: row.bodySystem ?? null,
       questionType: row.questionType,
+      learningLoop: {
+        topicCode,
+        confidence: topicCode ? "high" : "low",
+        lessonHref,
+        flashcardsHref,
+        topicDrillHref,
+      },
       topicStatsUpdated: true,
     });
   } catch (e) {

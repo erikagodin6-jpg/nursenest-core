@@ -143,6 +143,13 @@ export function QuestionBankPracticeClient({
         referenceMedia?: RationaleReferenceMedia[] | null;
         teaching?: NormalizedTeachingPayload | null;
         teachingMedia?: TeachingMediaBundle | null;
+        learningLoop?: {
+          topicCode: string | null;
+          confidence: "high" | "medium" | "low";
+          lessonHref: string | null;
+          flashcardsHref: string | null;
+          topicDrillHref: string | null;
+        } | null;
       }
     >
   >({});
@@ -199,6 +206,7 @@ export function QuestionBankPracticeClient({
           topicRelaxed?: boolean;
           topicRequested?: string | null;
           studyModeNote?: string | null;
+          weakTopicConfidence?: "high" | "medium" | "low" | null;
           diagnostics?: QuestionListEmptyDiagnostics;
         };
         try {
@@ -219,6 +227,10 @@ export function QuestionBankPracticeClient({
         } else if (data.studyModeNote === "weak_topic_unavailable") {
           setSoftNotice(
             "Weak-area mode needs a few graded items first—we are showing a mixed pool until your topic ledger populates.",
+          );
+        } else if (data.studyModeNote === "weak_topic_low_confidence") {
+          setSoftNotice(
+            "Weak-area topic mapping is low-confidence right now. Continue grading items and we will tighten topic alignment.",
           );
         } else {
           setSoftNotice(null);
@@ -275,6 +287,13 @@ export function QuestionBankPracticeClient({
                     referenceMedia?: RationaleReferenceMedia[] | null;
                     teaching?: NormalizedTeachingPayload | null;
                     teachingMedia?: TeachingMediaBundle | null;
+                    learningLoop?: {
+                      topicCode: string | null;
+                      confidence: "high" | "medium" | "low";
+                      lessonHref: string | null;
+                      flashcardsHref: string | null;
+                      topicDrillHref: string | null;
+                    } | null;
                   }
                 >;
               };
@@ -431,6 +450,13 @@ export function QuestionBankPracticeClient({
         referenceMedia?: RationaleReferenceMedia[] | null;
         teaching?: NormalizedTeachingPayload | null;
         teachingMedia?: TeachingMediaBundle | null;
+        learningLoop?: {
+          topicCode: string | null;
+          confidence: "high" | "medium" | "low";
+          lessonHref: string | null;
+          flashcardsHref: string | null;
+          topicDrillHref: string | null;
+        } | null;
         error?: string;
       };
       if (!res.ok) {
@@ -448,6 +474,7 @@ export function QuestionBankPracticeClient({
           referenceMedia: data.referenceMedia ?? null,
           teaching: data.teaching ?? null,
           teachingMedia: data.teachingMedia ?? null,
+          learningLoop: data.learningLoop ?? null,
         },
       }));
       const opened = questionOpenedAtMsRef.current;
@@ -737,6 +764,41 @@ export function QuestionBankPracticeClient({
                   </button>
                 )}
               </div>
+              {g.learningLoop?.topicCode ? (
+                <div className="mt-4 rounded-xl border border-border/70 bg-muted/20 p-3">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Reinforce this topic</p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Topic code: <span className="font-medium text-foreground">{g.learningLoop.topicCode}</span> · confidence{" "}
+                    {g.learningLoop.confidence}
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {g.learningLoop.lessonHref ? (
+                      <Link
+                        href={g.learningLoop.lessonHref}
+                        className="rounded-full border border-border bg-card px-3 py-1.5 text-xs font-semibold hover:bg-muted/80"
+                      >
+                        Reinforce this topic
+                      </Link>
+                    ) : null}
+                    {g.learningLoop.flashcardsHref ? (
+                      <Link
+                        href={g.learningLoop.flashcardsHref}
+                        className="rounded-full border border-border bg-card px-3 py-1.5 text-xs font-semibold hover:bg-muted/80"
+                      >
+                        Related flashcards
+                      </Link>
+                    ) : null}
+                    {g.learningLoop.topicDrillHref ? (
+                      <Link
+                        href={g.learningLoop.topicDrillHref}
+                        className="rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-white"
+                      >
+                        Test again on this topic
+                      </Link>
+                    ) : null}
+                  </div>
+                </div>
+              ) : null}
             </>
           )}
 

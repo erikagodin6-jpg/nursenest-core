@@ -11,7 +11,7 @@ import {
   rnLessons,
   rnQuestions,
 } from "@/lib/marketing/marketing-entry-routes";
-import { getExamTrack, type ExamKey } from "@/lib/content/master-topic-map";
+import type { ExamKey } from "@/lib/content/master-topic-map.types";
 
 export type PracticeHubContext = {
   examKey: ExamKey;
@@ -125,11 +125,27 @@ export type PracticeTaxonomyCategory = {
 };
 
 export function buildPracticeTaxonomy(examKey: ExamKey): PracticeTaxonomyCategory[] {
-  const track = getExamTrack(examKey);
-  return track.categories.map((c) => ({
-    id: c.id,
-    name: c.name,
-    systems: c.topics.slice(0, 6).map((t) => t.name),
-  }));
+  if (examKey === "RN") {
+    return [
+      { id: "safe_effective", name: "Safe and Effective Care Environment", systems: ["Care management", "Safety and infection", "Delegation", "Legal and ethical"] },
+      { id: "health_promotion", name: "Health Promotion and Maintenance", systems: ["Growth and development", "Maternity", "Newborn", "Screening and prevention"] },
+      { id: "psychosocial", name: "Psychosocial Integrity", systems: ["Therapeutic communication", "Mental health", "Crisis intervention", "Family support"] },
+      { id: "physiological", name: "Physiological Integrity", systems: ["Cardiovascular", "Respiratory", "Renal", "GI/Endocrine", "Neuro", "Pharmacology"] },
+    ];
+  }
+  if (examKey === "PN") {
+    return [
+      { id: "coordination", name: "Care Coordination and Safety", systems: ["Scope and delegation", "Safety and infection", "Documentation", "Client stability"] },
+      { id: "health_maintenance", name: "Health Promotion", systems: ["Maternal/newborn", "Pediatrics", "Preventive care", "Teaching"] },
+      { id: "psychosocial", name: "Psychosocial Integrity", systems: ["Communication", "Behavioral health", "Supportive care", "Cultural context"] },
+      { id: "physiological", name: "Physiological Adaptation", systems: ["Cardiovascular", "Respiratory", "GI/Renal", "Endocrine", "Pharmacology", "Emergency response"] },
+    ];
+  }
+  return [
+    { id: "assessment_dx", name: "Assessment and Differential Diagnosis", systems: ["History and exam", "Red flags", "Diagnostics", "Differential narrowing"] },
+    { id: "pharmacotherapy", name: "Pharmacotherapy and Safety", systems: ["Drug selection", "Contraindications", "Dosing/titration", "Monitoring"] },
+    { id: "management", name: "Management and Follow-up", systems: ["Acute management", "Chronic disease", "Care plans", "Follow-up intervals"] },
+    { id: "professional", name: "Professional and Regulatory Role", systems: ["Scope and autonomy", "Ethics/legal", "Interprofessional care", "Documentation"] },
+  ];
 }
 
