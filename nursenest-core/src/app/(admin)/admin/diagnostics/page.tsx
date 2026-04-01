@@ -3,6 +3,7 @@ import { requireAdmin } from "@/lib/auth/guards";
 import { loadAdminDiagnostics } from "@/lib/admin/load-admin-diagnostics";
 import { loadExamPlanAdoptionStats } from "@/lib/admin/load-exam-plan-adoption";
 import { loadQuestionBankRemediationIntelligence } from "@/lib/questions/load-question-bank-remediation-intelligence";
+import { QuestionQualityQueueTable } from "@/components/admin/question-quality-queue-table";
 
 export const dynamic = "force-dynamic";
 
@@ -311,6 +312,8 @@ export default async function AdminDiagnosticsPage() {
           </div>
         </section>
       ) : null}
+
+      <QuestionQualityQueueTable />
 
       <section className="mt-8 nn-card p-6">
         <h2 className="text-lg font-semibold">Related</h2>

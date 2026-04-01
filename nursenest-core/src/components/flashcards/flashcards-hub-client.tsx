@@ -48,6 +48,7 @@ export function FlashcardsHubClient({
   const pathwayId = urlParams.get("pathwayId") ?? "";
   const examFamily = urlParams.get("examFamily") ?? "";
   const tagSlug = urlParams.get("tagSlug") ?? "";
+  const topicCode = urlParams.get("topicCode") ?? "";
   const q = urlParams.get("q") ?? "";
   const pageFromUrl = urlParams.get("page") ?? "1";
   const [searchDraft, setSearchDraft] = useState(q);
@@ -87,6 +88,7 @@ export function FlashcardsHubClient({
         if (pathwayId) qs.set("pathwayId", pathwayId);
         if (examFamily) qs.set("examFamily", examFamily);
         if (tagSlug) qs.set("tagSlug", tagSlug);
+        if (topicCode) qs.set("topicCode", topicCode);
         const qTrim = q.trim();
         if (qTrim.length >= 2) qs.set("q", qTrim);
         const [dRes, sRes, dueRes] = await Promise.all([
@@ -118,13 +120,13 @@ export function FlashcardsHubClient({
         setLoading(false);
       }
     },
-    [pathwayId, examFamily, tagSlug, q],
+    [pathwayId, examFamily, tagSlug, topicCode, q],
   );
 
   useEffect(() => {
     const p = Number(pageFromUrl);
     void load(Number.isFinite(p) && p >= 1 ? p : 1);
-  }, [load, pageFromUrl, pathwayId, examFamily, tagSlug]);
+  }, [load, pageFromUrl, pathwayId, examFamily, tagSlug, topicCode]);
 
   const setFilters = (next: {
     pathwayId?: string;

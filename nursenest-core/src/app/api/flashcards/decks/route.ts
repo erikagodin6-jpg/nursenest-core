@@ -68,6 +68,7 @@ export async function GET(req: NextRequest) {
   const pathwayId = req.nextUrl.searchParams.get("pathwayId")?.trim();
   const tagSlug = req.nextUrl.searchParams.get("tagSlug")?.trim();
   const topicSlug = req.nextUrl.searchParams.get("topicSlug")?.trim();
+  const topicCode = req.nextUrl.searchParams.get("topicCode")?.trim().toLowerCase();
 
   setSentryServerContext({ route: "/api/flashcards/decks", feature: SERVER_FEATURE.flashcard, userId: userId ?? "" });
 
@@ -95,6 +96,15 @@ export async function GET(req: NextRequest) {
   const tagFilter = tagSlug ?? topicSlug;
   if (tagFilter) {
     andExtra.push({ tags: { some: { tag: { slug: tagFilter } } } });
+  }
+  if (topicCode) {
+    andExtra.push({
+      cards: {
+        some: {
+          category: { topicCode },
+        },
+      },
+    });
   }
 
   const q = req.nextUrl.searchParams.get("q")?.trim();

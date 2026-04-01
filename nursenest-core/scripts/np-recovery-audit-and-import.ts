@@ -107,10 +107,7 @@ async function main() {
     }),
   );
 
-  const validNp = normalized
-    .filter((n): n is { ok: true; row: NonNullable<(typeof normalized)[number] extends infer U ? U : never>["row"] } => n.ok)
-    .map((n) => n.row)
-    .filter((r) => r.tier === "NP");
+  const validNp = normalized.flatMap((n) => (n.ok ? [n.row] : [])).filter((r) => r.tier === "NP");
 
   const uniqueByHash = new Map<string, (typeof validNp)[number]>();
   for (const r of validNp) {

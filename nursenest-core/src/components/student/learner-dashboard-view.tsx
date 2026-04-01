@@ -39,6 +39,12 @@ export function LearnerDashboardView({ data }: { data: LearnerDashboardModel }) 
   const lessonPct = pctLine(data.lessonsCompleted, data.lessonsAvailable);
   const topWeak = data.weakTopics.slice(0, 3);
   const r = data.readiness;
+  const weakestFactors = [...r.factors]
+    .filter((f) => f.maxPoints > 0)
+    .sort((a, b) => a.points / Math.max(1, a.maxPoints) - b.points / Math.max(1, b.maxPoints))
+    .slice(0, 3);
+  const topicFactor = r.factors.find((f) => f.id === "topic_errors") ?? null;
+  const mockFactor = r.factors.find((f) => f.id === "mock_performance") ?? null;
 
   return (
     <div className="space-y-8">
@@ -115,7 +121,7 @@ export function LearnerDashboardView({ data }: { data: LearnerDashboardModel }) 
           <summary className="cursor-pointer list-none font-semibold text-foreground [&::-webkit-details-marker]:hidden">
             <span className="inline-flex items-center gap-2">
               <Info className="h-4 w-4 shrink-0 text-primary" aria-hidden />
-              How this score is calculated
+              Why this score?
             </span>
           </summary>
           <div className="mt-3 space-y-3 text-muted-foreground">
@@ -159,6 +165,27 @@ export function LearnerDashboardView({ data }: { data: LearnerDashboardModel }) 
                   ))}
                 </ul>
               </div>
+            ) : null}
+            {weakestFactors.length > 0 ? (
+              <div>
+                <p className="font-medium text-foreground" title="Lowest-contributing factors in your current readiness score.">
+                  Weakest factors
+                </p>
+                <p className="mt-1 text-xs">{weakestFactors.map((f) => f.label).join(" · ")}</p>
+              </div>
+            ) : null}
+            {mockFactor?.detail.includes("Spread is") ? (
+              <p
+                className="text-xs"
+                title="Large score swings across recent mocks reduce confidence and can dampen this factor."
+              >
+                Mock consistency penalty applied: recent mock spread is high, so readiness emphasizes stable performance.
+              </p>
+            ) : null}
+            {topicFactor ? (
+              <p className="text-xs" title="Topic contribution reflects miss concentration on your priority weak topics.">
+                Topic performance contribution: {topicFactor.points}/{topicFactor.maxPoints} points.
+              </p>
             ) : null}
           </div>
         </details>
