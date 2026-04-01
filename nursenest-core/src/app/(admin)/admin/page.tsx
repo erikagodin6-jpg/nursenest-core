@@ -343,6 +343,8 @@ export default async function AdminPage() {
   });
 
   const api = [
+    { href: "/admin/diagnostics", label: "Diagnostics dashboard (HTML)" },
+    { href: "/api/admin/diagnostics", label: "Diagnostics snapshot (JSON)" },
     { href: "/api/admin/stats", label: "Platform stats (JSON)" },
     { href: "/api/admin/insights", label: "Insights JSON" },
     { href: "/api/admin/qa", label: "QA summary" },
@@ -367,23 +369,34 @@ export default async function AdminPage() {
     qualityFlags: q.tags.filter((tag) => QUALITY_FLAG_TAGS.includes(tag as (typeof QUALITY_FLAG_TAGS)[number])),
     stemPreview: q.stem.length > 120 ? `${q.stem.slice(0, 117)}…` : q.stem,
   }));
-  const [
-    mixedRnCount,
-    mixedPnCount,
-    mixedCatchAll,
-    rnMixedCatchAll,
-    pnMixedCatchAll,
-    usRnFullCatchAll,
-    usPnFullCatchAll,
-  ] = await Promise.all([
-    countPresetInventory(EXAM_PRESET_RN_MIXED_2026_TAG, ["rn"]),
-    countPresetInventory(EXAM_PRESET_PN_MIXED_2026_TAG, ["rpn", "lvn"]),
-    countPresetCatchAll("mixed-practice-2026-rn-pn"),
-    countPresetCatchAll(EXAM_PRESET_RN_MIXED_2026_TAG),
-    countPresetCatchAll(EXAM_PRESET_PN_MIXED_2026_TAG),
-    countPresetCatchAll(EXAM_PRESET_US_RN_FULL_2026_TAG),
-    countPresetCatchAll(EXAM_PRESET_US_PN_FULL_2026_TAG),
-  ]);
+  let mixedRnCount = 0;
+  let mixedPnCount = 0;
+  let mixedCatchAll = 0;
+  let rnMixedCatchAll = 0;
+  let pnMixedCatchAll = 0;
+  let usRnFullCatchAll = 0;
+  let usPnFullCatchAll = 0;
+  try {
+    [
+      mixedRnCount,
+      mixedPnCount,
+      mixedCatchAll,
+      rnMixedCatchAll,
+      pnMixedCatchAll,
+      usRnFullCatchAll,
+      usPnFullCatchAll,
+    ] = await Promise.all([
+      countPresetInventory(EXAM_PRESET_RN_MIXED_2026_TAG, ["rn"]),
+      countPresetInventory(EXAM_PRESET_PN_MIXED_2026_TAG, ["rpn", "lvn"]),
+      countPresetCatchAll("mixed-practice-2026-rn-pn"),
+      countPresetCatchAll(EXAM_PRESET_RN_MIXED_2026_TAG),
+      countPresetCatchAll(EXAM_PRESET_PN_MIXED_2026_TAG),
+      countPresetCatchAll(EXAM_PRESET_US_RN_FULL_2026_TAG),
+      countPresetCatchAll(EXAM_PRESET_US_PN_FULL_2026_TAG),
+    ]);
+  } catch {
+    /* Preset validation is optional; missing tables must not crash admin home. */
+  }
   const presetValidationRows = [
     { tag: "mixed-practice-2026-rn-pn", poolSize: presetMap.get("mixed-practice-2026-rn-pn") ?? 0, catchAllRows: mixedCatchAll, target: 20 },
     { tag: EXAM_PRESET_RN_MIXED_2026_TAG, poolSize: presetMap.get(EXAM_PRESET_RN_MIXED_2026_TAG) ?? 0, catchAllRows: rnMixedCatchAll, target: 20 },
@@ -398,7 +411,10 @@ export default async function AdminPage() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Admin operations dashboard</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Internal day-to-day controls for blog scheduling, content readiness, question bank quality, and ops jobs.
+            Internal day-to-day controls for blog scheduling, content readiness, question bank quality, and ops jobs.{" "}
+            <Link href="/admin/diagnostics" className="font-medium text-primary underline">
+              Diagnostics
+            </Link>
           </p>
         </div>
         {stats ? (

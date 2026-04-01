@@ -9,12 +9,13 @@ import {
 } from "@/lib/entitlements/content-access-scope";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { isRuntimeSafeMode } from "@/lib/runtime/safe-mode";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { safePrismaCount, withPrismaReadFallback } from "@/lib/prisma/safe-reads";
 
 /** Public marketing stats — freemium-visible scope only. Tolerates missing `content_items` / `exam_questions` in prod. */
 export async function GET() {
-  if (!isDatabaseUrlConfigured()) {
+  if (!isDatabaseUrlConfigured() || isRuntimeSafeMode()) {
     return NextResponse.json({
       totalLessons: 0,
       pathwayLessonsPublished: 0,
@@ -28,6 +29,7 @@ export async function GET() {
       scenarioCount: 0,
       topicCategoryCount: 0,
       degraded: true,
+      runtimeSafeMode: isRuntimeSafeMode(),
     });
   }
 

@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import * as Sentry from "@sentry/nextjs";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
+import { getErrorMessage } from "@/lib/runtime/error-message";
 
 export default function LearnerError({
   error,
@@ -28,7 +29,7 @@ export default function LearnerError({
         Your session is unchanged. Retry the page or return to the dashboard.
       </p>
       {digest ? <p className="text-xs text-muted">Reference: {digest}</p> : null}
-      {showDetail ? <p className="text-xs text-muted">{error.message}</p> : null}
+      {showDetail ? <p className="text-xs text-muted">{getErrorMessage(error)}</p> : null}
       <div className="flex flex-wrap gap-2">
         <button type="button" className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white" onClick={() => reset()}>
           Try again

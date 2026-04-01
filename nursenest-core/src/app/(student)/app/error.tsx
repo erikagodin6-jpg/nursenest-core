@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import * as Sentry from "@sentry/nextjs";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
+import { getErrorMessage } from "@/lib/runtime/error-message";
 
 export default function LearnerError({
   error,
@@ -22,7 +23,7 @@ export default function LearnerError({
       </a>
       <h2 className="text-xl font-semibold">Unable to load this section</h2>
       <p className="mt-2 text-sm text-muted">Your account and access remain intact. Try again.</p>
-      <p className="mt-2 text-xs text-muted">{error.message}</p>
+      <p className="mt-2 text-xs text-muted">{getErrorMessage(error)}</p>
       <button className="mt-4 rounded-lg bg-primary px-4 py-2 text-sm font-semibold" onClick={reset}>
         Retry
       </button>

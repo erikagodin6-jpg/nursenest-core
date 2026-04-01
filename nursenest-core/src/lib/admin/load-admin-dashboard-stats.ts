@@ -2,6 +2,7 @@ import { ContentStatus, SubscriptionStatus, UserRole } from "@prisma/client";
 import { DB_PUBLISHED } from "@/lib/entitlements/content-access-scope";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { isRuntimeSafeMode } from "@/lib/runtime/safe-mode";
 
 const LIST_LIMIT = 15;
 const DAU_WINDOW_MS = 24 * 60 * 60 * 1000;
@@ -83,7 +84,7 @@ async function dailyActiveUsersCount(since: Date): Promise<number> {
  * Aggregated admin dashboard metrics — bounded queries only (no full-table loads).
  */
 export async function loadAdminDashboardStats(): Promise<AdminDashboardStats | null> {
-  if (!isDatabaseUrlConfigured()) return null;
+  if (!isDatabaseUrlConfigured() || isRuntimeSafeMode()) return null;
   const now = Date.now();
   if (cachedStats && now - cachedStats.at < STATS_CACHE_MS) return cachedStats.value;
   if (inFlightStats) return inFlightStats;

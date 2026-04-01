@@ -1,4 +1,5 @@
 import "@/lib/db/env-bootstrap";
+import { isRuntimeSafeMode } from "@/lib/runtime/safe-mode";
 
 /**
  * Shared guards for Prisma when `DATABASE_URL` may be unset (e.g. `next build`, local CI).
@@ -19,6 +20,7 @@ export function isDatabaseUrlConfigured(): boolean {
 
 export async function withDatabaseFallback<T>(run: () => Promise<T>, fallback: T): Promise<T> {
   if (!isDatabaseUrlConfigured()) return fallback;
+  if (isRuntimeSafeMode()) return fallback;
   try {
     return await run();
   } catch {
@@ -37,6 +39,7 @@ export async function withDatabaseFallbackTimeout<T>(
   timeoutMs: number,
 ): Promise<T> {
   if (!isDatabaseUrlConfigured()) return fallback;
+  if (isRuntimeSafeMode()) return fallback;
   let timer: ReturnType<typeof setTimeout> | undefined;
   try {
     return await Promise.race([

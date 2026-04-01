@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 
 export const dynamic = "force-dynamic";
 
@@ -14,20 +16,44 @@ export async function GET() {
 
   setSentryServerContext({ route: "/api/flashcards/stats", feature: "flashcard", userId });
 
-  const stats = await prisma.flashcardUserStats.findUnique({
-    where: { userId },
-    select: {
-      currentStreak: true,
-      longestStreak: true,
-      cardsReviewedTotal: true,
-      lastStudyDate: true,
-    },
-  });
+  if (!isDatabaseUrlConfigured()) {
+    return NextResponse.json({
+      currentStreak: 0,
+      longestStreak: 0,
+      cardsReviewedTotal: 0,
+      lastStudyDate: null,
+      degraded: true,
+    });
+  }
 
-  return NextResponse.json({
-    currentStreak: stats?.currentStreak ?? 0,
-    longestStreak: stats?.longestStreak ?? 0,
-    cardsReviewedTotal: stats?.cardsReviewedTotal ?? 0,
-    lastStudyDate: stats?.lastStudyDate?.toISOString() ?? null,
-  });
+  try {
+    const stats = await prisma.flashcardUserStats.findUnique({
+      where: { userId },
+      select: {
+        currentStreak: true,
+        longestStreak: true,
+        cardsReviewedTotal: true,
+        lastStudyDate: true,
+      },
+    });
+
+    return NextResponse.json({
+      currentStreak: stats?.currentStreak ?? 0,
+      longestStreak: stats?.longestStreak ?? 0,
+      cardsReviewedTotal: stats?.cardsReviewedTotal ?? 0,
+      lastStudyDate: stats?.lastStudyDate?.toISOString() ?? null,
+    });
+  } catch (e) {
+    safeServerLogCritical("api_flashcards_stats", "find_failed", { userId: userId.slice(0, 8) }, e);
+    return NextResponse.json(
+      {
+        currentStreak: 0,
+        longestStreak: 0,
+        cardsReviewedTotal: 0,
+        lastStudyDate: null,
+        degraded: true,
+      },
+      { status: 200 },
+    );
+  }
 }

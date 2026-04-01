@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
+import { asArray } from "@/lib/runtime/collections";
 
 type DeckRow = {
   id: string;
@@ -40,9 +41,9 @@ export function FlashcardsHubClient() {
         fetch(`/api/flashcards/decks?page=${p}&pageSize=18`, { credentials: "include" }),
         fetch("/api/flashcards/stats", { credentials: "include" }).catch(() => null),
       ]);
-      const dJson = await dRes.json();
+      const dJson = (await dRes.json()) as { decks?: DeckRow[]; error?: string; page?: number; pageCount?: number };
       if (!dRes.ok) throw new Error(dJson.error ?? "Failed to load decks");
-      setDecks(dJson.decks ?? []);
+      setDecks(asArray(dJson.decks));
       setPage(dJson.page ?? 1);
       setTotalPages(dJson.pageCount ?? 1);
       if (sRes?.ok) {

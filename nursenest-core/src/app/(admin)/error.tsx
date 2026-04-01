@@ -1,6 +1,7 @@
 "use client";
 
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
+import { getErrorMessage } from "@/lib/runtime/error-message";
 
 export default function AdminError({
   error,
@@ -16,7 +17,7 @@ export default function AdminError({
       </a>
       <h1 className="text-xl font-semibold text-foreground">Admin area unavailable</h1>
       <p className="mt-2 text-sm text-muted">
-        {error.message || "Something went wrong loading this page."}
+        {getErrorMessage(error) || "Something went wrong loading this page."}
       </p>
       <button
         type="button"

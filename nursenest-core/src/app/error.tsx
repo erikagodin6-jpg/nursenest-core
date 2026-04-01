@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import * as Sentry from "@sentry/nextjs";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
+import { getErrorMessage } from "@/lib/runtime/error-message";
 
 export default function GlobalError({
   error,
@@ -33,7 +34,7 @@ export default function GlobalError({
             Reference: {digest}
           </p>
         ) : null}
-        {showDetail ? <p className="mt-3 text-xs text-muted">{error.message}</p> : null}
+        {showDetail ? <p className="mt-3 text-xs text-muted">{getErrorMessage(error)}</p> : null}
         <button type="button" className="mt-5 rounded-xl bg-primary px-4 py-2 font-semibold" onClick={() => reset()}>
           Try again
         </button>

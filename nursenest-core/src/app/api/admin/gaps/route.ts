@@ -3,6 +3,7 @@ import { ContentStatus } from "@prisma/client";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallback } from "@/lib/db/safe-database";
+import { withPrismaReadFallback } from "@/lib/prisma/safe-reads";
 
 const LOW_THRESHOLD = 20;
 const PUBLISHED = "published";
@@ -10,8 +11,10 @@ const PUBLISHED = "published";
 const LOW_TOPIC_LIST_CAP = 350;
 
 async function getGapsPayload() {
-  const [lowTopicRows, lowTopicTotalRows, lessonCount, examsPerFamily] = await Promise.all([
-    prisma.$queryRaw<{ topic: string | null; cnt: bigint }[]>`
+  const lowTopicRows = await withPrismaReadFallback(
+    "gaps_low_topics",
+    () =>
+      prisma.$queryRaw<{ topic: string | null; cnt: bigint }[]>`
       SELECT topic, COUNT(*)::bigint AS cnt
       FROM exam_questions
       WHERE status = ${PUBLISHED} AND topic IS NOT NULL
@@ -20,7 +23,12 @@ async function getGapsPayload() {
       ORDER BY COUNT(*) ASC
       LIMIT ${LOW_TOPIC_LIST_CAP}
     `,
-    prisma.$queryRaw<{ n: bigint }[]>`
+    [],
+  );
+  const lowTopicTotalRows = await withPrismaReadFallback(
+    "gaps_low_topics_total",
+    () =>
+      prisma.$queryRaw<{ n: bigint }[]>`
       SELECT COUNT(*)::bigint AS n FROM (
         SELECT topic FROM exam_questions
         WHERE status = ${PUBLISHED} AND topic IS NOT NULL
@@ -28,18 +36,36 @@ async function getGapsPayload() {
         HAVING COUNT(*) < ${LOW_THRESHOLD}
       ) t
     `,
-    prisma.contentItem.count({
-      where: { type: "lesson", status: PUBLISHED },
-    }),
-    prisma.exam.groupBy({
-      by: ["examFamily"],
-      _count: { examFamily: true },
-      where: { status: ContentStatus.PUBLISHED },
-    }),
-  ]);
+    [] as { n: bigint }[],
+  );
+  const lessonCountRes = await withPrismaReadFallback(
+    "gaps_lessons_published",
+    () =>
+      prisma.contentItem.count({
+        where: { type: "lesson", status: PUBLISHED },
+      }),
+    0,
+  );
+  const examsPerFamilyRes = await withPrismaReadFallback(
+    "gaps_exams_by_family",
+    () =>
+      prisma.exam.groupBy({
+        by: ["examFamily"],
+        _count: { examFamily: true },
+        where: { status: ContentStatus.PUBLISHED },
+      }),
+    [],
+  );
 
-  const lowQuestionTopicsTotal = Number(lowTopicTotalRows[0]?.n ?? 0);
-  const lowQuestionTopics = lowTopicRows.map((r) => ({
+  const warnings = [
+    lowTopicRows.warning,
+    lowTopicTotalRows.warning,
+    lessonCountRes.warning,
+    examsPerFamilyRes.warning,
+  ].filter(Boolean) as string[];
+
+  const lowQuestionTopicsTotal = Number(lowTopicTotalRows.value[0]?.n ?? 0);
+  const lowQuestionTopics = lowTopicRows.value.map((r) => ({
     topic: r.topic,
     publishedQuestions: Number(r.cnt),
   }));
@@ -49,9 +75,10 @@ async function getGapsPayload() {
     lowQuestionTopicsTruncated: lowQuestionTopicsTotal > lowQuestionTopics.length,
     lowQuestionTopicsTotal,
     lowQuestionTopicsListCap: LOW_TOPIC_LIST_CAP,
-    lessonsPublished: lessonCount,
-    publishedExamsByFamily: examsPerFamily,
+    lessonsPublished: lessonCountRes.value,
+    publishedExamsByFamily: examsPerFamilyRes.value,
     thresholds: { lowQuestionCount: LOW_THRESHOLD },
+    queryWarnings: warnings,
     note: "Flashcard↔lesson links live in `flashcard_bank.lesson_links` JSON in production; not modeled in Prisma yet. Low-topic list is SQL-capped; total reflects all sparse topics.",
   };
 }
@@ -71,6 +98,7 @@ export async function GET() {
       lessonsPublished: 0,
       publishedExamsByFamily: [],
       thresholds: { lowQuestionCount: LOW_THRESHOLD },
+      queryWarnings: [],
       note: "Flashcard↔lesson links live in `flashcard_bank.lesson_links` JSON in production; not modeled in Prisma yet.",
       degraded: true,
     } as Parameters<typeof NextResponse.json>[0]),

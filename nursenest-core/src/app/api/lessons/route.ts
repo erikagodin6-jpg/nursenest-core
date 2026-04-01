@@ -5,6 +5,7 @@ import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
 import { prisma } from "@/lib/db";
+import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { logLargeApiResponse } from "@/lib/observability/perf-log";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
@@ -113,10 +114,23 @@ export async function GET(req: NextRequest) {
     }
   }
 
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { country: true, tier: true, freeLessonOpens: true },
-  });
+  if (!isDatabaseUrlConfigured()) {
+    return NextResponse.json(
+      { error: "Study content is temporarily unavailable. Try again shortly.", code: "database_unavailable" },
+      { status: 503 },
+    );
+  }
+
+  let user: { country: string | null; tier: string | null; freeLessonOpens: number } | null = null;
+  try {
+    user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { country: true, tier: true, freeLessonOpens: true },
+    });
+  } catch (e) {
+    safeServerLogCritical("api_lessons", "user_lookup_failed_freemium", { userId: userId.slice(0, 8) }, e);
+    return NextResponse.json({ error: "Unable to load profile. Try again shortly." }, { status: 503 });
+  }
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
