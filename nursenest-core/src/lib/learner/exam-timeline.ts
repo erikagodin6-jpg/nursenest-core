@@ -5,12 +5,19 @@ export type ExamUrgency = "far" | "moderate" | "near" | "final_stretch";
 /** Days from today (UTC date) until exam day; null if no date or past exam day. */
 export function daysUntilExamUtc(examDate: Date | null | undefined): number | null {
   if (!examDate) return null;
+  const delta = daysDeltaToExamUtc(examDate);
+  if (delta == null || delta < 0) return null;
+  return delta;
+}
+
+/**
+ * Signed whole days until exam (UTC date-only): negative if the exam date is in the past (overdue).
+ */
+export function daysDeltaToExamUtc(examDate: Date | null | undefined): number | null {
+  if (!examDate) return null;
   const today = utcDateOnly(new Date());
   const target = utcDateOnly(examDate);
-  const diffMs = target.getTime() - today.getTime();
-  const days = Math.floor(diffMs / 86400000);
-  if (days < 0) return null;
-  return days;
+  return Math.floor((target.getTime() - today.getTime()) / 86400000);
 }
 
 function utcDateOnly(d: Date): Date {

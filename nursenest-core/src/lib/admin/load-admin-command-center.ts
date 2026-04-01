@@ -19,6 +19,10 @@ import { listMissingStripePriceEnvKeys, eachStripePriceMatrixRow } from "@/lib/s
 import { loadAdminQaIssueSnapshot } from "@/lib/admin/admin-qa-snapshot";
 import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-product-registry";
 import { buildQuestionBankCoverageReport } from "@/lib/questions/build-question-bank-diagnostics";
+import { loadContentQualityCorpusPayload } from "@/lib/admin/content-quality-corpus-refresh";
+import type { ContentQualityCorpusPayload } from "@/lib/admin/content-quality-corpus-refresh";
+import { emptyContentQualitySnapshot, loadContentQualitySnapshot } from "@/lib/admin/content-quality-snapshot";
+import type { ContentQualitySnapshot } from "@/lib/admin/content-quality-snapshot";
 
 export type AdminNeedsAttentionItem = {
   severity: "critical" | "warning" | "info";
@@ -104,6 +108,11 @@ export type AdminCommandCenterData = {
     subscriptionsByDay: TimeSeriesPoint[];
   };
   needsAttention: AdminNeedsAttentionItem[];
+  /** Editorial quality: live snapshot + optional persisted full-corpus scan. */
+  contentQuality: {
+    snapshot: ContentQualitySnapshot;
+    corpus: ContentQualityCorpusPayload | null;
+  };
 };
 
 function startOfUtcDay(d: Date): Date {
@@ -379,6 +388,11 @@ export async function loadAdminCommandCenter(): Promise<AdminCommandCenterData |
       return rank[a.severity] - rank[b.severity];
     });
 
+    const [contentQualitySnapshot, contentQualityCorpus] = await Promise.all([
+      loadContentQualitySnapshot(),
+      loadContentQualityCorpusPayload(),
+    ]);
+
     return {
       generatedAt,
       stats,
@@ -445,6 +459,10 @@ export async function loadAdminCommandCenter(): Promise<AdminCommandCenterData |
       pathwayCoveragePreview,
       charts: { signupsByDay, subscriptionsByDay },
       needsAttention,
+      contentQuality: {
+        snapshot: contentQualitySnapshot,
+        corpus: contentQualityCorpus,
+      },
     };
   } catch (e) {
     console.error("[loadAdminCommandCenter]", e);
@@ -517,6 +535,10 @@ export async function loadAdminCommandCenter(): Promise<AdminCommandCenterData |
           href: "/admin/operations",
         },
       ],
+      contentQuality: {
+        snapshot: emptyContentQualitySnapshot(generatedAt),
+        corpus: null,
+      },
     };
   }
 }

@@ -1,11 +1,43 @@
 import Link from "next/link";
 import { Activity, AlertTriangle, CheckCircle2, Database, Flame, ShieldAlert } from "lucide-react";
 import type { AdminCommandCenterData } from "@/lib/admin/load-admin-command-center";
+import type { ContentQualityCorpusPayload } from "@/lib/admin/content-quality-corpus-refresh";
 import { AdminQuickActions } from "@/components/admin/admin-quick-actions";
 import { AdminSimpleBarChart } from "@/components/admin/admin-simple-bar-chart";
+import { RATIONALE_MIN_WORDS } from "@/lib/content-quality/standards";
 
 function fmt(n: number) {
   return n.toLocaleString();
+}
+
+function examTierBar(
+  corpus: ContentQualityCorpusPayload | null,
+  snapshotEq: AdminCommandCenterData["contentQuality"]["snapshot"]["examQuestionsPublished"],
+) {
+  if (corpus) {
+    const t = corpus.examQuestions.totals;
+    const sum = t.missing + t.thin + t.acceptable + t.strong;
+    if (sum <= 0) return null;
+    const pct = (n: number) => (n / sum) * 100;
+    return (
+      <div className="flex h-3 w-full max-w-xl overflow-hidden rounded-full bg-muted" role="img" aria-label="Exam rationale tier distribution">
+        <span className="bg-rose-500/85" style={{ width: `${pct(t.missing)}%` }} title="Missing" />
+        <span className="bg-amber-500/85" style={{ width: `${pct(t.thin)}%` }} title="Thin" />
+        <span className="bg-sky-600/75" style={{ width: `${pct(t.acceptable)}%` }} title="Acceptable" />
+        <span className="bg-emerald-600/90" style={{ width: `${pct(t.strong)}%` }} title="Strong" />
+      </div>
+    );
+  }
+  const total = snapshotEq.total;
+  if (total <= 0) return null;
+  const pct = (n: number) => (n / total) * 100;
+  return (
+    <div className="flex h-3 w-full max-w-xl overflow-hidden rounded-full bg-muted" role="img" aria-label="Exam rationale depth (snapshot)">
+      <span className="bg-rose-500/85" style={{ width: `${pct(snapshotEq.rationaleMissingOrEmpty)}%` }} title="Missing" />
+      <span className="bg-amber-500/85" style={{ width: `${pct(snapshotEq.rationaleThinWords)}%` }} title="Thin" />
+      <span className="bg-emerald-600/90" style={{ width: `${pct(snapshotEq.rationaleAcceptableOrStrong)}%` }} title="Acceptable or strong" />
+    </div>
+  );
 }
 
 function severityIcon(sev: AdminCommandCenterData["needsAttention"][0]["severity"]) {
@@ -143,6 +175,111 @@ export function AdminCommandCenter({ data }: { data: AdminCommandCenterData }) {
           points={data.charts.subscriptionsByDay}
           accentClass="bg-gradient-to-t from-emerald-600/90 to-teal-500/70"
         />
+      </section>
+
+      <section className="rounded-2xl border border-amber-500/25 bg-gradient-to-br from-amber-500/[0.05] via-[var(--theme-card-bg)] to-rose-500/[0.06] p-6 shadow-sm">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="min-w-0">
+            <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Content quality & editorial</h2>
+            <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
+              Publish rules require ≥{RATIONALE_MIN_WORDS} words of rationale (and lesson depth targets) before going live.
+              Run a full corpus snapshot off-peak for worst exams and pathways.
+            </p>
+          </div>
+          <Link
+            href="/admin/content-quality"
+            className="shrink-0 rounded-lg border border-border bg-[var(--theme-card-bg)] px-3 py-2 text-sm font-semibold text-primary hover:bg-muted"
+          >
+            Workbench →
+          </Link>
+        </div>
+
+        <div className="mt-6 grid gap-6 lg:grid-cols-2">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Exam bank — rationale tiers</p>
+            {examTierBar(data.contentQuality.corpus, data.contentQuality.snapshot.examQuestionsPublished)}
+            <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-muted-foreground">
+              {data.contentQuality.corpus ? (
+                <>
+                  <li>
+                    <span className="inline-block h-2 w-2 rounded-full bg-rose-500/85 align-middle" /> Missing{" "}
+                    {fmt(data.contentQuality.corpus.examQuestions.totals.missing)}
+                  </li>
+                  <li>
+                    <span className="inline-block h-2 w-2 rounded-full bg-amber-500/85 align-middle" /> Thin{" "}
+                    {fmt(data.contentQuality.corpus.examQuestions.totals.thin)}
+                  </li>
+                  <li>
+                    <span className="inline-block h-2 w-2 rounded-full bg-sky-600/75 align-middle" /> OK{" "}
+                    {fmt(data.contentQuality.corpus.examQuestions.totals.acceptable)}
+                  </li>
+                  <li>
+                    <span className="inline-block h-2 w-2 rounded-full bg-emerald-600/90 align-middle" /> Strong{" "}
+                    {fmt(data.contentQuality.corpus.examQuestions.totals.strong)}
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li>
+                    <span className="inline-block h-2 w-2 rounded-full bg-rose-500/85 align-middle" /> Missing{" "}
+                    {fmt(data.contentQuality.snapshot.examQuestionsPublished.rationaleMissingOrEmpty)}
+                  </li>
+                  <li>
+                    <span className="inline-block h-2 w-2 rounded-full bg-amber-500/85 align-middle" /> Thin{" "}
+                    {fmt(data.contentQuality.snapshot.examQuestionsPublished.rationaleThinWords)}
+                  </li>
+                  <li>
+                    <span className="inline-block h-2 w-2 rounded-full bg-emerald-600/90 align-middle" /> ≥{RATIONALE_MIN_WORDS}w{" "}
+                    {fmt(data.contentQuality.snapshot.examQuestionsPublished.rationaleAcceptableOrStrong)}
+                  </li>
+                  <li className="text-amber-800 dark:text-amber-200">Full tier split — refresh corpus snapshot in workbench.</li>
+                </>
+              )}
+            </ul>
+            {data.contentQuality.corpus ? (
+              <p className="mt-2 text-[11px] text-muted-foreground">
+                Corpus scanned {fmt(data.contentQuality.corpus.examQuestions.scanned)} published rows · updated{" "}
+                {new Date(data.contentQuality.corpus.generatedAt).toLocaleString()}
+              </p>
+            ) : null}
+          </div>
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Urgent fixes (thin + missing)</p>
+            {data.contentQuality.corpus ? (
+              <ul className="mt-2 space-y-2 text-sm">
+                {data.contentQuality.corpus.examQuestions.worstExams.slice(0, 5).map((r) => (
+                  <li key={r.exam} className="flex justify-between gap-2 rounded-lg border border-border/50 bg-[var(--theme-card-bg)] px-2 py-1.5">
+                    <span className="truncate font-mono text-xs">{r.exam}</span>
+                    <span className="shrink-0 tabular-nums text-amber-900 dark:text-amber-100">
+                      {r.thin + r.missing} / {r.total}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="mt-2 text-sm text-muted-foreground">Run corpus refresh to rank exams and pathways.</p>
+            )}
+          </div>
+        </div>
+
+        {data.contentQuality.corpus ? (
+          <div className="mt-6 border-t border-border/60 pt-5">
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Pathway lessons — worst rollups</p>
+            <ul className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              {data.contentQuality.corpus.pathwayLessons.byPathway.slice(0, 6).map((r) => (
+                <li key={`${r.pathwayId}|${r.countryCode ?? "—"}|${r.tier ?? "—"}`} className="rounded-lg border border-border/50 bg-[var(--theme-card-bg)] px-2 py-1.5 text-xs">
+                  <p className="truncate font-mono">{r.pathwayId}</p>
+                  <p className="text-muted-foreground">
+                    {r.countryCode ?? "—"} · {r.tier ?? "—"}
+                  </p>
+                  <p className="mt-1 tabular-nums font-medium text-amber-900 dark:text-amber-100">
+                    thin {fmt(r.thin)} · miss {fmt(r.missing)}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
       </section>
 
       <section className="grid gap-4 lg:grid-cols-3">

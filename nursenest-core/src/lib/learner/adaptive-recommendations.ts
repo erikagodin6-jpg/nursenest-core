@@ -2,7 +2,25 @@ import type { ExamDatePlanType } from "@prisma/client";
 import type { ReadinessBand, ReadinessResult } from "@/lib/learner/readiness-score";
 import type { TopicTrendRow } from "@/lib/learner/topic-performance";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
-import { buildCountdownCopy, daysUntilExamUtc, urgencyFromDays, type ExamUrgency } from "@/lib/learner/exam-timeline";
+import {
+  assessPlanTrack,
+  buildExamPlanMilestones,
+  buildRecoveryRecommendations,
+  buildWeeklyStudyPlan,
+  cadenceLabel,
+  type ExamPlanMilestone,
+  type PlanTrackAssessment,
+  type RecoveryRecommendation,
+  type WeeklyStudyPlan,
+} from "@/lib/learner/exam-plan-engine";
+import {
+  buildCountdownCopy,
+  daysDeltaToExamUtc,
+  daysUntilExamUtc,
+  urgencyFromDays,
+  weeksRemainingRounded,
+  type ExamUrgency,
+} from "@/lib/learner/exam-timeline";
 
 export type PaceStatus = "on_pace" | "slightly_behind" | "behind_weak_review" | "final_review";
 
@@ -34,6 +52,15 @@ export type AdaptiveLearnerRecommendations = {
   todayFocus: string[];
   /** Honest combined line for readiness + time — no pass guarantees. */
   readinessTimelineLine: string | null;
+  /** Calm exam-plan pacing — preferred for dashboard copy. */
+  planTrack: PlanTrackAssessment;
+  /** Cadence-aware weekly targets (lessons, questions, flashcards, mock timing). */
+  weeklyPlan: WeeklyStudyPlan;
+  /** Supportive recovery paths for common risk patterns. */
+  recovery: RecoveryRecommendation[];
+  milestones: ExamPlanMilestone[];
+  /** Human label for active cadence (or default). */
+  cadenceDisplay: string;
 };
 
 function encodeTopic(topic: string): string {
@@ -108,6 +135,10 @@ export function buildAdaptiveRecommendations(args: {
   topicTrends?: TopicTrendRow[];
   streakDays: number;
   lessonPct: number;
+  /** Completed / total lessons in scope — drives weekly lesson targets. */
+  lessonsCompleted: number;
+  lessonsTotal: number;
+  studyCadencePreference: string | null | undefined;
   continueLesson: { title: string; href: string } | null;
   recommendedQuizTopic: string | null;
   mockCount: number;
@@ -119,6 +150,8 @@ export function buildAdaptiveRecommendations(args: {
   });
 
   const days = daysUntilExamUtc(args.examDate ?? null);
+  const daysDelta = daysDeltaToExamUtc(args.examDate ?? null);
+  const weeksRem = weeksRemainingRounded(days);
   const urgency = urgencyFromDays(days);
   const weakTop3 = args.weakTopics
     .slice(0, 3)
@@ -129,6 +162,46 @@ export function buildAdaptiveRecommendations(args: {
     urgency,
     readinessBand: args.readiness.band,
     weakTopicCount: args.weakTopics.length,
+  });
+
+  const planTrack = assessPlanTrack({
+    examDatePlanType: args.examDatePlanType,
+    examDate: args.examDate,
+    readinessBand: args.readiness.band,
+    weakTopicCount: args.weakTopics.length,
+    streakDays: args.streakDays,
+    mockCount: args.mockCount,
+    lessonPct: args.lessonPct,
+    practiceSessionCount: args.practiceSessionCount,
+  });
+
+  const weeklyPlan = buildWeeklyStudyPlan({
+    daysRemaining: days,
+    weeksRemaining: weeksRem,
+    urgency,
+    cadence: args.studyCadencePreference,
+    lessonPct: args.lessonPct,
+    lessonsCompleted: args.lessonsCompleted,
+    lessonsTotal: args.lessonsTotal,
+  });
+
+  const recovery = buildRecoveryRecommendations({
+    daysRemaining: days,
+    daysDelta,
+    urgency,
+    readiness: args.readiness,
+    mockCount: args.mockCount,
+    streakDays: args.streakDays,
+    weakTopics: args.weakTopics,
+    lessonPct: args.lessonPct,
+  });
+
+  const milestones = buildExamPlanMilestones({
+    lessonPct: args.lessonPct,
+    mockCount: args.mockCount,
+    readiness: args.readiness,
+    weakestTopic: weakTop3[0] ?? null,
+    examDatePlanType: args.examDatePlanType,
   });
 
   const trajectory = trajectoryFromSignals({
@@ -253,6 +326,10 @@ export function buildAdaptiveRecommendations(args: {
   }
 
   const weeklyPriorities: string[] = [];
+  weeklyPriorities.push(
+    `This week: ~${weeklyPlan.questionVolume} scored questions, ${weeklyPlan.lessonsToFinish} lesson module(s), ${weeklyPlan.flashcardSessions} short flashcard session(s)`,
+  );
+  weeklyPriorities.push(weeklyPlan.mockTiming);
   if (weakTop3.length) {
     weeklyPriorities.push(`Tackle weak signals: ${weakTop3.slice(0, 2).join(", ")}`);
   }
@@ -282,6 +359,7 @@ export function buildAdaptiveRecommendations(args: {
   if (weakTop3[0]) todayFocus.push(`Short block on ${weakTop3[0]}`);
   if (args.streakDays < 3) todayFocus.push("15–25 minutes to extend your study streak");
   else todayFocus.push("One timed segment plus rationales review");
+  todayFocus.push(`${cadenceLabel(args.studyCadencePreference)} — ${weeklyPlan.rationale}`);
 
   const readinessTimelineLine =
     args.readiness.score != null && days != null
@@ -299,8 +377,13 @@ export function buildAdaptiveRecommendations(args: {
     secondary: dedupedSecondary.slice(0, 3),
     weakTop3,
     holdingBackLabels: args.readiness.holdingBack ?? [],
-    weeklyPriorities: weeklyPriorities.slice(0, 4),
-    todayFocus: todayFocus.slice(0, 4),
+    weeklyPriorities: weeklyPriorities.slice(0, 6),
+    todayFocus: todayFocus.slice(0, 5),
     readinessTimelineLine,
+    planTrack,
+    weeklyPlan,
+    recovery,
+    milestones,
+    cadenceDisplay: cadenceLabel(args.studyCadencePreference),
   };
 }
