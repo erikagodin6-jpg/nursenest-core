@@ -35,7 +35,8 @@ export function recordQuestionPerformanceEvent(
     }
     let data: { events: QuestionPerformanceEventV1[] };
     try {
-      data = raw ? (JSON.parse(raw) as { events?: QuestionPerformanceEventV1[] }) : { events: [] };
+      const parsed = raw ? (JSON.parse(raw) as { events?: QuestionPerformanceEventV1[] }) : { events: [] };
+      data = { events: Array.isArray(parsed.events) ? parsed.events : [] };
     } catch {
       data = { events: [] };
     }
