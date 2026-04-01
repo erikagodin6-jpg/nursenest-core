@@ -49,23 +49,19 @@ export function ProtectionAbuseReviewPanel(props: { initialOpen: OpenRow[]; init
       setOpen((prev) => prev.filter((r) => r.id !== id));
       if (moved) {
         const note = notes[id]?.trim() || null;
-        setClosed((prev) =>
-          [
-            {
-              id: moved.id,
-              userId: moved.userId,
-              userEmailSample: moved.userEmailSample,
-              reason: moved.reason,
-              score: moved.score,
-              createdAt: moved.createdAt,
-              dismissedAt: new Date().toISOString(),
-              resolution: action === "dismiss" ? "DISMISSED" : "RESOLVED",
-              adminNote: note,
-              actorEmailSample: null,
-            },
-            ...prev,
-          ].slice(0, 30),
-        );
+        const newRow: ClosedRow = {
+          id: moved.id,
+          userId: moved.userId,
+          userEmailSample: moved.userEmailSample,
+          reason: moved.reason,
+          score: moved.score,
+          createdAt: moved.createdAt,
+          dismissedAt: new Date().toISOString(),
+          resolution: action === "dismiss" ? "DISMISSED" : "RESOLVED",
+          adminNote: note,
+          actorEmailSample: null,
+        };
+        setClosed((prev) => [newRow, ...prev].slice(0, 30));
       }
       setNotes((n) => {
         const next = { ...n };
