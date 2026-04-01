@@ -40,7 +40,7 @@ function Bar({
         aria-valuemax={100}
       >
         <div
-          className="h-full rounded-full bg-gradient-to-r from-role-warning-soft via-role-success to-role-success transition-[width] duration-500 ease-out"
+          className="h-full rounded-full bg-role-success transition-[width] duration-500 ease-out"
           style={{ width: `${pct}%` }}
         />
       </div>

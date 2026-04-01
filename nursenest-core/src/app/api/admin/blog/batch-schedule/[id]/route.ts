@@ -1,5 +1,5 @@
 import { BlogBatchScheduleStatus } from "@prisma/client";
-import { NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { refreshBlogBatchScheduleStats } from "@/lib/blog/blog-batch-schedule";
@@ -9,9 +9,10 @@ const patchSchema = z.object({
   status: z.enum([BlogBatchScheduleStatus.ACTIVE, BlogBatchScheduleStatus.PAUSED, BlogBatchScheduleStatus.CANCELLED]),
 });
 
-type Props = { params: Promise<{ id: string }> };
+type RouteContext = { params: Promise<{ id: string }> };
 
-export async function GET(_req: Request, { params }: Props) {
+export async function GET(_req: NextRequest, context: RouteContext) {
+  const { params } = context;
   const gate = await requireAdmin();
   if (!gate.ok) return gate.response;
   const { id } = await params;
@@ -44,7 +45,8 @@ export async function GET(_req: Request, { params }: Props) {
   return NextResponse.json({ schedule });
 }
 
-export async function PATCH(req: Request, { params }: Props) {
+export async function PATCH(req: NextRequest, context: RouteContext) {
+  const { params } = context;
   const gate = await requireAdmin();
   if (!gate.ok) return gate.response;
   const { id } = await params;

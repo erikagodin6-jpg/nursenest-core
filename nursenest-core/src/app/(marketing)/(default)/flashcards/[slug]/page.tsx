@@ -128,7 +128,7 @@ export default async function PublicFlashcardSlugPage({ params }: Props) {
       </section>
 
       <div className="mt-10 flex flex-wrap gap-3">
-        <Link href="/login" className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground">
+        <Link href="/login" className="rounded-full bg-role-cta px-5 py-2.5 text-sm font-semibold text-role-cta-foreground">
           Study in app
         </Link>
         <Link href="/flashcards" className="rounded-full border border-border px-5 py-2.5 text-sm font-semibold">

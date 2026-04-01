@@ -86,7 +86,7 @@ export default async function PublicFlashcardsHubPage() {
       <div className="mt-12 flex flex-wrap gap-3">
         <Link
           href="/login"
-          className="inline-flex rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground"
+          className="inline-flex rounded-full bg-role-cta px-5 py-2.5 text-sm font-semibold text-role-cta-foreground"
         >
           Sign in to study
         </Link>

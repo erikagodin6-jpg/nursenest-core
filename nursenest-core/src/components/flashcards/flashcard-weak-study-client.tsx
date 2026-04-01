@@ -126,7 +126,7 @@ export function FlashcardWeakStudyClient({
           <p className="mt-2 text-xs text-[var(--theme-muted-text)]">Topics we are watching: {weakTopics.join(", ")}</p>
         ) : null}
         <div className="mt-8 flex flex-col gap-3">
-          <Link href="/app/flashcards" className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground">
+          <Link href="/app/flashcards" className="rounded-full bg-role-cta px-5 py-2.5 text-sm font-semibold text-role-cta-foreground">
             Browse decks
           </Link>
           <Link href="/app/questions" className="rounded-full border border-border px-5 py-2.5 text-sm font-semibold">

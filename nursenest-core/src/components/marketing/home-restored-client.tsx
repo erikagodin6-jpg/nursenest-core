@@ -218,11 +218,11 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
             >
               <div className="hero-motion-enter min-w-0 max-w-[min(100%,46rem)] space-y-4 md:space-y-5">
                 <div
-                  className="inline-flex max-w-full flex-wrap items-center gap-x-3 gap-y-1 rounded-full border border-primary/15 bg-primary/[0.06] px-3 py-1.5 text-xs font-semibold text-primary sm:text-sm"
+                  className="inline-flex max-w-full flex-wrap items-center gap-x-2 gap-y-1 rounded-full border border-primary/15 bg-primary/[0.06] px-3 py-1.5 text-[11px] font-semibold leading-snug text-primary sm:text-sm"
                   data-testid="badge-trust-micro"
                 >
-                  <span className="hidden sm:inline">{t("home.hero.trustMicroBadge")}</span>
-                  <span className="text-[var(--theme-muted-text)] sm:text-primary/40" aria-hidden="true">
+                  <span>{t("home.hero.trustMicroBadge")}</span>
+                  <span className="text-primary/45" aria-hidden="true">
                     ·
                   </span>
                   <span>{t("home.hero.authorityBadge")}</span>
