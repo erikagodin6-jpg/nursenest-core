@@ -10,8 +10,6 @@ export const SERVER_FEATURE = {
   /** Reserved for generic API instrumentation when no product feature applies. */
   api: "api",
   auth: "auth",
-  /** Stripe customer portal / subscription management (distinct from checkout + payment webhooks). */
-  billing: "billing",
   entitlement: "entitlement",
   exam: "exam",
   flashcard: "flashcard",

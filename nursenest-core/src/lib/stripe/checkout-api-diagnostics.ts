@@ -1,6 +1,13 @@
 /** Matches POST /api/subscriptions/checkout when no Stripe price env is mapped. */
 export const STRIPE_PRICE_NOT_CONFIGURED_CODE = "stripe_price_not_configured";
 
+/** Structured checkout error codes (POST /api/subscriptions/checkout). */
+export const CHECKOUT_UNAUTHORIZED_CODE = "checkout_unauthorized";
+export const CHECKOUT_INVALID_PAYLOAD_CODE = "checkout_invalid_payload";
+export const CHECKOUT_POLICY_VERSION_MISMATCH_CODE = "checkout_policy_version_mismatch";
+export const CHECKOUT_STRIPE_UNAVAILABLE_CODE = "checkout_stripe_unavailable";
+export const CHECKOUT_SESSION_FAILED_CODE = "checkout_session_failed";
+
 /**
  * Include `envKey` in checkout 400 JSON only when not on Vercel production.
  * Local dev and preview/staging keep ops-friendly detail; production responses stay minimal.
@@ -23,16 +30,23 @@ export function showStripePriceEnvKeyOnCheckoutError(): boolean {
 }
 
 export type ParsedCheckoutErrorBody = {
-  error: string;
+  /** Prefer `message` from API; fall back to legacy `error`. */
+  message: string;
   code?: string;
   envKey?: string;
 };
 
 export function parseCheckoutApiErrorBody(body: unknown): ParsedCheckoutErrorBody {
-  if (!body || typeof body !== "object") return { error: "" };
+  if (!body || typeof body !== "object") return { message: "" };
   const o = body as Record<string, unknown>;
+  const message =
+    typeof o.message === "string"
+      ? o.message
+      : typeof o.error === "string"
+        ? o.error
+        : "";
   return {
-    error: typeof o.error === "string" ? o.error : "",
+    message,
     code: typeof o.code === "string" ? o.code : undefined,
     envKey: typeof o.envKey === "string" ? o.envKey : undefined,
   };

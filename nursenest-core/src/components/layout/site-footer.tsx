@@ -9,6 +9,8 @@ import { MARKETING_LANGUAGES } from "@/lib/i18n/marketing-languages";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
+import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
+import { npPracticeProgrammatic, pnPracticeProgrammatic } from "@/lib/marketing/marketing-entry-routes";
 
 function FLink({
   href,
@@ -42,6 +44,9 @@ export function SiteFooter() {
   const { pathname: pathWithoutLocale } = stripMarketingLocalePrefix(pathname);
   const pathForLanguageSwitch = pathWithoutLocale || "/";
   const { t } = useMarketingI18n();
+  const { region } = useNursenestRegion();
+  const pnPrepHref = pnPracticeProgrammatic(region);
+  const npPrepHref = npPracticeProgrammatic(region);
 
   return (
     <footer className="mt-auto border-t border-[var(--divider,var(--theme-nav-border))] bg-[var(--bg-section,var(--theme-card-bg))] py-12">
@@ -97,10 +102,14 @@ export function SiteFooter() {
                 <FLink href="/nclex-rn">{t("components.footer.nclexrnPrep")}</FLink>
               </li>
               <li>
-                <FLink href="/rex-pn">{t("components.footer.rexpnNclexpnPrep")}</FLink>
+                <FLink href={pnPrepHref}>
+                  {region === "US" ? t("components.footer.pnExamPrepUs") : t("components.footer.pnExamPrepCa")}
+                </FLink>
               </li>
               <li>
-                <FLink href="/np-exam-practice-questions">{t("components.footer.npExamPrepHub")}</FLink>
+                <FLink href={npPrepHref}>
+                  {region === "US" ? t("components.footer.npExamPrepUs") : t("components.footer.npExamPrepCa")}
+                </FLink>
               </li>
               <li>
                 <FLink href="/question-of-the-day">{t("footer.questionOfTheDay")}</FLink>

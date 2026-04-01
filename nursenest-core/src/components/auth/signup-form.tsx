@@ -1,9 +1,14 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { TurnstileSignup } from "@/components/auth/turnstile-signup";
+import {
+  reconcileExamFocusForCountry,
+  signupExamFocusOptions,
+  type SignupExamFocusValue,
+} from "@/lib/marketing/signup-exam-focus-options";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 
@@ -27,7 +32,13 @@ export function SignupForm({
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [country, setCountry] = useState<"CA" | "US">("CA");
+  const [examFocus, setExamFocus] = useState<SignupExamFocusValue>("nclex_rn");
   const onCaptcha = useCallback((t: string | null) => setCaptchaToken(t), []);
+
+  useEffect(() => {
+    setExamFocus((prev) => reconcileExamFocusForCountry(country, prev));
+  }, [country]);
 
   async function onSubmit(formData: FormData) {
     setError(null);
@@ -37,9 +48,9 @@ export function SignupForm({
       username: String(formData.get("username") ?? ""),
       email: String(formData.get("email") ?? ""),
       password: String(formData.get("password") ?? ""),
-      country: String(formData.get("country") ?? "CA"),
+      country,
       tier: String(formData.get("tier") ?? "RN"),
-      examFocus: String(formData.get("examFocus") ?? ""),
+      examFocus,
       studyGoal: String(formData.get("studyGoal") ?? ""),
       dailyStudyMinutes: Number(formData.get("dailyStudyMinutes") ?? 30),
       learnerPath: String(formData.get("learnerPath") ?? ""),
@@ -76,7 +87,12 @@ export function SignupForm({
       <input className="w-full rounded-xl border border-border bg-white px-3 py-2" type="email" name="email" placeholder="Email" required />
       <input className="w-full rounded-xl border border-border bg-white px-3 py-2" type="password" name="password" placeholder="Password (8+ chars)" required />
       <div className="grid gap-3 sm:grid-cols-2">
-        <select className="rounded-xl border border-border bg-white px-3 py-2" name="country" defaultValue="CA">
+        <select
+          className="rounded-xl border border-border bg-white px-3 py-2"
+          name="country"
+          value={country}
+          onChange={(e) => setCountry(e.target.value === "US" ? "US" : "CA")}
+        >
           <option value="CA">Canada</option>
           <option value="US">United States</option>
         </select>
@@ -96,12 +112,17 @@ export function SignupForm({
             <option value="experienced">Working clinician</option>
             <option value="career_change">Career change</option>
           </select>
-          <select className="rounded-lg border border-border px-3 py-2 text-sm" name="examFocus" defaultValue="nclex_rn">
-            <option value="nclex_rn">NCLEX-RN / RN readiness</option>
-            <option value="nclex_pn">NCLEX-PN / PN readiness</option>
-            <option value="rex_pn">REx-PN</option>
-            <option value="np_board">NP exam</option>
-            <option value="allied_cert">Allied certification</option>
+          <select
+            className="rounded-lg border border-border px-3 py-2 text-sm"
+            name="examFocus"
+            value={examFocus}
+            onChange={(e) => setExamFocus(e.target.value as SignupExamFocusValue)}
+          >
+            {signupExamFocusOptions(country).map((o) => (
+              <option key={o.value} value={o.value}>
+                {o.label}
+              </option>
+            ))}
           </select>
           <select className="rounded-lg border border-border px-3 py-2 text-sm" name="studyGoal" defaultValue="pass_first">
             <option value="pass_first">Pass on first attempt</option>

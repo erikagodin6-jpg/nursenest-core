@@ -145,7 +145,6 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
   const [flashcardCount, setFlashcardCount] = useState(0);
   const [deckCount, setDeckCount] = useState(0);
   const [registeredLearners, setRegisteredLearners] = useState(0);
-  const [topicCategoryCount, setTopicCategoryCount] = useState<number | undefined>(undefined);
 
   const heroSlides = useMemo(() => buildHomepageHeroSlides(t), [t]);
   /** When false, hero is single-column; media is omitted (no `hidden` placeholder delaying layout). */

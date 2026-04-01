@@ -9,6 +9,11 @@ import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sent
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { stripePriceEnvKey } from "@/lib/pricing/display-catalog";
 import {
+  CHECKOUT_INVALID_PAYLOAD_CODE,
+  CHECKOUT_POLICY_VERSION_MISMATCH_CODE,
+  CHECKOUT_SESSION_FAILED_CODE,
+  CHECKOUT_STRIPE_UNAVAILABLE_CODE,
+  CHECKOUT_UNAUTHORIZED_CODE,
   includeStripePriceEnvKeyInCheckoutResponse,
   STRIPE_PRICE_NOT_CONFIGURED_CODE,
 } from "@/lib/stripe/checkout-api-diagnostics";
@@ -44,19 +49,31 @@ export async function POST(req: Request) {
   const session = await auth();
   const userId = sessionUserId(session);
   if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const msg = "Sign in required to start checkout.";
+    return NextResponse.json(
+      { code: CHECKOUT_UNAUTHORIZED_CODE, message: msg, error: msg },
+      { status: 401 },
+    );
   }
 
   setSentryServerContext({ route: "/api/subscriptions/checkout", feature: SERVER_FEATURE.payment, userId });
 
   const parsed = bodySchema.safeParse(await req.json());
   if (!parsed.success) {
-    return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
+    const msg = "Invalid checkout request. Refresh the page and try again.";
+    return NextResponse.json(
+      { code: CHECKOUT_INVALID_PAYLOAD_CODE, message: msg, error: msg },
+      { status: 400 },
+    );
   }
 
   const { country, tier, duration, policyVersion } = parsed.data;
   if (policyVersion !== LEGAL_POLICY_BUNDLE_VERSION) {
-    return NextResponse.json({ error: "Policy version outdated. Refresh the page and try again." }, { status: 400 });
+    const msg = "Policy version outdated. Refresh the page and try again.";
+    return NextResponse.json(
+      { code: CHECKOUT_POLICY_VERSION_MISMATCH_CODE, message: msg, error: msg },
+      { status: 400 },
+    );
   }
   const tierCode = tier as TierCode;
   const durationCode = duration as BillingDuration;
@@ -69,9 +86,11 @@ export async function POST(req: Request) {
       duration: String(duration),
       envKey: missingEnvKey.slice(0, 80),
     });
+    const msg = "This plan is not available for checkout — billing configuration is incomplete.";
     const payload: Record<string, string> = {
-      error: "This plan is not available for checkout — billing configuration is incomplete.",
       code: STRIPE_PRICE_NOT_CONFIGURED_CODE,
+      message: msg,
+      error: msg,
     };
     if (includeStripePriceEnvKeyInCheckoutResponse()) {
       payload.envKey = missingEnvKey;
@@ -82,7 +101,11 @@ export async function POST(req: Request) {
   const stripe = await getStripeClient();
   if (!stripe) {
     safeServerLog("stripe_checkout", "stripe_client_unavailable", {});
-    return NextResponse.json({ error: "Billing unavailable" }, { status: 503 });
+    const msg = "Billing is temporarily unavailable. Try again shortly.";
+    return NextResponse.json(
+      { code: CHECKOUT_STRIPE_UNAVAILABLE_CODE, message: msg, error: msg },
+      { status: 503 },
+    );
   }
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") ?? "http://localhost:3000";
@@ -132,6 +155,10 @@ export async function POST(req: Request) {
       { country, tier: String(tier), duration: String(duration) },
       e,
     );
-    return NextResponse.json({ error: "Unable to start checkout. Try again shortly." }, { status: 503 });
+    const msg = "Unable to start checkout. Try again shortly.";
+    return NextResponse.json(
+      { code: CHECKOUT_SESSION_FAILED_CODE, message: msg, error: msg },
+      { status: 503 },
+    );
   }
 }

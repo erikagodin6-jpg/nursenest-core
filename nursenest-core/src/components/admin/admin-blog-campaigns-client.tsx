@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { ADMIN_BLOG_TARGET_EXAM_OPTIONS } from "@/lib/marketing/blog-admin-exam-options";
 
 type CampaignSummary = {
   id: string;
@@ -22,7 +23,7 @@ export function AdminBlogCampaignsClient({ initialCampaigns }: { initialCampaign
   const [form, setForm] = useState({
     name: "",
     keywordCluster: "",
-    targetExam: "NCLEX-RN",
+    targetExam: ADMIN_BLOG_TARGET_EXAM_OPTIONS[0].value,
     desiredPostCount: 12,
     postsPerWeek: 3,
     startDate: "",
@@ -76,7 +77,18 @@ export function AdminBlogCampaignsClient({ initialCampaigns }: { initialCampaign
         <div className="mt-4 grid gap-2 md:grid-cols-3">
           <input className="rounded border border-border px-3 py-2 text-sm" placeholder="Campaign name" value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} />
           <input className="rounded border border-border px-3 py-2 text-sm" placeholder="Keyword cluster" value={form.keywordCluster} onChange={(e) => setForm((f) => ({ ...f, keywordCluster: e.target.value }))} />
-          <input className="rounded border border-border px-3 py-2 text-sm" placeholder="Target exam" value={form.targetExam} onChange={(e) => setForm((f) => ({ ...f, targetExam: e.target.value }))} />
+          <select
+            className="rounded border border-border px-3 py-2 text-sm"
+            value={form.targetExam}
+            onChange={(e) => setForm((f) => ({ ...f, targetExam: e.target.value }))}
+            aria-label="Target exam"
+          >
+            {ADMIN_BLOG_TARGET_EXAM_OPTIONS.map((o) => (
+              <option key={o.value} value={o.value}>
+                {o.label}
+              </option>
+            ))}
+          </select>
           <input className="rounded border border-border px-3 py-2 text-sm" type="number" min={1} max={200} value={form.desiredPostCount} onChange={(e) => setForm((f) => ({ ...f, desiredPostCount: Number(e.target.value) }))} />
           <input className="rounded border border-border px-3 py-2 text-sm" type="number" min={1} max={14} value={form.postsPerWeek} onChange={(e) => setForm((f) => ({ ...f, postsPerWeek: Number(e.target.value) }))} />
           <input className="rounded border border-border px-3 py-2 text-sm" type="datetime-local" value={form.startDate} onChange={(e) => setForm((f) => ({ ...f, startDate: e.target.value }))} />

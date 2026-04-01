@@ -21,9 +21,15 @@ import {
 } from "@/lib/marketing/marketing-entry-routes";
 import { LEGAL_POLICY_BUNDLE_VERSION } from "@/lib/legal/legal-config";
 import {
+  CHECKOUT_INVALID_PAYLOAD_CODE,
+  CHECKOUT_POLICY_VERSION_MISMATCH_CODE,
+  CHECKOUT_SESSION_FAILED_CODE,
+  CHECKOUT_STRIPE_UNAVAILABLE_CODE,
+  CHECKOUT_UNAUTHORIZED_CODE,
   parseCheckoutApiErrorBody,
   showStripePriceEnvKeyOnCheckoutError,
   STRIPE_PRICE_NOT_CONFIGURED_CODE,
+  type ParsedCheckoutErrorBody,
 } from "@/lib/stripe/checkout-api-diagnostics";
 import type { BillingDuration } from "@/lib/stripe/pricing-map";
 
@@ -70,6 +76,23 @@ type HomeStatsPayload = {
   questionCount?: number;
   totalFlashcards?: number;
 };
+
+function checkoutErrorUserMessage(
+  parsed: ParsedCheckoutErrorBody,
+  httpStatus: number,
+  t: (key: string, params?: Record<string, string | number>) => string,
+): string {
+  const { code, message } = parsed;
+  if (code === STRIPE_PRICE_NOT_CONFIGURED_CODE) return t("pages.pricing.error.checkoutPlanNotConfigured");
+  if (code === CHECKOUT_UNAUTHORIZED_CODE || httpStatus === 401) return t("pages.pricing.error.checkoutSignIn");
+  if (code === CHECKOUT_POLICY_VERSION_MISMATCH_CODE) return t("pages.pricing.error.checkoutPolicyStale");
+  if (code === CHECKOUT_INVALID_PAYLOAD_CODE) return t("pages.pricing.error.checkoutInvalidRequest");
+  if (code === CHECKOUT_STRIPE_UNAVAILABLE_CODE || code === CHECKOUT_SESSION_FAILED_CODE) {
+    return t("pages.pricing.error.checkoutTemporarilyUnavailable");
+  }
+  if (message.length > 0) return message;
+  return t("pages.pricing.error.checkoutUnavailable");
+}
 
 export function PricingPageClient({
   heading,
@@ -206,22 +229,16 @@ export function PricingPageClient({
           }),
         });
         const data: unknown = await res.json();
-        if (res.status === 401) {
-          setCheckoutError(t("pages.pricing.error.checkoutSignIn"));
-          setCheckoutLoading(false);
-          return;
-        }
         if (!res.ok || !(data && typeof data === "object" && "url" in data && (data as { url?: unknown }).url)) {
           const parsed = parseCheckoutApiErrorBody(data);
+          setCheckoutOpsHint(null);
           if (parsed.code === STRIPE_PRICE_NOT_CONFIGURED_CODE) {
             setCheckoutError(t("pages.pricing.error.checkoutPlanNotConfigured"));
             if (showStripePriceEnvKeyOnCheckoutError() && parsed.envKey) {
               setCheckoutOpsHint(t("pages.pricing.error.checkoutOpsStripePrice", { envKey: parsed.envKey }));
             }
           } else {
-            setCheckoutError(
-              parsed.error.length > 0 ? parsed.error : t("pages.pricing.error.checkoutUnavailable"),
-            );
+            setCheckoutError(checkoutErrorUserMessage(parsed, res.status, t));
           }
           setCheckoutLoading(false);
           return;
@@ -229,6 +246,7 @@ export function PricingPageClient({
         const url = (data as { url: string }).url;
         window.location.href = url;
       } catch {
+        setCheckoutOpsHint(null);
         setCheckoutError(t("pages.pricing.error.checkoutNetwork"));
         setCheckoutLoading(false);
       }

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { BlogFunnelStage, BlogPostIntent, BlogPostTemplate } from "@prisma/client";
+import { ADMIN_BLOG_TARGET_EXAM_OPTIONS } from "@/lib/marketing/blog-admin-exam-options";
 
 const templates: BlogPostTemplate[] = [
   BlogPostTemplate.HOW_TO_PASS,
@@ -14,7 +15,7 @@ const templates: BlogPostTemplate[] = [
 export function AdminBlogGenerateClient() {
   const [topic, setTopic] = useState("");
   const [keywords, setKeywords] = useState("");
-  const [exam, setExam] = useState("NCLEX-RN");
+  const [exam, setExam] = useState(ADMIN_BLOG_TARGET_EXAM_OPTIONS[0].value);
   const [template, setTemplate] = useState<BlogPostTemplate>(BlogPostTemplate.TOPIC_EXPLAINED);
   const [tone, setTone] = useState<"professional" | "supportive" | "direct">("professional");
   const [intent, setIntent] = useState<BlogPostIntent>(BlogPostIntent.EXAM_PREP);
@@ -87,7 +88,17 @@ export function AdminBlogGenerateClient() {
         </label>
         <label className="block space-y-1">
           <span className="text-xs font-medium text-muted-foreground">Exam focus *</span>
-          <input className="w-full rounded-md border border-border px-3 py-2 text-sm" value={exam} onChange={(e) => setExam(e.target.value)} />
+          <select
+            className="w-full rounded-md border border-border px-3 py-2 text-sm"
+            value={exam}
+            onChange={(e) => setExam(e.target.value)}
+          >
+            {ADMIN_BLOG_TARGET_EXAM_OPTIONS.map((o) => (
+              <option key={o.value} value={o.value}>
+                {o.label}
+              </option>
+            ))}
+          </select>
         </label>
         <label className="block space-y-1 sm:col-span-2">
           <span className="text-xs font-medium text-muted-foreground">Keywords (comma-separated)</span>
