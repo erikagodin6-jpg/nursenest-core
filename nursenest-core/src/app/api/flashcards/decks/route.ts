@@ -66,6 +66,8 @@ export async function GET(req: NextRequest) {
 
   const examFamily = req.nextUrl.searchParams.get("examFamily")?.trim();
   const pathwayId = req.nextUrl.searchParams.get("pathwayId")?.trim();
+  const tagSlug = req.nextUrl.searchParams.get("tagSlug")?.trim();
+  const topicSlug = req.nextUrl.searchParams.get("topicSlug")?.trim();
 
   setSentryServerContext({ route: "/api/flashcards/decks", feature: "flashcard", userId: userId ?? "" });
 
@@ -90,6 +92,10 @@ export async function GET(req: NextRequest) {
   if (pathwayId) {
     andExtra.push({ pathwayId });
   }
+  const tagFilter = tagSlug ?? topicSlug;
+  if (tagFilter) {
+    andExtra.push({ tags: { some: { tag: { slug: tagFilter } } } });
+  }
   const where: Prisma.FlashcardDeckWhereInput =
     andExtra.length > 0 ? { AND: [baseWhere, ...andExtra] } : baseWhere;
 
@@ -109,6 +115,7 @@ export async function GET(req: NextRequest) {
             pathwayId: true,
             visibility: true,
             cardCount: true,
+            tags: { select: { tag: { select: { slug: true, name: true } } } },
           },
           orderBy: [{ sortOrder: "asc" }, { title: "asc" }],
           skip: skipRows,
@@ -125,6 +132,7 @@ export async function GET(req: NextRequest) {
       pageCount: Math.max(1, Math.ceil(total / pageSize)),
       decks: decks.map((d) => ({
         ...d,
+        tags: d.tags.map((t) => t.tag),
         locked: !isSubscriber && d.visibility === "SUBSCRIBER",
       })),
     };

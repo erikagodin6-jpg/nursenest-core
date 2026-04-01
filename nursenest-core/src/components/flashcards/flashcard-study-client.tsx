@@ -7,7 +7,14 @@ import { ProtectedPremiumContent } from "@/components/student/protected-premium-
 import { StudyNotesPanel } from "@/components/student/study-notes-panel";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
 
-type CardPayload = { id: string; front: string; back: string; fullBackAvailable: boolean };
+type CardPayload = {
+  id: string;
+  front: string;
+  back: string;
+  fullBackAvailable: boolean;
+  topic?: string;
+  subtopic?: string | null;
+};
 
 type StudyResponse = {
   mode: "preview" | "subscriber";
@@ -17,18 +24,21 @@ type StudyResponse = {
   session: { cursor: number; queueLength: number; done: boolean; batchSize?: number } | null;
 };
 
-const RATINGS = ["again", "hard", "good", "easy"] as const;
+const SIMPLE = ["incorrect", "unsure", "known"] as const;
 
 export function FlashcardStudyClient({
   deckRef,
   userId,
   userLabel,
   protectionFlags,
+  shuffleInitially = false,
 }: {
   deckRef: string;
   userId: string;
   userLabel: string;
   protectionFlags: PremiumProtectionFlags;
+  /** From `?shuffle=1` — new sessions shuffle the queue. */
+  shuffleInitially?: boolean;
 }) {
   const [title, setTitle] = useState<string>("");
   const [mode, setMode] = useState<"preview" | "subscriber" | null>(null);
@@ -40,33 +50,41 @@ export function FlashcardStudyClient({
   const [saving, setSaving] = useState(false);
   const [sessionMeta, setSessionMeta] = useState<StudyResponse["session"]>(null);
   const [resetToken, setResetToken] = useState(0);
+  const [shuffleOn, setShuffleOn] = useState(shuffleInitially);
 
   const current = queue[idx] ?? null;
 
-  const fetchBatch = useCallback(async (reset: boolean) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const q = reset ? "&reset=1" : "";
-      const res = await fetch(`/api/flashcards/decks/${encodeURIComponent(deckRef)}/study?limit=8${q}`, {
-        credentials: "include",
-      });
-      const data = (await res.json()) as StudyResponse & { error?: string; code?: string };
-      if (!res.ok) {
-        throw new Error(data.error ?? "Could not load cards");
+  const fetchBatch = useCallback(
+    async (reset: boolean) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const q = reset ? "&reset=1" : "";
+        const sh = shuffleOn ? "&shuffle=1" : "";
+        const res = await fetch(
+          `/api/flashcards/decks/${encodeURIComponent(deckRef)}/study?limit=8${q}${sh}`,
+          {
+            credentials: "include",
+          },
+        );
+        const data = (await res.json()) as StudyResponse & { error?: string; code?: string };
+        if (!res.ok) {
+          throw new Error(data.error ?? "Could not load cards");
+        }
+        setMode(data.mode);
+        setQueue(data.cards);
+        setIdx(0);
+        setFlipped(false);
+        setSessionMeta(data.session);
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "Error");
+        setQueue([]);
+      } finally {
+        setLoading(false);
       }
-      setMode(data.mode);
-      setQueue(data.cards);
-      setIdx(0);
-      setFlipped(false);
-      setSessionMeta(data.session);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Error");
-      setQueue([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [deckRef]);
+    },
+    [deckRef, shuffleOn],
+  );
 
   useEffect(() => {
     void fetchBatch(resetToken > 0);
@@ -85,7 +103,7 @@ export function FlashcardStudyClient({
     };
   }, [deckRef]);
 
-  const onRate = async (rating: (typeof RATINGS)[number]) => {
+  const onRate = async (rating: (typeof SIMPLE)[number]) => {
     if (!current || mode !== "subscriber") return;
     setSaving(true);
     setError(null);
@@ -167,22 +185,43 @@ export function FlashcardStudyClient({
 
   return (
     <div className="mx-auto max-w-lg px-4 py-6 pb-24">
-      <div className="mb-4 flex items-center justify-between gap-2">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
         <Link href="/app/flashcards" className="text-sm font-medium text-primary">
           ← Decks
         </Link>
         {mode === "subscriber" ? (
-          <button
-            type="button"
-            className="text-xs font-medium text-[var(--theme-muted-text)] underline"
-            onClick={() => setResetToken((t) => t + 1)}
-          >
-            Reset session
-          </button>
+          <div className="flex flex-wrap items-center gap-2">
+            <label className="flex cursor-pointer items-center gap-1.5 text-xs text-[var(--theme-muted-text)]">
+              <input
+                type="checkbox"
+                checked={shuffleOn}
+                onChange={(e) => {
+                  setShuffleOn(e.target.checked);
+                  setResetToken((t) => t + 1);
+                }}
+                className="rounded border-border"
+              />
+              Shuffle
+            </label>
+            <button
+              type="button"
+              className="text-xs font-medium text-[var(--theme-muted-text)] underline"
+              onClick={() => setResetToken((t) => t + 1)}
+            >
+              Reset session
+            </button>
+          </div>
         ) : null}
       </div>
 
       {title ? <h1 className="text-lg font-bold text-[var(--theme-heading-text)]">{title}</h1> : null}
+
+      {current.topic ? (
+        <p className="mt-2 text-xs text-[var(--theme-muted-text)]">
+          <span className="font-semibold text-[var(--theme-heading-text)]">Topic:</span> {current.topic}
+          {current.subtopic ? ` · ${current.subtopic}` : ""}
+        </p>
+      ) : null}
 
       {mode === "preview" ? (
         <p className="mt-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-950">
@@ -197,6 +236,31 @@ export function FlashcardStudyClient({
           Premium content is for individual subscriber use. Notes are printable; protected card text is not.
         </p>
       ) : null}
+
+      <div className="mt-3 flex gap-2">
+        <button
+          type="button"
+          className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold disabled:opacity-40"
+          disabled={idx <= 0}
+          onClick={() => {
+            setFlipped(false);
+            setIdx((i) => Math.max(0, i - 1));
+          }}
+        >
+          Previous
+        </button>
+        <button
+          type="button"
+          className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold disabled:opacity-40"
+          disabled={idx + 1 >= queue.length}
+          onClick={() => {
+            setFlipped(false);
+            setIdx((i) => Math.min(queue.length - 1, i + 1));
+          }}
+        >
+          Next
+        </button>
+      </div>
 
       {mode === "subscriber" ? (
         <ProtectedPremiumContent userLabel={userLabel} flags={protectionFlags} className="mt-6">
@@ -246,7 +310,7 @@ export function FlashcardStudyClient({
             userId={userId}
             scope={LearnerNoteScope.FLASHCARD_DECK}
             contextId={deckRef}
-            topic={title || null}
+            topic={title || current.topic || null}
             sourceLabel={title ? `Flashcards · ${title}` : `Flashcards · ${deckRef.slice(0, 12)}`}
             userLabel={userLabel}
             flags={protectionFlags}
@@ -261,8 +325,9 @@ export function FlashcardStudyClient({
               ? `Card ${sessionMeta.cursor + idx + 1} of ${sessionMeta.queueLength || queue.length}`
               : `Card ${idx + 1} of ${queue.length}`}
           </p>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-            {RATINGS.map((r) => (
+          <p className="mb-2 text-center text-[10px] text-[var(--theme-muted-text)]">Incorrect · Unsure · Known (spaced repetition)</p>
+          <div className="grid grid-cols-3 gap-2">
+            {SIMPLE.map((r) => (
               <button
                 key={r}
                 type="button"
@@ -270,7 +335,7 @@ export function FlashcardStudyClient({
                 onClick={() => void onRate(r)}
                 className="min-h-[48px] rounded-xl border border-border bg-card text-sm font-semibold capitalize text-[var(--theme-heading-text)] transition enabled:hover:border-primary/40 disabled:opacity-40"
               >
-                {r}
+                {r === "incorrect" ? "Incorrect" : r === "unsure" ? "Unsure" : "Known"}
               </button>
             ))}
           </div>
