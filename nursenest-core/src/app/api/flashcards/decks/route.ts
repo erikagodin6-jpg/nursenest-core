@@ -5,7 +5,7 @@ import { prismaDeckListWhere } from "@/lib/flashcards/flashcard-access";
 import { prisma } from "@/lib/db";
 import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
 import { logLargeApiResponse } from "@/lib/observability/perf-log";
-import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { withRetry } from "@/lib/resilience/with-retry";
 import { ExamFamily, type Prisma } from "@prisma/client";
@@ -69,7 +69,7 @@ export async function GET(req: NextRequest) {
   const tagSlug = req.nextUrl.searchParams.get("tagSlug")?.trim();
   const topicSlug = req.nextUrl.searchParams.get("topicSlug")?.trim();
 
-  setSentryServerContext({ route: "/api/flashcards/decks", feature: "flashcard", userId: userId ?? "" });
+  setSentryServerContext({ route: "/api/flashcards/decks", feature: SERVER_FEATURE.flashcard, userId: userId ?? "" });
 
   let entitlement = null;
   try {

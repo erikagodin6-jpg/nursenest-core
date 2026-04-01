@@ -7,7 +7,7 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { logLargeApiResponse } from "@/lib/observability/perf-log";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
-import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
 import {
   FLASHCARD_PAGE,
@@ -70,7 +70,7 @@ export async function GET(req: NextRequest) {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
-  setSentryServerContext({ route: "/api/flashcards", feature: "flashcard", userId: gate.userId });
+  setSentryServerContext({ route: "/api/flashcards", feature: SERVER_FEATURE.flashcard, userId: gate.userId });
 
   if (!isDatabaseUrlConfigured()) {
     return NextResponse.json({

@@ -10,7 +10,7 @@ import {
   PRE_NURSING_PROGRESS_PREFIX,
 } from "@/lib/pre-nursing/pre-nursing-constants";
 import { nextPreNursingModuleSlug, preNursingCompletionFraction } from "@/lib/pre-nursing/pre-nursing-adaptive";
-import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 
 const bodySchema = z.object({
   slug: z.string().min(2).max(80),
@@ -36,7 +36,7 @@ export async function GET() {
     });
   }
 
-  setSentryServerContext({ route: "/api/learner/pre-nursing-progress", feature: "lesson", userId });
+  setSentryServerContext({ route: "/api/learner/pre-nursing-progress", feature: SERVER_FEATURE.lesson, userId });
 
   try {
     const rows = await prisma.progress.findMany({
@@ -75,7 +75,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Sign in to save progress across devices." }, { status: 401 });
   }
 
-  setSentryServerContext({ route: "/api/learner/pre-nursing-progress", feature: "lesson", userId });
+  setSentryServerContext({ route: "/api/learner/pre-nursing-progress", feature: SERVER_FEATURE.lesson, userId });
 
   let parsedBody: z.infer<typeof bodySchema>;
   try {

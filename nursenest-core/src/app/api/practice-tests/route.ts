@@ -4,7 +4,7 @@ import { z } from "zod";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { enforcePracticeTestsListProtection } from "@/lib/http/api-protection";
 import { prisma } from "@/lib/db";
-import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { createCatPracticeTestPayload } from "@/lib/practice-tests/cat-session";
 import { configFromInput, pickPracticeQuestionIds } from "@/lib/practice-tests/pick-question-ids";
 import type { PracticeTestConfigJson } from "@/lib/practice-tests/types";
@@ -35,7 +35,7 @@ export async function GET(req: NextRequest) {
   const rl = enforcePracticeTestsListProtection(req, gate.userId);
   if (rl) return rl;
 
-  setSentryServerContext({ route: "/api/practice-tests", feature: "practice_test", userId: gate.userId });
+  setSentryServerContext({ route: "/api/practice-tests", feature: SERVER_FEATURE.practiceTest, userId: gate.userId });
 
   const rows = await prisma.practiceTest.findMany({
     where: { userId: gate.userId },
@@ -87,7 +87,7 @@ export async function POST(req: Request) {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
-  setSentryServerContext({ route: "/api/practice-tests", feature: "practice_test", userId: gate.userId });
+  setSentryServerContext({ route: "/api/practice-tests", feature: SERVER_FEATURE.practiceTest, userId: gate.userId });
 
   let body: unknown;
   try {

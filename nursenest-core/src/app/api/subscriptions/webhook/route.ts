@@ -6,7 +6,7 @@ import { Prisma, SubscriptionStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { productEvent } from "@/lib/observability/product-events";
-import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { findTierCountryByPriceId } from "@/lib/stripe/pricing-map";
 import {
   planFromCheckoutMetadata,
@@ -92,7 +92,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
   }
 
-  setSentryServerContext({ route: "/api/subscriptions/webhook", feature: "payment" });
+  setSentryServerContext({ route: "/api/subscriptions/webhook", feature: SERVER_FEATURE.payment });
 
   let claimedEventId = false;
   try {

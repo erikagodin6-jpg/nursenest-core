@@ -64,14 +64,14 @@ export function readQuestionPerformanceSample(userId: string, max = 50): Questio
       return [];
     }
     if (!raw) return [];
-    let data: { events?: QuestionPerformanceEventV1[] };
+    let events: QuestionPerformanceEventV1[];
     try {
       const parsed = JSON.parse(raw) as { events?: QuestionPerformanceEventV1[] };
-      data = { events: Array.isArray(parsed.events) ? parsed.events : [] };
+      events = Array.isArray(parsed.events) ? parsed.events : [];
     } catch {
       return [];
     }
-    return data.events.slice(-max);
+    return events.slice(-max);
   } catch {
     return [];
   }

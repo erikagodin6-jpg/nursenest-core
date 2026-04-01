@@ -17,7 +17,7 @@ import {
   logFlashcardLargePayload,
 } from "@/lib/observability/flashcard-log";
 import { enforceFlashcardStudyProtection } from "@/lib/http/api-protection";
-import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { withRetry } from "@/lib/resilience/with-retry";
 import type { Prisma } from "@prisma/client";
@@ -47,7 +47,7 @@ export async function GET(req: NextRequest, { params }: Props) {
   const reset = sp.get("reset") === "1";
   const shuffle = sp.get("shuffle") === "1";
 
-  setSentryServerContext({ route: "/api/flashcards/decks/[deckRef]/study", feature: "flashcard", userId: userId ?? "" });
+  setSentryServerContext({ route: "/api/flashcards/decks/[deckRef]/study", feature: SERVER_FEATURE.flashcard, userId: userId ?? "" });
 
   const deck = await findPublishedDeckByRef(deckRef);
   if (!deck) {

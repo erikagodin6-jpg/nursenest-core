@@ -7,7 +7,7 @@ import { userCanAccessExam } from "@/lib/entitlements/content-access-scope";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { buildExamSessionReview, type ExamReviewJson } from "@/lib/exams/exam-session-review";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
-import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
 import { collectSessionTopicOutcomes, scoreSessionAnswers } from "@/lib/exams/score-session-answers";
 import { recordTopicOutcomesSequential } from "@/lib/learner/topic-performance";
@@ -37,7 +37,7 @@ export async function POST(req: Request) {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
-  setSentryServerContext({ route: "/api/exams/submit", feature: "exam", userId: gate.userId });
+  setSentryServerContext({ route: "/api/exams/submit", feature: SERVER_FEATURE.exam, userId: gate.userId });
 
   let body: unknown;
   try {

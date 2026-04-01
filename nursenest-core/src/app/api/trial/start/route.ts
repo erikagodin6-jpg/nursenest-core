@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { attemptStartTrial } from "@/lib/trial/attempt-start-trial";
 import { TRIAL_DEVICE_COOKIE } from "@/lib/trial/trial-constants";
-import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 
 export const runtime = "nodejs";
 
@@ -29,7 +29,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "Unauthorized", code: "unauthorized" }, { status: 401 });
   }
 
-  setSentryServerContext({ route: "/api/trial/start", feature: "trial", userId });
+  setSentryServerContext({ route: "/api/trial/start", feature: SERVER_FEATURE.trial, userId });
 
   const jar = await cookies();
   let deviceId = jar.get(TRIAL_DEVICE_COOKIE)?.value;

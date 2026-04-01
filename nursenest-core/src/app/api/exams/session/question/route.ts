@@ -4,7 +4,7 @@ import { prisma } from "@/lib/db";
 import { filterSessionQuestionIdsInScope, questionIdWhereIfAllowed } from "@/lib/entitlements/assert-question-access";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
-import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
 import { MAX_SESSION_QUESTION_IDS, sanitizeSessionQuestionIds } from "@/lib/exams/exam-session-bounds";
 import { QUESTION_PAYLOAD_WARN_BYTES } from "@/lib/questions/question-api-limits";
@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "invalid index" }, { status: 400 });
   }
 
-  setSentryServerContext({ route: "/api/exams/session/question", feature: "exam", userId: gate.userId });
+  setSentryServerContext({ route: "/api/exams/session/question", feature: SERVER_FEATURE.exam, userId: gate.userId });
 
   try {
     const row = await withRetry(() =>

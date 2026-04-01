@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { SubscriptionStatus } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 
 export const runtime = "nodejs";
@@ -21,7 +21,7 @@ export async function POST() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  setSentryServerContext({ route: "/api/billing/portal", feature: "payment", userId });
+  setSentryServerContext({ route: "/api/billing/portal", feature: SERVER_FEATURE.payment, userId });
 
   const stripe = await getStripe();
   if (!stripe) {

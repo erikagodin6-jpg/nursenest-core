@@ -6,7 +6,7 @@ import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-
 import { logPaywallDeny } from "@/lib/entitlements/assert-question-access";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { productEvent } from "@/lib/observability/product-events";
-import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
 import { MAX_SESSION_QUESTION_IDS } from "@/lib/exams/exam-session-bounds";
 import {
@@ -104,7 +104,7 @@ export async function POST(req: Request) {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
-  setSentryServerContext({ route: "/api/exams/start", feature: "exam", userId: gate.userId });
+  setSentryServerContext({ route: "/api/exams/start", feature: SERVER_FEATURE.exam, userId: gate.userId });
 
   await seedMinimalQuestionBankIfEmpty();
 

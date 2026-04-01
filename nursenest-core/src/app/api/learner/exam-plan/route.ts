@@ -4,7 +4,7 @@ import { ALLIED_PROFESSION_KEYS, listAlliedProfessionsSorted } from "@/lib/allie
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import { prisma } from "@/lib/db";
-import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 
 const CADENCE = new Set(["light", "steady", "intensive"]);
 
@@ -46,7 +46,7 @@ export async function GET() {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
-  setSentryServerContext({ route: "/api/learner/exam-plan", feature: "exam", userId: gate.userId });
+  setSentryServerContext({ route: "/api/learner/exam-plan", feature: SERVER_FEATURE.exam, userId: gate.userId });
 
   try {
     const user = await prisma.user.findUnique({
@@ -90,7 +90,7 @@ export async function PATCH(req: Request) {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
-  setSentryServerContext({ route: "/api/learner/exam-plan", feature: "exam", userId: gate.userId });
+  setSentryServerContext({ route: "/api/learner/exam-plan", feature: SERVER_FEATURE.exam, userId: gate.userId });
 
   let body: unknown;
   try {

@@ -4,13 +4,13 @@ import { prisma } from "@/lib/db";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import type { ExamReviewJson } from "@/lib/exams/exam-session-review";
 import { enforceExamAttemptDetailProtection } from "@/lib/http/api-protection";
-import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 
 export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
-  setSentryServerContext({ route: "/api/exams/attempt/[id]", feature: "exam", userId: gate.userId });
+  setSentryServerContext({ route: "/api/exams/attempt/[id]", feature: SERVER_FEATURE.exam, userId: gate.userId });
 
   const limited = enforceExamAttemptDetailProtection(req, gate.userId);
   if (limited) return limited;

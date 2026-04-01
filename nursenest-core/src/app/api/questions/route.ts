@@ -7,7 +7,7 @@ import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-
 import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
 import { prisma } from "@/lib/db";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
-import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
 import type { CountryCode, TierCode } from "@prisma/client";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
@@ -186,7 +186,7 @@ export async function GET(req: NextRequest) {
   if (entitlement.hasAccess) {
     const gate = await requireSubscriberSession();
     if (!gate.ok) return gate.response;
-    setSentryServerContext({ route: "/api/questions", feature: "question", userId: gate.userId });
+    setSentryServerContext({ route: "/api/questions", feature: SERVER_FEATURE.question, userId: gate.userId });
 
     const rateLimited = enforceQuestionsListProtection(req, gate.userId, pageSize);
     if (rateLimited) return rateLimited;
@@ -426,7 +426,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized", code: "unauthorized" }, { status: 401 });
   }
 
-  setSentryServerContext({ route: "/api/questions", feature: "question", userId });
+  setSentryServerContext({ route: "/api/questions", feature: SERVER_FEATURE.question, userId });
 
   await seedMinimalQuestionBankIfEmpty();
 

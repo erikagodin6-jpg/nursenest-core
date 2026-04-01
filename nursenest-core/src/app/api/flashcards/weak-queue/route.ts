@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { loadWeakAreaFlashcardsForUser } from "@/lib/flashcards/load-weak-flashcards";
-import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 
 export const dynamic = "force-dynamic";
@@ -11,7 +11,7 @@ export async function GET() {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
-  setSentryServerContext({ route: "/api/flashcards/weak-queue", feature: "flashcard", userId: gate.userId });
+  setSentryServerContext({ route: "/api/flashcards/weak-queue", feature: SERVER_FEATURE.flashcard, userId: gate.userId });
 
   try {
     const { weakTopics, cards } = await loadWeakAreaFlashcardsForUser(gate.userId, gate.entitlement);

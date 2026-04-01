@@ -2,7 +2,7 @@ import { PreNursingDatePlanType } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import type { PreNursingFuturePathwayHint } from "@/lib/pre-nursing/pre-nursing-conversion-links";
 
 const HINTS = new Set<PreNursingFuturePathwayHint>(["rn", "rpn", "pn", "np", "unsure"]);
@@ -42,7 +42,7 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  setSentryServerContext({ route: "/api/learner/pre-nursing-plan", feature: "lesson", userId });
+  setSentryServerContext({ route: "/api/learner/pre-nursing-plan", feature: SERVER_FEATURE.lesson, userId });
 
   try {
     const user = await prisma.user.findUnique({
@@ -82,7 +82,7 @@ export async function PATCH(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  setSentryServerContext({ route: "/api/learner/pre-nursing-plan", feature: "lesson", userId });
+  setSentryServerContext({ route: "/api/learner/pre-nursing-plan", feature: SERVER_FEATURE.lesson, userId });
 
   let body: unknown;
   try {

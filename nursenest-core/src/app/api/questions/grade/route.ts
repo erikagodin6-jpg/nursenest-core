@@ -3,7 +3,7 @@ import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-
 import { questionIdWhereIfAllowed } from "@/lib/entitlements/assert-question-access";
 import { prisma } from "@/lib/db";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
-import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
 import type { Prisma } from "@prisma/client";
 import { recordTopicOutcomesSequential } from "@/lib/learner/topic-performance";
@@ -34,7 +34,7 @@ export async function POST(req: Request) {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
-  setSentryServerContext({ route: "/api/questions/grade", feature: "question", userId: gate.userId });
+  setSentryServerContext({ route: "/api/questions/grade", feature: SERVER_FEATURE.question, userId: gate.userId });
 
   let body: { questionId?: string; answer?: unknown };
   try {

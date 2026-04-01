@@ -3,7 +3,7 @@ import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-
 import { flashcardAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
-import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 
 export const dynamic = "force-dynamic";
@@ -22,7 +22,7 @@ export async function GET() {
   if (!gate.ok) return gate.response;
 
   const { userId, entitlement } = gate;
-  setSentryServerContext({ route: "/api/flashcards/due-summary", feature: "flashcard", userId });
+  setSentryServerContext({ route: "/api/flashcards/due-summary", feature: SERVER_FEATURE.flashcard, userId });
 
   if (!isDatabaseUrlConfigured()) {
     return NextResponse.json({

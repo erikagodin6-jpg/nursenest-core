@@ -8,7 +8,7 @@ import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-
 import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
 import { prisma } from "@/lib/db";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
-import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
 import type { CountryCode, TierCode } from "@prisma/client";
 import { QUESTION_PAYLOAD_WARN_BYTES } from "@/lib/questions/question-api-limits";
@@ -40,7 +40,7 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
     const gate = await requireSubscriberSession();
     if (!gate.ok) return gate.response;
 
-    setSentryServerContext({ route: "/api/questions/[id]", feature: "question", userId: gate.userId });
+    setSentryServerContext({ route: "/api/questions/[id]", feature: SERVER_FEATURE.question, userId: gate.userId });
 
     const includeRationale =
       req.nextUrl.searchParams.get("includeRationale") === "1" ||

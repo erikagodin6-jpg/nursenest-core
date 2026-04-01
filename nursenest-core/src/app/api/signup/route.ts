@@ -11,7 +11,7 @@ import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { productEvent } from "@/lib/observability/product-events";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
-import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 
 function clientIp(req: Request): string {
   return (
@@ -41,7 +41,7 @@ const schema = z.object({
 });
 
 export async function POST(req: Request) {
-  setSentryServerContext({ route: "/api/signup", feature: "signup" });
+  setSentryServerContext({ route: "/api/signup", feature: SERVER_FEATURE.signup });
   const ip = clientIp(req);
   const rl = checkRateLimit(`signup:${ip}`, { windowMs: 60_000, max: 10 });
   if (!rl.ok) {

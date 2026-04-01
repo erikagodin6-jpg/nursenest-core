@@ -4,7 +4,7 @@ import { PracticeTestStatus } from "@prisma/client";
 import { z } from "zod";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { prisma } from "@/lib/db";
-import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { advanceCatPracticeTest, finalizeCatPracticeTest } from "@/lib/practice-tests/cat-session";
 import { recordTopicOutcomesFromPracticeTest } from "@/lib/learner/topic-performance";
@@ -45,7 +45,7 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  setSentryServerContext({ route: "/api/practice-tests/[id]", feature: "practice_test", userId: gate.userId });
+  setSentryServerContext({ route: "/api/practice-tests/[id]", feature: SERVER_FEATURE.practiceTest, userId: gate.userId });
 
   const row = await prisma.practiceTest.findFirst({
     where: { id, userId: gate.userId },
@@ -121,7 +121,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  setSentryServerContext({ route: "/api/practice-tests/[id]", feature: "practice_test", userId: gate.userId });
+  setSentryServerContext({ route: "/api/practice-tests/[id]", feature: SERVER_FEATURE.practiceTest, userId: gate.userId });
 
   let body: unknown;
   try {

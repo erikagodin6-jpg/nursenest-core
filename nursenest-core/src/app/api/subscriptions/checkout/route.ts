@@ -3,7 +3,7 @@ import type Stripe from "stripe";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
-import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { stripePriceEnvKey } from "@/lib/pricing/display-catalog";
 import { findPriceEntry, type BillingDuration } from "@/lib/stripe/pricing-map";
@@ -39,7 +39,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  setSentryServerContext({ route: "/api/subscriptions/checkout", feature: "payment", userId });
+  setSentryServerContext({ route: "/api/subscriptions/checkout", feature: SERVER_FEATURE.payment, userId });
 
   const parsed = bodySchema.safeParse(await req.json());
   if (!parsed.success) {

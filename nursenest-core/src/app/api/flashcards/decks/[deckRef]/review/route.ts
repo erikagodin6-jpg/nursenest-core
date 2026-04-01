@@ -19,7 +19,7 @@ import {
   logSpacedRepetitionScheduleError,
 } from "@/lib/observability/flashcard-log";
 import { enforceFlashcardReviewProtection } from "@/lib/http/api-protection";
-import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import type { Prisma } from "@prisma/client";
 import { toSchedulerRating } from "@/lib/flashcards/map-study-rating";
@@ -55,7 +55,7 @@ export async function POST(req: NextRequest, { params }: Props) {
   const { userId, entitlement } = gate;
   const { deckRef } = await params;
 
-  setSentryServerContext({ route: "/api/flashcards/decks/[deckRef]/review", feature: "flashcard", userId });
+  setSentryServerContext({ route: "/api/flashcards/decks/[deckRef]/review", feature: SERVER_FEATURE.flashcard, userId });
 
   const reviewLimited = enforceFlashcardReviewProtection(req, userId);
   if (reviewLimited) return reviewLimited;

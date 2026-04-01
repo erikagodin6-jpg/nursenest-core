@@ -4,7 +4,7 @@ import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
 import { userCanAccessDeckForStudy } from "@/lib/flashcards/flashcard-access";
 import { findPublishedDeckByRef } from "@/lib/flashcards/resolve-deck";
 import { logFlashcardAccessDenied } from "@/lib/observability/flashcard-log";
-import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 
 const NO_ACCESS: AccessScope = {
@@ -22,7 +22,7 @@ export async function GET(_req: Request, { params }: Props) {
   const { deckRef } = await params;
   const session = await auth();
   const userId = (session?.user as { id?: string } | undefined)?.id;
-  setSentryServerContext({ route: "/api/flashcards/decks/[deckRef]", feature: "flashcard", userId: userId ?? "" });
+  setSentryServerContext({ route: "/api/flashcards/decks/[deckRef]", feature: SERVER_FEATURE.flashcard, userId: userId ?? "" });
 
   const deck = await findPublishedDeckByRef(deckRef);
   if (!deck) {

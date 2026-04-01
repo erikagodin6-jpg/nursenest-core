@@ -7,7 +7,7 @@ import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { appPathwayLessonVisibleToSubscriber } from "@/lib/lessons/app-pathway-lesson-list-scope";
-import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 
 const bodySchema = z.object({
   lessonId: z.string().min(5),
@@ -24,7 +24,7 @@ export async function POST(req: Request) {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
-  setSentryServerContext({ route: "/api/lessons/progress", feature: "lesson", userId: gate.userId });
+  setSentryServerContext({ route: "/api/lessons/progress", feature: SERVER_FEATURE.lesson, userId: gate.userId });
 
   const parsed = bodySchema.safeParse(await req.json());
   if (!parsed.success) {

@@ -4,7 +4,7 @@ import { z } from "zod";
 import type { NextRequest } from "next/server";
 import { prisma } from "@/lib/db";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
-import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { enforceLearnerNotesProtection } from "@/lib/http/api-protection";
 
 const scopeSchema = z.nativeEnum(LearnerNoteScope);
@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
   const blocked = enforceLearnerNotesProtection(req, gate.userId);
   if (blocked) return blocked;
 
-  setSentryServerContext({ route: "/api/learner/notes", feature: "other", userId: gate.userId });
+  setSentryServerContext({ route: "/api/learner/notes", feature: SERVER_FEATURE.other, userId: gate.userId });
 
   const { searchParams } = new URL(req.url);
   const scope = searchParams.get("scope");
@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
   const blocked = enforceLearnerNotesProtection(req, gate.userId);
   if (blocked) return blocked;
 
-  setSentryServerContext({ route: "/api/learner/notes", feature: "other", userId: gate.userId });
+  setSentryServerContext({ route: "/api/learner/notes", feature: SERVER_FEATURE.other, userId: gate.userId });
 
   let body: unknown;
   try {

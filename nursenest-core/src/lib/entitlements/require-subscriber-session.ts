@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { resolveEntitlement, type AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
-import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 
 export type SubscriberSessionOk = { ok: true; userId: string; entitlement: AccessScope };
 export type SubscriberSessionFail = { ok: false; response: NextResponse };
@@ -22,7 +22,7 @@ export async function requireSubscriberSession(): Promise<SubscriberSessionResul
     };
   }
 
-  setSentryServerContext({ route: "requireSubscriberSession", feature: "entitlement", userId });
+  setSentryServerContext({ route: "requireSubscriberSession", feature: SERVER_FEATURE.entitlement, userId });
 
   let entitlement: AccessScope;
   try {

@@ -9,7 +9,7 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { logLargeApiResponse } from "@/lib/observability/perf-log";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
-import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
 import type { CountryCode, TierCode } from "@prisma/client";
 import {
@@ -79,7 +79,7 @@ export async function GET(req: NextRequest) {
     const gate = await requireSubscriberSession();
     if (!gate.ok) return gate.response;
 
-    setSentryServerContext({ route: "/api/lessons", feature: "lesson", userId: gate.userId });
+    setSentryServerContext({ route: "/api/lessons", feature: SERVER_FEATURE.lesson, userId: gate.userId });
 
     try {
       const where = lessonAccessWhere(gate.entitlement);
@@ -135,7 +135,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  setSentryServerContext({ route: "/api/lessons", feature: "lesson", userId });
+  setSentryServerContext({ route: "/api/lessons", feature: SERVER_FEATURE.lesson, userId });
 
   const snap = await getFreemiumSnapshot(userId);
   if (!snap || snap.lessonRemaining <= 0) {

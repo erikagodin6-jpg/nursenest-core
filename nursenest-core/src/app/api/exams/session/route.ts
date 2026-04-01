@@ -6,7 +6,7 @@ import { filterSessionQuestionIdsInScope } from "@/lib/entitlements/assert-quest
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
-import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
 import {
   MAX_SESSION_ANSWER_KEYS,
@@ -43,7 +43,7 @@ export async function GET(req: NextRequest) {
   /** Default `minimal` (ids + metadata only). `full` hydrates question stems/options — use sparingly. */
   const mode = req.nextUrl.searchParams.get("mode") === "full" ? "full" : "minimal";
 
-  setSentryServerContext({ route: "/api/exams/session", feature: "exam", userId: gate.userId });
+  setSentryServerContext({ route: "/api/exams/session", feature: SERVER_FEATURE.exam, userId: gate.userId });
 
   try {
     const row = await withRetry(() =>
@@ -194,7 +194,7 @@ export async function PATCH(req: Request) {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
-  setSentryServerContext({ route: "/api/exams/session", feature: "exam", userId: gate.userId });
+  setSentryServerContext({ route: "/api/exams/session", feature: SERVER_FEATURE.exam, userId: gate.userId });
 
   let body: unknown;
   try {

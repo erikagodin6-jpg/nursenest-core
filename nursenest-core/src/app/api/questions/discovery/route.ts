@@ -9,7 +9,7 @@ import {
   loadSubscriberDiscoveryAggregates,
 } from "@/lib/questions/subscriber-discovery-aggregates";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
-import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
 import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
 import { logLargeApiResponse } from "@/lib/observability/perf-log";
@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
   const blocked = enforceDiscoveryProtection(req, gate.userId);
   if (blocked) return blocked;
 
-  setSentryServerContext({ route: "/api/questions/discovery", feature: "question", userId: gate.userId });
+  setSentryServerContext({ route: "/api/questions/discovery", feature: SERVER_FEATURE.question, userId: gate.userId });
 
   try {
     const t0 = performance.now();

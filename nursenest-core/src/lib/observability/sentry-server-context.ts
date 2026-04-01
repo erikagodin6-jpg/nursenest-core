@@ -1,20 +1,9 @@
 import * as Sentry from "@sentry/nextjs";
 import { sentryUserHash } from "@/lib/observability/sentry-user-hash";
+import type { ServerFeatureTag } from "@/lib/observability/server-feature-tags";
 
-export type ServerFeatureTag =
-  | "exam"
-  | "lesson"
-  | "flashcard"
-  | "question"
-  | "practice_test"
-  | "entitlement"
-  | "payment"
-  | "trial"
-  | "auth"
-  | "signup"
-  | "image"
-  | "api"
-  | "other";
+export type { ServerFeatureTag };
+export { SERVER_FEATURE, SERVER_FEATURE_TAGS } from "@/lib/observability/server-feature-tags";
 
 /**
  * Set scoped tags for the current request (API routes / server actions).

@@ -5,7 +5,7 @@ import { auth } from "@/lib/auth";
 import { strongPasswordSchema } from "@/lib/auth/password-policy";
 import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
 import { prisma } from "@/lib/db";
-import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 
 export const runtime = "nodejs";
@@ -42,7 +42,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "Too many attempts. Try again shortly." }, { status: 429 });
   }
 
-  setSentryServerContext({ route: "/api/auth/change-password", feature: "auth", userId });
+  setSentryServerContext({ route: "/api/auth/change-password", feature: SERVER_FEATURE.auth, userId });
 
   let json: unknown;
   try {
