@@ -36,7 +36,6 @@ import {
   topicEqualsSql,
 } from "@/lib/questions/exam-question-access-sql";
 import { getWeakTopicTargetsForPractice } from "@/lib/learner/topic-performance";
-import { notSubscribedResponse } from "@/lib/entitlements/require-subscriber-session";
 
 /** Deep offset pagination is expensive on large tables; reject before issuing heavy skip scans. */
 const MAX_QUESTION_LIST_SKIP_ROWS = MAX_LIST_SKIP_ROWS_DEFAULT;
@@ -451,12 +450,7 @@ export async function GET(req: NextRequest) {
 
   const snap = await getFreemiumSnapshot(userId);
   if (!snap || snap.questionRemaining <= 0) {
-    const base = notSubscribedResponse();
-    const payload = {
-      ...(await base.json()),
-      freemiumExhausted: true,
-    };
-    return NextResponse.json(payload, { status: 403 });
+    return NextResponse.json({ code: "not_subscribed", message: "Subscription required", freemiumExhausted: true }, { status: 403 });
   }
 
   const take = Math.min(pageSize, snap.questionRemaining);

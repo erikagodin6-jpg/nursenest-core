@@ -1,8 +1,26 @@
 import { Suspense } from "react";
 import { FlashcardsHubClient } from "@/components/flashcards/flashcards-hub-client";
+import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
+import { auth } from "@/lib/auth";
+import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-product-registry";
 
-export default function FlashcardsPage() {
+export default async function FlashcardsPage() {
+  const session = await auth();
+  const userId = (session?.user as { id?: string })?.id ?? "";
+  const entitlement = await resolveEntitlementForPage(userId);
+  if (entitlement === "error") {
+    return <div className="mx-auto max-w-3xl px-4 py-8 text-sm text-[var(--theme-muted-text)]">Unable to verify access right now. Refresh and try again.</div>;
+  }
+  if (!entitlement.hasAccess) {
+    return (
+      <main className="space-y-4">
+        <h1 className="text-3xl font-bold">Flashcards</h1>
+        <p className="text-sm text-muted-foreground">Subscriber plans unlock full flashcard study, weak-area queues, and progress tracking.</p>
+        <SubscriptionPaywall context="dashboard" />
+      </main>
+    );
+  }
   const pathwayOptions = EXAM_PATHWAYS.map((p) => ({ id: p.id, label: p.displayName }));
   return (
     <Suspense

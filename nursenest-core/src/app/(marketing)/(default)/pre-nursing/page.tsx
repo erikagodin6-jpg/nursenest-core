@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { PreNursingAccountCapture } from "@/components/pre-nursing/pre-nursing-account-capture";
 import { PreNursingLandingClient } from "@/components/pre-nursing/pre-nursing-landing-client";
+import { PreNursingMilestoneStrip } from "@/components/pre-nursing/pre-nursing-milestone-strip";
+import { PreNursingNextStepsBlock } from "@/components/pre-nursing/pre-nursing-next-steps-block";
+import { PreNursingSurfaceAnalytics } from "@/components/pre-nursing/pre-nursing-surface-analytics";
 import strings from "@/content/pre-nursing/pre-nursing-strings-en.json";
 import { preNursingHubBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { absoluteUrl } from "@/lib/seo/site-origin";
@@ -38,12 +42,16 @@ export default function PreNursingLandingPage() {
   return (
     <div className="nn-marketing-surface">
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+        <PreNursingSurfaceAnalytics surface="hub" />
         <BreadcrumbJsonLd items={schemaItems} />
         <div className="mb-8">
           <BreadcrumbTrail items={crumbs} />
         </div>
 
+        <PreNursingMilestoneStrip sourceSurface="hub" />
         <PreNursingLandingClient />
+        <PreNursingAccountCapture sourceSurface="hub" />
+        <PreNursingNextStepsBlock sourceSurface="hub" />
 
         <section className="mt-16 border-t border-border pt-12">
           <h2 className="text-2xl font-bold text-[var(--theme-heading-text)]">What Pre-Nursing is</h2>

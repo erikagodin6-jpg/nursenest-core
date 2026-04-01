@@ -214,7 +214,7 @@ export function PremiumLearnerHub({
           </div>
           {weakTopicTitles.length > 0 ? (
             <p className="mt-3 text-xs text-muted">
-              Weak topics we are matching to flashcards:{" "}
+              Priority review queue matched to flashcards:{" "}
               <span className="font-medium text-foreground">{weakTopicTitles.slice(0, 5).join(", ")}</span>
             </p>
           ) : null}
@@ -229,7 +229,7 @@ export function PremiumLearnerHub({
               href="/app/flashcards/weak-areas"
               className="inline-flex rounded-full border border-border px-4 py-2 text-sm font-semibold text-foreground"
             >
-              Study weak areas
+              Study priority review
             </Link>
           </div>
           {snapshot.flashcards.suggestedDecks.length > 0 ? (

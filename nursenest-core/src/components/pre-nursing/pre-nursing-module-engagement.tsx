@@ -10,31 +10,15 @@ import {
   type PreNursingFuturePathwayHint,
 } from "@/lib/pre-nursing/pre-nursing-conversion-links";
 import { nextPreNursingModuleSlug, preNursingCompletionFraction } from "@/lib/pre-nursing/pre-nursing-adaptive";
+import {
+  readLocalPreNursingCompleted,
+  writeLocalPreNursingCompleted,
+  preNursingMilestoneMessage,
+} from "@/lib/pre-nursing/pre-nursing-progress-client";
+import { PH } from "@/lib/observability/posthog-conversion-events";
+import { trackClientEvent } from "@/lib/observability/posthog-client";
 
 const dict = strings as Record<string, string>;
-
-const LS_KEY = "pre-nursing-completed-slugs-v1";
-
-function readLocalCompleted(): string[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = window.localStorage.getItem(LS_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw) as unknown;
-    if (!Array.isArray(parsed)) return [];
-    return parsed.filter((x): x is string => typeof x === "string");
-  } catch {
-    return [];
-  }
-}
-
-function writeLocalCompleted(slugs: string[]) {
-  try {
-    window.localStorage.setItem(LS_KEY, JSON.stringify(slugs));
-  } catch {
-    /* ignore */
-  }
-}
 
 function moduleTitleForSlug(s: string): string {
   const m = PRE_NURSING_MODULE_REGISTRY.find((x) => x.slug === s);
@@ -63,7 +47,7 @@ export function PreNursingModuleEngagement({
   const [hint, setHint] = useState<PreNursingFuturePathwayHint | null>(null);
 
   const load = useCallback(async () => {
-    const local = readLocalCompleted();
+    const local = readLocalPreNursingCompleted();
     try {
       const res = await fetch("/api/learner/pre-nursing-progress", { method: "GET" });
       if (!res.ok) {
@@ -118,7 +102,7 @@ export function PreNursingModuleEngagement({
     const nextSet = new Set(completed);
     if (next) nextSet.add(slug);
     else nextSet.delete(slug);
-    writeLocalCompleted([...nextSet]);
+    writeLocalPreNursingCompleted([...nextSet]);
     setCompleted(nextSet);
 
     try {
@@ -129,6 +113,23 @@ export function PreNursingModuleEngagement({
       });
       if (res.ok) {
         setSignedIn(true);
+        if (next) {
+          trackClientEvent(PH.preNursingModuleCompleted, {
+            source_surface: "module",
+            module_slug: slug,
+            completion_count: nextSet.size,
+            signed_in: true,
+            selected_pathway_hint: hint ?? "unsure",
+          });
+          if (nextSet.size >= PRE_NURSING_MODULE_REGISTRY.length) {
+            trackClientEvent(PH.preNursingAllModulesCompleted, {
+              source_surface: "module",
+              completion_count: nextSet.size,
+              signed_in: true,
+              selected_pathway_hint: hint ?? "unsure",
+            });
+          }
+        }
         await load();
       } else if (res.status === 401) {
         setSignedIn(false);
@@ -144,6 +145,11 @@ export function PreNursingModuleEngagement({
   const pathwayHintSet = hint && hint !== "unsure";
 
   const showMilestoneCta = completed.size >= 3 || isDone;
+  const milestoneText = preNursingMilestoneMessage({
+    completedCount: completed.size,
+    totalCount: PRE_NURSING_MODULE_REGISTRY.length,
+    currentModuleDone: isDone,
+  });
 
   return (
     <section className="mx-auto mt-12 max-w-4xl border-t border-border px-4 pb-16 sm:px-6 lg:px-8">
@@ -151,7 +157,20 @@ export function PreNursingModuleEngagement({
         <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Your progress · {moduleTitle}</h2>
         <p className="text-sm text-muted">
           Pre-Nursing stays free — progress is optional.{" "}
-          {signedIn === false ? "Sign in to sync completion across devices." : null}{" "}
+          {signedIn === false ? (
+            <>
+              <Link
+                href="/login"
+                className="font-semibold text-primary hover:underline"
+                onClick={() =>
+                  trackClientEvent(PH.preNursingSigninCtaClicked, { source_surface: "module", cta_type: "sync_progress" })
+                }
+              >
+                Sign in
+              </Link>{" "}
+              to sync completion across devices.
+            </>
+          ) : null}{" "}
           {signedIn === true ? "Signed in — completions save to your account." : null}
         </p>
         <div className="flex flex-wrap items-center gap-3">
@@ -160,6 +179,7 @@ export function PreNursingModuleEngagement({
           </div>
           <span className="text-sm font-medium text-foreground">{pct}% of modules</span>
         </div>
+        <p className="text-sm text-muted">{milestoneText}</p>
         <label className="flex cursor-pointer items-center gap-2 text-sm font-medium">
           <input
             type="checkbox"
@@ -173,7 +193,18 @@ export function PreNursingModuleEngagement({
         {showResume && resumeSlug ? (
           <p className="text-sm text-muted">
             Pick up where you left off:{" "}
-            <Link href={`/pre-nursing/lessons/${resumeSlug}`} className="font-semibold text-primary hover:underline">
+            <Link
+              href={`/pre-nursing/lessons/${resumeSlug}`}
+              className="font-semibold text-primary hover:underline"
+              onClick={() =>
+                trackClientEvent(PH.preNursingResumeClicked, {
+                  source_surface: "module",
+                  module_slug: resumeSlug,
+                  completion_count: completed.size,
+                  signed_in: signedIn === true,
+                })
+              }
+            >
               {moduleTitleForSlug(resumeSlug)}
             </Link>
           </p>
@@ -181,7 +212,18 @@ export function PreNursingModuleEngagement({
         {nextSlug && nextSlug !== slug && nextTitle ? (
           <p className="text-sm text-muted">
             Suggested next in sequence:{" "}
-            <Link href={`/pre-nursing/lessons/${nextSlug}`} className="font-semibold text-primary hover:underline">
+            <Link
+              href={`/pre-nursing/lessons/${nextSlug}`}
+              className="font-semibold text-primary hover:underline"
+              onClick={() =>
+                trackClientEvent(PH.preNursingNextModuleClicked, {
+                  source_surface: "module",
+                  module_slug: nextSlug,
+                  completion_count: completed.size,
+                  signed_in: signedIn === true,
+                })
+              }
+            >
               {nextTitle}
             </Link>
           </p>
@@ -223,18 +265,48 @@ export function PreNursingModuleEngagement({
           </p>
           <ul className="mt-4 space-y-2 text-sm">
             <li>
-              <Link href="/pricing" className="font-medium text-primary hover:underline">
+              <Link
+                href="/pricing"
+                className="font-medium text-primary hover:underline"
+                onClick={() =>
+                  trackClientEvent(PH.preNursingComparePlansClicked, {
+                    source_surface: "module",
+                    completion_count: completed.size,
+                    selected_pathway_hint: hint ?? "unsure",
+                  })
+                }
+              >
                 Compare plans
               </Link>
             </li>
             <li>
-              <Link href="/exam-lessons" className="font-medium text-primary hover:underline">
+              <Link
+                href="/exam-lessons"
+                className="font-medium text-primary hover:underline"
+                onClick={() =>
+                  trackClientEvent(PH.preNursingExamLessonsHubClicked, {
+                    source_surface: "module",
+                    completion_count: completed.size,
+                    selected_pathway_hint: hint ?? "unsure",
+                  })
+                }
+              >
                 Browse exam lesson hubs
               </Link>
             </li>
             {primaryHref ? (
               <li>
-                <Link href={primaryHref} className="font-medium text-primary hover:underline">
+                <Link
+                  href={primaryHref}
+                  className="font-medium text-primary hover:underline"
+                  onClick={() =>
+                    trackClientEvent(PH.preNursingPathwayCtaClicked, {
+                      source_surface: "module",
+                      selected_pathway_hint: hint ?? "unsure",
+                      destination_pathway: hint ?? "unsure",
+                    })
+                  }
+                >
                   {hint === "rn"
                     ? "US RN (NCLEX-RN) pathway"
                     : hint === "pn"
@@ -248,14 +320,36 @@ export function PreNursingModuleEngagement({
               </li>
             ) : (
               <li>
-                <Link href="/exam-lessons" className="font-medium text-primary hover:underline">
+                <Link
+                  href="/exam-lessons"
+                  className="font-medium text-primary hover:underline"
+                  onClick={() =>
+                    trackClientEvent(PH.preNursingExamLessonsHubClicked, {
+                      source_surface: "module",
+                      completion_count: completed.size,
+                      selected_pathway_hint: hint ?? "unsure",
+                      cta_type: "generic_pathways",
+                    })
+                  }
+                >
                   Explore NCLEX &amp; RN/PN pathways
                 </Link>
               </li>
             )}
             {secondaryHref ? (
               <li>
-                <Link href={secondaryHref} className="font-medium text-muted-foreground hover:text-primary hover:underline">
+                <Link
+                  href={secondaryHref}
+                  className="font-medium text-muted-foreground hover:text-primary hover:underline"
+                  onClick={() =>
+                    trackClientEvent(PH.preNursingPathwayCtaClicked, {
+                      source_surface: "module",
+                      selected_pathway_hint: hint ?? "unsure",
+                      destination_pathway: "rn",
+                      cta_type: "secondary_canada_rn",
+                    })
+                  }
+                >
                   Canada RN (NCLEX-RN) pathway
                 </Link>
               </li>

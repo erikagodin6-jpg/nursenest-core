@@ -139,15 +139,8 @@ export async function GET(req: NextRequest) {
 
   const snap = await getFreemiumSnapshot(userId);
   if (!snap || snap.lessonRemaining <= 0) {
-    return NextResponse.json(
-      {
-        error: "Subscription required",
-        code: "paywall",
-        message: "Complimentary lesson previews are used up. Subscribe for full lesson depth and tracking.",
-        freemiumExhausted: true,
-      },
-      { status: 403 },
-    );
+    const payload = { code: "not_subscribed", message: "Subscription required", freemiumExhausted: true };
+    return NextResponse.json(payload, { status: 403 });
   }
 
   const take = Math.min(pageSize, snap.lessonRemaining);

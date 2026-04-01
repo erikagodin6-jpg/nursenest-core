@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CalendarClock, ChevronRight, Sparkles, Target } from "lucide-react";
 import type { AdaptiveLearnerRecommendations } from "@/lib/learner/adaptive-recommendations";
+import { remediationTopicDrillHref } from "@/lib/learner/remediation-links";
 import type { ReadinessResult } from "@/lib/learner/readiness-score";
 import { readinessBandLabel } from "@/lib/learner/readiness-score";
 
@@ -106,12 +107,12 @@ export function LearnerDashboardHero({
 
           {weakTopicTitles.length > 0 ? (
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Focus here next</p>
+              <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Priority review queue</p>
               <div className="mt-2 flex flex-wrap gap-2">
                 {weakTopicTitles.slice(0, 4).map((t) => (
                   <Link
                     key={t}
-                    href={`/app/questions?topic=${encodeURIComponent(t)}`}
+                    href={remediationTopicDrillHref(t)}
                     className="rounded-full border border-rose-500/25 bg-rose-500/[0.08] px-3 py-1 text-xs font-medium text-foreground transition hover:border-primary/30 hover:bg-primary/5"
                   >
                     {t}

@@ -11,6 +11,7 @@ import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlemen
 import { buildAdaptiveRecommendations } from "@/lib/learner/adaptive-recommendations";
 import { loadLearnerProfileActivity } from "@/lib/learner/load-learner-profile-activity";
 import { loadPremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
+import { remediationTopicDrillHref, remediationWeakModeTestHref } from "@/lib/learner/remediation-links";
 import { readinessBandLabel } from "@/lib/learner/readiness-score";
 import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
 import type { Metadata } from "next";
@@ -327,12 +328,14 @@ export default async function LearnerProfilePage() {
                       <p className="mt-1 text-xs text-muted-foreground">
                         {acc != null ? `${acc}% accuracy` : "—"} · {w.missed} miss{w.missed === 1 ? "" : "es"}
                       </p>
-                      <Link
-                        href={`/app/questions?preset=topic_drill&topic=${encodeURIComponent(w.topic)}`}
-                        className="mt-2 inline-block text-xs font-semibold text-primary underline"
-                      >
-                        Drill this topic
-                      </Link>
+                      <div className="mt-2 flex flex-wrap gap-3">
+                        <Link href={remediationTopicDrillHref(w.topic)} className="text-xs font-semibold text-primary underline">
+                          Remediate in question bank
+                        </Link>
+                        <Link href={remediationWeakModeTestHref(w.topic)} className="text-xs font-semibold text-primary underline">
+                          Apply in weak-mode test
+                        </Link>
+                      </div>
                     </li>
                   );
                 })}
