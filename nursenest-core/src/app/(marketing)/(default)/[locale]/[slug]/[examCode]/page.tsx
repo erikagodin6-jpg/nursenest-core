@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { ExamPathwayHub } from "@/components/exam-pathways/exam-pathway-hub";
 import { getExamPathwayByRoute } from "@/lib/exam-pathways/exam-product-registry";
 import { auth } from "@/lib/auth";
+import { loadNpCanadaInventoryGate } from "@/lib/np/np-pathway-inventory-gate";
 
 export const dynamicParams = true;
 export const revalidate = 86400;
@@ -18,5 +19,6 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
   if (!pathway) notFound();
   const session = await auth();
   const isSignedIn = Boolean(session?.user);
-  return <ExamPathwayHub pathway={pathway} isSignedIn={isSignedIn} />;
+  const npInventory = pathway.id === "ca-np-cnple" ? await loadNpCanadaInventoryGate() : null;
+  return <ExamPathwayHub pathway={pathway} isSignedIn={isSignedIn} npInventory={npInventory} />;
 }

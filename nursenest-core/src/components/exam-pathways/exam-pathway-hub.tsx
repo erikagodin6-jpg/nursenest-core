@@ -6,8 +6,17 @@ import { pathwayOverviewBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { pathwayHubFaqSchema } from "@/lib/seo/pathway-hub-faq-schema";
 import { getPathwayProgrammaticSeoLanding } from "@/lib/seo/pathway-programmatic-seo";
 import { ExamPathwayHubBody } from "@/components/exam-pathways/exam-pathway-hub-body";
+import type { NpPathwayInventoryGate } from "@/lib/np/np-pathway-inventory-gate";
 
-export function ExamPathwayHub({ pathway, isSignedIn = false }: { pathway: ExamPathwayDefinition; isSignedIn?: boolean }) {
+export function ExamPathwayHub({
+  pathway,
+  isSignedIn = false,
+  npInventory = null,
+}: {
+  pathway: ExamPathwayDefinition;
+  isSignedIn?: boolean;
+  npInventory?: NpPathwayInventoryGate | null;
+}) {
   const { crumbs, schemaItems } = pathwayOverviewBreadcrumbs(pathway);
   const programmaticLanding = getPathwayProgrammaticSeoLanding(pathway);
   const countryLine = pathway.countrySlug === "canada" ? "Canada" : "United States";
@@ -34,6 +43,13 @@ export function ExamPathwayHub({ pathway, isSignedIn = false }: { pathway: ExamP
             Exam branding and registration rules can change (especially Canadian NP integration). This hub stays updated: join the list or
             start from an active track if you test sooner.
           </p>
+        </aside>
+      ) : null}
+
+      {npInventory?.belowThreshold ? (
+        <aside className="nn-card mt-6 border-border bg-[var(--theme-muted-surface)] p-4 text-sm text-[var(--theme-body-text)]">
+          <p className="font-semibold text-[var(--theme-heading-text)]">Content depth (transparent)</p>
+          <p className="mt-1 leading-relaxed text-[var(--theme-muted-text)]">{npInventory.noticeMarkdown}</p>
         </aside>
       ) : null}
 

@@ -14,6 +14,8 @@ import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
 import { ProtectedPremiumContent } from "@/components/student/protected-premium-content";
 import { StudyNotesPanel } from "@/components/student/study-notes-panel";
+import { PracticeTestTeachingReviewPanel } from "@/components/student/practice-test-teaching-review-panel";
+import type { PracticeTestTeachingItem } from "@/lib/practice-tests/build-teaching-review";
 
 type QRow = {
   id: string;
@@ -59,6 +61,8 @@ export function PracticeTestRunnerClient({
   const [adaptiveTheta, setAdaptiveTheta] = useState<number | null>(null);
   const [adaptiveSe, setAdaptiveSe] = useState<number | null>(null);
   const [saving, setSaving] = useState(false);
+  const [teachingReviewItems, setTeachingReviewItems] = useState<PracticeTestTeachingItem[] | null>(null);
+  const [teachingReviewLoading, setTeachingReviewLoading] = useState(false);
   /** Session-local only — helps pacing habits; not sent to the server. */
   const [flagged, setFlagged] = useState<Record<string, boolean>>({});
   const autoSubmitRef = useRef(false);
@@ -105,6 +109,7 @@ export function PracticeTestRunnerClient({
       setSessionStartMs(data.startedAt ? new Date(data.startedAt).getTime() : Date.now());
       setTestConfig(data.config ?? null);
       setCatMode(Boolean(data.catMode));
+      setTeachingReviewItems(null);
       const ast = data.adaptiveState;
       setAdaptiveTheta(typeof ast?.theta === "number" ? ast.theta : null);
       setAdaptiveSe(typeof ast?.se === "number" ? ast.se : null);
@@ -302,6 +307,23 @@ export function PracticeTestRunnerClient({
     );
   }
 
+  async function loadTeachingReview() {
+    setTeachingReviewLoading(true);
+    try {
+      const res = await fetch(`/api/practice-tests/${testId}?teachingReview=1`);
+      const data = (await res.json()) as { teachingReview?: { items: PracticeTestTeachingItem[] }; error?: string };
+      if (!res.ok) {
+        setError(data.error ?? "Could not load teaching review.");
+        return;
+      }
+      setTeachingReviewItems(data.teachingReview?.items ?? []);
+    } catch {
+      setError("Could not load teaching review.");
+    } finally {
+      setTeachingReviewLoading(false);
+    }
+  }
+
   if (status === "COMPLETED" && results) {
     const elapsedDisplay =
       savedElapsedMs != null
@@ -310,6 +332,7 @@ export function PracticeTestRunnerClient({
     return (
       <div className="space-y-6">
         <div className="nn-card p-6">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-primary">Results</p>
           <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">Test complete</h2>
           <p className="mt-2 text-3xl font-bold tabular-nums text-primary">
             {results.scoreCorrect}/{results.scoreTotal}{" "}
@@ -392,6 +415,29 @@ export function PracticeTestRunnerClient({
             </ul>
           </div>
         ) : null}
+
+        <div className="nn-card space-y-3 border border-primary/20 p-6">
+          <h3 className="font-semibold text-foreground">Post-exam teaching review</h3>
+          <p className="text-sm text-muted-foreground">
+            During CAT, rationales stay hidden to mirror exam pacing. After completion, open the full teaching breakdown
+            (correct logic, distractors, strategy, and figures when available).
+          </p>
+          {teachingReviewItems === null ? (
+            <button
+              type="button"
+              disabled={teachingReviewLoading}
+              className="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-50"
+              onClick={() => void loadTeachingReview()}
+            >
+              {teachingReviewLoading ? "Loading…" : "Open teaching review"}
+            </button>
+          ) : teachingReviewItems.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No review items available for this session.</p>
+          ) : (
+            <PracticeTestTeachingReviewPanel items={teachingReviewItems} />
+          )}
+        </div>
+
         <StudyNotesPanel
           userId={userId}
           scope={LearnerNoteScope.PRACTICE_TEST}

@@ -9,7 +9,7 @@ import type { Prisma } from "@prisma/client";
 import { recordTopicOutcomesSequential } from "@/lib/learner/topic-performance";
 import { normalizeTopicLabel } from "@/lib/learner/weak-topics-from-sessions";
 import { buildRationalePayloadForGradeResponse } from "@/lib/content-quality/rationale-display";
-import { parseRationaleReferenceMedia } from "@/lib/content-quality/rationale-media";
+import { buildNormalizedTeachingPayload, buildTeachingMediaBundle } from "@/lib/content-quality/teaching-payload";
 
 function normalizeCorrect(correctAnswer: Prisma.JsonValue | null | undefined): string[] {
   if (correctAnswer == null) return [];
@@ -54,6 +54,7 @@ export async function POST(req: Request) {
         where: questionIdWhereIfAllowed(questionId, gate.entitlement),
         select: {
           id: true,
+          stem: true,
           questionType: true,
           correctAnswer: true,
           rationale: true,
@@ -65,8 +66,11 @@ export async function POST(req: Request) {
           memoryHook: true,
           clinicalTrap: true,
           distractorRationales: true,
+          incorrectAnswerRationale: true,
           topic: true,
+          subtopic: true,
           bodySystem: true,
+          tags: true,
           images: true,
         },
       }),
@@ -95,15 +99,20 @@ export async function POST(req: Request) {
     }
 
     const rationaleBundle = buildRationalePayloadForGradeResponse(row);
-    const referenceMedia = parseRationaleReferenceMedia(row.images);
+    const teaching = buildNormalizedTeachingPayload(row);
+    const teachingMedia = buildTeachingMediaBundle(row);
 
     return NextResponse.json({
       correct,
       rationale: row.rationale ?? null,
       rationaleQuality: rationaleBundle.rationaleQuality,
       rationaleSections: rationaleBundle.sections,
-      referenceMedia,
+      teaching,
+      teachingMedia,
+      referenceMedia: teachingMedia.referenceMedia,
+      matchedConceptImage: teachingMedia.matchedConceptImage,
       topic: row.topic ?? null,
+      subtopic: row.subtopic ?? null,
       bodySystem: row.bodySystem ?? null,
       questionType: row.questionType,
       topicStatsUpdated: true,

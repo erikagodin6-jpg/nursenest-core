@@ -114,7 +114,7 @@ export function buildNormalizedTeachingPayload(row: ExamQuestionTeachingRow): No
 
   const sections: Array<{ id: string; heading: string; body: string }> = [];
 
-  pushSection(sections, "correct_answer", "Correct answer", correctAnswerExplanation ?? rationale);
+  pushSection(sections, "why_correct", "Why this is the best answer", correctAnswerExplanation);
   pushSection(sections, "explanation", "Explanation", rationale);
   pushSection(sections, "clinical_reasoning", "Clinical reasoning", row.clinicalReasoning);
   pushSection(sections, "distractors", "Why other options fail", distractorNotes);

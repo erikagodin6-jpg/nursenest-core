@@ -1,7 +1,9 @@
 import { ContentStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured, withDatabaseFallback } from "@/lib/db/safe-database";
+import { CountryCode } from "@prisma/client";
 import { pathwayLessonWordCount } from "@/lib/content-quality/classify-lesson";
+import { NP_COVERAGE_THRESHOLDS } from "@/lib/np/np-coverage-thresholds";
 import { classifyContentItemLesson } from "@/lib/content-quality/classify-lesson";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 
@@ -12,6 +14,15 @@ export type ContentQualitySnapshot = {
     rationaleMissingOrEmpty: number;
     rationaleThinWords: number;
     rationaleAcceptableOrStrong: number;
+  };
+  /** Extra teaching-field coverage (published bank). */
+  examQuestionTeachingFields?: {
+    withCorrectAnswerExplanation: number;
+    withDistractorNotes: number;
+    withImagesJson: number;
+    npCanadaPublished: number;
+    npCanadaBelowTarget: boolean;
+    npCanadaTarget: number;
   };
   pathwayLessonsPublished: {
     total: number;
@@ -34,6 +45,40 @@ export type ContentQualitySnapshot = {
 /**
  * Rationale word count via Postgres whitespace split (aligned with app `countWords` for normal prose).
  */
+async function examQuestionTeachingFieldStats(): Promise<NonNullable<ContentQualitySnapshot["examQuestionTeachingFields"]>> {
+  const rows = await prisma.$queryRaw<
+    {
+      with_cae: bigint;
+      with_distractor: bigint;
+      with_images: bigint;
+      np_ca: bigint;
+    }[]
+  >`
+    SELECT
+      COUNT(*) FILTER (
+        WHERE correct_answer_explanation IS NOT NULL AND trim(correct_answer_explanation) <> ''
+      )::bigint AS with_cae,
+      COUNT(*) FILTER (
+        WHERE (distractor_rationales IS NOT NULL AND distractor_rationales::text NOT IN ('null', '[]', '{}'))
+           OR (incorrect_answer_rationale IS NOT NULL AND incorrect_answer_rationale::text NOT IN ('null', '[]', '{}'))
+      )::bigint AS with_distractor,
+      COUNT(*) FILTER (WHERE images IS NOT NULL)::bigint AS with_images,
+      COUNT(*) FILTER (WHERE tier = 'NP' AND country_code = ${CountryCode.CA})::bigint AS np_ca
+    FROM exam_questions
+    WHERE status = 'published'
+  `;
+  const r = rows[0];
+  const np = Number(r?.np_ca ?? 0);
+  return {
+    withCorrectAnswerExplanation: Number(r?.with_cae ?? 0),
+    withDistractorNotes: Number(r?.with_distractor ?? 0),
+    withImagesJson: Number(r?.with_images ?? 0),
+    npCanadaPublished: np,
+    npCanadaBelowTarget: np < NP_COVERAGE_THRESHOLDS.canadaNpMinPublished,
+    npCanadaTarget: NP_COVERAGE_THRESHOLDS.canadaNpMinPublished,
+  };
+}
+
 async function examQuestionRationaleStats(): Promise<ContentQualitySnapshot["examQuestionsPublished"]> {
   const rows = await prisma.$queryRaw<
     { total: bigint; missing: bigint; thin: bigint; ok: bigint }[]
@@ -82,8 +127,9 @@ export async function loadContentQualitySnapshot(): Promise<ContentQualitySnapsh
   }
 
   return withDatabaseFallback(async () => {
-    const [examStats, pathwayTotal, contentTotal] = await Promise.all([
+    const [examStats, teachingFields, pathwayTotal, contentTotal] = await Promise.all([
       examQuestionRationaleStats(),
+      examQuestionTeachingFieldStats().catch(() => null),
       prisma.pathwayLesson.count({ where: { status: ContentStatus.PUBLISHED } }),
       prisma.contentItem.count({ where: { type: "lesson", status: "published" } }),
     ]);
@@ -127,6 +173,7 @@ export async function loadContentQualitySnapshot(): Promise<ContentQualitySnapsh
     return {
       generatedAt: new Date().toISOString(),
       examQuestionsPublished: examStats,
+      ...(teachingFields ? { examQuestionTeachingFields: teachingFields } : {}),
       pathwayLessonsPublished: {
         total: pathwayTotal,
         sampleSize: pathwayRows.length,

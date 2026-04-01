@@ -10,6 +10,7 @@ import { advanceCatPracticeTest, finalizeCatPracticeTest } from "@/lib/practice-
 import { recordTopicOutcomesFromPracticeTest } from "@/lib/learner/topic-performance";
 import { computePracticeTestResults } from "@/lib/practice-tests/score-practice-test";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
+import { buildPracticeTestTeachingReview } from "@/lib/practice-tests/build-teaching-review";
 import {
   enforcePracticeTestDetailProtection,
   enforcePracticeTestMutationProtection,
@@ -69,6 +70,12 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
 
   const cfg = row.config as PracticeTestConfigJson;
 
+  const teachingReviewRequested = req.nextUrl.searchParams.get("teachingReview") === "1";
+  let teachingReview: Awaited<ReturnType<typeof buildPracticeTestTeachingReview>> | null = null;
+  if (teachingReviewRequested && row.status === PracticeTestStatus.COMPLETED) {
+    teachingReview = await buildPracticeTestTeachingReview(ids, answers, gate.entitlement);
+  }
+
   return NextResponse.json({
     id: row.id,
     title: row.title,
@@ -88,6 +95,10 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
     completedAt: row.completedAt?.toISOString() ?? null,
     adaptiveState: row.adaptiveState ?? null,
     catMode: cfg.selectionMode === "cat",
+    ...(teachingReview ? { teachingReview } : {}),
+    ...(teachingReviewRequested && row.status !== PracticeTestStatus.COMPLETED
+      ? { teachingReviewUnavailable: true as const }
+      : {}),
   });
 }
 

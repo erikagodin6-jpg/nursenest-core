@@ -13,6 +13,7 @@ type QuestionRationaleFields = {
   memoryHook?: string | null;
   clinicalTrap?: string | null;
   distractorRationales?: unknown;
+  incorrectAnswerRationale?: unknown;
 };
 
 function stringifyDistractors(raw: unknown): string | null {
@@ -52,6 +53,7 @@ export function buildRationaleSectionsFromQuestion(row: QuestionRationaleFields)
   push("Explanation", row.rationale);
   push("Clinical reasoning", row.clinicalReasoning);
   push("Distractors", stringifyDistractors(row.distractorRationales));
+  push("Incorrect options", stringifyDistractors(row.incorrectAnswerRationale));
   push("High-yield takeaway", row.keyTakeaway);
   push("Clinical pearl", row.clinicalPearl);
   push("Exam strategy", row.examStrategy);
@@ -85,6 +87,7 @@ export function buildRationalePayloadForGradeResponse(row: QuestionRationaleFiel
     row.clinicalPearl,
     row.examStrategy,
     stringifyDistractors(row.distractorRationales),
+    stringifyDistractors(row.incorrectAnswerRationale),
     row.memoryHook,
     row.clinicalTrap,
   ]);

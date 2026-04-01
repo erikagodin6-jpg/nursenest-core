@@ -209,6 +209,7 @@ export async function GET(req: NextRequest) {
         difficulty: true,
         exam: true,
         topic: true,
+        subtopic: true,
         bodySystem: true,
       } as const;
       const fullSelect = {
@@ -218,6 +219,7 @@ export async function GET(req: NextRequest) {
         rationale: true,
         options: true,
         topic: true,
+        subtopic: true,
         exam: true,
       } as const;
 

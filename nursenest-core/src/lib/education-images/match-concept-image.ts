@@ -92,7 +92,7 @@ export function matchConceptImage(query: ConceptImageQuery): ConceptImageMatchRe
     if (!best || sc > best.score) best = { basename: b, score: sc };
   }
 
-  if (best && best.score >= 6) {
+  if (best && best.score >= 3) {
     const key = pickPreferredKeyForBasename(best.basename);
     if (key) {
       return {

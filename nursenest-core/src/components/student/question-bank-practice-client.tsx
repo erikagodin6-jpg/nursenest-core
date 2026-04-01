@@ -8,6 +8,8 @@ import { ProtectedPremiumContent } from "@/components/student/protected-premium-
 import { StudyNotesPanel } from "@/components/student/study-notes-panel";
 import type { RationaleQualityClient } from "@/components/student/premium-rationale-panel";
 import type { RationaleReferenceMedia } from "@/lib/content-quality/rationale-media";
+import type { NormalizedTeachingPayload, TeachingMediaBundle } from "@/lib/content-quality/teaching-payload";
+import { recordQuestionPerformanceEvent } from "@/lib/learner/question-performance-events";
 import { PremiumRationalePanel } from "@/components/student/premium-rationale-panel";
 import type { QuestionListEmptyDiagnostics } from "@/lib/questions/question-list-empty-diagnostics";
 import {
@@ -23,6 +25,7 @@ type QFull = {
   rationale?: string | null;
   options?: unknown;
   topic?: string | null;
+  subtopic?: string | null;
   exam?: string | null;
 };
 
@@ -42,7 +45,17 @@ function rollupsKey(userId: string) {
   return `nn_qbank_rollups_${userId}`;
 }
 
-function appendRollup(userId: string, topic: string | null | undefined, correct: boolean) {
+function appendRollup(
+  userId: string,
+  topic: string | null | undefined,
+  correct: boolean,
+  meta: {
+    questionId: string;
+    subtopic?: string | null;
+    pathwayId?: string | null;
+    exam?: string | null;
+  },
+) {
   try {
     const k = rollupsKey(userId);
     const raw = localStorage.getItem(k);
@@ -55,6 +68,14 @@ function appendRollup(userId: string, topic: string | null | undefined, correct:
   } catch {
     /* ignore quota */
   }
+  recordQuestionPerformanceEvent(userId, {
+    questionId: meta.questionId,
+    topic: topic ?? null,
+    subtopic: meta.subtopic ?? null,
+    pathwayId: meta.pathwayId ?? null,
+    exam: meta.exam ?? null,
+    correct,
+  });
 }
 
 function sameIdListOrderIndependent(a: string[], b: string[]): boolean {
@@ -107,6 +128,8 @@ export function QuestionBankPracticeClient({
         rationaleQuality?: RationaleQualityClient | null;
         rationaleSections?: Array<{ heading: string; body: string }> | null;
         referenceMedia?: RationaleReferenceMedia[] | null;
+        teaching?: NormalizedTeachingPayload | null;
+        teachingMedia?: TeachingMediaBundle | null;
       }
     >
   >({});
@@ -232,6 +255,8 @@ export function QuestionBankPracticeClient({
                     rationaleQuality?: RationaleQualityClient | null;
                     rationaleSections?: Array<{ heading: string; body: string }> | null;
                     referenceMedia?: RationaleReferenceMedia[] | null;
+                    teaching?: NormalizedTeachingPayload | null;
+                    teachingMedia?: TeachingMediaBundle | null;
                   }
                 >;
               };
@@ -386,6 +411,8 @@ export function QuestionBankPracticeClient({
         rationaleQuality?: RationaleQualityClient | null;
         rationaleSections?: Array<{ heading: string; body: string }> | null;
         referenceMedia?: RationaleReferenceMedia[] | null;
+        teaching?: NormalizedTeachingPayload | null;
+        teachingMedia?: TeachingMediaBundle | null;
         error?: string;
       };
       if (!res.ok) {
@@ -401,9 +428,16 @@ export function QuestionBankPracticeClient({
           rationaleQuality: data.rationaleQuality ?? null,
           rationaleSections: data.rationaleSections ?? null,
           referenceMedia: data.referenceMedia ?? null,
+          teaching: data.teaching ?? null,
+          teachingMedia: data.teachingMedia ?? null,
         },
       }));
-      appendRollup(userId, current.topic, correct);
+      appendRollup(userId, current.topic, correct, {
+        questionId: current.id,
+        subtopic: current.subtopic,
+        pathwayId: pathwayIdFilter,
+        exam: current.exam,
+      });
       if (typeof window !== "undefined") {
         window.dispatchEvent(new CustomEvent("nn-topic-stats-updated"));
         window.dispatchEvent(new CustomEvent("nn-learner-stats-updated"));
@@ -654,6 +688,8 @@ export function QuestionBankPracticeClient({
                   rationaleQuality={g.rationaleQuality}
                   rationaleSections={g.rationaleSections}
                   referenceMedia={g.referenceMedia}
+                  teaching={g.teaching}
+                  teachingMedia={g.teachingMedia}
                 />
               )}
               <div className="mt-4 flex flex-wrap gap-2">

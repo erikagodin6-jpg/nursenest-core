@@ -30,6 +30,8 @@ import { LessonQualityNotice } from "@/components/lessons/lesson-quality-notice"
 import { PathwayLessonQuickReview } from "@/components/lessons/pathway-lesson-quick-review";
 import { classifyPathwayLesson } from "@/lib/content-quality/classify-lesson";
 import { buildQuickReviewBullets } from "@/lib/lessons/pathway-lesson-quick-review";
+import { matchConceptImage } from "@/lib/education-images/match-concept-image";
+import { PathwayLessonFigures } from "@/components/lessons/pathway-lesson-figures";
 
 export const dynamic = "force-dynamic";
 
@@ -121,6 +123,12 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
   const related = await getRelatedPathwayLessons(pathway.id, lesson.topicSlug, lesson.slug, undefined, lessonContentLocale);
   const { crumbs, schemaItems } = pathwayLessonDetailBreadcrumbs(pathway, lesson.slug, lesson.title);
   const lessonQuality = classifyPathwayLesson(lesson);
+  const matchedLessonImage = matchConceptImage({
+    title: lesson.title,
+    slug: lesson.slug,
+    topic: lesson.topic,
+    bodySystem: lesson.bodySystem,
+  });
   const requestedNorm = normalizePathwayLessonLocale(lessonContentLocale);
   const showLocaleFallbackNotice = Boolean(
     lesson.localeMeta &&
@@ -192,6 +200,25 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
             pathwayCountryLabel={pathway.countryCode === "CA" ? "Canada" : "United States"}
           />
         )
+      ) : null}
+
+      {matchedLessonImage.url ? (
+        <aside className="mt-8 overflow-hidden rounded-2xl border border-border bg-[var(--theme-muted-surface)]/50 p-4">
+          <p className="text-xs font-semibold uppercase tracking-wide text-primary">Concept illustration</p>
+          <div className="mt-3">
+            <PathwayLessonFigures
+              figures={[
+                {
+                  id: "lesson-matched-media",
+                  url: matchedLessonImage.url,
+                  alt: matchedLessonImage.alt,
+                  caption: "Matched from NurseNest media library using lesson title and topic.",
+                  kind: "clinical_reference",
+                },
+              ]}
+            />
+          </div>
+        </aside>
       ) : null}
 
       <article className="mt-8 space-y-8">
