@@ -23,6 +23,10 @@ import { loadContentQualityCorpusPayload } from "@/lib/admin/content-quality-cor
 import type { ContentQualityCorpusPayload } from "@/lib/admin/content-quality-corpus-refresh";
 import { emptyContentQualitySnapshot, loadContentQualitySnapshot } from "@/lib/admin/content-quality-snapshot";
 import type { ContentQualitySnapshot } from "@/lib/admin/content-quality-snapshot";
+import {
+  loadPremiumProtectionAdminSnapshot,
+  type PremiumProtectionAdminSnapshot,
+} from "@/lib/admin/load-premium-protection-admin-snapshot";
 
 export type AdminNeedsAttentionItem = {
   severity: "critical" | "warning" | "info";
@@ -113,6 +117,8 @@ export type AdminCommandCenterData = {
     snapshot: ContentQualitySnapshot;
     corpus: ContentQualityCorpusPayload | null;
   };
+  /** Premium deterrence rollups, notes adoption, abuse review queue (no note bodies). */
+  premiumProtection: PremiumProtectionAdminSnapshot | null;
 };
 
 function startOfUtcDay(d: Date): Date {
@@ -383,15 +389,25 @@ export async function loadAdminCommandCenter(): Promise<AdminCommandCenterData |
       });
     }
 
+    const [contentQualitySnapshot, contentQualityCorpus, premiumProtection] = await Promise.all([
+      loadContentQualitySnapshot(),
+      loadContentQualityCorpusPayload(),
+      loadPremiumProtectionAdminSnapshot().catch(() => null),
+    ]);
+
+    if (premiumProtection && premiumProtection.openAbuseReviews.length > 0) {
+      needsAttention.push({
+        severity: "warning",
+        title: `${premiumProtection.openAbuseReviews.length} premium-protection abuse item(s) need review`,
+        detail: "Repeated rate limits or bulk API volume on protected routes.",
+        href: "/admin/premium-protection",
+      });
+    }
+
     needsAttention.sort((a, b) => {
       const rank = { critical: 0, warning: 1, info: 2 };
       return rank[a.severity] - rank[b.severity];
     });
-
-    const [contentQualitySnapshot, contentQualityCorpus] = await Promise.all([
-      loadContentQualitySnapshot(),
-      loadContentQualityCorpusPayload(),
-    ]);
 
     return {
       generatedAt,
@@ -463,6 +479,7 @@ export async function loadAdminCommandCenter(): Promise<AdminCommandCenterData |
         snapshot: contentQualitySnapshot,
         corpus: contentQualityCorpus,
       },
+      premiumProtection,
     };
   } catch (e) {
     console.error("[loadAdminCommandCenter]", e);
@@ -539,6 +556,7 @@ export async function loadAdminCommandCenter(): Promise<AdminCommandCenterData |
         snapshot: emptyContentQualitySnapshot(generatedAt),
         corpus: null,
       },
+      premiumProtection: null,
     };
   }
 }

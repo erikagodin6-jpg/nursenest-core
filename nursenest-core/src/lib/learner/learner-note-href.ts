@@ -12,8 +12,6 @@ export function hrefForLearnerNote(scope: LearnerNoteScope, contextId: string): 
       return `/app/practice-tests/${encodeURIComponent(contextId)}`;
     case LearnerNoteScope.FLASHCARD_DECK:
       return `/app/flashcards/${encodeURIComponent(contextId)}`;
-    default:
-      return "/app";
   }
 }
 
@@ -29,7 +27,5 @@ export function labelForLearnerNoteScope(scope: LearnerNoteScope): string {
       return "Practice test";
     case LearnerNoteScope.FLASHCARD_DECK:
       return "Flashcards";
-    default:
-      return "Study";
   }
 }

@@ -21,9 +21,23 @@ function safeCallbackPath(raw: string | null): string | null {
 export function LoginForm({
   forgotPasswordHref = "/forgot-password",
   forgotPasswordLabel = "Forgot password?",
+  termsHref = "/terms",
+  privacyHref = "/privacy",
+  legalBefore = "By signing in, you agree to our ",
+  legalAnd = " and ",
+  legalAfter = ".",
+  termsLabel = "Terms of Service",
+  privacyLabel = "Privacy Policy",
 }: {
   forgotPasswordHref?: string;
   forgotPasswordLabel?: string;
+  termsHref?: string;
+  privacyHref?: string;
+  legalBefore?: string;
+  legalAnd?: string;
+  legalAfter?: string;
+  termsLabel?: string;
+  privacyLabel?: string;
 } = {}) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -94,6 +108,17 @@ export function LoginForm({
       <button className="w-full rounded-xl bg-primary px-4 py-2 font-semibold" type="submit">
         Sign in
       </button>
+      <p className="text-center text-xs text-muted-foreground">
+        {legalBefore}
+        <Link href={termsHref} className="font-medium text-primary underline">
+          {termsLabel}
+        </Link>
+        {legalAnd}
+        <Link href={privacyHref} className="font-medium text-primary underline">
+          {privacyLabel}
+        </Link>
+        {legalAfter}
+      </p>
     </form>
   );
 }

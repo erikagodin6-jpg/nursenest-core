@@ -168,6 +168,41 @@ export function LearnerProfileAccountActions({
         )}
       </div>
 
+      <div className="border-t border-border/60 pt-6">
+        <h3 className="text-sm font-semibold text-[var(--theme-heading-text)]">Policies &amp; support</h3>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Subscription terms, privacy, refunds, and how to reach us. For payment updates or cancellation, use{" "}
+          {showBillingPortal ? "Manage billing in Stripe above" : "Stripe after you subscribe"}.
+        </p>
+        <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-sm">
+          <li>
+            <Link className="font-medium text-primary underline" href="/terms">
+              Terms
+            </Link>
+          </li>
+          <li>
+            <Link className="font-medium text-primary underline" href="/privacy">
+              Privacy
+            </Link>
+          </li>
+          <li>
+            <Link className="font-medium text-primary underline" href="/refund-policy">
+              Subscription &amp; refunds
+            </Link>
+          </li>
+          <li>
+            <Link className="font-medium text-primary underline" href="/acceptable-use">
+              Acceptable use
+            </Link>
+          </li>
+          <li>
+            <Link className="font-medium text-primary underline" href="/contact">
+              Contact
+            </Link>
+          </li>
+        </ul>
+      </div>
+
       {error ? (
         <p className="text-sm text-red-700 dark:text-red-300" role="alert">
           {error}

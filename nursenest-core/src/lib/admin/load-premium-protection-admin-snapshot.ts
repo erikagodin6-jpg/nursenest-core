@@ -40,13 +40,10 @@ export async function loadPremiumProtectionAdminSnapshot(): Promise<PremiumProte
   if (!isDatabaseUrlConfigured() || isRuntimeSafeMode()) return null;
   const generatedAt = new Date().toISOString();
   const day = utcDayDate();
-  const dayStart = new Date(day);
-  const dayEnd = new Date(day);
-  dayEnd.setUTCDate(dayEnd.getUTCDate() + 1);
   const since24h = new Date(Date.now() - 86400000);
 
   try {
-    const [flags, todayRollups, notesTotal, notesUpdatedLast24h, openReviews, reviewUsers] = await Promise.all([
+    const [flags, todayRollups, notesTotal, notesUpdatedLast24h, openReviews] = await Promise.all([
       Promise.resolve(getServerPremiumProtectionFlags()),
       prisma.premiumProtectionRollup.findMany({
         where: { day },
@@ -61,14 +58,6 @@ export async function loadPremiumProtectionAdminSnapshot(): Promise<PremiumProte
         orderBy: { createdAt: "desc" },
         take: 25,
         select: { id: true, userId: true, reason: true, score: true, createdAt: true },
-      }),
-      prisma.user.findMany({
-        where: {
-          id: {
-            in: [],
-          },
-        },
-        select: { id: true, email: true },
       }),
     ]);
 

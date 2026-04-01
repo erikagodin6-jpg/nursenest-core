@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Award, ChevronRight, Crown, Flame, Sparkles, Target } from "lucide-react";
+import type { LearnerNoteScope } from "@prisma/client";
+import { Award, ChevronRight, Crown, FileText, Flame, Sparkles, Target } from "lucide-react";
 import type { PremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
 import { readinessBandLabel } from "@/lib/learner/readiness-score";
 

@@ -3,12 +3,19 @@ import { SiteHeader } from "@/components/layout/site-header";
 import { MarketingI18nProvider } from "@/components/marketing/marketing-i18n-provider";
 import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/seo-json-ld";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
-import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { loadMarketingMessages, loadMarketingMessagesSync } from "@/lib/marketing-i18n/load-marketing-messages";
 
 export default async function MarketingDefaultLocaleLayout({ children }: { children: React.ReactNode }) {
   const messages = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+  /** Disk English fills gaps when CDN/async bundles are partial (avoids humanized key leaks). */
+  const fallbackMessages = loadMarketingMessagesSync(DEFAULT_MARKETING_LOCALE);
   return (
-    <MarketingI18nProvider key={DEFAULT_MARKETING_LOCALE} locale={DEFAULT_MARKETING_LOCALE} messages={messages}>
+    <MarketingI18nProvider
+      key={DEFAULT_MARKETING_LOCALE}
+      locale={DEFAULT_MARKETING_LOCALE}
+      messages={messages}
+      fallbackMessages={fallbackMessages}
+    >
       <OrganizationJsonLd />
       <WebSiteJsonLd />
       <div className="nn-marketing-surface flex min-h-screen flex-col bg-[var(--theme-page-bg)]">
