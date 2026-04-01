@@ -161,7 +161,7 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
               >
                 <span className="text-xs font-semibold uppercase text-primary">{t("home.conversion.sampleBank")}</span>
                 <span className="mt-2 text-sm font-semibold text-[var(--theme-heading-text)]">
-                  {region === "US" ? "NCLEX-RN question run" : "Canada RN question run"}
+                  {t("home.conversion.sampleRnQuestionRun")}
                 </span>
                 <span className="mt-3 inline-flex items-center text-xs font-semibold text-primary">
                   {t("home.conversion.sampleGo")}

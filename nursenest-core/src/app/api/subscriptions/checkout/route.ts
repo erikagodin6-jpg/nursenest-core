@@ -8,6 +8,10 @@ import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/pos
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { stripePriceEnvKey } from "@/lib/pricing/display-catalog";
+import {
+  includeStripePriceEnvKeyInCheckoutResponse,
+  STRIPE_PRICE_NOT_CONFIGURED_CODE,
+} from "@/lib/stripe/checkout-api-diagnostics";
 import { findPriceEntry, type BillingDuration } from "@/lib/stripe/pricing-map";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import type { TierCode } from "@prisma/client";
@@ -65,14 +69,14 @@ export async function POST(req: Request) {
       duration: String(duration),
       envKey: missingEnvKey.slice(0, 80),
     });
-    return NextResponse.json(
-      {
-        error: "This plan is not available for checkout — billing configuration is incomplete.",
-        code: "stripe_price_not_configured",
-        envKey: missingEnvKey,
-      },
-      { status: 400 },
-    );
+    const payload: Record<string, string> = {
+      error: "This plan is not available for checkout — billing configuration is incomplete.",
+      code: STRIPE_PRICE_NOT_CONFIGURED_CODE,
+    };
+    if (includeStripePriceEnvKeyInCheckoutResponse()) {
+      payload.envKey = missingEnvKey;
+    }
+    return NextResponse.json(payload, { status: 400 });
   }
 
   const stripe = await getStripeClient();

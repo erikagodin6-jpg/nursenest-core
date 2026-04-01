@@ -380,17 +380,20 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
                 <div className="space-y-2" data-testid="hero-quick-entry-links">
                   <p className="text-xs font-medium text-[var(--theme-muted-text)]">{t("home.hero.quickEntryLabel")}</p>
                   <div className="flex flex-wrap gap-2">
-                    {heroQuickLinks.map((item) => (
-                      <MarketingTrackedLink
-                        key={item.label}
-                        href={withMarketingLocale(locale, item.href)}
-                        event={PH.marketingHomeQuickEntryClick}
-                        eventProps={{ region, link_label: item.label }}
-                        className="inline-flex items-center rounded-full border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)] px-3 py-1.5 text-xs font-semibold text-[var(--theme-heading-text)] transition hover:border-primary/35 hover:bg-card"
-                      >
-                        {item.label}
-                      </MarketingTrackedLink>
-                    ))}
+                    {heroQuickLinks.map((item) => {
+                      const label = t(item.labelKey);
+                      return (
+                        <MarketingTrackedLink
+                          key={item.labelKey}
+                          href={withMarketingLocale(locale, item.href)}
+                          event={PH.marketingHomeQuickEntryClick}
+                          eventProps={{ region, link_label: label }}
+                          className="inline-flex items-center rounded-full border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)] px-3 py-1.5 text-xs font-semibold text-[var(--theme-heading-text)] transition hover:border-primary/35 hover:bg-card"
+                        >
+                          {label}
+                        </MarketingTrackedLink>
+                      );
+                    })}
                   </div>
                 </div>
 

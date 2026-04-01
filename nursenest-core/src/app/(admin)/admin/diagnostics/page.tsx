@@ -1,6 +1,10 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/auth/guards";
-import { buildAdminDiagnosticsOperationsLayer } from "@/lib/admin/build-admin-diagnostics-operations-layer";
+import {
+  buildAdminDiagnosticsOperationsLayer,
+  type OperationsScoreDriver,
+} from "@/lib/admin/build-admin-diagnostics-operations-layer";
+import { readPriorReadinessScore, writePriorReadinessScore } from "@/lib/admin/readiness-prior-score-cache";
 import { loadAdminDiagnostics } from "@/lib/admin/load-admin-diagnostics";
 import { loadQuestionBankRemediationIntelligence } from "@/lib/questions/load-question-bank-remediation-intelligence";
 
@@ -26,13 +30,28 @@ function severityStyles(sev: "critical" | "high" | "medium") {
   return "border-border/80 bg-muted/30 text-foreground";
 }
 
+function driverSeverityPill(sev: OperationsScoreDriver["severity"]) {
+  if (sev === "critical") return "bg-red-500/15 text-red-900 dark:text-red-100";
+  if (sev === "high") return "bg-amber-500/15 text-amber-900 dark:text-amber-100";
+  if (sev === "medium") return "bg-muted text-muted-foreground";
+  return "bg-emerald-500/10 text-emerald-900 dark:text-emerald-100";
+}
+
+function trendStyles(direction: "improving" | "stable" | "worsening") {
+  if (direction === "improving") return "text-emerald-700 dark:text-emerald-300";
+  if (direction === "worsening") return "text-rose-700 dark:text-rose-300";
+  return "text-muted-foreground";
+}
+
 export default async function AdminDiagnosticsPage() {
   await requireAdmin();
   const [diagnostics, remediation] = await Promise.all([
     loadAdminDiagnostics(),
     loadQuestionBankRemediationIntelligence(),
   ]);
-  const ops = buildAdminDiagnosticsOperationsLayer(diagnostics, remediation);
+  const priorReadiness = readPriorReadinessScore();
+  const ops = buildAdminDiagnosticsOperationsLayer(diagnostics, remediation, { priorReadiness });
+  writePriorReadinessScore(ops.readinessScore);
 
   return (
     <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
@@ -68,6 +87,20 @@ export default async function AdminDiagnosticsPage() {
             <span className="text-lg font-semibold text-muted-foreground">/100</span>
           </p>
           <p className="mt-3 text-sm text-muted-foreground">{ops.readinessSummary}</p>
+          <p className="mt-3 text-sm font-medium leading-snug text-[var(--theme-heading-text)]">{ops.readinessExplanation}</p>
+          {ops.readinessTrend.available ? (
+            <p className={`mt-2 text-sm font-medium ${trendStyles(ops.readinessTrend.direction)}`}>
+              Trend: {ops.readinessTrend.direction}
+              {ops.readinessTrend.delta === 0
+                ? " (unchanged)"
+                : ` (${ops.readinessTrend.delta > 0 ? "+" : ""}${ops.readinessTrend.delta} vs prior ${ops.readinessTrend.priorScore})`}
+              <span className="ml-1 font-normal text-muted-foreground">
+                · prior {new Date(ops.readinessTrend.priorRecordedAt).toLocaleString()}
+              </span>
+            </p>
+          ) : (
+            <p className="mt-2 text-xs text-muted-foreground">{ops.readinessTrend.reason}</p>
+          )}
           <p className="mt-4 text-[11px] text-muted-foreground">
             Generated {new Date(diagnostics.generatedAt).toLocaleString()} · heuristic score from diagnostics + bank intel
           </p>
@@ -123,6 +156,63 @@ export default async function AdminDiagnosticsPage() {
               ))}
             </ul>
           )}
+        </div>
+      </section>
+
+      <section className="mt-6 rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-5">
+        <div className="flex flex-wrap items-end justify-between gap-2">
+          <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Score drivers</h2>
+          <p className="text-xs text-muted-foreground">
+            Negative weights = points deducted from 100; positive ranks strengths (1–10, not added to score).
+          </p>
+        </div>
+        <div className="mt-4 grid gap-4 lg:grid-cols-2">
+          <div>
+            <h3 className="text-xs font-bold uppercase tracking-wide text-rose-800 dark:text-rose-200">Top negative contributors</h3>
+            {ops.scoreDrivers.negative.length === 0 ? (
+              <p className="mt-2 text-sm text-muted-foreground">None — no automated deductions on this snapshot.</p>
+            ) : (
+              <ul className="mt-2 space-y-2 text-sm">
+                {ops.scoreDrivers.negative.map((d) => (
+                  <li
+                    key={d.id}
+                    className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-rose-500/20 bg-rose-500/[0.04] px-3 py-2"
+                  >
+                    <span className="min-w-0 font-medium text-[var(--theme-heading-text)]">{d.label}</span>
+                    <span className="flex shrink-0 items-center gap-2 tabular-nums">
+                      <span className="text-muted-foreground">−{d.weight} pts</span>
+                      <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase ${driverSeverityPill(d.severity)}`}>
+                        {d.severity}
+                      </span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          <div>
+            <h3 className="text-xs font-bold uppercase tracking-wide text-emerald-800 dark:text-emerald-200">Top positive signals</h3>
+            {ops.scoreDrivers.positive.length === 0 ? (
+              <p className="mt-2 text-sm text-muted-foreground">No standout positive flags from heuristics.</p>
+            ) : (
+              <ul className="mt-2 space-y-2 text-sm">
+                {ops.scoreDrivers.positive.map((d) => (
+                  <li
+                    key={d.id}
+                    className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-emerald-500/20 bg-emerald-500/[0.04] px-3 py-2"
+                  >
+                    <span className="min-w-0 font-medium text-[var(--theme-heading-text)]">{d.label}</span>
+                    <span className="flex shrink-0 items-center gap-2 tabular-nums">
+                      <span className="text-muted-foreground">weight {d.weight}</span>
+                      <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase ${driverSeverityPill(d.severity)}`}>
+                        {d.severity}
+                      </span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
       </section>
 

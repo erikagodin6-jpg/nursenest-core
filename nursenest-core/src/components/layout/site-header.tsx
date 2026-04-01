@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import {
   BookOpen,
   Briefcase,
@@ -24,6 +24,7 @@ import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 import { MarketingHeaderAuthDesktop, MarketingHeaderAuthMobile } from "@/components/auth/marketing-header-auth";
 import { ThemePicker } from "@/components/theme/theme-picker";
 import { Button } from "@/components/ui/button";
+import { getExamNavStripItems } from "@/lib/marketing/country-exam-offerings";
 
 function NavDetails({
   label,
@@ -90,6 +91,8 @@ export function SiteHeader() {
     { href: localizeHref("/healthcare-careers"), label: t("nav.healthcareCareers"), icon: Briefcase },
     { href: localizeHref("/allied-health"), label: t("nav.alliedHealth"), icon: Heart },
   ];
+
+  const examNavStrip = useMemo(() => getExamNavStripItems(region), [region]);
 
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--divider,var(--theme-nav-border))] bg-[color-mix(in_srgb,var(--theme-nav-bg)_92%,var(--theme-primary))]/90 shadow-sm backdrop-blur-xl transition-all duration-300">
@@ -233,18 +236,24 @@ export function SiteHeader() {
           <span className="hidden text-[var(--theme-muted-text)] sm:inline" aria-hidden="true">
             |
           </span>
-          <Link
-            href={localizeHref("/nclex-rn-practice-questions")}
-            className="px-1.5 py-1 text-xs font-medium text-primary/80 hover:text-primary lg:px-2"
-          >
-            {t("home.hero.nclexRn")}
-          </Link>
-          <Link
-            href={localizeHref("/rex-pn-practice-questions")}
-            className="px-1.5 py-1 text-xs font-medium text-primary/80 hover:text-primary lg:px-2"
-          >
-            {t("home.hero.rexPn")}
-          </Link>
+          {examNavStrip.map((item, idx) => (
+            <span key={item.id} className="contents">
+              {idx > 0 ? (
+                <span className="hidden text-[var(--theme-muted-text)] sm:inline" aria-hidden="true">
+                  |
+                </span>
+              ) : null}
+              <Link
+                href={localizeHref(item.href)}
+                className="px-1.5 py-1 text-xs font-medium text-primary/80 hover:text-primary lg:px-2"
+              >
+                {t(item.labelKey)}
+              </Link>
+            </span>
+          ))}
+          <span className="hidden text-[var(--theme-muted-text)] sm:inline" aria-hidden="true">
+            |
+          </span>
           <NavDetails label={t("nav.examPrepShort")} subBar>
             <NavLinkItem href={localizeHref("/mock-exams")}>{t("nav.practiceExams")}</NavLinkItem>
             <NavLinkItem href={localizeHref("/pricing")}>{t("nav.pricing")}</NavLinkItem>
@@ -309,6 +318,20 @@ export function SiteHeader() {
                 <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0" />
                 {region === "US" ? t("home.region.usDesc") : t("home.region.caDesc")}
               </p>
+              <hr className="my-3 border-[var(--theme-separator)]" />
+              <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-primary">{t("nav.examHubsMobile")}</p>
+              <div className="mb-4 flex flex-col gap-1.5">
+                {examNavStrip.map((item) => (
+                  <Link
+                    key={item.id}
+                    href={localizeHref(item.href)}
+                    className="rounded-lg border border-[var(--theme-card-border)] bg-[var(--theme-page-bg)] px-3 py-2 text-sm font-semibold text-[var(--theme-heading-text)] hover:border-primary/35"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    {t(item.labelKey)}
+                  </Link>
+                ))}
+              </div>
               <hr className="my-3 border-[var(--theme-separator)]" />
               <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-primary">{t("nav.language")}</p>
               <div className="mb-4 max-h-[min(50vh,20rem)] space-y-0.5 overflow-y-auto rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-page-bg)] p-1">

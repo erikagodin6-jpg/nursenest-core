@@ -20,6 +20,11 @@ import {
   rnQuestions,
 } from "@/lib/marketing/marketing-entry-routes";
 import { LEGAL_POLICY_BUNDLE_VERSION } from "@/lib/legal/legal-config";
+import {
+  parseCheckoutApiErrorBody,
+  showStripePriceEnvKeyOnCheckoutError,
+  STRIPE_PRICE_NOT_CONFIGURED_CODE,
+} from "@/lib/stripe/checkout-api-diagnostics";
 import type { BillingDuration } from "@/lib/stripe/pricing-map";
 
 type PlanRow = {
@@ -78,6 +83,7 @@ export function PricingPageClient({
   const [plans, setPlans] = useState<PlanRow[]>([]);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
+  const [checkoutOpsHint, setCheckoutOpsHint] = useState<string | null>(null);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [policiesAccepted, setPoliciesAccepted] = useState(false);
   const [stats, setStats] = useState<HomeStatsPayload | null>(null);
@@ -143,37 +149,31 @@ export function PricingPageClient({
   const examsHref = localize(loginWithCallback(RN.appExams));
   const lessonsHubHref = localize(HUB.examLessons);
   const toolsHref = localize(HUB.tools);
-  const examLinks = useMemo(
-    () => ({
+  const examLinks = useMemo(() => {
+    const rc = country === "US" ? "US" : "CA";
+    return {
       rn: {
-        label: country === "US" ? "RN (NCLEX-RN)" : "RN (Canada entry-to-practice)",
+        labelKey: `pages.pricing.examCard.rn${rc}`,
+        blurbKey: `pages.pricing.examBlurb.rn${rc}`,
         href: localize(rnQuestions(country)),
-        blurb:
-          country === "US"
-            ? "NCLEX-style client-needs question flow with readiness guidance."
-            : "Canadian RN-style preparation with system-based remediation.",
       },
       pn: {
-        label: country === "US" ? "PN (NCLEX-PN)" : "PN (REx-PN)",
+        labelKey: `pages.pricing.examCard.pn${rc}`,
+        blurbKey: `pages.pricing.examBlurb.pn${rc}`,
         href: localize(pnQuestions(country)),
-        blurb:
-          country === "US"
-            ? "Practical-nursing scope and delegation-focused prep."
-            : "Canadian REx-PN terminology and entry-to-practice focus.",
       },
       np: {
-        label: "NP",
+        labelKey: `pages.pricing.examCard.np${rc}`,
+        blurbKey: `pages.pricing.examBlurb.np${rc}`,
         href: localize(country === "US" ? NP.fnpQuestions : NP.caNpQuestions),
-        blurb: "Advanced differential, pharmacotherapy, and management-focused cases.",
       },
       allied: {
-        label: "Allied",
+        labelKey: `pages.pricing.examCard.allied${rc}`,
+        blurbKey: `pages.pricing.examBlurb.allied${rc}`,
         href: localize(country === "US" ? ALLIED.usQuestions : ALLIED.caQuestions),
-        blurb: "Role-specific pathways with practical exam-style drills.",
       },
-    }),
-    [country, localize],
-  );
+    } as const;
+  }, [country, localize]);
 
   const termsHref = localize("/terms");
   const privacyHref = localize("/privacy");
@@ -182,6 +182,7 @@ export function PricingPageClient({
   const startCheckout = useCallback(
     async (duration: BillingDuration) => {
       setCheckoutError(null);
+      setCheckoutOpsHint(null);
       if (!policiesAccepted) {
         setCheckoutError(t("pages.pricing.checkout.mustAcceptPolicies"));
         return;
@@ -204,22 +205,29 @@ export function PricingPageClient({
             policyVersion: LEGAL_POLICY_BUNDLE_VERSION,
           }),
         });
-        const data = await res.json();
+        const data: unknown = await res.json();
         if (res.status === 401) {
           setCheckoutError(t("pages.pricing.error.checkoutSignIn"));
           setCheckoutLoading(false);
           return;
         }
-        if (!res.ok || !data.url) {
-          setCheckoutError(
-            typeof data.error === "string" && data.error.length > 0
-              ? data.error
-              : t("pages.pricing.error.checkoutUnavailable"),
-          );
+        if (!res.ok || !(data && typeof data === "object" && "url" in data && (data as { url?: unknown }).url)) {
+          const parsed = parseCheckoutApiErrorBody(data);
+          if (parsed.code === STRIPE_PRICE_NOT_CONFIGURED_CODE) {
+            setCheckoutError(t("pages.pricing.error.checkoutPlanNotConfigured"));
+            if (showStripePriceEnvKeyOnCheckoutError() && parsed.envKey) {
+              setCheckoutOpsHint(t("pages.pricing.error.checkoutOpsStripePrice", { envKey: parsed.envKey }));
+            }
+          } else {
+            setCheckoutError(
+              parsed.error.length > 0 ? parsed.error : t("pages.pricing.error.checkoutUnavailable"),
+            );
+          }
           setCheckoutLoading(false);
           return;
         }
-        window.location.href = data.url as string;
+        const url = (data as { url: string }).url;
+        window.location.href = url;
       } catch {
         setCheckoutError(t("pages.pricing.error.checkoutNetwork"));
         setCheckoutLoading(false);
@@ -680,6 +688,11 @@ export function PricingPageClient({
         <p className="mt-2 text-xs font-medium text-primary">Cancel anytime. Choose the shortest plan that matches your exam timeline and comfort level.</p>
         {loadError ? <p className="mt-4 text-sm text-red-600">{loadError}</p> : null}
         {checkoutError ? <p className="mt-4 text-sm text-red-600">{checkoutError}</p> : null}
+        {checkoutOpsHint ? (
+          <p className="mt-2 rounded-md border border-border/80 bg-muted/40 px-3 py-2 font-mono text-xs text-muted-foreground">
+            {checkoutOpsHint}
+          </p>
+        ) : null}
 
         <div className="mt-6 rounded-2xl border border-[var(--border-subtle,var(--theme-card-border))] bg-[var(--bg-section-alt)] p-4 text-sm leading-relaxed text-[var(--theme-body-text)]">
           <label className="flex cursor-pointer gap-3">
@@ -802,17 +815,17 @@ export function PricingPageClient({
       <section className="mt-14">
         <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">Choose your exam</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          Country-aware links: {country === "US" ? "US terminology and exam naming" : "Canadian terminology and exam naming"}.
+          {t(country === "US" ? "pages.pricing.examChoose.subtitleUS" : "pages.pricing.examChoose.subtitleCA")}
         </p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           {Object.values(examLinks).map((item) => (
             <Link
-              key={item.label}
+              key={item.labelKey}
               href={item.href}
               className="rounded-xl border border-[var(--theme-card-border)] bg-card p-4 transition hover:border-primary/35"
             >
-              <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{item.label}</p>
-              <p className="mt-1 text-xs text-muted-foreground">{item.blurb}</p>
+              <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{t(item.labelKey)}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{t(item.blurbKey)}</p>
             </Link>
           ))}
         </div>

@@ -3,15 +3,16 @@ import {
   ALLIED,
   HUB,
   NP,
-  PN,
   RN,
   alliedCareersMarketingUrl,
   alliedHub,
   alliedQuestions,
   loginWithCallback,
   npNpQuestionsForRegion,
+  npPracticeProgrammatic,
   pnLessons,
   pnPrimaryHub,
+  pnPracticeProgrammatic,
   pnQuestions,
   rnLessons,
   rnQuestions,
@@ -22,23 +23,23 @@ export type NursenestMarketingRegion = MarketingRegionToggle;
 
 export type HeroGatewayLink = {
   id: string;
-  label: string;
-  description?: string;
+  labelKey: string;
+  descriptionKey?: string;
   href: string;
   external?: boolean;
 };
 
 export type HeroGatewayCluster = {
   id: string;
-  title: string;
+  titleKey: string;
+  introKey?: string;
   tier: "primary" | "secondary";
-  intro?: string;
   primaryCta?: HeroGatewayLink;
   links: HeroGatewayLink[];
 };
 
 /**
- * “Choose your path” clusters: one dominant CTA per group, short secondaries, paths from marketing-entry-routes.
+ * “Choose your path” clusters: copy from i18n keys; hrefs from marketing-entry-routes.
  */
 export function buildHeroGatewayClusters(region: NursenestMarketingRegion): HeroGatewayCluster[] {
   const isUs = region === "US";
@@ -47,85 +48,90 @@ export function buildHeroGatewayClusters(region: NursenestMarketingRegion): Hero
   return [
     {
       id: "nursing",
-      title: isUs ? "NCLEX-RN (US)" : "NCLEX-RN (Canada)",
+      titleKey: "home.gateway.nursing.title",
+      introKey: isUs ? "home.gateway.nursing.introUS" : "home.gateway.nursing.introCA",
       tier: "primary",
-      intro: isUs
-        ? "Clinical judgment practice for US RN candidates: NGN-style stems, rationales per option, and full-length mocks when you are ready."
-        : "Canadian RN registration: same high-stakes reasoning skills, scoped to your NCLEX-RN track and Canadian lesson hubs.",
       primaryCta: {
         id: "rn-start",
-        label: "Run NCLEX-RN questions",
-        description: "Starts in your selected region",
+        labelKey: "home.gateway.nursing.ctaPrimary",
+        descriptionKey: "home.gateway.nursing.ctaPrimaryDesc",
         href: rnQuestions(region),
       },
       links: [
-        { id: "rn-seo", label: "NCLEX-RN prep overview", href: RN.practiceProgrammatic },
-        { id: "rn-lessons", label: "RN lessons", href: rnLessons(region) },
-        { id: "rn-exams", label: "Timed practice exams", href: RN.appExams },
+        { id: "rn-seo", labelKey: "home.gateway.nursing.link.seoOverview", href: RN.practiceProgrammatic },
+        { id: "rn-lessons", labelKey: "home.gateway.nursing.link.lessons", href: rnLessons(region) },
+        { id: "rn-exams", labelKey: "home.gateway.nursing.link.timedMocks", href: RN.appExams },
       ],
     },
     {
       id: "practical-nursing",
-      title: isUs ? "NCLEX-PN (LVN/LPN)" : "REx-PN (Canada PN)",
+      titleKey: isUs ? "home.gateway.practical.titleUS" : "home.gateway.practical.titleCA",
+      introKey: isUs ? "home.gateway.practical.introUS" : "home.gateway.practical.introCA",
       tier: "primary",
-      intro: isUs
-        ? "PN-level safety and pharmacology stems with lesson support—not RN material squeezed into an LPN label."
-        : "REx-PN is its own exam. Use the Canadian PN bank and lessons built for REx-PN, not a relabeled US mix.",
       primaryCta: {
         id: "pn-questions",
-        label: isUs ? "Run NCLEX-PN questions" : "Run REx-PN questions",
-        description: "Pathway-filtered bank",
+        labelKey: isUs ? "home.gateway.practical.ctaUS" : "home.gateway.practical.ctaCA",
+        descriptionKey: "home.gateway.practical.ctaDesc",
         href: pnQuestions(region),
       },
       links: [
-        { id: "pn-lessons", label: "PN lessons", href: pnLessons(region) },
-        { id: "pn-hub", label: "PN exam hub", href: pnPrimaryHub(region) },
-        { id: "pn-seo", label: "PN prep overview", href: PN.practiceProgrammatic },
+        { id: "pn-lessons", labelKey: "home.gateway.practical.link.lessons", href: pnLessons(region) },
+        { id: "pn-hub", labelKey: "home.gateway.practical.link.hub", href: pnPrimaryHub(region) },
+        {
+          id: "pn-seo",
+          labelKey: "home.gateway.practical.link.seoOverview",
+          href: pnPracticeProgrammatic(region),
+        },
       ],
     },
     {
       id: "np",
-      title: "Nurse practitioner",
+      titleKey: "home.gateway.np.title",
+      introKey: isUs ? "home.gateway.np.introUS" : "home.gateway.np.introCA",
       tier: "primary",
-      intro: isUs
-        ? "FNP and AGPCNP each have dedicated lessons and banks. Pick the board you are sitting—do not cross-train on the wrong blueprint."
-        : "Canadian NP: start from the CNPLE hub. US FNP/AGPCNP stays available if you sit US certification exams.",
       primaryCta: {
         id: "np-practice",
-        label: isUs ? "Open FNP question bank" : "Open CNPLE questions",
-        description: isUs ? "US NP clinical cases" : "Canadian NP track",
+        labelKey: isUs ? "home.gateway.np.ctaUS" : "home.gateway.np.ctaCA",
+        descriptionKey: isUs ? "home.gateway.np.ctaDescUS" : "home.gateway.np.ctaDescCA",
         href: npNpQuestionsForRegion(region),
       },
       links: isUs
         ? [
-            { id: "np-seo", label: "NP certification overview", href: NP.practiceProgrammatic },
-            { id: "fnp-l", label: "FNP lessons", href: NP.fnpLessons },
-            { id: "ag-l", label: "AGPCNP lessons", href: NP.agpcnpLessons },
+            {
+              id: "np-seo",
+              labelKey: "home.gateway.np.link.seoOverview",
+              href: npPracticeProgrammatic(region),
+            },
+            { id: "fnp-l", labelKey: "home.gateway.np.link.fnpLessons", href: NP.fnpLessons },
+            { id: "ag-l", labelKey: "home.gateway.np.link.agpcnpLessons", href: NP.agpcnpLessons },
           ]
         : [
-            { id: "np-seo", label: "NP certification overview", href: NP.practiceProgrammatic },
-            { id: "ca-np", label: "Canadian NP hub", href: NP.caNpHub },
-            { id: "fnp-l", label: "FNP lessons (US)", href: NP.fnpLessons },
-            { id: "ag-l", label: "AGPCNP lessons (US)", href: NP.agpcnpLessons },
+            {
+              id: "np-seo",
+              labelKey: "home.gateway.np.link.seoOverviewCa",
+              href: npPracticeProgrammatic(region),
+            },
+            { id: "ca-np", labelKey: "home.gateway.np.link.caHub", href: NP.caNpHub },
+            { id: "fnp-l", labelKey: "home.gateway.np.link.fnpLessonsUs", href: NP.fnpLessons },
+            { id: "ag-l", labelKey: "home.gateway.np.link.agpcnpLessonsUs", href: NP.agpcnpLessons },
           ],
     },
     {
       id: "allied",
-      title: "Allied health exams",
+      titleKey: "home.gateway.allied.title",
+      introKey: "home.gateway.allied.intro",
       tier: "secondary",
-      intro:
-        "Same pathway model as nursing: open your regional question bank first, then use the hub for lessons and context. The careers brochure lists supported certifications if you are still choosing an exam.",
       primaryCta: {
         id: "allied-questions",
-        label: "Open allied question bank",
-        description: "Region-scoped bank",
+        labelKey: "home.gateway.allied.ctaPrimary",
+        descriptionKey: "home.gateway.allied.ctaDesc",
         href: alliedQuestions(region),
       },
       links: [
-        { id: "allied-in", label: "Allied exam hub", href: alliedHub(region) },
+        { id: "allied-in", labelKey: "home.gateway.allied.link.hub", href: alliedHub(region) },
         {
           id: "allied-brochure",
-          label: "Supported careers & exams (brochure)",
+          labelKey: "home.gateway.allied.link.brochure",
           href: alliedBrochure,
           external: true,
         },
@@ -133,37 +139,51 @@ export function buildHeroGatewayClusters(region: NursenestMarketingRegion): Hero
     },
     {
       id: "tools-newgrad",
-      title: "Tools & new grad",
+      titleKey: "home.gateway.tools.title",
+      introKey: "home.gateway.tools.intro",
       tier: "secondary",
-      intro: "Dose calculators, lesson index, timed exams (sign in), and first-year roadmaps when you need a break from board mode.",
       primaryCta: {
         id: "tools",
-        label: "Use study tools",
+        labelKey: "home.gateway.tools.ctaPrimary",
         href: HUB.tools,
       },
       links: [
-        { id: "exam-lessons", label: "Exam lesson hubs", href: HUB.examLessons },
-        { id: "roadmap", label: "New graduate roadmap", href: "/new-graduate-nursing-roadmap" },
+        { id: "exam-lessons", labelKey: "home.gateway.tools.link.examLessons", href: HUB.examLessons },
+        {
+          id: "roadmap",
+          labelKey: "home.gateway.tools.link.roadmap",
+          href: "/new-graduate-nursing-roadmap",
+        },
         {
           id: "new-grad-support",
-          label: "New graduate support",
+          labelKey: "home.gateway.tools.link.newGradSupport",
           href: marketingAssetUrl("/new-graduate-support"),
           external: true,
         },
-        { id: "flashcards", label: "Flashcards (sign in)", href: loginWithCallback("/app/flashcards") },
-        { id: "exams-login", label: "Practice exams (sign in)", href: loginWithCallback("/app/exams") },
+        {
+          id: "flashcards",
+          labelKey: "home.gateway.tools.link.flashcards",
+          href: loginWithCallback("/app/flashcards"),
+        },
+        {
+          id: "exams-login",
+          labelKey: "home.gateway.tools.link.practiceExams",
+          href: loginWithCallback("/app/exams"),
+        },
       ],
     },
   ];
 }
 
-export function heroQuickEntryLinks(region: NursenestMarketingRegion): { label: string; href: string }[] {
+export type HeroQuickEntryItem = { labelKey: string; href: string };
+
+export function heroQuickEntryLinks(region: NursenestMarketingRegion): HeroQuickEntryItem[] {
   const isUs = region === "US";
   return [
-    { label: isUs ? "NCLEX-RN questions" : "Canada RN questions", href: rnQuestions(region) },
-    { label: isUs ? "NCLEX-PN questions" : "REx-PN questions", href: pnQuestions(region) },
-    { label: isUs ? "FNP question bank" : "CNPLE questions", href: npNpQuestionsForRegion(region) },
-    { label: "Allied question bank", href: alliedQuestions(region) },
-    { label: "Study tools", href: HUB.tools },
+    { labelKey: "home.quickEntry.rnQuestions", href: rnQuestions(region) },
+    { labelKey: isUs ? "home.quickEntry.pnQuestionsUS" : "home.quickEntry.pnQuestionsCA", href: pnQuestions(region) },
+    { labelKey: isUs ? "home.quickEntry.npQuestionsUS" : "home.quickEntry.npQuestionsCA", href: npNpQuestionsForRegion(region) },
+    { labelKey: isUs ? "home.quickEntry.alliedUS" : "home.quickEntry.alliedCA", href: alliedQuestions(region) },
+    { labelKey: "home.quickEntry.studyTools", href: HUB.tools },
   ];
 }

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { buildAdminDiagnosticsOperationsLayer } from "@/lib/admin/build-admin-diagnostics-operations-layer";
+import { readPriorReadinessScore, writePriorReadinessScore } from "@/lib/admin/readiness-prior-score-cache";
 import { loadAdminDiagnostics } from "@/lib/admin/load-admin-diagnostics";
 import { loadQuestionBankRemediationIntelligence } from "@/lib/questions/load-question-bank-remediation-intelligence";
 
@@ -18,7 +19,9 @@ export async function GET() {
       loadAdminDiagnostics(),
       loadQuestionBankRemediationIntelligence(),
     ]);
-    const rawOps = buildAdminDiagnosticsOperationsLayer(diagnostics, remediation);
+    const priorReadiness = readPriorReadinessScore();
+    const rawOps = buildAdminDiagnosticsOperationsLayer(diagnostics, remediation, { priorReadiness });
+    writePriorReadinessScore(rawOps.readinessScore);
     const operations = {
       ...rawOps,
       priorityIssues: rawOps.priorityIssues.map(({ impactRank: _i, ...rest }) => rest),

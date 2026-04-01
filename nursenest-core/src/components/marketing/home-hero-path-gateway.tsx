@@ -43,28 +43,29 @@ export function HomeHeroPathGateway({ region }: Props) {
       <div className="rounded-xl border border-[var(--theme-card-border)] bg-card p-4 shadow-sm sm:p-5 lg:grid lg:grid-cols-12 lg:gap-6" data-testid="hero-gateway-nursing">
         <div className="lg:col-span-5">
           <p className="text-[11px] font-bold uppercase tracking-wide text-primary">{t("home.gateway.badgePrimary")}</p>
-          <h3 className="mt-1 text-lg font-bold text-[var(--theme-heading-text)]">{rn.title}</h3>
-          {rn.intro && <p className="mt-2 text-sm text-[var(--theme-muted-text)]">{rn.intro}</p>}
+          <h3 className="mt-1 text-lg font-bold text-[var(--theme-heading-text)]">{t(rn.titleKey)}</h3>
+          {rn.introKey ? <p className="mt-2 text-sm text-[var(--theme-muted-text)]">{t(rn.introKey)}</p> : null}
           {rn.primaryCta && (
             <PrimaryCtaButton
               clusterId="nursing"
               region={region}
               cta={rn.primaryCta}
+              label={t(rn.primaryCta.labelKey)}
               localize={localize}
               className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:brightness-110 sm:w-auto"
               icon="arrow"
             />
           )}
-          {rn.primaryCta?.description && (
-            <p className="mt-2 text-xs text-[var(--theme-muted-text)]">{rn.primaryCta.description}</p>
-          )}
+          {rn.primaryCta?.descriptionKey ? (
+            <p className="mt-2 text-xs text-[var(--theme-muted-text)]">{t(rn.primaryCta.descriptionKey)}</p>
+          ) : null}
         </div>
         <div className="mt-4 border-t border-[var(--theme-card-border)] pt-4 lg:col-span-7 lg:mt-0 lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0">
           <p className="text-xs font-semibold text-[var(--theme-heading-text)]">{t("home.gateway.quickLinks")}</p>
           <ul className="mt-3 grid gap-2 sm:grid-cols-2">
             {rn.links.map((link) => (
               <li key={link.id}>
-                <GatewayLink clusterId="nursing" region={region} link={link} localize={localize} />
+                <GatewayLink clusterId="nursing" region={region} link={link} localize={localize} t={t} />
               </li>
             ))}
           </ul>
@@ -72,13 +73,13 @@ export function HomeHeroPathGateway({ region }: Props) {
       </div>
 
       <div className="mt-4 grid gap-4 lg:grid-cols-2">
-        <ClusterCard cluster={lpn} localize={localize} testId="hero-gateway-lpn" region={region} />
-        <ClusterCard cluster={np} localize={localize} testId="hero-gateway-np" region={region} />
+        <ClusterCard cluster={lpn} localize={localize} testId="hero-gateway-lpn" region={region} t={t} />
+        <ClusterCard cluster={np} localize={localize} testId="hero-gateway-np" region={region} t={t} />
       </div>
 
       <div className="mt-4 grid gap-4 lg:grid-cols-2">
-        <ClusterCard cluster={allied} localize={localize} testId="hero-gateway-allied" region={region} />
-        <ClusterCard cluster={newGrad} localize={localize} testId="hero-gateway-newgrad" region={region} />
+        <ClusterCard cluster={allied} localize={localize} testId="hero-gateway-allied" region={region} t={t} />
+        <ClusterCard cluster={newGrad} localize={localize} testId="hero-gateway-newgrad" region={region} t={t} />
       </div>
 
       {frictionNote ? (
@@ -93,11 +94,13 @@ function ClusterCard({
   localize,
   testId,
   region,
+  t,
 }: {
   cluster: ReturnType<typeof buildHeroGatewayClusters>[number];
   localize: (h: string) => string;
   testId: string;
   region: NursenestMarketingRegion;
+  t: (key: string) => string;
 }) {
   return (
     <div
@@ -106,14 +109,15 @@ function ClusterCard({
     >
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div>
-          <h3 className="text-base font-bold text-[var(--theme-heading-text)]">{cluster.title}</h3>
-          {cluster.intro && <p className="mt-1 text-sm text-[var(--theme-muted-text)]">{cluster.intro}</p>}
+          <h3 className="text-base font-bold text-[var(--theme-heading-text)]">{t(cluster.titleKey)}</h3>
+          {cluster.introKey ? <p className="mt-1 text-sm text-[var(--theme-muted-text)]">{t(cluster.introKey)}</p> : null}
         </div>
         {cluster.primaryCta && (
           <PrimaryCtaButton
             clusterId={cluster.id}
             region={region}
             cta={cluster.primaryCta}
+            label={t(cluster.primaryCta.labelKey)}
             localize={localize}
             className="inline-flex shrink-0 items-center rounded-full border border-primary/25 bg-primary/5 px-3 py-1.5 text-xs font-semibold text-primary hover:bg-primary/10"
             icon="chevron"
@@ -123,7 +127,7 @@ function ClusterCard({
       <ul className="mt-4 grid flex-1 gap-1.5 sm:grid-cols-2">
         {cluster.links.map((link) => (
           <li key={link.id}>
-            <GatewayLink clusterId={cluster.id} region={region} link={link} localize={localize} compact />
+            <GatewayLink clusterId={cluster.id} region={region} link={link} localize={localize} compact t={t} />
           </li>
         ))}
       </ul>
@@ -138,6 +142,7 @@ function PrimaryCtaButton({
   localize,
   className,
   icon,
+  label,
 }: {
   clusterId: string;
   region: NursenestMarketingRegion;
@@ -145,6 +150,7 @@ function PrimaryCtaButton({
   localize: (h: string) => string;
   className: string;
   icon: "arrow" | "chevron";
+  label: string;
 }) {
   const external = Boolean(cta.external || cta.href.startsWith("http"));
   const href = external ? cta.href : localize(cta.href);
@@ -157,7 +163,7 @@ function PrimaryCtaButton({
     });
   const inner = (
     <>
-      {cta.label}
+      {label}
       {icon === "arrow" ? <ArrowRight className="ml-2 h-4 w-4" /> : <ChevronRight className="ml-0.5 h-3.5 w-3.5" />}
     </>
   );
@@ -181,12 +187,14 @@ function GatewayLink({
   link,
   localize,
   compact,
+  t,
 }: {
   clusterId: string;
   region: NursenestMarketingRegion;
-  link: { id: string; label: string; href: string; external?: boolean };
+  link: HeroGatewayLink;
   localize: (h: string) => string;
   compact?: boolean;
+  t: (key: string) => string;
 }) {
   const href = link.external || link.href.startsWith("http") ? link.href : localize(link.href);
   const track = () =>
@@ -201,7 +209,7 @@ function GatewayLink({
 
   const inner = (
     <>
-      <span className="min-w-0 flex-1">{link.label}</span>
+      <span className="min-w-0 flex-1">{t(link.labelKey)}</span>
       <ChevronRight className={`shrink-0 text-primary opacity-70 transition group-hover:translate-x-0.5 ${compact ? "h-3.5 w-3.5" : "h-4 w-4"}`} />
     </>
   );

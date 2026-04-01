@@ -67,6 +67,106 @@ const patch = {
   "home.gateway.frictionNote":
     "A free account opens starter runs and previews. A paid plan unlocks the full bank for your tier, lesson depth, timed mocks, saved history, and weak-area tools.",
 
+  "nav.examHubsMobile": "Practice hubs by exam",
+  "nav.examStrip.rn": "NCLEX-RN",
+  "nav.examStrip.pnUS": "NCLEX-PN",
+  "nav.examStrip.pnCA": "REx-PN",
+  "nav.examStrip.npUS": "NP (US certifications)",
+  "nav.examStrip.npCA": "NP (CNPLE)",
+  "nav.examStrip.alliedUS": "Allied health",
+  "nav.examStrip.alliedCA": "Allied health",
+
+  "home.quickEntry.rnQuestions": "NCLEX-RN questions",
+  "home.quickEntry.pnQuestionsUS": "NCLEX-PN questions",
+  "home.quickEntry.pnQuestionsCA": "REx-PN questions",
+  "home.quickEntry.npQuestionsUS": "NP practice questions (US)",
+  "home.quickEntry.npQuestionsCA": "CNPLE / NP questions",
+  "home.quickEntry.alliedUS": "Allied health questions (US)",
+  "home.quickEntry.alliedCA": "Allied health questions (Canada)",
+  "home.quickEntry.studyTools": "Study tools",
+
+  "home.gateway.nursing.title": "NCLEX-RN",
+  "home.gateway.nursing.introUS":
+    "Clinical judgment practice for US RN candidates: NGN-style stems, rationales per option, and full-length mocks when you are ready.",
+  "home.gateway.nursing.introCA":
+    "Canadian RN registration: same high-stakes reasoning skills, scoped to your NCLEX-RN track and Canadian lesson hubs.",
+  "home.gateway.nursing.ctaPrimary": "Run NCLEX-RN questions",
+  "home.gateway.nursing.ctaPrimaryDesc": "Starts in your selected region",
+  "home.gateway.nursing.link.seoOverview": "NCLEX-RN prep overview",
+  "home.gateway.nursing.link.lessons": "RN lessons",
+  "home.gateway.nursing.link.timedMocks": "Timed practice exams",
+
+  "home.gateway.practical.titleUS": "NCLEX-PN (LVN/LPN)",
+  "home.gateway.practical.titleCA": "REx-PN (Canada PN)",
+  "home.gateway.practical.introUS":
+    "PN-level safety and pharmacology stems with lesson support—not RN material squeezed into an LPN label.",
+  "home.gateway.practical.introCA":
+    "REx-PN is its own exam. Use the Canadian PN bank and lessons built for REx-PN, not a relabeled US mix.",
+  "home.gateway.practical.ctaUS": "Run NCLEX-PN questions",
+  "home.gateway.practical.ctaCA": "Run REx-PN questions",
+  "home.gateway.practical.ctaDesc": "Pathway-filtered bank",
+  "home.gateway.practical.link.lessons": "PN lessons",
+  "home.gateway.practical.link.hub": "PN exam hub",
+  "home.gateway.practical.link.seoOverview": "PN prep overview",
+
+  "home.gateway.np.title": "Nurse practitioner",
+  "home.gateway.np.introUS":
+    "FNP and AGPCNP each have dedicated lessons and banks. Pick the board you are sitting—do not cross-train on the wrong blueprint.",
+  "home.gateway.np.introCA":
+    "Canadian NP: start from the CNPLE hub. US FNP/AGPCNP stays available if you sit US certification exams.",
+  "home.gateway.np.ctaUS": "Open NP question bank (US)",
+  "home.gateway.np.ctaCA": "Open CNPLE questions",
+  "home.gateway.np.ctaDescUS": "US NP clinical cases",
+  "home.gateway.np.ctaDescCA": "Canadian NP track",
+  "home.gateway.np.link.seoOverview": "NP certification overview (US)",
+  "home.gateway.np.link.seoOverviewCa": "CNPLE / NP prep overview",
+  "home.gateway.np.link.fnpLessons": "FNP lessons",
+  "home.gateway.np.link.agpcnpLessons": "AGPCNP lessons",
+  "home.gateway.np.link.caHub": "Canadian NP hub",
+  "home.gateway.np.link.fnpLessonsUs": "FNP lessons (US)",
+  "home.gateway.np.link.agpcnpLessonsUs": "AGPCNP lessons (US)",
+
+  "home.gateway.allied.title": "Allied health exams",
+  "home.gateway.allied.intro":
+    "Same pathway model as nursing: open your regional question bank first, then use the hub for lessons and context. The careers brochure lists supported certifications if you are still choosing an exam.",
+  "home.gateway.allied.ctaPrimary": "Open allied question bank",
+  "home.gateway.allied.ctaDesc": "Region-scoped bank",
+  "home.gateway.allied.link.hub": "Allied exam hub",
+  "home.gateway.allied.link.brochure": "Supported careers & exams (brochure)",
+
+  "home.gateway.tools.title": "Tools & new grad",
+  "home.gateway.tools.intro":
+    "Dose calculators, lesson index, timed exams (sign in), and first-year roadmaps when you need a break from board mode.",
+  "home.gateway.tools.ctaPrimary": "Use study tools",
+  "home.gateway.tools.link.examLessons": "Exam lesson hubs",
+  "home.gateway.tools.link.roadmap": "New graduate roadmap",
+  "home.gateway.tools.link.newGradSupport": "New graduate support",
+  "home.gateway.tools.link.flashcards": "Flashcards (sign in)",
+  "home.gateway.tools.link.practiceExams": "Practice exams (sign in)",
+
+  "home.conversion.sampleRnQuestionRun": "NCLEX-RN question run",
+
+  "pages.pricing.examChoose.subtitleUS": "US terminology and exam naming",
+  "pages.pricing.examChoose.subtitleCA": "Canadian terminology and exam naming",
+
+  "pages.pricing.examCard.rnUS": "RN (NCLEX-RN)",
+  "pages.pricing.examCard.rnCA": "RN (NCLEX-RN)",
+  "pages.pricing.examCard.pnUS": "PN (NCLEX-PN)",
+  "pages.pricing.examCard.pnCA": "PN (REx-PN)",
+  "pages.pricing.examCard.npUS": "NP (US certifications)",
+  "pages.pricing.examCard.npCA": "NP (CNPLE)",
+  "pages.pricing.examCard.alliedUS": "Allied health (US)",
+  "pages.pricing.examCard.alliedCA": "Allied health (Canada)",
+
+  "pages.pricing.examBlurb.rnUS": "NCLEX-style client-needs question flow with readiness guidance.",
+  "pages.pricing.examBlurb.rnCA": "Canadian RN-style preparation with system-based remediation.",
+  "pages.pricing.examBlurb.pnUS": "Practical-nursing scope and delegation-focused prep.",
+  "pages.pricing.examBlurb.pnCA": "Canadian REx-PN terminology and entry-to-practice focus.",
+  "pages.pricing.examBlurb.npUS": "Advanced differential, pharmacotherapy, and management-focused cases (US boards).",
+  "pages.pricing.examBlurb.npCA": "Canadian NP entry and CNPLE-aligned clinical management practice.",
+  "pages.pricing.examBlurb.alliedUS": "Role-specific pathways with practical exam-style drills.",
+  "pages.pricing.examBlurb.alliedCA": "Role-specific pathways with Canadian scope and exam-style drills.",
+
   "home.conversion.whyHeading": "Why use NurseNest instead of three different apps",
   "home.conversion.whySub":
     "Topic tags connect the bank, lessons, and flashcards—so weak-area lists, your planner, and readiness signals point at the same gaps.",
