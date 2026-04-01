@@ -458,6 +458,8 @@ model ExamQuestion {
   correctAnswer              Json?     @map("correct_answer")
   rationale                  String?
   difficulty                 Int?      @default(3)
+  /** Lightweight IRT-style discrimination for CAT (default 1.0 in engine when null). */
+  discrimination             Float?    @map("discrimination")
   tags                       String[]  @default([])
   bodySystem                 String?   @map("body_system")
   topic                      String?

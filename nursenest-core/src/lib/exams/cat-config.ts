@@ -25,10 +25,16 @@ export const CAT_MAX_QUESTIONS =
 export const CAT_START_THETA = 0;
 export const CAT_START_TARGET_DIFFICULTY = 3;
 
+/** Minimum answered items before confidence-based early stop (unsafe to stop earlier). */
+export const CAT_MIN_ANSWERED_FOR_CONFIDENCE_STOP = 16;
+
 /** Early stop after min questions when estimate is confident. */
 export const CAT_EARLY_PASS_THETA = 0.42;
 export const CAT_EARLY_FAIL_THETA = -0.42;
 export const CAT_EARLY_STOP_SE = 0.34;
+
+/** Weak prior precision so SE is finite before any items (roughly SE ≈ 1.1). */
+export const CAT_PRIOR_INFORMATION = 0.82;
 
 /** Final pass/fail thresholds on theta (softer than early stop). */
 export const CAT_FINAL_PASS_THETA = 0.12;

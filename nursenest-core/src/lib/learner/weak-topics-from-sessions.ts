@@ -5,11 +5,13 @@ import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { answerMatches } from "@/lib/exams/score-session-answers";
 import { sanitizeSessionQuestionIds } from "@/lib/exams/exam-session-bounds";
+import { formatTopicLabelForDisplay, normalizeTopicKey } from "@/lib/learner/topic-normalize";
 
 /** Derived tier for dashboard / planner copy (centralized weak-area system). */
 export type TopicStrength = "strong" | "moderate" | "weak";
 
 export type WeakTopicRow = {
+  /** Display label (from canonical key; stable title-style casing). */
   topic: string;
   missed: number;
   attempted: number;
@@ -18,11 +20,25 @@ export type WeakTopicRow = {
   /** ISO timestamp of last incorrect attempt when known. */
   lastWrongAt?: string | null;
   wrongStreak?: number;
+  /** Canonical normalized key — use for dedup and matching question bank topics. */
+  normalizedTopic?: string;
+  /** 0 = low … 1 = high — ledger evidence vs session fallback. */
+  sourceConfidence?: number;
+  /** 0–1 higher = drill sooner (CAT / weak pools use this; UI may ignore). */
+  weakPriorityScore?: number;
+  decayAdjustedWrongSignal?: number;
+  decayAdjustedCorrectSignal?: number;
+  /** "ledger" | "session_fallback" | "mixed" */
+  topicSource?: "ledger" | "session_fallback" | "mixed";
+  /** Total scored attempts backing this row (ledger or session aggregate). */
+  evidenceCount?: number;
 };
 
 export function normalizeTopicLabel(topic: string | null | undefined): string {
-  return (topic?.trim() || "General").slice(0, 80);
+  return normalizeTopicKey(topic);
 }
+
+export { formatTopicLabelForDisplay, normalizeTopicKey };
 
 /**
  * Aggregates missed items by topic from recent completed exam sessions (tier + country scoped questions only).
@@ -63,7 +79,7 @@ export async function loadWeakTopicsFromExamSessions(
     });
 
     for (const q of qs) {
-      const label = normalizeTopicLabel(q.topic);
+      const label = normalizeTopicKey(q.topic);
       attempted.set(label, (attempted.get(label) ?? 0) + 1);
       const ok = answerMatches(q.questionType, q.correctAnswer as Prisma.JsonValue, answers[q.id]);
       if (!ok) {
@@ -77,10 +93,13 @@ export async function loadWeakTopicsFromExamSessions(
     const m = missed.get(topic) ?? 0;
     if (m === 0) continue;
     rows.push({
-      topic,
+      topic: formatTopicLabelForDisplay(topic),
+      normalizedTopic: topic,
       missed: m,
       attempted: att,
       missRate: att > 0 ? Math.round((m / att) * 100) : 0,
+      topicSource: "session_fallback",
+      sourceConfidence: 0.35,
     });
   }
 
