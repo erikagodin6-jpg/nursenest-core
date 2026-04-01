@@ -10,16 +10,52 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const enPath = path.join(__dirname, "../public/i18n/en.json");
 
 const patch = {
-  "home.hero.mainTitle": "Exam prep that trains judgment—not memorized buzzwords",
+  "home.hero.mainTitle":
+    "Pass your nursing exam with a fully guided system — not just a question bank",
   "home.hero.newSubheadline":
-    "Pathway-scoped lessons and question runs, spaced flashcards, study planner, and readiness live in one learner dashboard. Rationales break down every option; timed mocks and CAT-style practice sit in the same shell when you are ready.",
+    "Pathway-scoped questions with option-level rationales, spaced flashcards, an adaptive study planner, and readiness tracking in one learner shell. Lessons and timed mocks sit beside the bank so you rehearse judgment, not isolated facts.",
   "home.hero.quickEntryLabel": "Jump in without hunting menus",
   "home.hero.trustMicroBadge": "US & Canadian scopes kept separate",
   "home.hero.authorityBadge": "Rationale on every scored option",
-  "home.hero.ctaPrimary": "Create free account",
+  "home.hero.ctaPrimary": "Start free trial",
   "home.hero.ctaSecondary": "Browse practice questions",
+  "home.hero.ctaInstant": "Start practicing instantly",
+  "home.hero.ctaInstantHint": "Opens a short practice path—free account, no card to start your preview runs.",
   "home.hero.urgencyMicrocopy":
-    "Filter by the exam you are sitting next—RN, PN, NP, or allied—then drill stems that match that board’s framing.",
+    "Pick RN, PN, NP, or allied and your country first—stems, delegation language, and lesson tags stay aligned to that registration.",
+
+  "home.howItWorks.title": "How it works",
+  "home.howItWorks.sub": "Three steps from sign-up to a study rhythm you can keep until test day.",
+  "home.howItWorks.step1Title": "Choose your exam and region",
+  "home.howItWorks.step1Body":
+    "RN, PN, NP, or allied—US or Canada—so the bank, lessons, and scope language match what you will sit for.",
+  "home.howItWorks.step2Title": "Train with questions and rationales",
+  "home.howItWorks.step2Body":
+    "Every scored option explains why it passes or fails clinically. Misses roll into categories you can target with the next set.",
+  "home.howItWorks.step3Title": "Let the planner and readiness guide reps",
+  "home.howItWorks.step3Body":
+    "Add your exam date for pacing, use flashcards for weak facts, and read readiness as a next-study signal—not a guarantee.",
+
+  "home.featuresStack.title": "What you get in one subscription",
+  "home.featuresStack.lead":
+    "Bank, lessons, cards, planner, and dashboard are wired together—same tags, same weak-area lists, no tab-hopping between vendors.",
+  "home.featuresStack.questionBankTitle": "Question bank",
+  "home.featuresStack.questionBankBody":
+    "Pathway-scoped items with category tags; subscribers get the full pool for their tier plus full rationales and history.",
+  "home.featuresStack.lessonsTitle": "Lessons",
+  "home.featuresStack.lessonsBody":
+    "Blueprint-aligned modules for your track—use them when a category keeps failing, not as a substitute for stems.",
+  "home.featuresStack.flashcardsTitle": "Flashcards",
+  "home.featuresStack.flashcardsBody":
+    "Spaced repetition for weak-topic facts pulled from your misses so memorization meets application the same week.",
+  "home.featuresStack.plannerTitle": "Adaptive study planner",
+  "home.featuresStack.plannerBody":
+    "Schedule blocks around your exam date and shift workload; the planner nudges what to run next when your categories drift.",
+  "home.featuresStack.readinessTitle": "Readiness system",
+  "home.featuresStack.readinessBody":
+    "Blends recent accuracy, volume, and pacing—so you know what to study next, not a black-box score.",
+  "home.featuresStack.ctaQuestions": "Open practice questions",
+  "home.featuresStack.ctaPricing": "Compare plans",
 
   "home.gateway.title": "Start from the exam you are registered for",
   "home.gateway.subtitle":
@@ -98,10 +134,10 @@ const patch = {
   "home.conversion.faq6a":
     "Yes—manage billing from your account. You typically keep access through the period you already paid for; see current Terms for details.",
 
-  "home.conversion.finalTitle": "One login for lessons, bank, mocks, and progress",
+  "home.conversion.finalTitle": "Ready to prep with the full system?",
   "home.conversion.finalSub":
-    "Create a free account to explore starter content. Upgrade when you want the full bank, timed exams, and saved history for your exam pathway.",
-  "home.conversion.ctaSignup": "Create free account",
+    "Start a free trial to unlock starter runs, then upgrade for the full bank, timed mocks, and saved progress for your pathway.",
+  "home.conversion.ctaSignup": "Start free trial",
   "home.conversion.ctaPricing": "View plans & pricing",
   "home.conversion.ctaTryFree": "Try RN practice questions",
 
@@ -192,6 +228,8 @@ const patch = {
   "pages.pricing.plan.outcomeA": "Full bank, lessons, and mocks for your purchased tier",
   "pages.pricing.plan.outcomeB": "Flashcards and weak-topic routing from your misses",
   "pages.pricing.plan.outcomeC": "Planner, readiness, and history in the learner dashboard",
+  "pages.pricing.plan.bestValue": "Best value",
+  "pages.pricing.plan.mostPopular": "Most popular",
 
   "pages.pricing.duration.position.monthly": "Flexible if your test window is still moving",
   "pages.pricing.duration.position.3month": "Fits many 10–12 week sprint schedules",
