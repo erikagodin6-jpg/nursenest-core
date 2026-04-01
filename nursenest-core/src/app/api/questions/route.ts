@@ -35,7 +35,7 @@ import {
   pathwayExamKeysSql,
   topicEqualsSql,
 } from "@/lib/questions/exam-question-access-sql";
-import { getWeakTopicNamesForPractice } from "@/lib/learner/topic-performance";
+import { getWeakTopicTargetsForPractice } from "@/lib/learner/topic-performance";
 
 /** Deep offset pagination is expensive on large tables; reject before issuing heavy skip scans. */
 const MAX_QUESTION_LIST_SKIP_ROWS = MAX_LIST_SKIP_ROWS_DEFAULT;
@@ -239,10 +239,21 @@ export async function GET(req: NextRequest) {
 
       let topicFilterResolved = topicFilter;
       let studyModeNote: string | null = null;
+      let weakTopicCodeApplied: string | null = null;
+      let weakTopicConfidence: "high" | "medium" | "low" | null = null;
       if (studyMode === "weak" && !topicFilterResolved) {
-        const w = await getWeakTopicNamesForPractice(gate.userId, gate.entitlement, 1);
-        if (w[0]) topicFilterResolved = w[0];
-        else studyModeNote = "weak_topic_unavailable";
+        const targets = await getWeakTopicTargetsForPractice(gate.userId, gate.entitlement, 4);
+        const preferred = targets.find((t) => t.confidence !== "low") ?? targets[0];
+        if (preferred?.topicCode) {
+          topicFilterResolved = preferred.topicCode;
+          weakTopicCodeApplied = preferred.topicCode;
+          weakTopicConfidence = preferred.confidence;
+          if (preferred.confidence === "low") {
+            studyModeNote = "weak_topic_low_confidence";
+          }
+        } else {
+          studyModeNote = "weak_topic_unavailable";
+        }
       }
 
       const studyModeFilters: Prisma.ExamQuestionWhereInput[] = [];
@@ -385,6 +396,8 @@ export async function GET(req: NextRequest) {
         pageSize: effectivePageSize,
         studyMode: studyMode ?? null,
         studyModeNote,
+        weakTopicCodeApplied,
+        weakTopicConfidence,
         questions: payload,
         mode: "subscriber" as const,
         fields: responseMode,

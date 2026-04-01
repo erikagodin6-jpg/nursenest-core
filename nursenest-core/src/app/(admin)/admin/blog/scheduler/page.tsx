@@ -30,6 +30,12 @@ export default async function AdminBlogSchedulerPage() {
         tags: true,
         seoTitle: true,
         seoDescription: true,
+        workflowStatus: true,
+        requiresReferences: true,
+        apaReferences: true,
+        coverImage: true,
+        coverImageAlt: true,
+        imageStatus: true,
         postStatus: true,
         publishAt: true,
         updatedAt: true,
@@ -38,6 +44,8 @@ export default async function AdminBlogSchedulerPage() {
   ]);
 
   const missingBlogSeoCount = blogRows.filter((p) => !p.seoTitle?.trim() || !p.seoDescription?.trim() || !p.excerpt.trim()).length;
+  const missingReferencesCount = blogRows.filter((p) => p.requiresReferences && p.apaReferences.length === 0).length;
+  const missingImageAltCount = blogRows.filter((p) => p.coverImage && !p.coverImageAlt?.trim()).length;
 
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -69,6 +77,8 @@ export default async function AdminBlogSchedulerPage() {
           }}
           nextScheduledAt={nextScheduledBlog?.publishAt ? nextScheduledBlog.publishAt.toISOString() : null}
           missingSeoCount={missingBlogSeoCount}
+          missingReferencesCount={missingReferencesCount}
+          missingImageAltCount={missingImageAltCount}
         />
       </div>
     </main>

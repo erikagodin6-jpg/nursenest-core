@@ -5,6 +5,7 @@ import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { computeTopicMomentum, topicTrendSummary, type TopicMomentum } from "@/lib/learner/topic-momentum";
 import { formatTopicLabelForDisplay, normalizeTopicKey } from "@/lib/learner/topic-normalize";
+import { confidenceFromSignal, type RecommendationConfidence } from "@/lib/learner/topic-linking";
 import { examQuestionDbTopicsMatchingCanonicals } from "@/lib/learner/weak-topic-db-match";
 import {
   classifyTopicStrength,
@@ -71,6 +72,7 @@ function statRowToWeakTopicRow(
     wrongStreak: s.wrongStreak,
     weakPriorityScore,
     sourceConfidence: ledgerSourceConfidence(statLike),
+    recommendationConfidence: confidenceFromSignal(ledgerSourceConfidence(statLike)),
     decayAdjustedWrongSignal: signals.decayAdjustedWrongSignal,
     decayAdjustedCorrectSignal: signals.decayAdjustedCorrectSignal,
     topicSource: "ledger",
@@ -129,6 +131,7 @@ function mergeLedgerAndFallbackWeak(args: {
           weakPriorityScore: mergedScore,
           topicSource: "mixed",
           sourceConfidence: Math.min(1, wL + 0.12),
+          recommendationConfidence: confidenceFromSignal(Math.min(1, wL + 0.12)),
         });
       } else {
         const cap = 0.62;
@@ -141,6 +144,7 @@ function mergeLedgerAndFallbackWeak(args: {
           strength: "weak",
           weakPriorityScore: Math.min(cap, fp),
           sourceConfidence: 0.35,
+          recommendationConfidence: "low",
           topicSource: "session_fallback",
           evidenceCount: f.evidenceCount ?? f.attempted,
           decayAdjustedWrongSignal: fp * 0.85,
@@ -356,6 +360,11 @@ export type WeakTopicPracticePlan = {
   priorityByCanonical: Map<string, number>;
 };
 
+export type WeakTopicTarget = {
+  topicCode: string;
+  confidence: RecommendationConfidence;
+};
+
 /**
  * Resolves DB topic strings and priority map for weak-mode pools and CAT boosts.
  */
@@ -395,4 +404,21 @@ export async function getWeakTopicNamesForPractice(
 ): Promise<string[]> {
   const plan = await loadWeakTopicPracticePlan(userId, entitlement, max);
   return plan.dbTopicNames.slice(0, max);
+}
+
+export async function getWeakTopicTargetsForPractice(
+  userId: string,
+  entitlement: AccessScope,
+  max = 8,
+): Promise<WeakTopicTarget[]> {
+  const snap = await loadUnifiedTopicPerformance(userId, entitlement, max);
+  return snap.weakTopics
+    .map((w) => {
+      const topicCode = (w.normalizedTopic ?? normalizeTopicKey(w.topic)).trim();
+      if (topicCode.length < 2) return null;
+      const confidence = w.recommendationConfidence ?? confidenceFromSignal(w.sourceConfidence);
+      return { topicCode, confidence };
+    })
+    .filter((x): x is WeakTopicTarget => x !== null)
+    .slice(0, max);
 }

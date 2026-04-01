@@ -32,6 +32,8 @@ export type WeakTopicRow = {
   topicSource?: "ledger" | "session_fallback" | "mixed";
   /** Total scored attempts backing this row (ledger or session aggregate). */
   evidenceCount?: number;
+  /** Recommendation confidence for topic-level remediation links. */
+  recommendationConfidence?: "high" | "medium" | "low";
 };
 
 export function normalizeTopicLabel(topic: string | null | undefined): string {

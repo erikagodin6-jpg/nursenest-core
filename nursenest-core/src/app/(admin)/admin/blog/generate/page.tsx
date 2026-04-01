@@ -27,6 +27,13 @@ export default async function AdminBlogGeneratePage() {
       </div>
 
       <div className="mt-8 space-y-8">
+        <div className="rounded-xl border border-border/70 bg-muted/20 p-4 text-sm">
+          Need quantity + cadence planning? Use{" "}
+          <Link href="/admin/blog/campaigns" className="font-semibold text-primary underline">
+            SEO campaigns
+          </Link>{" "}
+          for queue-based generation and posts-per-week scheduling.
+        </div>
         <AdminBlogGenerateClient />
         <AdminBlogBatchClient />
       </div>

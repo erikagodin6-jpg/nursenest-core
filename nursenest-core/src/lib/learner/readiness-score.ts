@@ -32,6 +32,8 @@ export type ReadinessResult = {
   nextActions: string[];
   /** Lowest-scoring factors (plain labels)—what is limiting readiness most. */
   holdingBack: string[];
+  /** True when this score is intentionally conservative due to cohort/signal limits. */
+  calibratedPreview?: boolean;
 };
 
 /** Minimum graded items from sessions to treat practice accuracy as a signal. */
@@ -43,10 +45,34 @@ const MIN_MOCK_ATTEMPTS = 1;
 /** Minimum questions in a single mock to count that attempt toward “recent performance”. */
 const MIN_QUESTIONS_PER_MOCK = 5;
 
+type ReadinessSignalProfile = {
+  minPracticeItems: number;
+  minMockAttempts: number;
+  confidencePracticeHigh: number;
+};
+
+function resolveSignalProfile(scope?: { tier?: string; country?: string }): ReadinessSignalProfile {
+  const tier = (scope?.tier ?? "").toUpperCase();
+  const country = (scope?.country ?? "").toUpperCase();
+  // NP and Allied-CA currently have thinner/less uniform pools; stay intentionally conservative.
+  if (tier === "NP" || (tier === "ALLIED" && country === "CA")) {
+    return {
+      minPracticeItems: 25,
+      minMockAttempts: 2,
+      confidencePracticeHigh: 80,
+    };
+  }
+  return {
+    minPracticeItems: MIN_PRACTICE_ITEMS,
+    minMockAttempts: MIN_MOCK_ATTEMPTS,
+    confidencePracticeHigh: 60,
+  };
+}
+
 /** We only emit a numeric score if at least one strong signal exists. */
-function hasMinimumSignal(practiceTotal: number, mocks: ReadinessMockInput[]): boolean {
+function hasMinimumSignal(practiceTotal: number, mocks: ReadinessMockInput[], profile: ReadinessSignalProfile): boolean {
   const mockUsable = mocks.filter((m) => m.total >= MIN_QUESTIONS_PER_MOCK);
-  return practiceTotal >= MIN_PRACTICE_ITEMS || mockUsable.length >= MIN_MOCK_ATTEMPTS;
+  return practiceTotal >= profile.minPracticeItems || mockUsable.length >= profile.minMockAttempts;
 }
 
 function clamp01(n: number): number {
@@ -61,9 +87,9 @@ function bandFromScore(score: number): Exclude<ReadinessBand, "insufficient_data
   return "ready";
 }
 
-function confidenceLevel(practiceTotal: number, mockCount: number): ReadinessConfidence {
-  if (practiceTotal >= 60 && mockCount >= 2) return "high";
-  if (practiceTotal >= MIN_PRACTICE_ITEMS || mockCount >= 2) return "medium";
+function confidenceLevel(practiceTotal: number, mockCount: number, profile: ReadinessSignalProfile): ReadinessConfidence {
+  if (practiceTotal >= profile.confidencePracticeHigh && mockCount >= 2) return "high";
+  if (practiceTotal >= profile.minPracticeItems || mockCount >= 2) return "medium";
   return "low";
 }
 
@@ -95,6 +121,8 @@ export function computeReadiness(args: {
   weakTopics: WeakTopicRow[];
   lessonsCompleted: number;
   lessonsAvailable: number;
+  /** Optional scope for conservative calibration in thinner cohorts. */
+  scope?: { tier?: string; country?: string };
 }): ReadinessResult {
   const {
     practiceCorrect,
@@ -103,7 +131,10 @@ export function computeReadiness(args: {
     weakTopics: weakTopicsRaw,
     lessonsCompleted,
     lessonsAvailable,
+    scope,
   } = args;
+  const signalProfile = resolveSignalProfile(scope);
+  const calibratedPreview = signalProfile.minPracticeItems > MIN_PRACTICE_ITEMS;
 
   const weakTopics = [...weakTopicsRaw].sort(
     (a, b) =>
@@ -114,13 +145,15 @@ export function computeReadiness(args: {
 
   const usableMocks = recentMocks.filter((m) => m.total >= MIN_QUESTIONS_PER_MOCK).slice(0, 3);
 
-  if (!hasMinimumSignal(practiceTotal, recentMocks)) {
+  if (!hasMinimumSignal(practiceTotal, recentMocks, signalProfile)) {
     return {
       score: null,
       band: "insufficient_data",
       confidence: "low",
       summary:
-        "We need more scored practice (about 15+ graded items in timed sessions) or at least one mock with 5+ questions before a readiness number is meaningful.",
+        calibratedPreview
+          ? `Readiness is withheld until stronger evidence: complete about ${signalProfile.minPracticeItems}+ graded items in timed sessions or at least ${signalProfile.minMockAttempts} mock(s) with 5+ questions each.`
+          : "We need more scored practice (about 15+ graded items in timed sessions) or at least one mock with 5+ questions before a readiness number is meaningful.",
       factors: [],
       whatToImprove: [
         "Complete a timed practice or mock exam so we can measure accuracy and topics.",
@@ -131,6 +164,7 @@ export function computeReadiness(args: {
         "Open Lessons and complete at least one module in your tier.",
       ],
       holdingBack: [],
+      calibratedPreview,
     };
   }
 
@@ -139,7 +173,7 @@ export function computeReadiness(args: {
   /** Practice accuracy factor (0–35) */
   let practicePoints = 0;
   let practiceMax = 0;
-  if (practiceTotal >= MIN_PRACTICE_ITEMS) {
+  if (practiceTotal >= signalProfile.minPracticeItems) {
     practiceMax = 35;
     const acc = practiceTotal > 0 ? practiceCorrect / practiceTotal : 0;
     practicePoints = Math.round(35 * clamp01(acc));
@@ -156,14 +190,14 @@ export function computeReadiness(args: {
       label: "Practice accuracy",
       points: 0,
       maxPoints: 0,
-      detail: `Only ${practiceTotal} graded items — need at least ${MIN_PRACTICE_ITEMS} before this signal is included in the denominator.`,
+      detail: `Only ${practiceTotal} graded items — need at least ${signalProfile.minPracticeItems} before this signal is included in the denominator.`,
     });
   }
 
   /** Mock performance (0–30) */
   let mockPoints = 0;
   let mockMax = 0;
-  if (usableMocks.length >= MIN_MOCK_ATTEMPTS) {
+  if (usableMocks.length >= signalProfile.minMockAttempts) {
     mockMax = 30;
     const avgPct =
       usableMocks.reduce((s, m) => s + (m.total > 0 ? (m.score / m.total) * 100 : 0), 0) / usableMocks.length;
@@ -251,17 +285,20 @@ export function computeReadiness(args: {
     band = "near_ready";
   }
 
-  let confidence = confidenceLevel(practiceTotal, usableMocks.length);
+  let confidence = confidenceLevel(practiceTotal, usableMocks.length, signalProfile);
   if (spread != null && spread > 18 && confidence === "high") {
     confidence = "medium";
   }
 
-  const summary =
+  let summary =
     confidence === "high"
       ? "Readiness blends recent session accuracy, mock scores, topic misses, and lesson completion. It is indicative—not a pass guarantee."
       : confidence === "medium"
         ? "Readiness is preliminary: add more timed practice and mocks to tighten this estimate."
         : "Readiness is early: numbers will move as you complete more full sessions.";
+  if (calibratedPreview) {
+    summary += " For this exam track, thresholds are intentionally stricter to avoid overstating readiness.";
+  }
 
   const whatToImprove: string[] = [];
   if (practiceTotal >= MIN_PRACTICE_ITEMS && practiceCorrect / practiceTotal < 0.65) {
@@ -308,6 +345,7 @@ export function computeReadiness(args: {
     whatToImprove: whatToImprove.slice(0, 5),
     nextActions: nextActions.slice(0, 4),
     holdingBack: holdingBack.slice(0, 3),
+    calibratedPreview,
   };
 }
 

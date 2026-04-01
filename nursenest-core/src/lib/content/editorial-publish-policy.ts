@@ -20,6 +20,8 @@ export type ExamQuestionGovernanceResult = {
   qualityTier: ContentQualityTier;
   /** True when rationale is below the premium bar — PATCH must send acknowledgeBelowQualityBar. */
   requiresQualityOverride: boolean;
+  /** True when severe content incompleteness requires explicit override intent. */
+  requiresSevereOverride: boolean;
 };
 
 function rationalePartsForCount(rationale: string, extra: Array<string | null | undefined>): number {
@@ -41,7 +43,7 @@ export function governExamQuestionPublish(
     options: unknown;
     answerKey: unknown;
   },
-  opts: { acknowledgeBelowQualityBar?: boolean },
+  opts: { acknowledgeBelowQualityBar?: boolean; acknowledgeSevereQualityIssue?: boolean },
 ): ExamQuestionGovernanceResult {
   const reasons: string[] = [];
   const warnings: string[] = [];
@@ -58,7 +60,13 @@ export function governExamQuestionPublish(
   const classified = classifyRationaleWordCount(wc);
 
   if (classified.tier === "missing") {
-    reasons.push("Rationale missing or empty — add teaching text before publish.");
+    if (!opts.acknowledgeSevereQualityIssue) {
+      reasons.push(
+        "Rationale missing or empty — add teaching text before publish, or explicitly confirm severe-quality override.",
+      );
+    } else {
+      warnings.push("Published with severe rationale gap (missing rationale). Prioritize remediation immediately.");
+    }
   }
 
   if (reasons.length > 0) {
@@ -69,6 +77,7 @@ export function governExamQuestionPublish(
       rationaleWordCount: wc,
       qualityTier: classified.tier,
       requiresQualityOverride: false,
+      requiresSevereOverride: classified.tier === "missing" && !opts.acknowledgeSevereQualityIssue,
     };
   }
 
@@ -83,6 +92,7 @@ export function governExamQuestionPublish(
         rationaleWordCount: wc,
         qualityTier: classified.tier,
         requiresQualityOverride: true,
+        requiresSevereOverride: false,
       };
     }
     warnings.push(
@@ -99,6 +109,7 @@ export function governExamQuestionPublish(
     rationaleWordCount: wc,
     qualityTier: classified.tier,
     requiresQualityOverride: false,
+    requiresSevereOverride: false,
   };
 }
 

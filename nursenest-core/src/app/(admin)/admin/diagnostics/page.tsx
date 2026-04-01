@@ -2,6 +2,7 @@ import Link from "next/link";
 import { requireAdmin } from "@/lib/auth/guards";
 import { loadAdminDiagnostics } from "@/lib/admin/load-admin-diagnostics";
 import { loadExamPlanAdoptionStats } from "@/lib/admin/load-exam-plan-adoption";
+import { loadQuestionBankRemediationIntelligence } from "@/lib/questions/load-question-bank-remediation-intelligence";
 
 export const dynamic = "force-dynamic";
 
@@ -19,7 +20,11 @@ function StatusPill({ ok, label }: { ok: boolean; label: string }) {
 
 export default async function AdminDiagnosticsPage() {
   await requireAdmin();
-  const [d, examPlan] = await Promise.all([loadAdminDiagnostics(), loadExamPlanAdoptionStats()]);
+  const [d, examPlan, qbIntel] = await Promise.all([
+    loadAdminDiagnostics(),
+    loadExamPlanAdoptionStats(),
+    loadQuestionBankRemediationIntelligence(),
+  ]);
 
   return (
     <main className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6">
@@ -244,6 +249,64 @@ export default async function AdminDiagnosticsPage() {
               <p className="mt-1 text-sm font-semibold tabular-nums">
                 {examPlan.cadenceLight} · {examPlan.cadenceSteady} · {examPlan.cadenceIntensive} · {examPlan.cadenceUnset}
               </p>
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      {qbIntel ? (
+        <section className="mt-8 nn-card p-6">
+          <h2 className="text-lg font-semibold">Question-bank remediation intelligence</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Actionable banking signals: strongest/weakest pools, below-floor pathways, uncategorized risk, and Allied CA classification checks.
+          </p>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="rounded-lg border border-border/60 bg-muted/20 px-3 py-2">
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">NP published</p>
+              <p className="mt-1 text-xl font-bold tabular-nums">{qbIntel.np.published}</p>
+              <p className="text-xs text-muted-foreground">Uncategorized {qbIntel.np.uncategorizedPct}%</p>
+            </div>
+            <div className="rounded-lg border border-border/60 bg-muted/20 px-3 py-2">
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Allied CA rows</p>
+              <p className="mt-1 text-xl font-bold tabular-nums">{qbIntel.alliedCanada.publishedCA}</p>
+              <p className="text-xs text-muted-foreground">US/null {qbIntel.alliedCanada.publishedUSOrNull}</p>
+            </div>
+            <div className="rounded-lg border border-border/60 bg-muted/20 px-3 py-2">
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Allied assessment</p>
+              <p className="mt-1 text-sm font-semibold">{qbIntel.alliedCanada.assessment.replaceAll("_", " ")}</p>
+              <p className="text-xs text-muted-foreground">
+                shared rows {qbIntel.alliedCanada.sharedRegionRows}
+              </p>
+            </div>
+            <div className="rounded-lg border border-border/60 bg-muted/20 px-3 py-2">
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Below-floor banks</p>
+              <p className="mt-1 text-xl font-bold tabular-nums">{qbIntel.belowFloorBanks.length}</p>
+              <p className="text-xs text-muted-foreground">threshold misses</p>
+            </div>
+          </div>
+
+          <div className="mt-5 grid gap-4 lg:grid-cols-2">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Strongest banks</p>
+              <ul className="mt-2 space-y-1 text-sm">
+                {qbIntel.strongestBanks.map((r) => (
+                  <li key={r.label} className="flex justify-between rounded bg-muted/40 px-2 py-1">
+                    <span className="truncate pr-2">{r.label}</span>
+                    <span className="tabular-nums">{r.published}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Weakest banks</p>
+              <ul className="mt-2 space-y-1 text-sm">
+                {qbIntel.weakestBanks.map((r) => (
+                  <li key={r.label} className="flex justify-between rounded bg-amber-50 px-2 py-1 dark:bg-amber-950/30">
+                    <span className="truncate pr-2">{r.label}</span>
+                    <span className="tabular-nums">{r.missingPct}% miss · {r.thinPct}% thin</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </section>

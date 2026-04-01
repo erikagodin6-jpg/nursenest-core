@@ -30,6 +30,7 @@ const patchSchema = z
     systemTag: z.string().nullable().optional(),
     tags: z.array(z.string()).optional(),
     acknowledgeBelowQualityBar: z.boolean().optional(),
+    acknowledgeSevereQualityIssue: z.boolean().optional(),
   })
   .strict();
 
@@ -79,7 +80,10 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
         options: merged.options,
         answerKey: merged.answerKey,
       },
-      { acknowledgeBelowQualityBar: d.acknowledgeBelowQualityBar === true },
+      {
+        acknowledgeBelowQualityBar: d.acknowledgeBelowQualityBar === true,
+        acknowledgeSevereQualityIssue: d.acknowledgeSevereQualityIssue === true,
+      },
     );
     if (!publishGov.ok) {
       return NextResponse.json(

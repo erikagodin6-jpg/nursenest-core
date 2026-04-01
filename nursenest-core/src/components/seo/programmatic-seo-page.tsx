@@ -13,8 +13,10 @@ import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { ProgrammaticPracticeConversionBlocks } from "@/components/seo/programmatic-practice-conversion-blocks";
 import { ProgrammaticPracticeHeroActions } from "@/components/seo/programmatic-practice-hero-actions";
+import { ProgrammaticPracticeDynamicHeader } from "@/components/seo/programmatic-practice-dynamic-header";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { resolveProgrammaticProductLinks } from "@/lib/seo/programmatic-page-links";
+import { isUnifiedPracticeSlug } from "@/lib/seo/programmatic-practice-hub";
 
 export function ProgrammaticSeoPage({ page, locale }: { page: SeoPageDefinition; locale: string }) {
   const related = getRelatedProgrammaticPages(page.slug, 6);
@@ -37,8 +39,19 @@ export function ProgrammaticSeoPage({ page, locale }: { page: SeoPageDefinition;
 
         <header className="mb-10 border-b border-[var(--theme-card-border)] pb-8">
           <p className="text-sm font-medium text-primary">NurseNest exam prep</p>
-          <h1 className="mt-2 text-3xl font-bold tracking-tight text-[var(--theme-body-text)] sm:text-4xl">{page.h1}</h1>
-          <p className="mt-4 text-lg leading-relaxed text-[var(--theme-body-text)]/90">{introLead}</p>
+          {page.practiceConversion && isUnifiedPracticeSlug(page.slug) ? (
+            <ProgrammaticPracticeDynamicHeader
+              slug={page.slug}
+              locale={locale}
+              fallbackTitle={page.h1}
+              fallbackLead={introLead}
+            />
+          ) : (
+            <>
+              <h1 className="mt-2 text-3xl font-bold tracking-tight text-[var(--theme-body-text)] sm:text-4xl">{page.h1}</h1>
+              <p className="mt-4 text-lg leading-relaxed text-[var(--theme-body-text)]/90">{introLead}</p>
+            </>
+          )}
           <p className="mt-3 text-sm font-medium text-[var(--theme-body-text)]/85">
             Turn reading into reps: pathway-scoped questions, lessons, and timed exams—so you study what your authorization
             actually covers.

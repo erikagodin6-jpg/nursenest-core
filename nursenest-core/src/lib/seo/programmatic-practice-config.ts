@@ -203,8 +203,10 @@ const NP_CFG: ProgrammaticPracticeConversionConfig = {
 
 const BY_SLUG: Record<string, ProgrammaticPracticeConversionConfig> = {
   "nclex-rn-practice-questions": NCLEX,
+  "nclex-pn-practice-questions": PN,
   "rex-pn-practice-questions": PN,
   "np-exam-practice-questions": NP_CFG,
+  "cnple-practice-questions": NP_CFG,
 };
 
 export function getProgrammaticPracticeConversionConfig(slug: string): ProgrammaticPracticeConversionConfig | null {

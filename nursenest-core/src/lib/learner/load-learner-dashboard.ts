@@ -230,6 +230,7 @@ export async function loadLearnerDashboard(
     weakTopics,
     lessonsCompleted,
     lessonsAvailable,
+    scope: { tier, country },
   });
 
   return {

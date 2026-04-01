@@ -95,10 +95,21 @@ export default async function BlogPostPage({ params }: Props) {
         ) : null}
         <h1 className="text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)]">{post.title}</h1>
         <p className="text-sm text-[var(--theme-muted-text)]">{publishedAt.toISOString().slice(0, 10)}</p>
+        {"workflowStatus" in post && post.workflowStatus ? (
+          <p className="text-xs text-muted-foreground">Editorial status: {post.workflowStatus.replace(/_/g, " ").toLowerCase()}</p>
+        ) : null}
+        {"lastReviewedAt" in post && post.lastReviewedAt ? (
+          <p className="text-xs text-muted-foreground">Last reviewed: {new Date(post.lastReviewedAt).toISOString().slice(0, 10)}</p>
+        ) : null}
       </header>
       {post.coverImage ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={post.coverImage} alt="" className="mt-8 w-full rounded-xl border border-[var(--theme-card-border)] object-cover" />
+        <figure className="mt-8">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={post.coverImage} alt={"coverImageAlt" in post ? (post.coverImageAlt ?? "") : ""} className="w-full rounded-xl border border-[var(--theme-card-border)] object-cover" />
+          {"coverImageCaption" in post && post.coverImageCaption ? (
+            <figcaption className="mt-2 text-xs text-muted-foreground">{post.coverImageCaption}</figcaption>
+          ) : null}
+        </figure>
       ) : null}
       <div
         className="prose prose-neutral mt-8 max-w-none dark:prose-invert [&_a]:text-primary [&_h2]:text-[var(--theme-heading-text)] [&_h3]:text-[var(--theme-heading-text)]"
@@ -112,6 +123,19 @@ export default async function BlogPostPage({ params }: Props) {
           relatedTools={post.relatedTools}
         />
       ) : null}
+      {"apaReferences" in post && Array.isArray(post.apaReferences) && post.apaReferences.length > 0 ? (
+        <section className="mt-10 rounded-xl border border-border/60 bg-muted/20 p-5">
+          <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">References (APA 7)</h2>
+          <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm text-muted-foreground">
+            {post.apaReferences.map((ref: string, idx: number) => (
+              <li key={`${idx}-${ref.slice(0, 24)}`}>{ref}</li>
+            ))}
+          </ol>
+        </section>
+      ) : null}
+      <section className="mt-6 rounded-xl border border-border/60 bg-muted/10 p-4 text-xs text-muted-foreground">
+        Educational use only. Content supports exam preparation and is not a substitute for professional clinical judgment or local protocols.
+      </section>
       {post.tags.length > 0 ? (
         <footer className="mt-10 flex flex-wrap gap-2 border-t border-[var(--theme-separator)] pt-6">
           {post.tags.map((t) => (

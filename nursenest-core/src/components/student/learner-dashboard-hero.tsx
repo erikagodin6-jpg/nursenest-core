@@ -147,6 +147,9 @@ export function LearnerDashboardHero({
             ) : null}
           </div>
           <p className="mt-1 text-sm font-medium text-foreground">{readinessBandLabel(readiness.band)}</p>
+          {readiness.calibratedPreview ? (
+            <p className="mt-1 text-[11px] font-medium text-amber-700 dark:text-amber-300">Conservative calibration active</p>
+          ) : null}
           <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
             Confidence: <span className="font-medium text-foreground">{readiness.confidence}</span>
           </p>

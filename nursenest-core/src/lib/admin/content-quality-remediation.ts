@@ -22,6 +22,8 @@ export type ThinContentLessonRow = {
 export type RemediationReport = {
   generatedAt: string;
   thinQuestionsByExam: Array<{ exam: string; thinOrMissing: number; total: number }>;
+  weakStemByExam: Array<{ exam: string; weakStem: number; total: number }>;
+  weakByTopic: Array<{ exam: string; topic: string; weakCount: number }>;
   thinQuestionsSample: ThinQuestionRow[];
   newestPoorQuestions: NewestLowQualityQuestionRow[];
   thinContentLessonsSample: ThinContentLessonRow[];
@@ -68,6 +70,37 @@ export async function loadRemediationReport(): Promise<RemediationReport | null>
       WHERE wc > 0 AND wc < 120
       ORDER BY wc ASC, updated_at DESC
       LIMIT 25
+    `;
+
+    const weakStemByExam = await prisma.$queryRaw<{ exam: string; weak_stem: bigint; total: bigint }[]>`
+      SELECT exam,
+        COUNT(*) FILTER (WHERE stem IS NULL OR LENGTH(TRIM(stem)) < 24)::bigint AS weak_stem,
+        COUNT(*)::bigint AS total
+      FROM exam_questions
+      WHERE status = 'published'
+      GROUP BY exam
+      ORDER BY weak_stem DESC, total DESC
+      LIMIT 20
+    `;
+
+    const weakByTopic = await prisma.$queryRaw<{ exam: string; topic: string | null; weak_count: bigint }[]>`
+      WITH w AS (
+        SELECT
+          exam,
+          topic,
+          CASE
+            WHEN rationale IS NULL OR trim(rationale) = '' THEN 0
+            ELSE cardinality(regexp_split_to_array(trim(regexp_replace(rationale, '\\s+', ' ', 'g')), ' '))
+          END AS wc
+        FROM exam_questions
+        WHERE status = 'published'
+      )
+      SELECT exam, topic, COUNT(*)::bigint AS weak_count
+      FROM w
+      WHERE wc < 120
+      GROUP BY exam, topic
+      ORDER BY weak_count DESC
+      LIMIT 30
     `;
 
     const newestPoor = await prisma.$queryRaw<
@@ -131,6 +164,16 @@ export async function loadRemediationReport(): Promise<RemediationReport | null>
         exam: r.exam,
         thinOrMissing: Number(r.bad),
         total: Number(r.total),
+      })),
+      weakStemByExam: weakStemByExam.map((r) => ({
+        exam: r.exam,
+        weakStem: Number(r.weak_stem),
+        total: Number(r.total),
+      })),
+      weakByTopic: weakByTopic.map((r) => ({
+        exam: r.exam,
+        topic: r.topic ?? "Uncategorized",
+        weakCount: Number(r.weak_count),
       })),
       thinQuestionsSample,
       newestPoorQuestions,

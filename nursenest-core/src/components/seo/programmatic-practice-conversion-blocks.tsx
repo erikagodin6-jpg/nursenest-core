@@ -2,19 +2,9 @@
 
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
-import {
-  HUB,
-  NP,
-  PN,
-  RN,
-  loginWithCallback,
-  pnLessons,
-  rnLessons,
-  rnQuestions,
-} from "@/lib/marketing/marketing-entry-routes";
 import type { ProgrammaticPracticeConversionConfig } from "@/lib/seo/programmatic-practice-config";
+import { buildPracticeHubContext, buildPracticeTaxonomy } from "@/lib/seo/programmatic-practice-hub";
 
 type Props = {
   slug: string;
@@ -24,24 +14,8 @@ type Props = {
 
 export function ProgrammaticPracticeConversionBlocks({ slug, locale, config }: Props) {
   const { region } = useNursenestRegion();
-  const loc = (path: string) => withMarketingLocale(locale, path);
-
-  const questionsHref =
-    slug === "nclex-rn-practice-questions"
-      ? loc(rnQuestions(region))
-      : slug === "rex-pn-practice-questions"
-        ? loc(region === "US" ? PN.usQuestions : PN.caQuestions)
-        : loc(region === "US" ? NP.fnpQuestions : NP.caNpQuestions);
-
-  const lessonsHref =
-    slug === "nclex-rn-practice-questions"
-      ? loc(rnLessons(region))
-      : slug === "rex-pn-practice-questions"
-        ? loc(pnLessons(region))
-        : loc(NP.fnpLessons);
-
-  const examsHref = loc(loginWithCallback(RN.appExams));
-  const pricingHref = loc(HUB.pricing);
+  const hub = buildPracticeHubContext(slug, region, locale);
+  const taxonomy = buildPracticeTaxonomy(hub.examKey);
 
   return (
     <div className="space-y-14">
@@ -58,41 +32,72 @@ export function ProgrammaticPracticeConversionBlocks({ slug, locale, config }: P
 
       <section aria-labelledby="categories-heading">
         <h2 id="categories-heading" className="text-xl font-bold text-[var(--theme-heading-text)]">
-          Study by client need category
+          {hub.categoryHeading}
         </h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          Jump to a section. Counts are approximate pool sizes for planning; live availability follows your pathway and tier.
+          Structured the same way for RN, PN, and NP: category first, then system/topic groups with scoped actions.
         </p>
         <nav className="mt-5 grid gap-3 sm:grid-cols-2" aria-label="Category shortcuts">
-          {config.categories.map((c) => (
+          {taxonomy.map((c) => (
             <a
               key={c.id}
               href={`#cat-${c.id}`}
               className="flex flex-col rounded-xl border border-[var(--theme-card-border)] bg-card p-4 transition hover:border-primary/40"
             >
-              <span className="font-semibold text-[var(--theme-heading-text)]">{c.label}</span>
-              <span className="mt-1 text-xs text-muted-foreground">{c.note}</span>
-              <span className="mt-2 text-sm font-medium text-primary">~{c.approximateCount.toLocaleString()} items</span>
+              <span className="font-semibold text-[var(--theme-heading-text)]">{c.name}</span>
+              <span className="mt-1 text-xs text-muted-foreground">{hub.systemHeading}</span>
+              <span className="mt-2 text-sm font-medium text-primary">{c.systems.length} mapped system/topic groups</span>
             </a>
           ))}
         </nav>
 
         <div className="mt-8 space-y-6">
-          {config.categories.map((c) => (
+          {taxonomy.map((c) => (
             <div key={c.id} id={`cat-${c.id}`} className="scroll-mt-24 rounded-xl border border-[var(--theme-card-border)] bg-card p-4 sm:p-5">
-              <h3 className="text-lg font-semibold text-[var(--theme-heading-text)]">{c.label}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">{c.note}</p>
-              <p className="mt-2 text-sm text-[var(--theme-body-text)]">
-                Drill here when your report flags this client need. Pair a short block with{" "}
-                <Link href={lessonsHref} className="font-semibold text-primary underline-offset-4 hover:underline">
-                  pathway lessons
-                </Link>
-                , then return to questions the same week.
+              <h3 className="text-lg font-semibold text-[var(--theme-heading-text)]">{c.name}</h3>
+              <p className="mt-1 text-sm text-muted-foreground">
+                {hub.examLabel} · {region === "US" ? "US terminology" : "Canada terminology"}
               </p>
-              <Link
-                href={questionsHref}
-                className="mt-3 inline-flex items-center text-sm font-semibold text-primary hover:underline"
-              >
+              <p className="mt-2 text-sm text-[var(--theme-body-text)]">
+                Drill one system here, review lessons, then apply under timed pressure in the same week.
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {c.systems.map((system) => (
+                  <span
+                    key={`${c.id}-${system}`}
+                    className="rounded-full border border-border/70 bg-muted/20 px-2.5 py-1 text-xs text-[var(--theme-body-text)]"
+                  >
+                    {system}
+                  </span>
+                ))}
+              </div>
+              <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+                <Link
+                  href={`${hub.ctas.questions}?topic=${encodeURIComponent(c.systems[0] ?? c.name)}`}
+                  className="rounded-lg border border-primary/30 bg-primary/10 px-3 py-2 text-xs font-semibold text-primary hover:bg-primary/15"
+                >
+                  Practice Questions
+                </Link>
+                <Link
+                  href={hub.ctas.lessons}
+                  className="rounded-lg border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] px-3 py-2 text-xs font-semibold text-[var(--theme-body-text)] hover:border-primary/40"
+                >
+                  Lessons
+                </Link>
+                <Link
+                  href={`${hub.ctas.testBank}?topic=${encodeURIComponent(c.systems[0] ?? c.name)}`}
+                  className="rounded-lg border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] px-3 py-2 text-xs font-semibold text-[var(--theme-body-text)] hover:border-primary/40"
+                >
+                  Test Bank
+                </Link>
+                <Link
+                  href={hub.ctas.exams}
+                  className="rounded-lg border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] px-3 py-2 text-xs font-semibold text-[var(--theme-body-text)] hover:border-primary/40"
+                >
+                  Exams (CAT / practice)
+                </Link>
+              </div>
+              <Link href={hub.ctas.questions} className="mt-3 inline-flex items-center text-sm font-semibold text-primary hover:underline">
                 Start practice questions
                 <ArrowRight className="ml-1 h-4 w-4" />
               </Link>
@@ -204,25 +209,37 @@ export function ProgrammaticPracticeConversionBlocks({ slug, locale, config }: P
         </p>
         <ul className="mt-4 flex flex-col gap-2 text-sm font-semibold text-primary sm:flex-row sm:flex-wrap">
           <li>
-            <Link href={lessonsHref} className="underline-offset-4 hover:underline">
+            <Link href={hub.ctas.lessons} className="underline-offset-4 hover:underline">
               Lessons for this pathway
             </Link>
           </li>
           <li>
-            <Link href={questionsHref} className="underline-offset-4 hover:underline">
+            <Link href={hub.ctas.questions} className="underline-offset-4 hover:underline">
               Try 5 questions now
             </Link>
           </li>
           <li>
-            <Link href={examsHref} className="underline-offset-4 hover:underline">
+            <Link href={hub.ctas.testBank} className="underline-offset-4 hover:underline">
+              Test bank
+            </Link>
+          </li>
+          <li>
+            <Link href={hub.ctas.exams} className="underline-offset-4 hover:underline">
               Practice exams (sign in)
             </Link>
           </li>
           <li>
-            <Link href={pricingHref} className="underline-offset-4 hover:underline">
+            <Link href={hub.ctas.pricing} className="underline-offset-4 hover:underline">
               Plans and pricing
             </Link>
           </li>
+          {hub.ctas.studyPlan ? (
+            <li>
+              <Link href={hub.ctas.studyPlan} className="underline-offset-4 hover:underline">
+                Build study plan
+              </Link>
+            </li>
+          ) : null}
         </ul>
       </section>
     </div>

@@ -13,6 +13,12 @@ type BlogRow = {
   tags: string[];
   seoTitle: string | null;
   seoDescription: string | null;
+  workflowStatus?: string;
+  requiresReferences?: boolean;
+  apaReferences?: string[];
+  coverImage?: string | null;
+  coverImageAlt?: string | null;
+  imageStatus?: string;
   postStatus: "DRAFT" | "SCHEDULED" | "PUBLISHED";
   publishAt: string | null;
   updatedAt: string;
@@ -29,11 +35,15 @@ export function AdminBlogSchedulerPanel({
   counts,
   nextScheduledAt,
   missingSeoCount,
+  missingReferencesCount,
+  missingImageAltCount,
 }: {
   initialPosts: BlogRow[];
   counts: { draft: number; scheduled: number; published: number };
   nextScheduledAt: string | null;
   missingSeoCount: number;
+  missingReferencesCount: number;
+  missingImageAltCount: number;
 }) {
   const router = useRouter();
   const [statusFilter, setStatusFilter] = useState<"ALL" | BlogRow["postStatus"]>("ALL");
@@ -100,11 +110,13 @@ export function AdminBlogSchedulerPanel({
           <h2 className="text-lg font-semibold">Blog scheduler</h2>
           <p className="mt-1 text-sm text-muted-foreground">Draft, schedule, publish, and monitor blog readiness.</p>
         </div>
-        <div className="grid grid-cols-2 gap-2 text-xs sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-2 text-xs sm:grid-cols-6">
           <div className="rounded-md bg-muted px-2 py-1">Draft: {counts.draft}</div>
           <div className="rounded-md bg-muted px-2 py-1">Scheduled: {counts.scheduled}</div>
           <div className="rounded-md bg-muted px-2 py-1">Published: {counts.published}</div>
           <div className="rounded-md bg-muted px-2 py-1">Missing SEO: {missingSeoCount}</div>
+          <div className="rounded-md bg-muted px-2 py-1">Missing refs: {missingReferencesCount}</div>
+          <div className="rounded-md bg-muted px-2 py-1">Missing alt: {missingImageAltCount}</div>
         </div>
       </div>
       <p className="mt-2 text-xs text-muted-foreground">
@@ -202,8 +214,15 @@ export function AdminBlogSchedulerPanel({
                   <p>{p.exam || "—"} / {p.category || "—"}</p>
                   <p className="mt-1 text-muted-foreground">{p.tags.join(", ") || "no tags"}</p>
                   <p className="mt-1 text-[10px] text-amber-700">
-                    {!p.seoTitle || !p.seoDescription ? "Missing SEO field(s)" : "SEO ready"}
+                    {!p.seoTitle || !p.seoDescription
+                      ? "Missing SEO field(s)"
+                      : p.requiresReferences && !(p.apaReferences?.length ?? 0)
+                        ? "Needs references"
+                        : p.coverImage && !p.coverImageAlt
+                          ? "Needs image alt"
+                          : "SEO ready"}
                   </p>
+                  {p.workflowStatus ? <p className="mt-1 text-[10px] text-muted-foreground">Workflow: {p.workflowStatus}</p> : null}
                 </td>
                 <td className="px-2 py-2">
                   <input

@@ -97,11 +97,22 @@ export async function GET(req: NextRequest) {
       altTextMissing: Boolean(p.coverImage) && !p.coverImageAlt?.trim(),
     }));
 
+  const keywordCounts = posts.reduce<Record<string, number>>((acc, p) => {
+    const k = p.targetKeyword?.trim().toLowerCase();
+    if (!k) return acc;
+    acc[k] = (acc[k] ?? 0) + 1;
+    return acc;
+  }, {});
+  const cannibalization = Object.entries(keywordCounts)
+    .filter(([, count]) => count > 1)
+    .map(([keyword, count]) => ({ keyword, count }));
+
   return NextResponse.json({
     posts,
     counts: { draft: draftCount, scheduled: scheduledCount, published: publishedCount },
     nextScheduled,
     warnings,
+    cannibalization,
   });
 }
 

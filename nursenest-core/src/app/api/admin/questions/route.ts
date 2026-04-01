@@ -36,6 +36,8 @@ const createSchema = z.object({
   generationBatchId: z.string().optional(),
   /** Required when rationale is below the premium word-count bar but you still need to publish. */
   acknowledgeBelowQualityBar: z.boolean().optional(),
+  /** Explicit opt-in for severe incompleteness (e.g., missing rationale). */
+  acknowledgeSevereQualityIssue: z.boolean().optional(),
 });
 
 export async function GET(req: NextRequest) {
@@ -101,7 +103,10 @@ export async function POST(req: Request) {
         options: data.options,
         answerKey: data.answerKey,
       },
-      { acknowledgeBelowQualityBar: data.acknowledgeBelowQualityBar === true },
+      {
+        acknowledgeBelowQualityBar: data.acknowledgeBelowQualityBar === true,
+        acknowledgeSevereQualityIssue: data.acknowledgeSevereQualityIssue === true,
+      },
     );
     if (!publishGov.ok) {
       return NextResponse.json(

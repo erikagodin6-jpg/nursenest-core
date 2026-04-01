@@ -179,13 +179,68 @@ export default async function AdminContentQualityPage() {
                     <span className="text-xs">{r.wordCount}w</span>
                   </div>
                   <p className="text-xs text-muted-foreground">{r.exam}</p>
+                  <div className="mt-1 flex flex-wrap gap-3">
+                    <a className="text-xs font-semibold text-primary underline" href={`/admin/questions?focus=${r.id}`}>
+                      Review queue
+                    </a>
+                    <a
+                      className="text-xs font-semibold text-primary underline"
+                      href={`/api/admin/questions/${r.id}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      JSON (admin)
+                    </a>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-5 lg:col-span-2">
+            <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Weak stems by exam (published)</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Calm writing-quality signal. Short stems can still pass structure checks but often underperform editorially.
+            </p>
+            <div className="mt-4 overflow-auto">
+              <table className="w-full min-w-[360px] text-left text-sm">
+                <thead className="border-b border-border text-muted-foreground">
+                  <tr>
+                    <th className="py-2">Exam</th>
+                    <th className="py-2 text-right">Weak stems</th>
+                    <th className="py-2 text-right">Total</th>
+                    <th className="py-2 text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {remediation.weakStemByExam.slice(0, 16).map((r) => (
+                    <tr key={r.exam} className="border-b border-border/40">
+                      <td className="py-2 font-mono text-xs">{r.exam}</td>
+                      <td className="py-2 text-right tabular-nums">{r.weakStem}</td>
+                      <td className="py-2 text-right tabular-nums">{r.total}</td>
+                      <td className="py-2 text-right">
+                        <a className="text-xs font-semibold text-primary underline" href={`/admin/questions?exam=${encodeURIComponent(r.exam)}`}>
+                          Open exam queue
+                        </a>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div className="rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-5 lg:col-span-2">
+            <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Top weak topic clusters</h2>
+            <p className="mt-1 text-sm text-muted-foreground">Grouped by exam + topic for targeted remediation batches.</p>
+            <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+              {remediation.weakByTopic.slice(0, 20).map((r) => (
+                <li key={`${r.exam}|${r.topic}`} className="rounded border border-border/50 px-3 py-2 text-sm">
+                  <p className="font-medium">{r.topic}</p>
+                  <p className="text-xs text-muted-foreground">{r.exam} · weak {r.weakCount}</p>
                   <a
-                    className="text-xs font-semibold text-primary underline"
-                    href={`/api/admin/questions/${r.id}`}
-                    target="_blank"
-                    rel="noreferrer"
+                    className="mt-1 inline-block text-xs font-semibold text-primary underline"
+                    href={`/admin/questions?exam=${encodeURIComponent(r.exam)}&topic=${encodeURIComponent(r.topic)}`}
                   >
-                    JSON (admin)
+                    Open topic queue
                   </a>
                 </li>
               ))}
@@ -220,6 +275,10 @@ export default async function AdminContentQualityPage() {
           <li>
             Exam questions: publishing requires ≥{RATIONALE_MIN_WORDS} words in combined rationale + key teaching fields unless{" "}
             <code className="rounded bg-muted px-1">acknowledgeBelowQualityBar: true</code> on POST/PATCH.
+          </li>
+          <li>
+            Missing rationale is treated as severe incompleteness and requires explicit opt-in{" "}
+            <code className="rounded bg-muted px-1">acknowledgeSevereQualityIssue: true</code> if you must publish anyway.
           </li>
           <li>Content-item lessons: same pattern for body depth vs tier thresholds.</li>
           <li>Bulk publish to PUBLISHED skips rows that fail the bar — fix individually or use overrides.</li>

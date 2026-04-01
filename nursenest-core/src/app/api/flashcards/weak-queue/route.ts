@@ -14,14 +14,20 @@ export async function GET() {
   setSentryServerContext({ route: "/api/flashcards/weak-queue", feature: SERVER_FEATURE.flashcard, userId: gate.userId });
 
   try {
-    const { weakTopics, cards } = await loadWeakAreaFlashcardsForUser(gate.userId, gate.entitlement);
+    const { weakTopics, topicCodes, cards } = await loadWeakAreaFlashcardsForUser(gate.userId, gate.entitlement);
     return NextResponse.json({
       weakTopics,
+      topicCodes,
       cards,
+      confidenceBreakdown: {
+        high: cards.filter((c) => c.confidence === "high").length,
+        medium: cards.filter((c) => c.confidence === "medium").length,
+        low: cards.filter((c) => c.confidence === "low").length,
+      },
       empty: cards.length === 0,
       hint:
         cards.length === 0
-          ? "Complete a few more questions so we can infer weak topics, or study a full deck from Flashcards."
+          ? "Complete a few more questions with mapped topics so we can build a precise weak-area queue."
           : null,
     });
   } catch (e) {

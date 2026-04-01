@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { BlogPostTemplate } from "@prisma/client";
+import { BlogFunnelStage, BlogPostIntent, BlogPostTemplate } from "@prisma/client";
 
 const templates: BlogPostTemplate[] = [
   BlogPostTemplate.HOW_TO_PASS,
@@ -17,6 +17,13 @@ export function AdminBlogGenerateClient() {
   const [exam, setExam] = useState("NCLEX-RN");
   const [template, setTemplate] = useState<BlogPostTemplate>(BlogPostTemplate.TOPIC_EXPLAINED);
   const [tone, setTone] = useState<"professional" | "supportive" | "direct">("professional");
+  const [intent, setIntent] = useState<BlogPostIntent>(BlogPostIntent.EXAM_PREP);
+  const [funnelStage, setFunnelStage] = useState<BlogFunnelStage>(BlogFunnelStage.CONSIDERATION);
+  const [targetKeyword, setTargetKeyword] = useState("");
+  const [keywordCluster, setKeywordCluster] = useState("");
+  const [includeImage, setIncludeImage] = useState(true);
+  const [includeAiImage, setIncludeAiImage] = useState(false);
+  const [sourceRecordsJson, setSourceRecordsJson] = useState("");
   const [slug, setSlug] = useState("");
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
@@ -37,6 +44,13 @@ export function AdminBlogGenerateClient() {
           exam,
           template,
           tone,
+          intent,
+          funnelStage,
+          targetKeyword: targetKeyword || undefined,
+          keywordCluster: keywordCluster || undefined,
+          includeImage,
+          includeAiImage,
+          sourceRecords: sourceRecordsJson.trim() ? JSON.parse(sourceRecordsJson) : undefined,
           slug: slug.trim() || undefined,
         }),
       });
@@ -83,6 +97,42 @@ export function AdminBlogGenerateClient() {
             onChange={(e) => setKeywords(e.target.value)}
             placeholder="e.g. fluids, electrolytes"
           />
+        </label>
+        <label className="block space-y-1">
+          <span className="text-xs font-medium text-muted-foreground">Intent</span>
+          <select className="w-full rounded-md border border-border px-3 py-2 text-sm" value={intent} onChange={(e) => setIntent(e.target.value as BlogPostIntent)}>
+            {Object.values(BlogPostIntent).map((i) => (
+              <option key={i} value={i}>{i}</option>
+            ))}
+          </select>
+        </label>
+        <label className="block space-y-1">
+          <span className="text-xs font-medium text-muted-foreground">Funnel stage</span>
+          <select className="w-full rounded-md border border-border px-3 py-2 text-sm" value={funnelStage} onChange={(e) => setFunnelStage(e.target.value as BlogFunnelStage)}>
+            {Object.values(BlogFunnelStage).map((i) => (
+              <option key={i} value={i}>{i}</option>
+            ))}
+          </select>
+        </label>
+        <label className="block space-y-1 sm:col-span-2">
+          <span className="text-xs font-medium text-muted-foreground">Primary target keyword</span>
+          <input className="w-full rounded-md border border-border px-3 py-2 text-sm" value={targetKeyword} onChange={(e) => setTargetKeyword(e.target.value)} />
+        </label>
+        <label className="block space-y-1 sm:col-span-2">
+          <span className="text-xs font-medium text-muted-foreground">Keyword cluster</span>
+          <input className="w-full rounded-md border border-border px-3 py-2 text-sm" value={keywordCluster} onChange={(e) => setKeywordCluster(e.target.value)} />
+        </label>
+        <label className="block space-y-1 sm:col-span-2">
+          <span className="text-xs font-medium text-muted-foreground">Structured sources JSON (optional)</span>
+          <textarea className="w-full rounded-md border border-border px-3 py-2 font-mono text-xs" rows={5} value={sourceRecordsJson} onChange={(e) => setSourceRecordsJson(e.target.value)} placeholder='[{"authors":["CDC"],"year":"2024","title":"...","source":"...","url":"https://...","authority":"regulator"}]' />
+        </label>
+        <label className="flex items-center gap-2 text-sm">
+          <input type="checkbox" checked={includeImage} onChange={(e) => setIncludeImage(e.target.checked)} />
+          Request featured image workflow
+        </label>
+        <label className="flex items-center gap-2 text-sm">
+          <input type="checkbox" checked={includeAiImage} onChange={(e) => setIncludeAiImage(e.target.checked)} />
+          Request AI-generated image (async state)
         </label>
         <label className="block space-y-1">
           <span className="text-xs font-medium text-muted-foreground">Template</span>

@@ -38,7 +38,7 @@ export function computeCadenceDates(params: {
   const out: Date[] = [];
   const weekdays = (params.preferredWeekdays ?? []).filter((d) => d >= 0 && d <= 6);
   const slots = weekdays.length > 0 ? weekdays.slice(0, params.postsPerWeek) : [1, 3, 5].slice(0, Math.max(1, params.postsPerWeek));
-  let cursor = new Date(params.startDate);
+  const cursor = new Date(params.startDate);
   cursor.setHours(14, 0, 0, 0);
   while (out.length < params.count) {
     for (const wd of slots) {

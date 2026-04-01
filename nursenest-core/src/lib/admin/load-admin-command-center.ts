@@ -27,6 +27,10 @@ import {
   loadPremiumProtectionAdminSnapshot,
   type PremiumProtectionAdminSnapshot,
 } from "@/lib/admin/load-premium-protection-admin-snapshot";
+import {
+  loadQuestionBankRemediationIntelligence,
+  type QuestionBankRemediationIntelligence,
+} from "@/lib/questions/load-question-bank-remediation-intelligence";
 
 export type AdminNeedsAttentionItem = {
   severity: "critical" | "warning" | "info";
@@ -119,6 +123,8 @@ export type AdminCommandCenterData = {
   };
   /** Premium deterrence rollups, notes adoption, abuse review queue (no note bodies). */
   premiumProtection: PremiumProtectionAdminSnapshot | null;
+  /** Actionable question-bank remediation intelligence layer. */
+  questionBankIntel: QuestionBankRemediationIntelligence | null;
 };
 
 function startOfUtcDay(d: Date): Date {
@@ -389,10 +395,11 @@ export async function loadAdminCommandCenter(): Promise<AdminCommandCenterData |
       });
     }
 
-    const [contentQualitySnapshot, contentQualityCorpus, premiumProtection] = await Promise.all([
+    const [contentQualitySnapshot, contentQualityCorpus, premiumProtection, questionBankIntel] = await Promise.all([
       loadContentQualitySnapshot(),
       loadContentQualityCorpusPayload(),
       loadPremiumProtectionAdminSnapshot().catch(() => null),
+      loadQuestionBankRemediationIntelligence().catch(() => null),
     ]);
 
     if (premiumProtection && premiumProtection.openAbuseReviews.length > 0) {
@@ -480,6 +487,7 @@ export async function loadAdminCommandCenter(): Promise<AdminCommandCenterData |
         corpus: contentQualityCorpus,
       },
       premiumProtection,
+      questionBankIntel,
     };
   } catch (e) {
     console.error("[loadAdminCommandCenter]", e);
@@ -557,6 +565,7 @@ export async function loadAdminCommandCenter(): Promise<AdminCommandCenterData |
         corpus: null,
       },
       premiumProtection: null,
+      questionBankIntel: null,
     };
   }
 }

@@ -2,7 +2,8 @@ import { ContentStatus, type Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { flashcardAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
-import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
+import { getWeakTopicTargetsForPractice, loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
+import { confidenceFromSignal, type RecommendationConfidence } from "@/lib/learner/topic-linking";
 import { shuffleIdsStableSeed } from "@/lib/flashcards/study-queue";
 
 const MAX_WEAK_TOPIC_TERMS = 8;
@@ -16,6 +17,7 @@ export type WeakFlashcardRow = {
   deckSlug: string;
   topic: string;
   subtopic: string | null;
+  confidence: RecommendationConfidence;
 };
 
 /**
@@ -24,16 +26,20 @@ export type WeakFlashcardRow = {
 export async function loadWeakAreaFlashcardsForUser(
   userId: string,
   entitlement: AccessScope,
-): Promise<{ weakTopics: string[]; cards: WeakFlashcardRow[] }> {
+): Promise<{ weakTopics: string[]; topicCodes: string[]; cards: WeakFlashcardRow[] }> {
   const perf = await loadUnifiedTopicPerformance(userId, entitlement, MAX_WEAK_TOPIC_TERMS);
   const topics = perf.weakTopics.map((w) => w.topic.trim()).filter((t) => t.length > 1);
-  if (topics.length === 0) {
-    return { weakTopics: [], cards: [] };
+  const targets = await getWeakTopicTargetsForPractice(userId, entitlement, MAX_WEAK_TOPIC_TERMS);
+  const highSignalTopicCodes = targets.filter((t) => t.confidence !== "low").map((t) => t.topicCode);
+  const topicCodes = (highSignalTopicCodes.length > 0 ? highSignalTopicCodes : targets.map((t) => t.topicCode)).slice(
+    0,
+    MAX_WEAK_TOPIC_TERMS,
+  );
+  if (topics.length === 0 || topicCodes.length === 0) {
+    return { weakTopics: [], topicCodes: [], cards: [] };
   }
-
-  const or: Prisma.FlashcardWhereInput[] = topics.slice(0, MAX_WEAK_TOPIC_TERMS).map((t) => ({
-    category: { name: { contains: t, mode: "insensitive" } },
-  }));
+  const confidenceByCode = new Map(targets.map((t) => [t.topicCode, t.confidence]));
+  const or: Prisma.FlashcardWhereInput[] = topicCodes.map((code) => ({ category: { topicCode: code } }));
 
   const rows = await prisma.flashcard.findMany({
     where: {
@@ -67,9 +73,10 @@ export async function loadWeakAreaFlashcardsForUser(
       deckSlug: c.deck.slug,
       topic: c.category.name,
       subtopic: c.category.topicCode,
+      confidence: confidenceByCode.get(c.category.topicCode ?? "") ?? "low",
     });
     if (cards.length >= RETURN_CAP) break;
   }
 
-  return { weakTopics: topics, cards };
+  return { weakTopics: topics, topicCodes, cards };
 }

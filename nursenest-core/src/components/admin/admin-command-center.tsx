@@ -453,6 +453,47 @@ export function AdminCommandCenter({ data }: { data: AdminCommandCenterData }) {
         </div>
       </section>
 
+      {data.questionBankIntel ? (
+        <section className="rounded-xl border border-cyan-500/25 bg-gradient-to-br from-cyan-500/[0.05] via-[var(--theme-card-bg)] to-primary/[0.05] p-5">
+          <div className="flex flex-wrap items-end justify-between gap-2">
+            <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Question-bank intelligence</h2>
+            <Link href="/admin/diagnostics" className="text-sm font-semibold text-primary underline">
+              Full diagnostics →
+            </Link>
+          </div>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <MetricTile label="NP published" value={fmt(data.questionBankIntel.np.published)} />
+            <MetricTile label="NP uncategorized" value={`${data.questionBankIntel.np.uncategorizedPct}%`} />
+            <MetricTile label="Allied CA rows" value={fmt(data.questionBankIntel.alliedCanada.publishedCA)} />
+            <MetricTile label="Below-floor banks" value={fmt(data.questionBankIntel.belowFloorBanks.length)} />
+          </div>
+          <div className="mt-5 grid gap-4 lg:grid-cols-2">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Weakest banks</p>
+              <ul className="mt-2 space-y-1 text-sm">
+                {data.questionBankIntel.weakestBanks.map((r) => (
+                  <li key={r.label} className="flex justify-between rounded bg-amber-50 px-2 py-1 dark:bg-amber-950/30">
+                    <span className="truncate pr-2">{r.label}</span>
+                    <span className="tabular-nums">{r.missingPct}% miss · {r.thinPct}% thin</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Top weak canonical topics</p>
+              <ul className="mt-2 space-y-1 text-sm">
+                {data.questionBankIntel.topWeakCanonicalTopics.slice(0, 6).map((r) => (
+                  <li key={`${r.bucket}|${r.slug}`} className="flex justify-between rounded bg-muted/40 px-2 py-1">
+                    <span className="truncate pr-2">{r.label}</span>
+                    <span className="tabular-nums">{r.count}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+      ) : null}
+
       <section className="rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-5">
         <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">SEO & blog</h2>
         <div className="mt-4 flex flex-wrap gap-4 text-sm">

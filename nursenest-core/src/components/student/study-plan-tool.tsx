@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 const EXAMS = [
   { value: "NCLEX_RN", label: "NCLEX-RN" },
@@ -114,6 +114,28 @@ export function StudyPlanTool() {
   const [error, setError] = useState<string | null>(null);
   const [plan, setPlan] = useState<unknown>(null);
   const [disclaimer, setDisclaimer] = useState<string | null>(null);
+  const [suggestedWeakAreas, setSuggestedWeakAreas] = useState<string[]>([]);
+  async function loadWeakAreaSuggestions() {
+    try {
+      const res = await fetch("/api/learner/weak-areas", { cache: "no-store" });
+      if (!res.ok) return;
+      const data = (await res.json()) as { weakTopics?: Array<{ topic?: string }> };
+      const topics = Array.isArray(data.weakTopics)
+        ? data.weakTopics
+            .map((w) => (typeof w.topic === "string" ? w.topic.trim() : ""))
+            .filter((t) => t.length > 0)
+            .slice(0, 5)
+        : [];
+      if (topics.length > 0) setSuggestedWeakAreas(topics);
+    } catch {
+      /* non-blocking */
+    }
+  }
+
+  useEffect(() => {
+    void loadWeakAreaSuggestions();
+  }, []);
+
 
   async function run() {
     setError(null);
@@ -197,6 +219,41 @@ export function StudyPlanTool() {
           onChange={(e) => setWeakAreas(e.target.value)}
         />
       </label>
+      {suggestedWeakAreas.length > 0 ? (
+        <div className="rounded-xl border border-border/60 bg-muted/20 p-3">
+          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            Use my current weak areas
+          </p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {suggestedWeakAreas.map((topic) => (
+              <button
+                key={topic}
+                type="button"
+                className="rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary hover:bg-primary/15"
+                onClick={() =>
+                  setWeakAreas((prev) => {
+                    const parts = prev
+                      .split(",")
+                      .map((p) => p.trim())
+                      .filter(Boolean);
+                    if (parts.some((p) => p.toLowerCase() === topic.toLowerCase())) return prev;
+                    return [...parts, topic].join(", ");
+                  })
+                }
+              >
+                {topic}
+              </button>
+            ))}
+            <button
+              type="button"
+              className="rounded-full border border-border bg-card px-3 py-1 text-xs font-semibold text-[var(--theme-menu-text)] hover:bg-muted/80"
+              onClick={() => setWeakAreas(suggestedWeakAreas.join(", "))}
+            >
+              Use all
+            </button>
+          </div>
+        </div>
+      ) : null}
 
       <button
         type="button"

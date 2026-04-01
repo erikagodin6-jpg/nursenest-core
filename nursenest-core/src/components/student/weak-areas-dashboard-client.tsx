@@ -164,18 +164,39 @@ export function WeakAreasDashboardClient({ initial }: Props) {
           {data.weakTopics.length > 0 ? (
             <div>
               <p className="text-xs font-semibold uppercase tracking-wide text-muted">Priority review</p>
+              <p className="mt-1 text-xs text-muted">
+                Ranked remediation queue from your graded misses. Start at #1 and clear one topic at a time.
+              </p>
               <ul className="mt-2 space-y-2">
-                {data.weakTopics.slice(0, 6).map((w) => (
+                {data.weakTopics.slice(0, 6).map((w, i) => (
                   <li
                     key={w.topic}
-                    className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-border/80 bg-muted/30 px-3 py-2 text-sm"
+                    className="rounded-lg border border-border/80 bg-muted/30 px-3 py-2 text-sm"
                   >
-                    <span className="font-medium text-foreground">{w.topic}</span>
-                    <span className="text-xs text-muted">
-                      {w.attempted > 0 ? `${100 - w.missRate}% accuracy` : "—"} · {w.missed} miss
-                      {w.missed === 1 ? "" : "es"}
-                      {typeof w.wrongStreak === "number" && w.wrongStreak > 1 ? ` · streak ${w.wrongStreak}` : ""}
-                    </span>
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <span className="font-medium text-foreground">
+                        #{i + 1} {w.topic}
+                      </span>
+                      <span className="text-xs text-muted">
+                        {w.attempted > 0 ? `${100 - w.missRate}% accuracy` : "—"} · {w.missed} miss
+                        {w.missed === 1 ? "" : "es"}
+                        {typeof w.wrongStreak === "number" && w.wrongStreak > 1 ? ` · streak ${w.wrongStreak}` : ""}
+                      </span>
+                    </div>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      <Link
+                        className="rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary transition-colors hover:bg-primary/15"
+                        href={`/app/questions?preset=topic_drill&topic=${encodeURIComponent(w.topic)}`}
+                      >
+                        Remediate in question bank
+                      </Link>
+                      <Link
+                        className="rounded-full border border-border bg-card px-3 py-1 text-xs font-semibold text-[var(--theme-menu-text)] transition-colors hover:bg-muted/80"
+                        href="/app/practice-tests?focus=weak"
+                      >
+                        Apply in weak-mode test
+                      </Link>
+                    </div>
                   </li>
                 ))}
               </ul>

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BlogPostStatus } from "@prisma/client";
+import { BlogCampaignItemStatus, BlogPostStatus } from "@prisma/client";
 import { requireAdmin } from "@/lib/auth/guards";
 import { prisma } from "@/lib/db";
 
@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminBlogHubPage() {
   await requireAdmin();
-  const [draft, scheduled, published, recent, next] = await Promise.all([
+  const [draft, scheduled, published, recent, next, campaignCount, queuedItems, failedItems] = await Promise.all([
     prisma.blogPost.count({ where: { postStatus: BlogPostStatus.DRAFT } }),
     prisma.blogPost.count({ where: { postStatus: BlogPostStatus.SCHEDULED } }),
     prisma.blogPost.count({ where: { postStatus: BlogPostStatus.PUBLISHED } }),
@@ -21,6 +21,9 @@ export default async function AdminBlogHubPage() {
       orderBy: { publishAt: "asc" },
       select: { title: true, publishAt: true, slug: true },
     }),
+    prisma.blogCampaign.count(),
+    prisma.blogCampaignItem.count({ where: { status: { in: [BlogCampaignItemStatus.QUEUED, BlogCampaignItemStatus.GENERATING] } } }),
+    prisma.blogCampaignItem.count({ where: { status: BlogCampaignItemStatus.FAILED } }),
   ]);
 
   const missingSeo = await prisma.blogPost.count({
@@ -69,6 +72,12 @@ export default async function AdminBlogHubPage() {
           Blog generator →
         </Link>
         <Link
+          href="/admin/blog/campaigns"
+          className="rounded-xl border border-border/80 bg-[var(--theme-card-bg)] p-6 text-center font-semibold hover:bg-muted/40"
+        >
+          Campaigns →
+        </Link>
+        <Link
           href="/admin/blog/scheduler"
           className="rounded-xl border border-border/80 bg-[var(--theme-card-bg)] p-6 text-center font-semibold hover:bg-muted/40"
         >
@@ -81,6 +90,10 @@ export default async function AdminBlogHubPage() {
           SEO backlog →
         </Link>
       </section>
+
+      <p className="mt-4 text-xs text-muted-foreground">
+        Campaigns: {campaignCount} · Queue pending: {queuedItems} · Queue failed: {failedItems}
+      </p>
 
       {next ? (
         <p className="mt-6 text-sm text-muted-foreground">
