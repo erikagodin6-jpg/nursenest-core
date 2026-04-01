@@ -187,8 +187,55 @@ model User {
   topicStats              UserTopicStat[]
   /** User-authored study notes (never stores premium HTML bodies). */
   learnerNotes            LearnerNote[]
+  /** Daily per-user protection / API abuse tallies (admin-only; no note bodies). */
+  premiumProtectionUserDays PremiumProtectionUserDay[]
+  protectionAbuseReviews    ProtectionAbuseReview[]
 
   @@index([alliedProfessionKey])
+}
+
+/** Aggregated premium UX telemetry (UTC day; global counts, no user PII). */
+model PremiumProtectionRollup {
+  id        String   @id @default(cuid())
+  day       DateTime @db.Date
+  metricKey String   @map("metric_key") @db.VarChar(96)
+  segment   String   @default("") @db.VarChar(96)
+  count     Int      @default(0)
+
+  @@unique([day, metricKey, segment])
+  @@index([day])
+  @@map("premium_protection_rollups")
+}
+
+/** Per-user daily tallies for abuse heuristics (admin review; subscriber ids). */
+model PremiumProtectionUserDay {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  day       DateTime @db.Date
+  metricKey String   @map("metric_key") @db.VarChar(96)
+  count     Int      @default(0)
+
+  @@unique([userId, day, metricKey])
+  @@index([day])
+  @@index([userId, day])
+  @@map("premium_protection_user_days")
+}
+
+/** Flagged accounts for manual review (rate limits, scraping signals). */
+model ProtectionAbuseReview {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reason      String    @db.VarChar(80)
+  score       Int
+  evidence    Json?
+  createdAt   DateTime  @default(now())
+  dismissedAt DateTime?
+
+  @@index([dismissedAt, createdAt])
+  @@index([userId, createdAt])
+  @@map("protection_abuse_reviews")
 }
 
 enum BaselineAssessmentAttemptStatus {

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { ContentStatus } from "@prisma/client";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
+import { classifyContentItemLesson } from "@/lib/content-quality/classify-lesson";
 import { governContentItemLessonPublish } from "@/lib/content/editorial-publish-policy";
 import { prisma } from "@/lib/db";
 import { bodyStringFromContentJson, bodyStringToContentJson } from "@/lib/prisma/content-item-body";
@@ -27,6 +28,31 @@ const patchSchema = z
     acknowledgeBelowQualityBar: z.boolean().optional(),
   })
   .strict();
+
+export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> }) {
+  const gate = await requireAdmin();
+  if (!gate.ok) return gate.response;
+  const { id } = await ctx.params;
+
+  const existing = await prisma.contentItem.findUnique({ where: { id } });
+  if (!existing || existing.type !== "lesson") {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
+  const body = bodyStringFromContentJson(existing.content);
+  const lessonQuality = classifyContentItemLesson(existing.content);
+  const publishPreview = governContentItemLessonPublish(
+    { title: existing.title, summary: existing.summary ?? "", body },
+    { acknowledgeBelowQualityBar: false },
+  );
+
+  return NextResponse.json({
+    lesson: existing,
+    body,
+    lessonQuality,
+    publishPreview,
+  });
+}
 
 export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }> }) {
   const gate = await requireAdmin();

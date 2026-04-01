@@ -200,11 +200,11 @@ export default async function AdminContentQualityPage() {
                   <p className="text-xs text-muted-foreground">{r.wordCount} words · {new Date(r.updatedAt).toLocaleDateString()}</p>
                   <a
                     className="mt-1 inline-block text-xs font-semibold text-primary underline"
-                    href={`/api/admin/lessons?page=1&pageSize=100`}
+                    href={`/api/admin/lessons/${r.id}`}
                     target="_blank"
                     rel="noreferrer"
                   >
-                    Find in lessons API (id {r.id.slice(0, 8)}…)
+                    JSON + quality (admin)
                   </a>
                 </li>
               ))}
