@@ -12,11 +12,9 @@ import {
 
 function ScreenshotFrame({
   slide,
-  priority,
   testId,
 }: {
   slide: HomeHeroSlide;
-  priority: boolean;
   testId: string;
 }) {
   const chain = useMemo(
@@ -45,8 +43,11 @@ function ScreenshotFrame({
           alt={slide.alt}
           fill
           sizes={MARKETING_STACK_SHOT_SIZES}
-          quality={MARKETING_PHOTO_QUALITY}
-          priority={priority}
+          quality={MARKETING_PHOTO_QUALITY_BELOW_FOLD}
+          priority={false}
+          loading="lazy"
+          fetchPriority="low"
+          decoding="async"
           unoptimized={unoptimized}
           referrerPolicy="no-referrer"
           className="object-cover object-top bg-[var(--theme-muted-surface)]"
