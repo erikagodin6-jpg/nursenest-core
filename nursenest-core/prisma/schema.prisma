@@ -194,6 +194,8 @@ model User {
   /** Daily per-user protection / API abuse tallies (admin-only; no note bodies). */
   premiumProtectionUserDays PremiumProtectionUserDay[]
   protectionAbuseReviews    ProtectionAbuseReview[]
+  /** Abuse review rows this admin closed (dismiss / resolve). */
+  abuseReviewsDismissed     ProtectionAbuseReview[] @relation("ProtectionAbuseReviewDismissedBy")
 
   @@index([alliedProfessionKey])
 }
@@ -226,6 +228,11 @@ model PremiumProtectionUserDay {
   @@map("premium_protection_user_days")
 }
 
+enum ProtectionAbuseReviewResolution {
+  DISMISSED
+  RESOLVED
+}
+
 /** Flagged accounts for manual review (rate limits, scraping signals). */
 model ProtectionAbuseReview {
   id          String    @id @default(cuid())
@@ -235,10 +242,17 @@ model ProtectionAbuseReview {
   score       Int
   evidence    Json?
   createdAt   DateTime  @default(now())
+  /** When an admin closed this item (dismiss or resolve). */
   dismissedAt DateTime?
+  resolution  ProtectionAbuseReviewResolution?
+  dismissedByUserId String?
+  dismissedBy       User?   @relation("ProtectionAbuseReviewDismissedBy", fields: [dismissedByUserId], references: [id], onDelete: SetNull)
+  /** Short admin note (optional). */
+  adminNote   String?   @db.VarChar(500)
 
   @@index([dismissedAt, createdAt])
   @@index([userId, createdAt])
+  @@index([dismissedAt])
   @@map("protection_abuse_reviews")
 }
 

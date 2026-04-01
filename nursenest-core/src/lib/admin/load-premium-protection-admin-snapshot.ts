@@ -27,6 +27,19 @@ export type PremiumProtectionAdminSnapshot = {
     reason: string;
     score: number;
     createdAt: string;
+    evidence: unknown | null;
+  }>;
+  recentClosedAbuseReviews: Array<{
+    id: string;
+    userId: string;
+    userEmailSample: string;
+    reason: string;
+    score: number;
+    createdAt: string;
+    dismissedAt: string;
+    resolution: "DISMISSED" | "RESOLVED";
+    adminNote: string | null;
+    actorEmailSample: string | null;
   }>;
 };
 
@@ -43,7 +56,7 @@ export async function loadPremiumProtectionAdminSnapshot(): Promise<PremiumProte
   const since24h = new Date(Date.now() - 86400000);
 
   try {
-    const [flags, todayRollups, notesTotal, notesUpdatedLast24h, openReviews] = await Promise.all([
+    const [flags, todayRollups, notesTotal, notesUpdatedLast24h, openReviews, closedReviews] = await Promise.all([
       Promise.resolve(getServerPremiumProtectionFlags()),
       prisma.premiumProtectionRollup.findMany({
         where: { day },
@@ -56,17 +69,34 @@ export async function loadPremiumProtectionAdminSnapshot(): Promise<PremiumProte
       prisma.protectionAbuseReview.findMany({
         where: { dismissedAt: null },
         orderBy: { createdAt: "desc" },
+        take: 40,
+        select: { id: true, userId: true, reason: true, score: true, createdAt: true, evidence: true },
+      }),
+      prisma.protectionAbuseReview.findMany({
+        where: { dismissedAt: { not: null } },
+        orderBy: { dismissedAt: "desc" },
         take: 25,
-        select: { id: true, userId: true, reason: true, score: true, createdAt: true },
+        select: {
+          id: true,
+          userId: true,
+          reason: true,
+          score: true,
+          createdAt: true,
+          dismissedAt: true,
+          resolution: true,
+          adminNote: true,
+          dismissedByUserId: true,
+        },
       }),
     ]);
 
-    const userIds = [...new Set(openReviews.map((r) => r.userId))];
+    const userIds = [...new Set([...openReviews.map((r) => r.userId), ...closedReviews.map((r) => r.userId)])];
+    const actorIds = [...new Set(closedReviews.map((r) => r.dismissedByUserId).filter((x): x is string => Boolean(x)))];
     const users =
-      userIds.length === 0
+      userIds.length === 0 && actorIds.length === 0
         ? []
         : await prisma.user.findMany({
-            where: { id: { in: userIds } },
+            where: { id: { in: [...new Set([...userIds, ...actorIds])] } },
             select: { id: true, email: true },
           });
     const emailById = new Map(users.map((u) => [u.id, u.email]));
@@ -90,7 +120,22 @@ export async function loadPremiumProtectionAdminSnapshot(): Promise<PremiumProte
         reason: r.reason,
         score: r.score,
         createdAt: r.createdAt.toISOString(),
+        evidence: r.evidence,
       })),
+      recentClosedAbuseReviews: closedReviews
+        .filter((r) => r.dismissedAt != null && r.resolution != null)
+        .map((r) => ({
+          id: r.id,
+          userId: r.userId,
+          userEmailSample: emailSample(emailById.get(r.userId) ?? ""),
+          reason: r.reason,
+          score: r.score,
+          createdAt: r.createdAt.toISOString(),
+          dismissedAt: r.dismissedAt!.toISOString(),
+          resolution: r.resolution!,
+          adminNote: r.adminNote,
+          actorEmailSample: r.dismissedByUserId ? emailSample(emailById.get(r.dismissedByUserId) ?? "") : null,
+        })),
     };
   } catch (e) {
     console.error("[loadPremiumProtectionAdminSnapshot]", e);

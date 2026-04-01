@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { TurnstileSignup } from "@/components/auth/turnstile-signup";
@@ -35,10 +35,6 @@ export function SignupForm({
   const [country, setCountry] = useState<"CA" | "US">("CA");
   const [examFocus, setExamFocus] = useState<SignupExamFocusValue>("nclex_rn");
   const onCaptcha = useCallback((t: string | null) => setCaptchaToken(t), []);
-
-  useEffect(() => {
-    setExamFocus((prev) => reconcileExamFocusForCountry(country, prev));
-  }, [country]);
 
   async function onSubmit(formData: FormData) {
     setError(null);
@@ -91,7 +87,11 @@ export function SignupForm({
           className="rounded-xl border border-border bg-white px-3 py-2"
           name="country"
           value={country}
-          onChange={(e) => setCountry(e.target.value === "US" ? "US" : "CA")}
+          onChange={(e) => {
+            const next = e.target.value === "US" ? "US" : "CA";
+            setCountry(next);
+            setExamFocus((prev) => reconcileExamFocusForCountry(next, prev));
+          }}
         >
           <option value="CA">Canada</option>
           <option value="US">United States</option>

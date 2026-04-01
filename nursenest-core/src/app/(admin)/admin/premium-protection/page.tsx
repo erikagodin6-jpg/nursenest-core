@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/auth/guards";
 import { loadPremiumProtectionAdminSnapshot } from "@/lib/admin/load-premium-protection-admin-snapshot";
+import { ProtectionAbuseReviewPanel } from "@/components/admin/protection-abuse-review-panel";
 
 export const dynamic = "force-dynamic";
 
@@ -127,23 +128,15 @@ export default async function AdminPremiumProtectionPage() {
               </Link>
             </div>
             <p className="mt-1 text-xs text-muted-foreground">
-              Heuristic queue from repeated rate limits or bulk fetches. Dismissal workflow can be added later.
+              Heuristic queue from repeated rate limits or bulk fetches. Dismiss clears a false alarm; resolve marks review
+              complete (e.g. handled offline). Optional internal note only.
             </p>
-            {snap.openAbuseReviews.length === 0 ? (
-              <p className="mt-4 text-sm text-muted-foreground">No open items.</p>
-            ) : (
-              <ul className="mt-4 space-y-3">
-                {snap.openAbuseReviews.map((r) => (
-                  <li key={r.id} className="rounded-lg border border-border/60 bg-muted/15 p-3 text-sm">
-                    <p className="font-medium text-foreground">{r.reason}</p>
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      Score {r.score} · User <code className="text-foreground">{r.userId.slice(0, 12)}…</code> ·{" "}
-                      {r.userEmailSample} · {new Date(r.createdAt).toLocaleString()}
-                    </p>
-                  </li>
-                ))}
-              </ul>
-            )}
+            <div className="mt-4">
+              <ProtectionAbuseReviewPanel
+                initialOpen={snap.openAbuseReviews}
+                initialClosed={snap.recentClosedAbuseReviews}
+              />
+            </div>
           </section>
         </div>
       )}
