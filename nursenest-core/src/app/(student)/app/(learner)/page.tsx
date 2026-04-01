@@ -94,21 +94,19 @@ export default async function DashboardPage() {
           where: { id: userId },
           select: { examDate: true, examDatePlanType: true },
         });
-        if (userExam) {
-          adaptiveRecommendations = buildAdaptiveRecommendations({
-            examDatePlanType: userExam.examDatePlanType,
-            examDate: userExam.examDate,
-            readiness: premiumSnapshot.readiness,
-            weakTopics: topicPerfInitial.weakTopics,
-            topicTrends: topicPerfInitial.trends,
-            streakDays: premiumSnapshot.studyStreakDays,
-            lessonPct: premiumSnapshot.overallLessons.pct,
-            continueLesson: premiumSnapshot.continueLesson,
-            recommendedQuizTopic: premiumSnapshot.recommendedQuizTopic,
-            mockCount: premiumSnapshot.mockCount,
-            practiceSessionCount: premiumSnapshot.practice.sessionCount,
-          });
-        }
+        adaptiveRecommendations = buildAdaptiveRecommendations({
+          examDatePlanType: userExam?.examDatePlanType,
+          examDate: userExam?.examDate ?? null,
+          readiness: premiumSnapshot.readiness,
+          weakTopics: topicPerfInitial.weakTopics,
+          topicTrends: topicPerfInitial.trends,
+          streakDays: premiumSnapshot.studyStreakDays,
+          lessonPct: premiumSnapshot.overallLessons.pct,
+          continueLesson: premiumSnapshot.continueLesson,
+          recommendedQuizTopic: premiumSnapshot.recommendedQuizTopic,
+          mockCount: premiumSnapshot.mockCount,
+          practiceSessionCount: premiumSnapshot.practice.sessionCount,
+        });
       } catch {
         adaptiveRecommendations = null;
       }

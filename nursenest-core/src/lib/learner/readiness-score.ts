@@ -30,6 +30,8 @@ export type ReadinessResult = {
   whatToImprove: string[];
   /** Recommended next actions. */
   nextActions: string[];
+  /** Lowest-scoring factors (plain labels)—what is limiting readiness most. */
+  holdingBack: string[];
 };
 
 /** Minimum graded items from sessions to treat practice accuracy as a signal. */
@@ -63,6 +65,16 @@ function confidenceLevel(practiceTotal: number, mockCount: number): ReadinessCon
   if (practiceTotal >= 60 && mockCount >= 2) return "high";
   if (practiceTotal >= MIN_PRACTICE_ITEMS || mockCount >= 2) return "medium";
   return "low";
+}
+
+/** Std dev of mock % when 2+ usable mocks — high spread lowers confidence in a single “score”. */
+function mockPercentStdDev(mocks: ReadinessMockInput[]): number | null {
+  const usable = mocks.filter((m) => m.total >= MIN_QUESTIONS_PER_MOCK);
+  if (usable.length < 2) return null;
+  const pcts = usable.map((m) => (m.total > 0 ? (m.score / m.total) * 100 : 0));
+  const mean = pcts.reduce((a, b) => a + b, 0) / pcts.length;
+  const v = pcts.reduce((s, p) => s + (p - mean) ** 2, 0) / pcts.length;
+  return Math.sqrt(v);
 }
 
 /**
@@ -111,6 +123,7 @@ export function computeReadiness(args: {
         "Run a block in the question bank or a practice exam, then return here.",
         "Open Lessons and complete at least one module in your tier.",
       ],
+      holdingBack: [],
     };
   }
 
@@ -148,12 +161,19 @@ export function computeReadiness(args: {
     const avgPct =
       usableMocks.reduce((s, m) => s + (m.total > 0 ? (m.score / m.total) * 100 : 0), 0) / usableMocks.length;
     mockPoints = Math.round(30 * clamp01(avgPct / 100));
+    const spread = mockPercentStdDev(recentMocks);
+    let mockDetail = `Average ${Math.round(avgPct)}% across ${usableMocks.length} recent mock attempt(s) (5+ items each).`;
+    if (spread != null && spread > 12) {
+      mockDetail += ` Spread is ~${Math.round(spread)}% between mocks—readiness weights consistency, not one lucky run.`;
+      const dampen = Math.max(0.72, 1 - (spread - 12) / 140);
+      mockPoints = Math.round(mockPoints * dampen);
+    }
     factors.push({
       id: "mock_performance",
       label: "Recent mock performance",
       points: mockPoints,
       maxPoints: mockMax,
-      detail: `Average ${Math.round(avgPct)}% across ${usableMocks.length} recent mock attempt(s) (5+ items each).`,
+      detail: mockDetail,
     });
   } else {
     factors.push({
@@ -216,8 +236,16 @@ export function computeReadiness(args: {
   const earned = practicePoints + mockPoints + topicPoints + lessonPoints;
   const possible = practiceMax + mockMax + topicMax + lessonMax;
   const score = possible > 0 ? Math.round((earned / possible) * 100) : 0;
-  const band = bandFromScore(score);
-  const confidence = confidenceLevel(practiceTotal, usableMocks.length);
+  let band = bandFromScore(score);
+  const spread = mockPercentStdDev(recentMocks);
+  if (spread != null && spread > 18 && band === "ready") {
+    band = "near_ready";
+  }
+
+  let confidence = confidenceLevel(practiceTotal, usableMocks.length);
+  if (spread != null && spread > 18 && confidence === "high") {
+    confidence = "medium";
+  }
 
   const summary =
     confidence === "high"
@@ -255,6 +283,13 @@ export function computeReadiness(args: {
   nextActions.push("Schedule one full mock this week and review every miss.");
   nextActions.push("Complete the next lesson in your pathway, then repeat a short quiz on the same topic.");
 
+  const holdingBack: string[] = [];
+  for (const f of factors) {
+    if (f.maxPoints <= 0) continue;
+    const ratio = f.points / f.maxPoints;
+    if (ratio < 0.42) holdingBack.push(f.label);
+  }
+
   return {
     score,
     band,
@@ -263,6 +298,7 @@ export function computeReadiness(args: {
     factors,
     whatToImprove: whatToImprove.slice(0, 5),
     nextActions: nextActions.slice(0, 4),
+    holdingBack: holdingBack.slice(0, 3),
   };
 }
 

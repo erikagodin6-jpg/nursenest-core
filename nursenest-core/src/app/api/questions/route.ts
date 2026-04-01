@@ -35,6 +35,7 @@ import {
   pathwayExamKeysSql,
   topicEqualsSql,
 } from "@/lib/questions/exam-question-access-sql";
+import { getWeakTopicNamesForPractice } from "@/lib/learner/topic-performance";
 
 /** Deep offset pagination is expensive on large tables; reject before issuing heavy skip scans. */
 const MAX_QUESTION_LIST_SKIP_ROWS = MAX_LIST_SKIP_ROWS_DEFAULT;
@@ -228,10 +229,36 @@ export async function GET(req: NextRequest) {
       }
       const baseWhere = questionAccessWhereWithPathway(gate.entitlement, pathway);
 
+      const studyModeRaw = searchParams.get("studyMode")?.trim().toLowerCase() ?? "";
+      const STUDY_MODES = new Set(["weak", "high_yield", "rapid", "final_prep"]);
+      const studyMode = STUDY_MODES.has(studyModeRaw) ? studyModeRaw : null;
+      const effectivePageSize = studyMode === "rapid" ? Math.min(pageSize, 8) : pageSize;
+      const skipRowsEff = sort === "random" ? 0 : (page - 1) * effectivePageSize;
+
+      let topicFilterResolved = topicFilter;
+      let studyModeNote: string | null = null;
+      if (studyMode === "weak" && !topicFilterResolved) {
+        const w = await getWeakTopicNamesForPractice(gate.userId, gate.entitlement, 1);
+        if (w[0]) topicFilterResolved = w[0];
+        else studyModeNote = "weak_topic_unavailable";
+      }
+
+      const studyModeFilters: Prisma.ExamQuestionWhereInput[] = [];
+      if (studyMode === "high_yield") {
+        studyModeFilters.push({
+          OR: [{ blueprintWeight: { gte: 0.35 } }, { difficulty: { gte: 4 } }],
+        });
+      }
+      if (studyMode === "final_prep") {
+        studyModeFilters.push({
+          OR: [{ difficulty: { gte: 3 } }, { blueprintWeight: { gte: 0.25 } }],
+        });
+      }
+
       const buildWhereParts = (includeTopic: boolean): Prisma.ExamQuestionWhereInput => {
-        const parts: Prisma.ExamQuestionWhereInput[] = [baseWhere];
-        if (includeTopic && topicFilter && topicFilter.length > 0) {
-          parts.push({ topic: topicFilter });
+        const parts: Prisma.ExamQuestionWhereInput[] = [baseWhere, ...studyModeFilters];
+        if (includeTopic && topicFilterResolved && topicFilterResolved.length > 0) {
+          parts.push({ topic: topicFilterResolved });
         }
         if (excludeIds.length > 0) {
           parts.push({ id: { notIn: excludeIds } });
@@ -243,43 +270,55 @@ export async function GET(req: NextRequest) {
       let questions;
 
       if (sort === "random") {
-        const accessSql = examQuestionAccessWhereSql(gate.entitlement);
-        const pathSql = pathwayExamKeysSql(pathway);
-        const exSql = excludeQuestionIdsSql(excludeIds);
-        let topicSql =
-          topicFilter && topicFilter.length > 0 ? topicEqualsSql(topicFilter) : Prisma.empty;
+        if (studyModeFilters.length > 0) {
+          const pool = await withRetry(() =>
+            prisma.examQuestion.findMany({
+              where: buildWhereParts(true),
+              select: responseMode === "full" ? fullSelect : previewSelect,
+              take: Math.min(160, Math.max(48, effectivePageSize * 12)),
+            }),
+          );
+          const shuffled = [...pool].sort(() => Math.random() - 0.5).slice(0, effectivePageSize);
+          questions = shuffled;
+        } else {
+          const accessSql = examQuestionAccessWhereSql(gate.entitlement);
+          const pathSql = pathwayExamKeysSql(pathway);
+          const exSql = excludeQuestionIdsSql(excludeIds);
+          let topicSql =
+            topicFilterResolved && topicFilterResolved.length > 0 ? topicEqualsSql(topicFilterResolved) : Prisma.empty;
 
-        let idRows = await withRetry(() =>
-          prisma.$queryRaw<{ id: string }[]>`
+          let idRows = await withRetry(() =>
+            prisma.$queryRaw<{ id: string }[]>`
             SELECT id FROM exam_questions
             WHERE ${accessSql} ${pathSql} ${topicSql} ${exSql}
             ORDER BY random()
-            LIMIT ${pageSize}
+            LIMIT ${effectivePageSize}
           `,
-        );
+          );
 
-        if (idRows.length === 0 && topicFilter && topicFilter.length > 0) {
-          topicSql = Prisma.empty;
-          idRows = await withRetry(() =>
-            prisma.$queryRaw<{ id: string }[]>`
+          if (idRows.length === 0 && topicFilterResolved && topicFilterResolved.length > 0) {
+            topicSql = Prisma.empty;
+            idRows = await withRetry(() =>
+              prisma.$queryRaw<{ id: string }[]>`
               SELECT id FROM exam_questions
               WHERE ${accessSql} ${pathSql} ${topicSql} ${exSql}
               ORDER BY random()
-              LIMIT ${pageSize}
+              LIMIT ${effectivePageSize}
             `,
-          );
-          if (idRows.length > 0) topicRelaxed = true;
-        }
+            );
+            if (idRows.length > 0) topicRelaxed = true;
+          }
 
-        const ids = idRows.map((r) => r.id);
-        const rows = await withRetry(() =>
-          prisma.examQuestion.findMany({
-            where: { id: { in: ids } },
-            select: responseMode === "full" ? fullSelect : previewSelect,
-          }),
-        );
-        const order = new Map(ids.map((id, i) => [id, i]));
-        questions = [...rows].sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
+          const ids = idRows.map((r) => r.id);
+          const rows = await withRetry(() =>
+            prisma.examQuestion.findMany({
+              where: { id: { in: ids } },
+              select: responseMode === "full" ? fullSelect : previewSelect,
+            }),
+          );
+          const order = new Map(ids.map((id, i) => [id, i]));
+          questions = [...rows].sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
+        }
       } else {
         const whereWithTopic = buildWhereParts(true);
         questions = await withRetry(() =>
@@ -287,18 +326,18 @@ export async function GET(req: NextRequest) {
             where: whereWithTopic,
             select: responseMode === "full" ? fullSelect : previewSelect,
             orderBy: { updatedAt: "desc" },
-            skip: (page - 1) * pageSize,
-            take: pageSize,
+            skip: skipRowsEff,
+            take: effectivePageSize,
           }),
         );
-        if (questions.length === 0 && topicFilter && topicFilter.length > 0) {
+        if (questions.length === 0 && topicFilterResolved && topicFilterResolved.length > 0) {
           questions = await withRetry(() =>
             prisma.examQuestion.findMany({
               where: buildWhereParts(false),
               select: responseMode === "full" ? fullSelect : previewSelect,
               orderBy: { updatedAt: "desc" },
-              skip: (page - 1) * pageSize,
-              take: pageSize,
+              skip: skipRowsEff,
+              take: effectivePageSize,
             }),
           );
           if (questions.length > 0) topicRelaxed = true;
@@ -328,7 +367,8 @@ export async function GET(req: NextRequest) {
         listEmptyDiagnostics = await diagnoseSubscriberQuestionListEmpty({
           entitlement: gate.entitlement,
           pathwayIdParam: pathwayIdParam ?? null,
-          topicFilter: topicRelaxed ? null : topicFilter && topicFilter.length > 0 ? topicFilter : null,
+          topicFilter:
+            topicRelaxed ? null : topicFilterResolved && topicFilterResolved.length > 0 ? topicFilterResolved : null,
         });
         safeServerLog("api_questions", "subscriber_list_empty", {
           code: listEmptyDiagnostics.code,
@@ -340,7 +380,9 @@ export async function GET(req: NextRequest) {
 
       const subscriberBody = {
         page,
-        pageSize,
+        pageSize: effectivePageSize,
+        studyMode: studyMode ?? null,
+        studyModeNote,
         questions: payload,
         mode: "subscriber" as const,
         fields: responseMode,
@@ -348,7 +390,7 @@ export async function GET(req: NextRequest) {
         excludeIdsCount: excludeIds.length,
         pathwayIdApplied: pathway?.id ?? null,
         pathwayIdRequested: pathwayIdParam && pathwayIdParam.length > 0 ? pathwayIdParam : null,
-        topicRequested: topicFilter && topicFilter.length > 0 ? topicFilter : null,
+        topicRequested: topicFilterResolved && topicFilterResolved.length > 0 ? topicFilterResolved : null,
         topicRelaxed,
         ...(listEmptyDiagnostics
           ? {

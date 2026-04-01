@@ -31,10 +31,10 @@ export default async function StudyPlanPage() {
           select: { examDate: true, examDatePlanType: true },
         }),
       ]);
-      if (premiumSnapshot && userExam) {
+      if (premiumSnapshot && topicPerf) {
         adaptive = buildAdaptiveRecommendations({
-          examDatePlanType: userExam.examDatePlanType,
-          examDate: userExam.examDate,
+          examDatePlanType: userExam?.examDatePlanType,
+          examDate: userExam?.examDate ?? null,
           readiness: premiumSnapshot.readiness,
           weakTopics: topicPerf.weakTopics,
           topicTrends: topicPerf.trends,

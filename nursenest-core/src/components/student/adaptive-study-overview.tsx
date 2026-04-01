@@ -41,7 +41,16 @@ export function AdaptiveStudyOverview({
   adaptive: AdaptiveLearnerRecommendations;
   showHeading?: boolean;
 }) {
-  const { countdown, primaryNext, secondary, weeklyPriorities, todayFocus, readinessTimelineLine, weakTop3 } = adaptive;
+  const {
+    countdown,
+    primaryNext,
+    secondary,
+    weeklyPriorities,
+    todayFocus,
+    readinessTimelineLine,
+    weakTop3,
+    holdingBackLabels,
+  } = adaptive;
 
   return (
     <section className="nn-card p-6">
@@ -86,6 +95,13 @@ export function AdaptiveStudyOverview({
         <p className="mt-3 text-sm text-foreground">
           <span className="font-medium">Weakest signals right now: </span>
           {weakTop3.join(", ")}
+        </p>
+      ) : null}
+
+      {holdingBackLabels.length > 0 ? (
+        <p className="mt-3 text-sm text-muted">
+          <span className="font-medium text-foreground">What is holding readiness back: </span>
+          {holdingBackLabels.join(" · ")}
         </p>
       ) : null}
 

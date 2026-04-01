@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { asArray } from "@/lib/runtime/collections";
 
 type TagRow = { slug: string; name: string };
@@ -50,7 +50,6 @@ export function FlashcardsHubClient({
   const tagSlug = urlParams.get("tagSlug") ?? "";
   const q = urlParams.get("q") ?? "";
   const pageFromUrl = urlParams.get("page") ?? "1";
-  const searchInputRef = useRef<HTMLInputElement>(null);
   const [searchDraft, setSearchDraft] = useState(q);
 
   useEffect(() => {
@@ -228,20 +227,19 @@ export function FlashcardsHubClient({
           Search decks
           <div className="mt-1 flex gap-2">
             <input
-              ref={searchInputRef}
               type="search"
               className="min-w-0 flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm"
               placeholder="Title or description (2+ characters)"
               value={searchDraft}
               onChange={(e) => setSearchDraft(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === "Enter") setFilters({ q: searchInputRef.current?.value ?? "" });
+                if (e.key === "Enter") setFilters({ q: searchDraft });
               }}
             />
             <button
               type="button"
               className="shrink-0 rounded-lg border border-border bg-card px-3 py-2 text-sm font-medium hover:bg-muted/50"
-              onClick={() => setFilters({ q: searchInputRef.current?.value ?? "" })}
+              onClick={() => setFilters({ q: searchDraft })}
             >
               Search
             </button>

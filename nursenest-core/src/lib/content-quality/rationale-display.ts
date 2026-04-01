@@ -52,7 +52,7 @@ export function buildRationaleSectionsFromQuestion(row: QuestionRationaleFields)
   push("Explanation", row.rationale);
   push("Clinical reasoning", row.clinicalReasoning);
   push("Distractors", stringifyDistractors(row.distractorRationales));
-  push("Key takeaway", row.keyTakeaway);
+  push("High-yield takeaway", row.keyTakeaway);
   push("Clinical pearl", row.clinicalPearl);
   push("Exam strategy", row.examStrategy);
   push("Memory hook", row.memoryHook);

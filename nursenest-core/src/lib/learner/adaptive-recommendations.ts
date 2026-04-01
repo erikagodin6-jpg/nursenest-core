@@ -28,6 +28,8 @@ export type AdaptiveLearnerRecommendations = {
   primaryNext: NextAction;
   secondary: NextAction[];
   weakTop3: string[];
+  /** Factors most limiting readiness (from blended score). */
+  holdingBackLabels: string[];
   weeklyPriorities: string[];
   todayFocus: string[];
   /** Honest combined line for readiness + time — no pass guarantees. */
@@ -144,7 +146,9 @@ export function buildAdaptiveRecommendations(args: {
   });
 
   const topic = args.recommendedQuizTopic ?? weakTop3[0] ?? null;
-  const quizHref = topic ? `/app/questions?topic=${encodeTopic(topic)}` : "/app/questions";
+  const quizHref = topic
+    ? `/app/questions?preset=topic_drill&topic=${encodeTopic(topic)}`
+    : "/app/questions";
 
   const primaryNext: NextAction = (() => {
     if (args.streakDays === 0 && args.practiceSessionCount + args.mockCount > 0) {
@@ -212,6 +216,12 @@ export function buildAdaptiveRecommendations(args: {
       kind: "quiz",
     });
   }
+  secondary.push({
+    title: "Weak-area study mode (bank)",
+    href: "/app/questions?studyMode=weak",
+    reason: "Prioritizes topics your ledger flags—less random-only drilling.",
+    kind: "quiz",
+  });
   if (urgency === "near" || urgency === "final_stretch") {
     secondary.push({
       title: "Adaptive (CAT) practice test",
@@ -227,13 +237,19 @@ export function buildAdaptiveRecommendations(args: {
       kind: "mock",
     });
   }
-  if (secondary.length < 3) {
-    secondary.push({
-      title: "Review flashcards",
-      href: "/app/flashcards",
-      reason: "Light spaced repetition between heavier blocks.",
-      kind: "review",
-    });
+  secondary.push({
+    title: "Weak-topic flashcards",
+    href: "/app/flashcards/weak-areas",
+    reason: "Ties missed bank concepts to short spaced-repetition reps.",
+    kind: "review",
+  });
+
+  const seenHref = new Set<string>([primaryNext.href]);
+  const dedupedSecondary: NextAction[] = [];
+  for (const a of secondary) {
+    if (seenHref.has(a.href)) continue;
+    seenHref.add(a.href);
+    dedupedSecondary.push(a);
   }
 
   const weeklyPriorities: string[] = [];
@@ -280,8 +296,9 @@ export function buildAdaptiveRecommendations(args: {
     trajectory,
     trajectoryLines,
     primaryNext,
-    secondary: secondary.slice(0, 3),
+    secondary: dedupedSecondary.slice(0, 3),
     weakTop3,
+    holdingBackLabels: args.readiness.holdingBack ?? [],
     weeklyPriorities: weeklyPriorities.slice(0, 4),
     todayFocus: todayFocus.slice(0, 4),
     readinessTimelineLine,
