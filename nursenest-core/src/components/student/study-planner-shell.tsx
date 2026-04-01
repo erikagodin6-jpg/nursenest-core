@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import type { StudyPlannerContext } from "@/lib/learner/load-study-planner-context";
 import { readinessBandLabel } from "@/lib/learner/readiness-score";
+import { remediationTopicDrillHref, remediationWeakModeTestHref } from "@/lib/learner/remediation-links";
 import { StudyPlanToolGateway } from "@/components/student/study-plan-tool-gateway";
 
 function pctDone(done: number, total: number): number {
@@ -66,6 +67,7 @@ export function StudyPlannerShell({ ctx }: { ctx: StudyPlannerContext }) {
               {readiness.score !== null ? (
                 <span className="tabular-nums text-muted-foreground">
                   Score {readiness.score}/100 · {readiness.confidence} confidence
+                  {readiness.calibratedPreview ? " · conservative calibration active" : ""}
                 </span>
               ) : (
                 <span className="text-muted-foreground">Score not shown yet — complete more practice or a mock.</span>
@@ -97,10 +99,10 @@ export function StudyPlannerShell({ ctx }: { ctx: StudyPlannerContext }) {
         <div className="mt-5 flex flex-wrap gap-2">
           {weak[0] ? (
             <Link
-              href={`/app/questions?topic=${encodeURIComponent(weak[0].topic)}`}
+              href={remediationTopicDrillHref(weak[0].topic)}
               className="inline-flex items-center rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:brightness-110"
             >
-              Start weak-topic drill
+              Start priority review drill
             </Link>
           ) : null}
           <Link
@@ -147,7 +149,7 @@ export function StudyPlannerShell({ ctx }: { ctx: StudyPlannerContext }) {
         <section className="nn-card p-6">
           <div className="flex items-center gap-2">
             <Flame className="h-5 w-5 text-amber-600" aria-hidden />
-            <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Prioritize weak topics</h2>
+            <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Priority review queue</h2>
           </div>
           <p className="mt-1 text-xs text-muted-foreground">From recent mock performance (scoped questions only).</p>
           {weak.length > 0 ? (
@@ -156,10 +158,13 @@ export function StudyPlannerShell({ ctx }: { ctx: StudyPlannerContext }) {
                 <li key={w.topic} className="flex items-center justify-between gap-2 text-sm">
                   <span className="font-medium text-foreground">{w.topic}</span>
                   <Link
-                    href={`/app/questions?topic=${encodeURIComponent(w.topic)}`}
+                    href={remediationTopicDrillHref(w.topic)}
                     className="shrink-0 text-xs font-semibold text-primary hover:underline"
                   >
-                    Practice
+                    Topic drill
+                  </Link>
+                  <Link href={remediationWeakModeTestHref(w.topic)} className="shrink-0 text-xs font-semibold text-primary hover:underline">
+                    Weak-mode test
                   </Link>
                 </li>
               ))}

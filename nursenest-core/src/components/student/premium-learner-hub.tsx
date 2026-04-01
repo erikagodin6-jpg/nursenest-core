@@ -157,6 +157,9 @@ export function PremiumLearnerHub({
                 ) : (
                   <span>Score unlocks after a bit more scored practice</span>
                 )}
+                {readiness.calibratedPreview ? (
+                  <span className="text-amber-700 dark:text-amber-300">Conservative calibration active</span>
+                ) : null}
               </p>
             </div>
           </div>

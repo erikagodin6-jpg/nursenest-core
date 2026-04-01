@@ -4,7 +4,7 @@ import { auth } from "@/lib/auth";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { canViewFullPathwayLesson } from "@/lib/lessons/pathway-lesson-access";
 import { getPathwayLessonForProgress } from "@/lib/lessons/pathway-lesson-loader";
-import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
+import { requireSubscriberSession, notSubscribedResponse } from "@/lib/entitlements/require-subscriber-session";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -41,26 +41,25 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Progress unavailable" }, { status: 503 });
   }
 
-  let entitlement;
-  try {
-    entitlement = await resolveEntitlement(userId);
-  } catch {
-    return NextResponse.json({ error: "Unable to verify access" }, { status: 503 });
-  }
+  const gate = await requireSubscriberSession();
+  if (!gate.ok) return gate.response;
 
   const user = await prisma.user.findUnique({
     where: { id: userId },
     select: { learnerPath: true },
   });
 
-  if (!canViewFullPathwayLesson(entitlement, pathway, user?.learnerPath)) {
+  if (!canViewFullPathwayLesson(gate.entitlement, pathway, user?.learnerPath)) {
     safeServerLog("pathway_lesson", "pathway_progress_denied", {
       pathwayId,
       lessonSlug,
-      hasAccess: entitlement.hasAccess,
-      reason: entitlement.reason,
+      hasAccess: gate.entitlement.hasAccess,
+      reason: gate.entitlement.reason,
+      userIdPrefix: userId.slice(0, 8),
+      tier: String(gate.entitlement.tier ?? ""),
+      country: String(gate.entitlement.country ?? ""),
     });
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    return notSubscribedResponse();
   }
 
   const syntheticLessonId = `pathway:${pathwayId}:${lessonSlug}`;

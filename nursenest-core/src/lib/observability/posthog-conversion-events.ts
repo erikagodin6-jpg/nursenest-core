@@ -39,6 +39,22 @@ export const PH = {
   lessonPreviewUnlockCta: "lesson_preview_unlock_cta",
   /** Freemium question peek: user clicked upgrade to see rationale path. */
   freemiumSeeRationaleCta: "freemium_see_rationale_cta",
+  /** Pre-Nursing surface engagement + conversion loop. */
+  preNursingHubViewed: "pre_nursing_hub_viewed",
+  preNursingLessonsHubViewed: "pre_nursing_lessons_hub_viewed",
+  preNursingModuleViewed: "pre_nursing_module_viewed",
+  preNursingStudyPlanViewed: "pre_nursing_study_plan_viewed",
+  preNursingModuleCompleted: "pre_nursing_module_completed",
+  preNursingAllModulesCompleted: "pre_nursing_all_modules_completed",
+  preNursingNextModuleClicked: "pre_nursing_next_module_clicked",
+  preNursingResumeClicked: "pre_nursing_resume_clicked",
+  preNursingStudyPlanSaved: "pre_nursing_study_plan_saved",
+  preNursingFuturePathwayHintChanged: "pre_nursing_future_pathway_hint_changed",
+  preNursingComparePlansClicked: "pre_nursing_compare_plans_clicked",
+  preNursingExamLessonsHubClicked: "pre_nursing_exam_lessons_hub_clicked",
+  preNursingPathwayCtaClicked: "pre_nursing_pathway_cta_clicked",
+  preNursingSignupCtaClicked: "pre_nursing_signup_cta_clicked",
+  preNursingSigninCtaClicked: "pre_nursing_signin_cta_clicked",
 } as const;
 
 export type AppSection =

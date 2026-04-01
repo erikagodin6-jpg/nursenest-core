@@ -3,11 +3,12 @@ import { ContentStatus } from "@prisma/client";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { lessonAccessWhere } from "@/lib/entitlements/content-access-scope";
-import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
+import { notSubscribedResponse, requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { appPathwayLessonVisibleToSubscriber } from "@/lib/lessons/app-pathway-lesson-list-scope";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 const bodySchema = z.object({
   lessonId: z.string().min(5),
@@ -48,7 +49,12 @@ export async function POST(req: Request) {
   });
   if (pw && pw.status === ContentStatus.PUBLISHED) {
     if (!appPathwayLessonVisibleToSubscriber(gate.entitlement, pw, learnerPath)) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      safeServerLog("api_lessons_progress", "denied_out_of_scope_pathway_lesson", {
+        lessonIdPrefix: lessonId.slice(0, 8),
+        tier: String(gate.entitlement.tier ?? ""),
+        country: String(gate.entitlement.country ?? ""),
+      });
+      return notSubscribedResponse();
     }
     await prisma.progress.upsert({
       where: { userId_lessonId: { userId, lessonId } },
@@ -71,5 +77,10 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true });
   }
 
-  return NextResponse.json({ error: "Not found" }, { status: 404 });
+  safeServerLog("api_lessons_progress", "denied_out_of_scope_content_lesson", {
+    lessonIdPrefix: lessonId.slice(0, 8),
+    tier: String(gate.entitlement.tier ?? ""),
+    country: String(gate.entitlement.country ?? ""),
+  });
+  return notSubscribedResponse();
 }

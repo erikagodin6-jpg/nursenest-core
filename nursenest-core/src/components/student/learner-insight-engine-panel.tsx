@@ -67,7 +67,7 @@ export function LearnerInsightEnginePanel({ insights }: { insights: LearnerInsig
 
       {insights.weakAreas.length > 0 ? (
         <div className="mt-4">
-          <p className="text-xs font-semibold uppercase tracking-wide text-muted">Weak-area signals</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-muted">Priority review signals</p>
           <ul className="mt-2 space-y-2">
             {insights.weakAreas.slice(0, 5).map((w) => (
               <li

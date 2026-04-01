@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
+import { remediationTopicDrillHref, remediationWeakModeTestHref } from "@/lib/learner/remediation-links";
 import type { TopicPerformanceSnapshot } from "@/lib/learner/topic-performance";
 import type { TopicStrength } from "@/lib/learner/weak-topics-from-sessions";
 
@@ -88,16 +89,16 @@ export function WeakAreasDashboardClient({ initial }: Props) {
         <div className="flex flex-wrap gap-2">
           <Link
             className="rounded-full border border-primary/40 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary/15"
-            href="/app/practice-tests?focus=weak"
+            href={remediationWeakModeTestHref(firstWeakTopic ?? undefined)}
           >
-            Focus on weak topics
+            Open weak-mode test
           </Link>
           {firstWeakTopic ? (
             <Link
               className="rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold text-[var(--theme-menu-text)] transition-colors hover:bg-muted/80"
-              href={`/app/questions?topic=${encodeURIComponent(firstWeakTopic)}`}
+              href={remediationTopicDrillHref(firstWeakTopic)}
             >
-              Drill top weak topic
+              Open top queue topic drill
             </Link>
           ) : (
             <Link
@@ -192,13 +193,13 @@ export function WeakAreasDashboardClient({ initial }: Props) {
                     <div className="mt-2 flex flex-wrap gap-2">
                       <Link
                         className="rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary transition-colors hover:bg-primary/15"
-                        href={`/app/questions?preset=topic_drill&topic=${encodeURIComponent(w.topic)}`}
+                        href={remediationTopicDrillHref(w.topic)}
                       >
                         Remediate in question bank
                       </Link>
                       <Link
                         className="rounded-full border border-border bg-card px-3 py-1 text-xs font-semibold text-[var(--theme-menu-text)] transition-colors hover:bg-muted/80"
-                        href="/app/practice-tests?focus=weak"
+                        href={remediationWeakModeTestHref(w.topic)}
                       >
                         Apply in weak-mode test
                       </Link>

@@ -178,7 +178,7 @@ export function AdaptiveStudyOverview({
 
       {weakTop3.length > 0 ? (
         <p className="mt-4 text-sm text-foreground">
-          <span className="font-medium">Weakest signals right now: </span>
+          <span className="font-medium">Priority review queue: </span>
           {weakTop3.join(", ")}
         </p>
       ) : null}

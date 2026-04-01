@@ -11,6 +11,7 @@ import {
   Info,
 } from "lucide-react";
 import type { LearnerDashboardModel } from "@/lib/learner/load-learner-dashboard";
+import { remediationTopicDrillHref, remediationWeakModeTestHref } from "@/lib/learner/remediation-links";
 import { readinessBandLabel, type ReadinessBand } from "@/lib/learner/readiness-score";
 
 function pctLine(current: number, total: number): string {
@@ -90,6 +91,7 @@ export function LearnerDashboardView({ data }: { data: LearnerDashboardModel }) 
               {r.confidence === "low" ? " — add more full sessions." : null}
               {r.confidence === "medium" ? " — estimate will stabilize with volume." : null}
               {r.confidence === "high" ? " — based on enough recent items." : null}
+              {r.calibratedPreview ? " Conservative calibration is active for this exam track." : null}
             </p>
           </div>
           <div className="min-w-0 flex-1 space-y-2 text-sm text-[var(--theme-body-text)]">
@@ -139,8 +141,8 @@ export function LearnerDashboardView({ data }: { data: LearnerDashboardModel }) 
               <li>Ready: 80+</li>
             </ul>
             <p className="text-xs">
-              We show a number only after you have at least ~15 graded session items or one mock with 5+ questions — so
-              we do not invent precision from thin data.
+              We show a number only after a minimum graded-session or mock threshold is met for your exam track, so we do
+              not invent precision from thin data.
             </p>
             {r.factors.length > 0 ? (
               <div>
@@ -340,7 +342,7 @@ export function LearnerDashboardView({ data }: { data: LearnerDashboardModel }) 
         <section className="nn-card p-6">
           <div className="flex items-center gap-2">
             <Flame className="h-5 w-5 text-amber-600" aria-hidden />
-            <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Weak areas</h2>
+            <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Priority review queue</h2>
           </div>
           <p className="mt-1 text-xs text-muted-foreground">From recent scored mock sessions (your plan only).</p>
           {topWeak.length > 0 ? (
@@ -352,11 +354,11 @@ export function LearnerDashboardView({ data }: { data: LearnerDashboardModel }) 
                 >
                   <span className="font-medium text-foreground">{w.topic}</span>
                   <div className="flex shrink-0 flex-wrap items-center gap-2">
-                    <Link
-                      href={`/app/lessons?topic=${encodeURIComponent(w.topic)}`}
-                      className="text-xs font-semibold text-primary underline-offset-4 hover:underline"
-                    >
-                      Lessons
+                    <Link href={remediationTopicDrillHref(w.topic)} className="text-xs font-semibold text-primary underline-offset-4 hover:underline">
+                      Topic drill
+                    </Link>
+                    <Link href={remediationWeakModeTestHref(w.topic)} className="text-xs font-semibold text-primary underline-offset-4 hover:underline">
+                      Weak-mode test
                     </Link>
                     <span className="text-xs text-muted-foreground">
                       {w.missed}/{w.attempted} missed ({w.missRate}%)

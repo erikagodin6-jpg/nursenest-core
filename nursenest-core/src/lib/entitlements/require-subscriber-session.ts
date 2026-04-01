@@ -8,6 +8,10 @@ export type SubscriberSessionOk = { ok: true; userId: string; entitlement: Acces
 export type SubscriberSessionFail = { ok: false; response: NextResponse };
 export type SubscriberSessionResult = SubscriberSessionOk | SubscriberSessionFail;
 
+export function notSubscribedResponse() {
+  return NextResponse.json({ code: "not_subscribed", message: "Subscription required" }, { status: 403 });
+}
+
 /**
  * Single gate for subscriber-only APIs: session + entitlement resolution.
  * Avoid duplicating auth/403 logic across route handlers.
@@ -39,13 +43,16 @@ export async function requireSubscriberSession(): Promise<SubscriberSessionResul
   }
 
   if (!entitlement.hasAccess) {
-    safeServerLog("access", "denied", { reason: "no_active_entitlement", surface: "subscriber_gate" });
+    safeServerLog("access", "denied", {
+      reason: "no_active_entitlement",
+      surface: "subscriber_gate",
+      userIdPrefix: userId.slice(0, 8),
+      tier: String(entitlement.tier ?? ""),
+      country: String(entitlement.country ?? ""),
+    });
     return {
       ok: false,
-      response: NextResponse.json(
-        { error: "Subscription required", code: "no_active_subscription" },
-        { status: 403 },
-      ),
+      response: notSubscribedResponse(),
     };
   }
 
