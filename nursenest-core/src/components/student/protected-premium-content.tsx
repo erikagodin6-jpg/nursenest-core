@@ -20,7 +20,9 @@ function usePremiumProtectionTelemetry(surface: PremiumProtectionTelemetrySurfac
   const bufferRef = useRef(new Map<string, number>());
   const flushTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const surfaceRef = useRef(surface);
-  surfaceRef.current = surface;
+  useEffect(() => {
+    surfaceRef.current = surface;
+  }, [surface]);
 
   const flush = useCallback(async () => {
     const surf = surfaceRef.current;

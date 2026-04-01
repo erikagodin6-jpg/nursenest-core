@@ -212,7 +212,7 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
       <div className="flex-grow overflow-x-hidden">
         <section
           className="relative overflow-hidden"
-          style={{ paddingTop: "var(--space-hero-top)", paddingBottom: "var(--space-hero-bottom)" }}
+          style={{ paddingTop: "clamp(0.35rem, 1.1vw, 0.85rem)", paddingBottom: "var(--space-hero-bottom)" }}
           data-testid="hero-section"
         >
           <div className="pointer-events-none absolute left-0 top-0 -z-10 hidden h-full w-full overflow-hidden md:block will-change-transform" aria-hidden="true">
@@ -222,9 +222,9 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
 
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div
-              className={`grid items-center gap-5 md:gap-8 lg:gap-10 ${showHeroMediaColumn ? "md:grid-cols-[1fr_1.08fr]" : "md:grid-cols-1"}`}
+              className={`grid items-start gap-5 md:gap-8 lg:gap-10 ${showHeroMediaColumn ? "md:grid-cols-[1fr_1.08fr]" : "md:grid-cols-1"}`}
             >
-              <div className="hero-motion-enter min-w-0 max-w-[min(100%,45rem)] space-y-3.5 md:space-y-4">
+              <div className="hero-motion-enter min-w-0 max-w-[min(100%,45rem)] space-y-3 md:space-y-3.5">
                 <div className="flex flex-wrap items-center gap-2">
                   <div
                     className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/5 px-3 py-1.5 sm:px-4"
@@ -239,7 +239,7 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
                   </div>
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-2.5">
                   <h1
                     className="text-balance font-bold leading-[1.08] tracking-tight text-[var(--theme-heading-text)]"
                     style={{ fontSize: "var(--text-hero)" }}
@@ -478,14 +478,18 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
                 })}
               </p>
               <div className="flex flex-wrap gap-2">
-                {enabledCareers.slice(0, 8).map((career) => (
+                {enabledCareers.slice(0, 8).map((career) => {
+                  const label = (career.shortName || career.name || "").trim();
+                  if (!label) return null;
+                  return (
                   <span
                     key={career.id}
                     className="inline-flex items-center rounded-full border border-[var(--theme-card-border)] bg-card px-3 py-1.5 text-xs font-medium text-[var(--theme-body-text)] shadow-sm"
                   >
-                    {career.shortName}
+                    {label}
                   </span>
-                ))}
+                  );
+                })}
                 {enabledCareers.length > 8 && (
                   <span className="inline-flex items-center rounded-full border border-primary/15 bg-primary/5 px-3 py-1.5 text-xs font-semibold text-primary">
                     {t("home.hero.moreCount", { count: String(enabledCareers.length - 8) })}

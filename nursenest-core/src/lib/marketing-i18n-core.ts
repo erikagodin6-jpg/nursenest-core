@@ -28,11 +28,8 @@ export function formatMarketingMessage(
     raw = fallbackMessages[key];
   }
   if (raw === undefined) {
-    if (process.env.NODE_ENV === "production") {
-      console.error(`[marketing-i18n] missing key (suppressed UI): ${key}`);
-      return "";
-    }
     console.error(`[marketing-i18n] missing key: ${key} (locale bundle)`);
+    /** Last resort: readable fragment — prefer fixing bundles or passing fallbackMessages (see marketing layouts). */
     return humanizeMarketingKey(key);
   }
   let s = raw;

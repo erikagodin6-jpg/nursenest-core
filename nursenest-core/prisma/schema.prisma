@@ -383,6 +383,74 @@ enum BlogPostTemplate {
   TOP_MISTAKES
   PRACTICE_QUESTIONS
   STUDY_PLAN
+  EXAM_GUIDE
+  MEDICATION_REVIEW
+  LAB_VALUES_GUIDE
+  DISEASE_PROCESS_EXPLAINER
+  PRIORITIZATION_ARTICLE
+  COMPARISON_ARTICLE
+  CHECKLIST_ARTICLE
+  FAQ_STYLE
+  GLOSSARY
+}
+
+enum BlogPostIntent {
+  INFORMATIONAL
+  EXAM_PREP
+  STUDY_STRATEGY
+  COMPARISON
+  CONVERSION
+  PRACTICE_QUESTIONS
+  CHECKLIST
+  CONCEPT_EXPLAINER
+}
+
+enum BlogFunnelStage {
+  AWARENESS
+  CONSIDERATION
+  CONVERSION
+  RETENTION
+}
+
+enum BlogWorkflowStatus {
+  OUTLINE_READY
+  GENERATED
+  NEEDS_SOURCE_REVIEW
+  NEEDS_MEDICAL_REVIEW
+  NEEDS_SEO_REVIEW
+  APPROVED
+  SCHEDULED
+  PUBLISHED
+  STALE
+  FAILED_GENERATION
+  FAILED_IMAGE
+  NEEDS_METADATA
+  NEEDS_REFERENCES
+}
+
+enum BlogCampaignStatus {
+  DRAFT
+  QUEUED
+  RUNNING
+  PAUSED
+  COMPLETED
+  FAILED
+}
+
+enum BlogCampaignItemStatus {
+  QUEUED
+  GENERATING
+  GENERATED
+  FAILED
+  SCHEDULED
+  PUBLISHED
+}
+
+enum BlogImageStatus {
+  NONE
+  REQUESTED
+  GENERATED
+  FAILED
 }
 
 /** Aggregated full-corpus lesson/question quality (refreshed via admin POST, not hot-path). */
@@ -425,9 +493,118 @@ model BlogPost {
   updatedAt    DateTime @updatedAt
   /** e.g. content_items, paramedic-static, legacy-json */
   legacySource String?
+  campaignId   String?
+  campaign     BlogCampaign? @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+  targetKeyword String?
+  keywordCluster String?
+  countryTarget CountryCode?
+  intent       BlogPostIntent?
+  funnelStage  BlogFunnelStage?
+  workflowStatus BlogWorkflowStatus @default(GENERATED)
+  outlineJson  Json?
+  keyQuestions String[] @default([])
+  keywordPlan  String[] @default([])
+  internalLinkPlan Json?
+  ctaType      String?
+  ctaText      String?
+  ctaHref      String?
+  titleAlternates String[] @default([])
+  clickTitle   String?
+  metaTitleVariant String?
+  metaDescriptionVariant String?
+  featuredSnippet String? @db.Text
+  keyTakeaways String[] @default([])
+  faqBlock     Json?
+  definitionBox String? @db.Text
+  checklistBlock Json?
+  quickReferenceBlock Json?
+  sourceReliabilityScore Int?
+  sourcesJson  Json?
+  apaReferences String[] @default([])
+  requiresReferences Boolean @default(false)
+  medicalRiskFlags String[] @default([])
+  reviewDueAt  DateTime?
+  lastReviewedAt DateTime?
+  coverImageAlt String?
+  coverImageCaption String?
+  coverImagePrompt String? @db.Text
+  imageStyleType String?
+  imageStatus  BlogImageStatus @default(NONE)
+  socialCaption String? @db.Text
+  emailTeaser  String? @db.Text
+  shortSummary String? @db.Text
+  promoBlurb   String? @db.Text
+  schemaSummary String? @db.Text
+  perfImpressions Int?
+  perfClicks   Int?
+  perfCtr      Float?
+  perfInternalClicks Int?
+  perfConversionAssists Int?
+  perfSubscriptionAssists Int?
+  updateNeeded Boolean @default(false)
+  rankingNote  String? @db.Text
 
   @@index([postStatus, publishAt])
   @@index([createdAt])
+  @@index([campaignId, postStatus, publishAt])
+  @@index([targetKeyword])
+  @@index([keywordCluster])
+  @@index([workflowStatus])
+}
+
+model BlogCampaign {
+  id                 String              @id @default(cuid())
+  name               String
+  keywordCluster     String
+  targetExam         String?
+  targetProfession   String?
+  targetPathway      String?
+  countryTarget      CountryCode?
+  desiredPostCount   Int
+  postsPerWeek       Int?
+  preferredWeekdays  Int[]               @default([])
+  startDate          DateTime?
+  templateMix        BlogPostTemplate[]  @default([])
+  intentMix          BlogPostIntent[]    @default([])
+  funnelStage        BlogFunnelStage?
+  includeImages      Boolean             @default(false)
+  includeAiImages    Boolean             @default(false)
+  requireReferences  Boolean             @default(false)
+  status             BlogCampaignStatus  @default(DRAFT)
+  progressJson       Json?
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  posts              BlogPost[]
+  items              BlogCampaignItem[]
+
+  @@index([status, startDate])
+  @@index([keywordCluster])
+}
+
+model BlogCampaignItem {
+  id                 String                 @id @default(cuid())
+  campaignId         String
+  campaign           BlogCampaign           @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  ordinal            Int
+  status             BlogCampaignItemStatus @default(QUEUED)
+  plannedKeyword     String?
+  plannedTitle       String?
+  plannedSlug        String?
+  plannedPublishAt   DateTime?
+  preferredTemplate  BlogPostTemplate?
+  preferredIntent    BlogPostIntent?
+  preferredFunnel    BlogFunnelStage?
+  includeImage       Boolean                @default(false)
+  includeAiImage     Boolean                @default(false)
+  postId             String?
+  post               BlogPost?              @relation(fields: [postId], references: [id], onDelete: SetNull)
+  error              String?
+  createdAt          DateTime               @default(now())
+  updatedAt          DateTime               @updatedAt
+
+  @@unique([campaignId, ordinal])
+  @@index([campaignId, status, ordinal])
+  @@index([plannedPublishAt])
 }
 
 /** Production `content_items` — lessons are `type = "lesson"`. */
