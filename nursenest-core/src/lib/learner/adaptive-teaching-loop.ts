@@ -42,6 +42,15 @@ function hasStrongTeachingPayload(teaching: NormalizedTeachingPayload): boolean 
   return teaching.sections.length >= 3 && highValueFields >= 2;
 }
 
+export function deriveAdaptiveLoopDataGaps(recommendedContent: AdaptiveLoopContentRecommendation[]): string[] {
+  const dataGaps: string[] = [];
+  const strongTeachingPayloadExists = recommendedContent.some((r) => r.strongTeachingPayload);
+  const conceptImageAvailable = recommendedContent.some((r) => r.conceptImageAvailable);
+  if (!strongTeachingPayloadExists) dataGaps.push("No high-quality teaching payload found in prioritized recommendations.");
+  if (!conceptImageAvailable) dataGaps.push("No concept image matched for prioritized concepts.");
+  return dataGaps;
+}
+
 export async function buildAdaptiveTeachingLoopFromPerformance(args: {
   userId: string;
   events: QuestionPerformanceEventV1[];
@@ -138,7 +147,7 @@ export async function buildAdaptiveTeachingLoopFromPerformance(args: {
     kind: "lesson",
     id: r.id,
     title: r.title,
-    href: `/app/lessons`,
+    href: r.topic || prioritizedTopic ? `/app/lessons?topic=${encodeURIComponent(r.topic || prioritizedTopic || "")}` : "/app/lessons",
     topic: r.topic,
     subtopic: r.topicSlug,
     strongTeachingPayload: false,
@@ -150,8 +159,7 @@ export async function buildAdaptiveTeachingLoopFromPerformance(args: {
   const strongTeachingPayloadExists = recommendedContent.some((r) => r.strongTeachingPayload);
   const conceptImageAvailable = recommendedContent.some((r) => r.conceptImageAvailable);
 
-  if (!strongTeachingPayloadExists) dataGaps.push("No high-quality teaching payload found in prioritized recommendations.");
-  if (!conceptImageAvailable) dataGaps.push("No concept image matched for prioritized concepts.");
+  dataGaps.push(...deriveAdaptiveLoopDataGaps(recommendedContent));
 
   return {
     prioritizedTopic,

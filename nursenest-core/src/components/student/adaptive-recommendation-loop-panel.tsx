@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { readQuestionPerformanceSample } from "@/lib/learner/question-performance-events";
 import type { AdaptiveTeachingLoopRecommendation } from "@/lib/learner/adaptive-teaching-loop";
@@ -13,11 +13,16 @@ export function AdaptiveRecommendationLoopPanel({
   fallbackTopics: string[];
 }) {
   const [data, setData] = useState<AdaptiveTeachingLoopRecommendation | null>(null);
+  const requestKeyRef = useRef<string>("");
+  const fallbackKey = useMemo(() => fallbackTopics.slice(0, 3).join("|"), [fallbackTopics]);
 
   useEffect(() => {
     let cancelled = false;
     const run = async () => {
       if (!userId) return;
+      const requestKey = `${userId}:${fallbackKey}`;
+      if (requestKeyRef.current === requestKey) return;
+      requestKeyRef.current = requestKey;
       const events = readQuestionPerformanceSample(userId, 120);
       const res = await fetch("/api/learner/adaptive-loop", {
         method: "POST",
@@ -32,13 +37,13 @@ export function AdaptiveRecommendationLoopPanel({
     return () => {
       cancelled = true;
     };
-  }, [userId, fallbackTopics]);
+  }, [userId, fallbackTopics, fallbackKey]);
 
   if (!data) return null;
 
   return (
     <div className="mt-6 rounded-xl border border-border/60 bg-muted/15 p-4">
-      <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Adaptive teaching loop</p>
+      <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Priority review loop</p>
       <p className="mt-1 text-sm text-foreground">
         <span className="font-medium">Prioritized topic:</span>{" "}
         {data.prioritizedTopic ?? "—"}
@@ -65,7 +70,9 @@ export function AdaptiveRecommendationLoopPanel({
             </li>
           ))}
         </ul>
-      ) : null}
+      ) : (
+        <p className="mt-3 text-xs text-muted-foreground">No targeted recommendation yet. Continue the priority review queue to refine this loop.</p>
+      )}
 
       {data.dataGaps.length > 0 ? (
         <ul className="mt-3 list-inside list-disc space-y-1 text-xs text-muted-foreground">

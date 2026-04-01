@@ -60,7 +60,7 @@ export async function loadPreNursingAnalyticsReport(): Promise<PreNursingAnalyti
       .sort((a, b) => b.completed - a.completed)
       .slice(0, 10),
     pathwayHintDistribution: [...byHint.entries()]
-      .map(([hint, users: count]) => ({ hint, users: count }))
+      .map(([hint, userCount]) => ({ hint, users: userCount }))
       .sort((a, b) => b.users - a.users),
     extensionPath: {
       eventSource: "PostHog events prefixed pre_nursing_*",
