@@ -136,6 +136,7 @@ export async function GET(req: NextRequest) {
   const pageSize = pageSizeParsed;
 
   const topicFilter = searchParams.get("topic")?.trim();
+  const topicCodeFilter = searchParams.get("topicCode")?.trim().toLowerCase();
   const pathwayIdParam = searchParams.get("pathwayId")?.trim();
   const responseMode = parseQuestionListMode(searchParams.get("mode"));
   const sortRaw = searchParams.get("sort")?.trim().toLowerCase() ?? "recent";
@@ -273,6 +274,9 @@ export async function GET(req: NextRequest) {
         if (includeTopic && topicFilterResolved && topicFilterResolved.length > 0) {
           parts.push({ topic: topicFilterResolved });
         }
+        if (includeTopic && topicCodeFilter && topicCodeFilter.length > 0) {
+          parts.push({ subtopic: topicCodeFilter });
+        }
         if (excludeIds.length > 0) {
           parts.push({ id: { notIn: excludeIds } });
         }
@@ -406,6 +410,7 @@ export async function GET(req: NextRequest) {
         pathwayIdApplied: pathway?.id ?? null,
         pathwayIdRequested: pathwayIdParam && pathwayIdParam.length > 0 ? pathwayIdParam : null,
         topicRequested: topicFilterResolved && topicFilterResolved.length > 0 ? topicFilterResolved : null,
+        topicCodeRequested: topicCodeFilter ?? null,
         topicRelaxed,
         ...(listEmptyDiagnostics
           ? {

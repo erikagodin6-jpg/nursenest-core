@@ -11,9 +11,12 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import {
+  ALLIED,
   HUB,
+  NP,
   RN,
   loginWithCallback,
+  pnQuestions,
   rnQuestions,
 } from "@/lib/marketing/marketing-entry-routes";
 import { LEGAL_POLICY_BUNDLE_VERSION } from "@/lib/legal/legal-config";
@@ -121,11 +124,56 @@ export function PricingPageClient({
     () => plans.filter((p) => p.tier === tier && p.country === effectiveCountry),
     [plans, tier, effectiveCountry],
   );
+  const availableRows = useMemo(
+    () =>
+      filtered.filter((p) => p.checkoutAvailable).sort((a, b) => {
+        const order: BillingDuration[] = ["monthly", "3-month", "6-month", "yearly"];
+        return order.indexOf(a.duration) - order.indexOf(b.duration);
+      }),
+    [filtered],
+  );
+  const coreRow = availableRows.find((r) => r.duration === "monthly") ?? availableRows[0] ?? null;
+  const premiumRow =
+    availableRows.find((r) => r.isBestValue) ??
+    availableRows.find((r) => r.duration === "yearly") ??
+    availableRows[availableRows.length - 1] ??
+    null;
 
   const tryQuestionsHref = localize(rnQuestions(region));
   const examsHref = localize(loginWithCallback(RN.appExams));
   const lessonsHubHref = localize(HUB.examLessons);
   const toolsHref = localize(HUB.tools);
+  const examLinks = useMemo(
+    () => ({
+      rn: {
+        label: country === "US" ? "RN (NCLEX-RN)" : "RN (Canada entry-to-practice)",
+        href: localize(rnQuestions(country)),
+        blurb:
+          country === "US"
+            ? "NCLEX-style client-needs question flow with readiness guidance."
+            : "Canadian RN-style preparation with system-based remediation.",
+      },
+      pn: {
+        label: country === "US" ? "PN (NCLEX-PN)" : "PN (REx-PN)",
+        href: localize(pnQuestions(country)),
+        blurb:
+          country === "US"
+            ? "Practical-nursing scope and delegation-focused prep."
+            : "Canadian REx-PN terminology and entry-to-practice focus.",
+      },
+      np: {
+        label: "NP",
+        href: localize(country === "US" ? NP.fnpQuestions : NP.caNpQuestions),
+        blurb: "Advanced differential, pharmacotherapy, and management-focused cases.",
+      },
+      allied: {
+        label: "Allied",
+        href: localize(country === "US" ? ALLIED.usQuestions : ALLIED.caQuestions),
+        blurb: "Role-specific pathways with practical exam-style drills.",
+      },
+    }),
+    [country, localize],
+  );
 
   const termsHref = localize("/terms");
   const privacyHref = localize("/privacy");
@@ -191,16 +239,9 @@ export function PricingPageClient({
     [t],
   );
 
-  const heroHeadline = "Pass with a plan, not guesswork";
+  const heroHeadline = "Pass your nursing exam with a structured clinical prep loop";
   const heroSubheadline =
-    "NurseNest adapts to your weak areas, tracks readiness, and tells you what to do next so your final weeks are focused and calm.";
-
-  const planPositioning: Record<BillingDuration, string> = {
-    monthly: "Most popular",
-    "3-month": "Best for final weeks",
-    "6-month": "Best for quick review",
-    yearly: "Best for comprehensive prep",
-  };
+    "Train with exam-style questions, UWorld-level rationale structure, weak-area targeting, flashcards, and readiness guidance that tells you exactly what to do next.";
 
   const planPersona: Record<BillingDuration, string> = {
     monthly: "For students who want flexibility while building consistent weekly momentum.",
@@ -276,7 +317,7 @@ export function PricingPageClient({
             href={tryQuestionsHref}
             className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition hover:brightness-110"
           >
-            Start today
+            Start studying now
             <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
           <Link href={tryQuestionsHref} className="inline-flex items-center text-sm font-semibold text-primary hover:underline">
@@ -334,6 +375,42 @@ export function PricingPageClient({
             <p className="mt-2 text-[11px] text-muted-foreground">Illustrative breakdown. Your report uses live data.</p>
           </div>
         </div>
+      </section>
+
+      <section className="mt-12 overflow-x-auto rounded-2xl border border-[var(--theme-card-border)] bg-card">
+        <h2 className="px-4 pt-4 text-xl font-bold text-[var(--theme-heading-text)] sm:px-6">Plan comparison</h2>
+        <p className="px-4 pb-2 text-sm text-muted-foreground sm:px-6">Choose by depth: Free to start, Core to improve, Premium for full exam-readiness workflow.</p>
+        <table className="w-full min-w-[640px] text-left text-sm">
+          <thead>
+            <tr className="border-y border-[var(--theme-card-border)] bg-muted/35">
+              <th className="px-4 py-3 sm:px-6">Feature</th>
+              <th className="px-4 py-3">Free</th>
+              <th className="px-4 py-3">Core</th>
+              <th className="px-4 py-3">Premium</th>
+            </tr>
+          </thead>
+          <tbody>
+            {[
+              ["Practice questions", "Limited starter sets", "Full question access", "Full + prioritized drills"],
+              ["Rationales", "Basic", "Detailed", "Detailed + remediation cues"],
+              ["Lessons", "Preview only", "Included", "Included"],
+              ["Flashcards", "Preview", "Included", "Included"],
+              ["Exams (CAT)", "No", "Practice exams", "Practice exams + adaptive focus"],
+              ["Adaptive features", "No", "Basic", "Advanced"],
+              ["Study plan", "No", "Included", "Included + weak-area guided"],
+              ["Weak-area tracking", "No", "Yes", "Yes + stronger prioritization"],
+            ].map((row) => (
+              <tr key={row[0]} className="border-b border-[var(--theme-card-border)] last:border-0">
+                <th scope="row" className="px-4 py-3 font-medium text-[var(--theme-heading-text)] sm:px-6">
+                  {row[0]}
+                </th>
+                <td className="px-4 py-3 text-muted-foreground">{row[1]}</td>
+                <td className="px-4 py-3 text-[var(--theme-body-text)]">{row[2]}</td>
+                <td className="px-4 py-3 text-[var(--theme-body-text)]">{row[3]}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </section>
 
       <div className="nn-accent-soft-ring mt-10 rounded-xl border border-[var(--theme-card-border)] px-4 py-3 text-sm text-muted-foreground">
@@ -598,7 +675,7 @@ export function PricingPageClient({
         <p className="mt-2 text-sm text-muted-foreground">{t("pages.pricing.billing.helper")}</p>
         <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{t("pages.pricing.billing.recurringDisclosure")}</p>
         <p className="mt-2 text-xs text-muted-foreground">{t("pages.pricing.checkout.recurringShort")}</p>
-        <p className="mt-2 text-xs font-medium text-primary">Choose the shortest plan that matches your exam timeline and comfort level.</p>
+        <p className="mt-2 text-xs font-medium text-primary">Cancel anytime. Choose the shortest plan that matches your exam timeline and comfort level.</p>
         {loadError ? <p className="mt-4 text-sm text-red-600">{loadError}</p> : null}
         {checkoutError ? <p className="mt-4 text-sm text-red-600">{checkoutError}</p> : null}
 
@@ -628,64 +705,114 @@ export function PricingPageClient({
           </label>
         </div>
 
-        <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {(["monthly", "3-month", "6-month", "yearly"] as BillingDuration[]).map((dur) => {
-            const row = filtered.find((p) => p.duration === dur);
-            return (
-              <article
-                key={dur}
-                className={`flex flex-col rounded-2xl border border-[var(--theme-card-border)] bg-card p-5 shadow-sm ${
-                  row?.isBestValue ? "ring-2 ring-primary md:scale-[1.02]" : row?.isMostPopular ? "ring-2 ring-primary/40" : ""
-                }`}
+        <div className="mt-6 grid gap-4 md:grid-cols-3">
+          <article className="flex flex-col rounded-2xl border border-[var(--theme-card-border)] bg-card p-5 shadow-sm">
+            <p className="mb-2 inline-block w-fit rounded-full bg-muted px-2 py-0.5 text-xs font-bold text-muted-foreground">Free</p>
+            <h3 className="text-lg font-semibold text-[var(--theme-heading-text)]">Starter access</h3>
+            <p className="mt-2 text-xs leading-snug text-muted-foreground">Try exam-style questions and preview how NurseNest works before subscribing.</p>
+            <ul className="mt-3 space-y-1.5 text-xs text-[var(--theme-body-text)]">
+              <li className="flex gap-1.5"><Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />Starter question sets</li>
+              <li className="flex gap-1.5"><Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />Basic rationale visibility</li>
+              <li className="flex gap-1.5"><Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />No payment required</li>
+            </ul>
+            <p className="mt-4 text-2xl font-bold">$0</p>
+            <Link href={tryQuestionsHref} className="mt-4 inline-flex w-full justify-center rounded-full border border-[var(--theme-card-border)] bg-card py-2.5 text-sm font-semibold text-[var(--theme-heading-text)] hover:border-primary/35">
+              Start practicing
+            </Link>
+          </article>
+
+          {coreRow ? (
+            <article className="flex flex-col rounded-2xl border border-[var(--theme-card-border)] bg-card p-5 shadow-sm ring-2 ring-primary/25">
+              <p className="mb-2 inline-block w-fit rounded-full bg-primary/15 px-2 py-0.5 text-xs font-bold text-primary">Core</p>
+              <h3 className="text-lg font-semibold text-[var(--theme-heading-text)]">{t(DURATION_KEYS[coreRow.duration])}</h3>
+              <p className="mt-2 text-xs leading-snug text-muted-foreground">{planPersona[coreRow.duration]}</p>
+              <ul className="mt-3 space-y-1.5 text-xs text-[var(--theme-body-text)]">
+                {planOutcomeLines[coreRow.duration].map((line) => (
+                  <li key={line} className="flex gap-1.5"><Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />{line}</li>
+                ))}
+              </ul>
+              <p className="mt-4 text-2xl font-bold">{coreRow.totalLabel}</p>
+              <p className="text-sm text-muted-foreground">{coreRow.monthlyEquivalentLabel} {t("pages.pricing.plan.avgSuffix")}</p>
+              <button
+                type="button"
+                disabled={checkoutLoading || !policiesAccepted}
+                onClick={() => startCheckout(coreRow.duration)}
+                className="mt-4 w-full rounded-full bg-primary py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
               >
-                <p className="mb-2 inline-block w-fit rounded-full bg-primary/15 px-2 py-0.5 text-xs font-bold text-primary">
-                  {planPositioning[dur]}
+                Unlock full access
+              </button>
+            </article>
+          ) : null}
+
+          {premiumRow ? (
+            <article className="flex flex-col rounded-2xl border border-[var(--theme-card-border)] bg-card p-5 shadow-sm">
+              <p className="mb-2 inline-block w-fit rounded-full bg-primary px-2 py-0.5 text-xs font-bold text-primary-foreground">Premium · Most popular</p>
+              <h3 className="text-lg font-semibold text-[var(--theme-heading-text)]">{t(DURATION_KEYS[premiumRow.duration])}</h3>
+              <p className="mt-2 text-xs leading-snug text-muted-foreground">Best for comprehensive prep with maximum runway and savings.</p>
+              <ul className="mt-3 space-y-1.5 text-xs text-[var(--theme-body-text)]">
+                <li className="flex gap-1.5"><Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />Full lessons, questions, and exam prep loop</li>
+                <li className="flex gap-1.5"><Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />Adaptive weak-area and readiness guidance</li>
+                <li className="flex gap-1.5"><Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />Best value per month for long prep</li>
+              </ul>
+              <p className="mt-4 text-2xl font-bold">{premiumRow.totalLabel}</p>
+              <p className="text-sm text-muted-foreground">{premiumRow.monthlyEquivalentLabel} {t("pages.pricing.plan.avgSuffix")}</p>
+              {premiumRow.savingsVsMonthlyPercent > 0 ? (
+                <p className="mt-2 text-xs font-semibold text-primary">
+                  {t("pages.pricing.plan.saveVsMonthly", { pct: premiumRow.savingsVsMonthlyPercent })}
                 </p>
-                <h3 className="text-lg font-semibold text-[var(--theme-heading-text)]">{t(DURATION_KEYS[dur])}</h3>
-                <p className="mt-2 text-xs leading-snug text-muted-foreground">{planPersona[dur]}</p>
-                <ul className="mt-3 space-y-1.5 text-xs text-[var(--theme-body-text)]">
-                  {planOutcomeLines[dur].map((line) => (
-                    <li key={line} className="flex gap-1.5">
-                      <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />
-                      {line}
-                    </li>
-                  ))}
-                </ul>
-                {row ? (
-                  <>
-                    <p className="mt-4 text-2xl font-bold">{row.totalLabel}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {row.monthlyEquivalentLabel} {t("pages.pricing.plan.avgSuffix")}
-                    </p>
-                    {row.savingsVsMonthlyPercent > 0 ? (
-                      <p className="mt-2 text-xs font-semibold text-primary">
-                        {t("pages.pricing.plan.saveVsMonthly", { pct: row.savingsVsMonthlyPercent })}
-                      </p>
-                    ) : null}
-                    <button
-                      type="button"
-                      disabled={checkoutLoading || !row.checkoutAvailable || !policiesAccepted}
-                      onClick={() => startCheckout(dur)}
-                      className="mt-4 w-full rounded-full bg-primary py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
-                    >
-                      {row.checkoutAvailable ? "Start this plan" : t("pages.pricing.checkout.comingSoon")}
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <p className="mt-3 text-sm font-medium text-muted-foreground">{t("pages.pricing.checkout.comingSoon")}</p>
-                    <button
-                      type="button"
-                      disabled
-                      className="mt-4 w-full rounded-full border border-border bg-muted/50 py-2.5 text-sm font-semibold text-muted-foreground"
-                    >
-                      {t("pages.pricing.checkout.comingSoon")}
-                    </button>
-                  </>
-                )}
-              </article>
-            );
-          })}
+              ) : null}
+              <button
+                type="button"
+                disabled={checkoutLoading || !policiesAccepted}
+                onClick={() => startCheckout(premiumRow.duration)}
+                className="mt-4 w-full rounded-full bg-primary py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
+              >
+                Start studying now
+              </button>
+            </article>
+          ) : null}
+          {!coreRow && !premiumRow ? (
+            <article className="md:col-span-3 rounded-2xl border border-border/70 bg-muted/30 p-5 text-sm text-muted-foreground">
+              Plans for this pathway are updating. Explore free questions now, then return to unlock full access.
+            </article>
+          ) : null}
+        </div>
+      </section>
+
+      <section className="mt-14">
+        <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">Product preview</h2>
+        <p className="mt-2 text-sm text-muted-foreground">What you actually use each study day.</p>
+        <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {[
+            ["Question UI", "Timed, exam-style question flow with clear prompt and choices."],
+            ["Rationales", "Plain-language reasoning for correct and incorrect answers."],
+            ["CAT / Exams", "Adaptive and timed testing to practice pressure and pacing."],
+            ["Dashboard", "Weak-area tracking, readiness trends, and next-best actions."],
+          ].map(([title, body]) => (
+            <div key={title} className="rounded-xl border border-[var(--theme-card-border)] bg-card p-4">
+              <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{title}</p>
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="mt-14">
+        <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">Choose your exam</h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Country-aware links: {country === "US" ? "US terminology and exam naming" : "Canadian terminology and exam naming"}.
+        </p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          {Object.values(examLinks).map((item) => (
+            <Link
+              key={item.label}
+              href={item.href}
+              className="rounded-xl border border-[var(--theme-card-border)] bg-card p-4 transition hover:border-primary/35"
+            >
+              <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{item.label}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{item.blurb}</p>
+            </Link>
+          ))}
         </div>
       </section>
 

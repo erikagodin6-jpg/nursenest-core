@@ -3,6 +3,7 @@
 import { LearnerNoteScope } from "@prisma/client";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
 import { ProtectedPremiumContent } from "@/components/student/protected-premium-content";
 import { StudyNotesPanel } from "@/components/student/study-notes-panel";
@@ -119,6 +120,7 @@ export function QuestionBankPracticeClient({
   const [softNotice, setSoftNotice] = useState<string | null>(null);
   const [questions, setQuestions] = useState<QFull[]>([]);
   const [topic, setTopic] = useState<string | null>(null);
+  const [topicCodeFilter, setTopicCodeFilter] = useState<string | null>(null);
   const [pathwayIdFilter, setPathwayIdFilter] = useState<string | null>(null);
   const [preset, setPreset] = useState<QuestionBankPreset>("pathway_mixed");
   const seenIdsRef = useRef<string[]>([]);
@@ -192,6 +194,7 @@ export function QuestionBankPracticeClient({
           sort: sortForApi,
         });
         if (topicForApi) qs.set("topic", topicForApi);
+        if (topicCodeFilter) qs.set("topicCode", topicCodeFilter);
         if (pathwayIdFilter) qs.set("pathwayId", pathwayIdFilter);
         if (efficiencyMode) qs.set("studyMode", efficiencyMode);
         if (append && seenIdsRef.current.length > 0) {
@@ -321,15 +324,17 @@ export function QuestionBankPracticeClient({
         setError("Network error loading questions.");
       }
     },
-    [userId, preset, topicForApi, topic, pathwayIdFilter, pathwayOptions, sortForApi, efficiencyMode],
+    [userId, preset, topicForApi, topicCodeFilter, topic, pathwayIdFilter, sortForApi, efficiencyMode],
   );
 
   useEffect(() => {
     const tp = searchParams.get("topic")?.trim();
+    const tpc = searchParams.get("topicCode")?.trim().toLowerCase();
     const pid = searchParams.get("pathwayId")?.trim();
     const pr = searchParams.get("preset")?.trim();
     const sm = searchParams.get("studyMode")?.trim().toLowerCase();
     if (tp) setTopic(tp);
+    if (tpc) setTopicCodeFilter(tpc);
     if (pid) setPathwayIdFilter(pid);
     if (pr === "random" || pr === "random_bank") setPreset("random_bank");
     else if (pr === "topic" || pr === "topic_drill") setPreset("topic_drill");
@@ -771,6 +776,11 @@ export function QuestionBankPracticeClient({
                     Topic code: <span className="font-medium text-foreground">{g.learningLoop.topicCode}</span> · confidence{" "}
                     {g.learningLoop.confidence}
                   </p>
+                  {g.learningLoop.confidence !== "low" ? (
+                    <p className="mt-1 text-xs text-amber-900 dark:text-amber-200">
+                      Your weak areas: this topic is currently prioritized for remediation.
+                    </p>
+                  ) : null}
                   <div className="mt-3 flex flex-wrap gap-2">
                     {g.learningLoop.lessonHref ? (
                       <Link

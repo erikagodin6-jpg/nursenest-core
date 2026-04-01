@@ -177,11 +177,17 @@ export function WeakAreasDashboardClient({ initial }: Props) {
                       <span className="font-medium text-foreground">
                         #{i + 1} {w.topic}
                       </span>
-                      <span className="text-xs text-muted">
-                        {w.attempted > 0 ? `${100 - w.missRate}% accuracy` : "—"} · {w.missed} miss
-                        {w.missed === 1 ? "" : "es"}
-                        {typeof w.wrongStreak === "number" && w.wrongStreak > 1 ? ` · streak ${w.wrongStreak}` : ""}
-                      </span>
+                      <div className="flex flex-wrap items-center gap-2 text-xs text-muted">
+                        <span className="rounded-full border border-border px-2 py-0.5">
+                          {w.recommendationConfidence ?? "low"} confidence
+                        </span>
+                        <span>{w.attempted > 0 ? `${100 - w.missRate}% accuracy` : "—"}</span>
+                        <span>
+                          {w.missed} miss
+                          {w.missed === 1 ? "" : "es"}
+                        </span>
+                        {typeof w.wrongStreak === "number" && w.wrongStreak > 1 ? <span>streak {w.wrongStreak}</span> : null}
+                      </div>
                     </div>
                     <div className="mt-2 flex flex-wrap gap-2">
                       <Link

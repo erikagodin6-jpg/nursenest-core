@@ -4,6 +4,7 @@ import { loadAdminDiagnostics } from "@/lib/admin/load-admin-diagnostics";
 import { loadExamPlanAdoptionStats } from "@/lib/admin/load-exam-plan-adoption";
 import { loadQuestionBankRemediationIntelligence } from "@/lib/questions/load-question-bank-remediation-intelligence";
 import { QuestionQualityQueueTable } from "@/components/admin/question-quality-queue-table";
+import { buildNpCanadaCoverageReport } from "@/lib/np/build-np-canada-coverage-report";
 
 export const dynamic = "force-dynamic";
 
@@ -21,10 +22,11 @@ function StatusPill({ ok, label }: { ok: boolean; label: string }) {
 
 export default async function AdminDiagnosticsPage() {
   await requireAdmin();
-  const [d, examPlan, qbIntel] = await Promise.all([
+  const [d, examPlan, qbIntel, npCoverage] = await Promise.all([
     loadAdminDiagnostics(),
     loadExamPlanAdoptionStats(),
     loadQuestionBankRemediationIntelligence(),
+    buildNpCanadaCoverageReport().catch(() => null),
   ]);
 
   return (
@@ -310,6 +312,92 @@ export default async function AdminDiagnosticsPage() {
               </ul>
             </div>
           </div>
+          <div className="mt-4 rounded-lg border border-border/60 bg-muted/15 p-3 text-sm">
+            <p className="font-medium">Allied Canada status: {qbIntel.alliedCanada.assessment.replaceAll("_", " ")}</p>
+            <p className="mt-1 text-muted-foreground">
+              {qbIntel.alliedCanada.assessment === "classification_gap"
+                ? "Likely classification issue: CA appears sparse while US/null and shared-region rows are high. Prioritize country/tag remapping before net-new writing."
+                : qbIntel.alliedCanada.assessment === "true_inventory_gap"
+                  ? "Likely true inventory gap: CA-tagged allied rows are genuinely low. Plan content recovery/import."
+                  : "No acute classification-only issue detected; treat as mixed/healthy inventory."}
+            </p>
+            <div className="mt-2 flex flex-wrap gap-3 text-xs">
+              <Link href="/admin/questions?exam=ALLIED" className="text-primary underline">
+                Open Allied question queue
+              </Link>
+              <Link href="/api/admin/question-bank-remediation" className="text-primary underline">
+                JSON remediation intelligence
+              </Link>
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      {npCoverage ? (
+        <section className="mt-8 nn-card p-6">
+          <h2 className="text-lg font-semibold">NP Canada triage actions</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Reporting-only prioritization from published NP CA rows. Use this to queue writing/upgrades, not to auto-generate filler.
+          </p>
+          <div className="mt-4 grid gap-3 sm:grid-cols-3">
+            <div className="rounded-lg border border-border/60 bg-muted/20 px-3 py-2">
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">NP published</p>
+              <p className="mt-1 text-xl font-bold tabular-nums">{npCoverage.totals.published}</p>
+            </div>
+            <div className="rounded-lg border border-border/60 bg-muted/20 px-3 py-2">
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">HTTPS images</p>
+              <p className="mt-1 text-xl font-bold tabular-nums">
+                {npCoverage.totals.withHttpsImages} / {npCoverage.totals.withoutHttpsImages}
+              </p>
+            </div>
+            <div className="rounded-lg border border-border/60 bg-muted/20 px-3 py-2">
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Topics below floor</p>
+              <p className="mt-1 text-xl font-bold tabular-nums">{npCoverage.deficits.topicsBelowThreshold.length}</p>
+            </div>
+          </div>
+          <div className="mt-5 grid gap-4 lg:grid-cols-3">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Highest-risk topic gaps</p>
+              <ul className="mt-2 space-y-1 text-sm">
+                {npCoverage.nextActions.highestRiskTopicGaps.slice(0, 8).map((r) => (
+                  <li key={r.topic} className="flex justify-between rounded bg-rose-50 px-2 py-1 dark:bg-rose-950/20">
+                    <span className="truncate pr-2">{r.topic}</span>
+                    <span className="tabular-nums">-{r.deficit}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Weakest stem coverage</p>
+              <ul className="mt-2 space-y-1 text-sm">
+                {npCoverage.nextActions.weakestStemTypeCoverage.slice(0, 8).map((r) => (
+                  <li key={r.stemType} className="flex justify-between rounded bg-amber-50 px-2 py-1 dark:bg-amber-950/20">
+                    <span className="truncate pr-2">{r.stemType}</span>
+                    <span className="tabular-nums">{r.count}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Depth upgrades (enough volume)</p>
+              <ul className="mt-2 space-y-1 text-sm">
+                {npCoverage.nextActions.weakTeachingDepthWithVolume.slice(0, 8).map((r) => (
+                  <li key={r.topic} className="flex justify-between rounded bg-muted/40 px-2 py-1">
+                    <span className="truncate pr-2">{r.topic}</span>
+                    <span className="tabular-nums">{Math.round(r.lackingRate * 100)}%</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <div className="mt-4 flex flex-wrap gap-3 text-sm">
+            <Link href="/admin/questions?exam=NP" className="text-primary underline">
+              Open NP question editor queue
+            </Link>
+            <Link href="/api/admin/np-coverage" className="text-primary underline">
+              JSON NP coverage payload
+            </Link>
+          </div>
         </section>
       ) : null}
 
@@ -329,6 +417,12 @@ export default async function AdminDiagnosticsPage() {
               GET /api/admin/gaps
             </Link>{" "}
             — extended coverage gaps
+          </li>
+          <li>
+            <Link className="text-primary underline" href="/api/admin/np-coverage">
+              GET /api/admin/np-coverage
+            </Link>{" "}
+            — NP Canada triage signals + prioritized next actions
           </li>
           <li>
             <Link className="text-primary underline" href="/admin">

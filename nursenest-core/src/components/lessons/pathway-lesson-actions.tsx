@@ -6,11 +6,15 @@ import Link from "next/link";
 export function PathwayLessonActions({
   pathwayId,
   lessonSlug,
+  topicCode,
+  topicLabel,
   userId,
   canMarkComplete,
 }: {
   pathwayId: string;
   lessonSlug: string;
+  topicCode?: string | null;
+  topicLabel?: string | null;
   userId: string;
   canMarkComplete: boolean;
 }) {
@@ -39,8 +43,12 @@ export function PathwayLessonActions({
     }
   }
 
-  /** Pathway-only: `topic` labels in lessons rarely match `exam_questions.topic` strings — filter in-app instead. */
-  const qbHref = `/app/questions?pathwayId=${encodeURIComponent(pathwayId)}`;
+  const topicCodeParam = topicCode?.trim() ? `&topicCode=${encodeURIComponent(topicCode.trim())}` : "";
+  const topicLabelParam = topicLabel?.trim() ? `&topic=${encodeURIComponent(topicLabel.trim())}` : "";
+  const qbHref = `/app/questions?pathwayId=${encodeURIComponent(pathwayId)}${topicCodeParam}${topicLabelParam}&preset=topic_drill`;
+  const flashcardsHref = topicCode?.trim()
+    ? `/app/flashcards?pathwayId=${encodeURIComponent(pathwayId)}&topicCode=${encodeURIComponent(topicCode.trim())}`
+    : `/app/flashcards?pathwayId=${encodeURIComponent(pathwayId)}`;
 
   return (
     <div className="mt-10 flex flex-col gap-4 border-t border-[var(--theme-separator)] pt-8 sm:flex-row sm:flex-wrap sm:items-center">
@@ -48,13 +56,13 @@ export function PathwayLessonActions({
         href={qbHref}
         className="inline-flex justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground"
       >
-        Test this topic in the question bank
+        Practice more like this
       </Link>
       <Link
-        href="/app/flashcards"
+        href={flashcardsHref}
         className="inline-flex justify-center rounded-full border border-border px-5 py-2.5 text-sm font-semibold hover:bg-gray-50"
       >
-        Flashcards
+        Reinforce with flashcards
       </Link>
       <Link
         href="/app/exams"

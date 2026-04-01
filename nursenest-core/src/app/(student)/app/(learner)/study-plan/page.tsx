@@ -72,7 +72,7 @@ export default async function StudyPlanPage() {
 
       {entitlement !== "error" && entitlement.hasAccess ? <ExamPlanSettingsCard /> : null}
 
-      {adaptive ? <AdaptiveStudyOverview adaptive={adaptive} showHeading /> : null}
+      {adaptive ? <AdaptiveStudyOverview adaptive={adaptive} showHeading userId={userId} /> : null}
 
       {insightSnapshot ? <LearnerInsightEnginePanel insights={insightSnapshot} /> : null}
 

@@ -1,4 +1,4 @@
-import { BlogFunnelStage, BlogImageStatus, BlogPostIntent, BlogPostStatus, BlogPostTemplate, BlogWorkflowStatus } from "@prisma/client";
+import { BlogFunnelStage, BlogImageStatus, BlogPostIntent, BlogPostStatus, BlogPostTemplate, BlogWorkflowStatus, Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
@@ -44,6 +44,14 @@ const schema = z.object({
     .optional(),
 });
 
+function normalizeTopic(input: string): string {
+  return input
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim()
+    .replace(/\s+/g, " ");
+}
+
 /**
  * Single-post AI draft generation (one model call per request — batch uses /api/admin/blog/batch-chunk).
  */
@@ -67,6 +75,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid payload", details: parsed.error.flatten() }, { status: 400 });
   }
   const d = parsed.data;
+  const normalizedTopic = normalizeTopic(d.targetKeyword ?? d.topic);
 
   const titleFn = BLOG_TEMPLATE_TITLE_PATTERNS[d.template];
   const title = titleFn({ exam: d.exam, topic: d.topic });
@@ -86,6 +95,30 @@ export async function POST(req: Request) {
       }
       return candidate;
     })());
+
+  const dupBySlug = await prisma.blogPost.findUnique({ where: { slug }, select: { id: true } });
+  if (dupBySlug) {
+    return NextResponse.json({ ok: true, skipped: true, reason: "duplicate_slug", slug }, { status: 200 });
+  }
+  const dupByTopic = normalizedTopic
+    ? await prisma.blogPost.findFirst({
+        where: {
+          exam: d.exam,
+          OR: [
+            { targetKeyword: normalizedTopic },
+            { keywordCluster: normalizedTopic },
+            { tags: { has: normalizedTopic } },
+          ],
+        },
+        select: { id: true, slug: true },
+      })
+    : null;
+  if (dupByTopic) {
+    return NextResponse.json(
+      { ok: true, skipped: true, reason: "duplicate_topic", existingSlug: dupByTopic.slug, normalizedTopic },
+      { status: 200 },
+    );
+  }
 
   const system = `You write SEO-aware HTML for NurseNest nursing education blog posts. Output valid HTML only: use <h2>, <h3>, <p>, <ul>, <li>, <strong>. No markdown. No fabricated statistics or pass-rate claims. Be accurate and conservative. Audience: nursing students preparing for licensure exams.
 Include a short "Key takeaways" section and a short FAQ section when natural.
@@ -160,7 +193,7 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
       excerpt: excerpt.length >= 10 ? excerpt : `${title.slice(0, 200)} — draft excerpt; edit before publish.`,
       body: bodyHtml,
       exam: d.exam,
-      targetKeyword: d.targetKeyword ?? d.topic,
+      targetKeyword: normalizedTopic || (d.targetKeyword ?? d.topic),
       keywordCluster: d.keywordCluster ?? null,
       countryTarget: d.countryTarget ?? null,
       intent: d.intent ?? BlogPostIntent.EXAM_PREP,
@@ -180,7 +213,7 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
       ctaText: cta.text,
       ctaHref: cta.href,
       workflowStatus,
-      sourcesJson: sources.length ? sources : null,
+      sourcesJson: sources.length ? (sources as Prisma.InputJsonValue) : Prisma.JsonNull,
       apaReferences,
       requiresReferences: Boolean(sources.length || riskFlags.length > 0),
       sourceReliabilityScore: sourceCheck.reliabilityScore,

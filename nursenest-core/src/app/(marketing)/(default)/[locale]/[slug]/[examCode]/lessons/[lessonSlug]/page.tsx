@@ -244,6 +244,8 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
       <PathwayLessonActions
         pathwayId={pathway.id}
         lessonSlug={lesson.slug}
+        topicCode={lesson.topicSlug}
+        topicLabel={lesson.topic}
         userId={userId}
         canMarkComplete={fullAccess}
       />

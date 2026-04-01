@@ -8,8 +8,11 @@ type Severity = "high" | "medium" | "low";
 type QueueItem = {
   questionId: string;
   exam: string;
+  tier: string;
+  countryCode: string | null;
   topic: string | null;
   topicCode: string | null;
+  canonicalTopic: string;
   severity: Severity;
   rationaleCompleteness: "full" | "partial" | "thin";
   missingKeyTakeaway: boolean;
@@ -32,7 +35,6 @@ export function QuestionQualityQueueTable() {
   const [severity, setSeverity] = useState<Severity | "all">("all");
   const [page, setPage] = useState(1);
   const [data, setData] = useState<QueuePayload | null>(null);
-  const [loading, setLoading] = useState(false);
 
   const query = useMemo(() => {
     const qs = new URLSearchParams({ page: String(page), pageSize: "15" });
@@ -42,14 +44,10 @@ export function QuestionQualityQueueTable() {
 
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
     void fetch(`/api/admin/question-quality-queue?${query}`, { cache: "no-store" })
       .then((r) => r.json())
       .then((json) => {
         if (!cancelled) setData(json as QueuePayload);
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
       });
     return () => {
       cancelled = true;
@@ -89,7 +87,7 @@ export function QuestionQualityQueueTable() {
           <thead className="border-b border-border text-xs text-muted-foreground">
             <tr>
               <th className="py-2 pr-2">Priority</th>
-              <th className="py-2 pr-2">Topic</th>
+              <th className="py-2 pr-2">Topic / taxonomy</th>
               <th className="py-2 pr-2">Issues</th>
               <th className="py-2 pr-2">Question</th>
               <th className="py-2 pr-2">Updated</th>
@@ -106,6 +104,9 @@ export function QuestionQualityQueueTable() {
                 </td>
                 <td className="py-2 pr-2">
                   <p>{item.topic ?? "Unmapped topic"}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {item.tier} · {item.countryCode ?? "null country"} · {item.canonicalTopic}
+                  </p>
                   <p className="text-xs text-muted-foreground">{item.topicCode ?? "no topicCode"}</p>
                 </td>
                 <td className="py-2 pr-2 text-xs text-muted-foreground">{item.issues.join(", ")}</td>
@@ -120,7 +121,7 @@ export function QuestionQualityQueueTable() {
                 </td>
               </tr>
             ))}
-            {!loading && (data?.items.length ?? 0) === 0 ? (
+            {(data?.items.length ?? 0) === 0 ? (
               <tr>
                 <td colSpan={6} className="py-4 text-sm text-muted-foreground">
                   No issues found for this filter.
@@ -132,7 +133,7 @@ export function QuestionQualityQueueTable() {
       </div>
 
       <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
-        <p>{loading ? "Loading queue…" : `Showing ${(data?.items.length ?? 0)} of ${data?.total ?? 0}`}</p>
+        <p>{data ? `Showing ${(data.items.length ?? 0)} of ${data.total ?? 0}` : "Loading queue…"}</p>
         <div className="flex gap-2">
           <button
             type="button"

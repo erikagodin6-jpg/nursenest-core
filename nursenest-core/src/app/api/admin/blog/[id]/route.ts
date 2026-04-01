@@ -1,4 +1,4 @@
-import { BlogFunnelStage, BlogImageStatus, BlogPostIntent, BlogPostStatus, BlogWorkflowStatus } from "@prisma/client";
+import { BlogFunnelStage, BlogImageStatus, BlogPostIntent, BlogPostStatus, BlogWorkflowStatus, Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
@@ -86,7 +86,9 @@ export async function PATCH(req: Request, { params }: Props) {
       ...(d.imageStatus !== undefined ? { imageStatus: d.imageStatus } : {}),
       ...(d.apaReferences !== undefined ? { apaReferences: d.apaReferences } : {}),
       ...(d.requiresReferences !== undefined ? { requiresReferences: d.requiresReferences } : {}),
-      ...(d.sourcesJson !== undefined ? { sourcesJson: d.sourcesJson } : {}),
+      ...(d.sourcesJson !== undefined
+        ? { sourcesJson: d.sourcesJson === null ? Prisma.JsonNull : (d.sourcesJson as Prisma.InputJsonValue) }
+        : {}),
       ...(d.reviewDueAt !== undefined ? { reviewDueAt: d.reviewDueAt ? new Date(d.reviewDueAt) : null } : {}),
       ...(d.lastReviewedAt !== undefined ? { lastReviewedAt: d.lastReviewedAt ? new Date(d.lastReviewedAt) : null } : {}),
       ...(d.postStatus !== undefined ? { postStatus: d.postStatus } : {}),

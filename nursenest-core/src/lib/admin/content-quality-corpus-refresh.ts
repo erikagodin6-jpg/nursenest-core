@@ -27,6 +27,10 @@ export type CorpusExamRollup = {
 
 export type ContentQualityCorpusPayload = {
   generatedAt: string;
+  meta: {
+    available: boolean;
+    reason?: string;
+  };
   pathwayLessons: {
     totals: Record<ContentQualityTier, number>;
     byPathway: CorpusPathwayRollup[];
@@ -49,7 +53,18 @@ function emptyTierTotals(): Record<ContentQualityTier, number> {
   return { missing: 0, thin: 0, acceptable: 0, strong: 0 };
 }
 
+export function emptyContentQualityCorpusPayload(reason = "data_unavailable"): ContentQualityCorpusPayload {
+  return {
+    generatedAt: new Date().toISOString(),
+    meta: { available: false, reason },
+    pathwayLessons: { totals: emptyTierTotals(), byPathway: [], scanned: 0 },
+    contentItemLessons: { totals: emptyTierTotals(), scanned: 0 },
+    examQuestions: { totals: emptyTierTotals(), worstExams: [], scanned: 0 },
+  };
+}
+
 export async function refreshContentQualityCorpusSnapshot(): Promise<ContentQualityCorpusPayload> {
+  try {
   const pathwayTotals = emptyTierTotals();
   const byPathway = new Map<string, CorpusPathwayRollup>();
 
@@ -154,6 +169,7 @@ export async function refreshContentQualityCorpusSnapshot(): Promise<ContentQual
 
   const payload: ContentQualityCorpusPayload = {
     generatedAt: new Date().toISOString(),
+    meta: { available: true },
     pathwayLessons: {
       totals: pathwayTotals,
       byPathway: [...byPathway.values()].sort((a, b) => b.thin + b.missing - (a.thin + a.missing)),
@@ -177,10 +193,21 @@ export async function refreshContentQualityCorpusSnapshot(): Promise<ContentQual
   });
 
   return payload;
+  } catch {
+    return emptyContentQualityCorpusPayload("refresh_failed");
+  }
 }
 
 export async function loadContentQualityCorpusPayload(): Promise<ContentQualityCorpusPayload | null> {
-  const row = await prisma.contentQualityCorpusSnapshot.findUnique({ where: { id: "default" } });
-  if (!row?.payload || typeof row.payload !== "object") return null;
-  return row.payload as ContentQualityCorpusPayload;
+  try {
+    const row = await prisma.contentQualityCorpusSnapshot.findUnique({ where: { id: "default" } });
+    if (!row?.payload || typeof row.payload !== "object") return emptyContentQualityCorpusPayload("snapshot_missing");
+    const payload = row.payload as ContentQualityCorpusPayload;
+    return {
+      ...payload,
+      meta: payload.meta?.available === true ? payload.meta : { available: true },
+    };
+  } catch {
+    return emptyContentQualityCorpusPayload("load_failed");
+  }
 }

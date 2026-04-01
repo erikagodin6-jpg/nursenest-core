@@ -257,6 +257,22 @@ export function AdminBlogSchedulerPanel({
                     >
                       Unpublish to draft
                     </button>
+                    <button
+                      type="button"
+                      disabled={busyId === p.id}
+                      className="rounded border border-border px-2 py-1 text-left hover:border-primary/40 disabled:opacity-60"
+                      onClick={async () => {
+                        setBusyId(p.id);
+                        try {
+                          await fetch(`/api/admin/blog/${p.id}/image-generate`, { method: "POST" });
+                          router.refresh();
+                        } finally {
+                          setBusyId(null);
+                        }
+                      }}
+                    >
+                      Queue image generation
+                    </button>
                   </div>
                 </td>
               </tr>

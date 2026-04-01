@@ -2,6 +2,7 @@ import Link from "next/link";
 import { CheckCircle2, Circle, Compass, Flag, Heart, Target } from "lucide-react";
 import type { AdaptiveLearnerRecommendations } from "@/lib/learner/adaptive-recommendations";
 import { retentionPromptHints } from "@/lib/learner/exam-plan-engine";
+import { AdaptiveRecommendationLoopPanel } from "@/components/student/adaptive-recommendation-loop-panel";
 
 function trajectoryLabel(t: AdaptiveLearnerRecommendations["trajectory"]): string {
   switch (t) {
@@ -26,11 +27,13 @@ export function AdaptiveStudyOverview({
   compact = false,
   /** Subscriber — enables soft retention copy (non-pushy). */
   subscriber = true,
+  userId,
 }: {
   adaptive: AdaptiveLearnerRecommendations;
   showHeading?: boolean;
   compact?: boolean;
   subscriber?: boolean;
+  userId?: string;
 }) {
   const {
     countdown,
@@ -187,6 +190,14 @@ export function AdaptiveStudyOverview({
         </p>
       ) : null}
 
+      <details className="mt-3 rounded-lg border border-border/60 bg-muted/20 p-3 text-sm">
+        <summary className="cursor-pointer font-medium text-foreground">Why this score?</summary>
+        <p className="mt-2 text-xs text-muted-foreground">
+          Readiness combines practice accuracy, mock consistency, topic miss concentration, and lesson completion. The same
+          factors are shown on your dashboard so recommendations stay consistent.
+        </p>
+      </details>
+
       {!compact ? (
         <div className="mt-5 rounded-xl border border-primary/15 bg-primary/[0.04] p-4">
           <p className="text-xs font-semibold uppercase tracking-wide text-primary">Next best action</p>
@@ -220,6 +231,8 @@ export function AdaptiveStudyOverview({
           ))}
         </ul>
       ) : null}
+
+      {userId ? <AdaptiveRecommendationLoopPanel userId={userId} fallbackTopics={weakTop3} /> : null}
 
       <div className="mt-6 grid gap-4 md:grid-cols-2">
         <div>

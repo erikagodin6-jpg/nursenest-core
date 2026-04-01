@@ -73,10 +73,12 @@ export async function loadQuestionBankRemediationIntelligence(): Promise<Questio
 
       const qualityScore = (r: { thinPct: number; missingPct: number }) => r.missingPct * 2 + r.thinPct;
       const strongestBanks = [...agg]
+        .filter((r) => r.published > 0)
         .sort((a, b) => qualityScore(a) - qualityScore(b) || b.published - a.published)
         .slice(0, 4)
         .map((r) => ({ label: r.label, published: r.published, thinPct: r.thinPct, missingPct: r.missingPct }));
       const weakestBanks = [...agg]
+        .filter((r) => r.published > 0)
         .sort((a, b) => qualityScore(b) - qualityScore(a) || a.published - b.published)
         .slice(0, 4)
         .map((r) => ({ label: r.label, published: r.published, thinPct: r.thinPct, missingPct: r.missingPct }));
@@ -114,7 +116,7 @@ export async function loadQuestionBankRemediationIntelligence(): Promise<Questio
         SELECT
           COUNT(*) FILTER (WHERE exam = 'ALLIED' AND status = 'published' AND country_code = 'CA')::bigint AS ca_rows,
           COUNT(*) FILTER (WHERE exam = 'ALLIED' AND status = 'published' AND (country_code = 'US' OR country_code IS NULL))::bigint AS us_or_null_rows,
-          COUNT(*) FILTER (WHERE exam = 'ALLIED' AND status = 'published' AND "regionScope" = 'BOTH')::bigint AS shared_region_rows,
+          COUNT(*) FILTER (WHERE exam = 'ALLIED' AND status = 'published' AND region_scope = 'BOTH')::bigint AS shared_region_rows,
           COUNT(*) FILTER (WHERE exam = 'ALLIED' AND status = 'published' AND (exam ILIKE '%CA%' OR exam ILIKE '%CAN%'))::bigint AS ca_exam_tag_rows
         FROM exam_questions
       `;

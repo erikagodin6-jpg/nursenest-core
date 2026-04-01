@@ -222,8 +222,13 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
           ...(elapsedMs !== undefined ? { elapsedMs } : {}),
         },
       });
-      void recordTopicOutcomesFromPracticeTest(gate.userId, ids, merged, gate.entitlement).catch(() => {});
-      return NextResponse.json({ ok: true, results: adv.results, catCompleted: true });
+      let topicStatsSynced = true;
+      try {
+        await recordTopicOutcomesFromPracticeTest(gate.userId, ids, merged, gate.entitlement);
+      } catch {
+        topicStatsSynced = false;
+      }
+      return NextResponse.json({ ok: true, results: adv.results, catCompleted: true, topicStatsSynced });
     }
 
     await prisma.practiceTest.update({
@@ -254,8 +259,13 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
           ...(elapsedMs !== undefined ? { elapsedMs } : {}),
         },
       });
-      void recordTopicOutcomesFromPracticeTest(gate.userId, ids, merged, gate.entitlement).catch(() => {});
-      return NextResponse.json({ ok: true, results: fin.results });
+      let topicStatsSynced = true;
+      try {
+        await recordTopicOutcomesFromPracticeTest(gate.userId, ids, merged, gate.entitlement);
+      } catch {
+        topicStatsSynced = false;
+      }
+      return NextResponse.json({ ok: true, results: fin.results, topicStatsSynced });
     }
 
     const results = await computePracticeTestResults(ids, merged, gate.entitlement);
@@ -272,9 +282,13 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
       },
     });
 
-    void recordTopicOutcomesFromPracticeTest(gate.userId, ids, merged, gate.entitlement).catch(() => {});
-
-    return NextResponse.json({ ok: true, results });
+    let topicStatsSynced = true;
+    try {
+      await recordTopicOutcomesFromPracticeTest(gate.userId, ids, merged, gate.entitlement);
+    } catch {
+      topicStatsSynced = false;
+    }
+    return NextResponse.json({ ok: true, results, topicStatsSynced });
   }
 
   return NextResponse.json({ error: "Unsupported action" }, { status: 400 });

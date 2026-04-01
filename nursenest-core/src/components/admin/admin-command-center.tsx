@@ -255,6 +255,11 @@ export function AdminCommandCenter({ data }: { data: AdminCommandCenterData }) {
             Workbench →
           </Link>
         </div>
+        {data.contentQuality.corpus && data.contentQuality.corpus.meta.available === false ? (
+          <p className="mt-4 rounded-lg border border-amber-500/35 bg-amber-500/10 px-3 py-2 text-xs font-medium text-amber-900 dark:text-amber-100">
+            Content-quality corpus data unavailable ({data.contentQuality.corpus.meta.reason ?? "unknown"}). Showing fallback snapshot metrics.
+          </p>
+        ) : null}
 
         <div className="mt-6 grid gap-6 lg:grid-cols-2">
           <div>

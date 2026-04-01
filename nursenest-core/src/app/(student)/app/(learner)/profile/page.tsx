@@ -364,7 +364,7 @@ export default async function LearnerProfilePage() {
       ) : null}
 
       {adaptive && entitlement !== "error" && entitlement.hasAccess && topicPerf ? (
-        <AdaptiveStudyOverview adaptive={adaptive} compact />
+        <AdaptiveStudyOverview adaptive={adaptive} compact userId={userId} />
       ) : null}
 
       {entitlement !== "error" && entitlement.hasAccess ? (

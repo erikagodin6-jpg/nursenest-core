@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { resolveLessonRefFromProgressId } from "@/lib/lessons/lesson-progress-resolver";
 
 export type ProfileActivityMock = {
   kind: "mock";
@@ -75,16 +76,6 @@ export async function loadLearnerProfileActivity(userId: string): Promise<Learne
       }),
     ]);
 
-    const lessonIds = [...new Set(progressRows.map((p) => p.lessonId))];
-    const lessons =
-      lessonIds.length > 0
-        ? await prisma.contentItem.findMany({
-            where: { id: { in: lessonIds }, type: "lesson" },
-            select: { id: true, title: true },
-          })
-        : [];
-    const lessonMeta = new Map(lessons.map((l) => [l.id, l]));
-
     const mocks: ProfileActivityMock[] = attempts.map((a) => {
       const pct = a.total > 0 ? Math.round((a.score / a.total) * 100) : 0;
       return {
@@ -112,19 +103,23 @@ export async function loadLearnerProfileActivity(userId: string): Promise<Learne
       };
     });
 
-    const lessonActivity: ProfileActivityLesson[] = progressRows.map((p) => {
-      const meta = lessonMeta.get(p.lessonId);
-      return {
-        kind: "lesson" as const,
-        lessonId: p.lessonId,
-        title: meta?.title ?? "Lesson",
-        completed: p.completed,
-        updatedAt: p.updatedAt.toISOString(),
-        href: `/app/lessons/${encodeURIComponent(p.lessonId)}`,
-      };
-    });
+    const lessonActivity: ProfileActivityLesson[] = (
+      await Promise.all(
+        progressRows.map(async (p) => {
+          const resolved = await resolveLessonRefFromProgressId({ lessonId: p.lessonId });
+          return {
+            kind: "lesson" as const,
+            lessonId: p.lessonId,
+            title: resolved?.title ?? "Lesson",
+            completed: p.completed,
+            updatedAt: p.updatedAt.toISOString(),
+            href: resolved?.href ?? `/app/lessons/${encodeURIComponent(p.lessonId)}`,
+          };
+        }),
+      )
+    ).slice(0, 6);
 
-    return { mocks, practiceTests, lessons: lessonActivity.slice(0, 6) };
+    return { mocks, practiceTests, lessons: lessonActivity };
   } catch {
     return empty;
   }

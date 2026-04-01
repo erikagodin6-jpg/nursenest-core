@@ -12,6 +12,14 @@ const bodySchema = z.object({
   dryRun: z.boolean().optional(),
 });
 
+function normalizeTopic(input: string): string {
+  return input
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim()
+    .replace(/\s+/g, " ");
+}
+
 /**
  * Chunked blog shell creation from RN master topic map — avoids long single HTTP requests (timeout-safe).
  * Client loops: increment `cursor` by `processed` until `done`.
@@ -66,6 +74,24 @@ export async function POST(req: Request) {
         skipped.push(row.slug);
         continue;
       }
+      const normalizedTopic = normalizeTopic(row.tags[1] ?? row.title);
+      const dupTopic = normalizedTopic
+        ? await prisma.blogPost.findFirst({
+            where: {
+              exam: row.exam,
+              OR: [
+                { targetKeyword: normalizedTopic },
+                { keywordCluster: normalizedTopic },
+                { tags: { has: normalizedTopic } },
+              ],
+            },
+            select: { id: true },
+          })
+        : null;
+      if (dupTopic) {
+        skipped.push(`${row.slug} (topic duplicate)`);
+        continue;
+      }
       await prisma.blogPost.create({
         data: {
           slug: row.slug,
@@ -80,6 +106,7 @@ export async function POST(req: Request) {
           relatedLessonPaths: [row.relatedLessonPath],
           seoTitle: row.title.slice(0, 200),
           seoDescription: row.excerpt.slice(0, 480),
+          targetKeyword: normalizedTopic || null,
         },
       });
       created.push(row.slug);

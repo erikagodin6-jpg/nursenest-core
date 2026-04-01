@@ -1,10 +1,11 @@
-import { ContentStatus, TierCode } from "@prisma/client";
+import { TierCode } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { lessonAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import { pathwayLessonsAppListWhere } from "@/lib/lessons/app-pathway-lesson-list-scope";
+import { resolveLessonRefFromProgressId } from "@/lib/lessons/lesson-progress-resolver";
 import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
 import {
   filterTopicRowsForAlliedProfession,
@@ -22,7 +23,7 @@ import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
 export type ContinueLesson = {
   title: string;
   href: string;
-  kind: "content" | "pathway";
+  kind: "content" | "pathway" | "pre_nursing";
 };
 
 export type RecentMock = {
@@ -53,17 +54,6 @@ export type LearnerDashboardModel = {
   /** Recent completed exam-session grading (tier-scoped); reused by premium snapshot. */
   sessionGrading: SessionGradingAggregate;
 };
-
-function parsePathwaySyntheticId(lessonId: string): { pathwayId: string; slug: string } | null {
-  if (!lessonId.startsWith("pathway:")) return null;
-  const rest = lessonId.slice("pathway:".length);
-  const idx = rest.indexOf(":");
-  if (idx <= 0) return null;
-  const pathwayId = rest.slice(0, idx);
-  const slug = rest.slice(idx + 1);
-  if (!pathwayId || !slug) return null;
-  return { pathwayId, slug };
-}
 
 export async function loadLearnerDashboard(
   userId: string,
@@ -171,53 +161,12 @@ export async function loadLearnerDashboard(
 
   let continueLesson: ContinueLesson | null = null;
   if (incompleteProgress?.lessonId) {
-    const lid = incompleteProgress.lessonId;
     try {
-      const parsed = parsePathwaySyntheticId(lid);
-      if (parsed) {
-        const pathwayFilter = pathwayLessonsAppListWhere(entitlement, learnerPath);
-        const row = await prisma.pathwayLesson.findFirst({
-          where: {
-            AND: [
-              pathwayFilter,
-              {
-                pathwayId: parsed.pathwayId,
-                slug: parsed.slug,
-                locale: "en",
-                status: ContentStatus.PUBLISHED,
-              },
-            ],
-          },
-          select: { id: true, title: true },
-        });
-        if (row) {
-          continueLesson = {
-            title: row.title,
-            href: `/app/lessons/${row.id}`,
-            kind: "pathway",
-          };
-        }
-      } else {
-        const row = await prisma.contentItem.findFirst({
-          where: { AND: [{ id: lid, type: "lesson" }, lessonWhere] },
-          select: { id: true, title: true },
-        });
-        if (row) {
-          continueLesson = { title: row.title, href: `/app/lessons/${row.id}`, kind: "content" };
-        } else {
-          const pwById = await prisma.pathwayLesson.findFirst({
-            where: { AND: [pathwayWhere, { id: lid }] },
-            select: { id: true, title: true },
-          });
-          if (pwById) {
-            continueLesson = {
-              title: pwById.title,
-              href: `/app/lessons/${pwById.id}`,
-              kind: "pathway",
-            };
-          }
-        }
-      }
+      continueLesson = await resolveLessonRefFromProgressId({
+        lessonId: incompleteProgress.lessonId,
+        entitlement,
+        learnerPath,
+      });
     } catch {
       continueLesson = null;
     }

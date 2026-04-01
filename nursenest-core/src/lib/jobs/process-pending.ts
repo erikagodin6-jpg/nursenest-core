@@ -1,4 +1,4 @@
-import { JobStatus } from "@prisma/client";
+import { BlogImageStatus, JobStatus } from "@prisma/client";
 import { stemHash } from "@/lib/content/stem-hash";
 import { prisma } from "@/lib/db";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -74,6 +74,31 @@ async function handleJob(type: string, payload: unknown): Promise<void> {
         const hash = stemHash(r.stem);
         await prisma.examQuestion.update({ where: { id: r.id }, data: { stemHash: hash } });
       }
+      return;
+    }
+    case "blog.image.generate_featured": {
+      const p = payload as { postId?: string; prompt?: string };
+      if (!p?.postId) throw new Error("Missing postId for blog.image.generate_featured");
+      // Provider integration point: keep flow production-safe even without API keys.
+      // If no provider is configured, mark failed-image state explicitly for admin retry.
+      const provider = process.env.BLOG_IMAGE_PROVIDER?.trim();
+      if (!provider) {
+        await prisma.blogPost.update({
+          where: { id: p.postId },
+          data: {
+            imageStatus: BlogImageStatus.FAILED,
+            rankingNote: "Image generation requested but BLOG_IMAGE_PROVIDER is not configured.",
+          },
+        });
+        return;
+      }
+      await prisma.blogPost.update({
+        where: { id: p.postId },
+        data: {
+          imageStatus: BlogImageStatus.FAILED,
+          rankingNote: `Image provider "${provider}" is configured but generator adapter is not yet wired.`,
+        },
+      });
       return;
     }
     default:

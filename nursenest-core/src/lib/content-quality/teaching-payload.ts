@@ -6,6 +6,7 @@ import { parseRationaleReferenceMedia, type RationaleReferenceMedia } from "@/li
 export type TeachingDistractorNotes = string | null;
 
 export type NormalizedTeachingPayload = {
+  questionType: string;
   correctAnswers: string[];
   rationale: string | null;
   correctAnswerExplanation: string | null;
@@ -17,6 +18,7 @@ export type NormalizedTeachingPayload = {
   clinicalPearl: string | null;
   clinicalTrap: string | null;
   memoryHook: string | null;
+  keyTakeawayDerived: boolean;
   /** Ordered sections for subscriber review / SEO-rich rendering (no fabricated facts). */
   sections: Array<{ id: string; heading: string; body: string }>;
 };
@@ -86,6 +88,16 @@ function deriveConceptTested(row: ExamQuestionTeachingRow): string | null {
   return null;
 }
 
+function fallbackTakeawayFromText(text: string | null | undefined): string | null {
+  const clean = stripToPlainText(text);
+  if (clean.length < 16) return null;
+  const sentence = clean.split(/(?<=[.!?])\s+/).find((s) => s.trim().length >= 16) ?? clean;
+  const clipped = sentence.trim().replace(/\s+/g, " ");
+  if (!clipped) return null;
+  const oneSentence = clipped.replace(/([.!?]).*$/, "$1");
+  return oneSentence.length > 180 ? `${oneSentence.slice(0, 177).trim()}...` : oneSentence;
+}
+
 function pushSection(
   out: Array<{ id: string; heading: string; body: string }>,
   id: string,
@@ -111,16 +123,41 @@ export function buildNormalizedTeachingPayload(row: ExamQuestionTeachingRow): No
     [distractorFromJson, incorrectLines].filter(Boolean).join("\n\n").trim() || null;
 
   const conceptTested = deriveConceptTested(row);
+  const takeawayFallback = fallbackTakeawayFromText(row.keyTakeaway) ?? fallbackTakeawayFromText(row.rationale);
+  const keyTakeaway = row.keyTakeaway?.trim() ? row.keyTakeaway.trim() : takeawayFallback;
+  const keyTakeawayDerived = Boolean(!row.keyTakeaway?.trim() && takeawayFallback);
+  const isSata = row.questionType.toUpperCase() === "SATA" || row.questionType.toUpperCase() === "SELECT_ALL_THAT_APPLY";
+  const distractorBody =
+    distractorNotes ??
+    (isSata
+      ? "Each option must be judged independently as selected/not selected against the stem priorities and safety rules."
+      : "Review each distractor against stem clues and priority rules; eliminate options that do not address the immediate clinical risk.");
 
   const sections: Array<{ id: string; heading: string; body: string }> = [];
 
-  pushSection(sections, "why_correct", "Why this is the best answer", correctAnswerExplanation);
-  pushSection(sections, "explanation", "Explanation", rationale);
+  pushSection(
+    sections,
+    "correct_answer",
+    "Correct answer",
+    correctAnswers.length > 0 ? correctAnswers.join(", ") : "Correct option not listed in source data.",
+  );
+  pushSection(
+    sections,
+    "why_correct",
+    "Why this is correct",
+    correctAnswerExplanation ?? rationale ?? "Clinical reasoning not yet provided for this item.",
+  );
+  pushSection(sections, "explanation", "Clinical decision logic", rationale ?? row.clinicalReasoning);
   pushSection(sections, "clinical_reasoning", "Clinical reasoning", row.clinicalReasoning);
-  pushSection(sections, "distractors", "Why other options fail", distractorNotes);
+  pushSection(sections, "distractors", "Why the other options are wrong", distractorBody);
   pushSection(sections, "concept", "Concept tested", conceptTested);
+  pushSection(
+    sections,
+    "takeaway",
+    "Clinical takeaway",
+    keyTakeaway ?? "Takeaway unavailable. Review this item in admin for quality completion.",
+  );
   pushSection(sections, "exam_strategy", "Exam strategy", row.examStrategy);
-  pushSection(sections, "takeaway", "High-yield takeaway", row.keyTakeaway);
   pushSection(sections, "pearl", "Clinical pearl", row.clinicalPearl);
   pushSection(sections, "trap", "Common trap", row.clinicalTrap);
   pushSection(sections, "memory_hook", "Memory hook", row.memoryHook);
@@ -139,15 +176,17 @@ export function buildNormalizedTeachingPayload(row: ExamQuestionTeachingRow): No
   return {
     correctAnswers,
     rationale,
+    questionType: row.questionType,
     correctAnswerExplanation,
     distractorNotes,
     conceptTested,
     examStrategy: row.examStrategy?.trim() ? row.examStrategy.trim() : null,
-    keyTakeaway: row.keyTakeaway?.trim() ? row.keyTakeaway.trim() : null,
+    keyTakeaway,
     clinicalReasoning: row.clinicalReasoning?.trim() ? row.clinicalReasoning.trim() : null,
     clinicalPearl: row.clinicalPearl?.trim() ? row.clinicalPearl.trim() : null,
     clinicalTrap: row.clinicalTrap?.trim() ? row.clinicalTrap.trim() : null,
     memoryHook: row.memoryHook?.trim() ? row.memoryHook.trim() : null,
+    keyTakeawayDerived,
     sections: dedup,
   };
 }

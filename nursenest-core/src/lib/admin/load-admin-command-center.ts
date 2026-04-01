@@ -21,6 +21,7 @@ import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-product-registry";
 import { buildQuestionBankCoverageReport } from "@/lib/questions/build-question-bank-diagnostics";
 import { loadContentQualityCorpusPayload } from "@/lib/admin/content-quality-corpus-refresh";
 import type { ContentQualityCorpusPayload } from "@/lib/admin/content-quality-corpus-refresh";
+import { emptyContentQualityCorpusPayload } from "@/lib/admin/content-quality-corpus-refresh";
 import { emptyContentQualitySnapshot, loadContentQualitySnapshot } from "@/lib/admin/content-quality-snapshot";
 import type { ContentQualitySnapshot } from "@/lib/admin/content-quality-snapshot";
 import {
@@ -293,14 +294,13 @@ export async function loadAdminCommandCenter(): Promise<AdminCommandCenterData |
     );
 
     const pathwayLessonCounts = await prisma.pathwayLesson.groupBy({
-      by: ["pathwayId", "status"],
+      by: ["pathwayId"],
+      where: { status: ContentStatus.PUBLISHED },
       _count: { _all: true },
     });
     const pubByPathway = new Map<string, number>();
     for (const row of pathwayLessonCounts) {
-      if (row.status === ContentStatus.PUBLISHED) {
-        pubByPathway.set(row.pathwayId, (pubByPathway.get(row.pathwayId) ?? 0) + row._count._all);
-      }
+      pubByPathway.set(row.pathwayId, row._count._all);
     }
 
     const pathwayCoveragePreview = EXAM_PATHWAYS.filter((p) => p.countryCode === CountryCode.US).slice(0, 12).map((p) => {
@@ -334,7 +334,8 @@ export async function loadAdminCommandCenter(): Promise<AdminCommandCenterData |
         take: 40,
         select: { id: true },
       })
-      .then((rows) => rows.map((r) => r.id));
+      .then((rows) => rows.map((r) => r.id))
+      .catch(() => []);
 
     const needsAttention: AdminNeedsAttentionItem[] = [];
 
@@ -396,11 +397,20 @@ export async function loadAdminCommandCenter(): Promise<AdminCommandCenterData |
     }
 
     const [contentQualitySnapshot, contentQualityCorpus, premiumProtection, questionBankIntel] = await Promise.all([
-      loadContentQualitySnapshot(),
-      loadContentQualityCorpusPayload(),
+      loadContentQualitySnapshot().catch(() => emptyContentQualitySnapshot(generatedAt)),
+      loadContentQualityCorpusPayload().catch(() => emptyContentQualityCorpusPayload("load_failed")),
       loadPremiumProtectionAdminSnapshot().catch(() => null),
       loadQuestionBankRemediationIntelligence().catch(() => null),
     ]);
+
+    if (!contentQualityCorpus?.meta?.available) {
+      needsAttention.push({
+        severity: "warning",
+        title: "Content-quality corpus data unavailable",
+        detail: "Using fallback snapshot metrics until corpus refresh succeeds.",
+        href: "/admin/content-quality",
+      });
+    }
 
     if (premiumProtection && premiumProtection.openAbuseReviews.length > 0) {
       needsAttention.push({

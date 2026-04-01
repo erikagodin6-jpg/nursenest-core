@@ -2,6 +2,7 @@ import type { ExamDatePlanType } from "@prisma/client";
 import type { ReadinessBand, ReadinessResult } from "@/lib/learner/readiness-score";
 import type { TopicTrendRow } from "@/lib/learner/topic-performance";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
+import type { AdaptiveTeachingLoopRecommendation } from "@/lib/learner/adaptive-teaching-loop";
 import {
   assessPlanTrack,
   buildExamPlanMilestones,
@@ -63,6 +64,8 @@ export type AdaptiveLearnerRecommendations = {
   cadenceDisplay: string;
   /** Raw stored preference — light | steady | intensive | null */
   studyCadencePreference: string | null;
+  /** Client-updated adaptive teaching loop (performance + teaching + image). */
+  adaptiveLoop: AdaptiveTeachingLoopRecommendation | null;
 };
 
 function encodeTopic(topic: string): string {
@@ -391,5 +394,6 @@ export function buildAdaptiveRecommendations(args: {
       args.studyCadencePreference === "light" || args.studyCadencePreference === "steady" || args.studyCadencePreference === "intensive"
         ? args.studyCadencePreference
         : null,
+    adaptiveLoop: null,
   };
 }

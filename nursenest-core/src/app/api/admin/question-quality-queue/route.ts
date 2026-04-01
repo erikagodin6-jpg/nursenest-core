@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { analyzeQuestionQualitySignals } from "@/lib/questions/question-quality-signals";
+import { inferPathwayFamilyFromExamKeys, mapRowToCanonicalTopic } from "@/lib/questions/question-bank-taxonomy";
 
 type Severity = "high" | "medium" | "low";
 
@@ -45,8 +46,11 @@ export async function GET(req: NextRequest) {
       id: true,
       stem: true,
       exam: true,
+      tier: true,
+      countryCode: true,
       topic: true,
       subtopic: true,
+      bodySystem: true,
       updatedAt: true,
       rationale: true,
       correctAnswerExplanation: true,
@@ -72,19 +76,34 @@ export async function GET(req: NextRequest) {
         ...(signals.rationaleCompleteness === "thin" ? ["thin_rationale"] : []),
         ...(duplicate ? ["duplicate_rationale_explanation"] : []),
       ];
+      const family = inferPathwayFamilyFromExamKeys([q.exam]);
+      const canonical = mapRowToCanonicalTopic(family, {
+        topic: q.topic,
+        subtopic: q.subtopic,
+        bodySystem: q.bodySystem,
+        exam: q.exam,
+      });
+      if (canonical === "uncategorized") issues.push("uncategorized_taxonomy");
+      if (q.exam === "ALLIED" && (q.countryCode === "US" || q.countryCode == null)) {
+        issues.push("allied_ca_classification_review");
+      }
+      if (q.tier === "NP" && canonical === "uncategorized") issues.push("np_taxonomy_gap");
       if (issues.length === 0) return null;
       return {
         questionId: q.id,
         exam: q.exam,
+        tier: q.tier,
+        countryCode: q.countryCode,
         topic: q.topic,
         topicCode: q.subtopic,
+        canonicalTopic: canonical,
         severity,
         rationaleCompleteness: signals.rationaleCompleteness,
         missingKeyTakeaway: !signals.hasHighYieldTakeaway,
         issues: [...new Set(issues)],
         stemPreview: q.stem.slice(0, 180),
         updatedAt: q.updatedAt.toISOString(),
-        editHref: `/admin/questions/${q.id}`,
+        editHref: `/admin/questions/${q.id}?from=quality_queue`,
       };
     })
     .filter((x): x is NonNullable<typeof x> => x !== null)

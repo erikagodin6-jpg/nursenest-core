@@ -69,14 +69,19 @@ export function TeachingBreakdown({
     <div className={`text-sm ${wrap}`}>
       <div className="space-y-4">
         {teaching.sections.map((s) => (
-          <section key={s.id} aria-labelledby={`teach-${s.id}`}>
-            <h3 id={`teach-${s.id}`} className="text-xs font-semibold uppercase tracking-wide text-primary">
+          <section key={s.id} aria-labelledby={`teach-${s.id}`} className="rounded-lg border border-border/60 bg-card/50 px-3 py-2.5">
+            <h3 id={`teach-${s.id}`} className="text-[11px] font-semibold uppercase tracking-wide text-primary">
               {s.heading}
             </h3>
-            <p className="mt-1.5 whitespace-pre-wrap leading-relaxed text-muted-foreground">{s.body}</p>
+            <p className="mt-1.5 whitespace-pre-wrap leading-relaxed text-foreground/90">{s.body}</p>
           </section>
         ))}
       </div>
+      {teaching.keyTakeawayDerived ? (
+        <p className="mt-3 text-xs text-muted-foreground">
+          Takeaway auto-generated from rationale content; editorial review recommended for this item.
+        </p>
+      ) : null}
       {hasMedia && teachingMedia ? (
         <MediaStrip referenceMedia={teachingMedia.referenceMedia} matchedConceptImage={teachingMedia.matchedConceptImage} />
       ) : null}

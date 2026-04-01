@@ -219,7 +219,14 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
 
       {lockedSections.length > 0 ? <PathwayLessonLockedSectionsPreview sections={lockedSections} /> : null}
 
-      <PathwayLessonActions pathwayId={pathway.id} lessonSlug={lesson.slug} userId={userId} canMarkComplete={fullAccess} />
+      <PathwayLessonActions
+        pathwayId={pathway.id}
+        lessonSlug={lesson.slug}
+        topicCode={lesson.topicSlug}
+        topicLabel={lesson.topic}
+        userId={userId}
+        canMarkComplete={fullAccess}
+      />
 
       <p className="mt-6 text-sm text-muted">
         Also see:{" "}

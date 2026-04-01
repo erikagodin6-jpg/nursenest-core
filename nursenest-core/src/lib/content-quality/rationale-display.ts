@@ -39,6 +39,16 @@ function stringifyDistractors(raw: unknown): string | null {
   return null;
 }
 
+function fallbackTakeawayFromText(text: string | null | undefined): string | null {
+  const clean = stripToPlainText(text);
+  if (clean.length < 16) return null;
+  const sentence = clean.split(/(?<=[.!?])\s+/).find((s) => s.trim().length >= 16) ?? clean;
+  const compact = sentence.trim().replace(/\s+/g, " ");
+  if (!compact) return null;
+  const oneSentence = compact.replace(/([.!?]).*$/, "$1");
+  return oneSentence.length > 180 ? `${oneSentence.slice(0, 177).trim()}...` : oneSentence;
+}
+
 /** Build labeled sections from real DB fields only (no invented facts). */
 export function buildRationaleSectionsFromQuestion(row: QuestionRationaleFields): RationaleSection[] {
   const out: RationaleSection[] = [];
@@ -49,14 +59,18 @@ export function buildRationaleSectionsFromQuestion(row: QuestionRationaleFields)
     out.push({ heading, body: t });
   };
 
-  push("Correct answer", row.correctAnswerExplanation);
-  push("Explanation", row.rationale);
-  push("Clinical reasoning", row.clinicalReasoning);
-  push("Distractors", stringifyDistractors(row.distractorRationales));
-  push("Incorrect options", stringifyDistractors(row.incorrectAnswerRationale));
-  push("High-yield takeaway", row.keyTakeaway);
+  const distractors = stringifyDistractors(row.distractorRationales) ?? stringifyDistractors(row.incorrectAnswerRationale);
+  const fallbackTakeaway = row.keyTakeaway ?? fallbackTakeawayFromText(row.rationale) ?? fallbackTakeawayFromText(row.correctAnswerExplanation);
+
+  push("Correct answer", row.correctAnswerExplanation ?? "Answer rationale is loading.");
+  push("Why this is correct", row.rationale ?? row.clinicalReasoning ?? "Clinical explanation is not available yet.");
+  push("Why the other options are wrong", distractors ?? "Distractor-specific explanations were not provided for this item.");
+  push(
+    "Clinical takeaway",
+    fallbackTakeaway ?? "Takeaway unavailable. This question should be reviewed in the admin quality queue.",
+  );
+  push("Exam strategy", row.examStrategy ?? "Apply safety, prioritization, and scope-of-practice rules to select the next best action.");
   push("Clinical pearl", row.clinicalPearl);
-  push("Exam strategy", row.examStrategy);
   push("Memory hook", row.memoryHook);
   push("Common trap", row.clinicalTrap);
 

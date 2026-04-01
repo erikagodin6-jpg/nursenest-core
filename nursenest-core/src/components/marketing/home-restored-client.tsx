@@ -254,6 +254,20 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
                   >
                     {t("home.hero.newSubheadline")}
                   </p>
+                  <div className="grid gap-2 pt-1 text-xs font-medium text-[var(--theme-body-text)] sm:grid-cols-2">
+                    <p className="rounded-lg border border-border/60 bg-card/50 px-2.5 py-1.5">
+                      Thousands of NCLEX-style and pathway-aligned questions
+                    </p>
+                    <p className="rounded-lg border border-border/60 bg-card/50 px-2.5 py-1.5">
+                      Adaptive readiness tracking with weak-area prioritization
+                    </p>
+                    <p className="rounded-lg border border-border/60 bg-card/50 px-2.5 py-1.5">
+                      Clinically structured rationales with exam strategy cues
+                    </p>
+                    <p className="rounded-lg border border-border/60 bg-card/50 px-2.5 py-1.5">
+                      One learning loop: questions, lessons, flashcards, retesting
+                    </p>
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-2 sm:gap-2.5" data-testid="hero-feature-strip">

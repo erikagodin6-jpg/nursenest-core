@@ -21,6 +21,7 @@ import { AdaptiveStudyOverview } from "@/components/student/adaptive-study-overv
 import { LearnerDashboardActionCards } from "@/components/student/learner-dashboard-action-cards";
 import { LearnerDashboardHero } from "@/components/student/learner-dashboard-hero";
 import { hrefForLearnerNote, labelForLearnerNoteScope } from "@/lib/learner/learner-note-href";
+import { resolveLessonRefFromProgressId } from "@/lib/lessons/lesson-progress-resolver";
 
 export default async function DashboardPage() {
   const messages = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
@@ -44,6 +45,7 @@ export default async function DashboardPage() {
   }
 
   let nextLessonTitle: string | null = null;
+  let nextLessonHref: string | null = null;
   let userPrefs: {
     examFocus: string | null;
     studyGoal: string | null;
@@ -86,15 +88,14 @@ export default async function DashboardPage() {
         orderBy: { updatedAt: "desc" },
         select: { lessonId: true },
       });
-      const lessonRow = incomplete?.lessonId
-        ? await prisma.contentItem.findFirst({
-            where: { id: incomplete.lessonId, type: "lesson" },
-            select: { title: true },
-          })
+      const resolved = incomplete?.lessonId
+        ? await resolveLessonRefFromProgressId({ lessonId: incomplete.lessonId, entitlement })
         : null;
-      nextLessonTitle = lessonRow?.title ?? null;
+      nextLessonTitle = resolved?.title ?? null;
+      nextLessonHref = resolved?.href ?? null;
     } catch {
       nextLessonTitle = null;
+      nextLessonHref = null;
     }
   }
 
@@ -204,7 +205,7 @@ export default async function DashboardPage() {
                 weakTopicTitles={topicPerfInitial.weakTopics.map((w) => w.topic)}
                 continueLesson={premiumSnapshot.continueLesson}
               />
-              <AdaptiveStudyOverview adaptive={adaptiveRecommendations} compact />
+              <AdaptiveStudyOverview adaptive={adaptiveRecommendations} compact userId={userId} />
               <ExamPlanSettingsCard />
               <LearnerDashboardActionCards
                 continueLesson={premiumSnapshot.continueLesson}
@@ -226,7 +227,14 @@ export default async function DashboardPage() {
               <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Continue where you left off</h2>
               {nextLessonTitle ? (
                 <p className="mt-2 text-sm text-muted">
-                  Next open lesson: <span className="font-medium text-foreground">{nextLessonTitle}</span>
+                  Next open lesson:{" "}
+                  {nextLessonHref ? (
+                    <Link href={nextLessonHref} className="font-medium text-foreground underline">
+                      {nextLessonTitle}
+                    </Link>
+                  ) : (
+                    <span className="font-medium text-foreground">{nextLessonTitle}</span>
+                  )}
                 </p>
               ) : (
                 <p className="mt-2 text-sm text-muted">Pick a lesson or jump to the question bank for a timed block.</p>
