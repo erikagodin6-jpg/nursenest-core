@@ -31,24 +31,9 @@ import { buildHomepageHeroSlides } from "@/lib/marketing-assets";
 import type { HomepageLessonTeaser } from "@/lib/marketing/homepage-lesson-teasers";
 import { heroQuickEntryLinks } from "@/lib/marketing/home-hero-gateway-config";
 import { rnQuestions } from "@/lib/marketing/marketing-entry-routes";
+import { HomeHeroMediaPanel } from "@/components/marketing/home-hero-media-panel";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
-
-const HomeHeroMediaPanel = dynamic(
-  () => import("@/components/marketing/home-hero-media-panel").then((m) => ({ default: m.HomeHeroMediaPanel })),
-  {
-    ssr: true,
-    loading: () => (
-      <div className="flex w-full min-w-0 flex-col gap-3 md:gap-3.5" aria-hidden>
-        <div className="relative min-h-[15.5rem] w-full animate-pulse rounded-2xl bg-[var(--theme-muted-surface)] sm:min-h-[18.25rem] md:min-h-[19.5rem] lg:min-h-[22rem]" />
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-3.5">
-          <div className="aspect-[16/10] min-h-[8.25rem] animate-pulse rounded-xl bg-[var(--theme-muted-surface)] sm:min-h-[8.75rem]" />
-          <div className="aspect-[16/10] min-h-[8.25rem] animate-pulse rounded-xl bg-[var(--theme-muted-surface)] sm:min-h-[8.75rem]" />
-        </div>
-      </div>
-    ),
-  },
-);
 
 const HomePageHeroTail = dynamic(() => import("@/components/marketing/home-page-hero-tail"), {
   ssr: false,

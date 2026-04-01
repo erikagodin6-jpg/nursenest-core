@@ -6,8 +6,11 @@
 /** Max logical width for marketing hero & carousel sources (matches CDN `-1200w` variants). */
 export const MARKETING_HERO_MAX_DISPLAY_WIDTH = 1200;
 
-/** JPEG/WebP quality passed to `next/image` — balances ~150KB-class payloads at 1200w for UI screenshots. */
+/** JPEG/WebP quality passed to `next/image` — balances ~150KB-class payloads at 1200w for UI screenshots (LCP / above-fold). */
 export const MARKETING_PHOTO_QUALITY = 72;
+
+/** Slightly lower quality for below-fold marketing stills; keeps layout identical, trims transfer on `/_next/image`. */
+export const MARKETING_PHOTO_QUALITY_BELOW_FOLD = 68;
 
 /** Homepage hero column (primary product still). */
 export const MARKETING_HERO_LCP_SIZES =

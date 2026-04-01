@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import type { HomeHeroSlide } from "@/config/home-hero-carousel";
 import { getMarketingHeroImageUrlChain, MARKETING_HERO_LOCAL_FALLBACK } from "@/lib/marketing-hero-image";
 import {
-  MARKETING_PHOTO_QUALITY,
+  MARKETING_PHOTO_QUALITY_BELOW_FOLD,
   MARKETING_STACK_SHOT_SIZES,
   marketingImageShouldUnoptimize,
 } from "@/lib/marketing-image-delivery";

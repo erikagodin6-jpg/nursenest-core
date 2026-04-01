@@ -10,7 +10,7 @@ import { PH } from "@/lib/observability/posthog-conversion-events";
 import { HUB, loginWithCallback, rnLessons, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
 import type { NursenestMarketingRegion } from "@/lib/marketing/home-hero-gateway-config";
 import {
-  MARKETING_PHOTO_QUALITY,
+  MARKETING_PHOTO_QUALITY_BELOW_FOLD,
   MARKETING_SCREENSHOT_PAIR_SIZES,
   marketingScreenshotBundleDisplaySrc,
 } from "@/lib/marketing-image-delivery";
@@ -92,7 +92,10 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
                     alt={t("home.conversion.previewCaptionDash")}
                     fill
                     sizes={MARKETING_SCREENSHOT_PAIR_SIZES}
-                    quality={MARKETING_PHOTO_QUALITY}
+                    quality={MARKETING_PHOTO_QUALITY_BELOW_FOLD}
+                    loading="lazy"
+                    fetchPriority="low"
+                    decoding="async"
                     className="object-cover object-top"
                   />
                 </div>
@@ -115,7 +118,10 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
                     alt={t("home.conversion.previewCaptionBank")}
                     fill
                     sizes={MARKETING_SCREENSHOT_PAIR_SIZES}
-                    quality={MARKETING_PHOTO_QUALITY}
+                    quality={MARKETING_PHOTO_QUALITY_BELOW_FOLD}
+                    loading="lazy"
+                    fetchPriority="low"
+                    decoding="async"
                     className="object-cover object-top"
                   />
                 </div>

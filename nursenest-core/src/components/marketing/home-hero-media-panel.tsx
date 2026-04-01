@@ -8,6 +8,7 @@ import {
   MARKETING_HERO_LCP_SIZES,
   MARKETING_HERO_SECONDARY_SIZES,
   MARKETING_PHOTO_QUALITY,
+  MARKETING_PHOTO_QUALITY_BELOW_FOLD,
   marketingImageShouldUnoptimize,
 } from "@/lib/marketing-image-delivery";
 
@@ -18,6 +19,7 @@ function HeroImage({
   className,
   imgClassName,
   sizes,
+  quality,
 }: {
   slide: HomeHeroSlide;
   priority: boolean;
@@ -25,6 +27,7 @@ function HeroImage({
   className?: string;
   imgClassName: string;
   sizes: string;
+  quality: number;
 }) {
   const chain = useMemo(
     () =>
@@ -48,9 +51,11 @@ function HeroImage({
         alt={slide.alt}
         fill
         sizes={sizes}
-        quality={MARKETING_PHOTO_QUALITY}
+        quality={quality}
         priority={priority}
         fetchPriority={priority ? "high" : "low"}
+        loading={priority ? undefined : "lazy"}
+        decoding={priority ? "sync" : "async"}
         unoptimized={unoptimized}
         referrerPolicy="no-referrer"
         className={imgClassName}
@@ -131,6 +136,7 @@ export function HomeHeroMediaPanel({
                 className="absolute inset-0 h-full w-full"
                 imgClassName="h-full w-full object-cover object-top"
                 sizes={MARKETING_HERO_LCP_SIZES}
+                quality={MARKETING_PHOTO_QUALITY}
               />
             </div>
           </div>
@@ -157,6 +163,7 @@ export function HomeHeroMediaPanel({
                   className="absolute inset-0 h-full w-full"
                   imgClassName="h-full w-full object-cover object-top"
                   sizes={MARKETING_HERO_SECONDARY_SIZES}
+                  quality={MARKETING_PHOTO_QUALITY_BELOW_FOLD}
                 />
               </div>
               <div className="border-t border-[var(--theme-card-border)]/80 px-3 py-2.5">
