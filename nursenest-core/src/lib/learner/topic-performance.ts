@@ -91,8 +91,11 @@ function mergeLedgerAndFallbackWeak(args: {
   const weakCount = ledgerWeak.length;
   const ledgerAdequate =
     totalLedgerAttempts >= THIN_LEDGER_TOTAL_ATTEMPTS && ledgerTopicCount >= THIN_LEDGER_MIN_TOPICS;
-  /** Adequate ledger + enough weak labels: do not blend session fallback (avoids stale mock pollution). */
-  const skipFallback = ledgerAdequate && weakCount >= 2;
+  /**
+   * Skip mock/session fallback when ledger is thick enough: either we already have ≥2 weak topics,
+   * or the classifier found zero weak topics (trust the ledger; do not resurrect stale session noise).
+   */
+  const skipFallback = (ledgerAdequate && weakCount >= 2) || (ledgerAdequate && weakCount === 0);
 
   const byNorm = new Map<string, WeakTopicRow>();
   for (const r of ledgerWeak) {

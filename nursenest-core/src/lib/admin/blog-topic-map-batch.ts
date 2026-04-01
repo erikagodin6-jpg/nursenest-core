@@ -88,7 +88,18 @@ export function loadRnTopicMapBatchRows(limit: number): TopicMapBatchRow[] {
   return rows;
 }
 
+/** One batch row per RN topic (template rotates per row). */
 export function totalRnTopicMapRowsEstimate(): number {
-  const rows = loadRnTopicMapBatchRows(50000);
-  return rows.length;
+  const p = mapPath();
+  if (!fs.existsSync(p)) return 0;
+  const raw = JSON.parse(fs.readFileSync(p, "utf8")) as {
+    exams?: { RN?: { categories?: Array<{ topics: unknown[] }> } };
+  };
+  const rn = raw.exams?.RN;
+  if (!rn?.categories) return 0;
+  let n = 0;
+  for (const cat of rn.categories) {
+    n += cat.topics.length;
+  }
+  return n;
 }

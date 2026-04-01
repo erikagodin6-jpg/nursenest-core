@@ -7,6 +7,11 @@ import { prisma } from "@/lib/db";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { advanceCatPracticeTest, finalizeCatPracticeTest } from "@/lib/practice-tests/cat-session";
+/**
+ * Topic ledger updates run only when a practice test completes (linear or CAT finalization).
+ * Incremental recording on each CAT advance would double-count if the client retried the same step
+ * or replayed answers; completion uses the full question id + answer set once.
+ */
 import { recordTopicOutcomesFromPracticeTest } from "@/lib/learner/topic-performance";
 import { computePracticeTestResults } from "@/lib/practice-tests/score-practice-test";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";

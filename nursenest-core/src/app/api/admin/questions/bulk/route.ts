@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
-import { ContentStatus } from "@prisma/client";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
+import { ContentStatus, QuestionType } from "@prisma/client";
+import { governExamQuestionPublish } from "@/lib/content/editorial-publish-policy";
 import { prisma } from "@/lib/db";
 import { contentStatusToDb } from "@/lib/prisma/content-status";
 
@@ -37,6 +38,49 @@ export async function POST(req: Request) {
   }
 
   if (body.action === "set_status") {
+    if (body.status === ContentStatus.PUBLISHED) {
+      const rows = await prisma.examQuestion.findMany({
+        where: { id: { in: body.ids } },
+        select: {
+          id: true,
+          stem: true,
+          rationale: true,
+          questionType: true,
+          options: true,
+          correctAnswer: true,
+          correctAnswerExplanation: true,
+          clinicalReasoning: true,
+          keyTakeaway: true,
+        },
+      });
+      const blocked: { id: string; reasons: string[] }[] = [];
+      for (const row of rows) {
+        const gov = governExamQuestionPublish(
+          {
+            stem: row.stem,
+            rationale: row.rationale ?? "",
+            correctAnswerExplanation: row.correctAnswerExplanation,
+            clinicalReasoning: row.clinicalReasoning,
+            keyTakeaway: row.keyTakeaway,
+            questionType: row.questionType as QuestionType,
+            options: row.options as unknown[],
+            answerKey: row.correctAnswer as unknown[],
+          },
+          { acknowledgeBelowQualityBar: false },
+        );
+        if (!gov.ok) blocked.push({ id: row.id, reasons: gov.reasons });
+      }
+      if (blocked.length > 0) {
+        return NextResponse.json(
+          {
+            error: "Bulk publish blocked: some rows fail editorial policy",
+            blocked,
+            hint: "Fix rationales or publish individually with acknowledgeBelowQualityBar.",
+          },
+          { status: 422 },
+        );
+      }
+    }
     const res = await prisma.examQuestion.updateMany({
       where: { id: { in: body.ids } },
       data: { status: contentStatusToDb(body.status) },

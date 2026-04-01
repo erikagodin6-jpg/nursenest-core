@@ -3,7 +3,7 @@ import { ContentStatus, QuestionType } from "@prisma/client";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { stemHash } from "@/lib/content/stem-hash";
-import { validateQuestionForPublish } from "@/lib/content/publish-validation";
+import { governExamQuestionPublish } from "@/lib/content/editorial-publish-policy";
 import { prisma } from "@/lib/db";
 import { contentStatusToDb } from "@/lib/prisma/content-status";
 import {
@@ -34,6 +34,8 @@ const createSchema = z.object({
   lessonId: z.string().optional(),
   sourceNotes: z.string().optional(),
   generationBatchId: z.string().optional(),
+  /** Required when rationale is below the premium word-count bar but you still need to publish. */
+  acknowledgeBelowQualityBar: z.boolean().optional(),
 });
 
 export async function GET(req: NextRequest) {
@@ -89,15 +91,24 @@ export async function POST(req: Request) {
   if (!parsed.success) return NextResponse.json({ error: "Invalid payload", details: parsed.error.flatten() }, { status: 400 });
 
   const data = parsed.data;
+  let publishGov: ReturnType<typeof governExamQuestionPublish> | null = null;
   if (data.status === ContentStatus.PUBLISHED) {
-    const v = validateQuestionForPublish({
-      stem: data.stem,
-      rationale: data.rationale,
-      questionType: data.questionType as QuestionType,
-      options: data.options,
-      answerKey: data.answerKey,
-    });
-    if (!v.ok) return NextResponse.json({ error: "Publish validation failed", reasons: v.reasons }, { status: 400 });
+    publishGov = governExamQuestionPublish(
+      {
+        stem: data.stem,
+        rationale: data.rationale,
+        questionType: data.questionType as QuestionType,
+        options: data.options,
+        answerKey: data.answerKey,
+      },
+      { acknowledgeBelowQualityBar: data.acknowledgeBelowQualityBar === true },
+    );
+    if (!publishGov.ok) {
+      return NextResponse.json(
+        { error: "Publish blocked by editorial policy", reasons: publishGov.reasons, quality: publishGov },
+        { status: 422 },
+      );
+    }
   }
 
   const hash = stemHash(data.stem);
@@ -125,5 +136,11 @@ export async function POST(req: Request) {
     },
   });
 
-  return NextResponse.json({ question }, { status: 201 });
+  return NextResponse.json(
+    {
+      question,
+      ...(publishGov && publishGov.warnings.length ? { publishWarnings: publishGov.warnings, quality: publishGov } : {}),
+    },
+    { status: 201 },
+  );
 }

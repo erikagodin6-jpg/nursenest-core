@@ -3,7 +3,7 @@ import { ContentStatus, QuestionType } from "@prisma/client";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { stemHash } from "@/lib/content/stem-hash";
-import { validateQuestionForPublish } from "@/lib/content/publish-validation";
+import { governExamQuestionPublish } from "@/lib/content/editorial-publish-policy";
 import { prisma } from "@/lib/db";
 import { contentStatusToDb } from "@/lib/prisma/content-status";
 import {
@@ -29,8 +29,18 @@ const patchSchema = z
     topicTag: z.string().nullable().optional(),
     systemTag: z.string().nullable().optional(),
     tags: z.array(z.string()).optional(),
+    acknowledgeBelowQualityBar: z.boolean().optional(),
   })
   .strict();
+
+export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> }) {
+  const gate = await requireAdmin();
+  if (!gate.ok) return gate.response;
+  const { id } = await ctx.params;
+  const q = await prisma.examQuestion.findUnique({ where: { id } });
+  if (!q) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  return NextResponse.json({ question: q });
+}
 
 export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }> }) {
   const gate = await requireAdmin();
@@ -45,7 +55,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
 
   const d = parsed.data;
   const qtDb = d.questionType ? adminQuestionTypeToDb(d.questionType) : existing.questionType;
-  const qtForValidation = (d.questionType ?? "MCQ") as QuestionType;
+  const qtForValidation = (d.questionType ?? existing.questionType) as QuestionType;
 
   const merged = {
     stem: d.stem ?? existing.stem,
@@ -56,15 +66,27 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
   };
 
   const nextStatusDb = d.status ? contentStatusToDb(d.status) : existing.status;
+  let publishGov: ReturnType<typeof governExamQuestionPublish> | null = null;
   if (d.status === ContentStatus.PUBLISHED) {
-    const v = validateQuestionForPublish({
-      stem: merged.stem,
-      rationale: merged.rationale,
-      questionType: merged.questionType,
-      options: merged.options,
-      answerKey: merged.answerKey,
-    });
-    if (!v.ok) return NextResponse.json({ error: "Publish validation failed", reasons: v.reasons }, { status: 400 });
+    publishGov = governExamQuestionPublish(
+      {
+        stem: merged.stem,
+        rationale: merged.rationale,
+        correctAnswerExplanation: existing.correctAnswerExplanation,
+        clinicalReasoning: existing.clinicalReasoning,
+        keyTakeaway: existing.keyTakeaway,
+        questionType: merged.questionType,
+        options: merged.options,
+        answerKey: merged.answerKey,
+      },
+      { acknowledgeBelowQualityBar: d.acknowledgeBelowQualityBar === true },
+    );
+    if (!publishGov.ok) {
+      return NextResponse.json(
+        { error: "Publish blocked by editorial policy", reasons: publishGov.reasons, quality: publishGov },
+        { status: 422 },
+      );
+    }
   }
 
   let topic = existing.topic;
@@ -95,7 +117,10 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     },
   });
 
-  return NextResponse.json({ question });
+  return NextResponse.json({
+    question,
+    ...(publishGov && publishGov.warnings.length ? { publishWarnings: publishGov.warnings, quality: publishGov } : {}),
+  });
 }
 
 export async function DELETE(_req: Request, ctx: { params: Promise<{ id: string }> }) {

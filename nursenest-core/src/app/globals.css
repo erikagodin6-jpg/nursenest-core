@@ -103,9 +103,14 @@ a {
   text-decoration: none;
 }
 
-/* NurseNest header wordmark: preflight constrains all `img` to parent width + height:auto; keep width uncapped. */
-img.nn-brand-header-logo {
-  max-width: none !important;
+/* Header wordmark: inside `.nn-brand-header-logo-slot`, respect slot bounds so every theme maps into the same visual frame. */
+.nn-brand-header-logo-slot img.nn-brand-header-logo {
+  max-width: 100% !important;
+  max-height: 100% !important;
+  width: auto !important;
+  height: 100% !important;
+  object-fit: contain;
+  object-position: left center;
 }
 
 .nn-card {

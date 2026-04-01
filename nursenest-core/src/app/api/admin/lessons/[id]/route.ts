@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { ContentStatus } from "@prisma/client";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
-import { validateLessonForPublish } from "@/lib/content/publish-validation";
+import { governContentItemLessonPublish } from "@/lib/content/editorial-publish-policy";
 import { prisma } from "@/lib/db";
 import { bodyStringFromContentJson, bodyStringToContentJson } from "@/lib/prisma/content-item-body";
 import { contentStatusToDb } from "@/lib/prisma/content-status";
@@ -24,6 +24,7 @@ const patchSchema = z
     systemTag: z.string().nullable().optional(),
     tags: z.array(z.string()).optional(),
     sourceNotes: z.string().nullable().optional(),
+    acknowledgeBelowQualityBar: z.boolean().optional(),
   })
   .strict();
 
@@ -47,9 +48,18 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
   };
 
   const nextStatus = d.status ? contentStatusToDb(d.status) : existing.status;
+  let lessonGov: ReturnType<typeof governContentItemLessonPublish> | null = null;
   if (d.status === ContentStatus.PUBLISHED) {
-    const v = validateLessonForPublish({ title: merged.title, summary: merged.summary, body: merged.body });
-    if (!v.ok) return NextResponse.json({ error: "Publish validation failed", reasons: v.reasons }, { status: 400 });
+    lessonGov = governContentItemLessonPublish(
+      { title: merged.title, summary: merged.summary, body: merged.body },
+      { acknowledgeBelowQualityBar: d.acknowledgeBelowQualityBar === true },
+    );
+    if (!lessonGov.ok) {
+      return NextResponse.json(
+        { error: "Publish blocked by editorial policy", reasons: lessonGov.reasons, quality: lessonGov },
+        { status: 422 },
+      );
+    }
   }
 
   let category = existing.category;
@@ -74,7 +84,10 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     },
   });
 
-  return NextResponse.json({ lesson });
+  return NextResponse.json({
+    lesson,
+    ...(lessonGov && lessonGov.warnings.length ? { publishWarnings: lessonGov.warnings, quality: lessonGov } : {}),
+  });
 }
 
 export async function DELETE(_req: Request, ctx: { params: Promise<{ id: string }> }) {

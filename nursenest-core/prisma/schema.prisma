@@ -334,7 +334,6 @@ enum BlogPostTemplate {
   STUDY_PLAN
 }
 
-/** Public SEO blog posts (migrated from legacy content_items / static allied data). Not the same rows as `content_items.type = 'lesson'`. */
 /** Aggregated full-corpus lesson/question quality (refreshed via admin POST, not hot-path). */
 model ContentQualityCorpusSnapshot {
   id        String   @id @default("default")
@@ -344,6 +343,7 @@ model ContentQualityCorpusSnapshot {
   @@map("content_quality_corpus_snapshots")
 }
 
+/** Public SEO blog posts (migrated from legacy content_items / static allied data). Not the same rows as `content_items.type = 'lesson'`. */
 model BlogPost {
   id           String   @id @default(cuid())
   slug         String   @unique

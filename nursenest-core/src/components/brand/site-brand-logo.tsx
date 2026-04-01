@@ -5,6 +5,7 @@ import {
   BRAND_NAME,
   DEFAULT_BRAND_LOGO_MARK_CLASSNAME,
   HEADER_BRAND_LOGO_IMG_CLASSNAME,
+  HEADER_BRAND_LOGO_SLOT_CLASSNAME,
   LOCAL_BRAND_MARK_PATH,
 } from "@/lib/branding/logo-config";
 import { logBrandLogoLoadFailure } from "@/lib/observability/brand-logo-client-log";
@@ -70,16 +71,18 @@ export function SiteBrandLogoMark({
   if (showTextFallback) {
     return (
       <span
-        className={`inline-flex min-h-[3.25rem] flex-none items-center overflow-visible sm:min-h-16 md:min-h-[5.25rem] lg:min-h-24 xl:min-h-[6.75rem] ${className}`}
+        className={`${HEADER_BRAND_LOGO_SLOT_CLASSNAME} ${className}`.trim()}
         aria-label={BRAND_NAME}
       >
-        <span className="text-3xl font-extrabold tracking-tight text-primary sm:text-4xl md:text-5xl lg:text-6xl">{BRAND_NAME}</span>
+        <span className="text-2xl font-extrabold leading-none tracking-tight text-primary sm:text-3xl md:text-4xl lg:text-[2.65rem] xl:text-[2.85rem] 2xl:text-[3.05rem]">
+          {BRAND_NAME}
+        </span>
       </span>
     );
   }
 
   return (
-    <span className={`inline-flex w-auto max-w-none flex-none items-center justify-start overflow-visible ${className}`}>
+    <span className={`${HEADER_BRAND_LOGO_SLOT_CLASSNAME} ${className}`.trim()}>
       <img
         key={`${themeId}-${safeIndex}-${src}`}
         src={src}

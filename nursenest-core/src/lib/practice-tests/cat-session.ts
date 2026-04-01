@@ -19,7 +19,8 @@ import {
   validatePracticeCatPool,
 } from "@/lib/exams/cat-engine";
 import type { CatAdaptiveState, CatAnswerResult, CatExamReport } from "@/lib/exams/cat-types";
-import { getWeakTopicNamesForPractice } from "@/lib/learner/topic-performance";
+import { loadWeakTopicPracticePlan } from "@/lib/learner/topic-performance";
+import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
 import { fetchCatPracticePool } from "@/lib/practice-tests/cat-pool";
 import { practiceCatBounds } from "@/lib/practice-tests/cat-practice-config";
 import { configFromInput, type PickQuestionsInput } from "@/lib/practice-tests/pick-question-ids";
@@ -52,14 +53,17 @@ function countsFromResults(results: CatAnswerResult[]): Map<string, number> {
   return m;
 }
 
-function catBoostFromConfig(weakCategories: string[]): CatSelectOptions {
-  const weak = new Set(weakCategories.map((s) => s.trim()).filter(Boolean));
+/** Proportional weak boost (0…~9); blueprint balancing still dominates via deficit * 3 in cat-engine. */
+const CAT_WEAK_MAX_BOOST = 9;
+
+function catBoostFromWeakPriorities(priorityByCanonical: Map<string, number>): CatSelectOptions {
   return {
     categoryPriorityBoost: (cat: string, row: CatPoolRow) => {
       const t = row.topic?.trim() ?? "";
-      let boost = 0;
-      if (weak.has(cat) || (t && weak.has(t))) boost += 6;
-      return boost;
+      const pT = t ? (priorityByCanonical.get(normalizeTopicKey(t)) ?? 0) : 0;
+      const pC = priorityByCanonical.get(normalizeTopicKey(cat)) ?? 0;
+      const p = Math.max(pT, pC);
+      return CAT_WEAK_MAX_BOOST * p;
     },
   };
 }
@@ -127,9 +131,11 @@ export async function createCatPracticeTestPayload(
     }
   | { ok: false; message: string }
 > {
-  const catWeakCategories = await getWeakTopicNamesForPractice(userId, entitlement, 14);
+  const weakPlan = await loadWeakTopicPracticePlan(userId, entitlement, 14);
+  const catWeakCategories = weakPlan.dbTopicNames;
+  const catWeakPriorityByCanonical = Object.fromEntries(weakPlan.priorityByCanonical);
 
-  if (catBasis === "weak" && catWeakCategories.length === 0) {
+  if (catBasis === "weak" && weakPlan.priorityByCanonical.size === 0) {
     return {
       ok: false,
       message:
@@ -149,7 +155,7 @@ export async function createCatPracticeTestPayload(
   const bounds = practiceCatBounds(input.questionCount);
   const state = createInitialAdaptiveState();
   const delivered = new Map<string, number>();
-  const boost = mergeCatBoosts(catBoostFromConfig(catWeakCategories), sessionMissBoost(state));
+  const boost = mergeCatBoosts(catBoostFromWeakPriorities(weakPlan.priorityByCanonical), sessionMissBoost(state));
 
   const first = selectNextQuestion(pool, new Set(), state.targetDifficulty, delivered, boost);
   if (!first.selected) {
@@ -163,6 +169,7 @@ export async function createCatPracticeTestPayload(
     catMinQuestions: bounds.min,
     catMaxQuestions: bounds.max,
     catWeakCategories,
+    catWeakPriorityByCanonical,
   };
 
   return {
@@ -225,8 +232,29 @@ export async function advanceCatPracticeTest(params: {
     max: params.config.catMaxQuestions ?? practiceCatBounds(30).max,
   };
 
-  const weakCats = params.config.catWeakCategories ?? [];
-  const boost = mergeCatBoosts(catBoostFromConfig(weakCats), sessionMissBoost(state));
+  const pri = params.config.catWeakPriorityByCanonical;
+  const hasPriority =
+    pri && typeof pri === "object" && Object.keys(pri as Record<string, number>).length > 0;
+  const priorityMap = hasPriority
+    ? new Map<string, number>(
+        Object.entries(pri as Record<string, number>).map(([k, v]) => [k, typeof v === "number" ? v : 0]),
+      )
+    : new Map<string, number>();
+  const weakBoost = hasPriority
+    ? catBoostFromWeakPriorities(priorityMap)
+    : (() => {
+        const weakCats = params.config.catWeakCategories ?? [];
+        const weak = new Set(weakCats.map((s) => s.trim()).filter(Boolean));
+        return {
+          categoryPriorityBoost: (cat: string, row: CatPoolRow) => {
+            const t = row.topic?.trim() ?? "";
+            let boost = 0;
+            if (weak.has(cat) || (t && weak.has(t))) boost += 6;
+            return boost;
+          },
+        } satisfies CatSelectOptions;
+      })();
+  const boost = mergeCatBoosts(weakBoost, sessionMissBoost(state));
 
   const basis = params.config.catSelectionBasis ?? "random";
   const pickInput: PickQuestionsInput = {

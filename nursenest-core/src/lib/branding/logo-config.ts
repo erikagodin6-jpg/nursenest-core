@@ -24,14 +24,17 @@ export const FALLBACK_LOGO_PATH = SITE_LOGO_FALLBACK_PATH;
 export const BRAND_NAME = "NurseNest" as const;
 
 /**
- * Inner `<img>` — `!h-*` / `!max-w-none` beat Tailwind preflight `img { max-width: 100%; height: auto }`, which
- * otherwise caps the mark to the link column and ignores intended header height.
+ * Fixed header slot: same box for every theme so raster marks with different canvas padding normalize visually.
+ * Height drives scale; max-width caps overflow. Image uses {@link HEADER_BRAND_LOGO_IMG_CLASSNAME} inside this slot.
  */
-export const HEADER_BRAND_LOGO_IMG_CLASSNAME =
-  "nn-brand-header-logo block !h-[3.25rem] !w-auto !min-w-0 !max-w-none !shrink-0 !object-contain !object-left sm:!h-16 md:!h-[5.25rem] lg:!h-24 xl:!h-[6.75rem] 2xl:!h-32" as const;
+export const HEADER_BRAND_LOGO_SLOT_CLASSNAME =
+  "nn-brand-header-logo-slot inline-flex flex-none shrink-0 items-center justify-start overflow-visible self-center h-14 max-h-14 w-auto max-w-[min(88vw,15rem)] sm:h-[3.75rem] sm:max-h-[3.75rem] sm:max-w-[min(88vw,16rem)] md:h-16 md:max-h-16 md:max-w-[17rem] lg:h-[4.5rem] lg:max-h-[4.5rem] lg:max-w-[18rem] xl:h-[5rem] xl:max-h-[5rem] xl:max-w-[19rem] 2xl:h-[5.5rem] 2xl:max-h-[5.5rem] 2xl:max-w-[20rem]" as const;
 
 /**
- * Wrapper for `<SiteBrandLogoMark />` — flex-safe brand slot; raster sizing lives on {@link HEADER_BRAND_LOGO_IMG_CLASSNAME}.
+ * Raster mark: fills slot height; width from aspect ratio; `object-contain` keeps sharpness and trims effective padding vs stretching.
  */
-export const DEFAULT_BRAND_LOGO_MARK_CLASSNAME =
-  "flex flex-none max-w-none items-center justify-start self-center overflow-visible" as const;
+export const HEADER_BRAND_LOGO_IMG_CLASSNAME =
+  "nn-brand-header-logo block h-full w-auto max-h-full max-w-full shrink-0 object-contain object-left" as const;
+
+/** Extra classes merged onto the slot in `<SiteBrandLogoMark />` (call sites rarely need overrides). */
+export const DEFAULT_BRAND_LOGO_MARK_CLASSNAME = "" as const;

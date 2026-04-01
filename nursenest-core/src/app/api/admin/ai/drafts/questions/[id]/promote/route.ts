@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import type { NormalizedQuestionDraft } from "@/lib/content/ai-draft-validation";
-import { validateQuestionForPublish } from "@/lib/content/publish-validation";
+import { governExamQuestionPublish } from "@/lib/content/editorial-publish-policy";
 import { stemHash } from "@/lib/content/stem-hash";
 import { prisma } from "@/lib/db";
 import { contentStatusToDb } from "@/lib/prisma/content-status";
@@ -51,15 +51,26 @@ export async function POST(req: Request, ctx: Props) {
   }
 
   const n = draft.normalizedJson as unknown as NormalizedQuestionDraft;
-  const v = validateQuestionForPublish({
-    stem: n.stem,
-    rationale: n.rationale,
-    questionType: n.questionType as QuestionType,
-    options: n.options,
-    answerKey: n.answerKey,
-  });
-  if (!v.ok) {
-    return NextResponse.json({ error: "Promotion validation failed", reasons: v.reasons }, { status: 400 });
+  const gov = governExamQuestionPublish(
+    {
+      stem: n.stem,
+      rationale: n.rationale,
+      questionType: n.questionType as QuestionType,
+      options: n.options,
+      answerKey: n.answerKey,
+    },
+    { acknowledgeBelowQualityBar: false },
+  );
+  if (!gov.ok) {
+    return NextResponse.json(
+      {
+        error: "Draft fails editorial quality bar for promotion",
+        reasons: gov.reasons,
+        quality: gov,
+        hint: "Expand rationale/teaching fields in the draft, or promote manually after editing in the question admin.",
+      },
+      { status: 422 },
+    );
   }
 
   const hash = stemHash(n.stem);

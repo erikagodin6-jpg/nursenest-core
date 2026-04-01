@@ -100,10 +100,17 @@ export function computeReadiness(args: {
     practiceCorrect,
     practiceTotal,
     recentMocks,
-    weakTopics,
+    weakTopics: weakTopicsRaw,
     lessonsCompleted,
     lessonsAvailable,
   } = args;
+
+  const weakTopics = [...weakTopicsRaw].sort(
+    (a, b) =>
+      (b.weakPriorityScore ?? 0) - (a.weakPriorityScore ?? 0) ||
+      (b.missRate ?? 0) - (a.missRate ?? 0) ||
+      a.topic.localeCompare(b.topic),
+  );
 
   const usableMocks = recentMocks.filter((m) => m.total >= MIN_QUESTIONS_PER_MOCK).slice(0, 3);
 
@@ -199,14 +206,16 @@ export function computeReadiness(args: {
     });
   } else {
     const top = weakTopics.slice(0, 3);
-    const avgMiss = top.reduce((s, t) => s + t.missRate, 0) / top.length;
+    const weights = top.map((t) => Math.max(0.12, (t.weakPriorityScore ?? 0.5) + 0.12));
+    const wSum = weights.reduce((s, w) => s + w, 0) || 1;
+    const avgMiss = top.reduce((s, t, i) => s + t.missRate * (weights[i] ?? 1), 0) / wSum;
     topicPoints = Math.round(25 * clamp01(1 - avgMiss / 100));
     factors.push({
       id: "topic_errors",
       label: "Topic error load",
       points: topicPoints,
       maxPoints: topicMax,
-      detail: `Top weak topics average ~${Math.round(avgMiss)}% miss rate (from recent sessions). Lower is better.`,
+      detail: `Weighted miss pressure on priority weak topics ~${Math.round(avgMiss)}% (ledger + sessions). Lower is better.`,
     });
   }
 

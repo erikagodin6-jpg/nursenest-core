@@ -18,8 +18,10 @@ export type PracticeTestConfigJson = {
   catSelectionBasis?: CatSelectionBasis;
   catMinQuestions?: number;
   catMaxQuestions?: number;
-  /** Topic labels from recent exam performance — used to prioritize weak areas in CAT. */
+  /** DB topic strings matching weak areas — pool filter + legacy boost label list. */
   catWeakCategories?: string[];
+  /** Canonical topic key → 0–1 weak priority for proportional CAT boosting. */
+  catWeakPriorityByCanonical?: Record<string, number>;
 };
 
 export type PracticeTestResultsJson = {
