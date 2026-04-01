@@ -29,6 +29,13 @@ type Stats = {
   lastStudyDate: string | null;
 };
 
+type DueSummary = {
+  dueToday: number;
+  overdue: number;
+  learning: number;
+  asOf?: string;
+};
+
 const EXAM_FAMILIES = ["NCLEX_RN", "NCLEX_PN", "REX_PN", "AANP", "GENERIC"] as const;
 
 export function FlashcardsHubClient({
@@ -41,10 +48,12 @@ export function FlashcardsHubClient({
   const pathwayId = urlParams.get("pathwayId") ?? "";
   const examFamily = urlParams.get("examFamily") ?? "";
   const tagSlug = urlParams.get("tagSlug") ?? "";
+  const q = urlParams.get("q") ?? "";
   const pageFromUrl = urlParams.get("page") ?? "1";
 
   const [decks, setDecks] = useState<DeckRow[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
+  const [dueSummary, setDueSummary] = useState<DueSummary | null>(null);
   const [tagList, setTagList] = useState<TagRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -73,9 +82,12 @@ export function FlashcardsHubClient({
         if (pathwayId) qs.set("pathwayId", pathwayId);
         if (examFamily) qs.set("examFamily", examFamily);
         if (tagSlug) qs.set("tagSlug", tagSlug);
-        const [dRes, sRes] = await Promise.all([
+        const qTrim = q.trim();
+        if (qTrim.length >= 2) qs.set("q", qTrim);
+        const [dRes, sRes, dueRes] = await Promise.all([
           fetch(`/api/flashcards/decks?${qs.toString()}`, { credentials: "include" }),
           fetch("/api/flashcards/stats", { credentials: "include" }).catch(() => null),
+          fetch("/api/flashcards/due-summary", { credentials: "include" }).catch(() => null),
         ]);
         const dJson = (await dRes.json()) as { decks?: DeckRow[]; error?: string; page?: number; pageCount?: number };
         if (!dRes.ok) throw new Error(dJson.error ?? "Failed to load decks");
@@ -88,6 +100,12 @@ export function FlashcardsHubClient({
         } else {
           setStats(null);
         }
+        if (dueRes?.ok) {
+          const j = (await dueRes.json()) as DueSummary;
+          setDueSummary(j);
+        } else {
+          setDueSummary(null);
+        }
       } catch (e) {
         setError(e instanceof Error ? e.message : "Error");
         setDecks([]);
@@ -95,7 +113,7 @@ export function FlashcardsHubClient({
         setLoading(false);
       }
     },
-    [pathwayId, examFamily, tagSlug],
+    [pathwayId, examFamily, tagSlug, q],
   );
 
   useEffect(() => {
@@ -103,7 +121,12 @@ export function FlashcardsHubClient({
     void load(Number.isFinite(p) && p >= 1 ? p : 1);
   }, [load, pageFromUrl, pathwayId, examFamily, tagSlug]);
 
-  const setFilters = (next: { pathwayId?: string; examFamily?: string; tagSlug?: string }) => {
+  const setFilters = (next: {
+    pathwayId?: string;
+    examFamily?: string;
+    tagSlug?: string;
+    q?: string;
+  }) => {
     const qs = new URLSearchParams(urlParams.toString());
     qs.delete("page");
     if (next.pathwayId !== undefined) {
@@ -117,6 +140,11 @@ export function FlashcardsHubClient({
     if (next.tagSlug !== undefined) {
       if (next.tagSlug) qs.set("tagSlug", next.tagSlug);
       else qs.delete("tagSlug");
+    }
+    if (next.q !== undefined) {
+      const t = next.q.trim();
+      if (t.length >= 2) qs.set("q", t);
+      else qs.delete("q");
     }
     router.replace(`/app/flashcards?${qs.toString()}`);
   };
@@ -190,7 +218,52 @@ export function FlashcardsHubClient({
             ))}
           </select>
         </label>
+        <label className="block text-xs font-semibold text-[var(--theme-muted-text)] sm:col-span-2">
+          Search decks
+          <div className="mt-1 flex gap-2">
+            <input
+              type="search"
+              className="min-w-0 flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm"
+              placeholder="Title or description (2+ characters)"
+              defaultValue={q}
+              name="deckSearch"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  const v = (e.currentTarget as HTMLInputElement).value;
+                  setFilters({ q: v });
+                }
+              }}
+            />
+            <button
+              type="button"
+              className="shrink-0 rounded-lg border border-border bg-card px-3 py-2 text-sm font-medium hover:bg-muted/50"
+              onClick={() => {
+                const el = document.querySelector<HTMLInputElement>('input[name="deckSearch"]');
+                setFilters({ q: el?.value ?? "" });
+              }}
+            >
+              Search
+            </button>
+          </div>
+        </label>
       </div>
+
+      {dueSummary && (dueSummary.dueToday > 0 || dueSummary.overdue > 0 || dueSummary.learning > 0) ? (
+        <div className="mt-6 grid grid-cols-3 gap-3 rounded-2xl border border-primary/25 bg-primary/5 p-4 text-center">
+          <div>
+            <p className="text-2xl font-bold tabular-nums text-primary">{dueSummary.dueToday}</p>
+            <p className="text-xs font-medium text-[var(--theme-muted-text)]">Due (today)</p>
+          </div>
+          <div>
+            <p className="text-2xl font-bold tabular-nums text-[var(--theme-heading-text)]">{dueSummary.overdue}</p>
+            <p className="text-xs font-medium text-[var(--theme-muted-text)]">Overdue</p>
+          </div>
+          <div>
+            <p className="text-2xl font-bold tabular-nums text-[var(--theme-heading-text)]">{dueSummary.learning}</p>
+            <p className="text-xs font-medium text-[var(--theme-muted-text)]">Learning</p>
+          </div>
+        </div>
+      ) : null}
 
       {stats && (stats.currentStreak > 0 || stats.cardsReviewedTotal > 0) ? (
         <div className="mt-6 grid grid-cols-3 gap-3 rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] p-4 text-center">

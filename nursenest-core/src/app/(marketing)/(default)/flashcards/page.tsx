@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { loadPublicFlashcardHub } from "@/lib/seo/public-flashcard-landing";
+import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 
 export const dynamic = "force-dynamic";
 
@@ -17,6 +18,7 @@ export default async function PublicFlashcardsHubPage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
+      <BreadcrumbJsonLd items={[{ name: "Home", path: "/" }, { name: "Flashcards", path: "/flashcards" }]} />
       <nav className="mb-6 text-sm text-[var(--theme-muted-text)]" aria-label="Breadcrumb">
         <ol className="flex flex-wrap items-center gap-2">
           <li>

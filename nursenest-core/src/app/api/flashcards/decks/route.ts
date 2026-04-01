@@ -96,6 +96,17 @@ export async function GET(req: NextRequest) {
   if (tagFilter) {
     andExtra.push({ tags: { some: { tag: { slug: tagFilter } } } });
   }
+
+  const q = req.nextUrl.searchParams.get("q")?.trim();
+  if (q && q.length >= 2) {
+    andExtra.push({
+      OR: [
+        { title: { contains: q, mode: "insensitive" } },
+        { description: { contains: q, mode: "insensitive" } },
+      ],
+    });
+  }
+
   const where: Prisma.FlashcardDeckWhereInput =
     andExtra.length > 0 ? { AND: [baseWhere, ...andExtra] } : baseWhere;
 

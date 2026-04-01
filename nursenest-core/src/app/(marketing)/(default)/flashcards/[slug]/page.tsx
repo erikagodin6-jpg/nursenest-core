@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { loadPublicFlashcardSlugLanding } from "@/lib/seo/public-flashcard-landing";
+import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -37,8 +38,17 @@ export default async function PublicFlashcardSlugPage({ params }: Props) {
   const data = await loadPublicFlashcardSlugLanding(slug);
   if (!data) notFound();
 
+  const crumbName = data.kind === "deck" ? data.title : data.name;
+
   return (
     <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", path: "/" },
+          { name: "Flashcards", path: "/flashcards" },
+          { name: crumbName, path: `/flashcards/${slug}` },
+        ]}
+      />
       <nav className="mb-6 text-sm text-[var(--theme-muted-text)]" aria-label="Breadcrumb">
         <ol className="flex flex-wrap items-center gap-2">
           <li>

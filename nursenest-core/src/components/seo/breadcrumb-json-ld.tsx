@@ -1,11 +1,6 @@
-import { MARKETING_SITE_ORIGIN } from "@/lib/seo/site-origin";
+import { absoluteUrl } from "@/lib/seo/site-origin";
 
 export type BreadcrumbJsonLdItem = { name: string; path: string };
-
-function absolute(path: string): string {
-  const p = path.startsWith("/") ? path : `/${path}`;
-  return `${MARKETING_SITE_ORIGIN}${p}`;
-}
 
 /** Schema.org BreadcrumbList for public marketing pages (indexable). */
 export function BreadcrumbJsonLd({ items }: { items: BreadcrumbJsonLdItem[] }) {
@@ -16,7 +11,7 @@ export function BreadcrumbJsonLd({ items }: { items: BreadcrumbJsonLdItem[] }) {
       "@type": "ListItem",
       position: i + 1,
       name: it.name,
-      item: absolute(it.path),
+      item: absoluteUrl(it.path),
     })),
   };
   return (
