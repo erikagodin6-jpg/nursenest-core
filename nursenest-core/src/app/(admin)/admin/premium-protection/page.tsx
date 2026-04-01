@@ -135,6 +135,7 @@ export default async function AdminPremiumProtectionPage() {
               <ProtectionAbuseReviewPanel
                 initialOpen={snap.openAbuseReviews}
                 initialClosed={snap.recentClosedAbuseReviews}
+                summary={snap.abuseReviewSummary}
               />
             </div>
           </section>

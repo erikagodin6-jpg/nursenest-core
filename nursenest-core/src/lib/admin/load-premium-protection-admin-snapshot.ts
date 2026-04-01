@@ -1,3 +1,4 @@
+import { ProtectionAbuseReviewResolution } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { isRuntimeSafeMode } from "@/lib/runtime/safe-mode";
@@ -41,6 +42,14 @@ export type PremiumProtectionAdminSnapshot = {
     adminNote: string | null;
     actorEmailSample: string | null;
   }>;
+  /** Aggregate counts (not limited by list `take`). */
+  abuseReviewSummary: {
+    openCount: number;
+    dismissedCount: number;
+    resolvedCount: number;
+    /** Rows closed in the rolling last 7 days (UTC). */
+    actionsLast7Days: number;
+  };
 };
 
 function emailSample(email: string): string {
@@ -54,9 +63,21 @@ export async function loadPremiumProtectionAdminSnapshot(): Promise<PremiumProte
   const generatedAt = new Date().toISOString();
   const day = utcDayDate();
   const since24h = new Date(Date.now() - 86400000);
+  const since7d = new Date(Date.now() - 7 * 86400000);
 
   try {
-    const [flags, todayRollups, notesTotal, notesUpdatedLast24h, openReviews, closedReviews] = await Promise.all([
+    const [
+      flags,
+      todayRollups,
+      notesTotal,
+      notesUpdatedLast24h,
+      openReviews,
+      closedReviews,
+      openCount,
+      dismissedCount,
+      resolvedCount,
+      actionsLast7Days,
+    ] = await Promise.all([
       Promise.resolve(getServerPremiumProtectionFlags()),
       prisma.premiumProtectionRollup.findMany({
         where: { day },
@@ -87,6 +108,16 @@ export async function loadPremiumProtectionAdminSnapshot(): Promise<PremiumProte
           adminNote: true,
           dismissedByUserId: true,
         },
+      }),
+      prisma.protectionAbuseReview.count({ where: { dismissedAt: null } }),
+      prisma.protectionAbuseReview.count({
+        where: { resolution: ProtectionAbuseReviewResolution.DISMISSED },
+      }),
+      prisma.protectionAbuseReview.count({
+        where: { resolution: ProtectionAbuseReviewResolution.RESOLVED },
+      }),
+      prisma.protectionAbuseReview.count({
+        where: { dismissedAt: { gte: since7d } },
       }),
     ]);
 
@@ -136,6 +167,12 @@ export async function loadPremiumProtectionAdminSnapshot(): Promise<PremiumProte
           adminNote: r.adminNote,
           actorEmailSample: r.dismissedByUserId ? emailSample(emailById.get(r.dismissedByUserId) ?? "") : null,
         })),
+      abuseReviewSummary: {
+        openCount,
+        dismissedCount,
+        resolvedCount,
+        actionsLast7Days,
+      },
     };
   } catch (e) {
     console.error("[loadPremiumProtectionAdminSnapshot]", e);

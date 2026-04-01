@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { ProtectionAbuseReviewResolution } from "@prisma/client";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
+import { PROTECTION_ABUSE_REVIEW_NOTE_MAX } from "@/lib/admin/protection-abuse-review-constants";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 
@@ -9,7 +10,7 @@ export const dynamic = "force-dynamic";
 
 const bodySchema = z.object({
   action: z.enum(["dismiss", "resolve"]),
-  note: z.string().max(500).optional(),
+  note: z.string().max(PROTECTION_ABUSE_REVIEW_NOTE_MAX).optional(),
 });
 
 function normalizeNote(s: string | undefined): string | null {
@@ -39,7 +40,10 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
 
   const parsed = bodySchema.safeParse(json);
   if (!parsed.success) {
-    return NextResponse.json({ error: "Invalid body" }, { status: 400 });
+    return NextResponse.json(
+      { error: `Invalid body (note max ${PROTECTION_ABUSE_REVIEW_NOTE_MAX} characters)` },
+      { status: 400 },
+    );
   }
 
   const resolution =
