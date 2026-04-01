@@ -1,6 +1,7 @@
 "use client";
 
 import type { ContentQualityTier } from "@/lib/content-quality/standards";
+import type { RationaleReferenceMedia } from "@/lib/content-quality/rationale-media";
 
 export type RationaleQualityClient = {
   tier: ContentQualityTier;
@@ -9,6 +10,30 @@ export type RationaleQualityClient = {
 };
 
 type Section = { heading: string; body: string };
+
+function RationaleReferenceFigures({ items }: { items: RationaleReferenceMedia[] }) {
+  if (items.length === 0) return null;
+  return (
+    <div className="mt-4 space-y-3 border-t border-border pt-4">
+      <p className="text-xs font-semibold uppercase tracking-wide text-primary">Reference figures</p>
+      {items.map((m, i) => (
+        <figure key={`${m.url}-${i}`} className="overflow-hidden rounded-lg border border-border bg-background/60">
+          {/* eslint-disable-next-line @next/next/no-img-element -- HTTPS-only educational URLs from content pipeline */}
+          <img
+            src={m.url}
+            alt={m.alt}
+            loading="lazy"
+            decoding="async"
+            className="max-h-[min(60vh,480px)] w-full object-contain"
+          />
+          {m.caption ? (
+            <figcaption className="px-2 py-1.5 text-xs text-muted-foreground">{m.caption}</figcaption>
+          ) : null}
+        </figure>
+      ))}
+    </div>
+  );
+}
 
 /**
  * Quality-aware rationale display for question bank / review surfaces.
@@ -19,11 +44,14 @@ export function PremiumRationalePanel({
   rationale,
   rationaleQuality,
   rationaleSections,
+  referenceMedia,
 }: {
   correct: boolean;
   rationale: string | null;
   rationaleQuality?: RationaleQualityClient | null;
   rationaleSections?: Section[] | null;
+  /** Optional HTTPS figures from `exam_questions.images` — shown only in review / explanation mode. */
+  referenceMedia?: RationaleReferenceMedia[] | null;
 }) {
   const sections = (rationaleSections ?? []).filter((s) => s.body?.trim());
   const tier = rationaleQuality?.tier;
@@ -57,6 +85,7 @@ export function PremiumRationalePanel({
           No explanation is on file for this item yet.
         </p>
       ) : null}
+      {referenceMedia && referenceMedia.length > 0 ? <RationaleReferenceFigures items={referenceMedia} /> : null}
     </div>
   );
 }

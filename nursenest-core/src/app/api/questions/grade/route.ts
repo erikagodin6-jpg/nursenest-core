@@ -9,6 +9,7 @@ import type { Prisma } from "@prisma/client";
 import { recordTopicOutcomesSequential } from "@/lib/learner/topic-performance";
 import { normalizeTopicLabel } from "@/lib/learner/weak-topics-from-sessions";
 import { buildRationalePayloadForGradeResponse } from "@/lib/content-quality/rationale-display";
+import { parseRationaleReferenceMedia } from "@/lib/content-quality/rationale-media";
 
 function normalizeCorrect(correctAnswer: Prisma.JsonValue | null | undefined): string[] {
   if (correctAnswer == null) return [];
@@ -66,6 +67,7 @@ export async function POST(req: Request) {
           distractorRationales: true,
           topic: true,
           bodySystem: true,
+          images: true,
         },
       }),
     );
@@ -93,12 +95,14 @@ export async function POST(req: Request) {
     }
 
     const rationaleBundle = buildRationalePayloadForGradeResponse(row);
+    const referenceMedia = parseRationaleReferenceMedia(row.images);
 
     return NextResponse.json({
       correct,
       rationale: row.rationale ?? null,
       rationaleQuality: rationaleBundle.rationaleQuality,
       rationaleSections: rationaleBundle.sections,
+      referenceMedia,
       topic: row.topic ?? null,
       bodySystem: row.bodySystem ?? null,
       questionType: row.questionType,

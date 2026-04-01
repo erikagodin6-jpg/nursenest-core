@@ -115,18 +115,19 @@ export function pathwayLessonDetailBreadcrumbs(
 ): { crumbs: BreadcrumbCrumb[]; schemaItems: BreadcrumbSchemaItem[] } {
   const lessonsPath = buildExamPathwayPath(pathway, "lessons");
   const lessonPath = buildExamPathwayPath(pathway, `lessons/${lessonSlug}`);
+  const lessonsLabel = `${pathway.shortName} lessons`;
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
     pathwayProgrammaticParentCrumb(pathway, true),
     pathwayHubCrumb(pathway, true),
-    { name: "Lessons", href: lessonsPath },
+    { name: lessonsLabel, href: lessonsPath },
     { name: lessonTitle, href: undefined },
   ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
     pathwayProgrammaticParentSchema(pathway),
     pathwayHubSchema(pathway),
-    { name: "Lessons", item: toAbsoluteSiteUrl(lessonsPath) },
+    { name: lessonsLabel, item: toAbsoluteSiteUrl(lessonsPath) },
     { name: lessonTitle, item: toAbsoluteSiteUrl(lessonPath) },
   ];
   return { crumbs, schemaItems };

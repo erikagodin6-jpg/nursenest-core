@@ -7,6 +7,7 @@ import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
 import { ProtectedPremiumContent } from "@/components/student/protected-premium-content";
 import { StudyNotesPanel } from "@/components/student/study-notes-panel";
 import type { RationaleQualityClient } from "@/components/student/premium-rationale-panel";
+import type { RationaleReferenceMedia } from "@/lib/content-quality/rationale-media";
 import { PremiumRationalePanel } from "@/components/student/premium-rationale-panel";
 import type { QuestionListEmptyDiagnostics } from "@/lib/questions/question-list-empty-diagnostics";
 import {
@@ -105,6 +106,7 @@ export function QuestionBankPracticeClient({
         rationale: string | null;
         rationaleQuality?: RationaleQualityClient | null;
         rationaleSections?: Array<{ heading: string; body: string }> | null;
+        referenceMedia?: RationaleReferenceMedia[] | null;
       }
     >
   >({});
@@ -229,6 +231,7 @@ export function QuestionBankPracticeClient({
                     rationale: string | null;
                     rationaleQuality?: RationaleQualityClient | null;
                     rationaleSections?: Array<{ heading: string; body: string }> | null;
+                    referenceMedia?: RationaleReferenceMedia[] | null;
                   }
                 >;
               };
@@ -382,6 +385,7 @@ export function QuestionBankPracticeClient({
         rationale?: string | null;
         rationaleQuality?: RationaleQualityClient | null;
         rationaleSections?: Array<{ heading: string; body: string }> | null;
+        referenceMedia?: RationaleReferenceMedia[] | null;
         error?: string;
       };
       if (!res.ok) {
@@ -396,6 +400,7 @@ export function QuestionBankPracticeClient({
           rationale: data.rationale ?? null,
           rationaleQuality: data.rationaleQuality ?? null,
           rationaleSections: data.rationaleSections ?? null,
+          referenceMedia: data.referenceMedia ?? null,
         },
       }));
       appendRollup(userId, current.topic, correct);
@@ -648,6 +653,7 @@ export function QuestionBankPracticeClient({
                   rationale={g.rationale}
                   rationaleQuality={g.rationaleQuality}
                   rationaleSections={g.rationaleSections}
+                  referenceMedia={g.referenceMedia}
                 />
               )}
               <div className="mt-4 flex flex-wrap gap-2">
