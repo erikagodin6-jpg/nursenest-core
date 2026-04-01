@@ -1,4 +1,6 @@
 import type { ReactNode } from "react";
+import type { PathwayLessonFigure } from "@/lib/lessons/pathway-lesson-types";
+import { PathwayLessonFigures } from "@/components/lessons/pathway-lesson-figures";
 
 function inlineBold(text: string): ReactNode {
   const parts = text.split(/(\*\*[^*]+\*\*)/g);
@@ -27,6 +29,22 @@ export function PathwayLessonBody({ text }: { text: string }) {
           {inlineBold(p)}
         </p>
       ))}
+    </div>
+  );
+}
+
+/** Section body plus optional structured figures (catalog / DB JSON). */
+export function PathwayLessonSectionContent({
+  text,
+  figures,
+}: {
+  text: string;
+  figures?: PathwayLessonFigure[] | undefined;
+}) {
+  return (
+    <div>
+      <PathwayLessonBody text={text} />
+      {figures && figures.length > 0 ? <PathwayLessonFigures figures={figures} /> : null}
     </div>
   );
 }

@@ -3,6 +3,8 @@ import { prisma } from "@/lib/db";
 import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { normalizePathwayLessonLocale, PATHWAY_LESSON_SITEMAP_LOCALE } from "@/lib/lessons/pathway-lesson-locale";
 import type {
+  PathwayLessonFigure,
+  PathwayLessonFigureKind,
   PathwayLessonLocaleMeta,
   PathwayLessonQuizItem,
   PathwayLessonRecord,
@@ -68,15 +70,65 @@ function sanitizeSectionBody(body: unknown): string {
   return body.trim();
 }
 
+function sanitizeFigureKind(raw: unknown): PathwayLessonFigureKind | undefined {
+  if (typeof raw !== "string") return undefined;
+  const k = raw.trim() as PathwayLessonFigureKind;
+  const allowed: PathwayLessonFigureKind[] = [
+    "diagram",
+    "chart",
+    "anatomy",
+    "flowchart",
+    "clinical_reference",
+    "other",
+  ];
+  return allowed.includes(k) ? k : "other";
+}
+
+function sanitizeFigures(raw: unknown): PathwayLessonFigure[] | undefined {
+  if (!Array.isArray(raw) || raw.length === 0) return undefined;
+  const out: PathwayLessonFigure[] = [];
+  for (let i = 0; i < raw.length; i += 1) {
+    const item = raw[i];
+    if (!item || typeof item !== "object") continue;
+    const o = item as Record<string, unknown>;
+    const url = typeof o.url === "string" ? o.url.trim() : "";
+    if (!url.startsWith("https://")) continue;
+    const alt = typeof o.alt === "string" && o.alt.trim().length > 0 ? o.alt.trim() : "Lesson figure";
+    const caption = typeof o.caption === "string" && o.caption.trim() ? o.caption.trim() : undefined;
+    const attribution = typeof o.attribution === "string" && o.attribution.trim() ? o.attribution.trim() : undefined;
+    const id = typeof o.id === "string" && o.id.trim() ? o.id.trim() : `figure-${i}`;
+    const kind = sanitizeFigureKind(o.kind);
+    out.push({ id, url, alt, caption, kind, attribution });
+  }
+  return out.length ? out : undefined;
+}
+
+function mergeFigures(...buckets: Array<PathwayLessonFigure[] | undefined>): PathwayLessonFigure[] | undefined {
+  const merged: PathwayLessonFigure[] = [];
+  const seen = new Set<string>();
+  for (const b of buckets) {
+    if (!b?.length) continue;
+    for (const f of b) {
+      const key = `${f.url}:${f.alt}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      merged.push(f);
+    }
+  }
+  return merged.length ? merged : undefined;
+}
+
 function sanitizeSection(raw: Partial<PathwayLessonSection>, index: number): PathwayLessonSection {
   const kind = (raw.kind ?? "intro") as PathwayLessonSectionKind;
   const heading = typeof raw.heading === "string" && raw.heading.trim().length > 0 ? raw.heading.trim() : "Section";
   const id = typeof raw.id === "string" && raw.id.trim().length > 0 ? raw.id : `${kind}-${index}`;
+  const figures = sanitizeFigures(raw.figures);
   return {
     id,
     heading,
     kind,
     body: sanitizeSectionBody(raw.body),
+    ...(figures ? { figures } : {}),
   };
 }
 
@@ -96,6 +148,7 @@ function expandToStandardFiveSections(sections: PathwayLessonSection[]): Pathway
       return ordered.map((s) => ({
         ...s,
         body: s.body || defaultBodyFor(s.kind),
+        ...(s.figures ? { figures: s.figures } : {}),
       }));
     }
   }
@@ -125,6 +178,12 @@ function expandToStandardFiveSections(sections: PathwayLessonSection[]): Pathway
       ? sentences.slice(2).join(" ")
       : "Before your next question block, restate one rule you will not violate on prioritization or scope.");
 
+  const figClinical = mergeFigures(intro?.figures);
+  const figExam = mergeFigures(exam?.figures);
+  const figCore = mergeFigures(core?.figures);
+  const figScenario = mergeFigures(clinical?.figures);
+  const figTakeaways = mergeFigures(explicitTakeaways?.figures);
+
   return [
     {
       id: "clinical_meaning",
@@ -133,12 +192,14 @@ function expandToStandardFiveSections(sections: PathwayLessonSection[]): Pathway
       body:
         intro?.body?.trim() ||
         "Read the stem as a safety and prioritization problem first, then match your action to the risk you can justify.",
+      ...(figClinical ? { figures: figClinical } : {}),
     },
     {
       id: "exam_relevance",
       heading: "Why this appears on exams",
       kind: "exam_relevance",
       body: examRelevanceBody,
+      ...(figExam ? { figures: figExam } : {}),
     },
     {
       id: "core_concept",
@@ -147,6 +208,7 @@ function expandToStandardFiveSections(sections: PathwayLessonSection[]): Pathway
       body:
         core?.body?.trim() ||
         "Anchor pathophysiology to assessment findings, then tie interventions to monitoring and escalation rules.",
+      ...(figCore ? { figures: figCore } : {}),
     },
     {
       id: "clinical_scenario",
@@ -155,12 +217,14 @@ function expandToStandardFiveSections(sections: PathwayLessonSection[]): Pathway
       body:
         clinical?.body?.trim() ||
         "Picture one client whose data forces a fork: stable monitoring versus urgent escalation. Choose the branch the stem supports.",
+      ...(figScenario ? { figures: figScenario } : {}),
     },
     {
       id: "takeaways",
       heading: "Key takeaways",
       kind: "takeaways",
       body: takeawaysBody,
+      ...(figTakeaways ? { figures: figTakeaways } : {}),
     },
   ];
 }

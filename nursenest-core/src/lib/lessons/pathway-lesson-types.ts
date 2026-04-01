@@ -18,6 +18,25 @@ export type PathwayLessonSectionKind =
   | "exam_tips"
   | "exam_focus";
 
+/** Optional educational figures for a lesson section (HTTPS URLs only after sanitization). */
+export type PathwayLessonFigureKind =
+  | "diagram"
+  | "chart"
+  | "anatomy"
+  | "flowchart"
+  | "clinical_reference"
+  | "other";
+
+export type PathwayLessonFigure = {
+  id: string;
+  url: string;
+  alt: string;
+  caption?: string;
+  kind?: PathwayLessonFigureKind;
+  /** Internal attribution / source line (not always shown publicly). */
+  attribution?: string;
+};
+
 export type PathwayLessonSection = {
   id: string;
   heading: string;
@@ -25,6 +44,8 @@ export type PathwayLessonSection = {
   body: string;
   /** Present when `kind === "exam_focus"`. */
   examFocus?: PathwayLessonExamFocus;
+  /** Inline diagrams / algorithms — lazy-loaded in the lesson UI. */
+  figures?: PathwayLessonFigure[];
 };
 
 /** Inline pre/post checks for pathway lessons (catalog or DB JSON). */

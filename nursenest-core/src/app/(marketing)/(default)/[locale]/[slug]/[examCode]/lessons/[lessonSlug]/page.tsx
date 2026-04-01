@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { auth } from "@/lib/auth";
-import { PathwayLessonBody } from "@/components/lessons/pathway-lesson-body";
+import { PathwayLessonSectionContent } from "@/components/lessons/pathway-lesson-body";
 import { PathwayLessonQuizzes } from "@/components/lessons/pathway-lesson-quizzes";
 import { PathwayLessonLockedSectionsPreview } from "@/components/lessons/pathway-lesson-locked-sections-preview";
 import { PathwayLessonActions } from "@/components/lessons/pathway-lesson-actions";
@@ -53,11 +53,35 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!pathway || !lesson) return {};
   const path = buildExamPathwayPath(pathway, `lessons/${lesson.slug}`);
   const canonical = absoluteUrl(path);
+  const keywords = [
+    pathway.shortName,
+    pathway.displayName,
+    lesson.topic,
+    lesson.bodySystem,
+    "nurse practitioner",
+    pathway.countrySlug === "canada" ? "Canada NP" : "NP exam",
+    "clinical reasoning",
+  ]
+    .filter(Boolean)
+    .join(", ");
   return {
     title: lesson.seoTitle,
     description: lesson.seoDescription,
+    keywords: keywords.split(", ").slice(0, 24),
     alternates: { canonical },
-    openGraph: { title: lesson.seoTitle, description: lesson.seoDescription, url: canonical, type: "article" },
+    openGraph: {
+      title: lesson.seoTitle,
+      description: lesson.seoDescription,
+      url: canonical,
+      type: "article",
+      siteName: "NurseNest",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: lesson.seoTitle,
+      description: lesson.seoDescription.length > 160 ? `${lesson.seoDescription.slice(0, 157)}…` : lesson.seoDescription,
+    },
+    robots: { index: true, follow: true },
   };
 }
 
@@ -177,7 +201,10 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
               {section.heading?.trim() || "Section"}
             </h2>
             <div className="mt-3">
-              <PathwayLessonBody text={typeof section.body === "string" ? section.body : ""} />
+              <PathwayLessonSectionContent
+                text={typeof section.body === "string" ? section.body : ""}
+                figures={section.figures}
+              />
             </div>
           </section>
         ))}
