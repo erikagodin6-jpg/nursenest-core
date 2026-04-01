@@ -46,6 +46,17 @@ export function excludeQuestionIdsSql(ids: string[]): Prisma.Sql {
   return Prisma.sql` AND id NOT IN (${Prisma.join(ids)})`;
 }
 
+/** Full profile-tier pool (mirrors {@link questionBankWhereForProfile}) for baseline sampling. */
+export function profileTierExamQuestionWhereSql(country: CountryCode, tier: TierCode): Prisma.Sql {
+  const tiers = examQuestionTiersForUserTier(tier);
+  if (tiers.length === 0) return Prisma.sql`FALSE`;
+  const region =
+    country === "CA"
+      ? Prisma.sql`(region_scope = 'BOTH' OR region_scope = 'CA_ONLY')`
+      : Prisma.sql`(region_scope = 'BOTH' OR region_scope = 'US_ONLY')`;
+  return Prisma.sql`status = ${DB_PUBLISHED} AND tier IN (${Prisma.join(tiers)}) AND ${region}`;
+}
+
 /** Freemium pool — mirrors {@link freemiumQuestionWhereForProfile}. */
 export function freemiumExamQuestionWhereSql(country: CountryCode, tier: TierCode): Prisma.Sql {
   const tiers =
