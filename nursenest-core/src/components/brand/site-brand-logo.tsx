@@ -15,7 +15,7 @@ export type BrandMarkLoadState = "loading" | "ready" | "error";
 
 /**
  * Theme-aware brand mark: `useThemeLogo` (tracks `data-theme`) → `getHeaderBrandLogoLoadChain` (CDN/proxy → default-theme rasters → local SVG → legacy).
- * Uses {@link DEFAULT_BRAND_LOGO_MARK_CLASSNAME} on the wrapper; raster uses {@link HEADER_BRAND_LOGO_IMG_CLASSNAME} on the `<img>`.
+ * Raster path: {@link HEADER_BRAND_LOGO_SLOT_CLASSNAME} + {@link HEADER_BRAND_LOGO_IMG_CLASSNAME}. Optional `className` merges onto the slot.
  */
 export function SiteBrandLogoMark({
   className = DEFAULT_BRAND_LOGO_MARK_CLASSNAME,
