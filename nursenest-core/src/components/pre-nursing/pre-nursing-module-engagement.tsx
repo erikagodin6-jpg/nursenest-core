@@ -104,6 +104,23 @@ export function PreNursingModuleEngagement({
     else nextSet.delete(slug);
     writeLocalPreNursingCompleted([...nextSet]);
     setCompleted(nextSet);
+    if (next) {
+      trackClientEvent(PH.preNursingModuleCompleted, {
+        source_surface: "module",
+        module_slug: slug,
+        completion_count: nextSet.size,
+        signed_in: signedIn === true,
+        selected_pathway_hint: hint ?? "unsure",
+      });
+      if (nextSet.size >= PRE_NURSING_MODULE_REGISTRY.length) {
+        trackClientEvent(PH.preNursingAllModulesCompleted, {
+          source_surface: "module",
+          completion_count: nextSet.size,
+          signed_in: signedIn === true,
+          selected_pathway_hint: hint ?? "unsure",
+        });
+      }
+    }
 
     try {
       const res = await fetch("/api/learner/pre-nursing-progress", {
@@ -113,23 +130,6 @@ export function PreNursingModuleEngagement({
       });
       if (res.ok) {
         setSignedIn(true);
-        if (next) {
-          trackClientEvent(PH.preNursingModuleCompleted, {
-            source_surface: "module",
-            module_slug: slug,
-            completion_count: nextSet.size,
-            signed_in: true,
-            selected_pathway_hint: hint ?? "unsure",
-          });
-          if (nextSet.size >= PRE_NURSING_MODULE_REGISTRY.length) {
-            trackClientEvent(PH.preNursingAllModulesCompleted, {
-              source_surface: "module",
-              completion_count: nextSet.size,
-              signed_in: true,
-              selected_pathway_hint: hint ?? "unsure",
-            });
-          }
-        }
         await load();
       } else if (res.status === 401) {
         setSignedIn(false);

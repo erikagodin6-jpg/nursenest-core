@@ -44,7 +44,9 @@ export function PreNursingLandingClient() {
             <Link
               href="/pre-nursing/study-plan"
               className="nn-btn-secondary inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold"
-              onClick={() => trackClientEvent(PH.preNursingStudyPlanViewed, { source_surface: "hub", cta_type: "set_readiness_target" })}
+              onClick={() =>
+                trackClientEvent(PH.preNursingPathwayCtaClicked, { source_surface: "hub", cta_type: "set_readiness_target" })
+              }
             >
               <Sparkles className="h-4 w-4" aria-hidden />
               Set a readiness target

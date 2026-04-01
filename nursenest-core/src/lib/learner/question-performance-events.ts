@@ -123,15 +123,23 @@ export function deriveWeakAreasFromPerformanceEvents(
   }
 
   return [...byKey.values()]
-    .map((r) => ({
+    .map((r) => {
+      // Damp one-off misses so tiny samples do not whipsaw priority.
+      const sampleStability = Math.min(1, r.attempts / 3);
+      // Light Bayesian-style smoothing for ranking stability only.
+      const smoothedWrongRate = (r.wrong + 1) / (r.attempts + 2);
+      const priorityScore = r.weightedWrong * sampleStability * smoothedWrongRate;
+      return {
       topic: r.topic,
       subtopic: r.subtopic,
       attempts: r.attempts,
       wrong: r.wrong,
       accuracyPct: r.attempts > 0 ? Math.round(((r.attempts - r.wrong) / r.attempts) * 100) : 0,
       weightedWrong: Math.round(r.weightedWrong * 100) / 100,
-    }))
+      priorityScore,
+      };
+    })
     .filter((r) => r.wrong > 0)
-    .sort((a, b) => b.weightedWrong - a.weightedWrong || a.accuracyPct - b.accuracyPct || b.attempts - a.attempts)
+    .sort((a, b) => b.priorityScore - a.priorityScore || a.accuracyPct - b.accuracyPct || b.attempts - a.attempts)
     .slice(0, max);
 }

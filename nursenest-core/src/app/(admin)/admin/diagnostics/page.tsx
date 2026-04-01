@@ -5,6 +5,7 @@ import { loadExamPlanAdoptionStats } from "@/lib/admin/load-exam-plan-adoption";
 import { loadQuestionBankRemediationIntelligence } from "@/lib/questions/load-question-bank-remediation-intelligence";
 import { QuestionQualityQueueTable } from "@/components/admin/question-quality-queue-table";
 import { buildNpCanadaCoverageReport } from "@/lib/np/build-np-canada-coverage-report";
+import { loadPreNursingAnalyticsReport } from "@/lib/admin/load-pre-nursing-report";
 
 export const dynamic = "force-dynamic";
 
@@ -22,11 +23,12 @@ function StatusPill({ ok, label }: { ok: boolean; label: string }) {
 
 export default async function AdminDiagnosticsPage() {
   await requireAdmin();
-  const [d, examPlan, qbIntel, npCoverage] = await Promise.all([
+  const [d, examPlan, qbIntel, npCoverage, preNursingReport] = await Promise.all([
     loadAdminDiagnostics(),
     loadExamPlanAdoptionStats(),
     loadQuestionBankRemediationIntelligence(),
     buildNpCanadaCoverageReport().catch(() => null),
+    loadPreNursingAnalyticsReport().catch(() => null),
   ]);
 
   return (
@@ -401,6 +403,59 @@ export default async function AdminDiagnosticsPage() {
         </section>
       ) : null}
 
+      {preNursingReport ? (
+        <section className="mt-8 nn-card p-6">
+          <h2 className="text-lg font-semibold">Pre-Nursing conversion visibility</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Baseline funnel visibility from persisted progress + pathway hints. Clickstream funnel details are emitted to
+            PostHog via pre_nursing_* events.
+          </p>
+          <div className="mt-4 grid gap-3 sm:grid-cols-3">
+            <div className="rounded-lg border border-border/60 bg-muted/20 px-3 py-2">
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Module catalog</p>
+              <p className="mt-1 text-xl font-bold tabular-nums">{preNursingReport.modulesTotal}</p>
+            </div>
+            <div className="rounded-lg border border-border/60 bg-muted/20 px-3 py-2">
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Users w/ completion</p>
+              <p className="mt-1 text-xl font-bold tabular-nums">{preNursingReport.usersWithAnyCompletion}</p>
+            </div>
+            <div className="rounded-lg border border-border/60 bg-muted/20 px-3 py-2">
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Completion rows</p>
+              <p className="mt-1 text-xl font-bold tabular-nums">{preNursingReport.totalCompletionRows}</p>
+            </div>
+          </div>
+          <div className="mt-5 grid gap-4 lg:grid-cols-2">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Most-completed modules</p>
+              <ul className="mt-2 space-y-1 text-sm">
+                {preNursingReport.moduleCompletionLeaders.map((row) => (
+                  <li key={row.slug} className="flex justify-between rounded bg-muted/40 px-2 py-1">
+                    <span className="truncate pr-2">{row.slug}</span>
+                    <span className="tabular-nums">{row.completed}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Future pathway hints</p>
+              <ul className="mt-2 space-y-1 text-sm">
+                {preNursingReport.pathwayHintDistribution.map((row) => (
+                  <li key={row.hint} className="flex justify-between rounded bg-muted/40 px-2 py-1">
+                    <span className="truncate pr-2">{row.hint}</span>
+                    <span className="tabular-nums">{row.users}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <div className="mt-4 flex flex-wrap gap-3 text-sm">
+            <Link href="/api/admin/pre-nursing-report" className="text-primary underline">
+              JSON Pre-Nursing report
+            </Link>
+          </div>
+        </section>
+      ) : null}
+
       <QuestionQualityQueueTable />
 
       <section className="mt-8 nn-card p-6">
@@ -423,6 +478,12 @@ export default async function AdminDiagnosticsPage() {
               GET /api/admin/np-coverage
             </Link>{" "}
             — NP Canada triage signals + prioritized next actions
+          </li>
+          <li>
+            <Link className="text-primary underline" href="/api/admin/pre-nursing-report">
+              GET /api/admin/pre-nursing-report
+            </Link>{" "}
+            — Pre-Nursing completion + pathway-hint visibility
           </li>
           <li>
             <Link className="text-primary underline" href="/admin">

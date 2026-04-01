@@ -117,14 +117,16 @@ export async function POST(req: Request) {
     });
     const completedCount = rows.length;
     const totalModules = PRE_NURSING_MODULE_REGISTRY.length;
-    await captureServerEvent(analyticsDistinctId(userId), PH.preNursingModuleCompleted, {
-      source_surface: "progress_api",
-      module_slug: parsedBody.slug,
-      completed: parsedBody.completed,
-      signed_in: true,
-      completion_count: completedCount,
-      modules_total: totalModules,
-    });
+    if (parsedBody.completed) {
+      await captureServerEvent(analyticsDistinctId(userId), PH.preNursingModuleCompleted, {
+        source_surface: "progress_api",
+        module_slug: parsedBody.slug,
+        completed: true,
+        signed_in: true,
+        completion_count: completedCount,
+        modules_total: totalModules,
+      });
+    }
     if (parsedBody.completed && completedCount >= totalModules) {
       await captureServerEvent(analyticsDistinctId(userId), PH.preNursingAllModulesCompleted, {
         source_surface: "progress_api",
