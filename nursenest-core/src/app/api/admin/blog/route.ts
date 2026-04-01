@@ -2,6 +2,7 @@ import { BlogFunnelStage, BlogImageStatus, BlogPostIntent, BlogPostStatus, BlogP
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
+import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
 import { prisma } from "@/lib/db";
 
 const createSchema = z.object({
@@ -125,6 +126,30 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid payload", details: parsed.error.flatten() }, { status: 400 });
   }
   const d = parsed.data;
+
+  const dupSlug = await prisma.blogPost.findUnique({ where: { slug: d.slug }, select: { id: true } });
+  if (dupSlug) {
+    return NextResponse.json({ error: "Slug already exists", code: "duplicate_slug" }, { status: 409 });
+  }
+
+  const topicSource = [d.targetKeyword, d.keywordCluster, d.title].find((x) => x && String(x).trim()) ?? "";
+  const topicKey = normalizeBlogTopicKey(String(topicSource));
+  if (topicKey.length >= 3) {
+    const dupTopic = await findExistingBlogByCanonicalIntent({
+      exam: d.exam ?? null,
+      normalizedTopic: topicKey,
+    });
+    if (dupTopic) {
+      return NextResponse.json(
+        {
+          error: "A post already targets this topic intent",
+          code: "duplicate_topic_intent",
+          existingSlug: dupTopic.slug,
+        },
+        { status: 409 },
+      );
+    }
+  }
 
   const post = await prisma.blogPost.create({
     data: {

@@ -57,14 +57,22 @@ export async function POST(req: Request) {
   const tierCode = tier as TierCode;
   const durationCode = duration as BillingDuration;
   const price = findPriceEntry(country, tierCode, durationCode);
+  const missingEnvKey = stripePriceEnvKey(country, tierCode, durationCode);
   if (!price) {
     safeServerLog("stripe_checkout", "rejected_missing_stripe_price_env", {
       country,
       tier: String(tier),
       duration: String(duration),
-      envKey: stripePriceEnvKey(country, tierCode, durationCode).slice(0, 80),
+      envKey: missingEnvKey.slice(0, 80),
     });
-    return NextResponse.json({ error: "Plan unavailable" }, { status: 400 });
+    return NextResponse.json(
+      {
+        error: "This plan is not available for checkout — billing configuration is incomplete.",
+        code: "stripe_price_not_configured",
+        envKey: missingEnvKey,
+      },
+      { status: 400 },
+    );
   }
 
   const stripe = await getStripeClient();

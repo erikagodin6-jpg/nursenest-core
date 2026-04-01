@@ -355,10 +355,13 @@ export async function loadAdminCommandCenter(): Promise<AdminCommandCenterData |
       });
     }
     if (stripeSecretConfigured && missingPriceEnvKeys.length > 0) {
+      const prod = process.env.NODE_ENV === "production";
       needsAttention.push({
-        severity: "warning",
+        severity: prod ? "critical" : "warning",
         title: `${missingPriceEnvKeys.length} Stripe price env vars missing`,
-        detail: "Checkout will be unavailable for those plan cells until STRIPE_PRICE_* keys are set.",
+        detail: prod
+          ? `Checkout returns 400 for those plans until envs are set. Example: ${missingPriceEnvKeys[0] ?? "STRIPE_PRICE_*"}.`
+          : "Checkout will be unavailable for those plan cells until STRIPE_PRICE_* keys are set.",
         href: "/admin/subscriptions",
       });
     }
@@ -403,11 +406,13 @@ export async function loadAdminCommandCenter(): Promise<AdminCommandCenterData |
       loadQuestionBankRemediationIntelligence().catch(() => null),
     ]);
 
-    if (!contentQualityCorpus?.meta?.available) {
+    if (!contentQualityCorpus.meta.available) {
       needsAttention.push({
         severity: "warning",
         title: "Content-quality corpus data unavailable",
-        detail: "Using fallback snapshot metrics until corpus refresh succeeds.",
+        detail: contentQualityCorpus.meta.reason
+          ? `Corpus load/refresh issue (${contentQualityCorpus.meta.reason}). Workbench snapshot metrics still load separately.`
+          : "Using fallback until corpus refresh succeeds.",
         href: "/admin/content-quality",
       });
     }

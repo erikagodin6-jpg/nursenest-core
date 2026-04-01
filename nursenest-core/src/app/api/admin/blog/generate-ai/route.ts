@@ -7,6 +7,7 @@ import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
 import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
 import { BLOG_TEMPLATE_TITLE_PATTERNS } from "@/lib/blog/blog-template-copy";
 import { buildApa7References, type BlogSourceRecord, validateSources } from "@/lib/blog/apa7";
+import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
 import { buildOutline, ctaFor, detectRiskFlags, thinDraftWarning } from "@/lib/blog/seo-campaign-engine";
 import { prisma } from "@/lib/db";
 
@@ -44,14 +45,6 @@ const schema = z.object({
     .optional(),
 });
 
-function normalizeTopic(input: string): string {
-  return input
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, " ")
-    .trim()
-    .replace(/\s+/g, " ");
-}
-
 /**
  * Single-post AI draft generation (one model call per request — batch uses /api/admin/blog/batch-chunk).
  */
@@ -75,7 +68,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid payload", details: parsed.error.flatten() }, { status: 400 });
   }
   const d = parsed.data;
-  const normalizedTopic = normalizeTopic(d.targetKeyword ?? d.topic);
+  const normalizedTopic = normalizeBlogTopicKey(d.targetKeyword ?? d.topic);
 
   const titleFn = BLOG_TEMPLATE_TITLE_PATTERNS[d.template];
   const title = titleFn({ exam: d.exam, topic: d.topic });
@@ -101,17 +94,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true, skipped: true, reason: "duplicate_slug", slug }, { status: 200 });
   }
   const dupByTopic = normalizedTopic
-    ? await prisma.blogPost.findFirst({
-        where: {
-          exam: d.exam,
-          OR: [
-            { targetKeyword: normalizedTopic },
-            { keywordCluster: normalizedTopic },
-            { tags: { has: normalizedTopic } },
-          ],
-        },
-        select: { id: true, slug: true },
-      })
+    ? await findExistingBlogByCanonicalIntent({ exam: d.exam, normalizedTopic })
     : null;
   if (dupByTopic) {
     return NextResponse.json(
@@ -186,51 +169,74 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
     riskFlags.length > 0 ? BlogWorkflowStatus.NEEDS_MEDICAL_REVIEW :
     BlogWorkflowStatus.GENERATED;
 
-  const post = await prisma.blogPost.create({
-    data: {
-      slug,
-      title,
-      excerpt: excerpt.length >= 10 ? excerpt : `${title.slice(0, 200)} — draft excerpt; edit before publish.`,
-      body: bodyHtml,
-      exam: d.exam,
-      targetKeyword: normalizedTopic || (d.targetKeyword ?? d.topic),
-      keywordCluster: d.keywordCluster ?? null,
-      countryTarget: d.countryTarget ?? null,
-      intent: d.intent ?? BlogPostIntent.EXAM_PREP,
-      funnelStage: d.funnelStage ?? BlogFunnelStage.CONSIDERATION,
-      postTemplate: d.template,
-      postStatus: BlogPostStatus.DRAFT,
-      seoTitle: title.slice(0, 200),
-      seoDescription,
-      tags: d.keywords ? d.keywords.split(",").map((s) => s.trim()).filter(Boolean).slice(0, 12) : [],
-      outlineJson: outline,
-      keyQuestions: [
-        `What matters most about ${d.topic} on ${d.exam}?`,
-        `What mistakes should students avoid for ${d.topic}?`,
-      ],
-      keywordPlan: [d.targetKeyword ?? d.topic, ...(d.keywords ? d.keywords.split(",").map((s) => s.trim()).filter(Boolean).slice(0, 8) : [])],
-      ctaType: cta.type,
-      ctaText: cta.text,
-      ctaHref: cta.href,
-      workflowStatus,
-      sourcesJson: sources.length ? (sources as Prisma.InputJsonValue) : Prisma.JsonNull,
-      apaReferences,
-      requiresReferences: Boolean(sources.length || riskFlags.length > 0),
-      sourceReliabilityScore: sourceCheck.reliabilityScore,
-      medicalRiskFlags: riskFlags,
-      imageStatus: d.includeImage ? (d.includeAiImage ? BlogImageStatus.REQUESTED : BlogImageStatus.NONE) : BlogImageStatus.NONE,
-      coverImagePrompt: d.includeAiImage ? `Educational nursing blog hero image about ${d.topic}. Focus keyword: ${d.targetKeyword ?? d.topic}.` : null,
-      shortSummary: excerpt.slice(0, 220),
-      socialCaption: `${title} — ${excerpt.slice(0, 120)}...`,
-      promoBlurb: cta.text,
-      updateNeeded: Boolean(thinWarning),
-      rankingNote: thinWarning ?? null,
-    },
-    select: { id: true, slug: true, title: true, postStatus: true, updatedAt: true },
-  });
+  const dupSlugLate = await prisma.blogPost.findUnique({ where: { slug }, select: { id: true } });
+  if (dupSlugLate) {
+    return NextResponse.json({ ok: true, skipped: true, reason: "duplicate_slug", slug }, { status: 200 });
+  }
+  const dupTopicLate =
+    normalizedTopic && (await findExistingBlogByCanonicalIntent({ exam: d.exam, normalizedTopic }));
+  if (dupTopicLate) {
+    return NextResponse.json(
+      { ok: true, skipped: true, reason: "duplicate_topic", existingSlug: dupTopicLate.slug, normalizedTopic },
+      { status: 200 },
+    );
+  }
 
-  return NextResponse.json({
-    post,
-    warnings: [...sourceCheck.warnings, ...(thinWarning ? [thinWarning] : [])],
-  }, { status: 201 });
+  try {
+    const post = await prisma.blogPost.create({
+      data: {
+        slug,
+        title,
+        excerpt: excerpt.length >= 10 ? excerpt : `${title.slice(0, 200)} — draft excerpt; edit before publish.`,
+        body: bodyHtml,
+        exam: d.exam,
+        targetKeyword: normalizedTopic || (d.targetKeyword ?? d.topic),
+        keywordCluster: d.keywordCluster ?? null,
+        countryTarget: d.countryTarget ?? null,
+        intent: d.intent ?? BlogPostIntent.EXAM_PREP,
+        funnelStage: d.funnelStage ?? BlogFunnelStage.CONSIDERATION,
+        postTemplate: d.template,
+        postStatus: BlogPostStatus.DRAFT,
+        seoTitle: title.slice(0, 200),
+        seoDescription,
+        tags: d.keywords ? d.keywords.split(",").map((s) => s.trim()).filter(Boolean).slice(0, 12) : [],
+        outlineJson: outline,
+        keyQuestions: [
+          `What matters most about ${d.topic} on ${d.exam}?`,
+          `What mistakes should students avoid for ${d.topic}?`,
+        ],
+        keywordPlan: [d.targetKeyword ?? d.topic, ...(d.keywords ? d.keywords.split(",").map((s) => s.trim()).filter(Boolean).slice(0, 8) : [])],
+        ctaType: cta.type,
+        ctaText: cta.text,
+        ctaHref: cta.href,
+        workflowStatus,
+        sourcesJson: sources.length ? (sources as Prisma.InputJsonValue) : Prisma.JsonNull,
+        apaReferences,
+        requiresReferences: Boolean(sources.length || riskFlags.length > 0),
+        sourceReliabilityScore: sourceCheck.reliabilityScore,
+        medicalRiskFlags: riskFlags,
+        imageStatus: d.includeImage ? (d.includeAiImage ? BlogImageStatus.REQUESTED : BlogImageStatus.NONE) : BlogImageStatus.NONE,
+        coverImagePrompt: d.includeAiImage ? `Educational nursing blog hero image about ${d.topic}. Focus keyword: ${d.targetKeyword ?? d.topic}.` : null,
+        shortSummary: excerpt.slice(0, 220),
+        socialCaption: `${title} — ${excerpt.slice(0, 120)}...`,
+        promoBlurb: cta.text,
+        updateNeeded: Boolean(thinWarning),
+        rankingNote: thinWarning ?? null,
+      },
+      select: { id: true, slug: true, title: true, postStatus: true, updatedAt: true },
+    });
+
+    return NextResponse.json(
+      {
+        post,
+        warnings: [...sourceCheck.warnings, ...(thinWarning ? [thinWarning] : [])],
+      },
+      { status: 201 },
+    );
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2002") {
+      return NextResponse.json({ ok: true, skipped: true, reason: "duplicate_slug_race", slug }, { status: 200 });
+    }
+    throw e;
+  }
 }

@@ -13,6 +13,7 @@ import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
 import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
+import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
 import { buildOutline, ctaFor, detectRiskFlags, slugify, thinDraftWarning } from "@/lib/blog/seo-campaign-engine";
 import { prisma } from "@/lib/db";
 
@@ -65,6 +66,26 @@ export async function POST(req: Request, { params }: Props) {
         suffix += 1;
         slug = `${slugBase}-${suffix}`.slice(0, 170);
       }
+
+      const normIntent = normalizeBlogTopicKey(item.plannedKeyword ?? campaign.keywordCluster);
+      if (normIntent.length >= 3) {
+        const dupIntent = await findExistingBlogByCanonicalIntent({
+          exam: campaign.targetExam ?? null,
+          normalizedTopic: normIntent,
+        });
+        if (dupIntent) {
+          await prisma.blogCampaignItem.update({
+            where: { id: item.id },
+            data: {
+              status: BlogCampaignItemStatus.FAILED,
+              error: `duplicate_topic_intent:existing_slug=${dupIntent.slug}`,
+            },
+          });
+          out.push({ itemId: item.id, status: "failed", error: "duplicate_topic_intent" });
+          continue;
+        }
+      }
+
       let body = `<p>${title}</p><p>Draft generated from campaign queue item ${item.ordinal}.</p>`;
       if (d.mode === "generate" && aiEnabled) {
         const prompt = `Write SEO-ready HTML for nursing exam prep. Topic: ${item.plannedKeyword ?? campaign.keywordCluster}. Template: ${template}. Intent: ${intent}. Include practical advice, FAQs, and key takeaways.`;

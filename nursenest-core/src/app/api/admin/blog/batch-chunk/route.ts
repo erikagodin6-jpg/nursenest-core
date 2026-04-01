@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { loadRnTopicMapBatchRows } from "@/lib/admin/blog-topic-map-batch";
+import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
 import { prisma } from "@/lib/db";
 
 const bodySchema = z.object({
@@ -11,14 +12,6 @@ const bodySchema = z.object({
   /** When true, no DB writes — returns what would be created. */
   dryRun: z.boolean().optional(),
 });
-
-function normalizeTopic(input: string): string {
-  return input
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, " ")
-    .trim()
-    .replace(/\s+/g, " ");
-}
 
 /**
  * Chunked blog shell creation from RN master topic map — avoids long single HTTP requests (timeout-safe).
@@ -52,6 +45,7 @@ export async function POST(req: Request) {
   const created: string[] = [];
   const skipped: string[] = [];
   const errors: string[] = [];
+  const seenTopicKeys = new Set<string>();
 
   if (dryRun) {
     return NextResponse.json({
@@ -74,23 +68,21 @@ export async function POST(req: Request) {
         skipped.push(row.slug);
         continue;
       }
-      const normalizedTopic = normalizeTopic(row.tags[1] ?? row.title);
-      const dupTopic = normalizedTopic
-        ? await prisma.blogPost.findFirst({
-            where: {
-              exam: row.exam,
-              OR: [
-                { targetKeyword: normalizedTopic },
-                { keywordCluster: normalizedTopic },
-                { tags: { has: normalizedTopic } },
-              ],
-            },
-            select: { id: true },
-          })
-        : null;
-      if (dupTopic) {
-        skipped.push(`${row.slug} (topic duplicate)`);
-        continue;
+      const normalizedTopic = normalizeBlogTopicKey(row.tags[1] ?? row.title);
+      if (normalizedTopic) {
+        if (seenTopicKeys.has(normalizedTopic)) {
+          skipped.push(`${row.slug} (topic duplicate in batch)`);
+          continue;
+        }
+        const dupTopic = await findExistingBlogByCanonicalIntent({
+          exam: row.exam,
+          normalizedTopic,
+        });
+        if (dupTopic) {
+          skipped.push(`${row.slug} (topic duplicate)`);
+          continue;
+        }
+        seenTopicKeys.add(normalizedTopic);
       }
       await prisma.blogPost.create({
         data: {

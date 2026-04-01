@@ -73,7 +73,7 @@ export default async function AdminContentQualityPage() {
         </div>
       </section>
 
-      {corpus ? (
+      {corpus.meta.available ? (
         <section className="mt-8 rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-5">
           <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Full-corpus snapshot</h2>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -111,7 +111,12 @@ export default async function AdminContentQualityPage() {
         </section>
       ) : (
         <section className="mt-8 rounded-xl border border-dashed border-border p-5 text-sm text-muted-foreground">
-          No corpus snapshot yet. Click <strong>Refresh corpus snapshot</strong> to run a full scan (safe to run off-peak).
+          <p className="font-medium text-foreground">Corpus snapshot unavailable</p>
+          <p className="mt-1">
+            {corpus.meta.reason === "snapshot_missing"
+              ? "No snapshot stored yet. Click Refresh corpus snapshot to run a full scan (safe to run off-peak)."
+              : `Last refresh did not produce usable data (${corpus.meta.reason ?? "unknown"}). Try refreshing or check database connectivity.`}
+          </p>
         </section>
       )}
 

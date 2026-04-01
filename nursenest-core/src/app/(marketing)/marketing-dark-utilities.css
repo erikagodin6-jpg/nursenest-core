@@ -1,7 +1,7 @@
 /**
  * Dark-theme Tailwind utility remaps — scoped to `.nn-marketing-surface` only so
  * learner and exam routes are not affected by aggressive !important overrides.
- * Import from `(marketing)/layout.tsx` and `(admin)/layout.tsx` only.
+ * Imported from root `layout.tsx` with `globals.css` so it shares one layout stylesheet.
  */
 html:is([data-theme="dark-clinical"], [data-theme="dark-academia"], [data-theme="dark-mode"]) .nn-marketing-surface .bg-white {
   background-color: var(--theme-card-bg) !important;

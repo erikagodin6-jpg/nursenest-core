@@ -8,6 +8,8 @@ import { marketingOpenGraphImageUrl } from "@/lib/marketing-assets";
 import { MARKETING_SITE_ORIGIN } from "@/lib/seo/site-origin";
 import { THEME_STORAGE_KEY } from "@/lib/theme/theme-registry";
 import "./globals.css";
+/** Bundled with root layout CSS so marketing pages avoid a second render-blocking stylesheet (rules are dark-theme + `.nn-marketing-surface` scoped). */
+import "./(marketing)/marketing-dark-utilities.css";
 
 /** Variable cut = one font request vs four static weights; `font-weight` utilities still map to the same axis. */
 const dmSans = DM_Sans({

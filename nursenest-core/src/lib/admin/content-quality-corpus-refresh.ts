@@ -63,6 +63,74 @@ export function emptyContentQualityCorpusPayload(reason = "data_unavailable"): C
   };
 }
 
+function isRecord(x: unknown): x is Record<string, unknown> {
+  return typeof x === "object" && x !== null && !Array.isArray(x);
+}
+
+function safeTierTotals(t: unknown): Record<ContentQualityTier, number> {
+  const out = emptyTierTotals();
+  if (!isRecord(t)) return out;
+  for (const k of ["missing", "thin", "acceptable", "strong"] as const) {
+    const v = t[k];
+    if (typeof v === "number" && Number.isFinite(v)) out[k] = v;
+  }
+  return out;
+}
+
+/**
+ * Validates JSON from DB so admin UI never spreads a malformed snapshot.
+ */
+export function coerceCorpusPayload(raw: unknown): ContentQualityCorpusPayload {
+  if (!isRecord(raw) || typeof raw.generatedAt !== "string") {
+    return emptyContentQualityCorpusPayload("invalid_snapshot_shape");
+  }
+  const fallback = emptyContentQualityCorpusPayload("corrupt_snapshot_sections");
+  const pl = raw.pathwayLessons;
+  const ci = raw.contentItemLessons;
+  const eq = raw.examQuestions;
+  if (!isRecord(pl) || !isRecord(ci) || !isRecord(eq)) return fallback;
+
+  const meta = isRecord(raw.meta) && typeof raw.meta.available === "boolean"
+    ? {
+        available: raw.meta.available,
+        ...(typeof raw.meta.reason === "string" ? { reason: raw.meta.reason } : {}),
+      }
+    : { available: false, reason: "snapshot_meta_missing" as const };
+
+  const byPathway: CorpusPathwayRollup[] = Array.isArray(pl.byPathway)
+    ? (pl.byPathway as unknown[]).filter((r): r is CorpusPathwayRollup => {
+        if (!isRecord(r)) return false;
+        return typeof r.pathwayId === "string" && typeof r.total === "number";
+      })
+    : [];
+
+  const worstExams: CorpusExamRollup[] = Array.isArray(eq.worstExams)
+    ? (eq.worstExams as unknown[]).filter((r): r is CorpusExamRollup => {
+        if (!isRecord(r)) return false;
+        return typeof r.exam === "string" && typeof r.total === "number";
+      })
+    : [];
+
+  return {
+    generatedAt: raw.generatedAt,
+    meta,
+    pathwayLessons: {
+      totals: safeTierTotals(pl.totals),
+      byPathway,
+      scanned: typeof pl.scanned === "number" ? pl.scanned : 0,
+    },
+    contentItemLessons: {
+      totals: safeTierTotals(ci.totals),
+      scanned: typeof ci.scanned === "number" ? ci.scanned : 0,
+    },
+    examQuestions: {
+      totals: safeTierTotals(eq.totals),
+      worstExams,
+      scanned: typeof eq.scanned === "number" ? eq.scanned : 0,
+    },
+  };
+}
+
 export async function refreshContentQualityCorpusSnapshot(): Promise<ContentQualityCorpusPayload> {
   try {
   const pathwayTotals = emptyTierTotals();
@@ -89,8 +157,13 @@ export async function refreshContentQualityCorpusSnapshot(): Promise<ContentQual
     scannedPl += batch.length;
 
     for (const row of batch) {
-      const q = classifyPathwayLesson({ sections: row.sections as PathwayLessonRecord["sections"] });
-      pathwayTotals[q.tier] += 1;
+      let tier: ContentQualityTier;
+      try {
+        tier = classifyPathwayLesson({ sections: row.sections as PathwayLessonRecord["sections"] }).tier;
+      } catch {
+        tier = "missing";
+      }
+      pathwayTotals[tier] += 1;
       const key = `${row.pathwayId}|${row.countryCode ?? "—"}|${row.tierCode ?? "—"}`;
       let r = byPathway.get(key);
       if (!r) {
@@ -107,9 +180,9 @@ export async function refreshContentQualityCorpusSnapshot(): Promise<ContentQual
         byPathway.set(key, r);
       }
       r.total += 1;
-      if (q.tier === "missing") r.missing += 1;
-      else if (q.tier === "thin") r.thin += 1;
-      else if (q.tier === "acceptable") r.acceptable += 1;
+      if (tier === "missing") r.missing += 1;
+      else if (tier === "thin") r.thin += 1;
+      else if (tier === "acceptable") r.acceptable += 1;
       else r.strong += 1;
     }
   }
@@ -129,37 +202,60 @@ export async function refreshContentQualityCorpusSnapshot(): Promise<ContentQual
     cursor = batch[batch.length - 1]!.id;
     scannedCi += batch.length;
     for (const row of batch) {
-      const q = classifyContentItemLesson(row.content);
-      contentTotals[q.tier] += 1;
+      try {
+        const q = classifyContentItemLesson(row.content);
+        contentTotals[q.tier] += 1;
+      } catch {
+        contentTotals.missing += 1;
+      }
     }
   }
 
   const examTotals = emptyTierTotals();
-  const examRows = await prisma.$queryRaw<
-    { exam: string; wc: number }[]
+  const examAgg = await prisma.$queryRaw<
+    {
+      exam: string | null;
+      total: bigint;
+      missing: bigint;
+      thin: bigint;
+      acceptable: bigint;
+      strong: bigint;
+    }[]
   >`
+    WITH w AS (
+      SELECT exam,
+        CASE
+          WHEN rationale IS NULL OR trim(rationale) = '' THEN 0
+          ELSE cardinality(regexp_split_to_array(trim(regexp_replace(rationale, '\\s+', ' ', 'g')), ' '))
+        END AS wc
+      FROM exam_questions
+      WHERE status = 'published'
+    )
     SELECT exam,
-      CASE
-        WHEN rationale IS NULL OR trim(rationale) = '' THEN 0
-        ELSE cardinality(regexp_split_to_array(trim(regexp_replace(rationale, '\\s+', ' ', 'g')), ' '))
-      END AS wc
-    FROM exam_questions
-    WHERE status = 'published'
+      COUNT(*)::bigint AS total,
+      COUNT(*) FILTER (WHERE wc <= 0)::bigint AS missing,
+      COUNT(*) FILTER (WHERE wc > 0 AND wc < 120)::bigint AS thin,
+      COUNT(*) FILTER (WHERE wc >= 120 AND wc < 160)::bigint AS acceptable,
+      COUNT(*) FILTER (WHERE wc >= 160)::bigint AS strong
+    FROM w
+    GROUP BY exam
   `;
   const byExam = new Map<string, { missing: number; thin: number; acceptable: number; strong: number; total: number }>();
-  for (const row of examRows) {
-    const wc = row.wc;
-    let tier: keyof typeof examTotals;
-    if (wc <= 0) tier = "missing";
-    else if (wc < 120) tier = "thin";
-    else if (wc < 160) tier = "acceptable";
-    else tier = "strong";
-    examTotals[tier] += 1;
+  let scannedEq = 0;
+  for (const row of examAgg) {
+    scannedEq += Number(row.total);
+    examTotals.missing += Number(row.missing);
+    examTotals.thin += Number(row.thin);
+    examTotals.acceptable += Number(row.acceptable);
+    examTotals.strong += Number(row.strong);
     const ex = row.exam ?? "—";
-    const cur = byExam.get(ex) ?? { missing: 0, thin: 0, acceptable: 0, strong: 0, total: 0 };
-    cur.total += 1;
-    cur[tier] += 1;
-    byExam.set(ex, cur);
+    byExam.set(ex, {
+      missing: Number(row.missing),
+      thin: Number(row.thin),
+      acceptable: Number(row.acceptable),
+      strong: Number(row.strong),
+      total: Number(row.total),
+    });
   }
 
   const worstExams: CorpusExamRollup[] = [...byExam.entries()]
@@ -182,7 +278,7 @@ export async function refreshContentQualityCorpusSnapshot(): Promise<ContentQual
     examQuestions: {
       totals: examTotals,
       worstExams,
-      scanned: examRows.length,
+      scanned: scannedEq,
     },
   };
 
@@ -198,15 +294,13 @@ export async function refreshContentQualityCorpusSnapshot(): Promise<ContentQual
   }
 }
 
-export async function loadContentQualityCorpusPayload(): Promise<ContentQualityCorpusPayload | null> {
+export async function loadContentQualityCorpusPayload(): Promise<ContentQualityCorpusPayload> {
   try {
     const row = await prisma.contentQualityCorpusSnapshot.findUnique({ where: { id: "default" } });
-    if (!row?.payload || typeof row.payload !== "object") return emptyContentQualityCorpusPayload("snapshot_missing");
-    const payload = row.payload as ContentQualityCorpusPayload;
-    return {
-      ...payload,
-      meta: payload.meta?.available === true ? payload.meta : { available: true },
-    };
+    if (!row?.payload || typeof row.payload !== "object") {
+      return emptyContentQualityCorpusPayload("snapshot_missing");
+    }
+    return coerceCorpusPayload(row.payload);
   } catch {
     return emptyContentQualityCorpusPayload("load_failed");
   }
