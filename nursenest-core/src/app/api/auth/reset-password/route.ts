@@ -93,7 +93,7 @@ export async function POST(req: Request) {
     await prisma.$transaction([
       prisma.user.update({
         where: { id: row.userId },
-        data: { passwordHash },
+        data: { passwordHash, credentialVersion: { increment: 1 } },
       }),
       prisma.passwordResetToken.deleteMany({ where: { userId: row.userId } }),
     ]);
