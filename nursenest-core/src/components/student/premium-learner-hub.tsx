@@ -73,7 +73,14 @@ function FactorBar({ label, points, maxPoints, detail }: { label: string; points
   );
 }
 
-export function PremiumLearnerHub({ snapshot }: { snapshot: PremiumDashboardSnapshot }) {
+export function PremiumLearnerHub({
+  snapshot,
+  weakTopicTitles = [],
+}: {
+  snapshot: PremiumDashboardSnapshot;
+  /** From practice stats — surfaces weak-area flashcard link context. */
+  weakTopicTitles?: string[];
+}) {
   const { readiness, overallLessons, pathways, practice, recentMocks, momentumMessages, examReadyHeadline, milestones } =
     snapshot;
 
@@ -124,6 +131,60 @@ export function PremiumLearnerHub({ snapshot }: { snapshot: PremiumDashboardSnap
           </p>
         )}
       </section>
+
+      {snapshot.flashcards ? (
+        <section className="nn-card p-6">
+          <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Flashcards</h2>
+          <p className="mt-1 text-xs text-muted">
+            Spaced repetition ties to your decks; weak-area study pulls cards that match topics you have missed in the bank.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-4 text-sm">
+            <div>
+              <p className="text-xs font-medium uppercase tracking-wide text-muted">Reviews logged</p>
+              <p className="text-2xl font-bold tabular-nums text-primary">{snapshot.flashcards.cardsReviewedTotal}</p>
+            </div>
+            <div>
+              <p className="text-xs font-medium uppercase tracking-wide text-muted">Card streak</p>
+              <p className="text-2xl font-bold tabular-nums text-foreground">{snapshot.flashcards.reviewStreak}</p>
+            </div>
+          </div>
+          {weakTopicTitles.length > 0 ? (
+            <p className="mt-3 text-xs text-muted">
+              Weak topics we are matching to flashcards:{" "}
+              <span className="font-medium text-foreground">{weakTopicTitles.slice(0, 5).join(", ")}</span>
+            </p>
+          ) : null}
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Link
+              href="/app/flashcards"
+              className="inline-flex rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+            >
+              All decks
+            </Link>
+            <Link
+              href="/app/flashcards/weak-areas"
+              className="inline-flex rounded-full border border-border px-4 py-2 text-sm font-semibold text-foreground"
+            >
+              Study weak areas
+            </Link>
+          </div>
+          {snapshot.flashcards.suggestedDecks.length > 0 ? (
+            <div className="mt-5 border-t border-border/60 pt-4">
+              <p className="text-sm font-medium text-foreground">Suggested decks</p>
+              <ul className="mt-2 space-y-2 text-sm">
+                {snapshot.flashcards.suggestedDecks.map((d) => (
+                  <li key={d.slug}>
+                    <Link href={`/app/flashcards/${d.slug}`} className="text-primary underline hover:no-underline">
+                      {d.title}
+                    </Link>
+                    <span className="ml-2 text-xs tabular-nums text-muted">{d.cardCount} cards</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+        </section>
+      ) : null}
 
       <section className="nn-card p-6">
         <div className="flex flex-wrap items-end justify-between gap-3">

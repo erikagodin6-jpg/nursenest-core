@@ -175,7 +175,10 @@ export default async function DashboardPage() {
           </section>
 
           {premiumSnapshot ? (
-            <PremiumLearnerHub snapshot={premiumSnapshot} />
+            <PremiumLearnerHub
+              snapshot={premiumSnapshot}
+              weakTopicTitles={topicPerfInitial?.weakTopics.map((w) => w.topic) ?? []}
+            />
           ) : (
             <section className="nn-card p-6">
               <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Progress overview</h2>

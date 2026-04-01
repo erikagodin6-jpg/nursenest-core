@@ -1,4 +1,4 @@
-import { PracticeTestStatus } from "@prisma/client";
+import { ContentStatus, FlashcardDeckVisibility, PracticeTestStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
@@ -213,6 +213,12 @@ export type PremiumDashboardSnapshot = {
   /** Next incomplete lesson in tier/country scope (for adaptive next-step). */
   continueLesson: { title: string; href: string } | null;
   recommendedQuizTopic: string | null;
+  /** Flashcard stats + suggested decks (optional if tables missing). */
+  flashcards: {
+    cardsReviewedTotal: number;
+    reviewStreak: number;
+    suggestedDecks: { slug: string; title: string; cardCount: number }[];
+  } | null;
 };
 
 export async function loadPremiumDashboardSnapshot(
@@ -268,6 +274,36 @@ export async function loadPremiumDashboardSnapshot(
     mockCount,
   });
 
+  let flashcards: PremiumDashboardSnapshot["flashcards"] = null;
+  try {
+    const [fcStats, suggested] = await Promise.all([
+      prisma.flashcardUserStats.findUnique({
+        where: { userId },
+        select: { cardsReviewedTotal: true, currentStreak: true },
+      }),
+      prisma.flashcardDeck.findMany({
+        where: {
+          status: ContentStatus.PUBLISHED,
+          visibility: { not: FlashcardDeckVisibility.HIDDEN },
+        },
+        orderBy: [{ sortOrder: "asc" }, { title: "asc" }],
+        take: 4,
+        select: { slug: true, title: true, cardCount: true },
+      }),
+    ]);
+    flashcards = {
+      cardsReviewedTotal: fcStats?.cardsReviewedTotal ?? 0,
+      reviewStreak: fcStats?.currentStreak ?? 0,
+      suggestedDecks: suggested.map((d) => ({
+        slug: d.slug,
+        title: d.title,
+        cardCount: d.cardCount,
+      })),
+    };
+  } catch {
+    flashcards = null;
+  }
+
   return {
     pathways,
     overallLessons: {
@@ -285,5 +321,6 @@ export async function loadPremiumDashboardSnapshot(
     mockCount,
     continueLesson: dash.continueLesson ? { title: dash.continueLesson.title, href: dash.continueLesson.href } : null,
     recommendedQuizTopic: dash.recommendedQuizTopic,
+    flashcards,
   };
 }

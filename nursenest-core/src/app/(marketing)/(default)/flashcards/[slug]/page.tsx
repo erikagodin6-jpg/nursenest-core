@@ -71,12 +71,12 @@ export default async function PublicFlashcardSlugPage({ params }: Props) {
           <p className="mt-3 text-sm text-[var(--theme-muted-text)]">
             Explore decks tagged with this topic. Samples below; subscribe for every card, scheduling, and weak-area sets.
           </p>
-          {data.deckSlugs.length > 0 ? (
-            <ul className="mt-4 flex flex-wrap gap-2 text-sm">
-              {data.deckSlugs.map((s) => (
-                <li key={s}>
-                  <Link href={`/flashcards/${s}`} className="text-primary underline">
-                    Open deck →
+          {data.decks.length > 0 ? (
+            <ul className="mt-4 space-y-1 text-sm">
+              {data.decks.map((d) => (
+                <li key={d.slug}>
+                  <Link href={`/flashcards/${d.slug}`} className="text-primary underline">
+                    {d.title}
                   </Link>
                 </li>
               ))}

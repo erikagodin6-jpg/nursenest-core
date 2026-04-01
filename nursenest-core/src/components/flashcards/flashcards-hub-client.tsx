@@ -41,6 +41,7 @@ export function FlashcardsHubClient({
   const pathwayId = urlParams.get("pathwayId") ?? "";
   const examFamily = urlParams.get("examFamily") ?? "";
   const tagSlug = urlParams.get("tagSlug") ?? "";
+  const pageFromUrl = urlParams.get("page") ?? "1";
 
   const [decks, setDecks] = useState<DeckRow[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
@@ -98,9 +99,9 @@ export function FlashcardsHubClient({
   );
 
   useEffect(() => {
-    const p = Number(urlParams.get("page") ?? "1");
+    const p = Number(pageFromUrl);
     void load(Number.isFinite(p) && p >= 1 ? p : 1);
-  }, [load, urlParams]);
+  }, [load, pageFromUrl, pathwayId, examFamily, tagSlug]);
 
   const setFilters = (next: { pathwayId?: string; examFamily?: string; tagSlug?: string }) => {
     const qs = new URLSearchParams(urlParams.toString());

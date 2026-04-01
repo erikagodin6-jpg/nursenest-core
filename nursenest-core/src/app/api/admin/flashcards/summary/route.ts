@@ -19,6 +19,7 @@ export async function GET() {
       publishedCards,
       orphanCards,
       byExamFamily,
+      publishedCardsMissingTopicCode,
     ] = await Promise.all([
       prisma.flashcardDeck.count(),
       prisma.flashcardDeck.count({ where: { status: ContentStatus.PUBLISHED } }),
@@ -30,6 +31,9 @@ export async function GET() {
         by: ["examFamily"],
         where: { status: ContentStatus.PUBLISHED },
         _count: { _all: true },
+      }),
+      prisma.flashcard.count({
+        where: { status: ContentStatus.PUBLISHED, category: { topicCode: null } },
       }),
     ]);
 
@@ -46,6 +50,7 @@ export async function GET() {
         total: totalCards,
         published: publishedCards,
         publishedOrphans: orphanCards,
+        publishedMissingTopicCode: publishedCardsMissingTopicCode,
         perExamFamily: cardsPerExam,
       },
     });

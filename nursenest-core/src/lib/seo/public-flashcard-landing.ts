@@ -72,7 +72,7 @@ export type PublicTopicLanding = {
   kind: "topic";
   slug: string;
   name: string;
-  deckSlugs: string[];
+  decks: Array<{ slug: string; title: string }>;
   samples: Array<{ front: string; backTeaser: string; deckTitle: string }>;
 };
 
@@ -138,7 +138,9 @@ export async function loadPublicFlashcardSlugLanding(slug: string): Promise<Publ
     if (!tag || tag.decks.length === 0) return null;
 
     const samples: PublicTopicLanding["samples"] = [];
+    const deckMap = new Map<string, string>();
     for (const row of tag.decks) {
+      deckMap.set(row.deck.slug, row.deck.title);
       const c = row.deck.cards[0];
       if (!c) continue;
       samples.push({
@@ -153,7 +155,7 @@ export async function loadPublicFlashcardSlugLanding(slug: string): Promise<Publ
       kind: "topic",
       slug: tag.slug,
       name: tag.name,
-      deckSlugs: [...new Set(tag.decks.map((d) => d.deck.slug))],
+      decks: [...deckMap.entries()].map(([slug, title]) => ({ slug, title })),
       samples,
     };
   }, null);
