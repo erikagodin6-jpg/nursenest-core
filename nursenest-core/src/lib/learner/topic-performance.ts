@@ -4,38 +4,31 @@ import { answerMatches } from "@/lib/exams/score-session-answers";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { computeTopicMomentum, topicTrendSummary, type TopicMomentum } from "@/lib/learner/topic-momentum";
+import { formatTopicLabelForDisplay, normalizeTopicKey } from "@/lib/learner/topic-normalize";
+import { examQuestionDbTopicsMatchingCanonicals } from "@/lib/learner/weak-topic-db-match";
+import {
+  classifyTopicStrength,
+  computeDecaySignals,
+  computeWeakPriorityScore,
+  fallbackWeakPriorityFromSessionRow,
+  ledgerSourceConfidence,
+  THIN_LEDGER_MIN_TOPICS,
+  THIN_LEDGER_TOTAL_ATTEMPTS,
+} from "@/lib/learner/weak-topic-priority";
 import {
   loadWeakTopicsFromExamSessions,
-  normalizeTopicLabel,
   type TopicStrength,
   type WeakTopicRow,
 } from "@/lib/learner/weak-topics-from-sessions";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 
-function classifyTopicStrength(args: {
-  correctCount: number;
-  wrongCount: number;
-  wrongStreak: number;
-  lastWrongAt: Date | null;
-}): TopicStrength {
-  const total = args.correctCount + args.wrongCount;
-  if (total === 0) return "moderate";
-  const acc = args.correctCount / total;
-  const daysSinceWrong = args.lastWrongAt
-    ? (Date.now() - args.lastWrongAt.getTime()) / 86400000
-    : 999;
-
-  if (total < 3) {
-    if (args.wrongCount >= 2 && acc < 0.5) return "weak";
-    if (args.correctCount === total && total >= 2) return "strong";
-    return "moderate";
-  }
-
-  if (acc >= 0.78 && args.wrongStreak <= 1 && args.wrongCount / total <= 0.28) return "strong";
-  if (acc < 0.55 || args.wrongStreak >= 3 || (acc < 0.65 && daysSinceWrong < 3 && args.wrongCount >= 2)) {
-    return "weak";
-  }
-  return "moderate";
+function stableWeakPrioritySortKey(a: WeakTopicRow, b: WeakTopicRow): number {
+  const pa = Math.round((a.weakPriorityScore ?? 0) * 1000) / 1000;
+  const pb = Math.round((b.weakPriorityScore ?? 0) * 1000) / 1000;
+  if (pb !== pa) return pb - pa;
+  const ta = a.normalizedTopic ?? normalizeTopicKey(a.topic);
+  const tb = b.normalizedTopic ?? normalizeTopicKey(b.topic);
+  return ta.localeCompare(tb);
 }
 
 function statRowToWeakTopicRow(
@@ -45,25 +38,116 @@ function statRowToWeakTopicRow(
     wrongCount: number;
     wrongStreak: number;
     lastWrongAt: Date | null;
+    lastAttemptAt: Date | null;
   },
 ): WeakTopicRow {
+  const normalizedTopic = s.topic;
   const attempted = s.correctCount + s.wrongCount;
   const missed = s.wrongCount;
   const missRate = attempted > 0 ? Math.round((missed / attempted) * 100) : 0;
+  const statLike = {
+    correctCount: s.correctCount,
+    wrongCount: s.wrongCount,
+    wrongStreak: s.wrongStreak,
+    lastWrongAt: s.lastWrongAt,
+    lastAttemptAt: s.lastAttemptAt,
+  };
+  const weakPriorityScore = computeWeakPriorityScore(statLike);
+  const signals = computeDecaySignals(statLike);
+  const strength = classifyTopicStrength({
+    correctCount: s.correctCount,
+    wrongCount: s.wrongCount,
+    wrongStreak: s.wrongStreak,
+    lastWrongAt: s.lastWrongAt,
+  });
   return {
-    topic: s.topic,
+    topic: formatTopicLabelForDisplay(normalizedTopic),
+    normalizedTopic,
     missed,
     attempted,
     missRate,
-    strength: classifyTopicStrength({
-      correctCount: s.correctCount,
-      wrongCount: s.wrongCount,
-      wrongStreak: s.wrongStreak,
-      lastWrongAt: s.lastWrongAt,
-    }),
+    strength,
     lastWrongAt: s.lastWrongAt?.toISOString() ?? null,
     wrongStreak: s.wrongStreak,
+    weakPriorityScore,
+    sourceConfidence: ledgerSourceConfidence(statLike),
+    decayAdjustedWrongSignal: signals.decayAdjustedWrongSignal,
+    decayAdjustedCorrectSignal: signals.decayAdjustedCorrectSignal,
+    topicSource: "ledger",
+    evidenceCount: attempted,
   };
+}
+
+function mergeLedgerAndFallbackWeak(args: {
+  ledgerWeak: WeakTopicRow[];
+  ledgerAll: WeakTopicRow[];
+  fallback: WeakTopicRow[];
+  limit: number;
+  totalLedgerAttempts: number;
+  ledgerTopicCount: number;
+}): WeakTopicRow[] {
+  const { ledgerWeak, ledgerAll, fallback, limit, totalLedgerAttempts, ledgerTopicCount } = args;
+
+  const weakCount = ledgerWeak.length;
+  const ledgerAdequate =
+    totalLedgerAttempts >= THIN_LEDGER_TOTAL_ATTEMPTS && ledgerTopicCount >= THIN_LEDGER_MIN_TOPICS;
+  /** Adequate ledger + enough weak labels: do not blend session fallback (avoids stale mock pollution). */
+  const skipFallback = ledgerAdequate && weakCount >= 2;
+
+  const byNorm = new Map<string, WeakTopicRow>();
+  for (const r of ledgerWeak) {
+    const k = r.normalizedTopic ?? normalizeTopicKey(r.topic);
+    byNorm.set(k, { ...r });
+  }
+
+  const ledgerByNorm = new Map<string, WeakTopicRow>();
+  for (const r of ledgerAll) {
+    ledgerByNorm.set(r.normalizedTopic ?? normalizeTopicKey(r.topic), r);
+  }
+
+  if (!skipFallback) {
+    for (const f of fallback) {
+      const canon = f.normalizedTopic ?? normalizeTopicKey(f.topic);
+      const fp = fallbackWeakPriorityFromSessionRow(f.missRate, f.attempted, f.missed);
+      const existing = byNorm.get(canon);
+      const ledgerPeer = ledgerByNorm.get(canon);
+      const wL = ledgerPeer?.sourceConfidence ?? 0;
+
+      if (ledgerPeer && ledgerPeer.strength === "strong" && wL >= 0.45) {
+        continue;
+      }
+
+      if (existing) {
+        const wF = (1 - wL) * 0.85;
+        const mergedScore = Math.min(1, wL * (existing.weakPriorityScore ?? 0) + wF * fp);
+        if (mergedScore <= (existing.weakPriorityScore ?? 0) + 0.001) continue;
+        byNorm.set(canon, {
+          ...existing,
+          weakPriorityScore: mergedScore,
+          topicSource: "mixed",
+          sourceConfidence: Math.min(1, wL + 0.12),
+        });
+      } else {
+        const cap = 0.62;
+        byNorm.set(canon, {
+          topic: f.topic,
+          normalizedTopic: canon,
+          missed: f.missed,
+          attempted: f.attempted,
+          missRate: f.missRate,
+          strength: "weak",
+          weakPriorityScore: Math.min(cap, fp),
+          sourceConfidence: 0.35,
+          topicSource: "session_fallback",
+          evidenceCount: f.evidenceCount ?? f.attempted,
+          decayAdjustedWrongSignal: fp * 0.85,
+          decayAdjustedCorrectSignal: (1 - fp) * 0.35,
+        });
+      }
+    }
+  }
+
+  return [...byNorm.values()].sort(stableWeakPrioritySortKey).slice(0, limit);
 }
 
 export async function recordTopicOutcomesSequential(
@@ -73,7 +157,7 @@ export async function recordTopicOutcomesSequential(
   if (outcomes.length === 0) return;
   const now = new Date();
   for (const o of outcomes) {
-    const topic = normalizeTopicLabel(o.topic);
+    const topic = normalizeTopicKey(o.topic);
     try {
       await prisma.$transaction(async (tx) => {
         const row = await tx.userTopicStat.findUnique({
@@ -127,7 +211,7 @@ export async function recordTopicOutcomesFromPracticeTest(
     const q = byId.get(id);
     if (!q) continue;
     const ok = answerMatches(q.questionType, q.correctAnswer as Prisma.JsonValue, answers[id]);
-    outcomes.push({ topic: normalizeTopicLabel(q.topic), correct: ok });
+    outcomes.push({ topic: normalizeTopicKey(q.topic), correct: ok });
   }
   await recordTopicOutcomesSequential(userId, outcomes);
 }
@@ -151,7 +235,7 @@ export type TopicPerformanceSnapshot = {
 
 /**
  * Unified weak-area list: prefers persisted topic stats; falls back to mock session aggregation when
- * the ledger is still sparse.
+ * ledger evidence is thin.
  */
 export async function loadUnifiedTopicPerformance(
   userId: string,
@@ -175,41 +259,56 @@ export async function loadUnifiedTopicPerformance(
     take: 200,
   });
 
-  const rows = stats.map(statRowToWeakTopicRow);
+  const rows = stats.map((s) =>
+    statRowToWeakTopicRow({
+      topic: s.topic,
+      correctCount: s.correctCount,
+      wrongCount: s.wrongCount,
+      wrongStreak: s.wrongStreak,
+      lastWrongAt: s.lastWrongAt,
+      lastAttemptAt: s.lastAttemptAt,
+    }),
+  );
+
+  const totalLedgerAttempts = rows.reduce((sum, r) => sum + r.attempted, 0);
+
   const byStrength: TopicPerformanceSnapshot["byStrength"] = {
     strong: [],
     moderate: [],
     weak: [],
   };
   for (const r of rows) {
-    const tier = r.strength ?? "moderate";
+    const tier = (r.strength ?? "moderate") as TopicStrength;
     byStrength[tier].push(r);
   }
   for (const k of Object.keys(byStrength) as (keyof typeof byStrength)[]) {
-    byStrength[k].sort((a, b) => b.missRate - a.missRate || b.missed - a.missed);
+    byStrength[k].sort(stableWeakPrioritySortKey);
   }
 
-  let weakFromLedger = rows.filter((r) => r.strength === "weak").slice(0, limit);
+  const ledgerWeak = rows.filter((r) => r.strength === "weak").sort(stableWeakPrioritySortKey);
+
+  const fallback = await loadWeakTopicsFromExamSessions(userId, entitlement, limit);
+  const mergedWeak = mergeLedgerAndFallbackWeak({
+    ledgerWeak,
+    ledgerAll: rows,
+    fallback,
+    limit,
+    totalLedgerAttempts,
+    ledgerTopicCount: rows.length,
+  });
+
   let source: TopicPerformanceSnapshot["source"] = "ledger";
-
-  if (weakFromLedger.length < 2) {
-    const fallback = await loadWeakTopicsFromExamSessions(userId, entitlement, limit);
-    const seen = new Set(weakFromLedger.map((w) => w.topic));
-    for (const f of fallback) {
-      if (weakFromLedger.length >= limit) break;
-      if (seen.has(f.topic)) continue;
-      seen.add(f.topic);
-      weakFromLedger.push({
-        ...f,
-        strength: "weak" as const,
-      });
-    }
-    source = weakFromLedger.length ? "mixed" : "fallback";
+  if (mergedWeak.some((w) => w.topicSource === "session_fallback" || w.topicSource === "mixed")) {
+    source = "mixed";
+  }
+  if (mergedWeak.length > 0 && mergedWeak.every((m) => m.topicSource === "session_fallback")) {
+    source = "fallback";
   }
 
-  weakFromLedger = weakFromLedger.slice(0, limit);
-
-  const recommendedQuizTopic = weakFromLedger[0]?.topic ?? rows.find((r) => r.strength === "weak")?.topic ?? null;
+  const recommendedQuizTopic =
+    pickRecommendedQuizTopic(mergedWeak, ledgerWeak) ??
+    rows.find((r) => r.strength === "weak")?.topic ??
+    null;
 
   const strongTopics = [...rows]
     .filter((r) => r.attempted >= 3)
@@ -227,7 +326,7 @@ export async function loadUnifiedTopicPerformance(
     .slice(0, 8);
 
   return {
-    weakTopics: weakFromLedger,
+    weakTopics: mergedWeak,
     strongTopics,
     trends,
     byStrength,
@@ -236,16 +335,61 @@ export async function loadUnifiedTopicPerformance(
   };
 }
 
-/** Topic names for practice-test “weak” pool selection (linear + CAT). */
+function pickRecommendedQuizTopic(mergedWeak: WeakTopicRow[], ledgerWeak: WeakTopicRow[]): string | null {
+  const pool = mergedWeak.length ? mergedWeak : ledgerWeak;
+  if (pool.length === 0) return null;
+  const sorted = [...pool].sort(stableWeakPrioritySortKey);
+  const best = sorted[0];
+  if (!best) return null;
+  const ledgerBacked = sorted.filter((r) => r.topicSource !== "session_fallback" || (r.sourceConfidence ?? 0) >= 0.35);
+  const top = ledgerBacked[0] ?? best;
+  return top.topic;
+}
+
+export type WeakTopicPracticePlan = {
+  /** Raw DB topic strings for `ExamQuestion.topic` queries. */
+  dbTopicNames: string[];
+  /** Canonical topic key → weak priority 0–1 */
+  priorityByCanonical: Map<string, number>;
+};
+
+/**
+ * Resolves DB topic strings and priority map for weak-mode pools and CAT boosts.
+ */
+export async function loadWeakTopicPracticePlan(
+  userId: string,
+  entitlement: AccessScope,
+  max = 16,
+): Promise<WeakTopicPracticePlan> {
+  const snap = await loadUnifiedTopicPerformance(userId, entitlement, max);
+  const weak = snap.weakTopics;
+  const priorityByCanonical = new Map<string, number>();
+  for (const w of weak) {
+    const k = w.normalizedTopic ?? normalizeTopicKey(w.topic);
+    priorityByCanonical.set(k, w.weakPriorityScore ?? 0);
+  }
+
+  if (weak.length === 0) {
+    const fb = await loadWeakTopicsFromExamSessions(userId, entitlement, 12);
+    for (const f of fb) {
+      const k = f.normalizedTopic ?? normalizeTopicKey(f.topic);
+      priorityByCanonical.set(k, fallbackWeakPriorityFromSessionRow(f.missRate, f.attempted, f.missed));
+    }
+  }
+
+  const canonicals = [...priorityByCanonical.keys()].slice(0, max);
+  const base = questionAccessWhere(entitlement);
+  const dbTopicNames = await examQuestionDbTopicsMatchingCanonicals(base, canonicals);
+
+  return { dbTopicNames, priorityByCanonical };
+}
+
+/** Topic names for practice-test weak pool selection (DB-aligned strings). */
 export async function getWeakTopicNamesForPractice(
   userId: string,
   entitlement: AccessScope,
   max = 16,
 ): Promise<string[]> {
-  const snap = await loadUnifiedTopicPerformance(userId, entitlement, max);
-  const names = [...new Set(snap.weakTopics.map((w) => w.topic).filter(Boolean))];
-  if (names.length > 0) return names.slice(0, max);
-
-  const fallback = await loadWeakTopicsFromExamSessions(userId, entitlement, 12);
-  return [...new Set(fallback.map((w) => w.topic).filter(Boolean))].slice(0, max);
+  const plan = await loadWeakTopicPracticePlan(userId, entitlement, max);
+  return plan.dbTopicNames.slice(0, max);
 }

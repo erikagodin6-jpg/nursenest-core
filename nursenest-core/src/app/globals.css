@@ -21,8 +21,9 @@ body {
 
   --text-hero: clamp(2.1rem, 4.6vw, 3.45rem);
   --text-section: clamp(1.7rem, 3.4vw, 2.4rem);
-  --space-hero-top: clamp(2rem, 4vw, 3rem);
-  --space-hero-bottom: clamp(3rem, 6vw, 5rem);
+  /* Tight above-the-fold: avoid a dead zone between sticky header and hero */
+  --space-hero-top: clamp(0.75rem, 2vw, 1.5rem);
+  --space-hero-bottom: clamp(2.25rem, 5vw, 4rem);
   --space-block: clamp(2rem, 4vw, 3rem);
 
   --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);

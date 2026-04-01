@@ -31,7 +31,7 @@ export default async function HomePage() {
       <BreadcrumbJsonLd items={schemaItems} />
       <FaqJsonLd items={MARKETING_HOME_FAQ_JSONLD} />
       {crumbs.length > 0 ? (
-        <div className="mx-auto max-w-7xl px-4 pt-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-4 pt-2 sm:px-6 sm:pt-3 lg:px-8">
           <BreadcrumbTrail items={crumbs} />
         </div>
       ) : null}

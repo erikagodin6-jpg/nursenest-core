@@ -28,9 +28,10 @@ export const BRAND_NAME = "NurseNest" as const;
  * otherwise caps the mark to the link column and ignores intended header height.
  */
 export const HEADER_BRAND_LOGO_IMG_CLASSNAME =
-  "nn-brand-header-logo block !h-12 !w-auto !max-w-none !shrink-0 !object-contain object-left sm:!h-14 md:!h-[72px] lg:!h-20 xl:!h-24 2xl:!h-28" as const;
+  "nn-brand-header-logo block !h-[3.25rem] !w-auto !min-w-0 !max-w-none !shrink-0 !object-contain !object-left sm:!h-16 md:!h-[5.25rem] lg:!h-24 xl:!h-[6.75rem] 2xl:!h-32" as const;
 
 /**
- * Wrapper for `<SiteBrandLogoMark />` — no height/width clamps here; sizing lives on {@link HEADER_BRAND_LOGO_IMG_CLASSNAME}.
+ * Wrapper for `<SiteBrandLogoMark />` — flex-safe brand slot; raster sizing lives on {@link HEADER_BRAND_LOGO_IMG_CLASSNAME}.
  */
-export const DEFAULT_BRAND_LOGO_MARK_CLASSNAME = "max-w-none overflow-visible" as const;
+export const DEFAULT_BRAND_LOGO_MARK_CLASSNAME =
+  "flex flex-none max-w-none items-center justify-start self-center overflow-visible" as const;

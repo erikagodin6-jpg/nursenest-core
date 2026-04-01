@@ -111,16 +111,16 @@ export function SiteHeader() {
         </div>
       </div>
 
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-2 py-3 sm:gap-4 sm:px-4 md:py-4 lg:px-8 lg:py-5">
+      <div className="mx-auto flex max-w-7xl min-h-[3.5rem] items-center justify-between gap-2 px-2 py-2.5 sm:gap-3 sm:px-4 sm:py-3 md:min-h-[4rem] md:gap-3 md:py-3 lg:gap-4 lg:px-8 lg:py-4">
         <Link
           href={localizeHref("/")}
-          className="group flex shrink-0 items-center gap-2 overflow-visible"
+          className="group flex flex-none items-center gap-2 overflow-visible md:min-w-[12.5rem] lg:min-w-[15rem] xl:min-w-[17rem]"
           aria-label="NurseNest home"
         >
           <SiteBrandLogoMark />
         </Link>
 
-        <nav className="hidden items-center gap-0.5 md:flex lg:gap-1">
+        <nav className="hidden min-w-0 flex-1 items-center justify-center gap-0.5 md:flex lg:gap-1 xl:gap-1.5">
           <Link
             href={localizeHref("/")}
             className="rounded-full px-3 py-2 text-sm font-medium text-[var(--theme-menu-text)] hover:bg-[var(--theme-menu-hover-bg)] hover:text-[var(--theme-menu-hover-text)]"
@@ -209,7 +209,7 @@ export function SiteHeader() {
           </div>
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-none items-center gap-2">
           <ThemePicker
             className="lg:hidden"
             labels={{

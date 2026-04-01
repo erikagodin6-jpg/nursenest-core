@@ -335,6 +335,15 @@ enum BlogPostTemplate {
 }
 
 /** Public SEO blog posts (migrated from legacy content_items / static allied data). Not the same rows as `content_items.type = 'lesson'`. */
+/** Aggregated full-corpus lesson/question quality (refreshed via admin POST, not hot-path). */
+model ContentQualityCorpusSnapshot {
+  id        String   @id @default("default")
+  payload   Json
+  updatedAt DateTime @updatedAt
+
+  @@map("content_quality_corpus_snapshots")
+}
+
 model BlogPost {
   id           String   @id @default(cuid())
   slug         String   @unique

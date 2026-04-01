@@ -223,9 +223,9 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
 
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div
-              className={`grid items-center gap-8 md:items-stretch md:gap-10 lg:gap-12 ${showHeroMediaColumn ? "md:grid-cols-2" : "md:grid-cols-1"}`}
+              className={`grid items-start gap-5 md:gap-8 lg:gap-10 ${showHeroMediaColumn ? "md:grid-cols-2" : "md:grid-cols-1"}`}
             >
-              <div className="hero-motion-enter min-w-0 space-y-6 md:space-y-5">
+              <div className="hero-motion-enter min-w-0 space-y-4 md:space-y-5">
                 <div className="flex flex-wrap items-center gap-2">
                   <div
                     className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/5 px-3 py-1.5 sm:px-4"
@@ -461,7 +461,7 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
 
               <div
                 className={
-                  showHeroMediaColumn ? "relative mt-8 w-full min-w-0 md:mt-0 md:flex md:flex-col md:justify-center" : "hidden"
+                  showHeroMediaColumn ? "relative mt-5 w-full min-w-0 md:mt-0 md:flex md:flex-col md:justify-start md:pt-0" : "hidden"
                 }
                 style={{ overflowAnchor: "none" }}
               >
@@ -469,7 +469,7 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
               </div>
             </div>
 
-            <div className="mt-10 sm:mt-12" data-testid="section-careers-supported">
+            <div className="mt-7 sm:mt-9" data-testid="section-careers-supported">
               <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-[var(--theme-body-text)]">
                 {t("home.hero.examPrepFor", {
                   region: region === "CA" ? t("home.region.ca") : t("home.region.us"),
