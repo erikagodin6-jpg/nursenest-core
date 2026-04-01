@@ -98,6 +98,50 @@ function fallbackTakeawayFromText(text: string | null | undefined): string | nul
   return oneSentence.length > 180 ? `${oneSentence.slice(0, 177).trim()}...` : oneSentence;
 }
 
+function normBodyKey(s: string | null | undefined): string {
+  return stripToPlainText(s)
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/** Single “why correct” block: explanation first, then non-duplicate rationale/clinical reasoning. */
+function mergeWhyThisIsCorrect(
+  correctAnswerExplanation: string | null,
+  rationale: string | null,
+  clinicalReasoning: string | null,
+): string {
+  const parts: string[] = [];
+  const seen = new Set<string>();
+  const pushUnique = (t: string | null | undefined) => {
+    const plain = stripToPlainText(t);
+    if (plain.length < 4) return;
+    const k = normBodyKey(plain);
+    if (seen.has(k)) return;
+    seen.add(k);
+    parts.push(plain);
+  };
+  pushUnique(correctAnswerExplanation);
+  pushUnique(rationale);
+  pushUnique(clinicalReasoning);
+  if (parts.length === 0) return "Clinical reasoning is not yet on file for this item.";
+  return parts.join("\n\n");
+}
+
+function defaultExamStrategyFallback(questionType: string, isSata: boolean): string {
+  const t = questionType.toUpperCase();
+  if (isSata || t === "SELECT_ALL_THAT_APPLY") {
+    return "On the exam: treat each option as its own true/false against the stem. Select only what is fully supported; avoid stretching scope or ignoring a safety keyword in the scenario.";
+  }
+  if (t === "ORDERING") {
+    return "On the exam: order steps by immediate risk and standard sequence (assess before acting when the stem asks what to do first).";
+  }
+  if (t === "PRIORITIZATION_ARTICLE" || t.includes("PRIOR")) {
+    return "On the exam: use ABCs, acute vs stable, and the stem’s urgency cues to choose the highest-priority action first.";
+  }
+  return "On the exam: use safety, scope-of-practice, and stem keywords to choose the single best next action.";
+}
+
 function pushSection(
   out: Array<{ id: string; heading: string; body: string }>,
   id: string,
