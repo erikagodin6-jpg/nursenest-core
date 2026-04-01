@@ -10,6 +10,8 @@ import {
   PRE_NURSING_PROGRESS_PREFIX,
 } from "@/lib/pre-nursing/pre-nursing-constants";
 import { nextPreNursingModuleSlug, preNursingCompletionFraction } from "@/lib/pre-nursing/pre-nursing-adaptive";
+import { PH } from "@/lib/observability/posthog-conversion-events";
+import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 
 const bodySchema = z.object({
@@ -105,6 +107,32 @@ export async function POST(req: Request) {
       create: { userId, lessonId, completed: parsedBody.completed },
       update: { completed: parsedBody.completed },
     });
+    const rows = await prisma.progress.findMany({
+      where: {
+        userId,
+        completed: true,
+        lessonId: { startsWith: PRE_NURSING_PROGRESS_PREFIX },
+      },
+      select: { lessonId: true },
+    });
+    const completedCount = rows.length;
+    const totalModules = PRE_NURSING_MODULE_REGISTRY.length;
+    await captureServerEvent(analyticsDistinctId(userId), PH.preNursingModuleCompleted, {
+      source_surface: "progress_api",
+      module_slug: parsedBody.slug,
+      completed: parsedBody.completed,
+      signed_in: true,
+      completion_count: completedCount,
+      modules_total: totalModules,
+    });
+    if (parsedBody.completed && completedCount >= totalModules) {
+      await captureServerEvent(analyticsDistinctId(userId), PH.preNursingAllModulesCompleted, {
+        source_surface: "progress_api",
+        signed_in: true,
+        completion_count: completedCount,
+        modules_total: totalModules,
+      });
+    }
     return NextResponse.json({ ok: true });
   } catch {
     return NextResponse.json({ error: "Unable to save progress." }, { status: 503 });

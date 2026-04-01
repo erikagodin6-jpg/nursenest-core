@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
@@ -8,11 +8,9 @@ import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const session = await auth();
-  const userId = (session?.user as { id?: string } | undefined)?.id;
-  if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const gate = await requireSubscriberSession();
+  if (!gate.ok) return gate.response;
+  const { userId } = gate;
 
   setSentryServerContext({ route: "/api/flashcards/stats", feature: SERVER_FEATURE.flashcard, userId });
 

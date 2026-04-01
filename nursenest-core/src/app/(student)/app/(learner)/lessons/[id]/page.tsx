@@ -22,6 +22,7 @@ import { LegacyMonolithLessonBody } from "@/components/lessons/legacy-monolith-l
 import { LessonQualityNotice } from "@/components/lessons/lesson-quality-notice";
 import { classifyContentItemLesson, classifyPathwayLesson } from "@/lib/content-quality/classify-lesson";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 
 function LessonBody({ content }: { content: unknown }) {
   if (Array.isArray(content)) {
@@ -90,9 +91,7 @@ export default async function LessonDetailPage({ params }: Props) {
     return (
       <main className="space-y-4">
         <p className="text-sm text-muted">You need an active subscription to open full app lessons.</p>
-        <Link className="text-sm font-semibold text-primary underline" href="/app/lessons">
-          Back to lessons
-        </Link>
+        <SubscriptionPaywall context="lessons" />
       </main>
     );
   }

@@ -83,6 +83,25 @@ describe("computeWeakPriorityScore", () => {
     assert.ok(computeWeakPriorityScore(weak) < computeWeakPriorityScore(worse));
   });
 
+  it("drops recovered topic priority vs stale unresolved weakness", () => {
+    const now = Date.now();
+    const recovered = stat({
+      correctCount: 18,
+      wrongCount: 8,
+      wrongStreak: 0,
+      lastWrongAt: new Date(now - 14 * 86400000),
+      lastAttemptAt: new Date(now - 1 * 86400000),
+    });
+    const unresolved = stat({
+      correctCount: 8,
+      wrongCount: 12,
+      wrongStreak: 3,
+      lastWrongAt: new Date(now - 1 * 86400000),
+      lastAttemptAt: new Date(now - 1 * 86400000),
+    });
+    assert.ok(computeWeakPriorityScore(recovered, now) < computeWeakPriorityScore(unresolved, now));
+  });
+
   it("orders consistently with classifyTopicStrength labels for typical cases", () => {
     const strong = stat({
       correctCount: 20,

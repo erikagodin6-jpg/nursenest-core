@@ -4,6 +4,8 @@ import Link from "next/link";
 import { ArrowRight, BookOpen, FlaskConical, Sparkles } from "lucide-react";
 import { PRE_NURSING_MODULE_REGISTRY } from "@/content/pre-nursing/pre-nursing-registry";
 import strings from "@/content/pre-nursing/pre-nursing-strings-en.json";
+import { PH } from "@/lib/observability/posthog-conversion-events";
+import { trackClientEvent } from "@/lib/observability/posthog-client";
 
 const dict = strings as Record<string, string>;
 
@@ -33,6 +35,7 @@ export function PreNursingLandingClient() {
               href="/pre-nursing/lessons"
               className="nn-btn-primary inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold shadow-sm"
               data-testid="link-pre-nursing-lessons"
+              onClick={() => trackClientEvent(PH.preNursingNextModuleClicked, { source_surface: "hub", cta_type: "start_lessons" })}
             >
               <BookOpen className="h-4 w-4" aria-hidden />
               Start free lessons
@@ -41,6 +44,7 @@ export function PreNursingLandingClient() {
             <Link
               href="/pre-nursing/study-plan"
               className="nn-btn-secondary inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold"
+              onClick={() => trackClientEvent(PH.preNursingStudyPlanViewed, { source_surface: "hub", cta_type: "set_readiness_target" })}
             >
               <Sparkles className="h-4 w-4" aria-hidden />
               Set a readiness target
@@ -48,6 +52,9 @@ export function PreNursingLandingClient() {
             <Link
               href="/tools/med-math"
               className="nn-btn-secondary inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold"
+              onClick={() =>
+                trackClientEvent(PH.preNursingPathwayCtaClicked, { source_surface: "hub", cta_type: "med_math_tools" })
+              }
             >
               Med math tools
               <ArrowRight className="h-4 w-4" aria-hidden />
@@ -63,6 +70,13 @@ export function PreNursingLandingClient() {
             href={`/pre-nursing/lessons/${m.slug}`}
             className="nn-card nn-card-interactive group flex flex-col p-5"
             data-testid={`pre-nursing-card-${m.slug}`}
+            onClick={() =>
+              trackClientEvent(PH.preNursingModuleViewed, {
+                source_surface: "hub",
+                module_slug: m.slug,
+                cta_type: "module_card",
+              })
+            }
           >
             <h2 className="text-lg font-bold text-[var(--theme-heading-text)] group-hover:text-primary">
               {dict[m.titleKey] ?? m.slug}

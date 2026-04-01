@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { PreNursingAccountCapture } from "@/components/pre-nursing/pre-nursing-account-capture";
+import { PreNursingMilestoneStrip } from "@/components/pre-nursing/pre-nursing-milestone-strip";
+import { PreNursingNextStepsBlock } from "@/components/pre-nursing/pre-nursing-next-steps-block";
+import { PreNursingSurfaceAnalytics } from "@/components/pre-nursing/pre-nursing-surface-analytics";
 import { PreNursingStudyPlanClient } from "@/components/pre-nursing/pre-nursing-study-plan-client";
 import { preNursingStudyPlanBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { absoluteUrl } from "@/lib/seo/site-origin";
@@ -31,10 +35,12 @@ export default function PreNursingStudyPlanPage() {
   return (
     <div className="nn-marketing-surface">
       <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
+        <PreNursingSurfaceAnalytics surface="study_plan" />
         <BreadcrumbJsonLd items={schemaItems} />
         <div className="mb-6">
           <BreadcrumbTrail items={crumbs} />
         </div>
+        <PreNursingMilestoneStrip sourceSurface="study_plan" />
 
         <header className="mb-8">
           <p className="text-xs font-semibold uppercase tracking-wide text-primary">Free · Pre-Nursing</p>
@@ -51,6 +57,8 @@ export default function PreNursingStudyPlanPage() {
         </header>
 
         <PreNursingStudyPlanClient />
+        <PreNursingAccountCapture sourceSurface="study_plan" />
+        <PreNursingNextStepsBlock sourceSurface="study_plan" />
       </div>
     </div>
   );

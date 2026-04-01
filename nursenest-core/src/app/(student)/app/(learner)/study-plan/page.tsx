@@ -1,4 +1,5 @@
 import { auth } from "@/lib/auth";
+import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { AdaptiveStudyOverview } from "@/components/student/adaptive-study-overview";
 import { ExamPlanSettingsCard } from "@/components/student/exam-plan-settings-card";
 import { LearnerInsightEnginePanel } from "@/components/student/learner-insight-engine-panel";
@@ -15,15 +16,23 @@ export default async function StudyPlanPage() {
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
 
+  if (entitlement === "error") {
+    return <p className="text-sm text-muted-foreground">Unable to verify subscription status right now. Refresh and try again.</p>;
+  }
+  if (!entitlement.hasAccess) {
+    return (
+      <main className="space-y-4">
+        <h1 className="text-3xl font-bold tracking-tight text-[var(--theme-heading-text)]">Study plan</h1>
+        <p className="text-sm text-muted-foreground">Study-plan recommendations are available to subscribers.</p>
+        <SubscriptionPaywall context="dashboard" />
+      </main>
+    );
+  }
+
   let adaptive = null;
   let insightSnapshot = null;
 
-  if (
-    userId &&
-    entitlement !== "error" &&
-    entitlement.hasAccess &&
-    isDatabaseUrlConfigured()
-  ) {
+  if (userId && entitlement.hasAccess && isDatabaseUrlConfigured()) {
     try {
       const [premiumSnapshot, topicPerf, userExam] = await Promise.all([
         loadPremiumDashboardSnapshot(userId, entitlement),
@@ -70,7 +79,7 @@ export default async function StudyPlanPage() {
         </p>
       </div>
 
-      {entitlement !== "error" && entitlement.hasAccess ? <ExamPlanSettingsCard /> : null}
+      <ExamPlanSettingsCard />
 
       {adaptive ? <AdaptiveStudyOverview adaptive={adaptive} showHeading userId={userId} /> : null}
 

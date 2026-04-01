@@ -19,7 +19,7 @@ import {
 } from "@/lib/observability/flashcard-log";
 import { enforceFlashcardStudyProtection } from "@/lib/http/api-protection";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
-import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { withRetry } from "@/lib/resilience/with-retry";
 import type { Prisma } from "@prisma/client";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
@@ -67,6 +67,12 @@ export async function GET(req: NextRequest, { params }: Props) {
 
   if (!userCanAccessDeckForStudy(deck, entitlement)) {
     logFlashcardAccessDenied({ deckId: deck.id.slice(0, 12), surface: "study_get" });
+    safeServerLog("api_flashcards_study", "entitlement_mismatch_deck_access", {
+      deckIdPrefix: deck.id.slice(0, 8),
+      tier: String(entitlement.tier ?? ""),
+      country: String(entitlement.country ?? ""),
+      visibility: deck.visibility,
+    });
     return notSubscribedResponse();
   }
 

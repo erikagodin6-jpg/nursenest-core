@@ -20,6 +20,7 @@ export async function requireSubscriberSession(): Promise<SubscriberSessionResul
   const session = await auth();
   const userId = (session?.user as { id?: string } | undefined)?.id;
   if (!userId) {
+    safeServerLog("access", "unauthorized_no_session", { surface: "subscriber_gate" });
     return {
       ok: false,
       response: NextResponse.json({ error: "Unauthorized", code: "unauthorized" }, { status: 401 }),

@@ -86,6 +86,15 @@ function mergeCatBoosts(a: CatSelectOptions, b: CatSelectOptions): CatSelectOpti
   };
 }
 
+export function hasUsableCatWeakPriorityMap(
+  pri: PracticeTestConfigJson["catWeakPriorityByCanonical"] | undefined,
+): pri is Record<string, number> {
+  if (!pri || typeof pri !== "object") return false;
+  const entries = Object.entries(pri as Record<string, unknown>);
+  if (entries.length === 0) return false;
+  return entries.some(([, v]) => typeof v === "number" && Number.isFinite(v) && v > 0);
+}
+
 async function scoreOne(
   q: {
     id: string;
@@ -233,8 +242,7 @@ export async function advanceCatPracticeTest(params: {
   };
 
   const pri = params.config.catWeakPriorityByCanonical;
-  const hasPriority =
-    pri && typeof pri === "object" && Object.keys(pri as Record<string, number>).length > 0;
+  const hasPriority = hasUsableCatWeakPriorityMap(pri);
   const priorityMap = hasPriority
     ? new Map<string, number>(
         Object.entries(pri as Record<string, number>).map(([k, v]) => [k, typeof v === "number" ? v : 0]),

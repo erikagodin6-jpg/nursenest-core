@@ -13,6 +13,16 @@ describe("normalizeTopicKey", () => {
     assert.equal(normalizeTopicKey("Cardiac  /  CVS"), normalizeTopicKey("cardiac / cvs"));
   });
 
+  it("maps visually different but equivalent separators to same canonical key", () => {
+    assert.equal(normalizeTopicKey("Acid\u00A0Base"), normalizeTopicKey("acid base"));
+    assert.equal(normalizeTopicKey("Acid\\Base"), normalizeTopicKey("acid / base"));
+  });
+
+  it("does not collapse materially different topics", () => {
+    assert.notEqual(normalizeTopicKey("Heart failure"), normalizeTopicKey("Heart block"));
+    assert.notEqual(normalizeTopicKey("Pediatrics"), normalizeTopicKey("Geriatrics"));
+  });
+
   it("uses general for empty", () => {
     assert.equal(normalizeTopicKey(""), "general");
     assert.equal(normalizeTopicKey("   "), "general");

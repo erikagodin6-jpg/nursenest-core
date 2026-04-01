@@ -2,6 +2,8 @@ import { PreNursingDatePlanType } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { PH } from "@/lib/observability/posthog-conversion-events";
+import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import type { PreNursingFuturePathwayHint } from "@/lib/pre-nursing/pre-nursing-conversion-links";
 
@@ -143,6 +145,10 @@ export async function PATCH(req: Request) {
   const now = new Date();
 
   try {
+    const before = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { preNursingFuturePathwayHint: true, preNursingDatePlanType: true },
+    });
     const updated = await prisma.user.update({
       where: { id: userId },
       data: {
@@ -159,6 +165,20 @@ export async function PATCH(req: Request) {
         preNursingFuturePathwayHint: true,
       },
     });
+    await captureServerEvent(analyticsDistinctId(userId), PH.preNursingStudyPlanSaved, {
+      source_surface: "study_plan_api",
+      signed_in: true,
+      pre_nursing_date_plan_type: updated.preNursingDatePlanType?.toLowerCase(),
+      has_target_date: Boolean(updated.preNursingTargetDate),
+      selected_pathway_hint: updated.preNursingFuturePathwayHint ?? "unsure",
+    });
+    if ((before?.preNursingFuturePathwayHint ?? "unsure") !== (updated.preNursingFuturePathwayHint ?? "unsure")) {
+      await captureServerEvent(analyticsDistinctId(userId), PH.preNursingFuturePathwayHintChanged, {
+        source_surface: "study_plan_api",
+        signed_in: true,
+        selected_pathway_hint: updated.preNursingFuturePathwayHint ?? "unsure",
+      });
+    }
 
     const futurePathwayOptions: { value: PreNursingFuturePathwayHint; label: string }[] = [
       { value: "unsure", label: "Not sure yet" },

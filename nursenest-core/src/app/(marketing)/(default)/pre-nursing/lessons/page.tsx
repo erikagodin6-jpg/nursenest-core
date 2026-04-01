@@ -4,6 +4,8 @@ import { redirect } from "next/navigation";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { AlliedMarketingPagination } from "@/components/marketing/allied-pagination";
+import { PreNursingMilestoneStrip } from "@/components/pre-nursing/pre-nursing-milestone-strip";
+import { PreNursingSurfaceAnalytics } from "@/components/pre-nursing/pre-nursing-surface-analytics";
 import { PRE_NURSING_MODULE_REGISTRY } from "@/content/pre-nursing/pre-nursing-registry";
 import strings from "@/content/pre-nursing/pre-nursing-strings-en.json";
 import { PRE_NURSING_LESSON_HUB_PAGE_SIZE } from "@/lib/pre-nursing/pre-nursing-constants";
@@ -55,10 +57,12 @@ export default async function PreNursingLessonsHubPage({ searchParams }: Props) 
   return (
     <div className="nn-marketing-surface">
       <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
+        <PreNursingSurfaceAnalytics surface="lessons_hub" />
         <BreadcrumbJsonLd items={schemaItems} />
         <div className="mb-6">
           <BreadcrumbTrail items={crumbs} />
         </div>
+        <PreNursingMilestoneStrip sourceSurface="lessons_hub" />
 
         <header className="mb-10">
           <p className="text-xs font-semibold uppercase tracking-wide text-primary">Free · Pre-Nursing</p>

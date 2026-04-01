@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
+import { PH } from "@/lib/observability/posthog-conversion-events";
+import { trackClientEvent } from "@/lib/observability/posthog-client";
 
 type PlanType = "unsure" | "proposed";
 
@@ -86,6 +88,12 @@ export function PreNursingStudyPlanClient() {
         return;
       }
       await load();
+      trackClientEvent(PH.preNursingStudyPlanSaved, {
+        source_surface: "study_plan",
+        plan_type: planType,
+        has_target_date: Boolean(planType === "proposed" && targetDate),
+        selected_pathway_hint: hint || "unsure",
+      });
     } catch {
       setError("Save failed.");
     } finally {
@@ -118,7 +126,11 @@ export function PreNursingStudyPlanClient() {
     return (
       <div className="nn-card space-y-4 p-6">
         <p className="text-sm text-muted">
-          <Link href="/login" className="font-semibold text-primary hover:underline">
+          <Link
+            href="/login"
+            className="font-semibold text-primary hover:underline"
+            onClick={() => trackClientEvent(PH.preNursingSigninCtaClicked, { source_surface: "study_plan", cta_type: "guest_intro" })}
+          >
             Sign in
           </Link>{" "}
           to save a target readiness date and optional future pathway. Still free — no paid exam prep subscription needed.
@@ -126,6 +138,22 @@ export function PreNursingStudyPlanClient() {
         <p className="text-sm text-muted">
           Guests can open every Pre-Nursing module; completion can stay on this device until you create an account.
         </p>
+        <div className="flex flex-wrap gap-3 text-sm">
+          <Link
+            href="/signup"
+            className="font-semibold text-primary hover:underline"
+            onClick={() => trackClientEvent(PH.preNursingSignupCtaClicked, { source_surface: "study_plan", cta_type: "guest_gate" })}
+          >
+            Create free account
+          </Link>
+          <Link
+            href="/login"
+            className="font-semibold text-primary hover:underline"
+            onClick={() => trackClientEvent(PH.preNursingSigninCtaClicked, { source_surface: "study_plan", cta_type: "guest_gate" })}
+          >
+            I already have an account
+          </Link>
+        </div>
       </div>
     );
   }
@@ -188,6 +216,12 @@ export function PreNursingStudyPlanClient() {
           className="mt-1 w-full max-w-md rounded-lg border border-border bg-card px-3 py-2 text-sm"
           value={hint}
           onChange={(e) => setHint(e.target.value)}
+          onBlur={() =>
+            trackClientEvent(PH.preNursingFuturePathwayHintChanged, {
+              source_surface: "study_plan",
+              selected_pathway_hint: hint || "unsure",
+            })
+          }
         >
           {pathwayOpts.map((o) => (
             <option key={o.value} value={o.value}>

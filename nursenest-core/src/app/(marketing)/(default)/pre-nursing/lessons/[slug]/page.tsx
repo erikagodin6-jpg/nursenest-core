@@ -4,8 +4,11 @@ import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { PreNursingAccountCapture } from "@/components/pre-nursing/pre-nursing-account-capture";
+import { PreNursingMilestoneStrip } from "@/components/pre-nursing/pre-nursing-milestone-strip";
 import { PreNursingModuleView } from "@/components/pre-nursing/pre-nursing-module-view";
 import { PreNursingModuleEngagement } from "@/components/pre-nursing/pre-nursing-module-engagement";
+import { PreNursingSurfaceAnalytics } from "@/components/pre-nursing/pre-nursing-surface-analytics";
 import { PRE_NURSING_MODULE_REGISTRY } from "@/content/pre-nursing/pre-nursing-registry";
 import { getPreNursingModuleComponent } from "@/content/pre-nursing/pre-nursing-module-map";
 import strings from "@/content/pre-nursing/pre-nursing-strings-en.json";
@@ -53,6 +56,7 @@ export default async function PreNursingLessonModulePage({ params }: Props) {
   return (
     <div className="nn-marketing-surface">
       <div className="mx-auto max-w-4xl px-4 pt-8 sm:px-6 lg:px-8">
+        <PreNursingSurfaceAnalytics surface="module" moduleSlug={slug} />
         <BreadcrumbJsonLd items={schemaItems} />
         <div className="mb-4">
           <BreadcrumbTrail items={crumbs} />
@@ -65,8 +69,12 @@ export default async function PreNursingLessonModulePage({ params }: Props) {
           {dict["preNursing.backToModules"] ?? "Back to lessons"}
         </Link>
         <p className="sr-only">{title}</p>
+        <PreNursingMilestoneStrip sourceSurface="module" currentSlug={slug} />
       </div>
       <PreNursingModuleView slug={slug} />
+      <div className="mx-auto mt-6 max-w-4xl px-4 sm:px-6 lg:px-8">
+        <PreNursingAccountCapture sourceSurface="module" />
+      </div>
       <PreNursingModuleEngagement slug={slug} moduleTitle={title} />
     </div>
   );

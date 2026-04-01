@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { SubscriptionStatus, TrialStatus } from "@prisma/client";
+import { TrialStatus } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { ExamPlanSettingsCard } from "@/components/student/exam-plan-settings-card";
 import { LearnerInsightEnginePanel } from "@/components/student/learner-insight-engine-panel";
@@ -69,7 +69,7 @@ export default async function LearnerProfilePage() {
   let premiumSnapshot = null;
   let topicPerf = null;
   let adaptive = null;
-  let activity = await loadLearnerProfileActivity(userId);
+  const activity = await loadLearnerProfileActivity(userId);
 
   if (entitlement !== "error" && entitlement.hasAccess) {
     try {
