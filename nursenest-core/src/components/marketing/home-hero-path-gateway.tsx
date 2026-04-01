@@ -20,6 +20,10 @@ export function HomeHeroPathGateway({ region }: Props) {
   const localize = (href: string) => (href.startsWith("http") ? href : withMarketingLocale(locale, href));
 
   const [rn, lpn, np, allied, newGrad] = clusters;
+  const regionLabel = region === "US" ? t("home.region.us") : t("home.region.ca");
+  const regionHint = t("home.gateway.regionHint").trim();
+  const regionMeta = [regionLabel.trim(), regionHint].filter(Boolean).join(" · ");
+  const frictionNote = t("home.gateway.frictionNote").trim();
 
   return (
     <div
@@ -31,9 +35,9 @@ export function HomeHeroPathGateway({ region }: Props) {
           <h2 className="text-base font-bold text-[var(--theme-heading-text)] sm:text-lg">{t("home.gateway.title")}</h2>
           <p className="mt-1 max-w-2xl text-sm text-[var(--theme-muted-text)]">{t("home.gateway.subtitle")}</p>
         </div>
-        <p className="text-xs font-medium uppercase tracking-wide text-[var(--theme-muted-text)]">
-          {region === "US" ? t("home.region.us") : t("home.region.ca")} · {t("home.gateway.regionHint")}
-        </p>
+        {regionMeta ? (
+          <p className="text-xs font-medium uppercase tracking-wide text-[var(--theme-muted-text)]">{regionMeta}</p>
+        ) : null}
       </div>
 
       <div className="rounded-xl border border-[var(--theme-card-border)] bg-card p-4 shadow-sm sm:p-5 lg:grid lg:grid-cols-12 lg:gap-6" data-testid="hero-gateway-nursing">
@@ -77,7 +81,9 @@ export function HomeHeroPathGateway({ region }: Props) {
         <ClusterCard cluster={newGrad} localize={localize} testId="hero-gateway-newgrad" region={region} />
       </div>
 
-      <p className="mt-4 text-center text-xs text-[var(--theme-muted-text)] sm:text-left">{t("home.gateway.frictionNote")}</p>
+      {frictionNote ? (
+        <p className="mt-4 text-center text-xs text-[var(--theme-muted-text)] sm:text-left">{frictionNote}</p>
+      ) : null}
     </div>
   );
 }

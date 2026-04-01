@@ -20,6 +20,8 @@ export async function GET() {
       orphanCards,
       byExamFamily,
       publishedCardsMissingTopicCode,
+      publishedDecksLowCards,
+      deckTagSlugCollisions,
     ] = await Promise.all([
       prisma.flashcardDeck.count(),
       prisma.flashcardDeck.count({ where: { status: ContentStatus.PUBLISHED } }),
@@ -35,6 +37,15 @@ export async function GET() {
       prisma.flashcard.count({
         where: { status: ContentStatus.PUBLISHED, category: { topicCode: null } },
       }),
+      prisma.flashcardDeck.count({
+        where: { status: ContentStatus.PUBLISHED, cardCount: { lt: 3 } },
+      }),
+      prisma.$queryRaw<{ slug: string }[]>`
+        SELECT d.slug AS slug
+        FROM "flashcard_decks" d
+        INNER JOIN "flashcard_tags" t ON t.slug = d.slug
+        LIMIT 100
+      `,
     ]);
 
     const cardsPerExam = Object.fromEntries(byExamFamily.map((r) => [r.examFamily, r._count._all]));
@@ -52,6 +63,10 @@ export async function GET() {
         publishedOrphans: orphanCards,
         publishedMissingTopicCode: publishedCardsMissingTopicCode,
         perExamFamily: cardsPerExam,
+      },
+      quality: {
+        publishedDecksWithCardCountUnder3: publishedDecksLowCards,
+        deckAndTagSlugCollisions: deckTagSlugCollisions.map((r) => r.slug),
       },
     });
   } catch (e) {

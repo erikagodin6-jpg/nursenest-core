@@ -7,7 +7,7 @@ import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { LearnerInsightEnginePanel } from "@/components/student/learner-insight-engine-panel";
-import { PremiumLearnerHub } from "@/components/student/premium-learner-hub";
+import { PremiumLearnerHub, type RecentLearnerNoteSummary } from "@/components/student/premium-learner-hub";
 import { WeakAreasDashboardClient } from "@/components/student/weak-areas-dashboard-client";
 import { SubscriberPracticeRollups } from "@/components/student/subscriber-practice-rollups";
 import {
@@ -20,6 +20,7 @@ import { ExamPlanSettingsCard } from "@/components/student/exam-plan-settings-ca
 import { AdaptiveStudyOverview } from "@/components/student/adaptive-study-overview";
 import { LearnerDashboardActionCards } from "@/components/student/learner-dashboard-action-cards";
 import { LearnerDashboardHero } from "@/components/student/learner-dashboard-hero";
+import { hrefForLearnerNote, labelForLearnerNoteScope } from "@/lib/learner/learner-note-href";
 
 export default async function DashboardPage() {
   const messages = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
@@ -53,6 +54,7 @@ export default async function DashboardPage() {
   let premiumSnapshot: PremiumDashboardSnapshot | null = null;
   let adaptiveRecommendations: ReturnType<typeof buildAdaptiveRecommendations> | null = null;
   let baselineWeakTopics: string[] = [];
+  let recentNotes: RecentLearnerNoteSummary[] = [];
 
   if (userId && isDatabaseUrlConfigured()) {
     try {
@@ -106,6 +108,24 @@ export default async function DashboardPage() {
       premiumSnapshot = await loadPremiumDashboardSnapshot(userId, entitlement);
     } catch {
       premiumSnapshot = null;
+    }
+    try {
+      const noteRows = await prisma.learnerNote.findMany({
+        where: { userId },
+        orderBy: { updatedAt: "desc" },
+        take: 8,
+        select: { scope: true, contextId: true, title: true, updatedAt: true },
+      });
+      recentNotes = noteRows.map((r) => ({
+        scope: r.scope,
+        contextId: r.contextId,
+        title: r.title,
+        updatedAt: r.updatedAt.toISOString(),
+        href: hrefForLearnerNote(r.scope, r.contextId),
+        scopeLabel: labelForLearnerNoteScope(r.scope),
+      }));
+    } catch {
+      recentNotes = [];
     }
     if (premiumSnapshot && topicPerfInitial) {
       try {
@@ -239,6 +259,7 @@ export default async function DashboardPage() {
               snapshot={premiumSnapshot}
               weakTopicTitles={topicPerfInitial?.weakTopics.map((w) => w.topic) ?? []}
               compactIntro={Boolean(premiumSnapshot && adaptiveRecommendations && topicPerfInitial)}
+              recentNotes={recentNotes}
             />
           ) : (
             <section className="nn-card p-6">

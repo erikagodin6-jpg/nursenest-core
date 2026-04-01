@@ -13,6 +13,7 @@ import {
   LayoutDashboard,
   Layers,
   Search,
+  Shield,
   Sparkles,
   Users,
   Wrench,
@@ -30,6 +31,7 @@ const links: Array<{ href: string; label: string; icon: React.ElementType }> = [
   { href: "/admin/blog/scheduler", label: "Scheduler", icon: BookOpen },
   { href: "/admin/seo", label: "SEO", icon: Search },
   { href: "/admin/operations", label: "Operations", icon: Wrench },
+  { href: "/admin/premium-protection", label: "Premium protection", icon: Shield },
   { href: "/admin/diagnostics", label: "Diagnostics", icon: BarChart3 },
   { href: "/admin/i18n", label: "i18n", icon: Globe },
 ];

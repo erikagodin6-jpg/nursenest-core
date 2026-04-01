@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { absoluteUrl } from "@/lib/seo/site-origin";
-import { loadPublicFlashcardSlugLanding } from "@/lib/seo/public-flashcard-landing";
+import { resolvePublicFlashcardLanding } from "@/lib/seo/public-flashcard-slug-resolve";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const data = await loadPublicFlashcardSlugLanding(slug);
+  const data = await resolvePublicFlashcardLanding(slug);
   if (!data) {
     return { title: "Flashcards" };
   }
@@ -24,8 +24,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       alternates: { canonical: absoluteUrl(`/flashcards/${slug}`) },
     };
   }
-  const title = `${data.name} flashcards`;
-  const desc = `Nursing flashcards for ${data.name}. Sample cards from NurseNest decks—sign in for adaptive study and weak-topic review.`;
+  const title = `${data.name} topic flashcards | NurseNest`;
+  const desc = `Topic “${data.name}”: curated nursing flashcard decks on NurseNest. Preview sample cards; subscribe for full decks, spaced repetition, and weak-area review tied to your exam track.`;
   return {
     title,
     description: desc,
@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function PublicFlashcardSlugPage({ params }: Props) {
   const { slug } = await params;
-  const data = await loadPublicFlashcardSlugLanding(slug);
+  const data = await resolvePublicFlashcardLanding(slug);
   if (!data) notFound();
 
   const crumbName = data.kind === "deck" ? data.title : data.name;
@@ -77,9 +77,17 @@ export default async function PublicFlashcardSlugPage({ params }: Props) {
         </>
       ) : (
         <>
-          <h1 className="text-3xl font-bold text-[var(--theme-heading-text)]">{data.name}</h1>
-          <p className="mt-3 text-sm text-[var(--theme-muted-text)]">
-            Explore decks tagged with this topic. Samples below; subscribe for every card, scheduling, and weak-area sets.
+          <h1 className="text-3xl font-bold text-[var(--theme-heading-text)]">{data.name} flashcards</h1>
+          <p className="mt-3 text-sm leading-relaxed text-[var(--theme-muted-text)]">
+            Decks below share this topic tag—use them to reinforce quick recall alongside{" "}
+            <Link href="/exam-lessons" className="font-medium text-primary underline">
+              pathway lessons
+            </Link>{" "}
+            and{" "}
+            <Link href="/test-bank" className="font-medium text-primary underline">
+              question bank
+            </Link>{" "}
+            practice. Samples are shortened; subscribers get full cards, scheduling, and weak-area queues.
           </p>
           {data.decks.length > 0 ? (
             <ul className="mt-4 space-y-1 text-sm">

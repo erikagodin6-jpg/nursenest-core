@@ -162,15 +162,6 @@ export function SiteHeader() {
             </button>
           </div>
 
-          <ThemePicker
-            className="hidden lg:block"
-            labels={{
-              navTheme: t("nav.theme"),
-              themeGroupLight: t("nav.themeGroupLight"),
-              themeGroupDark: t("nav.themeGroupDark"),
-            }}
-          />
-
           <div className="relative hidden lg:flex" ref={langRef}>
             <button
               type="button"
@@ -211,7 +202,7 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-2">
           <ThemePicker
-            className="lg:hidden"
+            className="shrink-0"
             labels={{
               navTheme: t("nav.theme"),
               themeGroupLight: t("nav.themeGroupLight"),

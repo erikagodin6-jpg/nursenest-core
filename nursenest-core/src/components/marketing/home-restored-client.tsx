@@ -33,7 +33,6 @@ import { HomeHeroMediaPanel } from "@/components/marketing/home-hero-media-panel
 import type { HomepageLessonTeaser } from "@/lib/marketing/homepage-lesson-teasers";
 import { HomeHeroPathGateway } from "@/components/marketing/home-hero-path-gateway";
 import { HomeMarketingConversionBlocks } from "@/components/marketing/home-marketing-conversion-blocks";
-import { HomeMarketingSixtySeconds } from "@/components/marketing/home-marketing-sixty-seconds";
 import { HomeMarketingProductProof } from "@/components/marketing/home-marketing-product-proof";
 import { HomeMarketingFeaturesStack } from "@/components/marketing/home-marketing-features-stack";
 import { heroQuickEntryLinks } from "@/lib/marketing/home-hero-gateway-config";
@@ -556,45 +555,6 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
           </div>
         </section>
 
-        <section
-          className="border-t border-[var(--theme-card-border)] bg-[var(--theme-card-bg)]"
-          style={{ paddingTop: "var(--space-block)", paddingBottom: "var(--space-block)" }}
-          data-testid="section-explore-hubs"
-        >
-          <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-            <h2 className="text-left text-base font-bold text-[var(--theme-heading-text)] sm:text-lg md:text-center">
-              {t("home.exploreHubs.title")}
-            </h2>
-            <p className="mt-2 text-left text-sm text-[var(--theme-muted-text)] md:text-center">
-              {t("home.exploreHubs.subtitle")}
-            </p>
-            <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {(
-                [
-                  { href: "/nclex-rn-practice-questions", labelKey: "home.exploreHubs.link.nclexRn", hub: "nclex_rn_programmatic" },
-                  { href: "/rex-pn-practice-questions", labelKey: "home.exploreHubs.link.rexPn", hub: "pn_programmatic" },
-                  { href: "/np-exam-practice-questions", labelKey: "home.exploreHubs.link.np", hub: "np_programmatic" },
-                  { href: "/tools", labelKey: "home.exploreHubs.link.tools", hub: "tools" },
-                  { href: "/blog", labelKey: "home.exploreHubs.link.blog", hub: "blog" },
-                  { href: "/pricing", labelKey: "home.exploreHubs.link.pricing", hub: "pricing" },
-                ] as const
-              ).map((item) => (
-                <li key={item.href}>
-                  <MarketingTrackedLink
-                    href={withMarketingLocale(locale, item.href)}
-                    event={PH.marketingHomeExploreHubClick}
-                    eventProps={{ hub: item.hub }}
-                    className="flex items-center justify-between rounded-xl border border-[var(--theme-card-border)] bg-card px-4 py-3 text-sm font-medium text-[var(--theme-heading-text)] shadow-sm transition hover:border-primary/30 hover:bg-[var(--theme-muted-surface)]"
-                  >
-                    {t(item.labelKey)}
-                    <ArrowRight className="h-4 w-4 shrink-0 text-primary" />
-                  </MarketingTrackedLink>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-
         <HomeMarketingConversionBlocks region={region} />
 
         <LazySection minHeight="60px" rootMargin="400px">
@@ -617,12 +577,6 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
         <LazySection minHeight="300px" rootMargin="300px">
           <Suspense fallback={<div className="min-h-[300px]" />}>
             <HeroPlatformStats />
-          </Suspense>
-        </LazySection>
-
-        <LazySection minHeight="280px" rootMargin="300px">
-          <Suspense fallback={<div className="min-h-[280px]" />}>
-            <HomeMarketingSixtySeconds region={region} />
           </Suspense>
         </LazySection>
 

@@ -1,26 +1,12 @@
 "use client";
 
-import type { ReactNode } from "react";
-import Link from "next/link";
 import { ArrowRight, BookOpen, ChevronDown, LayoutDashboard, Stethoscope } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { MARKETING_SCREENSHOT_SOURCES } from "@/lib/marketing-assets.generated";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
-import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
-import {
-  ALLIED,
-  HUB,
-  NP,
-  PN,
-  RN,
-  alliedHub,
-  alliedQuestions,
-  loginWithCallback,
-  rnLessons,
-  rnQuestions,
-} from "@/lib/marketing/marketing-entry-routes";
+import { HUB, loginWithCallback, rnLessons, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
 import type { NursenestMarketingRegion } from "@/lib/marketing/home-hero-gateway-config";
 
 type Props = {
@@ -53,15 +39,20 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
           </h2>
           <p className="mt-2 max-w-2xl text-sm text-[var(--theme-muted-text)] sm:text-base">{t("home.conversion.whySub")}</p>
           <ul className="mt-8 grid gap-4 sm:grid-cols-2">
-            {(["why1", "why2", "why3", "why4"] as const).map((key) => (
-              <li
-                key={key}
-                className="rounded-2xl border border-[var(--theme-card-border)] bg-card p-5 shadow-[var(--shadow-card)]"
-              >
-                <h3 className="text-sm font-bold text-[var(--theme-heading-text)]">{t(`home.conversion.${key}Title`)}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-[var(--theme-body-text)]">{t(`home.conversion.${key}Body`)}</p>
-              </li>
-            ))}
+            {(["why1", "why2", "why3", "why4"] as const).flatMap((key) => {
+              const title = t(`home.conversion.${key}Title`).trim();
+              const body = t(`home.conversion.${key}Body`).trim();
+              if (!title && !body) return [];
+              return [
+                <li
+                  key={key}
+                  className="rounded-2xl border border-[var(--theme-card-border)] bg-card p-5 shadow-[var(--shadow-card)]"
+                >
+                  {title ? <h3 className="text-sm font-bold text-[var(--theme-heading-text)]">{title}</h3> : null}
+                  {body ? <p className="mt-2 text-sm leading-relaxed text-[var(--theme-body-text)]">{body}</p> : null}
+                </li>,
+              ];
+            })}
           </ul>
         </div>
       </section>
@@ -142,93 +133,6 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
               {t("home.conversion.previewSignupHint")}
             </MarketingTrackedLink>
           </p>
-        </div>
-      </section>
-
-      <section
-        className="border-t border-[var(--theme-card-border)] bg-[var(--theme-card-bg)]"
-        style={{ paddingTop: "var(--space-block)", paddingBottom: "var(--space-block)" }}
-        data-testid="section-pathway-cards"
-        aria-labelledby="pathway-cards-heading"
-      >
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <h2 id="pathway-cards-heading" className="text-xl font-bold tracking-tight text-[var(--theme-heading-text)] sm:text-2xl">
-            {t("home.conversion.pathwaysHeading")}
-          </h2>
-          <p className="mt-2 max-w-2xl text-sm text-[var(--theme-muted-text)] sm:text-base">{t("home.conversion.pathwaysSub")}</p>
-          <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <PathwayCard
-              pathwayKey="ca_rn"
-              badge="Canada"
-              title="NCLEX-RN (Canada)"
-              body="RN registration prep: Canadian-context stems, lessons, and timed sets on the Canada NCLEX-RN route."
-              primary={{ label: "Open Canada RN questions", href: loc("/canada/rn/nclex-rn/questions") }}
-              secondary={[
-                { label: "RN lessons", href: loc("/canada/rn/nclex-rn/lessons") },
-                { label: "Pathway hub", href: loc("/canada/rn/nclex-rn") },
-              ]}
-            />
-            <PathwayCard
-              pathwayKey="ca_rex_pn"
-              badge="Canada"
-              title="REx-PN (Practical nurse)"
-              body="Built for REx-PN: PN-scoped banks and topic lessons, not a relabeled US NCLEX-PN mix."
-              primary={{ label: "Open REx-PN questions", href: loc("/canada/rpn/rex-pn/questions") }}
-              secondary={[
-                { label: "REx-PN lessons", href: loc("/canada/rpn/rex-pn/lessons") },
-                { label: "REx-PN hub", href: loc(PN.caHub) },
-              ]}
-            />
-            <PathwayCard
-              pathwayKey="us_rn"
-              badge="United States"
-              title="NCLEX-RN"
-              body="Clinical judgment practice with rationales for every option, aligned to the US NCLEX-RN hub."
-              primary={{ label: "Open US NCLEX-RN questions", href: loc("/us/rn/nclex-rn/questions") }}
-              secondary={[
-                { label: "RN lessons", href: loc("/us/rn/nclex-rn/lessons") },
-                { label: "NCLEX-RN prep overview", href: loc(RN.practiceProgrammatic) },
-              ]}
-            />
-            <PathwayCard
-              pathwayKey="us_nclex_pn"
-              badge="United States"
-              title="NCLEX-PN (LVN/LPN)"
-              body="PN-level safety and pharmacology stems with lesson hubs on the US NCLEX-PN route."
-              primary={{ label: "Open NCLEX-PN questions", href: loc("/us/lpn/nclex-pn/questions") }}
-              secondary={[
-                { label: "PN lessons", href: loc("/us/lpn/nclex-pn/lessons") },
-                { label: "PN hub", href: loc("/us/lpn/nclex-pn") },
-              ]}
-            />
-            <PathwayCard
-              pathwayKey="np"
-              badge="NP"
-              title="Nurse practitioner"
-              body="US: FNP and AGPCNP each have their own lessons and banks. Canada: CNPLE hub for national NP registration prep."
-              primary={{
-                label: region === "US" ? "Practice FNP questions" : "Open CNPLE questions",
-                href: loc(region === "US" ? NP.fnpQuestions : NP.caNpQuestions),
-              }}
-              secondary={[
-                { label: "NP prep overview", href: loc(NP.practiceProgrammatic) },
-                { label: "FNP lessons", href: loc(NP.fnpLessons) },
-                { label: "AGPCNP lessons", href: loc(NP.agpcnpLessons) },
-                ...(region === "CA" ? [{ label: "CNPLE hub", href: loc(NP.caNpHub) }] : []),
-              ]}
-            />
-            <PathwayCard
-              pathwayKey="allied"
-              badge="Allied"
-              title="Allied health exams"
-              body="Separate tier from nursing: start with your regional question bank and hub; use the careers brochure to scan supported certifications."
-              primary={{ label: "Allied question bank", href: loc(alliedQuestions(region)) }}
-              secondary={[
-                { label: "Allied hub", href: loc(alliedHub(region)) },
-                { label: "Supported careers (brochure)", href: ALLIED.marketingLanding(), external: true },
-              ]}
-            />
-          </ul>
         </div>
       </section>
 
@@ -368,100 +272,3 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
   );
 }
 
-function PathwayCard({
-  pathwayKey,
-  badge,
-  title,
-  body,
-  primary,
-  secondary,
-}: {
-  pathwayKey: string;
-  badge: string;
-  title: string;
-  body: string;
-  primary: { label: string; href: string };
-  secondary: { label: string; href: string; external?: boolean }[];
-}) {
-  return (
-    <li className="flex h-full flex-col rounded-2xl border border-[var(--theme-card-border)] bg-card p-5 shadow-[var(--shadow-card)]">
-      <span className="text-[10px] font-bold uppercase tracking-wider text-primary">{badge}</span>
-      <h3 className="mt-1 text-base font-bold text-[var(--theme-heading-text)]">{title}</h3>
-      <p className="mt-2 flex-1 text-sm leading-relaxed text-[var(--theme-body-text)]">{body}</p>
-      <MarketingTrackedLink
-        href={primary.href}
-        event={PH.marketingHomePathwayCardPrimary}
-        eventProps={{ pathway_key: pathwayKey }}
-        className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:brightness-110 sm:w-auto"
-      >
-        {primary.label}
-        <ArrowRight className="ml-2 h-4 w-4" />
-      </MarketingTrackedLink>
-      <ul className="mt-3 space-y-1.5 border-t border-[var(--theme-card-border)] pt-3">
-        {secondary.map((s) => (
-          <li key={s.label}>
-            <MarketingInlineLink
-              href={s.href}
-              className="text-xs font-medium text-primary hover:underline"
-              pathwayKey={pathwayKey}
-              linkLabel={s.label}
-              external={s.external}
-            >
-              {s.label}
-            </MarketingInlineLink>
-          </li>
-        ))}
-      </ul>
-    </li>
-  );
-}
-
-function MarketingInlineLink({
-  href,
-  className,
-  children,
-  pathwayKey,
-  linkLabel,
-  external,
-}: {
-  href: string;
-  className: string;
-  children: ReactNode;
-  pathwayKey: string;
-  linkLabel: string;
-  external?: boolean;
-}) {
-  if (external || href.startsWith("http://") || href.startsWith("https://")) {
-    return (
-      <a
-        href={href}
-        className={className}
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={() => {
-          trackClientEvent(PH.marketingHomePathwayCardSecondary, {
-            pathway_key: pathwayKey,
-            link: linkLabel,
-            external: true,
-          });
-        }}
-      >
-        {children}
-      </a>
-    );
-  }
-  return (
-    <Link
-      href={href}
-      className={className}
-      onClick={() =>
-        trackClientEvent(PH.marketingHomePathwayCardSecondary, {
-          pathway_key: pathwayKey,
-          link: linkLabel,
-        })
-      }
-    >
-      {children}
-    </Link>
-  );
-}

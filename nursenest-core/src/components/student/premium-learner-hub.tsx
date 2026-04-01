@@ -74,16 +74,28 @@ function FactorBar({ label, points, maxPoints, detail }: { label: string; points
   );
 }
 
+export type RecentLearnerNoteSummary = {
+  scope: LearnerNoteScope;
+  contextId: string;
+  title: string | null;
+  updatedAt: string;
+  href: string;
+  scopeLabel: string;
+};
+
 export function PremiumLearnerHub({
   snapshot,
   weakTopicTitles = [],
   /** When the dashboard hero already shows readiness — keep momentum only, avoid duplicate score band. */
   compactIntro = false,
+  recentNotes = [],
 }: {
   snapshot: PremiumDashboardSnapshot;
   /** From practice stats — surfaces weak-area flashcard link context. */
   weakTopicTitles?: string[];
   compactIntro?: boolean;
+  /** Metadata + links only (no note bodies). */
+  recentNotes?: RecentLearnerNoteSummary[];
 }) {
   const { readiness, overallLessons, pathways, practice, recentMocks, momentumMessages, examReadyHeadline, milestones } =
     snapshot;
@@ -152,6 +164,34 @@ export function PremiumLearnerHub({
           {momentumSection}
         </section>
       )}
+
+      {recentNotes.length > 0 ? (
+        <section className="nn-card p-6">
+          <div className="flex flex-wrap items-center gap-2">
+            <FileText className="h-4 w-4 text-primary" aria-hidden />
+            <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Recent study notes</h2>
+          </div>
+          <p className="mt-1 text-xs text-muted">Titles and sources only—open the lesson or bank to edit.</p>
+          <ul className="mt-4 space-y-2">
+            {recentNotes.map((n) => (
+              <li key={`${n.scope}-${n.contextId}`}>
+                <Link
+                  href={n.href}
+                  className="flex flex-wrap items-baseline justify-between gap-2 rounded-lg border border-border/60 bg-muted/20 px-3 py-2 text-sm transition-colors hover:bg-muted/40"
+                >
+                  <span className="min-w-0 font-medium text-foreground">
+                    {n.title?.trim() || "Untitled note"}
+                    <span className="ml-2 text-xs font-normal text-muted">· {n.scopeLabel}</span>
+                  </span>
+                  <span className="shrink-0 text-xs tabular-nums text-muted">
+                    {new Date(n.updatedAt).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
       {snapshot.flashcards ? (
         <section className="nn-card p-6">

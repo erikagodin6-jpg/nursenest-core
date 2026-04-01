@@ -16,9 +16,8 @@ export default async function MarketingLocaleLayout({
   const { locale } = await params;
   if (!isCoreHostedNonDefaultLocale(locale)) notFound();
   const messages = await loadMarketingMessages(locale);
-  const diskEn = loadMarketingMessagesSync(DEFAULT_MARKETING_LOCALE);
-  const fallbackMessages =
-    locale !== DEFAULT_MARKETING_LOCALE ? (await loadMarketingMessages(DEFAULT_MARKETING_LOCALE)) ?? diskEn : diskEn;
+  /** Full disk English — reliable fallback when locale CDN bundles omit newer keys. */
+  const fallbackMessages = loadMarketingMessagesSync(DEFAULT_MARKETING_LOCALE);
   return (
     <MarketingI18nProvider key={locale} locale={locale} messages={messages} fallbackMessages={fallbackMessages}>
       <OrganizationJsonLd />

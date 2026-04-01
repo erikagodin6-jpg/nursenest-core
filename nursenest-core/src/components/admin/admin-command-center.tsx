@@ -133,6 +133,68 @@ export function AdminCommandCenter({ data }: { data: AdminCommandCenterData }) {
 
       <AdminQuickActions />
 
+      {data.premiumProtection ? (
+        <section className="rounded-2xl border border-sky-500/25 bg-gradient-to-br from-sky-500/[0.06] via-[var(--theme-card-bg)] to-primary/[0.05] p-6 shadow-sm">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div className="min-w-0">
+              <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Premium protection & notes</h2>
+              <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
+                UTC day rollups for deterrence and API abuse; learner note counts (no bodies). Server enforcement remains
+                authoritative.
+              </p>
+            </div>
+            <Link
+              href="/admin/premium-protection"
+              className="shrink-0 rounded-lg border border-border bg-[var(--theme-card-bg)] px-3 py-2 text-sm font-semibold text-primary hover:bg-muted"
+            >
+              Open report →
+            </Link>
+          </div>
+          <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <MetricTile
+              label="Learner notes (total)"
+              value={fmt(data.premiumProtection.notesTotal)}
+              hint="All scopes"
+              accent="ring-1 ring-sky-500/15"
+            />
+            <MetricTile
+              label="Notes touched (24h)"
+              value={fmt(data.premiumProtection.notesUpdatedLast24h)}
+              hint="updatedAt window"
+            />
+            <MetricTile
+              label="Rollup rows (today UTC)"
+              value={fmt(data.premiumProtection.todayRollups.length)}
+              hint={data.premiumProtection.utcDay}
+            />
+            <MetricTile
+              label="Abuse queue (open)"
+              value={fmt(data.premiumProtection.openAbuseReviews.length)}
+              hint={data.premiumProtection.openAbuseReviews.length > 0 ? "See report" : "None"}
+              accent={
+                data.premiumProtection.openAbuseReviews.length > 0 ? "ring-1 ring-amber-500/25" : undefined
+              }
+            />
+          </div>
+          {data.premiumProtection.todayRollups.length > 0 ? (
+            <div className="mt-5 rounded-lg border border-border/60 bg-black/[0.02] p-3 dark:bg-white/[0.04]">
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Top signals today</p>
+              <ul className="mt-2 space-y-1 font-mono text-[11px] text-foreground/90">
+                {data.premiumProtection.todayRollups.slice(0, 6).map((r) => (
+                  <li key={`${r.metricKey}-${r.segment}`} className="flex justify-between gap-2">
+                    <span className="min-w-0 truncate">
+                      {r.metricKey}
+                      {r.segment ? <span className="text-muted-foreground"> · {r.segment}</span> : null}
+                    </span>
+                    <span className="shrink-0 tabular-nums">{fmt(r.count)}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+        </section>
+      ) : null}
+
       {data.needsAttention.length > 0 ? (
         <section className="rounded-2xl border border-amber-500/30 bg-amber-500/[0.06] p-6">
           <div className="flex items-center gap-2">

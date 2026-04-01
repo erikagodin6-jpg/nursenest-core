@@ -105,20 +105,20 @@ export function LoginForm({
         </div>
       </div>
       {error ? <p className="text-sm text-red-600">{error}</p> : null}
-      <button className="w-full rounded-xl bg-primary px-4 py-2 font-semibold" type="submit">
-        Sign in
-      </button>
-      <p className="text-center text-xs text-muted-foreground">
+      <p className="text-xs leading-relaxed text-muted-foreground">
         {legalBefore}
-        <Link href={termsHref} className="font-medium text-primary underline">
+        <Link href={termsHref} className="font-semibold text-primary underline-offset-4 hover:underline">
           {termsLabel}
         </Link>
         {legalAnd}
-        <Link href={privacyHref} className="font-medium text-primary underline">
+        <Link href={privacyHref} className="font-semibold text-primary underline-offset-4 hover:underline">
           {privacyLabel}
         </Link>
         {legalAfter}
       </p>
+      <button className="w-full rounded-xl bg-primary px-4 py-2 font-semibold" type="submit">
+        Sign in
+      </button>
     </form>
   );
 }
