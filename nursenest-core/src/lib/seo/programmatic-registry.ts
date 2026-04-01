@@ -129,6 +129,125 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
     ],
   },
   {
+    slug: "nclex-rn-lessons",
+    title: "NCLEX-RN Lessons | Structured Modules Before the Question Bank",
+    description:
+      "How to use pathway RN lessons with NCLEX-style practice: sequencing modules, pairing weak systems with question sets, and avoiding passive video-only study.",
+    h1: "NCLEX-RN lessons that connect to your question sessions",
+    cluster: "exam-nclex",
+    keywords: ["NCLEX-RN", "lessons", "study modules"],
+    linkPack: "nclex-rn",
+    breadcrumb: {
+      midLabel: "NCLEX-RN prep",
+      midPath: "/nclex-rn-exam-prep",
+      currentLabel: "Lessons",
+    },
+    sections: [
+      {
+        heading: "Why lessons belong before isolated drills",
+        level: 2,
+        body: [
+          "If you only grind questions, you can memorize distractor patterns without fixing the underlying rule. Short lesson blocks rebuild the rule, then questions test whether you can apply it under time pressure.",
+          "Use lessons when a category accuracy stays flat for two weeks despite more reps—usually a concept gap, not a volume gap.",
+        ],
+      },
+      {
+        heading: "Sample study cadence",
+        level: 2,
+        body: [
+          "Monday: one lesson section on the weak system. Tuesday–Thursday: two timed mini-sets tagged to that system. Friday: review rationales only on misses, then one mixed set.",
+          "Keep lessons and questions in the same pathway so scope and delegation language stay consistent with your registration.",
+        ],
+      },
+      {
+        heading: "Where to go next",
+        level: 2,
+        body: [
+          `Pair this cadence with ${SITE} NCLEX-RN practice questions when you are ready to test transfer, not recognition.`,
+        ],
+      },
+    ],
+  },
+  {
+    slug: "nclex-study-plan",
+    title: "NCLEX Study Plan | Weekly Structure Without Generic Calendars",
+    description:
+      "Build an NCLEX study plan around weak-area data: how to layer questions, rationales, lessons, and mocks with a fixed weekly hour budget.",
+    h1: "NCLEX study plan built around your weak categories",
+    cluster: "study-guide",
+    keywords: ["NCLEX", "study plan", "schedule"],
+    breadcrumb: {
+      midLabel: "NCLEX prep guides",
+      midPath: "/nursing-lab-values-study-guide",
+      currentLabel: "Study plan",
+    },
+    sections: [
+      {
+        heading: "Start from hours, not vibes",
+        level: 2,
+        body: [
+          "Pick a weekly hour budget you can defend for eight weeks. Split it 60/30/10: question reps with rationales, lessons or review on flagged systems, one timed block for stamina.",
+          "If your job is unpredictable, anchor three non-negotiable 25-minute blocks instead of one long Sunday session that gets skipped.",
+        ],
+      },
+      {
+        heading: "Use the planner as a guardrail",
+        level: 2,
+        body: [
+          "Enter your exam authorization window so pacing suggestions stay realistic. Move blocks when shifts change—consistency beats perfect adherence.",
+          `Readiness in ${SITE} is a next-step signal: if it flags pharmacology while your self-story says you are "fine," trust the data for one week.`,
+        ],
+      },
+      {
+        heading: "Sample week (illustrative)",
+        level: 2,
+        body: [
+          "Mon/Wed/Fri: 40 questions with immediate rationale review. Tue: lesson on the lowest category. Thu: 75-minute mixed set. Sat: half mock, review only flagged items.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "nclex-pn-practice-questions",
+    title: "NCLEX-PN Practice Questions | US Practical Nursing Scope",
+    description:
+      "NCLEX-PN practice with PN-level delegation, pharmacology, and prioritization—separate from RN management stems. Rationales explain scope edges, not generic tips.",
+    h1: "NCLEX-PN practice questions for US candidates",
+    cluster: "exam-pn",
+    keywords: ["NCLEX-PN", "LPN", "PN", "practice questions"],
+    linkPack: "nclex-pn",
+    breadcrumb: {
+      midLabel: "PN exam prep",
+      midPath: "/rex-pn-exam-prep",
+      currentLabel: "NCLEX-PN practice",
+    },
+    practiceConversion: true,
+    sections: [
+      {
+        heading: "How NCLEX-PN stems differ from RN banks",
+        level: 2,
+        body: [
+          "Expect tighter focus on stable versus unstable, what stays at the bedside versus what gets escalated, and medication administration within PN scope for your jurisdiction.",
+          `${SITE} keeps PN pools separate from RN-only management scenarios unless your purchased tier explicitly includes crossover.`,
+        ],
+      },
+      {
+        heading: "When to add Canadian PN resources",
+        level: 2,
+        body: [
+          "If you are preparing for Canadian entry-to-practice, use the REx-PN hub and its practice page—billing language and case framing follow Canadian regulators.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "Is this page only for US NCLEX-PN?",
+        answer:
+          "This guide focuses on NCLEX-PN. Canadian PN candidates should start from REx-PN materials so scope and case law match provincial expectations.",
+      },
+    ],
+  },
+  {
     slug: "rex-pn-practice-questions",
     title: "REx-PN and NCLEX-PN Practice Questions | Scope and Safety",
     description:

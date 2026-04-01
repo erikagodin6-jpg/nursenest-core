@@ -2,54 +2,70 @@ import Link from "next/link";
 
 export type PaywallContext = "questions" | "lessons" | "exams" | "dashboard";
 
+const UNLOCK_BULLETS = [
+  "full question bank",
+  "detailed rationales",
+  "flashcards",
+  "adaptive study planner",
+  "readiness tracking",
+] as const;
+
 const COPY: Record<
   PaywallContext,
-  { title: string; body: string; missing: string[]; progressNote: string }
+  {
+    title: string;
+    intro: string;
+    loseWithoutUpgrade: string[];
+    progressTemplate: string;
+  }
 > = {
   questions: {
-    title: "Subscribe for the full bank and saved progress",
-    body:
-      "Previews are capped. A paid tier unlocks the full pathway-scoped item pool, full rationales on every option, weak-area routing, and session history across devices.",
-    missing: [
-      "Unlimited or tier-scoped items (not preview caps)",
-      "Topic and category analytics tied to your misses",
-      "CAT-style and adaptive practice modes where your plan includes them",
+    title: "Unlock full access",
+    intro:
+      "Previews and capped runs show you the interface; a paid tier unlocks the full pathway-scoped pool, full rationales on every option, weak-area routing, and cross-device history.",
+    loseWithoutUpgrade: [
+      "Full rationales and review history for every item you have attempted",
+      "Unlimited or tier-scoped bank access (not preview caps)",
+      "Category analytics that persist across sessions and devices",
     ],
-    progressNote:
-      "Free-tier runs do not sync full analytics—upgrade to keep your weak-topic list and streaks across study sessions.",
+    progressTemplate:
+      "You have already started prep—your recent attempts count. Upgrade to keep weak-topic lists, streaks, and full review instead of losing depth after each preview.",
   },
   lessons: {
-    title: "Subscribe for full lesson depth and tracking",
-    body:
-      "Previews show structure; subscribers get complete lesson bodies, module progress, and alignment with your pathway’s lesson pool.",
-    missing: [
+    title: "Unlock full access",
+    intro:
+      "Lesson previews show structure; subscribers get complete bodies, module progress, and the lesson pool that matches your pathway.",
+    loseWithoutUpgrade: [
       "Full lesson content beyond preview limits",
-      "Completion tracking across modules",
-      "Cross-lesson paths that match your exam scope",
+      "Completion tracking and resume across modules",
+      "Cross-lesson sequences aligned to your exam scope",
     ],
-    progressNote: "Use previews to judge quality; a plan keeps your pathway sequence and progress in one place.",
+    progressTemplate:
+      "Any preview modules you opened still count toward your study story—upgrade to keep progress and unlock full depth.",
   },
   exams: {
-    title: "Timed mocks require an active plan",
-    body:
-      "Mocks are drawn from your tier’s item pool on the server—there is no URL bypass. Checkout enables full-length and timed attempts with score history.",
-    missing: [
-      "Full-length timed sessions with autosave",
-      "Score history and attempt review",
-      "Exam pacing that matches authorization-to-test timing",
+    title: "Unlock full access",
+    intro:
+      "Timed mocks draw from your tier’s server-side pool—checkout enables full-length attempts, autosave, and score history.",
+    loseWithoutUpgrade: [
+      "Full-length timed sessions with attempt review",
+      "Score history and pacing that match authorization-to-test timing",
+      "Saved mocks tied to your pathway",
     ],
-    progressNote: "After Stripe confirms activation, your mock attempts show up here immediately.",
+    progressTemplate:
+      "When your plan is active, new mock attempts appear here immediately after checkout.",
   },
   dashboard: {
-    title: "Subscribe for the full learner dashboard",
-    body:
-      "You still see access status; subscribers get readiness, streaks, weak-topic nudges, planner, and continue-where-you-left-off shortcuts.",
-    missing: [
-      "Blended readiness and suggested next steps",
-      "Study planner and exam-date pacing (when you set a date)",
-      "Weak-area flashcard and drill nudges",
+    title: "Unlock full access",
+    intro:
+      "The dashboard shows access status for everyone; subscribers get readiness, streaks, planner, weak-topic nudges, and continue-where-you-left-off shortcuts.",
+    loseWithoutUpgrade: [
+      "Blended readiness and suggested next steps across sessions",
+      "Study planner and exam-date pacing",
+      "Weak-area flashcard and drill nudges from your misses",
     ],
-    progressNote: "Upgrade to turn this into your daily study hub—not just a static banner.",
+    progressTemplate:
+      "You already have activity on this account—upgrade to turn this into your daily hub with saved signals, not just banners.",
   },
 };
 
@@ -63,37 +79,50 @@ export function SubscriptionPaywall({
   freemiumRemainingLessons?: number;
 }) {
   const c = COPY[context];
+  const progressBits: string[] = [];
+  if (freemiumRemainingQuestions !== undefined && freemiumRemainingQuestions > 0) {
+    progressBits.push(`${freemiumRemainingQuestions} preview questions remaining`);
+  }
+  if (freemiumRemainingLessons !== undefined && freemiumRemainingLessons > 0) {
+    progressBits.push(`${freemiumRemainingLessons} lesson preview rows remaining`);
+  }
+  const progressLine =
+    progressBits.length > 0 ? `${progressBits.join(" · ")}. ${c.progressTemplate}` : c.progressTemplate;
+
   return (
     <section className="nn-card space-y-4 p-6">
       <div>
         <p className="text-xs font-semibold uppercase tracking-wide text-primary">NurseNest subscription</p>
         <h2 className="mt-1 text-2xl font-bold">{c.title}</h2>
-        <p className="mt-2 text-sm text-muted">{c.body}</p>
+        <p className="mt-2 text-sm text-muted">{c.intro}</p>
       </div>
+
       <div>
-        <p className="text-sm font-semibold text-foreground">What you are missing</p>
-        <ul className="mt-2 list-inside list-disc space-y-1 text-sm text-muted">
-          {c.missing.map((item) => (
+        <p className="text-sm font-semibold text-foreground">Unlock full access to:</p>
+        <ul className="mt-2 list-inside list-disc space-y-1 text-sm text-foreground">
+          {UNLOCK_BULLETS.map((item) => (
             <li key={item}>{item}</li>
           ))}
         </ul>
       </div>
-      {(freemiumRemainingQuestions !== undefined && freemiumRemainingQuestions > 0) ||
-      (freemiumRemainingLessons !== undefined && freemiumRemainingLessons > 0) ? (
-        <p className="rounded-xl border border-primary/20 bg-primary/5 px-3 py-2 text-sm text-foreground">
-          Free previews left:{" "}
-          {freemiumRemainingQuestions !== undefined ? `${freemiumRemainingQuestions} questions` : null}
-          {freemiumRemainingQuestions !== undefined && freemiumRemainingLessons !== undefined ? " · " : null}
-          {freemiumRemainingLessons !== undefined ? `${freemiumRemainingLessons} lesson rows` : null}.
-        </p>
-      ) : null}
-      <p className="text-sm text-muted">{c.progressNote}</p>
+
+      <div>
+        <p className="text-sm font-semibold text-foreground">What you lose without upgrading</p>
+        <ul className="mt-2 list-inside list-disc space-y-1 text-sm text-muted">
+          {c.loseWithoutUpgrade.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      </div>
+
+      <p className="rounded-xl border border-primary/20 bg-primary/5 px-3 py-2 text-sm text-foreground">{progressLine}</p>
+
       <div className="flex flex-wrap gap-3">
         <Link
           href="/pricing"
           className="inline-flex items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground"
         >
-          View plans & pricing
+          Unlock full access
         </Link>
         <Link
           href="/app"
@@ -103,7 +132,8 @@ export function SubscriptionPaywall({
         </Link>
       </div>
       <p className="text-xs text-muted">
-        Most candidates who feel exam-ready mixed steady question reps, rationales, and at least one full mock in the weeks before their date—not a single cram block.
+        Most candidates who feel exam-ready mixed steady question reps, full rationales, and at least one full mock in the weeks before their
+        date—not a single cram block.
       </p>
     </section>
   );

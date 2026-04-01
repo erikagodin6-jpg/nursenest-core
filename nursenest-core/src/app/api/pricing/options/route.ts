@@ -30,6 +30,7 @@ export async function GET() {
     monthlyEquivalentLabel: string;
     savingsVsMonthlyPercent: number;
     isBestValue: boolean;
+    isMostPopular: boolean;
   }> = [];
 
   for (const { country, tier, duration } of eachPricedCombination()) {
@@ -47,6 +48,7 @@ export async function GET() {
     const priceEntry = findPriceEntry(country, tier, duration);
     const hasYearly = Boolean(findPriceEntry(country, tier, "yearly"));
     const isBestValue = duration === "yearly" || (!hasYearly && duration === "6-month");
+    const isMostPopular = duration === "3-month";
 
     plans.push({
       tier,
@@ -57,6 +59,7 @@ export async function GET() {
       monthlyEquivalentLabel: formatPerMonthLabel(monthlyEquiv, country),
       savingsVsMonthlyPercent: savingsVsMonthly,
       isBestValue: Boolean(isBestValue && months > 1),
+      isMostPopular,
     });
   }
 

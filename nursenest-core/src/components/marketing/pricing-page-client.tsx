@@ -27,6 +27,7 @@ type PlanRow = {
   monthlyEquivalentLabel: string;
   savingsVsMonthlyPercent: number;
   isBestValue: boolean;
+  isMostPopular: boolean;
 };
 
 type Segment = "rpn" | "lvn" | "rn" | "np" | "allied";
@@ -512,12 +513,16 @@ export function PricingPageClient({
               <article
                 key={dur}
                 className={`flex flex-col rounded-2xl border border-[var(--theme-card-border)] bg-card p-5 shadow-sm ${
-                  row?.isBestValue ? "ring-2 ring-primary md:scale-[1.02]" : ""
+                  row?.isBestValue ? "ring-2 ring-primary md:scale-[1.02]" : row?.isMostPopular ? "ring-2 ring-primary/40" : ""
                 }`}
               >
                 {row?.isBestValue ? (
                   <p className="mb-2 inline-block w-fit rounded-full bg-primary px-2 py-0.5 text-xs font-bold text-primary-foreground">
                     {t("pages.pricing.plan.bestValue")}
+                  </p>
+                ) : row?.isMostPopular ? (
+                  <p className="mb-2 inline-block w-fit rounded-full bg-primary/15 px-2 py-0.5 text-xs font-bold text-primary">
+                    {t("pages.pricing.plan.mostPopular")}
                   </p>
                 ) : null}
                 <h3 className="text-lg font-semibold text-[var(--theme-heading-text)]">{t(DURATION_KEYS[dur])}</h3>

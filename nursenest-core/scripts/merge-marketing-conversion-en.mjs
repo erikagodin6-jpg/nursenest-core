@@ -243,6 +243,26 @@ const patch = {
     "Learners who keep a weekly rhythm—questions, rationales, then timed blocks—often feel steadier as test day approaches. Your results depend on how consistently you use the tools.",
   "pages.pricing.social.pricingFooterLine":
     "One subscription covers the bank, lessons, mocks, and performance history for your tier so you are not stitching vendors together the week before the exam.",
+
+  "home.productProof.title": "Proof in the product",
+  "home.productProof.sub":
+    "Live library scale updates on the homepage; session panels below illustrate how rationales and category tags behave after each set.",
+  "home.productProof.sessionLabel": "Session report",
+  "home.productProof.sessionSub": "Last 20 items · example category",
+  "home.productProof.needsReview": "Needs review",
+  "home.productProof.priorityRisk": "Priority risk",
+  "home.productProof.trend": "Trend",
+  "home.productProof.trendExample": "+6% vs last set",
+  "home.productProof.chartCaption": "Bars are example score blocks, not live data.",
+  "home.productProof.rationaleLabel": "Rationale",
+  "home.productProof.rationaleTitle": "After a wrong answer",
+  "home.productProof.rationaleBody":
+    "A strong rationale names the decision rule, cites the cue in the stem, and states why the distractors fail. You should see that pattern on every scored item, not a generic pep talk.",
+  "home.productProof.stemLabel": "Clinical stem",
+  "home.productProof.stemQuote":
+    "“Adult post-op day 2 after bowel resection. BP 92/58, HR 112, urine 15 mL last hour. Next step?”",
+  "home.productProof.stemNote": "This is where students often rush past volume status.",
+  "home.productProof.statsLine": "{{questions}} practice items · {{lessons}} lessons in rotation (pathway mix varies)",
 };
 
 const raw = fs.readFileSync(enPath, "utf8");
