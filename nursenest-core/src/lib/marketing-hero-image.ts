@@ -1,5 +1,5 @@
 /**
- * Shared homepage / marketing screenshot URL resolution: proxy → CDN → local SVG.
+ * Shared homepage / marketing screenshot URL resolution: optimized WebP variants → legacy PNG → proxy → local SVG.
  * Keeps the hero carousel and lower screenshot carousel on the same fallback order.
  */
 import {
@@ -10,6 +10,9 @@ import {
 } from "@/lib/marketing-resolve-image-url";
 
 export const MARKETING_HERO_LOCAL_FALLBACK = "/marketing/hero-fallback.svg" as const;
+
+/** Width suffixes for CDN hero screenshots (bucket root `screenshot{N}.png` → `screenshot{N}-1200w.webp`, etc.). */
+export const HOME_HERO_SCREENSHOT_WEBP_WIDTH_SUFFIXES = ["-1200w.webp", "-768w.webp", "-480w.webp"] as const;
 
 function uniqueStrings(urls: string[]): string[] {
   const seen = new Set<string>();
@@ -33,7 +36,37 @@ export function objectKeyFromPublicCdnUrl(cdnUrl: string): string {
 }
 
 /**
- * Ordered candidates for `<img src>`: same-origin proxy (when enabled), direct CDN, then local SVG.
+ * For homepage hero CDN URLs whose path ends with `screenshot{N}.png`, returns ordered optimized keys + absolute URLs
+ * (`…-1200w.webp`, then 768w, 480w). Empty if the path does not match.
+ */
+export function homeHeroScreenshotOptimizedVariants(publicPngUrl: string): Array<{ key: string; url: string }> {
+  try {
+    const u = new URL(publicPngUrl);
+    if (u.protocol !== "https:" && u.protocol !== "http:") return [];
+    const path = u.pathname.replace(/^\//, "");
+    if (!/screenshot\d+\.png$/i.test(path)) return [];
+    return HOME_HERO_SCREENSHOT_WEBP_WIDTH_SUFFIXES.map((suffix) => {
+      const key = path.replace(/\.png$/i, suffix);
+      return { key, url: `${u.origin}/${key}` };
+    });
+  } catch {
+    return [];
+  }
+}
+
+function pushOptimizedTiers(out: string[], variants: Array<{ key: string; url: string }>, proxyFirst: boolean): void {
+  for (const { key, url } of variants) {
+    const proxyPath = marketingProxyPathForKey(key);
+    if (proxyFirst) {
+      out.push(proxyPath, url);
+    } else {
+      out.push(url);
+    }
+  }
+}
+
+/**
+ * Ordered candidates for `<img src>`: optimized WebP (CDN root `screenshot{N}-*w.webp`) → legacy PNG → same-origin proxy when configured → local SVG.
  * Never loops: advance index on `onError` until the last entry (always `MARKETING_HERO_LOCAL_FALLBACK` when inputs are valid).
  */
 export function getMarketingHeroImageUrlChain(params: {
@@ -45,12 +78,23 @@ export function getMarketingHeroImageUrlChain(params: {
   if (!objectKey || isForbiddenBrowserImageScheme(publicCdnUrl)) {
     return [local];
   }
-  const proxy = marketingProxyPathForKey(objectKey);
+  const optimized = homeHeroScreenshotOptimizedVariants(publicCdnUrl);
+  const proxyPng = marketingProxyPathForKey(objectKey);
+
   if (marketingImageUsesProxy()) {
-    return uniqueStrings([proxy, publicCdnUrl, local]);
+    const out: string[] = [];
+    pushOptimizedTiers(out, optimized, true);
+    out.push(proxyPng, publicCdnUrl, local);
+    return uniqueStrings(out);
   }
   if (marketingProxyFallbackEnabled()) {
-    return uniqueStrings([publicCdnUrl, proxy, local]);
+    const out: string[] = [];
+    pushOptimizedTiers(out, optimized, false);
+    out.push(publicCdnUrl, proxyPng, local);
+    return uniqueStrings(out);
   }
-  return uniqueStrings([publicCdnUrl, local]);
+  const out: string[] = [];
+  pushOptimizedTiers(out, optimized, false);
+  out.push(publicCdnUrl, local);
+  return uniqueStrings(out);
 }

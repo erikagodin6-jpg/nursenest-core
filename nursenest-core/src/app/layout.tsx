@@ -16,6 +16,7 @@ const dmSans = DM_Sans({
   variable: "--font-dm-sans",
   subsets: ["latin"],
   weight: "variable",
+  style: ["normal", "italic"],
   display: "swap",
   adjustFontFallback: true,
   preload: true,

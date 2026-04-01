@@ -33,7 +33,7 @@ export type MarketingHeroCarouselProps = {
 };
 
 /**
- * Shared homepage carousel: CDN → proxy → local SVG via `getMarketingHeroImageUrlChain`,
+ * Shared homepage carousel: optimized WebP → legacy PNG → proxy → local SVG via `getMarketingHeroImageUrlChain`,
  * autoplay with hover pause, dot navigation, skeleton until first load, full fallback if all slides fail.
  * Used by the hero and by “See the Platform in Action” with different `slides` only.
  */

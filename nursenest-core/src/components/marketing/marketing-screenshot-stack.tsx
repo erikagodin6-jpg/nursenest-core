@@ -63,7 +63,7 @@ function ScreenshotFrame({
 }
 
 /**
- * Static screenshot column/grid using the same CDN → proxy → local chain as the legacy carousel.
+ * Static screenshot column/grid using the same optimized WebP → PNG → proxy → local chain as the hero carousel.
  * Prefer over autoplay carousel when a stacked layout should fill the hero.
  */
 export function MarketingScreenshotStack({

@@ -1,7 +1,7 @@
 {
-  "description": "Marketing CDN facts and legacy fallbacks. Homepage hero carousel: `src/config/home-hero-carousel.ts` — `screenshot1.png` … `screenshot15.png` at CDN root (nursenest-images.tor1.cdn.digitaloceanspaces.com).",
+  "description": "Marketing CDN facts and legacy fallbacks. Homepage hero carousel: `src/config/home-hero-carousel.ts` — legacy `screenshot{N}.png` plus optional optimized `screenshot{N}-1200w.webp`, `-768w.webp`, `-480w.webp` at CDN root (nursenest-images.tor1.cdn.digitaloceanspaces.com).",
   "homepageHeroCarousel": {
-    "notes": "Canonical mapping and captions: `src/config/home-hero-carousel.ts`. Public URL pattern: {digitalOceanSpaces.nursenestImages.publicBaseUrl}/screenshot{N}.png. Default: direct HTTPS; optional /api/marketing-assets/... when NEXT_PUBLIC_MARKETING_USE_SPACES_PROXY=true or FALLBACK=true (see marketing-resolve-image-url.ts).",
+    "notes": "Canonical mapping and captions: `src/config/home-hero-carousel.ts`. Legacy PNG: {publicBaseUrl}/screenshot{N}.png. Preferred WebP variants (same directory): screenshot{N}-1200w.webp, -768w.webp, -480w.webp — loaded first via `getMarketingHeroImageUrlChain` with PNG fallback. Default: direct HTTPS; optional /api/marketing-assets/... when NEXT_PUBLIC_MARKETING_USE_SPACES_PROXY=true or FALLBACK=true (see marketing-resolve-image-url.ts).",
     "canonicalPublicFallbackUrls": [
       "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot1.png",
       "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot2.png",

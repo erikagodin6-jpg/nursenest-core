@@ -67,7 +67,8 @@ export async function POST(req: Request, { params }: Props) {
         slug = `${slugBase}-${suffix}`.slice(0, 170);
       }
 
-      const normIntent = normalizeBlogTopicKey(item.plannedKeyword ?? campaign.keywordCluster);
+      /** Per-item intent (not the whole campaign cluster) so a queue can emit multiple distinct posts. */
+      const normIntent = normalizeBlogTopicKey(item.plannedKeyword ?? item.plannedTitle ?? title);
       if (normIntent.length >= 3) {
         const dupIntent = await findExistingBlogByCanonicalIntent({
           exam: campaign.targetExam ?? null,

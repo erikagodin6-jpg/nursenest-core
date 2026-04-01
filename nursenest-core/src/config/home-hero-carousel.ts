@@ -1,8 +1,11 @@
 /**
  * Homepage hero carousel — direct DigitalOcean Spaces CDN (no app proxy).
  *
- * Exact pattern: https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot{N}.png
- * for N = 1 … 15.
+ * Legacy PNG (required for OG + fallback): `…/screenshot{N}.png` for N = 1 … 15.
+ *
+ * Optimized sources (optional; preferred by `getMarketingHeroImageUrlChain` in order):
+ *   `…/screenshot{N}-1200w.webp`, `…/screenshot{N}-768w.webp`, `…/screenshot{N}-480w.webp`
+ * Same bucket path prefix as PNG (typically CDN root). If WebP objects are missing, the UI falls back to PNG.
  *
  * Slide copy (title, caption, alt) is loaded via `buildHomepageHeroSlides(t)` and marketing i18n keys.
  * This module keeps only non-localized metadata (URLs, object keys).
