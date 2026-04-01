@@ -2,6 +2,8 @@ import { ContentStatus, FlashcardDeckVisibility, PracticeTestStatus } from "@pri
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import { buildLearnerInsightSnapshot } from "@/lib/insights/learner-insight-engine";
+import type { LearnerInsightSnapshot } from "@/lib/insights/types";
 import { loadLearnerDashboard, loadPathwayStudySummaries, type RecentMock } from "@/lib/learner/load-learner-dashboard";
 import type { ReadinessResult } from "@/lib/learner/readiness-score";
 
@@ -219,6 +221,8 @@ export type PremiumDashboardSnapshot = {
     reviewStreak: number;
     suggestedDecks: { slug: string; title: string; cardCount: number }[];
   } | null;
+  /** Central interpretation engine: performance, gaps, explainable next steps. */
+  insights: LearnerInsightSnapshot | null;
 };
 
 export async function loadPremiumDashboardSnapshot(
@@ -230,10 +234,14 @@ export async function loadPremiumDashboardSnapshot(
   const dash = await loadLearnerDashboard(userId, entitlement);
   if (!dash) return null;
 
-  const [pathwayRaw, streakDays, topStrongTopic] = await Promise.all([
+  const [pathwayRaw, streakDays, topStrongTopic, userExamRow] = await Promise.all([
     loadPathwayStudySummaries(userId, entitlement),
     loadStudyStreakDays(userId),
     topStrongTopicFromLedger(userId),
+    prisma.user.findUnique({
+      where: { id: userId },
+      select: { examDate: true, examDatePlanType: true },
+    }),
   ]);
 
   const pathways: PathwayProgressRow[] = pathwayRaw.map((p) => {
@@ -304,6 +312,18 @@ export async function loadPremiumDashboardSnapshot(
     flashcards = null;
   }
 
+  let insights: LearnerInsightSnapshot | null = null;
+  try {
+    insights = await buildLearnerInsightSnapshot(userId, entitlement, dash, {
+      streakDays,
+      mockCount,
+      examDate: userExamRow?.examDate ?? null,
+      examDatePlanType: userExamRow?.examDatePlanType ?? null,
+    });
+  } catch {
+    insights = null;
+  }
+
   return {
     pathways,
     overallLessons: {
@@ -322,5 +342,6 @@ export async function loadPremiumDashboardSnapshot(
     continueLesson: dash.continueLesson ? { title: dash.continueLesson.title, href: dash.continueLesson.href } : null,
     recommendedQuizTopic: dash.recommendedQuizTopic,
     flashcards,
+    insights,
   };
 }

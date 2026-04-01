@@ -4,10 +4,16 @@ import type { CatInsightSummary, FlashcardInsight } from "@/lib/insights/types";
 
 export async function loadCatInsightSummary(userId: string): Promise<CatInsightSummary> {
   try {
-    const row = await prisma.practiceTest.findFirst({
-      where: { userId, status: PracticeTestStatus.COMPLETED },
+    const rows = await prisma.practiceTest.findMany({
+      where: { userId, status: PracticeTestStatus.COMPLETED, completedAt: { not: null } },
       orderBy: { completedAt: "desc" },
-      select: { adaptiveState: true, results: true },
+      take: 15,
+      select: { adaptiveState: true, config: true },
+    });
+    const row = rows.find((r) => {
+      if (r.adaptiveState == null || typeof r.adaptiveState !== "object") return false;
+      const cfg = r.config as { selectionMode?: string } | null;
+      return cfg?.selectionMode === "cat";
     });
     if (!row?.adaptiveState || typeof row.adaptiveState !== "object") {
       return { hasData: false, theta: null, se: null, line: null };

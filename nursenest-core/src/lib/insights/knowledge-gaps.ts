@@ -8,9 +8,19 @@ export function detectKnowledgeGaps(args: {
   weakTopics: WeakTopicRow[];
   strongTopics: WeakTopicRow[];
   topicStatCount: number;
+  gradedSessionItems?: number;
 }): KnowledgeGap[] {
   const gaps: KnowledgeGap[] = [];
   const seen = new Set<string>();
+
+  if (args.topicStatCount === 0 && (args.gradedSessionItems ?? 0) < 5) {
+    gaps.push({
+      kind: "never_practiced",
+      topic: "Topic ledger",
+      detail: "Graded topic stats have not accumulated yet — we cannot pinpoint weak systems precisely.",
+      suggestedAction: "Answer graded questions in the bank or a practice session so topics populate your profile.",
+    });
+  }
 
   for (const w of args.weakTopics) {
     if (w.attempted === 0) continue;
@@ -33,10 +43,6 @@ export function detectKnowledgeGaps(args: {
         suggestedAction: `Spaced repetition: alternate flashcards and short quizzes on ${w.topic}.`,
       });
     }
-  }
-
-  for (const s of args.strongTopics) {
-    if (s.attempted >= 3 && s.missRate <= 18) continue;
   }
 
   if (args.topicStatCount > 0 && args.weakTopics.length === 0 && args.strongTopics.length < 2) {
