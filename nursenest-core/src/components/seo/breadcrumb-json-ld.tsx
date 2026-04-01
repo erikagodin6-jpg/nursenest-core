@@ -1,29 +1,25 @@
-import type { BreadcrumbSchemaItem } from "@/lib/seo/breadcrumb-types";
-import { toAbsoluteSiteUrl } from "@/lib/seo/breadcrumb-utils";
+import { MARKETING_SITE_ORIGIN } from "@/lib/seo/site-origin";
 
-/**
- * schema.org BreadcrumbList for indexable marketing pages.
- * @see https://developers.google.com/search/docs/appearance/structured-data/breadcrumb
- */
-export function BreadcrumbJsonLd({ items }: { items: BreadcrumbSchemaItem[] }) {
-  const list = items.map((it, i) => ({
-    "@type": "ListItem",
-    position: i + 1,
-    name: it.name,
-    item: toAbsoluteSiteUrl(it.item),
-  }));
+export type BreadcrumbJsonLdItem = { name: string; path: string };
 
-  const json = {
+function absolute(path: string): string {
+  const p = path.startsWith("/") ? path : `/${path}`;
+  return `${MARKETING_SITE_ORIGIN}${p}`;
+}
+
+/** Schema.org BreadcrumbList for public marketing pages (indexable). */
+export function BreadcrumbJsonLd({ items }: { items: BreadcrumbJsonLdItem[] }) {
+  const data = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    itemListElement: list,
+    itemListElement: items.map((it, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: it.name,
+      item: absolute(it.path),
+    })),
   };
-
   return (
-    <script
-      type="application/ld+json"
-      // eslint-disable-next-line react/no-danger -- JSON-LD is safe static output
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(json) }}
-    />
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />
   );
 }
