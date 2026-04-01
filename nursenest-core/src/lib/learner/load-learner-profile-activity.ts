@@ -95,7 +95,7 @@ export async function loadLearnerProfileActivity(userId: string): Promise<Learne
         total: a.total,
         pct,
         at: a.createdAt.toISOString(),
-        href: a.exam?.id ? `/app/exams?highlight=${encodeURIComponent(a.exam.id)}` : "/app/exams",
+        href: "/app/exams",
       };
     });
 

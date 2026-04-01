@@ -66,6 +66,14 @@ export function LearnerShellUserBar() {
             ) : null}
           </div>
           <Link
+            href="/app/profile"
+            className="block px-3 py-2 text-sm font-medium hover:bg-gray-50"
+            role="menuitem"
+            onClick={() => setOpen(false)}
+          >
+            Profile & account
+          </Link>
+          <Link
             href="/app"
             className="block px-3 py-2 text-sm hover:bg-gray-50"
             role="menuitem"

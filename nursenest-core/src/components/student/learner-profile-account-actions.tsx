@@ -30,18 +30,24 @@ export function LearnerProfileAccountActions({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ currentPassword, newPassword, confirmPassword }),
       });
-      const data = (await res.json()) as { ok?: boolean; error?: string; signOutRecommended?: boolean };
+      const data = (await res.json()) as {
+        ok?: boolean;
+        error?: string;
+        message?: string;
+        signOutRecommended?: boolean;
+      };
       if (!res.ok || !data.ok) {
         setError(data.error ?? "Could not update password.");
         return;
       }
-      setMessage(data.error ?? "Password updated.");
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
       if (data.signOutRecommended) {
         await signOut({ callbackUrl: "/login" });
+        return;
       }
+      setMessage(data.message ?? "Password updated.");
     } catch {
       setError("Network error.");
     } finally {
