@@ -30,7 +30,7 @@ export default async function StudyPlanPage() {
         loadUnifiedTopicPerformance(userId, entitlement, 12),
         prisma.user.findUnique({
           where: { id: userId },
-          select: { examDate: true, examDatePlanType: true },
+          select: { examDate: true, examDatePlanType: true, studyCadencePreference: true },
         }),
       ]);
       if (premiumSnapshot && topicPerf) {
@@ -43,6 +43,9 @@ export default async function StudyPlanPage() {
           topicTrends: topicPerf.trends,
           streakDays: premiumSnapshot.studyStreakDays,
           lessonPct: premiumSnapshot.overallLessons.pct,
+          lessonsCompleted: premiumSnapshot.overallLessons.completed,
+          lessonsTotal: premiumSnapshot.overallLessons.total,
+          studyCadencePreference: userExam?.studyCadencePreference,
           continueLesson: premiumSnapshot.continueLesson,
           recommendedQuizTopic: premiumSnapshot.recommendedQuizTopic,
           mockCount: premiumSnapshot.mockCount,

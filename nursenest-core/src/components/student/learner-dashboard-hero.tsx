@@ -4,21 +4,6 @@ import type { AdaptiveLearnerRecommendations } from "@/lib/learner/adaptive-reco
 import type { ReadinessResult } from "@/lib/learner/readiness-score";
 import { readinessBandLabel } from "@/lib/learner/readiness-score";
 
-function paceShort(p: AdaptiveLearnerRecommendations["paceStatus"]): string {
-  switch (p) {
-    case "on_pace":
-      return "On pace";
-    case "slightly_behind":
-      return "Room to tighten";
-    case "behind_weak_review":
-      return "Prioritize gaps";
-    case "final_review":
-      return "Final review";
-    default:
-      return "—";
-  }
-}
-
 function trajectoryShort(t: AdaptiveLearnerRecommendations["trajectory"]): string {
   switch (t) {
     case "building_foundation":
@@ -97,8 +82,16 @@ export function LearnerDashboardHero({
           </div>
 
           <div className="flex flex-wrap gap-2">
-            <span className="rounded-full border border-border/80 bg-background/80 px-3 py-1.5 text-xs font-medium text-foreground shadow-sm">
-              {paceShort(adaptive.paceStatus)}
+            <span
+              className={`rounded-full border px-3 py-1.5 text-xs font-semibold shadow-sm ${
+                adaptive.planTrack.status === "at_risk" || adaptive.planTrack.status === "overdue"
+                  ? "border-amber-500/35 bg-amber-500/[0.09] text-amber-950 dark:text-amber-100"
+                  : adaptive.planTrack.status === "slightly_behind"
+                    ? "border-border/80 bg-background/80 font-medium text-foreground"
+                    : "border-emerald-500/30 bg-emerald-500/[0.07] font-medium text-foreground"
+              }`}
+            >
+              {adaptive.planTrack.label}
             </span>
             <span className="rounded-full border border-border/80 bg-background/80 px-3 py-1.5 text-xs font-medium text-foreground shadow-sm">
               {trajectoryShort(adaptive.trajectory)}
@@ -109,6 +102,7 @@ export function LearnerDashboardHero({
               </span>
             ) : null}
           </div>
+          <p className="text-sm leading-relaxed text-muted-foreground">{adaptive.planTrack.headline}</p>
 
           {weakTopicTitles.length > 0 ? (
             <div>

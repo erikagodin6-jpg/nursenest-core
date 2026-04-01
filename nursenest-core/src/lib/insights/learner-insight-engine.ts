@@ -70,7 +70,7 @@ export async function buildLearnerInsightSnapshot(
         : prisma.user
             .findUnique({
               where: { id: userId },
-              select: { examDate: true, examDatePlanType: true },
+              select: { examDate: true, examDatePlanType: true, studyCadencePreference: true },
             })
             .catch(() => null),
     ]);
@@ -110,6 +110,9 @@ export async function buildLearnerInsightSnapshot(
     topicTrends,
     streakDays,
     lessonPct: lp,
+    lessonsCompleted: lc,
+    lessonsTotal: la,
+    studyCadencePreference: userExam?.studyCadencePreference,
     continueLesson: dashboard.continueLesson,
     recommendedQuizTopic: dashboard.recommendedQuizTopic,
     mockCount,

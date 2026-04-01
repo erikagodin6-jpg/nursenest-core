@@ -8,34 +8,6 @@ import { classifyContentItemLesson } from "@/lib/content-quality/classify-lesson
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import { getInventoryKeys } from "@/lib/education-images/inventory";
 
-/** Fallback when command center cannot load DB-backed quality metrics. */
-export function emptyContentQualitySnapshot(generatedAt: string): ContentQualitySnapshot {
-  return {
-    generatedAt,
-    examQuestionsPublished: {
-      total: 0,
-      rationaleMissingOrEmpty: 0,
-      rationaleThinWords: 0,
-      rationaleAcceptableOrStrong: 0,
-    },
-    pathwayLessonsPublished: {
-      total: 0,
-      sampleSize: 0,
-      sampleThin: 0,
-      sampleAcceptable: 0,
-      sampleStrong: 0,
-    },
-    contentItemLessonsPublished: {
-      total: 0,
-      sampleSize: 0,
-      sampleThin: 0,
-      sampleAcceptable: 0,
-      sampleStrong: 0,
-    },
-    notes: ["Metrics unavailable"],
-  };
-}
-
 export type ContentQualitySnapshot = {
   generatedAt: string;
   examQuestionsPublished: {
@@ -76,6 +48,34 @@ export type ContentQualitySnapshot = {
   educationImageInventoryKeyCount?: number;
   notes: string[];
 };
+
+/** Fallback when command center cannot load DB-backed quality metrics. */
+export function emptyContentQualitySnapshot(generatedAt: string): ContentQualitySnapshot {
+  return {
+    generatedAt,
+    examQuestionsPublished: {
+      total: 0,
+      rationaleMissingOrEmpty: 0,
+      rationaleThinWords: 0,
+      rationaleAcceptableOrStrong: 0,
+    },
+    pathwayLessonsPublished: {
+      total: 0,
+      sampleSize: 0,
+      sampleThin: 0,
+      sampleAcceptable: 0,
+      sampleStrong: 0,
+    },
+    contentItemLessonsPublished: {
+      total: 0,
+      sampleSize: 0,
+      sampleThin: 0,
+      sampleAcceptable: 0,
+      sampleStrong: 0,
+    },
+    notes: ["Metrics unavailable"],
+  };
+}
 
 /**
  * Rationale word count via Postgres whitespace split (aligned with app `countWords` for normal prose).

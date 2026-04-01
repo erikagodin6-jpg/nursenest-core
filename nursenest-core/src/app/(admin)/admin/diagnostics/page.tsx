@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/auth/guards";
 import { loadAdminDiagnostics } from "@/lib/admin/load-admin-diagnostics";
+import { loadExamPlanAdoptionStats } from "@/lib/admin/load-exam-plan-adoption";
 
 export const dynamic = "force-dynamic";
 
@@ -18,7 +19,7 @@ function StatusPill({ ok, label }: { ok: boolean; label: string }) {
 
 export default async function AdminDiagnosticsPage() {
   await requireAdmin();
-  const d = await loadAdminDiagnostics();
+  const [d, examPlan] = await Promise.all([loadAdminDiagnostics(), loadExamPlanAdoptionStats()]);
 
   return (
     <main className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6">
@@ -201,6 +202,52 @@ export default async function AdminDiagnosticsPage() {
           </table>
         </div>
       </section>
+
+      {examPlan ? (
+        <section className="mt-8 nn-card p-6">
+          <h2 className="text-lg font-semibold">Exam plan adoption</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Learner exam-date intent, cadence, and urgency (UTC dates). For product and retention — not clinical.
+          </p>
+          <p className="mt-2 text-xs text-muted-foreground">Snapshot {new Date(examPlan.generatedAt).toLocaleString()}</p>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="rounded-lg border border-border/60 bg-muted/20 px-3 py-2">
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Total users</p>
+              <p className="mt-1 text-xl font-bold tabular-nums">{examPlan.totalUsers}</p>
+            </div>
+            <div className="rounded-lg border border-border/60 bg-muted/20 px-3 py-2">
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Unsure / no date</p>
+              <p className="mt-1 text-xl font-bold tabular-nums">{examPlan.unsure}</p>
+            </div>
+            <div className="rounded-lg border border-border/60 bg-muted/20 px-3 py-2">
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Proposed</p>
+              <p className="mt-1 text-xl font-bold tabular-nums">{examPlan.proposed}</p>
+            </div>
+            <div className="rounded-lg border border-border/60 bg-muted/20 px-3 py-2">
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Confirmed</p>
+              <p className="mt-1 text-xl font-bold tabular-nums">{examPlan.confirmed}</p>
+            </div>
+            <div className="rounded-lg border border-border/60 bg-muted/20 px-3 py-2">
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Exam ≤30d</p>
+              <p className="mt-1 text-xl font-bold tabular-nums">{examPlan.examWithin30Days}</p>
+            </div>
+            <div className="rounded-lg border border-border/60 bg-muted/20 px-3 py-2">
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Overdue date</p>
+              <p className="mt-1 text-xl font-bold tabular-nums">{examPlan.overdueExamDate}</p>
+            </div>
+            <div className="rounded-lg border border-border/60 bg-muted/20 px-3 py-2">
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Plan missing date</p>
+              <p className="mt-1 text-xl font-bold tabular-nums">{examPlan.datedPlanMissingDate}</p>
+            </div>
+            <div className="rounded-lg border border-border/60 bg-muted/20 px-3 py-2">
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Cadence L / S / I / unset</p>
+              <p className="mt-1 text-sm font-semibold tabular-nums">
+                {examPlan.cadenceLight} · {examPlan.cadenceSteady} · {examPlan.cadenceIntensive} · {examPlan.cadenceUnset}
+              </p>
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       <section className="mt-8 nn-card p-6">
         <h2 className="text-lg font-semibold">Related</h2>

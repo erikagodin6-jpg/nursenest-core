@@ -116,7 +116,35 @@ export default async function AdminContentQualityPage() {
       )}
 
       {remediation ? (
-        <section className="mt-8 grid gap-6 lg:grid-cols-2">
+        <section className="mt-8 space-y-8">
+          <div className="rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-5">
+            <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Thin or missing rationales — by exam</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Sorted by count of items below {RATIONALE_MIN_WORDS} words (or empty). Cross-check with corpus “worst exams” after refresh.
+            </p>
+            <div className="mt-4 overflow-auto">
+              <table className="w-full min-w-[360px] text-left text-sm">
+                <thead className="border-b border-border text-muted-foreground">
+                  <tr>
+                    <th className="py-2">Exam</th>
+                    <th className="py-2 text-right">Thin / missing</th>
+                    <th className="py-2 text-right">Total pub.</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {remediation.thinQuestionsByExam.slice(0, 20).map((r) => (
+                    <tr key={r.exam} className="border-b border-border/40">
+                      <td className="py-2 font-mono text-xs">{r.exam}</td>
+                      <td className="py-2 text-right tabular-nums text-amber-900 dark:text-amber-100">{r.thinOrMissing}</td>
+                      <td className="py-2 text-right tabular-nums">{r.total}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-2">
           <div className="rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-5">
             <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Thin rationales — sample (lowest word count)</h2>
             <p className="mt-1 text-sm text-muted-foreground">{remediation.priorityMessage}</p>
@@ -151,6 +179,14 @@ export default async function AdminContentQualityPage() {
                     <span className="text-xs">{r.wordCount}w</span>
                   </div>
                   <p className="text-xs text-muted-foreground">{r.exam}</p>
+                  <a
+                    className="text-xs font-semibold text-primary underline"
+                    href={`/api/admin/questions/${r.id}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    JSON (admin)
+                  </a>
                 </li>
               ))}
             </ul>
@@ -162,9 +198,18 @@ export default async function AdminContentQualityPage() {
                 <li key={r.id} className="rounded border border-border/50 px-3 py-2 text-sm">
                   <span className="line-clamp-2 font-medium">{r.title}</span>
                   <p className="text-xs text-muted-foreground">{r.wordCount} words · {new Date(r.updatedAt).toLocaleDateString()}</p>
+                  <a
+                    className="mt-1 inline-block text-xs font-semibold text-primary underline"
+                    href={`/api/admin/lessons?page=1&pageSize=100`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Find in lessons API (id {r.id.slice(0, 8)}…)
+                  </a>
                 </li>
               ))}
             </ul>
+          </div>
           </div>
         </section>
       ) : null}

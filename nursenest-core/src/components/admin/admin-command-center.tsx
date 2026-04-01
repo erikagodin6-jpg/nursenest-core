@@ -197,7 +197,9 @@ export function AdminCommandCenter({ data }: { data: AdminCommandCenterData }) {
         <div className="mt-6 grid gap-6 lg:grid-cols-2">
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Exam bank — rationale tiers</p>
-            {examTierBar(data.contentQuality.corpus, data.contentQuality.snapshot.examQuestionsPublished)}
+            {examTierBar(data.contentQuality.corpus, data.contentQuality.snapshot.examQuestionsPublished) ?? (
+              <p className="mt-2 text-sm text-muted-foreground">No published exam questions in scope.</p>
+            )}
             <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-muted-foreground">
               {data.contentQuality.corpus ? (
                 <>

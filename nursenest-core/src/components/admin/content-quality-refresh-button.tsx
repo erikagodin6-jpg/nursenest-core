@@ -1,8 +1,10 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export function ContentQualityRefreshButton() {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
 
@@ -13,7 +15,8 @@ export function ContentQualityRefreshButton() {
       const res = await fetch("/api/admin/content-quality/refresh", { method: "POST" });
       const data = (await res.json()) as { ok?: boolean; error?: string };
       if (!res.ok) throw new Error(data.error ?? "Failed");
-      setMsg("Snapshot refreshed. Reload the page to see updated numbers.");
+      router.refresh();
+      setMsg("Snapshot refreshed.");
     } catch (e) {
       setMsg(e instanceof Error ? e.message : "Error");
     } finally {

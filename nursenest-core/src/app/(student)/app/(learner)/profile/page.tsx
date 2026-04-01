@@ -85,7 +85,7 @@ export default async function LearnerProfilePage() {
       try {
         const userExam = await prisma.user.findUnique({
           where: { id: userId },
-          select: { examDate: true, examDatePlanType: true },
+          select: { examDate: true, examDatePlanType: true, studyCadencePreference: true },
         });
         adaptive = buildAdaptiveRecommendations({
           examDatePlanType: userExam?.examDatePlanType,
@@ -95,6 +95,9 @@ export default async function LearnerProfilePage() {
           topicTrends: topicPerf.trends,
           streakDays: premiumSnapshot.studyStreakDays,
           lessonPct: premiumSnapshot.overallLessons.pct,
+          lessonsCompleted: premiumSnapshot.overallLessons.completed,
+          lessonsTotal: premiumSnapshot.overallLessons.total,
+          studyCadencePreference: userExam?.studyCadencePreference,
           continueLesson: premiumSnapshot.continueLesson,
           recommendedQuizTopic: premiumSnapshot.recommendedQuizTopic,
           mockCount: premiumSnapshot.mockCount,
