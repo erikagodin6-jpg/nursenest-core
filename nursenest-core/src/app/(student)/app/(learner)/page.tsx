@@ -52,13 +52,29 @@ export default async function DashboardPage() {
   let topicPerfInitial: TopicPerformanceSnapshot | null = null;
   let premiumSnapshot: PremiumDashboardSnapshot | null = null;
   let adaptiveRecommendations: ReturnType<typeof buildAdaptiveRecommendations> | null = null;
+  let baselineWeakTopics: string[] = [];
 
   if (userId && isDatabaseUrlConfigured()) {
     try {
-      userPrefs = await prisma.user.findUnique({
+      const prefsRow = await prisma.user.findUnique({
         where: { id: userId },
-        select: { examFocus: true, studyGoal: true, dailyStudyMinutes: true },
+        select: {
+          examFocus: true,
+          studyGoal: true,
+          dailyStudyMinutes: true,
+          baselineAssessmentSummary: true,
+        },
       });
+      userPrefs = prefsRow
+        ? { examFocus: prefsRow.examFocus, studyGoal: prefsRow.studyGoal, dailyStudyMinutes: prefsRow.dailyStudyMinutes }
+        : null;
+      const raw = prefsRow?.baselineAssessmentSummary;
+      if (raw && typeof raw === "object" && raw !== null && !Array.isArray(raw)) {
+        const w = (raw as { weakTopics?: unknown }).weakTopics;
+        if (Array.isArray(w)) {
+          baselineWeakTopics = w.filter((x): x is string => typeof x === "string" && x.length > 0).slice(0, 8);
+        }
+      }
     } catch {
       /* optional */
     }
@@ -97,7 +113,7 @@ export default async function DashboardPage() {
           where: { id: userId },
           select: { examDate: true, examDatePlanType: true },
         });
-        adaptiveRecommendations = buildAdaptiveRecommendations({
+        const built = buildAdaptiveRecommendations({
           examDatePlanType: userExam?.examDatePlanType,
           examDate: userExam?.examDate ?? null,
           readiness: premiumSnapshot.readiness,
@@ -110,6 +126,15 @@ export default async function DashboardPage() {
           mockCount: premiumSnapshot.mockCount,
           practiceSessionCount: premiumSnapshot.practice.sessionCount,
         });
+        if (baselineWeakTopics.length > 0) {
+          const hint = `Baseline run: prioritize ${baselineWeakTopics.slice(0, 2).join(" & ")}`;
+          adaptiveRecommendations = {
+            ...built,
+            weeklyPriorities: [hint, ...built.weeklyPriorities].slice(0, 5),
+          };
+        } else {
+          adaptiveRecommendations = built;
+        }
       } catch {
         adaptiveRecommendations = null;
       }

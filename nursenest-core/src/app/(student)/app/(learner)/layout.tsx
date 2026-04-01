@@ -10,6 +10,10 @@ import { LearnerAppSectionAnalytics } from "@/components/observability/learner-a
 import { SentryLearnerShell } from "@/components/observability/sentry-learner-shell";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { loadLearnerAdaptiveStrip } from "@/lib/learner/load-learner-adaptive-strip";
+import { prisma } from "@/lib/db";
+import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { userShouldSeeBaselinePrompt } from "@/lib/baseline/baseline-assessment";
+import { BaselineAssessmentPrompt } from "@/components/student/baseline-assessment-prompt";
 
 /** Auth is enforced in `src/proxy.ts` (Next.js 16+) so this layout never calls `redirect()` for missing session. */
 export const dynamic = "force-dynamic";
@@ -19,10 +23,22 @@ export default async function LearnerShellLayout({ children }: { children: React
   const userId = (session?.user as { id?: string })?.id ?? "";
 
   let adaptiveStrip = null;
+  let showBaselinePrompt = false;
   if (userId) {
     const ent = await resolveEntitlementForPage(userId);
     if (ent !== "error" && ent.hasAccess) {
       adaptiveStrip = await loadLearnerAdaptiveStrip(userId, ent);
+    }
+    if (isDatabaseUrlConfigured()) {
+      try {
+        const u = await prisma.user.findUnique({
+          where: { id: userId },
+          select: { baselineAssessmentSkippedAt: true, baselineAssessmentCompletedAt: true },
+        });
+        showBaselinePrompt = u != null && userShouldSeeBaselinePrompt(u);
+      } catch {
+        showBaselinePrompt = false;
+      }
     }
   }
 
@@ -101,6 +117,7 @@ export default async function LearnerShellLayout({ children }: { children: React
       <div className="nn-learner-exam-chrome-dim">
         <CheckoutSuccessBanner />
       </div>
+      <BaselineAssessmentPrompt show={showBaselinePrompt} />
       {children}
     </div>
     </LearnerExamChromeGate>
