@@ -2,6 +2,7 @@ import { publicCdnUrlForObjectKey } from "@/lib/education-images/cdn-url";
 import { getInventoryKeys, listInventoryBasenames } from "@/lib/education-images/inventory";
 import {
   basenameWithoutExtension,
+  inventoryBasenameCandidatesFromLabel,
   normalizeConceptToken,
   tokenizeForConceptMatch,
 } from "@/lib/education-images/normalize-concept-token";
@@ -52,6 +53,50 @@ function pickPreferredKeyForBasename(basename: string): string | null {
   return hit ?? null;
 }
 
+function tryExactBasenameMatch(
+  query: ConceptImageQuery,
+  basenameSet: Set<string>,
+  debugCandidates: string[],
+): ConceptImageMatchResult | null {
+  const raw: string[] = [
+    query.title,
+    query.slug,
+    query.topic,
+    query.subtopic,
+    query.bodySystem,
+    ...(query.tags ?? []),
+  ].filter((x): x is string => typeof x === "string" && x.trim().length > 0);
+
+  const tried = new Set<string>();
+  for (const r of raw) {
+    for (const cand of inventoryBasenameCandidatesFromLabel(r)) {
+      const key = cand.toLowerCase();
+      if (tried.has(key)) continue;
+      tried.add(key);
+      if (!basenameSet.has(key)) continue;
+      const objectKey = pickPreferredKeyForBasename(key);
+      if (!objectKey) continue;
+      return {
+        url: publicCdnUrlForObjectKey(objectKey),
+        objectKey,
+        alt: key.replace(/-/g, " "),
+        tier: "exact_basename",
+        score: 100,
+        ...(process.env.NODE_ENV === "development"
+          ? {
+              debug: {
+                candidates: debugCandidates,
+                bestBasename: key,
+                reason: "exact_basename",
+              },
+            }
+          : {}),
+      };
+    }
+  }
+  return null;
+}
+
 /**
  * Match storage education images by filename / concept tokens.
  * Prefers `uploads/images/{concept}.webp` then `.png` when present in inventory.
@@ -69,6 +114,12 @@ export function matchConceptImage(query: ConceptImageQuery): ConceptImageMatchRe
     .filter((x): x is string => typeof x === "string" && x.trim().length > 0)
     .map((s) => normalizeConceptToken(s));
 
+  const basenames = listInventoryBasenames();
+  const basenameSet = new Set(basenames.map((b) => b.toLowerCase()));
+
+  const exact = tryExactBasenameMatch(query, basenameSet, candidates);
+  if (exact) return exact;
+
   const merged = candidates.join(" ");
   const queryTokens = new Set(tokenizeForConceptMatch(merged));
 
@@ -85,7 +136,6 @@ export function matchConceptImage(query: ConceptImageQuery): ConceptImageMatchRe
     };
   }
 
-  const basenames = listInventoryBasenames();
   let best: { basename: string; score: number } | null = null;
   for (const b of basenames) {
     const sc = scoreAgainstBasename(queryTokens, b);

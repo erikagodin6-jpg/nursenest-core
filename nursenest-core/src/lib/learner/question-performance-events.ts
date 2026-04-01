@@ -57,10 +57,20 @@ export function recordQuestionPerformanceEvent(
 export function readQuestionPerformanceSample(userId: string, max = 50): QuestionPerformanceEventV1[] {
   try {
     if (typeof window === "undefined" || !window.localStorage) return [];
-    const raw = window.localStorage.getItem(storageKey(userId));
+    let raw: string | null;
+    try {
+      raw = window.localStorage.getItem(storageKey(userId));
+    } catch {
+      return [];
+    }
     if (!raw) return [];
-    const data = JSON.parse(raw) as { events?: QuestionPerformanceEventV1[] };
-    if (!Array.isArray(data.events)) return [];
+    let data: { events?: QuestionPerformanceEventV1[] };
+    try {
+      const parsed = JSON.parse(raw) as { events?: QuestionPerformanceEventV1[] };
+      data = { events: Array.isArray(parsed.events) ? parsed.events : [] };
+    } catch {
+      return [];
+    }
     return data.events.slice(-max);
   } catch {
     return [];

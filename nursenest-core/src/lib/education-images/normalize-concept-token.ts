@@ -53,3 +53,24 @@ export function basenameWithoutExtension(pathOrKey: string): string {
   const base = pathOrKey.split("/").pop() ?? pathOrKey;
   return base.replace(/\.[^.]+$/, "").toLowerCase();
 }
+
+/**
+ * Possible inventory basename forms for exact/slug matching (hyphenated keys in `uploads/images/`).
+ */
+export function inventoryBasenameCandidatesFromLabel(s: string): string[] {
+  const n = normalizeConceptToken(s);
+  const out = new Set<string>();
+  if (n) {
+    out.add(n.replace(/\s+/g, "-"));
+    const collapsed = n.replace(/\s+/g, "");
+    if (collapsed.length >= 4) out.add(collapsed);
+  }
+  const slugish = s
+    .toLowerCase()
+    .trim()
+    .replace(/^\/+|\/+$/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  if (slugish.length >= 3) out.add(slugish);
+  return [...out].filter((x) => x.length >= 3);
+}

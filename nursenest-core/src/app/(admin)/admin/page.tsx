@@ -481,12 +481,75 @@ export default async function AdminPage() {
               value={contentQuality.examQuestionsPublished.rationaleMissingOrEmpty}
             />
             <MetricMini label="Published Q · OK rationale (≥120w)" value={contentQuality.examQuestionsPublished.rationaleAcceptableOrStrong} />
+            {contentQuality.examQuestionTeachingFields ? (
+              <>
+                <MetricMini
+                  label="Published Q · correctAnswerExplanation"
+                  value={contentQuality.examQuestionTeachingFields.withCorrectAnswerExplanation}
+                />
+                <MetricMini
+                  label="Published Q · distractor / incorrect teaching"
+                  value={contentQuality.examQuestionTeachingFields.withDistractorNotes}
+                />
+                <MetricMini
+                  label="Published Q · images JSON (authoritative figures)"
+                  value={contentQuality.examQuestionTeachingFields.withImagesJson}
+                />
+                <MetricMini
+                  label="NP Canada published (total)"
+                  value={contentQuality.examQuestionTeachingFields.npCanadaPublished}
+                />
+                <MetricMini
+                  label="NP Canada vs min target"
+                  value={
+                    contentQuality.examQuestionTeachingFields.npCanadaBelowTarget
+                      ? `below (${contentQuality.examQuestionTeachingFields.npCanadaTarget})`
+                      : `ok (≥${contentQuality.examQuestionTeachingFields.npCanadaTarget})`
+                  }
+                />
+              </>
+            ) : null}
+            {typeof contentQuality.educationImageInventoryKeyCount === "number" ? (
+              <MetricMini
+                label="Education image inventory keys (CDN)"
+                value={contentQuality.educationImageInventoryKeyCount}
+              />
+            ) : null}
             <MetricMini label="Pathway lessons (total)" value={contentQuality.pathwayLessonsPublished.total} />
             <MetricMini label="Pathway sample · thin" value={contentQuality.pathwayLessonsPublished.sampleThin} />
             <MetricMini label="Pathway sample · strong" value={contentQuality.pathwayLessonsPublished.sampleStrong} />
             <MetricMini label="Content-item lessons (total)" value={contentQuality.contentItemLessonsPublished.total} />
             <MetricMini label="Content sample · thin" value={contentQuality.contentItemLessonsPublished.sampleThin} />
           </div>
+          {contentQuality.npCanadaPublishedByExam && contentQuality.npCanadaPublishedByExam.length > 0 ? (
+            <>
+              <h3 className="mt-5 text-sm font-semibold">NP Canada · published by exam code</h3>
+              <ul className="mt-2 max-h-40 space-y-1 overflow-auto text-xs">
+                {contentQuality.npCanadaPublishedByExam.map((row) => (
+                  <li key={row.exam} className="flex justify-between rounded bg-muted/40 px-2 py-1">
+                    <span className="truncate pr-2 font-mono">{row.exam}</span>
+                    <span className="tabular-nums">{row.count}</span>
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : null}
+          {contentQuality.thinRationaleTopicsLeaderboard && contentQuality.thinRationaleTopicsLeaderboard.length > 0 ? (
+            <>
+              <h3 className="mt-5 text-sm font-semibold">Thin rationale topics (most items 1–119 words)</h3>
+              <ul className="mt-2 max-h-40 space-y-1 overflow-auto text-xs">
+                {contentQuality.thinRationaleTopicsLeaderboard.map((row) => (
+                  <li
+                    key={String(row.topic ?? "null")}
+                    className="flex justify-between rounded bg-muted/40 px-2 py-1"
+                  >
+                    <span className="truncate pr-2">{row.topic ?? "(untagged)"}</span>
+                    <span className="tabular-nums">{row.thinCount}</span>
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : null}
           <h3 className="mt-5 text-sm font-semibold">Top weak topics (low count)</h3>
           <ul className="mt-2 space-y-1 text-xs">
             {(questionDiag?.topicTopPublished ?? []).slice(-10).map((row) => (

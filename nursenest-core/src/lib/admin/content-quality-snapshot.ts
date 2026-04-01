@@ -6,6 +6,7 @@ import { pathwayLessonWordCount } from "@/lib/content-quality/classify-lesson";
 import { NP_COVERAGE_THRESHOLDS } from "@/lib/np/np-coverage-thresholds";
 import { classifyContentItemLesson } from "@/lib/content-quality/classify-lesson";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
+import { getInventoryKeys } from "@/lib/education-images/inventory";
 
 export type ContentQualitySnapshot = {
   generatedAt: string;
@@ -39,6 +40,12 @@ export type ContentQualitySnapshot = {
     sampleAcceptable: number;
     sampleStrong: number;
   };
+  /** Canada NP published rows grouped by `exam` (import pipeline codes). */
+  npCanadaPublishedByExam?: Array<{ exam: string; count: number }>;
+  /** Topics with the most published questions in the “thin rationale” band (0 < words < 120). */
+  thinRationaleTopicsLeaderboard?: Array<{ topic: string | null; thinCount: number }>;
+  /** Keys listed in `education-image-inventory.json` (CDN filename resolution). */
+  educationImageInventoryKeyCount?: number;
   notes: string[];
 };
 
@@ -77,6 +84,41 @@ async function examQuestionTeachingFieldStats(): Promise<NonNullable<ContentQual
     npCanadaBelowTarget: np < NP_COVERAGE_THRESHOLDS.canadaNpMinPublished,
     npCanadaTarget: NP_COVERAGE_THRESHOLDS.canadaNpMinPublished,
   };
+}
+
+async function npCanadaPublishedByExam(): Promise<NonNullable<ContentQualitySnapshot["npCanadaPublishedByExam"]>> {
+  const rows = await prisma.$queryRaw<{ exam: string; c: bigint }[]>`
+    SELECT exam, COUNT(*)::bigint AS c
+    FROM exam_questions
+    WHERE status = 'published' AND tier = 'NP' AND country_code = ${CountryCode.CA}
+    GROUP BY exam
+    ORDER BY c DESC
+  `;
+  return rows.map((r) => ({ exam: r.exam, count: Number(r.c) }));
+}
+
+async function thinRationaleTopicsLeaderboard(): Promise<
+  NonNullable<ContentQualitySnapshot["thinRationaleTopicsLeaderboard"]>
+> {
+  const rows = await prisma.$queryRaw<{ topic: string | null; thin_count: bigint }[]>`
+    WITH w AS (
+      SELECT
+        NULLIF(trim(topic), '') AS topic_label,
+        CASE
+          WHEN rationale IS NULL OR trim(rationale) = '' THEN 0
+          ELSE cardinality(regexp_split_to_array(trim(regexp_replace(rationale, '\\s+', ' ', 'g')), ' '))
+        END AS wc
+      FROM exam_questions
+      WHERE status = 'published'
+    )
+    SELECT topic_label AS topic, COUNT(*)::bigint AS thin_count
+    FROM w
+    WHERE wc > 0 AND wc < 120
+    GROUP BY topic_label
+    ORDER BY thin_count DESC NULLS LAST
+    LIMIT 15
+  `;
+  return rows.map((r) => ({ topic: r.topic, thinCount: Number(r.thin_count) }));
 }
 
 async function examQuestionRationaleStats(): Promise<ContentQualitySnapshot["examQuestionsPublished"]> {
@@ -127,11 +169,20 @@ export async function loadContentQualitySnapshot(): Promise<ContentQualitySnapsh
   }
 
   return withDatabaseFallback(async () => {
-    const [examStats, teachingFields, pathwayTotal, contentTotal] = await Promise.all([
+    const [
+      examStats,
+      teachingFields,
+      pathwayTotal,
+      contentTotal,
+      npByExam,
+      thinLeaderboard,
+    ] = await Promise.all([
       examQuestionRationaleStats(),
       examQuestionTeachingFieldStats().catch(() => null),
       prisma.pathwayLesson.count({ where: { status: ContentStatus.PUBLISHED } }),
       prisma.contentItem.count({ where: { type: "lesson", status: "published" } }),
+      npCanadaPublishedByExam().catch(() => []),
+      thinRationaleTopicsLeaderboard().catch(() => []),
     ]);
 
     const SAMPLE = 800;
@@ -174,6 +225,9 @@ export async function loadContentQualitySnapshot(): Promise<ContentQualitySnapsh
       generatedAt: new Date().toISOString(),
       examQuestionsPublished: examStats,
       ...(teachingFields ? { examQuestionTeachingFields: teachingFields } : {}),
+      npCanadaPublishedByExam: npByExam,
+      thinRationaleTopicsLeaderboard: thinLeaderboard,
+      educationImageInventoryKeyCount: getInventoryKeys().length,
       pathwayLessonsPublished: {
         total: pathwayTotal,
         sampleSize: pathwayRows.length,
@@ -191,6 +245,7 @@ export async function loadContentQualitySnapshot(): Promise<ContentQualitySnapsh
       notes: [
         "Exam question counts use SQL word splits on `rationale` only (primary narrative field).",
         `Pathway/content lesson samples: last ${SAMPLE} updated rows — not a full corpus scan.`,
+        "Filename-based concept images use `education-image-inventory.json`; per-question inventory matches are resolved at runtime, not stored in SQL.",
       ],
     };
   }, empty);

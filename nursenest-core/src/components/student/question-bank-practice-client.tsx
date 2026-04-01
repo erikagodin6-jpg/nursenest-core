@@ -54,14 +54,26 @@ function appendRollup(
     subtopic?: string | null;
     pathwayId?: string | null;
     exam?: string | null;
+    timeSpentMs?: number;
   },
 ) {
   try {
     const k = rollupsKey(userId);
-    const raw = localStorage.getItem(k);
-    const data = raw
-      ? (JSON.parse(raw) as { events: Array<{ topic?: string | null; correct: boolean; at: string }> })
-      : { events: [] };
+    let raw: string | null;
+    try {
+      raw = localStorage.getItem(k);
+    } catch {
+      raw = null;
+    }
+    let data: { events: Array<{ topic?: string | null; correct: boolean; at: string }> };
+    try {
+      data = raw
+        ? (JSON.parse(raw) as { events: Array<{ topic?: string | null; correct: boolean; at: string }> })
+        : { events: [] };
+      if (!Array.isArray(data.events)) data.events = [];
+    } catch {
+      data = { events: [] };
+    }
     data.events.push({ topic: topic ?? null, correct, at: new Date().toISOString() });
     data.events = data.events.slice(-120);
     localStorage.setItem(k, JSON.stringify(data));
@@ -75,6 +87,7 @@ function appendRollup(
     pathwayId: meta.pathwayId ?? null,
     exam: meta.exam ?? null,
     correct,
+    ...(typeof meta.timeSpentMs === "number" && meta.timeSpentMs >= 0 ? { timeSpentMs: meta.timeSpentMs } : {}),
   });
 }
 
@@ -134,9 +147,14 @@ export function QuestionBankPracticeClient({
     >
   >({});
   const [grading, setGrading] = useState(false);
+  const questionOpenedAtMsRef = useRef<number | null>(null);
 
   const current = questions[idx];
   const total = questions.length;
+
+  useEffect(() => {
+    if (current?.id) questionOpenedAtMsRef.current = Date.now();
+  }, [current?.id]);
 
   const topicForApi = preset === "topic_drill" ? topic : null;
   const sortForApi = preset === "topic_drill" ? "recent" : "random";
@@ -432,11 +450,15 @@ export function QuestionBankPracticeClient({
           teachingMedia: data.teachingMedia ?? null,
         },
       }));
+      const opened = questionOpenedAtMsRef.current;
+      const timeSpentMs =
+        typeof opened === "number" ? Math.min(1_800_000, Math.max(0, Date.now() - opened)) : undefined;
       appendRollup(userId, current.topic, correct, {
         questionId: current.id,
         subtopic: current.subtopic,
         pathwayId: pathwayIdFilter,
         exam: current.exam,
+        timeSpentMs,
       });
       if (typeof window !== "undefined") {
         window.dispatchEvent(new CustomEvent("nn-topic-stats-updated"));
