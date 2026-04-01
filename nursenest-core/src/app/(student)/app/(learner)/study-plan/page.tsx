@@ -58,21 +58,23 @@ export default async function StudyPlanPage() {
   }
 
   return (
-    <main className="space-y-5">
+    <main className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Study plan</h1>
-        <p className="mt-2 text-sm text-muted">
-          Date-aware priorities from your performance, plus optional AI-assisted weekly structure. Enable server-side AI with{" "}
-          <code className="rounded bg-black/5 px-1 dark:bg-white/10">AI_STUDY_PLAN_ENABLED=true</code> and an OpenAI-compatible API
-          key. Not medical advice.
+        <p className="text-xs font-semibold uppercase tracking-wide text-primary">Exam-first prep</p>
+        <h1 className="mt-1 text-3xl font-bold tracking-tight text-[var(--theme-heading-text)]">Study plan</h1>
+        <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+          Your exam date, cadence, and practice signals drive weekly targets and checkpoints. Optional AI weekly structure still
+          lives below — enable with{" "}
+          <code className="rounded bg-black/5 px-1 dark:bg-white/10">AI_STUDY_PLAN_ENABLED=true</code> when configured. Not medical
+          advice.
         </p>
       </div>
 
       {entitlement !== "error" && entitlement.hasAccess ? <ExamPlanSettingsCard /> : null}
 
-      {insightSnapshot ? <LearnerInsightEnginePanel insights={insightSnapshot} /> : null}
+      {adaptive ? <AdaptiveStudyOverview adaptive={adaptive} showHeading /> : null}
 
-      {adaptive ? <AdaptiveStudyOverview adaptive={adaptive} /> : null}
+      {insightSnapshot ? <LearnerInsightEnginePanel insights={insightSnapshot} /> : null}
 
       <StudyPlanToolGateway />
     </main>

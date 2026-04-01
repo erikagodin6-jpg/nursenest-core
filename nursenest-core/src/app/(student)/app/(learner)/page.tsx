@@ -168,8 +168,6 @@ export default async function DashboardPage() {
 
       {entitlement.hasAccess ? (
         <>
-          <ExamPlanSettingsCard />
-
           {premiumSnapshot && adaptiveRecommendations && topicPerfInitial ? (
             <>
               <LearnerDashboardHero
@@ -186,6 +184,8 @@ export default async function DashboardPage() {
                 weakTopicTitles={topicPerfInitial.weakTopics.map((w) => w.topic)}
                 continueLesson={premiumSnapshot.continueLesson}
               />
+              <AdaptiveStudyOverview adaptive={adaptiveRecommendations} compact />
+              <ExamPlanSettingsCard />
               <LearnerDashboardActionCards
                 continueLesson={premiumSnapshot.continueLesson}
                 quizTopic={premiumSnapshot.recommendedQuizTopic}
@@ -195,11 +195,9 @@ export default async function DashboardPage() {
                 }
               />
             </>
-          ) : null}
-
-          {adaptiveRecommendations ? (
-            <AdaptiveStudyOverview adaptive={adaptiveRecommendations} compact={Boolean(premiumSnapshot && topicPerfInitial)} />
-          ) : null}
+          ) : (
+            <ExamPlanSettingsCard />
+          )}
 
           {premiumSnapshot?.insights ? <LearnerInsightEnginePanel insights={premiumSnapshot.insights} /> : null}
 

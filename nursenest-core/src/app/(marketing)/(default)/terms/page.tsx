@@ -1,40 +1,30 @@
 import type { Metadata } from "next";
 import { LegalMarkdownBody } from "@/components/legal/legal-markdown-body";
-import { parseFaqMarkdownForJsonLd } from "@/components/legal/parse-faq-for-json-ld";
-import { FaqJsonLd } from "@/components/seo/faq-json-ld";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { loadLegalMarkdownDoc } from "@/lib/legal/load-legal-doc";
+import { simpleMarketingBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
 export const metadata: Metadata = {
-  title: "FAQ | NurseNest",
+  title: "Terms of Service | NurseNest",
   description:
-    "Answers about NurseNest subscriptions, cancellations, refunds, account sharing, content protection, billing disputes, and privacy.",
-  alternates: { canonical: absoluteUrl("/faq") },
+    "NurseNest Terms of Service: subscription license, acceptable use, paywall enforcement, billing, disclaimers, and dispute terms.",
+  alternates: { canonical: absoluteUrl("/terms") },
   robots: { index: true, follow: true },
   openGraph: {
-    title: "FAQ | NurseNest",
-    url: absoluteUrl("/faq"),
+    title: "Terms of Service | NurseNest",
+    description: "Terms governing use of NurseNest exam prep, subscriptions, and content.",
+    url: absoluteUrl("/terms"),
     type: "website",
   },
 };
 
-export default async function FaqPage() {
-  const md = await loadLegalMarkdownDoc("faq");
-  const faqItems = parseFaqMarkdownForJsonLd(md);
-  const crumbs = [
-    { label: "Home", href: "/" },
-    { label: "FAQ", href: "/faq" },
-  ];
-  const schemaItems = crumbs.map((c, i) => ({
-    name: c.label,
-    item: absoluteUrl(c.href),
-    position: i + 1,
-  }));
+export default async function TermsOfServicePage() {
+  const md = await loadLegalMarkdownDoc("terms-of-service");
+  const { crumbs, schemaItems } = simpleMarketingBreadcrumbs("Terms of Service", "/terms");
   return (
     <>
-      <FaqJsonLd items={faqItems} />
       <BreadcrumbJsonLd items={schemaItems} />
       <div className="mx-auto max-w-3xl px-4 pt-4 sm:px-6 lg:px-8">
         <BreadcrumbTrail items={crumbs} />

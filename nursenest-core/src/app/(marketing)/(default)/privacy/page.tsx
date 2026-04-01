@@ -1,40 +1,28 @@
 import type { Metadata } from "next";
 import { LegalMarkdownBody } from "@/components/legal/legal-markdown-body";
-import { parseFaqMarkdownForJsonLd } from "@/components/legal/parse-faq-for-json-ld";
-import { FaqJsonLd } from "@/components/seo/faq-json-ld";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { loadLegalMarkdownDoc } from "@/lib/legal/load-legal-doc";
+import { simpleMarketingBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
 export const metadata: Metadata = {
-  title: "FAQ | NurseNest",
-  description:
-    "Answers about NurseNest subscriptions, cancellations, refunds, account sharing, content protection, billing disputes, and privacy.",
-  alternates: { canonical: absoluteUrl("/faq") },
+  title: "Privacy Policy | NurseNest",
+  description: "How NurseNest collects, uses, stores, and protects personal information.",
+  alternates: { canonical: absoluteUrl("/privacy") },
   robots: { index: true, follow: true },
   openGraph: {
-    title: "FAQ | NurseNest",
-    url: absoluteUrl("/faq"),
+    title: "Privacy Policy | NurseNest",
+    url: absoluteUrl("/privacy"),
     type: "website",
   },
 };
 
-export default async function FaqPage() {
-  const md = await loadLegalMarkdownDoc("faq");
-  const faqItems = parseFaqMarkdownForJsonLd(md);
-  const crumbs = [
-    { label: "Home", href: "/" },
-    { label: "FAQ", href: "/faq" },
-  ];
-  const schemaItems = crumbs.map((c, i) => ({
-    name: c.label,
-    item: absoluteUrl(c.href),
-    position: i + 1,
-  }));
+export default async function PrivacyPolicyPage() {
+  const md = await loadLegalMarkdownDoc("privacy-policy");
+  const { crumbs, schemaItems } = simpleMarketingBreadcrumbs("Privacy Policy", "/privacy");
   return (
     <>
-      <FaqJsonLd items={faqItems} />
       <BreadcrumbJsonLd items={schemaItems} />
       <div className="mx-auto max-w-3xl px-4 pt-4 sm:px-6 lg:px-8">
         <BreadcrumbTrail items={crumbs} />

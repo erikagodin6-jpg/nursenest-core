@@ -61,6 +61,8 @@ export type AdaptiveLearnerRecommendations = {
   milestones: ExamPlanMilestone[];
   /** Human label for active cadence (or default). */
   cadenceDisplay: string;
+  /** Raw stored preference — light | steady | intensive | null */
+  studyCadencePreference: string | null;
 };
 
 function encodeTopic(topic: string): string {
@@ -385,5 +387,9 @@ export function buildAdaptiveRecommendations(args: {
     recovery,
     milestones,
     cadenceDisplay: cadenceLabel(args.studyCadencePreference),
+    studyCadencePreference:
+      args.studyCadencePreference === "light" || args.studyCadencePreference === "steady" || args.studyCadencePreference === "intensive"
+        ? args.studyCadencePreference
+        : null,
   };
 }
