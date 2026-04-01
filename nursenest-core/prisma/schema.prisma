@@ -149,6 +149,14 @@ model User {
   /** Optional learner preference: light | steady | intensive — used for copy only, not hours math. */
   studyCadencePreference  String?        @db.VarChar(32)
   onboardingCompletedAt   DateTime?
+  /** User dismissed the baseline assessment prompt (non-blocking). */
+  baselineAssessmentSkippedAt    DateTime?
+  /** User finished the short baseline question set. */
+  baselineAssessmentCompletedAt  DateTime?
+  /** Summary: { correctCount, totalQuestions, weakTopics: string[], at: string } */
+  baselineAssessmentSummary      Json?
+  baselineAssessmentAttempts     BaselineAssessmentAttempt[]
+
   freeQuestionViews       Int            @default(0)
   freeLessonOpens         Int            @default(0)
   trialStatus             TrialStatus    @default(NONE)
@@ -181,6 +189,24 @@ model User {
   learnerNotes            LearnerNote[]
 
   @@index([alliedProfessionKey])
+}
+
+enum BaselineAssessmentAttemptStatus {
+  OPEN
+  SUBMITTED
+}
+
+model BaselineAssessmentAttempt {
+  id          String                        @id @default(cuid())
+  userId      String
+  user        User                          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questionIds Json
+  status      BaselineAssessmentAttemptStatus @default(OPEN)
+  createdAt   DateTime                      @default(now())
+  submittedAt DateTime?
+
+  @@index([userId, status])
+  @@index([createdAt])
 }
 
 enum LearnerNoteScope {
