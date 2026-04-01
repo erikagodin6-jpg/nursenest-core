@@ -42,7 +42,7 @@ export function LearnerShellUserBar() {
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="flex max-w-[16rem] items-center gap-1 rounded-full border border-border bg-white px-3 py-2 text-sm font-medium hover:bg-gray-50"
+        className="flex max-w-[16rem] items-center gap-1 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-2 text-sm font-medium text-[var(--theme-menu-text)] hover:bg-[var(--surface-interactive-hover)]"
         aria-expanded={open}
         aria-haspopup="menu"
       >
@@ -53,7 +53,7 @@ export function LearnerShellUserBar() {
       {open ? (
         <div
           role="menu"
-          className="absolute right-0 z-50 mt-1 min-w-[13rem] rounded-xl border border-border bg-white py-1 shadow-lg"
+          className="absolute right-0 z-50 mt-1 min-w-[13rem] rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] py-1 shadow-[var(--shadow-elevated)]"
         >
           <div className="border-b border-border px-3 py-2 text-xs text-muted-foreground">
             <div className="font-mono text-[11px] text-foreground" title={user.id}>
@@ -67,7 +67,7 @@ export function LearnerShellUserBar() {
           </div>
           <Link
             href="/app/profile"
-            className="block px-3 py-2 text-sm font-medium hover:bg-gray-50"
+            className="block px-3 py-2 text-sm font-medium hover:bg-[var(--surface-interactive-hover)]"
             role="menuitem"
             onClick={() => setOpen(false)}
           >
@@ -75,7 +75,7 @@ export function LearnerShellUserBar() {
           </Link>
           <Link
             href="/app"
-            className="block px-3 py-2 text-sm hover:bg-gray-50"
+            className="block px-3 py-2 text-sm hover:bg-[var(--surface-interactive-hover)]"
             role="menuitem"
             onClick={() => setOpen(false)}
           >
@@ -84,7 +84,7 @@ export function LearnerShellUserBar() {
           {admin ? (
             <Link
               href="/admin"
-              className="block px-3 py-2 text-sm font-medium text-primary hover:bg-primary/5"
+              className="block px-3 py-2 text-sm font-medium text-primary hover:bg-[var(--surface-interactive-hover)]"
               role="menuitem"
               onClick={() => setOpen(false)}
             >
@@ -93,7 +93,7 @@ export function LearnerShellUserBar() {
           ) : null}
           <button
             type="button"
-            className="block w-full border-t border-border px-3 py-2 text-left text-sm hover:bg-gray-50"
+            className="block w-full border-t border-[var(--border-subtle)] px-3 py-2 text-left text-sm hover:bg-[var(--surface-interactive-hover)]"
             role="menuitem"
             onClick={() => void signOut({ callbackUrl: "/" })}
           >

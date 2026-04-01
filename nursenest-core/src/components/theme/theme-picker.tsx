@@ -72,7 +72,7 @@ export function ThemePicker({ className = "", labels }: { className?: string; la
       </button>
       {open && (
         <div
-          className="absolute right-0 z-[100] mt-1 max-h-[min(70vh,22rem)] w-56 overflow-y-auto rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] py-1 shadow-lg"
+          className="absolute right-0 z-[100] mt-1 max-h-[min(70vh,22rem)] w-56 overflow-y-auto rounded-xl border border-[var(--border-subtle,var(--theme-card-border))] bg-[var(--bg-elevated,var(--theme-card-bg))] py-1 shadow-[var(--shadow-elevated)]"
           role="listbox"
         >
           {(["light", "dark"] as const).map((group) => (

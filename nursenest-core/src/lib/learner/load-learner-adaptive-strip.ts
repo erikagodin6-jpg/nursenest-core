@@ -2,6 +2,7 @@ import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { buildCountdownCopy } from "@/lib/learner/exam-timeline";
+import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
 import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
 
 export type LearnerAdaptiveStripModel = {
@@ -46,19 +47,24 @@ export async function loadLearnerAdaptiveStrip(
 
     let weakShort: string | null = null;
     let firstTopic: string | null = null;
+    let topicCode: string | null = null;
     try {
       const perf = await loadUnifiedTopicPerformance(userId, entitlement, 4);
       const names = perf.weakTopics.map((w) => w.topic).filter(Boolean);
       weakShort = shortWeakAreas(names);
-      firstTopic = perf.weakTopics[0]?.topic ?? perf.recommendedQuizTopic ?? null;
+      const top = perf.weakTopics[0];
+      firstTopic = top?.topic ?? perf.recommendedQuizTopic ?? null;
+      topicCode = top ? normalizeTopicKey(top.topic) : firstTopic ? normalizeTopicKey(firstTopic) : null;
     } catch {
       weakShort = null;
     }
 
     const nextActionHref = firstTopic
-      ? `/app/questions?topic=${encodeURIComponent(firstTopic)}`
+      ? `/app/questions?preset=topic_drill&topic=${encodeURIComponent(firstTopic)}${
+          topicCode && topicCode.length > 1 ? `&topicCode=${encodeURIComponent(topicCode)}` : ""
+        }`
       : "/app/lessons";
-    const nextActionShort = firstTopic ? `Quiz: ${firstTopic}` : "Open lessons";
+    const nextActionShort = firstTopic ? `Priority review: ${firstTopic}` : "Open lessons";
 
     return {
       countdownPrimary: countdown.primary,

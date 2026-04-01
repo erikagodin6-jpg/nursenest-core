@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { LegalDocMarketingView } from "@/components/legal/legal-doc-marketing-view";
+import { simpleMarketingBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
 type Props = { params: Promise<{ locale: string }> };
@@ -17,11 +18,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function LocalizedAcceptableUsePage({ params }: Props) {
   const { locale } = await params;
+  const path = `/${locale}/acceptable-use`;
   return (
     <LegalDocMarketingView
       docId="acceptable-use-policy"
-      breadcrumbLabel="Acceptable use"
-      path={`/${locale}/acceptable-use`}
+      breadcrumbResolution={simpleMarketingBreadcrumbs("Acceptable use", path)}
     />
   );
 }

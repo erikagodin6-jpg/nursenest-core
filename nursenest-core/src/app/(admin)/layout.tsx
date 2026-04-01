@@ -14,7 +14,7 @@ export default async function AdminGroupLayout({ children }: { children: React.R
   const messages = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
   return (
     <MarketingI18nProvider key={DEFAULT_MARKETING_LOCALE} locale={DEFAULT_MARKETING_LOCALE} messages={messages}>
-      <div className="nn-marketing-surface flex min-h-screen flex-col bg-[var(--theme-page-bg)]">
+      <div className="nn-marketing-surface flex min-h-screen flex-col">
         <SiteHeader />
         <div className="flex-1">{children}</div>
         <SiteFooter />

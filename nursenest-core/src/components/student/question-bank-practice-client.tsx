@@ -771,23 +771,31 @@ export function QuestionBankPracticeClient({
               </div>
               {g.learningLoop?.topicCode ? (
                 <div className="mt-4 rounded-xl border border-border/70 bg-muted/20 p-3">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Reinforce this topic</p>
+                  <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Continue priority review</p>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    Topic code: <span className="font-medium text-foreground">{g.learningLoop.topicCode}</span> · confidence{" "}
+                    Topic code: <span className="font-medium text-foreground">{g.learningLoop.topicCode}</span> · routing confidence{" "}
                     {g.learningLoop.confidence}
                   </p>
-                  {g.learningLoop.confidence !== "low" ? (
-                    <p className="mt-1 text-xs text-amber-900 dark:text-amber-200">
-                      Your weak areas: this topic is currently prioritized for remediation.
+                  {g.learningLoop.confidence === "high" ? (
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Strong match from this item’s metadata—next steps should stay on the same topic track.
                     </p>
-                  ) : null}
+                  ) : g.learningLoop.confidence === "medium" ? (
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Routed from the question topic; if the bank feels broad, narrow with filters or your priority review queue.
+                    </p>
+                  ) : (
+                    <p className="mt-1 text-xs text-amber-900 dark:text-amber-200">
+                      Approximate routing only—open the question bank and tune filters if results look off-target.
+                    </p>
+                  )}
                   <div className="mt-3 flex flex-wrap gap-2">
                     {g.learningLoop.lessonHref ? (
                       <Link
                         href={g.learningLoop.lessonHref}
                         className="rounded-full border border-border bg-card px-3 py-1.5 text-xs font-semibold hover:bg-muted/80"
                       >
-                        Reinforce this topic
+                        Related lesson
                       </Link>
                     ) : null}
                     {g.learningLoop.flashcardsHref ? (
@@ -795,7 +803,7 @@ export function QuestionBankPracticeClient({
                         href={g.learningLoop.flashcardsHref}
                         className="rounded-full border border-border bg-card px-3 py-1.5 text-xs font-semibold hover:bg-muted/80"
                       >
-                        Related flashcards
+                        Review flashcards
                       </Link>
                     ) : null}
                     {g.learningLoop.topicDrillHref ? (
@@ -803,7 +811,7 @@ export function QuestionBankPracticeClient({
                         href={g.learningLoop.topicDrillHref}
                         className="rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-white"
                       >
-                        Test again on this topic
+                        Topic drill (same code)
                       </Link>
                     ) : null}
                   </div>

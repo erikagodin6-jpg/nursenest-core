@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { LegalDocMarketingView } from "@/components/legal/legal-doc-marketing-view";
+import { simpleMarketingBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
 export const metadata: Metadata = {
@@ -10,5 +11,10 @@ export const metadata: Metadata = {
 };
 
 export default async function AcceptableUsePage() {
-  return <LegalDocMarketingView docId="acceptable-use-policy" breadcrumbLabel="Acceptable use" path="/acceptable-use" />;
+  return (
+    <LegalDocMarketingView
+      docId="acceptable-use-policy"
+      breadcrumbResolution={simpleMarketingBreadcrumbs("Acceptable use", "/acceptable-use")}
+    />
+  );
 }

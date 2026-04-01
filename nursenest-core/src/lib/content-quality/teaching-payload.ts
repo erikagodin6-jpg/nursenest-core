@@ -72,7 +72,7 @@ function incorrectAnswerLines(raw: Prisma.JsonValue | null | undefined): string 
   return d;
 }
 
-function normalizeCorrectList(correctAnswer: Prisma.JsonValue | null | undefined, questionType: string): string[] {
+function normalizeCorrectList(correctAnswer: Prisma.JsonValue | null | undefined): string[] {
   if (correctAnswer == null) return [];
   if (Array.isArray(correctAnswer)) return correctAnswer.map((x) => String(x));
   if (typeof correctAnswer === "string") return [correctAnswer];
@@ -158,7 +158,7 @@ function pushSection(
  * Omits empty sections; does not invent clinical content.
  */
 export function buildNormalizedTeachingPayload(row: ExamQuestionTeachingRow): NormalizedTeachingPayload {
-  const correctAnswers = normalizeCorrectList(row.correctAnswer, row.questionType);
+  const correctAnswers = normalizeCorrectList(row.correctAnswer);
   const rationale = row.rationale?.trim() ? row.rationale.trim() : null;
   const correctAnswerExplanation = row.correctAnswerExplanation?.trim() ? row.correctAnswerExplanation.trim() : null;
   const distractorFromJson = stringifyDistractors(row.distractorRationales);
@@ -174,34 +174,34 @@ export function buildNormalizedTeachingPayload(row: ExamQuestionTeachingRow): No
   const distractorBody =
     distractorNotes ??
     (isSata
-      ? "Each option must be judged independently as selected/not selected against the stem priorities and safety rules."
-      : "Review each distractor against stem clues and priority rules; eliminate options that do not address the immediate clinical risk.");
+      ? "For each option: decide if it is fully true in this scenario (select) or if it is unsafe, incomplete, or off-target (do not select). Common misses ignore a stem keyword, exceed scope, or treat a partial truth as sufficient."
+      : "For each incorrect option: name why it fails the stem—wrong priority, unsafe action, outside scope, or a plausible but less urgent choice.");
 
   const sections: Array<{ id: string; heading: string; body: string }> = [];
 
+  // Canonical learner-facing order (then supplementary blocks).
   pushSection(
     sections,
     "correct_answer",
     "Correct answer",
-    correctAnswers.length > 0 ? correctAnswers.join(", ") : "Correct option not listed in source data.",
+    correctAnswers.length > 0 ? correctAnswers.join(", ") : "Correct option labels are not present in bank metadata for this item.",
   );
   pushSection(
     sections,
     "why_correct",
     "Why this is correct",
-    correctAnswerExplanation ?? rationale ?? "Clinical reasoning not yet provided for this item.",
+    mergeWhyThisIsCorrect(correctAnswerExplanation, rationale, row.clinicalReasoning?.trim() ? row.clinicalReasoning.trim() : null),
   );
-  pushSection(sections, "explanation", "Clinical decision logic", rationale ?? row.clinicalReasoning);
-  pushSection(sections, "clinical_reasoning", "Clinical reasoning", row.clinicalReasoning);
   pushSection(sections, "distractors", "Why the other options are wrong", distractorBody);
-  pushSection(sections, "concept", "Concept tested", conceptTested);
   pushSection(
     sections,
     "takeaway",
     "Clinical takeaway",
     keyTakeaway ?? "Takeaway unavailable. Review this item in admin for quality completion.",
   );
-  pushSection(sections, "exam_strategy", "Exam strategy", row.examStrategy);
+  const examStrategyBody = row.examStrategy?.trim() || defaultExamStrategyFallback(row.questionType, isSata);
+  pushSection(sections, "exam_strategy", "Exam strategy", examStrategyBody);
+  pushSection(sections, "concept", "Concept tested", conceptTested);
   pushSection(sections, "pearl", "Clinical pearl", row.clinicalPearl);
   pushSection(sections, "trap", "Common trap", row.clinicalTrap);
   pushSection(sections, "memory_hook", "Memory hook", row.memoryHook);

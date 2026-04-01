@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { ArrowRight, BookOpen, ChevronDown, LayoutDashboard, Stethoscope } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
@@ -8,6 +9,11 @@ import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-l
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { HUB, loginWithCallback, rnLessons, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
 import type { NursenestMarketingRegion } from "@/lib/marketing/home-hero-gateway-config";
+import {
+  MARKETING_PHOTO_QUALITY,
+  MARKETING_SCREENSHOT_PAIR_SIZES,
+  marketingScreenshotBundleDisplaySrc,
+} from "@/lib/marketing-image-delivery";
 
 type Props = {
   region: NursenestMarketingRegion;
@@ -81,17 +87,13 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
                   className="relative w-full bg-[var(--theme-muted-surface)]"
                   style={{ aspectRatio: `${dash.width} / ${dash.height}` }}
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element -- external CDN srcSet; avoid remotePatterns churn */}
-                  <img
-                    src={dash.fallback}
-                    srcSet={dash.srcSet}
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                    width={dash.width}
-                    height={dash.height}
+                  <Image
+                    src={marketingScreenshotBundleDisplaySrc(dash)}
                     alt={t("home.conversion.previewCaptionDash")}
-                    className="absolute inset-0 h-full w-full object-cover object-top"
-                    loading="lazy"
-                    decoding="async"
+                    fill
+                    sizes={MARKETING_SCREENSHOT_PAIR_SIZES}
+                    quality={MARKETING_PHOTO_QUALITY}
+                    className="object-cover object-top"
                   />
                 </div>
               </figure>
@@ -108,17 +110,13 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
                   className="relative w-full bg-[var(--theme-muted-surface)]"
                   style={{ aspectRatio: `${qb.width} / ${qb.height}` }}
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={qb.fallback}
-                    srcSet={qb.srcSet}
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                    width={qb.width}
-                    height={qb.height}
+                  <Image
+                    src={marketingScreenshotBundleDisplaySrc(qb)}
                     alt={t("home.conversion.previewCaptionBank")}
-                    className="absolute inset-0 h-full w-full object-cover object-top"
-                    loading="lazy"
-                    decoding="async"
+                    fill
+                    sizes={MARKETING_SCREENSHOT_PAIR_SIZES}
+                    quality={MARKETING_PHOTO_QUALITY}
+                    className="object-cover object-top"
                   />
                 </div>
               </figure>

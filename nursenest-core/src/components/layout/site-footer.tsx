@@ -44,7 +44,7 @@ export function SiteFooter() {
   const { t } = useMarketingI18n();
 
   return (
-    <footer className="mt-auto border-t border-[var(--theme-nav-border)] bg-[var(--theme-card-bg)] py-12">
+    <footer className="mt-auto border-t border-[var(--divider,var(--theme-nav-border))] bg-[var(--bg-section,var(--theme-card-bg))] py-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
           <EmailSignupBanner />

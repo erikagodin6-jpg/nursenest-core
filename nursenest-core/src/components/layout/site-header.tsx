@@ -37,14 +37,14 @@ function NavDetails({
   return (
     <details className="group relative">
       <summary
-        className={`flex cursor-pointer list-none items-center gap-1 font-medium text-[var(--theme-menu-text)] hover:text-primary [&::-webkit-details-marker]:hidden ${
+        className={`flex cursor-pointer list-none items-center gap-1 font-medium text-[var(--theme-menu-text)] hover:bg-[var(--surface-interactive-hover)] hover:text-primary [&::-webkit-details-marker]:hidden ${
           subBar ? "h-7 rounded-md px-1.5 text-xs text-primary/70 hover:text-primary lg:px-2" : "rounded-full px-3 py-2 text-sm"
         }`}
       >
         {label}
         <ChevronDown className={`shrink-0 transition-transform group-open:rotate-180 ${subBar ? "h-3 w-3" : "h-3.5 w-3.5"}`} />
       </summary>
-      <div className="absolute left-0 top-full z-50 mt-1 min-w-[12rem] rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] py-1 shadow-lg">{children}</div>
+      <div className="absolute left-0 top-full z-50 mt-1 min-w-[12rem] rounded-xl border border-[var(--border-subtle,var(--theme-card-border))] bg-[var(--bg-elevated,var(--theme-card-bg))] py-1 shadow-[var(--shadow-elevated)]">{children}</div>
     </details>
   );
 }
@@ -53,7 +53,7 @@ function NavLinkItem({ href, children }: { href: string; children: React.ReactNo
   return (
     <Link
       href={href}
-      className="block px-3 py-2 text-sm text-[var(--theme-menu-text)] hover:bg-primary/5 hover:text-primary"
+      className="block px-3 py-2 text-sm text-[var(--theme-menu-text)] hover:bg-[var(--surface-interactive-hover)] hover:text-primary"
     >
       {children}
     </Link>
@@ -92,7 +92,7 @@ export function SiteHeader() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 border-b border-transparent bg-[var(--theme-nav-bg)]/90 shadow-sm backdrop-blur-xl transition-all duration-300">
+    <header className="sticky top-0 z-50 border-b border-[var(--divider,var(--theme-nav-border))] bg-[color-mix(in_srgb,var(--theme-nav-bg)_92%,var(--theme-primary))]/90 shadow-sm backdrop-blur-xl transition-all duration-300">
       <div className="hidden bg-[var(--theme-topbar-bg)] text-[var(--theme-topbar-text)] md:block">
         <div className="mx-auto flex h-7 max-w-7xl items-center justify-center gap-1 px-2 text-[10px] font-medium sm:h-8 sm:gap-6 sm:px-4 sm:text-xs lg:px-8">
           {topLinks.map((item, index) => (

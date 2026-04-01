@@ -56,13 +56,13 @@ export function PathwayLessonActions({
         href={qbHref}
         className="inline-flex justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground"
       >
-        Practice more like this
+        Priority review drill
       </Link>
       <Link
         href={flashcardsHref}
         className="inline-flex justify-center rounded-full border border-border px-5 py-2.5 text-sm font-semibold hover:bg-gray-50"
       >
-        Reinforce with flashcards
+        Review flashcards (same topic)
       </Link>
       <Link
         href="/app/exams"

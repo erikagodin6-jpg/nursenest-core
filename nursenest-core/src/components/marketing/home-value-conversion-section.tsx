@@ -8,6 +8,11 @@ import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import type { NursenestMarketingRegion } from "@/lib/marketing/home-hero-gateway-config";
 import { HUB, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
 import { MARKETING_SCREENSHOT_SOURCES } from "@/lib/marketing-assets.generated";
+import {
+  MARKETING_PHOTO_QUALITY,
+  MARKETING_SCREENSHOT_TRIPLE_SIZES,
+  marketingScreenshotBundleDisplaySrc,
+} from "@/lib/marketing-image-delivery";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 
 const PLATFORM_STEPS: {
@@ -133,12 +138,12 @@ export function HomeValueConversionSection({ region }: { region: NursenestMarket
                 <figure key={id} className="overflow-hidden rounded-2xl border border-[var(--theme-card-border)] bg-card shadow-[var(--shadow-card)]">
                   <div className="relative aspect-[16/10] w-full bg-[var(--theme-muted-surface)]">
                     <Image
-                      src={bundle.fallback}
+                      src={marketingScreenshotBundleDisplaySrc(bundle)}
                       alt={label}
-                      width={bundle.width}
-                      height={bundle.height}
-                      className="h-full w-full object-cover object-top"
-                      sizes="(max-width: 768px) 100vw, 33vw"
+                      fill
+                      sizes={MARKETING_SCREENSHOT_TRIPLE_SIZES}
+                      quality={MARKETING_PHOTO_QUALITY}
+                      className="object-cover object-top"
                     />
                   </div>
                   <figcaption className="border-t border-[var(--theme-card-border)] px-3 py-2.5 text-center text-xs font-medium text-[var(--theme-muted-text)]">

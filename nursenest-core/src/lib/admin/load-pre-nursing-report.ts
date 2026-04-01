@@ -73,4 +73,3 @@ export async function loadPreNursingAnalyticsReport(): Promise<PreNursingAnalyti
     },
   };
 }
-

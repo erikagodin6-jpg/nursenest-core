@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import type { HomeHeroSlide } from "@/config/home-hero-carousel";
@@ -7,6 +8,12 @@ import {
   getMarketingHeroImageUrlChain,
   MARKETING_HERO_LOCAL_FALLBACK,
 } from "@/lib/marketing-hero-image";
+import {
+  MARKETING_CAROUSEL_SIZES,
+  MARKETING_HERO_LCP_SIZES,
+  MARKETING_PHOTO_QUALITY,
+  marketingImageShouldUnoptimize,
+} from "@/lib/marketing-image-delivery";
 
 export type MarketingHeroCarouselProps = {
   slides: readonly HomeHeroSlide[];
@@ -23,8 +30,6 @@ export type MarketingHeroCarouselProps = {
   /** Slide images: `img-${imgTestIdPrefix}-slide-{i}` (default `hero` → `img-hero-slide-0`). */
   imgTestIdPrefix?: string;
   autoplayIntervalMs?: number;
-  /** Console / debug tag when an image fails (default `hero-carousel`). */
-  logPrefix?: string;
 };
 
 /**
@@ -44,7 +49,6 @@ export function MarketingHeroCarousel({
   testIdPrefix = "hero-carousel",
   imgTestIdPrefix = "hero",
   autoplayIntervalMs = 5000,
-  logPrefix = "hero-carousel",
 }: MarketingHeroCarouselProps) {
   const { t } = useMarketingI18n();
   const [current, setCurrent] = useState(0);
@@ -65,10 +69,12 @@ export function MarketingHeroCarousel({
     lastSlideFingerprintRef.current = slideFingerprint;
     loadedOnceRef.current = false;
     unavailableReported.current = false;
-    setHasLoaded(false);
-    setHeroTierByIndex({});
-    setFailed(new Set());
-    setCurrent(0);
+    queueMicrotask(() => {
+      setHasLoaded(false);
+      setHeroTierByIndex({});
+      setFailed(new Set());
+      setCurrent(0);
+    });
   }, [slideFingerprint, slides.length]);
 
   useEffect(() => {
@@ -115,7 +121,7 @@ export function MarketingHeroCarousel({
     for (let step = 0; step < slides.length; step++) {
       const idx = (current + step) % slides.length;
       if (!failed.has(idx)) {
-        setCurrent(idx);
+        queueMicrotask(() => setCurrent(idx));
         return;
       }
     }
@@ -161,20 +167,21 @@ export function MarketingHeroCarousel({
       ? heroMediaFrameClass
       : "relative aspect-[16/10] w-full max-h-[min(15rem,42vh)] min-h-[9rem] sm:min-h-[9.5rem]";
 
+  const carouselSizes = mediaFrame === "hero" ? MARKETING_HERO_LCP_SIZES : MARKETING_CAROUSEL_SIZES;
+
   if (validCount === 0) {
     return (
       <div className="relative w-full min-w-0" data-testid={fallbackWrapperTestId}>
         <div
           className={`${frameShell} overflow-hidden rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] shadow-[var(--shadow-elevated)]`}
         >
-          <img
+          <Image
             src={MARKETING_HERO_LOCAL_FALLBACK}
             alt=""
-            width={1200}
-            height={750}
-            className="pointer-events-none absolute inset-0 h-full w-full object-contain bg-[var(--theme-muted-surface)]"
-            loading="eager"
-            decoding="async"
+            fill
+            unoptimized
+            className="pointer-events-none object-contain bg-[var(--theme-muted-surface)]"
+            sizes={carouselSizes}
           />
         </div>
       </div>
@@ -210,19 +217,20 @@ export function MarketingHeroCarousel({
           const tier = Math.min(heroTierByIndex[index] ?? 0, chain.length - 1);
           const src = chain[tier];
           const active = index === current;
+          const lcp = mediaFrame === "hero" && index === 0;
           return (
-            <img
-              key={`${slide.objectKey}-${tier}`}
+            <Image
+              key={`${slide.objectKey}-${index}-${tier}`}
               src={src}
               alt={slide.alt}
-              width={1200}
-              height={750}
-              decoding={index === 0 ? "sync" : "async"}
-              className={`pointer-events-none absolute inset-0 h-full w-full object-contain bg-[var(--theme-muted-surface)] transition-opacity duration-700 ease-in-out will-change-[opacity] ${
+              fill
+              sizes={carouselSizes}
+              quality={MARKETING_PHOTO_QUALITY}
+              priority={lcp}
+              unoptimized={marketingImageShouldUnoptimize(src)}
+              className={`pointer-events-none object-contain bg-[var(--theme-muted-surface)] transition-opacity duration-700 ease-in-out will-change-[opacity] ${
                 active ? "opacity-100" : "opacity-0"
               }`}
-              loading="eager"
-              fetchPriority={index === 0 ? "high" : "low"}
               data-testid={`img-${imgTestIdPrefix}-slide-${index}`}
               aria-hidden={!active}
               referrerPolicy="no-referrer"

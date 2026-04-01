@@ -3,18 +3,18 @@ import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { loadLegalMarkdownDoc, type LegalDocId } from "@/lib/legal/load-legal-doc";
 import { simpleMarketingBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
+import type { BreadcrumbResolution } from "@/lib/seo/breadcrumb-types";
 
-export async function LegalDocMarketingView({
-  docId,
-  breadcrumbLabel,
-  path,
-}: {
-  docId: LegalDocId;
-  breadcrumbLabel: string;
-  path: string;
-}) {
-  const md = await loadLegalMarkdownDoc(docId);
-  const { crumbs, schemaItems } = simpleMarketingBreadcrumbs(breadcrumbLabel, path);
+export type LegalDocMarketingViewProps =
+  | { docId: LegalDocId; breadcrumbLabel: string; path: string }
+  | { docId: LegalDocId; breadcrumbResolution: BreadcrumbResolution };
+
+export async function LegalDocMarketingView(props: LegalDocMarketingViewProps) {
+  const md = await loadLegalMarkdownDoc(props.docId);
+  const { crumbs, schemaItems } =
+    "breadcrumbResolution" in props
+      ? props.breadcrumbResolution
+      : simpleMarketingBreadcrumbs(props.breadcrumbLabel, props.path);
   return (
     <>
       <BreadcrumbJsonLd items={schemaItems} />

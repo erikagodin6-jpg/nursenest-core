@@ -132,7 +132,6 @@ function buildResponsiveBundle(clusterObjects, baseUrl, defaultW, defaultH) {
     (a, b) => variantWidth(a.Key) - variantWidth(b.Key),
   );
   const variants = sorted.filter((o) => /-\d+w\.(png|jpe?g|webp|svg)$/i.test(o.Key));
-  const full = sorted.find((o) => /-full\.(png|jpe?g|webp|svg)$/i.test(o.Key));
   const thumbs = sorted.filter((o) => /-thumb-\d+w\./i.test(o.Key));
 
   let srcSet = "";
@@ -140,15 +139,14 @@ function buildResponsiveBundle(clusterObjects, baseUrl, defaultW, defaultH) {
     srcSet = variants
       .map((o) => `${publicUrl(baseUrl, o.Key)} ${variantWidth(o.Key)}w`)
       .join(", ");
-    if (full) {
-      srcSet += `, ${publicUrl(baseUrl, full.Key)} ${defaultW}w`;
-    }
+    // Omit `-full` in srcSet: in-app delivery caps at 1200w (`marketing-image-delivery.ts`).
   } else if (clusterObjects.length === 1) {
     const o = clusterObjects[0];
     srcSet = `${publicUrl(baseUrl, o.Key)} 1x`;
   }
 
   const fallbackObj =
+    variants.find((o) => variantWidth(o.Key) === 1200) ||
     variants.find((o) => variantWidth(o.Key) === 768) ||
     variants[Math.floor(variants.length / 2)] ||
     pickBestObject(clusterObjects);
@@ -182,9 +180,9 @@ function buildResponsiveBundle(clusterObjects, baseUrl, defaultW, defaultH) {
 function legacyScreenshotBundle(stem, w, h) {
   const base = `${DEFAULT_MARKETING_CDN_BASE}/screenshots/${stem}`;
   return {
-    srcSet: `${base}-480w.webp 480w, ${base}-768w.webp 768w, ${base}-1200w.webp 1200w, ${base}-full.webp ${w}w`,
+    srcSet: `${base}-480w.webp 480w, ${base}-768w.webp 768w, ${base}-1200w.webp 1200w`,
     thumbSrcSet: `${base}-thumb-160w.webp 160w, ${base}-thumb-240w.webp 240w`,
-    fallback: `${base}-768w.webp`,
+    fallback: `${base}-1200w.webp`,
     thumbFallback: `${base}-thumb-160w.webp`,
     width: w,
     height: h,

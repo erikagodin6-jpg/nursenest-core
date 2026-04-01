@@ -22,7 +22,7 @@ export default async function MarketingLocaleLayout({
     <MarketingI18nProvider key={locale} locale={locale} messages={messages} fallbackMessages={fallbackMessages}>
       <OrganizationJsonLd />
       <WebSiteJsonLd />
-      <div className="nn-marketing-surface flex min-h-screen flex-col bg-[var(--theme-page-bg)]">
+      <div className="nn-marketing-surface flex min-h-screen flex-col">
         <SiteHeader />
         <main className="flex-1">{children}</main>
         <SiteFooter />

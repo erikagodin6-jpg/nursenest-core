@@ -72,34 +72,64 @@ export default async function LearnerShellLayout({ children }: { children: React
           <Link className="rounded-full border border-primary/15 bg-primary/8 px-3 py-2 text-primary" href="/app">
             Dashboard
           </Link>
-          <Link className="rounded-full border border-border bg-white px-3 py-2 hover:bg-gray-50" href="/app/lessons">
+          <Link
+            className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-menu-text)] hover:bg-[var(--accent-soft)]"
+            href="/app/lessons"
+          >
             Lessons
           </Link>
-          <Link className="rounded-full border border-border bg-white px-3 py-2 hover:bg-gray-50" href="/app/questions">
+          <Link
+            className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-menu-text)] hover:bg-[var(--accent-soft)]"
+            href="/app/questions"
+          >
             Question Bank
           </Link>
-          <Link className="rounded-full border border-border bg-white px-3 py-2 hover:bg-gray-50" href="/app/practice-tests">
+          <Link
+            className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-menu-text)] hover:bg-[var(--accent-soft)]"
+            href="/app/practice-tests"
+          >
             Practice tests
           </Link>
-          <Link className="rounded-full border border-border bg-white px-3 py-2 hover:bg-gray-50" href="/app/exams">
+          <Link
+            className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-menu-text)] hover:bg-[var(--accent-soft)]"
+            href="/app/exams"
+          >
             Practice Exams
           </Link>
-          <Link className="rounded-full border border-border bg-white px-3 py-2 hover:bg-gray-50" href="/app/study-plan">
+          <Link
+            className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-menu-text)] hover:bg-[var(--accent-soft)]"
+            href="/app/study-plan"
+          >
             Study plan
           </Link>
-          <Link className="rounded-full border border-border bg-white px-3 py-2 hover:bg-gray-50" href="/app/flashcards">
+          <Link
+            className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-menu-text)] hover:bg-[var(--accent-soft)]"
+            href="/app/flashcards"
+          >
             Flashcards
           </Link>
-          <Link className="rounded-full border border-border bg-white px-3 py-2 hover:bg-gray-50" href="/blog">
+          <Link
+            className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-menu-text)] hover:bg-[var(--accent-soft)]"
+            href="/blog"
+          >
             Blog
           </Link>
-          <Link className="rounded-full border border-border bg-white px-3 py-2 hover:bg-gray-50" href="/tools">
+          <Link
+            className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-menu-text)] hover:bg-[var(--accent-soft)]"
+            href="/tools"
+          >
             Clinical tools
           </Link>
-          <Link className="rounded-full border border-border bg-white px-3 py-2 hover:bg-gray-50" href="/case-studies">
+          <Link
+            className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-menu-text)] hover:bg-[var(--accent-soft)]"
+            href="/case-studies"
+          >
             Case studies
           </Link>
-          <Link className="rounded-full border border-border bg-white px-3 py-2 hover:bg-gray-50" href="/pricing">
+          <Link
+            className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-menu-text)] hover:bg-[var(--accent-soft)]"
+            href="/pricing"
+          >
             Plans
           </Link>
           </nav>

@@ -328,7 +328,7 @@ export function PricingPageClient({
         <p className="mt-2 text-xs text-muted-foreground">{t("pages.pricing.hero.regionHint")}</p>
       </header>
 
-      <section className="mt-12 rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]/50 p-5 sm:p-6">
+      <section className="mt-12 rounded-2xl border border-[var(--border-subtle,var(--theme-card-border))] bg-[var(--bg-section-alt)] p-5 sm:p-6 shadow-[var(--shadow-card)]">
         <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">{t("pages.pricing.proof.title")}</h2>
         <ul className="mt-4 space-y-3 text-sm leading-relaxed text-[var(--theme-body-text)]">
           <li className="flex gap-2">
@@ -345,7 +345,7 @@ export function PricingPageClient({
           </li>
         </ul>
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
-          <div className="rounded-xl border border-[var(--theme-card-border)] bg-card p-4 shadow-sm">
+          <div className="rounded-xl border border-[var(--border-subtle,var(--theme-card-border))] bg-card p-4 shadow-[var(--shadow-card)]">
             <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Score preview</p>
             <p className="mt-2 text-2xl font-bold tabular-nums text-[var(--theme-heading-text)]">68%</p>
             <p className="text-xs text-muted-foreground">Last session · Pharmacology (example)</p>
@@ -353,10 +353,12 @@ export function PricingPageClient({
               <span className="rounded-full bg-amber-500/15 px-2 py-0.5 text-[11px] font-medium text-amber-900 dark:text-amber-100">
                 Priority
               </span>
-              <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] text-muted-foreground">Safety</span>
+              <span className="rounded-full bg-[var(--surface-chip)] px-2 py-0.5 text-[11px] text-muted-foreground ring-1 ring-[var(--border-subtle)]">
+                Safety
+              </span>
             </div>
           </div>
-          <div className="rounded-xl border border-[var(--theme-card-border)] bg-card p-4 shadow-sm">
+          <div className="rounded-xl border border-[var(--border-subtle,var(--theme-card-border))] bg-card p-4 shadow-[var(--shadow-card)]">
             <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Categories</p>
             <ul className="mt-2 space-y-1.5 text-sm">
               <li className="flex justify-between border-b border-dashed border-border pb-1">
@@ -377,12 +379,12 @@ export function PricingPageClient({
         </div>
       </section>
 
-      <section className="mt-12 overflow-x-auto rounded-2xl border border-[var(--theme-card-border)] bg-card">
+      <section className="mt-12 overflow-x-auto rounded-2xl border border-[var(--border-subtle,var(--theme-card-border))] bg-card shadow-[var(--shadow-card)]">
         <h2 className="px-4 pt-4 text-xl font-bold text-[var(--theme-heading-text)] sm:px-6">Plan comparison</h2>
         <p className="px-4 pb-2 text-sm text-muted-foreground sm:px-6">Choose by depth: Free to start, Core to improve, Premium for full exam-readiness workflow.</p>
         <table className="w-full min-w-[640px] text-left text-sm">
           <thead>
-            <tr className="border-y border-[var(--theme-card-border)] bg-muted/35">
+            <tr className="border-y border-[var(--border-subtle,var(--theme-card-border))] bg-[var(--bg-inset)]">
               <th className="px-4 py-3 sm:px-6">Feature</th>
               <th className="px-4 py-3">Free</th>
               <th className="px-4 py-3">Core</th>
@@ -413,7 +415,7 @@ export function PricingPageClient({
         </table>
       </section>
 
-      <div className="nn-accent-soft-ring mt-10 rounded-xl border border-[var(--theme-card-border)] px-4 py-3 text-sm text-muted-foreground">
+      <div className="nn-accent-soft-ring mt-10 rounded-xl border border-[var(--border-subtle,var(--theme-card-border))] px-4 py-3 text-sm text-muted-foreground">
         <p>{t("pages.pricing.institutionalBanner")}</p>
         <Link href={institutionalHref} className="mt-2 inline-block font-semibold text-primary hover:underline">
           {t("pages.pricing.institutionalLink")} →
@@ -446,10 +448,10 @@ export function PricingPageClient({
               id === "rn"
                 ? segment === id
                   ? "bg-primary px-5 py-2.5 text-base text-primary-foreground shadow-md ring-2 ring-primary/30"
-                  : "border-2 border-primary/25 bg-card px-5 py-2.5 text-base hover:bg-muted/80"
+                  : "border-2 border-primary/25 bg-card px-5 py-2.5 text-base hover:bg-[var(--surface-interactive-hover)]"
                 : segment === id
                   ? "bg-primary text-primary-foreground"
-                  : "border border-border bg-card hover:bg-muted/80"
+                  : "border border-border bg-card hover:bg-[var(--surface-interactive-hover)]"
             }`}
           >
             {t(labelKey)}
@@ -526,7 +528,7 @@ export function PricingPageClient({
                 </div>
               </div>
             </div>
-            <div className="border-t border-border/40 bg-muted/20 px-4 py-5 text-left">
+            <div className="border-t border-[var(--border-subtle)] bg-[var(--bg-inset)] px-4 py-5 text-left">
               <p className="text-xs font-semibold uppercase tracking-wide text-primary">{t("pages.pricing.preview.badge")}</p>
               <p className="mt-2 text-sm text-muted-foreground">{t("pages.pricing.preview.body")}</p>
             </div>
@@ -552,7 +554,7 @@ export function PricingPageClient({
           <li>{t("pages.pricing.get.b2")}</li>
           <li>{t("pages.pricing.get.b3")}</li>
         </ul>
-        <div className="mt-6 space-y-3 rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]/40 p-5 text-sm leading-relaxed text-[var(--theme-body-text)]">
+        <div className="mt-6 space-y-3 rounded-2xl border border-[var(--border-subtle,var(--theme-card-border))] bg-[var(--bg-section-alt)] p-5 text-sm leading-relaxed text-[var(--theme-body-text)] shadow-[var(--shadow-card)]">
           <p>
             {t("pages.pricing.get.afterLesson")}{" "}
             <Link href={lessonsHubHref} className="font-semibold text-primary underline-offset-4 hover:underline">
@@ -583,7 +585,7 @@ export function PricingPageClient({
             <p className="text-sm font-semibold text-primary">{t("pages.pricing.use.afterShiftTitle")}</p>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t("pages.pricing.use.afterShiftBody")}</p>
           </div>
-          <div className="mt-4 rounded-2xl border border-dashed border-primary/30 bg-primary/[0.04] p-5">
+          <div className="mt-4 rounded-2xl border border-dashed border-[var(--border-medium)] bg-[var(--accent-soft)] p-5">
             <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{t("pages.pricing.use.weekendTitle")}</p>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t("pages.pricing.use.weekendBody")}</p>
           </div>
@@ -607,7 +609,7 @@ export function PricingPageClient({
         </div>
       </section>
 
-      <section className="mt-14 rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]/40 p-6">
+      <section className="mt-14 rounded-2xl border border-[var(--border-subtle,var(--theme-card-border))] bg-[var(--bg-section-alt)] p-6 shadow-[var(--shadow-card)]">
         <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">Student outcomes and trust</h2>
         <p className="mt-2 text-sm text-muted-foreground">
           Built for realistic nursing decision-making with clinically grounded rationales and targeted review loops.
@@ -637,14 +639,14 @@ export function PricingPageClient({
         </dl>
       </section>
 
-      <section className="mt-14 overflow-x-auto rounded-2xl border border-[var(--theme-card-border)] bg-card">
+      <section className="mt-14 overflow-x-auto rounded-2xl border border-[var(--border-subtle,var(--theme-card-border))] bg-card shadow-[var(--shadow-card)]">
         <h2 className="sr-only">{t("pages.pricing.compare.title")}</h2>
         <table className="w-full min-w-[520px] text-left text-sm">
           <caption className="border-b border-[var(--theme-card-border)] px-4 py-3 text-left text-base font-bold text-[var(--theme-heading-text)]">
             NurseNest vs UWorld-style qbank
           </caption>
           <thead>
-            <tr className="border-b border-[var(--theme-card-border)] bg-muted/40">
+            <tr className="border-b border-[var(--border-subtle,var(--theme-card-border))] bg-[var(--bg-inset)]">
               <th className="px-4 py-3 font-semibold" scope="col">
                 {" "}
               </th>
@@ -679,7 +681,7 @@ export function PricingPageClient({
         {loadError ? <p className="mt-4 text-sm text-red-600">{loadError}</p> : null}
         {checkoutError ? <p className="mt-4 text-sm text-red-600">{checkoutError}</p> : null}
 
-        <div className="mt-6 rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]/40 p-4 text-sm leading-relaxed text-[var(--theme-body-text)]">
+        <div className="mt-6 rounded-2xl border border-[var(--border-subtle,var(--theme-card-border))] bg-[var(--bg-section-alt)] p-4 text-sm leading-relaxed text-[var(--theme-body-text)]">
           <label className="flex cursor-pointer gap-3">
             <input
               type="checkbox"
@@ -772,7 +774,7 @@ export function PricingPageClient({
             </article>
           ) : null}
           {!coreRow && !premiumRow ? (
-            <article className="md:col-span-3 rounded-2xl border border-border/70 bg-muted/30 p-5 text-sm text-muted-foreground">
+            <article className="md:col-span-3 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-inset)] p-5 text-sm text-muted-foreground">
               Plans for this pathway are updating. Explore free questions now, then return to unlock full access.
             </article>
           ) : null}

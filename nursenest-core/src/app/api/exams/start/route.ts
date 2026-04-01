@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { ContentStatus, ExamSessionStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { questionAccessWhere, userCanAccessExam } from "@/lib/entitlements/content-access-scope";
-import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
+import { notSubscribedResponse, requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { logPaywallDeny } from "@/lib/entitlements/assert-question-access";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { productEvent } from "@/lib/observability/product-events";
@@ -172,10 +172,7 @@ export async function POST(req: Request) {
     }
     if (!userCanAccessExam(gate.entitlement, exam)) {
       logPaywallDeny("/api/exams/start", "exam_out_of_scope", { examId: effectiveExamId });
-      return NextResponse.json(
-        { error: "Forbidden", code: "exam_not_in_plan" },
-        { status: 403 },
-      );
+      return notSubscribedResponse();
     }
   }
 

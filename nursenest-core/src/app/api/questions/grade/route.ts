@@ -11,7 +11,21 @@ import { normalizeTopicLabel } from "@/lib/learner/weak-topics-from-sessions";
 import { buildRationalePayloadForGradeResponse } from "@/lib/content-quality/rationale-display";
 import { buildNormalizedTeachingPayload, buildTeachingMediaBundle } from "@/lib/content-quality/teaching-payload";
 import { deriveTopicCode } from "@/lib/learner/topic-linking";
+import type { RecommendationConfidence } from "@/lib/learner/topic-linking";
 import { ContentStatus } from "@prisma/client";
+
+function topicRoutingConfidence(row: { subtopic?: string | null; topic?: string | null; bodySystem?: string | null }): RecommendationConfidence {
+  if ((row.subtopic ?? "").trim().length > 1) return "high";
+  if ((row.topic ?? "").trim().length > 1) return "medium";
+  if ((row.bodySystem ?? "").trim().length > 1) return "low";
+  return "low";
+}
+
+function appendTopicCodeToDrillHref(href: string, topicCode: string): string {
+  if (!topicCode || href.includes("topicCode=")) return href;
+  const join = href.includes("?") ? "&" : "?";
+  return `${href}${join}topicCode=${encodeURIComponent(topicCode)}`;
+}
 
 function normalizeCorrect(correctAnswer: Prisma.JsonValue | null | undefined): string[] {
   if (correctAnswer == null) return [];
@@ -104,6 +118,7 @@ export async function POST(req: Request) {
     const teaching = buildNormalizedTeachingPayload(row);
     const teachingMedia = buildTeachingMediaBundle(row);
     const topicCode = deriveTopicCode({ topic: row.topic, subtopic: row.subtopic, bodySystem: row.bodySystem });
+    const linkConfidence = topicRoutingConfidence(row);
 
     const [linkedPathwayLesson, linkedContentLesson, linkedDeck] = topicCode
       ? await Promise.all([
@@ -143,12 +158,13 @@ export async function POST(req: Request) {
         ? `/app/flashcards/${linkedDeck.slug}/study?topicCode=${encodeURIComponent(topicCode)}`
         : `/app/flashcards?topicCode=${encodeURIComponent(topicCode)}`
       : null;
-    const topicDrillHref =
+    const topicDrillBase =
       topicCode && row.topic
         ? `/app/questions?preset=topic_drill&topic=${encodeURIComponent(row.topic)}`
         : topicCode
           ? `/app/questions?preset=topic_drill&topic=${encodeURIComponent(topicCode)}`
           : null;
+    const topicDrillHref = topicDrillBase && topicCode ? appendTopicCodeToDrillHref(topicDrillBase, topicCode) : topicDrillBase;
 
     return NextResponse.json({
       correct,
@@ -166,7 +182,7 @@ export async function POST(req: Request) {
       questionType: row.questionType,
       learningLoop: {
         topicCode,
-        confidence: topicCode ? "high" : "low",
+        confidence: topicCode ? linkConfidence : "low",
         lessonHref,
         flashcardsHref,
         topicDrillHref,

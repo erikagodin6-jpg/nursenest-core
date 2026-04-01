@@ -18,7 +18,7 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
     >
       <OrganizationJsonLd />
       <WebSiteJsonLd />
-      <div className="nn-marketing-surface flex min-h-screen flex-col bg-[var(--theme-page-bg)]">
+      <div className="nn-marketing-surface flex min-h-screen flex-col">
         <SiteHeader />
         <main className="flex-1">{children}</main>
         <SiteFooter />

@@ -31,13 +31,102 @@ body {
   --shadow-elevated: 0 12px 40px -12px rgba(0, 0, 0, 0.12), 0 4px 16px -4px rgba(0, 0, 0, 0.06);
 }
 
-/* Subtle tinted surface + legacy aliases — only when a theme palette is active on `html` */
+/*
+ * Layered tonal system (one user-selected theme → many surfaces)
+ * ------------------------------------------------------------------
+ * Surfaces: --bg-page, --bg-section, --bg-section-alt, --bg-card, --bg-elevated, --bg-inset
+ * Accents:  --accent-primary, --accent-hover, --accent-pressed, --accent-soft, --accent-highlight
+ * Borders:  --border-subtle, --border-medium, --border-strong, --divider
+ * UI:       --surface-interactive-hover, --surface-selected, --surface-input, --surface-chip
+ * Focus:    --focus-halo, --focus-halo-strong
+ * Hero:     --hero-gradient-start, --hero-gradient-end
+ * Text:     --text-on-accent, --text-muted-bg
+ * Utilities: .nn-surface-section, .nn-surface-section-alt, .nn-surface-inset, .nn-chip, .nn-tab-pill*
+ */
 :where([data-theme]) {
-  --theme-muted-surface: color-mix(in srgb, var(--theme-primary) 8%, var(--theme-page-bg));
-  --color-card-base: var(--theme-card-bg);
+  /* Surfaces: one cohesive hue per theme, multiple depths */
+  --bg-page: var(--theme-page-bg);
+  --bg-section: color-mix(in srgb, var(--theme-primary) 6%, var(--theme-page-bg));
+  /* Lighter band for alternating strips (pricing rows, hub rhythm) — still same family */
+  --bg-section-alt: color-mix(in srgb, var(--theme-primary) 3.5%, var(--theme-page-bg));
+  --bg-card: color-mix(in srgb, var(--theme-primary) 3.25%, var(--theme-card-bg));
+  --bg-elevated: color-mix(in srgb, var(--theme-card-bg) 90%, var(--theme-heading-text));
+  /* Slightly recessed / table header bands */
+  --bg-inset: color-mix(in srgb, var(--theme-body-text) 5%, var(--bg-card));
+
+  /* Accent ladder (primary stays the user’s chosen theme color) */
+  --accent-primary: var(--theme-primary);
+  --accent-hover: color-mix(in srgb, var(--theme-primary) 90%, var(--theme-heading-text));
+  --accent-pressed: color-mix(in srgb, var(--theme-primary) 78%, var(--theme-heading-text));
+  --accent-soft: color-mix(in srgb, var(--theme-primary) 11%, var(--theme-card-bg));
+  --accent-highlight: color-mix(in srgb, var(--theme-primary) 15%, var(--theme-card-bg));
+
+  /* Interactive list / tab / chip surfaces */
+  --surface-interactive-hover: color-mix(in srgb, var(--theme-primary) 7%, var(--bg-card));
+  --surface-selected: color-mix(in srgb, var(--theme-primary) 12%, var(--bg-card));
+  --surface-input: color-mix(in srgb, var(--theme-primary) 2.5%, var(--theme-input-bg));
+  --surface-chip: color-mix(in srgb, var(--theme-primary) 9%, var(--bg-card));
+  --text-on-accent: var(--theme-primary-foreground);
+
+  /* Borders / dividers */
+  --border-subtle: color-mix(in srgb, var(--theme-border) 52%, var(--theme-page-bg));
+  --border-medium: color-mix(in srgb, var(--theme-border) 68%, var(--theme-page-bg));
+  --border-strong: color-mix(in srgb, var(--theme-primary) 26%, var(--theme-border));
+  --divider: color-mix(in srgb, var(--theme-body-text) 9%, var(--theme-page-bg));
+  --text-muted-bg: color-mix(in srgb, var(--theme-muted-text) 16%, var(--bg-card));
+
+  /* Focus: visible halo without leaving the theme family */
+  --focus-halo: color-mix(in srgb, var(--theme-primary) 32%, transparent);
+  --focus-halo-strong: color-mix(in srgb, var(--theme-primary) 48%, transparent);
+
+  /* Hero / large marketing panels — same hue, soft glow */
+  --hero-gradient-start: color-mix(in srgb, var(--theme-primary) 8%, transparent);
+  --hero-gradient-end: transparent;
+
+  /* Stripes / panels that sit on the page canvas */
+  --theme-muted-surface: color-mix(in srgb, var(--theme-primary) 7%, var(--bg-page));
+
+  --color-card-base: var(--bg-card);
   --color-card-fg-base: var(--theme-card-text);
-  --color-popover-base: var(--theme-card-bg);
+  --color-popover-base: var(--bg-elevated);
   --color-popover-fg-base: var(--theme-body-text);
+
+  /* Theme-tinted depth (still restrained for long study sessions) */
+  --shadow-card:
+    0 1px 2px color-mix(in srgb, var(--theme-heading-text) 5%, transparent),
+    0 8px 28px -10px color-mix(in srgb, var(--theme-primary) 12%, transparent);
+  --shadow-card-hover:
+    0 10px 36px -12px color-mix(in srgb, var(--theme-primary) 16%, transparent),
+    0 4px 14px -4px color-mix(in srgb, var(--theme-heading-text) 6%, transparent);
+  --shadow-elevated:
+    0 18px 50px -18px color-mix(in srgb, var(--theme-primary) 18%, transparent),
+    0 8px 22px -8px color-mix(in srgb, var(--theme-heading-text) 8%, transparent);
+}
+
+/* Dark palettes: stronger separation (flat navy + same accent reads as one blob) */
+html[data-theme="dark-clinical"],
+html[data-theme="dark-academia"],
+html[data-theme="dark-mode"] {
+  --bg-section: color-mix(in srgb, var(--theme-primary) 12%, var(--theme-page-bg));
+  --bg-section-alt: color-mix(in srgb, var(--theme-primary) 7%, var(--theme-page-bg));
+  --bg-card: color-mix(in srgb, var(--theme-primary) 7%, var(--theme-card-bg));
+  --bg-inset: color-mix(in srgb, var(--theme-body-text) 9%, var(--bg-card));
+  --bg-elevated: color-mix(in srgb, var(--theme-card-bg) 76%, var(--theme-primary));
+  --accent-soft: color-mix(in srgb, var(--theme-primary) 14%, var(--theme-card-bg));
+  --accent-highlight: color-mix(in srgb, var(--theme-primary) 20%, var(--theme-card-bg));
+  --accent-pressed: color-mix(in srgb, var(--theme-primary) 72%, var(--theme-heading-text));
+  --surface-interactive-hover: color-mix(in srgb, var(--theme-primary) 11%, var(--bg-card));
+  --surface-selected: color-mix(in srgb, var(--theme-primary) 18%, var(--bg-card));
+  --surface-input: color-mix(in srgb, var(--theme-primary) 5%, var(--theme-input-bg));
+  --surface-chip: color-mix(in srgb, var(--theme-primary) 12%, var(--bg-card));
+  --border-subtle: color-mix(in srgb, var(--theme-border) 62%, var(--theme-page-bg));
+  --border-medium: color-mix(in srgb, var(--theme-border) 78%, var(--theme-page-bg));
+  --border-strong: color-mix(in srgb, var(--theme-primary) 32%, var(--theme-border));
+  --divider: color-mix(in srgb, var(--theme-body-text) 14%, var(--theme-page-bg));
+  --focus-halo: color-mix(in srgb, var(--theme-primary) 40%, transparent);
+  --focus-halo-strong: color-mix(in srgb, var(--theme-primary) 55%, transparent);
+  --hero-gradient-start: color-mix(in srgb, var(--theme-primary) 14%, transparent);
+  --theme-muted-surface: color-mix(in srgb, var(--theme-primary) 10%, var(--bg-page));
 }
 
 @theme inline {
@@ -49,25 +138,27 @@ body {
   /* Match legacy `client/src/index.css` token names (`bg-warmwhite`, `text-softgray`, etc.) */
   --color-warmwhite: var(--color-warmwhite);
   --color-softgray: var(--color-softgray);
-  /* Page surface follows active theme (lavender default + data-theme overrides) */
-  --color-background: var(--theme-page-bg);
+  /* Page surface follows layered tokens when `[data-theme]` is set */
+  --color-background: var(--bg-page, var(--theme-page-bg));
   --color-foreground: var(--theme-body-text);
-  /* Single chain: Tailwind semantic tokens track `--theme-*` so bg-card / text-primary move with the picker */
-  --color-card: var(--theme-card-bg);
+  /* Single chain: Tailwind semantic tokens track tonal layers so surfaces separate cleanly */
+  --color-card: var(--bg-card, var(--theme-card-bg));
   --color-card-foreground: var(--theme-card-text);
-  --color-popover: var(--theme-card-bg);
+  --color-popover: var(--bg-elevated, var(--theme-card-bg));
   --color-popover-foreground: var(--theme-body-text);
-  --color-primary: var(--theme-primary);
+  --color-primary: var(--accent-primary, var(--theme-primary));
   --color-primary-foreground: var(--theme-primary-foreground);
   --color-secondary: var(--theme-secondary);
   --color-secondary-foreground: var(--theme-secondary-foreground);
   --color-accent: var(--theme-accent);
   --color-accent-foreground: var(--theme-accent-foreground);
-  --color-border: var(--theme-border);
+  --color-border: var(--border-subtle, var(--theme-border));
   --color-ring: var(--theme-ring);
-  /* Muted surfaces/text — Tailwind `bg-muted`, `text-muted-foreground` track active theme */
-  --color-muted: color-mix(in srgb, var(--theme-body-text) 6%, var(--theme-page-bg));
+  /* Muted row/chip surfaces — slightly richer than page, still low contrast */
+  --color-muted: color-mix(in srgb, var(--theme-body-text) 7%, var(--bg-page, var(--theme-page-bg)));
   --color-muted-foreground: var(--theme-muted-text);
+  /* Form fields track input surface token when theme is active */
+  --color-input: var(--surface-input, var(--theme-input-bg));
 }
 
 @layer utilities {
@@ -87,12 +178,12 @@ body {
 
 * {
   box-sizing: border-box;
-  border-color: var(--theme-border);
+  border-color: var(--border-subtle, var(--theme-border));
 }
 
 body {
   margin: 0;
-  background: var(--theme-page-bg);
+  background: var(--bg-page, var(--theme-page-bg));
   color: var(--theme-body-text);
   font-family: var(--font-dm-sans), Arial, Helvetica, sans-serif;
   text-rendering: optimizeLegibility;
@@ -114,20 +205,93 @@ a {
 }
 
 .nn-card {
-  background: var(--theme-card-bg);
-  border: 1px solid var(--theme-card-border);
+  background: var(--bg-card, var(--theme-card-bg));
+  border: 1px solid var(--border-subtle, var(--theme-card-border));
   border-radius: 1rem;
   box-shadow: var(--shadow-card);
 }
 
 .nn-card-interactive {
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
 }
 
 .nn-card-interactive:hover {
   transform: translateY(-1px);
   box-shadow: var(--shadow-card-hover);
-  border-color: color-mix(in srgb, var(--theme-primary) 32%, transparent);
+  border-color: var(--border-strong, color-mix(in srgb, var(--theme-primary) 32%, transparent));
+  background-color: color-mix(in srgb, var(--accent-soft, transparent) 55%, var(--bg-card, var(--theme-card-bg)));
+}
+
+/* Marketing / long-form chrome: soft top glow + gradient to section tint (same hue family) */
+html[data-theme] .nn-marketing-surface {
+  background-color: var(--bg-page);
+  background-image:
+    radial-gradient(120% 65% at 50% -18%, var(--hero-gradient-start), var(--hero-gradient-end) 50%),
+    linear-gradient(180deg, var(--bg-page) 0%, color-mix(in srgb, var(--bg-section) 40%, var(--bg-page)) 55%, var(--bg-section) 100%);
+}
+
+/* Optional: full-width section band on page canvas */
+.nn-surface-section {
+  background: var(--bg-section);
+}
+
+/* Alternate band — use between major sections (pricing, hubs) for rhythm */
+.nn-surface-section-alt {
+  background: var(--bg-section-alt);
+}
+
+/* Inset / muted panel inside a card */
+.nn-surface-inset {
+  background: var(--bg-inset);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.nn-surface-elevated {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-elevated);
+  border-radius: var(--radius-lg);
+}
+
+/* Chips / small filters — theme-native, not gray-100 */
+.nn-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  background: var(--surface-chip);
+  border: 1px solid var(--border-subtle);
+  color: var(--theme-heading-text);
+}
+
+.nn-chip[data-selected="true"],
+.nn-chip[aria-pressed="true"] {
+  background: var(--surface-selected);
+  border-color: var(--border-medium);
+}
+
+/* Tab-style pills (segmented controls) */
+.nn-tab-pill {
+  border-radius: 9999px;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-card);
+  color: var(--theme-menu-text);
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.nn-tab-pill:hover {
+  background: var(--surface-interactive-hover);
+  border-color: var(--border-medium);
+}
+
+.nn-tab-pill[data-active="true"],
+.nn-tab-pill[aria-selected="true"] {
+  background: var(--theme-primary);
+  border-color: color-mix(in srgb, var(--theme-primary) 40%, transparent);
+  color: var(--text-on-accent);
 }
 
 /* Accent surfaces — use instead of scattered bg-*-50 / text-*-600 Tailwind palettes */
@@ -136,19 +300,19 @@ a {
   align-items: center;
   justify-content: center;
   border-radius: 0.5rem;
-  background: color-mix(in srgb, var(--theme-primary) 13%, var(--theme-card-bg));
+  background: var(--accent-soft);
 }
 .nn-accent-icon {
   color: var(--theme-primary);
 }
 .nn-accent-pill {
-  background: color-mix(in srgb, var(--theme-primary) 10%, var(--theme-card-bg));
-  border: 1px solid color-mix(in srgb, var(--theme-primary) 22%, transparent);
+  background: var(--accent-soft);
+  border: 1px solid var(--border-strong);
   color: color-mix(in srgb, var(--theme-primary) 88%, var(--theme-heading-text));
 }
 .nn-accent-soft-ring {
-  border-color: color-mix(in srgb, var(--theme-primary) 28%, transparent);
-  background: color-mix(in srgb, var(--theme-primary) 8%, var(--theme-card-bg));
+  border-color: var(--border-strong);
+  background: var(--accent-soft);
 }
 .nn-theme-gradient-br {
   background-image: linear-gradient(
@@ -169,11 +333,13 @@ a {
 }
 
 .nn-btn-primary:hover:not(:disabled):not([aria-disabled="true"]) {
-  filter: brightness(1.07);
+  background: var(--accent-hover);
+  filter: brightness(1.03);
 }
 
 .nn-btn-primary:active:not(:disabled):not([aria-disabled="true"]) {
-  filter: brightness(0.96);
+  background: var(--accent-pressed);
+  filter: brightness(1);
 }
 
 .nn-btn-primary:disabled,
@@ -186,15 +352,15 @@ a {
 }
 
 .nn-btn-secondary {
-  background: var(--theme-card-bg);
-  border: 1px solid var(--theme-input-border);
+  background: var(--bg-card, var(--theme-card-bg));
+  border: 1px solid var(--border-subtle, var(--theme-input-border));
   color: var(--theme-menu-text);
   border-radius: 9999px;
 }
 
 .nn-btn-secondary:hover {
-  background: color-mix(in srgb, var(--theme-primary) 6%, var(--theme-card-bg));
-  border-color: color-mix(in srgb, var(--theme-primary) 22%, var(--theme-input-border));
+  background: var(--accent-soft);
+  border-color: var(--border-strong, color-mix(in srgb, var(--theme-primary) 22%, var(--theme-input-border)));
 }
 
 .animate-page-enter {
@@ -236,10 +402,18 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   display: none !important;
 }
 
+/* Themed exam shell: inherits tonal layers when `[data-theme]` is set */
+html[data-theme] .nn-exam-session.nn-exam-session--neutral {
+  background: var(--bg-section-alt);
+  border-color: var(--border-medium);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--theme-heading-text) 5%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--theme-card-bg) 35%, transparent);
+}
+
 .nn-exam-session.nn-exam-session--neutral {
   background: #f1f5f9;
   border-color: #cbd5e1;
-  /* Subtle separation without loud theme fills */
   box-shadow:
     0 1px 0 rgb(15 23 42 / 0.04),
     inset 0 1px 0 rgb(255 255 255 / 0.45);

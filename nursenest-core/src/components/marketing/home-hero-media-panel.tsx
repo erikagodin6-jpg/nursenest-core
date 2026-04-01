@@ -1,8 +1,15 @@
 "use client";
 
-import { useCallback, useEffect, useState, type ReactNode } from "react";
+import Image from "next/image";
+import { useMemo, useState, type ReactNode } from "react";
 import type { HomeHeroSlide } from "@/config/home-hero-carousel";
 import { getMarketingHeroImageUrlChain, MARKETING_HERO_LOCAL_FALLBACK } from "@/lib/marketing-hero-image";
+import {
+  MARKETING_HERO_LCP_SIZES,
+  MARKETING_HERO_SECONDARY_SIZES,
+  MARKETING_PHOTO_QUALITY,
+  marketingImageShouldUnoptimize,
+} from "@/lib/marketing-image-delivery";
 
 function HeroImage({
   slide,
@@ -10,42 +17,44 @@ function HeroImage({
   testId,
   className,
   imgClassName,
+  sizes,
 }: {
   slide: HomeHeroSlide;
   priority: boolean;
   testId: string;
   className?: string;
   imgClassName: string;
+  sizes: string;
 }) {
-  const chain = getMarketingHeroImageUrlChain({
-    objectKey: slide.objectKey,
-    publicCdnUrl: slide.publicUrl,
-  });
+  const chain = useMemo(
+    () =>
+      getMarketingHeroImageUrlChain({
+        objectKey: slide.objectKey,
+        publicCdnUrl: slide.publicUrl,
+      }),
+    [slide.objectKey, slide.publicUrl],
+  );
   const [tier, setTier] = useState(0);
   const src = chain[Math.min(tier, chain.length - 1)] ?? MARKETING_HERO_LOCAL_FALLBACK;
+  const maxTierIndex = chain.length - 1;
 
-  useEffect(() => {
-    setTier(0);
-  }, [slide.objectKey, slide.publicUrl]);
-
-  const onError = useCallback(() => {
-    setTier((t) => (t < chain.length - 1 ? t + 1 : t));
-  }, [chain.length]);
+  const unoptimized = marketingImageShouldUnoptimize(src);
 
   return (
     <div className={className}>
-      <img
+      <Image
+        key={`${slide.objectKey}-${tier}`}
         src={src}
         alt={slide.alt}
-        width={1200}
-        height={750}
-        loading={priority ? "eager" : "lazy"}
-        decoding={priority ? "sync" : "async"}
-        fetchPriority={priority ? "high" : "low"}
+        fill
+        sizes={sizes}
+        quality={MARKETING_PHOTO_QUALITY}
+        priority={priority}
+        unoptimized={unoptimized}
         referrerPolicy="no-referrer"
         className={imgClassName}
         data-testid={testId}
-        onError={onError}
+        onError={() => setTier((t) => (t < maxTierIndex ? t + 1 : t))}
       />
     </div>
   );
@@ -108,13 +117,15 @@ export function HomeHeroMediaPanel({
         />
         <BrowserChrome>
           <div className="relative w-full overflow-hidden bg-[var(--theme-muted-surface)]">
-            <div className="aspect-[16/10] w-full min-h-[15.5rem] sm:min-h-[18.25rem] md:min-h-[19.5rem] lg:min-h-[22rem]">
+            <div className="relative aspect-[16/10] w-full min-h-[15.5rem] sm:min-h-[18.25rem] md:min-h-[19.5rem] lg:min-h-[22rem]">
               <HeroImage
+                key={primary.objectKey}
                 slide={primary}
                 priority
                 testId="img-hero-media-primary"
                 className="absolute inset-0 h-full w-full"
                 imgClassName="h-full w-full object-cover object-top"
+                sizes={MARKETING_HERO_LCP_SIZES}
               />
             </div>
           </div>
@@ -132,13 +143,15 @@ export function HomeHeroMediaPanel({
               key={`${slide.objectKey}-sec-${i}`}
               className="overflow-hidden rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] shadow-[var(--shadow-card)]"
             >
-              <div className="aspect-[16/10] w-full min-h-[8.25rem] overflow-hidden bg-[var(--theme-muted-surface)] sm:min-h-[8.75rem]">
+              <div className="relative aspect-[16/10] w-full min-h-[8.25rem] overflow-hidden bg-[var(--theme-muted-surface)] sm:min-h-[8.75rem]">
                 <HeroImage
+                  key={slide.objectKey}
                   slide={slide}
                   priority={false}
                   testId={`img-hero-media-secondary-${i}`}
-                  className="h-full w-full"
+                  className="absolute inset-0 h-full w-full"
                   imgClassName="h-full w-full object-cover object-top"
+                  sizes={MARKETING_HERO_SECONDARY_SIZES}
                 />
               </div>
               <div className="border-t border-[var(--theme-card-border)]/80 px-3 py-2.5">

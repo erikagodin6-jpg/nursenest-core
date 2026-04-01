@@ -4,7 +4,8 @@ import { ExamSessionStatus } from "@prisma/client";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { userCanAccessExam } from "@/lib/entitlements/content-access-scope";
-import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
+import { logPaywallDeny } from "@/lib/entitlements/assert-question-access";
+import { notSubscribedResponse, requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { buildExamSessionReview, type ExamReviewJson } from "@/lib/exams/exam-session-review";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
@@ -94,7 +95,8 @@ export async function POST(req: Request) {
   }
 
   if (!userCanAccessExam(gate.entitlement, exam)) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    logPaywallDeny("/api/exams/submit", "exam_out_of_scope", { examId: parsed.data.examId });
+    return notSubscribedResponse();
   }
 
   let prefetchReview: ExamReviewJson | null = null;

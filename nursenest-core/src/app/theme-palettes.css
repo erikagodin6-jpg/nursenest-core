@@ -418,14 +418,15 @@
   --theme-topbar-bg: var(--theme-primary);
   --theme-topbar-text: #ffffff;
   --theme-page-bg: #fdfcfa;
-  --theme-nav-bg: #ffffff;
+  /* Slight primary wash so chrome/cards don’t read as flat white vs page */
+  --theme-nav-bg: color-mix(in srgb, #ffffff 96.5%, var(--theme-primary));
   --theme-nav-text: #6b7280;
   --theme-nav-border: color-mix(in srgb, var(--theme-primary) 10%, transparent);
   --theme-menu-text: #374151;
   --theme-menu-hover-bg: color-mix(in srgb, var(--theme-primary) 8%, transparent);
   --theme-menu-hover-text: var(--theme-primary);
   --theme-menu-active-bg: color-mix(in srgb, var(--theme-primary) 12%, transparent);
-  --theme-card-bg: #ffffff;
+  --theme-card-bg: color-mix(in srgb, #ffffff 97.5%, var(--theme-primary));
   --theme-card-border: color-mix(in srgb, var(--theme-border) 60%, transparent);
   --theme-card-text: #6b7280;
   --theme-input-bg: #ffffff;

@@ -1,8 +1,14 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import Image from "next/image";
+import { useMemo, useState } from "react";
 import type { HomeHeroSlide } from "@/config/home-hero-carousel";
 import { getMarketingHeroImageUrlChain, MARKETING_HERO_LOCAL_FALLBACK } from "@/lib/marketing-hero-image";
+import {
+  MARKETING_PHOTO_QUALITY,
+  MARKETING_STACK_SHOT_SIZES,
+  marketingImageShouldUnoptimize,
+} from "@/lib/marketing-image-delivery";
 
 function ScreenshotFrame({
   slide,
@@ -13,20 +19,19 @@ function ScreenshotFrame({
   priority: boolean;
   testId: string;
 }) {
-  const chain = getMarketingHeroImageUrlChain({
-    objectKey: slide.objectKey,
-    publicCdnUrl: slide.publicUrl,
-  });
+  const chain = useMemo(
+    () =>
+      getMarketingHeroImageUrlChain({
+        objectKey: slide.objectKey,
+        publicCdnUrl: slide.publicUrl,
+      }),
+    [slide.objectKey, slide.publicUrl],
+  );
   const [tier, setTier] = useState(0);
   const src = chain[Math.min(tier, chain.length - 1)] ?? MARKETING_HERO_LOCAL_FALLBACK;
+  const maxTierIndex = chain.length - 1;
 
-  useEffect(() => {
-    setTier(0);
-  }, [slide.objectKey, slide.publicUrl]);
-
-  const onError = useCallback(() => {
-    if (tier < chain.length - 1) setTier((t) => t + 1);
-  }, [chain.length, tier]);
+  const unoptimized = marketingImageShouldUnoptimize(src);
 
   return (
     <div className="flex min-w-0 flex-col gap-2">
@@ -34,18 +39,19 @@ function ScreenshotFrame({
         className="relative w-full overflow-hidden rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] shadow-[var(--shadow-elevated)]"
         style={{ aspectRatio: "16 / 10" }}
       >
-        <img
+        <Image
+          key={`${slide.objectKey}-${tier}`}
           src={src}
           alt={slide.alt}
-          width={1200}
-          height={750}
-          loading={priority ? "eager" : "lazy"}
-          decoding={priority ? "sync" : "async"}
-          fetchPriority={priority ? "high" : "low"}
+          fill
+          sizes={MARKETING_STACK_SHOT_SIZES}
+          quality={MARKETING_PHOTO_QUALITY}
+          priority={priority}
+          unoptimized={unoptimized}
           referrerPolicy="no-referrer"
-          className="h-full w-full object-cover object-top bg-[var(--theme-muted-surface)]"
+          className="object-cover object-top bg-[var(--theme-muted-surface)]"
           data-testid={testId}
-          onError={onError}
+          onError={() => setTier((t) => (t < maxTierIndex ? t + 1 : t))}
         />
       </div>
       <div className="space-y-0.5 px-0.5">

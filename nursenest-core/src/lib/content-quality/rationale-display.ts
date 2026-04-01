@@ -49,6 +49,35 @@ function fallbackTakeawayFromText(text: string | null | undefined): string | nul
   return oneSentence.length > 180 ? `${oneSentence.slice(0, 177).trim()}...` : oneSentence;
 }
 
+function normKey(s: string): string {
+  return stripToPlainText(s)
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function mergeWhyCorrectBlocks(
+  correctAnswerExplanation: string | null | undefined,
+  rationale: string | null | undefined,
+  clinicalReasoning: string | null | undefined,
+): string {
+  const parts: string[] = [];
+  const seen = new Set<string>();
+  const add = (t: string | null | undefined) => {
+    const p = stripToPlainText(t);
+    if (p.length < 4) return;
+    const k = normKey(p);
+    if (seen.has(k)) return;
+    seen.add(k);
+    parts.push(p);
+  };
+  add(correctAnswerExplanation);
+  add(rationale);
+  add(clinicalReasoning);
+  if (parts.length === 0) return "Clinical reasoning is not yet on file for this item.";
+  return parts.join("\n\n");
+}
+
 /** Build labeled sections from real DB fields only (no invented facts). */
 export function buildRationaleSectionsFromQuestion(row: QuestionRationaleFields): RationaleSection[] {
   const out: RationaleSection[] = [];
@@ -60,16 +89,31 @@ export function buildRationaleSectionsFromQuestion(row: QuestionRationaleFields)
   };
 
   const distractors = stringifyDistractors(row.distractorRationales) ?? stringifyDistractors(row.incorrectAnswerRationale);
-  const fallbackTakeaway = row.keyTakeaway ?? fallbackTakeawayFromText(row.rationale) ?? fallbackTakeawayFromText(row.correctAnswerExplanation);
+  const condensedTakeaway =
+    !row.keyTakeaway?.trim()
+      ? fallbackTakeawayFromText(row.rationale) ?? fallbackTakeawayFromText(row.correctAnswerExplanation)
+      : null;
+  const fallbackTakeaway =
+    row.keyTakeaway?.trim() ??
+    (condensedTakeaway
+      ? `${condensedTakeaway}\n\n(Condensed from rationale text—editorial review recommended.)`
+      : null);
 
-  push("Correct answer", row.correctAnswerExplanation ?? "Answer rationale is loading.");
-  push("Why this is correct", row.rationale ?? row.clinicalReasoning ?? "Clinical explanation is not available yet.");
+  push(
+    "Correct answer",
+    row.correctAnswerExplanation ?? "Correct option labels are not present in bank metadata for this item.",
+  );
+  push("Why this is correct", mergeWhyCorrectBlocks(row.correctAnswerExplanation, row.rationale, row.clinicalReasoning));
   push("Why the other options are wrong", distractors ?? "Distractor-specific explanations were not provided for this item.");
   push(
     "Clinical takeaway",
     fallbackTakeaway ?? "Takeaway unavailable. This question should be reviewed in the admin quality queue.",
   );
-  push("Exam strategy", row.examStrategy ?? "Apply safety, prioritization, and scope-of-practice rules to select the next best action.");
+  push(
+    "Exam strategy",
+    row.examStrategy ??
+      "Use safety, prioritization, and scope-of-practice rules to select the single best next action.",
+  );
   push("Clinical pearl", row.clinicalPearl);
   push("Memory hook", row.memoryHook);
   push("Common trap", row.clinicalTrap);

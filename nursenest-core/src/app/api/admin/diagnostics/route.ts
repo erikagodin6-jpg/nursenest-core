@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
+import { buildAdminDiagnosticsOperationsLayer } from "@/lib/admin/build-admin-diagnostics-operations-layer";
 import { loadAdminDiagnostics } from "@/lib/admin/load-admin-diagnostics";
+import { loadQuestionBankRemediationIntelligence } from "@/lib/questions/load-question-bank-remediation-intelligence";
 
 export const dynamic = "force-dynamic";
 
@@ -12,8 +14,16 @@ export async function GET() {
   if (!gate.ok) return gate.response;
 
   try {
-    const diagnostics = await loadAdminDiagnostics();
-    return NextResponse.json({ ok: true, diagnostics });
+    const [diagnostics, remediation] = await Promise.all([
+      loadAdminDiagnostics(),
+      loadQuestionBankRemediationIntelligence(),
+    ]);
+    const rawOps = buildAdminDiagnosticsOperationsLayer(diagnostics, remediation);
+    const operations = {
+      ...rawOps,
+      priorityIssues: rawOps.priorityIssues.map(({ impactRank: _i, ...rest }) => rest),
+    };
+    return NextResponse.json({ ok: true, diagnostics, operations });
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     return NextResponse.json({ ok: false, error: msg.slice(0, 400) }, { status: 500 });
