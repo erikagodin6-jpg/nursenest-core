@@ -42,7 +42,9 @@ export default async function AdminDiagnosticsPage() {
         <article className="nn-card p-4">
           <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Questions (total)</p>
           <p className="mt-1 text-2xl font-bold tabular-nums">{d.counts.questionsTotal}</p>
-          <p className="mt-1 text-[11px] text-muted-foreground">Published: {d.counts.questionsPublished}</p>
+          <p className="mt-1 text-[11px] text-muted-foreground">
+            Published: {d.counts.questionsPublished} · Missing takeaway: {d.counts.questionsPublishedMissingKeyTakeaway}
+          </p>
         </article>
         <article className="nn-card p-4">
           <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Lessons</p>

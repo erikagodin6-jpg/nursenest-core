@@ -268,6 +268,12 @@ export function PremiumLearnerHub({
             <p className="text-sm font-semibold text-foreground">Readiness breakdown</p>
             <p className="mt-1 text-xs text-muted">{readiness.summary}</p>
             <div className="mt-4 space-y-4">
+              {readiness.holdingBack.length > 0 ? (
+                <p className="text-sm text-foreground">
+                  <span className="font-medium">Limiting factors: </span>
+                  {readiness.holdingBack.join(" · ")}
+                </p>
+              ) : null}
               {readiness.factors.length > 0 ? (
                 readiness.factors.map((f) => (
                   <FactorBar key={f.id} label={f.label} points={f.points} maxPoints={f.maxPoints} detail={f.detail} />

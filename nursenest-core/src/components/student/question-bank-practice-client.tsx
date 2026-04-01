@@ -2,7 +2,7 @@
 
 import { LearnerNoteScope } from "@prisma/client";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
 import { ProtectedPremiumContent } from "@/components/student/protected-premium-content";
 import { StudyNotesPanel } from "@/components/student/study-notes-panel";
@@ -77,6 +77,8 @@ export function QuestionBankPracticeClient({
   defaultPathwayId?: string | null;
 }) {
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
   const [phase, setPhase] = useState<"loading" | "ready" | "empty" | "error">("loading");
   const [error, setError] = useState<string | null>(null);
   const [softNotice, setSoftNotice] = useState<string | null>(null);
@@ -88,6 +90,7 @@ export function QuestionBankPracticeClient({
   const [topics, setTopics] = useState<{ topic: string; count: number }[]>([]);
   const [topicMenuTruncationNotice, setTopicMenuTruncationNotice] = useState<string | null>(null);
   const [discoveryNotice, setDiscoveryNotice] = useState<string | null>(null);
+  const [efficiencyMode, setEfficiencyMode] = useState<string | null>(null);
   const [emptyCopy, setEmptyCopy] = useState<{ title: string; body: string } | null>(null);
   const [idx, setIdx] = useState(0);
   const [answer, setAnswer] = useState<unknown>(null);
@@ -137,6 +140,7 @@ export function QuestionBankPracticeClient({
         });
         if (topicForApi) qs.set("topic", topicForApi);
         if (pathwayIdFilter) qs.set("pathwayId", pathwayIdFilter);
+        if (efficiencyMode) qs.set("studyMode", efficiencyMode);
         if (append && seenIdsRef.current.length > 0) {
           qs.set("excludeIds", seenIdsRef.current.join(","));
         }
@@ -148,6 +152,7 @@ export function QuestionBankPracticeClient({
           code?: string;
           topicRelaxed?: boolean;
           topicRequested?: string | null;
+          studyModeNote?: string | null;
           diagnostics?: QuestionListEmptyDiagnostics;
         };
         try {
@@ -164,6 +169,10 @@ export function QuestionBankPracticeClient({
         if (data.topicRelaxed && data.topicRequested) {
           setSoftNotice(
             `No exact matches for topic “${data.topicRequested}”. Showing questions for your pathway instead — use the topic menu to narrow further.`,
+          );
+        } else if (data.studyModeNote === "weak_topic_unavailable") {
+          setSoftNotice(
+            "Weak-area mode needs a few graded items first—we are showing a mixed pool until your topic ledger populates.",
           );
         } else {
           setSoftNotice(null);
@@ -244,18 +253,21 @@ export function QuestionBankPracticeClient({
         setError("Network error loading questions.");
       }
     },
-    [userId, preset, topicForApi, topic, pathwayIdFilter, pathwayOptions, sortForApi],
+    [userId, preset, topicForApi, topic, pathwayIdFilter, pathwayOptions, sortForApi, efficiencyMode],
   );
 
   useEffect(() => {
     const tp = searchParams.get("topic")?.trim();
     const pid = searchParams.get("pathwayId")?.trim();
     const pr = searchParams.get("preset")?.trim();
+    const sm = searchParams.get("studyMode")?.trim().toLowerCase();
     if (tp) setTopic(tp);
     if (pid) setPathwayIdFilter(pid);
     if (pr === "random" || pr === "random_bank") setPreset("random_bank");
     else if (pr === "topic" || pr === "topic_drill") setPreset("topic_drill");
     else if (pr === "mixed" || pr === "pathway_mixed") setPreset("pathway_mixed");
+    const okSm = sm && ["weak", "high_yield", "rapid", "final_prep"].includes(sm);
+    setEfficiencyMode(okSm ? sm : null);
   }, [searchParams]);
 
   useEffect(() => {
@@ -512,6 +524,27 @@ export function QuestionBankPracticeClient({
         <p className="text-xs text-muted">
           Session: {sessionTotal > 0 ? `${sessionRight}/${sessionTotal} correct` : "Answer and check to track this session"}
         </p>
+        <label className="block text-sm">
+          <span className="text-muted">Efficiency mode</span>
+          <select
+            className="ml-2 rounded-lg border border-border bg-white px-2 py-1.5 text-sm"
+            value={efficiencyMode ?? ""}
+            onChange={(e) => {
+              const v = e.target.value;
+              setEfficiencyMode(v || null);
+              const qs = new URLSearchParams(searchParams.toString());
+              if (v) qs.set("studyMode", v);
+              else qs.delete("studyMode");
+              router.replace(`${pathname}?${qs.toString()}`);
+            }}
+          >
+            <option value="">Off</option>
+            <option value="weak">Weak areas (ledger)</option>
+            <option value="high_yield">High-yield / harder items</option>
+            <option value="rapid">Rapid (short batch)</option>
+            <option value="final_prep">Final prep mix</option>
+          </select>
+        </label>
       </div>
 
       <ProtectedPremiumContent userLabel={userLabel} flags={protectionFlags}>

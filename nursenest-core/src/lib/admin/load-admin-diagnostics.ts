@@ -31,6 +31,7 @@ export type AdminDiagnostics = {
     questionsPublished: number;
     questionsDraft: number;
     questionsPublishedMissingRationale: number;
+    questionsPublishedMissingKeyTakeaway: number;
     lessonsContentItemsAll: number;
     lessonsContentItemsPublished: number;
     pathwayLessonsPublished: number;
@@ -121,6 +122,15 @@ export async function loadAdminDiagnostics(): Promise<AdminDiagnostics> {
     prisma.examQuestion.count({ where: { status: DB_PUBLISHED, rationale: null } }),
   );
   if (qNoRat.warning) countWarnings.push(qNoRat.warning);
+  const qNoTakeaway = await safePrismaCount("exam_questions_published_no_key_takeaway", () =>
+    prisma.examQuestion.count({
+      where: {
+        status: DB_PUBLISHED,
+        OR: [{ keyTakeaway: null }, { keyTakeaway: "" }],
+      },
+    }),
+  );
+  if (qNoTakeaway.warning) countWarnings.push(qNoTakeaway.warning);
 
   const lessonsAll = await safePrismaCount("content_items_lessons", () =>
     prisma.contentItem.count({ where: { type: "lesson" } }),
@@ -249,6 +259,7 @@ export async function loadAdminDiagnostics(): Promise<AdminDiagnostics> {
       questionsPublished: qPub.value,
       questionsDraft: qDraft.value,
       questionsPublishedMissingRationale: qNoRat.value,
+      questionsPublishedMissingKeyTakeaway: qNoTakeaway.value,
       lessonsContentItemsAll: lessonsAll.value,
       lessonsContentItemsPublished: lessonsPub.value,
       pathwayLessonsPublished: pathPub.value,
