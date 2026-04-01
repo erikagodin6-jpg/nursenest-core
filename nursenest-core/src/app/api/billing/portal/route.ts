@@ -21,7 +21,7 @@ export async function POST() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  setSentryServerContext({ route: "/api/billing/portal", feature: "billing", userId });
+  setSentryServerContext({ route: "/api/billing/portal", feature: "payment", userId });
 
   const stripe = await getStripe();
   if (!stripe) {
