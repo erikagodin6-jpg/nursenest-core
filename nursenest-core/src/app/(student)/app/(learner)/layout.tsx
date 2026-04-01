@@ -69,7 +69,7 @@ export default async function LearnerShellLayout({ children }: { children: React
             <SiteBrandLogoMark />
           </Link>
           <nav className="flex flex-wrap items-center gap-2 text-sm font-medium">
-          <Link className="rounded-full border border-primary/15 bg-primary/8 px-3 py-2 text-primary" href="/app">
+          <Link className="rounded-full border border-role-cta/25 bg-role-cta-soft px-3 py-2 text-role-cta-on-soft" href="/app">
             Dashboard
           </Link>
           <Link

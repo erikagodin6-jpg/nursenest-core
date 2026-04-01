@@ -264,7 +264,7 @@ export function MarketingHeroCarousel({
                   if (!failed.has(index)) setCurrent(index);
                 }}
                 className={`h-2 rounded-full transition-all duration-300 ${
-                  index === current ? "w-6 bg-primary" : "w-2 bg-[var(--theme-muted-text)]/35 hover:bg-[var(--theme-muted-text)]/55"
+                  index === current ? "w-6 bg-role-cta" : "w-2 bg-[var(--theme-muted-text)]/35 hover:bg-[var(--theme-muted-text)]/55"
                 } ${failed.has(index) ? "cursor-not-allowed opacity-40" : ""}`}
                 aria-label={t("components.marketingHeroCarousel.goToSlide", { n: index + 1 })}
                 data-testid={

@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "./theme-palettes.css";
+@import "./color-roles.css";
 
 html,
 body {
@@ -19,11 +20,11 @@ body {
   --color-warmwhite: #fdfcfa;
   --color-softgray: #6b7280;
 
-  --text-hero: clamp(2.1rem, 4.6vw, 3.45rem);
+  --text-hero: clamp(2.2rem, 4.85vw, 3.6rem);
   --text-section: clamp(1.7rem, 3.4vw, 2.4rem);
-  /* Tight above-the-fold: avoid a dead zone between sticky header and hero */
-  --space-hero-top: clamp(0.75rem, 2vw, 1.5rem);
-  --space-hero-bottom: clamp(2.25rem, 5vw, 4rem);
+  /* Tight above-the-fold: hero sits close under sticky header */
+  --space-hero-top: clamp(0rem, 0.6vw, 0.35rem);
+  --space-hero-bottom: clamp(1.15rem, 2.6vw, 2.35rem);
   --space-block: clamp(2rem, 4vw, 3rem);
 
   --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
@@ -159,6 +160,29 @@ html[data-theme="dark-mode"] {
   --color-muted-foreground: var(--theme-muted-text);
   /* Form fields track input surface token when theme is active */
   --color-input: var(--surface-input, var(--theme-input-bg));
+
+  /* Semantic roles → Tailwind: bg-role-cta, text-role-success, etc. */
+  --color-role-cta: var(--role-cta);
+  --color-role-cta-foreground: var(--role-cta-foreground);
+  --color-role-cta-hover: var(--role-cta-hover);
+  --color-role-cta-soft: var(--role-cta-soft);
+  --color-role-cta-on-soft: var(--role-cta-on-soft);
+  --color-role-secondary-action-bg: var(--role-secondary-action-bg);
+  --color-role-secondary-action-border: var(--role-secondary-action-border);
+  --color-role-secondary-action-text: var(--role-secondary-action-text);
+  --color-role-secondary-action-hover-bg: var(--role-secondary-action-hover-bg);
+  --color-role-success: var(--role-success);
+  --color-role-success-soft: var(--role-success-soft);
+  --color-role-success-text: var(--role-success-text);
+  --color-role-success-on-soft: var(--role-success-on-soft);
+  --color-role-warning: var(--role-warning);
+  --color-role-warning-soft: var(--role-warning-soft);
+  --color-role-warning-text: var(--role-warning-text);
+  --color-role-warning-border: var(--role-warning-border);
+  --color-role-premium-surface: var(--role-premium-surface);
+  --color-role-premium-border: var(--role-premium-border);
+  --color-role-premium-text: var(--role-premium-text);
+  --color-role-heat-text: var(--role-heat-text);
 }
 
 @layer utilities {
@@ -173,6 +197,14 @@ html[data-theme="dark-mode"] {
   /* Lucide / inline icons often set stroke via currentColor; force contrast on solid primary CTAs. */
   .bg-primary svg {
     color: var(--color-primary-foreground) !important;
+  }
+
+  /* Main conversion CTAs — always --role-cta, not ad-hoc brand purple */
+  .bg-role-cta {
+    color: var(--color-role-cta-foreground) !important;
+  }
+  .bg-role-cta svg {
+    color: var(--color-role-cta-foreground) !important;
   }
 }
 
@@ -326,19 +358,19 @@ html[data-theme] .nn-marketing-surface {
 }
 
 .nn-btn-primary {
-  background: var(--theme-primary);
-  color: #ffffff;
+  background: var(--role-cta, var(--theme-primary));
+  color: var(--role-cta-foreground, #ffffff);
   border-radius: 9999px;
-  box-shadow: 0 8px 24px color-mix(in srgb, var(--theme-primary) 35%, transparent);
+  box-shadow: 0 8px 24px var(--role-cta-shadow, color-mix(in srgb, var(--theme-primary) 35%, transparent));
 }
 
 .nn-btn-primary:hover:not(:disabled):not([aria-disabled="true"]) {
-  background: var(--accent-hover);
+  background: var(--role-cta-hover, var(--accent-hover));
   filter: brightness(1.03);
 }
 
 .nn-btn-primary:active:not(:disabled):not([aria-disabled="true"]) {
-  background: var(--accent-pressed);
+  background: var(--role-cta-pressed, var(--accent-pressed));
   filter: brightness(1);
 }
 
@@ -346,7 +378,7 @@ html[data-theme] .nn-marketing-surface {
 .nn-btn-primary[aria-disabled="true"] {
   cursor: not-allowed;
   filter: none;
-  background: color-mix(in srgb, var(--theme-primary) 42%, var(--theme-card-bg));
+  background: color-mix(in srgb, var(--role-cta, var(--theme-primary)) 42%, var(--theme-card-bg));
   color: rgb(255 255 255 / 0.72);
   box-shadow: none;
 }

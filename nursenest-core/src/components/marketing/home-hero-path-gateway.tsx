@@ -52,7 +52,7 @@ export function HomeHeroPathGateway({ region }: Props) {
               cta={rn.primaryCta}
               label={t(rn.primaryCta.labelKey)}
               localize={localize}
-              className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:brightness-110 sm:w-auto"
+              className="mt-4 inline-flex w-full items-center justify-center rounded-full bg-role-cta px-4 py-2.5 text-sm font-semibold text-role-cta-foreground shadow-[0_6px_18px_var(--role-cta-shadow)] transition hover:bg-role-cta-hover sm:w-auto"
               icon="arrow"
             />
           )}
@@ -119,7 +119,7 @@ function ClusterCard({
             cta={cluster.primaryCta}
             label={t(cluster.primaryCta.labelKey)}
             localize={localize}
-            className="inline-flex shrink-0 items-center rounded-full border border-primary/25 bg-primary/5 px-3 py-1.5 text-xs font-semibold text-primary hover:bg-primary/10"
+            className="inline-flex shrink-0 items-center rounded-full border border-role-cta/30 bg-role-cta-soft px-3 py-1.5 text-xs font-semibold text-role-cta-on-soft hover:bg-[color-mix(in_srgb,var(--role-cta)_18%,var(--bg-card))]"
             icon="chevron"
           />
         )}

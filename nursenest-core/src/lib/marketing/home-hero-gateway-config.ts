@@ -187,3 +187,8 @@ export function heroQuickEntryLinks(region: NursenestMarketingRegion): HeroQuick
     { labelKey: "home.quickEntry.studyTools", href: HUB.tools },
   ];
 }
+
+/** Hero pathway row only: RN / PN / NP / Allied — one clear entry path (study tools elsewhere). */
+export function heroPathwayEntryLinks(region: NursenestMarketingRegion): HeroQuickEntryItem[] {
+  return heroQuickEntryLinks(region).filter((item) => item.labelKey !== "home.quickEntry.studyTools");
+}

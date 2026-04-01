@@ -196,6 +196,7 @@ model User {
   protectionAbuseReviews    ProtectionAbuseReview[]
   /** Abuse review rows this admin closed (dismiss / resolve). */
   abuseReviewsDismissed     ProtectionAbuseReview[] @relation("ProtectionAbuseReviewDismissedBy")
+  blogBatchSchedules        BlogBatchSchedule[]
 
   @@index([alliedProfessionKey])
 }
@@ -460,6 +461,22 @@ enum BlogCampaignItemStatus {
   PUBLISHED
 }
 
+/** Admin topic-paste batch: automatic AI generation + publish/slot cadence. */
+enum BlogBatchScheduleStatus {
+  ACTIVE
+  PAUSED
+  COMPLETED
+  CANCELLED
+}
+
+enum BlogBatchScheduleItemStatus {
+  PENDING
+  GENERATING
+  PUBLISHED
+  FAILED
+  SKIPPED
+}
+
 enum BlogImageStatus {
   NONE
   REQUESTED
@@ -510,6 +527,7 @@ model BlogPost {
   campaignId   String?
   campaign     BlogCampaign? @relation(fields: [campaignId], references: [id], onDelete: SetNull)
   campaignItems BlogCampaignItem[]
+  batchScheduleItems BlogBatchScheduleItem[]
   targetKeyword String?
   keywordCluster String?
   countryTarget CountryCode?
@@ -620,6 +638,56 @@ model BlogCampaignItem {
   @@unique([campaignId, ordinal])
   @@index([campaignId, status, ordinal])
   @@index([plannedPublishAt])
+}
+
+/**
+ * Paste-many-topics batch schedule (admin). Items get staggered `plannedPublishAt`; a cron/admin runner
+ * generates AI drafts and schedules publication (reuses `generateBlogAiDraft` + canonical intent dedupe).
+ */
+model BlogBatchSchedule {
+  id              String                  @id @default(cuid())
+  status          BlogBatchScheduleStatus @default(ACTIVE)
+  /** Posts per 24h window (1–12). Slot interval = 24h / cadencePerDay. */
+  cadencePerDay   Int
+  startAt         DateTime
+  /** Earliest pending item publish slot (denormalized for ops UI). */
+  nextRunAt       DateTime?
+  lastRunAt       DateTime?
+  totalItems      Int
+  publishedCount  Int                     @default(0)
+  failedCount     Int                     @default(0)
+  skippedCount    Int                     @default(0)
+  exam            String
+  country         String                  @default("unspecified")
+  defaultTemplate BlogPostTemplate        @default(TOPIC_EXPLAINED)
+  defaultIntent   BlogPostIntent?
+  createdById     String?
+  createdBy       User?                   @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  items           BlogBatchScheduleItem[]
+  createdAt       DateTime                @default(now())
+  updatedAt       DateTime                @updatedAt
+
+  @@index([status, nextRunAt])
+}
+
+model BlogBatchScheduleItem {
+  id                String                      @id @default(cuid())
+  scheduleId        String
+  schedule          BlogBatchSchedule           @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  ordinal           Int
+  topicRaw          String
+  canonicalTopicKey String?
+  plannedPublishAt  DateTime
+  status            BlogBatchScheduleItemStatus @default(PENDING)
+  blogPostId        String?
+  blogPost          BlogPost?                   @relation(fields: [blogPostId], references: [id], onDelete: SetNull)
+  failureReason     String?                   @db.Text
+  createdAt         DateTime                    @default(now())
+  updatedAt         DateTime                    @updatedAt
+
+  @@unique([scheduleId, ordinal])
+  @@index([scheduleId, status, plannedPublishAt])
+  @@index([plannedPublishAt, status])
 }
 
 /** Production `content_items` — lessons are `type = "lesson"`. */

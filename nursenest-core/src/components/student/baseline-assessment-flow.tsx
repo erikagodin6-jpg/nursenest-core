@@ -214,7 +214,7 @@ export function BaselineAssessmentFlow() {
 
         <Link
           href="/app"
-          className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground"
+          className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-role-cta px-5 py-2.5 text-sm font-semibold text-role-cta-foreground shadow-[0_4px_14px_var(--role-cta-shadow)]"
         >
           Continue to dashboard
         </Link>
@@ -301,7 +301,7 @@ export function BaselineAssessmentFlow() {
           {idx < total - 1 ? (
             <button
               type="button"
-              className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+              className="rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground"
               onClick={() => setIdx((i) => i + 1)}
             >
               Next
@@ -310,7 +310,7 @@ export function BaselineAssessmentFlow() {
             <button
               type="button"
               disabled={phase === "submitting"}
-              className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-60"
+              className="rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground disabled:opacity-60"
               onClick={() => void onSubmitAll()}
             >
               {phase === "submitting" ? "Saving…" : "Finish and save"}

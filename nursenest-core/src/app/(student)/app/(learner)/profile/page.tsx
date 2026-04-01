@@ -210,7 +210,7 @@ export default async function LearnerProfilePage() {
           {entitlement !== "error" && entitlement.hasAccess ? (
             <Link
               href="/app/study-plan"
-              className="inline-flex rounded-full border border-primary/25 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary hover:bg-primary/15"
+              className="inline-flex rounded-full border border-role-cta/30 bg-role-cta-soft px-4 py-2 text-sm font-semibold text-role-cta-on-soft hover:bg-[color-mix(in_srgb,var(--role-cta)_14%,var(--bg-card))]"
             >
               Study planner
             </Link>
@@ -261,7 +261,7 @@ export default async function LearnerProfilePage() {
             </div>
           </div>
           {readiness ? (
-            <div className="mt-5 rounded-xl border border-primary/15 bg-primary/[0.04] p-4">
+            <div className="mt-5 rounded-xl border border-role-cta/20 bg-role-cta-soft p-4">
               <p className="text-xs font-semibold uppercase tracking-wide text-primary">Readiness</p>
               <p className="mt-1 text-2xl font-bold tabular-nums text-[var(--theme-heading-text)]">
                 {readiness.score != null ? `${readiness.score}/100` : "—"}
@@ -352,7 +352,7 @@ export default async function LearnerProfilePage() {
                 {topicPerf.strongTopics.slice(0, 8).map((s) => (
                   <li
                     key={s.topic}
-                    className="rounded-full bg-emerald-500/12 px-3 py-1 text-xs font-medium text-emerald-900 dark:text-emerald-100"
+                    className="rounded-full border border-[color-mix(in_srgb,var(--role-success)_22%,transparent)] bg-role-success-soft px-3 py-1 text-xs font-medium text-role-success-text"
                   >
                     {s.topic}{" "}
                     <span className="tabular-nums opacity-80">({100 - s.missRate}%)</span>
@@ -406,7 +406,7 @@ export default async function LearnerProfilePage() {
             </Link>
             <Link
               href="/app/study-plan"
-              className="rounded-full border border-primary/25 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary"
+              className="rounded-full border border-role-cta/30 bg-role-cta-soft px-4 py-2 text-sm font-semibold text-role-cta-on-soft"
             >
               Study planner
             </Link>

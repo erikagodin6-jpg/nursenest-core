@@ -122,7 +122,7 @@ export function LearnerInsightEnginePanel({ insights }: { insights: LearnerInsig
         </dl>
         <Link
           href={primary.href}
-          className="mt-3 inline-flex rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+          className="mt-3 inline-flex rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground shadow-[0_4px_14px_var(--role-cta-shadow)]"
         >
           Go
         </Link>

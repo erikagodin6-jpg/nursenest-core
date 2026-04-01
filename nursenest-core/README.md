@@ -23,6 +23,12 @@ Commands: `npm run disk:audit`, `npm run storage:check` (use `storage:check:stri
 - **Deploy:** `build:deploy` runs the same build, then `scripts/post-build-prune.mjs` (drops `.next/cache` in the artifact).
 - **Monitor:** keep several GB free on the volume that holds the repo and `~/.npm`; prune old `node_modules` copies if needed.
 
+### Build directory & monorepo root
+
+- **Working directory:** Run `npm run build` and `npm run dev` from **`nursenest-core/`** (the directory that contains this `package.json` and `next.config.ts`). A nested clone like `…/nursenest-core/nursenest-core/` is fine as long as commands run from the **inner** app folder that holds `next.config.ts`.
+- **Tracing roots:** `next.config.ts` sets `turbopack.root` and `outputFileTracingRoot` to the **parent** of the app package so monorepo/shared imports and lockfile resolution stay consistent (see inline comments there). Do not point those roots only at `nursenest-core` unless you know you are changing the import graph.
+- **Deploy:** Keep **`source_dir` / app root** (e.g. DigitalOcean App Platform) set to **`nursenest-core`**, matching local builds.
+
 ## Stability-First Architecture
 
 - Route isolation:

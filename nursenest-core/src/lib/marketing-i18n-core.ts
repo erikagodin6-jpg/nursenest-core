@@ -24,15 +24,16 @@ export function formatMarketingMessage(
   fallbackMessages?: MarketingMessages,
 ): string {
   let raw = messages[key];
-  if (raw === undefined && fallbackMessages) {
+  const isEmpty = (v: string | undefined) => v === undefined || (typeof v === "string" && v.trim() === "");
+  if (isEmpty(raw) && fallbackMessages) {
     raw = fallbackMessages[key];
   }
-  if (raw === undefined) {
+  if (isEmpty(raw)) {
     console.error(`[marketing-i18n] missing key: ${key} (locale bundle)`);
     /** Last resort: readable fragment — prefer fixing bundles or passing fallbackMessages (see marketing layouts). */
     return humanizeMarketingKey(key);
   }
-  let s = raw;
+  let s: string = raw;
   if (params) {
     for (const [k, val] of Object.entries(params)) {
       if (val === undefined) continue;

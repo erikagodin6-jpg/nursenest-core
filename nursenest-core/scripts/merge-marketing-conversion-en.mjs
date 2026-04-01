@@ -13,7 +13,7 @@ const patch = {
   "home.hero.mainTitle":
     "Pass your nursing exam with a fully guided system — not just a question bank",
   "home.hero.newSubheadline":
-    "Pathway-scoped questions with option-level rationales, spaced flashcards, an adaptive study planner, and readiness tracking in one learner shell. Lessons and timed mocks sit beside the bank so you rehearse judgment, not isolated facts.",
+    "Clinical-depth rationales, adaptive review, and readiness tracking—scoped to your RN, PN, NP, or allied pathway (US & Canada).",
   "home.hero.quickEntryLabel": "Jump in without hunting menus",
   "home.hero.trustMicroBadge": "US & Canadian scopes kept separate",
   "home.hero.authorityBadge": "Rationale on every scored option",
@@ -67,6 +67,7 @@ const patch = {
   "home.gateway.frictionNote":
     "A free account opens starter runs and previews. A paid plan unlocks the full bank for your tier, lesson depth, timed mocks, saved history, and weak-area tools.",
 
+  "nav.marketingExplore": "Explore",
   "nav.examHubsMobile": "Practice hubs by exam",
   "nav.examStrip.rn": "NCLEX-RN",
   "nav.examStrip.pnUS": "NCLEX-PN",
@@ -338,6 +339,19 @@ const patch = {
   "pages.pricing.duration.position.yearly": "Lowest per-month cost for long-horizon prep",
 
   "pages.pricing.checkout.startPlan": "Continue to secure checkout",
+  "pages.pricing.billing.recurringDisclosure":
+    "Paid plans renew automatically on each billing date until you cancel. You can cancel from your account billing portal before the next charge; access continues through the end of the paid period.",
+  "pages.pricing.checkout.recurringShort":
+    "Subscriptions renew until canceled. See Terms, Privacy, and Refund Policy.",
+  "pages.pricing.checkout.policyAckStart": "I agree to the ",
+  "pages.pricing.checkout.policyTermsLabel": "Terms of Service",
+  "pages.pricing.checkout.policyAckBetween1": ", the ",
+  "pages.pricing.checkout.policyPrivacyLabel": "Privacy Policy",
+  "pages.pricing.checkout.policyAckBetween2": ", and the ",
+  "pages.pricing.checkout.policyRefundLabel": "Refund Policy",
+  "pages.pricing.checkout.policyAckEnd": ".",
+  "pages.pricing.checkout.mustAcceptPolicies":
+    "Please confirm the Terms, Privacy Policy, and Refund Policy before continuing to checkout.",
   "pages.pricing.cta.startPractice": "Try another practice set",
 
   "pages.pricing.social.passRateLine":

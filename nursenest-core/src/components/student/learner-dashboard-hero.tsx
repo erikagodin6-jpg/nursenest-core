@@ -128,7 +128,7 @@ export function LearnerDashboardHero({
 
           <Link
             href={primaryHref}
-            className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-md transition hover:brightness-[1.03] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl bg-role-cta px-6 py-3 text-sm font-semibold text-role-cta-foreground shadow-[0_8px_24px_var(--role-cta-shadow)] transition hover:bg-role-cta-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--role-cta)]"
           >
             <Target className="h-4 w-4 shrink-0" aria-hidden />
             {primaryTitle}

@@ -521,7 +521,7 @@ export function QuestionBankPracticeClient({
         <p className="text-sm text-muted">{error ?? "Something went wrong."}</p>
         <button
           type="button"
-          className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white"
+          className="rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground"
           onClick={() => void loadBatch(false)}
         >
           Retry
@@ -553,7 +553,7 @@ export function QuestionBankPracticeClient({
   return (
     <div className="mt-6 space-y-4">
       {discoveryNotice ? (
-        <p className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-950">{discoveryNotice}</p>
+        <p className="rounded-lg border border-role-warning-border bg-role-warning-soft px-3 py-2 text-sm text-role-warning-text">{discoveryNotice}</p>
       ) : null}
       {topicMenuTruncationNotice ? (
         <p className="rounded-lg border border-border bg-muted/40 px-3 py-2 text-sm text-muted-foreground">
@@ -561,7 +561,7 @@ export function QuestionBankPracticeClient({
         </p>
       ) : null}
       {softNotice ? (
-        <p className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-950">{softNotice}</p>
+        <p className="rounded-lg border border-role-warning-border bg-role-warning-soft px-3 py-2 text-sm text-role-warning-text">{softNotice}</p>
       ) : null}
 
       <div className="flex flex-wrap items-end gap-4">
@@ -711,7 +711,7 @@ export function QuestionBankPracticeClient({
               <button
                 type="button"
                 disabled={grading || answer === null || (Array.isArray(answer) && answer.length === 0)}
-                className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
+                className="rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground disabled:opacity-50"
                 onClick={() => void checkAnswer()}
               >
                 {grading ? "Checking…" : "Check answer"}
@@ -721,7 +721,7 @@ export function QuestionBankPracticeClient({
             <>
               {examShell && !examShowExplanation ? (
                 <div className="rounded-xl border border-slate-200 bg-slate-50/80 p-4 dark:border-slate-700 dark:bg-slate-900/40">
-                  <p className={`text-sm font-semibold ${g.correct ? "text-emerald-700 dark:text-emerald-400" : "text-red-700 dark:text-red-400"}`}>
+                  <p className={`text-sm font-semibold ${g.correct ? "text-role-success" : "text-red-700 dark:text-red-400"}`}>
                     {g.correct ? "Correct" : "Incorrect"}
                   </p>
                   <p className="mt-2 text-xs text-muted-foreground">
@@ -756,7 +756,7 @@ export function QuestionBankPracticeClient({
                   Previous
                 </button>
                 {idx < total - 1 ? (
-                  <button type="button" className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white" onClick={next}>
+                  <button type="button" className="rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground" onClick={next}>
                     Next question
                   </button>
                 ) : (
@@ -785,7 +785,7 @@ export function QuestionBankPracticeClient({
                       Routed from the question topic; if the bank feels broad, narrow with filters or your priority review queue.
                     </p>
                   ) : (
-                    <p className="mt-1 text-xs text-amber-900 dark:text-amber-200">
+                    <p className="mt-1 text-xs text-role-warning">
                       Approximate routing only—open the question bank and tune filters if results look off-target.
                     </p>
                   )}
@@ -809,7 +809,7 @@ export function QuestionBankPracticeClient({
                     {g.learningLoop.topicDrillHref ? (
                       <Link
                         href={g.learningLoop.topicDrillHref}
-                        className="rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-white"
+                        className="rounded-full bg-role-cta px-3 py-1.5 text-xs font-semibold text-role-cta-foreground"
                       >
                         Topic drill (same code)
                       </Link>

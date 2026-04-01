@@ -116,7 +116,7 @@ export function LoginForm({
         </Link>
         {legalAfter}
       </p>
-      <button className="w-full rounded-xl bg-primary px-4 py-2 font-semibold" type="submit">
+      <button className="w-full rounded-xl bg-role-cta px-4 py-2 font-semibold text-role-cta-foreground" type="submit">
         Sign in
       </button>
     </form>

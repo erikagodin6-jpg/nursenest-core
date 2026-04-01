@@ -89,7 +89,7 @@ export function StudyPlannerShell({ ctx }: { ctx: StudyPlannerContext }) {
         <ol className="mt-5 space-y-3">
           {todaySteps.map((step, i) => (
             <li key={i} className="flex gap-3 rounded-xl border border-border/60 bg-muted/15 px-4 py-3 text-sm leading-relaxed">
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-role-cta text-xs font-bold text-role-cta-foreground">
                 {i + 1}
               </span>
               <span className="text-[var(--theme-body-text)]">{step}</span>
@@ -100,7 +100,7 @@ export function StudyPlannerShell({ ctx }: { ctx: StudyPlannerContext }) {
           {weak[0] ? (
             <Link
               href={remediationTopicDrillHref(weak[0].topic)}
-              className="inline-flex items-center rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:brightness-110"
+              className="inline-flex items-center rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground shadow-[0_4px_14px_var(--role-cta-shadow)] hover:bg-role-cta-hover"
             >
               Start priority review drill
             </Link>
@@ -134,7 +134,7 @@ export function StudyPlannerShell({ ctx }: { ctx: StudyPlannerContext }) {
                     </span>
                   </div>
                   <div className="mt-2 h-2 overflow-hidden rounded-full bg-muted">
-                    <div className="h-full rounded-full bg-primary transition-[width]" style={{ width: `${pct}%` }} />
+                    <div className="h-full rounded-full bg-role-success transition-[width]" style={{ width: `${pct}%` }} />
                   </div>
                   <p className="mt-2 text-xs text-muted-foreground">{remaining} lesson(s) remaining in scope.</p>
                 </li>

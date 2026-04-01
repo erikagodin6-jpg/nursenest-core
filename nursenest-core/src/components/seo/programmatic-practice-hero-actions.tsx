@@ -13,7 +13,7 @@ export function ProgrammaticPracticeHeroActions({ locale, slug }: { locale: stri
     <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
       <Link
         href={hub.ctas.questions}
-        className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-90"
+        className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-role-cta px-6 py-3 text-sm font-semibold text-role-cta-foreground shadow-[0_6px_18px_var(--role-cta-shadow)] transition hover:bg-role-cta-hover"
       >
         Start practice questions
         <ArrowRight className="ml-2 h-4 w-4" />

@@ -1,0 +1,96 @@
+/**
+ * Semantic color roles (psychology + conversion)
+ * ------------------------------------------------
+ * - --role-cta*: main conversion CTAs only (warm-shifted primary; same slot per theme).
+ * - --role-secondary-action*: outline/secondary buttons (neutral emphasis).
+ * - --role-success*: progress, readiness, positive.
+ * - --role-warning*: attention, weak areas (amber, not alarm red).
+ * - --role-premium*: premium panels, value-implying surfaces.
+ * :root mirrors lavender for first paint before data-theme hydrates.
+ */
+:root {
+  --role-cta: color-mix(in srgb, #9d82dd 84%, #ea580c);
+  --role-cta-foreground: #ffffff;
+  --role-cta-hover: color-mix(in srgb, var(--role-cta) 89%, #111827);
+  --role-cta-pressed: color-mix(in srgb, var(--role-cta) 76%, #111827);
+  --role-cta-shadow: color-mix(in srgb, var(--role-cta) 36%, transparent);
+  --role-cta-soft: color-mix(in srgb, var(--role-cta) 11%, #ffffff);
+  --role-cta-on-soft: color-mix(in srgb, var(--role-cta) 78%, #111827);
+  --role-secondary-action-bg: #ffffff;
+  --role-secondary-action-border: #e5e7eb;
+  --role-secondary-action-text: #374151;
+  --role-secondary-action-hover-bg: color-mix(in srgb, #9d82dd 11%, #ffffff);
+  --role-success: #15803d;
+  --role-success-soft: color-mix(in srgb, #15803d 11%, #ffffff);
+  --role-success-text: #14532d;
+  --role-success-on-soft: #166534;
+  --role-warning: #b45309;
+  --role-warning-soft: color-mix(in srgb, #d97706 13%, #ffffff);
+  --role-warning-text: #78350f;
+  --role-warning-border: color-mix(in srgb, #f59e0b 32%, #e9e2ff);
+  --role-premium-surface: color-mix(in srgb, #9d82dd 9%, #ffffff);
+  --role-premium-border: color-mix(in srgb, #9d82dd 38%, #e9e2ff);
+  --role-premium-text: color-mix(in srgb, #9d82dd 42%, #111827);
+  --role-premium-glow: color-mix(in srgb, #9d82dd 14%, transparent);
+  --role-heat-text: color-mix(in srgb, #ea580c 55%, #111827);
+}
+
+/* Theme-scoped overrides (lavender, ocean, sage, dark-*, …): same roles, hue from --theme-primary */
+:where([data-theme]) {
+  /* CTA: theme identity + small warm shift (same structure for lavender, ocean, sage, …) */
+  --role-cta: color-mix(in srgb, var(--theme-primary) 84%, #ea580c);
+  --role-cta-foreground: #ffffff;
+  --role-cta-hover: color-mix(in srgb, var(--role-cta) 89%, var(--theme-heading-text));
+  --role-cta-pressed: color-mix(in srgb, var(--role-cta) 76%, var(--theme-heading-text));
+  --role-cta-shadow: color-mix(in srgb, var(--role-cta) 36%, transparent);
+  --role-cta-soft: color-mix(in srgb, var(--role-cta) 11%, var(--bg-card, var(--theme-card-bg)));
+  --role-cta-on-soft: color-mix(in srgb, var(--role-cta) 78%, var(--theme-heading-text));
+
+  /* Secondary actions (ghost / outline) */
+  --role-secondary-action-bg: var(--bg-card, var(--theme-card-bg));
+  --role-secondary-action-border: var(--border-medium, var(--theme-input-border));
+  --role-secondary-action-text: var(--theme-menu-text);
+  --role-secondary-action-hover-bg: var(--accent-soft);
+
+  /* Success / readiness */
+  --role-success: #15803d;
+  --role-success-soft: color-mix(in srgb, #15803d 11%, var(--bg-card, var(--theme-card-bg)));
+  --role-success-text: #14532d;
+  --role-success-on-soft: #166534;
+
+  /* Warning / attention */
+  --role-warning: #b45309;
+  --role-warning-soft: color-mix(in srgb, #d97706 13%, var(--bg-card, var(--theme-card-bg)));
+  --role-warning-text: #78350f;
+  --role-warning-border: color-mix(in srgb, #f59e0b 32%, var(--border-subtle));
+
+  /* Premium / streak / locked — deeper, value-implying */
+  --role-premium-surface: color-mix(in srgb, var(--theme-primary) 9%, var(--bg-card, var(--theme-card-bg)));
+  --role-premium-border: color-mix(in srgb, var(--theme-primary) 38%, var(--border-medium));
+  --role-premium-text: color-mix(in srgb, var(--theme-primary) 42%, var(--theme-heading-text));
+  --role-premium-glow: color-mix(in srgb, var(--theme-primary) 14%, transparent);
+  --role-heat-text: color-mix(in srgb, #ea580c 55%, var(--theme-heading-text));
+}
+
+html[data-theme="dark-clinical"],
+html[data-theme="dark-academia"],
+html[data-theme="dark-mode"] {
+  --role-cta: color-mix(in srgb, var(--theme-primary) 88%, #fb923c);
+  --role-cta-hover: color-mix(in srgb, var(--role-cta) 87%, var(--theme-heading-text));
+  --role-cta-pressed: color-mix(in srgb, var(--role-cta) 74%, var(--theme-heading-text));
+  --role-cta-soft: color-mix(in srgb, var(--role-cta) 16%, var(--bg-card, var(--theme-card-bg)));
+  --role-cta-on-soft: color-mix(in srgb, var(--role-cta) 72%, #ffffff);
+
+  --role-success: #34d399;
+  --role-success-soft: color-mix(in srgb, #34d399 14%, var(--bg-card, var(--theme-card-bg)));
+  --role-success-text: #a7f3d0;
+  --role-success-on-soft: #6ee7b7;
+
+  --role-warning: #fbbf24;
+  --role-warning-soft: color-mix(in srgb, #f59e0b 16%, var(--bg-card, var(--theme-card-bg)));
+  --role-warning-text: #fde68a;
+  --role-warning-border: color-mix(in srgb, #f59e0b 40%, var(--border-subtle));
+
+  --role-premium-text: color-mix(in srgb, var(--theme-primary) 65%, #ffffff);
+  --role-heat-text: color-mix(in srgb, #fb923c 70%, #ffffff);
+}

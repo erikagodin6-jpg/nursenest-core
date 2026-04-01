@@ -96,7 +96,7 @@ export function ProgrammaticSeoPage({ page, locale }: { page: SeoPageDefinition;
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href={signup}
-                className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-90"
+                className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-role-cta px-5 py-2.5 text-sm font-semibold text-role-cta-foreground shadow-[0_4px_14px_var(--role-cta-shadow)] transition hover:bg-role-cta-hover"
               >
                 Start free (create account)
               </Link>

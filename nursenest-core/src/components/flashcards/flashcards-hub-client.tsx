@@ -167,7 +167,7 @@ export function FlashcardsHubClient({
       <div className="mt-6 flex flex-wrap gap-2">
         <Link
           href="/app/flashcards/weak-areas"
-          className="inline-flex rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+          className="inline-flex rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground"
         >
           Study weak areas
         </Link>
@@ -250,7 +250,7 @@ export function FlashcardsHubClient({
       </div>
 
       {dueSummary && (dueSummary.dueToday > 0 || dueSummary.overdue > 0 || dueSummary.learning > 0) ? (
-        <div className="mt-6 grid grid-cols-3 gap-3 rounded-2xl border border-primary/25 bg-primary/5 p-4 text-center">
+        <div className="mt-6 grid grid-cols-3 gap-3 rounded-2xl border border-role-cta/25 bg-role-cta-soft p-4 text-center">
           <div>
             <p className="text-2xl font-bold tabular-nums text-primary">{dueSummary.dueToday}</p>
             <p className="text-xs font-medium text-[var(--theme-muted-text)]">Due (today)</p>
@@ -331,7 +331,7 @@ export function FlashcardsHubClient({
                 {d.locked ? (
                   <Link
                     href="/pricing"
-                    className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:brightness-110"
+                    className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-role-cta px-5 py-2.5 text-sm font-semibold text-role-cta-foreground shadow-[0_4px_14px_var(--role-cta-shadow)] transition hover:bg-role-cta-hover"
                   >
                     Subscribe to unlock
                   </Link>
@@ -339,7 +339,7 @@ export function FlashcardsHubClient({
                   <div className="flex flex-col gap-2 sm:items-end">
                     <Link
                       href={`/app/flashcards/${d.slug}`}
-                      className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:brightness-110"
+                      className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-role-cta px-5 py-2.5 text-sm font-semibold text-role-cta-foreground shadow-[0_4px_14px_var(--role-cta-shadow)] transition hover:bg-role-cta-hover"
                     >
                       Study
                     </Link>

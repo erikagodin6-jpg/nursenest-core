@@ -334,14 +334,14 @@ export function PricingPageClient({
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{intro}</p>
 
         <p className="mt-4 text-sm text-[var(--theme-body-text)]">{t("pages.pricing.hero.trustLine")}</p>
-        <p className="mt-2 inline-flex rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+        <p className="mt-2 inline-flex rounded-full border border-role-cta/25 bg-role-cta-soft px-3 py-1 text-xs font-semibold text-role-cta-on-soft">
           Most students choose a plan that matches their time-to-exam window.
         </p>
 
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
           <Link
             href={tryQuestionsHref}
-            className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition hover:brightness-110"
+            className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-role-cta px-6 py-3 text-sm font-semibold text-role-cta-foreground shadow-[0_6px_18px_var(--role-cta-shadow)] transition hover:bg-role-cta-hover"
           >
             Start studying now
             <ArrowRight className="ml-2 h-4 w-4" />
@@ -376,7 +376,7 @@ export function PricingPageClient({
             <p className="mt-2 text-2xl font-bold tabular-nums text-[var(--theme-heading-text)]">68%</p>
             <p className="text-xs text-muted-foreground">Last session · Pharmacology (example)</p>
             <div className="mt-3 flex flex-wrap gap-1.5">
-              <span className="rounded-full bg-amber-500/15 px-2 py-0.5 text-[11px] font-medium text-amber-900 dark:text-amber-100">
+              <span className="rounded-full border border-role-warning-border bg-role-warning-soft px-2 py-0.5 text-[11px] font-medium text-role-warning-text">
                 Priority
               </span>
               <span className="rounded-full bg-[var(--surface-chip)] px-2 py-0.5 text-[11px] text-muted-foreground ring-1 ring-[var(--border-subtle)]">
@@ -473,10 +473,10 @@ export function PricingPageClient({
             className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
               id === "rn"
                 ? segment === id
-                  ? "bg-primary px-5 py-2.5 text-base text-primary-foreground shadow-md ring-2 ring-primary/30"
-                  : "border-2 border-primary/25 bg-card px-5 py-2.5 text-base hover:bg-[var(--surface-interactive-hover)]"
+                  ? "bg-role-cta px-5 py-2.5 text-base text-role-cta-foreground shadow-md ring-2 ring-role-cta/25"
+                  : "border-2 border-role-cta/30 bg-card px-5 py-2.5 text-base hover:bg-[var(--surface-interactive-hover)]"
                 : segment === id
-                  ? "bg-primary text-primary-foreground"
+                  ? "bg-role-cta text-role-cta-foreground"
                   : "border border-border bg-card hover:bg-[var(--surface-interactive-hover)]"
             }`}
           >
@@ -490,14 +490,14 @@ export function PricingPageClient({
           <span className="text-sm text-muted-foreground">{t("pages.pricing.countryLabel")}</span>
           <button
             type="button"
-            className={`rounded-full px-3 py-1 text-xs font-semibold ${country === "CA" ? "bg-primary/15 text-primary" : "border border-border"}`}
+            className={`rounded-full px-3 py-1 text-xs font-semibold ${country === "CA" ? "bg-role-cta-soft text-role-cta-on-soft" : "border border-border"}`}
             onClick={() => setCountry("CA")}
           >
             {t("pages.pricing.country.ca")}
           </button>
           <button
             type="button"
-            className={`rounded-full px-3 py-1 text-xs font-semibold ${country === "US" ? "bg-primary/15 text-primary" : "border border-border"}`}
+            className={`rounded-full px-3 py-1 text-xs font-semibold ${country === "US" ? "bg-role-cta-soft text-role-cta-on-soft" : "border border-border"}`}
             onClick={() => setCountry("US")}
           >
             {t("pages.pricing.country.us")}
@@ -755,8 +755,8 @@ export function PricingPageClient({
           </article>
 
           {coreRow ? (
-            <article className="flex flex-col rounded-2xl border border-[var(--theme-card-border)] bg-card p-5 shadow-sm ring-2 ring-primary/25">
-              <p className="mb-2 inline-block w-fit rounded-full bg-primary/15 px-2 py-0.5 text-xs font-bold text-primary">Core</p>
+            <article className="flex flex-col rounded-2xl border border-[var(--theme-card-border)] bg-card p-5 shadow-sm ring-2 ring-role-cta/25">
+              <p className="mb-2 inline-block w-fit rounded-full bg-role-cta-soft px-2 py-0.5 text-xs font-bold text-role-cta-on-soft">Core</p>
               <h3 className="text-lg font-semibold text-[var(--theme-heading-text)]">{t(DURATION_KEYS[coreRow.duration])}</h3>
               <p className="mt-2 text-xs leading-snug text-muted-foreground">{planPersona[coreRow.duration]}</p>
               <ul className="mt-3 space-y-1.5 text-xs text-[var(--theme-body-text)]">
@@ -770,7 +770,7 @@ export function PricingPageClient({
                 type="button"
                 disabled={checkoutLoading || !policiesAccepted}
                 onClick={() => startCheckout(coreRow.duration)}
-                className="mt-4 w-full rounded-full bg-primary py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
+                className="mt-4 w-full rounded-full bg-role-cta py-2.5 text-sm font-semibold text-role-cta-foreground shadow-[0_6px_18px_var(--role-cta-shadow)] disabled:opacity-60"
               >
                 Unlock full access
               </button>
@@ -778,8 +778,8 @@ export function PricingPageClient({
           ) : null}
 
           {premiumRow ? (
-            <article className="flex flex-col rounded-2xl border border-[var(--theme-card-border)] bg-card p-5 shadow-sm">
-              <p className="mb-2 inline-block w-fit rounded-full bg-primary px-2 py-0.5 text-xs font-bold text-primary-foreground">Premium · Most popular</p>
+            <article className="flex flex-col rounded-2xl border border-role-premium-border bg-role-premium-surface p-5 shadow-sm">
+              <p className="mb-2 inline-block w-fit rounded-full bg-role-cta px-2 py-0.5 text-xs font-bold text-role-cta-foreground">Premium · Most popular</p>
               <h3 className="text-lg font-semibold text-[var(--theme-heading-text)]">{t(DURATION_KEYS[premiumRow.duration])}</h3>
               <p className="mt-2 text-xs leading-snug text-muted-foreground">Best for comprehensive prep with maximum runway and savings.</p>
               <ul className="mt-3 space-y-1.5 text-xs text-[var(--theme-body-text)]">
@@ -798,7 +798,7 @@ export function PricingPageClient({
                 type="button"
                 disabled={checkoutLoading || !policiesAccepted}
                 onClick={() => startCheckout(premiumRow.duration)}
-                className="mt-4 w-full rounded-full bg-primary py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
+                className="mt-4 w-full rounded-full bg-role-cta py-2.5 text-sm font-semibold text-role-cta-foreground shadow-[0_6px_18px_var(--role-cta-shadow)] disabled:opacity-60"
               >
                 Start studying now
               </button>
@@ -852,7 +852,7 @@ export function PricingPageClient({
       <div className="mt-12 flex justify-center">
         <Link
           href={tryQuestionsHref}
-          className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-primary/30 bg-primary/5 px-8 py-3 text-sm font-semibold text-primary hover:bg-primary/10"
+          className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-role-cta/35 bg-role-cta-soft px-8 py-3 text-sm font-semibold text-role-cta-on-soft hover:bg-[color-mix(in_srgb,var(--role-cta)_14%,var(--bg-card))]"
         >
           {t("pages.pricing.cta.startPractice")}
         </Link>

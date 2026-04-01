@@ -426,7 +426,7 @@ export function PracticeTestRunnerClient({
             <button
               type="button"
               disabled={teachingReviewLoading}
-              className="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-50"
+              className="rounded-lg bg-role-cta px-4 py-2.5 text-sm font-semibold text-role-cta-foreground disabled:opacity-50"
               onClick={() => void loadTeachingReview()}
             >
               {teachingReviewLoading ? "Loading…" : "Open teaching review"}
@@ -449,7 +449,7 @@ export function PracticeTestRunnerClient({
         />
         <Link
           href="/app/practice-tests"
-          className="inline-flex rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground"
+          className="inline-flex rounded-full bg-role-cta px-5 py-2.5 text-sm font-semibold text-role-cta-foreground"
         >
           Back to test bank
         </Link>

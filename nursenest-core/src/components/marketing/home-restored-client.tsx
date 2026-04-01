@@ -3,25 +3,7 @@
 import { useCallback, useEffect, useMemo, useState, Suspense } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import {
-  ArrowRight,
-  Shield,
-  BookOpen,
-  CheckCircle2,
-  MapPin,
-  HelpCircle,
-  Layers,
-  Users,
-  Brain,
-  Target,
-  ClipboardList,
-  Stethoscope,
-  GraduationCap,
-  Heart,
-  Briefcase,
-  Award,
-  Sparkles,
-} from "lucide-react";
+import { ArrowRight, Shield, BookOpen, CheckCircle2, MapPin } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
@@ -29,7 +11,7 @@ import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { LazySection } from "@/legacy/marketing/lazy-section";
 import { buildHomepageHeroSlides } from "@/lib/marketing-assets";
 import type { HomepageLessonTeaser } from "@/lib/marketing/homepage-lesson-teasers";
-import { heroQuickEntryLinks } from "@/lib/marketing/home-hero-gateway-config";
+import { heroPathwayEntryLinks } from "@/lib/marketing/home-hero-gateway-config";
 import { rnQuestions } from "@/lib/marketing/marketing-entry-routes";
 import { HomeHeroMediaPanel } from "@/components/marketing/home-hero-media-panel";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
@@ -150,7 +132,7 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
   /** When false, hero is single-column; media is omitted (no `hidden` placeholder delaying layout). */
   const showHeroMediaColumn = heroSlides.length > 0;
 
-  const heroQuickLinks = useMemo(() => heroQuickEntryLinks(region), [region]);
+  const heroPathwayLinks = useMemo(() => heroPathwayEntryLinks(region), [region]);
 
   const [email, setEmail] = useState("");
   const [emailFrequency, setEmailFrequency] = useState("weekly");
@@ -221,37 +203,34 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
     <div className="font-sans md:animate-page-enter flex min-h-screen flex-col overflow-x-hidden bg-[var(--theme-page-bg)]">
       <div className="flex-grow overflow-x-hidden">
         <section
-          className="relative overflow-hidden"
-          style={{ paddingTop: "clamp(0.35rem, 1.1vw, 0.85rem)", paddingBottom: "var(--space-hero-bottom)" }}
+          className="relative overflow-hidden pt-0"
+          style={{ paddingBottom: "var(--space-hero-bottom)" }}
           data-testid="hero-section"
         >
           <div className="pointer-events-none absolute left-0 top-0 -z-10 hidden h-full w-full overflow-hidden md:block will-change-transform" aria-hidden="true">
-            <div className="absolute right-[-5%] top-[-10%] h-[500px] w-[500px] rounded-full bg-primary/8 blur-[80px]" style={{ transform: "translateZ(0)" }} />
+            <div className="absolute right-[-5%] top-[-10%] h-[500px] w-[500px] rounded-full bg-role-cta/10 blur-[80px]" style={{ transform: "translateZ(0)" }} />
             <div className="absolute bottom-[10%] left-[-10%] h-[600px] w-[600px] rounded-full bg-secondary/20 blur-[100px]" style={{ transform: "translateZ(0)" }} />
           </div>
 
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div
-              className={`grid items-start gap-5 md:gap-8 lg:gap-10 ${showHeroMediaColumn ? "md:grid-cols-[1fr_1.08fr]" : "md:grid-cols-1"}`}
+              className={`grid items-start gap-4 md:gap-6 lg:gap-8 ${showHeroMediaColumn ? "md:grid-cols-[1fr_1.08fr]" : "md:grid-cols-1"}`}
             >
-              <div className="hero-motion-enter min-w-0 max-w-[min(100%,45rem)] space-y-3 md:space-y-3.5">
-                <div className="flex flex-wrap items-center gap-2">
-                  <div
-                    className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/5 px-3 py-1.5 sm:px-4"
-                    data-testid="badge-trust-micro"
-                  >
-                    <Award className="h-3.5 w-3.5 shrink-0 text-primary" />
-                    <span className="text-xs font-semibold text-primary sm:text-sm">{t("home.hero.trustMicroBadge")}</span>
-                  </div>
-                  <div className="nn-accent-pill inline-flex items-center gap-2 rounded-full px-3 py-1.5 sm:px-4" data-testid="badge-authority">
-                    <Sparkles className="h-3.5 w-3.5 shrink-0 text-primary" />
-                    <span className="text-xs font-semibold text-primary sm:text-sm">{t("home.hero.authorityBadge")}</span>
-                  </div>
+              <div className="hero-motion-enter min-w-0 max-w-[min(100%,46rem)] space-y-4 md:space-y-5">
+                <div
+                  className="inline-flex max-w-full flex-wrap items-center gap-x-3 gap-y-1 rounded-full border border-primary/15 bg-primary/[0.06] px-3 py-1.5 text-xs font-semibold text-primary sm:text-sm"
+                  data-testid="badge-trust-micro"
+                >
+                  <span className="hidden sm:inline">{t("home.hero.trustMicroBadge")}</span>
+                  <span className="text-[var(--theme-muted-text)] sm:text-primary/40" aria-hidden="true">
+                    ·
+                  </span>
+                  <span>{t("home.hero.authorityBadge")}</span>
                 </div>
 
-                <div className="space-y-2.5">
+                <div className="space-y-3">
                   <h1
-                    className="text-balance font-bold leading-[1.08] tracking-tight text-[var(--theme-heading-text)]"
+                    className="text-balance font-bold leading-[1.06] tracking-tight text-[var(--theme-heading-text)]"
                     style={{ fontSize: "var(--text-hero)" }}
                     data-testid="text-hero-heading"
                   >
@@ -259,127 +238,79 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
                   </h1>
 
                   <p
-                    className="text-pretty max-w-none text-base leading-relaxed text-[var(--theme-body-text)] lg:text-lg"
+                    className="text-pretty max-w-[52ch] text-base leading-relaxed text-[var(--theme-body-text)] md:text-lg"
                     data-testid="text-hero-subheading"
                   >
                     {t("home.hero.newSubheadline")}
                   </p>
-                  <div className="grid gap-2 pt-1 text-xs font-medium text-[var(--theme-body-text)] sm:grid-cols-2">
-                    <p className="rounded-lg border border-border/60 bg-card/50 px-2.5 py-1.5">
-                      Thousands of NCLEX-style and pathway-aligned questions
-                    </p>
-                    <p className="rounded-lg border border-border/60 bg-card/50 px-2.5 py-1.5">
-                      Adaptive readiness tracking with weak-area prioritization
-                    </p>
-                    <p className="rounded-lg border border-border/60 bg-card/50 px-2.5 py-1.5">
-                      Clinically structured rationales with exam strategy cues
-                    </p>
-                    <p className="rounded-lg border border-border/60 bg-card/50 px-2.5 py-1.5">
-                      One learning loop: questions, lessons, flashcards, retesting
-                    </p>
-                  </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 sm:gap-2.5" data-testid="hero-feature-strip">
-                  {(
-                    [
-                      { icon: Brain, key: "featureActiveRecall", descKey: "featureActiveRecallDesc" },
-                      { icon: ClipboardList, key: "featureNGN", descKey: "featureNGNDesc" },
-                      { icon: Target, key: "featureBlueprint", descKey: "featureBlueprintDesc" },
-                      { icon: Stethoscope, key: "featureClinicalDecision", descKey: "featureClinicalDecisionDesc" },
-                    ] as const
-                  ).map((feat) => (
-                    <div
-                      key={feat.key}
-                      className="nn-card flex items-start gap-2 rounded-xl p-2.5"
-                      data-testid={`feature-${feat.key}`}
-                    >
-                      <div className="nn-accent-icon-wrap mt-0.5 h-7 w-7 shrink-0">
-                        <feat.icon className="nn-accent-icon h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-xs font-semibold leading-snug text-[var(--theme-heading-text)] sm:text-sm">{t(`home.hero.${feat.key}`)}</p>
-                        <p className="mt-0.5 hidden text-[10px] leading-snug text-[var(--theme-body-text)] sm:line-clamp-2 sm:block sm:text-[11px]">
-                          {t(`home.hero.${feat.descKey}`)}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="overflow-hidden rounded-2xl border border-[var(--theme-input-border)] bg-card shadow-[var(--shadow-card)]" data-testid="region-toggle-hero">
-                  <div className="flex">
+                <div
+                  className="flex flex-wrap items-center gap-2 rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]/80 px-3 py-2 text-sm"
+                  data-testid="region-toggle-hero"
+                >
+                  <span className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">{t("nav.regionLabel")}</span>
+                  <div className="inline-flex rounded-lg border border-[var(--theme-input-border)] bg-[var(--theme-card-bg)] p-0.5">
                     <button
                       type="button"
                       onClick={() => setRegion("US")}
-                      className={`relative flex flex-1 items-center justify-center gap-2.5 px-4 py-3.5 text-sm font-semibold transition-all duration-200 sm:py-4 sm:text-base ${
-                        region === "US"
-                          ? "border-b-2 border-primary bg-primary/10 text-primary"
-                          : "border-b-2 border-transparent text-[var(--theme-muted-text)] hover:bg-[var(--theme-muted-surface)] hover:text-[var(--theme-body-text)]"
+                      className={`rounded-md px-2.5 py-1 text-xs font-semibold sm:px-3 sm:text-sm ${
+                        region === "US" ? "bg-primary/15 text-primary shadow-sm" : "text-[var(--theme-muted-text)] hover:text-[var(--theme-body-text)]"
                       }`}
                       data-testid="button-region-us"
                     >
-                      <span className="text-xl" role="img" aria-label={t("pages.home.usFlag")}>
+                      <span className="mr-1" role="img" aria-label={t("pages.home.usFlag")}>
                         🇺🇸
                       </span>
-                      <span>{t("home.region.us")}</span>
-                      {region === "US" && <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />}
+                      {t("home.region.us")}
                     </button>
-                    <div className="w-px bg-[var(--theme-input-border)]" />
                     <button
                       type="button"
                       onClick={() => setRegion("CA")}
-                      className={`relative flex flex-1 items-center justify-center gap-2.5 px-4 py-3.5 text-sm font-semibold transition-all duration-200 sm:py-4 sm:text-base ${
-                        region === "CA"
-                          ? "border-b-2 border-primary bg-primary/10 text-primary"
-                          : "border-b-2 border-transparent text-[var(--theme-muted-text)] hover:bg-[var(--theme-muted-surface)] hover:text-[var(--theme-body-text)]"
+                      className={`rounded-md px-2.5 py-1 text-xs font-semibold sm:px-3 sm:text-sm ${
+                        region === "CA" ? "bg-primary/15 text-primary shadow-sm" : "text-[var(--theme-muted-text)] hover:text-[var(--theme-body-text)]"
                       }`}
                       data-testid="button-region-ca"
                     >
-                      <span className="text-xl" role="img" aria-label={t("pages.home.canadianFlag")}>
+                      <span className="mr-1" role="img" aria-label={t("pages.home.canadianFlag")}>
                         🇨🇦
                       </span>
-                      <span>{t("home.region.ca")}</span>
-                      {region === "CA" && <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />}
+                      {t("home.region.ca")}
                     </button>
                   </div>
-                  <div className="border-t border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)] px-4 py-3">
-                    <div className="flex items-start gap-2">
-                      <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--theme-body-text)]" />
-                      <p className="text-xs leading-relaxed text-[var(--theme-body-text)]">
-                        {region === "US" ? t("home.region.usDesc") : t("home.region.caDesc")}
-                      </p>
-                    </div>
+                  <div className="flex min-w-0 flex-1 items-start gap-1.5 text-xs text-[var(--theme-body-text)] sm:justify-end">
+                    <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
+                    <span className="leading-snug">{region === "US" ? t("home.region.usDesc") : t("home.region.caDesc")}</span>
                   </div>
                 </div>
 
-                <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
+                <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:gap-4">
                   <MarketingTrackedLink
                     href="/signup"
                     event={PH.marketingHomeHeroPrimaryCta}
                     eventProps={{ region }}
-                    className="shadow-primary/25 flex min-h-[52px] w-full items-center justify-center rounded-full bg-primary px-7 py-3 text-base font-semibold text-white shadow-[var(--shadow-elevated)] transition-transform hover:-translate-y-0.5 hover:brightness-110 sm:min-h-[56px] sm:w-auto sm:px-9 sm:text-lg"
+                    className="inline-flex min-h-[52px] w-full items-center justify-center rounded-full bg-role-cta px-8 py-3.5 text-base font-semibold text-role-cta-foreground shadow-[0_10px_28px_var(--role-cta-shadow),var(--shadow-elevated)] transition-transform hover:-translate-y-0.5 hover:bg-role-cta-hover sm:min-h-[54px] sm:w-auto sm:px-10 sm:text-lg"
                     data-testid="button-hero-start-free"
                   >
                     {t("home.hero.ctaPrimary")}
-                    <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
+                    <ArrowRight className="ml-2 h-5 w-5" />
                   </MarketingTrackedLink>
                   <MarketingTrackedLink
                     href={withMarketingLocale(locale, rnQuestions(region))}
                     event={PH.marketingHomeHeroSecondaryCta}
                     eventProps={{ region, destination: "rn_questions" }}
-                    className="flex min-h-[52px] w-full items-center justify-center rounded-full border border-[var(--theme-input-border)] bg-card px-7 py-3 text-base font-medium text-[var(--theme-body-text)] hover:border-[color-mix(in_srgb,var(--theme-primary)_22%,var(--theme-input-border))] hover:bg-[var(--theme-muted-surface)] sm:min-h-[56px] sm:w-auto sm:px-9 sm:text-lg"
+                    className="inline-flex min-h-[48px] w-full items-center justify-center rounded-full border border-[var(--theme-input-border)] bg-transparent px-6 py-3 text-sm font-semibold text-[var(--theme-heading-text)] hover:border-[color-mix(in_srgb,var(--theme-primary)_28%,var(--theme-input-border))] hover:bg-[var(--theme-muted-surface)] sm:min-h-[54px] sm:w-auto sm:px-7 sm:text-base"
                     data-testid="button-hero-browse"
                   >
-                    <BookOpen className="mr-2 h-4 w-4 text-primary sm:h-5 sm:w-5" />
+                    <BookOpen className="mr-2 h-4 w-4 text-primary" />
                     {t("home.hero.ctaSecondary")}
                   </MarketingTrackedLink>
                 </div>
 
-                <div className="space-y-2" data-testid="hero-quick-entry-links">
-                  <p className="text-xs font-medium text-[var(--theme-muted-text)]">{t("home.hero.quickEntryLabel")}</p>
-                  <div className="flex flex-wrap gap-2">
-                    {heroQuickLinks.map((item) => {
+                <div className="space-y-2.5" data-testid="hero-quick-entry-links">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">{t("home.hero.quickEntryLabel")}</p>
+                  <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
+                    {heroPathwayLinks.map((item) => {
                       const label = t(item.labelKey);
                       return (
                         <MarketingTrackedLink
@@ -387,107 +318,70 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
                           href={withMarketingLocale(locale, item.href)}
                           event={PH.marketingHomeQuickEntryClick}
                           eventProps={{ region, link_label: label }}
-                          className="inline-flex items-center rounded-full border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)] px-3 py-1.5 text-xs font-semibold text-[var(--theme-heading-text)] transition hover:border-primary/35 hover:bg-card"
+                          className="inline-flex min-h-[2.75rem] items-center justify-center rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] px-3 py-2 text-center text-xs font-semibold leading-tight text-[var(--theme-heading-text)] shadow-sm transition hover:border-primary/35 hover:shadow-md sm:min-h-0 sm:rounded-full sm:px-4 sm:py-2 sm:text-sm"
                         >
                           {label}
                         </MarketingTrackedLink>
                       );
                     })}
                   </div>
+                  <p className="text-xs text-[var(--theme-muted-text)]">
+                    <MarketingTrackedLink
+                      href={withMarketingLocale(locale, "/tools")}
+                      event={PH.marketingHomeQuickEntryClick}
+                      eventProps={{ region, link_label: "study_tools" }}
+                      className="font-semibold text-primary underline-offset-2 hover:underline"
+                    >
+                      {t("home.quickEntry.studyTools")}
+                    </MarketingTrackedLink>
+                  </p>
                 </div>
 
-                <p className="text-center text-xs text-[var(--theme-body-text)] sm:text-left" data-testid="text-urgency-microcopy">
+                <p className="text-xs text-[var(--theme-body-text)] sm:text-sm" data-testid="text-urgency-microcopy">
                   {t("home.hero.urgencyMicrocopy")}
                 </p>
 
-                <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-[var(--theme-body-text)] sm:gap-x-5">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
-                    <span>{t("home.hero.noCreditCard")}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Shield className="h-4 w-4 shrink-0 text-primary" />
-                    <span>{t("home.hero.guarantee")}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
-                    <span>{t("home.hero.cancelAnytime")}</span>
-                  </div>
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-[var(--theme-body-text)] sm:text-sm">
+                  <span className="inline-flex items-center gap-1.5">
+                    <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />
+                    {t("home.hero.noCreditCard")}
+                  </span>
+                  <span className="inline-flex items-center gap-1.5">
+                    <Shield className="h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />
+                    {t("home.hero.guarantee")}
+                  </span>
+                  <span className="inline-flex items-center gap-1.5">
+                    <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />
+                    {t("home.hero.cancelAnytime")}
+                  </span>
                 </div>
 
-                <div className="space-y-2" data-testid="hero-trust-indicators">
-                  <p className="text-[11px] font-medium leading-snug text-[var(--theme-muted-text)]" data-testid="text-trust-tagline">
-                    {t("home.hero.trustPassRate")}
-                  </p>
-                  <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-xs text-[var(--theme-body-text)] sm:justify-start sm:gap-x-4">
-                    <div className="flex items-center gap-1.5">
-                      <HelpCircle className="h-3.5 w-3.5 shrink-0" />
-                      <span data-testid="text-trust-questions">
-                        {trustStatsFormatted.questions
-                          ? `${trustStatsFormatted.questions} ${t("home.hero.trustQuestionsLabel")}`
-                          : t("home.hero.trustQuestions")}
-                      </span>
-                    </div>
-                    <span className="hidden text-[var(--theme-muted-text)] sm:inline" aria-hidden="true">
-                      ·
-                    </span>
-                    <div className="flex items-center gap-1.5">
-                      <Layers className="h-3.5 w-3.5 shrink-0" />
-                      <span data-testid="text-trust-flashcards">
-                        {trustStatsFormatted.flashcards
-                          ? `${trustStatsFormatted.flashcards} ${t("home.hero.trustFlashcardsLabel")}`
-                          : t("home.hero.trustFlashcards")}
-                      </span>
-                    </div>
-                    <span className="hidden text-[var(--theme-muted-text)] sm:inline" aria-hidden="true">
-                      ·
-                    </span>
-                    <div className="flex items-center gap-1.5">
-                      <BookOpen className="h-3.5 w-3.5 shrink-0" />
-                      <span data-testid="text-trust-lessons">
-                        {trustStatsFormatted.lessons
-                          ? `${trustStatsFormatted.lessons} ${t("home.hero.trustLessonsLabel")}`
-                          : t("home.hero.trustLessons")}
-                      </span>
-                    </div>
-                    <span className="hidden text-[var(--theme-muted-text)] sm:inline" aria-hidden="true">
-                      ·
-                    </span>
-                    <div className="flex items-center gap-1.5">
-                      <Users className="h-3.5 w-3.5 shrink-0" />
-                      <span data-testid="text-trust-students">
-                        {trustStatsFormatted.learners
-                          ? `${trustStatsFormatted.learners} ${t("home.hero.trustLearnersLabel")}`
-                          : t("home.hero.trustStudents")}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="rounded-xl border border-[var(--theme-card-border)] bg-card/60 p-4 shadow-[var(--shadow-card)]" data-testid="hero-built-for-bar">
-                  <p className="mb-2.5 text-[10px] font-bold uppercase tracking-wider text-[var(--theme-body-text)]">{t("home.hero.builtForLabel")}</p>
-                  <div className="flex flex-wrap gap-2">
-                    {(
-                      [
-                        { icon: GraduationCap, key: "builtForNursingStudents" },
-                        { icon: Heart, key: "builtForPracticalNurses" },
-                        { icon: Stethoscope, key: "builtForRegisteredNurses" },
-                        { icon: Briefcase, key: "builtForNursePractitioners" },
-                        { icon: Users, key: "builtForAlliedHealth" },
-                      ] as const
-                    ).map((seg) => (
-                      <span
-                        key={seg.key}
-                        className="inline-flex items-center gap-1.5 rounded-full border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)] px-2 py-1 text-[11px] font-medium text-[var(--theme-body-text)] sm:px-2.5 sm:text-xs"
-                        data-testid={`built-for-${seg.key}`}
-                      >
-                        <seg.icon className="h-3 w-3 shrink-0 text-[var(--theme-muted-text)]" />
-                        {t(`home.hero.${seg.key}`)}
-                      </span>
-                    ))}
-                  </div>
-                  <p className="mt-2 text-[11px] leading-relaxed text-[var(--theme-body-text)]">{t("home.hero.builtForMicrocopy")}</p>
-                </div>
+                <p className="text-[11px] font-medium text-[var(--theme-muted-text)] sm:text-xs" data-testid="text-trust-tagline">
+                  {t("home.hero.trustPassRate")}
+                </p>
+                <p className="text-xs leading-relaxed text-[var(--theme-body-text)] sm:text-sm" data-testid="hero-trust-indicators">
+                  {trustStatsFormatted.questions
+                    ? `${trustStatsFormatted.questions} ${t("home.hero.trustQuestionsLabel")}`
+                    : t("home.hero.trustQuestions")}
+                  <span className="mx-1.5 text-[var(--theme-muted-text)]" aria-hidden="true">
+                    ·
+                  </span>
+                  {trustStatsFormatted.flashcards
+                    ? `${trustStatsFormatted.flashcards} ${t("home.hero.trustFlashcardsLabel")}`
+                    : t("home.hero.trustFlashcards")}
+                  <span className="mx-1.5 text-[var(--theme-muted-text)]" aria-hidden="true">
+                    ·
+                  </span>
+                  {trustStatsFormatted.lessons
+                    ? `${trustStatsFormatted.lessons} ${t("home.hero.trustLessonsLabel")}`
+                    : t("home.hero.trustLessons")}
+                  <span className="mx-1.5 text-[var(--theme-muted-text)]" aria-hidden="true">
+                    ·
+                  </span>
+                  {trustStatsFormatted.learners
+                    ? `${trustStatsFormatted.learners} ${t("home.hero.trustLearnersLabel")}`
+                    : t("home.hero.trustStudents")}
+                </p>
               </div>
 
               {showHeroMediaColumn ? (

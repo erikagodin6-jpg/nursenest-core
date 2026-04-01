@@ -21,6 +21,7 @@ import { MARKETING_LANGUAGES } from "@/lib/i18n/marketing-languages";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
+import { HOME_BRAND_LOGO_MARK_CLASSNAME } from "@/lib/branding/logo-config";
 import { MarketingHeaderAuthDesktop, MarketingHeaderAuthMobile } from "@/components/auth/marketing-header-auth";
 import { ThemePicker } from "@/components/theme/theme-picker";
 import { Button } from "@/components/ui/button";
@@ -30,16 +31,23 @@ function NavDetails({
   label,
   children,
   subBar,
+  dense,
 }: {
   label: string;
   children: ReactNode;
   subBar?: boolean;
+  /** Tighter homepage header: matches reduced row padding. */
+  dense?: boolean;
 }) {
   return (
-    <details className="group relative">
+    <details className={`group relative ${subBar ? "shrink-0" : ""}`}>
       <summary
         className={`flex cursor-pointer list-none items-center gap-1 font-medium text-[var(--theme-menu-text)] hover:bg-[var(--surface-interactive-hover)] hover:text-primary [&::-webkit-details-marker]:hidden ${
-          subBar ? "h-7 rounded-md px-1.5 text-xs text-primary/70 hover:text-primary lg:px-2" : "rounded-full px-3 py-2 text-sm"
+          subBar
+            ? "min-h-7 rounded-md px-1.5 py-0.5 text-xs text-primary/70 hover:text-primary lg:px-2"
+            : dense
+              ? "rounded-full px-2.5 py-1.5 text-sm"
+              : "rounded-full px-3 py-2 text-sm"
         }`}
       >
         {label}
@@ -94,44 +102,64 @@ export function SiteHeader() {
 
   const examNavStrip = useMemo(() => getExamNavStripItems(region), [region]);
 
+  /** Tighter marketing homepage chrome: pathway entry lives in the hero; strip duplicates noise. */
+  const isMarketingHome = pathWithoutLocale === "/" || pathWithoutLocale === "";
+
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--divider,var(--theme-nav-border))] bg-[color-mix(in_srgb,var(--theme-nav-bg)_92%,var(--theme-primary))]/90 shadow-sm backdrop-blur-xl transition-all duration-300">
-      <div className="hidden bg-[var(--theme-topbar-bg)] text-[var(--theme-topbar-text)] md:block">
-        <div className="mx-auto flex h-7 max-w-7xl items-center justify-center gap-1 px-2 text-[10px] font-medium sm:h-8 sm:gap-6 sm:px-4 sm:text-xs lg:px-8">
-          {topLinks.map((item, index) => (
-            <div key={item.href} className="flex items-center gap-1 sm:gap-6">
-              <Link href={item.href} className="flex items-center gap-1.5 rounded-full px-2 py-1 hover:bg-white/15">
-                <item.icon className="h-3 w-3" />
-                <span>{item.label}</span>
-              </Link>
-              {index < topLinks.length - 1 && (
-                <span className="hidden opacity-30 sm:inline" aria-hidden="true">
-                  |
-                </span>
-              )}
-            </div>
-          ))}
+      {!isMarketingHome ? (
+        <div className="hidden bg-[var(--theme-topbar-bg)] text-[var(--theme-topbar-text)] md:block">
+          <div className="mx-auto flex h-6 max-w-7xl items-center justify-center gap-1 px-2 text-[10px] font-medium sm:h-7 sm:gap-5 sm:px-4 sm:text-[11px] lg:px-8">
+            {topLinks.map((item, index) => (
+              <div key={item.href} className="flex items-center gap-1 sm:gap-5">
+                <Link href={item.href} className="flex items-center gap-1.5 rounded-full px-2 py-0.5 hover:bg-white/15">
+                  <item.icon className="h-3 w-3" />
+                  <span>{item.label}</span>
+                </Link>
+                {index < topLinks.length - 1 && (
+                  <span className="hidden opacity-30 sm:inline" aria-hidden="true">
+                    |
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      ) : null}
 
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-2 py-3 sm:gap-4 sm:px-4 md:py-4 lg:px-8 lg:py-5">
+      <div
+        className={`mx-auto flex max-w-7xl items-center justify-between gap-2 px-2 sm:gap-3 sm:px-4 lg:px-8 ${isMarketingHome ? "min-h-[3.25rem] py-1.5 md:min-h-[3.5rem] md:py-2" : "py-2 md:py-2.5 lg:py-3"}`}
+      >
         <Link
           href={localizeHref("/")}
           className="group flex shrink-0 items-center gap-2 overflow-visible"
           aria-label="NurseNest home"
         >
-          <SiteBrandLogoMark />
+          <SiteBrandLogoMark className={isMarketingHome ? HOME_BRAND_LOGO_MARK_CLASSNAME : undefined} />
         </Link>
 
-        <nav className="hidden items-center gap-0.5 md:flex lg:gap-1">
+        <nav className={`hidden items-center md:flex ${isMarketingHome ? "gap-0 lg:gap-0.5" : "gap-0.5 lg:gap-1"}`}>
           <Link
             href={localizeHref("/")}
-            className="rounded-full px-3 py-2 text-sm font-medium text-[var(--theme-menu-text)] hover:bg-[var(--theme-menu-hover-bg)] hover:text-[var(--theme-menu-hover-text)]"
+            className={`rounded-full font-medium text-[var(--theme-menu-text)] hover:bg-[var(--theme-menu-hover-bg)] hover:text-[var(--theme-menu-hover-text)] ${isMarketingHome ? "px-2.5 py-1.5 text-sm" : "px-3 py-2 text-sm"}`}
           >
             {t("nav.home")}
           </Link>
 
-          <NavDetails label={t("nav.study")}>
+          {isMarketingHome ? (
+            <NavDetails label={t("nav.marketingExplore")} dense>
+              {topLinks.map((item) => (
+                <NavLinkItem key={item.href} href={item.href}>
+                  <span className="flex items-center gap-2">
+                    <item.icon className="h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden />
+                    {item.label}
+                  </span>
+                </NavLinkItem>
+              ))}
+            </NavDetails>
+          ) : null}
+
+          <NavDetails label={t("nav.study")} dense={isMarketingHome}>
             <NavLinkItem href={localizeHref("/lessons")}>{t("nav.lessons")}</NavLinkItem>
             <NavLinkItem href={localizeHref("/exam-lessons")}>{t("nav.lessonsByExam")}</NavLinkItem>
             <NavLinkItem href={localizeHref("/test-bank")}>{t("nav.questionBank")}</NavLinkItem>
@@ -139,7 +167,7 @@ export function SiteHeader() {
             <NavLinkItem href={localizeHref("/flashcards")}>{t("nav.flashcards")}</NavLinkItem>
           </NavDetails>
 
-          <NavDetails label={t("nav.resources")}>
+          <NavDetails label={t("nav.resources")} dense={isMarketingHome}>
             <NavLinkItem href={localizeHref("/blog")}>{t("nav.blog")}</NavLinkItem>
             <NavLinkItem href={localizeHref("/tools")}>{t("nav.clinicalTools")}</NavLinkItem>
             <NavLinkItem href={localizeHref("/case-studies")}>{t("nav.caseStudies")}</NavLinkItem>
@@ -148,18 +176,20 @@ export function SiteHeader() {
             <NavLinkItem href={localizeHref("/shop")}>{t("nav.store")}</NavLinkItem>
           </NavDetails>
 
-          <div className="mx-1 flex items-center gap-1 rounded-full border border-[var(--theme-nav-border)] px-1 py-0.5">
+          <div
+            className={`mx-1 flex items-center gap-0.5 rounded-full border border-[var(--theme-nav-border)] px-0.5 py-0.5 ${isMarketingHome ? "scale-[0.96] lg:scale-100" : ""}`}
+          >
             <button
               type="button"
               onClick={() => setRegion("US")}
-              className={`rounded-full px-2 py-1 text-xs font-semibold ${region === "US" ? "bg-primary/15 text-primary" : "text-[var(--theme-muted-text)] hover:bg-[var(--theme-menu-hover-bg)]"}`}
+              className={`rounded-full px-2 py-0.5 text-xs font-semibold ${region === "US" ? "bg-role-cta-soft text-role-cta-on-soft" : "text-[var(--theme-muted-text)] hover:bg-[var(--theme-menu-hover-bg)]"}`}
             >
               {t("home.region.us")}
             </button>
             <button
               type="button"
               onClick={() => setRegion("CA")}
-              className={`rounded-full px-2 py-1 text-xs font-semibold ${region === "CA" ? "bg-primary/15 text-primary" : "text-[var(--theme-muted-text)] hover:bg-[var(--theme-menu-hover-bg)]"}`}
+              className={`rounded-full px-2 py-0.5 text-xs font-semibold ${region === "CA" ? "bg-role-cta-soft text-role-cta-on-soft" : "text-[var(--theme-muted-text)] hover:bg-[var(--theme-menu-hover-bg)]"}`}
             >
               {t("home.region.ca")}
             </button>
@@ -169,7 +199,7 @@ export function SiteHeader() {
             <button
               type="button"
               onClick={() => setLangOpen((o) => !o)}
-              className="flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium text-[var(--theme-menu-text)] hover:bg-[var(--theme-menu-hover-bg)] hover:text-[var(--theme-menu-hover-text)]"
+              className={`flex items-center gap-1 rounded-full font-medium text-[var(--theme-menu-text)] hover:bg-[var(--theme-menu-hover-bg)] hover:text-[var(--theme-menu-hover-text)] ${isMarketingHome ? "px-2.5 py-1.5 text-sm" : "px-3 py-2 text-sm"}`}
             >
               {t("nav.language")}
               <ChevronDown className="h-3.5 w-3.5" />
@@ -225,11 +255,12 @@ export function SiteHeader() {
         </div>
       </div>
 
-      <div className="hidden border-t border-primary/10 bg-primary/5 md:block">
-        <div className="mx-auto flex h-9 max-w-7xl flex-wrap items-center gap-x-1 gap-y-1 px-2 sm:px-4 lg:px-8">
+      {!isMarketingHome ? (
+        <div className="hidden border-t border-role-cta/15 bg-role-cta-soft md:block">
+        <div className="mx-auto flex min-h-8 max-w-7xl flex-nowrap items-center gap-x-0.5 overflow-x-auto overflow-y-hidden px-2 py-1 sm:px-4 lg:px-8 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <Link
             href={localizeHref("/exam-lessons")}
-            className="px-1.5 py-1 text-xs font-medium text-primary/80 hover:text-primary lg:px-2"
+            className="shrink-0 px-1.5 py-0.5 text-xs font-medium text-role-cta-on-soft/90 hover:text-role-cta-on-soft lg:px-2"
           >
             {t("nav.lessonsByExam")}
           </Link>
@@ -245,7 +276,7 @@ export function SiteHeader() {
               ) : null}
               <Link
                 href={localizeHref(item.href)}
-                className="px-1.5 py-1 text-xs font-medium text-primary/80 hover:text-primary lg:px-2"
+                className="shrink-0 px-1.5 py-0.5 text-xs font-medium text-role-cta-on-soft/90 hover:text-role-cta-on-soft lg:px-2"
               >
                 {t(item.labelKey)}
               </Link>
@@ -260,18 +291,19 @@ export function SiteHeader() {
           </NavDetails>
           <Link
             href={localizeHref("/pricing")}
-            className="px-1.5 py-1 text-xs font-medium text-primary/70 hover:text-primary lg:px-2"
+            className="shrink-0 px-1.5 py-0.5 text-xs font-medium text-role-cta-on-soft/85 hover:text-role-cta-on-soft lg:px-2"
           >
             {t("nav.pricing")}
           </Link>
           <Link
             href={mapLegacyMarketingHref("/faq")}
-            className="px-1.5 py-1 text-xs font-medium text-primary/70 hover:text-primary lg:px-2"
+            className="shrink-0 px-1.5 py-0.5 text-xs font-medium text-role-cta-on-soft/85 hover:text-role-cta-on-soft lg:px-2"
           >
             {t("footer.faq")}
           </Link>
         </div>
-      </div>
+        </div>
+      ) : null}
 
       {mobileOpen && (
         <div className="fixed inset-0 z-[200] md:hidden">
@@ -297,7 +329,7 @@ export function SiteHeader() {
                   type="button"
                   onClick={() => setRegion("US")}
                   className={`flex flex-1 items-center justify-center gap-2 rounded-xl border px-3 py-2 text-sm font-semibold ${
-                    region === "US" ? "border-primary bg-primary/10 text-primary" : "border-[var(--theme-card-border)] text-[var(--theme-muted-text)]"
+                    region === "US" ? "border-role-cta/40 bg-role-cta-soft text-role-cta-on-soft" : "border-[var(--theme-card-border)] text-[var(--theme-muted-text)]"
                   }`}
                 >
                   {t("home.region.us")}
@@ -307,7 +339,7 @@ export function SiteHeader() {
                   type="button"
                   onClick={() => setRegion("CA")}
                   className={`flex flex-1 items-center justify-center gap-2 rounded-xl border px-3 py-2 text-sm font-semibold ${
-                    region === "CA" ? "border-primary bg-primary/10 text-primary" : "border-[var(--theme-card-border)] text-[var(--theme-muted-text)]"
+                    region === "CA" ? "border-role-cta/40 bg-role-cta-soft text-role-cta-on-soft" : "border-[var(--theme-card-border)] text-[var(--theme-muted-text)]"
                   }`}
                 >
                   {t("home.region.ca")}

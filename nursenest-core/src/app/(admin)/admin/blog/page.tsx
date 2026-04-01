@@ -64,7 +64,7 @@ export default async function AdminBlogHubPage() {
         </div>
       </section>
 
-      <section className="mt-8 grid gap-4 md:grid-cols-3">
+      <section className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Link
           href="/admin/blog/generate"
           className="rounded-xl border border-primary/30 bg-primary/10 p-6 text-center font-semibold text-primary hover:bg-primary/15"
@@ -82,6 +82,12 @@ export default async function AdminBlogHubPage() {
           className="rounded-xl border border-border/80 bg-[var(--theme-card-bg)] p-6 text-center font-semibold hover:bg-muted/40"
         >
           Scheduler →
+        </Link>
+        <Link
+          href="/admin/blog/topic-batch"
+          className="rounded-xl border border-primary/25 bg-primary/8 p-6 text-center font-semibold text-primary hover:bg-primary/12"
+        >
+          Topic batch schedule →
         </Link>
         <Link
           href="/admin/seo"

@@ -233,7 +233,7 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
       </section>
 
       <section
-        className="border-t border-[var(--theme-card-border)] bg-gradient-to-br from-primary/12 via-[var(--theme-muted-surface)] to-[var(--theme-card-bg)]"
+        className="border-t border-[var(--theme-card-border)] bg-gradient-to-br from-role-cta/12 via-[var(--theme-muted-surface)] to-[var(--theme-card-bg)]"
         style={{ paddingTop: "var(--space-block)", paddingBottom: "var(--space-block)" }}
         data-testid="section-final-cta"
         aria-labelledby="final-cta-heading"
@@ -248,7 +248,7 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
               href={loc(HUB.signup)}
               event={PH.marketingHomeFinalCta}
               eventProps={{ choice: "signup" }}
-              className="shadow-primary/25 inline-flex min-h-[52px] w-full items-center justify-center rounded-full bg-primary px-8 py-3 text-base font-semibold text-primary-foreground shadow-[var(--shadow-elevated)] transition hover:-translate-y-0.5 hover:brightness-110 sm:w-auto sm:min-h-[56px] sm:min-w-[200px] sm:text-lg"
+              className="inline-flex min-h-[52px] w-full items-center justify-center rounded-full bg-role-cta px-8 py-3 text-base font-semibold text-role-cta-foreground shadow-[0_8px_24px_var(--role-cta-shadow),var(--shadow-elevated)] transition hover:-translate-y-0.5 hover:bg-role-cta-hover sm:w-auto sm:min-h-[56px] sm:min-w-[200px] sm:text-lg"
             >
               {t("home.conversion.ctaSignup")}
               <ArrowRight className="ml-2 h-5 w-5" />

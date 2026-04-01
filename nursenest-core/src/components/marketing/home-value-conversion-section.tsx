@@ -81,7 +81,7 @@ export function HomeValueConversionSection({ region }: { region: NursenestMarket
             href={loc("/signup")}
             event={PH.marketingHomeHeroPrimaryCta}
             eventProps={{ region, surface: "value_section" }}
-            className="inline-flex min-h-[52px] items-center justify-center rounded-full bg-primary px-8 py-3 text-base font-semibold text-primary-foreground shadow-md transition hover:brightness-110"
+            className="inline-flex min-h-[52px] items-center justify-center rounded-full bg-role-cta px-8 py-3 text-base font-semibold text-role-cta-foreground shadow-[0_8px_20px_var(--role-cta-shadow)] transition hover:bg-role-cta-hover"
           >
             Start free — unlock full prep at checkout
             <ArrowRight className="ml-2 h-5 w-5" />
@@ -90,7 +90,7 @@ export function HomeValueConversionSection({ region }: { region: NursenestMarket
             href={loc(HUB.pricing)}
             event={PH.marketingHomeExploreHubClick}
             eventProps={{ hub: "pricing" }}
-            className="inline-flex min-h-[52px] items-center justify-center rounded-full border-2 border-primary/30 bg-card px-8 py-3 text-base font-semibold text-[var(--theme-heading-text)] hover:bg-[var(--theme-muted-surface)]"
+            className="inline-flex min-h-[52px] items-center justify-center rounded-full border-2 border-role-cta/35 bg-card px-8 py-3 text-base font-semibold text-[var(--theme-heading-text)] hover:bg-role-cta-soft"
           >
             Compare plans & pricing
           </MarketingTrackedLink>

@@ -175,7 +175,7 @@ export function PreNursingModuleEngagement({
         </p>
         <div className="flex flex-wrap items-center gap-3">
           <div className="h-2 flex-1 min-w-[120px] overflow-hidden rounded-full bg-muted">
-            <div className="h-full bg-primary transition-[width] duration-300" style={{ width: `${pct}%` }} />
+            <div className="h-full bg-role-success transition-[width] duration-300" style={{ width: `${pct}%` }} />
           </div>
           <span className="text-sm font-medium text-foreground">{pct}% of modules</span>
         </div>

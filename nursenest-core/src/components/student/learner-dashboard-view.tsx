@@ -211,7 +211,7 @@ export function LearnerDashboardView({ data }: { data: LearnerDashboardModel }) 
           </div>
           <div className="mt-4 h-2 overflow-hidden rounded-full bg-muted">
             <div
-              className="h-full rounded-full bg-primary transition-[width]"
+              className="h-full rounded-full bg-role-success transition-[width]"
               style={{ width: data.lessonsAvailable > 0 ? `${Math.min(100, (data.lessonsCompleted / data.lessonsAvailable) * 100)}%` : "0%" }}
             />
           </div>
@@ -259,7 +259,7 @@ export function LearnerDashboardView({ data }: { data: LearnerDashboardModel }) 
               </p>
               <Link
                 href={data.continueLesson.href}
-                className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:brightness-110"
+                className="mt-4 inline-flex items-center gap-2 rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground shadow-[0_4px_14px_var(--role-cta-shadow)] hover:bg-role-cta-hover"
               >
                 Resume lesson
                 <ArrowRight className="h-4 w-4" />

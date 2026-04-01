@@ -257,7 +257,7 @@ export function StudyPlanTool() {
 
       <button
         type="button"
-        className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50"
+        className="rounded-lg bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground disabled:opacity-50"
         disabled={loading}
         onClick={() => void run()}
       >

@@ -227,7 +227,7 @@ export default async function LessonDetailPage({ params }: Props) {
         <div className="mt-10 flex flex-wrap gap-2 border-t border-border pt-6">
           <Link
             href="/app/questions"
-            className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+            className="rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground"
           >
             Apply in question bank
           </Link>
@@ -286,7 +286,7 @@ export default async function LessonDetailPage({ params }: Props) {
         <div className="mt-10 flex flex-wrap gap-2 border-t border-border pt-6">
           <Link
             href="/app/questions"
-            className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+            className="rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground"
           >
             Apply in question bank
           </Link>
@@ -325,7 +325,7 @@ export default async function LessonDetailPage({ params }: Props) {
       <div className="mt-10 flex flex-wrap gap-2 border-t border-border pt-6">
         <Link
           href="/app/questions"
-          className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+          className="rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground"
         >
           Apply in question bank
         </Link>

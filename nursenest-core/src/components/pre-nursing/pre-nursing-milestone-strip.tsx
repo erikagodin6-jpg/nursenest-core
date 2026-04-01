@@ -56,7 +56,7 @@ export function PreNursingMilestoneStrip({
         </p>
       </div>
       <div className="h-2 overflow-hidden rounded-full bg-muted">
-        <div className="h-full bg-primary transition-[width] duration-300" style={{ width: `${snapshot.progressPct}%` }} />
+        <div className="h-full bg-role-success transition-[width] duration-300" style={{ width: `${snapshot.progressPct}%` }} />
       </div>
       <p className="text-sm text-muted">{milestone}</p>
       <div className="flex flex-wrap items-center gap-3 text-sm">

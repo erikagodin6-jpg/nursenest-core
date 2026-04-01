@@ -40,7 +40,7 @@ function Bar({
         aria-valuemax={100}
       >
         <div
-          className="h-full rounded-full bg-gradient-to-r from-amber-500/90 via-primary to-emerald-500/85 transition-[width] duration-500 ease-out"
+          className="h-full rounded-full bg-gradient-to-r from-role-warning-soft via-role-success to-role-success transition-[width] duration-500 ease-out"
           style={{ width: `${pct}%` }}
         />
       </div>
@@ -67,7 +67,7 @@ function FactorBar({ label, points, maxPoints, detail }: { label: string; points
         </span>
       </div>
       <div className="h-1.5 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
-        <div className="h-full rounded-full bg-primary/80" style={{ width: `${pct}%` }} />
+        <div className="h-full rounded-full bg-role-success" style={{ width: `${pct}%` }} />
       </div>
       <p className="text-[11px] leading-snug text-muted">{detail}</p>
     </div>
@@ -132,10 +132,10 @@ export function PremiumLearnerHub({
           <div className="mt-4">{momentumSection}</div>
         </section>
       ) : (
-        <section className="relative overflow-hidden rounded-2xl border border-amber-500/25 bg-gradient-to-br from-amber-500/[0.08] via-[var(--theme-card-bg)] to-primary/[0.06] p-6 shadow-sm">
-          <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-amber-400/10 blur-3xl" aria-hidden />
+        <section className="relative overflow-hidden rounded-2xl border border-role-premium-border bg-gradient-to-br from-role-premium-surface via-[var(--theme-card-bg)] to-primary/[0.06] p-6 shadow-sm">
+          <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-role-premium-glow blur-3xl" aria-hidden />
           <div className="relative flex flex-wrap items-start gap-4">
-            <div className="flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-amber-950 dark:text-amber-100">
+            <div className="flex items-center gap-2 rounded-full border border-role-warning-border bg-role-warning-soft px-3 py-1 text-xs font-semibold uppercase tracking-wide text-role-warning-text">
               <Crown className="h-3.5 w-3.5" aria-hidden />
               Full member experience
             </div>
@@ -158,7 +158,7 @@ export function PremiumLearnerHub({
                   <span>Score unlocks after a bit more scored practice</span>
                 )}
                 {readiness.calibratedPreview ? (
-                  <span className="text-amber-700 dark:text-amber-300">Conservative calibration active</span>
+                  <span className="text-role-warning">Conservative calibration active</span>
                 ) : null}
               </p>
             </div>
@@ -221,7 +221,7 @@ export function PremiumLearnerHub({
           <div className="mt-4 flex flex-wrap gap-2">
             <Link
               href="/app/flashcards"
-              className="inline-flex rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+              className="inline-flex rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground shadow-[0_4px_14px_var(--role-cta-shadow)]"
             >
               All decks
             </Link>
@@ -355,7 +355,7 @@ export function PremiumLearnerHub({
 
       <section className="nn-card p-6">
         <div className="flex flex-wrap items-center gap-2">
-          <Flame className="h-5 w-5 text-orange-500" aria-hidden />
+          <Flame className="h-5 w-5 text-role-heat-text" aria-hidden />
           <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Milestones and streaks</h2>
         </div>
         <p className="mt-1 text-xs text-muted">
@@ -363,7 +363,7 @@ export function PremiumLearnerHub({
           perfection.
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-orange-500/30 bg-orange-500/10 px-3 py-1.5 text-xs font-semibold text-orange-950 dark:text-orange-100">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-role-warning-border bg-role-warning-soft px-3 py-1.5 text-xs font-semibold text-role-warning-text">
             <Flame className="h-3.5 w-3.5" aria-hidden />
             {snapshot.studyStreakDays > 0
               ? `${snapshot.studyStreakDays}-day activity streak`

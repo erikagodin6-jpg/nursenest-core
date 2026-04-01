@@ -1,5 +1,5 @@
 /**
- * Shared homepage / marketing screenshot URL resolution: optimized WebP variants → legacy PNG → proxy → local SVG.
+ * Shared homepage / marketing screenshot URL resolution: public PNG first, then WebP tiers, then proxy → local SVG.
  * Keeps the hero carousel and lower screenshot carousel on the same fallback order.
  */
 import {
@@ -66,8 +66,9 @@ function pushOptimizedTiers(out: string[], variants: Array<{ key: string; url: s
 }
 
 /**
- * Ordered candidates for `<img src>`: optimized WebP (CDN root `screenshot{N}-*w.webp`) → legacy PNG → same-origin proxy when configured → local SVG.
- * Never loops: advance index on `onError` until the last entry (always `MARKETING_HERO_LOCAL_FALLBACK` when inputs are valid).
+ * Ordered candidates for `<Image src>`: **public PNG first** (bucket root `screenshot{N}.png` is reliably public),
+ * then optional WebP tiers, then proxy/local fallbacks. Root WebP variants often 403 while PNG 200s; PNG-first avoids
+ * a burst of failed requests before paint. `next/image` still optimizes the PNG when allowed.
  */
 export function getMarketingHeroImageUrlChain(params: {
   objectKey: string;
@@ -83,18 +84,21 @@ export function getMarketingHeroImageUrlChain(params: {
 
   if (marketingImageUsesProxy()) {
     const out: string[] = [];
+    out.push(proxyPng, publicCdnUrl);
     pushOptimizedTiers(out, optimized, true);
-    out.push(proxyPng, publicCdnUrl, local);
+    out.push(local);
     return uniqueStrings(out);
   }
   if (marketingProxyFallbackEnabled()) {
     const out: string[] = [];
+    out.push(publicCdnUrl, proxyPng);
     pushOptimizedTiers(out, optimized, false);
-    out.push(publicCdnUrl, proxyPng, local);
+    out.push(local);
     return uniqueStrings(out);
   }
   const out: string[] = [];
+  out.push(publicCdnUrl);
   pushOptimizedTiers(out, optimized, false);
-  out.push(publicCdnUrl, local);
+  out.push(local);
   return uniqueStrings(out);
 }

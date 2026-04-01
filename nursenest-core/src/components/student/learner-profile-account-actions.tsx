@@ -127,7 +127,7 @@ export function LearnerProfileAccountActions({
             <button
               type="submit"
               disabled={busy}
-              className="rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50"
+              className="rounded-xl bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground disabled:opacity-50"
             >
               {busy ? "Updating…" : "Update password"}
             </button>
@@ -154,7 +154,7 @@ export function LearnerProfileAccountActions({
             type="button"
             disabled={billingBusy}
             onClick={() => void openBillingPortal()}
-            className="mt-3 rounded-xl border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary disabled:opacity-50"
+            className="mt-3 rounded-xl border border-role-cta/35 bg-role-cta-soft px-4 py-2 text-sm font-semibold text-role-cta-on-soft disabled:opacity-50"
           >
             {billingBusy ? "Opening…" : "Manage billing in Stripe"}
           </button>
@@ -209,7 +209,7 @@ export function LearnerProfileAccountActions({
         </p>
       ) : null}
       {message ? (
-        <p className="text-sm text-emerald-800 dark:text-emerald-200" role="status">
+        <p className="text-sm text-role-success" role="status">
           {message}
         </p>
       ) : null}
