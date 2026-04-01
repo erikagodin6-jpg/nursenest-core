@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useCallback, useEffect, useMemo, useState, Suspense } from "react";
+import { useCallback, useEffect, useMemo, useState, Suspense } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import {
@@ -22,58 +22,105 @@ import {
   Award,
   Sparkles,
 } from "lucide-react";
-import { getEnabledCareers } from "@shared/careers";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { LazySection } from "@/legacy/marketing/lazy-section";
-import { buildHomepageHeroSlides, HOMEPAGE_HERO_SLIDE_METADATA } from "@/lib/marketing-assets";
-import { HomeHeroMediaPanel } from "@/components/marketing/home-hero-media-panel";
+import { buildHomepageHeroSlides } from "@/lib/marketing-assets";
 import type { HomepageLessonTeaser } from "@/lib/marketing/homepage-lesson-teasers";
-import { HomeHeroPathGateway } from "@/components/marketing/home-hero-path-gateway";
-import { HomeMarketingConversionBlocks } from "@/components/marketing/home-marketing-conversion-blocks";
-import { HomeMarketingProductProof } from "@/components/marketing/home-marketing-product-proof";
-import { HomeMarketingFeaturesStack } from "@/components/marketing/home-marketing-features-stack";
 import { heroQuickEntryLinks } from "@/lib/marketing/home-hero-gateway-config";
 import { rnQuestions } from "@/lib/marketing/marketing-entry-routes";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 
+const HomeHeroMediaPanel = dynamic(
+  () => import("@/components/marketing/home-hero-media-panel").then((m) => ({ default: m.HomeHeroMediaPanel })),
+  {
+    ssr: true,
+    loading: () => (
+      <div className="flex w-full min-w-0 flex-col gap-3 md:gap-3.5" aria-hidden>
+        <div className="relative min-h-[15.5rem] w-full animate-pulse rounded-2xl bg-[var(--theme-muted-surface)] sm:min-h-[18.25rem] md:min-h-[19.5rem] lg:min-h-[22rem]" />
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-3.5">
+          <div className="aspect-[16/10] min-h-[8.25rem] animate-pulse rounded-xl bg-[var(--theme-muted-surface)] sm:min-h-[8.75rem]" />
+          <div className="aspect-[16/10] min-h-[8.25rem] animate-pulse rounded-xl bg-[var(--theme-muted-surface)] sm:min-h-[8.75rem]" />
+        </div>
+      </div>
+    ),
+  },
+);
+
+const HomePageHeroTail = dynamic(() => import("@/components/marketing/home-page-hero-tail"), {
+  ssr: false,
+  loading: () => <div className="min-h-[200px]" aria-hidden />,
+});
+
+const HomePageMidSections = dynamic(() => import("@/components/marketing/home-page-mid-sections"), {
+  ssr: false,
+  loading: () => <div className="min-h-[320px]" aria-hidden />,
+});
+
+const HomeMarketingConversionBlocks = dynamic(
+  () => import("@/components/marketing/home-marketing-conversion-blocks").then((m) => ({ default: m.HomeMarketingConversionBlocks })),
+  { ssr: false, loading: () => <div className="min-h-[240px]" aria-hidden /> },
+);
+
+const HomeMarketingFeaturesStack = dynamic(
+  () => import("@/components/marketing/home-marketing-features-stack").then((m) => ({ default: m.HomeMarketingFeaturesStack })),
+  { ssr: false, loading: () => <div className="min-h-[200px]" aria-hidden /> },
+);
+
+const HomeMarketingProductProof = dynamic(
+  () => import("@/components/marketing/home-marketing-product-proof").then((m) => ({ default: m.HomeMarketingProductProof })),
+  { ssr: false, loading: () => <div className="min-h-[400px]" aria-hidden /> },
+);
+
 const HeroFeatureStrip = dynamic(() => import("@/legacy/marketing/hero-feature-strip"), {
+  ssr: false,
   loading: () => <div className="min-h-[60px]" />,
 });
 const HeroTrustIndicator = dynamic(() => import("@/legacy/marketing/hero-trust-indicator"), {
+  ssr: false,
   loading: () => <div className="min-h-[50px]" />,
 });
 const HeroPlatformStats = dynamic(() => import("@/legacy/marketing/hero-platform-stats"), {
+  ssr: false,
   loading: () => <div className="min-h-[300px]" />,
 });
 const HeroGlobalCoverage = dynamic(() => import("@/legacy/marketing/hero-global-coverage"), {
+  ssr: false,
   loading: () => <div className="min-h-[300px]" />,
 });
 const HeroNursingTiers = dynamic(() => import("@/legacy/marketing/hero-nursing-tiers"), {
+  ssr: false,
   loading: () => <div className="min-h-[400px]" />,
 });
 const HeroCertifications = dynamic(() => import("@/legacy/marketing/hero-certifications"), {
+  ssr: false,
   loading: () => <div className="min-h-[300px]" />,
 });
 const HeroAlliedHealth = dynamic(() => import("@/legacy/marketing/hero-allied-health"), {
+  ssr: false,
   loading: () => <div className="min-h-[400px]" />,
 });
 const HeroExpansionTracker = dynamic(() => import("@/legacy/marketing/hero-expansion-tracker"), {
+  ssr: false,
   loading: () => <div className="min-h-[300px]" />,
 });
 const HomeDifferentiation = dynamic(() => import("@/legacy/marketing/home-differentiation"), {
+  ssr: false,
   loading: () => <div className="min-h-[600px]" />,
 });
 const HomeConversionSections = dynamic(() => import("@/legacy/marketing/home-conversion-sections"), {
+  ssr: false,
   loading: () => <div className="min-h-[400px]" />,
 });
 const HomeCareerCta = dynamic(() => import("@/legacy/marketing/home-career-cta"), {
+  ssr: false,
   loading: () => <div className="min-h-[200px]" />,
 });
 const HomeBottomSections = dynamic(() => import("@/legacy/marketing/home-bottom-sections"), {
+  ssr: false,
   loading: () => <div className="min-h-[800px]" />,
 });
 
@@ -104,26 +151,6 @@ type HomeRestoredClientProps = {
   lessonTeasers: HomepageLessonTeaser[];
 };
 
-const MemoLessonTeaserGrid = memo(function MemoLessonTeaserGrid({ items }: { items: HomepageLessonTeaser[] }) {
-  const { t, locale } = useMarketingI18n();
-  return (
-    <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-      {items.map((item) => (
-        <li key={item.id}>
-          <Link
-            href={withMarketingLocale(locale, item.lessonsHref)}
-            className="flex h-full flex-col rounded-xl border border-[var(--theme-card-border)] bg-card p-4 shadow-sm transition hover:border-primary/30"
-          >
-            <span className="text-xs font-semibold uppercase text-primary">{item.shortLabel}</span>
-            <span className="mt-1 text-sm font-semibold text-[var(--theme-heading-text)]">{item.title}</span>
-            <span className="mt-3 text-xs font-medium text-primary">{t("home.lessons.lessonHubCta")}</span>
-          </Link>
-        </li>
-      ))}
-    </ul>
-  );
-});
-
 export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClientProps) {
   const { t, locale } = useMarketingI18n();
   const { region, setRegion } = useNursenestRegion();
@@ -134,9 +161,10 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
   const [deckCount, setDeckCount] = useState(0);
   const [registeredLearners, setRegisteredLearners] = useState(0);
   const [topicCategoryCount, setTopicCategoryCount] = useState<number | undefined>(undefined);
-  const showHeroMediaColumn = HOMEPAGE_HERO_SLIDE_METADATA.length > 0;
 
   const heroSlides = useMemo(() => buildHomepageHeroSlides(t), [t]);
+  /** When false, hero is single-column; media is omitted (no `hidden` placeholder delaying layout). */
+  const showHeroMediaColumn = heroSlides.length > 0;
 
   const heroQuickLinks = useMemo(() => heroQuickEntryLinks(region), [region]);
 
@@ -194,8 +222,6 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
       setEmailMessage(e instanceof Error ? e.message : t("home.email.somethingWrong"));
     }
   }, [email, emailFrequency, t]);
-
-  const enabledCareers = getEnabledCareers();
 
   const trustStatsFormatted = useMemo(
     () => ({
@@ -477,101 +503,16 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
                 </div>
               </div>
 
-              <div
-                className={showHeroMediaColumn ? "relative w-full min-w-0" : "hidden"}
-                style={{ overflowAnchor: "none" }}
-              >
+              {showHeroMediaColumn ? (
                 <HomeHeroMediaPanel slides={heroSlides} primaryIndex={0} secondaryIndices={[1, 2]} />
-              </div>
+              ) : null}
             </div>
 
-            <div className="mt-7 sm:mt-9" data-testid="section-careers-supported">
-              <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-[var(--theme-body-text)]">
-                {t("home.hero.examPrepFor", {
-                  region: region === "CA" ? t("home.region.ca") : t("home.region.us"),
-                })}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {enabledCareers.slice(0, 8).map((career) => {
-                  const label = (career.shortName || career.name || "").trim();
-                  if (!label) return null;
-                  return (
-                  <span
-                    key={career.id}
-                    className="inline-flex items-center rounded-full border border-[var(--theme-card-border)] bg-card px-3 py-1.5 text-xs font-medium text-[var(--theme-body-text)] shadow-sm"
-                  >
-                    {label}
-                  </span>
-                  );
-                })}
-                {enabledCareers.length > 8 && (
-                  <span className="inline-flex items-center rounded-full border border-primary/15 bg-primary/5 px-3 py-1.5 text-xs font-semibold text-primary">
-                    {t("home.hero.moreCount", { count: String(enabledCareers.length - 8) })}
-                  </span>
-                )}
-              </div>
-            </div>
-
-            <HomeHeroPathGateway region={region} />
+            <HomePageHeroTail />
           </div>
         </section>
 
-        <section
-          className="border-t border-[var(--theme-card-border)] bg-gradient-to-b from-[var(--theme-muted-surface)] to-[var(--theme-card-bg)]"
-          style={{ paddingTop: "var(--space-block)", paddingBottom: "var(--space-block)" }}
-          data-testid="section-hero-benefits"
-        >
-          <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-            <h2 className="mb-6 text-center text-lg font-bold text-[var(--theme-heading-text)] sm:text-xl" data-testid="text-benefits-heading">
-              {t("home.hero.benefitsHeading")}
-            </h2>
-            <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
-              {(
-                [
-                  { key: "benefit1", icon: Stethoscope },
-                  { key: "benefit2", icon: Brain },
-                  { key: "benefit3", icon: ClipboardList },
-                  { key: "benefit4", icon: Target },
-                ] as const
-              ).map((item) => (
-                <div
-                  key={item.key}
-                  className="flex items-start gap-3 rounded-xl border border-[var(--theme-card-border)] bg-card p-3.5 shadow-[var(--shadow-card)]"
-                  data-testid={`hero-${item.key}`}
-                >
-                  <div className="nn-accent-icon-wrap mt-0.5 h-8 w-8 shrink-0">
-                    <item.icon className="nn-accent-icon h-4 w-4" />
-                  </div>
-                  <p className="text-sm leading-relaxed text-[var(--theme-body-text)]">{t(`home.hero.${item.key}`)}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section
-          className="border-t border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]"
-          style={{ paddingTop: "var(--space-block)", paddingBottom: "var(--space-block)" }}
-          data-testid="section-start-lessons"
-        >
-          <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-              <div>
-                <h2 className="text-lg font-bold text-[var(--theme-heading-text)] sm:text-xl">{t("home.lessons.title")}</h2>
-                <p className="mt-1 max-w-xl text-sm text-[var(--theme-muted-text)]">{t("home.lessons.subtitle")}</p>
-              </div>
-              <Link
-                href={withMarketingLocale(locale, "/exam-lessons")}
-                className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-primary hover:underline"
-              >
-                <BookOpen className="h-4 w-4" />
-                {t("home.lessons.allPathwaysCta")}
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-            <MemoLessonTeaserGrid items={lessonTeasers} />
-          </div>
-        </section>
+        <HomePageMidSections lessonTeasers={lessonTeasers} />
 
         <HomeMarketingConversionBlocks region={region} />
 

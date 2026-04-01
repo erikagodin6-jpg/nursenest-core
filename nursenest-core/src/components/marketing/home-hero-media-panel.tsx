@@ -50,6 +50,7 @@ function HeroImage({
         sizes={sizes}
         quality={MARKETING_PHOTO_QUALITY}
         priority={priority}
+        fetchPriority={priority ? "high" : "low"}
         unoptimized={unoptimized}
         referrerPolicy="no-referrer"
         className={imgClassName}
@@ -109,7 +110,11 @@ export function HomeHeroMediaPanel({
   }
 
   return (
-    <div className="flex w-full min-w-0 flex-col gap-3 md:gap-3.5" data-testid="hero-media-panel">
+    <div
+      className="relative flex w-full min-w-0 flex-col gap-3 md:gap-3.5"
+      style={{ overflowAnchor: "none" }}
+      data-testid="hero-media-panel"
+    >
       <div className="relative">
         <div
           className="pointer-events-none absolute -inset-1 -z-10 rounded-[1.35rem] bg-gradient-to-br from-primary/[0.12] via-transparent to-secondary/[0.15] blur-2xl md:-inset-3"

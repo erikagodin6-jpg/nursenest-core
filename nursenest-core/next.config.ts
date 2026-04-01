@@ -41,12 +41,17 @@ const examPathwayFromProgrammaticRedirects = Object.entries(PROGRAMMATIC_SLUG_TO
   permanent: true,
 }));
 
+/** Matches `/api/marketing-assets/*` success responses and recommended DO Spaces CDN object metadata (see marketing-cdn.catalog.json). */
+const STATIC_ASSET_CACHE_CONTROL = "public, max-age=31536000, immutable" as const;
+
 const nextConfig: NextConfig = {
   turbopack: {
     root: monorepoRoot,
   },
   outputFileTracingRoot: monorepoRoot,
   images: {
+    /** Long TTL for `/_next/image` output; uses max(this, upstream Cache-Control) per Next image optimizer. */
+    minimumCacheTTL: 31536000,
     remotePatterns: [
       {
         protocol: "https",
@@ -98,6 +103,17 @@ const nextConfig: NextConfig = {
       destination: `/sitemaps/locales/${locale}`,
     }));
     return { beforeFiles: [...programmaticSeoRewrites, ...localeSitemapRewrites] };
+  },
+  async headers() {
+    if (process.env.NODE_ENV !== "production") {
+      return [];
+    }
+    return [
+      {
+        source: "/_next/static/:path*",
+        headers: [{ key: "Cache-Control", value: STATIC_ASSET_CACHE_CONTROL }],
+      },
+    ];
   },
 };
 

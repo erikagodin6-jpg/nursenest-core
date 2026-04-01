@@ -26,7 +26,9 @@
       "bucket": "nursenest-images",
       "region": "tor1",
       "objectUrlPattern": "{publicBaseUrl}/{objectKey}",
-      "notes": "Prefer CDN hostname `*.cdn.digitaloceanspaces.com` for public assets. Private buckets: set NEXT_PUBLIC_MARKETING_USE_SPACES_PROXY=true and SPACES_KEY/SPACES_SECRET so /api/marketing-assets/... can stream objects."
+      "notes": "Prefer CDN hostname `*.cdn.digitaloceanspaces.com` for public assets. Private buckets: set NEXT_PUBLIC_MARKETING_USE_SPACES_PROXY=true and SPACES_KEY/SPACES_SECRET so /api/marketing-assets/... can stream objects.",
+      "recommendedCacheControl": "public, max-age=31536000, immutable",
+      "cachingNotes": "This Next.js app cannot set response headers on cross-origin CDN URLs. Set recommendedCacheControl on Spaces object metadata and/or CDN edge rules so direct CDN image responses are long-cached. Same-origin /api/marketing-assets/* already sends this Cache-Control on 200. next/image uses images.minimumCacheTTL (see next.config.ts) for optimized fetches."
     }
   },
   "committedMarketingAssets": {

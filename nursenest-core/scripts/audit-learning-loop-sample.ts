@@ -6,7 +6,7 @@
  * Run from nursenest-core/: `npm run ops:learning-loop-audit`
  * Options: `--limit=28` (default 28), `--min=20` (warn if fewer rows sampled)
  */
-import { ContentStatus } from "@prisma/client";
+import { ContentStatus, type Prisma } from "@prisma/client";
 import { prisma } from "../src/lib/db";
 import { buildNormalizedTeachingPayload } from "../src/lib/content-quality/teaching-payload";
 import { deriveTopicCode } from "../src/lib/learner/topic-linking";
@@ -31,10 +31,10 @@ type AuditRow = {
   clinicalPearl: string | null;
   clinicalTrap: string | null;
   memoryHook: string | null;
-  distractorRationales: unknown;
-  incorrectAnswerRationale: unknown;
-  correctAnswer: unknown;
-  images: unknown;
+  distractorRationales: Prisma.JsonValue | null;
+  incorrectAnswerRationale: Prisma.JsonValue | null;
+  correctAnswer: Prisma.JsonValue | null;
+  images: Prisma.JsonValue | null;
 };
 
 function topicRoutingConfidence(row: { subtopic?: string | null; topic?: string | null; bodySystem?: string | null }): RecommendationConfidence {
@@ -102,8 +102,6 @@ async function fetchBucket(
     },
     select: {
       id: true,
-      stem: true,
-      questionType: true,
       tier: true,
       exam: true,
       countryCode: true,
@@ -131,8 +129,6 @@ async function fetchFillPublished(take: number, excludeIds: Set<string>): Promis
     },
     select: {
       id: true,
-      stem: true,
-      questionType: true,
       tier: true,
       exam: true,
       countryCode: true,
