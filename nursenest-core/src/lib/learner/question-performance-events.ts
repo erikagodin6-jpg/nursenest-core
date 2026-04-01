@@ -29,6 +29,19 @@ function storageKey(userId: string) {
   return `nn_question_perf_v1_${userId}`;
 }
 
+/** Parse localStorage JSON into a guaranteed array (strict-null-safe before any `.slice()`). */
+function parseStoredQuestionPerformanceEvents(raw: string): QuestionPerformanceEventV1[] {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw) as unknown;
+  } catch {
+    return [];
+  }
+  if (parsed == null || typeof parsed !== "object") return [];
+  const events = (parsed as { events?: unknown }).events;
+  return Array.isArray(events) ? (events as QuestionPerformanceEventV1[]) : [];
+}
+
 export function recordQuestionPerformanceEvent(
   userId: string,
   partial: Omit<QuestionPerformanceEventV1, "v" | "at"> & { at?: string },
@@ -44,8 +57,8 @@ export function recordQuestionPerformanceEvent(
     }
     let data: { events: QuestionPerformanceEventV1[] };
     try {
-      const parsed = raw ? (JSON.parse(raw) as { events?: QuestionPerformanceEventV1[] }) : { events: [] };
-      data = { events: Array.isArray(parsed.events) ? parsed.events : [] };
+      const events: QuestionPerformanceEventV1[] = raw ? parseStoredQuestionPerformanceEvents(raw) : [];
+      data = { events };
     } catch {
       data = { events: [] };
     }
@@ -75,8 +88,7 @@ export function readQuestionPerformanceSample(userId: string, max = 50): Questio
     if (!raw) return [];
     let events: QuestionPerformanceEventV1[];
     try {
-      const parsed = JSON.parse(raw) as { events?: QuestionPerformanceEventV1[] };
-      events = Array.isArray(parsed.events) ? parsed.events : [];
+      events = parseStoredQuestionPerformanceEvents(raw);
     } catch {
       return [];
     }
