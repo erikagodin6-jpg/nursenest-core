@@ -44,7 +44,6 @@ function ScreenshotFrame({
           fill
           sizes={MARKETING_STACK_SHOT_SIZES}
           quality={MARKETING_PHOTO_QUALITY_BELOW_FOLD}
-          priority={false}
           loading="lazy"
           fetchPriority="low"
           decoding="async"

@@ -5,15 +5,7 @@
  * Paths stay aligned with `marketing-entry-routes.ts` and programmatic SEO slugs — do not rename routes here.
  */
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
-import {
-  ALLIED,
-  NP,
-  RN,
-  npPracticeProgrammatic,
-  pnPracticeProgrammatic,
-  rnQuestions,
-  alliedQuestions,
-} from "@/lib/marketing/marketing-entry-routes";
+import { ALLIED, RN, npPracticeProgrammatic, pnPracticeProgrammatic } from "@/lib/marketing/marketing-entry-routes";
 
 export type CountryExamOfferingId = "rn" | "pn" | "np" | "allied";
 
