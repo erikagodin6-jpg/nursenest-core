@@ -8,7 +8,7 @@ import {
   userCanAccessDeckForStudy,
 } from "@/lib/flashcards/flashcard-access";
 import { findPublishedDeckByRef } from "@/lib/flashcards/resolve-deck";
-import { buildStudyQueueIds } from "@/lib/flashcards/study-queue";
+import { buildStudyQueueIds, shuffleIdsStableSeed } from "@/lib/flashcards/study-queue";
 import { prisma } from "@/lib/db";
 import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
 import { logLargeApiResponse } from "@/lib/observability/perf-log";
@@ -45,6 +45,7 @@ export async function GET(req: NextRequest, { params }: Props) {
   const sp = req.nextUrl.searchParams;
   const limit = Math.min(MAX_BATCH, Math.max(1, Number(sp.get("limit") ?? "8")));
   const reset = sp.get("reset") === "1";
+  const shuffle = sp.get("shuffle") === "1";
 
   setSentryServerContext({ route: "/api/flashcards/decks/[deckRef]/study", feature: "flashcard", userId: userId ?? "" });
 
@@ -79,7 +80,12 @@ export async function GET(req: NextRequest, { params }: Props) {
           where: { deckId: deck.id, status: ContentStatus.PUBLISHED },
           orderBy: { positionInDeck: "asc" },
           take: PREVIEW_CARD_CAP,
-          select: { id: true, front: true, back: true },
+          select: {
+            id: true,
+            front: true,
+            back: true,
+            category: { select: { name: true, topicCode: true } },
+          },
         }),
       );
 
@@ -92,6 +98,8 @@ export async function GET(req: NextRequest, { params }: Props) {
           front: c.front,
           back: truncateForPreview(c.back),
           fullBackAvailable: false,
+          topic: c.category.name,
+          subtopic: c.category.topicCode,
         })),
         session: null,
       };
@@ -155,7 +163,7 @@ export async function GET(req: NextRequest, { params }: Props) {
     );
 
     const now = new Date();
-    const queueIds = buildStudyQueueIds(deckCards, progressMap, now);
+    let queueIds = buildStudyQueueIds(deckCards, progressMap, now);
 
     let sessionRow = await withRetry(() =>
       prisma.flashcardStudySession.findUnique({
@@ -164,6 +172,9 @@ export async function GET(req: NextRequest, { params }: Props) {
     );
 
     if (!sessionRow || reset) {
+      if (shuffle) {
+        queueIds = shuffleIdsStableSeed(queueIds);
+      }
       sessionRow = await withRetry(() =>
         prisma.flashcardStudySession.upsert({
           where: { userId_deckId: { userId, deckId: deck.id } },
@@ -187,11 +198,21 @@ export async function GET(req: NextRequest, { params }: Props) {
     const cardPayload = await withRetry(() =>
       prisma.flashcard.findMany({
         where: { id: { in: sliceIds } },
-        select: { id: true, front: true, back: true },
+        select: {
+          id: true,
+          front: true,
+          back: true,
+          category: { select: { name: true, topicCode: true } },
+        },
       }),
     );
     const byId = new Map(cardPayload.map((c) => [c.id, c]));
-    const ordered = sliceIds.map((id) => byId.get(id)).filter(Boolean) as { id: string; front: string; back: string }[];
+    const ordered = sliceIds.map((id) => byId.get(id)).filter(Boolean) as Array<{
+      id: string;
+      front: string;
+      back: string;
+      category: { name: string; topicCode: string | null };
+    }>;
 
     const body = {
       mode: "subscriber" as const,
@@ -202,6 +223,8 @@ export async function GET(req: NextRequest, { params }: Props) {
         front: c.front,
         back: c.back,
         fullBackAvailable: true,
+        topic: c.category.name,
+        subtopic: c.category.topicCode,
       })),
       session: {
         cursor,

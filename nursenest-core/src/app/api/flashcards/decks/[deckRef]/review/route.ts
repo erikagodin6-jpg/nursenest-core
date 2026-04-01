@@ -22,10 +22,11 @@ import { enforceFlashcardReviewProtection } from "@/lib/http/api-protection";
 import { setSentryServerContext } from "@/lib/observability/sentry-server-context";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import type { Prisma } from "@prisma/client";
+import { toSchedulerRating } from "@/lib/flashcards/map-study-rating";
 
 const bodySchema = z.object({
   flashcardId: z.string().min(4),
-  rating: z.enum(["again", "hard", "good", "easy"]),
+  rating: z.enum(["again", "hard", "good", "easy", "incorrect", "unsure", "known"]),
 });
 
 function qualityNumeric(rating: FlashcardRating): number {
@@ -64,7 +65,8 @@ export async function POST(req: NextRequest, { params }: Props) {
     return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
   }
 
-  const { flashcardId, rating } = parsed.data;
+  const { flashcardId, rating: rawRating } = parsed.data;
+  const rating = toSchedulerRating(rawRating);
 
   const deck = await findPublishedDeckByRef(deckRef);
   if (!deck) {
@@ -106,7 +108,7 @@ export async function POST(req: NextRequest, { params }: Props) {
           repetitions: prev.repetitions,
         }
       : initialSm2State();
-    nextSchedule = computeNextSchedule(base, rating as FlashcardRating, now);
+    nextSchedule = computeNextSchedule(base, rating, now);
   } catch (e) {
     logSpacedRepetitionScheduleError({ flashcardId: flashcardId.slice(0, 12) }, e);
     return NextResponse.json({ error: "Unable to schedule review" }, { status: 500 });
@@ -123,7 +125,7 @@ export async function POST(req: NextRequest, { params }: Props) {
           intervalDays: nextSchedule.intervalDays,
           repetitions: nextSchedule.repetitions,
           nextReviewAt: nextSchedule.nextReviewAt,
-          lastQuality: qualityNumeric(rating as FlashcardRating),
+          lastQuality: qualityNumeric(rating),
           lastReviewedAt: now,
         },
         update: {
@@ -131,7 +133,7 @@ export async function POST(req: NextRequest, { params }: Props) {
           intervalDays: nextSchedule.intervalDays,
           repetitions: nextSchedule.repetitions,
           nextReviewAt: nextSchedule.nextReviewAt,
-          lastQuality: qualityNumeric(rating as FlashcardRating),
+          lastQuality: qualityNumeric(rating),
           lastReviewedAt: now,
         },
       });
@@ -180,7 +182,7 @@ export async function POST(req: NextRequest, { params }: Props) {
     logFlashcardProgressSaved({
       userIdPrefix: userId.slice(0, 8),
       deckId: deck.id.slice(0, 12),
-      rating,
+      rating: rawRating,
     });
 
     return NextResponse.json({

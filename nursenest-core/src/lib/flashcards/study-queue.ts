@@ -1,5 +1,19 @@
 export type CardOrderRow = { id: string; positionInDeck: number };
 
+export function shuffleIdsStableSeed(ids: string[], seed?: number): string[] {
+  const out = [...ids];
+  let s = seed ?? Math.floor(Math.random() * 2 ** 31);
+  const rnd = () => {
+    s = (s * 1103515245 + 12345) & 0x7fffffff;
+    return s / 0x7fffffff;
+  };
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(rnd() * (i + 1));
+    [out[i], out[j]] = [out[j]!, out[i]!];
+  }
+  return out;
+}
+
 export type ProgressLite = {
   nextReviewAt: Date | null;
   repetitions: number;
