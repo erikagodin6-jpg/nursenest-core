@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { asArray } from "@/lib/runtime/collections";
 
 type TagRow = { slug: string; name: string };
@@ -50,6 +50,12 @@ export function FlashcardsHubClient({
   const tagSlug = urlParams.get("tagSlug") ?? "";
   const q = urlParams.get("q") ?? "";
   const pageFromUrl = urlParams.get("page") ?? "1";
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const [searchDraft, setSearchDraft] = useState(q);
+
+  useEffect(() => {
+    setSearchDraft(q);
+  }, [q]);
 
   const [decks, setDecks] = useState<DeckRow[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
@@ -222,25 +228,20 @@ export function FlashcardsHubClient({
           Search decks
           <div className="mt-1 flex gap-2">
             <input
+              ref={searchInputRef}
               type="search"
               className="min-w-0 flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm"
               placeholder="Title or description (2+ characters)"
-              defaultValue={q}
-              name="deckSearch"
+              value={searchDraft}
+              onChange={(e) => setSearchDraft(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  const v = (e.currentTarget as HTMLInputElement).value;
-                  setFilters({ q: v });
-                }
+                if (e.key === "Enter") setFilters({ q: searchInputRef.current?.value ?? "" });
               }}
             />
             <button
               type="button"
               className="shrink-0 rounded-lg border border-border bg-card px-3 py-2 text-sm font-medium hover:bg-muted/50"
-              onClick={() => {
-                const el = document.querySelector<HTMLInputElement>('input[name="deckSearch"]');
-                setFilters({ q: el?.value ?? "" });
-              }}
+              onClick={() => setFilters({ q: searchInputRef.current?.value ?? "" })}
             >
               Search
             </button>
