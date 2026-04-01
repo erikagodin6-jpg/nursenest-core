@@ -382,6 +382,7 @@ export function QuestionBankPracticeClient({
       appendRollup(userId, current.topic, correct);
       if (typeof window !== "undefined") {
         window.dispatchEvent(new CustomEvent("nn-topic-stats-updated"));
+        window.dispatchEvent(new CustomEvent("nn-learner-stats-updated"));
       }
     } finally {
       setGrading(false);

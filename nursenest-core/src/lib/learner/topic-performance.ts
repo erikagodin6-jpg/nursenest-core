@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { answerMatches } from "@/lib/exams/score-session-answers";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import { computeTopicMomentum, topicTrendSummary, type TopicMomentum } from "@/lib/learner/topic-momentum";
 import {
   loadWeakTopicsFromExamSessions,
   normalizeTopicLabel,
@@ -131,8 +132,18 @@ export async function recordTopicOutcomesFromPracticeTest(
   await recordTopicOutcomesSequential(userId, outcomes);
 }
 
+export type TopicTrendRow = {
+  topic: string;
+  momentum: TopicMomentum;
+  summary: string;
+};
+
 export type TopicPerformanceSnapshot = {
   weakTopics: WeakTopicRow[];
+  /** Highest-accuracy topics with enough attempts — for reinforcement messaging. */
+  strongTopics: WeakTopicRow[];
+  /** Recent trajectory heuristics (declining / improving / stable). */
+  trends: TopicTrendRow[];
   byStrength: { strong: WeakTopicRow[]; moderate: WeakTopicRow[]; weak: WeakTopicRow[] };
   recommendedQuizTopic: string | null;
   source: "ledger" | "mixed" | "fallback";
@@ -150,6 +161,8 @@ export async function loadUnifiedTopicPerformance(
   if (!entitlement.hasAccess) {
     return {
       weakTopics: [],
+      strongTopics: [],
+      trends: [],
       byStrength: { strong: [], moderate: [], weak: [] },
       recommendedQuizTopic: null,
       source: "fallback",
@@ -198,8 +211,25 @@ export async function loadUnifiedTopicPerformance(
 
   const recommendedQuizTopic = weakFromLedger[0]?.topic ?? rows.find((r) => r.strength === "weak")?.topic ?? null;
 
+  const strongTopics = [...rows]
+    .filter((r) => r.attempted >= 3)
+    .sort((a, b) => a.missRate - b.missRate || b.attempted - a.attempted)
+    .slice(0, 6);
+
+  const momentumRank: Record<TopicMomentum, number> = { declining: 0, stable: 1, improving: 2 };
+  const trends: TopicTrendRow[] = [...rows]
+    .filter((r) => r.attempted >= 3)
+    .map((r) => {
+      const momentum = computeTopicMomentum(r);
+      return { topic: r.topic, momentum, summary: topicTrendSummary(r, momentum) };
+    })
+    .sort((a, b) => momentumRank[a.momentum] - momentumRank[b.momentum] || a.topic.localeCompare(b.topic))
+    .slice(0, 8);
+
   return {
     weakTopics: weakFromLedger,
+    strongTopics,
+    trends,
     byStrength,
     recommendedQuizTopic,
     source,

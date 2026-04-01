@@ -1,5 +1,6 @@
 import type { ExamDatePlanType } from "@prisma/client";
 import type { ReadinessBand, ReadinessResult } from "@/lib/learner/readiness-score";
+import type { TopicTrendRow } from "@/lib/learner/topic-performance";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
 import { buildCountdownCopy, daysUntilExamUtc, urgencyFromDays, type ExamUrgency } from "@/lib/learner/exam-timeline";
 
@@ -101,6 +102,8 @@ export function buildAdaptiveRecommendations(args: {
   examDate: Date | null | undefined;
   readiness: ReadinessResult;
   weakTopics: WeakTopicRow[];
+  /** Optional momentum lines — fold into weekly priorities when present. */
+  topicTrends?: TopicTrendRow[];
   streakDays: number;
   lessonPct: number;
   continueLesson: { title: string; href: string } | null;
@@ -236,6 +239,15 @@ export function buildAdaptiveRecommendations(args: {
   const weeklyPriorities: string[] = [];
   if (weakTop3.length) {
     weeklyPriorities.push(`Tackle weak signals: ${weakTop3.slice(0, 2).join(", ")}`);
+  }
+  const trends = args.topicTrends ?? [];
+  const declining = trends.filter((t) => t.momentum === "declining").slice(0, 2);
+  const improving = trends.filter((t) => t.momentum === "improving").slice(0, 2);
+  if (declining.length) {
+    weeklyPriorities.push(`Stabilize: ${declining.map((t) => t.topic).join(", ")} (recent misses)`);
+  }
+  if (improving.length && weeklyPriorities.length < 4) {
+    weeklyPriorities.push(`Keep momentum on: ${improving.map((t) => t.topic).join(", ")}`);
   }
   if (args.mockCount < 2 && (urgency === "near" || urgency === "final_stretch")) {
     weeklyPriorities.push("Schedule at least one full mock-style attempt this week");

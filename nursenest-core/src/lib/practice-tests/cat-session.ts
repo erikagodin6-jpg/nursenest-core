@@ -26,9 +26,11 @@ import { configFromInput, type PickQuestionsInput } from "@/lib/practice-tests/p
 import { computePracticeTestResults } from "@/lib/practice-tests/score-practice-test";
 import type { CatSelectionBasis, PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
 
-function readinessFromDecision(d: CatExamReport["decision"]): string {
-  if (d === "pass") return "On track";
-  if (d === "fail") return "Needs work";
+function readinessFromReport(report: CatExamReport): string {
+  if (report.stoppedReason === "confidence_pass") return "Pass signal — estimate stabilized above threshold";
+  if (report.stoppedReason === "confidence_fail") return "Remediation signal — estimate stabilized below threshold";
+  if (report.decision === "pass") return "On track";
+  if (report.decision === "fail") return "Needs work";
   return "Building confidence";
 }
 
@@ -38,7 +40,7 @@ function enrichWithCat(base: PracticeTestResultsJson, report: CatExamReport): Pr
     catReport: report,
     estimatedAbility: report.theta,
     abilityStdError: report.se,
-    readinessLabel: readinessFromDecision(report.decision),
+    readinessLabel: readinessFromReport(report),
   };
 }
 
@@ -59,6 +61,24 @@ function catBoostFromConfig(weakCategories: string[]): CatSelectOptions {
       if (weak.has(cat) || (t && weak.has(t))) boost += 6;
       return boost;
     },
+  };
+}
+
+/** Prefer categories missed on this CAT run (without repeating items). */
+function sessionMissBoost(state: CatAdaptiveState): CatSelectOptions {
+  const missed = new Set<string>();
+  for (const r of state.results) {
+    if (!r.correct) missed.add(r.categoryKey);
+  }
+  return {
+    categoryPriorityBoost: (cat: string) => (missed.has(cat) ? 5 : 0),
+  };
+}
+
+function mergeCatBoosts(a: CatSelectOptions, b: CatSelectOptions): CatSelectOptions {
+  return {
+    categoryPriorityBoost: (cat: string, row: CatPoolRow) =>
+      (a.categoryPriorityBoost?.(cat, row) ?? 0) + (b.categoryPriorityBoost?.(cat, row) ?? 0),
   };
 }
 
@@ -129,7 +149,7 @@ export async function createCatPracticeTestPayload(
   const bounds = practiceCatBounds(input.questionCount);
   const state = createInitialAdaptiveState();
   const delivered = new Map<string, number>();
-  const boost = catBoostFromConfig(catWeakCategories);
+  const boost = mergeCatBoosts(catBoostFromConfig(catWeakCategories), sessionMissBoost(state));
 
   const first = selectNextQuestion(pool, new Set(), state.targetDifficulty, delivered, boost);
   if (!first.selected) {
@@ -206,7 +226,7 @@ export async function advanceCatPracticeTest(params: {
   };
 
   const weakCats = params.config.catWeakCategories ?? [];
-  const boost = catBoostFromConfig(weakCats);
+  const boost = mergeCatBoosts(catBoostFromConfig(weakCats), sessionMissBoost(state));
 
   const basis = params.config.catSelectionBasis ?? "random";
   const pickInput: PickQuestionsInput = {
@@ -224,7 +244,9 @@ export async function advanceCatPracticeTest(params: {
 
   const stop = shouldStopAfterAnswer(state, state.results.length, bounds);
   if (stop) {
-    state = { ...state, stoppedReason: stop, decision: null };
+    const earlyDecision =
+      stop === "confidence_pass" ? ("pass" as const) : stop === "confidence_fail" ? ("fail" as const) : null;
+    state = { ...state, stoppedReason: stop, decision: earlyDecision ?? state.decision };
     const report = buildCatReport(state);
     const baseResults = await computePracticeTestResults(ids, params.mergedAnswers, params.entitlement);
     return { kind: "completed", results: enrichWithCat(baseResults, report), adaptiveState: state };

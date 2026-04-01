@@ -6,10 +6,17 @@ import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import { pathwayLessonsAppListWhere } from "@/lib/lessons/app-pathway-lesson-list-scope";
 import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
-import { filterWeakTopicsForAlliedProfession } from "@/lib/allied/allied-weak-topic-filter";
+import {
+  filterTopicRowsForAlliedProfession,
+  filterWeakTopicsForAlliedProfession,
+} from "@/lib/allied/allied-weak-topic-filter";
 import { computeReadiness, type ReadinessResult } from "@/lib/learner/readiness-score";
 import { loadSessionGradingAggregate, type SessionGradingAggregate } from "@/lib/learner/session-grading-aggregate";
-import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
+import {
+  loadUnifiedTopicPerformance,
+  type TopicPerformanceSnapshot,
+  type TopicTrendRow,
+} from "@/lib/learner/topic-performance";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
 
 export type ContinueLesson = {
@@ -34,6 +41,12 @@ export type LearnerDashboardModel = {
   questionsInMocksLast14d: number;
   recentMocks: RecentMock[];
   weakTopics: WeakTopicRow[];
+  /** Highest-accuracy topics (≥3 attempts) for reinforcement copy. */
+  strongTopics: WeakTopicRow[];
+  /** Momentum heuristics for planner + adaptive copy. */
+  topicTrends: TopicTrendRow[];
+  /** Full snapshot when topic perf loaded (optional for callers that need breakdown). */
+  topicPerformance: TopicPerformanceSnapshot | null;
   continueLesson: ContinueLesson | null;
   recommendedQuizTopic: string | null;
   readiness: ReadinessResult;
@@ -115,21 +128,40 @@ export async function loadLearnerDashboard(
   }));
 
   let weakTopics: WeakTopicRow[] = [];
+  let strongTopics: WeakTopicRow[] = [];
+  let topicTrends: TopicTrendRow[] = [];
+  let topicPerformance: TopicPerformanceSnapshot | null = null;
   let recommendedQuizTopic: string | null = null;
   let practiceAgg = { correct: 0, total: 0, sessionCount: 0 };
   try {
     const perf = await loadUnifiedTopicPerformance(userId, entitlement, 8);
+    topicPerformance = perf;
     weakTopics = perf.weakTopics;
+    strongTopics = perf.strongTopics;
+    topicTrends = perf.trends;
     recommendedQuizTopic = perf.recommendedQuizTopic ?? perf.weakTopics[0]?.topic ?? null;
   } catch {
     weakTopics = [];
+    strongTopics = [];
+    topicTrends = [];
+    topicPerformance = null;
     recommendedQuizTopic = null;
   }
 
   if (user?.tier === TierCode.ALLIED && user.alliedProfessionKey) {
     const ap = getAlliedProfessionByProfessionKey(user.alliedProfessionKey);
     weakTopics = filterWeakTopicsForAlliedProfession(weakTopics, ap);
+    strongTopics = filterWeakTopicsForAlliedProfession(strongTopics, ap);
+    topicTrends = filterTopicRowsForAlliedProfession(topicTrends, ap);
     recommendedQuizTopic = weakTopics[0]?.topic ?? null;
+    if (topicPerformance) {
+      topicPerformance = {
+        ...topicPerformance,
+        weakTopics,
+        strongTopics,
+        trends: topicTrends,
+      };
+    }
   }
   try {
     practiceAgg = await loadSessionGradingAggregate(userId, entitlement, 8);
@@ -207,6 +239,9 @@ export async function loadLearnerDashboard(
     questionsInMocksLast14d,
     recentMocks,
     weakTopics,
+    strongTopics,
+    topicTrends,
+    topicPerformance,
     continueLesson,
     recommendedQuizTopic,
     readiness,

@@ -320,6 +320,18 @@ export function PracticeTestRunnerClient({
               Readiness: {results.readinessLabel}
             </p>
           ) : null}
+          {results.catReport ? (
+            <p className="mt-2 text-sm text-muted-foreground">
+              Classification:{" "}
+              <span className="font-semibold capitalize text-foreground">{results.catReport.decision}</span>
+              {results.catReport.stoppedReason !== "completed" ? (
+                <>
+                  {" "}
+                  · Stopped: <span className="text-foreground">{results.catReport.stoppedReason.replace(/_/g, " ")}</span>
+                </>
+              ) : null}
+            </p>
+          ) : null}
           {results.estimatedAbility != null ? (
             <p className="mt-1 text-sm text-muted-foreground">
               Estimated ability (θ):{" "}
@@ -327,11 +339,21 @@ export function PracticeTestRunnerClient({
               {results.abilityStdError != null ? (
                 <>
                   {" "}
-                  · Standard error:{" "}
+                  · Standard error (confidence):{" "}
                   <span className="font-medium tabular-nums text-foreground">{results.abilityStdError.toFixed(2)}</span>
                 </>
               ) : null}
             </p>
+          ) : null}
+          {results.catReport?.suggestedNextSteps?.length ? (
+            <div className="mt-4 rounded-lg border border-border/60 bg-muted/20 p-3">
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Next steps</p>
+              <ul className="mt-2 list-inside list-disc space-y-1 text-sm text-muted-foreground">
+                {results.catReport.suggestedNextSteps.map((line) => (
+                  <li key={line.slice(0, 120)}>{line}</li>
+                ))}
+              </ul>
+            </div>
           ) : null}
         </div>
         <div className="nn-card p-6">

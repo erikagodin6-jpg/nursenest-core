@@ -20,3 +20,13 @@ export function filterWeakTopicsForAlliedProfession(
   if (slugs.length === 0) return weakTopics;
   return weakTopics.filter((w) => slugs.some((slug) => topicMatchesSlug(w.topic, slug)));
 }
+
+/** Same slug scoping for trend rows / any `{ topic: string }` list. */
+export function filterTopicRowsForAlliedProfession<T extends { topic: string }>(
+  rows: T[],
+  prof: Pick<AlliedProfessionMarketing, "topicSlugsIn"> | null | undefined,
+): T[] {
+  const slugs = prof?.topicSlugsIn?.filter(Boolean) ?? [];
+  if (slugs.length === 0) return rows;
+  return rows.filter((w) => slugs.some((slug) => topicMatchesSlug(w.topic, slug)));
+}

@@ -19,6 +19,7 @@ function pctDone(done: number, total: number): number {
 export function StudyPlannerShell({ ctx }: { ctx: StudyPlannerContext }) {
   const d = ctx.dashboard;
   const weak = d?.weakTopics?.slice(0, 4) ?? [];
+  const declineTrend = d?.topicTrends?.find((t) => t.momentum === "declining");
   const topPath =
     ctx.pathways.length > 0
       ? [...ctx.pathways].sort(
@@ -31,9 +32,11 @@ export function StudyPlannerShell({ ctx }: { ctx: StudyPlannerContext }) {
   const readiness = d?.readiness;
 
   const todaySteps = [
-    weak[0]
-      ? `Drill “${weak[0].topic}” in the question bank (15–20 min).`
-      : `Open the question bank and run a 20-item block aligned to ${focus}.`,
+    declineTrend
+      ? `Stabilize “${declineTrend.topic}” first — recent misses cluster here; use rationales, then 10–15 questions.`
+      : weak[0]
+        ? `Drill “${weak[0].topic}” in the question bank (15–20 min).`
+        : `Open the question bank and run a 20-item block aligned to ${focus}.`,
     topPath
       ? `Advance “${topPath.shortLabel}”: ${topPath.lessonsCompleted}/${topPath.lessonsTotal} lessons in your plan.`
       : `Work one lesson module in your tier (30–45 min).`,

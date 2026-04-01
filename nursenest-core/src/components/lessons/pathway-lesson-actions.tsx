@@ -31,6 +31,9 @@ export function PathwayLessonActions({
       });
       if (!res.ok) throw new Error("save_failed");
       setStatus("done");
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("nn-learner-stats-updated"));
+      }
     } catch {
       setStatus("error");
     }

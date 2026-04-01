@@ -41,10 +41,12 @@ export function WeakAreasDashboardClient({ initial }: Props) {
     document.addEventListener("visibilitychange", onVis);
     const onNN = () => void refresh();
     window.addEventListener("nn-topic-stats-updated", onNN);
+    window.addEventListener("nn-learner-stats-updated", onNN);
     const t = window.setInterval(() => void refresh(), 45000);
     return () => {
       document.removeEventListener("visibilitychange", onVis);
       window.removeEventListener("nn-topic-stats-updated", onNN);
+      window.removeEventListener("nn-learner-stats-updated", onNN);
       window.clearInterval(t);
     };
   }, [refresh]);
@@ -89,6 +91,8 @@ export function WeakAreasDashboardClient({ initial }: Props) {
 
       {!data ||
       (!data.weakTopics.length &&
+        !data.strongTopics.length &&
+        !data.trends.length &&
         !data.byStrength.strong.length &&
         !data.byStrength.moderate.length &&
         !data.byStrength.weak.length) ? (
@@ -98,6 +102,44 @@ export function WeakAreasDashboardClient({ initial }: Props) {
         </p>
       ) : (
         <div className="mt-5 space-y-5">
+          {data.strongTopics.length > 0 ? (
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted">Strong topics</p>
+              <p className="mt-1 text-xs text-muted">
+                Keep light reinforcement so these do not decay — mix in other gaps.
+              </p>
+              <ul className="mt-2 flex flex-wrap gap-1.5">
+                {data.strongTopics.slice(0, 6).map((s) => (
+                  <li
+                    key={`st-${s.topic}`}
+                    className="rounded-full bg-emerald-500/12 px-2.5 py-0.5 text-xs font-medium text-emerald-900 dark:text-emerald-100"
+                  >
+                    {s.topic}{" "}
+                    <span className="tabular-nums opacity-80">({100 - s.missRate}%)</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+
+          {data.trends.length > 0 ? (
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted">Trajectory</p>
+              <ul className="mt-2 space-y-2">
+                {data.trends.slice(0, 5).map((t) => (
+                  <li
+                    key={`tr-${t.topic}-${t.momentum}`}
+                    className="rounded-lg border border-border/70 bg-muted/20 px-3 py-2 text-sm text-muted"
+                  >
+                    <span className="font-medium text-foreground">{t.topic}</span>
+                    <span className="ml-2 text-xs uppercase tracking-wide text-muted">{t.momentum}</span>
+                    <p className="mt-1 text-xs leading-snug">{t.summary}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+
           {data.weakTopics.length > 0 ? (
             <div>
               <p className="text-xs font-semibold uppercase tracking-wide text-muted">Priority review</p>

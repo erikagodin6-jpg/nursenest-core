@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { QuestionType } from "@prisma/client";
+import type { ExamReviewJson } from "@/lib/exams/exam-session-review";
 import type { ExamStartEmptyDiagnostics } from "@/lib/questions/exam-start-empty-diagnostics";
 import { examPoolEmptyCopy, examStartFailureMessage } from "@/lib/student/gated-state-messages";
 
@@ -26,11 +27,23 @@ function parseOptions(raw: unknown): string[] {
   return [];
 }
 
+function formatDuration(ms: number | null | undefined): string {
+  if (ms == null || !Number.isFinite(ms) || ms < 0) return "—";
+  const s = Math.floor(ms / 1000);
+  const m = Math.floor(s / 60);
+  const h = Math.floor(m / 60);
+  if (h > 0) return `${h}h ${m % 60}m`;
+  if (m > 0) return `${m}m ${s % 60}s`;
+  return `${s}s`;
+}
+
 export function ExamPracticeClient({
   examId,
   examTitle,
   questionTag,
   sessionNamespace,
+  /** Suggested countdown length when learner picks timed mode (NCLEX-style full mocks often use 5h). */
+  timedSuggestedMinutes = 90,
 }: {
   examId: string | null;
   examTitle?: string | null;
@@ -38,9 +51,10 @@ export function ExamPracticeClient({
   questionTag?: string | null;
   /** Suffix for localStorage keys when multiple exam widgets exist on one page. */
   sessionNamespace?: string;
+  timedSuggestedMinutes?: number;
 }) {
   const { session: STORAGE_SESSION, exam: STORAGE_EXAM } = storageKeys(sessionNamespace);
-  const [phase, setPhase] = useState<"loading" | "ready" | "empty" | "error">("loading");
+  const [phase, setPhase] = useState<"loading" | "pickMode" | "ready" | "empty" | "error">("loading");
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [resolvedExamId, setResolvedExamId] = useState<string | null>(examId);
   const [questionIds, setQuestionIds] = useState<string[]>([]);
@@ -48,7 +62,12 @@ export function ExamPracticeClient({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, unknown>>({});
   const [submitting, setSubmitting] = useState(false);
-  const [done, setDone] = useState<{ score: number; total: number } | null>(null);
+  const [done, setDone] = useState<{
+    score: number;
+    total: number;
+    attemptId: string;
+    review: ExamReviewJson | null;
+  } | null>(null);
   const [qLoading, setQLoading] = useState(false);
   const [blockingError, setBlockingError] = useState<string | null>(null);
   const [poolEmptyCopy, setPoolEmptyCopy] = useState<{ title: string; body: string } | null>(null);
@@ -56,29 +75,70 @@ export function ExamPracticeClient({
   const cacheRef = useRef<Record<string, ExamQuestion>>({});
   cacheRef.current = cache;
 
+  const [timedMode, setTimedMode] = useState(false);
+  const [timeLimitSec, setTimeLimitSec] = useState<number | null>(null);
+  const [remainingSec, setRemainingSec] = useState<number | null>(null);
+  const sessionStartMsRef = useRef<number | null>(null);
+  const currentIndexRef = useRef(0);
+  const answersRef = useRef<Record<string, unknown>>({});
+  currentIndexRef.current = currentIndex;
+  answersRef.current = answers;
+
   const total = questionIds.length;
 
   const flushSave = useCallback(
-    (sid: string, idx: number, ans: Record<string, unknown>) => {
+    (sid: string, idx: number, ans: Record<string, unknown>, useKeepalive = false) => {
+      const elapsedMs =
+        sessionStartMsRef.current != null ? Math.max(0, Date.now() - sessionStartMsRef.current) : undefined;
+      const body = JSON.stringify({
+        sessionId: sid,
+        currentIndex: idx,
+        answers: ans,
+        ...(elapsedMs !== undefined ? { elapsedMs } : {}),
+      });
       void fetch("/api/exams/session", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sessionId: sid, currentIndex: idx, answers: ans }),
+        body,
+        keepalive: useKeepalive,
       }).catch(() => {});
     },
     [],
   );
 
   useEffect(() => {
-    if (!sessionId) return;
+    if (!sessionId || phase !== "ready") return;
     if (saveTimer.current) clearTimeout(saveTimer.current);
     saveTimer.current = setTimeout(() => {
-      flushSave(sessionId, currentIndex, answers);
+      flushSave(sessionId, currentIndex, answers, false);
     }, 400);
     return () => {
       if (saveTimer.current) clearTimeout(saveTimer.current);
     };
-  }, [sessionId, currentIndex, answers, flushSave]);
+  }, [sessionId, phase, currentIndex, answers, flushSave]);
+
+  useEffect(() => {
+    if (!sessionId || phase !== "ready") return;
+    const flush = () => flushSave(sessionId, currentIndexRef.current, answersRef.current, true);
+    window.addEventListener("beforeunload", flush);
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "hidden") flush();
+    });
+    return () => {
+      window.removeEventListener("beforeunload", flush);
+    };
+  }, [sessionId, phase, flushSave]);
+
+  useEffect(() => {
+    if (!timedMode || phase !== "ready" || timeLimitSec == null || remainingSec === null) return;
+    const t = window.setInterval(() => {
+      setRemainingSec((r) => {
+        if (r == null) return null;
+        return r <= 0 ? 0 : r - 1;
+      });
+    }, 1000);
+    return () => window.clearInterval(t);
+  }, [timedMode, phase, timeLimitSec, remainingSec]);
 
   const fetchQuestion = useCallback(async (sid: string, index: number, signal: AbortSignal) => {
     const res = await fetch(
@@ -116,11 +176,45 @@ export function ExamPracticeClient({
     return () => ac.abort();
   }, [phase, sessionId, currentIndex, questionIds, total, fetchQuestion]);
 
+  const applySessionPayload = useCallback(
+    (data: {
+      sessionId: string;
+      examId: string | null;
+      currentIndex: number;
+      answers: Record<string, unknown>;
+      questionIds: string[];
+      timedMode?: boolean;
+      timeLimitSec?: number | null;
+      elapsedMs?: number | null;
+    }) => {
+      setSessionId(data.sessionId);
+      setResolvedExamId(data.examId ?? examId);
+      setQuestionIds(data.questionIds);
+      setCurrentIndex(data.currentIndex);
+      setAnswers(data.answers ?? {});
+      setCache({});
+      setBlockingError(null);
+      const tm = Boolean(data.timedMode);
+      setTimedMode(tm);
+      const tls = typeof data.timeLimitSec === "number" ? data.timeLimitSec : null;
+      setTimeLimitSec(tls);
+      const elapsed = typeof data.elapsedMs === "number" ? data.elapsedMs : 0;
+      sessionStartMsRef.current = Date.now() - elapsed;
+      if (tm && tls != null) {
+        const usedSec = Math.floor(elapsed / 1000);
+        setRemainingSec(Math.max(0, tls - usedSec));
+      } else {
+        setRemainingSec(null);
+      }
+    },
+    [examId],
+  );
+
   useEffect(() => {
     let cancelled = false;
     const ac = new AbortController();
 
-    async function boot() {
+    async function tryResumeThenPick() {
       try {
         const storedSession = typeof window !== "undefined" ? localStorage.getItem(STORAGE_SESSION) : null;
         const storedExam = typeof window !== "undefined" ? localStorage.getItem(STORAGE_EXAM) : null;
@@ -143,91 +237,105 @@ export function ExamPracticeClient({
               questionIds: string[];
               total: number;
               poolEmpty?: boolean;
+              timedMode?: boolean;
+              timeLimitSec?: number | null;
+              elapsedMs?: number | null;
             };
             if (cancelled) return;
-            setSessionId(data.sessionId);
-            setResolvedExamId(data.examId ?? examId);
-            setQuestionIds(data.questionIds);
-            setCurrentIndex(data.currentIndex);
-            setAnswers(data.answers ?? {});
-            setCache({});
-            setBlockingError(null);
             if (data.questionIds.length > 0) {
+              applySessionPayload(data);
               setPoolEmptyCopy(null);
               setPhase("ready");
-            } else {
-              setPoolEmptyCopy(examPoolEmptyCopy(undefined));
-              setPhase("empty");
+              localStorage.setItem(STORAGE_SESSION, data.sessionId);
+              localStorage.setItem(STORAGE_EXAM, data.examId ?? examId ?? "");
+              return;
             }
+            setPoolEmptyCopy(examPoolEmptyCopy(undefined));
+            setPhase("empty");
             return;
           }
         }
 
-        const start = await fetch("/api/exams/start", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            examId: examId ?? undefined,
-            questionTag: questionTag ?? undefined,
-            hydrate: "window",
-          }),
-          signal: ac.signal,
-        });
-        let payload = {} as {
-          sessionId?: string;
-          examId?: string | null;
-          questionIds?: string[];
-          questions?: ExamQuestion[];
-          poolEmpty?: boolean;
-          code?: string;
-          diagnostics?: ExamStartEmptyDiagnostics;
-        };
-        try {
-          payload = (await start.json()) as typeof payload;
-        } catch {
-          /* ignore */
-        }
-        if (!start.ok) {
-          if (!cancelled) {
-            setBlockingError(examStartFailureMessage(start.status, payload.code));
-            setPhase("error");
-          }
-          return;
-        }
-        if (cancelled) return;
-        if (!payload.sessionId || payload.poolEmpty || !payload.questionIds?.length) {
-          setPoolEmptyCopy(examPoolEmptyCopy(payload.diagnostics));
-          setPhase("empty");
-          return;
-        }
-        setBlockingError(null);
-        setPoolEmptyCopy(null);
-        setSessionId(payload.sessionId);
-        setResolvedExamId(payload.examId ?? examId);
-        setQuestionIds(payload.questionIds);
-        setCurrentIndex(0);
-        setAnswers({});
-        const seed: Record<string, ExamQuestion> = {};
-        if (payload.questions?.[0]) {
-          seed[payload.questions[0].id] = payload.questions[0];
-        }
-        setCache(seed);
-        setPhase("ready");
-        localStorage.setItem(STORAGE_SESSION, payload.sessionId);
-        localStorage.setItem(STORAGE_EXAM, payload.examId ?? examId ?? "");
+        if (!cancelled) setPhase("pickMode");
       } catch (e) {
         if (cancelled || (e instanceof DOMException && e.name === "AbortError")) return;
-        setBlockingError("Could not reach the server to start this session. Check your connection and retry.");
-        setPhase("error");
+        setPhase("pickMode");
       }
     }
 
-    void boot();
+    void tryResumeThenPick();
     return () => {
       cancelled = true;
       ac.abort();
     };
-  }, [examId, questionTag, sessionNamespace]);
+  }, [STORAGE_SESSION, STORAGE_EXAM, examId, applySessionPayload]);
+
+  async function startExamSession(useTimed: boolean) {
+    setPhase("loading");
+    setBlockingError(null);
+    const limitSec = useTimed ? Math.round(timedSuggestedMinutes * 60) : null;
+    try {
+      const start = await fetch("/api/exams/start", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          examId: examId ?? undefined,
+          questionTag: questionTag ?? undefined,
+          hydrate: "window",
+          timedMode: useTimed,
+          timeLimitSec: useTimed ? limitSec : null,
+        }),
+      });
+      let payload = {} as {
+        sessionId?: string;
+        examId?: string | null;
+        questionIds?: string[];
+        questions?: ExamQuestion[];
+        poolEmpty?: boolean;
+        code?: string;
+        diagnostics?: ExamStartEmptyDiagnostics;
+        timedMode?: boolean;
+        timeLimitSec?: number | null;
+        elapsedMs?: number | null;
+      };
+      try {
+        payload = (await start.json()) as typeof payload;
+      } catch {
+        /* ignore */
+      }
+      if (!start.ok) {
+        setBlockingError(examStartFailureMessage(start.status, payload.code));
+        setPhase("error");
+        return;
+      }
+      if (!payload.sessionId || payload.poolEmpty || !payload.questionIds?.length) {
+        setPoolEmptyCopy(examPoolEmptyCopy(payload.diagnostics));
+        setPhase("empty");
+        return;
+      }
+      applySessionPayload({
+        sessionId: payload.sessionId,
+        examId: payload.examId ?? examId,
+        currentIndex: 0,
+        answers: {},
+        questionIds: payload.questionIds,
+        timedMode: payload.timedMode,
+        timeLimitSec: payload.timeLimitSec,
+        elapsedMs: payload.elapsedMs ?? 0,
+      });
+      const seed: Record<string, ExamQuestion> = {};
+      if (payload.questions?.[0]) {
+        seed[payload.questions[0].id] = payload.questions[0];
+      }
+      setCache(seed);
+      setPhase("ready");
+      localStorage.setItem(STORAGE_SESSION, payload.sessionId);
+      localStorage.setItem(STORAGE_EXAM, payload.examId ?? examId ?? "");
+    } catch {
+      setBlockingError("Could not reach the server to start this session. Check your connection and retry.");
+      setPhase("error");
+    }
+  }
 
   const qid = questionIds[currentIndex];
   const q = qid ? cache[qid] : undefined;
@@ -237,6 +345,8 @@ export function ExamPracticeClient({
     if (!sessionId || !examIdForSubmit) return;
     setSubmitting(true);
     try {
+      const elapsedMs =
+        sessionStartMsRef.current != null ? Math.max(0, Date.now() - sessionStartMsRef.current) : undefined;
       const res = await fetch("/api/exams/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -244,16 +354,26 @@ export function ExamPracticeClient({
           examId: examIdForSubmit,
           sessionId,
           answers,
+          ...(elapsedMs !== undefined ? { elapsedMs } : {}),
         }),
       });
-      const data = (await res.json()) as { attempt?: { score: number; total: number }; error?: string };
+      const data = (await res.json()) as {
+        attempt?: { id: string; score: number; total: number };
+        review?: ExamReviewJson | null;
+        error?: string;
+      };
       if (!res.ok) {
         setBlockingError("We couldn’t record this attempt. Check your connection or try again shortly.");
         setPhase("error");
         return;
       }
       if (data.attempt) {
-        setDone({ score: data.attempt.score, total: data.attempt.total });
+        setDone({
+          score: data.attempt.score,
+          total: data.attempt.total,
+          attemptId: data.attempt.id,
+          review: data.review ?? null,
+        });
         localStorage.removeItem(STORAGE_SESSION);
         localStorage.removeItem(STORAGE_EXAM);
       }
@@ -262,16 +382,49 @@ export function ExamPracticeClient({
     }
   }
 
+  useEffect(() => {
+    if (remainingSec !== 0 || phase !== "ready" || !timedMode || submitting) return;
+    void submitExam();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- submit once when timer hits 0
+  }, [remainingSec]);
+
   if (phase === "loading") {
     return <p className="text-sm text-muted">Preparing your practice session…</p>;
+  }
+
+  if (phase === "pickMode") {
+    return (
+      <div className="nn-card mt-4 space-y-4 p-6">
+        {examTitle ? <p className="text-sm font-medium text-muted">{examTitle}</p> : null}
+        <p className="text-sm text-muted">Choose how you want to run this session. Progress saves automatically; you can refresh and resume.</p>
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-primary/5"
+            onClick={() => void startExamSession(false)}
+          >
+            Untimed
+          </button>
+          <button
+            type="button"
+            className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+            onClick={() => void startExamSession(true)}
+          >
+            Timed ({timedSuggestedMinutes} min)
+          </button>
+        </div>
+        <p className="text-xs text-muted">
+          Timed mode shows a countdown and submits automatically when time expires (your answers so far are sent).
+        </p>
+      </div>
+    );
   }
 
   if (phase === "error") {
     return (
       <div className="nn-card mt-4 space-y-3 p-6">
         <p className="text-sm text-muted">
-          {blockingError ??
-            "We could not load the exam session. Check your connection and retry."}
+          {blockingError ?? "We could not load the exam session. Check your connection and retry."}
         </p>
         <button
           type="button"
@@ -301,12 +454,38 @@ export function ExamPracticeClient({
   }
 
   if (done) {
+    const r = done.review;
     return (
       <div className="nn-card mt-4 space-y-4 p-6">
         <p className="font-semibold">Attempt recorded</p>
         <p className="text-sm text-muted">
           Score: {done.score}/{done.total}
+          {r?.accuracyPct != null ? ` (${r.accuracyPct}%)` : ""}
         </p>
+        {r?.elapsedMs != null ? (
+          <p className="text-sm text-muted">
+            Time: {formatDuration(r.elapsedMs)}
+            {r.timedMode && r.timeLimitSec != null ? ` / limit ${formatDuration(r.timeLimitSec * 1000)}` : ""}
+          </p>
+        ) : null}
+        {r?.byTopic && Object.keys(r.byTopic).length > 0 ? (
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-foreground">Performance by topic</p>
+            <ul className="max-h-48 space-y-1 overflow-y-auto text-sm text-muted">
+              {Object.entries(r.byTopic).map(([topic, row]) => (
+                <li key={topic}>
+                  <span className="text-foreground">{topic}</span>: {row.correct}/{row.total}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+        {r?.weakAreas && r.weakAreas.length > 0 ? (
+          <p className="text-sm text-muted">
+            <span className="font-medium text-foreground">Review topics: </span>
+            {r.weakAreas.slice(0, 8).join(", ")}
+          </p>
+        ) : null}
         <p className="text-sm text-muted">
           Review misses in the question bank, then reinforce weak systems with{" "}
           <Link href="/exam-lessons" className="font-medium text-primary underline">
@@ -316,8 +495,14 @@ export function ExamPracticeClient({
         </p>
         <div className="flex flex-wrap gap-2">
           <Link
-            href="/app/questions"
+            href={`/app/exams/attempts/${done.attemptId}`}
             className="inline-flex rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+          >
+            Full score report
+          </Link>
+          <Link
+            href="/app/questions"
+            className="inline-flex rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-gray-50"
           >
             Open question bank
           </Link>
@@ -336,6 +521,11 @@ export function ExamPracticeClient({
     return (
       <div className="nn-card mt-6 space-y-3 p-6">
         {examTitle ? <p className="text-sm font-medium text-muted">{examTitle}</p> : null}
+        {timedMode && remainingSec != null ? (
+          <p className="text-sm font-semibold text-foreground">
+            Time remaining: {Math.floor(remainingSec / 60)}:{String(remainingSec % 60).padStart(2, "0")}
+          </p>
+        ) : null}
         <p className="text-sm text-muted">Loading question…</p>
       </div>
     );
@@ -351,6 +541,11 @@ export function ExamPracticeClient({
   return (
     <div className="nn-card mt-6 space-y-4 p-6">
       {examTitle ? <p className="text-sm font-medium text-muted">{examTitle}</p> : null}
+      {timedMode && remainingSec != null ? (
+        <p className="text-sm font-semibold text-amber-800 dark:text-amber-200">
+          Time remaining: {Math.floor(remainingSec / 60)}:{String(remainingSec % 60).padStart(2, "0")}
+        </p>
+      ) : null}
       <p className="text-xs text-muted">
         Question {currentIndex + 1} of {total}
       </p>

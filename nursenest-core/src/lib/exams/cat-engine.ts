@@ -77,9 +77,14 @@ export function appendScoredResult(state: CatAdaptiveState, result: CatAnswerRes
   let theta = state.theta + step;
   theta = Math.min(3, Math.max(-3, theta));
 
+  /** Next-item difficulty target: larger steps after hard wins / easy misses (exam-like progression). */
   let target = state.targetDifficulty;
-  if (result.correct) target = Math.min(5, target + 1);
-  else target = Math.max(1, target - 1);
+  if (result.correct) {
+    target = Math.min(5, target + (d >= 4 ? 2 : 1));
+  } else {
+    target = Math.max(1, target - (d <= 2 ? 2 : 1));
+  }
+  target = clampDifficulty(target);
 
   const n = state.results.length + 1;
   const se = Math.min(1.2, 2.0 / Math.sqrt(Math.max(1, n)));
@@ -208,13 +213,13 @@ export function selectNextQuestion(
   const scored = unused.map((row) => {
     const cat = categoryKeyForQuestion(row);
     const delivered = deliveredCountsByCategory.get(cat) ?? 0;
-    const deficit = delivered; // lower is better for balance — invert
+    const deficit = delivered;
     const boost = options?.categoryPriorityBoost?.(cat, row) ?? 0;
-    const score = band(row.difficulty) * 12 + deficit * 3 - boost + Math.random() * 0.01;
+    const score = band(row.difficulty) * 12 + deficit * 3 - boost;
     return { row, score };
   });
 
-  scored.sort((a, b) => a.score - b.score);
+  scored.sort((a, b) => a.score - b.score || a.row.id.localeCompare(b.row.id));
   const best = scored[0]?.score ?? 0;
   const top = scored.filter((s) => s.score <= best + 0.5).map((s) => s.row);
   const pick = top.length ? hashPickStable(top, `${usedIds.size}:${td}`) : unused[0]!;

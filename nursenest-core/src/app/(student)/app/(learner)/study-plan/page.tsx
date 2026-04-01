@@ -37,6 +37,7 @@ export default async function StudyPlanPage() {
           examDate: userExam.examDate,
           readiness: premiumSnapshot.readiness,
           weakTopics: topicPerf.weakTopics,
+          topicTrends: topicPerf.trends,
           streakDays: premiumSnapshot.studyStreakDays,
           lessonPct: premiumSnapshot.overallLessons.pct,
           continueLesson: premiumSnapshot.continueLesson,

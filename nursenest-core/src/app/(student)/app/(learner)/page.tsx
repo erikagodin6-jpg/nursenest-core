@@ -100,6 +100,7 @@ export default async function DashboardPage() {
             examDate: userExam.examDate,
             readiness: premiumSnapshot.readiness,
             weakTopics: topicPerfInitial.weakTopics,
+            topicTrends: topicPerfInitial.trends,
             streakDays: premiumSnapshot.studyStreakDays,
             lessonPct: premiumSnapshot.overallLessons.pct,
             continueLesson: premiumSnapshot.continueLesson,
