@@ -5,7 +5,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { QuestionType } from "@prisma/client";
 import type { ExamReviewJson } from "@/lib/exams/exam-session-review";
 import type { ExamStartEmptyDiagnostics } from "@/lib/questions/exam-start-empty-diagnostics";
-import { ExamSessionShell, ExamSessionTopBar } from "@/components/exam/exam-session-shell";
+import {
+  ExamProgressBar,
+  ExamSessionShell,
+  ExamSessionTopBar,
+  ExamTimerReadout,
+} from "@/components/exam/exam-session-shell";
 import { examPoolEmptyCopy, examStartFailureMessage } from "@/lib/student/gated-state-messages";
 
 type ExamQuestion = {
@@ -538,55 +543,63 @@ export function ExamPracticeClient({
     return (
       <ExamSessionShell className="mt-6 overflow-hidden" neutralPalette>
         <ExamSessionTopBar
-          left={<span className="text-slate-700 dark:text-slate-200">Review before scoring</span>}
-          center={<span className="text-slate-500">{total} items</span>}
-          right={
-            timedMode && remainingSec != null ? (
-              <span
-                className={`font-semibold tabular-nums ${remainingSec < 120 ? "text-red-600 dark:text-red-400" : "text-slate-800 dark:text-slate-100"}`}
-              >
-                {Math.floor(remainingSec / 60)}:{String(remainingSec % 60).padStart(2, "0")}
-              </span>
-            ) : (
-              <span className="text-slate-500">Untimed</span>
-            )
-          }
+          left={<span className="font-medium text-slate-800 dark:text-slate-100">Review before scoring</span>}
+          center={<span>Pre-submit checklist</span>}
+          right={<ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />}
         />
+        <ExamProgressBar current={total} total={total} />
         <div className="space-y-4 p-5 md:p-6">
-          <p className="text-sm text-slate-600 dark:text-slate-400">
-            Unanswered: {unansweredCount} · Flagged: {Object.values(flagged).filter(Boolean).length}
+          <p className="text-sm tabular-nums text-slate-600 dark:text-slate-400">
+            Unanswered: <span className="font-semibold text-slate-800 dark:text-slate-200">{unansweredCount}</span>
+            {" · "}
+            Marked for review:{" "}
+            <span className="font-semibold text-slate-800 dark:text-slate-200">
+              {Object.values(flagged).filter(Boolean).length}
+            </span>
           </p>
-          <ul className="max-h-64 space-y-2 overflow-y-auto text-sm">
+          <ul className="max-h-64 space-y-1.5 overflow-y-auto text-sm">
             {questionIds.map((id, i) => {
               const v = answers[id];
               const answered = v != null && (!Array.isArray(v) || v.length > 0);
               return (
                 <li
                   key={id}
-                  className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-slate-200/80 bg-white px-3 py-2 dark:border-slate-700 dark:bg-slate-900/40"
+                  className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-slate-200/90 bg-white px-3 py-2.5 dark:border-slate-700 dark:bg-slate-900/50"
                 >
                   <button
                     type="button"
-                    className="font-medium text-primary underline"
+                    className="min-w-0 text-left font-medium text-slate-800 underline decoration-slate-300 underline-offset-2 transition hover:text-primary hover:decoration-primary dark:text-slate-100 dark:decoration-slate-600"
                     onClick={() => {
                       setSessionPhase("active");
                       setCurrentIndex(i);
                     }}
                   >
-                    Question {i + 1}
+                    Item {i + 1}
                   </button>
-                  <span className="text-slate-600 dark:text-slate-400">
-                    {answered ? "Answered" : "Unanswered"}
-                    {flagged[id] ? " · Flagged" : ""}
-                  </span>
+                  <div className="flex shrink-0 flex-wrap items-center gap-1.5">
+                    <span
+                      className={`rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
+                        answered
+                          ? "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300"
+                          : "border border-amber-300/80 bg-amber-50/90 text-amber-950 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-100"
+                      }`}
+                    >
+                      {answered ? "Answered" : "Unanswered"}
+                    </span>
+                    {flagged[id] ? (
+                      <span className="rounded border border-primary/30 bg-primary/[0.06] px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-200">
+                        Marked
+                      </span>
+                    ) : null}
+                  </div>
                 </li>
               );
             })}
           </ul>
-          <div className="flex flex-wrap gap-2 pt-2">
+          <div className="flex flex-wrap gap-2 border-t border-slate-200/80 pt-4 dark:border-slate-800">
             <button
               type="button"
-              className="rounded-full border border-slate-300 px-4 py-2 text-sm font-medium text-slate-800 dark:border-slate-600 dark:text-slate-100"
+              className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-medium text-slate-800 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-900"
               onClick={() => setSessionPhase("active")}
             >
               Back to items
@@ -594,7 +607,7 @@ export function ExamPracticeClient({
             <button
               type="button"
               disabled={submitting}
-              className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-60"
+              className="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm disabled:opacity-60"
               onClick={() => void submitExam()}
             >
               {submitting ? "Submitting…" : "Submit for scoring"}
@@ -612,18 +625,11 @@ export function ExamPracticeClient({
     return (
       <ExamSessionShell className="mt-6 overflow-hidden" neutralPalette>
         <ExamSessionTopBar
-          left={examTitle ? <span className="font-medium text-slate-700 dark:text-slate-200">{examTitle}</span> : null}
-          center={<span className="text-slate-500">Loading</span>}
-          right={
-            timedMode && remainingSec != null ? (
-              <span className="font-semibold tabular-nums text-slate-800 dark:text-slate-100">
-                {Math.floor(remainingSec / 60)}:{String(remainingSec % 60).padStart(2, "0")}
-              </span>
-            ) : (
-              <span className="text-slate-500">—</span>
-            )
-          }
+          left={examTitle ? <span className="font-medium text-slate-800 dark:text-slate-100">{examTitle}</span> : null}
+          center={<span>Loading</span>}
+          right={<ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />}
         />
+        {total > 0 ? <ExamProgressBar current={Math.min(currentIndex + 1, total)} total={total} /> : null}
         <div className="p-6">
           <p className="text-sm text-slate-600 dark:text-slate-400">Loading question…</p>
         </div>
@@ -642,28 +648,25 @@ export function ExamPracticeClient({
     <ExamSessionShell className="mt-6 overflow-hidden" neutralPalette>
       <ExamSessionTopBar
         left={
-          <span className="text-slate-700 dark:text-slate-200">
-            Item {currentIndex + 1} of {total}
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+              Item {currentIndex + 1} of {total}
+            </p>
             {unansweredCount > 0 ? (
-              <span className="ml-2 text-slate-500">· {unansweredCount} unanswered</span>
-            ) : null}
-          </span>
+              <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">{unansweredCount} still unanswered</p>
+            ) : (
+              <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">All items have a selection</p>
+            )}
+          </div>
         }
-        center={examTitle ? <span className="hidden text-slate-500 sm:inline">{examTitle}</span> : null}
-        right={
-          timedMode && remainingSec != null ? (
-            <span
-              className={`font-semibold tabular-nums ${remainingSec < 120 ? "text-red-600 dark:text-red-400" : "text-slate-800 dark:text-slate-100"}`}
-            >
-              {Math.floor(remainingSec / 60)}:{String(remainingSec % 60).padStart(2, "0")}
-            </span>
-          ) : (
-            <span className="text-slate-500">Untimed</span>
-          )
-        }
+        center={examTitle ? <span className="line-clamp-2 normal-case">{examTitle}</span> : null}
+        right={<ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />}
       />
-      <div className="space-y-4 p-5 md:p-6">
-        <p className="min-h-[1.5rem] text-base font-medium leading-relaxed text-slate-900 dark:text-slate-100">{q.stem}</p>
+      <ExamProgressBar current={currentIndex + 1} total={total} />
+      <div className="space-y-5 p-5 md:p-6">
+        <div className="min-h-[4.5rem] border-b border-slate-200/80 pb-4 dark:border-slate-700/80">
+          <p className="text-base font-normal leading-[1.65] text-slate-900 dark:text-slate-100">{q.stem}</p>
+        </div>
 
         {q.questionType === "SATA" ? (
           <ul className="space-y-2">
@@ -671,7 +674,13 @@ export function ExamPracticeClient({
               const selected = Array.isArray(raw) ? raw.includes(label) : false;
               return (
                 <li key={label}>
-                  <label className="flex cursor-pointer items-start gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm dark:border-slate-700 dark:bg-slate-900/50">
+                  <label
+                    className={`flex min-h-[2.75rem] cursor-pointer items-start gap-3 rounded-lg border px-4 py-3 text-sm leading-snug transition ${
+                      selected
+                        ? "border-primary/45 bg-primary/[0.05] ring-1 ring-primary/25 dark:bg-primary/[0.07]"
+                        : "border-slate-200 bg-white hover:border-slate-300 dark:border-slate-700 dark:bg-slate-900/40 dark:hover:border-slate-600"
+                    }`}
+                  >
                     <input
                       type="checkbox"
                       checked={selected}
@@ -680,9 +689,9 @@ export function ExamPracticeClient({
                         const next = e.target.checked ? [...prev, label] : prev.filter((x) => x !== label);
                         setAnswers((a) => ({ ...a, [q.id]: next }));
                       }}
-                      className="mt-1"
+                      className="mt-0.5 size-4 shrink-0 rounded border-slate-300 text-primary focus:ring-primary/30"
                     />
-                    <span>{label}</span>
+                    <span className="text-slate-800 dark:text-slate-100">{label}</span>
                   </label>
                 </li>
               );
@@ -695,10 +704,10 @@ export function ExamPracticeClient({
                 <button
                   type="button"
                   onClick={() => setAnswers((a) => ({ ...a, [q.id]: label }))}
-                  className={`w-full rounded-xl border px-4 py-3 text-left text-sm transition ${
+                  className={`min-h-[2.75rem] w-full rounded-lg border px-4 py-3 text-left text-sm leading-snug transition ${
                     raw === label
-                      ? "border-2 border-primary bg-primary/10"
-                      : "border border-slate-200 bg-white hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900/50 dark:hover:bg-slate-900"
+                      ? "border-primary/50 bg-primary/[0.05] font-medium text-slate-900 ring-1 ring-primary/30 dark:text-slate-50"
+                      : "border border-slate-200 bg-white text-slate-800 hover:border-slate-300 dark:border-slate-700 dark:bg-slate-900/40 dark:text-slate-100 dark:hover:border-slate-600"
                   }`}
                 >
                   {label}
@@ -708,24 +717,25 @@ export function ExamPracticeClient({
           </ul>
         )}
 
-        <div className="flex flex-wrap items-center gap-2 pt-2">
+        <div className="flex flex-wrap items-center gap-2 border-t border-slate-200/70 pt-4 dark:border-slate-800">
           <button
             type="button"
-            className={`rounded-full border px-4 py-2 text-sm font-medium ${
+            aria-pressed={Boolean(flagged[q.id])}
+            className={`inline-flex items-center rounded-lg border px-3 py-2 text-xs font-semibold uppercase tracking-wide transition ${
               flagged[q.id]
-                ? "border-amber-500 bg-amber-50 text-amber-950 dark:bg-amber-950/30 dark:text-amber-100"
-                : "border-slate-300 text-slate-700 dark:border-slate-600 dark:text-slate-200"
+                ? "border-primary/35 bg-primary/[0.07] text-slate-800 dark:text-slate-100"
+                : "border-slate-300 text-slate-600 hover:border-slate-400 dark:border-slate-600 dark:text-slate-300"
             }`}
             onClick={() => setFlagged((f) => ({ ...f, [q.id]: !f[q.id] }))}
           >
-            {flagged[q.id] ? "Flagged" : "Flag for review"}
+            {flagged[q.id] ? "Marked for review" : "Mark for review"}
           </button>
         </div>
 
-        <div className="flex flex-wrap gap-2 border-t border-slate-200/80 pt-4 dark:border-slate-800">
+        <div className="flex flex-wrap gap-2">
           <button
             type="button"
-            className="rounded-full border border-slate-300 px-4 py-2 text-sm dark:border-slate-600"
+            className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-medium text-slate-800 hover:bg-slate-50 disabled:opacity-40 dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-900"
             disabled={currentIndex === 0}
             onClick={() => setCurrentIndex((i) => Math.max(0, i - 1))}
           >
@@ -734,7 +744,7 @@ export function ExamPracticeClient({
           {currentIndex < total - 1 ? (
             <button
               type="button"
-              className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+              className="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm"
               onClick={() => setCurrentIndex((i) => Math.min(total - 1, i + 1))}
             >
               Next
@@ -742,14 +752,14 @@ export function ExamPracticeClient({
           ) : (
             <button
               type="button"
-              className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+              className="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm"
               onClick={() => setSessionPhase("review")}
             >
               Review answers
             </button>
           )}
         </div>
-        <p className="text-xs text-slate-500">Progress saves automatically. Refresh-safe resume.</p>
+        <p className="text-[11px] text-slate-500 dark:text-slate-400">Progress saves automatically. You can refresh and resume.</p>
       </div>
     </ExamSessionShell>
   );

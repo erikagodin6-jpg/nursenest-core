@@ -233,9 +233,14 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
 .nn-exam-session.nn-exam-session--neutral {
   background: #f1f5f9;
   border-color: #cbd5e1;
+  /* Subtle separation without loud theme fills */
+  box-shadow:
+    0 1px 0 rgb(15 23 42 / 0.04),
+    inset 0 1px 0 rgb(255 255 255 / 0.45);
 }
 
 .dark .nn-exam-session.nn-exam-session--neutral {
   background: rgb(15 23 42 / 0.92);
   border-color: #334155;
+  box-shadow: 0 1px 0 rgb(0 0 0 / 0.25);
 }

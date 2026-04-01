@@ -3,7 +3,12 @@
 import { LearnerNoteScope } from "@prisma/client";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ExamSessionShell, ExamSessionTopBar } from "@/components/exam/exam-session-shell";
+import {
+  ExamProgressBar,
+  ExamSessionShell,
+  ExamSessionTopBar,
+  ExamTimerReadout,
+} from "@/components/exam/exam-session-shell";
 import { difficultyBandLabel } from "@/lib/questions/difficulty-label";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
@@ -54,6 +59,8 @@ export function PracticeTestRunnerClient({
   const [adaptiveTheta, setAdaptiveTheta] = useState<number | null>(null);
   const [adaptiveSe, setAdaptiveSe] = useState<number | null>(null);
   const [saving, setSaving] = useState(false);
+  /** Session-local only — helps pacing habits; not sent to the server. */
+  const [flagged, setFlagged] = useState<Record<string, boolean>>({});
   const autoSubmitRef = useRef(false);
   const answersRef = useRef<Record<string, unknown>>({});
   const idxRef = useRef(0);
@@ -432,35 +439,30 @@ export function PracticeTestRunnerClient({
         <ExamSessionShell neutralPalette>
           <ExamSessionTopBar
             left={
-              <span className="text-slate-700 dark:text-slate-200">
-                {catMode ? `Adaptive · ${idx + 1} / ${total}` : `Question ${idx + 1} / ${total}`}
-                {saving ? <span className="ml-2 text-xs text-slate-500">Saving…</span> : null}
-              </span>
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                  {catMode ? "Adaptive item" : "Item"} {idx + 1} of {total}
+                </p>
+                {saving ? <p className="mt-0.5 text-xs text-slate-500">Saving…</p> : null}
+              </div>
             }
             center={
-              <span className="text-xs text-slate-500">
-                {catMode ? "CAT · NurseNest-style adaptive engine" : "Practice test"}
+              <span className="line-clamp-2 normal-case">
+                {catMode ? "Computer-adaptive (practice)" : "Practice test"}
               </span>
             }
-            right={
-              timedMode && remainingSec != null ? (
-                <span className={`font-semibold tabular-nums ${remainingSec < 120 ? "text-red-600" : "text-slate-800 dark:text-slate-100"}`}>
-                  {Math.floor(remainingSec / 60)}:{String(remainingSec % 60).padStart(2, "0")}
-                </span>
-              ) : (
-                <span className="text-slate-500">Untimed</span>
-              )
-            }
+            right={<ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />}
           />
-          <div className="space-y-4 p-5 md:p-6">
-            <p className="text-xs text-slate-500">
+          <ExamProgressBar current={idx + 1} total={total} />
+          <div className="space-y-5 p-5 md:p-6">
+            <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">
               {catMode
-                ? "Difficulty adapts after each response. Rationales and topic coaching appear after you finish the session—not during the exam-style block."
-                : "Timed sessions are for pacing practice. This is not a copy of any official exam interface."}
+                ? "Each response updates difficulty. Explanations and coaching appear after the session."
+                : "Pacing practice only—not a copy of any official exam interface."}
             </p>
 
-            <div className="overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900/60">
-              <div className="border-b border-slate-200 px-3 py-2 text-xs text-slate-600 dark:border-slate-700 dark:text-slate-400">
+            <div className="overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900/50">
+              <div className="border-b border-slate-200 px-3 py-2 text-[11px] text-slate-600 dark:border-slate-700 dark:text-slate-400">
                 {current.topic ? <span className="font-medium text-slate-700 dark:text-slate-200">{current.topic}</span> : null}
                 {current.subtopic ? <span className="ml-2 text-slate-500">· {current.subtopic}</span> : null}
                 {current.difficulty != null ? (
@@ -468,117 +470,142 @@ export function PracticeTestRunnerClient({
                 ) : null}
               </div>
               <div className="space-y-4 p-5 md:p-6">
-              <p className="text-base font-medium leading-relaxed">{current.stem}</p>
-              {isSata ? (
-                <ul className="space-y-2">
-                  {opts.map((label) => {
-                    const selected = Array.isArray(raw) ? raw.includes(label) : false;
-                    return (
+                <div className="min-h-[4rem] border-b border-slate-200/80 pb-4 dark:border-slate-700/80">
+                  <p className="text-base font-normal leading-[1.65] text-slate-900 dark:text-slate-100">{current.stem}</p>
+                </div>
+                {isSata ? (
+                  <ul className="space-y-2">
+                    {opts.map((label) => {
+                      const selected = Array.isArray(raw) ? raw.includes(label) : false;
+                      return (
+                        <li key={label}>
+                          <label
+                            className={`flex min-h-[2.75rem] cursor-pointer items-start gap-3 rounded-lg border px-4 py-3 text-sm leading-snug transition ${
+                              selected
+                                ? "border-primary/45 bg-primary/[0.05] ring-1 ring-primary/25 dark:bg-primary/[0.07]"
+                                : "border-slate-200 bg-white hover:border-slate-300 dark:border-slate-700 dark:bg-slate-900/30 dark:hover:border-slate-600"
+                            }`}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={selected}
+                              onChange={(e) => {
+                                const prev = Array.isArray(raw) ? [...raw] : [];
+                                const next = e.target.checked ? [...prev, label] : prev.filter((x) => x !== label);
+                                setAnswerForCurrent(next);
+                              }}
+                              className="mt-0.5 size-4 shrink-0 rounded border-slate-300 text-primary focus:ring-primary/30"
+                            />
+                            <span className="text-slate-800 dark:text-slate-100">{label}</span>
+                          </label>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                ) : (
+                  <ul className="space-y-2">
+                    {opts.map((label) => (
                       <li key={label}>
-                        <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-border px-4 py-3 text-sm hover:bg-muted/40">
-                          <input
-                            type="checkbox"
-                            checked={selected}
-                            onChange={(e) => {
-                              const prev = Array.isArray(raw) ? [...raw] : [];
-                              const next = e.target.checked ? [...prev, label] : prev.filter((x) => x !== label);
-                              setAnswerForCurrent(next);
-                            }}
-                            className="mt-1"
-                          />
-                          <span>{label}</span>
-                        </label>
+                        <button
+                          type="button"
+                          onClick={() => setAnswerForCurrent(label)}
+                          className={`min-h-[2.75rem] w-full rounded-lg border px-4 py-3 text-left text-sm leading-snug transition ${
+                            raw === label
+                              ? "border-primary/50 bg-primary/[0.05] font-medium text-slate-900 ring-1 ring-primary/30 dark:text-slate-50"
+                              : "border border-slate-200 bg-white text-slate-800 hover:border-slate-300 dark:border-slate-700 dark:bg-slate-900/30 dark:text-slate-100 dark:hover:border-slate-600"
+                          }`}
+                        >
+                          {label}
+                        </button>
                       </li>
-                    );
-                  })}
-                </ul>
-              ) : (
-                <ul className="space-y-2">
-                  {opts.map((label) => (
-                    <li key={label}>
-                      <button
-                        type="button"
-                        onClick={() => setAnswerForCurrent(label)}
-                        className={`w-full rounded-xl border px-4 py-3 text-left text-sm transition ${
-                          raw === label ? "border-2 border-primary bg-primary/10" : "border border-border hover:bg-muted/40"
-                        }`}
-                      >
-                        {label}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
+                    ))}
+                  </ul>
+                )}
+              </div>
             </div>
-          </div>
+
+            <div className="flex flex-wrap items-center gap-2 border-t border-slate-200/70 pt-4 dark:border-slate-800">
+              <button
+                type="button"
+                aria-pressed={Boolean(flagged[current.id])}
+                className={`inline-flex items-center rounded-lg border px-3 py-2 text-xs font-semibold uppercase tracking-wide transition ${
+                  flagged[current.id]
+                    ? "border-primary/35 bg-primary/[0.07] text-slate-800 dark:text-slate-100"
+                    : "border-slate-300 text-slate-600 hover:border-slate-400 dark:border-slate-600 dark:text-slate-300"
+                }`}
+                onClick={() => setFlagged((f) => ({ ...f, [current.id]: !f[current.id] }))}
+              >
+                {flagged[current.id] ? "Marked for review" : "Mark for review"}
+              </button>
+            </div>
+
+            <div className="flex flex-wrap gap-2 border-t border-slate-200/70 pt-4 dark:border-slate-800">
+              <button
+                type="button"
+                disabled={idx === 0 || catMode}
+                className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-medium text-slate-800 hover:bg-slate-50 disabled:opacity-40 dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-900"
+                onClick={() => void goPrev()}
+              >
+                Previous
+              </button>
+              {catMode ? (
+                idx < total - 1 ? (
+                  <button
+                    type="button"
+                    className="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm"
+                    onClick={() => void goNext()}
+                  >
+                    Next
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      disabled={saving}
+                      className="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm"
+                      onClick={() => void catAdvance()}
+                    >
+                      {saving ? "Working…" : "Next question"}
+                    </button>
+                    <button
+                      type="button"
+                      disabled={saving}
+                      className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-medium text-slate-700 dark:border-slate-600 dark:text-slate-200"
+                      onClick={() => void submitTest()}
+                    >
+                      End session
+                    </button>
+                  </>
+                )
+              ) : idx < total - 1 ? (
+                <button
+                  type="button"
+                  className="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm"
+                  onClick={() => void goNext()}
+                >
+                  Next
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  disabled={saving}
+                  className="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm"
+                  onClick={() => void submitTest()}
+                >
+                  {saving ? "Submitting…" : "Submit test"}
+                </button>
+              )}
+              <button
+                type="button"
+                className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm text-slate-600 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-900"
+                onClick={() => void abandon()}
+              >
+                Abandon
+              </button>
+            </div>
           </div>
         </ExamSessionShell>
       </ProtectedPremiumContent>
-
-      <div className="flex flex-wrap gap-2">
-        <button
-          type="button"
-          disabled={idx === 0 || catMode}
-          className="rounded-full border border-border px-4 py-2 text-sm disabled:opacity-40"
-          onClick={() => void goPrev()}
-        >
-          Previous
-        </button>
-        {catMode ? (
-          idx < total - 1 ? (
-            <button
-              type="button"
-              className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
-              onClick={() => void goNext()}
-            >
-              Next
-            </button>
-          ) : (
-            <>
-              <button
-                type="button"
-                disabled={saving}
-                className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
-                onClick={() => void catAdvance()}
-              >
-                {saving ? "Working…" : "Next question"}
-              </button>
-              <button
-                type="button"
-                disabled={saving}
-                className="rounded-full border border-border px-4 py-2 text-sm font-medium"
-                onClick={() => void submitTest()}
-              >
-                End session
-              </button>
-            </>
-          )
-        ) : idx < total - 1 ? (
-          <button
-            type="button"
-            className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
-            onClick={() => void goNext()}
-          >
-            Next
-          </button>
-        ) : (
-          <button
-            type="button"
-            disabled={saving}
-            className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
-            onClick={() => void submitTest()}
-          >
-            {saving ? "Submitting…" : "Submit test"}
-          </button>
-        )}
-        <button
-          type="button"
-          className="rounded-full border border-border px-4 py-2 text-sm text-muted-foreground"
-          onClick={() => void abandon()}
-        >
-          Abandon
-        </button>
-      </div>
     </div>
   );
 }

@@ -32,13 +32,16 @@ function LearnerExamChromeGateInner({ children }: { children: React.ReactNode })
   return (
     <>
       {examFocus ? (
-        <div className="nn-exam-minimal-nav sticky top-0 z-50 mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-slate-200/90 bg-slate-50/95 px-3 py-2 text-xs text-slate-600 backdrop-blur-sm dark:border-slate-800 dark:bg-slate-950/95 dark:text-slate-300">
-          <span className="font-medium text-slate-800 dark:text-slate-100">Focused session</span>
-          <span className="hidden sm:inline text-slate-500">
-            Distractions reduced — not an official exam replica; for practice only.
+        <div className="nn-exam-minimal-nav sticky top-0 z-50 mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-slate-200/90 border-l-[3px] border-l-primary/25 bg-slate-50/95 px-3 py-2.5 text-xs text-slate-600 backdrop-blur-sm dark:border-slate-800 dark:bg-slate-950/95 dark:text-slate-300">
+          <span className="font-semibold tracking-tight text-slate-800 dark:text-slate-100">Focused session</span>
+          <span className="hidden max-w-xl sm:inline sm:text-[11px] sm:leading-snug sm:text-slate-500">
+            Distractions reduced. Not an official exam interface—practice only.
           </span>
-          <Link href="/app" className="shrink-0 rounded-full border border-slate-300 px-3 py-1.5 font-semibold text-slate-800 hover:bg-white dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-900">
-            Exit to app
+          <Link
+            href="/app"
+            className="shrink-0 rounded-md border border-slate-300 bg-white px-3 py-1.5 text-[11px] font-semibold text-slate-800 shadow-sm hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
+          >
+            Exit
           </Link>
         </div>
       ) : null}
