@@ -269,6 +269,11 @@ export default async function LearnerProfilePage() {
                 </span>
               </p>
               <p className="mt-2 text-sm text-muted-foreground">{readiness.summary}</p>
+              {readiness.calibratedPreview ? (
+                <p className="mt-1 text-xs font-medium text-amber-700 dark:text-amber-300">
+                  Conservative calibration is active for this exam track.
+                </p>
+              ) : null}
               {readiness.holdingBack.length > 0 ? (
                 <p className="mt-2 text-sm text-foreground">
                   <span className="font-medium">Holding back: </span>

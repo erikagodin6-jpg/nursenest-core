@@ -15,6 +15,7 @@ import { QUESTION_PAYLOAD_WARN_BYTES } from "@/lib/questions/question-api-limits
 import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { logLargeApiResponse } from "@/lib/observability/perf-log";
+import { notSubscribedResponse } from "@/lib/entitlements/require-subscriber-session";
 
 export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
   const { id } = await ctx.params;
@@ -125,10 +126,7 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
   const snap = await getFreemiumSnapshot(userId);
   if (!snap || snap.questionRemaining <= 0) {
     logPaywallDeny("/api/questions/[id]", "freemium_exhausted", { id });
-    return NextResponse.json(
-      { error: "Subscription required", code: "paywall" },
-      { status: 403 },
-    );
+    return notSubscribedResponse();
   }
 
   const where = {

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { ContentStatus, FlashcardDeckVisibility } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { flashcardAccessWhere } from "@/lib/entitlements/content-access-scope";
+import { notSubscribedResponse } from "@/lib/entitlements/require-subscriber-session";
 import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
 import {
   truncateForPreview,
@@ -66,7 +67,7 @@ export async function GET(req: NextRequest, { params }: Props) {
 
   if (!userCanAccessDeckForStudy(deck, entitlement)) {
     logFlashcardAccessDenied({ deckId: deck.id.slice(0, 12), surface: "study_get" });
-    return NextResponse.json({ error: "Access denied", code: "flashcard_access_denied" }, { status: 403 });
+    return notSubscribedResponse();
   }
 
   const isSubscriber = Boolean(entitlement.hasAccess);
@@ -116,7 +117,7 @@ export async function GET(req: NextRequest, { params }: Props) {
 
     if (deck.visibility === FlashcardDeckVisibility.SUBSCRIBER && !isSubscriber) {
       logFlashcardAccessDenied({ deckId: deck.id.slice(0, 12), reason: "subscription_required" });
-      return NextResponse.json({ error: "Subscription required", code: "no_active_subscription" }, { status: 403 });
+      return notSubscribedResponse();
     }
 
     const studyLimited = enforceFlashcardStudyProtection(req, userId);

@@ -222,7 +222,7 @@ export function StudyPlanTool() {
       {suggestedWeakAreas.length > 0 ? (
         <div className="rounded-xl border border-border/60 bg-muted/20 p-3">
           <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            Use my current weak areas
+            Use my priority review queue
           </p>
           <div className="mt-2 flex flex-wrap gap-2">
             {suggestedWeakAreas.map((topic) => (
