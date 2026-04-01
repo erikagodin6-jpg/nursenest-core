@@ -15,6 +15,7 @@ export const authCallbacks: NonNullable<NextAuthConfig["callbacks"]> = {
         country?: unknown;
         tier?: unknown;
         subscriptionStatus?: unknown;
+        credentialVersion?: unknown;
       };
       if (u.id) token.sub = u.id;
       if (u.email !== undefined) token.email = u.email;
@@ -23,6 +24,8 @@ export const authCallbacks: NonNullable<NextAuthConfig["callbacks"]> = {
       token.country = u.country as typeof token.country;
       token.tier = u.tier as typeof token.tier;
       token.subscriptionStatus = u.subscriptionStatus as typeof token.subscriptionStatus;
+      token.credentialVersion =
+        typeof u.credentialVersion === "number" ? u.credentialVersion : 0;
     }
     if (trigger === "update" && session && typeof session === "object") {
       const s = session as Partial<{
@@ -46,6 +49,8 @@ export const authCallbacks: NonNullable<NextAuthConfig["callbacks"]> = {
       su.country = token.country;
       su.tier = token.tier;
       su.subscriptionStatus = token.subscriptionStatus;
+      su.credentialVersion =
+        typeof token.credentialVersion === "number" ? token.credentialVersion : 0;
     }
     return session;
   },

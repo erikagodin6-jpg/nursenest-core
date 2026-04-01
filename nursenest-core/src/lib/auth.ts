@@ -177,6 +177,7 @@ export const authConfig: NextAuthConfig = {
           country: user.country,
           tier: user.tier,
           subscriptionStatus,
+          credentialVersion: user.credentialVersion ?? 0,
         };
       },
     }),

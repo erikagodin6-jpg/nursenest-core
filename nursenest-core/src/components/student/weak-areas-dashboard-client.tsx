@@ -16,12 +16,28 @@ type Props = { initial: TopicPerformanceSnapshot | null };
 export function WeakAreasDashboardClient({ initial }: Props) {
   const [data, setData] = useState<TopicPerformanceSnapshot | null>(initial);
   const [loading, setLoading] = useState(false);
+  const [refreshError, setRefreshError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setData(initial);
+  }, [initial]);
 
   const refresh = useCallback(async () => {
     setLoading(true);
+    setRefreshError(null);
     try {
       const res = await fetch("/api/learner/weak-areas", { cache: "no-store" });
-      if (!res.ok) return;
+      if (!res.ok) {
+        let msg = "Could not refresh topic performance.";
+        try {
+          const j = (await res.json()) as { error?: string };
+          if (j.error) msg = j.error;
+        } catch {
+          /* ignore */
+        }
+        setRefreshError(msg);
+        return;
+      }
       const json = (await res.json()) as TopicPerformanceSnapshot;
       setData(json);
     } finally {
@@ -63,6 +79,11 @@ export function WeakAreasDashboardClient({ initial }: Props) {
             Based on graded question bank attempts, practice tests, and scored mocks. Updates after each graded item.
             {loading ? <span className="ml-2 opacity-70">Refreshing…</span> : null}
           </p>
+          {refreshError ? (
+            <p className="mt-2 text-xs text-amber-800 dark:text-amber-200" role="status">
+              {refreshError} Showing last loaded data.
+            </p>
+          ) : null}
         </div>
         <div className="flex flex-wrap gap-2">
           <Link

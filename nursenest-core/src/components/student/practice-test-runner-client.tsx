@@ -422,6 +422,21 @@ export function PracticeTestRunnerClient({
     );
   }
 
+  if (phase === "ready" && status === "IN_PROGRESS" && questions.length === 0) {
+    return (
+      <div className="nn-card space-y-3 p-6 text-sm">
+        <p className="font-medium text-foreground">No questions in this practice test.</p>
+        <p className="text-muted-foreground">
+          The pool may have been empty for your filters and tier, or the test was saved in an incomplete state. Start a
+          new adaptive (CAT) or linear test from the list—broaden topics or difficulty if you see this again.
+        </p>
+        <Link className="inline-block font-semibold text-primary underline" href="/app/practice-tests">
+          Back to practice tests
+        </Link>
+      </div>
+    );
+  }
+
   if (status !== "IN_PROGRESS" || !current) {
     return (
       <p className="text-sm text-muted-foreground">

@@ -123,6 +123,8 @@ model User {
   username                String?        @unique
   name                    String
   passwordHash            String?
+  /** Bumped on password change/reset so JWTs can be invalidated without per-device session rows. */
+  credentialVersion       Int            @default(0)
   role                    UserRole       @default(LEARNER)
   country                 CountryCode
   tier                    TierCode
