@@ -76,61 +76,81 @@ function FactorBar({ label, points, maxPoints, detail }: { label: string; points
 export function PremiumLearnerHub({
   snapshot,
   weakTopicTitles = [],
+  /** When the dashboard hero already shows readiness — keep momentum only, avoid duplicate score band. */
+  compactIntro = false,
 }: {
   snapshot: PremiumDashboardSnapshot;
   /** From practice stats — surfaces weak-area flashcard link context. */
   weakTopicTitles?: string[];
+  compactIntro?: boolean;
 }) {
   const { readiness, overallLessons, pathways, practice, recentMocks, momentumMessages, examReadyHeadline, milestones } =
     snapshot;
 
+  const momentumSection =
+    momentumMessages.length > 0 ? (
+      <ul className={compactIntro ? "space-y-2" : "relative mt-5 space-y-2 border-t border-border/50 pt-4"}>
+        {momentumMessages.map((line) => (
+          <li key={line} className="flex gap-2 text-sm text-foreground/90">
+            <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
+            <span>{line}</span>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p className={compactIntro ? "text-sm text-muted" : "relative mt-5 border-t border-border/50 pt-4 text-sm text-muted"}>
+        Complete a lesson, graded bank block, or mock—personal feedback will show here as soon as we have a trend to
+        compare.
+      </p>
+    );
+
   return (
     <div className="space-y-5">
-      <section className="relative overflow-hidden rounded-2xl border border-amber-500/25 bg-gradient-to-br from-amber-500/[0.08] via-[var(--theme-card-bg)] to-primary/[0.06] p-6 shadow-sm">
-        <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-amber-400/10 blur-3xl" aria-hidden />
-        <div className="relative flex flex-wrap items-start gap-4">
-          <div className="flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-amber-950 dark:text-amber-100">
-            <Crown className="h-3.5 w-3.5" aria-hidden />
-            Full member experience
+      {compactIntro ? (
+        <section className="nn-card p-6">
+          <div className="flex flex-wrap items-center gap-2">
+            <Crown className="h-4 w-4 text-primary" aria-hidden />
+            <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Momentum this week</h2>
           </div>
-          <div className="min-w-0 flex-1">
-            {examReadyHeadline ? (
-              <p className="text-lg font-semibold tracking-tight text-[var(--theme-heading-text)]">{examReadyHeadline}</p>
-            ) : (
-              <p className="text-lg font-semibold tracking-tight text-[var(--theme-heading-text)]">
-                Your progress is personal—we surface it clearly so every session counts.
-              </p>
-            )}
-            <p className="mt-1 flex flex-wrap items-center gap-2 text-sm text-muted">
-              <span className="inline-flex items-center gap-1 rounded-md bg-black/5 px-2 py-0.5 dark:bg-white/10">
-                <Target className="h-3.5 w-3.5 text-primary" aria-hidden />
-                Readiness: {readinessBandLabel(readiness.band)}
-              </span>
-              {readiness.score != null ? (
-                <span className="tabular-nums text-foreground/90">Score {readiness.score}/100</span>
-              ) : (
-                <span>Score unlocks after a bit more scored practice</span>
-              )}
-            </p>
-          </div>
-        </div>
-
-        {momentumMessages.length > 0 ? (
-          <ul className="relative mt-5 space-y-2 border-t border-border/50 pt-4">
-            {momentumMessages.map((line) => (
-              <li key={line} className="flex gap-2 text-sm text-foreground/90">
-                <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
-                <span>{line}</span>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="relative mt-5 border-t border-border/50 pt-4 text-sm text-muted">
-            Complete a lesson, graded bank block, or mock—personal feedback will show here as soon as we have a trend to
-            compare.
+          <p className="mt-1 text-xs text-muted">
+            {examReadyHeadline ? `${examReadyHeadline} — ` : null}
+            Short signals from your last sessions—details stay in the readiness card above.
           </p>
-        )}
-      </section>
+          <div className="mt-4">{momentumSection}</div>
+        </section>
+      ) : (
+        <section className="relative overflow-hidden rounded-2xl border border-amber-500/25 bg-gradient-to-br from-amber-500/[0.08] via-[var(--theme-card-bg)] to-primary/[0.06] p-6 shadow-sm">
+          <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-amber-400/10 blur-3xl" aria-hidden />
+          <div className="relative flex flex-wrap items-start gap-4">
+            <div className="flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-amber-950 dark:text-amber-100">
+              <Crown className="h-3.5 w-3.5" aria-hidden />
+              Full member experience
+            </div>
+            <div className="min-w-0 flex-1">
+              {examReadyHeadline ? (
+                <p className="text-lg font-semibold tracking-tight text-[var(--theme-heading-text)]">{examReadyHeadline}</p>
+              ) : (
+                <p className="text-lg font-semibold tracking-tight text-[var(--theme-heading-text)]">
+                  Your progress is personal—we surface it clearly so every session counts.
+                </p>
+              )}
+              <p className="mt-1 flex flex-wrap items-center gap-2 text-sm text-muted">
+                <span className="inline-flex items-center gap-1 rounded-md bg-black/5 px-2 py-0.5 dark:bg-white/10">
+                  <Target className="h-3.5 w-3.5 text-primary" aria-hidden />
+                  Readiness: {readinessBandLabel(readiness.band)}
+                </span>
+                {readiness.score != null ? (
+                  <span className="tabular-nums text-foreground/90">Score {readiness.score}/100</span>
+                ) : (
+                  <span>Score unlocks after a bit more scored practice</span>
+                )}
+              </p>
+            </div>
+          </div>
+
+          {momentumSection}
+        </section>
+      )}
 
       {snapshot.flashcards ? (
         <section className="nn-card p-6">

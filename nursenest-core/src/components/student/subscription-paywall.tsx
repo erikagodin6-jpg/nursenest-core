@@ -7,32 +7,49 @@ const COPY: Record<
   { title: string; body: string; missing: string[]; progressNote: string }
 > = {
   questions: {
-    title: "Unlock the full question bank",
-    body: "You are missing unlimited items, full rationales, category analytics, and NGN-style practice depth.",
+    title: "Subscribe for the full bank and saved progress",
+    body:
+      "Previews are capped. A paid tier unlocks the full pathway-scoped item pool, full rationales on every option, weak-area routing, and session history across devices.",
     missing: [
-      "Full rationale explanations on every item",
-      "Unlimited retakes and weak-area routing",
-      "CAT-style / adaptive practice where enabled",
+      "Unlimited or tier-scoped items (not preview caps)",
+      "Topic and category analytics tied to your misses",
+      "CAT-style and adaptive practice modes where your plan includes them",
     ],
-    progressNote: "Your complimentary previews do not carry subscription analytics—upgrade to save progress across sessions.",
+    progressNote:
+      "Free-tier runs do not sync full analytics—upgrade to keep your weak-topic list and streaks across study sessions.",
   },
   lessons: {
-    title: "Unlock full lessons and tracking",
-    body: "Complete lesson bodies, structured modules, and progress sync are reserved for active subscribers.",
-    missing: ["Full lesson depth beyond previews", "Cross-lesson study paths", "Completion tracking tied to your exam date"],
-    progressNote: "Partial previews help you taste the quality; a plan keeps your study arc organized.",
+    title: "Subscribe for full lesson depth and tracking",
+    body:
+      "Previews show structure; subscribers get complete lesson bodies, module progress, and alignment with your pathway’s lesson pool.",
+    missing: [
+      "Full lesson content beyond preview limits",
+      "Completion tracking across modules",
+      "Cross-lesson paths that match your exam scope",
+    ],
+    progressNote: "Use previews to judge quality; a plan keeps your pathway sequence and progress in one place.",
   },
   exams: {
-    title: "Practice exams are subscription-protected",
-    body: "Mock exams use your filtered item pool server-side—there is no URL bypass. Start checkout to enable attempts.",
-    missing: ["Full-length timed sessions", "Score history and readiness trends", "Exam-realistic pacing"],
-    progressNote: "Exams stay locked until billing confirms—your attempts will appear here immediately after activation.",
+    title: "Timed mocks require an active plan",
+    body:
+      "Mocks are drawn from your tier’s item pool on the server—there is no URL bypass. Checkout enables full-length and timed attempts with score history.",
+    missing: [
+      "Full-length timed sessions with autosave",
+      "Score history and attempt review",
+      "Exam pacing that matches authorization-to-test timing",
+    ],
+    progressNote: "After Stripe confirms activation, your mock attempts show up here immediately.",
   },
   dashboard: {
-    title: "Activate your plan to see readiness insights",
-    body: "The dashboard surfaces access status today; subscribers see streaks, recommendations, and next-best actions.",
-    missing: ["Readiness indicators", "Continue-where-you-left-off shortcuts", "Weak-area nudges"],
-    progressNote: "Subscribe to turn this page into your daily command center.",
+    title: "Subscribe for the full learner dashboard",
+    body:
+      "You still see access status; subscribers get readiness, streaks, weak-topic nudges, planner, and continue-where-you-left-off shortcuts.",
+    missing: [
+      "Blended readiness and suggested next steps",
+      "Study planner and exam-date pacing (when you set a date)",
+      "Weak-area flashcard and drill nudges",
+    ],
+    progressNote: "Upgrade to turn this into your daily study hub—not just a static banner.",
   },
 };
 
@@ -86,7 +103,7 @@ export function SubscriptionPaywall({
         </Link>
       </div>
       <p className="text-xs text-muted">
-        Outcome focus: learners who combine timed practice, rationales, and mock exams report higher confidence approaching test day.
+        Most candidates who feel exam-ready mixed steady question reps, rationales, and at least one full mock in the weeks before their date—not a single cram block.
       </p>
     </section>
   );

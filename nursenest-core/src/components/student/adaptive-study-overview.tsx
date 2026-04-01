@@ -37,9 +37,12 @@ function trajectoryLabel(t: AdaptiveLearnerRecommendations["trajectory"]): strin
 export function AdaptiveStudyOverview({
   adaptive,
   showHeading = true,
+  /** Hides duplicate countdown + primary CTA when the dashboard hero already shows them. */
+  compact = false,
 }: {
   adaptive: AdaptiveLearnerRecommendations;
   showHeading?: boolean;
+  compact?: boolean;
 }) {
   const {
     countdown,
@@ -58,13 +61,21 @@ export function AdaptiveStudyOverview({
         <div className="flex items-start gap-2">
           <Compass className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden />
           <div>
-            <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Adaptive study plan</h2>
-            <p className="mt-1 text-sm text-muted">
-              {countdown.primary}
-              {countdown.daysRemaining != null && countdown.weeksRemaining != null
-                ? ` · ~${countdown.weeksRemaining} week${countdown.weeksRemaining === 1 ? "" : "s"} left`
-                : null}
-            </p>
+            <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">
+              {compact ? "Plan & pacing" : "Adaptive study plan"}
+            </h2>
+            {!compact ? (
+              <p className="mt-1 text-sm text-muted">
+                {countdown.primary}
+                {countdown.daysRemaining != null && countdown.weeksRemaining != null
+                  ? ` · ~${countdown.weeksRemaining} week${countdown.weeksRemaining === 1 ? "" : "s"} left`
+                  : null}
+              </p>
+            ) : (
+              <p className="mt-1 text-sm text-muted">
+                Today’s focus, weekly priorities, and what supports your trajectory.
+              </p>
+            )}
           </div>
         </div>
       ) : null}
@@ -105,17 +116,26 @@ export function AdaptiveStudyOverview({
         </p>
       ) : null}
 
-      <div className="mt-5 rounded-xl border border-primary/15 bg-primary/[0.04] p-4">
-        <p className="text-xs font-semibold uppercase tracking-wide text-primary">Next best action</p>
-        <Link
-          href={primaryNext.href}
-          className="mt-2 flex items-start gap-2 text-base font-semibold text-[var(--theme-heading-text)] hover:underline"
-        >
-          <Target className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
-          <span>{primaryNext.title}</span>
-        </Link>
-        <p className="mt-1 text-sm text-muted">{primaryNext.reason}</p>
-      </div>
+      {!compact ? (
+        <div className="mt-5 rounded-xl border border-primary/15 bg-primary/[0.04] p-4">
+          <p className="text-xs font-semibold uppercase tracking-wide text-primary">Next best action</p>
+          <Link
+            href={primaryNext.href}
+            className="mt-2 flex items-start gap-2 text-base font-semibold text-[var(--theme-heading-text)] hover:underline"
+          >
+            <Target className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
+            <span>{primaryNext.title}</span>
+          </Link>
+          <p className="mt-1 text-sm text-muted">{primaryNext.reason}</p>
+        </div>
+      ) : (
+        <div className="mt-4 rounded-xl border border-border/60 bg-muted/20 px-4 py-3 text-sm text-muted">
+          <span className="font-medium text-foreground">Primary step: </span>
+          <Link href={primaryNext.href} className="font-semibold text-primary underline-offset-2 hover:underline">
+            {primaryNext.title}
+          </Link>
+        </div>
+      )}
 
       {secondary.length > 0 ? (
         <ul className="mt-4 space-y-2">

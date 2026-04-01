@@ -104,27 +104,3 @@ export type LearnerInsightSnapshot = {
   /** Re-export for surfaces that need trends without re-fetching. */
   topicTrends: TopicTrendRow[];
 };
-
-export type InsightEngineInput = {
-  userId: string;
-  readiness: ReadinessResult;
-  weakTopics: WeakTopicRow[];
-  strongTopics: WeakTopicRow[];
-  topicTrends: TopicTrendRow[];
-  sessionGrading: { correct: number; total: number; sessionCount: number };
-  recencyWeighted: { correct: number; total: number } | null;
-  recentMocks: { score: number; total: number; at: string }[];
-  lessonsCompleted: number;
-  lessonsAvailable: number;
-  recommendedQuizTopic: string | null;
-  continueLesson: { title: string; href: string } | null;
-  streakDays: number;
-  mockCount: number;
-  practiceSessionCount: number;
-  examDate: Date | null;
-  examDatePlanType: import("@prisma/client").ExamDatePlanType | null;
-  /** From buildAdaptiveRecommendations — we enrich with explainability. */
-  adaptiveBase: import("@/lib/learner/adaptive-recommendations").AdaptiveLearnerRecommendations;
-  cat: CatInsightSummary;
-  flashcards: FlashcardInsight;
-};

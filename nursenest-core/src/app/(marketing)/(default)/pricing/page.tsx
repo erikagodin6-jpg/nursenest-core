@@ -8,12 +8,12 @@ import { absoluteUrl } from "@/lib/seo/site-origin";
 export const metadata: Metadata = {
   title: "Pricing and plans | NurseNest",
   description:
-    "NurseNest plans by exam pathway: practice questions, lessons, timed exams, and score history. Try free questions before you subscribe.",
+    "NurseNest plans by exam pathway: full question bank, lessons, flashcards, planner, readiness, timed mocks, and saved history. Try starter questions before checkout.",
   alternates: { canonical: absoluteUrl("/pricing") },
   openGraph: {
     title: "Pricing and plans | NurseNest",
     description:
-      "Choose a pathway-aligned plan. Questions, lessons, and mock exams stay in one subscription with Stripe checkout.",
+      "Pathway-aligned plans: bank, lessons, flashcards, planner, readiness, and mocks in one subscription. Secure checkout with Stripe.",
     url: absoluteUrl("/pricing"),
     type: "website",
   },

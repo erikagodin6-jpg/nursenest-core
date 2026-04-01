@@ -1,20 +1,18 @@
 import type { ConsistencyLabel, PerformanceAnalysis, PerformanceTrend, TopicAccuracyRow } from "@/lib/insights/types";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
 
-function clamp(n: number, lo: number, hi: number): number {
-  return Math.max(lo, Math.min(hi, n));
-}
-
 /**
  * Mock trend from up to last 5 attempts (oldest → newest).
  */
+/** `mocks` must be newest-first (same as `examAttempt` / dashboard order). */
 export function mockPerformanceTrend(mocks: { score: number; total: number }[]): PerformanceTrend {
-  const usable = mocks.filter((m) => m.total >= 5).slice(0, 5);
+  const usable = mocks.filter((m) => m.total >= 5);
   if (usable.length < 2) return "unknown";
-  const pcts = usable.map((m) => (m.total > 0 ? (m.score / m.total) * 100 : 0));
-  const first = pcts[pcts.length - 1]!;
-  const prev = pcts[pcts.length - 2]!;
-  const delta = first - prev;
+  const latest = usable[0]!;
+  const prior = usable[1]!;
+  const pLatest = latest.total > 0 ? (latest.score / latest.total) * 100 : 0;
+  const pPrior = prior.total > 0 ? (prior.score / prior.total) * 100 : 0;
+  const delta = pLatest - pPrior;
   if (delta >= 4) return "improving";
   if (delta <= -4) return "declining";
   return "stable";
@@ -100,21 +98,3 @@ export function buildPerformanceAnalysis(args: {
   };
 }
 
-function clamp01(n: number): number {
-  if (Number.isNaN(n)) return 0;
-  return clamp(n, 0, 1);
-}
-
-/**
- * Optional: blend readiness with CAT stability — never a fake “pass chance”.
- */
-export function catReadinessNudge(args: {
-  readinessScore: number | null;
-  catSe: number | null;
-}): number | null {
-  if (args.readinessScore == null || args.catSe == null) return args.readinessScore;
-  if (args.catSe > 0.85) return args.readinessScore;
-  /** Small damping when CAT estimate is still noisy — honest uncertainty. */
-  const damp = clamp01(1 - (0.85 - args.catSe) * 0.15);
-  return Math.round(args.readinessScore * damp);
-}

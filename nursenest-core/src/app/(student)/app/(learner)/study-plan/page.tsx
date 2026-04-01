@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth";
 import { AdaptiveStudyOverview } from "@/components/student/adaptive-study-overview";
 import { ExamPlanSettingsCard } from "@/components/student/exam-plan-settings-card";
+import { LearnerInsightEnginePanel } from "@/components/student/learner-insight-engine-panel";
 import { StudyPlanToolGateway } from "@/components/student/study-plan-tool-gateway";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
@@ -15,6 +16,7 @@ export default async function StudyPlanPage() {
   const entitlement = await resolveEntitlementForPage(userId);
 
   let adaptive = null;
+  let insightSnapshot = null;
 
   if (
     userId &&
@@ -32,6 +34,7 @@ export default async function StudyPlanPage() {
         }),
       ]);
       if (premiumSnapshot && topicPerf) {
+        insightSnapshot = premiumSnapshot.insights;
         adaptive = buildAdaptiveRecommendations({
           examDatePlanType: userExam?.examDatePlanType,
           examDate: userExam?.examDate ?? null,
@@ -63,6 +66,8 @@ export default async function StudyPlanPage() {
       </div>
 
       {entitlement !== "error" && entitlement.hasAccess ? <ExamPlanSettingsCard /> : null}
+
+      {insightSnapshot ? <LearnerInsightEnginePanel insights={insightSnapshot} /> : null}
 
       {adaptive ? <AdaptiveStudyOverview adaptive={adaptive} /> : null}
 

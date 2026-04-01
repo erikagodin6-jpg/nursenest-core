@@ -21,9 +21,10 @@ export function HomeMarketingFeaturesStack({ region }: Props) {
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="mb-10 max-w-2xl">
-          <h2 className="text-xl font-bold text-[var(--theme-heading-text)] sm:text-2xl">How the workflow behaves</h2>
+          <h2 className="text-xl font-bold text-[var(--theme-heading-text)] sm:text-2xl">How the pieces connect</h2>
           <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
-            Practice, then read the rationale, then watch category scores move. No “smart” adjectives, just the loop you will use on exam day.
+            Bank reps update topic stats; lessons shore up systems you miss; flashcards resurface facts on a schedule; planner and readiness sit on
+            the dashboard; timed mocks and exam mode come last when scores stop swinging session to session.
           </p>
         </div>
 

@@ -6,6 +6,7 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { LearnerInsightEnginePanel } from "@/components/student/learner-insight-engine-panel";
 import { PremiumLearnerHub } from "@/components/student/premium-learner-hub";
 import { WeakAreasDashboardClient } from "@/components/student/weak-areas-dashboard-client";
 import { SubscriberPracticeRollups } from "@/components/student/subscriber-practice-rollups";
@@ -17,6 +18,8 @@ import { buildAdaptiveRecommendations } from "@/lib/learner/adaptive-recommendat
 import { loadUnifiedTopicPerformance, type TopicPerformanceSnapshot } from "@/lib/learner/topic-performance";
 import { ExamPlanSettingsCard } from "@/components/student/exam-plan-settings-card";
 import { AdaptiveStudyOverview } from "@/components/student/adaptive-study-overview";
+import { LearnerDashboardActionCards } from "@/components/student/learner-dashboard-action-cards";
+import { LearnerDashboardHero } from "@/components/student/learner-dashboard-hero";
 
 export default async function DashboardPage() {
   const messages = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
@@ -139,43 +142,77 @@ export default async function DashboardPage() {
         <>
           <ExamPlanSettingsCard />
 
-          {adaptiveRecommendations ? <AdaptiveStudyOverview adaptive={adaptiveRecommendations} /> : null}
+          {premiumSnapshot && adaptiveRecommendations && topicPerfInitial ? (
+            <>
+              <LearnerDashboardHero
+                adaptive={adaptiveRecommendations}
+                readiness={premiumSnapshot.readiness}
+                practice={{
+                  gradedTotal: premiumSnapshot.practice.gradedTotal,
+                  accuracyPct: premiumSnapshot.practice.accuracyPct,
+                  sessionCount: premiumSnapshot.practice.sessionCount,
+                }}
+                overallLessons={premiumSnapshot.overallLessons}
+                streakDays={premiumSnapshot.studyStreakDays}
+                flashcardReviews={premiumSnapshot.flashcards?.cardsReviewedTotal ?? null}
+                weakTopicTitles={topicPerfInitial.weakTopics.map((w) => w.topic)}
+                continueLesson={premiumSnapshot.continueLesson}
+              />
+              <LearnerDashboardActionCards
+                continueLesson={premiumSnapshot.continueLesson}
+                quizTopic={premiumSnapshot.recommendedQuizTopic}
+                showCatHint={
+                  adaptiveRecommendations.countdown.urgency === "near" ||
+                  adaptiveRecommendations.countdown.urgency === "final_stretch"
+                }
+              />
+            </>
+          ) : null}
 
-          <section className="nn-card p-6">
-            <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Continue where you left off</h2>
-            {nextLessonTitle ? (
-              <p className="mt-2 text-sm text-muted">
-                Next open lesson: <span className="font-medium text-foreground">{nextLessonTitle}</span>
-              </p>
-            ) : (
-              <p className="mt-2 text-sm text-muted">Pick a lesson or jump to the question bank for a timed block.</p>
-            )}
-            <div className="mt-4 flex flex-wrap gap-2">
-              <Link
-                className="rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold text-[var(--theme-menu-text)] transition-colors hover:bg-muted/80"
-                href="/app/lessons"
-              >
-                Open lessons
-              </Link>
-              <Link
-                className="rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold text-[var(--theme-menu-text)] transition-colors hover:bg-muted/80"
-                href="/app/questions"
-              >
-                Question bank
-              </Link>
-              <Link
-                className="rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary/15"
-                href="/app/exams"
-              >
-                Mock exams
-              </Link>
-            </div>
-          </section>
+          {adaptiveRecommendations ? (
+            <AdaptiveStudyOverview adaptive={adaptiveRecommendations} compact={Boolean(premiumSnapshot && topicPerfInitial)} />
+          ) : null}
+
+          {premiumSnapshot?.insights ? <LearnerInsightEnginePanel insights={premiumSnapshot.insights} /> : null}
+
+          {premiumSnapshot && adaptiveRecommendations && topicPerfInitial ? null : (
+            <section className="nn-card p-6">
+              <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Continue where you left off</h2>
+              {nextLessonTitle ? (
+                <p className="mt-2 text-sm text-muted">
+                  Next open lesson: <span className="font-medium text-foreground">{nextLessonTitle}</span>
+                </p>
+              ) : (
+                <p className="mt-2 text-sm text-muted">Pick a lesson or jump to the question bank for a timed block.</p>
+              )}
+              <div className="mt-4 flex flex-wrap gap-2">
+                <Link
+                  className="rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold text-[var(--theme-menu-text)] transition-colors hover:bg-muted/80"
+                  href="/app/lessons"
+                >
+                  Open lessons
+                </Link>
+                <Link
+                  className="rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold text-[var(--theme-menu-text)] transition-colors hover:bg-muted/80"
+                  href="/app/questions"
+                >
+                  Question bank
+                </Link>
+                <Link
+                  className="rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary/15"
+                  href="/app/exams"
+                >
+                  Mock exams
+                </Link>
+              </div>
+            </section>
+          )}
 
           {premiumSnapshot ? (
             <PremiumLearnerHub
               snapshot={premiumSnapshot}
               weakTopicTitles={topicPerfInitial?.weakTopics.map((w) => w.topic) ?? []}
+              compactIntro={Boolean(premiumSnapshot && adaptiveRecommendations && topicPerfInitial)}
             />
           ) : (
             <section className="nn-card p-6">

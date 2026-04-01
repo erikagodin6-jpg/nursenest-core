@@ -82,10 +82,25 @@ export function ExamPathwayHubBody({ pathway, isSignedIn, discovery }: Props) {
         </p>
       </aside>
 
-      <h2 className="mt-14 text-lg font-bold text-[var(--theme-heading-text)] sm:text-xl">Everything for this exam in one place</h2>
-      <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
-        Question bank for fast reps, lessons for weak systems, timed mocks after sign-in, and plans when you want full access.
+      <h2 className="mt-14 text-lg font-bold text-[var(--theme-heading-text)] sm:text-xl">Everything for this exam in one platform</h2>
+      <p className="mt-2 max-w-2xl text-sm text-[var(--theme-muted-text)]">
+        Same-pathway question runs, structured lessons, spaced flashcards, study planner, and readiness sit behind one login after you subscribe.
+        Timed and exam-style practice (including mocks) unlock in the app once your plan matches this pathway.
       </p>
+      <ul className="mt-4 list-inside list-disc space-y-1.5 text-sm text-[var(--theme-body-text)]">
+        <li>
+          <span className="font-medium text-[var(--theme-heading-text)]">Question bank</span> — short reps with rationales on every option.
+        </li>
+        <li>
+          <span className="font-medium text-[var(--theme-heading-text)]">Lessons</span> — system and safety topics aligned to this exam’s framing.
+        </li>
+        <li>
+          <span className="font-medium text-[var(--theme-heading-text)]">Flashcards &amp; planner</span> — weak-topic decks and pacing after sign-in.
+        </li>
+        <li>
+          <span className="font-medium text-[var(--theme-heading-text)]">Exam mode &amp; mocks</span> — full-length timing and review flags in-app.
+        </li>
+      </ul>
 
       <ul className="mt-6 grid gap-4 sm:grid-cols-2">
         <li>
