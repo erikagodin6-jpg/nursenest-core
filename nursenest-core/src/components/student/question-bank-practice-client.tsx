@@ -91,6 +91,9 @@ export function QuestionBankPracticeClient({
   const [topicMenuTruncationNotice, setTopicMenuTruncationNotice] = useState<string | null>(null);
   const [discoveryNotice, setDiscoveryNotice] = useState<string | null>(null);
   const [efficiencyMode, setEfficiencyMode] = useState<string | null>(null);
+  /** Exam-style bank: suppress rich rationale until learner opts in (reduces “open-book” feel). */
+  const [examShell, setExamShell] = useState(false);
+  const [examShowExplanation, setExamShowExplanation] = useState(false);
   const [emptyCopy, setEmptyCopy] = useState<{ title: string; body: string } | null>(null);
   const [idx, setIdx] = useState(0);
   const [answer, setAnswer] = useState<unknown>(null);
@@ -268,6 +271,10 @@ export function QuestionBankPracticeClient({
     else if (pr === "mixed" || pr === "pathway_mixed") setPreset("pathway_mixed");
     const okSm = sm && ["weak", "high_yield", "rapid", "final_prep"].includes(sm);
     setEfficiencyMode(okSm ? sm : null);
+    const ex = searchParams.get("examShell");
+    const examOn = ex === "1" || ex === "true";
+    setExamShell(examOn);
+    setExamShowExplanation(!examOn);
   }, [searchParams]);
 
   useEffect(() => {
@@ -619,12 +626,30 @@ export function QuestionBankPracticeClient({
             </div>
           ) : (
             <>
-              <PremiumRationalePanel
-                correct={g.correct}
-                rationale={g.rationale}
-                rationaleQuality={g.rationaleQuality}
-                rationaleSections={g.rationaleSections}
-              />
+              {examShell && !examShowExplanation ? (
+                <div className="rounded-xl border border-slate-200 bg-slate-50/80 p-4 dark:border-slate-700 dark:bg-slate-900/40">
+                  <p className={`text-sm font-semibold ${g.correct ? "text-emerald-700 dark:text-emerald-400" : "text-red-700 dark:text-red-400"}`}>
+                    {g.correct ? "Correct" : "Incorrect"}
+                  </p>
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    Exam-style session: explanations stay hidden until you choose—mirrors closed-book pacing (still practice only).
+                  </p>
+                  <button
+                    type="button"
+                    className="mt-3 rounded-full border border-primary/40 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary"
+                    onClick={() => setExamShowExplanation(true)}
+                  >
+                    Show explanation
+                  </button>
+                </div>
+              ) : (
+                <PremiumRationalePanel
+                  correct={g.correct}
+                  rationale={g.rationale}
+                  rationaleQuality={g.rationaleQuality}
+                  rationaleSections={g.rationaleSections}
+                />
+              )}
               <div className="mt-4 flex flex-wrap gap-2">
                 <button
                   type="button"

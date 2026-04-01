@@ -7,8 +7,17 @@ import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlemen
 import { getServerPremiumProtectionFlags } from "@/lib/premium-protection/config";
 import { maskUserLabelForWatermark } from "@/lib/premium-protection/mask-user-label";
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
+import type { Metadata } from "next";
 
 type Props = { params: Promise<{ id: string }> };
+
+/** Private learner session — do not index individual test runs. */
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    robots: { index: false, follow: false },
+    title: "Practice test session",
+  };
+}
 
 export default async function PracticeTestRunPage({ params }: Props) {
   const { id } = await params;

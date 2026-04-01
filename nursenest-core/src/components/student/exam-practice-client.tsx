@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { QuestionType } from "@prisma/client";
 import type { ExamReviewJson } from "@/lib/exams/exam-session-review";
 import type { ExamStartEmptyDiagnostics } from "@/lib/questions/exam-start-empty-diagnostics";
+import { ExamSessionShell, ExamSessionTopBar } from "@/components/exam/exam-session-shell";
 import { examPoolEmptyCopy, examStartFailureMessage } from "@/lib/student/gated-state-messages";
 
 type ExamQuestion = {
@@ -78,6 +79,9 @@ export function ExamPracticeClient({
   const [timedMode, setTimedMode] = useState(false);
   const [timeLimitSec, setTimeLimitSec] = useState<number | null>(null);
   const [remainingSec, setRemainingSec] = useState<number | null>(null);
+  /** Flag items for review (client-side; helps pacing habits, not persisted to server). */
+  const [flagged, setFlagged] = useState<Record<string, boolean>>({});
+  const [sessionPhase, setSessionPhase] = useState<"active" | "review">("active");
   const sessionStartMsRef = useRef<number | null>(null);
   const currentIndexRef = useRef(0);
   const answersRef = useRef<Record<string, unknown>>({});
@@ -194,6 +198,8 @@ export function ExamPracticeClient({
       setAnswers(data.answers ?? {});
       setCache({});
       setBlockingError(null);
+      setSessionPhase("active");
+      setFlagged({});
       const tm = Boolean(data.timedMode);
       setTimedMode(tm);
       const tls = typeof data.timeLimitSec === "number" ? data.timeLimitSec : null;
@@ -397,6 +403,10 @@ export function ExamPracticeClient({
       <div className="nn-card mt-4 space-y-4 p-6">
         {examTitle ? <p className="text-sm font-medium text-muted">{examTitle}</p> : null}
         <p className="text-sm text-muted">Choose how you want to run this session. Progress saves automatically; you can refresh and resume.</p>
+        <p className="text-xs text-muted">
+          This is NurseNest practice—timed pacing and layout are designed to feel serious and focused. We do not replicate any
+          official exam vendor interface or guarantee identical behavior on test day.
+        </p>
         <div className="flex flex-wrap gap-2">
           <button
             type="button"
@@ -517,17 +527,107 @@ export function ExamPracticeClient({
     );
   }
 
+  const unansweredCount = questionIds.filter((id) => {
+    const v = answers[id];
+    if (v == null) return true;
+    if (Array.isArray(v)) return v.length === 0;
+    return false;
+  }).length;
+
+  if (phase === "ready" && sessionPhase === "review") {
+    return (
+      <ExamSessionShell className="mt-6 overflow-hidden" neutralPalette>
+        <ExamSessionTopBar
+          left={<span className="text-slate-700 dark:text-slate-200">Review before scoring</span>}
+          center={<span className="text-slate-500">{total} items</span>}
+          right={
+            timedMode && remainingSec != null ? (
+              <span
+                className={`font-semibold tabular-nums ${remainingSec < 120 ? "text-red-600 dark:text-red-400" : "text-slate-800 dark:text-slate-100"}`}
+              >
+                {Math.floor(remainingSec / 60)}:{String(remainingSec % 60).padStart(2, "0")}
+              </span>
+            ) : (
+              <span className="text-slate-500">Untimed</span>
+            )
+          }
+        />
+        <div className="space-y-4 p-5 md:p-6">
+          <p className="text-sm text-slate-600 dark:text-slate-400">
+            Unanswered: {unansweredCount} · Flagged: {Object.values(flagged).filter(Boolean).length}
+          </p>
+          <ul className="max-h-64 space-y-2 overflow-y-auto text-sm">
+            {questionIds.map((id, i) => {
+              const v = answers[id];
+              const answered = v != null && (!Array.isArray(v) || v.length > 0);
+              return (
+                <li
+                  key={id}
+                  className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-slate-200/80 bg-white px-3 py-2 dark:border-slate-700 dark:bg-slate-900/40"
+                >
+                  <button
+                    type="button"
+                    className="font-medium text-primary underline"
+                    onClick={() => {
+                      setSessionPhase("active");
+                      setCurrentIndex(i);
+                    }}
+                  >
+                    Question {i + 1}
+                  </button>
+                  <span className="text-slate-600 dark:text-slate-400">
+                    {answered ? "Answered" : "Unanswered"}
+                    {flagged[id] ? " · Flagged" : ""}
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+          <div className="flex flex-wrap gap-2 pt-2">
+            <button
+              type="button"
+              className="rounded-full border border-slate-300 px-4 py-2 text-sm font-medium text-slate-800 dark:border-slate-600 dark:text-slate-100"
+              onClick={() => setSessionPhase("active")}
+            >
+              Back to items
+            </button>
+            <button
+              type="button"
+              disabled={submitting}
+              className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-60"
+              onClick={() => void submitExam()}
+            >
+              {submitting ? "Submitting…" : "Submit for scoring"}
+            </button>
+          </div>
+          <p className="text-xs text-slate-500">
+            Rationales and explanations appear only after scoring—same discipline as many high-stakes exams.
+          </p>
+        </div>
+      </ExamSessionShell>
+    );
+  }
+
   if (!q && (qLoading || !qid)) {
     return (
-      <div className="nn-card mt-6 space-y-3 p-6">
-        {examTitle ? <p className="text-sm font-medium text-muted">{examTitle}</p> : null}
-        {timedMode && remainingSec != null ? (
-          <p className="text-sm font-semibold text-foreground">
-            Time remaining: {Math.floor(remainingSec / 60)}:{String(remainingSec % 60).padStart(2, "0")}
-          </p>
-        ) : null}
-        <p className="text-sm text-muted">Loading question…</p>
-      </div>
+      <ExamSessionShell className="mt-6 overflow-hidden" neutralPalette>
+        <ExamSessionTopBar
+          left={examTitle ? <span className="font-medium text-slate-700 dark:text-slate-200">{examTitle}</span> : null}
+          center={<span className="text-slate-500">Loading</span>}
+          right={
+            timedMode && remainingSec != null ? (
+              <span className="font-semibold tabular-nums text-slate-800 dark:text-slate-100">
+                {Math.floor(remainingSec / 60)}:{String(remainingSec % 60).padStart(2, "0")}
+              </span>
+            ) : (
+              <span className="text-slate-500">—</span>
+            )
+          }
+        />
+        <div className="p-6">
+          <p className="text-sm text-slate-600 dark:text-slate-400">Loading question…</p>
+        </div>
+      </ExamSessionShell>
     );
   }
 
@@ -539,88 +639,118 @@ export function ExamPracticeClient({
   const raw = answers[q.id];
 
   return (
-    <div className="nn-card mt-6 space-y-4 p-6">
-      {examTitle ? <p className="text-sm font-medium text-muted">{examTitle}</p> : null}
-      {timedMode && remainingSec != null ? (
-        <p className="text-sm font-semibold text-amber-800 dark:text-amber-200">
-          Time remaining: {Math.floor(remainingSec / 60)}:{String(remainingSec % 60).padStart(2, "0")}
-        </p>
-      ) : null}
-      <p className="text-xs text-muted">
-        Question {currentIndex + 1} of {total}
-      </p>
-      <p className="text-base font-medium">{q.stem}</p>
+    <ExamSessionShell className="mt-6 overflow-hidden" neutralPalette>
+      <ExamSessionTopBar
+        left={
+          <span className="text-slate-700 dark:text-slate-200">
+            Item {currentIndex + 1} of {total}
+            {unansweredCount > 0 ? (
+              <span className="ml-2 text-slate-500">· {unansweredCount} unanswered</span>
+            ) : null}
+          </span>
+        }
+        center={examTitle ? <span className="hidden text-slate-500 sm:inline">{examTitle}</span> : null}
+        right={
+          timedMode && remainingSec != null ? (
+            <span
+              className={`font-semibold tabular-nums ${remainingSec < 120 ? "text-red-600 dark:text-red-400" : "text-slate-800 dark:text-slate-100"}`}
+            >
+              {Math.floor(remainingSec / 60)}:{String(remainingSec % 60).padStart(2, "0")}
+            </span>
+          ) : (
+            <span className="text-slate-500">Untimed</span>
+          )
+        }
+      />
+      <div className="space-y-4 p-5 md:p-6">
+        <p className="min-h-[1.5rem] text-base font-medium leading-relaxed text-slate-900 dark:text-slate-100">{q.stem}</p>
 
-      {q.questionType === "SATA" ? (
-        <ul className="space-y-2">
-          {opts.map((label) => {
-            const selected = Array.isArray(raw) ? raw.includes(label) : false;
-            return (
-              <li key={label}>
-                <label className="flex cursor-pointer items-start gap-2 text-sm">
-                  <input
-                    type="checkbox"
-                    checked={selected}
-                    onChange={(e) => {
-                      const prev = Array.isArray(raw) ? [...raw] : [];
-                      const next = e.target.checked ? [...prev, label] : prev.filter((x) => x !== label);
-                      setAnswers((a) => ({ ...a, [q.id]: next }));
-                    }}
-                    className="mt-1"
-                  />
-                  <span>{label}</span>
-                </label>
-              </li>
-            );
-          })}
-        </ul>
-      ) : (
-        <ul className="space-y-2">
-          {opts.map((label) => (
-            <li key={label}>
-              <button
-                type="button"
-                onClick={() => setAnswers((a) => ({ ...a, [q.id]: label }))}
-                className={`w-full rounded-xl border px-4 py-3 text-left text-sm transition ${
-                  raw === label ? "border-primary bg-primary/10" : "border-border hover:bg-primary/5"
-                }`}
-              >
-                {label}
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-
-      <div className="flex flex-wrap gap-2 pt-2">
-        <button
-          type="button"
-          className="rounded-full border border-border px-4 py-2 text-sm"
-          disabled={currentIndex === 0}
-          onClick={() => setCurrentIndex((i) => Math.max(0, i - 1))}
-        >
-          Back
-        </button>
-        {currentIndex < total - 1 ? (
-          <button
-            type="button"
-            className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white"
-            onClick={() => setCurrentIndex((i) => Math.min(total - 1, i + 1))}
-          >
-            Next
-          </button>
+        {q.questionType === "SATA" ? (
+          <ul className="space-y-2">
+            {opts.map((label) => {
+              const selected = Array.isArray(raw) ? raw.includes(label) : false;
+              return (
+                <li key={label}>
+                  <label className="flex cursor-pointer items-start gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm dark:border-slate-700 dark:bg-slate-900/50">
+                    <input
+                      type="checkbox"
+                      checked={selected}
+                      onChange={(e) => {
+                        const prev = Array.isArray(raw) ? [...raw] : [];
+                        const next = e.target.checked ? [...prev, label] : prev.filter((x) => x !== label);
+                        setAnswers((a) => ({ ...a, [q.id]: next }));
+                      }}
+                      className="mt-1"
+                    />
+                    <span>{label}</span>
+                  </label>
+                </li>
+              );
+            })}
+          </ul>
         ) : (
+          <ul className="space-y-2">
+            {opts.map((label) => (
+              <li key={label}>
+                <button
+                  type="button"
+                  onClick={() => setAnswers((a) => ({ ...a, [q.id]: label }))}
+                  className={`w-full rounded-xl border px-4 py-3 text-left text-sm transition ${
+                    raw === label
+                      ? "border-2 border-primary bg-primary/10"
+                      : "border border-slate-200 bg-white hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900/50 dark:hover:bg-slate-900"
+                  }`}
+                >
+                  {label}
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <div className="flex flex-wrap items-center gap-2 pt-2">
           <button
             type="button"
-            className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white disabled:opacity-60"
-            disabled={submitting}
-            onClick={() => void submitExam()}
+            className={`rounded-full border px-4 py-2 text-sm font-medium ${
+              flagged[q.id]
+                ? "border-amber-500 bg-amber-50 text-amber-950 dark:bg-amber-950/30 dark:text-amber-100"
+                : "border-slate-300 text-slate-700 dark:border-slate-600 dark:text-slate-200"
+            }`}
+            onClick={() => setFlagged((f) => ({ ...f, [q.id]: !f[q.id] }))}
           >
-            {submitting ? "Submitting…" : "Submit exam"}
+            {flagged[q.id] ? "Flagged" : "Flag for review"}
           </button>
-        )}
+        </div>
+
+        <div className="flex flex-wrap gap-2 border-t border-slate-200/80 pt-4 dark:border-slate-800">
+          <button
+            type="button"
+            className="rounded-full border border-slate-300 px-4 py-2 text-sm dark:border-slate-600"
+            disabled={currentIndex === 0}
+            onClick={() => setCurrentIndex((i) => Math.max(0, i - 1))}
+          >
+            Previous
+          </button>
+          {currentIndex < total - 1 ? (
+            <button
+              type="button"
+              className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+              onClick={() => setCurrentIndex((i) => Math.min(total - 1, i + 1))}
+            >
+              Next
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+              onClick={() => setSessionPhase("review")}
+            >
+              Review answers
+            </button>
+          )}
+        </div>
+        <p className="text-xs text-slate-500">Progress saves automatically. Refresh-safe resume.</p>
       </div>
-      <p className="text-xs text-muted">Progress saves automatically. You can refresh and resume this session.</p>
-    </div>
+    </ExamSessionShell>
   );
 }

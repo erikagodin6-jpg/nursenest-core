@@ -92,6 +92,14 @@ export default async function QuestionBankPage() {
         <ul className="mt-2 list-inside list-disc space-y-1">
           <li>Select answers, then use <strong className="text-foreground">Check answer</strong> for instant feedback.</li>
           <li>Pair with <strong className="text-foreground">Practice exams</strong> when you want timed, full-set rehearsal.</li>
+          <li>
+            For a more exam-like bank session (explanations hidden until you opt in), add{" "}
+            <code className="rounded bg-muted px-1 py-0.5 text-xs">?examShell=1</code> to this page URL, or use{" "}
+            <a className="font-semibold text-primary underline" href="/app/questions?examShell=1">
+              Exam-style question bank
+            </a>
+            .
+          </li>
         </ul>
         <p className="mt-3 text-xs">
           Premium items and rationales are for individual subscriber use. Copying is limited on-screen; use{" "}

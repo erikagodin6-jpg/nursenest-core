@@ -3,6 +3,7 @@
 import { LearnerNoteScope } from "@prisma/client";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { ExamSessionShell, ExamSessionTopBar } from "@/components/exam/exam-session-shell";
 import { difficultyBandLabel } from "@/lib/questions/difficulty-label";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
@@ -384,6 +385,15 @@ export function PracticeTestRunnerClient({
             </ul>
           </div>
         ) : null}
+        <StudyNotesPanel
+          userId={userId}
+          scope={LearnerNoteScope.PRACTICE_TEST}
+          contextId={testId}
+          topic={results.weakAreas[0] ?? null}
+          sourceLabel={`Practice test ${testId.slice(0, 8)}…`}
+          userLabel={userLabel}
+          flags={protectionFlags}
+        />
         <Link
           href="/app/practice-tests"
           className="inline-flex rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground"
@@ -418,67 +428,46 @@ export function PracticeTestRunnerClient({
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-muted-foreground">
-          {catMode ? (
-            <>
-              Adaptive item {idx + 1} of {total} delivered
-              {testConfig?.catMaxQuestions != null ? (
-                <span className="text-muted-foreground"> · up to {testConfig.catMaxQuestions} max</span>
-              ) : null}
-            </>
-          ) : (
-            <>
-              Question {idx + 1} of {total}
-            </>
-          )}
-          {saving ? <span className="ml-2 text-xs">Saving…</span> : null}
-        </p>
-        {timedMode && remainingSec != null ? (
-          <p className={`text-sm font-semibold tabular-nums ${remainingSec < 120 ? "text-red-600" : "text-foreground"}`}>
-            {Math.floor(remainingSec / 60)}:{String(remainingSec % 60).padStart(2, "0")} left
-          </p>
-        ) : (
-          <p className="text-xs text-muted-foreground">Untimed</p>
-        )}
-      </div>
-
       <ProtectedPremiumContent userLabel={userLabel} flags={protectionFlags}>
-        <div className="space-y-4">
-          {catMode && (adaptiveTheta != null || adaptiveSe != null) ? (
-            <div className="nn-card border-primary/20 bg-primary/[0.06] px-4 py-3 text-sm">
-              <p className="font-semibold text-foreground">Adaptive estimate</p>
-              <p className="mt-1 text-muted-foreground">
-                θ (ability):{" "}
-                <span className="font-mono tabular-nums text-foreground">
-                  {adaptiveTheta != null ? adaptiveTheta.toFixed(2) : "—"}
+        <ExamSessionShell neutralPalette>
+          <ExamSessionTopBar
+            left={
+              <span className="text-slate-700 dark:text-slate-200">
+                {catMode ? `Adaptive · ${idx + 1} / ${total}` : `Question ${idx + 1} / ${total}`}
+                {saving ? <span className="ml-2 text-xs text-slate-500">Saving…</span> : null}
+              </span>
+            }
+            center={
+              <span className="text-xs text-slate-500">
+                {catMode ? "CAT · NurseNest-style adaptive engine" : "Practice test"}
+              </span>
+            }
+            right={
+              timedMode && remainingSec != null ? (
+                <span className={`font-semibold tabular-nums ${remainingSec < 120 ? "text-red-600" : "text-slate-800 dark:text-slate-100"}`}>
+                  {Math.floor(remainingSec / 60)}:{String(remainingSec % 60).padStart(2, "0")}
                 </span>
-                {" · "}
-                Confidence (SE):{" "}
-                <span className="font-mono tabular-nums text-foreground">{adaptiveSe != null ? adaptiveSe.toFixed(2) : "—"}</span>
-              </p>
-              <p className="mt-1 text-xs text-muted-foreground">
-                Difficulty shifts after each item; weak areas from recent exams get extra priority in the pool.
-              </p>
-            </div>
-          ) : null}
+              ) : (
+                <span className="text-slate-500">Untimed</span>
+              )
+            }
+          />
+          <div className="space-y-4 p-5 md:p-6">
+            <p className="text-xs text-slate-500">
+              {catMode
+                ? "Difficulty adapts after each response. Rationales and topic coaching appear after you finish the session—not during the exam-style block."
+                : "Timed sessions are for pacing practice. This is not a copy of any official exam interface."}
+            </p>
 
-          <div className="overflow-hidden rounded-2xl border border-border bg-[var(--theme-card-bg)] shadow-sm">
-            <div className="border-b border-border bg-muted/30 px-4 py-3">
-              <div className="flex flex-wrap gap-2 text-xs">
-                {current.topic ? (
-                  <span className="rounded-full bg-primary/15 px-2.5 py-0.5 font-medium text-primary">{current.topic}</span>
-                ) : null}
-                {current.subtopic ? (
-                  <span className="rounded-full bg-sky-500/10 px-2.5 py-0.5 text-sky-900 dark:text-sky-100">{current.subtopic}</span>
-                ) : null}
+            <div className="overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900/60">
+              <div className="border-b border-slate-200 px-3 py-2 text-xs text-slate-600 dark:border-slate-700 dark:text-slate-400">
+                {current.topic ? <span className="font-medium text-slate-700 dark:text-slate-200">{current.topic}</span> : null}
+                {current.subtopic ? <span className="ml-2 text-slate-500">· {current.subtopic}</span> : null}
                 {current.difficulty != null ? (
-                  <span className="rounded-full bg-amber-500/10 px-2.5 py-0.5">{difficultyBandLabel(current.difficulty)}</span>
+                  <span className="ml-2 text-slate-500">· {difficultyBandLabel(current.difficulty)}</span>
                 ) : null}
-                {current.exam ? <span className="text-muted-foreground">{current.exam}</span> : null}
               </div>
-            </div>
-            <div className="space-y-4 p-5 md:p-6">
+              <div className="space-y-4 p-5 md:p-6">
               <p className="text-base font-medium leading-relaxed">{current.stem}</p>
               {isSata ? (
                 <ul className="space-y-2">
@@ -522,18 +511,9 @@ export function PracticeTestRunnerClient({
               )}
             </div>
           </div>
-        </div>
+          </div>
+        </ExamSessionShell>
       </ProtectedPremiumContent>
-
-      <StudyNotesPanel
-        userId={userId}
-        scope={LearnerNoteScope.PRACTICE_TEST}
-        contextId={testId}
-        topic={current.topic}
-        sourceLabel={`Practice test · question ${current.id.slice(0, 8)}…`}
-        userLabel={userLabel}
-        flags={protectionFlags}
-      />
 
       <div className="flex flex-wrap gap-2">
         <button

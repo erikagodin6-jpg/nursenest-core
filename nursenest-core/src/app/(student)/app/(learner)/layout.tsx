@@ -3,6 +3,7 @@ import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 import { auth } from "@/lib/auth";
 import { LearnerShellUserBar } from "@/components/auth/learner-shell-user-bar";
 import { CheckoutSuccessBanner } from "@/components/student/checkout-success-banner";
+import { LearnerExamChromeGate } from "@/components/exam/learner-exam-chrome";
 import { LearnerAdaptiveStrip } from "@/components/student/learner-adaptive-strip";
 import { LearnerThemeControl } from "@/components/student/learner-theme-control";
 import { LearnerAppSectionAnalytics } from "@/components/observability/learner-app-section-analytics";
@@ -43,9 +44,10 @@ export default async function LearnerShellLayout({ children }: { children: React
 
   return (
     <SentryLearnerShell userId={userId}>
+    <LearnerExamChromeGate>
     <div className="mx-auto w-full max-w-6xl px-6 py-8">
       <LearnerAppSectionAnalytics />
-      <header className="nn-card mb-6 flex flex-col gap-4 rounded-2xl p-4 lg:flex-row lg:items-center lg:justify-between">
+      <header className="nn-learner-exam-chrome-target nn-card mb-6 flex flex-col gap-4 rounded-2xl p-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex min-w-0 flex-wrap items-center gap-4">
           <Link href="/" className="inline-flex shrink-0 overflow-visible">
             <SiteBrandLogoMark />
@@ -92,13 +94,16 @@ export default async function LearnerShellLayout({ children }: { children: React
         </div>
       </header>
       {adaptiveStrip ? (
-        <div className="mb-4">
+        <div className="nn-learner-exam-chrome-dim mb-4">
           <LearnerAdaptiveStrip model={adaptiveStrip} />
         </div>
       ) : null}
-      <CheckoutSuccessBanner />
+      <div className="nn-learner-exam-chrome-dim">
+        <CheckoutSuccessBanner />
+      </div>
       {children}
     </div>
+    </LearnerExamChromeGate>
     </SentryLearnerShell>
   );
 }

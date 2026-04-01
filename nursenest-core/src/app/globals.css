@@ -223,3 +223,19 @@ img.nn-brand-header-logo {
     transform: translateY(0);
   }
 }
+
+/* Exam-style sessions: hide main learner chrome (nav, adaptive strip) — see LearnerExamChromeGate. */
+html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-target,
+html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
+  display: none !important;
+}
+
+.nn-exam-session.nn-exam-session--neutral {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.dark .nn-exam-session.nn-exam-session--neutral {
+  background: rgb(15 23 42 / 0.92);
+  border-color: #334155;
+}
