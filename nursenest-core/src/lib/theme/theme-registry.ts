@@ -1,6 +1,10 @@
 /**
- * Canonical NurseNest brand default. All surfaces use this unless the user selects another theme.
- * Must stay aligned with `data-theme="lavender"` in theme CSS.
+ * **Source of truth for theme ids** used across the app: CSS `[data-theme="…"]` palettes, the theme picker,
+ * and **per-theme brand logo filenames** (`{id}brandlogo_transparent.png` from `THEME_OPTIONS[].id`).
+ * Favicon generation tints to the default theme primary (`lavender` → `color` here); wordmark PNGs are produced
+ * by `scripts/generate-theme-logos-from-registry.ts`. Legacy shared logo filenames are not used for theme marks.
+ *
+ * Canonical NurseNest brand default. Must stay aligned with `data-theme="lavender"` in theme CSS.
  */
 export const NURSENEST_DEFAULT_THEME = "lavender" as const;
 

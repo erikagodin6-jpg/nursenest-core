@@ -22,7 +22,7 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
       <WebSiteJsonLd />
       <div className="nn-marketing-surface flex min-h-screen flex-col">
         <SiteHeader />
-        <main className="flex-1">{children}</main>
+        <main className="flex min-h-0 flex-1 flex-col">{children}</main>
         <SiteFooter />
       </div>
     </MarketingI18nProvider>

@@ -68,7 +68,7 @@ function HeroImage({
 
 function BrowserChrome({ children }: { children: ReactNode }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] shadow-[0_24px_64px_-12px_rgba(15,23,42,0.18)] ring-1 ring-black/[0.04] dark:ring-white/[0.06]">
+    <div className="overflow-hidden rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] shadow-[0_24px_64px_-12px_rgba(15,23,42,0.18)] ring-1 ring-[color-mix(in_srgb,var(--theme-primary)_16%,var(--theme-card-border))]">
       <div
         className="flex items-center gap-2 border-b border-[var(--theme-card-border)] bg-[color-mix(in_srgb,var(--theme-muted-surface)_88%,var(--theme-page-bg))] px-3 py-2.5 sm:px-4"
         aria-hidden

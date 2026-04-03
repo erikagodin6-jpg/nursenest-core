@@ -6,6 +6,7 @@ import {
   DEFAULT_BRAND_LOGO_MARK_CLASSNAME,
   LOCAL_BRAND_MARK_PATH,
   brandLogoMarkPresentation,
+  brandLogoRasterContrastClass,
   type BrandLogoMarkVariant,
 } from "@/lib/branding/logo-config";
 import { logBrandLogoLoadFailure } from "@/lib/observability/brand-logo-client-log";
@@ -93,7 +94,7 @@ export function SiteBrandLogoMark({
         alt={BRAND_NAME}
         loading="eager"
         decoding="async"
-        className={imgClassName}
+        className={`${imgClassName} ${brandLogoRasterContrastClass(themeId)}`.trim()}
         onLoad={handleLoad}
         onError={handleError}
       />

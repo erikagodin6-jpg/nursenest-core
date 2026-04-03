@@ -51,9 +51,9 @@ export default async function LearnerShellLayout({ children }: { children: React
   return (
     <SentryLearnerShell userId={userId}>
       <LearnerExamChromeGate>
-        <div className="mx-auto w-full max-w-6xl px-6 py-8">
+        <div className="mx-auto w-full max-w-6xl px-4 py-[var(--nn-rhythm-shell-y)] sm:px-6">
           <LearnerAppSectionAnalytics />
-          <header className="nn-learner-exam-chrome-target nn-card mb-6 flex flex-col gap-4 rounded-2xl p-4 lg:flex-row lg:items-center lg:justify-between">
+          <header className="nn-learner-exam-chrome-target nn-card mb-5 flex flex-col gap-3 rounded-2xl p-4 sm:gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex min-w-0 flex-wrap items-center gap-4">
               <LearnerShellBrandHomeLink />
               <LearnerShellPrimaryNav />

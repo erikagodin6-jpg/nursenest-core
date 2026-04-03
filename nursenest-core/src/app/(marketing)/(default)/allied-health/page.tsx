@@ -46,13 +46,13 @@ export default async function AlliedHealthHubPage() {
 
   return (
     <>
-      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl px-4 py-9 sm:px-6 sm:py-10 lg:px-8">
         <BreadcrumbJsonLd items={schemaItems} />
-        <div className="mb-8">
+        <div className="mb-6 sm:mb-7">
           <BreadcrumbTrail items={crumbs} />
         </div>
 
-        <header className="relative overflow-hidden rounded-[1.75rem] border border-[var(--border-strong)] bg-gradient-to-br from-[var(--accent-soft)] via-[var(--theme-card-bg)] to-[var(--bg-section-alt)] px-6 py-12 shadow-[var(--shadow-elevated)] sm:px-11 sm:py-16">
+        <header className="relative overflow-hidden rounded-[1.75rem] border border-[var(--border-strong)] bg-gradient-to-br from-[var(--accent-soft)] via-[var(--theme-card-bg)] to-[var(--bg-section-alt)] px-6 py-10 shadow-[var(--shadow-elevated)] sm:px-11 sm:py-14">
           <div
             className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-primary/15 blur-3xl"
             aria-hidden
@@ -75,7 +75,7 @@ export default async function AlliedHealthHubPage() {
               social work exams. Start with your country, jump into your profession, then open lessons or the question bank on
               an allied plan.
             </p>
-            <div className="mt-9 flex flex-wrap gap-3">
+            <div className="mt-8 flex flex-wrap gap-2.5 sm:mt-9 sm:gap-3">
               <Link
                 href="/pricing"
                 className="inline-flex rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground shadow-md transition hover:opacity-95"
@@ -114,7 +114,7 @@ export default async function AlliedHealthHubPage() {
 
         <AlliedHealthTrustStrip />
 
-        <p className="mt-14 border-t border-[var(--border-subtle)] pt-10 text-center text-xs text-[var(--theme-muted-text)]">
+        <p className="mt-12 border-t border-[var(--border-subtle)] pt-8 text-center text-xs text-[var(--theme-muted-text)] sm:mt-14 sm:pt-9">
           <Link
             href="/exam-lessons"
             className="font-semibold text-primary underline-offset-4 transition hover:underline"

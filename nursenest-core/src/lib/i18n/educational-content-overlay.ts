@@ -3,6 +3,13 @@ import "server-only";
 import { existsSync, readFileSync } from "fs";
 import path from "path";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import type {
+  PathwayLessonExamFocus,
+  PathwayLessonLocaleMeta,
+  PathwayLessonQuizItem,
+  PathwayLessonRecord,
+  PathwayLessonSection,
+} from "@/lib/lessons/pathway-lesson-types";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 /** Per-question overlay keyed by `ExamQuestion.id` (stable). */
@@ -24,11 +31,31 @@ export type QuestionEducationalOverlay = {
 
 export type FlashcardEducationalBundle = {
   decks?: Record<string, { title?: string; description?: string | null }>;
-  cards?: Record<string, { front?: string; back?: string }>;
+  /** Optional extra teaching line (overlay-only; not stored on `Flashcard` rows). */
+  cards?: Record<string, { front?: string; back?: string; explanation?: string }>;
 };
 
 const questionBundleCache = new Map<string, Record<string, QuestionEducationalOverlay> | null>();
 const flashcardBundleCache = new Map<string, FlashcardEducationalBundle | null>();
+const lessonBundleCache = new Map<string, Record<string, unknown> | null>();
+
+/** File shape: `lessons.json` keyed by `slug` or `pathwayId:slug`. */
+export type PathwayLessonEducationalOverlay = {
+  title?: string;
+  topic?: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  /** Merge by section `id`. */
+  sections?: Record<
+    string,
+    Partial<Pick<PathwayLessonSection, "heading" | "body">> & {
+      examFocus?: Partial<PathwayLessonExamFocus>;
+    }
+  >;
+  /** Parallel to lesson `preTest` / `postTest` arrays — do not include `correct` (grading index stays canonical). */
+  preTest?: Array<Partial<Pick<PathwayLessonQuizItem, "question" | "options" | "rationale">>>;
+  postTest?: Array<Partial<Pick<PathwayLessonQuizItem, "question" | "options" | "rationale">>>;
+};
 
 function resolveEducationalI18nRoot(): string {
   const root = process.cwd();
@@ -80,9 +107,159 @@ export function loadFlashcardEducationalBundle(locale: string): FlashcardEducati
   return normalized ?? {};
 }
 
+/** Cached map: lesson key (`slug` or `pathwayId:slug`) → overlay payload for a locale. */
+export function loadLessonEducationalBundle(locale: string): Record<string, PathwayLessonEducationalOverlay> {
+  if (locale === DEFAULT_MARKETING_LOCALE) return {};
+  const hit = lessonBundleCache.get(locale);
+  if (hit !== undefined) return (hit ?? {}) as Record<string, PathwayLessonEducationalOverlay>;
+  const base = resolveEducationalI18nRoot();
+  const fp = path.join(base, locale, "lessons.json");
+  const data = readJsonFile<Record<string, PathwayLessonEducationalOverlay>>(fp);
+  const normalized = data && typeof data === "object" ? data : null;
+  lessonBundleCache.set(locale, normalized as unknown as Record<string, unknown> | null);
+  return (normalized ?? {}) as Record<string, PathwayLessonEducationalOverlay>;
+}
+
+function mergeExamFocus(
+  base: PathwayLessonExamFocus | undefined,
+  patch: Partial<PathwayLessonExamFocus> | undefined,
+): PathwayLessonExamFocus | undefined {
+  if (!patch || Object.keys(patch).length === 0) return base;
+  return { ...(base ?? {}), ...patch };
+}
+
+type PathwayLessonSectionOverlayPatch = Partial<Pick<PathwayLessonSection, "heading" | "body">> & {
+  examFocus?: Partial<PathwayLessonExamFocus>;
+};
+
+function mergeLessonSection(base: PathwayLessonSection, patch: PathwayLessonSectionOverlayPatch): PathwayLessonSection {
+  const heading = patch.heading !== undefined && patch.heading.trim() ? patch.heading : base.heading;
+  const body = patch.body !== undefined && patch.body.trim() ? patch.body : base.body;
+  const examFocus = mergeExamFocus(base.examFocus, patch.examFocus);
+  return {
+    ...base,
+    heading,
+    body,
+    ...(examFocus !== undefined ? { examFocus } : {}),
+  };
+}
+
+function mergeQuizList(
+  base: PathwayLessonQuizItem[] | undefined,
+  patch: PathwayLessonEducationalOverlay["preTest"],
+  label: string,
+  locale: string,
+  slug: string,
+): PathwayLessonQuizItem[] | undefined {
+  if (!base?.length || !patch?.length) return base;
+  const out = base.map((item, i) => {
+    const p = patch[i];
+    if (!p) return item;
+    const question = p.question?.trim() ? p.question : item.question;
+    let options = item.options;
+    if (Array.isArray(p.options) && p.options.length === item.options.length) {
+      options = p.options.map((x) => String(x));
+    } else if (p.options !== undefined && p.options.length !== item.options.length) {
+      safeServerLog("i18n", "educational_lesson_overlay_quiz_options_length_mismatch", {
+        locale,
+        slug,
+        label,
+        index: i,
+        baseLen: item.options.length,
+        patchLen: p.options.length,
+      });
+    }
+    const rationale = p.rationale?.trim() ? p.rationale : item.rationale;
+    return { ...item, question, options, correct: item.correct, ...(rationale ? { rationale } : {}) };
+  });
+  return out;
+}
+
+/**
+ * Merge file-based lesson overlays for display. Does not change slug, pathway, or quiz `correct` indices.
+ * Keys: `slug` or `pathwayId:slug` when `pathwayId` is provided (disambiguates duplicate slugs).
+ */
+export function applyPathwayLessonEducationalOverlay(
+  lesson: PathwayLessonRecord,
+  locale: string,
+  pathwayId?: string,
+): PathwayLessonRecord {
+  if (locale === DEFAULT_MARKETING_LOCALE) return lesson;
+
+  const bundle = loadLessonEducationalBundle(locale);
+  const compoundKey = pathwayId ? `${pathwayId}:${lesson.slug}` : null;
+  const o = (compoundKey ? bundle[compoundKey] : undefined) ?? bundle[lesson.slug];
+  if (!o || typeof o !== "object") {
+    return lesson;
+  }
+
+  let applied = false;
+
+  const title = o.title !== undefined && o.title.trim() ? o.title : lesson.title;
+  if (title !== lesson.title) applied = true;
+  const topic = o.topic !== undefined && o.topic.trim() ? o.topic : lesson.topic;
+  if (topic !== lesson.topic) applied = true;
+  const seoTitle = o.seoTitle !== undefined && o.seoTitle.trim() ? o.seoTitle : lesson.seoTitle;
+  if (seoTitle !== lesson.seoTitle) applied = true;
+  const seoDescription =
+    o.seoDescription !== undefined && o.seoDescription.trim() ? o.seoDescription : lesson.seoDescription;
+  if (seoDescription !== lesson.seoDescription) applied = true;
+
+  let sections = lesson.sections;
+  if (o.sections && lesson.sections.length > 0) {
+    const byId = o.sections;
+    const next = lesson.sections.map((s) => {
+      const patch = byId[s.id];
+      if (!patch) return s;
+      applied = true;
+      return mergeLessonSection(s, patch);
+    });
+    sections = next;
+  }
+
+  let preTest = lesson.preTest;
+  let postTest = lesson.postTest;
+  if (o.preTest?.length) {
+    const merged = mergeQuizList(lesson.preTest, o.preTest, "preTest", locale, lesson.slug);
+    if (merged !== lesson.preTest) {
+      preTest = merged;
+      applied = true;
+    }
+  }
+  if (o.postTest?.length) {
+    const merged = mergeQuizList(lesson.postTest, o.postTest, "postTest", locale, lesson.slug);
+    if (merged !== lesson.postTest) {
+      postTest = merged;
+      applied = true;
+    }
+  }
+
+  if (!applied) return lesson;
+
+  const baseMeta: PathwayLessonLocaleMeta = lesson.localeMeta ?? {
+    requestedContentLocale: locale,
+    contentLocale: locale,
+    usedLocaleFallback: false,
+    isCatalogEnglishSource: false,
+  };
+
+  return {
+    ...lesson,
+    title,
+    topic,
+    seoTitle,
+    seoDescription,
+    sections,
+    ...(preTest ? { preTest } : {}),
+    ...(postTest ? { postTest } : {}),
+    localeMeta: { ...baseMeta, educationalOverlayApplied: true },
+  };
+}
+
 export function clearEducationalOverlayCachesForTests(): void {
   questionBundleCache.clear();
   flashcardBundleCache.clear();
+  lessonBundleCache.clear();
 }
 
 export function normalizeExamQuestionOptionsArray(raw: unknown): string[] {
@@ -165,7 +342,7 @@ export function applyQuestionEducationalOverlayForDisplay(
   const bundle = loadQuestionEducationalOverlayBundle(locale);
   const o = bundle[row.id];
   if (!o) {
-    if (locale !== DEFAULT_MARKETING_LOCALE) {
+    if (locale !== DEFAULT_MARKETING_LOCALE && process.env.NODE_ENV !== "production") {
       safeServerLog("i18n", "educational_question_overlay_miss", {
         locale,
         questionIdPrefix: row.id.slice(0, 8),
@@ -231,16 +408,16 @@ export function mergeQuestionApiPayload(q: Record<string, unknown>, locale: stri
   const m = applyQuestionEducationalOverlayForDisplay(q as QuestionRowForDisplay, locale);
   const out: Record<string, unknown> = { ...q, stem: m.stem, options: m.options };
   if (m.displayOptions) out.displayOptions = m.displayOptions;
-  if ("rationale" in q) out.rationale = m.rationale;
-  if ("correctAnswerExplanation" in q) out.correctAnswerExplanation = m.correctAnswerExplanation;
-  if ("clinicalReasoning" in q) out.clinicalReasoning = m.clinicalReasoning;
-  if ("keyTakeaway" in q) out.keyTakeaway = m.keyTakeaway;
-  if ("clinicalPearl" in q) out.clinicalPearl = m.clinicalPearl;
-  if ("examStrategy" in q) out.examStrategy = m.examStrategy;
-  if ("memoryHook" in q) out.memoryHook = m.memoryHook;
-  if ("clinicalTrap" in q) out.clinicalTrap = m.clinicalTrap;
-  if ("distractorRationales" in q) out.distractorRationales = m.distractorRationales;
-  if ("incorrectAnswerRationale" in q) out.incorrectAnswerRationale = m.incorrectAnswerRationale;
+  out.rationale = m.rationale;
+  out.correctAnswerExplanation = m.correctAnswerExplanation;
+  out.clinicalReasoning = m.clinicalReasoning;
+  out.keyTakeaway = m.keyTakeaway;
+  out.clinicalPearl = m.clinicalPearl;
+  out.examStrategy = m.examStrategy;
+  out.memoryHook = m.memoryHook;
+  out.clinicalTrap = m.clinicalTrap;
+  out.distractorRationales = m.distractorRationales;
+  out.incorrectAnswerRationale = m.incorrectAnswerRationale;
   return out;
 }
 
@@ -313,11 +490,13 @@ export function applyFlashcardDeckOverlay(
   const decks = b.decks ?? {};
   const d = decks[deck.id] ?? decks[deck.slug];
   if (!d) {
-    safeServerLog("i18n", "educational_flashcard_deck_overlay_miss", {
-      locale,
-      deckIdPrefix: deck.id.slice(0, 8),
-      slug: deck.slug,
-    });
+    if (process.env.NODE_ENV !== "production") {
+      safeServerLog("i18n", "educational_flashcard_deck_overlay_miss", {
+        locale,
+        deckIdPrefix: deck.id.slice(0, 8),
+        slug: deck.slug,
+      });
+    }
     return { title: deck.title, description: deck.description };
   }
   return {
@@ -329,19 +508,23 @@ export function applyFlashcardDeckOverlay(
 export function applyFlashcardCardOverlay(
   card: { id: string; front: string; back: string },
   locale: string,
-): { front: string; back: string } {
+): { front: string; back: string; explanation?: string } {
   if (locale === DEFAULT_MARKETING_LOCALE) return { front: card.front, back: card.back };
   const b = loadFlashcardEducationalBundle(locale);
   const c = b.cards?.[card.id];
   if (!c) {
-    safeServerLog("i18n", "educational_flashcard_card_overlay_miss", {
-      locale,
-      cardIdPrefix: card.id.slice(0, 8),
-    });
+    if (process.env.NODE_ENV !== "production") {
+      safeServerLog("i18n", "educational_flashcard_card_overlay_miss", {
+        locale,
+        cardIdPrefix: card.id.slice(0, 8),
+      });
+    }
     return { front: card.front, back: card.back };
   }
+  const explanation = c.explanation?.trim() ? c.explanation.trim() : undefined;
   return {
     front: c.front?.trim() ? c.front! : card.front,
     back: c.back?.trim() ? c.back! : card.back,
+    ...(explanation ? { explanation } : {}),
   };
 }

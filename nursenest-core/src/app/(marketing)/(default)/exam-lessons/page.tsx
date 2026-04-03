@@ -68,14 +68,14 @@ export default async function ExamLessonsIndexPage() {
     slug === "canada" ? t("pages.pricing.country.ca") : t("pages.pricing.country.us");
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12">
+    <div className="mx-auto max-w-3xl nn-marketing-x nn-rhythm-page">
       <BreadcrumbJsonLd items={schemaItems} />
-      <div className="mb-6">
+      <div className="mb-5">
         <BreadcrumbTrail items={crumbs} />
       </div>
       <h1 className="text-3xl font-extrabold text-[var(--theme-heading-text)]">{t("pages.examLessons.h1")}</h1>
       <p className="mt-3 text-[var(--theme-muted-text)]">{t("pages.examLessons.intro")}</p>
-      <div className="mt-6 flex flex-wrap gap-3">
+      <div className="mt-5 flex flex-wrap gap-3 sm:mt-6">
         <Link
           href={withMarketingLocale(locale, "/pricing")}
           className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:brightness-110"
@@ -95,7 +95,7 @@ export default async function ExamLessonsIndexPage() {
           {t("pages.examLessons.ctaTools")}
         </Link>
       </div>
-      <ul className="mt-8 space-y-4">
+      <ul className="mt-7 space-y-3 sm:mt-8">
         {rows.map((p) => (
           <li key={p.id} className="nn-card p-4">
             <p className="text-xs font-semibold uppercase text-primary">
@@ -112,8 +112,8 @@ export default async function ExamLessonsIndexPage() {
           </li>
         ))}
       </ul>
-      <MarketingStudyCrossLinks className="mt-12" />
-      <p className="mt-10 text-sm text-muted">
+      <MarketingStudyCrossLinks className="mt-10" />
+      <p className="mt-8 text-sm text-muted sm:mt-9">
         {t("pages.examLessons.appLessonsLead")}{" "}
         <Link href="/app/lessons" className="font-semibold text-primary">
           {t("pages.examLessons.appLessonsLink")}

@@ -8,14 +8,14 @@ export async function MarketingLoginPage({ locale }: { locale: string }) {
   const m = await loadMarketingMessages(locale);
   const forgotHref = withMarketingLocale(locale, "/forgot-password");
   return (
-    <main className="mx-auto w-full max-w-md px-6 py-16">
-      <div className="nn-card p-8">
+    <main className="mx-auto w-full max-w-md nn-marketing-x nn-rhythm-page">
+      <div className="nn-card p-6 sm:p-8">
         <div className="mb-6 flex justify-center bg-transparent">
           <SiteBrandLogoMark variant="auth" />
         </div>
         <h1 className="text-3xl font-bold">{m["pages.login.welcome"]}</h1>
         <p className="mt-2 text-sm text-muted">{m["pages.login.subtitle"]}</p>
-        <Suspense fallback={<div className="mt-6 h-40 animate-pulse rounded-xl bg-border/40" aria-hidden />}>
+        <Suspense fallback={<div className="mt-6 h-32 animate-pulse rounded-xl bg-border/40" aria-hidden />}>
           <LoginForm
             forgotPasswordHref={forgotHref}
             termsHref={withMarketingLocale(locale, "/terms")}

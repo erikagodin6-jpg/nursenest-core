@@ -1,6 +1,7 @@
 /**
  * Builds centered, padded leaf favicon assets from CDN `leaflogo2_transparent.png` (cleaner at small sizes).
- * Tints the leaf to the default app theme primary (`lavender` → `#9d82dd` from `theme-registry.ts`).
+ * Tints the leaf to **default theme** primary (`NURSENEST_DEFAULT_THEME` / `lavender` → `THEME_OPTIONS` hex).
+ * Wordmark theme PNGs are separate per-theme files; favicon stays a single global mark aligned to default lavender.
  * Outputs: public/favicon.ico, public/icon.png (512), public/apple-touch-icon.png (180).
  *
  * Run: `node scripts/build-favicon-from-leaf.mjs`

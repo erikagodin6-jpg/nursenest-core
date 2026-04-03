@@ -15,7 +15,7 @@ const MemoLessonTeaserGrid = memo(function MemoLessonTeaserGrid({ items }: { ite
         <li key={item.id}>
           <Link
             href={withMarketingLocale(locale, item.lessonsHref)}
-            className="flex h-full flex-col rounded-xl border border-[var(--theme-card-border)] bg-card p-4 shadow-sm transition hover:border-primary/30"
+            className="flex h-full flex-col rounded-xl border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] p-4 shadow-sm transition hover:border-primary/35 hover:bg-[var(--surface-interactive-hover)]"
           >
             <span className="text-xs font-semibold uppercase text-primary">{item.shortLabel}</span>
             <span className="mt-1 text-sm font-semibold text-[var(--theme-heading-text)]">{item.title}</span>
@@ -38,12 +38,12 @@ export default function HomePageMidSections({ lessonTeasers }: Props) {
   return (
     <>
       <section
-        className="border-t border-[var(--theme-card-border)] bg-gradient-to-b from-[var(--theme-muted-surface)] to-[var(--theme-card-bg)]"
+        className="border-t border-[var(--border-subtle)] bg-[var(--nn-presentation-trust-band)]"
         style={{ paddingTop: "var(--space-block)", paddingBottom: "var(--space-block)" }}
         data-testid="section-hero-benefits"
       >
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <h2 className="mb-6 text-center text-lg font-bold text-[var(--theme-heading-text)] sm:text-xl" data-testid="text-benefits-heading">
+          <h2 className="mb-5 text-center text-lg font-bold text-[var(--theme-heading-text)] sm:mb-6 sm:text-xl" data-testid="text-benefits-heading">
             {t("home.hero.benefitsHeading")}
           </h2>
           <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
@@ -57,7 +57,7 @@ export default function HomePageMidSections({ lessonTeasers }: Props) {
             ).map((item) => (
               <div
                 key={item.key}
-                className="flex items-start gap-3 rounded-xl border border-[var(--theme-card-border)] bg-card p-3.5 shadow-[var(--shadow-card)]"
+                className="flex items-start gap-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--nn-presentation-ribbon)] p-3.5 shadow-[var(--shadow-card)]"
                 data-testid={`hero-${item.key}`}
               >
                 <div className="nn-accent-icon-wrap mt-0.5 h-8 w-8 shrink-0">
@@ -71,7 +71,7 @@ export default function HomePageMidSections({ lessonTeasers }: Props) {
       </section>
 
       <section
-        className="border-t border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]"
+        className="border-t border-[var(--border-subtle)] bg-[var(--nn-presentation-wash)]"
         style={{ paddingTop: "var(--space-block)", paddingBottom: "var(--space-block)" }}
         data-testid="section-start-lessons"
       >

@@ -394,11 +394,23 @@ async function fillLocale(code) {
     for (const k of slice) {
       const enVal = String(en[k]);
       if (/\{\{[^}]+\}\}/.test(enVal)) {
-        try {
-          j[k] = await translateOneSafe(enVal, opts);
-        } catch {
-          j[k] = en[k];
+        const enP = mustachePlaceholders(enVal);
+        let best = en[k];
+        for (let attempt = 0; attempt < 3; attempt++) {
+          try {
+            const t = await translateOneSafe(enVal, opts);
+            if (mustachePlaceholders(t) === enP) {
+              best = t;
+              break;
+            }
+            best = t;
+          } catch {
+            best = en[k];
+            break;
+          }
+          await sleep(80);
         }
+        j[k] = mustachePlaceholders(best) === enP ? best : en[k];
         await sleep(80);
         done += 1;
       } else {

@@ -14,9 +14,8 @@ export default async function AdminThemeQaPage() {
           <p className="text-xs font-semibold uppercase tracking-wide text-primary">Diagnostics</p>
           <h1 className="mt-1 text-2xl font-bold text-[var(--theme-heading-text)]">Theme & logo QA</h1>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-            One card per registered theme: isolated <code className="rounded bg-muted px-1">data-theme</code> wrapper,
-            first resolved logo URL from <code className="rounded bg-muted px-1">getThemeLogoLoadChain</code>, and surface
-            samples. Remove this route when no longer needed.
+            Registry color, light/dark group, local-canonical check, load errors, runtime contrast boost flags, and surface
+            samples per theme. Remove this route when no longer needed.
           </p>
         </div>
         <Link

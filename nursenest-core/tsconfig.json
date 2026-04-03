@@ -26,11 +26,12 @@
   },
   "include": [
     "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
+    "next.config.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "prisma/**/*.ts",
     ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts",
-    "**/*.mts"
+    ".next/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",
@@ -41,6 +42,9 @@
     "coverage",
     "dist",
     "out",
-    ".turbo"
+    ".turbo",
+    "data",
+    "public",
+    "scripts"
   ]
 }

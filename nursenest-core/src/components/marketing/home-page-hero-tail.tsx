@@ -15,7 +15,7 @@ export default function HomePageHeroTail() {
 
   return (
     <>
-      <div className="mt-5 sm:mt-6" data-testid="section-careers-supported">
+      <div className="mt-[var(--nn-rhythm-tight-y)] sm:mt-6" data-testid="section-careers-supported">
         <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-[var(--theme-body-text)]">
           {t("home.hero.examPrepFor", {
             region: region === "CA" ? t("home.region.ca") : t("home.region.us"),

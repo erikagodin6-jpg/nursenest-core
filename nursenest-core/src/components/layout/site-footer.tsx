@@ -44,7 +44,7 @@ export function SiteFooter() {
   const npPrepHref = npPracticeProgrammatic(region);
 
   return (
-    <footer className="mt-auto border-t border-[var(--divider,var(--theme-nav-border))] bg-[var(--bg-section,var(--theme-card-bg))] py-9 sm:py-11">
+    <footer className="mt-auto border-t border-[var(--divider,var(--theme-nav-border))] bg-[var(--bg-section,var(--theme-card-bg))] py-[var(--nn-rhythm-footer-y)]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-6 sm:mb-8">
           <EmailSignupBanner />

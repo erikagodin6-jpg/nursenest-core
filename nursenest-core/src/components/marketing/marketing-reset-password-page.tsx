@@ -14,8 +14,8 @@ export async function MarketingResetPasswordPage({
   const loginHref = withMarketingLocale(locale, "/login");
 
   return (
-    <main className="mx-auto w-full max-w-md px-6 py-16">
-      <div className="nn-card p-8">
+    <main className="mx-auto w-full max-w-md nn-marketing-x nn-rhythm-page">
+      <div className="nn-card p-6 sm:p-8">
         <div className="mb-6 flex justify-center bg-transparent">
           <SiteBrandLogoMark variant="auth" />
         </div>

@@ -7,6 +7,7 @@ import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlemen
 import { getServerPremiumProtectionFlags } from "@/lib/premium-protection/config";
 import { maskUserLabelForWatermark } from "@/lib/premium-protection/mask-user-label";
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
+import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import type { Metadata } from "next";
 
 type Props = { params: Promise<{ id: string }> };
@@ -24,6 +25,7 @@ export default async function PracticeTestRunPage({ params }: Props) {
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
+  const { t } = await getLearnerMarketingBundle();
 
   if (entitlement === "error") {
     return (
@@ -31,9 +33,7 @@ export default async function PracticeTestRunPage({ params }: Props) {
         <div className="mb-4">
           <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
         </div>
-        <p className="nn-card p-6 text-sm text-muted">
-          We couldn’t finish checking your subscription. Refresh shortly, or sign in again if it keeps happening.
-        </p>
+        <p className="nn-card p-6 text-sm text-muted">{t("learner.entitlement.verifyFailed")}</p>
       </main>
     );
   }
@@ -49,8 +49,8 @@ export default async function PracticeTestRunPage({ params }: Props) {
         <div className="mb-4">
           <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
         </div>
-        <h1 className="text-2xl font-bold">Practice test</h1>
-        <p className="mt-2 text-sm text-muted">Timed and untimed practice tests are included with an active plan.</p>
+        <h1 className="text-2xl font-bold">{t("learner.practiceTests.run.title")}</h1>
+        <p className="mt-2 text-sm text-muted">{t("learner.practiceTests.run.subtitleLocked")}</p>
         <div className="mt-6">
           <SubscriptionPaywall context="questions" freemiumRemainingQuestions={snap?.questionRemaining ?? 0} />
         </div>
@@ -63,10 +63,10 @@ export default async function PracticeTestRunPage({ params }: Props) {
       <div className="mb-4">
         <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
       </div>
-      <h1 className="text-2xl font-bold">Practice test</h1>
+      <h1 className="text-2xl font-bold">{t("learner.practiceTests.run.title")}</h1>
       <p className="mt-1 text-sm text-muted">
         <a className="font-medium text-primary underline" href="/app/practice-tests">
-          ← Back to test bank
+          {t("learner.practiceTests.run.backToBank")}
         </a>
       </p>
       <div className="mt-6">

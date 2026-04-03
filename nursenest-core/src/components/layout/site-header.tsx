@@ -310,7 +310,7 @@ export function SiteHeader() {
             </div>
             <div className="min-h-0 flex-1 space-y-1 overflow-y-auto overscroll-y-contain p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
               <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-primary">{t("nav.regionLabel")}</p>
-              <div className="mb-4 flex gap-2">
+              <div className="mb-3 flex gap-2">
                 <button
                   type="button"
                   onClick={() => setRegion("US")}
@@ -338,7 +338,7 @@ export function SiteHeader() {
               </p>
               <hr className="my-3 border-[var(--theme-separator)]" />
               <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-primary">{t("nav.examHubsMobile")}</p>
-              <div className="mb-4 flex flex-col gap-1.5">
+              <div className="mb-3 flex flex-col gap-1.5">
                 {examNavStrip.map((item) => (
                   <Link
                     key={item.id}
@@ -352,7 +352,7 @@ export function SiteHeader() {
               </div>
               <hr className="my-3 border-[var(--theme-separator)]" />
               <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-primary">{t("nav.language")}</p>
-              <div className="mb-4 max-h-[min(50vh,20rem)] space-y-0.5 overflow-y-auto rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-page-bg)] p-1">
+              <div className="mb-3 max-h-[min(50vh,20rem)] space-y-0.5 overflow-y-auto rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-page-bg)] p-1">
                 <MarketingLanguagePreferenceList
                   onDone={() => setMobileOpen(false)}
                   renderItem={({ code, name, flag, disabled, onSelect }) => (

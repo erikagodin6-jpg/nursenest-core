@@ -8,6 +8,7 @@
  * **Maintainers:** keys are 1:1 with `THEME_OPTIONS[].id`. Grouped or similar hues (e.g. indigo vs berry,
  * lavender vs lavender-dream) still get **separate** files — only `normalizeThemeIdForLogo` aliases merge *names*,
  * not asset paths. Run `npm run verify:theme-logos` before release to confirm local PNG parity.
+ * Historical shared non-theme-specific logo filenames are not used for these keys.
  */
 import { NURSENEST_DEFAULT_THEME, THEME_OPTIONS } from "@/lib/theme/theme-registry";
 

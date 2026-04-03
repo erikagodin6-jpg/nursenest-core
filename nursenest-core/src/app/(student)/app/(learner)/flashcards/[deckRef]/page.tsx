@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { getServerPremiumProtectionFlags } from "@/lib/premium-protection/config";
 import { maskUserLabelForWatermark } from "@/lib/premium-protection/mask-user-label";
+import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 
 type Props = {
   params: Promise<{ deckRef: string }>;
@@ -19,14 +20,15 @@ export default async function FlashcardDeckStudyPage({ params, searchParams }: P
   const email = (session?.user as { email?: string | null })?.email ?? null;
   const protectionFlags = getServerPremiumProtectionFlags();
   const userLabel = maskUserLabelForWatermark(email, userId || "unknown");
+  const { t } = await getLearnerMarketingBundle();
 
   if (entitlement === "error") {
-    return <p className="text-sm text-muted-foreground">Unable to verify access right now. Refresh and try again.</p>;
+    return <p className="text-sm text-muted-foreground">{t("learner.entitlement.verifyFailedShort")}</p>;
   }
   if (!entitlement.hasAccess) {
     return (
       <main className="space-y-4">
-        <h1 className="text-2xl font-bold">Flashcard study</h1>
+        <h1 className="text-2xl font-bold">{t("learner.flashcards.study.heading")}</h1>
         <SubscriptionPaywall context="dashboard" />
       </main>
     );

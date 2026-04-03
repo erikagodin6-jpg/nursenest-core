@@ -1,4 +1,6 @@
 import { NURSENEST_IMAGES_SPACE_PUBLIC_BASE_URL } from "@/config/marketing-cdn.catalog";
+import { relativeLuminanceFromHex } from "@/lib/color/hex-luminance";
+import { THEME_OPTIONS } from "@/lib/theme/theme-registry";
 
 /** Same-origin transparent theme marks (see `scripts/generate-theme-logos-from-registry.ts`). */
 export const COMMITTED_THEME_LOGO_PUBLIC_PREFIX = "/branding/theme-logos/" as const;
@@ -89,3 +91,20 @@ export function brandLogoMarkPresentation(variant: BrandLogoMarkVariant = "heade
 
 /** Extra classes merged onto the slot in `<SiteBrandLogoMark />` (call sites rarely need overrides). */
 export const DEFAULT_BRAND_LOGO_MARK_CLASSNAME = "" as const;
+
+/**
+ * Bounded CSS filter for generated raster wordmarks: dark theme groups get a slight dark lift on headers;
+ * very light registry primaries get a hairline edge so tints do not disappear on light nav.
+ * Does not replace registry-driven assets — presentation only.
+ */
+export function brandLogoRasterContrastClass(themeId: string): string {
+  const opt = THEME_OPTIONS.find((o) => o.id === themeId);
+  if (!opt) return "";
+  if (opt.group === "dark") {
+    return "[filter:drop-shadow(0_1px_2px_rgba(0,0,0,0.5))]";
+  }
+  if (relativeLuminanceFromHex(opt.color) >= 0.88) {
+    return "[filter:drop-shadow(0_0_1px_rgba(15,23,42,0.28))]";
+  }
+  return "";
+}

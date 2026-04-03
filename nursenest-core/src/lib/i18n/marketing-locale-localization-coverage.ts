@@ -5,7 +5,7 @@ import { MARKETING_LANGUAGES } from "@/lib/i18n/marketing-languages";
  * Product-facing localization depth for marketing UI (not the same as switcher tiers).
  *
  * - **full** — Broad overlay coverage; primary locales.
- * - **reviewed-partial** — Meaningful coverage with known gaps (e.g. French).
+ * - **reviewed-partial** — Meaningful coverage with known gaps (switcher `partial` tier, e.g. Tagalog).
  * - **shell-placeholder** — High-frequency shell only (nav, auth CTAs); long-form may remain English until reviewed.
  */
 export type MarketingLocaleLocalizationCoverage = "full" | "reviewed-partial" | "shell-placeholder";
@@ -29,7 +29,7 @@ export function isShellPlaceholderMarketingLocale(locale: string): boolean {
   return isMarketingLocaleCode(locale) && marketingLocaleLocalizationCoverage(locale) === "shell-placeholder";
 }
 
-/** True for any locale that is not **full** (includes reviewed-partial French and shell-placeholder low-coverage locales). */
+/** True for any locale that is not **full** (includes partial-tier and shell-placeholder locales). */
 export function marketingLocaleIsPartialCoverage(locale: string): boolean {
   return marketingLocaleLocalizationCoverage(locale) !== "full";
 }

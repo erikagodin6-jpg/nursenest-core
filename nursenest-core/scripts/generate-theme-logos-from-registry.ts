@@ -1,7 +1,9 @@
 /**
  * Regenerates `public/branding/theme-logos/{themeId}brandlogo_transparent.png` for every entry in
- * `THEME_OPTIONS` (`src/lib/theme/theme-registry.ts`), using each theme’s exact `color` hex for
- * wordmark + leaf (luminance-preserving multiply on the base raster).
+ * `THEME_OPTIONS` (`src/lib/theme/theme-registry.ts` — **source of truth for ids + hex**), using each
+ * theme’s exact `color` for wordmark + leaf (luminance-preserving multiply on the base raster).
+ * Filenames are canonical from `theme id`; there is no separate shared “transparent logo” name per theme.
+ * Runtime resolves `/branding/theme-logos/…` first, then CDN/proxy (see `getThemeLogoLoadChain`).
  *
  * Run from `nursenest-core/`: `npx tsx scripts/generate-theme-logos-from-registry.ts`
  */

@@ -67,6 +67,11 @@ export type PathwayLessonLocaleMeta = {
   usedLocaleFallback: boolean;
   /** Narrative comes from bundled English catalog (not `pathway_lessons`). */
   isCatalogEnglishSource: boolean;
+  /**
+   * True when `public/i18n/educational-overlays/<locale>/lessons.json` merged display strings
+   * on top of the resolved lesson (audit trail for file-based translations).
+   */
+  educationalOverlayApplied?: boolean;
 };
 
 export type PathwayLessonRecord = {

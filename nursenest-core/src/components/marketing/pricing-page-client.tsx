@@ -311,8 +311,8 @@ export function PricingPageClient({
   );
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-9 sm:px-6 sm:py-10 lg:px-8">
-      <header className="border-b border-[var(--theme-card-border)] pb-8 sm:pb-9">
+    <main className="mx-auto w-full max-w-6xl nn-marketing-x nn-rhythm-page">
+      <header className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--nn-presentation-wash)] pb-8 sm:pb-9">
         <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("pages.pricing.title")}</p>
         <h1 className="mt-2 text-balance text-3xl font-bold leading-tight text-[var(--theme-heading-text)] sm:text-4xl">
           {heading}
@@ -325,7 +325,7 @@ export function PricingPageClient({
           {t("pages.pricing.hero.choicePill")}
         </p>
 
-        <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+        <div className="mt-5 flex flex-col gap-2.5 sm:mt-6 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
           <Link
             href={tryQuestionsHref}
             className="nn-btn-primary inline-flex min-h-[48px] items-center justify-center px-6 py-3 text-sm font-semibold transition"
@@ -341,7 +341,7 @@ export function PricingPageClient({
         <p className="mt-2 text-xs text-muted-foreground">{t("pages.pricing.hero.regionHint")}</p>
       </header>
 
-      <section className="mt-12 rounded-2xl border border-[var(--border-subtle,var(--theme-card-border))] bg-[var(--bg-section-alt)] p-5 sm:p-6 shadow-[var(--shadow-card)]">
+      <section className="mt-10 rounded-2xl border border-[var(--border-subtle,var(--theme-card-border))] bg-[var(--nn-presentation-panel)] p-5 sm:mt-12 sm:p-6 shadow-[var(--shadow-card)]">
         <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">{t("pages.pricing.proof.title")}</h2>
         <ul className="mt-4 space-y-3 text-sm leading-relaxed text-[var(--theme-body-text)]">
           <li className="flex gap-2">

@@ -18,6 +18,7 @@ import {
   legacyContentMapLessonTitle,
 } from "@/lib/lessons/legacy-content-map-lessons";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
+import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { getPathwayLesson } from "@/lib/lessons/pathway-lesson-loader";
 import { LegacyMonolithLessonBody } from "@/components/lessons/legacy-monolith-lesson-body";
 import { LessonQualityNotice } from "@/components/lessons/lesson-quality-notice";
@@ -76,16 +77,14 @@ export default async function LessonDetailPage({ params }: Props) {
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
+  const { t } = await getLearnerMarketingBundle();
 
   if (entitlement === "error") {
     return (
       <main className="space-y-4">
-        <p className="text-sm text-muted">
-          We couldn’t finish checking your subscription (temporary data issue). This is not the same as being out of
-          plan. Refresh, then reopen this lesson; sign in again if it persists.
-        </p>
+        <p className="text-sm text-muted">{t("learner.entitlement.verifyFailed")}</p>
         <Link className="text-sm font-semibold text-primary underline" href="/app/lessons">
-          Back to lessons
+          {t("learner.lessons.detail.backToLessons")}
         </Link>
       </main>
     );
@@ -94,7 +93,7 @@ export default async function LessonDetailPage({ params }: Props) {
   if (!entitlement.hasAccess) {
     return (
       <main className="space-y-4">
-        <p className="text-sm text-muted">You need an active subscription to open full app lessons.</p>
+        <p className="text-sm text-muted">{t("learner.lessons.detail.subscriberRequired")}</p>
         <SubscriptionPaywall context="lessons" />
       </main>
     );
@@ -175,9 +174,9 @@ export default async function LessonDetailPage({ params }: Props) {
     safeServerLog("page_lesson_detail", "lesson_not_found", { id });
     return (
       <main className="space-y-4">
-        <p className="text-sm text-muted">No lesson exists at this link. It may have been removed or the URL is incorrect.</p>
+        <p className="text-sm text-muted">{t("learner.lessons.detail.notFound")}</p>
         <Link className="text-sm font-semibold text-primary underline" href="/app/lessons">
-          Back to lessons
+          {t("learner.lessons.detail.backToLessons")}
         </Link>
       </main>
     );
@@ -211,12 +210,9 @@ export default async function LessonDetailPage({ params }: Props) {
     }
     return (
       <main className="space-y-4">
-        <p className="text-sm text-muted">
-          This lesson is not included in your current region or plan. Update your profile country and tier, or choose a plan that
-          matches the content library you need.
-        </p>
+        <p className="text-sm text-muted">{t("learner.lessons.detail.outOfPlan")}</p>
         <Link className="text-sm font-semibold text-primary underline" href="/app/lessons">
-          Back to lessons
+          {t("learner.lessons.detail.backToLessons")}
         </Link>
       </main>
     );
@@ -241,7 +237,7 @@ export default async function LessonDetailPage({ params }: Props) {
     return (
       <main>
         <Link href="/app/lessons" className="text-sm font-medium text-primary hover:underline">
-          ← All lessons
+          {t("learner.lessons.detail.allLessons")}
         </Link>
         <h1 className="mt-4 text-3xl font-bold">{title}</h1>
         <PremiumLessonShell
@@ -260,13 +256,13 @@ export default async function LessonDetailPage({ params }: Props) {
             href="/app/questions"
             className="rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground"
           >
-            Apply in question bank
+            {t("learner.lessons.detail.ctaQuestionBank")}
           </Link>
           <Link
             href="/app/exams"
             className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-gray-50"
           >
-            Timed practice exam
+            {t("learner.lessons.detail.ctaTimedExam")}
           </Link>
         </div>
       </main>
@@ -294,7 +290,7 @@ export default async function LessonDetailPage({ params }: Props) {
     return (
       <main>
         <Link href="/app/lessons" className="text-sm font-medium text-primary hover:underline">
-          ← All lessons
+          {t("learner.lessons.detail.allLessons")}
         </Link>
         <h1 className="mt-4 text-3xl font-bold">{record.title}</h1>
         {record.seoDescription ? <p className="mt-2 text-sm text-muted">{record.seoDescription}</p> : null}
@@ -314,7 +310,7 @@ export default async function LessonDetailPage({ params }: Props) {
               {visible.map((section) => (
                 <section key={section.id} className="border-b border-border pb-8 last:border-0">
                   <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">
-                    {section.heading?.trim() || "Section"}
+                    {section.heading?.trim() || t("learner.lessons.detail.sectionFallback")}
                   </h2>
                   <div className="mt-3">
                     <PathwayLessonBody text={typeof section.body === "string" ? section.body : ""} />
@@ -330,13 +326,13 @@ export default async function LessonDetailPage({ params }: Props) {
             href="/app/questions"
             className="rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground"
           >
-            Apply in question bank
+            {t("learner.lessons.detail.ctaQuestionBank")}
           </Link>
           <Link
             href="/app/exams"
             className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-gray-50"
           >
-            Timed practice exam
+            {t("learner.lessons.detail.ctaTimedExam")}
           </Link>
         </div>
       </main>
@@ -365,7 +361,7 @@ export default async function LessonDetailPage({ params }: Props) {
   return (
     <main>
       <Link href="/app/lessons" className="text-sm font-medium text-primary hover:underline">
-        ← All lessons
+        {t("learner.lessons.detail.allLessons")}
       </Link>
       <h1 className="mt-4 text-3xl font-bold">{row.title}</h1>
       {row.summary ? <p className="mt-2 text-sm text-muted">{row.summary}</p> : null}
@@ -386,10 +382,10 @@ export default async function LessonDetailPage({ params }: Props) {
           href="/app/questions"
           className="rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground"
         >
-          Apply in question bank
+          {t("learner.lessons.detail.ctaQuestionBank")}
         </Link>
         <Link href="/app/exams" className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-gray-50">
-          Timed practice exam
+          {t("learner.lessons.detail.ctaTimedExam")}
         </Link>
       </div>
     </main>

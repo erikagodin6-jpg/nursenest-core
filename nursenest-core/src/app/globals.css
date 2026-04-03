@@ -91,6 +91,23 @@ body {
   /* Stripes / panels that sit on the page canvas */
   --theme-muted-surface: color-mix(in srgb, var(--theme-primary) 7%, var(--bg-page));
 
+  /*
+   * Vertical rhythm: owns padding/margins between sections (not max-width).
+   * Presentation companions: deterministic color-mix from --theme-primary (single accent family per theme).
+   */
+  --nn-rhythm-page-y: clamp(1.75rem, 4.2vw, 2.75rem);
+  --nn-rhythm-section-y: clamp(2.25rem, 4.2vw, 3.25rem);
+  --nn-rhythm-tight-y: clamp(1.125rem, 2.4vw, 1.625rem);
+  --nn-rhythm-hero-gap: clamp(0.875rem, 1.8vw, 1.125rem);
+  --nn-rhythm-footer-y: clamp(2.25rem, 4vw, 2.875rem);
+  --nn-rhythm-shell-y: clamp(1.375rem, 3vw, 2rem);
+  --nn-presentation-wash: color-mix(in srgb, var(--theme-primary) 5.5%, var(--theme-page-bg));
+  --nn-presentation-panel: color-mix(in srgb, var(--theme-primary) 8%, var(--theme-card-bg));
+  --nn-presentation-badge: color-mix(in srgb, var(--theme-primary) 10%, var(--theme-card-bg));
+  --nn-presentation-trust-band: color-mix(in srgb, var(--theme-primary) 6.5%, var(--bg-page));
+  --nn-presentation-ribbon: color-mix(in srgb, var(--theme-primary) 4.5%, var(--theme-card-bg));
+  --nn-presentation-divider: color-mix(in srgb, var(--theme-primary) 12%, var(--theme-border));
+
   --color-card-base: var(--bg-card);
   --color-card-fg-base: var(--theme-card-text);
   --color-popover-base: var(--bg-elevated);
@@ -135,6 +152,12 @@ html[data-theme="dark-mode"] {
   --focus-halo-strong: color-mix(in srgb, var(--theme-primary) 55%, transparent);
   --hero-gradient-start: color-mix(in srgb, var(--theme-primary) 14%, transparent);
   --theme-muted-surface: color-mix(in srgb, var(--theme-primary) 10%, var(--bg-page));
+  --nn-presentation-wash: color-mix(in srgb, var(--theme-primary) 10%, var(--theme-page-bg));
+  --nn-presentation-panel: color-mix(in srgb, var(--theme-primary) 13%, var(--theme-card-bg));
+  --nn-presentation-badge: color-mix(in srgb, var(--theme-primary) 14%, var(--theme-card-bg));
+  --nn-presentation-trust-band: color-mix(in srgb, var(--theme-primary) 11%, var(--bg-page));
+  --nn-presentation-ribbon: color-mix(in srgb, var(--theme-primary) 9%, var(--theme-card-bg));
+  --nn-presentation-divider: color-mix(in srgb, var(--theme-primary) 22%, var(--theme-border));
 }
 
 @theme inline {
@@ -511,6 +534,40 @@ html[data-theme="dark-mode"] .nn-trust-mark {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/*
+ * Shared horizontal gutter for marketing/hub pages (matches max-w-* inner padding; opt-in per page).
+ */
+.nn-marketing-x {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+@media (min-width: 640px) {
+  .nn-marketing-x {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .nn-marketing-x {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+.nn-rhythm-section {
+  padding-top: var(--nn-rhythm-section-y);
+  padding-bottom: var(--nn-rhythm-section-y);
+}
+
+.nn-rhythm-page {
+  padding-top: var(--nn-rhythm-page-y);
+  padding-bottom: var(--nn-rhythm-page-y);
+}
+
+.nn-hero-bridge {
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 /* Exam-style sessions: hide main learner chrome (nav, adaptive strip) — see LearnerExamChromeGate. */

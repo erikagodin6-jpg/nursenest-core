@@ -6,6 +6,7 @@ import {
 } from "@/lib/lessons/scoped-lessons/copd-gold-standard";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
+import { applyPathwayLessonEducationalOverlay } from "@/lib/i18n/educational-content-overlay";
 import { normalizePathwayLessonLocale, PATHWAY_LESSON_SITEMAP_LOCALE } from "@/lib/lessons/pathway-lesson-locale";
 import type {
   PathwayLessonFigure,
@@ -388,6 +389,15 @@ function withLocaleMeta(lesson: PathwayLessonRecord, meta: PathwayLessonLocaleMe
   return { ...lesson, localeMeta: meta };
 }
 
+/** File-based `educational-overlays/<locale>/lessons.json` on top of DB/catalog (slug or pathwayId:slug). */
+function applyLessonEducationalOverlay(
+  lesson: PathwayLessonRecord,
+  marketingLocale: string | undefined,
+  pathwayId: string,
+): PathwayLessonRecord {
+  return applyPathwayLessonEducationalOverlay(lesson, normalizePathwayLessonLocale(marketingLocale), pathwayId);
+}
+
 function lessonLocaleMeta(
   requestedRaw: string | undefined,
   contentLocale: string,
@@ -613,7 +623,9 @@ export async function getPathwayLessonsPage(
     });
     const meta = lessonLocaleMeta(marketingLocale, effective, requested !== effective, false);
     return {
-      items: raw.map((row) => withLocaleMeta(normalizeLessonForHubList(row), meta)),
+      items: raw.map((row) =>
+        applyLessonEducationalOverlay(withLocaleMeta(normalizeLessonForHubList(row), meta), marketingLocale, pathwayId),
+      ),
       total,
       page: safePage,
       pageSize: ps,
@@ -642,7 +654,9 @@ export async function getPathwayLessonsPage(
   });
   const catMeta = lessonLocaleMeta(marketingLocale, "en", requested !== "en", true);
   return {
-    items: slice.map((row) => withLocaleMeta(normalizeLesson(row), catMeta)),
+    items: slice.map((row) =>
+      applyLessonEducationalOverlay(withLocaleMeta(normalizeLesson(row), catMeta), marketingLocale, pathwayId),
+    ),
     total,
     page: safePage,
     pageSize: ps,
@@ -707,7 +721,13 @@ export async function getLessonsForTopicPage(
           catalogSupplement: true,
         });
         return {
-          items: sliceCat.map((row) => withLocaleMeta(normalizeLesson(row), metaCat)),
+          items: sliceCat.map((row) =>
+            applyLessonEducationalOverlay(
+              withLocaleMeta(normalizeLesson(row), metaCat),
+              marketingLocale,
+              pathwayId,
+            ),
+          ),
           total: catMatched.length,
           page: safePageCat,
           pageSize: ps,
@@ -823,11 +843,22 @@ export async function getLessonsForTopicPage(
     });
     const meta = lessonLocaleMeta(marketingLocale, effective, requested !== effective, false);
     const dbItems = rows.map((r) =>
-      withLocaleMeta(normalizeLessonForHubList(pathwayLessonRowToInput({ ...r, sections: [] })), meta),
+      applyLessonEducationalOverlay(
+        withLocaleMeta(normalizeLessonForHubList(pathwayLessonRowToInput({ ...r, sections: [] })), meta),
+        marketingLocale,
+        pathwayId,
+      ),
     );
     const items =
       goldHub && start === 0
-        ? [withLocaleMeta(normalizeLessonForHubList(goldHub), meta), ...dbItems]
+        ? [
+            applyLessonEducationalOverlay(
+              withLocaleMeta(normalizeLessonForHubList(goldHub), meta),
+              marketingLocale,
+              pathwayId,
+            ),
+            ...dbItems,
+          ]
         : dbItems;
     return {
       items,
@@ -860,7 +891,9 @@ export async function getLessonsForTopicPage(
   });
   const catMeta = lessonLocaleMeta(marketingLocale, "en", requested !== "en", true);
   return {
-    items: slice.map((row) => withLocaleMeta(normalizeLesson(row), catMeta)),
+    items: slice.map((row) =>
+      applyLessonEducationalOverlay(withLocaleMeta(normalizeLesson(row), catMeta), marketingLocale, pathwayId),
+    ),
     total,
     page: safePage,
     pageSize: ps,
@@ -892,9 +925,13 @@ export async function getPathwayLesson(
     null,
   );
   if (rowRequested && rowRequested.status === ContentStatus.PUBLISHED) {
-    return withLocaleMeta(
-      normalizeLesson(pathwayLessonRowToInput(rowRequested)),
-      lessonLocaleMeta(marketingLocale, requested, false, false),
+    return applyLessonEducationalOverlay(
+      withLocaleMeta(
+        normalizeLesson(pathwayLessonRowToInput(rowRequested)),
+        lessonLocaleMeta(marketingLocale, requested, false, false),
+      ),
+      marketingLocale,
+      pathwayId,
     );
   }
 
@@ -909,9 +946,13 @@ export async function getPathwayLesson(
       null,
     );
     if (rowEn && rowEn.status === ContentStatus.PUBLISHED) {
-      return withLocaleMeta(
-        normalizeLesson(pathwayLessonRowToInput(rowEn)),
-        lessonLocaleMeta(marketingLocale, "en", true, false),
+      return applyLessonEducationalOverlay(
+        withLocaleMeta(
+          normalizeLesson(pathwayLessonRowToInput(rowEn)),
+          lessonLocaleMeta(marketingLocale, "en", true, false),
+        ),
+        marketingLocale,
+        pathwayId,
       );
     }
   }
@@ -926,9 +967,10 @@ export async function getPathwayLesson(
       pathwayLessonRuntimeSource: "database",
     });
   }
-  return withLocaleMeta(
-    normalizeLesson(hit),
-    lessonLocaleMeta(marketingLocale, "en", requested !== "en", true),
+  return applyLessonEducationalOverlay(
+    withLocaleMeta(normalizeLesson(hit), lessonLocaleMeta(marketingLocale, "en", requested !== "en", true)),
+    marketingLocale,
+    pathwayId,
   );
 }
 
@@ -963,10 +1005,17 @@ export async function getPathwayLessonForProgress(pathwayId: string, slug: strin
  * App shell `/app/lessons/[id]`: load a published DB row by primary key (no catalog fallback).
  * Callers must enforce access with {@link appPathwayLessonVisibleToSubscriber}.
  */
-export async function getPublishedPathwayLessonRecordById(id: string): Promise<PathwayLessonRecord | undefined> {
+export async function getPublishedPathwayLessonRecordById(
+  id: string,
+  marketingLocale?: string,
+): Promise<PathwayLessonRecord | undefined> {
   const row = await dbCall(() => prisma.pathwayLesson.findUnique({ where: { id } }), null);
   if (!row || row.status !== ContentStatus.PUBLISHED) return undefined;
-  return normalizeLesson(pathwayLessonRowToInput(row));
+  return applyLessonEducationalOverlay(
+    normalizeLesson(pathwayLessonRowToInput(row)),
+    marketingLocale,
+    row.pathwayId,
+  );
 }
 
 /** Related lessons (same topic) for detail page — capped list, bounded query on DB. */
@@ -1001,7 +1050,11 @@ export async function getRelatedPathwayLessons(
     );
     const meta = lessonLocaleMeta(marketingLocale, effective, requested !== effective, false);
     return rows.map((r) =>
-      withLocaleMeta(normalizeLessonForHubList(pathwayLessonRowToInput({ ...r, sections: [] })), meta),
+      applyLessonEducationalOverlay(
+        withLocaleMeta(normalizeLessonForHubList(pathwayLessonRowToInput({ ...r, sections: [] })), meta),
+        marketingLocale,
+        pathwayId,
+      ),
     );
   }
 
@@ -1009,7 +1062,7 @@ export async function getRelatedPathwayLessons(
   return getCatalogPathwayLessonsSync(pathwayId)
     .filter((l) => l.topicSlug === topicSlug && l.slug !== excludeSlug)
     .slice(0, cap)
-    .map((l) => withLocaleMeta(l, catMeta));
+    .map((l) => applyLessonEducationalOverlay(withLocaleMeta(l, catMeta), marketingLocale, pathwayId));
 }
 
 async function listPathwayIdsWithDbLessons(): Promise<string[]> {

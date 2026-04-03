@@ -30,22 +30,22 @@ const HomePageMidSections = dynamic(() => import("@/components/marketing/home-pa
 
 const HomeMarketingConversionBlocks = dynamic(
   () => import("@/components/marketing/home-marketing-conversion-blocks").then((m) => ({ default: m.HomeMarketingConversionBlocks })),
-  { ssr: false, loading: () => <div className="min-h-[240px]" aria-hidden /> },
+  { ssr: false, loading: () => <div className="min-h-[160px]" aria-hidden /> },
 );
 
 const HomeMarketingFeaturesStack = dynamic(
   () => import("@/components/marketing/home-marketing-features-stack").then((m) => ({ default: m.HomeMarketingFeaturesStack })),
-  { ssr: false, loading: () => <div className="min-h-[200px]" aria-hidden /> },
+  { ssr: false, loading: () => <div className="min-h-[120px]" aria-hidden /> },
 );
 
 const HomeMarketingProductProof = dynamic(
   () => import("@/components/marketing/home-marketing-product-proof").then((m) => ({ default: m.HomeMarketingProductProof })),
-  { ssr: false, loading: () => <div className="min-h-[400px]" aria-hidden /> },
+  { ssr: false, loading: () => <div className="min-h-[220px]" aria-hidden /> },
 );
 
 const HeroPlatformStats = dynamic(() => import("@/legacy/marketing/hero-platform-stats"), {
   ssr: false,
-  loading: () => <div className="min-h-[300px]" />,
+  loading: () => <div className="min-h-[180px]" />,
 });
 const HeroFeatureStrip = dynamic(() => import("@/legacy/marketing/hero-feature-strip"), {
   ssr: false,
@@ -57,31 +57,31 @@ const HeroTrustIndicator = dynamic(() => import("@/legacy/marketing/hero-trust-i
 });
 const HeroExpansionTracker = dynamic(() => import("@/legacy/marketing/hero-expansion-tracker"), {
   ssr: false,
-  loading: () => <div className="min-h-[300px]" />,
+  loading: () => <div className="min-h-[180px]" />,
 });
 const HeroGlobalCoverage = dynamic(() => import("@/legacy/marketing/hero-global-coverage"), {
   ssr: false,
-  loading: () => <div className="min-h-[300px]" />,
+  loading: () => <div className="min-h-[180px]" />,
 });
 const HeroNursingTiers = dynamic(() => import("@/legacy/marketing/hero-nursing-tiers"), {
   ssr: false,
-  loading: () => <div className="min-h-[400px]" />,
+  loading: () => <div className="min-h-[220px]" />,
 });
 const HeroCertifications = dynamic(() => import("@/legacy/marketing/hero-certifications"), {
   ssr: false,
-  loading: () => <div className="min-h-[300px]" />,
+  loading: () => <div className="min-h-[180px]" />,
 });
 const HeroAlliedHealth = dynamic(() => import("@/legacy/marketing/hero-allied-health"), {
   ssr: false,
-  loading: () => <div className="min-h-[400px]" />,
+  loading: () => <div className="min-h-[220px]" />,
 });
 const HomeDifferentiation = dynamic(() => import("@/legacy/marketing/home-differentiation"), {
   ssr: false,
-  loading: () => <div className="min-h-[600px]" />,
+  loading: () => <div className="min-h-[320px]" />,
 });
 const HomeConversionSections = dynamic(() => import("@/legacy/marketing/home-conversion-sections"), {
   ssr: false,
-  loading: () => <div className="min-h-[400px]" />,
+  loading: () => <div className="min-h-[220px]" />,
 });
 const HomeCareerCta = dynamic(() => import("@/legacy/marketing/home-career-cta"), {
   ssr: false,
@@ -89,7 +89,7 @@ const HomeCareerCta = dynamic(() => import("@/legacy/marketing/home-career-cta")
 });
 const HomeBottomSections = dynamic(() => import("@/legacy/marketing/home-bottom-sections"), {
   ssr: false,
-  loading: () => <div className="min-h-[800px]" />,
+  loading: () => <div className="min-h-[360px]" />,
 });
 
 /** Comma-separated counts from `GET /api/public/home-stats` (exact aggregates, marketing scope). */
@@ -213,17 +213,17 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
     <div className="font-sans md:animate-page-enter flex min-h-screen flex-col overflow-x-hidden bg-[var(--theme-page-bg)]">
       <div className="flex-grow overflow-x-hidden">
         <section
-          className="relative overflow-hidden pt-0"
+          className="nn-hero-bridge relative overflow-hidden pt-0"
           style={{ paddingTop: "var(--space-hero-top)", paddingBottom: "var(--space-hero-bottom)" }}
           data-testid="hero-section"
         >
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div
-              className={`grid items-start gap-4 md:gap-5 lg:gap-6 ${showHeroMediaColumn ? "md:grid-cols-[1fr_1.08fr]" : "md:grid-cols-1"}`}
+              className={`grid items-start gap-4 md:gap-5 lg:gap-[1.35rem] ${showHeroMediaColumn ? "md:grid-cols-[1fr_1.08fr]" : "md:grid-cols-1"}`}
             >
-              <div className="hero-motion-enter min-w-0 max-w-[min(100%,46rem)] space-y-3 md:space-y-4">
+              <div className="hero-motion-enter min-w-0 max-w-[min(100%,46rem)] space-y-[var(--nn-rhythm-hero-gap)] md:space-y-4">
                 <div
-                  className="inline-flex max-w-full flex-wrap items-center gap-x-2 gap-y-1 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-inset)] px-3 py-1.5 text-[11px] font-semibold leading-snug text-[var(--theme-heading-text)] sm:text-sm"
+                  className="inline-flex max-w-full flex-wrap items-center gap-x-2 gap-y-1 rounded-full border border-[var(--border-subtle)] bg-[var(--nn-presentation-badge)] px-3 py-1.5 text-[11px] font-semibold leading-snug text-[var(--theme-heading-text)] sm:text-sm"
                   data-testid="badge-trust-micro"
                 >
                   <span>{t("home.hero.trustMicroBadge")}</span>
@@ -423,62 +423,62 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
           </Suspense>
         </LazySection>
 
-        <LazySection minHeight="200px" rootMargin="300px">
-          <Suspense fallback={<div className="min-h-[200px]" />}>
+        <LazySection minHeight="120px" rootMargin="300px">
+          <Suspense fallback={<div className="min-h-[120px]" />}>
             <HomeMarketingFeaturesStack region={region} />
           </Suspense>
         </LazySection>
 
-        <LazySection minHeight="300px" rootMargin="300px">
-          <Suspense fallback={<div className="min-h-[300px]" />}>
+        <LazySection minHeight="180px" rootMargin="300px">
+          <Suspense fallback={<div className="min-h-[180px]" />}>
             <HeroPlatformStats stats={heroPlatformStatsPayload} />
           </Suspense>
         </LazySection>
 
-        <LazySection minHeight="400px" rootMargin="300px">
-          <Suspense fallback={<div className="min-h-[400px]" />}>
+        <LazySection minHeight="220px" rootMargin="300px">
+          <Suspense fallback={<div className="min-h-[220px]" />}>
             <HomeMarketingProductProof />
           </Suspense>
         </LazySection>
 
-        <LazySection minHeight="300px" rootMargin="300px">
-          <Suspense fallback={<div className="min-h-[300px]" />}>
+        <LazySection minHeight="180px" rootMargin="300px">
+          <Suspense fallback={<div className="min-h-[180px]" />}>
             <HeroGlobalCoverage />
           </Suspense>
         </LazySection>
 
-        <LazySection minHeight="400px" rootMargin="300px">
-          <Suspense fallback={<div className="min-h-[400px]" />}>
+        <LazySection minHeight="220px" rootMargin="300px">
+          <Suspense fallback={<div className="min-h-[220px]" />}>
             <HeroNursingTiers />
           </Suspense>
         </LazySection>
 
-        <LazySection minHeight="300px" rootMargin="300px">
-          <Suspense fallback={<div className="min-h-[300px]" />}>
+        <LazySection minHeight="180px" rootMargin="300px">
+          <Suspense fallback={<div className="min-h-[180px]" />}>
             <HeroCertifications />
           </Suspense>
         </LazySection>
 
-        <LazySection minHeight="400px" rootMargin="300px">
-          <Suspense fallback={<div className="min-h-[400px]" />}>
+        <LazySection minHeight="220px" rootMargin="300px">
+          <Suspense fallback={<div className="min-h-[220px]" />}>
             <HeroAlliedHealth />
           </Suspense>
         </LazySection>
 
-        <LazySection minHeight="300px" rootMargin="300px">
-          <Suspense fallback={<div className="min-h-[300px]" />}>
+        <LazySection minHeight="180px" rootMargin="300px">
+          <Suspense fallback={<div className="min-h-[180px]" />}>
             <HeroExpansionTracker />
           </Suspense>
         </LazySection>
 
-        <LazySection minHeight="600px" rootMargin="300px">
-          <Suspense fallback={<div className="min-h-[600px]" />}>
+        <LazySection minHeight="320px" rootMargin="300px">
+          <Suspense fallback={<div className="min-h-[320px]" />}>
             <HomeDifferentiation />
           </Suspense>
         </LazySection>
 
-        <LazySection minHeight="400px" rootMargin="200px">
-          <Suspense fallback={<div className="min-h-[400px]" />}>
+        <LazySection minHeight="220px" rootMargin="200px">
+          <Suspense fallback={<div className="min-h-[220px]" />}>
             <HomeConversionSections
               lessonCount={lessonCount}
               questionCount={questionCount}
@@ -494,8 +494,8 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
           </Suspense>
         </LazySection>
 
-        <LazySection minHeight="420px" rootMargin="400px">
-          <Suspense fallback={<div className="min-h-[420px]" />}>
+        <LazySection minHeight="360px" rootMargin="400px">
+          <Suspense fallback={<div className="min-h-[360px]" />}>
             <HomeBottomSections
               region={region}
               heroStats={undefined}
