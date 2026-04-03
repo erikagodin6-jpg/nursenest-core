@@ -5,9 +5,9 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { MarketingI18nProvider } from "@/components/marketing/marketing-i18n-provider";
 import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/seo-json-ld";
-import { DEFAULT_MARKETING_LOCALE, isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy";
+import { isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy";
 import { MARKETING_LOCALE_COOKIE, MARKETING_LOCALE_COOKIE_MAX_AGE } from "@/lib/i18n/marketing-locale-cookie";
-import { loadMarketingMessages, loadMarketingMessagesSync } from "@/lib/marketing-i18n/load-marketing-messages";
+import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 
 export default async function MarketingLocaleLayout({
   children,
@@ -26,10 +26,8 @@ export default async function MarketingLocaleLayout({
     httpOnly: true,
   });
   const messages = await loadMarketingMessages(locale);
-  /** Full disk English — reliable fallback when locale CDN bundles omit newer keys. */
-  const fallbackMessages = loadMarketingMessagesSync(DEFAULT_MARKETING_LOCALE);
   return (
-    <MarketingI18nProvider key={locale} locale={locale} messages={messages} fallbackMessages={fallbackMessages}>
+    <MarketingI18nProvider key={locale} locale={locale} messages={messages}>
       <MarketingLocaleUrlSync locale={locale} />
       <OrganizationJsonLd />
       <WebSiteJsonLd />

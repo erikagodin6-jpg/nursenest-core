@@ -9,7 +9,7 @@ import type {
 export function localizeBreadcrumbCrumbs(
   crumbs: BreadcrumbCrumb[],
   primary: MarketingMessages,
-  fallback: MarketingMessages,
+  fallback?: MarketingMessages,
 ): BreadcrumbCrumb[] {
   return crumbs.map((c) => {
     if (!c.i18nKey) return { name: c.name, href: c.href };
@@ -23,7 +23,7 @@ export function localizeBreadcrumbCrumbs(
 export function localizeBreadcrumbSchemaItems(
   items: BreadcrumbSchemaItem[],
   primary: MarketingMessages,
-  fallback: MarketingMessages,
+  fallback?: MarketingMessages,
 ): BreadcrumbSchemaItem[] {
   return items.map((s) => {
     if (!s.i18nKey) return { name: s.name, item: s.item };
@@ -37,7 +37,7 @@ export function localizeBreadcrumbSchemaItems(
 export function localizeBreadcrumbResolution(
   res: BreadcrumbResolution,
   primary: MarketingMessages,
-  fallback: MarketingMessages,
+  fallback?: MarketingMessages,
 ): BreadcrumbResolution {
   return {
     crumbs: localizeBreadcrumbCrumbs(res.crumbs, primary, fallback),

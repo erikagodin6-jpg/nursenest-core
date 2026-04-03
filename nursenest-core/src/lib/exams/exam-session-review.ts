@@ -67,7 +67,7 @@ export async function buildExamSessionReview(
 
   let scoreCorrect = 0;
   const byTopic: Record<string, { correct: number; total: number }> = {};
-  const items: { questionId: string; topic: string; correct: boolean }[] = [];
+  const items: ExamReviewJson["items"] = [];
 
   for (let i = 0; i < ids.length; i++) {
     const id = ids[i]!;

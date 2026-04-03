@@ -116,7 +116,7 @@ export function loadMarketingMessagesSync(locale: string): MarketingMessages {
   const disk = loadFromDiskSync(locale);
   if (disk) return disk;
   safeServerLog("i18n", "merged_bundle_missing", { locale, syncOnly: true });
-  if (locale !== DEFAULT_MARKETING_LOCALE) {
+  if (locale === DEFAULT_MARKETING_LOCALE) {
     return loadEnglishBundleFromDisk();
   }
   return {} as MarketingMessages;
@@ -131,11 +131,7 @@ export async function loadMarketingMessages(locale: string): Promise<MarketingMe
   if (fromCdn) return fromCdn;
 
   safeServerLog("i18n", "merged_bundle_missing", { locale });
-  if (locale !== DEFAULT_MARKETING_LOCALE) {
-    const enDisk = loadFromDiskSync(DEFAULT_MARKETING_LOCALE);
-    if (enDisk) return enDisk;
-    const enCdn = await loadFromCdn(DEFAULT_MARKETING_LOCALE);
-    if (enCdn) return enCdn;
+  if (locale === DEFAULT_MARKETING_LOCALE) {
     return loadEnglishBundleFromDisk();
   }
   return {} as MarketingMessages;

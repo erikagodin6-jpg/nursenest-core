@@ -4,9 +4,9 @@ import HomeRestoredClient from "@/components/marketing/home-restored-client";
 import { getHomepageLessonTeasers } from "@/lib/marketing/homepage-lesson-teasers";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
-import { DEFAULT_MARKETING_LOCALE, isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy";
+import { isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy";
 import { localizeBreadcrumbResolution } from "@/lib/seo/breadcrumb-i18n";
-import { loadMarketingMessages, loadMarketingMessagesSync } from "@/lib/marketing-i18n/load-marketing-messages";
+import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { marketingHomeSurfaceBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 
 export const revalidate = 600;
@@ -31,8 +31,7 @@ export default async function LocalizedHomePage({ params }: Props) {
   const lessonTeasers = await getHomepageLessonTeasers();
   const raw = marketingHomeSurfaceBreadcrumbs();
   const primary = await loadMarketingMessages(locale);
-  const fallback = loadMarketingMessagesSync(DEFAULT_MARKETING_LOCALE);
-  const { crumbs, schemaItems } = localizeBreadcrumbResolution(raw, primary, fallback);
+  const { crumbs, schemaItems } = localizeBreadcrumbResolution(raw, primary);
   return (
     <>
       <BreadcrumbJsonLd items={schemaItems} />

@@ -33,13 +33,15 @@ export function MarketingLanguagePreferenceList({ onDone, renderItem }: Props) {
   const { pathname: barePath } = stripMarketingLocalePrefix(pathname);
   const basePath = barePath || "/";
   const onExamHub = isExamHubMarketingPath(pathname);
+  /** `/app/…` URLs are not under `(marketing)/[locale]`; keep path stable and rely on the cookie + refresh. */
+  const onAppShell = /^\/app(\/|$)/.test(pathname);
 
   function select(code: string) {
     startTransition(() => {
       void (async () => {
         const res = await preferMarketingLocale(code);
         if (!res.ok) return;
-        if (onExamHub) {
+        if (onExamHub || onAppShell) {
           router.refresh();
         } else {
           router.push(withMarketingLocale(code, basePath));

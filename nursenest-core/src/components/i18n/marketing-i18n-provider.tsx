@@ -31,7 +31,7 @@ export function MarketingI18nProvider({
 }: {
   locale: string;
   messages: MarketingMessages;
-  /** When set, missing keys in `messages` resolve from this bundle (usually English). */
+  /** When set, missing keys in `messages` resolve from this bundle before `[missing:…]` placeholders. */
   fallbackMessages?: MarketingMessages;
   children: ReactNode;
 }) {

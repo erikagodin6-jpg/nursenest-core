@@ -2,20 +2,9 @@ export type MarketingMessages = Record<string, string>;
 
 type Params = Record<string, string | number | undefined>;
 
-/** Last-resort label when no locale (including English) defines the key — readable, not blank. */
-export function humanizeMarketingKey(key: string): string {
-  const segment = key.includes(".") ? key.slice(key.lastIndexOf(".") + 1) : key;
-  const spaced = segment
-    .replace(/_/g, " ")
-    .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
-    .trim();
-  if (!spaced) return key;
-  return spaced.replace(/\b\w/g, (c) => c.toUpperCase());
-}
-
 /**
- * Resolves copy for a flat key. When `fallbackMessages` is provided (typically English),
- * missing keys in the primary bundle resolve from fallback before logging.
+ * Resolves copy for a flat key. When `fallbackMessages` is provided, missing keys in the primary
+ * bundle resolve from fallback before the explicit `[missing:…]` placeholder.
  */
 export function formatMarketingMessage(
   messages: MarketingMessages,
@@ -30,8 +19,7 @@ export function formatMarketingMessage(
   }
   if (isEmpty(raw)) {
     console.error(`[marketing-i18n] missing key: ${key} (locale bundle)`);
-    /** Last resort: readable fragment — prefer fixing bundles or passing fallbackMessages (see marketing layouts). */
-    return humanizeMarketingKey(key);
+    return `[missing:${key}]`;
   }
   let s: string = raw;
   if (params) {
