@@ -15,7 +15,8 @@ export function NpProgrammaticPracticeTestCrossLinks({ slug, locale }: { slug: s
   if (!NP_PRACTICE_SLUGS.has(slug)) return null;
   const { region } = useNursenestRegion();
   const loc = (path: string) => withMarketingLocale(locale, path);
-  const base = { event: PH.marketingPathwayHubCta as const, surface: "programmatic_np_board_crosslink" as const };
+  const ev = PH.marketingPathwayHubCta;
+  const surface = "programmatic_np_board_crosslink" as const;
 
   if (slug === "cnple-practice-questions") {
     return (
@@ -27,8 +28,8 @@ export function NpProgrammaticPracticeTestCrossLinks({ slug, locale }: { slug: s
           Prefer a single landing that says CNPLE in the URL? Open the{" "}
           <MarketingTrackedLink
             href={loc(NP.cnplePracticeTest)}
-            event={base.event}
-            eventProps={{ ...base, pathway_id: "ca-np-cnple", link_target: "cnple_practice_test" }}
+            event={ev}
+            eventProps={{ surface, pathway_id: "ca-np-cnple", link_target: "cnple_practice_test" }}
             className="font-semibold text-primary hover:underline"
           >
             CNPLE practice test
@@ -48,12 +49,11 @@ export function NpProgrammaticPracticeTestCrossLinks({ slug, locale }: { slug: s
         {region === "US" ? (
           <>
             US Family NP candidates often search by certifying body. These URLs use the same FNP pathway as{" "}
-            <code className="rounded bg-muted px-1 py-0.5 text-xs">/us/np/fnm</code>…{" "}
             <code className="rounded bg-muted px-1 py-0.5 text-xs">/us/np/fnp</code>:{" "}
             <MarketingTrackedLink
               href={loc(NP.aanpPracticeTest)}
-              event={base.event}
-              eventProps={{ ...base, pathway_id: "us-np-fnp", link_target: "aanp_practice_test" }}
+              event={ev}
+              eventProps={{ surface, pathway_id: "us-np-fnp", link_target: "aanp_practice_test" }}
               className="font-semibold text-primary hover:underline"
             >
               AANP practice test
@@ -61,8 +61,8 @@ export function NpProgrammaticPracticeTestCrossLinks({ slug, locale }: { slug: s
             ,{" "}
             <MarketingTrackedLink
               href={loc(NP.anccFnpPracticeTest)}
-              event={base.event}
-              eventProps={{ ...base, pathway_id: "us-np-fnp", link_target: "ancc_fnp_practice_test" }}
+              event={ev}
+              eventProps={{ surface, pathway_id: "us-np-fnp", link_target: "ancc_fnp_practice_test" }}
               className="font-semibold text-primary hover:underline"
             >
               ANCC FNP practice test
@@ -70,8 +70,8 @@ export function NpProgrammaticPracticeTestCrossLinks({ slug, locale }: { slug: s
             . Psychiatric–mental health NP:{" "}
             <MarketingTrackedLink
               href={loc(NP.pmhnpPracticeTest)}
-              event={base.event}
-              eventProps={{ ...base, pathway_id: "us-np-pmhnp", link_target: "pmhnp_practice_test" }}
+              event={ev}
+              eventProps={{ surface, pathway_id: "us-np-pmhnp", link_target: "pmhnp_practice_test" }}
               className="font-semibold text-primary hover:underline"
             >
               PMHNP practice test
@@ -83,8 +83,8 @@ export function NpProgrammaticPracticeTestCrossLinks({ slug, locale }: { slug: s
             Canadian NP: use the{" "}
             <MarketingTrackedLink
               href={loc(NP.cnplePracticeTest)}
-              event={base.event}
-              eventProps={{ ...base, pathway_id: "ca-np-cnple", link_target: "cnple_practice_test" }}
+              event={ev}
+              eventProps={{ surface, pathway_id: "ca-np-cnple", link_target: "cnple_practice_test" }}
               className="font-semibold text-primary hover:underline"
             >
               CNPLE practice test

@@ -76,6 +76,12 @@ export default async function AdminDiagnosticsPage() {
           >
             JSON API
           </Link>
+          <Link
+            href="/admin/diagnostics/cat-blueprint-sessions"
+            className="rounded-lg border border-border px-3 py-2 font-medium text-foreground hover:bg-muted"
+          >
+            CAT blueprint sessions
+          </Link>
         </div>
       </div>
 

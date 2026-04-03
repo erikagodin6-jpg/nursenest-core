@@ -39,7 +39,8 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
   const session = await auth();
   const isSignedIn = Boolean(session?.user);
   const npInventory = pathway.id === "ca-np-cnple" ? await loadNpCanadaInventoryGate() : null;
-  const npPracticeSeo = getNpPracticeTestLandingCopy(locale, slug, examCode);
+  const npPracticeSeo = getNpPracticeTestLandingCopy(locale, slug, examCode) ?? null;
+  const marketingHubPath = `/${locale}/${slug}/${examCode}`;
   return (
     <ExamPathwayHub
       pathway={pathway}
@@ -48,6 +49,9 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
       heroTitle={npPracticeSeo?.heroTitle}
       heroLead={npPracticeSeo?.heroLead}
       emphasizeCatPracticeTests={Boolean(npPracticeSeo)}
+      marketingHubPath={marketingHubPath}
+      npPracticeSeo={npPracticeSeo}
+      npSeoAliasSegment={npPracticeSeo ? examCode : undefined}
     />
   );
 }

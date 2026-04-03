@@ -53,7 +53,8 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const pathway = resolveExamPathwayFromMarketingHubSegment(countrySlug, roleTrack, examCode);
   if (!pathway) notFound();
 
-  const base = buildExamPathwayPath(pathway, "lessons");
+  const hubBase = `/${countrySlug}/${roleTrack}/${examCode}`;
+  const base = `${hubBase}/lessons`;
   const sp = await searchParams;
   const pageRequested = Math.max(1, Number(sp.page ?? "1") || 1);
   const pageSizeRequested = Number(sp.pageSize ?? String(PATHWAY_HUB_PAGE_SIZE_DEFAULT)) || PATHWAY_HUB_PAGE_SIZE_DEFAULT;
@@ -66,7 +67,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
 
   const lessons = pageResult.items;
   const topics = await listTopicClusters(pathway.id, lessonContentLocale);
-  const { crumbs, schemaItems } = pathwayLessonsHubBreadcrumbs(pathway);
+  const { crumbs, schemaItems } = pathwayLessonsHubBreadcrumbs(pathway, { hubBasePath: hubBase });
   const isNclexRnHub = pathway.id === "us-rn-nclex-rn" || pathway.id === "ca-rn-nclex-rn";
   const nclexRnRegion = pathway.id === "ca-rn-nclex-rn" ? "ca" : "us";
   const isUsNclexPnHub = pathway.id === "us-lpn-nclex-pn";

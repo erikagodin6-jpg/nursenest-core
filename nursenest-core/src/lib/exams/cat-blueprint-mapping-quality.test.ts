@@ -101,6 +101,15 @@ describe("buildCatBlueprintAdminDiagnostics", () => {
     assert.equal(admin.deliveredFallbackCount, 3);
     assert.equal(admin.topFallbackBlueprintKeysDelivered[0]?.blueprintKey, "Cardiac");
     assert.equal(admin.topFallbackBlueprintKeysDelivered[0]?.count, 2);
+    assert.equal(admin.qualityThresholds.poolMappedFractionWarning, 0.9);
+    assert.equal(admin.qualityThresholds.sessionMappedFractionWarning, 0.85);
+    assert.equal(admin.deliveredPercentMapped, 25);
+    assert.equal(admin.deliveredPercentFallback, 75);
+    const cardiac = admin.fallbackDistributionDelivered.find((e) => e.blueprintKey === "Cardiac");
+    assert.ok(cardiac);
+    assert.equal(cardiac!.count, 2);
+    assert.equal(cardiac!.percentOfFallbackItems, 66.67);
+    assert.equal(cardiac!.percentOfTotalScored, 50);
   });
 });
 

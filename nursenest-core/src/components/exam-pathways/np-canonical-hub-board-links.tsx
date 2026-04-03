@@ -9,7 +9,8 @@ import { PH } from "@/lib/observability/posthog-conversion-events";
  * Inbound links from canonical NP hubs to board-named SEO URLs (single pathway; no duplicate trees).
  */
 export function NpCanonicalHubBoardLinks({ pathway }: { pathway: ExamPathwayDefinition }) {
-  const base = { event: PH.marketingPathwayHubCta as const, pathway_id: pathway.id };
+  const ev = PH.marketingPathwayHubCta;
+  const pid = pathway.id;
 
   if (pathway.id === "us-np-fnp") {
     return (
@@ -19,8 +20,8 @@ export function NpCanonicalHubBoardLinks({ pathway }: { pathway: ExamPathwayDefi
           Same Family NP track—pick the label that matches how you search:{" "}
           <MarketingTrackedLink
             href={NP.aanpPracticeTest}
-            event={base.event}
-            eventProps={{ ...base, surface: "canonical_hub_board_link", link_target: "aanp_practice_test" }}
+            event={ev}
+            eventProps={{ pathway_id: pid, surface: "canonical_hub_board_link", link_target: "aanp_practice_test" }}
             className="font-semibold text-primary hover:underline"
           >
             AANP practice test
@@ -28,8 +29,8 @@ export function NpCanonicalHubBoardLinks({ pathway }: { pathway: ExamPathwayDefi
           ,{" "}
           <MarketingTrackedLink
             href={NP.anccFnpPracticeTest}
-            event={base.event}
-            eventProps={{ ...base, surface: "canonical_hub_board_link", link_target: "ancc_fnp_practice_test" }}
+            event={ev}
+            eventProps={{ pathway_id: pid, surface: "canonical_hub_board_link", link_target: "ancc_fnp_practice_test" }}
             className="font-semibold text-primary hover:underline"
           >
             ANCC FNP practice test
@@ -48,8 +49,8 @@ export function NpCanonicalHubBoardLinks({ pathway }: { pathway: ExamPathwayDefi
           Prefer that phrasing in search? Use the{" "}
           <MarketingTrackedLink
             href={NP.pmhnpPracticeTest}
-            event={base.event}
-            eventProps={{ ...base, surface: "canonical_hub_board_link", link_target: "pmhnp_practice_test" }}
+            event={ev}
+            eventProps={{ pathway_id: pid, surface: "canonical_hub_board_link", link_target: "pmhnp_practice_test" }}
             className="font-semibold text-primary hover:underline"
           >
             PMHNP practice test
@@ -68,8 +69,8 @@ export function NpCanonicalHubBoardLinks({ pathway }: { pathway: ExamPathwayDefi
           If you landed from a CNPLE search, the{" "}
           <MarketingTrackedLink
             href={NP.cnplePracticeTest}
-            event={base.event}
-            eventProps={{ ...base, surface: "canonical_hub_board_link", link_target: "cnple_practice_test" }}
+            event={ev}
+            eventProps={{ pathway_id: pid, surface: "canonical_hub_board_link", link_target: "cnple_practice_test" }}
             className="font-semibold text-primary hover:underline"
           >
             CNPLE practice test

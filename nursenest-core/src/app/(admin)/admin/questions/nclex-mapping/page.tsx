@@ -65,21 +65,49 @@ export default async function AdminNclexClientNeedsMappingPage() {
           target="_blank"
           rel="noreferrer"
         >
-          JSON sample (missing category)
+          JSON (missing category)
+        </a>
+        <a
+          className="rounded-lg border border-border px-4 py-2 font-semibold text-foreground hover:bg-muted"
+          href="/api/admin/nclex-client-needs-mapping?missingField=subcategory&limit=200&format=json"
+          target="_blank"
+          rel="noreferrer"
+        >
+          JSON (missing subcategory)
+        </a>
+        <a
+          className="rounded-lg border border-border px-4 py-2 font-semibold text-foreground hover:bg-muted"
+          href="/api/admin/nclex-client-needs-mapping?missingField=both&limit=200&format=json"
+          target="_blank"
+          rel="noreferrer"
+        >
+          JSON (category or subcategory gap)
         </a>
         <a
           className="rounded-lg border border-border px-4 py-2 font-semibold text-foreground hover:bg-muted"
           href="/api/admin/nclex-client-needs-mapping?missingOnly=1&limit=500&format=csv"
         >
-          Download CSV (missing category)
+          CSV (missing category)
+        </a>
+        <a
+          className="rounded-lg border border-border px-4 py-2 font-semibold text-foreground hover:bg-muted"
+          href="/api/admin/nclex-client-needs-mapping?missingField=subcategory&limit=500&format=csv"
+        >
+          CSV (missing subcategory)
         </a>
         <a
           className="rounded-lg border border-border px-4 py-2 font-semibold text-foreground hover:bg-muted"
           href="/api/admin/nclex-client-needs-mapping?limit=50&format=json"
         >
-          JSON sample (any)
+          JSON (any sample)
         </a>
       </div>
+
+      <p className="mt-4 text-sm">
+        <Link className="font-semibold text-primary underline" href="/admin/diagnostics/cat-blueprint-sessions">
+          CAT blueprint session diagnostics (completed runs)
+        </Link>
+      </p>
 
       <p className="mt-6 text-sm text-muted-foreground">
         Editing these fields in-app is not included here; use your CMS, SQL, or import pipeline. CAT reports expose{" "}

@@ -2,10 +2,13 @@ import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { FaqJsonLd } from "@/components/seo/faq-json-ld";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import type { NpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
 import { pathwayOverviewBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { pathwayHubFaqSchema } from "@/lib/seo/pathway-hub-faq-schema";
 import { getPathwayProgrammaticSeoLanding } from "@/lib/seo/pathway-programmatic-seo";
 import { ExamPathwayHubBody } from "@/components/exam-pathways/exam-pathway-hub-body";
+import { NpCanonicalHubBoardLinks } from "@/components/exam-pathways/np-canonical-hub-board-links";
+import { NpSeoAliasHubAnalytics } from "@/components/marketing/np-seo-alias-hub-analytics";
 import type { NpPathwayInventoryGate } from "@/lib/np/np-pathway-inventory-gate";
 
 export function ExamPathwayHub({
@@ -15,6 +18,9 @@ export function ExamPathwayHub({
   heroTitle,
   heroLead,
   emphasizeCatPracticeTests = false,
+  marketingHubPath,
+  npPracticeSeo,
+  npSeoAliasSegment,
 }: {
   pathway: ExamPathwayDefinition;
   isSignedIn?: boolean;
@@ -24,13 +30,24 @@ export function ExamPathwayHub({
   heroLead?: string;
   /** Surfaces CAT practice-test entry (signed-in → `/app/practice-tests`). */
   emphasizeCatPracticeTests?: boolean;
+  /** Request path `/${country}/${role}/${segment}` so breadcrumbs JSON-LD match NP SEO aliases. */
+  marketingHubPath: string;
+  /** Full NP alias copy when on a board-named URL. */
+  npPracticeSeo?: NpPracticeTestLandingCopy | null;
+  /** Third path segment when it is an NP SEO alias (e.g. `aanp-practice-test`). */
+  npSeoAliasSegment?: string;
 }) {
-  const { crumbs, schemaItems } = pathwayOverviewBreadcrumbs(pathway);
+  const hubOpts = { hubBasePath: marketingHubPath };
+  const { crumbs, schemaItems } = pathwayOverviewBreadcrumbs(pathway, hubOpts);
   const programmaticLanding = getPathwayProgrammaticSeoLanding(pathway);
   const countryLine = pathway.countrySlug === "canada" ? "Canada" : "United States";
+  const showCanonicalBoardLinks = !npSeoAliasSegment && pathway.roleTrack === "np";
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-10 sm:py-14">
+      {npSeoAliasSegment ? (
+        <NpSeoAliasHubAnalytics pathwayId={pathway.id} aliasSegment={npSeoAliasSegment} />
+      ) : null}
       <BreadcrumbJsonLd items={schemaItems} />
       <FaqJsonLd items={pathwayHubFaqSchema(pathway)} />
       <div className="mb-8">
@@ -63,11 +80,25 @@ export function ExamPathwayHub({
         </aside>
       ) : null}
 
+      {npPracticeSeo ? (
+        <section className="nn-card mt-8 border border-[var(--theme-card-border)] bg-card p-4 sm:p-5" aria-labelledby="np-alias-support-heading">
+          <h2 id="np-alias-support-heading" className="text-base font-bold text-[var(--theme-heading-text)]">
+            {npPracticeSeo.supportSectionHeading}
+          </h2>
+          <p className="mt-2 text-sm leading-relaxed text-[var(--theme-muted-text)]">{npPracticeSeo.supportSectionBody}</p>
+        </section>
+      ) : null}
+
+      {showCanonicalBoardLinks ? <NpCanonicalHubBoardLinks pathway={pathway} /> : null}
+
       <ExamPathwayHubBody
         pathway={pathway}
         isSignedIn={isSignedIn}
         discovery={programmaticLanding}
         emphasizeCatPracticeTests={emphasizeCatPracticeTests}
+        npSeoAliasSegment={npSeoAliasSegment}
+        conversionSectionHeading={npPracticeSeo?.conversionSectionHeading}
+        conversionSectionLead={npPracticeSeo?.conversionSectionLead}
       />
     </div>
   );

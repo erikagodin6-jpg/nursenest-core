@@ -14,15 +14,33 @@ type Props = {
   discovery: { path: string; label: string } | null;
   /** NP practice-test SEO landings: highlight in-app CAT practice tests. */
   emphasizeCatPracticeTests?: boolean;
+  /** When set, all hub CTAs include `np_seo_alias_segment` + `from_np_seo_alias` for PostHog. */
+  npSeoAliasSegment?: string;
+  conversionSectionHeading?: string;
+  conversionSectionLead?: string;
 };
 
-export function ExamPathwayHubBody({ pathway, isSignedIn, discovery, emphasizeCatPracticeTests = false }: Props) {
+function npAliasAnalytics(npSeoAliasSegment: string | undefined): Record<string, string | boolean> {
+  if (!npSeoAliasSegment) return {};
+  return { np_seo_alias_segment: npSeoAliasSegment, from_np_seo_alias: true };
+}
+
+export function ExamPathwayHubBody({
+  pathway,
+  isSignedIn,
+  discovery,
+  emphasizeCatPracticeTests = false,
+  npSeoAliasSegment,
+  conversionSectionHeading,
+  conversionSectionLead,
+}: Props) {
   const isWaitlist = pathway.acquisitionMode === "waitlist" || pathway.status === "upcoming";
   const questionsHref = buildExamPathwayPath(pathway, "questions");
   const lessonsHref = buildExamPathwayPath(pathway, "lessons");
   const pricingHref = buildExamPathwayPath(pathway, "pricing");
   const tertiaryHref = isSignedIn ? "/app" : pricingHref;
   const tertiaryLabel = isSignedIn ? "Open your study hub" : "Plans & pricing";
+  const alias = npAliasAnalytics(npSeoAliasSegment);
 
   return (
     <>
@@ -30,7 +48,7 @@ export function ExamPathwayHubBody({ pathway, isSignedIn, discovery, emphasizeCa
         <MarketingTrackedLink
           href="/signup"
           event={PH.marketingPathwayHubCta}
-          eventProps={{ surface: "top_primary", pathway_id: pathway.id, signed_in: isSignedIn }}
+          eventProps={{ surface: "top_primary", pathway_id: pathway.id, signed_in: isSignedIn, ...alias }}
           className="inline-flex min-h-[52px] w-full items-center justify-center rounded-full bg-primary px-8 py-3 text-base font-semibold text-primary-foreground shadow-sm transition hover:brightness-110 sm:w-auto sm:min-h-[56px]"
         >
           {isWaitlist ? "Join or sign in" : "Create free account"}
@@ -39,7 +57,7 @@ export function ExamPathwayHubBody({ pathway, isSignedIn, discovery, emphasizeCa
         <MarketingTrackedLink
           href={questionsHref}
           event={PH.marketingPathwayHubCta}
-          eventProps={{ surface: "top_questions", pathway_id: pathway.id }}
+          eventProps={{ surface: "top_questions", pathway_id: pathway.id, ...alias }}
           className="inline-flex min-h-[52px] w-full items-center justify-center rounded-full border-2 border-primary/35 bg-primary/5 px-8 py-3 text-base font-semibold text-primary transition hover:bg-primary/10 sm:w-auto sm:min-h-[56px]"
         >
           Try {pathway.shortName} questions
@@ -51,6 +69,7 @@ export function ExamPathwayHubBody({ pathway, isSignedIn, discovery, emphasizeCa
             surface: isSignedIn ? "top_app_hub" : "top_pricing",
             pathway_id: pathway.id,
             signed_in: isSignedIn,
+            ...alias,
           }}
           className="inline-flex min-h-[48px] w-full items-center justify-center rounded-full border border-[var(--theme-input-border)] px-6 py-2.5 text-sm font-semibold text-[var(--theme-heading-text)] hover:bg-[var(--theme-muted-surface)] sm:w-auto"
         >
@@ -69,7 +88,7 @@ export function ExamPathwayHubBody({ pathway, isSignedIn, discovery, emphasizeCa
             <MarketingTrackedLink
               href="/app/practice-tests"
               event={PH.marketingPathwayHubCta}
-              eventProps={{ surface: "cat_practice_strip", pathway_id: pathway.id, signed_in: true }}
+              eventProps={{ surface: "cat_practice_strip", pathway_id: pathway.id, signed_in: true, ...alias }}
               className="mt-3 inline-flex font-semibold text-primary hover:underline"
             >
               Go to practice tests →
@@ -78,7 +97,7 @@ export function ExamPathwayHubBody({ pathway, isSignedIn, discovery, emphasizeCa
             <MarketingTrackedLink
               href="/signup"
               event={PH.marketingPathwayHubCta}
-              eventProps={{ surface: "cat_practice_strip", pathway_id: pathway.id, signed_in: false }}
+              eventProps={{ surface: "cat_practice_strip", pathway_id: pathway.id, signed_in: false, ...alias }}
               className="mt-3 inline-flex font-semibold text-primary hover:underline"
             >
               Create a free account to start →
@@ -93,9 +112,20 @@ export function ExamPathwayHubBody({ pathway, isSignedIn, discovery, emphasizeCa
           {discovery ? (
             <>
               Related public guide:{" "}
-              <Link href={discovery.path} className="font-semibold text-primary hover:underline">
-                {discovery.label}
-              </Link>
+              {npSeoAliasSegment ? (
+                <MarketingTrackedLink
+                  href={discovery.path}
+                  event={PH.marketingPathwayHubCta}
+                  eventProps={{ surface: "discovery_programmatic_guide", pathway_id: pathway.id, ...alias }}
+                  className="font-semibold text-primary hover:underline"
+                >
+                  {discovery.label}
+                </MarketingTrackedLink>
+              ) : (
+                <Link href={discovery.path} className="font-semibold text-primary hover:underline">
+                  {discovery.label}
+                </Link>
+              )}
               . Or{" "}
               <Link href="/exam-lessons" className="font-semibold text-primary hover:underline">
                 browse all exam lesson pathways
@@ -113,10 +143,12 @@ export function ExamPathwayHubBody({ pathway, isSignedIn, discovery, emphasizeCa
         </p>
       </aside>
 
-      <h2 className="mt-14 text-lg font-bold text-[var(--theme-heading-text)] sm:text-xl">Everything for this exam in one platform</h2>
+      <h2 className="mt-14 text-lg font-bold text-[var(--theme-heading-text)] sm:text-xl">
+        {conversionSectionHeading ?? "Everything for this exam in one platform"}
+      </h2>
       <p className="mt-2 max-w-2xl text-sm text-[var(--theme-muted-text)]">
-        Same-pathway question runs, structured lessons, spaced flashcards, study planner, and readiness sit behind one login after you subscribe.
-        Timed and exam-style practice (including mocks) unlock in the app once your plan matches this pathway.
+        {conversionSectionLead ??
+          "Same-pathway question runs, structured lessons, spaced flashcards, study planner, and readiness sit behind one login after you subscribe. Timed and exam-style practice (including mocks) unlock in the app once your plan matches this pathway."}
       </p>
       <ul className="mt-4 list-inside list-disc space-y-1.5 text-sm text-[var(--theme-body-text)]">
         <li>
@@ -138,7 +170,7 @@ export function ExamPathwayHubBody({ pathway, isSignedIn, discovery, emphasizeCa
           <MarketingTrackedLink
             href={questionsHref}
             event={PH.marketingPathwayHubCta}
-            eventProps={{ surface: "card_questions", pathway_id: pathway.id }}
+            eventProps={{ surface: "card_questions", pathway_id: pathway.id, ...alias }}
             className="flex h-full min-h-[11rem] flex-col rounded-2xl border border-[var(--theme-card-border)] bg-card p-5 shadow-sm transition hover:border-primary/30 hover:shadow-[var(--shadow-card)] sm:min-h-[12rem]"
           >
             <LayoutList className="h-5 w-5 text-primary" aria-hidden />
@@ -156,7 +188,7 @@ export function ExamPathwayHubBody({ pathway, isSignedIn, discovery, emphasizeCa
           <MarketingTrackedLink
             href={lessonsHref}
             event={PH.marketingPathwayHubCta}
-            eventProps={{ surface: "card_lessons", pathway_id: pathway.id }}
+            eventProps={{ surface: "card_lessons", pathway_id: pathway.id, ...alias }}
             className="flex h-full min-h-[11rem] flex-col rounded-2xl border border-[var(--theme-card-border)] bg-card p-5 shadow-sm transition hover:border-primary/30 hover:shadow-[var(--shadow-card)] sm:min-h-[12rem]"
           >
             <BookOpen className="h-5 w-5 text-primary" aria-hidden />
@@ -174,7 +206,7 @@ export function ExamPathwayHubBody({ pathway, isSignedIn, discovery, emphasizeCa
           <MarketingTrackedLink
             href={pricingHref}
             event={PH.marketingPathwayHubCta}
-            eventProps={{ surface: "card_pricing", pathway_id: pathway.id }}
+            eventProps={{ surface: "card_pricing", pathway_id: pathway.id, ...alias }}
             className="flex h-full min-h-[11rem] flex-col rounded-2xl border border-[var(--theme-card-border)] bg-card p-5 shadow-sm transition hover:border-primary/30 hover:shadow-[var(--shadow-card)] sm:min-h-[12rem]"
           >
             <ClipboardList className="h-5 w-5 text-primary" aria-hidden />
@@ -193,7 +225,7 @@ export function ExamPathwayHubBody({ pathway, isSignedIn, discovery, emphasizeCa
           <MarketingTrackedLink
             href="/app/exams"
             event={PH.marketingPathwayHubCta}
-            eventProps={{ surface: "card_timed_exams", pathway_id: pathway.id }}
+            eventProps={{ surface: "card_timed_exams", pathway_id: pathway.id, ...alias }}
             className="flex h-full min-h-[11rem] flex-col rounded-2xl border border-[var(--theme-card-border)] bg-card p-5 shadow-sm transition hover:border-primary/30 hover:shadow-[var(--shadow-card)] sm:min-h-[12rem]"
           >
             <GraduationCap className="h-5 w-5 text-primary" aria-hidden />
@@ -217,17 +249,29 @@ export function ExamPathwayHubBody({ pathway, isSignedIn, discovery, emphasizeCa
               <MarketingTrackedLink
                 href="/app/questions"
                 event={PH.marketingPathwayHubCta}
-                eventProps={{ surface: "shortcut_questions", pathway_id: pathway.id, signed_in: true }}
+                eventProps={{ surface: "shortcut_questions", pathway_id: pathway.id, signed_in: true, ...alias }}
                 className="block rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)] px-4 py-3 text-sm font-semibold text-[var(--theme-heading-text)] hover:border-primary/25"
               >
                 In-app question bank →
               </MarketingTrackedLink>
             </li>
+            {emphasizeCatPracticeTests ? (
+              <li>
+                <MarketingTrackedLink
+                  href="/app/practice-tests"
+                  event={PH.marketingPathwayHubCta}
+                  eventProps={{ surface: "shortcut_cat_practice", pathway_id: pathway.id, signed_in: true, ...alias }}
+                  className="block rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)] px-4 py-3 text-sm font-semibold text-[var(--theme-heading-text)] hover:border-primary/25"
+                >
+                  Adaptive practice tests →
+                </MarketingTrackedLink>
+              </li>
+            ) : null}
             <li>
               <MarketingTrackedLink
                 href="/app"
                 event={PH.marketingPathwayHubCta}
-                eventProps={{ surface: "shortcut_dashboard", pathway_id: pathway.id, signed_in: true }}
+                eventProps={{ surface: "shortcut_dashboard", pathway_id: pathway.id, signed_in: true, ...alias }}
                 className="block rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)] px-4 py-3 text-sm font-semibold text-[var(--theme-heading-text)] hover:border-primary/25"
               >
                 Open your dashboard →
@@ -248,7 +292,7 @@ export function ExamPathwayHubBody({ pathway, isSignedIn, discovery, emphasizeCa
           <MarketingTrackedLink
             href="/signup"
             event={PH.marketingPathwayHubCta}
-            eventProps={{ surface: "footer_waitlist", pathway_id: pathway.id }}
+            eventProps={{ surface: "footer_waitlist", pathway_id: pathway.id, ...alias }}
             className="mt-4 inline-flex items-center font-semibold text-primary"
           >
             Join or sign in →
@@ -257,7 +301,7 @@ export function ExamPathwayHubBody({ pathway, isSignedIn, discovery, emphasizeCa
           <MarketingTrackedLink
             href="/pricing"
             event={PH.marketingPathwayHubCta}
-            eventProps={{ surface: "footer_pricing", pathway_id: pathway.id }}
+            eventProps={{ surface: "footer_pricing", pathway_id: pathway.id, ...alias }}
             className="mt-4 inline-flex items-center font-semibold text-primary"
           >
             View all plans →

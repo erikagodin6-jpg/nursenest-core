@@ -102,6 +102,43 @@ describe("buildCatReport blueprintAdminDiagnostics", () => {
     assert.ok(
       report.blueprintAdminDiagnostics!.mappingQualityWarnings.some((w) => w.code === "session_delivered_mapping_low"),
     );
+    assert.equal(report.blueprintAdminDiagnostics!.fallbackDistributionDelivered.length, 1);
+    assert.equal(report.blueprintAdminDiagnostics!.fallbackDistributionDelivered[0]!.blueprintKey, "G");
+    assert.equal(report.blueprintAdminDiagnostics!.qualityThresholds.poolMappedFractionWarning, 0.9);
+  });
+});
+
+describe("finalize-style replay (incremental merge)", () => {
+  it("matches per-step mergeBlueprintDiagnosticsPostScore after each appended result", () => {
+    const baseDiag = {
+      examConfigId: NCLEX_RN_US_EXAM_CONFIG.id,
+      poolCountsByBlueprintKey: { x: 1 },
+      sessionCountsByBlueprintKey: {},
+      poolMappedFraction: 1,
+      sessionMappedFraction: 0,
+    };
+    const acc: CatAnswerResult[] = [];
+    const step = (r: CatAnswerResult) => {
+      acc.push(r);
+      return mergeBlueprintDiagnosticsPostScore(baseDiag, acc);
+    };
+    step({
+      questionId: "a",
+      correct: true,
+      categoryKey: "F",
+      difficulty: 3,
+      blueprintMappingSource: "fallback",
+    });
+    const mid = step({
+      questionId: "b",
+      correct: true,
+      categoryKey: "N",
+      difficulty: 3,
+      blueprintMappingSource: "nclex_client_needs",
+    });
+    assert.equal(mid.sessionMappedFraction, 0.5);
+    assert.equal(mid.sessionCountsByBlueprintKey["F"], 1);
+    assert.equal(mid.sessionCountsByBlueprintKey["N"], 1);
   });
 });
 
