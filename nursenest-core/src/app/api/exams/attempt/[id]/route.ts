@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import type { ExamReviewJson } from "@/lib/exams/exam-session-review";
+import type { PostTestStudyNextBundle } from "@/lib/learner/adaptive-recommendations";
+import { buildPostTestStudyNextFromReview } from "@/lib/learner/post-test-study-next";
 import { enforceExamAttemptDetailProtection } from "@/lib/http/api-protection";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 
@@ -42,6 +44,15 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
       ? (attempt.results as ExamReviewJson)
       : null;
 
+  let studyNext: PostTestStudyNextBundle | null = null;
+  if (review?.items?.length) {
+    try {
+      studyNext = await buildPostTestStudyNextFromReview(review);
+    } catch {
+      studyNext = null;
+    }
+  }
+
   return NextResponse.json({
     attempt: {
       id: attempt.id,
@@ -52,5 +63,6 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
       examTitle: attempt.exam.title,
     },
     review,
+    studyNext,
   });
 }

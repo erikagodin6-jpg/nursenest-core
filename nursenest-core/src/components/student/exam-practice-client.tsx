@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { QuestionType } from "@prisma/client";
 import type { ExamReviewJson } from "@/lib/exams/exam-session-review";
+import type { PostTestStudyNextBundle } from "@/lib/learner/adaptive-recommendations";
 import type { ExamStartEmptyDiagnostics } from "@/lib/questions/exam-start-empty-diagnostics";
 import {
   ExamProgressBar,
@@ -73,6 +74,7 @@ export function ExamPracticeClient({
     total: number;
     attemptId: string;
     review: ExamReviewJson | null;
+    studyNext: PostTestStudyNextBundle | null;
   } | null>(null);
   const [qLoading, setQLoading] = useState(false);
   const [blockingError, setBlockingError] = useState<string | null>(null);
@@ -371,6 +373,7 @@ export function ExamPracticeClient({
       const data = (await res.json()) as {
         attempt?: { id: string; score: number; total: number };
         review?: ExamReviewJson | null;
+        studyNext?: PostTestStudyNextBundle | null;
         error?: string;
       };
       if (!res.ok) {
@@ -384,6 +387,7 @@ export function ExamPracticeClient({
           total: data.attempt.total,
           attemptId: data.attempt.id,
           review: data.review ?? null,
+          studyNext: data.studyNext ?? null,
         });
         localStorage.removeItem(STORAGE_SESSION);
         localStorage.removeItem(STORAGE_EXAM);
@@ -500,6 +504,32 @@ export function ExamPracticeClient({
             <span className="font-medium text-foreground">Review topics: </span>
             {r.weakAreas.slice(0, 8).join(", ")}
           </p>
+        ) : null}
+        {done.studyNext ? (
+          <div className="rounded-xl border border-primary/25 bg-primary/[0.06] p-4">
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary">What to study next</p>
+            <p className="mt-2 text-sm font-semibold text-foreground">{done.studyNext.primary.title}</p>
+            <p className="mt-1 text-sm text-muted-foreground">{done.studyNext.primary.reason}</p>
+            <Link
+              href={done.studyNext.primary.href}
+              className="mt-3 inline-flex rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground shadow-[0_4px_14px_var(--role-cta-shadow)]"
+            >
+              Open
+            </Link>
+            {done.studyNext.secondary.length > 0 ? (
+              <ul className="mt-4 space-y-3 border-t border-border/60 pt-4">
+                {done.studyNext.secondary.map((s) => (
+                  <li key={s.href} className="text-sm">
+                    <p className="font-medium text-foreground">{s.title}</p>
+                    <p className="text-muted-foreground">{s.reason}</p>
+                    <Link href={s.href} className="mt-1 inline-block text-sm font-semibold text-primary underline-offset-4 hover:underline">
+                      Open
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </div>
         ) : null}
         <p className="text-sm text-muted">
           Review misses in the question bank, then reinforce weak systems with{" "}

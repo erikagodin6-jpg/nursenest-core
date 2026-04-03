@@ -500,3 +500,71 @@ export function buildAdaptiveRecommendations(args: {
     adaptiveLoop: null,
   };
 }
+
+// ─── Post-test remediation (Study Next engine, post_test profile) ───
+
+export type PostTestStudyNextActionKind = "weak_topic_lesson" | "weak_topic_qbank";
+
+export type PostTestStudyNextAction = {
+  title: string;
+  href: string;
+  reason: string;
+  kind: PostTestStudyNextActionKind;
+};
+
+export type PostTestStudyNextBundle = {
+  primary: PostTestStudyNextAction;
+  secondary: PostTestStudyNextAction[];
+};
+
+/** Enriched weak-topic row with resolved hrefs (server supplies links; engine only ranks and dedupes). */
+export type PostTestRemediationInputRow = {
+  topicLabel: string;
+  topicCode: string | null;
+  missCount: number;
+  lessonHref: string;
+  qbankHref: string;
+};
+
+/**
+ * Study Next — post-test profile: for each topic in rank order, emit weak_topic_lesson then weak_topic_qbank,
+ * then take the first three unique hrefs as 1 primary + up to 2 secondaries.
+ */
+export function recommendNextActions(rows: PostTestRemediationInputRow[]): PostTestStudyNextBundle | null {
+  if (rows.length === 0) return null;
+
+  const candidates: PostTestStudyNextAction[] = [];
+  for (const r of rows) {
+    const reason =
+      r.missCount >= 2
+        ? "You missed multiple questions in this topic"
+        : "You missed a question in this topic";
+    candidates.push({
+      kind: "weak_topic_lesson",
+      href: r.lessonHref,
+      title: `Review lesson · ${r.topicLabel}`,
+      reason,
+    });
+    candidates.push({
+      kind: "weak_topic_qbank",
+      href: r.qbankHref,
+      title: `Question bank · ${r.topicLabel}`,
+      reason,
+    });
+  }
+
+  const seenHref = new Set<string>();
+  const picked: PostTestStudyNextAction[] = [];
+  for (const c of candidates) {
+    if (seenHref.has(c.href)) continue;
+    seenHref.add(c.href);
+    picked.push(c);
+    if (picked.length >= 3) break;
+  }
+
+  if (picked.length === 0) return null;
+  return {
+    primary: picked[0]!,
+    secondary: picked.slice(1, 3),
+  };
+}

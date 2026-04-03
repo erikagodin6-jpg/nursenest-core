@@ -2,6 +2,7 @@ import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import { deriveTopicCode } from "@/lib/learner/topic-linking";
 import { normalizeTopicLabel } from "@/lib/learner/weak-topics-from-sessions";
 import { answerMatches } from "@/lib/exams/score-session-answers";
 import { sanitizeSessionQuestionIds } from "@/lib/exams/exam-session-bounds";
@@ -12,7 +13,15 @@ export type ExamReviewJson = {
   accuracyPct: number;
   byTopic: Record<string, { correct: number; total: number }>;
   weakAreas: string[];
-  items: { questionId: string; topic: string; correct: boolean }[];
+  items: {
+    questionId: string;
+    /** Canonical topic key (same as weak-area / ledger keys). */
+    topic: string;
+    /** Present for reviews built after post-test enrichment; omitted on older stored attempts. */
+    topicCode?: string | null;
+    itemIndex?: number;
+    correct: boolean;
+  }[];
   timedMode: boolean;
   timeLimitSec: number | null;
   elapsedMs: number | null;
@@ -52,7 +61,7 @@ export async function buildExamSessionReview(
   const base = questionAccessWhere(entitlement);
   const qs = await prisma.examQuestion.findMany({
     where: { AND: [{ id: { in: ids } }, base] },
-    select: { id: true, topic: true, questionType: true, correctAnswer: true },
+    select: { id: true, topic: true, subtopic: true, bodySystem: true, questionType: true, correctAnswer: true },
   });
   const byId = new Map(qs.map((q) => [q.id, q]));
 
@@ -60,7 +69,8 @@ export async function buildExamSessionReview(
   const byTopic: Record<string, { correct: number; total: number }> = {};
   const items: { questionId: string; topic: string; correct: boolean }[] = [];
 
-  for (const id of ids) {
+  for (let i = 0; i < ids.length; i++) {
+    const id = ids[i]!;
     const q = byId.get(id);
     if (!q) continue;
     const userAns = answers[id];
@@ -68,11 +78,12 @@ export async function buildExamSessionReview(
     if (ok) scoreCorrect += 1;
 
     const label = normalizeTopicLabel(q.topic);
+    const topicCode = deriveTopicCode({ topic: q.topic, subtopic: q.subtopic, bodySystem: q.bodySystem });
     const cur = byTopic[label] ?? { correct: 0, total: 0 };
     cur.total += 1;
     if (ok) cur.correct += 1;
     byTopic[label] = cur;
-    items.push({ questionId: id, topic: label, correct: ok });
+    items.push({ questionId: id, topic: label, topicCode, itemIndex: i, correct: ok });
   }
 
   const scoreTotal = items.length;

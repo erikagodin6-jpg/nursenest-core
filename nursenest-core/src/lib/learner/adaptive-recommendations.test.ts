@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { buildAdaptiveRecommendations } from "@/lib/learner/adaptive-recommendations";
+import { buildAdaptiveRecommendations, recommendNextActions } from "@/lib/learner/adaptive-recommendations";
 import type { ReadinessResult } from "@/lib/learner/readiness-score";
 import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
@@ -141,5 +141,65 @@ describe("buildAdaptiveRecommendations (Study Next)", () => {
     const y = buildAdaptiveRecommendations(args);
     assert.equal(JSON.stringify(x.primaryNext), JSON.stringify(y.primaryNext));
     assert.equal(JSON.stringify(x.secondary), JSON.stringify(y.secondary));
+  });
+});
+
+describe("recommendNextActions (post-test Study Next)", () => {
+  it("prioritizes lesson then qbank per topic and caps at three unique hrefs", () => {
+    const r = recommendNextActions([
+      {
+        topicLabel: "Pharmacology",
+        topicCode: "pharmacology",
+        missCount: 2,
+        lessonHref: "/app/lessons/a",
+        qbankHref: "/app/questions?preset=topic_drill&topic=Pharmacology&topicCode=pharmacology",
+      },
+      {
+        topicLabel: "Cardiac",
+        topicCode: "cardiac",
+        missCount: 1,
+        lessonHref: "/app/lessons/b",
+        qbankHref: "/app/questions?preset=topic_drill&topic=Cardiac&topicCode=cardiac",
+      },
+    ]);
+    assert.ok(r);
+    assert.equal(r!.primary.kind, "weak_topic_lesson");
+    assert.equal(r!.primary.href, "/app/lessons/a");
+    assert.equal(r!.secondary.length, 2);
+    assert.equal(r!.secondary[0]!.kind, "weak_topic_qbank");
+    assert.equal(r!.secondary[1]!.kind, "weak_topic_lesson");
+    assert.equal(r!.primary.reason, "You missed multiple questions in this topic");
+    const hrefs = [r!.primary.href, ...r!.secondary.map((s) => s.href)];
+    assert.equal(new Set(hrefs).size, hrefs.length);
+  });
+
+  it("returns null for empty rows", () => {
+    assert.equal(recommendNextActions([]), null);
+  });
+
+  it("skips duplicate lesson hrefs and still fills up to three slots", () => {
+    const shared = "/app/lessons";
+    const r = recommendNextActions([
+      {
+        topicLabel: "T1",
+        topicCode: null,
+        missCount: 2,
+        lessonHref: shared,
+        qbankHref: "/app/questions?a=1",
+      },
+      {
+        topicLabel: "T2",
+        topicCode: null,
+        missCount: 2,
+        lessonHref: shared,
+        qbankHref: "/app/questions?a=2",
+      },
+    ]);
+    assert.ok(r);
+    assert.equal(r!.primary.href, shared);
+    assert.ok(r!.secondary.length >= 1);
+    assert.ok(r!.secondary.every((s) => s.href !== shared));
+    const all = [r!.primary.href, ...r!.secondary.map((s) => s.href)];
+    assert.equal(new Set(all).size, all.length);
   });
 });

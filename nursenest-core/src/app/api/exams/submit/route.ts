@@ -11,8 +11,10 @@ import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { withRetry } from "@/lib/resilience/with-retry";
 import { collectSessionTopicOutcomes, scoreSessionAnswers } from "@/lib/exams/score-session-answers";
+import { buildPostTestStudyNextFromReview } from "@/lib/learner/post-test-study-next";
 import { recordTopicOutcomesSequential } from "@/lib/learner/topic-performance";
 import { productEvent } from "@/lib/observability/product-events";
+import type { PostTestStudyNextBundle } from "@/lib/learner/adaptive-recommendations";
 
 const schema = z
   .object({
@@ -183,7 +185,15 @@ export async function POST(req: Request) {
         const raw = result.attempt.results;
         const review =
           raw && typeof raw === "object" && raw !== null ? (raw as ExamReviewJson) : null;
-        return NextResponse.json({ attempt: result.attempt, review, idempotent: true });
+        let studyNext: PostTestStudyNextBundle | null = null;
+        if (review?.items?.length) {
+          try {
+            studyNext = await buildPostTestStudyNextFromReview(review);
+          } catch {
+            studyNext = null;
+          }
+        }
+        return NextResponse.json({ attempt: result.attempt, review, studyNext, idempotent: true });
       }
       if (result.kind === "created" && result.attempt) {
         if (parsed.data.sessionId && parsed.data.answers) {
@@ -203,7 +213,15 @@ export async function POST(req: Request) {
           }
         }
         productEvent("exam_submit", { score, total, timed: prefetchReview?.timedMode ? 1 : 0 });
-        return NextResponse.json({ attempt: result.attempt, review: prefetchReview });
+        let studyNext: PostTestStudyNextBundle | null = null;
+        if (prefetchReview?.items?.length) {
+          try {
+            studyNext = await buildPostTestStudyNextFromReview(prefetchReview);
+          } catch {
+            studyNext = null;
+          }
+        }
+        return NextResponse.json({ attempt: result.attempt, review: prefetchReview, studyNext });
       }
     } catch (e) {
       safeServerLogCritical("api_exams_submit", "session_tx_failed", {}, e);
