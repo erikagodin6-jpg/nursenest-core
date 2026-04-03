@@ -14,8 +14,8 @@ import { AlertTriangle, Shield, Skull, RefreshCw, Activity } from "lucide-react"
 
 export function CellularInjuryModule() {
   const { t } = usePreNursingT();
-  const freeRadicalContent = useEditableText("ci-free-radical-content", "Free radicals are highly reactive molecules with unpaired electrons that damage cellular components. lipids (cell membrane destruction via lipid peroxidation), proteins (enzyme dysfunction), and DNA (mutations, impaired replication). The body uses antioxidant enzymes (superoxide dismutase, catalase, glutathione peroxidase) and dietary antioxidants (vitamins C, E, selenium) to neutralize free radicals. When production exceeds neutralization capacity, oxidative stress occurs, contributing to aging, cancer, atherosclerosis, and neurodegenerative diseases.");
-  const compensationContent = useEditableText("ci-compensation-content", "Compensation is the body's ability to maintain homeostasis despite injury or disease through adaptive mechanisms. For example, the heart compensates for increased workload through hypertrophy, or the kidneys compensate for metabolic acidosis by excreting more hydrogen ions. Decompensation occurs when adaptive mechanisms are overwhelmed and can no longer maintain normal function. this is when clinical symptoms appear and organ failure begins. Recognizing the transition from compensation to decompensation is a critical nursing skill.");
+  const freeRadicalContent = useEditableText("ci-free-radical-content", "Free radicals are highly reactive molecules with unpaired electrons that damage cellular components, lipids (cell membrane destruction via lipid peroxidation), proteins (enzyme dysfunction), and DNA (mutations, impaired replication). The body uses antioxidant enzymes (superoxide dismutase, catalase, glutathione peroxidase) and dietary antioxidants (vitamins C, E, selenium) to neutralize free radicals. When production exceeds neutralization capacity, oxidative stress occurs, contributing to aging, cancer, atherosclerosis, and neurodegenerative diseases.");
+  const compensationContent = useEditableText("ci-compensation-content", "Compensation is the body's ability to maintain homeostasis despite injury or disease through adaptive mechanisms. For example, the heart compensates for increased workload through hypertrophy, or the kidneys compensate for metabolic acidosis by excreting more hydrogen ions. Decompensation occurs when adaptive mechanisms are overwhelmed and can no longer maintain normal function, this is when clinical symptoms appear and organ failure begins. Recognizing the transition from compensation to decompensation is a critical nursing skill.");
   const reversibleContent = useEditableText("ci-reversible-content", "Reversible injury is characterized by cellular swelling (due to failure of sodium-potassium pump), fatty change (lipid accumulation), and decreased ATP production. The cell can recover if the injurious stimulus is removed. Irreversible injury occurs when membrane damage is severe, mitochondrial function is permanently lost, and calcium floods the cell activating destructive enzymes. Key markers of irreversible injury include: massive calcium influx, lysosomal enzyme release, nuclear changes (pyknosis, karyorrhexis, karyolysis), and release of intracellular enzymes into the blood (troponin, CK, LDH, AST/ALT).");
 
   return (
@@ -81,11 +81,11 @@ export function CellularInjuryModule() {
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
             <p className="text-xs font-semibold text-blue-700 mb-1">Apoptosis (Programmed Cell Death)</p>
-            <p className="text-xs text-blue-600"><strong>Mechanism:</strong> Organized, energy-dependent process involving caspase enzymes. Cell shrinks, chromatin condenses, DNA fragments in orderly fashion, cell breaks into apoptotic bodies that are phagocytosed. <strong>Key feature:</strong> No inflammation. contents are contained and cleaned up. <strong>Normal functions:</strong> Embryonic development (removing webbing between fingers), immune system regulation (eliminating self-reactive lymphocytes), tissue homeostasis (replacing old intestinal epithelium every 3-5 days). <strong>Pathological:</strong> Viral infections (HIV killing CD4 cells), radiation damage, neurodegenerative diseases.</p>
+            <p className="text-xs text-blue-600"><strong>Mechanism:</strong> Organized, energy-dependent process involving caspase enzymes. Cell shrinks, chromatin condenses, DNA fragments in orderly fashion, cell breaks into apoptotic bodies that are phagocytosed. <strong>Key feature:</strong> No inflammation, contents are contained and cleaned up. <strong>Normal functions:</strong> Embryonic development (removing webbing between fingers), immune system regulation (eliminating self-reactive lymphocytes), tissue homeostasis (replacing old intestinal epithelium every 3-5 days). <strong>Pathological:</strong> Viral infections (HIV killing CD4 cells), radiation damage, neurodegenerative diseases.</p>
           </div>
           <div className="p-4 bg-red-50/60 rounded-xl border border-red-100">
             <p className="text-xs font-semibold text-red-700 mb-1">Necrosis (Uncontrolled Cell Death)</p>
-            <p className="text-xs text-red-600"><strong>Mechanism:</strong> Cell swells, membrane ruptures, contents spill into surrounding tissue. <strong>Key feature:</strong> Always causes inflammation. released contents activate immune response. <strong>Types:</strong> Coagulative (most organs, preserves tissue architecture. seen in MI), liquefactive (brain, abscesses. tissue becomes liquid), caseous (tuberculosis. cheese-like appearance), fat necrosis (pancreas. lipase digests fat), fibrinoid (blood vessel walls in autoimmune disease), gangrenous (limbs. dry or wet gangrene). <strong>Clinical markers:</strong> Elevated enzymes in blood (troponin, CK, LDH).</p>
+            <p className="text-xs text-red-600"><strong>Mechanism:</strong> Cell swells, membrane ruptures, contents spill into surrounding tissue. <strong>Key feature:</strong> Always causes inflammation, released contents activate immune response. <strong>Types:</strong> Coagulative (most organs, preserves tissue architecture, seen in MI), liquefactive (brain, abscesses, tissue becomes liquid), caseous (tuberculosis, cheese-like appearance), fat necrosis (pancreas, lipase digests fat), fibrinoid (blood vessel walls in autoimmune disease), gangrenous (limbs, dry or wet gangrene). <strong>Clinical markers:</strong> Elevated enzymes in blood (troponin, CK, LDH).</p>
           </div>
         </div>
         <ProgressiveReveal
@@ -94,26 +94,26 @@ export function CellularInjuryModule() {
             {
               id: "ci-nec1",
               title: "Coagulative Necrosis",
-              summary: "Most common type. preserves tissue architecture",
-              detail: "Occurs in most solid organs (heart, kidney, liver) after ischemia. Protein denaturation preserves the 'ghost outline' of cells for days. Classic example: myocardial infarction. dead cardiac tissue maintains its structure initially. Eventually replaced by scar tissue through fibrosis.",
+              summary: "Most common type, preserves tissue architecture",
+              detail: "Occurs in most solid organs (heart, kidney, liver) after ischemia. Protein denaturation preserves the 'ghost outline' of cells for days. Classic example: myocardial infarction, dead cardiac tissue maintains its structure initially. Eventually replaced by scar tissue through fibrosis.",
             },
             {
               id: "ci-nec2",
               title: "Liquefactive Necrosis",
-              summary: "Tissue becomes liquid. brain and abscesses",
-              detail: "Occurs when enzymatic digestion dominates, turning tissue into liquid. Brain infarcts undergo liquefactive necrosis because the brain has high lipid content and abundant hydrolytic enzymes. Bacterial infections produce abscesses. localized collections of liquefied necrotic tissue and neutrophils (pus).",
+              summary: "Tissue becomes liquid, brain and abscesses",
+              detail: "Occurs when enzymatic digestion dominates, turning tissue into liquid. Brain infarcts undergo liquefactive necrosis because the brain has high lipid content and abundant hydrolytic enzymes. Bacterial infections produce abscesses, localized collections of liquefied necrotic tissue and neutrophils (pus).",
             },
             {
               id: "ci-nec3",
               title: "Caseous Necrosis",
-              summary: "Cheese-like appearance. hallmark of tuberculosis",
+              summary: "Cheese-like appearance, hallmark of tuberculosis",
               detail: "A distinctive form where necrotic tissue has a white, cheese-like (caseous) appearance. The hallmark of granulomatous inflammation, most classically seen in tuberculosis. Granulomas form when macrophages surround and wall off the organism they cannot destroy, with caseous necrosis at the center.",
             },
             {
               id: "ci-nec4",
               title: "Fat Necrosis",
-              summary: "Lipase digests adipose tissue. acute pancreatitis",
-              detail: "Occurs when lipase enzymes are released and digest surrounding adipose tissue. Most commonly seen in acute pancreatitis, where pancreatic lipase leaks from damaged pancreatic acinar cells. Also occurs in breast tissue after trauma. Produces chalky white areas (calcium soap formation. saponification).",
+              summary: "Lipase digests adipose tissue, acute pancreatitis",
+              detail: "Occurs when lipase enzymes are released and digest surrounding adipose tissue. Most commonly seen in acute pancreatitis, where pancreatic lipase leaks from damaged pancreatic acinar cells. Also occurs in breast tissue after trauma. Produces chalky white areas (calcium soap formation, saponification).",
             },
           ]}
         />
@@ -123,38 +123,38 @@ export function CellularInjuryModule() {
         <EditableModuleText sectionKey="ci-adaptations-content" defaultText="When cells face persistent sublethal stress, they adapt to survive. These adaptations are reversible if the stimulus is removed but can progress to injury if the stress continues or exceeds the cell's adaptive capacity. Understanding adaptations helps nurses recognize pathological changes and anticipate disease progression." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-indigo-50/60 rounded-xl border border-indigo-100">
-            <p className="text-xs font-semibold text-indigo-700 mb-2">Hypertrophy. Increase in Cell SIZE</p>
-            <p className="text-xs text-indigo-600">Individual cells grow larger (not more numerous). Occurs in cells that cannot divide (cardiac myocytes, skeletal muscle). <strong>Physiologic example:</strong> Uterine smooth muscle growth during pregnancy (hormonal), skeletal muscle enlargement from weightlifting (increased workload). <strong>Pathologic example:</strong> Left ventricular hypertrophy from chronic hypertension. the heart muscle thickens to pump against increased resistance. Initially compensatory, but eventually leads to heart failure when oxygen demand exceeds supply.</p>
+            <p className="text-xs font-semibold text-indigo-700 mb-2">Hypertrophy, Increase in Cell SIZE</p>
+            <p className="text-xs text-indigo-600">Individual cells grow larger (not more numerous). Occurs in cells that cannot divide (cardiac myocytes, skeletal muscle). <strong>Physiologic example:</strong> Uterine smooth muscle growth during pregnancy (hormonal), skeletal muscle enlargement from weightlifting (increased workload). <strong>Pathologic example:</strong> Left ventricular hypertrophy from chronic hypertension, the heart muscle thickens to pump against increased resistance. Initially compensatory, but eventually leads to heart failure when oxygen demand exceeds supply.</p>
           </div>
           <div className="p-4 bg-emerald-50/60 rounded-xl border border-emerald-100">
-            <p className="text-xs font-semibold text-emerald-700 mb-2">Hyperplasia. Increase in Cell NUMBER</p>
-            <p className="text-xs text-emerald-600">More cells are produced through increased cell division. Only occurs in cells capable of division. <strong>Physiologic example:</strong> Endometrial proliferation during menstrual cycle (hormonal), liver regeneration after partial hepatectomy (compensatory). <strong>Pathologic example:</strong> Benign prostatic hyperplasia (BPH). prostate gland enlarges from increased cell number due to hormonal stimulation. Endometrial hyperplasia from excess estrogen (risk factor for endometrial cancer).</p>
+            <p className="text-xs font-semibold text-emerald-700 mb-2">Hyperplasia, Increase in Cell NUMBER</p>
+            <p className="text-xs text-emerald-600">More cells are produced through increased cell division. Only occurs in cells capable of division. <strong>Physiologic example:</strong> Endometrial proliferation during menstrual cycle (hormonal), liver regeneration after partial hepatectomy (compensatory). <strong>Pathologic example:</strong> Benign prostatic hyperplasia (BPH), prostate gland enlarges from increased cell number due to hormonal stimulation. Endometrial hyperplasia from excess estrogen (risk factor for endometrial cancer).</p>
           </div>
           <div className="p-4 bg-amber-50/60 rounded-xl border border-amber-100">
-            <p className="text-xs font-semibold text-amber-700 mb-2">Atrophy. Decrease in Cell Size</p>
+            <p className="text-xs font-semibold text-amber-700 mb-2">Atrophy, Decrease in Cell Size</p>
             <p className="text-xs text-amber-600">Cells shrink due to reduced use, nutrition, blood supply, hormonal stimulation, or innervation. <strong>Physiologic example:</strong> Thymus involution after puberty, uterine shrinkage after delivery. <strong>Pathologic example:</strong> Muscle atrophy from immobilization or denervation (cast, spinal cord injury), brain atrophy in Alzheimer's disease, adrenal atrophy from chronic corticosteroid therapy (exogenous steroids suppress ACTH).</p>
           </div>
           <div className="p-4 bg-rose-50/60 rounded-xl border border-rose-100">
-            <p className="text-xs font-semibold text-rose-700 mb-2">Metaplasia. Change in Cell TYPE</p>
-            <p className="text-xs text-rose-600">One mature cell type is replaced by another mature cell type better suited to withstand the stress. <strong>Reversible if stimulus removed.</strong> Classic example: Respiratory epithelium (ciliated columnar) changes to squamous epithelium in chronic smokers. squamous cells are more resistant to smoke irritation but lose the ability to secrete mucus and move particles (lost ciliary function). Barrett's esophagus: squamous epithelium replaced by columnar epithelium from chronic GERD. a precancerous condition.</p>
+            <p className="text-xs font-semibold text-rose-700 mb-2">Metaplasia, Change in Cell TYPE</p>
+            <p className="text-xs text-rose-600">One mature cell type is replaced by another mature cell type better suited to withstand the stress. <strong>Reversible if stimulus removed.</strong> Classic example: Respiratory epithelium (ciliated columnar) changes to squamous epithelium in chronic smokers, squamous cells are more resistant to smoke irritation but lose the ability to secrete mucus and move particles (lost ciliary function). Barrett's esophagus: squamous epithelium replaced by columnar epithelium from chronic GERD, a precancerous condition.</p>
           </div>
           <div className="p-4 bg-red-50/60 rounded-xl border border-red-100">
-            <p className="text-xs font-semibold text-red-700 mb-2">Dysplasia. Disordered Cell Growth</p>
-            <p className="text-xs text-red-600">Abnormal changes in cell size, shape, and organization. Cells look atypical under the microscope. <strong>Considered pre-cancerous</strong>. not cancer itself, but may progress to cancer if the stimulus persists. Classic example: Cervical dysplasia detected on Pap smear (from HPV infection). classified as mild, moderate, or severe (CIN I, II, III). May regress if HPV is cleared, or progress to cervical carcinoma in situ and invasive cancer.</p>
+            <p className="text-xs font-semibold text-red-700 mb-2">Dysplasia, Disordered Cell Growth</p>
+            <p className="text-xs text-red-600">Abnormal changes in cell size, shape, and organization. Cells look atypical under the microscope. <strong>Considered pre-cancerous</strong>, not cancer itself, but may progress to cancer if the stimulus persists. Classic example: Cervical dysplasia detected on Pap smear (from HPV infection), classified as mild, moderate, or severe (CIN I, II, III). May regress if HPV is cleared, or progress to cervical carcinoma in situ and invasive cancer.</p>
           </div>
         </div>
       </MicroLesson>
 
       <MicroLesson title="Reversible vs Irreversible Injury" subtitle="The point of no return" icon={<Shield className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="ci-reversible-intro" defaultText="The distinction between reversible and irreversible cellular injury is clinically critical. it determines whether tissue can recover or will die. Understanding injury markers helps nurses interpret lab values and anticipate patient outcomes." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="ci-reversible-intro" defaultText="The distinction between reversible and irreversible cellular injury is clinically critical, it determines whether tissue can recover or will die. Understanding injury markers helps nurses interpret lab values and anticipate patient outcomes." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-yellow-50/60 rounded-xl border border-yellow-100">
             <p className="text-xs font-semibold text-yellow-700 mb-1">Reversible Injury (Cell Can Recover)</p>
-            <p className="text-xs text-yellow-600"><strong>Cellular swelling:</strong> Na+/K+ ATPase pump fails → sodium and water enter cell. <strong>Fatty change:</strong> Lipid accumulation in hepatocytes (commonly from alcohol). <strong>Decreased ATP:</strong> Reduced oxidative phosphorylation but still functional. <strong>ER swelling:</strong> Ribosomes detach, protein synthesis decreases. <strong>Key point:</strong> Membrane integrity is maintained. cell contents stay inside. If the injurious stimulus is removed, the cell returns to normal.</p>
+            <p className="text-xs text-yellow-600"><strong>Cellular swelling:</strong> Na+/K+ ATPase pump fails → sodium and water enter cell. <strong>Fatty change:</strong> Lipid accumulation in hepatocytes (commonly from alcohol). <strong>Decreased ATP:</strong> Reduced oxidative phosphorylation but still functional. <strong>ER swelling:</strong> Ribosomes detach, protein synthesis decreases. <strong>Key point:</strong> Membrane integrity is maintained, cell contents stay inside. If the injurious stimulus is removed, the cell returns to normal.</p>
           </div>
           <div className="p-4 bg-red-50/60 rounded-xl border border-red-100">
             <p className="text-xs font-semibold text-red-700 mb-1">Irreversible Injury (Cell Will Die)</p>
-            <p className="text-xs text-red-600"><strong>Membrane damage:</strong> Plasma membrane and organelle membranes lose integrity. <strong>Calcium influx:</strong> Massive Ca2+ entry activates destructive enzymes (phospholipases, proteases, endonucleases). <strong>Mitochondrial failure:</strong> Permanent loss of oxidative phosphorylation. <strong>Nuclear changes:</strong> Pyknosis (nucleus shrinks), karyorrhexis (nucleus fragments), karyolysis (nucleus dissolves). <strong>Enzyme release:</strong> Intracellular enzymes leak into blood (troponin, CK-MB, LDH, AST/ALT). this is why we measure these lab values.</p>
+            <p className="text-xs text-red-600"><strong>Membrane damage:</strong> Plasma membrane and organelle membranes lose integrity. <strong>Calcium influx:</strong> Massive Ca2+ entry activates destructive enzymes (phospholipases, proteases, endonucleases). <strong>Mitochondrial failure:</strong> Permanent loss of oxidative phosphorylation. <strong>Nuclear changes:</strong> Pyknosis (nucleus shrinks), karyorrhexis (nucleus fragments), karyolysis (nucleus dissolves). <strong>Enzyme release:</strong> Intracellular enzymes leak into blood (troponin, CK-MB, LDH, AST/ALT), this is why we measure these lab values.</p>
           </div>
         </div>
         <CognitiveCard
@@ -203,7 +203,7 @@ export function CellularInjuryModule() {
             question: "Which type of cell death does NOT cause inflammation?",
             options: ["Coagulative necrosis", "Liquefactive necrosis", "Apoptosis", "Caseous necrosis"],
             correctIndex: 2,
-            rationale: "Apoptosis is programmed cell death where cell contents are contained within apoptotic bodies and phagocytosed. no contents leak out, so no inflammatory response is triggered. All forms of necrosis cause inflammation because cell contents spill into surrounding tissue.",
+            rationale: "Apoptosis is programmed cell death where cell contents are contained within apoptotic bodies and phagocytosed, no contents leak out, so no inflammatory response is triggered. All forms of necrosis cause inflammation because cell contents spill into surrounding tissue.",
           },
           {
             id: "ci4",
@@ -224,7 +224,7 @@ export function CellularInjuryModule() {
             question: "What is the key marker distinguishing irreversible from reversible cellular injury?",
             options: ["Cellular swelling", "Fatty change", "Membrane integrity loss", "Decreased ATP production"],
             correctIndex: 2,
-            rationale: "Loss of membrane integrity is the critical point of no return. When the plasma membrane is breached, calcium floods in, destructive enzymes are activated, and intracellular contents leak out. the cell cannot recover.",
+            rationale: "Loss of membrane integrity is the critical point of no return. When the plasma membrane is breached, calcium floods in, destructive enzymes are activated, and intracellular contents leak out, the cell cannot recover.",
           },
           {
             id: "ci7",
@@ -245,7 +245,7 @@ export function CellularInjuryModule() {
             question: "A patient in a cast for 6 weeks develops noticeable muscle wasting in the immobilized limb. This is an example of:",
             options: ["Necrosis", "Atrophy", "Metaplasia", "Apoptosis"],
             correctIndex: 1,
-            rationale: "Disuse atrophy occurs when muscles are not used. cells shrink in size due to decreased workload and reduced protein synthesis. This is reversible with rehabilitation and physical therapy after the cast is removed.",
+            rationale: "Disuse atrophy occurs when muscles are not used, cells shrink in size due to decreased workload and reduced protein synthesis. This is reversible with rehabilitation and physical therapy after the cast is removed.",
           },
           {
             id: "ci10",
@@ -259,7 +259,7 @@ export function CellularInjuryModule() {
             question: "Elevated troponin levels in the blood indicate:",
             options: ["Reversible myocardial injury", "Normal cardiac function", "Irreversible cardiac cell death with membrane rupture", "Pulmonary infection"],
             correctIndex: 2,
-            rationale: "Troponin is an intracellular protein found in cardiac myocytes. Its presence in the blood indicates that cardiac cell membranes have ruptured (irreversible injury), releasing intracellular contents. this is why troponin is the gold standard marker for myocardial infarction.",
+            rationale: "Troponin is an intracellular protein found in cardiac myocytes. Its presence in the blood indicates that cardiac cell membranes have ruptured (irreversible injury), releasing intracellular contents, this is why troponin is the gold standard marker for myocardial infarction.",
           },
           {
             id: "ci12",
@@ -280,7 +280,7 @@ export function CellularInjuryModule() {
             question: "During reversible cellular injury, the sodium-potassium pump fails, causing:",
             options: ["Cell shrinkage", "Cellular swelling from sodium and water influx", "Immediate membrane rupture", "DNA fragmentation"],
             correctIndex: 1,
-            rationale: "When ATP is depleted, the Na+/K+ ATPase pump fails. Sodium accumulates inside the cell, drawing water in by osmosis, causing the cell to swell. This is an early, reversible sign of injury. if ATP is restored, the pump resumes and the cell recovers.",
+            rationale: "When ATP is depleted, the Na+/K+ ATPase pump fails. Sodium accumulates inside the cell, drawing water in by osmosis, causing the cell to swell. This is an early, reversible sign of injury, if ATP is restored, the pump resumes and the cell recovers.",
           },
           {
             id: "ci15",
@@ -301,7 +301,7 @@ export function CellularInjuryModule() {
             question: "Apoptosis differs from necrosis in that apoptosis:",
             options: ["Always involves infection", "Is energy-dependent and does not cause inflammation", "Only occurs in the liver", "Causes more tissue damage than necrosis"],
             correctIndex: 1,
-            rationale: "Apoptosis is an active, energy-requiring process (requires ATP and caspase enzyme activation). Cell contents are neatly packaged into apoptotic bodies and phagocytosed without spillage, so no inflammatory response occurs. unlike necrosis, which always triggers inflammation.",
+            rationale: "Apoptosis is an active, energy-requiring process (requires ATP and caspase enzyme activation). Cell contents are neatly packaged into apoptotic bodies and phagocytosed without spillage, so no inflammatory response occurs, unlike necrosis, which always triggers inflammation.",
           },
           {
             id: "ci18",
@@ -322,7 +322,7 @@ export function CellularInjuryModule() {
             question: "Decompensation in organ function refers to:",
             options: ["The body's successful adaptation to increased demand", "The point where adaptive mechanisms are overwhelmed and symptoms appear", "Normal aging processes", "Reduced drug metabolism"],
             correctIndex: 1,
-            rationale: "Decompensation occurs when the body's compensatory mechanisms can no longer maintain normal function despite injury or disease. This is the transition point where clinical symptoms manifest and organ failure begins. a critical concept for nursing assessment and early intervention.",
+            rationale: "Decompensation occurs when the body's compensatory mechanisms can no longer maintain normal function despite injury or disease. This is the transition point where clinical symptoms manifest and organ failure begins, a critical concept for nursing assessment and early intervention.",
             hint: "Think about what happens when the body can no longer 'keep up' with the demands placed on it.",
           },
         ]}

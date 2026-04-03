@@ -16,13 +16,13 @@ export function FluidsElectrolytesModule() {
   const { t } = usePreNursingT();
   const naKGradientContent = useEditableText("fluids-nak-gradient-content", "Na⁺ is concentrated OUTSIDE cells, K⁺ is concentrated INSIDE cells. This gradient is maintained by the Na⁺/K⁺ ATPase pump (3 Na⁺ out, 2 K⁺ in per cycle). This concentration difference is essential for nerve impulse transmission, muscle contraction, and maintaining cell volume. Disrupting this gradient has immediate physiological consequences.");
   const osmoticOncoticContent = useEditableText("fluids-osmotic-oncotic-content", "Osmotic pressure is created by ALL solutes (electrolytes, glucose, urea). Oncotic (colloid osmotic) pressure is the portion of osmotic pressure created specifically by plasma proteins (mainly albumin). Oncotic pressure keeps fluid inside blood vessels. When albumin is low (malnutrition, liver disease, nephrotic syndrome), oncotic pressure drops and fluid leaks into interstitial spaces → edema.");
-  const bicarbonateContent = useEditableText("fluids-bicarbonate-content", "CO₂ + H₂O ⇌ H₂CO₃ ⇌ H⁺ + HCO₃⁻. This single equation is the key to understanding acid-base balance. The left side (CO₂) is controlled by the lungs. The right side (HCO₃⁻) is controlled by the kidneys. Normal ratio of HCO₃⁻ to CO₂ is 20:1. as long as this ratio is maintained, pH stays normal.");
+  const bicarbonateContent = useEditableText("fluids-bicarbonate-content", "CO₂ + H₂O ⇌ H₂CO₃ ⇌ H⁺ + HCO₃⁻. This single equation is the key to understanding acid-base balance. The left side (CO₂) is controlled by the lungs. The right side (HCO₃⁻) is controlled by the kidneys. Normal ratio of HCO₃⁻ to CO₂ is 20:1, as long as this ratio is maintained, pH stays normal.");
 
   return (
     <div className="space-y-10" data-testid="module-fluids-electrolytes">
       <div>
         <EditableModuleText sectionKey="fluids-title" defaultText="Fluids & Electrolytes Foundations" as="h2" className="text-2xl font-bold text-gray-900 mb-2" />
-        <EditableModuleText sectionKey="fluids-desc" defaultText="Understand body fluid compartments, osmotic principles, electrolyte roles in normal physiology, fluid shifts, and acid-base foundations. all at the conceptual level without disease states." as="p" className="text-gray-600" multiline />
+        <EditableModuleText sectionKey="fluids-desc" defaultText="Understand body fluid compartments, osmotic principles, electrolyte roles in normal physiology, fluid shifts, and acid-base foundations, all at the conceptual level without disease states." as="p" className="text-gray-600" multiline />
       </div>
 
       <MicroLesson title="Body Fluid Compartments" subtitle="Where the body's water lives" icon={<Droplets className="w-5 h-5" />}>
@@ -49,7 +49,7 @@ export function FluidsElectrolytesModule() {
       </MicroLesson>
 
       <MicroLesson title="Osmosis & Tonicity" subtitle="How water moves between compartments" icon={<Waves className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="fluids-osmosis-content" defaultText="Water moves by osmosis. the net movement of water across a semipermeable membrane from an area of lower solute concentration to an area of higher solute concentration. Water follows solute. This is a passive process requiring no energy. It always moves toward higher solute concentration. This principle governs fluid distribution between compartments and is the basis for understanding IV fluid therapy." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="fluids-osmosis-content" defaultText="Water moves by osmosis, the net movement of water across a semipermeable membrane from an area of lower solute concentration to an area of higher solute concentration. Water follows solute. This is a passive process requiring no energy. It always moves toward higher solute concentration. This principle governs fluid distribution between compartments and is the basis for understanding IV fluid therapy." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
         <ProgressiveReveal
           title={t("data.pre_nursing_fluids_electrolytes.tonicityOfSolutions")}
           cards={[
@@ -57,7 +57,7 @@ export function FluidsElectrolytesModule() {
               id: "fe1",
               title: "Isotonic",
               summary: "Same osmolarity as plasma (~275–295 mOsm/L)",
-              detail: "Water does not shift in or out of cells. no change in cell volume. Examples: 0.9% NaCl (Normal Saline), Lactated Ringer's. These solutions expand the intravascular volume without causing osmotic fluid shifts. Used for volume replacement.",
+              detail: "Water does not shift in or out of cells, no change in cell volume. Examples: 0.9% NaCl (Normal Saline), Lactated Ringer's. These solutions expand the intravascular volume without causing osmotic fluid shifts. Used for volume replacement.",
             },
             {
               id: "fe2",
@@ -84,20 +84,20 @@ export function FluidsElectrolytesModule() {
         <EditableModuleText sectionKey="fluids-electrolyte-roles-content" defaultText="Each electrolyte has specific physiological roles. Understanding their normal functions helps you appreciate why imbalances cause predictable symptoms." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
-            <p className="text-xs font-semibold text-blue-700 mb-1">Sodium (Na⁺). Normal: 135–145 mEq/L</p>
+            <p className="text-xs font-semibold text-blue-700 mb-1">Sodium (Na⁺), Normal: 135–145 mEq/L</p>
             <p className="text-xs text-blue-600">Primary ECF cation. Regulates water distribution (water follows sodium). Drives nerve impulse conduction. Major determinant of plasma osmolarity. Changes in sodium primarily affect water balance and neurological function.</p>
           </div>
           <div className="p-4 bg-emerald-50/60 rounded-xl border border-emerald-100">
-            <p className="text-xs font-semibold text-emerald-700 mb-1">Potassium (K⁺). Normal: 3.5–5.0 mEq/L</p>
+            <p className="text-xs font-semibold text-emerald-700 mb-1">Potassium (K⁺), Normal: 3.5–5.0 mEq/L</p>
             <p className="text-xs text-emerald-600">Primary ICF cation. Critical for cardiac electrical conduction (resting membrane potential), skeletal muscle contraction, and nerve transmission. Even small changes outside the narrow normal range affect cardiac rhythm. The most dangerous electrolyte to get wrong.</p>
           </div>
           <div className="p-4 bg-amber-50/60 rounded-xl border border-amber-100">
-            <p className="text-xs font-semibold text-amber-700 mb-1">Calcium (Ca²⁺). Normal: 8.5–10.5 mg/dL</p>
+            <p className="text-xs font-semibold text-amber-700 mb-1">Calcium (Ca²⁺), Normal: 8.5–10.5 mg/dL</p>
             <p className="text-xs text-amber-600">Muscle contraction (including cardiac), bone structure (99% stored in bone), blood clotting cascade, nerve impulse transmission, enzyme activation. Only the ionized (free) fraction is physiologically active. Albumin level affects total calcium measurement.</p>
           </div>
           <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
-            <p className="text-xs font-semibold text-purple-700 mb-1">Magnesium (Mg²⁺). Normal: 1.5–2.5 mEq/L</p>
-            <p className="text-xs text-purple-600">Cofactor for over 300 enzyme systems. Involved in energy production (ATP requires Mg²⁺), protein synthesis, neuromuscular function, and cardiac rhythm stability. Works in tandem with calcium and potassium. deficiency of one often accompanies deficiency of others.</p>
+            <p className="text-xs font-semibold text-purple-700 mb-1">Magnesium (Mg²⁺), Normal: 1.5–2.5 mEq/L</p>
+            <p className="text-xs text-purple-600">Cofactor for over 300 enzyme systems. Involved in energy production (ATP requires Mg²⁺), protein synthesis, neuromuscular function, and cardiac rhythm stability. Works in tandem with calcium and potassium, deficiency of one often accompanies deficiency of others.</p>
           </div>
         </div>
       </MicroLesson>
@@ -107,7 +107,7 @@ export function FluidsElectrolytesModule() {
         <div className="grid sm:grid-cols-3 gap-3 mt-3">
           <div className="p-4 bg-orange-50/60 rounded-xl border border-orange-100">
             <p className="text-xs font-semibold text-orange-700 mb-1">Buffer Systems</p>
-            <p className="text-xs text-orange-600"><strong>Response: Immediate (seconds).</strong> Chemical buffers (bicarbonate, phosphate, protein) absorb or release H⁺ to resist pH changes. Limited capacity. buffers are consumed and must be regenerated.</p>
+            <p className="text-xs text-orange-600"><strong>Response: Immediate (seconds).</strong> Chemical buffers (bicarbonate, phosphate, protein) absorb or release H⁺ to resist pH changes. Limited capacity, buffers are consumed and must be regenerated.</p>
           </div>
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
             <p className="text-xs font-semibold text-blue-700 mb-1">Respiratory System</p>
@@ -128,9 +128,9 @@ export function FluidsElectrolytesModule() {
       <MatchingExercise
         title={t("data.pre_nursing_fluids_electrolytes.matchFluidElectrolyteConcepts")}
         pairs={[
-          { term: "Isotonic solution", definition: "Same osmolarity as plasma. no cell volume change" },
-          { term: "Hypotonic solution", definition: "Lower osmolarity. water enters cells" },
-          { term: "Hypertonic solution", definition: "Higher osmolarity. water leaves cells" },
+          { term: "Isotonic solution", definition: "Same osmolarity as plasma, no cell volume change" },
+          { term: "Hypotonic solution", definition: "Lower osmolarity, water enters cells" },
+          { term: "Hypertonic solution", definition: "Higher osmolarity, water leaves cells" },
           { term: "Oncotic pressure", definition: "Osmotic pull created by plasma proteins" },
           { term: "Na⁺/K⁺ ATPase", definition: "Pump maintaining ion gradient across cell membranes" },
           { term: "Bicarbonate", definition: "Primary pH buffer in blood" },

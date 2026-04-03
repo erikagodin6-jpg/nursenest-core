@@ -14,9 +14,9 @@ import { UtensilsCrossed, Droplets, Scale, Apple } from "lucide-react";
 
 export function NutritionFoundationsModule() {
   const { t } = usePreNursingT();
-  const macronutrientContent = useEditableText("nf-macronutrient-content", "Macronutrients are nutrients needed in large quantities that provide energy (calories). Carbohydrates provide 4 kcal/g and are the body's preferred energy source. the brain relies almost exclusively on glucose. Proteins provide 4 kcal/g and are essential for tissue repair, immune function, enzyme production, and fluid balance (albumin maintains oncotic pressure). Fats provide 9 kcal/g. the most calorie-dense macronutrient. and are essential for hormone synthesis, cell membrane integrity, absorption of fat-soluble vitamins (A, D, E, K), and insulation. Alcohol provides 7 kcal/g but is not classified as a macronutrient because it offers no nutritional value.");
-  const electrolyteContent = useEditableText("nf-electrolyte-content", "Key electrolytes obtained from diet include: Sodium (Na+). found in processed foods, table salt; regulates fluid balance and nerve impulses; normal: 135-145 mEq/L. Potassium (K+). found in bananas, oranges, potatoes, spinach; critical for cardiac function and muscle contraction; normal: 3.5-5.0 mEq/L. Calcium (Ca²+). found in dairy, leafy greens, fortified foods; essential for bone health, muscle contraction, blood clotting; normal: 8.5-10.5 mg/dL. Magnesium (Mg²+). found in nuts, seeds, whole grains; cofactor in 300+ enzymatic reactions; normal: 1.5-2.5 mEq/L. Phosphorus. found in dairy, meat, beans; partners with calcium for bone health; normal: 2.5-4.5 mg/dL.");
-  const malnutritionContent = useEditableText("nf-malnutrition-content", "BMI categories: Underweight (<18.5), Normal (18.5-24.9), Overweight (25.0-29.9), Obese Class I (30.0-34.9), Obese Class II (35.0-39.9), Obese Class III (≥40.0). Malnutrition screening tools include the Malnutrition Screening Tool (MST), Subjective Global Assessment (SGA), and Mini Nutritional Assessment (MNA) for elderly patients. Key lab markers: serum albumin (<3.5 g/dL indicates chronic malnutrition, half-life 18-20 days), prealbumin (<17 mg/dL indicates recent nutritional changes, half-life 2-3 days. more sensitive to acute changes), and transferrin. Unintentional weight loss of >5% in 1 month or >10% in 6 months is clinically significant and warrants nutritional intervention.");
+  const macronutrientContent = useEditableText("nf-macronutrient-content", "Macronutrients are nutrients needed in large quantities that provide energy (calories). Carbohydrates provide 4 kcal/g and are the body's preferred energy source, the brain relies almost exclusively on glucose. Proteins provide 4 kcal/g and are essential for tissue repair, immune function, enzyme production, and fluid balance (albumin maintains oncotic pressure). Fats provide 9 kcal/g, the most calorie-dense macronutrient, and are essential for hormone synthesis, cell membrane integrity, absorption of fat-soluble vitamins (A, D, E, K), and insulation. Alcohol provides 7 kcal/g but is not classified as a macronutrient because it offers no nutritional value.");
+  const electrolyteContent = useEditableText("nf-electrolyte-content", "Key electrolytes obtained from diet include: Sodium (Na+), found in processed foods, table salt; regulates fluid balance and nerve impulses; normal: 135-145 mEq/L. Potassium (K+), found in bananas, oranges, potatoes, spinach; critical for cardiac function and muscle contraction; normal: 3.5-5.0 mEq/L. Calcium (Ca²+), found in dairy, leafy greens, fortified foods; essential for bone health, muscle contraction, blood clotting; normal: 8.5-10.5 mg/dL. Magnesium (Mg²+), found in nuts, seeds, whole grains; cofactor in 300+ enzymatic reactions; normal: 1.5-2.5 mEq/L. Phosphorus, found in dairy, meat, beans; partners with calcium for bone health; normal: 2.5-4.5 mg/dL.");
+  const malnutritionContent = useEditableText("nf-malnutrition-content", "BMI categories: Underweight (<18.5), Normal (18.5-24.9), Overweight (25.0-29.9), Obese Class I (30.0-34.9), Obese Class II (35.0-39.9), Obese Class III (≥40.0). Malnutrition screening tools include the Malnutrition Screening Tool (MST), Subjective Global Assessment (SGA), and Mini Nutritional Assessment (MNA) for elderly patients. Key lab markers: serum albumin (<3.5 g/dL indicates chronic malnutrition, half-life 18-20 days), prealbumin (<17 mg/dL indicates recent nutritional changes, half-life 2-3 days, more sensitive to acute changes), and transferrin. Unintentional weight loss of >5% in 1 month or >10% in 6 months is clinically significant and warrants nutritional intervention.");
 
   return (
     <div className="space-y-10" data-testid="module-nutrition-foundations">
@@ -26,18 +26,18 @@ export function NutritionFoundationsModule() {
       </div>
 
       <MicroLesson title="Macronutrients: Carbohydrates, Proteins, and Fats" subtitle="Energy sources and their roles in the body" icon={<Apple className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="nf-macro-intro" defaultText="The three macronutrients. carbohydrates, proteins, and fats. serve distinct roles in human physiology. Understanding their caloric density and functions is fundamental to nursing nutrition assessment and patient education." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="nf-macro-intro" defaultText="The three macronutrients, carbohydrates, proteins, and fats, serve distinct roles in human physiology. Understanding their caloric density and functions is fundamental to nursing nutrition assessment and patient education." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
         <div className="grid sm:grid-cols-3 gap-3 mt-3">
           <div className="p-4 bg-amber-50/60 rounded-xl border border-amber-100">
-            <p className="text-xs font-semibold text-amber-700 mb-1">Carbohydrates. 4 kcal/g</p>
+            <p className="text-xs font-semibold text-amber-700 mb-1">Carbohydrates, 4 kcal/g</p>
             <p className="text-xs text-amber-600">Primary energy source. Simple carbs (glucose, fructose, sucrose) provide rapid energy. Complex carbs (starches, fiber) provide sustained energy and promote GI health. The brain uses ~120g glucose/day. Sources: grains, fruits, vegetables, legumes, dairy. Recommended: 45-65% of total daily calories.</p>
           </div>
           <div className="p-4 bg-red-50/60 rounded-xl border border-red-100">
-            <p className="text-xs font-semibold text-red-700 mb-1">Proteins. 4 kcal/g</p>
+            <p className="text-xs font-semibold text-red-700 mb-1">Proteins, 4 kcal/g</p>
             <p className="text-xs text-red-600">Building blocks for tissue repair and growth. Complete proteins (animal sources) contain all 9 essential amino acids. Incomplete proteins (plant sources) must be combined for complete amino acid profile. Functions: enzymes, antibodies, albumin (oncotic pressure), hormones. Recommended: 10-35% of total daily calories, or 0.8 g/kg/day for healthy adults.</p>
           </div>
           <div className="p-4 bg-green-50/60 rounded-xl border border-green-100">
-            <p className="text-xs font-semibold text-green-700 mb-1">Fats. 9 kcal/g</p>
+            <p className="text-xs font-semibold text-green-700 mb-1">Fats, 9 kcal/g</p>
             <p className="text-xs text-green-600">Most calorie-dense macronutrient. Essential for absorbing fat-soluble vitamins (A, D, E, K). Unsaturated fats (olive oil, fish, nuts) are heart-healthy. Saturated fats (animal products) raise LDL cholesterol. Trans fats (hydrogenated oils) are the most harmful. Recommended: 20-35% of total daily calories, &lt;10% from saturated fat.</p>
           </div>
         </div>
@@ -49,10 +49,10 @@ export function NutritionFoundationsModule() {
       </MicroLesson>
 
       <MicroLesson title="Micronutrients and Fluid Requirements" subtitle="Vitamins, minerals, and hydration" icon={<Droplets className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="nf-micro-intro" defaultText="Micronutrients. vitamins and minerals. are required in small amounts but are essential for metabolic processes, immune function, and disease prevention. Adequate fluid intake is equally critical for cellular function, thermoregulation, and waste elimination." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="nf-micro-intro" defaultText="Micronutrients, vitamins and minerals, are required in small amounts but are essential for metabolic processes, immune function, and disease prevention. Adequate fluid intake is equally critical for cellular function, thermoregulation, and waste elimination." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
-            <p className="text-xs font-semibold text-blue-700 mb-2">Fat-Soluble Vitamins (A, D, E, K). stored in body fat</p>
+            <p className="text-xs font-semibold text-blue-700 mb-2">Fat-Soluble Vitamins (A, D, E, K), stored in body fat</p>
             <div className="space-y-1 text-xs text-blue-600">
               <p><strong>{t("data.pre_nursing_nutrition_foundations.vitaminA")}</strong>{t("data.pre_nursing_nutrition_foundations.visionEspeciallyNightVisionImmune")}</p>
               <p><strong>{t("data.pre_nursing_nutrition_foundations.vitaminD")}</strong>{t("data.pre_nursing_nutrition_foundations.calciumAbsorptionBoneHealthImmune")}</p>
@@ -61,7 +61,7 @@ export function NutritionFoundationsModule() {
             </div>
           </div>
           <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
-            <p className="text-xs font-semibold text-purple-700 mb-2">Water-Soluble Vitamins (B-complex, C). not stored, need daily intake</p>
+            <p className="text-xs font-semibold text-purple-700 mb-2">Water-Soluble Vitamins (B-complex, C), not stored, need daily intake</p>
             <div className="space-y-1 text-xs text-purple-600">
               <p><strong>{t("data.pre_nursing_nutrition_foundations.b1Thiamine")}</strong>{t("data.pre_nursing_nutrition_foundations.energyMetabolismDeficiencyWernickekorsak")}</p>
               <p><strong>{t("data.pre_nursing_nutrition_foundations.b9Folate")}</strong>{t("data.pre_nursing_nutrition_foundations.dnaSynthesisRbcFormationCritical")}</p>
@@ -90,13 +90,13 @@ export function NutritionFoundationsModule() {
               id: "nf-cardiac",
               title: "Cardiac Diet",
               summary: "Low sodium, low saturated fat, high fiber",
-              detail: "Sodium restriction: typically <2,000 mg/day for heart failure, <1,500 mg/day for advanced HF. Limit saturated fat to <7% of calories, eliminate trans fats, increase omega-3 fatty acids (fish, flaxseed). DASH diet (Dietary Approaches to Stop Hypertension) emphasizes fruits, vegetables, whole grains, and low-fat dairy. Limit alcohol. Read food labels. processed foods are the primary source of dietary sodium.",
+              detail: "Sodium restriction: typically <2,000 mg/day for heart failure, <1,500 mg/day for advanced HF. Limit saturated fat to <7% of calories, eliminate trans fats, increase omega-3 fatty acids (fish, flaxseed). DASH diet (Dietary Approaches to Stop Hypertension) emphasizes fruits, vegetables, whole grains, and low-fat dairy. Limit alcohol. Read food labels, processed foods are the primary source of dietary sodium.",
             },
             {
               id: "nf-renal",
               title: "Renal Diet",
               summary: "Restricted sodium, potassium, phosphorus, and protein",
-              detail: "Pre-dialysis: restrict protein to 0.6-0.8 g/kg/day (reduces uremia). Limit sodium (<2,000 mg/day), potassium (<2,000 mg/day. avoid bananas, oranges, tomatoes, potatoes), and phosphorus (<1,000 mg/day. limit dairy, cola, nuts). On dialysis: protein needs increase to 1.2-1.5 g/kg/day to replace losses. Fluid restriction typically 1,000-1,500 mL/day based on urine output.",
+              detail: "Pre-dialysis: restrict protein to 0.6-0.8 g/kg/day (reduces uremia). Limit sodium (<2,000 mg/day), potassium (<2,000 mg/day, avoid bananas, oranges, tomatoes, potatoes), and phosphorus (<1,000 mg/day, limit dairy, cola, nuts). On dialysis: protein needs increase to 1.2-1.5 g/kg/day to replace losses. Fluid restriction typically 1,000-1,500 mL/day based on urine output.",
             },
             {
               id: "nf-diabetic",
@@ -137,8 +137,8 @@ export function NutritionFoundationsModule() {
       <MatchingExercise
         title={t("data.pre_nursing_nutrition_foundations.matchTheNutritionConcept")}
         pairs={[
-          { id: "carbs", term: "Carbohydrates", definition: "Provide 4 kcal/g. the body's preferred energy source" },
-          { id: "fats", term: "Fats", definition: "Provide 9 kcal/g. most calorie-dense macronutrient" },
+          { id: "carbs", term: "Carbohydrates", definition: "Provide 4 kcal/g, the body's preferred energy source" },
+          { id: "fats", term: "Fats", definition: "Provide 9 kcal/g, most calorie-dense macronutrient" },
           { id: "vitk", term: "Vitamin K", definition: "Essential for blood clotting; interacts with warfarin" },
           { id: "prealbumin", term: "Prealbumin", definition: "Sensitive marker for recent nutritional status (half-life 2-3 days)" },
           { id: "dash", term: "DASH diet", definition: "Dietary approach to reduce hypertension" },
@@ -217,7 +217,7 @@ export function NutritionFoundationsModule() {
             question: "On a nutrition label, a %DV of 5% or less is considered:",
             options: ["High in that nutrient", "Moderate in that nutrient", "Low in that nutrient", "The recommended daily amount"],
             correctIndex: 2,
-            rationale: "The FDA guidelines state that 5% DV or less is considered low, while 20% DV or more is considered high. This helps patients make informed choices. aim for low %DV for nutrients to limit (sodium, saturated fat) and high %DV for nutrients to increase (fiber, calcium).",
+            rationale: "The FDA guidelines state that 5% DV or less is considered low, while 20% DV or more is considered high. This helps patients make informed choices, aim for low %DV for nutrients to limit (sodium, saturated fat) and high %DV for nutrients to increase (fiber, calcium).",
           },
           {
             id: "nf11",
@@ -280,7 +280,7 @@ export function NutritionFoundationsModule() {
             question: "On a food label, ingredients are listed in:",
             options: ["Alphabetical order", "Ascending order by weight", "Descending order by weight", "Random order"],
             correctIndex: 2,
-            rationale: "Ingredients are listed in descending order by weight. the first ingredient is present in the greatest amount. If sugar or its variants (sucrose, high-fructose corn syrup, dextrose) appear in the first few ingredients, the food is high in added sugars.",
+            rationale: "Ingredients are listed in descending order by weight, the first ingredient is present in the greatest amount. If sugar or its variants (sucrose, high-fructose corn syrup, dextrose) appear in the first few ingredients, the food is high in added sugars.",
           },
           {
             id: "nf20",

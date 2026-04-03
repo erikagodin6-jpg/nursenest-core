@@ -54,7 +54,7 @@ const structuralQuiz: import("@/components/pre-nursing/interactive-learning").Qu
     ],
     correctIndex: 1,
     rationale: "Negative feedback opposes the initial change, bringing the variable back toward the set point. Example: when body temperature rises, sweating activates to cool the body back down. Most homeostatic mechanisms use negative feedback.",
-    hint: "Think of a thermostat. when it gets too hot, the AC turns on to bring temperature back down.",
+    hint: "Think of a thermostat, when it gets too hot, the AC turns on to bring temperature back down.",
   },
   {
     id: "so4",
@@ -72,7 +72,7 @@ const cellTissueQuiz: import("@/components/pre-nursing/interactive-learning").Qu
     options: ["Crenate (shrink)", "Swell and potentially lyse", "No change", "Clump together"],
     correctIndex: 1,
     rationale: "Hypotonic solutions have lower solute concentration than inside the cell. Water moves INTO the cell by osmosis, causing it to swell. Excessive swelling can lead to hemolysis (cell bursting). This is why hypotonic solutions must be infused carefully.",
-    hint: "Water follows solute. or more precisely, water moves toward higher solute concentration.",
+    hint: "Water follows solute, or more precisely, water moves toward higher solute concentration.",
   },
   {
     id: "ct2",
@@ -103,7 +103,7 @@ const cellTissueQuiz: import("@/components/pre-nursing/interactive-learning").Qu
       "Only moves water molecules",
     ],
     correctIndex: 1,
-    rationale: "Active transport uses cellular energy (ATP) to move substances against their concentration gradient. from low to high concentration. Passive transport (diffusion, osmosis, facilitated diffusion) requires no energy and moves substances down the gradient.",
+    rationale: "Active transport uses cellular energy (ATP) to move substances against their concentration gradient, from low to high concentration. Passive transport (diffusion, osmosis, facilitated diffusion) requires no energy and moves substances down the gradient.",
   },
   {
     id: "ct5",
@@ -120,7 +120,7 @@ const integumentaryQuiz: import("@/components/pre-nursing/interactive-learning")
     question: "A nurse assesses a patient and finds decreased skin turgor. This finding most likely indicates:",
     options: ["Fluid overload", "Dehydration", "Infection", "Allergic reaction"],
     correctIndex: 1,
-    rationale: "Skin turgor is assessed by gently pinching skin (often on the sternum or forearm). Skin that remains tented indicates dehydration. reduced interstitial fluid causes decreased elasticity. Poor turgor in elderly patients may be normal due to loss of collagen.",
+    rationale: "Skin turgor is assessed by gently pinching skin (often on the sternum or forearm). Skin that remains tented indicates dehydration, reduced interstitial fluid causes decreased elasticity. Poor turgor in elderly patients may be normal due to loss of collagen.",
     hint: "Turgor reflects the hydration status of the interstitial tissue.",
   },
   {
@@ -152,7 +152,7 @@ const skeletalQuiz: import("@/components/pre-nursing/interactive-learning").Quiz
     question: "A patient's serum calcium is critically low. Which hormone would the body release to correct this?",
     options: ["Calcitonin", "Parathyroid hormone (PTH)", "Insulin", "Cortisol"],
     correctIndex: 1,
-    rationale: "PTH is released by the parathyroid glands in response to low blood calcium. PTH stimulates osteoclast activity (releasing calcium from bone), increases renal calcium reabsorption, and promotes vitamin D activation. Calcitonin has the opposite effect. it lowers blood calcium.",
+    rationale: "PTH is released by the parathyroid glands in response to low blood calcium. PTH stimulates osteoclast activity (releasing calcium from bone), increases renal calcium reabsorption, and promotes vitamin D activation. Calcitonin has the opposite effect, it lowers blood calcium.",
     hint: "Think 'PTH = Pushes calcium To High levels.'",
   },
   {
@@ -192,7 +192,7 @@ const muscularQuiz: import("@/components/pre-nursing/interactive-learning").Quiz
       "Calcium leaving the muscle cell",
     ],
     correctIndex: 1,
-    rationale: "During contraction, myosin heads bind to actin (forming cross-bridges) and pull the thin filaments toward the center of the sarcomere. The filaments themselves don't shorten. they slide past each other. This requires calcium (to expose binding sites) and ATP (for cross-bridge cycling).",
+    rationale: "During contraction, myosin heads bind to actin (forming cross-bridges) and pull the thin filaments toward the center of the sarcomere. The filaments themselves don't shorten, they slide past each other. This requires calcium (to expose binding sites) and ATP (for cross-bridge cycling).",
   },
   {
     id: "mu2",
@@ -253,7 +253,7 @@ const nervousQuiz: import("@/components/pre-nursing/interactive-learning").QuizQ
     question: "The resting membrane potential of a neuron is approximately:",
     options: ["+30 mV", "0 mV", "-70 mV", "-90 mV"],
     correctIndex: 2,
-    rationale: "At rest, the inside of a neuron is approximately -70mV relative to outside, maintained by the Na+/K+ pump (3 Na+ out, 2 K+ in) and K+ leak channels. This negative resting potential is essential. the neuron must be 'charged' to fire an action potential.",
+    rationale: "At rest, the inside of a neuron is approximately -70mV relative to outside, maintained by the Na+/K+ pump (3 Na+ out, 2 K+ in) and K+ leak channels. This negative resting potential is essential, the neuron must be 'charged' to fire an action potential.",
   },
 ];
 
@@ -338,31 +338,31 @@ export function AnatomyPhysiologyModule() {
   const { t } = usePreNursingT();
   const levelsOrganizationClinical = useEditableText("preanat-levels-clinical", "Disease can originate at any level and cascade upward. A molecular mutation (chemical level) can impair cell function (cellular), damage tissue, compromise an organ, and ultimately affect the whole organism. Understanding this hierarchy helps you trace symptoms back to root causes.");
   const directionalClinical = useEditableText("preanat-directional-clinical", "Precise anatomical language prevents medical errors. 'The wound is on the medial aspect of the right lower leg, 3 cm distal to the knee' is far more useful than 'the wound is on the inside of the leg near the knee.' Always use directional terms in documentation.");
-  const homeostasisFeedback = useEditableText("preanat-homeostasis-feedback", "Every feedback loop has three components: (1) Receptor. detects the change (sensor), (2) Control Center. processes information and determines response (often the brain), (3) Effector. carries out the corrective action (muscle, gland). Failure at any component disrupts homeostasis.");
+  const homeostasisFeedback = useEditableText("preanat-homeostasis-feedback", "Every feedback loop has three components: (1) Receptor, detects the change (sensor), (2) Control Center, processes information and determines response (often the brain), (3) Effector, carries out the corrective action (muscle, gland). Failure at any component disrupts homeostasis.");
   const cellularComm = useEditableText("preanat-cellular-comm", "Cells communicate via direct contact (gap junctions), chemical signals (hormones, neurotransmitters, paracrines), and electrical signals (neurons). Autocrine signals act on the same cell; paracrine signals act on nearby cells; endocrine signals travel via blood to distant targets. Understanding communication modes explains how drugs, diseases, and therapies work at the cellular level.");
   const transportGradient = useEditableText("preanat-transport-gradient", "The electrochemical gradient combines the concentration gradient (chemical) with the electrical gradient (charge difference across the membrane). The Na+/K+ pump creates both: more Na+ outside (chemical) and net negative charge inside (electrical). This stored energy drives nerve impulses, muscle contraction, and secondary active transport (e.g., glucose co-transport in the intestine).");
   const receptorsDrugs = useEditableText("preanat-receptors-drugs", "Agonists mimic the natural ligand and activate the receptor (e.g., albuterol mimics epinephrine at beta-2 receptors → bronchodilation). Antagonists block the receptor without activating it (e.g., propranolol blocks beta receptors → decreased heart rate). Understanding receptor pharmacology is the foundation of safe medication administration.");
-  const tissueAdaptation = useEditableText("preanat-tissue-adaptation", "Cells respond to stress through adaptive changes: Atrophy (decreased size. muscle wasting from disuse), Hypertrophy (increased size. cardiac enlargement from hypertension), Hyperplasia (increased number. endometrial thickening), Metaplasia (change in type. smoker's bronchial cells). If stress exceeds adaptive capacity, irreversible injury leads to necrosis (pathological death) or apoptosis (programmed death).");
-  const skinTurgor = useEditableText("preanat-skin-turgor", "Skin turgor assesses hydration status. When skin is gently pinched and released, well-hydrated tissue returns immediately to its normal position. Tenting (skin remains raised) indicates dehydration. decreased interstitial fluid reduces skin elasticity. Assess on the sternum or inner forearm; elderly patients' decreased collagen makes extremity turgor unreliable. Insensible water loss through the skin is approximately 300-400 mL/day and increases dramatically with burns, fever, and low humidity.");
-  const boneTypes = useEditableText("preanat-bone-types", "Long bones (femur, humerus). levers for movement. Short bones (carpals, tarsals). gliding movements. Flat bones (skull, sternum, pelvis). protection and hematopoiesis. Irregular bones (vertebrae, facial bones). complex shapes for specific functions. Sesamoid bones (patella). develop within tendons to reduce friction.");
-  const skeletonAxial = useEditableText("preanat-skeleton-axial", "The axial skeleton (80 bones) forms the central axis: skull (22), hyoid (1), vertebral column (26), thoracic cage (25). It protects the brain, spinal cord, and thoracic organs. The appendicular skeleton (126 bones) includes the pectoral girdle, upper limbs, pelvic girdle, and lower limbs. designed for movement and manipulation. Total: 206 bones in the adult skeleton.");
+  const tissueAdaptation = useEditableText("preanat-tissue-adaptation", "Cells respond to stress through adaptive changes: Atrophy (decreased size, muscle wasting from disuse), Hypertrophy (increased size, cardiac enlargement from hypertension), Hyperplasia (increased number, endometrial thickening), Metaplasia (change in type, smoker's bronchial cells). If stress exceeds adaptive capacity, irreversible injury leads to necrosis (pathological death) or apoptosis (programmed death).");
+  const skinTurgor = useEditableText("preanat-skin-turgor", "Skin turgor assesses hydration status. When skin is gently pinched and released, well-hydrated tissue returns immediately to its normal position. Tenting (skin remains raised) indicates dehydration, decreased interstitial fluid reduces skin elasticity. Assess on the sternum or inner forearm; elderly patients' decreased collagen makes extremity turgor unreliable. Insensible water loss through the skin is approximately 300-400 mL/day and increases dramatically with burns, fever, and low humidity.");
+  const boneTypes = useEditableText("preanat-bone-types", "Long bones (femur, humerus), levers for movement. Short bones (carpals, tarsals), gliding movements. Flat bones (skull, sternum, pelvis), protection and hematopoiesis. Irregular bones (vertebrae, facial bones), complex shapes for specific functions. Sesamoid bones (patella), develop within tendons to reduce friction.");
+  const skeletonAxial = useEditableText("preanat-skeleton-axial", "The axial skeleton (80 bones) forms the central axis: skull (22), hyoid (1), vertebral column (26), thoracic cage (25). It protects the brain, spinal cord, and thoracic organs. The appendicular skeleton (126 bones) includes the pectoral girdle, upper limbs, pelvic girdle, and lower limbs, designed for movement and manipulation. Total: 206 bones in the adult skeleton.");
   const muscleFatigue = useEditableText("preanat-muscle-fatigue", "Isotonic contractions: muscle length changes (concentric = shortening, eccentric = lengthening under tension). Isometric contractions: muscle generates force without length change (holding a heavy object). Muscle fatigue occurs from ATP depletion, lactic acid accumulation, electrolyte imbalances (K+, Ca2+, Na+), and CNS fatigue. Creatine phosphate provides immediate ATP for the first 10-15 seconds of intense activity, then aerobic and anaerobic pathways take over.");
   const synapticTransmission = useEditableText("preanat-synaptic-transmission", "When an action potential reaches the axon terminal: (1) voltage-gated Ca2+ channels open, (2) Ca2+ influx triggers vesicle fusion with the membrane, (3) neurotransmitters are released into the synaptic cleft (exocytosis), (4) neurotransmitters bind postsynaptic receptors, (5) excitatory or inhibitory response generated. The signal is terminated by reuptake, enzymatic breakdown, or diffusion. Most psychiatric and neurological drugs target these synaptic mechanisms.");
   const neurotransmittersText = useEditableText("preanat-neurotransmitters", "Acetylcholine (ACh): muscle contraction, parasympathetic effects, memory. Norepinephrine: sympathetic 'fight or flight,' alertness. Dopamine: reward, movement (Parkinson's = dopamine deficiency). Serotonin: mood, sleep, appetite (many antidepressants target serotonin). GABA: main inhibitory NT (benzodiazepines enhance GABA). Glutamate: main excitatory NT. Endorphins: natural pain relief. Understanding these helps you predict drug effects and side effects.");
-  const negativeFeedback = useEditableText("preanat-negative-feedback", "Rising hormone levels inhibit further release. Example: Thyroid axis. Hypothalamus releases TRH → Anterior pituitary releases TSH → Thyroid releases T3/T4 → Rising T3/T4 levels inhibit TRH and TSH release (negative feedback). In hypothyroidism, low T3/T4 means TSH is HIGH (no feedback inhibition). In hyperthyroidism, high T3/T4 means TSH is LOW (strong feedback inhibition). This logic applies to most endocrine axes.");
-  const cortisolClinical = useEditableText("preanat-cortisol-clinical", "Chronic cortisol elevation (Cushing syndrome): hyperglycemia, immunosuppression, muscle wasting, central obesity, moon face, thin skin, osteoporosis, poor wound healing. Cortisol deficiency (Addison disease): hypoglycemia, hypotension, hyperkalemia, hyponatremia, hyperpigmentation, fatigue. Exogenous corticosteroids (prednisone) mimic cortisol. never stop abruptly (adrenal suppression → adrenal crisis).");
+  const negativeFeedback = useEditableText("preanat-negative-feedback", "Rising hormone levels inhibit further release. Example: Thyroid axis, Hypothalamus releases TRH → Anterior pituitary releases TSH → Thyroid releases T3/T4 → Rising T3/T4 levels inhibit TRH and TSH release (negative feedback). In hypothyroidism, low T3/T4 means TSH is HIGH (no feedback inhibition). In hyperthyroidism, high T3/T4 means TSH is LOW (strong feedback inhibition). This logic applies to most endocrine axes.");
+  const cortisolClinical = useEditableText("preanat-cortisol-clinical", "Chronic cortisol elevation (Cushing syndrome): hyperglycemia, immunosuppression, muscle wasting, central obesity, moon face, thin skin, osteoporosis, poor wound healing. Cortisol deficiency (Addison disease): hypoglycemia, hypotension, hyperkalemia, hyponatremia, hyperpigmentation, fatigue. Exogenous corticosteroids (prednisone) mimic cortisol, never stop abruptly (adrenal suppression → adrenal crisis).");
   const heartAnatomyText = useEditableText("preanat-heart-anatomy", "The left ventricle wall is approximately 3x thicker than the right because it must generate enough pressure to pump blood through the entire systemic circuit. The coronary arteries (right and left) branch from the base of the aorta and supply the myocardium itself with oxygenated blood. The septum separates left and right sides, preventing mixing of oxygenated and deoxygenated blood.");
   const cardiacOutputText = useEditableText("preanat-cardiac-output", "Cardiac output (CO) = Heart Rate (HR) × Stroke Volume (SV). Normal resting CO is approximately 5 L/min. Stroke volume is the amount of blood ejected per beat (~70 mL). CO can increase 4-5x during vigorous exercise through increased HR and SV. Blood pressure = CO × peripheral resistance.");
   const ventilationMechanics = useEditableText("preanat-ventilation", "Inspiration is an ACTIVE process: the diaphragm contracts and flattens, external intercostals elevate the ribs, thoracic volume increases, intrapulmonary pressure drops below atmospheric pressure, and air flows IN (Boyle's law). Quiet expiration is PASSIVE: the diaphragm and intercostals relax, elastic recoil of lungs decreases thoracic volume, intrapulmonary pressure rises above atmospheric pressure, and air flows OUT. Forced expiration recruits internal intercostals and abdominal muscles.");
   const oxygenTransport = useEditableText("preanat-oxygen-transport", "~98.5% of O₂ is transported bound to hemoglobin (as oxyhemoglobin, HbO₂) within red blood cells. ~1.5% is dissolved in plasma. Each hemoglobin molecule can carry up to 4 O₂ molecules. CO₂ transport: ~70% as bicarbonate (HCO₃⁻) in plasma, ~23% bound to hemoglobin (carbaminohemoglobin), ~7% dissolved in plasma.");
-  const digestionMechanical = useEditableText("preanat-digestion", "Mechanical digestion physically breaks food into smaller pieces without altering chemical composition. includes mastication (chewing), churning in the stomach, and segmentation in the small intestine. Chemical digestion uses enzymes and other chemicals to break covalent bonds in macromolecules: amylase breaks starch into maltose, pepsin/trypsin break proteins into peptides, lipase breaks triglycerides into fatty acids and monoglycerides, and brush border enzymes complete final digestion at the intestinal wall.");
+  const digestionMechanical = useEditableText("preanat-digestion", "Mechanical digestion physically breaks food into smaller pieces without altering chemical composition, includes mastication (chewing), churning in the stomach, and segmentation in the small intestine. Chemical digestion uses enzymes and other chemicals to break covalent bonds in macromolecules: amylase breaks starch into maltose, pepsin/trypsin break proteins into peptides, lipase breaks triglycerides into fatty acids and monoglycerides, and brush border enzymes complete final digestion at the intestinal wall.");
   const kidneyFunctions = useEditableText("preanat-kidney-functions", "The kidneys do far more than produce urine. They regulate blood volume and pressure (RAAS, ADH), maintain electrolyte balance (Na+, K+, Ca²+, phosphate), regulate acid-base balance (H+ secretion, HCO₃⁻ reabsorption), produce erythropoietin (EPO, stimulates red blood cell production), activate vitamin D (calcitriol, for calcium absorption), and perform gluconeogenesis during prolonged fasting.");
 
   return (
     <div className="space-y-10" data-testid="module-anatomy-physiology">
       <div>
         <EditableModuleText sectionKey="preanat-title" defaultText="Anatomy & Physiology" as="h2" className="text-2xl font-bold text-gray-900 mb-2" />
-        <EditableModuleText sectionKey="preanat-desc" defaultText="Master the structure and function of the human body. from cells and tissues to organ systems. building the foundation for clinical nursing practice." as="p" className="text-gray-600" multiline />
+        <EditableModuleText sectionKey="preanat-desc" defaultText="Master the structure and function of the human body, from cells and tissues to organ systems, building the foundation for clinical nursing practice." as="p" className="text-gray-600" multiline />
       </div>
 
       <section className="space-y-6">
@@ -468,7 +468,7 @@ export function AnatomyPhysiologyModule() {
           subtitle={t("data.pre_nursing_anatomy.howAnatomyDictatesPhysiology")}
           icon={<Network className="w-5 h-5" />}
         >
-          <EditableModuleText sectionKey="preanat-structure-function-content" defaultText="The principle of complementarity of structure and function is fundamental. you can predict a structure's function by examining its anatomy, and vice versa." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+          <EditableModuleText sectionKey="preanat-structure-function-content" defaultText="The principle of complementarity of structure and function is fundamental, you can predict a structure's function by examining its anatomy, and vice versa." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
           <ProgressiveReveal
             title={t("data.pre_nursing_anatomy.11OrganSystemsOverview")}
             cards={[
@@ -476,31 +476,31 @@ export function AnatomyPhysiologyModule() {
                 id: "os1",
                 title: "Integumentary & Skeletal",
                 summary: "Protection, support, movement framework",
-                detail: "Integumentary: skin, hair, nails. protection, thermoregulation, vitamin D synthesis. Skeletal: 206 bones. support, protection of organs, mineral storage, blood cell production (hematopoiesis).",
+                detail: "Integumentary: skin, hair, nails, protection, thermoregulation, vitamin D synthesis. Skeletal: 206 bones, support, protection of organs, mineral storage, blood cell production (hematopoiesis).",
               },
               {
                 id: "os2",
                 title: "Muscular & Nervous",
                 summary: "Movement and control/communication",
-                detail: "Muscular: skeletal, smooth, cardiac. movement, posture, heat production. Nervous: brain, spinal cord, nerves. rapid electrochemical communication, sensation, integration, motor control.",
+                detail: "Muscular: skeletal, smooth, cardiac, movement, posture, heat production. Nervous: brain, spinal cord, nerves, rapid electrochemical communication, sensation, integration, motor control.",
               },
               {
                 id: "os3",
                 title: "Endocrine & Cardiovascular",
                 summary: "Hormonal regulation and transport",
-                detail: "Endocrine: glands secreting hormones. slow but prolonged chemical regulation. Cardiovascular: heart and blood vessels. transport oxygen, nutrients, wastes, hormones, and immune cells throughout the body.",
+                detail: "Endocrine: glands secreting hormones, slow but prolonged chemical regulation. Cardiovascular: heart and blood vessels, transport oxygen, nutrients, wastes, hormones, and immune cells throughout the body.",
               },
               {
                 id: "os4",
                 title: "Lymphatic, Respiratory & Digestive",
                 summary: "Immunity, gas exchange, and nutrient processing",
-                detail: "Lymphatic: lymph nodes, vessels, spleen. immunity and fluid recovery. Respiratory: lungs and airways. O2/CO2 exchange, pH regulation. Digestive: GI tract and accessory organs. nutrient breakdown, absorption, elimination.",
+                detail: "Lymphatic: lymph nodes, vessels, spleen, immunity and fluid recovery. Respiratory: lungs and airways, O2/CO2 exchange, pH regulation. Digestive: GI tract and accessory organs, nutrient breakdown, absorption, elimination.",
               },
               {
                 id: "os5",
                 title: "Urinary & Reproductive",
                 summary: "Waste removal and species continuation",
-                detail: "Urinary: kidneys, ureters, bladder. fluid/electrolyte balance, waste excretion, blood pressure regulation. Reproductive: gonads and associated structures. gamete production, hormone secretion, fetal development.",
+                detail: "Urinary: kidneys, ureters, bladder, fluid/electrolyte balance, waste excretion, blood pressure regulation. Reproductive: gonads and associated structures, gamete production, hormone secretion, fetal development.",
               },
             ]}
           />
@@ -610,7 +610,7 @@ export function AnatomyPhysiologyModule() {
           subtitle={t("data.pre_nursing_anatomy.howCellsReceiveAndRespond")}
           icon={<Network className="w-5 h-5" />}
         >
-          <EditableModuleText sectionKey="preanat-cell-signaling-content" defaultText="Cell signaling underlies pharmacology. drugs work by mimicking or blocking natural signaling molecules." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+          <EditableModuleText sectionKey="preanat-cell-signaling-content" defaultText="Cell signaling underlies pharmacology, drugs work by mimicking or blocking natural signaling molecules." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
           <div className="grid sm:grid-cols-2 gap-3 mt-3">
             <div className="p-4 bg-indigo-50/60 rounded-xl border border-indigo-100">
               <p className="text-xs font-semibold text-indigo-700 mb-1">Receptor Types</p>
@@ -646,19 +646,19 @@ export function AnatomyPhysiologyModule() {
                 id: "tt2",
                 title: "Connective Tissue",
                 summary: "Supports, binds, and protects structures",
-                detail: "Most abundant tissue type. Includes: loose CT (areolar. fills spaces), dense CT (tendons, ligaments), cartilage (hyaline, fibro, elastic), bone, blood, and adipose. All have cells embedded in an extracellular matrix. Connective tissue proper has fibroblasts producing collagen and elastin.",
+                detail: "Most abundant tissue type. Includes: loose CT (areolar, fills spaces), dense CT (tendons, ligaments), cartilage (hyaline, fibro, elastic), bone, blood, and adipose. All have cells embedded in an extracellular matrix. Connective tissue proper has fibroblasts producing collagen and elastin.",
               },
               {
                 id: "tt3",
                 title: "Muscle Tissue",
                 summary: "Generates force through contraction",
-                detail: "Skeletal: voluntary, striated, multinucleated. moves the skeleton. Cardiac: involuntary, striated, branched with intercalated discs. pumps blood. Smooth: involuntary, non-striated, spindle-shaped. found in organ walls (blood vessels, GI tract, airways).",
+                detail: "Skeletal: voluntary, striated, multinucleated, moves the skeleton. Cardiac: involuntary, striated, branched with intercalated discs, pumps blood. Smooth: involuntary, non-striated, spindle-shaped, found in organ walls (blood vessels, GI tract, airways).",
               },
               {
                 id: "tt4",
                 title: "Nervous Tissue",
                 summary: "Generates and transmits electrical signals",
-                detail: "Neurons: excitable cells that transmit electrical impulses via action potentials. Neuroglia (glial cells): support cells. astrocytes (blood-brain barrier), oligodendrocytes (CNS myelin), Schwann cells (PNS myelin), microglia (immune defense). Neurons are generally amitotic (don't divide). damage is often permanent.",
+                detail: "Neurons: excitable cells that transmit electrical impulses via action potentials. Neuroglia (glial cells): support cells, astrocytes (blood-brain barrier), oligodendrocytes (CNS myelin), Schwann cells (PNS myelin), microglia (immune defense). Neurons are generally amitotic (don't divide), damage is often permanent.",
               },
             ]}
           />
@@ -734,13 +734,13 @@ export function AnatomyPhysiologyModule() {
                 id: "wh2",
                 title: "Inflammatory Phase (Days 1-4)",
                 summary: "Immune response clears debris and fights infection",
-                detail: "Neutrophils arrive first (within hours) to phagocytize bacteria and debris. Macrophages follow (24-48 hours), cleaning the wound and releasing growth factors. Cardinal signs: redness, heat, swelling, pain. these are NORMAL and necessary.",
+                detail: "Neutrophils arrive first (within hours) to phagocytize bacteria and debris. Macrophages follow (24-48 hours), cleaning the wound and releasing growth factors. Cardinal signs: redness, heat, swelling, pain, these are NORMAL and necessary.",
               },
               {
                 id: "wh3",
                 title: "Proliferative Phase (Days 4-21)",
                 summary: "New tissue formation and wound closure",
-                detail: "Fibroblasts produce collagen (granulation tissue. beefy red appearance). Angiogenesis creates new blood vessels. Epithelial cells migrate across the wound surface (epithelialization). The wound contracts as myofibroblasts pull edges together.",
+                detail: "Fibroblasts produce collagen (granulation tissue, beefy red appearance). Angiogenesis creates new blood vessels. Epithelial cells migrate across the wound surface (epithelialization). The wound contracts as myofibroblasts pull edges together.",
               },
               {
                 id: "wh4",
@@ -821,7 +821,7 @@ export function AnatomyPhysiologyModule() {
           <div className="grid sm:grid-cols-2 gap-3">
             <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
               <p className="text-sm font-semibold text-blue-700 mb-1">Joint Classification</p>
-              <p className="text-xs text-blue-600">Fibrous joints (synarthroses): immovable (skull sutures). Cartilaginous joints (amphiarthroses): slightly movable (intervertebral discs, pubic symphysis). Synovial joints (diarthroses): freely movable (knee, shoulder, hip). most clinically significant.</p>
+              <p className="text-xs text-blue-600">Fibrous joints (synarthroses): immovable (skull sutures). Cartilaginous joints (amphiarthroses): slightly movable (intervertebral discs, pubic symphysis). Synovial joints (diarthroses): freely movable (knee, shoulder, hip), most clinically significant.</p>
             </div>
             <div className="p-4 bg-emerald-50/60 rounded-xl border border-emerald-100">
               <p className="text-sm font-semibold text-emerald-700 mb-1">Synovial Joint Features</p>
@@ -872,7 +872,7 @@ export function AnatomyPhysiologyModule() {
             </div>
             <div className="p-4 bg-red-50/60 rounded-xl border border-red-100">
               <p className="text-xs font-semibold text-red-700 mb-1">Cardiac Muscle</p>
-              <p className="text-xs text-red-600">Involuntary, striated, branched. Found ONLY in the heart. Intercalated discs allow synchronized contraction. Autorhythmic. generates its own electrical impulses. Highly resistant to fatigue.</p>
+              <p className="text-xs text-red-600">Involuntary, striated, branched. Found ONLY in the heart. Intercalated discs allow synchronized contraction. Autorhythmic, generates its own electrical impulses. Highly resistant to fatigue.</p>
             </div>
             <div className="p-4 bg-pink-50/60 rounded-xl border border-pink-100">
               <p className="text-xs font-semibold text-pink-700 mb-1">Smooth Muscle</p>
@@ -951,7 +951,7 @@ export function AnatomyPhysiologyModule() {
                 id: "ap2",
                 title: "2. Depolarization",
                 summary: "Na+ rushes in, membrane reaches +30mV",
-                detail: "When a stimulus reaches threshold (-55mV), voltage-gated Na+ channels open rapidly. Na+ floods into the cell, driving the membrane potential from -70mV to about +30mV. This is an 'all-or-nothing' event. once threshold is reached, the full action potential fires.",
+                detail: "When a stimulus reaches threshold (-55mV), voltage-gated Na+ channels open rapidly. Na+ floods into the cell, driving the membrane potential from -70mV to about +30mV. This is an 'all-or-nothing' event, once threshold is reached, the full action potential fires.",
               },
               {
                 id: "ap3",
@@ -1062,11 +1062,11 @@ export function AnatomyPhysiologyModule() {
           <div className="grid sm:grid-cols-2 gap-3 mt-3">
             <div className="p-4 bg-indigo-50/60 rounded-xl border border-indigo-100">
               <p className="text-xs font-semibold text-indigo-700 mb-1">Anterior Pituitary Hormones</p>
-              <p className="text-xs text-indigo-600">GH (growth), TSH (thyroid), ACTH (adrenals/cortisol), FSH & LH (gonads), Prolactin (milk production). Mnemonic: FLAT PiG. FSH, LH, ACTH, TSH, Prolactin, GH.</p>
+              <p className="text-xs text-indigo-600">GH (growth), TSH (thyroid), ACTH (adrenals/cortisol), FSH & LH (gonads), Prolactin (milk production). Mnemonic: FLAT PiG, FSH, LH, ACTH, TSH, Prolactin, GH.</p>
             </div>
             <div className="p-4 bg-violet-50/60 rounded-xl border border-violet-100">
               <p className="text-xs font-semibold text-violet-700 mb-1">Posterior Pituitary Hormones</p>
-              <p className="text-xs text-violet-600">ADH (antidiuretic hormone): promotes water reabsorption in kidneys. low ADH → diabetes insipidus (dilute urine). Oxytocin: stimulates uterine contractions and milk let-down. Both made in hypothalamus, stored in posterior pituitary.</p>
+              <p className="text-xs text-violet-600">ADH (antidiuretic hormone): promotes water reabsorption in kidneys, low ADH → diabetes insipidus (dilute urine). Oxytocin: stimulates uterine contractions and milk let-down. Both made in hypothalamus, stored in posterior pituitary.</p>
             </div>
           </div>
         </MicroLesson>
@@ -1130,7 +1130,7 @@ export function AnatomyPhysiologyModule() {
             </div>
             <div className="p-4 bg-red-50/60 rounded-xl border border-red-100">
               <p className="text-xs font-semibold text-red-700 mb-1">Left Side (Systemic Circuit)</p>
-              <p className="text-xs text-red-600">The left atrium receives oxygenated blood from the lungs via four pulmonary veins. Blood flows through the bicuspid (mitral) valve into the left ventricle. the most muscular chamber. then is ejected through the aortic semilunar valve into the aorta to supply the entire body.</p>
+              <p className="text-xs text-red-600">The left atrium receives oxygenated blood from the lungs via four pulmonary veins. Blood flows through the bicuspid (mitral) valve into the left ventricle, the most muscular chamber, then is ejected through the aortic semilunar valve into the aorta to supply the entire body.</p>
             </div>
           </div>
           <ProgressiveReveal
@@ -1138,7 +1138,7 @@ export function AnatomyPhysiologyModule() {
             cards={[
               { id: "bf1", title: "Step 1: Venous Return", summary: "Venae cavae → Right atrium → Tricuspid valve → Right ventricle", detail: "Deoxygenated blood from the systemic circuit returns to the right atrium via the superior vena cava (upper body) and inferior vena cava (lower body), then passes through the tricuspid (right atrioventricular) valve into the right ventricle." },
               { id: "bf2", title: "Step 2: Pulmonary Circuit", summary: "Right ventricle → Pulmonary valve → Pulmonary arteries → Lungs", detail: "The right ventricle contracts, closing the tricuspid valve and opening the pulmonary semilunar valve. Blood is pumped into the pulmonary trunk, which splits into left and right pulmonary arteries carrying deoxygenated blood to the lungs for gas exchange." },
-              { id: "bf3", title: "Step 3: Pulmonary Return", summary: "Pulmonary veins → Left atrium → Mitral valve → Left ventricle", detail: "Oxygenated blood returns from the lungs via four pulmonary veins into the left atrium, then flows through the bicuspid (mitral) valve into the left ventricle. the thickest, most muscular chamber." },
+              { id: "bf3", title: "Step 3: Pulmonary Return", summary: "Pulmonary veins → Left atrium → Mitral valve → Left ventricle", detail: "Oxygenated blood returns from the lungs via four pulmonary veins into the left atrium, then flows through the bicuspid (mitral) valve into the left ventricle, the thickest, most muscular chamber." },
               { id: "bf4", title: "Step 4: Systemic Circuit", summary: "Left ventricle → Aortic valve → Aorta → Body → Venae cavae", detail: "The left ventricle contracts powerfully, ejecting oxygenated blood through the aortic semilunar valve into the aorta for distribution to all body tissues. After gas exchange at tissue capillaries, deoxygenated blood returns via venules and veins to the venae cavae, completing the circuit." },
             ]}
           />
@@ -1209,9 +1209,9 @@ export function AnatomyPhysiologyModule() {
             title={t("data.pre_nursing_anatomy.airwayBranchingConductingZoneRespiratory")}
             cards={[
               { id: "ab1", title: "Trachea", summary: "C-shaped cartilage rings maintain patency", detail: "The trachea is lined with pseudostratified ciliated columnar epithelium (mucociliary escalator) that traps and propels inhaled particles upward. C-shaped hyaline cartilage rings keep the airway open while the posterior trachealis muscle allows esophageal expansion during swallowing." },
-              { id: "ab2", title: "Bronchi", summary: "Progressive branching with decreasing cartilage", detail: "Primary (main) bronchi enter each lung at the hilum. They subdivide into secondary (lobar) bronchi (3 right, 2 left. matching lung lobes), then tertiary (segmental) bronchi. As airways branch, cartilage decreases and smooth muscle increases, allowing autonomic control of airway diameter." },
-              { id: "ab3", title: "Bronchioles", summary: "No cartilage; smooth muscle controls diameter", detail: "Bronchioles lack cartilage entirely and rely on smooth muscle for structural support and diameter regulation. Terminal bronchioles are the smallest conducting airways. The conducting zone (nose through terminal bronchioles) warms, humidifies, and filters air but performs no gas exchange. this is anatomical dead space (~150 mL)." },
-              { id: "ab4", title: "Respiratory Zone", summary: "Respiratory bronchioles → Alveolar ducts → Alveoli", detail: "The respiratory zone begins at respiratory bronchioles, which have scattered alveoli budding from their walls. These lead to alveolar ducts and alveolar sacs. An estimated 300 million alveoli provide ~70 m² of surface area for gas exchange. roughly the size of a tennis court." },
+              { id: "ab2", title: "Bronchi", summary: "Progressive branching with decreasing cartilage", detail: "Primary (main) bronchi enter each lung at the hilum. They subdivide into secondary (lobar) bronchi (3 right, 2 left, matching lung lobes), then tertiary (segmental) bronchi. As airways branch, cartilage decreases and smooth muscle increases, allowing autonomic control of airway diameter." },
+              { id: "ab3", title: "Bronchioles", summary: "No cartilage; smooth muscle controls diameter", detail: "Bronchioles lack cartilage entirely and rely on smooth muscle for structural support and diameter regulation. Terminal bronchioles are the smallest conducting airways. The conducting zone (nose through terminal bronchioles) warms, humidifies, and filters air but performs no gas exchange, this is anatomical dead space (~150 mL)." },
+              { id: "ab4", title: "Respiratory Zone", summary: "Respiratory bronchioles → Alveolar ducts → Alveoli", detail: "The respiratory zone begins at respiratory bronchioles, which have scattered alveoli budding from their walls. These lead to alveolar ducts and alveolar sacs. An estimated 300 million alveoli provide ~70 m² of surface area for gas exchange, roughly the size of a tennis court." },
             ]}
           />
           <div className="grid sm:grid-cols-2 gap-3 mt-3">
@@ -1338,7 +1338,7 @@ export function AnatomyPhysiologyModule() {
           description={t("data.pre_nursing_anatomy.matchEachOrganSystemTo")}
           pairs={[
             { id: "osm1", term: "Cardiovascular System", definition: "Pumps and transports blood, O\u2082, nutrients, and wastes throughout the body" },
-            { id: "osm2", term: "Respiratory System", definition: "Gas exchange. delivers O\u2082 to blood and removes CO\u2082 from the body" },
+            { id: "osm2", term: "Respiratory System", definition: "Gas exchange, delivers O\u2082 to blood and removes CO\u2082 from the body" },
             { id: "osm3", term: "Digestive System", definition: "Breaks down food into absorbable nutrients; eliminates solid waste" },
             { id: "osm4", term: "Urinary System", definition: "Filters blood, regulates fluid/electrolyte balance, and produces urine" },
             { id: "osm5", term: "Nervous System", definition: "Rapid electrochemical signaling for sensation, integration, and motor response" },

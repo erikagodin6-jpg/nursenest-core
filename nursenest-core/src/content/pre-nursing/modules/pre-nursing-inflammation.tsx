@@ -14,9 +14,9 @@ import { Flame, Shield, Activity, Heart } from "lucide-react";
 
 export function InflammationModule() {
   const { t } = usePreNursingT();
-  const cardinalSignsContent = useEditableText("infl-cardinal-signs-content", "The five cardinal signs of inflammation were first described by Celsus (rubor, calor, dolor, tumor) with functio laesa added by Virchow. Rubor (redness) results from vasodilation increasing blood flow to the area. Calor (heat) occurs from increased blood flow and metabolic activity. Dolor (pain) is caused by inflammatory mediators stimulating nerve endings and tissue swelling compressing nerves. Tumor (swelling) results from increased vascular permeability allowing fluid and proteins to leak into interstitial spaces. Functio laesa (loss of function) occurs as a protective mechanism. pain and swelling limit movement of the affected area, promoting healing.");
-  const mediatorContent = useEditableText("infl-mediator-content", "Inflammatory mediators are chemical signals that coordinate the inflammatory response. Histamine (from mast cells) causes immediate vasodilation and increased vascular permeability. this is why antihistamines reduce swelling and itching. Prostaglandins (produced via the COX pathway) cause pain, fever, and prolonged vasodilation. NSAIDs work by inhibiting COX enzymes. Cytokines (IL-1, IL-6, TNF-alpha) are signaling proteins that recruit immune cells, induce fever via the hypothalamus, and can trigger systemic inflammatory response syndrome (SIRS) when overproduced. Complement proteins create membrane attack complexes that lyse pathogens. Leukotrienes cause bronchospasm and are involved in asthma pathophysiology.");
-  const woundHealingContent = useEditableText("infl-wound-healing-content", "Wound healing proceeds through four overlapping phases. Hemostasis (seconds to hours): vasoconstriction, platelet plug formation, fibrin clot stabilization. stops bleeding. Inflammatory phase (1-6 days): neutrophils arrive first (within hours) to phagocytize bacteria, followed by macrophages (24-48 hours) that clear debris and release growth factors. Proliferative phase (4-21 days): fibroblasts produce collagen, angiogenesis creates new blood vessels, granulation tissue fills the wound, and epithelial cells migrate across the wound surface. Remodeling phase (21 days to 2 years): collagen reorganizes along stress lines, scar tissue matures and strengthens (reaching maximum 80% of original skin strength), and excess vasculature regresses.");
+  const cardinalSignsContent = useEditableText("infl-cardinal-signs-content", "The five cardinal signs of inflammation were first described by Celsus (rubor, calor, dolor, tumor) with functio laesa added by Virchow. Rubor (redness) results from vasodilation increasing blood flow to the area. Calor (heat) occurs from increased blood flow and metabolic activity. Dolor (pain) is caused by inflammatory mediators stimulating nerve endings and tissue swelling compressing nerves. Tumor (swelling) results from increased vascular permeability allowing fluid and proteins to leak into interstitial spaces. Functio laesa (loss of function) occurs as a protective mechanism, pain and swelling limit movement of the affected area, promoting healing.");
+  const mediatorContent = useEditableText("infl-mediator-content", "Inflammatory mediators are chemical signals that coordinate the inflammatory response. Histamine (from mast cells) causes immediate vasodilation and increased vascular permeability, this is why antihistamines reduce swelling and itching. Prostaglandins (produced via the COX pathway) cause pain, fever, and prolonged vasodilation, NSAIDs work by inhibiting COX enzymes. Cytokines (IL-1, IL-6, TNF-alpha) are signaling proteins that recruit immune cells, induce fever via the hypothalamus, and can trigger systemic inflammatory response syndrome (SIRS) when overproduced. Complement proteins create membrane attack complexes that lyse pathogens. Leukotrienes cause bronchospasm and are involved in asthma pathophysiology.");
+  const woundHealingContent = useEditableText("infl-wound-healing-content", "Wound healing proceeds through four overlapping phases. Hemostasis (seconds to hours): vasoconstriction, platelet plug formation, fibrin clot stabilization, stops bleeding. Inflammatory phase (1-6 days): neutrophils arrive first (within hours) to phagocytize bacteria, followed by macrophages (24-48 hours) that clear debris and release growth factors. Proliferative phase (4-21 days): fibroblasts produce collagen, angiogenesis creates new blood vessels, granulation tissue fills the wound, and epithelial cells migrate across the wound surface. Remodeling phase (21 days to 2 years): collagen reorganizes along stress lines, scar tissue matures and strengthens (reaching maximum 80% of original skin strength), and excess vasculature regresses.");
 
   return (
     <div className="space-y-10" data-testid="module-inflammation">
@@ -26,7 +26,7 @@ export function InflammationModule() {
       </div>
 
       <MicroLesson title="Acute vs. Chronic Inflammation" subtitle="Protective response vs. pathological process" icon={<Flame className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="infl-acute-chronic-intro" defaultText="Inflammation is a fundamental protective response to tissue injury or infection. Acute inflammation is rapid, self-limiting, and beneficial. it eliminates the threat and initiates repair. Chronic inflammation persists for weeks to years, causes ongoing tissue damage, and underlies many chronic diseases including atherosclerosis, rheumatoid arthritis, and cancer." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="infl-acute-chronic-intro" defaultText="Inflammation is a fundamental protective response to tissue injury or infection. Acute inflammation is rapid, self-limiting, and beneficial, it eliminates the threat and initiates repair. Chronic inflammation persists for weeks to years, causes ongoing tissue damage, and underlies many chronic diseases including atherosclerosis, rheumatoid arthritis, and cancer." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-orange-50/60 rounded-xl border border-orange-100">
             <p className="text-xs font-semibold text-orange-700 mb-1">Acute Inflammation</p>
@@ -34,7 +34,7 @@ export function InflammationModule() {
           </div>
           <div className="p-4 bg-red-50/60 rounded-xl border border-red-100">
             <p className="text-xs font-semibold text-red-700 mb-1">Chronic Inflammation</p>
-            <p className="text-xs text-red-600"><strong>Onset:</strong> Gradual or follows unresolved acute inflammation. <strong>Duration:</strong> Weeks to years. <strong>Primary cells:</strong> Macrophages, lymphocytes, plasma cells. <strong>Tissue changes:</strong> Fibrosis, tissue destruction, angiogenesis occurring simultaneously. <strong>Purpose:</strong> Attempt to contain persistent threat. often causes more damage than the original insult. <strong>Examples:</strong> Rheumatoid arthritis, atherosclerosis, Crohn's disease, chronic hepatitis, tuberculosis.</p>
+            <p className="text-xs text-red-600"><strong>Onset:</strong> Gradual or follows unresolved acute inflammation. <strong>Duration:</strong> Weeks to years. <strong>Primary cells:</strong> Macrophages, lymphocytes, plasma cells. <strong>Tissue changes:</strong> Fibrosis, tissue destruction, angiogenesis occurring simultaneously. <strong>Purpose:</strong> Attempt to contain persistent threat, often causes more damage than the original insult. <strong>Examples:</strong> Rheumatoid arthritis, atherosclerosis, Crohn's disease, chronic hepatitis, tuberculosis.</p>
           </div>
         </div>
         <CognitiveCard
@@ -52,14 +52,14 @@ export function InflammationModule() {
             {
               id: "infl-med-1",
               title: "Histamine",
-              summary: "Released from mast cells. causes immediate vasodilation and permeability",
-              detail: "Histamine is preformed and stored in mast cell granules, released within seconds of injury or allergen exposure. It causes arteriolar vasodilation (redness, warmth), increased venular permeability (swelling), and smooth muscle contraction (bronchospasm in allergic reactions). Antihistamines (diphenhydramine, cetirizine) block H1 receptors to reduce these effects. H2 receptors in the stomach regulate acid secretion. H2 blockers (famotidine) reduce gastric acid.",
+              summary: "Released from mast cells, causes immediate vasodilation and permeability",
+              detail: "Histamine is preformed and stored in mast cell granules, released within seconds of injury or allergen exposure. It causes arteriolar vasodilation (redness, warmth), increased venular permeability (swelling), and smooth muscle contraction (bronchospasm in allergic reactions). Antihistamines (diphenhydramine, cetirizine) block H1 receptors to reduce these effects. H2 receptors in the stomach regulate acid secretion, H2 blockers (famotidine) reduce gastric acid.",
             },
             {
               id: "infl-med-2",
               title: "Prostaglandins",
-              summary: "Produced via COX pathway. cause pain, fever, and sustained vasodilation",
-              detail: "Prostaglandins are synthesized from arachidonic acid by cyclooxygenase (COX) enzymes. COX-1 is constitutive. it protects gastric mucosa, supports platelet function, and maintains renal blood flow. COX-2 is inducible. upregulated during inflammation. NSAIDs inhibit COX: non-selective (ibuprofen, aspirin) inhibit both COX-1 and COX-2, which is why they can cause GI bleeding and renal impairment. Selective COX-2 inhibitors (celecoxib) have fewer GI side effects but increased cardiovascular risk.",
+              summary: "Produced via COX pathway, cause pain, fever, and sustained vasodilation",
+              detail: "Prostaglandins are synthesized from arachidonic acid by cyclooxygenase (COX) enzymes. COX-1 is constitutive, it protects gastric mucosa, supports platelet function, and maintains renal blood flow. COX-2 is inducible, upregulated during inflammation. NSAIDs inhibit COX: non-selective (ibuprofen, aspirin) inhibit both COX-1 and COX-2, which is why they can cause GI bleeding and renal impairment. Selective COX-2 inhibitors (celecoxib) have fewer GI side effects but increased cardiovascular risk.",
             },
             {
               id: "infl-med-3",
@@ -83,15 +83,15 @@ export function InflammationModule() {
       </MicroLesson>
 
       <MicroLesson title="Fever Physiology & Immune Regulation" subtitle="Understanding fever as a regulated immune response" icon={<Activity className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="infl-fever-intro" defaultText="Fever is not a malfunction. it is a deliberate upward resetting of the hypothalamic thermostat in response to pyrogens. It enhances immune function but can become dangerous at extreme levels. Understanding fever physiology helps nurses make evidence-based decisions about when to treat fever and when to let it serve its protective role." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="infl-fever-intro" defaultText="Fever is not a malfunction, it is a deliberate upward resetting of the hypothalamic thermostat in response to pyrogens. It enhances immune function but can become dangerous at extreme levels. Understanding fever physiology helps nurses make evidence-based decisions about when to treat fever and when to let it serve its protective role." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-amber-50/60 rounded-xl border border-amber-100">
             <p className="text-xs font-semibold text-amber-700 mb-1">Fever Mechanism</p>
-            <p className="text-xs text-amber-600"><strong>Exogenous pyrogens</strong> (bacteria, viruses) stimulate macrophages to release <strong>endogenous pyrogens</strong> (IL-1, IL-6, TNF-α). These act on the hypothalamus to increase prostaglandin E2 (PGE2) production, which raises the thermostat set point. The body then generates heat through shivering and vasoconstriction (chills) until the new set point is reached. <strong>Antipyretics</strong> (acetaminophen, NSAIDs) lower fever by inhibiting PGE2 synthesis. they reset the thermostat back to normal, causing vasodilation and sweating (defervescence).</p>
+            <p className="text-xs text-amber-600"><strong>Exogenous pyrogens</strong> (bacteria, viruses) stimulate macrophages to release <strong>endogenous pyrogens</strong> (IL-1, IL-6, TNF-α). These act on the hypothalamus to increase prostaglandin E2 (PGE2) production, which raises the thermostat set point. The body then generates heat through shivering and vasoconstriction (chills) until the new set point is reached. <strong>Antipyretics</strong> (acetaminophen, NSAIDs) lower fever by inhibiting PGE2 synthesis, they reset the thermostat back to normal, causing vasodilation and sweating (defervescence).</p>
           </div>
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
             <p className="text-xs font-semibold text-blue-700 mb-1">Immune Overreaction vs. Immunosuppression</p>
-            <p className="text-xs text-blue-600"><strong>Overreaction (Hypersensitivity):</strong> The immune system attacks harmless substances (allergies. Type I), self-tissues (autoimmune diseases. Type II/III), or causes excessive cell-mediated responses (contact dermatitis. Type IV). In severe cases, systemic overreaction causes anaphylaxis or cytokine storm. <strong>Immunosuppression:</strong> Inadequate immune response. from HIV/AIDS, chemotherapy, corticosteroids, malnutrition, or extremes of age. Increases susceptibility to opportunistic infections. Both extremes require nursing vigilance for different complications.</p>
+            <p className="text-xs text-blue-600"><strong>Overreaction (Hypersensitivity):</strong> The immune system attacks harmless substances (allergies, Type I), self-tissues (autoimmune diseases, Type II/III), or causes excessive cell-mediated responses (contact dermatitis, Type IV). In severe cases, systemic overreaction causes anaphylaxis or cytokine storm. <strong>Immunosuppression:</strong> Inadequate immune response, from HIV/AIDS, chemotherapy, corticosteroids, malnutrition, or extremes of age. Increases susceptibility to opportunistic infections. Both extremes require nursing vigilance for different complications.</p>
           </div>
         </div>
       </MicroLesson>
@@ -104,26 +104,26 @@ export function InflammationModule() {
             {
               id: "infl-wh-1",
               title: "Phase 1: Hemostasis (Seconds to Hours)",
-              summary: "Stop the bleeding. vasoconstriction and clot formation",
+              summary: "Stop the bleeding, vasoconstriction and clot formation",
               detail: "Immediately after injury, damaged blood vessels constrict (vasoconstriction) to reduce blood loss. Platelets adhere to exposed collagen and aggregate to form a temporary platelet plug. The coagulation cascade activates to convert fibrinogen to fibrin, which stabilizes the plug into a clot. The clot serves as a scaffold for incoming cells and a barrier against infection. Clinically: direct pressure aids hemostasis; impaired coagulation (anticoagulant therapy, liver disease, thrombocytopenia) delays this phase.",
             },
             {
               id: "infl-wh-2",
               title: "Phase 2: Inflammatory Phase (Days 1-6)",
-              summary: "Clean the wound. neutrophils and macrophages remove debris and bacteria",
-              detail: "Neutrophils arrive within hours. they phagocytize bacteria and release proteolytic enzymes to break down necrotic tissue. Macrophages arrive at 24-48 hours and are essential for wound healing. they clear debris, release growth factors (PDGF, TGF-β, VEGF), and transition the wound from inflammation to proliferation. Signs of normal inflammation (redness, warmth, swelling, pain) are expected. Signs of infection (increasing pain, purulent drainage, fever, spreading erythema) indicate the inflammatory phase has been overwhelmed.",
+              summary: "Clean the wound, neutrophils and macrophages remove debris and bacteria",
+              detail: "Neutrophils arrive within hours, they phagocytize bacteria and release proteolytic enzymes to break down necrotic tissue. Macrophages arrive at 24-48 hours and are essential for wound healing, they clear debris, release growth factors (PDGF, TGF-β, VEGF), and transition the wound from inflammation to proliferation. Signs of normal inflammation (redness, warmth, swelling, pain) are expected. Signs of infection (increasing pain, purulent drainage, fever, spreading erythema) indicate the inflammatory phase has been overwhelmed.",
             },
             {
               id: "infl-wh-3",
               title: "Phase 3: Proliferative Phase (Days 4-21)",
-              summary: "Rebuild tissue. granulation, angiogenesis, and epithelialization",
-              detail: "Fibroblasts migrate into the wound and produce collagen. the primary structural protein of new tissue. Angiogenesis creates new blood vessels from existing ones, giving granulation tissue its characteristic beefy red, bumpy appearance. Epithelial cells migrate across the wound surface from the edges (epithelialization). Wound contraction reduces wound size. Clinically: moist wound environment promotes healing; excessive dryness impairs epithelial migration; protein and vitamin C are essential for collagen synthesis.",
+              summary: "Rebuild tissue, granulation, angiogenesis, and epithelialization",
+              detail: "Fibroblasts migrate into the wound and produce collagen, the primary structural protein of new tissue. Angiogenesis creates new blood vessels from existing ones, giving granulation tissue its characteristic beefy red, bumpy appearance. Epithelial cells migrate across the wound surface from the edges (epithelialization). Wound contraction reduces wound size. Clinically: moist wound environment promotes healing; excessive dryness impairs epithelial migration; protein and vitamin C are essential for collagen synthesis.",
             },
             {
               id: "infl-wh-4",
               title: "Phase 4: Remodeling (Day 21 to 2 Years)",
-              summary: "Strengthen and reorganize. collagen maturation and scar formation",
-              detail: "Type III collagen (weaker, produced during proliferation) is gradually replaced by Type I collagen (stronger, organized along stress lines). The scar initially appears raised and red, then flattens and pales over months. Maximum tensile strength is reached at approximately 80% of original skin strength. healed tissue is never as strong as uninjured tissue. Excess collagen deposition can lead to hypertrophic scars or keloids. Clinically: activity restrictions during this phase protect healing tissue from disruption.",
+              summary: "Strengthen and reorganize, collagen maturation and scar formation",
+              detail: "Type III collagen (weaker, produced during proliferation) is gradually replaced by Type I collagen (stronger, organized along stress lines). The scar initially appears raised and red, then flattens and pales over months. Maximum tensile strength is reached at approximately 80% of original skin strength, healed tissue is never as strong as uninjured tissue. Excess collagen deposition can lead to hypertrophic scars or keloids. Clinically: activity restrictions during this phase protect healing tissue from disruption.",
             },
           ]}
         />
@@ -137,12 +137,12 @@ export function InflammationModule() {
       <MatchingExercise
         title={t("data.pre_nursing_inflammation.matchTheInflammationConcept")}
         pairs={[
-          { id: "infl-m1", term: "Rubor", definition: "Redness. caused by vasodilation increasing blood flow" },
+          { id: "infl-m1", term: "Rubor", definition: "Redness, caused by vasodilation increasing blood flow" },
           { id: "infl-m2", term: "Histamine", definition: "Mast cell mediator causing immediate vasodilation and permeability" },
           { id: "infl-m3", term: "Prostaglandins", definition: "COX-pathway mediators causing pain, fever, and vasodilation" },
           { id: "infl-m4", term: "Granulation tissue", definition: "Beefy red tissue with new blood vessels during proliferative phase" },
           { id: "infl-m5", term: "Cytokine storm", definition: "Dangerous systemic overproduction of inflammatory signaling proteins" },
-          { id: "infl-m6", term: "Functio laesa", definition: "Loss of function. protective limitation of movement in inflamed area" },
+          { id: "infl-m6", term: "Functio laesa", definition: "Loss of function, protective limitation of movement in inflamed area" },
         ]}
       />
 
@@ -161,7 +161,7 @@ export function InflammationModule() {
             question: "The cardinal sign 'tumor' in inflammation refers to:",
             options: ["A cancerous growth", "Swelling from fluid leaking into interstitial spaces", "Increased body temperature", "Loss of function"],
             correctIndex: 1,
-            rationale: "In the context of inflammation, 'tumor' means swelling. it results from increased vascular permeability allowing plasma proteins and fluid to leak from blood vessels into the interstitial spaces (edema formation).",
+            rationale: "In the context of inflammation, 'tumor' means swelling, it results from increased vascular permeability allowing plasma proteins and fluid to leak from blood vessels into the interstitial spaces (edema formation).",
           },
           {
             id: "infl3",
@@ -175,7 +175,7 @@ export function InflammationModule() {
             question: "A major risk of non-selective NSAID use is GI bleeding because:",
             options: ["NSAIDs are toxic to the liver", "COX-1 inhibition reduces the protective prostaglandins that maintain gastric mucosal integrity", "NSAIDs increase gastric acid production", "NSAIDs kill beneficial gut bacteria"],
             correctIndex: 1,
-            rationale: "COX-1 is constitutive. it produces prostaglandins that protect the gastric mucosa by maintaining blood flow and mucus production. Non-selective NSAIDs inhibit both COX-1 and COX-2, removing this gastroprotective effect and increasing GI bleeding risk.",
+            rationale: "COX-1 is constitutive, it produces prostaglandins that protect the gastric mucosa by maintaining blood flow and mucus production. Non-selective NSAIDs inhibit both COX-1 and COX-2, removing this gastroprotective effect and increasing GI bleeding risk.",
           },
           {
             id: "infl5",
@@ -189,7 +189,7 @@ export function InflammationModule() {
             question: "During wound healing, macrophages are MOST critical because they:",
             options: ["Form the initial platelet plug", "Produce collagen for tissue repair", "Release growth factors that transition the wound from inflammation to proliferation", "Create the fibrin clot"],
             correctIndex: 2,
-            rationale: "Macrophages are essential for wound healing. they phagocytize debris, release growth factors (PDGF, TGF-β, VEGF), and orchestrate the transition from the inflammatory phase to the proliferative phase. Without macrophages, wound healing is severely impaired.",
+            rationale: "Macrophages are essential for wound healing, they phagocytize debris, release growth factors (PDGF, TGF-β, VEGF), and orchestrate the transition from the inflammatory phase to the proliferative phase. Without macrophages, wound healing is severely impaired.",
           },
           {
             id: "infl7",
@@ -201,7 +201,7 @@ export function InflammationModule() {
           {
             id: "infl8",
             question: "The maximum tensile strength a healed wound can achieve compared to original tissue is approximately:",
-            options: ["100%. wounds heal to full strength", "80% of original strength", "50% of original strength", "30% of original strength"],
+            options: ["100%, wounds heal to full strength", "80% of original strength", "50% of original strength", "30% of original strength"],
             correctIndex: 1,
             rationale: "Even after complete remodeling (which takes up to 2 years), scar tissue reaches a maximum of approximately 80% of original skin tensile strength. Healed tissue is never as strong as uninjured tissue, which is why re-injury at the same site is common.",
           },
@@ -231,7 +231,7 @@ export function InflammationModule() {
             question: "Which nutrient is MOST essential for collagen synthesis during wound healing?",
             options: ["Vitamin A", "Vitamin C", "Vitamin D", "Vitamin K"],
             correctIndex: 1,
-            rationale: "Vitamin C (ascorbic acid) is required for collagen synthesis. it is a cofactor for the enzymes that hydroxylate proline and lysine in collagen formation. Vitamin C deficiency (scurvy) causes impaired wound healing, bleeding gums, and fragile blood vessels.",
+            rationale: "Vitamin C (ascorbic acid) is required for collagen synthesis, it is a cofactor for the enzymes that hydroxylate proline and lysine in collagen formation. Vitamin C deficiency (scurvy) causes impaired wound healing, bleeding gums, and fragile blood vessels.",
           },
           {
             id: "infl13",
@@ -245,7 +245,7 @@ export function InflammationModule() {
             question: "A patient has a wound that shows increasing redness spreading beyond the wound edges, purulent drainage, and fever. This MOST likely indicates:",
             options: ["Normal inflammatory phase progression", "Wound infection requiring intervention", "Successful transition to the proliferative phase", "Normal remodeling phase"],
             correctIndex: 1,
-            rationale: "Spreading erythema beyond wound edges, purulent drainage, and fever are signs of wound infection. the inflammatory response has been overwhelmed by bacterial growth. This requires assessment, possible wound culture, and treatment. Normal inflammation is localized and decreasing by day 4-6.",
+            rationale: "Spreading erythema beyond wound edges, purulent drainage, and fever are signs of wound infection, the inflammatory response has been overwhelmed by bacterial growth. This requires assessment, possible wound culture, and treatment. Normal inflammation is localized and decreasing by day 4-6.",
           },
           {
             id: "infl15",
@@ -266,12 +266,12 @@ export function InflammationModule() {
             question: "TNF-alpha inhibitors (infliximab, adalimumab) are used to treat which type of inflammation?",
             options: ["Acute bacterial infections", "Chronic inflammatory conditions like rheumatoid arthritis and Crohn's disease", "Allergic rhinitis", "Post-surgical wound inflammation"],
             correctIndex: 1,
-            rationale: "TNF-alpha inhibitors (biologics) target the cytokine TNF-alpha, which drives chronic inflammatory conditions. They are used for rheumatoid arthritis, Crohn's disease, psoriasis, and ankylosing spondylitis. conditions where chronic cytokine-mediated inflammation causes ongoing tissue damage.",
+            rationale: "TNF-alpha inhibitors (biologics) target the cytokine TNF-alpha, which drives chronic inflammatory conditions. They are used for rheumatoid arthritis, Crohn's disease, psoriasis, and ankylosing spondylitis, conditions where chronic cytokine-mediated inflammation causes ongoing tissue damage.",
           },
           {
             id: "infl18",
             question: "Which phase of wound healing involves fibroblasts producing collagen?",
-            options: ["Hemostasis", "Inflammatory phase", "Proliferative phase", "None. collagen is pre-existing"],
+            options: ["Hemostasis", "Inflammatory phase", "Proliferative phase", "None, collagen is pre-existing"],
             correctIndex: 2,
             rationale: "During the proliferative phase (days 4-21), fibroblasts migrate into the wound bed and produce collagen, the primary structural protein of new connective tissue. This phase also features angiogenesis, granulation tissue formation, and epithelialization.",
           },
@@ -280,7 +280,7 @@ export function InflammationModule() {
             question: "A patient on chronic corticosteroid therapy has impaired wound healing because corticosteroids:",
             options: ["Increase collagen synthesis", "Suppress the inflammatory response needed to initiate healing", "Promote excessive granulation tissue", "Enhance platelet function"],
             correctIndex: 1,
-            rationale: "Corticosteroids suppress inflammation broadly. they inhibit cytokine production, reduce neutrophil and macrophage function, and impair fibroblast activity. While this reduces harmful inflammation, it also suppresses the inflammatory phase necessary to initiate wound healing.",
+            rationale: "Corticosteroids suppress inflammation broadly, they inhibit cytokine production, reduce neutrophil and macrophage function, and impair fibroblast activity. While this reduces harmful inflammation, it also suppresses the inflammatory phase necessary to initiate wound healing.",
           },
           {
             id: "infl20",

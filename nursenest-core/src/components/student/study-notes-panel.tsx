@@ -10,7 +10,7 @@ type Props = {
   contextId: string;
   pathwayId?: string | null;
   topic?: string | null;
-  /** Short label for print/export (e.g. lesson title)—never full protected body. */
+  /** Short label for print/export (e.g. lesson title); never the full protected body. */
   sourceLabel: string;
   /** Masked subscriber label shown on printed notes only (not lesson content). */
   userLabel?: string;

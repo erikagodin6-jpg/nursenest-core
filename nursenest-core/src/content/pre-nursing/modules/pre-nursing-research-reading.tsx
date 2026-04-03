@@ -14,9 +14,9 @@ import { FileText, BarChart3, Search, BookOpen } from "lucide-react";
 
 export function ResearchReadingModule() {
   const { t } = usePreNursingT();
-  const picoContent = useEditableText("rr-pico-content", "PICO is a framework for formulating clinical questions that can be answered through research. P = Patient/Population (Who is the patient or group?), I = Intervention (What treatment or action is being considered?), C = Comparison (What is the alternative. another treatment, placebo, or no treatment?), O = Outcome (What is the desired measurable result?). Example: In hospitalized elderly patients (P), does hourly rounding (I) compared to standard care (C) reduce fall rates (O)? A well-built PICO question guides your literature search and helps you find the most relevant evidence.");
+  const picoContent = useEditableText("rr-pico-content", "PICO is a framework for formulating clinical questions that can be answered through research. P = Patient/Population (Who is the patient or group?), I = Intervention (What treatment or action is being considered?), C = Comparison (What is the alternative, another treatment, placebo, or no treatment?), O = Outcome (What is the desired measurable result?). Example: In hospitalized elderly patients (P), does hourly rounding (I) compared to standard care (C) reduce fall rates (O)? A well-built PICO question guides your literature search and helps you find the most relevant evidence.");
   const biasContent = useEditableText("rr-bias-content", "Bias is any systematic error that distorts study results. Selection bias occurs when participants are not representative of the target population or are not randomly assigned. Measurement bias happens when outcomes are assessed inconsistently or when assessors know which group participants belong to (lack of blinding). Publication bias arises because studies with positive or significant results are more likely to be published, creating a skewed evidence base. Attrition bias occurs when participants drop out unevenly between groups. Understanding bias helps you evaluate whether a study's conclusions are trustworthy.");
-  const significanceContent = useEditableText("rr-significance-content", "Statistical significance (p < 0.05) means the result is unlikely due to chance alone. but it does NOT mean the result is clinically important. A study might find a statistically significant blood pressure reduction of 1 mmHg with a new drug. statistically real but clinically meaningless. Clinical significance asks: Is the effect large enough to matter to patients? Always look at effect size, confidence intervals, and clinical context, not just p-values.");
+  const significanceContent = useEditableText("rr-significance-content", "Statistical significance (p < 0.05) means the result is unlikely due to chance alone, but it does NOT mean the result is clinically important. A study might find a statistically significant blood pressure reduction of 1 mmHg with a new drug, statistically real but clinically meaningless. Clinical significance asks: Is the effect large enough to matter to patients? Always look at effect size, confidence intervals, and clinical context, not just p-values.");
 
   return (
     <div className="space-y-10" data-testid="module-research-reading">
@@ -34,7 +34,7 @@ export function ResearchReadingModule() {
               id: "rr-abstract",
               title: "Abstract",
               summary: "A condensed summary of the entire study",
-              detail: "The abstract provides a brief overview of the study's purpose, methods, key findings, and conclusions. typically 150-300 words. It helps you quickly decide if the full article is relevant to your clinical question. Structured abstracts with labeled sections (Background, Methods, Results, Conclusions) are easier to scan than unstructured paragraphs.",
+              detail: "The abstract provides a brief overview of the study's purpose, methods, key findings, and conclusions, typically 150-300 words. It helps you quickly decide if the full article is relevant to your clinical question. Structured abstracts with labeled sections (Background, Methods, Results, Conclusions) are easier to scan than unstructured paragraphs.",
             },
             {
               id: "rr-intro",
@@ -51,25 +51,25 @@ export function ResearchReadingModule() {
             {
               id: "rr-results",
               title: "Results",
-              summary: "What the study found. data without interpretation",
-              detail: "Results present the data objectively through text, tables, and figures. Look for the primary outcome measure, p-values, confidence intervals, effect sizes, and any unexpected findings. Results should report all outcomes specified in the methods. selective reporting is a red flag. Tables and figures often contain the most important information in a concise format.",
+              summary: "What the study found, data without interpretation",
+              detail: "Results present the data objectively through text, tables, and figures. Look for the primary outcome measure, p-values, confidence intervals, effect sizes, and any unexpected findings. Results should report all outcomes specified in the methods, selective reporting is a red flag. Tables and figures often contain the most important information in a concise format.",
             },
             {
               id: "rr-discussion",
               title: "Discussion / Conclusion",
               summary: "What the findings mean in clinical context",
-              detail: "The discussion interprets results in context of existing literature, addresses study limitations, suggests clinical implications, and proposes future research directions. Authors may overstate findings here. compare their claims to the actual data in the results section. Strong discussions acknowledge limitations honestly and avoid causal language for non-experimental designs.",
+              detail: "The discussion interprets results in context of existing literature, addresses study limitations, suggests clinical implications, and proposes future research directions. Authors may overstate findings here, compare their claims to the actual data in the results section. Strong discussions acknowledge limitations honestly and avoid causal language for non-experimental designs.",
             },
           ]}
         />
       </MicroLesson>
 
       <MicroLesson title="Identifying Bias in Research" subtitle="Recognizing threats to validity" icon={<Search className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="rr-bias-intro" defaultText="Every study has potential biases. Critical appraisal means identifying these biases and determining whether they are significant enough to invalidate the conclusions. No study is perfect. the question is whether the biases are adequately controlled." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="rr-bias-intro" defaultText="Every study has potential biases. Critical appraisal means identifying these biases and determining whether they are significant enough to invalidate the conclusions. No study is perfect, the question is whether the biases are adequately controlled." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-red-50/60 rounded-xl border border-red-100">
             <p className="text-xs font-semibold text-red-700 mb-1">Selection Bias</p>
-            <p className="text-xs text-red-600">Occurs when study participants are not representative of the target population, or when group assignment is not truly random. Example: A study on fall prevention that only includes alert, oriented patients excludes the population at highest risk. the results may not apply to cognitively impaired patients who fall most often.</p>
+            <p className="text-xs text-red-600">Occurs when study participants are not representative of the target population, or when group assignment is not truly random. Example: A study on fall prevention that only includes alert, oriented patients excludes the population at highest risk, the results may not apply to cognitively impaired patients who fall most often.</p>
           </div>
           <div className="p-4 bg-orange-50/60 rounded-xl border border-orange-100">
             <p className="text-xs font-semibold text-orange-700 mb-1">Measurement Bias</p>
@@ -81,7 +81,7 @@ export function ResearchReadingModule() {
           </div>
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
             <p className="text-xs font-semibold text-blue-700 mb-1">Attrition Bias</p>
-            <p className="text-xs text-blue-600">When participants drop out of a study unevenly between groups. If sicker patients leave the treatment group due to side effects, the remaining participants appear healthier. making the treatment look more effective than it is. Intention-to-treat analysis helps address this by analyzing all participants in their original groups.</p>
+            <p className="text-xs text-blue-600">When participants drop out of a study unevenly between groups. If sicker patients leave the treatment group due to side effects, the remaining participants appear healthier, making the treatment look more effective than it is. Intention-to-treat analysis helps address this by analyzing all participants in their original groups.</p>
           </div>
         </div>
         <CognitiveCard
@@ -92,19 +92,19 @@ export function ResearchReadingModule() {
       </MicroLesson>
 
       <MicroLesson title="Statistical Concepts for Nurses" subtitle="P-values, confidence intervals, and risk measures" icon={<BarChart3 className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="rr-stats-content" defaultText="You do not need to be a statistician to read research. but you need to understand a few key concepts to determine whether findings are meaningful and applicable to your patients." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="rr-stats-content" defaultText="You do not need to be a statistician to read research, but you need to understand a few key concepts to determine whether findings are meaningful and applicable to your patients." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
             <p className="text-xs font-semibold text-blue-700 mb-1">P-Value (Probability Value)</p>
-            <p className="text-xs text-blue-600">The p-value tells you the probability that the observed result occurred by chance alone. A p-value less than 0.05 means there is less than a 5% probability the result is due to chance. this is the conventional threshold for statistical significance. However, p = 0.049 and p = 0.051 are practically identical. the 0.05 cutoff is a convention, not a magical boundary.</p>
+            <p className="text-xs text-blue-600">The p-value tells you the probability that the observed result occurred by chance alone. A p-value less than 0.05 means there is less than a 5% probability the result is due to chance, this is the conventional threshold for statistical significance. However, p = 0.049 and p = 0.051 are practically identical, the 0.05 cutoff is a convention, not a magical boundary.</p>
           </div>
           <div className="p-4 bg-teal-50/60 rounded-xl border border-teal-100">
             <p className="text-xs font-semibold text-teal-700 mb-1">Confidence Interval (CI)</p>
-            <p className="text-xs text-teal-600">A 95% confidence interval provides a range within which the true population value likely falls. Example: If a drug reduces blood pressure by 8 mmHg (95% CI: 5-11), we are 95% confident the true effect is between 5 and 11 mmHg. If the CI crosses zero (e.g., -2 to 6), the effect may be zero. the result is not statistically significant. Narrower CIs indicate more precise estimates (usually from larger samples).</p>
+            <p className="text-xs text-teal-600">A 95% confidence interval provides a range within which the true population value likely falls. Example: If a drug reduces blood pressure by 8 mmHg (95% CI: 5-11), we are 95% confident the true effect is between 5 and 11 mmHg. If the CI crosses zero (e.g., -2 to 6), the effect may be zero, the result is not statistically significant. Narrower CIs indicate more precise estimates (usually from larger samples).</p>
           </div>
           <div className="p-4 bg-green-50/60 rounded-xl border border-green-100">
             <p className="text-xs font-semibold text-green-700 mb-1">Relative Risk (RR) vs Absolute Risk Reduction (ARR) vs NNT</p>
-            <p className="text-xs text-green-600">Relative Risk compares the risk between groups (e.g., 50% reduction sounds impressive). Absolute Risk Reduction shows the actual difference (e.g., from 4% to 2% = ARR of 2%). Number Needed to Treat (NNT) = 1/ARR. the number of patients you must treat for one to benefit (NNT = 50 means you treat 50 patients for one to benefit). NNT puts effectiveness in practical clinical perspective.</p>
+            <p className="text-xs text-green-600">Relative Risk compares the risk between groups (e.g., 50% reduction sounds impressive). Absolute Risk Reduction shows the actual difference (e.g., from 4% to 2% = ARR of 2%). Number Needed to Treat (NNT) = 1/ARR, the number of patients you must treat for one to benefit (NNT = 50 means you treat 50 patients for one to benefit). NNT puts effectiveness in practical clinical perspective.</p>
           </div>
         </div>
         <CognitiveCard
@@ -121,33 +121,33 @@ export function ResearchReadingModule() {
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
               <div className="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center font-bold">1</div>
-              <span className="text-xs text-indigo-700 font-medium">Systematic Reviews & Meta-Analyses. synthesize all available evidence on a topic</span>
+              <span className="text-xs text-indigo-700 font-medium">Systematic Reviews & Meta-Analyses, synthesize all available evidence on a topic</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-6 h-6 rounded-full bg-indigo-500 text-white text-xs flex items-center justify-center font-bold">2</div>
-              <span className="text-xs text-indigo-600 font-medium">Randomized Controlled Trials (RCTs). gold standard for testing interventions</span>
+              <span className="text-xs text-indigo-600 font-medium">Randomized Controlled Trials (RCTs), gold standard for testing interventions</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-6 h-6 rounded-full bg-indigo-400 text-white text-xs flex items-center justify-center font-bold">3</div>
-              <span className="text-xs text-indigo-600">Cohort Studies. follow groups over time to observe outcomes</span>
+              <span className="text-xs text-indigo-600">Cohort Studies, follow groups over time to observe outcomes</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-6 h-6 rounded-full bg-indigo-300 text-white text-xs flex items-center justify-center font-bold">4</div>
-              <span className="text-xs text-indigo-500">Case-Control Studies. compare cases with controls retrospectively</span>
+              <span className="text-xs text-indigo-500">Case-Control Studies, compare cases with controls retrospectively</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-6 h-6 rounded-full bg-indigo-200 text-indigo-700 text-xs flex items-center justify-center font-bold">5</div>
-              <span className="text-xs text-indigo-400">Case Reports / Series. descriptions of individual cases</span>
+              <span className="text-xs text-indigo-400">Case Reports / Series, descriptions of individual cases</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 text-xs flex items-center justify-center font-bold">6</div>
-              <span className="text-xs text-indigo-400">Expert Opinion. lowest level, based on authority not data</span>
+              <span className="text-xs text-indigo-400">Expert Opinion, lowest level, based on authority not data</span>
             </div>
           </div>
         </div>
         <div className="p-4 bg-emerald-50/60 rounded-xl border border-emerald-100 mt-3">
           <p className="text-xs font-semibold text-emerald-700 mb-1">Sensitivity vs Specificity</p>
-          <p className="text-xs text-emerald-600">Sensitivity answers: If the disease IS present, will the test detect it? (True positive rate. SnNOUT: a Sensitive test, when Negative, rules OUT the disease). Specificity answers: If the disease is NOT present, will the test correctly show negative? (True negative rate. SpPIN: a Specific test, when Positive, rules IN the disease). High sensitivity tests are best for screening; high specificity tests are best for confirmation.</p>
+          <p className="text-xs text-emerald-600">Sensitivity answers: If the disease IS present, will the test detect it? (True positive rate, SnNOUT: a Sensitive test, when Negative, rules OUT the disease). Specificity answers: If the disease is NOT present, will the test correctly show negative? (True negative rate, SpPIN: a Specific test, when Positive, rules IN the disease). High sensitivity tests are best for screening; high specificity tests are best for confirmation.</p>
         </div>
         <CognitiveCard
           type="concept"
@@ -197,7 +197,7 @@ export function ResearchReadingModule() {
             question: "In a PICO question, the 'C' stands for:",
             options: ["Clinical relevance", "Comparison", "Confidence interval", "Control group"],
             correctIndex: 1,
-            rationale: "In the PICO framework, C stands for Comparison. the alternative being compared to the intervention, such as standard care, placebo, or another treatment.",
+            rationale: "In the PICO framework, C stands for Comparison, the alternative being compared to the intervention, such as standard care, placebo, or another treatment.",
           },
           {
             id: "rr5",
@@ -267,14 +267,14 @@ export function ResearchReadingModule() {
             question: "Which component of PICO is missing from this question: 'In adults with type 2 diabetes, does metformin reduce HbA1c levels?'",
             options: ["Patient/Population", "Intervention", "Comparison", "Outcome"],
             correctIndex: 2,
-            rationale: "The question specifies Population (adults with type 2 diabetes), Intervention (metformin), and Outcome (HbA1c levels), but lacks a Comparison. compared to what? Placebo? Diet alone? Another medication?",
+            rationale: "The question specifies Population (adults with type 2 diabetes), Intervention (metformin), and Outcome (HbA1c levels), but lacks a Comparison, compared to what? Placebo? Diet alone? Another medication?",
           },
           {
             id: "rr15",
             question: "If a confidence interval for relative risk crosses 1.0 (e.g., RR = 0.8, 95% CI: 0.6-1.2), this means:",
             options: ["The treatment is definitely effective", "The result is NOT statistically significant", "The treatment doubles the risk", "The study should be repeated"],
             correctIndex: 1,
-            rationale: "For relative risk, a CI that crosses 1.0 means the true effect could be protective, harmful, or no different. the result is not statistically significant. RR = 1.0 means no difference between groups.",
+            rationale: "For relative risk, a CI that crosses 1.0 means the true effect could be protective, harmful, or no different, the result is not statistically significant. RR = 1.0 means no difference between groups.",
           },
           {
             id: "rr16",

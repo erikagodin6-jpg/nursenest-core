@@ -14,15 +14,15 @@ import { Wind, Heart, Activity, Gauge, Brain } from "lucide-react";
 
 export function OxygenationModule() {
   const { t } = usePreNursingT();
-  const dissociationContent = useEditableText("oxy-dissociation-content", "The oxyhemoglobin dissociation curve describes hemoglobin's affinity for oxygen at different partial pressures. A RIGHT shift (decreased affinity. hemoglobin releases oxygen more readily to tissues) is caused by increased temperature, increased CO2 (Bohr effect), increased 2,3-DPG, and decreased pH (acidosis). A LEFT shift (increased affinity. hemoglobin holds onto oxygen more tightly) is caused by decreased temperature, decreased CO2, decreased 2,3-DPG, increased pH (alkalosis), carbon monoxide, and fetal hemoglobin. Mnemonic for right shift: 'Right = Release'. conditions that increase tissue metabolic demand shift the curve right to deliver more oxygen.");
-  const cardiacOutputContent = useEditableText("oxy-cardiac-output-content", "Cardiac output (CO) = Heart Rate (HR) × Stroke Volume (SV). Normal CO is approximately 4-8 L/min. Stroke volume is determined by three factors: Preload (volume of blood filling the ventricle. Frank-Starling mechanism), Afterload (resistance the ventricle must pump against. primarily systemic vascular resistance), and Contractility (strength of ventricular contraction. inotropic state). Increasing preload or contractility increases CO; increasing afterload decreases CO. Medications target these factors: fluids increase preload, vasodilators decrease afterload, and inotropes increase contractility.");
-  const abgContent = useEditableText("oxy-abg-content", "Arterial blood gas (ABG) interpretation is a critical nursing skill. Normal values: pH 7.35-7.45, PaCO2 35-45 mmHg, HCO3 22-26 mEq/L, PaO2 80-100 mmHg. Step 1: Look at pH. acidosis (<7.35) or alkalosis (>7.45). Step 2: Check PaCO2. if it explains the pH change, the primary disorder is respiratory. Step 3: Check HCO3. if it explains the pH change, the primary disorder is metabolic. Step 4: Check for compensation. the body tries to normalize pH using the opposite system (respiratory compensates for metabolic and vice versa). Step 5: Check PaO2. is the patient hypoxemic?");
+  const dissociationContent = useEditableText("oxy-dissociation-content", "The oxyhemoglobin dissociation curve describes hemoglobin's affinity for oxygen at different partial pressures. A RIGHT shift (decreased affinity, hemoglobin releases oxygen more readily to tissues) is caused by increased temperature, increased CO2 (Bohr effect), increased 2,3-DPG, and decreased pH (acidosis). A LEFT shift (increased affinity, hemoglobin holds onto oxygen more tightly) is caused by decreased temperature, decreased CO2, decreased 2,3-DPG, increased pH (alkalosis), carbon monoxide, and fetal hemoglobin. Mnemonic for right shift: 'Right = Release', conditions that increase tissue metabolic demand shift the curve right to deliver more oxygen.");
+  const cardiacOutputContent = useEditableText("oxy-cardiac-output-content", "Cardiac output (CO) = Heart Rate (HR) × Stroke Volume (SV). Normal CO is approximately 4-8 L/min. Stroke volume is determined by three factors: Preload (volume of blood filling the ventricle, Frank-Starling mechanism), Afterload (resistance the ventricle must pump against, primarily systemic vascular resistance), and Contractility (strength of ventricular contraction, inotropic state). Increasing preload or contractility increases CO; increasing afterload decreases CO. Medications target these factors: fluids increase preload, vasodilators decrease afterload, and inotropes increase contractility.");
+  const abgContent = useEditableText("oxy-abg-content", "Arterial blood gas (ABG) interpretation is a critical nursing skill. Normal values: pH 7.35-7.45, PaCO2 35-45 mmHg, HCO3 22-26 mEq/L, PaO2 80-100 mmHg. Step 1: Look at pH, acidosis (<7.35) or alkalosis (>7.45). Step 2: Check PaCO2, if it explains the pH change, the primary disorder is respiratory. Step 3: Check HCO3, if it explains the pH change, the primary disorder is metabolic. Step 4: Check for compensation, the body tries to normalize pH using the opposite system (respiratory compensates for metabolic and vice versa). Step 5: Check PaO2, is the patient hypoxemic?");
 
   return (
     <div className="space-y-10" data-testid="module-oxygenation">
       <div>
         <EditableModuleText sectionKey="oxy-title" defaultText="Oxygenation & Oxygen Delivery" as="h2" className="text-2xl font-bold text-gray-900 mb-2" />
-        <EditableModuleText sectionKey="oxy-desc" defaultText="Master the principles of oxygen transport, hemoglobin binding, the oxyhemoglobin dissociation curve, cardiac output, tissue perfusion, and ABG interpretation. foundational concepts for all nursing practice." as="p" className="text-gray-600" multiline />
+        <EditableModuleText sectionKey="oxy-desc" defaultText="Master the principles of oxygen transport, hemoglobin binding, the oxyhemoglobin dissociation curve, cardiac output, tissue perfusion, and ABG interpretation, foundational concepts for all nursing practice." as="p" className="text-gray-600" multiline />
       </div>
 
       <MicroLesson title="Hemoglobin & Oxygen Binding" subtitle="How oxygen travels in the blood" icon={<Heart className="w-5 h-5" />}>
@@ -34,12 +34,12 @@ export function OxygenationModule() {
           </div>
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
             <p className="text-xs font-semibold text-blue-700 mb-1">Oxygen Saturation (SpO2/SaO2)</p>
-            <p className="text-xs text-blue-600"><strong>SaO2:</strong> Arterial oxygen saturation measured from ABG (gold standard). <strong>SpO2:</strong> Peripheral oxygen saturation measured by pulse oximetry (non-invasive estimate). <strong>Normal:</strong> 95-100%. <strong>Critical insight:</strong> Due to the S-shaped curve, SpO2 stays high until PaO2 drops significantly. A SpO2 of 90% corresponds to a PaO2 of only ~60 mmHg. below the 'steep part' of the curve, small PaO2 drops cause large SpO2 drops. This is why SpO2 below 90% is considered critical.</p>
+            <p className="text-xs text-blue-600"><strong>SaO2:</strong> Arterial oxygen saturation measured from ABG (gold standard). <strong>SpO2:</strong> Peripheral oxygen saturation measured by pulse oximetry (non-invasive estimate). <strong>Normal:</strong> 95-100%. <strong>Critical insight:</strong> Due to the S-shaped curve, SpO2 stays high until PaO2 drops significantly. A SpO2 of 90% corresponds to a PaO2 of only ~60 mmHg, below the 'steep part' of the curve, small PaO2 drops cause large SpO2 drops. This is why SpO2 below 90% is considered critical.</p>
           </div>
         </div>
         <div className="p-4 bg-amber-50/60 rounded-xl border border-amber-100 mt-3">
           <p className="text-xs font-semibold text-amber-700 mb-1">Oxygen Content Equation</p>
-          <p className="text-xs text-amber-600"><strong>CaO2 = (Hgb × 1.34 × SaO2) + (0.003 × PaO2)</strong>. The first term (hemoglobin-bound O2) contributes ~98.5% of total oxygen content. The second term (dissolved O2) is minimal. This equation explains why a patient can have a normal SpO2 but still be hypoxic if severely anemic. there isn't enough hemoglobin to carry adequate oxygen, even if what hemoglobin exists is fully saturated.</p>
+          <p className="text-xs text-amber-600"><strong>CaO2 = (Hgb × 1.34 × SaO2) + (0.003 × PaO2)</strong>. The first term (hemoglobin-bound O2) contributes ~98.5% of total oxygen content. The second term (dissolved O2) is minimal. This equation explains why a patient can have a normal SpO2 but still be hypoxic if severely anemic, there isn't enough hemoglobin to carry adequate oxygen, even if what hemoglobin exists is fully saturated.</p>
         </div>
       </MicroLesson>
 
@@ -47,12 +47,12 @@ export function OxygenationModule() {
         <EditableModuleText sectionKey="oxy-curve-content" defaultText="The oxyhemoglobin dissociation curve is an S-shaped curve that shows the relationship between PaO2 (x-axis) and hemoglobin saturation (y-axis). The curve's position can shift right or left depending on physiologic conditions, affecting how readily hemoglobin binds and releases oxygen." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-orange-50/60 rounded-xl border border-orange-100">
-            <p className="text-xs font-semibold text-orange-700 mb-2">RIGHT Shift. O2 Released to Tissues</p>
-            <p className="text-xs text-orange-600"><strong>Hemoglobin affinity DECREASES</strong>. oxygen is unloaded more readily at the tissues. This makes physiologic sense: conditions that increase metabolic demand also shift the curve right to deliver more O2. <strong>Causes (mnemonic. CADET face Right):</strong> CO2 increased, Acidosis (decreased pH), 2,3-DPG increased, Exercise/Fever (increased temperature). <strong>Clinical relevance:</strong> A febrile, acidotic patient delivers oxygen to tissues more efficiently but may desaturate faster.</p>
+            <p className="text-xs font-semibold text-orange-700 mb-2">RIGHT Shift, O2 Released to Tissues</p>
+            <p className="text-xs text-orange-600"><strong>Hemoglobin affinity DECREASES</strong>, oxygen is unloaded more readily at the tissues. This makes physiologic sense: conditions that increase metabolic demand also shift the curve right to deliver more O2. <strong>Causes (mnemonic, CADET face Right):</strong> CO2 increased, Acidosis (decreased pH), 2,3-DPG increased, Exercise/Fever (increased temperature). <strong>Clinical relevance:</strong> A febrile, acidotic patient delivers oxygen to tissues more efficiently but may desaturate faster.</p>
           </div>
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
-            <p className="text-xs font-semibold text-blue-700 mb-2">LEFT Shift. O2 Held by Hemoglobin</p>
-            <p className="text-xs text-blue-600"><strong>Hemoglobin affinity INCREASES</strong>. oxygen binds more tightly and is not released as easily at the tissues. <strong>Causes:</strong> Decreased CO2, Alkalosis (increased pH), Decreased 2,3-DPG, Hypothermia, Carbon monoxide (CO binds 200x tighter than O2), Fetal hemoglobin (HgbF has higher O2 affinity to extract O2 from maternal blood). <strong>Clinical relevance:</strong> SpO2 may look normal, but tissues may still be hypoxic because hemoglobin won't release its oxygen.</p>
+            <p className="text-xs font-semibold text-blue-700 mb-2">LEFT Shift, O2 Held by Hemoglobin</p>
+            <p className="text-xs text-blue-600"><strong>Hemoglobin affinity INCREASES</strong>, oxygen binds more tightly and is not released as easily at the tissues. <strong>Causes:</strong> Decreased CO2, Alkalosis (increased pH), Decreased 2,3-DPG, Hypothermia, Carbon monoxide (CO binds 200x tighter than O2), Fetal hemoglobin (HgbF has higher O2 affinity to extract O2 from maternal blood). <strong>Clinical relevance:</strong> SpO2 may look normal, but tissues may still be hypoxic because hemoglobin won't release its oxygen.</p>
           </div>
         </div>
         <CognitiveCard
@@ -67,11 +67,11 @@ export function OxygenationModule() {
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
             <p className="text-xs font-semibold text-purple-700 mb-2">Cardiac Output Components</p>
-            <p className="text-xs text-purple-600"><strong>Heart Rate (HR):</strong> Normal 60-100 bpm. Too fast (tachycardia) reduces ventricular filling time → decreased stroke volume. Too slow (bradycardia) may not provide adequate output. <strong>Stroke Volume (SV):</strong> Volume ejected per beat, normally ~70 mL. Determined by: <strong>Preload</strong> (venous return/end-diastolic volume. Frank-Starling: more stretch = more force up to a point), <strong>Afterload</strong> (resistance to ejection. primarily SVR; high afterload = decreased SV), <strong>Contractility</strong> (intrinsic muscle force independent of preload/afterload).</p>
+            <p className="text-xs text-purple-600"><strong>Heart Rate (HR):</strong> Normal 60-100 bpm. Too fast (tachycardia) reduces ventricular filling time → decreased stroke volume. Too slow (bradycardia) may not provide adequate output. <strong>Stroke Volume (SV):</strong> Volume ejected per beat, normally ~70 mL. Determined by: <strong>Preload</strong> (venous return/end-diastolic volume, Frank-Starling: more stretch = more force up to a point), <strong>Afterload</strong> (resistance to ejection, primarily SVR; high afterload = decreased SV), <strong>Contractility</strong> (intrinsic muscle force independent of preload/afterload).</p>
           </div>
           <div className="p-4 bg-teal-50/60 rounded-xl border border-teal-100">
             <p className="text-xs font-semibold text-teal-700 mb-2">O2 Delivery Equation</p>
-            <p className="text-xs text-teal-600"><strong>DO2 = CO × CaO2 × 10</strong> (normal ~1000 mL O2/min). Tissues extract about 250 mL O2/min at rest (25% extraction ratio). This reserve means the body can compensate for moderate reductions in delivery. <strong>Clinical application:</strong> Improving O2 delivery can target any component. give O2 (increases PaO2/SaO2), transfuse blood (increases Hgb), give fluids (increases preload → increases SV → increases CO), give inotropes (increases contractility → increases SV).</p>
+            <p className="text-xs text-teal-600"><strong>DO2 = CO × CaO2 × 10</strong> (normal ~1000 mL O2/min). Tissues extract about 250 mL O2/min at rest (25% extraction ratio). This reserve means the body can compensate for moderate reductions in delivery. <strong>Clinical application:</strong> Improving O2 delivery can target any component, give O2 (increases PaO2/SaO2), transfuse blood (increases Hgb), give fluids (increases preload → increases SV → increases CO), give inotropes (increases contractility → increases SV).</p>
           </div>
         </div>
         <CognitiveCard
@@ -100,25 +100,25 @@ export function OxygenationModule() {
               id: "oxy-brain",
               title: "Brain (Most Sensitive)",
               summary: "Irreversible damage in 4-6 minutes without oxygen",
-              detail: "The brain consumes 20% of the body's oxygen despite being only 2% of body weight. It has virtually no oxygen or glucose reserves. Neurons begin to die after 4-6 minutes of anoxia. Early signs of cerebral hypoxia: restlessness, confusion, anxiety, headache. Late signs: decreased LOC, seizures, coma. The brainstem (which controls breathing and heart rate) is the last area to fail. when it does, death follows.",
+              detail: "The brain consumes 20% of the body's oxygen despite being only 2% of body weight. It has virtually no oxygen or glucose reserves. Neurons begin to die after 4-6 minutes of anoxia. Early signs of cerebral hypoxia: restlessness, confusion, anxiety, headache. Late signs: decreased LOC, seizures, coma. The brainstem (which controls breathing and heart rate) is the last area to fail, when it does, death follows.",
             },
             {
               id: "oxy-heart",
               title: "Heart (High O2 Demand)",
               summary: "Myocardium extracts 70-80% of delivered oxygen at rest",
-              detail: "Unlike skeletal muscle (which extracts only 25% at rest), cardiac muscle extracts 70-80% of delivered oxygen even at rest, leaving little reserve. The only way to increase myocardial oxygen supply is to increase coronary blood flow (not extraction). When oxygen demand exceeds supply, ischemia occurs. manifesting as angina (reversible) or infarction (irreversible). This is why tachycardia is dangerous in coronary artery disease: it increases demand while decreasing diastolic filling time (when coronaries are perfused).",
+              detail: "Unlike skeletal muscle (which extracts only 25% at rest), cardiac muscle extracts 70-80% of delivered oxygen even at rest, leaving little reserve. The only way to increase myocardial oxygen supply is to increase coronary blood flow (not extraction). When oxygen demand exceeds supply, ischemia occurs, manifesting as angina (reversible) or infarction (irreversible). This is why tachycardia is dangerous in coronary artery disease: it increases demand while decreasing diastolic filling time (when coronaries are perfused).",
             },
             {
               id: "oxy-kidney",
               title: "Kidneys (Flow-Dependent)",
-              summary: "Receive 25% of cardiac output. highly sensitive to hypoperfusion",
+              summary: "Receive 25% of cardiac output, highly sensitive to hypoperfusion",
               detail: "Kidneys receive ~25% of cardiac output (1.2 L/min) to perform filtration. The renal medulla operates in a relatively hypoxic environment normally. Acute kidney injury (AKI) commonly results from hypoperfusion (prerenal causes account for 60-70% of AKI). Early sign of inadequate renal perfusion: decreased urine output (<0.5 mL/kg/hr). This is why urine output is a key indicator of perfusion status in critically ill patients.",
             },
             {
               id: "oxy-gut",
               title: "GI Tract (Vulnerable in Shock)",
               summary: "Blood flow diverted away during shock states",
-              detail: "During shock, blood is shunted away from the splanchnic (gut) circulation to preserve flow to the brain and heart. Gut ischemia damages the intestinal mucosal barrier, allowing bacterial translocation. gut bacteria enter the bloodstream, potentially causing sepsis. This is one reason why shock can cascade into multi-organ dysfunction syndrome (MODS). Ischemic bowel produces lactic acid, worsening systemic acidosis.",
+              detail: "During shock, blood is shunted away from the splanchnic (gut) circulation to preserve flow to the brain and heart. Gut ischemia damages the intestinal mucosal barrier, allowing bacterial translocation, gut bacteria enter the bloodstream, potentially causing sepsis. This is one reason why shock can cascade into multi-organ dysfunction syndrome (MODS). Ischemic bowel produces lactic acid, worsening systemic acidosis.",
             },
           ]}
         />
@@ -129,7 +129,7 @@ export function OxygenationModule() {
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-green-50/60 rounded-xl border border-green-100">
             <p className="text-xs font-semibold text-green-700 mb-2">Pulse Oximetry (SpO2)</p>
-            <p className="text-xs text-green-600"><strong>Principle:</strong> Uses two wavelengths of light (red and infrared) passed through a pulsatile vascular bed. Oxyhemoglobin and deoxyhemoglobin absorb these wavelengths differently, allowing calculation of saturation percentage. <strong>Normal:</strong> 95-100%. <strong>Limitations:</strong> Inaccurate with poor perfusion (shock, cold extremities, vasoconstriction), nail polish (especially dark colors), carbon monoxide poisoning (reads falsely high. CO-Hgb absorbs like O2-Hgb), severe anemia (can show normal SpO2 with critically low O2 content), methemoglobinemia (reads ~85% regardless of true saturation), motion artifact, ambient light.</p>
+            <p className="text-xs text-green-600"><strong>Principle:</strong> Uses two wavelengths of light (red and infrared) passed through a pulsatile vascular bed. Oxyhemoglobin and deoxyhemoglobin absorb these wavelengths differently, allowing calculation of saturation percentage. <strong>Normal:</strong> 95-100%. <strong>Limitations:</strong> Inaccurate with poor perfusion (shock, cold extremities, vasoconstriction), nail polish (especially dark colors), carbon monoxide poisoning (reads falsely high, CO-Hgb absorbs like O2-Hgb), severe anemia (can show normal SpO2 with critically low O2 content), methemoglobinemia (reads ~85% regardless of true saturation), motion artifact, ambient light.</p>
           </div>
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
             <p className="text-xs font-semibold text-blue-700 mb-2">ABG Normal Values</p>
@@ -184,14 +184,14 @@ export function OxygenationModule() {
             question: "Approximately what percentage of oxygen in the blood is carried by hemoglobin?",
             options: ["50%", "75%", "90%", "98.5%"],
             correctIndex: 3,
-            rationale: "About 98.5% of oxygen is carried bound to hemoglobin (measured as SaO2/SpO2). Only about 1.5% is dissolved in plasma (measured as PaO2). This is why hemoglobin level is critical for oxygen delivery. even with perfect lung function, severe anemia means inadequate oxygen transport.",
+            rationale: "About 98.5% of oxygen is carried bound to hemoglobin (measured as SaO2/SpO2). Only about 1.5% is dissolved in plasma (measured as PaO2). This is why hemoglobin level is critical for oxygen delivery, even with perfect lung function, severe anemia means inadequate oxygen transport.",
           },
           {
             id: "oxy2",
             question: "A patient with fever, acidosis, and elevated CO2 will have their oxyhemoglobin dissociation curve shifted:",
             options: ["To the left", "To the right", "No change", "The curve inverts"],
             correctIndex: 1,
-            rationale: "Fever (increased temperature), acidosis (decreased pH), and elevated CO2 all shift the curve to the RIGHT. hemoglobin releases oxygen more readily to tissues. This is physiologically appropriate: tissues with high metabolic demand (producing heat, CO2, and acid) need more oxygen.",
+            rationale: "Fever (increased temperature), acidosis (decreased pH), and elevated CO2 all shift the curve to the RIGHT, hemoglobin releases oxygen more readily to tissues. This is physiologically appropriate: tissues with high metabolic demand (producing heat, CO2, and acid) need more oxygen.",
           },
           {
             id: "oxy3",
@@ -205,7 +205,7 @@ export function OxygenationModule() {
             question: "A SpO2 of 90% corresponds to a PaO2 of approximately:",
             options: ["90 mmHg", "80 mmHg", "60 mmHg", "40 mmHg"],
             correctIndex: 2,
-            rationale: "Due to the S-shaped oxyhemoglobin dissociation curve, an SpO2 of 90% corresponds to a PaO2 of approximately 60 mmHg. Below this point, the curve becomes steep. small decreases in PaO2 cause large drops in SpO2. This is why SpO2 <90% is considered critical.",
+            rationale: "Due to the S-shaped oxyhemoglobin dissociation curve, an SpO2 of 90% corresponds to a PaO2 of approximately 60 mmHg. Below this point, the curve becomes steep, small decreases in PaO2 cause large drops in SpO2. This is why SpO2 <90% is considered critical.",
           },
           {
             id: "oxy5",
@@ -233,7 +233,7 @@ export function OxygenationModule() {
             question: "A patient has a normal SpO2 of 99% but hemoglobin of 5 g/dL. This patient is:",
             options: ["Well oxygenated with adequate O2 delivery", "Well saturated but has critically low oxygen content", "In respiratory failure", "Experiencing a left shift"],
             correctIndex: 1,
-            rationale: "SpO2 measures the percentage of hemoglobin that is saturated. not the total amount of oxygen. With severe anemia (Hgb 5), even 99% saturation means very little total oxygen is being carried. Using the oxygen content equation: CaO2 = 5 × 1.34 × 0.99 = 6.6 mL O2/dL (normal ~20). This patient needs transfusion, not just supplemental O2.",
+            rationale: "SpO2 measures the percentage of hemoglobin that is saturated, not the total amount of oxygen. With severe anemia (Hgb 5), even 99% saturation means very little total oxygen is being carried. Using the oxygen content equation: CaO2 = 5 × 1.34 × 0.99 = 6.6 mL O2/dL (normal ~20). This patient needs transfusion, not just supplemental O2.",
           },
           {
             id: "oxy9",
@@ -247,7 +247,7 @@ export function OxygenationModule() {
             question: "The Frank-Starling mechanism states that:",
             options: ["Heart rate always equals stroke volume", "Increased ventricular stretch (preload) increases the force of contraction up to a point", "Afterload is the primary determinant of cardiac output", "The heart can only contract at one fixed strength"],
             correctIndex: 1,
-            rationale: "The Frank-Starling mechanism describes how increased ventricular filling (preload) stretches myocardial fibers, which increases the force of contraction and stroke volume. up to a physiologic limit. Beyond that limit (over-distension), the heart fails to generate adequate force, which is what happens in heart failure.",
+            rationale: "The Frank-Starling mechanism describes how increased ventricular filling (preload) stretches myocardial fibers, which increases the force of contraction and stroke volume, up to a physiologic limit. Beyond that limit (over-distension), the heart fails to generate adequate force, which is what happens in heart failure.",
           },
           {
             id: "oxy11",
@@ -289,7 +289,7 @@ export function OxygenationModule() {
             question: "The difference between oxygenation and perfusion is:",
             options: ["They are the same thing", "Oxygenation is how O2 enters the blood; perfusion is how blood delivers O2 to tissues", "Perfusion only refers to the lungs", "Oxygenation only matters in cardiac patients"],
             correctIndex: 1,
-            rationale: "Oxygenation refers to getting oxygen into the blood (lung function. assessed by PaO2, SpO2). Perfusion refers to delivering oxygenated blood to tissues (cardiac function. assessed by BP, CO, capillary refill, urine output). A patient can have excellent oxygenation but poor perfusion (cardiogenic shock) or adequate perfusion but poor oxygenation (respiratory failure).",
+            rationale: "Oxygenation refers to getting oxygen into the blood (lung function, assessed by PaO2, SpO2). Perfusion refers to delivering oxygenated blood to tissues (cardiac function, assessed by BP, CO, capillary refill, urine output). A patient can have excellent oxygenation but poor perfusion (cardiogenic shock) or adequate perfusion but poor oxygenation (respiratory failure).",
           },
           {
             id: "oxy17",
@@ -317,7 +317,7 @@ export function OxygenationModule() {
             question: "Early signs of cerebral hypoxia include:",
             options: ["Seizures and coma", "Restlessness, confusion, and anxiety", "Bradycardia and hypotension", "Decreased urine output"],
             correctIndex: 1,
-            rationale: "Early signs of cerebral hypoxia are restlessness, confusion, anxiety, irritability, and headache. these reflect the brain's sensitivity to even mild oxygen deprivation. Late signs include decreased level of consciousness, seizures, and coma. Recognizing early signs allows intervention before irreversible damage occurs.",
+            rationale: "Early signs of cerebral hypoxia are restlessness, confusion, anxiety, irritability, and headache, these reflect the brain's sensitivity to even mild oxygen deprivation. Late signs include decreased level of consciousness, seizures, and coma. Recognizing early signs allows intervention before irreversible damage occurs.",
             hint: "Think about subtle behavioral changes that occur before the brain 'shuts down' more dramatically.",
           },
         ]}

@@ -14,15 +14,15 @@ import { Atom, Beaker, Droplets, FlaskConical } from "lucide-react";
 
 export function ChemistryModule() {
   const { t } = usePreNursingT();
-  const bondTypeContent = useEditableText("chem-bond-type-content", "Ionic bonds create electrolytes that dissociate in body fluids. essential for electrical signaling. Covalent bonds create the stable molecules of life. Hydrogen bonds maintain the 3D shapes of proteins and DNA. When a fever denatures enzymes, it's disrupting hydrogen bonds that maintain protein folding.");
-  const waterSolventContent = useEditableText("chem-water-solvent-content", "Water is a polar molecule. the oxygen end is slightly negative, the hydrogen end slightly positive. This polarity allows water to dissolve ionic and polar substances (hydrophilic), making it the universal solvent of the body. Non-polar substances (lipids) do not dissolve in water (hydrophobic). this is why cell membranes, made of phospholipids, form barriers in an aqueous environment.");
+  const bondTypeContent = useEditableText("chem-bond-type-content", "Ionic bonds create electrolytes that dissociate in body fluids, essential for electrical signaling. Covalent bonds create the stable molecules of life. Hydrogen bonds maintain the 3D shapes of proteins and DNA. When a fever denatures enzymes, it's disrupting hydrogen bonds that maintain protein folding.");
+  const waterSolventContent = useEditableText("chem-water-solvent-content", "Water is a polar molecule, the oxygen end is slightly negative, the hydrogen end slightly positive. This polarity allows water to dissolve ionic and polar substances (hydrophilic), making it the universal solvent of the body. Non-polar substances (lipids) do not dissolve in water (hydrophobic), this is why cell membranes, made of phospholipids, form barriers in an aqueous environment.");
   const bufferContent = useEditableText("chem-buffer-content", "A buffer resists changes in pH by absorbing excess H⁺ or releasing H⁺ as needed. The bicarbonate buffer system is the most important: CO₂ + H₂O ⇌ H₂CO₃ ⇌ H⁺ + HCO₃⁻. The lungs regulate CO₂ (acid side) and the kidneys regulate HCO₃⁻ (base side). This dual regulation is why respiratory and renal function both affect pH.");
 
   return (
     <div className="space-y-10" data-testid="module-chemistry">
       <div>
         <EditableModuleText sectionKey="chem-title" defaultText="Basic Chemistry for Health Sciences" as="h2" className="text-2xl font-bold text-gray-900 mb-2" />
-        <EditableModuleText sectionKey="chem-desc" defaultText="Understand the chemical principles that govern biological processes. from atomic structure and bonding to pH, solutions, and the chemistry of life." as="p" className="text-gray-600" multiline />
+        <EditableModuleText sectionKey="chem-desc" defaultText="Understand the chemical principles that govern biological processes, from atomic structure and bonding to pH, solutions, and the chemistry of life." as="p" className="text-gray-600" multiline />
       </div>
 
       <MicroLesson title="Atomic Structure & Chemical Bonds" subtitle="Building blocks of all matter" icon={<Atom className="w-5 h-5" />}>
@@ -34,13 +34,13 @@ export function ChemistryModule() {
               id: "cb1",
               title: "Ionic Bonds",
               summary: "Electron transfer between atoms",
-              detail: "One atom donates electrons to another, creating charged ions (cations = positive, anions = negative). The electrostatic attraction between opposite charges forms the bond. Example: NaCl. sodium loses an electron (Na⁺) and chlorine gains one (Cl⁻). This is why NaCl dissociates in water into electrolytes critical for nerve conduction and fluid balance.",
+              detail: "One atom donates electrons to another, creating charged ions (cations = positive, anions = negative). The electrostatic attraction between opposite charges forms the bond. Example: NaCl, sodium loses an electron (Na⁺) and chlorine gains one (Cl⁻). This is why NaCl dissociates in water into electrolytes critical for nerve conduction and fluid balance.",
             },
             {
               id: "cb2",
               title: "Covalent Bonds",
               summary: "Electron sharing between atoms",
-              detail: "Atoms share electron pairs. This creates very stable molecules. Water (H₂O) has covalent bonds. oxygen shares electrons with two hydrogens. Organic molecules (proteins, carbohydrates, lipids, nucleic acids) are held together primarily by covalent bonds, which is why they are structurally stable.",
+              detail: "Atoms share electron pairs. This creates very stable molecules. Water (H₂O) has covalent bonds, oxygen shares electrons with two hydrogens. Organic molecules (proteins, carbohydrates, lipids, nucleic acids) are held together primarily by covalent bonds, which is why they are structurally stable.",
             },
             {
               id: "cb3",
@@ -62,11 +62,11 @@ export function ChemistryModule() {
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
             <p className="text-xs font-semibold text-blue-700 mb-1">Key Cations (+)</p>
-            <p className="text-xs text-blue-600"><strong>Na⁺</strong>. primary extracellular cation, drives fluid volume. <strong>K⁺</strong>. primary intracellular cation, critical for cardiac and nerve function. <strong>Ca²⁺</strong>. muscle contraction, bone structure, clotting. <strong>Mg²⁺</strong>. enzyme cofactor, neuromuscular function.</p>
+            <p className="text-xs text-blue-600"><strong>Na⁺</strong>, primary extracellular cation, drives fluid volume. <strong>K⁺</strong>, primary intracellular cation, critical for cardiac and nerve function. <strong>Ca²⁺</strong>, muscle contraction, bone structure, clotting. <strong>Mg²⁺</strong>, enzyme cofactor, neuromuscular function.</p>
           </div>
           <div className="p-4 bg-emerald-50/60 rounded-xl border border-emerald-100">
             <p className="text-xs font-semibold text-emerald-700 mb-1">Key Anions (−)</p>
-            <p className="text-xs text-emerald-600"><strong>Cl⁻</strong>. follows sodium, maintains osmolarity. <strong>HCO₃⁻</strong>. bicarbonate, the body's primary pH buffer. <strong>HPO₄²⁻</strong>. phosphate, energy metabolism (ATP), bone. These balance the cations to maintain electrical neutrality.</p>
+            <p className="text-xs text-emerald-600"><strong>Cl⁻</strong>, follows sodium, maintains osmolarity. <strong>HCO₃⁻</strong>, bicarbonate, the body's primary pH buffer. <strong>HPO₄²⁻</strong>, phosphate, energy metabolism (ATP), bone. These balance the cations to maintain electrical neutrality.</p>
           </div>
         </div>
         <CognitiveCard
@@ -114,7 +114,7 @@ export function ChemistryModule() {
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
             <p className="text-xs font-semibold text-purple-700 mb-1">Concentration Units</p>
-            <p className="text-xs text-purple-600"><strong>mg/mL</strong>. milligrams of drug per milliliter of solution (most common in medication dosing). <strong>%</strong>. grams of solute per 100 mL of solution (0.9% NaCl = 0.9 g NaCl per 100 mL = 9 g/L). <strong>mEq/L</strong>. milliequivalents per liter (used for electrolytes, accounts for ionic charge). <strong>mmol/L</strong>. millimoles per liter (used for lab values like glucose in some countries).</p>
+            <p className="text-xs text-purple-600"><strong>mg/mL</strong>, milligrams of drug per milliliter of solution (most common in medication dosing). <strong>%</strong>, grams of solute per 100 mL of solution (0.9% NaCl = 0.9 g NaCl per 100 mL = 9 g/L). <strong>mEq/L</strong>, milliequivalents per liter (used for electrolytes, accounts for ionic charge). <strong>mmol/L</strong>, millimoles per liter (used for lab values like glucose in some countries).</p>
           </div>
           <div className="p-4 bg-teal-50/60 rounded-xl border border-teal-100">
             <p className="text-xs font-semibold text-teal-700 mb-1">Dilution Reasoning</p>
@@ -128,7 +128,7 @@ export function ChemistryModule() {
         pairs={[
           { term: "Ionic bond", definition: "Electron transfer creating charged ions" },
           { term: "Covalent bond", definition: "Electron sharing between atoms" },
-          { term: "pH 7.0", definition: "Neutral. equal H⁺ and OH⁻" },
+          { term: "pH 7.0", definition: "Neutral, equal H⁺ and OH⁻" },
           { term: "Buffer", definition: "Resists pH changes" },
           { term: "Electrolyte", definition: "Ion that conducts electricity in solution" },
           { term: "Hydrophobic", definition: "Repels water (non-polar)" },
@@ -171,7 +171,7 @@ export function ChemistryModule() {
             question: "Each pH unit represents what change in H⁺ concentration?",
             options: ["2-fold change", "5-fold change", "10-fold change", "100-fold change"],
             correctIndex: 2,
-            rationale: "The pH scale is logarithmic. each whole unit represents a 10-fold (one order of magnitude) change in H⁺ concentration.",
+            rationale: "The pH scale is logarithmic, each whole unit represents a 10-fold (one order of magnitude) change in H⁺ concentration.",
           },
           {
             id: "c6",
@@ -183,9 +183,9 @@ export function ChemistryModule() {
           {
             id: "c7",
             question: "What happens to a protein when hydrogen bonds are disrupted by extreme heat?",
-            options: ["It becomes stronger", "It denatures and loses function", "It gains new functions", "Nothing. hydrogen bonds are not important to proteins"],
+            options: ["It becomes stronger", "It denatures and loses function", "It gains new functions", "Nothing, hydrogen bonds are not important to proteins"],
             correctIndex: 1,
-            rationale: "Hydrogen bonds maintain protein tertiary structure (3D folding). Disrupting them causes denaturation. the protein unfolds and loses its specific shape, destroying enzyme activity.",
+            rationale: "Hydrogen bonds maintain protein tertiary structure (3D folding). Disrupting them causes denaturation, the protein unfolds and loses its specific shape, destroying enzyme activity.",
           },
           {
             id: "c8",

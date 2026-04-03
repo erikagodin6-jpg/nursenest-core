@@ -14,9 +14,9 @@ import { ShieldAlert, Brain, MessageSquare, AlertTriangle } from "lucide-react";
 
 export function HumanFactorsModule() {
   const { t } = usePreNursingT();
-  const swissCheeseContent = useEditableText("hf-swiss-cheese-content", "The Swiss Cheese Model (James Reason) explains that healthcare errors rarely result from a single mistake. Each layer of defense (policies, training, checklists, technology, supervision) has 'holes'. weaknesses that can be latent or active. An adverse event occurs only when the holes in multiple layers align, allowing a hazard to pass through every defense. This means preventing errors requires strengthening multiple layers simultaneously rather than blaming individuals.");
-  const justCultureContent = useEditableText("hf-just-culture-content", "A just culture distinguishes between human error (inadvertent. support and coach), at-risk behavior (conscious choice due to drift from best practice. coach and remove incentives for risk), and reckless behavior (conscious disregard of substantial risk. disciplinary action). This replaces blame culture, where all errors are punished regardless of intent, which discourages reporting and prevents organizational learning. In a just culture, reporting is encouraged because the focus is on fixing systems, not punishing people.");
-  const sbarContent = useEditableText("hf-sbar-content", "SBAR is a structured communication framework: Situation (What is happening right now?), Background (What is the clinical context?), Assessment (What do I think the problem is?), Recommendation (What do I think should be done?). I-PASS is used for handoffs: Illness severity, Patient summary, Action list, Situation awareness and contingency planning, Synthesis by receiver. Structured communication prevents information loss during transitions of care. a leading cause of preventable adverse events.");
+  const swissCheeseContent = useEditableText("hf-swiss-cheese-content", "The Swiss Cheese Model (James Reason) explains that healthcare errors rarely result from a single mistake. Each layer of defense (policies, training, checklists, technology, supervision) has 'holes', weaknesses that can be latent or active. An adverse event occurs only when the holes in multiple layers align, allowing a hazard to pass through every defense. This means preventing errors requires strengthening multiple layers simultaneously rather than blaming individuals.");
+  const justCultureContent = useEditableText("hf-just-culture-content", "A just culture distinguishes between human error (inadvertent, support and coach), at-risk behavior (conscious choice due to drift from best practice, coach and remove incentives for risk), and reckless behavior (conscious disregard of substantial risk, disciplinary action). This replaces blame culture, where all errors are punished regardless of intent, which discourages reporting and prevents organizational learning. In a just culture, reporting is encouraged because the focus is on fixing systems, not punishing people.");
+  const sbarContent = useEditableText("hf-sbar-content", "SBAR is a structured communication framework: Situation (What is happening right now?), Background (What is the clinical context?), Assessment (What do I think the problem is?), Recommendation (What do I think should be done?). I-PASS is used for handoffs: Illness severity, Patient summary, Action list, Situation awareness and contingency planning, Synthesis by receiver. Structured communication prevents information loss during transitions of care, a leading cause of preventable adverse events.");
 
   return (
     <div className="space-y-10" data-testid="module-human-factors">
@@ -26,11 +26,11 @@ export function HumanFactorsModule() {
       </div>
 
       <MicroLesson title="The Swiss Cheese Model of Errors" subtitle="Understanding system-level failure" icon={<ShieldAlert className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="hf-swiss-intro" defaultText="Most healthcare errors are not caused by incompetent individuals. they result from system failures. Understanding error theory helps nurses recognize vulnerabilities and advocate for system improvements that protect patients." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="hf-swiss-intro" defaultText="Most healthcare errors are not caused by incompetent individuals, they result from system failures. Understanding error theory helps nurses recognize vulnerabilities and advocate for system improvements that protect patients." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-red-50/60 rounded-xl border border-red-100">
             <p className="text-xs font-semibold text-red-700 mb-1">Active Errors</p>
-            <p className="text-xs text-red-600">Errors committed by the person at the 'sharp end'. the nurse, physician, or technician directly interacting with the patient. These are immediately apparent: wrong medication administered, incorrect dose calculated, procedure performed on wrong site. Active errors are the visible tip of the iceberg.</p>
+            <p className="text-xs text-red-600">Errors committed by the person at the 'sharp end', the nurse, physician, or technician directly interacting with the patient. These are immediately apparent: wrong medication administered, incorrect dose calculated, procedure performed on wrong site. Active errors are the visible tip of the iceberg.</p>
           </div>
           <div className="p-4 bg-orange-50/60 rounded-xl border border-orange-100">
             <p className="text-xs font-semibold text-orange-700 mb-1">Latent Errors</p>
@@ -69,28 +69,28 @@ export function HumanFactorsModule() {
               id: "hf-avail",
               title: "Availability Bias",
               summary: "Overestimating probability of events that come easily to mind",
-              detail: "Recent or dramatic experiences disproportionately influence clinical judgment. If a nurse recently cared for a patient with pulmonary embolism, they may over-diagnose PE in subsequent patients with chest pain. or conversely, if they've never seen a rare condition, they may fail to consider it. Mitigation: Use systematic assessment frameworks rather than relying on memory-based pattern matching.",
+              detail: "Recent or dramatic experiences disproportionately influence clinical judgment. If a nurse recently cared for a patient with pulmonary embolism, they may over-diagnose PE in subsequent patients with chest pain, or conversely, if they've never seen a rare condition, they may fail to consider it. Mitigation: Use systematic assessment frameworks rather than relying on memory-based pattern matching.",
             },
             {
               id: "hf-premature",
               title: "Premature Closure",
               summary: "Accepting a diagnosis before fully verifying it",
-              detail: "Stopping the diagnostic process once a plausible explanation is found, without considering alternatives or completing the assessment. Example: A patient presents with chest pain and has a history of GERD. the nurse assumes it's GERD without completing a cardiac workup. Premature closure is the most common cognitive bias in diagnostic errors. Mitigation: Always ask, 'What else could this be?'",
+              detail: "Stopping the diagnostic process once a plausible explanation is found, without considering alternatives or completing the assessment. Example: A patient presents with chest pain and has a history of GERD, the nurse assumes it's GERD without completing a cardiac workup. Premature closure is the most common cognitive bias in diagnostic errors. Mitigation: Always ask, 'What else could this be?'",
             },
           ]}
         />
       </MicroLesson>
 
       <MicroLesson title="Fatigue & Performance Degradation" subtitle="The science of human limitations" icon={<AlertTriangle className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="hf-fatigue-content" defaultText="Healthcare providers are human. subject to fatigue, circadian rhythm disruption, and cognitive overload. Understanding these limitations is essential for designing safe work systems and recognizing when performance is compromised." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="hf-fatigue-content" defaultText="Healthcare providers are human, subject to fatigue, circadian rhythm disruption, and cognitive overload. Understanding these limitations is essential for designing safe work systems and recognizing when performance is compromised." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-amber-50/60 rounded-xl border border-amber-100">
             <p className="text-xs font-semibold text-amber-700 mb-1">Fatigue Science</p>
-            <p className="text-xs text-amber-600">After 17 hours of wakefulness, cognitive performance equals a blood alcohol level of 0.05%. After 24 hours, it equals 0.10%. above the legal driving limit. Night shift nurses experience the combined effects of sleep deprivation and circadian misalignment. Studies show error rates increase significantly after 12.5 hours on shift, with the highest risk between 3-5 AM when circadian alertness is lowest.</p>
+            <p className="text-xs text-amber-600">After 17 hours of wakefulness, cognitive performance equals a blood alcohol level of 0.05%. After 24 hours, it equals 0.10%, above the legal driving limit. Night shift nurses experience the combined effects of sleep deprivation and circadian misalignment. Studies show error rates increase significantly after 12.5 hours on shift, with the highest risk between 3-5 AM when circadian alertness is lowest.</p>
           </div>
           <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
             <p className="text-xs font-semibold text-purple-700 mb-1">Interruptions & Cognitive Load</p>
-            <p className="text-xs text-purple-600">Nurses are interrupted an average of every 6-8 minutes during medication administration. Each interruption increases error risk by 12.7%. Cognitive load theory explains that working memory has limited capacity. when it's overwhelmed by interruptions, multitasking, and environmental noise, critical information is lost. Strategies: Wear 'Do Not Disturb' vests during med passes, use checklists to prevent omissions, and minimize environmental distractions.</p>
+            <p className="text-xs text-purple-600">Nurses are interrupted an average of every 6-8 minutes during medication administration. Each interruption increases error risk by 12.7%. Cognitive load theory explains that working memory has limited capacity, when it's overwhelmed by interruptions, multitasking, and environmental noise, critical information is lost. Strategies: Wear 'Do Not Disturb' vests during med passes, use checklists to prevent omissions, and minimize environmental distractions.</p>
           </div>
           <div className="p-4 bg-green-50/60 rounded-xl border border-green-100">
             <p className="text-xs font-semibold text-green-700 mb-1">High-Reliability Organizations (HROs)</p>
@@ -105,20 +105,20 @@ export function HumanFactorsModule() {
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
             <p className="text-xs font-semibold text-blue-700 mb-2">SBAR Framework</p>
             <div className="space-y-1">
-              <p className="text-xs text-blue-600"><strong>S. Situation:</strong> "I'm calling about Mr. Jones in room 412. His BP has dropped to 80/50."</p>
-              <p className="text-xs text-blue-600"><strong>B. Background:</strong> "He's 2 days post-op from a hip replacement. He's been stable until this shift."</p>
-              <p className="text-xs text-blue-600"><strong>A. Assessment:</strong> "I think he may be bleeding internally. His hemoglobin was 10.2 this morning."</p>
-              <p className="text-xs text-blue-600"><strong>R. Recommendation:</strong> "I'd like to get a stat CBC, type and crossmatch, and have you come assess him."</p>
+              <p className="text-xs text-blue-600"><strong>S: Situation:</strong> "I'm calling about Mr. Jones in room 412. His BP has dropped to 80/50."</p>
+              <p className="text-xs text-blue-600"><strong>B: Background:</strong> "He's 2 days post-op from a hip replacement. He's been stable until this shift."</p>
+              <p className="text-xs text-blue-600"><strong>A: Assessment:</strong> "I think he may be bleeding internally. His hemoglobin was 10.2 this morning."</p>
+              <p className="text-xs text-blue-600"><strong>R: Recommendation:</strong> "I'd like to get a stat CBC, type and crossmatch, and have you come assess him."</p>
             </div>
           </div>
           <div className="p-4 bg-teal-50/60 rounded-xl border border-teal-100">
             <p className="text-xs font-semibold text-teal-700 mb-2">I-PASS Handoff</p>
             <div className="space-y-1">
-              <p className="text-xs text-teal-600"><strong>I. Illness severity:</strong> Stable, watcher, or unstable</p>
-              <p className="text-xs text-teal-600"><strong>P. Patient summary:</strong> Diagnosis, pertinent history, current plan</p>
-              <p className="text-xs text-teal-600"><strong>A. Action list:</strong> Pending tasks, follow-up items</p>
-              <p className="text-xs text-teal-600"><strong>S. Situation awareness:</strong> What to watch for, contingency plans</p>
-              <p className="text-xs text-teal-600"><strong>S. Synthesis:</strong> Receiving nurse reads back key points</p>
+              <p className="text-xs text-teal-600"><strong>I, Illness severity:</strong> Stable, watcher, or unstable</p>
+              <p className="text-xs text-teal-600"><strong>P, Patient summary:</strong> Diagnosis, pertinent history, current plan</p>
+              <p className="text-xs text-teal-600"><strong>A, Action list:</strong> Pending tasks, follow-up items</p>
+              <p className="text-xs text-teal-600"><strong>S: Situation awareness:</strong> What to watch for, contingency plans</p>
+              <p className="text-xs text-teal-600"><strong>S, Synthesis:</strong> Receiving nurse reads back key points</p>
             </div>
           </div>
         </div>
@@ -159,7 +159,7 @@ export function HumanFactorsModule() {
           {
             id: "hf2",
             question: "A nurse administers the wrong medication because the packaging looks identical to another drug. This is an example of:",
-            options: ["Active error only", "Latent error only", "Both active and latent errors", "Neither. it is expected practice"],
+            options: ["Active error only", "Latent error only", "Both active and latent errors", "Neither, it is expected practice"],
             correctIndex: 2,
             rationale: "The nurse committed an active error (administering the wrong drug), but a latent error (confusing look-alike packaging) created the condition for the mistake. Fixing the latent error (changing packaging) is more effective than punishing the nurse.",
           },
@@ -182,12 +182,12 @@ export function HumanFactorsModule() {
             question: "The 'S' in SBAR stands for:",
             options: ["Safety", "Situation", "Summary", "Systems"],
             correctIndex: 1,
-            rationale: "In SBAR, S stands for Situation. a concise statement of what is happening with the patient right now. This immediately orients the listener to the reason for communication.",
+            rationale: "In SBAR, S stands for Situation, a concise statement of what is happening with the patient right now. This immediately orients the listener to the reason for communication.",
           },
           {
             id: "hf6",
             question: "In a just culture, a nurse who makes an inadvertent error (human error) should be:",
-            options: ["Terminated immediately", "Supported and coached. the system should be examined", "Transferred to a different unit", "Required to retake nursing school courses"],
+            options: ["Terminated immediately", "Supported and coached, the system should be examined", "Transferred to a different unit", "Required to retake nursing school courses"],
             correctIndex: 1,
             rationale: "A just culture recognizes that human error is inevitable and should be met with support, coaching, and system improvement rather than punishment. Only reckless behavior (conscious disregard of substantial risk) warrants disciplinary action.",
           },
@@ -231,14 +231,14 @@ export function HumanFactorsModule() {
             question: "A latent error differs from an active error because latent errors:",
             options: ["Are committed by nurses at the bedside", "Exist in the system before any incident occurs", "Are immediately visible when they happen", "Only occur during night shifts"],
             correctIndex: 1,
-            rationale: "Latent errors are hidden system conditions. such as poor design, inadequate staffing, or lack of protocols. that exist before any incident. They create the conditions in which active (immediate, visible) errors are more likely to occur.",
+            rationale: "Latent errors are hidden system conditions, such as poor design, inadequate staffing, or lack of protocols, that exist before any incident. They create the conditions in which active (immediate, visible) errors are more likely to occur.",
           },
           {
             id: "hf13",
             question: "Premature closure is the most common cognitive bias in:",
             options: ["Medication administration errors", "Diagnostic errors", "Documentation errors", "Communication errors"],
             correctIndex: 1,
-            rationale: "Premature closure. accepting a diagnosis before fully verifying it. is the most commonly identified cognitive bias in diagnostic error. It occurs when clinicians stop considering alternatives once a plausible explanation is found.",
+            rationale: "Premature closure, accepting a diagnosis before fully verifying it, is the most commonly identified cognitive bias in diagnostic error. It occurs when clinicians stop considering alternatives once a plausible explanation is found.",
           },
           {
             id: "hf14",
@@ -273,7 +273,7 @@ export function HumanFactorsModule() {
             question: "At-risk behavior in a just culture is defined as:",
             options: ["Intentionally harming a patient", "Making an inadvertent error", "A conscious choice to drift from best practice, often due to normalization of deviance", "Following established protocols"],
             correctIndex: 2,
-            rationale: "At-risk behavior involves choosing to deviate from best practice. often because shortcuts have become normalized over time ('we've always done it this way'). The just culture response is coaching and removing incentives for the risky behavior.",
+            rationale: "At-risk behavior involves choosing to deviate from best practice, often because shortcuts have become normalized over time ('we've always done it this way'). The just culture response is coaching and removing incentives for the risky behavior.",
           },
           {
             id: "hf19",
@@ -287,7 +287,7 @@ export function HumanFactorsModule() {
             question: "To mitigate confirmation bias, a nurse should:",
             options: ["Trust their first instinct completely", "Actively seek evidence that could disprove their initial assessment", "Avoid forming any clinical impressions", "Only consider diagnoses they have seen before"],
             correctIndex: 1,
-            rationale: "The best strategy for countering confirmation bias is deliberately seeking disconfirming evidence. asking 'What would prove me wrong?' or 'What else could this be?' This forces consideration of alternative explanations.",
+            rationale: "The best strategy for countering confirmation bias is deliberately seeking disconfirming evidence, asking 'What would prove me wrong?' or 'What else could this be?' This forces consideration of alternative explanations.",
           },
         ]}
       />
