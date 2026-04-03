@@ -32,8 +32,12 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { translate, batchTranslate } from "google-translate-api-x";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const ROOT = path.join(__dirname, "..");
+/** True when executed as CLI (`node scripts/nav-i18n-parity.mjs …`), not when imported. */
+const isMainModule =
+  Boolean(process.argv[1]) && path.resolve(process.argv[1]) === path.resolve(__filename);
 const EN_PATH = path.join(ROOT, "public/i18n", "en.json");
 const I18N_DIR = path.join(ROOT, "public", "i18n");
 
@@ -488,19 +492,21 @@ function runVerify() {
   console.log("\nAll verification checks passed.");
 }
 
-const cmd = process.argv[2] || "audit";
-const jsonMode = process.argv.includes("--json");
+if (isMainModule) {
+  const cmd = process.argv[2] || "audit";
+  const jsonMode = process.argv.includes("--json");
 
-if (cmd === "audit") {
-  runAudit(jsonMode);
-} else if (cmd === "fill") {
-  runFill().catch((e) => {
-    console.error(e);
+  if (cmd === "audit") {
+    runAudit(jsonMode);
+  } else if (cmd === "fill") {
+    runFill().catch((e) => {
+      console.error(e);
+      process.exit(1);
+    });
+  } else if (cmd === "verify") {
+    runVerify();
+  } else {
+    console.error("Usage: node scripts/nav-i18n-parity.mjs [audit|fill|verify] [--json]");
     process.exit(1);
-  });
-} else if (cmd === "verify") {
-  runVerify();
-} else {
-  console.error("Usage: node scripts/nav-i18n-parity.mjs [audit|fill|verify] [--json]");
-  process.exit(1);
+  }
 }
