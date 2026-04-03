@@ -17,6 +17,8 @@ export type CatAnswerResult = {
   correct: boolean;
   categoryKey: string;
   difficulty: number;
+  /** How `categoryKey` was derived (diagnostics; omitted on legacy persisted rows). */
+  blueprintMappingSource?: "nclex_client_needs" | "fallback";
   /** Effective discrimination used for this item (defaults to 1). */
   discrimination?: number;
   /** Fisher information contributed at scoring theta (for audit). */
@@ -33,6 +35,17 @@ export type CatStoppedReason =
   | "user_completed";
 
 export type CatPresentationMode = "practice" | "exam_simulation";
+
+/** Audit trail for client-needs vs fallback coverage in the pool and this session. */
+export type CatBlueprintDiagnostics = {
+  examConfigId: string;
+  poolCountsByBlueprintKey: Record<string, number>;
+  sessionCountsByBlueprintKey: Record<string, number>;
+  /** Share of pool rows with `nclexClientNeedsCategory` set. */
+  poolMappedFraction: number;
+  /** Share of scored items that used NCLEX client-needs mapping (not topic/system fallback). */
+  sessionMappedFraction: number;
+};
 
 export type CatConfidenceLevel = "low" | "medium" | "high";
 
@@ -54,6 +67,8 @@ export type CatAdaptiveState = {
   decision: "pass" | "fail" | "uncertain" | null;
   /** How the learner chose to run CAT (affects UI only; server still scores the same). */
   catPresentationMode?: CatPresentationMode;
+  /** Blueprint pool + running session distribution (exam + practice when mapping exists). */
+  catBlueprintDiagnostics?: CatBlueprintDiagnostics;
 };
 
 export type CatExamReport = {
@@ -64,7 +79,10 @@ export type CatExamReport = {
   correctCount: number;
   stoppedReason: Exclude<CatStoppedReason, "max_length"> | "completed";
   categoryBreakdown: Array<{
+    /** Display label (NCLEX client-needs name when mapped). */
     category: string;
+    /** Internal blueprint key (client-needs id or legacy topic/system key). */
+    blueprintKey: string;
     correct: number;
     total: number;
     strength: "strong" | "weak" | "mixed";
@@ -77,4 +95,6 @@ export type CatExamReport = {
   trajectory: "improving" | "slipping" | "steady" | "insufficient";
   /** Short headline for results card. */
   readinessHeadline: string;
+  /** Present when blueprint diagnostics were captured on the adaptive state. */
+  blueprintDiagnostics?: CatBlueprintDiagnostics | null;
 };

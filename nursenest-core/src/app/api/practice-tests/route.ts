@@ -5,6 +5,7 @@ import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-
 import { enforcePracticeTestsListProtection } from "@/lib/http/api-protection";
 import { prisma } from "@/lib/db";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
+import { isCatExamSimulationFeatureEnabled, NCLEX_EXAM_SIMULATION_TIME_LIMIT_SEC } from "@/lib/exams/cat-exam-simulation";
 import { createCatPracticeTestPayload } from "@/lib/practice-tests/cat-session";
 import { configFromInput, pickPracticeQuestionIds } from "@/lib/practice-tests/pick-question-ids";
 import type { PracticeTestConfigJson } from "@/lib/practice-tests/types";
@@ -12,19 +13,38 @@ import type { PracticeTestConfigJson } from "@/lib/practice-tests/types";
 const createSchema = z
   .object({
     title: z.string().max(120).optional(),
-    questionCount: z.number().int().min(5).max(75),
+    questionCount: z.number().int().min(5).max(145),
     topicNames: z.array(z.string().min(1).max(200)).max(30).optional().default([]),
     difficultyMin: z.union([z.number().int().min(1).max(5), z.null()]).optional(),
     difficultyMax: z.union([z.number().int().min(1).max(5), z.null()]).optional(),
     selectionMode: z.enum(["random", "targeted", "weak", "cat"]),
     /** Pool strategy when `selectionMode` is `cat`. */
     catSelectionBasis: z.enum(["random", "targeted", "weak"]).optional(),
+    /** NCLEX-RN exam simulation uses fixed 75–145 bounds and blueprint-first selection (feature-flagged). */
+    catPresentationMode: z.enum(["practice", "exam_simulation"]).optional().default("practice"),
     pathwayId: z.union([z.string().min(2).max(80), z.null()]).optional(),
     timedMode: z.boolean(),
-    timeLimitSec: z.union([z.number().int().min(120).max(14_400), z.null()]).optional(),
+    /** Up to 5h for NCLEX-style timed simulation (`NCLEX_EXAM_SIMULATION_TIME_LIMIT_SEC`). */
+    timeLimitSec: z.union([z.number().int().min(120).max(18_000), z.null()]).optional(),
+  })
+  .refine((d) => d.selectionMode !== "cat" || d.catPresentationMode !== "practice" || d.questionCount <= 75, {
+    message: "Practice CAT maximum question cap is 75.",
+    path: ["questionCount"],
+  })
+  .refine((d) => d.selectionMode !== "cat" || d.catPresentationMode !== "exam_simulation" || d.questionCount <= 145, {
+    message: "Exam simulation maximum is 145.",
+    path: ["questionCount"],
   })
   .refine((d) => d.selectionMode !== "cat" || d.questionCount >= 10, {
-    message: "Adaptive (CAT) mode needs at least 10 as the maximum question cap.",
+    message: "Adaptive (CAT) mode needs at least 10 as the maximum question cap input.",
+    path: ["questionCount"],
+  })
+  .refine((d) => d.catPresentationMode !== "exam_simulation" || d.selectionMode === "cat", {
+    message: "Exam simulation requires adaptive (CAT) mode.",
+    path: ["catPresentationMode"],
+  })
+  .refine((d) => d.selectionMode === "cat" || d.questionCount <= 75, {
+    message: "Linear practice tests support up to 75 questions.",
     path: ["questionCount"],
   });
 
@@ -68,6 +88,7 @@ export async function GET(req: NextRequest) {
       status: r.status,
       questionCount: cfg?.selectionMode === "cat" ? maxCap : ids.length,
       selectionMode: cfg?.selectionMode ?? null,
+      catPresentationMode: cfg?.catPresentationMode ?? "practice",
       timedMode: r.timedMode,
       timeLimitSec: r.timeLimitSec,
       elapsedMs: r.elapsedMs,
@@ -111,7 +132,17 @@ export async function POST(req: Request) {
     : null;
 
   if (d.selectionMode === "cat") {
-    const basis = d.catSelectionBasis ?? "random";
+    if (d.catPresentationMode === "exam_simulation" && !isCatExamSimulationFeatureEnabled()) {
+      return NextResponse.json(
+        { error: "NCLEX exam simulation is not enabled.", code: "exam_sim_disabled" },
+        { status: 403 },
+      );
+    }
+    const basis = d.catPresentationMode === "exam_simulation" ? "random" : (d.catSelectionBasis ?? "random");
+    const examTimedLimit =
+      d.catPresentationMode === "exam_simulation" && d.timedMode
+        ? (d.timeLimitSec ?? NCLEX_EXAM_SIMULATION_TIME_LIMIT_SEC)
+        : timeLimitSec;
     const cat = await createCatPracticeTestPayload(
       gate.userId,
       gate.entitlement,
@@ -124,10 +155,14 @@ export async function POST(req: Request) {
         pathwayId: d.pathwayId ?? null,
       },
       d.timedMode,
-      timeLimitSec,
+      examTimedLimit,
+      d.catPresentationMode,
     );
     if (!cat.ok) {
-      return NextResponse.json({ error: cat.message, code: "pool_too_small" }, { status: 400 });
+      return NextResponse.json(
+        { error: cat.message, code: cat.code ?? "cat_create_failed" },
+        { status: 400 },
+      );
     }
 
     const row = await prisma.practiceTest.create({
@@ -139,7 +174,7 @@ export async function POST(req: Request) {
         adaptiveState: cat.adaptiveState as object,
         status: PracticeTestStatus.IN_PROGRESS,
         timedMode: d.timedMode,
-        timeLimitSec,
+        timeLimitSec: examTimedLimit,
         cursorIndex: 0,
       },
     });

@@ -55,6 +55,8 @@ export async function fetchCatPracticePool(
       difficulty: true,
       bodySystem: true,
       topic: true,
+      nclexClientNeedsCategory: true,
+      nclexClientNeedsSubcategory: true,
     },
     orderBy: { id: "asc" },
     take: MAX_POOL,
@@ -65,5 +67,7 @@ export async function fetchCatPracticePool(
     difficulty: typeof r.difficulty === "number" && Number.isFinite(r.difficulty) ? Math.round(r.difficulty) : 3,
     bodySystem: r.bodySystem,
     topic: r.topic,
+    nclexClientNeedsCategory: r.nclexClientNeedsCategory,
+    nclexClientNeedsSubcategory: r.nclexClientNeedsSubcategory,
   }));
 }

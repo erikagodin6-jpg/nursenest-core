@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { PracticeTestsHubClient } from "@/components/student/practice-tests-hub-client";
+import { isCatExamSimulationFeatureEnabled } from "@/lib/exams/cat-exam-simulation";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { auth } from "@/lib/auth";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
@@ -56,7 +57,7 @@ export default async function PracticeTestsPage() {
         resume incomplete tests, and review scores with per-topic breakdowns and weak-area links.
       </p>
       <Suspense fallback={<p className="mt-6 text-sm text-muted">Loading…</p>}>
-        <PracticeTestsHubClient />
+        <PracticeTestsHubClient examSimulationEnabled={isCatExamSimulationFeatureEnabled()} />
       </Suspense>
     </main>
   );

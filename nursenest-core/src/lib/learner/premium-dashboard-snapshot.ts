@@ -195,7 +195,7 @@ function milestoneLines(args: {
   }
 
   if (args.mockCount >= 3) {
-    lines.push(`${args.mockCount} mock exams logged—use trends, not single scores`);
+    lines.push(`${args.mockCount} mock exams logged. Use trends, not single scores`);
   }
 
   return lines.slice(0, 5);

@@ -825,6 +825,10 @@ model ExamQuestion {
   images                     Json?
   scenarioId                 String?   @map("scenario_id")
   blueprintWeight            Float?    @map("blueprint_weight")
+  /// NCLEX RN client-needs major category id (e.g. safe-effective). See `exam-config` category ids.
+  nclexClientNeedsCategory    String?   @map("nclex_client_needs_category") @db.VarChar(64)
+  /// Optional subcategory / content area label for audits (not required for CAT balancing).
+  nclexClientNeedsSubcategory String?   @map("nclex_client_needs_subcategory") @db.VarChar(128)
   createdAt                  DateTime  @default(now()) @map("created_at")
   updatedAt                  DateTime  @updatedAt @map("updated_at")
   publishedAt                DateTime? @map("published_at")

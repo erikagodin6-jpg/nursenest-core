@@ -246,7 +246,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
 
   if (parsed.data.action === "complete") {
     if (cfg.selectionMode === "cat") {
-      const fin = await finalizeCatPracticeTest(ids, merged, gate.entitlement);
+      const fin = await finalizeCatPracticeTest(ids, merged, gate.entitlement, row.adaptiveState);
       await prisma.practiceTest.update({
         where: { id },
         data: {

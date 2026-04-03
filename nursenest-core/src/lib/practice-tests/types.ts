@@ -1,4 +1,6 @@
-import type { CatExamReport } from "@/lib/exams/cat-types";
+import type { CatExamReport, CatPresentationMode } from "@/lib/exams/cat-types";
+
+export type { CatPresentationMode };
 
 export type PracticeTestSelectionMode = "random" | "targeted" | "weak" | "cat";
 
@@ -22,6 +24,10 @@ export type PracticeTestConfigJson = {
   catWeakCategories?: string[];
   /** Canonical topic key → 0–1 weak priority for proportional CAT boosting. */
   catWeakPriorityByCanonical?: Record<string, number>;
+  /** Practice CAT vs NCLEX-style exam simulation (bounds, copy, pool validation). */
+  catPresentationMode?: CatPresentationMode;
+  /** Blueprint used for weights + diagnostics (e.g. nclex-rn-us). */
+  catExamConfigId?: string | null;
 };
 
 export type PracticeTestResultsJson = {

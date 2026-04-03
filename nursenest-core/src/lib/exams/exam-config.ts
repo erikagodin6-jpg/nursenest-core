@@ -80,3 +80,19 @@ export function getExamConfig(id: string): ExamConfig | null {
 export function listExamConfigs(): ExamConfig[] {
   return Object.values(BY_ID);
 }
+
+/** Normalized blueprint weights (sum ≈ 1) for CAT client-needs balancing. */
+export function nclexBlueprintWeightMap(cfg: ExamConfig): Record<string, number> {
+  const m: Record<string, number> = {};
+  let sum = 0;
+  for (const c of cfg.categories) {
+    const w = typeof c.weightHint === "number" && c.weightHint > 0 ? c.weightHint : 0;
+    m[c.id] = w;
+    sum += w;
+  }
+  if (sum <= 0) return {};
+  for (const k of Object.keys(m)) {
+    m[k]! /= sum;
+  }
+  return m;
+}

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import type { CatSelectionBasis, PracticeTestSelectionMode } from "@/lib/practice-tests/types";
+import type { CatPresentationMode, CatSelectionBasis, PracticeTestSelectionMode } from "@/lib/practice-tests/types";
 
 type TestListRow = {
   id: string;
@@ -11,6 +11,7 @@ type TestListRow = {
   status: string;
   questionCount: number;
   selectionMode: string | null;
+  catPresentationMode?: string | null;
   timedMode: boolean;
   timeLimitSec: number | null;
   elapsedMs: number | null;
@@ -22,7 +23,7 @@ type TestListRow = {
   updatedAt: string;
 };
 
-export function PracticeTestsHubClient() {
+export function PracticeTestsHubClient({ examSimulationEnabled = false }: { examSimulationEnabled?: boolean }) {
   const searchParams = useSearchParams();
   const [topics, setTopics] = useState<{ topic: string; count: number }[]>([]);
   const [loading, setLoading] = useState(true);
@@ -34,6 +35,7 @@ export function PracticeTestsHubClient() {
   const [questionCount, setQuestionCount] = useState(20);
   const [selectionMode, setSelectionMode] = useState<PracticeTestSelectionMode>("random");
   const [catSelectionBasis, setCatSelectionBasis] = useState<CatSelectionBasis>("random");
+  const [catPresentationMode, setCatPresentationMode] = useState<CatPresentationMode>("practice");
   const [topicPicks, setTopicPicks] = useState<string[]>([]);
   const [topicInput, setTopicInput] = useState("");
   const [difficultyMin, setDifficultyMin] = useState<number | "">("");
@@ -117,7 +119,12 @@ export function PracticeTestsHubClient() {
           difficultyMin: difficultyMin === "" ? null : difficultyMin,
           difficultyMax: difficultyMax === "" ? null : difficultyMax,
           selectionMode,
-          ...(selectionMode === "cat" ? { catSelectionBasis } : {}),
+          ...(selectionMode === "cat"
+            ? {
+                catSelectionBasis,
+                catPresentationMode,
+              }
+            : {}),
           pathwayId: null,
           timedMode,
           timeLimitSec: timedMode ? Math.round(timeLimitMin * 60) : null,
@@ -165,12 +172,16 @@ export function PracticeTestsHubClient() {
           </label>
           <label className="block text-sm">
             <span className="text-muted-foreground">
-              {selectionMode === "cat" ? "Maximum questions (cap, 10–75)" : "Number of questions (5–75)"}
+              {selectionMode === "cat"
+                ? catPresentationMode === "exam_simulation"
+                  ? "Maximum length (75–145; simulation uses NCLEX-style bounds)"
+                  : "Maximum questions (cap, 10–75)"
+                : "Number of questions (5–145)"}
             </span>
             <input
               type="number"
               min={selectionMode === "cat" ? 10 : 5}
-              max={75}
+              max={selectionMode === "cat" && catPresentationMode === "exam_simulation" ? 145 : 75}
               className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm"
               value={questionCount}
               onChange={(e) => setQuestionCount(Number(e.target.value))}
@@ -192,7 +203,10 @@ export function PracticeTestsHubClient() {
               <button
                 key={v}
                 type="button"
-                onClick={() => setSelectionMode(v)}
+                onClick={() => {
+                  setSelectionMode(v);
+                  if (v !== "cat") setCatPresentationMode("practice");
+                }}
                 className={`rounded-full px-4 py-1.5 text-sm font-medium ${
                   selectionMode === v ? "bg-primary text-primary-foreground" : "border border-border hover:bg-muted"
                 }`}
@@ -207,12 +221,59 @@ export function PracticeTestsHubClient() {
               : selectionMode === "weak"
                 ? "Uses topics you’ve missed on recent scored practice exams."
                 : selectionMode === "cat"
-                  ? "CAT starts near mid difficulty, then moves up or down; may stop early when the estimate stabilizes."
+                  ? catPresentationMode === "exam_simulation"
+                    ? "NCLEX-RN-style simulation: 75–145 items, blueprint-balanced pool, confidence-based stop when allowed."
+                    : "CAT starts near mid difficulty, then moves up or down; may stop early when the estimate stabilizes."
                   : "Optional topic filters narrow the pool; leave empty for a broad mix."}
           </p>
         </div>
 
-        {selectionMode === "cat" ? (
+        {selectionMode === "cat" && examSimulationEnabled ? (
+          <div className="mt-4 rounded-lg border border-border bg-muted/25 p-4">
+            <span className="text-sm font-medium text-foreground">CAT format</span>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setCatPresentationMode("practice");
+                  if (questionCount > 75) setQuestionCount(75);
+                }}
+                className={`rounded-full px-4 py-1.5 text-sm font-medium ${
+                  catPresentationMode === "practice"
+                    ? "bg-primary text-primary-foreground"
+                    : "border border-border hover:bg-muted"
+                }`}
+              >
+                Practice CAT
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setCatPresentationMode("exam_simulation");
+                  setCatSelectionBasis("random");
+                  setTimedMode(true);
+                  setTimeLimitMin(300);
+                  if (questionCount < 75) setQuestionCount(145);
+                }}
+                className={`rounded-full px-4 py-1.5 text-sm font-medium ${
+                  catPresentationMode === "exam_simulation"
+                    ? "bg-primary text-primary-foreground"
+                    : "border border-border hover:bg-muted"
+                }`}
+              >
+                NCLEX-RN exam simulation
+              </button>
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Practice CAT keeps shorter runs and weak-area boosts. Exam simulation uses a 75–145 cap, NCLEX client-needs
+              blueprint balancing when items are tagged, and stricter pool sizing. Enable with{" "}
+              <code className="rounded bg-muted px-1">CAT_EXAM_SIMULATION_ENABLED=1</code> on the server (and optional{" "}
+              <code className="rounded bg-muted px-1">NEXT_PUBLIC_CAT_EXAM_SIMULATION=1</code> for this UI).
+            </p>
+          </div>
+        ) : null}
+
+        {selectionMode === "cat" && catPresentationMode === "practice" ? (
           <div className="mt-4">
             <span className="text-sm text-muted-foreground">Pool for adaptive draws</span>
             <div className="mt-2 flex flex-wrap gap-2">
@@ -325,7 +386,7 @@ export function PracticeTestsHubClient() {
               <input
                 type="number"
                 min={2}
-                max={240}
+                max={selectionMode === "cat" && catPresentationMode === "exam_simulation" ? 400 : 240}
                 className="ml-2 rounded-lg border border-border px-2 py-1 text-sm"
                 value={timeLimitMin}
                 onChange={(e) => setTimeLimitMin(Number(e.target.value))}
@@ -362,7 +423,9 @@ export function PracticeTestsHubClient() {
                 <div>
                   <p className="font-medium text-foreground">{t.title || "Practice test"}</p>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    {t.questionCount} Q · {t.selectionMode ?? "N/A"} · {t.timedMode ? `timed ${t.timeLimitSec ? `${Math.round(t.timeLimitSec / 60)} min` : ""}` : "untimed"}
+                    {t.questionCount} Q · {t.selectionMode ?? "N/A"}
+                    {t.catPresentationMode === "exam_simulation" ? " · NCLEX exam sim" : ""} ·{" "}
+                    {t.timedMode ? `timed ${t.timeLimitSec ? `${Math.round(t.timeLimitSec / 60)} min` : ""}` : "untimed"}
                     {t.status === "COMPLETED" && t.accuracyPct != null ? ` · ${t.accuracyPct}% (${t.scoreCorrect}/${t.scoreTotal})` : null}
                     {t.status === "IN_PROGRESS" ? " · in progress" : null}
                     {t.status === "ABANDONED" ? " · abandoned" : null}

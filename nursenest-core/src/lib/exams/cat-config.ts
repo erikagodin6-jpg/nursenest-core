@@ -25,7 +25,10 @@ export const CAT_MAX_QUESTIONS =
 export const CAT_START_THETA = 0;
 export const CAT_START_TARGET_DIFFICULTY = 3;
 
-/** Minimum answered items before confidence-based early stop (unsafe to stop earlier). */
+/**
+ * Minimum scored items before confidence-based early stop (theta + SE) may fire.
+ * Enforced in `cat-engine` `shouldStopAfterAnswer` alongside session `min` (e.g. NCLEX 75).
+ */
 export const CAT_MIN_ANSWERED_FOR_CONFIDENCE_STOP = 16;
 
 /** Early stop after min questions when estimate is confident. */

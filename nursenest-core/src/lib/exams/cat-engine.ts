@@ -5,6 +5,7 @@ import {
   CAT_FINAL_FAIL_THETA,
   CAT_FINAL_PASS_THETA,
   CAT_MAX_QUESTIONS,
+  CAT_MIN_ANSWERED_FOR_CONFIDENCE_STOP,
   CAT_MIN_QUESTIONS,
   CAT_START_TARGET_DIFFICULTY,
   CAT_START_THETA,
@@ -16,10 +17,12 @@ import {
   readinessScoreFromTheta,
   trajectorySummary,
 } from "@/lib/exams/cat-readiness";
+import { getExamConfig } from "@/lib/exams/exam-config";
 import {
   CAT_STATE_VERSION,
   type CatAdaptiveState,
   type CatAnswerResult,
+  type CatBlueprintDiagnostics,
   type CatExamReport,
   type CatIncident,
   type CatStoppedReason,
@@ -30,6 +33,9 @@ export type CatPoolRow = {
   difficulty: number;
   bodySystem: string | null;
   topic: string | null;
+  /** NCLEX client-needs major id when tagged; drives blueprint balancing when set. */
+  nclexClientNeedsCategory?: string | null;
+  nclexClientNeedsSubcategory?: string | null;
 };
 
 export function categoryKeyForQuestion(row: Pick<CatPoolRow, "bodySystem" | "topic">): string {
@@ -38,6 +44,45 @@ export function categoryKeyForQuestion(row: Pick<CatPoolRow, "bodySystem" | "top
   if (b && b.length > 0) return b;
   if (t && t.length > 0) return t;
   return "General";
+}
+
+/** Blueprint key: client-needs id when present, else body system / topic / General (legacy fallback). */
+export function blueprintKeyForPoolRow(row: CatPoolRow): string {
+  const c = row.nclexClientNeedsCategory?.trim();
+  if (c && c.length > 0) return c;
+  return categoryKeyForQuestion(row);
+}
+
+export function buildPoolBlueprintDiagnostics(pool: CatPoolRow[], examConfigId: string): CatBlueprintDiagnostics {
+  const poolCountsByBlueprintKey: Record<string, number> = {};
+  let mapped = 0;
+  for (const r of pool) {
+    if (r.nclexClientNeedsCategory?.trim()) mapped++;
+    const k = blueprintKeyForPoolRow(r);
+    poolCountsByBlueprintKey[k] = (poolCountsByBlueprintKey[k] ?? 0) + 1;
+  }
+  return {
+    examConfigId,
+    poolCountsByBlueprintKey,
+    sessionCountsByBlueprintKey: {},
+    poolMappedFraction: pool.length ? mapped / pool.length : 0,
+    sessionMappedFraction: 0,
+  };
+}
+
+/** Fraction of results tagged with NCLEX client-needs mapping (legacy rows without `blueprintMappingSource` count as unmapped). */
+export function sessionMappedFractionFromResults(results: CatAnswerResult[]): number {
+  if (results.length === 0) return 0;
+  const n = results.filter((r) => r.blueprintMappingSource === "nclex_client_needs").length;
+  return n / results.length;
+}
+
+export function sessionBlueprintCountsFromResults(results: CatAnswerResult[]): Record<string, number> {
+  const m: Record<string, number> = {};
+  for (const r of results) {
+    m[r.categoryKey] = (m[r.categoryKey] ?? 0) + 1;
+  }
+  return m;
 }
 
 export function clampDifficulty(n: number): number {
@@ -79,6 +124,26 @@ export function parseAdaptiveState(raw: unknown): CatAdaptiveState | null {
     stoppedReason: o.stoppedReason ?? null,
     decision: o.decision ?? null,
     catPresentationMode: o.catPresentationMode,
+    catBlueprintDiagnostics: coerceCatBlueprintDiagnostics(o.catBlueprintDiagnostics),
+  };
+}
+
+export function coerceCatBlueprintDiagnostics(raw: unknown): CatBlueprintDiagnostics | undefined {
+  if (!raw || typeof raw !== "object") return undefined;
+  const d = raw as Partial<CatBlueprintDiagnostics>;
+  if (typeof d.examConfigId !== "string") return undefined;
+  return {
+    examConfigId: d.examConfigId,
+    poolCountsByBlueprintKey:
+      d.poolCountsByBlueprintKey && typeof d.poolCountsByBlueprintKey === "object"
+        ? (d.poolCountsByBlueprintKey as Record<string, number>)
+        : {},
+    sessionCountsByBlueprintKey:
+      d.sessionCountsByBlueprintKey && typeof d.sessionCountsByBlueprintKey === "object"
+        ? (d.sessionCountsByBlueprintKey as Record<string, number>)
+        : {},
+    poolMappedFraction: typeof d.poolMappedFraction === "number" ? d.poolMappedFraction : 0,
+    sessionMappedFraction: typeof d.sessionMappedFraction === "number" ? d.sessionMappedFraction : 0,
   };
 }
 
@@ -86,6 +151,7 @@ export function parseAdaptiveState(raw: unknown): CatAdaptiveState | null {
 export function appendScoredResult(state: CatAdaptiveState, result: CatAnswerResult): CatAdaptiveState {
   const d = clampDifficulty(result.difficulty);
   const diffFromCenter = (d - 3) / 2;
+  // P3: replace with item-parameter-driven IRT update when discrimination + difficulty (b) are stored per item.
   const step = 0.18 * (result.correct ? 1 : -1) * (1 - 0.15 * Math.abs(diffFromCenter));
   let theta = state.theta + step;
   theta = Math.min(3, Math.max(-3, theta));
@@ -125,11 +191,12 @@ export type CatPoolValidation = { ok: true } | { ok: false; error: string };
 /**
  * Ensures enough adaptive-eligible items exist for a credible CAT run.
  */
-export function validateCatQuestionPool(rows: CatPoolRow[]): CatPoolValidation {
-  if (rows.length < CAT_MIN_QUESTIONS) {
+export function validateCatQuestionPool(rows: CatPoolRow[], options?: { minPoolSize?: number }): CatPoolValidation {
+  const minNeed = options?.minPoolSize ?? CAT_MIN_QUESTIONS;
+  if (rows.length < minNeed) {
     return {
       ok: false,
-      error: `CAT needs at least ${CAT_MIN_QUESTIONS} published adaptive-eligible questions in your pool (found ${rows.length}). Add items or contact your admin.`,
+      error: `CAT needs at least ${minNeed} published adaptive-eligible questions in your pool (found ${rows.length}). Add items or contact your admin.`,
     };
   }
 
@@ -211,10 +278,15 @@ export type CatSelectOptions = {
    * Lower returned value = higher priority in the sort.
    */
   categoryPriorityBoost?: (categoryKey: string, row: CatPoolRow) => number;
+  /**
+   * When set, balances toward NCLEX client-needs weights for rows with a mapped category id.
+   * Rows without a mapping keep legacy deficit balancing on `blueprintKeyForPoolRow`.
+   */
+  blueprintWeights?: Record<string, number>;
 };
 
 /**
- * Blueprint-style: prefer categories with fewer delivered items; match difficulty band; no repeats.
+ * Blueprint-style: prefer under-served blueprint categories; match difficulty band; no repeats.
  */
 export function selectNextQuestion(
   pool: CatPoolRow[],
@@ -230,13 +302,23 @@ export function selectNextQuestion(
 
   const td = clampDifficulty(targetDifficulty);
   const band = (d: number) => Math.abs(clampDifficulty(d) - td);
+  const nDelivered = usedIds.size;
+  const weights = options?.blueprintWeights;
 
   const scored = unused.map((row) => {
-    const cat = categoryKeyForQuestion(row);
+    const cat = blueprintKeyForPoolRow(row);
     const delivered = deliveredCountsByCategory.get(cat) ?? 0;
-    const deficit = delivered;
     const boost = options?.categoryPriorityBoost?.(cat, row) ?? 0;
-    const score = band(row.difficulty) * 12 + deficit * 3 - boost;
+    const mappedNclex = Boolean(row.nclexClientNeedsCategory?.trim());
+    const w = mappedNclex && weights ? weights[cat] : undefined;
+    let balanceTerm: number;
+    if (w != null && nDelivered > 0) {
+      const expected = nDelivered * w;
+      balanceTerm = (expected - delivered) * 12;
+    } else {
+      balanceTerm = delivered * 3;
+    }
+    const score = band(row.difficulty) * 12 + balanceTerm - boost;
     return { row, score };
   });
 
@@ -257,15 +339,30 @@ export function selectNextQuestion(
   return { selected: pick, fallback: true, detail: "closest_available" };
 }
 
+export type CatStopBounds = {
+  min: number;
+  max: number;
+  /**
+   * Minimum scored items before theta/SE confidence-based early stop is allowed.
+   * Defaults to `CAT_MIN_ANSWERED_FOR_CONFIDENCE_STOP`. Exam simulations with a high `min`
+   * (e.g. 75) already satisfy this; practice modes with a low `min` still require this floor.
+   */
+  minAnsweredForConfidenceStop?: number;
+};
+
 export function shouldStopAfterAnswer(
   state: CatAdaptiveState,
   nAnswered: number,
-  bounds?: { min: number; max: number },
+  bounds?: CatStopBounds,
 ): CatAdaptiveState["stoppedReason"] {
   const minQ = bounds?.min ?? CAT_MIN_QUESTIONS;
   const maxQ = bounds?.max ?? CAT_MAX_QUESTIONS;
+  const minForConfidence =
+    bounds?.minAnsweredForConfidenceStop ?? CAT_MIN_ANSWERED_FOR_CONFIDENCE_STOP;
+
   if (nAnswered >= maxQ) return "max_length";
   if (nAnswered < minQ) return null;
+  if (nAnswered < minForConfidence) return null;
   if (state.se <= CAT_EARLY_STOP_SE && state.theta >= CAT_EARLY_PASS_THETA) return "confidence_pass";
   if (state.se <= CAT_EARLY_STOP_SE && state.theta <= CAT_EARLY_FAIL_THETA) return "confidence_fail";
   return null;
@@ -297,13 +394,22 @@ export function buildCatReport(state: CatAdaptiveState): CatExamReport {
   const decision =
     state.decision ?? (totalQuestions > 0 ? finalizeThetaDecision(state.theta) : "uncertain");
 
+  const examCfg = state.catBlueprintDiagnostics ? getExamConfig(state.catBlueprintDiagnostics.examConfigId) : null;
+
   const categoryBreakdown = [...byCat.entries()]
-    .map(([category, v]) => {
+    .map(([blueprintKey, v]) => {
       const pct = v.total > 0 ? v.correct / v.total : 0;
       let strength: "strong" | "weak" | "mixed" = "mixed";
       if (pct >= 0.65) strength = "strong";
       else if (pct < 0.45) strength = "weak";
-      return { category, correct: v.correct, total: v.total, strength };
+      const label = examCfg?.categories.find((c) => c.id === blueprintKey)?.label ?? blueprintKey;
+      return {
+        category: label,
+        blueprintKey,
+        correct: v.correct,
+        total: v.total,
+        strength,
+      };
     })
     .sort((a, b) => b.total - a.total);
 
@@ -332,6 +438,12 @@ export function buildCatReport(state: CatAdaptiveState): CatExamReport {
     suggestedNextSteps.push("Keep mixing systems and prioritization items in the question bank.");
   }
 
+  if (state.catPresentationMode === "exam_simulation") {
+    suggestedNextSteps.unshift(
+      "This NCLEX-RN-style simulation uses NurseNest content and our adaptive engine. It is not an official NCLEX result or pass prediction.",
+    );
+  }
+
   const readinessScore = readinessScoreFromTheta(state.theta);
   const confidenceLevel = confidenceLevelFromSe(state.se);
   const trajectory = trajectorySummary(state.results.map((r) => r.correct));
@@ -339,6 +451,7 @@ export function buildCatReport(state: CatAdaptiveState): CatExamReport {
     readinessScore,
     confidenceLevel,
     decision,
+    presentationMode: state.catPresentationMode,
   });
 
   return {
@@ -356,6 +469,13 @@ export function buildCatReport(state: CatAdaptiveState): CatExamReport {
     confidenceText: confidenceText(confidenceLevel),
     trajectory,
     readinessHeadline,
+    blueprintDiagnostics: state.catBlueprintDiagnostics
+      ? {
+          ...state.catBlueprintDiagnostics,
+          sessionCountsByBlueprintKey: sessionBlueprintCountsFromResults(state.results),
+          sessionMappedFraction: sessionMappedFractionFromResults(state.results),
+        }
+      : null,
   };
 }
 

@@ -182,6 +182,8 @@ export function PracticeTestRunnerClient({
 
   const current = questions[idx];
   const total = questions.length;
+  const examSimulation = testConfig?.catPresentationMode === "exam_simulation";
+  const catMaxCap = testConfig?.catMaxQuestions ?? total;
   const opts = useMemo(() => (current ? parseOptions(current.options) : []), [current]);
 
   const isSata =
@@ -333,7 +335,11 @@ export function PracticeTestRunnerClient({
       <div className="space-y-6">
         <div className="nn-card p-6">
           <p className="text-[10px] font-bold uppercase tracking-widest text-primary">Results</p>
-          <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">Test complete</h2>
+          <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">
+            {results.catReport && testConfig?.catPresentationMode === "exam_simulation"
+              ? "Exam simulation complete"
+              : "Test complete"}
+          </h2>
           <p className="mt-2 text-3xl font-bold tabular-nums text-primary">
             {results.scoreCorrect}/{results.scoreTotal}{" "}
             <span className="text-lg font-semibold text-muted-foreground">({results.accuracyPct}%)</span>
@@ -384,6 +390,55 @@ export function PracticeTestRunnerClient({
                   <li key={line.slice(0, 120)}>{line}</li>
                 ))}
               </ul>
+            </div>
+          ) : null}
+          {results.catReport?.blueprintDiagnostics ? (
+            <div className="mt-4 rounded-lg border border-border/60 bg-muted/15 p-3">
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                Blueprint diagnostics (client-needs coverage)
+              </p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Pool mapping rate:{" "}
+                <span className="font-medium text-foreground">
+                  {Math.round((results.catReport.blueprintDiagnostics.poolMappedFraction ?? 0) * 100)}%
+                </span>{" "}
+                of eligible items have{" "}
+                <code className="rounded bg-muted px-1 text-[10px]">nclex_client_needs_category</code> set. Session
+                delivered (mapped):{" "}
+                <span className="font-medium text-foreground">
+                  {Math.round((results.catReport.blueprintDiagnostics.sessionMappedFraction ?? 0) * 100)}%
+                </span>
+                . That is the share of questions you answered that used NCLEX client-needs keys; the rest used topic or
+                body-system fallback for balancing.
+              </p>
+              <div className="mt-2 grid gap-2 text-xs sm:grid-cols-2">
+                <div>
+                  <p className="font-semibold text-foreground">Pool counts (by selection key)</p>
+                  <ul className="mt-1 max-h-32 space-y-0.5 overflow-y-auto text-muted-foreground">
+                    {Object.entries(results.catReport.blueprintDiagnostics.poolCountsByBlueprintKey)
+                      .sort((a, b) => b[1] - a[1])
+                      .map(([k, n]) => (
+                        <li key={k} className="flex justify-between gap-2 tabular-nums">
+                          <span className="truncate">{k}</span>
+                          <span>{n}</span>
+                        </li>
+                      ))}
+                  </ul>
+                </div>
+                <div>
+                  <p className="font-semibold text-foreground">This session</p>
+                  <ul className="mt-1 max-h-32 space-y-0.5 overflow-y-auto text-muted-foreground">
+                    {Object.entries(results.catReport.blueprintDiagnostics.sessionCountsByBlueprintKey)
+                      .sort((a, b) => b[1] - a[1])
+                      .map(([k, n]) => (
+                        <li key={k} className="flex justify-between gap-2 tabular-nums">
+                          <span className="truncate">{k}</span>
+                          <span>{n}</span>
+                        </li>
+                      ))}
+                  </ul>
+                </div>
+              </div>
             </div>
           ) : null}
         </div>
@@ -503,13 +558,22 @@ export function PracticeTestRunnerClient({
               <div>
                 <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
                   {catMode ? "Adaptive item" : "Item"} {idx + 1} of {total}
+                  {catMode ? (
+                    <span className="block normal-case text-[10px] font-normal text-slate-500 dark:text-slate-400">
+                      Up to {catMaxCap} scored (variable stop)
+                    </span>
+                  ) : null}
                 </p>
                 {saving ? <p className="mt-0.5 text-xs text-slate-500">Saving…</p> : null}
               </div>
             }
             center={
               <span className="line-clamp-2 normal-case">
-                {catMode ? "Computer-adaptive (practice)" : "Practice test"}
+                {catMode
+                  ? examSimulation
+                    ? "NCLEX-RN exam simulation (CAT)"
+                    : "Computer-adaptive (practice)"
+                  : "Practice test"}
               </span>
             }
             right={<ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />}
@@ -518,7 +582,9 @@ export function PracticeTestRunnerClient({
           <div className="space-y-5 p-5 md:p-6">
             <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">
               {catMode
-                ? "Each response updates difficulty. Explanations and coaching appear after the session."
+                ? examSimulation
+                  ? "NCLEX-style length band (75–145) and stop rules on this server. Not the live NCLEX. Rationales unlock after completion."
+                  : "Each response updates difficulty. Explanations and coaching appear after the session."
                 : "Pacing practice only. Not a copy of any official exam interface."}
             </p>
 
