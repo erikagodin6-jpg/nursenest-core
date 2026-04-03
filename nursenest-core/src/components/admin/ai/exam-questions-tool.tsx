@@ -49,7 +49,7 @@ export function ExamQuestionsTool() {
   return (
     <div className="nn-card space-y-4 p-6">
       <p className="text-sm text-muted">
-        Generates <strong>draft records</strong> for review — never publishes to the live question bank.
+        Generates <strong>draft records</strong> for review. Never publishes to the live question bank.
       </p>
       <div className="grid gap-3 sm:grid-cols-2">
         <label className="text-sm">
@@ -114,7 +114,7 @@ export function ExamQuestionsTool() {
           Category ID (optional)
           <input
             className="mt-1 w-full rounded border border-border px-2 py-1.5 text-sm"
-            placeholder="cuid — for promotion defaults"
+            placeholder="cuid (for promotion defaults)"
             value={categoryId}
             onChange={(e) => setCategoryId(e.target.value)}
           />

@@ -32,7 +32,7 @@ export function PathwayLessonPreviewBanner({ kind, pathwayShortName, pathwayCoun
     },
     default_preview: {
       title: "Preview-only content",
-      body: `You see the first section only because of subscription preview rules—not because the lesson is missing from our catalog or untranslated. If a separate notice mentions language, that is about translation; this banner is about access. Full sections unlock with a plan that matches this pathway and country.`,
+      body: `You see the first section only because of subscription preview rules, not because the lesson is missing from our catalog or untranslated. If a separate notice mentions language, that is about translation; this banner is about access. Full sections unlock with a plan that matches this pathway and country.`,
     },
   };
 

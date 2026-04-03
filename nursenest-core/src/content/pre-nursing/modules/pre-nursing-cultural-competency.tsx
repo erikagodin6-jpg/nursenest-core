@@ -14,9 +14,9 @@ import { Users, Heart, Globe, Shield } from "lucide-react";
 
 export function CulturalCompetencyModule() {
   const { t } = usePreNursingT();
-  const sdohContent = useEditableText("cc-sdoh-content", "Social Determinants of Health (SDOH) are the non-medical factors that influence health outcomes. They include the conditions in which people are born, grow, work, live, and age, and the wider set of forces shaping daily life. SDOH account for 30-55% of health outcomes — far more than clinical care alone. Nurses must assess and address these factors to provide equitable, effective care.");
-  const biasContent = useEditableText("cc-bias-content", "Implicit biases are unconscious attitudes or stereotypes that affect understanding, actions, and decisions. In healthcare, implicit bias can lead to disparities in pain management, diagnostic workups, treatment recommendations, and communication quality. Research shows that healthcare providers hold implicit biases related to race, ethnicity, weight, age, gender identity, socioeconomic status, and disability. Recognizing that everyone holds implicit biases is the first step — the goal is not to eliminate them entirely but to develop strategies to prevent them from affecting patient care.");
-  const traumaInformedContent = useEditableText("cc-trauma-informed-content", "Trauma-informed care (TIC) recognizes that many patients have experienced trauma — physical, emotional, sexual, or systemic — and that healthcare encounters can trigger re-traumatization. The five principles are: Safety (ensuring physical and emotional safety), Trustworthiness (maintaining clear boundaries and consistency), Choice (giving patients control over decisions), Collaboration (sharing power in the care relationship), and Empowerment (building on patient strengths). TIC shifts the question from 'What is wrong with you?' to 'What has happened to you?'");
+  const sdohContent = useEditableText("cc-sdoh-content", "Social Determinants of Health (SDOH) are the non-medical factors that influence health outcomes. They include the conditions in which people are born, grow, work, live, and age, and the wider set of forces shaping daily life. SDOH account for 30-55% of health outcomes. far more than clinical care alone. Nurses must assess and address these factors to provide equitable, effective care.");
+  const biasContent = useEditableText("cc-bias-content", "Implicit biases are unconscious attitudes or stereotypes that affect understanding, actions, and decisions. In healthcare, implicit bias can lead to disparities in pain management, diagnostic workups, treatment recommendations, and communication quality. Research shows that healthcare providers hold implicit biases related to race, ethnicity, weight, age, gender identity, socioeconomic status, and disability. Recognizing that everyone holds implicit biases is the first step. the goal is not to eliminate them entirely but to develop strategies to prevent them from affecting patient care.");
+  const traumaInformedContent = useEditableText("cc-trauma-informed-content", "Trauma-informed care (TIC) recognizes that many patients have experienced trauma. physical, emotional, sexual, or systemic. and that healthcare encounters can trigger re-traumatization. The five principles are: Safety (ensuring physical and emotional safety), Trustworthiness (maintaining clear boundaries and consistency), Choice (giving patients control over decisions), Collaboration (sharing power in the care relationship), and Empowerment (building on patient strengths). TIC shifts the question from 'What is wrong with you?' to 'What has happened to you?'");
 
   return (
     <div className="space-y-10" data-testid="module-cultural-competency">
@@ -34,7 +34,7 @@ export function CulturalCompetencyModule() {
           </div>
           <div className="p-4 bg-green-50/60 rounded-xl border border-green-100">
             <p className="text-xs font-semibold text-green-700 mb-1">Nursing Implications</p>
-            <p className="text-xs text-green-600">Screen for SDOH using validated tools. Connect patients to community resources (food banks, housing assistance, transportation). Document SDOH in the medical record using Z-codes (ICD-10). Advocate for policy changes that address upstream determinants. Recognize that non-adherence may reflect barriers — not unwillingness. A patient who misses appointments may lack transportation, not motivation.</p>
+            <p className="text-xs text-green-600">Screen for SDOH using validated tools. Connect patients to community resources (food banks, housing assistance, transportation). Document SDOH in the medical record using Z-codes (ICD-10). Advocate for policy changes that address upstream determinants. Recognize that non-adherence may reflect barriers. not unwillingness. A patient who misses appointments may lack transportation, not motivation.</p>
           </div>
         </div>
         <CognitiveCard
@@ -45,11 +45,11 @@ export function CulturalCompetencyModule() {
       </MicroLesson>
 
       <MicroLesson title="Cultural Humility vs. Cultural Competence" subtitle="Moving from knowledge to lifelong self-reflection" icon={<Heart className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="cc-humility-intro" defaultText="Cultural competence implies a finite endpoint — mastering knowledge about specific cultures. Cultural humility, by contrast, is a lifelong commitment to self-reflection, recognizing power imbalances, and developing mutually respectful partnerships. Modern nursing education increasingly emphasizes humility over competence because no one can master all cultures." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="cc-humility-intro" defaultText="Cultural competence implies a finite endpoint. mastering knowledge about specific cultures. Cultural humility, by contrast, is a lifelong commitment to self-reflection, recognizing power imbalances, and developing mutually respectful partnerships. Modern nursing education increasingly emphasizes humility over competence because no one can master all cultures." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-amber-50/60 rounded-xl border border-amber-100">
             <p className="text-xs font-semibold text-amber-700 mb-1">Cultural Competence (Traditional Model)</p>
-            <p className="text-xs text-amber-600">Knowledge-based approach: learn facts about specific cultural groups. Risk of stereotyping — assuming all members of a group share the same beliefs. Implies an achievable endpoint. Focuses on the provider's knowledge. Example: 'Hispanic patients value family involvement in care decisions.' While sometimes useful, this approach can become reductionist.</p>
+            <p className="text-xs text-amber-600">Knowledge-based approach: learn facts about specific cultural groups. Risk of stereotyping. assuming all members of a group share the same beliefs. Implies an achievable endpoint. Focuses on the provider's knowledge. Example: 'Hispanic patients value family involvement in care decisions.' While sometimes useful, this approach can become reductionist.</p>
           </div>
           <div className="p-4 bg-teal-50/60 rounded-xl border border-teal-100">
             <p className="text-xs font-semibold text-teal-700 mb-1">Cultural Humility (Modern Approach)</p>
@@ -58,12 +58,12 @@ export function CulturalCompetencyModule() {
         </div>
         <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100 mt-3">
           <p className="text-xs font-semibold text-purple-700 mb-1">Culturally Responsive Communication</p>
-          <p className="text-xs text-purple-600"><strong>Use professional interpreters</strong> — never family members (especially children) for medical interpretation. Family members may filter, omit, or add information, and using them creates confidentiality and consent issues. <strong>Health literacy:</strong> Use plain language, teach-back method, visual aids. Approximately 36% of U.S. adults have basic or below-basic health literacy. <strong>Nonverbal awareness:</strong> Eye contact, personal space, and touch norms vary across cultures. <strong>Ask, don't assume:</strong> Every patient is an individual within their cultural context.</p>
+          <p className="text-xs text-purple-600"><strong>Use professional interpreters</strong>. never family members (especially children) for medical interpretation. Family members may filter, omit, or add information, and using them creates confidentiality and consent issues. <strong>Health literacy:</strong> Use plain language, teach-back method, visual aids. Approximately 36% of U.S. adults have basic or below-basic health literacy. <strong>Nonverbal awareness:</strong> Eye contact, personal space, and touch norms vary across cultures. <strong>Ask, don't assume:</strong> Every patient is an individual within their cultural context.</p>
         </div>
       </MicroLesson>
 
       <MicroLesson title="Implicit Bias & Health Disparities" subtitle="Recognizing unconscious influences on clinical decisions" icon={<Shield className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="cc-bias-intro" defaultText="Health disparities are preventable differences in health outcomes between population groups. They persist even when controlling for insurance status, income, and education — suggesting that bias within the healthcare system itself plays a role. Nurses spend more time with patients than any other provider and thus have enormous influence on equitable care delivery." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="cc-bias-intro" defaultText="Health disparities are preventable differences in health outcomes between population groups. They persist even when controlling for insurance status, income, and education. suggesting that bias within the healthcare system itself plays a role. Nurses spend more time with patients than any other provider and thus have enormous influence on equitable care delivery." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
         <ProgressiveReveal
           title={t("data.pre_nursing_cultural_competency.typesOfBiasInHealthcare")}
           cards={[
@@ -101,15 +101,15 @@ export function CulturalCompetencyModule() {
       </MicroLesson>
 
       <MicroLesson title="Trauma-Informed Care & Health Literacy" subtitle="Creating safe, empowering healthcare encounters" icon={<Users className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="cc-tic-intro" defaultText="Trauma is pervasive — the ACE (Adverse Childhood Experiences) study found that nearly two-thirds of adults have experienced at least one adverse childhood experience. Healthcare settings can trigger re-traumatization through power imbalances, loss of control, invasive procedures, and institutional environments. Nurses practicing trauma-informed care create safety and trust that improve outcomes." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="cc-tic-intro" defaultText="Trauma is pervasive. the ACE (Adverse Childhood Experiences) study found that nearly two-thirds of adults have experienced at least one adverse childhood experience. Healthcare settings can trigger re-traumatization through power imbalances, loss of control, invasive procedures, and institutional environments. Nurses practicing trauma-informed care create safety and trust that improve outcomes." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-rose-50/60 rounded-xl border border-rose-100">
             <p className="text-xs font-semibold text-rose-700 mb-1">Five Principles of Trauma-Informed Care</p>
-            <p className="text-xs text-rose-600"><strong>1. Safety:</strong> Physical and emotional safety — explain what you will do before touching the patient. <strong>2. Trustworthiness:</strong> Be consistent, follow through on promises, maintain boundaries. <strong>3. Choice:</strong> Offer options whenever possible — 'Would you prefer to sit or lie down for this procedure?' <strong>4. Collaboration:</strong> Partner with the patient rather than directing them. <strong>5. Empowerment:</strong> Build on patient strengths and resilience.</p>
+            <p className="text-xs text-rose-600"><strong>1. Safety:</strong> Physical and emotional safety. explain what you will do before touching the patient. <strong>2. Trustworthiness:</strong> Be consistent, follow through on promises, maintain boundaries. <strong>3. Choice:</strong> Offer options whenever possible. 'Would you prefer to sit or lie down for this procedure?' <strong>4. Collaboration:</strong> Partner with the patient rather than directing them. <strong>5. Empowerment:</strong> Build on patient strengths and resilience.</p>
           </div>
           <div className="p-4 bg-indigo-50/60 rounded-xl border border-indigo-100">
             <p className="text-xs font-semibold text-indigo-700 mb-1">Health Literacy in Practice</p>
-            <p className="text-xs text-indigo-600"><strong>Teach-back method:</strong> 'Can you tell me in your own words what we discussed?' — confirms understanding without shaming. <strong>Plain language:</strong> Replace 'hypertension' with 'high blood pressure,' 'NPO' with 'nothing to eat or drink.' <strong>Visual aids:</strong> Use diagrams, models, and written materials at 5th-6th grade reading level. <strong>Chunk and check:</strong> Give 2-3 pieces of information, then check understanding before continuing. <strong>Universal precautions approach:</strong> Assume all patients may have limited health literacy — clear communication benefits everyone.</p>
+            <p className="text-xs text-indigo-600"><strong>Teach-back method:</strong> 'Can you tell me in your own words what we discussed?'. confirms understanding without shaming. <strong>Plain language:</strong> Replace 'hypertension' with 'high blood pressure,' 'NPO' with 'nothing to eat or drink.' <strong>Visual aids:</strong> Use diagrams, models, and written materials at 5th-6th grade reading level. <strong>Chunk and check:</strong> Give 2-3 pieces of information, then check understanding before continuing. <strong>Universal precautions approach:</strong> Assume all patients may have limited health literacy. clear communication benefits everyone.</p>
           </div>
         </div>
         <CognitiveCard
@@ -139,7 +139,7 @@ export function CulturalCompetencyModule() {
             question: "Which factor accounts for the LARGEST proportion of health outcomes?",
             options: ["Clinical healthcare quality", "Genetics and biology", "Social determinants of health", "Individual health behaviors alone"],
             correctIndex: 2,
-            rationale: "Social determinants of health (SDOH) account for 30-55% of health outcomes — more than clinical care, genetics, or individual behaviors alone. This includes factors like income, education, housing, and community context.",
+            rationale: "Social determinants of health (SDOH) account for 30-55% of health outcomes. more than clinical care, genetics, or individual behaviors alone. This includes factors like income, education, housing, and community context.",
           },
           {
             id: "cc2",
@@ -167,21 +167,21 @@ export function CulturalCompetencyModule() {
             question: "Implicit bias in healthcare is BEST described as:",
             options: ["Intentional discrimination against certain patient groups", "Unconscious attitudes that influence clinical decisions without awareness", "A problem limited to older healthcare providers", "Bias that only affects pain management decisions"],
             correctIndex: 1,
-            rationale: "Implicit biases are unconscious attitudes that affect understanding, actions, and decisions. All healthcare providers hold implicit biases — the goal is to recognize them and develop strategies to prevent them from affecting patient care.",
+            rationale: "Implicit biases are unconscious attitudes that affect understanding, actions, and decisions. All healthcare providers hold implicit biases. the goal is to recognize them and develop strategies to prevent them from affecting patient care.",
           },
           {
             id: "cc6",
             question: "The teach-back method involves:",
             options: ["Teaching patients to read medical charts", "Having patients repeat medical terminology", "Asking patients to explain information in their own words to verify understanding", "Providing patients with textbooks about their condition"],
             correctIndex: 2,
-            rationale: "The teach-back method asks patients to restate information in their own words — 'Can you tell me what we discussed about your medications?' This confirms understanding without shaming and identifies gaps in comprehension.",
+            rationale: "The teach-back method asks patients to restate information in their own words. 'Can you tell me what we discussed about your medications?' This confirms understanding without shaming and identifies gaps in comprehension.",
           },
           {
             id: "cc7",
             question: "Which principle of trauma-informed care involves giving patients control over healthcare decisions?",
             options: ["Safety", "Trustworthiness", "Choice", "Collaboration"],
             correctIndex: 2,
-            rationale: "Choice means offering patients options whenever possible — 'Would you prefer to sit or lie down?' 'Would you like a same-gender provider?' Giving control back to patients who have experienced trauma supports healing and trust.",
+            rationale: "Choice means offering patients options whenever possible. 'Would you prefer to sit or lie down?' 'Would you like a same-gender provider?' Giving control back to patients who have experienced trauma supports healing and trust.",
           },
           {
             id: "cc8",
@@ -200,7 +200,7 @@ export function CulturalCompetencyModule() {
           {
             id: "cc10",
             question: "Health literacy is BEST assessed by:",
-            options: ["Asking patients their education level", "Observing whether patients can read consent forms", "Using a universal precautions approach — assuming all patients may benefit from clear communication", "Testing patients with vocabulary quizzes"],
+            options: ["Asking patients their education level", "Observing whether patients can read consent forms", "Using a universal precautions approach. assuming all patients may benefit from clear communication", "Testing patients with vocabulary quizzes"],
             correctIndex: 2,
             rationale: "The universal precautions approach to health literacy means providing clear, plain-language communication to ALL patients regardless of education level. Education level does not reliably predict health literacy, and testing creates shame.",
           },
@@ -237,7 +237,7 @@ export function CulturalCompetencyModule() {
             question: "A nurse is caring for a patient from an unfamiliar cultural background. The BEST approach is to:",
             options: ["Research stereotypes about that culture online", "Assume the patient follows all traditional practices of their culture", "Ask the patient open-ended questions about their preferences and beliefs", "Treat the patient exactly the same as all other patients without asking about preferences"],
             correctIndex: 2,
-            rationale: "Cultural humility involves asking open-ended questions — 'What is important to you about your care?' 'Are there cultural or spiritual practices I should know about?' This treats the patient as the expert on their own experience without stereotyping.",
+            rationale: "Cultural humility involves asking open-ended questions. 'What is important to you about your care?' 'Are there cultural or spiritual practices I should know about?' This treats the patient as the expert on their own experience without stereotyping.",
           },
           {
             id: "cc16",
@@ -249,7 +249,7 @@ export function CulturalCompetencyModule() {
           {
             id: "cc17",
             question: "Which strategy is MOST effective for communicating complex health information to patients with low health literacy?",
-            options: ["Providing detailed written instructions with medical terminology", "Using the chunk-and-check method — giving 2-3 pieces of information then verifying understanding", "Speaking louder and more slowly", "Giving all instructions at once to save time"],
+            options: ["Providing detailed written instructions with medical terminology", "Using the chunk-and-check method. giving 2-3 pieces of information then verifying understanding", "Speaking louder and more slowly", "Giving all instructions at once to save time"],
             correctIndex: 1,
             rationale: "Chunk-and-check involves delivering 2-3 pieces of information, then checking understanding before continuing. This prevents cognitive overload and allows clarification in real-time. Combined with plain language and teach-back, it significantly improves comprehension.",
           },
@@ -272,7 +272,7 @@ export function CulturalCompetencyModule() {
             question: "Health disparities BEST refer to:",
             options: ["Normal variations in health outcomes between individuals", "Preventable differences in health outcomes between population groups", "Differences in healthcare costs between hospitals", "Variations in provider specialization"],
             correctIndex: 1,
-            rationale: "Health disparities are preventable differences in health outcomes experienced by socially disadvantaged populations. They are linked to historical and current inequities in social, economic, and environmental conditions — not to biological differences between groups.",
+            rationale: "Health disparities are preventable differences in health outcomes experienced by socially disadvantaged populations. They are linked to historical and current inequities in social, economic, and environmental conditions. not to biological differences between groups.",
           },
         ]}
       />

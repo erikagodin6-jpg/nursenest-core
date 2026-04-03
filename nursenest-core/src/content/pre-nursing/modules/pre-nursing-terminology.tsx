@@ -14,7 +14,7 @@ import { BookOpen, Layers, Brain, FileText } from "lucide-react";
 
 export function MedicalTerminologyModule() {
   const { t } = usePreNursingT();
-  const decodingAction = useEditableText("medterm-decoding-action", "Electrocardiography: electr/o (electrical) + cardi/o (heart) + -graphy (process of recording) = the process of recording the electrical activity of the heart. You don't need to memorize this — you can construct the meaning from parts.");
+  const decodingAction = useEditableText("medterm-decoding-action", "Electrocardiography: electr/o (electrical) + cardi/o (heart) + -graphy (process of recording) = the process of recording the electrical activity of the heart. You don't need to memorize this. you can construct the meaning from parts.");
   const otomyConfusion = useEditableText("medterm-otomy-confusion", "These three sound similar but mean very different things. -Otomy = cutting into (the structure remains). -Ostomy = creating a permanent opening. -Ectomy = removing entirely. A tracheotomy cuts into the trachea; a tracheostomy creates a permanent opening; a tonsillectomy removes the tonsils.");
 
   return (
@@ -25,7 +25,7 @@ export function MedicalTerminologyModule() {
       </div>
 
       <MicroLesson title="How Medical Language Works" subtitle="A systematic approach to decoding medical terms" icon={<BookOpen className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="medterm-how-language-content" defaultText={`Medical terminology follows a logical construction system. Every medical term is assembled from building blocks: a root (the core meaning, usually an organ or structure), a prefix (modifies meaning — location, number, time), and a suffix (indicates procedure, condition, or function).`} as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="medterm-how-language-content" defaultText={`Medical terminology follows a logical construction system. Every medical term is assembled from building blocks: a root (the core meaning, usually an organ or structure), a prefix (modifies meaning. location, number, time), and a suffix (indicates procedure, condition, or function).`} as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
         <div className="grid sm:grid-cols-3 gap-3 mt-3">
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
             <p className="text-xs font-semibold text-blue-700 mb-1">Root / Combining Form</p>
@@ -74,7 +74,7 @@ export function MedicalTerminologyModule() {
               id: "mt4",
               title: "Neurological",
               summary: "Brain and nerve roots",
-              detail: "Neur/o (nerve), cerebr/o or encephal/o (brain), mening/o (meninges), myel/o (spinal cord or bone marrow — context matters), psych/o (mind), cephal/o (head). Example: Encephalitis = encephal/o + -itis (inflammation).",
+              detail: "Neur/o (nerve), cerebr/o or encephal/o (brain), mening/o (meninges), myel/o (spinal cord or bone marrow. context matters), psych/o (mind), cephal/o (head). Example: Encephalitis = encephal/o + -itis (inflammation).",
             },
             {
               id: "mt5",
@@ -150,8 +150,8 @@ export function MedicalTerminologyModule() {
             <p className="text-xs text-green-600">BP (blood pressure), HR (heart rate), RR (respiratory rate), SpO2 (oxygen saturation), BID (twice daily), TID (three times daily), PO (by mouth), IV (intravenous), IM (intramuscular), SubQ (subcutaneous), NPO (nothing by mouth)</p>
           </div>
           <div className="p-4 bg-red-50/60 rounded-xl border border-red-100">
-            <p className="text-xs font-semibold text-red-700 mb-1">Dangerous — Do Not Use</p>
-            <p className="text-xs text-red-600">U (for units — mistaken for 0), QD/QOD (mistaken for each other), trailing zeros (1.0 mg read as 10 mg), MS (morphine sulfate or magnesium sulfate?), IU (mistaken for IV), μg (mistaken for mg)</p>
+            <p className="text-xs font-semibold text-red-700 mb-1">Dangerous. Do Not Use</p>
+            <p className="text-xs text-red-600">U (for units. mistaken for 0), QD/QOD (mistaken for each other), trailing zeros (1.0 mg read as 10 mg), MS (morphine sulfate or magnesium sulfate?), IU (mistaken for IV), μg (mistaken for mg)</p>
           </div>
         </div>
         <div className="mt-3 p-4 bg-indigo-50/60 rounded-xl border border-indigo-100">
@@ -191,14 +191,14 @@ export function MedicalTerminologyModule() {
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-violet-50/60 rounded-xl border border-violet-100">
             <p className="text-xs font-semibold text-violet-700 mb-2">SBAR Communication Using Medical Terms</p>
-            <p className="text-xs text-violet-600">The SBAR framework (Situation, Background, Assessment, Recommendation) requires precise medical terminology. For example: Situation — the patient is experiencing tachycardia with a heart rate of 128 and diaphoresis. Background — the patient has a history of atrial fibrillation and is prescribed metoprolol 25 mg BID. Assessment — the patient may be experiencing breakthrough atrial fibrillation or medication non-adherence. Recommendation — requesting an ECG and cardiac enzyme panel stat. Notice how every medical term carries specific clinical meaning that would be lost with non-medical language.</p>
+            <p className="text-xs text-violet-600">The SBAR framework (Situation, Background, Assessment, Recommendation) requires precise medical terminology. For example: Situation. the patient is experiencing tachycardia with a heart rate of 128 and diaphoresis. Background. the patient has a history of atrial fibrillation and is prescribed metoprolol 25 mg BID. Assessment. the patient may be experiencing breakthrough atrial fibrillation or medication non-adherence. Recommendation. requesting an ECG and cardiac enzyme panel stat. Notice how every medical term carries specific clinical meaning that would be lost with non-medical language.</p>
           </div>
           <div className="p-4 bg-orange-50/60 rounded-xl border border-orange-100">
             <p className="text-xs font-semibold text-orange-700 mb-2">Charting with Precision</p>
-            <p className="text-xs text-orange-600">Documentation in nursing requires exact terminology. Instead of writing that a wound looks bad, a nurse charts that the wound bed demonstrates erythema with serosanguineous drainage and a two-centimeter area of induration at the periwound margin. This language is not just professional — it communicates specific clinical findings that other providers can interpret consistently. Erythema means redness indicating inflammation, serosanguineous describes drainage that is both serous (clear) and bloody, and induration means firmness or hardening of tissue.</p>
+            <p className="text-xs text-orange-600">Documentation in nursing requires exact terminology. Instead of writing that a wound looks bad, a nurse charts that the wound bed demonstrates erythema with serosanguineous drainage and a two-centimeter area of induration at the periwound margin. This language is not just professional. it communicates specific clinical findings that other providers can interpret consistently. Erythema means redness indicating inflammation, serosanguineous describes drainage that is both serous (clear) and bloody, and induration means firmness or hardening of tissue.</p>
           </div>
           <div className="p-4 bg-lime-50/60 rounded-xl border border-lime-100">
-            <p className="text-xs font-semibold text-lime-700 mb-2">Patient Education — Translating Terms</p>
+            <p className="text-xs font-semibold text-lime-700 mb-2">Patient Education. Translating Terms</p>
             <p className="text-xs text-lime-600">Nurses bridge the gap between medical terminology and patient understanding. When a patient is told they have peripheral neuropathy, the nurse explains that the nerves in their hands and feet are damaged, which may cause tingling, numbness, or burning sensations. When a patient is diagnosed with cholelithiasis, the nurse explains that they have gallstones. This translation skill requires deep understanding of the medical terms so you can accurately simplify without losing critical meaning.</p>
           </div>
         </div>
@@ -236,7 +236,7 @@ export function MedicalTerminologyModule() {
           </div>
           <div className="p-4 bg-emerald-50/60 rounded-xl border border-emerald-100">
             <p className="text-xs font-semibold text-emerald-700 mb-2">Abdominal Regions</p>
-            <p className="text-xs text-emerald-600">The abdomen is divided into nine regions or four quadrants. The four-quadrant system is most common in clinical practice: right upper quadrant (RUQ) contains the liver and gallbladder, left upper quadrant (LUQ) contains the spleen and stomach, right lower quadrant (RLQ) contains the appendix and cecum, and left lower quadrant (LLQ) contains the sigmoid colon. When documenting abdominal pain, always specify the quadrant — this guides differential diagnosis and further investigation.</p>
+            <p className="text-xs text-emerald-600">The abdomen is divided into nine regions or four quadrants. The four-quadrant system is most common in clinical practice: right upper quadrant (RUQ) contains the liver and gallbladder, left upper quadrant (LUQ) contains the spleen and stomach, right lower quadrant (RLQ) contains the appendix and cecum, and left lower quadrant (LLQ) contains the sigmoid colon. When documenting abdominal pain, always specify the quadrant. this guides differential diagnosis and further investigation.</p>
           </div>
         </div>
       </MicroLesson>

@@ -115,7 +115,7 @@ function buildMomentumMessages(args: {
   if (args.streakDays >= 3) {
     out.push(
       args.streakDays >= 7
-        ? `You have a ${args.streakDays}-day study streak—consistency like this compounds.`
+        ? `You have a ${args.streakDays}-day study streak. Consistency like this compounds.`
         : `${args.streakDays} days in a row with activity. Keep the chain going.`,
     );
   }
@@ -129,19 +129,19 @@ function buildMomentumMessages(args: {
   }
 
   if (args.topStrongTopic) {
-    out.push(`You’re building real strength in ${args.topStrongTopic}—balance it with one weak-topic set per session.`);
+    out.push(`You’re building real strength in ${args.topStrongTopic}. Balance it with one weak-topic set per session.`);
   }
 
   if (args.lessonPct >= 40 && args.lessonPct < 85) {
-    out.push(`You’re past the early stretch of your lesson plan (${args.lessonPct}% complete)—momentum matters now.`);
+    out.push(`You’re past the early stretch of your lesson plan (${args.lessonPct}% complete). Momentum matters now.`);
   }
 
   if (args.readiness.band === "near_ready") {
-    out.push("You’re close to exam-ready on our blended readiness view—tighten weak topics and run one more full mock.");
+    out.push("You’re close to exam-ready on our blended readiness view. Tighten weak topics and run one more full mock.");
   } else if (args.readiness.band === "ready") {
-    out.push("Signals look strong—stay exam-sharp with spaced mocks, sleep, and light review.");
+    out.push("Signals look strong. Stay exam-sharp with spaced mocks, sleep, and light review.");
   } else if (args.readiness.band === "improving") {
-    out.push("Trajectory is positive—add one more scored block this week to solidify gains.");
+    out.push("Trajectory is positive. Add one more scored block this week to solidify gains.");
   }
 
   return [...new Set(out)].slice(0, 4);
@@ -172,7 +172,7 @@ function milestoneLines(args: {
   if (args.lessonPct >= 25 && args.lessonPct < 100) {
     lines.push(`${args.lessonPct}% of your lesson pool complete`);
   } else if (args.lessonPct >= 100) {
-    lines.push("Lesson pool complete for your plan—rotate mocks and weak-topic drills.");
+    lines.push("Lesson pool complete for your plan. Rotate mocks and weak-topic drills.");
   }
 
   const bestPath = [...args.pathways].sort((a, b) => b.pct - a.pct)[0];

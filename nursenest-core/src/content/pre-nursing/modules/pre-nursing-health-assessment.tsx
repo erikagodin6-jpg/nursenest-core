@@ -14,9 +14,9 @@ import { Stethoscope, ClipboardList, Activity, Eye } from "lucide-react";
 
 export function HealthAssessmentModule() {
   const { t } = usePreNursingT();
-  const subjectiveVsObjectiveContent = useEditableText("ha-subjective-objective-content", "Subjective data is information reported by the patient — symptoms, feelings, perceptions, and history. Only the patient can provide this data (e.g., 'I feel dizzy,' 'My pain is 7/10'). Objective data is observable, measurable information obtained through examination, diagnostic tests, and direct observation (e.g., BP 148/92, temperature 38.5°C, crackles auscultated in lung bases). The distinction matters because nursing diagnoses and clinical decisions require both types of data to form a complete clinical picture.");
+  const subjectiveVsObjectiveContent = useEditableText("ha-subjective-objective-content", "Subjective data is information reported by the patient. symptoms, feelings, perceptions, and history. Only the patient can provide this data (e.g., 'I feel dizzy,' 'My pain is 7/10'). Objective data is observable, measurable information obtained through examination, diagnostic tests, and direct observation (e.g., BP 148/92, temperature 38.5°C, crackles auscultated in lung bases). The distinction matters because nursing diagnoses and clinical decisions require both types of data to form a complete clinical picture.");
   const redFlagsContent = useEditableText("ha-red-flags-content", "Red flags are assessment findings that require immediate intervention or escalation. Key red flags include: sudden change in level of consciousness (stroke, hypoglycemia, increased ICP), new-onset chest pain with diaphoresis (MI), respiratory distress with SpO2 < 90% (respiratory failure), systolic BP < 90 mmHg (shock), unilateral weakness or speech changes (stroke), rigid/board-like abdomen (peritonitis), and asymmetric pupils (increased ICP, herniation). When you identify a red flag, stop the routine assessment and activate the appropriate emergency response.");
-  const documentationContent = useEditableText("ha-documentation-content", "SOAP notes organize documentation into Subjective (patient's report), Objective (measurable findings), Assessment (clinical judgment/diagnosis), and Plan (interventions). Focus charting uses DAR: Data (subjective + objective), Action (nursing interventions), and Response (patient outcomes). Narrative charting tells the story chronologically but can be disorganized. Exception-based charting documents only deviations from normal, saving time but risking missed documentation. Always document assessment findings promptly, accurately, and objectively — avoid subjective language like 'patient seems fine.'");
+  const documentationContent = useEditableText("ha-documentation-content", "SOAP notes organize documentation into Subjective (patient's report), Objective (measurable findings), Assessment (clinical judgment/diagnosis), and Plan (interventions). Focus charting uses DAR: Data (subjective + objective), Action (nursing interventions), and Response (patient outcomes). Narrative charting tells the story chronologically but can be disorganized. Exception-based charting documents only deviations from normal, saving time but risking missed documentation. Always document assessment findings promptly, accurately, and objectively. avoid subjective language like 'patient seems fine.'");
 
   return (
     <div className="space-y-10" data-testid="module-health-assessment">
@@ -52,7 +52,7 @@ export function HealthAssessmentModule() {
             {
               id: "ha-inspect",
               title: "Inspection",
-              summary: "Visual examination — always performed first",
+              summary: "Visual examination. always performed first",
               detail: "Inspection uses sight, smell, and hearing to observe the patient before touching. Assess skin color, symmetry, size, shape, contour, movement, and position. Compare bilateral structures. Note odors (fruity breath in DKA, ammonia in renal failure). Inspection begins the moment you enter the room and continues throughout the encounter. Good lighting and adequate exposure are essential.",
             },
             {
@@ -82,7 +82,7 @@ export function HealthAssessmentModule() {
       </MicroLesson>
 
       <MicroLesson title="Vital Signs Interpretation" subtitle="The foundation of every patient assessment" icon={<Activity className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="ha-vitals-intro" defaultText="Vital signs — temperature, pulse, respirations, blood pressure, and oxygen saturation (the 'fifth vital sign') — provide baseline data and indicate physiological status. Trends in vital signs are more clinically significant than single readings." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="ha-vitals-intro" defaultText="Vital signs. temperature, pulse, respirations, blood pressure, and oxygen saturation (the 'fifth vital sign'). provide baseline data and indicate physiological status. Trends in vital signs are more clinically significant than single readings." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
             <p className="text-xs font-semibold text-purple-700 mb-2">Normal Adult Vital Sign Ranges</p>
@@ -152,7 +152,7 @@ export function HealthAssessmentModule() {
             question: "A patient states, 'I feel like my heart is racing.' This is an example of:",
             options: ["Objective data", "Subjective data", "A nursing diagnosis", "An assessment finding"],
             correctIndex: 1,
-            rationale: "The patient's verbal report of their experience is subjective data — it is a symptom that only the patient can perceive and report. Objective data would be the measured heart rate (e.g., HR 112 bpm).",
+            rationale: "The patient's verbal report of their experience is subjective data. it is a symptom that only the patient can perceive and report. Objective data would be the measured heart rate (e.g., HR 112 bpm).",
           },
           {
             id: "ha2",
@@ -199,7 +199,7 @@ export function HealthAssessmentModule() {
           {
             id: "ha8",
             question: "In SOAP documentation, the 'A' stands for:",
-            options: ["Action taken by the nurse", "Assessment — the clinical judgment or diagnosis", "Auscultation findings", "Allergies of the patient"],
+            options: ["Action taken by the nurse", "Assessment. the clinical judgment or diagnosis", "Auscultation findings", "Allergies of the patient"],
             correctIndex: 1,
             rationale: "In SOAP notes, A = Assessment, which represents the nurse's clinical judgment, nursing diagnosis, or interpretation of the subjective and objective data. It is the analytical component of the note.",
           },
@@ -257,7 +257,7 @@ export function HealthAssessmentModule() {
             question: "Which finding is a RED FLAG requiring immediate intervention?",
             options: ["BP 132/84 mmHg", "Temperature 37.8°C", "New onset unilateral weakness with slurred speech", "Respiratory rate of 18 breaths/min"],
             correctIndex: 2,
-            rationale: "New-onset unilateral weakness with speech changes is a red flag for acute stroke. This requires immediate activation of the stroke response team — 'time is brain.' The other findings are mildly abnormal or normal and do not require emergent action.",
+            rationale: "New-onset unilateral weakness with speech changes is a red flag for acute stroke. This requires immediate activation of the stroke response team. 'time is brain.' The other findings are mildly abnormal or normal and do not require emergent action.",
           },
           {
             id: "ha17",

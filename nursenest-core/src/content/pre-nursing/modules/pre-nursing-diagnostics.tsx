@@ -14,8 +14,8 @@ import { Microscope, Activity, Scan, FlaskConical, Radio } from "lucide-react";
 
 export function DiagnosticsModule() {
   const { t } = usePreNursingT();
-  const contrastMediaContent = useEditableText("diag-contrast-media-content", "Contrast media enhances imaging by increasing the difference in density between structures. Iodinated contrast is used for CT scans and angiography; gadolinium-based contrast is used for MRI. Patients must be screened for allergies (especially iodine/shellfish for CT contrast), renal function (contrast can cause nephropathy — check creatinine/GFR before administration), and metformin use (must be held 48 hours post-contrast to prevent lactic acidosis). Signs of contrast reaction range from mild (hives, itching) to severe (anaphylaxis with bronchospasm and hypotension). Emergency equipment must be immediately available.");
-  const sensitivitySpecificityContent = useEditableText("diag-sensitivity-specificity-content", "Sensitivity and specificity are fundamental properties of diagnostic tests. Sensitivity (true positive rate) answers: 'If the patient HAS the disease, will the test detect it?' A highly sensitive test rarely misses disease — useful for screening (rule OUT). Specificity (true positive rate for negatives) answers: 'If the patient does NOT have the disease, will the test correctly show negative?' A highly specific test rarely gives false positives — useful for confirmation (rule IN). Memory aid: SN-N-OUT (Sensitive test, Negative result, rules OUT disease) and SP-P-IN (Specific test, Positive result, rules IN disease).");
+  const contrastMediaContent = useEditableText("diag-contrast-media-content", "Contrast media enhances imaging by increasing the difference in density between structures. Iodinated contrast is used for CT scans and angiography; gadolinium-based contrast is used for MRI. Patients must be screened for allergies (especially iodine/shellfish for CT contrast), renal function (contrast can cause nephropathy. check creatinine/GFR before administration), and metformin use (must be held 48 hours post-contrast to prevent lactic acidosis). Signs of contrast reaction range from mild (hives, itching) to severe (anaphylaxis with bronchospasm and hypotension). Emergency equipment must be immediately available.");
+  const sensitivitySpecificityContent = useEditableText("diag-sensitivity-specificity-content", "Sensitivity and specificity are fundamental properties of diagnostic tests. Sensitivity (true positive rate) answers: 'If the patient HAS the disease, will the test detect it?' A highly sensitive test rarely misses disease. useful for screening (rule OUT). Specificity (true positive rate for negatives) answers: 'If the patient does NOT have the disease, will the test correctly show negative?' A highly specific test rarely gives false positives. useful for confirmation (rule IN). Memory aid: SN-N-OUT (Sensitive test, Negative result, rules OUT disease) and SP-P-IN (Specific test, Positive result, rules IN disease).");
   const pocTestingContent = useEditableText("diag-poc-testing-content", "Point-of-care testing (POCT) provides rapid results at the bedside, enabling immediate clinical decisions. Common POCT includes: blood glucose monitoring (most common POCT in nursing), urine dipstick analysis, rapid strep tests, pregnancy tests (hCG), troponin for acute MI, INR for anticoagulation monitoring, and arterial blood gases. Advantages include faster turnaround and immediate treatment decisions. Limitations include potentially lower accuracy than central lab testing, need for quality control, and operator-dependent reliability. Nurses must follow facility protocols for POCT quality assurance.");
 
   return (
@@ -34,15 +34,15 @@ export function DiagnosticsModule() {
           </div>
           <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
             <p className="text-xs font-semibold text-purple-700 mb-1">CT Scan (Computed Tomography)</p>
-            <p className="text-xs text-purple-600">Uses X-rays from multiple angles to create cross-sectional images. Best for: trauma assessment, stroke (hemorrhagic vs ischemic), pulmonary embolism, abdominal emergencies, cancer staging. Fast (minutes), excellent detail. Higher radiation dose than X-ray. Often uses iodinated contrast — check allergies and renal function. CT is the gold standard for acute stroke evaluation.</p>
+            <p className="text-xs text-purple-600">Uses X-rays from multiple angles to create cross-sectional images. Best for: trauma assessment, stroke (hemorrhagic vs ischemic), pulmonary embolism, abdominal emergencies, cancer staging. Fast (minutes), excellent detail. Higher radiation dose than X-ray. Often uses iodinated contrast. check allergies and renal function. CT is the gold standard for acute stroke evaluation.</p>
           </div>
           <div className="p-4 bg-green-50/60 rounded-xl border border-green-100">
             <p className="text-xs font-semibold text-green-700 mb-1">MRI (Magnetic Resonance Imaging)</p>
-            <p className="text-xs text-green-600">Uses strong magnetic fields and radio waves — NO ionizing radiation. Best for: brain and spinal cord, soft tissues (ligaments, tendons, cartilage), tumors, cardiac imaging. Superior soft tissue contrast. Takes 30-90 minutes, patient must remain still. Contraindications: pacemakers (most), metallic implants, cochlear implants, metal fragments. Uses gadolinium contrast (check renal function — risk of nephrogenic systemic fibrosis).</p>
+            <p className="text-xs text-green-600">Uses strong magnetic fields and radio waves. NO ionizing radiation. Best for: brain and spinal cord, soft tissues (ligaments, tendons, cartilage), tumors, cardiac imaging. Superior soft tissue contrast. Takes 30-90 minutes, patient must remain still. Contraindications: pacemakers (most), metallic implants, cochlear implants, metal fragments. Uses gadolinium contrast (check renal function. risk of nephrogenic systemic fibrosis).</p>
           </div>
           <div className="p-4 bg-amber-50/60 rounded-xl border border-amber-100">
             <p className="text-xs font-semibold text-amber-700 mb-1">Ultrasound (Sonography)</p>
-            <p className="text-xs text-amber-600">Uses high-frequency sound waves — no radiation. Best for: pregnancy monitoring, gallbladder (stones), cardiac assessment (echocardiogram), vascular studies (DVT), guided procedures (IV placement, biopsies), kidney assessment. Real-time imaging, portable, safe in pregnancy. Limitations: operator-dependent, limited by body habitus and gas/bone interference.</p>
+            <p className="text-xs text-amber-600">Uses high-frequency sound waves. no radiation. Best for: pregnancy monitoring, gallbladder (stones), cardiac assessment (echocardiogram), vascular studies (DVT), guided procedures (IV placement, biopsies), kidney assessment. Real-time imaging, portable, safe in pregnancy. Limitations: operator-dependent, limited by body habitus and gas/bone interference.</p>
           </div>
         </div>
         <CognitiveCard
@@ -88,15 +88,15 @@ export function DiagnosticsModule() {
       </MicroLesson>
 
       <MicroLesson title="Sensitivity vs Specificity" subtitle="Understanding diagnostic test accuracy" icon={<Microscope className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="diag-sens-spec-intro" defaultText="No diagnostic test is perfect. Understanding how tests perform — their ability to correctly identify disease (sensitivity) and correctly identify absence of disease (specificity) — is critical for interpreting results and making clinical decisions. These concepts apply to every test from blood work to imaging." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="diag-sens-spec-intro" defaultText="No diagnostic test is perfect. Understanding how tests perform. their ability to correctly identify disease (sensitivity) and correctly identify absence of disease (specificity). is critical for interpreting results and making clinical decisions. These concepts apply to every test from blood work to imaging." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-emerald-50/60 rounded-xl border border-emerald-100">
             <p className="text-xs font-semibold text-emerald-700 mb-1">High Sensitivity Tests (Screening)</p>
-            <p className="text-xs text-emerald-600">Purpose: Detect as many true cases as possible. Minimizes false negatives. Used when missing a diagnosis is dangerous. Examples: D-dimer for PE (highly sensitive — if negative, PE is very unlikely), HIV screening tests, troponin for MI. Trade-off: May produce more false positives. Memory: SN-N-OUT — a Sensitive test with a Negative result rules OUT disease.</p>
+            <p className="text-xs text-emerald-600">Purpose: Detect as many true cases as possible. Minimizes false negatives. Used when missing a diagnosis is dangerous. Examples: D-dimer for PE (highly sensitive. if negative, PE is very unlikely), HIV screening tests, troponin for MI. Trade-off: May produce more false positives. Memory: SN-N-OUT. a Sensitive test with a Negative result rules OUT disease.</p>
           </div>
           <div className="p-4 bg-orange-50/60 rounded-xl border border-orange-100">
             <p className="text-xs font-semibold text-orange-700 mb-1">High Specificity Tests (Confirmation)</p>
-            <p className="text-xs text-orange-600">Purpose: Confirm disease when positive. Minimizes false positives. Used when a false positive would cause harm (unnecessary treatment, anxiety). Examples: Western blot for HIV confirmation, biopsy for cancer. Trade-off: May miss some true cases (false negatives). Memory: SP-P-IN — a Specific test with a Positive result rules IN disease.</p>
+            <p className="text-xs text-orange-600">Purpose: Confirm disease when positive. Minimizes false positives. Used when a false positive would cause harm (unnecessary treatment, anxiety). Examples: Western blot for HIV confirmation, biopsy for cancer. Trade-off: May miss some true cases (false negatives). Memory: SP-P-IN. a Specific test with a Positive result rules IN disease.</p>
           </div>
         </div>
         <CognitiveCard
@@ -115,15 +115,15 @@ export function DiagnosticsModule() {
           </div>
           <div className="p-4 bg-green-50/60 rounded-xl border border-green-100">
             <p className="text-xs font-semibold text-green-700 mb-2">Basic Metabolic Panel (BMP)</p>
-            <p className="text-xs text-green-600">Sodium (135-145 mEq/L): Fluid balance indicator. Potassium (3.5-5.0 mEq/L): Critical for cardiac function — both hypo and hyperkalemia are dangerous. Glucose (70-100 mg/dL fasting): Diabetes management. BUN (7-20 mg/dL) and Creatinine (0.6-1.2 mg/dL): Renal function markers. Calcium (8.5-10.5 mg/dL): Neuromuscular function. CO2/Bicarbonate (22-26 mEq/L): Acid-base balance.</p>
+            <p className="text-xs text-green-600">Sodium (135-145 mEq/L): Fluid balance indicator. Potassium (3.5-5.0 mEq/L): Critical for cardiac function. both hypo and hyperkalemia are dangerous. Glucose (70-100 mg/dL fasting): Diabetes management. BUN (7-20 mg/dL) and Creatinine (0.6-1.2 mg/dL): Renal function markers. Calcium (8.5-10.5 mg/dL): Neuromuscular function. CO2/Bicarbonate (22-26 mEq/L): Acid-base balance.</p>
           </div>
           <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
             <p className="text-xs font-semibold text-purple-700 mb-2">Coagulation Studies</p>
-            <p className="text-xs text-purple-600">PT (11-13.5 seconds): Monitors warfarin therapy (extrinsic pathway). INR (0.8-1.1 normal; 2.0-3.0 therapeutic on warfarin): Standardized PT ratio. aPTT (25-35 seconds): Monitors heparin therapy (intrinsic pathway). Elevated values mean longer clotting time — increased bleeding risk. Critical to check before surgery or invasive procedures.</p>
+            <p className="text-xs text-purple-600">PT (11-13.5 seconds): Monitors warfarin therapy (extrinsic pathway). INR (0.8-1.1 normal; 2.0-3.0 therapeutic on warfarin): Standardized PT ratio. aPTT (25-35 seconds): Monitors heparin therapy (intrinsic pathway). Elevated values mean longer clotting time. increased bleeding risk. Critical to check before surgery or invasive procedures.</p>
           </div>
           <div className="p-4 bg-amber-50/60 rounded-xl border border-amber-100">
             <p className="text-xs font-semibold text-amber-700 mb-2">Comprehensive Metabolic Panel (CMP)</p>
-            <p className="text-xs text-amber-600">Includes everything in BMP plus liver function tests. AST (10-40 U/L) and ALT (7-56 U/L): Liver enzymes — elevated in hepatic damage. Albumin (3.5-5.0 g/dL): Nutritional status and liver synthetic function. Total protein (6.0-8.3 g/dL). Bilirubin (0.1-1.2 mg/dL): Elevated causes jaundice, indicates liver or hemolysis issues. ALP (44-147 U/L): Elevated in bone or biliary disease.</p>
+            <p className="text-xs text-amber-600">Includes everything in BMP plus liver function tests. AST (10-40 U/L) and ALT (7-56 U/L): Liver enzymes. elevated in hepatic damage. Albumin (3.5-5.0 g/dL): Nutritional status and liver synthetic function. Total protein (6.0-8.3 g/dL). Bilirubin (0.1-1.2 mg/dL): Elevated causes jaundice, indicates liver or hemolysis issues. ALP (44-147 U/L): Elevated in bone or biliary disease.</p>
           </div>
         </div>
         <CognitiveCard
@@ -160,7 +160,7 @@ export function DiagnosticsModule() {
             question: "The P wave on an ECG represents:",
             options: ["Ventricular depolarization", "Atrial depolarization", "Ventricular repolarization", "Atrial repolarization"],
             correctIndex: 1,
-            rationale: "The P wave represents atrial depolarization — the electrical activation that triggers atrial contraction. It should appear before every QRS complex in normal sinus rhythm.",
+            rationale: "The P wave represents atrial depolarization. the electrical activation that triggers atrial contraction. It should appear before every QRS complex in normal sinus rhythm.",
           },
           {
             id: "diag3",
@@ -216,7 +216,7 @@ export function DiagnosticsModule() {
             question: "The QRS complex on an ECG represents:",
             options: ["Atrial depolarization", "Atrial repolarization", "Ventricular depolarization", "Ventricular repolarization"],
             correctIndex: 2,
-            rationale: "The QRS complex represents ventricular depolarization — the electrical activation that triggers ventricular contraction. Normal QRS duration is 0.06-0.12 seconds; a widened QRS suggests conduction abnormalities.",
+            rationale: "The QRS complex represents ventricular depolarization. the electrical activation that triggers ventricular contraction. Normal QRS duration is 0.06-0.12 seconds; a widened QRS suggests conduction abnormalities.",
           },
           {
             id: "diag11",

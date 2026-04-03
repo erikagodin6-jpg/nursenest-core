@@ -14,18 +14,18 @@ import { Scale, Shield, BookOpen, Heart } from "lucide-react";
 
 export function EthicsLegalModule() {
   const { t } = usePreNursingT();
-  const principlesConflict = useEditableText("ethics-principles-conflict", "A competent adult patient refuses a blood transfusion based on religious beliefs, but without it they may die. Autonomy says respect their decision. Beneficence says intervene to save their life. This is an ethical dilemma — and in most legal frameworks, autonomy prevails for competent adults. Recognizing these tensions and reasoning through them is the foundation of ethical practice.");
+  const principlesConflict = useEditableText("ethics-principles-conflict", "A competent adult patient refuses a blood transfusion based on religious beliefs, but without it they may die. Autonomy says respect their decision. Beneficence says intervene to save their life. This is an ethical dilemma. and in most legal frameworks, autonomy prevails for competent adults. Recognizing these tensions and reasoning through them is the foundation of ethical practice.");
   const mandatoryReporting = useEditableText("ethics-mandatory-reporting", "Confidentiality is not absolute. Healthcare providers are legally required to report: suspected child abuse or neglect, suspected elder abuse, certain communicable diseases (to public health), gunshot wounds and stab wounds, threats of harm to self or others (duty to warn/protect). These reporting obligations override patient confidentiality.");
 
   return (
     <div className="space-y-10" data-testid="module-ethics-legal">
       <div>
         <EditableModuleText sectionKey="ethics-title" defaultText="Ethical & Legal Foundations" as="h2" className="text-2xl font-bold text-gray-900 mb-2" />
-        <EditableModuleText sectionKey="ethics-desc" defaultText="Understand the bioethics principles, legal concepts, patient rights, and professional standards that govern healthcare practice — foundational knowledge for safe, ethical nursing." as="p" className="text-gray-600" multiline />
+        <EditableModuleText sectionKey="ethics-desc" defaultText="Understand the bioethics principles, legal concepts, patient rights, and professional standards that govern healthcare practice. foundational knowledge for safe, ethical nursing." as="p" className="text-gray-600" multiline />
       </div>
 
       <MicroLesson title="Bioethics Principles" subtitle="The four pillars of healthcare ethics" icon={<Heart className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="ethics-bioethics-content" defaultText="Healthcare ethics is built on four core bioethics principles — Autonomy (patient self-determination), Beneficence (doing good), Nonmaleficence (do no harm), and Justice (fairness in resource allocation) — established by Beauchamp and Childress. When these principles conflict — and they frequently do — ethical reasoning requires balancing them thoughtfully." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="ethics-bioethics-content" defaultText="Healthcare ethics is built on four core bioethics principles. Autonomy (patient self-determination), Beneficence (doing good), Nonmaleficence (do no harm), and Justice (fairness in resource allocation). established by Beauchamp and Childress. When these principles conflict. and they frequently do. ethical reasoning requires balancing them thoughtfully." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
         <ProgressiveReveal
           title={t("data.pre_nursing_ethics_legal.theFourPrinciples")}
           cards={[
@@ -39,13 +39,13 @@ export function EthicsLegalModule() {
               id: "ep2",
               title: "Beneficence",
               summary: "Acting in the patient's best interest",
-              detail: "The obligation to do good — to act in ways that benefit the patient. This goes beyond simply avoiding harm; it requires actively promoting the patient's well-being. It includes providing competent care, advocating for patients, and balancing benefits against risks of interventions.",
+              detail: "The obligation to do good. to act in ways that benefit the patient. This goes beyond simply avoiding harm; it requires actively promoting the patient's well-being. It includes providing competent care, advocating for patients, and balancing benefits against risks of interventions.",
             },
             {
               id: "ep3",
               title: "Nonmaleficence",
               summary: "First, do no harm",
-              detail: "The obligation to avoid causing harm. Every intervention carries potential risks — nonmaleficence requires that the expected benefit outweighs the potential harm. This principle drives medication safety checks, fall prevention protocols, and the careful assessment of intervention risks.",
+              detail: "The obligation to avoid causing harm. Every intervention carries potential risks. nonmaleficence requires that the expected benefit outweighs the potential harm. This principle drives medication safety checks, fall prevention protocols, and the careful assessment of intervention risks.",
             },
             {
               id: "ep4",
@@ -63,7 +63,7 @@ export function EthicsLegalModule() {
       </MicroLesson>
 
       <MicroLesson title="Informed Consent" subtitle="More than a signature" icon={<BookOpen className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="ethics-consent-content" defaultText="Informed consent is a process, not a form. The signed form is documentation that the process occurred. The actual consent process involves a conversation where the provider explains the procedure, its risks, benefits, alternatives, and the right to refuse — and the patient demonstrates understanding before agreeing. It is the practical application of the autonomy principle." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="ethics-consent-content" defaultText="Informed consent is a process, not a form. The signed form is documentation that the process occurred. The actual consent process involves a conversation where the provider explains the procedure, its risks, benefits, alternatives, and the right to refuse. and the patient demonstrates understanding before agreeing. It is the practical application of the autonomy principle." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
             <p className="text-xs font-semibold text-blue-700 mb-1">Required Elements</p>
@@ -75,13 +75,13 @@ export function EthicsLegalModule() {
           </div>
           <div className="p-4 bg-red-50/60 rounded-xl border border-red-100">
             <p className="text-xs font-semibold text-red-700 mb-1">Exceptions to Informed Consent</p>
-            <p className="text-xs text-red-600"><strong>Emergency:</strong> When delay would cause death or serious harm and consent cannot be obtained. <strong>Therapeutic privilege:</strong> Rare — when disclosure would cause serious psychological harm. <strong>Patient waiver:</strong> Patient explicitly states they don't want to know details. <strong>Implied consent:</strong> Patient presents for routine care (e.g., extending arm for blood draw).</p>
+            <p className="text-xs text-red-600"><strong>Emergency:</strong> When delay would cause death or serious harm and consent cannot be obtained. <strong>Therapeutic privilege:</strong> Rare. when disclosure would cause serious psychological harm. <strong>Patient waiver:</strong> Patient explicitly states they don't want to know details. <strong>Implied consent:</strong> Patient presents for routine care (e.g., extending arm for blood draw).</p>
           </div>
         </div>
       </MicroLesson>
 
       <MicroLesson title="Patient Rights & Confidentiality" subtitle="HIPAA, privacy, and patient advocacy" icon={<Shield className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="ethics-rights-content" defaultText="Patient rights are legally protected. Understanding these rights and the duty of confidentiality — the legal and ethical obligation to protect patient health information (PHI), codified in privacy legislation (e.g., HIPAA in the US, PIPEDA in Canada) — is non-negotiable for all healthcare providers. Violations can result in fines, license sanctions, and criminal charges." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="ethics-rights-content" defaultText="Patient rights are legally protected. Understanding these rights and the duty of confidentiality. the legal and ethical obligation to protect patient health information (PHI), codified in privacy legislation (e.g., HIPAA in the US, PIPEDA in Canada). is non-negotiable for all healthcare providers. Violations can result in fines, license sanctions, and criminal charges." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-green-50/60 rounded-xl border border-green-100">
             <p className="text-xs font-semibold text-green-700 mb-1">Core Patient Rights</p>
@@ -89,7 +89,7 @@ export function EthicsLegalModule() {
           </div>
           <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
             <p className="text-xs font-semibold text-purple-700 mb-1">Confidentiality Rules</p>
-            <p className="text-xs text-purple-600"><strong>Minimum necessary:</strong> Only access/share the minimum information needed for your role. <strong>Need to know:</strong> Don't discuss patients with colleagues who are not involved in their care. <strong>Social media:</strong> Never post identifiable patient information, even without names — details can be identifying. <strong>Elevator rule:</strong> Don't discuss patients in public spaces.</p>
+            <p className="text-xs text-purple-600"><strong>Minimum necessary:</strong> Only access/share the minimum information needed for your role. <strong>Need to know:</strong> Don't discuss patients with colleagues who are not involved in their care. <strong>Social media:</strong> Never post identifiable patient information, even without names. details can be identifying. <strong>Elevator rule:</strong> Don't discuss patients in public spaces.</p>
           </div>
         </div>
         <CognitiveCard
@@ -100,11 +100,11 @@ export function EthicsLegalModule() {
       </MicroLesson>
 
       <MicroLesson title="Scope of Practice & Professional Standards" subtitle="Practicing within legal boundaries" icon={<Scale className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="ethics-scope-content" defaultText="Every regulated healthcare professional has a defined scope of practice — the range of activities, procedures, and processes that a regulated healthcare professional is legally authorized to perform based on their education, competency, and registration/licensure. Practicing outside scope of practice is illegal and creates liability." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="ethics-scope-content" defaultText="Every regulated healthcare professional has a defined scope of practice. the range of activities, procedures, and processes that a regulated healthcare professional is legally authorized to perform based on their education, competency, and registration/licensure. Practicing outside scope of practice is illegal and creates liability." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-teal-50/60 rounded-xl border border-teal-100">
             <p className="text-xs font-semibold text-teal-700 mb-1">Key Legal Concepts</p>
-            <p className="text-xs text-teal-600"><strong>Negligence:</strong> Failure to provide care that a reasonable nurse would provide under similar circumstances. Requires four elements: duty, breach of duty, causation, and damages. <strong>Malpractice:</strong> Professional negligence — negligence committed by a professional in the course of their professional duties. <strong>Abandonment:</strong> Terminating the provider-patient relationship without ensuring continuity of care.</p>
+            <p className="text-xs text-teal-600"><strong>Negligence:</strong> Failure to provide care that a reasonable nurse would provide under similar circumstances. Requires four elements: duty, breach of duty, causation, and damages. <strong>Malpractice:</strong> Professional negligence. negligence committed by a professional in the course of their professional duties. <strong>Abandonment:</strong> Terminating the provider-patient relationship without ensuring continuity of care.</p>
           </div>
           <div className="p-4 bg-indigo-50/60 rounded-xl border border-indigo-100">
             <p className="text-xs font-semibold text-indigo-700 mb-1">Delegation Principles</p>
@@ -133,7 +133,7 @@ export function EthicsLegalModule() {
             question: "A competent adult patient refuses life-saving treatment. Which ethical principle supports their right to refuse?",
             options: ["Beneficence", "Justice", "Autonomy", "Nonmaleficence"],
             correctIndex: 2,
-            rationale: "Autonomy — the right to self-determination — gives competent adults the legal and ethical right to refuse any treatment, even if refusal leads to death. Competence and voluntary decision-making are the key requirements.",
+            rationale: "Autonomy. the right to self-determination. gives competent adults the legal and ethical right to refuse any treatment, even if refusal leads to death. Competence and voluntary decision-making are the key requirements.",
           },
           {
             id: "el2",
@@ -147,7 +147,7 @@ export function EthicsLegalModule() {
             question: "A nurse notices a colleague accessing the medical record of a celebrity patient who is not in their care. This is a violation of:",
             options: ["Beneficence", "Scope of practice", "Minimum necessary standard / Confidentiality", "Delegation principles"],
             correctIndex: 2,
-            rationale: "Accessing a patient's record when you are not involved in their care violates the minimum necessary standard — only access the information needed for your role. This is a confidentiality violation regardless of intent.",
+            rationale: "Accessing a patient's record when you are not involved in their care violates the minimum necessary standard. only access the information needed for your role. This is a confidentiality violation regardless of intent.",
           },
           {
             id: "el4",
@@ -210,7 +210,7 @@ export function EthicsLegalModule() {
             question: "Which of the following is an example of malpractice?",
             options: ["A nurse trips in the hallway and falls", "A nurse administers the wrong medication due to failure to check the MAR", "A patient refuses treatment and has a poor outcome", "A nurse follows the physician's correct order"],
             correctIndex: 1,
-            rationale: "Malpractice is professional negligence — failing to meet the standard of care in the course of professional duties. Administering the wrong medication because the nurse did not verify the MAR is a breach of the standard of care that constitutes malpractice.",
+            rationale: "Malpractice is professional negligence. failing to meet the standard of care in the course of professional duties. Administering the wrong medication because the nurse did not verify the MAR is a breach of the standard of care that constitutes malpractice.",
           },
           {
             id: "el13",
@@ -245,14 +245,14 @@ export function EthicsLegalModule() {
             question: "The principle of beneficence is BEST demonstrated when a nurse:",
             options: ["Respects a patient's refusal of medication", "Advocates for a patient to receive pain management", "Reports a medication error to the supervisor", "Distributes supplies equally among patients"],
             correctIndex: 1,
-            rationale: "Beneficence means acting in the patient's best interest — actively promoting their well-being. Advocating for adequate pain management directly benefits the patient. Respecting refusal is autonomy, reporting errors relates to nonmaleficence, and equal distribution relates to justice.",
+            rationale: "Beneficence means acting in the patient's best interest. actively promoting their well-being. Advocating for adequate pain management directly benefits the patient. Respecting refusal is autonomy, reporting errors relates to nonmaleficence, and equal distribution relates to justice.",
           },
           {
             id: "el18",
             question: "A nurse suspects that an elderly patient is being financially exploited by a family member. The nurse is legally obligated to:",
             options: ["Discuss concerns with the family member first", "Document suspicions but take no further action", "Report the suspected abuse to the appropriate authorities", "Wait for physical evidence of abuse before reporting"],
             correctIndex: 2,
-            rationale: "Suspected elder abuse — including financial exploitation — is a mandatory reporting situation. Healthcare providers are legally required to report to the appropriate authorities (e.g., Adult Protective Services). Physical proof is not required; reasonable suspicion is sufficient.",
+            rationale: "Suspected elder abuse. including financial exploitation. is a mandatory reporting situation. Healthcare providers are legally required to report to the appropriate authorities (e.g., Adult Protective Services). Physical proof is not required; reasonable suspicion is sufficient.",
           },
           {
             id: "el19",
@@ -263,10 +263,10 @@ export function EthicsLegalModule() {
           },
           {
             id: "el20",
-            question: "Therapeutic privilege — withholding information from a patient — is ethically justified when:",
+            question: "Therapeutic privilege. withholding information from a patient. is ethically justified when:",
             options: ["The family requests it", "The nurse thinks the information will upset the patient", "Disclosure would cause serious, documented psychological harm to the patient", "The physician prefers not to share bad news"],
             correctIndex: 2,
-            rationale: "Therapeutic privilege is a rare and controversial exception to full disclosure in informed consent. It applies only when there is clear evidence that disclosure would cause serious psychological harm — not simply distress. It must never be used as a convenience or at the request of others.",
+            rationale: "Therapeutic privilege is a rare and controversial exception to full disclosure in informed consent. It applies only when there is clear evidence that disclosure would cause serious psychological harm. not simply distress. It must never be used as a convenience or at the request of others.",
           },
         ]}
       />

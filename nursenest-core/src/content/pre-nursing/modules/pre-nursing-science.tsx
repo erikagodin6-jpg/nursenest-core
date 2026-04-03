@@ -25,10 +25,10 @@ import {
 
 export function ScienceFoundationsModule() {
   const { t } = usePreNursingT();
-  const biosystemsConcept = useEditableText("science-biosystems-concept", "When a patient presents with multi-organ dysfunction, you're seeing the levels of organization failing in reverse — from organism-level symptoms traced back to cellular injury. Understanding this hierarchy helps you prioritize assessments.");
-  const biomoleculesRemember = useEditableText("science-biomolecules-remember", "ATP (adenosine triphosphate) is the universal energy currency. Cells generate ATP primarily through aerobic metabolism (oxygen-dependent). When oxygen is unavailable, anaerobic metabolism produces lactic acid — this is why tissue hypoxia leads to metabolic acidosis.");
+  const biosystemsConcept = useEditableText("science-biosystems-concept", "When a patient presents with multi-organ dysfunction, you're seeing the levels of organization failing in reverse. from organism-level symptoms traced back to cellular injury. Understanding this hierarchy helps you prioritize assessments.");
+  const biomoleculesRemember = useEditableText("science-biomolecules-remember", "ATP (adenosine triphosphate) is the universal energy currency. Cells generate ATP primarily through aerobic metabolism (oxygen-dependent). When oxygen is unavailable, anaerobic metabolism produces lactic acid. this is why tissue hypoxia leads to metabolic acidosis.");
   const dnaWarning = useEditableText("science-dna-warning", "A single nucleotide mutation can alter the protein produced. Sickle cell disease results from one amino acid change in hemoglobin (Glu→Val), causing red blood cells to deform under low oxygen conditions. This is a powerful example of how molecular changes manifest as clinical disease.");
-  const celldivConcept = useEditableText("science-celldiv-concept", "Maintaining accurate DNA replication during division is essential. Checkpoints in the cell cycle catch errors. When these checkpoints fail (e.g., p53 tumor suppressor mutation), cells can proliferate uncontrollably — the basis of cancer development.");
+  const celldivConcept = useEditableText("science-celldiv-concept", "Maintaining accurate DNA replication during division is essential. Checkpoints in the cell cycle catch errors. When these checkpoints fail (e.g., p53 tumor suppressor mutation), cells can proliferate uncontrollably. the basis of cancer development.");
   const microWarning = useEditableText("science-micro-warning", "Antibiotic resistance occurs when bacteria evolve mechanisms to survive antibiotic exposure. Key nursing actions: complete full antibiotic courses, practice meticulous hand hygiene, use contact precautions for resistant organisms (MRSA, VRE, C. diff), and educate patients on proper antibiotic use.");
   const immunityConcept = useEditableText("science-immunity-concept", "Vaccines work by exposing the immune system to a harmless form of a pathogen (inactivated, attenuated, or mRNA-encoded antigen). This triggers adaptive immunity to produce memory B and T cells WITHOUT causing disease. Upon future exposure, the immune system mounts a rapid, targeted response. This is why booster doses enhance the memory response.");
   const chemRemember = useEditableText("science-chem-remember", "When salts dissolve in water, they dissociate into ions (ionization). NaCl → Na+ + Cl⁻. These ions conduct electricity in body fluids, enabling nerve impulses and muscle contractions. Electrolyte imbalances directly affect cardiac rhythm, muscle function, and neurological status.");
@@ -37,20 +37,20 @@ export function ScienceFoundationsModule() {
   const organelleConcept = useEditableText("science-organelle-concept", "Lysosomal storage diseases (Tay-Sachs, Gaucher disease) occur when enzyme deficiencies prevent lysosomes from breaking down specific substrates. Mitochondrial dysfunction is implicated in neurodegenerative diseases. Understanding organelle function reveals why these conditions manifest the way they do.");
   const waterRemember = useEditableText("science-water-remember", "Because water is critical for every metabolic process, dehydration impairs cellular function rapidly. Even 2% body water loss affects cognitive function and cardiovascular performance. This is why fluid balance assessment (intake/output, skin turgor, mucous membranes) is a fundamental nursing skill.");
   const metabolismWarning = useEditableText("science-metabolism-warning", "When cells are deprived of oxygen (ischemia), the electron transport chain halts. Cells revert to anaerobic glycolysis, producing only 2 ATP instead of ~36-38 per glucose. Lactic acid accumulates, pH drops, and cellular enzymes denature. Within minutes, irreversible damage occurs in oxygen-dependent tissues like brain and heart. This is the biochemical basis of stroke and myocardial infarction.");
-  const homeostasisConcept = useEditableText("science-homeostasis-concept", "Diabetes mellitus is a failure of glucose homeostasis — in Type 1, the receptor/effector (beta cells) is destroyed; in Type 2, cells become resistant to the effector (insulin). Fever represents a temporary resetting of the temperature set point by pyrogens. Understanding feedback loops helps you predict how disruptions at any point in the loop will manifest clinically.");
-  const orgchemRemember = useEditableText("science-orgchem-remember", "Large biological molecules are built by dehydration synthesis (removing water to form bonds: amino acids → proteins, monosaccharides → polysaccharides) and broken down by hydrolysis (adding water to break bonds). Digestion is fundamentally hydrolysis — enzymes add water molecules to break food into absorbable units.");
+  const homeostasisConcept = useEditableText("science-homeostasis-concept", "Diabetes mellitus is a failure of glucose homeostasis. in Type 1, the receptor/effector (beta cells) is destroyed; in Type 2, cells become resistant to the effector (insulin). Fever represents a temporary resetting of the temperature set point by pyrogens. Understanding feedback loops helps you predict how disruptions at any point in the loop will manifest clinically.");
+  const orgchemRemember = useEditableText("science-orgchem-remember", "Large biological molecules are built by dehydration synthesis (removing water to form bonds: amino acids → proteins, monosaccharides → polysaccharides) and broken down by hydrolysis (adding water to break bonds). Digestion is fundamentally hydrolysis. enzymes add water molecules to break food into absorbable units.");
 
   return (
     <div className="space-y-10" data-testid="module-science-foundations">
       <div>
         <EditableModuleText sectionKey="science-title" defaultText="Science Foundations" as="h2" className="text-2xl font-bold text-gray-900 mb-2" />
-        <EditableModuleText sectionKey="science-desc" defaultText="Build the essential science knowledge that underpins every nursing concept — from biomolecules to microbiology, chemistry to scientific reasoning." as="p" className="text-gray-600" multiline />
+        <EditableModuleText sectionKey="science-desc" defaultText="Build the essential science knowledge that underpins every nursing concept. from biomolecules to microbiology, chemistry to scientific reasoning." as="p" className="text-gray-600" multiline />
       </div>
 
       <MicroLesson title="Biological Systems" subtitle="Characteristics of life and levels of organization" icon={<Sparkles className="w-5 h-5" />}>
         <p className="text-sm text-gray-600 leading-relaxed">
           All living organisms share fundamental{" "}
-          <HoverReveal term="characteristics of life" definition="Organization, metabolism, responsiveness, growth, reproduction, and homeostasis — the six hallmarks that distinguish living systems from non-living matter." />.
+          <HoverReveal term="characteristics of life" definition="Organization, metabolism, responsiveness, growth, reproduction, and homeostasis. the six hallmarks that distinguish living systems from non-living matter." />.
           Understanding these properties helps nurses recognize when physiological systems deviate from normal.
         </p>
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
@@ -83,7 +83,7 @@ export function ScienceFoundationsModule() {
               id: "bio1",
               title: "Proteins",
               summary: "Structure, enzymes, transport, immunity",
-              detail: "Made of amino acids linked by peptide bonds. Enzymes are biological catalysts that lower activation energy — nearly every metabolic reaction depends on them. Denaturation (by heat, pH change) destroys protein function.",
+              detail: "Made of amino acids linked by peptide bonds. Enzymes are biological catalysts that lower activation energy. nearly every metabolic reaction depends on them. Denaturation (by heat, pH change) destroys protein function.",
             },
             {
               id: "bio2",
@@ -95,12 +95,12 @@ export function ScienceFoundationsModule() {
               id: "bio3",
               title: "Carbohydrates",
               summary: "Primary energy source, structural roles",
-              detail: "Glucose is the body's preferred fuel. Glycogen is the storage form in liver and muscle. Complex carbs provide sustained energy; simple sugars cause rapid glucose spikes — critical for diabetic patient education.",
+              detail: "Glucose is the body's preferred fuel. Glycogen is the storage form in liver and muscle. Complex carbs provide sustained energy; simple sugars cause rapid glucose spikes. critical for diabetic patient education.",
             },
             {
               id: "bio4",
               title: "Nucleic Acids",
-              summary: "DNA and RNA — genetic information storage and expression",
+              summary: "DNA and RNA. genetic information storage and expression",
               detail: "DNA stores the genetic blueprint; RNA translates it into proteins. Mutations in DNA can lead to disease (e.g., sickle cell disease from a single nucleotide change in the hemoglobin gene).",
             },
           ]}
@@ -140,7 +140,7 @@ export function ScienceFoundationsModule() {
             question: "When cells lack oxygen, anaerobic metabolism produces:",
             options: ["Carbon dioxide only", "Lactic acid", "Bicarbonate", "Glucose"],
             correctIndex: 1,
-            rationale: "Without oxygen, cells switch to anaerobic glycolysis, producing lactic acid as a byproduct. Accumulation of lactic acid causes metabolic acidosis — a key indicator of tissue hypoperfusion in shock.",
+            rationale: "Without oxygen, cells switch to anaerobic glycolysis, producing lactic acid as a byproduct. Accumulation of lactic acid causes metabolic acidosis. a key indicator of tissue hypoperfusion in shock.",
             hint: "Think about what happens to a patient's pH when tissues aren't getting enough oxygen.",
           },
           {
@@ -264,7 +264,7 @@ export function ScienceFoundationsModule() {
               id: "mic4",
               title: "Parasites & Prions",
               summary: "Diverse pathogens with unique mechanisms",
-              detail: "Parasites include protozoa (malaria) and helminths (tapeworms). Prions are misfolded proteins that cause fatal neurodegenerative diseases (Creutzfeldt-Jakob disease) — no treatment exists because prions contain no DNA/RNA.",
+              detail: "Parasites include protozoa (malaria) and helminths (tapeworms). Prions are misfolded proteins that cause fatal neurodegenerative diseases (Creutzfeldt-Jakob disease). no treatment exists because prions contain no DNA/RNA.",
             },
           ]}
         />
@@ -280,12 +280,12 @@ export function ScienceFoundationsModule() {
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
             <p className="text-sm font-semibold text-blue-700 mb-1">Innate Immunity</p>
             <p className="text-xs text-blue-600">Non-specific, immediate defense. Present from birth. Includes skin barriers, mucous membranes, phagocytes (neutrophils, macrophages), inflammation, and fever.</p>
-            <p className="text-[10px] text-blue-500 mt-1 italic">First responders — same response regardless of pathogen.</p>
+            <p className="text-[10px] text-blue-500 mt-1 italic">First responders. same response regardless of pathogen.</p>
           </div>
           <div className="p-4 bg-emerald-50/60 rounded-xl border border-emerald-100">
             <p className="text-sm font-semibold text-emerald-700 mb-1">Adaptive Immunity</p>
             <p className="text-xs text-emerald-600">Specific, slower but creates memory. B cells produce antibodies; T cells directly attack infected cells. Takes days to activate initially but responds faster upon re-exposure.</p>
-            <p className="text-[10px] text-emerald-500 mt-1 italic">Targeted response — memory cells provide lasting protection.</p>
+            <p className="text-[10px] text-emerald-500 mt-1 italic">Targeted response. memory cells provide lasting protection.</p>
           </div>
         </div>
         <CognitiveCard
@@ -316,7 +316,7 @@ export function ScienceFoundationsModule() {
             options: ["Administering broad-spectrum antibiotics", "Contact precautions and hand hygiene", "Respiratory isolation only", "No special precautions needed"],
             correctIndex: 1,
             rationale: "MRSA (Methicillin-Resistant Staphylococcus aureus) spreads by contact. Contact precautions (gown, gloves) and meticulous hand hygiene are the primary interventions to prevent transmission.",
-            hint: "Think about how MRSA is transmitted — contact, droplet, or airborne?",
+            hint: "Think about how MRSA is transmitted. contact, droplet, or airborne?",
           },
           {
             id: "sf9",
@@ -411,7 +411,7 @@ export function ScienceFoundationsModule() {
               id: "math2",
               title: "Ratios & Proportions",
               summary: "Comparing quantities and solving for unknowns",
-              detail: "Foundation of dosage calculation. If 250 mg is in 5 mL, how many mL for 100 mg? Set up: 250/5 = 100/x → x = 2 mL. Cross-multiply and divide — the most-used math skill in nursing.",
+              detail: "Foundation of dosage calculation. If 250 mg is in 5 mL, how many mL for 100 mg? Set up: 250/5 = 100/x → x = 2 mL. Cross-multiply and divide. the most-used math skill in nursing.",
             },
             {
               id: "math3",
@@ -484,14 +484,14 @@ export function ScienceFoundationsModule() {
               "A theory is always wrong; a hypothesis is always right",
             ],
             correctIndex: 1,
-            rationale: "A hypothesis is a testable prediction (e.g., 'hand hygiene reduces infection rates'). A theory is a broadly supported explanation backed by extensive evidence (e.g., germ theory). Theories are not 'just guesses' — they represent the strongest level of scientific understanding.",
+            rationale: "A hypothesis is a testable prediction (e.g., 'hand hygiene reduces infection rates'). A theory is a broadly supported explanation backed by extensive evidence (e.g., germ theory). Theories are not 'just guesses'. they represent the strongest level of scientific understanding.",
           },
           {
             id: "sf16",
             question: "A study finds that patients who drink more water have fewer headaches. This demonstrates:",
             options: ["Causation", "Correlation", "A controlled experiment", "A theory"],
             correctIndex: 1,
-            rationale: "This shows correlation (association) — not causation. There could be confounding variables (e.g., people who drink more water may also have healthier lifestyles). Establishing causation requires controlled experimental studies.",
+            rationale: "This shows correlation (association). not causation. There could be confounding variables (e.g., people who drink more water may also have healthier lifestyles). Establishing causation requires controlled experimental studies.",
             hint: "Just because two things happen together doesn't mean one causes the other.",
           },
           {
@@ -522,14 +522,14 @@ export function ScienceFoundationsModule() {
             {
               id: "org2",
               title: "Mitochondria",
-              summary: "Powerhouse — generates ATP via aerobic respiration",
+              summary: "Powerhouse. generates ATP via aerobic respiration",
               detail: "Double-membraned organelle with its own DNA (maternal inheritance). The inner membrane folds (cristae) maximize surface area for the electron transport chain. Produces ~36 ATP per glucose molecule. Cells with high energy demands (cardiac muscle, hepatocytes) have thousands of mitochondria.",
             },
             {
               id: "org3",
               title: "Endoplasmic Reticulum (ER)",
               summary: "Rough ER synthesizes proteins; Smooth ER processes lipids",
-              detail: "Rough ER is studded with ribosomes — it synthesizes secretory proteins and membrane proteins. Smooth ER synthesizes lipids, detoxifies drugs (abundant in liver cells), and stores calcium in muscle cells (sarcoplasmic reticulum).",
+              detail: "Rough ER is studded with ribosomes. it synthesizes secretory proteins and membrane proteins. Smooth ER synthesizes lipids, detoxifies drugs (abundant in liver cells), and stores calcium in muscle cells (sarcoplasmic reticulum).",
             },
             {
               id: "org4",
@@ -541,7 +541,7 @@ export function ScienceFoundationsModule() {
               id: "org5",
               title: "Lysosomes & Peroxisomes",
               summary: "Digestive and detoxification compartments",
-              detail: "Lysosomes contain hydrolytic enzymes (pH ~5) that break down worn-out organelles, bacteria, and cellular debris — autophagy and phagocytosis depend on them. Peroxisomes neutralize toxic hydrogen peroxide (H2O2) using catalase and break down fatty acids via beta-oxidation.",
+              detail: "Lysosomes contain hydrolytic enzymes (pH ~5) that break down worn-out organelles, bacteria, and cellular debris. autophagy and phagocytosis depend on them. Peroxisomes neutralize toxic hydrogen peroxide (H2O2) using catalase and break down fatty acids via beta-oxidation.",
             },
           ]}
         />
@@ -601,17 +601,17 @@ export function ScienceFoundationsModule() {
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-cyan-50/60 rounded-xl border border-cyan-100">
             <p className="text-xs font-semibold text-cyan-700 mb-1">Polarity & Hydrogen Bonding</p>
-            <p className="text-xs text-cyan-600">Water is a polar molecule — oxygen pulls electrons more strongly than hydrogen, creating partial charges. This polarity allows hydrogen bonding between water molecules, giving water high cohesion, adhesion, and surface tension.</p>
+            <p className="text-xs text-cyan-600">Water is a polar molecule. oxygen pulls electrons more strongly than hydrogen, creating partial charges. This polarity allows hydrogen bonding between water molecules, giving water high cohesion, adhesion, and surface tension.</p>
           </div>
           <div className="p-4 bg-sky-50/60 rounded-xl border border-sky-100">
             <p className="text-xs font-semibold text-sky-700 mb-1">High Specific Heat</p>
-            <p className="text-xs text-sky-600">Water resists temperature changes due to extensive hydrogen bonding. This stabilizes body temperature — the body can absorb significant heat before temperature rises. Sweating exploits water's high heat of vaporization for cooling.</p>
+            <p className="text-xs text-sky-600">Water resists temperature changes due to extensive hydrogen bonding. This stabilizes body temperature. the body can absorb significant heat before temperature rises. Sweating exploits water's high heat of vaporization for cooling.</p>
           </div>
         </div>
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
             <p className="text-xs font-semibold text-blue-700 mb-1">Solvent Properties</p>
-            <p className="text-xs text-blue-600">Polar and ionic substances dissolve in water (hydrophilic). Nonpolar substances do not (hydrophobic). This governs drug solubility — water-soluble drugs distribute throughout body fluids while fat-soluble drugs accumulate in adipose tissue.</p>
+            <p className="text-xs text-blue-600">Polar and ionic substances dissolve in water (hydrophilic). Nonpolar substances do not (hydrophobic). This governs drug solubility. water-soluble drugs distribute throughout body fluids while fat-soluble drugs accumulate in adipose tissue.</p>
           </div>
           <div className="p-4 bg-indigo-50/60 rounded-xl border border-indigo-100">
             <p className="text-xs font-semibold text-indigo-700 mb-1">Reactant & Medium</p>
@@ -634,19 +634,19 @@ export function ScienceFoundationsModule() {
               id: "aer1",
               title: "Stage 1: Glycolysis",
               summary: "Glucose → 2 pyruvate (occurs in cytoplasm, no oxygen required)",
-              detail: "Glucose (6-carbon) is split into two pyruvate molecules (3-carbon each). Net yield: 2 ATP and 2 NADH. This is the only pathway that functions without oxygen. When oxygen is absent, pyruvate is converted to lactate (anaerobic metabolism) — this produces far less energy and generates acid.",
+              detail: "Glucose (6-carbon) is split into two pyruvate molecules (3-carbon each). Net yield: 2 ATP and 2 NADH. This is the only pathway that functions without oxygen. When oxygen is absent, pyruvate is converted to lactate (anaerobic metabolism). this produces far less energy and generates acid.",
             },
             {
               id: "aer2",
               title: "Stage 2: Krebs Cycle (Citric Acid Cycle)",
               summary: "Pyruvate → CO₂ + electron carriers (occurs in mitochondrial matrix)",
-              detail: "Pyruvate is converted to acetyl-CoA, which enters the Krebs cycle. Each turn produces CO₂ (exhaled by the lungs), NADH, FADH₂ (electron carriers), and 1 ATP. The CO₂ produced here is the carbon dioxide you breathe out — directly linking cellular metabolism to respiratory function.",
+              detail: "Pyruvate is converted to acetyl-CoA, which enters the Krebs cycle. Each turn produces CO₂ (exhaled by the lungs), NADH, FADH₂ (electron carriers), and 1 ATP. The CO₂ produced here is the carbon dioxide you breathe out. directly linking cellular metabolism to respiratory function.",
             },
             {
               id: "aer3",
               title: "Stage 3: Electron Transport Chain (ETC)",
               summary: "NADH/FADH₂ → ATP (occurs on inner mitochondrial membrane, requires O₂)",
-              detail: "NADH and FADH₂ donate electrons to a series of protein complexes. As electrons pass through, protons are pumped across the membrane, creating a gradient. ATP synthase harnesses this gradient to produce ~34 ATP. Oxygen is the final electron acceptor — without it, the entire chain stops. This is why oxygen deprivation kills cells rapidly.",
+              detail: "NADH and FADH₂ donate electrons to a series of protein complexes. As electrons pass through, protons are pumped across the membrane, creating a gradient. ATP synthase harnesses this gradient to produce ~34 ATP. Oxygen is the final electron acceptor. without it, the entire chain stops. This is why oxygen deprivation kills cells rapidly.",
             },
           ]}
         />
@@ -669,7 +669,7 @@ export function ScienceFoundationsModule() {
             question: "Why does water's high specific heat capacity benefit the human body?",
             options: ["It helps water freeze quickly", "It stabilizes body temperature against rapid changes", "It makes water a poor solvent", "It increases metabolic rate"],
             correctIndex: 1,
-            rationale: "Water's high specific heat means it absorbs large amounts of heat before its temperature rises significantly. This prevents rapid body temperature fluctuations during exercise, fever, or environmental exposure — a critical aspect of thermoregulation.",
+            rationale: "Water's high specific heat means it absorbs large amounts of heat before its temperature rises significantly. This prevents rapid body temperature fluctuations during exercise, fever, or environmental exposure. a critical aspect of thermoregulation.",
           },
           {
             id: "sf22",
@@ -698,7 +698,7 @@ export function ScienceFoundationsModule() {
 
       <MicroLesson title="Homeostasis & Feedback Loops" subtitle="How the body maintains internal stability through self-regulation" icon={<Activity className="w-5 h-5" />}>
         <p className="text-sm text-gray-600 leading-relaxed">
-          <HoverReveal term="Homeostasis" definition="The maintenance of a relatively stable internal environment despite changes in external conditions. It is the single most important concept in physiology — virtually all disease can be understood as a failure of homeostasis." />{" "}
+          <HoverReveal term="Homeostasis" definition="The maintenance of a relatively stable internal environment despite changes in external conditions. It is the single most important concept in physiology. virtually all disease can be understood as a failure of homeostasis." />{" "}
           is the body's ability to maintain stable internal conditions. Every organ system participates in homeostatic regulation through feedback mechanisms.
         </p>
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
@@ -737,7 +737,7 @@ export function ScienceFoundationsModule() {
           </div>
           <div className="p-4 bg-pink-50/60 rounded-xl border border-pink-100">
             <p className="text-xs font-semibold text-pink-700 mb-1">Phosphate Group (-PO₄)</p>
-            <p className="text-xs text-pink-600">Found in ATP, DNA, and phospholipids. High-energy phosphate bonds in ATP store and release energy for cellular work. Phosphorylation (adding a phosphate group) activates or deactivates enzymes — a key regulatory mechanism.</p>
+            <p className="text-xs text-pink-600">Found in ATP, DNA, and phospholipids. High-energy phosphate bonds in ATP store and release energy for cellular work. Phosphorylation (adding a phosphate group) activates or deactivates enzymes. a key regulatory mechanism.</p>
           </div>
         </div>
         <CognitiveCard
@@ -770,7 +770,7 @@ export function ScienceFoundationsModule() {
             question: "Blood glucose homeostasis is maintained primarily by:",
             options: ["Positive feedback from the adrenal glands", "Negative feedback involving insulin and glucagon", "Conscious dietary control only", "Positive feedback from the pancreas"],
             correctIndex: 1,
-            rationale: "Blood glucose regulation is a classic negative feedback loop. When glucose rises, insulin is released to lower it. When glucose falls, glucagon is released to raise it. Both hormones work in opposition to maintain the set point — this is the mechanism disrupted in diabetes.",
+            rationale: "Blood glucose regulation is a classic negative feedback loop. When glucose rises, insulin is released to lower it. When glucose falls, glucagon is released to raise it. Both hormones work in opposition to maintain the set point. this is the mechanism disrupted in diabetes.",
           },
           {
             id: "sf26",

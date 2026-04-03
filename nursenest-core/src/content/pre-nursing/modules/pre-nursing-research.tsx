@@ -186,7 +186,7 @@ const ebpQuiz: import("@/components/pre-nursing/interactive-learning").QuizQuest
       "The study is flawed",
     ],
     correctIndex: 1,
-    rationale: "Relative risk reduction can sound dramatic (50% reduction!) while the absolute benefit is tiny (0.5%). The NNT (number needed to treat) here would be 200 — you'd need to treat 200 patients for 1 to benefit. Always look at absolute numbers for clinical significance.",
+    rationale: "Relative risk reduction can sound dramatic (50% reduction!) while the absolute benefit is tiny (0.5%). The NNT (number needed to treat) here would be 200. you'd need to treat 200 patients for 1 to benefit. Always look at absolute numbers for clinical significance.",
     hint: "If baseline risk is 1% and drops to 0.5%, the relative reduction is 50% but the absolute reduction is only 0.5%.",
   },
   {
@@ -194,7 +194,7 @@ const ebpQuiz: import("@/components/pre-nursing/interactive-learning").QuizQuest
     question: "Statistical significance (p < 0.05) and clinical significance are:",
     options: [
       "Always the same thing",
-      "Not necessarily the same — a result can be statistically significant but clinically unimportant",
+      "Not necessarily the same. a result can be statistically significant but clinically unimportant",
       "Irrelevant to nursing practice",
       "Only different in qualitative research",
     ],
@@ -248,7 +248,7 @@ const advancedTopicsQuiz: import("@/components/pre-nursing/interactive-learning"
     question: "A researcher recruits participants from a single hospital's waiting room during morning hours only. This is an example of:",
     options: ["Random sampling", "Stratified sampling", "Convenience sampling", "Purposive sampling"],
     correctIndex: 2,
-    rationale: "Convenience sampling selects participants based on easy availability rather than random selection. Recruiting from one location at one time introduces sampling bias — the sample may not represent the broader population (e.g., excludes evening/night patients and those at other facilities).",
+    rationale: "Convenience sampling selects participants based on easy availability rather than random selection. Recruiting from one location at one time introduces sampling bias. the sample may not represent the broader population (e.g., excludes evening/night patients and those at other facilities).",
   },
   {
     id: "at2",
@@ -312,7 +312,7 @@ const appliedQuiz: import("@/components/pre-nursing/interactive-learning").QuizQ
       "The test is unreliable",
     ],
     correctIndex: 0,
-    rationale: "Sensitivity = true positive rate (how well the test catches disease). Specificity = true negative rate (how well it rules out disease). High sensitivity (95%) means few false negatives — good for screening. Low specificity (60%) means more false positives.",
+    rationale: "Sensitivity = true positive rate (how well the test catches disease). Specificity = true negative rate (how well it rules out disease). High sensitivity (95%) means few false negatives. good for screening. Low specificity (60%) means more false positives.",
     hint: "SPin: High Specificity rules IN disease. SNout: High Sensitivity rules OUT disease.",
   },
   {
@@ -351,12 +351,12 @@ export function ResearchStatisticsModule() {
   const confidenceIntervalsContent = useEditableText("research-confidence-intervals", "A 95% CI gives a range of plausible values for the true effect. If the CI for a treatment difference does NOT cross zero (for differences) or 1.0 (for ratios), the result is statistically significant. CI width reflects precision: narrow = more precise, wide = less certain.");
   const whenToUseContent = useEditableText("research-when-to-use", "Quantitative: 'Does hand hygiene education reduce infection rates?' (measurable outcome). Qualitative: 'What barriers do nurses experience with hand hygiene compliance?' (exploring experiences). Mixed methods combines both.");
   const validityThreatsContent = useEditableText("research-validity-threats", "Internal: selection bias, attrition (dropouts), maturation, history (external events), Hawthorne effect. External: narrow inclusion criteria, single-site study, volunteer bias, artificial lab setting.");
-  const clinicalScenarioContent = useEditableText("research-clinical-scenario", "Research shows compression stockings reduce DVT risk (evidence). You know this patient is post-op day 1 (expertise). But the patient refuses to wear them due to discomfort (preferences). EBP means integrating all three — perhaps exploring alternatives like SCDs or patient education.");
-  const statVsClinicalContent = useEditableText("research-stat-vs-clinical", "Statistical significance means the result is unlikely due to chance (p < 0.05). Clinical significance means the result is large enough to matter in practice. A drug that lowers HbA1c by 0.1% may be statistically significant with a huge sample but clinically meaningless — you wouldn't change treatment for 0.1%.");
-  const snoutSpinContent = useEditableText("research-snout-spin", "SNout: Sensitivity rules OUT — if a highly sensitive test is Negative, you can rule OUT the disease. SPin: Specificity rules IN — if a highly specific test is Positive, you can rule IN the disease. This is a high-yield NCLEX concept.");
+  const clinicalScenarioContent = useEditableText("research-clinical-scenario", "Research shows compression stockings reduce DVT risk (evidence). You know this patient is post-op day 1 (expertise). But the patient refuses to wear them due to discomfort (preferences). EBP means integrating all three. perhaps exploring alternatives like SCDs or patient education.");
+  const statVsClinicalContent = useEditableText("research-stat-vs-clinical", "Statistical significance means the result is unlikely due to chance (p < 0.05). Clinical significance means the result is large enough to matter in practice. A drug that lowers HbA1c by 0.1% may be statistically significant with a huge sample but clinically meaningless. you wouldn't change treatment for 0.1%.");
+  const snoutSpinContent = useEditableText("research-snout-spin", "SNout: Sensitivity rules OUT. if a highly sensitive test is Negative, you can rule OUT the disease. SPin: Specificity rules IN. if a highly specific test is Positive, you can rule IN the disease. This is a high-yield NCLEX concept.");
   const nntContent = useEditableText("research-nnt", "NNT = 1 ÷ Absolute Risk Reduction. It tells you how many patients must receive the treatment for ONE additional patient to benefit. NNT of 10 is excellent (treat 10, 1 benefits). NNT of 500 means marginal benefit. Always compare NNT to NNH (Number Needed to Harm).");
   const sampleSizeContent = useEditableText("research-sample-size", "Larger samples increase statistical power (the ability to detect a real effect) and produce narrower confidence intervals (more precise estimates). Small samples risk Type II errors (missing real effects) and may not capture population variability. Researchers use power analysis before a study to calculate the minimum sample needed.");
-  const samplingBiasContent = useEditableText("research-sampling-bias", "Sampling bias occurs when certain members of the population are systematically more or less likely to be selected. This threatens external validity — your results may not apply to the broader population. Examples: volunteer bias (only motivated people enroll), non-response bias (those who don't respond differ from those who do), and selection bias from convenience sampling.");
+  const samplingBiasContent = useEditableText("research-sampling-bias", "Sampling bias occurs when certain members of the population are systematically more or less likely to be selected. This threatens external validity. your results may not apply to the broader population. Examples: volunteer bias (only motivated people enroll), non-response bias (those who don't respond differ from those who do), and selection bias from convenience sampling.");
   const vulnerablePopContent = useEditableText("research-vulnerable-populations", "Vulnerable populations require additional ethical protections because they have diminished capacity to give truly voluntary consent. This includes: children (require parental consent plus child assent), pregnant women, prisoners, cognitively impaired individuals, economically disadvantaged persons, and those in dependent relationships (e.g., students, employees). IRBs/REBs apply heightened scrutiny to studies involving these groups.");
   const interpretingGraphsContent = useEditableText("research-interpreting-graphs", "When reading any graph, systematically ask: (1) What variables are on each axis? (2) What are the units? (3) Does the Y-axis start at 0, or is it truncated? (4) Are the intervals equal? (5) Is the scale linear or logarithmic? (6) What is the sample size? (7) Are error bars or confidence intervals shown? Missing any of these can lead to misinterpretation.");
   const systematicReviewsPowerContent = useEditableText("research-systematic-reviews-power", "By combining data from multiple studies, systematic reviews and meta-analyses increase statistical power, improve precision of effect estimates, resolve conflicting results from individual studies, and reduce the impact of bias from any single study. They sit at the top of the evidence pyramid and are the foundation of clinical practice guidelines.");
@@ -444,7 +444,7 @@ export function ResearchStatisticsModule() {
             { id: "rt2", term: "Sampling Bias", definition: "Systematic error in participant selection" },
             { id: "rt3", term: "Informed Consent", definition: "Participants understand risks and voluntarily agree" },
             { id: "rt4", term: "Reliability", definition: "Consistency of measurement over time" },
-            { id: "rt5", term: "Validity", definition: "Accuracy — measures what it intends to measure" },
+            { id: "rt5", term: "Validity", definition: "Accuracy. measures what it intends to measure" },
             { id: "rt6", term: "Blinding", definition: "Concealing group assignment to reduce bias" },
           ]}
         />
@@ -455,7 +455,7 @@ export function ResearchStatisticsModule() {
             {
               id: "loe1",
               title: "Level 7: Expert Opinion",
-              summary: "Lowest level — clinical experience and expert committees",
+              summary: "Lowest level. clinical experience and expert committees",
               detail: "Based on clinical experience and expert committees. Lowest level but still valuable when no research exists. Includes position statements and consensus guidelines.",
             },
             {
@@ -473,7 +473,7 @@ export function ResearchStatisticsModule() {
             {
               id: "loe4",
               title: "Level 4: Cohort or Case-Control Studies",
-              summary: "Observational studies — suggests associations",
+              summary: "Observational studies. suggests associations",
               detail: "Observational studies that follow groups over time (cohort) or look backward from outcomes (case-control). Can suggest associations but not causation.",
             },
             {
@@ -491,7 +491,7 @@ export function ResearchStatisticsModule() {
             {
               id: "loe7",
               title: "Level 1: Systematic Review with Meta-Analysis of RCTs",
-              summary: "Pinnacle of evidence — pooled RCT data",
+              summary: "Pinnacle of evidence. pooled RCT data",
               detail: "The pinnacle of evidence. Statistically pools data from multiple RCTs for a quantitative summary. Largest sample, least bias, most generalizable conclusions.",
             },
           ]}
@@ -602,7 +602,7 @@ export function ResearchStatisticsModule() {
             { id: "sc1", term: "P-value", definition: "Probability of results if null hypothesis is true" },
             { id: "sc2", term: "Confidence Interval", definition: "Range of plausible values for the true effect" },
             { id: "sc3", term: "Standard Deviation", definition: "Measure of data spread around the mean" },
-            { id: "sc4", term: "Type I Error", definition: "False positive — detecting an effect that isn't real" },
+            { id: "sc4", term: "Type I Error", definition: "False positive. detecting an effect that isn't real" },
             { id: "sc5", term: "Correlation Coefficient", definition: "Strength and direction of linear relationship (-1 to +1)" },
             { id: "sc6", term: "Normal Distribution", definition: "Symmetric bell-shaped curve where mean = median = mode" },
           ]}
@@ -649,7 +649,7 @@ export function ResearchStatisticsModule() {
             {
               id: "sd1",
               title: "Case Report / Case Series",
-              summary: "Descriptions of individual patients — generates hypotheses",
+              summary: "Descriptions of individual patients. generates hypotheses",
               detail: "Detailed descriptions of one or few patients. Generates hypotheses but cannot test them. No comparison group. Useful for rare conditions or new observations.",
             },
             {
@@ -673,13 +673,13 @@ export function ResearchStatisticsModule() {
             {
               id: "sd5",
               title: "Randomized Controlled Trial (RCT)",
-              summary: "Gold standard — random assignment controls confounders",
+              summary: "Gold standard. random assignment controls confounders",
               detail: "Gold standard for causation. Randomly assigns participants to intervention or control. Controls for known and unknown confounders. Example: randomizing patients to new wound care protocol vs standard care and comparing healing times.",
             },
             {
               id: "sd6",
               title: "Systematic Review & Meta-Analysis",
-              summary: "Synthesizes multiple studies — highest evidence level",
+              summary: "Synthesizes multiple studies. highest evidence level",
               detail: "Synthesizes multiple studies on the same question. Systematic review uses rigorous search and appraisal. Meta-analysis adds statistical pooling of results. Highest level of evidence when done well.",
             },
           ]}
@@ -787,7 +787,7 @@ export function ResearchStatisticsModule() {
               {
                 id: "ap1",
                 title: "1. Read the Abstract",
-                summary: "Skim the abstract first — about 2 minutes.",
+                summary: "Skim the abstract first. about 2 minutes.",
                 detail:
                   "Get the big picture: What was the question? What design was used? What were the main findings? This takes 2 minutes and tells you if the full paper is worth reading.",
               },
@@ -850,7 +850,7 @@ export function ResearchStatisticsModule() {
             </div>
             <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
               <p className="text-xs font-semibold text-purple-700 mb-1">Confusing Correlation with Causation</p>
-              <p className="text-xs text-purple-600">Ice cream sales and drowning rates both rise in summer — not because ice cream causes drowning, but because of the shared confounder (warm weather).</p>
+              <p className="text-xs text-purple-600">Ice cream sales and drowning rates both rise in summer. not because ice cream causes drowning, but because of the shared confounder (warm weather).</p>
             </div>
           </div>
         </MicroLesson>
@@ -995,7 +995,7 @@ export function ResearchStatisticsModule() {
           icon={<Shield className="w-5 h-5" />}
         >
           <p className="text-sm text-gray-600 leading-relaxed">
-            Research ethics exist because of historical abuses — the Nazi experiments, the{" "}
+            Research ethics exist because of historical abuses. the Nazi experiments, the{" "}
             <HoverReveal
               term="Tuskegee Syphilis Study"
               definition="A U.S. Public Health Service study (1932–1972) that deliberately withheld treatment from African American men with syphilis without their informed consent, even after penicillin became the standard cure. This led directly to the Belmont Report and modern research ethics regulations."
@@ -1020,7 +1020,7 @@ export function ResearchStatisticsModule() {
                 id: "bp1",
                 title: "Respect for Persons",
                 summary: "Autonomy and protection of those with diminished autonomy",
-                detail: "Individuals are treated as autonomous agents capable of making their own decisions. Those with diminished autonomy (children, cognitively impaired, prisoners) receive additional protections. This principle underlies informed consent — participants must be given adequate information, comprehend it, and choose freely.",
+                detail: "Individuals are treated as autonomous agents capable of making their own decisions. Those with diminished autonomy (children, cognitively impaired, prisoners) receive additional protections. This principle underlies informed consent. participants must be given adequate information, comprehend it, and choose freely.",
               },
               {
                 id: "bp2",
@@ -1081,7 +1081,7 @@ export function ResearchStatisticsModule() {
             </div>
             <div className="p-4 bg-yellow-50/60 rounded-xl border border-yellow-100">
               <p className="text-xs font-semibold text-yellow-700 mb-1">Misleading Visual: 3D Charts &amp; Pictographs</p>
-              <p className="text-xs text-yellow-600">Three-dimensional bar charts distort visual perception — rear bars appear smaller. Pictographs that scale both width and height make differences appear squared. Stick to simple 2D charts for accurate comparison.</p>
+              <p className="text-xs text-yellow-600">Three-dimensional bar charts distort visual perception. rear bars appear smaller. Pictographs that scale both width and height make differences appear squared. Stick to simple 2D charts for accurate comparison.</p>
             </div>
           </div>
         </MicroLesson>
@@ -1147,7 +1147,7 @@ export function ResearchStatisticsModule() {
             </div>
             <div className="p-4 bg-amber-50/60 rounded-xl border border-amber-100">
               <p className="text-xs font-semibold text-amber-700 mb-1">Heterogeneity (I&sup2;)</p>
-              <p className="text-xs text-amber-600">Measures how much variation across studies is due to real differences rather than chance. I&sup2; = 0% means no heterogeneity (studies agree). I&sup2; &gt; 50% suggests substantial heterogeneity — the pooled result should be interpreted cautiously. Sources include differences in populations, interventions, or outcome measures.</p>
+              <p className="text-xs text-amber-600">Measures how much variation across studies is due to real differences rather than chance. I&sup2; = 0% means no heterogeneity (studies agree). I&sup2; &gt; 50% suggests substantial heterogeneity. the pooled result should be interpreted cautiously. Sources include differences in populations, interventions, or outcome measures.</p>
             </div>
             <div className="p-4 bg-teal-50/60 rounded-xl border border-teal-100">
               <p className="text-xs font-semibold text-teal-700 mb-1">Pooled Effect Size</p>

@@ -296,7 +296,7 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
           Structured pathway: lesson → questions → weak areas → CAT → readiness
         </h2>
         <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
-          Lessons alone do not equal readiness—they feed the loop below with the bank, analytics, and adaptive exams.
+          Lessons alone do not equal readiness. They feed the loop below with the bank, analytics, and adaptive exams.
         </p>
         <div
           className="mt-5 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-stretch sm:gap-0"
@@ -327,7 +327,7 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
           <li>Lesson establishes cue patterns you will recognize in stems.</li>
           <li>Practice forces commitment; rationales and weak-area tags show where judgment drifts.</li>
           <li>Performance feedback (accuracy by domain, trend) directs what to re-study.</li>
-          <li>CAT mocks approximate adaptive difficulty and stopping rules—not the same as untimed blocks.</li>
+          <li>CAT mocks approximate adaptive difficulty and stopping rules, not the same as untimed blocks.</li>
           <li>Readiness: you can state the error you almost made before the rationale reveals it.</li>
         </ol>
         <div className="mt-3 flex flex-wrap gap-2 text-sm">
@@ -378,7 +378,7 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
           </p>
           <p className="mt-2 text-[var(--theme-muted-text)]">
             <strong className="text-foreground">Takeaway:</strong> “Priority” on NCLEX often means the action that most
-            directly reduces death in the next minutes—not the most detailed nursing task.
+            directly reduces death in the next minutes, not the most detailed nursing task.
           </p>
         </div>
       </section>
@@ -410,7 +410,7 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
       <section className="rounded-2xl border border-primary/20 bg-primary/[0.06] p-5 sm:p-6">
         <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Start without friction</h2>
         <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
-          Try a short bank pass first; full sessions may prompt sign-in depending on product rules—not a forced login at the
+          Try a short bank pass first; full sessions may prompt sign-in depending on product rules, not a forced login at the
           first click.
         </p>
         <div className="mt-4 flex flex-wrap gap-2">

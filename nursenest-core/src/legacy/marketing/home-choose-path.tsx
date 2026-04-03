@@ -56,7 +56,7 @@ export default function HomeChoosePath() {
       icon: Award,
       title: "Certifications & Specialties",
       subtitle: "ICU / NICU / Trauma & More",
-      desc: "Targeted prep for nursing specialty certifications and continuing education — CCRN, CEN, PCCN, and clinical specialty guides.",
+      desc: "Targeted prep for nursing specialty certifications and continuing education (CCRN, CEN, PCCN, and clinical specialty guides).",
       cta: "Browse Certifications",
       href: "/nursing-specialties",
       testId: "card-certifications",

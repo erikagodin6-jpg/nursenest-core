@@ -40,11 +40,11 @@ export function NclexPnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
         <ol className="mt-4 space-y-3 text-sm leading-relaxed text-[var(--theme-muted-text)]">
           <li>
             <span className="font-semibold text-foreground">1. Learn the concept.</span> Focus on what the LVN/LPN can do,
-            must report, and must not do—NCLEX-PN tests scope as often as content.
+            must report, and must not do. NCLEX-PN tests scope as often as content.
           </li>
           <li>
             <span className="font-semibold text-foreground">2. Apply with questions.</span> Use this pathway in the bank so
-            stems stay PN-scoped (delegation, basic care, ordered interventions)—not RN-level analysis items.
+            stems stay PN-scoped (delegation, basic care, ordered interventions), not RN-level analysis items.
           </li>
           <li>
             <span className="font-semibold text-foreground">3. Review rationale deeply.</span> For each wrong option, ask:
@@ -58,10 +58,10 @@ export function NclexPnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
       </section>
 
       <section className="rounded-2xl border border-primary/20 bg-primary/[0.04] p-5 sm:p-6">
-        <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">NCLEX-PN — explicit, not generic prep</h2>
+        <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">NCLEX-PN: explicit, not generic prep</h2>
         <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[var(--theme-muted-text)]">
           <li>Aligned with the NCLEX-PN test plan Client Needs framework used to group lessons below.</li>
-          <li>Built around practical/vocational scope: delegation, safety, and ordered care—not RN leadership disguised as PN.</li>
+          <li>Built around practical/vocational scope: delegation, safety, and ordered care, not RN leadership disguised as PN.</li>
           <li>Supports clinical judgment and NGN-style stems: multiple “reasonable” options with one safest, scope-correct choice.</li>
         </ul>
       </section>
@@ -69,7 +69,7 @@ export function NclexPnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
       {topicClusters.length > 0 && (
         <section aria-label="Browse by topic" className="rounded-xl border border-border bg-card p-4">
           <h2 className="text-sm font-bold text-[var(--theme-heading-text)]">Browse by topic cluster</h2>
-          <p className="mt-1 text-xs text-muted">Alternate index by system or topic label—same pathway constraints.</p>
+          <p className="mt-1 text-xs text-muted">Alternate index by system or topic label, same pathway constraints.</p>
           <ul className="mt-3 flex flex-wrap gap-2">
             {topicClusters.map((t) => (
               <li key={t.topicSlug}>
@@ -228,13 +228,13 @@ export function NclexPnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
         </h2>
         <div className="mt-3 space-y-3 text-sm leading-relaxed text-[var(--theme-muted-text)]">
           <p>
-            NCLEX-PN measures whether you can apply knowledge to <em>safe decisions</em> in the practical nurse role—not
+            NCLEX-PN measures whether you can apply knowledge to <em>safe decisions</em> in the practical nurse role, not
             whether you can list facts. CAT adjusts difficulty as you go; weak scope boundaries show up fast.
           </p>
           <ul className="list-disc space-y-2 pl-5">
             <li>
               <strong className="text-foreground">Prioritization:</strong> unstable vs stable, acute change vs routine
-              care—then choose what your license supports.
+              care. Then choose what your license supports.
             </li>
             <li>
               <strong className="text-foreground">Safety &amp; outcomes:</strong> Does this option reduce harm in the next few
@@ -255,7 +255,7 @@ export function NclexPnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
         <ol className="mt-4 space-y-2 text-sm text-[var(--theme-muted-text)]">
           <li>Lesson: pattern recognition for PN-appropriate actions and delegation.</li>
           <li>Practice: commit under time; read every distractor against scope and safety.</li>
-          <li>Weak areas: let rationales drive what you re-study—avoid endless new topics.</li>
+          <li>Weak areas: let rationales drive what you re-study. Avoid endless new topics.</li>
           <li>CAT mock: adaptive stops and length mirror the real exam more than untimed blocks alone.</li>
         </ol>
         <div className="mt-3 flex flex-wrap gap-2 text-sm">
@@ -282,7 +282,7 @@ export function NclexPnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
           What strong NCLEX-PN reasoning looks like
         </h2>
         <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
-          Illustrative delegation stem—eliminate options that confuse task completion with patient safety or licensed duty.
+          Illustrative delegation stem: eliminate options that confuse task completion with patient safety or licensed duty.
         </p>
         <div className="mt-4 rounded-xl border border-border bg-[var(--theme-muted-surface)] p-4 text-sm">
           <p className="font-medium text-foreground">
@@ -295,7 +295,7 @@ export function NclexPnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
             <li>D. UAP asks for help turning a patient on bedrest</li>
           </ul>
           <p className="mt-3 text-foreground">
-            <strong>Correct logic:</strong> See the patient with acute cardiopulmonary compromise first—potential
+            <strong>Correct logic:</strong> See the patient with acute cardiopulmonary compromise first. Potential
             life-threatening change beats routine timing tasks.
           </p>
           <p className="mt-2 text-[var(--theme-muted-text)]">
@@ -305,7 +305,7 @@ export function NclexPnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
           </p>
           <p className="mt-2 text-[var(--theme-muted-text)]">
             <strong className="text-foreground">Takeaway:</strong> NCLEX-PN prioritization still follows patient outcome
-            risk—then stay inside what you can assess, perform, and report within PN scope.
+            risk. Then stay inside what you can assess, perform, and report within PN scope.
           </p>
         </div>
       </section>
@@ -335,7 +335,7 @@ export function NclexPnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
       <section className="rounded-2xl border border-primary/20 bg-primary/[0.06] p-5 sm:p-6">
         <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Low-friction next steps</h2>
         <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
-          Open the bank with this pathway; longer sessions may prompt sign-in—short tries stay accessible when the product
+          Open the bank with this pathway; longer sessions may prompt sign-in. Short tries stay accessible when the product
           allows it.
         </p>
         <div className="mt-4 flex flex-wrap gap-2">

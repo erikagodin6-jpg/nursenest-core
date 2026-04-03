@@ -198,7 +198,7 @@ export function ReviewQueueClient() {
                 value={categoryId}
                 onChange={(e) => setCategoryId(e.target.value)}
               >
-                <option value="">— paste ID or pick —</option>
+                <option value="">(paste ID or pick)</option>
                 {categories.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.name} ({c.slug})

@@ -16,13 +16,13 @@ export function CommunicationModule() {
   const { t } = usePreNursingT();
   const therapeuticWarning = useEditableText("comm-therapeutic-warning", "Giving false reassurance ('Everything will be fine'), being judgmental ('You shouldn't feel that way'), giving advice ('If I were you...'), changing the subject when the patient is expressing concerns, using medical jargon the patient doesn't understand, and asking 'why' questions ('Why didn't you take your medication?') which sound accusatory.");
   const sbarConcept = useEditableText("comm-sbar-concept", "Without a structure, handoffs often bury the critical information in a sea of background data. SBAR forces the communicator to lead with the most important information (Situation), provide only relevant context (Background), share their clinical reasoning (Assessment), and state a clear ask (Recommendation). This saves time and prevents the receiver from having to extract the key message.");
-  const justCultureConcept = useEditableText("comm-just-culture-concept", "A just culture distinguishes between human error (unintentional — support the person), at-risk behavior (taking shortcuts — coach the person), and reckless behavior (conscious disregard for safety — hold accountable). This distinction encourages reporting of errors and near-misses without fear of punishment, which is essential for learning and prevention.");
+  const justCultureConcept = useEditableText("comm-just-culture-concept", "A just culture distinguishes between human error (unintentional. support the person), at-risk behavior (taking shortcuts. coach the person), and reckless behavior (conscious disregard for safety. hold accountable). This distinction encourages reporting of errors and near-misses without fear of punishment, which is essential for learning and prevention.");
 
   return (
     <div className="space-y-10" data-testid="module-communication">
       <div>
         <EditableModuleText sectionKey="comm-title" defaultText="Healthcare Communication Fundamentals" as="h2" className="text-2xl font-bold text-gray-900 mb-2" />
-        <EditableModuleText sectionKey="comm-desc" defaultText="Master professional communication, therapeutic techniques, structured handoff methods, documentation principles, and interprofessional collaboration — foundational skills for safe, effective healthcare." as="p" className="text-gray-600" multiline />
+        <EditableModuleText sectionKey="comm-desc" defaultText="Master professional communication, therapeutic techniques, structured handoff methods, documentation principles, and interprofessional collaboration. foundational skills for safe, effective healthcare." as="p" className="text-gray-600" multiline />
       </div>
 
       <MicroLesson title="Therapeutic Communication" subtitle="Purposeful communication that promotes healing" icon={<MessageSquare className="w-5 h-5" />}>
@@ -40,7 +40,7 @@ export function CommunicationModule() {
               id: "tc2",
               title: "Open-Ended Questions",
               summary: "Questions that invite elaboration",
-              detail: "Ask 'How are you feeling about your care today?' instead of 'Are you feeling okay?' Open-ended questions begin with how, what, tell me, describe — they yield richer assessment data and make patients feel heard. Closed-ended questions (yes/no) are useful for specific data collection but limit patient expression.",
+              detail: "Ask 'How are you feeling about your care today?' instead of 'Are you feeling okay?' Open-ended questions begin with how, what, tell me, describe. they yield richer assessment data and make patients feel heard. Closed-ended questions (yes/no) are useful for specific data collection but limit patient expression.",
             },
             {
               id: "tc3",
@@ -52,7 +52,7 @@ export function CommunicationModule() {
               id: "tc4",
               title: "Silence",
               summary: "Purposeful pauses that allow processing",
-              detail: "Silence gives patients time to organize thoughts, process emotions, and decide what to share. It communicates that you're not rushed and that their words matter. Many healthcare providers fill silence prematurely — learn to tolerate it as a therapeutic tool.",
+              detail: "Silence gives patients time to organize thoughts, process emotions, and decide what to share. It communicates that you're not rushed and that their words matter. Many healthcare providers fill silence prematurely. learn to tolerate it as a therapeutic tool.",
             },
           ]}
         />
@@ -67,19 +67,19 @@ export function CommunicationModule() {
         <EditableModuleText sectionKey="comm-sbar-content" defaultText={'SBAR is a <span data-hover-term="standardized communication framework">standardized communication framework</span> designed to prevent critical information loss during handoffs, phone calls to providers, and escalation of concerns.'} as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-red-50/60 rounded-xl border border-red-100">
-            <p className="text-xs font-semibold text-red-700 mb-1">S — Situation</p>
+            <p className="text-xs font-semibold text-red-700 mb-1">S. Situation</p>
             <p className="text-xs text-red-600">What is happening right now? State the patient's name, location, the immediate concern. Be concise and specific. Example: 'I'm calling about Mr. Smith in Room 412. His blood pressure has dropped to 82/50 and he is diaphoretic.'</p>
           </div>
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
-            <p className="text-xs font-semibold text-blue-700 mb-1">B — Background</p>
+            <p className="text-xs font-semibold text-blue-700 mb-1">B. Background</p>
             <p className="text-xs text-blue-600">What is the relevant clinical context? Admitting diagnosis, pertinent medical history, current treatment, recent changes. Only include information relevant to the current situation. Example: 'He was admitted yesterday for pneumonia. He has a history of heart failure.'</p>
           </div>
           <div className="p-4 bg-amber-50/60 rounded-xl border border-amber-100">
-            <p className="text-xs font-semibold text-amber-700 mb-1">A — Assessment</p>
+            <p className="text-xs font-semibold text-amber-700 mb-1">A. Assessment</p>
             <p className="text-xs text-amber-600">What do you think is going on? Share your clinical judgment. Example: 'I'm concerned he may be developing sepsis. His lactate was 3.2 an hour ago and he has a new fever of 38.8°C.'</p>
           </div>
           <div className="p-4 bg-green-50/60 rounded-xl border border-green-100">
-            <p className="text-xs font-semibold text-green-700 mb-1">R — Recommendation</p>
+            <p className="text-xs font-semibold text-green-700 mb-1">R. Recommendation</p>
             <p className="text-xs text-green-600">What do you need? Be specific. Example: 'I'd like you to come evaluate him. Would you like me to start a fluid bolus and draw blood cultures in the meantime?'</p>
           </div>
         </div>
@@ -112,8 +112,8 @@ export function CommunicationModule() {
             <p className="text-xs text-blue-600">When receiving verbal orders or critical test results, repeat the information back to the sender for verification. 'I'm reading back: Give Metoprolol 25 mg by mouth now. Is that correct?' This catches mishearing or miscommunication before it reaches the patient.</p>
           </div>
           <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
-            <p className="text-xs font-semibold text-purple-700 mb-1">CUS Framework — Escalating Concerns</p>
-            <p className="text-xs text-purple-600"><strong>C</strong> — 'I am <em>Concerned</em>' (first level). <strong>U</strong> — 'I am <em>Uncomfortable</em>' (second level). <strong>S</strong> — 'This is a <em>Safety issue</em>' (highest level — stops the action). This graduated framework gives team members language to escalate concerns assertively.</p>
+            <p className="text-xs font-semibold text-purple-700 mb-1">CUS Framework. Escalating Concerns</p>
+            <p className="text-xs text-purple-600"><strong>C</strong>. 'I am <em>Concerned</em>' (first level). <strong>U</strong>. 'I am <em>Uncomfortable</em>' (second level). <strong>S</strong>. 'This is a <em>Safety issue</em>' (highest level. stops the action). This graduated framework gives team members language to escalate concerns assertively.</p>
           </div>
           <div className="p-4 bg-teal-50/60 rounded-xl border border-teal-100">
             <p className="text-xs font-semibold text-teal-700 mb-1">Two-Challenge Rule</p>
@@ -130,7 +130,7 @@ export function CommunicationModule() {
       <MatchingExercise
         title={t("data.pre_nursing_communication.matchTheCommunicationConcept")}
         pairs={[
-          { term: "Open-ended question", definition: "Invites elaboration — 'How are you feeling?'" },
+          { term: "Open-ended question", definition: "Invites elaboration. 'How are you feeling?'" },
           { term: "SBAR", definition: "Situation, Background, Assessment, Recommendation" },
           { term: "Active listening", definition: "Full attention with verbal and nonverbal engagement" },
           { term: "Read-back", definition: "Repeating orders back for verification" },
@@ -154,7 +154,7 @@ export function CommunicationModule() {
             question: "In SBAR, the 'A' stands for:",
             options: ["Action", "Assessment", "Alert", "Acknowledgment"],
             correctIndex: 1,
-            rationale: "A = Assessment — your clinical judgment about what is happening. This is where you share your analysis, not just data. It helps the receiver understand your reasoning.",
+            rationale: "A = Assessment. your clinical judgment about what is happening. This is where you share your analysis, not just data. It helps the receiver understand your reasoning.",
           },
           {
             id: "cm3",
@@ -182,7 +182,7 @@ export function CommunicationModule() {
             question: "Most sentinel events in healthcare involve failures in:",
             options: ["Medication calculations", "Communication", "Equipment", "Staffing levels"],
             correctIndex: 1,
-            rationale: "Studies consistently show that 60-70% of sentinel events involve communication breakdowns — during handoffs, between disciplines, or when team members fail to speak up about concerns.",
+            rationale: "Studies consistently show that 60-70% of sentinel events involve communication breakdowns. during handoffs, between disciplines, or when team members fail to speak up about concerns.",
           },
           {
             id: "cm7",
@@ -257,7 +257,7 @@ export function CommunicationModule() {
           {
             id: "cm17",
             question: "A nurse witnesses a colleague administer medication without scanning the patient's wristband. Using CUS, which is the appropriate first response?",
-            options: ["'This is a safety issue — stop immediately.'", "'I am concerned that the patient's wristband was not scanned.'", "'I am uncomfortable with how you are giving medications.'", "'I'm reporting this to the manager.'"],
+            options: ["'This is a safety issue. stop immediately.'", "'I am concerned that the patient's wristband was not scanned.'", "'I am uncomfortable with how you are giving medications.'", "'I'm reporting this to the manager.'"],
             correctIndex: 1,
             rationale: "CUS is graduated: start with 'I am Concerned' (lowest level). If dismissed, escalate to 'I am Uncomfortable,' then to 'This is a Safety issue.' Starting at the first level maintains collegiality while still addressing the concern.",
           },
@@ -280,7 +280,7 @@ export function CommunicationModule() {
             question: "A nurse accidentally administers the wrong dose of a medication due to a similar-looking label. In a just culture, this is classified as:",
             options: ["At-risk behavior", "Reckless behavior", "Human error", "Intentional misconduct"],
             correctIndex: 2,
-            rationale: "Human error is unintentional — the nurse did not choose to make the mistake. In a just culture, human error is addressed by supporting the individual and examining the system (e.g., look-alike labels) to prevent recurrence. Punishment is not appropriate for genuine human error.",
+            rationale: "Human error is unintentional. the nurse did not choose to make the mistake. In a just culture, human error is addressed by supporting the individual and examining the system (e.g., look-alike labels) to prevent recurrence. Punishment is not appropriate for genuine human error.",
           },
         ]}
       />

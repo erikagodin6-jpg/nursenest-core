@@ -15,8 +15,8 @@ import { Building, Users, Shield, Network, HeartPulse } from "lucide-react";
 export function HealthcareStructureModule() {
   const { t } = usePreNursingT();
   const scopeOfPracticeContent = useEditableText("hcs-scope-practice-content", "Scope of practice defines the legal boundaries of what each healthcare professional is authorized to do based on their education, certification, and licensure. Working outside your scope is a legal and ethical violation. RNs can assess, plan, implement, and evaluate care, administer medications, and delegate to LPNs/CNAs. LPNs/LVNs provide direct care under RN or physician supervision, administer certain medications, and perform focused assessments. CNAs/PCAs perform basic care tasks (bathing, feeding, vital signs, ambulation) under nurse supervision. NPs have advanced practice authority including diagnosis, prescribing, and autonomous practice (varies by state/province). PAs practice medicine under physician collaboration. The key principle: always practice within YOUR scope and delegate appropriately within THEIR scope.");
-  const deliveryModelsContent = useEditableText("hcs-delivery-models-content", "Healthcare delivery models determine how care is organized, financed, and delivered. Fee-for-service: providers are paid for each service rendered — can incentivize volume over quality. Managed care (HMOs, PPOs): organizations manage cost and quality by requiring referrals, using networks, and implementing utilization review. Accountable Care Organizations (ACOs): groups of providers jointly accountable for quality and cost of care for a patient population. Patient-Centered Medical Home (PCMH): coordinated primary care model with a team approach, emphasizing prevention and chronic disease management. Value-based care: reimbursement tied to patient outcomes rather than volume of services — the direction healthcare is moving globally.");
-  const patientRightsContent = useEditableText("hcs-patient-rights-content", "Patient rights are legally protected and include: the right to informed consent (understanding risks, benefits, alternatives before treatment), the right to refuse treatment (even life-saving treatment for competent adults), the right to privacy and confidentiality (HIPAA in the US, PIPEDA in Canada), the right to access medical records, the right to be informed of diagnosis and treatment options, the right to participate in care decisions, the right to be treated with dignity and respect regardless of background, the right to file grievances without retaliation. Advance directives (living will, healthcare power of attorney) extend these rights to situations when patients cannot speak for themselves. Nurses are patient advocates — protecting these rights is a core nursing responsibility.");
+  const deliveryModelsContent = useEditableText("hcs-delivery-models-content", "Healthcare delivery models determine how care is organized, financed, and delivered. Fee-for-service: providers are paid for each service rendered. can incentivize volume over quality. Managed care (HMOs, PPOs): organizations manage cost and quality by requiring referrals, using networks, and implementing utilization review. Accountable Care Organizations (ACOs): groups of providers jointly accountable for quality and cost of care for a patient population. Patient-Centered Medical Home (PCMH): coordinated primary care model with a team approach, emphasizing prevention and chronic disease management. Value-based care: reimbursement tied to patient outcomes rather than volume of services. the direction healthcare is moving globally.");
+  const patientRightsContent = useEditableText("hcs-patient-rights-content", "Patient rights are legally protected and include: the right to informed consent (understanding risks, benefits, alternatives before treatment), the right to refuse treatment (even life-saving treatment for competent adults), the right to privacy and confidentiality (HIPAA in the US, PIPEDA in Canada), the right to access medical records, the right to be informed of diagnosis and treatment options, the right to participate in care decisions, the right to be treated with dignity and respect regardless of background, the right to file grievances without retaliation. Advance directives (living will, healthcare power of attorney) extend these rights to situations when patients cannot speak for themselves. Nurses are patient advocates. protecting these rights is a core nursing responsibility.");
 
   return (
     <div className="space-y-10" data-testid="module-healthcare-structure">
@@ -33,7 +33,7 @@ export function HealthcareStructureModule() {
             {
               id: "hcs-primary",
               title: "Primary Care",
-              summary: "First point of contact — prevention and routine management",
+              summary: "First point of contact. prevention and routine management",
               detail: "Primary care is the foundation of the healthcare system. It includes health promotion, disease prevention, routine health maintenance, screening, immunizations, and management of common acute and chronic conditions. Provided by family physicians, nurse practitioners, pediatricians, and internists in clinics, community health centers, and physician offices. Most healthcare encounters occur at this level. Primary care reduces emergency department visits and hospitalizations through early intervention.",
             },
             {
@@ -52,7 +52,7 @@ export function HealthcareStructureModule() {
               id: "hcs-quaternary",
               title: "Quaternary Care",
               summary: "Experimental, cutting-edge, and rare procedures",
-              detail: "Quaternary care represents the most specialized level — experimental treatments, clinical trials, highly unusual and complex surgical procedures, and rare disease management. Only available at select academic medical centers or specialized institutions. Examples: gene therapy, experimental cancer protocols, complex multi-organ transplants, and specialized pediatric conditions requiring one-of-a-kind expertise.",
+              detail: "Quaternary care represents the most specialized level. experimental treatments, clinical trials, highly unusual and complex surgical procedures, and rare disease management. Only available at select academic medical centers or specialized institutions. Examples: gene therapy, experimental cancer protocols, complex multi-organ transplants, and specialized pediatric conditions requiring one-of-a-kind expertise.",
             },
           ]}
         />
@@ -80,12 +80,12 @@ export function HealthcareStructureModule() {
         </div>
       </MicroLesson>
 
-      <MicroLesson title="Scope of Practice & Interprofessional Team" subtitle="Who does what — and why it matters" icon={<Users className="w-5 h-5" />}>
+      <MicroLesson title="Scope of Practice & Interprofessional Team" subtitle="Who does what. and why it matters" icon={<Users className="w-5 h-5" />}>
         <EditableModuleText sectionKey="hcs-team-intro" defaultText="Modern healthcare is delivered by interprofessional teams. Each member brings unique expertise, and effective collaboration improves patient outcomes. Understanding roles prevents scope-of-practice violations and optimizes delegation. The nurse is often the coordinator of the care team at the bedside." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-indigo-50/60 rounded-xl border border-indigo-100">
             <p className="text-xs font-semibold text-indigo-700 mb-1">Nursing Roles</p>
-            <p className="text-xs text-indigo-600"><strong>RN:</strong> Full assessment, care planning, medication administration, IV therapy, patient education, delegation, and evaluation. <strong>LPN/LVN:</strong> Focused assessment, stable patient care, medication administration (varies by jurisdiction), data collection. Works under RN/provider supervision. <strong>CNA/PCA:</strong> Basic care — vital signs, hygiene, ambulation, feeding, I&O recording. Cannot assess, plan, or administer medications. <strong>NP:</strong> Advanced practice — diagnoses, prescribes, orders tests, manages care independently or collaboratively.</p>
+            <p className="text-xs text-indigo-600"><strong>RN:</strong> Full assessment, care planning, medication administration, IV therapy, patient education, delegation, and evaluation. <strong>LPN/LVN:</strong> Focused assessment, stable patient care, medication administration (varies by jurisdiction), data collection. Works under RN/provider supervision. <strong>CNA/PCA:</strong> Basic care. vital signs, hygiene, ambulation, feeding, I&O recording. Cannot assess, plan, or administer medications. <strong>NP:</strong> Advanced practice. diagnoses, prescribes, orders tests, manages care independently or collaboratively.</p>
           </div>
           <div className="p-4 bg-teal-50/60 rounded-xl border border-teal-100">
             <p className="text-xs font-semibold text-teal-700 mb-1">Allied Health Team Members</p>
@@ -100,11 +100,11 @@ export function HealthcareStructureModule() {
       </MicroLesson>
 
       <MicroLesson title="Healthcare Delivery Models & Patient Rights" subtitle="How care is organized and what patients are entitled to" icon={<Shield className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="hcs-delivery-intro" defaultText="Healthcare delivery models shape how care is financed, accessed, and coordinated. Understanding these models helps nurses navigate the system and advocate for patients. Equally important, patient rights form the ethical and legal foundation of all nursing care — nurses serve as the primary advocates for these rights." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="hcs-delivery-intro" defaultText="Healthcare delivery models shape how care is financed, accessed, and coordinated. Understanding these models helps nurses navigate the system and advocate for patients. Equally important, patient rights form the ethical and legal foundation of all nursing care. nurses serve as the primary advocates for these rights." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
             <p className="text-xs font-semibold text-purple-700 mb-1">Chain of Command</p>
-            <p className="text-xs text-purple-600">The chain of command provides a structured process for escalating patient safety concerns. If a nurse identifies a safety issue: first notify the charge nurse, then the nursing supervisor, then the nurse manager, then the medical director/chief nursing officer. The chain exists to protect patients — nurses have an ethical and legal obligation to escalate concerns even when met with resistance. Document all communication and responses.</p>
+            <p className="text-xs text-purple-600">The chain of command provides a structured process for escalating patient safety concerns. If a nurse identifies a safety issue: first notify the charge nurse, then the nursing supervisor, then the nurse manager, then the medical director/chief nursing officer. The chain exists to protect patients. nurses have an ethical and legal obligation to escalate concerns even when met with resistance. Document all communication and responses.</p>
           </div>
           <div className="p-4 bg-rose-50/60 rounded-xl border border-rose-100">
             <p className="text-xs font-semibold text-rose-700 mb-1">Advance Directives</p>
@@ -128,7 +128,7 @@ export function HealthcareStructureModule() {
         pairs={[
           { term: "RN", definition: "Full assessment, care planning, delegation, and medication administration", id: "rn" },
           { term: "LPN/LVN", definition: "Focused assessment and stable patient care under supervision", id: "lpn" },
-          { term: "CNA/PCA", definition: "Basic care tasks — vital signs, hygiene, ambulation", id: "cna" },
+          { term: "CNA/PCA", definition: "Basic care tasks. vital signs, hygiene, ambulation", id: "cna" },
           { term: "Respiratory Therapist", definition: "Airway management, ventilator settings, breathing treatments", id: "rt" },
           { term: "Social Worker", definition: "Discharge planning, community resources, psychosocial support", id: "sw" },
           { term: "Physical Therapist", definition: "Mobility, strength, gait training, and rehabilitation", id: "pt" },
@@ -164,7 +164,7 @@ export function HealthcareStructureModule() {
             question: "A CNA reports that a patient's blood pressure is 80/50 mmHg. The RN should:",
             options: ["Document the finding and continue with other tasks", "Delegate reassessment to another CNA", "Assess the patient immediately", "Wait until the next scheduled vital signs"],
             correctIndex: 2,
-            rationale: "The CNA can measure vital signs but cannot assess or interpret findings. A blood pressure of 80/50 is critically low and requires immediate RN assessment. Assessment cannot be delegated — it is within the RN's scope only.",
+            rationale: "The CNA can measure vital signs but cannot assess or interpret findings. A blood pressure of 80/50 is critically low and requires immediate RN assessment. Assessment cannot be delegated. it is within the RN's scope only.",
           },
           {
             id: "hcs5",
@@ -176,7 +176,7 @@ export function HealthcareStructureModule() {
           {
             id: "hcs6",
             question: "A patient who is competent refuses a blood transfusion due to religious beliefs. The nurse should:",
-            options: ["Administer the transfusion anyway — it is medically necessary", "Respect the patient's right to refuse treatment", "Call security to restrain the patient", "Discharge the patient for noncompliance"],
+            options: ["Administer the transfusion anyway. it is medically necessary", "Respect the patient's right to refuse treatment", "Call security to restrain the patient", "Discharge the patient for noncompliance"],
             correctIndex: 1,
             rationale: "Competent adult patients have the legal right to refuse any treatment, including life-saving interventions. The nurse must respect this right, ensure the patient understands the consequences, document the refusal, and advocate for the patient's autonomy.",
           },
@@ -241,7 +241,7 @@ export function HealthcareStructureModule() {
             question: "A DNR (Do Not Resuscitate) order means:",
             options: ["No treatment of any kind should be given", "CPR should not be performed if cardiac/respiratory arrest occurs", "The patient is being discharged to hospice", "All medications should be discontinued"],
             correctIndex: 1,
-            rationale: "A DNR specifically means that cardiopulmonary resuscitation (CPR) should not be performed if the patient experiences cardiac or respiratory arrest. It does NOT mean withholding all other treatments — the patient still receives all other appropriate medical care.",
+            rationale: "A DNR specifically means that cardiopulmonary resuscitation (CPR) should not be performed if the patient experiences cardiac or respiratory arrest. It does NOT mean withholding all other treatments. the patient still receives all other appropriate medical care.",
           },
           {
             id: "hcs16",

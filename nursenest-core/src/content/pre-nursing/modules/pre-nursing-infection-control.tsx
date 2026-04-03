@@ -15,13 +15,13 @@ import { Shield, AlertTriangle, Hand, Layers } from "lucide-react";
 export function InfectionControlModule() {
   const { t } = usePreNursingT();
   const hygieneContent = useEditableText("infctrl-hygiene-cognitive", "1. BEFORE touching a patient. 2. BEFORE a clean/aseptic procedure. 3. AFTER body fluid exposure risk. 4. AFTER touching a patient. 5. AFTER touching patient surroundings. These moments create a systematic approach to hand hygiene that covers all critical transmission opportunities.");
-  const ppeDoffingContent = useEditableText("infctrl-ppe-doffing-cognitive", "DONNING (putting on): Gown → Mask/Respirator → Goggles/Face shield → Gloves. DOFFING (removing): Gloves → Goggles/Face shield → Gown → Mask/Respirator. The doffing sequence is critical — the most contaminated items (gloves) come off first, and the mask (which protects airways) comes off last, AFTER leaving the patient area. Hand hygiene after each step of doffing.");
+  const ppeDoffingContent = useEditableText("infctrl-ppe-doffing-cognitive", "DONNING (putting on): Gown → Mask/Respirator → Goggles/Face shield → Gloves. DOFFING (removing): Gloves → Goggles/Face shield → Gown → Mask/Respirator. The doffing sequence is critical. the most contaminated items (gloves) come off first, and the mask (which protects airways) comes off last, AFTER leaving the patient area. Hand hygiene after each step of doffing.");
 
   return (
     <div className="space-y-10" data-testid="module-infection-control">
       <div>
         <EditableModuleText sectionKey="infctrl-title" defaultText="Infection Control Foundations" as="h2" className="text-2xl font-bold text-gray-900 mb-2" />
-        <EditableModuleText sectionKey="infctrl-desc" defaultText="Master the chain of infection, standard precautions, hand hygiene, PPE selection, and aseptic technique — the core competencies that prevent healthcare-associated infections." as="p" className="text-gray-600" multiline />
+        <EditableModuleText sectionKey="infctrl-desc" defaultText="Master the chain of infection, standard precautions, hand hygiene, PPE selection, and aseptic technique. the core competencies that prevent healthcare-associated infections." as="p" className="text-gray-600" multiline />
       </div>
 
       <MicroLesson title="The Chain of Infection" subtitle="Six links that must all be present for infection to occur" icon={<Layers className="w-5 h-5" />}>
@@ -33,7 +33,7 @@ export function InfectionControlModule() {
               id: "ic1",
               title: "1. Infectious Agent",
               summary: "The pathogen itself",
-              detail: "The microorganism capable of causing disease — bacteria, virus, fungus, parasite, or prion. Factors that matter: virulence (ability to cause disease), infectivity (ability to establish infection), pathogenicity (ability to produce disease), and dose (number of organisms needed). Breaking this link: antimicrobial agents, vaccines.",
+              detail: "The microorganism capable of causing disease. bacteria, virus, fungus, parasite, or prion. Factors that matter: virulence (ability to cause disease), infectivity (ability to establish infection), pathogenicity (ability to produce disease), and dose (number of organisms needed). Breaking this link: antimicrobial agents, vaccines.",
             },
             {
               id: "ic2",
@@ -63,7 +63,7 @@ export function InfectionControlModule() {
               id: "ic6",
               title: "6. Susceptible Host",
               summary: "A person who can develop infection",
-              detail: "Not everyone exposed becomes infected — susceptibility depends on: immune status, age (very young and elderly are more vulnerable), nutritional status, chronic disease, immunosuppressive therapy, stress, and presence of invasive devices. Breaking this link: vaccination, nutrition, minimizing immunosuppression when possible.",
+              detail: "Not everyone exposed becomes infected. susceptibility depends on: immune status, age (very young and elderly are more vulnerable), nutritional status, chronic disease, immunosuppressive therapy, stress, and presence of invasive devices. Breaking this link: vaccination, nutrition, minimizing immunosuppression when possible.",
             },
           ]}
         />
@@ -74,7 +74,7 @@ export function InfectionControlModule() {
         <div className="grid sm:grid-cols-2 gap-3 mt-3">
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
             <p className="text-xs font-semibold text-blue-700 mb-1">Alcohol-Based Hand Rub (ABHR)</p>
-            <p className="text-xs text-blue-600"><strong>Preferred method</strong> for routine decontamination when hands are not visibly soiled. Faster, more effective against most organisms, less irritating to skin. Apply enough to cover all surfaces; rub until dry (minimum 20 seconds). <strong>NOT effective against:</strong> C. difficile spores and norovirus — these require soap and water.</p>
+            <p className="text-xs text-blue-600"><strong>Preferred method</strong> for routine decontamination when hands are not visibly soiled. Faster, more effective against most organisms, less irritating to skin. Apply enough to cover all surfaces; rub until dry (minimum 20 seconds). <strong>NOT effective against:</strong> C. difficile spores and norovirus. these require soap and water.</p>
           </div>
           <div className="p-4 bg-emerald-50/60 rounded-xl border border-emerald-100">
             <p className="text-xs font-semibold text-emerald-700 mb-1">Soap & Water Handwashing</p>
@@ -93,7 +93,7 @@ export function InfectionControlModule() {
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-blue-50/60 rounded-xl border border-blue-100">
             <p className="text-xs font-semibold text-blue-700 mb-1">Gloves</p>
-            <p className="text-xs text-blue-600">Used when touching blood, body fluids, mucous membranes, non-intact skin, or contaminated items. Change between patients and between dirty and clean tasks on the same patient. Gloves do NOT replace hand hygiene — hands must be cleaned before donning and after removing gloves.</p>
+            <p className="text-xs text-blue-600">Used when touching blood, body fluids, mucous membranes, non-intact skin, or contaminated items. Change between patients and between dirty and clean tasks on the same patient. Gloves do NOT replace hand hygiene. hands must be cleaned before donning and after removing gloves.</p>
           </div>
           <div className="p-4 bg-purple-50/60 rounded-xl border border-purple-100">
             <p className="text-xs font-semibold text-purple-700 mb-1">Gown</p>
@@ -101,7 +101,7 @@ export function InfectionControlModule() {
           </div>
           <div className="p-4 bg-teal-50/60 rounded-xl border border-teal-100">
             <p className="text-xs font-semibold text-teal-700 mb-1">Mask & Eye Protection</p>
-            <p className="text-xs text-teal-600"><strong>Surgical mask:</strong> Protects against droplet transmission (within ~1 meter). <strong>N95 respirator:</strong> Required for airborne precautions (TB, measles, varicella) — must be fit-tested. <strong>Eye protection (goggles/face shield):</strong> When splash or spray of body fluids is anticipated.</p>
+            <p className="text-xs text-teal-600"><strong>Surgical mask:</strong> Protects against droplet transmission (within ~1 meter). <strong>N95 respirator:</strong> Required for airborne precautions (TB, measles, varicella). must be fit-tested. <strong>Eye protection (goggles/face shield):</strong> When splash or spray of body fluids is anticipated.</p>
           </div>
         </div>
         <CognitiveCard
@@ -112,7 +112,7 @@ export function InfectionControlModule() {
       </MicroLesson>
 
       <MicroLesson title="Standard & Transmission-Based Precautions" subtitle="The two tiers of isolation precautions" icon={<AlertTriangle className="w-5 h-5" />}>
-        <EditableModuleText sectionKey="infctrl-precautions-content" defaultText="Infection prevention uses a two-tier system (Tier 1: Standard Precautions — applied to ALL patients regardless of diagnosis. Tier 2: Transmission-Based Precautions — added on top of standard precautions for patients with known or suspected infections transmitted by specific routes.)." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
+        <EditableModuleText sectionKey="infctrl-precautions-content" defaultText="Infection prevention uses a two-tier system (Tier 1: Standard Precautions. applied to ALL patients regardless of diagnosis. Tier 2: Transmission-Based Precautions. added on top of standard precautions for patients with known or suspected infections transmitted by specific routes.)." as="p" className="text-sm text-gray-600 leading-relaxed" multiline />
         <div className="space-y-3 mt-3">
           <div className="p-4 bg-green-50/60 rounded-xl border border-green-100">
             <p className="text-xs font-semibold text-green-700 mb-1">Standard Precautions (ALL Patients)</p>
@@ -181,7 +181,7 @@ export function InfectionControlModule() {
             question: "Standard precautions are based on the principle that:",
             options: ["Only symptomatic patients are infectious", "All blood and body fluids may contain transmissible agents", "Precautions are only needed for known infections", "Gloves provide sufficient protection for all situations"],
             correctIndex: 1,
-            rationale: "Standard precautions assume that ALL blood, body fluids, secretions, excretions (except sweat), non-intact skin, and mucous membranes may contain infectious agents — regardless of diagnosis.",
+            rationale: "Standard precautions assume that ALL blood, body fluids, secretions, excretions (except sweat), non-intact skin, and mucous membranes may contain infectious agents. regardless of diagnosis.",
           },
           {
             id: "ic6",
@@ -272,7 +272,7 @@ export function InfectionControlModule() {
             question: "Which factor makes a host MORE susceptible to infection?",
             options: ["Adequate nutrition", "Immunosuppressive therapy", "Up-to-date vaccinations", "Intact skin barriers"],
             correctIndex: 1,
-            rationale: "Immunosuppressive therapy weakens the immune response, making the host more vulnerable to infection. This breaks the sixth link in the chain — the susceptible host — by reducing the body's ability to fight off pathogens.",
+            rationale: "Immunosuppressive therapy weakens the immune response, making the host more vulnerable to infection. This breaks the sixth link in the chain. the susceptible host. by reducing the body's ability to fight off pathogens.",
           },
           {
             id: "ic19",

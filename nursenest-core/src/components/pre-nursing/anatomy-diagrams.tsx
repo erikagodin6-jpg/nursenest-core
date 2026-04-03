@@ -419,7 +419,7 @@ export const musculoskeletalLabels: LabelPoint[] = [
 ];
 
 export const integumentaryLabels: LabelPoint[] = [
-  { id: "epidermis", x: 350, y: 75, label: "Epidermis", hint: "Outermost skin layer; stratified squamous epithelium; contains keratinocytes, melanocytes, Langerhans cells; avascular — receives nutrients from dermis" },
+  { id: "epidermis", x: 350, y: 75, label: "Epidermis", hint: "Outermost skin layer; stratified squamous epithelium; contains keratinocytes, melanocytes, Langerhans cells; avascular; receives nutrients from dermis" },
   { id: "dermis", x: 150, y: 190, label: "Dermis", hint: "Middle layer with collagen/elastin fibers; contains blood vessels, nerves, hair follicles, sweat glands; papillary and reticular layers" },
   { id: "hypodermis", x: 350, y: 340, label: "Hypodermis", hint: "Subcutaneous layer; adipose tissue for insulation and energy storage; subcutaneous injection site; anchors skin to underlying fascia" },
   { id: "hair-follicle", x: 240, y: 170, label: "Hair Follicle", hint: "Invagination of epidermis into dermis; arrector pili muscle causes goosebumps; sebaceous gland opens into follicle" },

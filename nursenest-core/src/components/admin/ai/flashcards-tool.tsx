@@ -51,7 +51,7 @@ export function FlashcardsTool() {
   return (
     <div className="nn-card space-y-4 p-6">
       <p className="text-sm text-muted">
-        Generates <strong>draft records</strong> for review — never publishes flashcards to learners.
+        Generates <strong>draft records</strong> for review. Never publishes flashcards to learners.
       </p>
       <div className="grid gap-3 sm:grid-cols-2">
         <label className="text-sm sm:col-span-2">

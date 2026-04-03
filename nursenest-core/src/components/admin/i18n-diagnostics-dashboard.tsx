@@ -176,7 +176,7 @@ export function I18nDiagnosticsDashboard() {
             <dl className="mt-3 grid gap-2 text-sm sm:grid-cols-2">
               <div className="flex justify-between gap-4">
                 <dt className="text-muted">Last compile (JSON mtime)</dt>
-                <dd className="font-mono text-xs">{report.summary.lastCompileIso ?? "—"}</dd>
+                <dd className="font-mono text-xs">{report.summary.lastCompileIso ?? "N/A"}</dd>
               </div>
               <div className="flex justify-between gap-4">
                 <dt className="text-muted">Compile status</dt>
@@ -334,7 +334,7 @@ function KeyBlock({ title, keys }: { title: string; keys: string[] }) {
   return (
     <div>
       <h3 className="font-medium">{title}</h3>
-      <pre className="mt-2 max-h-48 overflow-auto rounded-md bg-black/5 p-3 text-xs font-mono">{keys.join("\n") || "—"}</pre>
+      <pre className="mt-2 max-h-48 overflow-auto rounded-md bg-black/5 p-3 text-xs font-mono">{keys.join("\n") || "N/A"}</pre>
     </div>
   );
 }
@@ -367,8 +367,8 @@ function LocaleTableRow({
       <td className="p-2">
         <span className={`rounded px-2 py-0.5 text-xs ${driftClass(row.drift)}`}>{row.drift}</span>
       </td>
-      <td className="p-2 text-xs">{row.compiledClientJson.exists ? row.compiledClientJson.keyCount : "—"}</td>
-      <td className="p-2 text-xs">{row.compiledNextJson.exists ? row.compiledNextJson.keyCount : "—"}</td>
+      <td className="p-2 text-xs">{row.compiledClientJson.exists ? row.compiledClientJson.keyCount : "N/A"}</td>
+      <td className="p-2 text-xs">{row.compiledNextJson.exists ? row.compiledNextJson.keyCount : "N/A"}</td>
     </tr>
   );
 }
