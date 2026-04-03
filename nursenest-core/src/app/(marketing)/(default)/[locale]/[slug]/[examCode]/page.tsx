@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ExamPathwayHub } from "@/components/exam-pathways/exam-pathway-hub";
-import { resolveExamPathwayFromMarketingHubSegment } from "@/lib/exam-pathways/exam-product-registry";
+import {
+  buildExamPathwayPath,
+  resolveExamPathwayFromMarketingHubSegment,
+} from "@/lib/exam-pathways/exam-product-registry";
 import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
 import { auth } from "@/lib/auth";
 import { loadNpCanadaInventoryGate } from "@/lib/np/np-pathway-inventory-gate";
@@ -21,14 +24,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const pathway = resolveExamPathwayFromMarketingHubSegment(locale, slug, examCode);
   if (!pathway) return {};
   const seo = getNpPracticeTestLandingCopy(locale, slug, examCode);
-  if (!seo) return {};
-  const path = `/${locale}/${slug}/${examCode}`;
-  const url = absoluteUrl(path);
+  const requestPath = `/${locale}/${slug}/${examCode}`;
+  const requestUrl = absoluteUrl(requestPath);
+  if (seo) {
+    return {
+      title: seo.title,
+      description: seo.description,
+      alternates: { canonical: requestUrl },
+      openGraph: { title: seo.title, description: seo.description, url: requestUrl, type: "website" },
+    };
+  }
+  const corePath = buildExamPathwayPath(pathway);
+  const coreUrl = absoluteUrl(corePath);
   return {
-    title: seo.title,
-    description: seo.description,
-    alternates: { canonical: url },
-    openGraph: { title: seo.title, description: seo.description, url, type: "website" },
+    title: pathway.seoTitle,
+    description: pathway.seoDescription,
+    alternates: { canonical: coreUrl },
+    openGraph: {
+      title: pathway.seoTitle,
+      description: pathway.seoDescription,
+      url: coreUrl,
+      type: "website",
+    },
   };
 }
 

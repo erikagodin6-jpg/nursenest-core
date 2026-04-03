@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 import {
   buildCatBlueprintAdminDiagnostics,
   buildMappingQualityWarnings,
+  catBlueprintSessionHasQualityWarnings,
   CAT_BLUEPRINT_WARN_POOL_EXAM_SIM_FRACTION,
   CAT_BLUEPRINT_WARN_SESSION_DELIVERED_FRACTION,
   sessionMappedFractionFromResultsLocal,
@@ -103,6 +104,7 @@ describe("buildCatBlueprintAdminDiagnostics", () => {
     assert.equal(admin.topFallbackBlueprintKeysDelivered[0]?.count, 2);
     assert.equal(admin.qualityThresholds.poolMappedFractionWarning, 0.9);
     assert.equal(admin.qualityThresholds.sessionMappedFractionWarning, 0.85);
+    assert.equal(admin.qualityThresholds.practicePoolLogFraction, 0.85);
     assert.equal(admin.deliveredPercentMapped, 25);
     assert.equal(admin.deliveredPercentFallback, 75);
     const cardiac = admin.fallbackDistributionDelivered.find((e) => e.blueprintKey === "Cardiac");
@@ -117,5 +119,46 @@ describe("threshold constants", () => {
   it("matches spec (exam pool 0.90, session 0.85)", () => {
     assert.equal(CAT_BLUEPRINT_WARN_POOL_EXAM_SIM_FRACTION, 0.9);
     assert.equal(CAT_BLUEPRINT_WARN_SESSION_DELIVERED_FRACTION, 0.85);
+  });
+});
+
+describe("catBlueprintSessionHasQualityWarnings", () => {
+  it("trusts persisted warnings when present", () => {
+    assert.equal(
+      catBlueprintSessionHasQualityWarnings({
+        presentationMode: "practice",
+        poolMappedFraction: 1,
+        sessionMappedFraction: 1,
+        scoredCount: 5,
+        persistedWarnings: [{ code: "session_delivered_mapping_low", detail: "x" }],
+      }),
+      true,
+    );
+  });
+
+  it("matches buildMappingQualityWarnings for exam pool", () => {
+    assert.equal(
+      catBlueprintSessionHasQualityWarnings({
+        presentationMode: "exam_simulation",
+        poolMappedFraction: 0.5,
+        sessionMappedFraction: null,
+        scoredCount: 0,
+        persistedWarnings: [],
+      }),
+      true,
+    );
+  });
+
+  it("does not false-flag when fractions are unknown", () => {
+    assert.equal(
+      catBlueprintSessionHasQualityWarnings({
+        presentationMode: "exam_simulation",
+        poolMappedFraction: null,
+        sessionMappedFraction: null,
+        scoredCount: 10,
+        persistedWarnings: [],
+      }),
+      false,
+    );
   });
 });

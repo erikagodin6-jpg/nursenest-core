@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import {
   EXAM_LESSONS_INDEX,
   blogPostBreadcrumbs,
@@ -103,4 +103,31 @@ test("exam-lessons index: single crumb title matches constant", () => {
 test("blog post: final schema item matches post path", () => {
   const { schemaItems } = blogPostBreadcrumbs("Hello", "hello-world");
   assert.equal(schemaItems[schemaItems.length - 1]?.item, toAbsoluteSiteUrl("/blog/hello-world"));
+});
+
+test("NP alias overview: hubBasePath keeps self-canonical keyword URL in breadcrumb JSON-LD", () => {
+  const usFnp = getExamPathwayById("us-np-fnp");
+  assert.ok(usFnp);
+  const aliasBase = "/us/np/aanp-practice-test";
+  const { crumbs, schemaItems } = pathwayOverviewBreadcrumbs(usFnp!, { hubBasePath: aliasBase });
+  assert.equal(crumbs[2]?.href, undefined);
+  assert.equal(schemaItems[2]?.item, toAbsoluteSiteUrl(aliasBase));
+});
+
+test("NP subpages: omit hubBasePath so breadcrumbs match core pathway URLs (canonical alignment)", () => {
+  const usFnp = getExamPathwayById("us-np-fnp");
+  assert.ok(usFnp);
+  const coreHub = buildExamPathwayPath(usFnp!);
+  const lessons = pathwayLessonsHubBreadcrumbs(usFnp!);
+  assert.equal(lessons.crumbs[2]?.href, coreHub);
+  assert.equal(lessons.schemaItems[3]?.item, toAbsoluteSiteUrl(`${coreHub}/lessons`));
+});
+
+test("NP questions hub: omit hubBasePath so question bank schema matches core canonical URL", () => {
+  const usFnp = getExamPathwayById("us-np-fnp");
+  assert.ok(usFnp);
+  const coreHub = buildExamPathwayPath(usFnp!);
+  const q = pathwayQuestionsHubBreadcrumbs(usFnp!);
+  assert.equal(q.crumbs[2]?.href, coreHub);
+  assert.equal(q.schemaItems[3]?.item, toAbsoluteSiteUrl(`${coreHub}/questions`));
 });

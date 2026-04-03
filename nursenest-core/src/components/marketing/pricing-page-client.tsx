@@ -2,6 +2,7 @@
 
 import type { TierCode } from "@prisma/client";
 import Link from "next/link";
+import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ArrowRight, Check } from "lucide-react";
 import { buildTierPricingNarrative } from "@/lib/conversion/pricing-catalog";
@@ -97,9 +98,11 @@ function checkoutErrorUserMessage(
 export function PricingPageClient({
   heading,
   intro,
+  heroSub,
 }: {
   heading: string;
   intro: string;
+  heroSub: string;
 }) {
   const [segment, setSegment] = useState<Segment>("rn");
   const [country, setCountry] = useState<"CA" | "US">("CA");
@@ -113,6 +116,48 @@ export function PricingPageClient({
   const { locale, t } = useMarketingI18n();
   const { region } = useNursenestRegion();
   const institutionalHref = withMarketingLocale(locale, "/for-institutions");
+
+  const planPersona = useMemo(
+    () =>
+      ({
+        monthly: t("pages.pricing.persona.monthly"),
+        "3-month": t("pages.pricing.persona.3-month"),
+        "6-month": t("pages.pricing.persona.6-month"),
+        yearly: t("pages.pricing.persona.yearly"),
+      }) satisfies Record<BillingDuration, string>,
+    [t],
+  );
+
+  const planOutcomeLines = useMemo(
+    () =>
+      ({
+        monthly: [0, 1, 2].map((i) => t(`pages.pricing.outcomes.monthly.${i}`)),
+        "3-month": [0, 1, 2].map((i) => t(`pages.pricing.outcomes.3-month.${i}`)),
+        "6-month": [0, 1, 2].map((i) => t(`pages.pricing.outcomes.6-month.${i}`)),
+        yearly: [0, 1, 2].map((i) => t(`pages.pricing.outcomes.yearly.${i}`)),
+      }) satisfies Record<BillingDuration, string[]>,
+    [t],
+  );
+
+  const pricingFaqs = useMemo(
+    () =>
+      [0, 1, 2, 3, 4].map((i) => ({
+        q: t(`pages.pricing.faq.${i}.q`),
+        a: t(`pages.pricing.faq.${i}.a`),
+      })),
+    [t],
+  );
+
+  const matrixRows = useMemo(
+    () =>
+      [0, 1, 2, 3, 4, 5, 6, 7].map((i) => [
+        t(`pages.pricing.matrix.r${i}.f`),
+        t(`pages.pricing.matrix.r${i}.free`),
+        t(`pages.pricing.matrix.r${i}.core`),
+        t(`pages.pricing.matrix.r${i}.premium`),
+      ]),
+    [t],
+  );
 
   const localize = useCallback((href: string) => withMarketingLocale(locale, href), [locale]);
 
@@ -264,63 +309,6 @@ export function PricingPageClient({
     ],
     [t],
   );
-
-  const heroHeadline = "Pass your nursing exam with a structured clinical prep loop";
-  const heroSubheadline =
-    "Train with exam-style questions, UWorld-level rationale structure, weak-area targeting, flashcards, and readiness guidance that tells you exactly what to do next.";
-
-  const planPersona: Record<BillingDuration, string> = {
-    monthly: "For students who want flexibility while building consistent weekly momentum.",
-    "3-month": "For learners in the last 8-12 weeks who need focused, high-yield readiness work.",
-    "6-month": "For busy schedules that need a practical runway without rushing.",
-    yearly: "For long-horizon prep across lessons, question bank depth, and exam-day confidence.",
-  };
-
-  const planOutcomeLines: Record<BillingDuration, string[]> = {
-    monthly: [
-      "Start today and get immediate weak-area targeting.",
-      "Build confidence with realistic question flow and rationales.",
-      "Keep pressure low with a month-to-month commitment.",
-    ],
-    "3-month": [
-      "Tighten your weakest topics before exam day.",
-      "Use readiness trends to prioritize the next best study block.",
-      "Convert study time into exam-style decision speed.",
-    ],
-    "6-month": [
-      "Cover fundamentals thoroughly, then sharpen with mocks.",
-      "Improve consistency before entering final exam stretch.",
-      "Reduce last-minute cramming with a structured timeline.",
-    ],
-    yearly: [
-      "Build deep clinical reasoning over a full prep cycle.",
-      "Track progress from baseline to exam-ready readiness bands.",
-      "Study with a complete system, not disconnected resources.",
-    ],
-  };
-
-  const pricingFaqs = [
-    {
-      q: "Can I cancel anytime?",
-      a: "Yes. You can cancel from your billing portal anytime. Your access remains active until the end of the current paid period.",
-    },
-    {
-      q: "What if I choose the wrong plan length?",
-      a: "Choose based on your timeline: final weeks = shorter plans, broader prep runway = longer plans. All plans use the same core study system.",
-    },
-    {
-      q: "Do you offer refunds?",
-      a: "Please review the refund policy before checkout. We keep pricing and billing terms transparent so you can choose with confidence.",
-    },
-    {
-      q: "What is the difference between plans?",
-      a: "The core platform is the same; plan duration changes your runway. Longer plans are best when you need deeper coverage and repetition before exam day.",
-    },
-    {
-      q: "How long do I keep access?",
-      a: "Access lasts for your selected billing period and renews automatically unless cancelled.",
-    },
-  ];
 
   return (
     <main className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
@@ -881,6 +869,55 @@ export function PricingPageClient({
             </Link>
           ))}
         </div>
+        {segment === "np" ? (
+          <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+            {country === "US" ? (
+              <>
+                NP search intent varies by board. Keyword hubs (same FNP or PMHNP pathways):{" "}
+                <MarketingTrackedLink
+                  href={localize(NP.aanpPracticeTest)}
+                  event={PH.marketingPathwayHubCta}
+                  eventProps={{ surface: "pricing_compare_np_board_link", pathway_id: "us-np-fnp", link_target: "aanp_practice_test" }}
+                  className="font-semibold text-primary hover:underline"
+                >
+                  AANP practice test
+                </MarketingTrackedLink>
+                ,{" "}
+                <MarketingTrackedLink
+                  href={localize(NP.anccFnpPracticeTest)}
+                  event={PH.marketingPathwayHubCta}
+                  eventProps={{ surface: "pricing_compare_np_board_link", pathway_id: "us-np-fnp", link_target: "ancc_fnp_practice_test" }}
+                  className="font-semibold text-primary hover:underline"
+                >
+                  ANCC FNP practice test
+                </MarketingTrackedLink>
+                ,{" "}
+                <MarketingTrackedLink
+                  href={localize(NP.pmhnpPracticeTest)}
+                  event={PH.marketingPathwayHubCta}
+                  eventProps={{ surface: "pricing_compare_np_board_link", pathway_id: "us-np-pmhnp", link_target: "pmhnp_practice_test" }}
+                  className="font-semibold text-primary hover:underline"
+                >
+                  PMHNP practice test
+                </MarketingTrackedLink>
+                .
+              </>
+            ) : (
+              <>
+                Canadian NP:{" "}
+                <MarketingTrackedLink
+                  href={localize(NP.cnplePracticeTest)}
+                  event={PH.marketingPathwayHubCta}
+                  eventProps={{ surface: "pricing_compare_np_board_link", pathway_id: "ca-np-cnple", link_target: "cnple_practice_test" }}
+                  className="font-semibold text-primary hover:underline"
+                >
+                  CNPLE practice test
+                </MarketingTrackedLink>{" "}
+                matches the national hub path.
+              </>
+            )}
+          </p>
+        ) : null}
       </section>
 
       <div className="mt-12 flex justify-center">

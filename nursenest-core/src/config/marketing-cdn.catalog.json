@@ -41,8 +41,8 @@
     "defaultFallbackThemeId": "lavender",
     "primaryBrandMarkObjectKey": "bluebrandlogo.png",
     "primaryBrandMarkThemeTinted": false,
-    "spacesBlueBrandLogoObjectKey": "bluebrandlogo.jpg",
-    "notes": "Per-theme logo keys: `src/config/theme-brand-logo-space-keys.ts` (explicit filenames). Resolver uses proxy-first via `getThemeLogoLoadChain`. Keep `primaryBrandMarkThemeTinted` false. Generic blue mark is last resort after legacy GIF/SVG.",
+    "spacesBlueBrandLogoObjectKey": "bluebrandlogo.png",
+    "notes": "Per-theme logo keys: `src/config/theme-brand-logo-space-keys.ts` (explicit filenames). Resolver uses proxy-first via `getThemeLogoLoadChain`. Keep `primaryBrandMarkThemeTinted` false. Prefer PNG/SVG for transparency; avoid JPG for the blue mark. Generic blue mark is last resort after legacy GIF/SVG.",
     "legacyFallbackUrl": "https://www.nursenest.ca/brand-logo.gif",
     "discoveryFilenamePattern": "Objects whose key matches /logo/i (see scripts/generate-marketing-assets.mjs CATEGORY_TESTS.LOGO_PRIMARY).",
     "themeBrandLogoObjectKeys": {}

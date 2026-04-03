@@ -2,11 +2,28 @@
 
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { NP } from "@/lib/marketing/marketing-entry-routes";
+import type { PathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-analytics-props";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 
-export function NpQuestionsHubBoardLinks({ pathwayId }: { pathwayId: string }) {
+export type NpQuestionsHubBoardLinkContext = PathwayMarketingHubLinkContext;
+
+export function NpQuestionsHubBoardLinks({
+  pathwayId,
+  linkContext,
+  surface = "questions_hub_board_link",
+}: {
+  pathwayId: string;
+  /** From `pathwayMarketingHubLinkContext(pathway, npAliasSegment)` — includes `pathway_id`, alias dimensions, canonical hub path. */
+  linkContext: NpQuestionsHubBoardLinkContext;
+  surface?: string;
+}) {
   const ev = PH.marketingPathwayHubCta;
-  const surface = "questions_hub_board_link" as const;
+  const baseProps = {
+    ...linkContext,
+    surface,
+    pathway_id: pathwayId,
+    destination_type: "cat_practice_tests" as const,
+  };
 
   if (pathwayId === "us-np-fnp") {
     return (
@@ -14,7 +31,7 @@ export function NpQuestionsHubBoardLinks({ pathwayId }: { pathwayId: string }) {
         <MarketingTrackedLink
           href={NP.aanpPracticeTest}
           event={ev}
-          eventProps={{ surface, pathway_id: pathwayId, link_target: "aanp_practice_test" }}
+          eventProps={{ ...baseProps, link_target: "aanp_practice_test" }}
           className="font-semibold text-primary hover:underline"
         >
           AANP practice test
@@ -23,7 +40,7 @@ export function NpQuestionsHubBoardLinks({ pathwayId }: { pathwayId: string }) {
         <MarketingTrackedLink
           href={NP.anccFnpPracticeTest}
           event={ev}
-          eventProps={{ surface, pathway_id: pathwayId, link_target: "ancc_fnp_practice_test" }}
+          eventProps={{ ...baseProps, link_target: "ancc_fnp_practice_test" }}
           className="font-semibold text-primary hover:underline"
         >
           ANCC FNP practice test
@@ -37,7 +54,7 @@ export function NpQuestionsHubBoardLinks({ pathwayId }: { pathwayId: string }) {
         <MarketingTrackedLink
           href={NP.pmhnpPracticeTest}
           event={ev}
-          eventProps={{ surface, pathway_id: pathwayId, link_target: "pmhnp_practice_test" }}
+          eventProps={{ ...baseProps, link_target: "pmhnp_practice_test" }}
           className="font-semibold text-primary hover:underline"
         >
           PMHNP practice test
@@ -51,7 +68,7 @@ export function NpQuestionsHubBoardLinks({ pathwayId }: { pathwayId: string }) {
         <MarketingTrackedLink
           href={NP.cnplePracticeTest}
           event={ev}
-          eventProps={{ surface, pathway_id: pathwayId, link_target: "cnple_practice_test" }}
+          eventProps={{ ...baseProps, link_target: "cnple_practice_test" }}
           className="font-semibold text-primary hover:underline"
         >
           CNPLE practice test

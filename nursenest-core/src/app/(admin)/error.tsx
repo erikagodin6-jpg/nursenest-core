@@ -12,7 +12,7 @@ export default function AdminError({
 }) {
   return (
     <main className="mx-auto max-w-lg px-6 py-16 text-center">
-      <a href="/" className="mb-6 inline-flex justify-center" aria-label="NurseNest home">
+      <a href="/" className="mb-6 inline-flex justify-center bg-transparent" aria-label="NurseNest home">
         <SiteBrandLogoMark />
       </a>
       <h1 className="text-xl font-semibold text-foreground">Admin area unavailable</h1>

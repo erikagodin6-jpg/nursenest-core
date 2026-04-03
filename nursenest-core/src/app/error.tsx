@@ -22,7 +22,7 @@ export default function GlobalError({
   return (
     <main className="mx-auto mt-16 w-full max-w-xl px-6">
       <div className="nn-card p-8">
-        <a href="/" className="mb-6 inline-flex" aria-label="NurseNest home">
+        <a href="/" className="mb-6 inline-flex bg-transparent" aria-label="NurseNest home">
           <SiteBrandLogoMark />
         </a>
         <h1 className="text-2xl font-bold">Something went wrong</h1>

@@ -56,6 +56,35 @@ export function buildMappingQualityWarnings(params: {
   return w;
 }
 
+/**
+ * Admin filters / summaries: true when persisted warnings exist or when fractions + mode
+ * would produce the same warnings as {@link buildMappingQualityWarnings} (thresholds live in
+ * `cat-blueprint-thresholds.ts` via that helper). Missing fractions are treated as “unknown”
+ * for the corresponding check (no false positives).
+ */
+export function catBlueprintSessionHasQualityWarnings(params: {
+  presentationMode?: CatPresentationMode;
+  poolMappedFraction: number | null | undefined;
+  sessionMappedFraction: number | null | undefined;
+  scoredCount: number | null | undefined;
+  persistedWarnings?: Array<{ code: string; detail: string }> | null | undefined;
+}): boolean {
+  if (params.persistedWarnings && params.persistedWarnings.length > 0) return true;
+  const pool = params.poolMappedFraction;
+  const sess = params.sessionMappedFraction;
+  if (pool == null && sess == null) return false;
+  const safePool = typeof pool === "number" ? pool : 1;
+  const safeSess = typeof sess === "number" ? sess : 1;
+  return (
+    buildMappingQualityWarnings({
+      poolMappedFraction: safePool,
+      sessionMappedFraction: safeSess,
+      scoredCount: params.scoredCount ?? 0,
+      presentationMode: params.presentationMode,
+    }).length > 0
+  );
+}
+
 const FALLBACK_DISTRIBUTION_MAX_KEYS = 30;
 const TOP_FALLBACK_QUICK_LIST = 15;
 
@@ -127,6 +156,7 @@ export function buildCatBlueprintAdminDiagnostics(params: {
     qualityThresholds: {
       poolMappedFractionWarning: t.poolMappedFractionWarning,
       sessionMappedFractionWarning: t.sessionMappedFractionWarning,
+      practicePoolLogFraction: t.practicePoolLogFraction,
     },
     deliveredPercentMapped,
     deliveredPercentFallback,

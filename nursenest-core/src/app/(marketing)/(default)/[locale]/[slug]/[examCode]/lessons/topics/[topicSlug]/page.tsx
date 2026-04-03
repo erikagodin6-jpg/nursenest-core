@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { PathwayLessonContentLocaleBanner } from "@/components/lessons/pathway-lesson-content-locale-banner";
@@ -12,6 +13,7 @@ import {
   listTopicClusters,
 } from "@/lib/lessons/pathway-lesson-loader";
 import { pathwayTopicClusterBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
+import { absoluteUrl } from "@/lib/seo/site-origin";
 
 export const dynamicParams = true;
 export const revalidate = 86400;
@@ -25,13 +27,30 @@ type Props = {
   searchParams: Promise<{ page?: string; pageSize?: string }>;
 };
 
+export async function generateMetadata({ params }: Pick<Props, "params">): Promise<Metadata> {
+  const { locale: countrySlug, slug: roleTrack, examCode, topicSlug } = await params;
+  const pathway = resolveExamPathwayFromMarketingHubSegment(countrySlug, roleTrack, examCode);
+  if (!pathway) return {};
+  const canonicalPath = buildExamPathwayPath(pathway, `lessons/topics/${topicSlug}`);
+  const canonical = absoluteUrl(canonicalPath);
+  const title = `Topic · ${pathway.displayName} | NurseNest`;
+  const description = `Lessons grouped under this topic for ${pathway.shortName} (${pathway.countrySlug === "canada" ? "Canada" : "US"}).`;
+  return {
+    title,
+    description,
+    alternates: { canonical },
+    openGraph: { title, description, url: canonical, type: "website" },
+  };
+}
+
 export default async function PathwayLessonTopicClusterPage({ params, searchParams }: Props) {
   const { locale: countrySlug, slug: roleTrack, examCode, topicSlug } = await params;
   const lessonContentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
   const pathway = resolveExamPathwayFromMarketingHubSegment(countrySlug, roleTrack, examCode);
   if (!pathway) notFound();
 
-  const base = buildExamPathwayPath(pathway, "lessons");
+  const hubBase = `/${countrySlug}/${roleTrack}/${examCode}`;
+  const base = `${hubBase}/lessons`;
   const topicBase = `${base}/topics/${topicSlug}`;
   const sp = await searchParams;
   const pageRequested = Math.max(1, Number(sp.page ?? "1") || 1);

@@ -113,7 +113,7 @@ export function SiteHeader() {
       >
         <Link
           href={localizeHref("/")}
-          className="group flex shrink-0 items-center gap-2 overflow-visible"
+          className="group flex shrink-0 items-center gap-2 overflow-visible bg-transparent"
           aria-label="NurseNest home"
         >
           <SiteBrandLogoMark className={isMarketingHome ? HOME_BRAND_LOGO_MARK_CLASSNAME : undefined} />
@@ -291,7 +291,7 @@ export function SiteHeader() {
             <div className="flex shrink-0 items-center justify-between border-b border-[var(--theme-separator)] p-4 pt-[max(1rem,env(safe-area-inset-top))]">
               <Link
                 href={localizeHref("/")}
-                className="flex shrink-0 items-center gap-2 overflow-visible"
+                className="flex shrink-0 items-center gap-2 overflow-visible bg-transparent"
                 aria-label="NurseNest home"
               >
                 <SiteBrandLogoMark className={HOME_BRAND_LOGO_MARK_CLASSNAME} />

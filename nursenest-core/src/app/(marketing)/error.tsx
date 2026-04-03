@@ -20,7 +20,7 @@ export default function MarketingSegmentError({
   return (
     <div className="flex min-h-[50vh] flex-col items-center justify-center px-6 py-16">
       <div className="nn-card max-w-md p-8 text-center">
-        <a href="/" className="mb-5 inline-flex justify-center" aria-label="NurseNest home">
+        <a href="/" className="mb-5 inline-flex justify-center bg-transparent" aria-label="NurseNest home">
           <SiteBrandLogoMark />
         </a>
         <h1 className="text-xl font-bold text-[var(--theme-heading-text)]">Something went wrong</h1>

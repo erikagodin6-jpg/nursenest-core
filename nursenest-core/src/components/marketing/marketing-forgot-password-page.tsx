@@ -10,7 +10,7 @@ export async function MarketingForgotPasswordPage({ locale }: { locale: string }
   return (
     <main className="mx-auto w-full max-w-md px-6 py-16">
       <div className="nn-card p-8">
-        <div className="mb-6 flex justify-center">
+        <div className="mb-6 flex justify-center bg-transparent">
           <SiteBrandLogoMark />
         </div>
         <h1 className="text-3xl font-bold">Reset your password</h1>

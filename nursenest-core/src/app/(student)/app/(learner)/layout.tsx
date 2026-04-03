@@ -45,7 +45,7 @@ export default async function LearnerShellLayout({ children }: { children: React
   if (!userId) {
     return (
       <div className="mx-auto w-full max-w-6xl px-6 py-8">
-        <Link href="/" className="mb-6 inline-flex overflow-visible" aria-label="NurseNest home">
+        <Link href="/" className="mb-6 inline-flex overflow-visible bg-transparent" aria-label="NurseNest home">
           <SiteBrandLogoMark />
         </Link>
         <p className="text-sm text-[var(--theme-muted-text)]">
@@ -65,7 +65,7 @@ export default async function LearnerShellLayout({ children }: { children: React
       <LearnerAppSectionAnalytics />
       <header className="nn-learner-exam-chrome-target nn-card mb-6 flex flex-col gap-4 rounded-2xl p-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex min-w-0 flex-wrap items-center gap-4">
-          <Link href="/" className="inline-flex shrink-0 overflow-visible">
+          <Link href="/" className="inline-flex shrink-0 overflow-visible bg-transparent">
             <SiteBrandLogoMark />
           </Link>
           <nav className="flex flex-wrap items-center gap-2 text-sm font-medium">
@@ -76,25 +76,25 @@ export default async function LearnerShellLayout({ children }: { children: React
             className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-menu-text)] hover:bg-[var(--accent-soft)]"
             href="/app/lessons"
           >
-            Lessons
+            Clinical lessons
           </Link>
           <Link
             className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-menu-text)] hover:bg-[var(--accent-soft)]"
             href="/app/questions"
           >
-            Question Bank
+            Question bank
           </Link>
           <Link
             className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-menu-text)] hover:bg-[var(--accent-soft)]"
             href="/app/practice-tests"
           >
-            Practice tests
+            Topic & adaptive tests
           </Link>
           <Link
             className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-menu-text)] hover:bg-[var(--accent-soft)]"
             href="/app/exams"
           >
-            Practice Exams
+            Mock exams
           </Link>
           <Link
             className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-menu-text)] hover:bg-[var(--accent-soft)]"
@@ -112,13 +112,13 @@ export default async function LearnerShellLayout({ children }: { children: React
             className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-menu-text)] hover:bg-[var(--accent-soft)]"
             href="/blog"
           >
-            Blog
+            Articles & tips
           </Link>
           <Link
             className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-menu-text)] hover:bg-[var(--accent-soft)]"
             href="/tools"
           >
-            Clinical tools
+            Calculators & tools
           </Link>
           <Link
             className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-menu-text)] hover:bg-[var(--accent-soft)]"
@@ -130,7 +130,7 @@ export default async function LearnerShellLayout({ children }: { children: React
             className="rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-menu-text)] hover:bg-[var(--accent-soft)]"
             href="/pricing"
           >
-            Plans
+            Plans & pricing
           </Link>
           </nav>
         </div>

@@ -29,7 +29,7 @@ export const BRAND_NAME = "NurseNest" as const;
  * Previous `max-w ~18–24rem` caps were the main limiter on visible wordmark width.
  */
 export const HEADER_BRAND_LOGO_SLOT_CLASSNAME =
-  "nn-brand-header-logo-slot inline-flex flex-none shrink-0 items-center justify-start overflow-visible self-center h-[5.5rem] max-h-[5.5rem] w-auto max-w-[min(96vw,26rem)] sm:h-[6rem] sm:max-h-[6rem] sm:max-w-[28rem] md:h-[6.75rem] md:max-h-[6.75rem] md:max-w-[30rem] lg:h-[7.25rem] lg:max-h-[7.25rem] lg:max-w-[31rem] xl:h-[7.75rem] xl:max-h-[7.75rem] xl:max-w-[32rem] 2xl:h-[8.25rem] 2xl:max-h-[8.25rem] 2xl:max-w-[34rem]" as const;
+  "nn-brand-header-logo-slot inline-flex flex-none shrink-0 items-center justify-start overflow-visible self-center bg-transparent h-[5.5rem] max-h-[5.5rem] w-auto max-w-[min(96vw,26rem)] sm:h-[6rem] sm:max-h-[6rem] sm:max-w-[28rem] md:h-[6.75rem] md:max-h-[6.75rem] md:max-w-[30rem] lg:h-[7.25rem] lg:max-h-[7.25rem] lg:max-w-[31rem] xl:h-[7.75rem] xl:max-h-[7.75rem] xl:max-w-[32rem] 2xl:h-[8.25rem] 2xl:max-h-[8.25rem] 2xl:max-w-[34rem]" as const;
 
 /** Homepage header: one step larger than default slot (still same img pipeline). */
 export const HOME_BRAND_LOGO_MARK_CLASSNAME =
@@ -39,7 +39,7 @@ export const HOME_BRAND_LOGO_MARK_CLASSNAME =
  * Raster mark: fills slot height; width from aspect ratio; `object-contain` keeps sharpness and trims effective padding vs stretching.
  */
 export const HEADER_BRAND_LOGO_IMG_CLASSNAME =
-  "nn-brand-header-logo block h-full w-auto max-h-full max-w-full shrink-0 object-contain object-left" as const;
+  "nn-brand-header-logo block h-full w-auto max-h-full max-w-full shrink-0 bg-transparent object-contain object-left" as const;
 
 /** Extra classes merged onto the slot in `<SiteBrandLogoMark />` (call sites rarely need overrides). */
 export const DEFAULT_BRAND_LOGO_MARK_CLASSNAME = "" as const;

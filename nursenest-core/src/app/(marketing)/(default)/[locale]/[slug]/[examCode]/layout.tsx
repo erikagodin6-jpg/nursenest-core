@@ -1,7 +1,5 @@
-import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { resolveExamPathwayFromMarketingHubSegment } from "@/lib/exam-pathways/exam-product-registry";
-import { absoluteUrl } from "@/lib/seo/site-origin";
 
 type Props = {
   children: React.ReactNode;
@@ -9,22 +7,10 @@ type Props = {
   params: Promise<{ locale: string; slug: string; examCode: string }>;
 };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { locale, slug, examCode } = await params;
-  const pathway = resolveExamPathwayFromMarketingHubSegment(locale, slug, examCode);
-  if (!pathway) return {};
-  const path = `/${pathway.countrySlug}/${pathway.roleTrack}/${pathway.examCode}`;
-  return {
-    title: pathway.seoTitle,
-    description: pathway.seoDescription,
-    alternates: { canonical: absoluteUrl(path) },
-    openGraph: {
-      title: pathway.seoTitle,
-      description: pathway.seoDescription,
-      url: absoluteUrl(path),
-    },
-  };
-}
+/**
+ * No `generateMetadata` here: child routes need different canonicals (alias hub self-canonical vs subpages → core pathway).
+ * Each `page.tsx` under this segment defines title, description, and `alternates.canonical`.
+ */
 
 export default async function ExamPathwayLayout({ children, params }: Props) {
   const { locale, slug, examCode } = await params;

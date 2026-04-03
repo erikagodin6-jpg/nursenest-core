@@ -18,7 +18,7 @@ export default function LearnerError({
 
   return (
     <div className="nn-card p-6">
-      <a href="/" className="mb-4 inline-flex" aria-label="NurseNest home">
+      <a href="/" className="mb-4 inline-flex bg-transparent" aria-label="NurseNest home">
         <SiteBrandLogoMark />
       </a>
       <h2 className="text-xl font-semibold">Unable to load this section</h2>

@@ -19,9 +19,15 @@ export async function MarketingPricingPage({ locale }: { locale: string }) {
     en,
     "Pathway-aligned practice, lessons, and timed exams in one place. Pick your exam track and choose a plan that matches your timeline.",
   );
+  const heroSub = resolveMarketingCopy(
+    m,
+    "pages.pricing.hero.subheadMain",
+    en,
+    "Train with exam-style questions, UWorld-level rationale structure, weak-area targeting, flashcards, and readiness guidance that tells you exactly what to do next.",
+  );
   return (
     <PricingPageErrorBoundary>
-      <PricingPageClient heading={heading} intro={intro} />
+      <PricingPageClient heading={heading} intro={intro} heroSub={heroSub} />
     </PricingPageErrorBoundary>
   );
 }

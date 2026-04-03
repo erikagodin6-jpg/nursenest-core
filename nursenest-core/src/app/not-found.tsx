@@ -5,7 +5,7 @@ export default function NotFound() {
   return (
     <main className="mx-auto mt-16 w-full max-w-xl px-6">
       <div className="nn-card p-8">
-        <Link href="/" className="mb-6 inline-flex" aria-label="NurseNest home">
+        <Link href="/" className="mb-6 inline-flex bg-transparent" aria-label="NurseNest home">
           <SiteBrandLogoMark />
         </Link>
         <h1 className="text-2xl font-bold">Page not found</h1>

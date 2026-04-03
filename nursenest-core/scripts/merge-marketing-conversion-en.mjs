@@ -68,8 +68,8 @@ const patch = {
   "home.gateway.frictionNote":
     "A free account opens starter runs and previews. A paid plan unlocks the full bank for your tier, lesson depth, timed mocks, saved history, and weak-area tools.",
 
-  "nav.marketingExplore": "Explore",
-  "nav.examHubsMobile": "Practice hubs by exam",
+  "nav.marketingExplore": "Who we help",
+  "nav.examHubsMobile": "Pick your exam",
   "nav.examStrip.rn": "NCLEX-RN",
   "nav.examStrip.pnUS": "NCLEX-PN",
   "nav.examStrip.pnCA": "REx-PN",

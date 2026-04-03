@@ -6,6 +6,7 @@ import {
 } from "@/lib/admin/build-admin-diagnostics-operations-layer";
 import { readPriorReadinessScore, writePriorReadinessScore } from "@/lib/admin/readiness-prior-score-cache";
 import { loadAdminDiagnostics } from "@/lib/admin/load-admin-diagnostics";
+import { loadCatBlueprintDiagnosticsSummary } from "@/lib/admin/load-cat-blueprint-diagnostics-summary";
 import { loadQuestionBankRemediationIntelligence } from "@/lib/questions/load-question-bank-remediation-intelligence";
 
 export const dynamic = "force-dynamic";
@@ -45,9 +46,10 @@ function trendStyles(direction: "improving" | "stable" | "worsening") {
 
 export default async function AdminDiagnosticsPage() {
   await requireAdmin();
-  const [diagnostics, remediation] = await Promise.all([
+  const [diagnostics, remediation, catBlueprintSummary] = await Promise.all([
     loadAdminDiagnostics(),
     loadQuestionBankRemediationIntelligence(),
+    loadCatBlueprintDiagnosticsSummary(),
   ]);
   const priorReadiness = readPriorReadinessScore();
   const ops = buildAdminDiagnosticsOperationsLayer(diagnostics, remediation, { priorReadiness });
@@ -84,6 +86,62 @@ export default async function AdminDiagnosticsPage() {
           </Link>
         </div>
       </div>
+
+      <section className="mt-6 rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-5">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">CAT blueprint quality</h2>
+            <p className="mt-1 max-w-3xl text-xs text-muted-foreground">
+              Based on the {catBlueprintSummary.recentCompletedCatSessions} most recent{" "}
+              <span className="font-medium text-foreground">completed</span> CAT practice tests (by last update). Averages
+              include only sessions that have the corresponding stored mapping fraction (pool vs delivered/session).
+              Low-quality count uses the same rules as the CAT sessions filter (
+              <span className="font-mono">lowQualityOnly=1</span>
+              ): exam simulation pool &lt;{" "}
+              {catBlueprintSummary.qualityThresholds.poolMappedFractionWarning * 100}% or delivered mapping &lt;{" "}
+              {catBlueprintSummary.qualityThresholds.sessionMappedFractionWarning * 100}% when scored.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2 text-sm">
+            <Link
+              href="/admin/diagnostics/cat-blueprint-sessions"
+              className="rounded-lg border border-border px-3 py-2 font-medium text-foreground hover:bg-muted"
+            >
+              CAT blueprint sessions
+            </Link>
+            <Link
+              href="/admin/questions/nclex-mapping"
+              className="rounded-lg border border-border px-3 py-2 font-medium text-primary underline-offset-4 hover:underline"
+            >
+              NCLEX mapping remediation
+            </Link>
+          </div>
+        </div>
+        <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
+          <div>
+            <dt className="text-muted-foreground">Avg pool mapped (recent completed, with pool %)</dt>
+            <dd className="font-semibold tabular-nums">
+              {catBlueprintSummary.avgPoolMappedPct != null ? `${catBlueprintSummary.avgPoolMappedPct}%` : "—"}
+            </dd>
+          </div>
+          <div>
+            <dt className="text-muted-foreground">Avg delivered mapped (recent completed, with session %)</dt>
+            <dd className="font-semibold tabular-nums">
+              {catBlueprintSummary.avgSessionMappedPct != null ? `${catBlueprintSummary.avgSessionMappedPct}%` : "—"}
+            </dd>
+          </div>
+          <div>
+            <dt className="text-muted-foreground">Sessions with blueprint diagnostics in window</dt>
+            <dd className="font-semibold tabular-nums">{catBlueprintSummary.sessionsWithBlueprintDiagnostics}</dd>
+          </div>
+          <div>
+            <dt className="text-muted-foreground">Low-quality sessions (same thresholds)</dt>
+            <dd className="font-semibold tabular-nums text-amber-900 dark:text-amber-100">
+              {catBlueprintSummary.lowQualitySessionCount}
+            </dd>
+          </div>
+        </dl>
+      </section>
 
       <section className="mt-8 grid gap-4 lg:grid-cols-3">
         <div className="rounded-xl border border-primary/25 bg-gradient-to-br from-primary/[0.07] via-[var(--theme-card-bg)] to-[var(--theme-card-bg)] p-5 lg:col-span-1">

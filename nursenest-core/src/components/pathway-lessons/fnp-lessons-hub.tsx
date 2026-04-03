@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { FnpLessonExplorer } from "@/components/pathway-lessons/fnp-lesson-explorer";
+import { FnpLessonsNpBoardCrosslinks } from "@/components/pathway-lessons/fnp-lessons-np-board-crosslinks";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import {
   buildFnpExplorerPayload,
@@ -73,6 +74,7 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
             interval, and safety-netting should match guideline intensity and the patient&apos;s context.
           </li>
         </ol>
+        <FnpLessonsNpBoardCrosslinks />
       </section>
 
       {/* Trust anchors */}

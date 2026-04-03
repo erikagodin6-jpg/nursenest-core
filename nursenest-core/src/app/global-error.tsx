@@ -36,7 +36,7 @@ export default function GlobalError({
           disableTransitionOnChange
         >
           <main className="mx-auto mt-16 w-full max-w-xl">
-            <a href="/" className="mb-6 inline-flex items-center gap-2">
+            <a href="/" className="mb-6 inline-flex items-center gap-2 bg-transparent">
               <SiteBrandLogoMark />
             </a>
             <div className="rounded-2xl border border-border bg-white p-8 shadow-sm">

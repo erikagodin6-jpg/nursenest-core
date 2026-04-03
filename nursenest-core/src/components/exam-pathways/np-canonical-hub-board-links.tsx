@@ -3,6 +3,7 @@
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { NP } from "@/lib/marketing/marketing-entry-routes";
+import { pathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-analytics-props";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 
 /**
@@ -10,7 +11,12 @@ import { PH } from "@/lib/observability/posthog-conversion-events";
  */
 export function NpCanonicalHubBoardLinks({ pathway }: { pathway: ExamPathwayDefinition }) {
   const ev = PH.marketingPathwayHubCta;
-  const pid = pathway.id;
+  const linkCtx = pathwayMarketingHubLinkContext(pathway, undefined);
+  const base = {
+    ...linkCtx,
+    surface: "canonical_hub_board_link" as const,
+    destination_type: "cat_practice_tests" as const,
+  };
 
   if (pathway.id === "us-np-fnp") {
     return (
@@ -21,7 +27,7 @@ export function NpCanonicalHubBoardLinks({ pathway }: { pathway: ExamPathwayDefi
           <MarketingTrackedLink
             href={NP.aanpPracticeTest}
             event={ev}
-            eventProps={{ pathway_id: pid, surface: "canonical_hub_board_link", link_target: "aanp_practice_test" }}
+            eventProps={{ ...base, link_target: "aanp_practice_test" }}
             className="font-semibold text-primary hover:underline"
           >
             AANP practice test
@@ -30,7 +36,7 @@ export function NpCanonicalHubBoardLinks({ pathway }: { pathway: ExamPathwayDefi
           <MarketingTrackedLink
             href={NP.anccFnpPracticeTest}
             event={ev}
-            eventProps={{ pathway_id: pid, surface: "canonical_hub_board_link", link_target: "ancc_fnp_practice_test" }}
+            eventProps={{ ...base, link_target: "ancc_fnp_practice_test" }}
             className="font-semibold text-primary hover:underline"
           >
             ANCC FNP practice test
@@ -50,7 +56,7 @@ export function NpCanonicalHubBoardLinks({ pathway }: { pathway: ExamPathwayDefi
           <MarketingTrackedLink
             href={NP.pmhnpPracticeTest}
             event={ev}
-            eventProps={{ pathway_id: pid, surface: "canonical_hub_board_link", link_target: "pmhnp_practice_test" }}
+            eventProps={{ ...base, link_target: "pmhnp_practice_test" }}
             className="font-semibold text-primary hover:underline"
           >
             PMHNP practice test
@@ -70,7 +76,7 @@ export function NpCanonicalHubBoardLinks({ pathway }: { pathway: ExamPathwayDefi
           <MarketingTrackedLink
             href={NP.cnplePracticeTest}
             event={ev}
-            eventProps={{ pathway_id: pid, surface: "canonical_hub_board_link", link_target: "cnple_practice_test" }}
+            eventProps={{ ...base, link_target: "cnple_practice_test" }}
             className="font-semibold text-primary hover:underline"
           >
             CNPLE practice test

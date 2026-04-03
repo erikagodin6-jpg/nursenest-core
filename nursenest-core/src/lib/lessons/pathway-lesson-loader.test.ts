@@ -24,4 +24,12 @@ describe("pathway-lesson-loader normalization", () => {
   it("returns undefined for unknown slug", async () => {
     assert.equal(await getPathwayLesson("ca-rn-nclex-rn", "does-not-exist-zzz"), undefined);
   });
+
+  it("injects scoped COPD gold-standard lesson from TS (catalog supplement)", async () => {
+    const lesson = await getPathwayLesson("us-rn-nclex-rn", "copd-clinical-judgment-gold");
+    assert.ok(lesson);
+    assert.equal(lesson!.sections.length, 5);
+    assert.match(lesson!.title, /NCLEX-RN.*US/i);
+    assert.ok((lesson!.preTest?.length ?? 0) >= 3);
+  });
 });

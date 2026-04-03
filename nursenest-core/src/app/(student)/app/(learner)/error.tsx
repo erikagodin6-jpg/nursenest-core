@@ -21,7 +21,7 @@ export default function LearnerError({
 
   return (
     <main className="space-y-4">
-      <a href="/app" className="inline-flex" aria-label="NurseNest learner home">
+      <a href="/app" className="inline-flex bg-transparent" aria-label="NurseNest learner home">
         <SiteBrandLogoMark />
       </a>
       <h1 className="text-2xl font-bold">This section hit a snag</h1>

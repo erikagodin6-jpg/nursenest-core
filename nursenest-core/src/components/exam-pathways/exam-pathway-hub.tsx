@@ -9,6 +9,7 @@ import { getPathwayProgrammaticSeoLanding } from "@/lib/seo/pathway-programmatic
 import { ExamPathwayHubBody } from "@/components/exam-pathways/exam-pathway-hub-body";
 import { NpCanonicalHubBoardLinks } from "@/components/exam-pathways/np-canonical-hub-board-links";
 import { NpSeoAliasHubAnalytics } from "@/components/marketing/np-seo-alias-hub-analytics";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import type { NpPathwayInventoryGate } from "@/lib/np/np-pathway-inventory-gate";
 
 export function ExamPathwayHub({
@@ -30,7 +31,7 @@ export function ExamPathwayHub({
   heroLead?: string;
   /** Surfaces CAT practice-test entry (signed-in → `/app/practice-tests`). */
   emphasizeCatPracticeTests?: boolean;
-  /** Request path `/${country}/${role}/${segment}` so breadcrumbs JSON-LD match NP SEO aliases. */
+  /** Request path for the hub crumb. On NP alias overviews, equals the keyword URL (self-canonical). Subpages omit hubBasePath in breadcrumbs — see `np-seo-alias-canonical-policy.ts`. */
   marketingHubPath: string;
   /** Full NP alias copy when on a board-named URL. */
   npPracticeSeo?: NpPracticeTestLandingCopy | null;
@@ -46,7 +47,13 @@ export function ExamPathwayHub({
   return (
     <div className="mx-auto max-w-4xl px-4 py-10 sm:py-14">
       {npSeoAliasSegment ? (
-        <NpSeoAliasHubAnalytics pathwayId={pathway.id} aliasSegment={npSeoAliasSegment} />
+        <NpSeoAliasHubAnalytics
+          pathwayId={pathway.id}
+          aliasSegment={npSeoAliasSegment}
+          canonicalPathwayHubPath={buildExamPathwayPath(pathway)}
+          countrySlug={pathway.countrySlug}
+          examFamily={String(pathway.examFamily)}
+        />
       ) : null}
       <BreadcrumbJsonLd items={schemaItems} />
       <FaqJsonLd items={pathwayHubFaqSchema(pathway)} />
@@ -89,7 +96,9 @@ export function ExamPathwayHub({
         </section>
       ) : null}
 
-      {showCanonicalBoardLinks ? <NpCanonicalHubBoardLinks pathway={pathway} /> : null}
+      {showCanonicalBoardLinks ? (
+        <NpCanonicalHubBoardLinks pathway={pathway} />
+      ) : null}
 
       <ExamPathwayHubBody
         pathway={pathway}

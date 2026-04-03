@@ -1,6 +1,14 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { resolveExamPathwayFromMarketingHubSegment } from "@/lib/exam-pathways/exam-product-registry";
+import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
+import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import {
+  buildExamPathwayPath,
+  resolveExamPathwayFromMarketingHubSegment,
+} from "@/lib/exam-pathways/exam-product-registry";
+import { pathwayPricingBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
+import { absoluteUrl } from "@/lib/seo/site-origin";
 
 export const dynamicParams = true;
 export const revalidate = 86400;
@@ -11,16 +19,37 @@ export function generateStaticParams() {
 
 type Props = { params: Promise<{ locale: string; slug: string; examCode: string }> };
 
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale, slug, examCode } = await params;
+  const pathway = resolveExamPathwayFromMarketingHubSegment(locale, slug, examCode);
+  if (!pathway) return {};
+  const canonicalPath = buildExamPathwayPath(pathway, "pricing");
+  const canonical = absoluteUrl(canonicalPath);
+  const title = `Pricing · ${pathway.displayName} | NurseNest`;
+  const description = `Plans for ${pathway.shortName} on NurseNest (${pathway.countryCode}). Checkout uses tier ${pathway.stripeTier} with content scoped to this pathway.`;
+  return {
+    title,
+    description,
+    alternates: { canonical },
+    openGraph: { title, description, url: canonical, type: "website" },
+  };
+}
+
 export default async function ExamPathwayPricingPage({ params }: Props) {
   const { locale, slug, examCode } = await params;
   const pathway = resolveExamPathwayFromMarketingHubSegment(locale, slug, examCode);
   if (!pathway) notFound();
 
+  const { crumbs, schemaItems } = pathwayPricingBreadcrumbs(pathway);
   const waitlist = pathway.acquisitionMode === "waitlist" || pathway.status === "upcoming";
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
-      <Link href={`/${pathway.countrySlug}/${pathway.roleTrack}/${pathway.examCode}`} className="text-sm font-medium text-primary hover:underline">
+      <BreadcrumbJsonLd items={schemaItems} />
+      <div className="mb-6">
+        <BreadcrumbTrail items={crumbs} />
+      </div>
+      <Link href={buildExamPathwayPath(pathway)} className="text-sm font-medium text-primary hover:underline">
         ← {pathway.shortName} overview
       </Link>
       <h1 className="mt-4 text-3xl font-extrabold text-[var(--theme-heading-text)]">Plans for {pathway.displayName}</h1>

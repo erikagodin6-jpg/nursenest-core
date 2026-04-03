@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import {
   HelpCircle,
   Layers,
@@ -12,7 +11,7 @@ import {
   Users,
 } from "lucide-react";
 
-type HomeStatsPayload = {
+export type HeroPlatformStatsPayload = {
   totalLessons: number;
   questionCount: number;
   totalFlashcards: number;
@@ -27,24 +26,9 @@ function formatStat(n: number | undefined): string {
 }
 
 /**
- * Live counts from `GET /api/public/home-stats` (aggregate, paywall-safe).
+ * Renders aggregate counts; parent loads `GET /api/public/home-stats` once (paywall-safe).
  */
-export default function HeroPlatformStats() {
-  const [stats, setStats] = useState<HomeStatsPayload | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    fetch("/api/public/home-stats")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((d: HomeStatsPayload | null) => {
-        if (!cancelled && d) setStats(d);
-      })
-      .catch(() => {});
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
+export default function HeroPlatformStats({ stats }: { stats: HeroPlatformStatsPayload | null }) {
   const rows = [
     { icon: HelpCircle, label: "Practice questions", value: formatStat(stats?.questionCount) },
     { icon: Layers, label: "Flashcards", value: formatStat(stats?.totalFlashcards) },
@@ -63,7 +47,7 @@ export default function HeroPlatformStats() {
       data-testid="section-platform-stats"
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-8 text-center">
+        <div className="mb-6 text-center">
           <h2
             className="mb-2 font-bold text-[var(--theme-heading-text)]"
             style={{ fontSize: "var(--text-section)" }}

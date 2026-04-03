@@ -17,6 +17,7 @@ import { ProgrammaticPracticeDynamicHeader } from "@/components/seo/programmatic
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { resolveProgrammaticProductLinks } from "@/lib/seo/programmatic-page-links";
 import { isUnifiedPracticeSlug } from "@/lib/seo/programmatic-practice-hub";
+import { NpProgrammaticPracticeTestCrossLinks } from "@/components/seo/np-programmatic-practice-test-cross-links";
 
 export function ProgrammaticSeoPage({ page, locale }: { page: SeoPageDefinition; locale: string }) {
   const related = getRelatedProgrammaticPages(page.slug, 6);
@@ -119,6 +120,8 @@ export function ProgrammaticSeoPage({ page, locale }: { page: SeoPageDefinition;
         {practiceConfig && page.practiceConversion ? (
           <ProgrammaticPracticeConversionBlocks slug={page.slug} locale={locale} config={practiceConfig} />
         ) : null}
+
+        <NpProgrammaticPracticeTestCrossLinks slug={page.slug} locale={locale} />
 
         <div className="prose prose-neutral max-w-none dark:prose-invert prose-headings:text-[var(--theme-body-text)] prose-p:text-[var(--theme-body-text)]/90 prose-li:text-[var(--theme-body-text)]/90">
           {page.sections.map((section, idx) => {

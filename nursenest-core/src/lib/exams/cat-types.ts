@@ -71,6 +71,7 @@ export type CatBlueprintAdminDiagnostics = {
   qualityThresholds: {
     poolMappedFractionWarning: number;
     sessionMappedFractionWarning: number;
+    practicePoolLogFraction: number;
   };
   /** Mapped vs fallback as percent of scored items (0–100 each; sums to ~100). */
   deliveredPercentMapped: number;

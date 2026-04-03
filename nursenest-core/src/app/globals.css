@@ -234,7 +234,12 @@ a {
 }
 
 /* Header wordmark: inside `.nn-brand-header-logo-slot`, respect slot bounds so every theme maps into the same visual frame. */
+.nn-brand-header-logo-slot {
+  background-color: transparent;
+}
+
 .nn-brand-header-logo-slot img.nn-brand-header-logo {
+  background-color: transparent;
   max-width: 100% !important;
   max-height: 100% !important;
   width: auto !important;

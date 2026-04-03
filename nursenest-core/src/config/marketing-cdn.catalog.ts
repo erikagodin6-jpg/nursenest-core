@@ -30,7 +30,7 @@ export function getPrimaryBrandMarkObjectKey(): string | null {
   return k || null;
 }
 
-/** Documented Spaces key for the blue brand asset (e.g. `bluebrandlogo.jpg`) — tried first in the header load chain when tinting is on. */
+/** Documented Spaces key for the blue brand asset (e.g. `bluebrandlogo.png`) — tried first in the tinted-mark chain when tinting is on. */
 export function getSpacesBlueBrandLogoObjectKey(): string | null {
   const raw = (catalog.logo as LogoCatalog).spacesBlueBrandLogoObjectKey;
   if (raw == null || typeof raw !== "string") return null;

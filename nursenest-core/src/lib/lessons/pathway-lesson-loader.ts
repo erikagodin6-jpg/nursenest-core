@@ -1,4 +1,9 @@
 import catalog from "@/content/pathway-lessons/catalog.json";
+import {
+  COPD_GOLD_STANDARD_SLUG,
+  copdGoldHubListInput,
+  getCopdGoldStandardLessonInput,
+} from "@/lib/lessons/scoped-lessons/copd-gold-standard";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { normalizePathwayLessonLocale, PATHWAY_LESSON_SITEMAP_LOCALE } from "@/lib/lessons/pathway-lesson-locale";
@@ -333,10 +338,19 @@ function filterCatalogLessonsByTopicSlugs(raw: LessonInput[], topicSlugsIn?: str
   return raw.filter((l) => set.has(l.topicSlug));
 }
 
+function shouldInjectCopdGoldStandard(pathwayId: string, topicSlugsIn?: string[]): boolean {
+  const gold = getCopdGoldStandardLessonInput(pathwayId);
+  if (!gold) return false;
+  if (topicSlugsIn && topicSlugsIn.length > 0 && !topicSlugsIn.includes(gold.topicSlug)) return false;
+  return true;
+}
+
 function getCatalogLessonsRaw(pathwayId: string): LessonInput[] {
   const bucket = data.pathways[pathwayId];
-  if (!bucket?.lessons?.length) return [];
-  return bucket.lessons.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP);
+  const fromJson = bucket?.lessons?.length ? bucket.lessons.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
+  const gold = getCopdGoldStandardLessonInput(pathwayId);
+  if (!gold || fromJson.some((l) => l.slug === gold.slug)) return fromJson;
+  return [gold, ...fromJson];
 }
 
 function getCatalogPathwayLessonsSync(pathwayId: string): PathwayLessonRecord[] {
@@ -390,6 +404,22 @@ function lessonLocaleMeta(
 
 async function dbCall<T>(run: () => Promise<T>, fallback: T): Promise<T> {
   return withDatabaseFallbackTimeout(run, fallback, PATHWAY_LESSON_DB_TIMEOUT_MS);
+}
+
+async function copdGoldStandardPublishedInDb(pathwayId: string, locale: string): Promise<boolean> {
+  const n = await dbCall(
+    () =>
+      prisma.pathwayLesson.count({
+        where: {
+          pathwayId,
+          locale,
+          slug: COPD_GOLD_STANDARD_SLUG,
+          status: ContentStatus.PUBLISHED,
+        },
+      }),
+    0,
+  );
+  return n > 0;
 }
 
 /** Any published row for pathway (any locale). */
@@ -546,11 +576,32 @@ export async function getPathwayLessonsPage(
   if (dbAny) {
     const t0 = performance.now();
     const effective = await resolveEffectiveListLocale(pathwayId, requested);
-    const total = await countPublishedDbLessonsForPathwayLocale(pathwayId, effective, topicSlugsIn);
+    let total = await countPublishedDbLessonsForPathwayLocale(pathwayId, effective, topicSlugsIn);
+    let goldHub: LessonInput | null = null;
+    if (shouldInjectCopdGoldStandard(pathwayId, topicSlugsIn)) {
+      const inDb = await copdGoldStandardPublishedInDb(pathwayId, effective);
+      if (!inDb) {
+        const meta = copdGoldHubListInput(pathwayId);
+        if (meta) {
+          goldHub = { ...meta, sections: [] };
+          total += 1;
+        }
+      }
+    }
     const pageCount = total === 0 ? 1 : Math.max(1, Math.ceil(total / ps));
     const safePage = total === 0 ? 1 : Math.min(p, pageCount);
-    const skip = (safePage - 1) * ps;
-    const raw = await loadPublishedLessonRowsPage(pathwayId, effective, skip, ps, topicSlugsIn);
+    const start = (safePage - 1) * ps;
+    let raw: LessonInput[];
+    if (goldHub && start === 0) {
+      const dbTake = Math.max(0, ps - 1);
+      const dbRows = await loadPublishedLessonRowsPage(pathwayId, effective, 0, dbTake, topicSlugsIn);
+      raw = [goldHub, ...dbRows];
+    } else if (goldHub && start > 0) {
+      const dbSkip = start - 1;
+      raw = await loadPublishedLessonRowsPage(pathwayId, effective, dbSkip, ps, topicSlugsIn);
+    } else {
+      raw = await loadPublishedLessonRowsPage(pathwayId, effective, start, ps, topicSlugsIn);
+    }
     const durationMs = Math.round(performance.now() - t0);
     safeServerLog("pathway_lessons", "hub_list_db_timing", {
       pathwayId,
@@ -693,20 +744,73 @@ export async function getLessonsForTopicPage(
         },
       };
     }
-    const pageCount = Math.max(1, Math.ceil(total / ps));
+    let totalWithGold = total;
+    let goldHub: LessonInput | null = null;
+    if (
+      topicSlug === "copd" &&
+      shouldInjectCopdGoldStandard(pathwayId, [topicSlug]) &&
+      !(await copdGoldStandardPublishedInDb(pathwayId, effective))
+    ) {
+      const meta = copdGoldHubListInput(pathwayId);
+      if (meta) {
+        goldHub = { ...meta, sections: [] };
+        totalWithGold += 1;
+      }
+    }
+    const pageCount = Math.max(1, Math.ceil(totalWithGold / ps));
     const safePage = Math.min(p, pageCount);
-    const skip = (safePage - 1) * ps;
-    const rows = await dbCall(
-      () =>
-        prisma.pathwayLesson.findMany({
-          where: { pathwayId, status: ContentStatus.PUBLISHED, topicSlug, locale: effective },
-          orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
-          skip,
-          take: ps,
-          select: PATHWAY_LESSON_HUB_LIST_SELECT,
-        }),
-      [],
-    );
+    const start = (safePage - 1) * ps;
+    type PathwayLessonHubListRow = {
+      slug: string;
+      title: string;
+      topic: string;
+      topicSlug: string;
+      bodySystem: string;
+      previewSectionCount: number;
+      seoTitle: string;
+      seoDescription: string;
+      locale: string;
+    };
+    let rows: PathwayLessonHubListRow[];
+    if (goldHub && start === 0) {
+      const dbTake = Math.max(0, ps - 1);
+      rows = await dbCall(
+        () =>
+          prisma.pathwayLesson.findMany({
+            where: { pathwayId, status: ContentStatus.PUBLISHED, topicSlug, locale: effective },
+            orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
+            skip: 0,
+            take: dbTake,
+            select: PATHWAY_LESSON_HUB_LIST_SELECT,
+          }),
+        [],
+      );
+    } else if (goldHub && start > 0) {
+      const dbSkip = start - 1;
+      rows = await dbCall(
+        () =>
+          prisma.pathwayLesson.findMany({
+            where: { pathwayId, status: ContentStatus.PUBLISHED, topicSlug, locale: effective },
+            orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
+            skip: dbSkip,
+            take: ps,
+            select: PATHWAY_LESSON_HUB_LIST_SELECT,
+          }),
+        [],
+      );
+    } else {
+      rows = await dbCall(
+        () =>
+          prisma.pathwayLesson.findMany({
+            where: { pathwayId, status: ContentStatus.PUBLISHED, topicSlug, locale: effective },
+            orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
+            skip: start,
+            take: ps,
+            select: PATHWAY_LESSON_HUB_LIST_SELECT,
+          }),
+        [],
+      );
+    }
     const durationMs = Math.round(performance.now() - t0);
     safeServerLog("pathway_lessons", "topic_list_db_timing", {
       pathwayId,
@@ -715,14 +819,19 @@ export async function getLessonsForTopicPage(
       durationMs,
       page: safePage,
       pageSize: ps,
-      total,
+      total: totalWithGold,
     });
     const meta = lessonLocaleMeta(marketingLocale, effective, requested !== effective, false);
+    const dbItems = rows.map((r) =>
+      withLocaleMeta(normalizeLessonForHubList(pathwayLessonRowToInput({ ...r, sections: [] })), meta),
+    );
+    const items =
+      goldHub && start === 0
+        ? [withLocaleMeta(normalizeLessonForHubList(goldHub), meta), ...dbItems]
+        : dbItems;
     return {
-      items: rows.map((r) =>
-        withLocaleMeta(normalizeLessonForHubList(pathwayLessonRowToInput({ ...r, sections: [] })), meta),
-      ),
-      total,
+      items,
+      total: totalWithGold,
       page: safePage,
       pageSize: ps,
       pageCount,

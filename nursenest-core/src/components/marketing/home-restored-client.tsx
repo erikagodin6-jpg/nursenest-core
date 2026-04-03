@@ -15,6 +15,7 @@ import { heroPathwayEntryLinks } from "@/lib/marketing/home-hero-gateway-config"
 import { rnQuestions } from "@/lib/marketing/marketing-entry-routes";
 import { HomeHeroMediaPanel } from "@/components/marketing/home-hero-media-panel";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
+import type { HeroPlatformStatsPayload } from "@/legacy/marketing/hero-platform-stats";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 
 const HomePageHeroTail = dynamic(() => import("@/components/marketing/home-page-hero-tail"), {
@@ -42,6 +43,10 @@ const HomeMarketingProductProof = dynamic(
   { ssr: false, loading: () => <div className="min-h-[400px]" aria-hidden /> },
 );
 
+const HeroPlatformStats = dynamic(() => import("@/legacy/marketing/hero-platform-stats"), {
+  ssr: false,
+  loading: () => <div className="min-h-[300px]" />,
+});
 const HeroFeatureStrip = dynamic(() => import("@/legacy/marketing/hero-feature-strip"), {
   ssr: false,
   loading: () => <div className="min-h-[60px]" />,
@@ -50,7 +55,7 @@ const HeroTrustIndicator = dynamic(() => import("@/legacy/marketing/hero-trust-i
   ssr: false,
   loading: () => <div className="min-h-[50px]" />,
 });
-const HeroPlatformStats = dynamic(() => import("@/legacy/marketing/hero-platform-stats"), {
+const HeroExpansionTracker = dynamic(() => import("@/legacy/marketing/hero-expansion-tracker"), {
   ssr: false,
   loading: () => <div className="min-h-[300px]" />,
 });
@@ -69,10 +74,6 @@ const HeroCertifications = dynamic(() => import("@/legacy/marketing/hero-certifi
 const HeroAlliedHealth = dynamic(() => import("@/legacy/marketing/hero-allied-health"), {
   ssr: false,
   loading: () => <div className="min-h-[400px]" />,
-});
-const HeroExpansionTracker = dynamic(() => import("@/legacy/marketing/hero-expansion-tracker"), {
-  ssr: false,
-  loading: () => <div className="min-h-[300px]" />,
 });
 const HomeDifferentiation = dynamic(() => import("@/legacy/marketing/home-differentiation"), {
   ssr: false,
@@ -121,12 +122,7 @@ type HomeRestoredClientProps = {
 export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClientProps) {
   const { t, locale } = useMarketingI18n();
   const { region, setRegion } = useNursenestRegion();
-  const [lessonCount, setLessonCount] = useState(0);
-  const [questionCount, setQuestionCount] = useState(0);
-  const [storeProductCount, setStoreProductCount] = useState(0);
-  const [flashcardCount, setFlashcardCount] = useState(0);
-  const [deckCount, setDeckCount] = useState(0);
-  const [registeredLearners, setRegisteredLearners] = useState(0);
+  const [homeStats, setHomeStats] = useState<HomeStatsPayload | null>(null);
 
   const heroSlides = useMemo(() => buildHomepageHeroSlides(t), [t]);
   /** When false, hero is single-column; media is omitted (no `hidden` placeholder delaying layout). */
@@ -149,12 +145,7 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
       .then((r) => (r.ok ? r.json() : null))
       .then((d: HomeStatsPayload | null) => {
         if (cancelled || !d) return;
-        setLessonCount(d.totalLessons ?? 0);
-        setQuestionCount(d.questionCount ?? 0);
-        setStoreProductCount(d.storeProductCount ?? 0);
-        if (typeof d.totalFlashcards === "number") setFlashcardCount(d.totalFlashcards);
-        if (typeof d.totalDecks === "number") setDeckCount(d.totalDecks);
-        if (typeof d.registeredLearners === "number") setRegisteredLearners(d.registeredLearners);
+        setHomeStats(d);
       })
       .catch(() => {});
     return () => {
@@ -188,6 +179,25 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
       setEmailMessage(e instanceof Error ? e.message : t("home.email.somethingWrong"));
     }
   }, [email, emailFrequency, t]);
+
+  const lessonCount = homeStats?.totalLessons ?? 0;
+  const questionCount = homeStats?.questionCount ?? 0;
+  const flashcardCount = homeStats?.totalFlashcards ?? 0;
+  const deckCount = homeStats?.totalDecks ?? 0;
+  const storeProductCount = homeStats?.storeProductCount ?? 0;
+  const registeredLearners = homeStats?.registeredLearners;
+
+  const heroPlatformStatsPayload = useMemo((): HeroPlatformStatsPayload | null => {
+    if (!homeStats) return null;
+    return {
+      totalLessons: homeStats.totalLessons ?? 0,
+      questionCount: homeStats.questionCount ?? 0,
+      totalFlashcards: homeStats.totalFlashcards ?? 0,
+      totalDecks: homeStats.totalDecks ?? 0,
+      scenarioCount: homeStats.scenarioCount,
+      registeredLearners: homeStats.registeredLearners,
+    };
+  }, [homeStats]);
 
   const trustStatsFormatted = useMemo(
     () => ({
@@ -421,7 +431,7 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
 
         <LazySection minHeight="300px" rootMargin="300px">
           <Suspense fallback={<div className="min-h-[300px]" />}>
-            <HeroPlatformStats />
+            <HeroPlatformStats stats={heroPlatformStatsPayload} />
           </Suspense>
         </LazySection>
 

@@ -1,6 +1,17 @@
 /**
  * SEO landing segments under `/{country}/np/{segment}` that are not canonical `examCode` keys
  * (e.g. `aanp-practice-test` → FNP pathway). Keeps strict public URLs without forking product rows.
+ *
+ * ## Canonical URL policy (marketing, no duplicate trees)
+ *
+ * - **Alias hub overview** (`/us/np/aanp-practice-test`, …): **self-canonical** — `generateMetadata` on the overview
+ *   page points `rel=canonical` at the alias URL and uses alias-specific title/description.
+ * - **All deeper routes** (lessons hub, lesson detail, topic clusters, questions, pricing): **consolidate to the core
+ *   pathway URL** — `rel=canonical` is always `buildExamPathwayPath(pathway, …)` (e.g. `/us/np/fnp/lessons/...`).
+ *   Users may still browse under an alias path; search engines consolidate rank to the canonical examCode URL.
+ * - **Breadcrumb JSON-LD**: on the **alias overview only**, pass `hubBasePath` so crumbs match the keyword URL.
+ *   On **subpages** (lessons, topics, questions, pricing), omit `hubBasePath` so crumbs and schema use the same URLs as
+ *   `rel=canonical` (core pathway tree). See `np-seo-alias-canonical-policy.ts`.
  */
 export type NpPracticeTestLandingCopy = {
   pathwayId: string;

@@ -119,7 +119,8 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
   const lockedSections =
     !fullAccess && lesson.sections.length > visible.length ? lesson.sections.slice(visible.length) : [];
 
-  const base = buildExamPathwayPath(pathway, "lessons");
+  const hubBase = `/${countrySlug}/${roleTrack}/${examCode}`;
+  const base = `${hubBase}/lessons`;
   const related = await getRelatedPathwayLessons(pathway.id, lesson.topicSlug, lesson.slug, undefined, lessonContentLocale);
   const { crumbs, schemaItems } = pathwayLessonDetailBreadcrumbs(pathway, lesson.slug, lesson.title);
   const lessonQuality = classifyPathwayLesson(lesson);

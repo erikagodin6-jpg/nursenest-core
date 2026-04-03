@@ -67,7 +67,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
 
   const lessons = pageResult.items;
   const topics = await listTopicClusters(pathway.id, lessonContentLocale);
-  const { crumbs, schemaItems } = pathwayLessonsHubBreadcrumbs(pathway, { hubBasePath: hubBase });
+  const { crumbs, schemaItems } = pathwayLessonsHubBreadcrumbs(pathway);
   const isNclexRnHub = pathway.id === "us-rn-nclex-rn" || pathway.id === "ca-rn-nclex-rn";
   const nclexRnRegion = pathway.id === "ca-rn-nclex-rn" ? "ca" : "us";
   const isUsNclexPnHub = pathway.id === "us-lpn-nclex-pn";
