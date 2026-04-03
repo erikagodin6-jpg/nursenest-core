@@ -219,7 +219,7 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
         >
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div
-              className={`grid items-start gap-3 md:gap-3.5 lg:gap-5 ${showHeroMediaColumn ? "md:grid-cols-[1fr_1.08fr]" : "md:grid-cols-1"}`}
+              className={`grid items-start gap-4 md:gap-5 lg:gap-6 ${showHeroMediaColumn ? "md:grid-cols-[1fr_1.08fr]" : "md:grid-cols-1"}`}
             >
               <div className="hero-motion-enter min-w-0 max-w-[min(100%,46rem)] space-y-3 md:space-y-4">
                 <div

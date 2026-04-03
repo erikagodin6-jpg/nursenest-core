@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { ContentStatus, ExamSessionStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { questionAccessWhere, userCanAccessExam } from "@/lib/entitlements/content-access-scope";
@@ -35,6 +35,8 @@ import { diagnoseExamStartEmpty } from "@/lib/questions/exam-start-empty-diagnos
 import { QUESTION_PAYLOAD_WARN_BYTES } from "@/lib/questions/question-api-limits";
 import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { mergeQuestionApiPayload } from "@/lib/i18n/educational-content-overlay";
+import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
 
 const DEFAULT_POOL_LIMIT = Math.min(20, MAX_SESSION_QUESTION_IDS);
 /** Large enough to shuffle 75-Q full exams from tagged pools without starving draws. */
@@ -100,13 +102,22 @@ function pickStratifiedByDifficulty<T extends { id: string; difficulty: number |
   return shuffleIds(out).slice(0, limit);
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
   setSentryServerContext({ route: "/api/exams/start", feature: SERVER_FEATURE.exam, userId: gate.userId });
 
   await seedMinimalQuestionBankIfEmpty();
+
+  const educationalLocale = getMarketingLocaleFromRequestCookie(req);
+  const localizeStartQuestion = (q: {
+    id: string;
+    stem: string;
+    options: unknown;
+    questionType: unknown;
+    difficulty: unknown;
+  }) => mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale);
 
   let examId: string | null = null;
   let hydrate: "full" | "window" = "window";
@@ -315,7 +326,7 @@ export async function POST(req: Request) {
         examId: effectiveExamId,
         total: questionPool.length,
         questionIds,
-        questions: questionPool.length ? [questionPool[0]] : [],
+        questions: questionPool.length ? [localizeStartQuestion(questionPool[0]!)] : [],
         poolEmpty: questionPool.length === 0,
         hydrate: "window" as const,
         timedMode,
@@ -344,7 +355,7 @@ export async function POST(req: Request) {
       examId: effectiveExamId,
       total: questionPool.length,
       questionIds,
-      questions: questionPool,
+      questions: questionPool.map(localizeStartQuestion),
       poolEmpty: questionPool.length === 0,
       hydrate: "full" as const,
       timedMode,

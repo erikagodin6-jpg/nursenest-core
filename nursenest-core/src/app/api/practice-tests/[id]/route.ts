@@ -20,6 +20,8 @@ import {
   enforcePracticeTestDetailProtection,
   enforcePracticeTestMutationProtection,
 } from "@/lib/http/api-protection";
+import { mergeQuestionApiPayload } from "@/lib/i18n/educational-content-overlay";
+import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
 
 const previewSelect = {
   id: true,
@@ -81,6 +83,8 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
     teachingReview = await buildPracticeTestTeachingReview(ids, answers, gate.entitlement);
   }
 
+  const educationalLocale = getMarketingLocaleFromRequestCookie(req);
+
   return NextResponse.json({
     id: row.id,
     title: row.title,
@@ -91,10 +95,14 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
     elapsedMs: row.elapsedMs,
     cursorIndex: row.cursorIndex,
     answers,
-    questions: questions.map((q) => ({
-      ...q,
-      stem: q.stem.length > 2000 ? `${q.stem.slice(0, 1997)}…` : q.stem,
-    })),
+    questions: questions.map((q) => {
+      const merged = mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale);
+      const stem = String(merged.stem ?? "");
+      return {
+        ...merged,
+        stem: stem.length > 2000 ? `${stem.slice(0, 1997)}…` : stem,
+      };
+    }),
     results: row.results as PracticeTestResultsJson | null,
     startedAt: row.startedAt.toISOString(),
     completedAt: row.completedAt?.toISOString() ?? null,

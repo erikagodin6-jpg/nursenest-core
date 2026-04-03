@@ -22,6 +22,7 @@ type QRow = {
   stem: string;
   questionType: string;
   options: unknown;
+  displayOptions?: string[] | null;
   topic?: string | null;
   subtopic?: string | null;
   difficulty?: number | null;
@@ -185,7 +186,13 @@ export function PracticeTestRunnerClient({
   const examSimulation = testConfig?.catPresentationMode === "exam_simulation";
   const aanpNpExamSim = examSimulation && testConfig?.catExamConfigId === "aanp-np-us";
   const catMaxCap = testConfig?.catMaxQuestions ?? total;
-  const opts = useMemo(() => (current ? parseOptions(current.options) : []), [current]);
+  const optsCanonical = useMemo(() => (current ? parseOptions(current.options) : []), [current]);
+  const optsDisplay = useMemo(() => {
+    if (!current) return [];
+    const d = current.displayOptions;
+    if (Array.isArray(d) && d.length === optsCanonical.length) return d.map((x) => String(x));
+    return optsCanonical;
+  }, [current, optsCanonical]);
 
   const isSata =
     current &&
@@ -608,10 +615,11 @@ export function PracticeTestRunnerClient({
                 </div>
                 {isSata ? (
                   <ul className="space-y-2">
-                    {opts.map((label) => {
-                      const selected = Array.isArray(raw) ? raw.includes(label) : false;
+                    {optsCanonical.map((canonical, i) => {
+                      const label = optsDisplay[i] ?? canonical;
+                      const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
                       return (
-                        <li key={label}>
+                        <li key={canonical}>
                           <label
                             className={`flex min-h-[2.75rem] cursor-pointer items-start gap-3 rounded-lg border px-4 py-3 text-sm leading-snug transition ${
                               selected
@@ -624,7 +632,7 @@ export function PracticeTestRunnerClient({
                               checked={selected}
                               onChange={(e) => {
                                 const prev = Array.isArray(raw) ? [...raw] : [];
-                                const next = e.target.checked ? [...prev, label] : prev.filter((x) => x !== label);
+                                const next = e.target.checked ? [...prev, canonical] : prev.filter((x) => x !== canonical);
                                 setAnswerForCurrent(next);
                               }}
                               className="mt-0.5 size-4 shrink-0 rounded border-slate-300 text-primary focus:ring-primary/30"
@@ -637,21 +645,24 @@ export function PracticeTestRunnerClient({
                   </ul>
                 ) : (
                   <ul className="space-y-2">
-                    {opts.map((label) => (
-                      <li key={label}>
-                        <button
-                          type="button"
-                          onClick={() => setAnswerForCurrent(label)}
-                          className={`min-h-[2.75rem] w-full rounded-lg border px-4 py-3 text-left text-sm leading-snug transition ${
-                            raw === label
-                              ? "border-primary/50 bg-primary/[0.05] font-medium text-slate-900 ring-1 ring-primary/30 dark:text-slate-50"
-                              : "border border-slate-200 bg-white text-slate-800 hover:border-slate-300 dark:border-slate-700 dark:bg-slate-900/30 dark:text-slate-100 dark:hover:border-slate-600"
-                          }`}
-                        >
-                          {label}
-                        </button>
-                      </li>
-                    ))}
+                    {optsCanonical.map((canonical, i) => {
+                      const label = optsDisplay[i] ?? canonical;
+                      return (
+                        <li key={canonical}>
+                          <button
+                            type="button"
+                            onClick={() => setAnswerForCurrent(canonical)}
+                            className={`min-h-[2.75rem] w-full rounded-lg border px-4 py-3 text-left text-sm leading-snug transition ${
+                              raw === canonical
+                                ? "border-primary/50 bg-primary/[0.05] font-medium text-slate-900 ring-1 ring-primary/30 dark:text-slate-50"
+                                : "border border-slate-200 bg-white text-slate-800 hover:border-slate-300 dark:border-slate-700 dark:bg-slate-900/30 dark:text-slate-100 dark:hover:border-slate-600"
+                            }`}
+                          >
+                            {label}
+                          </button>
+                        </li>
+                      );
+                    })}
                   </ul>
                 )}
               </div>

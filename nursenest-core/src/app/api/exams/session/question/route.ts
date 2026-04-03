@@ -10,6 +10,8 @@ import { MAX_SESSION_QUESTION_IDS, sanitizeSessionQuestionIds } from "@/lib/exam
 import { QUESTION_PAYLOAD_WARN_BYTES } from "@/lib/questions/question-api-limits";
 import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { mergeQuestionApiPayload } from "@/lib/i18n/educational-content-overlay";
+import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
 
 /**
  * Fetch a single exam question by session + index (avoids loading full pool in one response).
@@ -81,10 +83,13 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Question not available" }, { status: 404 });
     }
 
+    const educationalLocale = getMarketingLocaleFromRequestCookie(req);
+    const localizedQuestion = mergeQuestionApiPayload({ ...question } as Record<string, unknown>, educationalLocale);
+
     const jsonBody = {
       index,
       total: ids.length,
-      question,
+      question: localizedQuestion,
       entitlementFiltered: sanitized.ids.length !== ids.length,
     };
     const approxPayloadBytes = estimateJsonUtf8Bytes(jsonBody);

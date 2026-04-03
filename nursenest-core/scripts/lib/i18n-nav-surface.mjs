@@ -61,6 +61,50 @@ const NAV_IDENTICAL_VALUE_ALLOWLIST = new Set([
   "United States",
 ]);
 
+/**
+ * Tagalog locale: many admin/footer nav strings stay English in production (MT returns English;
+ * product choice is mixed Taglish UI). Explicit allowlist for audit verification only.
+ */
+export const TAGALOG_NAV_IDENTICAL_ENGLISH_OK = new Set([
+  "components.footer.alliedPricing",
+  "components.footer.diagnosticImaging",
+  "components.footer.electrolyteAmpAbgSimulator",
+  "components.footer.internationalRecruitment",
+  "components.footer.medicalLabTech",
+  "components.footer.npExamPrepHub",
+  "components.footer.occupationalTherapy",
+  "components.footer.paramedic",
+  "components.footer.psychotherapy",
+  "components.footer.respiratoryTherapist",
+  "components.footer.safetyHazardSimulator",
+  "components.footer.siConventionalConverter",
+  "dashboard.breadcrumbDashboard",
+  "footer.applyNest",
+  "footer.ecosystem",
+  "footer.medLabTech",
+  "nav.allied.mockExams",
+  "nav.allied.testBank",
+  "nav.analytics",
+  "nav.catAnalytics",
+  "nav.clinicalLessons",
+  "nav.diagnosticImaging",
+  "nav.ecosystem",
+  "nav.medLabTech",
+  "nav.medMathLab",
+  "nav.newGradCareer",
+  "nav.npAdvanced",
+  "nav.occupationalTherapy",
+  "nav.paramedicine",
+  "nav.preNursing",
+  "nav.previewMode",
+  "nav.psychotherapy",
+  "nav.respTherapy",
+  "nav.revenueIntelligence",
+  "nav.screenshotStudio",
+  "nav.seoDashboard",
+  "nav.testBank",
+]);
+
 export function isNavIdenticalAllowlisted(key, enVal, locVal) {
   if (String(enVal) !== String(locVal)) return false;
   if (NAV_PATCH_SKIP_KEYS.has(key)) return true;

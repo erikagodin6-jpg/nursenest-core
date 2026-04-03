@@ -1,6 +1,11 @@
 /**
  * Normalizes arbitrary theme strings (URL segments, legacy labels, aliases) to a canonical
  * theme id registered in `THEME_OPTIONS`.
+ *
+ * Logo filenames are always `{canonicalId}brandlogo_transparent.png` (see `THEME_BRAND_LOGO_SPACE_KEYS`).
+ * Similar **labels** (e.g. pastel lilac vs lavender) are still **distinct ids** with distinct files.
+ * **indigo** and **berry** are separate themes (different purples) — do not merge their object keys.
+ * Aliases below only remap **legacy nicknames** (e.g. `black` → `midnight`); they do not imply shared assets.
  */
 import { NURSENEST_DEFAULT_THEME, THEME_OPTIONS } from "@/lib/theme/theme-registry";
 

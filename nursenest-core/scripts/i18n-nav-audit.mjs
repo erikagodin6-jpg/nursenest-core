@@ -15,6 +15,7 @@ import {
   isNavIdenticalAllowlisted,
   placeholderBalance,
   SUPPORTED_NON_EN_LOCALES,
+  TAGALOG_NAV_IDENTICAL_ENGLISH_OK,
 } from "./lib/i18n-nav-surface.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -57,7 +58,10 @@ function auditLocale(code, en, locale, enNavKeys) {
       continue;
     }
     if (String(ev) === lStr) {
-      if (isNavIdenticalAllowlisted(key, String(ev), lStr)) {
+      if (
+        isNavIdenticalAllowlisted(key, String(ev), lStr) ||
+        (code === "tl" && TAGALOG_NAV_IDENTICAL_ENGLISH_OK.has(key))
+      ) {
         issues.identicalAllowlisted.push(key);
       } else {
         issues.identicalToEn.push(key);

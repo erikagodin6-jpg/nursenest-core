@@ -21,6 +21,7 @@ type ExamQuestion = {
   id: string;
   stem: string;
   options: unknown;
+  displayOptions?: string[] | null;
   questionType: QuestionType;
 };
 
@@ -648,7 +649,11 @@ export function ExamPracticeClient({
     return null;
   }
 
-  const opts = parseOptions(q.options);
+  const optsCanonical = parseOptions(q.options);
+  const optsDisplay =
+    Array.isArray(q.displayOptions) && q.displayOptions.length === optsCanonical.length
+      ? q.displayOptions.map((x) => String(x))
+      : optsCanonical;
   const raw = answers[q.id];
 
   return (
@@ -677,10 +682,11 @@ export function ExamPracticeClient({
 
         {q.questionType === "SATA" ? (
           <ul className="space-y-2">
-            {opts.map((label) => {
-              const selected = Array.isArray(raw) ? raw.includes(label) : false;
+            {optsCanonical.map((canonical, i) => {
+              const label = optsDisplay[i] ?? canonical;
+              const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
               return (
-                <li key={label}>
+                <li key={canonical}>
                   <label
                     className={`flex min-h-[2.75rem] cursor-pointer items-start gap-3 rounded-lg border px-4 py-3 text-sm leading-snug transition ${
                       selected
@@ -693,7 +699,7 @@ export function ExamPracticeClient({
                       checked={selected}
                       onChange={(e) => {
                         const prev = Array.isArray(raw) ? [...raw] : [];
-                        const next = e.target.checked ? [...prev, label] : prev.filter((x) => x !== label);
+                        const next = e.target.checked ? [...prev, canonical] : prev.filter((x) => x !== canonical);
                         setAnswers((a) => ({ ...a, [q.id]: next }));
                       }}
                       className="mt-0.5 size-4 shrink-0 rounded border-slate-300 text-primary focus:ring-primary/30"
@@ -706,21 +712,24 @@ export function ExamPracticeClient({
           </ul>
         ) : (
           <ul className="space-y-2">
-            {opts.map((label) => (
-              <li key={label}>
-                <button
-                  type="button"
-                  onClick={() => setAnswers((a) => ({ ...a, [q.id]: label }))}
-                  className={`min-h-[2.75rem] w-full rounded-lg border px-4 py-3 text-left text-sm leading-snug transition ${
-                    raw === label
-                      ? "border-primary/50 bg-primary/[0.05] font-medium text-slate-900 ring-1 ring-primary/30 dark:text-slate-50"
-                      : "border border-slate-200 bg-white text-slate-800 hover:border-slate-300 dark:border-slate-700 dark:bg-slate-900/40 dark:text-slate-100 dark:hover:border-slate-600"
-                  }`}
-                >
-                  {label}
-                </button>
-              </li>
-            ))}
+            {optsCanonical.map((canonical, i) => {
+              const label = optsDisplay[i] ?? canonical;
+              return (
+                <li key={canonical}>
+                  <button
+                    type="button"
+                    onClick={() => setAnswers((a) => ({ ...a, [q.id]: canonical }))}
+                    className={`min-h-[2.75rem] w-full rounded-lg border px-4 py-3 text-left text-sm leading-snug transition ${
+                      raw === canonical
+                        ? "border-primary/50 bg-primary/[0.05] font-medium text-slate-900 ring-1 ring-primary/30 dark:text-slate-50"
+                        : "border border-slate-200 bg-white text-slate-800 hover:border-slate-300 dark:border-slate-700 dark:bg-slate-900/40 dark:text-slate-100 dark:hover:border-slate-600"
+                    }`}
+                  >
+                    {label}
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         )}
 

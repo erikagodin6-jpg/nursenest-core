@@ -10,7 +10,7 @@ export async function MarketingResetPasswordPage({
   locale: string;
   token: string;
 }) {
-  await loadMarketingMessages(locale);
+  const m = await loadMarketingMessages(locale);
   const loginHref = withMarketingLocale(locale, "/login");
 
   return (
@@ -19,19 +19,24 @@ export async function MarketingResetPasswordPage({
         <div className="mb-6 flex justify-center bg-transparent">
           <SiteBrandLogoMark variant="auth" />
         </div>
-        <h1 className="text-3xl font-bold">Choose a new password</h1>
-        <p className="mt-2 text-sm text-muted">Enter and confirm your new password (at least 8 characters).</p>
+        <h1 className="text-3xl font-bold">{m["pages.resetPassword.h1"] ?? "Choose a new password"}</h1>
+        <p className="mt-2 text-sm text-muted">
+          {m["pages.resetPassword.intro"] ?? "Enter and confirm your new password (at least 8 characters)."}
+        </p>
         <ResetPasswordForm
           token={token}
           backToLoginHref={loginHref}
-          backToLoginLabel="Back to sign in"
-          submitLabel="Update password"
-          successMessage="Your password has been updated. You can sign in now."
-          errorGeneric="This reset link is invalid or has expired. Request a new one from the sign-in page."
-          passwordLabel="New password"
-          confirmLabel="Confirm new password"
-          mismatchMessage="Passwords do not match."
-          weakPasswordMessage="Password must be at least 8 characters."
+          backToLoginLabel={m["pages.resetPassword.backToLoginLabel"] ?? "Back to sign in"}
+          submitLabel={m["pages.resetPassword.submitLabel"] ?? "Update password"}
+          successMessage={m["pages.resetPassword.successMessage"] ?? "Your password has been updated. You can sign in now."}
+          errorGeneric={
+            m["pages.resetPassword.errorGeneric"] ??
+            "This reset link is invalid or has expired. Request a new one from the sign-in page."
+          }
+          passwordLabel={m["pages.resetPassword.passwordLabel"] ?? "New password"}
+          confirmLabel={m["pages.resetPassword.confirmLabel"] ?? "Confirm new password"}
+          mismatchMessage={m["pages.resetPassword.mismatchMessage"] ?? "Passwords do not match."}
+          weakPasswordMessage={m["pages.resetPassword.weakPasswordMessage"] ?? "Password must be at least 8 characters."}
         />
       </div>
     </main>

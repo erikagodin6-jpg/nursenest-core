@@ -4,6 +4,10 @@
  * One file per theme id: `{themeId}brandlogo_transparent.png` — colors match `THEME_OPTIONS[].color`
  * in `src/lib/theme/theme-registry.ts`. Regenerate: `npx tsx scripts/generate-theme-logos-from-registry.ts`.
  * Committed copies load first from `public/branding/theme-logos/` (see `getThemeLogoLoadChain`).
+ *
+ * **Maintainers:** keys are 1:1 with `THEME_OPTIONS[].id`. Grouped or similar hues (e.g. indigo vs berry,
+ * lavender vs lavender-dream) still get **separate** files — only `normalizeThemeIdForLogo` aliases merge *names*,
+ * not asset paths. Run `npm run verify:theme-logos` before release to confirm local PNG parity.
  */
 import { NURSENEST_DEFAULT_THEME, THEME_OPTIONS } from "@/lib/theme/theme-registry";
 

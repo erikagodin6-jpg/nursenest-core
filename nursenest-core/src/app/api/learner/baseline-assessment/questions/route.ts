@@ -6,6 +6,8 @@ import { BaselineAssessmentAttemptStatus } from "@prisma/client";
 import type { CountryCode, TierCode } from "@prisma/client";
 import { BASELINE_QUESTION_COUNT, pickRandomBaselineQuestionIds, userShouldSeeBaselinePrompt } from "@/lib/baseline/baseline-assessment";
 import { withRetry } from "@/lib/resilience/with-retry";
+import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
+import { mergeQuestionApiPayload } from "@/lib/i18n/educational-content-overlay";
 
 export const dynamic = "force-dynamic";
 
@@ -71,9 +73,12 @@ export async function GET() {
   const order = new Map(ids.map((id, i) => [id, i]));
   const questions = [...rows].sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
 
+  const educationalLocale = await getMarketingLocaleForDefaultRoute();
+  const localized = questions.map((q) => mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale));
+
   return NextResponse.json({
     attemptId: attempt.id,
-    questions,
+    questions: localized,
     total: questions.length,
   });
 }

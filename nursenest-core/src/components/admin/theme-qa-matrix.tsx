@@ -31,7 +31,7 @@ export function ThemeQaMatrix() {
               {logoSrc ? (
                 <img
                   src={logoSrc}
-                  alt=""
+                  alt={`${opt.label} theme wordmark`}
                   className="h-8 w-auto max-w-full object-contain object-left [image-rendering:auto]"
                 />
               ) : (
@@ -59,7 +59,6 @@ export function ThemeQaMatrix() {
             </div>
 
             <div className="flex items-center gap-2 border-t border-[var(--theme-card-border)] pt-2">
-              {/* eslint-disable-next-line @next/next/no-img-element -- tiny QA preview */}
               <img src="/favicon.ico" alt="" width={20} height={20} className="h-5 w-5 shrink-0 rounded-sm" />
               <span className="text-[9px] text-[var(--theme-muted-text)]">Favicon (global)</span>
             </div>

@@ -10,6 +10,7 @@ type Q = {
   stem: string;
   questionType: string;
   options: unknown;
+  displayOptions?: string[] | null;
   topic: string | null;
   exam: string | null;
 };
@@ -224,7 +225,11 @@ export function BaselineAssessmentFlow() {
 
   if (!current) return null;
 
-  const opts = parseOptions(current.options);
+  const optsCanonical = parseOptions(current.options);
+  const optsDisplay =
+    Array.isArray(current.displayOptions) && current.displayOptions.length === optsCanonical.length
+      ? current.displayOptions.map((x) => String(x))
+      : optsCanonical;
   const progress = `${idx + 1} / ${total}`;
 
   return (
@@ -247,17 +252,18 @@ export function BaselineAssessmentFlow() {
 
         {isSata ? (
           <ul className="space-y-2">
-            {opts.map((label) => {
-              const selected = Array.isArray(raw) ? raw.includes(label) : false;
+            {optsCanonical.map((canonical, i) => {
+              const label = optsDisplay[i] ?? canonical;
+              const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
               return (
-                <li key={label}>
+                <li key={canonical}>
                   <label className="flex cursor-pointer items-start gap-2 text-sm">
                     <input
                       type="checkbox"
                       checked={selected}
                       onChange={(e) => {
                         const prev = Array.isArray(raw) ? [...raw] : [];
-                        const next = e.target.checked ? [...prev, label] : prev.filter((x) => x !== label);
+                        const next = e.target.checked ? [...prev, canonical] : prev.filter((x) => x !== canonical);
                         setAnswers((a) => ({ ...a, [current.id]: next }));
                       }}
                       className="mt-1"
@@ -270,20 +276,23 @@ export function BaselineAssessmentFlow() {
           </ul>
         ) : (
           <ul className="space-y-2">
-            {opts.map((label) => (
-              <li key={label}>
-                <label className="flex cursor-pointer items-start gap-2 text-sm">
-                  <input
-                    type="radio"
-                    name={`q-${current.id}`}
-                    checked={raw === label}
-                    onChange={() => setAnswers((a) => ({ ...a, [current.id]: label }))}
-                    className="mt-1"
-                  />
-                  <span>{label}</span>
-                </label>
-              </li>
-            ))}
+            {optsCanonical.map((canonical, i) => {
+              const label = optsDisplay[i] ?? canonical;
+              return (
+                <li key={canonical}>
+                  <label className="flex cursor-pointer items-start gap-2 text-sm">
+                    <input
+                      type="radio"
+                      name={`q-${current.id}`}
+                      checked={raw === canonical}
+                      onChange={() => setAnswers((a) => ({ ...a, [current.id]: canonical }))}
+                      className="mt-1"
+                    />
+                    <span>{label}</span>
+                  </label>
+                </li>
+              );
+            })}
           </ul>
         )}
 

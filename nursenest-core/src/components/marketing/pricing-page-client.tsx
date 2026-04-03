@@ -311,8 +311,8 @@ export function PricingPageClient({
   );
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
-      <header className="border-b border-[var(--theme-card-border)] pb-10">
+    <main className="mx-auto w-full max-w-6xl px-4 py-9 sm:px-6 sm:py-10 lg:px-8">
+      <header className="border-b border-[var(--theme-card-border)] pb-8 sm:pb-9">
         <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("pages.pricing.title")}</p>
         <h1 className="mt-2 text-balance text-3xl font-bold leading-tight text-[var(--theme-heading-text)] sm:text-4xl">
           {heading}

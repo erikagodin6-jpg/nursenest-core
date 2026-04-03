@@ -45,7 +45,7 @@ export default async function AlliedHealthHubPage() {
   const { crumbs, schemaItems } = alliedHubBreadcrumbs();
 
   return (
-    <div className="nn-marketing-surface">
+    <>
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
         <BreadcrumbJsonLd items={schemaItems} />
         <div className="mb-8">
@@ -123,6 +123,6 @@ export default async function AlliedHealthHubPage() {
           </Link>
         </p>
       </div>
-    </div>
+    </>
   );
 }

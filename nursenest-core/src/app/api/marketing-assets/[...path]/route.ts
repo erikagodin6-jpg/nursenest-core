@@ -13,7 +13,7 @@ let loggedMissingSpacesProxy = false;
 /** Allowed object key prefixes in the marketing bucket (screens + brand marks). */
 const ALLOW_PREFIXES = ["screenshots/", "brand/", "branding/"] as const;
 
-/** Root-level public marketing files (e.g. `blackbrandlogo.gif`). */
+/** Root-level public marketing files (e.g. `lavenderbrandlogo_transparent.png` or legacy `.gif` marks). */
 function isAllowedRootMarketingKey(key: string): boolean {
   if (key.includes("/") || key.includes("..")) return false;
   return /^[a-zA-Z0-9][a-zA-Z0-9._-]*\.(gif|png|webp|jpe?g|svg)$/i.test(key);
@@ -66,7 +66,7 @@ function resolvedImageContentType(s3ContentType: string | undefined, key: string
 
 /**
  * Streams marketing images from DigitalOcean Spaces (private bucket safe).
- * Allowed keys: `screenshots/…`, `brand/…`, `branding/…`, or a single-segment root filename (e.g. `blackbrandlogo.gif`).
+ * Allowed keys: `screenshots/…`, `brand/…`, `branding/…`, or a single-segment root image filename (e.g. theme PNGs).
  */
 export async function GET(
   _req: Request,

@@ -44,7 +44,7 @@ function main() {
   const missing = expectedKeys.filter((k) => !onDiskSet.has(k));
   const extra = onDisk.filter((k) => !expectedSet.has(k));
 
-  /** Same filename used by multiple theme ids (should not happen with current naming). */
+  /** Multiple theme ids resolving to the same object key (registry collision). */
   const keyToIds = new Map();
   for (let i = 0; i < themeIds.length; i++) {
     const k = expectedKeys[i];
