@@ -295,7 +295,7 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
 
                 <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:gap-4">
                   <MarketingTrackedLink
-                    href="/signup"
+                    href={withMarketingLocale(locale, "/signup")}
                     event={PH.marketingHomeHeroPrimaryCta}
                     eventProps={{ region }}
                     className="nn-btn-primary inline-flex min-h-[48px] w-full items-center justify-center px-8 py-3 text-base font-semibold transition-[filter] hover:bg-role-cta-hover sm:min-h-[52px] sm:w-auto sm:px-10 sm:text-lg"

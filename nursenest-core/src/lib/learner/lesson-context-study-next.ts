@@ -97,7 +97,7 @@ export async function loadLessonContinueStudyNext(
   for (const w of filtered.slice(0, 8)) {
     const topicLabel = formatTopicLabelForDisplay(w.normalizedTopic ?? normalizeTopicKey(w.topic));
     const code = w.normalizedTopic ?? normalizeTopicKey(w.topic);
-    const { lessonHref, qbankHref } = await resolveTopicRemediationLinks(code, topicLabel);
+    const { lessonHref, qbankHref } = await resolveTopicRemediationLinks(code, topicLabel, entitlement, learnerPath);
     enriched.push({
       topicLabel,
       topicCode: code,

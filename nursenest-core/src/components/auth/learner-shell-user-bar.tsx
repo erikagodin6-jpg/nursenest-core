@@ -4,6 +4,7 @@ import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { ChevronDown, User } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useMarketingI18n } from "@/lib/marketing-i18n";
 
 function isAdminRole(role: unknown): boolean {
   return role === "ADMIN";
@@ -13,6 +14,7 @@ function isAdminRole(role: unknown): boolean {
  * Learner app shell: account dropdown (identity, admin, sign out) beside theme control.
  */
 export function LearnerShellUserBar() {
+  const { t } = useMarketingI18n();
   const { data: session, status } = useSession();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -61,7 +63,7 @@ export function LearnerShellUserBar() {
             </div>
             {admin ? (
               <span className="mt-1 inline-block rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase text-primary">
-                Admin
+                {t("account.role.admin")}
               </span>
             ) : null}
           </div>
@@ -71,7 +73,7 @@ export function LearnerShellUserBar() {
             role="menuitem"
             onClick={() => setOpen(false)}
           >
-            Profile & account
+            {t("learner.nav.profileAccount")}
           </Link>
           <Link
             href="/app"
@@ -79,7 +81,7 @@ export function LearnerShellUserBar() {
             role="menuitem"
             onClick={() => setOpen(false)}
           >
-            Dashboard
+            {t("dashboard.breadcrumbDashboard")}
           </Link>
           {admin ? (
             <Link
@@ -88,7 +90,7 @@ export function LearnerShellUserBar() {
               role="menuitem"
               onClick={() => setOpen(false)}
             >
-              Admin dashboard
+              {t("nav.admin")}
             </Link>
           ) : null}
           <button
@@ -97,7 +99,7 @@ export function LearnerShellUserBar() {
             role="menuitem"
             onClick={() => void signOut({ callbackUrl: "/" })}
           >
-            Sign out
+            {t("nav.signout")}
           </button>
         </div>
       ) : null}

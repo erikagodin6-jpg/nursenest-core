@@ -5,6 +5,7 @@ import { ExamPlanSettingsCard } from "@/components/student/exam-plan-settings-ca
 import { LearnerInsightEnginePanel } from "@/components/student/learner-insight-engine-panel";
 import { LearnerProfileAccountActions } from "@/components/student/learner-profile-account-actions";
 import { AdaptiveStudyOverview } from "@/components/student/adaptive-study-overview";
+import { LockedStudyNextPreview } from "@/components/student/locked-study-next-preview";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
@@ -103,6 +104,7 @@ export default async function LearnerProfilePage() {
           recommendedQuizTopic: premiumSnapshot.recommendedQuizTopic,
           mockCount: premiumSnapshot.mockCount,
           practiceSessionCount: premiumSnapshot.practice.sessionCount,
+          subscriberCountry: entitlement.country,
         });
       } catch {
         adaptive = null;
@@ -295,15 +297,29 @@ export default async function LearnerProfilePage() {
           ) : null}
         </section>
       ) : entitlement !== "error" && !entitlement.hasAccess ? (
-        <section className="nn-card p-6">
-          <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Performance</h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Subscribe to unlock full lesson pools, the question bank, CAT practice tests, flashcards, and readiness tracking.
-          </p>
-          <Link href="/pricing" className="mt-3 inline-block text-sm font-semibold text-primary underline">
-            View plans
-          </Link>
-        </section>
+        <>
+          <section className="nn-card p-6">
+            <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Performance</h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Subscribe to unlock full lesson pools, the question bank, CAT practice tests, flashcards, and readiness tracking.
+            </p>
+            <div className="mt-4 flex flex-wrap gap-3">
+              <Link
+                href="/pricing"
+                className="inline-flex items-center justify-center rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+              >
+                Continue your plan
+              </Link>
+              <Link
+                href="/pricing"
+                className="inline-flex items-center justify-center rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold hover:bg-muted/80"
+              >
+                Improve your weak areas
+              </Link>
+            </div>
+          </section>
+          <LockedStudyNextPreview className="nn-card space-y-2 p-6" />
+        </>
       ) : null}
 
       {topicPerf && entitlement !== "error" && entitlement.hasAccess ? (

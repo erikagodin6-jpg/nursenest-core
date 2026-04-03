@@ -119,6 +119,7 @@ export async function buildLearnerInsightSnapshot(
     recommendedQuizTopic: dashboard.recommendedQuizTopic,
     mockCount,
     practiceSessionCount: dashboard.sessionGrading.sessionCount,
+    subscriberCountry: entitlement.country,
   });
 
   const primary = explainNextAction(adaptive.primaryNext);

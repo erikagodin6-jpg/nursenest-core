@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import HomeRestoredClient from "@/components/marketing/home-restored-client";
+import { HomeStudyNextPreviewSection } from "@/components/marketing/home-study-next-preview-section";
 import { getHomepageLessonTeasers } from "@/lib/marketing/homepage-lesson-teasers";
+import { buildSimulatedAdaptiveRecommendationsForConversionPreview } from "@/lib/learner/adaptive-recommendations";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy";
 import { localizeBreadcrumbResolution } from "@/lib/seo/breadcrumb-i18n";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { marketingHomeSurfaceBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
+import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 
 export const revalidate = 600;
 
@@ -29,6 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function LocalizedHomePage({ params }: Props) {
   const { locale } = await params;
   const lessonTeasers = await getHomepageLessonTeasers();
+  const studyNextPreview = buildSimulatedAdaptiveRecommendationsForConversionPreview();
   const raw = marketingHomeSurfaceBreadcrumbs();
   const primary = await loadMarketingMessages(locale);
   const { crumbs, schemaItems } = localizeBreadcrumbResolution(raw, primary);
@@ -40,6 +44,13 @@ export default async function LocalizedHomePage({ params }: Props) {
           <BreadcrumbTrail items={crumbs} />
         </div>
       ) : null}
+      <div className="mx-auto max-w-7xl px-4 pb-2 pt-3 sm:px-6 sm:pb-3 sm:pt-4 lg:px-8">
+        <HomeStudyNextPreviewSection
+          adaptive={studyNextPreview}
+          pricingHref={withMarketingLocale(locale, "/pricing")}
+          signupHref={withMarketingLocale(locale, "/signup")}
+        />
+      </div>
       <HomeRestoredClient lessonTeasers={lessonTeasers} />
     </>
   );

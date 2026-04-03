@@ -2,6 +2,9 @@ import "server-only";
 
 import { ContentStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
+import { lessonAccessWhere } from "@/lib/entitlements/content-access-scope";
+import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import { pathwayLessonsAppListWhere } from "@/lib/lessons/app-pathway-lesson-list-scope";
 
 function appendTopicCodeToDrillHref(href: string, topicCode: string): string {
   if (!topicCode || href.includes("topicCode=")) return href;
@@ -10,11 +13,15 @@ function appendTopicCodeToDrillHref(href: string, topicCode: string): string {
 }
 
 /**
- * Resolves in-app lesson + topic-drill URLs for a missed topic (same rules as question-grade learning loop).
+ * Resolves in-app lesson + topic-drill URLs for a missed topic.
+ * Pathway lessons are limited to {@link pathwayLessonsAppListWhere} (country, tier, learnerPath).
+ * Catalog `content_items` lessons use {@link lessonAccessWhere} (regionScope + tier ladder).
  */
 export async function resolveTopicRemediationLinks(
   topicCode: string | null | undefined,
   topicLabelForBank: string,
+  entitlement: AccessScope,
+  learnerPath: string | null | undefined,
 ): Promise<{ lessonHref: string; qbankHref: string }> {
   const label = topicLabelForBank.trim();
   const code = (topicCode ?? "").trim() || null;
@@ -29,14 +36,28 @@ export async function resolveTopicRemediationLinks(
 
   let lessonHref = "/app/lessons";
   if (code) {
+    const pathwayScope = pathwayLessonsAppListWhere(entitlement, learnerPath);
+    const contentScope = lessonAccessWhere(entitlement);
+
     const [pathwayLesson, contentLesson] = await Promise.all([
       prisma.pathwayLesson.findFirst({
-        where: { topicSlug: code, status: ContentStatus.PUBLISHED, locale: "en" },
+        where: {
+          AND: [
+            pathwayScope,
+            {
+              topicSlug: code,
+              status: ContentStatus.PUBLISHED,
+              locale: "en",
+            },
+          ],
+        },
         select: { id: true },
         orderBy: { sortOrder: "asc" },
       }),
       prisma.contentItem.findFirst({
-        where: { type: "lesson", status: "published", bodySystem: code },
+        where: {
+          AND: [contentScope, { bodySystem: code }],
+        },
         select: { id: true },
         orderBy: { updatedAt: "desc" },
       }),

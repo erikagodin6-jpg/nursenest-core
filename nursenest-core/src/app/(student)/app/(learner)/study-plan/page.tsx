@@ -1,5 +1,6 @@
 import { auth } from "@/lib/auth";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
+import { LockedStudyNextPreview } from "@/components/student/locked-study-next-preview";
 import { AdaptiveStudyOverview } from "@/components/student/adaptive-study-overview";
 import { ExamPlanSettingsCard } from "@/components/student/exam-plan-settings-card";
 import { LearnerInsightEnginePanel } from "@/components/student/learner-insight-engine-panel";
@@ -21,9 +22,16 @@ export default async function StudyPlanPage() {
   }
   if (!entitlement.hasAccess) {
     return (
-      <main className="space-y-4">
-        <h1 className="text-3xl font-bold tracking-tight text-[var(--theme-heading-text)]">Study plan</h1>
-        <p className="text-sm text-muted-foreground">Study-plan recommendations are available to subscribers.</p>
+      <main className="space-y-6">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wide text-primary">Exam-first prep</p>
+          <h1 className="mt-1 text-3xl font-bold tracking-tight text-[var(--theme-heading-text)]">Study plan</h1>
+          <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+            Your exam date, cadence, and practice signals drive weekly targets and Study Next recommendations when you have an active
+            plan.
+          </p>
+        </div>
+        <LockedStudyNextPreview className="nn-card space-y-2 p-6" />
         <SubscriptionPaywall context="dashboard" />
       </main>
     );
@@ -59,6 +67,7 @@ export default async function StudyPlanPage() {
           recommendedQuizTopic: premiumSnapshot.recommendedQuizTopic,
           mockCount: premiumSnapshot.mockCount,
           practiceSessionCount: premiumSnapshot.practice.sessionCount,
+          subscriberCountry: entitlement.country,
         });
       }
     } catch {

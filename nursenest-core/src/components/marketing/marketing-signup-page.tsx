@@ -16,11 +16,6 @@ export async function MarketingSignupPage({ locale }: { locale: string }) {
         <SignupForm
           termsHref={withMarketingLocale(locale, "/terms")}
           privacyHref={withMarketingLocale(locale, "/privacy")}
-          legalBefore={m["pages.signup.legalBefore"]}
-          legalAnd={m["pages.signup.legalAnd"]}
-          legalAfter={m["pages.signup.legalAfter"]}
-          termsLabel={m["pages.signup.termsLink"]}
-          privacyLabel={m["pages.signup.privacyLink"]}
         />
       </div>
     </main>

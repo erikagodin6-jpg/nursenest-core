@@ -3,26 +3,28 @@ export type SignupExamFocusValue = "nclex_rn" | "nclex_pn" | "rex_pn" | "np_boar
 
 export type SignupExamFocusOption = { value: SignupExamFocusValue; label: string };
 
+type Translate = (key: string) => string;
+
 /**
  * Country-aware labels for signup “exam focus” — PN uses NCLEX-PN (US) vs REx-PN (CA); NP wording matches region.
  */
-export function signupExamFocusOptions(country: "US" | "CA"): SignupExamFocusOption[] {
+export function signupExamFocusOptions(country: "US" | "CA", t: Translate): SignupExamFocusOption[] {
   const rn: SignupExamFocusOption =
     country === "US"
-      ? { value: "nclex_rn", label: "NCLEX-RN / RN readiness" }
-      : { value: "nclex_rn", label: "RN entry-to-practice (Canada)" };
+      ? { value: "nclex_rn", label: t("pages.signup.examFocus.nclexRnUs") }
+      : { value: "nclex_rn", label: t("pages.signup.examFocus.nclexRnCa") };
 
   const pn: SignupExamFocusOption =
     country === "US"
-      ? { value: "nclex_pn", label: "NCLEX-PN / LVN-LPN readiness" }
-      : { value: "rex_pn", label: "REx-PN / practical nursing (Canada)" };
+      ? { value: "nclex_pn", label: t("pages.signup.examFocus.nclexPnUs") }
+      : { value: "rex_pn", label: t("pages.signup.examFocus.rexPnCa") };
 
   const np: SignupExamFocusOption =
     country === "US"
-      ? { value: "np_board", label: "NP board exams (US)" }
-      : { value: "np_board", label: "CNPLE / NP (Canada)" };
+      ? { value: "np_board", label: t("pages.signup.examFocus.npUs") }
+      : { value: "np_board", label: t("pages.signup.examFocus.npCa") };
 
-  return [rn, pn, np, { value: "allied_cert", label: "Allied health certification" }];
+  return [rn, pn, np, { value: "allied_cert", label: t("pages.signup.examFocus.allied") }];
 }
 
 /** When country toggles, map invalid PN focus to the closest valid value for the new country. */

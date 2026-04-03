@@ -124,6 +124,12 @@ export async function POST(req: Request) {
   }
 
   if (parsed.data.sessionId) {
+    const subscriberRow = await prisma.user.findUnique({
+      where: { id: gate.userId },
+      select: { learnerPath: true },
+    });
+    const learnerPath = subscriberRow?.learnerPath ?? null;
+
     try {
       const result = await prisma.$transaction(async (tx) => {
         const session = await tx.examSession.findFirst({
@@ -188,7 +194,7 @@ export async function POST(req: Request) {
         let studyNext: PostTestStudyNextBundle | null = null;
         if (review?.items?.length) {
           try {
-            studyNext = await buildPostTestStudyNextFromReview(review);
+            studyNext = await buildPostTestStudyNextFromReview(review, gate.entitlement, learnerPath);
           } catch {
             studyNext = null;
           }
@@ -216,7 +222,7 @@ export async function POST(req: Request) {
         let studyNext: PostTestStudyNextBundle | null = null;
         if (prefetchReview?.items?.length) {
           try {
-            studyNext = await buildPostTestStudyNextFromReview(prefetchReview);
+            studyNext = await buildPostTestStudyNextFromReview(prefetchReview, gate.entitlement, learnerPath);
           } catch {
             studyNext = null;
           }

@@ -1,10 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
-import type { ExamReviewJson } from "@/lib/exams/exam-session-review";
-import type { PostTestStudyNextBundle } from "@/lib/learner/adaptive-recommendations";
-import { buildPostTestStudyNextFromReview } from "@/lib/learner/post-test-study-next";
+import { loadExamAttemptDetailForSubscriber } from "@/lib/exams/load-exam-attempt-detail";
 import { enforceExamAttemptDetailProtection } from "@/lib/http/api-protection";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 
@@ -22,47 +19,21 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  const attempt = await prisma.examAttempt.findFirst({
-    where: { id, userId: gate.userId },
-    select: {
-      id: true,
-      examId: true,
-      score: true,
-      total: true,
-      createdAt: true,
-      results: true,
-      exam: { select: { title: true } },
-    },
-  });
-
-  if (!attempt) {
+  const payload = await loadExamAttemptDetailForSubscriber(gate.userId, gate.entitlement, id);
+  if (!payload) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
-  }
-
-  const review =
-    attempt.results && typeof attempt.results === "object" && attempt.results !== null
-      ? (attempt.results as ExamReviewJson)
-      : null;
-
-  let studyNext: PostTestStudyNextBundle | null = null;
-  if (review?.items?.length) {
-    try {
-      studyNext = await buildPostTestStudyNextFromReview(review);
-    } catch {
-      studyNext = null;
-    }
   }
 
   return NextResponse.json({
     attempt: {
-      id: attempt.id,
-      examId: attempt.examId,
-      score: attempt.score,
-      total: attempt.total,
-      createdAt: attempt.createdAt,
-      examTitle: attempt.exam.title,
+      id: payload.attempt.id,
+      examId: payload.attempt.examId,
+      score: payload.attempt.score,
+      total: payload.attempt.total,
+      createdAt: payload.attempt.createdAt,
+      examTitle: payload.attempt.examTitle,
     },
-    review,
-    studyNext,
+    review: payload.review,
+    studyNext: payload.studyNext,
   });
 }

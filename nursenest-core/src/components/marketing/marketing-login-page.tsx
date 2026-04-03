@@ -18,14 +18,8 @@ export async function MarketingLoginPage({ locale }: { locale: string }) {
         <Suspense fallback={<div className="mt-6 h-40 animate-pulse rounded-xl bg-border/40" aria-hidden />}>
           <LoginForm
             forgotPasswordHref={forgotHref}
-            forgotPasswordLabel="Forgot password?"
             termsHref={withMarketingLocale(locale, "/terms")}
             privacyHref={withMarketingLocale(locale, "/privacy")}
-            legalBefore={m["pages.login.legalBefore"]}
-            legalAnd={m["pages.login.legalAnd"]}
-            legalAfter={m["pages.login.legalAfter"]}
-            termsLabel={m["pages.login.termsLink"]}
-            privacyLabel={m["pages.login.privacyLink"]}
           />
         </Suspense>
       </div>

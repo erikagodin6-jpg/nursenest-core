@@ -13,6 +13,8 @@ import {
   ExamTimerReadout,
 } from "@/components/exam/exam-session-shell";
 import { examPoolEmptyCopy, examStartFailureMessage } from "@/lib/student/gated-state-messages";
+import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { PostTestStudyNextCard } from "@/components/student/post-test-study-next-card";
 
 type ExamQuestion = {
   id: string;
@@ -60,6 +62,7 @@ export function ExamPracticeClient({
   sessionNamespace?: string;
   timedSuggestedMinutes?: number;
 }) {
+  const { t } = useMarketingI18n();
   const { session: STORAGE_SESSION, exam: STORAGE_EXAM } = storageKeys(sessionNamespace);
   const [phase, setPhase] = useState<"loading" | "pickMode" | "ready" | "empty" | "error">("loading");
   const [sessionId, setSessionId] = useState<string | null>(null);
@@ -476,20 +479,23 @@ export function ExamPracticeClient({
     const r = done.review;
     return (
       <div className="nn-card mt-4 space-y-4 p-6">
-        <p className="font-semibold">Attempt recorded</p>
+        <p className="font-semibold">{t("examAttempt.recorded")}</p>
         <p className="text-sm text-muted">
-          Score: {done.score}/{done.total}
-          {r?.accuracyPct != null ? ` (${r.accuracyPct}%)` : ""}
+          {r?.accuracyPct != null
+            ? t("examAttempt.scoreWithPct", { score: done.score, total: done.total, pct: r.accuracyPct })
+            : t("examAttempt.scoreLine", { score: done.score, total: done.total })}
         </p>
         {r?.elapsedMs != null ? (
           <p className="text-sm text-muted">
-            Time: {formatDuration(r.elapsedMs)}
-            {r.timedMode && r.timeLimitSec != null ? ` / limit ${formatDuration(r.timeLimitSec * 1000)}` : ""}
+            {t("examAttempt.timeLabel", { time: formatDuration(r.elapsedMs) })}
+            {r.timedMode && r.timeLimitSec != null
+              ? ` · ${t("examAttempt.timeLimitLabel", { time: formatDuration(r.timeLimitSec * 1000) })}`
+              : ""}
           </p>
         ) : null}
         {r?.byTopic && Object.keys(r.byTopic).length > 0 ? (
           <div className="space-y-2">
-            <p className="text-sm font-medium text-foreground">Performance by topic</p>
+            <p className="text-sm font-medium text-foreground">{t("examAttempt.byTopicHeading")}</p>
             <ul className="max-h-48 space-y-1 overflow-y-auto text-sm text-muted">
               {Object.entries(r.byTopic).map(([topic, row]) => (
                 <li key={topic}>
@@ -501,36 +507,11 @@ export function ExamPracticeClient({
         ) : null}
         {r?.weakAreas && r.weakAreas.length > 0 ? (
           <p className="text-sm text-muted">
-            <span className="font-medium text-foreground">Review topics: </span>
+            <span className="font-medium text-foreground">{t("examAttempt.reviewTopicsLabel")} </span>
             {r.weakAreas.slice(0, 8).join(", ")}
           </p>
         ) : null}
-        {done.studyNext ? (
-          <div className="rounded-xl border border-primary/25 bg-primary/[0.06] p-4">
-            <p className="text-xs font-semibold uppercase tracking-wide text-primary">What to study next</p>
-            <p className="mt-2 text-sm font-semibold text-foreground">{done.studyNext.primary.title}</p>
-            <p className="mt-1 text-sm text-muted-foreground">{done.studyNext.primary.reason}</p>
-            <Link
-              href={done.studyNext.primary.href}
-              className="mt-3 inline-flex rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground shadow-[0_4px_14px_var(--role-cta-shadow)]"
-            >
-              Open
-            </Link>
-            {done.studyNext.secondary.length > 0 ? (
-              <ul className="mt-4 space-y-3 border-t border-border/60 pt-4">
-                {done.studyNext.secondary.map((s) => (
-                  <li key={s.href} className="text-sm">
-                    <p className="font-medium text-foreground">{s.title}</p>
-                    <p className="text-muted-foreground">{s.reason}</p>
-                    <Link href={s.href} className="mt-1 inline-block text-sm font-semibold text-primary underline-offset-4 hover:underline">
-                      Open
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            ) : null}
-          </div>
-        ) : null}
+        {done.studyNext ? <PostTestStudyNextCard bundle={done.studyNext} /> : null}
         <p className="text-sm text-muted">
           Review misses in the question bank, then reinforce weak systems with{" "}
           <Link href="/exam-lessons" className="font-medium text-primary underline">
@@ -543,7 +524,7 @@ export function ExamPracticeClient({
             href={`/app/exams/attempts/${done.attemptId}`}
             className="inline-flex rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
           >
-            Full score report
+            {t("examAttempt.fullReportCta")}
           </Link>
           <Link
             href="/app/questions"

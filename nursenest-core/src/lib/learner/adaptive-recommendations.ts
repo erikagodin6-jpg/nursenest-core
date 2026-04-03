@@ -1,5 +1,5 @@
-import type { ExamDatePlanType } from "@prisma/client";
-import type { ReadinessBand, ReadinessResult } from "@/lib/learner/readiness-score";
+import { ExamDatePlanType } from "@prisma/client";
+import { computeReadiness, type ReadinessBand, type ReadinessResult } from "@/lib/learner/readiness-score";
 import type { TopicTrendRow } from "@/lib/learner/topic-performance";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
 import type { AdaptiveTeachingLoopRecommendation } from "@/lib/learner/adaptive-teaching-loop";
@@ -227,8 +227,11 @@ export function buildAdaptiveRecommendations(args: {
   recommendedQuizTopic: string | null;
   mockCount: number;
   practiceSessionCount: number;
+  /** Subscriber country (`US` | `CA`) — avoids US-exam-specific wording in Canada. */
+  subscriberCountry?: string | null;
 }): AdaptiveLearnerRecommendations {
   const weakTopicsOrdered = dedupeWeakTopicsStable(args.weakTopics);
+  const isCanadaSubscriber = args.subscriberCountry === "CA";
 
   const countdown = buildCountdownCopy({
     examDatePlanType: args.examDatePlanType,
@@ -405,9 +408,11 @@ export function buildAdaptiveRecommendations(args: {
   });
   if (urgency === "near" || urgency === "final_stretch") {
     secondaryCandidates.push({
-      title: "Adaptive (CAT) practice test",
+      title: isCanadaSubscriber ? "Adaptive practice test" : "Adaptive (CAT) practice test",
       href: "/app/practice-tests",
-      reason: "CAT adjusts difficulty. Useful when the exam is close.",
+      reason: isCanadaSubscriber
+        ? "Computer-adaptive practice adjusts difficulty—useful when your exam is close."
+        : "CAT adjusts difficulty. Useful when the exam is close.",
       kind: "cat",
     });
   } else {
@@ -499,6 +504,63 @@ export function buildAdaptiveRecommendations(args: {
         : null,
     adaptiveLoop: null,
   };
+}
+
+/** Fixed weak-topic rows for conversion previews — not user-derived. */
+const CONVERSION_PREVIEW_WEAK_TOPICS: WeakTopicRow[] = [
+  {
+    topic: "Pharmacology & dosing",
+    missed: 5,
+    attempted: 18,
+    missRate: 5 / 18,
+    normalizedTopic: "pharmacology dosing",
+    weakPriorityScore: 0.72,
+  },
+  {
+    topic: "Fluid & electrolytes",
+    missed: 3,
+    attempted: 14,
+    missRate: 3 / 14,
+    normalizedTopic: "fluid electrolytes",
+    weakPriorityScore: 0.55,
+  },
+];
+
+/**
+ * Deterministic Study Next payload for paywall / marketing previews only.
+ * Uses real {@link computeReadiness} + {@link buildAdaptiveRecommendations} — not any learner's data.
+ * Callers must label the UI as a sample (no implied personalization).
+ */
+export function buildSimulatedAdaptiveRecommendationsForConversionPreview(): AdaptiveLearnerRecommendations {
+  const readiness = computeReadiness({
+    practiceCorrect: 48,
+    practiceTotal: 72,
+    recentMocks: [{ score: 58, total: 85 }],
+    weakTopics: CONVERSION_PREVIEW_WEAK_TOPICS,
+    lessonsCompleted: 5,
+    lessonsAvailable: 28,
+    scope: { tier: "NCLEX_RN", country: "US" },
+  });
+
+  const sampleExamDate = new Date();
+  sampleExamDate.setUTCDate(sampleExamDate.getUTCDate() + 52);
+
+  return buildAdaptiveRecommendations({
+    examDatePlanType: ExamDatePlanType.PROPOSED,
+    examDate: sampleExamDate,
+    readiness,
+    weakTopics: CONVERSION_PREVIEW_WEAK_TOPICS,
+    streakDays: 4,
+    lessonPct: 42,
+    lessonsCompleted: 5,
+    lessonsTotal: 28,
+    studyCadencePreference: "steady",
+    continueLesson: { title: "Sample pathway module (illustration)", href: "/pricing" },
+    recommendedQuizTopic: CONVERSION_PREVIEW_WEAK_TOPICS[0]!.topic,
+    mockCount: 1,
+    practiceSessionCount: 6,
+    subscriberCountry: "US",
+  });
 }
 
 // ─── Post-test remediation (Study Next engine, post_test profile) ───

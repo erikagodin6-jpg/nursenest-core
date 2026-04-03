@@ -4,7 +4,9 @@ import { FaqJsonLd } from "@/components/seo/faq-json-ld";
 import { MARKETING_HOME_FAQ_JSONLD } from "@/lib/seo/marketing-home-faq-schema";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import HomeRestoredClient from "@/components/marketing/home-restored-client";
+import { HomeStudyNextPreviewSection } from "@/components/marketing/home-study-next-preview-section";
 import { getHomepageLessonTeasers } from "@/lib/marketing/homepage-lesson-teasers";
+import { buildSimulatedAdaptiveRecommendationsForConversionPreview } from "@/lib/learner/adaptive-recommendations";
 import { marketingHomeSurfaceBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
@@ -25,6 +27,7 @@ export const metadata: Metadata = {
 
 export default async function HomePage() {
   const lessonTeasers = await getHomepageLessonTeasers();
+  const studyNextPreview = buildSimulatedAdaptiveRecommendationsForConversionPreview();
   const { crumbs, schemaItems } = marketingHomeSurfaceBreadcrumbs();
   return (
     <>
@@ -35,6 +38,9 @@ export default async function HomePage() {
           <BreadcrumbTrail items={crumbs} />
         </div>
       ) : null}
+      <div className="mx-auto max-w-7xl px-4 pb-2 pt-3 sm:px-6 sm:pb-3 sm:pt-4 lg:px-8">
+        <HomeStudyNextPreviewSection adaptive={studyNextPreview} />
+      </div>
       <HomeRestoredClient lessonTeasers={lessonTeasers} />
     </>
   );

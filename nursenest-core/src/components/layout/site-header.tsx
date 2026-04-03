@@ -25,6 +25,13 @@ import { MarketingHeaderAuthDesktop, MarketingHeaderAuthMobile } from "@/compone
 import { ThemePicker } from "@/components/theme/theme-picker";
 import { Button } from "@/components/ui/button";
 import { getExamNavStripItems } from "@/lib/marketing/country-exam-offerings";
+import type { GlobalNavIconId } from "@/config/global-nav-config";
+import {
+  getMarketingGuidesPlansItems,
+  getMarketingLearnPracticeItems,
+  getMarketingMobileDrawerLeafItems,
+  getMarketingWhoWeHelpItems,
+} from "@/config/global-nav-config";
 
 function NavDetails({
   label,
@@ -91,12 +98,12 @@ export function SiteHeader() {
     return () => document.removeEventListener("click", close);
   }, []);
 
-  const topLinks = [
-    { href: localizeHref("/exam-prep"), label: t("nav.examPrep"), icon: BookOpen },
-    { href: localizeHref("/new-graduate-support"), label: t("nav.newGradSupport"), icon: GraduationCap },
-    { href: localizeHref("/healthcare-careers"), label: t("nav.healthcareCareers"), icon: Briefcase },
-    { href: localizeHref("/allied-health"), label: t("nav.alliedHealth"), icon: Heart },
-  ];
+  const exploreIcons: Record<GlobalNavIconId, typeof BookOpen> = {
+    "book-open": BookOpen,
+    "graduation-cap": GraduationCap,
+    briefcase: Briefcase,
+    heart: Heart,
+  };
 
   const examNavStrip = useMemo(() => getExamNavStripItems(region), [region]);
 
@@ -112,7 +119,7 @@ export function SiteHeader() {
         <Link
           href={localizeHref("/")}
           className="group flex shrink-0 items-center gap-2 overflow-visible bg-transparent"
-          aria-label="NurseNest home"
+          aria-label={t("brand.homeAriaLabel")}
         >
           <SiteBrandLogoMark className={isMarketingHome ? HOME_BRAND_LOGO_MARK_CLASSNAME : undefined} />
         </Link>
@@ -126,31 +133,33 @@ export function SiteHeader() {
           </Link>
 
           <NavDetails label={t("nav.marketingExplore")} dense={isMarketingHome}>
-            {topLinks.map((item) => (
-              <NavLinkItem key={item.href} href={item.href}>
-                <span className="flex items-center gap-2">
-                  <item.icon className="h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden />
-                  {item.label}
-                </span>
+            {getMarketingWhoWeHelpItems().map((item) => {
+              const Icon = item.icon ? exploreIcons[item.icon] : BookOpen;
+              return (
+                <NavLinkItem key={item.id} href={localizeHref(item.href)}>
+                  <span className="flex items-center gap-2">
+                    <Icon className="h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden />
+                    {t(item.labelKey)}
+                  </span>
+                </NavLinkItem>
+              );
+            })}
+          </NavDetails>
+
+          <NavDetails label={t("nav.study")} dense={isMarketingHome}>
+            {getMarketingLearnPracticeItems().map((item) => (
+              <NavLinkItem key={item.id} href={localizeHref(item.href)}>
+                {t(item.labelKey)}
               </NavLinkItem>
             ))}
           </NavDetails>
 
-          <NavDetails label={t("nav.study")} dense={isMarketingHome}>
-            <NavLinkItem href={localizeHref("/lessons")}>{t("nav.lessons")}</NavLinkItem>
-            <NavLinkItem href={localizeHref("/exam-lessons")}>{t("nav.lessonsByExam")}</NavLinkItem>
-            <NavLinkItem href={localizeHref("/test-bank")}>{t("nav.questionBank")}</NavLinkItem>
-            <NavLinkItem href={localizeHref("/mock-exams")}>{t("nav.practiceExams")}</NavLinkItem>
-            <NavLinkItem href={localizeHref("/flashcards")}>{t("nav.flashcards")}</NavLinkItem>
-          </NavDetails>
-
           <NavDetails label={t("nav.resources")} dense={isMarketingHome}>
-            <NavLinkItem href={localizeHref("/blog")}>{t("nav.blog")}</NavLinkItem>
-            <NavLinkItem href={localizeHref("/tools")}>{t("nav.clinicalTools")}</NavLinkItem>
-            <NavLinkItem href={localizeHref("/case-studies")}>{t("nav.caseStudies")}</NavLinkItem>
-            <NavLinkItem href={localizeHref("/pricing")}>{t("nav.pricing")}</NavLinkItem>
-            <NavLinkItem href={localizeHref("/faq")}>{t("footer.faq")}</NavLinkItem>
-            <NavLinkItem href={localizeHref("/shop")}>{t("nav.store")}</NavLinkItem>
+            {getMarketingGuidesPlansItems().map((item) => (
+              <NavLinkItem key={item.id} href={localizeHref(item.href)}>
+                {t(item.labelKey)}
+              </NavLinkItem>
+            ))}
           </NavDetails>
 
           <div
@@ -291,7 +300,7 @@ export function SiteHeader() {
               <Link
                 href={localizeHref("/")}
                 className="flex shrink-0 items-center gap-2 overflow-visible bg-transparent"
-                aria-label="NurseNest home"
+                aria-label={t("brand.homeAriaLabel")}
               >
                 <SiteBrandLogoMark className={HOME_BRAND_LOGO_MARK_CLASSNAME} />
               </Link>
@@ -361,25 +370,21 @@ export function SiteHeader() {
                   )}
                 />
               </div>
-              {[
-                { href: localizeHref("/"), label: t("nav.home") },
-                { href: localizeHref("/lessons"), label: t("nav.lessons") },
-                { href: localizeHref("/exam-lessons"), label: t("nav.lessonsByExam") },
-                { href: localizeHref("/flashcards"), label: t("nav.flashcards") },
-                { href: localizeHref("/test-bank"), label: t("nav.questionBank") },
-                { href: localizeHref("/mock-exams"), label: t("nav.practiceExams") },
-                { href: localizeHref("/blog"), label: t("nav.blog") },
-                { href: localizeHref("/tools"), label: t("nav.clinicalTools") },
-                { href: localizeHref("/case-studies"), label: t("nav.caseStudies") },
-                { href: localizeHref("/pricing"), label: t("nav.pricing") },
-              ].map((item) => (
+              <Link
+                href={localizeHref("/")}
+                className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-[var(--theme-menu-text)] hover:bg-[var(--theme-menu-hover-bg)]"
+                onClick={() => setMobileOpen(false)}
+              >
+                {t("nav.home")}
+              </Link>
+              {getMarketingMobileDrawerLeafItems().map((item) => (
                 <Link
-                  key={item.href}
-                  href={item.href}
+                  key={item.id}
+                  href={localizeHref(item.href)}
                   className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-[var(--theme-menu-text)] hover:bg-[var(--theme-menu-hover-bg)]"
                   onClick={() => setMobileOpen(false)}
                 >
-                  {item.label}
+                  {t(item.labelKey)}
                 </Link>
               ))}
               <MarketingHeaderAuthMobile onNavigate={() => setMobileOpen(false)} />

@@ -11,10 +11,12 @@ const dir = dirname(fileURLToPath(import.meta.url));
  * with HTTP redirect to `/login` before RSC — bare `/app` must be in the matcher or the dashboard
  * could hit `redirect()` in a layout and expose raw Flight payloads in the document.
  */
-test("proxy matcher includes /app and /admin roots; auth-middleware uses authorized", () => {
+test("proxy matcher includes /app, /admin, and exam hub roots; auth-middleware uses authorized", () => {
   const proxySrc = readFileSync(join(dir, "proxy.ts"), "utf8");
   assert.match(proxySrc, /\/app",/);
   assert.match(proxySrc, /\/admin",/);
+  assert.match(proxySrc, /\/us",/);
+  assert.match(proxySrc, /\/canada",/);
   assert.match(proxySrc, /matcher/);
 
   const am = readFileSync(join(dir, "lib", "auth-middleware.ts"), "utf8");

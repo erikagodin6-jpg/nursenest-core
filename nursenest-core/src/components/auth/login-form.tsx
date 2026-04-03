@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useMarketingI18n } from "@/lib/marketing-i18n";
 
 function safeCallbackPath(raw: string | null): string | null {
   if (!raw?.trim()) return null;
@@ -20,25 +21,14 @@ function safeCallbackPath(raw: string | null): string | null {
 
 export function LoginForm({
   forgotPasswordHref = "/forgot-password",
-  forgotPasswordLabel = "Forgot password?",
   termsHref = "/terms",
   privacyHref = "/privacy",
-  legalBefore = "By signing in, you agree to our ",
-  legalAnd = " and ",
-  legalAfter = ".",
-  termsLabel = "Terms of Service",
-  privacyLabel = "Privacy Policy",
 }: {
   forgotPasswordHref?: string;
-  forgotPasswordLabel?: string;
   termsHref?: string;
   privacyHref?: string;
-  legalBefore?: string;
-  legalAnd?: string;
-  legalAfter?: string;
-  termsLabel?: string;
-  privacyLabel?: string;
 } = {}) {
+  const { t } = useMarketingI18n();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [error, setError] = useState<string | null>(null);
@@ -58,11 +48,11 @@ export function LoginForm({
     });
 
     if (result?.error) {
-      setError("Invalid email, username, or password.");
+      setError(t("pages.login.errorInvalid"));
       return;
     }
     if (result && result.ok === false) {
-      setError("Unable to sign in. Try again.");
+      setError(t("pages.login.errorGeneric"));
       return;
     }
 
@@ -81,43 +71,46 @@ export function LoginForm({
     >
       <div className="space-y-1.5">
         <label htmlFor="login-identifier" className="text-sm font-medium text-foreground">
-          Email or username
+          {t("pages.login.fieldIdentifierLabel")}
         </label>
         <input
           id="login-identifier"
           className="w-full rounded-xl border border-border bg-white px-3 py-2"
           type="text"
           name="email"
-          placeholder="Enter your email or username"
+          placeholder={t("pages.login.placeholderIdentifier")}
           required
           autoComplete="username"
         />
       </div>
       <div className="space-y-1.5">
-        <input className="w-full rounded-xl border border-border bg-white px-3 py-2" type="password" name="password" placeholder="Password" required />
+        <input
+          className="w-full rounded-xl border border-border bg-white px-3 py-2"
+          type="password"
+          name="password"
+          placeholder={t("pages.login.placeholderPassword")}
+          required
+        />
         <div className="flex justify-end sm:justify-start">
-          <Link
-            href={forgotPasswordHref}
-            className="text-sm font-medium text-primary hover:underline"
-          >
-            {forgotPasswordLabel}
+          <Link href={forgotPasswordHref} className="text-sm font-medium text-primary hover:underline">
+            {t("pages.login.forgotPasswordLink")}
           </Link>
         </div>
       </div>
       {error ? <p className="text-sm text-red-600">{error}</p> : null}
       <p className="text-xs leading-relaxed text-muted-foreground">
-        {legalBefore}
+        {t("pages.login.legalBefore")}
         <Link href={termsHref} className="font-semibold text-primary underline-offset-4 hover:underline">
-          {termsLabel}
+          {t("pages.login.termsLink")}
         </Link>
-        {legalAnd}
+        {t("pages.login.legalAnd")}
         <Link href={privacyHref} className="font-semibold text-primary underline-offset-4 hover:underline">
-          {privacyLabel}
+          {t("pages.login.privacyLink")}
         </Link>
-        {legalAfter}
+        {t("pages.login.legalAfter")}
       </p>
       <button className="w-full rounded-xl bg-role-cta px-4 py-2 font-semibold text-role-cta-foreground" type="submit">
-        Sign in
+        {t("pages.login.submit")}
       </button>
     </form>
   );

@@ -68,7 +68,7 @@ export function MarketingHeaderAuthDesktop() {
   }
 
   const user = session.user;
-  const label = user.email ?? user.name ?? (user.id ? `${user.id.slice(0, 8)}…` : "Account");
+  const label = user.email ?? user.name ?? (user.id ? `${user.id.slice(0, 8)}…` : t("nav.account"));
   const admin = isAdminRole(user.role);
 
   return (
@@ -91,11 +91,11 @@ export function MarketingHeaderAuthDesktop() {
         >
           <div className="border-b border-[var(--theme-separator)] px-3 py-2 text-xs text-[var(--theme-muted-text)]">
             <div className="font-mono text-[11px] text-foreground/80" title={user.id}>
-              ID {user.id?.slice(0, 8)}…
+              {t("account.idPrefix")} {user.id?.slice(0, 8)}…
             </div>
             {admin ? (
               <span className="mt-1 inline-block rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase text-primary">
-                Admin
+                {t("account.role.admin")}
               </span>
             ) : null}
           </div>
@@ -105,7 +105,7 @@ export function MarketingHeaderAuthDesktop() {
             role="menuitem"
             onClick={() => setOpen(false)}
           >
-            Learner app
+            {t("nav.learnerApp")}
           </Link>
           {admin ? (
             <Link
@@ -114,7 +114,7 @@ export function MarketingHeaderAuthDesktop() {
               role="menuitem"
               onClick={() => setOpen(false)}
             >
-              Admin dashboard
+              {t("nav.admin")}
             </Link>
           ) : null}
           <button
@@ -123,7 +123,7 @@ export function MarketingHeaderAuthDesktop() {
             role="menuitem"
             onClick={() => void signOut({ callbackUrl: "/" })}
           >
-            Sign out
+            {t("nav.signout")}
           </button>
         </div>
       ) : null}
@@ -165,22 +165,24 @@ export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => vo
   }
 
   const user = session.user;
-  const label = user.email ?? user.name ?? `ID ${user.id?.slice(0, 8)}…`;
+  const label = user.email ?? user.name ?? `${t("account.idPrefix")} ${user.id?.slice(0, 8)}…`;
   const admin = isAdminRole(user.role);
 
   return (
     <div className="mt-4 space-y-2 border-t border-[var(--theme-separator)] pt-4">
       <p className="text-[10px] font-bold uppercase tracking-wider text-primary">{label}</p>
-      <p className="font-mono text-xs text-[var(--theme-muted-text)]">ID {user.id}</p>
+      <p className="font-mono text-xs text-[var(--theme-muted-text)]">
+        {t("account.idPrefix")} {user.id}
+      </p>
       {admin ? (
-        <p className="text-xs font-semibold text-primary">Administrator</p>
+        <p className="text-xs font-semibold text-primary">{t("account.role.administrator")}</p>
       ) : null}
       <Link
         href="/app"
         className="block rounded-xl border border-[var(--theme-card-border)] px-3 py-2.5 text-sm font-semibold text-[var(--theme-menu-text)] hover:bg-[var(--theme-menu-hover-bg)]"
         onClick={onNavigate}
       >
-        Learner app
+        {t("nav.learnerApp")}
       </Link>
       {admin ? (
         <Link
@@ -188,7 +190,7 @@ export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => vo
           className="block rounded-xl border border-primary/20 bg-primary/5 px-3 py-2.5 text-sm font-semibold text-primary hover:bg-primary/10"
           onClick={onNavigate}
         >
-          Admin dashboard
+          {t("nav.admin")}
         </Link>
       ) : null}
       <button
@@ -196,7 +198,7 @@ export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => vo
         className="w-full rounded-xl border border-[var(--theme-nav-border)] px-3 py-2.5 text-sm font-semibold text-[var(--theme-menu-text)] hover:bg-[var(--theme-menu-hover-bg)]"
         onClick={() => void signOut({ callbackUrl: "/" })}
       >
-        Sign out
+        {t("nav.signout")}
       </button>
     </div>
   );
