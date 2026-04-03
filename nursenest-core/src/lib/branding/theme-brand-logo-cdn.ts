@@ -24,7 +24,7 @@ export const THEME_BRAND_LOGO_PREFIX = "branding/themes" as const;
 
 /**
  * Public CDN URL for the theme’s pre-colored brand raster on DigitalOcean Spaces (`nursenest-images` CDN).
- * Canonical entry point for theme logo URLs — uses real object keys (e.g. `lavenderbrandlogo.png`).
+ * Canonical entry point for theme logo URLs — uses real object keys (e.g. `lavenderbrandlogo_transparent.png`).
  */
 export function getThemeLogoUrl(themeId?: string | null): string {
   const id = normalizeThemeIdForLogo(themeId ?? NURSENEST_DEFAULT_THEME);

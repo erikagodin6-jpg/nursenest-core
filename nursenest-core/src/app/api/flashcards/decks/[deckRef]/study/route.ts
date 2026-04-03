@@ -23,6 +23,8 @@ import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-s
 import { withRetry } from "@/lib/resilience/with-retry";
 import type { Prisma } from "@prisma/client";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import { applyFlashcardCardOverlay } from "@/lib/i18n/educational-content-overlay";
+import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
 
 const NO_ACCESS: AccessScope = {
   hasAccess: false,
@@ -47,6 +49,7 @@ export async function GET(req: NextRequest, { params }: Props) {
   const limit = Math.min(MAX_BATCH, Math.max(1, Number(sp.get("limit") ?? "8")));
   const reset = sp.get("reset") === "1";
   const shuffle = sp.get("shuffle") === "1";
+  const educationalLocale = getMarketingLocaleFromRequestCookie(req);
 
   setSentryServerContext({ route: "/api/flashcards/decks/[deckRef]/study", feature: SERVER_FEATURE.flashcard, userId: userId ?? "" });
 
@@ -100,14 +103,17 @@ export async function GET(req: NextRequest, { params }: Props) {
         mode: "preview" as const,
         deckId: deck.id,
         slug: deck.slug,
-        cards: cards.map((c) => ({
-          id: c.id,
-          front: c.front,
-          back: truncateForPreview(c.back),
-          fullBackAvailable: false,
-          topic: c.category.name,
-          subtopic: c.category.topicCode,
-        })),
+        cards: cards.map((c) => {
+          const loc = applyFlashcardCardOverlay({ id: c.id, front: c.front, back: c.back }, educationalLocale);
+          return {
+            id: c.id,
+            front: loc.front,
+            back: truncateForPreview(loc.back),
+            fullBackAvailable: false,
+            topic: c.category.name,
+            subtopic: c.category.topicCode,
+          };
+        }),
         session: null,
       };
       const approx = estimateJsonUtf8Bytes(body);
@@ -225,14 +231,17 @@ export async function GET(req: NextRequest, { params }: Props) {
       mode: "subscriber" as const,
       deckId: deck.id,
       slug: deck.slug,
-      cards: ordered.map((c) => ({
-        id: c.id,
-        front: c.front,
-        back: c.back,
-        fullBackAvailable: true,
-        topic: c.category.name,
-        subtopic: c.category.topicCode,
-      })),
+      cards: ordered.map((c) => {
+        const loc = applyFlashcardCardOverlay({ id: c.id, front: c.front, back: c.back }, educationalLocale);
+        return {
+          id: c.id,
+          front: loc.front,
+          back: loc.back,
+          fullBackAvailable: true,
+          topic: c.category.name,
+          subtopic: c.category.topicCode,
+        };
+      }),
       session: {
         cursor,
         queueLength: storedQueue.length,

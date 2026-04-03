@@ -20,12 +20,12 @@ import { PH } from "@/lib/observability/posthog-conversion-events";
 
 const HomePageHeroTail = dynamic(() => import("@/components/marketing/home-page-hero-tail"), {
   ssr: false,
-  loading: () => <div className="min-h-[200px]" aria-hidden />,
+  loading: () => <div className="min-h-0" aria-hidden />,
 });
 
 const HomePageMidSections = dynamic(() => import("@/components/marketing/home-page-mid-sections"), {
   ssr: false,
-  loading: () => <div className="min-h-[320px]" aria-hidden />,
+  loading: () => <div className="min-h-[120px]" aria-hidden />,
 });
 
 const HomeMarketingConversionBlocks = dynamic(
@@ -219,9 +219,9 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
         >
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div
-              className={`grid items-start gap-3 md:gap-4 lg:gap-6 ${showHeroMediaColumn ? "md:grid-cols-[1fr_1.08fr]" : "md:grid-cols-1"}`}
+              className={`grid items-start gap-3 md:gap-3.5 lg:gap-5 ${showHeroMediaColumn ? "md:grid-cols-[1fr_1.08fr]" : "md:grid-cols-1"}`}
             >
-              <div className="hero-motion-enter min-w-0 max-w-[min(100%,46rem)] space-y-4 md:space-y-5">
+              <div className="hero-motion-enter min-w-0 max-w-[min(100%,46rem)] space-y-3 md:space-y-4">
                 <div
                   className="inline-flex max-w-full flex-wrap items-center gap-x-2 gap-y-1 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-inset)] px-3 py-1.5 text-[11px] font-semibold leading-snug text-[var(--theme-heading-text)] sm:text-sm"
                   data-testid="badge-trust-micro"

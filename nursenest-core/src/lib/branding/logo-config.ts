@@ -1,11 +1,17 @@
 import { NURSENEST_IMAGES_SPACE_PUBLIC_BASE_URL } from "@/config/marketing-cdn.catalog";
 
+/** Same-origin transparent theme marks (see `scripts/generate-theme-logos-from-registry.ts`). */
+export const COMMITTED_THEME_LOGO_PUBLIC_PREFIX = "/branding/theme-logos/" as const;
+
 /**
  * Global site logo fallbacks (header uses `SiteBrandLogoMark` → `getHeaderBrandLogoLoadChain`:
- * per-theme PNG via `/api/marketing-assets/...` + CDN, then `PRIMARY_LOGO_URL`, then local SVG).
- * Base URL matches `digitalOceanSpaces.nursenestImages.publicBaseUrl` in `marketing-cdn.catalog.json`.
+ * committed transparent PNG first, then CDN/proxy, then `PRIMARY_LOGO_URL`, then local SVG).
+ * Default brand theme is lavender (`NURSENEST_DEFAULT_THEME`).
  */
-export const PRIMARY_LOGO_URL = `${NURSENEST_IMAGES_SPACE_PUBLIC_BASE_URL.replace(/\/$/, "")}/bluebrandlogo.png` as const;
+export const PRIMARY_LOGO_URL = `${COMMITTED_THEME_LOGO_PUBLIC_PREFIX}lavenderbrandlogo_transparent.png` as const;
+
+/** CDN URL for default lavender wordmark (last resort when same-origin assets are unavailable). */
+export const PRIMARY_LOGO_CDN_URL = `${NURSENEST_IMAGES_SPACE_PUBLIC_BASE_URL.replace(/\/$/, "")}/lavenderbrandlogo_transparent.png` as const;
 
 /**
  * Committed same-origin wordmark — always available when CDN/proxy/theme objects fail.
@@ -39,7 +45,47 @@ export const HOME_BRAND_LOGO_MARK_CLASSNAME =
  * Raster mark: fills slot height; width from aspect ratio; `object-contain` keeps sharpness and trims effective padding vs stretching.
  */
 export const HEADER_BRAND_LOGO_IMG_CLASSNAME =
-  "nn-brand-header-logo block h-full w-auto max-h-full max-w-full shrink-0 bg-transparent object-contain object-left" as const;
+  "nn-brand-header-logo block h-full w-auto max-h-full max-w-full shrink-0 bg-transparent object-contain object-left [image-rendering:auto]" as const;
+
+/** Site footer: smaller than header; same object-contain rules, no vertical stretch. */
+export const FOOTER_BRAND_LOGO_SLOT_CLASSNAME =
+  "nn-brand-footer-logo-slot inline-flex flex-none shrink-0 items-center justify-center overflow-visible bg-transparent h-[3rem] max-h-[3rem] w-auto max-w-[min(88vw,14rem)] sm:h-[3.25rem] sm:max-h-[3.25rem] sm:max-w-[15rem] md:max-w-[16rem]" as const;
+
+export const FOOTER_BRAND_LOGO_IMG_CLASSNAME =
+  "nn-brand-footer-logo block h-full w-auto max-h-full max-w-full shrink-0 bg-transparent object-contain object-center [image-rendering:auto]" as const;
+
+/** Auth / narrow forms: compact wordmark, still theme-aware via `SiteBrandLogoMark`. */
+export const AUTH_BRAND_LOGO_SLOT_CLASSNAME =
+  "nn-brand-auth-logo-slot inline-flex flex-none shrink-0 items-center justify-center overflow-visible bg-transparent h-[2.75rem] max-h-[2.75rem] w-auto max-w-[min(90vw,13rem)] sm:h-[3rem] sm:max-h-[3rem] sm:max-w-[14rem]" as const;
+
+export const AUTH_BRAND_LOGO_IMG_CLASSNAME =
+  "nn-brand-auth-logo block h-full w-auto max-h-full max-w-full shrink-0 bg-transparent object-contain object-center [image-rendering:auto]" as const;
+
+/** Learner app shell top bar: between auth and full marketing header. */
+export const LEARNER_BRAND_LOGO_SLOT_CLASSNAME =
+  "nn-brand-learner-logo-slot inline-flex flex-none shrink-0 items-center justify-start overflow-visible bg-transparent h-[4rem] max-h-[4rem] w-auto max-w-[min(92vw,20rem)] sm:h-[4.5rem] sm:max-h-[4.5rem] sm:max-w-[22rem]" as const;
+
+export const LEARNER_BRAND_LOGO_IMG_CLASSNAME =
+  "nn-brand-learner-logo block h-full w-auto max-h-full max-w-full shrink-0 bg-transparent object-contain object-left [image-rendering:auto]" as const;
+
+export type BrandLogoMarkVariant = "header" | "footer" | "auth" | "learner";
+
+/** Single presentation contract for `<SiteBrandLogoMark />` (slot + img). Default `header` matches marketing nav. */
+export function brandLogoMarkPresentation(variant: BrandLogoMarkVariant = "header"): {
+  slotClassName: string;
+  imgClassName: string;
+} {
+  switch (variant) {
+    case "footer":
+      return { slotClassName: FOOTER_BRAND_LOGO_SLOT_CLASSNAME, imgClassName: FOOTER_BRAND_LOGO_IMG_CLASSNAME };
+    case "auth":
+      return { slotClassName: AUTH_BRAND_LOGO_SLOT_CLASSNAME, imgClassName: AUTH_BRAND_LOGO_IMG_CLASSNAME };
+    case "learner":
+      return { slotClassName: LEARNER_BRAND_LOGO_SLOT_CLASSNAME, imgClassName: LEARNER_BRAND_LOGO_IMG_CLASSNAME };
+    default:
+      return { slotClassName: HEADER_BRAND_LOGO_SLOT_CLASSNAME, imgClassName: HEADER_BRAND_LOGO_IMG_CLASSNAME };
+  }
+}
 
 /** Extra classes merged onto the slot in `<SiteBrandLogoMark />` (call sites rarely need overrides). */
 export const DEFAULT_BRAND_LOGO_MARK_CLASSNAME = "" as const;

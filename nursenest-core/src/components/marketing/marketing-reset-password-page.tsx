@@ -17,7 +17,7 @@ export async function MarketingResetPasswordPage({
     <main className="mx-auto w-full max-w-md px-6 py-16">
       <div className="nn-card p-8">
         <div className="mb-6 flex justify-center bg-transparent">
-          <SiteBrandLogoMark />
+          <SiteBrandLogoMark variant="auth" />
         </div>
         <h1 className="text-3xl font-bold">Choose a new password</h1>
         <p className="mt-2 text-sm text-muted">Enter and confirm your new password (at least 8 characters).</p>

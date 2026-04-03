@@ -27,6 +27,9 @@ import { diagnoseSubscriberQuestionListEmpty } from "@/lib/questions/question-li
 import { logLargeApiResponse } from "@/lib/observability/perf-log";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { MAX_LIST_SKIP_ROWS_DEFAULT } from "@/lib/api/api-pagination-limits";
+import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { localizeQuestionListForApi } from "@/lib/i18n/educational-content-overlay";
+import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
 import { enforceQuestionsListProtection } from "@/lib/http/api-protection";
 import {
   examQuestionAccessWhereSql,
@@ -142,6 +145,7 @@ export async function GET(req: NextRequest) {
   const sortRaw = searchParams.get("sort")?.trim().toLowerCase() ?? "recent";
   const sort = sortRaw === "random" ? "random" : "recent";
   const excludeIds = parseExcludeIdsParam(searchParams.get("excludeIds"));
+  const educationalLocale = getMarketingLocaleFromRequestCookie(req);
 
   if (sort === "random" && page > 1 && excludeIds.length === 0) {
     return NextResponse.json(
@@ -361,13 +365,11 @@ export async function GET(req: NextRequest) {
         }
       }
 
-      const payload =
-        responseMode === "preview"
-          ? questions.map((q) => ({
-              ...q,
-              stem: q.stem.length > 280 ? `${q.stem.slice(0, 280).trim()}…` : q.stem,
-            }))
-          : questions;
+      const payload = localizeQuestionListForApi(
+        questions as Array<Record<string, unknown>>,
+        responseMode,
+        educationalLocale,
+      );
 
       const approxPayloadBytes = estimateJsonUtf8Bytes(payload);
       logSubscriberPayload(approxPayloadBytes, {
@@ -412,6 +414,9 @@ export async function GET(req: NextRequest) {
         topicRequested: topicFilterResolved && topicFilterResolved.length > 0 ? topicFilterResolved : null,
         topicCodeRequested: topicCodeFilter ?? null,
         topicRelaxed,
+        ...(educationalLocale !== DEFAULT_MARKETING_LOCALE
+          ? { educationalContentLocale: educationalLocale }
+          : {}),
         ...(listEmptyDiagnostics
           ? {
               diagnostics:
@@ -538,13 +543,11 @@ export async function GET(req: NextRequest) {
     }
 
     const remaining = Math.max(0, snap.questionRemaining - used);
-    const sanitized =
-      responseMode === "full"
-        ? questions
-        : questions.map((q) => ({
-            ...q,
-            stem: q.stem.length > 280 ? `${q.stem.slice(0, 280).trim()}…` : q.stem,
-          }));
+    const sanitized = localizeQuestionListForApi(
+      questions as Array<Record<string, unknown>>,
+      responseMode,
+      educationalLocale,
+    );
 
     const freemiumApproxBytes = estimateJsonUtf8Bytes(sanitized);
     safeServerLog("api_questions", "freemium_list_payload", {
@@ -577,6 +580,9 @@ export async function GET(req: NextRequest) {
       sort,
       excludeIdsCount: excludeIds.length,
       freemiumRemainingAfterBatch: remaining,
+      ...(educationalLocale !== DEFAULT_MARKETING_LOCALE
+        ? { educationalContentLocale: educationalLocale }
+        : {}),
     };
     logLargeApiResponse("/api/questions", estimateJsonUtf8Bytes(freemiumBody));
     return NextResponse.json(freemiumBody);

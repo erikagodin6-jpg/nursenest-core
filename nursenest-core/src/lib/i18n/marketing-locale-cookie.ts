@@ -1,3 +1,4 @@
+import type { NextRequest } from "next/server";
 import { DEFAULT_MARKETING_LOCALE, isMarketingLocaleCode } from "@/lib/i18n/marketing-locale-policy";
 
 /** Persisted UI language for `(default)` marketing routes (exam hubs use country as first segment, not this). */
@@ -11,4 +12,9 @@ export function normalizePreferredMarketingLocale(raw: string | undefined): stri
   const v = raw.trim();
   if (!v) return DEFAULT_MARKETING_LOCALE;
   return isMarketingLocaleCode(v) ? v : DEFAULT_MARKETING_LOCALE;
+}
+
+/** Marketing / learner UI locale from `nn_marketing_locale` on API routes (matches {@link getMarketingLocaleForDefaultRoute}). */
+export function getMarketingLocaleFromRequestCookie(req: NextRequest): string {
+  return normalizePreferredMarketingLocale(req.cookies.get(MARKETING_LOCALE_COOKIE)?.value);
 }

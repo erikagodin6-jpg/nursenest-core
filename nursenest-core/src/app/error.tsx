@@ -23,7 +23,7 @@ export default function GlobalError({
     <main className="mx-auto mt-16 w-full max-w-xl px-6">
       <div className="nn-card p-8">
         <a href="/" className="mb-6 inline-flex bg-transparent" aria-label="NurseNest home">
-          <SiteBrandLogoMark />
+          <SiteBrandLogoMark variant="auth" />
         </a>
         <h1 className="text-2xl font-bold">Something went wrong</h1>
         <p className="mt-3 text-sm text-muted">

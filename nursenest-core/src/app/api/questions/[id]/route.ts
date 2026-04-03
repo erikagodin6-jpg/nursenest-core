@@ -16,6 +16,8 @@ import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics"
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { logLargeApiResponse } from "@/lib/observability/perf-log";
 import { notSubscribedResponse } from "@/lib/entitlements/require-subscriber-session";
+import { mergeQuestionApiPayload } from "@/lib/i18n/educational-content-overlay";
+import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
 
 export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
   const { id } = await ctx.params;
@@ -42,6 +44,8 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
     if (!gate.ok) return gate.response;
 
     setSentryServerContext({ route: "/api/questions/[id]", feature: SERVER_FEATURE.question, userId: gate.userId });
+
+    const educationalLocale = getMarketingLocaleFromRequestCookie(req);
 
     const includeRationale =
       req.nextUrl.searchParams.get("includeRationale") === "1" ||
@@ -92,7 +96,11 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
         return NextResponse.json({ error: "Not found" }, { status: 404 });
       }
 
-      const body = { question: q, mode: "subscriber" as const, fields: includeRationale ? ("full" as const) : ("preview" as const) };
+      const body = {
+        question: mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale),
+        mode: "subscriber" as const,
+        fields: includeRationale ? ("full" as const) : ("preview" as const),
+      };
       const approxPayloadBytes = estimateJsonUtf8Bytes(body);
       safeServerLog("api_questions_id", "single_payload", {
         approxPayloadBytes,
@@ -133,6 +141,8 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
     AND: [{ id }, freemiumQuestionWhereForProfile(user.country as CountryCode, user.tier as TierCode)],
   };
 
+  const educationalLocale = getMarketingLocaleFromRequestCookie(req);
+
   try {
     const q = await withRetry(() =>
       prisma.examQuestion.findFirst({
@@ -158,7 +168,10 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
       data: { freeQuestionViews: { increment: 1 } },
     });
 
-    const freemiumBody = { question: q, mode: "freemium" as const };
+    const freemiumBody = {
+      question: mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale),
+      mode: "freemium" as const,
+    };
     logLargeApiResponse("/api/questions/[id]", estimateJsonUtf8Bytes(freemiumBody));
     return NextResponse.json(freemiumBody);
   } catch (e) {

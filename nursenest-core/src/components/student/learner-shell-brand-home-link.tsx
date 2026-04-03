@@ -8,7 +8,7 @@ export function LearnerShellBrandHomeLink() {
   const { t } = useMarketingI18n();
   return (
     <Link href="/" className="inline-flex shrink-0 overflow-visible bg-transparent" aria-label={t("brand.homeAriaLabel")}>
-      <SiteBrandLogoMark />
+      <SiteBrandLogoMark variant="learner" />
     </Link>
   );
 }

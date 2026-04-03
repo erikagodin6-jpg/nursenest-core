@@ -84,6 +84,12 @@ export default async function AdminDiagnosticsPage() {
           >
             CAT blueprint sessions
           </Link>
+          <Link
+            href="/admin/diagnostics/theme-qa"
+            className="rounded-lg border border-border px-3 py-2 font-medium text-foreground hover:bg-muted"
+          >
+            Theme & logo QA
+          </Link>
         </div>
       </div>
 

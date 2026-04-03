@@ -27,7 +27,7 @@ export function HomeHeroPathGateway({ region }: Props) {
 
   return (
     <div
-      className="mt-8 rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]/80 p-4 shadow-[var(--shadow-card)] sm:p-6"
+      className="mt-6 rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]/80 p-4 shadow-[var(--shadow-card)] sm:mt-7 sm:p-6"
       data-testid="hero-path-gateway"
     >
       <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">

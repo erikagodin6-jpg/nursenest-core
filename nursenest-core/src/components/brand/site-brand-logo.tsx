@@ -4,9 +4,9 @@ import { useCallback, useEffect, useState } from "react";
 import {
   BRAND_NAME,
   DEFAULT_BRAND_LOGO_MARK_CLASSNAME,
-  HEADER_BRAND_LOGO_IMG_CLASSNAME,
-  HEADER_BRAND_LOGO_SLOT_CLASSNAME,
   LOCAL_BRAND_MARK_PATH,
+  brandLogoMarkPresentation,
+  type BrandLogoMarkVariant,
 } from "@/lib/branding/logo-config";
 import { logBrandLogoLoadFailure } from "@/lib/observability/brand-logo-client-log";
 import { useThemeLogo } from "@/lib/theme/use-theme-logo";
@@ -14,16 +14,20 @@ import { useThemeLogo } from "@/lib/theme/use-theme-logo";
 export type BrandMarkLoadState = "loading" | "ready" | "error";
 
 /**
- * Theme-aware brand mark: `useThemeLogo` (tracks `data-theme`) → `getHeaderBrandLogoLoadChain` (CDN/proxy → default-theme rasters → local SVG → legacy).
- * Raster path: {@link HEADER_BRAND_LOGO_SLOT_CLASSNAME} + {@link HEADER_BRAND_LOGO_IMG_CLASSNAME}. Optional `className` merges onto the slot.
+ * Theme-aware brand mark: `useThemeLogo` → `getHeaderBrandLogoLoadChain` (local PNG → CDN → proxy → SVG/legacy).
+ * Presentation: {@link brandLogoMarkPresentation}; optional `className` merges onto the slot (e.g. {@link HOME_BRAND_LOGO_MARK_CLASSNAME} on home).
  */
 export function SiteBrandLogoMark({
   className = DEFAULT_BRAND_LOGO_MARK_CLASSNAME,
+  variant = "header",
   onMarkState,
 }: {
   className?: string;
+  /** Shared sizing contract: header (default), footer, auth, learner shell. */
+  variant?: BrandLogoMarkVariant;
   onMarkState?: (state: BrandMarkLoadState) => void;
 }) {
+  const { slotClassName, imgClassName } = brandLogoMarkPresentation(variant);
   const { themeId, mappedSpaceKey, loadChain } = useThemeLogo();
   const [candidateIndex, setCandidateIndex] = useState(0);
   const [showTextFallback, setShowTextFallback] = useState(false);
@@ -71,7 +75,7 @@ export function SiteBrandLogoMark({
   if (showTextFallback) {
     return (
       <span
-        className={`${HEADER_BRAND_LOGO_SLOT_CLASSNAME} ${className}`.trim()}
+        className={`${slotClassName} ${className}`.trim()}
         aria-label={BRAND_NAME}
       >
         <span className="text-2xl font-extrabold leading-none tracking-tight text-primary sm:text-3xl md:text-4xl lg:text-[2.65rem] xl:text-[2.85rem] 2xl:text-[3.05rem]">
@@ -82,14 +86,14 @@ export function SiteBrandLogoMark({
   }
 
   return (
-    <span className={`${HEADER_BRAND_LOGO_SLOT_CLASSNAME} ${className}`.trim()}>
+    <span className={`${slotClassName} ${className}`.trim()}>
       <img
         key={`${themeId}-${safeIndex}-${src}`}
         src={src}
         alt={BRAND_NAME}
         loading="eager"
         decoding="async"
-        className={HEADER_BRAND_LOGO_IMG_CLASSNAME}
+        className={imgClassName}
         onLoad={handleLoad}
         onError={handleError}
       />

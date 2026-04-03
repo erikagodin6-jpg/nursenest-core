@@ -11,7 +11,7 @@ export function LearnerUnauthenticatedGate() {
     <div className="mx-auto w-full max-w-6xl px-6 py-8">
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <Link href="/" className="inline-flex overflow-visible bg-transparent" aria-label={t("brand.homeAriaLabel")}>
-          <SiteBrandLogoMark />
+          <SiteBrandLogoMark variant="auth" />
         </Link>
         <LearnerShellLanguageControl />
       </div>

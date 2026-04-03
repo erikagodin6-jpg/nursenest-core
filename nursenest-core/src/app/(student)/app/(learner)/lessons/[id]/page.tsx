@@ -17,7 +17,8 @@ import {
   getLegacyContentMapLessonById,
   legacyContentMapLessonTitle,
 } from "@/lib/lessons/legacy-content-map-lessons";
-import { getPublishedPathwayLessonRecordById } from "@/lib/lessons/pathway-lesson-loader";
+import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
+import { getPathwayLesson } from "@/lib/lessons/pathway-lesson-loader";
 import { LegacyMonolithLessonBody } from "@/components/lessons/legacy-monolith-lesson-body";
 import { LessonQualityNotice } from "@/components/lessons/lesson-quality-notice";
 import { classifyContentItemLesson, classifyPathwayLesson } from "@/lib/content-quality/classify-lesson";
@@ -112,6 +113,8 @@ export default async function LessonDetailPage({ params }: Props) {
     learnerPath = lpRow?.learnerPath ?? null;
   }
 
+  const marketingLocale = await getMarketingLocaleForDefaultRoute();
+
   const resolved = await withDatabaseFallback(async () => {
     const learnerPathRow = userId
       ? await prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } })
@@ -142,9 +145,9 @@ export default async function LessonDetailPage({ params }: Props) {
       if (!appPathwayLessonVisibleToSubscriber(entitlement, pwRow, learnerPath)) {
         return { kind: "out_of_plan" as const };
       }
-      const record = await getPublishedPathwayLessonRecordById(id);
+      const record = await getPathwayLesson(pwRow.pathwayId, pwRow.slug, marketingLocale);
       if (!record) return { kind: "not_found" as const };
-      return { kind: "pathway_ok" as const, record };
+      return { kind: "pathway_ok" as const, record, pathwayId: pwRow.pathwayId };
     }
 
     const legacyLesson = await getLegacyContentMapLessonById(id);
@@ -273,18 +276,15 @@ export default async function LessonDetailPage({ params }: Props) {
   if (resolvedLesson.kind === "pathway_ok") {
     const record = resolvedLesson.record;
     const visible = visibleSectionsForLesson(record, true);
-    const pathwayRow = await withDatabaseFallback(
-      () => prisma.pathwayLesson.findUnique({ where: { id }, select: { pathwayId: true } }),
-      null,
-    );
+    const pathwayId = resolvedLesson.pathwayId;
     const pathwayQuality = classifyPathwayLesson(record);
     let pathwayContinue = null;
-    if (userId && pathwayRow?.pathwayId) {
+    if (userId && pathwayId) {
       try {
         pathwayContinue = await loadLessonContinueStudyNext(userId, entitlement, learnerPath, {
           variant: "pathway",
           lessonId: id,
-          pathwayId: pathwayRow.pathwayId,
+          pathwayId,
           topicSlug: record.topicSlug,
         });
       } catch {
@@ -305,7 +305,7 @@ export default async function LessonDetailPage({ params }: Props) {
             flags={flags}
             scope={LearnerNoteScope.PATHWAY_LESSON}
             contextId={id}
-            pathwayId={pathwayRow?.pathwayId ?? undefined}
+            pathwayId={pathwayId}
             topic={record.topic}
             sourceLabel={record.title}
             qualityNotice={<LessonQualityNotice tier={pathwayQuality.tier} wordCount={pathwayQuality.wordCount} />}

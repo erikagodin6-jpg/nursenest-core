@@ -4,26 +4,30 @@ import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 
 export async function MarketingForgotPasswordPage({ locale }: { locale: string }) {
-  await loadMarketingMessages(locale);
+  const m = await loadMarketingMessages(locale);
   const loginHref = withMarketingLocale(locale, "/login");
 
   return (
     <main className="mx-auto w-full max-w-md px-6 py-16">
       <div className="nn-card p-8">
         <div className="mb-6 flex justify-center bg-transparent">
-          <SiteBrandLogoMark />
+          <SiteBrandLogoMark variant="auth" />
         </div>
-        <h1 className="text-3xl font-bold">Reset your password</h1>
+        <h1 className="text-3xl font-bold">{m["pages.forgotPassword.h1"] ?? "Reset your password"}</h1>
         <p className="mt-2 text-sm text-muted">
-          Enter your email address. If an account exists with a password, we will send a reset link.
+          {m["pages.forgotPassword.intro"] ??
+            "Enter your email address. If an account exists with a password, we will send a reset link."}
         </p>
         <ForgotPasswordForm
           backToLoginHref={loginHref}
-          backToLoginLabel="Back to sign in"
-          submitLabel="Send reset link"
-          successMessage="If an account exists for that email, a password reset link has been sent."
-          errorMessage="Something went wrong. Please try again."
-          emailPlaceholder="Email address on your account"
+          backToLoginLabel={m["pages.forgotPassword.backToLoginLabel"] ?? "Back to sign in"}
+          submitLabel={m["pages.forgotPassword.submitLabel"] ?? "Send reset link"}
+          successMessage={
+            m["pages.forgotPassword.successMessage"] ??
+            "If an account exists for that email, a password reset link has been sent."
+          }
+          errorMessage={m["pages.forgotPassword.errorMessage"] ?? "Something went wrong. Please try again."}
+          emailPlaceholder={m["pages.forgotPassword.emailPlaceholder"] ?? "Email address on your account"}
         />
       </div>
     </main>

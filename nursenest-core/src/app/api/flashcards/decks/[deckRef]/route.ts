@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
 import { userCanAccessDeckForStudy } from "@/lib/flashcards/flashcard-access";
@@ -6,6 +6,8 @@ import { findPublishedDeckByRef } from "@/lib/flashcards/resolve-deck";
 import { logFlashcardAccessDenied } from "@/lib/observability/flashcard-log";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import { applyFlashcardDeckOverlay } from "@/lib/i18n/educational-content-overlay";
+import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
 
 const NO_ACCESS: AccessScope = {
   hasAccess: false,
@@ -18,8 +20,9 @@ type Props = { params: Promise<{ deckRef: string }> };
 
 export const dynamic = "force-dynamic";
 
-export async function GET(_req: Request, { params }: Props) {
+export async function GET(req: NextRequest, { params }: Props) {
   const { deckRef } = await params;
+  const educationalLocale = getMarketingLocaleFromRequestCookie(req);
   const session = await auth();
   const userId = (session?.user as { id?: string } | undefined)?.id;
   setSentryServerContext({ route: "/api/flashcards/decks/[deckRef]", feature: SERVER_FEATURE.flashcard, userId: userId ?? "" });
@@ -43,12 +46,17 @@ export async function GET(_req: Request, { params }: Props) {
     return NextResponse.json({ error: "Access denied", code: "flashcard_access_denied" }, { status: 403 });
   }
 
+  const localized = applyFlashcardDeckOverlay(
+    { id: deck.id, slug: deck.slug, title: deck.title, description: deck.description },
+    educationalLocale,
+  );
+
   return NextResponse.json({
     deck: {
       id: deck.id,
       slug: deck.slug,
-      title: deck.title,
-      description: deck.description,
+      title: localized.title,
+      description: localized.description,
       country: deck.country,
       tier: deck.tier,
       examFamily: deck.examFamily,

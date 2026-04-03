@@ -13,6 +13,8 @@ import { buildNormalizedTeachingPayload, buildTeachingMediaBundle } from "@/lib/
 import { deriveTopicCode } from "@/lib/learner/topic-linking";
 import type { RecommendationConfidence } from "@/lib/learner/topic-linking";
 import { ContentStatus } from "@prisma/client";
+import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
+import { mergeQuestionOverlayForGradeResponse } from "@/lib/i18n/educational-content-overlay";
 
 function topicRoutingConfidence(row: { subtopic?: string | null; topic?: string | null; bodySystem?: string | null }): RecommendationConfidence {
   if ((row.subtopic ?? "").trim().length > 1) return "high";
@@ -114,9 +116,12 @@ export async function POST(req: Request) {
       /* ledger is best-effort */
     }
 
-    const rationaleBundle = buildRationalePayloadForGradeResponse(row);
-    const teaching = buildNormalizedTeachingPayload(row);
-    const teachingMedia = buildTeachingMediaBundle(row);
+    const locale = await getMarketingLocaleForDefaultRoute();
+    const displayRow = mergeQuestionOverlayForGradeResponse(row, row.id, locale);
+
+    const rationaleBundle = buildRationalePayloadForGradeResponse(displayRow);
+    const teaching = buildNormalizedTeachingPayload(displayRow);
+    const teachingMedia = buildTeachingMediaBundle(displayRow);
     const topicCode = deriveTopicCode({ topic: row.topic, subtopic: row.subtopic, bodySystem: row.bodySystem });
     const linkConfidence = topicRoutingConfidence(row);
 
@@ -168,7 +173,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({
       correct,
-      rationale: row.rationale ?? null,
+      rationale: displayRow.rationale ?? null,
       rationaleQuality: rationaleBundle.rationaleQuality,
       rationaleSections: rationaleBundle.sections,
       teaching,

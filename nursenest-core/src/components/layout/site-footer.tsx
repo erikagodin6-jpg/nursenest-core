@@ -44,13 +44,13 @@ export function SiteFooter() {
   const npPrepHref = npPracticeProgrammatic(region);
 
   return (
-    <footer className="mt-auto border-t border-[var(--divider,var(--theme-nav-border))] bg-[var(--bg-section,var(--theme-card-bg))] py-12">
+    <footer className="mt-auto border-t border-[var(--divider,var(--theme-nav-border))] bg-[var(--bg-section,var(--theme-card-bg))] py-10 sm:py-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-8">
+        <div className="mb-6 sm:mb-8">
           <EmailSignupBanner />
         </div>
 
-        <div className="mb-8 grid grid-cols-2 gap-8 md:grid-cols-4">
+        <div className="mb-6 grid grid-cols-2 gap-6 sm:gap-8 md:grid-cols-4 sm:mb-8">
           <div>
             <h3 className="mb-3 text-sm font-semibold text-[var(--theme-heading-text)]">{t("footer.studyTools")}</h3>
             <ul className="space-y-2 text-sm text-[var(--theme-muted-text)]">
@@ -252,7 +252,7 @@ export function SiteFooter() {
 
         <div className="flex flex-col items-center justify-between gap-4 border-t border-[var(--theme-separator)] pt-6 md:flex-row">
           <div className="flex items-center gap-2 bg-transparent">
-            <SiteBrandLogoMark />
+            <SiteBrandLogoMark variant="footer" />
           </div>
           <div className="text-sm text-[var(--theme-muted-text)]">
             © {new Date().getFullYear()} {t("brand.nurseNest")}. {t("footer.rights")}

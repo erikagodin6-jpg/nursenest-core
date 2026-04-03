@@ -22,7 +22,7 @@ export default function LearnerError({
   return (
     <div className="nn-card p-6">
       <a href="/" className="mb-4 inline-flex bg-transparent" aria-label={t("brand.homeAriaLabel")}>
-        <SiteBrandLogoMark />
+        <SiteBrandLogoMark variant="auth" />
       </a>
       <h2 className="text-xl font-semibold">{t("learner.error.app.title")}</h2>
       <p className="mt-2 text-sm text-muted">{t("learner.error.app.description")}</p>

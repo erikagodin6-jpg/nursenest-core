@@ -49,7 +49,7 @@ function getServerSnapshot(): string {
 export function useThemeLogo(): {
   /** Canonical theme id used for logo mapping. */
   themeId: string;
-  /** Spaces object key for the active theme mark (e.g. `lavenderbrandlogo.png`). */
+  /** Spaces object key for the active theme mark (e.g. `lavenderbrandlogo_transparent.png`). */
   mappedSpaceKey: string;
   /** Ordered URLs: same-origin proxy first, then public CDN, then fallbacks. */
   loadChain: string[];

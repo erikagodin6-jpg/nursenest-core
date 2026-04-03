@@ -27,6 +27,8 @@ type QFull = {
   questionType: string;
   rationale?: string | null;
   options?: unknown;
+  /** Localized labels aligned to `options` (canonical English strings for grading). */
+  displayOptions?: string[] | null;
   topic?: string | null;
   subtopic?: string | null;
   exam?: string | null;
@@ -425,7 +427,13 @@ export function QuestionBankPracticeClient({
     }
   }, [phase, questions, idx, topicForApi, pathwayIdFilter, preset, graded, userId]);
 
-  const opts = useMemo(() => (current ? parseOptions(current.options) : []), [current]);
+  const optsCanonical = useMemo(() => (current ? parseOptions(current.options) : []), [current]);
+  const optsDisplay = useMemo(() => {
+    if (!current) return [];
+    const d = current.displayOptions;
+    if (Array.isArray(d) && d.length === optsCanonical.length) return d.map((x) => String(x));
+    return optsCanonical;
+  }, [current, optsCanonical]);
 
   const g = current ? graded[current.id] : undefined;
 
@@ -664,10 +672,11 @@ export function QuestionBankPracticeClient({
 
           {isSata ? (
             <ul className="space-y-2">
-              {opts.map((label) => {
-                const selected = Array.isArray(raw) ? raw.includes(label) : false;
+              {optsCanonical.map((canonical, i) => {
+                const label = optsDisplay[i] ?? canonical;
+                const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
                 return (
-                  <li key={label}>
+                  <li key={canonical}>
                     <label className="flex cursor-pointer items-start gap-2 text-sm">
                       <input
                         type="checkbox"
@@ -675,7 +684,7 @@ export function QuestionBankPracticeClient({
                         disabled={!!g}
                         onChange={(e) => {
                           const prev = Array.isArray(raw) ? [...raw] : [];
-                          const next = e.target.checked ? [...prev, label] : prev.filter((x) => x !== label);
+                          const next = e.target.checked ? [...prev, canonical] : prev.filter((x) => x !== canonical);
                           setAnswer(next);
                         }}
                         className="mt-1"
@@ -688,20 +697,23 @@ export function QuestionBankPracticeClient({
             </ul>
           ) : (
             <ul className="space-y-2">
-              {opts.map((label) => (
-                <li key={label}>
-                  <button
-                    type="button"
-                    disabled={!!g}
-                    onClick={() => setAnswer(label)}
-                    className={`w-full rounded-xl border px-4 py-3 text-left text-sm transition ${
-                      raw === label ? "border-primary bg-primary/10" : "border-border hover:bg-primary/5"
-                    }`}
-                  >
-                    {label}
-                  </button>
-                </li>
-              ))}
+              {optsCanonical.map((canonical, i) => {
+                const label = optsDisplay[i] ?? canonical;
+                return (
+                  <li key={canonical}>
+                    <button
+                      type="button"
+                      disabled={!!g}
+                      onClick={() => setAnswer(canonical)}
+                      className={`w-full rounded-xl border px-4 py-3 text-left text-sm transition ${
+                        raw === canonical ? "border-primary bg-primary/10" : "border-border hover:bg-primary/5"
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  </li>
+                );
+              })}
             </ul>
           )}
 

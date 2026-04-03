@@ -33,7 +33,11 @@ export const metadata: Metadata = {
   description:
     "Stable, premium nursing exam prep for CA and US learners across RPN, LVN/LPN, RN, and NP pathways.",
   icons: {
-    icon: [{ url: `${siteUrl}/favicon.ico`, sizes: "any" }],
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.png", type: "image/png", sizes: "512x512" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
   },
   openGraph: {
     type: "website",
