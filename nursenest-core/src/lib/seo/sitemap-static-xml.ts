@@ -27,6 +27,7 @@ import { ALLIED_PROFESSIONS } from "@/lib/allied/allied-professions-registry";
 import { PRE_NURSING_MODULE_REGISTRY } from "@/content/pre-nursing/pre-nursing-registry";
 import { PROGRAMMATIC_SLUG_TO_PATHWAY_PATH } from "@/lib/exam-pathways/programmatic-slug-redirects";
 import { buildExamPathwayPath, getExamPathwayById, listPublicExamPathways } from "@/lib/exam-pathways/exam-product-registry";
+import { listNpPracticeTestSegmentPaths } from "@/lib/exam-pathways/np-practice-test-segments";
 import {
   PATHWAY_LESSON_SITEMAP_BATCH,
   listPathwayIdsWithLessons,
@@ -51,6 +52,14 @@ export function resolveSitemapOrigin(): string {
 
 export function normalizeOrigin(origin: string): string {
   return origin.endsWith("/") ? origin.slice(0, -1) : origin;
+}
+
+/** NP keyword practice-test hubs (`/us/np/aanp-practice-test`, …) — indexable alongside canonical exam codes. */
+export function collectNpPracticeTestHubUrls(origin: string): string[] {
+  const o = normalizeOrigin(origin);
+  return listNpPracticeTestSegmentPaths().map(
+    ({ countrySlug, roleTrack, segment }) => `${o}/${countrySlug}/${roleTrack}/${segment}`,
+  );
 }
 
 /** Exam hub URLs: /{country}/{role}/{exam} + pricing + questions landing */
@@ -238,6 +247,7 @@ export async function collectCoreUrls(origin: string): Promise<string[]> {
   return [
     ...base,
     ...collectExamPathwayUrls(o),
+    ...collectNpPracticeTestHubUrls(o),
     ...collectAlliedMarketingUrls(o),
     ...collectPreNursingSeoUrls(o),
     ...lessonUrls,

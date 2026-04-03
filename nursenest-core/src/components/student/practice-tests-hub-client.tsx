@@ -3,7 +3,12 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import type { CatPresentationMode, CatSelectionBasis, PracticeTestSelectionMode } from "@/lib/practice-tests/types";
+import type {
+  CatPresentationMode,
+  CatSelectionBasis,
+  PracticeTestPathwayOption,
+  PracticeTestSelectionMode,
+} from "@/lib/practice-tests/types";
 
 type TestListRow = {
   id: string;
@@ -23,7 +28,15 @@ type TestListRow = {
   updatedAt: string;
 };
 
-export function PracticeTestsHubClient({ examSimulationEnabled = false }: { examSimulationEnabled?: boolean }) {
+export function PracticeTestsHubClient({
+  examSimulationEnabled = false,
+  pathwayOptions = [],
+  defaultPathwayId = null,
+}: {
+  examSimulationEnabled?: boolean;
+  pathwayOptions?: PracticeTestPathwayOption[];
+  defaultPathwayId?: string | null;
+}) {
   const searchParams = useSearchParams();
   const [topics, setTopics] = useState<{ topic: string; count: number }[]>([]);
   const [loading, setLoading] = useState(true);
@@ -42,6 +55,12 @@ export function PracticeTestsHubClient({ examSimulationEnabled = false }: { exam
   const [difficultyMax, setDifficultyMax] = useState<number | "">("");
   const [timedMode, setTimedMode] = useState(false);
   const [timeLimitMin, setTimeLimitMin] = useState(45);
+  const [pathwayId, setPathwayId] = useState(
+    () => defaultPathwayId ?? pathwayOptions[0]?.id ?? "",
+  );
+
+  const selectedPathway = pathwayOptions.find((p) => p.id === pathwayId);
+  const isNpPathway = selectedPathway?.examFamily === "NP";
 
   const loadList = useCallback(async () => {
     setError(null);
@@ -60,6 +79,17 @@ export function PracticeTestsHubClient({ examSimulationEnabled = false }: { exam
   useEffect(() => {
     void loadList();
   }, [loadList]);
+
+  function applyExamSimulationDefaultsForPathway(nextPathwayId: string) {
+    const np = pathwayOptions.find((p) => p.id === nextPathwayId)?.examFamily === "NP";
+    if (np) {
+      setTimeLimitMin(180);
+      setQuestionCount((q) => Math.min(150, Math.max(75, q)));
+    } else {
+      setTimeLimitMin(300);
+      setQuestionCount((q) => Math.min(145, Math.max(75, q)));
+    }
+  }
 
   useEffect(() => {
     if (searchParams.get("focus") !== "weak") return;
@@ -125,7 +155,7 @@ export function PracticeTestsHubClient({ examSimulationEnabled = false }: { exam
                 catPresentationMode,
               }
             : {}),
-          pathwayId: null,
+          pathwayId: pathwayId.trim() || null,
           timedMode,
           timeLimitSec: timedMode ? Math.round(timeLimitMin * 60) : null,
         }),
@@ -160,6 +190,35 @@ export function PracticeTestsHubClient({ examSimulationEnabled = false }: { exam
           weak-area history.
         </p>
 
+        {pathwayOptions.length > 0 ? (
+          <div className="mt-4">
+            <label className="block text-sm">
+              <span className="text-muted-foreground">Exam pathway (filters the question pool)</span>
+              <select
+                className="mt-1 w-full max-w-xl rounded-lg border border-border px-3 py-2 text-sm"
+                value={pathwayId}
+                onChange={(e) => {
+                  const next = e.target.value;
+                  setPathwayId(next);
+                  if (selectionMode === "cat" && catPresentationMode === "exam_simulation") {
+                    applyExamSimulationDefaultsForPathway(next);
+                  }
+                }}
+              >
+                {pathwayOptions.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <p className="mt-1 text-xs text-muted-foreground">
+              NP tracks use the NP question bank and AANP-style blueprint when you run exam simulation. RN tracks use
+              the NCLEX-RN bank and NCLEX client-needs blueprint.
+            </p>
+          </div>
+        ) : null}
+
         <div className="mt-6 grid gap-4 md:grid-cols-2">
           <label className="block text-sm">
             <span className="text-muted-foreground">Title (optional)</span>
@@ -174,14 +233,22 @@ export function PracticeTestsHubClient({ examSimulationEnabled = false }: { exam
             <span className="text-muted-foreground">
               {selectionMode === "cat"
                 ? catPresentationMode === "exam_simulation"
-                  ? "Maximum length (75–145; simulation uses NCLEX-style bounds)"
+                  ? isNpPathway
+                    ? "Maximum length (AANP-style NP sim: 75–150)"
+                    : "Maximum length (NCLEX-RN exam sim: 75–145)"
                   : "Maximum questions (cap, 10–75)"
-                : "Number of questions (5–145)"}
+                : "Number of questions (5–150)"}
             </span>
             <input
               type="number"
               min={selectionMode === "cat" ? 10 : 5}
-              max={selectionMode === "cat" && catPresentationMode === "exam_simulation" ? 145 : 75}
+              max={
+                selectionMode === "cat" && catPresentationMode === "exam_simulation"
+                  ? isNpPathway
+                    ? 150
+                    : 145
+                  : 75
+              }
               className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm"
               value={questionCount}
               onChange={(e) => setQuestionCount(Number(e.target.value))}
@@ -222,7 +289,9 @@ export function PracticeTestsHubClient({ examSimulationEnabled = false }: { exam
                 ? "Uses topics you’ve missed on recent scored practice exams."
                 : selectionMode === "cat"
                   ? catPresentationMode === "exam_simulation"
-                    ? "NCLEX-RN-style simulation: 75–145 items, blueprint-balanced pool, confidence-based stop when allowed."
+                    ? isNpPathway
+                      ? "AANP-style NP exam simulation: 75–150 items, four-domain blueprint when questions are tagged, adaptive readiness (theta + confidence stops). Not the live AANP format."
+                      : "NCLEX-RN exam simulation: 75–145 items, client-needs blueprint when tagged, adaptive stops. Not an official NCLEX result."
                     : "CAT starts near mid difficulty, then moves up or down; may stop early when the estimate stabilizes."
                   : "Optional topic filters narrow the pool; leave empty for a broad mix."}
           </p>
@@ -252,8 +321,14 @@ export function PracticeTestsHubClient({ examSimulationEnabled = false }: { exam
                   setCatPresentationMode("exam_simulation");
                   setCatSelectionBasis("random");
                   setTimedMode(true);
-                  setTimeLimitMin(300);
-                  if (questionCount < 75) setQuestionCount(145);
+                  const np = pathwayOptions.find((p) => p.id === pathwayId)?.examFamily === "NP";
+                  if (np) {
+                    setTimeLimitMin(180);
+                    setQuestionCount((q) => (q < 75 ? 150 : Math.min(150, Math.max(75, q))));
+                  } else {
+                    setTimeLimitMin(300);
+                    setQuestionCount((q) => (q < 75 ? 145 : Math.min(145, Math.max(75, q))));
+                  }
                 }}
                 className={`rounded-full px-4 py-1.5 text-sm font-medium ${
                   catPresentationMode === "exam_simulation"
@@ -261,12 +336,23 @@ export function PracticeTestsHubClient({ examSimulationEnabled = false }: { exam
                     : "border border-border hover:bg-muted"
                 }`}
               >
-                NCLEX-RN exam simulation
+                Exam simulation
               </button>
             </div>
             <p className="mt-2 text-xs text-muted-foreground">
-              Practice CAT keeps shorter runs and weak-area boosts. Exam simulation uses a 75–145 cap, NCLEX client-needs
-              blueprint balancing when items are tagged, and stricter pool sizing. Enable with{" "}
+              Practice CAT keeps shorter runs and weak-area boosts. Exam simulation uses your selected pathway:{" "}
+              {isNpPathway ? (
+                <>
+                  <strong className="text-foreground">NP</strong> — 75–150 items, default{" "}
+                  <strong className="text-foreground">3 hours</strong> timed, AANP-style four-domain blueprint.
+                </>
+              ) : (
+                <>
+                  <strong className="text-foreground">NCLEX-RN</strong> — 75–145 items, default{" "}
+                  <strong className="text-foreground">5 hours</strong> timed, NCLEX client-needs blueprint.
+                </>
+              )}{" "}
+              Enable with{" "}
               <code className="rounded bg-muted px-1">CAT_EXAM_SIMULATION_ENABLED=1</code> on the server (and optional{" "}
               <code className="rounded bg-muted px-1">NEXT_PUBLIC_CAT_EXAM_SIMULATION=1</code> for this UI).
             </p>
@@ -424,7 +510,7 @@ export function PracticeTestsHubClient({ examSimulationEnabled = false }: { exam
                   <p className="font-medium text-foreground">{t.title || "Practice test"}</p>
                   <p className="mt-1 text-xs text-muted-foreground">
                     {t.questionCount} Q · {t.selectionMode ?? "N/A"}
-                    {t.catPresentationMode === "exam_simulation" ? " · NCLEX exam sim" : ""} ·{" "}
+                    {t.catPresentationMode === "exam_simulation" ? " · Exam sim" : ""} ·{" "}
                     {t.timedMode ? `timed ${t.timeLimitSec ? `${Math.round(t.timeLimitSec / 60)} min` : ""}` : "untimed"}
                     {t.status === "COMPLETED" && t.accuracyPct != null ? ` · ${t.accuracyPct}% (${t.scoreCorrect}/${t.scoreTotal})` : null}
                     {t.status === "IN_PROGRESS" ? " · in progress" : null}

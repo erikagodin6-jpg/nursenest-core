@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { subscriptionCoversPathwayBase } from "@/lib/exam-pathways/pathway-entitlements";
 import { answerMatches } from "@/lib/exams/score-session-answers";
 import {
@@ -14,28 +15,34 @@ import {
   coerceCatBlueprintDiagnostics,
   createInitialAdaptiveState,
   finalizeThetaDecision,
+  mergeBlueprintDiagnosticsPostScore,
   parseAdaptiveState,
   pushIncident,
   selectNextQuestion,
-  sessionBlueprintCountsFromResults,
-  sessionMappedFractionFromResults,
   shouldStopAfterAnswer,
   type CatPoolRow,
   type CatSelectOptions,
   validateCatQuestionPool,
   validatePracticeCatPool,
 } from "@/lib/exams/cat-engine";
+import { logCatBlueprintSessionMappingQualityFromReport } from "@/lib/exams/cat-blueprint-mapping-quality";
 import {
   examSimulationConfigForPathway,
   logCatBlueprintPoolReady,
   nclexRnSimulationBoundsFromConfig,
-  pathwaySupportsNclexRnExamSimulation,
+  pathwaySupportsCatExamSimulation,
 } from "@/lib/exams/cat-exam-simulation";
 import type { CatAdaptiveState, CatAnswerResult, CatExamReport, CatPresentationMode } from "@/lib/exams/cat-types";
-import { getExamConfig, nclexBlueprintWeightMap, NCLEX_RN_US_EXAM_CONFIG } from "@/lib/exams/exam-config";
+import {
+  blueprintTagSourceForCategoryKey,
+  getExamConfig,
+  nclexBlueprintWeightMap,
+  NCLEX_RN_US_EXAM_CONFIG,
+} from "@/lib/exams/exam-config";
 import { loadWeakTopicPracticePlan } from "@/lib/learner/topic-performance";
 import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
 import { fetchCatPracticePool } from "@/lib/practice-tests/cat-pool";
+import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
 import { practiceCatBounds } from "@/lib/practice-tests/cat-practice-config";
 import { configFromInput, type PickQuestionsInput } from "@/lib/practice-tests/pick-question-ids";
 import { computePracticeTestResults } from "@/lib/practice-tests/score-practice-test";
@@ -150,14 +157,13 @@ async function scoreOne(
     nclexClientNeedsSubcategory: q.nclexClientNeedsSubcategory,
   };
   const categoryKey = blueprintKeyForPoolRow(row);
-  const mappedNclex = Boolean(row.nclexClientNeedsCategory?.trim());
   return {
     result: {
       questionId: q.id,
       correct,
       categoryKey,
       difficulty: row.difficulty,
-      blueprintMappingSource: mappedNclex ? "nclex_client_needs" : "fallback",
+      blueprintMappingSource: blueprintTagSourceForCategoryKey(categoryKey),
     },
   };
 }
@@ -166,11 +172,7 @@ function patchBlueprintSessionDiagnostics(state: CatAdaptiveState): CatAdaptiveS
   if (!state.catBlueprintDiagnostics) return state;
   return {
     ...state,
-    catBlueprintDiagnostics: {
-      ...state.catBlueprintDiagnostics,
-      sessionCountsByBlueprintKey: sessionBlueprintCountsFromResults(state.results),
-      sessionMappedFraction: sessionMappedFractionFromResults(state.results),
-    },
+    catBlueprintDiagnostics: mergeBlueprintDiagnosticsPostScore(state.catBlueprintDiagnostics, state.results),
   };
 }
 
@@ -192,17 +194,41 @@ export async function createCatPracticeTestPayload(
   | { ok: false; message: string; code?: string }
 > {
   const sim = presentationMode === "exam_simulation";
-  let pathway = input.pathwayId ? getExamPathwayById(input.pathwayId) ?? null : null;
-  if (pathway && !subscriptionCoversPathwayBase(entitlement, pathway)) {
-    pathway = null;
+  const requestedPathwayId = input.pathwayId?.trim() || null;
+  let pathway: ExamPathwayDefinition | null = null;
+
+  if (requestedPathwayId) {
+    const resolved = getExamPathwayById(requestedPathwayId);
+    if (!resolved) {
+      return {
+        ok: false,
+        code: PRACTICE_TEST_CAT_CREATE_CODE.pathway_not_found,
+        message:
+          "Unknown exam pathway. Choose a pathway from the list on the practice test page, or clear the selection if your client sent an invalid id.",
+      };
+    }
+    const covered = subscriptionCoversPathwayBase(entitlement, resolved);
+    if (!covered) {
+      if (sim) {
+        return {
+          ok: false,
+          code: PRACTICE_TEST_CAT_CREATE_CODE.pathway_not_entitled,
+          message:
+            "Your subscription does not include the selected exam pathway. Pick a pathway that matches your plan, or choose a different track for exam simulation.",
+        };
+      }
+      pathway = null;
+    } else {
+      pathway = resolved;
+    }
   }
 
-  if (sim && !pathwaySupportsNclexRnExamSimulation(pathway)) {
+  if (sim && !pathwaySupportsCatExamSimulation(pathway)) {
     return {
       ok: false,
-      code: "exam_sim_unsupported_pathway",
+      code: PRACTICE_TEST_CAT_CREATE_CODE.exam_sim_unsupported_pathway,
       message:
-        "NCLEX exam simulation is only available for NCLEX-RN pathways. Choose an RN track in your profile or leave the pathway unset for the default RN pool.",
+        "Exam simulation is available for NCLEX-RN and NP pathways. Choose an RN or NP track, or leave the pathway unset for the default NCLEX-RN pool.",
     };
   }
 
@@ -217,7 +243,7 @@ export async function createCatPracticeTestPayload(
   if (!sim && effectiveBasis === "weak" && weakPlan.priorityByCanonical.size === 0) {
     return {
       ok: false,
-      code: "cat_weak_areas_empty",
+      code: PRACTICE_TEST_CAT_CREATE_CODE.cat_weak_areas_empty,
       message:
         "No weak areas yet. Use the question bank, complete a mock, or finish a practice test. Then try weak adaptive mode.",
     };
@@ -236,7 +262,7 @@ export async function createCatPracticeTestPayload(
   const v = sim
     ? validateCatQuestionPool(pool, { minPoolSize: bounds.min })
     : validatePracticeCatPool(pool);
-  if (!v.ok) return { ok: false, code: "cat_pool_invalid", message: v.error };
+  if (!v.ok) return { ok: false, code: PRACTICE_TEST_CAT_CREATE_CODE.cat_pool_invalid, message: v.error };
 
   const blueprintWeights = nclexBlueprintWeightMap(examCfg);
   const diagnostics = buildPoolBlueprintDiagnostics(pool, examCfg.id);
@@ -265,7 +291,11 @@ export async function createCatPracticeTestPayload(
 
   const first = selectNextQuestion(pool, new Set(), state.targetDifficulty, delivered, selectOpts);
   if (!first.selected) {
-    return { ok: false, code: "cat_pick_failed", message: "Could not pick a first question. Try broader filters." };
+    return {
+      ok: false,
+      code: PRACTICE_TEST_CAT_CREATE_CODE.cat_pick_failed,
+      message: "Could not pick a first question. Try broader filters.",
+    };
   }
 
   const config: PracticeTestConfigJson = {
@@ -398,6 +428,10 @@ export async function advanceCatPracticeTest(params: {
       stop === "confidence_pass" ? ("pass" as const) : stop === "confidence_fail" ? ("fail" as const) : null;
     state = { ...state, stoppedReason: stop, decision: earlyDecision ?? state.decision };
     const report = buildCatReport(state);
+    logCatBlueprintSessionMappingQualityFromReport(report, {
+      userId: params.userId,
+      presentationMode,
+    });
     const baseResults = await computePracticeTestResults(ids, params.mergedAnswers, params.entitlement);
     return { kind: "completed", results: enrichWithCat(baseResults, report, presentationMode), adaptiveState: state };
   }
@@ -411,6 +445,10 @@ export async function advanceCatPracticeTest(params: {
       decision: finalizeThetaDecision(state.theta),
     };
     const report = buildCatReport(state);
+    logCatBlueprintSessionMappingQualityFromReport(report, {
+      userId: params.userId,
+      presentationMode,
+    });
     const baseResults = await computePracticeTestResults(ids, params.mergedAnswers, params.entitlement);
     return { kind: "completed", results: enrichWithCat(baseResults, report, presentationMode), adaptiveState: state };
   }
@@ -480,6 +518,7 @@ export async function finalizeCatPracticeTest(
   state = patchBlueprintSessionDiagnostics(state);
 
   const report = buildCatReport(state);
+  logCatBlueprintSessionMappingQualityFromReport(report, { presentationMode: state.catPresentationMode });
   const baseResults = await computePracticeTestResults(questionIds, answers, entitlement);
   return {
     results: enrichWithCat(baseResults, report, state.catPresentationMode),

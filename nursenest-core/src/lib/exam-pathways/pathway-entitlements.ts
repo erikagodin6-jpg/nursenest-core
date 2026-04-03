@@ -1,4 +1,4 @@
-import type { CountryCode, TierCode } from "@prisma/client";
+import { ExamFamily, type CountryCode, type TierCode } from "@prisma/client";
 import { accessibleTiersForUserTier } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { EXAM_PATHWAYS, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
@@ -53,4 +53,27 @@ export function subscriptionCoversPathwayBase(scope: AccessScope, pathway: ExamP
 export function pathwayFromLearnerPath(learnerPath: string | null | undefined): ExamPathwayDefinition | undefined {
   if (!learnerPath || learnerPath.trim().length === 0) return undefined;
   return getExamPathwayById(learnerPath.trim());
+}
+
+/**
+ * Default pathway for practice-test builder: profile pathway if entitled, else RN NCLEX-RN for country, else first compatible.
+ */
+export function defaultPracticeTestPathwayId(
+  compatible: ExamPathwayDefinition[],
+  learnerPath: string | null | undefined,
+  countryHint: string | null,
+): string | null {
+  if (compatible.length === 0) return null;
+  const fromLp = pathwayFromLearnerPath(learnerPath);
+  if (fromLp && compatible.some((p) => p.id === fromLp.id)) {
+    return fromLp.id;
+  }
+  const nclexRn = compatible.find(
+    (p) =>
+      p.examFamily === ExamFamily.NCLEX_RN &&
+      p.roleTrack === "rn" &&
+      (countryHint ? p.countryCode === countryHint : true),
+  );
+  if (nclexRn) return nclexRn.id;
+  return compatible[0]!.id;
 }

@@ -183,6 +183,7 @@ export function PracticeTestRunnerClient({
   const current = questions[idx];
   const total = questions.length;
   const examSimulation = testConfig?.catPresentationMode === "exam_simulation";
+  const aanpNpExamSim = examSimulation && testConfig?.catExamConfigId === "aanp-np-us";
   const catMaxCap = testConfig?.catMaxQuestions ?? total;
   const opts = useMemo(() => (current ? parseOptions(current.options) : []), [current]);
 
@@ -395,21 +396,22 @@ export function PracticeTestRunnerClient({
           {results.catReport?.blueprintDiagnostics ? (
             <div className="mt-4 rounded-lg border border-border/60 bg-muted/15 p-3">
               <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                Blueprint diagnostics (client-needs coverage)
+                Blueprint diagnostics (
+                {testConfig?.catExamConfigId === "aanp-np-us" ? "AANP-style NP domains" : "NCLEX client-needs coverage"})
               </p>
               <p className="mt-1 text-xs text-muted-foreground">
                 Pool mapping rate:{" "}
                 <span className="font-medium text-foreground">
                   {Math.round((results.catReport.blueprintDiagnostics.poolMappedFraction ?? 0) * 100)}%
                 </span>{" "}
-                of eligible items have{" "}
-                <code className="rounded bg-muted px-1 text-[10px]">nclex_client_needs_category</code> set. Session
-                delivered (mapped):{" "}
+                of eligible items carry a valid blueprint tag in{" "}
+                <code className="rounded bg-muted px-1 text-[10px]">nclex_client_needs_category</code>. Session delivered
+                (mapped):{" "}
                 <span className="font-medium text-foreground">
                   {Math.round((results.catReport.blueprintDiagnostics.sessionMappedFraction ?? 0) * 100)}%
                 </span>
-                . That is the share of questions you answered that used NCLEX client-needs keys; the rest used topic or
-                body-system fallback for balancing.
+                . Unmapped items still run through the same CAT engine using topic or body-system fallback keys for
+                balancing.
               </p>
               <div className="mt-2 grid gap-2 text-xs sm:grid-cols-2">
                 <div>
@@ -571,7 +573,9 @@ export function PracticeTestRunnerClient({
               <span className="line-clamp-2 normal-case">
                 {catMode
                   ? examSimulation
-                    ? "NCLEX-RN exam simulation (CAT)"
+                    ? aanpNpExamSim
+                      ? "NP exam simulation (AANP-style CAT)"
+                      : "NCLEX-RN exam simulation (CAT)"
                     : "Computer-adaptive (practice)"
                   : "Practice test"}
               </span>
@@ -583,7 +587,9 @@ export function PracticeTestRunnerClient({
             <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">
               {catMode
                 ? examSimulation
-                  ? "NCLEX-style length band (75–145) and stop rules on this server. Not the live NCLEX. Rationales unlock after completion."
+                  ? aanpNpExamSim
+                    ? "AANP-style NP band (75–150) with adaptive stop rules on this server. The live AANP exam is not CAT. Rationales unlock after completion."
+                    : "NCLEX-style length band (75–145) and stop rules on this server. Not the live NCLEX. Rationales unlock after completion."
                   : "Each response updates difficulty. Explanations and coaching appear after the session."
                 : "Pacing practice only. Not a copy of any official exam interface."}
             </p>

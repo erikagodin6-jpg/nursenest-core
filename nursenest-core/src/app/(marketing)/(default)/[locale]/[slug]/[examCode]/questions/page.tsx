@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
-import { getExamPathwayByRoute } from "@/lib/exam-pathways/exam-product-registry";
+import { resolveExamPathwayFromMarketingHubSegment } from "@/lib/exam-pathways/exam-product-registry";
 import { pathwayQuestionsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 
 export const dynamicParams = true;
@@ -16,7 +16,7 @@ type Props = { params: Promise<{ locale: string; slug: string; examCode: string 
 
 export default async function ExamPathwayQuestionsHubPage({ params }: Props) {
   const { locale, slug, examCode } = await params;
-  const pathway = getExamPathwayByRoute(locale, slug, examCode);
+  const pathway = resolveExamPathwayFromMarketingHubSegment(locale, slug, examCode);
   if (!pathway) notFound();
 
   const { crumbs, schemaItems } = pathwayQuestionsHubBreadcrumbs(pathway);

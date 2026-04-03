@@ -11,6 +11,7 @@ export {
   getExamPathwayByRoute,
   listExamPathways,
   listPublicExamPathways,
+  resolveExamPathwayFromMarketingHubSegment,
 } from "@/lib/exam-pathways/exam-product-registry";
 export { questionAccessWhereWithPathway } from "@/lib/exam-pathways/pathway-content-scope";
 export {

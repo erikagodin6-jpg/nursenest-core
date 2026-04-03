@@ -27,6 +27,8 @@ export const PH = {
   marketingPathGatewayPrimaryCta: "marketing_path_gateway_primary_cta",
   marketingPathGatewayLinkClick: "marketing_path_gateway_link_click",
   marketingPathwayHubCta: "marketing_pathway_hub_cta",
+  /** NP SEO alias hub first paint (complements $pageview; use for funnel breakdown by alias segment). */
+  marketingNpSeoAliasHubView: "marketing_np_seo_alias_hub_view",
   /** First paint of global marketing trust strip (homepage). */
   marketingTrustBarView: "marketing_trust_bar_view",
   /** Homepage sample question: user unlocked teaching rationale. */

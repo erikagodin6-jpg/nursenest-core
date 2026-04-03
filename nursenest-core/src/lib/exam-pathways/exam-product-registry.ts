@@ -1,4 +1,5 @@
 import { CountryCode, ExamFamily, TierCode } from "@prisma/client";
+import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
 import type { CountrySlug, ExamPathwayDefinition, ExamPathwayStatus, RoleTrackSlug } from "@/lib/exam-pathways/types";
 
 /**
@@ -118,9 +119,9 @@ export const EXAM_PATHWAYS: ExamPathwayDefinition[] = [
     stripeTier: TierCode.NP,
     contentExamKeys: ["NP", "FNP", "NP-FNP"],
     boardLabel: "ANCC / AANP — Family NP",
-    seoTitle: "FNP Exam Prep | Family Nurse Practitioner | NurseNest",
+    seoTitle: "FNP Exam Prep | AANP Practice Exam & Readiness | NurseNest",
     seoDescription:
-      "Family NP track: advanced practice items, differential depth, and management rigor—scoped to FNP preparation (not interchangeable with other NP specialties).",
+      "Family NP: AANP-style practice questions, FNP exam simulator, and readiness predictor framing—advanced practice items scoped to FNP (not interchangeable with other NP specialties).",
     status: "active",
     acquisitionMode: "subscribe",
   },
@@ -201,6 +202,18 @@ export const EXAM_PATHWAYS: ExamPathwayDefinition[] = [
   },
 ];
 
+/** Distinct `exam_questions.exam` values used across NP pathways (diagnostics + pool scoping). */
+export function npPoolExamColumnValues(): string[] {
+  const s = new Set<string>();
+  for (const p of EXAM_PATHWAYS) {
+    if (p.examFamily === ExamFamily.NP) {
+      for (const k of p.contentExamKeys) s.add(k);
+    }
+  }
+  if (s.size === 0) s.add("NP");
+  return [...s];
+}
+
 const byRoute = new Map<string, ExamPathwayDefinition>();
 const byId = new Map<string, ExamPathwayDefinition>();
 
@@ -219,6 +232,22 @@ export function getExamPathwayByRoute(
   examCode: string,
 ): ExamPathwayDefinition | undefined {
   return byRoute.get(`${countrySlug}/${roleTrack}/${examCode}`);
+}
+
+/**
+ * Resolves marketing hub URLs where the third segment may be a canonical `examCode` (`fnp`, `pmhnp`, …)
+ * or an NP SEO alias (`aanp-practice-test`, …).
+ */
+export function resolveExamPathwayFromMarketingHubSegment(
+  countrySlug: string,
+  roleTrack: string,
+  segment: string,
+): ExamPathwayDefinition | undefined {
+  const direct = getExamPathwayByRoute(countrySlug, roleTrack, segment);
+  if (direct) return direct;
+  const seo = getNpPracticeTestLandingCopy(countrySlug, roleTrack, segment);
+  if (!seo) return undefined;
+  return getExamPathwayById(seo.pathwayId);
 }
 
 export function getExamPathwayById(id: string): ExamPathwayDefinition | undefined {

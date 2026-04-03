@@ -7,7 +7,7 @@ import { PathwayLessonQuizzes } from "@/components/lessons/pathway-lesson-quizze
 import { PathwayLessonLockedSectionsPreview } from "@/components/lessons/pathway-lesson-locked-sections-preview";
 import { PathwayLessonActions } from "@/components/lessons/pathway-lesson-actions";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import { buildExamPathwayPath, getExamPathwayByRoute } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath, resolveExamPathwayFromMarketingHubSegment } from "@/lib/exam-pathways/exam-product-registry";
 import { PathwayLessonPreviewBanner } from "@/components/lessons/pathway-lesson-preview-banner";
 import {
   canViewFullPathwayLesson,
@@ -49,7 +49,7 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale: countrySlug, slug: roleTrack, examCode, lessonSlug } = await params;
-  const pathway = getExamPathwayByRoute(countrySlug, roleTrack, examCode);
+  const pathway = resolveExamPathwayFromMarketingHubSegment(countrySlug, roleTrack, examCode);
   const contentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
   const lesson = pathway ? await getPathwayLesson(pathway.id, lessonSlug, contentLocale) : undefined;
   if (!pathway || !lesson) return {};
@@ -89,7 +89,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function PathwayLessonDetailPage({ params }: Props) {
   const { locale: countrySlug, slug: roleTrack, examCode, lessonSlug } = await params;
-  const pathway = getExamPathwayByRoute(countrySlug, roleTrack, examCode);
+  const pathway = resolveExamPathwayFromMarketingHubSegment(countrySlug, roleTrack, examCode);
   if (!pathway) notFound();
   const lessonContentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
   const lesson = await getPathwayLesson(pathway.id, lessonSlug, lessonContentLocale);

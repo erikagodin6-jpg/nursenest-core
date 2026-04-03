@@ -12,10 +12,18 @@ export function ExamPathwayHub({
   pathway,
   isSignedIn = false,
   npInventory = null,
+  heroTitle,
+  heroLead,
+  emphasizeCatPracticeTests = false,
 }: {
   pathway: ExamPathwayDefinition;
   isSignedIn?: boolean;
   npInventory?: NpPathwayInventoryGate | null;
+  /** NP SEO landing (`aanp-practice-test`, …) overrides the default hub headline. */
+  heroTitle?: string;
+  heroLead?: string;
+  /** Surfaces CAT practice-test entry (signed-in → `/app/practice-tests`). */
+  emphasizeCatPracticeTests?: boolean;
 }) {
   const { crumbs, schemaItems } = pathwayOverviewBreadcrumbs(pathway);
   const programmaticLanding = getPathwayProgrammaticSeoLanding(pathway);
@@ -32,9 +40,11 @@ export function ExamPathwayHub({
         {countryLine} · {pathway.boardLabel ?? pathway.roleTrack.toUpperCase()}
       </p>
       <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)] sm:text-4xl">
-        {pathway.displayName}
+        {heroTitle ?? pathway.displayName}
       </h1>
-      <p className="mt-4 max-w-2xl text-base leading-relaxed text-[var(--theme-muted-text)] sm:text-lg">{pathway.seoDescription}</p>
+      <p className="mt-4 max-w-2xl text-base leading-relaxed text-[var(--theme-muted-text)] sm:text-lg">
+        {heroLead ?? pathway.seoDescription}
+      </p>
 
       {pathway.status === "upcoming" ? (
         <aside className="nn-card mt-8 border-amber-200/80 bg-amber-50/60 p-4 text-sm text-foreground">
@@ -53,7 +63,12 @@ export function ExamPathwayHub({
         </aside>
       ) : null}
 
-      <ExamPathwayHubBody pathway={pathway} isSignedIn={isSignedIn} discovery={programmaticLanding} />
+      <ExamPathwayHubBody
+        pathway={pathway}
+        isSignedIn={isSignedIn}
+        discovery={programmaticLanding}
+        emphasizeCatPracticeTests={emphasizeCatPracticeTests}
+      />
     </div>
   );
 }

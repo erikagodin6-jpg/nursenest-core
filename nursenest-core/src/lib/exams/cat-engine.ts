@@ -17,6 +17,7 @@ import {
   readinessScoreFromTheta,
   trajectorySummary,
 } from "@/lib/exams/cat-readiness";
+import { buildCatBlueprintAdminDiagnostics } from "@/lib/exams/cat-blueprint-mapping-quality";
 import { getExamConfig } from "@/lib/exams/exam-config";
 import {
   CAT_STATE_VERSION,
@@ -55,10 +56,16 @@ export function blueprintKeyForPoolRow(row: CatPoolRow): string {
 
 export function buildPoolBlueprintDiagnostics(pool: CatPoolRow[], examConfigId: string): CatBlueprintDiagnostics {
   const poolCountsByBlueprintKey: Record<string, number> = {};
+  const cfg = getExamConfig(examConfigId);
+  const allowedBlueprint = cfg ? new Set(cfg.categories.map((c) => c.id)) : null;
   let mapped = 0;
   for (const r of pool) {
-    if (r.nclexClientNeedsCategory?.trim()) mapped++;
     const k = blueprintKeyForPoolRow(r);
+    if (allowedBlueprint && allowedBlueprint.size > 0) {
+      if (allowedBlueprint.has(k)) mapped++;
+    } else if (r.nclexClientNeedsCategory?.trim()) {
+      mapped++;
+    }
     poolCountsByBlueprintKey[k] = (poolCountsByBlueprintKey[k] ?? 0) + 1;
   }
   return {
@@ -70,11 +77,24 @@ export function buildPoolBlueprintDiagnostics(pool: CatPoolRow[], examConfigId: 
   };
 }
 
-/** Fraction of results tagged with NCLEX client-needs mapping (legacy rows without `blueprintMappingSource` count as unmapped). */
+/** Fraction of results tagged with a known blueprint axis (NCLEX client-needs or AANP domains). */
 export function sessionMappedFractionFromResults(results: CatAnswerResult[]): number {
   if (results.length === 0) return 0;
-  const n = results.filter((r) => r.blueprintMappingSource === "nclex_client_needs").length;
+  const n = results.filter(
+    (r) => r.blueprintMappingSource === "nclex_client_needs" || r.blueprintMappingSource === "aanp_blueprint",
+  ).length;
   return n / results.length;
+}
+
+export function mergeBlueprintDiagnosticsPostScore(
+  diagnostics: CatBlueprintDiagnostics,
+  results: CatAnswerResult[],
+): CatBlueprintDiagnostics {
+  return {
+    ...diagnostics,
+    sessionCountsByBlueprintKey: sessionBlueprintCountsFromResults(results),
+    sessionMappedFraction: sessionMappedFractionFromResults(results),
+  };
 }
 
 export function sessionBlueprintCountsFromResults(results: CatAnswerResult[]): Record<string, number> {
@@ -439,8 +459,11 @@ export function buildCatReport(state: CatAdaptiveState): CatExamReport {
   }
 
   if (state.catPresentationMode === "exam_simulation") {
+    const aanp = examCfg?.id === "aanp-np-us";
     suggestedNextSteps.unshift(
-      "This NCLEX-RN-style simulation uses NurseNest content and our adaptive engine. It is not an official NCLEX result or pass prediction.",
+      aanp
+        ? "This AANP-style NP readiness simulation uses NurseNest content and our adaptive engine. The live AANP exam is not computer-adaptive; this session simulates adaptive precision for learning. It is not an official AANP result or pass prediction."
+        : "This NCLEX-RN-style simulation uses NurseNest content and our adaptive engine. It is not an official NCLEX result or pass prediction.",
     );
   }
 
@@ -453,6 +476,18 @@ export function buildCatReport(state: CatAdaptiveState): CatExamReport {
     decision,
     presentationMode: state.catPresentationMode,
   });
+
+  const blueprintDiagnostics = state.catBlueprintDiagnostics
+    ? mergeBlueprintDiagnosticsPostScore(state.catBlueprintDiagnostics, state.results)
+    : null;
+
+  const blueprintAdminDiagnostics = blueprintDiagnostics
+    ? buildCatBlueprintAdminDiagnostics({
+        results: state.results,
+        poolMappedFraction: blueprintDiagnostics.poolMappedFraction,
+        presentationMode: state.catPresentationMode,
+      })
+    : null;
 
   return {
     decision,
@@ -469,13 +504,8 @@ export function buildCatReport(state: CatAdaptiveState): CatExamReport {
     confidenceText: confidenceText(confidenceLevel),
     trajectory,
     readinessHeadline,
-    blueprintDiagnostics: state.catBlueprintDiagnostics
-      ? {
-          ...state.catBlueprintDiagnostics,
-          sessionCountsByBlueprintKey: sessionBlueprintCountsFromResults(state.results),
-          sessionMappedFraction: sessionMappedFractionFromResults(state.results),
-        }
-      : null,
+    blueprintDiagnostics,
+    blueprintAdminDiagnostics,
   };
 }
 

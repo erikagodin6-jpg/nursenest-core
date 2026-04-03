@@ -9,7 +9,7 @@ import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-le
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
-import { buildExamPathwayPath, getExamPathwayByRoute } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath, resolveExamPathwayFromMarketingHubSegment } from "@/lib/exam-pathways/exam-product-registry";
 import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
 import {
   PATHWAY_HUB_PAGE_SIZE_DEFAULT,
@@ -33,7 +33,7 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale: countrySlug, slug: roleTrack, examCode } = await params;
-  const pathway = getExamPathwayByRoute(countrySlug, roleTrack, examCode);
+  const pathway = resolveExamPathwayFromMarketingHubSegment(countrySlug, roleTrack, examCode);
   if (!pathway) return {};
   const path = buildExamPathwayPath(pathway, "lessons");
   const canonical = absoluteUrl(path);
@@ -50,7 +50,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function PathwayLessonsHubPage({ params, searchParams }: Props) {
   const { locale: countrySlug, slug: roleTrack, examCode } = await params;
   const lessonContentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
-  const pathway = getExamPathwayByRoute(countrySlug, roleTrack, examCode);
+  const pathway = resolveExamPathwayFromMarketingHubSegment(countrySlug, roleTrack, examCode);
   if (!pathway) notFound();
 
   const base = buildExamPathwayPath(pathway, "lessons");

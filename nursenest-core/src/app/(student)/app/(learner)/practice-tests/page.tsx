@@ -6,6 +6,11 @@ import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { auth } from "@/lib/auth";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
+import {
+  defaultPracticeTestPathwayId,
+  listPathwaysCompatibleWithSubscription,
+} from "@/lib/exam-pathways/pathway-entitlements";
+import { prisma } from "@/lib/db";
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 
 export default async function PracticeTestsPage() {
@@ -46,6 +51,21 @@ export default async function PracticeTestsPage() {
     );
   }
 
+  const compatiblePathways = listPathwaysCompatibleWithSubscription(entitlement);
+  const learnerPathRow = userId
+    ? await prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } })
+    : null;
+  const defaultPathwayId = defaultPracticeTestPathwayId(
+    compatiblePathways,
+    learnerPathRow?.learnerPath,
+    entitlement.country,
+  );
+  const pathwayOptions = compatiblePathways.map((p) => ({
+    id: p.id,
+    label: `${p.shortName} — ${p.displayName}`,
+    examFamily: p.examFamily,
+  }));
+
   return (
     <main>
       <div className="mb-4">
@@ -57,7 +77,11 @@ export default async function PracticeTestsPage() {
         resume incomplete tests, and review scores with per-topic breakdowns and weak-area links.
       </p>
       <Suspense fallback={<p className="mt-6 text-sm text-muted">Loading…</p>}>
-        <PracticeTestsHubClient examSimulationEnabled={isCatExamSimulationFeatureEnabled()} />
+        <PracticeTestsHubClient
+          examSimulationEnabled={isCatExamSimulationFeatureEnabled()}
+          pathwayOptions={pathwayOptions}
+          defaultPathwayId={defaultPathwayId}
+        />
       </Suspense>
     </main>
   );

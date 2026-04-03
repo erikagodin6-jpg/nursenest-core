@@ -4,6 +4,13 @@ export type { CatPresentationMode };
 
 export type PracticeTestSelectionMode = "random" | "targeted" | "weak" | "cat";
 
+/** Serialized pathway row for the practice-test builder (server → client). */
+export type PracticeTestPathwayOption = {
+  id: string;
+  label: string;
+  examFamily: string;
+};
+
 /** Pool basis when `selectionMode === "cat"` (how items are filtered before adaptive selection). */
 export type CatSelectionBasis = "random" | "targeted" | "weak";
 

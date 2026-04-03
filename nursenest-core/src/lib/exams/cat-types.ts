@@ -18,7 +18,7 @@ export type CatAnswerResult = {
   categoryKey: string;
   difficulty: number;
   /** How `categoryKey` was derived (diagnostics; omitted on legacy persisted rows). */
-  blueprintMappingSource?: "nclex_client_needs" | "fallback";
+  blueprintMappingSource?: "nclex_client_needs" | "aanp_blueprint" | "fallback";
   /** Effective discrimination used for this item (defaults to 1). */
   discrimination?: number;
   /** Fisher information contributed at scoring theta (for audit). */
@@ -41,10 +41,41 @@ export type CatBlueprintDiagnostics = {
   examConfigId: string;
   poolCountsByBlueprintKey: Record<string, number>;
   sessionCountsByBlueprintKey: Record<string, number>;
-  /** Share of pool rows with `nclexClientNeedsCategory` set. */
+  /** Share of pool rows tagged with this exam config’s blueprint category ids. */
   poolMappedFraction: number;
-  /** Share of scored items that used NCLEX client-needs mapping (not topic/system fallback). */
+  /** Share of scored items that used blueprint tags (not topic/system fallback). */
   sessionMappedFraction: number;
+};
+
+/** Per fallback blueprint key in the delivered session (excludes NCLEX/AANP-mapped items). */
+export type CatFallbackDistributionEntry = {
+  blueprintKey: string;
+  count: number;
+  /** Percent of items that used any fallback key (0–100). */
+  percentOfFallbackItems: number;
+  /** Percent of all scored items in the session (0–100). */
+  percentOfTotalScored: number;
+};
+
+/** Admin / ops: explicit counts, fallback keys, and non-blocking mapping quality warnings. Omitted in learner UI. */
+export type CatBlueprintAdminDiagnostics = {
+  poolMappedFraction: number;
+  sessionMappedFraction: number;
+  deliveredMappedCount: number;
+  deliveredFallbackCount: number;
+  /** Top fallback keys (legacy compact list). */
+  topFallbackBlueprintKeysDelivered: Array<{ blueprintKey: string; count: number }>;
+  /** Sorted fallback keys with counts and percentages (up to 30 rows). */
+  fallbackDistributionDelivered: CatFallbackDistributionEntry[];
+  /** Threshold constants echoed for admin tools (same as logging; never blocks sessions). */
+  qualityThresholds: {
+    poolMappedFractionWarning: number;
+    sessionMappedFractionWarning: number;
+  };
+  /** Mapped vs fallback as percent of scored items (0–100 each; sums to ~100). */
+  deliveredPercentMapped: number;
+  deliveredPercentFallback: number;
+  mappingQualityWarnings: Array<{ code: string; detail: string }>;
 };
 
 export type CatConfidenceLevel = "low" | "medium" | "high";
@@ -97,4 +128,6 @@ export type CatExamReport = {
   readinessHeadline: string;
   /** Present when blueprint diagnostics were captured on the adaptive state. */
   blueprintDiagnostics?: CatBlueprintDiagnostics | null;
+  /** Admin-facing blueprint audit (learner clients should ignore). */
+  blueprintAdminDiagnostics?: CatBlueprintAdminDiagnostics | null;
 };

@@ -4,7 +4,7 @@ import { PathwayLessonContentLocaleBanner } from "@/components/lessons/pathway-l
 import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-lesson-pagination";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
-import { buildExamPathwayPath, getExamPathwayByRoute } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath, resolveExamPathwayFromMarketingHubSegment } from "@/lib/exam-pathways/exam-product-registry";
 import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
 import {
   PATHWAY_HUB_PAGE_SIZE_DEFAULT,
@@ -28,7 +28,7 @@ type Props = {
 export default async function PathwayLessonTopicClusterPage({ params, searchParams }: Props) {
   const { locale: countrySlug, slug: roleTrack, examCode, topicSlug } = await params;
   const lessonContentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
-  const pathway = getExamPathwayByRoute(countrySlug, roleTrack, examCode);
+  const pathway = resolveExamPathwayFromMarketingHubSegment(countrySlug, roleTrack, examCode);
   if (!pathway) notFound();
 
   const base = buildExamPathwayPath(pathway, "lessons");

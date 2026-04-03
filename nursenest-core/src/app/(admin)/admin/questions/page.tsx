@@ -50,6 +50,10 @@ export default async function AdminQuestionsPage({
         <Link className="font-semibold text-primary underline" href="/admin/ai/exam-questions">
           AI exam questions
         </Link>
+        . NCLEX client-needs backfill queue:{" "}
+        <Link className="font-semibold text-primary underline" href="/admin/questions/nclex-mapping">
+          NCLEX mapping
+        </Link>
         .
       </p>
 

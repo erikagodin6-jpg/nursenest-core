@@ -35,6 +35,11 @@ export const PN = {
 /** NP (US tracks in product) */
 export const NP = {
   practiceProgrammatic: "/np-exam-practice-questions",
+  /** Strict SEO hubs → same pathways as `fnp` / `pmhnp` / CNPLE (see `np-practice-test-segments.ts`). */
+  aanpPracticeTest: "/us/np/aanp-practice-test",
+  anccFnpPracticeTest: "/us/np/ancc-fnp-practice-test",
+  pmhnpPracticeTest: "/us/np/pmhnp-practice-test",
+  cnplePracticeTest: "/canada/np/cnple-practice-test",
   /** Canadian NP programmatic SEO landing (CNPLE). */
   practiceProgrammaticCa: "/cnple-practice-questions",
   fnpLessons: "/us/np/fnp/lessons",

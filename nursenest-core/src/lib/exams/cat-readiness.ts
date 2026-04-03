@@ -40,13 +40,13 @@ export function readinessHeadlineFromSignals(args: {
   const { readinessScore, confidenceLevel, decision, presentationMode } = args;
   const sim = presentationMode === "exam_simulation";
   if (decision === "pass" && readinessScore >= 62) {
-    return sim ? "NCLEX-style simulation: above passing band for this run" : "On track for this session";
+    return sim ? "Exam simulation: above passing band for this run" : "On track for this session";
   }
   if (decision === "fail" || readinessScore < 42) {
-    return sim ? "NCLEX-style simulation: below passing band for this run" : "Needs focused review";
+    return sim ? "Exam simulation: below passing band for this run" : "Needs focused review";
   }
   if (confidenceLevel === "low") {
     return sim ? "Simulation still calibrating. More items may be needed" : "Building confidence. Keep practicing";
   }
-  return sim ? "NCLEX-style simulation: mixed. Keep building depth" : "Mixed performance. Keep going";
+  return sim ? "Exam simulation: mixed. Keep building depth" : "Mixed performance. Keep going";
 }

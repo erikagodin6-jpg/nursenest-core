@@ -12,9 +12,11 @@ type Props = {
   isSignedIn: boolean;
   /** Programmatic SEO parent link; rendered after top CTAs, before conversion cards. */
   discovery: { path: string; label: string } | null;
+  /** NP practice-test SEO landings: highlight in-app CAT practice tests. */
+  emphasizeCatPracticeTests?: boolean;
 };
 
-export function ExamPathwayHubBody({ pathway, isSignedIn, discovery }: Props) {
+export function ExamPathwayHubBody({ pathway, isSignedIn, discovery, emphasizeCatPracticeTests = false }: Props) {
   const isWaitlist = pathway.acquisitionMode === "waitlist" || pathway.status === "upcoming";
   const questionsHref = buildExamPathwayPath(pathway, "questions");
   const lessonsHref = buildExamPathwayPath(pathway, "lessons");
@@ -55,6 +57,35 @@ export function ExamPathwayHubBody({ pathway, isSignedIn, discovery }: Props) {
           {tertiaryLabel}
         </MarketingTrackedLink>
       </div>
+
+      {emphasizeCatPracticeTests ? (
+        <div className="mt-6 rounded-xl border border-primary/20 bg-primary/5 px-4 py-4 text-sm text-[var(--theme-body-text)] sm:px-5">
+          <p className="font-semibold text-[var(--theme-heading-text)]">Computerized adaptive (CAT) practice tests</p>
+          <p className="mt-1 text-[var(--theme-muted-text)]">
+            After sign-in, open Practice tests to run CAT-style sessions matched to your pathway (length, topics, and review
+            flow). Full adaptive depth unlocks with a plan that covers this track.
+          </p>
+          {isSignedIn ? (
+            <MarketingTrackedLink
+              href="/app/practice-tests"
+              event={PH.marketingPathwayHubCta}
+              eventProps={{ surface: "cat_practice_strip", pathway_id: pathway.id, signed_in: true }}
+              className="mt-3 inline-flex font-semibold text-primary hover:underline"
+            >
+              Go to practice tests →
+            </MarketingTrackedLink>
+          ) : (
+            <MarketingTrackedLink
+              href="/signup"
+              event={PH.marketingPathwayHubCta}
+              eventProps={{ surface: "cat_practice_strip", pathway_id: pathway.id, signed_in: false }}
+              className="mt-3 inline-flex font-semibold text-primary hover:underline"
+            >
+              Create a free account to start →
+            </MarketingTrackedLink>
+          )}
+        </div>
+      ) : null}
 
       <aside className="mt-10 rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]/80 px-4 py-4 text-sm text-[var(--theme-body-text)] sm:px-5">
         <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">Search &amp; discovery</p>

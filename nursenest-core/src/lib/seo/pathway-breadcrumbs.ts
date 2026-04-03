@@ -6,6 +6,11 @@ import { getPathwayProgrammaticSeoLanding } from "@/lib/seo/pathway-programmatic
 
 export type { BreadcrumbCrumb, BreadcrumbSchemaItem } from "@/lib/seo/breadcrumb-types";
 
+/** Optional hub URL when the third segment is an NP SEO alias (must match the request path). */
+export type PathwayMarketingHubBreadcrumbOpts = {
+  hubBasePath?: string;
+};
+
 const HOME: BreadcrumbCrumb = { name: "Home", href: "/" };
 const HOME_ITEM: BreadcrumbSchemaItem = { name: "Home", item: "/" };
 
@@ -41,42 +46,60 @@ function pathwayProgrammaticParentSchema(pathway: ExamPathwayDefinition): Breadc
   return { name: land.label, item: toAbsoluteSiteUrl(land.path) };
 }
 
-function pathwayHubCrumb(pathway: ExamPathwayDefinition, linked: boolean): BreadcrumbCrumb {
-  const base = buildExamPathwayPath(pathway);
+function pathwayHubBase(pathway: ExamPathwayDefinition, hubBasePath?: string): string {
+  return hubBasePath ?? buildExamPathwayPath(pathway);
+}
+
+function pathwayHubChildPath(pathway: ExamPathwayDefinition, hubBasePath: string | undefined, subpath: string): string {
+  const base = pathwayHubBase(pathway, hubBasePath);
+  const tail = subpath.replace(/^\//, "");
+  return tail ? `${base}/${tail}` : base;
+}
+
+function pathwayHubCrumb(pathway: ExamPathwayDefinition, linked: boolean, hubBasePath?: string): BreadcrumbCrumb {
+  const base = pathwayHubBase(pathway, hubBasePath);
   return linked ? { name: pathway.shortName, href: base } : { name: pathway.shortName, href: undefined };
 }
 
-function pathwayHubSchema(pathway: ExamPathwayDefinition): BreadcrumbSchemaItem {
-  const base = buildExamPathwayPath(pathway);
+function pathwayHubSchema(pathway: ExamPathwayDefinition, hubBasePath?: string): BreadcrumbSchemaItem {
+  const base = pathwayHubBase(pathway, hubBasePath);
   return { name: pathway.shortName, item: toAbsoluteSiteUrl(base) };
 }
 
 /** Exam pathway overview: Home → programmatic SEO (or lessons index) → pathway hub (current). */
-export function pathwayOverviewBreadcrumbs(pathway: ExamPathwayDefinition): {
+export function pathwayOverviewBreadcrumbs(
+  pathway: ExamPathwayDefinition,
+  opts?: PathwayMarketingHubBreadcrumbOpts,
+): {
   crumbs: BreadcrumbCrumb[];
   schemaItems: BreadcrumbSchemaItem[];
 } {
-  const crumbs: BreadcrumbCrumb[] = [HOME, pathwayProgrammaticParentCrumb(pathway, true), pathwayHubCrumb(pathway, false)];
-  const schemaItems: BreadcrumbSchemaItem[] = [HOME_ITEM, pathwayProgrammaticParentSchema(pathway), pathwayHubSchema(pathway)];
+  const hub = opts?.hubBasePath;
+  const crumbs: BreadcrumbCrumb[] = [HOME, pathwayProgrammaticParentCrumb(pathway, true), pathwayHubCrumb(pathway, false, hub)];
+  const schemaItems: BreadcrumbSchemaItem[] = [HOME_ITEM, pathwayProgrammaticParentSchema(pathway), pathwayHubSchema(pathway, hub)];
   return { crumbs, schemaItems };
 }
 
 /** Lessons hub for a pathway. */
-export function pathwayLessonsHubBreadcrumbs(pathway: ExamPathwayDefinition): {
+export function pathwayLessonsHubBreadcrumbs(
+  pathway: ExamPathwayDefinition,
+  opts?: PathwayMarketingHubBreadcrumbOpts,
+): {
   crumbs: BreadcrumbCrumb[];
   schemaItems: BreadcrumbSchemaItem[];
 } {
-  const lessons = buildExamPathwayPath(pathway, "lessons");
+  const hub = opts?.hubBasePath;
+  const lessons = pathwayHubChildPath(pathway, hub, "lessons");
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
     pathwayProgrammaticParentCrumb(pathway, true),
-    pathwayHubCrumb(pathway, true),
+    pathwayHubCrumb(pathway, true, hub),
     { name: "Lessons", href: undefined },
   ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
     pathwayProgrammaticParentSchema(pathway),
-    pathwayHubSchema(pathway),
+    pathwayHubSchema(pathway, hub),
     { name: "Lessons", item: toAbsoluteSiteUrl(lessons) },
   ];
   return { crumbs, schemaItems };
@@ -87,20 +110,22 @@ export function pathwayTopicClusterBreadcrumbs(
   pathway: ExamPathwayDefinition,
   topicSlug: string,
   topicLabel: string,
+  opts?: PathwayMarketingHubBreadcrumbOpts,
 ): { crumbs: BreadcrumbCrumb[]; schemaItems: BreadcrumbSchemaItem[] } {
-  const lessonsPath = buildExamPathwayPath(pathway, "lessons");
-  const topicPath = buildExamPathwayPath(pathway, `lessons/topics/${topicSlug}`);
+  const hub = opts?.hubBasePath;
+  const lessonsPath = pathwayHubChildPath(pathway, hub, "lessons");
+  const topicPath = pathwayHubChildPath(pathway, hub, `lessons/topics/${topicSlug}`);
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
     pathwayProgrammaticParentCrumb(pathway, true),
-    pathwayHubCrumb(pathway, true),
+    pathwayHubCrumb(pathway, true, hub),
     { name: "Lessons", href: lessonsPath },
     { name: topicLabel, href: undefined },
   ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
     pathwayProgrammaticParentSchema(pathway),
-    pathwayHubSchema(pathway),
+    pathwayHubSchema(pathway, hub),
     { name: "Lessons", item: toAbsoluteSiteUrl(lessonsPath) },
     { name: topicLabel, item: toAbsoluteSiteUrl(topicPath) },
   ];
@@ -112,21 +137,23 @@ export function pathwayLessonDetailBreadcrumbs(
   pathway: ExamPathwayDefinition,
   lessonSlug: string,
   lessonTitle: string,
+  opts?: PathwayMarketingHubBreadcrumbOpts,
 ): { crumbs: BreadcrumbCrumb[]; schemaItems: BreadcrumbSchemaItem[] } {
-  const lessonsPath = buildExamPathwayPath(pathway, "lessons");
-  const lessonPath = buildExamPathwayPath(pathway, `lessons/${lessonSlug}`);
+  const hub = opts?.hubBasePath;
+  const lessonsPath = pathwayHubChildPath(pathway, hub, "lessons");
+  const lessonPath = pathwayHubChildPath(pathway, hub, `lessons/${lessonSlug}`);
   const lessonsLabel = `${pathway.shortName} lessons`;
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
     pathwayProgrammaticParentCrumb(pathway, true),
-    pathwayHubCrumb(pathway, true),
+    pathwayHubCrumb(pathway, true, hub),
     { name: lessonsLabel, href: lessonsPath },
     { name: lessonTitle, href: undefined },
   ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
     pathwayProgrammaticParentSchema(pathway),
-    pathwayHubSchema(pathway),
+    pathwayHubSchema(pathway, hub),
     { name: lessonsLabel, item: toAbsoluteSiteUrl(lessonsPath) },
     { name: lessonTitle, item: toAbsoluteSiteUrl(lessonPath) },
   ];
@@ -134,42 +161,50 @@ export function pathwayLessonDetailBreadcrumbs(
 }
 
 /** Marketing question bank hub for a pathway. */
-export function pathwayQuestionsHubBreadcrumbs(pathway: ExamPathwayDefinition): {
+export function pathwayQuestionsHubBreadcrumbs(
+  pathway: ExamPathwayDefinition,
+  opts?: PathwayMarketingHubBreadcrumbOpts,
+): {
   crumbs: BreadcrumbCrumb[];
   schemaItems: BreadcrumbSchemaItem[];
 } {
-  const qPath = buildExamPathwayPath(pathway, "questions");
+  const hub = opts?.hubBasePath;
+  const qPath = pathwayHubChildPath(pathway, hub, "questions");
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
     pathwayProgrammaticParentCrumb(pathway, true),
-    pathwayHubCrumb(pathway, true),
+    pathwayHubCrumb(pathway, true, hub),
     { name: "Question bank", href: undefined },
   ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
     pathwayProgrammaticParentSchema(pathway),
-    pathwayHubSchema(pathway),
+    pathwayHubSchema(pathway, hub),
     { name: "Question bank", item: toAbsoluteSiteUrl(qPath) },
   ];
   return { crumbs, schemaItems };
 }
 
 /** Pathway-specific pricing page (marketing). */
-export function pathwayPricingBreadcrumbs(pathway: ExamPathwayDefinition): {
+export function pathwayPricingBreadcrumbs(
+  pathway: ExamPathwayDefinition,
+  opts?: PathwayMarketingHubBreadcrumbOpts,
+): {
   crumbs: BreadcrumbCrumb[];
   schemaItems: BreadcrumbSchemaItem[];
 } {
-  const pricingPath = buildExamPathwayPath(pathway, "pricing");
+  const hub = opts?.hubBasePath;
+  const pricingPath = pathwayHubChildPath(pathway, hub, "pricing");
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
     pathwayProgrammaticParentCrumb(pathway, true),
-    pathwayHubCrumb(pathway, true),
+    pathwayHubCrumb(pathway, true, hub),
     { name: "Pricing", href: undefined },
   ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
     pathwayProgrammaticParentSchema(pathway),
-    pathwayHubSchema(pathway),
+    pathwayHubSchema(pathway, hub),
     { name: "Pricing", item: toAbsoluteSiteUrl(pricingPath) },
   ];
   return { crumbs, schemaItems };

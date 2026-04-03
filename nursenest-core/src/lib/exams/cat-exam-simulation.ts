@@ -1,7 +1,13 @@
 import { CountryCode, ExamFamily } from "@prisma/client";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { buildMappingQualityWarnings } from "@/lib/exams/cat-blueprint-mapping-quality";
+import {
+  CAT_BLUEPRINT_LOG_POOL_PRACTICE_MAPPED,
+  getCatBlueprintQualityThresholds,
+} from "@/lib/exams/cat-blueprint-thresholds";
 import type { CatPresentationMode } from "@/lib/exams/cat-types";
 import {
+  AANP_NP_US_EXAM_CONFIG,
   NCLEX_RN_CA_EXAM_CONFIG,
   NCLEX_RN_US_EXAM_CONFIG,
   type ExamConfig,
@@ -19,8 +25,8 @@ export function isCatExamSimulationFeatureEnabled(): boolean {
 }
 
 /**
- * Structured log for ops: prioritize NCLEX client-needs backfill where pool mapping is thin.
- * Emits on every exam-simulation create and when practice CAT pool mapping is below ~85%.
+ * Structured log for ops: every exam-simulation create; practice CAT when pool mapping is thin.
+ * Includes non-blocking `mappingQualityWarnings` (exam sim pool under 0.90, practice pool under 0.85).
  */
 export function logCatBlueprintPoolReady(params: {
   presentationMode: CatPresentationMode;
@@ -29,8 +35,23 @@ export function logCatBlueprintPoolReady(params: {
   poolMappedFraction: number;
   userId: string;
 }): void {
-  const thin = params.poolMappedFraction < 0.85;
-  if (params.presentationMode !== "exam_simulation" && !thin) return;
+  const practiceThin = params.poolMappedFraction < CAT_BLUEPRINT_LOG_POOL_PRACTICE_MAPPED;
+  const shouldLog = params.presentationMode === "exam_simulation" || practiceThin;
+  if (!shouldLog) return;
+
+  const warnings = buildMappingQualityWarnings({
+    poolMappedFraction: params.poolMappedFraction,
+    sessionMappedFraction: 1,
+    scoredCount: 0,
+    presentationMode: params.presentationMode,
+  });
+  if (params.presentationMode !== "exam_simulation" && practiceThin) {
+    warnings.push({
+      code: "practice_pool_mapping_low",
+      detail: `Practice CAT pool NCLEX/AANP blueprint tagging is ${(params.poolMappedFraction * 100).toFixed(1)}% (log threshold ${CAT_BLUEPRINT_LOG_POOL_PRACTICE_MAPPED * 100}%). Consider backfilling nclex_client_needs_category or blueprint ids.`,
+    });
+  }
+
   console.info(
     JSON.stringify({
       tag: "nursenest_cat_blueprint",
@@ -40,19 +61,31 @@ export function logCatBlueprintPoolReady(params: {
       poolSize: params.poolSize,
       poolMappedFraction: params.poolMappedFraction,
       userId: params.userId,
+      qualityThresholds: getCatBlueprintQualityThresholds(),
+      mappingQualityWarnings: warnings,
     }),
   );
 }
 
 export function examSimulationConfigForPathway(pathway: ExamPathwayDefinition | null): ExamConfig {
+  if (pathway?.examFamily === ExamFamily.NP) {
+    return AANP_NP_US_EXAM_CONFIG;
+  }
   if (pathway?.countryCode === CountryCode.CA) return NCLEX_RN_CA_EXAM_CONFIG;
   return NCLEX_RN_US_EXAM_CONFIG;
 }
 
-/** Exam simulation CAT is defined for NCLEX-RN pathways (US/CA share the same program). */
-export function pathwaySupportsNclexRnExamSimulation(pathway: ExamPathwayDefinition | null): boolean {
+/**
+ * Exam simulation CAT: NCLEX-RN (US/CA) or NP tracks (AANP-style blueprint). Unset pathway defaults to NCLEX-RN US.
+ */
+export function pathwaySupportsCatExamSimulation(pathway: ExamPathwayDefinition | null): boolean {
   if (!pathway) return true;
-  return pathway.examFamily === ExamFamily.NCLEX_RN;
+  return pathway.examFamily === ExamFamily.NCLEX_RN || pathway.examFamily === ExamFamily.NP;
+}
+
+/** @deprecated Use `pathwaySupportsCatExamSimulation` */
+export function pathwaySupportsNclexRnExamSimulation(pathway: ExamPathwayDefinition | null): boolean {
+  return pathwaySupportsCatExamSimulation(pathway);
 }
 
 /** Fixed NCLEX-RN simulation bounds (ignores CAT_RELAX_* env overrides). */
@@ -60,5 +93,13 @@ export function nclexRnSimulationBoundsFromConfig(cfg: ExamConfig): { min: numbe
   return { min: cfg.minQuestions, max: cfg.maxQuestions };
 }
 
-/** Suggested timed limit: 5 hours, matching common NCLEX allotments (product default). */
+/** Default when pathway is unknown or config omits override (NCLEX-style). */
 export const NCLEX_EXAM_SIMULATION_TIME_LIMIT_SEC = 5 * 60 * 60;
+
+export function examSimulationTimeLimitSecForConfig(cfg: ExamConfig): number {
+  return cfg.examSimulationTimeLimitSec ?? NCLEX_EXAM_SIMULATION_TIME_LIMIT_SEC;
+}
+
+export function defaultExamSimulationTimeLimitSec(pathway: ExamPathwayDefinition | null): number {
+  return examSimulationTimeLimitSecForConfig(examSimulationConfigForPathway(pathway));
+}

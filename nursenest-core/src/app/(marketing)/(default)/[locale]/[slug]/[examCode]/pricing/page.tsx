@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getExamPathwayByRoute } from "@/lib/exam-pathways/exam-product-registry";
+import { resolveExamPathwayFromMarketingHubSegment } from "@/lib/exam-pathways/exam-product-registry";
 
 export const dynamicParams = true;
 export const revalidate = 86400;
@@ -13,7 +13,7 @@ type Props = { params: Promise<{ locale: string; slug: string; examCode: string 
 
 export default async function ExamPathwayPricingPage({ params }: Props) {
   const { locale, slug, examCode } = await params;
-  const pathway = getExamPathwayByRoute(locale, slug, examCode);
+  const pathway = resolveExamPathwayFromMarketingHubSegment(locale, slug, examCode);
   if (!pathway) notFound();
 
   const waitlist = pathway.acquisitionMode === "waitlist" || pathway.status === "upcoming";
