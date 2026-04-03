@@ -15,6 +15,8 @@
     "lint": "eslint",
     "generate:marketing-assets": "node scripts/generate-marketing-assets.mjs",
     "generate:education-inventory": "node scripts/build-education-image-inventory.mjs",
+    "i18n:generate-from-en": "node scripts/generate-locales-from-en.mjs",
+    "i18n:merge-locale-ts-extras": "node scripts/generate-locales-from-en.mjs --merge-ts-only",
     "db:generate": "prisma generate",
     "db:deploy": "prisma migrate deploy",
     "db:validate": "prisma validate",
@@ -78,8 +80,8 @@
     "ops:recover-np-historical": "tsx scripts/recover-np-historical-lessons.ts"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.1019.0",
     "@auth/core": "0.37.2",
+    "@aws-sdk/client-s3": "^3.1019.0",
     "@prisma/client": "^6.7.0",
     "@radix-ui/react-accordion": "^1.2.12",
     "@sentry/nextjs": "^10.46.0",
@@ -107,6 +109,7 @@
     "dotenv": "^17.3.1",
     "eslint": "^9",
     "eslint-config-next": "16.2.1",
+    "google-translate-api-x": "^10.7.2",
     "mime-types": "^2.1.35",
     "pg": "^8.20.0",
     "prisma": "^6.7.0",
