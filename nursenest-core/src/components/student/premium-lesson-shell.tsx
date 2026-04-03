@@ -36,7 +36,7 @@ export function PremiumLessonShell({
     <div className="space-y-4">
       <p className="rounded-lg border border-border/60 bg-muted/30 px-3 py-2 text-xs text-muted">
         Premium content is for individual subscriber use. Notes are printable; protected lesson content is not. Copying is
-        limited on lesson text—this is deterrence only, not DRM.
+        limited on lesson text. This is deterrence only, not DRM.
       </p>
       {qualityNotice}
       <ProtectedPremiumContent

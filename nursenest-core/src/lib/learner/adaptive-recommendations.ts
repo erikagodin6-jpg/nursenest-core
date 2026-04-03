@@ -117,7 +117,7 @@ function explainTrajectory(args: {
         ? "With your current timeline, steady blocks beat cramming."
         : args.days > 14
           ? "Time remaining supports focused weak-topic work each week."
-          : "Shorter horizon — prioritize gaps that move your readiness the most.",
+          : "Shorter horizon. Prioritize gaps that move your readiness the most.",
     );
   } else {
     lines.push("Without a target date, we use mastery-style pacing; add a date anytime for tighter timing.");
@@ -126,7 +126,7 @@ function explainTrajectory(args: {
     lines.push(`Topics to watch: ${args.weakTop3.slice(0, 3).join(", ")}.`);
   }
   if (args.lessonPct < 50) {
-    lines.push(`Lesson completion is about ${args.lessonPct}% of your visible plan — finishing modules lifts readiness inputs.`);
+    lines.push(`Lesson completion is about ${args.lessonPct}% of your visible plan. Finishing modules lifts readiness inputs.`);
   }
   return lines.slice(0, 4);
 }
@@ -249,7 +249,7 @@ export function buildAdaptiveRecommendations(args: {
       return {
         title: "Run a timed practice exam",
         href: "/app/exams",
-        reason: "Near your date — rehearsal under time mirrors test day.",
+        reason: "Near your date. Rehearsal under time mirrors test day.",
         kind: "exams",
       };
     }
@@ -257,7 +257,7 @@ export function buildAdaptiveRecommendations(args: {
       return {
         title: `Targeted quiz: ${topic}`,
         href: quizHref,
-        reason: "Your recent pattern points here — short sets beat marathon cramming.",
+        reason: "Your recent pattern points here. Short sets beat marathon cramming.",
         kind: "quiz",
       };
     }
@@ -265,7 +265,7 @@ export function buildAdaptiveRecommendations(args: {
       return {
         title: "Complete a lesson module",
         href: "/app/lessons",
-        reason: "Foundation still opening up — lessons anchor the bank work.",
+        reason: "Foundation still opening up. Lessons anchor the bank work.",
         kind: "lesson",
       };
     }
@@ -297,21 +297,21 @@ export function buildAdaptiveRecommendations(args: {
   secondary.push({
     title: "Weak-area study mode (bank)",
     href: "/app/questions?studyMode=weak",
-    reason: "Prioritizes topics your ledger flags—less random-only drilling.",
+    reason: "Prioritizes topics your ledger flags. Less random-only drilling.",
     kind: "quiz",
   });
   if (urgency === "near" || urgency === "final_stretch") {
     secondary.push({
       title: "Adaptive (CAT) practice test",
       href: "/app/practice-tests",
-      reason: "CAT adjusts difficulty — useful when the exam is close.",
+      reason: "CAT adjusts difficulty. Useful when the exam is close.",
       kind: "cat",
     });
   } else {
     secondary.push({
       title: "Timed mock exam",
       href: "/app/exams",
-      reason: "Mocks show pacing and stamina — use occasionally even early on.",
+      reason: "Mocks show pacing and stamina. Use occasionally even early on.",
       kind: "mock",
     });
   }
@@ -364,13 +364,13 @@ export function buildAdaptiveRecommendations(args: {
   if (weakTop3[0]) todayFocus.push(`Short block on ${weakTop3[0]}`);
   if (args.streakDays < 3) todayFocus.push("15–25 minutes to extend your study streak");
   else todayFocus.push("One timed segment plus rationales review");
-  todayFocus.push(`${cadenceLabel(args.studyCadencePreference)} — ${weeklyPlan.rationale}`);
+  todayFocus.push(`${cadenceLabel(args.studyCadencePreference)}. ${weeklyPlan.rationale}`);
 
   const readinessTimelineLine =
     args.readiness.score != null && days != null
-      ? `Readiness score ${args.readiness.score}/100 with ${days} day${days === 1 ? "" : "s"} on the calendar — trajectory depends on consistent practice, not a single number.`
+      ? `Readiness score ${args.readiness.score}/100 with ${days} day${days === 1 ? "" : "s"} on the calendar. Trajectory depends on consistent practice, not a single number.`
       : args.readiness.score != null
-        ? `Readiness score ${args.readiness.score}/100 — add an exam date for time-aware pacing.`
+        ? `Readiness score ${args.readiness.score}/100. Add an exam date for time-aware pacing.`
         : null;
 
   return {

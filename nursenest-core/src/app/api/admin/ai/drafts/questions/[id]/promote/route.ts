@@ -74,7 +74,7 @@ export async function POST(req: Request, ctx: Props) {
   }
 
   const hash = stemHash(n.stem);
-  const topic = [cat.name, n.topicTag].filter(Boolean).join(" — ") || cat.slug;
+  const topic = [cat.name, n.topicTag].filter(Boolean).join(" · ") || cat.slug;
 
   const q = await prisma.examQuestion.create({
     data: {

@@ -369,7 +369,7 @@ export async function loadAdminCommandCenter(): Promise<AdminCommandCenterData |
       needsAttention.push({
         severity: "warning",
         title: `${overdueSched} scheduled blog post(s) past publish time`,
-        detail: "Run cron blog-publish or promote from ops — posts may already be visible via SCHEDULED+publishAt rule.",
+        detail: "Run cron blog-publish or promote from ops. Posts may already be visible via SCHEDULED+publishAt rule.",
         href: "/admin/blog/scheduler",
       });
     }
@@ -394,7 +394,7 @@ export async function loadAdminCommandCenter(): Promise<AdminCommandCenterData |
       needsAttention.push({
         severity: "info",
         title: `${thinPathways.length} US pathways show thin content depth`,
-        detail: "See coverage table — add lessons and bank alignment.",
+        detail: "See coverage table. Add lessons and bank alignment.",
         href: "/admin/content",
       });
     }

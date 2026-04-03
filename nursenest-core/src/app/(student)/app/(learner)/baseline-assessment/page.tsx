@@ -28,7 +28,7 @@ export default async function BaselineAssessmentPage() {
         <p className="text-xs font-semibold uppercase tracking-wide text-primary">Getting started</p>
         <h1 className="mt-1 text-3xl font-bold text-[var(--theme-heading-text)]">Baseline assessment</h1>
         <p className="mt-2 max-w-2xl text-sm text-muted">
-          Short, untimed. Your answers tune weak-topic signals—nothing is a pass/fail grade for your license.
+          Short, untimed. Your answers tune weak-topic signals. Nothing here is a pass/fail grade for your license.
         </p>
       </div>
       <BaselineAssessmentFlow />

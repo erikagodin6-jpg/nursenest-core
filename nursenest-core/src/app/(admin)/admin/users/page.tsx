@@ -88,7 +88,7 @@ export default async function AdminUsersPage() {
           </table>
         </div>
         <p className="mt-3 text-xs text-muted-foreground">
-          No per-user “activity score” column in schema — use command center DAU for aggregate signals.
+          No per-user “activity score” column in schema. Use command center DAU for aggregate signals.
         </p>
       </section>
     </main>

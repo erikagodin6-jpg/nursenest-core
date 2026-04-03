@@ -128,7 +128,7 @@ export function WeakAreasDashboardClient({ initial }: Props) {
             <div>
               <p className="text-xs font-semibold uppercase tracking-wide text-muted">Strong topics</p>
               <p className="mt-1 text-xs text-muted">
-                Keep light reinforcement so these do not decay — mix in other gaps.
+                Keep light reinforcement so these do not decay. Mix in other gaps.
               </p>
               <ul className="mt-2 flex flex-wrap gap-1.5">
                 {data.strongTopics.slice(0, 6).map((s) => (
@@ -182,7 +182,7 @@ export function WeakAreasDashboardClient({ initial }: Props) {
                         <span className="rounded-full border border-border px-2 py-0.5">
                           {w.recommendationConfidence ?? "low"} confidence
                         </span>
-                        <span>{w.attempted > 0 ? `${100 - w.missRate}% accuracy` : "—"}</span>
+                        <span>{w.attempted > 0 ? `${100 - w.missRate}% accuracy` : "N/A"}</span>
                         <span>
                           {w.missed} miss
                           {w.missed === 1 ? "" : "es"}
@@ -229,7 +229,7 @@ export function WeakAreasDashboardClient({ initial }: Props) {
                       {r.topic}
                     </li>
                   ))}
-                  {rows.length === 0 ? <li className="text-xs text-muted">—</li> : null}
+                  {rows.length === 0 ? <li className="text-xs text-muted">None yet</li> : null}
                 </ul>
               </div>
             ))}

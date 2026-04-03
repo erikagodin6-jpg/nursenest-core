@@ -62,7 +62,7 @@ export function governExamQuestionPublish(
   if (classified.tier === "missing") {
     if (!opts.acknowledgeSevereQualityIssue) {
       reasons.push(
-        "Rationale missing or empty — add teaching text before publish, or explicitly confirm severe-quality override.",
+        "Rationale missing or empty. Add teaching text before publish, or explicitly confirm severe-quality override.",
       );
     } else {
       warnings.push("Published with severe rationale gap (missing rationale). Prioritize remediation immediately.");
@@ -164,7 +164,7 @@ export function governContentItemLessonPublish(
     return {
       ok: true,
       reasons: [],
-      warnings: ["Published with thin lesson body — prioritize enrichment for public previews."],
+      warnings: ["Published with thin lesson body. Prioritize enrichment for public previews."],
       wordCount: q.wordCount,
       qualityTier: q.tier,
       requiresQualityOverride: false,

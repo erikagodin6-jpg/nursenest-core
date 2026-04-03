@@ -225,11 +225,11 @@ export function QuestionBankPracticeClient({
         }
         if (data.topicRelaxed && data.topicRequested) {
           setSoftNotice(
-            `No exact matches for topic “${data.topicRequested}”. Showing questions for your pathway instead — use the topic menu to narrow further.`,
+            `No exact matches for topic “${data.topicRequested}”. Showing questions for your pathway instead. Use the topic menu to narrow further.`,
           );
         } else if (data.studyModeNote === "weak_topic_unavailable") {
           setSoftNotice(
-            "Weak-area mode needs a few graded items first—we are showing a mixed pool until your topic ledger populates.",
+            "Weak-area mode needs a few graded items first. We are showing a mixed pool until your topic ledger populates.",
           );
         } else if (data.studyModeNote === "weak_topic_low_confidence") {
           setSoftNotice(
@@ -725,7 +725,7 @@ export function QuestionBankPracticeClient({
                     {g.correct ? "Correct" : "Incorrect"}
                   </p>
                   <p className="mt-2 text-xs text-muted-foreground">
-                    Exam-style session: explanations stay hidden until you choose—mirrors closed-book pacing (still practice only).
+                    Exam-style session: explanations stay hidden until you choose, like closed-book pacing (practice only).
                   </p>
                   <button
                     type="button"
@@ -778,7 +778,7 @@ export function QuestionBankPracticeClient({
                   </p>
                   {g.learningLoop.confidence === "high" ? (
                     <p className="mt-1 text-xs text-muted-foreground">
-                      Strong match from this item’s metadata—next steps should stay on the same topic track.
+                      Strong match from this item’s metadata. Next steps should stay on the same topic track.
                     </p>
                   ) : g.learningLoop.confidence === "medium" ? (
                     <p className="mt-1 text-xs text-muted-foreground">
@@ -786,7 +786,7 @@ export function QuestionBankPracticeClient({
                     </p>
                   ) : (
                     <p className="mt-1 text-xs text-role-warning">
-                      Approximate routing only—open the question bank and tune filters if results look off-target.
+                      Approximate routing only. Open the question bank and tune filters if results look off-target.
                     </p>
                   )}
                   <div className="mt-3 flex flex-wrap gap-2">
@@ -843,7 +843,7 @@ export function QuestionBankPracticeClient({
 
           <p className="text-xs text-muted">
             Progress for this batch is saved in your browser so you can refresh and continue. Random and mixed modes exclude
-            questions you have already seen this session when you load more. Scoring runs on the server—answers are not graded in
+            questions you have already seen this session when you load more. Scoring runs on the server. Answers are not graded in
             the page alone.
           </p>
         </div>

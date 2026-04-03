@@ -57,7 +57,7 @@ export function buildCountdownCopy(args: {
   if (!t || t === "UNSURE") {
     return {
       primary: "No exam date set",
-      secondary: "Set a date when you can — it unlocks pacing tailored to your timeline.",
+      secondary: "Set a date when you can. It unlocks pacing tailored to your timeline.",
       daysRemaining: null,
       weeksRemaining: null,
       urgency: null,
@@ -82,7 +82,7 @@ export function buildCountdownCopy(args: {
   if (days == null) {
     const label = t === "PROPOSED" ? "Proposed exam date" : "Exam date";
     return {
-      primary: `${label} has passed — update your plan`,
+      primary: `${label} has passed. Update your plan`,
       secondary: "Adjust your exam date so pacing and countdown stay accurate.",
       daysRemaining: null,
       weeksRemaining: null,
@@ -102,10 +102,10 @@ export function buildCountdownCopy(args: {
   if (weeks != null && days > 0) {
     secondaryParts.push(`About ${weeks} week${weeks === 1 ? "" : "s"} remaining`);
   }
-  if (urgency === "far") secondaryParts.push("Plenty of runway — build fundamentals steadily.");
+  if (urgency === "far") secondaryParts.push("Plenty of runway. Build fundamentals steadily.");
   else if (urgency === "moderate") secondaryParts.push("Good window to tighten weak topics.");
-  else if (urgency === "near") secondaryParts.push("A focused review stretch — prioritize high-yield gaps.");
-  else secondaryParts.push("Final review phase — short sessions, strong sleep, and targeted drills.");
+  else if (urgency === "near") secondaryParts.push("A focused review stretch. Prioritize high-yield gaps.");
+  else secondaryParts.push("Final review phase: short sessions, strong sleep, and targeted drills.");
 
   const urgencyLabel =
     urgency === "far"

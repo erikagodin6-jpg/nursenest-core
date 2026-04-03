@@ -89,16 +89,16 @@ export function ExamPathwayHubBody({ pathway, isSignedIn, discovery }: Props) {
       </p>
       <ul className="mt-4 list-inside list-disc space-y-1.5 text-sm text-[var(--theme-body-text)]">
         <li>
-          <span className="font-medium text-[var(--theme-heading-text)]">Question bank</span> — short reps with rationales on every option.
+          <span className="font-medium text-[var(--theme-heading-text)]">Question bank:</span> short reps with rationales on every option.
         </li>
         <li>
-          <span className="font-medium text-[var(--theme-heading-text)]">Lessons</span> — system and safety topics aligned to this exam’s framing.
+          <span className="font-medium text-[var(--theme-heading-text)]">Lessons:</span> system and safety topics aligned to this exam’s framing.
         </li>
         <li>
-          <span className="font-medium text-[var(--theme-heading-text)]">Flashcards &amp; planner</span> — weak-topic decks and pacing after sign-in.
+          <span className="font-medium text-[var(--theme-heading-text)]">Flashcards &amp; planner:</span> weak-topic decks and pacing after sign-in.
         </li>
         <li>
-          <span className="font-medium text-[var(--theme-heading-text)]">Exam mode &amp; mocks</span> — full-length timing and review flags in-app.
+          <span className="font-medium text-[var(--theme-heading-text)]">Exam mode &amp; mocks:</span> full-length timing and review flags in-app.
         </li>
       </ul>
 

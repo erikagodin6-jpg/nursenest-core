@@ -28,7 +28,7 @@ export function LearnerInsightEnginePanel({ insights }: { insights: LearnerInsig
         <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Insight engine</h2>
       </div>
       <p className="mt-1 text-xs text-muted">
-        Interpretation of your recent activity — not medical advice and not a guarantee of exam outcome.
+        Interpretation of your recent activity. Not medical advice and not a guarantee of exam outcome.
       </p>
 
       <div className="mt-4 grid gap-4 md:grid-cols-2">
@@ -37,7 +37,7 @@ export function LearnerInsightEnginePanel({ insights }: { insights: LearnerInsig
           <p className="mt-2 text-sm text-[var(--theme-body-text)]">
             Overall session accuracy:{" "}
             <span className="font-semibold tabular-nums text-foreground">
-              {p.overallAccuracyPct != null ? `${p.overallAccuracyPct}%` : "—"}
+              {p.overallAccuracyPct != null ? `${p.overallAccuracyPct}%` : "N/A"}
             </span>
             {p.recencyWeightedAccuracyPct != null ? (
               <>
@@ -93,7 +93,7 @@ export function LearnerInsightEnginePanel({ insights }: { insights: LearnerInsig
             {insights.knowledgeGaps.map((g) => (
               <li key={`${g.kind}:${g.topic}`}>
                 <span className="font-medium text-foreground">{g.topic}</span>: {g.detail}{" "}
-                <span className="text-muted">— {g.suggestedAction}</span>
+                <span className="text-muted">({g.suggestedAction})</span>
               </li>
             ))}
           </ul>
@@ -159,7 +159,7 @@ export function LearnerInsightEnginePanel({ insights }: { insights: LearnerInsig
               <Link className="text-primary underline" href={t.href}>
                 (open)
               </Link>
-              <span className="text-muted"> — {t.reason}</span>
+              <span className="text-muted"> · {t.reason}</span>
             </li>
           ))}
         </ul>

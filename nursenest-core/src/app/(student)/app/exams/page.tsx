@@ -60,7 +60,7 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
         </div>
         <p className="nn-card p-6 text-sm text-muted">
           We couldn’t finish checking your subscription (database or billing lookup failed). This is not the same as “no
-          plan”—refresh shortly, or sign in again if it keeps happening.
+          plan.” Refresh shortly, or sign in again if it keeps happening.
         </p>
       </main>
     );
@@ -129,7 +129,7 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
         </div>
         <h1 className="text-3xl font-bold">Practice exams</h1>
         <p className="nn-card mt-4 p-6 text-sm text-muted">
-          Exam history couldn’t load—the database was unreachable or the request failed. Your subscription status is
+          Exam history couldn’t load. The database was unreachable or the request failed. Your subscription status is
           unchanged; refresh or try again shortly.
         </p>
       </main>
@@ -154,15 +154,15 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
       <h1 className="text-3xl font-bold">Practice exams</h1>
       <p className="mt-2 text-muted">
         US <strong>NCLEX-RN</strong> and <strong>NCLEX-PN</strong> timed runs use your subscription pool. Answers stay hidden until you
-        submit; you get a score at the end (no rationales between items—same pacing as test day).
+        submit; you get a score at the end (no rationales between items, same pacing as test day).
       </p>
       {pct !== null ? (
         <p className="mt-3 text-sm font-medium text-foreground">
-          Latest attempt: {last?.score}/{last?.total} ({pct}%) —{" "}
-          {pct >= 75 ? "strong practice band—keep mixing timed sets." : "add timed blocks this week to lift accuracy."}
+          Latest attempt: {last?.score}/{last?.total} ({pct}%).{" "}
+          {pct >= 75 ? "Strong practice band. Keep mixing timed sets." : "Add timed blocks this week to lift accuracy."}
         </p>
       ) : (
-        <p className="mt-3 text-sm text-muted">No attempts yet—start a session below when you are ready.</p>
+        <p className="mt-3 text-sm text-muted">No attempts yet. Start a session below when you are ready.</p>
       )}
       <aside className="nn-card mt-4 border-primary/15 bg-primary/5 p-4 text-sm text-muted">
         <p className="font-semibold text-foreground">Report card & analytics</p>
@@ -193,7 +193,7 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
         </p>
         <ExamPracticeClient
           examId={MIXED_PRACTICE_2026_EXAM_ID}
-          examTitle="Mixed clinical — RN/PN batch"
+          examTitle="Mixed clinical (RN/PN batch)"
           questionTag={MIXED_PRACTICE_2026_RN_PN_TAG}
           sessionNamespace="mixed2026"
         />
@@ -202,7 +202,7 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
       <section className="mt-10 space-y-2">
         <h2 className="text-xl font-semibold">RN mixed practice (20 questions)</h2>
         <p className="text-sm text-muted">
-          Shuffled draw from items tagged with the RN preset batch—RN-tier subscribers only. Tag{" "}
+          Shuffled draw from items tagged with the RN preset batch. RN-tier subscribers only. Tag{" "}
           <span className="font-mono text-xs">{EXAM_PRESET_RN_MIXED_2026_TAG}</span>.
         </p>
         <ExamPracticeClient

@@ -56,8 +56,8 @@ export default function PreNursingLandingPage() {
         <section className="mt-16 border-t border-border pt-12">
           <h2 className="text-2xl font-bold text-[var(--theme-heading-text)]">What Pre-Nursing is</h2>
           <p className="mt-3 max-w-3xl text-muted">
-            NurseNest Pre-Nursing is a free, structured library of interactive modules — anatomy, chemistry, infection
-            control, communication, and more — so you can strengthen prerequisites and habits before you invest in full NCLEX
+            NurseNest Pre-Nursing is a free, structured library of interactive modules (anatomy, chemistry, infection
+            control, communication, and more) so you can strengthen prerequisites and habits before you invest in full NCLEX
             or RPN exam prep.
           </p>
         </section>
@@ -75,7 +75,7 @@ export default function PreNursingLandingPage() {
             <h3 className="text-lg font-semibold text-[var(--theme-heading-text)]">What happens next</h3>
             <p className="mt-3 text-sm text-muted">
               When you’re ready, NurseNest offers paid exam pathways with full question banks, mocks, and lessons aligned to
-              NCLEX-RN, NCLEX-PN, REX-PN, and NP tracks — the same product family, with entitlements that match your
+              NCLEX-RN, NCLEX-PN, REX-PN, and NP tracks. Same product family, with entitlements that match your
               subscription.
             </p>
             <div className="mt-4 flex flex-wrap gap-3 text-sm font-semibold">

@@ -71,20 +71,38 @@ export function SignupForm({
 
   return (
     <form action={onSubmit} className="mt-6 space-y-4">
-      <input className="w-full rounded-xl border border-border bg-white px-3 py-2" type="text" name="name" placeholder="Full name" required />
       <input
-        className="w-full rounded-xl border border-border bg-white px-3 py-2"
+        className="w-full rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)] placeholder:text-muted-foreground"
+        type="text"
+        name="name"
+        placeholder="Full name"
+        required
+      />
+      <input
+        className="w-full rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)] placeholder:text-muted-foreground"
         type="text"
         name="username"
         placeholder="Username (3–30 characters)"
         required
         autoComplete="username"
       />
-      <input className="w-full rounded-xl border border-border bg-white px-3 py-2" type="email" name="email" placeholder="Email" required />
-      <input className="w-full rounded-xl border border-border bg-white px-3 py-2" type="password" name="password" placeholder="Password (8+ chars)" required />
+      <input
+        className="w-full rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)] placeholder:text-muted-foreground"
+        type="email"
+        name="email"
+        placeholder="Email"
+        required
+      />
+      <input
+        className="w-full rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)] placeholder:text-muted-foreground"
+        type="password"
+        name="password"
+        placeholder="Password (8+ chars)"
+        required
+      />
       <div className="grid gap-3 sm:grid-cols-2">
         <select
-          className="rounded-xl border border-border bg-white px-3 py-2"
+          className="rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)]"
           name="country"
           value={country}
           onChange={(e) => {
@@ -96,7 +114,11 @@ export function SignupForm({
           <option value="CA">Canada</option>
           <option value="US">United States</option>
         </select>
-        <select className="rounded-xl border border-border bg-white px-3 py-2" name="tier" defaultValue="RN">
+        <select
+          className="rounded-xl border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-body-text)]"
+          name="tier"
+          defaultValue="RN"
+        >
           <option value="RPN">RPN / Practical nursing (CA)</option>
           <option value="LVN_LPN">LVN/LPN (US)</option>
           <option value="RN">RN</option>
@@ -104,16 +126,20 @@ export function SignupForm({
           <option value="ALLIED">Allied health</option>
         </select>
       </div>
-      <div className="rounded-xl border border-border bg-white/80 p-4">
-        <p className="text-sm font-semibold">Quick onboarding (improves recommendations)</p>
+      <div className="rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-inset)] p-4">
+        <p className="text-sm font-semibold text-[var(--theme-heading-text)]">Quick onboarding (improves recommendations)</p>
         <div className="mt-3 grid gap-3 sm:grid-cols-2">
-          <select className="rounded-lg border border-border px-3 py-2 text-sm" name="learnerPath" defaultValue="experienced">
+          <select
+            className="rounded-lg border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-sm text-[var(--theme-body-text)]"
+            name="learnerPath"
+            defaultValue="experienced"
+          >
             <option value="new_grad">New grad</option>
             <option value="experienced">Working clinician</option>
             <option value="career_change">Career change</option>
           </select>
           <select
-            className="rounded-lg border border-border px-3 py-2 text-sm"
+            className="rounded-lg border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-sm text-[var(--theme-body-text)]"
             name="examFocus"
             value={examFocus}
             onChange={(e) => setExamFocus(e.target.value as SignupExamFocusValue)}
@@ -124,12 +150,20 @@ export function SignupForm({
               </option>
             ))}
           </select>
-          <select className="rounded-lg border border-border px-3 py-2 text-sm" name="studyGoal" defaultValue="pass_first">
+          <select
+            className="rounded-lg border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-sm text-[var(--theme-body-text)]"
+            name="studyGoal"
+            defaultValue="pass_first"
+          >
             <option value="pass_first">Pass on first attempt</option>
             <option value="raise_score">Raise practice scores</option>
             <option value="speed">Improve speed under pressure</option>
           </select>
-          <select className="rounded-lg border border-border px-3 py-2 text-sm" name="dailyStudyMinutes" defaultValue="30">
+          <select
+            className="rounded-lg border border-[var(--border-medium)] bg-[var(--bg-card)] px-3 py-2 text-sm text-[var(--theme-body-text)]"
+            name="dailyStudyMinutes"
+            defaultValue="30"
+          >
             <option value="15">~15 min / day</option>
             <option value="30">~30 min / day</option>
             <option value="45">~45 min / day</option>
@@ -140,17 +174,17 @@ export function SignupForm({
       <TurnstileSignup onToken={onCaptcha} />
       <p className="text-xs leading-relaxed text-muted-foreground">
         {legalBefore}
-        <Link href={termsHref} className="font-semibold text-primary underline-offset-4 hover:underline">
+        <Link href={termsHref} className="nn-link-quiet font-semibold">
           {termsLabel}
         </Link>
         {legalAnd}
-        <Link href={privacyHref} className="font-semibold text-primary underline-offset-4 hover:underline">
+        <Link href={privacyHref} className="nn-link-quiet font-semibold">
           {privacyLabel}
         </Link>
         {legalAfter}
       </p>
       {error ? <p className="text-sm text-red-600">{error}</p> : null}
-      <button className="w-full rounded-xl bg-role-cta px-4 py-2 font-semibold text-role-cta-foreground" type="submit">
+      <button className="nn-btn-primary w-full px-4 py-3 text-base font-semibold" type="submit">
         Create account
       </button>
     </form>

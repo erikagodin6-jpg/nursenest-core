@@ -90,7 +90,7 @@ export function AdminBlogBatchClient() {
       <p className="mt-1 text-sm text-muted-foreground">
         Creates DRAFT <code className="rounded bg-muted px-1">BlogPost</code> rows from{" "}
         <code className="rounded bg-muted px-1">master-topic-map.json</code> (same editorial pattern as{" "}
-        <code className="rounded bg-muted px-1">scripts/blog-bulk-schedule.mjs</code>). Chunked API — safe for serverless timeouts.
+        <code className="rounded bg-muted px-1">scripts/blog-bulk-schedule.mjs</code>). Chunked API. Safe for serverless timeouts.
       </p>
       {total != null ? <p className="mt-2 text-sm">Total rows in map: {total}</p> : null}
       <div className="mt-4 flex flex-wrap gap-2">
@@ -125,7 +125,7 @@ export function AdminBlogBatchClient() {
       </div>
       <p className="mt-2 text-xs text-muted-foreground">Current cursor: {cursor}</p>
       {done ? <p className="mt-2 text-sm font-medium text-emerald-700 dark:text-emerald-300">Batch complete.</p> : null}
-      <pre className="mt-4 max-h-64 overflow-auto rounded-lg bg-muted/40 p-3 text-xs">{log.join("\n") || "—"}</pre>
+      <pre className="mt-4 max-h-64 overflow-auto rounded-lg bg-muted/40 p-3 text-xs">{log.join("\n") || "N/A"}</pre>
     </div>
   );
 }

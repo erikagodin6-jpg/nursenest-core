@@ -204,25 +204,20 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
       <div className="flex-grow overflow-x-hidden">
         <section
           className="relative overflow-hidden pt-0"
-          style={{ paddingBottom: "var(--space-hero-bottom)" }}
+          style={{ paddingTop: "var(--space-hero-top)", paddingBottom: "var(--space-hero-bottom)" }}
           data-testid="hero-section"
         >
-          <div className="pointer-events-none absolute left-0 top-0 -z-10 hidden h-full w-full overflow-hidden md:block will-change-transform" aria-hidden="true">
-            <div className="absolute right-[-5%] top-[-10%] h-[500px] w-[500px] rounded-full bg-role-cta/10 blur-[80px]" style={{ transform: "translateZ(0)" }} />
-            <div className="absolute bottom-[10%] left-[-10%] h-[600px] w-[600px] rounded-full bg-secondary/20 blur-[100px]" style={{ transform: "translateZ(0)" }} />
-          </div>
-
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div
-              className={`grid items-start gap-4 md:gap-6 lg:gap-8 ${showHeroMediaColumn ? "md:grid-cols-[1fr_1.08fr]" : "md:grid-cols-1"}`}
+              className={`grid items-start gap-3 md:gap-4 lg:gap-6 ${showHeroMediaColumn ? "md:grid-cols-[1fr_1.08fr]" : "md:grid-cols-1"}`}
             >
               <div className="hero-motion-enter min-w-0 max-w-[min(100%,46rem)] space-y-4 md:space-y-5">
                 <div
-                  className="inline-flex max-w-full flex-wrap items-center gap-x-2 gap-y-1 rounded-full border border-primary/15 bg-primary/[0.06] px-3 py-1.5 text-[11px] font-semibold leading-snug text-primary sm:text-sm"
+                  className="inline-flex max-w-full flex-wrap items-center gap-x-2 gap-y-1 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-inset)] px-3 py-1.5 text-[11px] font-semibold leading-snug text-[var(--theme-heading-text)] sm:text-sm"
                   data-testid="badge-trust-micro"
                 >
                   <span>{t("home.hero.trustMicroBadge")}</span>
-                  <span className="text-primary/45" aria-hidden="true">
+                  <span className="text-[var(--theme-muted-text)]" aria-hidden="true">
                     ·
                   </span>
                   <span>{t("home.hero.authorityBadge")}</span>
@@ -246,7 +241,7 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
                 </div>
 
                 <div
-                  className="flex flex-wrap items-center gap-2 rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]/80 px-3 py-2 text-sm"
+                  className="flex flex-wrap items-center gap-2 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-2 text-sm"
                   data-testid="region-toggle-hero"
                 >
                   <span className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">{t("nav.regionLabel")}</span>
@@ -255,7 +250,9 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
                       type="button"
                       onClick={() => setRegion("US")}
                       className={`rounded-md px-2.5 py-1 text-xs font-semibold sm:px-3 sm:text-sm ${
-                        region === "US" ? "bg-primary/15 text-primary shadow-sm" : "text-[var(--theme-muted-text)] hover:text-[var(--theme-body-text)]"
+                        region === "US"
+                          ? "bg-[var(--surface-selected)] text-[var(--theme-heading-text)] ring-1 ring-[var(--border-medium)]"
+                          : "text-[var(--theme-muted-text)] hover:text-[var(--theme-body-text)]"
                       }`}
                       data-testid="button-region-us"
                     >
@@ -268,7 +265,9 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
                       type="button"
                       onClick={() => setRegion("CA")}
                       className={`rounded-md px-2.5 py-1 text-xs font-semibold sm:px-3 sm:text-sm ${
-                        region === "CA" ? "bg-primary/15 text-primary shadow-sm" : "text-[var(--theme-muted-text)] hover:text-[var(--theme-body-text)]"
+                        region === "CA"
+                          ? "bg-[var(--surface-selected)] text-[var(--theme-heading-text)] ring-1 ring-[var(--border-medium)]"
+                          : "text-[var(--theme-muted-text)] hover:text-[var(--theme-body-text)]"
                       }`}
                       data-testid="button-region-ca"
                     >
@@ -289,7 +288,7 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
                     href="/signup"
                     event={PH.marketingHomeHeroPrimaryCta}
                     eventProps={{ region }}
-                    className="inline-flex min-h-[52px] w-full items-center justify-center rounded-full bg-role-cta px-8 py-3.5 text-base font-semibold text-role-cta-foreground shadow-[0_10px_28px_var(--role-cta-shadow),var(--shadow-elevated)] transition-transform hover:-translate-y-0.5 hover:bg-role-cta-hover sm:min-h-[54px] sm:w-auto sm:px-10 sm:text-lg"
+                    className="nn-btn-primary inline-flex min-h-[48px] w-full items-center justify-center px-8 py-3 text-base font-semibold transition-[filter] hover:bg-role-cta-hover sm:min-h-[52px] sm:w-auto sm:px-10 sm:text-lg"
                     data-testid="button-hero-start-free"
                   >
                     {t("home.hero.ctaPrimary")}
@@ -299,29 +298,35 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
                     href={withMarketingLocale(locale, rnQuestions(region))}
                     event={PH.marketingHomeHeroSecondaryCta}
                     eventProps={{ region, destination: "rn_questions" }}
-                    className="inline-flex min-h-[48px] w-full items-center justify-center rounded-full border border-[var(--theme-input-border)] bg-transparent px-6 py-3 text-sm font-semibold text-[var(--theme-heading-text)] hover:border-[color-mix(in_srgb,var(--theme-primary)_28%,var(--theme-input-border))] hover:bg-[var(--theme-muted-surface)] sm:min-h-[54px] sm:w-auto sm:px-7 sm:text-base"
+                    className="nn-btn-secondary inline-flex min-h-[48px] w-full items-center justify-center px-6 py-3 text-sm font-semibold sm:min-h-[52px] sm:w-auto sm:px-7 sm:text-base"
                     data-testid="button-hero-browse"
                   >
-                    <BookOpen className="mr-2 h-4 w-4 text-primary" />
+                    <BookOpen className="mr-2 h-4 w-4 text-[var(--theme-muted-text)]" />
                     {t("home.hero.ctaSecondary")}
                   </MarketingTrackedLink>
                 </div>
 
                 <div className="space-y-2.5" data-testid="hero-quick-entry-links">
                   <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">{t("home.hero.quickEntryLabel")}</p>
-                  <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
-                    {heroPathwayLinks.map((item) => {
+                  <div className="flex flex-wrap gap-x-1 gap-y-1 sm:gap-x-3">
+                    {heroPathwayLinks.map((item, i) => {
                       const label = t(item.labelKey);
                       return (
-                        <MarketingTrackedLink
-                          key={item.labelKey}
-                          href={withMarketingLocale(locale, item.href)}
-                          event={PH.marketingHomeQuickEntryClick}
-                          eventProps={{ region, link_label: label }}
-                          className="inline-flex min-h-[2.75rem] items-center justify-center rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] px-3 py-2 text-center text-xs font-semibold leading-tight text-[var(--theme-heading-text)] shadow-sm transition hover:border-primary/35 hover:shadow-md sm:min-h-0 sm:rounded-full sm:px-4 sm:py-2 sm:text-sm"
-                        >
-                          {label}
-                        </MarketingTrackedLink>
+                        <span key={item.labelKey} className="inline-flex items-center">
+                          {i > 0 ? (
+                            <span className="mr-1 hidden text-[var(--theme-muted-text)] sm:mr-3 sm:inline" aria-hidden>
+                              ·
+                            </span>
+                          ) : null}
+                          <MarketingTrackedLink
+                            href={withMarketingLocale(locale, item.href)}
+                            event={PH.marketingHomeQuickEntryClick}
+                            eventProps={{ region, link_label: label }}
+                            className="nn-link-quiet text-xs sm:text-sm"
+                          >
+                            {label}
+                          </MarketingTrackedLink>
+                        </span>
                       );
                     })}
                   </div>
@@ -330,7 +335,7 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
                       href={withMarketingLocale(locale, "/tools")}
                       event={PH.marketingHomeQuickEntryClick}
                       eventProps={{ region, link_label: "study_tools" }}
-                      className="font-semibold text-primary underline-offset-2 hover:underline"
+                      className="nn-link-quiet text-xs sm:text-sm"
                     >
                       {t("home.quickEntry.studyTools")}
                     </MarketingTrackedLink>
@@ -343,15 +348,15 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
 
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-[var(--theme-body-text)] sm:text-sm">
                   <span className="inline-flex items-center gap-1.5">
-                    <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />
+                    <CheckCircle2 className="nn-trust-mark h-3.5 w-3.5 shrink-0" aria-hidden />
                     {t("home.hero.noCreditCard")}
                   </span>
                   <span className="inline-flex items-center gap-1.5">
-                    <Shield className="h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />
+                    <Shield className="nn-trust-mark h-3.5 w-3.5 shrink-0" aria-hidden />
                     {t("home.hero.guarantee")}
                   </span>
                   <span className="inline-flex items-center gap-1.5">
-                    <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />
+                    <CheckCircle2 className="nn-trust-mark h-3.5 w-3.5 shrink-0" aria-hidden />
                     {t("home.hero.cancelAnytime")}
                   </span>
                 </div>
@@ -503,7 +508,7 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
         <div className="mx-auto max-w-5xl px-4 py-8 text-center sm:px-6 lg:px-8">
           <Link
             href={mapLegacyMarketingHref("/languages")}
-            className="inline-flex items-center gap-2 text-sm text-[var(--theme-muted-text)] transition-colors hover:text-primary"
+            className="inline-flex items-center gap-2 text-sm text-[var(--theme-muted-text)] transition-colors hover:text-[var(--theme-heading-text)]"
             data-testid="link-home-languages"
           >
             <span aria-hidden="true">🌐</span>

@@ -20,10 +20,10 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   const page = Math.max(1, Number(sp.page ?? "1") || 1);
   const title =
     page > 1
-      ? `Allied health exam prep — professions (page ${page}) | NurseNest`
+      ? `Allied health exam prep: professions (page ${page}) | NurseNest`
       : "Allied health exam prep | RT, MLT, paramedic & more | NurseNest";
   const description =
-    "Explore allied health certification prep by profession — pathway-scoped lessons, safe pagination, and clear links to study tools. Content stays within the allied tier.";
+    "Explore allied health certification prep by profession: pathway-scoped lessons, safe pagination, and clear links to study tools. Content stays within the allied tier.";
   const canonical = page > 1 ? `${BASE}?page=${page}` : BASE;
   return {
     title,
@@ -61,7 +61,7 @@ export default async function AlliedHealthHubPage({ searchParams }: Props) {
             Exam prep by profession
           </h1>
           <p className="mt-4 max-w-2xl text-base text-muted">
-            Pick your discipline for overview pages, paginated lesson hubs, and internal links — built for scale without loading entire
+            Pick your discipline for overview pages, paginated lesson hubs, and internal links, built for scale without loading entire
             libraries into one screen. Nursing and NP hubs stay separate; allied content follows strict tier rules.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
@@ -83,7 +83,7 @@ export default async function AlliedHealthHubPage({ searchParams }: Props) {
         <section className="mt-12">
           <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">Professions</h2>
           <p className="mt-2 text-sm text-muted">
-            Each card opens a dedicated guide with lessons listed on separate, paginated URLs — never the full dataset at once.
+            Each card opens a dedicated guide with lessons listed on separate, paginated URLs, never the full dataset at once.
           </p>
           <div className="mt-6">
             <AlliedHubProfessionGrid professions={slice} />
@@ -101,7 +101,7 @@ export default async function AlliedHealthHubPage({ searchParams }: Props) {
         <section className="mt-14 rounded-2xl border border-border bg-card p-6">
           <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Why this hub exists</h2>
           <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-muted">
-            <li>ISR-cached pages with bounded queries — safe under load.</li>
+            <li>ISR-cached pages with bounded queries, safe under load.</li>
             <li>Breadcrumbs and JSON-LD on indexable routes.</li>
             <li>Profession and lesson detail URLs are stable for growth and imports.</li>
           </ul>

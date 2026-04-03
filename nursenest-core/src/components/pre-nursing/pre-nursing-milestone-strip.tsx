@@ -88,7 +88,7 @@ export function PreNursingMilestoneStrip({
               })
             }
           >
-            All complete — explore exam lesson hubs
+            All complete. Explore exam lesson hubs.
           </Link>
         )}
         <Link href="/pre-nursing/study-plan" className="text-muted-foreground hover:text-primary hover:underline">

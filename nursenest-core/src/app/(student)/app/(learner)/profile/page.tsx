@@ -124,7 +124,7 @@ export default async function LearnerProfilePage() {
         <p className="text-xs font-semibold uppercase tracking-wide text-primary">Control center</p>
         <h1 className="mt-1 text-3xl font-bold text-[var(--theme-heading-text)]">Profile & account</h1>
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-          Manage your sign-in, subscription, and see how you are performing—then jump straight into the next best session.
+          Manage your sign-in, subscription, and see how you are performing. Then jump into your next session.
         </p>
       </div>
 
@@ -134,11 +134,11 @@ export default async function LearnerProfilePage() {
         <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
           <div>
             <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Email</dt>
-            <dd className="mt-0.5 font-medium text-foreground">{userRow?.email ?? "—"}</dd>
+            <dd className="mt-0.5 font-medium text-foreground">{userRow?.email ?? "N/A"}</dd>
           </div>
           <div>
             <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Name</dt>
-            <dd className="mt-0.5 font-medium text-foreground">{userRow?.name ?? "—"}</dd>
+            <dd className="mt-0.5 font-medium text-foreground">{userRow?.name ?? "N/A"}</dd>
           </div>
         </dl>
         <div className="mt-6 border-t border-border/60 pt-6">
@@ -163,7 +163,7 @@ export default async function LearnerProfilePage() {
           <div>
             <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Profile tier & country</dt>
             <dd className="mt-0.5 font-medium text-foreground">
-              {userRow ? `${tierLabel(userRow.tier)} · ${userRow.country}` : "—"}
+              {userRow ? `${tierLabel(userRow.tier)} · ${userRow.country}` : "N/A"}
             </dd>
           </div>
           {subscription ? (
@@ -228,7 +228,7 @@ export default async function LearnerProfilePage() {
             <div className="rounded-xl border border-border/60 bg-muted/15 p-4">
               <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Lessons</p>
               <p className="mt-1 text-2xl font-bold tabular-nums text-primary">
-                {lessons && lessons.total > 0 ? `${lessons.pct}%` : "—"}
+                {lessons && lessons.total > 0 ? `${lessons.pct}%` : "N/A"}
               </p>
               <p className="text-xs text-muted-foreground">
                 {lessons && lessons.total > 0 ? `${lessons.completed} / ${lessons.total}` : "Start a lesson"}
@@ -237,7 +237,7 @@ export default async function LearnerProfilePage() {
             <div className="rounded-xl border border-border/60 bg-muted/15 p-4">
               <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Scored accuracy</p>
               <p className="mt-1 text-2xl font-bold tabular-nums text-primary">
-                {practice && practice.gradedTotal > 0 ? `${practice.accuracyPct ?? 0}%` : "—"}
+                {practice && practice.gradedTotal > 0 ? `${practice.accuracyPct ?? 0}%` : "N/A"}
               </p>
               <p className="text-xs text-muted-foreground">
                 {practice && practice.gradedTotal > 0
@@ -248,14 +248,14 @@ export default async function LearnerProfilePage() {
             <div className="rounded-xl border border-border/60 bg-muted/15 p-4">
               <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Streak</p>
               <p className="mt-1 text-2xl font-bold tabular-nums text-primary">
-                {premiumSnapshot.studyStreakDays > 0 ? premiumSnapshot.studyStreakDays : "—"}
+                {premiumSnapshot.studyStreakDays > 0 ? premiumSnapshot.studyStreakDays : "N/A"}
               </p>
               <p className="text-xs text-muted-foreground">Days with activity</p>
             </div>
             <div className="rounded-xl border border-border/60 bg-muted/15 p-4">
               <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Flashcards</p>
               <p className="mt-1 text-2xl font-bold tabular-nums text-primary">
-                {fc ? fc.cardsReviewedTotal : "—"}
+                {fc ? fc.cardsReviewedTotal : "N/A"}
               </p>
               <p className="text-xs text-muted-foreground">Reviews logged</p>
             </div>
@@ -264,7 +264,7 @@ export default async function LearnerProfilePage() {
             <div className="mt-5 rounded-xl border border-role-cta/20 bg-role-cta-soft p-4">
               <p className="text-xs font-semibold uppercase tracking-wide text-primary">Readiness</p>
               <p className="mt-1 text-2xl font-bold tabular-nums text-[var(--theme-heading-text)]">
-                {readiness.score != null ? `${readiness.score}/100` : "—"}
+                {readiness.score != null ? `${readiness.score}/100` : "N/A"}
                 <span className="ml-2 text-base font-semibold text-muted-foreground">
                   {readinessBandLabel(readiness.band)}
                 </span>
@@ -288,7 +288,7 @@ export default async function LearnerProfilePage() {
                     .filter((f) => f.points > 0)
                     .slice(0, 4)
                     .map((f) => f.label)
-                    .join(" · ") || "Keep practicing—signals will sharpen."}
+                    .join(" · ") || "Keep practicing. Signals will sharpen."}
                 </p>
               ) : null}
             </div>
@@ -326,7 +326,7 @@ export default async function LearnerProfilePage() {
                         </span>
                       ) : null}
                       <p className="mt-1 text-xs text-muted-foreground">
-                        {acc != null ? `${acc}% accuracy` : "—"} · {w.missed} miss{w.missed === 1 ? "" : "es"}
+                        {acc != null ? `${acc}% accuracy` : "N/A"} · {w.missed} miss{w.missed === 1 ? "" : "es"}
                       </p>
                       <div className="mt-2 flex flex-wrap gap-3">
                         <Link href={remediationTopicDrillHref(w.topic)} className="text-xs font-semibold text-primary underline">
@@ -342,7 +342,7 @@ export default async function LearnerProfilePage() {
               </ul>
               {topicPerf.weakTopics.length === 0 ? (
                 <p className="mt-2 text-sm text-muted-foreground">
-                  No weak-topic signal yet—complete a graded bank block or practice test to populate this list.
+                  No weak-topic signal yet. Complete a graded bank block or practice test to populate this list.
                 </p>
               ) : null}
             </div>

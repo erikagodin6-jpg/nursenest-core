@@ -175,7 +175,7 @@ export function buildNormalizedTeachingPayload(row: ExamQuestionTeachingRow): No
     distractorNotes ??
     (isSata
       ? "For each option: decide if it is fully true in this scenario (select) or if it is unsafe, incomplete, or off-target (do not select). Common misses ignore a stem keyword, exceed scope, or treat a partial truth as sufficient."
-      : "For each incorrect option: name why it fails the stem—wrong priority, unsafe action, outside scope, or a plausible but less urgent choice.");
+      : "For each incorrect option, name why it fails the stem (wrong priority, unsafe action, outside scope, or a plausible but less urgent choice).");
 
   const sections: Array<{ id: string; heading: string; body: string }> = [];
 

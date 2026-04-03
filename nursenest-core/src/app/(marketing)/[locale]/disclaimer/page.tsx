@@ -9,7 +9,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const path = `/${locale}/disclaimer`;
   return {
     title: "Educational Disclaimer | NurseNest",
-    description: "NurseNest is for educational use only—not medical advice or a guarantee of exam results.",
+    description: "NurseNest is for educational use only. It is not medical advice and does not guarantee exam results.",
     alternates: { canonical: absoluteUrl(path) },
     robots: { index: true, follow: true },
   };

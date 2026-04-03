@@ -146,7 +146,7 @@ export async function pickPracticeQuestionIds(
       return {
         ok: false,
         message:
-          "No weak areas yet. Answer graded questions, finish a mock, or complete a practice test—then try weak mode again.",
+          "No weak areas yet. Answer graded questions, finish a mock, or complete a practice test. Then try weak mode again.",
       };
     }
     const names = plan.dbTopicNames;

@@ -273,7 +273,7 @@ export function PricingPageClient({
     monthly: "For students who want flexibility while building consistent weekly momentum.",
     "3-month": "For learners in the last 8-12 weeks who need focused, high-yield readiness work.",
     "6-month": "For busy schedules that need a practical runway without rushing.",
-    yearly: "For comprehensive prep across lessons, question bank depth, and exam-day confidence.",
+    yearly: "For long-horizon prep across lessons, question bank depth, and exam-day confidence.",
   };
 
   const planOutcomeLines: Record<BillingDuration, string[]> = {
@@ -326,7 +326,7 @@ export function PricingPageClient({
     <main className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
       <header className="border-b border-[var(--theme-card-border)] pb-10">
         <p className="sr-only">{heading}</p>
-        <p className="text-xs font-semibold uppercase tracking-wide text-primary">{t("pages.pricing.title")}</p>
+        <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("pages.pricing.title")}</p>
         <h1 className="mt-2 text-balance text-3xl font-bold leading-tight text-[var(--theme-heading-text)] sm:text-4xl">
           {heroHeadline}
         </h1>
@@ -334,19 +334,19 @@ export function PricingPageClient({
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{intro}</p>
 
         <p className="mt-4 text-sm text-[var(--theme-body-text)]">{t("pages.pricing.hero.trustLine")}</p>
-        <p className="mt-2 inline-flex rounded-full border border-role-cta/25 bg-role-cta-soft px-3 py-1 text-xs font-semibold text-role-cta-on-soft">
+        <p className="mt-2 inline-flex rounded-full border border-[var(--border-subtle)] bg-[var(--bg-inset)] px-3 py-1 text-xs font-medium text-[var(--theme-body-text)]">
           Most students choose a plan that matches their time-to-exam window.
         </p>
 
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
           <Link
             href={tryQuestionsHref}
-            className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-role-cta px-6 py-3 text-sm font-semibold text-role-cta-foreground shadow-[0_6px_18px_var(--role-cta-shadow)] transition hover:bg-role-cta-hover"
+            className="nn-btn-primary inline-flex min-h-[48px] items-center justify-center px-6 py-3 text-sm font-semibold transition"
           >
             Start studying now
             <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
-          <Link href={tryQuestionsHref} className="inline-flex items-center text-sm font-semibold text-primary hover:underline">
+          <Link href={tryQuestionsHref} className="nn-link-quiet inline-flex items-center text-sm font-semibold">
             See weak-area targeting first
           </Link>
         </div>
@@ -358,15 +358,15 @@ export function PricingPageClient({
         <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">{t("pages.pricing.proof.title")}</h2>
         <ul className="mt-4 space-y-3 text-sm leading-relaxed text-[var(--theme-body-text)]">
           <li className="flex gap-2">
-            <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
+            <Check className="nn-trust-mark mt-0.5 h-4 w-4 shrink-0" aria-hidden />
             <span>{t("pages.pricing.proof.line1")}</span>
           </li>
           <li className="flex gap-2">
-            <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
+            <Check className="nn-trust-mark mt-0.5 h-4 w-4 shrink-0" aria-hidden />
             <span>{t("pages.pricing.proof.line2")}</span>
           </li>
           <li className="flex gap-2">
-            <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
+            <Check className="nn-trust-mark mt-0.5 h-4 w-4 shrink-0" aria-hidden />
             <span>{t("pages.pricing.proof.line3")}</span>
           </li>
         </ul>
@@ -389,7 +389,7 @@ export function PricingPageClient({
             <ul className="mt-2 space-y-1.5 text-sm">
               <li className="flex justify-between border-b border-dashed border-border pb-1">
                 <span>Fluid balance</span>
-                <span className="font-medium text-primary">Review</span>
+                <span className="font-medium text-[var(--role-heat-text)]">Review</span>
               </li>
               <li className="flex justify-between border-b border-dashed border-border pb-1">
                 <span>Infection control</span>
@@ -397,7 +397,7 @@ export function PricingPageClient({
               </li>
               <li className="flex justify-between pt-0.5">
                 <span>Med admin</span>
-                <span className="font-medium text-primary">Review</span>
+                <span className="font-medium text-[var(--role-heat-text)]">Review</span>
               </li>
             </ul>
             <p className="mt-2 text-[11px] text-muted-foreground">Illustrative breakdown. Your report uses live data.</p>
@@ -443,7 +443,7 @@ export function PricingPageClient({
 
       <div className="nn-accent-soft-ring mt-10 rounded-xl border border-[var(--border-subtle,var(--theme-card-border))] px-4 py-3 text-sm text-muted-foreground">
         <p>{t("pages.pricing.institutionalBanner")}</p>
-        <Link href={institutionalHref} className="mt-2 inline-block font-semibold text-primary hover:underline">
+        <Link href={institutionalHref} className="nn-link-quiet mt-2 inline-block font-semibold">
           {t("pages.pricing.institutionalLink")} →
         </Link>
       </div>
@@ -471,13 +471,9 @@ export function PricingPageClient({
             type="button"
             onClick={() => setSegment(id)}
             className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
-              id === "rn"
-                ? segment === id
-                  ? "bg-role-cta px-5 py-2.5 text-base text-role-cta-foreground shadow-md ring-2 ring-role-cta/25"
-                  : "border-2 border-role-cta/30 bg-card px-5 py-2.5 text-base hover:bg-[var(--surface-interactive-hover)]"
-                : segment === id
-                  ? "bg-role-cta text-role-cta-foreground"
-                  : "border border-border bg-card hover:bg-[var(--surface-interactive-hover)]"
+              segment === id
+                ? "bg-role-cta text-role-cta-foreground shadow-[0_4px_14px_var(--role-cta-shadow)]"
+                : "border border-[var(--border-medium)] bg-card text-[var(--theme-body-text)] hover:bg-[var(--surface-interactive-hover)]"
             }`}
           >
             {t(labelKey)}
@@ -490,14 +486,22 @@ export function PricingPageClient({
           <span className="text-sm text-muted-foreground">{t("pages.pricing.countryLabel")}</span>
           <button
             type="button"
-            className={`rounded-full px-3 py-1 text-xs font-semibold ${country === "CA" ? "bg-role-cta-soft text-role-cta-on-soft" : "border border-border"}`}
+            className={`rounded-full px-3 py-1 text-xs font-semibold ${
+              country === "CA"
+                ? "bg-[var(--surface-selected)] text-[var(--theme-heading-text)] ring-1 ring-[var(--border-medium)]"
+                : "border border-border text-[var(--theme-body-text)]"
+            }`}
             onClick={() => setCountry("CA")}
           >
             {t("pages.pricing.country.ca")}
           </button>
           <button
             type="button"
-            className={`rounded-full px-3 py-1 text-xs font-semibold ${country === "US" ? "bg-role-cta-soft text-role-cta-on-soft" : "border border-border"}`}
+            className={`rounded-full px-3 py-1 text-xs font-semibold ${
+              country === "US"
+                ? "bg-[var(--surface-selected)] text-[var(--theme-heading-text)] ring-1 ring-[var(--border-medium)]"
+                : "border border-border text-[var(--theme-body-text)]"
+            }`}
             onClick={() => setCountry("US")}
           >
             {t("pages.pricing.country.us")}
@@ -508,7 +512,9 @@ export function PricingPageClient({
       <section className="mt-10 grid gap-10 lg:grid-cols-2 lg:items-start">
         <div className="lg:max-w-xl lg:pr-2">
           <h2 className="text-2xl font-bold text-[var(--theme-heading-text)]">{narrative.headline}</h2>
-          {narrative.urgencyLine ? <p className="mt-2 text-sm font-medium text-primary">{narrative.urgencyLine}</p> : null}
+          {narrative.urgencyLine ? (
+            <p className="mt-2 text-sm font-medium text-[var(--role-heat-text)]">{narrative.urgencyLine}</p>
+          ) : null}
           <p className="mt-3 text-muted-foreground">{narrative.subhead}</p>
 
           <h3 className="mt-6 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
@@ -555,7 +561,7 @@ export function PricingPageClient({
               </div>
             </div>
             <div className="border-t border-[var(--border-subtle)] bg-[var(--bg-inset)] px-4 py-5 text-left">
-              <p className="text-xs font-semibold uppercase tracking-wide text-primary">{t("pages.pricing.preview.badge")}</p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("pages.pricing.preview.badge")}</p>
               <p className="mt-2 text-sm text-muted-foreground">{t("pages.pricing.preview.body")}</p>
             </div>
           </div>
@@ -583,21 +589,21 @@ export function PricingPageClient({
         <div className="mt-6 space-y-3 rounded-2xl border border-[var(--border-subtle,var(--theme-card-border))] bg-[var(--bg-section-alt)] p-5 text-sm leading-relaxed text-[var(--theme-body-text)] shadow-[var(--shadow-card)]">
           <p>
             {t("pages.pricing.get.afterLesson")}{" "}
-            <Link href={lessonsHubHref} className="font-semibold text-primary underline-offset-4 hover:underline">
+            <Link href={lessonsHubHref} className="nn-link-quiet font-semibold">
               {t("pages.pricing.get.linkLessons")}
             </Link>
             .{" "}
-            <Link href={tryQuestionsHref} className="font-semibold text-primary underline-offset-4 hover:underline">
+            <Link href={tryQuestionsHref} className="nn-link-quiet font-semibold">
               {t("pages.pricing.get.linkQuestions")}
             </Link>
           </p>
           <p>
             {t("pages.pricing.get.afterQuestions")}{" "}
-            <Link href={examsHref} className="font-semibold text-primary underline-offset-4 hover:underline">
+            <Link href={examsHref} className="nn-link-quiet font-semibold">
               {t("pages.pricing.get.linkExams")}
             </Link>
             .{" "}
-            <Link href={toolsHref} className="font-semibold text-primary underline-offset-4 hover:underline">
+            <Link href={toolsHref} className="nn-link-quiet font-semibold">
               {t("pages.pricing.get.linkTools")}
             </Link>
           </p>
@@ -608,7 +614,7 @@ export function PricingPageClient({
         <div>
           <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">{t("pages.pricing.use.title")}</h2>
           <div className="mt-4 rounded-2xl border border-[var(--theme-card-border)] bg-card p-5">
-            <p className="text-sm font-semibold text-primary">{t("pages.pricing.use.afterShiftTitle")}</p>
+            <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{t("pages.pricing.use.afterShiftTitle")}</p>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t("pages.pricing.use.afterShiftBody")}</p>
           </div>
           <div className="mt-4 rounded-2xl border border-dashed border-[var(--border-medium)] bg-[var(--accent-soft)] p-5">
@@ -620,15 +626,15 @@ export function PricingPageClient({
           <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">{t("pages.pricing.risk.title")}</h2>
           <ul className="mt-4 space-y-3 text-sm text-[var(--theme-body-text)]">
             <li className="flex gap-2">
-              <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
+              <Check className="nn-trust-mark mt-0.5 h-4 w-4 shrink-0" aria-hidden />
               {t("pages.pricing.risk.b0")}
             </li>
             <li className="flex gap-2">
-              <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
+              <Check className="nn-trust-mark mt-0.5 h-4 w-4 shrink-0" aria-hidden />
               {t("pages.pricing.risk.b1")}
             </li>
             <li className="flex gap-2">
-              <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
+              <Check className="nn-trust-mark mt-0.5 h-4 w-4 shrink-0" aria-hidden />
               {t("pages.pricing.risk.b2")}
             </li>
           </ul>
@@ -676,7 +682,7 @@ export function PricingPageClient({
               <th className="px-4 py-3 font-semibold" scope="col">
                 {" "}
               </th>
-              <th className="px-4 py-3 font-semibold text-primary" scope="col">
+              <th className="px-4 py-3 font-semibold text-[var(--theme-heading-text)]" scope="col">
                 NurseNest
               </th>
               <th className="px-4 py-3 font-semibold text-muted-foreground" scope="col">
@@ -703,7 +709,9 @@ export function PricingPageClient({
         <p className="mt-2 text-sm text-muted-foreground">{t("pages.pricing.billing.helper")}</p>
         <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{t("pages.pricing.billing.recurringDisclosure")}</p>
         <p className="mt-2 text-xs text-muted-foreground">{t("pages.pricing.checkout.recurringShort")}</p>
-        <p className="mt-2 text-xs font-medium text-primary">Cancel anytime. Choose the shortest plan that matches your exam timeline and comfort level.</p>
+        <p className="mt-2 text-xs font-medium text-[var(--role-heat-text)]">
+          Cancel anytime. Choose the shortest plan that matches your exam timeline and comfort level.
+        </p>
         {loadError ? <p className="mt-4 text-sm text-red-600">{loadError}</p> : null}
         {checkoutError ? <p className="mt-4 text-sm text-red-600">{checkoutError}</p> : null}
         {checkoutOpsHint ? (
@@ -722,15 +730,15 @@ export function PricingPageClient({
             />
             <span>
               {t("pages.pricing.checkout.policyAckStart")}
-              <Link href={termsHref} className="font-semibold text-primary underline-offset-4 hover:underline">
+              <Link href={termsHref} className="nn-link-quiet font-semibold">
                 {t("pages.pricing.checkout.policyTermsLabel")}
               </Link>
               {t("pages.pricing.checkout.policyAckBetween1")}
-              <Link href={privacyHref} className="font-semibold text-primary underline-offset-4 hover:underline">
+              <Link href={privacyHref} className="nn-link-quiet font-semibold">
                 {t("pages.pricing.checkout.policyPrivacyLabel")}
               </Link>
               {t("pages.pricing.checkout.policyAckBetween2")}
-              <Link href={refundHref} className="font-semibold text-primary underline-offset-4 hover:underline">
+              <Link href={refundHref} className="nn-link-quiet font-semibold">
                 {t("pages.pricing.checkout.policyRefundLabel")}
               </Link>
               {t("pages.pricing.checkout.policyAckEnd")}
@@ -744,12 +752,24 @@ export function PricingPageClient({
             <h3 className="text-lg font-semibold text-[var(--theme-heading-text)]">Starter access</h3>
             <p className="mt-2 text-xs leading-snug text-muted-foreground">Try exam-style questions and preview how NurseNest works before subscribing.</p>
             <ul className="mt-3 space-y-1.5 text-xs text-[var(--theme-body-text)]">
-              <li className="flex gap-1.5"><Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />Starter question sets</li>
-              <li className="flex gap-1.5"><Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />Basic rationale visibility</li>
-              <li className="flex gap-1.5"><Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />No payment required</li>
+              <li className="flex gap-1.5">
+                <Check className="nn-trust-mark mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
+                Starter question sets
+              </li>
+              <li className="flex gap-1.5">
+                <Check className="nn-trust-mark mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
+                Basic rationale visibility
+              </li>
+              <li className="flex gap-1.5">
+                <Check className="nn-trust-mark mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
+                No payment required
+              </li>
             </ul>
             <p className="mt-4 text-2xl font-bold">$0</p>
-            <Link href={tryQuestionsHref} className="mt-4 inline-flex w-full justify-center rounded-full border border-[var(--theme-card-border)] bg-card py-2.5 text-sm font-semibold text-[var(--theme-heading-text)] hover:border-primary/35">
+            <Link
+              href={tryQuestionsHref}
+              className="nn-btn-secondary mt-4 inline-flex w-full justify-center py-2.5 text-sm font-semibold"
+            >
               Start practicing
             </Link>
           </article>
@@ -761,7 +781,10 @@ export function PricingPageClient({
               <p className="mt-2 text-xs leading-snug text-muted-foreground">{planPersona[coreRow.duration]}</p>
               <ul className="mt-3 space-y-1.5 text-xs text-[var(--theme-body-text)]">
                 {planOutcomeLines[coreRow.duration].map((line) => (
-                  <li key={line} className="flex gap-1.5"><Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />{line}</li>
+                  <li key={line} className="flex gap-1.5">
+                    <Check className="nn-trust-mark mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
+                    {line}
+                  </li>
                 ))}
               </ul>
               <p className="mt-4 text-2xl font-bold">{coreRow.totalLabel}</p>
@@ -770,7 +793,7 @@ export function PricingPageClient({
                 type="button"
                 disabled={checkoutLoading || !policiesAccepted}
                 onClick={() => startCheckout(coreRow.duration)}
-                className="mt-4 w-full rounded-full bg-role-cta py-2.5 text-sm font-semibold text-role-cta-foreground shadow-[0_6px_18px_var(--role-cta-shadow)] disabled:opacity-60"
+                className="nn-btn-primary mt-4 w-full py-2.5 text-sm font-semibold disabled:opacity-60"
               >
                 Unlock full access
               </button>
@@ -779,18 +802,29 @@ export function PricingPageClient({
 
           {premiumRow ? (
             <article className="flex flex-col rounded-2xl border border-role-premium-border bg-role-premium-surface p-5 shadow-sm">
-              <p className="mb-2 inline-block w-fit rounded-full bg-role-cta px-2 py-0.5 text-xs font-bold text-role-cta-foreground">Premium · Most popular</p>
+              <p className="mb-2 inline-block w-fit rounded-full border border-role-premium-border bg-role-premium-surface px-2 py-0.5 text-xs font-bold text-role-premium-text">
+                Premium · Most popular
+              </p>
               <h3 className="text-lg font-semibold text-[var(--theme-heading-text)]">{t(DURATION_KEYS[premiumRow.duration])}</h3>
-              <p className="mt-2 text-xs leading-snug text-muted-foreground">Best for comprehensive prep with maximum runway and savings.</p>
+              <p className="mt-2 text-xs leading-snug text-muted-foreground">Best if you want the longest runway and lowest per-month cost.</p>
               <ul className="mt-3 space-y-1.5 text-xs text-[var(--theme-body-text)]">
-                <li className="flex gap-1.5"><Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />Full lessons, questions, and exam prep loop</li>
-                <li className="flex gap-1.5"><Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />Adaptive weak-area and readiness guidance</li>
-                <li className="flex gap-1.5"><Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />Best value per month for long prep</li>
+                <li className="flex gap-1.5">
+                  <Check className="nn-trust-mark mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
+                  Full lessons, questions, and exam prep loop
+                </li>
+                <li className="flex gap-1.5">
+                  <Check className="nn-trust-mark mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
+                  Adaptive weak-area and readiness guidance
+                </li>
+                <li className="flex gap-1.5">
+                  <Check className="nn-trust-mark mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
+                  Best value per month for long prep
+                </li>
               </ul>
               <p className="mt-4 text-2xl font-bold">{premiumRow.totalLabel}</p>
               <p className="text-sm text-muted-foreground">{premiumRow.monthlyEquivalentLabel} {t("pages.pricing.plan.avgSuffix")}</p>
               {premiumRow.savingsVsMonthlyPercent > 0 ? (
-                <p className="mt-2 text-xs font-semibold text-primary">
+                <p className="mt-2 text-xs font-semibold text-[var(--role-heat-text)]">
                   {t("pages.pricing.plan.saveVsMonthly", { pct: premiumRow.savingsVsMonthlyPercent })}
                 </p>
               ) : null}
@@ -798,7 +832,7 @@ export function PricingPageClient({
                 type="button"
                 disabled={checkoutLoading || !policiesAccepted}
                 onClick={() => startCheckout(premiumRow.duration)}
-                className="mt-4 w-full rounded-full bg-role-cta py-2.5 text-sm font-semibold text-role-cta-foreground shadow-[0_6px_18px_var(--role-cta-shadow)] disabled:opacity-60"
+                className="nn-btn-primary mt-4 w-full py-2.5 text-sm font-semibold disabled:opacity-60"
               >
                 Start studying now
               </button>
@@ -840,7 +874,7 @@ export function PricingPageClient({
             <Link
               key={item.labelKey}
               href={item.href}
-              className="rounded-xl border border-[var(--theme-card-border)] bg-card p-4 transition hover:border-primary/35"
+              className="rounded-xl border border-[var(--theme-card-border)] bg-card p-4 transition hover:border-[var(--border-medium)]"
             >
               <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{t(item.labelKey)}</p>
               <p className="mt-1 text-xs text-muted-foreground">{t(item.blurbKey)}</p>

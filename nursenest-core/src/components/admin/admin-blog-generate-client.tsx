@@ -60,7 +60,7 @@ export function AdminBlogGenerateClient() {
         setErr(json.error ?? "Request failed");
         return;
       }
-      setMsg(`Draft created: ${json.post?.slug ?? ""} — review in scheduler or edit via API.`);
+      setMsg(`Draft created: ${json.post?.slug ?? ""}. Review in scheduler or edit via API.`);
     } catch (e) {
       setErr(e instanceof Error ? e.message : String(e));
     } finally {
@@ -73,7 +73,7 @@ export function AdminBlogGenerateClient() {
       <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Single-post AI draft</h2>
       <p className="text-sm text-muted-foreground">
         Requires <code className="rounded bg-muted px-1">AI_ADMIN_GENERATION_ENABLED=true</code> and{" "}
-        <code className="rounded bg-muted px-1">AI_INTEGRATIONS_OPENAI_API_KEY</code>. One model call per submit — no batch timeouts.
+        <code className="rounded bg-muted px-1">AI_INTEGRATIONS_OPENAI_API_KEY</code>. One model call per submit. No batch timeouts.
       </p>
       <div className="grid gap-3 sm:grid-cols-2">
         <label className="block space-y-1">

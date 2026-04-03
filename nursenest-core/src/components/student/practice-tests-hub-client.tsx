@@ -136,7 +136,7 @@ export function PracticeTestsHubClient() {
   }
 
   function formatDuration(ms: number | null): string {
-    if (ms == null) return "—";
+    if (ms == null) return "N/A";
     const s = Math.round(ms / 1000);
     const m = Math.floor(s / 60);
     const r = s % 60;
@@ -332,7 +332,7 @@ export function PracticeTestsHubClient() {
               />
             </label>
           ) : (
-            <span className="text-xs text-muted-foreground">Untimed — elapsed time is still recorded when you finish.</span>
+            <span className="text-xs text-muted-foreground">Untimed. Elapsed time is still recorded when you finish.</span>
           )}
         </div>
 
@@ -362,7 +362,7 @@ export function PracticeTestsHubClient() {
                 <div>
                   <p className="font-medium text-foreground">{t.title || "Practice test"}</p>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    {t.questionCount} Q · {t.selectionMode ?? "—"} · {t.timedMode ? `timed ${t.timeLimitSec ? `${Math.round(t.timeLimitSec / 60)} min` : ""}` : "untimed"}
+                    {t.questionCount} Q · {t.selectionMode ?? "N/A"} · {t.timedMode ? `timed ${t.timeLimitSec ? `${Math.round(t.timeLimitSec / 60)} min` : ""}` : "untimed"}
                     {t.status === "COMPLETED" && t.accuracyPct != null ? ` · ${t.accuracyPct}% (${t.scoreCorrect}/${t.scoreTotal})` : null}
                     {t.status === "IN_PROGRESS" ? " · in progress" : null}
                     {t.status === "ABANDONED" ? " · abandoned" : null}

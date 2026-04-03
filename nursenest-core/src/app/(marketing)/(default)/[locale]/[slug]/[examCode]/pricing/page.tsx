@@ -27,7 +27,7 @@ export default async function ExamPathwayPricingPage({ params }: Props) {
       <p className="mt-3 text-[var(--theme-muted-text)]">
         {waitlist
           ? "Pricing for this pathway will open when the exam offering is finalized. Join the waitlist or explore other active tracks."
-          : `Checkout uses the ${pathway.stripeTier} subscription tier for ${pathway.countryCode} with content scoped to ${pathway.shortName}—not shared with other roles or countries.`}
+          : `Checkout uses the ${pathway.stripeTier} subscription tier for ${pathway.countryCode} with content scoped to ${pathway.shortName}, not shared with other roles or countries.`}
       </p>
 
       {waitlist ? (
@@ -44,7 +44,7 @@ export default async function ExamPathwayPricingPage({ params }: Props) {
           <p className="text-sm text-muted">
             Stripe checkout uses <strong className="text-foreground">country + tier</strong>. Choose{" "}
             <strong className="text-foreground">{pathway.stripeTier}</strong> with billing country{" "}
-            <strong className="text-foreground">{pathway.countryCode}</strong>—after payment, your NurseNest profile tier and
+            <strong className="text-foreground">{pathway.countryCode}</strong>. After payment, your NurseNest profile tier and
             country update from that plan so lessons, questions, and exams match this pathway.
           </p>
           <Link

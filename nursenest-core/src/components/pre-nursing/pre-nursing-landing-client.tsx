@@ -23,7 +23,7 @@ export function PreNursingLandingClient() {
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-[var(--theme-body-text)]">
             Strengthen sciences, terminology, and clinical reasoning before you commit to NCLEX-style prep. These modules are
-            free to use — <span className="font-medium text-foreground">no nursing subscription required</span> — so you can
+            free to use (<span className="font-medium text-foreground">no nursing subscription required</span>), so you can
             build habits first and add a paid exam pathway when the timing is right.
           </p>
           <p className="mt-3 max-w-2xl text-sm text-muted">

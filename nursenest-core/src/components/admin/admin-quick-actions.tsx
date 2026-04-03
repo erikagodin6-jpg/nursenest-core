@@ -37,7 +37,7 @@ export function AdminQuickActions() {
   return (
     <section className="rounded-2xl border border-border/80 bg-gradient-to-br from-primary/[0.06] via-transparent to-emerald-500/[0.05] p-6 shadow-sm">
       <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Quick actions</h2>
-      <p className="mt-1 text-sm text-muted-foreground">Operational shortcuts — all routes require admin access.</p>
+      <p className="mt-1 text-sm text-muted-foreground">Operational shortcuts. All routes require admin access.</p>
       <ul className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         {actions.map((a) => (
           <li key={a.href}>

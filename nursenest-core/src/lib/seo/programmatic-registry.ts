@@ -87,7 +87,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
     slug: "nclex-rn-test-bank",
     title: "NCLEX-RN Test Bank | Timed Sets & Category Breakdowns",
     description:
-      "Access a structured NCLEX-RN test bank with category performance views—ideal for weekly readiness checks before your authorization to test.",
+      "Access a structured NCLEX-RN test bank with category performance views, ideal for weekly readiness checks before your authorization to test.",
     h1: "NCLEX-RN test bank for disciplined, data-driven study",
     cluster: "exam-nclex",
     keywords: ["NCLEX-RN", "test bank"],
@@ -96,7 +96,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
         heading: "What a test bank should measure",
         level: 2,
         body: [
-          "A strong RN test bank exposes gaps across physiological adaptation, pharmacology, and reduction of risk—without letting you hide in one comfort topic.",
+          "A strong RN test bank exposes gaps across physiological adaptation, pharmacology, and reduction of risk, without letting you hide in one comfort topic.",
           `${SITE} surfaces category trends so you can rebalance study time toward domains that move your probability of success.`,
         ],
       },
@@ -113,7 +113,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
     slug: "nclex-rn-exam-prep",
     title: "NCLEX-RN Exam Prep | Lessons, Questions, and Mocks",
     description:
-      "Combine lessons, practice questions, and mock exams in one NCLEX-RN exam prep workflow—built for Canada and the United States.",
+      "Combine lessons, practice questions, and mock exams in one NCLEX-RN exam prep workflow, built for Canada and the United States.",
     h1: "NCLEX-RN exam prep that connects lessons to assessment",
     cluster: "exam-nclex",
     keywords: ["NCLEX-RN", "exam prep"],
@@ -148,7 +148,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
         level: 2,
         body: [
           "If you only grind questions, you can memorize distractor patterns without fixing the underlying rule. Short lesson blocks rebuild the rule, then questions test whether you can apply it under time pressure.",
-          "Use lessons when a category accuracy stays flat for two weeks despite more reps—usually a concept gap, not a volume gap.",
+          "Use lessons when category accuracy stays flat for two weeks despite more reps. Usually that is a concept gap, not a volume gap.",
         ],
       },
       {
@@ -194,7 +194,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
         heading: "Use the planner as a guardrail",
         level: 2,
         body: [
-          "Enter your exam authorization window so pacing suggestions stay realistic. Move blocks when shifts change—consistency beats perfect adherence.",
+          "Enter your exam authorization window so pacing suggestions stay realistic. Move blocks when shifts change, consistency beats perfect adherence.",
           `Readiness in ${SITE} is a next-step signal: if it flags pharmacology while your self-story says you are "fine," trust the data for one week.`,
         ],
       },
@@ -211,7 +211,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
     slug: "nclex-pn-practice-questions",
     title: "NCLEX-PN Practice Questions | US Practical Nursing Scope",
     description:
-      "NCLEX-PN practice with PN-level delegation, pharmacology, and prioritization—separate from RN management stems. Rationales explain scope edges, not generic tips.",
+      "NCLEX-PN practice with PN-level delegation, pharmacology, and prioritization, separate from RN management stems. Rationales explain scope edges, not generic tips.",
     h1: "NCLEX-PN practice questions for US candidates",
     cluster: "exam-pn",
     keywords: ["NCLEX-PN", "LPN", "PN", "practice questions"],
@@ -235,7 +235,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
         heading: "When to add Canadian PN resources",
         level: 2,
         body: [
-          "If you are preparing for Canadian entry-to-practice, use the REx-PN hub and its practice page—billing language and case framing follow Canadian regulators.",
+          "If you are preparing for Canadian entry-to-practice, use the REx-PN hub and its practice page, billing language and case framing follow Canadian regulators.",
         ],
       },
     ],
@@ -285,7 +285,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
         heading: "Stay inside your entry-to-practice profile",
         level: 2,
         body: [
-          "Your regulator publishes competencies—use them to prioritize community care, chronic illness, and acute changes PN scope can address.",
+          "Your regulator publishes competencies, use them to prioritize community care, chronic illness, and acute changes PN scope can address.",
           "Pair each lesson block with a short question set the same week so knowledge converts to decision speed.",
         ],
       },
@@ -338,7 +338,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
     slug: "canada-np-exam-prep",
     title: "Canadian NP Exam Prep | Clinical Decision Training",
     description:
-      "How to prepare for Canadian nurse practitioner exams with case-based questions, guideline-linked lessons, and readiness that tracks reasoning gaps—not recall-only drills.",
+      "How to prepare for Canadian nurse practitioner exams with case-based questions, guideline-linked lessons, and readiness that tracks reasoning gaps, not recall-only drills.",
     h1: "Canadian NP exam prep for advanced clinical judgment",
     cluster: "exam-np",
     keywords: ["Canadian NP", "CNPLE", "exam prep", "nurse practitioner Canada"],
@@ -377,7 +377,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
     slug: "cnple-practice-questions",
     title: "CNPLE Practice Questions | Canadian NP Clinical Cases",
     description:
-      "Practice for the Canadian NP exam (CNPLE) with management-focused stems, pharmacology in context, and rationales tied to clinical reasoning—not undergraduate trivia.",
+      "Practice for the Canadian NP exam (CNPLE) with management-focused stems, pharmacology in context, and rationales tied to clinical reasoning, not undergraduate trivia.",
     h1: "CNPLE practice questions for Canadian NP candidates",
     cluster: "exam-np",
     keywords: ["CNPLE", "Canadian NP", "practice questions"],
@@ -401,7 +401,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
         heading: "How to review misses",
         level: 2,
         body: [
-          "For each error, name whether you missed a diagnosis fork, a contraindication, a monitoring step, or a follow-up interval. That label becomes your next study unit—not re-reading the whole chapter.",
+          "For each error, name whether you missed a diagnosis fork, a contraindication, a monitoring step, or a follow-up interval. That label becomes your next study unit, not re-reading the whole chapter.",
         ],
       },
     ],
@@ -441,7 +441,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
     slug: "np-clinical-cases",
     title: "NP Clinical Cases | Decision Patterns for Exam Prep",
     description:
-      "Train NP-level clinical reasoning with case patterns: red flags, diagnostic forks, treatment sequencing, and when to escalate—mapped to how advanced practice exams are written.",
+      "Train NP-level clinical reasoning with case patterns: red flags, diagnostic forks, treatment sequencing, and when to escalate, mapped to how advanced practice exams are written.",
     h1: "NP clinical cases for exam-style reasoning",
     cluster: "exam-np",
     keywords: ["NP cases", "clinical reasoning", "nurse practitioner"],
@@ -477,7 +477,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
         level: 2,
         body: [
           "Master ABG interpretation, ventilator modes and weaning criteria, obstructive versus restrictive patterns, and emergency airway priorities.",
-          "Use question practice to stress-test rapid pattern recognition—exam items often compress time the way shift work does.",
+          "Use question practice to stress-test rapid pattern recognition, exam items often compress time the way shift work does.",
         ],
       },
     ],
@@ -513,7 +513,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
         heading: "Translate theory into result interpretation",
         level: 2,
         body: [
-          "Focus on delta checks, interference, critical values, and pre-analytical error sources—common exam themes that mirror bench accountability.",
+          "Focus on delta checks, interference, critical values, and pre-analytical error sources, common exam themes that mirror bench accountability.",
         ],
       },
     ],
@@ -540,7 +540,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
     slug: "cardiovascular-nursing-practice-questions",
     title: "Cardiovascular Nursing Practice Questions",
     description:
-      "HF, ACS, arrhythmia, and hemodynamic scenarios for nursing practice—prioritization and monitoring focused.",
+      "HF, ACS, arrhythmia, and hemodynamic scenarios for nursing practice, prioritization and monitoring focused.",
     h1: "Cardiovascular nursing practice questions for acute and chronic care",
     cluster: "category",
     keywords: ["cardiovascular", "nursing", "practice questions"],
@@ -550,7 +550,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
         level: 2,
         body: [
           "Watch for perfusion versus congestion tradeoffs, antiarrhythmic safety, anticoagulation education, and early sepsis overlap with cardiac decline.",
-          "Track your miss log by symptom cluster—not by isolated facts—to build transferable rules.",
+          "Track your miss log by symptom cluster, not by isolated facts, to build transferable rules.",
         ],
       },
     ],
@@ -565,7 +565,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
     keywords: ["respiratory", "nursing"],
     sections: [
       {
-        heading: "SpO₂ is a clue—not the whole story",
+        heading: "SpO₂ is a clue, not the whole story",
         level: 2,
         body: [
           "Combine work of breathing, mental status, and perfusion with saturation trends. Exams love hidden fatigue despite acceptable numbers.",
@@ -613,7 +613,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
     slug: "med-surg-nursing-practice-questions",
     title: "Medical-Surgical Nursing Practice Questions",
     description:
-      "Perioperative, GI, renal, endocrine, and multisystem med-surg scenarios for comprehensive nursing review.",
+      "Perioperative, GI, renal, endocrine, and multisystem med-surg scenarios for full med-surg review.",
     h1: "Medical-surgical nursing practice questions across core systems",
     cluster: "category",
     keywords: ["med-surg", "nursing"],
@@ -640,7 +640,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
         heading: "Build memory anchors, not isolated numbers",
         level: 2,
         body: [
-          "Group labs by organ system and by emergent pattern—renal failure panels versus hepatic panels versus sepsis screens.",
+          "Group labs by organ system and by emergent pattern, renal failure panels versus hepatic panels versus sepsis screens.",
           "Pair each abnormal value with an assessment action: recheck, hold dose, notify provider, or escalate monitoring.",
         ],
       },
@@ -675,7 +675,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
     slug: "clinical-cheat-sheets-nursing",
     title: "Clinical Cheat Sheets for Nursing Students",
     description:
-      "High-yield summaries for assessments, fluids, wounds, and common protocols—paired with links to deeper lessons.",
+      "High-yield summaries for assessments, fluids, wounds, and common protocols, paired with links to deeper lessons.",
     h1: "Clinical cheat sheets nursing students can trust on shift",
     cluster: "hub",
     keywords: ["clinical", "cheat sheets", "nursing"],
@@ -702,7 +702,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
         heading: "Protect sleep, then protect learning cadence",
         level: 2,
         body: [
-          "Short daily question blocks beat sporadic cramming. Tie each block to patients you saw when possible—context accelerates memory.",
+          "Short daily question blocks beat sporadic cramming. Tie each block to patients you saw when possible, context accelerates memory.",
         ],
       },
     ],
@@ -730,7 +730,7 @@ export const PROGRAMMATIC_SEO_PAGES: SeoPageDefinition[] = [
     title: "Nursing Flashcards for NCLEX & Clinical Courses",
     description:
       "How to use flashcards with spaced repetition alongside NCLEX-style questions for durable retention.",
-    h1: "Nursing flashcards that complement—not replace—clinical judgment practice",
+    h1: "Nursing flashcards that complement, not replace, clinical judgment practice",
     cluster: "study-format",
     keywords: ["flashcards", "NCLEX"],
     sections: [

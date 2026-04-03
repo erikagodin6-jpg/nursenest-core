@@ -6,7 +6,7 @@ export const ADMIN_BLOG_TARGET_EXAM_OPTIONS: readonly { value: string; label: st
   { value: "NCLEX-RN", label: "NCLEX-RN (US/CAN RN)" },
   { value: "NCLEX-PN", label: "NCLEX-PN (US PN)" },
   { value: "REx-PN", label: "REx-PN (Canada PN)" },
-  { value: "NP-US", label: "NP — US board tracks" },
+  { value: "NP-US", label: "NP: US board tracks" },
   { value: "CNPLE", label: "CNPLE / NP (Canada)" },
   { value: "Allied", label: "Allied health" },
 ] as const;

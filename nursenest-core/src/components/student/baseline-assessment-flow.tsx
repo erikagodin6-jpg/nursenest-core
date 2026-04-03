@@ -157,7 +157,7 @@ export function BaselineAssessmentFlow() {
           <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Your baseline snapshot</h2>
           <p className="mt-2 text-sm text-[var(--theme-body-text)]">
             You answered <strong>{result.correctCount}</strong> of <strong>{result.total}</strong> questions correctly (
-            <strong>{pct}%</strong>). This is a quick orientation check—not a pass/fail exam.
+            <strong>{pct}%</strong>). This is a quick orientation check, not a pass/fail exam.
           </p>
         </div>
 
@@ -180,7 +180,7 @@ export function BaselineAssessmentFlow() {
           </div>
         ) : (
           <p className="text-sm text-muted">
-            No single topic stood out from missed items this time—your pathway mix still guides what you see next.
+            No single topic stood out from missed items this time. Your pathway mix still guides what you see next.
           </p>
         )}
 
@@ -191,7 +191,7 @@ export function BaselineAssessmentFlow() {
               <Link href="/app/lessons" className="font-medium text-primary hover:underline">
                 Review lessons
               </Link>
-              <span className="text-muted"> — align with your exam blueprint.</span>
+              <span className="text-muted"> Align with your exam blueprint.</span>
             </li>
             <li>
               <Link href={qbankHref} className="font-medium text-primary hover:underline">
@@ -199,15 +199,15 @@ export function BaselineAssessmentFlow() {
               </Link>
               <span className="text-muted">
                 {firstWeakTopic
-                  ? ` — start with “${firstWeakTopic}” or pick another topic in the menu.`
-                  : " — pick a topic from the menu to drill recent items."}
+                  ? ` Start with “${firstWeakTopic}” or pick another topic in the menu.`
+                  : " Pick a topic from the menu to drill recent items."}
               </span>
             </li>
             <li>
               <Link href="/app/flashcards/weak-areas" className="font-medium text-primary hover:underline">
                 Weak-area flashcards
               </Link>
-              <span className="text-muted"> — short bursts on high-yield facts.</span>
+              <span className="text-muted"> Short bursts on high-yield facts.</span>
             </li>
           </ul>
         </div>

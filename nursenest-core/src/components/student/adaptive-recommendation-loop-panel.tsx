@@ -46,7 +46,7 @@ export function AdaptiveRecommendationLoopPanel({
       <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Priority review loop</p>
       <p className="mt-1 text-sm text-foreground">
         <span className="font-medium">Prioritized topic:</span>{" "}
-        {data.prioritizedTopic ?? "—"}
+        {data.prioritizedTopic ?? "N/A"}
         {data.prioritizedSubtopic ? ` · ${data.prioritizedSubtopic}` : ""}
       </p>
       <p className="mt-1 text-xs text-muted-foreground">

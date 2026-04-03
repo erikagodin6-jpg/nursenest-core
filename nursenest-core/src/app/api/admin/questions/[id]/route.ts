@@ -96,7 +96,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
   let topic = existing.topic;
   if (d.categoryId) {
     const cat = await prisma.category.findUnique({ where: { id: d.categoryId } });
-    topic = [cat?.name, d.topicTag ?? undefined].filter(Boolean).join(" — ") || cat?.slug || topic;
+    topic = [cat?.name, d.topicTag ?? undefined].filter(Boolean).join(" · ") || cat?.slug || topic;
   } else if (d.topicTag !== undefined) {
     topic = d.topicTag ?? existing.topic;
   }

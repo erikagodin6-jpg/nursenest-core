@@ -47,7 +47,7 @@ export default async function LessonsPage({ searchParams }: Props) {
     return (
       <p className="nn-card p-6 text-sm text-muted">
         We couldn’t finish checking your subscription (database or billing lookup failed). This is not the same as “no
-        plan”—refresh shortly, or sign in again if it keeps happening.
+        plan.” Refresh shortly, or sign in again if it keeps happening.
       </p>
     );
   }
@@ -189,7 +189,7 @@ export default async function LessonsPage({ searchParams }: Props) {
       <p className="mt-2 text-sm text-muted">Continue modules, then lock in retention with the question bank the same day.</p>
       <p className="mt-2 text-sm text-muted">
         Paginated list: <strong className="text-foreground">{APP_LESSONS_PAGE_SIZE}</strong> app lessons per page (newest
-        first) scoped to your region and plan—use Next below when you have more. Exam pathway lessons (NCLEX-RN, REx-PN,
+        first) scoped to your region and plan. Use Next below when you have more. Exam pathway lessons (NCLEX-RN, REx-PN,
         FNP, …) live under{" "}
         <Link className="font-medium text-primary underline" href="/exam-lessons">
           lessons by exam pathway

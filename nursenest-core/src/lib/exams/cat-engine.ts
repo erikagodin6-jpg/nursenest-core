@@ -317,7 +317,7 @@ export function buildCatReport(state: CatAdaptiveState): CatExamReport {
   }
   if (decision === "uncertain") {
     suggestedNextSteps.push(
-      "Your estimate sat near the cutoff—add two full-length timed blocks this week to stabilize performance.",
+      "Your estimate sat near the cutoff. Add two full-length timed blocks this week to stabilize performance.",
     );
   }
   if (decision === "fail") {

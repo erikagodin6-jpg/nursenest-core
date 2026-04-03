@@ -35,7 +35,7 @@ export default async function PracticeTestsPage() {
         </div>
         <h1 className="text-3xl font-bold">Practice tests</h1>
         <p className="mt-2 text-sm text-muted">
-          Build timed or untimed tests from your question pool, save progress, and review scores with topic breakdowns —
+          Build timed or untimed tests from your question pool, save progress, and review scores with topic breakdowns,
           included with an active plan.
         </p>
         <div className="mt-6">

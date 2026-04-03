@@ -36,7 +36,7 @@ export default async function AdminSeoPage() {
           <p className="text-xs font-semibold uppercase tracking-wide text-primary">Admin</p>
           <h1 className="mt-1 text-3xl font-bold text-[var(--theme-heading-text)]">SEO backlog</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Blog posts with missing title, description, or excerpt — edit in scheduler or via API.
+            Blog posts with missing title, description, or excerpt. Edit in scheduler or via API.
           </p>
         </div>
         <Link href="/admin" className="text-sm font-semibold text-primary underline">
@@ -70,7 +70,7 @@ export default async function AdminSeoPage() {
                       <div className="text-xs text-muted-foreground">{p.title}</div>
                     </td>
                     <td className="py-2">{p.postStatus}</td>
-                    <td className="py-2 text-xs">{issues.join(", ") || "—"}</td>
+                    <td className="py-2 text-xs">{issues.join(", ") || "N/A"}</td>
                   </tr>
                 );
               })}
@@ -78,7 +78,7 @@ export default async function AdminSeoPage() {
           </table>
         </div>
         <p className="mt-4 text-xs text-muted-foreground">
-          Pathway lesson SEO gaps are summarized on the command center — full pathway editor uses lesson admin routes. Structured
+          Pathway lesson SEO gaps are summarized on the command center. Full pathway editor uses lesson admin routes. Structured
           data / OG tags for marketing pages: verify per-route <code className="rounded bg-muted px-1">metadata</code> in App Router.
         </p>
       </section>

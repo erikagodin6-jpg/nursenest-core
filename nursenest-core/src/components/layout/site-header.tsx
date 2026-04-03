@@ -102,33 +102,14 @@ export function SiteHeader() {
 
   const examNavStrip = useMemo(() => getExamNavStripItems(region), [region]);
 
-  /** Tighter marketing homepage chrome: pathway entry lives in the hero; strip duplicates noise. */
   const isMarketingHome = pathWithoutLocale === "/" || pathWithoutLocale === "";
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[var(--divider,var(--theme-nav-border))] bg-[color-mix(in_srgb,var(--theme-nav-bg)_92%,var(--theme-primary))]/90 shadow-sm backdrop-blur-xl transition-all duration-300">
-      {!isMarketingHome ? (
-        <div className="hidden bg-[var(--theme-topbar-bg)] text-[var(--theme-topbar-text)] md:block">
-          <div className="mx-auto flex h-6 max-w-7xl items-center justify-center gap-1 px-2 text-[10px] font-medium sm:h-7 sm:gap-5 sm:px-4 sm:text-[11px] lg:px-8">
-            {topLinks.map((item, index) => (
-              <div key={item.href} className="flex items-center gap-1 sm:gap-5">
-                <Link href={item.href} className="flex items-center gap-1.5 rounded-full px-2 py-0.5 hover:bg-white/15">
-                  <item.icon className="h-3 w-3" />
-                  <span>{item.label}</span>
-                </Link>
-                {index < topLinks.length - 1 && (
-                  <span className="hidden opacity-30 sm:inline" aria-hidden="true">
-                    |
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      ) : null}
+    <header className="sticky top-0 z-50 border-b border-[var(--divider,var(--theme-nav-border))] bg-[color-mix(in_srgb,var(--theme-nav-bg)_94%,var(--theme-primary))]/92 backdrop-blur-md transition-colors duration-200">
+      {/* Single primary bar: promo links live under “Explore” / mobile menu — removes stacked top bar height */}
 
       <div
-        className={`mx-auto flex max-w-7xl items-center justify-between gap-2 px-2 sm:gap-3 sm:px-4 lg:px-8 ${isMarketingHome ? "min-h-[3.25rem] py-1.5 md:min-h-[3.5rem] md:py-2" : "py-2 md:py-2.5 lg:py-3"}`}
+        className={`mx-auto flex max-w-7xl items-center justify-between gap-2 px-2 sm:gap-2 sm:px-4 lg:px-8 ${isMarketingHome ? "py-1" : "py-1 sm:py-1.5"}`}
       >
         <Link
           href={localizeHref("/")}
@@ -146,18 +127,16 @@ export function SiteHeader() {
             {t("nav.home")}
           </Link>
 
-          {isMarketingHome ? (
-            <NavDetails label={t("nav.marketingExplore")} dense>
-              {topLinks.map((item) => (
-                <NavLinkItem key={item.href} href={item.href}>
-                  <span className="flex items-center gap-2">
-                    <item.icon className="h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden />
-                    {item.label}
-                  </span>
-                </NavLinkItem>
-              ))}
-            </NavDetails>
-          ) : null}
+          <NavDetails label={t("nav.marketingExplore")} dense={isMarketingHome}>
+            {topLinks.map((item) => (
+              <NavLinkItem key={item.href} href={item.href}>
+                <span className="flex items-center gap-2">
+                  <item.icon className="h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden />
+                  {item.label}
+                </span>
+              </NavLinkItem>
+            ))}
+          </NavDetails>
 
           <NavDetails label={t("nav.study")} dense={isMarketingHome}>
             <NavLinkItem href={localizeHref("/lessons")}>{t("nav.lessons")}</NavLinkItem>
@@ -255,9 +234,9 @@ export function SiteHeader() {
         </div>
       </div>
 
-      {!isMarketingHome ? (
-        <div className="hidden border-t border-role-cta/15 bg-role-cta-soft md:block">
-        <div className="mx-auto flex min-h-8 max-w-7xl flex-nowrap items-center gap-x-0.5 overflow-x-auto overflow-y-hidden px-2 py-1 sm:px-4 lg:px-8 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      {/* Exam strip: same on homepage and inner pages (RN / PN / NP / Allied from getExamNavStripItems). Was hidden on `/`, which made NP invisible in “main” nav on home. */}
+      <div className="hidden border-t border-role-cta/15 bg-role-cta-soft md:block">
+        <div className="mx-auto flex max-w-7xl flex-nowrap items-center gap-x-0.5 overflow-x-auto overflow-y-hidden px-2 py-0.5 sm:px-4 lg:px-8 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <Link
             href={localizeHref("/exam-lessons")}
             className="shrink-0 px-1.5 py-0.5 text-xs font-medium text-role-cta-on-soft/90 hover:text-role-cta-on-soft lg:px-2"
@@ -302,8 +281,7 @@ export function SiteHeader() {
             {t("footer.faq")}
           </Link>
         </div>
-        </div>
-      ) : null}
+      </div>
 
       {mobileOpen && (
         <div className="fixed inset-0 z-[200] md:hidden">
@@ -316,7 +294,7 @@ export function SiteHeader() {
                 className="flex shrink-0 items-center gap-2 overflow-visible"
                 aria-label="NurseNest home"
               >
-                <SiteBrandLogoMark />
+                <SiteBrandLogoMark className={HOME_BRAND_LOGO_MARK_CLASSNAME} />
               </Link>
               <Button type="button" variant="ghost" className="h-9 w-9 p-0" aria-label={t("nav.closeMenu")} onClick={() => setMobileOpen(false)}>
                 <X className="h-5 w-5" />

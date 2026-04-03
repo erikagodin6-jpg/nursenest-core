@@ -110,7 +110,7 @@ export function PreNursingStudyPlanClient() {
           { value: "unsure", label: "Not sure yet" },
           { value: "rn", label: "Registered Nurse (RN)" },
           { value: "pn", label: "Practical / Vocational Nurse (PN/LPN)" },
-          { value: "rpn", label: "Registered Practical Nurse — Canada (RPN)" },
+          { value: "rpn", label: "Registered Practical Nurse, Canada (RPN)" },
           { value: "np", label: "Nurse Practitioner (NP)" },
         ];
 
@@ -133,7 +133,7 @@ export function PreNursingStudyPlanClient() {
           >
             Sign in
           </Link>{" "}
-          to save a target readiness date and optional future pathway. Still free — no paid exam prep subscription needed.
+          to save a target readiness date and optional future pathway. Still free. No paid exam prep subscription needed.
         </p>
         <p className="text-sm text-muted">
           Guests can open every Pre-Nursing module; completion can stay on this device until you create an account.
@@ -170,11 +170,11 @@ export function PreNursingStudyPlanClient() {
           value={planType}
           onChange={(e) => setPlanType(e.target.value as PlanType)}
         >
-          <option value="unsure">I’m not sure yet — use a steady, rolling pace</option>
+          <option value="unsure">I’m not sure yet: use a steady, rolling pace</option>
           <option value="proposed">I have a target date (school start, readiness goal, etc.)</option>
         </select>
         <p className="mt-1 text-xs text-muted">
-          This is not your NCLEX or registration exam — use it to pace free Pre-Nursing work gently.
+          This is not your NCLEX or registration exam. Use it to pace free Pre-Nursing work gently.
         </p>
       </div>
 
@@ -193,7 +193,7 @@ export function PreNursingStudyPlanClient() {
           />
           {typeof d === "number" ? (
             <p className="mt-2 text-sm text-muted">
-              About <span className="font-semibold text-foreground">{d}</span> days until your target — adjust anytime.
+              About <span className="font-semibold text-foreground">{d}</span> days until your target. Adjust anytime.
             </p>
           ) : null}
         </div>
@@ -201,7 +201,7 @@ export function PreNursingStudyPlanClient() {
         <div className="rounded-xl border border-border bg-muted/30 px-4 py-3 text-sm text-muted">
           <p className="font-medium text-foreground">Unsure mode</p>
           <p className="mt-1">
-            We’ll suggest the next module in order and keep countdowns out of the way — add a date later if you want a
+            We’ll suggest the next module in order and keep countdowns out of the way. Add a date later if you want a
             gentle time horizon.
           </p>
         </div>
@@ -229,7 +229,7 @@ export function PreNursingStudyPlanClient() {
             </option>
           ))}
         </select>
-        <p className="mt-1 text-xs text-muted">Used for softer “what’s next” links on lesson pages — not a commitment.</p>
+        <p className="mt-1 text-xs text-muted">Used for softer “what’s next” links on lesson pages, not a commitment.</p>
       </div>
 
       {error ? <p className="text-sm text-destructive">{error}</p> : null}

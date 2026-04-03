@@ -198,7 +198,7 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
       data: {
         slug,
         title,
-        excerpt: excerpt.length >= 10 ? excerpt : `${title.slice(0, 200)} — draft excerpt; edit before publish.`,
+        excerpt: excerpt.length >= 10 ? excerpt : `${title.slice(0, 200)}. Draft excerpt; edit before publish.`,
         body: bodyHtml,
         exam: d.exam,
         targetKeyword: normalizedTopic || (d.targetKeyword ?? d.topic),
@@ -230,7 +230,7 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
         imageStatus: d.includeImage ? (d.includeAiImage ? BlogImageStatus.REQUESTED : BlogImageStatus.NONE) : BlogImageStatus.NONE,
         coverImagePrompt: d.includeAiImage ? `Educational nursing blog hero image about ${d.topic}. Focus keyword: ${d.targetKeyword ?? d.topic}.` : null,
         shortSummary: excerpt.slice(0, 220),
-        socialCaption: `${title} — ${excerpt.slice(0, 120)}...`,
+        socialCaption: `${title}. ${excerpt.slice(0, 120)}...`,
         promoBlurb: cta.text,
         updateNeeded: Boolean(thinWarning),
         rankingNote: thinWarning ?? null,

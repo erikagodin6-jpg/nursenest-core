@@ -83,7 +83,7 @@ export function AdminCommandCenter({ data }: { data: AdminCommandCenterData }) {
               Platform health & growth
             </h1>
             <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-              Live database metrics, subscription signals, content pipeline, and SEO backlog — one surface for daily ops.
+              Live database metrics, subscription signals, content pipeline, and SEO backlog on one surface for daily ops.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
@@ -127,7 +127,7 @@ export function AdminCommandCenter({ data }: { data: AdminCommandCenterData }) {
         </div>
         <p className="mt-3 text-[11px] text-muted-foreground">
           Conversion (learners → ever subscribed):{" "}
-          {t?.conversionRatePct != null ? `${t.conversionRatePct}%` : "—"} · Trial active: {fmt(data.users.trialActive)}
+          {t?.conversionRatePct != null ? `${t.conversionRatePct}%` : "N/A"} · Trial active: {fmt(data.users.trialActive)}
         </p>
       </section>
 
@@ -201,7 +201,7 @@ export function AdminCommandCenter({ data }: { data: AdminCommandCenterData }) {
             <Flame className="h-5 w-5 text-amber-600" aria-hidden />
             <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Needs attention</h2>
           </div>
-          <p className="mt-1 text-sm text-muted-foreground">Ranked by severity — tackle critical items first.</p>
+          <p className="mt-1 text-sm text-muted-foreground">Ranked by severity. Tackle critical items first.</p>
           <ul className="mt-4 space-y-3">
             {data.needsAttention.map((item, i) => (
               <li
@@ -263,7 +263,7 @@ export function AdminCommandCenter({ data }: { data: AdminCommandCenterData }) {
 
         <div className="mt-6 grid gap-6 lg:grid-cols-2">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Exam bank — rationale tiers</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Exam bank: rationale tiers</p>
             {examTierBar(data.contentQuality.corpus, data.contentQuality.snapshot.examQuestionsPublished) ?? (
               <p className="mt-2 text-sm text-muted-foreground">No published exam questions in scope.</p>
             )}
@@ -301,7 +301,7 @@ export function AdminCommandCenter({ data }: { data: AdminCommandCenterData }) {
                     <span className="inline-block h-2 w-2 rounded-full bg-emerald-600/90 align-middle" /> ≥{RATIONALE_MIN_WORDS}w{" "}
                     {fmt(data.contentQuality.snapshot.examQuestionsPublished.rationaleAcceptableOrStrong)}
                   </li>
-                  <li className="text-amber-800 dark:text-amber-200">Full tier split — refresh corpus snapshot in workbench.</li>
+                  <li className="text-amber-800 dark:text-amber-200">Full tier split. Refresh corpus snapshot in workbench.</li>
                 </>
               )}
             </ul>
@@ -333,13 +333,13 @@ export function AdminCommandCenter({ data }: { data: AdminCommandCenterData }) {
 
         {data.contentQuality.corpus ? (
           <div className="mt-6 border-t border-border/60 pt-5">
-            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Pathway lessons — worst rollups</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Pathway lessons: worst rollups</p>
             <ul className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
               {data.contentQuality.corpus.pathwayLessons.byPathway.slice(0, 6).map((r) => (
-                <li key={`${r.pathwayId}|${r.countryCode ?? "—"}|${r.tier ?? "—"}`} className="rounded-lg border border-border/50 bg-[var(--theme-card-bg)] px-2 py-1.5 text-xs">
+                <li key={`${r.pathwayId}|${r.countryCode ?? "N/A"}|${r.tier ?? "N/A"}`} className="rounded-lg border border-border/50 bg-[var(--theme-card-bg)] px-2 py-1.5 text-xs">
                   <p className="truncate font-mono">{r.pathwayId}</p>
                   <p className="text-muted-foreground">
-                    {r.countryCode ?? "—"} · {r.tier ?? "—"}
+                    {r.countryCode ?? "N/A"} · {r.tier ?? "N/A"}
                   </p>
                   <p className="mt-1 tabular-nums font-medium text-amber-900 dark:text-amber-100">
                     thin {fmt(r.thin)} · miss {fmt(r.missing)}
@@ -517,7 +517,7 @@ export function AdminCommandCenter({ data }: { data: AdminCommandCenterData }) {
         </div>
         {data.blog.overdueScheduled > 0 ? (
           <p className="mt-3 text-sm text-amber-800 dark:text-amber-200">
-            {data.blog.overdueScheduled} scheduled post(s) past <code className="rounded bg-muted px-1">publishAt</code> — run{" "}
+            {data.blog.overdueScheduled} scheduled post(s) past <code className="rounded bg-muted px-1">publishAt</code>. Run{" "}
             <code className="rounded bg-muted px-1">promoteScheduledBlogPosts</code> or cron.
           </p>
         ) : null}

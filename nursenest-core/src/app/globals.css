@@ -22,14 +22,18 @@ body {
 
   --text-hero: clamp(2.2rem, 4.85vw, 3.6rem);
   --text-section: clamp(1.7rem, 3.4vw, 2.4rem);
-  /* Tight above-the-fold: hero sits close under sticky header */
-  --space-hero-top: clamp(0rem, 0.6vw, 0.35rem);
-  --space-hero-bottom: clamp(1.15rem, 2.6vw, 2.35rem);
+  /* Hero flush under sticky header (no extra top breathing room token) */
+  --space-hero-top: 0rem;
+  --space-hero-bottom: clamp(1rem, 2.2vw, 2rem);
   --space-block: clamp(2rem, 4vw, 3rem);
 
   --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
   --shadow-card-hover: 0 8px 30px -8px rgba(0, 0, 0, 0.08), 0 4px 12px -4px rgba(0, 0, 0, 0.04);
   --shadow-elevated: 0 12px 40px -12px rgba(0, 0, 0, 0.12), 0 4px 16px -4px rgba(0, 0, 0, 0.06);
+
+  /* Marketing / exam-prep: one card recipe (padding, radius, shadow) */
+  --nn-marketing-card-padding: 1.25rem;
+  --nn-marketing-card-padding-md: 1.5rem;
 }
 
 /*
@@ -93,15 +97,18 @@ body {
   --color-popover-fg-base: var(--theme-body-text);
 
   /* Theme-tinted depth (still restrained for long study sessions) */
+  /* Restrained depth: neutral first, slight theme tint (reads premium, not “glow template”) */
   --shadow-card:
-    0 1px 2px color-mix(in srgb, var(--theme-heading-text) 5%, transparent),
-    0 8px 28px -10px color-mix(in srgb, var(--theme-primary) 12%, transparent);
+    0 1px 0 color-mix(in srgb, var(--theme-heading-text) 4%, transparent),
+    0 1px 2px color-mix(in srgb, var(--theme-heading-text) 6%, transparent),
+    0 12px 32px -16px color-mix(in srgb, var(--theme-primary) 8%, transparent);
   --shadow-card-hover:
-    0 10px 36px -12px color-mix(in srgb, var(--theme-primary) 16%, transparent),
-    0 4px 14px -4px color-mix(in srgb, var(--theme-heading-text) 6%, transparent);
+    0 1px 0 color-mix(in srgb, var(--theme-heading-text) 5%, transparent),
+    0 4px 16px -6px color-mix(in srgb, var(--theme-heading-text) 8%, transparent),
+    0 14px 40px -18px color-mix(in srgb, var(--theme-primary) 12%, transparent);
   --shadow-elevated:
-    0 18px 50px -18px color-mix(in srgb, var(--theme-primary) 18%, transparent),
-    0 8px 22px -8px color-mix(in srgb, var(--theme-heading-text) 8%, transparent);
+    0 8px 28px -10px color-mix(in srgb, var(--theme-heading-text) 10%, transparent),
+    0 20px 48px -20px color-mix(in srgb, var(--theme-primary) 14%, transparent);
 }
 
 /* Dark palettes: stronger separation (flat navy + same accent reads as one blob) */
@@ -239,8 +246,57 @@ a {
 .nn-card {
   background: var(--bg-card, var(--theme-card-bg));
   border: 1px solid var(--border-subtle, var(--theme-card-border));
-  border-radius: 1rem;
+  border-radius: var(--radius-xl);
   box-shadow: var(--shadow-card);
+}
+
+/* Padded marketing cards: same radius + shadow as .nn-card */
+.nn-marketing-card {
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border-subtle, var(--theme-card-border));
+  background: var(--bg-card, var(--theme-card-bg));
+  box-shadow: var(--shadow-card);
+}
+
+.nn-marketing-card-pad {
+  padding: var(--nn-marketing-card-padding);
+}
+
+@media (min-width: 640px) {
+  .nn-marketing-card-pad {
+    padding: var(--nn-marketing-card-padding-md);
+  }
+}
+
+/* Section titles: consistent hierarchy above the fold and below */
+.nn-marketing-h2 {
+  font-size: var(--text-section);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--theme-heading-text);
+}
+
+.nn-marketing-lead {
+  margin-top: 0.75rem;
+  max-width: 42rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--theme-body-text);
+}
+
+@media (min-width: 640px) {
+  .nn-marketing-lead {
+    font-size: 1rem;
+  }
+}
+
+.nn-marketing-eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--theme-muted-text);
 }
 
 .nn-card-interactive {
@@ -254,12 +310,10 @@ a {
   background-color: color-mix(in srgb, var(--accent-soft, transparent) 55%, var(--bg-card, var(--theme-card-bg)));
 }
 
-/* Marketing / long-form chrome: soft top glow + gradient to section tint (same hue family) */
+/* Marketing shell: flat page + one soft top wash (no stacked band gradients) */
 html[data-theme] .nn-marketing-surface {
   background-color: var(--bg-page);
-  background-image:
-    radial-gradient(120% 65% at 50% -18%, var(--hero-gradient-start), var(--hero-gradient-end) 50%),
-    linear-gradient(180deg, var(--bg-page) 0%, color-mix(in srgb, var(--bg-section) 40%, var(--bg-page)) 55%, var(--bg-section) 100%);
+  background-image: radial-gradient(100% 42% at 50% 0%, var(--hero-gradient-start), transparent 70%);
 }
 
 /* Optional: full-width section band on page canvas */
@@ -361,7 +415,7 @@ html[data-theme] .nn-marketing-surface {
   background: var(--role-cta, var(--theme-primary));
   color: var(--role-cta-foreground, #ffffff);
   border-radius: 9999px;
-  box-shadow: 0 8px 24px var(--role-cta-shadow, color-mix(in srgb, var(--theme-primary) 35%, transparent));
+  box-shadow: 0 4px 14px var(--role-cta-shadow, color-mix(in srgb, var(--theme-primary) 28%, transparent));
 }
 
 .nn-btn-primary:hover:not(:disabled):not([aria-disabled="true"]) {
@@ -384,15 +438,41 @@ html[data-theme] .nn-marketing-surface {
 }
 
 .nn-btn-secondary {
-  background: var(--bg-card, var(--theme-card-bg));
-  border: 1px solid var(--border-subtle, var(--theme-input-border));
-  color: var(--theme-menu-text);
+  background: var(--role-secondary-action-bg, var(--bg-card, var(--theme-card-bg)));
+  border: 1px solid var(--role-secondary-action-border, var(--border-subtle, var(--theme-input-border)));
+  color: var(--role-secondary-action-text, var(--theme-menu-text));
   border-radius: 9999px;
 }
 
-.nn-btn-secondary:hover {
-  background: var(--accent-soft);
-  border-color: var(--border-strong, color-mix(in srgb, var(--theme-primary) 22%, var(--theme-input-border)));
+.nn-btn-secondary:hover:not(:disabled):not([aria-disabled="true"]) {
+  background: var(--role-secondary-action-hover-bg, var(--accent-soft));
+  border-color: var(--border-medium, var(--theme-input-border));
+  color: var(--theme-heading-text);
+}
+
+/* Trust marks (checks, shields): stable green family — not competing with CTA purple/warm */
+.nn-trust-mark {
+  color: var(--role-success, #15803d);
+}
+
+html[data-theme="dark-clinical"] .nn-trust-mark,
+html[data-theme="dark-academia"] .nn-trust-mark,
+html[data-theme="dark-mode"] .nn-trust-mark {
+  color: var(--role-success, #34d399);
+}
+
+/* Inline / tertiary actions: body tone, not brand primary (keeps CTA as only bright brand anchor) */
+.nn-link-quiet {
+  color: var(--theme-body-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: color-mix(in srgb, var(--theme-muted-text) 55%, transparent);
+  font-weight: 500;
+}
+
+.nn-link-quiet:hover {
+  color: var(--theme-heading-text);
+  text-decoration-color: color-mix(in srgb, var(--theme-heading-text) 35%, transparent);
 }
 
 .animate-page-enter {

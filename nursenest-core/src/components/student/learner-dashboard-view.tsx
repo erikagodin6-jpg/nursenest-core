@@ -15,7 +15,7 @@ import { remediationTopicDrillHref, remediationWeakModeTestHref } from "@/lib/le
 import { readinessBandLabel, type ReadinessBand } from "@/lib/learner/readiness-score";
 
 function pctLine(current: number, total: number): string {
-  if (total <= 0) return "—";
+  if (total <= 0) return "N/A";
   return `${Math.min(100, Math.round((current / total) * 100))}%`;
 }
 
@@ -77,20 +77,20 @@ export function LearnerDashboardView({ data }: { data: LearnerDashboardModel }) 
           </span>
         </div>
         <p className="mt-2 text-xs text-muted-foreground">
-          Indicative only — based on practice in this app, not a pass/fail prediction.
+          Indicative only, based on practice in this app. Not a pass/fail prediction.
         </p>
         <div className="mt-4 flex flex-wrap items-end gap-6">
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Score</p>
             <p className="mt-1 text-4xl font-bold tabular-nums text-[var(--theme-heading-text)]">
-              {r.score !== null ? r.score : "—"}
+              {r.score !== null ? r.score : "N/A"}
               {r.score !== null ? <span className="text-lg font-semibold text-muted-foreground"> /100</span> : null}
             </p>
             <p className="mt-1 text-xs text-muted-foreground">
               Confidence: <span className="font-medium text-foreground">{r.confidence}</span>
-              {r.confidence === "low" ? " — add more full sessions." : null}
-              {r.confidence === "medium" ? " — estimate will stabilize with volume." : null}
-              {r.confidence === "high" ? " — based on enough recent items." : null}
+              {r.confidence === "low" ? " Add more full sessions." : null}
+              {r.confidence === "medium" ? " Estimate will stabilize with volume." : null}
+              {r.confidence === "high" ? " Based on enough recent items." : null}
               {r.calibratedPreview ? " Conservative calibration is active for this exam track." : null}
             </p>
           </div>
@@ -202,7 +202,7 @@ export function LearnerDashboardView({ data }: { data: LearnerDashboardModel }) 
                 {data.lessonsCompleted}
                 <span className="text-lg font-semibold text-muted-foreground">
                   {" "}
-                  / {data.lessonsAvailable || "—"}
+                  / {data.lessonsAvailable || "N/A"}
                 </span>
               </p>
               <p className="mt-1 text-xs text-muted-foreground">Completed in your plan pool</p>
@@ -236,7 +236,7 @@ export function LearnerDashboardView({ data }: { data: LearnerDashboardModel }) 
             <div>
               <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Mocks taken</p>
               <p className="mt-2 text-3xl font-bold tabular-nums text-[var(--theme-heading-text)]">
-                {data.recentMocks.length > 0 ? data.recentMocks.length : "—"}
+                {data.recentMocks.length > 0 ? data.recentMocks.length : "N/A"}
               </p>
               <p className="mt-1 text-xs text-muted-foreground">Recent attempts below</p>
             </div>
@@ -392,7 +392,7 @@ export function LearnerDashboardView({ data }: { data: LearnerDashboardModel }) 
               ))}
             </ul>
           ) : (
-            <p className="mt-4 text-sm text-muted-foreground">No mock attempts yet — start from Practice exams.</p>
+            <p className="mt-4 text-sm text-muted-foreground">No mock attempts yet. Start from Practice exams.</p>
           )}
         </section>
       </div>

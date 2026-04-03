@@ -10,5 +10,5 @@ export const CAT_LEARNING_COPY = {
   readinessScore:
     "Readiness score translates your session estimate onto a 0–100 scale for quick interpretation. It summarizes performance in this run, not a guarantee on exam day.",
   confidenceLabel:
-    "Confidence reflects how stable the estimate is for the number of items answered — not whether you will pass a licensing exam.",
+    "Confidence reflects how stable the estimate is for the number of items answered. It is not whether you will pass a licensing exam.",
 } as const;

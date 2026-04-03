@@ -9,11 +9,11 @@
  * :root mirrors lavender for first paint before data-theme hydrates.
  */
 :root {
-  --role-cta: color-mix(in srgb, #9d82dd 84%, #ea580c);
+  --role-cta: color-mix(in srgb, #9d82dd 78%, #ea580c);
   --role-cta-foreground: #ffffff;
   --role-cta-hover: color-mix(in srgb, var(--role-cta) 89%, #111827);
   --role-cta-pressed: color-mix(in srgb, var(--role-cta) 76%, #111827);
-  --role-cta-shadow: color-mix(in srgb, var(--role-cta) 36%, transparent);
+  --role-cta-shadow: color-mix(in srgb, var(--role-cta) 44%, transparent);
   --role-cta-soft: color-mix(in srgb, var(--role-cta) 11%, #ffffff);
   --role-cta-on-soft: color-mix(in srgb, var(--role-cta) 78%, #111827);
   --role-secondary-action-bg: #ffffff;
@@ -28,21 +28,21 @@
   --role-warning-soft: color-mix(in srgb, #d97706 13%, #ffffff);
   --role-warning-text: #78350f;
   --role-warning-border: color-mix(in srgb, #f59e0b 32%, #e9e2ff);
-  --role-premium-surface: color-mix(in srgb, #9d82dd 9%, #ffffff);
-  --role-premium-border: color-mix(in srgb, #9d82dd 38%, #e9e2ff);
-  --role-premium-text: color-mix(in srgb, #9d82dd 42%, #111827);
+  --role-premium-surface: color-mix(in srgb, #9d82dd 13%, #ffffff);
+  --role-premium-border: color-mix(in srgb, #9d82dd 42%, #e9e2ff);
+  --role-premium-text: color-mix(in srgb, #9d82dd 48%, #111827);
   --role-premium-glow: color-mix(in srgb, #9d82dd 14%, transparent);
-  --role-heat-text: color-mix(in srgb, #ea580c 55%, #111827);
+  --role-heat-text: color-mix(in srgb, #c2410c 42%, #111827);
 }
 
 /* Theme-scoped overrides (lavender, ocean, sage, dark-*, …): same roles, hue from --theme-primary */
 :where([data-theme]) {
-  /* CTA: theme identity + small warm shift (same structure for lavender, ocean, sage, …) */
-  --role-cta: color-mix(in srgb, var(--theme-primary) 84%, #ea580c);
+  /* CTA: theme + warm shift so buttons read as “action” vs decorative primary hue elsewhere */
+  --role-cta: color-mix(in srgb, var(--theme-primary) 78%, #ea580c);
   --role-cta-foreground: #ffffff;
-  --role-cta-hover: color-mix(in srgb, var(--role-cta) 89%, var(--theme-heading-text));
-  --role-cta-pressed: color-mix(in srgb, var(--role-cta) 76%, var(--theme-heading-text));
-  --role-cta-shadow: color-mix(in srgb, var(--role-cta) 36%, transparent);
+  --role-cta-hover: color-mix(in srgb, var(--role-cta) 88%, var(--theme-heading-text));
+  --role-cta-pressed: color-mix(in srgb, var(--role-cta) 74%, var(--theme-heading-text));
+  --role-cta-shadow: color-mix(in srgb, var(--role-cta) 44%, transparent);
   --role-cta-soft: color-mix(in srgb, var(--role-cta) 11%, var(--bg-card, var(--theme-card-bg)));
   --role-cta-on-soft: color-mix(in srgb, var(--role-cta) 78%, var(--theme-heading-text));
 
@@ -64,12 +64,13 @@
   --role-warning-text: #78350f;
   --role-warning-border: color-mix(in srgb, #f59e0b 32%, var(--border-subtle));
 
-  /* Premium / streak / locked — deeper, value-implying */
-  --role-premium-surface: color-mix(in srgb, var(--theme-primary) 9%, var(--bg-card, var(--theme-card-bg)));
-  --role-premium-border: color-mix(in srgb, var(--theme-primary) 38%, var(--border-medium));
-  --role-premium-text: color-mix(in srgb, var(--theme-primary) 42%, var(--theme-heading-text));
+  /* Premium: slightly deeper surface so tier cards feel “above” generic panels */
+  --role-premium-surface: color-mix(in srgb, var(--theme-primary) 13%, var(--bg-card, var(--theme-card-bg)));
+  --role-premium-border: color-mix(in srgb, var(--theme-primary) 42%, var(--border-medium));
+  --role-premium-text: color-mix(in srgb, var(--theme-primary) 48%, var(--theme-heading-text));
   --role-premium-glow: color-mix(in srgb, var(--theme-primary) 14%, transparent);
-  --role-heat-text: color-mix(in srgb, #ea580c 55%, var(--theme-heading-text));
+  /* Urgency copy (deadlines, savings): warm, not alarm red */
+  --role-heat-text: color-mix(in srgb, #c2410c 42%, var(--theme-heading-text));
 }
 
 html[data-theme="dark-clinical"],
@@ -92,5 +93,5 @@ html[data-theme="dark-mode"] {
   --role-warning-border: color-mix(in srgb, #f59e0b 40%, var(--border-subtle));
 
   --role-premium-text: color-mix(in srgb, var(--theme-primary) 65%, #ffffff);
-  --role-heat-text: color-mix(in srgb, #fb923c 70%, #ffffff);
+  --role-heat-text: color-mix(in srgb, #fdba74 58%, #ffffff);
 }

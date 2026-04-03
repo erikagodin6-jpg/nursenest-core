@@ -73,7 +73,7 @@ export default async function StudyPlanPage() {
         <h1 className="mt-1 text-3xl font-bold tracking-tight text-[var(--theme-heading-text)]">Study plan</h1>
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
           Your exam date, cadence, and practice signals drive weekly targets and checkpoints. Optional AI weekly structure still
-          lives below — enable with{" "}
+          lives below. Enable with{" "}
           <code className="rounded bg-black/5 px-1 dark:bg-white/10">AI_STUDY_PLAN_ENABLED=true</code> when configured. Not medical
           advice.
         </p>

@@ -180,7 +180,7 @@ export async function loadRemediationReport(): Promise<RemediationReport | null>
       thinContentLessonsSample,
       priorityMessage:
         thinSum > 800
-          ? "Large backlog of thin rationales — prioritize worst exams and newest edits first."
+          ? "Large backlog of thin rationales. Prioritize worst exams and newest edits first."
           : "Use exam rollups to prioritize; sample lists link to REST IDs for your editor workflow.",
     };
   }, null);

@@ -15,9 +15,9 @@ export function confidenceLevelFromSe(se: number): CatConfidenceLevel {
 }
 
 export function confidenceText(level: CatConfidenceLevel): string {
-  if (level === "high") return "High — estimate is fairly stable for this session length.";
-  if (level === "medium") return "Medium — a few more items would narrow the estimate.";
-  return "Building — keep going; the estimate will firm up as you answer more.";
+  if (level === "high") return "High. Estimate is fairly stable for this session length.";
+  if (level === "medium") return "Medium. A few more items would narrow the estimate.";
+  return "Building. Keep going; the estimate will firm up as you answer more.";
 }
 
 /** Compare first vs second half accuracy for a simple trajectory hint. */
@@ -39,6 +39,6 @@ export function readinessHeadlineFromSignals(args: {
   const { readinessScore, confidenceLevel, decision } = args;
   if (decision === "pass" && readinessScore >= 62) return "On track for this session";
   if (decision === "fail" || readinessScore < 42) return "Needs focused review";
-  if (confidenceLevel === "low") return "Building confidence — keep practicing";
-  return "Mixed performance — keep going";
+  if (confidenceLevel === "low") return "Building confidence. Keep practicing";
+  return "Mixed performance. Keep going";
 }

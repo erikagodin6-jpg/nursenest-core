@@ -118,7 +118,7 @@ export async function POST(req: Request) {
 
   const hash = stemHash(data.stem);
   const cat = await prisma.category.findUnique({ where: { id: data.categoryId } });
-  const topic = [cat?.name, data.topicTag].filter(Boolean).join(" — ") || cat?.slug;
+  const topic = [cat?.name, data.topicTag].filter(Boolean).join(" · ") || cat?.slug;
 
   const question = await prisma.examQuestion.create({
     data: {

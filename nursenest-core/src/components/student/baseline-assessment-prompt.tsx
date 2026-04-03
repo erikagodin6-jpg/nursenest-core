@@ -35,7 +35,7 @@ export function BaselineAssessmentPrompt({ show }: { show: boolean }) {
         Find your starting point
       </h2>
       <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[var(--theme-body-text)]">
-        Take a short baseline quiz (about 10 questions). It helps personalize your study plan and weak-area signals—no pressure, and you
+        Take a short baseline quiz (about 10 questions). It helps personalize your study plan and weak-area signals. No pressure, and you
         can skip anytime.
       </p>
       <div className="mt-4 flex flex-wrap gap-3">

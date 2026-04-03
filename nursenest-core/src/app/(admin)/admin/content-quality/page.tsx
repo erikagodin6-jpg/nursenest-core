@@ -77,7 +77,7 @@ export default async function AdminContentQualityPage() {
         <section className="mt-8 rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-5">
           <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Full-corpus snapshot</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Updated {new Date(corpus.generatedAt).toLocaleString()} — pathway lessons scanned {corpus.pathwayLessons.scanned},
+            Updated {new Date(corpus.generatedAt).toLocaleString()}. Pathway lessons scanned {corpus.pathwayLessons.scanned},
             content items {corpus.contentItemLessons.scanned}, exam rows {corpus.examQuestions.scanned}.
           </p>
           <div className="mt-4 grid gap-4 lg:grid-cols-2">
@@ -123,7 +123,7 @@ export default async function AdminContentQualityPage() {
       {remediation ? (
         <section className="mt-8 space-y-8">
           <div className="rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-5">
-            <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Thin or missing rationales — by exam</h2>
+            <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Thin or missing rationales by exam</h2>
             <p className="mt-1 text-sm text-muted-foreground">
               Sorted by count of items below {RATIONALE_MIN_WORDS} words (or empty). Cross-check with corpus “worst exams” after refresh.
             </p>
@@ -151,7 +151,7 @@ export default async function AdminContentQualityPage() {
 
           <div className="grid gap-6 lg:grid-cols-2">
           <div className="rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-5">
-            <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Thin rationales — sample (lowest word count)</h2>
+            <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Thin rationales: sample (lowest word count)</h2>
             <p className="mt-1 text-sm text-muted-foreground">{remediation.priorityMessage}</p>
             <ul className="mt-3 max-h-64 space-y-2 overflow-auto text-sm">
               {remediation.thinQuestionsSample.map((r) => (
@@ -160,7 +160,7 @@ export default async function AdminContentQualityPage() {
                     <span className="font-mono text-xs">{r.id.slice(0, 8)}…</span>
                     <span className="text-xs text-muted-foreground">{r.wordCount}w</span>
                   </div>
-                  <p className="truncate text-xs text-muted-foreground">{r.topic ?? "—"} · {r.exam}</p>
+                  <p className="truncate text-xs text-muted-foreground">{r.topic ?? "N/A"} · {r.exam}</p>
                   <a
                     className="text-xs font-semibold text-primary underline"
                     href={`/api/admin/questions/${r.id}`}
@@ -286,7 +286,7 @@ export default async function AdminContentQualityPage() {
             <code className="rounded bg-muted px-1">acknowledgeSevereQualityIssue: true</code> if you must publish anyway.
           </li>
           <li>Content-item lessons: same pattern for body depth vs tier thresholds.</li>
-          <li>Bulk publish to PUBLISHED skips rows that fail the bar — fix individually or use overrides.</li>
+          <li>Bulk publish to PUBLISHED skips rows that fail the bar. Fix individually or use overrides.</li>
           <li>AI draft promotion to the bank is blocked until the draft meets the bar (promotes as DRAFT only).</li>
         </ul>
       </section>

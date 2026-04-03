@@ -24,16 +24,16 @@ export const FALLBACK_LOGO_PATH = SITE_LOGO_FALLBACK_PATH;
 export const BRAND_NAME = "NurseNest" as const;
 
 /**
- * Fixed header slot: same box for every theme so raster marks with different canvas padding normalize visually.
- * Height drives scale; max-width caps overflow. Image uses {@link HEADER_BRAND_LOGO_IMG_CLASSNAME} inside this slot.
+ * Fixed header slot: height + max-width are the single authority for rendered logo size.
+ * The img uses {@link HEADER_BRAND_LOGO_IMG_CLASSNAME} (`h-full`, `object-contain`) inside this slot.
+ * Previous `max-w ~18–24rem` caps were the main limiter on visible wordmark width.
  */
-/** Header mark: fixed slot height scales the raster consistently across themes/breakpoints. */
 export const HEADER_BRAND_LOGO_SLOT_CLASSNAME =
-  "nn-brand-header-logo-slot inline-flex flex-none shrink-0 items-center justify-start overflow-visible self-center h-[4.25rem] max-h-[4.25rem] w-auto max-w-[min(92vw,18rem)] sm:h-[4.75rem] sm:max-h-[4.75rem] sm:max-w-[min(92vw,19rem)] md:h-[5.25rem] md:max-h-[5.25rem] md:max-w-[20rem] lg:h-[5.75rem] lg:max-h-[5.75rem] lg:max-w-[21rem] xl:h-[6.25rem] xl:max-h-[6.25rem] xl:max-w-[22rem] 2xl:h-[6.75rem] 2xl:max-h-[6.75rem] 2xl:max-w-[23rem]" as const;
+  "nn-brand-header-logo-slot inline-flex flex-none shrink-0 items-center justify-start overflow-visible self-center h-[5.5rem] max-h-[5.5rem] w-auto max-w-[min(96vw,26rem)] sm:h-[6rem] sm:max-h-[6rem] sm:max-w-[28rem] md:h-[6.75rem] md:max-h-[6.75rem] md:max-w-[30rem] lg:h-[7.25rem] lg:max-h-[7.25rem] lg:max-w-[31rem] xl:h-[7.75rem] xl:max-h-[7.75rem] xl:max-w-[32rem] 2xl:h-[8.25rem] 2xl:max-h-[8.25rem] 2xl:max-w-[34rem]" as const;
 
-/** Homepage: stronger visual weight while keeping the same image pipeline (`object-contain` inside slot). */
+/** Homepage header: one step larger than default slot (still same img pipeline). */
 export const HOME_BRAND_LOGO_MARK_CLASSNAME =
-  "!h-[4.85rem] !max-h-[4.85rem] sm:!h-[5.35rem] sm:!max-h-[5.35rem] md:!h-[5.85rem] md:!max-h-[5.85rem] lg:!h-[6.35rem] lg:!max-h-[6.35rem] xl:!h-[6.85rem] xl:!max-h-[6.85rem] 2xl:!h-[7.25rem] 2xl:!max-h-[7.25rem] !max-w-[min(92vw,18.5rem)] sm:!max-w-[min(92vw,20rem)] md:!max-w-[21rem] lg:!max-w-[22rem] xl:!max-w-[23rem] 2xl:!max-w-[24rem]" as const;
+  "!h-[6.35rem] !max-h-[6.35rem] sm:!h-[6.85rem] sm:!max-h-[6.85rem] md:!h-[7.5rem] md:!max-h-[7.5rem] lg:!h-[8rem] lg:!max-h-[8rem] xl:!h-[8.5rem] xl:!max-h-[8.5rem] 2xl:!h-[9rem] 2xl:!max-h-[9rem] !max-w-[min(96vw,28rem)] sm:!max-w-[30rem] md:!max-w-[32rem] lg:!max-w-[34rem] xl:!max-w-[36rem] 2xl:!max-w-[38rem]" as const;
 
 /**
  * Raster mark: fills slot height; width from aspect ratio; `object-contain` keeps sharpness and trims effective padding vs stretching.

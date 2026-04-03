@@ -156,7 +156,7 @@ export function PreNursingModuleEngagement({
       <div className="nn-card space-y-4 p-6">
         <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Your progress · {moduleTitle}</h2>
         <p className="text-sm text-muted">
-          Pre-Nursing stays free — progress is optional.{" "}
+          Pre-Nursing stays free. Progress is optional.{" "}
           {signedIn === false ? (
             <>
               <Link
@@ -171,7 +171,7 @@ export function PreNursingModuleEngagement({
               to sync completion across devices.
             </>
           ) : null}{" "}
-          {signedIn === true ? "Signed in — completions save to your account." : null}
+          {signedIn === true ? "Signed in. Completions save to your account." : null}
         </p>
         <div className="flex flex-wrap items-center gap-3">
           <div className="h-2 flex-1 min-w-[120px] overflow-hidden rounded-full bg-muted">
@@ -230,7 +230,7 @@ export function PreNursingModuleEngagement({
         ) : null}
         {nextSlug === null && completed.size >= PRE_NURSING_MODULE_REGISTRY.length ? (
           <p className="text-sm font-medium text-primary">
-            You’ve touched every module in this catalog — explore exam prep below when you want practice under a paid plan.
+            You have touched every module in this catalog. Explore exam prep below when you want practice under a paid plan.
           </p>
         ) : null}
       </div>
@@ -260,8 +260,8 @@ export function PreNursingModuleEngagement({
         <div className="nn-card p-6">
           <h3 className="text-base font-semibold text-[var(--theme-heading-text)]">Ready for exam-style prep</h3>
           <p className="mt-2 text-sm text-muted">
-            Paid NurseNest plans add full question banks, mocks, and pathway-scoped lessons — after you’re comfortable with
-            the basics here.
+            Paid NurseNest plans add full question banks, mocks, and pathway-scoped lessons once you are comfortable with the
+            basics here.
           </p>
           <ul className="mt-4 space-y-2 text-sm">
             <li>
@@ -366,7 +366,7 @@ export function PreNursingModuleEngagement({
           ) : null}
           {showMilestoneCta ? (
             <p className="mt-4 text-xs text-muted">
-              You’ve built momentum — exam-style prep is there when you want timed practice and full banks under a paid plan.
+              You have built momentum. Exam-style prep is there when you want timed practice and full banks under a paid plan.
             </p>
           ) : (
             <p className="mt-4 text-xs text-muted">Focus on foundations here; we’ll keep exam prep one click away.</p>

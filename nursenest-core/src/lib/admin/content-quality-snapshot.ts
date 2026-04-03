@@ -272,7 +272,7 @@ export async function loadContentQualitySnapshot(): Promise<ContentQualitySnapsh
       },
       notes: [
         "Exam question counts use SQL word splits on `rationale` only (primary narrative field).",
-        `Pathway/content lesson samples: last ${SAMPLE} updated rows — not a full corpus scan.`,
+        `Pathway/content lesson samples: last ${SAMPLE} updated rows, not a full corpus scan.`,
         "Filename-based concept images use `education-image-inventory.json`; per-question inventory matches are resolved at runtime, not stored in SQL.",
       ],
     };

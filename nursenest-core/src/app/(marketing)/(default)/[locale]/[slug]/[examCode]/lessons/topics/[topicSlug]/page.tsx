@@ -67,7 +67,7 @@ export default async function PathwayLessonTopicClusterPage({ params, searchPara
       <h1 className="mt-2 text-3xl font-extrabold text-[var(--theme-heading-text)]">{label}</h1>
       <p className="mt-3 text-[var(--theme-muted-text)]">
         SEO cluster for {pathway.shortName}: lessons in this topic stay in the {pathway.countryCode} / {pathway.roleTrack}{" "}
-        track—no cross-mix with other exams or countries.
+        track, with no cross-mix with other exams or countries.
       </p>
 
       {pageResult.locale ? <PathwayLessonContentLocaleBanner listLocale={pageResult.locale} /> : null}

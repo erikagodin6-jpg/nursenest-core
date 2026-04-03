@@ -98,25 +98,25 @@ export default function HeroExpansionTracker() {
 
   return (
     <section
-      className="border-t border-[var(--theme-card-border)] bg-gradient-to-b from-[var(--theme-card-bg)] to-[var(--theme-muted-surface)]"
+      className="border-t border-[var(--divider)] bg-[var(--bg-section-alt)]"
       style={{ paddingTop: "var(--space-block)", paddingBottom: "var(--space-block)" }}
       data-testid="section-expansion-tracker"
     >
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-8 text-center">
-          <div className="nn-accent-pill mb-3 inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold text-primary">
-            <TrendingUp className="h-3.5 w-3.5 text-primary" />
-            Live Content Expansion
-          </div>
-          <h2 className="mb-2 font-bold text-[var(--theme-heading-text)]" style={{ fontSize: "var(--text-section)" }} data-testid="text-expansion-tracker-heading">
+        <div className="mb-8 max-w-2xl">
+          <p className="nn-marketing-eyebrow flex items-center gap-2">
+            <TrendingUp className="h-3.5 w-3.5 text-primary" aria-hidden />
+            Live content expansion
+          </p>
+          <h2 className="nn-marketing-h2 mt-2" data-testid="text-expansion-tracker-heading">
             Question Bank Growth Tracker
           </h2>
-          <p className="mx-auto max-w-xl text-sm text-[var(--theme-muted-text)]">
-            Track our progress toward building the most comprehensive healthcare exam preparation question banks available.
+          <p className="nn-marketing-lead text-[var(--theme-muted-text)]">
+            Track how we are growing the healthcare exam prep question banks.
           </p>
         </div>
 
-        <div className="divide-y divide-[var(--theme-card-border)] rounded-2xl border border-[var(--theme-card-border)] bg-card shadow-[var(--shadow-card)]">
+        <div className="nn-marketing-card divide-y divide-[var(--border-subtle)] overflow-hidden">
           <div className="space-y-5 p-6">
             <h3 className="text-sm font-semibold uppercase tracking-wider text-[var(--theme-muted-text)]">{t("components.heroExpansionTracker.nursingTiers")}</h3>
             {tierRows.map((row) => (

@@ -101,7 +101,7 @@ function computeReadinessTrend(currentScore: number, prior: { score: number; rec
   if (!prior) {
     return {
       available: false,
-      reason: "No prior score on this instance yet — trend appears after a second diagnostics visit (or API call).",
+      reason: "No prior score on this instance yet. Trend appears after a second diagnostics visit (or API call).",
     };
   }
   const delta = Math.round(currentScore) - prior.score;
@@ -221,7 +221,7 @@ export function buildAdminDiagnosticsOperationsLayer(
       issues.push({
         id: "api_liveness",
         title: "Public API liveness probe failed",
-        detail: d.apiHealth.liveness.error ?? `HTTP ${d.apiHealth.liveness.status ?? "—"}`,
+        detail: d.apiHealth.liveness.error ?? `HTTP ${d.apiHealth.liveness.status ?? "N/A"}`,
         severity: "high",
         conversionRisk: true,
         category: "infrastructure",
@@ -236,7 +236,7 @@ export function buildAdminDiagnosticsOperationsLayer(
       issues.push({
         id: "api_readiness",
         title: "Readiness endpoint unhealthy",
-        detail: d.apiHealth.readiness.error ?? `HTTP ${d.apiHealth.readiness.status ?? "—"}`,
+        detail: d.apiHealth.readiness.error ?? `HTTP ${d.apiHealth.readiness.status ?? "N/A"}`,
         severity: "high",
         conversionRisk: true,
         category: "infrastructure",
@@ -293,7 +293,7 @@ export function buildAdminDiagnosticsOperationsLayer(
       title: `${missingRat} published question(s) lack rationale`,
       detail:
         pub > 0
-          ? `${missingRatPct.toFixed(1)}% of the published bank — hurts explanations and trust.`
+          ? `${missingRatPct.toFixed(1)}% of the published bank, which hurts explanations and trust.`
           : undefined,
       severity: sev,
       conversionRisk: true,
@@ -331,7 +331,7 @@ export function buildAdminDiagnosticsOperationsLayer(
     issues.push({
       id: "np_below_floor",
       title: "NP question bank below configured floor",
-      detail: `${remediation.np.published} published NP rows — coverage targets not met.`,
+      detail: `${remediation.np.published} published NP rows. Coverage targets not met.`,
       severity: "high",
       conversionRisk: true,
       category: "question_bank",
@@ -376,11 +376,11 @@ export function buildAdminDiagnosticsOperationsLayer(
 
   let readinessSummary = "Content and infrastructure signals look healthy for launch-style readiness.";
   if (priorityIssues.length === 0) {
-    readinessSummary = "No prioritized issues from automated checks — spot-check content quality before releases.";
+    readinessSummary = "No prioritized issues from automated checks. Spot-check content quality before releases.";
   } else if (priorityIssues[0]?.severity === "critical") {
-    readinessSummary = "Critical blockers detected — fix database or published question bank before marketing pushes.";
+    readinessSummary = "Critical blockers detected. Fix database or published question bank before marketing pushes.";
   } else if (priorityIssues.some((i) => i.severity === "high")) {
-    readinessSummary = "High-impact gaps remain — address trust and coverage items before scaling traffic.";
+    readinessSummary = "High-impact gaps remain. Address trust and coverage items before scaling traffic.";
   } else {
     readinessSummary = "Mostly healthy; remaining items are incremental coverage and polish.";
   }

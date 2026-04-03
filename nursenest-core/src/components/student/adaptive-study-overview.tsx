@@ -226,7 +226,7 @@ export function AdaptiveStudyOverview({
               <Link href={s.href} className="text-sm font-medium text-primary hover:underline">
                 {s.title}
               </Link>
-              <span className="text-sm text-muted-foreground"> — {s.reason}</span>
+              <span className="text-sm text-muted-foreground"> · {s.reason}</span>
             </li>
           ))}
         </ul>
@@ -268,7 +268,7 @@ export function AdaptiveStudyOverview({
 
       <p className="mt-4 text-xs text-muted-foreground">
         <Flag className="mr-1 inline h-3 w-3" aria-hidden />
-        NurseNest does not predict pass/fail outcomes. Plans reflect practice signals and your calendar — adjust anytime.
+        NurseNest does not predict pass/fail outcomes. Plans reflect practice signals and your calendar. Adjust anytime.
       </p>
     </section>
   );

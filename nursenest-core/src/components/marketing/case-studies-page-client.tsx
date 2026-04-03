@@ -25,7 +25,7 @@ export function CaseStudiesPageClient() {
       <header className="mb-10">
         <h1 className="text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)]">Clinical case studies</h1>
         <p className="mt-3 text-lg text-[var(--theme-muted-text)]">
-          Short, exam-style vignettes with prioritization and safety reasoning—pair with your question bank sessions.
+          Short, exam-style vignettes with prioritization and safety reasoning. Pair them with your question bank sessions.
         </p>
       </header>
       <ul className="space-y-4">

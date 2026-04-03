@@ -4,7 +4,7 @@ import { absoluteUrl } from "@/lib/seo/site-origin";
 
 export const metadata: Metadata = {
   title: "Educational Disclaimer | NurseNest",
-  description: "NurseNest is for educational use only—not medical advice or a guarantee of exam results.",
+  description: "NurseNest is for educational use only, not medical advice or a guarantee of exam results.",
   alternates: { canonical: absoluteUrl("/disclaimer") },
   robots: { index: true, follow: true },
 };

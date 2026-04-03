@@ -12,9 +12,9 @@ import { absoluteUrl } from "@/lib/seo/site-origin";
 
 export const revalidate = 86400;
 
-const stTitle = "Pre-Nursing study planning — target date & pacing | NurseNest";
+const stTitle = "Pre-Nursing study planning: target date and pacing | NurseNest";
 const stDesc =
-  "Optional school-start or readiness target for free Pre-Nursing modules — not an NCLEX exam date. Pace foundations, then move to paid NurseNest exam prep when you choose.";
+  "Optional school-start or readiness target for free Pre-Nursing modules, not an NCLEX exam date. Pace foundations, then move to paid NurseNest exam prep when you choose.";
 
 export const metadata: Metadata = {
   title: stTitle,
@@ -48,7 +48,7 @@ export default function PreNursingStudyPlanPage() {
             Study planning
           </h1>
           <p className="mt-3 text-muted">
-            Optional targets help you pace the free module library. This is not a licensure exam registration — it’s a
+            Optional targets help you pace the free module library. This is not a licensure exam registration. It is a
             readiness or program-start anchor you can change anytime.
           </p>
           <Link href="/pre-nursing" className="mt-4 inline-block text-sm font-semibold text-primary hover:underline">

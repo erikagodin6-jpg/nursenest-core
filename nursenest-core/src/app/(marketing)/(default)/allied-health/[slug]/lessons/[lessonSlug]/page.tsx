@@ -185,7 +185,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
           <>
             <aside className="nn-card mt-6 border-amber-200 bg-amber-50 p-4 text-sm text-[var(--theme-body-text)] dark:border-amber-900/40 dark:bg-amber-950/30">
               <p className="font-semibold">Access check didn’t complete</p>
-              <p className="mt-1 text-muted">Refresh shortly — previews below remain available.</p>
+              <p className="mt-1 text-muted">Refresh shortly. Previews below remain available.</p>
             </aside>
             <PathwayLessonPreviewBanner
               kind="default_preview"

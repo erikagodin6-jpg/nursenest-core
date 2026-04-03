@@ -87,7 +87,7 @@ export function PathwayLessonActions({
           >
             {status === "done" ? "Saved as studied" : status === "saving" ? "Saving…" : "Mark lesson studied"}
           </button>
-          {status === "error" ? <span className="text-xs text-amber-800">Could not save—try again.</span> : null}
+          {status === "error" ? <span className="text-xs text-amber-800">Could not save. Try again.</span> : null}
         </div>
       ) : (
         <p className="text-sm text-muted">Subscribe with a plan that matches this exam pathway to track completion.</p>

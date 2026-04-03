@@ -62,7 +62,7 @@ export function LearnerDashboardActionCards({
   if (showCatHint) {
     cards.push({
       title: "Adaptive (CAT) test",
-      description: "Difficulty adjusts like practice—use alongside linear mocks.",
+      description: "Difficulty adjusts like practice. Use alongside linear mocks.",
       href: "/app/practice-tests",
       icon: Sparkles,
     });

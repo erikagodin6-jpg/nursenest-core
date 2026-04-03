@@ -54,7 +54,7 @@ function renderPlanBody(plan: unknown): { readable: boolean; node: ReactNode } {
                 >
                   <p className="text-sm font-semibold text-[var(--theme-heading-text)]">
                     {typeof w.week === "number" ? `Week ${w.week}` : `Block ${i + 1}`}
-                    {w.focus ? <span className="font-normal text-muted"> — {w.focus}</span> : null}
+                    {w.focus ? <span className="font-normal text-muted"> · {w.focus}</span> : null}
                   </p>
                   {w.objectives && w.objectives.length > 0 ? (
                     <ul className="mt-2 list-inside list-disc space-y-1 text-sm text-muted">

@@ -328,7 +328,7 @@ export function PracticeTestRunnerClient({
     const elapsedDisplay =
       savedElapsedMs != null
         ? `${Math.floor(savedElapsedMs / 60000)}m ${Math.round((savedElapsedMs % 60000) / 1000)}s`
-        : "—";
+        : "N/A";
     return (
       <div className="space-y-6">
         <div className="nn-card p-6">
@@ -474,7 +474,7 @@ export function PracticeTestRunnerClient({
         <p className="font-medium text-foreground">No questions in this practice test.</p>
         <p className="text-muted-foreground">
           The pool may have been empty for your filters and tier, or the test was saved in an incomplete state. Start a
-          new adaptive (CAT) or linear test from the list—broaden topics or difficulty if you see this again.
+          new adaptive (CAT) or linear test from the list. Broaden topics or difficulty if you see this again.
         </p>
         <Link className="inline-block font-semibold text-primary underline" href="/app/practice-tests">
           Back to practice tests
@@ -519,7 +519,7 @@ export function PracticeTestRunnerClient({
             <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">
               {catMode
                 ? "Each response updates difficulty. Explanations and coaching appear after the session."
-                : "Pacing practice only—not a copy of any official exam interface."}
+                : "Pacing practice only. Not a copy of any official exam interface."}
             </p>
 
             <div className="overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900/50">

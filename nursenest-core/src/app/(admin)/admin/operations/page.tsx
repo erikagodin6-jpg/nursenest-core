@@ -34,7 +34,7 @@ export default async function AdminOperationsPage() {
         </div>
         <div className="nn-card p-6">
           <h2 className="text-lg font-semibold">Safe mode</h2>
-          <p className="mt-2 text-sm">{safe ? "ON — reduced writes / metrics" : "Off"}</p>
+          <p className="mt-2 text-sm">{safe ? "ON (reduced writes / metrics)" : "Off"}</p>
         </div>
       </section>
 
@@ -52,7 +52,7 @@ export default async function AdminOperationsPage() {
             </li>
           </ul>
         ) : (
-          <p className="mt-2 text-sm text-muted-foreground">No public base URL — probes skipped.</p>
+          <p className="mt-2 text-sm text-muted-foreground">No public base URL. Probes skipped.</p>
         )}
       </section>
 

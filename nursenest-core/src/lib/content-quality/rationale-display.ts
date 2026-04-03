@@ -96,7 +96,7 @@ export function buildRationaleSectionsFromQuestion(row: QuestionRationaleFields)
   const fallbackTakeaway =
     row.keyTakeaway?.trim() ??
     (condensedTakeaway
-      ? `${condensedTakeaway}\n\n(Condensed from rationale text—editorial review recommended.)`
+      ? `${condensedTakeaway}\n\n(Condensed from rationale text. Editorial review recommended.)`
       : null);
 
   push(

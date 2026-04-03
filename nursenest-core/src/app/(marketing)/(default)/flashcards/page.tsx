@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "NCLEX & nursing flashcards",
   description:
-    "Topic-organized nursing flashcards for NCLEX-RN, NCLEX-PN, and clinical review—sample cards and full study inside NurseNest.",
+    "Topic-organized nursing flashcards for NCLEX-RN, NCLEX-PN, and clinical review. Sample cards here; full study inside NurseNest.",
   alternates: { canonical: absoluteUrl("/flashcards") },
 };
 
@@ -33,7 +33,7 @@ export default async function PublicFlashcardsHubPage() {
 
       <h1 className="text-3xl font-bold tracking-tight text-[var(--theme-heading-text)]">Nursing flashcards</h1>
       <p className="mt-3 max-w-2xl text-sm text-[var(--theme-muted-text)]">
-        NurseNest flashcards tie to your pathway, lessons, and practice stats. Browse topics and deck previews here—sign in for
+        NurseNest flashcards tie to your pathway, lessons, and practice stats. Browse topics and deck previews here, then sign in for
         full decks, spaced repetition, and weak-area study.
       </p>
 
@@ -59,7 +59,7 @@ export default async function PublicFlashcardsHubPage() {
 
       <section className="mt-12">
         <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Featured decks</h2>
-        <p className="mt-1 text-sm text-[var(--theme-muted-text)]">Sample fronts only—full backs and every card are in the app.</p>
+        <p className="mt-1 text-sm text-[var(--theme-muted-text)]">Sample fronts only. Full backs and every card live in the app.</p>
         <ul className="mt-6 space-y-6">
           {featuredDecks.length === 0 ? (
             <li className="text-sm text-[var(--theme-muted-text)]">Check back soon for deck previews.</li>

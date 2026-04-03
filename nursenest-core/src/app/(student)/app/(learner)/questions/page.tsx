@@ -29,7 +29,7 @@ export default async function QuestionBankPage() {
         </div>
         <p className="nn-card p-6 text-sm text-muted">
           We couldn’t finish checking your subscription (database or billing lookup failed). This is not the same as “no
-          plan”—refresh shortly, or sign in again if it keeps happening.
+          plan.” Refresh shortly, or sign in again if it keeps happening.
         </p>
       </main>
     );
@@ -64,7 +64,7 @@ export default async function QuestionBankPage() {
         </div>
         <h1 className="text-3xl font-bold">Question bank</h1>
         <p className="mt-2 text-sm text-muted">
-          Practice with rationales after each item, topic filters, and session-friendly review—included with an active plan.
+          Practice with rationales after each item, topic filters, and session-friendly review, included with an active plan.
         </p>
         <div className="mt-6">
           <SubscriptionPaywall

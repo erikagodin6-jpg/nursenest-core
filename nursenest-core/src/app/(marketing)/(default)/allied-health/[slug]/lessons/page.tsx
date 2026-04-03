@@ -61,7 +61,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   const canonical = page > 1 ? `${basePath}?page=${page}` : basePath;
   const title =
     page > 1
-      ? `Lessons (${prof.h1}) — page ${page} | NurseNest`
+      ? `Lessons (${prof.h1}), page ${page} | NurseNest`
       : `Lessons · ${prof.h1} | NurseNest`;
   const description = `Paginated allied health lessons for ${prof.h1}. Only metadata and one page of rows load per request.`;
   return {
@@ -165,7 +165,7 @@ export default async function AlliedHealthSlugLessonsPage({ params, searchParams
         </Link>
         <h1 className="mt-4 text-3xl font-extrabold text-[var(--theme-heading-text)]">Lessons · {prof.h1}</h1>
         <p className="mt-3 text-sm text-muted">
-          Paginated list — only {lessons.length} lesson{lessons.length === 1 ? "" : "s"} on this screen. Pathway:{" "}
+          Paginated list: only {lessons.length} lesson{lessons.length === 1 ? "" : "s"} on this screen. Pathway:{" "}
           <span className="font-medium text-foreground">{pathway.shortName}</span>.
         </p>
 

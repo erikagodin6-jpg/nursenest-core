@@ -20,7 +20,7 @@ const cachedPathwayIdsWithLessons = unstable_cache(
 export const metadata: Metadata = {
   title: "Exam-scoped clinical lessons | NurseNest",
   description:
-    "Browse nursing lessons by country, role, and exam track—REx-PN, NCLEX-RN, NCLEX-PN, NP specialties, and more. Previews are free; full depth unlocks with the matching subscription.",
+    "Browse nursing lessons by country, role, and exam track (REx-PN, NCLEX-RN, NCLEX-PN, NP specialties, and more). Previews are free; full depth unlocks with the matching subscription.",
   alternates: { canonical: absoluteUrl("/exam-lessons") },
   openGraph: {
     title: "Exam-scoped clinical lessons | NurseNest",
@@ -45,7 +45,7 @@ export default async function ExamLessonsIndexPage() {
       </div>
       <h1 className="text-3xl font-extrabold text-[var(--theme-heading-text)]">Lessons by exam pathway</h1>
       <p className="mt-3 text-[var(--theme-muted-text)]">
-        Every hub below is scoped to one country + license track + exam—no mixed terminology, no cross-leak between NP
+        Every hub below is scoped to one country, license track, and exam. No mixed terminology, no cross-leak between NP
         specialties when you set your learner pathway. Start with a preview, then unlock the full lesson with a matching plan.
       </p>
       <div className="mt-6 flex flex-wrap gap-3">

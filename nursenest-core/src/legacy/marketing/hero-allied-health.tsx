@@ -103,14 +103,14 @@ export default function HeroAlliedHealth() {
               Allied Health Exam Prep
             </h2>
             <p className="mx-auto max-w-2xl text-base text-muted-foreground lg:text-lg">
-              Targeted question banks for major and mid-size allied health careers — from respiratory therapy to psychotherapy.
+              Targeted question banks for major and mid-size allied health careers, from respiratory therapy to psychotherapy.
             </p>
           </div>
 
           <div className="space-y-6">
             <div>
               <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-                Major Careers — {computeCountRange(majorCareers)}
+                Major Careers: {computeCountRange(majorCareers)}
               </h3>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {majorCareers.map((career) => {
@@ -148,7 +148,7 @@ export default function HeroAlliedHealth() {
 
             <div>
               <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-                Mid-Size Careers — {computeCountRange(midCareers)}
+                Mid-Size Careers: {computeCountRange(midCareers)}
               </h3>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {midCareers.map((career) => {

@@ -239,7 +239,7 @@ export function ProtectionAbuseReviewPanel(props: {
                             setNotes((n) => ({ ...n, [r.id]: v }));
                           }
                         }}
-                        placeholder="Internal note — not shown to the learner"
+                        placeholder="Internal note (not shown to the learner)"
                       />
                       <span className="mt-1 block text-[11px] text-muted-foreground">
                         {len} / {PROTECTION_ABUSE_REVIEW_NOTE_MAX}

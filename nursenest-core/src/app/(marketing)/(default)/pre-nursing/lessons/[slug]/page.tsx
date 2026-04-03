@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const rawDesc = (dict[meta.subtitleKey] ?? "").trim();
   const description =
     rawDesc ||
-    `Free Pre-Nursing module: ${title}. Interactive foundations before nursing school — part of NurseNest’s free catalog.`;
+    `Free Pre-Nursing module: ${title}. Interactive foundations before nursing school, part of NurseNest’s free catalog.`;
   const metaTitle = `${title} | Free Pre-Nursing | NurseNest`;
   const path = `/pre-nursing/lessons/${slug}`;
   return {

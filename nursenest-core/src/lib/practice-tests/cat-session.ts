@@ -28,8 +28,8 @@ import { computePracticeTestResults } from "@/lib/practice-tests/score-practice-
 import type { CatSelectionBasis, PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
 
 function readinessFromReport(report: CatExamReport): string {
-  if (report.stoppedReason === "confidence_pass") return "Pass signal — estimate stabilized above threshold";
-  if (report.stoppedReason === "confidence_fail") return "Remediation signal — estimate stabilized below threshold";
+  if (report.stoppedReason === "confidence_pass") return "Pass signal. Estimate stabilized above threshold";
+  if (report.stoppedReason === "confidence_fail") return "Remediation signal. Estimate stabilized below threshold";
   if (report.decision === "pass") return "On track";
   if (report.decision === "fail") return "Needs work";
   return "Building confidence";
@@ -148,7 +148,7 @@ export async function createCatPracticeTestPayload(
     return {
       ok: false,
       message:
-        "No weak areas yet. Use the question bank, complete a mock, or finish a practice test—then try weak adaptive mode.",
+        "No weak areas yet. Use the question bank, complete a mock, or finish a practice test. Then try weak adaptive mode.",
     };
   }
 

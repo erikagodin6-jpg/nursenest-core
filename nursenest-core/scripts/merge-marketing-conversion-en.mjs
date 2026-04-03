@@ -11,49 +11,50 @@ const enPath = path.join(__dirname, "../public/i18n/en.json");
 
 const patch = {
   "home.hero.mainTitle":
-    "Pass your nursing exam with a fully guided system — not just a question bank",
+    "Pass your nursing exam with a guided system, not just another question dump",
   "home.hero.newSubheadline":
-    "Clinical-depth rationales, adaptive review, and readiness tracking—scoped to your RN, PN, NP, or allied pathway (US & Canada).",
+    "Clinical-depth rationales, adaptive review, and readiness tracking for your RN, PN, NP, or allied pathway. US and Canada, with scopes kept separate so stems match what you are sitting for.",
   "home.hero.quickEntryLabel": "Jump in without hunting menus",
   "home.hero.trustMicroBadge": "US & Canadian scopes kept separate",
   "home.hero.authorityBadge": "Rationale on every scored option",
   "home.hero.ctaPrimary": "Start free trial",
   "home.hero.ctaSecondary": "Browse practice questions",
   "home.hero.ctaInstant": "Start practicing instantly",
-  "home.hero.ctaInstantHint": "Opens a short practice path—free account, no card to start your preview runs.",
+  "home.hero.ctaInstantHint":
+    "Opens a short practice path. Free account, no card to start your preview runs.",
   "home.hero.urgencyMicrocopy":
-    "Pick RN, PN, NP, or allied and your country first—stems, delegation language, and lesson tags stay aligned to that registration.",
+    "Pick RN, PN, NP, or allied and your country first so stems, delegation language, and lesson tags stay aligned to that registration.",
 
   "home.howItWorks.title": "How it works",
   "home.howItWorks.sub": "Three steps from sign-up to a study rhythm you can keep until test day.",
   "home.howItWorks.step1Title": "Choose your exam and region",
   "home.howItWorks.step1Body":
-    "RN, PN, NP, or allied—US or Canada—so the bank, lessons, and scope language match what you will sit for.",
+    "RN, PN, NP, or allied, US or Canada. The bank, lessons, and scope language match what you will sit for.",
   "home.howItWorks.step2Title": "Train with questions and rationales",
   "home.howItWorks.step2Body":
     "Every scored option explains why it passes or fails clinically. Misses roll into categories you can target with the next set.",
   "home.howItWorks.step3Title": "Let the planner and readiness guide reps",
   "home.howItWorks.step3Body":
-    "Add your exam date for pacing, use flashcards for weak facts, and read readiness as a next-study signal—not a guarantee.",
+    "Add your exam date for pacing, use flashcards for weak facts, and read readiness as a next-study signal, not a guarantee.",
 
-  "home.featuresStack.title": "What you get in one subscription",
+  "home.featuresStack.title": "What actually ships with your subscription",
   "home.featuresStack.lead":
-    "Bank, lessons, cards, planner, and dashboard are wired together—same tags, same weak-area lists, no tab-hopping between vendors.",
+    "Bank, lessons, flashcards, planner, and dashboard share the same tags and weak-area lists. Fewer spreadsheets, fewer “wait, which app was that topic in?” moments.",
   "home.featuresStack.questionBankTitle": "Question bank",
   "home.featuresStack.questionBankBody":
-    "Pathway-scoped items with category tags; subscribers get the full pool for their tier plus full rationales and history.",
+    "Pathway-scoped items with category tags. Subscribers get the full pool for their tier, plus rationales and history that do not vanish when you close the tab.",
   "home.featuresStack.lessonsTitle": "Lessons",
   "home.featuresStack.lessonsBody":
-    "Blueprint-aligned modules for your track—use them when a category keeps failing, not as a substitute for stems.",
+    "Blueprint-style modules for your track. We reach for them when one section keeps failing, not as a substitute for doing stems.",
   "home.featuresStack.flashcardsTitle": "Flashcards",
   "home.featuresStack.flashcardsBody":
-    "Spaced repetition for weak-topic facts pulled from your misses so memorization meets application the same week.",
+    "You miss a question on Tuesday; related cards can show up again Friday. Memorization and application in the same week, without a separate deck app.",
   "home.featuresStack.plannerTitle": "Adaptive study planner",
   "home.featuresStack.plannerBody":
-    "Schedule blocks around your exam date and shift workload; the planner nudges what to run next when your categories drift.",
-  "home.featuresStack.readinessTitle": "Readiness system",
+    "You set blocks around exam day and real shifts. When categories drift, the planner gets opinionated about what to run next.",
+  "home.featuresStack.readinessTitle": "Readiness (the plain kind)",
   "home.featuresStack.readinessBody":
-    "Blends recent accuracy, volume, and pacing—so you know what to study next, not a black-box score.",
+    "Blends recent accuracy, volume, and optional test-date pacing. A “what should I do now?” line, not a black-box pass predictor.",
   "home.featuresStack.ctaQuestions": "Open practice questions",
   "home.featuresStack.ctaPricing": "Compare plans",
   "home.featuresStack.ctaSignIn": "Sign in to continue",
@@ -100,7 +101,7 @@ const patch = {
   "home.gateway.practical.titleUS": "NCLEX-PN (LVN/LPN)",
   "home.gateway.practical.titleCA": "REx-PN (Canada PN)",
   "home.gateway.practical.introUS":
-    "PN-level safety and pharmacology stems with lesson support—not RN material squeezed into an LPN label.",
+    "PN-level safety and pharmacology stems with lesson support, not RN material squeezed into an LPN label.",
   "home.gateway.practical.introCA":
     "REx-PN is its own exam. Use the Canadian PN bank and lessons built for REx-PN, not a relabeled US mix.",
   "home.gateway.practical.ctaUS": "Run NCLEX-PN questions",
@@ -112,7 +113,7 @@ const patch = {
 
   "home.gateway.np.title": "Nurse practitioner",
   "home.gateway.np.introUS":
-    "FNP and AGPCNP each have dedicated lessons and banks. Pick the board you are sitting—do not cross-train on the wrong blueprint.",
+    "FNP and AGPCNP each have dedicated lessons and banks. Pick the board you are sitting. Do not cross-train on the wrong blueprint.",
   "home.gateway.np.introCA":
     "Canadian NP: start from the CNPLE hub. US FNP/AGPCNP stays available if you sit US certification exams.",
   "home.gateway.np.ctaUS": "Open NP question bank (US)",
@@ -168,36 +169,36 @@ const patch = {
   "pages.pricing.examBlurb.alliedUS": "Role-specific pathways with practical exam-style drills.",
   "pages.pricing.examBlurb.alliedCA": "Role-specific pathways with Canadian scope and exam-style drills.",
 
-  "home.conversion.whyHeading": "Why use NurseNest instead of three different apps",
+  "home.conversion.whyHeading": "Why we did not want three tabs open",
   "home.conversion.whySub":
-    "Topic tags connect the bank, lessons, and flashcards—so weak-area lists, your planner, and readiness signals point at the same gaps.",
+    "Topic tags tie the bank, lessons, and flashcards together. Weak-area lists, planner nudges, and readiness all point at the same gaps.",
 
-  "home.conversion.why1Title": "Pathway-scoped banks",
+  "home.conversion.why1Title": "Banks that match your registration",
   "home.conversion.why1Body":
-    "RN, PN, NP, and allied pools stay separated. You are not studying US delegation language when you sit a Canadian exam—or PN pharmacology mixed into RN management stems.",
+    "RN, PN, NP, and allied pools stay separated. You should not be drilling US delegation language the night before a Canadian sit.",
 
-  "home.conversion.why2Title": "Distractor-level rationales",
+  "home.conversion.why2Title": "Rationales that walk each option",
   "home.conversion.why2Body":
-    "Each item explains why the keyed answer is safest and where each wrong option fails clinically—so you practice elimination, not letter memorization.",
+    "After you submit, see why the keyed answer is safest and where each distractor fails clinically. Elimination practice, not letter bingo.",
 
-  "home.conversion.why3Title": "Mocks and adaptive-style practice together",
+  "home.conversion.why3Title": "Mocks sitting next to category accuracy",
   "home.conversion.why3Body":
-    "Timed exams and CAT-style runs (where enabled) live next to category accuracy—so you move from drills to full-length sessions without exporting spreadsheets.",
+    "Timed exams and CAT-style runs (where enabled) live beside category stats. Move from drills to full-length sessions without exporting CSVs.",
 
-  "home.conversion.why4Title": "Readiness you can explain to yourself",
+  "home.conversion.why4Title": "A readiness signal you can explain out loud",
   "home.conversion.why4Body":
-    "The dashboard blends accuracy, streaks, and optional exam-date pacing—study signals to prioritize your next block, not a board score guarantee.",
+    "The dashboard mixes accuracy, streaks, and optional exam-date pacing. Study signals you can justify to yourself, not a board score guarantee.",
 
   "home.conversion.previewHeading": "Inside the learner experience",
   "home.conversion.previewSub":
-    "Dashboard for next steps and weak topics; bank for timed or untimed sets. Screenshots track the live product as it evolves.",
+    "Dashboard for next steps and weak topics; bank for timed or untimed sets. Screenshots trail the live app slightly by design.",
   "home.conversion.previewCaptionDash": "Dashboard: next steps, streaks, and weak-topic nudges",
   "home.conversion.previewCaptionBank": "Question bank: stems, rationales, and session progress",
   "home.conversion.previewSignupHint": "Create a free account to open starter runs and see how rationales render on your device.",
 
   "home.conversion.pathwaysHeading": "Pathway hubs (Canada & United States)",
   "home.conversion.pathwaysSub":
-    "Each hub connects questions, lessons, and pathway-specific pricing—open the track that matches your registration.",
+    "Each hub connects questions, lessons, and pathway-specific pricing. Open the track that matches your registration.",
 
   "home.conversion.sampleHeading": "Try content before you subscribe",
   "home.conversion.sampleSub":
@@ -210,7 +211,7 @@ const patch = {
   "home.conversion.sampleTimedDesc": "Full-length sessions live in the app after sign-in and checkout.",
   "home.conversion.sampleSignIn": "Sign in for mocks →",
 
-  "home.conversion.faqHeading": "Straight answers before you commit",
+  "home.conversion.faqHeading": "Stuff people ask before they pay",
 
   "home.conversion.faq1q": "What is included in a paid plan versus a free account?",
   "home.conversion.faq1a":
@@ -226,7 +227,7 @@ const patch = {
 
   "home.conversion.faq4q": "What does “readiness” on the dashboard mean?",
   "home.conversion.faq4a":
-    "Readiness blends recent accuracy, study volume, and optional exam-date pacing. It is a signal for what to study next—not a prediction of pass or fail.",
+    "Readiness blends recent accuracy, study volume, and optional exam-date pacing. It is a signal for what to study next, not a prediction of pass or fail.",
 
   "home.conversion.faq5q": "How do flashcards relate to the question bank?",
   "home.conversion.faq5a":
@@ -234,21 +235,22 @@ const patch = {
 
   "home.conversion.faq6q": "Can I cancel my subscription?",
   "home.conversion.faq6a":
-    "Yes—manage billing from your account. You typically keep access through the period you already paid for; see current Terms for details.",
+    "Yes. Manage billing from your account. You typically keep access through the period you already paid for; see current Terms for details.",
 
-  "home.conversion.finalTitle": "Ready to prep with the full system?",
+  "home.conversion.finalTitle": "Want the full loop, not just a preview?",
   "home.conversion.finalSub":
-    "Start a free trial to unlock starter runs, then upgrade for the full bank, timed mocks, and saved progress for your pathway.",
+    "Free accounts open starter runs. Paid plans bring the full bank, timed mocks with saved scores, and history for your pathway.",
   "home.conversion.ctaSignup": "Start free trial",
   "home.conversion.ctaPricing": "View plans & pricing",
   "home.conversion.ctaTryFree": "Try RN practice questions",
 
-  "pages.pricing.h1": "Pricing tied to your exam pathway—not a generic content bundle",
+  "pages.pricing.h1":
+    "Pricing tied to your exam pathway, not a generic content bundle",
   "pages.pricing.intro":
-    "Choose your segment and country. After checkout, that tier unlocks the full question bank, lessons, timed sessions, flashcards, planner, readiness, and score history for your registration context—without mixing in other scopes.",
+    "Choose your segment and country. After checkout, that tier unlocks the full question bank, lessons, timed sessions, flashcards, planner, readiness, and score history for your registration context, without mixing in other scopes.",
 
   "pages.pricing.hero.trustLine":
-    "Checkout is secure (Stripe). Access is tier-scoped server-side—what you bought is what appears in the bank and mocks.",
+    "Checkout is secure (Stripe). Access is tier-scoped server-side: what you bought is what appears in the bank and mocks.",
   "pages.pricing.hero.ctaTry5": "Run a short practice set first",
   "pages.pricing.hero.ctaWeak": "Open lesson hubs for weak systems",
   "pages.pricing.hero.ctaTry5Sub": "Public starter runs do not require a card.",
@@ -265,7 +267,7 @@ const patch = {
 
   "pages.pricing.get.title": "What you use after checkout",
   "pages.pricing.get.lead":
-    "The same login covers lessons, the question bank, flashcards, study planner, readiness dashboard, and exam mode—filtered to the tier you paid for.",
+    "The same login covers lessons, the question bank, flashcards, study planner, readiness dashboard, and exam mode, filtered to the tier you paid for.",
   "pages.pricing.get.b0": "Pathway-scoped question bank with option-by-option rationales",
   "pages.pricing.get.b1": "Lesson modules aligned to your pathway tags",
   "pages.pricing.get.b2": "Spaced flashcards and weak-topic decks tied to your misses",
@@ -280,13 +282,14 @@ const patch = {
   "pages.pricing.use.title": "How learners actually use the week",
   "pages.pricing.use.afterShiftTitle": "After a shift",
   "pages.pricing.use.afterShiftBody":
-    "A short timed block with rationales—note the weak category for a longer session on your day off.",
+    "A short timed block with rationales. Note the weak category for a longer session on your day off.",
   "pages.pricing.use.weekendTitle": "Weekend block",
   "pages.pricing.use.weekendBody":
     "A lesson on a fragile system, then a half-length mock; review only what you flagged.",
 
   "pages.pricing.risk.title": "What we do not promise",
-  "pages.pricing.risk.b0": "No prep product can guarantee a pass—your form and preparation determine the outcome.",
+  "pages.pricing.risk.b0":
+    "No prep product can guarantee a pass. Your form and preparation determine the outcome.",
   "pages.pricing.risk.b1": "Readiness and analytics are study aids, not certifications.",
   "pages.pricing.risk.b2": "Confirm eligibility, fees, and rules with your board directly.",
 
@@ -312,7 +315,7 @@ const patch = {
   "pages.pricing.compare.colNn": "NurseNest",
   "pages.pricing.compare.colTypical": "Typical fragmented prep",
   "pages.pricing.compare.row0": "Single learner shell for bank, lessons, mocks, planner",
-  "pages.pricing.compare.nn0": "Yes—one account and shared topic tags",
+  "pages.pricing.compare.nn0": "Yes: one account and shared topic tags",
   "pages.pricing.compare.ty0": "Often 2–3 vendors and manual tracking",
   "pages.pricing.compare.row1": "Rationale depth on distractors",
   "pages.pricing.compare.nn1": "In-product for scored items",
@@ -355,17 +358,18 @@ const patch = {
   "pages.pricing.cta.startPractice": "Try another practice set",
 
   "pages.pricing.social.passRateLine":
-    "Learners who keep a weekly rhythm—questions, rationales, then timed blocks—often feel steadier as test day approaches. Your results depend on how consistently you use the tools.",
+    "Learners who keep a weekly rhythm (questions, rationales, then timed blocks) often feel steadier as test day approaches. Your results depend on how consistently you use the tools.",
   "pages.pricing.social.pricingFooterLine":
     "One subscription covers the bank, lessons, mocks, and performance history for your tier so you are not stitching vendors together the week before the exam.",
 
   "home.productProof.title": "Proof in the product",
   "home.productProof.sub":
-    "Live library scale updates on the homepage; session panels below illustrate how rationales and category tags behave after each set.",
+    "The counts on the homepage pull from the live library. The panels below are a static example of how rationales and category tags read after a set.",
   "home.productProof.sessionLabel": "Session report",
-  "home.productProof.sessionSub": "Last 20 items · example category",
+  "home.productProof.sessionSub": "Last 20 items · Pharmacology (example bucket)",
   "home.productProof.needsReview": "Needs review",
   "home.productProof.priorityRisk": "Priority risk",
+  "home.productProof.priorityExample": "Fluid deficit / perfusion (sample tag)",
   "home.productProof.trend": "Trend",
   "home.productProof.trendExample": "+6% vs last set",
   "home.productProof.chartCaption": "Bars are example score blocks, not live data.",

@@ -35,7 +35,7 @@ import {
 } from "lucide-react";
 
 function formatCount(n: number | undefined): string {
-  if (n === undefined) return "—";
+  if (n === undefined) return "N/A";
   if (n === 0) return "0";
   if (n < 10) return `${n}`;
   if (n >= 1000) {
@@ -47,7 +47,7 @@ function formatCount(n: number | undefined): string {
 }
 
 function formatMarketingCount(n: number): string {
-  if (n <= 0) return "—";
+  if (n <= 0) return "N/A";
   if (n >= 1000) return `${Math.floor(n).toLocaleString("en-US")}+`;
   return `${n}+`;
 }
@@ -61,7 +61,7 @@ const sampleQuestion = {
     { id: "D", text: "Recheck the potassium level in 2 hours" },
   ],
   correctAnswer: "B",
-  rationale: "The client's potassium level of 3.1 mEq/L is below the normal range (3.5-5.0 mEq/L). Furosemide is a loop diuretic that causes potassium excretion. Administering furosemide to a client who is already hypokalemic could cause dangerous cardiac arrhythmias. The nurse should hold the medication and notify the provider so potassium can be corrected before administering the diuretic. This demonstrates clinical judgment — recognizing a safety concern and acting to prevent harm.",
+  rationale: "The client's potassium level of 3.1 mEq/L is below the normal range (3.5-5.0 mEq/L). Furosemide is a loop diuretic that causes potassium excretion. Administering furosemide to a client who is already hypokalemic could cause dangerous cardiac arrhythmias. The nurse should hold the medication and notify the provider so potassium can be corrected before administering the diuretic. This demonstrates clinical judgment: recognizing a safety concern and acting to prevent harm.",
   category: "Pharmacology",
   difficulty: "RPN/LPN Level",
 };
@@ -784,7 +784,7 @@ function TestimonialsSection() {
     { name: "Priya S.", role: "RPN Student, Ontario", rating: 5, text: "I passed my practical nursing exam on the first attempt. The question bank and clinical lessons covered everything I saw on exam day. The rationales actually teach you how to think through each question.", tier: "RPN" },
     { name: "James K.", role: "RN Student, British Columbia", rating: 5, text: "The mock exams with strict mode were a game changer. I felt completely prepared walking into the NCLEX-RN. The flashcard decks helped me memorize medications faster than any textbook.", tier: "RN" },
     { name: "Dr. Aisha M.", role: "NP Student, Alberta", rating: 5, text: "The NP question bank is incredibly thorough. Pharmacology questions, clinical management scenarios, and differential diagnosis content were all directly relevant to my AANP certification exam.", tier: "NP" },
-    { name: "Sophie L.", role: "RPN Student, Manitoba", rating: 5, text: "I stopped guessing what to open after night shifts—the lesson checks and miss categories pointed me to the next block instead of re-reading the same chapters.", tier: "RPN" },
+    { name: "Sophie L.", role: "RPN Student, Manitoba", rating: 5, text: "I stopped guessing what to open after night shifts. The lesson checks and miss categories pointed me to the next block instead of re-reading the same chapters.", tier: "RPN" },
     { name: "Marcus T.", role: "RN Student, Nova Scotia", rating: 4, text: "The pathophysiology lessons broke down complex topics into clear, digestible sections. Being able to switch languages to French was a huge plus for me as a bilingual student.", tier: "RN" },
     { name: "Dr. Fatima R.", role: "NP Student, Ontario", rating: 5, text: "I recommended NurseNest to my entire cohort. The clinical pearls and medication safety content go beyond surface-level review. This platform genuinely prepares you for advanced practice.", tier: "NP" },
   ];

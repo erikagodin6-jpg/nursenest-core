@@ -170,7 +170,7 @@ export default async function AdminDiagnosticsPage() {
           <div>
             <h3 className="text-xs font-bold uppercase tracking-wide text-rose-800 dark:text-rose-200">Top negative contributors</h3>
             {ops.scoreDrivers.negative.length === 0 ? (
-              <p className="mt-2 text-sm text-muted-foreground">None — no automated deductions on this snapshot.</p>
+              <p className="mt-2 text-sm text-muted-foreground">None. No automated deductions on this snapshot.</p>
             ) : (
               <ul className="mt-2 space-y-2 text-sm">
                 {ops.scoreDrivers.negative.map((d) => (

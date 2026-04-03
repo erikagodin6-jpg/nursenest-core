@@ -58,7 +58,7 @@ export default async function AdminSubscriptionsPage() {
           <ul className="mt-3 space-y-1 text-sm">
             {byTier.map((r) => (
               <li key={String(r.planTier)} className="flex justify-between">
-                <span>{r.planTier ?? "—"}</span>
+                <span>{r.planTier ?? "N/A"}</span>
                 <span className="tabular-nums">{r._count._all}</span>
               </li>
             ))}
@@ -69,7 +69,7 @@ export default async function AdminSubscriptionsPage() {
           <ul className="mt-3 space-y-1 text-sm">
             {byCountry.map((r) => (
               <li key={String(r.planCountry)} className="flex justify-between">
-                <span>{r.planCountry ?? "—"}</span>
+                <span>{r.planCountry ?? "N/A"}</span>
                 <span className="tabular-nums">{r._count._all}</span>
               </li>
             ))}
@@ -80,11 +80,11 @@ export default async function AdminSubscriptionsPage() {
       <section className="mt-8 nn-card p-6">
         <h2 className="text-lg font-semibold">Stripe price env matrix</h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          Checkout uses these env vars — missing cells show as unavailable in pricing UI.
+          Checkout uses these env vars. Missing cells show as unavailable in pricing UI.
         </p>
         {missing.length > 0 ? (
           <p className="mt-3 text-sm text-amber-800 dark:text-amber-200">
-            Missing: {missing.length} — {missing.slice(0, 6).map((m) => m.envKey).join(", ")}
+            Missing: {missing.length}. {missing.slice(0, 6).map((m) => m.envKey).join(", ")}
             {missing.length > 6 ? "…" : ""}
           </p>
         ) : (
@@ -102,7 +102,7 @@ export default async function AdminSubscriptionsPage() {
               {matrix.map((m) => (
                 <tr key={m.envKey} className="border-b border-border/40">
                   <td className="py-1.5 font-mono">{m.envKey}</td>
-                  <td className="py-1.5 font-mono">{m.priceId ?? "—"}</td>
+                  <td className="py-1.5 font-mono">{m.priceId ?? "N/A"}</td>
                 </tr>
               ))}
             </tbody>
@@ -130,7 +130,7 @@ export default async function AdminSubscriptionsPage() {
                   </td>
                   <td className="py-2">{s.status}</td>
                   <td className="py-2">
-                    {s.planTier ?? "—"} / {s.planCountry ?? "—"}
+                    {s.planTier ?? "N/A"} / {s.planCountry ?? "N/A"}
                   </td>
                   <td className="py-2 text-xs">{s.createdAt.toISOString().slice(0, 19)}</td>
                 </tr>
@@ -139,7 +139,7 @@ export default async function AdminSubscriptionsPage() {
           </table>
         </div>
         <p className="mt-3 text-xs text-muted-foreground">
-          MRR not stored in-app — derive from Stripe dashboard or reporting export.
+          MRR not stored in-app. Derive from Stripe dashboard or reporting export.
         </p>
       </section>
     </main>

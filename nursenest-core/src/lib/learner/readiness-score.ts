@@ -30,7 +30,7 @@ export type ReadinessResult = {
   whatToImprove: string[];
   /** Recommended next actions. */
   nextActions: string[];
-  /** Lowest-scoring factors (plain labels)—what is limiting readiness most. */
+  /** Lowest-scoring factors (plain labels): what is limiting readiness most. */
   holdingBack: string[];
   /** True when this score is intentionally conservative due to cohort/signal limits. */
   calibratedPreview?: boolean;
@@ -190,7 +190,7 @@ export function computeReadiness(args: {
       label: "Practice accuracy",
       points: 0,
       maxPoints: 0,
-      detail: `Only ${practiceTotal} graded items — need at least ${signalProfile.minPracticeItems} before this signal is included in the denominator.`,
+      detail: `Only ${practiceTotal} graded items. You need at least ${signalProfile.minPracticeItems} before this signal is included in the denominator.`,
     });
   }
 
@@ -205,7 +205,7 @@ export function computeReadiness(args: {
     const spread = mockPercentStdDev(recentMocks);
     let mockDetail = `Average ${Math.round(avgPct)}% across ${usableMocks.length} recent mock attempt(s) (5+ items each).`;
     if (spread != null && spread > 12) {
-      mockDetail += ` Spread is ~${Math.round(spread)}% between mocks—readiness weights consistency, not one lucky run.`;
+      mockDetail += ` Spread is ~${Math.round(spread)}% between mocks. Readiness weights consistency, not one lucky run.`;
       const dampen = Math.max(0.72, 1 - (spread - 12) / 140);
       mockPoints = Math.round(mockPoints * dampen);
     }
@@ -222,7 +222,7 @@ export function computeReadiness(args: {
       label: "Recent mock performance",
       points: 0,
       maxPoints: 0,
-      detail: "No recent mock with 5+ items — this signal is omitted from the denominator until you complete one.",
+      detail: "No recent mock with 5+ items. This signal is omitted from the denominator until you complete one.",
     });
   }
 
@@ -236,7 +236,7 @@ export function computeReadiness(args: {
       label: "Topic error load",
       points: topicPoints,
       maxPoints: topicMax,
-      detail: "No recorded topic misses in recent scored sessions — or not enough data to attribute errors yet.",
+      detail: "No recorded topic misses in recent scored sessions, or not enough data to attribute errors yet.",
     });
   } else {
     const top = weakTopics.slice(0, 3);
@@ -272,7 +272,7 @@ export function computeReadiness(args: {
       label: "Lesson completion",
       points: 0,
       maxPoints: 0,
-      detail: "No lesson pool counted for your scope — pathway or catalog may still be loading.",
+      detail: "No lesson pool counted for your scope. Pathway or catalog may still be loading.",
     });
   }
 
@@ -292,7 +292,7 @@ export function computeReadiness(args: {
 
   let summary =
     confidence === "high"
-      ? "Readiness blends recent session accuracy, mock scores, topic misses, and lesson completion. It is indicative—not a pass guarantee."
+      ? "Readiness blends recent session accuracy, mock scores, topic misses, and lesson completion. It is indicative, not a pass guarantee."
       : confidence === "medium"
         ? "Readiness is preliminary: add more timed practice and mocks to tighten this estimate."
         : "Readiness is early: numbers will move as you complete more full sessions.";

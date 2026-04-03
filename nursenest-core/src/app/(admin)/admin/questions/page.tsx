@@ -79,7 +79,7 @@ export default async function AdminQuestionsPage({
                   <p className="font-mono text-[11px] text-muted-foreground">{r.id.slice(0, 8)}…</p>
                 </td>
                 <td className="py-2 font-mono text-xs">{r.exam}</td>
-                <td className="py-2">{r.topic ?? "—"}</td>
+                <td className="py-2">{r.topic ?? "N/A"}</td>
                 <td className="py-2 text-right tabular-nums">{wordCount(r.rationale)}</td>
                 <td className="py-2 text-right text-xs">{new Date(r.updatedAt).toLocaleDateString()}</td>
                 <td className="py-2 text-right">

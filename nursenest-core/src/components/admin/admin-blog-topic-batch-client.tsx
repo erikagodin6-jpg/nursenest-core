@@ -294,7 +294,7 @@ export function AdminBlogTopicBatchClient({
               <ul className="mt-2 space-y-1 font-mono text-xs text-muted-foreground">
                 {preview.preview.map((row) => (
                   <li key={row.plannedPublishAt + row.topic}>
-                    {row.plannedPublishAt.slice(0, 16).replace("T", " ")} — {row.topic.slice(0, 80)}
+                    {row.plannedPublishAt.slice(0, 16).replace("T", " ")} · {row.topic.slice(0, 80)}
                   </li>
                 ))}
               </ul>
@@ -345,7 +345,7 @@ export function AdminBlogTopicBatchClient({
                     <span className="text-rose-700 dark:text-rose-200">fail {s.failedCount}</span>
                   </td>
                   <td className="px-3 py-2 text-xs text-muted-foreground">
-                    {s.nextRunAt ? new Date(s.nextRunAt).toLocaleString() : "—"}
+                    {s.nextRunAt ? new Date(s.nextRunAt).toLocaleString() : "N/A"}
                   </td>
                   <td className="px-3 py-2">
                     <div className="flex flex-wrap gap-1">
@@ -386,7 +386,7 @@ export function AdminBlogTopicBatchClient({
       {detail ? (
         <section className="rounded-xl border border-border/80 bg-muted/30 p-6">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <h3 className="font-semibold">Items — {detail.id}</h3>
+            <h3 className="font-semibold">Items: {detail.id}</h3>
             <Button type="button" variant="ghost" size="sm" onClick={() => setDetail(null)}>
               Close
             </Button>

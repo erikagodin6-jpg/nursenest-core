@@ -83,7 +83,7 @@ export function assessPlanTrack(args: {
     return {
       status: "overdue",
       label: "Date needs refresh",
-      headline: "Your saved exam date is in the past — update it when you can so pacing stays kind and accurate.",
+      headline: "Your saved exam date is in the past. Update it when you can so pacing stays kind and accurate.",
       detail: "This does not reset your progress; it only recalibrates reminders and weekly targets.",
     };
   }
@@ -104,7 +104,7 @@ export function assessPlanTrack(args: {
       status: "at_risk",
       label: "Worth extra focus",
       headline:
-        "You still have moves to make — short, consistent sessions usually beat cramming, especially close to test day.",
+        "You still have moves to make. Short, consistent sessions usually beat cramming, especially close to test day.",
       detail: lowReadinessNear
         ? "Readiness has room to climb; prioritize one weak area per day plus one mock-style block this week."
         : mocksThinNear
@@ -121,7 +121,7 @@ export function assessPlanTrack(args: {
     return {
       status: "slightly_behind",
       label: "Room to grow",
-      headline: "You are building — add one more structured lesson block and a short quiz set this week to tighten the arc.",
+      headline: "You are building. Add one more structured lesson block and a short quiz set this week to tighten the arc.",
       detail: inactive
         ? "Jumping back in today, even briefly, keeps the plan from feeling heavier later."
         : null,
@@ -132,7 +132,7 @@ export function assessPlanTrack(args: {
     return {
       status: "slightly_behind",
       label: "Gentle nudge",
-      headline: "A little activity today makes the next session easier — even fifteen minutes counts.",
+      headline: "A little activity today makes the next session easier. Even fifteen minutes counts.",
       detail: null,
     };
   }
@@ -140,10 +140,10 @@ export function assessPlanTrack(args: {
   return {
     status: "on_track",
     label: "On track",
-    headline: "Your plan and practice patterns look workable for the timeline you shared — stay steady and adjust if life gets noisy.",
+    headline: "Your plan and practice patterns look workable for the timeline you shared. Stay steady and adjust if life gets noisy.",
     detail:
       args.readinessBand === "ready" || args.readinessBand === "near_ready"
-        ? "Strong foundation — keep mixing review with fresh items so skills stay exam-sharp."
+        ? "Strong foundation. Keep mixing review with fresh items so skills stay exam-sharp."
         : "Keep alternating lessons, questions, and occasional mocks so readiness can keep climbing.",
   };
 }
@@ -180,16 +180,16 @@ export function buildWeeklyStudyPlan(args: {
 
   let mockTiming =
     args.urgency === "final_stretch"
-      ? "Schedule one mock early this week — short walk, then review misses."
+      ? "Schedule one mock early this week. Short walk, then review misses."
       : args.urgency === "near"
         ? "One timed mock mid-week; use the back half for weak-topic drills."
         : "If you have not mocked recently, reserve a quiet block before the weekend.";
 
   if (args.daysRemaining != null && args.daysRemaining <= 3) {
-    mockTiming = "Skip new heavy mocks if you are days out — light review and one short timed block if it helps you feel settled.";
+    mockTiming = "Skip new heavy mocks if you are days out. Light review and one short timed block if it helps you feel settled.";
   }
 
-  const rationale = `${cadenceLabel(args.cadence)} · ~${weeks} week(s) on the calendar — targets scale with cadence and horizon.`;
+  const rationale = `${cadenceLabel(args.cadence)} · ~${weeks} week(s) on the calendar. Targets scale with cadence and horizon.`;
 
   return {
     lessonsToFinish,
@@ -220,7 +220,7 @@ export function buildRecoveryRecommendations(args: {
     out.push({
       id: "overdue_date",
       title: "Refresh your exam date",
-      body: "Open exam plan settings and set a new target — we will re-align weekly targets without judging the slip.",
+      body: "Open exam plan settings and set a new target. We will re-align weekly targets without judging the slip.",
       href: "/app/study-plan#exam-plan",
     });
   }
@@ -232,7 +232,7 @@ export function buildRecoveryRecommendations(args: {
     out.push({
       id: "near_low_readiness",
       title: "Pair review with timed practice",
-      body: "Close to test day with readiness still building — alternate short drills with one mock-style block so stamina and judgment both move.",
+      body: "Close to test day with readiness still building. Alternate short drills with one mock-style block so stamina and judgment both move.",
       href: "/app/exams",
     });
   }
@@ -241,7 +241,7 @@ export function buildRecoveryRecommendations(args: {
     out.push({
       id: "inactive_near",
       title: "Ease back in with one small win",
-      body: "Exam window is tight — start with a 15-minute quiz or flashcard round so momentum returns without overwhelm.",
+      body: "Exam window is tight. Start with a 15-minute quiz or flashcard round so momentum returns without overwhelm.",
       href: "/app/questions",
     });
   }
@@ -250,7 +250,7 @@ export function buildRecoveryRecommendations(args: {
     out.push({
       id: "low_mocks_near",
       title: "Add a full mock when you can",
-      body: "At least one long timed attempt helps pacing feel familiar — use results to trim what you review next.",
+      body: "At least one long timed attempt helps pacing feel familiar. Use results to trim what you review next.",
       href: "/app/exams",
     });
   }
@@ -262,7 +262,7 @@ export function buildRecoveryRecommendations(args: {
     out.push({
       id: "weak_cluster",
       title: "Triage weak topics one at a time",
-      body: "Several areas are signaling — pick the top one first, clear it with focused drills, then move to the next.",
+      body: "Several areas are signaling. Pick the top one first, clear it with focused drills, then move to the next.",
       href: topicHref,
     });
   }
@@ -271,7 +271,7 @@ export function buildRecoveryRecommendations(args: {
     out.push({
       id: "foundation_gap",
       title: "Protect time for one lesson pathway block",
-      body: "Lessons still anchor tricky concepts — one module this week can reduce noise in your question review.",
+      body: "Lessons still anchor tricky concepts. One module this week can reduce noise in your question review.",
       href: "/app/lessons",
     });
   }
@@ -291,7 +291,7 @@ export function buildExamPlanMilestones(args: {
   milestones.push({
     id: "foundation",
     title: "Finish your lesson foundation",
-    description: "Work through the lesson pool for your pathway — structured context before volume.",
+    description: "Work through the lesson pool for your pathway: structured context before volume.",
     complete: args.lessonPct >= 85,
     href: "/app/lessons",
   });
@@ -299,7 +299,7 @@ export function buildExamPlanMilestones(args: {
   milestones.push({
     id: "first_mock",
     title: "Complete your first mock",
-    description: "A timed attempt shows pacing and stamina — review rationales, not just the score.",
+    description: "A timed attempt shows pacing and stamina. Review rationales, not just the score.",
     complete: args.mockCount >= 1,
     href: "/app/exams",
   });
@@ -308,7 +308,7 @@ export function buildExamPlanMilestones(args: {
     milestones.push({
       id: "weakest_topic",
       title: `Lift accuracy on ${args.weakestTopic}`,
-      description: "Short drills beat long marathons — use topic drill and weak-area flashcards.",
+      description: "Short drills beat long marathons. Use topic drill and weak-area flashcards.",
       complete: args.readiness.band === "near_ready" || args.readiness.band === "ready",
       href: `/app/questions?preset=topic_drill&topic=${encodeURIComponent(args.weakestTopic)}`,
     });
@@ -317,7 +317,7 @@ export function buildExamPlanMilestones(args: {
   milestones.push({
     id: "readiness_threshold",
     title: "Reach a stable readiness band",
-    description: "Aim for “improving” or higher with consistent practice — numbers track signals, not fate.",
+    description: "Aim for “improving” or higher with consistent practice. Numbers track signals, not fate.",
     complete: args.readiness.band === "near_ready" || args.readiness.band === "ready",
     href: "/app/questions",
   });
@@ -342,7 +342,7 @@ export function retentionPromptHints(args: {
   if (args.planTrack === "at_risk" || args.planTrack === "slightly_behind") {
     return {
       title: "Keep the full bank in reach",
-      body: "Consistent access to every question, mock, and lesson lane makes recovery weeks less chaotic — worth keeping if your window is tight.",
+      body: "Consistent access to every question, mock, and lesson lane makes recovery weeks less chaotic. Worth keeping if your window is tight.",
       ctaHref: "/pricing",
       soft: true,
     };
@@ -350,7 +350,7 @@ export function retentionPromptHints(args: {
   if (args.cadence === "intensive") {
     return {
       title: "Match intensity with depth",
-      body: "Intensive cadence pairs best with full explanations and mocks — your subscription keeps those unlocked.",
+      body: "Intensive cadence pairs best with full explanations and mocks. Your subscription keeps those unlocked.",
       ctaHref: "/app/exams",
       soft: true,
     };

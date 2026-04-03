@@ -211,7 +211,7 @@ export function AdminBlogSchedulerPanel({
                   <p className="mt-1 text-muted-foreground line-clamp-2">{p.excerpt}</p>
                 </td>
                 <td className="px-2 py-2">
-                  <p>{p.exam || "—"} / {p.category || "—"}</p>
+                  <p>{p.exam || "N/A"} / {p.category || "N/A"}</p>
                   <p className="mt-1 text-muted-foreground">{p.tags.join(", ") || "no tags"}</p>
                   <p className="mt-1 text-[10px] text-amber-700">
                     {!p.seoTitle || !p.seoDescription

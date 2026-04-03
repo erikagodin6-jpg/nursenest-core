@@ -18,7 +18,7 @@ function trajectoryShort(t: AdaptiveLearnerRecommendations["trajectory"]): strin
     case "final_review":
       return "Final stretch";
     default:
-      return "—";
+      return "N/A";
   }
 }
 
@@ -46,7 +46,7 @@ export function LearnerDashboardHero({
   const primaryHref = continueLesson?.href ?? primaryNext.href;
   const primaryTitle = continueLesson ? `Continue: ${continueLesson.title}` : primaryNext.title;
   const primaryReason = continueLesson
-    ? "Resume your pathway where you stopped—structured content before drills keeps gaps from compounding."
+    ? "Resume your pathway where you stopped. Structured content before drills keeps gaps from stacking up."
     : primaryNext.reason;
 
   return (
@@ -77,7 +77,7 @@ export function LearnerDashboardHero({
               </p>
             ) : !countdown.secondary ? (
               <p className="mt-2 text-sm text-muted-foreground">
-                Add a target exam date in settings for time-aware pacing—we’ll still guide you on mastery until then.
+                Add a target exam date in settings for time-aware pacing. We will still nudge you on mastery until then.
               </p>
             ) : null}
           </div>
@@ -122,7 +122,7 @@ export function LearnerDashboardHero({
             </div>
           ) : (
             <p className="text-sm text-muted-foreground">
-              Answer more graded questions—your topic ledger will highlight where to drill.
+              Answer more graded questions. Your topic ledger will highlight where to drill.
             </p>
           )}
 
@@ -141,7 +141,7 @@ export function LearnerDashboardHero({
           <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Exam readiness</p>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-4xl font-bold tabular-nums tracking-tight text-[var(--theme-heading-text)]">
-              {readiness.score != null ? readiness.score : "—"}
+              {readiness.score != null ? readiness.score : "N/A"}
             </span>
             {readiness.score != null ? (
               <span className="text-lg font-semibold text-muted-foreground">/100</span>
@@ -162,7 +162,7 @@ export function LearnerDashboardHero({
         <div className="rounded-xl border border-border/40 bg-background/50 px-4 py-3">
           <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Lessons</p>
           <p className="mt-1 text-lg font-bold tabular-nums text-foreground">
-            {overallLessons.total > 0 ? `${overallLessons.pct}%` : "—"}
+            {overallLessons.total > 0 ? `${overallLessons.pct}%` : "N/A"}
           </p>
           <p className="text-[11px] text-muted-foreground">
             {overallLessons.total > 0 ? `${overallLessons.completed} / ${overallLessons.total}` : "Pool loading"}
@@ -171,7 +171,7 @@ export function LearnerDashboardHero({
         <div className="rounded-xl border border-border/40 bg-background/50 px-4 py-3">
           <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Scored items</p>
           <p className="mt-1 text-lg font-bold tabular-nums text-foreground">
-            {practice.gradedTotal > 0 ? `${practice.accuracyPct ?? 0}%` : "—"}
+            {practice.gradedTotal > 0 ? `${practice.accuracyPct ?? 0}%` : "N/A"}
           </p>
           <p className="text-[11px] text-muted-foreground">
             {practice.gradedTotal > 0
@@ -181,13 +181,13 @@ export function LearnerDashboardHero({
         </div>
         <div className="rounded-xl border border-border/40 bg-background/50 px-4 py-3">
           <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Streak</p>
-          <p className="mt-1 text-lg font-bold tabular-nums text-foreground">{streakDays > 0 ? streakDays : "—"}</p>
+          <p className="mt-1 text-lg font-bold tabular-nums text-foreground">{streakDays > 0 ? streakDays : "N/A"}</p>
           <p className="text-[11px] text-muted-foreground">Days with activity</p>
         </div>
         <div className="rounded-xl border border-border/40 bg-background/50 px-4 py-3">
           <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Flashcards</p>
           <p className="mt-1 text-lg font-bold tabular-nums text-foreground">
-            {flashcardReviews != null ? flashcardReviews : "—"}
+            {flashcardReviews != null ? flashcardReviews : "N/A"}
           </p>
           <p className="text-[11px] text-muted-foreground">Reviews logged</p>
         </div>

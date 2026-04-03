@@ -22,7 +22,7 @@ type HomeStatsPayload = {
 };
 
 function formatStat(n: number | undefined): string {
-  if (n === undefined || n <= 0) return "—";
+  if (n === undefined || n <= 0) return "N/A";
   return Math.floor(n).toLocaleString("en-US");
 }
 
@@ -72,7 +72,7 @@ export default function HeroPlatformStats() {
             Your Complete Healthcare Exam Preparation Platform
           </h2>
           <p className="mx-auto max-w-2xl text-base text-[var(--theme-muted-text)] lg:text-lg">
-            Everything you need to pass your nursing, NP, or allied health exam — built by educators, backed by evidence.
+            Everything you need to pass your nursing, NP, or allied health exam: built by educators, backed by evidence.
           </p>
         </div>
 

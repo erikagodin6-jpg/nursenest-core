@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const title = `${data.title} flashcards`;
     const desc =
       data.description?.slice(0, 155) ||
-      `Study ${data.title} with NurseNest—${data.cardCount} nursing flashcards. Preview sample cards; subscribe for full decks and spaced repetition.`;
+      `Study ${data.title} with NurseNest: ${data.cardCount} nursing flashcards. Preview sample cards; subscribe for full decks and spaced repetition.`;
     return {
       title,
       description: desc,
@@ -79,7 +79,7 @@ export default async function PublicFlashcardSlugPage({ params }: Props) {
         <>
           <h1 className="text-3xl font-bold text-[var(--theme-heading-text)]">{data.name} flashcards</h1>
           <p className="mt-3 text-sm leading-relaxed text-[var(--theme-muted-text)]">
-            Decks below share this topic tag—use them to reinforce quick recall alongside{" "}
+            Decks below share this topic tag. Use them to reinforce quick recall alongside{" "}
             <Link href="/exam-lessons" className="font-medium text-primary underline">
               pathway lessons
             </Link>{" "}
@@ -106,7 +106,7 @@ export default async function PublicFlashcardSlugPage({ params }: Props) {
       <section className="mt-10">
         <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Sample cards</h2>
         <p className="mt-1 text-xs text-[var(--theme-muted-text)]">
-          Short answer previews—premium study includes full explanations and unlimited reviews.
+          Short answer previews here. Premium study includes full explanations and unlimited reviews.
         </p>
         <ul className="mt-6 space-y-5">
           {data.samples.length === 0 ? (

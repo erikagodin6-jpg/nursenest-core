@@ -112,8 +112,7 @@ export function PremiumLearnerHub({
       </ul>
     ) : (
       <p className={compactIntro ? "text-sm text-muted" : "relative mt-5 border-t border-border/50 pt-4 text-sm text-muted"}>
-        Complete a lesson, graded bank block, or mock—personal feedback will show here as soon as we have a trend to
-        compare.
+        Finish a lesson, a graded bank block, or a mock. Personal notes show up here once we have a trend to compare.
       </p>
     );
 
@@ -126,8 +125,8 @@ export function PremiumLearnerHub({
             <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Momentum this week</h2>
           </div>
           <p className="mt-1 text-xs text-muted">
-            {examReadyHeadline ? `${examReadyHeadline} — ` : null}
-            Short signals from your last sessions—details stay in the readiness card above.
+            {examReadyHeadline ? `${examReadyHeadline}. ` : null}
+            Short signals from your last sessions. Details stay in the readiness card above.
           </p>
           <div className="mt-4">{momentumSection}</div>
         </section>
@@ -144,7 +143,7 @@ export function PremiumLearnerHub({
                 <p className="text-lg font-semibold tracking-tight text-[var(--theme-heading-text)]">{examReadyHeadline}</p>
               ) : (
                 <p className="text-lg font-semibold tracking-tight text-[var(--theme-heading-text)]">
-                  Your progress is personal—we surface it clearly so every session counts.
+                  Your progress is yours. We try to surface it clearly so each session feels worth it.
                 </p>
               )}
               <p className="mt-1 flex flex-wrap items-center gap-2 text-sm text-muted">
@@ -174,7 +173,7 @@ export function PremiumLearnerHub({
             <FileText className="h-4 w-4 text-primary" aria-hidden />
             <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Recent study notes</h2>
           </div>
-          <p className="mt-1 text-xs text-muted">Titles and sources only—open the lesson or bank to edit.</p>
+          <p className="mt-1 text-xs text-muted">Titles and sources only. Open the lesson or bank to edit.</p>
           <ul className="mt-4 space-y-2">
             {recentNotes.map((n) => (
               <li key={`${n.scope}-${n.contextId}`}>
@@ -299,7 +298,7 @@ export function PremiumLearnerHub({
 
       <section className="nn-card p-6">
         <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Performance summary</h2>
-        <p className="mt-1 text-xs text-muted">Blended signals from your plan—indicative, not a pass guarantee.</p>
+        <p className="mt-1 text-xs text-muted">Blended signals from your plan. Indicative only, not a pass guarantee.</p>
 
         <div className="mt-5 space-y-6">
           <Bar
@@ -308,7 +307,7 @@ export function PremiumLearnerHub({
             sublabel={
               overallLessons.total > 0
                 ? `${overallLessons.completed} of ${overallLessons.total} lessons in your pool`
-                : "Lesson pool is still loading for your scope—we will show a target count soon."
+                : "Lesson pool is still loading for your scope. We will show a target count soon."
             }
           />
 
@@ -345,7 +344,7 @@ export function PremiumLearnerHub({
               ) : (
                 <p className="text-sm text-muted">
                   We will chart practice accuracy, mocks, topic load, and lesson completion here once you have enough scored
-                  activity—see the checklist in your readiness band above.
+                  activity. See the checklist in your readiness band above.
                 </p>
               )}
             </div>
@@ -367,7 +366,7 @@ export function PremiumLearnerHub({
             <Flame className="h-3.5 w-3.5" aria-hidden />
             {snapshot.studyStreakDays > 0
               ? `${snapshot.studyStreakDays}-day activity streak`
-              : "Start a streak—any study day counts"}
+              : "Start a streak. Any study day counts."}
           </span>
           {milestones.map((m) => (
             <span
@@ -381,15 +380,15 @@ export function PremiumLearnerHub({
         </div>
         {milestones.length === 0 && snapshot.studyStreakDays === 0 ? (
           <p className="mt-3 text-sm text-muted">
-            Milestones appear as you hit lesson thresholds, longer streaks, and more scored volume—your next win is one
-            focused session away.
+            Milestones show up as you hit lesson thresholds, longer streaks, and more scored volume. Often your next win is
+            one focused session away.
           </p>
         ) : null}
       </section>
 
       <section className="nn-card p-6">
         <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Recent mocks</h2>
-        <p className="mt-1 text-xs text-muted">Last five attempts—watch the trend, not a single score.</p>
+        <p className="mt-1 text-xs text-muted">Last five attempts. Watch the trend, not one score.</p>
         {recentMocks.length > 0 ? (
           <ul className="mt-4 divide-y divide-border/60">
             {recentMocks.map((m) => (

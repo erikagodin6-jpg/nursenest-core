@@ -7,7 +7,7 @@ import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 
 function formatStat(n: number | undefined): string {
-  if (n === undefined || Number.isNaN(n)) return "—";
+  if (n === undefined || Number.isNaN(n)) return "N/A";
   if (n === 0) return "0";
   return n.toLocaleString("en-US");
 }

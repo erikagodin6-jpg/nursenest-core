@@ -34,7 +34,7 @@ function parseOptions(raw: unknown): string[] {
 }
 
 function formatDuration(ms: number | null | undefined): string {
-  if (ms == null || !Number.isFinite(ms) || ms < 0) return "—";
+  if (ms == null || !Number.isFinite(ms) || ms < 0) return "N/A";
   const s = Math.floor(ms / 1000);
   const m = Math.floor(s / 60);
   const h = Math.floor(m / 60);
@@ -409,7 +409,7 @@ export function ExamPracticeClient({
         {examTitle ? <p className="text-sm font-medium text-muted">{examTitle}</p> : null}
         <p className="text-sm text-muted">Choose how you want to run this session. Progress saves automatically; you can refresh and resume.</p>
         <p className="text-xs text-muted">
-          This is NurseNest practice—timed pacing and layout are designed to feel serious and focused. We do not replicate any
+          This is NurseNest practice. Timed pacing and layout are designed to feel serious and focused. We do not replicate any
           official exam vendor interface or guarantee identical behavior on test day.
         </p>
         <div className="flex flex-wrap gap-2">
@@ -614,7 +614,7 @@ export function ExamPracticeClient({
             </button>
           </div>
           <p className="text-xs text-slate-500">
-            Rationales and explanations appear only after scoring—same discipline as many high-stakes exams.
+            Rationales and explanations appear only after scoring, same discipline as many high-stakes exams.
           </p>
         </div>
       </ExamSessionShell>

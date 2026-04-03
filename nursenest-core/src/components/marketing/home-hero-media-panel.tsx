@@ -79,7 +79,7 @@ function BrowserChrome({ children }: { children: ReactNode }) {
           <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]/90" />
         </span>
         <span className="ml-2 flex-1 truncate rounded-md bg-[var(--theme-card-bg)]/90 px-3 py-1 text-center text-[10px] font-medium text-[var(--theme-muted-text)] shadow-inner sm:text-[11px]">
-          NurseNest — exam prep
+          NurseNest · exam prep
         </span>
       </div>
       {children}

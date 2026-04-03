@@ -182,7 +182,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
             <aside className="nn-card mt-6 border-amber-200 bg-amber-50 p-4 text-sm text-[var(--theme-body-text)] dark:border-amber-900/40 dark:bg-amber-950/30">
               <p className="font-semibold">Access check didn’t complete</p>
               <p className="mt-1 text-muted">
-                We couldn’t confirm your plan (temporary server or data issue)—this is not the same as being denied access.
+                We couldn’t confirm your plan (temporary server or data issue). This is not the same as being denied access.
                 Refresh in a moment; you can still read the preview sections below. Sign in again or contact support if it
                 persists.
               </p>

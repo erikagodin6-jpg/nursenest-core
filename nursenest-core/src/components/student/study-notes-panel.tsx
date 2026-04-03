@@ -125,7 +125,7 @@ export function StudyNotesPanel({
   <div class="meta">Source: ${escapeHtml(sourceLabel)} · Scope: ${scope} · Saved ${escapeHtml(printedAt)}</div>
   ${title.trim() ? `<h2 style="font-size:14px;margin:12px 0 8px">${escapeHtml(title.trim())}</h2>` : ""}
   <div class="body">${escapeHtml(body)}</div>
-  <p class="foot">User notes only. Premium lesson and question content from NurseNest is not included. Screenshots and sharing are not blocked by technology—please respect your subscription terms.</p>
+  <p class="foot">User notes only. Premium lesson and question content from NurseNest is not included. Screenshots and sharing are not blocked by technology. Please respect your subscription terms.</p>
 </body></html>`;
     const w = window.open("", "_blank");
     if (!w) return;
@@ -163,7 +163,7 @@ export function StudyNotesPanel({
       {open ? (
         <div className="mt-3 space-y-2">
           <p className="text-xs text-muted">
-            Your notes save to your account. They are yours to copy, print, and export—protected premium text stays in the
+            Your notes save to your account. They are yours to copy, print, and export. Protected premium text stays in the
             app.
           </p>
           <input

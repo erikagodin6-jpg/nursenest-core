@@ -73,7 +73,7 @@ export function PremiumRationalePanel({
       </p>
       {showEnrichment ? (
         <p className="mt-2 rounded-lg border border-amber-200/60 bg-amber-50/50 px-3 py-2 text-xs text-amber-950 dark:border-amber-900/40 dark:bg-amber-950/20">
-          Rationale available but needs enrichment — we’re expanding explanations across the bank.
+          Rationale available but needs enrichment. We’re expanding explanations across the bank.
         </p>
       ) : null}
       {useTeaching && teaching ? (

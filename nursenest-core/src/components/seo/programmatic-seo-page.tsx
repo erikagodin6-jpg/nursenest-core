@@ -53,7 +53,7 @@ export function ProgrammaticSeoPage({ page, locale }: { page: SeoPageDefinition;
             </>
           )}
           <p className="mt-3 text-sm font-medium text-[var(--theme-body-text)]/85">
-            Turn reading into reps: pathway-scoped questions, lessons, and timed exams—so you study what your authorization
+            Turn reading into reps: pathway-scoped questions, lessons, and timed exams that match what your authorization
             actually covers.
           </p>
           <nav className="mt-3 text-sm text-primary" aria-label="Related hubs">

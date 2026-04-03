@@ -170,7 +170,7 @@ export async function GET(req: NextRequest) {
       ...l,
       summary:
         (l.summary ?? "").length > 220
-          ? `${(l.summary ?? "").slice(0, 220).trim()}… — unlock full lessons with a subscription.`
+          ? `${(l.summary ?? "").slice(0, 220).trim()}… Unlock full lessons with a subscription.`
           : l.summary ?? "",
     }));
 

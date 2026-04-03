@@ -26,7 +26,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
       ? `Pre-Nursing lessons (page ${page}) | NurseNest`
       : "Free Pre-Nursing lessons & modules | NurseNest";
   const description =
-    "Free interactive Pre-Nursing modules: sciences, terminology, communication, and clinical reasoning — paginated for fast loads. No subscription required.";
+    "Free interactive Pre-Nursing modules: sciences, terminology, communication, and clinical reasoning, paginated for fast loads. No subscription required.";
   const path = page > 1 ? `/pre-nursing/lessons?page=${page}` : "/pre-nursing/lessons";
   return {
     title,

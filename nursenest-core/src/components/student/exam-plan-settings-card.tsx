@@ -116,7 +116,7 @@ export function ExamPlanSettingsCard() {
     <section id="exam-plan" className="nn-card scroll-mt-24 p-6">
       <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Exam date & pacing</h2>
       <p className="mt-2 text-sm text-muted">
-        Tell us your timing so we can pace countdowns and suggestions. This is not a booking record — update it anytime.
+        Tell us your timing so we can pace countdowns and suggestions. This is not a booking record. Update it anytime.
       </p>
 
       <form className="mt-4 space-y-4" onSubmit={onSave}>
@@ -216,7 +216,7 @@ export function ExamPlanSettingsCard() {
             <option value="steady">Steady rhythm</option>
             <option value="intensive">More intensive blocks</option>
           </select>
-          <p className="mt-1 text-xs text-muted">Used for wording only — we do not assign fixed daily hours.</p>
+          <p className="mt-1 text-xs text-muted">Used for wording only. We do not assign fixed daily hours.</p>
         </div>
 
         {error ? <p className="text-sm text-destructive">{error}</p> : null}

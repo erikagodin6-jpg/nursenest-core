@@ -7,16 +7,16 @@ export function messageForQuestionsApiFailure(status: number, code?: string): st
     return "You need to sign in again to load the question bank.";
   }
   if (status === 403 && code === "paywall") {
-    return "Complimentary previews are used up—subscribe for full bank access and rationales.";
+    return "Complimentary previews are used up. Subscribe for full bank access and rationales.";
   }
   if (status === 403 && code === "no_active_subscription") {
-    return "No active subscription on this account—choose a plan to use the full question bank.";
+    return "No active subscription on this account. Choose a plan to use the full question bank.";
   }
   if (status === 403) {
     return "This account can’t open the subscriber question list with the current plan or session.";
   }
   if (status === 503 && code === "access_verify_failed") {
-    return "We couldn’t verify your access (subscription check failed). Refresh shortly—this is usually temporary, not a paywall block.";
+    return "We couldn’t verify your access (subscription check failed). Refresh shortly. This is usually temporary, not a paywall block.";
   }
   if (status === 503) {
     return "The question bank is temporarily unavailable (database or service issue). Try again in a moment.";
@@ -31,7 +31,7 @@ export function messageForDiscoveryFailure(status: number, code?: string): strin
   }
   if (status === 403) return "Topic discovery isn’t available for this account or plan.";
   if (status === 503 && code === "access_verify_failed") {
-    return "Couldn’t verify access for topic filters—refresh shortly.";
+    return "Couldn’t verify access for topic filters. Refresh shortly.";
   }
   if (status === 503) return "Topic list couldn’t load (temporary server or database issue).";
   return "Topic menu couldn’t load; try refreshing.";
@@ -49,14 +49,14 @@ export function questionBankEmptyCopy(
   if (d?.pathwayRejectedForSubscription && d.pathwayIdRequested) {
     return {
       title: "Pathway not on your plan",
-      body: `That pathway isn’t included in your subscription, so it wasn’t applied as a filter. Clear the pathway filter or upgrade—if the list is still empty, the cause below still applies.`,
+      body: `That pathway isn’t included in your subscription, so it wasn’t applied as a filter. Clear the pathway filter or upgrade. If the list is still empty, the cause below still applies.`,
     };
   }
   switch (d?.code) {
     case "bank_empty_global":
       return {
         title: "No published questions yet",
-        body: "There are no published items in the question bank yet—this is a content gap, not your subscription. Contact support if you expected data here.",
+        body: "There are no published items in the question bank yet. This is a content gap, not your subscription. Contact support if you expected data here.",
       };
     case "entitlement_excludes_all_published":
       return {
@@ -91,7 +91,7 @@ export function examPoolEmptyCopy(d: ExamStartEmptyDiagnostics | undefined): { t
     case "bank_empty_global":
       return {
         title: "No published questions for practice",
-        body: "Timed practice needs items in the question bank. None are published yet—this is a data gap, not a paywall.",
+        body: "Timed practice needs items in the question bank. None are published yet. This is a data gap, not a paywall.",
       };
     case "entitlement_excludes_all_published":
       return {
@@ -124,6 +124,6 @@ export function examStartFailureMessage(status: number, code?: string): string {
   if (status === 503 && code === "service_unavailable") {
     return "We couldn’t start the session (temporary database or service issue). Try again shortly.";
   }
-  if (status === 503) return "Starting the session failed—refresh and try again shortly.";
+  if (status === 503) return "Starting the session failed. Refresh and try again shortly.";
   return "Could not start the practice session.";
 }

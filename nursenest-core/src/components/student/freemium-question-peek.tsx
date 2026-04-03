@@ -60,7 +60,7 @@ export function FreemiumQuestionPeek() {
             <p className="text-xs uppercase tracking-wide text-muted">{q.questionType}</p>
             <h3 className="mt-1 font-semibold">{q.stem}</h3>
             {q.category?.name ? <p className="mt-1 text-xs text-muted">{q.category.name}</p> : null}
-            <p className="mt-2 text-xs text-muted">Answer choices load in the full bank—upgrade to submit and track.</p>
+            <p className="mt-2 text-xs text-muted">Answer choices load in the full bank. Upgrade to submit and track.</p>
           </article>
         ))}
       </div>

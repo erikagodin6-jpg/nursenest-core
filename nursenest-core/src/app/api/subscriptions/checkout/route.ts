@@ -86,7 +86,7 @@ export async function POST(req: Request) {
       duration: String(duration),
       envKey: missingEnvKey.slice(0, 80),
     });
-    const msg = "This plan is not available for checkout — billing configuration is incomplete.";
+    const msg = "This plan is not available for checkout. Billing configuration is incomplete.";
     const payload: Record<string, string> = {
       code: STRIPE_PRICE_NOT_CONFIGURED_CODE,
       message: msg,

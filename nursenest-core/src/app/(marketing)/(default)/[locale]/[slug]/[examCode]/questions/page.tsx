@@ -34,7 +34,7 @@ export default async function ExamPathwayQuestionsHubPage({ params }: Props) {
       <p className="mt-3 text-[var(--theme-muted-text)]">
         The live bank filters by your subscription region and tier; pathway-specific exam labels (
         {pathway.contentExamKeys.length ? pathway.contentExamKeys.join(", ") : "tier defaults"}) are applied as content is
-        retagged. Sign in to practice—no cross-role leakage at the product gate.
+        retagged. Sign in to practice. No cross-role leakage at the product gate.
       </p>
       <div className="mt-8 flex flex-wrap gap-3">
         <Link

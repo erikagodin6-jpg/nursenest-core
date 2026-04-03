@@ -34,14 +34,14 @@ export function StudyPlannerShell({ ctx }: { ctx: StudyPlannerContext }) {
 
   const todaySteps = [
     declineTrend
-      ? `Stabilize “${declineTrend.topic}” first — recent misses cluster here; use rationales, then 10–15 questions.`
+      ? `Stabilize “${declineTrend.topic}” first. Recent misses cluster here; use rationales, then 10–15 questions.`
       : weak[0]
         ? `Drill “${weak[0].topic}” in the question bank (15–20 min).`
         : `Open the question bank and run a 20-item block aligned to ${focus}.`,
     topPath
       ? `Advance “${topPath.shortLabel}”: ${topPath.lessonsCompleted}/${topPath.lessonsTotal} lessons in your plan.`
       : `Work one lesson module in your tier (30–45 min).`,
-    `Review rationales on misses — aim for ${minutes} minutes total study today.`,
+    `Review rationales on misses. Aim for ${minutes} minutes total study today.`,
   ];
 
   return (
@@ -70,7 +70,7 @@ export function StudyPlannerShell({ ctx }: { ctx: StudyPlannerContext }) {
                   {readiness.calibratedPreview ? " · conservative calibration active" : ""}
                 </span>
               ) : (
-                <span className="text-muted-foreground">Score not shown yet — complete more practice or a mock.</span>
+                <span className="text-muted-foreground">Score not shown yet. Complete more practice or a mock.</span>
               )}
               <Link href="/app" className="text-primary underline-offset-4 hover:underline">
                 Details on dashboard
@@ -85,7 +85,7 @@ export function StudyPlannerShell({ ctx }: { ctx: StudyPlannerContext }) {
           <Calendar className="h-5 w-5 text-primary" aria-hidden />
           <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Today&apos;s plan</h2>
         </div>
-        <p className="mt-1 text-xs text-muted-foreground">Suggested order — adjust to your shift schedule.</p>
+        <p className="mt-1 text-xs text-muted-foreground">Suggested order. Adjust to your shift schedule.</p>
         <ol className="mt-5 space-y-3">
           {todaySteps.map((step, i) => (
             <li key={i} className="flex gap-3 rounded-xl border border-border/60 bg-muted/15 px-4 py-3 text-sm leading-relaxed">
@@ -187,7 +187,7 @@ export function StudyPlannerShell({ ctx }: { ctx: StudyPlannerContext }) {
             <Circle className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
             <span>
               {ctx.studyGoal
-                ? `Goal: ${ctx.studyGoal} — align today’s block to that outcome.`
+                ? `Goal: ${ctx.studyGoal}. Align today’s block to that outcome.`
                 : "Set a goal in your profile during onboarding to personalize nudges."}
             </span>
           </li>
@@ -201,7 +201,7 @@ export function StudyPlannerShell({ ctx }: { ctx: StudyPlannerContext }) {
           </li>
           <li className="flex items-start gap-2 text-sm text-[var(--theme-body-text)]">
             <Circle className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
-            <span>Schedule one full mock exam weekly — use the score to reorder weak-topic drills.</span>
+            <span>Schedule one full mock exam weekly. Use the score to reorder weak-topic drills.</span>
           </li>
         </ul>
       </section>

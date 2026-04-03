@@ -34,7 +34,7 @@ export default async function AdminPremiumProtectionPage() {
           <p className="text-xs font-semibold uppercase tracking-wide text-primary">Admin</p>
           <h1 className="mt-1 text-3xl font-bold text-[var(--theme-heading-text)]">Premium protection</h1>
           <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
-            Aggregated deterrence and API signals (UTC day). Browser limits are not DRM—enforcement stays on the server.
+            Aggregated deterrence and API signals (UTC day). Browser limits are not DRM. Enforcement stays on the server.
             Note bodies are never listed here.
           </p>
         </div>
@@ -50,7 +50,7 @@ export default async function AdminPremiumProtectionPage() {
           <section className="nn-card p-6">
             <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Environment flags</h2>
             <p className="mt-1 text-xs text-muted-foreground">
-              Tune with these variables (boolean: 1/true/yes). Names only—values are not displayed.
+              Tune with these variables (boolean: 1/true/yes). Names only; values are not displayed.
             </p>
             <ul className="mt-3 list-inside list-disc text-sm text-muted-foreground">
               {snap.envVarNames.map((name) => (
@@ -69,7 +69,7 @@ export default async function AdminPremiumProtectionPage() {
 
           <section className="nn-card p-6">
             <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Learner notes (metadata)</h2>
-            <p className="mt-1 text-xs text-muted-foreground">Adoption counts only—no titles or bodies at bulk scale.</p>
+            <p className="mt-1 text-xs text-muted-foreground">Adoption counts only. No titles or bodies at bulk scale.</p>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               <div className="rounded-lg border border-border/60 bg-muted/20 p-4">
                 <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Total notes</p>
@@ -110,7 +110,7 @@ export default async function AdminPremiumProtectionPage() {
                     snap.todayRollups.map((r) => (
                       <tr key={`${r.metricKey}-${r.segment}`} className="border-b border-border/40">
                         <td className="py-2 pr-4 font-mono text-xs text-foreground">{r.metricKey}</td>
-                        <td className="py-2 pr-4 font-mono text-xs text-muted-foreground">{r.segment || "—"}</td>
+                        <td className="py-2 pr-4 font-mono text-xs text-muted-foreground">{r.segment || "N/A"}</td>
                         <td className="py-2 tabular-nums text-foreground">{r.count.toLocaleString()}</td>
                       </tr>
                     ))

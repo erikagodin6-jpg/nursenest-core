@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const path = buildExamPathwayPath(pathway, "lessons");
   const canonical = absoluteUrl(path);
   const title = `Lessons · ${pathway.displayName} | NurseNest`;
-  const description = `Clinical lessons for ${pathway.shortName} (${pathway.countrySlug === "canada" ? "Canada" : "US"}). Structured teaching, exam relevance, and practice links — preview sections are indexable; full depth unlocks with a matching plan.`;
+  const description = `Clinical lessons for ${pathway.shortName} (${pathway.countrySlug === "canada" ? "Canada" : "US"}). Structured teaching, exam relevance, and practice links. Preview sections are indexable; full depth unlocks with a matching plan.`;
   return {
     title,
     description,
@@ -85,34 +85,34 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       <p className="mt-3 text-[var(--theme-muted-text)]">
         {isUsNclexPnHub ? (
           <>
-            Clinical lessons for US LVN/LPN candidates—organized by NCLEX-PN Client Needs, focused on scope-safe judgment and
-            delegation—not textbook lists. Pair each lesson with pathway-scoped questions and CAT practice. Subscription gates
+            Clinical lessons for US LVN/LPN candidates, organized by NCLEX-PN Client Needs, focused on scope-safe judgment and
+            delegation, not textbook lists. Pair each lesson with pathway-scoped questions and CAT practice. Subscription gates
             full lesson depth; previews remain discoverable.
           </>
         ) : isUsFnpHub ? (
           <>
-            Advanced-practice lessons for US Family NP candidates—structured for board-style assessment → diagnosis → plan →
+            Advanced-practice lessons for US Family NP candidates, structured for board-style assessment → diagnosis → plan →
             evaluation across the lifespan (prenatal through geriatrics), not RN-level task lists. Pair each lesson with
             case-based questions and exam simulations; subscription gates full lesson depth; previews remain discoverable.
           </>
         ) : isNclexRnHub ? (
           pathway.id === "ca-rn-nclex-rn" ? (
             <>
-              Clinical lessons for Canadian RN candidates—written for decision-making and safety, not isolated facts. Content
+              Clinical lessons for Canadian RN candidates, written for decision-making and safety, not isolated facts. Content
               follows the NCLEX-RN Client Needs structure below; pair each lesson with pathway-scoped questions and CAT
               practice. Subscription gates full lesson depth; previews remain discoverable.
             </>
           ) : (
             <>
-              Clinical lessons for US RN candidates—written for decision-making and safety, not isolated facts. Content follows
+              Clinical lessons for US RN candidates, written for decision-making and safety, not isolated facts. Content follows
               the NCLEX-RN Client Needs structure below; pair each lesson with pathway-scoped questions, adaptive practice, and
-              performance feedback—lessons alone are not a full prep pathway. Subscription gates full lesson depth; previews
+              performance feedback. Lessons alone are not a full prep pathway. Subscription gates full lesson depth; previews
               remain discoverable.
             </>
           )
         ) : (
           <>
-            Exam-scoped clinical lessons for this track only—terminology and scope match{" "}
+            Exam-scoped clinical lessons for this track only. Terminology and scope match{" "}
             {pathway.countrySlug === "canada" ? "Canada" : "United States"} ({pathway.shortName}). Deeper sections unlock with
             a matching subscription; previews stay indexable for discovery.
           </>

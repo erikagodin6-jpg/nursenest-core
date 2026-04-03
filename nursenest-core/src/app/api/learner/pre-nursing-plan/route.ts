@@ -64,7 +64,7 @@ export async function GET() {
       { value: "unsure", label: "Not sure yet" },
       { value: "rn", label: "Registered Nurse (RN)" },
       { value: "pn", label: "Practical / Vocational Nurse (PN/LPN)" },
-      { value: "rpn", label: "Registered Practical Nurse — Canada (RPN)" },
+      { value: "rpn", label: "Registered Practical Nurse, Canada (RPN)" },
       { value: "np", label: "Nurse Practitioner (NP)" },
     ];
 
@@ -184,7 +184,7 @@ export async function PATCH(req: Request) {
       { value: "unsure", label: "Not sure yet" },
       { value: "rn", label: "Registered Nurse (RN)" },
       { value: "pn", label: "Practical / Vocational Nurse (PN/LPN)" },
-      { value: "rpn", label: "Registered Practical Nurse — Canada (RPN)" },
+      { value: "rpn", label: "Registered Practical Nurse, Canada (RPN)" },
       { value: "np", label: "Nurse Practitioner (NP)" },
     ];
 

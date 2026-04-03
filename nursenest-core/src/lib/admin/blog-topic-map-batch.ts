@@ -65,7 +65,7 @@ export function loadRnTopicMapBatchRows(limit: number): TopicMapBatchRow[] {
                 ? `Practice focus: ${topic.name} (NCLEX-RN)`
                 : `Study plan slice: ${topic.name} (NCLEX-RN)`;
 
-      const excerpt = `High-yield ${cat.name} topic: ${topic.name}. Links to lessons and practice — replace with final copy in admin.`;
+      const excerpt = `High-yield ${cat.name} topic: ${topic.name}. Links to lessons and practice. Replace with final copy in admin.`;
       const body = `<p><strong>Scheduled shell.</strong> Replace with structured HTML (H2 sections, traps, prioritization). Do not paste full bank rationales here.</p><h2>What to do first</h2><p>Outline clinical judgment hooks for ${topic.name}.</p>`;
       rows.push({
           slug,

@@ -41,7 +41,7 @@ function Inner() {
 
   return (
     <div className="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-950">
-      <p className="font-semibold">You are in—welcome to full access.</p>
+      <p className="font-semibold">You are in. Welcome to full access.</p>
       <p className="mt-1 text-emerald-900/90">
         Billing confirmed. Jump into your question bank or start a mock exam while your session refreshes entitlements.
       </p>

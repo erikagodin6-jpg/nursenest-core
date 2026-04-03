@@ -225,7 +225,7 @@ export function FlashcardStudyClient({
 
       {mode === "preview" ? (
         <p className="mt-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-950">
-          Preview sample — subscribe for full decks, backs, and spaced repetition.
+          Preview sample. Subscribe for full decks, backs, and spaced repetition.
         </p>
       ) : null}
 

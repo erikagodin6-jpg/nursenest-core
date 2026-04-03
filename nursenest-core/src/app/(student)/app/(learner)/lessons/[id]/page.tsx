@@ -78,7 +78,7 @@ export default async function LessonDetailPage({ params }: Props) {
       <main className="space-y-4">
         <p className="text-sm text-muted">
           We couldn’t finish checking your subscription (temporary data issue). This is not the same as being out of
-          plan—refresh, then reopen this lesson; sign in again if it persists.
+          plan. Refresh, then reopen this lesson; sign in again if it persists.
         </p>
         <Link className="text-sm font-semibold text-primary underline" href="/app/lessons">
           Back to lessons

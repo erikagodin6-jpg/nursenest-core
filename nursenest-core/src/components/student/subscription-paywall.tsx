@@ -29,7 +29,7 @@ const COPY: Record<
       "Category analytics that persist across sessions and devices",
     ],
     progressTemplate:
-      "You have already started prep—your recent attempts count. Upgrade to keep weak-topic lists, streaks, and full review instead of losing depth after each preview.",
+      "You have already started prep. Your recent attempts count. Upgrade to keep weak-topic lists, streaks, and full review instead of losing depth after each preview.",
   },
   lessons: {
     title: "Unlock full access",
@@ -41,12 +41,12 @@ const COPY: Record<
       "Cross-lesson sequences aligned to your exam scope",
     ],
     progressTemplate:
-      "Any preview modules you opened still count toward your study story—upgrade to keep progress and unlock full depth.",
+      "Any preview modules you opened still count toward your study story. Upgrade to keep progress and unlock full depth.",
   },
   exams: {
     title: "Unlock full access",
     intro:
-      "Timed mocks draw from your tier’s server-side pool—checkout enables full-length attempts, autosave, and score history.",
+      "Timed mocks draw from your tier’s server-side pool. Checkout enables full-length attempts, autosave, and score history.",
     loseWithoutUpgrade: [
       "Full-length timed sessions with attempt review",
       "Score history and pacing that match authorization-to-test timing",
@@ -65,7 +65,7 @@ const COPY: Record<
       "Weak-area flashcard and drill nudges from your misses",
     ],
     progressTemplate:
-      "You already have activity on this account—upgrade to turn this into your daily hub with saved signals, not just banners.",
+      "You already have activity on this account. Upgrade to turn this into your daily hub with saved signals, not just banners.",
   },
 };
 
@@ -133,7 +133,7 @@ export function SubscriptionPaywall({
       </div>
       <p className="text-xs text-muted">
         Most candidates who feel exam-ready mixed steady question reps, full rationales, and at least one full mock in the weeks before their
-        date—not a single cram block.
+        date, not a single cram block.
       </p>
     </section>
   );
