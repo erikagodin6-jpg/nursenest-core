@@ -1,0 +1,34 @@
+{
+  "title": "Plan d’étude NCLEX | Structure hebdomadaire sans calendriers génériques",
+  "h1": "Plan d’étude NCLEX construit autour de vos catégories faibles",
+  "description": "Construisez un plan NCLEX à partir des données de points faibles : enchaînez questions, justifications, leçons et examens blancs avec un budget d’heures fixe par semaine.",
+  "breadcrumb": {
+    "midLabel": "Guides de préparation NCLEX",
+    "currentLabel": "Plan d’étude"
+  },
+  "sections": [
+    {
+      "heading": "Partez du nombre d’heures, pas de l’intuition",
+      "level": 2,
+      "body": [
+        "Fixez un budget hebdomadaire que vous pouvez tenir huit semaines. Répartissez environ 60 % questions avec justifications, 30 % leçons ou reprises sur les systèmes signalés, 10 % un bloc chronométré pour l’endurance.",
+        "Si votre emploi du temps est imprévisible, ancrez trois blocs de 25 minutes non négociables plutôt qu’un long dimanche qui saute."
+      ]
+    },
+    {
+      "heading": "Utiliser le planificateur comme garde-fou",
+      "level": 2,
+      "body": [
+        "Indiquez votre fenêtre d’autorisation à l’examen pour que les suggestions de rythme restent réalistes. Déplacez les blocs quand les quarts changent : la régularité compte plus que la perfection.",
+        "La préparation dans NurseNest est un signal d’étape suivante : si la pharmacologie reste en alerte alors que vous vous sentez « à l’aise », faites confiance aux données une semaine."
+      ]
+    },
+    {
+      "heading": "Semaine type (illustratif)",
+      "level": 2,
+      "body": [
+        "Lun/mer/ven : 40 questions avec revue immédiate des justifications. Mar : leçon sur la catégorie la plus basse. Jeu : série mixte de 75 minutes. Sam : demi-examen blanc, reprise uniquement des items signalés."
+      ]
+    }
+  ]
+}

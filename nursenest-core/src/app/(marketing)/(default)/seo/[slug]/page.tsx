@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ProgrammaticSeoPage } from "@/components/seo/programmatic-seo-page";
-import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { buildProgrammaticMetadata } from "@/lib/seo/programmatic-metadata";
-import { getProgrammaticSeoPage } from "@/lib/seo/programmatic-registry";
+import { resolveProgrammaticSeoForLocale } from "@/lib/seo/resolve-programmatic-seo";
 
 /** Build-time prerender disabled: full slug list inflates `.next` on disk-limited hosts; pages are ISR on demand. */
 export const dynamicParams = true;
@@ -20,15 +19,23 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const page = getProgrammaticSeoPage(slug);
-  if (!page) return {};
-  return buildProgrammaticMetadata(page, DEFAULT_MARKETING_LOCALE);
+  const locale = await getMarketingLocaleForDefaultRoute();
+  const resolved = resolveProgrammaticSeoForLocale(slug, locale);
+  if (!resolved) return {};
+  return buildProgrammaticMetadata(resolved.page, locale);
 }
 
 export default async function ProgrammaticSeoRewriteTarget({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const page = getProgrammaticSeoPage(slug);
-  if (!page) notFound();
   const locale = await getMarketingLocaleForDefaultRoute();
-  return <ProgrammaticSeoPage page={page} locale={locale} />;
+  const resolved = resolveProgrammaticSeoForLocale(slug, locale);
+  if (!resolved) notFound();
+  return (
+    <ProgrammaticSeoPage
+      page={resolved.page}
+      locale={locale}
+      related={resolved.related}
+      cross={resolved.cross}
+    />
+  );
 }

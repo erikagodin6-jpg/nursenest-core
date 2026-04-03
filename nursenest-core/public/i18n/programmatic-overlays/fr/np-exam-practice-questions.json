@@ -1,0 +1,19 @@
+{
+  "title": "Questions d’entraînement pour l’examen NP | Diagnostics différentiels et prise en charge",
+  "h1": "Questions d’entraînement pour l’examen NP",
+  "description": "Questions de niveau NP avec justifications sur l’évaluation, le diagnostic et la prise en charge. Suivez les domaines faibles au lieu de relire passivement.",
+  "breadcrumb": {
+    "midLabel": "Préparation NP",
+    "currentLabel": "Questions d’entraînement"
+  },
+  "sections": [
+    {
+      "heading": "En quoi les énoncés NP diffèrent des banques RN",
+      "level": 2,
+      "body": [
+        "Attendez-vous à des cas plus longs, plus de diagnostics différentiels et la sécurité médicamenteuse en contexte. L’enjeu est un raisonnement par étapes, pas le clic le plus rapide.",
+        "NurseNest relie les erreurs aux catégories pour répéter le même écart de raisonnement jusqu’à correction."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "title": "Questions d’entraînement CNPLE | Cas cliniques pour infirmière praticienne au Canada",
+  "h1": "Questions d’entraînement CNPLE pour les candidats NP au Canada",
+  "description": "Pratique pour l’examen canadien des IP (CNPLE) : énoncés axés sur la prise en charge, pharmacologie contextualisée et justifications liées au raisonnement clinique, pas à des détails de premier cycle.",
+  "breadcrumb": {
+    "midLabel": "Préparation NP Canada",
+    "currentLabel": "Pratique CNPLE"
+  },
+  "sections": [
+    {
+      "heading": "Longueur des énoncés et charge de raisonnement",
+      "level": 2,
+      "body": [
+        "Attendez-vous à des vignettes où il faut interpréter des données incomplètes, pondérer les comorbidités et choisir examens ou traitements adaptés à une pratique autonome dans le cadre réglementaire.",
+        "Si un énoncé semble court et purement mnémotechnique, il représente probablement mal la densité de décision visée au niveau NP."
+      ]
+    },
+    {
+      "heading": "Comment revoir les erreurs",
+      "level": 2,
+      "body": [
+        "Pour chaque erreur, nommez si vous avez manqué une bifurcation diagnostique, une contre-indication, une étape de surveillance ou un intervalle de suivi. Cette étiquette devient votre prochaine unité d’étude, pas la relecture d’un chapitre entier."
+      ]
+    }
+  ]
+}

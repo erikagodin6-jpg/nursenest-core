@@ -6,6 +6,7 @@ import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-l
 import { NP } from "@/lib/marketing/marketing-entry-routes";
 import { npBoardAliasCrosslinkProps } from "@/lib/marketing/np-seo-alias-analytics-props";
 import { PH } from "@/lib/observability/posthog-conversion-events";
+import { useMarketingI18n } from "@/lib/marketing-i18n";
 
 const NP_PRACTICE_SLUGS = new Set(["np-exam-practice-questions", "cnple-practice-questions"]);
 
@@ -13,6 +14,7 @@ const NP_PRACTICE_SLUGS = new Set(["np-exam-practice-questions", "cnple-practice
  * Contextual links from NP programmatic guides to board-named pathway URLs (default-locale paths; locale wrapper applied).
  */
 export function NpProgrammaticPracticeTestCrossLinks({ slug, locale }: { slug: string; locale: string }) {
+  const { t } = useMarketingI18n();
   if (!NP_PRACTICE_SLUGS.has(slug)) return null;
   const { region } = useNursenestRegion();
   const loc = (path: string) => withMarketingLocale(locale, path);
@@ -22,12 +24,15 @@ export function NpProgrammaticPracticeTestCrossLinks({ slug, locale }: { slug: s
   if (slug === "cnple-practice-questions") {
     const ca = npBoardAliasCrosslinkProps("ca-np-cnple");
     return (
-      <section className="mb-10 rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]/40 p-5 sm:p-6" aria-labelledby="np-board-hubs-heading">
+      <section
+        className="mb-10 rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]/40 p-5 sm:p-6"
+        aria-labelledby="np-board-hubs-heading"
+      >
         <h2 id="np-board-hubs-heading" className="text-lg font-semibold text-[var(--theme-heading-text)]">
-          CNPLE keyword hub
+          {t("programmatic.npCrosslinks.cnpleKeywordHeading")}
         </h2>
         <p className="mt-2 text-sm leading-relaxed text-[var(--theme-muted-text)]">
-          Prefer a single landing that says CNPLE in the URL? Open the{" "}
+          {t("programmatic.npCrosslinks.cnpleBodyBefore")}
           <MarketingTrackedLink
             href={loc(NP.cnplePracticeTest)}
             event={ev}
@@ -39,9 +44,10 @@ export function NpProgrammaticPracticeTestCrossLinks({ slug, locale }: { slug: s
             }}
             className="font-semibold text-primary hover:underline"
           >
-            CNPLE practice test
-          </MarketingTrackedLink>{" "}
-          page—same Canadian NP pathway as <code className="rounded bg-muted px-1 py-0.5 text-xs">/canada/np/cnple</code>.
+            {t("programmatic.npCrosslinks.cnpleLink")}
+          </MarketingTrackedLink>
+          {t("programmatic.npCrosslinks.cnpleBodyAfter")}
+          <code className="rounded bg-muted px-1 py-0.5 text-xs">/canada/np/cnple</code>.
         </p>
       </section>
     );
@@ -52,15 +58,19 @@ export function NpProgrammaticPracticeTestCrossLinks({ slug, locale }: { slug: s
   const caCnple = npBoardAliasCrosslinkProps("ca-np-cnple");
 
   return (
-    <section className="mb-10 rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]/40 p-5 sm:p-6" aria-labelledby="np-board-hubs-heading">
+    <section
+      className="mb-10 rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]/40 p-5 sm:p-6"
+      aria-labelledby="np-board-hubs-heading"
+    >
       <h2 id="np-board-hubs-heading" className="text-lg font-semibold text-[var(--theme-heading-text)]">
-        Board-named NP practice hubs
+        {t("programmatic.npCrosslinks.boardHubsHeading")}
       </h2>
       <p className="mt-2 text-sm leading-relaxed text-[var(--theme-muted-text)]">
         {region === "US" ? (
           <>
-            US Family NP candidates often search by certifying body. These URLs use the same FNP pathway as{" "}
-            <code className="rounded bg-muted px-1 py-0.5 text-xs">/us/np/fnp</code>:{" "}
+            {t("programmatic.npCrosslinks.usBeforeCode")}
+            <code className="rounded bg-muted px-1 py-0.5 text-xs">/us/np/fnp</code>
+            {t("programmatic.npCrosslinks.usBetweenCodeAndLinks")}
             <MarketingTrackedLink
               href={loc(NP.aanpPracticeTest)}
               event={ev}
@@ -72,9 +82,9 @@ export function NpProgrammaticPracticeTestCrossLinks({ slug, locale }: { slug: s
               }}
               className="font-semibold text-primary hover:underline"
             >
-              AANP practice test
+              {t("programmatic.npCrosslinks.aanpLink")}
             </MarketingTrackedLink>
-            ,{" "}
+            {t("programmatic.npCrosslinks.usBetweenAanpAndAncc")}
             <MarketingTrackedLink
               href={loc(NP.anccFnpPracticeTest)}
               event={ev}
@@ -86,9 +96,9 @@ export function NpProgrammaticPracticeTestCrossLinks({ slug, locale }: { slug: s
               }}
               className="font-semibold text-primary hover:underline"
             >
-              ANCC FNP practice test
+              {t("programmatic.npCrosslinks.anccLink")}
             </MarketingTrackedLink>
-            . Psychiatric–mental health NP:{" "}
+            {t("programmatic.npCrosslinks.usAfterAnccBeforePm")}
             <MarketingTrackedLink
               href={loc(NP.pmhnpPracticeTest)}
               event={ev}
@@ -100,13 +110,13 @@ export function NpProgrammaticPracticeTestCrossLinks({ slug, locale }: { slug: s
               }}
               className="font-semibold text-primary hover:underline"
             >
-              PMHNP practice test
+              {t("programmatic.npCrosslinks.pmhnpLink")}
             </MarketingTrackedLink>
-            .
+            {t("programmatic.npCrosslinks.usEnd")}
           </>
         ) : (
           <>
-            Canadian NP: use the{" "}
+            {t("programmatic.npCrosslinks.caIntroBefore")}
             <MarketingTrackedLink
               href={loc(NP.cnplePracticeTest)}
               event={ev}
@@ -118,9 +128,11 @@ export function NpProgrammaticPracticeTestCrossLinks({ slug, locale }: { slug: s
               }}
               className="font-semibold text-primary hover:underline"
             >
-              CNPLE practice test
-            </MarketingTrackedLink>{" "}
-            landing (same pathway as <code className="rounded bg-muted px-1 py-0.5 text-xs">/canada/np/cnple</code>).
+              {t("programmatic.npCrosslinks.caLink")}
+            </MarketingTrackedLink>
+            {t("programmatic.npCrosslinks.caIntroAfter")}
+            <code className="rounded bg-muted px-1 py-0.5 text-xs">/canada/np/cnple</code>
+            {t("programmatic.npCrosslinks.samePathwaySuffix")}
           </>
         )}
       </p>

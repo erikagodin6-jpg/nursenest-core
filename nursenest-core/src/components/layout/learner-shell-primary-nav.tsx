@@ -1,14 +1,16 @@
-import Link from "next/link";
-import type { MarketingMessages } from "@/lib/marketing-i18n-core";
-import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
-import { getLearnerShellNavItems } from "@/config/global-nav-config";
+"use client";
 
-export function LearnerShellPrimaryNav({ messages }: { messages: MarketingMessages }) {
+import Link from "next/link";
+import { getLearnerShellNavItems } from "@/config/global-nav-config";
+import { useMarketingI18n } from "@/lib/marketing-i18n";
+
+export function LearnerShellPrimaryNav() {
+  const { t } = useMarketingI18n();
   const items = getLearnerShellNavItems();
   return (
     <nav className="flex flex-wrap items-center gap-2 text-sm font-medium">
       {items.map((item) => {
-        const label = formatMarketingMessage(messages, item.labelKey);
+        const label = t(item.labelKey);
         const isDashboard = item.id === "learner-dashboard";
         return (
           <Link

@@ -5,7 +5,7 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { MarketingI18nProvider } from "@/components/marketing/marketing-i18n-provider";
 import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/seo-json-ld";
-import { isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy";
+import { DEFAULT_MARKETING_LOCALE, isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy";
 import { MARKETING_LOCALE_COOKIE, MARKETING_LOCALE_COOKIE_MAX_AGE } from "@/lib/i18n/marketing-locale-cookie";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 
@@ -26,8 +26,10 @@ export default async function MarketingLocaleLayout({
     httpOnly: true,
   });
   const messages = await loadMarketingMessages(locale);
+  const fallbackMessages =
+    locale === DEFAULT_MARKETING_LOCALE ? undefined : await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
   return (
-    <MarketingI18nProvider key={locale} locale={locale} messages={messages}>
+    <MarketingI18nProvider key={locale} locale={locale} messages={messages} fallbackMessages={fallbackMessages}>
       <MarketingLocaleUrlSync locale={locale} />
       <OrganizationJsonLd />
       <WebSiteJsonLd />

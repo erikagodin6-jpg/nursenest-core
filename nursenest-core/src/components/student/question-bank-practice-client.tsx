@@ -13,11 +13,13 @@ import type { NormalizedTeachingPayload, TeachingMediaBundle } from "@/lib/conte
 import { recordQuestionPerformanceEvent } from "@/lib/learner/question-performance-events";
 import { PremiumRationalePanel } from "@/components/student/premium-rationale-panel";
 import type { QuestionListEmptyDiagnostics } from "@/lib/questions/question-list-empty-diagnostics";
+import type { EmptyCopyI18n } from "@/lib/student/gated-state-messages-i18n";
 import {
-  messageForDiscoveryFailure,
-  messageForQuestionsApiFailure,
-  questionBankEmptyCopy,
-} from "@/lib/student/gated-state-messages";
+  discoveryFailureKey,
+  questionBankEmptyKeys,
+  questionsApiFailureKey,
+} from "@/lib/student/gated-state-messages-i18n";
+import { useMarketingI18n } from "@/lib/marketing-i18n";
 
 type QFull = {
   id: string;
@@ -115,6 +117,7 @@ export function QuestionBankPracticeClient({
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
+  const { t } = useMarketingI18n();
   const [phase, setPhase] = useState<"loading" | "ready" | "empty" | "error">("loading");
   const [error, setError] = useState<string | null>(null);
   const [softNotice, setSoftNotice] = useState<string | null>(null);
@@ -131,7 +134,7 @@ export function QuestionBankPracticeClient({
   /** Exam-style bank: suppress rich rationale until learner opts in (reduces “open-book” feel). */
   const [examShell, setExamShell] = useState(false);
   const [examShowExplanation, setExamShowExplanation] = useState(false);
-  const [emptyCopy, setEmptyCopy] = useState<{ title: string; body: string } | null>(null);
+  const [emptyCopy, setEmptyCopy] = useState<EmptyCopyI18n | "pick_topic" | null>(null);
   const [idx, setIdx] = useState(0);
   const [answer, setAnswer] = useState<unknown>(null);
   const [graded, setGraded] = useState<
@@ -179,10 +182,7 @@ export function QuestionBankPracticeClient({
       try {
         if (preset === "topic_drill" && !topic) {
           setQuestions([]);
-          setEmptyCopy({
-            title: "Pick a topic",
-            body: "Choose a topic from the menu below to start a topic-based quiz (recent items first).",
-          });
+          setEmptyCopy("pick_topic");
           setPhase("empty");
           return;
         }
@@ -220,21 +220,15 @@ export function QuestionBankPracticeClient({
         if (!res.ok) {
           setPhase("error");
           setEmptyCopy(null);
-          setError(messageForQuestionsApiFailure(res.status, data.code) || data.error || "Could not load questions.");
+          setError(t(questionsApiFailureKey(res.status, data.code)));
           return;
         }
         if (data.topicRelaxed && data.topicRequested) {
-          setSoftNotice(
-            `No exact matches for topic “${data.topicRequested}”. Showing questions for your pathway instead. Use the topic menu to narrow further.`,
-          );
+          setSoftNotice(t("learner.qbank.notice.topicRelaxed", { topic: data.topicRequested }));
         } else if (data.studyModeNote === "weak_topic_unavailable") {
-          setSoftNotice(
-            "Weak-area mode needs a few graded items first. We are showing a mixed pool until your topic ledger populates.",
-          );
+          setSoftNotice(t("learner.qbank.notice.weakUnavailable"));
         } else if (data.studyModeNote === "weak_topic_low_confidence") {
-          setSoftNotice(
-            "Weak-area topic mapping is low-confidence right now. Continue grading items and we will tighten topic alignment.",
-          );
+          setSoftNotice(t("learner.qbank.notice.weakLowConfidence"));
         } else {
           setSoftNotice(null);
         }
@@ -242,7 +236,7 @@ export function QuestionBankPracticeClient({
         if (list.length === 0) {
           if (!append) {
             setQuestions([]);
-            setEmptyCopy(questionBankEmptyCopy(data.diagnostics));
+            setEmptyCopy(questionBankEmptyKeys(data.diagnostics));
             setPhase("empty");
             seenIdsRef.current = [];
           }
@@ -321,10 +315,10 @@ export function QuestionBankPracticeClient({
       } catch {
         setPhase("error");
         setEmptyCopy(null);
-        setError("Network error loading questions.");
+        setError(t("learner.qbank.networkError"));
       }
     },
-    [userId, preset, topicForApi, topicCodeFilter, topic, pathwayIdFilter, sortForApi, efficiencyMode],
+    [userId, preset, topicForApi, topicCodeFilter, topic, pathwayIdFilter, sortForApi, efficiencyMode, t],
   );
 
   useEffect(() => {
@@ -375,7 +369,7 @@ export function QuestionBankPracticeClient({
           }
           if (!cancelled) {
             setTopicMenuTruncationNotice(null);
-            setDiscoveryNotice(messageForDiscoveryFailure(res.status, code));
+            setDiscoveryNotice(t(discoveryFailureKey(res.status, code)));
           }
           return;
         }
@@ -393,9 +387,7 @@ export function QuestionBankPracticeClient({
         if (data.limits?.topicsTruncated) {
           const cap = data.limits.topicBucketCap ?? 250;
           const omitted = data.limits.topicsOmittedCount ?? 0;
-          setTopicMenuTruncationNotice(
-            `Showing the ${cap} most common topics in your bank (${omitted} question${omitted === 1 ? "" : "s"} in additional topics are not listed). Choose “All topics” in topic drill to browse discovery buckets.`,
-          );
+          setTopicMenuTruncationNotice(t("learner.qbank.notice.topicMenuTruncated", { cap, omitted }));
         } else {
           setTopicMenuTruncationNotice(null);
         }
@@ -406,7 +398,7 @@ export function QuestionBankPracticeClient({
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     if (!pathwayMixedReady) return;
@@ -465,7 +457,7 @@ export function QuestionBankPracticeClient({
         error?: string;
       };
       if (!res.ok) {
-        setError(data.error ?? "Could not grade this item.");
+        setError(data.error?.trim() || t("learner.qbank.gradeFailed"));
         return;
       }
       const correct = Boolean(data.correct);
@@ -512,26 +504,31 @@ export function QuestionBankPracticeClient({
   }
 
   if (phase === "loading") {
-    return <p className="text-sm text-muted">Loading your question bank…</p>;
+    return <p className="text-sm text-muted">{t("learner.qbank.loading")}</p>;
   }
 
   if (phase === "error") {
     return (
       <div className="nn-card mt-4 space-y-3 p-6">
-        <p className="text-sm text-muted">{error ?? "Something went wrong."}</p>
+        <p className="text-sm text-muted">{error ?? t("learner.qbank.genericError")}</p>
         <button
           type="button"
           className="rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground"
           onClick={() => void loadBatch(false)}
         >
-          Retry
+          {t("learner.qbank.retry")}
         </button>
       </div>
     );
   }
 
   if (phase === "empty") {
-    const { title, body } = emptyCopy ?? questionBankEmptyCopy(undefined);
+    const keys: EmptyCopyI18n =
+      emptyCopy === "pick_topic"
+        ? { titleKey: "learner.qbank.pickTopic.title", bodyKey: "learner.qbank.pickTopic.body" }
+        : (emptyCopy ?? questionBankEmptyKeys(undefined));
+    const title = t(keys.titleKey, keys.bodyParams);
+    const body = t(keys.bodyKey, keys.bodyParams);
     return (
       <div className="nn-card mt-4 p-6 text-sm text-muted">
         <p className="font-medium text-foreground">{title}</p>
@@ -566,7 +563,7 @@ export function QuestionBankPracticeClient({
 
       <div className="flex flex-wrap items-end gap-4">
         <label className="block text-sm">
-          <span className="text-muted">Study mode</span>
+          <span className="text-muted">{t("learner.qbank.ui.studyMode")}</span>
           <select
             className="ml-2 rounded-lg border border-border bg-white px-2 py-1.5 text-sm"
             value={preset}
@@ -580,14 +577,14 @@ export function QuestionBankPracticeClient({
               if (v === "pathway_mixed" && pathwayOptions[0]) setPathwayIdFilter(pathwayOptions[0].id);
             }}
           >
-            <option value="pathway_mixed">Pathway mixed exam (random, exam-aligned)</option>
-            <option value="topic_drill">Topic drill (recent)</option>
-            <option value="random_bank">Random (full tier pool)</option>
+            <option value="pathway_mixed">{t("learner.qbank.preset.pathwayMixed")}</option>
+            <option value="topic_drill">{t("learner.qbank.preset.topicDrill")}</option>
+            <option value="random_bank">{t("learner.qbank.preset.randomBank")}</option>
           </select>
         </label>
         {pathwayOptions.length > 0 ? (
           <label className="block text-sm">
-            <span className="text-muted">Pathway / exam mix</span>
+            <span className="text-muted">{t("learner.qbank.ui.pathwayFilter")}</span>
             <select
               className="ml-2 max-w-[min(100%,280px)] rounded-lg border border-border bg-white px-2 py-1.5 text-sm"
               value={pathwayIdFilter ?? ""}
@@ -595,7 +592,7 @@ export function QuestionBankPracticeClient({
               disabled={preset === "random_bank"}
             >
               {preset === "random_bank" || preset === "topic_drill" ? (
-                <option value="">All pathways (tier + country)</option>
+                <option value="">{t("learner.qbank.ui.pathwayAll")}</option>
               ) : null}
               {pathwayOptions.map((p) => (
                 <option key={p.id} value={p.id}>
@@ -606,14 +603,14 @@ export function QuestionBankPracticeClient({
           </label>
         ) : null}
         <label className="block text-sm">
-          <span className="text-muted">Topic (topic drill)</span>
+          <span className="text-muted">{t("learner.qbank.ui.topicDrill")}</span>
           <select
             className="ml-2 max-w-[min(100%,260px)] rounded-lg border border-border bg-white px-2 py-1.5 text-sm"
             value={topic ?? ""}
             onChange={(e) => setTopic(e.target.value === "" ? null : e.target.value)}
             disabled={preset !== "topic_drill"}
           >
-            <option value="">Select topic…</option>
+            <option value="">{t("learner.qbank.ui.selectTopic")}</option>
             {topics.map((b) => (
               <option key={b.topic} value={b.topic}>
                 {b.topic} ({b.count})
@@ -622,10 +619,12 @@ export function QuestionBankPracticeClient({
           </select>
         </label>
         <p className="text-xs text-muted">
-          Session: {sessionTotal > 0 ? `${sessionRight}/${sessionTotal} correct` : "Answer and check to track this session"}
+          {sessionTotal > 0
+            ? t("learner.qbank.ui.sessionLine", { correct: sessionRight, total: sessionTotal })
+            : t("learner.qbank.ui.sessionLineIdle")}
         </p>
         <label className="block text-sm">
-          <span className="text-muted">Efficiency mode</span>
+          <span className="text-muted">{t("learner.qbank.ui.efficiencyMode")}</span>
           <select
             className="ml-2 rounded-lg border border-border bg-white px-2 py-1.5 text-sm"
             value={efficiencyMode ?? ""}
@@ -638,11 +637,11 @@ export function QuestionBankPracticeClient({
               router.replace(`${pathname}?${qs.toString()}`);
             }}
           >
-            <option value="">Off</option>
-            <option value="weak">Weak areas (ledger)</option>
-            <option value="high_yield">High-yield / harder items</option>
-            <option value="rapid">Rapid (short batch)</option>
-            <option value="final_prep">Final prep mix</option>
+            <option value="">{t("learner.qbank.efficiency.off")}</option>
+            <option value="weak">{t("learner.qbank.efficiency.weak")}</option>
+            <option value="high_yield">{t("learner.qbank.efficiency.highYield")}</option>
+            <option value="rapid">{t("learner.qbank.efficiency.rapid")}</option>
+            <option value="final_prep">{t("learner.qbank.efficiency.finalPrep")}</option>
           </select>
         </label>
       </div>
@@ -651,13 +650,13 @@ export function QuestionBankPracticeClient({
         <div className="nn-card space-y-4 p-6">
           <div className="flex flex-wrap gap-2 text-xs text-muted">
             <span>
-              Question {idx + 1} of {total}
+              {t("learner.qbank.ui.questionOf", { n: idx + 1, total })}
             </span>
             {current.topic ? <span className="rounded-full bg-primary/10 px-2 py-0.5 text-primary">{current.topic}</span> : null}
             {current.exam ? <span>{current.exam}</span> : null}
             <span className="uppercase">{current.questionType}</span>
             <span className="rounded-full bg-muted px-2 py-0.5 text-muted-foreground">
-              {sortForApi === "random" ? "Random" : "Recent"}
+              {sortForApi === "random" ? t("learner.qbank.ui.sortRandom") : t("learner.qbank.ui.sortRecent")}
             </span>
           </div>
 
@@ -714,7 +713,7 @@ export function QuestionBankPracticeClient({
                 className="rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground disabled:opacity-50"
                 onClick={() => void checkAnswer()}
               >
-                {grading ? "Checking…" : "Check answer"}
+                {grading ? t("learner.qbank.ui.checking") : t("learner.qbank.ui.checkAnswer")}
               </button>
             </div>
           ) : (
@@ -722,17 +721,15 @@ export function QuestionBankPracticeClient({
               {examShell && !examShowExplanation ? (
                 <div className="rounded-xl border border-slate-200 bg-slate-50/80 p-4 dark:border-slate-700 dark:bg-slate-900/40">
                   <p className={`text-sm font-semibold ${g.correct ? "text-role-success" : "text-red-700 dark:text-red-400"}`}>
-                    {g.correct ? "Correct" : "Incorrect"}
+                    {g.correct ? t("learner.qbank.ui.correct") : t("learner.qbank.ui.incorrect")}
                   </p>
-                  <p className="mt-2 text-xs text-muted-foreground">
-                    Exam-style session: explanations stay hidden until you choose, like closed-book pacing (practice only).
-                  </p>
+                  <p className="mt-2 text-xs text-muted-foreground">{t("learner.qbank.ui.examShellHint")}</p>
                   <button
                     type="button"
                     className="mt-3 rounded-full border border-primary/40 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary"
                     onClick={() => setExamShowExplanation(true)}
                   >
-                    Show explanation
+                    {t("learner.qbank.ui.showExplanation")}
                   </button>
                 </div>
               ) : (
@@ -753,11 +750,11 @@ export function QuestionBankPracticeClient({
                   className="rounded-full border border-border px-4 py-2 text-sm disabled:opacity-40"
                   onClick={prev}
                 >
-                  Previous
+                  {t("learner.qbank.ui.previous")}
                 </button>
                 {idx < total - 1 ? (
                   <button type="button" className="rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground" onClick={next}>
-                    Next question
+                    {t("learner.qbank.ui.nextQuestion")}
                   </button>
                 ) : (
                   <button
@@ -765,29 +762,27 @@ export function QuestionBankPracticeClient({
                     className="rounded-full border border-primary px-4 py-2 text-sm font-semibold text-primary"
                     onClick={() => void loadBatch(true)}
                   >
-                    Load more (no repeats)
+                    {t("learner.qbank.ui.loadMore")}
                   </button>
                 )}
               </div>
               {g.learningLoop?.topicCode ? (
                 <div className="mt-4 rounded-xl border border-border/70 bg-muted/20 p-3">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Continue priority review</p>
+                  <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    {t("learner.qbank.ui.continuePriority")}
+                  </p>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    Topic code: <span className="font-medium text-foreground">{g.learningLoop.topicCode}</span> · routing confidence{" "}
-                    {g.learningLoop.confidence}
+                    {t("learner.qbank.ui.topicCodeLine", {
+                      code: g.learningLoop.topicCode ?? "",
+                      confidence: g.learningLoop.confidence,
+                    })}
                   </p>
                   {g.learningLoop.confidence === "high" ? (
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      Strong match from this item’s metadata. Next steps should stay on the same topic track.
-                    </p>
+                    <p className="mt-1 text-xs text-muted-foreground">{t("learner.qbank.ui.learningHigh")}</p>
                   ) : g.learningLoop.confidence === "medium" ? (
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      Routed from the question topic; if the bank feels broad, narrow with filters or your priority review queue.
-                    </p>
+                    <p className="mt-1 text-xs text-muted-foreground">{t("learner.qbank.ui.learningMedium")}</p>
                   ) : (
-                    <p className="mt-1 text-xs text-role-warning">
-                      Approximate routing only. Open the question bank and tune filters if results look off-target.
-                    </p>
+                    <p className="mt-1 text-xs text-role-warning">{t("learner.qbank.ui.learningLow")}</p>
                   )}
                   <div className="mt-3 flex flex-wrap gap-2">
                     {g.learningLoop.lessonHref ? (
@@ -795,7 +790,7 @@ export function QuestionBankPracticeClient({
                         href={g.learningLoop.lessonHref}
                         className="rounded-full border border-border bg-card px-3 py-1.5 text-xs font-semibold hover:bg-muted/80"
                       >
-                        Related lesson
+                        {t("learner.qbank.ui.relatedLesson")}
                       </Link>
                     ) : null}
                     {g.learningLoop.flashcardsHref ? (
@@ -803,7 +798,7 @@ export function QuestionBankPracticeClient({
                         href={g.learningLoop.flashcardsHref}
                         className="rounded-full border border-border bg-card px-3 py-1.5 text-xs font-semibold hover:bg-muted/80"
                       >
-                        Review flashcards
+                        {t("learner.qbank.ui.reviewFlashcards")}
                       </Link>
                     ) : null}
                     {g.learningLoop.topicDrillHref ? (
@@ -811,7 +806,7 @@ export function QuestionBankPracticeClient({
                         href={g.learningLoop.topicDrillHref}
                         className="rounded-full bg-role-cta px-3 py-1.5 text-xs font-semibold text-role-cta-foreground"
                       >
-                        Topic drill (same code)
+                        {t("learner.qbank.ui.topicDrillSameCode")}
                       </Link>
                     ) : null}
                   </div>
@@ -828,7 +823,7 @@ export function QuestionBankPracticeClient({
                 className="rounded-full border border-border px-4 py-2 text-sm disabled:opacity-40"
                 onClick={prev}
               >
-                Previous
+                {t("learner.qbank.ui.previous")}
               </button>
               <button
                 type="button"
@@ -836,16 +831,12 @@ export function QuestionBankPracticeClient({
                 className="rounded-full border border-border px-4 py-2 text-sm disabled:opacity-40"
                 onClick={next}
               >
-                Skip for now
+                {t("learner.qbank.ui.skipForNow")}
               </button>
             </div>
           )}
 
-          <p className="text-xs text-muted">
-            Progress for this batch is saved in your browser so you can refresh and continue. Random and mixed modes exclude
-            questions you have already seen this session when you load more. Scoring runs on the server. Answers are not graded in
-            the page alone.
-          </p>
+          <p className="text-xs text-muted">{t("learner.qbank.ui.batchProgressNote")}</p>
         </div>
       </ProtectedPremiumContent>
       <StudyNotesPanel

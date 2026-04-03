@@ -2,11 +2,29 @@
  * Single source of truth for marketing header (desktop dropdowns + mobile drawer)
  * and learner shell primary nav. Paths are locale-agnostic; callers apply
  * `mapLegacyMarketingHref` + `withMarketingLocale` on marketing routes only.
+ *
+ * ## Locale (learner shell)
+ * Marketing UI language for `/app/(learner)` matches {@link getMarketingLocaleForDefaultRoute}:
+ * `nn_marketing_locale` cookie, set by the language picker and `/[locale]/…` layouts.
+ *
+ * ## Surface parity (intentional exclusions)
+ * - **FAQ** (`/faq`) and **Shop** (`/shop`): `marketingDesktopDropdown` only. They appear in the
+ *   “Guides & plans” desktop dropdown but not in the marketing mobile drawer (space / IA: hubs +
+ *   core study links first; full resources stay on desktop).
+ * - **Explore** (“Who we help”) links: desktop dropdown only; not duplicated in the mobile flat list
+ *   (mobile users use region + exam hub section first).
+ * - **Learner shell** links are a distinct set (`/app/…` plus selected marketing routes). They never
+ *   appear in the marketing header; marketing items never appear in the learner row except shared
+ *   label keys where copy aligns (e.g. `nav.pricing`).
+ *
+ * ## Auth
+ * No nav entries are gated by auth in this config; marketing header auth UI stays separate.
  */
 
-export type NavVisibility = "marketing" | "learner" | "both";
+/** Where a leaf link may appear. One item can target multiple surfaces. */
+export type NavSurface = "marketingDesktopDropdown" | "marketingMobileDrawer" | "learnerShell";
 
-/** Semantic grouping for audits and tooling (not all map 1:1 to a visible dropdown). */
+/** Semantic grouping for audits (not always 1:1 with a visible dropdown). */
 export type GlobalNavGroupId =
   | "who-we-help"
   | "learn-practice"
@@ -20,74 +38,76 @@ export type GlobalNavLeafItem = {
   labelKey: string;
   href: string;
   group: GlobalNavGroupId;
-  visibility: NavVisibility;
-  /** Sort within desktop dropdown / learner row */
+  /** Which chrome surfaces render this link. */
+  surfaces: readonly NavSurface[];
+  /** Sort within a dropdown or learner row */
   order: number;
   icon?: GlobalNavIconId;
-  /** Shown in marketing mobile drawer (flat list under hubs) */
-  includeInMarketingMobileDrawer: boolean;
-  /** Ordering in mobile drawer; lower first. Omitted when not in drawer. */
+  /** When `marketingMobileDrawer` is in `surfaces`, controls order in the drawer (lower first). */
   mobileDrawerOrder?: number;
   /** Reserved for nested menus; not rendered yet. */
   children?: readonly GlobalNavLeafItem[];
 };
 
+export function itemHasSurface(item: GlobalNavLeafItem, surface: NavSurface): boolean {
+  return item.surfaces.includes(surface);
+}
+
+const DD = "marketingDesktopDropdown" as const;
+const MD = "marketingMobileDrawer" as const;
+const LS = "learnerShell" as const;
+
 const LEAF = (x: GlobalNavLeafItem) => x;
 
-/** Desktop “Explore” / who we help (icons in dropdown). */
+/** Desktop “Explore” / who we help (icons); not in mobile drawer list. */
 export const GLOBAL_NAV_WHO_WE_HELP: GlobalNavLeafItem[] = [
   LEAF({
     id: "marketing-exam-prep",
     labelKey: "nav.examPrep",
     href: "/exam-prep",
     group: "who-we-help",
-    visibility: "marketing",
+    surfaces: [DD],
     order: 10,
     icon: "book-open",
-    includeInMarketingMobileDrawer: false,
   }),
   LEAF({
     id: "marketing-new-graduate-support",
     labelKey: "nav.newGradSupport",
     href: "/new-graduate-support",
     group: "who-we-help",
-    visibility: "marketing",
+    surfaces: [DD],
     order: 20,
     icon: "graduation-cap",
-    includeInMarketingMobileDrawer: false,
   }),
   LEAF({
     id: "marketing-healthcare-careers",
     labelKey: "nav.healthcareCareers",
     href: "/healthcare-careers",
     group: "who-we-help",
-    visibility: "marketing",
+    surfaces: [DD],
     order: 30,
     icon: "briefcase",
-    includeInMarketingMobileDrawer: false,
   }),
   LEAF({
     id: "marketing-allied-health",
     labelKey: "nav.alliedHealth",
     href: "/allied-health",
     group: "who-we-help",
-    visibility: "marketing",
+    surfaces: [DD],
     order: 40,
     icon: "heart",
-    includeInMarketingMobileDrawer: false,
   }),
 ];
 
-/** Desktop “Learn & practice” dropdown + matching mobile drawer entries. */
+/** Desktop “Learn & practice” + mobile drawer (same subset). */
 export const GLOBAL_NAV_LEARN_PRACTICE: GlobalNavLeafItem[] = [
   LEAF({
     id: "marketing-lessons",
     labelKey: "nav.lessons",
     href: "/lessons",
     group: "learn-practice",
-    visibility: "marketing",
+    surfaces: [DD, MD],
     order: 10,
-    includeInMarketingMobileDrawer: true,
     mobileDrawerOrder: 20,
   }),
   LEAF({
@@ -95,9 +115,8 @@ export const GLOBAL_NAV_LEARN_PRACTICE: GlobalNavLeafItem[] = [
     labelKey: "nav.lessonsByExam",
     href: "/exam-lessons",
     group: "learn-practice",
-    visibility: "marketing",
+    surfaces: [DD, MD],
     order: 20,
-    includeInMarketingMobileDrawer: true,
     mobileDrawerOrder: 30,
   }),
   LEAF({
@@ -105,9 +124,8 @@ export const GLOBAL_NAV_LEARN_PRACTICE: GlobalNavLeafItem[] = [
     labelKey: "nav.questionBank",
     href: "/test-bank",
     group: "learn-practice",
-    visibility: "marketing",
+    surfaces: [DD, MD],
     order: 30,
-    includeInMarketingMobileDrawer: true,
     mobileDrawerOrder: 50,
   }),
   LEAF({
@@ -115,9 +133,8 @@ export const GLOBAL_NAV_LEARN_PRACTICE: GlobalNavLeafItem[] = [
     labelKey: "nav.practiceExams",
     href: "/mock-exams",
     group: "learn-practice",
-    visibility: "marketing",
+    surfaces: [DD, MD],
     order: 40,
-    includeInMarketingMobileDrawer: true,
     mobileDrawerOrder: 60,
   }),
   LEAF({
@@ -125,23 +142,23 @@ export const GLOBAL_NAV_LEARN_PRACTICE: GlobalNavLeafItem[] = [
     labelKey: "nav.flashcards",
     href: "/flashcards",
     group: "learn-practice",
-    visibility: "marketing",
+    surfaces: [DD, MD],
     order: 50,
-    includeInMarketingMobileDrawer: true,
     mobileDrawerOrder: 40,
   }),
 ];
 
-/** Desktop “Guides & plans” (nav.resources) + mobile drawer tail. */
+/**
+ * Desktop “Guides & plans” (`nav.resources`). FAQ and shop are desktop-dropdown-only (see file header).
+ */
 export const GLOBAL_NAV_GUIDES_PLANS: GlobalNavLeafItem[] = [
   LEAF({
     id: "marketing-blog",
     labelKey: "nav.blog",
     href: "/blog",
     group: "guides-plans",
-    visibility: "marketing",
+    surfaces: [DD, MD],
     order: 10,
-    includeInMarketingMobileDrawer: true,
     mobileDrawerOrder: 70,
   }),
   LEAF({
@@ -149,9 +166,8 @@ export const GLOBAL_NAV_GUIDES_PLANS: GlobalNavLeafItem[] = [
     labelKey: "nav.clinicalTools",
     href: "/tools",
     group: "guides-plans",
-    visibility: "marketing",
+    surfaces: [DD, MD],
     order: 20,
-    includeInMarketingMobileDrawer: true,
     mobileDrawerOrder: 80,
   }),
   LEAF({
@@ -159,9 +175,8 @@ export const GLOBAL_NAV_GUIDES_PLANS: GlobalNavLeafItem[] = [
     labelKey: "nav.caseStudies",
     href: "/case-studies",
     group: "guides-plans",
-    visibility: "marketing",
+    surfaces: [DD, MD],
     order: 30,
-    includeInMarketingMobileDrawer: true,
     mobileDrawerOrder: 90,
   }),
   LEAF({
@@ -169,9 +184,8 @@ export const GLOBAL_NAV_GUIDES_PLANS: GlobalNavLeafItem[] = [
     labelKey: "nav.pricing",
     href: "/pricing",
     group: "guides-plans",
-    visibility: "marketing",
+    surfaces: [DD, MD],
     order: 40,
-    includeInMarketingMobileDrawer: true,
     mobileDrawerOrder: 100,
   }),
   LEAF({
@@ -179,18 +193,16 @@ export const GLOBAL_NAV_GUIDES_PLANS: GlobalNavLeafItem[] = [
     labelKey: "footer.faq",
     href: "/faq",
     group: "guides-plans",
-    visibility: "marketing",
+    surfaces: [DD],
     order: 50,
-    includeInMarketingMobileDrawer: false,
   }),
   LEAF({
     id: "marketing-shop",
     labelKey: "nav.store",
     href: "/shop",
     group: "guides-plans",
-    visibility: "marketing",
+    surfaces: [DD],
     order: 60,
-    includeInMarketingMobileDrawer: false,
   }),
 ];
 
@@ -201,123 +213,117 @@ export const GLOBAL_NAV_LEARNER_SHELL: GlobalNavLeafItem[] = [
     labelKey: "dashboard.breadcrumbDashboard",
     href: "/app",
     group: "learner-shell",
-    visibility: "learner",
+    surfaces: [LS],
     order: 10,
-    includeInMarketingMobileDrawer: false,
   }),
   LEAF({
     id: "learner-lessons",
     labelKey: "nav.lessons",
     href: "/app/lessons",
     group: "learner-shell",
-    visibility: "learner",
+    surfaces: [LS],
     order: 20,
-    includeInMarketingMobileDrawer: false,
   }),
   LEAF({
     id: "learner-questions",
     labelKey: "nav.questionBank",
     href: "/app/questions",
     group: "learner-shell",
-    visibility: "learner",
+    surfaces: [LS],
     order: 30,
-    includeInMarketingMobileDrawer: false,
   }),
   LEAF({
     id: "learner-practice-tests",
     labelKey: "nav.topicAdaptiveTests",
     href: "/app/practice-tests",
     group: "learner-shell",
-    visibility: "learner",
+    surfaces: [LS],
     order: 40,
-    includeInMarketingMobileDrawer: false,
   }),
   LEAF({
     id: "learner-exams",
     labelKey: "nav.practiceExams",
     href: "/app/exams",
     group: "learner-shell",
-    visibility: "learner",
+    surfaces: [LS],
     order: 50,
-    includeInMarketingMobileDrawer: false,
   }),
   LEAF({
     id: "learner-study-plan",
     labelKey: "nav.studyPlanShort",
     href: "/app/study-plan",
     group: "learner-shell",
-    visibility: "learner",
+    surfaces: [LS],
     order: 60,
-    includeInMarketingMobileDrawer: false,
   }),
   LEAF({
     id: "learner-flashcards",
     labelKey: "nav.flashcards",
     href: "/app/flashcards",
     group: "learner-shell",
-    visibility: "learner",
+    surfaces: [LS],
     order: 70,
-    includeInMarketingMobileDrawer: false,
   }),
   LEAF({
     id: "learner-blog",
     labelKey: "nav.articlesAndTips",
     href: "/blog",
     group: "learner-shell",
-    visibility: "learner",
+    surfaces: [LS],
     order: 80,
-    includeInMarketingMobileDrawer: false,
   }),
   LEAF({
     id: "learner-tools",
     labelKey: "nav.clinicalTools",
     href: "/tools",
     group: "learner-shell",
-    visibility: "learner",
+    surfaces: [LS],
     order: 90,
-    includeInMarketingMobileDrawer: false,
   }),
   LEAF({
     id: "learner-case-studies",
     labelKey: "nav.caseStudiesShort",
     href: "/case-studies",
     group: "learner-shell",
-    visibility: "learner",
+    surfaces: [LS],
     order: 100,
-    includeInMarketingMobileDrawer: false,
   }),
   LEAF({
     id: "learner-pricing",
     labelKey: "nav.pricing",
     href: "/pricing",
     group: "learner-shell",
-    visibility: "learner",
+    surfaces: [LS],
     order: 110,
-    includeInMarketingMobileDrawer: false,
   }),
 ];
 
 const byGroup = (group: GlobalNavGroupId, items: GlobalNavLeafItem[]) =>
   items.filter((i) => i.group === group).sort((a, b) => a.order - b.order);
 
+function filterBySurface(items: GlobalNavLeafItem[], surface: NavSurface): GlobalNavLeafItem[] {
+  return items.filter((i) => itemHasSurface(i, surface)).sort((a, b) => a.order - b.order);
+}
+
 export function getMarketingWhoWeHelpItems(): GlobalNavLeafItem[] {
-  return byGroup("who-we-help", GLOBAL_NAV_WHO_WE_HELP);
+  return filterBySurface(byGroup("who-we-help", GLOBAL_NAV_WHO_WE_HELP), DD);
 }
 
 export function getMarketingLearnPracticeItems(): GlobalNavLeafItem[] {
-  return byGroup("learn-practice", GLOBAL_NAV_LEARN_PRACTICE);
+  return filterBySurface(byGroup("learn-practice", GLOBAL_NAV_LEARN_PRACTICE), DD);
 }
 
 export function getMarketingGuidesPlansItems(): GlobalNavLeafItem[] {
-  return byGroup("guides-plans", GLOBAL_NAV_GUIDES_PLANS);
+  return filterBySurface(byGroup("guides-plans", GLOBAL_NAV_GUIDES_PLANS), DD);
 }
 
 export function getMarketingMobileDrawerLeafItems(): GlobalNavLeafItem[] {
-  return [...GLOBAL_NAV_LEARN_PRACTICE, ...GLOBAL_NAV_GUIDES_PLANS]
-    .filter((i) => i.includeInMarketingMobileDrawer && i.mobileDrawerOrder !== undefined)
+  const combined = [...GLOBAL_NAV_LEARN_PRACTICE, ...GLOBAL_NAV_GUIDES_PLANS];
+  return combined
+    .filter((i) => itemHasSurface(i, MD) && i.mobileDrawerOrder !== undefined)
     .sort((a, b) => (a.mobileDrawerOrder ?? 0) - (b.mobileDrawerOrder ?? 0));
 }
 
 export function getLearnerShellNavItems(): GlobalNavLeafItem[] {
-  return [...GLOBAL_NAV_LEARNER_SHELL].sort((a, b) => a.order - b.order);
+  return filterBySurface([...GLOBAL_NAV_LEARNER_SHELL], LS);
 }

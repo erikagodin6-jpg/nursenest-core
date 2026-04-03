@@ -23,6 +23,7 @@ import {
 } from "@/lib/exams/practice-exam-presets";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 
 const HISTORY_PAGE_SIZE = 15;
@@ -41,6 +42,7 @@ function canUsePnFullExams(e: AccessScope): boolean {
 type ExamsPageProps = { searchParams: Promise<{ historyPage?: string }> };
 
 export default async function ExamsPage({ searchParams }: ExamsPageProps) {
+  const { t } = await getLearnerMarketingBundle();
   const sp = await searchParams;
   let requestedHistoryPage = Math.max(1, Number(sp.historyPage ?? "1"));
   if (!Number.isFinite(requestedHistoryPage)) requestedHistoryPage = 1;
@@ -58,10 +60,7 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
         <div className="mb-4">
           <BreadcrumbTrail items={examCrumbs} />
         </div>
-        <p className="nn-card p-6 text-sm text-muted">
-          We couldn’t finish checking your subscription (database or billing lookup failed). This is not the same as “no
-          plan.” Refresh shortly, or sign in again if it keeps happening.
-        </p>
+        <p className="nn-card p-6 text-sm text-muted">{t("learner.entitlement.verifyFailed")}</p>
       </main>
     );
   }
@@ -73,11 +72,8 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
         <div className="mb-4">
           <BreadcrumbTrail items={examCrumbs} />
         </div>
-        <h1 className="text-3xl font-bold">Practice exams</h1>
-        <p className="mt-2 text-sm text-muted">
-          Timed practice pulls from the same server-filtered pool as your question bank. Subscribe to start full sessions and save
-          attempts to your history.
-        </p>
+        <h1 className="text-3xl font-bold">{t("learner.exams.page.title")}</h1>
+        <p className="mt-2 text-sm text-muted">{t("learner.exams.page.subtitle.locked")}</p>
         <div className="mt-6">
           <SubscriptionPaywall
             context="exams"
@@ -85,11 +81,11 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
           />
         </div>
         <section className="nn-card mt-6 p-4 text-sm text-muted">
-          <p className="font-semibold text-foreground">After you subscribe</p>
+          <p className="font-semibold text-foreground">{t("learner.exams.page.afterSubscribe.title")}</p>
           <ul className="mt-2 list-inside list-disc space-y-1">
-            <li>Full-length mocks with server-filtered item pools</li>
-            <li>Score history for readiness tracking</li>
-            <li>Resumable sessions with autosaved progress</li>
+            <li>{t("learner.exams.page.afterSubscribe.li1")}</li>
+            <li>{t("learner.exams.page.afterSubscribe.li2")}</li>
+            <li>{t("learner.exams.page.afterSubscribe.li3")}</li>
           </ul>
         </section>
       </main>
@@ -127,11 +123,8 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
         <div className="mb-4">
           <BreadcrumbTrail items={examCrumbs} />
         </div>
-        <h1 className="text-3xl font-bold">Practice exams</h1>
-        <p className="nn-card mt-4 p-6 text-sm text-muted">
-          Exam history couldn’t load. The database was unreachable or the request failed. Your subscription status is
-          unchanged; refresh or try again shortly.
-        </p>
+        <h1 className="text-3xl font-bold">{t("learner.exams.page.title")}</h1>
+        <p className="nn-card mt-4 p-6 text-sm text-muted">{t("learner.exams.page.historyLoadFailed")}</p>
       </main>
     );
   }
@@ -151,35 +144,29 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
       <div className="mb-4">
         <BreadcrumbTrail items={examCrumbs} />
       </div>
-      <h1 className="text-3xl font-bold">Practice exams</h1>
-      <p className="mt-2 text-muted">
-        US <strong>NCLEX-RN</strong> and <strong>NCLEX-PN</strong> timed runs use your subscription pool. Answers stay hidden until you
-        submit; you get a score at the end (no rationales between items, same pacing as test day).
-      </p>
+      <h1 className="text-3xl font-bold">{t("learner.exams.page.title")}</h1>
+      <p className="mt-2 text-muted">{t("learner.exams.page.subscriberIntro")}</p>
       {pct !== null ? (
         <p className="mt-3 text-sm font-medium text-foreground">
-          Latest attempt: {last?.score}/{last?.total} ({pct}%).{" "}
-          {pct >= 75 ? "Strong practice band. Keep mixing timed sets." : "Add timed blocks this week to lift accuracy."}
+          {t("learner.exams.page.latestAttempt", { score: last?.score ?? 0, total: last?.total ?? 0, pct })}{" "}
+          {pct >= 75 ? t("learner.exams.page.latestStrong") : t("learner.exams.page.latestWeak")}
         </p>
       ) : (
-        <p className="mt-3 text-sm text-muted">No attempts yet. Start a session below when you are ready.</p>
+        <p className="mt-3 text-sm text-muted">{t("learner.exams.page.noAttempts")}</p>
       )}
       <aside className="nn-card mt-4 border-primary/15 bg-primary/5 p-4 text-sm text-muted">
-        <p className="font-semibold text-foreground">Report card & analytics</p>
-        <p className="mt-1">Pair exam scores with question bank misses to plan your next study blocks.</p>
+        <p className="font-semibold text-foreground">{t("learner.exams.page.reportCardTitle")}</p>
+        <p className="mt-1">{t("learner.exams.page.reportCardBody")}</p>
       </aside>
 
       {defaultExam ? (
         <ExamPracticeClient examId={defaultExam.id} examTitle={defaultExam.title} />
       ) : (
         <aside className="nn-card mt-4 border-amber-200/80 bg-amber-50/50 p-4 text-sm text-foreground">
-          <p className="font-semibold">Setting up your practice exam</p>
-          <p className="mt-1 text-muted">
-            We could not attach a default exam profile to your account yet. You can still use the question bank while we finish loading
-            exam metadata.
-          </p>
+          <p className="font-semibold">{t("learner.exams.page.defaultExamTitle")}</p>
+          <p className="mt-1 text-muted">{t("learner.exams.page.defaultExamBody")}</p>
           <Link href="/app/questions" className="mt-3 inline-flex text-sm font-semibold text-primary underline underline-offset-2">
-            Open question bank →
+            {t("learner.exams.page.openQuestionBankArrow")}
           </Link>
         </aside>
       )}

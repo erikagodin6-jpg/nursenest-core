@@ -23,7 +23,7 @@ export async function MarketingForInstitutionsPage({ locale }: { locale: string 
 
   return (
     <main className="mx-auto w-full max-w-6xl px-6 py-12">
-      <p className="text-xs font-semibold uppercase tracking-wide text-primary">Institutional</p>
+      <p className="text-xs font-semibold uppercase tracking-wide text-primary">{m["pages.forInstitutions.eyebrow"]}</p>
       <h1 className="mt-2 text-4xl font-bold">{m["pages.forInstitutions.h1"]}</h1>
       <p className="mt-3 max-w-2xl text-muted">{m["pages.forInstitutions.intro"]}</p>
 

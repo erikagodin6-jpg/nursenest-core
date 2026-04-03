@@ -12,7 +12,8 @@ import {
   ExamSessionTopBar,
   ExamTimerReadout,
 } from "@/components/exam/exam-session-shell";
-import { examPoolEmptyCopy, examStartFailureMessage } from "@/lib/student/gated-state-messages";
+import type { EmptyCopyI18n } from "@/lib/student/gated-state-messages-i18n";
+import { examPoolEmptyKeys, examStartFailureKey } from "@/lib/student/gated-state-messages-i18n";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { PostTestStudyNextCard } from "@/components/student/post-test-study-next-card";
 
@@ -81,7 +82,7 @@ export function ExamPracticeClient({
   } | null>(null);
   const [qLoading, setQLoading] = useState(false);
   const [blockingError, setBlockingError] = useState<string | null>(null);
-  const [poolEmptyCopy, setPoolEmptyCopy] = useState<{ title: string; body: string } | null>(null);
+  const [poolEmptyCopy, setPoolEmptyCopy] = useState<EmptyCopyI18n | null>(null);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const cacheRef = useRef<Record<string, ExamQuestion>>({});
   cacheRef.current = cache;
@@ -145,13 +146,13 @@ export function ExamPracticeClient({
 
   useEffect(() => {
     if (!timedMode || phase !== "ready" || timeLimitSec == null || remainingSec === null) return;
-    const t = window.setInterval(() => {
+    const tick = window.setInterval(() => {
       setRemainingSec((r) => {
         if (r == null) return null;
         return r <= 0 ? 0 : r - 1;
       });
     }, 1000);
-    return () => window.clearInterval(t);
+    return () => window.clearInterval(tick);
   }, [timedMode, phase, timeLimitSec, remainingSec]);
 
   const fetchQuestion = useCallback(async (sid: string, index: number, signal: AbortSignal) => {
@@ -175,9 +176,7 @@ export function ExamPracticeClient({
       const q = await fetchQuestion(sessionId, currentIndex, ac.signal);
       if (!q) {
         if (!ac.signal.aborted) {
-          setBlockingError(
-            "We couldn’t load this question (connection or temporary server issue). Refresh the page or try again shortly.",
-          );
+          setBlockingError(t("learner.examPractice.loadQuestionFailed"));
           setPhase("error");
         }
         setQLoading(false);
@@ -188,7 +187,7 @@ export function ExamPracticeClient({
     })();
 
     return () => ac.abort();
-  }, [phase, sessionId, currentIndex, questionIds, total, fetchQuestion]);
+  }, [phase, sessionId, currentIndex, questionIds, total, fetchQuestion, t]);
 
   const applySessionPayload = useCallback(
     (data: {
@@ -266,7 +265,7 @@ export function ExamPracticeClient({
               localStorage.setItem(STORAGE_EXAM, data.examId ?? examId ?? "");
               return;
             }
-            setPoolEmptyCopy(examPoolEmptyCopy(undefined));
+            setPoolEmptyCopy(examPoolEmptyKeys(undefined));
             setPhase("empty");
             return;
           }
@@ -320,12 +319,12 @@ export function ExamPracticeClient({
         /* ignore */
       }
       if (!start.ok) {
-        setBlockingError(examStartFailureMessage(start.status, payload.code));
+        setBlockingError(t(examStartFailureKey(start.status, payload.code)));
         setPhase("error");
         return;
       }
       if (!payload.sessionId || payload.poolEmpty || !payload.questionIds?.length) {
-        setPoolEmptyCopy(examPoolEmptyCopy(payload.diagnostics));
+        setPoolEmptyCopy(examPoolEmptyKeys(payload.diagnostics));
         setPhase("empty");
         return;
       }
@@ -348,7 +347,7 @@ export function ExamPracticeClient({
       localStorage.setItem(STORAGE_SESSION, payload.sessionId);
       localStorage.setItem(STORAGE_EXAM, payload.examId ?? examId ?? "");
     } catch {
-      setBlockingError("Could not reach the server to start this session. Check your connection and retry.");
+      setBlockingError(t("learner.examPractice.networkStart"));
       setPhase("error");
     }
   }
@@ -380,7 +379,7 @@ export function ExamPracticeClient({
         error?: string;
       };
       if (!res.ok) {
-        setBlockingError("We couldn’t record this attempt. Check your connection or try again shortly.");
+        setBlockingError(t("learner.examPractice.recordAttemptFailed"));
         setPhase("error");
         return;
       }
@@ -407,37 +406,32 @@ export function ExamPracticeClient({
   }, [remainingSec]);
 
   if (phase === "loading") {
-    return <p className="text-sm text-muted">Preparing your practice session…</p>;
+    return <p className="text-sm text-muted">{t("learner.examPractice.preparing")}</p>;
   }
 
   if (phase === "pickMode") {
     return (
       <div className="nn-card mt-4 space-y-4 p-6">
         {examTitle ? <p className="text-sm font-medium text-muted">{examTitle}</p> : null}
-        <p className="text-sm text-muted">Choose how you want to run this session. Progress saves automatically; you can refresh and resume.</p>
-        <p className="text-xs text-muted">
-          This is NurseNest practice. Timed pacing and layout are designed to feel serious and focused. We do not replicate any
-          official exam vendor interface or guarantee identical behavior on test day.
-        </p>
+        <p className="text-sm text-muted">{t("learner.examPractice.chooseMode")}</p>
+        <p className="text-xs text-muted">{t("learner.examPractice.disclaimer")}</p>
         <div className="flex flex-wrap gap-2">
           <button
             type="button"
             className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-primary/5"
             onClick={() => void startExamSession(false)}
           >
-            Untimed
+            {t("learner.examPractice.untimed")}
           </button>
           <button
             type="button"
             className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
             onClick={() => void startExamSession(true)}
           >
-            Timed ({timedSuggestedMinutes} min)
+            {t("learner.examPractice.timedButton", { minutes: timedSuggestedMinutes })}
           </button>
         </div>
-        <p className="text-xs text-muted">
-          Timed mode shows a countdown and submits automatically when time expires (your answers so far are sent).
-        </p>
+        <p className="text-xs text-muted">{t("learner.examPractice.timedModeHint")}</p>
       </div>
     );
   }
@@ -446,30 +440,32 @@ export function ExamPracticeClient({
     return (
       <div className="nn-card mt-4 space-y-3 p-6">
         <p className="text-sm text-muted">
-          {blockingError ?? "We could not load the exam session. Check your connection and retry."}
+          {blockingError ?? t("learner.examPractice.sessionLoadFailed")}
         </p>
         <button
           type="button"
           className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white"
           onClick={() => window.location.reload()}
         >
-          Retry
+          {t("learner.examPractice.retry")}
         </button>
       </div>
     );
   }
 
   if (phase === "empty") {
-    const { title, body } = poolEmptyCopy ?? examPoolEmptyCopy(undefined);
+    const keys = poolEmptyCopy ?? examPoolEmptyKeys(undefined);
+    const title = t(keys.titleKey, keys.bodyParams);
+    const body = t(keys.bodyKey, keys.bodyParams);
     return (
       <div className="mt-4 space-y-2 text-sm text-muted">
         <p className="font-medium text-foreground">{title}</p>
         <p>
           {body}{" "}
           <Link href="/app/questions" className="font-medium text-primary underline">
-            Open the question bank
+            {t("examAttempt.openQuestionBank")}
           </Link>{" "}
-          or contact support if this doesn’t match what you expect.
+          {t("learner.examPractice.emptySuffix")}
         </p>
       </div>
     );

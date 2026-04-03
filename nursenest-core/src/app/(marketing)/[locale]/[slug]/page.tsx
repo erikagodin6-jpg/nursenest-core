@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ProgrammaticSeoPage } from "@/components/seo/programmatic-seo-page";
 import { buildProgrammaticMetadata } from "@/lib/seo/programmatic-metadata";
-import { getProgrammaticSeoPage } from "@/lib/seo/programmatic-registry";
+import { resolveProgrammaticSeoForLocale } from "@/lib/seo/resolve-programmatic-seo";
 
 /**
  * English canonical programmatic URLs are fully prerendered at build under `/seo/[slug]`.
@@ -23,9 +23,9 @@ export async function generateMetadata({
   params: Promise<{ locale: string; slug: string }>;
 }): Promise<Metadata> {
   const { locale, slug } = await params;
-  const page = getProgrammaticSeoPage(slug);
-  if (!page) return {};
-  return buildProgrammaticMetadata(page, locale);
+  const resolved = resolveProgrammaticSeoForLocale(slug, locale);
+  if (!resolved) return {};
+  return buildProgrammaticMetadata(resolved.page, locale);
 }
 
 export default async function ProgrammaticSeoLocaleRoute({
@@ -34,7 +34,15 @@ export default async function ProgrammaticSeoLocaleRoute({
   params: Promise<{ locale: string; slug: string }>;
 }) {
   const { locale, slug } = await params;
-  const page = getProgrammaticSeoPage(slug);
-  if (!page) notFound();
-  return <ProgrammaticSeoPage page={page} locale={locale} localizedUrl />;
+  const resolved = resolveProgrammaticSeoForLocale(slug, locale);
+  if (!resolved) notFound();
+  return (
+    <ProgrammaticSeoPage
+      page={resolved.page}
+      locale={locale}
+      related={resolved.related}
+      cross={resolved.cross}
+      localizedUrl
+    />
+  );
 }

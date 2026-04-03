@@ -1,0 +1,25 @@
+{
+  "title": "Guide d’étude NP pour le Canada | Lignes directrices, cas et rythme",
+  "h1": "Guide d’étude NP pour les candidats canadiens",
+  "description": "Guide pratique pour la préparation NP au Canada : ordre des lignes directrices, pratique par cas, profondeur pharmacologique et rythme autour de la semaine d’examen, sans listes génériques.",
+  "breadcrumb": {
+    "midLabel": "Préparation NP Canada",
+    "currentLabel": "Guide d’étude"
+  },
+  "sections": [
+    {
+      "heading": "Ancrer d’abord les lignes directrices, puis les cas",
+      "level": 2,
+      "body": [
+        "Choisissez deux références que vous ouvrirez vraiment pendant les blocs. Résumez les seuils de décision avec vos mots, puis répondez à des cas qui obligent à les appliquer sous temps limité."
+      ]
+    },
+    {
+      "heading": "Rythme hebdomadaire pour cliniciens en poste",
+      "level": 2,
+      "body": [
+        "Trois blocs de cas plus courts valent mieux qu’un marathon épuisant à minuit. Réservez une séance par semaine uniquement aux domaines faibles d’après votre dernier rapport."
+      ]
+    }
+  ]
+}

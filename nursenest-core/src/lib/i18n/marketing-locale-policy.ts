@@ -3,7 +3,7 @@ import { MARKETING_LANGUAGES } from "./marketing-languages";
 /** Default marketing locale: URL has no `/[locale]` prefix; lavender theme remains app default via `AppThemeProvider`. */
 export const DEFAULT_MARKETING_LOCALE = "en" as const;
 
-/** All language codes exposed in the marketing shell (header/footer picker). */
+/** All routable marketing locale codes (overlays + `/{code}/…`); wider than the header/footer switcher. */
 export const MARKETING_LOCALE_CODES = MARKETING_LANGUAGES.map((l) => l.code) as readonly string[];
 
 export type MarketingLocaleCode = (typeof MARKETING_LOCALE_CODES)[number];
@@ -22,4 +22,15 @@ export const CORE_HOSTED_MARKETING_LOCALES = MARKETING_LOCALE_CODES.filter(
 
 export function isCoreHostedNonDefaultLocale(locale: string): boolean {
   return locale !== DEFAULT_MARKETING_LOCALE && isMarketingLocaleCode(locale);
+}
+
+/** Primary subtags that use right-to-left text direction in the marketing / learner shell. */
+const RTL_PRIMARY_LOCALES = new Set(["ar", "fa", "ur", "he"]);
+
+export function localePrimarySubtag(locale: string): string {
+  return locale.split(/[-_]/)[0]?.trim().toLowerCase() || "en";
+}
+
+export function isRtlMarketingLocale(locale: string): boolean {
+  return RTL_PRIMARY_LOCALES.has(localePrimarySubtag(locale));
 }

@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useMemo, type ReactNode } from "react";
 import { formatMarketingMessage, type MarketingMessages } from "@/lib/marketing-i18n-core";
+import { isRtlMarketingLocale, localePrimarySubtag } from "@/lib/i18n/marketing-locale-policy";
 
 type Params = Record<string, string | number | undefined>;
 
@@ -14,11 +15,12 @@ type MarketingI18nContextValue = {
 
 const MarketingI18nContext = createContext<MarketingI18nContextValue | null>(null);
 
-/** Keeps `<html lang>` aligned with the active marketing locale (accessibility + SEO). */
+/** Keeps `<html lang>` and `dir` aligned with the active marketing locale (accessibility + SEO + RTL). */
 function HtmlLangSync({ locale }: { locale: string }) {
   useEffect(() => {
-    const primary = locale.split(/[-_]/)[0]?.trim() || "en";
+    const primary = localePrimarySubtag(locale);
     document.documentElement.lang = primary.length >= 2 ? primary : "en";
+    document.documentElement.dir = isRtlMarketingLocale(locale) ? "rtl" : "ltr";
   }, [locale]);
   return null;
 }

@@ -3,7 +3,10 @@
 import { Fragment, useTransition, type ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { preferMarketingLocale } from "@/app/actions/marketing-locale";
-import { MARKETING_LANGUAGES } from "@/lib/i18n/marketing-languages";
+import {
+  getMarketingLanguagesForSwitcher,
+  marketingLanguageDisplayNameForSwitcher,
+} from "@/lib/i18n/marketing-languages";
 import { isExamHubMarketingPath } from "@/lib/i18n/exam-hub-path";
 import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/marketing-path";
 
@@ -51,13 +54,15 @@ export function MarketingLanguagePreferenceList({ onDone, renderItem }: Props) {
     });
   }
 
+  const switcherLanguages = getMarketingLanguagesForSwitcher();
+
   return (
     <>
-      {MARKETING_LANGUAGES.map((lang) => (
+      {switcherLanguages.map((lang) => (
         <Fragment key={lang.code}>
           {renderItem({
             code: lang.code,
-            name: lang.name,
+            name: marketingLanguageDisplayNameForSwitcher(lang),
             flag: lang.flag,
             disabled: pending,
             onSelect: () => select(lang.code),

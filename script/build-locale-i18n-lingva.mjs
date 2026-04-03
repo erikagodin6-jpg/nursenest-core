@@ -90,6 +90,8 @@ function lineToUrlPieces(line) {
 const SLASH_TOKEN = "⟨SL⟩";
 
 async function fetchLingvaChunk(chunk) {
+  /** Lingva returns 404 for a lone "." path segment. */
+  if (chunk === ".") return ".";
   const pathSafe = chunk.split("/").join(SLASH_TOKEN);
   const url = `https://lingva.ml/api/v1/en/${localeLower}/${encodeURIComponent(pathSafe)}`;
   let lastErr;

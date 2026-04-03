@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import type { AdaptiveLearnerRecommendations } from "@/lib/learner/adaptive-recommendations";
 import { AdaptiveStudyOverview } from "@/components/student/adaptive-study-overview";
+import { useMarketingI18n } from "@/lib/marketing-i18n";
 
 type Props = {
   adaptive: AdaptiveLearnerRecommendations;
@@ -18,6 +21,8 @@ export function HomeStudyNextPreviewSection({
   pricingHref = "/pricing",
   signupHref = "/signup",
 }: Props) {
+  const { t } = useMarketingI18n();
+
   return (
     <section
       className="nn-card space-y-3 p-5 sm:p-6"
@@ -27,26 +32,23 @@ export function HomeStudyNextPreviewSection({
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <h2 id="home-study-next-preview-title" className="text-lg font-bold text-[var(--theme-heading-text)] sm:text-xl">
-            See your next study step
+            {t("home.studyNextPreview.title")}
           </h2>
-          <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
-            Sample preview — numbers and steps below are illustrative. After you subscribe, this panel reflects your real practice,
-            exam date, and weak areas.
-          </p>
+          <p className="mt-1 max-w-2xl text-sm text-muted-foreground">{t("home.studyNextPreview.subtitle")}</p>
         </div>
         <Link
           href={pricingHref}
           className="inline-flex shrink-0 items-center justify-center rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
         >
-          Continue your plan
+          {t("cta.continuePlan")}
         </Link>
       </div>
       <AdaptiveStudyOverview adaptive={adaptive} showHeading={false} compact subscriber={false} />
       <p className="text-xs text-muted-foreground">
         <Link href={signupHref} className="font-semibold text-primary underline-offset-2 hover:underline">
-          Create a free account
+          {t("home.studyNextPreview.signupLink")}
         </Link>{" "}
-        to start logging practice; upgrade anytime for full Study Next and the question bank.
+        {t("home.studyNextPreview.footerAfterLink")}
       </p>
     </section>
   );

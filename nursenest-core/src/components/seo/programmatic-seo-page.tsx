@@ -2,10 +2,6 @@ import Link from "next/link";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import type { SeoPageDefinition } from "@/lib/seo/programmatic-registry";
-import {
-  getCrossClusterLinks,
-  getRelatedProgrammaticPages,
-} from "@/lib/seo/programmatic-registry";
 import { buildProgrammaticSeoBreadcrumbResolution } from "@/lib/seo/programmatic-breadcrumbs";
 import { getProgrammaticPracticeConversionConfig } from "@/lib/seo/programmatic-practice-config";
 import { ProgrammaticPageJsonLd } from "@/components/seo/seo-json-ld";
@@ -18,19 +14,27 @@ import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { resolveProgrammaticProductLinks } from "@/lib/seo/programmatic-page-links";
 import { isUnifiedPracticeSlug } from "@/lib/seo/programmatic-practice-hub";
 import { NpProgrammaticPracticeTestCrossLinks } from "@/components/seo/np-programmatic-practice-test-cross-links";
+import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
 
-export function ProgrammaticSeoPage({
+export async function ProgrammaticSeoPage({
   page,
   locale,
+  related,
+  cross,
   /** True when rendered from `/[locale]/[slug]` (prefix belongs in URLs). False on cookie-localized `(default)` routes. */
   localizedUrl = false,
 }: {
   page: SeoPageDefinition;
   locale: string;
+  related: { slug: string; title: string }[];
+  cross: { slug: string; label: string }[];
   localizedUrl?: boolean;
 }) {
-  const related = getRelatedProgrammaticPages(page.slug, 6);
-  const cross = getCrossClusterLinks(page.slug);
+  const m = await loadMarketingMessages(locale);
+  const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+  const t = (key: string) => formatMarketingMessage(m, key, undefined, en);
+
   const signup = withMarketingLocale(locale, "/signup");
   const pricing = withMarketingLocale(locale, HUB.pricing);
   const product = resolveProgrammaticProductLinks(page, locale);
@@ -43,7 +47,10 @@ export function ProgrammaticSeoPage({
     localized: localizedUrl,
   });
   const practiceConfig = getProgrammaticPracticeConversionConfig(page.slug);
-  const introLead = practiceConfig?.valueLead ?? page.description;
+  const introLead =
+    locale !== DEFAULT_MARKETING_LOCALE
+      ? page.description
+      : (practiceConfig?.valueLead ?? page.description);
 
   return (
     <>
@@ -53,7 +60,7 @@ export function ProgrammaticSeoPage({
         <BreadcrumbTrail items={crumbs} />
 
         <header className="mb-10 border-b border-[var(--theme-card-border)] pb-8">
-          <p className="text-sm font-medium text-primary">NurseNest exam prep</p>
+          <p className="text-sm font-medium text-primary">{t("programmatic.chrome.kicker")}</p>
           {page.practiceConversion && isUnifiedPracticeSlug(page.slug) ? (
             <ProgrammaticPracticeDynamicHeader
               slug={page.slug}
@@ -67,25 +74,22 @@ export function ProgrammaticSeoPage({
               <p className="mt-4 text-lg leading-relaxed text-[var(--theme-body-text)]/90">{introLead}</p>
             </>
           )}
-          <p className="mt-3 text-sm font-medium text-[var(--theme-body-text)]/85">
-            Turn reading into reps: pathway-scoped questions, lessons, and timed exams that match what your authorization
-            actually covers.
-          </p>
-          <nav className="mt-3 text-sm text-primary" aria-label="Related hubs">
+          <p className="mt-3 text-sm font-medium text-[var(--theme-body-text)]/85">{t("programmatic.chrome.subLead")}</p>
+          <nav className="mt-3 text-sm text-primary" aria-label={t("programmatic.chrome.relatedHubsAria")}>
             <Link href={withMarketingLocale(locale, "/exam-lessons")} className="underline-offset-4 hover:underline">
-              Lesson hubs
+              {t("programmatic.nav.examLessons")}
             </Link>
             <span className="mx-2 text-[var(--theme-body-text)]/40" aria-hidden>
               ·
             </span>
             <Link href={withMarketingLocale(locale, "/blog")} className="underline-offset-4 hover:underline">
-              Blog
+              {t("programmatic.nav.blog")}
             </Link>
             <span className="mx-2 text-[var(--theme-body-text)]/40" aria-hidden>
               ·
             </span>
             <Link href={withMarketingLocale(locale, "/tools")} className="underline-offset-4 hover:underline">
-              Free tools
+              {t("programmatic.nav.tools")}
             </Link>
           </nav>
 
@@ -97,13 +101,13 @@ export function ProgrammaticSeoPage({
                   href={signup}
                   className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] px-5 py-2.5 text-sm font-semibold text-[var(--theme-body-text)] hover:border-primary/40"
                 >
-                  Create free account
+                  {t("programmatic.cta.createFreeAccount")}
                 </Link>
                 <Link
                   href={pricing}
                   className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-primary/30 px-5 py-2.5 text-sm font-semibold text-primary hover:bg-primary/5"
                 >
-                  Compare plans
+                  {t("programmatic.cta.comparePlans")}
                 </Link>
               </div>
             </div>
@@ -113,19 +117,19 @@ export function ProgrammaticSeoPage({
                 href={signup}
                 className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-role-cta px-5 py-2.5 text-sm font-semibold text-role-cta-foreground shadow-[0_4px_14px_var(--role-cta-shadow)] transition hover:bg-role-cta-hover"
               >
-                Start free (create account)
+                {t("programmatic.cta.startFreeCreateAccount")}
               </Link>
               <Link
                 href={pricing}
                 className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] px-5 py-2.5 text-sm font-semibold text-[var(--theme-body-text)] hover:border-primary/40"
               >
-                View plans
+                {t("programmatic.cta.viewPlans")}
               </Link>
               <Link
                 href={questions}
                 className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-primary/30 px-5 py-2.5 text-sm font-semibold text-primary hover:bg-primary/5"
               >
-                Start practice questions
+                {t("programmatic.cta.startPracticeQuestions")}
               </Link>
             </div>
           )}
@@ -155,7 +159,7 @@ export function ProgrammaticSeoPage({
 
         {page.faq?.length ? (
           <section className="mt-12 rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] p-6 sm:p-8">
-            <h2 className="text-xl font-semibold text-[var(--theme-body-text)]">Common questions</h2>
+            <h2 className="text-xl font-semibold text-[var(--theme-body-text)]">{t("programmatic.faq.heading")}</h2>
             <ul className="mt-6 space-y-6">
               {page.faq.map((item, i) => (
                 <li key={i}>
@@ -168,57 +172,55 @@ export function ProgrammaticSeoPage({
         ) : null}
 
         <section className="mt-14 rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]/40 p-6 sm:p-8">
-          <h2 className="text-xl font-semibold text-[var(--theme-body-text)]">Study inside NurseNest</h2>
-          <p className="mt-2 text-sm leading-relaxed text-[var(--theme-body-text)]/85">
-            Every guide links to exam lessons, pathway questions, the public test bank, adaptive CAT exams, study tools, and flashcards so you never hit a dead end.
-          </p>
+          <h2 className="text-xl font-semibold text-[var(--theme-body-text)]">{t("programmatic.studyInside.heading")}</h2>
+          <p className="mt-2 text-sm leading-relaxed text-[var(--theme-body-text)]/85">{t("programmatic.studyInside.body")}</p>
           <ul className="mt-6 flex flex-col gap-2 text-sm font-medium text-primary sm:flex-row sm:flex-wrap sm:gap-4">
             <li>
               <Link href={lessons} className="underline-offset-4 hover:underline">
-                Exam lesson hubs
+                {t("programmatic.studyInside.linkExamLessons")}
               </Link>
             </li>
             <li>
               <Link href={questions} className="underline-offset-4 hover:underline">
-                Practice questions
+                {t("programmatic.studyInside.linkPracticeQuestions")}
               </Link>
             </li>
             <li>
               <Link href={testBank} className="underline-offset-4 hover:underline">
-                Test bank overview
+                {t("programmatic.studyInside.linkTestBank")}
               </Link>
             </li>
             <li>
               <Link href={exams} className="underline-offset-4 hover:underline">
-                Adaptive CAT exams
+                {t("programmatic.studyInside.linkExams")}
               </Link>
             </li>
             <li>
               <Link href={tools} className="underline-offset-4 hover:underline">
-                Study tools
+                {t("programmatic.studyInside.linkTools")}
               </Link>
             </li>
             <li>
               <Link href={flashcards} className="underline-offset-4 hover:underline">
-                Flashcards
+                {t("programmatic.studyInside.linkFlashcards")}
               </Link>
             </li>
             <li>
               <Link href={pricing} className="underline-offset-4 hover:underline">
-                Pricing
+                {t("programmatic.studyInside.linkPricing")}
               </Link>
             </li>
             <li>
               <Link href={signup} className="underline-offset-4 hover:underline">
-                Sign up
+                {t("programmatic.studyInside.linkSignup")}
               </Link>
             </li>
           </ul>
         </section>
 
         {related.length > 0 ? (
-          <nav className="mt-14" aria-label="Related topics">
-            <h2 className="text-lg font-semibold text-[var(--theme-body-text)]">Related guides</h2>
+          <nav className="mt-14" aria-label={t("programmatic.related.aria")}>
+            <h2 className="text-lg font-semibold text-[var(--theme-body-text)]">{t("programmatic.related.heading")}</h2>
             <ul className="mt-4 grid gap-3 sm:grid-cols-2">
               {related.map((r) => (
                 <li key={r.slug}>
@@ -235,8 +237,8 @@ export function ProgrammaticSeoPage({
         ) : null}
 
         {cross.length > 0 ? (
-          <nav className="mt-10" aria-label="More exam prep">
-            <h2 className="text-lg font-semibold text-[var(--theme-body-text)]">Explore more</h2>
+          <nav className="mt-10" aria-label={t("programmatic.explore.aria")}>
+            <h2 className="text-lg font-semibold text-[var(--theme-body-text)]">{t("programmatic.explore.heading")}</h2>
             <ul className="mt-4 flex flex-wrap gap-2">
               {cross.map((c) => (
                 <li key={c.slug}>
@@ -244,7 +246,7 @@ export function ProgrammaticSeoPage({
                     href={pathForProgrammatic(c.slug)}
                     className="inline-block rounded-full border border-[var(--theme-card-border)] px-3 py-1.5 text-xs font-medium text-[var(--theme-body-text)] hover:border-primary/40"
                   >
-                    {c.h1}
+                    {c.label}
                   </Link>
                 </li>
               ))}

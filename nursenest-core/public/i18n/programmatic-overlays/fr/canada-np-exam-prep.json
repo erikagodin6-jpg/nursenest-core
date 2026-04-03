@@ -1,0 +1,33 @@
+{
+  "title": "Préparation à l’examen NP au Canada | Entraînement au jugement clinique",
+  "h1": "Préparation à l’examen NP au Canada pour un jugement clinique avancé",
+  "description": "Comment préparer les examens d’infirmière praticienne au Canada avec des questions de cas, des leçons reliées aux lignes directrices et une préparation qui suit les écarts de raisonnement plutôt que la simple mémorisation.",
+  "breadcrumb": {
+    "midLabel": "Préparation NP",
+    "currentLabel": "Préparation NP Canada"
+  },
+  "sections": [
+    {
+      "heading": "Pourquoi la préparation NP ne peut pas copier la tactique « volume RN »",
+      "level": 2,
+      "body": [
+        "Les examens de pratique avancée valorisent le raisonnement différentiel, la pharmacologie contextualisée et les nuances de lignes directrices. Mémoriser des faits isolés sans cadrage de cas sous-teste ce que les régulateurs évaluent.",
+        "NurseNest oriente le travail NP vers des énoncés plus longs et des bifurcations de prise en charge pour répéter des décisions, pas seulement la vitesse de reconnaissance."
+      ]
+    },
+    {
+      "heading": "À attendre dans les blocs de cas",
+      "level": 2,
+      "body": [
+        "Cherchez des données en plusieurs étapes : antécédents, constantes, laboratoire et contre-indications qui changent l’action la plus sûre. Alternez nouvelles présentations et reprise des erreurs précédentes."
+      ]
+    },
+    {
+      "heading": "Ressources connexes",
+      "level": 2,
+      "body": [
+        "Utilisez le guide des questions CNPLE pour le style d’items, la page des cas cliniques NP pour les schémas de raisonnement, et votre hub de filière pour les leçons ciblées Canada."
+      ]
+    }
+  ]
+}

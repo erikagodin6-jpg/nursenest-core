@@ -8,6 +8,11 @@ import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/ex
 import { listPathwayIdsWithLessons } from "@/lib/lessons/pathway-lesson-loader";
 import { examLessonsIndexBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
+import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
+import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { formatMarketingMessage, resolveMarketingCopy } from "@/lib/marketing-i18n-core";
+import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 
 export const revalidate = 600;
 
@@ -17,17 +22,33 @@ const cachedPathwayIdsWithLessons = unstable_cache(
   { revalidate: 600, tags: ["pathway-lesson-index"] },
 );
 
-export const metadata: Metadata = {
-  title: "Exam-scoped clinical lessons | NurseNest",
-  description:
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getMarketingLocaleForDefaultRoute();
+  const m = await loadMarketingMessages(locale);
+  const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+  const title = resolveMarketingCopy(
+    m,
+    "pages.examLessons.metaTitle",
+    en,
+    "Exam-scoped clinical lessons | NurseNest",
+  );
+  const description = resolveMarketingCopy(
+    m,
+    "pages.examLessons.metaDescription",
+    en,
     "Browse nursing lessons by country, role, and exam track (REx-PN, NCLEX-RN, NCLEX-PN, NP specialties, and more). Previews are free; full depth unlocks with the matching subscription.",
-  alternates: { canonical: absoluteUrl("/exam-lessons") },
-  openGraph: {
-    title: "Exam-scoped clinical lessons | NurseNest",
-    url: absoluteUrl("/exam-lessons"),
-    type: "website",
-  },
-};
+  );
+  return {
+    title,
+    description,
+    alternates: { canonical: absoluteUrl("/exam-lessons") },
+    openGraph: {
+      title,
+      url: absoluteUrl("/exam-lessons"),
+      type: "website",
+    },
+  };
+}
 
 export default async function ExamLessonsIndexPage() {
   const pathwayIds = await cachedPathwayIdsWithLessons();
@@ -37,42 +58,48 @@ export default async function ExamLessonsIndexPage() {
 
   const { crumbs, schemaItems } = examLessonsIndexBreadcrumbs();
 
+  const locale = await getMarketingLocaleForDefaultRoute();
+  const m = await loadMarketingMessages(locale);
+  const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+  const t = (key: string, params?: Record<string, string | number>) =>
+    formatMarketingMessage(m, key, params, en);
+
+  const regionLabel = (slug: string) =>
+    slug === "canada" ? t("pages.pricing.country.ca") : t("pages.pricing.country.us");
+
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
       <BreadcrumbJsonLd items={schemaItems} />
       <div className="mb-6">
         <BreadcrumbTrail items={crumbs} />
       </div>
-      <h1 className="text-3xl font-extrabold text-[var(--theme-heading-text)]">Lessons by exam pathway</h1>
-      <p className="mt-3 text-[var(--theme-muted-text)]">
-        Every hub below is scoped to one country, license track, and exam. No mixed terminology, no cross-leak between NP
-        specialties when you set your learner pathway. Start with a preview, then unlock the full lesson with a matching plan.
-      </p>
+      <h1 className="text-3xl font-extrabold text-[var(--theme-heading-text)]">{t("pages.examLessons.h1")}</h1>
+      <p className="mt-3 text-[var(--theme-muted-text)]">{t("pages.examLessons.intro")}</p>
       <div className="mt-6 flex flex-wrap gap-3">
         <Link
-          href="/pricing"
+          href={withMarketingLocale(locale, "/pricing")}
           className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:brightness-110"
         >
-          View plans & pricing
+          {t("pages.examLessons.ctaPricing")}
         </Link>
         <Link
-          href="/blog"
+          href={withMarketingLocale(locale, "/blog")}
           className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] px-5 py-2.5 text-sm font-semibold text-[var(--theme-heading-text)] hover:border-primary/40"
         >
-          Read the blog
+          {t("pages.examLessons.ctaBlog")}
         </Link>
         <Link
-          href="/tools"
+          href={withMarketingLocale(locale, "/tools")}
           className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-primary/30 px-5 py-2.5 text-sm font-semibold text-primary hover:bg-primary/5"
         >
-          Free clinical tools
+          {t("pages.examLessons.ctaTools")}
         </Link>
       </div>
       <ul className="mt-8 space-y-4">
         {rows.map((p) => (
           <li key={p.id} className="nn-card p-4">
             <p className="text-xs font-semibold uppercase text-primary">
-              {p.countrySlug === "canada" ? "Canada" : "US"} · {p.shortName}
+              {t("pages.examLessons.pathwayBadge", { region: regionLabel(p.countrySlug), shortName: p.shortName })}
             </p>
             <h2 className="mt-1 text-lg font-semibold text-[var(--theme-heading-text)]">{p.displayName}</h2>
             <p className="mt-2 text-sm text-muted">{p.seoDescription}</p>
@@ -80,16 +107,16 @@ export default async function ExamLessonsIndexPage() {
               href={buildExamPathwayPath(p, "lessons")}
               className="mt-3 inline-block text-sm font-semibold text-primary hover:underline"
             >
-              Open lesson hub →
+              {t("pages.examLessons.openHub")}
             </Link>
           </li>
         ))}
       </ul>
       <MarketingStudyCrossLinks className="mt-12" />
       <p className="mt-10 text-sm text-muted">
-        Looking for the app lesson list (subscriber)?{" "}
+        {t("pages.examLessons.appLessonsLead")}{" "}
         <Link href="/app/lessons" className="font-semibold text-primary">
-          Go to app lessons
+          {t("pages.examLessons.appLessonsLink")}
         </Link>
       </p>
     </div>

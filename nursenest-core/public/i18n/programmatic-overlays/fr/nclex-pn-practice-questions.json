@@ -1,0 +1,32 @@
+{
+  "title": "Questions d’entraînement NCLEX-PN | Champ d’exercice des soins pratiques aux États-Unis",
+  "h1": "Questions d’entraînement NCLEX-PN pour les candidats américains",
+  "description": "Pratique NCLEX-PN avec délégation, pharmacologie et priorisation au niveau PN, distincte des scénarios de gestion RN. Les justifications clarifient les limites de champ, pas des astuces génériques.",
+  "breadcrumb": {
+    "midLabel": "Préparation PN",
+    "currentLabel": "Pratique NCLEX-PN"
+  },
+  "sections": [
+    {
+      "heading": "En quoi les énoncés NCLEX-PN diffèrent des banques RN",
+      "level": 2,
+      "body": [
+        "Attendez-vous à un focus sur stable vs instable, ce qui reste au chevet vs ce qui est escaladé, et l’administration des médicaments dans le champ PN de votre juridiction.",
+        "NurseNest garde les pools PN séparés des scénarios de gestion réservés aux RN, sauf si votre palier inclut explicitement du croisement."
+      ]
+    },
+    {
+      "heading": "Quand ajouter des ressources PN canadiennes",
+      "level": 2,
+      "body": [
+        "Si vous préparez l’entrée en exercice au Canada, utilisez le hub REx-PN et sa page de pratique : la facturation et le cadrage des cas suivent les régulateurs canadiens."
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "question": "Cette page concerne-t-elle uniquement le NCLEX-PN aux États-Unis ?",
+      "answer": "Ce guide cible le NCLEX-PN. Les candidats PN au Canada doivent partir des contenus REx-PN pour que le champ et les attentes provinciales correspondent."
+    }
+  ]
+}

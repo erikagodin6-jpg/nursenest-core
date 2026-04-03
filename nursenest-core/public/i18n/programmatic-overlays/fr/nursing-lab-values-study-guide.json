@@ -1,0 +1,22 @@
+{
+  "title": "Guide d’étude sur les valeurs de laboratoire infirmières | Référence clinique rapide",
+  "h1": "Guide des valeurs de laboratoire pour une interprétation rapide au chevet",
+  "description": "Guide pratique pour interpréter les analyses courantes en soins infirmiers, résultats critiques et raisonnement clinique pour la prochaine étape.",
+  "sections": [
+    {
+      "heading": "Créer des ancres de mémoire, pas des chiffres isolés",
+      "level": 2,
+      "body": [
+        "Regroupez les analyses par système et par motif urgent : panneaux rénaux vs hépatiques vs dépistage de sepsis.",
+        "Associez chaque valeur anormale à une action d’évaluation : revérifier, suspendre la dose, aviser le médecin ou intensifier la surveillance."
+      ]
+    },
+    {
+      "heading": "Relier les laboratoires aux leçons et aux questions",
+      "level": 2,
+      "body": [
+        "Utilisez les leçons NurseNest pour la physiopathologie de base, puis appliquez l’interprétation des bilans dans des séries de questions chronométrées."
+      ]
+    }
+  ]
+}

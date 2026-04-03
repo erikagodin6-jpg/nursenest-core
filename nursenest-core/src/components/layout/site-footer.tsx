@@ -237,13 +237,13 @@ export function SiteFooter() {
           <ul className="space-y-2 text-sm text-[var(--theme-muted-text)]">
             <li>
               <FLink href="/" className="font-medium transition-colors hover:text-primary">
-                NurseNest
+                {t("brand.nurseNest")}
               </FLink>
               <span className="ml-1">{t("components.footer.nursingExamPrepClinicalTools")}</span>
             </li>
             <li>
               <a href="https://applynest.ca" target="_blank" rel="noopener noreferrer" className="font-medium transition-colors hover:text-primary">
-                ApplyNest
+                {t("brand.applyNest")}
               </a>
               <span className="ml-1">{t("components.footer.healthcareProgramApplicationsAdmissionsAnd")}</span>
             </li>
@@ -255,7 +255,7 @@ export function SiteFooter() {
             <SiteBrandLogoMark />
           </div>
           <div className="text-sm text-[var(--theme-muted-text)]">
-            © {new Date().getFullYear()} NurseNest. {t("footer.rights")}
+            © {new Date().getFullYear()} {t("brand.nurseNest")}. {t("footer.rights")}
           </div>
         </div>
 

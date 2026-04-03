@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { asArray } from "@/lib/runtime/collections";
+import { useMarketingI18n } from "@/lib/marketing-i18n";
 
 type TagRow = { slug: string; name: string };
 
@@ -43,6 +44,7 @@ export function FlashcardsHubClient({
 }: {
   pathwayOptions?: { id: string; label: string }[];
 }) {
+  const { t } = useMarketingI18n();
   const router = useRouter();
   const urlParams = useSearchParams();
   const pathwayId = urlParams.get("pathwayId") ?? "";
@@ -97,7 +99,7 @@ export function FlashcardsHubClient({
           fetch("/api/flashcards/due-summary", { credentials: "include" }).catch(() => null),
         ]);
         const dJson = (await dRes.json()) as { decks?: DeckRow[]; error?: string; page?: number; pageCount?: number };
-        if (!dRes.ok) throw new Error(dJson.error ?? "Failed to load decks");
+        if (!dRes.ok) throw new Error(dJson.error ?? t("learner.flashcards.hub.loadDecksFailed"));
         setDecks(asArray(dJson.decks));
         setPage(dJson.page ?? 1);
         setTotalPages(dJson.pageCount ?? 1);
@@ -114,13 +116,13 @@ export function FlashcardsHubClient({
           setDueSummary(null);
         }
       } catch (e) {
-        setError(e instanceof Error ? e.message : "Error");
+        setError(e instanceof Error ? e.message : t("learner.error.app.title"));
         setDecks([]);
       } finally {
         setLoading(false);
       }
     },
-    [pathwayId, examFamily, tagSlug, topicCode, q],
+    [pathwayId, examFamily, tagSlug, topicCode, q, t],
   );
 
   useEffect(() => {
@@ -149,8 +151,8 @@ export function FlashcardsHubClient({
       else qs.delete("tagSlug");
     }
     if (next.q !== undefined) {
-      const t = next.q.trim();
-      if (t.length >= 2) qs.set("q", t);
+      const qNext = next.q.trim();
+      if (qNext.length >= 2) qs.set("q", qNext);
       else qs.delete("q");
     }
     router.replace(`/app/flashcards?${qs.toString()}`);
@@ -158,36 +160,33 @@ export function FlashcardsHubClient({
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8">
-      <h1 className="text-3xl font-bold tracking-tight text-[var(--theme-heading-text)]">Flashcards</h1>
-      <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
-        Pathway-scoped decks with spaced repetition. Filter by pathway, exam family, or topic tag. Subscribers get full decks,
-        shuffle, and weak-area study from your question stats.
-      </p>
+      <h1 className="text-3xl font-bold tracking-tight text-[var(--theme-heading-text)]">{t("learner.flashcards.hub.title")}</h1>
+      <p className="mt-2 text-sm text-[var(--theme-muted-text)]">{t("learner.flashcards.hub.subtitle")}</p>
 
       <div className="mt-6 flex flex-wrap gap-2">
         <Link
           href="/app/flashcards/weak-areas"
           className="inline-flex rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground"
         >
-          Study weak areas
+          {t("learner.flashcards.hub.weakAreasCta")}
         </Link>
         <Link
           href="/flashcards"
           className="inline-flex rounded-full border border-border px-4 py-2 text-sm font-semibold text-[var(--theme-heading-text)]"
         >
-          Public topic pages (SEO)
+          {t("learner.flashcards.hub.publicSeoCta")}
         </Link>
       </div>
 
       <div className="mt-6 grid gap-3 rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] p-4 sm:grid-cols-2">
         <label className="block text-xs font-semibold text-[var(--theme-muted-text)]">
-          Pathway
+          {t("learner.flashcards.hub.filterPathway")}
           <select
             className="mt-1 w-full rounded-lg border border-border bg-background px-2 py-2 text-sm"
             value={pathwayId}
             onChange={(e) => setFilters({ pathwayId: e.target.value })}
           >
-            <option value="">All pathways</option>
+            <option value="">{t("learner.flashcards.hub.pathwayAll")}</option>
             {pathwayOptions.map((o) => (
               <option key={o.id} value={o.id}>
                 {o.label}
@@ -196,13 +195,13 @@ export function FlashcardsHubClient({
           </select>
         </label>
         <label className="block text-xs font-semibold text-[var(--theme-muted-text)]">
-          Exam family
+          {t("learner.flashcards.hub.filterExamFamily")}
           <select
             className="mt-1 w-full rounded-lg border border-border bg-background px-2 py-2 text-sm"
             value={examFamily}
             onChange={(e) => setFilters({ examFamily: e.target.value })}
           >
-            <option value="">All</option>
+            <option value="">{t("learner.flashcards.hub.examFamilyAll")}</option>
             {EXAM_FAMILIES.map((ef) => (
               <option key={ef} value={ef}>
                 {ef.replace(/_/g, " ")}
@@ -211,13 +210,13 @@ export function FlashcardsHubClient({
           </select>
         </label>
         <label className="block text-xs font-semibold text-[var(--theme-muted-text)] sm:col-span-2">
-          Topic tag
+          {t("learner.flashcards.hub.topicTag")}
           <select
             className="mt-1 w-full rounded-lg border border-border bg-background px-2 py-2 text-sm"
             value={tagSlug}
             onChange={(e) => setFilters({ tagSlug: e.target.value })}
           >
-            <option value="">All tags</option>
+            <option value="">{t("learner.flashcards.hub.allTags")}</option>
             {tagList.map((t) => (
               <option key={t.slug} value={t.slug}>
                 {t.name}
@@ -226,12 +225,12 @@ export function FlashcardsHubClient({
           </select>
         </label>
         <label className="block text-xs font-semibold text-[var(--theme-muted-text)] sm:col-span-2">
-          Search decks
+          {t("learner.flashcards.hub.searchDecksLabel")}
           <div className="mt-1 flex gap-2">
             <input
               type="search"
               className="min-w-0 flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm"
-              placeholder="Title or description (2+ characters)"
+              placeholder={t("learner.flashcards.hub.searchPlaceholder")}
               value={searchDraft}
               onChange={(e) => setSearchDraft(e.target.value)}
               onKeyDown={(e) => {
@@ -243,7 +242,7 @@ export function FlashcardsHubClient({
               className="shrink-0 rounded-lg border border-border bg-card px-3 py-2 text-sm font-medium hover:bg-muted/50"
               onClick={() => setFilters({ q: searchDraft })}
             >
-              Search
+              {t("learner.flashcards.hub.search")}
             </button>
           </div>
         </label>
@@ -253,15 +252,15 @@ export function FlashcardsHubClient({
         <div className="mt-6 grid grid-cols-3 gap-3 rounded-2xl border border-role-cta/25 bg-role-cta-soft p-4 text-center">
           <div>
             <p className="text-2xl font-bold tabular-nums text-primary">{dueSummary.dueToday}</p>
-            <p className="text-xs font-medium text-[var(--theme-muted-text)]">Due (today)</p>
+            <p className="text-xs font-medium text-[var(--theme-muted-text)]">{t("learner.flashcards.hub.dueToday")}</p>
           </div>
           <div>
             <p className="text-2xl font-bold tabular-nums text-[var(--theme-heading-text)]">{dueSummary.overdue}</p>
-            <p className="text-xs font-medium text-[var(--theme-muted-text)]">Overdue</p>
+            <p className="text-xs font-medium text-[var(--theme-muted-text)]">{t("learner.flashcards.hub.overdue")}</p>
           </div>
           <div>
             <p className="text-2xl font-bold tabular-nums text-[var(--theme-heading-text)]">{dueSummary.learning}</p>
-            <p className="text-xs font-medium text-[var(--theme-muted-text)]">Learning</p>
+            <p className="text-xs font-medium text-[var(--theme-muted-text)]">{t("learner.flashcards.hub.learning")}</p>
           </div>
         </div>
       ) : null}
@@ -270,28 +269,28 @@ export function FlashcardsHubClient({
         <div className="mt-6 grid grid-cols-3 gap-3 rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] p-4 text-center">
           <div>
             <p className="text-2xl font-bold tabular-nums text-primary">{stats.currentStreak}</p>
-            <p className="text-xs font-medium text-[var(--theme-muted-text)]">Day streak</p>
+            <p className="text-xs font-medium text-[var(--theme-muted-text)]">{t("learner.flashcards.hub.dayStreak")}</p>
           </div>
           <div>
             <p className="text-2xl font-bold tabular-nums text-[var(--theme-heading-text)]">{stats.longestStreak}</p>
-            <p className="text-xs font-medium text-[var(--theme-muted-text)]">Best streak</p>
+            <p className="text-xs font-medium text-[var(--theme-muted-text)]">{t("learner.flashcards.hub.bestStreak")}</p>
           </div>
           <div>
             <p className="text-2xl font-bold tabular-nums text-[var(--theme-heading-text)]">{stats.cardsReviewedTotal}</p>
-            <p className="text-xs font-medium text-[var(--theme-muted-text)]">Reviews</p>
+            <p className="text-xs font-medium text-[var(--theme-muted-text)]">{t("learner.flashcards.hub.reviews")}</p>
           </div>
         </div>
       ) : null}
 
       {error ? <p className="mt-6 text-sm text-red-600">{error}</p> : null}
 
-      {loading ? <p className="mt-8 text-sm text-[var(--theme-muted-text)]">Loading decks…</p> : null}
+      {loading ? <p className="mt-8 text-sm text-[var(--theme-muted-text)]">{t("learner.flashcards.hub.loadingDecks")}</p> : null}
 
       {!loading && decks.length === 0 && !error ? (
         <p className="mt-8 text-sm text-[var(--theme-muted-text)]">
-          No decks match these filters. Try clearing filters or explore the{" "}
+          {t("learner.flashcards.hub.emptyPrefix")}{" "}
           <Link href="/app/questions" className="font-semibold text-primary underline">
-            question bank
+            {t("learner.flashcards.hub.emptyLink")}
           </Link>
           .
         </p>
@@ -304,7 +303,7 @@ export function FlashcardsHubClient({
               <div>
                 <p className="text-xs font-semibold uppercase tracking-wide text-primary">
                   {d.examFamily.replace(/_/g, " ")} · {d.country}
-                  {d.pathwayId ? ` · pathway` : ""}
+                  {d.pathwayId ? ` · ${t("learner.flashcards.hub.deckMetaPathway")}` : ""}
                 </p>
                 <h2 className="mt-1 text-lg font-semibold text-[var(--theme-heading-text)]">{d.title}</h2>
                 {d.description ? (
@@ -312,7 +311,7 @@ export function FlashcardsHubClient({
                 ) : null}
                 {d.tags && d.tags.length > 0 ? (
                   <p className="mt-2 text-xs text-[var(--theme-muted-text)]">
-                    Tags:{" "}
+                    {t("learner.flashcards.hub.tagsPrefix")}{" "}
                     {d.tags.map((t) => (
                       <span key={t.slug} className="mr-2 inline-block rounded-full bg-muted px-2 py-0.5">
                         {t.name}
@@ -320,12 +319,14 @@ export function FlashcardsHubClient({
                     ))}
                   </p>
                 ) : null}
-                <p className="mt-2 text-xs text-[var(--theme-muted-text)]">{d.cardCount} cards</p>
+                <p className="mt-2 text-xs text-[var(--theme-muted-text)]">
+                  {t("learner.flashcards.hub.cardsCount", { n: d.cardCount })}
+                </p>
               </div>
               <div className="flex shrink-0 flex-col gap-2 sm:items-end">
                 {d.locked ? (
                   <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
-                    Subscription required
+                    {t("learner.flashcards.hub.subscriptionRequired")}
                   </span>
                 ) : null}
                 {d.locked ? (
@@ -333,7 +334,7 @@ export function FlashcardsHubClient({
                     href="/pricing"
                     className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-role-cta px-5 py-2.5 text-sm font-semibold text-role-cta-foreground shadow-[0_4px_14px_var(--role-cta-shadow)] transition hover:bg-role-cta-hover"
                   >
-                    Subscribe to unlock
+                    {t("learner.flashcards.hub.subscribeUnlock")}
                   </Link>
                 ) : (
                   <div className="flex flex-col gap-2 sm:items-end">
@@ -341,13 +342,13 @@ export function FlashcardsHubClient({
                       href={`/app/flashcards/${d.slug}`}
                       className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-role-cta px-5 py-2.5 text-sm font-semibold text-role-cta-foreground shadow-[0_4px_14px_var(--role-cta-shadow)] transition hover:bg-role-cta-hover"
                     >
-                      Study
+                      {t("learner.flashcards.hub.study")}
                     </Link>
                     <Link
                       href={`/app/flashcards/${d.slug}?shuffle=1`}
                       className="text-center text-xs font-medium text-primary underline"
                     >
-                      Study shuffled
+                      {t("learner.flashcards.hub.studyShuffled")}
                     </Link>
                   </div>
                 )}
@@ -358,7 +359,7 @@ export function FlashcardsHubClient({
       </ul>
 
       {totalPages > 1 ? (
-        <nav className="mt-10 flex items-center justify-between text-sm" aria-label="Deck pagination">
+        <nav className="mt-10 flex items-center justify-between text-sm" aria-label={t("learner.flashcards.hub.paginationAria")}>
           <button
             type="button"
             disabled={page <= 1 || loading}
@@ -369,10 +370,10 @@ export function FlashcardsHubClient({
               router.push(`/app/flashcards?${qs.toString()}`);
             }}
           >
-            Previous
+            {t("learner.flashcards.hub.previous")}
           </button>
           <span className="text-[var(--theme-muted-text)]">
-            Page {page} / {totalPages}
+            {t("learner.flashcards.hub.pageOf", { page, total: totalPages })}
           </span>
           <button
             type="button"
@@ -384,7 +385,7 @@ export function FlashcardsHubClient({
               router.push(`/app/flashcards?${qs.toString()}`);
             }}
           >
-            Next
+            {t("learner.flashcards.hub.next")}
           </button>
         </nav>
       ) : null}
@@ -394,13 +395,13 @@ export function FlashcardsHubClient({
           href="/app/questions"
           className="rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold hover:bg-muted/50"
         >
-          Question bank
+          {t("learner.flashcards.hub.bottomQuestionBank")}
         </Link>
         <Link
           href="/exam-lessons"
           className="rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold hover:bg-muted/50"
         >
-          Exam lessons
+          {t("learner.flashcards.hub.bottomExamLessons")}
         </Link>
       </div>
     </div>

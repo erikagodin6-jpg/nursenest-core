@@ -11,25 +11,24 @@ import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlemen
 import { buildAdaptiveRecommendations } from "@/lib/learner/adaptive-recommendations";
 import { loadPremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
 import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
+import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 
 export default async function StudyPlanPage() {
+  const { t } = await getLearnerMarketingBundle();
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
 
   if (entitlement === "error") {
-    return <p className="text-sm text-muted-foreground">Unable to verify subscription status right now. Refresh and try again.</p>;
+    return <p className="text-sm text-muted-foreground">{t("learner.entitlement.verifyFailedShort")}</p>;
   }
   if (!entitlement.hasAccess) {
     return (
       <main className="space-y-6">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-primary">Exam-first prep</p>
-          <h1 className="mt-1 text-3xl font-bold tracking-tight text-[var(--theme-heading-text)]">Study plan</h1>
-          <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-            Your exam date, cadence, and practice signals drive weekly targets and Study Next recommendations when you have an active
-            plan.
-          </p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-primary">{t("learner.studyPlan.kicker")}</p>
+          <h1 className="mt-1 text-3xl font-bold tracking-tight text-[var(--theme-heading-text)]">{t("learner.studyPlan.title")}</h1>
+          <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.studyPlan.subtitle.locked")}</p>
         </div>
         <LockedStudyNextPreview className="nn-card space-y-2 p-6" />
         <SubscriptionPaywall context="dashboard" />
@@ -78,14 +77,9 @@ export default async function StudyPlanPage() {
   return (
     <main className="space-y-6">
       <div>
-        <p className="text-xs font-semibold uppercase tracking-wide text-primary">Exam-first prep</p>
-        <h1 className="mt-1 text-3xl font-bold tracking-tight text-[var(--theme-heading-text)]">Study plan</h1>
-        <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-          Your exam date, cadence, and practice signals drive weekly targets and checkpoints. Optional AI weekly structure still
-          lives below. Enable with{" "}
-          <code className="rounded bg-black/5 px-1 dark:bg-white/10">AI_STUDY_PLAN_ENABLED=true</code> when configured. Not medical
-          advice.
-        </p>
+        <p className="text-xs font-semibold uppercase tracking-wide text-primary">{t("learner.studyPlan.kicker")}</p>
+        <h1 className="mt-1 text-3xl font-bold tracking-tight text-[var(--theme-heading-text)]">{t("learner.studyPlan.title")}</h1>
+        <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.studyPlan.subtitle.subscriber")}</p>
       </div>
 
       <ExamPlanSettingsCard />
