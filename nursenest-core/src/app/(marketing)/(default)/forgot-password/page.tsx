@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { MarketingForgotPasswordPage } from "@/components/marketing/marketing-forgot-password-page";
+import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 
 export const metadata: Metadata = {
   title: "Forgot password",
@@ -8,6 +9,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: true },
 };
 
-export default function ForgotPasswordPage() {
-  return <MarketingForgotPasswordPage locale="en" />;
+export default async function ForgotPasswordPage() {
+  const locale = await getMarketingLocaleForDefaultRoute();
+  return <MarketingForgotPasswordPage locale={locale} />;
 }

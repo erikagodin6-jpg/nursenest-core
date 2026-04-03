@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { MarketingPricingPage } from "@/components/marketing/marketing-pricing-page";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
-import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { localizeBreadcrumbResolution } from "@/lib/seo/breadcrumb-i18n";
+import { loadMarketingMessages, loadMarketingMessagesSync } from "@/lib/marketing-i18n/load-marketing-messages";
 import { marketingPricingBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 
 type Props = { params: Promise<{ locale: string }> };
@@ -19,7 +21,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function LocalizedPricingPage({ params }: Props) {
   const { locale } = await params;
-  const { crumbs, schemaItems } = marketingPricingBreadcrumbs();
+  const raw = marketingPricingBreadcrumbs();
+  const primary = await loadMarketingMessages(locale);
+  const fallback = loadMarketingMessagesSync(DEFAULT_MARKETING_LOCALE);
+  const { crumbs, schemaItems } = localizeBreadcrumbResolution(raw, primary, fallback);
   return (
     <>
       <BreadcrumbJsonLd items={schemaItems} />

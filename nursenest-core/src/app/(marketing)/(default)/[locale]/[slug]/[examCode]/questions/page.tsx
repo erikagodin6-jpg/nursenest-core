@@ -69,7 +69,7 @@ export default async function ExamPathwayQuestionsHubPage({ params }: Props) {
             <Link href={buildExamPathwayPath(pathway)} className="font-medium text-primary hover:underline">
               {pathway.shortName} overview
             </Link>
-            —optional URLs for search, not a second product.
+            Optional URLs for search, not a second product.
           </p>
           <NpQuestionsHubBoardLinks pathwayId={pathway.id} linkContext={boardLinkContext} />
         </div>

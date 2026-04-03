@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { MarketingLoginPage } from "@/components/marketing/marketing-login-page";
+import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 
 export const metadata: Metadata = {
   title: "Login",
@@ -8,6 +9,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: true },
 };
 
-export default function LoginPage() {
-  return <MarketingLoginPage locale="en" />;
+export default async function LoginPage() {
+  const locale = await getMarketingLocaleForDefaultRoute();
+  return <MarketingLoginPage locale={locale} />;
 }

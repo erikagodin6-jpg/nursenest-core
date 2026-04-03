@@ -7,27 +7,33 @@
  */
 
 import { toAbsoluteSiteUrl } from "@/lib/seo/breadcrumb-utils";
-import type { BreadcrumbCrumb, BreadcrumbResolution, BreadcrumbSchemaItem } from "@/lib/seo/breadcrumb-types";
+import type {
+  BreadcrumbCrumb,
+  BreadcrumbResolution,
+  BreadcrumbSchemaItem,
+} from "@/lib/seo/breadcrumb-types";
 
-const HOME: BreadcrumbCrumb = { name: "Home", href: "/" };
+const HOME: BreadcrumbCrumb = { name: "Home", href: "/", i18nKey: "breadcrumbs.home" };
 
 function abs(path: string): string {
   return toAbsoluteSiteUrl(path);
 }
 
 /** Home > {name} (current). */
-export function simpleMarketingBreadcrumbs(name: string, path: string): BreadcrumbResolution {
+export function simpleMarketingBreadcrumbs(
+  name: string,
+  path: string,
+  opts?: { nameI18nKey?: string },
+): BreadcrumbResolution {
+  const homeSchema: BreadcrumbSchemaItem = { name: "Home", item: abs("/"), i18nKey: "breadcrumbs.home" };
   return {
-    crumbs: [HOME, { name, href: undefined }],
-    schemaItems: [
-      { name: "Home", item: abs("/") },
-      { name, item: abs(path) },
-    ],
+    crumbs: [HOME, { name, href: undefined, i18nKey: opts?.nameI18nKey }],
+    schemaItems: [homeSchema, { name, item: abs(path), i18nKey: opts?.nameI18nKey }],
   };
 }
 
 export function marketingPricingBreadcrumbs(): BreadcrumbResolution {
-  return simpleMarketingBreadcrumbs("Pricing", "/pricing");
+  return simpleMarketingBreadcrumbs("Pricing", "/pricing", { nameI18nKey: "breadcrumbs.pricing" });
 }
 
 export function preNursingHubBreadcrumbs(): BreadcrumbResolution {
@@ -123,11 +129,11 @@ export function forInstitutionsBreadcrumbs(): BreadcrumbResolution {
 export function marketingHomeSurfaceBreadcrumbs(): BreadcrumbResolution {
   return {
     crumbs: [],
-    schemaItems: [{ name: "Home", item: abs("/") }],
+    schemaItems: [{ name: "Home", item: abs("/"), i18nKey: "breadcrumbs.home" }],
   };
 }
 
-/** App shell: UX only — no schema items. */
+/** App shell: UX only. No schema items. */
 export function appShellBreadcrumbs(
   section: "dashboard" | "lessons" | "questions" | "exams" | "practice-tests",
 ): BreadcrumbCrumb[] {

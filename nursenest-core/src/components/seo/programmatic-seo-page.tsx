@@ -19,7 +19,16 @@ import { resolveProgrammaticProductLinks } from "@/lib/seo/programmatic-page-lin
 import { isUnifiedPracticeSlug } from "@/lib/seo/programmatic-practice-hub";
 import { NpProgrammaticPracticeTestCrossLinks } from "@/components/seo/np-programmatic-practice-test-cross-links";
 
-export function ProgrammaticSeoPage({ page, locale }: { page: SeoPageDefinition; locale: string }) {
+export function ProgrammaticSeoPage({
+  page,
+  locale,
+  /** True when rendered from `/[locale]/[slug]` (prefix belongs in URLs). False on cookie-localized `(default)` routes. */
+  localizedUrl = false,
+}: {
+  page: SeoPageDefinition;
+  locale: string;
+  localizedUrl?: boolean;
+}) {
   const related = getRelatedProgrammaticPages(page.slug, 6);
   const cross = getCrossClusterLinks(page.slug);
   const signup = withMarketingLocale(locale, "/signup");
@@ -27,7 +36,12 @@ export function ProgrammaticSeoPage({ page, locale }: { page: SeoPageDefinition;
   const product = resolveProgrammaticProductLinks(page, locale);
   const { lessons, questions, testBank, exams, tools, flashcards } = product;
 
-  const { crumbs, schemaItems } = buildProgrammaticSeoBreadcrumbResolution(page, locale);
+  const pathForProgrammatic = (slug: string) =>
+    localizedUrl && locale !== DEFAULT_MARKETING_LOCALE ? `/${locale}/${slug}` : `/${slug}`;
+
+  const { crumbs, schemaItems } = buildProgrammaticSeoBreadcrumbResolution(page, locale, {
+    localized: localizedUrl,
+  });
   const practiceConfig = getProgrammaticPracticeConversionConfig(page.slug);
   const introLead = practiceConfig?.valueLead ?? page.description;
 
@@ -209,7 +223,7 @@ export function ProgrammaticSeoPage({ page, locale }: { page: SeoPageDefinition;
               {related.map((r) => (
                 <li key={r.slug}>
                   <Link
-                    href={locale === DEFAULT_MARKETING_LOCALE ? `/${r.slug}` : `/${locale}/${r.slug}`}
+                    href={pathForProgrammatic(r.slug)}
                     className="block rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] px-4 py-3 text-sm font-medium text-[var(--theme-body-text)] hover:border-primary/40"
                   >
                     {r.title}
@@ -227,7 +241,7 @@ export function ProgrammaticSeoPage({ page, locale }: { page: SeoPageDefinition;
               {cross.map((c) => (
                 <li key={c.slug}>
                   <Link
-                    href={locale === DEFAULT_MARKETING_LOCALE ? `/${c.slug}` : `/${locale}/${c.slug}`}
+                    href={pathForProgrammatic(c.slug)}
                     className="inline-block rounded-full border border-[var(--theme-card-border)] px-3 py-1.5 text-xs font-medium text-[var(--theme-body-text)] hover:border-primary/40"
                   >
                     {c.h1}

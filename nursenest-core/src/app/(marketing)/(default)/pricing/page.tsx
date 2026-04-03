@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { MarketingPricingPage } from "@/components/marketing/marketing-pricing-page";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { marketingPricingBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
@@ -19,15 +20,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function PricingPage() {
+export default async function PricingPage() {
   const { crumbs, schemaItems } = marketingPricingBreadcrumbs();
+  const locale = await getMarketingLocaleForDefaultRoute();
   return (
     <>
       <BreadcrumbJsonLd items={schemaItems} />
       <div className="mx-auto max-w-6xl px-4 pt-4 sm:px-6 lg:px-8">
         <BreadcrumbTrail items={crumbs} />
       </div>
-      <MarketingPricingPage locale="en" />
+      <MarketingPricingPage locale={locale} />
     </>
   );
 }

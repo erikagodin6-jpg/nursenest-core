@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { MarketingForInstitutionsPage } from "@/components/marketing/marketing-for-institutions-page";
+import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 
 export const metadata: Metadata = {
   title: "Institutional pricing",
@@ -8,6 +9,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/for-institutions" },
 };
 
-export default function ForInstitutionsPage() {
-  return <MarketingForInstitutionsPage locale="en" />;
+export default async function ForInstitutionsPage() {
+  const locale = await getMarketingLocaleForDefaultRoute();
+  return <MarketingForInstitutionsPage locale={locale} />;
 }

@@ -36,5 +36,5 @@ export default async function ProgrammaticSeoLocaleRoute({
   const { locale, slug } = await params;
   const page = getProgrammaticSeoPage(slug);
   if (!page) notFound();
-  return <ProgrammaticSeoPage page={page} locale={locale} />;
+  return <ProgrammaticSeoPage page={page} locale={locale} localizedUrl />;
 }

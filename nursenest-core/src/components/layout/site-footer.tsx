@@ -1,13 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { mapLegacyMarketingHref, resolveMarketingHref } from "@/lib/legacy-marketing-routes";
+import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { EmailSignupBanner } from "@/components/marketing/email-signup-banner";
-import { MARKETING_LANGUAGES } from "@/lib/i18n/marketing-languages";
-import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
-import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/marketing-path";
+import { MarketingLanguagePreferenceList } from "@/components/i18n/marketing-language-preference";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { npPracticeProgrammatic, pnPracticeProgrammatic } from "@/lib/marketing/marketing-entry-routes";
@@ -31,19 +29,16 @@ function FLink({
       </a>
     );
   }
-  const localized = withMarketingLocale(locale, to);
+  const path = to.startsWith("/") ? to : `/${to}`;
   return (
-    <Link href={localized} className={className}>
+    <Link href={withMarketingLocale(locale, path)} className={className}>
       {children}
     </Link>
   );
 }
 
 export function SiteFooter() {
-  const pathname = usePathname() ?? "/";
-  const { pathname: pathWithoutLocale } = stripMarketingLocalePrefix(pathname);
-  const pathForLanguageSwitch = pathWithoutLocale || "/";
-  const { t } = useMarketingI18n();
+  const { t, locale } = useMarketingI18n();
   const { region } = useNursenestRegion();
   const pnPrepHref = pnPracticeProgrammatic(region);
   const npPrepHref = npPracticeProgrammatic(region);
@@ -216,20 +211,21 @@ export function SiteFooter() {
         <div className="mb-6 border-t border-[var(--theme-separator)] pb-6 pt-6">
           <h3 className="mb-3 text-sm font-semibold text-[var(--theme-heading-text)]">{t("footer.studyInYourLanguage")}</h3>
           <div className="mb-3 flex flex-wrap gap-2">
-            {MARKETING_LANGUAGES.map(({ code, flag, name }) => (
-              <Link
-                key={code}
-                href={
-                  code === DEFAULT_MARKETING_LOCALE
-                    ? pathForLanguageSwitch
-                    : withMarketingLocale(code, pathForLanguageSwitch)
-                }
-                className="inline-flex items-center gap-1 text-xs text-[var(--theme-muted-text)] hover:text-primary"
-              >
-                <span>{flag}</span>
-                <span>{name}</span>
-              </Link>
-            ))}
+            <MarketingLanguagePreferenceList
+              renderItem={({ code, name, flag, disabled, onSelect }) => (
+                <button
+                  type="button"
+                  disabled={disabled}
+                  onClick={onSelect}
+                  className={`inline-flex items-center gap-1 text-xs hover:text-primary ${
+                    code === locale ? "font-semibold text-primary" : "text-[var(--theme-muted-text)]"
+                  }`}
+                >
+                  <span>{flag}</span>
+                  <span>{name}</span>
+                </button>
+              )}
+            />
           </div>
           <Link href={mapLegacyMarketingHref("/languages")} className="text-xs text-primary hover:underline">
             {t("footer.viewAllLanguages")}

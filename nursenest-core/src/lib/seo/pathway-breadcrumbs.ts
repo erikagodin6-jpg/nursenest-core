@@ -11,8 +11,8 @@ export type PathwayMarketingHubBreadcrumbOpts = {
   hubBasePath?: string;
 };
 
-const HOME: BreadcrumbCrumb = { name: "Home", href: "/" };
-const HOME_ITEM: BreadcrumbSchemaItem = { name: "Home", item: "/" };
+const HOME: BreadcrumbCrumb = { name: "Home", href: "/", i18nKey: "breadcrumbs.home" };
+const HOME_ITEM: BreadcrumbSchemaItem = { name: "Home", item: "/", i18nKey: "breadcrumbs.home" };
 
 /**
  * Public index of all exam-scoped lesson hubs. Label matches the `h1` on `/exam-lessons`.
@@ -24,13 +24,19 @@ export const EXAM_LESSONS_INDEX = {
 };
 
 function examLessonsIndexCrumb(linked: boolean): BreadcrumbCrumb {
-  return linked
-    ? { name: EXAM_LESSONS_INDEX.label, href: EXAM_LESSONS_INDEX.path }
-    : { name: EXAM_LESSONS_INDEX.label, href: undefined };
+  const base = {
+    name: EXAM_LESSONS_INDEX.label,
+    i18nKey: "breadcrumbs.examLessonsIndex" as const,
+  };
+  return linked ? { ...base, href: EXAM_LESSONS_INDEX.path } : { ...base, href: undefined };
 }
 
 function examLessonsIndexSchema(): BreadcrumbSchemaItem {
-  return { name: EXAM_LESSONS_INDEX.label, item: toAbsoluteSiteUrl(EXAM_LESSONS_INDEX.path) };
+  return {
+    name: EXAM_LESSONS_INDEX.label,
+    item: toAbsoluteSiteUrl(EXAM_LESSONS_INDEX.path),
+    i18nKey: "breadcrumbs.examLessonsIndex",
+  };
 }
 
 /** Second crumb: programmatic SEO landing when mapped, else lessons index (all pathways). */
@@ -90,17 +96,18 @@ export function pathwayLessonsHubBreadcrumbs(
 } {
   const hub = opts?.hubBasePath;
   const lessons = pathwayHubChildPath(pathway, hub, "lessons");
+  const lessonsKey = "breadcrumbs.lessons" as const;
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
     pathwayProgrammaticParentCrumb(pathway, true),
     pathwayHubCrumb(pathway, true, hub),
-    { name: "Lessons", href: undefined },
+    { name: "Lessons", href: undefined, i18nKey: lessonsKey },
   ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
     pathwayProgrammaticParentSchema(pathway),
     pathwayHubSchema(pathway, hub),
-    { name: "Lessons", item: toAbsoluteSiteUrl(lessons) },
+    { name: "Lessons", item: toAbsoluteSiteUrl(lessons), i18nKey: lessonsKey },
   ];
   return { crumbs, schemaItems };
 }
@@ -115,18 +122,19 @@ export function pathwayTopicClusterBreadcrumbs(
   const hub = opts?.hubBasePath;
   const lessonsPath = pathwayHubChildPath(pathway, hub, "lessons");
   const topicPath = pathwayHubChildPath(pathway, hub, `lessons/topics/${topicSlug}`);
+  const lessonsKey = "breadcrumbs.lessons" as const;
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
     pathwayProgrammaticParentCrumb(pathway, true),
     pathwayHubCrumb(pathway, true, hub),
-    { name: "Lessons", href: lessonsPath },
+    { name: "Lessons", href: lessonsPath, i18nKey: lessonsKey },
     { name: topicLabel, href: undefined },
   ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
     pathwayProgrammaticParentSchema(pathway),
     pathwayHubSchema(pathway, hub),
-    { name: "Lessons", item: toAbsoluteSiteUrl(lessonsPath) },
+    { name: "Lessons", item: toAbsoluteSiteUrl(lessonsPath), i18nKey: lessonsKey },
     { name: topicLabel, item: toAbsoluteSiteUrl(topicPath) },
   ];
   return { crumbs, schemaItems };
@@ -143,18 +151,29 @@ export function pathwayLessonDetailBreadcrumbs(
   const lessonsPath = pathwayHubChildPath(pathway, hub, "lessons");
   const lessonPath = pathwayHubChildPath(pathway, hub, `lessons/${lessonSlug}`);
   const lessonsLabel = `${pathway.shortName} lessons`;
+  const lessonsHubKey = "breadcrumbs.pathwayLessonsHub" as const;
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
     pathwayProgrammaticParentCrumb(pathway, true),
     pathwayHubCrumb(pathway, true, hub),
-    { name: lessonsLabel, href: lessonsPath },
+    {
+      name: lessonsLabel,
+      href: lessonsPath,
+      i18nKey: lessonsHubKey,
+      i18nParams: { shortName: pathway.shortName },
+    },
     { name: lessonTitle, href: undefined },
   ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
     pathwayProgrammaticParentSchema(pathway),
     pathwayHubSchema(pathway, hub),
-    { name: lessonsLabel, item: toAbsoluteSiteUrl(lessonsPath) },
+    {
+      name: lessonsLabel,
+      item: toAbsoluteSiteUrl(lessonsPath),
+      i18nKey: lessonsHubKey,
+      i18nParams: { shortName: pathway.shortName },
+    },
     { name: lessonTitle, item: toAbsoluteSiteUrl(lessonPath) },
   ];
   return { crumbs, schemaItems };
@@ -170,17 +189,18 @@ export function pathwayQuestionsHubBreadcrumbs(
 } {
   const hub = opts?.hubBasePath;
   const qPath = pathwayHubChildPath(pathway, hub, "questions");
+  const qbKey = "breadcrumbs.questionBank" as const;
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
     pathwayProgrammaticParentCrumb(pathway, true),
     pathwayHubCrumb(pathway, true, hub),
-    { name: "Question bank", href: undefined },
+    { name: "Question bank", href: undefined, i18nKey: qbKey },
   ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
     pathwayProgrammaticParentSchema(pathway),
     pathwayHubSchema(pathway, hub),
-    { name: "Question bank", item: toAbsoluteSiteUrl(qPath) },
+    { name: "Question bank", item: toAbsoluteSiteUrl(qPath), i18nKey: qbKey },
   ];
   return { crumbs, schemaItems };
 }
@@ -195,17 +215,18 @@ export function pathwayPricingBreadcrumbs(
 } {
   const hub = opts?.hubBasePath;
   const pricingPath = pathwayHubChildPath(pathway, hub, "pricing");
+  const pricingKey = "breadcrumbs.pricing" as const;
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
     pathwayProgrammaticParentCrumb(pathway, true),
     pathwayHubCrumb(pathway, true, hub),
-    { name: "Pricing", href: undefined },
+    { name: "Pricing", href: undefined, i18nKey: pricingKey },
   ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
     pathwayProgrammaticParentSchema(pathway),
     pathwayHubSchema(pathway, hub),
-    { name: "Pricing", item: toAbsoluteSiteUrl(pricingPath) },
+    { name: "Pricing", item: toAbsoluteSiteUrl(pricingPath), i18nKey: pricingKey },
   ];
   return { crumbs, schemaItems };
 }
@@ -219,18 +240,27 @@ export function examLessonsIndexBreadcrumbs(): { crumbs: BreadcrumbCrumb[]; sche
 
 /** Blog index. */
 export function blogIndexBreadcrumbs(): { crumbs: BreadcrumbCrumb[]; schemaItems: BreadcrumbSchemaItem[] } {
-  const crumbs: BreadcrumbCrumb[] = [HOME, { name: "Blog", href: undefined }];
-  const schemaItems: BreadcrumbSchemaItem[] = [HOME_ITEM, { name: "Blog", item: toAbsoluteSiteUrl("/blog") }];
+  const blogKey = "breadcrumbs.blog" as const;
+  const crumbs: BreadcrumbCrumb[] = [HOME, { name: "Blog", href: undefined, i18nKey: blogKey }];
+  const schemaItems: BreadcrumbSchemaItem[] = [
+    HOME_ITEM,
+    { name: "Blog", item: toAbsoluteSiteUrl("/blog"), i18nKey: blogKey },
+  ];
   return { crumbs, schemaItems };
 }
 
 /** Blog post. */
 export function blogPostBreadcrumbs(title: string, slug: string): { crumbs: BreadcrumbCrumb[]; schemaItems: BreadcrumbSchemaItem[] } {
   const postPath = `/blog/${slug}`;
-  const crumbs: BreadcrumbCrumb[] = [HOME, { name: "Blog", href: "/blog" }, { name: title, href: undefined }];
+  const blogKey = "breadcrumbs.blog" as const;
+  const crumbs: BreadcrumbCrumb[] = [
+    HOME,
+    { name: "Blog", href: "/blog", i18nKey: blogKey },
+    { name: title, href: undefined },
+  ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
-    { name: "Blog", item: toAbsoluteSiteUrl("/blog") },
+    { name: "Blog", item: toAbsoluteSiteUrl("/blog"), i18nKey: blogKey },
     { name: title, item: toAbsoluteSiteUrl(postPath) },
   ];
   return { crumbs, schemaItems };
@@ -248,8 +278,14 @@ export function blogPostBreadcrumbsWithOptionalCategory(
   const base = blogPostBreadcrumbs(title, slug);
   const cat = category?.trim();
   if (!cat) return base;
+  const blogKey = "breadcrumbs.blog" as const;
   return {
-    crumbs: [HOME, { name: "Blog", href: "/blog" }, { name: cat, href: undefined }, { name: title, href: undefined }],
+    crumbs: [
+      HOME,
+      { name: "Blog", href: "/blog", i18nKey: blogKey },
+      { name: cat, href: undefined },
+      { name: title, href: undefined },
+    ],
     schemaItems: base.schemaItems,
   };
 }
@@ -258,11 +294,17 @@ export function blogPostBreadcrumbsWithOptionalCategory(
 export function blogTagBreadcrumbs(tag: string): { crumbs: BreadcrumbCrumb[]; schemaItems: BreadcrumbSchemaItem[] } {
   const tagPath = `/blog/tag/${encodeURIComponent(tag)}`;
   const tagLabel = `Tag: ${tag}`;
-  const crumbs: BreadcrumbCrumb[] = [HOME, { name: "Blog", href: "/blog" }, { name: tagLabel, href: undefined }];
+  const blogKey = "breadcrumbs.blog" as const;
+  const tagKey = "breadcrumbs.tagPage" as const;
+  const crumbs: BreadcrumbCrumb[] = [
+    HOME,
+    { name: "Blog", href: "/blog", i18nKey: blogKey },
+    { name: tagLabel, href: undefined, i18nKey: tagKey, i18nParams: { tag } },
+  ];
   const schemaItems: BreadcrumbSchemaItem[] = [
     HOME_ITEM,
-    { name: "Blog", item: toAbsoluteSiteUrl("/blog") },
-    { name: tagLabel, item: toAbsoluteSiteUrl(tagPath) },
+    { name: "Blog", item: toAbsoluteSiteUrl("/blog"), i18nKey: blogKey },
+    { name: tagLabel, item: toAbsoluteSiteUrl(tagPath), i18nKey: tagKey, i18nParams: { tag } },
   ];
   return { crumbs, schemaItems };
 }

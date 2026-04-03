@@ -17,8 +17,7 @@ import {
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
-import { MARKETING_LANGUAGES } from "@/lib/i18n/marketing-languages";
-import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { MarketingLanguagePreferenceList } from "@/components/i18n/marketing-language-preference";
 import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 import { HOME_BRAND_LOGO_MARK_CLASSNAME } from "@/lib/branding/logo-config";
@@ -72,7 +71,6 @@ function NavLinkItem({ href, children }: { href: string; children: React.ReactNo
 export function SiteHeader() {
   const pathname = usePathname() ?? "/";
   const { pathname: pathWithoutLocale } = stripMarketingLocalePrefix(pathname);
-  const pathForLanguageSwitch = pathWithoutLocale || "/";
   const { t, locale } = useMarketingI18n();
   const { region, setRegion } = useNursenestRegion();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -185,21 +183,22 @@ export function SiteHeader() {
             </button>
             {langOpen && (
               <div className="absolute right-0 z-[100] mt-1 max-h-64 w-52 overflow-y-auto rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] py-1 shadow-lg">
-                {MARKETING_LANGUAGES.map((lang) => (
-                  <Link
-                    key={lang.code}
-                    href={
-                      lang.code === DEFAULT_MARKETING_LOCALE
-                        ? pathForLanguageSwitch
-                        : withMarketingLocale(lang.code, pathForLanguageSwitch)
-                    }
-                    className="flex items-center gap-2 px-3 py-2 text-sm text-[var(--theme-menu-text)] hover:bg-[var(--theme-menu-hover-bg)]"
-                    onClick={() => setLangOpen(false)}
-                  >
-                    <span>{lang.flag}</span>
-                    {lang.name}
-                  </Link>
-                ))}
+                <MarketingLanguagePreferenceList
+                  onDone={() => setLangOpen(false)}
+                  renderItem={({ code, name, flag, disabled, onSelect }) => (
+                    <button
+                      type="button"
+                      disabled={disabled}
+                      onClick={onSelect}
+                      className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-[var(--theme-menu-text)] hover:bg-[var(--theme-menu-hover-bg)] ${
+                        code === locale ? "bg-[var(--theme-menu-hover-bg)]/60 font-semibold" : ""
+                      }`}
+                    >
+                      <span>{flag}</span>
+                      {name}
+                    </button>
+                  )}
+                />
                 <Link
                   href={mapLegacyMarketingHref("/languages")}
                   className="block border-t border-[var(--theme-separator)] px-3 py-2 text-xs font-semibold text-primary hover:underline"
@@ -275,7 +274,7 @@ export function SiteHeader() {
             {t("nav.pricing")}
           </Link>
           <Link
-            href={mapLegacyMarketingHref("/faq")}
+            href={localizeHref("/faq")}
             className="shrink-0 px-1.5 py-0.5 text-xs font-medium text-role-cta-on-soft/85 hover:text-role-cta-on-soft lg:px-2"
           >
             {t("footer.faq")}
@@ -345,21 +344,22 @@ export function SiteHeader() {
               <hr className="my-3 border-[var(--theme-separator)]" />
               <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-primary">{t("nav.language")}</p>
               <div className="mb-4 max-h-[min(50vh,20rem)] space-y-0.5 overflow-y-auto rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-page-bg)] p-1">
-                {MARKETING_LANGUAGES.map((lang) => (
-                  <Link
-                    key={lang.code}
-                    href={
-                      lang.code === DEFAULT_MARKETING_LOCALE
-                        ? pathForLanguageSwitch
-                        : withMarketingLocale(lang.code, pathForLanguageSwitch)
-                    }
-                    className="flex items-center gap-2 rounded-lg px-2 py-2 text-sm text-[var(--theme-menu-text)] hover:bg-[var(--theme-menu-hover-bg)]"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    <span>{lang.flag}</span>
-                    {lang.name}
-                  </Link>
-                ))}
+                <MarketingLanguagePreferenceList
+                  onDone={() => setMobileOpen(false)}
+                  renderItem={({ code, name, flag, disabled, onSelect }) => (
+                    <button
+                      type="button"
+                      disabled={disabled}
+                      onClick={onSelect}
+                      className={`flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-sm text-[var(--theme-menu-text)] hover:bg-[var(--theme-menu-hover-bg)] ${
+                        code === locale ? "bg-[var(--theme-menu-hover-bg)]/60 font-semibold" : ""
+                      }`}
+                    >
+                      <span>{flag}</span>
+                      {name}
+                    </button>
+                  )}
+                />
               </div>
               {[
                 { href: localizeHref("/"), label: t("nav.home") },

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ProgrammaticSeoPage } from "@/components/seo/programmatic-seo-page";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { buildProgrammaticMetadata } from "@/lib/seo/programmatic-metadata";
 import { getProgrammaticSeoPage } from "@/lib/seo/programmatic-registry";
 
@@ -28,5 +29,6 @@ export default async function ProgrammaticSeoRewriteTarget({ params }: { params:
   const { slug } = await params;
   const page = getProgrammaticSeoPage(slug);
   if (!page) notFound();
-  return <ProgrammaticSeoPage page={page} locale={DEFAULT_MARKETING_LOCALE} />;
+  const locale = await getMarketingLocaleForDefaultRoute();
+  return <ProgrammaticSeoPage page={page} locale={locale} />;
 }

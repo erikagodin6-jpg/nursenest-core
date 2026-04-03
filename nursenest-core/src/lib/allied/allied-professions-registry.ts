@@ -1,6 +1,33 @@
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 
+/** Visual grouping on `/allied-health` so learners scan by career area, not one flat list. */
+export type AlliedHubCategoryId = "therapy" | "lab" | "acute" | "clinical";
+
+export const ALLIED_HUB_CATEGORY_META: Record<
+  AlliedHubCategoryId,
+  { label: string; sublabel: string }
+> = {
+  therapy: {
+    label: "Therapy and rehabilitation",
+    sublabel: "Assistants and movement-focused roles",
+  },
+  lab: {
+    label: "Laboratory and imaging",
+    sublabel: "Specimen handling, safety, and modality judgment",
+  },
+  acute: {
+    label: "Field and acute care",
+    sublabel: "Prehospital and respiratory decision-making",
+  },
+  clinical: {
+    label: "Clinical and community support",
+    sublabel: "Pharmacy, behavioral health, and licensing contexts",
+  },
+};
+
+export const ALLIED_HUB_CATEGORY_ORDER: AlliedHubCategoryId[] = ["therapy", "lab", "acute", "clinical"];
+
 /**
  * Allied marketing + lesson routing.
  * - Hero URLs: `/allied-health/{segment}` where `segment` ends with `-exam-prep`
@@ -12,6 +39,8 @@ export type AlliedProfessionMarketing = {
   /** Hero segment, e.g. `paramedic-exam-prep` → `/allied-health/paramedic-exam-prep` */
   segment: string;
   pathwayId: string;
+  /** Section on the main allied hub */
+  hubCategory: AlliedHubCategoryId;
   topicSlugsIn?: string[];
   title: string;
   description: string;
@@ -28,6 +57,7 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     professionKey: "pta",
     segment: "pta-exam-prep",
     pathwayId: US_ALLIED,
+    hubCategory: "therapy",
     title: "Physical therapist assistant (PTA) exam prep | NurseNest",
     description:
       "Therapeutic exercise, mobility, and safety judgment for PTA certification study. pathway-scoped allied lessons and practice.",
@@ -47,6 +77,7 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     professionKey: "ota",
     segment: "ota-exam-prep",
     pathwayId: US_ALLIED,
+    hubCategory: "therapy",
     title: "Occupational therapy assistant (OTA) exam prep | NurseNest",
     description:
       "Activity analysis, ADLs, and safety sequencing for OTA certification prep. allied pathway scope.",
@@ -66,6 +97,7 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     professionKey: "mlt",
     segment: "mlt-exam-prep",
     pathwayId: US_ALLIED,
+    hubCategory: "lab",
     title: "Medical lab (MLT / MLS) exam prep | NurseNest",
     description:
       "Laboratory reasoning, quality control, and safety edges for medical laboratory certification study. allied-tier scoped.",
@@ -85,6 +117,7 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     professionKey: "imaging",
     segment: "imaging-exam-prep",
     pathwayId: US_ALLIED,
+    hubCategory: "lab",
     title: "Medical imaging exam prep | NurseNest",
     description:
       "Safety, contrast, positioning, and protocol edges for imaging certification contexts. content scoped to allied pathways.",
@@ -104,6 +137,7 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     professionKey: "respiratory",
     segment: "rrt-exam-prep",
     pathwayId: US_ALLIED,
+    hubCategory: "acute",
     title: "Respiratory therapy (RRT) exam prep | NurseNest",
     description:
       "Ventilation, gas exchange, and airway management for respiratory therapy certification prep. scoped to allied pathways and US context where applicable.",
@@ -123,6 +157,7 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     professionKey: "paramedic",
     segment: "paramedic-exam-prep",
     pathwayId: US_ALLIED,
+    hubCategory: "acute",
     title: "Paramedic exam prep | Allied health | NurseNest",
     description:
       "Protocol-first paramedic certification study: prioritization, airway, trauma, and scope-safe judgment. pathway-scoped lessons and practice aligned to allied tier content.",
@@ -142,6 +177,7 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     professionKey: "pharmacy-tech",
     segment: "pharmacy-tech-exam-prep",
     pathwayId: US_ALLIED,
+    hubCategory: "clinical",
     title: "Pharmacy technician exam prep | NurseNest",
     description:
       "Calculations, high-alert meds, sterile technique, and regulatory edges for pharmacy technician certification. allied pathway scope.",
@@ -161,6 +197,7 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     professionKey: "social-work",
     segment: "social-work-exam-prep",
     pathwayId: US_ALLIED,
+    hubCategory: "clinical",
     title: "Social work licensing exam prep | NurseNest",
     description:
       "Ethics, assessment, intervention planning, and boundaries for social work exam contexts. allied-tier pathway scope.",
@@ -180,6 +217,19 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
 
 export function listAlliedProfessionsSorted(): AlliedProfessionMarketing[] {
   return [...ALLIED_PROFESSIONS].sort((a, b) => a.segment.localeCompare(b.segment));
+}
+
+/** Group professions for the main hub: fixed category order, stable sort inside each group. */
+export function alliedProfessionsGroupedForHub(): Map<AlliedHubCategoryId, AlliedProfessionMarketing[]> {
+  const map = new Map<AlliedHubCategoryId, AlliedProfessionMarketing[]>();
+  for (const id of ALLIED_HUB_CATEGORY_ORDER) {
+    map.set(id, []);
+  }
+  for (const p of listAlliedProfessionsSorted()) {
+    const list = map.get(p.hubCategory);
+    if (list) list.push(p);
+  }
+  return map;
 }
 
 /** @deprecated use getAlliedProfessionByHeroSegment */
