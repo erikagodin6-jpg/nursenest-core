@@ -61,7 +61,7 @@ export function FnpLessonExplorer({ pathway, lessonsBasePath, explorerLessons, e
         <p className="text-xs font-semibold uppercase tracking-wide text-muted">Filter lessons</p>
         <p className="mt-1 text-xs text-[var(--theme-muted-text)]">
           Combine a <strong className="text-foreground">population</strong> lane with a{" "}
-          <strong className="text-foreground">competency</strong> lane—mirrors how board items layer age and task.
+          <strong className="text-foreground">competency</strong> lane: mirrors how board items layer age and task.
         </p>
 
         <div className="mt-4 space-y-3">
@@ -115,7 +115,7 @@ export function FnpLessonExplorer({ pathway, lessonsBasePath, explorerLessons, e
 
       {filtered.length === 0 ? (
         <p className="rounded-lg border border-dashed border-border bg-card p-4 text-sm text-[var(--theme-muted-text)]">
-          No lessons match this combination—clear one filter or browse another population lane.
+          No lessons match this combination. Clear one filter or browse another population lane.
         </p>
       ) : (
         <ul className="space-y-6">

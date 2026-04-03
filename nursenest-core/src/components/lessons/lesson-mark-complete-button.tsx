@@ -33,7 +33,7 @@ export function LessonMarkCompleteButton({ lessonId }: { lessonId: string }) {
       >
         {status === "done" ? "Marked complete" : status === "saving" ? "Saving…" : "Mark lesson complete"}
       </button>
-      {status === "error" ? <span className="text-xs text-amber-800">Could not save—try again.</span> : null}
+      {status === "error" ? <span className="text-xs text-amber-800">Could not save. Try again.</span> : null}
     </div>
   );
 }

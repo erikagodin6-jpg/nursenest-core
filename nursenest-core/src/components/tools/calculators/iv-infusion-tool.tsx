@@ -45,7 +45,7 @@ export default function IvInfusionTool() {
   return (
     <div className="space-y-6">
       <p className="text-sm text-[var(--theme-muted-text)]">
-        Educational calculator—always follow institutional policies, smart pumps, and provider orders.
+        Educational calculator. Always follow institutional policies, smart pumps, and provider orders.
       </p>
       <div className="flex flex-wrap gap-2">
         {(

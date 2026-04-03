@@ -13,7 +13,7 @@ export function PathwayLessonQuickReview({ bullets }: { bullets: string[] }) {
         <div>
           <p className="text-sm font-semibold text-foreground">Quick review (condensed)</p>
           <p className="mt-1 text-xs text-muted-foreground">
-            Short revision bullets only — not a replacement for the full lesson sections below.
+            Short revision bullets only, not a replacement for the full lesson sections below.
           </p>
         </div>
         <button

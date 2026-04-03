@@ -38,7 +38,7 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
 
   return (
     <div className="space-y-14">
-      {/* 1 — How to use */}
+      {/* 1: How to use */}
       <section className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-sm" aria-labelledby="how-use-nclex-rn">
         <h2 id="how-use-nclex-rn" className="text-lg font-bold text-[var(--theme-heading-text)]">
           How to use these lessons for NCLEX-RN
@@ -46,7 +46,7 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
         <ol className="mt-4 space-y-3 text-sm leading-relaxed text-[var(--theme-muted-text)]">
           <li>
             <span className="font-semibold text-foreground">1. Learn the concept.</span> Extract the decision rule (what
-            changes risk, what must be assessed first)—not isolated facts to recite.
+            changes risk, what must be assessed first), not isolated facts to recite.
           </li>
           <li>
             <span className="font-semibold text-foreground">2. Apply with exam-style questions.</span>{" "}
@@ -63,7 +63,7 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
           </li>
           <li>
             <span className="font-semibold text-foreground">3. Review rationale deeply.</span> For every option, name the
-            patient outcome if it were correct—then compare to the stem’s urgency and data.
+            patient outcome if it were correct. Then compare to the stem’s urgency and data.
           </li>
           <li>
             <span className="font-semibold text-foreground">4. Identify weak areas.</span> Tag misses by Client Needs bucket
@@ -71,7 +71,7 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
           </li>
           <li>
             <span className="font-semibold text-foreground">5. Retest.</span> Run a timed or CAT-style block after you can
-            explain prior errors—retesting without analysis reinforces guesses.
+            explain prior errors. Retesting without analysis reinforces guesses.
           </li>
         </ol>
       </section>
@@ -81,17 +81,17 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
         <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Built for NCLEX-RN, not generic “nursing content”</h2>
         <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[var(--theme-muted-text)]">
           <li>Aligned with the NCLEX-RN test plan Client Needs framework used to group lessons below.</li>
-          <li>Built for clinical judgment: unsafe vs safe, urgent vs routine—not recognition of the longest answer.</li>
+          <li>Built for clinical judgment: unsafe vs safe, urgent vs routine, not recognition of the longest answer.</li>
           <li>Includes NGN-style reasoning: layered data, multiple plausible options, one best action for this patient.</li>
           {isUsRn && (
             <li>
               High-performing prep pairs lessons with the question bank, adaptive (CAT) practice, and performance
-              feedback—this hub is the lesson layer of that system.
+              feedback. This hub is the lesson layer of that system.
             </li>
           )}
           {isCa && (
             <li>
-              Canadian RN track: lessons and stems use Canadian acute care language and SI units where noted—avoid
+              Canadian RN track: lessons and stems use Canadian acute care language and SI units where noted. Avoid
               cross-mixing unrelated US-only scope statements.
             </li>
           )}
@@ -102,7 +102,7 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
       {topicClusters.length > 0 && (
         <section aria-label="Browse by topic" className="rounded-xl border border-border bg-card p-4">
           <h2 className="text-sm font-bold text-[var(--theme-heading-text)]">Browse by topic cluster</h2>
-          <p className="mt-1 text-xs text-muted">Same lessons, alternate index—useful when you study by organ system.</p>
+          <p className="mt-1 text-xs text-muted">Same lessons, alternate index, useful when you study by organ system.</p>
           <ul className="mt-3 flex flex-wrap gap-2">
             {topicClusters.map((t) => (
               <li key={t.topicSlug}>
@@ -267,7 +267,7 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
         <div className="mt-3 space-y-3 text-sm leading-relaxed text-[var(--theme-muted-text)]">
           <p>
             NCLEX-RN does not reward recall. It rewards which action is <em> safest and most urgent</em> for this patient
-            with incomplete information—timed presentation and plausible distractors are part of the construct.
+            with incomplete information. Timed presentation and plausible distractors are part of the construct.
           </p>
           <p>
             <strong className="text-foreground">Thinking under pressure:</strong> You have seconds to notice the cue that
@@ -280,7 +280,7 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
             </li>
             <li>
               <strong className="text-foreground">Safety-first / Maslow</strong> when physiological and psychosocial answers
-              both look reasonable—threats to life, airway, or circulation usually precede psychosocial priorities on the exam.
+              both look reasonable. Threats to life, airway, or circulation usually precede psychosocial priorities on the exam.
             </li>
             <li>
               <strong className="text-foreground">Outcome-based selection</strong>: “If I do this now, what improves for the

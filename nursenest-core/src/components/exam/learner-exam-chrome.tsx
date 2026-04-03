@@ -35,7 +35,7 @@ function LearnerExamChromeGateInner({ children }: { children: React.ReactNode })
         <div className="nn-exam-minimal-nav sticky top-0 z-50 mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-slate-200/90 border-l-[3px] border-l-primary/25 bg-slate-50/95 px-3 py-2.5 text-xs text-slate-600 backdrop-blur-sm dark:border-slate-800 dark:bg-slate-950/95 dark:text-slate-300">
           <span className="font-semibold tracking-tight text-slate-800 dark:text-slate-100">Focused session</span>
           <span className="hidden max-w-xl sm:inline sm:text-[11px] sm:leading-snug sm:text-slate-500">
-            Distractions reduced. Not an official exam interface—practice only.
+            Distractions reduced. Not an official exam interface. Practice only.
           </span>
           <Link
             href="/app"

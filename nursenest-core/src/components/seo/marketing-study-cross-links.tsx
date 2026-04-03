@@ -16,7 +16,7 @@ export function MarketingStudyCrossLinks({ className = "" }: { className?: strin
         Keep building readiness
       </h2>
       <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
-        Pair reading with structured lessons, free calculators, and guides—then choose a pathway-aligned plan when you want
+        Pair reading with structured lessons, free calculators, and guides. Then choose a pathway-aligned plan when you want
         full question banks and exams.
       </p>
       <ul className="mt-4 flex flex-col gap-2 text-sm sm:flex-row sm:flex-wrap sm:gap-x-6 sm:gap-y-2">

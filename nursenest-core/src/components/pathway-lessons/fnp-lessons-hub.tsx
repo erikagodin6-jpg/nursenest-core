@@ -46,7 +46,7 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
 
   return (
     <div className="space-y-14">
-      {/* 1 — How to use */}
+      {/* 1: How to use */}
       <section className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-sm" aria-labelledby="how-use-fnp">
         <h2 id="how-use-fnp" className="text-lg font-bold text-[var(--theme-heading-text)]">
           How to use these lessons for FNP boards
@@ -54,7 +54,7 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
         <ol className="mt-4 space-y-3 text-sm leading-relaxed text-[var(--theme-muted-text)]">
           <li>
             <span className="font-semibold text-foreground">1. Review the clinical concept.</span> Extract the decision rule
-            (what changes risk, what data you must not skip)—at the NP level this is <em>provider</em> judgment, not task lists.
+            (what changes risk, what data you must not skip). At the NP level this is <em>provider</em> judgment, not task lists.
           </li>
           <li>
             <span className="font-semibold text-foreground">2. Apply it to a patient scenario.</span> Read for age, comorbidities,
@@ -62,7 +62,7 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
           </li>
           <li>
             <span className="font-semibold text-foreground">3. Interpret findings.</span> Labs, imaging, and exam elements are
-            there to support or refute differentials—name what each finding does to pretest probability.
+            there to support or refute differentials. Name what each finding does to pretest probability.
           </li>
           <li>
             <span className="font-semibold text-foreground">4. Choose the working diagnosis.</span> Commit only when criteria
@@ -81,12 +81,12 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
         <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[var(--theme-muted-text)]">
           <li>Structured around the <strong className="text-foreground">AANP and ANCC</strong> emphasis on assessment → diagnosis → plan → evaluation across settings.</li>
           <li>
-            <strong className="text-foreground">Full lifespan</strong>: from prenatal/women&apos;s health through geriatrics—how
+            <strong className="text-foreground">Full lifespan</strong>: from prenatal/women&apos;s health through geriatrics. How
             items embed age in the stem, not just the topic label.
           </li>
           <li>
             <strong className="text-foreground">Clinical decision-making</strong>, not memorization: differentials, interpretation,
-            and management trade-offs—not recognition of the longest answer.
+            and management trade-offs, not recognition of the longest answer.
           </li>
         </ul>
       </section>
@@ -134,7 +134,7 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
       <section aria-label="Clinical domain coverage" className="rounded-xl border border-border bg-card p-4">
         <h2 className="text-sm font-bold text-[var(--theme-heading-text)]">Domain coverage (secondary grouping)</h2>
         <p className="mt-1 text-xs text-[var(--theme-muted-text)]">
-          Pair a population filter with assessment, diagnosis, management, or evaluation—items on the exam cross these lanes.
+          Pair a population filter with assessment, diagnosis, management, or evaluation. Items on the exam cross these lanes.
         </p>
         <ul className="mt-3 flex flex-wrap gap-2 text-sm text-muted">
           {FNP_DOMAIN_ORDER.map((row) => (
@@ -225,11 +225,11 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
           <ul className="mt-2 space-y-1.5 text-[var(--theme-muted-text)]">
             <li>
               <strong className="text-foreground">Must rule out first:</strong> ACS, pulmonary embolism, aortic dissection,
-              pneumothorax—depending on risk factors and associated features in the stem.
+              pneumothorax, depending on risk factors and associated features in the stem.
             </li>
             <li>
               <strong className="text-foreground">Also in play:</strong> pericarditis, musculoskeletal pain, GERD/esophageal
-              spasm, anxiety/panic—after dangerous causes are addressed or convincingly lowered in probability.
+              spasm, anxiety/panic. After dangerous causes are addressed or convincingly lowered in probability.
             </li>
             <li>
               <strong className="text-foreground">Reasoning pathway:</strong> stabilize if unstable → targeted history/exam →
@@ -246,27 +246,27 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
           Clinical workflow: symptom → assessment → diagnosis → management → follow-up
         </h2>
         <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
-          Lessons are organized to reinforce this sequence—skipping upstream steps is how well-prepared candidates miss items.
+          Lessons are organized to reinforce this sequence. Skipping upstream steps is how well-prepared candidates miss items.
         </p>
         <ol className="mt-4 space-y-2 text-sm text-[var(--theme-muted-text)]">
           <li>
-            <strong className="text-foreground">Symptom / concern</strong> — what brought the patient in, and what must be ruled
+            <strong className="text-foreground">Symptom / concern</strong>: what brought the patient in, and what must be ruled
             out urgently?
           </li>
           <li>
-            <strong className="text-foreground">Assessment</strong> — history, exam, targeted tests; interpret in context of age
+            <strong className="text-foreground">Assessment</strong>: history, exam, targeted tests; interpret in context of age
             and comorbidity.
           </li>
           <li>
-            <strong className="text-foreground">Diagnosis</strong> — working diagnosis with differentials ranked by probability
+            <strong className="text-foreground">Diagnosis</strong>: working diagnosis with differentials ranked by probability
             and harm if wrong.
           </li>
           <li>
-            <strong className="text-foreground">Management</strong> — pharmacologic and nonpharmacologic plan, referrals,
+            <strong className="text-foreground">Management</strong>: pharmacologic and nonpharmacologic plan, referrals,
             patient education.
           </li>
           <li>
-            <strong className="text-foreground">Evaluation</strong> — when to reassess, what defines response, what triggers
+            <strong className="text-foreground">Evaluation</strong>: when to reassess, what defines response, what triggers
             escalation.
           </li>
         </ol>
@@ -278,7 +278,7 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
           Lesson → case questions → performance by domain → exam simulation → readiness
         </h2>
         <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
-          Lessons alone do not equal certification readiness—they anchor the loop below with case-based items, analytics, and
+          Lessons alone do not equal certification readiness. They anchor the loop below with case-based items, analytics, and
           timed simulations.
         </p>
         <div
@@ -331,7 +331,7 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
           What advanced FNP reasoning looks like
         </h2>
         <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
-          Illustrative primary-care vignette—focus on sequence and elimination, not memorizing this exact answer.
+          Illustrative primary-care vignette: focus on sequence and elimination, not memorizing this exact answer.
         </p>
         <div className="mt-4 rounded-xl border border-border bg-[var(--theme-muted-surface)] p-4 text-sm">
           <p className="font-medium text-foreground">
@@ -347,15 +347,15 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
           </ul>
           <p className="mt-3 text-foreground">
             <strong>Key findings:</strong> Volume overload + hypoxemia + tachycardia suggest acute decompensated heart failure
-            until proven otherwise—dangerous instability trumps completing all diagnostics first.
+            until proven otherwise. Dangerous instability trumps completing all diagnostics first.
           </p>
           <p className="mt-2 text-[var(--theme-muted-text)]">
             <strong className="text-foreground">Rule in/out:</strong> STEMI is less supported without ischemic symptoms, but you
             still monitor ECG/troponins per protocol. The stem rewards treating the failure state causing respiratory compromise.
           </p>
           <p className="mt-2 text-[var(--theme-muted-text)]">
-            <strong className="text-foreground">Best management:</strong> Initiate diuresis with monitoring (B is most aligned)—
-            then refine diagnosis with imaging/labs as the patient stabilizes.
+            <strong className="text-foreground">Best management:</strong> Initiate diuresis with monitoring (B is most aligned).
+            Then refine diagnosis with imaging/labs as the patient stabilizes.
           </p>
           <p className="mt-2 text-[var(--theme-muted-text)]">
             <strong className="text-foreground">Clinical takeaway:</strong> When the presentation is consistent with acute
@@ -387,7 +387,7 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
       <section className="rounded-2xl border border-primary/20 bg-primary/[0.06] p-5 sm:p-6">
         <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Low-friction entry</h2>
         <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
-          Start with a short case block; deeper sessions may prompt sign-in depending on product rules—not a forced login on
+          Start with a short case block; deeper sessions may prompt sign-in depending on product rules, not a forced login on
           the first click.
         </p>
         <div className="mt-4 flex flex-wrap gap-2">

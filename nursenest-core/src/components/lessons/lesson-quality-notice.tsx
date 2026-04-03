@@ -15,7 +15,7 @@ export function LessonQualityNotice({
         <p>Lesson body is still being assembled for this topic.</p>
       ) : (
         <p>
-          This lesson is shorter than our full teaching-depth target — we show what’s published and keep improving depth
+          This lesson is shorter than our full teaching-depth target. We show what’s published and keep improving depth
           over time{wordCount > 0 ? ` (~${wordCount} words in the full lesson)` : ""}.
         </p>
       )}
