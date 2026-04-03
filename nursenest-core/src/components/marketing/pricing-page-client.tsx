@@ -313,17 +313,16 @@ export function PricingPageClient({
   return (
     <main className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
       <header className="border-b border-[var(--theme-card-border)] pb-10">
-        <p className="sr-only">{heading}</p>
         <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("pages.pricing.title")}</p>
         <h1 className="mt-2 text-balance text-3xl font-bold leading-tight text-[var(--theme-heading-text)] sm:text-4xl">
-          {heroHeadline}
+          {heading}
         </h1>
-        <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">{heroSubheadline}</p>
+        <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">{heroSub}</p>
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{intro}</p>
 
         <p className="mt-4 text-sm text-[var(--theme-body-text)]">{t("pages.pricing.hero.trustLine")}</p>
         <p className="mt-2 inline-flex rounded-full border border-[var(--border-subtle)] bg-[var(--bg-inset)] px-3 py-1 text-xs font-medium text-[var(--theme-body-text)]">
-          Most students choose a plan that matches their time-to-exam window.
+          {t("pages.pricing.hero.choicePill")}
         </p>
 
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
@@ -331,14 +330,14 @@ export function PricingPageClient({
             href={tryQuestionsHref}
             className="nn-btn-primary inline-flex min-h-[48px] items-center justify-center px-6 py-3 text-sm font-semibold transition"
           >
-            Start studying now
+            {t("pages.pricing.hero.ctaStartStudying")}
             <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
           <Link href={tryQuestionsHref} className="nn-link-quiet inline-flex items-center text-sm font-semibold">
-            See weak-area targeting first
+            {t("pages.pricing.hero.ctaSeeWeakAreas")}
           </Link>
         </div>
-        <p className="mt-3 text-xs font-medium text-muted-foreground">No pressure: secure checkout, cancel anytime.</p>
+        <p className="mt-3 text-xs font-medium text-muted-foreground">{t("pages.pricing.hero.checkoutHint")}</p>
         <p className="mt-2 text-xs text-muted-foreground">{t("pages.pricing.hero.regionHint")}</p>
       </header>
 
@@ -360,62 +359,59 @@ export function PricingPageClient({
         </ul>
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
           <div className="rounded-xl border border-[var(--border-subtle,var(--theme-card-border))] bg-card p-4 shadow-[var(--shadow-card)]">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Score preview</p>
-            <p className="mt-2 text-2xl font-bold tabular-nums text-[var(--theme-heading-text)]">68%</p>
-            <p className="text-xs text-muted-foreground">Last session · Pharmacology (example)</p>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+              {t("pages.pricing.demo.scorePreview")}
+            </p>
+            <p className="mt-2 text-2xl font-bold tabular-nums text-[var(--theme-heading-text)]">
+              {t("pages.pricing.demo.scoreExamplePct")}
+            </p>
+            <p className="text-xs text-muted-foreground">{t("pages.pricing.demo.lastSessionExample")}</p>
             <div className="mt-3 flex flex-wrap gap-1.5">
               <span className="rounded-full border border-role-warning-border bg-role-warning-soft px-2 py-0.5 text-[11px] font-medium text-role-warning-text">
-                Priority
+                {t("pages.pricing.demo.priorityChip")}
               </span>
               <span className="rounded-full bg-[var(--surface-chip)] px-2 py-0.5 text-[11px] text-muted-foreground ring-1 ring-[var(--border-subtle)]">
-                Safety
+                {t("pages.pricing.demo.safetyChip")}
               </span>
             </div>
           </div>
           <div className="rounded-xl border border-[var(--border-subtle,var(--theme-card-border))] bg-card p-4 shadow-[var(--shadow-card)]">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Categories</p>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+              {t("pages.pricing.demo.categoriesTitle")}
+            </p>
             <ul className="mt-2 space-y-1.5 text-sm">
               <li className="flex justify-between border-b border-dashed border-border pb-1">
-                <span>Fluid balance</span>
-                <span className="font-medium text-[var(--role-heat-text)]">Review</span>
+                <span>{t("pages.pricing.demo.rowFluid")}</span>
+                <span className="font-medium text-[var(--role-heat-text)]">{t("pages.pricing.demo.reviewLabel")}</span>
               </li>
               <li className="flex justify-between border-b border-dashed border-border pb-1">
-                <span>Infection control</span>
-                <span className="text-muted-foreground">Stable</span>
+                <span>{t("pages.pricing.demo.rowInfection")}</span>
+                <span className="text-muted-foreground">{t("pages.pricing.demo.stableLabel")}</span>
               </li>
               <li className="flex justify-between pt-0.5">
-                <span>Med admin</span>
-                <span className="font-medium text-[var(--role-heat-text)]">Review</span>
+                <span>{t("pages.pricing.demo.rowMedAdmin")}</span>
+                <span className="font-medium text-[var(--role-heat-text)]">{t("pages.pricing.demo.reviewLabel")}</span>
               </li>
             </ul>
-            <p className="mt-2 text-[11px] text-muted-foreground">Illustrative breakdown. Your report uses live data.</p>
+            <p className="mt-2 text-[11px] text-muted-foreground">{t("pages.pricing.demo.illusNote")}</p>
           </div>
         </div>
       </section>
 
       <section className="mt-12 overflow-x-auto rounded-2xl border border-[var(--border-subtle,var(--theme-card-border))] bg-card shadow-[var(--shadow-card)]">
-        <h2 className="px-4 pt-4 text-xl font-bold text-[var(--theme-heading-text)] sm:px-6">Plan comparison</h2>
-        <p className="px-4 pb-2 text-sm text-muted-foreground sm:px-6">Choose by depth: Free to start, Core to improve, Premium for full exam-readiness workflow.</p>
+        <h2 className="px-4 pt-4 text-xl font-bold text-[var(--theme-heading-text)] sm:px-6">{t("pages.pricing.matrix.title")}</h2>
+        <p className="px-4 pb-2 text-sm text-muted-foreground sm:px-6">{t("pages.pricing.matrix.lead")}</p>
         <table className="w-full min-w-[640px] text-left text-sm">
           <thead>
             <tr className="border-y border-[var(--border-subtle,var(--theme-card-border))] bg-[var(--bg-inset)]">
-              <th className="px-4 py-3 sm:px-6">Feature</th>
-              <th className="px-4 py-3">Free</th>
-              <th className="px-4 py-3">Core</th>
-              <th className="px-4 py-3">Premium</th>
+              <th className="px-4 py-3 sm:px-6">{t("pages.pricing.matrix.thFeature")}</th>
+              <th className="px-4 py-3">{t("pages.pricing.matrix.thFree")}</th>
+              <th className="px-4 py-3">{t("pages.pricing.matrix.thCore")}</th>
+              <th className="px-4 py-3">{t("pages.pricing.matrix.thPremium")}</th>
             </tr>
           </thead>
           <tbody>
-            {[
-              ["Practice questions", "Limited starter sets", "Full question access", "Full + prioritized drills"],
-              ["Rationales", "Basic", "Detailed", "Detailed + remediation cues"],
-              ["Lessons", "Preview only", "Included", "Included"],
-              ["Flashcards", "Preview", "Included", "Included"],
-              ["Exams (CAT)", "No", "Practice exams", "Practice exams + adaptive focus"],
-              ["Adaptive features", "No", "Basic", "Advanced"],
-              ["Study plan", "No", "Included", "Included + weak-area guided"],
-              ["Weak-area tracking", "No", "Yes", "Yes + stronger prioritization"],
-            ].map((row) => (
+            {matrixRows.map((row) => (
               <tr key={row[0]} className="border-b border-[var(--theme-card-border)] last:border-0">
                 <th scope="row" className="px-4 py-3 font-medium text-[var(--theme-heading-text)] sm:px-6">
                   {row[0]}
@@ -523,7 +519,7 @@ export function PricingPageClient({
           </ul>
           {stats?.questionCount != null && stats.questionCount > 0 ? (
             <p className="mt-4 text-sm text-muted-foreground">
-              Library scale (platform-wide): {stats.questionCount.toLocaleString()}+ items in rotation, plus lessons and cards. Exact pool depends on your tier.
+              {t("pages.pricing.libraryScale", { count: stats.questionCount.toLocaleString() })}
             </p>
           ) : null}
           <p className="mt-4 text-sm text-muted-foreground">{narrative.proofLine}</p>
@@ -630,25 +626,23 @@ export function PricingPageClient({
       </section>
 
       <section className="mt-14 rounded-2xl border border-[var(--border-subtle,var(--theme-card-border))] bg-[var(--bg-section-alt)] p-6 shadow-[var(--shadow-card)]">
-        <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">Student outcomes and trust</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Built for realistic nursing decision-making with clinically grounded rationales and targeted review loops.
-        </p>
+        <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">{t("pages.pricing.trustSection.title")}</h2>
+        <p className="mt-2 text-sm text-muted-foreground">{t("pages.pricing.trustSection.lead")}</p>
         <div className="mt-5 grid gap-4 md:grid-cols-3">
           <blockquote className="rounded-xl border border-[var(--theme-card-border)] bg-card p-4 text-sm">
-            “I stopped random reviewing and finally knew what to focus on each week.”
+            “{t("pages.pricing.trustSection.quote0")}”
           </blockquote>
           <blockquote className="rounded-xl border border-[var(--theme-card-border)] bg-card p-4 text-sm">
-            “The readiness trend helped me decide when to switch from content review to timed sets.”
+            “{t("pages.pricing.trustSection.quote1")}”
           </blockquote>
           <blockquote className="rounded-xl border border-[var(--theme-card-border)] bg-card p-4 text-sm">
-            “Questions felt close to exam pressure, but with clearer next steps after every session.”
+            “{t("pages.pricing.trustSection.quote2")}”
           </blockquote>
         </div>
       </section>
 
       <section className="mt-14">
-        <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">Pricing FAQ</h2>
+        <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">{t("pages.pricing.faqSection.title")}</h2>
         <dl className="mt-6 space-y-6">
           {pricingFaqs.map((item) => (
             <div key={item.q} className="border-b border-[var(--theme-card-border)] pb-6 last:border-0 last:pb-0">
@@ -663,7 +657,7 @@ export function PricingPageClient({
         <h2 className="sr-only">{t("pages.pricing.compare.title")}</h2>
         <table className="w-full min-w-[520px] text-left text-sm">
           <caption className="border-b border-[var(--theme-card-border)] px-4 py-3 text-left text-base font-bold text-[var(--theme-heading-text)]">
-            NurseNest vs UWorld-style qbank
+            {t("pages.pricing.compare.uworldCaption")}
           </caption>
           <thead>
             <tr className="border-b border-[var(--border-subtle,var(--theme-card-border))] bg-[var(--bg-inset)]">
@@ -697,9 +691,7 @@ export function PricingPageClient({
         <p className="mt-2 text-sm text-muted-foreground">{t("pages.pricing.billing.helper")}</p>
         <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{t("pages.pricing.billing.recurringDisclosure")}</p>
         <p className="mt-2 text-xs text-muted-foreground">{t("pages.pricing.checkout.recurringShort")}</p>
-        <p className="mt-2 text-xs font-medium text-[var(--role-heat-text)]">
-          Cancel anytime. Choose the shortest plan that matches your exam timeline and comfort level.
-        </p>
+        <p className="mt-2 text-xs font-medium text-[var(--role-heat-text)]">{t("pages.pricing.billing.cancelComfort")}</p>
         {loadError ? <p className="mt-4 text-sm text-red-600">{loadError}</p> : null}
         {checkoutError ? <p className="mt-4 text-sm text-red-600">{checkoutError}</p> : null}
         {checkoutOpsHint ? (
@@ -736,21 +728,23 @@ export function PricingPageClient({
 
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           <article className="flex flex-col rounded-2xl border border-[var(--theme-card-border)] bg-card p-5 shadow-sm">
-            <p className="mb-2 inline-block w-fit rounded-full bg-muted px-2 py-0.5 text-xs font-bold text-muted-foreground">Free</p>
-            <h3 className="text-lg font-semibold text-[var(--theme-heading-text)]">Starter access</h3>
-            <p className="mt-2 text-xs leading-snug text-muted-foreground">Try exam-style questions and preview how NurseNest works before subscribing.</p>
+            <p className="mb-2 inline-block w-fit rounded-full bg-muted px-2 py-0.5 text-xs font-bold text-muted-foreground">
+              {t("pages.pricing.tier.freeBadge")}
+            </p>
+            <h3 className="text-lg font-semibold text-[var(--theme-heading-text)]">{t("pages.pricing.tier.freeTitle")}</h3>
+            <p className="mt-2 text-xs leading-snug text-muted-foreground">{t("pages.pricing.tier.freeDesc")}</p>
             <ul className="mt-3 space-y-1.5 text-xs text-[var(--theme-body-text)]">
               <li className="flex gap-1.5">
                 <Check className="nn-trust-mark mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
-                Starter question sets
+                {t("pages.pricing.tier.freeB0")}
               </li>
               <li className="flex gap-1.5">
                 <Check className="nn-trust-mark mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
-                Basic rationale visibility
+                {t("pages.pricing.tier.freeB1")}
               </li>
               <li className="flex gap-1.5">
                 <Check className="nn-trust-mark mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
-                No payment required
+                {t("pages.pricing.tier.freeB2")}
               </li>
             </ul>
             <p className="mt-4 text-2xl font-bold">$0</p>
@@ -758,13 +752,15 @@ export function PricingPageClient({
               href={tryQuestionsHref}
               className="nn-btn-secondary mt-4 inline-flex w-full justify-center py-2.5 text-sm font-semibold"
             >
-              Start practicing
+              {t("pages.pricing.tier.freeCta")}
             </Link>
           </article>
 
           {coreRow ? (
             <article className="flex flex-col rounded-2xl border border-[var(--theme-card-border)] bg-card p-5 shadow-sm ring-2 ring-role-cta/25">
-              <p className="mb-2 inline-block w-fit rounded-full bg-role-cta-soft px-2 py-0.5 text-xs font-bold text-role-cta-on-soft">Core</p>
+              <p className="mb-2 inline-block w-fit rounded-full bg-role-cta-soft px-2 py-0.5 text-xs font-bold text-role-cta-on-soft">
+                {t("pages.pricing.tier.coreBadge")}
+              </p>
               <h3 className="text-lg font-semibold text-[var(--theme-heading-text)]">{t(DURATION_KEYS[coreRow.duration])}</h3>
               <p className="mt-2 text-xs leading-snug text-muted-foreground">{planPersona[coreRow.duration]}</p>
               <ul className="mt-3 space-y-1.5 text-xs text-[var(--theme-body-text)]">
@@ -783,7 +779,7 @@ export function PricingPageClient({
                 onClick={() => startCheckout(coreRow.duration)}
                 className="nn-btn-primary mt-4 w-full py-2.5 text-sm font-semibold disabled:opacity-60"
               >
-                Unlock full access
+                {t("pages.pricing.tier.coreCta")}
               </button>
             </article>
           ) : null}
@@ -791,22 +787,22 @@ export function PricingPageClient({
           {premiumRow ? (
             <article className="flex flex-col rounded-2xl border border-role-premium-border bg-role-premium-surface p-5 shadow-sm">
               <p className="mb-2 inline-block w-fit rounded-full border border-role-premium-border bg-role-premium-surface px-2 py-0.5 text-xs font-bold text-role-premium-text">
-                Premium · Most popular
+                {t("pages.pricing.tier.premiumBadge")}
               </p>
               <h3 className="text-lg font-semibold text-[var(--theme-heading-text)]">{t(DURATION_KEYS[premiumRow.duration])}</h3>
-              <p className="mt-2 text-xs leading-snug text-muted-foreground">Best if you want the longest runway and lowest per-month cost.</p>
+              <p className="mt-2 text-xs leading-snug text-muted-foreground">{t("pages.pricing.tier.premiumSub")}</p>
               <ul className="mt-3 space-y-1.5 text-xs text-[var(--theme-body-text)]">
                 <li className="flex gap-1.5">
                   <Check className="nn-trust-mark mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
-                  Full lessons, questions, and exam prep loop
+                  {t("pages.pricing.tier.premiumB0")}
                 </li>
                 <li className="flex gap-1.5">
                   <Check className="nn-trust-mark mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
-                  Adaptive weak-area and readiness guidance
+                  {t("pages.pricing.tier.premiumB1")}
                 </li>
                 <li className="flex gap-1.5">
                   <Check className="nn-trust-mark mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
-                  Best value per month for long prep
+                  {t("pages.pricing.tier.premiumB2")}
                 </li>
               </ul>
               <p className="mt-4 text-2xl font-bold">{premiumRow.totalLabel}</p>
@@ -822,38 +818,37 @@ export function PricingPageClient({
                 onClick={() => startCheckout(premiumRow.duration)}
                 className="nn-btn-primary mt-4 w-full py-2.5 text-sm font-semibold disabled:opacity-60"
               >
-                Start studying now
+                {t("pages.pricing.tier.premiumCta")}
               </button>
             </article>
           ) : null}
           {!coreRow && !premiumRow ? (
             <article className="md:col-span-3 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-inset)] p-5 text-sm text-muted-foreground">
-              Plans for this pathway are updating. Explore free questions now, then return to unlock full access.
+              {t("pages.pricing.plansUpdating")}
             </article>
           ) : null}
         </div>
       </section>
 
       <section className="mt-14">
-        <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">Product preview</h2>
-        <p className="mt-2 text-sm text-muted-foreground">What you actually use each study day.</p>
+        <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">{t("pages.pricing.productPreview.title")}</h2>
+        <p className="mt-2 text-sm text-muted-foreground">{t("pages.pricing.productPreview.lead")}</p>
         <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {[
-            ["Question UI", "Timed, exam-style question flow with clear prompt and choices."],
-            ["Rationales", "Plain-language reasoning for correct and incorrect answers."],
-            ["CAT / Exams", "Adaptive and timed testing to practice pressure and pacing."],
-            ["Dashboard", "Weak-area tracking, readiness trends, and next-best actions."],
-          ].map(([title, body]) => (
-            <div key={title} className="rounded-xl border border-[var(--theme-card-border)] bg-card p-4">
-              <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{title}</p>
-              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{body}</p>
+          {([0, 1, 2, 3] as const).map((i) => (
+            <div key={i} className="rounded-xl border border-[var(--theme-card-border)] bg-card p-4">
+              <p className="text-sm font-semibold text-[var(--theme-heading-text)]">
+                {t(`pages.pricing.productPreview.${i}.title`)}
+              </p>
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                {t(`pages.pricing.productPreview.${i}.body`)}
+              </p>
             </div>
           ))}
         </div>
       </section>
 
       <section className="mt-14">
-        <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">Choose your exam</h2>
+        <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">{t("pages.pricing.examChoose.title")}</h2>
         <p className="mt-2 text-sm text-muted-foreground">
           {t(country === "US" ? "pages.pricing.examChoose.subtitleUS" : "pages.pricing.examChoose.subtitleCA")}
         </p>

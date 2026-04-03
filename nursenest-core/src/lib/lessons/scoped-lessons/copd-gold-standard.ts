@@ -602,8 +602,16 @@ export function copdGoldVariantForPathway(pathwayId: string): CopdVariant | unde
 export function copdGoldHubListInput(pathwayId: string): Omit<LessonInputShape, "sections" | "preTest" | "postTest"> | null {
   const full = getCopdGoldStandardLessonInput(pathwayId);
   if (!full) return null;
-  const { sections: _s, preTest: _p, postTest: _po, ...meta } = full;
-  return meta;
+  return {
+    slug: full.slug,
+    title: full.title,
+    topic: full.topic,
+    topicSlug: full.topicSlug,
+    bodySystem: full.bodySystem,
+    previewSectionCount: full.previewSectionCount,
+    seoTitle: full.seoTitle,
+    seoDescription: full.seoDescription,
+  };
 }
 
 export function getCopdGoldStandardLessonInput(pathwayId: string): LessonInputShape | null {
