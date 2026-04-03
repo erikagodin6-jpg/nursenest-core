@@ -3,6 +3,7 @@ import type { ReadinessBand, ReadinessResult } from "@/lib/learner/readiness-sco
 import type { TopicTrendRow } from "@/lib/learner/topic-performance";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
 import type { AdaptiveTeachingLoopRecommendation } from "@/lib/learner/adaptive-teaching-loop";
+import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
 import {
   assessPlanTrack,
   buildExamPlanMilestones,
@@ -70,6 +71,84 @@ export type AdaptiveLearnerRecommendations = {
 
 function encodeTopic(topic: string): string {
   return encodeURIComponent(topic);
+}
+
+/** Canonical key for dedupe + stable ordering (aligned with weak-topic ledger). */
+function weakTopicNormKey(row: WeakTopicRow): string {
+  return row.normalizedTopic ?? normalizeTopicKey(row.topic);
+}
+
+/**
+ * One row per canonical topic; deterministic order: priority desc, then norm key, then display label.
+ * Weak-topic rows are already entitlement- and exam-scoped by upstream loaders — do not re-filter here.
+ */
+function dedupeWeakTopicsStable(rows: WeakTopicRow[]): WeakTopicRow[] {
+  const map = new Map<string, WeakTopicRow>();
+  for (const r of rows) {
+    const k = weakTopicNormKey(r);
+    const ex = map.get(k);
+    if (!ex) {
+      map.set(k, r);
+      continue;
+    }
+    const rp = r.weakPriorityScore ?? 0;
+    const ep = ex.weakPriorityScore ?? 0;
+    if (rp > ep + 0.0001) map.set(k, r);
+  }
+  return [...map.values()].sort((a, b) => {
+    const pb = Math.round((b.weakPriorityScore ?? 0) * 1000);
+    const pa = Math.round((a.weakPriorityScore ?? 0) * 1000);
+    if (pb !== pa) return pb - pa;
+    const ka = weakTopicNormKey(a);
+    const kb = weakTopicNormKey(b);
+    if (ka !== kb) return ka.localeCompare(kb);
+    return a.topic.localeCompare(b.topic);
+  });
+}
+
+function quizTopicNormFromHref(href: string): string | null {
+  const match = /[?&]topic=([^&]*)/.exec(href);
+  if (!match?.[1]) return null;
+  const raw = match[1];
+  try {
+    return normalizeTopicKey(decodeURIComponent(raw.replace(/\+/g, " ")));
+  } catch {
+    return normalizeTopicKey(raw);
+  }
+}
+
+/** First weak topic whose canonical key differs from the primary targeted quiz topic (if any). */
+function pickSecondaryDrillTopic(weakOrdered: WeakTopicRow[], primaryQuizTopicNorm: string | null): string | null {
+  for (const w of weakOrdered) {
+    const k = weakTopicNormKey(w);
+    if (primaryQuizTopicNorm && k === primaryQuizTopicNorm) continue;
+    return w.topic;
+  }
+  return null;
+}
+
+const MAX_STUDY_NEXT_SECONDARY = 2;
+
+/**
+ * At most {@link MAX_STUDY_NEXT_SECONDARY} items; no duplicate hrefs; at most one quiz action per topic (encoded in href).
+ */
+function finalizeStudyNextSecondaries(primary: NextAction, candidates: NextAction[]): NextAction[] {
+  const seenHref = new Set<string>([primary.href]);
+  const seenQuizTopicNorm = new Set<string>();
+  const primaryQuizNorm = primary.kind === "quiz" ? quizTopicNormFromHref(primary.href) : null;
+  if (primaryQuizNorm) seenQuizTopicNorm.add(primaryQuizNorm);
+
+  const out: NextAction[] = [];
+  for (const a of candidates) {
+    if (out.length >= MAX_STUDY_NEXT_SECONDARY) break;
+    if (seenHref.has(a.href)) continue;
+    const qn = a.kind === "quiz" ? quizTopicNormFromHref(a.href) : null;
+    if (qn && seenQuizTopicNorm.has(qn)) continue;
+    if (qn) seenQuizTopicNorm.add(qn);
+    seenHref.add(a.href);
+    out.push(a);
+  }
+  return out;
 }
 
 function paceFromSignals(args: {
@@ -149,6 +228,8 @@ export function buildAdaptiveRecommendations(args: {
   mockCount: number;
   practiceSessionCount: number;
 }): AdaptiveLearnerRecommendations {
+  const weakTopicsOrdered = dedupeWeakTopicsStable(args.weakTopics);
+
   const countdown = buildCountdownCopy({
     examDatePlanType: args.examDatePlanType,
     examDate: args.examDate,
@@ -158,22 +239,38 @@ export function buildAdaptiveRecommendations(args: {
   const daysDelta = daysDeltaToExamUtc(args.examDate ?? null);
   const weeksRem = weeksRemainingRounded(days);
   const urgency = urgencyFromDays(days);
-  const weakTop3 = args.weakTopics
+  const weakTop3 = weakTopicsOrdered
     .slice(0, 3)
     .map((w) => w.topic)
     .filter(Boolean);
 
+  const recNorm = args.recommendedQuizTopic ? normalizeTopicKey(args.recommendedQuizTopic) : null;
+  const matchedRec = recNorm ? weakTopicsOrdered.find((w) => weakTopicNormKey(w) === recNorm) : undefined;
+  const topic =
+    matchedRec?.topic ?? weakTopicsOrdered[0]?.topic ?? (args.recommendedQuizTopic ? args.recommendedQuizTopic : null);
+
+  const weakMixedBankHref = "/app/questions?studyMode=weak";
+  const quizHref = topic
+    ? `/app/questions?preset=topic_drill&topic=${encodeTopic(topic)}`
+    : weakMixedBankHref;
+
+  const coldStartNoWeakNoPathway =
+    weakTopicsOrdered.length === 0 &&
+    !args.continueLesson &&
+    args.lessonsCompleted === 0 &&
+    args.practiceSessionCount + args.mockCount === 0;
+
   const paceStatus = paceFromSignals({
     urgency,
     readinessBand: args.readiness.band,
-    weakTopicCount: args.weakTopics.length,
+    weakTopicCount: weakTopicsOrdered.length,
   });
 
   const planTrack = assessPlanTrack({
     examDatePlanType: args.examDatePlanType,
     examDate: args.examDate,
     readinessBand: args.readiness.band,
-    weakTopicCount: args.weakTopics.length,
+    weakTopicCount: weakTopicsOrdered.length,
     streakDays: args.streakDays,
     mockCount: args.mockCount,
     lessonPct: args.lessonPct,
@@ -197,7 +294,7 @@ export function buildAdaptiveRecommendations(args: {
     readiness: args.readiness,
     mockCount: args.mockCount,
     streakDays: args.streakDays,
-    weakTopics: args.weakTopics,
+    weakTopics: weakTopicsOrdered,
     lessonPct: args.lessonPct,
   });
 
@@ -213,7 +310,7 @@ export function buildAdaptiveRecommendations(args: {
     lessonPct: args.lessonPct,
     readinessBand: args.readiness.band,
     urgency,
-    weakTopicCount: args.weakTopics.length,
+    weakTopicCount: weakTopicsOrdered.length,
   });
 
   const trajectoryLines = explainTrajectory({
@@ -223,18 +320,21 @@ export function buildAdaptiveRecommendations(args: {
     days,
   });
 
-  const topic = args.recommendedQuizTopic ?? weakTop3[0] ?? null;
-  const quizHref = topic
-    ? `/app/questions?preset=topic_drill&topic=${encodeTopic(topic)}`
-    : "/app/questions";
-
   const primaryNext: NextAction = (() => {
     if (args.streakDays === 0 && args.practiceSessionCount + args.mockCount > 0) {
       return {
         title: "Pick up where you left off",
-        href: args.continueLesson?.href ?? "/app/questions",
+        href: args.continueLesson?.href ?? weakMixedBankHref,
         reason: "A short session today keeps your streak and signals moving again.",
         kind: args.continueLesson ? "continue" : "quiz",
+      };
+    }
+    if (coldStartNoWeakNoPathway) {
+      return {
+        title: "Start your first pathway lesson",
+        href: "/app/lessons",
+        reason: "Your plan is ready—open a lesson on your exam track, then add short question sets.",
+        kind: "lesson",
       };
     }
     if (args.continueLesson && args.lessonPct < 55) {
@@ -270,65 +370,62 @@ export function buildAdaptiveRecommendations(args: {
       };
     }
     return {
-      title: "10-question mixed review",
-      href: "/app/questions",
-      reason: "Balanced practice keeps strengths sharp while we learn more weak signals.",
+      title: "Weak-first mixed question block",
+      href: weakMixedBankHref,
+      reason: "No topic signal yet—weak-mode pulls your ledger when available, otherwise mixed items in your scope.",
       kind: "quiz",
     };
   })();
 
-  const secondary: NextAction[] = [];
+  const primaryQuizNorm = primaryNext.kind === "quiz" ? quizTopicNormFromHref(primaryNext.href) : null;
+  const secondaryDrillTopic = pickSecondaryDrillTopic(weakTopicsOrdered, primaryQuizNorm);
+
+  const secondaryCandidates: NextAction[] = [];
   if (primaryNext.kind !== "lesson" && args.continueLesson) {
-    secondary.push({
+    secondaryCandidates.push({
       title: `Lesson: ${args.continueLesson.title}`,
       href: args.continueLesson.href,
       reason: "Alternate reading with questions for retention.",
       kind: "lesson",
     });
   }
-  if (primaryNext.kind !== "quiz" && topic) {
-    secondary.push({
-      title: `Drill ${topic}`,
-      href: quizHref,
-      reason: "Narrow misses on this topic.",
+  if (secondaryDrillTopic) {
+    secondaryCandidates.push({
+      title: `Drill ${secondaryDrillTopic}`,
+      href: `/app/questions?preset=topic_drill&topic=${encodeTopic(secondaryDrillTopic)}`,
+      reason: "Your next-highest weak signal after the primary pick—different topic when one exists.",
       kind: "quiz",
     });
   }
-  secondary.push({
+  secondaryCandidates.push({
     title: "Weak-area study mode (bank)",
-    href: "/app/questions?studyMode=weak",
+    href: weakMixedBankHref,
     reason: "Prioritizes topics your ledger flags. Less random-only drilling.",
     kind: "quiz",
   });
   if (urgency === "near" || urgency === "final_stretch") {
-    secondary.push({
+    secondaryCandidates.push({
       title: "Adaptive (CAT) practice test",
       href: "/app/practice-tests",
       reason: "CAT adjusts difficulty. Useful when the exam is close.",
       kind: "cat",
     });
   } else {
-    secondary.push({
+    secondaryCandidates.push({
       title: "Timed mock exam",
       href: "/app/exams",
       reason: "Mocks show pacing and stamina. Use occasionally even early on.",
       kind: "mock",
     });
   }
-  secondary.push({
+  secondaryCandidates.push({
     title: "Weak-topic flashcards",
     href: "/app/flashcards/weak-areas",
     reason: "Ties missed bank concepts to short spaced-repetition reps.",
     kind: "review",
   });
 
-  const seenHref = new Set<string>([primaryNext.href]);
-  const dedupedSecondary: NextAction[] = [];
-  for (const a of secondary) {
-    if (seenHref.has(a.href)) continue;
-    seenHref.add(a.href);
-    dedupedSecondary.push(a);
-  }
+  const dedupedSecondary = finalizeStudyNextSecondaries(primaryNext, secondaryCandidates);
 
   const weeklyPriorities: string[] = [];
   weeklyPriorities.push(
@@ -339,8 +436,14 @@ export function buildAdaptiveRecommendations(args: {
     weeklyPriorities.push(`Tackle weak signals: ${weakTop3.slice(0, 2).join(", ")}`);
   }
   const trends = args.topicTrends ?? [];
-  const declining = trends.filter((t) => t.momentum === "declining").slice(0, 2);
-  const improving = trends.filter((t) => t.momentum === "improving").slice(0, 2);
+  const declining = trends
+    .filter((t) => t.momentum === "declining")
+    .sort((a, b) => a.topic.localeCompare(b.topic))
+    .slice(0, 2);
+  const improving = trends
+    .filter((t) => t.momentum === "improving")
+    .sort((a, b) => a.topic.localeCompare(b.topic))
+    .slice(0, 2);
   if (declining.length) {
     weeklyPriorities.push(`Stabilize: ${declining.map((t) => t.topic).join(", ")} (recent misses)`);
   }
@@ -379,7 +482,7 @@ export function buildAdaptiveRecommendations(args: {
     trajectory,
     trajectoryLines,
     primaryNext,
-    secondary: dedupedSecondary.slice(0, 3),
+    secondary: dedupedSecondary,
     weakTop3,
     holdingBackLabels: args.readiness.holdingBack ?? [],
     weeklyPriorities: weeklyPriorities.slice(0, 6),
