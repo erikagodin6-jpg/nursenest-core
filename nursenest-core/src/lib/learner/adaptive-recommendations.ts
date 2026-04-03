@@ -503,7 +503,7 @@ export function buildAdaptiveRecommendations(args: {
 
 // ─── Post-test remediation (Study Next engine, post_test profile) ───
 
-export type PostTestStudyNextActionKind = "weak_topic_lesson" | "weak_topic_qbank";
+export type PostTestStudyNextActionKind = "weak_topic_lesson" | "weak_topic_qbank" | "next_pathway_lesson";
 
 export type PostTestStudyNextAction = {
   title: string;
@@ -556,6 +556,65 @@ export function recommendNextActions(rows: PostTestRemediationInputRow[]): PostT
   const seenHref = new Set<string>();
   const picked: PostTestStudyNextAction[] = [];
   for (const c of candidates) {
+    if (seenHref.has(c.href)) continue;
+    seenHref.add(c.href);
+    picked.push(c);
+    if (picked.length >= 3) break;
+  }
+
+  if (picked.length === 0) return null;
+  return {
+    primary: picked[0]!,
+    secondary: picked.slice(1, 3),
+  };
+}
+
+export type LessonContinueNextArgs = {
+  currentLessonId: string;
+  nextPathwayLesson: { id: string; title: string } | null;
+  weakRows: PostTestRemediationInputRow[];
+};
+
+/**
+ * Study Next — lesson-end profile: next pathway lesson first, then weak-topic qbank then lesson links,
+ * excluding the current lesson URL and duplicate hrefs (max 1 primary + 2 secondaries).
+ */
+export function recommendNextActionsForLessonContinue(args: LessonContinueNextArgs): PostTestStudyNextBundle | null {
+  const currentLessonHref = `/app/lessons/${args.currentLessonId}`;
+  const candidates: PostTestStudyNextAction[] = [];
+
+  if (args.nextPathwayLesson && args.nextPathwayLesson.id !== args.currentLessonId) {
+    candidates.push({
+      kind: "next_pathway_lesson",
+      href: `/app/lessons/${args.nextPathwayLesson.id}`,
+      title: `Next lesson: ${args.nextPathwayLesson.title}`,
+      reason: "Continue your pathway in order.",
+    });
+  }
+
+  for (const r of args.weakRows) {
+    const reason =
+      r.missCount >= 2
+        ? "Several recent misses in this area — short practice helps it stick."
+        : "Light practice here balances what you just studied.";
+    candidates.push({
+      kind: "weak_topic_qbank",
+      href: r.qbankHref,
+      title: `Question bank · ${r.topicLabel}`,
+      reason,
+    });
+    candidates.push({
+      kind: "weak_topic_lesson",
+      href: r.lessonHref,
+      title: `Review lesson · ${r.topicLabel}`,
+      reason,
+    });
+  }
+
+  const seenHref = new Set<string>();
+  const picked: PostTestStudyNextAction[] = [];
+  for (const c of candidates) {
+    if (c.href === currentLessonHref) continue;
     if (seenHref.has(c.href)) continue;
     seenHref.add(c.href);
     picked.push(c);

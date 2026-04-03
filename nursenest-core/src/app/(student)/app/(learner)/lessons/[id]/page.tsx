@@ -22,7 +22,10 @@ import { LegacyMonolithLessonBody } from "@/components/lessons/legacy-monolith-l
 import { LessonQualityNotice } from "@/components/lessons/lesson-quality-notice";
 import { classifyContentItemLesson, classifyPathwayLesson } from "@/lib/content-quality/classify-lesson";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { LessonContinueStudyNextBlock } from "@/components/student/lesson-continue-study-next-block";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
+import { loadLessonContinueStudyNext } from "@/lib/learner/lesson-context-study-next";
+import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
 
 function LessonBody({ content }: { content: unknown }) {
   if (Array.isArray(content)) {
@@ -100,6 +103,15 @@ export default async function LessonDetailPage({ params }: Props) {
   const email = (session?.user as { email?: string | null })?.email ?? null;
   const userLabel = maskUserLabelForWatermark(email, userId || "unknown");
 
+  let learnerPath: string | null = null;
+  if (userId) {
+    const lpRow = await withDatabaseFallback(
+      () => prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } }),
+      null,
+    );
+    learnerPath = lpRow?.learnerPath ?? null;
+  }
+
   const resolved = await withDatabaseFallback(async () => {
     const learnerPathRow = userId
       ? await prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } })
@@ -118,6 +130,7 @@ export default async function LessonDetailPage({ params }: Props) {
           title: true,
           summary: true,
           content: true,
+          bodySystem: true,
         },
       });
       if (!row) return { kind: "out_of_plan" as const };
@@ -208,6 +221,20 @@ export default async function LessonDetailPage({ params }: Props) {
 
   if (resolvedLesson.kind === "legacy_ok") {
     const title = legacyContentMapLessonTitle(resolvedLesson.lesson, id);
+    const anchorNorm = normalizeTopicKey(title);
+    let legacyContinue = null;
+    if (userId) {
+      try {
+        legacyContinue = await loadLessonContinueStudyNext(userId, entitlement, learnerPath, {
+          variant: "legacy",
+          lessonId: id,
+          anchorNorm,
+          topicCode: null,
+        });
+      } catch {
+        legacyContinue = null;
+      }
+    }
     return (
       <main>
         <Link href="/app/lessons" className="text-sm font-medium text-primary hover:underline">
@@ -224,6 +251,7 @@ export default async function LessonDetailPage({ params }: Props) {
         >
           <LegacyMonolithLessonBody lesson={resolvedLesson.lesson} />
         </PremiumLessonShell>
+        <LessonContinueStudyNextBlock bundle={legacyContinue} />
         <div className="mt-10 flex flex-wrap gap-2 border-t border-border pt-6">
           <Link
             href="/app/questions"
@@ -250,6 +278,19 @@ export default async function LessonDetailPage({ params }: Props) {
       null,
     );
     const pathwayQuality = classifyPathwayLesson(record);
+    let pathwayContinue = null;
+    if (userId && pathwayRow?.pathwayId) {
+      try {
+        pathwayContinue = await loadLessonContinueStudyNext(userId, entitlement, learnerPath, {
+          variant: "pathway",
+          lessonId: id,
+          pathwayId: pathwayRow.pathwayId,
+          topicSlug: record.topicSlug,
+        });
+      } catch {
+        pathwayContinue = null;
+      }
+    }
     return (
       <main>
         <Link href="/app/lessons" className="text-sm font-medium text-primary hover:underline">
@@ -283,6 +324,7 @@ export default async function LessonDetailPage({ params }: Props) {
             </article>
           </PremiumLessonShell>
         </div>
+        <LessonContinueStudyNextBlock bundle={pathwayContinue} />
         <div className="mt-10 flex flex-wrap gap-2 border-t border-border pt-6">
           <Link
             href="/app/questions"
@@ -303,6 +345,22 @@ export default async function LessonDetailPage({ params }: Props) {
 
   const row = resolvedLesson.row;
   const contentQ = classifyContentItemLesson(row.content);
+  const bs = row.bodySystem?.trim() ?? "";
+  const anchorNorm = normalizeTopicKey(bs || row.title);
+  const topicCode = bs.length > 0 ? normalizeTopicKey(bs) : null;
+  let contentContinue = null;
+  if (userId) {
+    try {
+      contentContinue = await loadLessonContinueStudyNext(userId, entitlement, learnerPath, {
+        variant: "content",
+        lessonId: id,
+        anchorNorm,
+        topicCode,
+      });
+    } catch {
+      contentContinue = null;
+    }
+  }
 
   return (
     <main>
@@ -322,6 +380,7 @@ export default async function LessonDetailPage({ params }: Props) {
       >
         <LessonBody content={row.content as unknown} />
       </PremiumLessonShell>
+      <LessonContinueStudyNextBlock bundle={contentContinue} />
       <div className="mt-10 flex flex-wrap gap-2 border-t border-border pt-6">
         <Link
           href="/app/questions"

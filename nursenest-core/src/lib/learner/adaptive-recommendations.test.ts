@@ -1,6 +1,10 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { buildAdaptiveRecommendations, recommendNextActions } from "@/lib/learner/adaptive-recommendations";
+import {
+  buildAdaptiveRecommendations,
+  recommendNextActions,
+  recommendNextActionsForLessonContinue,
+} from "@/lib/learner/adaptive-recommendations";
 import type { ReadinessResult } from "@/lib/learner/readiness-score";
 import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
@@ -201,5 +205,45 @@ describe("recommendNextActions (post-test Study Next)", () => {
     assert.ok(r!.secondary.every((s) => s.href !== shared));
     const all = [r!.primary.href, ...r!.secondary.map((s) => s.href)];
     assert.equal(new Set(all).size, all.length);
+  });
+});
+
+describe("recommendNextActionsForLessonContinue", () => {
+  it("prioritizes next pathway lesson before weak-topic actions", () => {
+    const r = recommendNextActionsForLessonContinue({
+      currentLessonId: "lesson-a",
+      nextPathwayLesson: { id: "lesson-b", title: "Fluid balance" },
+      weakRows: [
+        {
+          topicLabel: "Pharmacology",
+          topicCode: "pharmacology",
+          missCount: 2,
+          lessonHref: "/app/lessons/p",
+          qbankHref: "/app/questions?preset=topic_drill&topic=Pharmacology",
+        },
+      ],
+    });
+    assert.ok(r);
+    assert.equal(r!.primary.kind, "next_pathway_lesson");
+    assert.equal(r!.primary.href, "/app/lessons/lesson-b");
+  });
+
+  it("never recommends the current lesson URL and dedupes hrefs", () => {
+    const r = recommendNextActionsForLessonContinue({
+      currentLessonId: "cur",
+      nextPathwayLesson: null,
+      weakRows: [
+        {
+          topicLabel: "X",
+          topicCode: "x",
+          missCount: 1,
+          lessonHref: "/app/lessons/cur",
+          qbankHref: "/app/questions?weak=1",
+        },
+      ],
+    });
+    assert.ok(r);
+    assert.ok(r!.primary.href.includes("questions"));
+    assert.ok(!r!.primary.href.includes("/app/lessons/cur"));
   });
 });
