@@ -242,9 +242,12 @@ export function SiteHeader() {
         </div>
       </div>
 
-      {/* Exam strip: same on homepage and inner pages (RN / PN / NP / Allied from getExamNavStripItems). Was hidden on `/`, which made NP invisible in “main” nav on home. */}
+      {/* Exam strip: RN → PN → NP → Allied (getExamNavStripItems), same order as hero pathway row. */}
       <div className="hidden border-t border-role-cta/15 bg-role-cta-soft md:block">
-        <div className="mx-auto flex max-w-7xl flex-nowrap items-center gap-x-0.5 overflow-x-auto overflow-y-hidden px-2 py-0.5 sm:px-4 lg:px-8 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <nav
+          aria-label={t("nav.chooseYourExam")}
+          className="mx-auto flex max-w-7xl flex-nowrap items-center gap-x-0.5 overflow-x-auto overflow-y-hidden px-2 py-0.5 sm:px-4 lg:px-8 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
           <Link
             href={localizeHref("/exam-lessons")}
             className="shrink-0 px-1.5 py-0.5 text-xs font-medium text-role-cta-on-soft/90 hover:text-role-cta-on-soft lg:px-2"
@@ -277,18 +280,12 @@ export function SiteHeader() {
             <NavLinkItem href={localizeHref("/pricing")}>{t("nav.pricing")}</NavLinkItem>
           </NavDetails>
           <Link
-            href={localizeHref("/pricing")}
-            className="shrink-0 px-1.5 py-0.5 text-xs font-medium text-role-cta-on-soft/85 hover:text-role-cta-on-soft lg:px-2"
-          >
-            {t("nav.pricing")}
-          </Link>
-          <Link
             href={localizeHref("/faq")}
             className="shrink-0 px-1.5 py-0.5 text-xs font-medium text-role-cta-on-soft/85 hover:text-role-cta-on-soft lg:px-2"
           >
             {t("footer.faq")}
           </Link>
-        </div>
+        </nav>
       </div>
 
       {mobileOpen && (
@@ -337,7 +334,7 @@ export function SiteHeader() {
                 {region === "US" ? t("home.region.usDesc") : t("home.region.caDesc")}
               </p>
               <hr className="my-3 border-[var(--theme-separator)]" />
-              <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-primary">{t("nav.examHubsMobile")}</p>
+              <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-primary">{t("nav.chooseYourExam")}</p>
               <div className="mb-3 flex flex-col gap-1.5">
                 {examNavStrip.map((item) => (
                   <Link

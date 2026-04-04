@@ -70,6 +70,7 @@ const patch = {
 
   "nav.marketingExplore": "Who we help",
   "nav.examHubsMobile": "Pick your exam",
+  "nav.chooseYourExam": "Choose your exam",
   "nav.examStrip.rn": "NCLEX-RN",
   "nav.examStrip.pnUS": "NCLEX-PN",
   "nav.examStrip.pnCA": "REx-PN",

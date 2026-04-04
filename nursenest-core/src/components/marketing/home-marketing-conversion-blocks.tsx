@@ -14,6 +14,7 @@ import {
   MARKETING_SCREENSHOT_PAIR_SIZES,
   marketingScreenshotBundleDisplaySrc,
 } from "@/lib/marketing-image-delivery";
+import { MARKETING_FINAL_CTA_ROW_CLASS } from "@/lib/theme/marketing-hero-pattern";
 
 type Props = {
   region: NursenestMarketingRegion;
@@ -43,7 +44,7 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
   return (
     <>
       <section
-        className="border-t border-[var(--divider)] bg-[var(--bg-card)]"
+        className="border-t border-[var(--nn-presentation-divider)] bg-[var(--nn-presentation-wash)]"
         style={{ paddingTop: "var(--space-block)", paddingBottom: "var(--space-block)" }}
         data-testid="section-why-choosenest"
         aria-labelledby="why-choosenest-heading"
@@ -53,7 +54,7 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
             {t("home.conversion.whyHeading")}
           </h2>
           <p className="nn-marketing-lead text-[var(--theme-muted-text)]">{t("home.conversion.whySub")}</p>
-          <div className="mt-8 flex flex-col gap-4">
+          <div className="mt-8 flex flex-col gap-[var(--nn-rhythm-card-grid-gap)] sm:gap-5">
             {whyCard("why1")}
             <div className="grid gap-4 md:grid-cols-5 md:items-stretch">
               {whyCard("why2", "md:col-span-2")}
@@ -75,7 +76,7 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
             {t("home.conversion.previewHeading")}
           </h2>
           <p className="nn-marketing-lead text-[var(--theme-muted-text)]">{t("home.conversion.previewSub")}</p>
-          <div className="mt-8 grid gap-6 lg:grid-cols-2">
+          <div className="mt-8 grid gap-[var(--nn-rhythm-card-grid-gap)] lg:grid-cols-2 lg:gap-6">
             {dash ? (
               <figure className="nn-marketing-card overflow-hidden">
                 <div
@@ -136,7 +137,7 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
       </section>
 
       <section
-        className="border-t border-[var(--divider)] bg-[var(--bg-section-alt)]"
+        className="border-t border-[var(--divider)] bg-[var(--nn-presentation-trust-band)]"
         style={{ paddingTop: "var(--space-block)", paddingBottom: "var(--space-block)" }}
         data-testid="section-sample-content"
         aria-labelledby="sample-content-heading"
@@ -146,7 +147,7 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
             {t("home.conversion.sampleHeading")}
           </h2>
           <p className="nn-marketing-lead text-[var(--theme-muted-text)]">{t("home.conversion.sampleSub")}</p>
-          <ul className="mt-6 grid gap-3 sm:grid-cols-3">
+          <ul className="mt-6 grid gap-[var(--nn-rhythm-card-grid-gap)] sm:grid-cols-3 sm:gap-4">
             <li>
               <MarketingTrackedLink
                 href={loc(rnQuestions(region))}
@@ -199,7 +200,7 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
       </section>
 
       <section
-        className="border-t border-[var(--divider)] bg-[var(--bg-card)]"
+        className="border-t border-[var(--divider)] bg-[var(--bg-page)]"
         style={{ paddingTop: "var(--space-block)", paddingBottom: "var(--space-block)" }}
         data-testid="section-home-faq"
         aria-labelledby="home-faq-heading"
@@ -212,7 +213,7 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
             {faqKeys.map((n) => (
               <details
                 key={n}
-                className="group rounded-[var(--radius-lg)] border border-[var(--border-subtle)] bg-[var(--bg-card)] px-4 py-3.5"
+                className="group rounded-[var(--radius-lg)] border border-[var(--border-subtle)] bg-[var(--nn-presentation-ribbon)] px-4 py-3.5"
               >
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-sm font-semibold leading-snug text-[var(--theme-heading-text)] marker:content-none [&::-webkit-details-marker]:hidden">
                   {t(`home.conversion.faq${n}q`)}
@@ -228,7 +229,7 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
       </section>
 
       <section
-        className="border-t border-[var(--divider)] bg-[var(--bg-section)]"
+        className="border-t border-[var(--nn-presentation-divider)] bg-[var(--nn-presentation-panel)]"
         style={{ paddingTop: "var(--space-block)", paddingBottom: "var(--space-block)" }}
         data-testid="section-final-cta"
         aria-labelledby="final-cta-heading"
@@ -238,7 +239,7 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
             {t("home.conversion.finalTitle")}
           </h2>
           <p className="nn-marketing-lead mx-auto max-w-xl text-[var(--theme-body-text)]">{t("home.conversion.finalSub")}</p>
-          <div className="mt-8 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center">
+          <div className={`${MARKETING_FINAL_CTA_ROW_CLASS} mx-auto mt-8 max-w-xl`}>
             <MarketingTrackedLink
               href={loc(HUB.signup)}
               event={PH.marketingHomeFinalCta}

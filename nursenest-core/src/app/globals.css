@@ -22,9 +22,9 @@ body {
 
   --text-hero: clamp(2.2rem, 4.85vw, 3.6rem);
   --text-section: clamp(1.7rem, 3.4vw, 2.4rem);
-  /* Small rhythm under sticky marketing header (avoid crowding; still reads as one hero band) */
-  --space-hero-top: clamp(0.5rem, 1.25vw, 1rem);
-  --space-hero-bottom: clamp(1rem, 2.2vw, 1.75rem);
+  /* Hero band under sticky header: intentional gap, not flush */
+  --space-hero-top: clamp(0.625rem, 1.5vw, 1.125rem);
+  --space-hero-bottom: clamp(1rem, 2.2vw, 1.875rem);
   --space-block: clamp(2.25rem, 4.2vw, 3.25rem);
 
   --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
@@ -101,6 +101,11 @@ body {
   --nn-rhythm-hero-gap: clamp(0.875rem, 1.8vw, 1.125rem);
   --nn-rhythm-footer-y: clamp(2.25rem, 4vw, 2.875rem);
   --nn-rhythm-shell-y: clamp(1.375rem, 3vw, 2rem);
+  --nn-rhythm-heading-sub: clamp(0.5rem, 1.15vw, 0.75rem);
+  --nn-rhythm-text-to-cta: clamp(0.875rem, 1.9vw, 1.375rem);
+  --nn-rhythm-btn-group-gap: 0.75rem;
+  --nn-rhythm-card-grid-gap: clamp(0.75rem, 1.6vw, 1.125rem);
+  --nn-rhythm-mobile-section-y: clamp(1.35rem, 3.6vw, 2.125rem);
   --nn-presentation-wash: color-mix(in srgb, var(--theme-primary) 5.5%, var(--theme-page-bg));
   --nn-presentation-panel: color-mix(in srgb, var(--theme-primary) 8%, var(--theme-card-bg));
   --nn-presentation-badge: color-mix(in srgb, var(--theme-primary) 10%, var(--theme-card-bg));
@@ -568,6 +573,50 @@ html[data-theme="dark-mode"] .nn-trust-mark {
 
 .nn-hero-bridge {
   border-bottom: 1px solid var(--border-subtle);
+}
+
+/* Marketing hero band: padding only (border from .nn-hero-bridge when combined) */
+.nn-marketing-hero-section {
+  padding-top: var(--space-hero-top);
+  padding-bottom: var(--space-hero-bottom);
+}
+
+.nn-stack-hero-heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nn-rhythm-heading-sub);
+}
+
+/* Hero primary + secondary CTAs: mobile stack, desktop row (same gap token) */
+.nn-hero-cta-row {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--nn-rhythm-btn-group-gap);
+}
+@media (min-width: 640px) {
+  .nn-hero-cta-row {
+    flex-direction: row;
+    align-items: center;
+    gap: calc(var(--nn-rhythm-btn-group-gap) + 0.25rem);
+  }
+}
+
+/* Final marketing CTAs: stack on mobile, centered row + wrap on sm+ */
+.nn-final-cta-row {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--nn-rhythm-btn-group-gap);
+}
+@media (min-width: 640px) {
+  .nn-final-cta-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: calc(var(--nn-rhythm-btn-group-gap) + 0.25rem);
+  }
 }
 
 /* Exam-style sessions: hide main learner chrome (nav, adaptive strip) — see LearnerExamChromeGate. */

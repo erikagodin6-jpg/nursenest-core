@@ -12,6 +12,8 @@ type CardPayload = {
   front: string;
   back: string;
   fullBackAvailable: boolean;
+  /** Optional teaching line from locale overlay (`educational-overlays/<locale>/flashcards.json`). */
+  explanation?: string;
   topic?: string;
   subtopic?: string | null;
 };
@@ -279,6 +281,11 @@ export function FlashcardStudyClient({
               <p className="mt-4 whitespace-pre-wrap text-base leading-relaxed text-[var(--theme-heading-text)]">
                 {flipped ? current.back : current.front}
               </p>
+              {flipped && current.explanation ? (
+                <p className="mt-4 border-t border-[var(--theme-card-border)] pt-4 text-sm leading-relaxed text-[var(--theme-muted-text)]">
+                  {current.explanation}
+                </p>
+              ) : null}
               <p className="mt-6 text-center text-xs text-[var(--theme-muted-text)]">Tap to flip</p>
             </div>
           </button>
@@ -299,6 +306,11 @@ export function FlashcardStudyClient({
             <p className="mt-4 whitespace-pre-wrap text-base leading-relaxed text-[var(--theme-heading-text)]">
               {flipped ? current.back : current.front}
             </p>
+            {flipped && current.explanation ? (
+              <p className="mt-4 border-t border-[var(--theme-card-border)] pt-4 text-sm leading-relaxed text-[var(--theme-muted-text)]">
+                {current.explanation}
+              </p>
+            ) : null}
             <p className="mt-6 text-center text-xs text-[var(--theme-muted-text)]">Tap to flip</p>
           </div>
         </button>

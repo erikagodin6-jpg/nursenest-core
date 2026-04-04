@@ -112,6 +112,7 @@ export async function GET(req: NextRequest, { params }: Props) {
             fullBackAvailable: false,
             topic: c.category.name,
             subtopic: c.category.topicCode,
+            ...(loc.explanation ? { explanation: loc.explanation } : {}),
           };
         }),
         session: null,
@@ -240,6 +241,7 @@ export async function GET(req: NextRequest, { params }: Props) {
           fullBackAvailable: true,
           topic: c.category.name,
           subtopic: c.category.topicCode,
+          ...(loc.explanation ? { explanation: loc.explanation } : {}),
         };
       }),
       session: {

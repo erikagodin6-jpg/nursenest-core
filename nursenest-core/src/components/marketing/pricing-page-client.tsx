@@ -311,21 +311,27 @@ export function PricingPageClient({
   );
 
   return (
-    <main className="mx-auto w-full max-w-6xl nn-marketing-x nn-rhythm-page">
-      <header className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--nn-presentation-wash)] pb-8 sm:pb-9">
-        <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("pages.pricing.title")}</p>
-        <h1 className="mt-2 text-balance text-3xl font-bold leading-tight text-[var(--theme-heading-text)] sm:text-4xl">
-          {heading}
-        </h1>
-        <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">{heroSub}</p>
-        <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{intro}</p>
+    <main className="mx-auto w-full max-w-6xl nn-marketing-x pb-[var(--nn-rhythm-page-y)] pt-0">
+      <header className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--nn-presentation-wash)] px-5 pb-[var(--space-hero-bottom)] pt-6 sm:px-7 sm:pt-7">
+        <div className="nn-stack-hero-heading">
+          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("pages.pricing.title")}</p>
+          <h1 className="text-balance text-3xl font-bold leading-tight text-[var(--theme-heading-text)] sm:text-4xl">
+            {heading}
+          </h1>
+        </div>
+        <div className="nn-stack-hero-heading mt-[var(--nn-rhythm-text-to-cta)] max-w-2xl">
+          <p className="text-base leading-relaxed text-muted-foreground">{heroSub}</p>
+          <p className="text-sm text-muted-foreground">{intro}</p>
+        </div>
 
-        <p className="mt-4 text-sm text-[var(--theme-body-text)]">{t("pages.pricing.hero.trustLine")}</p>
-        <p className="mt-2 inline-flex rounded-full border border-[var(--border-subtle)] bg-[var(--bg-inset)] px-3 py-1 text-xs font-medium text-[var(--theme-body-text)]">
+        <p className="mt-[var(--nn-rhythm-text-to-cta)] text-sm text-[var(--theme-body-text)]">
+          {t("pages.pricing.hero.trustLine")}
+        </p>
+        <p className="mt-2 inline-flex rounded-full border border-[var(--border-subtle)] bg-[var(--nn-presentation-badge)] px-3 py-1 text-xs font-medium text-[var(--theme-body-text)]">
           {t("pages.pricing.hero.choicePill")}
         </p>
 
-        <div className="mt-5 flex flex-col gap-2.5 sm:mt-6 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
+        <div className="nn-hero-cta-row mt-[var(--nn-rhythm-text-to-cta)] flex-wrap sm:items-start">
           <Link
             href={tryQuestionsHref}
             className="nn-btn-primary inline-flex min-h-[48px] items-center justify-center px-6 py-3 text-sm font-semibold transition"
@@ -341,7 +347,7 @@ export function PricingPageClient({
         <p className="mt-2 text-xs text-muted-foreground">{t("pages.pricing.hero.regionHint")}</p>
       </header>
 
-      <section className="mt-10 rounded-2xl border border-[var(--border-subtle,var(--theme-card-border))] bg-[var(--nn-presentation-panel)] p-5 sm:mt-12 sm:p-6 shadow-[var(--shadow-card)]">
+      <section className="mt-[var(--nn-rhythm-section-y)] rounded-2xl border border-[var(--border-subtle,var(--theme-card-border))] bg-[var(--nn-presentation-panel)] p-5 sm:p-6 shadow-[var(--shadow-card)]">
         <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">{t("pages.pricing.proof.title")}</h2>
         <ul className="mt-4 space-y-3 text-sm leading-relaxed text-[var(--theme-body-text)]">
           <li className="flex gap-2">

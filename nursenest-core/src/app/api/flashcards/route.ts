@@ -5,6 +5,8 @@ import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { logLargeApiResponse } from "@/lib/observability/perf-log";
+import { applyFlashcardCardOverlay } from "@/lib/i18n/educational-content-overlay";
+import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
@@ -72,6 +74,8 @@ export async function GET(req: NextRequest) {
 
   setSentryServerContext({ route: "/api/flashcards", feature: SERVER_FEATURE.flashcard, userId: gate.userId });
 
+  const educationalLocale = getMarketingLocaleFromRequestCookie(req);
+
   if (!isDatabaseUrlConfigured()) {
     return NextResponse.json({
       page,
@@ -107,12 +111,22 @@ export async function GET(req: NextRequest) {
 
     const pageCount = Math.max(1, Math.ceil(total / pageSize));
 
+    const localized = flashcards.map((c) => {
+      const loc = applyFlashcardCardOverlay({ id: c.id, front: c.front, back: c.back }, educationalLocale);
+      return {
+        ...c,
+        front: loc.front,
+        back: loc.back,
+        ...(loc.explanation ? { explanation: loc.explanation } : {}),
+      };
+    });
+
     const body = {
       page,
       pageSize,
       total,
       pageCount,
-      flashcards,
+      flashcards: localized,
       mode: "subscriber" as const,
     };
     logLargeApiResponse("/api/flashcards", estimateJsonUtf8Bytes(body));

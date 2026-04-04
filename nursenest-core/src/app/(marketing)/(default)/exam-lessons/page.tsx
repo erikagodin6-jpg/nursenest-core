@@ -68,34 +68,38 @@ export default async function ExamLessonsIndexPage() {
     slug === "canada" ? t("pages.pricing.country.ca") : t("pages.pricing.country.us");
 
   return (
-    <div className="mx-auto max-w-3xl nn-marketing-x nn-rhythm-page">
+    <div className="mx-auto flex max-w-3xl flex-col gap-[var(--nn-rhythm-section-y)] nn-marketing-x nn-rhythm-page">
       <BreadcrumbJsonLd items={schemaItems} />
-      <div className="mb-5">
+      <div>
         <BreadcrumbTrail items={crumbs} />
       </div>
-      <h1 className="text-3xl font-extrabold text-[var(--theme-heading-text)]">{t("pages.examLessons.h1")}</h1>
-      <p className="mt-3 text-[var(--theme-muted-text)]">{t("pages.examLessons.intro")}</p>
-      <div className="mt-5 flex flex-wrap gap-3 sm:mt-6">
-        <Link
-          href={withMarketingLocale(locale, "/pricing")}
-          className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:brightness-110"
-        >
-          {t("pages.examLessons.ctaPricing")}
-        </Link>
-        <Link
-          href={withMarketingLocale(locale, "/blog")}
-          className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] px-5 py-2.5 text-sm font-semibold text-[var(--theme-heading-text)] hover:border-primary/40"
-        >
-          {t("pages.examLessons.ctaBlog")}
-        </Link>
-        <Link
-          href={withMarketingLocale(locale, "/tools")}
-          className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-primary/30 px-5 py-2.5 text-sm font-semibold text-primary hover:bg-primary/5"
-        >
-          {t("pages.examLessons.ctaTools")}
-        </Link>
+      <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--nn-presentation-wash)] p-5 sm:p-6">
+        <div className="nn-stack-hero-heading">
+          <h1 className="text-3xl font-extrabold text-[var(--theme-heading-text)]">{t("pages.examLessons.h1")}</h1>
+          <p className="text-[var(--theme-muted-text)]">{t("pages.examLessons.intro")}</p>
+        </div>
+        <div className="nn-hero-cta-row mt-[var(--nn-rhythm-text-to-cta)] flex-wrap">
+          <Link
+            href={withMarketingLocale(locale, "/pricing")}
+            className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:brightness-110"
+          >
+            {t("pages.examLessons.ctaPricing")}
+          </Link>
+          <Link
+            href={withMarketingLocale(locale, "/blog")}
+            className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] px-5 py-2.5 text-sm font-semibold text-[var(--theme-heading-text)] hover:border-primary/40"
+          >
+            {t("pages.examLessons.ctaBlog")}
+          </Link>
+          <Link
+            href={withMarketingLocale(locale, "/tools")}
+            className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-primary/30 px-5 py-2.5 text-sm font-semibold text-primary hover:bg-primary/5"
+          >
+            {t("pages.examLessons.ctaTools")}
+          </Link>
+        </div>
       </div>
-      <ul className="mt-7 space-y-3 sm:mt-8">
+      <ul className="flex flex-col gap-3 sm:gap-[var(--nn-rhythm-card-grid-gap)]">
         {rows.map((p) => (
           <li key={p.id} className="nn-card p-4">
             <p className="text-xs font-semibold uppercase text-primary">

@@ -23,6 +23,7 @@
     "i18n:nav-parity-audit": "node scripts/nav-i18n-parity.mjs audit",
     "i18n:nav-parity-fill": "node scripts/nav-i18n-parity.mjs fill",
     "i18n:nav-parity-verify": "node scripts/nav-i18n-parity.mjs verify",
+    "i18n:validate-nav": "node scripts/validate-nav-i18n.mjs",
     "db:generate": "prisma generate",
     "db:deploy": "prisma migrate deploy",
     "db:validate": "prisma validate",

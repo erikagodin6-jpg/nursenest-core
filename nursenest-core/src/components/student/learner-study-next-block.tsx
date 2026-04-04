@@ -4,7 +4,7 @@ import type { LearnerStudyNextBlockModel } from "@/lib/learner/load-learner-stud
 
 export function LearnerStudyNextBlock({ model }: { model: LearnerStudyNextBlockModel }) {
   return (
-    <div className="flex flex-col gap-3 rounded-xl border border-primary/15 bg-gradient-to-r from-primary/[0.06] to-transparent px-4 py-3 text-sm">
+    <div className="flex flex-col gap-3 rounded-xl border border-[var(--nn-presentation-divider)] bg-[var(--nn-presentation-wash)] px-4 py-3 text-sm shadow-[0_1px_0_color-mix(in_srgb,var(--theme-heading-text)_4%,transparent)]">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex min-w-0 flex-1 items-start gap-2">
           <CalendarClock className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
@@ -22,7 +22,7 @@ export function LearnerStudyNextBlock({ model }: { model: LearnerStudyNextBlockM
 
       <div className="border-t border-border/50 pt-3">
         <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Study next</p>
-        <div className="mt-2 rounded-lg border border-border/60 bg-card/80 p-3">
+        <div className="mt-2 rounded-lg border border-[var(--border-subtle)] bg-[var(--nn-presentation-badge)] p-3">
           <Link
             href={model.primary.href}
             className="text-sm font-semibold text-foreground underline-offset-2 hover:underline"

@@ -1,4 +1,5 @@
 import { marketingAssetUrl } from "@/lib/legacy-marketing-routes";
+import { getExamPathwayHeroItems } from "@/lib/marketing/country-exam-offerings";
 import {
   ALLIED,
   HUB,
@@ -178,17 +179,11 @@ export function buildHeroGatewayClusters(region: NursenestMarketingRegion): Hero
 export type HeroQuickEntryItem = { labelKey: string; href: string };
 
 export function heroQuickEntryLinks(region: NursenestMarketingRegion): HeroQuickEntryItem[] {
-  const isUs = region === "US";
-  return [
-    { labelKey: "home.quickEntry.rnQuestions", href: rnQuestions(region) },
-    { labelKey: isUs ? "home.quickEntry.pnQuestionsUS" : "home.quickEntry.pnQuestionsCA", href: pnQuestions(region) },
-    { labelKey: isUs ? "home.quickEntry.npQuestionsUS" : "home.quickEntry.npQuestionsCA", href: npNpQuestionsForRegion(region) },
-    { labelKey: isUs ? "home.quickEntry.alliedUS" : "home.quickEntry.alliedCA", href: alliedQuestions(region) },
-    { labelKey: "home.quickEntry.studyTools", href: HUB.tools },
-  ];
+  const pathway = getExamPathwayHeroItems(region).map(({ labelKey, href }) => ({ labelKey, href }));
+  return [...pathway, { labelKey: "home.quickEntry.studyTools", href: HUB.tools }];
 }
 
-/** Hero pathway row only: RN / PN / NP / Allied — one clear entry path (study tools elsewhere). */
+/** Hero pathway row only: RN / PN / NP / Allied — same order as header strip (`getExamPathwayHeroItems`). */
 export function heroPathwayEntryLinks(region: NursenestMarketingRegion): HeroQuickEntryItem[] {
-  return heroQuickEntryLinks(region).filter((item) => item.labelKey !== "home.quickEntry.studyTools");
+  return getExamPathwayHeroItems(region).map(({ labelKey, href }) => ({ labelKey, href }));
 }

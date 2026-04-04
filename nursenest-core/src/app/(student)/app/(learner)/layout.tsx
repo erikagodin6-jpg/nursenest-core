@@ -53,7 +53,7 @@ export default async function LearnerShellLayout({ children }: { children: React
       <LearnerExamChromeGate>
         <div className="mx-auto w-full max-w-6xl px-4 py-[var(--nn-rhythm-shell-y)] sm:px-6">
           <LearnerAppSectionAnalytics />
-          <header className="nn-learner-exam-chrome-target nn-card mb-5 flex flex-col gap-3 rounded-2xl p-4 sm:gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <header className="nn-learner-exam-chrome-target nn-card mb-[var(--nn-rhythm-tight-y)] flex flex-col gap-3 rounded-2xl p-4 sm:gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex min-w-0 flex-wrap items-center gap-4">
               <LearnerShellBrandHomeLink />
               <LearnerShellPrimaryNav />
@@ -65,7 +65,7 @@ export default async function LearnerShellLayout({ children }: { children: React
             </div>
           </header>
           {studyNextBlock ? (
-            <div className="nn-learner-exam-chrome-dim mb-4">
+            <div className="nn-learner-exam-chrome-dim mb-[var(--nn-rhythm-tight-y)]">
               <LearnerStudyNextBlock model={studyNextBlock} />
             </div>
           ) : null}

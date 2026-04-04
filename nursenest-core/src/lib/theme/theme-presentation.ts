@@ -22,4 +22,12 @@ export const THEME_RHYTHM_CSS_VARS = [
   "--nn-rhythm-hero-gap",
   "--nn-rhythm-footer-y",
   "--nn-rhythm-shell-y",
+  "--nn-rhythm-heading-sub",
+  "--nn-rhythm-text-to-cta",
+  "--nn-rhythm-btn-group-gap",
+  "--nn-rhythm-card-grid-gap",
+  "--nn-rhythm-mobile-section-y",
+  "--space-hero-top",
+  "--space-hero-bottom",
+  "--space-block",
 ] as const;
