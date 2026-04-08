@@ -1,8 +1,6 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
-import { Menu } from "lucide-react";
 import { AdminSidebarNav } from "@/components/admin/admin-sidebar-nav";
 
 export function AdminShell({
@@ -18,30 +16,12 @@ export function AdminShell({
   pendingAiHint?: number;
   userLabel?: string | null;
 }) {
-  const [menuOpen, setMenuOpen] = useState(false);
-
   return (
     <div className="flex min-h-screen bg-[var(--theme-page-bg)]">
-      <AdminSidebarNav
-        id="admin-sidebar"
-        open={menuOpen}
-        onClose={() => setMenuOpen(false)}
-        queuedBlogHint={queuedBlogHint}
-        pendingAiHint={pendingAiHint}
-      />
+      <AdminSidebarNav queuedBlogHint={queuedBlogHint} pendingAiHint={pendingAiHint} />
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="sticky top-0 z-30 flex h-14 items-center justify-between gap-3 border-b border-border/80 bg-[var(--theme-card-bg)]/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-[var(--theme-card-bg)]/80 lg:h-16 lg:px-6">
           <div className="flex items-center gap-3">
-            <button
-              type="button"
-              className="inline-flex items-center gap-2 rounded-lg border border-border bg-muted/30 px-3 py-2 text-sm font-medium text-foreground hover:bg-muted/50 lg:hidden"
-              aria-expanded={menuOpen}
-              aria-controls="admin-sidebar"
-              onClick={() => setMenuOpen(true)}
-            >
-              <Menu className="h-4 w-4 shrink-0" aria-hidden />
-              Menu
-            </button>
             <div className="hidden min-w-0 lg:block">
               <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Console</p>
               <p className="truncate text-sm font-semibold text-[var(--theme-heading-text)]">Operational control center</p>

@@ -7,6 +7,8 @@ import {
 } from "@/lib/exam-pathways/exam-product-registry";
 import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
 import { auth } from "@/lib/auth";
+import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
+import { countPathwayLessons } from "@/lib/lessons/pathway-lesson-loader";
 import { loadNpCanadaInventoryGate } from "@/lib/np/np-pathway-inventory-gate";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
@@ -55,14 +57,20 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
   if (!pathway) notFound();
   const session = await auth();
   const isSignedIn = Boolean(session?.user);
-  const npInventory = pathway.id === "ca-np-cnple" ? await loadNpCanadaInventoryGate() : null;
   const npPracticeSeo = getNpPracticeTestLandingCopy(locale, slug, examCode) ?? null;
   const marketingHubPath = `/${locale}/${slug}/${examCode}`;
+  const [npInventory, questionSnapshot, pathwayLessonCount] = await Promise.all([
+    pathway.id === "ca-np-cnple" ? loadNpCanadaInventoryGate() : Promise.resolve(null),
+    loadPathwayQuestionBankSnapshot(pathway.id),
+    countPathwayLessons(pathway.id),
+  ]);
   return (
     <ExamPathwayHub
       pathway={pathway}
       isSignedIn={isSignedIn}
       npInventory={npInventory}
+      questionSnapshot={questionSnapshot}
+      pathwayLessonCount={pathwayLessonCount}
       heroTitle={npPracticeSeo?.heroTitle}
       heroLead={npPracticeSeo?.heroLead}
       emphasizeCatPracticeTests={Boolean(npPracticeSeo)}

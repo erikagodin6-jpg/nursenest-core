@@ -5,7 +5,7 @@ import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage, type PageEntitlementResult } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { loadPremiumDashboardSnapshot, type PremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
-import { loadUnifiedTopicPerformance, type UnifiedTopicPerformance } from "@/lib/learner/topic-performance";
+import { loadUnifiedTopicPerformance, type TopicPerformanceSnapshot } from "@/lib/learner/topic-performance";
 
 export type AccountHubUserRow = {
   email: string | null;
@@ -32,7 +32,7 @@ export type AccountHubBundle = {
   subscription: AccountHubSubscriptionRow;
   entitlement: PageEntitlementResult;
   premiumSnapshot: PremiumDashboardSnapshot | null;
-  topicPerf: UnifiedTopicPerformance | null;
+  topicPerf: TopicPerformanceSnapshot | null;
 };
 
 export async function loadAccountHubBundle(userId: string): Promise<AccountHubBundle | null> {
@@ -68,7 +68,7 @@ export async function loadAccountHubBundle(userId: string): Promise<AccountHubBu
   const entitlement = await resolveEntitlementForPage(userId);
 
   let premiumSnapshot: PremiumDashboardSnapshot | null = null;
-  let topicPerf: UnifiedTopicPerformance | null = null;
+  let topicPerf: TopicPerformanceSnapshot | null = null;
 
   if (entitlement !== "error" && entitlement.hasAccess) {
     try {

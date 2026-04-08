@@ -4,6 +4,8 @@ import { ArrowRight, ChevronDown } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
+import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
+import { defaultNursingExamMarketingHub } from "@/lib/marketing/marketing-exam-navigation";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { MARKETING_PRIMARY_CTA_CLASS, MARKETING_TERTIARY_LINK_CLASS } from "@/lib/theme/marketing-hero-pattern";
@@ -25,6 +27,7 @@ const SECTION_Y = "py-9 md:py-12";
  */
 export function HomeLandingSections({ questionCount }: Props) {
   const { t, locale } = useMarketingI18n();
+  const { region } = useNursenestRegion();
   const loc = (path: string) => withMarketingLocale(locale, path);
   const qFormatted = formatQCount(questionCount, locale);
 
@@ -99,9 +102,9 @@ export function HomeLandingSections({ questionCount }: Props) {
               <ArrowRight className="ml-2 h-5 w-5 shrink-0" aria-hidden />
             </MarketingTrackedLink>
             <MarketingTrackedLink
-              href={loc(HUB.questionBank)}
+              href={loc(defaultNursingExamMarketingHub(region))}
               event={PH.marketingHomeFinalCta}
-              eventProps={{ choice: "browse_bank_landing" }}
+              eventProps={{ choice: "exam_hub_rn_landing", region }}
               className={MARKETING_TERTIARY_LINK_CLASS}
             >
               {t("home.landing.final.closingCtaLink")}

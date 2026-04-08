@@ -98,6 +98,28 @@ export function readQuestionPerformanceSample(userId: string, max = 50): Questio
   }
 }
 
+/** Newest-first window of stored performance events (cap avoids huge parses). */
+export function readQuestionPerformanceEvents(userId: string, max = 220): QuestionPerformanceEventV1[] {
+  return readQuestionPerformanceSample(userId, max);
+}
+
+/**
+ * Question IDs the learner has answered incorrectly at least once (from local history).
+ * Used to scope “mistakes only” practice; server still enforces entitlements.
+ */
+export function questionIdsWithIncorrectAttempts(
+  events: QuestionPerformanceEventV1[],
+  maxIds = 200,
+): string[] {
+  const wrong = new Set<string>();
+  for (const ev of events) {
+    if (ev.correct) continue;
+    const id = ev.questionId?.trim();
+    if (id && id.length >= 8 && id.length <= 64) wrong.add(id);
+  }
+  return [...wrong].slice(0, maxIds);
+}
+
 /**
  * Build weak-area ranking from local performance events (newest-biased).
  * Pure function so both client and server pathways can reuse it safely.

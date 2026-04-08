@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { MarketingPublicStudyLanding } from "@/components/marketing/marketing-public-study-landing";
+import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { loginCallbackDefaultRnCatStart, marketingExamHubPath } from "@/lib/marketing/marketing-exam-navigation";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
@@ -14,10 +16,12 @@ export async function PracticeExamsHubContent({ locale }: Props) {
   const m = await loadMarketingMessages(locale);
   const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
   const t = (key: string, params?: Record<string, string | number>) => formatMarketingMessage(m, key, params, en);
+  const marketingRegion = await getMarketingRegionFromCookies();
 
   const appExams = loginWithCallback("/app/exams");
-  const appPracticeTests = loginWithCallback("/app/practice-tests");
+  const appCatStartRn = loginCallbackDefaultRnCatStart(marketingRegion);
   const practiceExamsPath = withMarketingLocale(locale, "/practice-exams");
+  const rnExamHub = withMarketingLocale(locale, marketingExamHubPath(marketingRegion, "rn"));
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-[var(--nn-rhythm-section-y)] nn-marketing-x nn-rhythm-page">
@@ -44,7 +48,7 @@ export async function PracticeExamsHubContent({ locale }: Props) {
         intro={t("pages.publicPracticeExams.intro")}
         primaryCta={{ href: appExams, label: t("pages.publicPracticeExams.ctaPrimary") }}
         secondaryCta={{
-          href: withMarketingLocale(locale, "/question-bank"),
+          href: rnExamHub,
           label: t("pages.publicPracticeExams.ctaSecondaryQuestions"),
         }}
       />
@@ -64,7 +68,7 @@ export async function PracticeExamsHubContent({ locale }: Props) {
           {t("pages.publicPracticeExams.catP1")}
           <strong className="font-semibold text-[var(--theme-heading-text)]">{t("pages.publicPracticeExams.catP1Strong")}</strong>
           {t("pages.publicPracticeExams.catP2")}
-          <Link href={appPracticeTests} className="font-semibold text-primary underline">
+          <Link href={appCatStartRn} className="font-semibold text-primary underline">
             {t("pages.publicPracticeExams.catLinkPracticeTests")}
           </Link>
           {t("pages.publicPracticeExams.catP3")}

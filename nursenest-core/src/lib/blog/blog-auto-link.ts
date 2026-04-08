@@ -4,11 +4,11 @@
  */
 
 const DEFAULT_LINKS: Array<{ pattern: RegExp; href: string }> = [
-  { pattern: /\bNCLEX-RN\b/g, href: "/nclex-rn-practice-questions" },
-  { pattern: /\bNCLEX-PN\b/g, href: "/nclex-pn-practice-questions" },
-  { pattern: /\bREx-PN\b/g, href: "/rex-pn-practice-questions" },
+  { pattern: /\bNCLEX-RN\b/g, href: "/us/rn/nclex-rn" },
+  { pattern: /\bNCLEX-PN\b/g, href: "/us/lpn/nclex-pn" },
+  { pattern: /\bREx-PN\b/g, href: "/canada/rpn/rex-pn" },
   { pattern: /\bexam lesson(s)?\b/gi, href: "/lessons" },
-  { pattern: /\bpractice question(s)?\b/gi, href: "/nclex-rn-practice-questions" },
+  { pattern: /\bpractice question(s)?\b/gi, href: "/us/rn/nclex-rn" },
   { pattern: /\bstudy plan\b/gi, href: "/app/study-plan" },
   { pattern: /\bfree tools?\b/gi, href: "/tools" },
 ];

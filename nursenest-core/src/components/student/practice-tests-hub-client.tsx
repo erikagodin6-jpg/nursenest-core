@@ -92,6 +92,14 @@ export function PracticeTestsHubClient({
   }
 
   useEffect(() => {
+    const pid = searchParams.get("pathwayId");
+    if (pid && pathwayOptions.some((p) => p.id === pid)) {
+      setPathwayId(pid);
+    }
+    const cat = searchParams.get("cat");
+    if (cat === "1" || cat === "true") {
+      setSelectionMode("cat");
+    }
     if (searchParams.get("focus") !== "weak") return;
     setSelectionMode((prev) => {
       if (prev === "cat") {
@@ -100,7 +108,13 @@ export function PracticeTestsHubClient({
       }
       return "weak";
     });
-  }, [searchParams]);
+  }, [searchParams, pathwayOptions]);
+
+  useEffect(() => {
+    const pid = searchParams.get("pathwayId")?.trim();
+    if (!pid || !pathwayOptions.some((p) => p.id === pid)) return;
+    setPathwayId(pid);
+  }, [searchParams, pathwayOptions]);
 
   useEffect(() => {
     let cancelled = false;

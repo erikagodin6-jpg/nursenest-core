@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { PathwayHubSupplementaryDisclosure } from "@/components/pathway-lessons/pathway-hub-supplementary-disclosure";
 import { PathwayNclexScalableLessonSection } from "@/components/pathway-lessons/pathway-nclex-scalable-lesson-list";
 import { PathwayTopicClusterNav } from "@/components/pathway-lessons/pathway-topic-cluster-nav";
 import {
@@ -15,6 +16,8 @@ import {
 } from "@/lib/lessons/nclex-rn-us-lesson-enrichment";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import type { TopicCluster } from "@/lib/lessons/pathway-lesson-loader";
+import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
+import { PathwayLessonProgressBadge } from "@/components/lessons/pathway-lesson-progress-badge";
 
 type Props = {
   pathway: ExamPathwayDefinition;
@@ -22,6 +25,7 @@ type Props = {
   lessonsBasePath: string;
   topicClusters: TopicCluster[];
   region: NclexRnHubRegion;
+  progressMap?: Record<string, PathwayLessonProgressStatus>;
 };
 
 function appQuestionsHref(pathwayId: string, topic?: string): string {
@@ -31,7 +35,7 @@ function appQuestionsHref(pathwayId: string, topic?: string): string {
   return `/app/questions?${q.toString()}`;
 }
 
-export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters, region }: Props) {
+export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters, region, progressMap = {} }: Props) {
   const isCa = region === "ca";
   const isUsRn = region === "us";
   const safeLessons = lessons.filter(pathwayLessonHasRenderableHubSlug);
@@ -135,7 +139,12 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
       {/* Featured + category sections */}
       {featured && featured.slug?.trim() && featuredPreview && (
         <section className="rounded-2xl border-2 border-primary/25 bg-gradient-to-b from-card to-[var(--theme-muted-surface)] p-5 sm:p-7">
-          <p className="text-xs font-semibold uppercase tracking-wide text-primary">Featured lesson</p>
+          <div className="flex flex-wrap items-start justify-between gap-2">
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary">Featured lesson</p>
+            {Object.keys(progressMap).length > 0 ? (
+              <PathwayLessonProgressBadge status={progressMap[featured.slug] ?? "not_started"} />
+            ) : null}
+          </div>
           <h3 className="mt-2 text-xl font-bold text-[var(--theme-heading-text)]">{featured.title}</h3>
           <div className="mt-4 grid gap-3 border-t border-border pt-4 text-sm sm:grid-cols-2">
             <div>
@@ -190,9 +199,15 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
           featuredSlug={featured?.slug}
           variant="rn"
           rnRegion={region}
+          progressMap={progressMap}
         />
       ))}
 
+      <PathwayHubSupplementaryDisclosure
+        summary="Clinical judgment, study loops, sample items & next steps"
+        hint="Expand for deeper guidance after you finish browsing lessons on this page."
+        className="mt-2"
+      >
       {/* Clinical judgment */}
       <section className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-sm" aria-labelledby="cj-nclex-rn">
         <h2 id="cj-nclex-rn" className="text-lg font-bold text-[var(--theme-heading-text)]">
@@ -376,6 +391,7 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
           </Link>
         </p>
       </section>
+      </PathwayHubSupplementaryDisclosure>
     </div>
   );
 }

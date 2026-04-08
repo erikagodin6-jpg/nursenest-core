@@ -66,10 +66,16 @@ export default async function AdminBlogHubPage() {
 
       <section className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Link
+          href="/admin/blog/control-panel"
+          className="rounded-xl border border-primary/35 bg-gradient-to-br from-primary/15 to-emerald-500/10 p-6 text-center font-semibold text-primary hover:bg-primary/20"
+        >
+          AI control panel →
+        </Link>
+        <Link
           href="/admin/blog/generate"
           className="rounded-xl border border-primary/30 bg-primary/10 p-6 text-center font-semibold text-primary hover:bg-primary/15"
         >
-          Blog generator →
+          Legacy generator →
         </Link>
         <Link
           href="/admin/blog/campaigns"

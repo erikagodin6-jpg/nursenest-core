@@ -7,6 +7,8 @@ import { PremiumLessonPublishNotice } from "@/components/lessons/premium-lesson-
 import { PathwayLessonQuizzes } from "@/components/lessons/pathway-lesson-quizzes";
 import { PathwayLessonLockedSectionsPreview } from "@/components/lessons/pathway-lesson-locked-sections-preview";
 import { PathwayLessonActions } from "@/components/lessons/pathway-lesson-actions";
+import { PathwayLessonProgressBadgeLive } from "@/components/lessons/pathway-lesson-progress-badge-live";
+import { PathwayLessonProgressTracker } from "@/components/lessons/pathway-lesson-progress-tracker";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { buildExamPathwayPath, resolveExamPathwayFromMarketingHubSegment } from "@/lib/exam-pathways/exam-product-registry";
 import { PathwayLessonPreviewBanner } from "@/components/lessons/pathway-lesson-preview-banner";
@@ -42,9 +44,11 @@ import {
   pathwayLessonHasRenderableHubSlug,
   pathwayLessonMarketingDetailHref,
 } from "@/lib/lessons/pathway-lesson-types";
+import {
+  loadPathwayLessonProgressForSlug,
+  type PathwayLessonProgressStatus,
+} from "@/lib/lessons/pathway-lesson-progress";
 import { LessonStructuralQualityNotice } from "@/components/lessons/lesson-structural-quality-notice";
-
-export const dynamic = "force-dynamic";
 
 /** Avoid enumerating every lesson at build (large `.next` output + ENOSPC on small disks). */
 export const dynamicParams = true;
@@ -110,22 +114,27 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
   const pathway = resolveExamPathwayFromMarketingHubSegment(countrySlug, roleTrack, examCode);
   if (!pathway) notFound();
   const lessonContentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
-  const lesson = await getPathwayLesson(pathway.id, lessonSlug, lessonContentLocale);
+
+  const [lesson, session] = await Promise.all([
+    getPathwayLesson(pathway.id, lessonSlug, lessonContentLocale),
+    auth(),
+  ]);
   if (!lesson) notFound();
 
-  const session = await auth();
   const userId = (session?.user as { id?: string })?.id ?? "";
-  const entitlement = await resolveEntitlementForPage(userId);
 
-  let learnerPath: string | null = null;
-  if (userId && isDatabaseUrlConfigured()) {
-    try {
-      const u = await prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } });
-      learnerPath = u?.learnerPath ?? null;
-    } catch {
-      learnerPath = null;
-    }
-  }
+  const [entitlement, learnerPath] = await Promise.all([
+    resolveEntitlementForPage(userId),
+    (async (): Promise<string | null> => {
+      if (!userId || !isDatabaseUrlConfigured()) return null;
+      try {
+        const u = await prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } });
+        return u?.learnerPath ?? null;
+      } catch {
+        return null;
+      }
+    })(),
+  ]);
 
   const scope =
     entitlement === "error"
@@ -134,12 +143,19 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
 
   const fullAccess = canViewFullPathwayLesson(scope, pathway, learnerPath);
   const visible = visibleSectionsForLesson(lesson, fullAccess);
-  const lockedSections =
-    !fullAccess && lesson.sections.length > visible.length ? lesson.sections.slice(visible.length) : [];
 
   const hubBase = `/${countrySlug}/${roleTrack}/${examCode}`;
   const base = `${hubBase}/lessons`;
-  const relatedRaw = await getRelatedPathwayLessons(pathway.id, lesson.topicSlug, lesson.slug, undefined, lessonContentLocale);
+
+  const [lessonProgress, relatedRaw] = await Promise.all([
+    userId && fullAccess
+      ? loadPathwayLessonProgressForSlug(userId, pathway.id, lesson.slug)
+      : Promise.resolve<PathwayLessonProgressStatus>("not_started"),
+    getRelatedPathwayLessons(pathway.id, lesson.topicSlug, lesson.slug, undefined, lessonContentLocale),
+  ]);
+
+  const lockedSections =
+    !fullAccess && lesson.sections.length > visible.length ? lesson.sections.slice(visible.length) : [];
   const relatedTopicRows = relatedRaw.filter(pathwayLessonHasRenderableHubSlug);
   const relatedDisplay = mergeRelatedLessonDisplayList(lesson.relatedLessonRefs, relatedTopicRows, RELATED_PATHWAY_LESSONS_LIMIT);
   const { crumbs, schemaItems } = pathwayLessonDetailBreadcrumbs(pathway, lesson.slug, lesson.title);
@@ -163,11 +179,27 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
       <div className="mb-6">
         <BreadcrumbTrail items={crumbs} />
       </div>
+      <PathwayLessonProgressTracker
+        pathwayId={pathway.id}
+        lessonSlug={lesson.slug}
+        enabled={Boolean(userId) && fullAccess}
+        initialProgress={lessonProgress}
+      />
       <Link href={base} className="text-sm font-medium text-primary hover:underline">
         ← Lessons ({pathway.shortName})
       </Link>
       <p className="mt-3 text-xs font-semibold uppercase text-primary">{pathway.displayName}</p>
-      <h1 className="mt-2 text-3xl font-extrabold text-[var(--theme-heading-text)]">{lesson.title}</h1>
+      <div className="mt-2 flex flex-wrap items-start justify-between gap-3">
+        <h1 className="text-3xl font-extrabold text-[var(--theme-heading-text)]">{lesson.title}</h1>
+        {userId && fullAccess ? (
+          <PathwayLessonProgressBadgeLive
+            pathwayId={pathway.id}
+            lessonSlug={lesson.slug}
+            initial={lessonProgress}
+            className="shrink-0"
+          />
+        ) : null}
+      </div>
       <p className="mt-2 text-sm text-muted">
         {pathway.countrySlug === "canada" ? "Canada" : "United States"} · {lesson.topic} · {lesson.bodySystem}
       </p>
@@ -272,6 +304,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
         topicLabel={lesson.topic}
         userId={userId}
         canMarkComplete={fullAccess}
+        initialProgress={lessonProgress}
       />
 
       <p className="mt-6 text-sm text-muted">

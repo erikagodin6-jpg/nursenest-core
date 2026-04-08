@@ -210,6 +210,7 @@ export async function loadPathwayStudySummaries(
     shortLabel: string;
     lessonsTotal: number;
     lessonsCompleted: number;
+    lessonsInProgress: number;
   }[]
 > {
   if (!entitlement.hasAccess || !isDatabaseUrlConfigured()) return [];
@@ -229,6 +230,7 @@ export async function loadPathwayStudySummaries(
     shortLabel: string;
     lessonsTotal: number;
     lessonsCompleted: number;
+    lessonsInProgress: number;
   }[] = [];
 
   for (const p of pathways) {
@@ -238,15 +240,21 @@ export async function loadPathwayStudySummaries(
       },
     });
     const prefix = `pathway:${p.id}:`;
-    const lessonsCompleted = await prisma.progress.count({
-      where: { userId, completed: true, lessonId: { startsWith: prefix } },
-    });
+    const [lessonsCompleted, lessonsInProgress] = await Promise.all([
+      prisma.progress.count({
+        where: { userId, completed: true, lessonId: { startsWith: prefix } },
+      }),
+      prisma.progress.count({
+        where: { userId, completed: false, lessonId: { startsWith: prefix } },
+      }),
+    ]);
     out.push({
       pathwayId: p.id,
       label: p.displayName,
       shortLabel: p.shortName || p.displayName,
       lessonsTotal,
       lessonsCompleted,
+      lessonsInProgress,
     });
   }
 

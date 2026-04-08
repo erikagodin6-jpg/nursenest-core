@@ -47,6 +47,12 @@ import {
   pathwayLessonMarketingDetailHref,
 } from "@/lib/lessons/pathway-lesson-types";
 import { LessonStructuralQualityNotice } from "@/components/lessons/lesson-structural-quality-notice";
+import { PathwayLessonProgressBadgeLive } from "@/components/lessons/pathway-lesson-progress-badge-live";
+import { PathwayLessonProgressTracker } from "@/components/lessons/pathway-lesson-progress-tracker";
+import {
+  loadPathwayLessonProgressForSlug,
+  type PathwayLessonProgressStatus,
+} from "@/lib/lessons/pathway-lesson-progress";
 
 export const revalidate = 86400;
 export const dynamicParams = true;
@@ -135,6 +141,11 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
   const lockedSections =
     !fullAccess && lesson.sections.length > visible.length ? lesson.sections.slice(visible.length) : [];
 
+  const lessonProgress: PathwayLessonProgressStatus =
+    userId && fullAccess
+      ? await loadPathwayLessonProgressForSlug(userId, pathway.id, lesson.slug)
+      : "not_started";
+
   const professionHeroPath = `/allied-health/${prof.segment}`;
   const base = `/allied-health/${prof.professionKey}/lessons`;
   const lessonPath = `${base}/${lesson.slug}`;
@@ -172,11 +183,27 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
       <div className="mb-6">
         <BreadcrumbTrail items={crumbs} />
       </div>
+      <PathwayLessonProgressTracker
+        pathwayId={pathway.id}
+        lessonSlug={lesson.slug}
+        enabled={Boolean(userId) && fullAccess}
+        initialProgress={lessonProgress}
+      />
       <Link href={base} className="text-sm font-medium text-primary hover:underline">
         ← Lessons ({prof.h1})
       </Link>
       <p className="mt-3 text-xs font-semibold uppercase text-primary">{pathway.displayName}</p>
-      <h1 className="mt-2 text-3xl font-extrabold text-[var(--theme-heading-text)]">{lesson.title}</h1>
+      <div className="mt-2 flex flex-wrap items-start justify-between gap-3">
+        <h1 className="text-3xl font-extrabold text-[var(--theme-heading-text)]">{lesson.title}</h1>
+        {userId && fullAccess ? (
+          <PathwayLessonProgressBadgeLive
+            pathwayId={pathway.id}
+            lessonSlug={lesson.slug}
+            initial={lessonProgress}
+            className="shrink-0"
+          />
+        ) : null}
+      </div>
       <p className="mt-2 text-sm text-muted">
         {pathway.countryCode === "CA" ? "Canada" : "United States"} · {lesson.topic} · {lesson.bodySystem}
       </p>
@@ -249,6 +276,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
         topicLabel={lesson.topic}
         userId={userId}
         canMarkComplete={fullAccess}
+        initialProgress={lessonProgress}
       />
 
       <p className="mt-6 text-sm text-muted">

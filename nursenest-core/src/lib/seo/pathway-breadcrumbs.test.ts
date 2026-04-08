@@ -7,6 +7,7 @@ import {
   examLessonsIndexBreadcrumbs,
   pathwayLessonDetailBreadcrumbs,
   pathwayLessonsHubBreadcrumbs,
+  pathwayCatPracticeBreadcrumbs,
   pathwayOverviewBreadcrumbs,
   pathwayPricingBreadcrumbs,
   pathwayQuestionsHubBreadcrumbs,
@@ -76,9 +77,10 @@ test("lessons hub, topic cluster, questions hub, pricing use same second crumb a
   const lessons = pathwayLessonsHubBreadcrumbs(caRn!);
   const topic = pathwayTopicClusterBreadcrumbs(caRn!, "cardio", "Cardiovascular");
   const questions = pathwayQuestionsHubBreadcrumbs(caRn!);
+  const cat = pathwayCatPracticeBreadcrumbs(caRn!);
   const pricing = pathwayPricingBreadcrumbs(caRn!);
 
-  for (const b of [lessons, topic, questions, pricing]) {
+  for (const b of [lessons, topic, questions, cat, pricing]) {
     assert.equal(b.crumbs[1]?.name, overview.crumbs[1]?.name);
     assert.equal(b.crumbs[1]?.href, overview.crumbs[1]?.href);
     assert.equal(b.schemaItems[1]?.name, overview.schemaItems[1]?.name);

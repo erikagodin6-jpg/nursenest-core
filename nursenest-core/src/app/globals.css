@@ -264,6 +264,15 @@ html[data-theme="dark-mode"] {
   .bg-role-cta svg {
     color: var(--color-role-cta-foreground) !important;
   }
+
+  /**
+   * Long marketing hubs: skip layout/paint for off-screen sections when supported
+   * (keeps scrolling smoother on mid/low-end phones).
+   */
+  .nn-content-visibility-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 360px;
+  }
 }
 
 * {

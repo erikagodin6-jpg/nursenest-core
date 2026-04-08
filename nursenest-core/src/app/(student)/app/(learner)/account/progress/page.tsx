@@ -1,13 +1,12 @@
-import Link from "next/link";
 import type { Metadata } from "next";
 import { auth } from "@/lib/auth";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
-import { PremiumLearnerHub } from "@/components/student/premium-learner-hub";
+import { LearnerProgressPageContent } from "@/components/student/learner-progress-page-content";
 import { LockedStudyNextPreview } from "@/components/student/locked-study-next-preview";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
-import { loadAccountHubBundle } from "@/lib/learner/load-account-hub-snapshot";
-import { loadRecentLearnerNotesSummary } from "@/lib/learner/load-recent-learner-notes-summary";
+import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
+import { loadProgressPagePayload } from "@/lib/learner/load-progress-page-payload";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 
@@ -20,10 +19,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function AccountProgressPage() {
-  const { t } = await getLearnerMarketingBundle();
+  const { t, locale } = await getLearnerMarketingBundle();
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id ?? "";
   const crumbs = appAccountBreadcrumbs(t("learner.account.nav.progress"));
+  const localeTag = locale.replace(/_/g, "-");
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
@@ -34,17 +34,7 @@ export default async function AccountProgressPage() {
     );
   }
 
-  const bundle = await loadAccountHubBundle(userId);
-  if (!bundle) {
-    return (
-      <main className="space-y-4">
-        <BreadcrumbTrail items={crumbs} />
-        <p className="text-sm text-muted-foreground">{t("learner.account.loadFailed")}</p>
-      </main>
-    );
-  }
-
-  const { entitlement, premiumSnapshot, topicPerf } = bundle;
+  const entitlement = await resolveEntitlementForPage(userId);
 
   if (entitlement === "error") {
     return (
@@ -55,7 +45,7 @@ export default async function AccountProgressPage() {
     );
   }
 
-  if (!entitlement.hasAccess || !premiumSnapshot) {
+  if (!entitlement.hasAccess) {
     return (
       <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
@@ -69,8 +59,19 @@ export default async function AccountProgressPage() {
     );
   }
 
-  const notes = await loadRecentLearnerNotesSummary(userId);
-  const weakTopicTitles = topicPerf?.weakTopics.map((w) => w.topic) ?? [];
+  const payload = await loadProgressPagePayload(userId, entitlement);
+
+  if (!payload) {
+    return (
+      <main className="space-y-6">
+        <BreadcrumbTrail items={crumbs} />
+        <div>
+          <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.progress.title")}</h1>
+          <p className="mt-2 text-sm text-muted-foreground">{t("learner.account.loadFailed")}</p>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="space-y-6">
@@ -79,12 +80,7 @@ export default async function AccountProgressPage() {
         <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.progress.title")}</h1>
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.account.progress.intro")}</p>
       </div>
-      <PremiumLearnerHub snapshot={premiumSnapshot} weakTopicTitles={weakTopicTitles} recentNotes={notes} />
-      <p className="text-center text-sm text-muted-foreground">
-        <Link href="/app/account/overview" className="font-semibold text-primary underline underline-offset-2">
-          {t("learner.account.progress.backToOverview")}
-        </Link>
-      </p>
+      <LearnerProgressPageContent data={payload} t={t} localeTag={localeTag} />
     </main>
   );
 }

@@ -1,7 +1,16 @@
-import { BlogFunnelStage, BlogImageStatus, BlogPostIntent, BlogPostStatus, BlogWorkflowStatus, Prisma } from "@prisma/client";
+import {
+  BlogFunnelStage,
+  BlogImageStatus,
+  BlogPostIntent,
+  BlogPostStatus,
+  BlogPostTemplate,
+  BlogWorkflowStatus,
+  Prisma,
+} from "@prisma/client";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
+import { stripBrokenOrEmptyImagesFromHtml } from "@/lib/blog/blog-image-workflow";
 import { prisma } from "@/lib/db";
 
 const patchSchema = z.object({
@@ -31,9 +40,75 @@ const patchSchema = z.object({
   postStatus: z.nativeEnum(BlogPostStatus).optional(),
   publishAt: z.string().datetime().nullable().optional(),
   action: z.enum(["publish_now", "unpublish", "schedule", "revert_to_draft"]).optional(),
+  postTemplate: z.nativeEnum(BlogPostTemplate).nullable().optional(),
+  titleAlternates: z.array(z.string().max(220)).max(8).optional(),
+  keyTakeaways: z.array(z.string().max(500)).max(16).optional(),
+  relatedLessonPaths: z.array(z.string().max(500)).max(40).optional(),
+  featuredSnippet: z.string().max(4000).nullable().optional(),
+  metaTitleVariant: z.string().max(220).nullable().optional(),
+  metaDescriptionVariant: z.string().max(500).nullable().optional(),
+  schemaSummary: z.string().max(8000).nullable().optional(),
+  outlineJson: z.unknown().optional(),
+  faqBlock: z.unknown().optional(),
+  internalLinkPlan: z.unknown().optional(),
+  keyQuestions: z.array(z.string().max(400)).max(20).optional(),
 });
 
+const adminBlogPostSelect = {
+  id: true,
+  slug: true,
+  title: true,
+  excerpt: true,
+  body: true,
+  exam: true,
+  postStatus: true,
+  publishAt: true,
+  seoTitle: true,
+  seoDescription: true,
+  targetKeyword: true,
+  keywordCluster: true,
+  countryTarget: true,
+  intent: true,
+  funnelStage: true,
+  postTemplate: true,
+  workflowStatus: true,
+  outlineJson: true,
+  faqBlock: true,
+  internalLinkPlan: true,
+  titleAlternates: true,
+  keyTakeaways: true,
+  relatedLessonPaths: true,
+  schemaSummary: true,
+  metaTitleVariant: true,
+  metaDescriptionVariant: true,
+  featuredSnippet: true,
+  apaReferences: true,
+  tags: true,
+  keyQuestions: true,
+  updatedAt: true,
+  coverImage: true,
+  coverImageAlt: true,
+  coverImageCaption: true,
+  coverImagePrompt: true,
+  imageStatus: true,
+  requiresReferences: true,
+  sourcesJson: true,
+  medicalRiskFlags: true,
+  sourceReliabilityScore: true,
+  category: true,
+} as const;
+
 type Props = { params: Promise<{ id: string }> };
+
+export async function GET(_req: Request, { params }: Props) {
+  const gate = await requireAdmin();
+  if (!gate.ok) return gate.response;
+
+  const { id } = await params;
+  const post = await prisma.blogPost.findUnique({ where: { id }, select: adminBlogPostSelect });
+  if (!post) return NextResponse.json({ error: "Blog post not found" }, { status: 404 });
+  return NextResponse.json({ post });
+}
 
 export async function PATCH(req: Request, { params }: Props) {
   const gate = await requireAdmin();
@@ -49,6 +124,17 @@ export async function PATCH(req: Request, { params }: Props) {
   const where = { id };
   const existing = await prisma.blogPost.findUnique({ where, select: { id: true } });
   if (!existing) return NextResponse.json({ error: "Blog post not found" }, { status: 404 });
+
+  let bodyForUpdate: string | undefined;
+  if (d.action === "publish_now") {
+    const prevBody =
+      d.body ??
+      (await prisma.blogPost.findUnique({ where, select: { body: true } }))?.body ??
+      "";
+    bodyForUpdate = stripBrokenOrEmptyImagesFromHtml(prevBody);
+  } else if (d.body !== undefined) {
+    bodyForUpdate = d.body;
+  }
 
   const now = new Date();
   const actionData =
@@ -68,7 +154,7 @@ export async function PATCH(req: Request, { params }: Props) {
       ...actionData,
       ...(d.title !== undefined ? { title: d.title } : {}),
       ...(d.excerpt !== undefined ? { excerpt: d.excerpt } : {}),
-      ...(d.body !== undefined ? { body: d.body } : {}),
+      ...(bodyForUpdate !== undefined ? { body: bodyForUpdate } : {}),
       ...(d.exam !== undefined ? { exam: d.exam } : {}),
       ...(d.category !== undefined ? { category: d.category } : {}),
       ...(d.tags !== undefined ? { tags: d.tags } : {}),
@@ -93,28 +179,29 @@ export async function PATCH(req: Request, { params }: Props) {
       ...(d.lastReviewedAt !== undefined ? { lastReviewedAt: d.lastReviewedAt ? new Date(d.lastReviewedAt) : null } : {}),
       ...(d.postStatus !== undefined ? { postStatus: d.postStatus } : {}),
       ...(d.publishAt !== undefined ? { publishAt: d.publishAt ? new Date(d.publishAt) : null } : {}),
+      ...(d.postTemplate !== undefined ? { postTemplate: d.postTemplate } : {}),
+      ...(d.titleAlternates !== undefined ? { titleAlternates: d.titleAlternates } : {}),
+      ...(d.keyTakeaways !== undefined ? { keyTakeaways: d.keyTakeaways } : {}),
+      ...(d.relatedLessonPaths !== undefined ? { relatedLessonPaths: d.relatedLessonPaths } : {}),
+      ...(d.featuredSnippet !== undefined ? { featuredSnippet: d.featuredSnippet } : {}),
+      ...(d.metaTitleVariant !== undefined ? { metaTitleVariant: d.metaTitleVariant } : {}),
+      ...(d.metaDescriptionVariant !== undefined ? { metaDescriptionVariant: d.metaDescriptionVariant } : {}),
+      ...(d.schemaSummary !== undefined ? { schemaSummary: d.schemaSummary } : {}),
+      ...(d.keyQuestions !== undefined ? { keyQuestions: d.keyQuestions } : {}),
+      ...(d.outlineJson !== undefined
+        ? { outlineJson: d.outlineJson === null ? Prisma.JsonNull : (d.outlineJson as Prisma.InputJsonValue) }
+        : {}),
+      ...(d.faqBlock !== undefined
+        ? { faqBlock: d.faqBlock === null ? Prisma.JsonNull : (d.faqBlock as Prisma.InputJsonValue) }
+        : {}),
+      ...(d.internalLinkPlan !== undefined
+        ? {
+            internalLinkPlan:
+              d.internalLinkPlan === null ? Prisma.JsonNull : (d.internalLinkPlan as Prisma.InputJsonValue),
+          }
+        : {}),
     },
-    select: {
-      id: true,
-      slug: true,
-      postStatus: true,
-      publishAt: true,
-      updatedAt: true,
-      title: true,
-      excerpt: true,
-      seoTitle: true,
-      seoDescription: true,
-      targetKeyword: true,
-      keywordCluster: true,
-      intent: true,
-      funnelStage: true,
-      workflowStatus: true,
-      coverImage: true,
-      coverImageAlt: true,
-      imageStatus: true,
-      requiresReferences: true,
-      apaReferences: true,
-    },
+    select: adminBlogPostSelect,
   });
 
   return NextResponse.json({ post: updated });

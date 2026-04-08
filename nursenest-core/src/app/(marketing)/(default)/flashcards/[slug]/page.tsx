@@ -7,6 +7,8 @@ import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
+import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
+import { rnQuestions } from "@/lib/marketing/marketing-entry-routes";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
 
@@ -49,6 +51,7 @@ export default async function PublicFlashcardSlugPage({ params }: Props) {
   if (!data) notFound();
 
   const locale = await getMarketingLocaleForDefaultRoute();
+  const marketingRegion = await getMarketingRegionFromCookies();
   const m = await loadMarketingMessages(locale);
   const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
   const t = (key: string, p?: Record<string, string | number>) => formatMarketingMessage(m, key, p, en);
@@ -57,7 +60,7 @@ export default async function PublicFlashcardSlugPage({ params }: Props) {
   const home = withMarketingLocale(locale, "/");
   const flashcardsHub = withMarketingLocale(locale, "/flashcards");
   const lessons = withMarketingLocale(locale, "/lessons");
-  const questionBank = withMarketingLocale(locale, "/question-bank");
+  const pathwayQuestions = withMarketingLocale(locale, rnQuestions(marketingRegion));
   const login = withMarketingLocale(locale, "/login");
 
   return (
@@ -109,7 +112,7 @@ export default async function PublicFlashcardSlugPage({ params }: Props) {
               {t("pages.publicFlashcardSlug.topicIntroLinkLessons")}
             </Link>
             {t("pages.publicFlashcardSlug.topicIntroP2")}
-            <Link href={questionBank} className="font-medium text-primary underline">
+            <Link href={pathwayQuestions} className="font-medium text-primary underline">
               {t("pages.publicFlashcardSlug.topicIntroLinkQuestionBank")}
             </Link>
             {t("pages.publicFlashcardSlug.topicIntroP3")}

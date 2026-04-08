@@ -6,8 +6,10 @@ import type { NpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-
 import { pathwayOverviewBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { pathwayHubFaqSchema } from "@/lib/seo/pathway-hub-faq-schema";
 import { ExamPathwayHubBody } from "@/components/exam-pathways/exam-pathway-hub-body";
+import { PathwayLiveInventoryStrip } from "@/components/exam-pathways/pathway-live-inventory-strip";
 import { NpSeoAliasHubAnalytics } from "@/components/marketing/np-seo-alias-hub-analytics";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import type { PathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import type { NpPathwayInventoryGate } from "@/lib/np/np-pathway-inventory-gate";
 
 export function ExamPathwayHub({
@@ -20,6 +22,8 @@ export function ExamPathwayHub({
   marketingHubPath,
   npPracticeSeo,
   npSeoAliasSegment,
+  questionSnapshot,
+  pathwayLessonCount,
 }: {
   pathway: ExamPathwayDefinition;
   isSignedIn?: boolean;
@@ -35,6 +39,10 @@ export function ExamPathwayHub({
   npPracticeSeo?: NpPracticeTestLandingCopy | null;
   /** Third path segment when it is an NP SEO alias (e.g. `aanp-practice-test`). */
   npSeoAliasSegment?: string;
+  /** Published question pool scoped like the in-app bank (tier + region + pathway exam keys). */
+  questionSnapshot: PathwayQuestionBankSnapshot;
+  /** Pathway lesson total — {@link countPathwayLessons}. */
+  pathwayLessonCount: number;
 }) {
   const hubOpts = { hubBasePath: marketingHubPath };
   const { crumbs, schemaItems } = pathwayOverviewBreadcrumbs(pathway, hubOpts);
@@ -76,6 +84,13 @@ export function ExamPathwayHub({
         </aside>
       ) : null}
 
+      <PathwayLiveInventoryStrip
+        pathway={pathway}
+        questionSnapshot={questionSnapshot}
+        lessonCount={pathwayLessonCount}
+        variant="hub"
+      />
+
       {npInventory?.belowThreshold ? (
         <aside className="nn-card mt-6 border-border bg-[var(--theme-muted-surface)] p-4 text-sm text-[var(--theme-body-text)]">
           <p className="font-semibold text-[var(--theme-heading-text)]">Content depth (transparent)</p>
@@ -96,6 +111,7 @@ export function ExamPathwayHub({
         pathway={pathway}
         isSignedIn={isSignedIn}
         emphasizeCatPracticeTests={emphasizeCatPracticeTests}
+        marketingHubPath={marketingHubPath}
         npSeoAliasSegment={npSeoAliasSegment}
         conversionSectionHeading={npPracticeSeo?.conversionSectionHeading}
         conversionSectionLead={npPracticeSeo?.conversionSectionLead}

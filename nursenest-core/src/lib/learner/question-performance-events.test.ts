@@ -1,6 +1,10 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { deriveWeakAreasFromPerformanceEvents, type QuestionPerformanceEventV1 } from "@/lib/learner/question-performance-events";
+import {
+  deriveWeakAreasFromPerformanceEvents,
+  questionIdsWithIncorrectAttempts,
+  type QuestionPerformanceEventV1,
+} from "@/lib/learner/question-performance-events";
 
 function ev(input: Partial<QuestionPerformanceEventV1> & Pick<QuestionPerformanceEventV1, "questionId" | "correct">): QuestionPerformanceEventV1 {
   return {
@@ -37,6 +41,31 @@ describe("deriveWeakAreasFromPerformanceEvents", () => {
       3,
     );
     assert.equal(rows.length, 0);
+  });
+});
+
+describe("questionIdsWithIncorrectAttempts", () => {
+  it("collects ids with at least one incorrect attempt", () => {
+    const ids = questionIdsWithIncorrectAttempts(
+      [
+        ev({ questionId: "abcdefghij", correct: true }),
+        ev({ questionId: "bcdefghijk", correct: false }),
+        ev({ questionId: "abcdefghij", correct: false }),
+      ],
+      50,
+    );
+    assert.ok(ids.includes("bcdefghijk"));
+    assert.ok(ids.includes("abcdefghij"));
+    assert.equal(ids.length, 2);
+  });
+
+  it("respects maxIds", () => {
+    const events: QuestionPerformanceEventV1[] = [];
+    for (let i = 0; i < 5; i += 1) {
+      events.push(ev({ questionId: `id_wrong_${i}________`, correct: false }));
+    }
+    const ids = questionIdsWithIncorrectAttempts(events, 3);
+    assert.equal(ids.length, 3);
   });
 });
 

@@ -5,6 +5,7 @@ import { BlogPostDistributionFooter } from "@/components/blog/blog-post-distribu
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { applyAutoLinksToHtml } from "@/lib/blog/blog-auto-link-html";
+import { stripBrokenOrEmptyImagesFromHtml } from "@/lib/blog/blog-image-workflow";
 import {
   getBlogPostMetaBySlug,
   getPublishedBlogPostBySlug,
@@ -63,12 +64,14 @@ export default async function BlogPostPage({ params }: Props) {
 
   const publishedAt = isDbPost(post) ? post.publishAt ?? post.createdAt : post.publishAt ?? post.createdAt;
   const bodyHtml = isDbPost(post)
-    ? applyAutoLinksToHtml(post.body, {
-        exam: post.exam,
-        relatedLessonPaths: post.relatedLessonPaths,
-        relatedTools: post.relatedTools,
-      })
-    : post.body;
+    ? stripBrokenOrEmptyImagesFromHtml(
+        applyAutoLinksToHtml(post.body, {
+          exam: post.exam,
+          relatedLessonPaths: post.relatedLessonPaths,
+          relatedTools: post.relatedTools,
+        }),
+      )
+    : stripBrokenOrEmptyImagesFromHtml(post.body);
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-12">

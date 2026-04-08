@@ -19,6 +19,7 @@ import {
   marketingRegionToggleSegment,
   marketingRegionToggleShellMobileRow,
 } from "@/lib/theme/marketing-region-toggle";
+import { defaultNursingExamMarketingHub } from "@/lib/marketing/marketing-exam-navigation";
 
 const NAV_LINK_CLASS =
   "nn-marketing-body-sm font-medium tracking-tight text-[var(--theme-menu-text)] transition-colors duration-200 hover:text-primary";
@@ -46,7 +47,8 @@ export function SiteHeader() {
   }, []);
 
   const marketingNav = [
-    { href: "/lessons", labelKey: "nav.exams" as const },
+    { href: defaultNursingExamMarketingHub(region), labelKey: "nav.exams" as const },
+    { href: "/lessons", labelKey: "nav.lessons" as const },
     { href: "/pricing", labelKey: "nav.pricing" as const },
     { href: "/faq", labelKey: "footer.faq" as const },
   ];

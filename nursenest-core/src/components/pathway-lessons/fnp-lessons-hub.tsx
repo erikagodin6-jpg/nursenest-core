@@ -1,7 +1,21 @@
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { PathwayHubSupplementaryDisclosure } from "@/components/pathway-lessons/pathway-hub-supplementary-disclosure";
 import { PathwayTopicClusterNav } from "@/components/pathway-lessons/pathway-topic-cluster-nav";
-import { FnpLessonExplorer } from "@/components/pathway-lessons/fnp-lesson-explorer";
+
+const FnpLessonExplorer = dynamic(
+  () => import("@/components/pathway-lessons/fnp-lesson-explorer").then((m) => m.FnpLessonExplorer),
+  {
+    loading: () => (
+      <div
+        className="min-h-[240px] animate-pulse rounded-xl border border-border bg-[var(--theme-muted-surface)]/60"
+        aria-busy="true"
+        aria-label="Loading lesson library"
+      />
+    ),
+  },
+);
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import {
   buildFnpExplorerPayload,
@@ -17,12 +31,14 @@ import {
   type PathwayLessonRecord,
 } from "@/lib/lessons/pathway-lesson-types";
 import type { TopicCluster } from "@/lib/lessons/pathway-lesson-loader";
+import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 
 type Props = {
   pathway: ExamPathwayDefinition;
   lessons: PathwayLessonRecord[];
   lessonsBasePath: string;
   topicClusters: TopicCluster[];
+  progressMap?: Record<string, PathwayLessonProgressStatus>;
 };
 
 function appQuestionsHref(pathwayId: string, topic?: string): string {
@@ -41,7 +57,7 @@ const HASH_BY_LIFESPAN: Record<string, string> = {
   lifespan_mixed: "#fnp-lifespan",
 };
 
-export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters }: Props) {
+export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters, progressMap = {} }: Props) {
   const safeLessons = lessons.filter(pathwayLessonHasRenderableHubSlug);
   const explorerPayload = buildFnpExplorerPayload(safeLessons);
   const { countsLife, countsDom } = fnpExplorerCounts(explorerPayload);
@@ -200,10 +216,16 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
             lessonsBasePath={lessonsBasePath}
             explorerLessons={explorerPayload}
             excludeSlug={safeLessons.length > 1 ? featured?.slug ?? null : null}
+            progressMap={progressMap}
           />
         </div>
       </section>
 
+      <PathwayHubSupplementaryDisclosure
+        summary="Differential thinking, workflows, sample cases & shortcuts"
+        hint="Expand for board-style reasoning and study loops after the lesson library."
+        className="mt-2"
+      >
       {/* Differential diagnosis emphasis */}
       <section className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-sm" aria-labelledby="fnp-diff">
         <h2 id="fnp-diff" className="text-lg font-bold text-[var(--theme-heading-text)]">
@@ -415,6 +437,7 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
           </Link>
         </p>
       </section>
+      </PathwayHubSupplementaryDisclosure>
     </div>
   );
 }

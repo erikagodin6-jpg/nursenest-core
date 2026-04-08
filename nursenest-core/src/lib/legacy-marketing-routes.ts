@@ -14,8 +14,8 @@ const EXACT: Record<string, string> = {
   /** Public lesson index (exam-scoped hubs); avoid sending “exam prep” intent to pricing. */
   "/exam-prep": "/lessons",
   "/register": "/signup",
-  /** Canonical PN programmatic landings (region-aware practice flows live there). */
-  "/rex-pn": "/rex-pn-practice-questions",
+  /** PN Canada: canonical pathway hub (lessons, questions, CAT from hub). */
+  "/rex-pn": "/canada/rpn/rex-pn",
   /** Legacy short path: send to public lessons index (region + exam picked there and in nav). */
   "/nclex-rn": "/lessons",
   "/np-exam-practice-questions": "/np-exam-practice-questions",
@@ -30,12 +30,12 @@ const EXACT: Record<string, string> = {
   "/med-math": "/tools/med-math",
   "/mock-exams": "/practice-exams",
   "/mock-exam": "/practice-exams",
-  "/study": "/question-bank",
-  "/test-bank": "/question-bank",
+  "/study": "/lessons",
+  "/test-bank": "/lessons",
   "/analytics": "/app",
   "/clinical-scenarios": "/lessons",
   "/languages": `${PUBLIC_SITE}/languages`,
-  "/free-practice": "/question-bank",
+  "/free-practice": "/lessons",
   "/study-plan": "/app/study-plan",
   "/reports": "/app",
   "/career-journey": `${PUBLIC_SITE}/career-journey`,

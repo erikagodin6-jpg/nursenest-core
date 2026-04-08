@@ -4,6 +4,10 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { buildLearnerInsightSnapshot } from "@/lib/insights/learner-insight-engine";
 import type { LearnerInsightSnapshot } from "@/lib/insights/types";
+import {
+  loadLessonContinuationRows,
+  type LessonContinuationRow,
+} from "@/lib/learner/pathway-lesson-continuation";
 import { loadLearnerDashboard, loadPathwayStudySummaries, type RecentMock } from "@/lib/learner/load-learner-dashboard";
 import type { ReadinessResult } from "@/lib/learner/readiness-score";
 
@@ -13,6 +17,8 @@ export type PathwayProgressRow = {
   shortLabel: string;
   lessonsCompleted: number;
   lessonsTotal: number;
+  /** Rows with completed=false (opened / in progress, not finished). */
+  lessonsInProgress: number;
   /** 0–100 */
   pct: number;
 };
@@ -223,6 +229,8 @@ export type PremiumDashboardSnapshot = {
   } | null;
   /** Central interpretation engine: performance, gaps, explainable next steps. */
   insights: LearnerInsightSnapshot | null;
+  /** Marketing deep links to last pathway lesson per track (RN / PN / NP). */
+  lessonContinuations: LessonContinuationRow[];
 };
 
 export async function loadPremiumDashboardSnapshot(
@@ -234,15 +242,17 @@ export async function loadPremiumDashboardSnapshot(
   const dash = await loadLearnerDashboard(userId, entitlement);
   if (!dash) return null;
 
-  const [pathwayRaw, streakDays, topStrongTopic, userExamRow] = await Promise.all([
+  const [pathwayRaw, streakDays, topStrongTopic, userRow] = await Promise.all([
     loadPathwayStudySummaries(userId, entitlement),
     loadStudyStreakDays(userId),
     topStrongTopicFromLedger(userId),
     prisma.user.findUnique({
       where: { id: userId },
-      select: { examDate: true, examDatePlanType: true },
+      select: { examDate: true, examDatePlanType: true, learnerPath: true },
     }),
   ]);
+
+  const lessonContinuations = await loadLessonContinuationRows(userId, entitlement, userRow?.learnerPath ?? null);
 
   const pathways: PathwayProgressRow[] = pathwayRaw.map((p) => {
     const pct = p.lessonsTotal > 0 ? Math.round((p.lessonsCompleted / p.lessonsTotal) * 100) : 0;
@@ -317,8 +327,8 @@ export async function loadPremiumDashboardSnapshot(
     insights = await buildLearnerInsightSnapshot(userId, entitlement, dash, {
       streakDays,
       mockCount,
-      examDate: userExamRow?.examDate ?? null,
-      examDatePlanType: userExamRow?.examDatePlanType ?? null,
+      examDate: userRow?.examDate ?? null,
+      examDatePlanType: userRow?.examDatePlanType ?? null,
     });
   } catch {
     insights = null;
@@ -343,5 +353,6 @@ export async function loadPremiumDashboardSnapshot(
     recommendedQuizTopic: dash.recommendedQuizTopic,
     flashcards,
     insights,
+    lessonContinuations,
   };
 }

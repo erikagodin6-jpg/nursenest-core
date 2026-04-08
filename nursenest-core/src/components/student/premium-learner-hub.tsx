@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { LearnerNoteScope } from "@prisma/client";
 import { Award, ChevronRight, Crown, FileText, Flame, Sparkles, Target } from "lucide-react";
 import type { PremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
+import { LessonContinuationStrip } from "@/components/student/lesson-continuation-strip";
 import { readinessBandLabel } from "@/lib/learner/readiness-score";
 
 function Bar({
@@ -97,8 +98,17 @@ export function PremiumLearnerHub({
   /** Metadata + links only (no note bodies). */
   recentNotes?: RecentLearnerNoteSummary[];
 }) {
-  const { readiness, overallLessons, pathways, practice, recentMocks, momentumMessages, examReadyHeadline, milestones } =
-    snapshot;
+  const {
+    readiness,
+    overallLessons,
+    pathways,
+    practice,
+    recentMocks,
+    momentumMessages,
+    examReadyHeadline,
+    milestones,
+    lessonContinuations,
+  } = snapshot;
 
   const momentumSection =
     momentumMessages.length > 0 ? (
@@ -118,6 +128,9 @@ export function PremiumLearnerHub({
 
   return (
     <div className="space-y-5">
+      {!compactIntro && lessonContinuations.length > 0 ? (
+        <LessonContinuationStrip rows={lessonContinuations} />
+      ) : null}
       {compactIntro ? (
         <section className="nn-card p-6">
           <div className="flex flex-wrap items-center gap-2">
@@ -278,7 +291,9 @@ export function PremiumLearnerHub({
                   <span className="text-xs tabular-nums text-muted">
                     {p.lessonsTotal === 0
                       ? "No published lessons in scope yet"
-                      : `${p.lessonsCompleted} / ${p.lessonsTotal} lessons`}
+                      : `${p.lessonsCompleted} / ${p.lessonsTotal} completed${
+                          p.lessonsInProgress > 0 ? ` · ${p.lessonsInProgress} in progress` : ""
+                        }`}
                   </span>
                 </div>
                 {p.lessonsTotal > 0 ? (

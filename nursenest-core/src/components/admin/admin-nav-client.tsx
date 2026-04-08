@@ -17,6 +17,7 @@ import {
   Sparkles,
   Users,
   Wrench,
+  Wand2,
 } from "lucide-react";
 
 const links: Array<{ href: string; label: string; icon: React.ElementType }> = [
@@ -27,6 +28,7 @@ const links: Array<{ href: string; label: string; icon: React.ElementType }> = [
   { href: "/admin/lessons", label: "Lessons", icon: GraduationCap },
   { href: "/admin/questions", label: "Questions", icon: ClipboardList },
   { href: "/admin/blog", label: "Blog", icon: FileText },
+  { href: "/admin/blog/control-panel", label: "Blog AI panel", icon: Wand2 },
   { href: "/admin/blog/generate", label: "Blog generator", icon: Sparkles },
   { href: "/admin/blog/scheduler", label: "Scheduler", icon: BookOpen },
   { href: "/admin/seo", label: "SEO", icon: Search },

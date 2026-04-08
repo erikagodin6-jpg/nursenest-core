@@ -4,7 +4,9 @@
  *
  * @see country-exam-offerings.ts (implementation)
  */
+import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
+import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import {
   marketingExamHubPath,
   type CountryExamOfferingId,
@@ -29,4 +31,27 @@ export function marketingExamPrepHubs(region: MarketingRegionToggle): Record<Cou
     np: marketingExamHubPath(region, "np"),
     allied: marketingExamHubPath(region, "allied"),
   };
+}
+
+/**
+ * Default nursing entry when the UI must pick one hub (header “Exams”, homepage tertiary, etc.).
+ * Strip + cards still expose PN/NP; this stays RN-first for the single-link case.
+ */
+export function defaultNursingExamMarketingHub(region: MarketingRegionToggle): string {
+  return marketingExamHubPath(region, "rn");
+}
+
+const RN_PATHWAY_ID_BY_REGION: Record<MarketingRegionToggle, string> = {
+  US: "us-rn-nclex-rn",
+  CA: "ca-rn-nclex-rn",
+};
+
+/** Region’s NCLEX-RN pathway id (for `/app/practice-tests/start?pathwayId=…` callbacks). */
+export function defaultRnPathwayIdForMarketingRegion(region: MarketingRegionToggle): string {
+  return RN_PATHWAY_ID_BY_REGION[region];
+}
+
+/** Sign-in → app CAT start for the region’s default RN track (public practice-exams page, etc.). */
+export function loginCallbackDefaultRnCatStart(region: MarketingRegionToggle): string {
+  return loginWithCallback(appPathwayCatSessionStartPath(defaultRnPathwayIdForMarketingRegion(region)));
 }

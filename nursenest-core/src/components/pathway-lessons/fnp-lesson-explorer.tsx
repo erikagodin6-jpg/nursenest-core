@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { startTransition, useEffect, useMemo, useState, type ReactNode } from "react";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { pathwayLessonMarketingDetailHref } from "@/lib/lessons/pathway-lesson-types";
 import {
@@ -14,6 +14,8 @@ import {
   FNP_LIFESPAN_ORDER,
   fnpExplorerMatchesFilters,
 } from "@/lib/lessons/fnp-us-lesson-enrichment";
+import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
+import { PathwayLessonProgressBadge } from "@/components/lessons/pathway-lesson-progress-badge";
 
 function appQuestionsHref(pathwayId: string, topic?: string): string {
   const q = new URLSearchParams();
@@ -28,6 +30,7 @@ type Props = {
   /** Server-built: metadata + short preview snippets only (no full lesson sections). */
   explorerLessons: FnpExplorerLesson[];
   excludeSlug?: string | null;
+  progressMap?: Record<string, PathwayLessonProgressStatus>;
 };
 
 const HASH_TO_LIFESPAN: Record<string, FnpLifespanGroup> = {
@@ -39,7 +42,7 @@ const HASH_TO_LIFESPAN: Record<string, FnpLifespanGroup> = {
   "#fnp-lifespan": "lifespan_mixed",
 };
 
-export function FnpLessonExplorer({ pathway, lessonsBasePath, explorerLessons, excludeSlug }: Props) {
+export function FnpLessonExplorer({ pathway, lessonsBasePath, explorerLessons, excludeSlug, progressMap = {} }: Props) {
   const [lifespan, setLifespan] = useState<FnpLifespanFilter>("all");
   const [domain, setDomain] = useState<FnpDomainFilter>("all");
   const [textQ, setTextQ] = useState("");
@@ -47,7 +50,7 @@ export function FnpLessonExplorer({ pathway, lessonsBasePath, explorerLessons, e
   useEffect(() => {
     const h = window.location.hash;
     const mapped = HASH_TO_LIFESPAN[h];
-    if (mapped) setLifespan(mapped);
+    if (mapped) startTransition(() => setLifespan(mapped));
   }, []);
 
   const filtered = useMemo(() => {
@@ -81,11 +84,18 @@ export function FnpLessonExplorer({ pathway, lessonsBasePath, explorerLessons, e
               role="group"
               aria-labelledby="fnp-filter-age"
             >
-              <FilterChip active={lifespan === "all"} onClick={() => setLifespan("all")}>
+              <FilterChip
+                active={lifespan === "all"}
+                onClick={() => startTransition(() => setLifespan("all"))}
+              >
                 All
               </FilterChip>
               {FNP_LIFESPAN_ORDER.map((row) => (
-                <FilterChip key={row.id} active={lifespan === row.id} onClick={() => setLifespan(row.id)}>
+                <FilterChip
+                  key={row.id}
+                  active={lifespan === row.id}
+                  onClick={() => startTransition(() => setLifespan(row.id))}
+                >
                   {row.shortLabel}
                 </FilterChip>
               ))}
@@ -101,11 +111,15 @@ export function FnpLessonExplorer({ pathway, lessonsBasePath, explorerLessons, e
               role="group"
               aria-labelledby="fnp-filter-domain"
             >
-              <FilterChip active={domain === "all"} onClick={() => setDomain("all")}>
+              <FilterChip active={domain === "all"} onClick={() => startTransition(() => setDomain("all"))}>
                 All
               </FilterChip>
               {FNP_DOMAIN_ORDER.map((row) => (
-                <FilterChip key={row.id} active={domain === row.id} onClick={() => setDomain(row.id)}>
+                <FilterChip
+                  key={row.id}
+                  active={domain === row.id}
+                  onClick={() => startTransition(() => setDomain(row.id))}
+                >
                   {row.label}
                 </FilterChip>
               ))}
@@ -120,7 +134,10 @@ export function FnpLessonExplorer({ pathway, lessonsBasePath, explorerLessons, e
               id="fnp-lesson-text"
               type="search"
               value={textQ}
-              onChange={(ev) => setTextQ(ev.target.value)}
+              onChange={(ev) => {
+                const v = ev.target.value;
+                startTransition(() => setTextQ(v));
+              }}
               placeholder="Title, topic, or slug (min 2 characters)"
               autoComplete="off"
               maxLength={80}
@@ -149,6 +166,8 @@ export function FnpLessonExplorer({ pathway, lessonsBasePath, explorerLessons, e
               pathway={pathway}
               lessonsBasePath={lessonsBasePath}
               enriched={e}
+              progressStatus={progressMap[e.meta.slug] ?? "not_started"}
+              showProgress={Object.keys(progressMap).length > 0}
             />
           ))}
         </ul>
@@ -189,10 +208,14 @@ function FnpLessonCard({
   pathway,
   lessonsBasePath,
   enriched,
+  progressStatus,
+  showProgress,
 }: {
   pathway: ExamPathwayDefinition;
   lessonsBasePath: string;
   enriched: FnpExplorerLesson;
+  progressStatus: PathwayLessonProgressStatus;
+  showProgress: boolean;
 }) {
   const l = enriched.meta;
   const p = enriched.clinicalPreview;
@@ -201,9 +224,12 @@ function FnpLessonCard({
     <li className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <p className="text-xs font-medium uppercase text-muted">{l.topic}</p>
-        <span className="rounded-full bg-[var(--theme-muted-surface)] px-2 py-0.5 text-[11px] font-medium text-muted">
-          {lifespanLabel(enriched.primaryLifespan)}
-        </span>
+        <div className="flex flex-wrap items-center gap-2">
+          {showProgress ? <PathwayLessonProgressBadge status={progressStatus} /> : null}
+          <span className="rounded-full bg-[var(--theme-muted-surface)] px-2 py-0.5 text-[11px] font-medium text-muted">
+            {lifespanLabel(enriched.primaryLifespan)}
+          </span>
+        </div>
       </div>
       {detailHref ? (
         <Link href={detailHref} className="mt-1 block text-lg font-semibold text-primary hover:underline">

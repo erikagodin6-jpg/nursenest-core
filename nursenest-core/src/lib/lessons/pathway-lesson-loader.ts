@@ -33,6 +33,7 @@ import {
   type PathwayLessonSectionKind,
 } from "@/lib/lessons/pathway-lesson-types";
 import { ContentStatus, type Prisma } from "@prisma/client";
+import { unstable_cache } from "next/cache";
 import { cache } from "react";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { sortPathwayLessonsForPublicPreview } from "@/lib/lessons/pathway-lesson-public-preview-priority";
@@ -74,6 +75,11 @@ export const PATHWAY_HUB_PAGE_SIZE_DEFAULT = 40;
 export const PATHWAY_HUB_PAGE_SIZE_MAX = 60;
 /** DB read timeout for pathway lesson queries (marketing paths). */
 export const PATHWAY_LESSON_DB_TIMEOUT_MS = 12_000;
+/**
+ * Cross-request Data Cache for public lesson payloads (no user/session).
+ * Personalized progress stays outside this layer (see pathway-lesson-progress).
+ */
+const PATHWAY_LESSON_PUBLIC_CACHE_SECONDS = 3600;
 /** Related lessons block on lesson detail — small bounded list. */
 export const RELATED_PATHWAY_LESSONS_LIMIT = 8;
 /** Sitemap / batch reads: rows per round-trip. */
@@ -859,8 +865,24 @@ async function getPathwayLessonsPageImpl(
   };
 }
 
+async function getPathwayLessonsPageWithDataCache(
+  pathwayId: string,
+  page: number,
+  pageSize: number,
+  marketingLocale?: string,
+  listOptions?: { topicSlugsIn?: string[]; q?: string },
+): Promise<PathwayLessonsPageResult> {
+  const topicKey = JSON.stringify(listOptions?.topicSlugsIn?.slice().sort() ?? []);
+  const qKey = listOptions?.q ?? "";
+  return unstable_cache(
+    async () => getPathwayLessonsPageImpl(pathwayId, page, pageSize, marketingLocale, listOptions),
+    ["pathway-hub", pathwayId, String(page), String(pageSize), marketingLocale ?? "", topicKey, qKey],
+    { revalidate: PATHWAY_LESSON_PUBLIC_CACHE_SECONDS, tags: [`pathway-lessons:${pathwayId}`] },
+  )();
+}
+
 /** Dedupes identical hub list fetches within a single request (metadata + page, etc.). */
-export const getPathwayLessonsPage = cache(getPathwayLessonsPageImpl);
+export const getPathwayLessonsPage = cache(getPathwayLessonsPageWithDataCache);
 
 export type TopicLessonsPageResult = PathwayLessonsPageResult;
 
@@ -1077,7 +1099,21 @@ async function getLessonsForTopicPageImpl(
   };
 }
 
-export const getLessonsForTopicPage = cache(getLessonsForTopicPageImpl);
+async function getLessonsForTopicPageWithDataCache(
+  pathwayId: string,
+  topicSlug: string,
+  page: number,
+  pageSize: number,
+  marketingLocale?: string,
+): Promise<TopicLessonsPageResult> {
+  return unstable_cache(
+    async () => getLessonsForTopicPageImpl(pathwayId, topicSlug, page, pageSize, marketingLocale),
+    ["pathway-topic-page", pathwayId, topicSlug, String(page), String(pageSize), marketingLocale ?? ""],
+    { revalidate: PATHWAY_LESSON_PUBLIC_CACHE_SECONDS, tags: [`pathway-lessons:${pathwayId}`] },
+  )();
+}
+
+export const getLessonsForTopicPage = cache(getLessonsForTopicPageWithDataCache);
 
 /** Single lesson by slug — one targeted DB fetch (requested locale, then English fallback). */
 async function getPathwayLessonImpl(
@@ -1150,8 +1186,23 @@ async function getPathwayLessonImpl(
   );
 }
 
+async function getPathwayLessonWithDataCache(
+  pathwayId: string,
+  slug: string,
+  marketingLocale?: string,
+): Promise<PathwayLessonRecord | undefined> {
+  return unstable_cache(
+    async () => getPathwayLessonImpl(pathwayId, slug, marketingLocale),
+    ["pathway-lesson-detail", pathwayId, slug, marketingLocale ?? ""],
+    {
+      revalidate: PATHWAY_LESSON_PUBLIC_CACHE_SECONDS,
+      tags: [`pathway-lessons:${pathwayId}`, `pathway-lesson:${pathwayId}:${slug}`],
+    },
+  )();
+}
+
 /** Dedupes metadata + page lesson fetches in the same request. */
-export const getPathwayLesson = cache(getPathwayLessonImpl);
+export const getPathwayLesson = cache(getPathwayLessonWithDataCache);
 
 /**
  * Progress API: accept lesson completion if slug exists in any published locale (prefer `en` row when duplicated).
@@ -1259,7 +1310,28 @@ async function getRelatedPathwayLessonsImpl(
     .filter(pathwayLessonHasRenderableHubSlug);
 }
 
-export const getRelatedPathwayLessons = cache(getRelatedPathwayLessonsImpl);
+async function getRelatedPathwayLessonsWithDataCache(
+  pathwayId: string,
+  topicSlug: string,
+  excludeSlug: string,
+  limit: number = RELATED_PATHWAY_LESSONS_LIMIT,
+  marketingLocale?: string,
+): Promise<PathwayLessonRecord[]> {
+  return unstable_cache(
+    async () => getRelatedPathwayLessonsImpl(pathwayId, topicSlug, excludeSlug, limit, marketingLocale),
+    [
+      "pathway-related",
+      pathwayId,
+      topicSlug,
+      excludeSlug,
+      String(limit),
+      marketingLocale ?? "",
+    ],
+    { revalidate: PATHWAY_LESSON_PUBLIC_CACHE_SECONDS, tags: [`pathway-lessons:${pathwayId}`] },
+  )();
+}
+
+export const getRelatedPathwayLessons = cache(getRelatedPathwayLessonsWithDataCache);
 
 async function listPathwayIdsWithDbLessons(): Promise<string[]> {
   return dbCall(
@@ -1351,8 +1423,16 @@ async function listTopicClustersImpl(pathwayId: string, marketingLocale?: string
   return topicClustersFromCatalogPathway(pathwayId);
 }
 
+async function listTopicClustersWithDataCache(pathwayId: string, marketingLocale?: string): Promise<TopicCluster[]> {
+  return unstable_cache(
+    async () => listTopicClustersImpl(pathwayId, marketingLocale),
+    ["pathway-topic-clusters", pathwayId, marketingLocale ?? ""],
+    { revalidate: PATHWAY_LESSON_PUBLIC_CACHE_SECONDS, tags: [`pathway-lessons:${pathwayId}`] },
+  )();
+}
+
 /** Dedupes topic index work when metadata + page both need clusters in one request. */
-export const listTopicClusters = cache(listTopicClustersImpl);
+export const listTopicClusters = cache(listTopicClustersWithDataCache);
 
 export type PathwayLessonSlugRow = { slug: string; topicSlug: string };
 

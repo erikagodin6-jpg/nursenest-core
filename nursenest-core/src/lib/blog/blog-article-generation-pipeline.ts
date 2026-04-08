@@ -1,0 +1,146 @@
+/**
+ * NurseNest blog article generation pipeline (admin, AI-backed).
+ *
+ * ## Stages
+ * 1. **Structured plan** — One JSON completion validated by {@link blogControlPanelPlanSchema}:
+ *    audience titles, H1, slug, SEO title & meta, outline, internal link ideas, FAQs, breadcrumbs,
+ *    image prompts/placements, APA stubs, key takeaways.
+ * 2. **Long-form body** — Second completion: HTML only (H2+), pathway/country-aware, anti-filler rules.
+ * 3. **Persist (optional)** — {@link persistControlPanelDraft} writes a `DRAFT` {@link BlogPost} for later editing (PATCH) and publish.
+ *
+ * ## Storage mapping (`BlogPost`)
+ * | Pipeline output | Where it lives |
+ * |-----------------|----------------|
+ * | H1 (on-page headline) | `title` |
+ * | Slug | `slug` (unique; collision-suffixed) |
+ * | SEO title | `seoTitle`, `metaTitleVariant` |
+ * | Meta description | `seoDescription`, `metaDescriptionVariant` |
+ * | Structured outline | `outlineJson` (JSON) |
+ * | Article body | `body` (HTML text) |
+ * | Internal link suggestions | `internalLinkPlan` (JSON: lessons + imagePlacements), `relatedLessonPaths` |
+ * | FAQ section | `faqBlock` (`{ items: {q,a}[] }`), `keyQuestions` |
+ * | Breadcrumbs | `schemaSummary` (JSON string: `{ breadcrumbs, type }`) |
+ * | Image prompts / placements | `internalLinkPlan.imagePlacements`, `coverImagePrompt`, `coverImageAlt`, `imageStatus` |
+ * | APA 7 lines | `apaReferences` (string[]), `sourcesJson` |
+ * | Alternate titles | `titleAlternates` |
+ * | Pathway / country | `exam`, `countryTarget`, `targetKeyword`, `keywordCluster` |
+ * | Editorial state | `workflowStatus`, `postStatus` (DRAFT), `medicalRiskFlags`, etc. |
+ *
+ * Editing: admin `PATCH /api/admin/blog/[id]` and control panel UI update these fields without re-running the pipeline.
+ */
+
+import type { ControlPanelGenerateInput, ControlPanelPersistResult } from "@/lib/blog/blog-control-panel-generation";
+import {
+  fetchControlPanelBodyHtml,
+  fetchControlPanelPlan,
+  persistControlPanelDraft,
+} from "@/lib/blog/blog-control-panel-generation";
+import type { BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema";
+
+export const BLOG_ARTICLE_MIN_BODY_CHARS = 450;
+
+export type BlogArticlePipelineStage = "plan" | "body" | "persist" | "citations";
+
+export type BlogArticlePipelineSuccess = {
+  ok: true;
+  plan: BlogControlPanelPlan;
+  bodyHtml: string;
+  /** Present when `persist` was requested and persistence did not skip/fail. */
+  persist?: Extract<ControlPanelPersistResult, { ok: true; skipped: false }>;
+  /** When persistence skipped (duplicate topic/slug race). */
+  persistSkipped?: Extract<ControlPanelPersistResult, { ok: true; skipped: true }>;
+};
+
+export type BlogArticlePipelineFailure = {
+  ok: false;
+  stage: BlogArticlePipelineStage;
+  error: string;
+  /** Set when plan succeeded but a later stage failed (e.g. retry body only). */
+  plan?: BlogControlPanelPlan;
+  bodyHtml?: string;
+  /** Citation gate blocked persistence (high-risk topic without verified admin sources). */
+  code?: "INSUFFICIENT_CITATIONS";
+  riskFlags?: string[];
+};
+
+export type BlogArticlePipelineResult = BlogArticlePipelineSuccess | BlogArticlePipelineFailure;
+
+export type RunBlogArticlePipelineOptions = {
+  /** When true (default), writes `BlogPost` as DRAFT after body generation. */
+  persist?: boolean;
+  /** Override on-page H1 for the body pass (e.g. admin picked another title option). */
+  pageH1Override?: string;
+};
+
+const MIN_BODY_CHARS = BLOG_ARTICLE_MIN_BODY_CHARS;
+
+/**
+ * End-to-end generation: structured plan → HTML article → optional DB draft.
+ * Pathway- and country-aware prompts live in {@link blog-article-pipeline-prompts} / {@link blog-article-pathway-context}.
+ */
+export async function runBlogArticleGenerationPipeline(
+  input: ControlPanelGenerateInput,
+  options: RunBlogArticlePipelineOptions = {},
+): Promise<BlogArticlePipelineResult> {
+  const persist = options.persist !== false;
+
+  let plan: BlogControlPanelPlan;
+  try {
+    plan = await fetchControlPanelPlan(input);
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    return { ok: false, stage: "plan", error: msg };
+  }
+
+  let bodyHtml: string;
+  try {
+    bodyHtml = await fetchControlPanelBodyHtml({
+      plan,
+      topic: input.topic,
+      exam: input.exam,
+      country: input.country,
+      template: input.template,
+      intent: input.intent,
+      funnelStage: input.funnelStage,
+      tone: input.tone,
+      keywords: input.keywords,
+      selectedTitle: options.pageH1Override,
+    });
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    return { ok: false, stage: "body", error: msg, plan };
+  }
+
+  if (bodyHtml.length < MIN_BODY_CHARS) {
+    return { ok: false, stage: "body", error: "Article body too short after generation", plan, bodyHtml };
+  }
+
+  if (!persist) {
+    return { ok: true, plan, bodyHtml };
+  }
+
+  try {
+    const persistResult = await persistControlPanelDraft(input, plan, bodyHtml);
+    if (!persistResult.ok) {
+      if (persistResult.code === "INSUFFICIENT_CITATIONS") {
+        return {
+          ok: false,
+          stage: "citations",
+          error: persistResult.error,
+          plan,
+          bodyHtml,
+          code: persistResult.code,
+          riskFlags: persistResult.riskFlags,
+        };
+      }
+      return { ok: false, stage: "persist", error: persistResult.error, plan, bodyHtml };
+    }
+    if (persistResult.skipped) {
+      return { ok: true, plan, bodyHtml, persistSkipped: persistResult };
+    }
+    return { ok: true, plan, bodyHtml, persist: persistResult };
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    return { ok: false, stage: "persist", error: msg, plan, bodyHtml };
+  }
+}

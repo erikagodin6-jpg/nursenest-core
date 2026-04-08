@@ -10,8 +10,20 @@ function isAdminRole(role: unknown): boolean {
   return role === "ADMIN";
 }
 
+const ACCOUNT_LINKS = [
+  { href: "/app/account/overview", key: "learner.account.menu.accountHub" as const },
+  { href: "/app/account/report-card", key: "learner.account.nav.reportCard" as const },
+  { href: "/app/account/readiness", key: "learner.account.nav.readiness" as const },
+  { href: "/app/account/progress", key: "learner.account.nav.progress" as const },
+  { href: "/app/account/billing", key: "learner.account.nav.billing" as const },
+  { href: "/app/account/personal", key: "learner.account.nav.personal" as const },
+  { href: "/app/account/settings", key: "learner.account.nav.settings" as const },
+  { href: "/app/account/security", key: "learner.account.nav.security" as const },
+  { href: "/app/account/study-preferences", key: "learner.account.nav.studyPreferences" as const },
+] as const;
+
 /**
- * Learner app shell: account dropdown (identity, admin, sign out) beside theme control.
+ * Learner app shell: account dropdown — dashboard, full account hub, admin, sign out.
  */
 export function LearnerShellUserBar() {
   const { t } = useMarketingI18n();
@@ -39,12 +51,15 @@ export function LearnerShellUserBar() {
   const label = user.email ?? user.name ?? `ID ${user.id?.slice(0, 8)}…`;
   const admin = isAdminRole(user.role);
 
+  const linkClass =
+    "block px-3 py-2.5 text-sm hover:bg-[var(--surface-interactive-hover)] text-[var(--theme-menu-text)]";
+
   return (
     <div className="relative" ref={ref}>
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="flex max-w-[16rem] items-center gap-1 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-2 text-sm font-medium text-[var(--theme-menu-text)] hover:bg-[var(--surface-interactive-hover)]"
+        className="flex max-w-[min(16rem,72vw)] items-center gap-1 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-2 text-sm font-medium text-[var(--theme-menu-text)] hover:bg-[var(--surface-interactive-hover)]"
         aria-expanded={open}
         aria-haspopup="menu"
       >
@@ -55,7 +70,7 @@ export function LearnerShellUserBar() {
       {open ? (
         <div
           role="menu"
-          className="absolute right-0 z-50 mt-1 min-w-[13rem] rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] py-1 shadow-[var(--shadow-elevated)]"
+          className="absolute right-0 z-50 mt-1 max-h-[min(28rem,85vh)] w-[min(18rem,calc(100vw-1.5rem))] overflow-y-auto rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] py-1 shadow-[var(--shadow-elevated)]"
         >
           <div className="border-b border-border px-3 py-2 text-xs text-muted-foreground">
             <div className="font-mono text-[11px] text-foreground" title={user.id}>
@@ -67,26 +82,35 @@ export function LearnerShellUserBar() {
               </span>
             ) : null}
           </div>
-          <Link
-            href="/app/profile"
-            className="block px-3 py-2 text-sm font-medium hover:bg-[var(--surface-interactive-hover)]"
-            role="menuitem"
-            onClick={() => setOpen(false)}
-          >
-            {t("learner.nav.profileAccount")}
-          </Link>
+
           <Link
             href="/app"
-            className="block px-3 py-2 text-sm hover:bg-[var(--surface-interactive-hover)]"
+            className={`${linkClass} font-medium`}
             role="menuitem"
             onClick={() => setOpen(false)}
           >
-            {t("dashboard.breadcrumbDashboard")}
+            {t("learner.account.menu.dashboardOverview")}
           </Link>
+
+          <div className="px-3 py-2 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+            {t("learner.account.menu.sectionAccount")}
+          </div>
+          {ACCOUNT_LINKS.map(({ href, key }) => (
+            <Link
+              key={href}
+              href={href}
+              className={linkClass}
+              role="menuitem"
+              onClick={() => setOpen(false)}
+            >
+              {t(key)}
+            </Link>
+          ))}
+
           {admin ? (
             <Link
               href="/admin"
-              className="block px-3 py-2 text-sm font-medium text-primary hover:bg-[var(--surface-interactive-hover)]"
+              className={`${linkClass} border-t border-[var(--border-subtle)] font-medium text-primary`}
               role="menuitem"
               onClick={() => setOpen(false)}
             >
@@ -95,7 +119,7 @@ export function LearnerShellUserBar() {
           ) : null}
           <button
             type="button"
-            className="block w-full border-t border-[var(--border-subtle)] px-3 py-2 text-left text-sm hover:bg-[var(--surface-interactive-hover)]"
+            className="block w-full border-t border-[var(--border-subtle)] px-3 py-2.5 text-left text-sm hover:bg-[var(--surface-interactive-hover)]"
             role="menuitem"
             onClick={() => void signOut({ callbackUrl: "/" })}
           >

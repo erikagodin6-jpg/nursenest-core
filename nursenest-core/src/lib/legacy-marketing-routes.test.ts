@@ -6,7 +6,7 @@ describe("legacy-marketing-routes", () => {
   it("maps footer study-tool paths to Core routes", () => {
     assert.equal(mapLegacyMarketingHref("/med-math"), "/tools/med-math");
     assert.equal(mapLegacyMarketingHref("/anatomy"), "/tools");
-    assert.equal(mapLegacyMarketingHref("/free-practice"), "/question-bank");
+    assert.equal(mapLegacyMarketingHref("/free-practice"), "/lessons");
     assert.equal(mapLegacyMarketingHref("/exam-lessons"), "/lessons");
   });
 

@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
+import { auth } from "@/lib/auth";
 import { PathwayLessonContentLocaleBanner } from "@/components/lessons/pathway-lesson-content-locale-banner";
 import { FnpLessonsHub } from "@/components/pathway-lessons/fnp-lessons-hub";
 import { NclexPnLessonsHub } from "@/components/pathway-lessons/nclex-pn-lessons-hub";
 import { NclexRnLessonsHub } from "@/components/pathway-lessons/nclex-rn-lessons-hub";
+import { PathwayLiveInventoryStrip } from "@/components/exam-pathways/pathway-live-inventory-strip";
 import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-lesson-pagination";
+import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
@@ -13,11 +16,13 @@ import { buildExamPathwayPath, resolveExamPathwayFromMarketingHubSegment } from 
 import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
 import {
   PATHWAY_HUB_PAGE_SIZE_DEFAULT,
+  countPathwayLessons,
   getPathwayLessonsPage,
   listTopicClusters,
   normalizePathwayHubSearchQuery,
 } from "@/lib/lessons/pathway-lesson-loader";
 import { PathwayLessonsHubSearch } from "@/components/pathway-lessons/pathway-lessons-hub-search";
+import { PathwayLessonsResumeHub } from "@/components/pathway-lessons/pathway-lessons-resume-hub";
 import { PathwayTopicClusterNav } from "@/components/pathway-lessons/pathway-topic-cluster-nav";
 import {
   pathwayLessonHubH1,
@@ -32,6 +37,16 @@ import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { pathwayLessonsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
+import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
+import { canViewFullPathwayLesson } from "@/lib/lessons/pathway-lesson-access";
+import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
+import {
+  loadPathwayHubSubscriberData,
+  pathwayHubResumeHasContent,
+  type PathwayHubResumePayload,
+} from "@/lib/learner/pathway-lesson-continuation";
+import { prisma } from "@/lib/db";
+import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 
 export const dynamicParams = true;
 export const revalidate = 86400;
@@ -124,13 +139,11 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const qEffective = normalizePathwayHubSearchQuery(sp.q);
   const listOpts = typeof sp.q === "string" && sp.q.trim().length > 0 ? { q: sp.q } : undefined;
 
-  const pageResult = await getPathwayLessonsPage(
-    pathway.id,
-    pageRequested,
-    pageSizeRequested,
-    lessonContentLocale,
-    listOpts,
-  );
+  const [pageResult, questionSnapshot, pathwayLessonTotal] = await Promise.all([
+    getPathwayLessonsPage(pathway.id, pageRequested, pageSizeRequested, lessonContentLocale, listOpts),
+    loadPathwayQuestionBankSnapshot(pathway.id),
+    countPathwayLessons(pathway.id),
+  ]);
 
   const hubQuerySuffix = (page: number) => {
     const qs = new URLSearchParams();
@@ -172,6 +185,12 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
             No lessons matched &ldquo;{qEffective}&rdquo; for {pathway.shortName}. Try a shorter term, browse by topic, or clear
             the search.
           </p>
+          <PathwayLiveInventoryStrip
+            pathway={pathway}
+            questionSnapshot={questionSnapshot}
+            lessonCount={pathwayLessonTotal}
+            variant="lessons"
+          />
           <div className="mt-8 space-y-6">
             <PathwayLessonsHubSearch basePath={base} initialQuery={qEffective} />
             <Link href={base} className="text-sm font-semibold text-primary underline">
@@ -196,11 +215,55 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
           Exam-scoped clinical lessons for {pathway.countrySlug === "canada" ? "Canada" : "the United States"} ({pathway.shortName}
           ). When lesson pages go live for this pathway, they will be listed here.
         </p>
+        <PathwayLiveInventoryStrip
+          pathway={pathway}
+          questionSnapshot={questionSnapshot}
+          lessonCount={pathwayLessonTotal}
+          variant="lessons"
+        />
         {pageResult.locale ? <PathwayLessonContentLocaleBanner listLocale={pageResult.locale} /> : null}
         <PathwayLessonsEmptyHub pathway={pathway} lessonsBasePath={base} />
         <MarketingStudyCrossLinks className="mt-14" />
       </div>
     );
+  }
+
+  const session = await auth();
+  const userId = (session?.user as { id?: string })?.id ?? "";
+  const entitlement = await resolveEntitlementForPage(userId);
+  let learnerPath: string | null = null;
+  if (userId && isDatabaseUrlConfigured()) {
+    try {
+      const u = await prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } });
+      learnerPath = u?.learnerPath ?? null;
+    } catch {
+      learnerPath = null;
+    }
+  }
+  const scope =
+    entitlement === "error"
+      ? { hasAccess: false, reason: "no_access" as const, tier: null, country: null }
+      : entitlement;
+
+  let progressMap: Record<string, PathwayLessonProgressStatus> = {};
+  let resumePayload: PathwayHubResumePayload = { lastTouched: null, nextRecommended: null, lessonsCompleted: 0 };
+
+  const canShowResume =
+    userId && scope.hasAccess && canViewFullPathwayLesson(scope, pathway, learnerPath);
+  const canShowProgressMap = canShowResume && lessons.length > 0;
+
+  if (canShowResume) {
+    const hubSlugs = canShowProgressMap ? lessons.map((l) => l.slug).filter(Boolean) : [];
+    const { resume, progressMap: map } = await loadPathwayHubSubscriberData(
+      userId,
+      scope,
+      learnerPath,
+      pathway,
+      base,
+      hubSlugs,
+    );
+    resumePayload = resume;
+    progressMap = map;
   }
 
   return (
@@ -256,16 +319,35 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         )}
       </p>
 
+      <PathwayLiveInventoryStrip
+        pathway={pathway}
+        questionSnapshot={questionSnapshot}
+        lessonCount={pathwayLessonTotal}
+        variant="lessons"
+      />
+
       {pageResult.locale ? <PathwayLessonContentLocaleBanner listLocale={pageResult.locale} /> : null}
 
       <div className="mt-8">
         <PathwayLessonsHubSearch basePath={base} initialQuery={qEffective} />
       </div>
 
+      {canShowResume && pathwayHubResumeHasContent(resumePayload) ? (
+        <div className="mt-6">
+          <PathwayLessonsResumeHub pathwayShortName={pathway.shortName} resume={resumePayload} />
+        </div>
+      ) : null}
+
       {isUsNclexPnHub ? (
-        <NclexPnLessonsHub pathway={pathway} lessons={lessons} lessonsBasePath={base} topicClusters={topics} />
+        <NclexPnLessonsHub
+          pathway={pathway}
+          lessons={lessons}
+          lessonsBasePath={base}
+          topicClusters={topics}
+          progressMap={progressMap}
+        />
       ) : isUsFnpHub ? (
-        <FnpLessonsHub pathway={pathway} lessons={lessons} lessonsBasePath={base} topicClusters={topics} />
+        <FnpLessonsHub pathway={pathway} lessons={lessons} lessonsBasePath={base} topicClusters={topics} progressMap={progressMap} />
       ) : isNclexRnHub ? (
         <NclexRnLessonsHub
           pathway={pathway}
@@ -273,6 +355,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
           lessonsBasePath={base}
           topicClusters={topics}
           region={nclexRnRegion}
+          progressMap={progressMap}
         />
       ) : (
         <>
@@ -291,9 +374,17 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
               {lessons.map((l) => {
                 const href = pathwayLessonMarketingDetailHref(base, l.slug);
                 if (!href) return null;
+                const ps = progressMap[l.slug] ?? "not_started";
                 return (
                 <li key={l.slug} className="nn-card p-4">
-                  <p className="text-xs font-medium uppercase text-muted">{l.topic}</p>
+                  <div className="flex flex-wrap items-start justify-between gap-2">
+                    <p className="text-xs font-medium uppercase text-muted">{l.topic}</p>
+                    {canShowProgressMap ? (
+                      <span className="text-[11px] font-semibold text-muted">
+                        {ps === "completed" ? "Completed" : ps === "in_progress" ? "In progress" : "Not started"}
+                      </span>
+                    ) : null}
+                  </div>
                   <Link
                     href={href}
                     className="mt-1 block text-lg font-semibold text-primary hover:underline"

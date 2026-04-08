@@ -15,6 +15,7 @@ import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/prac
 import { ProtectedPremiumContent } from "@/components/student/protected-premium-content";
 import { StudyNotesPanel } from "@/components/student/study-notes-panel";
 import { PracticeTestTeachingReviewPanel } from "@/components/student/practice-test-teaching-review-panel";
+import { PracticeTestStudyLoopNext } from "@/components/student/practice-test-study-loop-next";
 import type { PracticeTestTeachingItem } from "@/lib/practice-tests/build-teaching-review";
 
 type QRow = {
@@ -353,6 +354,12 @@ export function PracticeTestRunnerClient({
             <span className="text-lg font-semibold text-muted-foreground">({results.accuracyPct}%)</span>
           </p>
           <p className="mt-2 text-sm text-muted-foreground">
+            <span className="font-medium text-foreground">Correct:</span> {results.scoreCorrect}
+            <span className="mx-2 text-border">·</span>
+            <span className="font-medium text-foreground">Incorrect:</span>{" "}
+            {Math.max(0, results.scoreTotal - results.scoreCorrect)}
+          </p>
+          <p className="mt-2 text-sm text-muted-foreground">
             Time taken: <span className="font-medium text-foreground">{elapsedDisplay}</span>
             {timedMode && timeLimitSec != null ? (
               <> · Limit {Math.round(timeLimitSec / 60)} min</>
@@ -390,6 +397,12 @@ export function PracticeTestRunnerClient({
               ) : null}
             </p>
           ) : null}
+          <p className="mt-3 text-sm text-muted-foreground">
+            <Link className="font-semibold text-primary underline" href={`/app/practice-tests/${testId}/results`}>
+              Results summary page
+            </Link>{" "}
+            (bookmark or share this view; full teaching review stays below.)
+          </p>
           {results.catReport?.suggestedNextSteps?.length ? (
             <div className="mt-4 rounded-lg border border-border/60 bg-muted/20 p-3">
               <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Next steps</p>
@@ -400,6 +413,10 @@ export function PracticeTestRunnerClient({
               </ul>
             </div>
           ) : null}
+
+          <div className="mt-4">
+            <PracticeTestStudyLoopNext results={results} pathwayId={testConfig?.pathwayId ?? null} />
+          </div>
           {results.catReport?.blueprintDiagnostics ? (
             <div className="mt-4 rounded-lg border border-border/60 bg-muted/15 p-3">
               <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">

@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, ClipboardList, GraduationCap } from "lucide-react";
+import { ArrowRight, ClipboardList } from "lucide-react";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
-import { ExamPathwayHubStudyModes } from "@/components/exam-pathways/exam-pathway-hub-study-modes";
+import { ExamPathwayHubPrimaryStudyCards } from "@/components/exam-pathways/exam-pathway-hub-study-modes";
 import { pathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-analytics-props";
-import { HUB, loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 
 type Props = {
@@ -15,6 +16,8 @@ type Props = {
   isSignedIn: boolean;
   /** NP practice-test SEO landings: highlight in-app CAT practice tests. */
   emphasizeCatPracticeTests?: boolean;
+  /** Request path for this hub overview (e.g. `/us/rn/nclex-rn` or NP alias). Used for `/cat` intro links. */
+  marketingHubPath: string;
   /** When set, all hub CTAs include `np_seo_alias_segment` + `from_np_seo_alias` for PostHog. */
   npSeoAliasSegment?: string;
   conversionSectionHeading?: string;
@@ -25,23 +28,33 @@ export function ExamPathwayHubBody({
   pathway,
   isSignedIn,
   emphasizeCatPracticeTests = false,
+  marketingHubPath,
   npSeoAliasSegment,
   conversionSectionHeading,
   conversionSectionLead,
 }: Props) {
   const isWaitlist = pathway.acquisitionMode === "waitlist" || pathway.status === "upcoming";
+  const pathwayCatIntroHref = `${marketingHubPath.replace(/\/$/, "")}/cat`;
+  const catAppStartHref = appPathwayCatSessionStartPath(pathway.id);
   const questionsHref = buildExamPathwayPath(pathway, "questions");
   const lessonsHref = buildExamPathwayPath(pathway, "lessons");
   const pricingHref = buildExamPathwayPath(pathway, "pricing");
   const tertiaryHref = isSignedIn ? "/app" : pricingHref;
   const tertiaryLabel = isSignedIn ? "Open your study hub" : "Plans & pricing";
   const linkCtx = pathwayMarketingHubLinkContext(pathway, npSeoAliasSegment);
-  const practiceEntryHref = emphasizeCatPracticeTests
-    ? loginWithCallback("/app/practice-tests")
-    : HUB.practiceExams;
-
   return (
     <>
+      <ExamPathwayHubPrimaryStudyCards
+        pathway={pathway}
+        lessonsHref={lessonsHref}
+        questionsHref={questionsHref}
+        pathwayCatIntroHref={pathwayCatIntroHref}
+        catAppStartHref={catAppStartHref}
+        isSignedIn={isSignedIn}
+        emphasizeCatPracticeTests={emphasizeCatPracticeTests}
+        npSeoAliasSegment={npSeoAliasSegment}
+      />
+
       <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
         <MarketingTrackedLink
           href="/signup"
@@ -90,14 +103,6 @@ export function ExamPathwayHubBody({
         </MarketingTrackedLink>
       </div>
 
-      <ExamPathwayHubStudyModes
-        pathway={pathway}
-        lessonsHref={lessonsHref}
-        questionsHref={questionsHref}
-        emphasizeCatPracticeTests={emphasizeCatPracticeTests}
-        npSeoAliasSegment={npSeoAliasSegment}
-      />
-
       {emphasizeCatPracticeTests ? (
         <div className="mt-6 rounded-xl border border-primary/20 bg-primary/5 px-4 py-4 text-sm text-[var(--theme-body-text)] sm:px-5">
           <p className="font-semibold text-[var(--theme-heading-text)]">Computerized adaptive (CAT) practice tests</p>
@@ -107,7 +112,7 @@ export function ExamPathwayHubBody({
           </p>
           {isSignedIn ? (
             <MarketingTrackedLink
-              href="/app/practice-tests"
+              href={catAppStartHref}
               event={PH.marketingPathwayHubCta}
               eventProps={{
                 ...linkCtx,
@@ -115,11 +120,11 @@ export function ExamPathwayHubBody({
                 pathway_id: pathway.id,
                 signed_in: true,
                 destination_type: "cat_practice_tests",
-                link_target: "cat_practice_tests",
+                link_target: "app_pathway_cat_start",
               }}
               className="mt-3 inline-flex font-semibold text-primary hover:underline"
             >
-              Go to practice tests →
+              Start pathway CAT →
             </MarketingTrackedLink>
           ) : (
             <MarketingTrackedLink
@@ -186,57 +191,31 @@ export function ExamPathwayHubBody({
         </li>
       </ul>
 
-      <ul className="mt-6 grid gap-4 sm:grid-cols-2">
-        <li>
-          <MarketingTrackedLink
-            href={pricingHref}
-            event={PH.marketingPathwayHubCta}
-            eventProps={{
-              ...linkCtx,
-              surface: "card_pricing",
-              pathway_id: pathway.id,
-              destination_type: "marketing_pricing",
-              link_target: "marketing_pricing_hub",
-            }}
-            className="flex h-full min-h-[11rem] flex-col rounded-2xl border border-[var(--theme-card-border)] bg-card p-5 shadow-sm transition hover:border-primary/30 hover:shadow-[var(--shadow-card)] sm:min-h-[12rem]"
-          >
-            <ClipboardList className="h-5 w-5 text-primary" aria-hidden />
-            <span className="mt-3 text-base font-bold text-[var(--theme-heading-text)]">Pricing & plans</span>
-            <span className="mt-2 text-sm text-[var(--theme-body-text)]">
-              See the NurseNest tier for this pathway in {pathway.countryCode}. NP specialties may share the NP tier until per-pathway billing
-              ships.
-            </span>
-            <span className="mt-auto inline-flex items-center pt-4 text-sm font-semibold text-primary">
-              Compare plans
-              <ArrowRight className="ml-1 h-4 w-4" />
-            </span>
-          </MarketingTrackedLink>
-        </li>
-        <li>
-          <MarketingTrackedLink
-            href={practiceEntryHref}
-            event={PH.marketingPathwayHubCta}
-            eventProps={{
-              ...linkCtx,
-              surface: "card_timed_exams",
-              pathway_id: pathway.id,
-              destination_type: "marketing_timed_exams",
-              link_target: emphasizeCatPracticeTests ? "app_practice_tests" : "public_practice_exams",
-            }}
-            className="flex h-full min-h-[11rem] flex-col rounded-2xl border border-[var(--theme-card-border)] bg-card p-5 shadow-sm transition hover:border-primary/30 hover:shadow-[var(--shadow-card)] sm:min-h-[12rem]"
-          >
-            <GraduationCap className="h-5 w-5 text-primary" aria-hidden />
-            <span className="mt-3 text-base font-bold text-[var(--theme-heading-text)]">Timed practice exams</span>
-            <span className="mt-2 text-sm text-[var(--theme-body-text)]">
-              Full-length and half-length mocks live in the app after sign-in. Use them once category scores hold steady.
-            </span>
-            <span className="mt-auto inline-flex items-center pt-4 text-sm font-semibold text-primary">
-              Go to exams
-              <ArrowRight className="ml-1 h-4 w-4" />
-            </span>
-          </MarketingTrackedLink>
-        </li>
-      </ul>
+      <div className="mt-6 max-w-md">
+        <MarketingTrackedLink
+          href={pricingHref}
+          event={PH.marketingPathwayHubCta}
+          eventProps={{
+            ...linkCtx,
+            surface: "card_pricing",
+            pathway_id: pathway.id,
+            destination_type: "marketing_pricing",
+            link_target: "marketing_pricing_hub",
+          }}
+          className="flex h-full min-h-[11rem] flex-col rounded-2xl border border-[var(--theme-card-border)] bg-card p-5 shadow-sm transition hover:border-primary/30 hover:shadow-[var(--shadow-card)] sm:min-h-[12rem]"
+        >
+          <ClipboardList className="h-5 w-5 text-primary" aria-hidden />
+          <span className="mt-3 text-base font-bold text-[var(--theme-heading-text)]">Pricing & plans</span>
+          <span className="mt-2 text-sm text-[var(--theme-body-text)]">
+            See the NurseNest tier for this pathway in {pathway.countryCode}. NP specialties may share the NP tier until per-pathway billing
+            ships.
+          </span>
+          <span className="mt-auto inline-flex items-center pt-4 text-sm font-semibold text-primary">
+            Compare plans
+            <ArrowRight className="ml-1 h-4 w-4" />
+          </span>
+        </MarketingTrackedLink>
+      </div>
 
       {isSignedIn ? (
         <>
@@ -264,7 +243,7 @@ export function ExamPathwayHubBody({
             {emphasizeCatPracticeTests ? (
               <li>
                 <MarketingTrackedLink
-                  href="/app/practice-tests"
+                  href={catAppStartHref}
                   event={PH.marketingPathwayHubCta}
                   eventProps={{
                     ...linkCtx,
@@ -272,11 +251,11 @@ export function ExamPathwayHubBody({
                     pathway_id: pathway.id,
                     signed_in: true,
                     destination_type: "cat_practice_tests",
-                    link_target: "cat_practice_tests",
+                    link_target: "app_pathway_cat_start",
                   }}
                   className="block rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)] px-4 py-3 text-sm font-semibold text-[var(--theme-heading-text)] hover:border-primary/25"
                 >
-                  Adaptive practice tests →
+                  Start pathway CAT →
                 </MarketingTrackedLink>
               </li>
             ) : null}

@@ -10,7 +10,11 @@ import { StudyNotesPanel } from "@/components/student/study-notes-panel";
 import type { RationaleQualityClient } from "@/components/student/premium-rationale-panel";
 import type { RationaleReferenceMedia } from "@/lib/content-quality/rationale-media";
 import type { NormalizedTeachingPayload, TeachingMediaBundle } from "@/lib/content-quality/teaching-payload";
-import { recordQuestionPerformanceEvent } from "@/lib/learner/question-performance-events";
+import {
+  questionIdsWithIncorrectAttempts,
+  readQuestionPerformanceEvents,
+  recordQuestionPerformanceEvent,
+} from "@/lib/learner/question-performance-events";
 import { PremiumRationalePanel } from "@/components/student/premium-rationale-panel";
 import type { QuestionListEmptyDiagnostics } from "@/lib/questions/question-list-empty-diagnostics";
 import type { EmptyCopyI18n } from "@/lib/student/gated-state-messages-i18n";
@@ -20,6 +24,8 @@ import {
   questionsApiFailureKey,
 } from "@/lib/student/gated-state-messages-i18n";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { QuestionSessionStudyLoopPanel } from "@/components/student/question-session-study-loop-panel";
+import { ExamProgressBar, ExamSessionShell, ExamSessionTopBar } from "@/components/exam/exam-session-shell";
 
 type QFull = {
   id: string;
@@ -45,6 +51,40 @@ function parseOptions(raw: unknown): string[] {
 function sessionKey(userId: string) {
   return `nn_qbank_session_${userId}`;
 }
+
+function presetsStorageKey(userId: string) {
+  return `nn_qbank_presets_${userId}`;
+}
+
+export type QuestionBankDifficultyBand = "" | "easy" | "moderate" | "hard";
+
+function difficultyQueryBounds(band: QuestionBankDifficultyBand): { min: number | null; max: number | null } {
+  switch (band) {
+    case "easy":
+      return { min: 1, max: 2 };
+    case "moderate":
+      return { min: 3, max: 3 };
+    case "hard":
+      return { min: 4, max: 5 };
+    default:
+      return { min: null, max: null };
+  }
+}
+
+export type SavedQuestionBankPreset = {
+  id: string;
+  name: string;
+  savedAt: number;
+  preset: QuestionBankPreset;
+  pathwayId: string | null;
+  topic: string | null;
+  exam: string | null;
+  difficultyBand: QuestionBankDifficultyBand;
+  incorrectOnly: boolean;
+  sessionSize: number;
+  examShell: boolean;
+  efficiencyMode: string | null;
+};
 
 function rollupsKey(userId: string) {
   return `nn_qbank_rollups_${userId}`;
@@ -109,12 +149,15 @@ export function QuestionBankPracticeClient({
   protectionFlags,
   pathwayOptions = [],
   defaultPathwayId = null,
+  pathwayExamKeysByPathwayId = {},
 }: {
   userId: string;
   userLabel: string;
   protectionFlags: PremiumProtectionFlags;
   pathwayOptions?: { id: string; label: string }[];
   defaultPathwayId?: string | null;
+  /** Maps pathway id → content exam keys (RN vs PN vs NP scope for exam-family filter). */
+  pathwayExamKeysByPathwayId?: Record<string, string[]>;
 }) {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -130,13 +173,20 @@ export function QuestionBankPracticeClient({
   const [preset, setPreset] = useState<QuestionBankPreset>("pathway_mixed");
   const seenIdsRef = useRef<string[]>([]);
   const [topics, setTopics] = useState<{ topic: string; count: number }[]>([]);
+  const [examBuckets, setExamBuckets] = useState<{ exam: string | null; count: number }[]>([]);
   const [topicMenuTruncationNotice, setTopicMenuTruncationNotice] = useState<string | null>(null);
   const [discoveryNotice, setDiscoveryNotice] = useState<string | null>(null);
   const [efficiencyMode, setEfficiencyMode] = useState<string | null>(null);
   /** Exam-style bank: suppress rich rationale until learner opts in (reduces “open-book” feel). */
   const [examShell, setExamShell] = useState(false);
   const [examShowExplanation, setExamShowExplanation] = useState(false);
-  const [emptyCopy, setEmptyCopy] = useState<EmptyCopyI18n | "pick_topic" | null>(null);
+  const [difficultyBand, setDifficultyBand] = useState<QuestionBankDifficultyBand>("");
+  const [sessionSize, setSessionSize] = useState(20);
+  const [incorrectOnly, setIncorrectOnly] = useState(false);
+  const [examFilter, setExamFilter] = useState<string | null>(null);
+  const [savedPresets, setSavedPresets] = useState<SavedQuestionBankPreset[]>([]);
+  const [presetNameDraft, setPresetNameDraft] = useState("");
+  const [emptyCopy, setEmptyCopy] = useState<EmptyCopyI18n | "pick_topic" | "no_mistakes" | null>(null);
   const [idx, setIdx] = useState(0);
   const [answer, setAnswer] = useState<unknown>(null);
   const [graded, setGraded] = useState<
@@ -162,6 +212,28 @@ export function QuestionBankPracticeClient({
   >({});
   const [grading, setGrading] = useState(false);
   const questionOpenedAtMsRef = useRef<number | null>(null);
+  /** Per-option exam tools (reset each item). */
+  const [strikeOut, setStrikeOut] = useState<Record<string, boolean>>({});
+  const [highlightOn, setHighlightOn] = useState<Record<string, boolean>>({});
+
+  const incorrectMistakeIds = useMemo(() => {
+    void graded;
+    if (!incorrectOnly) return [];
+    const events = readQuestionPerformanceEvents(userId, 220);
+    return questionIdsWithIncorrectAttempts(events, 200);
+  }, [incorrectOnly, userId, graded]);
+
+  const pathwayExamKeySet = useMemo(() => {
+    if (!pathwayIdFilter) return null;
+    const keys = pathwayExamKeysByPathwayId[pathwayIdFilter];
+    if (!keys?.length) return null;
+    return new Set(keys);
+  }, [pathwayIdFilter, pathwayExamKeysByPathwayId]);
+
+  const examBucketsForPathway = useMemo(() => {
+    if (!pathwayExamKeySet || pathwayExamKeySet.size === 0) return examBuckets;
+    return examBuckets.filter((b) => b.exam != null && pathwayExamKeySet.has(b.exam));
+  }, [examBuckets, pathwayExamKeySet]);
 
   const current = questions[idx];
   const total = questions.length;
@@ -170,7 +242,13 @@ export function QuestionBankPracticeClient({
     if (current?.id) questionOpenedAtMsRef.current = Date.now();
   }, [current?.id]);
 
-  const topicForApi = preset === "topic_drill" ? topic : null;
+  useEffect(() => {
+    setStrikeOut({});
+    setHighlightOn({});
+  }, [current?.id]);
+
+  /** Optional topic narrow for any preset; topic drill still uses “recent” sort below. */
+  const topicForApi = topic && topic.trim().length > 0 ? topic.trim() : null;
   const sortForApi = preset === "topic_drill" ? "recent" : "random";
 
   /** Avoid one request without pathway when mixed mode will apply learner pathway on next tick. */
@@ -188,17 +266,29 @@ export function QuestionBankPracticeClient({
           setPhase("empty");
           return;
         }
+        if (incorrectOnly && incorrectMistakeIds.length === 0) {
+          setQuestions([]);
+          setEmptyCopy("no_mistakes");
+          setPhase("empty");
+          seenIdsRef.current = [];
+          return;
+        }
 
         const qs = new URLSearchParams({
           mode: "preview",
           page: "1",
-          pageSize: "20",
+          pageSize: String(sessionSize),
           sort: sortForApi,
         });
         if (topicForApi) qs.set("topic", topicForApi);
         if (topicCodeFilter) qs.set("topicCode", topicCodeFilter);
         if (pathwayIdFilter) qs.set("pathwayId", pathwayIdFilter);
         if (efficiencyMode) qs.set("studyMode", efficiencyMode);
+        const dBounds = difficultyQueryBounds(difficultyBand);
+        if (dBounds.min != null) qs.set("difficultyMin", String(dBounds.min));
+        if (dBounds.max != null) qs.set("difficultyMax", String(dBounds.max));
+        if (examFilter) qs.set("exam", examFilter);
+        if (incorrectMistakeIds.length > 0) qs.set("mistakeIds", incorrectMistakeIds.join(","));
         if (append && seenIdsRef.current.length > 0) {
           qs.set("excludeIds", seenIdsRef.current.join(","));
         }
@@ -301,6 +391,11 @@ export function QuestionBankPracticeClient({
                 saved.preset === preset &&
                 (saved.topic ?? null) === (topicForApi ?? null) &&
                 (saved.pathwayId ?? null) === (pathwayIdFilter ?? null) &&
+                (saved.sessionSize ?? 20) === sessionSize &&
+                (saved.difficultyBand ?? "") === difficultyBand &&
+                (saved.examFilter ?? null) === (examFilter ?? null) &&
+                Boolean(saved.incorrectOnly) === incorrectOnly &&
+                Boolean(saved.examShell) === examShell &&
                 saved.ids &&
                 sameIdListOrderIndependent(saved.ids, listIds)
               ) {
@@ -320,7 +415,23 @@ export function QuestionBankPracticeClient({
         setError(t("learner.qbank.networkError"));
       }
     },
-    [userId, preset, topicForApi, topicCodeFilter, topic, pathwayIdFilter, sortForApi, efficiencyMode, t],
+    [
+      userId,
+      preset,
+      topicForApi,
+      topicCodeFilter,
+      topic,
+      pathwayIdFilter,
+      sortForApi,
+      efficiencyMode,
+      sessionSize,
+      difficultyBand,
+      examFilter,
+      incorrectOnly,
+      incorrectMistakeIds,
+      examShell,
+      t,
+    ],
   );
 
   useEffect(() => {
@@ -386,6 +497,7 @@ export function QuestionBankPracticeClient({
         if (cancelled) return;
         setDiscoveryNotice(null);
         if (data.buckets) setTopics(data.buckets);
+        if (data.examFamily) setExamBuckets(data.examFamily);
         if (data.limits?.topicsTruncated) {
           const cap = data.limits.topicBucketCap ?? 250;
           const omitted = data.limits.topicsOmittedCount ?? 0;
@@ -408,6 +520,31 @@ export function QuestionBankPracticeClient({
   }, [loadBatch, pathwayMixedReady]);
 
   useEffect(() => {
+    try {
+      const raw = localStorage.getItem(presetsStorageKey(userId));
+      if (!raw) return;
+      const parsed = JSON.parse(raw) as unknown;
+      if (!Array.isArray(parsed)) return;
+      const cleaned = parsed.filter(
+        (x): x is SavedQuestionBankPreset =>
+          Boolean(x) &&
+          typeof (x as SavedQuestionBankPreset).name === "string" &&
+          typeof (x as SavedQuestionBankPreset).id === "string",
+      );
+      setSavedPresets(cleaned);
+    } catch {
+      /* ignore */
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    if (!examFilter) return;
+    if (examBucketsForPathway.length === 0) return;
+    const ok = examBucketsForPathway.some((b) => b.exam === examFilter);
+    if (!ok) setExamFilter(null);
+  }, [examFilter, examBucketsForPathway]);
+
+  useEffect(() => {
     if (phase !== "ready" || questions.length === 0) return;
     try {
       localStorage.setItem(
@@ -419,13 +556,32 @@ export function QuestionBankPracticeClient({
           pathwayId: pathwayIdFilter,
           preset,
           graded,
+          sessionSize,
+          difficultyBand,
+          examFilter,
+          incorrectOnly,
+          examShell,
           savedAt: Date.now(),
         }),
       );
     } catch {
       /* ignore */
     }
-  }, [phase, questions, idx, topicForApi, pathwayIdFilter, preset, graded, userId]);
+  }, [
+    phase,
+    questions,
+    idx,
+    topicForApi,
+    pathwayIdFilter,
+    preset,
+    graded,
+    userId,
+    sessionSize,
+    difficultyBand,
+    examFilter,
+    incorrectOnly,
+    examShell,
+  ]);
 
   const optsCanonical = useMemo(() => (current ? parseOptions(current.options) : []), [current]);
   const optsDisplay = useMemo(() => {
@@ -501,6 +657,62 @@ export function QuestionBankPracticeClient({
     }
   }
 
+  function applySavedPreset(id: string) {
+    const p = savedPresets.find((x) => x.id === id);
+    if (!p) return;
+    setPreset(p.preset);
+    setPathwayIdFilter(p.pathwayId);
+    setTopic(p.topic);
+    setExamFilter(p.exam);
+    setDifficultyBand((p.difficultyBand ?? "") as QuestionBankDifficultyBand);
+    setIncorrectOnly(p.incorrectOnly);
+    setSessionSize(p.sessionSize);
+    setExamShell(p.examShell);
+    setExamShowExplanation(!p.examShell);
+    setEfficiencyMode(p.efficiencyMode);
+  }
+
+  function deleteSavedPreset(id: string) {
+    const next = savedPresets.filter((x) => x.id !== id);
+    setSavedPresets(next);
+    try {
+      localStorage.setItem(presetsStorageKey(userId), JSON.stringify(next));
+    } catch {
+      /* ignore */
+    }
+  }
+
+  function saveNamedPreset() {
+    const name = presetNameDraft.trim();
+    if (!name) return;
+    const id =
+      typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+        ? crypto.randomUUID()
+        : `preset_${Date.now()}`;
+    const row: SavedQuestionBankPreset = {
+      id,
+      name,
+      savedAt: Date.now(),
+      preset,
+      pathwayId: pathwayIdFilter,
+      topic,
+      exam: examFilter,
+      difficultyBand,
+      incorrectOnly,
+      sessionSize,
+      examShell,
+      efficiencyMode,
+    };
+    const next = [...savedPresets, row].slice(-15);
+    setSavedPresets(next);
+    try {
+      localStorage.setItem(presetsStorageKey(userId), JSON.stringify(next));
+    } catch {
+      /* ignore */
+    }
+    setPresetNameDraft("");
+  }
+
   function next() {
     setAnswer(null);
     setIdx((i) => Math.min(total - 1, i + 1));
@@ -534,7 +746,9 @@ export function QuestionBankPracticeClient({
     const keys: EmptyCopyI18n =
       emptyCopy === "pick_topic"
         ? { titleKey: "learner.qbank.pickTopic.title", bodyKey: "learner.qbank.pickTopic.body" }
-        : (emptyCopy ?? questionBankEmptyKeys(undefined));
+        : emptyCopy === "no_mistakes"
+          ? { titleKey: "learner.qbank.filters.noMistakesTitle", bodyKey: "learner.qbank.filters.noMistakesBody" }
+          : (emptyCopy ?? questionBankEmptyKeys(undefined));
     const title = t(keys.titleKey, keys.bodyParams);
     const body = t(keys.bodyKey, keys.bodyParams);
     return (
@@ -569,287 +783,545 @@ export function QuestionBankPracticeClient({
         <p className="rounded-lg border border-role-warning-border bg-role-warning-soft px-3 py-2 text-sm text-role-warning-text">{softNotice}</p>
       ) : null}
 
-      <div className="flex flex-wrap items-end gap-4">
-        <label className="block text-sm">
-          <span className="text-muted">{t("learner.qbank.ui.studyMode")}</span>
-          <select
-            className="ml-2 rounded-lg border border-border bg-white px-2 py-1.5 text-sm"
-            value={preset}
-            onChange={(e) => {
-              const v = e.target.value as QuestionBankPreset;
-              setPreset(v);
-              if (v === "random_bank") {
-                setTopic(null);
-                setPathwayIdFilter(null);
-              }
-              if (v === "pathway_mixed" && pathwayOptions[0]) setPathwayIdFilter(pathwayOptions[0].id);
-            }}
-          >
-            <option value="pathway_mixed">{t("learner.qbank.preset.pathwayMixed")}</option>
-            <option value="topic_drill">{t("learner.qbank.preset.topicDrill")}</option>
-            <option value="random_bank">{t("learner.qbank.preset.randomBank")}</option>
-          </select>
-        </label>
-        {pathwayOptions.length > 0 ? (
-          <label className="block text-sm">
-            <span className="text-muted">{t("learner.qbank.ui.pathwayFilter")}</span>
-            <select
-              className="ml-2 max-w-[min(100%,280px)] rounded-lg border border-border bg-white px-2 py-1.5 text-sm"
-              value={pathwayIdFilter ?? ""}
-              onChange={(e) => setPathwayIdFilter(e.target.value === "" ? null : e.target.value)}
-              disabled={preset === "random_bank"}
-            >
-              {preset === "random_bank" || preset === "topic_drill" ? (
-                <option value="">{t("learner.qbank.ui.pathwayAll")}</option>
-              ) : null}
-              {pathwayOptions.map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.label}
-                </option>
-              ))}
-            </select>
-          </label>
-        ) : null}
-        <label className="block text-sm">
-          <span className="text-muted">{t("learner.qbank.ui.topicDrill")}</span>
-          <select
-            className="ml-2 max-w-[min(100%,260px)] rounded-lg border border-border bg-white px-2 py-1.5 text-sm"
-            value={topic ?? ""}
-            onChange={(e) => setTopic(e.target.value === "" ? null : e.target.value)}
-            disabled={preset !== "topic_drill"}
-          >
-            <option value="">{t("learner.qbank.ui.selectTopic")}</option>
-            {topics.map((b) => (
-              <option key={b.topic} value={b.topic}>
-                {b.topic} ({b.count})
-              </option>
-            ))}
-          </select>
-        </label>
-        <p className="text-xs text-muted">
-          {sessionTotal > 0
-            ? t("learner.qbank.ui.sessionLine", { correct: sessionRight, total: sessionTotal })
-            : t("learner.qbank.ui.sessionLineIdle")}
-        </p>
-        <label className="block text-sm">
-          <span className="text-muted">{t("learner.qbank.ui.efficiencyMode")}</span>
-          <select
-            className="ml-2 rounded-lg border border-border bg-white px-2 py-1.5 text-sm"
-            value={efficiencyMode ?? ""}
-            onChange={(e) => {
-              const v = e.target.value;
-              setEfficiencyMode(v || null);
-              const qs = new URLSearchParams(searchParams.toString());
-              if (v) qs.set("studyMode", v);
-              else qs.delete("studyMode");
-              router.replace(`${pathname}?${qs.toString()}`);
-            }}
-          >
-            <option value="">{t("learner.qbank.efficiency.off")}</option>
-            <option value="weak">{t("learner.qbank.efficiency.weak")}</option>
-            <option value="high_yield">{t("learner.qbank.efficiency.highYield")}</option>
-            <option value="rapid">{t("learner.qbank.efficiency.rapid")}</option>
-            <option value="final_prep">{t("learner.qbank.efficiency.finalPrep")}</option>
-          </select>
-        </label>
-      </div>
-
-      <ProtectedPremiumContent userLabel={userLabel} flags={protectionFlags} telemetrySurface="question_bank">
-        <div className="nn-card space-y-4 p-6">
-          <div className="flex flex-wrap gap-2 text-xs text-muted">
-            <span>
-              {t("learner.qbank.ui.questionOf", { n: idx + 1, total })}
-            </span>
-            {current.topic ? <span className="rounded-full bg-primary/10 px-2 py-0.5 text-primary">{current.topic}</span> : null}
-            {current.exam ? <span>{current.exam}</span> : null}
-            <span className="uppercase">{current.questionType}</span>
-            <span className="rounded-full bg-muted px-2 py-0.5 text-muted-foreground">
-              {sortForApi === "random" ? t("learner.qbank.ui.sortRandom") : t("learner.qbank.ui.sortRecent")}
-            </span>
+      <details className="nn-card mb-4 overflow-hidden rounded-xl border border-border">
+        <summary className="cursor-pointer px-4 py-3.5 text-sm font-semibold text-foreground outline-none hover:bg-muted/30">
+          {t("learner.qbank.examUi.sessionSetup")}
+        </summary>
+        <div className="space-y-6 border-t border-border bg-muted/10 p-4">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              {t("learner.qbank.filters.sessionBuilderHeading")}
+            </p>
+            <div className="mt-3 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-end">
+              <label className="block min-w-[min(100%,160px)] text-sm">
+                <span className="text-muted-foreground">{t("learner.qbank.filters.sessionSize")}</span>
+                <select
+                  className="mt-1 w-full min-h-11 rounded-lg border border-border bg-card px-3 py-2.5 text-sm"
+                  value={sessionSize}
+                  onChange={(e) => setSessionSize(Number(e.target.value))}
+                >
+                  {[10, 15, 20, 30, 40, 50].map((n) => (
+                    <option key={n} value={n}>
+                      {n}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className="block min-w-[min(100%,220px)] text-sm">
+                <span className="text-muted-foreground">{t("learner.qbank.filters.practiceMode")}</span>
+                <select
+                  className="mt-1 w-full min-h-11 rounded-lg border border-border bg-card px-3 py-2.5 text-sm"
+                  value={examShell ? "exam" : "practice"}
+                  onChange={(e) => {
+                    const exam = e.target.value === "exam";
+                    setExamShell(exam);
+                    setExamShowExplanation(!exam);
+                  }}
+                >
+                  <option value="practice">{t("learner.qbank.filters.modePractice")}</option>
+                  <option value="exam">{t("learner.qbank.filters.modeExam")}</option>
+                </select>
+              </label>
+            </div>
           </div>
 
-          <p className="text-base font-medium leading-relaxed">{current.stem}</p>
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              {t("learner.qbank.filters.filtersHeading")}
+            </p>
+            <div className="mt-3 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-end">
+              <label className="block min-w-[min(100%,200px)] text-sm">
+                <span className="text-muted-foreground">{t("learner.qbank.ui.studyMode")}</span>
+                <select
+                  className="mt-1 w-full min-h-11 rounded-lg border border-border bg-card px-3 py-2.5 text-sm"
+                  value={preset}
+                  onChange={(e) => {
+                    const v = e.target.value as QuestionBankPreset;
+                    setPreset(v);
+                    if (v === "random_bank") {
+                      setTopic(null);
+                      setPathwayIdFilter(null);
+                    }
+                    if (v === "pathway_mixed" && pathwayOptions[0]) setPathwayIdFilter(pathwayOptions[0].id);
+                  }}
+                >
+                  <option value="pathway_mixed">{t("learner.qbank.preset.pathwayMixed")}</option>
+                  <option value="topic_drill">{t("learner.qbank.preset.topicDrill")}</option>
+                  <option value="random_bank">{t("learner.qbank.preset.randomBank")}</option>
+                </select>
+              </label>
+              {pathwayOptions.length > 0 ? (
+                <label className="block min-w-[min(100%,240px)] text-sm">
+                  <span className="text-muted-foreground">{t("learner.qbank.ui.pathwayFilter")}</span>
+                  <select
+                    className="mt-1 w-full max-w-full min-h-11 rounded-lg border border-border bg-card px-3 py-2.5 text-sm"
+                    value={pathwayIdFilter ?? ""}
+                    onChange={(e) => setPathwayIdFilter(e.target.value === "" ? null : e.target.value)}
+                    disabled={preset === "random_bank"}
+                  >
+                    {preset === "random_bank" || preset === "topic_drill" ? (
+                      <option value="">{t("learner.qbank.ui.pathwayAll")}</option>
+                    ) : null}
+                    {pathwayOptions.map((p) => (
+                      <option key={p.id} value={p.id}>
+                        {p.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              ) : null}
+              <label className="block min-w-[min(100%,240px)] text-sm">
+                <span className="text-muted-foreground">{t("learner.qbank.filters.topicOptional")}</span>
+                <select
+                  className="mt-1 w-full min-h-11 rounded-lg border border-border bg-card px-3 py-2.5 text-sm"
+                  value={topic ?? ""}
+                  onChange={(e) => setTopic(e.target.value === "" ? null : e.target.value)}
+                >
+                  <option value="">
+                    {preset === "topic_drill" ? t("learner.qbank.ui.selectTopic") : t("learner.qbank.filters.anyTopic")}
+                  </option>
+                  {topics.map((b) => (
+                    <option key={b.topic} value={b.topic}>
+                      {b.topic} ({b.count})
+                    </option>
+                  ))}
+                </select>
+              </label>
+              {examBucketsForPathway.length > 0 ? (
+                <label className="block min-w-[min(100%,220px)] text-sm">
+                  <span className="text-muted-foreground">{t("learner.qbank.filters.examFamily")}</span>
+                  <select
+                    className="mt-1 w-full min-h-11 rounded-lg border border-border bg-card px-3 py-2.5 text-sm"
+                    value={examFilter ?? ""}
+                    onChange={(e) => setExamFilter(e.target.value === "" ? null : e.target.value)}
+                  >
+                    <option value="">{t("learner.qbank.filters.anyExam")}</option>
+                    {examBucketsForPathway.map((b) =>
+                      b.exam ? (
+                        <option key={b.exam} value={b.exam}>
+                          {b.exam} ({b.count})
+                        </option>
+                      ) : null,
+                    )}
+                  </select>
+                </label>
+              ) : null}
+              <label className="block min-w-[min(100%,200px)] text-sm">
+                <span className="text-muted-foreground">{t("learner.qbank.filters.difficulty")}</span>
+                <select
+                  className="mt-1 w-full min-h-11 rounded-lg border border-border bg-card px-3 py-2.5 text-sm"
+                  value={difficultyBand}
+                  onChange={(e) => setDifficultyBand(e.target.value as QuestionBankDifficultyBand)}
+                >
+                  <option value="">{t("learner.qbank.filters.difficultyAny")}</option>
+                  <option value="easy">{t("learner.qbank.filters.difficultyEasy")}</option>
+                  <option value="moderate">{t("learner.qbank.filters.difficultyModerate")}</option>
+                  <option value="hard">{t("learner.qbank.filters.difficultyHard")}</option>
+                </select>
+              </label>
+              <label className="flex min-h-11 cursor-pointer items-center gap-3 rounded-lg border border-border bg-card px-3 py-2.5 text-sm sm:min-w-[220px]">
+                <input
+                  type="checkbox"
+                  className="size-5 rounded border-border"
+                  checked={incorrectOnly}
+                  onChange={(e) => setIncorrectOnly(e.target.checked)}
+                />
+                <span className="text-foreground">{t("learner.qbank.filters.incorrectOnly")}</span>
+              </label>
+              <label className="block min-w-[min(100%,200px)] text-sm">
+                <span className="text-muted-foreground">{t("learner.qbank.ui.efficiencyMode")}</span>
+                <select
+                  className="mt-1 w-full min-h-11 rounded-lg border border-border bg-card px-3 py-2.5 text-sm"
+                  value={efficiencyMode ?? ""}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    setEfficiencyMode(v || null);
+                    const qs = new URLSearchParams(searchParams.toString());
+                    if (v) qs.set("studyMode", v);
+                    else qs.delete("studyMode");
+                    router.replace(`${pathname}?${qs.toString()}`);
+                  }}
+                >
+                  <option value="">{t("learner.qbank.efficiency.off")}</option>
+                  <option value="weak">{t("learner.qbank.efficiency.weak")}</option>
+                  <option value="high_yield">{t("learner.qbank.efficiency.highYield")}</option>
+                  <option value="rapid">{t("learner.qbank.efficiency.rapid")}</option>
+                  <option value="final_prep">{t("learner.qbank.efficiency.finalPrep")}</option>
+                </select>
+              </label>
+            </div>
+            {incorrectOnly ? (
+              <p className="mt-2 text-xs text-muted-foreground">{t("learner.qbank.filters.incorrectOnlyHint")}</p>
+            ) : null}
+          </div>
 
-          {isSata ? (
-            <ul className="space-y-2">
-              {optsCanonical.map((canonical, i) => {
-                const label = optsDisplay[i] ?? canonical;
-                const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
-                return (
-                  <li key={canonical}>
-                    <label className="flex cursor-pointer items-start gap-2 text-sm">
-                      <input
-                        type="checkbox"
-                        checked={selected}
-                        disabled={!!g}
-                        onChange={(e) => {
-                          const prev = Array.isArray(raw) ? [...raw] : [];
-                          const next = e.target.checked ? [...prev, canonical] : prev.filter((x) => x !== canonical);
-                          setAnswer(next);
-                        }}
-                        className="mt-1"
-                      />
-                      <span>{label}</span>
-                    </label>
-                  </li>
-                );
-              })}
-            </ul>
-          ) : (
-            <ul className="space-y-2">
-              {optsCanonical.map((canonical, i) => {
-                const label = optsDisplay[i] ?? canonical;
-                return (
-                  <li key={canonical}>
-                    <button
-                      type="button"
-                      disabled={!!g}
-                      onClick={() => setAnswer(canonical)}
-                      className={`w-full rounded-xl border px-4 py-3 text-left text-sm transition ${
-                        raw === canonical ? "border-primary bg-primary/10" : "border-border hover:bg-primary/5"
-                      }`}
-                    >
-                      {label}
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-
-          {!g ? (
-            <div className="flex flex-wrap gap-2 pt-2">
+          <div className="rounded-lg border border-border/80 bg-card/40 p-3">
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              {t("learner.qbank.filters.presetsHeading")}
+            </p>
+            <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
+              <label className="block min-w-[min(100%,200px)] flex-1 text-sm">
+                <span className="text-muted-foreground">{t("learner.qbank.filters.presetName")}</span>
+                <input
+                  type="text"
+                  value={presetNameDraft}
+                  onChange={(e) => setPresetNameDraft(e.target.value)}
+                  placeholder={t("learner.qbank.filters.presetNamePlaceholder")}
+                  className="mt-1 w-full min-h-11 rounded-lg border border-border bg-card px-3 py-2 text-sm"
+                />
+              </label>
               <button
                 type="button"
-                disabled={grading || answer === null || (Array.isArray(answer) && answer.length === 0)}
-                className="rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground disabled:opacity-50"
-                onClick={() => void checkAnswer()}
+                className="min-h-11 rounded-full border-2 border-border px-4 text-sm font-semibold hover:bg-muted/60"
+                onClick={() => saveNamedPreset()}
               >
-                {grading ? t("learner.qbank.ui.checking") : t("learner.qbank.ui.checkAnswer")}
+                {t("learner.qbank.filters.savePreset")}
               </button>
-            </div>
-          ) : (
-            <>
-              {examShell && !examShowExplanation ? (
-                <div className="rounded-xl border border-slate-200 bg-slate-50/80 p-4 dark:border-slate-700 dark:bg-slate-900/40">
-                  <p className={`text-sm font-semibold ${g.correct ? "text-role-success" : "text-red-700 dark:text-red-400"}`}>
-                    {g.correct ? t("learner.qbank.ui.correct") : t("learner.qbank.ui.incorrect")}
-                  </p>
-                  <p className="mt-2 text-xs text-muted-foreground">{t("learner.qbank.ui.examShellHint")}</p>
-                  <button
-                    type="button"
-                    className="mt-3 rounded-full border border-primary/40 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary"
-                    onClick={() => setExamShowExplanation(true)}
-                  >
-                    {t("learner.qbank.ui.showExplanation")}
-                  </button>
-                </div>
-              ) : (
-                <PremiumRationalePanel
-                  correct={g.correct}
-                  rationale={g.rationale}
-                  rationaleQuality={g.rationaleQuality}
-                  rationaleSections={g.rationaleSections}
-                  referenceMedia={g.referenceMedia}
-                  teaching={g.teaching}
-                  teachingMedia={g.teachingMedia}
-                />
-              )}
-              <div className="mt-4 flex flex-wrap gap-2">
-                <button
-                  type="button"
-                  disabled={idx === 0}
-                  className="rounded-full border border-border px-4 py-2 text-sm disabled:opacity-40"
-                  onClick={prev}
-                >
-                  {t("learner.qbank.ui.previous")}
-                </button>
-                {idx < total - 1 ? (
-                  <button type="button" className="rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground" onClick={next}>
-                    {t("learner.qbank.ui.nextQuestion")}
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    className="rounded-full border border-primary px-4 py-2 text-sm font-semibold text-primary"
-                    onClick={() => void loadBatch(true)}
-                  >
-                    {t("learner.qbank.ui.loadMore")}
-                  </button>
-                )}
-              </div>
-              {g.learningLoop?.topicCode ? (
-                <div className="mt-4 rounded-xl border border-border/70 bg-muted/20 p-3">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                    {t("learner.qbank.ui.continuePriority")}
-                  </p>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    {t("learner.qbank.ui.topicCodeLine", {
-                      code: g.learningLoop.topicCode ?? "",
-                      confidence: g.learningLoop.confidence,
-                    })}
-                  </p>
-                  {g.learningLoop.confidence === "high" ? (
-                    <p className="mt-1 text-xs text-muted-foreground">{t("learner.qbank.ui.learningHigh")}</p>
-                  ) : g.learningLoop.confidence === "medium" ? (
-                    <p className="mt-1 text-xs text-muted-foreground">{t("learner.qbank.ui.learningMedium")}</p>
-                  ) : (
-                    <p className="mt-1 text-xs text-role-warning">{t("learner.qbank.ui.learningLow")}</p>
-                  )}
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {g.learningLoop.lessonHref ? (
-                      <Link
-                        href={g.learningLoop.lessonHref}
-                        className="rounded-full border border-border bg-card px-3 py-1.5 text-xs font-semibold hover:bg-muted/80"
-                      >
-                        {t("learner.qbank.ui.relatedLesson")}
-                      </Link>
-                    ) : null}
-                    {g.learningLoop.flashcardsHref ? (
-                      <Link
-                        href={g.learningLoop.flashcardsHref}
-                        className="rounded-full border border-border bg-card px-3 py-1.5 text-xs font-semibold hover:bg-muted/80"
-                      >
-                        {t("learner.qbank.ui.reviewFlashcards")}
-                      </Link>
-                    ) : null}
-                    {g.learningLoop.topicDrillHref ? (
-                      <Link
-                        href={g.learningLoop.topicDrillHref}
-                        className="rounded-full bg-role-cta px-3 py-1.5 text-xs font-semibold text-role-cta-foreground"
-                      >
-                        {t("learner.qbank.ui.topicDrillSameCode")}
-                      </Link>
-                    ) : null}
-                  </div>
+              {savedPresets.length > 0 ? (
+                <div className="flex min-w-[min(100%,280px)] flex-1 flex-col gap-2 sm:flex-row sm:items-end">
+                  <label className="block flex-1 text-sm">
+                    <span className="text-muted-foreground">{t("learner.qbank.filters.loadPreset")}</span>
+                    <select
+                      className="mt-1 w-full min-h-11 rounded-lg border border-border bg-card px-3 py-2.5 text-sm"
+                      defaultValue=""
+                      onChange={(e) => {
+                        const id = e.target.value;
+                        if (id) applySavedPreset(id);
+                        e.target.value = "";
+                      }}
+                    >
+                      <option value="">{t("learner.qbank.filters.selectPreset")}</option>
+                      {savedPresets.map((p) => (
+                        <option key={p.id} value={p.id}>
+                          {p.name}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
                 </div>
               ) : null}
-            </>
-          )}
-
-          {g ? null : (
-            <div className="flex flex-wrap gap-2 border-t border-border pt-4">
-              <button
-                type="button"
-                disabled={idx === 0}
-                className="rounded-full border border-border px-4 py-2 text-sm disabled:opacity-40"
-                onClick={prev}
-              >
-                {t("learner.qbank.ui.previous")}
-              </button>
-              <button
-                type="button"
-                disabled={idx >= total - 1}
-                className="rounded-full border border-border px-4 py-2 text-sm disabled:opacity-40"
-                onClick={next}
-              >
-                {t("learner.qbank.ui.skipForNow")}
-              </button>
             </div>
-          )}
+            {savedPresets.length > 0 ? (
+              <ul className="mt-3 space-y-1 text-xs text-muted-foreground">
+                {savedPresets.map((p) => (
+                  <li key={p.id} className="flex items-center justify-between gap-2 rounded-md bg-muted/30 px-2 py-1">
+                    <span className="truncate font-medium text-foreground">{p.name}</span>
+                    <button
+                      type="button"
+                      className="shrink-0 rounded-md px-2 py-1 text-destructive hover:underline"
+                      onClick={() => deleteSavedPreset(p.id)}
+                    >
+                      {t("learner.qbank.filters.removePreset")}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </div>
 
-          <p className="text-xs text-muted">{t("learner.qbank.ui.batchProgressNote")}</p>
+          <p className="text-xs text-muted-foreground">
+            {sessionTotal > 0
+              ? t("learner.qbank.ui.sessionLine", { correct: sessionRight, total: sessionTotal })
+              : t("learner.qbank.ui.sessionLineIdle")}
+          </p>
         </div>
+      </details>
+
+      <ProtectedPremiumContent userLabel={userLabel} flags={protectionFlags} telemetrySurface="question_bank">
+        <ExamSessionShell neutralPalette className="overflow-hidden shadow-md">
+          <ExamSessionTopBar
+            left={
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                  {t("learner.qbank.ui.questionOf", { n: idx + 1, total })}
+                </p>
+                {current.topic ? (
+                  <p className="mt-0.5 line-clamp-2 text-sm font-medium text-slate-800 dark:text-slate-100">{current.topic}</p>
+                ) : null}
+              </div>
+            }
+            center={
+              <span className="tabular-nums text-slate-600 dark:text-slate-300">
+                {sortForApi === "random" ? t("learner.qbank.ui.sortRandom") : t("learner.qbank.ui.sortRecent")}
+              </span>
+            }
+            right={
+              <span className="text-[10px] font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                {current.questionType}
+              </span>
+            }
+          />
+          <ExamProgressBar current={idx + 1} total={total} />
+
+          <div className="space-y-6 p-4 sm:p-6">
+            <div className="border-b border-slate-200/90 pb-6 dark:border-slate-700/90">
+              <p className="text-lg font-normal leading-[1.55] text-slate-900 dark:text-slate-100 sm:text-xl md:text-[1.35rem] md:leading-snug">
+                {current.stem}
+              </p>
+            </div>
+
+            <div>
+              <p className="mb-3 text-[11px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                {t("learner.qbank.examUi.answersHeading")}
+              </p>
+              {!g ? (
+                <p className="mb-3 text-xs text-muted-foreground">{t("learner.qbank.examUi.toolsHint")}</p>
+              ) : null}
+
+              {isSata ? (
+                <ul className="space-y-3">
+                  {optsCanonical.map((canonical, i) => {
+                    const label = optsDisplay[i] ?? canonical;
+                    const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
+                    const struck = Boolean(strikeOut[canonical]);
+                    const hi = Boolean(highlightOn[canonical]);
+                    return (
+                      <li key={canonical}>
+                        <div
+                          className={`flex gap-2 rounded-xl border-2 border-slate-200 bg-white p-1 dark:border-slate-700 dark:bg-slate-900/40 sm:gap-3 ${
+                            hi ? "border-amber-400/70 bg-amber-50/40 ring-1 ring-amber-400/35 dark:border-amber-700/50 dark:bg-amber-950/25" : ""
+                          } ${selected ? "border-primary/55 ring-1 ring-primary/25" : ""}`}
+                        >
+                          <label className="flex min-h-[3.25rem] flex-1 cursor-pointer items-center gap-3 px-3 py-2 sm:px-4">
+                            <input
+                              type="checkbox"
+                              checked={selected}
+                              disabled={!!g}
+                              onChange={(e) => {
+                                const prevAns = Array.isArray(raw) ? [...raw] : [];
+                                const next = e.target.checked ? [...prevAns, canonical] : prevAns.filter((x) => x !== canonical);
+                                setAnswer(next);
+                              }}
+                              className="size-5 shrink-0 rounded border-slate-300 text-primary"
+                            />
+                            <span
+                              className={`text-base leading-snug text-slate-800 dark:text-slate-100 ${struck ? "text-slate-400 line-through dark:text-slate-500" : ""}`}
+                            >
+                              {label}
+                            </span>
+                          </label>
+                          {!g ? (
+                            <div className="flex shrink-0 flex-col gap-1 pr-1 sm:flex-row sm:items-center sm:pr-2">
+                              <button
+                                type="button"
+                                aria-label={t("learner.qbank.examUi.ariaStrike")}
+                                title={t("learner.qbank.examUi.ariaStrike")}
+                                onClick={() => setStrikeOut((p) => ({ ...p, [canonical]: !p[canonical] }))}
+                                className="flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-slate-200 text-sm font-bold text-slate-500 hover:bg-slate-100 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-800"
+                              >
+                                ∅
+                              </button>
+                              <button
+                                type="button"
+                                aria-label={t("learner.qbank.examUi.ariaHighlight")}
+                                title={t("learner.qbank.examUi.ariaHighlight")}
+                                onClick={() => setHighlightOn((p) => ({ ...p, [canonical]: !p[canonical] }))}
+                                className="flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-slate-200 text-xs font-semibold text-amber-700 hover:bg-amber-50 dark:border-slate-600 dark:text-amber-400 dark:hover:bg-amber-950/40"
+                              >
+                                H
+                              </button>
+                            </div>
+                          ) : null}
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              ) : (
+                <ul className="space-y-3">
+                  {optsCanonical.map((canonical, i) => {
+                    const label = optsDisplay[i] ?? canonical;
+                    const struck = Boolean(strikeOut[canonical]);
+                    const hi = Boolean(highlightOn[canonical]);
+                    const picked = raw === canonical;
+                    return (
+                      <li key={canonical} className="flex gap-2 sm:gap-3">
+                        <button
+                          type="button"
+                          disabled={!!g}
+                          onClick={() => setAnswer(canonical)}
+                          className={`min-h-[3.25rem] flex-1 rounded-xl border-2 px-4 py-4 text-left text-base leading-snug transition sm:min-h-[3.5rem] sm:px-5 ${
+                            picked
+                              ? "border-primary bg-primary/[0.08] font-medium text-foreground ring-2 ring-primary/20"
+                              : "border-slate-200 bg-white text-slate-800 hover:border-slate-300 hover:bg-slate-50/80 dark:border-slate-700 dark:bg-slate-900/40 dark:text-slate-100 dark:hover:border-slate-600"
+                          } ${struck ? "opacity-65 line-through" : ""} ${
+                            hi ? "ring-2 ring-amber-400/50 dark:ring-amber-600/45" : ""
+                          }`}
+                        >
+                          {label}
+                        </button>
+                        {!g ? (
+                          <div className="flex shrink-0 flex-col gap-2 sm:flex-row sm:items-stretch">
+                            <button
+                              type="button"
+                              aria-label={t("learner.qbank.examUi.ariaStrike")}
+                              title={t("learner.qbank.examUi.ariaStrike")}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                setStrikeOut((p) => ({ ...p, [canonical]: !p[canonical] }));
+                              }}
+                              className="flex min-h-11 min-w-11 items-center justify-center rounded-xl border border-slate-200 text-lg font-bold leading-none text-slate-500 hover:bg-slate-100 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-800"
+                            >
+                              ∅
+                            </button>
+                            <button
+                              type="button"
+                              aria-label={t("learner.qbank.examUi.ariaHighlight")}
+                              title={t("learner.qbank.examUi.ariaHighlight")}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                setHighlightOn((p) => ({ ...p, [canonical]: !p[canonical] }));
+                              }}
+                              className="flex min-h-11 min-w-11 items-center justify-center rounded-xl border border-slate-200 text-sm font-bold text-amber-700 hover:bg-amber-50 dark:border-slate-600 dark:text-amber-400 dark:hover:bg-amber-950/40"
+                            >
+                              H
+                            </button>
+                          </div>
+                        ) : null}
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </div>
+
+            {!g ? (
+              <div className="flex flex-col gap-3 border-t border-slate-200/80 pt-5 dark:border-slate-800 sm:flex-row sm:flex-wrap sm:items-center">
+                <button
+                  type="button"
+                  disabled={grading || answer === null || (Array.isArray(answer) && answer.length === 0)}
+                  className="nn-btn-primary inline-flex min-h-12 w-full items-center justify-center rounded-full px-8 text-base font-semibold disabled:opacity-50 sm:w-auto sm:px-10"
+                  onClick={() => void checkAnswer()}
+                >
+                  {grading ? t("learner.qbank.ui.checking") : t("learner.qbank.ui.checkAnswer")}
+                </button>
+                <div className="flex w-full gap-2 sm:ml-auto sm:w-auto">
+                  <button
+                    type="button"
+                    disabled={idx === 0}
+                    className="min-h-12 flex-1 rounded-full border-2 border-slate-200 px-4 text-sm font-semibold text-slate-700 disabled:opacity-40 dark:border-slate-600 dark:text-slate-200 sm:flex-none sm:px-5"
+                    onClick={prev}
+                  >
+                    {t("learner.qbank.ui.previous")}
+                  </button>
+                  <button
+                    type="button"
+                    disabled={idx >= total - 1}
+                    className="min-h-12 flex-1 rounded-full border-2 border-slate-200 px-4 text-sm font-semibold text-slate-700 disabled:opacity-40 dark:border-slate-600 dark:text-slate-200 sm:flex-none sm:px-5"
+                    onClick={next}
+                  >
+                    {t("learner.qbank.ui.skipForNow")}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                {examShell && !examShowExplanation ? (
+                  <div className="overflow-hidden rounded-xl border-2 border-border bg-card shadow-sm">
+                    <div
+                      className={`border-b border-border px-4 py-4 sm:px-5 ${
+                        g.correct ? "bg-role-success-soft" : "bg-destructive/10 dark:bg-destructive/15"
+                      }`}
+                    >
+                      <p
+                        className={`text-lg font-bold sm:text-xl ${g.correct ? "text-role-success" : "text-destructive"}`}
+                        role="status"
+                      >
+                        {g.correct ? t("learner.qbank.ui.correct") : t("learner.qbank.ui.incorrect")}
+                      </p>
+                    </div>
+                    <div className="space-y-3 px-4 py-4 sm:px-5">
+                      <p className="text-sm text-muted-foreground">{t("learner.qbank.ui.examShellHint")}</p>
+                      <button
+                        type="button"
+                        className="nn-btn-secondary inline-flex min-h-12 w-full items-center justify-center rounded-full px-6 text-sm font-semibold sm:w-auto"
+                        onClick={() => setExamShowExplanation(true)}
+                      >
+                        {t("learner.qbank.ui.showExplanation")}
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <PremiumRationalePanel
+                    correct={g.correct}
+                    rationale={g.rationale}
+                    rationaleQuality={g.rationaleQuality}
+                    rationaleSections={g.rationaleSections}
+                    referenceMedia={g.referenceMedia}
+                    teaching={g.teaching}
+                    teachingMedia={g.teachingMedia}
+                    variant="exam"
+                    defaultOpenExplanation={!g.correct}
+                  />
+                )}
+                <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                  <button
+                    type="button"
+                    disabled={idx === 0}
+                    className="min-h-12 rounded-full border-2 border-slate-200 px-5 text-sm font-semibold disabled:opacity-40 dark:border-slate-600"
+                    onClick={prev}
+                  >
+                    {t("learner.qbank.ui.previous")}
+                  </button>
+                  {idx < total - 1 ? (
+                    <button
+                      type="button"
+                      className="nn-btn-primary inline-flex min-h-12 flex-1 items-center justify-center rounded-full px-8 text-base font-semibold sm:flex-none sm:px-10"
+                      onClick={next}
+                    >
+                      {t("learner.qbank.ui.nextQuestion")}
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      className="inline-flex min-h-12 flex-1 items-center justify-center rounded-full border-2 border-primary px-6 text-base font-semibold text-primary sm:flex-none"
+                      onClick={() => void loadBatch(true)}
+                    >
+                      {t("learner.qbank.ui.loadMore")}
+                    </button>
+                  )}
+                </div>
+                {g.learningLoop?.topicCode ? (
+                  <div className="rounded-xl border border-border/80 bg-muted/15 p-4">
+                    <div className="flex flex-wrap gap-2">
+                      {g.learningLoop.lessonHref ? (
+                        <Link
+                          href={g.learningLoop.lessonHref}
+                          className="inline-flex min-h-11 items-center rounded-full border border-border bg-card px-4 text-xs font-semibold hover:bg-muted/80"
+                        >
+                          {t("learner.qbank.ui.relatedLesson")}
+                        </Link>
+                      ) : null}
+                      {g.learningLoop.flashcardsHref ? (
+                        <Link
+                          href={g.learningLoop.flashcardsHref}
+                          className="inline-flex min-h-11 items-center rounded-full border border-border bg-card px-4 text-xs font-semibold hover:bg-muted/80"
+                        >
+                          {t("learner.qbank.ui.reviewFlashcards")}
+                        </Link>
+                      ) : null}
+                      {g.learningLoop.topicDrillHref ? (
+                        <Link
+                          href={g.learningLoop.topicDrillHref}
+                          className="inline-flex min-h-11 items-center rounded-full bg-role-cta px-4 text-xs font-semibold text-role-cta-foreground"
+                        >
+                          {t("learner.qbank.ui.topicDrillSameCode")}
+                        </Link>
+                      ) : null}
+                    </div>
+                  </div>
+                ) : null}
+
+                <QuestionSessionStudyLoopPanel
+                  questions={questions}
+                  graded={graded}
+                  pathwayId={pathwayIdFilter}
+                  visible={idx === total - 1 && !!g}
+                />
+              </>
+            )}
+          </div>
+        </ExamSessionShell>
       </ProtectedPremiumContent>
       <StudyNotesPanel
         userId={userId}

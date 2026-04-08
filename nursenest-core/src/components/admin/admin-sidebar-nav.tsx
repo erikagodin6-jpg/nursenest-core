@@ -38,6 +38,7 @@ const sections: NavSection[] = [
       { href: "/admin", label: "Overview", icon: LayoutDashboard },
       { href: "/admin/generation", label: "Content generation", icon: Sparkles },
       { href: "/admin/blog", label: "Blog library", icon: BookOpen },
+      { href: "/admin/blog/control-panel", label: "Blog AI panel", icon: Sparkles },
       { href: "/admin/lessons", label: "Lessons", icon: GraduationCap },
       { href: "/admin/questions", label: "Question bank", icon: ClipboardList },
       { href: "/admin/content", label: "Pathway coverage", icon: Layers },
@@ -129,7 +130,7 @@ export function AdminSidebarNav({
 
   return (
     <>
-      <aside className={asideClass} aria-label="Admin sidebar">
+      <aside id="admin-sidebar" className={asideClass} aria-label="Admin sidebar">
         <div className="flex h-14 items-center justify-between border-b border-white/10 px-4 lg:h-16">
           <Link href="/admin" className="font-semibold tracking-tight text-white" onClick={() => setOpen(false)}>
             NurseNest <span className="text-primary">Admin</span>

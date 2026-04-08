@@ -14,6 +14,7 @@ import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { userShouldSeeBaselinePrompt } from "@/lib/baseline/baseline-assessment";
 import { BaselineAssessmentPrompt } from "@/components/student/baseline-assessment-prompt";
+import { PathwayLessonProgressRefreshListener } from "@/components/lessons/pathway-lesson-progress-refresh-listener";
 import { LearnerShellPrimaryNav } from "@/components/layout/learner-shell-primary-nav";
 import { LearnerShellBrandHomeLink } from "@/components/student/learner-shell-brand-home-link";
 import { LearnerUnauthenticatedGate } from "@/components/student/learner-unauthenticated-gate";
@@ -53,6 +54,7 @@ export default async function LearnerShellLayout({ children }: { children: React
     <SentryLearnerShell userId={userId}>
       <LearnerExamChromeGate>
         <div className="mx-auto w-full max-w-6xl px-4 py-[var(--nn-rhythm-shell-y)] sm:px-6">
+          <PathwayLessonProgressRefreshListener />
           <LearnerAppSectionAnalytics />
           <header className="nn-learner-exam-chrome-target nn-card mb-[var(--nn-rhythm-tight-y)] flex min-h-14 flex-col gap-3 rounded-2xl p-3 sm:gap-4 lg:min-h-16 lg:flex-row lg:items-center lg:justify-between lg:p-4">
             <div className="flex min-w-0 flex-wrap items-center gap-3 md:gap-4">

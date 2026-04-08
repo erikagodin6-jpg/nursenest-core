@@ -28,11 +28,15 @@ export default async function AdminBlogGeneratePage() {
 
       <div className="mt-8 space-y-8">
         <div className="rounded-xl border border-border/70 bg-muted/20 p-4 text-sm">
-          Need quantity + cadence planning? Use{" "}
+          For the full structured workflow (titles, outline, FAQs, internal links, APA, section regen), use the{" "}
+          <Link href="/admin/blog/control-panel" className="font-semibold text-primary underline">
+            AI control panel
+          </Link>
+          . Need quantity + cadence? Use{" "}
           <Link href="/admin/blog/campaigns" className="font-semibold text-primary underline">
             SEO campaigns
-          </Link>{" "}
-          for queue-based generation and posts-per-week scheduling.
+          </Link>
+          .
         </div>
         <AdminBlogGenerateClient />
         <AdminBlogBatchClient />

@@ -46,6 +46,26 @@ export function excludeQuestionIdsSql(ids: string[]): Prisma.Sql {
   return Prisma.sql` AND id NOT IN (${Prisma.join(ids)})`;
 }
 
+/** Restrict random sampling to this id set (e.g. learner “mistakes” from client history). */
+export function includeQuestionIdsSql(ids: string[]): Prisma.Sql {
+  if (ids.length === 0) return Prisma.empty;
+  return Prisma.sql` AND id IN (${Prisma.join(ids)})`;
+}
+
+export function examEqualsFilterSql(exam: string): Prisma.Sql {
+  return Prisma.sql` AND exam = ${exam}`;
+}
+
+/** Difficulty is nullable in DB; filters exclude rows with NULL difficulty. */
+export function difficultyBoundsSql(min: number | null, max: number | null): Prisma.Sql {
+  if (min == null && max == null) return Prisma.empty;
+  if (min != null && max != null) {
+    return Prisma.sql` AND difficulty IS NOT NULL AND difficulty >= ${min} AND difficulty <= ${max}`;
+  }
+  if (min != null) return Prisma.sql` AND difficulty IS NOT NULL AND difficulty >= ${min}`;
+  return Prisma.sql` AND difficulty IS NOT NULL AND difficulty <= ${max!}`;
+}
+
 /** Full profile-tier pool (mirrors {@link questionBankWhereForProfile}) for baseline sampling. */
 export function profileTierExamQuestionWhereSql(country: CountryCode, tier: TierCode): Prisma.Sql {
   const tiers = examQuestionTiersForUserTier(tier);

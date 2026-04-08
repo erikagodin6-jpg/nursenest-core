@@ -1,0 +1,134 @@
+{
+  "generatedAt": "2026-04-08",
+  "source": "src/content/pathway-lessons/catalog.json",
+  "minimumLaunchLessons": 150,
+  "stretchTargetLessons": 500,
+  "notes": "Counts are catalog rows per pathwayId. Canada NP (ca-np-cnple) is waitlist/upcoming; inventory is empty until national scope firms. US NP primary track is us-np-fnp; agpcnp/pmhnp hubs exist with 0 catalog lessons today.",
+  "pathways": [
+    {
+      "id": "us-rn-nclex-rn",
+      "label": "US RN — NCLEX-RN",
+      "catalogCount": 122,
+      "distinctTopicSlugs": 43,
+      "gapTo150": 28,
+      "meets150": false,
+      "pairedPathwayId": "ca-rn-nclex-rn",
+      "sharedSlugCountWithPaired": 95,
+      "scopeNotes": "US acute care language; NGN-style clinical judgment emphasis."
+    },
+    {
+      "id": "ca-rn-nclex-rn",
+      "label": "Canada RN — NCLEX-RN",
+      "catalogCount": 123,
+      "distinctTopicSlugs": 43,
+      "gapTo150": 27,
+      "meets150": false,
+      "pairedPathwayId": "us-rn-nclex-rn",
+      "sharedSlugCountWithPaired": 95,
+      "scopeNotes": "Canadian units, acute care language; do not mix US-only scope statements."
+    },
+    {
+      "id": "us-lpn-nclex-pn",
+      "label": "US LVN/LPN — NCLEX-PN",
+      "catalogCount": 61,
+      "distinctTopicSlugs": 40,
+      "gapTo150": 89,
+      "meets150": false,
+      "pairedPathwayId": "ca-rpn-rex-pn",
+      "sharedSlugCountWithPaired": 34,
+      "scopeNotes": "NCLEX-PN vocational scope: delegation, safety, ordered care — not RN-level leadership disguised as PN."
+    },
+    {
+      "id": "ca-rpn-rex-pn",
+      "label": "Canada RPN — REx-PN",
+      "catalogCount": 61,
+      "distinctTopicSlugs": 40,
+      "gapTo150": 89,
+      "meets150": false,
+      "pairedPathwayId": "us-lpn-nclex-pn",
+      "sharedSlugCountWithPaired": 34,
+      "scopeNotes": "REx-PN / Canadian PN regulatory context; paired adaptation from US PN where appropriate, not copy-paste."
+    },
+    {
+      "id": "us-np-fnp",
+      "label": "US NP — FNP (primary US NP track)",
+      "catalogCount": 15,
+      "distinctTopicSlugs": 15,
+      "gapTo150": 135,
+      "meets150": false,
+      "pairedPathwayId": null,
+      "sharedSlugCountWithPaired": 0,
+      "scopeNotes": "Board-level advanced practice: assessment → diagnosis → plan → evaluation; lifespan FNP, not RN tasks."
+    },
+    {
+      "id": "ca-np-cnple",
+      "label": "Canada NP — CNPLE track",
+      "catalogCount": 0,
+      "distinctTopicSlugs": 0,
+      "gapTo150": 150,
+      "meets150": false,
+      "pairedPathwayId": null,
+      "sharedSlugCountWithPaired": 0,
+      "scopeNotes": "Pathway status upcoming/waitlist; author Canadian NP scope as requirements stabilize — do not mirror US FNP verbatim."
+    }
+  ],
+  "duplicateRisk": {
+    "catalogDuplicateSlugsWithinPathway": "none detected (slug keys unique per pathway)",
+    "pairedPathwayStrategy": "US/CA RN share 95 slugs (country-adapted pairs). US LPN / CA RPN share 34 slugs; remainder are track-specific.",
+    "lowValueLessonPolicy": "Do not add lessons with <3 substantive sections or duplicate titles; use pathway-lesson-premium gate and structural quality checks before publish."
+  },
+  "domainFramework": {
+    "description": "Map new lessons using topicSlug + PathwayLessonSectionKind (intro, labs_diagnostics, nursing_assessment_interventions, etc.) and exam_focus blocks. Align volume across:",
+    "domains": [
+      "diseases",
+      "syndromes",
+      "medications",
+      "safety",
+      "prioritization",
+      "delegation",
+      "clinical_judgment",
+      "case_studies",
+      "lab_values_diagnostics",
+      "procedures_interventions",
+      "mental_health_therapeutic_communication",
+      "maternal_newborn",
+      "pediatric",
+      "adult_health",
+      "community_leadership_ethics"
+    ],
+    "nclexRnPnTopicBuckets": "Reuse existing catalog topicSlug clusters (e.g. cardiovascular, pharmacology, mental-health, leadership, maternity, pediatrics) and add net-new slugs only when a domain is underrepresented vs targets below.",
+    "npTopicBuckets": "Expand fnp-us-lesson-enrichment lanes (lifespan × clinical domain); each new lesson must tag primaryLifespan + domains for hub filters."
+  },
+  "newLessonTargetsByDomain": {
+    "us-rn-nclex-rn": {
+      "priorityGaps": "Balance thin buckets: musculoskeletal, musculoskeletal-adjacent MSK procedures; expand pharmacology + safety cross-links; add explicit delegation vs leadership where stems demand it.",
+      "approxNewLessonsTo150": 28
+    },
+    "ca-rn-nclex-rn": {
+      "priorityGaps": "Mirror US RN gap list with Canada-specific copy; ensure SI units and provincial language in country_specific_notes.",
+      "approxNewLessonsTo150": 27
+    },
+    "us-lpn-nclex-pn": {
+      "priorityGaps": "Large lift: double PN-specific content in coordinated-care, delegation, safety, mental-health; avoid duplicating RN depth in leadership.",
+      "approxNewLessonsTo150": 89
+    },
+    "ca-rpn-rex-pn": {
+      "priorityGaps": "Parallel US LPN count with REx-PN scope overlays; 27 lessons differ by slug from US PN today — expand Canada-only scenarios.",
+      "approxNewLessonsTo150": 89
+    },
+    "us-np-fnp": {
+      "priorityGaps": "Major expansion: differential diagnosis, prescribing, chronic disease panels per lifespan; case-based exam_focus on each high-yield NP topic.",
+      "approxNewLessonsTo150": 135
+    },
+    "ca-np-cnple": {
+      "priorityGaps": "Greenfield: start from Canadian NP competency map when published; seed 20–30 foundational lessons before scaling to 150.",
+      "approxNewLessonsTo150": 150
+    }
+  },
+  "expansionPlan500": {
+    "phaseA": "150 launch: close gaps in table above; enforce one lesson = one primary learning objective; paired US/CA adaptation workflow.",
+    "phaseB": "150–250: deepen medications + labs_diagnostics density; add case_study template lessons per Client Needs / NP domain.",
+    "phaseC": "250–400: sub-specialty clusters (e.g. OB high-risk, peds infectious, geriatrics polypharmacy) without duplicating titles.",
+    "phaseD": "400–500+: maintenance cadence — retire or merge thin duplicates; A/B hub analytics for low-engagement slugs."
+  }
+}

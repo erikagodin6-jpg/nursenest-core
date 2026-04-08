@@ -58,3 +58,40 @@ export function validateSources(sources: BlogSourceRecord[]): { warnings: string
   if (score < sources.length) warnings.push("Source authority mix is weak; add higher-authority references.");
   return { warnings, reliabilityScore: Math.round((score / (sources.length * 2)) * 100) };
 }
+
+const AUTHORITY_VALUES = [
+  "regulator",
+  "guideline_body",
+  "peer_reviewed",
+  "academic_hospital",
+  "association",
+  "general_web",
+  "low_authority",
+] as const;
+
+function coerceAuthorityLoose(v: unknown): BlogSourceRecord["authority"] | undefined {
+  const s = typeof v === "string" ? v : "";
+  return AUTHORITY_VALUES.includes(s as (typeof AUTHORITY_VALUES)[number]) ? (s as BlogSourceRecord["authority"]) : undefined;
+}
+
+/** Best-effort parse of API/JSON rows into {@link BlogSourceRecord}. */
+export function coerceBlogSourceRows(raw: unknown[]): BlogSourceRecord[] {
+  const out: BlogSourceRecord[] = [];
+  for (const row of raw) {
+    if (!row || typeof row !== "object") continue;
+    const o = row as Record<string, unknown>;
+    const authors = Array.isArray(o.authors) ? o.authors.filter((a): a is string => typeof a === "string") : undefined;
+    out.push({
+      authors,
+      year: typeof o.year === "string" ? o.year : undefined,
+      title: typeof o.title === "string" ? o.title : undefined,
+      source: typeof o.source === "string" ? o.source : undefined,
+      publisher: typeof o.publisher === "string" ? o.publisher : undefined,
+      url: typeof o.url === "string" ? o.url : undefined,
+      doi: typeof o.doi === "string" ? o.doi : undefined,
+      accessedAt: typeof o.accessedAt === "string" ? o.accessedAt : undefined,
+      authority: coerceAuthorityLoose(o.authority),
+    });
+  }
+  return out;
+}

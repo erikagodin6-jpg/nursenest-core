@@ -11,6 +11,8 @@
  * - **FAQ** (`/faq`) and **Shop** (`/shop`): `marketingDesktopDropdown` only. They appear in the
  *   “Guides & plans” desktop dropdown but not in the marketing mobile drawer (space / IA: hubs +
  *   core study links first; full resources stay on desktop).
+ * - **Generic question-bank / practice-exams** are not top-level learn-practice nav items; users
+ *   reach them from exam pathway hubs and the exam strip.
  * - **Explore** (“Who we help”) links: desktop dropdown only; not duplicated in the mobile flat list
  *   (mobile users use region + exam hub section first).
  * - **Learner shell** links are a distinct set (`/app/…` plus selected marketing routes). They never
@@ -81,7 +83,7 @@ export const GLOBAL_NAV_WHO_WE_HELP: GlobalNavLeafItem[] = [
   }),
 ];
 
-/** Desktop “Learn & practice” + mobile drawer (same subset). */
+/** Desktop “Learn & practice” + mobile drawer (same subset). Exam-scoped practice uses pathway hubs + sub-nav, not generic question-bank / practice top-nav. */
 export const GLOBAL_NAV_LEARN_PRACTICE: GlobalNavLeafItem[] = [
   LEAF({
     id: "marketing-lessons",
@@ -91,24 +93,6 @@ export const GLOBAL_NAV_LEARN_PRACTICE: GlobalNavLeafItem[] = [
     surfaces: [DD, MD],
     order: 10,
     mobileDrawerOrder: 20,
-  }),
-  LEAF({
-    id: "marketing-test-bank",
-    labelKey: "nav.questionBank",
-    href: "/question-bank",
-    group: "learn-practice",
-    surfaces: [DD, MD],
-    order: 30,
-    mobileDrawerOrder: 50,
-  }),
-  LEAF({
-    id: "marketing-mock-exams",
-    labelKey: "nav.practiceExams",
-    href: "/practice-exams",
-    group: "learn-practice",
-    surfaces: [DD, MD],
-    order: 40,
-    mobileDrawerOrder: 60,
   }),
   LEAF({
     id: "marketing-flashcards",

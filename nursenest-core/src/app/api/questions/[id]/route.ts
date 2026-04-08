@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { DB_PUBLISHED, freemiumQuestionWhereForProfile, questionAccessWhere } from "@/lib/entitlements/content-access-scope";
+import { DB_PUBLISHED, freemiumQuestionWhereForProfile } from "@/lib/entitlements/content-access-scope";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { logPaywallDeny, questionIdWhereIfAllowed } from "@/lib/entitlements/assert-question-access";
 import { logBlockedAccess, logEntitlementMismatch } from "@/lib/entitlements/entitlement-logging";
@@ -32,6 +32,10 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const wantsRationale =
+    req.nextUrl.searchParams.get("includeRationale") === "1" ||
+    req.nextUrl.searchParams.get("includeRationale") === "true";
+
   let entitlement;
   try {
     entitlement = await resolveEntitlement(userId);
@@ -49,10 +53,6 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
     const educationalLocale = getMarketingLocaleFromRequestCookie(req);
     const questionOverlayBundle = await resolveMergedQuestionOverlayBundle(educationalLocale);
 
-    const includeRationale =
-      req.nextUrl.searchParams.get("includeRationale") === "1" ||
-      req.nextUrl.searchParams.get("includeRationale") === "true";
-
     try {
       const baseSelect = {
         id: true,
@@ -67,7 +67,7 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
       const q = await withRetry(() =>
         prisma.examQuestion.findFirst({
           where: questionIdWhereIfAllowed(id, gate.entitlement),
-          select: includeRationale ? { ...baseSelect, rationale: true } : { ...baseSelect },
+          select: wantsRationale ? { ...baseSelect, rationale: true } : { ...baseSelect },
         }),
       );
 
@@ -101,13 +101,13 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
       const body = {
         question: mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale, questionOverlayBundle),
         mode: "subscriber" as const,
-        fields: includeRationale ? ("full" as const) : ("preview" as const),
+        fields: wantsRationale ? ("full" as const) : ("preview" as const),
       };
       const approxPayloadBytes = estimateJsonUtf8Bytes(body);
       safeServerLog("api_questions_id", "single_payload", {
         approxPayloadBytes,
         payloadLarge: approxPayloadBytes >= QUESTION_PAYLOAD_WARN_BYTES ? 1 : 0,
-        includeRationale: includeRationale ? 1 : 0,
+        includeRationale: wantsRationale ? 1 : 0,
       });
       if (approxPayloadBytes >= QUESTION_PAYLOAD_WARN_BYTES) {
         safeServerLog("api_questions_id", "single_payload_warn", {
@@ -137,6 +137,16 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
   if (!snap || snap.questionRemaining <= 0) {
     logPaywallDeny("/api/questions/[id]", "freemium_exhausted", { id });
     return notSubscribedResponse();
+  }
+
+  if (wantsRationale) {
+    return NextResponse.json(
+      {
+        code: "rationale_locked",
+        message: "Explanations and rationales require an active subscription.",
+      },
+      { status: 403 },
+    );
   }
 
   const where = {
@@ -174,6 +184,8 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
     const freemiumBody = {
       question: mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale, questionOverlayBundle),
       mode: "freemium" as const,
+      fields: "preview" as const,
+      rationaleLocked: true as const,
     };
     logLargeApiResponse("/api/questions/[id]", estimateJsonUtf8Bytes(freemiumBody));
     return NextResponse.json(freemiumBody);

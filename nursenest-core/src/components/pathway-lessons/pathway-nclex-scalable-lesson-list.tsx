@@ -3,6 +3,8 @@ import {
   pathwayLessonMarketingDetailHref,
   type PathwayLessonRecord,
 } from "@/lib/lessons/pathway-lesson-types";
+import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
+import { PathwayLessonProgressBadge } from "@/components/lessons/pathway-lesson-progress-badge";
 import { nclexRnLessonExamPreview, type NclexRnHubRegion } from "@/lib/lessons/nclex-rn-us-lesson-enrichment";
 import { nclexPnLessonExamPreview } from "@/lib/lessons/nclex-pn-us-lesson-enrichment";
 
@@ -31,6 +33,7 @@ type Props = {
   featuredSlug: string | null | undefined;
   variant: "rn" | "pn";
   rnRegion?: NclexRnHubRegion;
+  progressMap?: Record<string, PathwayLessonProgressStatus>;
 };
 
 export function PathwayNclexScalableLessonSection({
@@ -40,6 +43,7 @@ export function PathwayNclexScalableLessonSection({
   featuredSlug,
   variant,
   rnRegion = "us",
+  progressMap = {},
 }: Props) {
   if (section.count === 0) return null;
 
@@ -51,9 +55,13 @@ export function PathwayNclexScalableLessonSection({
       variant === "rn"
         ? nclexRnLessonExamPreview(l, rnRegion)
         : nclexPnLessonExamPreview(l);
+    const showProgress = Object.keys(progressMap).length > 0;
     return (
       <li key={l.slug} className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
-        <p className="text-xs font-medium uppercase text-muted">{l.topic}</p>
+        <div className="flex flex-wrap items-start justify-between gap-2">
+          <p className="text-xs font-medium uppercase text-muted">{l.topic}</p>
+          {showProgress ? <PathwayLessonProgressBadge status={progressMap[l.slug] ?? "not_started"} /> : null}
+        </div>
         <Link
           href={pathwayLessonMarketingDetailHref(lessonsBasePath, l.slug)!}
           className="mt-1 block text-lg font-semibold text-primary hover:underline"
@@ -124,6 +132,7 @@ export function PathwayNclexScalableLessonSection({
             {display.map((l) => {
               const href = pathwayLessonMarketingDetailHref(lessonsBasePath, l.slug);
               if (!href) return null;
+              const showProgress = Object.keys(progressMap).length > 0;
               return (
                 <li
                   key={l.slug}
@@ -135,12 +144,17 @@ export function PathwayNclexScalableLessonSection({
                       {l.title}
                     </Link>
                   </div>
-                  <Link
-                    href={appQuestionsHref(pathwayId, l.topic)}
-                    className="shrink-0 text-xs font-medium text-muted hover:text-primary"
-                  >
-                    Questions →
-                  </Link>
+                  <div className="flex shrink-0 flex-wrap items-center gap-2">
+                    {showProgress ? (
+                      <PathwayLessonProgressBadge status={progressMap[l.slug] ?? "not_started"} />
+                    ) : null}
+                    <Link
+                      href={appQuestionsHref(pathwayId, l.topic)}
+                      className="shrink-0 text-xs font-medium text-muted hover:text-primary"
+                    >
+                      Questions →
+                    </Link>
+                  </div>
                 </li>
               );
             })}

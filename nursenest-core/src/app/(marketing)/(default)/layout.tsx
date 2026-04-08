@@ -1,5 +1,6 @@
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { PathwayLessonProgressRefreshListener } from "@/components/lessons/pathway-lesson-progress-refresh-listener";
 import { MarketingI18nProvider } from "@/components/marketing/marketing-i18n-provider";
 import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/seo-json-ld";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
@@ -22,6 +23,7 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
       <WebSiteJsonLd />
       <div className="nn-marketing-surface flex min-h-screen flex-col">
         <SiteHeader />
+        <PathwayLessonProgressRefreshListener />
         <main className="flex min-h-0 flex-1 flex-col">{children}</main>
         <SiteFooter />
       </div>

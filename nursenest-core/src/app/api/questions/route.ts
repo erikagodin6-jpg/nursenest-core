@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
 import { auth } from "@/lib/auth";
-import { freemiumQuestionWhereForProfile, questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
@@ -27,15 +26,19 @@ import { diagnoseSubscriberQuestionListEmpty } from "@/lib/questions/question-li
 import { logLargeApiResponse } from "@/lib/observability/perf-log";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { MAX_LIST_SKIP_ROWS_DEFAULT } from "@/lib/api/api-pagination-limits";
+import { FREEMIUM_QUESTION_LIST_MAX_PER_REQUEST } from "@/lib/conversion/constants";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { localizeQuestionListForApi } from "@/lib/i18n/educational-content-overlay";
 import { resolveMergedQuestionOverlayBundle } from "@/lib/i18n/educational-translation-db";
 import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
 import { enforceQuestionsListProtection } from "@/lib/http/api-protection";
 import {
+  difficultyBoundsSql,
+  examEqualsFilterSql,
   examQuestionAccessWhereSql,
   excludeQuestionIdsSql,
   freemiumExamQuestionWhereSql,
+  includeQuestionIdsSql,
   pathwayExamKeysSql,
   topicEqualsSql,
 } from "@/lib/questions/exam-question-access-sql";
@@ -61,6 +64,17 @@ function parseExcludeIdsParam(raw: string | null): string[] {
     if (out.length >= MAX_EXCLUDE_IDS) break;
   }
   return out;
+}
+
+function parseMistakeIdsParam(raw: string | null): string[] {
+  return parseExcludeIdsParam(raw);
+}
+
+function parseDifficultyBound(raw: string | null): number | null {
+  if (raw === null || raw.trim() === "") return null;
+  const n = Number(raw.trim());
+  if (!Number.isInteger(n) || n < 1 || n > 5) return null;
+  return n;
 }
 
 function logSubscriberPayload(
@@ -146,6 +160,17 @@ export async function GET(req: NextRequest) {
   const sortRaw = searchParams.get("sort")?.trim().toLowerCase() ?? "recent";
   const sort = sortRaw === "random" ? "random" : "recent";
   const excludeIds = parseExcludeIdsParam(searchParams.get("excludeIds"));
+  const mistakeIds = parseMistakeIdsParam(searchParams.get("mistakeIds"));
+  const examFilterRaw = searchParams.get("exam")?.trim() ?? "";
+  const examFilter = examFilterRaw.length > 0 && examFilterRaw.length <= 64 ? examFilterRaw : null;
+  const difficultyMin = parseDifficultyBound(searchParams.get("difficultyMin"));
+  const difficultyMax = parseDifficultyBound(searchParams.get("difficultyMax"));
+  if (difficultyMin != null && difficultyMax != null && difficultyMin > difficultyMax) {
+    return NextResponse.json(
+      { error: "difficultyMin must be less than or equal to difficultyMax.", code: "invalid_difficulty_range" },
+      { status: 400 },
+    );
+  }
   const educationalLocale = getMarketingLocaleFromRequestCookie(req);
   const questionOverlayBundle = await resolveMergedQuestionOverlayBundle(educationalLocale);
 
@@ -283,11 +308,33 @@ export async function GET(req: NextRequest) {
         if (includeTopic && topicCodeFilter && topicCodeFilter.length > 0) {
           parts.push({ subtopic: topicCodeFilter });
         }
+        if (examFilter) {
+          parts.push({ exam: examFilter });
+        }
+        if (difficultyMin != null || difficultyMax != null) {
+          parts.push({
+            difficulty: {
+              ...(difficultyMin != null ? { gte: difficultyMin } : {}),
+              ...(difficultyMax != null ? { lte: difficultyMax } : {}),
+            },
+          });
+        }
+        if (mistakeIds.length > 0) {
+          parts.push({ id: { in: mistakeIds } });
+        }
         if (excludeIds.length > 0) {
           parts.push({ id: { notIn: excludeIds } });
         }
         return parts.length === 1 ? parts[0]! : { AND: parts };
       };
+
+      const mistakeSql = includeQuestionIdsSql(mistakeIds);
+      const examExtraSql = examFilter ? examEqualsFilterSql(examFilter) : Prisma.empty;
+      const difficultySqlFrag = difficultyBoundsSql(difficultyMin, difficultyMax);
+      const subtopicSql =
+        topicCodeFilter && topicCodeFilter.length > 0
+          ? Prisma.sql` AND subtopic = ${topicCodeFilter}`
+          : Prisma.empty;
 
       let topicRelaxed = false;
       let questions;
@@ -313,7 +360,7 @@ export async function GET(req: NextRequest) {
           let idRows = await withRetry(() =>
             prisma.$queryRaw<{ id: string }[]>`
             SELECT id FROM exam_questions
-            WHERE ${accessSql} ${pathSql} ${topicSql} ${exSql}
+            WHERE ${accessSql} ${pathSql} ${topicSql} ${subtopicSql} ${examExtraSql} ${difficultySqlFrag} ${mistakeSql} ${exSql}
             ORDER BY random()
             LIMIT ${effectivePageSize}
           `,
@@ -324,7 +371,7 @@ export async function GET(req: NextRequest) {
             idRows = await withRetry(() =>
               prisma.$queryRaw<{ id: string }[]>`
               SELECT id FROM exam_questions
-              WHERE ${accessSql} ${pathSql} ${topicSql} ${exSql}
+              WHERE ${accessSql} ${pathSql} ${topicSql} ${subtopicSql} ${examExtraSql} ${difficultySqlFrag} ${mistakeSql} ${exSql}
               ORDER BY random()
               LIMIT ${effectivePageSize}
             `,
@@ -444,6 +491,16 @@ export async function GET(req: NextRequest) {
     }
   }
 
+  if (page > 1) {
+    return NextResponse.json(
+      {
+        error: "Complimentary preview is limited to a single page. Subscribe for full question bank access.",
+        code: "freemium_no_pagination",
+      },
+      { status: 400 },
+    );
+  }
+
   const user = await prisma.user.findUnique({
     where: { id: userId },
     select: { country: true, tier: true, freeQuestionViews: true },
@@ -461,25 +518,17 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ code: "not_subscribed", message: "Subscription required", freemiumExhausted: true }, { status: 403 });
   }
 
-  const take = Math.min(pageSize, snap.questionRemaining);
+  /** Non-subscribers: fixed small batch, preview fields only — ignores pathway/topic/study filters and mode=full. */
+  const take = Math.min(FREEMIUM_QUESTION_LIST_MAX_PER_REQUEST, snap.questionRemaining);
+  const freemiumFields: QuestionListResponseMode = "preview";
 
   const freemiumRateLimited = enforceQuestionsListProtection(req, userId, take);
   if (freemiumRateLimited) return freemiumRateLimited;
 
-  if (responseMode === "full" && !acquireQuestionFullModeSlot(userId)) {
-    safeServerLog("api_questions", "full_mode_concurrency_limit_freemium", { userId });
-    return NextResponse.json(
-      { error: "Too many concurrent full-mode question requests. Try again shortly.", code: "rate_limited" },
-      { status: 429 },
-    );
-  }
-
   try {
     const country = user.country as CountryCode;
     const tier = user.tier as TierCode;
-    const baseFreemium = freemiumQuestionWhereForProfile(country, tier);
-    const freeWhere =
-      excludeIds.length > 0 ? { AND: [baseFreemium, { id: { notIn: excludeIds } }] } : baseFreemium;
+    const freeSql = freemiumExamQuestionWhereSql(country, tier);
 
     const previewFreemiumSelect = {
       id: true,
@@ -490,48 +539,24 @@ export async function GET(req: NextRequest) {
       topic: true,
       bodySystem: true,
     } as const;
-    const fullFreemiumSelect = {
-      id: true,
-      stem: true,
-      questionType: true,
-      options: true,
-      topic: true,
-      exam: true,
-    } as const;
 
-    let questions;
-
-    if (sort === "random") {
-      const freeSql = freemiumExamQuestionWhereSql(country, tier);
-      const exSql = excludeQuestionIdsSql(excludeIds);
-      const idRows = await withRetry(() =>
-        prisma.$queryRaw<{ id: string }[]>`
-          SELECT id FROM exam_questions
-          WHERE ${freeSql} ${exSql}
-          ORDER BY random()
-          LIMIT ${take}
-        `,
-      );
-      const ids = idRows.map((r) => r.id);
-      const rows = await withRetry(() =>
-        prisma.examQuestion.findMany({
-          where: { id: { in: ids } },
-          select: responseMode === "full" ? fullFreemiumSelect : previewFreemiumSelect,
-        }),
-      );
-      const order = new Map(ids.map((id, i) => [id, i]));
-      questions = [...rows].sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
-    } else {
-      questions = await withRetry(() =>
-        prisma.examQuestion.findMany({
-          where: freeWhere,
-          select: responseMode === "full" ? fullFreemiumSelect : previewFreemiumSelect,
-          orderBy: { updatedAt: "desc" },
-          skip: 0,
-          take,
-        }),
-      );
-    }
+    const idRows = await withRetry(() =>
+      prisma.$queryRaw<{ id: string }[]>`
+        SELECT id FROM exam_questions
+        WHERE ${freeSql}
+        ORDER BY random()
+        LIMIT ${take}
+      `,
+    );
+    const ids = idRows.map((r) => r.id);
+    const rows = await withRetry(() =>
+      prisma.examQuestion.findMany({
+        where: { id: { in: ids } },
+        select: previewFreemiumSelect,
+      }),
+    );
+    const order = new Map(ids.map((id, i) => [id, i]));
+    const questions = [...rows].sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
 
     const used = questions.length;
     if (used > 0) {
@@ -548,7 +573,7 @@ export async function GET(req: NextRequest) {
     const remaining = Math.max(0, snap.questionRemaining - used);
     const sanitized = localizeQuestionListForApi(
       questions as Array<Record<string, unknown>>,
-      responseMode,
+      freemiumFields,
       educationalLocale,
       questionOverlayBundle,
     );
@@ -558,7 +583,7 @@ export async function GET(req: NextRequest) {
       approxPayloadBytes: freemiumApproxBytes,
       payloadLarge: freemiumApproxBytes >= QUESTION_PAYLOAD_WARN_BYTES ? 1 : 0,
       rowCount: sanitized.length,
-      mode: responseMode,
+      mode: freemiumFields,
     });
     if (freemiumApproxBytes >= QUESTION_PAYLOAD_WARN_BYTES) {
       safeServerLog("api_questions", "freemium_list_payload_warn", {
@@ -567,11 +592,11 @@ export async function GET(req: NextRequest) {
         userId,
       });
     }
-    if (responseMode === "full" || freemiumApproxBytes >= QUESTION_LIST_PAYLOAD_LOG_MIN_BYTES) {
+    if (freemiumApproxBytes >= QUESTION_LIST_PAYLOAD_LOG_MIN_BYTES) {
       safeServerLog("api_questions", "freemium_list_payload_estimate", {
         approxPayloadBytes: freemiumApproxBytes,
         rowCount: sanitized.length,
-        mode: responseMode === "full" ? 1 : 0,
+        mode: 0,
       });
     }
 
@@ -580,10 +605,12 @@ export async function GET(req: NextRequest) {
       pageSize: take,
       questions: sanitized,
       mode: "freemium" as const,
-      fields: responseMode,
-      sort,
-      excludeIdsCount: excludeIds.length,
+      fields: freemiumFields,
+      sort: "random" as const,
+      excludeIdsCount: 0,
       freemiumRemainingAfterBatch: remaining,
+      rationaleLocked: true as const,
+      upgradeRequiredFor: ["full_question_bank", "rationales", "grading", "filters", "pathway_scoped_bank"] as const,
       ...(educationalLocale !== DEFAULT_MARKETING_LOCALE
         ? { educationalContentLocale: educationalLocale }
         : {}),
@@ -596,9 +623,5 @@ export async function GET(req: NextRequest) {
       { error: "Unable to load questions. Try again shortly.", code: "service_unavailable" },
       { status: 503 },
     );
-  } finally {
-    if (responseMode === "full") {
-      releaseQuestionFullModeSlot(userId);
-    }
   }
 }

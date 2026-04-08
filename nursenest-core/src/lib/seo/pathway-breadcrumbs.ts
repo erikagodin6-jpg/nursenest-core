@@ -205,6 +205,31 @@ export function pathwayQuestionsHubBreadcrumbs(
   return { crumbs, schemaItems };
 }
 
+/** Marketing CAT / adaptive practice entry for a pathway (`…/cat`). */
+export function pathwayCatPracticeBreadcrumbs(
+  pathway: ExamPathwayDefinition,
+  opts?: PathwayMarketingHubBreadcrumbOpts,
+): {
+  crumbs: BreadcrumbCrumb[];
+  schemaItems: BreadcrumbSchemaItem[];
+} {
+  const hub = opts?.hubBasePath;
+  const catPath = pathwayHubChildPath(pathway, hub, "cat");
+  const crumbs: BreadcrumbCrumb[] = [
+    HOME,
+    pathwayProgrammaticParentCrumb(pathway, true),
+    pathwayHubCrumb(pathway, true, hub),
+    { name: "CAT practice", href: undefined },
+  ];
+  const schemaItems: BreadcrumbSchemaItem[] = [
+    HOME_ITEM,
+    pathwayProgrammaticParentSchema(pathway),
+    pathwayHubSchema(pathway, hub),
+    { name: "CAT practice", item: toAbsoluteSiteUrl(catPath) },
+  ];
+  return { crumbs, schemaItems };
+}
+
 /** Pathway-specific pricing page (marketing). */
 export function pathwayPricingBreadcrumbs(
   pathway: ExamPathwayDefinition,

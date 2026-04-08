@@ -1,16 +1,17 @@
 /**
  * Public marketing URLs for blog CTAs (no app-only or API routes; no rationales).
+ * Prefer canonical exam pathway hubs over programmatic SEO slugs.
  */
 export function defaultPracticeHubForExam(exam: string | null | undefined): string {
   switch (exam) {
     case "RN":
-      return "/nclex-rn-practice-questions";
+      return "/us/rn/nclex-rn/questions";
     case "PN":
-      return "/rex-pn-practice-questions";
+      return "/us/lpn/nclex-pn/questions";
     case "NP":
-      return "/np-exam-practice-questions";
+      return "/us/np/fnp/questions";
     case "ALLIED":
-      return "/allied-health";
+      return "/us/allied/allied-health/questions";
     default:
       return "/lessons";
   }
@@ -19,13 +20,13 @@ export function defaultPracticeHubForExam(exam: string | null | undefined): stri
 export function defaultLessonsHubForExam(exam: string | null | undefined): string {
   switch (exam) {
     case "RN":
-      return "/lessons";
+      return "/us/rn/nclex-rn/lessons";
     case "PN":
-      return "/lessons";
+      return "/us/lpn/nclex-pn/lessons";
     case "NP":
-      return "/np-exam-practice-questions";
+      return "/us/np/fnp/lessons";
     case "ALLIED":
-      return "/allied-health";
+      return "/us/allied/allied-health/lessons";
     default:
       return "/lessons";
   }

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { MarketingPublicStudyLanding } from "@/components/marketing/marketing-public-study-landing";
 import { PublicLessonsPathwaySections } from "@/components/marketing/public-lessons-pathway-sections";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
-import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { loginWithCallback, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
@@ -76,7 +76,10 @@ export default async function PublicLessonsLandingPage() {
           href: `${withMarketingLocale(locale, "/lessons")}#exam-pathways`,
           label: t("pages.publicLessons.ctaBrowseByExam"),
         }}
-        secondaryCta={{ href: withMarketingLocale(locale, "/question-bank"), label: t("pages.publicLessons.ctaPracticeQuestions") }}
+        secondaryCta={{
+          href: withMarketingLocale(locale, rnQuestions(marketingRegion)),
+          label: t("pages.publicLessons.ctaPracticeQuestions"),
+        }}
         signupCta={{ href: signupLessons, label: t("pages.publicLessons.ctaCreateAccount") }}
       >
         <PublicLessonsPathwaySections locale={locale} region={marketingRegion} />

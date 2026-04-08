@@ -2,6 +2,7 @@ import { prisma } from "@/lib/db";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { pathwayLessonsAppListWhere, visiblePathwayIdsForAppLessons } from "@/lib/lessons/app-pathway-lesson-list-scope";
 import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
+import { pathwayLessonMarketingDetailHref } from "@/lib/lessons/pathway-lesson-types";
 
 export type PathwayNextLesson = {
   title: string;
@@ -93,6 +94,49 @@ export async function resolvePathwayNextLesson(
         stalled,
       };
     }
+  }
+
+  return null;
+}
+
+/**
+ * Next incomplete lesson for a single marketing pathway hub (`/us/rn/nclex-rn/lessons/...`).
+ */
+export async function resolveNextIncompleteMarketingPathwayLesson(
+  userId: string,
+  entitlement: AccessScope,
+  learnerPath: string | null | undefined,
+  pathwayId: string,
+  lessonsBasePath: string,
+): Promise<{ title: string; href: string; slug: string } | null> {
+  if (!userId || !entitlement.hasAccess) return null;
+
+  const visible = visiblePathwayIdsForAppLessons(entitlement, learnerPath);
+  if (!visible.includes(pathwayId)) return null;
+
+  const pathwayWhere = pathwayLessonsAppListWhere(entitlement, learnerPath);
+  const lessons = await prisma.pathwayLesson.findMany({
+    where: { AND: [pathwayWhere, { pathwayId }] },
+    orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
+    take: 500,
+    select: { title: true, slug: true },
+  });
+  if (lessons.length === 0) return null;
+
+  const prefix = `pathway:${pathwayId}:`;
+  const completedRows = await prisma.progress.findMany({
+    where: { userId, completed: true, lessonId: { startsWith: prefix } },
+    select: { lessonId: true },
+    take: 600,
+  });
+  const completedSet = new Set(completedRows.map((r) => r.lessonId));
+
+  for (const l of lessons) {
+    const synthetic = `${prefix}${l.slug}`;
+    if (completedSet.has(synthetic)) continue;
+    const href = pathwayLessonMarketingDetailHref(lessonsBasePath, l.slug);
+    if (!href) continue;
+    return { title: l.title, href, slug: l.slug };
   }
 
   return null;

@@ -191,7 +191,7 @@ async function main() {
   }
 
   // App entry (may 307 to login)
-  paths.push("/app/questions", "/app/exams", "/app/practice-tests", "/app", "/app/lessons");
+  paths.push("/app/questions", "/app/exams", "/app/practice-tests", "/app/practice-tests/start", "/app", "/app/lessons");
 
   const unique = uniq(paths);
   const results: { path: string; status: number; finalUrl: string }[] = [];

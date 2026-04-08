@@ -1069,6 +1069,10 @@ model Progress {
   userId    String
   lessonId  String
   completed Boolean  @default(false)
+  /** First insert time (lesson opened / progress row created). */
+  createdAt DateTime @default(now())
+  /** Set when learner crosses read-depth threshold (scroll) — optional; not started = no row. */
+  engagedAt DateTime?
   updatedAt DateTime @updatedAt
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 

@@ -9,6 +9,7 @@ import { MarketingLanguagePreferenceList } from "@/components/i18n/marketing-lan
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { marketingExamPrepHubs } from "@/lib/marketing/marketing-exam-navigation";
+import { rnQuestions } from "@/lib/marketing/marketing-entry-routes";
 
 function FLink({
   href,
@@ -72,7 +73,7 @@ export function SiteFooter() {
                 <FLink href="/practice-exams">{t("footer.mockExams")}</FLink>
               </li>
               <li>
-                <FLink href="/free-practice">{t("footer.testBank")}</FLink>
+                <FLink href={rnQuestions(region)}>{t("footer.testBank")}</FLink>
               </li>
               <li>
                 <FLink href="/case-studies">{t("footer.caseStudies")}</FLink>
