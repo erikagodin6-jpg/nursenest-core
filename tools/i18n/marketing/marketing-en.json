@@ -605,6 +605,7 @@
   "home.hero.cta2": "Try Practice Questions",
   "home.hero.ctaPrimary": "Start practicing questions",
   "home.hero.ctaSecondary": "Browse lessons by exam",
+  "home.hero.ctaProofLine": "Questions hub opens on a public page; account creation unlocks full practice in the app.",
   "home.hero.dynamicSubtitle": "Our retention-focused learning system uses active recall and spaced repetition across {{questionCount}} practice questions, {{flashcardInfo}}{{lessonCount}} clinical lessons, and adaptive mock exams — engineered for {{rpnLabel}}, RN, NP, allied health, and certification success in {{regionName}}.",
   "home.hero.examPrepFor": "{{region}} Exam Prep Available For",
   "home.hero.exploreLessons": "Explore Practice Questions",

@@ -33,9 +33,10 @@ test("no country crumb points to exam-lessons index", () => {
     assert.notEqual(c.name, "Canada");
     assert.notEqual(c.name, "United States");
   }
+  const lessonsIndexUrl = toAbsoluteSiteUrl(EXAM_LESSONS_INDEX.path);
   for (const s of schemaItems) {
     assert.notEqual(s.name, "Canada");
-    if (s.item.includes("/lessons")) {
+    if (s.item === lessonsIndexUrl) {
       assert.equal(s.name, EXAM_LESSONS_INDEX.label);
     }
   }

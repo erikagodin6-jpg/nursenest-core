@@ -6,6 +6,7 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { MarketingScreenshotStack } from "@/components/marketing/marketing-screenshot-stack";
 import { buildHomepageHeroSlides } from "@/lib/marketing-assets";
+import { MARKETING_PRIMARY_CTA_CLASS, MARKETING_SECONDARY_CTA_CLASS } from "@/lib/theme/marketing-hero-pattern";
 import {
   ArrowRight,
   Star,
@@ -172,14 +173,10 @@ function DynamicTrustCounters({
             <BarChart3 className="h-3.5 w-3.5 text-primary" />
             <span className="nn-marketing-label nn-marketing-label--accent">{t("components.homeConversionSections.platformScale")}</span>
           </div>
-          <h2
-            className="mb-3 font-bold text-[var(--theme-heading-text)]"
-            style={{ fontSize: 'var(--text-section)' }}
-            data-testid="text-trust-counters-heading"
-          >
+          <h2 className="mb-3 nn-marketing-h2" data-testid="text-trust-counters-heading">
             {t("components.homeConversionSections.trustCountersHeading")}
           </h2>
-          <p className="text-base text-[var(--theme-muted-text)] lg:text-lg">{t("components.homeConversionSections.trustCountersSubcopy")}</p>
+          <p className="nn-marketing-body text-[var(--theme-muted-text)]">{t("components.homeConversionSections.trustCountersSubcopy")}</p>
         </div>
 
         <div className="mb-10 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-5">
@@ -194,8 +191,8 @@ function DynamicTrustCounters({
                   <div className="nn-theme-gradient-br mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-xl shadow-sm md:mx-0">
                     <counter.icon className="h-5 w-5 text-white" />
                   </div>
-                  <div className="text-2xl font-extrabold text-[var(--theme-heading-text)] sm:text-3xl">{counter.value}</div>
-                  <div className="mt-1.5 text-[11px] font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">{t(counter.labelKey)}</div>
+                  <div className="nn-marketing-h2 tabular-nums">{counter.value}</div>
+                  <div className="mt-1.5 nn-marketing-label">{t(counter.labelKey)}</div>
                 </div>
               ))}
         </div>
@@ -204,7 +201,7 @@ function DynamicTrustCounters({
           {badges.map((badge) => (
             <div
               key={badge.labelKey}
-              className="flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-2 text-xs font-medium text-[var(--theme-body-text)] shadow-sm"
+              className="flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-2 nn-marketing-caption text-[var(--theme-body-text)] shadow-sm"
               data-testid={`badge-trust-${badge.labelKey.split(".").pop()}`}
             >
               <badge.icon className="h-3.5 w-3.5 text-primary" />
@@ -250,14 +247,10 @@ function ConversionProofBlock({
             <Sparkles className="h-3.5 w-3.5 text-primary" />
             <span className="nn-marketing-label nn-marketing-label--accent">{t("components.homeConversionSections.everythingYouNeed")}</span>
           </div>
-          <h2
-            className="mb-3 font-bold text-[var(--theme-heading-text)]"
-            style={{ fontSize: 'var(--text-section)' }}
-            data-testid="text-conversion-proof-heading"
-          >
+          <h2 className="mb-3 nn-marketing-h2" data-testid="text-conversion-proof-heading">
             {t("components.homeConversionSections.conversionProofHeading")}
           </h2>
-          <p className="text-base leading-relaxed text-[var(--theme-muted-text)] lg:text-lg">
+          <p className="nn-marketing-body leading-relaxed text-[var(--theme-muted-text)]">
             {t("components.homeConversionSections.conversionProofSubcopy", {
               questions: formatMarketingCount(questions),
               flashcards: formatMarketingCount(flashcards),
@@ -276,10 +269,8 @@ function ConversionProofBlock({
               <div className="nn-theme-gradient-br mb-4 flex h-11 w-11 items-center justify-center rounded-xl shadow-sm">
                 <item.icon className="h-5 w-5 text-white" />
               </div>
-              <h3 className="mb-2 font-bold text-[var(--theme-heading-text)]" style={{ fontSize: 'var(--text-card-title)' }}>
-                {t(`components.homeConversionSections.proofCard.${item.id}.title`)}
-              </h3>
-              <p className="text-sm leading-relaxed text-[var(--theme-muted-text)]">{t(`components.homeConversionSections.proofCard.${item.id}.desc`)}</p>
+              <h3 className="mb-2 nn-marketing-h3">{t(`components.homeConversionSections.proofCard.${item.id}.title`)}</h3>
+              <p className="nn-marketing-body-sm leading-relaxed text-[var(--theme-muted-text)]">{t(`components.homeConversionSections.proofCard.${item.id}.desc`)}</p>
             </div>
           ))}
         </div>
@@ -287,14 +278,14 @@ function ConversionProofBlock({
         <div className="text-center sm:text-left">
           <button
             type="button"
-            className="inline-flex items-center justify-center rounded-full bg-primary px-9 py-3 text-lg font-semibold text-primary-foreground shadow-[var(--shadow-elevated)] shadow-primary/25 hover:brightness-110"
+            className={`${MARKETING_PRIMARY_CTA_CLASS} shadow-[var(--shadow-elevated)] shadow-primary/25`}
             onClick={() => router.push(mapLegacyMarketingHref("/register"))}
             data-testid="button-conversion-proof-cta"
           >
             {t("components.homeConversionSections.conversionProofCta")}
             <ArrowRight className="ml-2 w-5 h-5" />
           </button>
-          <p className="mt-4 text-xs text-[var(--theme-muted-text)]">{t("components.homeConversionSections.noCreditCardRequiredFree")}</p>
+          <p className="mt-4 nn-marketing-caption text-[var(--theme-muted-text)]">{t("components.homeConversionSections.noCreditCardRequiredFree")}</p>
         </div>
       </div>
     </section>
@@ -332,14 +323,10 @@ function CompetitivePositioningSection({
             <Shield className="h-3.5 w-3.5 text-primary" />
             <span className="nn-marketing-label nn-marketing-label--accent">{t("components.homeConversionSections.whyNursenest")}</span>
           </div>
-          <h2
-            className="mb-3 font-bold text-[var(--theme-heading-text)]"
-            style={{ fontSize: 'var(--text-section)' }}
-            data-testid="text-competitive-heading"
-          >
+          <h2 className="mb-3 nn-marketing-h2" data-testid="text-competitive-heading">
             {t("components.homeConversionSections.competitiveHeading")}
           </h2>
-          <p className="text-base text-[var(--theme-muted-text)] lg:text-lg">{t("components.homeConversionSections.competitiveSubcopy")}</p>
+          <p className="nn-marketing-body text-[var(--theme-muted-text)]">{t("components.homeConversionSections.competitiveSubcopy")}</p>
         </div>
 
         <div className="mx-auto mb-12 grid max-w-4xl grid-cols-1 gap-5 sm:grid-cols-2">
@@ -353,12 +340,12 @@ function CompetitivePositioningSection({
                 <div className="nn-accent-icon-wrap flex h-9 w-9 shrink-0 items-center justify-center rounded-xl">
                   <item.icon className="nn-accent-icon h-4 w-4" />
                 </div>
-                <h3 className="text-sm font-bold text-[var(--theme-heading-text)]">{t(`components.homeConversionSections.${item.id}.feature`)}</h3>
+                <h3 className="nn-marketing-h4">{t(`components.homeConversionSections.${item.id}.feature`)}</h3>
               </div>
               <div className="space-y-2.5">
                 <div className="flex items-start gap-2">
                   <CheckCircle2 className="nn-trust-check mt-0.5 h-4 w-4 shrink-0" />
-                  <p className="text-sm leading-relaxed text-[var(--theme-body-text)]">
+                  <p className="nn-marketing-body-sm leading-relaxed text-[var(--theme-body-text)]">
                     {item.id === "competitiveRow0"
                       ? t(`components.homeConversionSections.${item.id}.ours`, { count: formatMarketingCount(questions) })
                       : item.id === "competitiveRow1"
@@ -368,7 +355,7 @@ function CompetitivePositioningSection({
                 </div>
                 <div className="flex items-start gap-2 opacity-50">
                   <div className="mt-0.5 h-4 w-4 shrink-0 rounded-full border-2 border-[var(--theme-input-border)]" />
-                  <p className="text-sm leading-relaxed text-[var(--theme-muted-text)]">{t(`components.homeConversionSections.${item.id}.typical`)}</p>
+                  <p className="nn-marketing-body-sm leading-relaxed text-[var(--theme-muted-text)]">{t(`components.homeConversionSections.${item.id}.typical`)}</p>
                 </div>
               </div>
             </div>
@@ -378,7 +365,7 @@ function CompetitivePositioningSection({
         <div className="text-center sm:text-left">
           <button
             type="button"
-            className="inline-flex items-center justify-center rounded-full border border-primary/25 bg-white px-9 py-3 font-medium text-primary shadow-[var(--shadow-card)] hover:border-primary/40 hover:bg-primary/5"
+            className={`${MARKETING_SECONDARY_CTA_CLASS} border border-primary/25 bg-white px-9 text-primary shadow-[var(--shadow-card)] hover:border-primary/40 hover:bg-primary/5`}
             onClick={() => router.push(mapLegacyMarketingHref("/pricing"))}
             data-testid="button-competitive-cta"
           >

@@ -12,7 +12,6 @@ import { LazySection } from "@/legacy/marketing/lazy-section";
 import { buildHomepageHeroSlides } from "@/lib/marketing-assets";
 import type { HomepageLessonTeaser } from "@/lib/marketing/homepage-lesson-teasers";
 import { heroPathwayEntryLinks } from "@/lib/marketing/home-hero-gateway-config";
-import { rnQuestions } from "@/lib/marketing/marketing-entry-routes";
 import { HomeHeroMediaPanel } from "@/components/marketing/home-hero-media-panel";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
@@ -238,9 +237,9 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
 
                 <div className="nn-hero-cta-row mt-[var(--nn-rhythm-text-to-cta)]">
                   <MarketingTrackedLink
-                    href={withMarketingLocale(locale, "/signup")}
+                    href={withMarketingLocale(locale, "/test-bank")}
                     event={PH.marketingHomeHeroPrimaryCta}
-                    eventProps={{ region }}
+                    eventProps={{ region, destination: "public_test_bank" }}
                     className={MARKETING_PRIMARY_CTA_CLASS}
                     data-testid="button-hero-start-free"
                   >
@@ -248,9 +247,9 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </MarketingTrackedLink>
                   <MarketingTrackedLink
-                    href={withMarketingLocale(locale, rnQuestions(region))}
+                    href={withMarketingLocale(locale, "/exam-lessons")}
                     event={PH.marketingHomeHeroSecondaryCta}
-                    eventProps={{ region, destination: "rn_questions" }}
+                    eventProps={{ region, destination: "exam_lessons" }}
                     className={MARKETING_SECONDARY_CTA_CLASS}
                     data-testid="button-hero-browse"
                   >

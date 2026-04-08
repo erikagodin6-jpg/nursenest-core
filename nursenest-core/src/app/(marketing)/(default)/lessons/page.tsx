@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { MarketingPublicStudyLanding } from "@/components/marketing/marketing-public-study-landing";
+import { PublicLessonsPathwaySections } from "@/components/marketing/public-lessons-pathway-sections";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
+import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
@@ -38,7 +40,7 @@ export default async function PublicLessonsLandingPage() {
   const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
   const t = (key: string, params?: Record<string, string | number>) => formatMarketingMessage(m, key, params, en);
 
-  const signupLessons = `${withMarketingLocale(locale, "/signup")}?callbackUrl=${encodeURIComponent("/exam-lessons")}`;
+  const signupLessons = `${withMarketingLocale(locale, "/signup")}?callbackUrl=${encodeURIComponent("/app/lessons")}`;
 
   return (
     <>
@@ -56,10 +58,20 @@ export default async function PublicLessonsLandingPage() {
       <MarketingPublicStudyLanding
         h1={t("pages.publicLessons.h1")}
         intro={t("pages.publicLessons.intro")}
-        primaryCta={{ href: withMarketingLocale(locale, "/exam-lessons"), label: t("pages.publicLessons.ctaBrowseByExam") }}
-        secondaryCta={{ href: withMarketingLocale(locale, "/test-bank"), label: t("pages.publicLessons.ctaPracticeQuestions") }}
+        primaryCta={{
+          href: `${withMarketingLocale(locale, "/lessons")}#exam-pathways`,
+          label: t("pages.publicLessons.ctaBrowseByExam"),
+        }}
+        secondaryCta={{ href: withMarketingLocale(locale, "/question-bank"), label: t("pages.publicLessons.ctaPracticeQuestions") }}
         signupCta={{ href: signupLessons, label: t("pages.publicLessons.ctaCreateAccount") }}
       >
+        <PublicLessonsPathwaySections locale={locale} />
+        <p className="text-sm text-muted">
+          {t("pages.examLessons.appLessonsLead")}{" "}
+          <Link href={loginWithCallback("/app/lessons")} className="font-semibold text-primary">
+            {t("pages.examLessons.appLessonsLink")}
+          </Link>
+        </p>
         <MarketingStudyCrossLinks className="mt-4" />
       </MarketingPublicStudyLanding>
     </>
