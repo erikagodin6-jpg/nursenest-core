@@ -404,7 +404,7 @@ function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLessonRec
     sections: expanded,
     ...(premiumOmitted?.length ? { premiumOmittedSections: premiumOmitted } : {}),
     ...(relatedLessonRefs?.length ? { relatedLessonRefs } : {}),
-    ...lessonMetadataFields(raw),
+    ...mergeLessonAudienceMetadata(raw, pathwayId),
   };
 
   const maxPreview = Math.min(expanded.length, usePremium ? 11 : 5);
@@ -445,7 +445,7 @@ function getCatalogLessonsRaw(pathwayId: string): LessonInput[] {
 }
 
 function getCatalogPathwayLessonsSync(pathwayId: string): PathwayLessonRecord[] {
-  return getCatalogLessonsRaw(pathwayId).map(normalizeLesson);
+  return getCatalogLessonsRaw(pathwayId).map((raw) => normalizeLesson(raw, pathwayId));
 }
 
 /** First N lesson titles from the static catalog (public marketing previews). Empty when catalog has no rows for the pathway. */
@@ -751,7 +751,7 @@ export async function getPathwayLessonsPage(
     return {
       items: raw.map((row) =>
         applyLessonEducationalOverlay(
-          withLocaleMeta(normalizeLessonForHubList(row), meta),
+          withLocaleMeta(normalizeLessonForHubList(row, pathwayId), meta),
           marketingLocale,
           pathwayId,
           lessonDbOverlays,
@@ -860,7 +860,7 @@ export async function getLessonsForTopicPage(
         return {
           items: sliceCat.map((row) =>
             applyLessonEducationalOverlay(
-              withLocaleMeta(normalizeLesson(row), metaCat),
+              withLocaleMeta(normalizeLesson(row, pathwayId), metaCat),
               marketingLocale,
               pathwayId,
               lessonDbOverlays,
@@ -954,7 +954,7 @@ export async function getLessonsForTopicPage(
     const meta = lessonLocaleMeta(marketingLocale, effective, requested !== effective, false);
     const dbItems = rows.map((r) =>
       applyLessonEducationalOverlay(
-        withLocaleMeta(normalizeLessonForHubList(pathwayLessonRowToInput({ ...r, sections: [] })), meta),
+        withLocaleMeta(normalizeLessonForHubList(pathwayLessonRowToInput({ ...r, sections: [] }), pathwayId), meta),
         marketingLocale,
         pathwayId,
         lessonDbOverlays,
@@ -962,7 +962,7 @@ export async function getLessonsForTopicPage(
     );
     const goldItems = goldOnPage.map((gh) =>
       applyLessonEducationalOverlay(
-        withLocaleMeta(normalizeLessonForHubList(gh), meta),
+        withLocaleMeta(normalizeLessonForHubList(gh, pathwayId), meta),
         marketingLocale,
         pathwayId,
         lessonDbOverlays,
