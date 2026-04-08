@@ -183,7 +183,7 @@ function CTABanner({ variant = "default" }: { variant?: "default" | "mid" | "end
       <p className="text-lg font-semibold mb-2">{text}</p>
       <p className="text-gray-300 text-sm mb-4">{t("pages.rexPnContentHub.joinThousandsOfCanadianNursing")}</p>
       <div className="flex flex-wrap gap-3">
-        <LocaleLink href="/mock-exams">
+        <LocaleLink href="/practice-exams">
           <Button className="bg-white text-[#2E3A59] hover:bg-gray-100 font-semibold" data-testid="button-cta-mock-exam">
             Try a Mock Exam <ArrowRight className="w-4 h-4 ml-2" />
           </Button>

@@ -834,7 +834,7 @@ const AUTHORITY_GUIDES: Record<string, AuthorityGuidePage> = {
       { label: "REx-PN Practice Questions", url: "/rex-pn-practice-questions", description: "REx-PN exam questions" },
       { label: "Lab Values Reference", url: "/lab-values", description: "Complete lab values guide" },
       { label: "Study Lessons", url: "/lessons", description: "Pathophysiology lessons" },
-      { label: "Mock Exams", url: "/mock-exams", description: "Full-length practice exams" },
+      { label: "Mock Exams", url: "/practice-exams", description: "Full-length practice exams" },
     ],
     ctaTitle: "Practice Assessment Skills",
     ctaDescription: "Apply your assessment knowledge with clinical simulations and exam-style practice questions.",

@@ -4,28 +4,38 @@ import { notFound } from "next/navigation";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { resolvePublicFlashcardLanding } from "@/lib/seo/public-flashcard-slug-resolve";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
+import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
+import { withMarketingLocale } from "@/lib/i18n/marketing-path";
+import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
 
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
+  const locale = await getMarketingLocaleForDefaultRoute();
+  const m = await loadMarketingMessages(locale);
+  const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+  const t = (key: string, p?: Record<string, string | number>) => formatMarketingMessage(m, key, p, en);
+
   const data = await resolvePublicFlashcardLanding(slug);
   if (!data) {
-    return { title: "Flashcards" };
+    return { title: t("pages.publicFlashcardSlug.metaTitleFallback") };
   }
   if (data.kind === "deck") {
-    const title = `${data.title} flashcards`;
+    const title = t("pages.publicFlashcardSlug.metaDeckTitle", { title: data.title });
     const desc =
-      data.description?.slice(0, 155) ||
-      `Study ${data.title} with NurseNest: ${data.cardCount} nursing flashcards. Preview sample cards; subscribe for full decks and spaced repetition.`;
+      (data.description && String(data.description).trim().slice(0, 155)) ||
+      t("pages.publicFlashcardSlug.metaDeckDescriptionFallback", { title: data.title, count: data.cardCount });
     return {
       title,
       description: desc,
       alternates: { canonical: absoluteUrl(`/flashcards/${slug}`) },
     };
   }
-  const title = `${data.name} topic flashcards | NurseNest`;
-  const desc = `Topic “${data.name}”: curated nursing flashcard decks on NurseNest. Preview sample cards; subscribe for full decks, spaced repetition, and weak-area review tied to your exam track.`;
+  const title = t("pages.publicFlashcardSlug.metaTopicTitle", { name: data.name });
+  const desc = t("pages.publicFlashcardSlug.metaTopicDescription", { name: data.name });
   return {
     title,
     description: desc,
@@ -38,28 +48,38 @@ export default async function PublicFlashcardSlugPage({ params }: Props) {
   const data = await resolvePublicFlashcardLanding(slug);
   if (!data) notFound();
 
+  const locale = await getMarketingLocaleForDefaultRoute();
+  const m = await loadMarketingMessages(locale);
+  const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+  const t = (key: string, p?: Record<string, string | number>) => formatMarketingMessage(m, key, p, en);
+
   const crumbName = data.kind === "deck" ? data.title : data.name;
+  const home = withMarketingLocale(locale, "/");
+  const flashcardsHub = withMarketingLocale(locale, "/flashcards");
+  const lessons = withMarketingLocale(locale, "/lessons");
+  const questionBank = withMarketingLocale(locale, "/question-bank");
+  const login = withMarketingLocale(locale, "/login");
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
       <BreadcrumbJsonLd
         items={[
-          { name: "Home", path: "/" },
-          { name: "Flashcards", path: "/flashcards" },
+          { name: t("nav.home"), path: "/" },
+          { name: t("nav.flashcards"), path: "/flashcards" },
           { name: crumbName, path: `/flashcards/${slug}` },
         ]}
       />
       <nav className="mb-6 text-sm text-[var(--theme-muted-text)]" aria-label="Breadcrumb">
         <ol className="flex flex-wrap items-center gap-2">
           <li>
-            <Link href="/" className="text-primary underline">
-              Home
+            <Link href={home} className="text-primary underline">
+              {t("nav.home")}
             </Link>
           </li>
           <li aria-hidden>/</li>
           <li>
-            <Link href="/flashcards" className="text-primary underline">
-              Flashcards
+            <Link href={flashcardsHub} className="text-primary underline">
+              {t("nav.flashcards")}
             </Link>
           </li>
           <li aria-hidden>/</li>
@@ -73,27 +93,32 @@ export default async function PublicFlashcardSlugPage({ params }: Props) {
         <>
           <h1 className="text-3xl font-bold text-[var(--theme-heading-text)]">{data.title}</h1>
           {data.description ? <p className="mt-3 text-sm text-[var(--theme-muted-text)]">{data.description}</p> : null}
-          <p className="mt-2 text-xs text-[var(--theme-muted-text)]">{data.cardCount} cards · full deck in the learner app</p>
+          <p className="mt-2 text-xs text-[var(--theme-muted-text)]">
+            {t("pages.publicFlashcardSlug.deckCardLine", { count: data.cardCount })}
+          </p>
         </>
       ) : (
         <>
-          <h1 className="text-3xl font-bold text-[var(--theme-heading-text)]">{data.name} flashcards</h1>
+          <h1 className="text-3xl font-bold text-[var(--theme-heading-text)]">
+            {data.name}
+            {t("pages.publicFlashcardSlug.topicTitleSuffix")}
+          </h1>
           <p className="mt-3 text-sm leading-relaxed text-[var(--theme-muted-text)]">
-            Decks below share this topic tag. Use them to reinforce quick recall alongside{" "}
-            <Link href="/lessons" className="font-medium text-primary underline">
-              pathway lessons
-            </Link>{" "}
-            and{" "}
-            <Link href="/question-bank" className="font-medium text-primary underline">
-              question bank
-            </Link>{" "}
-            practice. Samples are shortened; subscribers get full cards, scheduling, and weak-area queues.
+            {t("pages.publicFlashcardSlug.topicIntroP1")}
+            <Link href={lessons} className="font-medium text-primary underline">
+              {t("pages.publicFlashcardSlug.topicIntroLinkLessons")}
+            </Link>
+            {t("pages.publicFlashcardSlug.topicIntroP2")}
+            <Link href={questionBank} className="font-medium text-primary underline">
+              {t("pages.publicFlashcardSlug.topicIntroLinkQuestionBank")}
+            </Link>
+            {t("pages.publicFlashcardSlug.topicIntroP3")}
           </p>
           {data.decks.length > 0 ? (
             <ul className="mt-4 space-y-1 text-sm">
               {data.decks.map((d) => (
                 <li key={d.slug}>
-                  <Link href={`/flashcards/${d.slug}`} className="text-primary underline">
+                  <Link href={withMarketingLocale(locale, `/flashcards/${d.slug}`)} className="text-primary underline">
                     {d.title}
                   </Link>
                 </li>
@@ -104,22 +129,24 @@ export default async function PublicFlashcardSlugPage({ params }: Props) {
       )}
 
       <section className="mt-10">
-        <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Sample cards</h2>
-        <p className="mt-1 text-xs text-[var(--theme-muted-text)]">
-          Short answer previews here. Premium study includes full explanations and unlimited reviews.
-        </p>
+        <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">{t("pages.publicFlashcardSlug.sampleCardsTitle")}</h2>
+        <p className="mt-1 text-xs text-[var(--theme-muted-text)]">{t("pages.publicFlashcardSlug.sampleCardsSubtitle")}</p>
         <ul className="mt-6 space-y-5">
           {data.samples.length === 0 ? (
-            <li className="text-sm text-[var(--theme-muted-text)]">No public samples yet.</li>
+            <li className="text-sm text-[var(--theme-muted-text)]">{t("pages.publicFlashcardSlug.noSamples")}</li>
           ) : (
             data.samples.map((s, i) => (
               <li key={i} className="nn-card p-5">
                 {data.kind === "topic" && "deckTitle" in s ? (
                   <p className="text-xs font-medium text-primary">{s.deckTitle}</p>
                 ) : null}
-                <p className="mt-2 text-sm font-medium text-[var(--theme-heading-text)]">Front</p>
+                <p className="mt-2 text-sm font-medium text-[var(--theme-heading-text)]">
+                  {t("pages.publicFlashcardSlug.labelFront")}
+                </p>
                 <p className="mt-1 whitespace-pre-wrap text-sm">{s.front}</p>
-                <p className="mt-4 text-sm font-medium text-[var(--theme-heading-text)]">Answer (preview)</p>
+                <p className="mt-4 text-sm font-medium text-[var(--theme-heading-text)]">
+                  {t("pages.publicFlashcardSlug.labelAnswerPreview")}
+                </p>
                 <p className="mt-1 whitespace-pre-wrap text-sm text-[var(--theme-muted-text)]">{s.backTeaser}</p>
               </li>
             ))
@@ -128,11 +155,11 @@ export default async function PublicFlashcardSlugPage({ params }: Props) {
       </section>
 
       <div className="mt-10 flex flex-wrap gap-3">
-        <Link href="/login" className="rounded-full bg-role-cta px-5 py-2.5 text-sm font-semibold text-role-cta-foreground">
-          Study in app
+        <Link href={login} className="rounded-full bg-role-cta px-5 py-2.5 text-sm font-semibold text-role-cta-foreground">
+          {t("pages.publicFlashcardSlug.ctaStudyInApp")}
         </Link>
-        <Link href="/flashcards" className="rounded-full border border-border px-5 py-2.5 text-sm font-semibold">
-          All flashcards
+        <Link href={flashcardsHub} className="rounded-full border border-border px-5 py-2.5 text-sm font-semibold">
+          {t("pages.publicFlashcardSlug.ctaAllFlashcards")}
         </Link>
       </div>
     </div>

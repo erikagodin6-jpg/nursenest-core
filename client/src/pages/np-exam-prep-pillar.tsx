@@ -457,7 +457,7 @@ export default function NpExamPrepPillarPage() {
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {[
                 { icon: Target, label: "NP Practice Questions", href: "/np-exam-practice-questions", desc: "Exam-specific question banks with rationales" },
-                { icon: Clock, label: "NP Mock Exams", href: "/mock-exams", desc: "Full-length timed practice exams" },
+                { icon: Clock, label: "NP Mock Exams", href: "/practice-exams", desc: "Full-length timed practice exams" },
                 { icon: BookOpen, label: "NP Clinical Lessons", href: "/lessons?tier=np", desc: "179+ body-system study guides" },
                 { icon: Brain, label: "NP Flashcards", href: "/flashcards", desc: "High-yield review cards" },
                 { icon: Shield, label: "Pharmacology Review", href: "/medication-mastery", desc: "NP prescribing and drug review" },
@@ -500,7 +500,7 @@ export default function NpExamPrepPillarPage() {
                     Start Free Practice <Zap className="w-5 h-5" />
                   </Button>
                 </LocaleLink>
-                <LocaleLink href="/mock-exams" data-testid="link-cta-mock-exams">
+                <LocaleLink href="/practice-exams" data-testid="link-cta-mock-exams">
                   <Button size="lg" variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20 gap-2 text-base px-8 h-12">
                     Take a Mock Exam <Target className="w-5 h-5" />
                   </Button>

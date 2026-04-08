@@ -61,7 +61,7 @@ export function MockExamTeaser({ profession, examCode }: MockExamTeaserProps) {
     mockExamCount = Object.values(counts).reduce((sum, c) => sum + c, 0);
   }
 
-  const examLink = profession ? `/careers/${profession}/mock-exams` : "/mock-exams";
+  const examLink = profession ? `/careers/${profession}/mock-exams` : "/practice-exams";
   const title = profession
     ? `${profession.charAt(0).toUpperCase() + profession.slice(1)} Mock Exam`
     : "Nursing Mock Exam";

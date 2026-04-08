@@ -218,7 +218,7 @@ export function NpExamHubPage() {
             <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
               {[
                 { icon: Target, label: "NP Practice Questions", href: "/np-exam-practice-questions", desc: "Browse NP question bank" },
-                { icon: Stethoscope, label: "NP Mock Exams", href: "/mock-exams", desc: "Full-length practice exams" },
+                { icon: Stethoscope, label: "NP Mock Exams", href: "/practice-exams", desc: "Full-length practice exams" },
                 { icon: BookOpen, label: "NP Lessons", href: "/lessons?tier=np", desc: "Clinical study guides" },
                 { icon: Layers, label: "NP Flashcards", href: "/flashcards", desc: "High-yield review cards" },
                 { icon: Pill, label: "Pharmacology", href: "/medication-mastery", desc: "NP prescribing review" },
@@ -551,7 +551,7 @@ function NpExamDetailPage({ data }: { data: NpExamPageData }) {
                   Practice Questions <ArrowRight className="w-4 h-4" />
                 </Button>
               </LocaleLink>
-              <LocaleLink href="/mock-exams" data-testid="link-mock-exam">
+              <LocaleLink href="/practice-exams" data-testid="link-mock-exam">
                 <Button variant="outline" className="gap-2">
                   Take Mock Exam <Target className="w-4 h-4" />
                 </Button>
@@ -572,7 +572,7 @@ function NpExamDetailPage({ data }: { data: NpExamPageData }) {
                 { label: "NP Practice Questions", href: "/np-exam-practice-questions", desc: "Exam-specific questions" },
                 { label: "NP Lessons", href: "/lessons?tier=np", desc: "Clinical guides" },
                 { label: "Flashcards", href: "/flashcards", desc: "Quick review" },
-                { label: "Mock Exams", href: "/mock-exams", desc: "Timed practice" },
+                { label: "Mock Exams", href: "/practice-exams", desc: "Timed practice" },
                 { label: "Pharmacology", href: "/medication-mastery", desc: "Drug review" },
               ].map((link, i) => (
                 <LocaleLink key={i} href={link.href} data-testid={`link-resource-${i}`}>

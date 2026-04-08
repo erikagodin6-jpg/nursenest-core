@@ -157,7 +157,7 @@ export function HomeBottomSections({
 
               <div
                 className="relative bg-white rounded-2xl border border-gray-100/80 shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-all duration-300 hover:-translate-y-1 p-6 cursor-pointer group overflow-hidden"
-                onClick={() => setLocation("/mock-exams")}
+                onClick={() => setLocation("/practice-exams")}
                 data-testid="card-promo-readiness-exam"
               >
                 <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-emerald-100/50 to-transparent rounded-bl-full" />
@@ -482,7 +482,7 @@ export function HomeBottomSections({
               {/* Mock Exams */}
               <div
                 className="bg-white rounded-2xl border border-gray-100/80 shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-all duration-300 hover:-translate-y-1 p-6 cursor-pointer group relative overflow-hidden"
-                onClick={() => setLocation("/mock-exams")}
+                onClick={() => setLocation("/practice-exams")}
                 data-testid="card-feature-mock-exams"
               >
                 <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-indigo-100/50 to-transparent rounded-bl-full" />

@@ -409,7 +409,7 @@ function ExamUpcomingContent({
         <Button
           size="sm"
           variant="outline"
-          onClick={() => navigate("/mock-exams")}
+          onClick={() => navigate("/practice-exams")}
           className="rounded-full"
           data-testid="button-cc-practice"
         >
@@ -498,7 +498,7 @@ function ExamApproachingSoonContent({
       <div className="flex flex-wrap gap-2">
         <Button
           size="sm"
-          onClick={() => navigate("/mock-exams")}
+          onClick={() => navigate("/practice-exams")}
           className="rounded-full shadow-sm bg-amber-500 hover:bg-amber-600 text-white"
           data-testid="button-cc-take-mock"
         >

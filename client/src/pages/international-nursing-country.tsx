@@ -495,7 +495,7 @@ export default function InternationalNursingCountryPage() {
             </h1>
             <p className="text-lg text-gray-600 mb-6" data-testid="text-description">{config.description}</p>
             <div className="flex flex-wrap gap-4">
-              <Link href="/mock-exams" className="inline-flex items-center gap-2 px-6 py-3 bg-teal-600 text-white rounded-xl font-semibold hover:bg-teal-700 transition-colors shadow-lg shadow-teal-200" data-testid="button-start-prep">
+              <Link href="/practice-exams" className="inline-flex items-center gap-2 px-6 py-3 bg-teal-600 text-white rounded-xl font-semibold hover:bg-teal-700 transition-colors shadow-lg shadow-teal-200" data-testid="button-start-prep">
                 {t("intlNursing.country.startPrep")} <ArrowRight className="w-4 h-4" />
               </Link>
               <Link href="/applynest" className="inline-flex items-center gap-2 px-6 py-3 bg-white text-teal-700 rounded-xl font-semibold hover:bg-teal-50 transition-colors border border-teal-200" data-testid="button-find-jobs">
@@ -661,7 +661,7 @@ export default function InternationalNursingCountryPage() {
           <h2 className="text-2xl font-bold text-white mb-4">{t("intlNursing.hub.whyNurseNest")}</h2>
           <p className="text-teal-100 mb-8">{t("intlNursing.country.subtitle", { country: countryName })}</p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <Link href="/mock-exams" className="inline-flex items-center gap-2 px-6 py-3 bg-white text-teal-700 rounded-xl font-semibold hover:bg-teal-50" data-testid="button-cta-prep">
+            <Link href="/practice-exams" className="inline-flex items-center gap-2 px-6 py-3 bg-white text-teal-700 rounded-xl font-semibold hover:bg-teal-50" data-testid="button-cta-prep">
               {t("intlNursing.country.startPrep")} <ArrowRight className="w-4 h-4" />
             </Link>
             <Link href="/applynest" className="inline-flex items-center gap-2 px-6 py-3 bg-teal-700 text-white rounded-xl font-semibold hover:bg-teal-800 border border-teal-500" data-testid="button-cta-jobs">

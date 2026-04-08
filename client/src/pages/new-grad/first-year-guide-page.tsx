@@ -361,7 +361,7 @@ const RELATED_GUIDES: Record<string, { slug: string; label: string }[]> = {
 };
 
 const EXAM_PREP_LINKS: Record<string, { label: string; href: string }> = {
-  nursing: { label: "NCLEX / REX-PN Exam Prep", href: "/mock-exams" },
+  nursing: { label: "NCLEX / REX-PN Exam Prep", href: "/practice-exams" },
   paramedic: { label: "NREMT / PCP Exam Prep", href: "/allied-health/paramedic/mock-exams" },
   "respiratory-therapy": { label: "RRT / NBRC Exam Prep", href: "/allied-health/rrt/mock-exams" },
   mlt: { label: "ASCP / CSMLS Exam Prep", href: "/allied-health/mlt/mock-exams" },

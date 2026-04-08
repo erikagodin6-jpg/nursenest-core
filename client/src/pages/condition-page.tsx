@@ -497,7 +497,7 @@ export default function ConditionPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <LocaleLink
-                href="/mock-exams"
+                href="/practice-exams"
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#BFA6F6] text-white rounded-lg font-semibold hover:bg-[#a88de8] transition-colors"
                 data-testid="link-start-exam"
               >

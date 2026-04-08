@@ -266,7 +266,7 @@ export default function HealthcareCertificationsHub() {
                 </CardContent>
               </Card>
             </LocaleLink>
-            <LocaleLink href="/mock-exams">
+            <LocaleLink href="/practice-exams">
               <Card className="h-full hover:shadow-md hover:border-emerald-200 transition-all cursor-pointer group" data-testid="card-tool-mocks">
                 <CardContent className="p-5 text-center">
                   <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center mx-auto mb-3">

@@ -71,7 +71,7 @@ const EXAM_CONFIGS: Record<string, ExamConfig> = {
       "Not familiarizing yourself with US/Canadian clinical terminology and medication names",
     ],
     studyPlanSummary: "Most IENs benefit from 8-12 weeks of dedicated NCLEX preparation. Start with a diagnostic assessment to identify weak areas, then follow a structured study plan focusing on high-yield topics. Complete at least 2,000 practice questions before your exam date.",
-    nursenestLink: "/mock-exams",
+    nursenestLink: "/practice-exams",
     nursenestCTA: "Start NCLEX Prep with NurseNest",
     examCode: "NCLEX-RN",
     faqs: [
@@ -117,7 +117,7 @@ const EXAM_CONFIGS: Record<string, ExamConfig> = {
       "Not practicing enough CAT-format questions",
     ],
     studyPlanSummary: "Plan for 8-10 weeks of dedicated preparation. Focus on understanding the Canadian practical nursing scope and practicing with REx-PN-specific questions.",
-    nursenestLink: "/mock-exams",
+    nursenestLink: "/practice-exams",
     nursenestCTA: "Start REx-PN Prep with NurseNest",
     examCode: "REx-PN",
     faqs: [

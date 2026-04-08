@@ -25,7 +25,7 @@ function buildRouteRegistry() {
   if (allRoutes.size > 0) return;
   allRoutes.add("/nclex-rn");
   allRoutes.add("/nclex-rn-guide");
-  allRoutes.add("/mock-exams");
+  allRoutes.add("/practice-exams");
   allRoutes.add("/free-practice");
   allRoutes.add("/pricing");
   allRoutes.add("/flashcards");

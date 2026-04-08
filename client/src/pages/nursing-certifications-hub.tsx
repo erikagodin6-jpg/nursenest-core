@@ -306,7 +306,7 @@ export default function NursingCertificationsHub() {
                 <p className="text-xs text-gray-500">{t("pages.nursingCertificationsHub.indepthClinicalLessonsCoveringCertification")}</p>
               </div>
             </Link>
-            <Link href="/mock-exams" className="group" data-testid="link-tool-mocks">
+            <Link href="/practice-exams" className="group" data-testid="link-tool-mocks">
               <div className="bg-white rounded-xl border border-emerald-100 p-5 hover:shadow-md transition-all h-full text-center">
                 <div className="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center mx-auto mb-3">
                   <Award className="w-6 h-6 text-emerald-600" />

@@ -494,7 +494,7 @@ export function PostponedCountdownCard({ user, newExamDate, onDateChange }: Post
           size="sm"
           variant="outline"
           className="flex-1"
-          onClick={() => navigate("/mock-exams")}
+          onClick={() => navigate("/practice-exams")}
           data-testid="button-practice-exams"
         >
           Practice Exams

@@ -71,7 +71,7 @@ export const SILO_CONFIGS: Record<string, SiloConfig> = {
     ],
     internalLinks: [
       { label: "NCLEX-RN Test Bank", href: "/free-practice" },
-      { label: "Timed Mock Exams", href: "/mock-exams" },
+      { label: "Timed Mock Exams", href: "/practice-exams" },
       { label: "Question of the Day", href: "/question-of-the-day" },
       { label: "Clinical Lessons", href: "/lessons" },
       { label: "Flashcard Study Decks", href: "/flashcards" },
@@ -137,7 +137,7 @@ export const SILO_CONFIGS: Record<string, SiloConfig> = {
     ],
     internalLinks: [
       { label: "NCLEX-PN Test Bank", href: "/free-practice" },
-      { label: "Timed Mock Exams", href: "/mock-exams" },
+      { label: "Timed Mock Exams", href: "/practice-exams" },
       { label: "Question of the Day", href: "/question-of-the-day" },
       { label: "Clinical Lessons", href: "/lessons" },
       { label: "Flashcard Study Decks", href: "/flashcards" },
@@ -198,7 +198,7 @@ export const SILO_CONFIGS: Record<string, SiloConfig> = {
     ],
     internalLinks: [
       { label: "REx-PN Test Bank", href: "/free-practice" },
-      { label: "Timed Mock Exams", href: "/mock-exams" },
+      { label: "Timed Mock Exams", href: "/practice-exams" },
       { label: "Question of the Day", href: "/question-of-the-day" },
       { label: "Clinical Lessons", href: "/lessons" },
       { label: "Flashcard Study Decks", href: "/flashcards" },
@@ -270,7 +270,7 @@ export const SILO_CONFIGS: Record<string, SiloConfig> = {
     ],
     internalLinks: [
       { label: "NP Test Bank", href: "/free-practice" },
-      { label: "Timed Mock Exams", href: "/mock-exams" },
+      { label: "Timed Mock Exams", href: "/practice-exams" },
       { label: "Question of the Day", href: "/question-of-the-day" },
       { label: "NP Clinical Lessons", href: "/lessons" },
       { label: "Study Flashcards", href: "/flashcards" },

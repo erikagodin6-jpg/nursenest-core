@@ -837,8 +837,8 @@ export function HomeBottomSections({
                         <topic.icon className="nn-accent-icon h-5 w-5" />
                       </div>
                       <div className="min-w-0">
-                        <h3 className="font-semibold text-[var(--theme-heading-text)] text-sm mb-1">{topic.title}</h3>
-                        <p className="text-xs text-muted-foreground leading-relaxed">{topic.desc}</p>
+                        <h4 className="mb-1 nn-marketing-h4">{topic.title}</h4>
+                        <p className="nn-marketing-caption leading-relaxed text-muted-foreground">{topic.desc}</p>
                       </div>
                     </div>
                   </CardContent>
@@ -875,7 +875,7 @@ export function HomeBottomSections({
                         <CheckCircle2 className="w-3.5 h-3.5 text-primary" />
                       </div>
                       <div>
-                        <h4 className="nn-marketing-h4 text-sm">{item.title}</h4>
+                        <h4 className="nn-marketing-h4">{item.title}</h4>
                         <p className="nn-marketing-body-sm text-foreground">{item.desc}</p>
                       </div>
                     </div>
@@ -1148,7 +1148,7 @@ export function HomeBottomSections({
                       <h3 className="mb-1.5 line-clamp-2 nn-marketing-h3 group-hover:text-primary transition-colors">{product.title}</h3>
                       <p className="mb-3 line-clamp-2 nn-marketing-body-sm text-foreground">{product.shortDescription || product.description}</p>
                       <div className="flex items-center gap-2">
-                        <span className="nn-marketing-h3 tabular-nums text-primary">${(product.price / 100).toFixed(2)}</span>
+                        <span className="nn-marketing-h2 tabular-nums text-primary">${(product.price / 100).toFixed(2)}</span>
                         {product.compareAtPrice && product.compareAtPrice > product.price && (
                           <span className="text-sm text-muted-foreground line-through">${(product.compareAtPrice / 100).toFixed(2)}</span>
                         )}
@@ -1333,8 +1333,8 @@ export function HomeBottomSections({
               <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-6">
                 <Mail className="w-7 h-7 text-primary" />
               </div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-[var(--theme-heading-text)] mb-3" data-testid="text-email-heading">{t("home.email.title")}</h2>
-              <p className="text-foreground mb-8 leading-relaxed">
+              <h2 className="mb-3 nn-marketing-h2" data-testid="text-email-heading">{t("home.email.title")}</h2>
+              <p className="mb-8 nn-marketing-body leading-relaxed text-foreground">
                 {t("home.email.subtitle")}
               </p>
               {emailStatus === "success" ? (
@@ -1385,7 +1385,7 @@ export function HomeBottomSections({
                   )}
                 </>
               )}
-              <p className="text-xs text-muted-foreground mt-4">{t("home.email.disclaimer")}</p>
+              <p className="mt-4 nn-marketing-caption text-muted-foreground">{t("home.email.disclaimer")}</p>
             </div>
           </div>
         </section>
@@ -1393,10 +1393,10 @@ export function HomeBottomSections({
         {/* Final CTA Section */}
         <section className="py-24 relative overflow-hidden bg-gradient-to-b from-[var(--theme-page-bg)] to-primary/5" data-testid="section-final-cta">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-            <h2 className="font-bold text-[var(--theme-heading-text)] mb-6" style={{ fontSize: 'var(--text-section)' }} data-testid="text-cta-heading">
+            <h2 className="mb-6 nn-marketing-h2" data-testid="text-cta-heading">
               {t("home.cta.title")}
             </h2>
-            <p className="text-xl text-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
+            <p className="mx-auto mb-10 max-w-2xl nn-marketing-body leading-relaxed text-foreground">
               {t("home.cta.subtitle")}
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

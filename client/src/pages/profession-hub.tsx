@@ -28,8 +28,8 @@ interface Profession {
 const MODULE_INFO = [
   { key: "lessons", label: "Lessons", desc: "Structured learning content for every exam domain", icon: BookOpen, path: "/lessons" },
   { key: "flashcards", label: "Flashcards", desc: "Spaced repetition cards for key concepts", icon: Brain, path: "/flashcards" },
-  { key: "practiceExams", label: "Practice Exams", desc: "Timed mock exams with detailed performance reports", icon: FileText, path: "/mock-exams" },
-  { key: "adaptiveExams", label: "Adaptive Exams", desc: "CAT-style exams that adapt to your ability level", icon: Target, path: "/mock-exams" },
+  { key: "practiceExams", label: "Practice Exams", desc: "Timed mock exams with detailed performance reports", icon: FileText, path: "/practice-exams" },
+  { key: "adaptiveExams", label: "Adaptive Exams", desc: "CAT-style exams that adapt to your ability level", icon: Target, path: "/practice-exams" },
   { key: "studyPacks", label: "Study Plans", desc: "Personalized daily study plans targeting weak areas", icon: Calendar, path: "/study-plan" },
 ];
 

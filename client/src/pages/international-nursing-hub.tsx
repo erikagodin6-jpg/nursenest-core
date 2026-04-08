@@ -391,7 +391,7 @@ export default function InternationalNursingHub() {
             <Link href="/international-nurses/canada" className="inline-flex items-center gap-2 px-6 py-3 bg-white text-teal-700 rounded-xl font-semibold hover:bg-teal-50 transition-colors" data-testid="button-cta-guides">
               {t("intlNursing.hub.ctaExplore")} <ArrowRight className="w-4 h-4" />
             </Link>
-            <Link href="/mock-exams" className="inline-flex items-center gap-2 px-6 py-3 bg-teal-700 text-white rounded-xl font-semibold hover:bg-teal-800 transition-colors border border-teal-500" data-testid="button-cta-prep">
+            <Link href="/practice-exams" className="inline-flex items-center gap-2 px-6 py-3 bg-teal-700 text-white rounded-xl font-semibold hover:bg-teal-800 transition-colors border border-teal-500" data-testid="button-cta-prep">
               {t("intlNursing.hub.ctaPrepare")}
             </Link>
             <Link href="/applynest" className="inline-flex items-center gap-2 px-6 py-3 bg-teal-700 text-white rounded-xl font-semibold hover:bg-teal-800 transition-colors border border-teal-500" data-testid="button-cta-jobs">

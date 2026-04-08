@@ -121,8 +121,8 @@ export const BLS_PREP: CertPrepContent = {
     { title: "BLS Clinical Scenarios", description: "Scenario-based questions testing BLS decision-making in clinical settings.", link: "/free-practice", type: "practice" },
   ],
   recommendedMockExams: [
-    { title: "BLS Full-Length Practice Exam", description: "50-question timed exam simulating the BLS provider written test.", link: "/mock-exams", type: "mock-exam" },
-    { title: "BLS Rapid Review Quiz", description: "25-question quick assessment to identify knowledge gaps.", link: "/mock-exams", type: "mock-exam" },
+    { title: "BLS Full-Length Practice Exam", description: "50-question timed exam simulating the BLS provider written test.", link: "/practice-exams", type: "mock-exam" },
+    { title: "BLS Rapid Review Quiz", description: "25-question quick assessment to identify knowledge gaps.", link: "/practice-exams", type: "mock-exam" },
   ],
   examFormat: [
     { label: "Course Length", value: "1 day (~4.5 hours, instructor-led)" },
@@ -255,9 +255,9 @@ export const ACLS_PREP: CertPrepContent = {
     { title: "ACLS Pharmacology Quiz", description: "Drug dose, indication, and contraindication questions.", link: "/free-practice", type: "practice" },
   ],
   recommendedMockExams: [
-    { title: "ACLS Full-Length Practice Exam", description: "75-question timed exam simulating the ACLS provider written test.", link: "/mock-exams", type: "mock-exam" },
-    { title: "ACLS Algorithm Rapid Review", description: "30-question focused assessment on cardiac arrest algorithms.", link: "/mock-exams", type: "mock-exam" },
-    { title: "ACLS Megacode Scenario Prep", description: "Interactive scenario-based questions preparing for skills stations.", link: "/mock-exams", type: "mock-exam" },
+    { title: "ACLS Full-Length Practice Exam", description: "75-question timed exam simulating the ACLS provider written test.", link: "/practice-exams", type: "mock-exam" },
+    { title: "ACLS Algorithm Rapid Review", description: "30-question focused assessment on cardiac arrest algorithms.", link: "/practice-exams", type: "mock-exam" },
+    { title: "ACLS Megacode Scenario Prep", description: "Interactive scenario-based questions preparing for skills stations.", link: "/practice-exams", type: "mock-exam" },
   ],
   examFormat: [
     { label: "Course Length", value: "2 days (~14 hours, instructor-led)" },
@@ -393,9 +393,9 @@ export const PALS_PREP: CertPrepContent = {
     { title: "Weight-Based Dosing Calculator Quiz", description: "Practice calculating pediatric drug doses under time pressure.", link: "/free-practice", type: "practice" },
   ],
   recommendedMockExams: [
-    { title: "PALS Full-Length Practice Exam", description: "60-question timed exam covering all PALS domains.", link: "/mock-exams", type: "mock-exam" },
-    { title: "PALS Scenario-Based Assessment", description: "Case-based questions testing the Assess-Categorize-Decide-Act framework.", link: "/mock-exams", type: "mock-exam" },
-    { title: "PALS Pharmacology Quiz", description: "Focused assessment on weight-based dosing and drug indications.", link: "/mock-exams", type: "mock-exam" },
+    { title: "PALS Full-Length Practice Exam", description: "60-question timed exam covering all PALS domains.", link: "/practice-exams", type: "mock-exam" },
+    { title: "PALS Scenario-Based Assessment", description: "Case-based questions testing the Assess-Categorize-Decide-Act framework.", link: "/practice-exams", type: "mock-exam" },
+    { title: "PALS Pharmacology Quiz", description: "Focused assessment on weight-based dosing and drug indications.", link: "/practice-exams", type: "mock-exam" },
   ],
   examFormat: [
     { label: "Course Length", value: "2 days (~14 hours, instructor-led)" },

@@ -79,7 +79,7 @@ const toolkitCards = [
     title: "Mock Exams (CAT)",
     description: "Simulate the real exam experience with computer adaptive testing. Questions adjust in difficulty based on your performance, just like exam day.",
     icon: Target,
-    href: "/mock-exams",
+    href: "/practice-exams",
     cta: "Take a Mock Exam",
   },
   {
@@ -93,7 +93,7 @@ const toolkitCards = [
     title: "Readiness Assessment",
     description: "Take a quick 25-question diagnostic to identify your strengths and areas that need more focus before exam day.",
     icon: Activity,
-    href: "/mock-exams",
+    href: "/practice-exams",
     cta: "Check Readiness",
   },
   {
@@ -237,7 +237,7 @@ export default function RexPnHub() {
                   size="lg"
                   variant="outline"
                   className="h-14 px-8 text-lg rounded-full border-2 border-red-200 hover:bg-red-50 hover:border-red-400 text-gray-700 bg-white/50"
-                  onClick={() => setLocation("/mock-exams")}
+                  onClick={() => setLocation("/practice-exams")}
                   data-testid="button-rex-pn-start-cat"
                 >
                   <Target className="mr-2 w-5 h-5 text-red-500" />

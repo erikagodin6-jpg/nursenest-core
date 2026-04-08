@@ -23,7 +23,7 @@ const CROSS_NAMESPACE_PATTERNS = [
 function buildRouteRegistry() {
   if (allRoutes.size > 0) return;
   allRoutes.add("/np-exam");
-  allRoutes.add("/mock-exams");
+  allRoutes.add("/practice-exams");
   allRoutes.add("/free-practice");
   allRoutes.add("/pricing");
   allRoutes.add("/flashcards");

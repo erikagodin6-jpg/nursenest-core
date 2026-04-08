@@ -334,7 +334,7 @@ export const GENERIC_JOURNEY: JourneyConfig = {
       icon: "Target",
       color: "emerald",
       links: [
-        { label: "Mock Exams", href: "/mock-exams" },
+        { label: "Mock Exams", href: "/practice-exams" },
         { label: "Study Plan", href: "/study-plan" },
         { label: "Performance Dashboard", href: "/dashboard" },
         { label: "Exam Hubs", href: "/nclex-rn" },

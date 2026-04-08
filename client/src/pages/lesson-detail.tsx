@@ -3953,7 +3953,7 @@ export default function LessonDetail() {
                 <p className="text-xs text-gray-500">{t("pages.lessonDetail.buildADeckForThis")}</p>
               </div>
             </LocaleLink>
-            <LocaleLink href="/mock-exams" className="block" data-testid="cta-mock-exam">
+            <LocaleLink href="/practice-exams" className="block" data-testid="cta-mock-exam">
               <div className="h-full p-4 rounded-xl bg-white border border-gray-200 hover:border-primary/30 hover:shadow-md transition-all group cursor-pointer">
                 <div className="w-10 h-10 bg-amber-50 rounded-lg flex items-center justify-center mb-3 group-hover:bg-amber-100 transition-colors">
                   <Trophy className="w-5 h-5 text-amber-600" />

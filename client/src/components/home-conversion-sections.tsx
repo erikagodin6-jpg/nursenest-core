@@ -617,7 +617,7 @@ function FeatureCardsSection({ questionCount }: { questionCount: number }) {
       color: "bg-indigo-100",
       iconColor: "text-indigo-600",
       tags: ["Timed", "Strict Mode", "Score Trends"],
-      href: "/mock-exams",
+      href: "/practice-exams",
     },
     {
       icon: Lightbulb,

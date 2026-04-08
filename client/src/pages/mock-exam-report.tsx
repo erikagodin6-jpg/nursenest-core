@@ -102,7 +102,7 @@ export default function MockExamReport() {
           <div className="text-center space-y-4">
             <AlertTriangle className="w-12 h-12 text-gray-400 mx-auto" />
             <p className="text-gray-500">{t("pages.mockExamReport.examReportNotFound")}</p>
-            <LocaleLink href="/mock-exams">
+            <LocaleLink href="/practice-exams">
               <Button variant="outline">{t("pages.mockExamReport.backToMockExams")}</Button>
             </LocaleLink>
           </div>
@@ -353,7 +353,7 @@ export default function MockExamReport() {
       <Navigation />
 
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full flex-1">
-        <LocaleLink href="/mock-exams">
+        <LocaleLink href="/practice-exams">
           <Button variant="ghost" className="mb-6 group">
             <ArrowLeft className="mr-2 w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back to Mock Exams
           </Button>

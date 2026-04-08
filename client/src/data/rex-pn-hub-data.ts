@@ -191,7 +191,7 @@ export const rexPnCategories: RexPnCategoryPage[] = [
       { title: "REx-PN Study Plan", href: "/rex-pn/study-plan", type: "category" },
       { title: "Clinical Judgment Framework", href: "/rex-pn/clinical-judgment", type: "category" },
       { title: "Pharmacology Review", href: "/rex-pn/pharmacology", type: "category" },
-      { title: "Mock Exams", href: "/mock-exams", type: "question-bank" },
+      { title: "Mock Exams", href: "/practice-exams", type: "question-bank" },
       { title: "Heart Failure", href: "/rex-pn/conditions/heart-failure", type: "condition" }
     ],
     lastReviewed: "2025-03-01",
@@ -329,7 +329,7 @@ export const rexPnCategories: RexPnCategoryPage[] = [
       { title: "Practice Questions", href: "/rex-pn/practice-questions", type: "category" },
       { title: "Exam Tips", href: "/rex-pn/exam-tips", type: "category" },
       { title: "How to Pass the REx-PN", href: "/rex-pn/strategy/how-to-pass-rex-pn", type: "strategy" },
-      { title: "Mock Exams", href: "/mock-exams", type: "question-bank" }
+      { title: "Mock Exams", href: "/practice-exams", type: "question-bank" }
     ],
     lastReviewed: "2025-03-01",
     reviewer: "NurseNest Clinical Review Team"
@@ -397,7 +397,7 @@ export const rexPnCategories: RexPnCategoryPage[] = [
       { title: "Practice Questions", href: "/rex-pn/practice-questions", type: "category" },
       { title: "Pharmacology Review", href: "/rex-pn/pharmacology", type: "category" },
       { title: "Clinical Judgment", href: "/rex-pn/clinical-judgment", type: "category" },
-      { title: "Mock Exams", href: "/mock-exams", type: "question-bank" }
+      { title: "Mock Exams", href: "/practice-exams", type: "question-bank" }
     ],
     lastReviewed: "2025-03-01",
     reviewer: "NurseNest Clinical Review Team"
@@ -1214,7 +1214,7 @@ export const rexPnStrategies: RexPnStrategyPage[] = [
       { title: "Practice Questions", href: "/rex-pn/practice-questions", type: "category" },
       { title: "Clinical Judgment", href: "/rex-pn/clinical-judgment", type: "category" },
       { title: "Exam Tips", href: "/rex-pn/exam-tips", type: "category" },
-      { title: "Mock Exams", href: "/mock-exams", type: "question-bank" }
+      { title: "Mock Exams", href: "/practice-exams", type: "question-bank" }
     ],
     lastReviewed: "2025-03-01",
     reviewer: "NurseNest Clinical Review Team"

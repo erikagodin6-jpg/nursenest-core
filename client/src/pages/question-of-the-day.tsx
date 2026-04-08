@@ -394,7 +394,7 @@ export default function QuestionOfTheDay() {
                   <Sparkles className="h-8 w-8 mx-auto mb-3 text-primary" />
                   <h3 className="font-bold mb-2">{t("pages.questionOfTheDay.mockExams")}</h3>
                   <p className="text-sm text-muted-foreground mb-4">{t("pages.questionOfTheDay.fulllengthTimedPracticeExamsWith")}</p>
-                  <LocaleLink href="/mock-exams">
+                  <LocaleLink href="/practice-exams">
                     <Button variant="outline" size="sm" data-testid="link-mock-exams">
                       Try a Mock Exam <ArrowRight className="h-3 w-3 ml-1" />
                     </Button>

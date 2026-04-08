@@ -501,7 +501,7 @@ export default function InternationalNursingMigrationPage() {
               <span className="flex items-center gap-1"><DollarSign className="w-4 h-4 text-teal-500" /> {config.estimatedCost}</span>
             </div>
             <div className="flex flex-wrap gap-4">
-              <Link href="/mock-exams" className="inline-flex items-center gap-2 px-6 py-3 bg-teal-600 text-white rounded-xl font-semibold hover:bg-teal-700 transition-colors" data-testid="button-start-prep">
+              <Link href="/practice-exams" className="inline-flex items-center gap-2 px-6 py-3 bg-teal-600 text-white rounded-xl font-semibold hover:bg-teal-700 transition-colors" data-testid="button-start-prep">
                 {t("intlNursing.country.startPrep")} <ArrowRight className="w-4 h-4" />
               </Link>
               <Link href="/applynest" className="inline-flex items-center gap-2 px-6 py-3 bg-white text-teal-700 rounded-xl font-semibold hover:bg-teal-50 transition-colors border border-teal-200" data-testid="button-find-jobs">
@@ -600,7 +600,7 @@ export default function InternationalNursingMigrationPage() {
           <h2 className="text-2xl font-bold text-white mb-4">{t("intlNursing.migration.heading", { from: config.fromCountry, to: config.toCountry })}</h2>
           <p className="text-teal-100 mb-8">{t("intlNursing.migration.metaDesc", { from: config.fromCountry, to: config.toCountry })}</p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <Link href="/mock-exams" className="inline-flex items-center gap-2 px-6 py-3 bg-white text-teal-700 rounded-xl font-semibold hover:bg-teal-50" data-testid="button-cta-prep">
+            <Link href="/practice-exams" className="inline-flex items-center gap-2 px-6 py-3 bg-white text-teal-700 rounded-xl font-semibold hover:bg-teal-50" data-testid="button-cta-prep">
               {t("intlNursing.country.startPrep")} <ArrowRight className="w-4 h-4" />
             </Link>
             <Link href="/applynest" className="inline-flex items-center gap-2 px-6 py-3 bg-teal-700 text-white rounded-xl font-semibold hover:bg-teal-800 border border-teal-500" data-testid="button-cta-jobs">

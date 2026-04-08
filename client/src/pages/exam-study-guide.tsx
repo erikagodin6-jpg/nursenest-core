@@ -573,7 +573,7 @@ const STUDY_GUIDES: Record<string, StudyGuideData> = {
     resourceLinks: [
       { label: "OT Practice Questions", href: "/start-free", icon: "questions" },
       { label: "OT Flashcards", href: "/flashcards", icon: "flashcards" },
-      { label: "OT Mock Exams", href: "/mock-exams", icon: "mock" },
+      { label: "OT Mock Exams", href: "/practice-exams", icon: "mock" },
       { label: "OT Study Plan", href: "/study-plan", icon: "plan" },
       { label: "Occupational Therapy Hub", href: "/occupational-therapy", icon: "lessons" },
     ],

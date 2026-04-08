@@ -139,7 +139,7 @@ export const STUDY_CROSS_LINKS: Record<string, RelatedResource[]> = {
     { title: "Clinical Simulations", href: "/case-simulations", description: "Apply your learning in branching clinical case scenarios.", icon: "simulator" },
     { title: "Med Math Practice", href: "/med-math", description: "Practice dosage calculations and medication math problems.", icon: "qbank" },
     { title: "Lab Values Review", href: "/lab-values", description: "Master abnormal lab value interpretation and clinical correlations.", icon: "lesson" },
-    { title: "Mock Exams", href: "/mock-exams", description: "Take timed practice tests simulating the real exam experience.", icon: "qbank" },
+    { title: "Mock Exams", href: "/practice-exams", description: "Take timed practice tests simulating the real exam experience.", icon: "qbank" },
   ],
   flashcards: [
     { title: "Clinical Lessons", href: "/lessons", description: "Deepen your understanding with pathophysiology and clinical lessons.", icon: "lesson" },
@@ -150,7 +150,7 @@ export const STUDY_CROSS_LINKS: Record<string, RelatedResource[]> = {
   qbank: [
     { title: "Clinical Lessons", href: "/lessons", description: "Review pathophysiology topics for questions you missed.", icon: "lesson" },
     { title: "Flashcards", href: "/flashcards", description: "Memorize key concepts with spaced repetition flashcards.", icon: "flashcard" },
-    { title: "Mock Exams", href: "/mock-exams", description: "Simulate the real exam with timed, adaptive mock tests.", icon: "qbank" },
+    { title: "Mock Exams", href: "/practice-exams", description: "Simulate the real exam with timed, adaptive mock tests.", icon: "qbank" },
     { title: "Case Simulations", href: "/case-simulations", description: "Practice clinical decision-making in scenario-based learning.", icon: "simulator" },
   ],
   mockExams: [
@@ -162,19 +162,19 @@ export const STUDY_CROSS_LINKS: Record<string, RelatedResource[]> = {
   simulators: [
     { title: "Clinical Lessons", href: "/lessons", description: "Build foundational knowledge for clinical simulations.", icon: "lesson" },
     { title: "Test Bank", href: "/free-practice", description: "Practice NCLEX-style questions after simulations.", icon: "qbank" },
-    { title: "Mock Exams", href: "/mock-exams", description: "Test your readiness with full-length practice exams.", icon: "qbank" },
+    { title: "Mock Exams", href: "/practice-exams", description: "Test your readiness with full-length practice exams.", icon: "qbank" },
     { title: "Medication Mastery", href: "/medication-mastery", description: "Review drug actions relevant to clinical scenarios.", icon: "lesson" },
   ],
   blog: [
     { title: "Clinical Lessons", href: "/lessons", description: "Explore structured lessons covering every exam domain.", icon: "lesson" },
     { title: "Practice Flashcards", href: "/flashcards", description: "Study key concepts with spaced repetition flashcards.", icon: "flashcard" },
     { title: "Test Bank", href: "/free-practice", description: "Test your understanding with NCLEX-style practice questions.", icon: "qbank" },
-    { title: "Mock Exams", href: "/mock-exams", description: "Simulate the real exam with full-length timed tests.", icon: "qbank" },
+    { title: "Mock Exams", href: "/practice-exams", description: "Simulate the real exam with full-length timed tests.", icon: "qbank" },
     { title: "Clinical Clarity", href: "/clinical-clarity", description: "Understand the 'why' behind clinical phenomena.", icon: "article" },
     { title: "Med Math Practice", href: "/med-math", description: "Practice dosage calculations and IV drip rates.", icon: "qbank" },
   ],
   examGuide: [
-    { title: "Mock Exams", href: "/mock-exams", description: "Practice with full-length timed exams that mirror the real test.", icon: "qbank" },
+    { title: "Mock Exams", href: "/practice-exams", description: "Practice with full-length timed exams that mirror the real test.", icon: "qbank" },
     { title: "Test Bank", href: "/free-practice", description: "Study with thousands of practice questions by topic.", icon: "qbank" },
     { title: "Clinical Lessons", href: "/lessons", description: "Master core clinical content organized by body system.", icon: "lesson" },
     { title: "Flashcards", href: "/flashcards", description: "Quick recall practice for pharmacology and clinical facts.", icon: "flashcard" },
@@ -185,7 +185,7 @@ export const STUDY_CROSS_LINKS: Record<string, RelatedResource[]> = {
     { title: "Clinical Lessons", href: "/lessons", description: "Structured pathophysiology and clinical nursing lessons.", icon: "lesson" },
     { title: "Practice Questions", href: "/free-practice", description: "Thousands of practice questions organized by exam domain.", icon: "qbank" },
     { title: "Flashcards", href: "/flashcards", description: "Spaced repetition cards for key pharmacology and clinical concepts.", icon: "flashcard" },
-    { title: "Mock Exams", href: "/mock-exams", description: "Full-length timed practice tests with performance analytics.", icon: "qbank" },
+    { title: "Mock Exams", href: "/practice-exams", description: "Full-length timed practice tests with performance analytics.", icon: "qbank" },
     { title: "Clinical Simulations", href: "/case-simulations", description: "Branching patient scenarios for clinical judgment practice.", icon: "simulator" },
     { title: "Study Plan", href: "/study-plan", description: "Personalized daily study schedules based on your progress.", icon: "lesson" },
   ],
@@ -207,7 +207,7 @@ const TOPIC_RESOURCE_MAP: Record<string, RelatedResource[]> = {
     { title: "Clinical Clarity", href: "/clinical-clarity", description: "Understand the pathophysiology behind clinical decisions.", icon: "article" },
   ],
   "exam-prep": [
-    { title: "Mock Exams", href: "/mock-exams", description: "Simulate the real exam with full-length timed practice tests.", icon: "qbank" },
+    { title: "Mock Exams", href: "/practice-exams", description: "Simulate the real exam with full-length timed practice tests.", icon: "qbank" },
     { title: "Test Bank", href: "/free-practice", description: "Practice with thousands of NCLEX-style questions.", icon: "qbank" },
     { title: "Study Plan", href: "/study-plan", description: "Get a personalized daily study plan for exam readiness.", icon: "lesson" },
     { title: "Diagnostic Assessment", href: "/diagnostic-assessment", description: "Identify your strengths and weaknesses with an initial assessment.", icon: "qbank" },

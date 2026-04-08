@@ -41,7 +41,7 @@ const PROFESSIONS: ProfessionSection[] = [
       { title: "REx-PN Study Hub", href: "/rex-pn", type: "Hub" },
       { title: "NP Exam Hub", href: "/canada-np", type: "Hub" },
       { title: "Test Bank", href: "/free-practice", type: "Practice" },
-      { title: "Mock Exams", href: "/mock-exams", type: "Practice" },
+      { title: "Mock Exams", href: "/practice-exams", type: "Practice" },
       { title: "Lessons & Study Guides", href: "/lessons", type: "Learn" },
       { title: "Flashcard Decks", href: "/flashcards", type: "Review" },
       { title: "Clinical Judgment Cases", href: "/clinical-clarity", type: "Practice" },

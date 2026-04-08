@@ -419,7 +419,7 @@ export function ClusterPageBySlug({ slug }: { slug: string }) {
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4" data-testid="text-h1">{config.title}</h1>
             <p className="text-lg text-gray-600 mb-6">{config.subtitle}</p>
             <div className="flex flex-wrap gap-3">
-              <Link href="/mock-exams" className="inline-flex items-center gap-2 px-5 py-2.5 bg-teal-600 text-white rounded-xl font-semibold hover:bg-teal-700 transition-colors text-sm" data-testid="button-cta-exam-prep">
+              <Link href="/practice-exams" className="inline-flex items-center gap-2 px-5 py-2.5 bg-teal-600 text-white rounded-xl font-semibold hover:bg-teal-700 transition-colors text-sm" data-testid="button-cta-exam-prep">
                 Start Exam Prep <ArrowRight className="w-4 h-4" />
               </Link>
               <Link href="/applynest" className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-teal-700 rounded-xl font-semibold hover:bg-teal-50 border border-teal-200 transition-colors text-sm" data-testid="button-cta-applynest">
@@ -468,7 +468,7 @@ export function ClusterPageBySlug({ slug }: { slug: string }) {
           <h2 className="text-2xl font-bold text-white mb-3">{t("pages.internationalNursingCluster.readyToStartYourInternational")}</h2>
           <p className="text-teal-100 mb-6 max-w-2xl mx-auto">{t("pages.internationalNursingCluster.nursenestProvidesComprehensiveExamPrep")}</p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <Link href="/mock-exams" className="inline-flex items-center gap-2 px-6 py-3 bg-white text-teal-700 rounded-xl font-semibold hover:bg-teal-50" data-testid="button-cta-bottom-exam">
+            <Link href="/practice-exams" className="inline-flex items-center gap-2 px-6 py-3 bg-white text-teal-700 rounded-xl font-semibold hover:bg-teal-50" data-testid="button-cta-bottom-exam">
               Explore Exam Prep <ArrowRight className="w-4 h-4" />
             </Link>
             <Link href="/applynest" className="inline-flex items-center gap-2 px-6 py-3 bg-teal-700 text-white rounded-xl font-semibold hover:bg-teal-800 border border-teal-500" data-testid="button-cta-bottom-jobs">

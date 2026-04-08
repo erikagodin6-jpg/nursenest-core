@@ -124,7 +124,7 @@ function CTABanner({ variant }: { variant: "default" | "mid" | "end" }) {
             <h3 className="text-lg font-bold text-gray-900 mb-1">{t("pages.nclexRnContentHub.readyToPractice")}</h3>
             <p className="text-sm text-gray-600">{t("pages.nclexRnContentHub.takeAFulllengthNclexrnMock")}</p>
           </div>
-          <LocaleLink href="/mock-exams"><Button className="bg-primary hover:bg-primary/90 whitespace-nowrap" data-testid="button-cta-mock-exam">{t("pages.nclexRnContentHub.startMockExam")}</Button></LocaleLink>
+          <LocaleLink href="/practice-exams"><Button className="bg-primary hover:bg-primary/90 whitespace-nowrap" data-testid="button-cta-mock-exam">{t("pages.nclexRnContentHub.startMockExam")}</Button></LocaleLink>
         </div>
       </div>
     );
@@ -142,7 +142,7 @@ function CTABanner({ variant }: { variant: "default" | "mid" | "end" }) {
       <h3 className="text-xl font-bold mb-2">{t("pages.nclexRnContentHub.passTheNclexrnWithConfidence")}</h3>
       <p className="text-gray-300 text-sm mb-4 max-w-lg mx-auto">{t("pages.nclexRnContentHub.access3000PracticeQuestionsNgnformat")}</p>
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
-        <LocaleLink href="/mock-exams"><Button className="bg-white text-[#2E3A59] hover:bg-gray-100" data-testid="button-cta-end-mock">{t("pages.nclexRnContentHub.tryAFreeMockExam")}</Button></LocaleLink>
+        <LocaleLink href="/practice-exams"><Button className="bg-white text-[#2E3A59] hover:bg-gray-100" data-testid="button-cta-end-mock">{t("pages.nclexRnContentHub.tryAFreeMockExam")}</Button></LocaleLink>
         <LocaleLink href="/pricing"><Button variant="outline" className="border-white/30 text-white hover:bg-white/10" data-testid="button-cta-end-pricing">{t("pages.nclexRnContentHub.viewPricing")}</Button></LocaleLink>
       </div>
     </div>

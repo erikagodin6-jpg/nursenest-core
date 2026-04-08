@@ -69,7 +69,7 @@ export class ExamErrorBoundary extends Component<ExamErrorBoundaryProps, ExamErr
       tier: ctx?.tier,
       attemptId,
       questionIndex: ctx?.questionIndex,
-      fallbackPath: "/mock-exams",
+      fallbackPath: "/practice-exams",
       label: "exam",
     };
   }
@@ -126,7 +126,7 @@ function ExamRecoveryUI({
   const backToExams = useCallback(() => {
     const path = window.location.pathname;
     const match = path.match(/^(\/[^/]+)\/mock-exams\//);
-    navigate(match ? `${match[1]}/mock-exams` : "/mock-exams");
+    navigate(match ? `${match[1]}/mock-exams` : "/practice-exams");
   }, [navigate]);
 
   const handleReport = useCallback(async () => {

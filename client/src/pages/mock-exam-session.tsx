@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/lib/auth";
+import { getLocaleFromPath } from "@/lib/locale-utils";
 import { useI18n } from "@/lib/i18n";
 import type { PooledQuestion } from "@/lib/question-pool";
 import {
@@ -290,8 +291,12 @@ function MockExamSessionInner() {
 
   const backToExamsPath = useMemo(() => {
     const path = window.location.pathname;
-    const match = path.match(/^(\/[^/]+)\/mock-exams\//);
-    return match ? `${match[1]}/mock-exams` : "/mock-exams";
+    const { pathWithoutLocale } = getLocaleFromPath(path);
+    if (pathWithoutLocale.startsWith("/mock-exams/")) {
+      return "/practice-exams";
+    }
+    const match = pathWithoutLocale.match(/^(\/[^/]+)\/mock-exams\//);
+    return match ? `${match[1]}/mock-exams` : "/practice-exams";
   }, []);
 
   const [questions, setQuestions] = useState<PooledQuestion[]>([]);
@@ -1748,7 +1753,7 @@ function MockExamSessionInner() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => navigate(backToExamsPath.replace("/mock-exams", "/practice"))}
+                    onClick={() => navigate(backToExamsPath.replace("/practice-exams", "/practice"))}
                     className="text-xs gap-1"
                     data-testid="link-practice-questions"
                   >

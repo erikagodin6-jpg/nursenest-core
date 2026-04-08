@@ -343,7 +343,7 @@ export default function FreePractice() {
 
                   <div className="space-y-3">
                     <Button
-                      onClick={() => setLocation("/mock-exams")}
+                      onClick={() => setLocation("/practice-exams")}
                       className="w-full h-12 bg-primary hover:brightness-110 text-white rounded-xl"
                       data-testid="button-try-mock-exams"
                     >
@@ -371,7 +371,7 @@ export default function FreePractice() {
             )}
 
             <div className="mt-12 grid sm:grid-cols-3 gap-4">
-              <Card className="border border-gray-100 hover:shadow-md transition-shadow cursor-pointer" onClick={() => setLocation("/mock-exams")} data-testid="card-cta-mock-exams">
+              <Card className="border border-gray-100 hover:shadow-md transition-shadow cursor-pointer" onClick={() => setLocation("/practice-exams")} data-testid="card-cta-mock-exams">
                 <CardContent className="p-5 text-center">
                   <Target className="w-8 h-8 text-primary mx-auto mb-2" />
                   <h3 className="font-semibold text-sm mb-1">{t("pages.freePractice.timedMockExams")}</h3>

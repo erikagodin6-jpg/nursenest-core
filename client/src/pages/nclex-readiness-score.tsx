@@ -533,7 +533,7 @@ export default function NclexReadinessScore() {
               <Button
                 size="lg"
                 className="rounded-full px-8"
-                onClick={() => navigate("/mock-exams")}
+                onClick={() => navigate("/practice-exams")}
                 data-testid="button-take-exam"
               >
                 Take free adaptive exam <ArrowRight className="w-4 h-4 ml-2" />

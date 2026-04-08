@@ -479,7 +479,7 @@ export default function DashboardPage() {
                   <LocaleLink href="/flashcards">{t("dashboard.nextStepOpenFlashcards")}</LocaleLink>
                 </Button>
                 <Button size="sm" variant="outline" asChild>
-                  <LocaleLink href="/mock-exams">{t("dashboard.nextStepMockExams")}</LocaleLink>
+                  <LocaleLink href="/practice-exams">{t("dashboard.nextStepMockExams")}</LocaleLink>
                 </Button>
                 <Button size="sm" variant="outline" asChild>
                   <LocaleLink href="/question-bank">{t("dashboard.nextStepQuestionBank")}</LocaleLink>
@@ -730,25 +730,25 @@ function WelcomeWidget({ user }: { user: any }) {
       { label: "View Plans", path: "/pricing", icon: Award, variant: "outline" },
     ],
     rpn: [
-      { label: config.examNames.practice, path: "/mock-exams", icon: ClipboardList, variant: "default" },
+      { label: config.examNames.practice, path: "/practice-exams", icon: ClipboardList, variant: "default" },
       { label: "Test Bank", path: "/test-bank", icon: FlaskConical, variant: "outline" },
       { label: "Flashcards", path: "/flashcard-study", icon: Brain, variant: "outline" },
       { label: "Lessons", path: "/lessons", icon: BookOpen, variant: "outline" },
     ],
     rn: [
-      { label: config.examNames.practice, path: "/mock-exams", icon: ClipboardList, variant: "default" },
+      { label: config.examNames.practice, path: "/practice-exams", icon: ClipboardList, variant: "default" },
       { label: "Test Bank", path: "/test-bank", icon: FlaskConical, variant: "outline" },
       { label: "Flashcards", path: "/flashcard-study", icon: Brain, variant: "outline" },
       { label: "Question of the Day", path: "/question-of-the-day", icon: Target, variant: "outline" },
     ],
     np: [
-      { label: config.examNames.practice, path: "/mock-exams", icon: ClipboardList, variant: "default" },
+      { label: config.examNames.practice, path: "/practice-exams", icon: ClipboardList, variant: "default" },
       { label: "Test Bank", path: "/test-bank", icon: FlaskConical, variant: "outline" },
       { label: "Flashcards", path: "/flashcard-study", icon: Brain, variant: "outline" },
       { label: "Question of the Day", path: "/question-of-the-day", icon: Target, variant: "outline" },
     ],
     admin: [
-      { label: "Mock Exams", path: "/mock-exams", icon: ClipboardList, variant: "default" },
+      { label: "Mock Exams", path: "/practice-exams", icon: ClipboardList, variant: "default" },
       { label: "Test Bank", path: "/test-bank", icon: FlaskConical, variant: "outline" },
       { label: "Admin Panel", path: "/admin", icon: Activity, variant: "outline" },
       { label: "Question of the Day", path: "/question-of-the-day", icon: Target, variant: "outline" },
@@ -896,7 +896,7 @@ function ContinueWhereYouLeftOffWidget({ user }: { user: any }) {
 
   const sessionResumePath = (type: string, _id: string) => {
     if (type === "qbank-exam") return "/qbank-exam";
-    if (type === "mock-exam" || type === "cat-exam") return "/mock-exams";
+    if (type === "mock-exam" || type === "cat-exam") return "/practice-exams";
     if (type === "lesson-quiz") return "/lessons";
     return "/practice";
   };
@@ -1158,7 +1158,7 @@ function ExamStatsWidget({ user }: { user: any }) {
       <div className="text-center py-4" data-testid="widget-content-exam-empty">
         <Award className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
         <p className="text-sm text-muted-foreground mb-2">{t("dashboard.examEmpty")}</p>
-        <Button size="sm" variant="link" onClick={() => navigate("/mock-exams")} data-testid="button-exam-start">
+        <Button size="sm" variant="link" onClick={() => navigate("/practice-exams")} data-testid="button-exam-start">
           {t("dashboard.examStart")} <ArrowRight className="h-3 w-3 ml-1" />
         </Button>
       </div>
@@ -1184,7 +1184,7 @@ function ExamStatsWidget({ user }: { user: any }) {
           <p className="text-[10px] text-muted-foreground mt-0.5">{t("dashboard.examTaken")}</p>
         </div>
       </div>
-      <Button size="sm" variant="outline" className="w-full" onClick={() => navigate("/mock-exams")} data-testid="button-view-exams">
+      <Button size="sm" variant="outline" className="w-full" onClick={() => navigate("/practice-exams")} data-testid="button-view-exams">
         <BarChart3 className="h-4 w-4 mr-1.5" /> {t("dashboard.examViewAll")}
       </Button>
     </div>
@@ -1909,7 +1909,7 @@ function TopicMasteryWidget({ user }: { user: any }) {
         <Button
           size="sm"
           variant="outline"
-          onClick={() => navigate("/mock-exams")}
+          onClick={() => navigate("/practice-exams")}
           className="mt-3 rounded-xl"
           data-testid="button-start-practice"
         >

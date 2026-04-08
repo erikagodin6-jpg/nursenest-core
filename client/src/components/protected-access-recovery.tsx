@@ -318,7 +318,7 @@ export function ProtectedAccessRecovery({
       });
     }
 
-    const backPath = context.fallbackPath || "/mock-exams";
+    const backPath = context.fallbackPath || "/practice-exams";
     actions.push({
       id: "back",
       label: "Back to Exams",

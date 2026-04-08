@@ -778,7 +778,7 @@ function MockExamsPage() {
 
   return (
     <div className="min-h-screen bg-warmwhite flex flex-col font-sans text-gray-900">
-      <SEO title={`${tierSpecificTitle} - NurseNest`} description={t("pages.mockExams.practiceWithRealisticNursingExam")} canonicalPath="/mock-exams" />
+      <SEO title={`${tierSpecificTitle} - NurseNest`} description={t("pages.mockExams.practiceWithRealisticNursingExam")} canonicalPath="/practice-exams" />
       <Navigation />
 
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full flex-1">
@@ -1261,7 +1261,7 @@ function MockExamsPage() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <ContextualRelatedResources
           pageType="mockExams"
-          currentPath="/mock-exams"
+          currentPath="/practice-exams"
           className="border-t border-gray-200"
         />
       </div>

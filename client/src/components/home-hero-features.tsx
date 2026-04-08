@@ -45,7 +45,7 @@ export default function HomeHeroFeatures() {
     { icon: HeartPulse, labelKey: "home.heroFeatures.areaCriticalCare", href: "/nursing-specialties", color: "from-rose-500 to-red-600" },
     { icon: Baby, labelKey: "home.heroFeatures.areaPediatric", href: "/lessons", color: "from-pink-500 to-rose-600" },
     { icon: Pill, labelKey: "home.heroFeatures.areaPharmacology", href: "/flashcards", color: "from-emerald-500 to-teal-600" },
-    { icon: Activity, labelKey: "home.heroFeatures.areaPrioritization", href: "/mock-exams", color: "from-indigo-500 to-blue-600" },
+    { icon: Activity, labelKey: "home.heroFeatures.areaPrioritization", href: "/practice-exams", color: "from-indigo-500 to-blue-600" },
   ];
 
   return (

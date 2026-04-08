@@ -26,7 +26,7 @@ const LOCALES = [
 
 const INSPECTABLE_ROUTES = [
   "/", "/lessons", "/flashcards", "/pricing", "/start-free", "/anatomy",
-  "/med-math", "/lab-values", "/mock-exams", "/clinical-clarity", "/blog",
+  "/med-math", "/lab-values", "/practice-exams", "/clinical-clarity", "/blog",
   "/pre-nursing", "/question-of-the-day", "/question-bank", "/lectures",
   "/nursing", "/nursing-specialties", "/faq", "/about", "/contact",
   "/terms", "/privacy", "/glossary", "/medication-mastery",

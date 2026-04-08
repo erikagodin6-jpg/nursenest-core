@@ -408,7 +408,7 @@ export default function NursingCareerPage() {
                 <p className="text-xs text-gray-500">{t("pages.nursingCareerPages.200PathophysiologyGuides")}</p>
               </div>
             </Link>
-            <Link href="/mock-exams" className="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-100 hover:shadow-md hover:border-teal-200 transition-all" data-testid="link-mock-exams">
+            <Link href="/practice-exams" className="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-100 hover:shadow-md hover:border-teal-200 transition-all" data-testid="link-mock-exams">
               <Award className="w-5 h-5 text-teal-500" />
               <div>
                 <h3 className="text-sm font-semibold text-gray-900">{t("pages.nursingCareerPages.mockExams")}</h3>

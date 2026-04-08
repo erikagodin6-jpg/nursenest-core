@@ -195,7 +195,7 @@ export const nclexRnCategories: NclexRnCategoryPage[] = [
       { title: "Prioritization & Delegation", href: "/nclex-rn/prioritization-and-delegation", type: "category" },
       { title: "Pharmacology Review", href: "/nclex-rn/pharmacology", type: "category" },
       { title: "Exam Strategy", href: "/nclex-rn/exam-strategy", type: "category" },
-      { title: "Mock Exams", href: "/mock-exams", type: "question-bank" }
+      { title: "Mock Exams", href: "/practice-exams", type: "question-bank" }
     ],
     lastReviewed: "2025-03-15",
     reviewer: "NurseNest Clinical Review Team"
@@ -267,7 +267,7 @@ export const nclexRnCategories: NclexRnCategoryPage[] = [
       { title: "Practice Questions", href: "/nclex-rn/practice-questions", type: "category" },
       { title: "Exam Strategy", href: "/nclex-rn/exam-strategy", type: "category" },
       { title: "Adult Health", href: "/nclex-rn/adult-health", type: "category" },
-      { title: "Mock Exams", href: "/mock-exams", type: "question-bank" }
+      { title: "Mock Exams", href: "/practice-exams", type: "question-bank" }
     ],
     lastReviewed: "2025-03-15",
     reviewer: "NurseNest Clinical Review Team"
@@ -428,7 +428,7 @@ export const nclexRnCategories: NclexRnCategoryPage[] = [
       { title: "Practice Questions", href: "/nclex-rn/practice-questions", type: "category" },
       { title: "NGN Guide", href: "/nclex-rn/ngn", type: "category" },
       { title: "Prioritization & Delegation", href: "/nclex-rn/prioritization-and-delegation", type: "category" },
-      { title: "Mock Exams", href: "/mock-exams", type: "question-bank" }
+      { title: "Mock Exams", href: "/practice-exams", type: "question-bank" }
     ],
     lastReviewed: "2025-03-15",
     reviewer: "NurseNest Clinical Review Team"
@@ -1909,7 +1909,7 @@ export const nclexRnStrategies: NclexRnStrategyPage[] = [
       { title: "Practice Questions", href: "/nclex-rn/practice-questions", type: "category" },
       { title: "NGN Guide", href: "/nclex-rn/ngn", type: "category" },
       { title: "Exam Strategy", href: "/nclex-rn/exam-strategy", type: "category" },
-      { title: "Mock Exams", href: "/mock-exams", type: "question-bank" }
+      { title: "Mock Exams", href: "/practice-exams", type: "question-bank" }
     ],
     lastReviewed: "2025-03-15",
     reviewer: "NurseNest Clinical Review Team"

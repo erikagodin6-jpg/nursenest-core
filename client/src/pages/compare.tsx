@@ -71,7 +71,7 @@ const comparisonData: Record<string, ComparisonData> = {
     hubLinks: [
       { label: "Browse NCLEX Lessons", href: "/lessons" },
       { label: "Try Free Practice Questions", href: "/question-of-the-day" },
-      { label: "Explore Mock Exams", href: "/mock-exams" },
+      { label: "Explore Mock Exams", href: "/practice-exams" },
       { label: "View All Flashcard Decks", href: "/flashcards" },
       { label: "See All Comparison Pages", href: "/compare/cheapest-nclex-prep" },
     ],
@@ -120,7 +120,7 @@ const comparisonData: Record<string, ComparisonData> = {
     hubLinks: [
       { label: "Browse NCLEX Lessons", href: "/lessons" },
       { label: "Try Free Practice Questions", href: "/question-of-the-day" },
-      { label: "Explore Mock Exams", href: "/mock-exams" },
+      { label: "Explore Mock Exams", href: "/practice-exams" },
       { label: "View Pricing Plans", href: "/pricing" },
       { label: "Compare UWorld vs Archer vs NurseNest", href: "/compare/uworld-vs-archer-vs-nursenest" },
     ],
@@ -192,7 +192,7 @@ const comparisonData: Record<string, ComparisonData> = {
     ],
     hubLinks: [
       { label: "Browse RPN Lessons", href: "/lessons?tier=rpn" },
-      { label: "Try REx-PN Mock Exams", href: "/mock-exams" },
+      { label: "Try REx-PN Mock Exams", href: "/practice-exams" },
       { label: "View Canadian Pricing", href: "/pricing" },
       { label: "Explore Clinical Simulations", href: "/case-simulations" },
     ],
@@ -359,7 +359,7 @@ const comparisonData: Record<string, ComparisonData> = {
       { label: "Free REx-PN Practice Questions", href: "/compare/rex-pn-practice-questions-free" },
       { label: "Best NCLEX Prep in Canada", href: "/compare/best-nclex-prep-canada" },
       { label: "Browse RPN Lessons", href: "/lessons?tier=rpn" },
-      { label: "Try REx-PN Mock Exams", href: "/mock-exams" },
+      { label: "Try REx-PN Mock Exams", href: "/practice-exams" },
       { label: "View Canadian Pricing", href: "/pricing" },
     ],
   },

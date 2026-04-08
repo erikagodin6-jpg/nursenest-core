@@ -28,7 +28,7 @@ export function Footer() {
           <div>
             <h3 className="text-sm font-semibold text-[var(--theme-heading-text)] mb-3">{t("footer.examPrep")}</h3>
             <ul className="space-y-2 text-sm text-[var(--theme-muted-text)]">
-              <li><LocaleLink href="/mock-exams" className="hover:text-primary transition-colors" data-testid="link-footer-mock-exams">{t("footer.mockExams")}</LocaleLink></li>
+              <li><LocaleLink href="/practice-exams" className="hover:text-primary transition-colors" data-testid="link-footer-mock-exams">{t("footer.mockExams")}</LocaleLink></li>
               <li><LocaleLink href="/free-practice" className="hover:text-primary transition-colors" data-testid="link-footer-test-bank">{t("footer.testBank")}</LocaleLink></li>
               <li><LocaleLink href="/question-of-the-day" className="hover:text-primary transition-colors" data-testid="link-footer-qotd">{t("footer.questionOfTheDay")}</LocaleLink></li>
               <li><LocaleLink href="/lab-values" className="hover:text-primary transition-colors" data-testid="link-footer-lab-values">{t("footer.labValues")}</LocaleLink></li>

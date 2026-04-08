@@ -1296,7 +1296,7 @@ function AnatomyListingPage() {
               <CheckCircle2 className="w-4 h-4" />
               {t("anatomy.testBank")}
             </LocaleLink>
-            <LocaleLink href="/mock-exams" className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-gray-200 hover:border-primary/30 hover:shadow-sm transition-all text-sm font-medium text-gray-600 hover:text-primary" data-testid="link-list-mock-exams">
+            <LocaleLink href="/practice-exams" className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-gray-200 hover:border-primary/30 hover:shadow-sm transition-all text-sm font-medium text-gray-600 hover:text-primary" data-testid="link-list-mock-exams">
               <GraduationCap className="w-4 h-4" />
               {t("anatomy.mockExams")}
             </LocaleLink>

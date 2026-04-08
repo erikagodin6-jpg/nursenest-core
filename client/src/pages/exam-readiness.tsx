@@ -277,7 +277,7 @@ const DEMO_RECOMMENDATIONS = [
   { title: "Review Maternal / Newborn Study Guide", description: "Complete the maternal care module to strengthen your lowest scoring topic", type: "study_guide", link: "/lessons?topic=maternal-newborn" },
   { title: "Flashcard Review: Risk Reduction", description: "45 flashcards due for spaced repetition review this week", type: "flashcards", link: "/flashcards" },
   { title: "Clinical Judgment Deep Dive", description: "Your accuracy has plateaued — try advanced clinical scenarios", type: "review", link: "/clinical-clarity" },
-  { title: "Mock Exam: Full-Length Simulation", description: "Take a timed adaptive mock exam to assess exam-day readiness", type: "practice", link: "/mock-exams" },
+  { title: "Mock Exam: Full-Length Simulation", description: "Take a timed adaptive mock exam to assess exam-day readiness", type: "practice", link: "/practice-exams" },
 ];
 
 const DEMO_BENCHMARK = {

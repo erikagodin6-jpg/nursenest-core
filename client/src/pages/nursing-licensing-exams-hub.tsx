@@ -184,7 +184,7 @@ export default function NursingLicensingExamsHub() {
               Practice Questions <ArrowRight className="w-4 h-4" />
             </LocaleLink>
             <LocaleLink
-              href="/mock-exams"
+              href="/practice-exams"
               className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#2E3A59] border border-gray-200 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
               data-testid="link-mock-exams"
             >

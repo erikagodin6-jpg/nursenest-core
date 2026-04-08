@@ -416,7 +416,7 @@ export function Navigation({ compact = false }: { compact?: boolean } = {}) {
       return;
     }
     if (itemLabel === "Exams") {
-      navTo("/mock-exams");
+      navTo("/practice-exams");
       return;
     }
     if (itemLabel === "Pricing") {
@@ -1164,7 +1164,7 @@ export function Navigation({ compact = false }: { compact?: boolean } = {}) {
                     <BookOpen className="w-4 h-4 text-primary/70" />
                     {t("nav.lessons")}
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="cursor-pointer gap-2 text-gray-700 hover:text-primary hover:bg-primary/5" onClick={() => navTo("/mock-exams")}>
+                  <DropdownMenuItem className="cursor-pointer gap-2 text-gray-700 hover:text-primary hover:bg-primary/5" onClick={() => navTo("/practice-exams")}>
                     <FileText className="w-4 h-4 text-primary/70" />
                     {t("nav.exams")}
                   </DropdownMenuItem>

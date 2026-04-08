@@ -26,7 +26,7 @@ const PROFESSION_DISPLAY: Record<string, { name: string; shortName: string; colo
 const STUDY_TOOL_LINKS = [
   { label: "Test Bank", icon: BookOpen, path: "/questions", desc: "Practice exam-authentic questions with detailed rationales" },
   { label: "Flashcards", icon: Brain, path: "/flashcards", desc: "Spaced repetition flashcards for key concepts" },
-  { label: "Mock Exams", icon: FileText, path: "/mock-exams", desc: "Full-length blueprint-weighted practice exams" },
+  { label: "Mock Exams", icon: FileText, path: "/practice-exams", desc: "Full-length blueprint-weighted practice exams" },
   { label: "Study Plan", icon: Target, path: "/study-plan", desc: "Personalized adaptive study schedule" },
   { label: "Case Simulators", icon: Zap, path: "/sims", desc: "Unfolding clinical case scenarios" },
 ];

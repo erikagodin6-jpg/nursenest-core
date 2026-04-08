@@ -200,7 +200,7 @@ export default function ExamLandingPage() {
             <nav className="flex items-center gap-2 text-sm text-white/60 mb-6" data-testid="exam-breadcrumb">
               <LocaleLink href="/" className="hover:text-white/80">{t("pages.examLanding.home")}</LocaleLink>
               <ChevronRight className="w-3 h-3" />
-              <LocaleLink href="/mock-exams" className="hover:text-white/80">{t("pages.examLanding.practiceExams")}</LocaleLink>
+              <LocaleLink href="/practice-exams" className="hover:text-white/80">{t("pages.examLanding.practiceExams")}</LocaleLink>
               <ChevronRight className="w-3 h-3" />
               <span className="text-white/90">{examData.examName}</span>
             </nav>
@@ -338,7 +338,7 @@ export default function ExamLandingPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <LocaleLink
-                href="/mock-exams"
+                href="/practice-exams"
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#BFA6F6] text-white rounded-lg font-semibold hover:bg-[#a88de8] transition-colors"
                 data-testid="link-start-exam"
               >

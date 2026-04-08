@@ -39,7 +39,7 @@ const PAIN_POINTS = [
 const FEATURES = [
   { title: "Adaptive Lessons", desc: "6,000+ pathophysiology lessons covering every body system with clinical depth and exam-aligned content.", icon: BookOpen, link: "/lessons" },
   { title: "Test Bank", desc: "2,400+ NCLEX-style questions with detailed rationales explaining the clinical reasoning behind every answer.", icon: FileText, link: "/free-practice" },
-  { title: "Mock Exams", desc: "Blueprint-weighted timed exams with adaptive CAT-style simulation matching real exam conditions.", icon: Layers, link: "/mock-exams" },
+  { title: "Mock Exams", desc: "Blueprint-weighted timed exams with adaptive CAT-style simulation matching real exam conditions.", icon: Layers, link: "/practice-exams" },
   { title: "Clinical Simulators", desc: "15 interactive simulators including OSCE practice, clinical skills lab, and unfolding case studies.", icon: Stethoscope, link: "/simulators/osce" },
   { title: "Custom Study Plan", desc: "Personalized study schedules that identify your weak areas and prioritize high-yield topics first.", icon: Sparkles, link: "/dashboard" },
   { title: "Flashcards", desc: "Spaced repetition flashcard decks across all exam domains with active recall methodology.", icon: Brain, link: "/flashcards" },
@@ -232,7 +232,7 @@ export default function NursingHub() {
             </div>
 
             <div className="flex flex-wrap gap-4">
-              <Link href="/mock-exams" className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-200" data-testid="button-start-diagnostic">
+              <Link href="/practice-exams" className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors shadow-lg shadow-blue-200" data-testid="button-start-diagnostic">
                 Start Free Diagnostic <ArrowRight className="w-4 h-4" />
               </Link>
               <Link href="/lessons" className="inline-flex items-center gap-2 px-6 py-3 bg-white text-blue-700 rounded-xl font-semibold hover:bg-blue-50 transition-colors border border-blue-200" data-testid="button-browse-lessons">
@@ -420,7 +420,7 @@ export default function NursingHub() {
             <Link href="/pricing" className="inline-flex items-center gap-2 px-8 py-3.5 bg-white text-blue-700 rounded-xl font-bold hover:bg-blue-50 transition-colors shadow-lg" data-testid="button-cta-pricing">
               View Pricing <ArrowRight className="w-4 h-4" />
             </Link>
-            <Link href="/mock-exams" className="inline-flex items-center gap-2 px-8 py-3.5 bg-blue-500 text-white rounded-xl font-semibold hover:bg-blue-400 transition-colors border border-blue-400" data-testid="button-cta-diagnostic">
+            <Link href="/practice-exams" className="inline-flex items-center gap-2 px-8 py-3.5 bg-blue-500 text-white rounded-xl font-semibold hover:bg-blue-400 transition-colors border border-blue-400" data-testid="button-cta-diagnostic">
               Start Free Diagnostic
             </Link>
           </div>

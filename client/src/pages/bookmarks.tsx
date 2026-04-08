@@ -275,7 +275,7 @@ export default function BookmarksPage() {
                   : "Try adjusting your search or filters."}
               </p>
               {bookmarks.length === 0 && (
-                <Button variant="outline" onClick={() => navigate("/mock-exams")} data-testid="button-start-practicing">
+                <Button variant="outline" onClick={() => navigate("/practice-exams")} data-testid="button-start-practicing">
                   Start Practicing
                 </Button>
               )}

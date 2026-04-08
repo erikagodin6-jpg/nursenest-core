@@ -27,7 +27,7 @@ const frenchMetadata: Record<string, LocalizedSEOEntry> = {
     description: "Étudiez avec des cartes mémoire infirmière vérifiées cliniquement. Pharmacologie, valeurs de laboratoire et pathophysiologie avec modes Apprendre et Test. Créez vos propres paquets.",
     keywords: "cartes mémoire infirmière, flashcards pharmacologie, révision NCLEX cartes, cartes mémoire soins infirmiers, étude infirmière",
   },
-  "/mock-exams": {
+  "/practice-exams": {
     title: "Examens Simulés NCLEX – Simulation Chronométrée | NurseNest",
     description: "Simulez les conditions réelles d'examen avec nos examens simulés NCLEX chronométrés. Sélection adaptative de questions, suivi de performance et justifications détaillées.",
     keywords: "examens simulés NCLEX, simulation examen infirmier, examen pratique chronométré, préparation examen infirmier, test blanc NCLEX",
@@ -270,7 +270,7 @@ const spanishMetadata: Record<string, LocalizedSEOEntry> = {
     description: "Estudia con tarjetas de enfermería verificadas clínicamente. Farmacología, valores de laboratorio y fisiopatología con modos Aprender y Examen. Crea tus propios mazos.",
     keywords: "tarjetas enfermería, flashcards farmacología, repaso NCLEX tarjetas, tarjetas estudio enfermería, estudio enfermería",
   },
-  "/mock-exams": {
+  "/practice-exams": {
     title: "Exámenes Simulados NCLEX – Simulación Cronometrada | NurseNest",
     description: "Simula las condiciones reales del examen con nuestros exámenes simulados NCLEX cronometrados. Selección adaptativa de preguntas, seguimiento de rendimiento y justificaciones detalladas.",
     keywords: "exámenes simulados NCLEX, simulación examen enfermería, examen práctico cronometrado, preparación examen enfermería, simulacro NCLEX",
@@ -498,7 +498,7 @@ const portugueseMetadata: Record<string, LocalizedSEOEntry> = {
     description: "Estude com flashcards de enfermagem verificados clinicamente. Farmacologia, valores laboratoriais e fisiopatologia com modos Aprender e Testar. Crie seus próprios baralhos.",
     keywords: "flashcards enfermagem, flashcards farmacologia, revisão NCLEX cartões, flashcards estudo enfermagem, estudo enfermagem",
   },
-  "/mock-exams": {
+  "/practice-exams": {
     title: "Simulados NCLEX – Simulação Cronometrada | NurseNest",
     description: "Simule condições reais de exame com nossos simulados NCLEX cronometrados. Seleção adaptativa de questões, acompanhamento de desempenho e justificativas detalhadas.",
     keywords: "simulados NCLEX, simulação exame enfermagem, exame prático cronometrado, preparação exame enfermagem, simulado NCLEX",
@@ -711,7 +711,7 @@ const vietnameseMetadata: Record<string, LocalizedSEOEntry> = {
     description: "Học với thẻ ghi nhớ điều dưỡng đã xác minh lâm sàng. Dược lý, giá trị xét nghiệm và sinh lý bệnh với chế độ Học và Kiểm tra. Tạo bộ thẻ riêng.",
     keywords: "thẻ ghi nhớ điều dưỡng, flashcard dược lý, ôn tập NCLEX thẻ, thẻ ghi nhớ ôn thi, học điều dưỡng",
   },
-  "/mock-exams": {
+  "/practice-exams": {
     title: "Thi thử NCLEX – Mô phỏng có giới hạn thời gian | NurseNest",
     description: "Mô phỏng điều kiện thi thực với thi thử NCLEX có giới hạn thời gian. Lựa chọn câu hỏi thích ứng, theo dõi hiệu suất và giải thích chi tiết.",
     keywords: "thi thử NCLEX, mô phỏng kỳ thi điều dưỡng, bài thi luyện tập có giờ, ôn thi điều dưỡng, thi thử NCLEX",
@@ -914,7 +914,7 @@ const filipinoMetadata: Record<string, LocalizedSEOEntry> = {
     description: "Mag-aral gamit ang clinically-verified nursing flashcards. Pharmacology, lab values at pathophysiology na may Learn at Test modes. Gumawa ng sariling decks.",
     keywords: "nursing flashcards, pharmacology flashcards, NCLEX review cards, nursing study cards",
   },
-  "/mock-exams": {
+  "/practice-exams": {
     title: "NCLEX Mock Exams – Timed Simulation | NurseNest",
     description: "I-simulate ang totoong exam conditions gamit ang timed NCLEX mock exams. Adaptive question selection, performance tracking at detalyadong rationales.",
     keywords: "NCLEX mock exams, nursing exam simulation, timed practice exam, nursing exam prep",
@@ -977,7 +977,7 @@ const traditionalChineseMetadata: Record<string, LocalizedSEOEntry> = {
     description: "使用經臨床驗證的護理記憶卡學習。藥理學、實驗室數值和病理生理學，含學習和測試模式。建立自己的牌組。",
     keywords: "護理記憶卡, 藥理學記憶卡, NCLEX複習卡, 護理學習卡",
   },
-  "/mock-exams": {
+  "/practice-exams": {
     title: "NCLEX模擬考試 – 計時模擬 | NurseNest",
     description: "使用計時NCLEX模擬考試模擬真實考試條件。自適應題目選擇、成績追蹤和詳細解析。",
     keywords: "NCLEX模擬考試, 護理考試模擬, 計時練習考試, 護理考試準備",
@@ -1040,7 +1040,7 @@ const germanMetadata: Record<string, LocalizedSEOEntry> = {
     description: "Lernen Sie mit klinisch verifizierten Pflege-Lernkarten. Pharmakologie, Laborwerte und Pathophysiologie mit Lern- und Testmodus. Erstellen Sie eigene Decks.",
     keywords: "Pflege-Lernkarten, Pharmakologie-Lernkarten, NCLEX-Wiederholungskarten, Pflege-Lernkarten",
   },
-  "/mock-exams": {
+  "/practice-exams": {
     title: "NCLEX-Probeprüfungen – Zeitsimulation | NurseNest",
     description: "Simulieren Sie reale Prüfungsbedingungen mit zeitgesteuerten NCLEX-Probeprüfungen. Adaptive Fragenauswahl, Leistungsverfolgung und detaillierte Erklärungen.",
     keywords: "NCLEX Probeprüfungen, Pflegeprüfungssimulation, zeitgesteuerte Übungsprüfung, Pflegeprüfungsvorbereitung",
@@ -1103,7 +1103,7 @@ const thaiMetadata: Record<string, LocalizedSEOEntry> = {
     description: "เรียนรู้ด้วยแฟลชการ์ดพยาบาลที่ได้รับการตรวจสอบทางคลินิก เภสัชวิทยา ค่าห้องปฏิบัติการ และพยาธิสรีรวิทยาพร้อมโหมดเรียนรู้และทดสอบ สร้างชุดของคุณเอง",
     keywords: "แฟลชการ์ดพยาบาล, แฟลชการ์ดเภสัชวิทยา, การ์ดทบทวน NCLEX, การ์ดเรียนพยาบาล",
   },
-  "/mock-exams": {
+  "/practice-exams": {
     title: "สอบจำลอง NCLEX – จำลองแบบจับเวลา | NurseNest",
     description: "จำลองสภาวะสอบจริงด้วยสอบจำลอง NCLEX แบบจับเวลา การเลือกคำถามแบบปรับตัว ติดตามผลการเรียน และคำอธิบายโดยละเอียด",
     keywords: "สอบจำลอง NCLEX, จำลองสอบพยาบาล, สอบฝึกหัดแบบจับเวลา, เตรียมสอบพยาบาล",
@@ -1166,7 +1166,7 @@ const turkishMetadata: Record<string, LocalizedSEOEntry> = {
     description: "Klinik olarak doğrulanmış hemşirelik bilgi kartları ile çalışın. Farmakoloji, laboratuvar değerleri ve patofizyoloji, Öğrenme ve Test modları ile. Kendi destelerinizi oluşturun.",
     keywords: "hemşirelik bilgi kartları, farmakoloji bilgi kartları, NCLEX tekrar kartları, hemşirelik çalışma kartları",
   },
-  "/mock-exams": {
+  "/practice-exams": {
     title: "NCLEX Deneme Sınavları – Zamanlı Simülasyon | NurseNest",
     description: "Zamanlı NCLEX deneme sınavları ile gerçek sınav koşullarını simüle edin. Uyarlanabilir soru seçimi, performans takibi ve ayrıntılı açıklamalar.",
     keywords: "NCLEX deneme sınavları, hemşirelik sınavı simülasyonu, zamanlı pratik sınav, hemşirelik sınavı hazırlığı",
@@ -1229,7 +1229,7 @@ const indonesianMetadata: Record<string, LocalizedSEOEntry> = {
     description: "Belajar dengan kartu flash keperawatan yang terverifikasi secara klinis. Farmakologi, nilai laboratorium, dan patofisiologi dengan mode Belajar dan Tes. Buat dek Anda sendiri.",
     keywords: "kartu flash keperawatan, kartu flash farmakologi, kartu ulasan NCLEX, kartu belajar keperawatan",
   },
-  "/mock-exams": {
+  "/practice-exams": {
     title: "Ujian Simulasi NCLEX – Simulasi Berwaktu | NurseNest",
     description: "Simulasikan kondisi ujian nyata dengan ujian simulasi NCLEX berwaktu. Pemilihan soal adaptif, pelacakan kinerja, dan penjelasan terperinci.",
     keywords: "ujian simulasi NCLEX, simulasi ujian keperawatan, ujian latihan berwaktu, persiapan ujian keperawatan",
@@ -1292,7 +1292,7 @@ const hindiMetadata: Record<string, LocalizedSEOEntry> = {
     description: "क्लिनिकली सत्यापित नर्सिंग फ्लैशकार्ड के साथ अध्ययन करें। फार्माकोलॉजी, लैब वैल्यू और पैथोफिजियोलॉजी।",
     keywords: "नर्सिंग फ्लैशकार्ड, फार्माकोलॉजी फ्लैशकार्ड, NCLEX समीक्षा कार्ड, नर्सिंग अध्ययन",
   },
-  "/mock-exams": {
+  "/practice-exams": {
     title: "NCLEX मॉक परीक्षा – समयबद्ध सिमुलेशन | NurseNest",
     description: "हमारी समयबद्ध NCLEX मॉक परीक्षाओं के साथ वास्तविक परीक्षा स्थितियों का अनुकरण करें। अनुकूली प्रश्न चयन और विस्तृत व्याख्या।",
     keywords: "NCLEX मॉक परीक्षा, नर्सिंग परीक्षा सिमुलेशन, समयबद्ध अभ्यास परीक्षा, NCLEX सिमुलेशन",
@@ -1335,7 +1335,7 @@ const simplifiedChineseMetadata: Record<string, LocalizedSEOEntry> = {
     description: "使用经过临床验证的护理闪卡学习。药理学、实验室值和病理生理学。",
     keywords: "护理闪卡, 药理学闪卡, NCLEX复习卡, 护理学习",
   },
-  "/mock-exams": {
+  "/practice-exams": {
     title: "NCLEX模拟考试 – 计时模拟 | NurseNest",
     description: "通过计时NCLEX模拟考试模拟真实考试条件。自适应题目选择和详细解析。",
     keywords: "NCLEX模拟考试, 护理考试模拟, 计时练习考试, NCLEX模拟",
@@ -1378,7 +1378,7 @@ const arabicMetadata: Record<string, LocalizedSEOEntry> = {
     description: "ادرس مع بطاقات التمريض المعتمدة سريرياً. علم الأدوية وقيم المختبر والفيزيولوجيا المرضية.",
     keywords: "بطاقات التمريض, بطاقات علم الأدوية, بطاقات مراجعة NCLEX, دراسة التمريض",
   },
-  "/mock-exams": {
+  "/practice-exams": {
     title: "اختبارات NCLEX التجريبية – محاكاة موقوتة | NurseNest",
     description: "حاكِ ظروف الاختبار الحقيقية مع اختباراتنا التجريبية الموقوتة لـ NCLEX. اختيار تكيفي للأسئلة وشرح مفصل.",
     keywords: "اختبارات NCLEX تجريبية, محاكاة امتحان التمريض, اختبار تدريبي موقوت, محاكاة NCLEX",
@@ -1421,7 +1421,7 @@ const koreanMetadata: Record<string, LocalizedSEOEntry> = {
     description: "임상적으로 검증된 간호 플래시카드로 공부하세요. 약리학, 검사 수치 및 병태생리학.",
     keywords: "간호 플래시카드, 약리학 플래시카드, NCLEX 복습 카드, 간호 학습",
   },
-  "/mock-exams": {
+  "/practice-exams": {
     title: "NCLEX 모의고사 – 시간제한 시뮬레이션 | NurseNest",
     description: "시간제한 NCLEX 모의고사로 실제 시험 조건을 시뮬레이션하세요. 적응형 문제 선택과 상세한 해설.",
     keywords: "NCLEX 모의고사, 간호사 시험 시뮬레이션, 시간제한 연습 시험, NCLEX 시뮬레이션",
@@ -1464,7 +1464,7 @@ const punjabiMetadata: Record<string, LocalizedSEOEntry> = {
     description: "ਕਲੀਨਿਕਲੀ ਪ੍ਰਮਾਣਿਤ ਨਰਸਿੰਗ ਫਲੈਸ਼ਕਾਰਡ ਨਾਲ ਅਧਿਐਨ ਕਰੋ।",
     keywords: "ਨਰਸਿੰਗ ਫਲੈਸ਼ਕਾਰਡ, ਫਾਰਮਾਕੋਲੋਜੀ ਫਲੈਸ਼ਕਾਰਡ, NCLEX ਸਮੀਖਿਆ ਕਾਰਡ",
   },
-  "/mock-exams": {
+  "/practice-exams": {
     title: "NCLEX ਮੌਕ ਪ੍ਰੀਖਿਆ – ਸਮੇਂਬੱਧ ਸਿਮੂਲੇਸ਼ਨ | NurseNest",
     description: "ਸਮੇਂਬੱਧ NCLEX ਮੌਕ ਪ੍ਰੀਖਿਆਵਾਂ ਨਾਲ ਅਸਲ ਪ੍ਰੀਖਿਆ ਹਾਲਾਤ ਦੀ ਨਕਲ ਕਰੋ।",
     keywords: "NCLEX ਮੌਕ ਪ੍ਰੀਖਿਆ, ਨਰਸਿੰਗ ਪ੍ਰੀਖਿਆ ਸਿਮੂਲੇਸ਼ਨ, ਸਮੇਂਬੱਧ ਅਭਿਆਸ ਪ੍ਰੀਖਿਆ",
@@ -1497,7 +1497,7 @@ const haitianCreoleMetadata: Record<string, LocalizedSEOEntry> = {
     description: "Etidye ak kat memwa enfimyè ki verifye klinikman. Famakoloji, valè laboratwa ak patofiziyoloji.",
     keywords: "kat memwa enfimyè, flashcard famakoloji, kat revizyon NCLEX",
   },
-  "/mock-exams": {
+  "/practice-exams": {
     title: "Egzamen Simulasyon NCLEX – Simulasyon ak Tan | NurseNest",
     description: "Simile kondisyon egzamen reyèl ak egzamen simulasyon NCLEX nou yo ki gen tan.",
     keywords: "egzamen simulasyon NCLEX, simulasyon egzamen enfimyè, egzamen pratik ak tan",
@@ -1530,7 +1530,7 @@ const urduMetadata: Record<string, LocalizedSEOEntry> = {
     description: "کلینیکلی تصدیق شدہ نرسنگ فلیش کارڈز کے ساتھ مطالعہ کریں۔",
     keywords: "نرسنگ فلیش کارڈز, فارماکولوجی فلیش کارڈز, NCLEX جائزہ کارڈز",
   },
-  "/mock-exams": {
+  "/practice-exams": {
     title: "NCLEX ماک امتحان – وقتی سمولیشن | NurseNest",
     description: "ہماری وقتی NCLEX ماک امتحانات کے ساتھ حقیقی امتحان کے حالات کی نقل کریں۔",
     keywords: "NCLEX ماک امتحان, نرسنگ امتحان سمولیشن, وقتی پریکٹس امتحان",
@@ -1563,7 +1563,7 @@ const japaneseMetadata: Record<string, LocalizedSEOEntry> = {
     description: "臨床的に検証された看護フラッシュカードで学習。薬理学、検査値、病態生理学。",
     keywords: "看護フラッシュカード, 薬理学フラッシュカード, NCLEXレビューカード, 看護学習",
   },
-  "/mock-exams": {
+  "/practice-exams": {
     title: "NCLEX模擬試験 – 時間制限シミュレーション | NurseNest",
     description: "時間制限付きNCLEX模擬試験で実際の試験条件をシミュレート。適応型問題選択と詳細な解説。",
     keywords: "NCLEX模擬試験, 看護師試験シミュレーション, 時間制限付き練習試験, NCLEXシミュレーション",
@@ -1606,7 +1606,7 @@ const farsiMetadata: Record<string, LocalizedSEOEntry> = {
     description: "با فلش‌کارت‌های پرستاری تأیید شده بالینی مطالعه کنید. فارماکولوژی، مقادیر آزمایشگاهی و پاتوفیزیولوژی.",
     keywords: "فلش‌کارت پرستاری, فلش‌کارت فارماکولوژی, کارت‌های مرور NCLEX",
   },
-  "/mock-exams": {
+  "/practice-exams": {
     title: "آزمون آزمایشی NCLEX – شبیه‌سازی زمان‌دار | NurseNest",
     description: "با آزمون‌های آزمایشی زمان‌دار NCLEX شرایط واقعی آزمون را شبیه‌سازی کنید.",
     keywords: "آزمون آزمایشی NCLEX, شبیه‌سازی آزمون پرستاری, آزمون تمرینی زمان‌دار",

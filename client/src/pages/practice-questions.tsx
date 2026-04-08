@@ -197,7 +197,7 @@ function PracticeQuestionsIndex() {
                 <Button onClick={() => setLocation("/start-free")} className="bg-primary hover:brightness-110 text-white rounded-xl h-11" data-testid="button-start-free-cta">
                   Start Free <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
-                <Button onClick={() => setLocation("/mock-exams")} variant="outline" className="rounded-xl h-11" data-testid="button-mock-exams-cta">
+                <Button onClick={() => setLocation("/practice-exams")} variant="outline" className="rounded-xl h-11" data-testid="button-mock-exams-cta">
                   Try Mock Exams
                 </Button>
               </div>

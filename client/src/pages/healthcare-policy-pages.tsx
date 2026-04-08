@@ -414,7 +414,7 @@ export function ExamFormatUpdates() {
           <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">{t("pages.healthcarePolicyPages.relatedResources3")}</h2>
           <CrossLinkSection links={[
             { title: "Free Practice Questions", href: "/free-practice", desc: "Practice with current formats", icon: BookOpen },
-            { title: "Mock Exams", href: "/mock-exams", desc: "Simulated CAT experience", icon: ClipboardList },
+            { title: "Mock Exams", href: "/practice-exams", desc: "Simulated CAT experience", icon: ClipboardList },
             { title: "NCLEX-RN Prep", href: "/nclex-rn-practice-questions", desc: "RN exam preparation", icon: Stethoscope },
             { title: "REX-PN Prep", href: "/rex-pn-practice-questions", desc: "PN exam preparation", icon: Award },
             { title: "Clinical Simulations", href: "/case-simulations", desc: "Practice clinical judgment", icon: Heart },

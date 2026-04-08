@@ -387,7 +387,7 @@ export default function SeoPracticeQuiz() {
                       <LocaleLink href="/pricing">
                         <Button size="sm" data-testid="button-unlock-upgrade">{t("pages.seoPracticeQuiz.unlockFullTestBank")}</Button>
                       </LocaleLink>
-                      <LocaleLink href="/mock-exams">
+                      <LocaleLink href="/practice-exams">
                         <Button size="sm" variant="outline" data-testid="button-try-adaptive">{t("pages.seoPracticeQuiz.tryAdaptiveExam")}</Button>
                       </LocaleLink>
                     </div>

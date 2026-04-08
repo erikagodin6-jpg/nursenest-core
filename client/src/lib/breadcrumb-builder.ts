@@ -54,7 +54,7 @@ function formatSegment(segment: string): string {
 
 const STATIC_ROUTES: Record<string, string> = {
   "/lessons": "Lessons",
-  "/mock-exams": "Mock Exams",
+  "/practice-exams": "Mock Exams",
   "/flashcards": "Flashcards",
   "/med-math": "Med Math",
   "/lab-values": "Lab Values",
@@ -135,7 +135,7 @@ const PARENT_ROUTES: Record<string, string> = {
   "/nclex-rn/": "/nclex-rn",
   "/np-exam-prep/": "/np-exam-prep",
   "/np-exam/": "/np-exam-prep",
-  "/mock-exams/": "/mock-exams",
+  "/mock-exams/": "/practice-exams",
   "/learn/": "/lessons",
   "/study-guide/": "/lessons",
   "/compare/": "/compare",

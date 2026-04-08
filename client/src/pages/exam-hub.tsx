@@ -539,7 +539,7 @@ export default function ExamHub() {
               {t("examHub.readyToStartDesc")}
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <LocaleLink href={hub.links[0]?.href || "/mock-exams"}>
+              <LocaleLink href={hub.links[0]?.href || "/practice-exams"}>
                 <Button className="bg-[#BFA6F6] hover:bg-[#a88de8] text-white px-6 py-2.5" data-testid="button-hub-start-exam">
                   {t("examHub.startMockExam")}
                   <ArrowRight className="w-4 h-4 ml-2" />

@@ -594,7 +594,7 @@ const EXAM_PREP_DATA: Record<string, ExamPrepConfig> = {
     examFormat: "The NCLEX uses computerized adaptive testing (CAT). NCLEX-RN: 75-145 questions. NCLEX-PN: 85-150 questions. NP exams: 150-175 fixed-length questions.",
     features: [
       { icon: Target, title: "Nursing Test Bank", desc: "4,000+ practice questions organized by body system and tier (RPN, RN, NP) with detailed rationales.", href: "/free-practice", cta: "Browse Questions" },
-      { icon: Stethoscope, title: "Mock Exam Simulator", desc: "CAT-adaptive mock exams simulating NCLEX-RN, NCLEX-PN, REx-PN, and NP certification.", href: "/mock-exams", cta: "Start Mock Exam" },
+      { icon: Stethoscope, title: "Mock Exam Simulator", desc: "CAT-adaptive mock exams simulating NCLEX-RN, NCLEX-PN, REx-PN, and NP certification.", href: "/practice-exams", cta: "Start Mock Exam" },
       { icon: BookOpen, title: "200+ Clinical Lessons", desc: "In-depth pathophysiology and nursing intervention lessons organized by body system.", href: "/lessons", cta: "Browse Lessons" },
       { icon: Layers, title: "Flashcard Decks", desc: "High-yield pharmacology, lab values, and pathophysiology flashcards with spaced repetition.", href: "/flashcards", cta: "Study Flashcards" },
     ],
@@ -627,7 +627,7 @@ const EXAM_PREP_DATA: Record<string, ExamPrepConfig> = {
       { q: "Is there a free trial?", a: "Yes! Start with free practice questions and access sample content across all study tools. No credit card required." },
     ],
     ctaPrimary: { label: "Start Free Practice", href: "/free-practice" },
-    ctaSecondary: { label: "Take Mock Exam", href: "/mock-exams" },
+    ctaSecondary: { label: "Take Mock Exam", href: "/practice-exams" },
     relatedProfessions: [
       { label: "RRT Exam Prep", href: "/rrt-exam-prep" },
       { label: "Paramedic Exam Prep", href: "/paramedic-exam-prep" },
