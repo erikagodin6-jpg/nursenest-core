@@ -137,6 +137,8 @@ export type PathwayLessonRecord = {
   relatedLessonRefs?: PathwayLessonRelatedRef[];
   /** Word counts, internal links, required sections — computed at normalize time for gating + UI. */
   structuralQuality?: PathwayLessonStructuralGate;
+  /** Present when lesson uses premium section kinds; filled in {@link normalizeLesson}. */
+  premiumValidation?: PathwayLessonPremiumValidation;
 };
 
 /** Hub cards must not link with empty or whitespace slugs (defensive; DB/catalog should always set slug). */

@@ -563,6 +563,8 @@ type LessonInputShape = {
   sections: PathwayLessonSection[];
   preTest: PathwayLessonQuizItem[];
   postTest: PathwayLessonQuizItem[];
+  premiumOmittedSections?: PathwayLessonOmittedPremiumSection[];
+  relatedLessonRefs?: PathwayLessonRelatedRef[];
 };
 
 function applyNpTitles(pathwayId: string, v: ReturnType<typeof t>): ReturnType<typeof t> {
@@ -603,6 +605,31 @@ export function getClinicalJudgmentGoldLessonInput(pathwayId: string): LessonInp
   if (!variantKey) return null;
   let v = VARIANTS[variantKey];
   v = applyNpTitles(pathwayId, v);
+  const geo = pathwayIdToTierGeo(pathwayId);
+  if (!geo) return null;
+  const syn = synthesizeGoldPremiumSections({
+    sharedCore: SHARED_CORE_BODY,
+    clinical_meaning: v.clinical_meaning,
+    exam_relevance: v.exam_relevance,
+    clinical_scenario: v.clinical_scenario,
+    takeaways: v.takeaways,
+    tierGeo: geo,
+    examLabel: PATHWAY_EXAM_LABEL[pathwayId] ?? "your nursing licensure exam",
+    labsOmitReason:
+      "Prioritization spine: laboratory interpretation is covered in disease-specific lessons (for example sepsis, shock, and electrolyte emergencies) when stems quote values.",
+    relatedSlugs: [
+      "sepsis-early-recognition-gold",
+      "shock-emergencies-gold",
+      "fluids-electrolytes-emergencies-gold",
+      "high-alert-medications-safety-gold",
+    ],
+    relatedTitlesBySlug: {
+      "sepsis-early-recognition-gold": "Sepsis early recognition",
+      "shock-emergencies-gold": "Shock emergencies",
+      "fluids-electrolytes-emergencies-gold": "Fluids & electrolyte emergencies",
+      "high-alert-medications-safety-gold": "High-alert medication safety",
+    },
+  });
   return {
     slug: CLINICAL_JUDGMENT_GOLD_SLUG,
     title: v.title,
@@ -612,13 +639,9 @@ export function getClinicalJudgmentGoldLessonInput(pathwayId: string): LessonInp
     previewSectionCount: 1,
     seoTitle: v.seoTitle,
     seoDescription: v.seoDescription,
-    sections: [
-      { id: "clinical_meaning", heading: "What this means clinically", kind: "clinical_meaning", body: v.clinical_meaning },
-      { id: "exam_relevance", heading: "Why this appears on your exam", kind: "exam_relevance", body: v.exam_relevance },
-      { id: "core_concept", heading: "Core concept — unstable versus routine", kind: "core_concept", body: SHARED_CORE_BODY },
-      { id: "clinical_scenario", heading: "Clinical scenario", kind: "clinical_scenario", body: v.clinical_scenario },
-      { id: "takeaways", heading: "Key takeaways", kind: "takeaways", body: v.takeaways },
-    ],
+    sections: syn.sections,
+    premiumOmittedSections: syn.premiumOmittedSections,
+    relatedLessonRefs: syn.relatedLessonRefs,
     preTest: v.quizzes.preTest,
     postTest: v.quizzes.postTest,
   };

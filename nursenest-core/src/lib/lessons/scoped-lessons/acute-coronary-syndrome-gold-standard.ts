@@ -2,7 +2,17 @@
  * Acute coronary syndrome / chest pain — nursing recognition, orders, escalation.
  * Remediation wave 2: cardio system + management_of_care prioritization.
  */
-import type { PathwayLessonQuizItem, PathwayLessonSection } from "@/lib/lessons/pathway-lesson-types";
+import type {
+  PathwayLessonOmittedPremiumSection,
+  PathwayLessonQuizItem,
+  PathwayLessonRelatedRef,
+  PathwayLessonSection,
+} from "@/lib/lessons/pathway-lesson-types";
+import {
+  PATHWAY_EXAM_LABEL,
+  pathwayIdToTierGeo,
+  synthesizeGoldPremiumSections,
+} from "@/lib/lessons/scoped-lessons/gold-premium-synthesis";
 import { npExamLabel, npPrimaryCareTitleSuffix } from "@/lib/lessons/scoped-lessons/np-pathway-display";
 
 export const ACS_GOLD_SLUG = "acute-coronary-syndrome-gold" as const;
@@ -27,6 +37,15 @@ Avoid NTG when stems flag **SBP below prescribed threshold**, **RV infarct suspi
 
 **Scope**  
 **Interpretation** of ECG belongs to authorized roles in the stem; your job is often **obtain**, **notify**, **prepare for reperfusion pathway**, and **continuous monitoring** (rhythm, pain, vitals, bleeding if anticoagulated).`;
+
+const ACS_LABS_DIAGNOSTICS = `**12-lead ECG and timing**  
+ACS items expect you to **obtain the ECG promptly when ordered** and **recognize patterns that trigger reperfusion pathways** in the vignette (STEMI patterns versus ischemia that still demands urgent evaluation). Nursing stems may test whether you **prepare the client**, **repeat vitals**, **keep the client NPO when appropriate**, and **avoid delays** disguised as comfort measures.
+
+**Cardiac biomarkers**  
+**Troponin** protocols—often **serial testing** when the stem references a protocol—help **rule in myocardial injury** and **track trajectory**. Your nursing actions align with **orders** and **institution pathways**: **labs drawn on schedule**, **monitor for bleeding** if anticoagulated, and **report new arrhythmias or recurrent pain** immediately.
+
+**Risk integration**  
+Combine the **story**, **risk factors**, and **first ECG abnormalities** before you choose teaching, discharge, or low-acuity tasks. Items punish **premature reassurance** when data still point to **unstable ischemia** or an **evolving syndrome**.`;
 
 function pack(
   variant: AcsVariant,
@@ -515,6 +534,8 @@ type LessonInputShape = {
   sections: PathwayLessonSection[];
   preTest: PathwayLessonQuizItem[];
   postTest: PathwayLessonQuizItem[];
+  premiumOmittedSections?: PathwayLessonOmittedPremiumSection[];
+  relatedLessonRefs?: PathwayLessonRelatedRef[];
 };
 
 function npTitles(pathwayId: string, v: (typeof VARIANTS)["us_np"]) {
@@ -548,6 +569,30 @@ export function getAcsGoldLessonInput(pathwayId: string): LessonInputShape | nul
   if (!key) return null;
   let v = VARIANTS[key];
   if (key === "us_np") v = npTitles(pathwayId, v);
+  const geo = pathwayIdToTierGeo(pathwayId);
+  if (!geo) return null;
+  const syn = synthesizeGoldPremiumSections({
+    sharedCore: SHARED_CORE_BODY,
+    clinical_meaning: v.clinical_meaning,
+    exam_relevance: v.exam_relevance,
+    clinical_scenario: v.clinical_scenario,
+    takeaways: v.takeaways,
+    tierGeo: geo,
+    examLabel: PATHWAY_EXAM_LABEL[pathwayId] ?? "your nursing licensure exam",
+    labsDiagnostics: ACS_LABS_DIAGNOSTICS,
+    relatedSlugs: [
+      "shock-emergencies-gold",
+      "stroke-increased-icp-gold",
+      "high-alert-medications-safety-gold",
+      "fluids-electrolytes-emergencies-gold",
+    ],
+    relatedTitlesBySlug: {
+      "shock-emergencies-gold": "Shock emergencies",
+      "stroke-increased-icp-gold": "Stroke & increased ICP",
+      "high-alert-medications-safety-gold": "High-alert medication safety",
+      "fluids-electrolytes-emergencies-gold": "Fluids & electrolyte emergencies",
+    },
+  });
   return {
     slug: ACS_GOLD_SLUG,
     title: v.title,
@@ -557,13 +602,9 @@ export function getAcsGoldLessonInput(pathwayId: string): LessonInputShape | nul
     previewSectionCount: 1,
     seoTitle: v.seoTitle,
     seoDescription: v.seoDescription,
-    sections: [
-      { id: "clinical_meaning", heading: "What this means clinically", kind: "clinical_meaning", body: v.clinical_meaning },
-      { id: "exam_relevance", heading: "Why this appears on your exam", kind: "exam_relevance", body: v.exam_relevance },
-      { id: "core_concept", heading: "Core concept — ACS recognition", kind: "core_concept", body: SHARED_CORE_BODY },
-      { id: "clinical_scenario", heading: "Clinical scenario", kind: "clinical_scenario", body: v.clinical_scenario },
-      { id: "takeaways", heading: "Key takeaways", kind: "takeaways", body: v.takeaways },
-    ],
+    sections: syn.sections,
+    premiumOmittedSections: syn.premiumOmittedSections,
+    relatedLessonRefs: syn.relatedLessonRefs,
     preTest: v.quizzes.preTest,
     postTest: v.quizzes.postTest,
   };

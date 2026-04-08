@@ -10,9 +10,10 @@ import { applyPathwayLessonEducationalOverlay } from "@/lib/i18n/educational-con
 import { fetchPublishedPathwayLessonOverlayMapSafe } from "@/lib/i18n/educational-translation-db";
 import { normalizePathwayLessonLocale, PATHWAY_LESSON_SITEMAP_LOCALE } from "@/lib/lessons/pathway-lesson-locale";
 import {
-  lessonUsesPremiumSections,
+  evaluatePathwayLessonStructuralGate,
+  lessonUsesPremiumStructure,
   orderPremiumSections,
-  validatePathwayLessonPremium,
+  PREMIUM_SECTION_KINDS,
 } from "@/lib/lessons/pathway-lesson-premium";
 import {
   pathwayLessonHasRenderableHubSlug,
@@ -77,6 +78,15 @@ const CANONICAL_ORDER: PathwayLessonSectionKind[] = [
   "clinical_scenario",
   "takeaways",
 ];
+
+const premiumSectionKindSet = new Set<string>(PREMIUM_SECTION_KINDS as readonly string[]);
+
+/** Premium spine in canonical order; non-premium sections (e.g. exam_focus) append after. */
+function finalizePremiumSections(sections: PathwayLessonSection[]): PathwayLessonSection[] {
+  const ordered = orderPremiumSections(sections);
+  const extras = sections.filter((s) => !premiumSectionKindSet.has(s.kind));
+  return [...ordered, ...extras];
+}
 
 function hasAllCanonicalKinds(sections: PathwayLessonSection[]): boolean {
   return CANONICAL_ORDER.every((k) => sections.some((s) => s.kind === k));
@@ -315,7 +325,7 @@ function normalizeLesson(raw: LessonInput): PathwayLessonRecord {
     typeof rawPc === "number" && Number.isFinite(rawPc) && rawPc > 0 ? Math.floor(rawPc) : 1;
 
   const incoming = sanitizeIncomingSections(raw.sections as PathwayLessonSection[]);
-  const usePremium = lessonUsesPremiumSections(incoming);
+  const usePremium = lessonUsesPremiumStructure(incoming);
   const expanded = usePremium
     ? orderPremiumSections(incoming)
     : expandToStandardFiveSections(incoming);
@@ -428,6 +438,17 @@ function applyLessonEducationalOverlay(
     pathwayId,
     dbLessonOverlayBundle,
   );
+}
+
+/** Recompute structural gate after overlay patches titles/sections (locale overlays). */
+function applyOverlayAndStructural(
+  lesson: PathwayLessonRecord,
+  marketingLocale: string | undefined,
+  pathwayId: string,
+  dbLessonOverlayBundle?: Record<string, PathwayLessonEducationalOverlay>,
+): PathwayLessonRecord {
+  const after = applyLessonEducationalOverlay(lesson, marketingLocale, pathwayId, dbLessonOverlayBundle);
+  return { ...after, structuralQuality: evaluatePathwayLessonStructuralGate(after) };
 }
 
 function lessonLocaleMeta(
@@ -959,7 +980,7 @@ export async function getPathwayLesson(
     null,
   );
   if (rowRequested && rowRequested.status === ContentStatus.PUBLISHED) {
-    return applyLessonEducationalOverlay(
+    return applyOverlayAndStructural(
       withLocaleMeta(
         normalizeLesson(pathwayLessonRowToInput(rowRequested)),
         lessonLocaleMeta(marketingLocale, requested, false, false),
@@ -981,7 +1002,7 @@ export async function getPathwayLesson(
       null,
     );
     if (rowEn && rowEn.status === ContentStatus.PUBLISHED) {
-      return applyLessonEducationalOverlay(
+      return applyOverlayAndStructural(
         withLocaleMeta(
           normalizeLesson(pathwayLessonRowToInput(rowEn)),
           lessonLocaleMeta(marketingLocale, "en", true, false),
@@ -1003,7 +1024,7 @@ export async function getPathwayLesson(
       pathwayLessonRuntimeSource: "database",
     });
   }
-  return applyLessonEducationalOverlay(
+  return applyOverlayAndStructural(
     withLocaleMeta(normalizeLesson(hit), lessonLocaleMeta(marketingLocale, "en", requested !== "en", true)),
     marketingLocale,
     pathwayId,
@@ -1051,7 +1072,7 @@ export async function getPublishedPathwayLessonRecordById(
   const lessonDbOverlays = await fetchPublishedPathwayLessonOverlayMapSafe(
     normalizePathwayLessonLocale(marketingLocale),
   );
-  return applyLessonEducationalOverlay(
+  return applyOverlayAndStructural(
     normalizeLesson(pathwayLessonRowToInput(row)),
     marketingLocale,
     row.pathwayId,
