@@ -57,6 +57,25 @@ export const PH = {
   preNursingPathwayCtaClicked: "pre_nursing_pathway_cta_clicked",
   preNursingSignupCtaClicked: "pre_nursing_signup_cta_clicked",
   preNursingSigninCtaClicked: "pre_nursing_signin_cta_clicked",
+
+  /** Marketing homepage → nursing exam hub (funnel; complements pathway card / final CTA events). */
+  funnelHomeToExamHub: "funnel_home_to_exam_hub",
+  /** Learner shell: user clicked primary nav Lessons. */
+  learnerNavLessonsClick: "learner_nav_lessons_click",
+  /** Question bank: first batch loaded for a new session (not append). */
+  learnerQuestionBankSessionStarted: "learner_question_bank_session_started",
+  /** Practice test API: adaptive (CAT) session created. */
+  learnerCatExamStarted: "learner_cat_exam_started",
+  /** Practice test API: non-CAT linear/random session created. */
+  learnerLinearPracticeTestStarted: "learner_linear_practice_test_started",
+  /** Practice test finished (linear complete, CAT advance completed, or CAT finalize). */
+  learnerPracticeTestSessionCompleted: "learner_practice_test_session_completed",
+  /** CAT / exam simulation produced a non-empty readiness label on completion. */
+  learnerReadinessScoreReached: "learner_readiness_score_reached",
+  /** Exam hub mock: graded attempt persisted via /api/exams/submit. */
+  learnerExamMockSessionCompleted: "learner_exam_mock_session_completed",
+  /** Stripe: first active subscription for user after checkout (free/trial → paid proxy). */
+  learnerConversionSubscribed: "learner_conversion_subscribed",
 } as const;
 
 export type AppSection =

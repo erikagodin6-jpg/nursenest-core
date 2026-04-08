@@ -7,7 +7,7 @@ import { ThemePicker } from "@/components/theme/theme-picker";
 import { Button } from "@/components/ui/button";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 
-/** Theme + UI language for `/app/account/settings` (matches header controls, collected in one place). */
+/** Theme + UI language for account study settings (matches header controls, collected in one place). */
 export function LearnerAccountSettingsPanel() {
   const { t, locale } = useMarketingI18n();
   const [langOpen, setLangOpen] = useState(false);

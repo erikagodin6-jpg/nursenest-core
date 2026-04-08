@@ -291,6 +291,8 @@ export function PracticeTestRunnerClient({
   const currentCommitted = Boolean(current && committedSet.has(current.id));
   const linearFeedback = current ? linearPracticeFeedback[current.id] : undefined;
   const pctComplete = total > 0 ? Math.round(((idx + 1) / total) * 100) : 0;
+  const committedCount = linearCommittedIds.length;
+  const committedAnsweredPct = total > 0 ? Math.round((committedCount / total) * 100) : 0;
 
   const hasMeaningfulAnswer = (qid: string): boolean => {
     const v = answers[qid];

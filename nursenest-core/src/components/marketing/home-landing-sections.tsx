@@ -105,6 +105,10 @@ export function HomeLandingSections({ questionCount }: Props) {
               href={loc(defaultNursingExamMarketingHub(region))}
               event={PH.marketingHomeFinalCta}
               eventProps={{ choice: "exam_hub_rn_landing", region }}
+              secondaryCapture={{
+                event: PH.funnelHomeToExamHub,
+                eventProps: { placement: "final_cta", pathway: "rn_default_hub", region },
+              }}
               className={MARKETING_TERTIARY_LINK_CLASS}
             >
               {t("home.landing.final.closingCtaLink")}

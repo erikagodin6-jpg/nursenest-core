@@ -399,3 +399,201 @@ Name the **primary risk**, the **first assessment** that protects the client, an
 
   return { sections, premiumOmittedSections: omitted, relatedLessonRefs };
 }
+
+/** Structured case-study spine: scenario → findings → priorities → actions → rationale → safety (maps into premium sections). */
+export type CaseStudyCasebookInput = {
+  tierGeo: GoldTierGeo;
+  examLabel: string;
+  scenarioSetup: string;
+  clinical_meaning: string;
+  exam_relevance: string;
+  pathophysiologyCore: string;
+  keyFindingsSignsSymptoms: string;
+  whatMattersMostEscalation: string;
+  labsDiagnostics?: string;
+  labsOmitReason?: string;
+  prioritizationNextActions: string;
+  rationaleDecisions: string;
+  escalationSafetyTeaching: string;
+  takeaways: string;
+  relatedSlugs: string[];
+  relatedTitlesBySlug?: Record<string, string>;
+  countryNotesOmitReason?: string;
+};
+
+function padKind(kind: keyof typeof PREMIUM_MIN_WORDS, body: string, pad: string): string {
+  let t = body.trim();
+  while (countWords(stripToPlainText(t)) < PREMIUM_MIN_WORDS[kind]) {
+    t = `${t}\n\n${pad.trim()}`;
+  }
+  return t;
+}
+
+function syntheticGoldInput(examLabel: string, tierGeo: GoldTierGeo): GoldPremiumSynthesisInput {
+  return {
+    sharedCore: "",
+    clinical_meaning: "",
+    exam_relevance: "",
+    clinical_scenario: "",
+    takeaways: "",
+    tierGeo,
+    examLabel,
+    relatedSlugs: [],
+  };
+}
+
+/**
+ * Premium case-study lesson: explicit narrative blocks mapped to the exam-complete spine.
+ * Use for RN / PN / NP pathway-scoped “casebook” lessons that differentiate from topic-overview gold lessons.
+ */
+export function synthesizeCaseStudyCasebookSections(input: CaseStudyCasebookInput): {
+  sections: PathwayLessonSection[];
+  premiumOmittedSections: PathwayLessonOmittedPremiumSection[];
+  relatedLessonRefs: PathwayLessonRelatedRef[];
+} {
+  const syn = syntheticGoldInput(input.examLabel, input.tierGeo);
+  const intro = ensureIntroductionWordCount(
+    [
+      `**Scenario setup**\n\n${input.scenarioSetup.trim()}`,
+      collapseInlineParagraphs(input.clinical_meaning),
+      collapseInlineParagraphs(input.exam_relevance),
+      `This **case-study format** is intentional: boards reward **trajectory thinking**—what changed, what is unstable, and what you do **next** for the **role** named in the stem. For **${input.examLabel}**, read the **assignment line** before you eliminate answers.`,
+    ].join("\n\n"),
+  );
+
+  const signsBody = padKind(
+    "signs_symptoms",
+    signsBlock(input.keyFindingsSignsSymptoms),
+    `**Key findings checklist**  
+Re-read the stem for **numbers you skipped**: vitals trends, device settings, allergies, and time since symptom onset. Case-style items often hide the “why now” clue in a single lab line or a single sentence of background.`,
+  );
+
+  const redBody = padKind(
+    "red_flags",
+    `${input.whatMattersMostEscalation.trim()}\n\n**Escalation & safety (case lens)**\nWhen instability is present, the best answer usually **activates help**, **obtains time-sensitive diagnostics**, or **prepares rescue therapies** per orders—not paperwork, not delayed reassessment, and not scope-expanding heroics.`,
+    redFlagsBlock(),
+  );
+
+  const nursingCombined = padKind(
+    "nursing_assessment_interventions",
+    `**Prioritization & next actions (this case)**\n\n${input.prioritizationNextActions.trim()}\n\n${nursingBlock(syn)}`,
+    `**Reassessment loop**  
+After any intervention, ask: did **oxygenation, perfusion, or mentation** improve on a short timeline? If not, **escalate** with objective data.`,
+  );
+
+  const pearlsCombined = ensureClinicalPearlsWordCount(
+    [
+      `**Rationale for the best decisions (eliminate distractors)**\n\n${input.rationaleDecisions.trim()}`,
+      `**Takeaways you can reuse on similar stems**\n\n${input.takeaways.trim()}`,
+      `**Second-pass rule**  
+If two answers sound “reasonable,” choose the one that **closes the highest-risk problem first** and matches **your license** in the stem.`,
+    ].join("\n\n"),
+  );
+
+  const clientCombined = padKind(
+    "client_education",
+    `**Escalation, handoffs, and safety teaching**\n\n${input.escalationSafetyTeaching.trim()}\n\n${clientEducationBlock(syn)}`,
+    `**Teach specifics**  
+Name **return precautions** with concrete triggers (worsening shortness of breath, new neuro deficits, uncontrolled bleeding, fever with confusion) rather than “call if worse.”`,
+  );
+
+  const omitted: PathwayLessonOmittedPremiumSection[] = [];
+  const labBody = input.labsDiagnostics?.trim();
+  if (!labBody) {
+    omitted.push({
+      kind: "labs_diagnostics",
+      reason:
+        input.labsOmitReason?.trim() ||
+        "Labs and diagnostics are integrated into the case findings section; this lesson emphasizes prioritization and management patterns in a single vignette.",
+    });
+  }
+
+  let countryBody = countryNotesBlock(input.tierGeo).trim();
+  if (input.countryNotesOmitReason) {
+    omitted.push({ kind: "country_specific_notes", reason: input.countryNotesOmitReason });
+    countryBody = "";
+  }
+
+  const sections: PathwayLessonSection[] = [
+    { id: "introduction", heading: PREMIUM_SECTION_HEADINGS.introduction, kind: "introduction", body: intro },
+    {
+      id: "pathophysiology_overview",
+      heading: PREMIUM_SECTION_HEADINGS.pathophysiology_overview,
+      kind: "pathophysiology_overview",
+      body: ensurePathophysiologyDepth(input.pathophysiologyCore),
+    },
+    {
+      id: "signs_symptoms",
+      heading: PREMIUM_SECTION_HEADINGS.signs_symptoms,
+      kind: "signs_symptoms",
+      body: signsBody,
+    },
+    {
+      id: "red_flags",
+      heading: PREMIUM_SECTION_HEADINGS.red_flags,
+      kind: "red_flags",
+      body: redBody,
+    },
+    ...(labBody
+      ? [
+          {
+            id: "labs_diagnostics",
+            heading: PREMIUM_SECTION_HEADINGS.labs_diagnostics,
+            kind: "labs_diagnostics" as const,
+            body: labBody,
+          },
+        ]
+      : []),
+    {
+      id: "nursing_assessment_interventions",
+      heading: PREMIUM_SECTION_HEADINGS.nursing_assessment_interventions,
+      kind: "nursing_assessment_interventions",
+      body: nursingCombined,
+    },
+    {
+      id: "clinical_pearls",
+      heading: PREMIUM_SECTION_HEADINGS.clinical_pearls,
+      kind: "clinical_pearls",
+      body: pearlsCombined,
+    },
+    {
+      id: "client_education",
+      heading: PREMIUM_SECTION_HEADINGS.client_education,
+      kind: "client_education",
+      body: clientCombined,
+    },
+    {
+      id: "tier_specific_relevance",
+      heading: PREMIUM_SECTION_HEADINGS.tier_specific_relevance,
+      kind: "tier_specific_relevance",
+      body: ensureTierRelevanceWordCount(tierRelevanceBlock(input.tierGeo)),
+    },
+    ...(countryBody
+      ? [
+          {
+            id: "country_specific_notes",
+            heading: PREMIUM_SECTION_HEADINGS.country_specific_notes,
+            kind: "country_specific_notes" as const,
+            body: countryBody,
+          },
+        ]
+      : []),
+    {
+      id: "related_next_steps",
+      heading: PREMIUM_SECTION_HEADINGS.related_next_steps,
+      kind: "related_next_steps",
+      body: relatedNextStepsBody({
+        ...syn,
+        relatedSlugs: input.relatedSlugs,
+        relatedTitlesBySlug: input.relatedTitlesBySlug,
+      }),
+    },
+  ];
+
+  const relatedLessonRefs: PathwayLessonRelatedRef[] = input.relatedSlugs.map((slug) => ({
+    slug,
+    titleHint: input.relatedTitlesBySlug?.[slug],
+  }));
+
+  return { sections, premiumOmittedSections: omitted, relatedLessonRefs };
+}
