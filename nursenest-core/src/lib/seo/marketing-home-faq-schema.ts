@@ -1,35 +1,35 @@
 import type { FaqJsonLdItem } from "@/components/seo/faq-json-ld";
 
-/** Keep in sync with `home.conversion.faq*` keys in `public/i18n/en.json` (FAQ section + JSON-LD). */
+/** Keep in sync with `home.landing.faq.q*` / `home.landing.faq.a*` in `public/i18n/en.json`. */
 export const MARKETING_HOME_FAQ_JSONLD: FaqJsonLdItem[] = [
   {
-    question: "Is NurseNest for NCLEX-RN, REx-PN, or both?",
+    question: "Which exam do I choose?",
     answer:
-      "Yes. Pick your country at the top of the page, then open the RN or PN pathway. US candidates use NCLEX-RN and NCLEX-PN hubs; Canadian PN candidates use the REx-PN track with its own lessons and question bank.",
+      "Use the country toggle, then pick the pathway that matches your license goal: RN (NCLEX-RN), Practical Nursing (NCLEX-PN or REx-PN by country), NP, or Allied Health. Each pathway opens the right question bank and lessons for that track.",
   },
   {
-    question: "Do I need a credit card to try questions?",
+    question: "Is this for Canada and the US?",
     answer:
-      "You can start with pathway-scoped previews and short bank passes before subscribing. Full-length sessions and saved progress use your NurseNest account; pricing and tiers are listed on the pricing page.",
+      "Yes. Switch between United States and Canada at the top of the page. Content labels and pathways (for example PN vs REx-PN) update for your region.",
   },
   {
-    question: "How is this different from flashcard-only apps?",
+    question: "Do I need a subscription?",
     answer:
-      "NurseNest is built around exam-style stems, rationales that explain incorrect options, and timed practice so you rehearse clinical judgment, not isolated definitions. Lessons and question banks stay aligned to your track.",
+      "You can create a free account and explore pathway-aligned previews. Full banks, saved sessions, and premium features are listed on the pricing page. No credit card is required to start.",
   },
   {
-    question: "Does NP content cover FNP and AGPCNP?",
+    question: "How many questions are included?",
     answer:
-      "US boards: open the FNP or AGPCNP lesson and question hubs for the exam you are sitting. Canadian NP preparation uses the CNPLE pathway hub; that track may show waitlist messaging while national requirements stabilize.",
+      "The question bank grows continuously. The homepage shows the current practice question count. Your pathway determines which items you see first.",
   },
   {
-    question: "Where do allied health exams fit?",
+    question: "Is this like UWorld?",
     answer:
-      "Allied health has its own hub and in-app bank, separate from nursing tiers. Use the allied careers overview to see supported exams, then jump into the pathway question bank for your region.",
+      "NurseNest is built for nursing and allied health licensing exams with rationale-first items, timed practice, and lessons aligned to your exam—not a generic flashcard app. Many students use it alongside other tools; pick what fits your study plan.",
   },
   {
-    question: "Can I use NurseNest on my phone?",
+    question: "What is readiness tracking?",
     answer:
-      "The marketing site and app routes are responsive. Long practice sessions work best on a tablet or laptop; short review and question runs work well on mobile.",
+      "As you practice, NurseNest highlights weak areas and trends so you can focus review before test day. It complements timed mocks and the question bank.",
   },
 ];

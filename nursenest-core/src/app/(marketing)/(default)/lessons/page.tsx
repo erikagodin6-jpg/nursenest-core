@@ -44,14 +44,14 @@ export default async function PublicLessonsLandingPage() {
   return (
     <>
       <div className="mx-auto max-w-7xl px-4 pt-2 sm:px-6 sm:pt-3 lg:px-8">
-        <nav className="text-sm text-[var(--theme-muted-text)]">
+        <nav className="nn-marketing-caption" aria-label="Breadcrumb">
           <Link href={withMarketingLocale(locale, "/")} className="hover:text-primary">
             {t("nav.home")}
           </Link>
           <span className="mx-1.5" aria-hidden>
             /
           </span>
-          <span className="text-[var(--theme-heading-text)]">{t("pages.publicLessons.breadcrumbCurrent")}</span>
+          <span className="font-medium text-[var(--theme-heading-text)]">{t("pages.publicLessons.breadcrumbCurrent")}</span>
         </nav>
       </div>
       <MarketingPublicStudyLanding

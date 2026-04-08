@@ -530,6 +530,36 @@ html[data-theme] .nn-marketing-surface {
   box-shadow: 0 4px 14px var(--role-cta-shadow, color-mix(in srgb, var(--theme-primary) 28%, transparent));
 }
 
+/** Header / compact CTAs: primary fill with rounded-xl (not full pill). */
+.nn-button-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  background: var(--role-cta, var(--theme-primary));
+  color: var(--role-cta-foreground, #ffffff);
+  box-shadow: 0 4px 14px var(--role-cta-shadow, color-mix(in srgb, var(--theme-primary) 28%, transparent));
+  transition: filter 0.15s ease, background-color 0.15s ease;
+}
+.nn-button-primary:hover:not(:disabled):not([aria-disabled="true"]) {
+  background: var(--role-cta-hover, var(--accent-hover));
+  filter: brightness(1.03);
+}
+.nn-button-primary:active:not(:disabled):not([aria-disabled="true"]) {
+  background: var(--role-cta-pressed, var(--accent-pressed));
+  filter: brightness(1);
+}
+.nn-button-primary:disabled,
+.nn-button-primary[aria-disabled="true"] {
+  cursor: not-allowed;
+  filter: none;
+  background: color-mix(in srgb, var(--role-cta, var(--theme-primary)) 42%, var(--theme-card-bg));
+  color: rgb(255 255 255 / 0.72);
+  box-shadow: none;
+}
+
 .nn-btn-primary:hover:not(:disabled):not([aria-disabled="true"]) {
   background: var(--role-cta-hover, var(--accent-hover));
   filter: brightness(1.03);

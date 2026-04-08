@@ -1,0 +1,14 @@
+{
+  "generatedAt": "2026-04-08T15:21:22.717Z",
+  "databaseConfigured": true,
+  "notes": [
+    "Question scope = published + pathway exam keys + tier ladder + region/country gates (mirrors subscriber pool shape).",
+    "Domains inferred from `nclex_client_needs_category` when set, else canonical topic mapping.",
+    "Clinical judgment proxy = counts in `management_of_care` domain (not NGN item types).",
+    "Medication breadth = distinct coarse buckets from topic/subtopic keywords (not a formulary).",
+    "Thin rationale = < 120 words (same heuristic as question-bank coverage).",
+    "Strong rationale tier = ≥ 200 words and/or correct_answer_explanation length > 80 (audit only).",
+    "Blueprint coverage unavailable (query timeout or database/schema error)."
+  ],
+  "pathways": []
+}

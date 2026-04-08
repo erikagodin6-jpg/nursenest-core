@@ -54,7 +54,7 @@ export default async function PracticeExamsHubPage() {
           { name: t("pages.publicPracticeExams.breadcrumbCurrent"), path: "/practice-exams" },
         ]}
       />
-      <nav className="text-sm text-[var(--theme-muted-text)]" aria-label="Breadcrumb">
+      <nav className="nn-marketing-caption" aria-label="Breadcrumb">
         <ol className="flex flex-wrap items-center gap-2">
           <li>
             <Link href={withMarketingLocale(locale, "/")} className="text-primary underline">

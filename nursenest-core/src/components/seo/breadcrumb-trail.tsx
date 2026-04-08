@@ -4,9 +4,16 @@ import type { BreadcrumbCrumb } from "@/lib/seo/breadcrumb-types";
 /**
  * Visible breadcrumb UI (marketing + app). Use without JSON-LD on non-indexable /app routes.
  */
-export function BreadcrumbTrail({ items }: { items: BreadcrumbCrumb[] }) {
+export function BreadcrumbTrail({
+  items,
+  navClassName = "text-sm text-[var(--theme-muted-text)]",
+}: {
+  items: BreadcrumbCrumb[];
+  /** Override root nav typography (e.g. `nn-marketing-caption` on public study hubs). */
+  navClassName?: string;
+}) {
   return (
-    <nav aria-label="Breadcrumb" className="text-sm text-[var(--theme-muted-text)]">
+    <nav aria-label="Breadcrumb" className={navClassName}>
       <ol className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
         {items.map((c, i) => {
           const isLast = i === items.length - 1;

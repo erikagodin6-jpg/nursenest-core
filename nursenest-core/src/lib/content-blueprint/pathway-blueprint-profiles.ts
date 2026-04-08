@@ -174,7 +174,10 @@ export function buildPathwayBlueprintProfile(p: ExamPathwayDefinition): PathwayB
       minClinicalJudgmentSignals: floorFromBucket("np", 0.08),
       maxPctThinRationale: 18,
       maxPctMissingRationale: 3,
-      notes: [...notes, "NP profile is FNP-oriented when pathway is us-np-fnp; tune per NP track if split pools."],
+      notes: [
+        ...notes,
+        "NP domain/system floors are shared across US NP tracks (FNP, AGPCNP, PMHNP) until exam-key pools diverge in data.",
+      ],
     };
   }
 

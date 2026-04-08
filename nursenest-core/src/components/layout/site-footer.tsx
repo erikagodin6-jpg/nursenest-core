@@ -232,24 +232,6 @@ export function SiteFooter() {
           </Link>
         </div>
 
-        <div className="mb-6 border-t border-[var(--theme-separator)] pb-6 pt-6">
-          <h3 className="mb-3 break-words text-sm font-semibold text-[var(--theme-heading-text)]">{t("components.footer.ourEducationEcosystem")}</h3>
-          <ul className="space-y-2 text-sm text-[var(--theme-muted-text)]">
-            <li>
-              <FLink href="/" className="font-medium transition-colors hover:text-primary">
-                {t("brand.nurseNest")}
-              </FLink>
-              <span className="ms-1">{t("components.footer.nursingExamPrepClinicalTools")}</span>
-            </li>
-            <li>
-              <a href="https://applynest.ca" target="_blank" rel="noopener noreferrer" className="font-medium transition-colors hover:text-primary">
-                {t("brand.applyNest")}
-              </a>
-              <span className="ms-1">{t("components.footer.healthcareProgramApplicationsAdmissionsAnd")}</span>
-            </li>
-          </ul>
-        </div>
-
         <div className="flex flex-col items-center justify-between gap-4 border-t border-[var(--theme-separator)] pt-6 md:flex-row">
           <div className="flex items-center gap-2 bg-transparent">
             <SiteBrandLogoMark variant="footer" />

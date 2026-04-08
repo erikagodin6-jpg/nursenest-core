@@ -33,15 +33,14 @@ export const BRAND_NAME = "NurseNest" as const;
 
 /**
  * Fixed header slot: height + max-width are the single authority for rendered logo size.
+ * Marketing header: h-5 · sm:h-6 · lg:h-7 — compact wordmark, no stretch.
  * The img uses {@link HEADER_BRAND_LOGO_IMG_CLASSNAME} (`h-full`, `object-contain`) inside this slot.
- * Previous `max-w ~18–24rem` caps were the main limiter on visible wordmark width.
  */
 export const HEADER_BRAND_LOGO_SLOT_CLASSNAME =
-  "nn-brand-header-logo-slot inline-flex flex-none shrink-0 items-center justify-start overflow-visible self-center bg-transparent h-[5.5rem] max-h-[5.5rem] w-auto max-w-[min(96vw,26rem)] sm:h-[6rem] sm:max-h-[6rem] sm:max-w-[28rem] md:h-[6.75rem] md:max-h-[6.75rem] md:max-w-[30rem] lg:h-[7.25rem] lg:max-h-[7.25rem] lg:max-w-[31rem] xl:h-[7.75rem] xl:max-h-[7.75rem] xl:max-w-[32rem] 2xl:h-[8.25rem] 2xl:max-h-[8.25rem] 2xl:max-w-[34rem]" as const;
+  "nn-brand-header-logo-slot inline-flex flex-none shrink-0 items-center justify-start overflow-hidden self-center bg-transparent h-5 max-h-5 w-auto max-w-[min(92vw,10rem)] sm:h-6 sm:max-h-6 sm:max-w-[12rem] lg:h-7 lg:max-h-7 lg:max-w-[14rem]" as const;
 
-/** Homepage header: one step larger than default slot (still same img pipeline). */
-export const HOME_BRAND_LOGO_MARK_CLASSNAME =
-  "!h-[6.35rem] !max-h-[6.35rem] sm:!h-[6.85rem] sm:!max-h-[6.85rem] md:!h-[7.5rem] md:!max-h-[7.5rem] lg:!h-[8rem] lg:!max-h-[8rem] xl:!h-[8.5rem] xl:!max-h-[8.5rem] 2xl:!h-[9rem] 2xl:!max-h-[9rem] !max-w-[min(96vw,28rem)] sm:!max-w-[30rem] md:!max-w-[32rem] lg:!max-w-[34rem] xl:!max-w-[36rem] 2xl:!max-w-[38rem]" as const;
+/** @deprecated Homepage no longer enlarges the mark; kept as empty merge for older call sites. */
+export const HOME_BRAND_LOGO_MARK_CLASSNAME = "" as const;
 
 /**
  * Raster mark: fills slot height; width from aspect ratio; `object-contain` keeps sharpness and trims effective padding vs stretching.
@@ -56,16 +55,16 @@ export const FOOTER_BRAND_LOGO_SLOT_CLASSNAME =
 export const FOOTER_BRAND_LOGO_IMG_CLASSNAME =
   "nn-brand-footer-logo block h-full w-auto max-h-full max-w-full shrink-0 bg-transparent object-contain object-center [image-rendering:auto]" as const;
 
-/** Auth / narrow forms: compact wordmark, still theme-aware via `SiteBrandLogoMark`. */
+/** Auth / narrow forms: same height scale as marketing header (compact, consistent). */
 export const AUTH_BRAND_LOGO_SLOT_CLASSNAME =
-  "nn-brand-auth-logo-slot inline-flex flex-none shrink-0 items-center justify-center overflow-visible bg-transparent h-[2.75rem] max-h-[2.75rem] w-auto max-w-[min(90vw,13rem)] sm:h-[3rem] sm:max-h-[3rem] sm:max-w-[14rem]" as const;
+  "nn-brand-auth-logo-slot inline-flex flex-none shrink-0 items-center justify-center overflow-hidden bg-transparent h-5 max-h-5 w-auto max-w-[min(90vw,10rem)] sm:h-6 sm:max-h-6 sm:max-w-[12rem] lg:h-7 lg:max-h-7 lg:max-w-[14rem]" as const;
 
 export const AUTH_BRAND_LOGO_IMG_CLASSNAME =
   "nn-brand-auth-logo block h-full w-auto max-h-full max-w-full shrink-0 bg-transparent object-contain object-center [image-rendering:auto]" as const;
 
-/** Learner app shell top bar: between auth and full marketing header. */
+/** Learner app shell top bar: matches marketing header logo scale. */
 export const LEARNER_BRAND_LOGO_SLOT_CLASSNAME =
-  "nn-brand-learner-logo-slot inline-flex flex-none shrink-0 items-center justify-start overflow-visible bg-transparent h-[4rem] max-h-[4rem] w-auto max-w-[min(92vw,20rem)] sm:h-[4.5rem] sm:max-h-[4.5rem] sm:max-w-[22rem]" as const;
+  "nn-brand-learner-logo-slot inline-flex flex-none shrink-0 items-center justify-start overflow-hidden bg-transparent h-5 max-h-5 w-auto max-w-[min(92vw,10rem)] sm:h-6 sm:max-h-6 sm:max-w-[12rem] lg:h-7 lg:max-h-7 lg:max-w-[14rem]" as const;
 
 export const LEARNER_BRAND_LOGO_IMG_CLASSNAME =
   "nn-brand-learner-logo block h-full w-auto max-h-full max-w-full shrink-0 bg-transparent object-contain object-left [image-rendering:auto]" as const;

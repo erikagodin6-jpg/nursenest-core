@@ -74,7 +74,7 @@ export async function PublicLessonsPathwaySections({ locale }: { locale: string 
     <div id="exam-pathways" className="scroll-mt-8">
       <BreadcrumbJsonLd items={schemaItems.map((s) => ({ name: s.name, item: s.item }))} />
       <div className="mb-6">
-        <BreadcrumbTrail items={crumbs} />
+        <BreadcrumbTrail items={crumbs} navClassName="nn-marketing-caption" />
       </div>
       {order.map((key) => {
         const rows = grouped[key];

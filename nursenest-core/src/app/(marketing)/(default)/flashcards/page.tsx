@@ -48,7 +48,7 @@ export default async function PublicFlashcardsHubPage() {
           { name: t("nav.flashcards"), path: "/flashcards" },
         ]}
       />
-      <nav className="mb-6 text-sm text-[var(--theme-muted-text)]" aria-label="Breadcrumb">
+      <nav className="mb-6 nn-marketing-caption" aria-label="Breadcrumb">
         <ol className="flex flex-wrap items-center gap-2">
           <li>
             <Link href={home} className="text-primary underline">

@@ -16,7 +16,7 @@ export type BrandMarkLoadState = "loading" | "ready" | "error";
 
 /**
  * Theme-aware brand mark: `useThemeLogo` → `getHeaderBrandLogoLoadChain` (local PNG → CDN → proxy → SVG/legacy).
- * Presentation: {@link brandLogoMarkPresentation}; optional `className` merges onto the slot (e.g. {@link HOME_BRAND_LOGO_MARK_CLASSNAME} on home).
+ * Presentation: {@link brandLogoMarkPresentation}; optional `className` merges onto the slot (legacy homepage override is deprecated).
  */
 export function SiteBrandLogoMark({
   className = DEFAULT_BRAND_LOGO_MARK_CLASSNAME,
@@ -79,7 +79,7 @@ export function SiteBrandLogoMark({
         className={`${slotClassName} ${className}`.trim()}
         aria-label={BRAND_NAME}
       >
-        <span className="text-2xl font-extrabold leading-none tracking-tight text-primary sm:text-3xl md:text-4xl lg:text-[2.65rem] xl:text-[2.85rem] 2xl:text-[3.05rem]">
+        <span className="text-lg font-semibold leading-none tracking-tight text-primary sm:text-xl lg:text-2xl">
           {BRAND_NAME}
         </span>
       </span>

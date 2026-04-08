@@ -1,0 +1,534 @@
+{
+  "version": 1,
+  "title": "Nursing content remediation backlog (execution-ready v1)",
+  "generatedAt": "2026-04-08",
+  "auditNote": "Priorities align with NurseNest blueprint domains (management_of_care, pharmacological_therapies, etc.), clinical-system buckets, and gap kinds (total, domain, system, rationale, medication, clinical_judgment, lessons). Re-run ops:exam-coverage-audit after DB schema includes nclex_client_needs_category; reorder items using pathway recommendedLessonTopics, recommendedQuestionBankTargets, and rationaleTiers.",
+  "scopeMode": {
+    "shared_core_plus_scoped_overlay": "One gold-standard lesson + question spine; pathway overlays adjust scope statements, exam cues, and regional practice language.",
+    "pathway_specific": "Substantively different objectives or item types for that license track.",
+    "country_specific": "Regulatory, documentation, units, or public-health framing differs materially (US vs CA)."
+  },
+  "deliveryMode": {
+    "lesson_only": "Lesson hub depth without a committed question batch (rare).",
+    "lesson_plus_questions": "Lesson + tagged question bank expansion.",
+    "lesson_plus_questions_plus_rationale": "Lesson + questions + rationale upgrade to strong tier where items ship.",
+    "medication_bundle": "Coordinated set across high-alert classes and safety cues (tags/metadata explicit).",
+    "clinical_judgment_scenario_set": "Multi-step prioritization / delegation / assignment-style scenarios (management_of_care proxy alignment)."
+  },
+  "segments": [
+    {
+      "segmentId": "us_pn_lpn",
+      "label": "US PN / LPN (NCLEX-PN)",
+      "pathwayIds": ["us-lpn-nclex-pn"],
+      "items": [
+        {
+          "id": "US-PN-01",
+          "segmentRank": 1,
+          "topicTitle": "Prioritization, delegation, and assignment within LPN scope",
+          "pathwayIds": ["us-lpn-nclex-pn"],
+          "blueprintDomain": "management_of_care",
+          "clinicalSystem": "general",
+          "workstreams": ["lessons", "questions", "rationale_upgrades"],
+          "whyHighPriority": "Largest-weight blueprint domain for PN; direct exam readiness for management-of-care items and delegation boundaries.",
+          "scope": "pathway_specific",
+          "delivery": "clinical_judgment_scenario_set"
+        },
+        {
+          "id": "US-PN-02",
+          "segmentRank": 2,
+          "topicTitle": "High-alert medications: insulin, anticoagulants, opioids — administration and monitoring",
+          "pathwayIds": ["us-lpn-nclex-pn"],
+          "blueprintDomain": "pharmacological_therapies",
+          "clinicalSystem": "endocrine",
+          "workstreams": ["lessons", "questions", "rationale_upgrades"],
+          "whyHighPriority": "Medication safety and class breadth are explicit blueprint thresholds; high failure rate on exams when under-taught.",
+          "scope": "shared_core_plus_scoped_overlay",
+          "delivery": "medication_bundle"
+        },
+        {
+          "id": "US-PN-03",
+          "segmentRank": 3,
+          "topicTitle": "Fluids, electrolytes, and IV therapy monitoring (PN scope)",
+          "pathwayIds": ["us-lpn-nclex-pn"],
+          "blueprintDomain": "physiological_adaptation",
+          "clinicalSystem": "fluids_electrolytes",
+          "workstreams": ["lessons", "questions", "rationale_upgrades"],
+          "whyHighPriority": "Cross-cutting physiological content; weak system coverage hits multiple exam items.",
+          "scope": "shared_core_plus_scoped_overlay",
+          "delivery": "lesson_plus_questions_plus_rationale"
+        },
+        {
+          "id": "US-PN-04",
+          "segmentRank": 4,
+          "topicTitle": "Infection control, isolation, and PPE sequencing",
+          "pathwayIds": ["us-lpn-nclex-pn"],
+          "blueprintDomain": "safety_and_infection",
+          "clinicalSystem": "infection_sepsis",
+          "workstreams": ["lessons", "questions"],
+          "whyHighPriority": "Safety domain weight is high for PN; fast ROI with scenario items.",
+          "scope": "shared_core_plus_scoped_overlay",
+          "delivery": "lesson_plus_questions"
+        },
+        {
+          "id": "US-PN-05",
+          "segmentRank": 5,
+          "topicTitle": "Wound care, pressure injury prevention, and skin integrity",
+          "pathwayIds": ["us-lpn-nclex-pn"],
+          "blueprintDomain": "basic_care_comfort",
+          "clinicalSystem": "msk",
+          "workstreams": ["lessons", "questions", "rationale_upgrades"],
+          "whyHighPriority": "Basic care domain + MSK bucket; common NCLEX-PN stem themes.",
+          "scope": "shared_core_plus_scoped_overlay",
+          "delivery": "lesson_plus_questions_plus_rationale"
+        },
+        {
+          "id": "US-PN-06",
+          "segmentRank": 6,
+          "topicTitle": "Diabetes: hypoglycemia, hyperglycemia, and sick-day basics",
+          "pathwayIds": ["us-lpn-nclex-pn"],
+          "blueprintDomain": "physiological_adaptation",
+          "clinicalSystem": "endocrine",
+          "workstreams": ["lessons", "questions", "rationale_upgrades"],
+          "whyHighPriority": "Endocrine is a recurring system gap candidate; rationales must teach safe nursing action.",
+          "scope": "shared_core_plus_scoped_overlay",
+          "delivery": "lesson_plus_questions_plus_rationale"
+        },
+        {
+          "id": "US-PN-07",
+          "segmentRank": 7,
+          "topicTitle": "Respiratory distress: assessment cues and escalation",
+          "pathwayIds": ["us-lpn-nclex-pn"],
+          "blueprintDomain": "management_of_care",
+          "clinicalSystem": "respiratory",
+          "workstreams": ["lessons", "questions"],
+          "whyHighPriority": "Combines physiological respiratory content with prioritization (who to see first).",
+          "scope": "shared_core_plus_scoped_overlay",
+          "delivery": "lesson_plus_questions"
+        },
+        {
+          "id": "US-PN-08",
+          "segmentRank": 8,
+          "topicTitle": "Mental health: therapeutic communication and safety (PN-relevant)",
+          "pathwayIds": ["us-lpn-nclex-pn"],
+          "blueprintDomain": "psychosocial_integrity",
+          "clinicalSystem": "mental_health",
+          "workstreams": ["lessons", "questions", "rationale_upgrades"],
+          "whyHighPriority": "Psychosocial domain underweighted in many banks; communication stems are high frequency.",
+          "scope": "pathway_specific",
+          "delivery": "lesson_plus_questions_plus_rationale"
+        }
+      ]
+    },
+    {
+      "segmentId": "ca_rpn",
+      "label": "Canada RPN (REX-PN)",
+      "pathwayIds": ["ca-rpn-rex-pn"],
+      "items": [
+        {
+          "id": "CA-RPN-01",
+          "segmentRank": 1,
+          "topicTitle": "RPN scope, accountability, and interprofessional collaboration (Canadian practice)",
+          "pathwayIds": ["ca-rpn-rex-pn"],
+          "blueprintDomain": "management_of_care",
+          "clinicalSystem": "general",
+          "workstreams": ["lessons", "questions", "rationale_upgrades"],
+          "whyHighPriority": "Country-specific scope and delegation differ from US LPN framing; reduces learner confusion and item ambiguity.",
+          "scope": "country_specific",
+          "delivery": "clinical_judgment_scenario_set"
+        },
+        {
+          "id": "CA-RPN-02",
+          "segmentRank": 2,
+          "topicTitle": "Safe medication practice: MAR, reconciliation, and high-alert meds (Canadian context)",
+          "pathwayIds": ["ca-rpn-rex-pn"],
+          "blueprintDomain": "pharmacological_therapies",
+          "clinicalSystem": "general",
+          "workstreams": ["lessons", "questions", "rationale_upgrades"],
+          "whyHighPriority": "Medication breadth targets + exam readiness; Canadian documentation and unit literacy.",
+          "scope": "country_specific",
+          "delivery": "medication_bundle"
+        },
+        {
+          "id": "CA-RPN-03",
+          "segmentRank": 3,
+          "topicTitle": "Infection prevention and control in acute and community settings (Canada)",
+          "pathwayIds": ["ca-rpn-rex-pn"],
+          "blueprintDomain": "safety_and_infection",
+          "clinicalSystem": "infection_sepsis",
+          "workstreams": ["lessons", "questions"],
+          "whyHighPriority": "Safety domain; Canadian public-health framing improves stem authenticity.",
+          "scope": "country_specific",
+          "delivery": "lesson_plus_questions"
+        },
+        {
+          "id": "CA-RPN-04",
+          "segmentRank": 4,
+          "topicTitle": "Older adult care: falls, confusion, and risk reduction",
+          "pathwayIds": ["ca-rpn-rex-pn"],
+          "blueprintDomain": "risk_reduction",
+          "clinicalSystem": "general",
+          "workstreams": ["lessons", "questions", "rationale_upgrades"],
+          "whyHighPriority": "Risk reduction domain + high-volume clinical scenarios on Canadian PN exams.",
+          "scope": "shared_core_plus_scoped_overlay",
+          "delivery": "lesson_plus_questions_plus_rationale"
+        },
+        {
+          "id": "CA-RPN-05",
+          "segmentRank": 5,
+          "topicTitle": "Heart failure and COPD exacerbation: recognition and nursing response",
+          "pathwayIds": ["ca-rpn-rex-pn"],
+          "blueprintDomain": "physiological_adaptation",
+          "clinicalSystem": "cardio",
+          "workstreams": ["lessons", "questions"],
+          "whyHighPriority": "Cardio + respiratory crossover; common complex stems.",
+          "scope": "shared_core_plus_scoped_overlay",
+          "delivery": "lesson_plus_questions"
+        },
+        {
+          "id": "CA-RPN-06",
+          "segmentRank": 6,
+          "topicTitle": "Mental health: communication, stigma-aware care, and safety planning",
+          "pathwayIds": ["ca-rpn-rex-pn"],
+          "blueprintDomain": "psychosocial_integrity",
+          "clinicalSystem": "mental_health",
+          "workstreams": ["lessons", "questions", "rationale_upgrades"],
+          "whyHighPriority": "Psychosocial integrity weight; Canadian mental-health system context in lesson overlay.",
+          "scope": "country_specific",
+          "delivery": "lesson_plus_questions_plus_rationale"
+        },
+        {
+          "id": "CA-RPN-07",
+          "segmentRank": 7,
+          "topicTitle": "Common labs and SI units: interpretation for bedside decision support",
+          "pathwayIds": ["ca-rpn-rex-pn"],
+          "blueprintDomain": "risk_reduction",
+          "clinicalSystem": "general",
+          "workstreams": ["lessons", "questions"],
+          "whyHighPriority": "Reduces avoidable errors on lab-heavy items; tag to risk_reduction / physiological_adaptation as appropriate in metadata.",
+          "scope": "country_specific",
+          "delivery": "lesson_plus_questions"
+        },
+        {
+          "id": "CA-RPN-08",
+          "segmentRank": 8,
+          "topicTitle": "Maternal–newborn basics where within RPN scope (regional nuance in overlay)",
+          "pathwayIds": ["ca-rpn-rex-pn"],
+          "blueprintDomain": "health_promotion_maintenance",
+          "clinicalSystem": "maternity",
+          "workstreams": ["lessons", "questions"],
+          "whyHighPriority": "Maternity system bucket often thin; scoped items prevent scope creep.",
+          "scope": "pathway_specific",
+          "delivery": "lesson_plus_questions"
+        }
+      ]
+    },
+    {
+      "segmentId": "us_rn",
+      "label": "US RN (NCLEX-RN)",
+      "pathwayIds": ["us-rn-nclex-rn"],
+      "items": [
+        {
+          "id": "US-RN-01",
+          "segmentRank": 1,
+          "topicTitle": "Clinical judgment: multi-patient prioritization and unsafe practice recognition",
+          "pathwayIds": ["us-rn-nclex-rn"],
+          "blueprintDomain": "management_of_care",
+          "clinicalSystem": "general",
+          "workstreams": ["lessons", "questions", "rationale_upgrades"],
+          "whyHighPriority": "Highest blueprint weight for RN; directly feeds management_of_care proxy counts.",
+          "scope": "shared_core_plus_scoped_overlay",
+          "delivery": "clinical_judgment_scenario_set"
+        },
+        {
+          "id": "US-RN-02",
+          "segmentRank": 2,
+          "topicTitle": "Shock, sepsis, and hemodynamic instability",
+          "pathwayIds": ["us-rn-nclex-rn"],
+          "blueprintDomain": "physiological_adaptation",
+          "clinicalSystem": "infection_sepsis",
+          "workstreams": ["lessons", "questions", "rationale_upgrades"],
+          "whyHighPriority": "Multi-system high acuity; rationale quality matters for learner trust.",
+          "scope": "shared_core_plus_scoped_overlay",
+          "delivery": "lesson_plus_questions_plus_rationale"
+        },
+        {
+          "id": "US-RN-03",
+          "segmentRank": 3,
+          "topicTitle": "Electrolyte emergencies (Na, K, Ca, Mg) and ECG linkage",
+          "pathwayIds": ["us-rn-nclex-rn"],
+          "blueprintDomain": "physiological_adaptation",
+          "clinicalSystem": "fluids_electrolytes",
+          "workstreams": ["lessons", "questions", "rationale_upgrades"],
+          "whyHighPriority": "Classic NCLEX-RN density topic; fills fluids_electrolytes system depth.",
+          "scope": "shared_core_plus_scoped_overlay",
+          "delivery": "lesson_plus_questions_plus_rationale"
+        },
+        {
+          "id": "US-RN-04",
+          "segmentRank": 4,
+          "topicTitle": "Anticoagulation, bleeding, and reversal concepts (nursing focus)",
+          "pathwayIds": ["us-rn-nclex-rn"],
+          "blueprintDomain": "pharmacological_therapies",
+          "clinicalSystem": "hematology_immuno",
+          "workstreams": ["lessons", "questions", "rationale_upgrades"],
+          "whyHighPriority": "Medication bundle + hematology bucket; high-alert med signals in metadata.",
+          "scope": "shared_core_plus_scoped_overlay",
+          "delivery": "medication_bundle"
+        },
+        {
+          "id": "US-RN-05",
+          "segmentRank": 5,
+          "topicTitle": "Acute coronary syndrome and MI: assessment, interventions, complications",
+          "pathwayIds": ["us-rn-nclex-rn"],
+          "blueprintDomain": "physiological_adaptation",
+          "clinicalSystem": "cardio",
+          "workstreams": ["lessons", "questions", "rationale_upgrades"],
+          "whyHighPriority": "Cardiovascular system floor driver; pairs with CJ scenarios.",
+          "scope": "shared_core_plus_scoped_overlay",
+          "delivery": "lesson_plus_questions_plus_rationale"
+        },
+        {
+          "id": "US-RN-06",
+          "segmentRank": 6,
+          "topicTitle": "Stroke, increased ICP, and neuro assessment",
+          "pathwayIds": ["us-rn-nclex-rn"],
+          "blueprintDomain": "physiological_adaptation",
+          "clinicalSystem": "neuro",
+          "workstreams": ["lessons", "questions", "rationale_upgrades"],
+          "whyHighPriority": "Neuro system coverage and time-sensitive prioritization.",
+          "scope": "shared_core_plus_scoped_overlay",
+          "delivery": "lesson_plus_questions_plus_rationale"
+        },
+        {
+          "id": "US-RN-07",
+          "segmentRank": 7,
+          "topicTitle": "DKA, HHS, and acute glycemic crises",
+          "pathwayIds": ["us-rn-nclex-rn"],
+          "blueprintDomain": "physiological_adaptation",
+          "clinicalSystem": "endocrine",
+          "workstreams": ["lessons", "questions"],
+          "whyHighPriority": "Endocrine acute presentations; strong question ROI.",
+          "scope": "shared_core_plus_scoped_overlay",
+          "delivery": "lesson_plus_questions"
+        },
+        {
+          "id": "US-RN-08",
+          "segmentRank": 8,
+          "topicTitle": "Pediatric fever, dehydration, and escalation thresholds",
+          "pathwayIds": ["us-rn-nclex-rn"],
+          "blueprintDomain": "physiological_adaptation",
+          "clinicalSystem": "peds",
+          "workstreams": ["lessons", "questions", "rationale_upgrades"],
+          "whyHighPriority": "Peds bucket often under-filled vs adult-heavy banks.",
+          "scope": "shared_core_plus_scoped_overlay",
+          "delivery": "lesson_plus_questions_plus_rationale"
+        }
+      ]
+    },
+    {
+      "segmentId": "ca_rn",
+      "label": "Canada RN (NCLEX-RN)",
+      "pathwayIds": ["ca-rn-nclex-rn"],
+      "items": [
+        {
+          "id": "CA-RN-01",
+          "segmentRank": 1,
+          "topicTitle": "Canadian acute care clinical judgment: prioritization with Canadian practice language",
+          "pathwayIds": ["ca-rn-nclex-rn"],
+          "blueprintDomain": "management_of_care",
+          "clinicalSystem": "general",
+          "workstreams": ["lessons", "questions", "rationale_upgrades"],
+          "whyHighPriority": "Same management domain weight as US RN; overlay reduces US-centric stem bias.",
+          "scope": "country_specific",
+          "delivery": "clinical_judgment_scenario_set"
+        },
+        {
+          "id": "CA-RN-02",
+          "segmentRank": 2,
+          "topicTitle": "Transfusion practice: reactions, monitoring, and documentation (Canada)",
+          "pathwayIds": ["ca-rn-nclex-rn"],
+          "blueprintDomain": "safety_and_infection",
+          "clinicalSystem": "hematology_immuno",
+          "workstreams": ["lessons", "questions", "rationale_upgrades"],
+          "whyHighPriority": "Safety + hematology; rationales must be teaching-grade for legal-sensitive topic.",
+          "scope": "country_specific",
+          "delivery": "lesson_plus_questions_plus_rationale"
+        },
+        {
+          "id": "CA-RN-03",
+          "segmentRank": 3,
+          "topicTitle": "AKI, fluid balance, and diuretic monitoring",
+          "pathwayIds": ["ca-rn-nclex-rn"],
+          "blueprintDomain": "physiological_adaptation",
+          "clinicalSystem": "renal",
+          "workstreams": ["lessons", "questions"],
+          "whyHighPriority": "Renal system floor; pairs with fluids/electrolytes cross-links.",
+          "scope": "shared_core_plus_scoped_overlay",
+          "delivery": "lesson_plus_questions"
+        },
+        {
+          "id": "CA-RN-04",
+          "segmentRank": 4,
+          "topicTitle": "Obstetric emergencies: hemorrhage, preeclampsia/eclampsia, and stabilization",
+          "pathwayIds": ["ca-rn-nclex-rn"],
+          "blueprintDomain": "physiological_adaptation",
+          "clinicalSystem": "maternity",
+          "workstreams": ["lessons", "questions", "rationale_upgrades"],
+          "whyHighPriority": "High-stakes maternity content; often under-represented vs med-surg.",
+          "scope": "shared_core_plus_scoped_overlay",
+          "delivery": "lesson_plus_questions_plus_rationale"
+        },
+        {
+          "id": "CA-RN-05",
+          "segmentRank": 5,
+          "topicTitle": "Ethics, capacity, consent, and goals-of-care (Canadian legal-ethical framing)",
+          "pathwayIds": ["ca-rn-nclex-rn"],
+          "blueprintDomain": "management_of_care",
+          "clinicalSystem": "general",
+          "workstreams": ["lessons", "questions", "rationale_upgrades"],
+          "whyHighPriority": "Management/coordination + psychosocial crossover; exam-style ambiguity.",
+          "scope": "country_specific",
+          "delivery": "clinical_judgment_scenario_set"
+        },
+        {
+          "id": "CA-RN-06",
+          "segmentRank": 6,
+          "topicTitle": "Airborne/droplet/contact precautions and outbreak principles (Canada)",
+          "pathwayIds": ["ca-rn-nclex-rn"],
+          "blueprintDomain": "safety_and_infection",
+          "clinicalSystem": "infection_sepsis",
+          "workstreams": ["lessons", "questions"],
+          "whyHighPriority": "Safety domain; Canadian public health context in overlays.",
+          "scope": "country_specific",
+          "delivery": "lesson_plus_questions"
+        },
+        {
+          "id": "CA-RN-07",
+          "segmentRank": 7,
+          "topicTitle": "GI bleed and acute abdomen: assessment and nursing priorities",
+          "pathwayIds": ["ca-rn-nclex-rn"],
+          "blueprintDomain": "physiological_adaptation",
+          "clinicalSystem": "gi",
+          "workstreams": ["lessons", "questions"],
+          "whyHighPriority": "GI bucket depth; complements med-surg volume.",
+          "scope": "shared_core_plus_scoped_overlay",
+          "delivery": "lesson_plus_questions"
+        },
+        {
+          "id": "CA-RN-08",
+          "segmentRank": 8,
+          "topicTitle": "Health promotion and screening (Canadian guideline references in lesson layer only)",
+          "pathwayIds": ["ca-rn-nclex-rn"],
+          "blueprintDomain": "health_promotion_maintenance",
+          "clinicalSystem": "general",
+          "workstreams": ["lessons", "questions"],
+          "whyHighPriority": "Domain weight for RN; avoid stale US-only screening stems in CA pool.",
+          "scope": "country_specific",
+          "delivery": "lesson_plus_questions"
+        }
+      ]
+    },
+    {
+      "segmentId": "us_np",
+      "label": "US NP (FNP primary; pool shared with AGPCNP/PMHNP until split)",
+      "pathwayIds": ["us-np-fnp", "us-np-agpcnp", "us-np-pmhnp"],
+      "items": [
+        {
+          "id": "US-NP-01",
+          "segmentRank": 1,
+          "topicTitle": "Primary care differentials: chest pain, SOB, headache, abdominal pain workups",
+          "pathwayIds": ["us-np-fnp", "us-np-agpcnp"],
+          "blueprintDomain": "physiological_adaptation",
+          "clinicalSystem": "general",
+          "workstreams": ["lessons", "questions", "rationale_upgrades"],
+          "whyHighPriority": "NP profile emphasizes differential reasoning and depth; rationale must be teaching-heavy.",
+          "scope": "pathway_specific",
+          "delivery": "lesson_plus_questions_plus_rationale"
+        },
+        {
+          "id": "US-NP-02",
+          "segmentRank": 2,
+          "topicTitle": "Polypharmacy, deprescribing, and high-risk drug classes in ambulatory care",
+          "pathwayIds": ["us-np-fnp", "us-np-agpcnp", "us-np-pmhnp"],
+          "blueprintDomain": "pharmacological_therapies",
+          "clinicalSystem": "general",
+          "workstreams": ["lessons", "questions", "rationale_upgrades"],
+          "whyHighPriority": "NP pharm weight is highest among blueprint profiles; medication_bundle alignment.",
+          "scope": "shared_core_plus_scoped_overlay",
+          "delivery": "medication_bundle"
+        },
+        {
+          "id": "US-NP-03",
+          "segmentRank": 3,
+          "topicTitle": "ASCVD risk, hypertension algorithms, and lipid management (nursing/NP practice lens)",
+          "pathwayIds": ["us-np-fnp", "us-np-agpcnp"],
+          "blueprintDomain": "health_promotion_maintenance",
+          "clinicalSystem": "cardio",
+          "workstreams": ["lessons", "questions", "rationale_upgrades"],
+          "whyHighPriority": "Cardio depth for NP-level items; FNP/AGPCNP overlap.",
+          "scope": "pathway_specific",
+          "delivery": "lesson_plus_questions_plus_rationale"
+        },
+        {
+          "id": "US-NP-04",
+          "segmentRank": 4,
+          "topicTitle": "Adult preventive care and screening matrix (educational; non-legal)",
+          "pathwayIds": ["us-np-fnp", "us-np-agpcnp"],
+          "blueprintDomain": "health_promotion_maintenance",
+          "clinicalSystem": "general",
+          "workstreams": ["lessons", "questions"],
+          "whyHighPriority": "Health promotion domain under NP profile; question items test counseling priorities.",
+          "scope": "pathway_specific",
+          "delivery": "lesson_plus_questions"
+        },
+        {
+          "id": "US-NP-05",
+          "segmentRank": 5,
+          "topicTitle": "Psychiatric medications in primary care: initiation, monitoring, referral triggers",
+          "pathwayIds": ["us-np-fnp", "us-np-pmhnp"],
+          "blueprintDomain": "pharmacological_therapies",
+          "clinicalSystem": "mental_health",
+          "workstreams": ["lessons", "questions", "rationale_upgrades"],
+          "whyHighPriority": "Crosses FNP primary mental health and PMHNP; explicit pathway overlays for depth.",
+          "scope": "shared_core_plus_scoped_overlay",
+          "delivery": "lesson_plus_questions_plus_rationale"
+        },
+        {
+          "id": "US-NP-06",
+          "segmentRank": 6,
+          "topicTitle": "Women's health: STI testing, contraception counseling, and urgent red flags",
+          "pathwayIds": ["us-np-fnp"],
+          "blueprintDomain": "health_promotion_maintenance",
+          "clinicalSystem": "general",
+          "workstreams": ["lessons", "questions"],
+          "whyHighPriority": "High-yield ambulatory NP topic; keep FNP-scoped unless expanded to WHNP track.",
+          "scope": "pathway_specific",
+          "delivery": "lesson_plus_questions"
+        }
+      ]
+    }
+  ],
+  "recommendedBuildOrder": [
+    { "step": 1, "theme": "Unblock measurement", "itemIds": [], "action": "Apply DB migration for nclex_client_needs_category; re-run ops:exam-coverage-audit; replace static ranks with audit-driven ordering per pathway." },
+    { "step": 2, "theme": "Cross-cutting rationale wave", "itemIds": ["US-RN-01", "US-PN-01", "CA-RN-01", "CA-RPN-01"], "action": "Upgrade rationales to strong tier on published CJ/management items touched by these lessons." },
+    { "step": 3, "theme": "Medication bundles (all nursing pathways)", "itemIds": ["US-PN-02", "CA-RPN-02", "US-RN-04", "US-NP-02"], "action": "Ship coordinated high-alert class tagging + lesson spine + question batch in one sprint." },
+    { "step": 4, "theme": "Shock/sepsis + electrolytes spine", "itemIds": ["US-RN-02", "US-RN-03", "CA-RN-03"], "action": "Shared physiological core; CA overlay on labs and documentation where needed." },
+    { "step": 5, "theme": "Cardio acute (RN) + NP ASCVD module", "itemIds": ["US-RN-05", "US-NP-03"], "action": "Reuse cardiovascular teaching where appropriate; NP layer adds outpatient management depth." },
+    { "step": 6, "theme": "Neuro stroke + ICP", "itemIds": ["US-RN-06"], "action": "Large RN batch; port thin rationale remediation from audit targets." },
+    { "step": 7, "theme": "PN fluids + RN peds", "itemIds": ["US-PN-03", "US-RN-08"], "action": "Fills fluids_electrolytes and peds buckets across tiers." },
+    { "step": 8, "theme": "Canada-specific overlays", "itemIds": ["CA-RN-02", "CA-RN-05", "CA-RN-06", "CA-RPN-03", "CA-RPN-06"], "action": "Batch edit stems/rationales for Canadian context to avoid US-default leakage." },
+    { "step": 9, "theme": "Maternity depth", "itemIds": ["CA-RN-04", "CA-RPN-08"], "action": "Scope-check RPN items; full RN set for obstetric emergencies." },
+    { "step": 10, "theme": "NP differentials + women's health", "itemIds": ["US-NP-01", "US-NP-04", "US-NP-06"], "action": "FNP-first; AGPCNP shares 01/03/04; PMHNP focuses on US-NP-05 expansion." },
+    { "step": 11, "theme": "Infection control + TB/outbreaks", "itemIds": ["US-PN-04", "CA-RN-06"], "action": "Safety domain lift across countries." },
+    { "step": 12, "theme": "Remaining segment fillers", "itemIds": ["US-PN-05", "US-PN-06", "US-PN-07", "US-PN-08", "CA-RPN-04", "CA-RPN-05", "CA-RPN-07", "US-RN-07", "CA-RN-07", "CA-RN-08"], "action": "Schedule by next audit weakest systems per pathway (recommendedLessonTopics)." }
+  ],
+  "contentModelRecommendations": [
+    "Add optional remediation_backlog_id (string) or content_epic_id on pathway lessons and exam questions for traceability from this JSON to shipped assets.",
+    "Ensure nclex_client_needs_category is populated on new/edited questions so domain inference matches audit; backfill script keyed by topic/subtopic where safe.",
+    "Use explicit body_system and topic/subtopic strings that map to inferClinicalSystemForRow / inferBlueprintDomainForRow to keep audit rollups honest.",
+    "For medication_bundle workstreams, require inferMedicationBuckets signals in stems or structured tags so medication breadth metrics move.",
+    "For clinical_judgment_scenario_set, tag items that should count toward management_of_care proxy or plan NGN-style case series without changing CAT in v1.",
+    "Store country_scope on lesson variants (US_ONLY | CA_ONLY | BOTH) consistent with question region_scope to avoid mixed-context hubs.",
+    "Re-export backlog slice per pathway in admin UI by filtering item.pathwayIds contains pathwayId."
+  ]
+}

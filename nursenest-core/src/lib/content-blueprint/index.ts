@@ -14,13 +14,24 @@ export {
   type PathwayBlueprintProfile,
 } from "./pathway-blueprint-profiles";
 export { classifyCoverage, type CoverageBand } from "./coverage-status";
-export { buildGapBacklog, recommendedFirstAdditions, type GapItem, type GapKind } from "./gap-prioritization";
+export {
+  buildGapBacklog,
+  recommendedFirstAdditions,
+  recommendedLessonTopicsFromSystems,
+  recommendedQuestionBankTargets,
+  type GapItem,
+  type GapKind,
+} from "./gap-prioritization";
 export type {
   BlueprintDomainCoverageRow,
   BlueprintSystemCoverageRow,
   ExamBlueprintCoverageReport,
   PathwayBlueprintReport,
+  RecommendedLessonTopicRow,
+  RationaleTierBreakdown,
 } from "./blueprint-report-types";
+export type { CatalogLessonInventory } from "./pathway-catalog-lesson-stats";
+export { loadPathwayCatalogLessonStats } from "./pathway-catalog-lesson-stats";
 export {
   buildExamBlueprintCoverageReport,
 } from "./build-blueprint-coverage-report";

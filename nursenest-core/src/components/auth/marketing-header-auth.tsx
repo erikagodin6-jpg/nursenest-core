@@ -7,7 +7,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
-import { MARKETING_PRIMARY_CTA_COMPACT_CLASS } from "@/lib/theme/marketing-hero-pattern";
+
+const SIGN_IN_CLASS =
+  "nn-marketing-body-sm font-medium tracking-normal text-[var(--theme-menu-text)] transition-colors duration-150 hover:text-primary inline-flex items-center rounded-full px-2 py-1.5 sm:px-3 sm:py-2";
+
+const GET_STARTED_CLASS =
+  "nn-button-primary px-4 py-2 rounded-xl inline-flex min-h-0 items-center justify-center text-sm font-medium text-[var(--role-cta-foreground,#ffffff)]";
 
 function useLocalizeHref() {
   const { locale } = useMarketingI18n();
@@ -26,7 +31,7 @@ function isAdminRole(role: unknown): boolean {
 }
 
 /**
- * Desktop: signed-in account dropdown vs Log in / Sign up (marketing header).
+ * Marketing header: Sign in + Get Started (guests) or account menu (signed-in). Same component at all breakpoints.
  */
 export function MarketingHeaderAuthDesktop() {
   const { t } = useMarketingI18n();
@@ -45,26 +50,20 @@ export function MarketingHeaderAuthDesktop() {
 
   if (status === "loading") {
     return (
-      <span
-        className="hidden h-9 w-28 shrink-0 animate-pulse rounded-full bg-primary/10 sm:inline-block"
-        aria-hidden="true"
-      />
+      <span className="inline-flex h-8 w-24 shrink-0 animate-pulse rounded-xl bg-primary/10 sm:w-28" aria-hidden="true" />
     );
   }
 
   if (status !== "authenticated" || !session?.user) {
     return (
-      <>
-        <Link
-          href={localizeHref("/login")}
-          className="hidden rounded-full px-3 py-2 text-sm font-medium text-[var(--theme-menu-text)] hover:bg-[var(--theme-menu-hover-bg)] hover:text-[var(--theme-menu-hover-text)] sm:inline-flex"
-        >
+      <div className="flex max-w-[100vw] items-center gap-1.5 sm:gap-2">
+        <Link href={localizeHref("/login")} className={SIGN_IN_CLASS}>
           {t("nav.logIn")}
         </Link>
-        <Link href={localizeHref("/signup")} className={`hidden ${MARKETING_PRIMARY_CTA_COMPACT_CLASS} sm:inline-flex`}>
-          {t("nav.signUp")}
+        <Link href={localizeHref("/signup")} className={GET_STARTED_CLASS}>
+          {t("nav.getStarted")}
         </Link>
-      </>
+      </div>
     );
   }
 
@@ -73,11 +72,11 @@ export function MarketingHeaderAuthDesktop() {
   const admin = isAdminRole(user.role);
 
   return (
-    <div className="relative hidden sm:block" ref={ref}>
+    <div className="relative inline-block max-w-full" ref={ref}>
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="flex min-w-0 max-w-[min(100%,14rem)] items-center gap-1 rounded-full border border-[var(--theme-nav-border)] px-3 py-2 text-sm font-medium text-[var(--theme-menu-text)] hover:bg-[var(--theme-menu-hover-bg)]"
+        className="flex max-w-[min(100%,12rem)] items-center gap-1 rounded-full border border-[var(--theme-nav-border)] px-2 py-1.5 nn-marketing-body-sm font-medium tracking-normal text-[var(--theme-menu-text)] hover:bg-[var(--theme-menu-hover-bg)] sm:max-w-[14rem] sm:px-3 sm:py-2"
         aria-expanded={open}
         aria-haspopup="menu"
       >
@@ -102,7 +101,7 @@ export function MarketingHeaderAuthDesktop() {
           </div>
           <Link
             href="/app"
-            className="block break-words px-3 py-2 text-start text-sm text-[var(--theme-menu-text)] [overflow-wrap:anywhere] hover:bg-[var(--theme-menu-hover-bg)]"
+            className="block break-words px-3 py-2 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--theme-menu-text)] [overflow-wrap:anywhere] hover:bg-[var(--theme-menu-hover-bg)]"
             role="menuitem"
             onClick={() => setOpen(false)}
           >
@@ -111,7 +110,7 @@ export function MarketingHeaderAuthDesktop() {
           {admin ? (
             <Link
               href="/admin"
-              className="block break-words px-3 py-2 text-start text-sm text-[var(--theme-menu-text)] [overflow-wrap:anywhere] hover:bg-[var(--theme-menu-hover-bg)]"
+              className="block break-words px-3 py-2 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--theme-menu-text)] [overflow-wrap:anywhere] hover:bg-[var(--theme-menu-hover-bg)]"
               role="menuitem"
               onClick={() => setOpen(false)}
             >
@@ -120,7 +119,7 @@ export function MarketingHeaderAuthDesktop() {
           ) : null}
           <button
             type="button"
-            className="block w-full border-t border-[var(--theme-separator)] px-3 py-2 text-start text-sm text-[var(--theme-menu-text)] hover:bg-[var(--theme-menu-hover-bg)]"
+            className="block w-full border-t border-[var(--theme-separator)] px-3 py-2 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--theme-menu-text)] hover:bg-[var(--theme-menu-hover-bg)]"
             role="menuitem"
             onClick={() => void signOut({ callbackUrl: "/" })}
           >
@@ -133,7 +132,7 @@ export function MarketingHeaderAuthDesktop() {
 }
 
 /**
- * Mobile drawer: account actions vs Log in / Sign up.
+ * Mobile drawer account block (optional; header bar uses {@link MarketingHeaderAuthDesktop} at all sizes).
  */
 export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => void }) {
   const { t } = useMarketingI18n();
@@ -147,19 +146,11 @@ export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => vo
   if (status !== "authenticated" || !session?.user) {
     return (
       <div className="mt-4 flex gap-2">
-        <Link
-          href={localizeHref("/login")}
-          className="flex-1 rounded-full border border-[var(--theme-nav-border)] py-2 text-center text-sm font-semibold"
-          onClick={onNavigate}
-        >
+        <Link href={localizeHref("/login")} className={`${SIGN_IN_CLASS} flex-1 justify-center border border-[var(--theme-nav-border)] py-2`} onClick={onNavigate}>
           {t("nav.logIn")}
         </Link>
-        <Link
-          href={localizeHref("/signup")}
-          className={`${MARKETING_PRIMARY_CTA_COMPACT_CLASS} flex-1 justify-center text-center`}
-          onClick={onNavigate}
-        >
-          {t("nav.signUp")}
+        <Link href={localizeHref("/signup")} className={`${GET_STARTED_CLASS} flex-1`} onClick={onNavigate}>
+          {t("nav.getStarted")}
         </Link>
       </div>
     );
@@ -171,16 +162,14 @@ export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => vo
 
   return (
     <div className="mt-4 space-y-2 border-t border-[var(--theme-separator)] pt-4">
-      <p className="break-words text-[10px] font-bold uppercase tracking-wider text-primary [overflow-wrap:anywhere]">{label}</p>
+      <p className="break-words nn-marketing-body-sm font-medium tracking-normal text-[var(--theme-muted-text)] [overflow-wrap:anywhere]">{label}</p>
       <p className="font-mono text-xs text-[var(--theme-muted-text)]">
         {t("account.idPrefix")} {user.id}
       </p>
-      {admin ? (
-        <p className="text-xs font-semibold text-primary">{t("account.role.administrator")}</p>
-      ) : null}
+      {admin ? <p className="text-xs font-semibold text-primary">{t("account.role.administrator")}</p> : null}
       <Link
         href="/app"
-        className="block rounded-xl border border-[var(--theme-card-border)] px-3 py-2.5 text-sm font-semibold text-[var(--theme-menu-text)] hover:bg-[var(--theme-menu-hover-bg)]"
+        className="block rounded-xl border border-[var(--theme-card-border)] px-3 py-2.5 nn-marketing-body-sm font-medium tracking-normal text-[var(--theme-menu-text)] hover:bg-[var(--theme-menu-hover-bg)]"
         onClick={onNavigate}
       >
         {t("nav.learnerApp")}
@@ -188,7 +177,7 @@ export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => vo
       {admin ? (
         <Link
           href="/admin"
-          className="block rounded-xl border border-primary/20 bg-primary/5 px-3 py-2.5 text-sm font-semibold text-primary hover:bg-primary/10"
+          className="block rounded-xl border border-primary/20 bg-primary/5 px-3 py-2.5 nn-marketing-body-sm font-medium tracking-normal text-primary hover:bg-primary/10"
           onClick={onNavigate}
         >
           {t("nav.admin")}
@@ -196,7 +185,7 @@ export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => vo
       ) : null}
       <button
         type="button"
-        className="w-full rounded-xl border border-[var(--theme-nav-border)] px-3 py-2.5 text-sm font-semibold text-[var(--theme-menu-text)] hover:bg-[var(--theme-menu-hover-bg)]"
+        className="w-full rounded-xl border border-[var(--theme-nav-border)] px-3 py-2.5 nn-marketing-body-sm font-medium tracking-normal text-[var(--theme-menu-text)] hover:bg-[var(--theme-menu-hover-bg)]"
         onClick={() => void signOut({ callbackUrl: "/" })}
       >
         {t("nav.signout")}

@@ -11,7 +11,7 @@ import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured, withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { ContentStatus } from "@prisma/client";
 import { inferPathwayFamilyFromExamKeys } from "@/lib/questions/question-bank-taxonomy";
-import { RATIONALE_MIN_WORDS } from "@/lib/questions/question-bank-coverage-thresholds";
+import { RATIONALE_MIN_WORDS, RATIONALE_STRONG_MIN_WORDS } from "@/lib/questions/question-bank-coverage-thresholds";
 import type { BlueprintDomainId } from "./blueprint-domain";
 import { BLUEPRINT_DOMAIN_LABELS } from "./blueprint-domain";
 import type { ClinicalSystemId } from "./clinical-system-id";
@@ -28,7 +28,13 @@ import {
   type PathwayBlueprintProfile,
 } from "./pathway-blueprint-profiles";
 import { classifyCoverage } from "./coverage-status";
-import { buildGapBacklog, recommendedFirstAdditions } from "./gap-prioritization";
+import {
+  buildGapBacklog,
+  recommendedFirstAdditions,
+  recommendedLessonTopicsFromSystems,
+  recommendedQuestionBankTargets,
+} from "./gap-prioritization";
+import { loadPathwayCatalogLessonStats } from "./pathway-catalog-lesson-stats";
 import type {
   BlueprintDomainCoverageRow,
   BlueprintSystemCoverageRow,
@@ -90,22 +96,50 @@ async function loadQuality(pathway: ExamPathwayDefinition): Promise<{
   publishedInScope: number;
   thinRationale: number;
   missingRationale: number;
+  acceptableRationale: number;
+  strongRationale: number;
 }> {
+  const empty = {
+    publishedInScope: 0,
+    thinRationale: 0,
+    missingRationale: 0,
+    acceptableRationale: 0,
+    strongRationale: 0,
+  };
   const keys = [...new Set(pathway.contentExamKeys)];
-  if (keys.length === 0) return { publishedInScope: 0, thinRationale: 0, missingRationale: 0 };
+  if (keys.length === 0) return empty;
   const tiers = examQuestionTierStringsForProfileTier(pathway.stripeTier);
-  if (tiers.length === 0) return { publishedInScope: 0, thinRationale: 0, missingRationale: 0 };
+  if (tiers.length === 0) return empty;
 
   const rows = await prisma.$queryRaw<
-    Array<{ n: bigint; thin: bigint; miss: bigint }>
+    Array<{ n: bigint; miss: bigint; strong: bigint; thin: bigint; acceptable: bigint }>
   >`
     SELECT
       COUNT(*)::bigint AS n,
+      COUNT(*) FILTER (WHERE rationale IS NULL OR TRIM(COALESCE(rationale, '')) = '')::bigint AS miss,
       COUNT(*) FILTER (
         WHERE rationale IS NOT NULL AND TRIM(rationale) <> ''
+        AND (
+          (LENGTH(TRIM(rationale)) - LENGTH(REPLACE(TRIM(rationale), ' ', '')) + 1) >= ${RATIONALE_STRONG_MIN_WORDS}
+          OR LENGTH(TRIM(COALESCE(correct_answer_explanation, ''))) > 80
+        )
+      )::bigint AS strong,
+      COUNT(*) FILTER (
+        WHERE rationale IS NOT NULL AND TRIM(rationale) <> ''
+        AND NOT (
+          (LENGTH(TRIM(rationale)) - LENGTH(REPLACE(TRIM(rationale), ' ', '')) + 1) >= ${RATIONALE_STRONG_MIN_WORDS}
+          OR LENGTH(TRIM(COALESCE(correct_answer_explanation, ''))) > 80
+        )
         AND (LENGTH(TRIM(rationale)) - LENGTH(REPLACE(TRIM(rationale), ' ', '')) + 1) < ${RATIONALE_MIN_WORDS}
       )::bigint AS thin,
-      COUNT(*) FILTER (WHERE rationale IS NULL OR TRIM(COALESCE(rationale, '')) = '')::bigint AS miss
+      COUNT(*) FILTER (
+        WHERE rationale IS NOT NULL AND TRIM(rationale) <> ''
+        AND NOT (
+          (LENGTH(TRIM(rationale)) - LENGTH(REPLACE(TRIM(rationale), ' ', '')) + 1) >= ${RATIONALE_STRONG_MIN_WORDS}
+          OR LENGTH(TRIM(COALESCE(correct_answer_explanation, ''))) > 80
+        )
+        AND (LENGTH(TRIM(rationale)) - LENGTH(REPLACE(TRIM(rationale), ' ', '')) + 1) >= ${RATIONALE_MIN_WORDS}
+      )::bigint AS acceptable
     FROM exam_questions
     WHERE status = ${DB_PUBLISHED}
       AND exam IN (${Prisma.join(keys)})
@@ -114,11 +148,13 @@ async function loadQuality(pathway: ExamPathwayDefinition): Promise<{
       ${countrySql(pathway.countryCode)}
   `;
   const r = rows[0];
-  if (!r) return { publishedInScope: 0, thinRationale: 0, missingRationale: 0 };
+  if (!r) return empty;
   return {
     publishedInScope: Number(r.n),
     thinRationale: Number(r.thin),
     missingRationale: Number(r.miss),
+    acceptableRationale: Number(r.acceptable),
+    strongRationale: Number(r.strong),
   };
 }
 
@@ -228,6 +264,10 @@ async function buildPathwayReport(pathway: ExamPathwayDefinition): Promise<Pathw
     q.publishedInScope > 0 ? Math.round((q.thinRationale / q.publishedInScope) * 1000) / 10 : 0;
   const pctMissing =
     q.publishedInScope > 0 ? Math.round((q.missingRationale / q.publishedInScope) * 1000) / 10 : 0;
+  const pctAcceptable =
+    q.publishedInScope > 0 ? Math.round((q.acceptableRationale / q.publishedInScope) * 1000) / 10 : 0;
+  const pctStrong =
+    q.publishedInScope > 0 ? Math.round((q.strongRationale / q.publishedInScope) * 1000) / 10 : 0;
 
   const prioritizedGaps = buildGapBacklog({
     profile,
@@ -240,7 +280,10 @@ async function buildPathwayReport(pathway: ExamPathwayDefinition): Promise<Pathw
     clinicalJudgmentProxyCount: cjProxy,
     lessonTopicCount: lessonTopics.size,
   });
-  const additions = recommendedFirstAdditions(prioritizedGaps, 8);
+  const additions = recommendedFirstAdditions(prioritizedGaps, 20);
+  const lessonRecs = recommendedLessonTopicsFromSystems(systems, 20);
+  const qbTargets = recommendedQuestionBankTargets(domains, systems, 20);
+  const catalogLessons = loadPathwayCatalogLessonStats(pathway.id);
 
   return {
     pathwayId: pathway.id,
@@ -258,10 +301,24 @@ async function buildPathwayReport(pathway: ExamPathwayDefinition): Promise<Pathw
       clinicalJudgmentProxyCount: cjProxy,
       lessonTopicSlugsWithAtLeastOneLesson: lessonTopics.size,
     },
+    rationaleTiers: {
+      publishedInScope: q.publishedInScope,
+      missing: q.missingRationale,
+      thin: q.thinRationale,
+      acceptable: q.acceptableRationale,
+      strong: q.strongRationale,
+      pctMissing,
+      pctThin,
+      pctAcceptable,
+      pctStrong,
+    },
+    catalogLessons,
     domains,
     systems,
     prioritizedGaps,
     recommendedFirstAdditions: additions,
+    recommendedLessonTopics: lessonRecs,
+    recommendedQuestionBankTargets: qbTargets,
   };
 }
 
@@ -273,6 +330,7 @@ export async function buildExamBlueprintCoverageReport(): Promise<ExamBlueprintC
     "Clinical judgment proxy = counts in `management_of_care` domain (not NGN item types).",
     "Medication breadth = distinct coarse buckets from topic/subtopic keywords (not a formulary).",
     `Thin rationale = < ${RATIONALE_MIN_WORDS} words (same heuristic as question-bank coverage).`,
+    `Strong rationale tier = ≥ ${RATIONALE_STRONG_MIN_WORDS} words and/or correct_answer_explanation length > 80 (audit only).`,
   ];
 
   if (!isDatabaseUrlConfigured()) {

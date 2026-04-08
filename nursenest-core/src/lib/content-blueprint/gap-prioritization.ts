@@ -171,7 +171,13 @@ export function recommendedFirstAdditions(gaps: GapItem[], limit = 6): string[] 
 export function recommendedLessonTopicsFromSystems(
   systems: SystemRow[],
   limit = 20,
-): Array<{ system: string; label: string; band: CoverageBand; questionCount: number; minQuestions: number }> {
+): Array<{
+  system: ClinicalSystemId;
+  label: string;
+  band: CoverageBand;
+  questionCount: number;
+  minQuestions: number;
+}> {
   const scored = [...systems]
     .filter((s) => s.band === "missing" || s.band === "insufficient" || s.band === "thin_acceptable")
     .map((s) => ({
