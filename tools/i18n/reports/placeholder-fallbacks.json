@@ -1,13 +1,11 @@
 {
-  "generatedAt": "2026-04-08T13:41:32.114Z",
-  "totalFallbacks": 28,
+  "generatedAt": "2026-04-08T13:49:39.367Z",
+  "totalFallbacks": 21,
   "byLocale": {
     "fr": 4,
     "ko": 3,
-    "pa": 4,
     "vi": 3,
     "ht": 3,
-    "ur": 3,
     "fa": 3,
     "th": 2,
     "tr": 1,
@@ -90,48 +88,6 @@
       ]
     },
     {
-      "locale": "pa",
-      "key": "glossary.relatedTerms",
-      "localizedValue": "ਸੰਬੰਧਿਤ ਸ਼ਬਦ",
-      "englishValue": "Related {{category}} Terms",
-      "placeholdersInEnglish": [
-        "category"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "pa",
-      "key": "pricing.save",
-      "localizedValue": "ਬਚਾਓ",
-      "englishValue": "Save {{percent}}%",
-      "placeholdersInEnglish": [
-        "percent"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "pa",
-      "key": "upgrade.title",
-      "localizedValue": "ਯੋਜਨਾ ਚੁਣੋ",
-      "englishValue": "Pass Your NCLEX or {{examName}} With Structured Exam-Level Practice",
-      "placeholdersInEnglish": [
-        "examName"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "pa",
-      "key": "upgrade.usageNote",
-      "localizedValue": "ਤੁਸੀਂ {{used}} ਵਿੱਚੋਂ {{limit}} ਮੁਫਤ ਕਾਰਡਾਂ ਦੀ ਵਰਤੋਂ ਕੀਤੀ ਹੈ ({{percentage}}%)",
-      "englishValue": "You",
-      "placeholdersInEnglish": [],
-      "placeholdersInLocalized": [
-        "limit",
-        "percentage",
-        "used"
-      ]
-    },
-    {
       "locale": "vi",
       "key": "glossary.relatedTerms",
       "localizedValue": "Thuật ngữ liên quan",
@@ -187,38 +143,6 @@
       "locale": "ht",
       "key": "upgrade.usageNote",
       "localizedValue": "Ou te itilize {{used}} nan {{limit}} kat gratis ({{percentage}}%)",
-      "englishValue": "You",
-      "placeholdersInEnglish": [],
-      "placeholdersInLocalized": [
-        "limit",
-        "percentage",
-        "used"
-      ]
-    },
-    {
-      "locale": "ur",
-      "key": "glossary.relatedTerms",
-      "localizedValue": "متعلقہ اصطلاحات",
-      "englishValue": "Related {{category}} Terms",
-      "placeholdersInEnglish": [
-        "category"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "ur",
-      "key": "pricing.save",
-      "localizedValue": "Save",
-      "englishValue": "Save {{percent}}%",
-      "placeholdersInEnglish": [
-        "percent"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "ur",
-      "key": "upgrade.usageNote",
-      "localizedValue": "آپ نے {{limit}} مفت کارڈز میں سے {{used}} استعمال کیے ہیں ({{percentage}}%)",
       "englishValue": "You",
       "placeholdersInEnglish": [],
       "placeholdersInLocalized": [

@@ -20,7 +20,7 @@ export default function HeroTrustIndicator() {
         <div className="flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
           <div className="flex shrink-0 items-center gap-2">
             <ShieldCheck className="h-5 w-5 text-emerald-500" />
-            <span className="text-sm font-semibold text-gray-800" data-testid="text-built-for-badge">
+            <span className="nn-marketing-body-sm font-medium text-[var(--theme-heading-text)]" data-testid="text-built-for-badge">
               {(() => {
                 const v = t("hero.trustIndicator.builtFor");
                 return v === "hero.trustIndicator.builtFor" ? "Built For" : v;
