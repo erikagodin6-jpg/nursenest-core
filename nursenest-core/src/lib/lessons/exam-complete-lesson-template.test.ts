@@ -54,3 +54,14 @@ describe("exam-complete topic taxonomy", () => {
     }
   });
 });
+
+describe("inferExamAudienceFromPathwayId", () => {
+  it("maps known pathway ids to tier and country", () => {
+    assert.deepEqual(inferExamAudienceFromPathwayId("us-rn-nclex-rn").audienceTiers, ["rn"]);
+    assert.equal(inferExamAudienceFromPathwayId("us-rn-nclex-rn").countryScope, "us");
+    assert.deepEqual(inferExamAudienceFromPathwayId("ca-rpn-rex-pn").audienceTiers, ["pn"]);
+    assert.equal(inferExamAudienceFromPathwayId("ca-rpn-rex-pn").countryScope, "ca");
+    assert.deepEqual(inferExamAudienceFromPathwayId("us-np-fnp").audienceTiers, ["np"]);
+    assert.equal(inferExamAudienceFromPathwayId("us-np-fnp").countryScope, "us");
+  });
+});

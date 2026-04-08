@@ -18,7 +18,7 @@ import {
   getRenalDialysisAcuteComplicationsGoldLessonInput,
 } from "./renal-dialysis-acute-complications-gold-standard";
 import { SEPSIS_GOLD_SLUG, getSepsisGoldLessonInput } from "./sepsis-early-recognition-gold-standard";
-import { isPremiumSectionKind } from "@/lib/lessons/pathway-lesson-premium";
+import { isPremiumSectionKind, validatePathwayLessonPremium } from "@/lib/lessons/pathway-lesson-premium";
 import { prependScopedGoldCatalogLessons, SCOPED_GOLD_PROVIDERS } from "./scoped-gold-registry";
 import { SHOCK_GOLD_SLUG, getShockGoldLessonInput } from "./shock-gold-standard";
 import { STROKE_ICP_GOLD_SLUG, getStrokeIcpGoldLessonInput } from "./stroke-increased-icp-gold-standard";
@@ -40,8 +40,6 @@ const LEGACY_KINDS = new Set([
   "clinical_scenario",
   "takeaways",
 ]);
-
-const PREMIUM_KIND_SET = new Set(PREMIUM_SECTION_KINDS);
 
 describe("scoped gold registry", () => {
   it("registry lists injectable slugs in remediation order (waves 1–4 + COPD)", () => {
@@ -72,10 +70,29 @@ describe("scoped gold registry", () => {
 });
 
 function assertLessonQuality(lesson: NonNullable<ReturnType<typeof getClinicalJudgmentGoldLessonInput>>) {
-  assert.equal(lesson.sections.length, 5);
-  for (const s of lesson.sections) {
-    assert.ok(KINDS.has(s.kind));
-    assert.ok(s.body.length > 80);
+  const isPremium = lesson.sections.some((s) => PREMIUM_KIND_SET.has(s.kind as (typeof PREMIUM_SECTION_KINDS)[number]));
+  if (isPremium) {
+    assert.ok(lesson.sections.length >= 10, "premium lessons should include ≥10 rendered sections (omitted labs/country excluded)");
+    for (const s of lesson.sections) {
+      assert.ok(PREMIUM_KIND_SET.has(s.kind as (typeof PREMIUM_SECTION_KINDS)[number]), `unexpected kind ${s.kind}`);
+      assert.ok(s.body.length > 40);
+    }
+    const v = validatePathwayLessonPremium({
+      slug: lesson.slug,
+      title: lesson.title,
+      seoTitle: lesson.seoTitle,
+      seoDescription: lesson.seoDescription,
+      sections: lesson.sections,
+      premiumOmittedSections: lesson.premiumOmittedSections,
+      relatedLessonRefs: lesson.relatedLessonRefs,
+    });
+    assert.equal(v.premiumReady, true, v.issues.join(" | "));
+  } else {
+    assert.equal(lesson.sections.length, 5);
+    for (const s of lesson.sections) {
+      assert.ok(LEGACY_KINDS.has(s.kind));
+      assert.ok(s.body.length > 80);
+    }
   }
   assert.ok((lesson.preTest?.length ?? 0) >= 3);
   assert.ok((lesson.postTest?.length ?? 0) >= 3);
