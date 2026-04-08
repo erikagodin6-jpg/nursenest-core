@@ -26,6 +26,7 @@ import {
 import { mergeQuestionApiPayload } from "@/lib/i18n/educational-content-overlay";
 import { resolveMergedQuestionOverlayBundle } from "@/lib/i18n/educational-translation-db";
 import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
+import { capturePracticeTestCompletedAnalytics } from "@/lib/observability/learner-product-analytics";
 
 const previewSelect = {
   id: true,
@@ -329,6 +330,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
       } catch {
         topicStatsSynced = false;
       }
+      capturePracticeTestCompletedAnalytics(gate.userId, gate.entitlement, cfg, adv.results);
       return NextResponse.json({ ok: true, results: adv.results, catCompleted: true, topicStatsSynced });
     }
 
@@ -366,6 +368,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
       } catch {
         topicStatsSynced = false;
       }
+      capturePracticeTestCompletedAnalytics(gate.userId, gate.entitlement, cfg, fin.results);
       return NextResponse.json({ ok: true, results: fin.results, topicStatsSynced });
     }
 
@@ -389,6 +392,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     } catch {
       topicStatsSynced = false;
     }
+    capturePracticeTestCompletedAnalytics(gate.userId, gate.entitlement, cfg, results);
     return NextResponse.json({ ok: true, results, topicStatsSynced });
   }
 

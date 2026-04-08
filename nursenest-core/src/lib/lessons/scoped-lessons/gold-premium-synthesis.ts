@@ -452,13 +452,18 @@ export function synthesizeCaseStudyCasebookSections(input: CaseStudyCasebookInpu
   relatedLessonRefs: PathwayLessonRelatedRef[];
 } {
   const syn = syntheticGoldInput(input.examLabel, input.tierGeo);
-  const intro = ensureIntroductionWordCount(
-    [
-      `**Scenario setup**\n\n${input.scenarioSetup.trim()}`,
-      collapseInlineParagraphs(input.clinical_meaning),
-      collapseInlineParagraphs(input.exam_relevance),
-      `This **case-study format** is intentional: boards reward **trajectory thinking**—what changed, what is unstable, and what you do **next** for the **role** named in the stem. For **${input.examLabel}**, read the **assignment line** before you eliminate answers.`,
-    ].join("\n\n"),
+  const intro = ensureMinimumWords(
+    ensureIntroductionWordCount(
+      [
+        `**Scenario setup**\n\n${input.scenarioSetup.trim()}`,
+        collapseInlineParagraphs(input.clinical_meaning),
+        collapseInlineParagraphs(input.exam_relevance),
+        `This **case-study format** is intentional: boards reward **trajectory thinking**—what changed, what is unstable, and what you do **next** for the **role** named in the stem. For **${input.examLabel}**, read the **assignment line** before you eliminate answers.`,
+      ].join("\n\n"),
+    ),
+    PREMIUM_MIN_WORDS.introduction,
+    `**Slow read**  
+Re-scan the stem for **vitals trends**, **oxygen settings**, **allergies**, and **time since onset**—case items often hide the decisive clue in a single line.`,
   );
 
   const signsBody = padKind(
@@ -481,13 +486,17 @@ Re-read the stem for **numbers you skipped**: vitals trends, device settings, al
 After any intervention, ask: did **oxygenation, perfusion, or mentation** improve on a short timeline? If not, **escalate** with objective data.`,
   );
 
-  const pearlsCombined = ensureClinicalPearlsWordCount(
-    [
-      `**Rationale for the best decisions (eliminate distractors)**\n\n${input.rationaleDecisions.trim()}`,
-      `**Takeaways you can reuse on similar stems**\n\n${input.takeaways.trim()}`,
-      `**Second-pass rule**  
+  const pearlsCombined = padKind(
+    "clinical_pearls",
+    ensureClinicalPearlsWordCount(
+      [
+        `**Rationale for the best decisions (eliminate distractors)**\n\n${input.rationaleDecisions.trim()}`,
+        `**Takeaways you can reuse on similar stems**\n\n${input.takeaways.trim()}`,
+        `**Second-pass rule**  
 If two answers sound “reasonable,” choose the one that **closes the highest-risk problem first** and matches **your license** in the stem.`,
-    ].join("\n\n"),
+      ].join("\n\n"),
+    ),
+    PEARLS_DEPTH_PAD,
   );
 
   const clientCombined = padKind(

@@ -3,6 +3,7 @@
  */
 
 import type { BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema";
+import { parseBlogSeoBundle, type BlogSeoBundle } from "@/lib/blog/blog-seo-automation";
 
 export type BlogImageSlotRole = "hero" | "inline";
 
@@ -53,6 +54,7 @@ export type ParsedInternalLinkPlan = {
   lessons: BlogControlPanelPlan["suggestedInternalLessons"];
   imagePlacements: BlogControlPanelPlan["imagePlacements"];
   imageAttachments: BlogImageSlotAttachment[];
+  seo: BlogSeoBundle | null;
 };
 
 const EMPTY_ATTACHMENTS: BlogImageSlotAttachment[] = [];
@@ -60,7 +62,7 @@ const EMPTY_ATTACHMENTS: BlogImageSlotAttachment[] = [];
 /** Best-effort read of `BlogPost.internalLinkPlan` JSON. */
 export function parseInternalLinkPlanJson(raw: unknown): ParsedInternalLinkPlan {
   if (!raw || typeof raw !== "object") {
-    return { lessons: [], imagePlacements: [], imageAttachments: EMPTY_ATTACHMENTS };
+    return { lessons: [], imagePlacements: [], imageAttachments: EMPTY_ATTACHMENTS, seo: null };
   }
   const o = raw as Record<string, unknown>;
   const lessons = Array.isArray(o.lessons) ? (o.lessons as BlogControlPanelPlan["suggestedInternalLessons"]) : [];
@@ -85,7 +87,8 @@ export function parseInternalLinkPlanJson(raw: unknown): ParsedInternalLinkPlan 
       })
       .filter((x): x is BlogImageSlotAttachment => Boolean(x));
   }
-  return { lessons, imagePlacements, imageAttachments };
+  const seo = parseBlogSeoBundle(o.seo);
+  return { lessons, imagePlacements, imageAttachments, seo };
 }
 
 export function mergeAttachmentsBySlotKey(rows: BlogImageSlotAttachment[]): BlogImageSlotAttachment[] {

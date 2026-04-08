@@ -164,10 +164,14 @@ export default function HomeRestoredClient() {
                         href={withMarketingLocale(locale, p.href)}
                         event={PH.marketingHomePathwayCardPrimary}
                         eventProps={{ pathway: p.id, region, surface: "hero" }}
-                        secondaryCapture={{
-                          event: PH.funnelHomeToExamHub,
-                          eventProps: { placement: "hero_pathway", pathway: p.id, region },
-                        }}
+                        {...(p.id !== "prenursing"
+                          ? {
+                              secondaryCapture: {
+                                event: PH.funnelHomeToExamHub,
+                                eventProps: { placement: "hero_pathway", pathway: p.id, region },
+                              },
+                            }
+                          : {})}
                         className="nn-marketing-card nn-marketing-card-pad flex h-full min-h-[8.5rem] flex-col transition hover:border-[var(--border-medium)]"
                         aria-label={`${t(p.titleKey)}. ${t(p.ctaKey)}`}
                       >

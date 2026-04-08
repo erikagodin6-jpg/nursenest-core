@@ -71,6 +71,13 @@ const blogControlPanelPlanBase = z.object({
   apaSourceStubs: z.array(z.record(z.string(), z.unknown())).max(20).default([]),
   keyTakeaways: z.array(z.string().min(5).max(400)).max(10).default([]),
   featuredSnippetHint: z.string().max(400).optional(),
+  /** List/card excerpt — must be concrete when present; transform pads from meta if short. */
+  suggestedExcerpt: z.string().max(360).optional(),
+  openGraphTitle: z.string().max(90).optional(),
+  openGraphDescription: z.string().max(200).optional(),
+  /** Only `/blog/{slug}` allowed after sanitize; omit for default canonical. */
+  canonicalPath: z.string().max(220).optional(),
+  seoFocusKeywords: z.array(z.string().min(2).max(80)).max(10).optional(),
 });
 
 /**
@@ -85,7 +92,26 @@ export const blogControlPanelPlanSchema = blogControlPanelPlanBase.transform((d)
     id: row.id?.trim() || lessonLinkStableId(row, i),
     reviewStatus: row.reviewStatus ?? "active",
   }));
-  return { ...d, h1, suggestedInternalLessons };
+  const suggestedExcerpt = (() => {
+    const raw = d.suggestedExcerpt?.trim();
+    if (raw && raw.length >= 80) return raw.slice(0, 360);
+    const meta = d.metaDescription.trim();
+    if (meta.length >= 70) return meta.slice(0, 360);
+    const head = h1.slice(0, 120);
+    return `${head} — Focused nursing exam prep: clinical cues, safety, and test-taking strategy (NurseNest).`.slice(0, 360);
+  })();
+  const openGraphTitle = d.openGraphTitle?.trim() ? d.openGraphTitle.trim().slice(0, 90) : undefined;
+  const openGraphDescription = d.openGraphDescription?.trim()
+    ? d.openGraphDescription.trim().slice(0, 200)
+    : undefined;
+  return {
+    ...d,
+    h1,
+    suggestedInternalLessons,
+    suggestedExcerpt,
+    openGraphTitle,
+    openGraphDescription,
+  };
 });
 
 export type BlogControlPanelPlan = z.output<typeof blogControlPanelPlanSchema>;

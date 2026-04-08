@@ -5,6 +5,8 @@ import type Stripe from "stripe";
 import { Prisma, SubscriptionStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
+import { PH } from "@/lib/observability/posthog-conversion-events";
 import { productEvent } from "@/lib/observability/product-events";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { findTierCountryByPriceId } from "@/lib/stripe/pricing-map";
@@ -117,6 +119,9 @@ export async function POST(req: Request) {
             hasMetadata: session.metadata && Object.keys(session.metadata).length > 0 ? 1 : 0,
           });
         }
+        const activeBefore = await prisma.subscription.count({
+          where: { userId, status: SubscriptionStatus.ACTIVE },
+        });
         await prisma.$transaction(async (tx) => {
           await tx.subscription.upsert({
             where: { stripeSubscriptionId: subId },
@@ -134,6 +139,13 @@ export async function POST(req: Request) {
             },
           });
         });
+        if (activeBefore === 0) {
+          void captureServerEvent(analyticsDistinctId(userId), PH.learnerConversionSubscribed, {
+            country: plan?.country,
+            tier: plan?.tier ? String(plan.tier) : undefined,
+            source: "stripe_checkout_session_completed",
+          });
+        }
         await syncUserFromCheckoutSessionMetadata(userId, session.metadata ?? undefined);
       }
     }

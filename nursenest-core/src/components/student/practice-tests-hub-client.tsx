@@ -55,6 +55,7 @@ export function PracticeTestsHubClient({
   const [difficultyMax, setDifficultyMax] = useState<number | "">("");
   const [timedMode, setTimedMode] = useState(false);
   const [timeLimitMin, setTimeLimitMin] = useState(45);
+  const [linearDeliveryMode, setLinearDeliveryMode] = useState<"practice" | "exam">("practice");
   const [pathwayId, setPathwayId] = useState(
     () => defaultPathwayId ?? pathwayOptions[0]?.id ?? "",
   );
@@ -156,7 +157,7 @@ export function PracticeTestsHubClient({
       const res = await fetch("/api/practice-tests", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+          body: JSON.stringify({
           title: title.trim() || undefined,
           questionCount: selectionMode === "cat" ? Math.max(10, questionCount) : questionCount,
           topicNames: topicPicks,
@@ -168,7 +169,7 @@ export function PracticeTestsHubClient({
                 catSelectionBasis,
                 catPresentationMode,
               }
-            : {}),
+            : { linearDeliveryMode }),
           pathwayId: pathwayId.trim() || null,
           timedMode,
           timeLimitSec: timedMode ? Math.round(timeLimitMin * 60) : null,
@@ -251,7 +252,7 @@ export function PracticeTestsHubClient({
                     ? "Maximum length (AANP-style NP sim: 75–150)"
                     : "Maximum length (NCLEX-RN exam sim: 75–145)"
                   : "Maximum questions (cap, 10–75)"
-                : "Number of questions (5–150)"}
+                : "Number of questions (5–100)"}
             </span>
             <input
               type="number"
@@ -261,12 +262,31 @@ export function PracticeTestsHubClient({
                   ? isNpPathway
                     ? 150
                     : 145
-                  : 75
+                  : selectionMode === "cat"
+                    ? 75
+                    : 100
               }
               className="mt-1 w-full rounded-lg border border-border px-3 py-2 text-sm"
               value={questionCount}
               onChange={(e) => setQuestionCount(Number(e.target.value))}
             />
+            {selectionMode !== "cat" ? (
+              <div className="mt-2 flex flex-wrap items-center gap-2">
+                <span className="text-xs text-muted-foreground">Quick:</span>
+                {([10, 25, 50, 75, 100] as const).map((n) => (
+                  <button
+                    key={n}
+                    type="button"
+                    onClick={() => setQuestionCount(n)}
+                    className={`rounded-full px-3 py-1 text-xs font-medium ${
+                      questionCount === n ? "bg-primary text-primary-foreground" : "border border-border hover:bg-muted"
+                    }`}
+                  >
+                    {n}
+                  </button>
+                ))}
+              </div>
+            ) : null}
           </label>
         </div>
 
@@ -286,7 +306,12 @@ export function PracticeTestsHubClient({
                 type="button"
                 onClick={() => {
                   setSelectionMode(v);
-                  if (v !== "cat") setCatPresentationMode("practice");
+                  if (v !== "cat") {
+                    setCatPresentationMode("practice");
+                    setQuestionCount((q) => (q > 100 ? 100 : q));
+                  } else if (catPresentationMode === "practice") {
+                    setQuestionCount((q) => (q > 75 ? 75 : q));
+                  }
                 }}
                 className={`rounded-full px-4 py-1.5 text-sm font-medium ${
                   selectionMode === v ? "bg-primary text-primary-foreground" : "border border-border hover:bg-muted"
@@ -310,6 +335,40 @@ export function PracticeTestsHubClient({
                   : "Optional topic filters narrow the pool; leave empty for a broad mix."}
           </p>
         </div>
+
+        {selectionMode !== "cat" ? (
+          <div className="mt-4 rounded-lg border border-border bg-muted/20 p-4">
+            <span className="text-sm font-medium text-foreground">Linear session style</span>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => setLinearDeliveryMode("practice")}
+                className={`rounded-full px-4 py-1.5 text-sm font-medium ${
+                  linearDeliveryMode === "practice"
+                    ? "bg-sky-600 text-white dark:bg-sky-700"
+                    : "border border-border hover:bg-muted"
+                }`}
+              >
+                Practice (per-item feedback)
+              </button>
+              <button
+                type="button"
+                onClick={() => setLinearDeliveryMode("exam")}
+                className={`rounded-full px-4 py-1.5 text-sm font-medium ${
+                  linearDeliveryMode === "exam"
+                    ? "bg-sky-600 text-white dark:bg-sky-700"
+                    : "border border-border hover:bg-muted"
+                }`}
+              >
+                Exam (lock until end)
+              </button>
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Practice shows rationales after each submitted answer. Exam locks choices and hides rationales until you
+              finish the full run.
+            </p>
+          </div>
+        ) : null}
 
         {selectionMode === "cat" && examSimulationEnabled ? (
           <div className="mt-4 rounded-lg border border-border bg-muted/25 p-4">

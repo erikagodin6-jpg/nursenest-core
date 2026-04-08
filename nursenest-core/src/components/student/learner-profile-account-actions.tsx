@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
+import { useMarketingI18n } from "@/lib/marketing-i18n";
 
 export function LearnerProfileAccountActions({
   hasPassword,
@@ -14,6 +15,7 @@ export function LearnerProfileAccountActions({
   /** `passwordOnly` / `billingOnly` for focused account subpages. */
   variant?: "full" | "passwordOnly" | "billingOnly";
 }) {
+  const { t } = useMarketingI18n();
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -40,7 +42,7 @@ export function LearnerProfileAccountActions({
         signOutRecommended?: boolean;
       };
       if (!res.ok || !data.ok) {
-        setError(data.error ?? "Could not update password.");
+        setError(data.error ?? t("learner.security.changePasswordFailed"));
         return;
       }
       setCurrentPassword("");
@@ -50,9 +52,9 @@ export function LearnerProfileAccountActions({
         await signOut({ callbackUrl: "/login" });
         return;
       }
-      setMessage(data.message ?? "Password updated.");
+      setMessage(data.message ?? t("learner.security.passwordUpdatedFallback"));
     } catch {
-      setError("Network error.");
+      setError(t("learner.security.networkError"));
     } finally {
       setBusy(false);
     }
@@ -65,12 +67,12 @@ export function LearnerProfileAccountActions({
       const res = await fetch("/api/billing/portal", { method: "POST" });
       const data = (await res.json()) as { url?: string; error?: string };
       if (!res.ok || !data.url) {
-        setError(data.error ?? "Billing portal unavailable.");
+        setError(data.error ?? t("learner.accountActions.billingPortalUnavailable"));
         return;
       }
       window.location.href = data.url;
     } catch {
-      setError("Could not open billing portal.");
+      setError(t("learner.accountActions.billingPortalOpenFailed"));
     } finally {
       setBillingBusy(false);
     }
@@ -83,19 +85,19 @@ export function LearnerProfileAccountActions({
     <div className="space-y-6">
       {showPassword ? (
       <div>
-        <h3 className="text-sm font-semibold text-[var(--theme-heading-text)]">Password</h3>
+        <h3 className="text-sm font-semibold text-[var(--theme-heading-text)]">{t("learner.security.passwordHeading")}</h3>
         {!hasPassword ? (
           <p className="mt-2 text-sm text-muted-foreground">
-            This account does not use a NurseNest password yet. Use{" "}
+            {t("learner.security.noPasswordBefore")}{" "}
             <Link className="font-medium text-primary underline" href="/forgot-password">
-              forgot password
+              {t("learner.security.noPasswordLink")}
             </Link>{" "}
-            with your email to set one.
+            {t("learner.security.noPasswordAfter")}
           </p>
         ) : (
           <form onSubmit={(e) => void changePassword(e)} className="mt-3 max-w-md space-y-3">
             <label className="block text-sm">
-              <span className="text-muted-foreground">Current password</span>
+              <span className="text-muted-foreground">{t("learner.security.currentPasswordLabel")}</span>
               <input
                 type="password"
                 autoComplete="current-password"
@@ -106,7 +108,7 @@ export function LearnerProfileAccountActions({
               />
             </label>
             <label className="block text-sm">
-              <span className="text-muted-foreground">New password</span>
+              <span className="text-muted-foreground">{t("learner.security.newPasswordLabel")}</span>
               <input
                 type="password"
                 autoComplete="new-password"
@@ -118,7 +120,7 @@ export function LearnerProfileAccountActions({
               />
             </label>
             <label className="block text-sm">
-              <span className="text-muted-foreground">Confirm new password</span>
+              <span className="text-muted-foreground">{t("learner.security.confirmPasswordLabel")}</span>
               <input
                 type="password"
                 autoComplete="new-password"
@@ -128,23 +130,21 @@ export function LearnerProfileAccountActions({
                 required
               />
             </label>
-            <p className="text-xs text-muted-foreground">
-              Use at least 8 characters with a letter and a number.
-            </p>
+            <p className="text-xs text-muted-foreground">{t("learner.security.passwordPolicyHint")}</p>
             <button
               type="submit"
               disabled={busy}
               className="rounded-xl bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground disabled:opacity-50"
             >
-              {busy ? "Updating…" : "Update password"}
+              {busy ? t("learner.security.updatingPassword") : t("learner.security.updatePassword")}
             </button>
           </form>
         )}
         {hasPassword ? (
           <p className="mt-3 text-xs text-muted-foreground">
-            Forgot it?{" "}
+            {t("learner.security.forgotInlineBefore")}{" "}
             <Link className="font-medium text-primary underline" href="/forgot-password">
-              Email reset link
+              {t("learner.security.forgotInlineLink")}
             </Link>
           </p>
         ) : null}
@@ -153,11 +153,8 @@ export function LearnerProfileAccountActions({
 
       {showBilling ? (
       <div className={showPassword ? "border-t border-border/60 pt-6" : ""}>
-        <h3 className="text-sm font-semibold text-[var(--theme-heading-text)]">Billing & subscription</h3>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Update payment method, view invoices, or cancel in Stripe’s secure portal when your plan is billed through
-          Stripe.
-        </p>
+        <h3 className="text-sm font-semibold text-[var(--theme-heading-text)]">{t("learner.accountActions.billingHeading")}</h3>
+        <p className="mt-1 text-sm text-muted-foreground">{t("learner.accountActions.billingBody")}</p>
         {showBillingPortal ? (
           <button
             type="button"
@@ -165,13 +162,13 @@ export function LearnerProfileAccountActions({
             onClick={() => void openBillingPortal()}
             className="mt-3 rounded-xl border border-role-cta/35 bg-role-cta-soft px-4 py-2 text-sm font-semibold text-role-cta-on-soft disabled:opacity-50"
           >
-            {billingBusy ? "Opening…" : "Manage billing in Stripe"}
+            {billingBusy ? t("learner.accountActions.billingOpening") : t("learner.accountActions.billingCta")}
           </button>
         ) : (
           <p className="mt-3 text-sm text-muted-foreground">
-            No Stripe customer linked yet.{" "}
+            {t("learner.accountActions.billingNoCustomerBefore")}{" "}
             <Link href="/pricing" className="font-medium text-primary underline">
-              View plans
+              {t("learner.accountActions.billingViewPlans")}
             </Link>
           </p>
         )}
@@ -180,35 +177,34 @@ export function LearnerProfileAccountActions({
 
       {showBilling ? (
       <div className="border-t border-border/60 pt-6">
-        <h3 className="text-sm font-semibold text-[var(--theme-heading-text)]">Policies &amp; support</h3>
+        <h3 className="text-sm font-semibold text-[var(--theme-heading-text)]">{t("learner.accountActions.policiesHeading")}</h3>
         <p className="mt-1 text-sm text-muted-foreground">
-          Subscription terms, privacy, refunds, and how to reach us. For payment updates or cancellation, use{" "}
-          {showBillingPortal ? "Manage billing in Stripe above" : "Stripe after you subscribe"}.
+          {showBillingPortal ? t("learner.accountActions.policiesBodyWithPortal") : t("learner.accountActions.policiesBodyNoPortal")}
         </p>
         <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-sm">
           <li>
             <Link className="font-medium text-primary underline" href="/terms">
-              Terms
+              {t("learner.accountActions.linkTerms")}
             </Link>
           </li>
           <li>
             <Link className="font-medium text-primary underline" href="/privacy">
-              Privacy
+              {t("learner.accountActions.linkPrivacy")}
             </Link>
           </li>
           <li>
             <Link className="font-medium text-primary underline" href="/refund-policy">
-              Subscription &amp; refunds
+              {t("learner.accountActions.linkRefunds")}
             </Link>
           </li>
           <li>
             <Link className="font-medium text-primary underline" href="/acceptable-use">
-              Acceptable use
+              {t("learner.accountActions.linkAcceptableUse")}
             </Link>
           </li>
           <li>
             <Link className="font-medium text-primary underline" href="/contact">
-              Contact
+              {t("learner.accountActions.linkContact")}
             </Link>
           </li>
         </ul>

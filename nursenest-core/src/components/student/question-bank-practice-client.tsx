@@ -25,6 +25,9 @@ import {
   questionsApiFailureKey,
 } from "@/lib/student/gated-state-messages-i18n";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { readMarketingRegionFromDocument } from "@/lib/observability/learner-analytics-context.client";
+import { trackClientEvent } from "@/lib/observability/posthog-client";
+import { PH } from "@/lib/observability/posthog-conversion-events";
 import { QuestionSessionStudyLoopPanel } from "@/components/student/question-session-study-loop-panel";
 import { ExamProgressBar, ExamSessionShell, ExamSessionTopBar } from "@/components/exam/exam-session-shell";
 
@@ -414,6 +417,16 @@ export function QuestionBankPracticeClient({
           } catch {
             /* ignore */
           }
+        }
+
+        if (!append && list.length > 0) {
+          trackClientEvent(PH.learnerQuestionBankSessionStarted, {
+            country: readMarketingRegionFromDocument(),
+            pathway_id: pathwayIdFilter ?? undefined,
+            preset,
+            session_size: sessionSize,
+            topic_set: Boolean(topicForApi),
+          });
         }
 
         setPhase("ready");

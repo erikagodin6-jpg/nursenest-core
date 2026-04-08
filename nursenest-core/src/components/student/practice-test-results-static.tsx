@@ -1,6 +1,12 @@
 import Link from "next/link";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
 
+export type PracticeTestIncorrectReviewItem = {
+  id: string;
+  stemPreview: string;
+  topic: string | null;
+};
+
 /**
  * Server-rendered results summary for bookmarkable `/app/practice-tests/[id]/results`.
  * Full teaching review and notes remain on the main run page.
@@ -11,12 +17,14 @@ export function PracticeTestResultsStatic({
   results,
   config,
   completedAtLabel,
+  incorrectReviewItems = [],
 }: {
   testId: string;
   title: string | null;
   results: PracticeTestResultsJson;
   config: PracticeTestConfigJson | null;
   completedAtLabel: string;
+  incorrectReviewItems?: PracticeTestIncorrectReviewItem[];
 }) {
   const cat = config?.selectionMode === "cat";
   const incorrect = Math.max(0, results.scoreTotal - results.scoreCorrect);
@@ -85,6 +93,56 @@ export function PracticeTestResultsStatic({
               </li>
             ))}
           </ul>
+        </div>
+      ) : null}
+
+      {incorrectReviewItems.length > 0 ? (
+        <div className="nn-card p-6">
+          <h3 className="font-semibold text-foreground">Missed items</h3>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Short previews from your session. Open the test page for full rationales and teaching review.
+          </p>
+          <ul className="mt-3 space-y-3 text-sm">
+            {incorrectReviewItems.map((item) => (
+              <li key={item.id} className="border-b border-border/50 pb-3 last:border-0 last:pb-0">
+                <p className="text-foreground">{item.stemPreview}</p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {item.topic ? (
+                    <>
+                      Topic:{" "}
+                      <Link
+                        className="font-medium text-primary underline"
+                        href={`/app/questions?topic=${encodeURIComponent(item.topic)}`}
+                      >
+                        {item.topic}
+                      </Link>
+                    </>
+                  ) : (
+                    "Topic not tagged"
+                  )}
+                </p>
+              </li>
+            ))}
+          </ul>
+          <Link
+            href={`/app/practice-tests/${testId}`}
+            className="mt-4 inline-flex text-sm font-semibold text-primary underline"
+          >
+            Open full review on test page
+          </Link>
+        </div>
+      ) : results.incorrectQuestionIds && results.incorrectQuestionIds.length > 0 ? (
+        <div className="nn-card p-6">
+          <h3 className="font-semibold text-foreground">Missed items</h3>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {results.incorrectQuestionIds.length} question(s) marked incorrect. Open the test page for full review.
+          </p>
+          <Link
+            href={`/app/practice-tests/${testId}`}
+            className="mt-3 inline-flex text-sm font-semibold text-primary underline"
+          >
+            Open full review on test page
+          </Link>
         </div>
       ) : null}
 

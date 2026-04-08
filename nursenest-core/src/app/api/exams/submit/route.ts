@@ -14,6 +14,8 @@ import { collectSessionTopicOutcomes, scoreSessionAnswers } from "@/lib/exams/sc
 import { buildPostTestStudyNextFromReview } from "@/lib/learner/post-test-study-next";
 import { recordTopicOutcomesSequential } from "@/lib/learner/topic-performance";
 import { productEvent } from "@/lib/observability/product-events";
+import { captureLearnerProductEvent } from "@/lib/observability/learner-product-analytics";
+import { PH } from "@/lib/observability/posthog-conversion-events";
 import type { PostTestStudyNextBundle } from "@/lib/learner/adaptive-recommendations";
 
 const schema = z
@@ -219,6 +221,13 @@ export async function POST(req: Request) {
           }
         }
         productEvent("exam_submit", { score, total, timed: prefetchReview?.timedMode ? 1 : 0 });
+        captureLearnerProductEvent(gate.userId, gate.entitlement, PH.learnerExamMockSessionCompleted, {
+          exam_id_prefix: parsed.data.examId.slice(0, 8),
+          score,
+          total,
+          graded_on_server: true,
+          timed: Boolean(prefetchReview?.timedMode),
+        });
         let studyNext: PostTestStudyNextBundle | null = null;
         if (prefetchReview?.items?.length) {
           try {
@@ -245,6 +254,12 @@ export async function POST(req: Request) {
       },
     });
     productEvent("exam_submit", { score, total });
+    captureLearnerProductEvent(gate.userId, gate.entitlement, PH.learnerExamMockSessionCompleted, {
+      exam_id_prefix: parsed.data.examId.slice(0, 8),
+      score,
+      total,
+      graded_on_server: false,
+    });
     return NextResponse.json({ attempt });
   } catch (e) {
     safeServerLogCritical("api_exams_submit", "attempt_create_failed", {}, e);

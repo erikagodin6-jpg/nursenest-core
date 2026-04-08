@@ -290,7 +290,6 @@ export function PracticeTestRunnerClient({
   const committedSet = useMemo(() => new Set(linearCommittedIds), [linearCommittedIds]);
   const currentCommitted = Boolean(current && committedSet.has(current.id));
   const linearFeedback = current ? linearPracticeFeedback[current.id] : undefined;
-  const pctComplete = total > 0 ? Math.round(((idx + 1) / total) * 100) : 0;
   const committedCount = linearCommittedIds.length;
   const committedAnsweredPct = total > 0 ? Math.round((committedCount / total) * 100) : 0;
 
@@ -301,6 +300,70 @@ export function PracticeTestRunnerClient({
     if (Array.isArray(v)) return v.length > 0;
     return true;
   };
+
+  function linearPracticeMcqClasses(canonical: string): string {
+    const selected = raw === canonical;
+    const base =
+      "min-h-[2.75rem] w-full rounded-lg border px-4 py-3 text-left text-sm leading-snug transition";
+    const idle =
+      "border border-slate-200 bg-white text-slate-800 hover:border-slate-300 dark:border-slate-700 dark:bg-slate-900/30 dark:text-slate-100 dark:hover:border-slate-600";
+    const picked =
+      "border-primary/50 bg-primary/[0.05] font-medium text-slate-900 ring-1 ring-primary/30 dark:text-slate-50";
+    if (isLinearEngine && currentCommitted && linearDelivery === "exam") {
+      return `${base} cursor-default border-slate-200 bg-slate-50/90 text-slate-800 dark:border-slate-600 dark:bg-slate-900/45 dark:text-slate-100 ${
+        selected ? "ring-1 ring-slate-300/70 dark:ring-slate-600" : "opacity-85"
+      }`;
+    }
+    if (
+      !isLinearEngine ||
+      linearDelivery !== "practice" ||
+      !linearFeedback ||
+      !current ||
+      !currentCommitted
+    ) {
+      return `${base} ${selected ? picked : idle}`;
+    }
+    const ck = new Set(linearFeedback.correctKeys);
+    const ok = ck.has(canonical);
+    if (ok) {
+      return `${base} border-emerald-500/55 bg-emerald-50/90 font-medium text-slate-900 ring-1 ring-emerald-400/35 dark:border-emerald-500/40 dark:bg-emerald-950/35 dark:text-slate-50`;
+    }
+    if (selected) {
+      return `${base} border-red-500/55 bg-red-50/90 font-medium text-slate-900 ring-1 ring-red-400/35 dark:border-red-500/40 dark:bg-red-950/30 dark:text-slate-50`;
+    }
+    return `${base} ${idle} opacity-75`;
+  }
+
+  function linearPracticeSataClasses(canonical: string, selected: boolean): string {
+    const base =
+      "flex min-h-[2.75rem] items-start gap-3 rounded-lg border px-4 py-3 text-sm leading-snug transition";
+    const idleUnsel = "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900/30";
+    const idleSel =
+      "border-primary/45 bg-primary/[0.05] ring-1 ring-primary/25 dark:bg-primary/[0.07]";
+    if (isLinearEngine && currentCommitted && linearDelivery === "exam") {
+      return `${base} cursor-default border-slate-200/90 bg-slate-50/50 dark:border-slate-600 dark:bg-slate-900/40 ${
+        selected ? "ring-1 ring-slate-300/50 dark:ring-slate-600" : ""
+      }`;
+    }
+    if (
+      !isLinearEngine ||
+      linearDelivery !== "practice" ||
+      !linearFeedback ||
+      !current ||
+      !currentCommitted
+    ) {
+      return `${base} ${selected ? idleSel : idleUnsel} cursor-pointer`;
+    }
+    const ck = new Set(linearFeedback.correctKeys);
+    const ok = ck.has(canonical);
+    if (ok) {
+      return `${base} cursor-default border-emerald-500/55 bg-emerald-50/90 ring-1 ring-emerald-400/35 dark:border-emerald-500/40 dark:bg-emerald-950/35`;
+    }
+    if (selected && !ok) {
+      return `${base} cursor-default border-red-500/55 bg-red-50/90 ring-1 ring-red-400/35 dark:border-red-500/40 dark:bg-red-950/30`;
+    }
+    return `${base} cursor-default ${idleUnsel} opacity-70`;
+  }
 
   async function persistSave(nextAnswers: Record<string, unknown>, nextIdx: number) {
     setSaving(true);
@@ -821,6 +884,11 @@ export function PracticeTestRunnerClient({
               <div>
                 <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
                   {catMode ? "Adaptive item" : "Item"} {idx + 1} of {total}
+                  {isLinearEngine ? (
+                    <span className="block normal-case text-[10px] font-normal text-slate-500 dark:text-slate-400">
+                      {committedAnsweredPct}% submitted · {committedCount}/{total} answered
+                    </span>
+                  ) : null}
                   {catMode ? (
                     <span className="block normal-case text-[10px] font-normal text-slate-500 dark:text-slate-400">
                       Up to {catMaxCap} scored (variable stop)
@@ -832,13 +900,17 @@ export function PracticeTestRunnerClient({
             }
             center={
               <span className="line-clamp-2 normal-case">
-                {catMode
-                  ? examSimulation
-                    ? aanpNpExamSim
-                      ? "NP exam simulation (AANP-style CAT)"
-                      : "NCLEX-RN exam simulation (CAT)"
-                    : "Computer-adaptive (practice)"
-                  : "Practice test"}
+                {isLinearEngine
+                  ? linearDelivery === "exam"
+                    ? "Linear exam"
+                    : "Linear practice"
+                  : catMode
+                    ? examSimulation
+                      ? aanpNpExamSim
+                        ? "NP exam simulation (AANP-style CAT)"
+                        : "NCLEX-RN exam simulation (CAT)"
+                      : "Computer-adaptive (practice)"
+                    : "Practice test"}
               </span>
             }
             right={<ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />}
@@ -846,13 +918,17 @@ export function PracticeTestRunnerClient({
           <ExamProgressBar current={idx + 1} total={total} />
           <div className="space-y-5 p-5 md:p-6">
             <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">
-              {catMode
-                ? examSimulation
-                  ? aanpNpExamSim
-                    ? "AANP-style NP band (75–150) with adaptive stop rules on this server. The live AANP exam is not CAT. Rationales unlock after completion."
-                    : "NCLEX-style length band (75–145) and stop rules on this server. Not the live NCLEX. Rationales unlock after completion."
-                  : "Each response updates difficulty. Explanations and coaching appear after the session."
-                : "Pacing practice only. Not a copy of any official exam interface."}
+              {isLinearEngine
+                ? linearDelivery === "exam"
+                  ? "Exam delivery: submit each answer to lock it in. Rationales and correct keys stay hidden until you finish the whole test."
+                  : "Practice delivery: submit each answer to see whether you were right, the rationale, and the correct option(s) before you continue."
+                : catMode
+                  ? examSimulation
+                    ? aanpNpExamSim
+                      ? "AANP-style NP band (75–150) with adaptive stop rules on this server. The live AANP exam is not CAT. Rationales unlock after completion."
+                      : "NCLEX-style length band (75–145) and stop rules on this server. Not the live NCLEX. Rationales unlock after completion."
+                    : "Each response updates difficulty. Explanations and coaching appear after the session."
+                  : "Pacing practice only. Not a copy of any official exam interface."}
             </p>
 
             <div className="overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900/50">
@@ -872,24 +948,20 @@ export function PracticeTestRunnerClient({
                     {optsCanonical.map((canonical, i) => {
                       const label = optsDisplay[i] ?? canonical;
                       const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
+                      const locked = isLinearEngine && currentCommitted;
                       return (
                         <li key={canonical}>
-                          <label
-                            className={`flex min-h-[2.75rem] cursor-pointer items-start gap-3 rounded-lg border px-4 py-3 text-sm leading-snug transition ${
-                              selected
-                                ? "border-primary/45 bg-primary/[0.05] ring-1 ring-primary/25 dark:bg-primary/[0.07]"
-                                : "border-slate-200 bg-white hover:border-slate-300 dark:border-slate-700 dark:bg-slate-900/30 dark:hover:border-slate-600"
-                            }`}
-                          >
+                          <label className={linearPracticeSataClasses(canonical, selected)}>
                             <input
                               type="checkbox"
+                              disabled={locked}
                               checked={selected}
                               onChange={(e) => {
                                 const prev = Array.isArray(raw) ? [...raw] : [];
                                 const next = e.target.checked ? [...prev, canonical] : prev.filter((x) => x !== canonical);
                                 setAnswerForCurrent(next);
                               }}
-                              className="mt-0.5 size-4 shrink-0 rounded border-slate-300 text-primary focus:ring-primary/30"
+                              className="mt-0.5 size-4 shrink-0 rounded border-slate-300 text-primary focus:ring-primary/30 disabled:opacity-50"
                             />
                             <span className="text-slate-800 dark:text-slate-100">{label}</span>
                           </label>
@@ -901,16 +973,14 @@ export function PracticeTestRunnerClient({
                   <ul className="space-y-2">
                     {optsCanonical.map((canonical, i) => {
                       const label = optsDisplay[i] ?? canonical;
+                      const locked = isLinearEngine && currentCommitted;
                       return (
                         <li key={canonical}>
                           <button
                             type="button"
+                            disabled={locked}
                             onClick={() => setAnswerForCurrent(canonical)}
-                            className={`min-h-[2.75rem] w-full rounded-lg border px-4 py-3 text-left text-sm leading-snug transition ${
-                              raw === canonical
-                                ? "border-primary/50 bg-primary/[0.05] font-medium text-slate-900 ring-1 ring-primary/30 dark:text-slate-50"
-                                : "border border-slate-200 bg-white text-slate-800 hover:border-slate-300 dark:border-slate-700 dark:bg-slate-900/30 dark:text-slate-100 dark:hover:border-slate-600"
-                            }`}
+                            className={linearPracticeMcqClasses(canonical)}
                           >
                             {label}
                           </button>
@@ -921,6 +991,30 @@ export function PracticeTestRunnerClient({
                 )}
               </div>
             </div>
+
+            {isLinearEngine && linearDelivery === "practice" && currentCommitted && linearFeedback ? (
+              <div
+                className={`rounded-xl border px-4 py-3 text-sm ${
+                  linearFeedback.isCorrect
+                    ? "border-emerald-200/80 bg-emerald-50/50 dark:border-emerald-900/50 dark:bg-emerald-950/25"
+                    : "border-red-200/80 bg-red-50/40 dark:border-red-900/45 dark:bg-red-950/20"
+                }`}
+              >
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300">
+                  {linearFeedback.isCorrect ? "Correct" : "Incorrect"}
+                </p>
+                {linearFeedback.rationale ? (
+                  <p className="mt-2 leading-relaxed text-slate-800 dark:text-slate-100">{linearFeedback.rationale}</p>
+                ) : (
+                  <p className="mt-2 text-slate-600 dark:text-slate-400">No rationale on file for this item.</p>
+                )}
+              </div>
+            ) : null}
+            {isLinearEngine && linearDelivery === "exam" && currentCommitted ? (
+              <p className="rounded-lg border border-slate-200/80 bg-slate-50/80 px-4 py-3 text-sm text-slate-600 dark:border-slate-700 dark:bg-slate-900/40 dark:text-slate-300">
+                Answer submitted and locked. Use <span className="font-medium text-foreground">Next</span> to continue.
+              </p>
+            ) : null}
 
             <div className="flex flex-wrap items-center gap-2 border-t border-slate-200/70 pt-4 dark:border-slate-800">
               <button
@@ -940,7 +1034,7 @@ export function PracticeTestRunnerClient({
             <div className="flex flex-wrap gap-2 border-t border-slate-200/70 pt-4 dark:border-slate-800">
               <button
                 type="button"
-                disabled={idx === 0 || catMode}
+                disabled={idx === 0 || catMode || isLinearEngine}
                 className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-medium text-slate-800 hover:bg-slate-50 disabled:opacity-40 dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-900"
                 onClick={() => void goPrev()}
               >
@@ -975,23 +1069,38 @@ export function PracticeTestRunnerClient({
                     </button>
                   </>
                 )
-              ) : idx < total - 1 ? (
-                <button
-                  type="button"
-                  className="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm"
-                  onClick={() => void goNext()}
-                >
-                  Next
-                </button>
               ) : (
-                <button
-                  type="button"
-                  disabled={saving}
-                  className="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm"
-                  onClick={() => void submitTest()}
-                >
-                  {saving ? "Submitting…" : "Submit test"}
-                </button>
+                <>
+                  {isLinearEngine && !currentCommitted ? (
+                    <button
+                      type="button"
+                      disabled={saving || !hasMeaningfulAnswer(current.id)}
+                      className="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm disabled:opacity-40"
+                      onClick={() => void submitLinearCommit()}
+                    >
+                      {saving ? "Submitting…" : "Submit answer"}
+                    </button>
+                  ) : null}
+                  {idx < total - 1 ? (
+                    <button
+                      type="button"
+                      disabled={isLinearEngine && !currentCommitted}
+                      className="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm disabled:opacity-40"
+                      onClick={() => void goNext()}
+                    >
+                      Next
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      disabled={saving || (isLinearEngine && !currentCommitted)}
+                      className="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm disabled:opacity-40"
+                      onClick={() => void submitTest()}
+                    >
+                      {saving ? "Submitting…" : "Submit test"}
+                    </button>
+                  )}
+                </>
               )}
               <button
                 type="button"

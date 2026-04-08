@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { auth } from "@/lib/auth";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
-import { LearnerProfileAccountActions } from "@/components/student/learner-profile-account-actions";
+import { LearnerSecurityHub } from "@/components/student/learner-security-hub";
+import { JWT_SESSION_MAX_AGE_SEC } from "@/lib/auth/auth-session-constants";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { loadAccountHubBundle } from "@/lib/learner/load-account-hub-snapshot";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
@@ -32,6 +33,7 @@ export default async function AccountSecurityPage() {
 
   const bundle = await loadAccountHubBundle(userId);
   const hasPassword = Boolean(bundle?.userRow?.passwordHash);
+  const sessionMaxDays = Math.max(1, Math.round(JWT_SESSION_MAX_AGE_SEC / 86400));
 
   return (
     <main className="space-y-6">
@@ -40,9 +42,7 @@ export default async function AccountSecurityPage() {
         <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.security.title")}</h1>
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.account.security.intro")}</p>
       </div>
-      <section className="nn-card p-6">
-        <LearnerProfileAccountActions hasPassword={hasPassword} showBillingPortal={false} variant="passwordOnly" />
-      </section>
+      <LearnerSecurityHub hasPassword={hasPassword} sessionMaxDays={sessionMaxDays} />
     </main>
   );
 }

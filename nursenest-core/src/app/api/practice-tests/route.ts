@@ -15,6 +15,8 @@ import { createCatPracticeTestPayload } from "@/lib/practice-tests/cat-session";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
 import { configFromInput, pickPracticeQuestionIds } from "@/lib/practice-tests/pick-question-ids";
 import type { PracticeTestConfigJson } from "@/lib/practice-tests/types";
+import { captureLearnerProductEvent } from "@/lib/observability/learner-product-analytics";
+import { PH } from "@/lib/observability/posthog-conversion-events";
 
 const createSchema = z
   .object({
@@ -204,6 +206,13 @@ export async function POST(req: Request) {
       },
     });
 
+    captureLearnerProductEvent(gate.userId, gate.entitlement, PH.learnerCatExamStarted, {
+      pathway_id: d.pathwayId?.trim() || undefined,
+      exam_simulation: d.catPresentationMode === "exam_simulation",
+      question_cap: d.questionCount,
+      timed: d.timedMode,
+    });
+
     return NextResponse.json(
       { id: row.id, questionCount: cat.questionIds.length, config: cat.config, adaptive: true },
       { status: 201 },
@@ -255,6 +264,13 @@ export async function POST(req: Request) {
           }
         : {}),
     },
+  });
+
+  captureLearnerProductEvent(gate.userId, gate.entitlement, PH.learnerLinearPracticeTestStarted, {
+    pathway_id: d.pathwayId?.trim() || undefined,
+    selection_mode: d.selectionMode,
+    question_count: d.questionCount,
+    timed: d.timedMode,
   });
 
   return NextResponse.json({ id: row.id, questionCount: picked.ids.length, config }, { status: 201 });

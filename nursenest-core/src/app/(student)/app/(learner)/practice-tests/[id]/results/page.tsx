@@ -2,10 +2,14 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { PracticeTestStatus } from "@prisma/client";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
-import { PracticeTestResultsStatic } from "@/components/student/practice-test-results-static";
+import {
+  PracticeTestResultsStatic,
+  type PracticeTestIncorrectReviewItem,
+} from "@/components/student/practice-test-results-static";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
@@ -13,6 +17,11 @@ import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/prac
 import type { Metadata } from "next";
 
 type Props = { params: Promise<{ id: string }> };
+
+function stemPreview(stem: string, max = 160): string {
+  const t = stem.replace(/\s+/g, " ").trim();
+  return t.length <= max ? t : `${t.slice(0, max).trim()}…`;
+}
 
 const RESULTS_CRUMBS = [
   { name: "Home", href: "/" as const },
@@ -117,6 +126,31 @@ export default async function PracticeTestResultsPage({ params }: Props) {
       ? row.completedAt.toLocaleString(localeTag, { dateStyle: "medium", timeStyle: "short" })
       : "—";
 
+  let incorrectReviewItems: PracticeTestIncorrectReviewItem[] = [];
+  const missedIds = results.incorrectQuestionIds;
+  if (missedIds?.length && isDatabaseUrlConfigured()) {
+    try {
+      const rows = await prisma.examQuestion.findMany({
+        where: { id: { in: missedIds } },
+        select: { id: true, stem: true, topic: true },
+      });
+      const byId = new Map(rows.map((r) => [r.id, r]));
+      incorrectReviewItems = missedIds
+        .map((qid) => {
+          const r = byId.get(qid);
+          if (!r) return null;
+          return {
+            id: r.id,
+            stemPreview: stemPreview(r.stem),
+            topic: r.topic,
+          };
+        })
+        .filter((x): x is PracticeTestIncorrectReviewItem => x != null);
+    } catch {
+      incorrectReviewItems = [];
+    }
+  }
+
   return (
     <main>
       <div className="mb-4">
@@ -139,6 +173,7 @@ export default async function PracticeTestResultsPage({ params }: Props) {
           results={results}
           config={cfg}
           completedAtLabel={completedAtLabel}
+          incorrectReviewItems={incorrectReviewItems}
         />
       </div>
     </main>
