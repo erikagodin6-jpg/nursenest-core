@@ -18,7 +18,11 @@ import {
   defaultPathwayLessonContentLocaleForExamHubRoute,
   normalizePathwayLessonLocale,
 } from "@/lib/lessons/pathway-lesson-locale";
-import { getPathwayLesson, getRelatedPathwayLessons } from "@/lib/lessons/pathway-lesson-loader";
+import {
+  getPathwayLesson,
+  getRelatedPathwayLessons,
+  RELATED_PATHWAY_LESSONS_LIMIT,
+} from "@/lib/lessons/pathway-lesson-loader";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { prisma } from "@/lib/db";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
@@ -33,9 +37,11 @@ import { buildQuickReviewBullets } from "@/lib/lessons/pathway-lesson-quick-revi
 import { matchConceptImage } from "@/lib/education-images/match-concept-image";
 import { PathwayLessonFigures } from "@/components/lessons/pathway-lesson-figures";
 import {
+  mergeRelatedLessonDisplayList,
   pathwayLessonHasRenderableHubSlug,
   pathwayLessonMarketingDetailHref,
 } from "@/lib/lessons/pathway-lesson-types";
+import { LessonStructuralQualityNotice } from "@/components/lessons/lesson-structural-quality-notice";
 
 export const dynamic = "force-dynamic";
 
@@ -70,6 +76,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   ]
     .filter(Boolean)
     .join(", ");
+  const strictPublic = process.env.PATHWAY_LESSON_STRICT_PUBLIC_QUALITY === "1";
+  const incomplete =
+    Boolean(lesson.structuralQuality) && lesson.structuralQuality && !lesson.structuralQuality.publicComplete;
+  const robots =
+    strictPublic && incomplete ? ({ index: false, follow: true } as const) : ({ index: true, follow: true } as const);
   return {
     title: lesson.seoTitle,
     description: lesson.seoDescription,
@@ -87,7 +98,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: lesson.seoTitle,
       description: lesson.seoDescription.length > 160 ? `${lesson.seoDescription.slice(0, 157)}…` : lesson.seoDescription,
     },
-    robots: { index: true, follow: true },
+    robots,
   };
 }
 
@@ -126,7 +137,8 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
   const hubBase = `/${countrySlug}/${roleTrack}/${examCode}`;
   const base = `${hubBase}/lessons`;
   const relatedRaw = await getRelatedPathwayLessons(pathway.id, lesson.topicSlug, lesson.slug, undefined, lessonContentLocale);
-  const related = relatedRaw.filter(pathwayLessonHasRenderableHubSlug);
+  const relatedTopicRows = relatedRaw.filter(pathwayLessonHasRenderableHubSlug);
+  const relatedDisplay = mergeRelatedLessonDisplayList(lesson.relatedLessonRefs, relatedTopicRows, RELATED_PATHWAY_LESSONS_LIMIT);
   const { crumbs, schemaItems } = pathwayLessonDetailBreadcrumbs(pathway, lesson.slug, lesson.title);
   const lessonQuality = classifyPathwayLesson(lesson);
   const matchedLessonImage = matchConceptImage({
@@ -158,6 +170,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
       </p>
       <div className="mt-4 space-y-3">
         <LessonQualityNotice tier={lessonQuality.tier} wordCount={lessonQuality.wordCount} />
+        <LessonStructuralQualityNotice gate={lesson.structuralQuality} />
         <PathwayLessonQuickReview bullets={buildQuickReviewBullets(lesson)} />
       </div>
       {showLocaleFallbackNotice ? (

@@ -14,6 +14,7 @@ import {
   lessonUsesPremiumStructure,
   orderPremiumSections,
   PREMIUM_SECTION_KINDS,
+  validatePathwayLessonPremium,
 } from "@/lib/lessons/pathway-lesson-premium";
 import {
   pathwayLessonHasRenderableHubSlug,

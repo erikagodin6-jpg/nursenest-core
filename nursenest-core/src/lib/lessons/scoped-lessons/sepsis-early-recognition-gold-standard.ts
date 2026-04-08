@@ -2,7 +2,17 @@
  * Gold-standard sepsis / early recognition — nursing assessment + escalation (not MD diagnosis).
  * Remediation wave 1: infection_sepsis system + physiological adaptation.
  */
-import type { PathwayLessonQuizItem, PathwayLessonSection } from "@/lib/lessons/pathway-lesson-types";
+import type {
+  PathwayLessonOmittedPremiumSection,
+  PathwayLessonQuizItem,
+  PathwayLessonRelatedRef,
+  PathwayLessonSection,
+} from "@/lib/lessons/pathway-lesson-types";
+import {
+  PATHWAY_EXAM_LABEL,
+  pathwayIdToTierGeo,
+  synthesizeGoldPremiumSections,
+} from "@/lib/lessons/scoped-lessons/gold-premium-synthesis";
 import { npExamLabel, npPrimaryCareTitleSuffix } from "@/lib/lessons/scoped-lessons/np-pathway-display";
 
 export const SEPSIS_GOLD_SLUG = "sepsis-early-recognition-gold" as const;
@@ -27,6 +37,15 @@ Pair **source cues** (lung, urinary, skin/line, abdominal, postpartum) with **pe
 
 **Escalation**  
 **Notify the RN/provider**, obtain **ordered labs/cultures**, support **oxygenation**, **IV access as ordered**, **sepsis bundles/protocols** when the stem includes them, and **monitor frequency** appropriate to instability.`;
+
+const SEPSIS_LABS_DIAGNOSTICS = `**Labs and infection workup**  
+Stems often pair sepsis with **lactate** (tissue hypoperfusion signal when shown), **CBC** shifts, **renal/hepatic injury markers**, and **coagulation** abnormalities in severe presentations. Nursing items test whether you **obtain labs when ordered**, **repeat per protocol**, **label cultures correctly**, and **report critical values** without delaying supportive care.
+
+**Cultures and timing**  
+**Blood cultures** and **site-specific cultures** (urine, wound, respiratory) are time-sensitive when the stem expects a sepsis workup—your role is **timely collection**, **proper technique**, and **documentation** that supports antibiotic stewardship pathways described in the vignette.
+
+**Imaging and monitoring**  
+Some items reference **imaging** to find a source (chest imaging, abdominal studies) while you **maintain perfusion and oxygenation**. Choose answers that **stabilize first** when the client is deteriorating, rather than **transporting an unstable client** for elective tests without support.`;
 
 function pack(
   variant: SepVariant,
@@ -517,6 +536,8 @@ type LessonInputShape = {
   sections: PathwayLessonSection[];
   preTest: PathwayLessonQuizItem[];
   postTest: PathwayLessonQuizItem[];
+  premiumOmittedSections?: PathwayLessonOmittedPremiumSection[];
+  relatedLessonRefs?: PathwayLessonRelatedRef[];
 };
 
 function npTitles(pathwayId: string, v: (typeof VARIANTS)["us_np"]) {
@@ -554,6 +575,30 @@ export function getSepsisGoldLessonInput(pathwayId: string): LessonInputShape | 
   if (!key) return null;
   let v = VARIANTS[key];
   if (key === "us_np") v = npTitles(pathwayId, v);
+  const geo = pathwayIdToTierGeo(pathwayId);
+  if (!geo) return null;
+  const syn = synthesizeGoldPremiumSections({
+    sharedCore: SHARED_CORE_BODY,
+    clinical_meaning: v.clinical_meaning,
+    exam_relevance: v.exam_relevance,
+    clinical_scenario: v.clinical_scenario,
+    takeaways: v.takeaways,
+    tierGeo: geo,
+    examLabel: PATHWAY_EXAM_LABEL[pathwayId] ?? "your nursing licensure exam",
+    labsDiagnostics: SEPSIS_LABS_DIAGNOSTICS,
+    relatedSlugs: [
+      "shock-emergencies-gold",
+      "fluids-electrolytes-emergencies-gold",
+      "acute-coronary-syndrome-gold",
+      "clinical-judgment-prioritization-gold",
+    ],
+    relatedTitlesBySlug: {
+      "shock-emergencies-gold": "Shock emergencies",
+      "fluids-electrolytes-emergencies-gold": "Fluids & electrolyte emergencies",
+      "acute-coronary-syndrome-gold": "Acute coronary syndrome",
+      "clinical-judgment-prioritization-gold": "Clinical judgment & prioritization",
+    },
+  });
   return {
     slug: SEPSIS_GOLD_SLUG,
     title: v.title,
@@ -563,13 +608,9 @@ export function getSepsisGoldLessonInput(pathwayId: string): LessonInputShape | 
     previewSectionCount: 1,
     seoTitle: v.seoTitle,
     seoDescription: v.seoDescription,
-    sections: [
-      { id: "clinical_meaning", heading: "What this means clinically", kind: "clinical_meaning", body: v.clinical_meaning },
-      { id: "exam_relevance", heading: "Why this appears on your exam", kind: "exam_relevance", body: v.exam_relevance },
-      { id: "core_concept", heading: "Core concept — infection meets systemic compromise", kind: "core_concept", body: SHARED_CORE_BODY },
-      { id: "clinical_scenario", heading: "Clinical scenario", kind: "clinical_scenario", body: v.clinical_scenario },
-      { id: "takeaways", heading: "Key takeaways", kind: "takeaways", body: v.takeaways },
-    ],
+    sections: syn.sections,
+    premiumOmittedSections: syn.premiumOmittedSections,
+    relatedLessonRefs: syn.relatedLessonRefs,
     preTest: v.quizzes.preTest,
     postTest: v.quizzes.postTest,
   };

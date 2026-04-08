@@ -2,7 +2,17 @@
  * High-alert medication safety — insulin, anticoagulants, opioids (nursing judgment, not prescribing).
  * Remediation wave 1: pharmacological_therapies breadth + medication_bundle alignment.
  */
-import type { PathwayLessonQuizItem, PathwayLessonSection } from "@/lib/lessons/pathway-lesson-types";
+import type {
+  PathwayLessonOmittedPremiumSection,
+  PathwayLessonQuizItem,
+  PathwayLessonRelatedRef,
+  PathwayLessonSection,
+} from "@/lib/lessons/pathway-lesson-types";
+import {
+  PATHWAY_EXAM_LABEL,
+  pathwayIdToTierGeo,
+  synthesizeGoldPremiumSections,
+} from "@/lib/lessons/scoped-lessons/gold-premium-synthesis";
 import { npExamLabel, npPrimaryCareTitleSuffix } from "@/lib/lessons/scoped-lessons/np-pathway-display";
 
 export const HIGH_ALERT_MEDS_GOLD_SLUG = "high-alert-medications-safety-gold" as const;

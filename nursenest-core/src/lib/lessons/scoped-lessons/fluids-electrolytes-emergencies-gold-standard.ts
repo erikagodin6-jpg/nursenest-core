@@ -2,7 +2,17 @@
  * Fluids & electrolyte emergencies — recognition, monitoring, escalation (nursing exam depth).
  * Remediation wave 2: fluids_electrolytes system + physiological adaptation.
  */
-import type { PathwayLessonQuizItem, PathwayLessonSection } from "@/lib/lessons/pathway-lesson-types";
+import type {
+  PathwayLessonOmittedPremiumSection,
+  PathwayLessonQuizItem,
+  PathwayLessonRelatedRef,
+  PathwayLessonSection,
+} from "@/lib/lessons/pathway-lesson-types";
+import {
+  PATHWAY_EXAM_LABEL,
+  pathwayIdToTierGeo,
+  synthesizeGoldPremiumSections,
+} from "@/lib/lessons/scoped-lessons/gold-premium-synthesis";
 import { npExamLabel, npPrimaryCareTitleSuffix } from "@/lib/lessons/scoped-lessons/np-pathway-display";
 
 export const FLUIDS_ELECTROLYTES_GOLD_SLUG = "fluids-electrolytes-emergencies-gold" as const;
