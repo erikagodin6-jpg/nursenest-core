@@ -9,7 +9,7 @@ export const MARKETING_HOME_FAQ_JSONLD: FaqJsonLdItem[] = [
   },
   {
     question: "Is this for the US and Canada?",
-    answer: "Yes. Toggle your country and labels plus pathways update for your region.",
+    answer: "Yes. When you toggle your country, labels and pathways update for your region.",
   },
   {
     question: "Do I need a subscription?",
@@ -18,7 +18,7 @@ export const MARKETING_HOME_FAQ_JSONLD: FaqJsonLdItem[] = [
   {
     question: "What is included?",
     answer:
-      "Everything stays tied to the exam card you pick: scope, totals, and depth follow that pathway. The homepage shows a live question count; filters keep your first screen aligned with the license you are pursuing.",
+      "Your pathway card sets scope and depth. The homepage shows a live question count; filters keep the bank aligned with the license you are pursuing.",
   },
   {
     question: "Is this like UWorld?",

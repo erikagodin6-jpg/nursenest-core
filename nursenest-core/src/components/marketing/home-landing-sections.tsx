@@ -19,6 +19,10 @@ function formatQCount(n: number, locale: string): string {
 
 const SECTION_Y = "py-9 md:py-12";
 
+/**
+ * Lower homepage stack: why (differentiation), trust (stats + access), FAQ (objections), final CTA.
+ * No product preview grid: carousel + social proof already cover surface area and “what people use.”
+ */
 export function HomeLandingSections({ questionCount }: Props) {
   const { t, locale } = useMarketingI18n();
   const loc = (path: string) => withMarketingLocale(locale, path);
@@ -48,12 +52,12 @@ export function HomeLandingSections({ questionCount }: Props) {
       <section className={`border-t border-[var(--border-subtle)] bg-[var(--theme-page-bg)] ${SECTION_Y}`} data-testid="section-trust">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <h2 className="nn-marketing-h2 mb-3">{t("home.landing.trust.title")}</h2>
-          <ul className="max-w-2xl space-y-2">
-            <li className="nn-marketing-body-sm text-[var(--theme-body-text)]">
+          <div className="max-w-2xl space-y-3 nn-marketing-body-sm text-[var(--theme-body-text)]">
+            <p>
               {qFormatted ? t("home.landing.trust.questionsLine", { count: qFormatted }) : t("home.landing.trust.questionsFallback")}
-            </li>
-            <li className="nn-marketing-body-sm text-[var(--theme-body-text)]">{t("home.landing.trust.noCardAndGuarantee")}</li>
-          </ul>
+            </p>
+            <p>{t("home.landing.trust.noCardAndGuarantee")}</p>
+          </div>
         </div>
       </section>
 

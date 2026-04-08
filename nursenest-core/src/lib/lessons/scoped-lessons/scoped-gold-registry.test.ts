@@ -18,7 +18,11 @@ import {
   getRenalDialysisAcuteComplicationsGoldLessonInput,
 } from "./renal-dialysis-acute-complications-gold-standard";
 import { SEPSIS_GOLD_SLUG, getSepsisGoldLessonInput } from "./sepsis-early-recognition-gold-standard";
-import { isPremiumSectionKind, validatePathwayLessonPremium } from "@/lib/lessons/pathway-lesson-premium";
+import {
+  isPremiumSectionKind,
+  PREMIUM_SECTION_KINDS,
+  validatePathwayLessonPremium,
+} from "@/lib/lessons/pathway-lesson-premium";
 import { prependScopedGoldCatalogLessons, SCOPED_GOLD_PROVIDERS } from "./scoped-gold-registry";
 import { SHOCK_GOLD_SLUG, getShockGoldLessonInput } from "./shock-gold-standard";
 import { STROKE_ICP_GOLD_SLUG, getStrokeIcpGoldLessonInput } from "./stroke-increased-icp-gold-standard";
@@ -40,6 +44,8 @@ const LEGACY_KINDS = new Set([
   "clinical_scenario",
   "takeaways",
 ]);
+
+const PREMIUM_KIND_SET = new Set(PREMIUM_SECTION_KINDS);
 
 describe("scoped gold registry", () => {
   it("registry lists injectable slugs in remediation order (waves 1–4 + COPD)", () => {
@@ -70,12 +76,13 @@ describe("scoped gold registry", () => {
 });
 
 function assertLessonQuality(lesson: NonNullable<ReturnType<typeof getClinicalJudgmentGoldLessonInput>>) {
-  const isPremium = lesson.sections.some((s) => PREMIUM_KIND_SET.has(s.kind as (typeof PREMIUM_SECTION_KINDS)[number]));
+  const isPremium = lesson.sections.some((s) => isPremiumSectionKind(s.kind));
   if (isPremium) {
     assert.ok(lesson.sections.length >= 10, "premium lessons should include ≥10 rendered sections (omitted labs/country excluded)");
     for (const s of lesson.sections) {
-      assert.ok(PREMIUM_KIND_SET.has(s.kind as (typeof PREMIUM_SECTION_KINDS)[number]), `unexpected kind ${s.kind}`);
-      assert.ok(s.body.length > 40);
+      assert.ok(isPremiumSectionKind(s.kind), `unexpected kind ${s.kind}`);
+      const minBody = s.kind === "related_next_steps" ? 40 : 60;
+      assert.ok(s.body.length >= minBody, `section ${s.kind} below minimum body length`);
     }
     const v = validatePathwayLessonPremium({
       slug: lesson.slug,

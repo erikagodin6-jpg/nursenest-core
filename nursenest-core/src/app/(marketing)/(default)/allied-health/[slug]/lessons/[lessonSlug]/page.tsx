@@ -78,9 +78,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const path = `/allied-health/${prof.professionKey}/lessons/${lesson.slug}`;
   const canonical = absoluteUrl(path);
   const strictPublic = process.env.PATHWAY_LESSON_STRICT_PUBLIC_QUALITY === "1";
-  const incomplete = Boolean(lesson.structuralQuality && !lesson.structuralQuality.publicComplete);
+  const gate = lesson.structuralQuality;
+  const incomplete = Boolean(gate && !gate.publicComplete);
   const robots =
-    strictPublic && incomplete ? ({ index: false, follow: true } as const) : ({ index: true, follow: true } as const);
+    incomplete && (strictPublic || gate?.structureMode === "premium")
+      ? ({ index: false, follow: true } as const)
+      : ({ index: true, follow: true } as const);
   return {
     title: lesson.seoTitle,
     description: lesson.seoDescription,

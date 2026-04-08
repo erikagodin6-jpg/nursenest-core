@@ -91,19 +91,19 @@ export function SiteFooter() {
             <h3 className="mb-3 break-words text-sm font-semibold text-[var(--theme-heading-text)]">{t("footer.examPrep")}</h3>
             <ul className="space-y-2 text-sm text-[var(--theme-muted-text)]">
               <li>
-                <FLink href="/exam-prep">{t("components.footer.nursingExamPrepHub")}</FLink>
+                <FLink href="/exam-prep">{t("footer.linkNursingExamPrepHub")}</FLink>
               </li>
               <li>
-                <FLink href="/nclex-rn">{t("components.footer.nclexrnPrep")}</FLink>
+                <FLink href="/nclex-rn">{t("footer.linkNclexRnPrep")}</FLink>
               </li>
               <li>
                 <FLink href={pnPrepHref}>
-                  {region === "US" ? t("components.footer.pnExamPrepUs") : t("components.footer.pnExamPrepCa")}
+                  {region === "US" ? t("footer.linkPnExamPrepUs") : t("footer.linkPnExamPrepCa")}
                 </FLink>
               </li>
               <li>
                 <FLink href={npPrepHref}>
-                  {region === "US" ? t("components.footer.npExamPrepUs") : t("components.footer.npExamPrepCa")}
+                  {region === "US" ? t("footer.linkNpExamPrepUs") : t("footer.linkNpExamPrepCa")}
                 </FLink>
               </li>
               <li>
@@ -188,20 +188,20 @@ export function SiteFooter() {
                 <FLink href="/allied-health">{t("footer.alliedHealthExamPrep")}</FLink>
               </li>
               <li>
-                <FLink href="/allied-health/rrt-exam-prep">{t("components.footer.respiratoryTherapist")}</FLink>
+                <FLink href="/allied-health/rrt-exam-prep">{t("footer.linkAlliedRespiratoryTherapy")}</FLink>
               </li>
               <li>
-                <FLink href="/allied-health/paramedic-exam-prep">{t("components.footer.paramedic")}</FLink>
+                <FLink href="/allied-health/paramedic-exam-prep">{t("footer.linkAlliedParamedic")}</FLink>
               </li>
             </ul>
             <h3 className="mb-3 mt-6 break-words text-sm font-semibold text-[var(--theme-heading-text)]">{t("footer.educationEcosystem")}</h3>
             <ul className="space-y-2 text-sm text-[var(--theme-muted-text)]">
               <li>
-                <FLink href="/">{t("components.footer.nursenestNursingAndHealthcareExam")}</FLink>
+                <FLink href="/">{t("footer.linkEcosystemNursenest")}</FLink>
               </li>
               <li>
                 <a href="https://applynest.ca" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-primary">
-                  {t("components.footer.applynestHealthcareProgramApplicationsAnd")}
+                  {t("footer.linkEcosystemApplynest")}
                 </a>
               </li>
             </ul>

@@ -551,7 +551,7 @@ function npTitles(pathwayId: string, v: (typeof VARIANTS)["us_np"]) {
     ...v,
     title: `High-alert meds: prescribing & monitoring (${suf})`,
     seoTitle: `High-alert meds | ${lab} US | NurseNest`,
-    seoDescription: `NP safety for ${lab}: opioids, anticoagulation, insulin titration, and monitoring.`,
+    seoDescription: `NP high-alert medication safety for ${lab}: opioids, anticoagulation, insulin titration, monitoring priorities, and escalation cues.`,
   };
 }
 

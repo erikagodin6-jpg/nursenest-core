@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, BookOpen, MapPin } from "lucide-react";
+import { ArrowRight, MapPin } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
@@ -36,8 +36,8 @@ type HomeStatsPayload = {
 };
 
 /**
- * Conversion-focused homepage: hero (region + pathways + CTAs), platform screenshot carousel, social proof,
- * then why / product preview / trust / FAQ / final CTA (`HomeLandingSections`). Copy uses `home.landing.*` plus `nav.*` / `home.region.*` where noted.
+ * Conversion-focused homepage: hero (region, pathways, CTAs, trust line), platform carousel,
+ * one social-proof block (testimonials + study chips), then why / trust / FAQ / final CTA (`HomeLandingSections`).
  */
 export default function HomeRestoredClient() {
   const { t, locale } = useMarketingI18n();
@@ -160,27 +160,34 @@ export default function HomeRestoredClient() {
                 </ul>
               </div>
 
-              <div className="nn-hero-cta-row flex flex-col gap-3 border-t border-[var(--border-subtle)] pt-5 sm:flex-row sm:flex-wrap">
-                <MarketingTrackedLink
-                  href={withMarketingLocale(locale, HUB.signup)}
-                  event={PH.marketingHomeHeroPrimaryCta}
-                  eventProps={{ region, destination: "signup" }}
-                  className={MARKETING_PRIMARY_CTA_CLASS}
-                  data-testid="button-hero-start-free"
+              <div className="nn-hero-cta-row space-y-3 border-t border-[var(--border-subtle)] pt-5">
+                <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                  <MarketingTrackedLink
+                    href={withMarketingLocale(locale, HUB.signup)}
+                    event={PH.marketingHomeHeroPrimaryCta}
+                    eventProps={{ region, destination: "signup" }}
+                    className={MARKETING_PRIMARY_CTA_CLASS}
+                    data-testid="button-hero-start-free"
+                  >
+                    {t("home.landing.ctaPrimary")}
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </MarketingTrackedLink>
+                  <MarketingTrackedLink
+                    href="#home-platform-preview"
+                    event={PH.marketingHomeHeroSecondaryCta}
+                    eventProps={{ region, destination: "platform_preview" }}
+                    className={MARKETING_SECONDARY_CTA_CLASS}
+                    data-testid="button-hero-see-how-it-works"
+                  >
+                    {t("home.landing.ctaSecondary")}
+                  </MarketingTrackedLink>
+                </div>
+                <p
+                  className="nn-marketing-caption max-w-2xl text-pretty text-[var(--theme-muted-text)]"
+                  data-testid="text-hero-trust-micro"
                 >
-                  {t("home.landing.ctaPrimary")}
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </MarketingTrackedLink>
-                <MarketingTrackedLink
-                  href={withMarketingLocale(locale, HUB.questionBank)}
-                  event={PH.marketingHomeHeroSecondaryCta}
-                  eventProps={{ region, destination: "question_bank" }}
-                  className={MARKETING_SECONDARY_CTA_CLASS}
-                  data-testid="button-hero-browse-questions"
-                >
-                  <BookOpen className="mr-2 h-4 w-4 text-[var(--theme-muted-text)]" />
-                  {t("home.landing.ctaSecondary")}
-                </MarketingTrackedLink>
+                  {t("home.landing.heroTrustLine")}
+                </p>
               </div>
             </div>
           </div>

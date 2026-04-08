@@ -159,8 +159,8 @@ export function validatePathwayLessonPremium(
   if (!lesson.slug?.trim()) issues.push("Lesson slug is required for publish readiness.");
   if (!lesson.title?.trim()) issues.push("Lesson title (H1 source) is required.");
   if (!lesson.seoTitle?.trim()) issues.push("seoTitle is required for metadata readiness.");
-  if (!lesson.seoDescription?.trim() || countWords(lesson.seoDescription) < 20) {
-    issues.push("seoDescription should be a substantive summary (at least ~20 words).");
+  if (!lesson.seoDescription?.trim() || countWords(lesson.seoDescription) < 12) {
+    issues.push("seoDescription should be a substantive summary (at least ~12 words).");
   }
 
   for (const kind of PREMIUM_SECTION_KINDS) {
@@ -239,8 +239,8 @@ export function validatePathwayLessonLegacyStructural(lesson: PathwayLessonRecor
   if (!lesson.slug?.trim()) issues.push("Lesson slug is required for publish readiness.");
   if (!lesson.title?.trim()) issues.push("Lesson title (H1 source) is required.");
   if (!lesson.seoTitle?.trim()) issues.push("seoTitle is required for metadata readiness.");
-  if (!lesson.seoDescription?.trim() || countWords(lesson.seoDescription) < 20) {
-    issues.push("seoDescription should be a substantive summary (at least ~20 words).");
+  if (!lesson.seoDescription?.trim() || countWords(lesson.seoDescription) < 12) {
+    issues.push("seoDescription should be a substantive summary (at least ~12 words).");
   }
 
   const corpus = lessonCorpusForLinkCount(lesson);

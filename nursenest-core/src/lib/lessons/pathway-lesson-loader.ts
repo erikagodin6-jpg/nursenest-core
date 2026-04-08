@@ -417,9 +417,11 @@ function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLessonRec
     ...(postTest ? { postTest } : {}),
   };
 
+  const structuralQuality = evaluatePathwayLessonStructuralGate(withQuizzes);
   return {
     ...withQuizzes,
-    structuralQuality: evaluatePathwayLessonStructuralGate(withQuizzes),
+    structuralQuality,
+    ...(usePremium ? { premiumValidation: validatePathwayLessonPremium(withQuizzes) } : {}),
   };
 }
 

@@ -78,10 +78,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     .filter(Boolean)
     .join(", ");
   const strictPublic = process.env.PATHWAY_LESSON_STRICT_PUBLIC_QUALITY === "1";
-  const incomplete = Boolean(lesson.structuralQuality && !lesson.structuralQuality.publicComplete);
-  const premiumIncomplete = Boolean(lesson.premiumValidation && !lesson.premiumValidation.publishReady);
+  const gate = lesson.structuralQuality;
+  const incomplete = Boolean(gate && !gate.publicComplete);
   const robots =
-    premiumIncomplete || (strictPublic && incomplete)
+    incomplete && (strictPublic || gate?.structureMode === "premium")
       ? ({ index: false, follow: true } as const)
       : ({ index: true, follow: true } as const);
   return {
