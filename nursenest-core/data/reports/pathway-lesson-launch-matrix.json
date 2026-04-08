@@ -3,15 +3,18 @@
   "source": "src/content/pathway-lessons/catalog.json",
   "minimumLaunchLessons": 150,
   "stretchTargetLessons": 500,
-  "notes": "Counts are catalog rows per pathwayId. Canada NP (ca-np-cnple) is waitlist/upcoming; inventory is empty until national scope firms. US NP primary track is us-np-fnp; agpcnp/pmhnp hubs exist with 0 catalog lessons today.",
+  "notes": "catalogCount = rows in catalog.json only. effectiveCountAfterScopedGold = catalog slice merged with prependScopedGoldCatalogLessons (Launch Wave 1 added 14 scoped-gold slugs in code; registry total 26 injectables when pathway returns getFullLesson). Run: npm run audit:pathway-lessons. Canada NP (ca-np-cnple) remains waitlist; scoped providers return null → effective 0 until content exists.",
   "pathways": [
     {
       "id": "us-rn-nclex-rn",
       "label": "US RN — NCLEX-RN",
       "catalogCount": 122,
+      "effectiveCountAfterScopedGold": 148,
       "distinctTopicSlugs": 43,
       "gapTo150": 28,
+      "gapTo150Effective": 2,
       "meets150": false,
+      "meets150Effective": false,
       "pairedPathwayId": "ca-rn-nclex-rn",
       "sharedSlugCountWithPaired": 95,
       "scopeNotes": "US acute care language; NGN-style clinical judgment emphasis."
@@ -20,9 +23,12 @@
       "id": "ca-rn-nclex-rn",
       "label": "Canada RN — NCLEX-RN",
       "catalogCount": 123,
+      "effectiveCountAfterScopedGold": 149,
       "distinctTopicSlugs": 43,
       "gapTo150": 27,
+      "gapTo150Effective": 1,
       "meets150": false,
+      "meets150Effective": false,
       "pairedPathwayId": "us-rn-nclex-rn",
       "sharedSlugCountWithPaired": 95,
       "scopeNotes": "Canadian units, acute care language; do not mix US-only scope statements."

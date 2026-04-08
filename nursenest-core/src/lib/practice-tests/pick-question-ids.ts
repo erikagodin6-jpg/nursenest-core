@@ -7,14 +7,14 @@ import { subscriptionCoversPathwayBase } from "@/lib/exam-pathways/pathway-entit
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
 import { loadWeakTopicPracticePlan } from "@/lib/learner/topic-performance";
-import type { PracticeTestConfigJson, PracticeTestSelectionMode } from "@/lib/practice-tests/types";
+import type { LinearDeliveryMode, PracticeTestConfigJson, PracticeTestSelectionMode } from "@/lib/practice-tests/types";
 
 /** Linear pool selection — CAT uses {@link createCatPracticeTestPayload} instead. */
 export type LinearPoolSelectionMode = Exclude<PracticeTestSelectionMode, "cat">;
 
 const MAX_POOL = 4000;
 export const PRACTICE_TEST_MIN_Q = 5;
-export const PRACTICE_TEST_MAX_Q = 75;
+export const PRACTICE_TEST_MAX_Q = 100;
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -186,6 +186,7 @@ export function configFromInput(
   input: PickQuestionsInput,
   timedMode: boolean,
   timeLimitSec: number | null,
+  extras?: { linearDeliveryMode?: LinearDeliveryMode },
 ): PracticeTestConfigJson {
   return {
     questionCount: input.questionCount,
@@ -196,5 +197,6 @@ export function configFromInput(
     pathwayId: input.pathwayId,
     timedMode,
     timeLimitSec,
+    ...(extras?.linearDeliveryMode ? { linearDeliveryMode: extras.linearDeliveryMode } : {}),
   };
 }

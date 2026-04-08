@@ -14,6 +14,8 @@ import { advanceCatPracticeTest, finalizeCatPracticeTest } from "@/lib/practice-
  * or replayed answers; completion uses the full question id + answer set once.
  */
 import { recordTopicOutcomesFromPracticeTest } from "@/lib/learner/topic-performance";
+import { buildLinearCommitFeedback } from "@/lib/practice-tests/build-linear-commit-feedback";
+import { getLinearCommittedQuestionIds, mergeLinearCommittedQuestionId } from "@/lib/practice-tests/practice-linear-engine";
 import { computePracticeTestResults } from "@/lib/practice-tests/score-practice-test";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
 import { buildPracticeTestTeachingReview } from "@/lib/practice-tests/build-teaching-review";
@@ -149,10 +151,11 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
 }
 
 const patchSchema = z.object({
-  action: z.enum(["save", "complete", "abandon", "cat_advance"]),
+  action: z.enum(["save", "complete", "abandon", "cat_advance", "linear_commit"]),
   answers: z.record(z.string(), z.unknown()).optional(),
   cursorIndex: z.number().int().min(0).optional(),
   elapsedMs: z.number().int().min(0).max(48 * 60 * 60 * 1000).optional(),
+  questionId: z.string().min(8).max(80).optional(),
 });
 
 export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
@@ -214,6 +217,63 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
       },
     });
     return NextResponse.json({ ok: true });
+  }
+
+  if (parsed.data.action === "linear_commit") {
+    if (cfg.selectionMode === "cat") {
+      return NextResponse.json({ error: "linear_commit is only for linear tests" }, { status: 400 });
+    }
+    if (!cfg.linearDeliveryMode) {
+      return NextResponse.json({ error: "Session does not use the linear exam engine" }, { status: 400 });
+    }
+    const qid = parsed.data.questionId?.trim();
+    if (!qid) {
+      return NextResponse.json({ error: "questionId required" }, { status: 400 });
+    }
+    const atCursor = ids[cursorIndex];
+    if (atCursor !== qid) {
+      return NextResponse.json({ error: "questionId must match the current item" }, { status: 400 });
+    }
+    const userAns = merged[qid];
+    const hasAnswer =
+      userAns !== undefined &&
+      userAns !== null &&
+      !(typeof userAns === "string" && userAns.trim() === "") &&
+      !(Array.isArray(userAns) && userAns.length === 0);
+    if (!hasAnswer) {
+      return NextResponse.json({ error: "Select an answer before submitting" }, { status: 400 });
+    }
+    const already = getLinearCommittedQuestionIds(row.adaptiveState);
+    if (already.includes(qid)) {
+      return NextResponse.json({ error: "This question is already submitted" }, { status: 409 });
+    }
+    const nextAdaptive = mergeLinearCommittedQuestionId(row.adaptiveState, qid);
+    const feedback = await buildLinearCommitFeedback(qid, userAns, gate.entitlement);
+    if (!feedback) {
+      return NextResponse.json({ error: "Question not available" }, { status: 404 });
+    }
+    await prisma.practiceTest.update({
+      where: { id },
+      data: {
+        answers: merged as object,
+        cursorIndex,
+        adaptiveState: nextAdaptive as object,
+        ...(elapsedMs !== undefined ? { elapsedMs } : {}),
+      },
+    });
+    const committedQuestionIds = getLinearCommittedQuestionIds(nextAdaptive);
+    if (cfg.linearDeliveryMode === "practice") {
+      return NextResponse.json({
+        ok: true,
+        committedQuestionIds,
+        feedback: {
+          isCorrect: feedback.isCorrect,
+          rationale: feedback.rationale,
+          correctKeys: feedback.correctKeys,
+        },
+      });
+    }
+    return NextResponse.json({ ok: true, committedQuestionIds, locked: true as const });
   }
 
   if (parsed.data.action === "abandon") {

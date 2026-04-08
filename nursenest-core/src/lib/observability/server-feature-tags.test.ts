@@ -42,6 +42,7 @@ const SENTRY_SERVER_CONTEXT_FILES = [
   "app/api/lessons/route.ts",
   "app/api/marketing-assets/[...path]/route.ts",
   "app/api/practice-tests/[id]/route.ts",
+  "app/api/practice-tests/[id]/question/route.ts",
   "app/api/practice-tests/route.ts",
   "app/api/questions/[id]/route.ts",
   "app/api/questions/discovery/route.ts",

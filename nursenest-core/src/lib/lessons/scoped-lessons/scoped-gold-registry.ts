@@ -76,6 +76,8 @@ import {
   RENAL_DIALYSIS_ACUTE_COMPLICATIONS_GOLD_SLUG,
   renalDialysisAcuteComplicationsGoldHubListInput,
 } from "@/lib/lessons/scoped-lessons/renal-dialysis-acute-complications-gold-standard";
+import { LAUNCH_WAVE_1_BULK_PROVIDERS } from "@/lib/lessons/scoped-lessons/launch-wave-1-bulk-specs";
+import { LAUNCH_WAVE_1A_PROVIDERS } from "@/lib/lessons/scoped-lessons/launch-wave-1a-high-yield-gold";
 
 /** Minimal lesson row shape for catalog merge (matches pathway-lesson-loader `LessonInput`). */
 export type ScopedGoldLessonInput = {
@@ -179,6 +181,8 @@ export const SCOPED_GOLD_PROVIDERS: ScopedGoldProvider[] = [
     getFullLesson: getCopdGoldStandardLessonInput,
     getHubListRow: copdGoldHubListInput,
   },
+  ...LAUNCH_WAVE_1A_PROVIDERS,
+  ...LAUNCH_WAVE_1_BULK_PROVIDERS,
 ];
 
 /**

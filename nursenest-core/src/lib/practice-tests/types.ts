@@ -14,6 +14,14 @@ export type PracticeTestPathwayOption = {
 /** Pool basis when `selectionMode === "cat"` (how items are filtered before adaptive selection). */
 export type CatSelectionBasis = "random" | "targeted" | "weak";
 
+/**
+ * Linear-only delivery policy (ignored when `selectionMode === "cat"`).
+ * - `practice`: submit/lock per item, immediate rationale + correct/incorrect highlights.
+ * - `exam`: submit locks response; rationales only after session completes (same runner completion UI).
+ * - Omitted / undefined: legacy linear — free prev/next without per-question lock (older sessions).
+ */
+export type LinearDeliveryMode = "practice" | "exam";
+
 export type PracticeTestConfigJson = {
   questionCount: number;
   topicNames: string[];
@@ -23,6 +31,8 @@ export type PracticeTestConfigJson = {
   pathwayId: string | null;
   timedMode: boolean;
   timeLimitSec: number | null;
+  /** Linear sessions only — see {@link LinearDeliveryMode}. */
+  linearDeliveryMode?: LinearDeliveryMode;
   /** When mode is CAT: which pool strategy to use for tier-scoped draws. */
   catSelectionBasis?: CatSelectionBasis;
   catMinQuestions?: number;
@@ -43,6 +53,8 @@ export type PracticeTestResultsJson = {
   accuracyPct: number;
   byTopic: Record<string, { correct: number; total: number }>;
   weakAreas: string[];
+  /** Question ids answered incorrectly (subset of session ids). */
+  incorrectQuestionIds?: string[];
   /** Present when the session used computer-adaptive testing. */
   catReport?: CatExamReport | null;
   /** Internal ability estimate (theta), roughly −3…+3. */

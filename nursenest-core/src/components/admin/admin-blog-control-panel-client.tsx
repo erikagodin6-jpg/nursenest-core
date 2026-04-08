@@ -7,6 +7,12 @@ import { ADMIN_BLOG_TARGET_EXAM_OPTIONS } from "@/lib/marketing/blog-admin-exam-
 import type { BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema";
 import { parseBlogSourcesJson } from "@/lib/blog/blog-citation-safety";
 import { formatApa7Source } from "@/lib/blog/apa7";
+import {
+  effectiveLessonHref,
+  isAllowedBlogInternalHref,
+  lessonRowsToRelatedPaths,
+  normalizeLessonRowsFromStorage,
+} from "@/lib/blog/blog-internal-lesson-links";
 import type { BlogImageSlotAttachment } from "@/lib/blog/blog-image-workflow";
 import {
   buildEducationalFigureHtml,
@@ -102,7 +108,7 @@ function planFromPost(post: AdminPostPayload): BlogControlPanelPlan {
     metaTitle: post.seoTitle ?? post.metaTitleVariant ?? post.title,
     metaDescription: post.seoDescription ?? post.metaDescriptionVariant ?? "",
     outline: outline.length ? outline : [{ h2: "Introduction", bullets: ["Generated outline missing — regenerate outline."] }],
-    suggestedInternalLessons: internal?.lessons ?? [],
+    suggestedInternalLessons: normalizeLessonRowsFromStorage(internal?.lessons ?? []),
     faqs: faqBlock?.items ?? [],
     breadcrumbs,
     imagePlacements: internal?.imagePlacements ?? [],
@@ -499,7 +505,7 @@ export function AdminBlogControlPanelClient({ initialPostId }: { initialPostId?:
           internalLinkPlan,
           titleAlternates: plan?.titleOptions.slice(1) ?? undefined,
           keyTakeaways: plan?.keyTakeaways ?? undefined,
-          relatedLessonPaths: plan?.suggestedInternalLessons.map((l) => l.suggestedPath).filter((p) => /^\/[a-z0-9]/i.test(p)) ?? undefined,
+          relatedLessonPaths: plan ? lessonRowsToRelatedPaths(plan.suggestedInternalLessons, country) : undefined,
           schemaSummary: plan ? JSON.stringify({ breadcrumbs: plan.breadcrumbs, type: "Article" }) : undefined,
           metaTitleVariant: seoTitle || null,
           metaDescriptionVariant: seoDescription || null,
@@ -643,6 +649,17 @@ export function AdminBlogControlPanelClient({ initialPostId }: { initialPostId?:
 
   function patchImageAttachment(slotKey: string, patch: Partial<BlogImageSlotAttachment>) {
     setImageAttachments((rows) => rows.map((row) => (row.slotKey === slotKey ? { ...row, ...patch } : row)));
+  }
+
+  function patchLessonLinkRow(i: number, patch: Partial<BlogControlPanelPlan["suggestedInternalLessons"][number]>) {
+    setPlan((prev) =>
+      prev
+        ? {
+            ...prev,
+            suggestedInternalLessons: prev.suggestedInternalLessons.map((row, j) => (j === i ? { ...row, ...patch } : row)),
+          }
+        : prev,
+    );
   }
 
   async function uploadImageToSpaces(file: File): Promise<string | null> {
@@ -1281,7 +1298,7 @@ export function AdminBlogControlPanelClient({ initialPostId }: { initialPostId?:
               <pre className="mt-2 max-h-40 overflow-auto text-xs">{JSON.stringify(plan.faqs, null, 2)}</pre>
             </div>
             <div className="rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-4">
-              <div className="flex items-center justify-between gap-2">
+              <div className="flex flex-wrap items-center justify-between gap-2">
                 <h3 className="text-sm font-semibold">Internal lesson links</h3>
                 <button
                   type="button"
@@ -1289,15 +1306,76 @@ export function AdminBlogControlPanelClient({ initialPostId }: { initialPostId?:
                   onClick={() => void runRegenerate("internal_links")}
                   className="text-xs font-semibold text-primary underline disabled:opacity-50"
                 >
-                  {sectionBusy === "internal_links" ? "…" : "Regenerate"}
+                  {sectionBusy === "internal_links" ? "…" : "Regenerate suggestions"}
                 </button>
               </div>
-              <ul className="mt-2 max-h-40 space-y-2 overflow-auto text-xs">
-                {plan.suggestedInternalLessons.map((l, i) => (
-                  <li key={i}>
-                    <span className="font-medium">{l.label}</span> — <code className="rounded bg-muted px-1">{l.suggestedPath}</code>
-                  </li>
-                ))}
+              <p className="mt-1 text-[11px] text-muted-foreground">
+                Active rows drive phrase auto-links in the published article (capped) and the footer. Country: <strong>{country}</strong> — paths are aligned on save. Remove off-topic rows or replace targets with a valid https-root path.
+              </p>
+              <ul className="mt-3 max-h-[min(28rem,55vh)] space-y-3 overflow-auto text-xs">
+                {plan.suggestedInternalLessons.map((l, i) => {
+                  const eff = effectiveLessonHref(l);
+                  const ok = Boolean(eff && isAllowedBlogInternalHref(eff));
+                  return (
+                    <li key={l.id ?? i} className="rounded-lg border border-border/60 p-3">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <span className="font-semibold text-foreground">{l.label}</span>
+                        <span
+                          className={`rounded-full px-2 py-0.5 text-[10px] font-medium uppercase ${
+                            l.reviewStatus === "removed"
+                              ? "bg-muted text-muted-foreground"
+                              : ok
+                                ? "bg-emerald-500/15 text-emerald-900 dark:text-emerald-100"
+                                : "bg-amber-500/15 text-amber-950 dark:text-amber-100"
+                          }`}
+                        >
+                          {l.reviewStatus === "removed" ? "removed" : ok ? "active · valid" : "active · check URL"}
+                        </span>
+                      </div>
+                      {l.linkKind ? (
+                        <p className="mt-1 text-[10px] uppercase tracking-wide text-muted-foreground">Kind: {l.linkKind.replace(/_/g, " ")}</p>
+                      ) : null}
+                      <p className="mt-1 font-mono text-[11px] text-muted-foreground">Suggested: {l.suggestedPath}</p>
+                      {eff && eff !== l.suggestedPath.trim() ? (
+                        <p className="mt-0.5 font-mono text-[11px] text-primary">Effective: {eff}</p>
+                      ) : null}
+                      <label className="mt-2 block space-y-1">
+                        <span className="text-[11px] text-muted-foreground">Replace target (optional, root-relative)</span>
+                        <input
+                          className="w-full rounded-md border border-border px-2 py-1.5 font-mono text-[11px]"
+                          value={l.replacementPath ?? ""}
+                          onChange={(e) => patchLessonLinkRow(i, { replacementPath: e.target.value.trim() || null })}
+                          placeholder="/us/rn/nclex-rn/lessons/…"
+                          disabled={l.reviewStatus === "removed"}
+                        />
+                      </label>
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        <label className="flex items-center gap-1.5 text-[11px]">
+                          <span className="text-muted-foreground">Status</span>
+                          <select
+                            className="rounded border border-border bg-background px-2 py-1 text-[11px]"
+                            value={l.reviewStatus ?? "active"}
+                            onChange={(e) =>
+                              patchLessonLinkRow(i, {
+                                reviewStatus: e.target.value as "active" | "removed",
+                              })
+                            }
+                          >
+                            <option value="active">Active (include)</option>
+                            <option value="removed">Removed</option>
+                          </select>
+                        </label>
+                        <button
+                          type="button"
+                          className="rounded border border-border px-2 py-1 text-[11px] font-medium hover:bg-muted/60"
+                          onClick={() => patchLessonLinkRow(i, { reviewStatus: "active", replacementPath: null })}
+                        >
+                          Accept suggested path
+                        </button>
+                      </div>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           </div>

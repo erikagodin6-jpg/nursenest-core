@@ -26,6 +26,12 @@ function userAnswerArray(questionType: string, user: unknown): string[] {
   return [];
 }
 
+/** Canonical option key(s) stored on the question row (for UI reveal / highlighting). */
+export function canonicalCorrectKeysForQuestion(questionType: string, correctAnswer: Prisma.JsonValue): string[] {
+  void questionType;
+  return asStringArray(correctAnswer).map((s) => s.trim()).filter(Boolean);
+}
+
 /** Compare learner answer to stored `correct_answer` JSON (MCQ / SATA style keys). */
 export function answerMatches(questionType: string, correctAnswer: Prisma.JsonValue, user: unknown): boolean {
   const keyParts = asStringArray(correctAnswer).map((s) => s.trim()).filter(Boolean);

@@ -78,7 +78,7 @@ function applyNpDisplay(pathwayId: string, stem: string, seoDescription: string,
   return {
     ...v,
     title: `${stem} (${suf})`,
-    seoTitle: `${stem.split(/[—:]/)[0]?.trim() ?? stem} | ${lab} US | NurseNest`,
+    seoTitle: `${stem} | ${lab} US | NurseNest`,
     seoDescription,
   };
 }

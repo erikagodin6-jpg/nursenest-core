@@ -69,6 +69,7 @@ export default async function BlogPostPage({ params }: Props) {
           exam: post.exam,
           relatedLessonPaths: post.relatedLessonPaths,
           relatedTools: post.relatedTools,
+          maxTotalAutoLinks: 14,
         }),
       )
     : stripBrokenOrEmptyImagesFromHtml(post.body);

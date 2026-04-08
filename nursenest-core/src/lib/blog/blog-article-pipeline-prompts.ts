@@ -1,5 +1,6 @@
 import type { BlogFunnelStage, BlogPostIntent, BlogPostTemplate } from "@prisma/client";
 import type { BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema";
+import { formatLessonRowsForBodyPrompt } from "@/lib/blog/blog-internal-lesson-links";
 import { countryEditorialContext, pathwayEditorialContext } from "@/lib/blog/blog-article-pathway-context";
 
 const ANTI_FILLER = `Quality bar (non-negotiable):
@@ -19,7 +20,7 @@ Required keys (exact names):
 - metaTitle: <=60 chars, primary intent near start
 - metaDescription: 120-155 chars, specific benefit + audience
 - outline: array of { "h2", optional "h3"[], optional "bullets"[] } — 4-7 sections; H2s must be topic-specific (not "Introduction" only)
-- suggestedInternalLessons: { "label", "suggestedPath", optional "rationale" }[] — paths like /us/rn/nclex-rn/lessons/... or /blog/...
+- suggestedInternalLessons: { "label", "suggestedPath", optional "rationale", optional "linkKind" ("lesson"|"lessons_hub"|"question_bank"|"topic_cluster"|"general") }[] — root-relative paths like /us/rn/nclex-rn/lessons/..., /.../questions, or /blog/...; match pathway + country from the brief; no /app/ or /api/
 - faqs: { "q", "a" }[] — 4-7 items; answers must teach a concrete exam-relevant point
 - breadcrumbs: { "label", "href" }[] — logical trail from Home
 - imagePlacements: { optional "slotKey" (e.g. hero, inline_1), optional "role" (hero|inline), "section", "promptIdea", "altIdea", optional "captionIdea" }[] — one hero + 1-3 optional inline; clinically relevant, NurseNest brand (professional nursing education, dignified, inclusive; no gore, no identifiable patients, no real institutional logos)
@@ -105,6 +106,6 @@ ${JSON.stringify(params.plan.faqs, null, 2)}
 Key takeaways to reflect:
 ${JSON.stringify(params.plan.keyTakeaways, null, 2)}
 
-Internal paths to mention:
-${params.plan.suggestedInternalLessons.map((l) => `${l.label}: ${l.suggestedPath}`).join("\n") || "(none)"}`;
+Internal paths to mention (non-removed, effective URLs only):
+${formatLessonRowsForBodyPrompt(params.plan.suggestedInternalLessons) || "(none)"}`;
 }

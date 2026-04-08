@@ -32,6 +32,8 @@ const createSchema = z
     timedMode: z.boolean(),
     /** Timed exam simulation: up to 5h NCLEX default or 3h AANP-style NP when pathway is NP (overridable). */
     timeLimitSec: z.union([z.number().int().min(120).max(18_000), z.null()]).optional(),
+    /** Linear sessions: per-question lock + practice rationales vs exam-style deferred rationales. */
+    linearDeliveryMode: z.enum(["practice", "exam"]).optional(),
   })
   .refine((d) => d.selectionMode !== "cat" || d.catPresentationMode !== "practice" || d.questionCount <= 75, {
     message: "Practice CAT maximum question cap is 75.",
@@ -62,8 +64,8 @@ const createSchema = z
     message: "Exam simulation requires adaptive (CAT) mode.",
     path: ["catPresentationMode"],
   })
-  .refine((d) => d.selectionMode === "cat" || d.questionCount <= 75, {
-    message: "Linear practice tests support up to 75 questions.",
+  .refine((d) => d.selectionMode === "cat" || d.questionCount <= 100, {
+    message: "Linear practice tests support up to 100 questions.",
     path: ["questionCount"],
   });
 
@@ -221,6 +223,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: picked.message, code: "pool_too_small" }, { status: 400 });
   }
 
+  const linearMode = d.linearDeliveryMode;
   const config = configFromInput(
     {
       questionCount: d.questionCount,
@@ -232,6 +235,7 @@ export async function POST(req: Request) {
     },
     d.timedMode,
     timeLimitSec,
+    linearMode ? { linearDeliveryMode: linearMode } : undefined,
   );
 
   const row = await prisma.practiceTest.create({
@@ -243,6 +247,13 @@ export async function POST(req: Request) {
       status: PracticeTestStatus.IN_PROGRESS,
       timedMode: d.timedMode,
       timeLimitSec,
+      ...(config.linearDeliveryMode
+        ? {
+            adaptiveState: {
+              linearEngine: { committedQuestionIds: [] as string[] },
+            } as object,
+          }
+        : {}),
     },
   });
 

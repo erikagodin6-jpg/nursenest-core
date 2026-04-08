@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { auth } from "@/lib/auth";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
-import { ExamPlanSettingsCard } from "@/components/student/exam-plan-settings-card";
+import { LearnerStudySettingsHub } from "@/components/student/learner-study-settings-hub";
 import { LockedStudyNextPreview } from "@/components/student/locked-study-next-preview";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
+import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
@@ -22,7 +24,7 @@ export default async function AccountStudyPreferencesPage() {
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
-  const crumbs = appAccountBreadcrumbs(t("learner.account.nav.studyPreferences"));
+  const crumbs = appAccountBreadcrumbs(t("learner.account.nav.settingsHub"));
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
@@ -33,14 +35,23 @@ export default async function AccountStudyPreferencesPage() {
     );
   }
 
-  if (entitlement === "error") {
-    return (
-      <main className="space-y-4">
-        <BreadcrumbTrail items={crumbs} />
-        <p className="text-sm text-muted-foreground">{t("learner.entitlement.verifyFailed")}</p>
-      </main>
-    );
+  let defaultPathwayLabel: string | null = null;
+  try {
+    const u = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { learnerPath: true },
+    });
+    const lp = u?.learnerPath?.trim();
+    if (lp) {
+      const p = getExamPathwayById(lp);
+      defaultPathwayLabel = p ? p.shortName || p.displayName : lp;
+    }
+  } catch {
+    /* optional */
   }
+
+  const verifyFailed = entitlement === "error";
+  const showExamPlan = !verifyFailed && entitlement.hasAccess;
 
   return (
     <main className="space-y-6">
@@ -50,14 +61,25 @@ export default async function AccountStudyPreferencesPage() {
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.account.studyPreferences.intro")}</p>
       </div>
 
-      {entitlement.hasAccess ? (
-        <ExamPlanSettingsCard />
-      ) : (
+      {verifyFailed ? (
+        <p className="rounded-xl border border-amber-500/25 bg-amber-500/10 px-4 py-3 text-sm text-amber-950 dark:text-amber-100">
+          {t("learner.entitlement.verifyFailed")}
+        </p>
+      ) : null}
+
+      <LearnerStudySettingsHub
+        userId={userId}
+        defaultPathwayLabel={defaultPathwayLabel}
+        showExamPlanForm={showExamPlan}
+        t={t}
+      />
+
+      {!showExamPlan && !verifyFailed ? (
         <>
           <LockedStudyNextPreview className="nn-card space-y-2 p-6" />
           <SubscriptionPaywall context="dashboard" />
         </>
-      )}
+      ) : null}
     </main>
   );
 }

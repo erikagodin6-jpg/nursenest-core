@@ -2,19 +2,14 @@
  * Pathway- and country-aware internal lesson / hub links for AI blog workflow + public auto-linking.
  */
 
+import { z } from "zod";
 import { equivalentExamHubUrlAfterRegionToggle } from "@/lib/marketing/marketing-region-equivalent-hub";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import { ALLIED, NP, PN, RN } from "@/lib/marketing/marketing-entry-routes";
-import { blogLessonLinkRowSchema } from "@/lib/blog/blog-control-panel-schema";
+import { blogLessonLinkRowSchema, lessonLinkStableId } from "@/lib/blog/blog-control-panel-schema";
 import type { BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema";
 
 export type BlogLessonLinkRow = BlogControlPanelPlan["suggestedInternalLessons"][number];
-
-function slugIdFragment(input: string): string {
-  let h = 0;
-  for (let i = 0; i < input.length; i++) h = (h * 31 + input.charCodeAt(i)) | 0;
-  return Math.abs(h).toString(36).slice(0, 10);
-}
 
 /** Root-relative marketing paths safe to inject from blog tooling (no app/API). */
 export function isAllowedBlogInternalHref(href: string): boolean {
@@ -68,7 +63,15 @@ export function lessonRowsToRelatedPaths(
   return out.slice(0, 24);
 }
 
-/** Normalize rows loaded from DB JSON (legacy rows without id / reviewStatus). */
+/** Normalize model/regeneration JSON rows before merging into {@link BlogControlPanelPlan}. */
+export function normalizePlanSuggestedLessonRows(rows: z.infer<typeof blogLessonLinkRowSchema>[]): BlogLessonLinkRow[] {
+  return rows.map((row, i) => ({
+    ...row,
+    id: row.id?.trim() || lessonLinkStableId(row, i),
+    reviewStatus: row.reviewStatus ?? "active",
+  }));
+}
+
 export function normalizeLessonRowsFromStorage(raw: unknown): BlogLessonLinkRow[] {
   if (!Array.isArray(raw)) return [];
   const out: BlogLessonLinkRow[] = [];
@@ -78,7 +81,7 @@ export function normalizeLessonRowsFromStorage(raw: unknown): BlogLessonLinkRow[
     const d = parsed.data;
     out.push({
       ...d,
-      id: d.id?.trim() || `ll-${i}-${slugIdFragment(d.suggestedPath + "\0" + d.label)}`,
+      id: d.id?.trim() || lessonLinkStableId(d, i),
       reviewStatus: d.reviewStatus ?? "active",
     });
   });
@@ -123,5 +126,17 @@ export function getBlogInternalLinkPathHintsForPrompt(exam: string, country: "US
   }
 
   lines.push("Do not link to /app/*, /api/*, or external domains. Limit suggestions to highly relevant lessons or hubs (max 10).");
+  return lines.join("\n");
+}
+
+/** Lines for article body prompt: only non-removed rows; uses effective href when replacement is valid. */
+export function formatLessonRowsForBodyPrompt(rows: BlogLessonLinkRow[]): string {
+  const lines: string[] = [];
+  for (const r of rows) {
+    if (r.reviewStatus === "removed") continue;
+    const href = effectiveLessonHref(r);
+    if (!href) continue;
+    lines.push(`${r.label}: ${href}`);
+  }
   return lines.join("\n");
 }

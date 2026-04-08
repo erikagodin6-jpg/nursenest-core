@@ -17,9 +17,8 @@ const ACCOUNT_LINKS = [
   { href: "/app/account/progress", key: "learner.account.nav.progress" as const },
   { href: "/app/account/billing", key: "learner.account.nav.billing" as const },
   { href: "/app/account/personal", key: "learner.account.nav.personal" as const },
-  { href: "/app/account/settings", key: "learner.account.nav.settings" as const },
+  { href: "/app/account/study-preferences", key: "learner.account.nav.settingsHub" as const },
   { href: "/app/account/security", key: "learner.account.nav.security" as const },
-  { href: "/app/account/study-preferences", key: "learner.account.nav.studyPreferences" as const },
 ] as const;
 
 /**

@@ -1,4 +1,5 @@
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { ExamSessionErrorBoundary } from "@/components/exam/exam-session-error-boundary";
 import { PracticeTestRunnerClient } from "@/components/student/practice-test-runner-client";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { auth } from "@/lib/auth";
@@ -71,12 +72,14 @@ export default async function PracticeTestRunPage({ params }: Props) {
         </a>
       </p>
       <div className="mt-6">
-        <PracticeTestRunnerClient
-          testId={id}
-          userId={userId}
-          userLabel={userLabel}
-          protectionFlags={protectionFlags}
-        />
+        <ExamSessionErrorBoundary surface="practice_test">
+          <PracticeTestRunnerClient
+            testId={id}
+            userId={userId}
+            userLabel={userLabel}
+            protectionFlags={protectionFlags}
+          />
+        </ExamSessionErrorBoundary>
       </div>
     </main>
   );

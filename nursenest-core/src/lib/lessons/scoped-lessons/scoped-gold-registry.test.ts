@@ -26,6 +26,8 @@ import {
 import { prependScopedGoldCatalogLessons, SCOPED_GOLD_PROVIDERS } from "./scoped-gold-registry";
 import { SHOCK_GOLD_SLUG, getShockGoldLessonInput } from "./shock-gold-standard";
 import { STROKE_ICP_GOLD_SLUG, getStrokeIcpGoldLessonInput } from "./stroke-increased-icp-gold-standard";
+import { BULK_ROWS } from "./launch-wave-1-bulk-rows";
+import { LAUNCH_WAVE_1A_SPECS } from "./launch-wave-1a-high-yield-gold";
 
 const CORE_NURSING_PATHWAYS = [
   "us-lpn-nclex-pn",
@@ -48,7 +50,7 @@ const LEGACY_KINDS = new Set([
 const PREMIUM_KIND_SET = new Set(PREMIUM_SECTION_KINDS);
 
 describe("scoped gold registry", () => {
-  it("registry lists injectable slugs in remediation order (waves 1–4 + COPD)", () => {
+  it("registry lists injectable slugs in remediation order (waves 1–4 + COPD + launch wave 1)", () => {
     assert.deepEqual(
       SCOPED_GOLD_PROVIDERS.map((p) => p.slug),
       [
@@ -64,6 +66,8 @@ describe("scoped gold registry", () => {
         PEDIATRIC_TRIAGE_EMERGENCIES_GOLD_SLUG,
         RENAL_DIALYSIS_ACUTE_COMPLICATIONS_GOLD_SLUG,
         "copd-clinical-judgment-gold",
+        ...LAUNCH_WAVE_1A_SPECS.map((s) => s.slug),
+        ...BULK_ROWS.map((r) => r.slug),
       ],
     );
   });

@@ -18,6 +18,7 @@ import {
 import { PremiumRationalePanel } from "@/components/student/premium-rationale-panel";
 import type { QuestionListEmptyDiagnostics } from "@/lib/questions/question-list-empty-diagnostics";
 import type { EmptyCopyI18n } from "@/lib/student/gated-state-messages-i18n";
+import { readLearnerStudyDefaults } from "@/lib/student/learner-study-defaults";
 import {
   discoveryFailureKey,
   questionBankEmptyKeys,
@@ -243,6 +244,13 @@ export function QuestionBankPracticeClient({
   }, [current?.id]);
 
   useEffect(() => {
+    const d = readLearnerStudyDefaults(userId);
+    setSessionSize(d.questionBank.sessionSize);
+    setExamShell(d.questionBank.examShell);
+    setExamShowExplanation(!d.questionBank.examShell);
+  }, [userId]);
+
+  useEffect(() => {
     setStrikeOut({});
     setHighlightOn({});
   }, [current?.id]);
@@ -449,9 +457,13 @@ export function QuestionBankPracticeClient({
     const okSm = sm && ["weak", "high_yield", "rapid", "final_prep"].includes(sm);
     setEfficiencyMode(okSm ? sm : null);
     const ex = searchParams.get("examShell");
-    const examOn = ex === "1" || ex === "true";
-    setExamShell(examOn);
-    setExamShowExplanation(!examOn);
+    if (ex === "1" || ex === "true") {
+      setExamShell(true);
+      setExamShowExplanation(false);
+    } else if (ex === "0" || ex === "false") {
+      setExamShell(false);
+      setExamShowExplanation(true);
+    }
   }, [searchParams]);
 
   useEffect(() => {

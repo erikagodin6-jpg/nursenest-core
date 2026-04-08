@@ -14,7 +14,7 @@
     "start": "NODE_ENV=production next start -H 0.0.0.0 -p ${PORT:-3000}",
     "lint": "eslint",
     "audit:internal-links": "tsx scripts/audit-internal-links.ts",
-    "audit:pathway-lessons": "node scripts/audit-pathway-lesson-inventory.mjs",
+    "audit:pathway-lessons": "tsx scripts/audit-pathway-lesson-inventory.ts",
     "test:internal-links-audit": "tsx --test scripts/audit-internal-links.test.ts",
     "generate:marketing-assets": "node scripts/generate-marketing-assets.mjs",
     "generate:brand-logos": "node scripts/build-transparent-theme-logos.mjs",

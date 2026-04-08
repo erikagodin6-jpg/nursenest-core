@@ -17,6 +17,7 @@ import { StudyNotesPanel } from "@/components/student/study-notes-panel";
 import { PracticeTestTeachingReviewPanel } from "@/components/student/practice-test-teaching-review-panel";
 import { PracticeTestStudyLoopNext } from "@/components/student/practice-test-study-loop-next";
 import type { PracticeTestTeachingItem } from "@/lib/practice-tests/build-teaching-review";
+import { getLinearCommittedQuestionIds } from "@/lib/practice-tests/practice-linear-engine";
 
 type QRow = {
   id: string;
@@ -34,6 +35,8 @@ function parseOptions(raw: unknown): string[] {
   if (Array.isArray(raw)) return raw.map((x) => String(x));
   return [];
 }
+
+const MAX_PRACTICE_QUESTION_CACHE = 32;
 
 export function PracticeTestRunnerClient({
   testId,
@@ -69,8 +72,16 @@ export function PracticeTestRunnerClient({
   const [saving, setSaving] = useState(false);
   const [teachingReviewItems, setTeachingReviewItems] = useState<PracticeTestTeachingItem[] | null>(null);
   const [teachingReviewLoading, setTeachingReviewLoading] = useState(false);
+  /** Bumps when user retries a failed per-question fetch (effect deps exclude full cache). */
+  const [questionFetchNonce, setQuestionFetchNonce] = useState(0);
   /** Session-local only — helps pacing habits; not sent to the server. */
   const [flagged, setFlagged] = useState<Record<string, boolean>>({});
+  /** Linear exam engine: server-persisted committed items (`adaptiveState.linearEngine`). */
+  const [linearCommittedIds, setLinearCommittedIds] = useState<string[]>([]);
+  /** Practice-mode per-question feedback after commit (not fully restored on reload). */
+  const [linearPracticeFeedback, setLinearPracticeFeedback] = useState<
+    Record<string, { isCorrect: boolean; rationale: string | null; correctKeys: string[] }>
+  >({});
   const autoSubmitRef = useRef(false);
   const answersRef = useRef<Record<string, unknown>>({});
   const idxRef = useRef(0);
@@ -102,7 +113,7 @@ export function PracticeTestRunnerClient({
         startedAt?: string;
         config?: PracticeTestConfigJson;
         catMode?: boolean;
-        adaptiveState?: { theta?: number; se?: number } | null;
+        adaptiveState?: unknown;
       };
       if (!res.ok) throw new Error(data.error ?? "Could not load test.");
       const ids =
@@ -129,8 +140,11 @@ export function PracticeTestRunnerClient({
       setCatMode(Boolean(data.catMode));
       setTeachingReviewItems(null);
       const ast = data.adaptiveState;
-      setAdaptiveTheta(typeof ast?.theta === "number" ? ast.theta : null);
-      setAdaptiveSe(typeof ast?.se === "number" ? ast.se : null);
+      const astObj = ast && typeof ast === "object" && !Array.isArray(ast) ? (ast as Record<string, unknown>) : null;
+      setAdaptiveTheta(typeof astObj?.theta === "number" ? astObj.theta : null);
+      setAdaptiveSe(typeof astObj?.se === "number" ? astObj.se : null);
+      setLinearCommittedIds(getLinearCommittedQuestionIds(ast));
+      setLinearPracticeFeedback({});
       if (data.status === "IN_PROGRESS" && data.timedMode && data.timeLimitSec) {
         const usedSec = data.elapsedMs != null ? Math.floor(data.elapsedMs / 1000) : 0;
         setRemainingSec(Math.max(0, data.timeLimitSec - usedSec));
@@ -164,7 +178,22 @@ export function PracticeTestRunnerClient({
           return;
         }
         if (payload.question && !ac.signal.aborted) {
-          setQuestionCache((c) => ({ ...c, [payload.question!.id]: payload.question! }));
+          const q = payload.question;
+          setQuestionCache((c) => {
+            const next = { ...c, [q.id]: q };
+            if (Object.keys(next).length <= MAX_PRACTICE_QUESTION_CACHE) return next;
+            const half = Math.floor(MAX_PRACTICE_QUESTION_CACHE / 2);
+            const lo = Math.max(0, idx - half);
+            const hi = Math.min(questionIds.length - 1, idx + half);
+            const keep = new Set<string>();
+            for (let i = lo; i <= hi; i++) {
+              const id = questionIds[i];
+              if (id && next[id]) keep.add(id);
+            }
+            const trimmed: Record<string, QRow> = {};
+            for (const id of keep) trimmed[id] = next[id]!;
+            return trimmed;
+          });
         }
       } catch {
         if (!ac.signal.aborted) setError("Could not load question.");
@@ -174,7 +203,7 @@ export function PracticeTestRunnerClient({
     })();
 
     return () => ac.abort();
-  }, [phase, status, testId, idx, questionIds]);
+  }, [phase, status, testId, idx, questionIds, questionFetchNonce]);
 
   useEffect(() => {
     if (phase !== "ready" || !timedMode || status !== "IN_PROGRESS") return;
@@ -193,6 +222,17 @@ export function PracticeTestRunnerClient({
       if (fromTimer) autoSubmitRef.current = true;
       setSaving(true);
       try {
+        const cfg = testConfig;
+        const linear = cfg && cfg.selectionMode !== "cat" && cfg.linearDeliveryMode;
+        if (linear && questionIds.length > 0) {
+          const missing = questionIds.filter((id) => !linearCommittedIds.includes(id));
+          if (missing.length > 0) {
+            if (fromTimer) autoSubmitRef.current = false;
+            setSaving(false);
+            setError(`Submit all questions first (${missing.length} remaining).`);
+            return;
+          }
+        }
         const elapsedMs =
           sessionStartMs != null ? Math.max(0, Date.now() - sessionStartMs) : undefined;
         const res = await fetch(`/api/practice-tests/${testId}`, {
@@ -218,7 +258,7 @@ export function PracticeTestRunnerClient({
         setSaving(false);
       }
     },
-    [sessionStartMs, testId],
+    [sessionStartMs, testId, testConfig, questionIds, linearCommittedIds],
   );
 
   useEffect(() => {
@@ -244,6 +284,21 @@ export function PracticeTestRunnerClient({
     current &&
     (current.questionType.toUpperCase() === "SATA" || current.questionType.toUpperCase() === "SELECT_ALL_THAT_APPLY");
   const raw = current ? answers[current.id] : undefined;
+
+  const linearDelivery = testConfig?.linearDeliveryMode;
+  const isLinearEngine = Boolean(!catMode && linearDelivery);
+  const committedSet = useMemo(() => new Set(linearCommittedIds), [linearCommittedIds]);
+  const currentCommitted = Boolean(current && committedSet.has(current.id));
+  const linearFeedback = current ? linearPracticeFeedback[current.id] : undefined;
+  const pctComplete = total > 0 ? Math.round(((idx + 1) / total) * 100) : 0;
+
+  const hasMeaningfulAnswer = (qid: string): boolean => {
+    const v = answers[qid];
+    if (v === undefined || v === null) return false;
+    if (typeof v === "string") return v.trim().length > 0;
+    if (Array.isArray(v)) return v.length > 0;
+    return true;
+  };
 
   async function persistSave(nextAnswers: Record<string, unknown>, nextIdx: number) {
     setSaving(true);
@@ -289,9 +344,55 @@ export function PracticeTestRunnerClient({
 
   function setAnswerForCurrent(next: unknown) {
     if (!current) return;
+    if (isLinearEngine && committedSet.has(current.id)) return;
     const nextAnswers = { ...answers, [current.id]: next };
     setAnswers(nextAnswers);
     void persistSave(nextAnswers, idx);
+  }
+
+  async function submitLinearCommit() {
+    if (!current || !isLinearEngine || currentCommitted) return;
+    if (!hasMeaningfulAnswer(current.id)) return;
+    setSaving(true);
+    try {
+      const elapsedMs =
+        sessionStartMs != null ? Math.max(0, Date.now() - sessionStartMs) : undefined;
+      const res = await fetch(`/api/practice-tests/${testId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "linear_commit",
+          questionId: current.id,
+          answers,
+          cursorIndex: idx,
+          ...(elapsedMs !== undefined ? { elapsedMs } : {}),
+        }),
+      });
+      const data = (await res.json()) as {
+        ok?: boolean;
+        error?: string;
+        committedQuestionIds?: string[];
+        feedback?: { isCorrect: boolean; rationale: string | null; correctKeys: string[] };
+      };
+      if (!res.ok) throw new Error(data.error ?? "Could not submit answer.");
+      if (Array.isArray(data.committedQuestionIds)) {
+        setLinearCommittedIds(data.committedQuestionIds);
+      }
+      if (data.feedback && linearDelivery === "practice") {
+        setLinearPracticeFeedback((prev) => ({
+          ...prev,
+          [current.id]: {
+            isCorrect: data.feedback!.isCorrect,
+            rationale: data.feedback!.rationale,
+            correctKeys: data.feedback!.correctKeys ?? [],
+          },
+        }));
+      }
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Submit failed");
+    } finally {
+      setSaving(false);
+    }
   }
 
   async function catAdvance() {
@@ -335,6 +436,7 @@ export function PracticeTestRunnerClient({
       await catAdvance();
       return;
     }
+    if (isLinearEngine && qid && !committedSet.has(qid)) return;
     if (idx >= total - 1) return;
     const nextIdx = idx + 1;
     setIdx(nextIdx);
@@ -342,7 +444,7 @@ export function PracticeTestRunnerClient({
   }
 
   async function goPrev() {
-    if (catMode) return;
+    if (catMode || isLinearEngine) return;
     if (idx <= 0) return;
     const nextIdx = idx - 1;
     setIdx(nextIdx);
@@ -626,7 +728,46 @@ export function PracticeTestRunnerClient({
     );
   }
 
-  if (!current && (qLoading || questionIds.length > 0)) {
+  const expectingQuestion =
+    phase === "ready" && status === "IN_PROGRESS" && Boolean(questionIds[idx]);
+
+  if (!current && expectingQuestion) {
+    if (error && !qLoading) {
+      return (
+        <div className="nn-card space-y-3 p-6 text-sm text-muted-foreground">
+          <p className="font-medium text-foreground">Could not load this question.</p>
+          <p>{error}</p>
+          <div className="flex flex-wrap gap-2 pt-1">
+            <button
+              type="button"
+              className="rounded-full border border-border px-4 py-2 text-sm font-semibold"
+              onClick={() => {
+                setError(null);
+                setQuestionCache((c) => {
+                  const id = questionIds[idx];
+                  if (!id) return c;
+                  const { [id]: _, ...rest } = c;
+                  return rest;
+                });
+                setQuestionFetchNonce((n) => n + 1);
+              }}
+            >
+              Retry this item
+            </button>
+            <button
+              type="button"
+              className="rounded-full border border-border px-4 py-2 text-sm font-semibold"
+              onClick={() => void load()}
+            >
+              Reload test
+            </button>
+            <Link className="inline-flex items-center font-medium text-primary underline" href="/app/practice-tests">
+              Back
+            </Link>
+          </div>
+        </div>
+      );
+    }
     return (
       <div className="space-y-4" aria-busy="true">
         <ExamSessionShell neutralPalette>
@@ -641,9 +782,9 @@ export function PracticeTestRunnerClient({
           />
           {total > 0 ? <ExamProgressBar current={idx + 1} total={total} /> : null}
           <div className="space-y-3 p-6">
-            <div className="h-4 w-3/4 animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
+            <div className="h-4 w-[75%] animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
             <div className="h-4 w-full animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
-            <div className="h-4 w-5/6 animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
+            <div className="h-4 w-[83%] animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
             <p className="text-sm text-slate-500 dark:text-slate-400">Loading question…</p>
           </div>
         </ExamSessionShell>

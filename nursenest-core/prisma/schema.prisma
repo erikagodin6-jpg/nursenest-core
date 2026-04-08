@@ -840,6 +840,8 @@ model ExamQuestion {
   @@index([stemHash])
   @@index([status, updatedAt])
   @@index([status, exam, tier, countryCode])
+  /** Topic / category-scoped bank queries (e.g. filters, analytics) alongside exam + status. */
+  @@index([status, exam, topic])
 }
 
 /**

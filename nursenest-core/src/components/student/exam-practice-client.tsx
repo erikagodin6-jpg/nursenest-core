@@ -15,6 +15,7 @@ import {
 import type { EmptyCopyI18n } from "@/lib/student/gated-state-messages-i18n";
 import { examPoolEmptyKeys, examStartFailureKey } from "@/lib/student/gated-state-messages-i18n";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { readLearnerStudyDefaults } from "@/lib/student/learner-study-defaults";
 import { PostTestStudyNextCard } from "@/components/student/post-test-study-next-card";
 
 type ExamQuestion = {
@@ -38,6 +39,9 @@ function parseOptions(raw: unknown): string[] {
   return [];
 }
 
+/** Bound client memory for long mocks (per-question fetch already avoids bulk load). */
+const MAX_EXAM_QUESTION_CACHE = 24;
+
 function formatDuration(ms: number | null | undefined): string {
   if (ms == null || !Number.isFinite(ms) || ms < 0) return "N/A";
   const s = Math.floor(ms / 1000);
@@ -53,6 +57,7 @@ export function ExamPracticeClient({
   examTitle,
   questionTag,
   sessionNamespace,
+  userId,
   /** Suggested countdown length when learner picks timed mode (NCLEX-style full mocks often use 5h). */
   timedSuggestedMinutes = 90,
 }: {
@@ -62,6 +67,8 @@ export function ExamPracticeClient({
   questionTag?: string | null;
   /** Suffix for localStorage keys when multiple exam widgets exist on one page. */
   sessionNamespace?: string;
+  /** When set, timed vs untimed button order follows Settings & study preferences. */
+  userId?: string | null;
   timedSuggestedMinutes?: number;
 }) {
   const { t } = useMarketingI18n();
@@ -90,6 +97,7 @@ export function ExamPracticeClient({
 
   const [timedMode, setTimedMode] = useState(false);
   const [timeLimitSec, setTimeLimitSec] = useState<number | null>(null);
+  const [timedPreferredFirst, setTimedPreferredFirst] = useState(false);
   const [remainingSec, setRemainingSec] = useState<number | null>(null);
   /** Flag items for review (client-side; helps pacing habits, not persisted to server). */
   const [flagged, setFlagged] = useState<Record<string, boolean>>({});
@@ -99,6 +107,14 @@ export function ExamPracticeClient({
   const answersRef = useRef<Record<string, unknown>>({});
   currentIndexRef.current = currentIndex;
   answersRef.current = answers;
+
+  useEffect(() => {
+    if (!userId) {
+      setTimedPreferredFirst(false);
+      return;
+    }
+    setTimedPreferredFirst(readLearnerStudyDefaults(userId).practiceExam.timedPreferred);
+  }, [userId]);
 
   const total = questionIds.length;
 
@@ -183,7 +199,21 @@ export function ExamPracticeClient({
         setQLoading(false);
         return;
       }
-      setCache((c) => ({ ...c, [q.id]: q }));
+      setCache((c) => {
+        const next = { ...c, [q.id]: q };
+        if (Object.keys(next).length <= MAX_EXAM_QUESTION_CACHE) return next;
+        const half = Math.floor(MAX_EXAM_QUESTION_CACHE / 2);
+        const lo = Math.max(0, currentIndex - half);
+        const hi = Math.min(questionIds.length - 1, currentIndex + half);
+        const keep = new Set<string>();
+        for (let i = lo; i <= hi; i++) {
+          const id = questionIds[i];
+          if (id && next[id]) keep.add(id);
+        }
+        const trimmed: Record<string, ExamQuestion> = {};
+        for (const id of keep) trimmed[id] = next[id]!;
+        return trimmed;
+      });
       setQLoading(false);
     })();
 
@@ -417,20 +447,41 @@ export function ExamPracticeClient({
         <p className="text-sm text-muted">{t("learner.examPractice.chooseMode")}</p>
         <p className="text-xs text-muted">{t("learner.examPractice.disclaimer")}</p>
         <div className="flex flex-wrap gap-2">
-          <button
-            type="button"
-            className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-primary/5"
-            onClick={() => void startExamSession(false)}
-          >
-            {t("learner.examPractice.untimed")}
-          </button>
-          <button
-            type="button"
-            className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
-            onClick={() => void startExamSession(true)}
-          >
-            {t("learner.examPractice.timedButton", { minutes: timedSuggestedMinutes })}
-          </button>
+          {timedPreferredFirst ? (
+            <>
+              <button
+                type="button"
+                className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+                onClick={() => void startExamSession(true)}
+              >
+                {t("learner.examPractice.timedButton", { minutes: timedSuggestedMinutes })}
+              </button>
+              <button
+                type="button"
+                className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-primary/5"
+                onClick={() => void startExamSession(false)}
+              >
+                {t("learner.examPractice.untimed")}
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                type="button"
+                className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-primary/5"
+                onClick={() => void startExamSession(false)}
+              >
+                {t("learner.examPractice.untimed")}
+              </button>
+              <button
+                type="button"
+                className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+                onClick={() => void startExamSession(true)}
+              >
+                {t("learner.examPractice.timedButton", { minutes: timedSuggestedMinutes })}
+              </button>
+            </>
+          )}
         </div>
         <p className="text-xs text-muted">{t("learner.examPractice.timedModeHint")}</p>
       </div>

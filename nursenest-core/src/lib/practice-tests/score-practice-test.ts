@@ -19,6 +19,7 @@ export async function computePracticeTestResults(
 
   let scoreCorrect = 0;
   const byTopic: Record<string, { correct: number; total: number }> = {};
+  const incorrectQuestionIds: string[] = [];
 
   for (const id of questionIds) {
     const q = byId.get(id);
@@ -26,6 +27,7 @@ export async function computePracticeTestResults(
     const userAns = answers[id];
     const ok = answerMatches(q.questionType, q.correctAnswer as Prisma.JsonValue, userAns);
     if (ok) scoreCorrect += 1;
+    else incorrectQuestionIds.push(id);
 
     const label = (q.topic?.trim() || "—").slice(0, 120);
     const cur = byTopic[label] ?? { correct: 0, total: 0 };
@@ -54,5 +56,6 @@ export async function computePracticeTestResults(
     accuracyPct,
     byTopic,
     weakAreas: [...new Set(weakAreas)].slice(0, 12),
+    ...(incorrectQuestionIds.length > 0 ? { incorrectQuestionIds } : {}),
   };
 }

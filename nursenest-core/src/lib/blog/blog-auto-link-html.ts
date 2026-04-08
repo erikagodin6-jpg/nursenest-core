@@ -1,3 +1,4 @@
+import { isAllowedBlogInternalHref } from "@/lib/blog/blog-internal-lesson-links";
 import { defaultPracticeHubForExam, toolPathForSlug } from "./blog-exam-routes";
 
 export type BlogAutoLinkContext = {
@@ -5,6 +6,8 @@ export type BlogAutoLinkContext = {
   /** Absolute or root-relative lesson paths already curated on the post */
   relatedLessonPaths?: string[];
   relatedTools?: string[];
+  /** Cap total auto-links inserted across the article (default 14). */
+  maxTotalAutoLinks?: number;
 };
 
 type LinkRule = { pattern: RegExp; href: string };
@@ -20,7 +23,7 @@ export function buildAutoLinkRules(ctx: BlogAutoLinkContext): LinkRule[] {
 
   for (const raw of ctx.relatedLessonPaths ?? []) {
     const path = raw.trim();
-    if (!path.startsWith("/")) continue;
+    if (!path.startsWith("/") || !isAllowedBlogInternalHref(path)) continue;
     const segments = path.split("/").filter(Boolean);
     const slug = segments[segments.length - 1];
     if (!slug) continue;
@@ -70,11 +73,13 @@ function dedupeRules(rules: LinkRule[]): LinkRule[] {
   return out;
 }
 
-function applyRulesToPlainText(text: string, rules: LinkRule[]): string {
+function applyRulesToPlainText(text: string, rules: LinkRule[], cap: { remaining: number }): string {
   let out = text;
   for (const { pattern, href } of rules) {
     out = out.replace(pattern, (m) => {
+      if (cap.remaining <= 0) return m;
       if (m.includes("<a ")) return m;
+      cap.remaining -= 1;
       return `<a href="${href}" class="nn-blog-auto-link">${m}</a>`;
     });
   }
@@ -89,6 +94,7 @@ export function applyAutoLinksToHtml(html: string, ctx: BlogAutoLinkContext): st
   const rules = buildAutoLinkRules(ctx);
   if (rules.length === 0) return html;
 
+  const cap = { remaining: ctx.maxTotalAutoLinks ?? 14 };
   const tokens = html.split(/(<[^>]+>)/g);
   let inA = 0;
   let inPre = 0;
@@ -112,7 +118,7 @@ export function applyAutoLinksToHtml(html: string, ctx: BlogAutoLinkContext): st
       result.push(token);
       continue;
     }
-    result.push(applyRulesToPlainText(token, rules));
+    result.push(applyRulesToPlainText(token, rules, cap));
   }
   return result.join("");
 }

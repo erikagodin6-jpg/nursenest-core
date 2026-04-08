@@ -18,7 +18,16 @@ import {
   partitionCitationsForBlog,
 } from "@/lib/blog/blog-citation-safety";
 import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
-import { blogControlPanelPlanSchema, type BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema";
+import {
+  blogControlPanelPlanSchema,
+  blogLessonLinkRowSchema,
+  type BlogControlPanelPlan,
+} from "@/lib/blog/blog-control-panel-schema";
+import {
+  getBlogInternalLinkPathHintsForPrompt,
+  lessonRowsToRelatedPaths,
+  normalizePlanSuggestedLessonRows,
+} from "@/lib/blog/blog-internal-lesson-links";
 import {
   buildArticleBodySystemPrompt,
   buildArticleBodyUserPrompt,
@@ -89,7 +98,7 @@ function sanitizeSlugInput(s: string, exam: string, topic: string): string {
 
 export async function fetchControlPanelPlan(input: ControlPanelGenerateInput): Promise<BlogControlPanelPlan> {
   const system = buildStructuredPlanSystemPrompt();
-  const user = buildStructuredPlanUserPrompt({
+  const user = `${buildStructuredPlanUserPrompt({
     topic: input.topic,
     exam: input.exam,
     country: input.country,
@@ -100,7 +109,7 @@ export async function fetchControlPanelPlan(input: ControlPanelGenerateInput): P
     keywords: input.keywords,
     targetKeyword: input.targetKeyword,
     keywordCluster: input.keywordCluster,
-  });
+  })}\n\n${getBlogInternalLinkPathHintsForPrompt(input.exam, input.country)}`;
 
   const res = await openAiChatCompletion({
     messages: [
@@ -244,10 +253,7 @@ export async function persistControlPanelDraft(
   const countryTarget: CountryCode | null =
     input.country === "US" ? CountryCode.US : input.country === "CA" ? CountryCode.CA : null;
 
-  const relatedPaths = plan.suggestedInternalLessons
-    .map((l) => l.suggestedPath.trim())
-    .filter((p) => /^\/[a-z0-9][a-z0-9/_-]*$/i.test(p))
-    .slice(0, 24);
+  const relatedPaths = lessonRowsToRelatedPaths(plan.suggestedInternalLessons, input.country);
 
   const faqBlock = { items: plan.faqs };
   const internalLinkPlan = {
@@ -425,7 +431,9 @@ Current outline for reference: ${JSON.stringify(params.currentPlan?.outline ?? [
 
     faqs: `Return {"faqs": array of {q,a} } with 4-6 new exam-prep FAQs for topic "${params.topic}" (${params.exam}).`,
 
-    internal_links: `Return {"suggestedInternalLessons": array of {label, suggestedPath, rationale?} } — 4-10 plausible NurseNest internal paths (start with /) for ${params.exam} learners studying "${params.topic}".`,
+    internal_links: `Return {"suggestedInternalLessons": array of { label, suggestedPath, rationale?, optional linkKind ("lesson"|"lessons_hub"|"question_bank"|"topic_cluster"|"general") } } — 4-10 **strictly relevant** destinations only (no filler). Match audience country when possible (/us/... vs /canada/...).
+
+${getBlogInternalLinkPathHintsForPrompt(params.exam, params.country)}`,
 
     apa_sources: `Return {"apaSourceStubs": array of source objects } with 3-6 conservative references (authors[], year, title, source, url?, authority?) suitable for nursing exam prep on "${params.topic}".`,
 
@@ -474,11 +482,12 @@ Current placements for reference: ${JSON.stringify(params.currentPlan?.imagePlac
     }
     case "internal_links": {
       const lessons = json.suggestedInternalLessons;
-      const parsed = z
-        .array(z.object({ label: z.string(), suggestedPath: z.string(), rationale: z.string().optional() }))
-        .safeParse(lessons);
+      const parsed = z.array(blogLessonLinkRowSchema).max(16).safeParse(lessons);
       if (!parsed.success) throw new Error("Invalid internal links payload");
-      return { section: "internal_links", suggestedInternalLessons: parsed.data };
+      return {
+        section: "internal_links",
+        suggestedInternalLessons: normalizePlanSuggestedLessonRows(parsed.data),
+      };
     }
     case "apa_sources": {
       const stubs = Array.isArray(json.apaSourceStubs) ? json.apaSourceStubs : [];

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ExamSessionErrorBoundary } from "@/components/exam/exam-session-error-boundary";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { ExamPracticeClient } from "@/components/student/exam-practice-client";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
@@ -162,7 +163,9 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
       </aside>
 
       {defaultExam ? (
-        <ExamPracticeClient examId={defaultExam.id} examTitle={defaultExam.title} />
+        <ExamSessionErrorBoundary surface="exam_default">
+          <ExamPracticeClient userId={userId} examId={defaultExam.id} examTitle={defaultExam.title} />
+        </ExamSessionErrorBoundary>
       ) : (
         <aside className="nn-card mt-4 border-amber-200/80 bg-amber-50/50 p-4 text-sm text-foreground">
           <p className="font-semibold">{t("learner.exams.page.defaultExamTitle")}</p>
@@ -176,34 +179,43 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
       <section className="mt-10 space-y-2">
         <h2 className="text-xl font-semibold">{t("learner.exams.preset.mixedClinical.title", { count: MIXED_PRACTICE_2026_QUESTION_TARGET })}</h2>
         <p className="text-sm text-muted">{t("learner.exams.preset.mixedClinical.body")}</p>
+        <ExamSessionErrorBoundary surface="exam_mixed2026">
         <ExamPracticeClient
+          userId={userId}
           examId={MIXED_PRACTICE_2026_EXAM_ID}
           examTitle={t("learner.exams.examTitle.mixedClinical")}
           questionTag={MIXED_PRACTICE_2026_RN_PN_TAG}
           sessionNamespace="mixed2026"
         />
+        </ExamSessionErrorBoundary>
       </section>
 
       <section className="mt-10 space-y-2">
         <h2 className="text-xl font-semibold">{t("learner.exams.preset.rnMixed.title", { count: MIXED_PRACTICE_2026_QUESTION_TARGET })}</h2>
         <p className="text-sm text-muted">{t("learner.exams.preset.rnMixed.body")}</p>
+        <ExamSessionErrorBoundary surface="exam_rnMixed2026">
         <ExamPracticeClient
+          userId={userId}
           examId={EXAM_RN_MIXED_PRACTICE_2026_ID}
           examTitle={t("learner.exams.examTitle.rnMixed")}
           questionTag={EXAM_PRESET_RN_MIXED_2026_TAG}
           sessionNamespace="rnMixed2026"
         />
+        </ExamSessionErrorBoundary>
       </section>
 
       <section className="mt-10 space-y-2">
         <h2 className="text-xl font-semibold">{t("learner.exams.preset.pnMixed.title", { count: MIXED_PRACTICE_2026_QUESTION_TARGET })}</h2>
         <p className="text-sm text-muted">{t("learner.exams.preset.pnMixed.body")}</p>
+        <ExamSessionErrorBoundary surface="exam_pnMixed2026">
         <ExamPracticeClient
+          userId={userId}
           examId={EXAM_PN_MIXED_PRACTICE_2026_ID}
           examTitle={t("learner.exams.examTitle.pnMixed")}
           questionTag={EXAM_PRESET_PN_MIXED_2026_TAG}
           sessionNamespace="pnMixed2026"
         />
+        </ExamSessionErrorBoundary>
       </section>
 
       <section className="mt-10 space-y-6">
@@ -218,12 +230,15 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
           <div className="space-y-2">
             <h3 className="text-lg font-semibold">{t("learner.exams.preset.rnFull.title")}</h3>
             <p className="text-sm text-muted">{t("learner.exams.preset.rnFull.body")}</p>
+            <ExamSessionErrorBoundary surface="exam_usRnFull2026">
             <ExamPracticeClient
+              userId={userId}
               examId={EXAM_US_RN_FULL_2026_ID}
               examTitle={t("learner.exams.examTitle.rnFull")}
               questionTag={EXAM_PRESET_US_RN_FULL_2026_TAG}
               sessionNamespace="usRnFull2026"
             />
+            </ExamSessionErrorBoundary>
           </div>
         ) : null}
 
@@ -231,12 +246,15 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
           <div className="space-y-2">
             <h3 className="text-lg font-semibold">{t("learner.exams.preset.pnFull.title")}</h3>
             <p className="text-sm text-muted">{t("learner.exams.preset.pnFull.body")}</p>
+            <ExamSessionErrorBoundary surface="exam_usPnFull2026">
             <ExamPracticeClient
+              userId={userId}
               examId={EXAM_US_PN_FULL_2026_ID}
               examTitle={t("learner.exams.examTitle.pnFull")}
               questionTag={EXAM_PRESET_US_PN_FULL_2026_TAG}
               sessionNamespace="usPnFull2026"
             />
+            </ExamSessionErrorBoundary>
           </div>
         ) : null}
       </section>

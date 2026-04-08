@@ -101,7 +101,7 @@ export function ExamPlanSettingsCard() {
 
   if (loading && !data) {
     return (
-      <section id="exam-plan" className="nn-card scroll-mt-24 p-6">
+      <section className="nn-card scroll-mt-24 p-6">
         <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Exam date & pacing</h2>
         <p className="mt-2 text-sm text-muted">Loading…</p>
       </section>
@@ -113,7 +113,7 @@ export function ExamPlanSettingsCard() {
   const showAlliedProfession = data?.tier === "allied";
 
   return (
-    <section id="exam-plan" className="nn-card scroll-mt-24 p-6">
+    <section className="nn-card scroll-mt-24 p-6">
       <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Exam date & pacing</h2>
       <p className="mt-2 text-sm text-muted">
         Tell us your timing so we can pace countdowns and suggestions. This is not a booking record. Update it anytime.
