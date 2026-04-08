@@ -1,6 +1,14 @@
 /**
- * Injectable scoped gold-standard lessons (shared core + pathway overlays).
- * Order = remediation priority for hub injection when not duplicated in catalog.json or DB.
+ * **Shared core + scoped variant** — how premium pathway lessons scale without “count inflation”.
+ *
+ * - **One stable `slug` per teachable unit** across pathways. Exam/country/role differences live in
+ *   `getFullLesson(pathwayId)` / `getHubListRow(pathwayId)` (see `*-gold-standard.ts`), not as separate
+ *   catalog rows that duplicate the same clinical spine.
+ * - **Do not** paste near-identical `catalog.json` lessons into multiple `pathways.*.lessons` arrays just
+ *   to raise lesson totals — that becomes uncontrolled duplication and erodes editorial quality.
+ * - **Registry merge**: {@link prependScopedGoldCatalogLessons} prepends injectables only when the slug is
+ *   absent from the pathway’s catalog slice (catalog/DB rows win on slug collision).
+ * - **Order** = remediation priority for hub injection when the slug is not already in catalog.json or DB.
  */
 import type {
   PathwayLessonOmittedPremiumSection,
@@ -87,13 +95,17 @@ export type ScopedGoldLessonInput = {
 };
 
 export type ScopedGoldProvider = {
+  /** Public URL slug — identical for every pathway; variants differ inside `getFullLesson`. */
   slug: string;
   topicSlug: string;
   getFullLesson: (pathwayId: string) => ScopedGoldLessonInput | null;
   getHubListRow: (pathwayId: string) => Omit<ScopedGoldLessonInput, "sections" | "preTest" | "postTest"> | null;
 };
 
-/** Waves 1–3 acute core + RPN slice; wave 4 maternal–child + renal dialysis; COPD legacy gold remains last. */
+/**
+ * Injectable gold lessons (shared clinical core + pathway-scoped copy). Prefer adding here over
+ * duplicating spine text across `catalog.json` pathways.
+ */
 export const SCOPED_GOLD_PROVIDERS: ScopedGoldProvider[] = [
   {
     slug: CLINICAL_JUDGMENT_GOLD_SLUG,
@@ -169,7 +181,10 @@ export const SCOPED_GOLD_PROVIDERS: ScopedGoldProvider[] = [
   },
 ];
 
-/** Prepend registry lessons not already present in catalog.json (stable slugs). */
+/**
+ * Prepend registry lessons not already present in the pathway’s catalog slice (stable slugs).
+ * Keeps a single authoritative row per slug while still surfacing the lesson on every eligible pathway hub.
+ */
 export function prependScopedGoldCatalogLessons(pathwayId: string, fromJson: ScopedGoldLessonInput[]): ScopedGoldLessonInput[] {
   const seen = new Set(fromJson.map((l) => l.slug));
   const prepend: ScopedGoldLessonInput[] = [];

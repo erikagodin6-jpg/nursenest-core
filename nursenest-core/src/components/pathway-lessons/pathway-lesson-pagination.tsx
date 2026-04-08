@@ -7,14 +7,24 @@ type Props = {
   pageCount: number;
   total: number;
   pageSize: number;
+  /** Preserved on prev/next (e.g. hub search). */
+  hubSearch?: string;
 };
+
+function hubQuery(page: number, hubSearch?: string): string {
+  const qs = new URLSearchParams();
+  if (page > 1) qs.set("page", String(page));
+  if (hubSearch && hubSearch.length > 0) qs.set("q", hubSearch);
+  const s = qs.toString();
+  return s ? `?${s}` : "";
+}
 
 /**
  * Server-rendered prev/next for pathway lesson lists. Keeps each page bounded (no infinite scroll of huge sets).
  */
-export function PathwayLessonPagination({ basePath, page, pageCount, total, pageSize }: Props) {
+export function PathwayLessonPagination({ basePath, page, pageCount, total, pageSize, hubSearch }: Props) {
   if (pageCount <= 1) return null;
-  const href = (p: number) => (p <= 1 ? basePath : `${basePath}?page=${p}`);
+  const href = (p: number) => `${basePath}${hubQuery(p, hubSearch)}`;
   const from = total === 0 ? 0 : (page - 1) * pageSize + 1;
   const to = Math.min(page * pageSize, total);
   return (

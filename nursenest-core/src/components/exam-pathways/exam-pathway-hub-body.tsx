@@ -7,14 +7,12 @@ import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry"
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { ExamPathwayHubStudyModes } from "@/components/exam-pathways/exam-pathway-hub-study-modes";
 import { pathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-analytics-props";
-import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { HUB, loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 
 type Props = {
   pathway: ExamPathwayDefinition;
   isSignedIn: boolean;
-  /** Programmatic SEO parent link; rendered after top CTAs, before conversion cards. */
-  discovery: { path: string; label: string } | null;
   /** NP practice-test SEO landings: highlight in-app CAT practice tests. */
   emphasizeCatPracticeTests?: boolean;
   /** When set, all hub CTAs include `np_seo_alias_segment` + `from_np_seo_alias` for PostHog. */
@@ -26,7 +24,6 @@ type Props = {
 export function ExamPathwayHubBody({
   pathway,
   isSignedIn,
-  discovery,
   emphasizeCatPracticeTests = false,
   npSeoAliasSegment,
   conversionSectionHeading,
@@ -39,7 +36,9 @@ export function ExamPathwayHubBody({
   const tertiaryHref = isSignedIn ? "/app" : pricingHref;
   const tertiaryLabel = isSignedIn ? "Open your study hub" : "Plans & pricing";
   const linkCtx = pathwayMarketingHubLinkContext(pathway, npSeoAliasSegment);
-  const practiceEntryHref = loginWithCallback(emphasizeCatPracticeTests ? "/app/practice-tests" : "/app/exams");
+  const practiceEntryHref = emphasizeCatPracticeTests
+    ? loginWithCallback("/app/practice-tests")
+    : HUB.practiceExams;
 
   return (
     <>
@@ -143,45 +142,25 @@ export function ExamPathwayHubBody({
       ) : null}
 
       <aside className="mt-10 rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]/80 px-4 py-4 text-sm text-[var(--theme-body-text)] sm:px-5">
-        <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">Search &amp; discovery</p>
+        <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">Study loop</p>
         <p className="mt-2 text-[var(--theme-muted-text)]">
-          {discovery ? (
-            <>
-              Related public guide:{" "}
-              {npSeoAliasSegment ? (
-                <MarketingTrackedLink
-                  href={discovery.path}
-                  event={PH.marketingPathwayHubCta}
-                  eventProps={{
-                    ...linkCtx,
-                    surface: "discovery_programmatic_guide",
-                    pathway_id: pathway.id,
-                    destination_type: "programmatic_guide",
-                    link_target: "programmatic_seo_guide",
-                  }}
-                  className="font-semibold text-primary hover:underline"
-                >
-                  {discovery.label}
-                </MarketingTrackedLink>
-              ) : (
-                <Link href={discovery.path} className="font-semibold text-primary hover:underline">
-                  {discovery.label}
-                </Link>
-              )}
-              . Or{" "}
-              <Link href="/lessons" className="font-semibold text-primary hover:underline">
-                browse all exam lesson pathways
-              </Link>
-              .
-            </>
-          ) : (
-            <>
-              <Link href="/lessons" className="font-semibold text-primary hover:underline">
-                Browse all exam lesson pathways
-              </Link>{" "}
-              to compare tracks.
-            </>
-          )}
+          Start from{" "}
+          <Link href={lessonsHref} className="font-semibold text-primary hover:underline">
+            clinical lessons
+          </Link>
+          , then{" "}
+          <Link href={questionsHref} className="font-semibold text-primary hover:underline">
+            pathway question reps
+          </Link>
+          , then{" "}
+          <Link href={HUB.practiceExams} className="font-semibold text-primary hover:underline">
+            timed practice exams
+          </Link>
+          . Compare every exam track from the{" "}
+          <Link href="/lessons" className="font-semibold text-primary hover:underline">
+            lessons overview
+          </Link>
+          .
         </p>
       </aside>
 
@@ -242,7 +221,7 @@ export function ExamPathwayHubBody({
               surface: "card_timed_exams",
               pathway_id: pathway.id,
               destination_type: "marketing_timed_exams",
-              link_target: emphasizeCatPracticeTests ? "app_practice_tests" : "app_exams",
+              link_target: emphasizeCatPracticeTests ? "app_practice_tests" : "public_practice_exams",
             }}
             className="flex h-full min-h-[11rem] flex-col rounded-2xl border border-[var(--theme-card-border)] bg-card p-5 shadow-sm transition hover:border-primary/30 hover:shadow-[var(--shadow-card)] sm:min-h-[12rem]"
           >

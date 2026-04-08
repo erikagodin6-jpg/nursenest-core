@@ -42,6 +42,7 @@ const HASH_TO_LIFESPAN: Record<string, FnpLifespanGroup> = {
 export function FnpLessonExplorer({ pathway, lessonsBasePath, explorerLessons, excludeSlug }: Props) {
   const [lifespan, setLifespan] = useState<FnpLifespanFilter>("all");
   const [domain, setDomain] = useState<FnpDomainFilter>("all");
+  const [textQ, setTextQ] = useState("");
 
   useEffect(() => {
     const h = window.location.hash;
@@ -50,11 +51,16 @@ export function FnpLessonExplorer({ pathway, lessonsBasePath, explorerLessons, e
   }, []);
 
   const filtered = useMemo(() => {
+    const t = textQ.trim().toLowerCase();
+    const useText = t.length >= 2;
     return explorerLessons.filter((e) => {
       if (excludeSlug && e.meta.slug === excludeSlug) return false;
-      return fnpExplorerMatchesFilters(e, lifespan, domain);
+      if (!fnpExplorerMatchesFilters(e, lifespan, domain)) return false;
+      if (!useText) return true;
+      const hay = `${e.meta.title} ${e.meta.topic} ${e.meta.slug}`.toLowerCase();
+      return hay.includes(t);
     });
-  }, [explorerLessons, lifespan, domain, excludeSlug]);
+  }, [explorerLessons, lifespan, domain, excludeSlug, textQ]);
 
   return (
     <div id="fnp-explorer" className="scroll-mt-24 space-y-5">
@@ -105,12 +111,29 @@ export function FnpLessonExplorer({ pathway, lessonsBasePath, explorerLessons, e
               ))}
             </div>
           </div>
+
+          <div className="mt-4">
+            <label htmlFor="fnp-lesson-text" className="text-xs font-semibold text-foreground">
+              Search this page
+            </label>
+            <input
+              id="fnp-lesson-text"
+              type="search"
+              value={textQ}
+              onChange={(ev) => setTextQ(ev.target.value)}
+              placeholder="Title, topic, or slug (min 2 characters)"
+              autoComplete="off"
+              maxLength={80}
+              className="mt-2 w-full rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground shadow-sm placeholder:text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+            />
+            <p className="mt-1 text-[11px] text-muted">Filters the current page of lessons only; use topic clusters or pagination for the full library.</p>
+          </div>
         </div>
 
         <p className="mt-3 text-xs text-muted" aria-live="polite">
           Showing <strong className="text-foreground">{filtered.length}</strong> lesson
           {filtered.length === 1 ? "" : "s"}
-          {lifespan !== "all" || domain !== "all" ? " (filtered)" : ""}.
+          {lifespan !== "all" || domain !== "all" || textQ.trim().length >= 2 ? " (filtered)" : ""}.
         </p>
       </div>
 

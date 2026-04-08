@@ -8,7 +8,7 @@ import { EmailSignupBanner } from "@/components/marketing/email-signup-banner";
 import { MarketingLanguagePreferenceList } from "@/components/i18n/marketing-language-preference";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
-import { npPracticeProgrammatic, pnPracticeProgrammatic } from "@/lib/marketing/marketing-entry-routes";
+import { marketingExamPrepHubs } from "@/lib/marketing/marketing-exam-navigation";
 
 function FLink({
   href,
@@ -40,8 +40,7 @@ function FLink({
 export function SiteFooter() {
   const { t, locale } = useMarketingI18n();
   const { region } = useNursenestRegion();
-  const pnPrepHref = pnPracticeProgrammatic(region);
-  const npPrepHref = npPracticeProgrammatic(region);
+  const examHubs = marketingExamPrepHubs(region);
 
   return (
     <footer className="mt-auto border-t border-[var(--divider,var(--theme-nav-border))] bg-[var(--bg-section,var(--theme-card-bg))] py-[var(--nn-rhythm-footer-y)]">
@@ -94,15 +93,15 @@ export function SiteFooter() {
                 <FLink href="/exam-prep">{t("footer.linkNursingExamPrepHub")}</FLink>
               </li>
               <li>
-                <FLink href="/nclex-rn">{t("footer.linkNclexRnPrep")}</FLink>
+                <FLink href={examHubs.rn}>{t("footer.linkNclexRnPrep")}</FLink>
               </li>
               <li>
-                <FLink href={pnPrepHref}>
+                <FLink href={examHubs.pn}>
                   {region === "US" ? t("footer.linkPnExamPrepUs") : t("footer.linkPnExamPrepCa")}
                 </FLink>
               </li>
               <li>
-                <FLink href={npPrepHref}>
+                <FLink href={examHubs.np}>
                   {region === "US" ? t("footer.linkNpExamPrepUs") : t("footer.linkNpExamPrepCa")}
                 </FLink>
               </li>

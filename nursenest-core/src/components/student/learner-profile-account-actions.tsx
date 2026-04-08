@@ -7,9 +7,12 @@ import { useState } from "react";
 export function LearnerProfileAccountActions({
   hasPassword,
   showBillingPortal,
+  variant = "full",
 }: {
   hasPassword: boolean;
   showBillingPortal: boolean;
+  /** `passwordOnly` / `billingOnly` for focused account subpages. */
+  variant?: "full" | "passwordOnly" | "billingOnly";
 }) {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -73,8 +76,12 @@ export function LearnerProfileAccountActions({
     }
   }
 
+  const showPassword = variant === "full" || variant === "passwordOnly";
+  const showBilling = variant === "full" || variant === "billingOnly";
+
   return (
     <div className="space-y-6">
+      {showPassword ? (
       <div>
         <h3 className="text-sm font-semibold text-[var(--theme-heading-text)]">Password</h3>
         {!hasPassword ? (
@@ -142,8 +149,10 @@ export function LearnerProfileAccountActions({
           </p>
         ) : null}
       </div>
+      ) : null}
 
-      <div className="border-t border-border/60 pt-6">
+      {showBilling ? (
+      <div className={showPassword ? "border-t border-border/60 pt-6" : ""}>
         <h3 className="text-sm font-semibold text-[var(--theme-heading-text)]">Billing & subscription</h3>
         <p className="mt-1 text-sm text-muted-foreground">
           Update payment method, view invoices, or cancel in Stripe’s secure portal when your plan is billed through
@@ -167,7 +176,9 @@ export function LearnerProfileAccountActions({
           </p>
         )}
       </div>
+      ) : null}
 
+      {showBilling ? (
       <div className="border-t border-border/60 pt-6">
         <h3 className="text-sm font-semibold text-[var(--theme-heading-text)]">Policies &amp; support</h3>
         <p className="mt-1 text-sm text-muted-foreground">
@@ -202,6 +213,7 @@ export function LearnerProfileAccountActions({
           </li>
         </ul>
       </div>
+      ) : null}
 
       {error ? (
         <p className="text-sm text-red-700 dark:text-red-300" role="alert">

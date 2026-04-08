@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ProgrammaticSeoPage } from "@/components/seo/programmatic-seo-page";
 import { buildProgrammaticMetadata } from "@/lib/seo/programmatic-metadata";
+import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 import { resolveProgrammaticSeoForLocale } from "@/lib/seo/resolve-programmatic-seo";
 
 /**
@@ -34,6 +35,7 @@ export default async function ProgrammaticSeoLocaleRoute({
   params: Promise<{ locale: string; slug: string }>;
 }) {
   const { locale, slug } = await params;
+  const marketingRegion = await getMarketingRegionFromCookies();
   const resolved = resolveProgrammaticSeoForLocale(slug, locale);
   if (!resolved) notFound();
   return (
@@ -42,6 +44,7 @@ export default async function ProgrammaticSeoLocaleRoute({
       locale={locale}
       related={resolved.related}
       cross={resolved.cross}
+      marketingRegion={marketingRegion}
       localizedUrl
     />
   );

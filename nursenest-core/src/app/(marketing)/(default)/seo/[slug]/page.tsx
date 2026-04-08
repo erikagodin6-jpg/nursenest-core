@@ -4,6 +4,7 @@ import { ProgrammaticSeoPage } from "@/components/seo/programmatic-seo-page";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { buildProgrammaticMetadata } from "@/lib/seo/programmatic-metadata";
+import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 import { resolveProgrammaticSeoForLocale } from "@/lib/seo/resolve-programmatic-seo";
 
 /** Build-time prerender disabled: full slug list inflates `.next` on disk-limited hosts; pages are ISR on demand. */
@@ -29,6 +30,7 @@ export async function generateMetadata({
 export default async function ProgrammaticSeoRewriteTarget({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const locale = await getMarketingLocaleForDefaultRoute();
+  const marketingRegion = await getMarketingRegionFromCookies();
   const resolved = resolveProgrammaticSeoForLocale(slug, locale);
   if (!resolved) notFound();
   return (
@@ -37,6 +39,7 @@ export default async function ProgrammaticSeoRewriteTarget({ params }: { params:
       locale={locale}
       related={resolved.related}
       cross={resolved.cross}
+      marketingRegion={marketingRegion}
     />
   );
 }

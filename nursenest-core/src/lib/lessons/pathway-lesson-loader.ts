@@ -32,7 +32,8 @@ import {
   type PathwayLessonSection,
   type PathwayLessonSectionKind,
 } from "@/lib/lessons/pathway-lesson-types";
-import { ContentStatus } from "@prisma/client";
+import { ContentStatus, type Prisma } from "@prisma/client";
+import { cache } from "react";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { sortPathwayLessonsForPublicPreview } from "@/lib/lessons/pathway-lesson-public-preview-priority";
 
@@ -79,6 +80,36 @@ export const RELATED_PATHWAY_LESSONS_LIMIT = 8;
 export const PATHWAY_LESSON_SITEMAP_BATCH = 600;
 /** Absolute safety cap: catalog pathways with more lessons are truncated for list/hub pagination math. */
 export const PATHWAY_CATALOG_LIST_HARD_CAP = 2_000;
+/** Hub lesson search: ignore single-character noise; cap length for safety. */
+export const PATHWAY_HUB_SEARCH_MIN_LEN = 2;
+export const PATHWAY_HUB_SEARCH_MAX_LEN = 80;
+
+/** Normalized search string for pathway lesson hubs (catalog + DB lists), or `undefined` when inactive. */
+export function normalizePathwayHubSearchQuery(raw: string | undefined): string | undefined {
+  if (typeof raw !== "string") return undefined;
+  const t = raw.trim();
+  if (t.length < PATHWAY_HUB_SEARCH_MIN_LEN) return undefined;
+  return t.slice(0, PATHWAY_HUB_SEARCH_MAX_LEN);
+}
+
+function hubSearchHaystackLessonInput(l: LessonInput): string {
+  return `${l.title}\n${l.slug}\n${l.topic}\n${l.topicSlug}`.toLowerCase();
+}
+
+function lessonInputMatchesHubSearch(l: LessonInput, qLower: string): boolean {
+  return hubSearchHaystackLessonInput(l).includes(qLower);
+}
+
+function pathwayLessonHubSearchWhere(q: string): Prisma.PathwayLessonWhereInput {
+  return {
+    OR: [
+      { title: { contains: q, mode: "insensitive" } },
+      { topic: { contains: q, mode: "insensitive" } },
+      { slug: { contains: q, mode: "insensitive" } },
+      { topicSlug: { contains: q, mode: "insensitive" } },
+    ],
+  };
+}
 
 const CANONICAL_ORDER: PathwayLessonSectionKind[] = [
   "clinical_meaning",
@@ -436,6 +467,10 @@ function filterCatalogLessonsByTopicSlugs(raw: LessonInput[], topicSlugsIn?: str
   return raw.filter((l) => set.has(l.topicSlug));
 }
 
+/**
+ * Static catalog slice for one pathway, merged with scoped-gold injectables (shared core + per-pathway variant
+ * in code — see `scoped-gold-registry.ts`). Catalog rows take precedence when slugs match.
+ */
 function getCatalogLessonsRaw(pathwayId: string): LessonInput[] {
   const bucket = data.pathways[pathwayId];
   const fromJson = bucket?.lessons?.length ? bucket.lessons.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
@@ -574,20 +609,20 @@ async function countPublishedDbLessonsForPathwayLocale(
   pathwayId: string,
   locale: string,
   topicSlugsIn?: string[],
+  hubSearch?: string,
 ): Promise<number> {
   if (topicSlugsIn && topicSlugsIn.length === 0) return 0;
-  return dbCall(
-    () =>
-      prisma.pathwayLesson.count({
-        where: {
-          pathwayId,
-          status: ContentStatus.PUBLISHED,
-          locale,
-          ...(topicSlugsIn && topicSlugsIn.length > 0 ? { topicSlug: { in: topicSlugsIn } } : {}),
-        },
-      }),
-    0,
-  );
+  const base: Prisma.PathwayLessonWhereInput = {
+    pathwayId,
+    status: ContentStatus.PUBLISHED,
+    locale,
+    ...(topicSlugsIn && topicSlugsIn.length > 0 ? { topicSlug: { in: topicSlugsIn } } : {}),
+  };
+  const where: Prisma.PathwayLessonWhereInput =
+    hubSearch && hubSearch.length >= PATHWAY_HUB_SEARCH_MIN_LEN
+      ? { AND: [base, pathwayLessonHubSearchWhere(hubSearch)] }
+      : base;
+  return dbCall(() => prisma.pathwayLesson.count({ where }), 0);
 }
 
 /** Total published rows for pathway across locales (audit / metrics). */
@@ -639,16 +674,22 @@ async function loadPublishedLessonRowsPage(
   skip: number,
   take: number,
   topicSlugsIn?: string[],
+  hubSearch?: string,
 ): Promise<LessonInput[]> {
   if (topicSlugsIn && topicSlugsIn.length === 0) return [];
+  const base: Prisma.PathwayLessonWhereInput = {
+    pathwayId,
+    status: ContentStatus.PUBLISHED,
+    locale,
+    ...(topicSlugsIn && topicSlugsIn.length > 0 ? { topicSlug: { in: topicSlugsIn } } : {}),
+  };
+  const where: Prisma.PathwayLessonWhereInput =
+    hubSearch && hubSearch.length >= PATHWAY_HUB_SEARCH_MIN_LEN
+      ? { AND: [base, pathwayLessonHubSearchWhere(hubSearch)] }
+      : base;
   return dbCall(async () => {
     const rows = await prisma.pathwayLesson.findMany({
-      where: {
-        pathwayId,
-        status: ContentStatus.PUBLISHED,
-        locale,
-        ...(topicSlugsIn && topicSlugsIn.length > 0 ? { topicSlug: { in: topicSlugsIn } } : {}),
-      },
+      where,
       orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
       skip,
       take,
@@ -693,48 +734,59 @@ function clampPage(page: number): number {
  *
  * @param marketingLocale Requested **lesson content** locale (BCP-47 base), not the exam URL country segment.
  * @param listOptions.topicSlugsIn When set, restrict to these topic slugs (empty array = no matches). Omit for full pathway.
+ * @param listOptions.q Optional title/topic/slug filter (bounded length); applied to catalog rows and DB rows; gold injections filtered in-memory.
  */
-export async function getPathwayLessonsPage(
+async function getPathwayLessonsPageImpl(
   pathwayId: string,
   page: number = 1,
   pageSize: number = PATHWAY_HUB_PAGE_SIZE_DEFAULT,
   marketingLocale?: string,
-  listOptions?: { topicSlugsIn?: string[] },
+  listOptions?: { topicSlugsIn?: string[]; q?: string },
 ): Promise<PathwayLessonsPageResult> {
   const ps = clampPageSize(pageSize);
   const p = clampPage(page);
   const requested = normalizePathwayLessonLocale(marketingLocale);
   const lessonDbOverlays = await fetchPublishedPathwayLessonOverlayMapSafe(requested);
   const topicSlugsIn = listOptions?.topicSlugsIn;
+  const qRaw = normalizePathwayHubSearchQuery(listOptions?.q);
+  const qLower = qRaw ? qRaw.toLowerCase() : "";
 
   const dbAny = await pathwayHasPublishedDbLessons(pathwayId);
   if (dbAny) {
     const t0 = performance.now();
     const effective = await resolveEffectiveListLocale(pathwayId, requested);
-    let total = await countPublishedDbLessonsForPathwayLocale(pathwayId, effective, topicSlugsIn);
     const missingGolds = await listMissingScopedGoldHubRows(pathwayId, effective, topicSlugsIn);
-    const g = missingGolds.length;
-    total += g;
-    const pageCount = total === 0 ? 1 : Math.max(1, Math.ceil(total / ps));
-    const safePage = total === 0 ? 1 : Math.min(p, pageCount);
-    const start = (safePage - 1) * ps;
+    const goldsFiltered = qRaw ? missingGolds.filter((row) => lessonInputMatchesHubSearch(row, qLower)) : missingGolds;
+    const g = goldsFiltered.length;
+    const dbCount = await countPublishedDbLessonsForPathwayLocale(pathwayId, effective, topicSlugsIn, qRaw);
+    let total = dbCount + g;
+    let pageCount = total === 0 ? 1 : Math.max(1, Math.ceil(total / ps));
+    let safePage = total === 0 ? 1 : Math.min(p, pageCount);
+    let start = (safePage - 1) * ps;
     let raw: LessonInput[];
-    if (g > 0) {
+    if (missingGolds.length > 0 && g > 0) {
       let vi = start;
       const goldOnPage: LessonInput[] = [];
       while (vi < g && goldOnPage.length < ps) {
-        goldOnPage.push(missingGolds[vi]);
+        goldOnPage.push(goldsFiltered[vi]);
         vi += 1;
       }
       const dbTake = ps - goldOnPage.length;
       const dbSkip = Math.max(0, vi - g);
       const dbRows =
         dbTake > 0
-          ? await loadPublishedLessonRowsPage(pathwayId, effective, dbSkip, dbTake, topicSlugsIn)
+          ? await loadPublishedLessonRowsPage(pathwayId, effective, dbSkip, dbTake, topicSlugsIn, qRaw)
           : [];
       raw = [...goldOnPage, ...dbRows];
+    } else if (missingGolds.length > 0 && g === 0) {
+      /** Search excluded all gold rows — paginate DB matches only. */
+      total = dbCount;
+      pageCount = total === 0 ? 1 : Math.max(1, Math.ceil(total / ps));
+      safePage = total === 0 ? 1 : Math.min(p, pageCount);
+      start = (safePage - 1) * ps;
+      raw = await loadPublishedLessonRowsPage(pathwayId, effective, start, ps, topicSlugsIn, qRaw);
     } else {
-      raw = await loadPublishedLessonRowsPage(pathwayId, effective, start, ps, topicSlugsIn);
+      raw = await loadPublishedLessonRowsPage(pathwayId, effective, start, ps, topicSlugsIn, qRaw);
     }
     const durationMs = Math.round(performance.now() - t0);
     safeServerLog("pathway_lessons", "hub_list_db_timing", {
@@ -744,6 +796,7 @@ export async function getPathwayLessonsPage(
       page: safePage,
       pageSize: ps,
       total,
+      hubSearch: qRaw ? "1" : "0",
     });
     const meta = lessonLocaleMeta(marketingLocale, effective, requested !== effective, false);
     return {
@@ -769,23 +822,25 @@ export async function getPathwayLessonsPage(
   }
 
   const allRaw = filterCatalogLessonsByTopicSlugs(getCatalogLessonsRaw(pathwayId), topicSlugsIn);
-  const total = allRaw.length;
+  const filteredRaw = qRaw ? allRaw.filter((row) => lessonInputMatchesHubSearch(row, qLower)) : allRaw;
+  const total = filteredRaw.length;
   const pageCount = Math.max(1, Math.ceil(total / ps));
   const safePage = Math.min(p, pageCount);
   const skip = (safePage - 1) * ps;
-  const slice = allRaw.slice(skip, skip + ps);
+  const slice = filteredRaw.slice(skip, skip + ps);
   safeServerLog("pathway_lessons", "hub_list_source", {
     pathwayId,
     pathwayLessonRuntimeSource: total > 0 ? "catalog" : "none",
     total,
     page: safePage,
     pageSize: ps,
+    hubSearch: qRaw ? "1" : "0",
   });
   const catMeta = lessonLocaleMeta(marketingLocale, "en", requested !== "en", true);
   return {
     items: slice.map((row) =>
       applyLessonEducationalOverlay(
-        withLocaleMeta(normalizeLesson(row, pathwayId), catMeta),
+        withLocaleMeta(normalizeLessonForHubList(row, pathwayId), catMeta),
         marketingLocale,
         pathwayId,
         lessonDbOverlays,
@@ -804,10 +859,13 @@ export async function getPathwayLessonsPage(
   };
 }
 
+/** Dedupes identical hub list fetches within a single request (metadata + page, etc.). */
+export const getPathwayLessonsPage = cache(getPathwayLessonsPageImpl);
+
 export type TopicLessonsPageResult = PathwayLessonsPageResult;
 
 /** Topic cluster page — bounded page through lessons in one topic slug. */
-export async function getLessonsForTopicPage(
+async function getLessonsForTopicPageImpl(
   pathwayId: string,
   topicSlug: string,
   page: number = 1,
@@ -858,7 +916,7 @@ export async function getLessonsForTopicPage(
         return {
           items: sliceCat.map((row) =>
             applyLessonEducationalOverlay(
-              withLocaleMeta(normalizeLesson(row, pathwayId), metaCat),
+              withLocaleMeta(normalizeLessonForHubList(row, pathwayId), metaCat),
               marketingLocale,
               pathwayId,
               lessonDbOverlays,
@@ -1000,7 +1058,7 @@ export async function getLessonsForTopicPage(
   return {
     items: slice.map((row) =>
       applyLessonEducationalOverlay(
-        withLocaleMeta(normalizeLesson(row, pathwayId), catMeta),
+        withLocaleMeta(normalizeLessonForHubList(row, pathwayId), catMeta),
         marketingLocale,
         pathwayId,
         lessonDbOverlays,
@@ -1019,8 +1077,10 @@ export async function getLessonsForTopicPage(
   };
 }
 
+export const getLessonsForTopicPage = cache(getLessonsForTopicPageImpl);
+
 /** Single lesson by slug — one targeted DB fetch (requested locale, then English fallback). */
-export async function getPathwayLesson(
+async function getPathwayLessonImpl(
   pathwayId: string,
   slug: string,
   marketingLocale?: string,
@@ -1090,6 +1150,9 @@ export async function getPathwayLesson(
   );
 }
 
+/** Dedupes metadata + page lesson fetches in the same request. */
+export const getPathwayLesson = cache(getPathwayLessonImpl);
+
 /**
  * Progress API: accept lesson completion if slug exists in any published locale (prefer `en` row when duplicated).
  */
@@ -1139,7 +1202,7 @@ export async function getPublishedPathwayLessonRecordById(
 }
 
 /** Related lessons (same topic) for detail page — capped list, bounded query on DB. */
-export async function getRelatedPathwayLessons(
+async function getRelatedPathwayLessonsImpl(
   pathwayId: string,
   topicSlug: string,
   excludeSlug: string,
@@ -1182,14 +1245,21 @@ export async function getRelatedPathwayLessons(
   }
 
   const catMeta = lessonLocaleMeta(marketingLocale, "en", requested !== "en", true);
-  return getCatalogPathwayLessonsSync(pathwayId)
+  return getCatalogLessonsRaw(pathwayId)
     .filter((l) => l.topicSlug === topicSlug && l.slug !== excludeSlug)
     .slice(0, cap)
-    .map((l) =>
-      applyLessonEducationalOverlay(withLocaleMeta(l, catMeta), marketingLocale, pathwayId, lessonDbOverlays),
+    .map((raw) =>
+      applyLessonEducationalOverlay(
+        withLocaleMeta(normalizeLessonForHubList(raw, pathwayId), catMeta),
+        marketingLocale,
+        pathwayId,
+        lessonDbOverlays,
+      ),
     )
     .filter(pathwayLessonHasRenderableHubSlug);
 }
+
+export const getRelatedPathwayLessons = cache(getRelatedPathwayLessonsImpl);
 
 async function listPathwayIdsWithDbLessons(): Promise<string[]> {
   return dbCall(
@@ -1217,12 +1287,15 @@ export type TopicCluster = { topicSlug: string; label: string; count: number };
 
 /** Topic index from static catalog (used when DB is primary but DB topic aggregates are empty). */
 function topicClustersFromCatalogPathway(pathwayId: string): TopicCluster[] {
-  const lessons = getCatalogPathwayLessonsSync(pathwayId);
+  const raw = getCatalogLessonsRaw(pathwayId);
   const map = new Map<string, { label: string; count: number }>();
-  for (const l of lessons) {
-    const cur = map.get(l.topicSlug) ?? { label: l.topic, count: 0 };
+  for (const l of raw) {
+    const topicSlug = typeof l.topicSlug === "string" ? l.topicSlug : "";
+    if (!topicSlug) continue;
+    const label = typeof l.topic === "string" ? l.topic : topicSlug;
+    const cur = map.get(topicSlug) ?? { label, count: 0 };
     cur.count += 1;
-    map.set(l.topicSlug, { label: l.topic, count: cur.count });
+    map.set(topicSlug, { label: cur.label, count: cur.count });
   }
   return [...map.entries()]
     .map(([topicSlug, v]) => ({ topicSlug, label: v.label, count: v.count }))
@@ -1230,7 +1303,7 @@ function topicClustersFromCatalogPathway(pathwayId: string): TopicCluster[] {
 }
 
 /** Topic index for a pathway — aggregates only (no full section bodies loaded). */
-export async function listTopicClusters(pathwayId: string, marketingLocale?: string): Promise<TopicCluster[]> {
+async function listTopicClustersImpl(pathwayId: string, marketingLocale?: string): Promise<TopicCluster[]> {
   const dbHas = await pathwayHasPublishedDbLessons(pathwayId);
   if (dbHas) {
     const effective = await resolveEffectiveListLocale(pathwayId, normalizePathwayLessonLocale(marketingLocale));
@@ -1277,6 +1350,9 @@ export async function listTopicClusters(pathwayId: string, marketingLocale?: str
 
   return topicClustersFromCatalogPathway(pathwayId);
 }
+
+/** Dedupes topic index work when metadata + page both need clusters in one request. */
+export const listTopicClusters = cache(listTopicClustersImpl);
 
 export type PathwayLessonSlugRow = { slug: string; topicSlug: string };
 

@@ -15,7 +15,11 @@ import {
 } from "@/lib/allied/allied-professions-registry";
 import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
 import { pathwayCountryLabel } from "@/lib/lessons/pathway-lesson-hub-seo";
-import { getPathwayLessonsPage, PATHWAY_HUB_PAGE_SIZE_MAX } from "@/lib/lessons/pathway-lesson-loader";
+import {
+  getPathwayLessonsPage,
+  normalizePathwayHubSearchQuery,
+  PATHWAY_HUB_PAGE_SIZE_MAX,
+} from "@/lib/lessons/pathway-lesson-loader";
 import {
   pathwayLessonHasRenderableHubSlug,
   pathwayLessonMarketingDetailHref,
@@ -32,7 +36,7 @@ export function generateStaticParams() {
 
 type Props = {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ page?: string; pageSize?: string }>;
+  searchParams: Promise<{ page?: string; pageSize?: string; q?: string }>;
 };
 
 function resolveProfession(slug: string) {
@@ -100,6 +104,11 @@ export default async function AlliedHealthSlugLessonsPage({ params, searchParams
   const pageRequested = Math.max(1, Number(sp.page ?? "1") || 1);
   const rawSize = Number(sp.pageSize ?? String(ALLIED_LESSON_HUB_PAGE_SIZE)) || ALLIED_LESSON_HUB_PAGE_SIZE;
   const pageSizeRequested = Math.min(PATHWAY_HUB_PAGE_SIZE_MAX, Math.max(8, Math.floor(rawSize)));
+  const qEffective = normalizePathwayHubSearchQuery(sp.q);
+  const listOptsRaw: { topicSlugsIn?: string[]; q?: string } = {};
+  if (prof.topicSlugsIn && prof.topicSlugsIn.length > 0) listOptsRaw.topicSlugsIn = prof.topicSlugsIn;
+  if (typeof sp.q === "string" && sp.q.trim().length > 0) listOptsRaw.q = sp.q;
+  const listOpts = Object.keys(listOptsRaw).length > 0 ? listOptsRaw : undefined;
 
   let pageResult;
   try {
@@ -108,7 +117,7 @@ export default async function AlliedHealthSlugLessonsPage({ params, searchParams
       pageRequested,
       pageSizeRequested,
       lessonContentLocale,
-      prof.topicSlugsIn ? { topicSlugsIn: prof.topicSlugsIn } : undefined,
+      listOpts,
     );
   } catch {
     pageResult = null;
@@ -154,7 +163,11 @@ export default async function AlliedHealthSlugLessonsPage({ params, searchParams
   }
 
   if (pageRequested !== pageResult.page) {
-    redirect(pageResult.page > 1 ? `${base}?page=${pageResult.page}` : base);
+    const qs = new URLSearchParams();
+    if (pageResult.page > 1) qs.set("page", String(pageResult.page));
+    if (qEffective) qs.set("q", qEffective);
+    const qstr = qs.toString();
+    redirect(qstr ? `${base}?${qstr}` : base);
   }
 
   const lessons = pageResult.items.filter(pathwayLessonHasRenderableHubSlug);
@@ -211,6 +224,7 @@ export default async function AlliedHealthSlugLessonsPage({ params, searchParams
           pageCount={pageResult.pageCount}
           total={pageResult.total}
           pageSize={pageResult.pageSize}
+          hubSearch={qEffective}
         />
 
         <section className="mt-10 rounded-xl border border-border bg-[var(--theme-muted-surface)] p-4 text-sm text-muted">

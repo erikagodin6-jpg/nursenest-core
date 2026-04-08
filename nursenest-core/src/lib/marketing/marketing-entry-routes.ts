@@ -49,6 +49,7 @@ export const NP = {
   pmhnpHub: "/us/np/pmhnp",
   pmhnpLessons: "/us/np/pmhnp/lessons",
   caNpHub: "/canada/np/cnple",
+  caNpLessons: "/canada/np/cnple/lessons",
   caNpQuestions: "/canada/np/cnple/questions",
 } as const;
 

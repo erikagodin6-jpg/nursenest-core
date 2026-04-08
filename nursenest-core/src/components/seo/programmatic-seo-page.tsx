@@ -10,11 +10,11 @@ import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { ProgrammaticPracticeConversionBlocks } from "@/components/seo/programmatic-practice-conversion-blocks";
 import { ProgrammaticPracticeHeroActions } from "@/components/seo/programmatic-practice-hero-actions";
 import { ProgrammaticPracticeDynamicHeader } from "@/components/seo/programmatic-practice-dynamic-header";
+import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { resolveProgrammaticProductLinks } from "@/lib/seo/programmatic-page-links";
 import { isUnifiedPracticeSlug } from "@/lib/seo/programmatic-practice-hub";
 import { ProgrammaticStudyModesHub } from "@/components/seo/programmatic-study-modes-hub";
-import { NpProgrammaticPracticeTestCrossLinks } from "@/components/seo/np-programmatic-practice-test-cross-links";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
 
@@ -23,6 +23,7 @@ export async function ProgrammaticSeoPage({
   locale,
   related,
   cross,
+  marketingRegion = "US",
   /** True when rendered from `/[locale]/[slug]` (prefix belongs in URLs). False on cookie-localized `(default)` routes. */
   localizedUrl = false,
 }: {
@@ -30,6 +31,8 @@ export async function ProgrammaticSeoPage({
   locale: string;
   related: { slug: string; title: string }[];
   cross: { slug: string; label: string }[];
+  /** Canada/US exam toggle (cookie on `(default)` routes). */
+  marketingRegion?: MarketingRegionToggle;
   localizedUrl?: boolean;
 }) {
   const m = await loadMarketingMessages(locale);
@@ -38,7 +41,7 @@ export async function ProgrammaticSeoPage({
 
   const signup = withMarketingLocale(locale, "/signup");
   const pricing = withMarketingLocale(locale, HUB.pricing);
-  const product = resolveProgrammaticProductLinks(page, locale);
+  const product = resolveProgrammaticProductLinks(page, locale, marketingRegion);
   const { lessons, questions, testBank, exams, tools, flashcards } = product;
 
   const pathForProgrammatic = (slug: string) =>
@@ -143,8 +146,6 @@ export async function ProgrammaticSeoPage({
         {practiceConfig && page.practiceConversion ? (
           <ProgrammaticPracticeConversionBlocks slug={page.slug} locale={locale} config={practiceConfig} />
         ) : null}
-
-        <NpProgrammaticPracticeTestCrossLinks slug={page.slug} locale={locale} />
 
         <div className="prose prose-neutral max-w-none dark:prose-invert prose-headings:text-[var(--theme-body-text)] prose-p:text-[var(--theme-body-text)]/90 prose-li:text-[var(--theme-body-text)]/90">
           {page.sections.map((section, idx) => {

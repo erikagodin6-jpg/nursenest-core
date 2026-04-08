@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { ChevronDown, MapPin, Menu, X } from "lucide-react";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
+import { useMarketingRegionToggleWithRefresh } from "@/lib/region/use-marketing-region-toggle";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { MarketingLanguagePreferenceList } from "@/components/i18n/marketing-language-preference";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
@@ -25,6 +26,7 @@ const NAV_LINK_CLASS =
 export function SiteHeader() {
   const { t, locale } = useMarketingI18n();
   const { region, setRegion } = useNursenestRegion();
+  const setRegionAndRefresh = useMarketingRegionToggleWithRefresh(setRegion);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const langRef = useRef<HTMLDivElement>(null);
@@ -127,10 +129,10 @@ export function SiteHeader() {
 
               <p className="mb-2 nn-marketing-caption text-[var(--theme-muted-text)]">{t("nav.regionLabel")}</p>
               <div className={`mb-3 ${marketingRegionToggleShellMobileRow()}`} role="group" aria-label={t("nav.regionLabel")}>
-                <button type="button" onClick={() => setRegion("US")} className={marketingRegionToggleSegment(region === "US", "mobile")}>
+                <button type="button" onClick={() => setRegionAndRefresh("US")} className={marketingRegionToggleSegment(region === "US", "mobile")}>
                   {t("home.region.us")}
                 </button>
-                <button type="button" onClick={() => setRegion("CA")} className={marketingRegionToggleSegment(region === "CA", "mobile")}>
+                <button type="button" onClick={() => setRegionAndRefresh("CA")} className={marketingRegionToggleSegment(region === "CA", "mobile")}>
                   {t("home.region.ca")}
                 </button>
               </div>

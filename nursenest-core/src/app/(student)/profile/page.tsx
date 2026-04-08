@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 
 /** Short URL → canonical learner profile under /app. */
 export default function ProfileShortLinkPage() {
-  redirect("/app/profile");
+  redirect("/app/account/overview");
 }

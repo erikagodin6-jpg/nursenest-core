@@ -1,14 +1,6 @@
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
-import {
-  HUB,
-  NP,
-  RN,
-  pnLessons,
-  pnQuestions,
-  rnLessons,
-  rnQuestions,
-} from "@/lib/marketing/marketing-entry-routes";
+import { HUB, NP, pnLessons, pnQuestions, rnLessons, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
 import type { ExamKey } from "@/lib/content/master-topic-map.types";
 
 export type PracticeHubContext = {
@@ -47,6 +39,11 @@ export function buildPracticeHubContext(slug: string, region: MarketingRegionTog
   const loc = (path: string) => withMarketingLocale(locale, path);
   const examKey = examKeyForSlug(slug);
 
+  /** REx-PN guides always target the Canadian PN pathway; NCLEX-PN guides target the US PN pathway. */
+  const pnRegion: MarketingRegionToggle = slug.startsWith("rex-pn") ? "CA" : slug.startsWith("nclex-pn") ? "US" : region;
+  /** CNPLE slug always maps to the Canadian NP hub; umbrella NP slugs follow the header region toggle. */
+  const npRegion: MarketingRegionToggle = slug === "cnple-practice-questions" ? "CA" : region;
+
   if (examKey === "RN") {
     const examLabel = "NCLEX-RN Practice Questions";
     const lead =
@@ -71,9 +68,9 @@ export function buildPracticeHubContext(slug: string, region: MarketingRegionTog
   }
 
   if (examKey === "PN") {
-    const examLabel = region === "US" ? "NCLEX-PN (LPN) Practice Questions" : "REx-PN (RPN) Practice Questions";
+    const examLabel = pnRegion === "US" ? "NCLEX-PN (LPN) Practice Questions" : "REx-PN (RPN) Practice Questions";
     const lead =
-      region === "US"
+      pnRegion === "US"
         ? "Prepare for the NCLEX-PN with LPN scope, safety, and delegation-focused practice."
         : "Prepare for the REx-PN entry-to-practice exam with Canadian RPN terminology and scope-aware scenarios.";
     return {
@@ -83,8 +80,8 @@ export function buildPracticeHubContext(slug: string, region: MarketingRegionTog
       categoryHeading: "Client Needs categories",
       systemHeading: "Systems / topic groups",
       ctas: {
-        questions: loc(pnQuestions(region)),
-        lessons: loc(pnLessons(region)),
+        questions: loc(pnQuestions(pnRegion)),
+        lessons: loc(pnLessons(pnRegion)),
         testBank: loc(HUB.questionBank),
         exams: loc(HUB.practiceExams),
         studyPlan: loc("/nclex-study-plan"),
@@ -93,9 +90,9 @@ export function buildPracticeHubContext(slug: string, region: MarketingRegionTog
     };
   }
 
-  const examLabel = region === "US" ? "FNP / NP Practice Questions" : "Canadian NP Practice Questions";
+  const examLabel = npRegion === "US" ? "FNP / NP Practice Questions" : "Canadian NP Practice Questions";
   const lead =
-    region === "US"
+    npRegion === "US"
       ? "Train advanced NP reasoning with pharmacotherapy, diagnostics, and management decisions."
       : "Train Canadian NP clinical reasoning for entry-to-practice with case-based management and differential focus.";
 
@@ -106,11 +103,11 @@ export function buildPracticeHubContext(slug: string, region: MarketingRegionTog
     categoryHeading: "Clinical domains",
     systemHeading: "Systems / topic groups",
     ctas: {
-      questions: loc(region === "US" ? NP.fnpQuestions : NP.caNpQuestions),
-      lessons: loc(region === "US" ? NP.fnpLessons : NP.caNpHub),
+      questions: loc(npRegion === "US" ? NP.fnpQuestions : NP.caNpQuestions),
+      lessons: loc(npRegion === "US" ? NP.fnpLessons : NP.caNpLessons),
       testBank: loc(HUB.questionBank),
       exams: loc(HUB.practiceExams),
-      studyPlan: region === "CA" ? loc("/np-study-guide-canada") : null,
+      studyPlan: npRegion === "CA" ? loc("/np-study-guide-canada") : null,
       pricing: loc(HUB.pricing),
     },
   };

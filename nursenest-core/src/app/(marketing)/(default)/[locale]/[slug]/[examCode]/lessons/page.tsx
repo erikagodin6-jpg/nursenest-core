@@ -15,7 +15,10 @@ import {
   PATHWAY_HUB_PAGE_SIZE_DEFAULT,
   getPathwayLessonsPage,
   listTopicClusters,
+  normalizePathwayHubSearchQuery,
 } from "@/lib/lessons/pathway-lesson-loader";
+import { PathwayLessonsHubSearch } from "@/components/pathway-lessons/pathway-lessons-hub-search";
+import { PathwayTopicClusterNav } from "@/components/pathway-lessons/pathway-topic-cluster-nav";
 import {
   pathwayLessonHubH1,
   pathwayLessonHubMetaDescription,
@@ -25,6 +28,8 @@ import {
   pathwayLessonHasRenderableHubSlug,
   pathwayLessonMarketingDetailHref,
 } from "@/lib/lessons/pathway-lesson-types";
+import { HUB } from "@/lib/marketing/marketing-entry-routes";
+import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { pathwayLessonsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
@@ -37,11 +42,59 @@ export function generateStaticParams() {
 
 type Props = {
   params: Promise<{ locale: string; slug: string; examCode: string }>;
-  searchParams: Promise<{ page?: string; pageSize?: string }>;
+  searchParams: Promise<{ page?: string; pageSize?: string; q?: string }>;
 };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+function PathwayLessonsEmptyHub({
+  pathway,
+  lessonsBasePath,
+}: {
+  pathway: ExamPathwayDefinition;
+  lessonsBasePath: string;
+}) {
+  const questionsHref = buildExamPathwayPath(pathway, "questions");
+  const overviewHref = buildExamPathwayPath(pathway);
+  const upcoming = pathway.status === "upcoming" || pathway.acquisitionMode === "waitlist";
+
+  return (
+    <div className="nn-card mt-10 border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]/40 p-6 sm:p-8">
+      <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Lesson library for this pathway</h2>
+      <p className="mt-3 text-sm leading-relaxed text-[var(--theme-muted-text)]">
+        {upcoming
+          ? "This track is still ramping up in NurseNest. You can start with pathway-scoped questions and public practice exams now; structured lessons will appear here as they ship."
+          : "No public lesson pages are available for this pathway yet. Use the question bank hub and practice exams to start studying; lessons will appear here when published for this track."}
+      </p>
+      <div className="mt-6 flex flex-wrap gap-3">
+        <Link
+          href={questionsHref}
+          className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground"
+        >
+          Open question bank hub
+        </Link>
+        <Link
+          href={HUB.practiceExams}
+          className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-border px-5 py-2.5 text-sm font-semibold hover:bg-card"
+        >
+          Practice exams
+        </Link>
+        <Link href="/signup" className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-primary/30 px-5 py-2.5 text-sm font-semibold text-primary hover:bg-primary/5">
+          Create account
+        </Link>
+        <Link href={overviewHref} className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-border px-5 py-2.5 text-sm font-semibold hover:bg-card">
+          Back to exam overview
+        </Link>
+      </div>
+      <p className="mt-4 text-xs text-muted">
+        Path: <span className="font-mono">{lessonsBasePath}</span>
+      </p>
+    </div>
+  );
+}
+
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const { locale: countrySlug, slug: roleTrack, examCode } = await params;
+  const sp = await searchParams;
+  const q = normalizePathwayHubSearchQuery(sp.q);
   const pathway = resolveExamPathwayFromMarketingHubSegment(countrySlug, roleTrack, examCode);
   if (!pathway) return {};
   const path = buildExamPathwayPath(pathway, "lessons");
@@ -53,6 +106,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description,
     alternates: { canonical },
     openGraph: { title, description, url: canonical, type: "website" },
+    ...(q ? { robots: { index: false, follow: true } } : {}),
   };
 }
 
@@ -67,11 +121,29 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const sp = await searchParams;
   const pageRequested = Math.max(1, Number(sp.page ?? "1") || 1);
   const pageSizeRequested = Number(sp.pageSize ?? String(PATHWAY_HUB_PAGE_SIZE_DEFAULT)) || PATHWAY_HUB_PAGE_SIZE_DEFAULT;
+  const qEffective = normalizePathwayHubSearchQuery(sp.q);
+  const listOpts = typeof sp.q === "string" && sp.q.trim().length > 0 ? { q: sp.q } : undefined;
 
-  const pageResult = await getPathwayLessonsPage(pathway.id, pageRequested, pageSizeRequested, lessonContentLocale);
-  if (pageResult.total === 0) notFound();
-  if (pageRequested !== pageResult.page) {
-    redirect(pageResult.page > 1 ? `${base}?page=${pageResult.page}` : base);
+  const pageResult = await getPathwayLessonsPage(
+    pathway.id,
+    pageRequested,
+    pageSizeRequested,
+    lessonContentLocale,
+    listOpts,
+  );
+
+  const hubQuerySuffix = (page: number) => {
+    const qs = new URLSearchParams();
+    if (page > 1) qs.set("page", String(page));
+    if (qEffective) qs.set("q", qEffective);
+    const s = qs.toString();
+    return s ? `?${s}` : "";
+  };
+
+  if (pageResult.total === 0) {
+    if (pageRequested > 1) redirect(`${base}${hubQuerySuffix(1)}`);
+  } else if (pageRequested !== pageResult.page) {
+    redirect(`${base}${hubQuerySuffix(pageResult.page)}`);
   }
 
   const lessons = pageResult.items.filter(pathwayLessonHasRenderableHubSlug);
@@ -82,6 +154,54 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const isUsNclexPnHub = pathway.id === "us-lpn-nclex-pn";
   const isUsFnpHub = pathway.id === "us-np-fnp";
   const isCaRexPnHub = pathway.id === "ca-rpn-rex-pn";
+
+  if (pageResult.total === 0) {
+    const { crumbs, schemaItems } = pathwayLessonsHubBreadcrumbs(pathway);
+    if (qEffective) {
+      return (
+        <div className="mx-auto max-w-3xl px-4 py-12">
+          <BreadcrumbJsonLd items={schemaItems} />
+          <div className="mb-6">
+            <BreadcrumbTrail items={crumbs} />
+          </div>
+          <Link href={buildExamPathwayPath(pathway)} className="text-sm font-medium text-primary hover:underline">
+            ← {pathway.shortName} hub
+          </Link>
+          <h1 className="mt-4 text-3xl font-extrabold text-[var(--theme-heading-text)]">{pathwayLessonHubH1(pathway)}</h1>
+          <p className="mt-3 text-[var(--theme-muted-text)]">
+            No lessons matched &ldquo;{qEffective}&rdquo; for {pathway.shortName}. Try a shorter term, browse by topic, or clear
+            the search.
+          </p>
+          <div className="mt-8 space-y-6">
+            <PathwayLessonsHubSearch basePath={base} initialQuery={qEffective} />
+            <Link href={base} className="text-sm font-semibold text-primary underline">
+              View all lessons (clear search)
+            </Link>
+          </div>
+          <MarketingStudyCrossLinks className="mt-14" />
+        </div>
+      );
+    }
+    return (
+      <div className="mx-auto max-w-3xl px-4 py-12">
+        <BreadcrumbJsonLd items={schemaItems} />
+        <div className="mb-6">
+          <BreadcrumbTrail items={crumbs} />
+        </div>
+        <Link href={buildExamPathwayPath(pathway)} className="text-sm font-medium text-primary hover:underline">
+          ← {pathway.shortName} hub
+        </Link>
+        <h1 className="mt-4 text-3xl font-extrabold text-[var(--theme-heading-text)]">{pathwayLessonHubH1(pathway)}</h1>
+        <p className="mt-3 text-[var(--theme-muted-text)]">
+          Exam-scoped clinical lessons for {pathway.countrySlug === "canada" ? "Canada" : "the United States"} ({pathway.shortName}
+          ). When lesson pages go live for this pathway, they will be listed here.
+        </p>
+        {pageResult.locale ? <PathwayLessonContentLocaleBanner listLocale={pageResult.locale} /> : null}
+        <PathwayLessonsEmptyHub pathway={pathway} lessonsBasePath={base} />
+        <MarketingStudyCrossLinks className="mt-14" />
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
@@ -138,6 +258,10 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
 
       {pageResult.locale ? <PathwayLessonContentLocaleBanner listLocale={pageResult.locale} /> : null}
 
+      <div className="mt-8">
+        <PathwayLessonsHubSearch basePath={base} initialQuery={qEffective} />
+      </div>
+
       {isUsNclexPnHub ? (
         <NclexPnLessonsHub pathway={pathway} lessons={lessons} lessonsBasePath={base} topicClusters={topics} />
       ) : isUsFnpHub ? (
@@ -152,28 +276,17 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         />
       ) : (
         <>
-          <section className="mt-10">
-            <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">
-              Browse by topic · {pathway.shortName}
-            </h2>
-            <ul className="mt-4 flex flex-wrap gap-2">
-              {topics.map((t) => (
-                <li key={t.topicSlug}>
-                  <Link
-                    href={`${base}/topics/${t.topicSlug}`}
-                    className="inline-flex rounded-full border border-[var(--theme-card-border)] bg-card px-3 py-1.5 text-sm font-medium hover:border-primary/40"
-                  >
-                    {t.label} ({t.count})
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </section>
+          <div className="mt-10">
+            <PathwayTopicClusterNav lessonsBasePath={base} topicClusters={topics} pathwayShortName={pathway.shortName} />
+          </div>
 
           <section className="mt-10">
             <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">
               All {pathway.shortName} lessons
             </h2>
+            <p className="mt-1 text-xs text-[var(--theme-muted-text)]">
+              Paginated list — use topic clusters above or search to narrow without loading everything at once.
+            </p>
             <ul className="mt-4 space-y-4">
               {lessons.map((l) => {
                 const href = pathwayLessonMarketingDetailHref(base, l.slug);
@@ -228,6 +341,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         pageCount={pageResult.pageCount}
         total={pageResult.total}
         pageSize={pageResult.pageSize}
+        hubSearch={qEffective}
       />
     </div>
   );

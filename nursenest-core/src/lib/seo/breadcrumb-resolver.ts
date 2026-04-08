@@ -133,6 +133,16 @@ export function marketingHomeSurfaceBreadcrumbs(): BreadcrumbResolution {
   };
 }
 
+/** App shell account hub: Home → Dashboard → Account → current (UX only). */
+export function appAccountBreadcrumbs(leafLabel: string): BreadcrumbCrumb[] {
+  return [
+    HOME,
+    { name: "Dashboard", href: "/app" },
+    { name: "Account", href: "/app/account/overview" },
+    { name: leafLabel, href: undefined },
+  ];
+}
+
 /** App shell: UX only. No schema items. */
 export function appShellBreadcrumbs(
   section: "dashboard" | "lessons" | "questions" | "exams" | "practice-tests",

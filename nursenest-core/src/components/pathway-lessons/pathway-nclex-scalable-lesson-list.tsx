@@ -1,0 +1,166 @@
+import Link from "next/link";
+import {
+  pathwayLessonMarketingDetailHref,
+  type PathwayLessonRecord,
+} from "@/lib/lessons/pathway-lesson-types";
+import { nclexRnLessonExamPreview, type NclexRnHubRegion } from "@/lib/lessons/nclex-rn-us-lesson-enrichment";
+import { nclexPnLessonExamPreview } from "@/lib/lessons/nclex-pn-us-lesson-enrichment";
+
+/** Above this count per Client Needs section, show a compact link list first and tuck rich previews behind a disclosure. */
+export const NCLEX_HUB_RICH_PREVIEWS_COLLAPSE_AFTER = 5;
+
+function appQuestionsHref(pathwayId: string, topic?: string): string {
+  const q = new URLSearchParams();
+  q.set("pathwayId", pathwayId);
+  if (topic) q.set("topic", topic);
+  return `/app/questions?${q.toString()}`;
+}
+
+type SectionShape = {
+  anchor: string;
+  title: string;
+  subtitle: string;
+  count: number;
+  lessons: PathwayLessonRecord[];
+};
+
+type Props = {
+  pathwayId: string;
+  lessonsBasePath: string;
+  section: SectionShape;
+  featuredSlug: string | null | undefined;
+  variant: "rn" | "pn";
+  rnRegion?: NclexRnHubRegion;
+};
+
+export function PathwayNclexScalableLessonSection({
+  pathwayId,
+  lessonsBasePath,
+  section,
+  featuredSlug,
+  variant,
+  rnRegion = "us",
+}: Props) {
+  if (section.count === 0) return null;
+
+  const display = section.lessons.filter((l) => !featuredSlug || l.slug !== featuredSlug);
+  const useCollapsedRich = display.length > NCLEX_HUB_RICH_PREVIEWS_COLLAPSE_AFTER;
+
+  const richCard = (l: PathwayLessonRecord) => {
+    const p =
+      variant === "rn"
+        ? nclexRnLessonExamPreview(l, rnRegion)
+        : nclexPnLessonExamPreview(l);
+    return (
+      <li key={l.slug} className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
+        <p className="text-xs font-medium uppercase text-muted">{l.topic}</p>
+        <Link
+          href={pathwayLessonMarketingDetailHref(lessonsBasePath, l.slug)!}
+          className="mt-1 block text-lg font-semibold text-primary hover:underline"
+        >
+          {l.title}
+        </Link>
+        <div className="mt-4 grid gap-3 border-t border-border pt-4 text-sm sm:grid-cols-2">
+          <div>
+            <p className="text-xs font-semibold uppercase text-muted">Scenario focus</p>
+            <p className="mt-0.5">{p.scenarioType}</p>
+          </div>
+          <div>
+            <p className="text-xs font-semibold uppercase text-muted">
+              {variant === "rn" ? "Likely NCLEX item types" : "Likely item types"}
+            </p>
+            <p className="mt-0.5">{p.examQuestionTypes}</p>
+          </div>
+          <div className="sm:col-span-2">
+            <p className="text-xs font-semibold uppercase text-muted">
+              {variant === "rn" ? "What this lesson prepares you for" : "Why it matters on NCLEX-PN"}
+            </p>
+            <p className="mt-0.5 text-[var(--theme-muted-text)]">{p.whyOnExam}</p>
+          </div>
+          <div className="sm:col-span-2 rounded-lg bg-[var(--theme-muted-surface)] p-3">
+            <p className="text-xs font-semibold text-muted">{variant === "rn" ? "Clinical scenario preview" : "Clinical preview"}</p>
+            <p className="mt-1">{p.miniScenario}</p>
+          </div>
+          <div className="sm:col-span-2 rounded-lg bg-[var(--theme-muted-surface)] p-3">
+            <p className="text-xs font-semibold text-muted">{variant === "rn" ? "Reasoning snippet" : "Rationale snippet"}</p>
+            <p className="mt-1 italic text-[var(--theme-muted-text)]">&ldquo;{p.rationaleSnippet}&rdquo;</p>
+          </div>
+        </div>
+        <div className="mt-4 flex flex-wrap gap-2">
+          <Link
+            href={pathwayLessonMarketingDetailHref(lessonsBasePath, l.slug)!}
+            className="text-sm font-semibold text-primary"
+          >
+            Read lesson →
+          </Link>
+          <Link href={appQuestionsHref(pathwayId, l.topic)} className="text-sm font-semibold text-primary">
+            Practice questions →
+          </Link>
+          <Link href="/app/flashcards" className="text-sm font-semibold text-muted hover:text-primary">
+            Flashcards →
+          </Link>
+          <Link href="/app/exams" className="text-sm font-semibold text-muted hover:text-primary">
+            CAT exams →
+          </Link>
+        </div>
+      </li>
+    );
+  };
+
+  return (
+    <section id={section.anchor} className="scroll-mt-24">
+      <div className="border-b border-border pb-3">
+        <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">{section.title}</h2>
+        {section.subtitle && (
+          <p className="mt-1 text-sm text-muted">
+            {section.subtitle} · <span className="font-medium text-foreground">{section.count} lesson(s) on this page</span>
+          </p>
+        )}
+      </div>
+
+      {useCollapsedRich ? (
+        <>
+          <ul className="mt-4 space-y-2">
+            {display.map((l) => {
+              const href = pathwayLessonMarketingDetailHref(lessonsBasePath, l.slug);
+              if (!href) return null;
+              return (
+                <li
+                  key={l.slug}
+                  className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-border/70 bg-card/70 px-3 py-2.5"
+                >
+                  <div className="min-w-0">
+                    <p className="text-[10px] font-medium uppercase tracking-wide text-muted">{l.topic}</p>
+                    <Link href={href} className="block truncate text-sm font-semibold text-primary hover:underline sm:text-base">
+                      {l.title}
+                    </Link>
+                  </div>
+                  <Link
+                    href={appQuestionsHref(pathwayId, l.topic)}
+                    className="shrink-0 text-xs font-medium text-muted hover:text-primary"
+                  >
+                    Questions →
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+          <details className="mt-5 rounded-xl border border-border bg-[var(--theme-muted-surface)]/40">
+            <summary className="cursor-pointer list-none px-4 py-3 text-sm font-semibold text-primary [&::-webkit-details-marker]:hidden">
+              <span className="underline-offset-2">Exam previews & clinical context — expand (optional)</span>
+            </summary>
+            <ul className="space-y-6 border-t border-border bg-card/30 px-3 py-4 sm:px-4">{display.map((l) => richCard(l))}</ul>
+          </details>
+        </>
+      ) : (
+        <ul className="mt-6 space-y-6">{display.map((l) => richCard(l))}</ul>
+      )}
+
+      {display.length === 0 && section.lessons.length > 0 && (
+        <p className="mt-4 text-sm text-[var(--theme-muted-text)]">
+          This category&apos;s lesson is expanded in the featured block above.
+        </p>
+      )}
+    </section>
+  );
+}

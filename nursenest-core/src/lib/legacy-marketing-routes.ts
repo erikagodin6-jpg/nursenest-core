@@ -16,8 +16,8 @@ const EXACT: Record<string, string> = {
   "/register": "/signup",
   /** Canonical PN programmatic landings (region-aware practice flows live there). */
   "/rex-pn": "/rex-pn-practice-questions",
-  /** Canonical RN programmatic landing (replaces legacy /nclex-rn → pricing). */
-  "/nclex-rn": "/nclex-rn-practice-questions",
+  /** Legacy short path: send to public lessons index (region + exam picked there and in nav). */
+  "/nclex-rn": "/lessons",
   "/np-exam-practice-questions": "/np-exam-practice-questions",
   "/nursing-certifications": `${PUBLIC_SITE}/nursing-certifications`,
   "/newgrad": `${PUBLIC_SITE}/newgrad`,
@@ -26,6 +26,8 @@ const EXACT: Record<string, string> = {
   "/lessons": "/lessons",
   "/exam-lessons": "/lessons",
   "/flashcards": "/flashcards",
+  /** Core hosts Med Math under tools; keep footer/header links on-origin. */
+  "/med-math": "/tools/med-math",
   "/mock-exams": "/practice-exams",
   "/mock-exam": "/practice-exams",
   "/study": "/question-bank",
@@ -68,7 +70,8 @@ export function isCoreAlliedMarketingPath(href: string): boolean {
 
 export function mapLegacyMarketingHref(href: string): string {
   if (isCoreAlliedMarketingPath(href)) return href;
-  if (href.startsWith("/allied-health") || href.startsWith("/shop")) {
+  /** Monolith storefront only; Core allied marketing is handled above. */
+  if (href.startsWith("/shop")) {
     return `${PUBLIC_SITE}${href}`;
   }
   return EXACT[href] ?? href;

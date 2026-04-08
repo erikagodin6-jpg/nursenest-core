@@ -5,7 +5,7 @@ import { BookOpen, ClipboardList, GraduationCap } from "lucide-react";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
-import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { HUB, loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { pathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-analytics-props";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 
@@ -29,7 +29,7 @@ export function ExamPathwayHubStudyModes({
 }: Props) {
   const { t } = useMarketingI18n();
   const linkCtx = pathwayMarketingHubLinkContext(pathway, npSeoAliasSegment);
-  const practiceHref = loginWithCallback(emphasizeCatPracticeTests ? "/app/practice-tests" : "/app/exams");
+  const practiceHref = emphasizeCatPracticeTests ? loginWithCallback("/app/practice-tests") : HUB.practiceExams;
 
   return (
     <section className="mt-10" aria-labelledby="exam-hub-study-modes-heading">
@@ -93,7 +93,7 @@ export function ExamPathwayHubStudyModes({
               surface: "study_modes_practice",
               pathway_id: pathway.id,
               destination_type: "signup_practice",
-              link_target: emphasizeCatPracticeTests ? "app_practice_tests" : "app_exams",
+              link_target: emphasizeCatPracticeTests ? "app_practice_tests" : "public_practice_exams",
             }}
             className={CARD}
           >

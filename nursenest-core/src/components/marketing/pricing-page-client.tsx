@@ -11,15 +11,9 @@ import { PH } from "@/lib/observability/posthog-conversion-events";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
-import {
-  ALLIED,
-  HUB,
-  NP,
-  RN,
-  loginWithCallback,
-  pnQuestions,
-  rnQuestions,
-} from "@/lib/marketing/marketing-entry-routes";
+import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { HUB, pnQuestions, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
+import { marketingExamHubPath } from "@/lib/marketing/country-exam-offerings";
 import { LEGAL_POLICY_BUNDLE_VERSION } from "@/lib/legal/legal-config";
 import {
   CHECKOUT_INVALID_PAYLOAD_CODE,
@@ -219,7 +213,7 @@ export function PricingPageClient({
     null;
 
   const tryQuestionsHref = localize(rnQuestions(region));
-  const examsHref = localize(loginWithCallback(RN.appExams));
+  const examsHref = localize(HUB.practiceExams);
   const lessonsHubHref = localize(HUB.examLessons);
   const toolsHref = localize(HUB.tools);
   const examLinks = useMemo(() => {
@@ -228,22 +222,22 @@ export function PricingPageClient({
       rn: {
         labelKey: `pages.pricing.examCard.rn${rc}`,
         blurbKey: `pages.pricing.examBlurb.rn${rc}`,
-        href: localize(rnQuestions(country)),
+        href: localize(marketingExamHubPath(country, "rn")),
       },
       pn: {
         labelKey: `pages.pricing.examCard.pn${rc}`,
         blurbKey: `pages.pricing.examBlurb.pn${rc}`,
-        href: localize(pnQuestions(country)),
+        href: localize(marketingExamHubPath(country, "pn")),
       },
       np: {
         labelKey: `pages.pricing.examCard.np${rc}`,
         blurbKey: `pages.pricing.examBlurb.np${rc}`,
-        href: localize(country === "US" ? NP.fnpQuestions : NP.caNpQuestions),
+        href: localize(marketingExamHubPath(country, "np")),
       },
       allied: {
         labelKey: `pages.pricing.examCard.allied${rc}`,
         blurbKey: `pages.pricing.examBlurb.allied${rc}`,
-        href: localize(country === "US" ? ALLIED.usQuestions : ALLIED.caQuestions),
+        href: localize(marketingExamHubPath(country, "allied")),
       },
     } as const;
   }, [country, localize]);
@@ -857,32 +851,23 @@ export function PricingPageClient({
           <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
             {country === "US" ? (
               <>
-                NP search intent varies by board. Keyword hubs (same FNP or PMHNP pathways):{" "}
+                NP tracks in NurseNest:{" "}
                 <MarketingTrackedLink
-                  href={localize(NP.aanpPracticeTest)}
+                  href={localize(buildExamPathwayPath(getExamPathwayById("us-np-fnp")!))}
                   event={PH.marketingPathwayHubCta}
-                  eventProps={{ surface: "pricing_compare_np_board_link", pathway_id: "us-np-fnp", link_target: "aanp_practice_test" }}
+                  eventProps={{ surface: "pricing_compare_np_hub_link", pathway_id: "us-np-fnp", link_target: "np_fnp_hub" }}
                   className="font-semibold text-primary hover:underline"
                 >
-                  AANP practice test
+                  US Family NP (FNP) hub
                 </MarketingTrackedLink>
                 ,{" "}
                 <MarketingTrackedLink
-                  href={localize(NP.anccFnpPracticeTest)}
+                  href={localize(buildExamPathwayPath(getExamPathwayById("us-np-pmhnp")!))}
                   event={PH.marketingPathwayHubCta}
-                  eventProps={{ surface: "pricing_compare_np_board_link", pathway_id: "us-np-fnp", link_target: "ancc_fnp_practice_test" }}
+                  eventProps={{ surface: "pricing_compare_np_hub_link", pathway_id: "us-np-pmhnp", link_target: "np_pmhnp_hub" }}
                   className="font-semibold text-primary hover:underline"
                 >
-                  ANCC FNP practice test
-                </MarketingTrackedLink>
-                ,{" "}
-                <MarketingTrackedLink
-                  href={localize(NP.pmhnpPracticeTest)}
-                  event={PH.marketingPathwayHubCta}
-                  eventProps={{ surface: "pricing_compare_np_board_link", pathway_id: "us-np-pmhnp", link_target: "pmhnp_practice_test" }}
-                  className="font-semibold text-primary hover:underline"
-                >
-                  PMHNP practice test
+                  US PMHNP hub
                 </MarketingTrackedLink>
                 .
               </>
@@ -890,14 +875,14 @@ export function PricingPageClient({
               <>
                 Canadian NP:{" "}
                 <MarketingTrackedLink
-                  href={localize(NP.cnplePracticeTest)}
+                  href={localize(buildExamPathwayPath(getExamPathwayById("ca-np-cnple")!))}
                   event={PH.marketingPathwayHubCta}
-                  eventProps={{ surface: "pricing_compare_np_board_link", pathway_id: "ca-np-cnple", link_target: "cnple_practice_test" }}
+                  eventProps={{ surface: "pricing_compare_np_hub_link", pathway_id: "ca-np-cnple", link_target: "np_cnple_hub" }}
                   className="font-semibold text-primary hover:underline"
                 >
-                  CNPLE practice test
-                </MarketingTrackedLink>{" "}
-                matches the national hub path.
+                  CNPLE pathway hub
+                </MarketingTrackedLink>
+                .
               </>
             )}
           </p>

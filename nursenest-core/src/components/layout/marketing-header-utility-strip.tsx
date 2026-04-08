@@ -6,6 +6,7 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { MarketingLanguagePreferenceList } from "@/components/i18n/marketing-language-preference";
 import { ThemePicker } from "@/components/theme/theme-picker";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
+import { useMarketingRegionToggleWithRefresh } from "@/lib/region/use-marketing-region-toggle";
 import {
   marketingRegionToggleSegment,
   marketingRegionToggleShell,
@@ -17,6 +18,7 @@ import {
 export function MarketingHeaderUtilityStrip() {
   const { t, locale } = useMarketingI18n();
   const { region, setRegion } = useNursenestRegion();
+  const setRegionAndRefresh = useMarketingRegionToggleWithRefresh(setRegion);
   const [langOpen, setLangOpen] = useState(false);
   const langRef = useRef<HTMLDivElement>(null);
 
@@ -36,14 +38,14 @@ export function MarketingHeaderUtilityStrip() {
           <div className={marketingRegionToggleShell("pill")} role="group" aria-label={t("nav.regionLabel")}>
             <button
               type="button"
-              onClick={() => setRegion("US")}
+              onClick={() => setRegionAndRefresh("US")}
               className={marketingRegionToggleSegment(region === "US", "compact")}
             >
               {t("home.region.us")}
             </button>
             <button
               type="button"
-              onClick={() => setRegion("CA")}
+              onClick={() => setRegionAndRefresh("CA")}
               className={marketingRegionToggleSegment(region === "CA", "compact")}
             >
               {t("home.region.ca")}

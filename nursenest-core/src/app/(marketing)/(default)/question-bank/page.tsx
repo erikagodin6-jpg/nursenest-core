@@ -8,9 +8,9 @@ import {
   PN,
   RN,
   loginWithCallback,
-  pnPrimaryHub,
   type MarketingRegionToggle,
 } from "@/lib/marketing/marketing-entry-routes";
+import { marketingExamHubPath } from "@/lib/marketing/country-exam-offerings";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
@@ -46,49 +46,49 @@ const CARDS: PathwayCard[] = [
   {
     cardKey: "cardRnUs",
     publicQuestionsHref: RN.usQuestions,
-    hubHref: "/us/rn/nclex-rn",
+    hubHref: marketingExamHubPath("US", "rn"),
     region: "US",
   },
   {
     cardKey: "cardRnCa",
     publicQuestionsHref: RN.caQuestions,
-    hubHref: "/canada/rn/nclex-rn",
+    hubHref: marketingExamHubPath("CA", "rn"),
     region: "CA",
   },
   {
     cardKey: "cardPnUs",
     publicQuestionsHref: PN.usQuestions,
-    hubHref: "/us/lpn/nclex-pn",
+    hubHref: marketingExamHubPath("US", "pn"),
     region: "US",
   },
   {
     cardKey: "cardPnCa",
     publicQuestionsHref: PN.caQuestions,
-    hubHref: pnPrimaryHub("CA"),
+    hubHref: marketingExamHubPath("CA", "pn"),
     region: "CA",
   },
   {
     cardKey: "cardNpUs",
     publicQuestionsHref: NP.fnpQuestions,
-    hubHref: "/us/np/fnp",
+    hubHref: marketingExamHubPath("US", "np"),
     region: "US",
   },
   {
     cardKey: "cardNpCa",
     publicQuestionsHref: NP.caNpQuestions,
-    hubHref: NP.caNpHub,
+    hubHref: marketingExamHubPath("CA", "np"),
     region: "CA",
   },
   {
     cardKey: "cardAlliedUs",
     publicQuestionsHref: ALLIED.usQuestions,
-    hubHref: ALLIED.usHub,
+    hubHref: marketingExamHubPath("US", "allied"),
     region: "US",
   },
   {
     cardKey: "cardAlliedCa",
     publicQuestionsHref: ALLIED.caQuestions,
-    hubHref: ALLIED.caHub,
+    hubHref: marketingExamHubPath("CA", "allied"),
     region: "CA",
   },
 ];

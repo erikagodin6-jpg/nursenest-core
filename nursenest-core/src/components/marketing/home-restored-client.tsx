@@ -7,11 +7,13 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
+import { useMarketingRegionToggleWithRefresh } from "@/lib/region/use-marketing-region-toggle";
 import {
   marketingRegionToggleSegment,
   marketingRegionToggleShell,
 } from "@/lib/theme/marketing-region-toggle";
-import { HUB, alliedQuestions, npNpQuestionsForRegion, pnQuestions, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
+import { HUB } from "@/lib/marketing/marketing-entry-routes";
+import { marketingExamHubPath } from "@/lib/marketing/country-exam-offerings";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import {
@@ -43,6 +45,7 @@ type HomeStatsPayload = {
 export default function HomeRestoredClient() {
   const { t, locale } = useMarketingI18n();
   const { region, setRegion } = useNursenestRegion();
+  const setRegionAndRefresh = useMarketingRegionToggleWithRefresh(setRegion);
   const [homeStats, setHomeStats] = useState<HomeStatsPayload | null>(null);
 
   useEffect(() => {
@@ -68,28 +71,28 @@ export default function HomeRestoredClient() {
   const pathwayRoutes = [
     {
       id: "rn" as const,
-      href: rnQuestions(region),
+      href: marketingExamHubPath(region, "rn"),
       titleKey: "home.landing.pathways.rnTitle",
       descKey: "home.landing.pathways.rnDesc",
       ctaKey: "home.landing.pathways.ctaRn",
     },
     {
       id: "pn" as const,
-      href: pnQuestions(region),
+      href: marketingExamHubPath(region, "pn"),
       titleKey: region === "US" ? "home.landing.pathways.pnTitleUS" : "home.landing.pathways.pnTitleCA",
       descKey: region === "US" ? "home.landing.pathways.pnDescUS" : "home.landing.pathways.pnDescCA",
       ctaKey: "home.landing.pathways.ctaPn",
     },
     {
       id: "np" as const,
-      href: npNpQuestionsForRegion(region),
+      href: marketingExamHubPath(region, "np"),
       titleKey: "home.landing.pathways.npTitle",
       descKey: region === "US" ? "home.landing.pathways.npDescUS" : "home.landing.pathways.npDescCA",
       ctaKey: "home.landing.pathways.ctaNp",
     },
     {
       id: "allied" as const,
-      href: alliedQuestions(region),
+      href: marketingExamHubPath(region, "allied"),
       titleKey: "home.landing.pathways.alliedTitle",
       descKey: "home.landing.pathways.alliedDesc",
       ctaKey: "home.landing.pathways.ctaAllied",
@@ -128,7 +131,7 @@ export default function HomeRestoredClient() {
                   <div className={marketingRegionToggleShell("rounded")} role="group" aria-label={t("nav.regionLabel")}>
                     <button
                       type="button"
-                      onClick={() => setRegion("US")}
+                      onClick={() => setRegionAndRefresh("US")}
                       className={marketingRegionToggleSegment(region === "US", "default")}
                       data-testid="button-region-us"
                     >
@@ -136,7 +139,7 @@ export default function HomeRestoredClient() {
                     </button>
                     <button
                       type="button"
-                      onClick={() => setRegion("CA")}
+                      onClick={() => setRegionAndRefresh("CA")}
                       className={marketingRegionToggleSegment(region === "CA", "default")}
                       data-testid="button-region-ca"
                     >

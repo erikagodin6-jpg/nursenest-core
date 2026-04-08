@@ -1,5 +1,7 @@
 import Link from "next/link";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { PathwayNclexScalableLessonSection } from "@/components/pathway-lessons/pathway-nclex-scalable-lesson-list";
+import { PathwayTopicClusterNav } from "@/components/pathway-lessons/pathway-topic-cluster-nav";
 import {
   pathwayLessonHasRenderableHubSlug,
   pathwayLessonMarketingDetailHref,
@@ -104,29 +106,17 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
       </section>
 
       {/* Topic clusters (body system / SEO hubs) */}
-      {topicClusters.length > 0 && (
-        <section aria-label="Browse by topic" className="rounded-xl border border-border bg-card p-4">
-          <h2 className="text-sm font-bold text-[var(--theme-heading-text)]">Browse by topic cluster</h2>
-          <p className="mt-1 text-xs text-muted">Same lessons, alternate index, useful when you study by organ system.</p>
-          <ul className="mt-3 flex flex-wrap gap-2">
-            {topicClusters.map((t) => (
-              <li key={t.topicSlug}>
-                <Link
-                  href={`${lessonsBasePath}/topics/${t.topicSlug}`}
-                  className="inline-flex rounded-full border border-border bg-[var(--theme-muted-surface)] px-3 py-1.5 text-sm font-medium hover:border-primary/40"
-                >
-                  {t.label} ({t.count})
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+      <PathwayTopicClusterNav
+        lessonsBasePath={lessonsBasePath}
+        topicClusters={topicClusters}
+        pathwayShortName={pathway.shortName}
+      />
 
       {/* Anchor navigation */}
       {navLinks.length > 0 && (
         <nav aria-label="NCLEX-RN lesson categories" className="rounded-xl border border-border bg-[var(--theme-muted-surface)] p-4">
           <p className="text-xs font-semibold uppercase tracking-wide text-muted">Jump to Client Needs</p>
+          <p className="mt-1 text-xs text-[var(--theme-muted-text)]">Counts reflect lessons on this page (paginated hub).</p>
           <ul className="mt-3 flex flex-wrap gap-2">
             {navLinks.map((s) => (
               <li key={s.anchor}>
@@ -191,84 +181,17 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
         </section>
       )}
 
-      {sections.map((section) => {
-        if (section.count === 0) return null;
-        return (
-          <section key={section.anchor} id={section.anchor} className="scroll-mt-24">
-            <div className="border-b border-border pb-3">
-              <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">{section.title}</h2>
-              {section.subtitle && (
-                <p className="mt-1 text-sm text-muted">
-                  {section.subtitle} · <span className="font-medium text-foreground">{section.count} lesson(s)</span>
-                </p>
-              )}
-            </div>
-            <ul className="mt-6 space-y-6">
-              {section.lessons
-                .filter((l) => !featured || l.slug !== featured.slug)
-                .map((l) => {
-                  const p = nclexRnLessonExamPreview(l, region);
-                  return (
-                    <li key={l.slug} className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
-                      <p className="text-xs font-medium uppercase text-muted">{l.topic}</p>
-                      <Link
-                        href={pathwayLessonMarketingDetailHref(lessonsBasePath, l.slug)!}
-                        className="mt-1 block text-lg font-semibold text-primary hover:underline"
-                      >
-                        {l.title}
-                      </Link>
-                      <div className="mt-4 grid gap-3 border-t border-border pt-4 text-sm sm:grid-cols-2">
-                        <div>
-                          <p className="text-xs font-semibold uppercase text-muted">Scenario focus</p>
-                          <p className="mt-0.5">{p.scenarioType}</p>
-                        </div>
-                        <div>
-                          <p className="text-xs font-semibold uppercase text-muted">Item types</p>
-                          <p className="mt-0.5">{p.examQuestionTypes}</p>
-                        </div>
-                        <div className="sm:col-span-2">
-                          <p className="text-xs font-semibold uppercase text-muted">What this lesson prepares you for</p>
-                          <p className="mt-0.5 text-[var(--theme-muted-text)]">{p.whyOnExam}</p>
-                        </div>
-                        <div className="sm:col-span-2 rounded-lg bg-[var(--theme-muted-surface)] p-3">
-                          <p className="text-xs font-semibold text-muted">Clinical scenario preview</p>
-                          <p className="mt-1">{p.miniScenario}</p>
-                        </div>
-                        <div className="sm:col-span-2 rounded-lg bg-[var(--theme-muted-surface)] p-3">
-                          <p className="text-xs font-semibold text-muted">Reasoning snippet</p>
-                          <p className="mt-1 italic text-[var(--theme-muted-text)]">&ldquo;{p.rationaleSnippet}&rdquo;</p>
-                        </div>
-                      </div>
-                      <div className="mt-4 flex flex-wrap gap-2">
-                        <Link
-                          href={pathwayLessonMarketingDetailHref(lessonsBasePath, l.slug)!}
-                          className="text-sm font-semibold text-primary"
-                        >
-                          Read lesson →
-                        </Link>
-                        <Link href={appQuestionsHref(pathway.id, l.topic)} className="text-sm font-semibold text-primary">
-                          Practice questions →
-                        </Link>
-                        <Link href="/app/flashcards" className="text-sm font-semibold text-muted hover:text-primary">
-                          Flashcards →
-                        </Link>
-                        <Link href="/app/exams" className="text-sm font-semibold text-muted hover:text-primary">
-                          CAT exams →
-                        </Link>
-                      </div>
-                    </li>
-                  );
-                })}
-            </ul>
-            {section.lessons.filter((l) => !featured || l.slug !== featured.slug).length === 0 &&
-              section.lessons.length > 0 && (
-                <p className="mt-4 text-sm text-[var(--theme-muted-text)]">
-                  This category&apos;s lesson is expanded in the featured block above.
-                </p>
-              )}
-          </section>
-        );
-      })}
+      {sections.map((section) => (
+        <PathwayNclexScalableLessonSection
+          key={section.anchor}
+          pathwayId={pathway.id}
+          lessonsBasePath={lessonsBasePath}
+          section={section}
+          featuredSlug={featured?.slug}
+          variant="rn"
+          rnRegion={region}
+        />
+      ))}
 
       {/* Clinical judgment */}
       <section className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-sm" aria-labelledby="cj-nclex-rn">

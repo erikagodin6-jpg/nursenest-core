@@ -2,6 +2,8 @@
  * Single country-aware source for marketing exam/program labels (i18n keys) and canonical hrefs.
  * UI resolves `labelKey` with `t(labelKey)` so switching region updates copy immediately.
  *
+ * **Import surface:** Prefer `@/lib/marketing/marketing-exam-navigation` for app-wide re-exports (`marketingExamPrepHubs`).
+ *
  * Paths stay aligned with `marketing-entry-routes.ts` and programmatic SEO slugs — do not rename routes here.
  *
  * **Strip vs hero:** Both point at canonical pathway hub URLs (exam first, then study modes on the hub).

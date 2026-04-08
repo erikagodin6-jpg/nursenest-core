@@ -5,9 +5,7 @@ import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { NpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
 import { pathwayOverviewBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { pathwayHubFaqSchema } from "@/lib/seo/pathway-hub-faq-schema";
-import { getPathwayProgrammaticSeoLanding } from "@/lib/seo/pathway-programmatic-seo";
 import { ExamPathwayHubBody } from "@/components/exam-pathways/exam-pathway-hub-body";
-import { NpCanonicalHubBoardLinks } from "@/components/exam-pathways/np-canonical-hub-board-links";
 import { NpSeoAliasHubAnalytics } from "@/components/marketing/np-seo-alias-hub-analytics";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import type { NpPathwayInventoryGate } from "@/lib/np/np-pathway-inventory-gate";
@@ -40,9 +38,7 @@ export function ExamPathwayHub({
 }) {
   const hubOpts = { hubBasePath: marketingHubPath };
   const { crumbs, schemaItems } = pathwayOverviewBreadcrumbs(pathway, hubOpts);
-  const programmaticLanding = getPathwayProgrammaticSeoLanding(pathway);
   const countryLine = pathway.countrySlug === "canada" ? "Canada" : "United States";
-  const showCanonicalBoardLinks = !npSeoAliasSegment && pathway.roleTrack === "np";
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-10 sm:py-14">
@@ -96,14 +92,9 @@ export function ExamPathwayHub({
         </section>
       ) : null}
 
-      {showCanonicalBoardLinks ? (
-        <NpCanonicalHubBoardLinks pathway={pathway} />
-      ) : null}
-
       <ExamPathwayHubBody
         pathway={pathway}
         isSignedIn={isSignedIn}
-        discovery={programmaticLanding}
         emphasizeCatPracticeTests={emphasizeCatPracticeTests}
         npSeoAliasSegment={npSeoAliasSegment}
         conversionSectionHeading={npPracticeSeo?.conversionSectionHeading}

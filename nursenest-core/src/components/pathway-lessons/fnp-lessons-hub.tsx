@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { PathwayTopicClusterNav } from "@/components/pathway-lessons/pathway-topic-cluster-nav";
 import { FnpLessonExplorer } from "@/components/pathway-lessons/fnp-lesson-explorer";
-import { FnpLessonsNpBoardCrosslinks } from "@/components/pathway-lessons/fnp-lessons-np-board-crosslinks";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import {
   buildFnpExplorerPayload,
@@ -79,7 +79,6 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
             interval, and safety-netting should match guideline intensity and the patient&apos;s context.
           </li>
         </ol>
-        <FnpLessonsNpBoardCrosslinks />
       </section>
 
       {/* Trust anchors */}
@@ -98,30 +97,17 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
         </ul>
       </section>
 
-      {topicClusters.length > 0 && (
-        <section aria-label="Browse by topic" className="rounded-xl border border-border bg-card p-4">
-          <h2 className="text-sm font-bold text-[var(--theme-heading-text)]">Browse by topic cluster</h2>
-          <p className="mt-1 text-xs text-muted">Alternate index when you study by organ system or theme.</p>
-          <ul className="mt-3 flex flex-wrap gap-2">
-            {topicClusters.map((t) => (
-              <li key={t.topicSlug}>
-                <Link
-                  href={`${lessonsBasePath}/topics/${t.topicSlug}`}
-                  className="inline-flex rounded-full border border-border bg-[var(--theme-muted-surface)] px-3 py-1.5 text-sm font-medium hover:border-primary/40"
-                >
-                  {t.label} ({t.count})
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+      <PathwayTopicClusterNav
+        lessonsBasePath={lessonsBasePath}
+        topicClusters={topicClusters}
+        pathwayShortName={pathway.shortName}
+      />
 
       {/* Lifespan quick nav + counts */}
       <nav aria-label="FNP lessons by population" className="rounded-xl border border-border bg-[var(--theme-muted-surface)] p-4">
         <p className="text-xs font-semibold uppercase tracking-wide text-muted">Jump to population lane</p>
         <p className="mt-1 text-xs text-[var(--theme-muted-text)]">
-          Opens the lesson list with that age filter. Use the domain chips below for assessment vs management.
+          Counts reflect lessons on this page (paginated hub). Use the domain chips below for assessment vs management.
         </p>
         <ul className="mt-3 flex flex-wrap gap-2">
           {FNP_LIFESPAN_ORDER.map((row) => (
