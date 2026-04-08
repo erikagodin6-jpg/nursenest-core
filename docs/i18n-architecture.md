@@ -28,6 +28,18 @@ This runs `script/compile-i18n.ts`, which:
 
 **Do not** hand-edit the merged JSON in `client/public/` or `nursenest-core/public/` except in emergencies — regenerate from source.
 
+### Marketing canonical English and locale overlays (avoid regressions)
+
+- **Canonical key set:** `tools/i18n/marketing/marketing-en.json` is the single list of marketing keys. `script/normalize-marketing-locale-overlays.ts` rewrites each `tools/i18n/marketing/locale/marketing-{lang}.json` so it contains **exactly** those keys (sorted). Any key in a locale file that is **not** in canonical English is removed as an **orphan** on compile. That is intentional: stray locale-only keys cannot drift alongside English.
+
+- **Audited nav / footer / shell keys** (`nav.*`, `footer.*`, `components.footer.*`, `dashboard.breadcrumb*`, `brand.*`, `home.region.*` — see `nursenest-core/scripts/lib/nav-i18n-audit.mjs`) must appear in **canonical English** if they are to be translated via overlays. Some keys exist only in merged `en.json` (e.g. from `ensureRequiredEnNavKeys`); they must be **synced into** `marketing-en.json` or the next normalize pass will drop overlay translations for keys not in the canonical set.
+
+- **Why compile before nav/footer fill:** `nursenest-core/scripts/fill-marketing-nav-footer-overlays.mjs` compares **merged** `nursenest-core/public/i18n/{lang}.json` to `en.json`. If you run fill against stale merged files, it may skip locales incorrectly. Always run `npm run i18n:compile` from the repo root immediately before (and after) overlay fills.
+
+- **Learner UI (`learner.*`):** Maintained in `marketing-en.json` and locale overlays as a separate pass (e.g. `fill-marketing-learner-overlays.mjs`). **`sync-audited-keys-into-marketing-en.mjs` explicitly skips `learner.*`** so nav/footer structural fixes never overwrite learner strings.
+
+- **One-command repair + verify (from repo root):** `npm run i18n:repair-marketing` runs compile → sync audited keys into `marketing-en.json` → compile → fill nav/footer overlays → compile → `i18n:validate` → `i18n:check-drift` → `nursenest-core` nav validation.
+
 ## Runtime loading
 
 ### Monolith (Vite SPA)
@@ -63,6 +75,7 @@ This runs `script/compile-i18n.ts`, which:
 | `npm run i18n:compile` | Regenerate merged JSON for all locales |
 | `npm run i18n:validate` | Key parity, file presence, empty-value warnings |
 | `npm run i18n:check-drift` | Ensures marketing keys are included in merged `en.json` |
+| `npm run i18n:repair-marketing` | Full marketing pipeline: compile → sync audited keys to `marketing-en.json` → fill nav/footer overlays → compile → validate + drift + nav checks |
 | `npm run i18n:status` | Writes `reports/i18n-status.json` (diagnostics snapshot) |
 | `npm run i18n:scan` / `i18n:scan:ci` | Hardcoded-string scan (see `i18n-scan.config.json`) |
 

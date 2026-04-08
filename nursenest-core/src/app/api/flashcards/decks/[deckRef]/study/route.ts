@@ -24,6 +24,7 @@ import { withRetry } from "@/lib/resilience/with-retry";
 import type { Prisma } from "@prisma/client";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { applyFlashcardCardOverlay } from "@/lib/i18n/educational-content-overlay";
+import { resolveMergedFlashcardEducationalBundle } from "@/lib/i18n/educational-translation-db";
 import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
 
 const NO_ACCESS: AccessScope = {
@@ -50,6 +51,7 @@ export async function GET(req: NextRequest, { params }: Props) {
   const reset = sp.get("reset") === "1";
   const shuffle = sp.get("shuffle") === "1";
   const educationalLocale = getMarketingLocaleFromRequestCookie(req);
+  const flashcardBundle = await resolveMergedFlashcardEducationalBundle(educationalLocale);
 
   setSentryServerContext({ route: "/api/flashcards/decks/[deckRef]/study", feature: SERVER_FEATURE.flashcard, userId: userId ?? "" });
 
@@ -104,7 +106,11 @@ export async function GET(req: NextRequest, { params }: Props) {
         deckId: deck.id,
         slug: deck.slug,
         cards: cards.map((c) => {
-          const loc = applyFlashcardCardOverlay({ id: c.id, front: c.front, back: c.back }, educationalLocale);
+          const loc = applyFlashcardCardOverlay(
+            { id: c.id, front: c.front, back: c.back },
+            educationalLocale,
+            flashcardBundle,
+          );
           return {
             id: c.id,
             front: loc.front,
@@ -233,7 +239,11 @@ export async function GET(req: NextRequest, { params }: Props) {
       deckId: deck.id,
       slug: deck.slug,
       cards: ordered.map((c) => {
-        const loc = applyFlashcardCardOverlay({ id: c.id, front: c.front, back: c.back }, educationalLocale);
+        const loc = applyFlashcardCardOverlay(
+          { id: c.id, front: c.front, back: c.back },
+          educationalLocale,
+          flashcardBundle,
+        );
         return {
           id: c.id,
           front: loc.front,

@@ -1,0 +1,40 @@
+{
+  "wave": 1,
+  "locales": ["fr", "es", "tl"],
+  "topics": [
+    { "id": "copd", "caSlug": "ca-rn-copd-respiratory", "usSlug": "us-rn-copd-respiratory" },
+    { "id": "heart_failure", "caSlug": "ca-rn-heart-failure", "usSlug": "us-rn-heart-failure" },
+    { "id": "diabetes", "caSlug": "ca-rn-insulin-hypoglycemia", "usSlug": "us-rn-insulin-hypoglycemia" },
+    { "id": "sepsis", "caSlug": "ca-rn-sepsis", "usSlug": "us-rn-sepsis" },
+    { "id": "fluids_electrolytes", "caSlug": "ca-rn-fluid-balance", "usSlug": "us-rn-fluid-balance" },
+    { "id": "respiratory_failure", "caSlug": "ca-rn-ards", "usSlug": "us-rn-ards" }
+  ],
+  "pathways": ["ca-rn-nclex-rn", "us-rn-nclex-rn"],
+  "source_inventory": {
+    "pathway_lessons_in_catalog": 12,
+    "pathway_lessons_with_full_pre_post_overlay": {
+      "fr": 1,
+      "es": 1,
+      "tl": 1,
+      "note": "Only ca-rn-nclex-rn:ca-rn-ards includes translated preTest/postTest in this wave. Other lessons use translated section/title/SEO; quizzes fall back to canonical English until wave 1b."
+    },
+    "exam_questions": {
+      "imported": 0,
+      "reason": "No stable question IDs are committed in-repo; add EXAM_QUESTION overlays after selecting published IDs from production (topic-tagged bank)."
+    },
+    "flashcards": {
+      "imported": 0,
+      "reason": "Deck/card IDs are environment-specific; add FLASHCARD_* overlays when deck inventory is pinned."
+    }
+  },
+  "counts_by_locale_and_kind": {
+    "fr": { "PATHWAY_LESSON": 12 },
+    "es": { "PATHWAY_LESSON": 12 },
+    "tl": { "PATHWAY_LESSON": 12 }
+  },
+  "gaps": [
+    "Pre-check/post-check translations for 11 of 12 pathway lessons deferred to wave 1b (same import pipeline; manifests can be extended per lesson).",
+    "EXAM_QUESTION and FLASHCARD overlays require stable IDs from the target database.",
+    "Canada RPN (ca-rpn-rex-pn) parallel slugs exist in catalog but are not in this wave — extend WAVE1_KEYS in generate-wave1-manifests.mjs."
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "ca-rn-nclex-rn:ca-rn-fluid-balance": {
+    "title": "Déficit vs excès liquidien (NCLEX-RN, Canada)",
+    "topic": "Déficit vs excès liquidien",
+    "seoTitle": "Déficit vs excès liquidien | NCLEX-RN Canada | NurseNest",
+    "seoDescription": "Contexte infirmier au Canada : bilan liquidien — électrolytes SI et jugement clinique.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Signification clinique",
+        "body": "Les questions sur le **déficit vs excès liquidien** vérifient si vous reliez les données d’évaluation au risque : ce qui change en premier, ce qui doit être escaladé, et ce qui est **inacceptable** dans le contexte.\n\n**IPAC Canada :** utilisez les **unités SI** pour les électrolytes lorsque l’énoncé les indique."
+      },
+      "exam_relevance": {
+        "heading": "Pertinence pour l’examen",
+        "body": "Attendez-vous à la **priorisation**, la **surveillance** et la **sécurité** — surtout lorsqu’un énoncé mélange tâches routinières et signe anormal."
+      },
+      "core_concept": {
+        "heading": "Concept central",
+        "body": "Reliez les interventions au schéma sous-jacent (perfusion, équilibre hydroélectrolytique, fonction rénale/cardiaque) et à la surveillance qui confirme la réponse."
+      },
+      "clinical_scenario": {
+        "heading": "Scénario clinique",
+        "body": "Choisissez le client dont le **risque augmente le plus vite** sans intervention infirmière — puis l’évaluation ou l’ordonnance qui correspond à ce risque."
+      },
+      "takeaways": {
+        "heading": "Points à retenir",
+        "body": "- Reliez **signes vitaux + bilan entrées/sorties + laboratoires** avant l’enseignement ou la sortie.\n- **Banque :** items `topic:fluid-balance`.\n- **Canada :** vigilance aux **unités métriques** et au **périmètre**."
+      }
+    }
+  }
+}

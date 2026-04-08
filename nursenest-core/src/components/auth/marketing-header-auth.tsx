@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
+import { MARKETING_PRIMARY_CTA_COMPACT_CLASS } from "@/lib/theme/marketing-hero-pattern";
 
 function useLocalizeHref() {
   const { locale } = useMarketingI18n();
@@ -60,7 +61,7 @@ export function MarketingHeaderAuthDesktop() {
         >
           {t("nav.logIn")}
         </Link>
-        <Link href={localizeHref("/signup")} className="hidden nn-btn-primary px-4 py-2 text-sm font-bold sm:inline-flex">
+        <Link href={localizeHref("/signup")} className={`hidden ${MARKETING_PRIMARY_CTA_COMPACT_CLASS} sm:inline-flex`}>
           {t("nav.signUp")}
         </Link>
       </>
@@ -155,7 +156,7 @@ export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => vo
         </Link>
         <Link
           href={localizeHref("/signup")}
-          className="nn-btn-primary flex-1 py-2 text-center text-sm font-bold"
+          className={`${MARKETING_PRIMARY_CTA_COMPACT_CLASS} flex-1 justify-center text-center`}
           onClick={onNavigate}
         >
           {t("nav.signUp")}

@@ -1,0 +1,30 @@
+{
+  "us-rn-nclex-rn:us-rn-insulin-hypoglycemia": {
+    "title": "Insulina e hipoglucemia (NCLEX-RN, EE. UU.)",
+    "topic": "Insulina e hipoglucemia",
+    "seoTitle": "Insulina e hipoglucemia | NCLEX-RN EE. UU. | NurseNest",
+    "seoDescription": "NCLEX-RN (EE. UU.): insulina e hipoglucemia — seguridad del medicamento y monitorización.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Significado clínico",
+        "body": "Los ítems sobre **insulina** e **hipoglucemia** evalúan si conecta los datos de valoración con el riesgo: qué cambia primero, qué requiere escalada y qué es **inseguro** en el contexto."
+      },
+      "exam_relevance": {
+        "heading": "Relevancia para el examen",
+        "body": "Espere **priorización**, **monitorización** y **seguridad**, especialmente cuando el enunciado mezcla tareas rutinarias con un hallazgo anormal."
+      },
+      "core_concept": {
+        "heading": "Concepto central",
+        "body": "Vincule las intervenciones a la dinámica **glucosa–insulina**, a los signos de **neuroglucopenia** y a la monitorización que demuestra respuesta."
+      },
+      "clinical_scenario": {
+        "heading": "Escenario clínico",
+        "body": "Elija al cliente cuyo **riesgo aumenta más rápido** sin intervención de enfermería; luego la valoración u orden que corresponda."
+      },
+      "takeaways": {
+        "heading": "Conclusiones",
+        "body": "- Una **historia + signos vitales + glucosa** antes de enseñar o dar el alta.\n- **Banco:** ítems `topic:insulin-hypoglycemia`."
+      }
+    }
+  }
+}

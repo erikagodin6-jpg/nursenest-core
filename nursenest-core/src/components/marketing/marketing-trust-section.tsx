@@ -62,15 +62,15 @@ export function MarketingTrustSection({
 
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
           <div className="rounded-2xl border border-[var(--theme-card-border)] bg-card p-4 text-center shadow-sm">
-            <p className="text-2xl font-bold tabular-nums text-[var(--theme-heading-text)]">{formatStat(questionCount)}</p>
+            <p className="nn-marketing-h3 tabular-nums">{formatStat(questionCount)}</p>
             <p className="mt-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("home.trust.statQuestions")}</p>
           </div>
           <div className="rounded-2xl border border-[var(--theme-card-border)] bg-card p-4 text-center shadow-sm">
-            <p className="text-2xl font-bold tabular-nums text-[var(--theme-heading-text)]">{formatStat(lessonCount)}</p>
+            <p className="nn-marketing-h3 tabular-nums">{formatStat(lessonCount)}</p>
             <p className="mt-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("home.trust.statLessons")}</p>
           </div>
           <div className="rounded-2xl border border-[var(--theme-card-border)] bg-card p-4 text-center shadow-sm">
-            <p className="text-2xl font-bold tabular-nums text-[var(--theme-heading-text)]">{cat}</p>
+            <p className="nn-marketing-h3 tabular-nums">{cat}</p>
             <p className="mt-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("home.trust.statCategories")}</p>
           </div>
         </div>
@@ -78,7 +78,7 @@ export function MarketingTrustSection({
         <div className="mt-8">
           <div className="mb-4 flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-primary" aria-hidden />
-            <h3 className="text-lg font-bold text-[var(--theme-heading-text)]">{t("home.trust.whyTitle")}</h3>
+            <h3 className="nn-marketing-h3">{t("home.trust.whyTitle")}</h3>
           </div>
           <ul className="grid gap-4 sm:grid-cols-3">
             <li className="rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]/50 p-4">

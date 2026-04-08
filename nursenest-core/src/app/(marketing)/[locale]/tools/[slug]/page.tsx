@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ToolsToolShell } from "@/components/tools/tools-tool-shell";
 import { isToolSlug } from "@/lib/tools/tool-registry";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
 
@@ -20,10 +21,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const k = keysForSlug(slug);
   if (!k) return {};
   const m = await loadMarketingMessages(locale);
+  const alt = marketingAlternatesSharedPage(locale, `/tools/${slug}`);
   return {
     title: m[k.title],
     description: m[k.desc],
-    alternates: { canonical: `/${locale}/tools/${slug}` },
+    alternates: { canonical: alt.canonical, languages: alt.languages },
+    openGraph: { title: m[k.title], description: m[k.desc], url: alt.canonical, type: "website" },
   };
 }
 

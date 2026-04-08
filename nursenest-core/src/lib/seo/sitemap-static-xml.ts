@@ -283,6 +283,10 @@ export function collectLocaleMarketingUrls(origin: string, locale: string): stri
   urls.push(add(`/${locale}/acceptable-use`));
   urls.push(add(`/${locale}/disclaimer`));
   urls.push(add(`/${locale}/contact`));
+  urls.push(add(`/${locale}/login`));
+  urls.push(add(`/${locale}/signup`));
+  urls.push(add(`/${locale}/forgot-password`));
+  urls.push(add(`/${locale}/reset-password`));
   for (const slug of getAllProgrammaticSlugs()) {
     if (slug in PROGRAMMATIC_SLUG_TO_PATHWAY_PATH) continue;
     urls.push(add(`/${locale}/${slug}`));

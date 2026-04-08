@@ -2,7 +2,7 @@
 /**
  * Navigation / footer / shell menu i18n audit and MT fill (idempotent).
  *
- * ## Audited key patterns (subset of `en.json`; ~265 keys)
+ * ## Audited key patterns (subset of `en.json`; ~270 keys; see `lib/ensure-en-nav-keys.mjs`)
  * - `nav.*` — header, mobile drawer, exam strip, theme, etc.
  * - `footer.*` — footer columns, legal, resources, email banner
  * - `components.footer.*` — ecosystem / exam prep lines in `site-footer.tsx`
@@ -40,6 +40,7 @@ import {
   isEnglishCarryoverAllowlisted,
   mustachePlaceholders,
 } from "./lib/nav-i18n-audit.mjs";
+import { ensureRequiredEnNavKeys } from "./lib/ensure-en-nav-keys.mjs";
 
 export {
   MARKETING_LOCALE_CODES,
@@ -114,6 +115,7 @@ function isReviewTagged(v) {
 }
 
 export function runAudit(jsonMode) {
+  ensureRequiredEnNavKeys();
   const en = JSON.parse(fs.readFileSync(EN_PATH, "utf8"));
   const auditedKeys = getAuditedKeys(en);
   const byLocale = {};
@@ -163,10 +165,13 @@ export function runAudit(jsonMode) {
       const c = r.englishCarryover.length;
       const a = r.allowlistedCarryover.length;
       const ph = r.placeholderMismatch.length;
-      if (m + e + c === 0 && ph === 0) {
+      const mf = r.malformed.length;
+      if (m + e + c === 0 && ph === 0 && mf === 0) {
         console.log(`[${code}] OK (allowlisted EN: ${a})`);
       } else {
-        console.log(`[${code}] missing=${m} empty=${e} englishCarryover=${c} allowlisted=${a} placeholderMismatch=${ph}`);
+        console.log(
+          `[${code}] missing=${m} empty=${e} englishCarryover=${c} allowlisted=${a} placeholderMismatch=${ph} malformed=${mf}`,
+        );
         if (m && m.length <= 15) console.log(`  missing: ${m.join(", ")}`);
         if (e && e.length <= 15) console.log(`  empty: ${e.join(", ")}`);
         if (c && c.length <= 20) console.log(`  englishCarryover: ${c.slice(0, 20).join(", ")}${c.length > 20 ? " …" : ""}`);
@@ -175,6 +180,8 @@ export function runAudit(jsonMode) {
             console.log(`  placeholder: ${x.key} en=${x.en} loc=${x.locale}`);
           }
         }
+        if (r.malformed.length && r.malformed.length <= 15)
+          console.log(`  malformed: ${r.malformed.join(", ")}`);
       }
     }
   }
@@ -222,6 +229,7 @@ async function fillLocale(code) {
   const opts = LANG_OPTS[code];
   if (!opts) throw new Error(`No LANG_OPTS for ${code}`);
 
+  ensureRequiredEnNavKeys();
   const en = JSON.parse(fs.readFileSync(EN_PATH, "utf8"));
   const auditedKeys = getAuditedKeys(en);
   const p = path.join(I18N_DIR, `${code}.json`);
@@ -297,11 +305,44 @@ async function fillLocale(code) {
     await sleep(BATCH_GAP_MS);
   }
 
+  /** Safety net: never leave audited string keys missing or empty after batch MT. */
+  for (const k of auditedKeys) {
+    const enVal = en[k];
+    if (typeof enVal !== "string") continue;
+    const cur = j[k];
+    if (cur !== undefined && !isEmpty(cur)) continue;
+    try {
+      j[k] = await translateOneSafe(enVal, opts);
+    } catch {
+      j[k] = enVal;
+    }
+    await sleep(40);
+  }
+
+  /** Re-sync any audited string whose locale lost `{{…}}` vs English (e.g. batch MT drift). */
+  for (const k of auditedKeys) {
+    const enVal = en[k];
+    if (typeof enVal !== "string" || !/\{\{[^}]+\}\}/.test(enVal)) continue;
+    const enP = mustachePlaceholders(enVal);
+    if (!enP) continue;
+    const cur = j[k];
+    if (typeof cur !== "string") continue;
+    if (mustachePlaceholders(cur) === enP) continue;
+    try {
+      const t = await translateOneSafe(enVal, opts);
+      j[k] = mustachePlaceholders(t) === enP ? t : en[k];
+    } catch {
+      j[k] = en[k];
+    }
+    await sleep(40);
+  }
+
   fs.writeFileSync(p, JSON.stringify(j));
   console.log(`\n[${code}] wrote ${p}`);
 }
 
 async function runFill() {
+  ensureRequiredEnNavKeys();
   const en = JSON.parse(fs.readFileSync(EN_PATH, "utf8"));
   const n = getAuditedKeys(en).length;
   console.log(`Fill: ${n} audited keys per locale (from en.json), ${MARKETING_LOCALE_CODES.length} locales\n`);
@@ -313,6 +354,7 @@ async function runFill() {
 }
 
 function runVerify() {
+  ensureRequiredEnNavKeys();
   let failed = false;
   for (const code of MARKETING_LOCALE_CODES) {
     const p = path.join(I18N_DIR, `${code}.json`);
@@ -336,10 +378,14 @@ function runVerify() {
     const locMap = JSON.parse(fs.readFileSync(path.join(I18N_DIR, `${code}.json`), "utf8"));
     const r = auditOneLocale(code, en, locMap);
     const bad =
-      r.missing.length + r.empty.length + r.englishCarryover.length + r.placeholderMismatch.length;
+      r.missing.length +
+      r.empty.length +
+      r.englishCarryover.length +
+      r.placeholderMismatch.length +
+      r.malformed.length;
     if (bad > 0) {
       console.log(
-        `[${code}] VERIFY FAIL: missing=${r.missing.length} empty=${r.empty.length} englishCarryover=${r.englishCarryover.length} placeholderMismatch=${r.placeholderMismatch.length}`,
+        `[${code}] VERIFY FAIL: missing=${r.missing.length} empty=${r.empty.length} englishCarryover=${r.englishCarryover.length} placeholderMismatch=${r.placeholderMismatch.length} malformed=${r.malformed.length}`,
       );
       failed = true;
     } else {

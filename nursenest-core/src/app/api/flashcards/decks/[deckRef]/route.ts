@@ -7,6 +7,7 @@ import { logFlashcardAccessDenied } from "@/lib/observability/flashcard-log";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { applyFlashcardDeckOverlay } from "@/lib/i18n/educational-content-overlay";
+import { resolveMergedFlashcardEducationalBundle } from "@/lib/i18n/educational-translation-db";
 import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
 
 const NO_ACCESS: AccessScope = {
@@ -46,9 +47,11 @@ export async function GET(req: NextRequest, { params }: Props) {
     return NextResponse.json({ error: "Access denied", code: "flashcard_access_denied" }, { status: 403 });
   }
 
+  const flashcardBundle = await resolveMergedFlashcardEducationalBundle(educationalLocale);
   const localized = applyFlashcardDeckOverlay(
     { id: deck.id, slug: deck.slug, title: deck.title, description: deck.description },
     educationalLocale,
+    flashcardBundle,
   );
 
   return NextResponse.json({

@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { AdaptiveLearnerRecommendations } from "@/lib/learner/adaptive-recommendations";
 import { AdaptiveStudyOverview } from "@/components/student/adaptive-study-overview";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { MARKETING_PRIMARY_CTA_COMPACT_CLASS } from "@/lib/theme/marketing-hero-pattern";
 
 type Props = {
   adaptive: AdaptiveLearnerRecommendations;
@@ -31,21 +32,21 @@ export function HomeStudyNextPreviewSection({
     >
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h2 id="home-study-next-preview-title" className="text-lg font-bold text-[var(--theme-heading-text)] sm:text-xl">
+          <h2 id="home-study-next-preview-title" className="nn-marketing-h3">
             {t("home.studyNextPreview.title")}
           </h2>
-          <p className="mt-1 max-w-2xl text-sm text-muted-foreground">{t("home.studyNextPreview.subtitle")}</p>
+          <p className="nn-marketing-body-sm mt-1 max-w-2xl text-muted-foreground">{t("home.studyNextPreview.subtitle")}</p>
         </div>
-        <Link
-          href={pricingHref}
-          className="inline-flex shrink-0 items-center justify-center rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
-        >
+        <Link href={pricingHref} className={`${MARKETING_PRIMARY_CTA_COMPACT_CLASS} shrink-0`}>
           {t("cta.continuePlan")}
         </Link>
       </div>
       <AdaptiveStudyOverview adaptive={adaptive} showHeading={false} compact subscriber={false} />
-      <p className="text-xs text-muted-foreground">
-        <Link href={signupHref} className="font-semibold text-primary underline-offset-2 hover:underline">
+      <p className="nn-marketing-caption text-muted-foreground">
+        <Link
+          href={signupHref}
+          className="nn-link-quiet font-semibold text-[var(--theme-primary)] underline-offset-2 hover:underline"
+        >
           {t("home.studyNextPreview.signupLink")}
         </Link>{" "}
         {t("home.studyNextPreview.footerAfterLink")}

@@ -19,8 +19,8 @@ export async function MarketingResetPasswordPage({
         <div className="mb-6 flex justify-center bg-transparent">
           <SiteBrandLogoMark variant="auth" />
         </div>
-        <h1 className="text-3xl font-bold">{m["pages.resetPassword.h1"] ?? "Choose a new password"}</h1>
-        <p className="mt-2 text-sm text-muted">
+        <h1 className="nn-marketing-h1">{m["pages.resetPassword.h1"] ?? "Choose a new password"}</h1>
+        <p className="nn-marketing-body-sm mt-2 text-muted">
           {m["pages.resetPassword.intro"] ?? "Enter and confirm your new password (at least 8 characters)."}
         </p>
         <ResetPasswordForm

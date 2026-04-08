@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { auth } from "@/lib/auth";
 import { LearnerShellUserBar } from "@/components/auth/learner-shell-user-bar";
 import { LearnerShellLanguageControl } from "@/components/student/learner-shell-language-control";
@@ -66,7 +67,16 @@ export default async function LearnerShellLayout({ children }: { children: React
           </header>
           {studyNextBlock ? (
             <div className="nn-learner-exam-chrome-dim mb-[var(--nn-rhythm-tight-y)]">
-              <LearnerStudyNextBlock model={studyNextBlock} />
+              <Suspense
+                fallback={
+                  <div
+                    className="min-h-[10rem] rounded-xl border border-[var(--nn-presentation-divider)] bg-[var(--nn-presentation-wash)]"
+                    aria-hidden
+                  />
+                }
+              >
+                <LearnerStudyNextBlock model={studyNextBlock} />
+              </Suspense>
             </div>
           ) : null}
           <div className="nn-learner-exam-chrome-dim">

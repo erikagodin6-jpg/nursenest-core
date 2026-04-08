@@ -33,6 +33,8 @@ export type FlashcardEducationalBundle = {
   decks?: Record<string, { title?: string; description?: string | null }>;
   /** Optional extra teaching line (overlay-only; not stored on `Flashcard` rows). */
   cards?: Record<string, { front?: string; back?: string; explanation?: string }>;
+  /** `FlashcardTag.id` → display label overlay (DB or file). */
+  tags?: Record<string, { label?: string }>;
 };
 
 const questionBundleCache = new Map<string, Record<string, QuestionEducationalOverlay> | null>();
@@ -175,18 +177,78 @@ function mergeQuizList(
   return out;
 }
 
+type QuizOverlayPatchRow = Partial<Pick<PathwayLessonQuizItem, "question" | "options" | "rationale">>;
+
+function mergeQuizOverlayArrays(
+  a: QuizOverlayPatchRow[] | undefined,
+  b: QuizOverlayPatchRow[] | undefined,
+): QuizOverlayPatchRow[] | undefined {
+  if (!b?.length) return a;
+  if (!a?.length) return b;
+  const len = Math.max(a.length, b.length);
+  const out: QuizOverlayPatchRow[] = [];
+  for (let i = 0; i < len; i++) {
+    out.push({ ...(a[i] ?? {}), ...(b[i] ?? {}) });
+  }
+  return out;
+}
+
+/** Deep-merge two partial lesson overlays (e.g. file + DB). DB patch wins on field conflicts. */
+export function mergePathwayLessonEducationalOverlayPatches(
+  a: PathwayLessonEducationalOverlay | undefined,
+  b: PathwayLessonEducationalOverlay | undefined,
+): PathwayLessonEducationalOverlay | undefined {
+  if (!a) return b;
+  if (!b) return a;
+  const sections: PathwayLessonEducationalOverlay["sections"] = { ...a.sections };
+  if (b.sections) {
+    for (const [id, patch] of Object.entries(b.sections)) {
+      const prev = sections[id] ?? {};
+      sections[id] = { ...prev, ...patch };
+    }
+  }
+  return {
+    ...a,
+    ...b,
+    title: b.title?.trim() ? b.title : a.title,
+    topic: b.topic?.trim() ? b.topic : a.topic,
+    seoTitle: b.seoTitle?.trim() ? b.seoTitle : a.seoTitle,
+    seoDescription: b.seoDescription?.trim() ? b.seoDescription : a.seoDescription,
+    sections,
+    preTest: mergeQuizOverlayArrays(a.preTest, b.preTest),
+    postTest: mergeQuizOverlayArrays(a.postTest, b.postTest),
+  };
+}
+
+/**
+ * Merge file-based lesson JSON with optional DB-published overlays (same keys: `slug` or `pathwayId:slug`).
+ */
+export function mergePathwayLessonOverlayRecordBundles(
+  file: Record<string, PathwayLessonEducationalOverlay>,
+  db?: Record<string, PathwayLessonEducationalOverlay>,
+): Record<string, PathwayLessonEducationalOverlay> {
+  if (!db || Object.keys(db).length === 0) return file;
+  const out: Record<string, PathwayLessonEducationalOverlay> = { ...file };
+  for (const [key, dbPatch] of Object.entries(db)) {
+    out[key] = mergePathwayLessonEducationalOverlayPatches(file[key], dbPatch) ?? dbPatch;
+  }
+  return out;
+}
+
 /**
  * Merge file-based lesson overlays for display. Does not change slug, pathway, or quiz `correct` indices.
  * Keys: `slug` or `pathwayId:slug` when `pathwayId` is provided (disambiguates duplicate slugs).
+ * @param dbLessonOverlayBundle — optional `EducationalTranslationOverlay` rows (PUBLISHED) merged after file JSON.
  */
 export function applyPathwayLessonEducationalOverlay(
   lesson: PathwayLessonRecord,
   locale: string,
   pathwayId?: string,
+  dbLessonOverlayBundle?: Record<string, PathwayLessonEducationalOverlay>,
 ): PathwayLessonRecord {
   if (locale === DEFAULT_MARKETING_LOCALE) return lesson;
 
-  const bundle = loadLessonEducationalBundle(locale);
+  const bundle = mergePathwayLessonOverlayRecordBundles(loadLessonEducationalBundle(locale), dbLessonOverlayBundle);
   const compoundKey = pathwayId ? `${pathwayId}:${lesson.slug}` : null;
   const o = (compoundKey ? bundle[compoundKey] : undefined) ?? bundle[lesson.slug];
   if (!o || typeof o !== "object") {
@@ -320,6 +382,8 @@ type QuestionRowForDisplay = {
 export function applyQuestionEducationalOverlayForDisplay(
   row: QuestionRowForDisplay,
   locale: string,
+  /** When set, merged file + DB overlays; otherwise file-based `questions.json` only. */
+  overlayBundle?: Record<string, QuestionEducationalOverlay>,
 ): QuestionDisplayLocalization {
   if (locale === DEFAULT_MARKETING_LOCALE) {
     return {
@@ -339,7 +403,7 @@ export function applyQuestionEducationalOverlayForDisplay(
     };
   }
 
-  const bundle = loadQuestionEducationalOverlayBundle(locale);
+  const bundle = overlayBundle ?? loadQuestionEducationalOverlayBundle(locale);
   const o = bundle[row.id];
   if (!o) {
     if (locale !== DEFAULT_MARKETING_LOCALE && process.env.NODE_ENV !== "production") {
@@ -404,8 +468,12 @@ export function applyQuestionEducationalOverlayForDisplay(
 }
 
 /** Merge localized display fields onto an API question object (list/detail). Preserves extra keys (topic, exam, …). */
-export function mergeQuestionApiPayload(q: Record<string, unknown>, locale: string): Record<string, unknown> {
-  const m = applyQuestionEducationalOverlayForDisplay(q as QuestionRowForDisplay, locale);
+export function mergeQuestionApiPayload(
+  q: Record<string, unknown>,
+  locale: string,
+  overlayBundle?: Record<string, QuestionEducationalOverlay>,
+): Record<string, unknown> {
+  const m = applyQuestionEducationalOverlayForDisplay(q as QuestionRowForDisplay, locale, overlayBundle);
   const out: Record<string, unknown> = { ...q, stem: m.stem, options: m.options };
   if (m.displayOptions) out.displayOptions = m.displayOptions;
   out.rationale = m.rationale;
@@ -426,10 +494,11 @@ export function localizeQuestionListForApi(
   items: Array<Record<string, unknown>>,
   mode: "preview" | "full",
   locale: string,
+  overlayBundle?: Record<string, QuestionEducationalOverlay>,
 ): Array<Record<string, unknown>> {
   if (mode === "preview") {
     return items.map((q) => {
-      const merged = mergeQuestionApiPayload(q, locale);
+      const merged = mergeQuestionApiPayload(q, locale, overlayBundle);
       const stem = String(merged.stem ?? "");
       return {
         ...merged,
@@ -437,7 +506,7 @@ export function localizeQuestionListForApi(
       };
     });
   }
-  return items.map((q) => mergeQuestionApiPayload(q, locale));
+  return items.map((q) => mergeQuestionApiPayload(q, locale, overlayBundle));
 }
 
 /** Row shape for grade-response teaching/rationale builders — overlay merged for subscriber-facing text only. */
@@ -459,9 +528,10 @@ export function mergeQuestionOverlayForGradeResponse<T extends ExamQuestionGrade
   row: T,
   questionId: string,
   locale: string,
+  overlayBundle?: Record<string, QuestionEducationalOverlay>,
 ): T {
   if (locale === DEFAULT_MARKETING_LOCALE) return row;
-  const bundle = loadQuestionEducationalOverlayBundle(locale);
+  const bundle = overlayBundle ?? loadQuestionEducationalOverlayBundle(locale);
   const o = bundle[questionId];
   if (!o) return row;
   return {
@@ -484,9 +554,11 @@ export function mergeQuestionOverlayForGradeResponse<T extends ExamQuestionGrade
 export function applyFlashcardDeckOverlay(
   deck: { id: string; slug: string; title: string; description: string | null },
   locale: string,
+  /** Merged file + DB bundle; when omitted, file `flashcards.json` only. */
+  bundleOverride?: FlashcardEducationalBundle,
 ): { title: string; description: string | null } {
   if (locale === DEFAULT_MARKETING_LOCALE) return { title: deck.title, description: deck.description };
-  const b = loadFlashcardEducationalBundle(locale);
+  const b = bundleOverride ?? loadFlashcardEducationalBundle(locale);
   const decks = b.decks ?? {};
   const d = decks[deck.id] ?? decks[deck.slug];
   if (!d) {
@@ -508,9 +580,10 @@ export function applyFlashcardDeckOverlay(
 export function applyFlashcardCardOverlay(
   card: { id: string; front: string; back: string },
   locale: string,
+  bundleOverride?: FlashcardEducationalBundle,
 ): { front: string; back: string; explanation?: string } {
   if (locale === DEFAULT_MARKETING_LOCALE) return { front: card.front, back: card.back };
-  const b = loadFlashcardEducationalBundle(locale);
+  const b = bundleOverride ?? loadFlashcardEducationalBundle(locale);
   const c = b.cards?.[card.id];
   if (!c) {
     if (process.env.NODE_ENV !== "production") {

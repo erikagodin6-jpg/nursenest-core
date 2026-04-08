@@ -5,16 +5,24 @@ import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { localizeBreadcrumbResolution } from "@/lib/seo/breadcrumb-i18n";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { marketingPricingBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
+import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 
 type Props = { params: Promise<{ locale: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const m = await loadMarketingMessages(locale);
+  const alt = marketingAlternatesSharedPage(locale, "/pricing");
   return {
     title: m["pages.pricing.title"],
     description: m["pages.pricing.description"],
-    alternates: { canonical: `/${locale}/pricing` },
+    alternates: { canonical: alt.canonical, languages: alt.languages },
+    openGraph: {
+      title: m["pages.pricing.title"],
+      description: m["pages.pricing.description"],
+      url: alt.canonical,
+      type: "website",
+    },
   };
 }
 

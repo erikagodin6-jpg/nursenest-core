@@ -32,19 +32,17 @@ export function HomeHeroPathGateway({ region }: Props) {
     >
       <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h2 className="text-base font-bold text-[var(--theme-heading-text)] sm:text-lg">{t("home.gateway.title")}</h2>
-          <p className="mt-1 max-w-2xl text-sm text-[var(--theme-muted-text)]">{t("home.gateway.subtitle")}</p>
+          <h2 className="nn-marketing-h3">{t("home.gateway.title")}</h2>
+          <p className="nn-marketing-body-sm mt-1 max-w-2xl text-[var(--theme-muted-text)]">{t("home.gateway.subtitle")}</p>
         </div>
-        {regionMeta ? (
-          <p className="text-xs font-medium uppercase tracking-wide text-[var(--theme-muted-text)]">{regionMeta}</p>
-        ) : null}
+        {regionMeta ? <p className="nn-marketing-label">{regionMeta}</p> : null}
       </div>
 
       <div className="rounded-xl border border-[var(--theme-card-border)] bg-card p-4 shadow-sm sm:p-5 lg:grid lg:grid-cols-12 lg:gap-6" data-testid="hero-gateway-nursing">
         <div className="lg:col-span-5">
-          <p className="text-[11px] font-bold uppercase tracking-wide text-primary">{t("home.gateway.badgePrimary")}</p>
-          <h3 className="mt-1 text-lg font-bold text-[var(--theme-heading-text)]">{t(rn.titleKey)}</h3>
-          {rn.introKey ? <p className="mt-2 text-sm text-[var(--theme-muted-text)]">{t(rn.introKey)}</p> : null}
+          <p className="nn-marketing-label nn-marketing-label--accent">{t("home.gateway.badgePrimary")}</p>
+          <h3 className="nn-marketing-h3 mt-1">{t(rn.titleKey)}</h3>
+          {rn.introKey ? <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">{t(rn.introKey)}</p> : null}
           {rn.primaryCta && (
             <PrimaryCtaButton
               clusterId="nursing"
@@ -61,7 +59,7 @@ export function HomeHeroPathGateway({ region }: Props) {
           ) : null}
         </div>
         <div className="mt-4 border-t border-[var(--theme-card-border)] pt-4 lg:col-span-7 lg:mt-0 lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0">
-          <p className="text-xs font-semibold text-[var(--theme-heading-text)]">{t("home.gateway.quickLinks")}</p>
+          <p className="nn-marketing-label text-[var(--theme-heading-text)]">{t("home.gateway.quickLinks")}</p>
           <ul className="mt-3 grid gap-2 sm:grid-cols-2">
             {rn.links.map((link) => (
               <li key={link.id}>
@@ -109,8 +107,8 @@ function ClusterCard({
     >
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div>
-          <h3 className="text-base font-bold text-[var(--theme-heading-text)]">{t(cluster.titleKey)}</h3>
-          {cluster.introKey ? <p className="mt-1 text-sm text-[var(--theme-muted-text)]">{t(cluster.introKey)}</p> : null}
+          <h3 className="nn-marketing-h3">{t(cluster.titleKey)}</h3>
+          {cluster.introKey ? <p className="nn-marketing-body-sm mt-1 text-[var(--theme-muted-text)]">{t(cluster.introKey)}</p> : null}
         </div>
         {cluster.primaryCta && (
           <PrimaryCtaButton

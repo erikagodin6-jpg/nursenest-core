@@ -8,22 +8,28 @@ import { HomeStudyNextPreviewSection } from "@/components/marketing/home-study-n
 import { getHomepageLessonTeasers } from "@/lib/marketing/homepage-lesson-teasers";
 import { buildSimulatedAdaptiveRecommendationsForConversionPreview } from "@/lib/learner/adaptive-recommendations";
 import { marketingHomeSurfaceBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
-import { absoluteUrl } from "@/lib/seo/site-origin";
+import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 
 /** ISR: homepage shell + cached lesson teaser strip (see getHomepageLessonTeasers). */
 export const revalidate = 600;
 
-export const metadata: Metadata = {
-  title: "NurseNest | NCLEX-RN, NCLEX-PN, REx-PN, NP & allied exam prep",
-  description:
-    "Exam-specific practice for US and Canada: NCLEX-RN, NCLEX-PN, REx-PN, nurse practitioner tracks, and allied health. Questions, lessons, and timed mocks scoped to your pathway.",
-  alternates: { canonical: absoluteUrl("/") },
-  openGraph: {
-    title: "NurseNest | NCLEX-RN, NCLEX-PN, REx-PN, NP & allied exam prep",
-    url: absoluteUrl("/"),
-    type: "website",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const m = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+  const alt = marketingAlternatesSharedPage(DEFAULT_MARKETING_LOCALE, "/");
+  return {
+    title: m["pages.home.metaTitle"],
+    description: m["pages.home.metaDescription"],
+    alternates: { canonical: alt.canonical, languages: alt.languages },
+    openGraph: {
+      title: m["pages.home.metaTitle"],
+      description: m["pages.home.metaDescription"],
+      url: alt.canonical,
+      type: "website",
+    },
+  };
+}
 
 export default async function HomePage() {
   const lessonTeasers = await getHomepageLessonTeasers();

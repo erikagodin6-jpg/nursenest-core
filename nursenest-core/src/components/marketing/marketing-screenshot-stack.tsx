@@ -91,8 +91,8 @@ function ScreenshotFrame({ slide }: { slide: HomeHeroSlide }) {
         rounded="rounded-2xl"
       />
       <div className="space-y-1 px-0.5">
-        <p className="text-sm font-semibold leading-snug text-[var(--theme-heading-text)]">{slide.title}</p>
-        <p className="text-xs leading-relaxed text-[var(--theme-body-text)]">{slide.caption}</p>
+        <p className="nn-marketing-h4 leading-snug">{slide.title}</p>
+        <p className="nn-marketing-body-sm mt-1">{slide.caption}</p>
       </div>
     </div>
   );
@@ -117,7 +117,7 @@ export function MarketingScreenshotStack({
   if (picks.length === 0) {
     return (
       <div
-        className="rounded-xl border border-dashed border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)] px-4 py-6 text-center text-sm text-[var(--theme-muted-text)]"
+        className="nn-marketing-body-sm rounded-xl border border-dashed border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)] px-4 py-6 text-center text-[var(--theme-muted-text)]"
         data-testid={`${testIdPrefix}-empty`}
       >
         Screenshots unavailable.

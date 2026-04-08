@@ -6,8 +6,9 @@
  */
 import { existsSync, readFileSync } from "fs";
 import path from "path";
+import { REPO_ROOT } from "./repo-root";
 
-const ROOT = path.resolve(process.cwd());
+const ROOT = REPO_ROOT;
 const MARKETING_EN = path.join(ROOT, "tools/i18n/marketing/marketing-en.json");
 const MERGED_EN = path.join(ROOT, "client/public/i18n/en.json");
 

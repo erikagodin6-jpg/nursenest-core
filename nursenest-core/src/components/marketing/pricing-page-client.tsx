@@ -33,6 +33,11 @@ import {
   type ParsedCheckoutErrorBody,
 } from "@/lib/stripe/checkout-api-diagnostics";
 import type { BillingDuration } from "@/lib/stripe/pricing-map";
+import {
+  MARKETING_PRIMARY_CTA_CLASS,
+  MARKETING_SECONDARY_CTA_CLASS,
+  MARKETING_TERTIARY_LINK_CLASS,
+} from "@/lib/theme/marketing-hero-pattern";
 
 type PlanRow = {
   tier: TierCode;
@@ -314,42 +319,35 @@ export function PricingPageClient({
     <main className="mx-auto w-full max-w-6xl nn-marketing-x pb-[var(--nn-rhythm-page-y)] pt-0">
       <header className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--nn-presentation-wash)] px-5 pb-[var(--space-hero-bottom)] pt-6 sm:px-7 sm:pt-7">
         <div className="nn-stack-hero-heading">
-          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("pages.pricing.title")}</p>
-          <h1 className="text-balance text-3xl font-bold leading-tight text-[var(--theme-heading-text)] sm:text-4xl">
-            {heading}
-          </h1>
+          <p className="nn-marketing-label">{t("pages.pricing.title")}</p>
+          <h1 className="nn-marketing-h1 text-balance">{heading}</h1>
         </div>
         <div className="nn-stack-hero-heading mt-[var(--nn-rhythm-text-to-cta)] max-w-2xl">
-          <p className="text-base leading-relaxed text-muted-foreground">{heroSub}</p>
-          <p className="text-sm text-muted-foreground">{intro}</p>
+          <p className="nn-marketing-lead text-muted-foreground">{heroSub}</p>
+          <p className="nn-marketing-body-sm mt-2 text-muted-foreground">{intro}</p>
         </div>
 
-        <p className="mt-[var(--nn-rhythm-text-to-cta)] text-sm text-[var(--theme-body-text)]">
-          {t("pages.pricing.hero.trustLine")}
-        </p>
-        <p className="mt-2 inline-flex rounded-full border border-[var(--border-subtle)] bg-[var(--nn-presentation-badge)] px-3 py-1 text-xs font-medium text-[var(--theme-body-text)]">
+        <p className="nn-marketing-body-sm mt-[var(--nn-rhythm-text-to-cta)]">{t("pages.pricing.hero.trustLine")}</p>
+        <p className="nn-marketing-caption mt-2 inline-flex rounded-full border border-[var(--border-subtle)] bg-[var(--nn-presentation-badge)] px-3 py-1 font-medium text-[var(--theme-body-text)]">
           {t("pages.pricing.hero.choicePill")}
         </p>
 
         <div className="nn-hero-cta-row mt-[var(--nn-rhythm-text-to-cta)] flex-wrap sm:items-start">
-          <Link
-            href={tryQuestionsHref}
-            className="nn-btn-primary inline-flex min-h-[48px] items-center justify-center px-6 py-3 text-sm font-semibold transition"
-          >
+          <Link href={tryQuestionsHref} className={MARKETING_PRIMARY_CTA_CLASS}>
             {t("pages.pricing.hero.ctaStartStudying")}
             <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
-          <Link href={tryQuestionsHref} className="nn-link-quiet inline-flex items-center text-sm font-semibold">
+          <Link href={tryQuestionsHref} className={`${MARKETING_TERTIARY_LINK_CLASS} font-semibold`}>
             {t("pages.pricing.hero.ctaSeeWeakAreas")}
           </Link>
         </div>
-        <p className="mt-3 text-xs font-medium text-muted-foreground">{t("pages.pricing.hero.checkoutHint")}</p>
-        <p className="mt-2 text-xs text-muted-foreground">{t("pages.pricing.hero.regionHint")}</p>
+        <p className="nn-marketing-caption mt-3 font-medium text-muted-foreground">{t("pages.pricing.hero.checkoutHint")}</p>
+        <p className="nn-marketing-caption mt-2 text-muted-foreground">{t("pages.pricing.hero.regionHint")}</p>
       </header>
 
       <section className="mt-[var(--nn-rhythm-section-y)] rounded-2xl border border-[var(--border-subtle,var(--theme-card-border))] bg-[var(--nn-presentation-panel)] p-5 sm:p-6 shadow-[var(--shadow-card)]">
-        <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">{t("pages.pricing.proof.title")}</h2>
-        <ul className="mt-4 space-y-3 text-sm leading-relaxed text-[var(--theme-body-text)]">
+        <h2 className="nn-marketing-h2">{t("pages.pricing.proof.title")}</h2>
+        <ul className="nn-marketing-body-sm mt-4 space-y-3 leading-relaxed text-[var(--theme-body-text)]">
           <li className="flex gap-2">
             <Check className="nn-trust-mark mt-0.5 h-4 w-4 shrink-0" aria-hidden />
             <span>{t("pages.pricing.proof.line1")}</span>
@@ -365,12 +363,8 @@ export function PricingPageClient({
         </ul>
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
           <div className="rounded-xl border border-[var(--border-subtle,var(--theme-card-border))] bg-card p-4 shadow-[var(--shadow-card)]">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-              {t("pages.pricing.demo.scorePreview")}
-            </p>
-            <p className="mt-2 text-2xl font-bold tabular-nums text-[var(--theme-heading-text)]">
-              {t("pages.pricing.demo.scoreExamplePct")}
-            </p>
+            <p className="nn-marketing-label text-muted-foreground">{t("pages.pricing.demo.scorePreview")}</p>
+            <p className="nn-marketing-h3 mt-2 tabular-nums">{t("pages.pricing.demo.scoreExamplePct")}</p>
             <p className="text-xs text-muted-foreground">{t("pages.pricing.demo.lastSessionExample")}</p>
             <div className="mt-3 flex flex-wrap gap-1.5">
               <span className="rounded-full border border-role-warning-border bg-role-warning-soft px-2 py-0.5 text-[11px] font-medium text-role-warning-text">
@@ -382,9 +376,7 @@ export function PricingPageClient({
             </div>
           </div>
           <div className="rounded-xl border border-[var(--border-subtle,var(--theme-card-border))] bg-card p-4 shadow-[var(--shadow-card)]">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-              {t("pages.pricing.demo.categoriesTitle")}
-            </p>
+            <p className="nn-marketing-label text-muted-foreground">{t("pages.pricing.demo.categoriesTitle")}</p>
             <ul className="mt-2 space-y-1.5 text-sm">
               <li className="flex justify-between border-b border-dashed border-border pb-1">
                 <span>{t("pages.pricing.demo.rowFluid")}</span>
@@ -405,8 +397,8 @@ export function PricingPageClient({
       </section>
 
       <section className="mt-12 overflow-x-auto rounded-2xl border border-[var(--border-subtle,var(--theme-card-border))] bg-card shadow-[var(--shadow-card)]">
-        <h2 className="px-4 pt-4 text-xl font-bold text-[var(--theme-heading-text)] sm:px-6">{t("pages.pricing.matrix.title")}</h2>
-        <p className="px-4 pb-2 text-sm text-muted-foreground sm:px-6">{t("pages.pricing.matrix.lead")}</p>
+        <h2 className="nn-marketing-h2 px-4 pt-4 sm:px-6">{t("pages.pricing.matrix.title")}</h2>
+        <p className="nn-marketing-body-sm px-4 pb-2 text-muted-foreground sm:px-6">{t("pages.pricing.matrix.lead")}</p>
         <table className="w-full min-w-[640px] text-left text-sm">
           <thead>
             <tr className="border-y border-[var(--border-subtle,var(--theme-card-border))] bg-[var(--bg-inset)]">
@@ -501,23 +493,19 @@ export function PricingPageClient({
 
       <section className="mt-10 grid gap-10 lg:grid-cols-2 lg:items-start">
         <div className="lg:max-w-xl lg:pr-2">
-          <h2 className="text-2xl font-bold text-[var(--theme-heading-text)]">{narrative.headline}</h2>
+          <h2 className="nn-marketing-h2">{narrative.headline}</h2>
           {narrative.urgencyLine ? (
             <p className="mt-2 text-sm font-medium text-[var(--role-heat-text)]">{narrative.urgencyLine}</p>
           ) : null}
           <p className="mt-3 text-muted-foreground">{narrative.subhead}</p>
 
-          <h3 className="mt-6 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-            {t("pages.pricing.section.outcomesHeading")}
-          </h3>
+          <h3 className="nn-marketing-label mt-6">{t("pages.pricing.section.outcomesHeading")}</h3>
           <ul className="mt-2 list-inside list-disc space-y-2 text-sm text-[var(--theme-body-text)]">
             {narrative.outcomes.map((o) => (
               <li key={o}>{o}</li>
             ))}
           </ul>
-          <h3 className="mt-6 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-            {t("pages.pricing.section.includedHeading")}
-          </h3>
+          <h3 className="nn-marketing-label mt-6">{t("pages.pricing.section.includedHeading")}</h3>
           <ul className="mt-2 list-inside list-disc space-y-2 text-sm text-muted-foreground">
             {narrative.included.map((o) => (
               <li key={o}>{o}</li>
@@ -534,29 +522,29 @@ export function PricingPageClient({
         <div className="space-y-4 lg:pl-2">
           <div className="overflow-hidden rounded-2xl border border-[var(--theme-card-border)] bg-card shadow-sm">
             <div className="border-b border-border/60 bg-muted/30 px-4 py-3 text-left">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{t("pages.pricing.preview.metricsLabel")}</p>
+              <p className="nn-marketing-label text-muted-foreground">{t("pages.pricing.preview.metricsLabel")}</p>
               <div className="mt-2 grid grid-cols-3 gap-2 text-center">
                 <div className="rounded-lg bg-card px-2 py-2 shadow-sm">
-                  <p className="text-lg font-bold text-[var(--theme-heading-text)]">{t("pages.pricing.preview.metricAccuracy")}</p>
+                  <p className="nn-marketing-h3 tabular-nums">{t("pages.pricing.preview.metricAccuracy")}</p>
                   <p className="text-[10px] text-muted-foreground">{t("pages.pricing.preview.metricAccuracyCaption")}</p>
                 </div>
                 <div className="rounded-lg bg-card px-2 py-2 shadow-sm">
-                  <p className="text-lg font-bold text-[var(--theme-heading-text)]">{t("pages.pricing.preview.metricWeak")}</p>
+                  <p className="nn-marketing-h3 tabular-nums">{t("pages.pricing.preview.metricWeak")}</p>
                   <p className="text-[10px] text-muted-foreground">{t("pages.pricing.preview.metricWeakCaption")}</p>
                 </div>
                 <div className="rounded-lg bg-card px-2 py-2 shadow-sm">
-                  <p className="text-lg font-bold text-[var(--theme-heading-text)]">{t("pages.pricing.preview.metricStreak")}</p>
+                  <p className="nn-marketing-h3 tabular-nums">{t("pages.pricing.preview.metricStreak")}</p>
                   <p className="text-[10px] text-muted-foreground">{t("pages.pricing.preview.metricStreakCaption")}</p>
                 </div>
               </div>
             </div>
             <div className="border-t border-[var(--border-subtle)] bg-[var(--bg-inset)] px-4 py-5 text-left">
-              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("pages.pricing.preview.badge")}</p>
+              <p className="nn-marketing-label text-muted-foreground">{t("pages.pricing.preview.badge")}</p>
               <p className="mt-2 text-sm text-muted-foreground">{t("pages.pricing.preview.body")}</p>
             </div>
           </div>
           <div className="rounded-2xl border border-[var(--theme-card-border)] bg-card p-4 shadow-sm">
-            <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{t("pages.pricing.trust.guaranteeTitle")}</p>
+            <p className="nn-marketing-h4">{t("pages.pricing.trust.guaranteeTitle")}</p>
             <p className="mt-2 text-sm text-muted-foreground">{t("pages.pricing.trust.guaranteeBody")}</p>
             <ul className="mt-3 list-inside list-disc text-sm text-muted-foreground">
               <li>{t("pages.pricing.trust.bullet0")}</li>
@@ -568,7 +556,7 @@ export function PricingPageClient({
       </section>
 
       <section className="mt-14">
-        <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">{t("pages.pricing.get.title")}</h2>
+        <h2 className="nn-marketing-h2">{t("pages.pricing.get.title")}</h2>
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">{t("pages.pricing.get.lead")}</p>
         <ul className="mt-4 list-inside list-disc space-y-2 text-sm text-[var(--theme-body-text)]">
           <li>{t("pages.pricing.get.b0")}</li>
@@ -602,18 +590,18 @@ export function PricingPageClient({
 
       <section className="mt-14 grid gap-8 md:grid-cols-2">
         <div>
-          <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">{t("pages.pricing.use.title")}</h2>
+          <h2 className="nn-marketing-h2">{t("pages.pricing.use.title")}</h2>
           <div className="mt-4 rounded-2xl border border-[var(--theme-card-border)] bg-card p-5">
-            <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{t("pages.pricing.use.afterShiftTitle")}</p>
+            <p className="nn-marketing-h4">{t("pages.pricing.use.afterShiftTitle")}</p>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t("pages.pricing.use.afterShiftBody")}</p>
           </div>
           <div className="mt-4 rounded-2xl border border-dashed border-[var(--border-medium)] bg-[var(--accent-soft)] p-5">
-            <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{t("pages.pricing.use.weekendTitle")}</p>
+            <p className="nn-marketing-h4">{t("pages.pricing.use.weekendTitle")}</p>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t("pages.pricing.use.weekendBody")}</p>
           </div>
         </div>
         <div>
-          <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">{t("pages.pricing.risk.title")}</h2>
+          <h2 className="nn-marketing-h2">{t("pages.pricing.risk.title")}</h2>
           <ul className="mt-4 space-y-3 text-sm text-[var(--theme-body-text)]">
             <li className="flex gap-2">
               <Check className="nn-trust-mark mt-0.5 h-4 w-4 shrink-0" aria-hidden />
@@ -632,7 +620,7 @@ export function PricingPageClient({
       </section>
 
       <section className="mt-14 rounded-2xl border border-[var(--border-subtle,var(--theme-card-border))] bg-[var(--bg-section-alt)] p-6 shadow-[var(--shadow-card)]">
-        <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">{t("pages.pricing.trustSection.title")}</h2>
+        <h2 className="nn-marketing-h2">{t("pages.pricing.trustSection.title")}</h2>
         <p className="mt-2 text-sm text-muted-foreground">{t("pages.pricing.trustSection.lead")}</p>
         <div className="mt-5 grid gap-4 md:grid-cols-3">
           <blockquote className="rounded-xl border border-[var(--theme-card-border)] bg-card p-4 text-sm">
@@ -648,7 +636,7 @@ export function PricingPageClient({
       </section>
 
       <section className="mt-14">
-        <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">{t("pages.pricing.faqSection.title")}</h2>
+        <h2 className="nn-marketing-h2">{t("pages.pricing.faqSection.title")}</h2>
         <dl className="mt-6 space-y-6">
           {pricingFaqs.map((item) => (
             <div key={item.q} className="border-b border-[var(--theme-card-border)] pb-6 last:border-0 last:pb-0">
@@ -662,7 +650,7 @@ export function PricingPageClient({
       <section className="mt-14 overflow-x-auto rounded-2xl border border-[var(--border-subtle,var(--theme-card-border))] bg-card shadow-[var(--shadow-card)]">
         <h2 className="sr-only">{t("pages.pricing.compare.title")}</h2>
         <table className="w-full min-w-[520px] text-left text-sm">
-          <caption className="border-b border-[var(--theme-card-border)] px-4 py-3 text-left text-base font-bold text-[var(--theme-heading-text)]">
+          <caption className="nn-marketing-h3 border-b border-[var(--theme-card-border)] px-4 py-3 text-left">
             {t("pages.pricing.compare.uworldCaption")}
           </caption>
           <thead>
@@ -693,7 +681,7 @@ export function PricingPageClient({
       </section>
 
       <section className="mt-14">
-        <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">{t("pages.pricing.billing.heading")}</h2>
+        <h2 className="nn-marketing-h2">{t("pages.pricing.billing.heading")}</h2>
         <p className="mt-2 text-sm text-muted-foreground">{t("pages.pricing.billing.helper")}</p>
         <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{t("pages.pricing.billing.recurringDisclosure")}</p>
         <p className="mt-2 text-xs text-muted-foreground">{t("pages.pricing.checkout.recurringShort")}</p>
@@ -737,7 +725,7 @@ export function PricingPageClient({
             <p className="mb-2 inline-block w-fit rounded-full bg-muted px-2 py-0.5 text-xs font-bold text-muted-foreground">
               {t("pages.pricing.tier.freeBadge")}
             </p>
-            <h3 className="text-lg font-semibold text-[var(--theme-heading-text)]">{t("pages.pricing.tier.freeTitle")}</h3>
+            <h3 className="nn-marketing-h3">{t("pages.pricing.tier.freeTitle")}</h3>
             <p className="mt-2 text-xs leading-snug text-muted-foreground">{t("pages.pricing.tier.freeDesc")}</p>
             <ul className="mt-3 space-y-1.5 text-xs text-[var(--theme-body-text)]">
               <li className="flex gap-1.5">
@@ -753,11 +741,8 @@ export function PricingPageClient({
                 {t("pages.pricing.tier.freeB2")}
               </li>
             </ul>
-            <p className="mt-4 text-2xl font-bold">$0</p>
-            <Link
-              href={tryQuestionsHref}
-              className="nn-btn-secondary mt-4 inline-flex w-full justify-center py-2.5 text-sm font-semibold"
-            >
+            <p className="mt-4 nn-marketing-h3 tabular-nums">$0</p>
+            <Link href={tryQuestionsHref} className={`${MARKETING_SECONDARY_CTA_CLASS} mt-4 w-full justify-center`}>
               {t("pages.pricing.tier.freeCta")}
             </Link>
           </article>
@@ -767,7 +752,7 @@ export function PricingPageClient({
               <p className="mb-2 inline-block w-fit rounded-full bg-role-cta-soft px-2 py-0.5 text-xs font-bold text-role-cta-on-soft">
                 {t("pages.pricing.tier.coreBadge")}
               </p>
-              <h3 className="text-lg font-semibold text-[var(--theme-heading-text)]">{t(DURATION_KEYS[coreRow.duration])}</h3>
+              <h3 className="nn-marketing-h3">{t(DURATION_KEYS[coreRow.duration])}</h3>
               <p className="mt-2 text-xs leading-snug text-muted-foreground">{planPersona[coreRow.duration]}</p>
               <ul className="mt-3 space-y-1.5 text-xs text-[var(--theme-body-text)]">
                 {planOutcomeLines[coreRow.duration].map((line) => (
@@ -777,13 +762,13 @@ export function PricingPageClient({
                   </li>
                 ))}
               </ul>
-              <p className="mt-4 text-2xl font-bold">{coreRow.totalLabel}</p>
+              <p className="mt-4 nn-marketing-h3 tabular-nums">{coreRow.totalLabel}</p>
               <p className="text-sm text-muted-foreground">{coreRow.monthlyEquivalentLabel} {t("pages.pricing.plan.avgSuffix")}</p>
               <button
                 type="button"
                 disabled={checkoutLoading || !policiesAccepted}
                 onClick={() => startCheckout(coreRow.duration)}
-                className="nn-btn-primary mt-4 w-full py-2.5 text-sm font-semibold disabled:opacity-60"
+                className={`${MARKETING_PRIMARY_CTA_CLASS} mt-4 w-full disabled:opacity-60`}
               >
                 {t("pages.pricing.tier.coreCta")}
               </button>
@@ -795,7 +780,7 @@ export function PricingPageClient({
               <p className="mb-2 inline-block w-fit rounded-full border border-role-premium-border bg-role-premium-surface px-2 py-0.5 text-xs font-bold text-role-premium-text">
                 {t("pages.pricing.tier.premiumBadge")}
               </p>
-              <h3 className="text-lg font-semibold text-[var(--theme-heading-text)]">{t(DURATION_KEYS[premiumRow.duration])}</h3>
+              <h3 className="nn-marketing-h3">{t(DURATION_KEYS[premiumRow.duration])}</h3>
               <p className="mt-2 text-xs leading-snug text-muted-foreground">{t("pages.pricing.tier.premiumSub")}</p>
               <ul className="mt-3 space-y-1.5 text-xs text-[var(--theme-body-text)]">
                 <li className="flex gap-1.5">
@@ -811,7 +796,7 @@ export function PricingPageClient({
                   {t("pages.pricing.tier.premiumB2")}
                 </li>
               </ul>
-              <p className="mt-4 text-2xl font-bold">{premiumRow.totalLabel}</p>
+              <p className="mt-4 nn-marketing-h3 tabular-nums">{premiumRow.totalLabel}</p>
               <p className="text-sm text-muted-foreground">{premiumRow.monthlyEquivalentLabel} {t("pages.pricing.plan.avgSuffix")}</p>
               {premiumRow.savingsVsMonthlyPercent > 0 ? (
                 <p className="mt-2 text-xs font-semibold text-[var(--role-heat-text)]">
@@ -822,7 +807,7 @@ export function PricingPageClient({
                 type="button"
                 disabled={checkoutLoading || !policiesAccepted}
                 onClick={() => startCheckout(premiumRow.duration)}
-                className="nn-btn-primary mt-4 w-full py-2.5 text-sm font-semibold disabled:opacity-60"
+                className={`${MARKETING_PRIMARY_CTA_CLASS} mt-4 w-full disabled:opacity-60`}
               >
                 {t("pages.pricing.tier.premiumCta")}
               </button>
@@ -837,14 +822,12 @@ export function PricingPageClient({
       </section>
 
       <section className="mt-14">
-        <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">{t("pages.pricing.productPreview.title")}</h2>
-        <p className="mt-2 text-sm text-muted-foreground">{t("pages.pricing.productPreview.lead")}</p>
+        <h2 className="nn-marketing-h2">{t("pages.pricing.productPreview.title")}</h2>
+        <p className="nn-marketing-body-sm mt-2 text-muted-foreground">{t("pages.pricing.productPreview.lead")}</p>
         <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {([0, 1, 2, 3] as const).map((i) => (
             <div key={i} className="rounded-xl border border-[var(--theme-card-border)] bg-card p-4">
-              <p className="text-sm font-semibold text-[var(--theme-heading-text)]">
-                {t(`pages.pricing.productPreview.${i}.title`)}
-              </p>
+              <p className="nn-marketing-h4">{t(`pages.pricing.productPreview.${i}.title`)}</p>
               <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
                 {t(`pages.pricing.productPreview.${i}.body`)}
               </p>
@@ -854,8 +837,8 @@ export function PricingPageClient({
       </section>
 
       <section className="mt-14">
-        <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">{t("pages.pricing.examChoose.title")}</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
+        <h2 className="nn-marketing-h2">{t("pages.pricing.examChoose.title")}</h2>
+        <p className="nn-marketing-body-sm mt-2 text-muted-foreground">
           {t(country === "US" ? "pages.pricing.examChoose.subtitleUS" : "pages.pricing.examChoose.subtitleCA")}
         </p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -865,7 +848,7 @@ export function PricingPageClient({
               href={item.href}
               className="rounded-xl border border-[var(--theme-card-border)] bg-card p-4 transition hover:border-[var(--border-medium)]"
             >
-              <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{t(item.labelKey)}</p>
+              <p className="nn-marketing-h4">{t(item.labelKey)}</p>
               <p className="mt-1 text-xs text-muted-foreground">{t(item.blurbKey)}</p>
             </Link>
           ))}
@@ -922,10 +905,7 @@ export function PricingPageClient({
       </section>
 
       <div className="mt-12 flex justify-center">
-        <Link
-          href={tryQuestionsHref}
-          className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-role-cta/35 bg-role-cta-soft px-8 py-3 text-sm font-semibold text-role-cta-on-soft hover:bg-[color-mix(in_srgb,var(--role-cta)_14%,var(--bg-card))]"
-        >
+        <Link href={tryQuestionsHref} className={MARKETING_PRIMARY_CTA_CLASS}>
           {t("pages.pricing.cta.startPractice")}
         </Link>
       </div>

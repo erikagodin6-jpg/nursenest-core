@@ -1,18 +1,25 @@
 import type { Metadata } from "next";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
 import { ToolsHubClient } from "@/components/tools/tools-hub-client";
-import { absoluteUrl } from "@/lib/seo/site-origin";
+import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 
-export const metadata: Metadata = {
-  title: "Clinical tools | NurseNest",
-  description: "Free nursing calculators: medication math, lab reference, and ABG interpretation practice.",
-  alternates: { canonical: absoluteUrl("/tools") },
-  openGraph: {
-    title: "Clinical tools | NurseNest",
-    url: absoluteUrl("/tools"),
-    type: "website",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const m = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+  const alt = marketingAlternatesSharedPage(DEFAULT_MARKETING_LOCALE, "/tools");
+  return {
+    title: m["tools.hub.metaTitle"],
+    description: m["tools.hub.metaDescription"],
+    alternates: { canonical: alt.canonical, languages: alt.languages },
+    openGraph: {
+      title: m["tools.hub.metaTitle"],
+      description: m["tools.hub.metaDescription"],
+      url: alt.canonical,
+      type: "website",
+    },
+  };
+}
 
 export default function ToolsHubPage() {
   return (

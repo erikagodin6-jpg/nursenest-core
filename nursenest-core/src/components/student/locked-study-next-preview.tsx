@@ -19,24 +19,16 @@ export function LockedStudyNextPreview({ className }: { className?: string }) {
         <div className="pointer-events-none select-none blur-[6px] opacity-[0.88]" aria-hidden="true">
           <AdaptiveStudyOverview adaptive={adaptive} showHeading subscriber={false} />
         </div>
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-background/60 px-5 py-10 backdrop-blur-[2px]">
-          <p className="max-w-sm text-center text-lg font-semibold text-[var(--theme-heading-text)]">
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-background/60 px-5 py-8 backdrop-blur-[2px]">
+          <p className="max-w-sm text-center text-base font-semibold leading-snug text-[var(--theme-heading-text)] sm:text-lg">
             {t("cta.unlockPlan")}
           </p>
-          <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-center">
-            <Link
-              href="/pricing"
-              className="inline-flex items-center justify-center rounded-full bg-primary px-5 py-2.5 text-center text-sm font-semibold text-primary-foreground"
-            >
-              {t("cta.continuePlan")}
-            </Link>
-            <Link
-              href="/pricing"
-              className="inline-flex items-center justify-center rounded-full border border-border bg-card px-5 py-2.5 text-center text-sm font-semibold hover:bg-muted/80"
-            >
-              {t("cta.improveWeakAreas")}
-            </Link>
-          </div>
+          <Link
+            href="/pricing"
+            className="inline-flex min-h-[2.75rem] w-full max-w-xs items-center justify-center rounded-full bg-primary px-5 py-2.5 text-center text-sm font-semibold text-primary-foreground sm:w-auto"
+          >
+            {t("cta.seePlansPricing")}
+          </Link>
         </div>
       </div>
     </section>

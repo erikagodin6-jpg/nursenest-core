@@ -170,7 +170,7 @@ function DynamicTrustCounters({
         <div className="mb-10 text-left md:max-w-3xl">
           <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/8 px-4 py-1.5 shadow-[var(--shadow-card)]">
             <BarChart3 className="h-3.5 w-3.5 text-primary" />
-            <span className="text-xs font-bold uppercase tracking-wider text-primary">{t("components.homeConversionSections.platformScale")}</span>
+            <span className="nn-marketing-label nn-marketing-label--accent">{t("components.homeConversionSections.platformScale")}</span>
           </div>
           <h2
             className="mb-3 font-bold text-[var(--theme-heading-text)]"
@@ -248,7 +248,7 @@ function ConversionProofBlock({
         <div className="mb-12 text-left md:max-w-3xl">
           <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/8 px-4 py-1.5 shadow-[var(--shadow-card)]">
             <Sparkles className="h-3.5 w-3.5 text-primary" />
-            <span className="text-xs font-bold uppercase tracking-wider text-primary">{t("components.homeConversionSections.everythingYouNeed")}</span>
+            <span className="nn-marketing-label nn-marketing-label--accent">{t("components.homeConversionSections.everythingYouNeed")}</span>
           </div>
           <h2
             className="mb-3 font-bold text-[var(--theme-heading-text)]"
@@ -330,7 +330,7 @@ function CompetitivePositioningSection({
         <div className="mb-12 text-left md:max-w-3xl">
           <div className="nn-accent-soft-ring mb-5 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 shadow-[var(--shadow-card)]">
             <Shield className="h-3.5 w-3.5 text-primary" />
-            <span className="text-xs font-bold uppercase tracking-wider text-primary">{t("components.homeConversionSections.whyNursenest")}</span>
+            <span className="nn-marketing-label nn-marketing-label--accent">{t("components.homeConversionSections.whyNursenest")}</span>
           </div>
           <h2
             className="mb-3 font-bold text-[var(--theme-heading-text)]"
@@ -405,7 +405,7 @@ function HowItWorksSection() {
         <div className="mb-12 text-left md:max-w-2xl">
           <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/8 px-4 py-1.5 shadow-[var(--shadow-card)]">
             <Zap className="h-3.5 w-3.5 text-primary" />
-            <span className="text-xs font-bold uppercase tracking-wider text-primary">{t("components.homeConversionSections.howItWorks")}</span>
+            <span className="nn-marketing-label nn-marketing-label--accent">{t("components.homeConversionSections.howItWorks")}</span>
           </div>
           <h2 className="mb-3 font-bold text-[var(--theme-heading-text)]" style={{ fontSize: 'var(--text-section)' }} data-testid="text-how-it-works-heading">
             {t("components.homeConversionSections.howItWorksHeading")}
@@ -510,7 +510,7 @@ function ScreenshotCarouselSection() {
         <div className="mx-auto max-w-3xl text-center">
           <div className="mb-4 inline-flex max-w-full flex-wrap items-center justify-center gap-2 rounded-full border border-primary/15 bg-primary/8 px-4 py-1.5 text-center shadow-[var(--shadow-card)]">
             <Sparkles className="h-3.5 w-3.5 shrink-0 text-primary" />
-            <span className="text-balance text-xs font-bold uppercase tracking-wider text-primary">
+            <span className="nn-marketing-label nn-marketing-label--accent text-balance">
               {t("components.homeConversionSections.platformPreviewBadge")}
             </span>
           </div>
@@ -650,7 +650,7 @@ function SampleQuestionSection() {
         <div className="text-center mb-10">
           <div className="nn-accent-soft-ring mb-5 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 shadow-[var(--shadow-card)]">
             <FileText className="h-3.5 w-3.5 text-primary" />
-            <span className="text-xs font-bold uppercase tracking-wider text-primary">{t("components.homeConversionSections.tryItFree")}</span>
+            <span className="nn-marketing-label nn-marketing-label--accent">{t("components.homeConversionSections.tryItFree")}</span>
           </div>
           <h2 className="font-bold text-[var(--theme-heading-text)] mb-3" style={{ fontSize: 'var(--text-section)' }} data-testid="text-sample-question-heading">
             {t("components.homeConversionSections.sampleQuestionHeading")}
@@ -796,7 +796,7 @@ function TestimonialsSection() {
         <div className="text-center mb-12">
           <div className="nn-accent-soft-ring mb-5 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 shadow-[var(--shadow-card)]">
             <Star className="h-3.5 w-3.5 fill-primary text-primary" />
-            <span className="text-xs font-bold uppercase tracking-wider text-primary">{t("components.homeConversionSections.studentReviews")}</span>
+            <span className="nn-marketing-label nn-marketing-label--accent">{t("components.homeConversionSections.studentReviews")}</span>
           </div>
           <h2 className="font-bold text-[var(--theme-heading-text)] mb-3" style={{ fontSize: 'var(--text-section)' }} data-testid="text-testimonials-heading">
             {t("components.homeConversionSections.testimonialsHeading")}

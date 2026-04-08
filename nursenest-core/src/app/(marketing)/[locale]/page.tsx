@@ -11,6 +11,7 @@ import { localizeBreadcrumbResolution } from "@/lib/seo/breadcrumb-i18n";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { marketingHomeSurfaceBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
+import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 
 export const revalidate = 600;
 
@@ -22,10 +23,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     notFound();
   }
   const m = await loadMarketingMessages(locale);
+  const alt = marketingAlternatesSharedPage(locale, "/");
   return {
     title: m["pages.home.metaTitle"],
     description: m["pages.home.metaDescription"],
-    alternates: { canonical: `/${locale}` },
+    alternates: { canonical: alt.canonical, languages: alt.languages },
+    openGraph: {
+      title: m["pages.home.metaTitle"],
+      description: m["pages.home.metaDescription"],
+      url: alt.canonical,
+      type: "website",
+    },
   };
 }
 

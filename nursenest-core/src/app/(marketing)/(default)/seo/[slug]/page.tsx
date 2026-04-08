@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ProgrammaticSeoPage } from "@/components/seo/programmatic-seo-page";
+import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { buildProgrammaticMetadata } from "@/lib/seo/programmatic-metadata";
 import { resolveProgrammaticSeoForLocale } from "@/lib/seo/resolve-programmatic-seo";
@@ -22,7 +23,7 @@ export async function generateMetadata({
   const locale = await getMarketingLocaleForDefaultRoute();
   const resolved = resolveProgrammaticSeoForLocale(slug, locale);
   if (!resolved) return {};
-  return buildProgrammaticMetadata(resolved.page, locale);
+  return buildProgrammaticMetadata(resolved.page, DEFAULT_MARKETING_LOCALE);
 }
 
 export default async function ProgrammaticSeoRewriteTarget({ params }: { params: Promise<{ slug: string }> }) {

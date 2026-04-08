@@ -8,16 +8,24 @@ on:
     paths:
       - "nursenest-core/public/i18n/**"
       - "nursenest-core/scripts/lib/nav-i18n-audit.mjs"
+      - "nursenest-core/scripts/lib/ensure-en-nav-keys.mjs"
       - "nursenest-core/scripts/validate-nav-i18n.mjs"
       - "nursenest-core/scripts/nav-i18n-parity.mjs"
+      - "nursenest-core/scripts/nav-i18n-manual-overrides.mjs"
+      - "nursenest-core/scripts/sync-required-nav-keys-all-locales.mjs"
+      - "nursenest-core/scripts/patch-nav-five-carryover-locales.mjs"
       - "nursenest-core/package.json"
       - ".github/workflows/nav-i18n-validate.yml"
   pull_request:
     paths:
       - "nursenest-core/public/i18n/**"
       - "nursenest-core/scripts/lib/nav-i18n-audit.mjs"
+      - "nursenest-core/scripts/lib/ensure-en-nav-keys.mjs"
       - "nursenest-core/scripts/validate-nav-i18n.mjs"
       - "nursenest-core/scripts/nav-i18n-parity.mjs"
+      - "nursenest-core/scripts/nav-i18n-manual-overrides.mjs"
+      - "nursenest-core/scripts/sync-required-nav-keys-all-locales.mjs"
+      - "nursenest-core/scripts/patch-nav-five-carryover-locales.mjs"
       - "nursenest-core/package.json"
       - ".github/workflows/nav-i18n-validate.yml"
 

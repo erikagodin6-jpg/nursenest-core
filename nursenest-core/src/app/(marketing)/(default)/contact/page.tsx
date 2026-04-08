@@ -1,13 +1,18 @@
 import type { Metadata } from "next";
 import { LegalDocMarketingView } from "@/components/legal/legal-doc-marketing-view";
-import { absoluteUrl } from "@/lib/seo/site-origin";
+import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 
-export const metadata: Metadata = {
-  title: "Contact & Support | NurseNest",
-  description: "Contact NurseNest for billing help, privacy requests, and product support.",
-  alternates: { canonical: absoluteUrl("/contact") },
-  robots: { index: true, follow: true },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const alt = marketingAlternatesSharedPage(DEFAULT_MARKETING_LOCALE, "/contact");
+  return {
+    title: "Contact & Support | NurseNest",
+    description: "Contact NurseNest for billing help, privacy requests, and product support.",
+    alternates: { canonical: alt.canonical, languages: alt.languages },
+    robots: { index: true, follow: true },
+    openGraph: { title: "Contact & Support | NurseNest", url: alt.canonical, type: "website" },
+  };
+}
 
 export default async function ContactPage() {
   return <LegalDocMarketingView docId="contact" breadcrumbLabel="Contact" path="/contact" />;

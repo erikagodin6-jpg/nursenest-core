@@ -197,7 +197,7 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
                   className="flex flex-wrap items-center gap-2 rounded-xl border border-[var(--border-subtle)] bg-[var(--nn-presentation-wash)] px-3 py-2 text-sm"
                   data-testid="region-toggle-hero"
                 >
-                  <span className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">{t("nav.regionLabel")}</span>
+                  <span className="nn-marketing-label">{t("nav.regionLabel")}</span>
                   <div className="inline-flex rounded-lg border border-[var(--theme-input-border)] bg-[var(--theme-card-bg)] p-0.5">
                     <button
                       type="button"

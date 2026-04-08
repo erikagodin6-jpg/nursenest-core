@@ -8,6 +8,7 @@ import { BASELINE_QUESTION_COUNT, pickRandomBaselineQuestionIds, userShouldSeeBa
 import { withRetry } from "@/lib/resilience/with-retry";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { mergeQuestionApiPayload } from "@/lib/i18n/educational-content-overlay";
+import { resolveMergedQuestionOverlayBundle } from "@/lib/i18n/educational-translation-db";
 
 export const dynamic = "force-dynamic";
 
@@ -74,7 +75,10 @@ export async function GET() {
   const questions = [...rows].sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
 
   const educationalLocale = await getMarketingLocaleForDefaultRoute();
-  const localized = questions.map((q) => mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale));
+  const questionOverlayBundle = await resolveMergedQuestionOverlayBundle(educationalLocale);
+  const localized = questions.map((q) =>
+    mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale, questionOverlayBundle),
+  );
 
   return NextResponse.json({
     attemptId: attempt.id,

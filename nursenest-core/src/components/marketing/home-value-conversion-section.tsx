@@ -102,14 +102,14 @@ export function HomeValueConversionSection({ region }: { region: NursenestMarket
 
         <div className="mt-14">
           <p className="nn-marketing-eyebrow text-center">How NurseNest works</p>
-          <p className="mx-auto mt-2 max-w-xl text-center text-sm text-[var(--theme-muted-text)]">
+          <p className="nn-marketing-body-sm mx-auto mt-2 max-w-xl text-center text-[var(--theme-muted-text)]">
             Four loops we use when we dogfood the app. Intentionally not a feature grid.
           </p>
           <div className="nn-marketing-card mx-auto mt-8 max-w-4xl divide-y divide-[var(--border-subtle)]">
             {PLATFORM_STEPS.map((step, i) => (
               <div key={step.title} className="nn-marketing-card-pad flex gap-4 sm:gap-5">
                 <span
-                  className="shrink-0 tabular-nums text-sm font-bold text-[var(--theme-muted-text)]"
+                  className="nn-marketing-caption shrink-0 tabular-nums font-bold"
                   aria-hidden
                 >
                   {String(i + 1).padStart(2, "0")}

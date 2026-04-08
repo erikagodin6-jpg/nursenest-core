@@ -1,0 +1,423 @@
+{
+  "generatedAt": "2026-04-08T13:30:35.357Z",
+  "totalFallbacks": 38,
+  "byLocale": {
+    "fr": 4,
+    "ko": 3,
+    "pt": 8,
+    "pa": 4,
+    "vi": 3,
+    "ht": 3,
+    "ur": 3,
+    "fa": 3,
+    "de": 2,
+    "th": 2,
+    "tr": 1,
+    "id": 2
+  },
+  "events": [
+    {
+      "locale": "fr",
+      "key": "glossary.relatedTerms",
+      "localizedValue": "Termes connexes",
+      "englishValue": "Related {{category}} Terms",
+      "placeholdersInEnglish": [
+        "category"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "fr",
+      "key": "pricing.save",
+      "localizedValue": "Enregistrer",
+      "englishValue": "Save {{percent}}%",
+      "placeholdersInEnglish": [
+        "percent"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "fr",
+      "key": "qbank.startPracticeExam",
+      "localizedValue": "Commencer l",
+      "englishValue": "Start Practice Exam ({{count}} questions, {{time}} min)",
+      "placeholdersInEnglish": [
+        "count",
+        "time"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "fr",
+      "key": "upgrade.usageNote",
+      "localizedValue": "Vous avez utilisé {{used}} sur {{limit}} ({{percentage}}%) de vos questions gratuites.",
+      "englishValue": "You",
+      "placeholdersInEnglish": [],
+      "placeholdersInLocalized": [
+        "limit",
+        "percentage",
+        "used"
+      ]
+    },
+    {
+      "locale": "ko",
+      "key": "glossary.relatedTerms",
+      "localizedValue": "관련 용어",
+      "englishValue": "Related {{category}} Terms",
+      "placeholdersInEnglish": [
+        "category"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "ko",
+      "key": "pricing.save",
+      "localizedValue": "절약",
+      "englishValue": "Save {{percent}}%",
+      "placeholdersInEnglish": [
+        "percent"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "ko",
+      "key": "upgrade.usageNote",
+      "localizedValue": "무료 카드 {{limit}}개 중 {{used}}개 사용 ({{percentage}}%)",
+      "englishValue": "You",
+      "placeholdersInEnglish": [],
+      "placeholdersInLocalized": [
+        "limit",
+        "percentage",
+        "used"
+      ]
+    },
+    {
+      "locale": "pt",
+      "key": "glossary.relatedTerms",
+      "localizedValue": "Termos Relacionados",
+      "englishValue": "Related {{category}} Terms",
+      "placeholdersInEnglish": [
+        "category"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "pt",
+      "key": "pricing.save",
+      "localizedValue": "Save",
+      "englishValue": "Save {{percent}}%",
+      "placeholdersInEnglish": [
+        "percent"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "pt",
+      "key": "qbank.freePreviewNote",
+      "localizedValue": "Prévia gratuita — faça upgrade para acesso completo",
+      "englishValue": "Sign in to access the full question bank. Free preview: {{count}} questions.",
+      "placeholdersInEnglish": [
+        "count"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "pt",
+      "key": "qbank.practiceQuestions",
+      "localizedValue": "Questões Práticas",
+      "englishValue": "Practice {{count}} questions with detailed rationales",
+      "placeholdersInEnglish": [
+        "count"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "pt",
+      "key": "qbank.requiresSubscription",
+      "localizedValue": "Requer Assinatura",
+      "englishValue": "{{tier}} Questions Require a Subscription",
+      "placeholdersInEnglish": [
+        "tier"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "pt",
+      "key": "qbank.showingPreview",
+      "localizedValue": "Mostrando prévia",
+      "englishValue": "Showing {{shown}} preview questions. Subscribe to unlock all {{total}} questions.",
+      "placeholdersInEnglish": [
+        "shown",
+        "total"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "pt",
+      "key": "qbank.startPracticeExam",
+      "localizedValue": "Iniciar Simulado",
+      "englishValue": "Start Practice Exam ({{count}} questions, {{time}} min)",
+      "placeholdersInEnglish": [
+        "count",
+        "time"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "pt",
+      "key": "upgrade.usageNote",
+      "localizedValue": "Você usou {{used}} de {{limit}} cartões gratuitos ({{percentage}}%)",
+      "englishValue": "You",
+      "placeholdersInEnglish": [],
+      "placeholdersInLocalized": [
+        "limit",
+        "percentage",
+        "used"
+      ]
+    },
+    {
+      "locale": "pa",
+      "key": "glossary.relatedTerms",
+      "localizedValue": "ਸੰਬੰਧਿਤ ਸ਼ਬਦ",
+      "englishValue": "Related {{category}} Terms",
+      "placeholdersInEnglish": [
+        "category"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "pa",
+      "key": "pricing.save",
+      "localizedValue": "ਬਚਾਓ",
+      "englishValue": "Save {{percent}}%",
+      "placeholdersInEnglish": [
+        "percent"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "pa",
+      "key": "upgrade.title",
+      "localizedValue": "ਯੋਜਨਾ ਚੁਣੋ",
+      "englishValue": "Pass Your NCLEX or {{examName}} With Structured Exam-Level Practice",
+      "placeholdersInEnglish": [
+        "examName"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "pa",
+      "key": "upgrade.usageNote",
+      "localizedValue": "ਤੁਸੀਂ {{used}} ਵਿੱਚੋਂ {{limit}} ਮੁਫਤ ਕਾਰਡਾਂ ਦੀ ਵਰਤੋਂ ਕੀਤੀ ਹੈ ({{percentage}}%)",
+      "englishValue": "You",
+      "placeholdersInEnglish": [],
+      "placeholdersInLocalized": [
+        "limit",
+        "percentage",
+        "used"
+      ]
+    },
+    {
+      "locale": "vi",
+      "key": "glossary.relatedTerms",
+      "localizedValue": "Thuật ngữ liên quan",
+      "englishValue": "Related {{category}} Terms",
+      "placeholdersInEnglish": [
+        "category"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "vi",
+      "key": "pricing.save",
+      "localizedValue": "Tiết kiệm",
+      "englishValue": "Save {{percent}}%",
+      "placeholdersInEnglish": [
+        "percent"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "vi",
+      "key": "upgrade.usageNote",
+      "localizedValue": "Bạn đã dùng {{used}} trong {{limit}} thẻ miễn phí ({{percentage}}%)",
+      "englishValue": "You",
+      "placeholdersInEnglish": [],
+      "placeholdersInLocalized": [
+        "limit",
+        "percentage",
+        "used"
+      ]
+    },
+    {
+      "locale": "ht",
+      "key": "glossary.relatedTerms",
+      "localizedValue": "Tèm ki Gen Rapò",
+      "englishValue": "Related {{category}} Terms",
+      "placeholdersInEnglish": [
+        "category"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "ht",
+      "key": "pricing.save",
+      "localizedValue": "Save",
+      "englishValue": "Save {{percent}}%",
+      "placeholdersInEnglish": [
+        "percent"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "ht",
+      "key": "upgrade.usageNote",
+      "localizedValue": "Ou te itilize {{used}} nan {{limit}} kat gratis ({{percentage}}%)",
+      "englishValue": "You",
+      "placeholdersInEnglish": [],
+      "placeholdersInLocalized": [
+        "limit",
+        "percentage",
+        "used"
+      ]
+    },
+    {
+      "locale": "ur",
+      "key": "glossary.relatedTerms",
+      "localizedValue": "متعلقہ اصطلاحات",
+      "englishValue": "Related {{category}} Terms",
+      "placeholdersInEnglish": [
+        "category"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "ur",
+      "key": "pricing.save",
+      "localizedValue": "Save",
+      "englishValue": "Save {{percent}}%",
+      "placeholdersInEnglish": [
+        "percent"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "ur",
+      "key": "upgrade.usageNote",
+      "localizedValue": "آپ نے {{limit}} مفت کارڈز میں سے {{used}} استعمال کیے ہیں ({{percentage}}%)",
+      "englishValue": "You",
+      "placeholdersInEnglish": [],
+      "placeholdersInLocalized": [
+        "limit",
+        "percentage",
+        "used"
+      ]
+    },
+    {
+      "locale": "fa",
+      "key": "glossary.relatedTerms",
+      "localizedValue": "اصطلاحات مرتبط",
+      "englishValue": "Related {{category}} Terms",
+      "placeholdersInEnglish": [
+        "category"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "fa",
+      "key": "pricing.save",
+      "localizedValue": "Save",
+      "englishValue": "Save {{percent}}%",
+      "placeholdersInEnglish": [
+        "percent"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "fa",
+      "key": "upgrade.usageNote",
+      "localizedValue": "شما از {{used}} از {{limit}} کارت رایگان استفاده کرده‌اید ({{percentage}}%)",
+      "englishValue": "You",
+      "placeholdersInEnglish": [],
+      "placeholdersInLocalized": [
+        "limit",
+        "percentage",
+        "used"
+      ]
+    },
+    {
+      "locale": "de",
+      "key": "glossary.relatedTerms",
+      "localizedValue": "Verwandte Begriffe",
+      "englishValue": "Related {{category}} Terms",
+      "placeholdersInEnglish": [
+        "category"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "de",
+      "key": "upgrade.usageNote",
+      "localizedValue": "Sie haben {{used}} von {{limit}} kostenlosen Karten verwendet ({{percentage}}%)",
+      "englishValue": "You",
+      "placeholdersInEnglish": [],
+      "placeholdersInLocalized": [
+        "limit",
+        "percentage",
+        "used"
+      ]
+    },
+    {
+      "locale": "th",
+      "key": "pricing.save",
+      "localizedValue": "ประหยัด",
+      "englishValue": "Save {{percent}}%",
+      "placeholdersInEnglish": [
+        "percent"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "th",
+      "key": "upgrade.usageNote",
+      "localizedValue": "คุณได้ใช้ {{used}} จาก {{limit}} การ์ดฟรี ({{percentage}}%)",
+      "englishValue": "You",
+      "placeholdersInEnglish": [],
+      "placeholdersInLocalized": [
+        "limit",
+        "percentage",
+        "used"
+      ]
+    },
+    {
+      "locale": "tr",
+      "key": "upgrade.title",
+      "localizedValue": "Premium",
+      "englishValue": "Pass Your NCLEX or {{examName}} With Structured Exam-Level Practice",
+      "placeholdersInEnglish": [
+        "examName"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "id",
+      "key": "pricing.save",
+      "localizedValue": "Hemat",
+      "englishValue": "Save {{percent}}%",
+      "placeholdersInEnglish": [
+        "percent"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "id",
+      "key": "upgrade.title",
+      "localizedValue": "Tingkatkan ke NurseNest Pro",
+      "englishValue": "Pass Your NCLEX or {{examName}} With Structured Exam-Level Practice",
+      "placeholdersInEnglish": [
+        "examName"
+      ],
+      "placeholdersInLocalized": []
+    }
+  ]
+}

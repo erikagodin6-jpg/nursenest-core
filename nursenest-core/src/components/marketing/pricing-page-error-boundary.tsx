@@ -2,6 +2,7 @@
 
 import * as Sentry from "@sentry/nextjs";
 import { Component, type ErrorInfo, type ReactNode } from "react";
+import { MARKETING_PRIMARY_CTA_COMPACT_CLASS } from "@/lib/theme/marketing-hero-pattern";
 
 type Props = { children: ReactNode };
 
@@ -31,14 +32,11 @@ export class PricingPageErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       return (
         <div className="mx-auto max-w-2xl px-4 py-16 text-center">
-          <p className="text-lg font-semibold text-[var(--theme-heading-text)]">Something went wrong loading this page</p>
-          <p className="mt-2 text-sm text-muted-foreground">
+          <p className="nn-marketing-h3">Something went wrong loading this page</p>
+          <p className="mt-2 nn-marketing-body-sm text-muted-foreground">
             Please refresh the page or return to the home page and try again.
           </p>
-          <a
-            href="/"
-            className="mt-6 inline-flex rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground"
-          >
+          <a href="/" className={`mt-6 ${MARKETING_PRIMARY_CTA_COMPACT_CLASS}`}>
             Go to home
           </a>
         </div>

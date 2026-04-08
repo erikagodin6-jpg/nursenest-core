@@ -13,8 +13,8 @@ export async function MarketingLoginPage({ locale }: { locale: string }) {
         <div className="mb-6 flex justify-center bg-transparent">
           <SiteBrandLogoMark variant="auth" />
         </div>
-        <h1 className="text-3xl font-bold">{m["pages.login.welcome"]}</h1>
-        <p className="mt-2 text-sm text-muted">{m["pages.login.subtitle"]}</p>
+        <h1 className="nn-marketing-h1">{m["pages.login.welcome"]}</h1>
+        <p className="nn-marketing-body-sm mt-2 text-muted">{m["pages.login.subtitle"]}</p>
         <Suspense fallback={<div className="mt-6 h-32 animate-pulse rounded-xl bg-border/40" aria-hidden />}>
           <LoginForm
             forgotPasswordHref={forgotHref}

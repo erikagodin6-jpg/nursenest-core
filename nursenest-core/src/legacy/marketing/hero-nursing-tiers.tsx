@@ -5,6 +5,7 @@ import { NURSING_TIERS } from "@shared/platform-manifest";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { ArrowRight, Target } from "lucide-react";
+import { MARKETING_PRIMARY_CTA_CLASS } from "@/lib/theme/marketing-hero-pattern";
 
 function ProgressBar({ current, goal }: { current: number; goal: number }) {
   const pct = Math.min(100, Math.round((current / goal) * 100));
@@ -54,7 +55,7 @@ export default function HeroNursingTiers() {
                 data-testid={`tier-card-${key}`}
               >
                 <div className="border-b border-[var(--border-subtle)] bg-[var(--bg-inset)] px-6 py-5">
-                  <h3 className="text-lg font-semibold text-primary">{tier.label}</h3>
+                  <h3 className="nn-marketing-h3 text-[var(--theme-primary)]">{tier.label}</h3>
                   <div className="mt-1 flex items-baseline gap-1">
                     <span className="text-3xl font-bold tabular-nums text-[var(--theme-heading-text)]">{formatK(tier.goalQuestions)}+</span>
                     <span className="text-sm text-[var(--theme-muted-text)]">{t("components.heroNursingTiers.questionsGoal")}</span>
@@ -72,9 +73,7 @@ export default function HeroNursingTiers() {
 
                 <div className="space-y-4 px-6 py-5">
                   <div>
-                    <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-[var(--theme-muted-text)]">
-                      {t("components.heroNursingTiers.majorExams")}
-                    </p>
+                    <p className="nn-marketing-label mb-2">{t("components.heroNursingTiers.majorExams")}</p>
                     <div className="flex flex-wrap gap-1.5">
                       {tier.exams.map((exam) => (
                         <span
@@ -98,7 +97,7 @@ export default function HeroNursingTiers() {
 
                   <Link
                     href={mapLegacyMarketingHref(tier.route)}
-                    className="nn-btn-primary flex w-full items-center justify-center gap-2 py-2.5 text-sm font-semibold no-underline"
+                    className={`${MARKETING_PRIMARY_CTA_CLASS} w-full gap-2 no-underline`}
                     data-testid={`button-tier-${key}`}
                   >
                     <Target className="h-4 w-4" />

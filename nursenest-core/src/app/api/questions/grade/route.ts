@@ -15,6 +15,7 @@ import type { RecommendationConfidence } from "@/lib/learner/topic-linking";
 import { ContentStatus } from "@prisma/client";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { mergeQuestionOverlayForGradeResponse } from "@/lib/i18n/educational-content-overlay";
+import { resolveMergedQuestionOverlayBundle } from "@/lib/i18n/educational-translation-db";
 
 function topicRoutingConfidence(row: { subtopic?: string | null; topic?: string | null; bodySystem?: string | null }): RecommendationConfidence {
   if ((row.subtopic ?? "").trim().length > 1) return "high";
@@ -117,7 +118,8 @@ export async function POST(req: Request) {
     }
 
     const locale = await getMarketingLocaleForDefaultRoute();
-    const displayRow = mergeQuestionOverlayForGradeResponse(row, row.id, locale);
+    const questionOverlayBundle = await resolveMergedQuestionOverlayBundle(locale);
+    const displayRow = mergeQuestionOverlayForGradeResponse(row, row.id, locale, questionOverlayBundle);
 
     const rationaleBundle = buildRationalePayloadForGradeResponse(displayRow);
     const teaching = buildNormalizedTeachingPayload(displayRow);

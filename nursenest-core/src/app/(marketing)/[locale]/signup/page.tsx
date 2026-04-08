@@ -1,17 +1,20 @@
 import type { Metadata } from "next";
 import { MarketingSignupPage } from "@/components/marketing/marketing-signup-page";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 
 type Props = { params: Promise<{ locale: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const m = await loadMarketingMessages(locale);
+  const alt = marketingAlternatesSharedPage(locale, "/signup");
   return {
     title: m["pages.signup.title"],
     description: m["pages.signup.description"],
-    alternates: { canonical: `/${locale}/signup` },
+    alternates: { canonical: alt.canonical, languages: alt.languages },
     robots: { index: false, follow: true },
+    openGraph: { title: m["pages.signup.title"], url: alt.canonical, type: "website" },
   };
 }
 

@@ -39,8 +39,8 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
     if (!title && !body) return null;
     return (
       <div className={`nn-marketing-card nn-marketing-card-pad ${className}`.trim()}>
-        {title ? <h3 className="text-sm font-semibold text-[var(--theme-heading-text)]">{title}</h3> : null}
-        {body ? <p className="mt-2 text-sm leading-relaxed text-[var(--theme-body-text)]">{body}</p> : null}
+        {title ? <h3 className="nn-marketing-h4">{title}</h3> : null}
+        {body ? <p className="nn-marketing-body-sm mt-2">{body}</p> : null}
       </div>
     );
   }
@@ -92,7 +92,7 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
                   className="border-0 bg-[var(--bg-inset)] shadow-none"
                   rounded="rounded-none"
                 />
-                <figcaption className="border-t border-[var(--border-subtle)] px-3 py-2.5 text-xs font-medium text-[var(--theme-muted-text)]">
+                <figcaption className="nn-marketing-caption border-t border-[var(--border-subtle)] px-3 py-2.5 font-medium">
                   {t("home.conversion.previewCaptionDash")}
                 </figcaption>
               </figure>
@@ -108,7 +108,7 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
                   className="border-0 bg-[var(--bg-inset)] shadow-none"
                   rounded="rounded-none"
                 />
-                <figcaption className="border-t border-[var(--border-subtle)] px-3 py-2.5 text-xs font-medium text-[var(--theme-muted-text)]">
+                <figcaption className="nn-marketing-caption border-t border-[var(--border-subtle)] px-3 py-2.5 font-medium">
                   {t("home.conversion.previewCaptionBank")}
                 </figcaption>
               </figure>
@@ -118,7 +118,7 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
             <MarketingTrackedLink
               href={loc(HUB.signup)}
               event={PH.marketingHomePreviewSignupHint}
-              className="nn-link-quiet font-semibold"
+              className={`${MARKETING_TERTIARY_LINK_CLASS} inline font-semibold`}
             >
               {t("home.conversion.previewSignupHint")}
             </MarketingTrackedLink>
@@ -145,11 +145,9 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
                 eventProps={{ sample: "question_bank", region }}
                 className="nn-marketing-card nn-marketing-card-pad flex h-full min-h-[8.5rem] flex-col transition-colors hover:border-[var(--border-medium)] sm:min-h-0"
               >
-                <span className="text-xs font-semibold uppercase text-[var(--theme-muted-text)]">{t("home.conversion.sampleBank")}</span>
-                <span className="mt-2 text-sm font-semibold text-[var(--theme-heading-text)]">
-                  {t("home.conversion.sampleRnQuestionRun")}
-                </span>
-                <span className="mt-3 inline-flex items-center text-xs font-semibold text-[var(--theme-heading-text)]">
+                <span className="nn-marketing-label">{t("home.conversion.sampleBank")}</span>
+                <span className="nn-marketing-h4 mt-2">{t("home.conversion.sampleRnQuestionRun")}</span>
+                <span className="nn-marketing-body-sm mt-3 inline-flex items-center font-semibold text-[var(--theme-heading-text)]">
                   {t("home.conversion.sampleGo")}
                   <ArrowRight className="ml-1 h-3.5 w-3.5" />
                 </span>
@@ -162,9 +160,9 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
                 eventProps={{ sample: "lessons", region }}
                 className="nn-marketing-card nn-marketing-card-pad flex h-full min-h-[8.5rem] flex-col transition-colors hover:border-[var(--border-medium)] sm:min-h-0"
               >
-                <span className="text-xs font-semibold uppercase text-[var(--theme-muted-text)]">{t("home.conversion.sampleLessons")}</span>
-                <span className="mt-2 text-sm font-semibold text-[var(--theme-heading-text)]">{t("home.conversion.sampleLessonsDesc")}</span>
-                <span className="mt-3 inline-flex items-center text-xs font-semibold text-[var(--theme-heading-text)]">
+                <span className="nn-marketing-label">{t("home.conversion.sampleLessons")}</span>
+                <span className="nn-marketing-h4 mt-2">{t("home.conversion.sampleLessonsDesc")}</span>
+                <span className="nn-marketing-body-sm mt-3 inline-flex items-center font-semibold text-[var(--theme-heading-text)]">
                   {t("home.conversion.sampleGo")}
                   <BookOpen className="ml-1 h-3.5 w-3.5" />
                 </span>
@@ -177,9 +175,9 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
                 eventProps={{ sample: "timed_exams_login", region }}
                 className="nn-marketing-card nn-marketing-card-pad flex h-full min-h-[8.5rem] flex-col transition-colors hover:border-[var(--border-medium)] sm:min-h-0"
               >
-                <span className="text-xs font-semibold uppercase text-[var(--theme-muted-text)]">{t("home.conversion.sampleTimed")}</span>
-                <span className="mt-2 text-sm font-semibold text-[var(--theme-heading-text)]">{t("home.conversion.sampleTimedDesc")}</span>
-                <span className="mt-3 inline-flex items-center text-xs font-semibold text-[var(--theme-heading-text)]">
+                <span className="nn-marketing-label">{t("home.conversion.sampleTimed")}</span>
+                <span className="nn-marketing-h4 mt-2">{t("home.conversion.sampleTimedDesc")}</span>
+                <span className="nn-marketing-body-sm mt-3 inline-flex items-center font-semibold text-[var(--theme-heading-text)]">
                   {t("home.conversion.sampleSignIn")}
                   <ArrowRight className="ml-1 h-3.5 w-3.5" />
                 </span>
@@ -205,11 +203,11 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
                 key={n}
                 className="group rounded-[var(--radius-lg)] border border-[var(--border-subtle)] bg-[var(--nn-presentation-ribbon)] px-4 py-3.5"
               >
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-sm font-semibold leading-snug text-[var(--theme-heading-text)] marker:content-none [&::-webkit-details-marker]:hidden">
+                <summary className="nn-marketing-body-sm flex cursor-pointer list-none items-center justify-between gap-3 font-semibold leading-snug text-[var(--theme-heading-text)] marker:content-none [&::-webkit-details-marker]:hidden">
                   {t(`home.conversion.faq${n}q`)}
                   <ChevronDown className="h-4 w-4 shrink-0 text-[var(--theme-muted-text)] transition group-open:rotate-180" aria-hidden />
                 </summary>
-                <p className="mt-3 border-t border-[var(--border-subtle)] pt-3 text-sm leading-relaxed text-[var(--theme-body-text)]">
+                <p className="nn-marketing-body-sm mt-3 border-t border-[var(--border-subtle)] pt-3">
                   {t(`home.conversion.faq${n}a`)}
                 </p>
               </details>

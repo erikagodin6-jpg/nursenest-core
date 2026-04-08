@@ -1,22 +1,24 @@
 #!/usr/bin/env npx tsx
 /**
  * Validates merged runtime JSON after `npm run i18n:compile`.
- * - All 20 locales present under client/public/i18n and nursenest-core/public/i18n
- * - Valid JSON, non-trivial size
- * - For each locale, every key extracted from `tools/i18n/source/i18n-{lang}.ts` exists in merged JSON
- * - Client vs Next mirror: same key count and identical key sets
  *
- * Note: Locales do not share identical keysets vs English in source (different TS tables);
- * we do not require en parity for non-English JSON.
+ * - All locales present under client/public/i18n and nursenest-core/public/i18n
+ * - Client vs Next: byte-identical files (no drift)
+ * - Each locale: every key from tools/i18n/source/i18n-{lang}.ts exists in merged JSON
+ * - Marketing locale overlays: same key set as tools/i18n/marketing/marketing-en.json (en has no overlay file)
+ * - Placeholder parity: for every key, {{mustache}} placeholder names match English merged bundle
  */
 import { existsSync, readFileSync } from "fs";
 import path from "path";
 import { I18N_LANGUAGES } from "./merge-marketing-i18n";
+import { REPO_ROOT } from "./repo-root";
 
-const ROOT = path.resolve(process.cwd());
+const ROOT = REPO_ROOT;
 const CLIENT_I18N = path.join(ROOT, "client/public/i18n");
 const NEXT_I18N = path.join(ROOT, "nursenest-core/public/i18n");
 const SOURCE_DIR = path.join(ROOT, "tools/i18n/source");
+const MARKETING_EN = path.join(ROOT, "tools/i18n/marketing/marketing-en.json");
+const MARKETING_LOCALE_DIR = path.join(ROOT, "tools/i18n/marketing/locale");
 
 function extractTranslationsFromSource(filePath: string): Record<string, string> | null {
   if (!existsSync(filePath)) return null;
@@ -46,38 +48,89 @@ function loadJson(p: string): Record<string, string> | null {
   return null;
 }
 
+/** Placeholder *names* inside {{ }}, sorted uniquely (e.g. count, score). */
+function placeholderNames(s: string): string[] {
+  const re = /\{\{\s*([^}]+?)\s*\}\}/g;
+  const names: string[] = [];
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(s)) !== null) {
+    names.push(m[1].trim());
+  }
+  return [...new Set(names)].sort();
+}
+
 function main(): void {
   const errors: string[] = [];
   const warnings: string[] = [];
+
+  if (!existsSync(MARKETING_EN)) {
+    errors.push(`Missing ${path.relative(ROOT, MARKETING_EN)}`);
+    mainEnd(errors, warnings);
+    return;
+  }
+  const marketingEn = loadJson(MARKETING_EN);
+  if (!marketingEn) {
+    errors.push(`Invalid ${path.relative(ROOT, MARKETING_EN)}`);
+    mainEnd(errors, warnings);
+    return;
+  }
+  const marketingCanonicalKeys = new Set(Object.keys(marketingEn).sort());
+
+  for (const lang of I18N_LANGUAGES) {
+    if (lang !== "en") {
+      const overlayPath = path.join(MARKETING_LOCALE_DIR, `marketing-${lang}.json`);
+      if (!existsSync(overlayPath)) {
+        errors.push(`Missing marketing overlay: ${path.relative(ROOT, overlayPath)}`);
+        continue;
+      }
+      const overlay = loadJson(overlayPath);
+      if (!overlay) {
+        errors.push(`Invalid JSON: ${path.relative(ROOT, overlayPath)}`);
+        continue;
+      }
+      const ok = new Set(Object.keys(overlay));
+      for (const k of marketingCanonicalKeys) {
+        if (!ok.has(k)) errors.push(`Marketing overlay missing key "${k}" (${lang})`);
+      }
+      for (const k of ok) {
+        if (!marketingCanonicalKeys.has(k)) errors.push(`Marketing overlay extra/orphan key "${k}" (${lang})`);
+      }
+    }
+  }
+
+  const mergedEn = loadJson(path.join(CLIENT_I18N, "en.json"));
+  if (!mergedEn) {
+    errors.push(`Missing merged en.json — run npm run i18n:compile`);
+    mainEnd(errors, warnings);
+    return;
+  }
+  const canonicalMergedKeys = new Set(Object.keys(mergedEn));
 
   for (const lang of I18N_LANGUAGES) {
     const rel = `${lang}.json`;
     const cj = path.join(CLIENT_I18N, rel);
     const nj = path.join(NEXT_I18N, rel);
+    if (!existsSync(cj)) {
+      errors.push(`Missing or unreadable: ${path.relative(ROOT, cj)}`);
+      continue;
+    }
+    if (!existsSync(nj)) {
+      errors.push(`Missing or unreadable Next mirror: ${path.relative(ROOT, nj)}`);
+      continue;
+    }
+    const cBuf = readFileSync(cj);
+    const nBuf = readFileSync(nj);
+    if (!cBuf.equals(nBuf)) {
+      errors.push(`Client vs Next drift (bytes differ): ${rel}`);
+    }
+
     const data = loadJson(cj);
     if (!data) {
-      errors.push(`Missing or invalid JSON: ${path.relative(ROOT, cj)}`);
+      errors.push(`Invalid JSON: ${path.relative(ROOT, cj)}`);
       continue;
     }
     if (Object.keys(data).length < 50) {
       errors.push(`Suspiciously small key count for ${lang}: ${Object.keys(data).length}`);
-    }
-
-    const nextData = loadJson(nj);
-    if (!nextData) {
-      errors.push(`Missing or invalid Next mirror: ${path.relative(ROOT, nj)}`);
-      continue;
-    }
-    const ck = new Set(Object.keys(data));
-    const nk = new Set(Object.keys(nextData));
-    if (ck.size !== nk.size) {
-      errors.push(`Key count mismatch client vs next for ${lang}: ${ck.size} vs ${nk.size}`);
-    }
-    for (const k of ck) {
-      if (!nk.has(k)) errors.push(`Next JSON missing key "${k}" (${lang})`);
-    }
-    for (const k of nk) {
-      if (!ck.has(k)) errors.push(`Client JSON missing key "${k}" (${lang})`);
     }
 
     const srcPath = path.join(SOURCE_DIR, `i18n-${lang}.ts`);
@@ -86,11 +139,41 @@ function main(): void {
       errors.push(`Could not extract keys from ${path.relative(ROOT, srcPath)}`);
       continue;
     }
-    const missingFromMerged = Object.keys(srcMap).filter((k) => !(k in data));
+    // Locale TS files may contain keys removed from English; only require keys that exist in en merged bundle.
+    const missingFromMerged = Object.keys(srcMap).filter((k) => k in mergedEn && !(k in data));
     if (missingFromMerged.length) {
       errors.push(
-        `[${lang}] merged JSON missing ${missingFromMerged.length} keys from source TS (e.g. ${missingFromMerged.slice(0, 5).join(", ")})`,
+        `[${lang}] merged JSON missing ${missingFromMerged.length} keys from source TS (present in en bundle) (e.g. ${missingFromMerged.slice(0, 5).join(", ")})`,
       );
+    }
+
+    const mk = new Set(Object.keys(marketingEn));
+    const notInMerged = [...mk].filter((k) => !(k in data));
+    if (notInMerged.length) {
+      errors.push(`[${lang}] merged JSON missing ${notInMerged.length} marketing-en key(s) (e.g. ${notInMerged.slice(0, 5).join(", ")})`);
+    }
+
+    const dataKeys = new Set(Object.keys(data));
+    if (canonicalMergedKeys.size !== dataKeys.size) {
+      errors.push(`[${lang}] key count differs from en: ${dataKeys.size} vs ${canonicalMergedKeys.size}`);
+    }
+    for (const k of canonicalMergedKeys) {
+      if (!dataKeys.has(k)) errors.push(`[${lang}] missing key vs en merged: "${k}"`);
+    }
+    for (const k of dataKeys) {
+      if (!canonicalMergedKeys.has(k)) errors.push(`[${lang}] extra key vs en merged: "${k}"`);
+    }
+
+    for (const k of canonicalMergedKeys) {
+      const enVal = mergedEn[k] ?? "";
+      const locVal = data[k] ?? "";
+      const pEn = placeholderNames(enVal);
+      const pLoc = placeholderNames(locVal);
+      if (JSON.stringify(pEn) !== JSON.stringify(pLoc)) {
+        errors.push(
+          `[${lang}] placeholder mismatch for "${k}": en [${pEn.join(", ")}] vs locale [${pLoc.join(", ")}]`,
+        );
+      }
     }
 
     const empty = Object.keys(data).filter((k) => (data[k] ?? "").trim() === "");
@@ -99,6 +182,10 @@ function main(): void {
     }
   }
 
+  mainEnd(errors, warnings);
+}
+
+function mainEnd(errors: string[], warnings: string[]): void {
   for (const w of warnings) console.warn("[warn]", w);
   if (errors.length) {
     console.error("[i18n:validate] FAILED");

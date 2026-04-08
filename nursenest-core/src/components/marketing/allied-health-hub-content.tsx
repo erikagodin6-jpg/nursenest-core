@@ -5,6 +5,10 @@ import type {
   AlliedProfessionMarketing,
 } from "@/lib/allied/allied-professions-registry";
 import { ALLIED_HUB_CATEGORY_META, ALLIED_HUB_CATEGORY_ORDER } from "@/lib/allied/allied-professions-registry";
+import {
+  MARKETING_PRIMARY_CTA_COMPACT_CLASS,
+  MARKETING_SECONDARY_CTA_COMPACT_CLASS,
+} from "@/lib/theme/marketing-hero-pattern";
 
 function professionChipLabel(key: string): string {
   return key
@@ -23,7 +27,7 @@ export function AlliedHeroProfessionScan({
   if (flat.length === 0) return null;
   return (
     <div className="relative mt-10 border-t border-[color-mix(in_srgb,var(--theme-primary)_18%,transparent)] pt-8">
-      <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[var(--theme-muted-text)]">Allied tracks here</p>
+      <p className="nn-marketing-label">Allied tracks here</p>
       <div className="mt-3 flex flex-wrap gap-2 sm:gap-2.5">
         {flat.map((p) => (
           <Link
@@ -55,14 +59,14 @@ export function AlliedHealthRegionStrip({ us, ca }: { us: RegionLinks; ca: Regio
     >
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div className="max-w-2xl">
-          <div className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-[var(--accent-soft)] px-3 py-1 text-[0.65rem] font-bold uppercase tracking-wider text-primary">
-            <Globe2 className="h-3.5 w-3.5" aria-hidden />
-            Region first
+          <div className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-[var(--accent-soft)] px-3 py-1">
+            <Globe2 className="h-3.5 w-3.5 text-[var(--theme-primary)]" aria-hidden />
+            <span className="nn-marketing-label nn-marketing-label--accent">Region first</span>
           </div>
-          <h2 id="allied-region-heading" className="mt-4 text-xl font-bold tracking-tight text-[var(--theme-heading-text)] sm:text-2xl">
+          <h2 id="allied-region-heading" className="nn-marketing-h2 mt-4">
             Where are you testing?
           </h2>
-          <p className="mt-2 text-sm leading-relaxed text-[var(--theme-muted-text)] sm:text-[0.9375rem]">
+          <p className="nn-marketing-body-sm mt-2 leading-relaxed text-[var(--theme-muted-text)]">
             Allied content is scoped by country at signup and checkout. Pick your region first, then your profession below.
           </p>
         </div>
@@ -86,21 +90,18 @@ function RegionCard({ label, countryLine, overviewHref, questionsHref, pricingHi
         <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--accent-soft)] text-primary shadow-sm ring-1 ring-primary/10">
           <MapPin className="h-5 w-5" aria-hidden />
         </span>
-        <span className="text-[0.65rem] font-bold uppercase tracking-[0.18em] text-primary">{countryLine}</span>
+        <span className="nn-marketing-label nn-marketing-label--accent">{countryLine}</span>
       </div>
-      <p className="mt-4 text-lg font-bold leading-snug text-[var(--theme-heading-text)]">{label}</p>
-      <p className="mt-2 flex-1 text-sm leading-relaxed text-[var(--theme-muted-text)]">{pricingHint}</p>
+      <p className="nn-marketing-h3 mt-4 leading-snug">{label}</p>
+      <p className="nn-marketing-body-sm mt-2 flex-1 leading-relaxed text-[var(--theme-muted-text)]">{pricingHint}</p>
       <div className="mt-6 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap">
-        <Link
-          href={overviewHref}
-          className="inline-flex items-center justify-center gap-1.5 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-95"
-        >
+        <Link href={overviewHref} className={`${MARKETING_PRIMARY_CTA_COMPACT_CLASS} gap-1.5 shadow-sm transition hover:opacity-95`}>
           Pathway overview
           <ArrowRight className="h-4 w-4" aria-hidden />
         </Link>
         <Link
           href={questionsHref}
-          className="inline-flex items-center justify-center gap-1.5 rounded-full border border-[var(--border-medium)] bg-[color-mix(in_srgb,var(--theme-primary)_4%,var(--theme-card-bg))] px-4 py-2.5 text-sm font-semibold text-foreground transition hover:border-primary/30 hover:bg-[var(--surface-interactive-hover)]"
+          className={`${MARKETING_SECONDARY_CTA_COMPACT_CLASS} gap-1.5 border-[var(--border-medium)] bg-[color-mix(in_srgb,var(--theme-primary)_4%,var(--theme-card-bg))] text-foreground transition hover:border-primary/30 hover:bg-[var(--surface-interactive-hover)]`}
         >
           <ClipboardList className="h-4 w-4" aria-hidden />
           Question bank hub
@@ -125,14 +126,14 @@ export function AlliedHubProfessionSections({
   return (
     <section className="mt-20" aria-labelledby="allied-professions-heading">
       <div className="max-w-2xl">
-        <div className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-[var(--accent-soft)] px-3 py-1 text-[0.65rem] font-bold uppercase tracking-wider text-primary">
-          <Sparkles className="h-3.5 w-3.5" aria-hidden />
-          By practice area
+        <div className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-[var(--accent-soft)] px-3 py-1">
+          <Sparkles className="h-3.5 w-3.5 text-[var(--theme-primary)]" aria-hidden />
+          <span className="nn-marketing-label nn-marketing-label--accent">By practice area</span>
         </div>
-        <h2 id="allied-professions-heading" className="mt-4 text-2xl font-bold tracking-tight text-[var(--theme-heading-text)] sm:text-3xl">
+        <h2 id="allied-professions-heading" className="nn-marketing-h2 mt-4">
           Choose your profession
         </h2>
-        <p className="mt-3 text-sm leading-relaxed text-[var(--theme-muted-text)] sm:text-[0.9375rem]">
+        <p className="nn-marketing-body-sm mt-3 leading-relaxed text-[var(--theme-muted-text)]">
           Each track has a dedicated prep guide plus a paginated lesson hub. Content stays on the allied tier, separate from
           nursing NCLEX and NP depth.
         </p>
@@ -155,8 +156,10 @@ export function AlliedHubProfessionSections({
                     {n}
                   </span>
                   <div>
-                    <h3 className="text-xl font-bold tracking-tight text-[var(--theme-heading-text)] sm:text-2xl">{meta.label}</h3>
-                    <p className="mt-1.5 max-w-xl text-sm leading-relaxed text-[var(--theme-muted-text)]">{meta.sublabel}</p>
+                    <h3 className="nn-marketing-h3">{meta.label}</h3>
+                    <p className="nn-marketing-body-sm mt-1.5 max-w-xl leading-relaxed text-[var(--theme-muted-text)]">
+                      {meta.sublabel}
+                    </p>
                   </div>
                 </div>
               </header>
@@ -168,22 +171,22 @@ export function AlliedHubProfessionSections({
                         className={`absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r ${accent}`}
                         aria-hidden
                       />
-                      <p className="text-[0.65rem] font-bold uppercase tracking-wider text-primary/90">
-                        {professionChipLabel(p.professionKey)}
+                      <p className="nn-marketing-label nn-marketing-label--accent opacity-90">{professionChipLabel(p.professionKey)}</p>
+                      <h4 className="nn-marketing-h4 mt-2 leading-snug">{p.h1}</h4>
+                      <p className="nn-marketing-body-sm mt-3 flex-1 leading-relaxed text-[var(--theme-muted-text)]">
+                        {p.description}
                       </p>
-                      <h4 className="mt-2 text-base font-bold leading-snug text-[var(--theme-heading-text)]">{p.h1}</h4>
-                      <p className="mt-3 flex-1 text-sm leading-relaxed text-[var(--theme-muted-text)]">{p.description}</p>
                       <div className="mt-6 flex flex-col gap-2 border-t border-[var(--border-subtle)] pt-5">
                         <Link
                           href={`/allied-health/${p.segment}`}
-                          className="inline-flex items-center gap-1.5 text-sm font-bold text-primary transition hover:gap-2"
+                          className="nn-link-quiet inline-flex items-center gap-1.5 font-semibold text-[var(--theme-primary)] transition hover:gap-2"
                         >
                           Open prep guide
                           <ArrowRight className="h-4 w-4 shrink-0" aria-hidden />
                         </Link>
                         <Link
                           href={`/allied-health/${p.professionKey}/lessons`}
-                          className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--theme-muted-text)] transition hover:text-primary"
+                          className="nn-link-quiet inline-flex items-center gap-2 font-medium text-[var(--theme-muted-text)] transition hover:text-[var(--theme-primary)]"
                         >
                           <BookOpen className="h-4 w-4 shrink-0 opacity-80" aria-hidden />
                           Browse lessons
@@ -224,10 +227,8 @@ export function AlliedHealthTrustStrip() {
       className="mt-20 rounded-[1.75rem] border border-[var(--border-subtle)] bg-gradient-to-b from-[var(--bg-section-alt)] to-[var(--bg-section)] px-5 py-10 shadow-[var(--shadow-card)] sm:px-10 sm:py-12"
       aria-label="Why allied learners use NurseNest"
     >
-      <h2 className="max-w-xl text-xl font-bold tracking-tight text-[var(--theme-heading-text)] sm:text-2xl">
-        Built for allied certification prep
-      </h2>
-      <p className="mt-2 text-sm text-[var(--theme-muted-text)]">Confidence cues before you commit to a plan.</p>
+      <h2 className="nn-marketing-h2 max-w-xl">Built for allied certification prep</h2>
+      <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">Confidence cues before you commit to a plan.</p>
       <ul className="mt-8 grid gap-5 sm:grid-cols-3 sm:gap-6">
         {items.map(({ icon: Icon, title, body }) => (
           <li
@@ -237,8 +238,8 @@ export function AlliedHealthTrustStrip() {
             <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--accent-soft)] text-primary ring-1 ring-primary/10">
               <Icon className="h-5 w-5" aria-hidden />
             </span>
-            <p className="mt-4 text-sm font-bold text-[var(--theme-heading-text)]">{title}</p>
-            <p className="mt-2 text-sm leading-relaxed text-[var(--theme-body-text)]">{body}</p>
+            <p className="nn-marketing-h4 mt-4">{title}</p>
+            <p className="nn-marketing-body-sm mt-2 leading-relaxed text-[var(--theme-body-text)]">{body}</p>
           </li>
         ))}
       </ul>

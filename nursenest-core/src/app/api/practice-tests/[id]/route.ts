@@ -21,6 +21,7 @@ import {
   enforcePracticeTestMutationProtection,
 } from "@/lib/http/api-protection";
 import { mergeQuestionApiPayload } from "@/lib/i18n/educational-content-overlay";
+import { resolveMergedQuestionOverlayBundle } from "@/lib/i18n/educational-translation-db";
 import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
 
 const previewSelect = {
@@ -84,6 +85,7 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
   }
 
   const educationalLocale = getMarketingLocaleFromRequestCookie(req);
+  const questionOverlayBundle = await resolveMergedQuestionOverlayBundle(educationalLocale);
 
   return NextResponse.json({
     id: row.id,
@@ -96,7 +98,7 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
     cursorIndex: row.cursorIndex,
     answers,
     questions: questions.map((q) => {
-      const merged = mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale);
+      const merged = mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale, questionOverlayBundle);
       const stem = String(merged.stem ?? "");
       return {
         ...merged,

@@ -1,17 +1,18 @@
 import type { Metadata } from "next";
 import { LegalDocMarketingView } from "@/components/legal/legal-doc-marketing-view";
-import { absoluteUrl } from "@/lib/seo/site-origin";
+import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 
 type Props = { params: Promise<{ locale: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  const path = `/${locale}/disclaimer`;
+  const alt = marketingAlternatesSharedPage(locale, "/disclaimer");
   return {
     title: "Educational Disclaimer | NurseNest",
     description: "NurseNest is for educational use only. It is not medical advice and does not guarantee exam results.",
-    alternates: { canonical: absoluteUrl(path) },
+    alternates: { canonical: alt.canonical, languages: alt.languages },
     robots: { index: true, follow: true },
+    openGraph: { title: "Educational Disclaimer | NurseNest", url: alt.canonical, type: "website" },
   };
 }
 

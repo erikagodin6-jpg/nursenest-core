@@ -1231,3 +1231,44 @@ model GeneratedLessonDraft {
   @@index([reviewStatus, createdAt])
   @@index([jobId])
 }
+
+/**
+ * Localized display overlays for canonical English educational content (questions, pathway lessons, flashcards).
+ * English remains on core rows / catalog JSON; overlays attach by stable `sourceId` + `locale`.
+ * Only `PUBLISHED` rows are merged at read time (see `educational-translation-db.ts`).
+ */
+enum EducationalTranslationSourceKind {
+  EXAM_QUESTION
+  PATHWAY_LESSON
+  FLASHCARD_DECK
+  FLASHCARD
+  FLASHCARD_TAG
+}
+
+enum EducationalTranslationStatus {
+  DRAFT
+  REVIEWED
+  PUBLISHED
+}
+
+model EducationalTranslationOverlay {
+  id         String                         @id @default(cuid())
+  sourceKind EducationalTranslationSourceKind @map("source_kind")
+  /**
+   * Stable key: `ExamQuestion.id`, `pathwayId:slug` for pathway lessons, `FlashcardDeck.id`, `Flashcard.id`, `FlashcardTag.id`.
+   */
+  sourceId   String                         @map("source_id") @db.VarChar(512)
+  locale     String                         @db.VarChar(32)
+  status     EducationalTranslationStatus   @default(DRAFT)
+  /** JSON payload — shape matches file-based overlays per kind (never replaces grading keys). */
+  payload    Json
+  reviewedAt DateTime?                      @map("reviewed_at")
+  publishedAt DateTime?                     @map("published_at")
+  createdAt  DateTime                       @default(now()) @map("created_at")
+  updatedAt  DateTime                       @updatedAt @map("updated_at")
+
+  @@unique([sourceKind, sourceId, locale])
+  @@index([locale, status, sourceKind])
+  @@index([sourceKind, status])
+  @@map("educational_translation_overlays")
+}

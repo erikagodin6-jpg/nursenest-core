@@ -23,8 +23,8 @@ export function CaseStudiesPageClient() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
       <header className="mb-10">
-        <h1 className="text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)]">Clinical case studies</h1>
-        <p className="mt-3 text-lg text-[var(--theme-muted-text)]">
+        <h1 className="nn-marketing-h1">Clinical case studies</h1>
+        <p className="nn-marketing-lead mt-3 text-[var(--theme-muted-text)]">
           Short, exam-style vignettes with prioritization and safety reasoning. Pair them with your question bank sessions.
         </p>
       </header>
@@ -40,8 +40,8 @@ export function CaseStudiesPageClient() {
                 onClick={() => setOpen(isOpen ? null : c.id)}
               >
                 <div>
-                  <h2 className="font-bold text-[var(--theme-heading-text)]">{c.title}</h2>
-                  <p className="mt-1 text-sm text-[var(--theme-muted-text)]">{c.summary}</p>
+                  <h2 className="nn-marketing-h4">{c.title}</h2>
+                  <p className="nn-marketing-body-sm mt-1 text-[var(--theme-muted-text)]">{c.summary}</p>
                 </div>
                 <span className="shrink-0 text-sm text-primary">{isOpen ? "−" : "+"}</span>
               </button>

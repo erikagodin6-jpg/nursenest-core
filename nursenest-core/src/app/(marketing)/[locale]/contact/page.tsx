@@ -1,17 +1,18 @@
 import type { Metadata } from "next";
 import { LegalDocMarketingView } from "@/components/legal/legal-doc-marketing-view";
-import { absoluteUrl } from "@/lib/seo/site-origin";
+import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 
 type Props = { params: Promise<{ locale: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  const path = `/${locale}/contact`;
+  const alt = marketingAlternatesSharedPage(locale, "/contact");
   return {
     title: "Contact & Support | NurseNest",
     description: "Contact NurseNest for billing help, privacy requests, and product support.",
-    alternates: { canonical: absoluteUrl(path) },
+    alternates: { canonical: alt.canonical, languages: alt.languages },
     robots: { index: true, follow: true },
+    openGraph: { title: "Contact & Support | NurseNest", url: alt.canonical, type: "website" },
   };
 }
 

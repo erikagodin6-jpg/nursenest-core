@@ -11,8 +11,8 @@ export async function MarketingSignupPage({ locale }: { locale: string }) {
         <div className="mb-6 flex justify-center bg-transparent">
           <SiteBrandLogoMark variant="auth" />
         </div>
-        <h1 className="text-3xl font-bold">{m["pages.signup.h1"]}</h1>
-        <p className="mt-2 text-sm text-muted">{m["pages.signup.subtitle"]}</p>
+        <h1 className="nn-marketing-h1">{m["pages.signup.h1"]}</h1>
+        <p className="nn-marketing-body-sm mt-2 text-muted">{m["pages.signup.subtitle"]}</p>
         <SignupForm
           termsHref={withMarketingLocale(locale, "/terms")}
           privacyHref={withMarketingLocale(locale, "/privacy")}

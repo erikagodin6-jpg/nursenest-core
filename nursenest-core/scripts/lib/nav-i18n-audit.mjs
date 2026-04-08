@@ -45,6 +45,14 @@ export function mustachePlaceholders(s) {
   return m ? m.sort().join("|") : "";
 }
 
+/** True if `{{` / `}}` counts are unbalanced (broken mustache / copy-paste corruption). */
+export function hasMalformedMustacheStructure(s) {
+  const str = String(s ?? "");
+  const open = (str.match(/\{\{/g) || []).length;
+  const close = (str.match(/\}\}/g) || []).length;
+  return open !== close;
+}
+
 function isEmpty(v) {
   return v === undefined || v === null || (typeof v === "string" && v.trim() === "");
 }
@@ -121,6 +129,19 @@ export function allowsEnglishParity(key, enVal) {
     "Safety Hazard Simulator",
     "Paramedic / EMT",
     "Respiratory Therapy",
+    "NP Certification Prep",
+    "Allied Health Guides",
+    "Feedback",
+    "Nephrology Nursing Guide",
+    "Trauma Nursing Guide",
+    "Anatomy",
+    "Blog Manager",
+    "Clinical Skill Lab",
+    "Content Intelligence",
+    "Practical Nursing Exam Prep",
+    "Pre-Nursing Foundations",
+    "Registered Nursing Exam Prep",
+    "Safety Hazard Detection",
   ]);
   if (loan.has(v)) return true;
   if (v.includes("Electrolyte") && v.includes("ABG") && v.includes("Simulator")) return true;
@@ -134,6 +155,7 @@ export function auditOneLocale(code, en, locMap) {
   const englishCarryover = [];
   const allowlistedCarryover = [];
   const placeholderMismatch = [];
+  const malformed = [];
 
   for (const k of auditedKeys) {
     const enVal = en[k];
@@ -146,6 +168,9 @@ export function auditOneLocale(code, en, locMap) {
     if (isEmpty(cur)) {
       empty.push(k);
       continue;
+    }
+    if (hasMalformedMustacheStructure(cur)) {
+      malformed.push(k);
     }
     if (String(cur) === String(enVal)) {
       if (isEnglishCarryoverAllowlisted(k) || allowsEnglishParity(k, enVal)) {
@@ -169,5 +194,6 @@ export function auditOneLocale(code, en, locMap) {
     englishCarryover,
     allowlistedCarryover,
     placeholderMismatch,
+    malformed,
   };
 }

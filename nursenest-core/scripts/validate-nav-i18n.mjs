@@ -14,6 +14,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { MARKETING_LOCALE_CODES, auditOneLocale, getAuditedKeys } from "./lib/nav-i18n-audit.mjs";
+import { ensureRequiredEnNavKeys } from "./lib/ensure-en-nav-keys.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
@@ -23,6 +24,7 @@ const I18N_DIR = path.join(ROOT, "public", "i18n");
 const jsonMode = process.argv.includes("--json");
 
 function main() {
+  ensureRequiredEnNavKeys();
   let en;
   try {
     en = JSON.parse(fs.readFileSync(EN_PATH, "utf8"));
@@ -54,7 +56,11 @@ function main() {
     const r = auditOneLocale(code, en, locMap);
     byLocale[code] = r;
     const bad =
-      r.missing.length + r.empty.length + r.englishCarryover.length + r.placeholderMismatch.length;
+      r.missing.length +
+      r.empty.length +
+      r.englishCarryover.length +
+      r.placeholderMismatch.length +
+      r.malformed.length;
     if (bad > 0) {
       for (const k of r.missing) failures.push({ code, kind: "missing", key: k });
       for (const k of r.empty) failures.push({ code, kind: "empty", key: k });
@@ -69,6 +75,9 @@ function main() {
           expectedPlaceholders: ph.en || "(none)",
           actualPlaceholders: ph.locale || "(none)",
         });
+      }
+      for (const k of r.malformed) {
+        failures.push({ code, kind: "malformed", key: k });
       }
     }
   }
@@ -106,7 +115,15 @@ function main() {
     byKind[f.kind] = byKind[f.kind] || [];
     byKind[f.kind].push(f);
   }
-  const order = ["file_missing", "json_parse", "missing", "empty", "english_carryover", "placeholder_mismatch"];
+  const order = [
+    "file_missing",
+    "json_parse",
+    "missing",
+    "empty",
+    "english_carryover",
+    "placeholder_mismatch",
+    "malformed",
+  ];
   for (const kind of order) {
     const list = byKind[kind];
     if (!list?.length) continue;
@@ -122,6 +139,8 @@ function main() {
         console.error(
           `  [${f.code}] ${f.key}\n      expected placeholders: ${f.expectedPlaceholders}\n      actual: ${f.actualPlaceholders}`,
         );
+      else if (kind === "malformed")
+        console.error(`  [${f.code}] ${f.key} (unbalanced {{ }} in locale string)`);
     }
     console.error("");
   }

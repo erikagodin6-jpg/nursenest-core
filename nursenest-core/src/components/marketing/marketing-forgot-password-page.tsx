@@ -13,8 +13,8 @@ export async function MarketingForgotPasswordPage({ locale }: { locale: string }
         <div className="mb-6 flex justify-center bg-transparent">
           <SiteBrandLogoMark variant="auth" />
         </div>
-        <h1 className="text-3xl font-bold">{m["pages.forgotPassword.h1"] ?? "Reset your password"}</h1>
-        <p className="mt-2 text-sm text-muted">
+        <h1 className="nn-marketing-h1">{m["pages.forgotPassword.h1"] ?? "Reset your password"}</h1>
+        <p className="nn-marketing-body-sm mt-2 text-muted">
           {m["pages.forgotPassword.intro"] ??
             "Enter your email address. If an account exists with a password, we will send a reset link."}
         </p>

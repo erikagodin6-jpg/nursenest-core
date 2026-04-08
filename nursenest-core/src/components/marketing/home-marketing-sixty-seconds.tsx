@@ -6,6 +6,7 @@ import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import type { NursenestMarketingRegion } from "@/lib/marketing/home-hero-gateway-config";
 import { HUB, NP, PN, RN, loginWithCallback, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
+import { MARKETING_PRIMARY_CTA_COMPACT_CLASS } from "@/lib/theme/marketing-hero-pattern";
 
 type Props = { region: NursenestMarketingRegion };
 
@@ -30,13 +31,13 @@ export function HomeMarketingSixtySeconds({ region }: Props) {
             <Clock className="h-5 w-5" aria-hidden />
           </div>
           <div>
-            <h2 className="text-base font-bold text-[var(--theme-heading-text)] sm:text-lg">{t("home.sixtySeconds.title")}</h2>
-            <p className="mt-1 max-w-prose text-sm text-[var(--theme-muted-text)]">{t("home.sixtySeconds.intro")}</p>
+            <h2 className="nn-marketing-h3">{t("home.sixtySeconds.title")}</h2>
+            <p className="nn-marketing-body-sm mt-1 max-w-prose text-[var(--theme-muted-text)]">{t("home.sixtySeconds.intro")}</p>
           </div>
         </div>
         <Link
           href={loc(quickTestHref)}
-          className="inline-flex shrink-0 items-center justify-center self-stretch rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:brightness-110 sm:self-center"
+          className={`${MARKETING_PRIMARY_CTA_COMPACT_CLASS} shrink-0 self-stretch px-5 shadow-sm transition hover:brightness-110 sm:self-center`}
         >
           {t("home.sixtySeconds.ctaTryFive")}
           <ArrowRight className="ml-2 h-4 w-4" />

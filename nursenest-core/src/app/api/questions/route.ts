@@ -29,6 +29,7 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { MAX_LIST_SKIP_ROWS_DEFAULT } from "@/lib/api/api-pagination-limits";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { localizeQuestionListForApi } from "@/lib/i18n/educational-content-overlay";
+import { resolveMergedQuestionOverlayBundle } from "@/lib/i18n/educational-translation-db";
 import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
 import { enforceQuestionsListProtection } from "@/lib/http/api-protection";
 import {
@@ -146,6 +147,7 @@ export async function GET(req: NextRequest) {
   const sort = sortRaw === "random" ? "random" : "recent";
   const excludeIds = parseExcludeIdsParam(searchParams.get("excludeIds"));
   const educationalLocale = getMarketingLocaleFromRequestCookie(req);
+  const questionOverlayBundle = await resolveMergedQuestionOverlayBundle(educationalLocale);
 
   if (sort === "random" && page > 1 && excludeIds.length === 0) {
     return NextResponse.json(
@@ -369,6 +371,7 @@ export async function GET(req: NextRequest) {
         questions as Array<Record<string, unknown>>,
         responseMode,
         educationalLocale,
+        questionOverlayBundle,
       );
 
       const approxPayloadBytes = estimateJsonUtf8Bytes(payload);
@@ -547,6 +550,7 @@ export async function GET(req: NextRequest) {
       questions as Array<Record<string, unknown>>,
       responseMode,
       educationalLocale,
+      questionOverlayBundle,
     );
 
     const freemiumApproxBytes = estimateJsonUtf8Bytes(sanitized);

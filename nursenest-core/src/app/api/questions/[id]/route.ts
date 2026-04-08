@@ -17,6 +17,7 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { logLargeApiResponse } from "@/lib/observability/perf-log";
 import { notSubscribedResponse } from "@/lib/entitlements/require-subscriber-session";
 import { mergeQuestionApiPayload } from "@/lib/i18n/educational-content-overlay";
+import { resolveMergedQuestionOverlayBundle } from "@/lib/i18n/educational-translation-db";
 import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
 
 export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
@@ -46,6 +47,7 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
     setSentryServerContext({ route: "/api/questions/[id]", feature: SERVER_FEATURE.question, userId: gate.userId });
 
     const educationalLocale = getMarketingLocaleFromRequestCookie(req);
+    const questionOverlayBundle = await resolveMergedQuestionOverlayBundle(educationalLocale);
 
     const includeRationale =
       req.nextUrl.searchParams.get("includeRationale") === "1" ||
@@ -97,7 +99,7 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
       }
 
       const body = {
-        question: mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale),
+        question: mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale, questionOverlayBundle),
         mode: "subscriber" as const,
         fields: includeRationale ? ("full" as const) : ("preview" as const),
       };
@@ -142,6 +144,7 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
   };
 
   const educationalLocale = getMarketingLocaleFromRequestCookie(req);
+  const questionOverlayBundle = await resolveMergedQuestionOverlayBundle(educationalLocale);
 
   try {
     const q = await withRetry(() =>
@@ -169,7 +172,7 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
     });
 
     const freemiumBody = {
-      question: mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale),
+      question: mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale, questionOverlayBundle),
       mode: "freemium" as const,
     };
     logLargeApiResponse("/api/questions/[id]", estimateJsonUtf8Bytes(freemiumBody));

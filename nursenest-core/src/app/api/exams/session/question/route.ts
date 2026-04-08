@@ -11,6 +11,7 @@ import { QUESTION_PAYLOAD_WARN_BYTES } from "@/lib/questions/question-api-limits
 import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { mergeQuestionApiPayload } from "@/lib/i18n/educational-content-overlay";
+import { resolveMergedQuestionOverlayBundle } from "@/lib/i18n/educational-translation-db";
 import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
 
 /**
@@ -84,7 +85,12 @@ export async function GET(req: NextRequest) {
     }
 
     const educationalLocale = getMarketingLocaleFromRequestCookie(req);
-    const localizedQuestion = mergeQuestionApiPayload({ ...question } as Record<string, unknown>, educationalLocale);
+    const questionOverlayBundle = await resolveMergedQuestionOverlayBundle(educationalLocale);
+    const localizedQuestion = mergeQuestionApiPayload(
+      { ...question } as Record<string, unknown>,
+      educationalLocale,
+      questionOverlayBundle,
+    );
 
     const jsonBody = {
       index,

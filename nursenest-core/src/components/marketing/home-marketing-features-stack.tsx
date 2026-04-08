@@ -6,6 +6,11 @@ import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import type { NursenestMarketingRegion } from "@/lib/marketing/home-hero-gateway-config";
 import { HUB, loginWithCallback, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
+import {
+  MARKETING_PRIMARY_CTA_CLASS,
+  MARKETING_SECONDARY_CTA_CLASS,
+  MARKETING_TERTIARY_LINK_CLASS,
+} from "@/lib/theme/marketing-hero-pattern";
 
 type Props = { region: NursenestMarketingRegion };
 
@@ -52,27 +57,24 @@ export function HomeMarketingFeaturesStack({ region }: Props) {
               <div className="flex items-start gap-3">
                 <feat.icon className="mt-0.5 h-5 w-5 shrink-0 text-[var(--theme-muted-text)]" aria-hidden />
                 <div className="min-w-0">
-                  <h3 className="text-base font-semibold text-[var(--theme-heading-text)]">{t(feat.titleKey)}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-[var(--theme-body-text)]">{t(feat.bodyKey)}</p>
+                  <h3 className="nn-marketing-h4">{t(feat.titleKey)}</h3>
+                  <p className="nn-marketing-body-sm mt-2">{t(feat.bodyKey)}</p>
                 </div>
               </div>
             </div>
           ))}
         </div>
 
-        <div className="mt-10 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-          <Link
-            href={loc(rnQuestions(region))}
-            className="nn-btn-primary inline-flex min-h-[44px] items-center justify-center px-6 py-2.5 text-sm font-semibold sm:min-h-0"
-          >
+        <div className="nn-marketing-cta-group mt-10 items-stretch sm:items-center">
+          <Link href={loc(rnQuestions(region))} className={MARKETING_PRIMARY_CTA_CLASS}>
             {t("home.featuresStack.ctaQuestions")}
           </Link>
-          <Link href={loc(HUB.pricing)} className="nn-btn-secondary inline-flex min-h-[44px] items-center justify-center px-6 py-2.5 text-sm font-semibold sm:min-h-0">
+          <Link href={loc(HUB.pricing)} className={MARKETING_SECONDARY_CTA_CLASS}>
             {t("home.featuresStack.ctaPricing")}
           </Link>
           <Link
             href={loc(loginWithCallback(rnQuestions(region)))}
-            className="nn-link-quiet text-center text-sm sm:ml-1 sm:text-left"
+            className={`${MARKETING_TERTIARY_LINK_CLASS} w-full justify-center text-center sm:ml-1 sm:w-auto sm:justify-start sm:text-left`}
           >
             {t("home.featuresStack.ctaSignIn")} →
           </Link>

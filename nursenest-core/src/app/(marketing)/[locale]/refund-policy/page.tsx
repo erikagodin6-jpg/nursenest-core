@@ -1,20 +1,20 @@
 import type { Metadata } from "next";
 import { LegalDocMarketingView } from "@/components/legal/legal-doc-marketing-view";
-import { absoluteUrl } from "@/lib/seo/site-origin";
+import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 
 type Props = { params: Promise<{ locale: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  const path = `/${locale}/refund-policy`;
+  const alt = marketingAlternatesSharedPage(locale, "/refund-policy");
   return {
     title: "Subscription, Cancellation, and Refund Policy | NurseNest",
     description: "How NurseNest subscriptions, renewals, cancellations, trials, and refunds work.",
-    alternates: { canonical: absoluteUrl(path) },
+    alternates: { canonical: alt.canonical, languages: alt.languages },
     robots: { index: true, follow: true },
     openGraph: {
       title: "Subscription, Cancellation, and Refund Policy | NurseNest",
-      url: absoluteUrl(path),
+      url: alt.canonical,
       type: "website",
     },
   };

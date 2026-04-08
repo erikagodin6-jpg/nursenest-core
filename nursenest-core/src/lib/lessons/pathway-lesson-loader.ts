@@ -6,7 +6,9 @@ import {
 } from "@/lib/lessons/scoped-lessons/copd-gold-standard";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
+import type { PathwayLessonEducationalOverlay } from "@/lib/i18n/educational-content-overlay";
 import { applyPathwayLessonEducationalOverlay } from "@/lib/i18n/educational-content-overlay";
+import { fetchPublishedPathwayLessonOverlayMapSafe } from "@/lib/i18n/educational-translation-db";
 import { normalizePathwayLessonLocale, PATHWAY_LESSON_SITEMAP_LOCALE } from "@/lib/lessons/pathway-lesson-locale";
 import type {
   PathwayLessonFigure,
@@ -389,13 +391,19 @@ function withLocaleMeta(lesson: PathwayLessonRecord, meta: PathwayLessonLocaleMe
   return { ...lesson, localeMeta: meta };
 }
 
-/** File-based `educational-overlays/<locale>/lessons.json` on top of DB/catalog (slug or pathwayId:slug). */
+/** File-based `lessons.json` + optional DB-published overlays (slug or `pathwayId:slug`). */
 function applyLessonEducationalOverlay(
   lesson: PathwayLessonRecord,
   marketingLocale: string | undefined,
   pathwayId: string,
+  dbLessonOverlayBundle?: Record<string, PathwayLessonEducationalOverlay>,
 ): PathwayLessonRecord {
-  return applyPathwayLessonEducationalOverlay(lesson, normalizePathwayLessonLocale(marketingLocale), pathwayId);
+  return applyPathwayLessonEducationalOverlay(
+    lesson,
+    normalizePathwayLessonLocale(marketingLocale),
+    pathwayId,
+    dbLessonOverlayBundle,
+  );
 }
 
 function lessonLocaleMeta(
@@ -580,6 +588,7 @@ export async function getPathwayLessonsPage(
   const ps = clampPageSize(pageSize);
   const p = clampPage(page);
   const requested = normalizePathwayLessonLocale(marketingLocale);
+  const lessonDbOverlays = await fetchPublishedPathwayLessonOverlayMapSafe(requested);
   const topicSlugsIn = listOptions?.topicSlugsIn;
 
   const dbAny = await pathwayHasPublishedDbLessons(pathwayId);
@@ -624,7 +633,12 @@ export async function getPathwayLessonsPage(
     const meta = lessonLocaleMeta(marketingLocale, effective, requested !== effective, false);
     return {
       items: raw.map((row) =>
-        applyLessonEducationalOverlay(withLocaleMeta(normalizeLessonForHubList(row), meta), marketingLocale, pathwayId),
+        applyLessonEducationalOverlay(
+          withLocaleMeta(normalizeLessonForHubList(row), meta),
+          marketingLocale,
+          pathwayId,
+          lessonDbOverlays,
+        ),
       ),
       total,
       page: safePage,
@@ -655,7 +669,12 @@ export async function getPathwayLessonsPage(
   const catMeta = lessonLocaleMeta(marketingLocale, "en", requested !== "en", true);
   return {
     items: slice.map((row) =>
-      applyLessonEducationalOverlay(withLocaleMeta(normalizeLesson(row), catMeta), marketingLocale, pathwayId),
+      applyLessonEducationalOverlay(
+        withLocaleMeta(normalizeLesson(row), catMeta),
+        marketingLocale,
+        pathwayId,
+        lessonDbOverlays,
+      ),
     ),
     total,
     page: safePage,
@@ -683,6 +702,7 @@ export async function getLessonsForTopicPage(
   const ps = clampPageSize(pageSize);
   const p = clampPage(page);
   const requested = normalizePathwayLessonLocale(marketingLocale);
+  const lessonDbOverlays = await fetchPublishedPathwayLessonOverlayMapSafe(requested);
 
   const dbHas = await pathwayHasPublishedDbLessons(pathwayId);
   if (dbHas) {
@@ -726,6 +746,7 @@ export async function getLessonsForTopicPage(
               withLocaleMeta(normalizeLesson(row), metaCat),
               marketingLocale,
               pathwayId,
+              lessonDbOverlays,
             ),
           ),
           total: catMatched.length,
@@ -847,6 +868,7 @@ export async function getLessonsForTopicPage(
         withLocaleMeta(normalizeLessonForHubList(pathwayLessonRowToInput({ ...r, sections: [] })), meta),
         marketingLocale,
         pathwayId,
+        lessonDbOverlays,
       ),
     );
     const items =
@@ -856,6 +878,7 @@ export async function getLessonsForTopicPage(
               withLocaleMeta(normalizeLessonForHubList(goldHub), meta),
               marketingLocale,
               pathwayId,
+              lessonDbOverlays,
             ),
             ...dbItems,
           ]
@@ -892,7 +915,12 @@ export async function getLessonsForTopicPage(
   const catMeta = lessonLocaleMeta(marketingLocale, "en", requested !== "en", true);
   return {
     items: slice.map((row) =>
-      applyLessonEducationalOverlay(withLocaleMeta(normalizeLesson(row), catMeta), marketingLocale, pathwayId),
+      applyLessonEducationalOverlay(
+        withLocaleMeta(normalizeLesson(row), catMeta),
+        marketingLocale,
+        pathwayId,
+        lessonDbOverlays,
+      ),
     ),
     total,
     page: safePage,
@@ -914,6 +942,7 @@ export async function getPathwayLesson(
   marketingLocale?: string,
 ): Promise<PathwayLessonRecord | undefined> {
   const requested = normalizePathwayLessonLocale(marketingLocale);
+  const lessonDbOverlays = await fetchPublishedPathwayLessonOverlayMapSafe(requested);
 
   const rowRequested = await dbCall(
     () =>
@@ -932,6 +961,7 @@ export async function getPathwayLesson(
       ),
       marketingLocale,
       pathwayId,
+      lessonDbOverlays,
     );
   }
 
@@ -953,6 +983,7 @@ export async function getPathwayLesson(
         ),
         marketingLocale,
         pathwayId,
+        lessonDbOverlays,
       );
     }
   }
@@ -971,6 +1002,7 @@ export async function getPathwayLesson(
     withLocaleMeta(normalizeLesson(hit), lessonLocaleMeta(marketingLocale, "en", requested !== "en", true)),
     marketingLocale,
     pathwayId,
+    lessonDbOverlays,
   );
 }
 
@@ -1011,10 +1043,14 @@ export async function getPublishedPathwayLessonRecordById(
 ): Promise<PathwayLessonRecord | undefined> {
   const row = await dbCall(() => prisma.pathwayLesson.findUnique({ where: { id } }), null);
   if (!row || row.status !== ContentStatus.PUBLISHED) return undefined;
+  const lessonDbOverlays = await fetchPublishedPathwayLessonOverlayMapSafe(
+    normalizePathwayLessonLocale(marketingLocale),
+  );
   return applyLessonEducationalOverlay(
     normalizeLesson(pathwayLessonRowToInput(row)),
     marketingLocale,
     row.pathwayId,
+    lessonDbOverlays,
   );
 }
 
@@ -1028,6 +1064,7 @@ export async function getRelatedPathwayLessons(
 ): Promise<PathwayLessonRecord[]> {
   const cap = Math.min(24, Math.max(1, Math.floor(limit)));
   const requested = normalizePathwayLessonLocale(marketingLocale);
+  const lessonDbOverlays = await fetchPublishedPathwayLessonOverlayMapSafe(requested);
 
   const dbHas = await pathwayHasPublishedDbLessons(pathwayId);
   if (dbHas) {
@@ -1054,6 +1091,7 @@ export async function getRelatedPathwayLessons(
         withLocaleMeta(normalizeLessonForHubList(pathwayLessonRowToInput({ ...r, sections: [] })), meta),
         marketingLocale,
         pathwayId,
+        lessonDbOverlays,
       ),
     );
   }
@@ -1062,7 +1100,9 @@ export async function getRelatedPathwayLessons(
   return getCatalogPathwayLessonsSync(pathwayId)
     .filter((l) => l.topicSlug === topicSlug && l.slug !== excludeSlug)
     .slice(0, cap)
-    .map((l) => applyLessonEducationalOverlay(withLocaleMeta(l, catMeta), marketingLocale, pathwayId));
+    .map((l) =>
+      applyLessonEducationalOverlay(withLocaleMeta(l, catMeta), marketingLocale, pathwayId, lessonDbOverlays),
+    );
 }
 
 async function listPathwayIdsWithDbLessons(): Promise<string[]> {

@@ -36,6 +36,7 @@ import { QUESTION_PAYLOAD_WARN_BYTES } from "@/lib/questions/question-api-limits
 import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { mergeQuestionApiPayload } from "@/lib/i18n/educational-content-overlay";
+import { resolveMergedQuestionOverlayBundle } from "@/lib/i18n/educational-translation-db";
 import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
 
 const DEFAULT_POOL_LIMIT = Math.min(20, MAX_SESSION_QUESTION_IDS);
@@ -111,13 +112,14 @@ export async function POST(req: NextRequest) {
   await seedMinimalQuestionBankIfEmpty();
 
   const educationalLocale = getMarketingLocaleFromRequestCookie(req);
+  const questionOverlayBundle = await resolveMergedQuestionOverlayBundle(educationalLocale);
   const localizeStartQuestion = (q: {
     id: string;
     stem: string;
     options: unknown;
     questionType: unknown;
     difficulty: unknown;
-  }) => mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale);
+  }) => mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale, questionOverlayBundle);
 
   let examId: string | null = null;
   let hydrate: "full" | "window" = "window";

@@ -18,8 +18,8 @@ const MemoLessonTeaserGrid = memo(function MemoLessonTeaserGrid({ items }: { ite
             className="nn-marketing-card nn-marketing-card-pad flex h-full flex-col transition hover:border-primary/35 hover:bg-[var(--surface-interactive-hover)]"
           >
             <span className="nn-marketing-label nn-marketing-label--accent">{item.shortLabel}</span>
-            <span className="mt-1 text-sm font-semibold text-[var(--theme-heading-text)]">{item.title}</span>
-            <span className="mt-3 text-xs font-medium text-primary">{t("home.lessons.lessonHubCta")}</span>
+            <span className="nn-marketing-h4 mt-1">{item.title}</span>
+            <span className="nn-marketing-label nn-marketing-label--accent mt-3">{t("home.lessons.lessonHubCta")}</span>
           </Link>
         </li>
       ))}
@@ -63,7 +63,7 @@ export default function HomePageMidSections({ lessonTeasers }: Props) {
                 <div className="nn-accent-icon-wrap mt-0.5 h-8 w-8 shrink-0">
                   <item.icon className="nn-accent-icon h-4 w-4" />
                 </div>
-                <p className="text-sm leading-relaxed text-[var(--theme-body-text)]">{t(`home.hero.${item.key}`)}</p>
+                <p className="nn-marketing-body-sm">{t(`home.hero.${item.key}`)}</p>
               </div>
             ))}
           </div>
@@ -83,7 +83,7 @@ export default function HomePageMidSections({ lessonTeasers }: Props) {
             </div>
             <Link
               href={withMarketingLocale(locale, "/exam-lessons")}
-              className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-primary hover:underline"
+              className="nn-link-quiet inline-flex shrink-0 items-center gap-1 font-semibold text-[var(--theme-primary)] hover:underline"
             >
               <BookOpen className="h-4 w-4" />
               {t("home.lessons.allPathwaysCta")}

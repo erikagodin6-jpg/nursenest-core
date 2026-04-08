@@ -17,7 +17,7 @@ const patch = {
   "home.hero.trustMicroBadge": "US & Canadian scopes kept separate",
   "home.hero.authorityBadge": "Rationale on every scored option",
   "home.hero.ctaPrimary": "Start free trial",
-  "home.hero.ctaSecondary": "Browse practice questions",
+  "home.hero.ctaSecondary": "Browse exam question banks",
   "home.hero.ctaProofLine": "20,000+ pathway-scoped questions with clinical rationales and readiness tracking.",
   "home.hero.ctaInstant": "Start practicing instantly",
   "home.hero.ctaInstantHint":

@@ -31,7 +31,7 @@ export function HomeMarketingProductProof({ questionCount, lessonCount }: Props)
         </h2>
         <p className="nn-marketing-lead mt-2 text-[var(--theme-muted-text)]">{t("home.productProof.sub")}</p>
         {showStatsLine ? (
-          <p className="mt-3 text-sm font-medium text-[var(--theme-body-text)]">
+          <p className="nn-marketing-body-sm mt-3 font-medium">
             {t("home.productProof.statsLine", { questions: q!, lessons: l! })}
           </p>
         ) : null}
@@ -40,13 +40,11 @@ export function HomeMarketingProductProof({ questionCount, lessonCount }: Props)
       <div className="grid gap-6 lg:grid-cols-12" data-testid="home-product-proof">
         <div className="lg:col-span-7">
           <div className="nn-marketing-card nn-marketing-card-pad">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--theme-muted-text)]">
-              {t("home.productProof.sessionLabel")}
-            </p>
+            <p className="nn-marketing-label">{t("home.productProof.sessionLabel")}</p>
             <div className="mt-3 flex flex-wrap items-end justify-between gap-2">
               <div>
-                <p className="text-2xl font-bold tabular-nums text-[var(--theme-heading-text)]">{t("home.productProof.sessionPctExample")}</p>
-                <p className="text-xs text-[var(--theme-muted-text)]">{t("home.productProof.sessionSub")}</p>
+                <p className="nn-marketing-h3 tabular-nums">{t("home.productProof.sessionPctExample")}</p>
+                <p className="nn-marketing-caption">{t("home.productProof.sessionSub")}</p>
               </div>
               <span className="rounded-full border border-role-warning-border bg-role-warning-soft px-2.5 py-1 text-[11px] font-semibold text-role-warning-text">
                 {t("home.productProof.needsReview")}
@@ -74,24 +72,20 @@ export function HomeMarketingProductProof({ questionCount, lessonCount }: Props)
                 ))}
               </div>
             </div>
-            <p className="mt-2 text-[11px] text-[var(--theme-muted-text)]">{t("home.productProof.chartCaption")}</p>
+            <p className="nn-marketing-caption mt-2">{t("home.productProof.chartCaption")}</p>
           </div>
         </div>
 
         <div className="space-y-4 lg:col-span-5">
           <div className="nn-marketing-card nn-marketing-card-pad">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--theme-muted-text)]">
-              {t("home.productProof.rationaleLabel")}
-            </p>
-            <p className="mt-2 text-sm font-semibold text-[var(--theme-heading-text)]">{t("home.productProof.rationaleTitle")}</p>
-            <p className="mt-2 text-sm leading-relaxed text-[var(--theme-body-text)]">{t("home.productProof.rationaleBody")}</p>
+            <p className="nn-marketing-label">{t("home.productProof.rationaleLabel")}</p>
+            <p className="nn-marketing-h4 mt-2">{t("home.productProof.rationaleTitle")}</p>
+            <p className="nn-marketing-body-sm mt-2">{t("home.productProof.rationaleBody")}</p>
           </div>
           <div className="nn-marketing-card nn-marketing-card-pad bg-[var(--bg-inset)]">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--theme-muted-text)]">
-              {t("home.productProof.stemLabel")}
-            </p>
-            <p className="mt-2 text-sm italic leading-relaxed text-[var(--theme-body-text)]">{t("home.productProof.stemQuote")}</p>
-            <p className="mt-3 text-xs text-[var(--theme-muted-text)]">{t("home.productProof.stemNote")}</p>
+            <p className="nn-marketing-label">{t("home.productProof.stemLabel")}</p>
+            <p className="nn-marketing-body-sm mt-2 italic">{t("home.productProof.stemQuote")}</p>
+            <p className="nn-marketing-caption mt-3">{t("home.productProof.stemNote")}</p>
           </div>
         </div>
       </div>
