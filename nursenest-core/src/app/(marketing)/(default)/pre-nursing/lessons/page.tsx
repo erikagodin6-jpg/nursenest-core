@@ -67,7 +67,7 @@ export default async function PreNursingLessonsHubPage({ searchParams }: Props) 
         <header className="mb-10">
           <p className="text-xs font-semibold uppercase tracking-wide text-primary">Free · Pre-Nursing</p>
           <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)] sm:text-4xl">
-            Lessons &amp; modules
+            Pre-nursing lessons &amp; modules
           </h1>
           <p className="mt-3 max-w-2xl text-muted">
             Every card opens a full interactive module. This list is paginated so we never ship the entire catalog in one

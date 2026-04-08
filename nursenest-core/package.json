@@ -30,6 +30,7 @@
     "i18n:sync-required-nav-keys": "node scripts/sync-required-nav-keys-all-locales.mjs",
     "i18n:apply-nav-manual": "node scripts/nav-i18n-manual-overrides.mjs",
     "i18n:patch-nav-five-carryover": "node scripts/patch-nav-five-carryover-locales.mjs",
+    "i18n:sync-nursing-tier-parity": "node scripts/sync-nursing-tier-parity-all-locales.mjs",
     "db:generate": "prisma generate",
     "db:deploy": "prisma migrate deploy",
     "db:validate": "prisma validate",

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "title": "Question bank expansion targets — scoped gold lessons (waves 1–2)",
+  "title": "Question bank expansion targets — scoped gold lessons (waves 1–3)",
   "lessons": [
     {
       "lessonSlug": "clinical-judgment-prioritization-gold",
@@ -101,6 +101,62 @@
       "metadataSignals": [
         "Cardiovascular body_system and topic slugs",
         "management_of_care for prioritization multi-patient items tied to ACS"
+      ]
+    },
+    {
+      "lessonSlug": "stroke-increased-icp-gold",
+      "topicSlug": "neurological",
+      "wave": 3,
+      "blueprintDomains": ["physiological_adaptation", "management_of_care", "safety_and_infection"],
+      "clinicalSystems": ["neuro"],
+      "questionThemes": [
+        "FAST / acute focal deficit — EMS activation and time-last-known-well",
+        "tPA eligibility framing: BP parameters, contraindications, post-tPA neuro checks (exam-level)",
+        "ICP: Cushing triad, pupil changes, seizure precautions, positioning per order",
+        "LP contraindication when mass effect/herniation risk before imaging",
+        "Posterior circulation and stroke mimics (hypoglycemia, migraine) when stem differentiates",
+        "NP: TIA same-day workup vs reassurance; anticoagulation stroke prevention themes"
+      ],
+      "metadataSignals": [
+        "Neurological topic/body_system for pathway rollup",
+        "management_of_care for multi-patient stroke vs stable client prioritization"
+      ]
+    },
+    {
+      "lessonSlug": "shock-emergencies-gold",
+      "topicSlug": "shock",
+      "wave": 3,
+      "blueprintDomains": ["physiological_adaptation", "management_of_care", "pharmacological_therapies"],
+      "clinicalSystems": ["cardio", "infection_sepsis", "fluids_electrolytes"],
+      "questionThemes": [
+        "Hypovolemic/hemorrhagic vs cardiogenic vs obstructive vs distributive recognition",
+        "Septic shock: early antibiotics, fluids, vasopressor teaching per Surviving Sepsis-style stems",
+        "Anaphylaxis: epinephrine first, airway, repeat dosing per protocol",
+        "Vasopressor extravasation and infusion safety",
+        "Canadian: mmol/L lactate, MAP in mmHg, massive transfusion / reaction monitoring",
+        "NP: clinic triage — who needs EMS for hypotension or bleeding"
+      ],
+      "metadataSignals": [
+        "Tag shock topic and cardio/perfusion language for inferClinicalSystemForRow",
+        "Include vasopressor/antibiotic cues for medication breadth when items add drugs"
+      ]
+    },
+    {
+      "lessonSlug": "canadian-rpn-scope-collaboration-gold",
+      "topicSlug": "delegation",
+      "wave": 3,
+      "blueprintDomains": ["management_of_care", "safety_and_infection"],
+      "clinicalSystems": ["general", "neuro", "gi"],
+      "questionThemes": [
+        "REx-PN scope: medication administration, IV authority, controlled acts — clarify vs guess",
+        "SBAR and interprofessional handoff; unsafe assignment escalation",
+        "Fraudulent documentation, abuse/neglect reporting, infection control leadership within role",
+        "US RN / CA RN: delegation to LPN/RPN, five rights of delegation, unstable client assignment",
+        "NP: clear orders and parameters for practical nursing staff; collaborative agreement boundaries"
+      ],
+      "metadataSignals": [
+        "delegation topic slug and management_of_care client-need tagging",
+        "Region_scope CA for RPN-heavy stems; US parallels for LPN comparison items"
       ]
     }
   ]

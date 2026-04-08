@@ -15,6 +15,7 @@ import {
 } from "@/lib/allied/allied-professions-registry";
 import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
 import { getPathwayLessonsPage, PATHWAY_HUB_PAGE_SIZE_MAX } from "@/lib/lessons/pathway-lesson-loader";
+import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
 import { alliedLessonsHubBreadcrumbs } from "@/lib/seo/allied-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
@@ -132,7 +133,7 @@ export default async function AlliedHealthSlugLessonsPage({ params, searchParams
         <Link href={professionHeroPath} className="text-sm font-medium text-primary hover:underline">
           ← {prof.h1}
         </Link>
-        <h1 className="mt-4 text-3xl font-bold text-[var(--theme-heading-text)]">Lessons</h1>
+        <h1 className="mt-4 text-3xl font-bold text-[var(--theme-heading-text)]">Lessons · {prof.h1}</h1>
         <p className="mt-3 text-muted">
           No published lessons for this filter yet. Check back after import, or browse the full pathway hub.
         </p>
@@ -150,7 +151,7 @@ export default async function AlliedHealthSlugLessonsPage({ params, searchParams
     redirect(pageResult.page > 1 ? `${base}?page=${pageResult.page}` : base);
   }
 
-  const lessons = pageResult.items;
+  const lessons = pageResult.items.filter(pathwayLessonHasRenderableHubSlug);
   const { crumbs, schemaItems } = alliedLessonsHubBreadcrumbs(prof.h1, professionHeroPath, base, pageResult.page);
 
   return (
@@ -172,7 +173,9 @@ export default async function AlliedHealthSlugLessonsPage({ params, searchParams
         {pageResult.locale ? <PathwayLessonContentLocaleBanner listLocale={pageResult.locale} /> : null}
 
         <section className="mt-10">
-          <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">All lessons</h2>
+          <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">
+            All {prof.h1} lessons · {pathway.shortName}
+          </h2>
           <ul className="mt-4 space-y-4">
             {lessons.map((l) => (
               <li key={l.slug} className="nn-card p-4">

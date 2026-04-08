@@ -1,11 +1,17 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { ACS_GOLD_SLUG, getAcsGoldLessonInput } from "./acute-coronary-syndrome-gold-standard";
+import {
+  CANADIAN_RPN_HIGH_YIELD_GOLD_SLUG,
+  getCanadianRpnHighYieldGoldLessonInput,
+} from "./canadian-rpn-high-yield-gold-standard";
 import { CLINICAL_JUDGMENT_GOLD_SLUG, getClinicalJudgmentGoldLessonInput } from "./clinical-judgment-prioritization-gold-standard";
 import { FLUIDS_ELECTROLYTES_GOLD_SLUG, getFluidsElectrolytesGoldLessonInput } from "./fluids-electrolytes-emergencies-gold-standard";
 import { HIGH_ALERT_MEDS_GOLD_SLUG, getHighAlertMedsGoldLessonInput } from "./high-alert-medications-gold-standard";
 import { SEPSIS_GOLD_SLUG, getSepsisGoldLessonInput } from "./sepsis-early-recognition-gold-standard";
 import { prependScopedGoldCatalogLessons, SCOPED_GOLD_PROVIDERS } from "./scoped-gold-registry";
+import { SHOCK_GOLD_SLUG, getShockGoldLessonInput } from "./shock-gold-standard";
+import { STROKE_ICP_GOLD_SLUG, getStrokeIcpGoldLessonInput } from "./stroke-increased-icp-gold-standard";
 
 const CORE_NURSING_PATHWAYS = [
   "us-lpn-nclex-pn",
@@ -26,7 +32,7 @@ const KINDS = new Set([
 ]);
 
 describe("scoped gold registry", () => {
-  it("registry lists injectable slugs in remediation order (waves 1–2 + COPD)", () => {
+  it("registry lists injectable slugs in remediation order (waves 1–3 + COPD)", () => {
     assert.deepEqual(
       SCOPED_GOLD_PROVIDERS.map((p) => p.slug),
       [
@@ -35,6 +41,9 @@ describe("scoped gold registry", () => {
         FLUIDS_ELECTROLYTES_GOLD_SLUG,
         ACS_GOLD_SLUG,
         HIGH_ALERT_MEDS_GOLD_SLUG,
+        STROKE_ICP_GOLD_SLUG,
+        SHOCK_GOLD_SLUG,
+        CANADIAN_RPN_HIGH_YIELD_GOLD_SLUG,
         "copd-clinical-judgment-gold",
       ],
     );
@@ -136,6 +145,51 @@ describe("high-alert medications gold standard", () => {
   it("all pathways have full lesson", () => {
     for (const pid of CORE_NURSING_PATHWAYS) {
       assertLessonQuality(getHighAlertMedsGoldLessonInput(pid)!);
+    }
+  });
+});
+
+describe("stroke & increased ICP gold standard", () => {
+  it("topic and slug stable", () => {
+    const lesson = getStrokeIcpGoldLessonInput("us-rn-nclex-rn");
+    assert.ok(lesson);
+    assert.equal(lesson!.slug, STROKE_ICP_GOLD_SLUG);
+    assert.equal(lesson!.topicSlug, "neurological");
+  });
+
+  it("all pathways have full lesson", () => {
+    for (const pid of CORE_NURSING_PATHWAYS) {
+      assertLessonQuality(getStrokeIcpGoldLessonInput(pid)!);
+    }
+  });
+});
+
+describe("shock gold standard", () => {
+  it("topic and slug stable", () => {
+    const lesson = getShockGoldLessonInput("ca-rn-nclex-rn");
+    assert.ok(lesson);
+    assert.equal(lesson!.slug, SHOCK_GOLD_SLUG);
+    assert.equal(lesson!.topicSlug, "shock");
+  });
+
+  it("all pathways have full lesson", () => {
+    for (const pid of CORE_NURSING_PATHWAYS) {
+      assertLessonQuality(getShockGoldLessonInput(pid)!);
+    }
+  });
+});
+
+describe("Canadian RPN scope & collaboration gold standard", () => {
+  it("topic and slug stable", () => {
+    const lesson = getCanadianRpnHighYieldGoldLessonInput("ca-rpn-rex-pn");
+    assert.ok(lesson);
+    assert.equal(lesson!.slug, CANADIAN_RPN_HIGH_YIELD_GOLD_SLUG);
+    assert.equal(lesson!.topicSlug, "delegation");
+  });
+
+  it("all pathways have full lesson", () => {
+    for (const pid of CORE_NURSING_PATHWAYS) {
+      assertLessonQuality(getCanadianRpnHighYieldGoldLessonInput(pid)!);
     }
   });
 });

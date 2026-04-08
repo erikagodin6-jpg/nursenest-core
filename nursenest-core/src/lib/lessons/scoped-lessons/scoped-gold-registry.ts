@@ -33,6 +33,21 @@ import {
   SEPSIS_GOLD_SLUG,
   sepsisGoldHubListInput,
 } from "@/lib/lessons/scoped-lessons/sepsis-early-recognition-gold-standard";
+import {
+  canadianRpnHighYieldGoldHubListInput,
+  CANADIAN_RPN_HIGH_YIELD_GOLD_SLUG,
+  getCanadianRpnHighYieldGoldLessonInput,
+} from "@/lib/lessons/scoped-lessons/canadian-rpn-high-yield-gold-standard";
+import {
+  getShockGoldLessonInput,
+  SHOCK_GOLD_SLUG,
+  shockGoldHubListInput,
+} from "@/lib/lessons/scoped-lessons/shock-gold-standard";
+import {
+  getStrokeIcpGoldLessonInput,
+  STROKE_ICP_GOLD_SLUG,
+  strokeIcpGoldHubListInput,
+} from "@/lib/lessons/scoped-lessons/stroke-increased-icp-gold-standard";
 
 /** Minimal lesson row shape for catalog merge (matches pathway-lesson-loader `LessonInput`). */
 export type ScopedGoldLessonInput = {
@@ -56,7 +71,7 @@ export type ScopedGoldProvider = {
   getHubListRow: (pathwayId: string) => Omit<ScopedGoldLessonInput, "sections" | "preTest" | "postTest"> | null;
 };
 
-/** Highest-yield remediation wave first; COPD legacy gold remains in rotation. */
+/** Highest-yield remediation wave first; wave 3 neuro/shock/RPN slice; COPD legacy gold remains last. */
 export const SCOPED_GOLD_PROVIDERS: ScopedGoldProvider[] = [
   {
     slug: CLINICAL_JUDGMENT_GOLD_SLUG,
@@ -87,6 +102,24 @@ export const SCOPED_GOLD_PROVIDERS: ScopedGoldProvider[] = [
     topicSlug: "medication-safety",
     getFullLesson: getHighAlertMedsGoldLessonInput,
     getHubListRow: highAlertMedsGoldHubListInput,
+  },
+  {
+    slug: STROKE_ICP_GOLD_SLUG,
+    topicSlug: "neurological",
+    getFullLesson: getStrokeIcpGoldLessonInput,
+    getHubListRow: strokeIcpGoldHubListInput,
+  },
+  {
+    slug: SHOCK_GOLD_SLUG,
+    topicSlug: "shock",
+    getFullLesson: getShockGoldLessonInput,
+    getHubListRow: shockGoldHubListInput,
+  },
+  {
+    slug: CANADIAN_RPN_HIGH_YIELD_GOLD_SLUG,
+    topicSlug: "delegation",
+    getFullLesson: getCanadianRpnHighYieldGoldLessonInput,
+    getHubListRow: canadianRpnHighYieldGoldHubListInput,
   },
   {
     slug: COPD_GOLD_STANDARD_SLUG,

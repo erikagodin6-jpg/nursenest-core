@@ -12,6 +12,7 @@ import {
   getLessonsForTopicPage,
   listTopicClusters,
 } from "@/lib/lessons/pathway-lesson-loader";
+import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
 import { pathwayTopicClusterBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
@@ -68,7 +69,7 @@ export default async function PathwayLessonTopicClusterPage({ params, searchPara
     redirect(pageResult.page > 1 ? `${topicBase}?page=${pageResult.page}` : topicBase);
   }
 
-  const lessons = pageResult.items;
+  const lessons = pageResult.items.filter(pathwayLessonHasRenderableHubSlug);
   const topicClusters = await listTopicClusters(pathway.id, lessonContentLocale);
   const label = topicClusters.find((t) => t.topicSlug === topicSlug)?.label ?? topicSlug;
   const { crumbs, schemaItems } = pathwayTopicClusterBreadcrumbs(pathway, topicSlug, label);
@@ -83,7 +84,9 @@ export default async function PathwayLessonTopicClusterPage({ params, searchPara
         ← All lessons ({pathway.shortName})
       </Link>
       <p className="mt-3 text-xs font-semibold uppercase text-primary">{pathway.displayName}</p>
-      <h1 className="mt-2 text-3xl font-extrabold text-[var(--theme-heading-text)]">{label}</h1>
+      <h1 className="mt-2 text-3xl font-extrabold text-[var(--theme-heading-text)]">
+        {label} · {pathway.shortName}
+      </h1>
       <p className="mt-3 text-[var(--theme-muted-text)]">
         SEO cluster for {pathway.shortName}: lessons in this topic stay in the {pathway.countryCode} / {pathway.roleTrack}{" "}
         track, with no cross-mix with other exams or countries.
