@@ -4,21 +4,12 @@
  *
  * Paths stay aligned with `marketing-entry-routes.ts` and programmatic SEO slugs — do not rename routes here.
  *
- * **Strip vs hero:** `getExamNavStripItems` uses programmatic / brochure entry URLs (SEO, overview).
- * `getExamPathwayHeroItems` uses in-app question-bank entry URLs (conversion). Order is always
- * RN → PN → NP → Allied (`EXAM_PATHWAY_ORDER`).
+ * **Strip vs hero:** Both point at canonical pathway hub URLs (exam first, then study modes on the hub).
+ * Order is always RN → PN → NP → Allied (`EXAM_PATHWAY_ORDER`).
  */
+import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
-import {
-  ALLIED,
-  RN,
-  alliedQuestions,
-  npNpQuestionsForRegion,
-  npPracticeProgrammatic,
-  pnPracticeProgrammatic,
-  pnQuestions,
-  rnQuestions,
-} from "@/lib/marketing/marketing-entry-routes";
+import { RN, alliedHub, npPracticeProgrammatic, pnPrimaryHub } from "@/lib/marketing/marketing-entry-routes";
 
 export type CountryExamOfferingId = "rn" | "pn" | "np" | "allied";
 
@@ -29,7 +20,7 @@ export type ExamNavStripItem = {
   href: string;
 };
 
-/** Same shape as strip items; hero uses question-bank hrefs and `home.quickEntry.*` label keys. */
+/** Same shape as strip items; hero uses `home.quickEntry.*` label keys and hub hrefs. */
 export type ExamPathwayHeroItem = ExamNavStripItem;
 
 /**
@@ -37,28 +28,51 @@ export type ExamPathwayHeroItem = ExamNavStripItem;
  */
 export const EXAM_PATHWAY_ORDER: readonly CountryExamOfferingId[] = ["rn", "pn", "np", "allied"];
 
+/** Primary marketing landing for each exam (pathway hub root, not programmatic SEO slugs). */
+export function marketingExamHubPath(region: MarketingRegionToggle, id: CountryExamOfferingId): string {
+  const isUs = region === "US";
+  switch (id) {
+    case "rn": {
+      const p = getExamPathwayById(isUs ? "us-rn-nclex-rn" : "ca-rn-nclex-rn");
+      return p ? buildExamPathwayPath(p) : RN.practiceProgrammatic;
+    }
+    case "pn":
+      return pnPrimaryHub(region);
+    case "np": {
+      const p = getExamPathwayById(isUs ? "us-np-fnp" : "ca-np-cnple");
+      return p ? buildExamPathwayPath(p) : npPracticeProgrammatic(region);
+    }
+    case "allied":
+      return alliedHub(region);
+    default: {
+      const _exhaustive: never = id;
+      return _exhaustive;
+    }
+  }
+}
+
 function examNavStripItemFor(region: MarketingRegionToggle, id: CountryExamOfferingId): ExamNavStripItem {
   const isUs = region === "US";
   switch (id) {
     case "rn":
-      return { id: "rn", labelKey: "nav.examStrip.rn", href: RN.practiceProgrammatic };
+      return { id: "rn", labelKey: "nav.examStrip.rn", href: marketingExamHubPath(region, "rn") };
     case "pn":
       return {
         id: "pn",
         labelKey: isUs ? "nav.examStrip.pnUS" : "nav.examStrip.pnCA",
-        href: pnPracticeProgrammatic(region),
+        href: marketingExamHubPath(region, "pn"),
       };
     case "np":
       return {
         id: "np",
         labelKey: isUs ? "nav.examStrip.npUS" : "nav.examStrip.npCA",
-        href: npPracticeProgrammatic(region),
+        href: marketingExamHubPath(region, "np"),
       };
     case "allied":
       return {
         id: "allied",
         labelKey: isUs ? "nav.examStrip.alliedUS" : "nav.examStrip.alliedCA",
-        href: ALLIED.marketingLanding(),
+        href: marketingExamHubPath(region, "allied"),
       };
     default: {
       const _exhaustive: never = id;
@@ -71,24 +85,24 @@ function examPathwayHeroItemFor(region: MarketingRegionToggle, id: CountryExamOf
   const isUs = region === "US";
   switch (id) {
     case "rn":
-      return { id: "rn", labelKey: "home.quickEntry.rnQuestions", href: rnQuestions(region) };
+      return { id: "rn", labelKey: "home.quickEntry.rnQuestions", href: marketingExamHubPath(region, "rn") };
     case "pn":
       return {
         id: "pn",
         labelKey: isUs ? "home.quickEntry.pnQuestionsUS" : "home.quickEntry.pnQuestionsCA",
-        href: pnQuestions(region),
+        href: marketingExamHubPath(region, "pn"),
       };
     case "np":
       return {
         id: "np",
         labelKey: isUs ? "home.quickEntry.npQuestionsUS" : "home.quickEntry.npQuestionsCA",
-        href: npNpQuestionsForRegion(region),
+        href: marketingExamHubPath(region, "np"),
       };
     case "allied":
       return {
         id: "allied",
         labelKey: isUs ? "home.quickEntry.alliedUS" : "home.quickEntry.alliedCA",
-        href: alliedQuestions(region),
+        href: marketingExamHubPath(region, "allied"),
       };
     default: {
       const _exhaustive: never = id;
@@ -101,7 +115,7 @@ export function getExamNavStripItems(region: MarketingRegionToggle): ExamNavStri
   return EXAM_PATHWAY_ORDER.map((id) => examNavStripItemFor(region, id));
 }
 
-/** Hero / quick-entry row: same order and labels as the nav strip, question-bank hrefs for conversion. */
+/** Hero / quick-entry row: same order and labels as the nav strip; links go to each exam hub. */
 export function getExamPathwayHeroItems(region: MarketingRegionToggle): ExamPathwayHeroItem[] {
   return EXAM_PATHWAY_ORDER.map((id) => examPathwayHeroItemFor(region, id));
 }

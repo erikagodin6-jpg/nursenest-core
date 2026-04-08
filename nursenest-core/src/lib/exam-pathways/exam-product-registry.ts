@@ -226,12 +226,19 @@ for (const p of EXAM_PATHWAYS) {
   byId.set(p.id, p);
 }
 
+/** Normalize marketing hub URL segments (case/whitespace) so registry lookups match Prisma-backed rows. */
+function normalizeMarketingHubSegment(segment: string): string {
+  return segment.trim().toLowerCase();
+}
+
 export function getExamPathwayByRoute(
   countrySlug: string,
   roleTrack: string,
   examCode: string,
 ): ExamPathwayDefinition | undefined {
-  return byRoute.get(`${countrySlug}/${roleTrack}/${examCode}`);
+  return byRoute.get(
+    `${normalizeMarketingHubSegment(countrySlug)}/${normalizeMarketingHubSegment(roleTrack)}/${normalizeMarketingHubSegment(examCode)}`,
+  );
 }
 
 /**
@@ -244,10 +251,19 @@ export function resolveExamPathwayFromMarketingHubSegment(
   segment: string,
 ): ExamPathwayDefinition | undefined {
   const direct = getExamPathwayByRoute(countrySlug, roleTrack, segment);
-  if (direct) return direct;
-  const seo = getNpPracticeTestLandingCopy(countrySlug, roleTrack, segment);
+  if (direct) {
+    if (direct.status === "hidden") return undefined;
+    return direct;
+  }
+  const seo = getNpPracticeTestLandingCopy(
+    normalizeMarketingHubSegment(countrySlug),
+    normalizeMarketingHubSegment(roleTrack),
+    normalizeMarketingHubSegment(segment),
+  );
   if (!seo) return undefined;
-  return getExamPathwayById(seo.pathwayId);
+  const aliased = getExamPathwayById(seo.pathwayId);
+  if (!aliased || aliased.status === "hidden") return undefined;
+  return aliased;
 }
 
 export function getExamPathwayById(id: string): ExamPathwayDefinition | undefined {

@@ -45,8 +45,6 @@ export function SiteHeader() {
 
   const marketingNav = [
     { href: "/lessons", labelKey: "nav.exams" as const },
-    { href: "/question-bank", labelKey: "nav.questionBank" as const },
-    { href: "/practice-exams", labelKey: "nav.practiceExams" as const },
     { href: "/pricing", labelKey: "nav.pricing" as const },
     { href: "/faq", labelKey: "footer.faq" as const },
   ];

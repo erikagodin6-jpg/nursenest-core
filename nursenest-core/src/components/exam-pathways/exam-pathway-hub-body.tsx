@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, BookOpen, ClipboardList, GraduationCap, LayoutList } from "lucide-react";
+import { ArrowRight, ClipboardList, GraduationCap } from "lucide-react";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
+import { ExamPathwayHubStudyModes } from "@/components/exam-pathways/exam-pathway-hub-study-modes";
 import { pathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-analytics-props";
+import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 
 type Props = {
@@ -37,6 +39,7 @@ export function ExamPathwayHubBody({
   const tertiaryHref = isSignedIn ? "/app" : pricingHref;
   const tertiaryLabel = isSignedIn ? "Open your study hub" : "Plans & pricing";
   const linkCtx = pathwayMarketingHubLinkContext(pathway, npSeoAliasSegment);
+  const practiceEntryHref = loginWithCallback(emphasizeCatPracticeTests ? "/app/practice-tests" : "/app/exams");
 
   return (
     <>
@@ -87,6 +90,14 @@ export function ExamPathwayHubBody({
           {tertiaryLabel}
         </MarketingTrackedLink>
       </div>
+
+      <ExamPathwayHubStudyModes
+        pathway={pathway}
+        lessonsHref={lessonsHref}
+        questionsHref={questionsHref}
+        emphasizeCatPracticeTests={emphasizeCatPracticeTests}
+        npSeoAliasSegment={npSeoAliasSegment}
+      />
 
       {emphasizeCatPracticeTests ? (
         <div className="mt-6 rounded-xl border border-primary/20 bg-primary/5 px-4 py-4 text-sm text-[var(--theme-body-text)] sm:px-5">
@@ -199,54 +210,6 @@ export function ExamPathwayHubBody({
       <ul className="mt-6 grid gap-4 sm:grid-cols-2">
         <li>
           <MarketingTrackedLink
-            href={questionsHref}
-            event={PH.marketingPathwayHubCta}
-            eventProps={{
-              ...linkCtx,
-              surface: "card_questions",
-              pathway_id: pathway.id,
-              destination_type: "marketing_questions",
-              link_target: "marketing_questions_hub",
-            }}
-            className="flex h-full min-h-[11rem] flex-col rounded-2xl border border-[var(--theme-card-border)] bg-card p-5 shadow-sm transition hover:border-primary/30 hover:shadow-[var(--shadow-card)] sm:min-h-[12rem]"
-          >
-            <LayoutList className="h-5 w-5 text-primary" aria-hidden />
-            <span className="mt-3 text-base font-bold text-[var(--theme-heading-text)]">Question bank hub</span>
-            <span className="mt-2 text-sm text-[var(--theme-body-text)]">
-              Topic runs, rationales, and pathway filters. Best first stop when you have ten to twenty minutes.
-            </span>
-            <span className="mt-auto inline-flex items-center pt-4 text-sm font-semibold text-primary">
-              Open bank
-              <ArrowRight className="ml-1 h-4 w-4" />
-            </span>
-          </MarketingTrackedLink>
-        </li>
-        <li>
-          <MarketingTrackedLink
-            href={lessonsHref}
-            event={PH.marketingPathwayHubCta}
-            eventProps={{
-              ...linkCtx,
-              surface: "card_lessons",
-              pathway_id: pathway.id,
-              destination_type: "marketing_lessons",
-              link_target: "marketing_lessons_hub",
-            }}
-            className="flex h-full min-h-[11rem] flex-col rounded-2xl border border-[var(--theme-card-border)] bg-card p-5 shadow-sm transition hover:border-primary/30 hover:shadow-[var(--shadow-card)] sm:min-h-[12rem]"
-          >
-            <BookOpen className="h-5 w-5 text-primary" aria-hidden />
-            <span className="mt-3 text-base font-bold text-[var(--theme-heading-text)]">Exam lessons</span>
-            <span className="mt-2 text-sm text-[var(--theme-body-text)]">
-              Blueprint-style hubs for the systems and safety topics that show up most on your form of the exam.
-            </span>
-            <span className="mt-auto inline-flex items-center pt-4 text-sm font-semibold text-primary">
-              Open lessons
-              <ArrowRight className="ml-1 h-4 w-4" />
-            </span>
-          </MarketingTrackedLink>
-        </li>
-        <li>
-          <MarketingTrackedLink
             href={pricingHref}
             event={PH.marketingPathwayHubCta}
             eventProps={{
@@ -272,14 +235,14 @@ export function ExamPathwayHubBody({
         </li>
         <li>
           <MarketingTrackedLink
-            href="/app/exams"
+            href={practiceEntryHref}
             event={PH.marketingPathwayHubCta}
             eventProps={{
               ...linkCtx,
               surface: "card_timed_exams",
               pathway_id: pathway.id,
               destination_type: "marketing_timed_exams",
-              link_target: "marketing_timed_exams",
+              link_target: emphasizeCatPracticeTests ? "app_practice_tests" : "app_exams",
             }}
             className="flex h-full min-h-[11rem] flex-col rounded-2xl border border-[var(--theme-card-border)] bg-card p-5 shadow-sm transition hover:border-primary/30 hover:shadow-[var(--shadow-card)] sm:min-h-[12rem]"
           >

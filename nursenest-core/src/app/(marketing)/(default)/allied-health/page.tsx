@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import {
   type AlliedHealthHubCopy,
   AlliedHealthRegionStrip,
@@ -79,7 +80,7 @@ export default async function AlliedHealthHubPage() {
   const usAllied = getExamPathwayById("us-allied-core");
   const caAllied = getExamPathwayById("ca-allied-core");
   if (!usAllied || !caAllied) {
-    throw new Error("Allied exam pathways (us-allied-core / ca-allied-core) must exist in the product registry.");
+    notFound();
   }
 
   const locale = await getMarketingLocaleForDefaultRoute();
