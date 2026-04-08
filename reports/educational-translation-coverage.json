@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-08T14:35:25.752Z",
+  "generatedAt": "2026-04-08T14:38:37.782Z",
   "pathwayCatalog": {
     "distinctPathwaySlugCompoundKeys": 382,
     "distinctSlugsAcrossPathways": 253
@@ -19,6 +19,7 @@
     },
     "fr": {
       "hasLessonsFile": true,
+      "lessonOverlayKeys": 16,
       "questionOverlayKeys": 0,
       "flashcardDeckKeys": 0,
       "flashcardCardKeys": 0,
@@ -26,6 +27,7 @@
     },
     "tl": {
       "hasLessonsFile": true,
+      "lessonOverlayKeys": 16,
       "questionOverlayKeys": 0,
       "flashcardDeckKeys": 0,
       "flashcardCardKeys": 0,
@@ -41,6 +43,7 @@
     },
     "es": {
       "hasLessonsFile": true,
+      "lessonOverlayKeys": 16,
       "questionOverlayKeys": 0,
       "flashcardDeckKeys": 0,
       "flashcardCardKeys": 0,

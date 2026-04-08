@@ -50,8 +50,8 @@ export default async function PracticeExamsHubPage() {
     <div className="mx-auto flex max-w-3xl flex-col gap-[var(--nn-rhythm-section-y)] nn-marketing-x nn-rhythm-page">
       <BreadcrumbJsonLd
         items={[
-          { name: "Home", path: "/" },
-          { name: "Practice exams", path: "/practice-exams" },
+          { name: t("nav.home"), path: "/" },
+          { name: t("pages.publicPracticeExams.breadcrumbCurrent"), path: "/practice-exams" },
         ]}
       />
       <nav className="text-sm text-[var(--theme-muted-text)]" aria-label="Breadcrumb">
@@ -78,54 +78,41 @@ export default async function PracticeExamsHubPage() {
 
       <section className="nn-card p-5" aria-labelledby="timed-mocks">
         <h2 id="timed-mocks" className="text-lg font-semibold text-[var(--theme-heading-text)]">
-          Timed mock exams
+          {t("pages.publicPracticeExams.sectionTimedMocksTitle")}
         </h2>
-        <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
-          Full-length or section-timed attempts with review of rationales and history—available to subscribers in the app for their
-          entitled pathway. Use this when you want exam-day pacing and a score-oriented pass.
-        </p>
+        <p className="mt-2 text-sm text-[var(--theme-muted-text)]">{t("pages.publicPracticeExams.sectionTimedMocksBody")}</p>
       </section>
 
       <section className="nn-card p-5" aria-labelledby="cat-practice">
         <h2 id="cat-practice" className="text-lg font-semibold text-[var(--theme-heading-text)]">
-          Topic practice tests & CAT-style sessions
+          {t("pages.publicPracticeExams.sectionCatTitle")}
         </h2>
         <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
-          For supported pathways, NurseNest also offers <strong className="font-semibold text-[var(--theme-heading-text)]">topic-level</strong>{" "}
-          practice tests in the app, including adaptive (CAT-style) sessions where the product implements them. Availability varies by
-          pathway and content pack—open{" "}
+          {t("pages.publicPracticeExams.catP1")}
+          <strong className="font-semibold text-[var(--theme-heading-text)]">{t("pages.publicPracticeExams.catP1Strong")}</strong>
+          {t("pages.publicPracticeExams.catP2")}
           <Link href={appPracticeTests} className="font-semibold text-primary underline">
-            practice tests
-          </Link>{" "}
-          after sign-in to see what your subscription includes. This is not a substitute for official NCLEX or board scheduling or
-          rules.
+            {t("pages.publicPracticeExams.catLinkPracticeTests")}
+          </Link>
+          {t("pages.publicPracticeExams.catP3")}
         </p>
       </section>
 
       <section className="nn-card p-5" aria-labelledby="pathway-sections">
         <h2 id="pathway-sections" className="text-lg font-semibold text-[var(--theme-heading-text)]">
-          RN, PN, NP, and Allied
+          {t("pages.publicPracticeExams.sectionPathwaysTitle")}
         </h2>
         <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-[var(--theme-muted-text)]">
-          <li>
-            <strong className="text-[var(--theme-heading-text)]">RN / PN:</strong> Mocks and drills align to NCLEX-RN, NCLEX-PN, or
-            REx-PN context for your region.
-          </li>
-          <li>
-            <strong className="text-[var(--theme-heading-text)]">NP:</strong> Advanced practice mocks are specialty-scoped (for example
-            FNP vs PMHNP)—always enter from your NP pathway in the app.
-          </li>
-          <li>
-            <strong className="text-[var(--theme-heading-text)]">Allied:</strong> Timed practice follows allied certification framing for
-            your hub—not nursing NCLEX content.
-          </li>
+          <li>{t("pages.publicPracticeExams.pathwayRnPnBullet")}</li>
+          <li>{t("pages.publicPracticeExams.pathwayNpBullet")}</li>
+          <li>{t("pages.publicPracticeExams.pathwayAlliedBullet")}</li>
         </ul>
         <p className="mt-4 text-sm text-[var(--theme-muted-text)]">
-          Start from your public lessons hub if you are still choosing a track:{" "}
+          {t("pages.publicPracticeExams.sectionPathwaysFooterBeforeLink")}
           <Link href={withMarketingLocale(locale, "/lessons")} className="font-semibold text-primary hover:underline">
-            Lessons overview
-          </Link>{" "}
-          links every exam-specific lesson catalog.
+            {t("pages.publicPracticeExams.lessonsOverviewLink")}
+          </Link>
+          {t("pages.publicPracticeExams.sectionPathwaysFooterAfterLink")}
         </p>
       </section>
     </div>

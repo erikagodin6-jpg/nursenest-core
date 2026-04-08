@@ -125,12 +125,12 @@ export function HomeBottomSections({
             <div className="mb-12 text-left md:max-w-3xl">
               <div className="nn-accent-soft-ring mb-4 inline-flex items-center gap-2 rounded-full border px-4 py-1.5">
                 <Sparkles className="h-3.5 w-3.5 text-primary" />
-                <span className="text-xs font-bold uppercase tracking-wider text-primary">{t("components.homeBottomSections.builtForYou")}</span>
+                <span className="nn-marketing-label nn-marketing-label--accent">{t("components.homeBottomSections.builtForYou")}</span>
               </div>
-              <h2 className="font-bold text-[var(--theme-heading-text)] mb-3" style={{ fontSize: 'var(--text-section)' }} data-testid="text-study-tools-heading">
+              <h2 className="mb-3 nn-marketing-h2" data-testid="text-study-tools-heading">
                 {t("components.homeBottomSections.studyToolsHeading")}
               </h2>
-              <p className="text-lg text-foreground">
+              <p className="nn-marketing-body text-foreground">
                 {t("components.homeBottomSections.studyToolsSubcopy")}
               </p>
             </div>
@@ -147,8 +147,8 @@ export function HomeBottomSections({
                 <div className="nn-accent-icon-wrap mb-4 flex h-12 w-12 items-center justify-center rounded-xl transition-transform group-hover:scale-110">
                   <Brain className="nn-accent-icon h-6 w-6" />
                 </div>
-                <h3 className="text-lg font-bold text-[var(--theme-heading-text)] mb-2">{t("components.homeBottomSections.customStudyPlanner")}</h3>
-                <p className="text-sm text-foreground leading-relaxed mb-3">{t("components.homeBottomSections.studyPlannerBody")}</p>
+                <h3 className="mb-2 nn-marketing-h3">{t("components.homeBottomSections.customStudyPlanner")}</h3>
+                <p className="mb-3 nn-marketing-body-sm leading-relaxed text-foreground">{t("components.homeBottomSections.studyPlannerBody")}</p>
                 <div className="flex flex-wrap gap-1.5 mb-3">
                   <span className="rounded-full border border-primary/15 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">{t("components.homeBottomSections.dailyTasks")}</span>
                   <span className="rounded-full border border-primary/15 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">{t("components.homeBottomSections.adaptive")}</span>
@@ -171,8 +171,8 @@ export function HomeBottomSections({
                 <div className="nn-accent-icon-wrap mb-4 flex h-12 w-12 items-center justify-center rounded-xl transition-transform group-hover:scale-110">
                   <ShieldCheck className="nn-accent-icon h-6 w-6" />
                 </div>
-                <h3 className="text-lg font-bold text-[var(--theme-heading-text)] mb-2">{t("components.homeBottomSections.freeReadinessExam")}</h3>
-                <p className="text-sm text-foreground leading-relaxed mb-3">{t("components.homeBottomSections.readinessExamBody")}</p>
+                <h3 className="mb-2 nn-marketing-h3">{t("components.homeBottomSections.freeReadinessExam")}</h3>
+                <p className="mb-3 nn-marketing-body-sm leading-relaxed text-foreground">{t("components.homeBottomSections.readinessExamBody")}</p>
                 <div className="mb-3 flex flex-wrap gap-1.5">
                   <span className="rounded-full border border-primary/15 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">{t("components.homeBottomSections.25Questions")}</span>
                   <span className="rounded-full border border-primary/15 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">{t("components.homeBottomSections.instantResults")}</span>
@@ -192,8 +192,8 @@ export function HomeBottomSections({
                 <div className="nn-accent-icon-wrap mb-4 flex h-12 w-12 items-center justify-center rounded-xl transition-transform group-hover:scale-110">
                   <BarChart3 className="nn-accent-icon h-6 w-6" />
                 </div>
-                <h3 className="text-lg font-bold text-[var(--theme-heading-text)] mb-2">{t("components.homeBottomSections.performanceReportCard")}</h3>
-                <p className="text-sm text-foreground leading-relaxed mb-3">{t("components.homeBottomSections.reportCardBody")}</p>
+                <h3 className="mb-2 nn-marketing-h3">{t("components.homeBottomSections.performanceReportCard")}</h3>
+                <p className="mb-3 nn-marketing-body-sm leading-relaxed text-foreground">{t("components.homeBottomSections.reportCardBody")}</p>
                 <div className="mb-3 flex flex-wrap gap-1.5">
                   <span className="rounded-full border border-primary/15 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">{t("components.homeBottomSections.scoreTrends")}</span>
                   <span className="rounded-full border border-primary/15 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">{t("components.homeBottomSections.domainAnalysis")}</span>
@@ -228,10 +228,10 @@ export function HomeBottomSections({
             <div className="text-center mb-10">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-4">
                 <Globe className="w-3.5 h-3.5 text-primary" />
-                <span className="text-xs font-bold text-primary uppercase tracking-wider">{t("home.examPath.badge")}</span>
+                <span className="nn-marketing-label nn-marketing-label--accent">{t("home.examPath.badge")}</span>
               </div>
-              <h2 className="font-bold text-[var(--theme-heading-text)] mb-3" style={{ fontSize: 'var(--text-section)' }} data-testid="text-exam-path-heading">{t("home.examPath.heading")}</h2>
-              <p className="text-lg text-foreground max-w-3xl mx-auto">{t("home.examPath.subtitle")}</p>
+              <h2 className="mb-3 nn-marketing-h2" data-testid="text-exam-path-heading">{t("home.examPath.heading")}</h2>
+              <p className="mx-auto max-w-3xl nn-marketing-body text-foreground">{t("home.examPath.subtitle")}</p>
             </div>
             <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
               <Card
@@ -250,11 +250,11 @@ export function HomeBottomSections({
                       <span className="text-2xl" role="img" aria-label={t("components.homeBottomSections.canada")}>🍁</span>
                     </div>
                     <div>
-                      <h3 className="font-bold text-[var(--theme-heading-text)] text-lg" data-testid="text-exam-path-ca-title">{t("home.examPath.ca.title")}</h3>
+                      <h3 className="nn-marketing-h3" data-testid="text-exam-path-ca-title">{t("home.examPath.ca.title")}</h3>
                       <p className="text-xs text-muted-foreground font-medium">{t("home.examPath.ca.subtitle")}</p>
                     </div>
                   </div>
-                  <p className="text-sm text-foreground leading-relaxed mb-4" data-testid="text-exam-path-ca-desc">{t("home.examPath.ca.desc")}</p>
+                  <p className="mb-4 nn-marketing-body-sm leading-relaxed text-foreground" data-testid="text-exam-path-ca-desc">{t("home.examPath.ca.desc")}</p>
                   <div className="mb-4 flex flex-wrap gap-2">
                     <span className="rounded-full border border-primary/20 bg-primary/10 px-2 py-1 text-[10px] font-medium text-primary">{t("home.examPath.ca.pill1")}</span>
                     <span className="rounded-full border border-primary/20 bg-primary/10 px-2 py-1 text-[10px] font-medium text-primary">{t("home.examPath.ca.pill2")}</span>
@@ -283,11 +283,11 @@ export function HomeBottomSections({
                       <span className="text-2xl" role="img" aria-label={t("components.homeBottomSections.unitedStates")}>🇺🇸</span>
                     </div>
                     <div>
-                      <h3 className="font-bold text-[var(--theme-heading-text)] text-lg" data-testid="text-exam-path-us-title">{t("home.examPath.us.title")}</h3>
+                      <h3 className="nn-marketing-h3" data-testid="text-exam-path-us-title">{t("home.examPath.us.title")}</h3>
                       <p className="text-xs text-muted-foreground font-medium">{t("home.examPath.us.subtitle")}</p>
                     </div>
                   </div>
-                  <p className="text-sm text-foreground leading-relaxed mb-4" data-testid="text-exam-path-us-desc">{t("home.examPath.us.desc")}</p>
+                  <p className="mb-4 nn-marketing-body-sm leading-relaxed text-foreground" data-testid="text-exam-path-us-desc">{t("home.examPath.us.desc")}</p>
                   <div className="mb-4 flex flex-wrap gap-2">
                     <span className="rounded-full border border-primary/20 bg-primary/10 px-2 py-1 text-[10px] font-medium text-primary">{t("home.examPath.us.pill1")}</span>
                     <span className="rounded-full border border-primary/20 bg-primary/10 px-2 py-1 text-[10px] font-medium text-primary">{t("home.examPath.us.pill2")}</span>
@@ -300,7 +300,7 @@ export function HomeBottomSections({
                 </CardContent>
               </Card>
             </div>
-            <p className="text-center text-xs text-muted-foreground mt-6">{t("home.examPath.bothNote")}</p>
+            <p className="mt-6 text-center nn-marketing-caption text-muted-foreground">{t("home.examPath.bothNote")}</p>
           </div>
         </section>
 
@@ -310,10 +310,10 @@ export function HomeBottomSections({
             <div className="text-center mb-12">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-4">
                 <Zap className="w-3.5 h-3.5 text-primary" />
-                <span className="text-xs font-bold text-primary uppercase tracking-wider">{t("home.howItWorks.badge")}</span>
+                <span className="nn-marketing-label nn-marketing-label--accent">{t("home.howItWorks.badge")}</span>
               </div>
-              <h2 className="font-bold text-[var(--theme-heading-text)] mb-3" style={{ fontSize: 'var(--text-section)' }} data-testid="text-how-it-works-heading">{t("home.howItWorks.heading")}</h2>
-              <p className="text-lg text-foreground">{t("home.howItWorks.subtitle")}</p>
+              <h2 className="mb-3 nn-marketing-h2" data-testid="text-how-it-works-heading">{t("home.howItWorks.heading")}</h2>
+              <p className="nn-marketing-body text-foreground">{t("home.howItWorks.subtitle")}</p>
             </div>
             <div className="grid md:grid-cols-3 gap-8">
               {[
@@ -329,9 +329,9 @@ export function HomeBottomSections({
                     <div className="nn-theme-gradient-br mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-2xl shadow-lg">
                       <item.icon className="h-9 w-9 text-white" />
                     </div>
-                    <div className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-primary text-primary-foreground text-xs font-bold mb-3">{item.step}</div>
-                    <h3 className="text-xl font-bold text-[var(--theme-heading-text)] mb-2">{item.title}</h3>
-                    <p className="text-sm text-foreground leading-relaxed max-w-xs mx-auto">{item.desc}</p>
+                    <div className="mb-3 inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary nn-marketing-caption text-primary-foreground">{item.step}</div>
+                    <h3 className="mb-2 nn-marketing-h3">{item.title}</h3>
+                    <p className="mx-auto max-w-xs nn-marketing-body-sm leading-relaxed text-foreground">{item.desc}</p>
                   </div>
                 </div>
               ))}
@@ -345,34 +345,34 @@ export function HomeBottomSections({
             <div className="text-center mb-10">
               <div className="nn-accent-soft-ring mb-4 inline-flex items-center gap-2 rounded-full border px-4 py-1.5">
                 <Star className="h-3.5 w-3.5 fill-primary text-primary" />
-                <span className="text-xs font-bold uppercase tracking-wider text-primary">{t("home.socialProof.badge")}</span>
+                <span className="nn-marketing-label nn-marketing-label--accent">{t("home.socialProof.badge")}</span>
               </div>
-              <h2 className="font-bold text-[var(--theme-heading-text)]" style={{ fontSize: 'var(--text-section)' }} data-testid="text-social-proof-heading">{t("home.socialProof.heading")}</h2>
+              <h2 className="nn-marketing-h2" data-testid="text-social-proof-heading">{t("home.socialProof.heading")}</h2>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               <div className="rounded-2xl border border-primary/20 bg-gradient-to-b from-primary/8 to-[var(--theme-page-bg)] p-5 text-center" data-testid="stat-social-students">
                 <Users className="mx-auto mb-2 h-7 w-7 text-primary" />
-                <div className="text-3xl font-extrabold text-[var(--theme-heading-text)]">5,000+</div>
-                <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mt-1">{t("home.socialProof.students")}</div>
+                <div className="nn-marketing-h2 tabular-nums">5,000+</div>
+                <div className="mt-1 nn-marketing-label text-muted-foreground">{t("home.socialProof.students")}</div>
               </div>
               <div className="rounded-2xl border border-primary/20 bg-gradient-to-b from-primary/8 to-[var(--theme-page-bg)] p-5 text-center" data-testid="stat-social-pass-rate">
                 <BadgeCheck className="mx-auto mb-2 h-7 w-7 text-primary" />
-                <div className="text-3xl font-extrabold text-[var(--theme-heading-text)]">{t("home.socialProof.passRateValue")}</div>
-                <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mt-1">{t("home.socialProof.passRate")}</div>
+                <div className="nn-marketing-h2 tabular-nums">{t("home.socialProof.passRateValue")}</div>
+                <div className="mt-1 nn-marketing-label text-muted-foreground">{t("home.socialProof.passRate")}</div>
               </div>
               <div className="rounded-2xl border border-primary/20 bg-gradient-to-b from-primary/8 to-[var(--theme-page-bg)] p-5 text-center" data-testid="stat-social-questions">
                 <Target className="mx-auto mb-2 h-7 w-7 text-primary" />
-                <div className="text-3xl font-extrabold text-[var(--theme-heading-text)]">{formatCount(questionCount)}</div>
-                <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mt-1">{t("home.socialProof.questions")}</div>
+                <div className="nn-marketing-h2 tabular-nums">{formatCount(questionCount)}</div>
+                <div className="mt-1 nn-marketing-label text-muted-foreground">{t("home.socialProof.questions")}</div>
               </div>
               <div className="rounded-2xl border border-primary/20 bg-gradient-to-b from-primary/8 to-[var(--theme-page-bg)] p-5 text-center" data-testid="stat-social-lessons">
                 <BookOpen className="mx-auto mb-2 h-7 w-7 text-primary" />
-                <div className="text-3xl font-extrabold text-[var(--theme-heading-text)]">{formatCount(lessonCount)}</div>
-                <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mt-1">{t("home.socialProof.lessons")}</div>
+                <div className="nn-marketing-h2 tabular-nums">{formatCount(lessonCount)}</div>
+                <div className="mt-1 nn-marketing-label text-muted-foreground">{t("home.socialProof.lessons")}</div>
               </div>
             </div>
             <div className="text-center mt-6">
-              <div className="inline-flex items-center gap-2 text-sm text-muted-foreground">
+              <div className="inline-flex items-center gap-2 nn-marketing-body-sm text-muted-foreground">
                 <TrendingUp className="h-4 w-4 text-primary" />
                 <span>{t("home.socialProof.updatedDesc")}</span>
               </div>
@@ -387,7 +387,7 @@ export function HomeBottomSections({
               <div className="h-px max-w-[60px] flex-1 bg-gradient-to-r from-transparent to-primary/35" />
               <div className="nn-accent-soft-ring inline-flex items-center gap-2 rounded-full border px-4 py-1.5">
                 <Sparkles className="h-3.5 w-3.5 text-primary" />
-                <span className="text-xs font-bold uppercase tracking-wider text-primary">{t("home.new.badge")}</span>
+                <span className="nn-marketing-label nn-marketing-label--accent">{t("home.new.badge")}</span>
               </div>
               <div className="h-px max-w-[60px] flex-1 bg-gradient-to-l from-transparent to-primary/35" />
             </div>
@@ -404,8 +404,8 @@ export function HomeBottomSections({
                   </div>
                   <span className="rounded-full bg-primary px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-primary-foreground">{t("home.new.label")}</span>
                 </div>
-                <h3 className="text-base font-bold text-[var(--theme-heading-text)] mb-1.5">{t("home.new.decks.title")}</h3>
-                <p className="text-sm text-foreground leading-relaxed">{t("home.new.decks.desc")}</p>
+                <h3 className="mb-1.5 nn-marketing-h3">{t("home.new.decks.title")}</h3>
+                <p className="nn-marketing-body-sm leading-relaxed text-foreground">{t("home.new.decks.desc")}</p>
               </div>
 
               <div
@@ -419,8 +419,8 @@ export function HomeBottomSections({
                   </div>
                   <span className="rounded-full bg-primary px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-primary-foreground">{t("home.new.label")}</span>
                 </div>
-                <h3 className="text-base font-bold text-[var(--theme-heading-text)] mb-1.5">{t("home.new.blog.title")}</h3>
-                <p className="text-sm text-foreground leading-relaxed">{t("home.new.blog.desc")}</p>
+                <h3 className="mb-1.5 nn-marketing-h3">{t("home.new.blog.title")}</h3>
+                <p className="nn-marketing-body-sm leading-relaxed text-foreground">{t("home.new.blog.desc")}</p>
               </div>
 
               <div
@@ -434,8 +434,8 @@ export function HomeBottomSections({
                   </div>
                   <span className="rounded-full bg-primary px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-primary-foreground">{t("home.new.label")}</span>
                 </div>
-                <h3 className="text-base font-bold text-[var(--theme-heading-text)] mb-1.5">{t("home.new.languages.title")}</h3>
-                <p className="text-sm text-foreground leading-relaxed">{t("home.new.languages.desc")}</p>
+                <h3 className="mb-1.5 nn-marketing-h3">{t("home.new.languages.title")}</h3>
+                <p className="nn-marketing-body-sm leading-relaxed text-foreground">{t("home.new.languages.desc")}</p>
               </div>
             </div>
           </div>
@@ -447,12 +447,12 @@ export function HomeBottomSections({
             <div className="text-center max-w-3xl mx-auto mb-14">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-5">
                 <Award className="w-4 h-4 text-primary" />
-                <span className="text-xs font-bold text-primary uppercase tracking-wider">{t("home.platform.badge")}</span>
+                <span className="nn-marketing-label nn-marketing-label--accent">{t("home.platform.badge")}</span>
               </div>
-              <h2 className="font-bold text-[var(--theme-heading-text)] mb-5" style={{ fontSize: 'var(--text-section)' }} data-testid="text-features-heading">
+              <h2 className="mb-5 nn-marketing-h2" data-testid="text-features-heading">
                 {t("home.features.title")}
               </h2>
-              <p className="text-lg text-foreground leading-relaxed">
+              <p className="nn-marketing-body leading-relaxed text-foreground">
                 {t("home.features.subtitle")}
               </p>
             </div>
@@ -474,8 +474,8 @@ export function HomeBottomSections({
                   <div className="nn-accent-icon-wrap mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-xl transition-transform group-hover:scale-110">
                     <stat.icon className="nn-accent-icon h-5 w-5" />
                   </div>
-                  <div className="text-2xl sm:text-3xl font-extrabold text-[var(--theme-heading-text)]">{stat.value}</div>
-                  <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mt-1">{stat.label}</div>
+                  <div className="nn-marketing-h2 tabular-nums">{stat.value}</div>
+                  <div className="mt-1 nn-marketing-label text-muted-foreground">{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -492,8 +492,8 @@ export function HomeBottomSections({
                 <div className="nn-accent-icon-wrap mb-4 flex h-12 w-12 items-center justify-center rounded-xl transition-transform group-hover:scale-110">
                   <ClipboardCheck className="nn-accent-icon h-6 w-6" />
                 </div>
-                <h3 className="text-lg font-bold text-[var(--theme-heading-text)] mb-2">{t("home.exams.title")}</h3>
-                <p className="text-sm text-foreground leading-relaxed mb-3">{t("home.exams.desc")}</p>
+                <h3 className="mb-2 nn-marketing-h3">{t("home.exams.title")}</h3>
+                <p className="mb-3 nn-marketing-body-sm leading-relaxed text-foreground">{t("home.exams.desc")}</p>
                 <div className="flex flex-wrap gap-1.5">
                   <span className="rounded-full border border-primary/15 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">{t("home.feature.examFormat")}</span>
                   <span className="rounded-full border border-primary/15 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">{t("home.feature.scoreTrends")}</span>
@@ -511,8 +511,8 @@ export function HomeBottomSections({
                 <div className="nn-accent-icon-wrap mb-4 flex h-12 w-12 items-center justify-center rounded-xl transition-transform group-hover:scale-110">
                   <Stethoscope className="nn-accent-icon h-6 w-6" />
                 </div>
-                <h3 className="text-lg font-bold text-[var(--theme-heading-text)] mb-2">{t("home.simulators.title")}</h3>
-                <p className="text-sm text-foreground leading-relaxed mb-3">{t("home.simulators.desc")}</p>
+                <h3 className="mb-2 nn-marketing-h3">{t("home.simulators.title")}</h3>
+                <p className="mb-3 nn-marketing-body-sm leading-relaxed text-foreground">{t("home.simulators.desc")}</p>
                 <div className="flex flex-wrap gap-1.5">
                   <span className="rounded-full border border-primary/15 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">{t("home.feature.branching")}</span>
                   <span className="rounded-full border border-primary/15 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">{t("home.feature.instantFeedback")}</span>
@@ -530,8 +530,8 @@ export function HomeBottomSections({
                 <div className="nn-accent-icon-wrap mb-4 flex h-12 w-12 items-center justify-center rounded-xl transition-transform group-hover:scale-110">
                   <Target className="nn-accent-icon h-6 w-6" />
                 </div>
-                <h3 className="text-lg font-bold text-[var(--theme-heading-text)] mb-2">{formatCount(questionCount)} {t("home.qbank.title")}</h3>
-                <p className="text-sm text-foreground leading-relaxed mb-3">{t("home.qbank.desc")}</p>
+                <h3 className="mb-2 nn-marketing-h3">{formatCount(questionCount)} {t("home.qbank.title")}</h3>
+                <p className="mb-3 nn-marketing-body-sm leading-relaxed text-foreground">{t("home.qbank.desc")}</p>
                 <div className="flex flex-wrap gap-1.5">
                   <span className="rounded-full border border-primary/15 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
                     RPN/LVN/RN/NP {t("home.feature.tierLevels")}
@@ -552,8 +552,8 @@ export function HomeBottomSections({
                 <div className="nn-accent-icon-wrap mb-4 flex h-12 w-12 items-center justify-center rounded-xl transition-transform group-hover:scale-110">
                   <Layers className="nn-accent-icon h-6 w-6" />
                 </div>
-                <h3 className="text-lg font-bold text-[var(--theme-heading-text)] mb-2">{t("home.flashcards.title")}</h3>
-                <p className="text-sm text-foreground leading-relaxed mb-3">{t("home.flashcards.desc")}</p>
+                <h3 className="mb-2 nn-marketing-h3">{t("home.flashcards.title")}</h3>
+                <p className="mb-3 nn-marketing-body-sm leading-relaxed text-foreground">{t("home.flashcards.desc")}</p>
                 <div className="flex flex-wrap gap-1.5">
                   <span className="rounded-full border border-primary/15 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">{t("home.feature.learnMode")}</span>
                   <span className="rounded-full border border-primary/15 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">{t("home.feature.testMode")}</span>
@@ -572,8 +572,8 @@ export function HomeBottomSections({
                 <div className="nn-accent-icon-wrap mb-4 flex h-12 w-12 items-center justify-center rounded-xl transition-transform group-hover:scale-110">
                   <Calculator className="nn-accent-icon h-6 w-6" />
                 </div>
-                <h3 className="text-lg font-bold text-[var(--theme-heading-text)] mb-2">{t("home.tools.title")}</h3>
-                <p className="text-sm text-foreground leading-relaxed mb-3">{t("home.tools.desc")}</p>
+                <h3 className="mb-2 nn-marketing-h3">{t("home.tools.title")}</h3>
+                <p className="mb-3 nn-marketing-body-sm leading-relaxed text-foreground">{t("home.tools.desc")}</p>
                 <div className="flex flex-wrap gap-1.5">
                   <span className="rounded-full border border-primary/15 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">{t("home.feature.stepwise")}</span>
                   <span className="rounded-full border border-primary/15 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">{t("home.feature.abg")}</span>
@@ -591,8 +591,8 @@ export function HomeBottomSections({
                 <div className="nn-accent-icon-wrap mb-4 flex h-12 w-12 items-center justify-center rounded-xl transition-transform group-hover:scale-110">
                   <PlayCircle className="nn-accent-icon h-6 w-6" />
                 </div>
-                <h3 className="text-lg font-bold text-[var(--theme-heading-text)] mb-2">{t("home.lessons.title")}</h3>
-                <p className="text-sm text-foreground leading-relaxed mb-3">{t("home.lessons.desc")}</p>
+                <h3 className="mb-2 nn-marketing-h3">{t("home.lessons.title")}</h3>
+                <p className="mb-3 nn-marketing-body-sm leading-relaxed text-foreground">{t("home.lessons.desc")}</p>
                 <div className="flex flex-wrap gap-1.5">
                   <span className="rounded-full border border-primary/15 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">{t("home.feature.videoLectures")}</span>
                   <span className="rounded-full border border-primary/15 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">{t("home.feature.clinicalPearls")}</span>
@@ -608,7 +608,7 @@ export function HomeBottomSections({
                   <LayoutDashboard className="nn-accent-icon h-5 w-5" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-[var(--theme-heading-text)]">{t("home.secondary.dashboard")}</h4>
+                  <h4 className="nn-marketing-h4">{t("home.secondary.dashboard")}</h4>
                   <p className="text-xs text-muted-foreground">{t("home.secondary.dashboardDesc")}</p>
                 </div>
               </div>
@@ -618,7 +618,7 @@ export function HomeBottomSections({
                   <BarChart3 className="nn-accent-icon h-5 w-5" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-[var(--theme-heading-text)]">{t("home.secondary.analytics")}</h4>
+                  <h4 className="nn-marketing-h4">{t("home.secondary.analytics")}</h4>
                   <p className="text-xs text-muted-foreground">{t("home.secondary.analyticsDesc")}</p>
                 </div>
               </div>
@@ -628,7 +628,7 @@ export function HomeBottomSections({
                   <MessageSquareQuote className="nn-accent-icon h-5 w-5" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-[var(--theme-heading-text)]">{t("home.secondary.qotd")}</h4>
+                  <h4 className="nn-marketing-h4">{t("home.secondary.qotd")}</h4>
                   <p className="text-xs text-muted-foreground">{t("home.secondary.qotdDesc")}</p>
                 </div>
               </div>
@@ -639,7 +639,7 @@ export function HomeBottomSections({
                   <Newspaper className="nn-accent-icon h-5 w-5" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-[var(--theme-heading-text)]">{t("home.secondary.blog")}</h4>
+                  <h4 className="nn-marketing-h4">{t("home.secondary.blog")}</h4>
                   <p className="text-xs text-muted-foreground">{t("home.secondary.blogDesc")}</p>
                 </div>
               </div>
@@ -653,7 +653,7 @@ export function HomeBottomSections({
                     <Globe className="w-4 h-4 text-primary" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-[var(--theme-heading-text)]">{t("home.diff.region")}</h4>
+                    <h4 className="nn-marketing-h4">{t("home.diff.region")}</h4>
                     <p className="text-xs text-muted-foreground mt-0.5">{t("home.diff.regionDesc")}</p>
                   </div>
                 </div>
@@ -662,7 +662,7 @@ export function HomeBottomSections({
                     <Microscope className="w-4 h-4 text-primary" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-[var(--theme-heading-text)]">{t("home.diff.patho")}</h4>
+                    <h4 className="nn-marketing-h4">{t("home.diff.patho")}</h4>
                     <p className="text-xs text-muted-foreground mt-0.5">{t("home.diff.pathoDesc")}</p>
                   </div>
                 </div>
@@ -671,7 +671,7 @@ export function HomeBottomSections({
                     <Shield className="w-4 h-4 text-primary" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-[var(--theme-heading-text)]">{t("home.diff.scope")}</h4>
+                    <h4 className="nn-marketing-h4">{t("home.diff.scope")}</h4>
                     <p className="text-xs text-muted-foreground mt-0.5">RPN/LVN {t("home.diff.scopeDesc")}</p>
                   </div>
                 </div>
@@ -680,7 +680,7 @@ export function HomeBottomSections({
                     <Globe className="w-4 h-4 text-primary" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-[var(--theme-heading-text)]">{t("home.diff.languages")}</h4>
+                    <h4 className="nn-marketing-h4">{t("home.diff.languages")}</h4>
                     <p className="text-xs text-muted-foreground mt-0.5">{t("home.diff.languagesDesc")}</p>
                   </div>
                 </div>
@@ -707,10 +707,10 @@ export function HomeBottomSections({
             <div className="text-center max-w-3xl mx-auto mb-12">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-4">
                 <Sparkles className="w-3.5 h-3.5 text-primary" />
-                <span className="text-xs font-semibold text-primary uppercase tracking-wide">{t("home.free.badge")}</span>
+                <span className="nn-marketing-label nn-marketing-label--accent">{t("home.free.badge")}</span>
               </div>
-              <h2 className="font-bold text-[var(--theme-heading-text)] mb-4" style={{ fontSize: 'var(--text-section)' }} data-testid="text-free-learning-heading">{t("home.free.title")}</h2>
-              <p className="text-lg text-foreground leading-relaxed">
+              <h2 className="mb-4 nn-marketing-h2" data-testid="text-free-learning-heading">{t("home.free.title")}</h2>
+              <p className="nn-marketing-body leading-relaxed text-foreground">
                 {t("home.free.subtitle")}
               </p>
             </div>
@@ -721,8 +721,8 @@ export function HomeBottomSections({
                   <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                     <GraduationCap className="w-6 h-6 text-primary" />
                   </div>
-                  <h3 className="text-lg font-semibold text-[var(--theme-heading-text)] mb-2">{t("home.free.preNursing")}</h3>
-                  <p className="text-sm text-foreground mb-3">{t("home.free.preNursingDesc")}</p>
+                  <h3 className="mb-2 nn-marketing-h3">{t("home.free.preNursing")}</h3>
+                  <p className="mb-3 nn-marketing-body-sm text-foreground">{t("home.free.preNursingDesc")}</p>
                   <span className="text-xs text-primary font-medium">{t("home.free.preNursingMeta")}</span>
                 </CardContent>
               </Card>
@@ -732,8 +732,8 @@ export function HomeBottomSections({
                   <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                     <HeartPulse className="w-6 h-6 text-primary" />
                   </div>
-                  <h3 className="text-lg font-semibold text-[var(--theme-heading-text)] mb-2">{t("home.free.anatomy")}</h3>
-                  <p className="text-sm text-foreground mb-3">{t("home.free.anatomyDesc")}</p>
+                  <h3 className="mb-2 nn-marketing-h3">{t("home.free.anatomy")}</h3>
+                  <p className="mb-3 nn-marketing-body-sm text-foreground">{t("home.free.anatomyDesc")}</p>
                   <span className="text-xs text-primary font-medium">{t("home.free.anatomyMeta")}</span>
                 </CardContent>
               </Card>
@@ -743,8 +743,8 @@ export function HomeBottomSections({
                   <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                     <Lightbulb className="w-6 h-6 text-primary" />
                   </div>
-                  <h3 className="text-lg font-semibold text-[var(--theme-heading-text)] mb-2">{t("home.free.clarity")}</h3>
-                  <p className="text-sm text-foreground mb-3">{t("home.free.clarityDesc")}</p>
+                  <h3 className="mb-2 nn-marketing-h3">{t("home.free.clarity")}</h3>
+                  <p className="mb-3 nn-marketing-body-sm text-foreground">{t("home.free.clarityDesc")}</p>
                   <span className="text-xs text-primary font-medium">{t("home.free.clarityMeta")}</span>
                 </CardContent>
               </Card>
@@ -763,13 +763,13 @@ export function HomeBottomSections({
         <section className="py-24 bg-card/50 backdrop-blur-sm relative z-10" data-testid="section-study-topics">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto mb-6">
-              <h2 className="font-bold text-[var(--theme-heading-text)] mb-4" style={{ fontSize: 'var(--text-section)' }} data-testid="text-study-heading">{t("home.study.heading")}</h2>
-              <p className="text-lg text-foreground leading-relaxed">
+              <h2 className="mb-4 nn-marketing-h2" data-testid="text-study-heading">{t("home.study.heading")}</h2>
+              <p className="nn-marketing-body leading-relaxed text-foreground">
                 {t("home.study.subtitle")}
               </p>
             </div>
 
-            <p className="text-center text-sm text-muted-foreground mb-12 max-w-2xl mx-auto">
+            <p className="mx-auto mb-12 max-w-2xl text-center nn-marketing-body-sm text-muted-foreground">
               {t("home.study.subtext")}
             </p>
 
@@ -790,8 +790,8 @@ export function HomeBottomSections({
                     <div className="nn-accent-icon-wrap mb-4 flex h-12 w-12 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110">
                       <topic.icon className="nn-accent-icon h-6 w-6" />
                     </div>
-                    <h3 className="text-lg font-semibold text-[var(--theme-heading-text)] mb-2">{topic.title}</h3>
-                    <p className="text-sm text-foreground leading-relaxed">{topic.desc}</p>
+                    <h3 className="mb-2 nn-marketing-h3">{topic.title}</h3>
+                    <p className="nn-marketing-body-sm leading-relaxed text-foreground">{topic.desc}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -811,10 +811,10 @@ export function HomeBottomSections({
             <div className="text-center max-w-3xl mx-auto mb-10">
               <div className="nn-accent-soft-ring mb-4 inline-flex items-center gap-2 rounded-full border px-3 py-1.5 shadow-sm">
                 <AlertTriangle className="h-3.5 w-3.5 text-primary" />
-                <span className="text-xs font-semibold uppercase tracking-wide text-primary">{t("home.mostTested.badge")}</span>
+                <span className="nn-marketing-label nn-marketing-label--accent">{t("home.mostTested.badge")}</span>
               </div>
-              <h2 className="font-bold text-[var(--theme-heading-text)] mb-3" style={{ fontSize: 'var(--text-section)' }} data-testid="text-most-tested-heading">{t("home.mostTested.heading")}</h2>
-              <p className="text-foreground">{t("home.mostTested.subtitle")}</p>
+              <h2 className="mb-3 nn-marketing-h2" data-testid="text-most-tested-heading">{t("home.mostTested.heading")}</h2>
+              <p className="nn-marketing-body text-foreground">{t("home.mostTested.subtitle")}</p>
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {[
@@ -855,12 +855,12 @@ export function HomeBottomSections({
               <div>
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-card border border-primary/20 shadow-sm mb-6">
                   <Users className="w-3.5 h-3.5 text-primary" />
-                  <span className="text-xs font-semibold text-primary uppercase tracking-wide">{t("home.nurses.badge")}</span>
+                  <span className="nn-marketing-label nn-marketing-label--accent">{t("home.nurses.badge")}</span>
                 </div>
-                <h2 className="font-bold text-[var(--theme-heading-text)] mb-6" style={{ fontSize: 'var(--text-section)' }} data-testid="text-new-nurses-heading">
+                <h2 className="mb-6 nn-marketing-h2" data-testid="text-new-nurses-heading">
                   {t("home.nurses.heading")}
                 </h2>
-                <p className="text-lg text-foreground mb-6 leading-relaxed">
+                <p className="mb-6 nn-marketing-body leading-relaxed text-foreground">
                   {t("home.nurses.subtitle")}
                 </p>
                 <div className="space-y-4">
@@ -875,8 +875,8 @@ export function HomeBottomSections({
                         <CheckCircle2 className="w-3.5 h-3.5 text-primary" />
                       </div>
                       <div>
-                        <h4 className="font-semibold text-[var(--theme-heading-text)] text-sm">{item.title}</h4>
-                        <p className="text-sm text-foreground">{item.desc}</p>
+                        <h4 className="nn-marketing-h4 text-sm">{item.title}</h4>
+                        <p className="nn-marketing-body-sm text-foreground">{item.desc}</p>
                       </div>
                     </div>
                   ))}
@@ -893,8 +893,8 @@ export function HomeBottomSections({
                     <div className="mx-auto w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-primary mb-3">
                       <stat.icon className="w-5 h-5" />
                     </div>
-                    <div className="text-2xl font-bold text-[var(--theme-heading-text)]">{stat.value}</div>
-                    <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide mt-1">{stat.label}</div>
+                    <div className="nn-marketing-h2 tabular-nums">{stat.value}</div>
+                    <div className="mt-1 nn-marketing-label text-muted-foreground">{stat.label}</div>
                   </div>
                 ))}
               </div>
@@ -906,8 +906,8 @@ export function HomeBottomSections({
         <section className="py-24 bg-card" data-testid="section-why-nursenest">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto mb-16">
-              <h2 className="font-bold text-[var(--theme-heading-text)] mb-4" style={{ fontSize: 'var(--text-section)' }} data-testid="text-why-heading">{t("home.why.heading")}</h2>
-              <p className="text-lg text-foreground leading-relaxed">
+              <h2 className="mb-4 nn-marketing-h2" data-testid="text-why-heading">{t("home.why.heading")}</h2>
+              <p className="nn-marketing-body leading-relaxed text-foreground">
                 {t("home.why.subtitle")}
               </p>
             </div>
@@ -925,8 +925,8 @@ export function HomeBottomSections({
                   <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-5">
                     <feature.icon className="w-6 h-6 text-primary" />
                   </div>
-                  <h3 className="text-lg font-semibold text-[var(--theme-heading-text)] mb-3">{feature.title}</h3>
-                  <p className="text-foreground text-sm leading-relaxed">{feature.desc}</p>
+                  <h3 className="mb-3 nn-marketing-h3">{feature.title}</h3>
+                  <p className="nn-marketing-body-sm leading-relaxed text-foreground">{feature.desc}</p>
                 </div>
               ))}
             </div>
@@ -941,10 +941,10 @@ export function HomeBottomSections({
                 <AlertTriangle className="h-4 w-4" aria-hidden="true" />
                 {t("home.flashcardTrust.warningBadge")}
               </div>
-              <h2 className="font-bold text-[var(--theme-heading-text)] mb-4" style={{ fontSize: 'var(--text-section)' }} data-testid="text-flashcard-trust-heading">
+              <h2 className="mb-4 nn-marketing-h2" data-testid="text-flashcard-trust-heading">
                 {t("home.flashcardTrust.heading")}
               </h2>
-              <p className="text-lg text-foreground leading-relaxed" data-testid="text-flashcard-trust-subtitle">
+              <p className="nn-marketing-body leading-relaxed text-foreground" data-testid="text-flashcard-trust-subtitle">
                 {t("home.flashcardTrust.subtitle")}
               </p>
             </div>
@@ -955,7 +955,7 @@ export function HomeBottomSections({
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-muted/80">
                     <XCircle className="h-5 w-5 text-foreground" aria-hidden="true" />
                   </div>
-                  <h3 className="text-lg font-bold text-[var(--theme-heading-text)]">{t("home.flashcardTrust.otherPlatforms")}</h3>
+                  <h3 className="nn-marketing-h3">{t("home.flashcardTrust.otherPlatforms")}</h3>
                 </div>
                 <ul className="space-y-4">
                   {[
@@ -977,7 +977,7 @@ export function HomeBottomSections({
                   <div className="nn-accent-icon-wrap flex h-10 w-10 items-center justify-center rounded-xl">
                     <ShieldCheck className="nn-accent-icon h-5 w-5" aria-hidden="true" />
                   </div>
-                  <h3 className="text-lg font-bold text-[var(--theme-heading-text)]">{t("home.flashcardTrust.nurseNest")}</h3>
+                  <h3 className="nn-marketing-h3">{t("home.flashcardTrust.nurseNest")}</h3>
                 </div>
                 <ul className="space-y-4">
                   {[
@@ -1000,11 +1000,11 @@ export function HomeBottomSections({
                 <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
                   <Sparkles className="w-5 h-5 text-primary" aria-hidden="true" />
                 </div>
-                <h3 className="text-xl font-bold text-[var(--theme-heading-text)]" data-testid="text-flashcard-user-created-heading">
+                <h3 className="nn-marketing-h3" data-testid="text-flashcard-user-created-heading">
                   {t("home.flashcardTrust.userCreated.heading")}
                 </h3>
               </div>
-              <p className="text-sm text-foreground leading-relaxed mb-5" data-testid="text-flashcard-user-created-desc">
+              <p className="mb-5 nn-marketing-body-sm leading-relaxed text-foreground" data-testid="text-flashcard-user-created-desc">
                 {t("home.flashcardTrust.userCreated.desc")}
               </p>
               <ul className="space-y-3">
@@ -1024,10 +1024,10 @@ export function HomeBottomSections({
 
             <div className="bg-card rounded-2xl border border-border shadow-sm p-8 max-w-3xl mx-auto text-center" data-testid="card-flashcard-trust-cta">
               <ShieldCheck className="w-10 h-10 text-primary mx-auto mb-4" aria-hidden="true" />
-              <h3 className="text-xl font-bold text-[var(--theme-heading-text)] mb-3" data-testid="text-flashcard-trust-cta">
+              <h3 className="mb-3 nn-marketing-h3" data-testid="text-flashcard-trust-cta">
                 {t("home.flashcardTrust.ctaTitle")}
               </h3>
-              <p className="text-sm text-foreground leading-relaxed mb-6" data-testid="text-flashcard-trust-cta-desc">
+              <p className="mb-6 nn-marketing-body-sm leading-relaxed text-foreground" data-testid="text-flashcard-trust-cta-desc">
                 {t("home.flashcardTrust.ctaDesc")}
               </p>
               <button
@@ -1048,17 +1048,17 @@ export function HomeBottomSections({
             <div className="text-center mb-12">
               <div className="nn-accent-soft-ring mb-4 inline-flex items-center gap-2 rounded-full border px-4 py-1.5">
                 <BarChart3 className="h-3.5 w-3.5 text-primary" />
-                <span className="text-xs font-bold uppercase tracking-wider text-primary">{t("home.competitive.badge")}</span>
+                <span className="nn-marketing-label nn-marketing-label--accent">{t("home.competitive.badge")}</span>
               </div>
-              <h2 className="font-bold text-[var(--theme-heading-text)] mb-3" style={{ fontSize: 'var(--text-section)' }} data-testid="text-competitive-heading">{t("home.competitive.heading")}</h2>
-              <p className="text-lg text-foreground">{t("home.competitive.subtitle")}</p>
+              <h2 className="mb-3 nn-marketing-h2" data-testid="text-competitive-heading">{t("home.competitive.heading")}</h2>
+              <p className="nn-marketing-body text-foreground">{t("home.competitive.subtitle")}</p>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full bg-card rounded-2xl border border-border shadow-md overflow-hidden" data-testid="table-competitive">
                 <thead>
                   <tr className="border-b border-border">
                     <th className="text-left py-4 px-5 text-sm font-semibold text-muted-foreground">{t("home.competitive.feature")}</th>
-                    <th className="text-center py-4 px-5 text-sm font-bold text-primary bg-primary/5">{t("home.competitive.nursenest")}</th>
+                    <th className="bg-primary/5 px-5 py-4 text-center nn-marketing-body-sm font-semibold text-primary">{t("home.competitive.nursenest")}</th>
                     <th className="text-center py-4 px-5 text-sm font-semibold text-muted-foreground">{t("home.competitive.uworld")}</th>
                     <th className="text-center py-4 px-5 text-sm font-semibold text-muted-foreground">{t("home.competitive.archer")}</th>
                   </tr>
@@ -1075,7 +1075,10 @@ export function HomeBottomSections({
                     { feature: t("home.competitive.freeContent"), nn: "yes", uw: "no", ar: "no" },
                   ] as Array<{ feature: string; nn: string; uw: string; ar: string; isPrice?: true }>).map((row, i) => {
                     const renderCell = (val: string, highlight?: boolean) => {
-                      if (row.isPrice) return <span className={`text-sm ${highlight ? "font-bold text-primary" : "text-foreground"}`}>{val}</span>;
+                      if (row.isPrice)
+                        return (
+                          <span className={`nn-marketing-body-sm ${highlight ? "font-semibold text-primary" : "text-foreground"}`}>{val}</span>
+                        );
                       if (val === "yes") return <CircleCheck className="nn-trust-check mx-auto h-5 w-5" />;
                       if (val === "limited") return <span className="text-xs text-muted-foreground">{t("home.competitive.limited")}</span>;
                       return <XCircle className="w-5 h-5 text-muted-foreground/40 mx-auto" />;
@@ -1095,7 +1098,7 @@ export function HomeBottomSections({
             <div className="text-center mt-8 space-y-4">
               <div className="nn-accent-soft-ring inline-flex items-center gap-2 rounded-full border px-5 py-2.5 shadow-sm" data-testid="badge-guarantee">
                 <ShieldCheck className="h-5 w-5 text-primary" />
-                <span className="text-sm font-bold text-primary">{t("home.guarantee.badge")}</span>
+                <span className="nn-marketing-body-sm font-semibold text-primary">{t("home.guarantee.badge")}</span>
               </div>
               <p className="text-sm text-muted-foreground">{t("home.guarantee.desc")}</p>
             </div>
@@ -1109,10 +1112,10 @@ export function HomeBottomSections({
               <div className="text-center mb-12">
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-4">
                   <ShoppingBag className="w-3.5 h-3.5 text-primary" />
-                  <span className="text-xs font-bold text-primary uppercase tracking-wider">{t("home.featured.badge")}</span>
+                  <span className="nn-marketing-label nn-marketing-label--accent">{t("home.featured.badge")}</span>
                 </div>
-                <h2 className="font-bold text-[var(--theme-heading-text)] mb-3" style={{ fontSize: 'var(--text-section)' }} data-testid="text-featured-heading">{t("home.featured.heading")}</h2>
-                <p className="text-lg text-foreground max-w-2xl mx-auto">{t("home.featured.subtitle")}</p>
+                <h2 className="mb-3 nn-marketing-h2" data-testid="text-featured-heading">{t("home.featured.heading")}</h2>
+                <p className="mx-auto max-w-2xl nn-marketing-body text-foreground">{t("home.featured.subtitle")}</p>
               </div>
               <div className={`grid gap-6 ${featuredProducts.length === 1 ? 'max-w-sm mx-auto' : featuredProducts.length === 2 ? 'md:grid-cols-2 max-w-2xl mx-auto' : featuredProducts.length === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2 lg:grid-cols-4'}`}>
                 {featuredProducts.map((product) => (
@@ -1142,10 +1145,10 @@ export function HomeBottomSections({
                           <span className="text-[10px] font-bold uppercase tracking-wider bg-muted text-muted-foreground px-2 py-0.5 rounded-full">{product.tierTarget}</span>
                         )}
                       </div>
-                      <h3 className="text-base font-bold text-[var(--theme-heading-text)] mb-1.5 line-clamp-2 group-hover:text-primary transition-colors">{product.title}</h3>
-                      <p className="text-sm text-foreground line-clamp-2 mb-3">{product.shortDescription || product.description}</p>
+                      <h3 className="mb-1.5 line-clamp-2 nn-marketing-h3 group-hover:text-primary transition-colors">{product.title}</h3>
+                      <p className="mb-3 line-clamp-2 nn-marketing-body-sm text-foreground">{product.shortDescription || product.description}</p>
                       <div className="flex items-center gap-2">
-                        <span className="text-lg font-extrabold text-primary">${(product.price / 100).toFixed(2)}</span>
+                        <span className="nn-marketing-h3 tabular-nums text-primary">${(product.price / 100).toFixed(2)}</span>
                         {product.compareAtPrice && product.compareAtPrice > product.price && (
                           <span className="text-sm text-muted-foreground line-through">${(product.compareAtPrice / 100).toFixed(2)}</span>
                         )}
@@ -1173,8 +1176,8 @@ export function HomeBottomSections({
         <section className="py-24 bg-gradient-to-b from-[var(--theme-page-bg)] to-muted" data-testid="section-faq-home">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
-              <h2 className="font-bold text-[var(--theme-heading-text)] mb-4" style={{ fontSize: 'var(--text-section)' }} data-testid="text-faq-heading">{t("home.faq.heading")}</h2>
-              <p className="text-lg text-foreground">{t("home.faq.subtitle")}</p>
+              <h2 className="mb-4 nn-marketing-h2" data-testid="text-faq-heading">{t("home.faq.heading")}</h2>
+              <p className="nn-marketing-body text-foreground">{t("home.faq.subtitle")}</p>
             </div>
 
             <Accordion type="single" collapsible className="space-y-3">

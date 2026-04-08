@@ -20,12 +20,18 @@ import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 
 export const revalidate = 600;
 
+type CardKey =
+  | "cardRnUs"
+  | "cardRnCa"
+  | "cardPnUs"
+  | "cardPnCa"
+  | "cardNpUs"
+  | "cardNpCa"
+  | "cardAlliedUs"
+  | "cardAlliedCa";
+
 type PathwayCard = {
-  id: string;
-  title: string;
-  examLabel: string;
-  who: string;
-  includes: string;
+  cardKey: CardKey;
   publicQuestionsHref: string;
   hubHref: string;
   region: MarketingRegionToggle;
@@ -33,81 +39,49 @@ type PathwayCard = {
 
 const CARDS: PathwayCard[] = [
   {
-    id: "rn-us",
-    title: "NCLEX-RN (United States)",
-    examLabel: "NCLEX-RN",
-    who: "US RN candidates preparing for the National Council exam.",
-    includes: "Client-needs–style items, clinical judgment practice, rationales, and topic drills scoped to US RN eligibility.",
+    cardKey: "cardRnUs",
     publicQuestionsHref: RN.usQuestions,
     hubHref: "/us/rn/nclex-rn",
     region: "US",
   },
   {
-    id: "rn-ca",
-    title: "NCLEX-RN (Canada)",
-    examLabel: "NCLEX-RN",
-    who: "Canadian RN candidates sitting NCLEX-RN for registration.",
-    includes: "Country-appropriate framing, safety and scope aligned to Canadian practice, and pathway-scoped banks.",
+    cardKey: "cardRnCa",
     publicQuestionsHref: RN.caQuestions,
     hubHref: "/canada/rn/nclex-rn",
     region: "CA",
   },
   {
-    id: "pn-us",
-    title: "NCLEX-PN (US LVN/LPN)",
-    examLabel: "NCLEX-PN",
-    who: "Practical/vocational nursing candidates in the United States.",
-    includes: "PN-level scope, prioritization, and medication safety with rationales tied to LVN/LPN practice.",
+    cardKey: "cardPnUs",
     publicQuestionsHref: PN.usQuestions,
     hubHref: "/us/lpn/nclex-pn",
     region: "US",
   },
   {
-    id: "pn-ca",
-    title: "REx-PN (Canada)",
-    examLabel: "REx-PN",
-    who: "Canadian practical nurse candidates.",
-    includes: "REx-PN–scoped practice with Canadian context—not recycled US-only copy.",
+    cardKey: "cardPnCa",
     publicQuestionsHref: PN.caQuestions,
     hubHref: pnPrimaryHub("CA"),
     region: "CA",
   },
   {
-    id: "np-us",
-    title: "US Nurse Practitioner boards",
-    examLabel: "NP (FNP, AGPCNP, PMHNP, …)",
-    who: "Advanced practice candidates preparing for board-specific NP exams.",
-    includes: "Specialty-scoped advanced practice items. Pick your board track in the pathway hub—content is not interchangeable between specialties.",
+    cardKey: "cardNpUs",
     publicQuestionsHref: NP.fnpQuestions,
     hubHref: "/us/np/fnp",
     region: "US",
   },
   {
-    id: "np-ca",
-    title: "Canadian NP (CNPLE track)",
-    examLabel: "CNPLE",
-    who: "Canadian NP candidates following national licensure preparation.",
-    includes: "Pathway hub explains scope and readiness; question pools align to the Canadian NP track as published.",
+    cardKey: "cardNpCa",
     publicQuestionsHref: NP.caNpQuestions,
     hubHref: NP.caNpHub,
     region: "CA",
   },
   {
-    id: "allied-us",
-    title: "Allied health (United States)",
-    examLabel: "Allied certifications",
-    who: "Allied health professionals using NurseNest certification prep.",
-    includes: "Reasoning-heavy items and protocol edges matched to US certification contexts for your discipline.",
+    cardKey: "cardAlliedUs",
     publicQuestionsHref: ALLIED.usQuestions,
     hubHref: ALLIED.usHub,
     region: "US",
   },
   {
-    id: "allied-ca",
-    title: "Allied health (Canada)",
-    examLabel: "Allied certifications",
-    who: "Canadian allied candidates.",
-    includes: "Canadian framing for prioritization, scope, and exam-style practice for your pathway.",
+    cardKey: "cardAlliedCa",
     publicQuestionsHref: ALLIED.caQuestions,
     hubHref: ALLIED.caHub,
     region: "CA",
@@ -142,12 +116,15 @@ export default async function QuestionBankHubPage() {
 
   const appBank = loginWithCallback("/app/questions");
 
+  const regionLabel = (r: MarketingRegionToggle) =>
+    r === "CA" ? t("pages.publicQuestionBank.regionCanada") : t("pages.publicQuestionBank.regionUnitedStates");
+
   return (
     <>
       <BreadcrumbJsonLd
         items={[
-          { name: "Home", path: "/" },
-          { name: "Question bank", path: "/question-bank" },
+          { name: t("nav.home"), path: "/" },
+          { name: t("pages.publicQuestionBank.breadcrumbCurrent"), path: "/question-bank" },
         ]}
       />
       <div className="mx-auto max-w-7xl px-4 pt-2 sm:px-6 sm:pt-3 lg:px-8">
@@ -171,32 +148,35 @@ export default async function QuestionBankHubPage() {
         }}
       >
         <ul className="flex flex-col gap-3 sm:gap-[var(--nn-rhythm-card-grid-gap)]">
-          {CARDS.map((c) => (
-            <li key={c.id} className="nn-card p-4">
-              <p className="text-xs font-semibold uppercase text-primary">
-                {c.region === "CA" ? "Canada" : "United States"} · {c.examLabel}
-              </p>
-              <h2 className="mt-1 text-lg font-semibold text-[var(--theme-heading-text)]">{c.title}</h2>
-              <p className="mt-2 text-sm text-muted">{c.who}</p>
-              <p className="mt-2 text-sm text-[var(--theme-muted-text)]">{c.includes}</p>
-              <div className="mt-4 flex flex-wrap gap-3">
-                <Link href={c.publicQuestionsHref} className="text-sm font-semibold text-primary hover:underline">
-                  Public questions landing
-                </Link>
-                <Link href={c.hubHref} className="text-sm font-semibold text-primary hover:underline">
-                  Pathway hub
-                </Link>
-              </div>
-            </li>
-          ))}
+          {CARDS.map((c) => {
+            const p = `pages.publicQuestionBank.${c.cardKey}`;
+            return (
+              <li key={c.cardKey} className="nn-card p-4">
+                <p className="text-xs font-semibold uppercase text-primary">
+                  {regionLabel(c.region)} · {t(`${p}.examLabel`)}
+                </p>
+                <h2 className="mt-1 text-lg font-semibold text-[var(--theme-heading-text)]">{t(`${p}.title`)}</h2>
+                <p className="mt-2 text-sm text-muted">{t(`${p}.who`)}</p>
+                <p className="mt-2 text-sm text-[var(--theme-muted-text)]">{t(`${p}.includes`)}</p>
+                <div className="mt-4 flex flex-wrap gap-3">
+                  <Link href={c.publicQuestionsHref} className="text-sm font-semibold text-primary hover:underline">
+                    {t("pages.publicQuestionBank.linkPublicQuestionsLanding")}
+                  </Link>
+                  <Link href={c.hubHref} className="text-sm font-semibold text-primary hover:underline">
+                    {t("pages.publicQuestionBank.linkPathwayHub")}
+                  </Link>
+                </div>
+              </li>
+            );
+          })}
         </ul>
 
         <p className="text-sm text-[var(--theme-muted-text)]">
-          Looking for timed sets and score review? See{" "}
+          {t("pages.publicQuestionBank.footerTimedSetsP1")}
           <Link href={withMarketingLocale(locale, "/practice-exams")} className="font-semibold text-primary hover:underline">
-            Practice exams
-          </Link>{" "}
-          for how mocks and review work in NurseNest.
+            {t("pages.publicQuestionBank.linkPracticeExams")}
+          </Link>
+          {t("pages.publicQuestionBank.footerTimedSetsP2")}
         </p>
       </MarketingPublicStudyLanding>
     </>

@@ -66,9 +66,9 @@ function countLessonKeysFromCatalog() {
 }
 
 function mergeFragmentLessonKeys(baseRoot, loc, baseKeys) {
-  const fragDir = join(baseRoot, loc, "fragments");
-  if (!existsSync(fragDir)) return baseKeys;
   const keys = new Set(baseKeys);
+  const fragDir = join(baseRoot, loc, "fragments");
+  if (!existsSync(fragDir)) return keys;
   const files = readdirSync(fragDir)
     .filter((x) => x.endsWith(".json"))
     .sort();
@@ -108,7 +108,7 @@ function overlayStatsForLocale(baseRoot, loc) {
 
   return {
     hasLessonsFile: existsSync(lessonsPath),
-    lessonOverlayKeys: mergedLessonKeys.length,
+    lessonOverlayKeys: mergedLessonKeys.size,
     questionOverlayKeys: questionKeys.length,
     flashcardDeckKeys: flashDeckKeys,
     flashcardCardKeys: flashCardKeys,
