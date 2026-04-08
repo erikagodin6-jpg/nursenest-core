@@ -1,12 +1,12 @@
 "use client";
 
-import { ChevronDown } from "lucide-react";
+import { BookOpen, ChevronDown, ClipboardList, GraduationCap, Layers } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
-import { BookOpen, ClipboardList, GraduationCap, Layers } from "lucide-react";
+import { MARKETING_PRIMARY_CTA_CLASS, MARKETING_TERTIARY_LINK_CLASS } from "@/lib/theme/marketing-hero-pattern";
 
 type Props = {
   questionCount: number;
@@ -33,7 +33,8 @@ export function HomeLandingSections({ questionCount }: Props) {
     { icon: GraduationCap, titleKey: "home.landing.preview.flashTitle", bodyKey: "home.landing.preview.flashBody" },
   ];
 
-  const faqKeys = ["1", "2", "3", "4", "5", "6"] as const;
+  /** Five highest-conversion questions; keep in sync with `MARKETING_HOME_FAQ_JSONLD`. */
+  const faqKeys = ["1", "2", "3", "4", "5"] as const;
 
   return (
     <>
@@ -68,13 +69,12 @@ export function HomeLandingSections({ questionCount }: Props) {
 
       <section className={`border-t border-[var(--border-subtle)] bg-[var(--theme-page-bg)] ${SECTION_Y}`} data-testid="section-trust">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <h2 className="nn-marketing-h2 mb-4">{t("home.landing.trust.title")}</h2>
-          <ul className="space-y-2 text-[var(--theme-body-text)]">
-            <li className="nn-marketing-body-sm">
+          <h2 className="nn-marketing-h2 mb-3">{t("home.landing.trust.title")}</h2>
+          <ul className="max-w-2xl space-y-2">
+            <li className="nn-marketing-body-sm text-[var(--theme-body-text)]">
               {qFormatted ? t("home.landing.trust.questionsLine", { count: qFormatted }) : t("home.landing.trust.questionsFallback")}
             </li>
-            <li className="nn-marketing-body-sm">{t("home.landing.trust.noCard")}</li>
-            <li className="nn-marketing-body-sm">{t("home.landing.trust.guarantee")}</li>
+            <li className="nn-marketing-body-sm text-[var(--theme-body-text)]">{t("home.landing.trust.noCardAndGuarantee")}</li>
           </ul>
         </div>
       </section>
@@ -103,24 +103,24 @@ export function HomeLandingSections({ questionCount }: Props) {
 
       <section className={`border-t border-[var(--border-subtle)] bg-[var(--nn-presentation-panel)] ${SECTION_Y}`} data-testid="section-final-cta">
         <div className="mx-auto max-w-6xl px-4 text-center sm:px-6 lg:px-8">
-          <h2 className="nn-marketing-h2 text-balance">{t("home.landing.final.title")}</h2>
-          <p className="nn-marketing-body mx-auto mt-2 max-w-xl text-[var(--theme-muted-text)]">{t("home.landing.final.sub")}</p>
-          <div className="mt-6 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
+          <h2 className="nn-marketing-h2 text-balance">{t("home.landing.final.closingTitle")}</h2>
+          <p className="nn-marketing-body-sm mx-auto mt-2 max-w-lg text-[var(--theme-muted-text)]">{t("home.landing.final.closingSub")}</p>
+          <div className="mt-6 flex flex-col items-center justify-center gap-4">
             <MarketingTrackedLink
               href={loc(HUB.signup)}
               event={PH.marketingHomeFinalCta}
               eventProps={{ choice: "signup_landing" }}
-              className="nn-btn-primary inline-flex min-h-[48px] w-full items-center justify-center px-8 py-3 text-base font-semibold sm:w-auto"
+              className={`${MARKETING_PRIMARY_CTA_CLASS} sm:min-w-[220px]`}
             >
-              {t("home.landing.final.ctaPrimary")}
+              {t("home.landing.final.closingCtaPrimary")}
             </MarketingTrackedLink>
             <MarketingTrackedLink
               href={loc(HUB.questionBank)}
               event={PH.marketingHomeFinalCta}
               eventProps={{ choice: "browse_bank_landing" }}
-              className="nn-btn-secondary inline-flex min-h-[48px] w-full items-center justify-center px-6 py-3 text-sm font-semibold sm:w-auto"
+              className={MARKETING_TERTIARY_LINK_CLASS}
             >
-              {t("home.landing.final.ctaSecondary")}
+              {t("home.landing.final.closingCtaLink")}
             </MarketingTrackedLink>
           </div>
         </div>

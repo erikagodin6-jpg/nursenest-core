@@ -93,36 +93,13 @@ export default function HomeRestoredClient() {
           data-testid="hero-section"
         >
           <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 md:py-14 lg:px-8">
-            <div className="mx-auto max-w-[52rem] space-y-6">
+            <div className="mx-auto max-w-[52rem] space-y-5">
               <h1 className="nn-marketing-h1 text-balance" data-testid="text-hero-heading">
                 {t("home.landing.heroTitle")}
               </h1>
               <p className="nn-marketing-body text-pretty text-[var(--theme-muted-text)]" data-testid="text-hero-subheading">
                 {t("home.landing.heroSub")}
               </p>
-
-              <div className="nn-hero-cta-row flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                <MarketingTrackedLink
-                  href={withMarketingLocale(locale, HUB.signup)}
-                  event={PH.marketingHomeHeroPrimaryCta}
-                  eventProps={{ region, destination: "signup" }}
-                  className={MARKETING_PRIMARY_CTA_CLASS}
-                  data-testid="button-hero-start-free"
-                >
-                  {t("home.landing.ctaPrimary")}
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </MarketingTrackedLink>
-                <MarketingTrackedLink
-                  href={withMarketingLocale(locale, HUB.questionBank)}
-                  event={PH.marketingHomeHeroSecondaryCta}
-                  eventProps={{ region, destination: "question_bank" }}
-                  className={MARKETING_SECONDARY_CTA_CLASS}
-                  data-testid="button-hero-browse-questions"
-                >
-                  <BookOpen className="mr-2 h-4 w-4 text-[var(--theme-muted-text)]" />
-                  {t("home.landing.ctaSecondary")}
-                </MarketingTrackedLink>
-              </div>
 
               <div
                 className="flex flex-col gap-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--nn-presentation-wash)] px-3 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-4"
@@ -180,15 +157,37 @@ export default function HomeRestoredClient() {
                         href={withMarketingLocale(locale, p.href)}
                         event={PH.marketingHomePathwayCardPrimary}
                         eventProps={{ pathway: p.id, region, surface: "hero" }}
-                        className="nn-marketing-card nn-marketing-card-pad flex h-full min-h-[7.25rem] flex-col transition hover:border-[var(--border-medium)]"
+                        className="nn-marketing-card nn-marketing-card-pad flex h-full min-h-[6.75rem] flex-col transition hover:border-[var(--border-medium)]"
                       >
                         <span className="nn-marketing-h3">{t(p.titleKey)}</span>
                         <span className="nn-marketing-body-sm mt-2 flex-1 text-[var(--theme-muted-text)]">{t(p.descKey)}</span>
-                        <span className="nn-marketing-caption mt-3 text-[var(--theme-primary)]">{t("home.landing.pathways.cta")}</span>
                       </MarketingTrackedLink>
                     </li>
                   ))}
                 </ul>
+              </div>
+
+              <div className="nn-hero-cta-row flex flex-col gap-3 border-t border-[var(--border-subtle)] pt-5 sm:flex-row sm:flex-wrap">
+                <MarketingTrackedLink
+                  href={withMarketingLocale(locale, HUB.signup)}
+                  event={PH.marketingHomeHeroPrimaryCta}
+                  eventProps={{ region, destination: "signup" }}
+                  className={MARKETING_PRIMARY_CTA_CLASS}
+                  data-testid="button-hero-start-free"
+                >
+                  {t("home.landing.ctaPrimary")}
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </MarketingTrackedLink>
+                <MarketingTrackedLink
+                  href={withMarketingLocale(locale, HUB.questionBank)}
+                  event={PH.marketingHomeHeroSecondaryCta}
+                  eventProps={{ region, destination: "question_bank" }}
+                  className={MARKETING_SECONDARY_CTA_CLASS}
+                  data-testid="button-hero-browse-questions"
+                >
+                  <BookOpen className="mr-2 h-4 w-4 text-[var(--theme-muted-text)]" />
+                  {t("home.landing.ctaSecondary")}
+                </MarketingTrackedLink>
               </div>
             </div>
           </div>
@@ -196,7 +195,7 @@ export default function HomeRestoredClient() {
 
         <HomeLandingSections questionCount={questionCount} />
 
-        <div className="mx-auto max-w-6xl px-4 py-8 text-center sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-6xl px-4 py-6 text-center sm:px-6 lg:px-8">
           <Link
             href={mapLegacyMarketingHref("/languages")}
             className="nn-marketing-body-sm inline-flex items-center gap-2 text-[var(--theme-muted-text)] transition-colors hover:text-[var(--theme-heading-text)]"

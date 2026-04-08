@@ -1,0 +1,100 @@
+/**
+ * Injectable scoped gold-standard lessons (shared core + pathway overlays).
+ * Order = remediation priority for hub injection when not duplicated in catalog.json or DB.
+ */
+import {
+  clinicalJudgmentHubListInput,
+  CLINICAL_JUDGMENT_GOLD_SLUG,
+  getClinicalJudgmentGoldLessonInput,
+} from "@/lib/lessons/scoped-lessons/clinical-judgment-prioritization-gold-standard";
+import {
+  COPD_GOLD_STANDARD_SLUG,
+  copdGoldHubListInput,
+  getCopdGoldStandardLessonInput,
+} from "@/lib/lessons/scoped-lessons/copd-gold-standard";
+import {
+  getHighAlertMedsGoldLessonInput,
+  HIGH_ALERT_MEDS_GOLD_SLUG,
+  highAlertMedsGoldHubListInput,
+} from "@/lib/lessons/scoped-lessons/high-alert-medications-gold-standard";
+import {
+  getSepsisGoldLessonInput,
+  SEPSIS_GOLD_SLUG,
+  sepsisGoldHubListInput,
+} from "@/lib/lessons/scoped-lessons/sepsis-early-recognition-gold-standard";
+
+/** Minimal lesson row shape for catalog merge (matches pathway-lesson-loader `LessonInput`). */
+export type ScopedGoldLessonInput = {
+  slug: string;
+  title: string;
+  topic: string;
+  topicSlug: string;
+  bodySystem: string;
+  previewSectionCount: number;
+  seoTitle: string;
+  seoDescription: string;
+  sections: unknown;
+  preTest?: import("@/lib/lessons/pathway-lesson-types").PathwayLessonQuizItem[];
+  postTest?: import("@/lib/lessons/pathway-lesson-types").PathwayLessonQuizItem[];
+};
+
+export type ScopedGoldProvider = {
+  slug: string;
+  topicSlug: string;
+  getFullLesson: (pathwayId: string) => ScopedGoldLessonInput | null;
+  getHubListRow: (pathwayId: string) => Omit<ScopedGoldLessonInput, "sections" | "preTest" | "postTest"> | null;
+};
+
+/** Highest-yield remediation wave first; COPD legacy gold remains in rotation. */
+export const SCOPED_GOLD_PROVIDERS: ScopedGoldProvider[] = [
+  {
+    slug: CLINICAL_JUDGMENT_GOLD_SLUG,
+    topicSlug: "prioritization-delegation",
+    getFullLesson: getClinicalJudgmentGoldLessonInput,
+    getHubListRow: clinicalJudgmentHubListInput,
+  },
+  {
+    slug: SEPSIS_GOLD_SLUG,
+    topicSlug: "sepsis",
+    getFullLesson: getSepsisGoldLessonInput,
+    getHubListRow: sepsisGoldHubListInput,
+  },
+  {
+    slug: HIGH_ALERT_MEDS_GOLD_SLUG,
+    topicSlug: "medication-safety",
+    getFullLesson: getHighAlertMedsGoldLessonInput,
+    getHubListRow: highAlertMedsGoldHubListInput,
+  },
+  {
+    slug: COPD_GOLD_STANDARD_SLUG,
+    topicSlug: "copd",
+    getFullLesson: getCopdGoldStandardLessonInput,
+    getHubListRow: copdGoldHubListInput,
+  },
+];
+
+/** Prepend registry lessons not already present in catalog.json (stable slugs). */
+export function prependScopedGoldCatalogLessons(pathwayId: string, fromJson: ScopedGoldLessonInput[]): ScopedGoldLessonInput[] {
+  const seen = new Set(fromJson.map((l) => l.slug));
+  const prepend: ScopedGoldLessonInput[] = [];
+  for (const p of SCOPED_GOLD_PROVIDERS) {
+    if (seen.has(p.slug)) continue;
+    const full = p.getFullLesson(pathwayId);
+    if (!full) continue;
+    prepend.push(full);
+    seen.add(p.slug);
+  }
+  return [...prepend, ...fromJson];
+}
+
+/** Hub metadata rows (empty sections) for injections matching optional topic filter. */
+export function scopedGoldHubRowsForPathway(pathwayId: string, topicSlugsIn?: string[]): ScopedGoldLessonInput[] {
+  const out: ScopedGoldLessonInput[] = [];
+  for (const p of SCOPED_GOLD_PROVIDERS) {
+    if (topicSlugsIn && topicSlugsIn.length > 0 && !topicSlugsIn.includes(p.topicSlug)) continue;
+    const hub = p.getHubListRow(pathwayId);
+    if (!hub) continue;
+    out.push({ ...hub, sections: [] });
+  }
+  return out;
+}

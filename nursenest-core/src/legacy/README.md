@@ -1,14 +1,6 @@
 # Legacy marketing components (Replit-era UI, controlled reuse)
 
-This folder holds **extracted** marketing sections (heroes, feature grids, conversion blocks) that power the **Next.js** marketing experience.
-
-## How they are loaded
-
-Do **not** import the entire folder from the root layout. The integration point is:
-
-- `src/components/marketing/home-restored-client.tsx`
-
-That file uses `next/dynamic` for each legacy module and `LazySection` for viewport-based loading so the first paint stays light.
+This folder previously held large homepage sections loaded via `next/dynamic` from `home-restored-client`. The **marketing homepage** is now a single streamlined client tree (`home-restored-client.tsx` + `home-landing-sections.tsx`) without those dynamic legacy chunks.
 
 ## Rules when editing
 

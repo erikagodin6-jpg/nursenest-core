@@ -1,35 +1,28 @@
 import type { FaqJsonLdItem } from "@/components/seo/faq-json-ld";
 
-/** Keep in sync with `home.landing.faq.q*` / `home.landing.faq.a*` in `public/i18n/en.json`. */
+/** Keep in sync with `home.landing.faq.q1`–`q5` / `a1`–`a5` in `public/i18n/en.json` and `HomeLandingSections` FAQ keys. */
 export const MARKETING_HOME_FAQ_JSONLD: FaqJsonLdItem[] = [
   {
-    question: "Which exam do I choose?",
+    question: "Which exam is this for?",
     answer:
-      "Use the country toggle, then pick the pathway that matches your license goal: RN (NCLEX-RN), Practical Nursing (NCLEX-PN or REx-PN by country), NP, or Allied Health. Each pathway opens the right question bank and lessons for that track.",
+      "RN (NCLEX-RN), practical nursing (NCLEX-PN or REx-PN by country), NP, or allied health. Use the card that matches your goal.",
   },
   {
-    question: "Is this for Canada and the US?",
-    answer:
-      "Yes. Switch between United States and Canada at the top of the page. Content labels and pathways (for example PN vs REx-PN) update for your region.",
+    question: "Is this for the US and Canada?",
+    answer: "Yes. Toggle your country—labels and pathways update for your region.",
   },
   {
     question: "Do I need a subscription?",
-    answer:
-      "You can create a free account and explore pathway-aligned previews. Full banks, saved sessions, and premium features are listed on the pricing page. No credit card is required to start.",
+    answer: "Start free. Full banks and saved work are on paid plans; see pricing when you are ready.",
   },
   {
-    question: "How many questions are included?",
+    question: "What is included?",
     answer:
-      "The question bank grows continuously. The homepage shows the current practice question count. Your pathway determines which items you see first.",
+      "Pathway questions, timed practice, lessons, and flashcards. The homepage shows the live question count; your pathway filters what you see first.",
   },
   {
     question: "Is this like UWorld?",
     answer:
-      "NurseNest is built for nursing and allied health licensing exams with rationale-first items, timed practice, and lessons aligned to your exam—not a generic flashcard app. Many students use it alongside other tools; pick what fits your study plan.",
-  },
-  {
-    question: "What is readiness tracking?",
-    answer:
-      "As you practice, NurseNest highlights weak areas and trends so you can focus review before test day. It complements timed mocks and the question bank.",
+      "Similar—exam-style items with rationales—but built for nursing and allied licensing, not a generic Qbank.",
   },
 ];
