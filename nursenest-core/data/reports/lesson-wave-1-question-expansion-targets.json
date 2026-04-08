@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "title": "Question bank expansion targets — scoped gold lesson wave 1",
+  "lessons": [
+    {
+      "lessonSlug": "clinical-judgment-prioritization-gold",
+      "topicSlug": "prioritization-delegation",
+      "blueprintDomains": ["management_of_care", "safety_and_infection"],
+      "clinicalSystems": ["general", "cardio", "respiratory", "neuro"],
+      "questionThemes": [
+        "Multi-patient prioritization (who to see first)",
+        "Delegation and assignment within PN/RPN vs RN scope",
+        "Unsafe practice recognition (delaying report, wrong task order)",
+        "Therapeutic communication during conflict over priorities",
+        "Canadian vs US: same judgment spine; watch scope language in stems"
+      ],
+      "metadataSignals": [
+        "Tag nclex_client_needs_category toward management/delegation when accurate",
+        "Include body_system or topic text that maps to inferClinicalSystemForRow for weak systems on the pathway"
+      ]
+    },
+    {
+      "lessonSlug": "sepsis-early-recognition-gold",
+      "topicSlug": "sepsis",
+      "blueprintDomains": ["physiological_adaptation", "risk_reduction", "pharmacological_therapies"],
+      "clinicalSystems": ["infection_sepsis", "renal", "fluids_electrolytes"],
+      "questionThemes": [
+        "Infection + hypotension/tachycardia/altered mentation — first actions",
+        "Post-op and line-associated infection cues",
+        "Lactate / urine output / perfusion trends when stem includes them",
+        "NP: ED referral vs outpatient management for toxic appearance",
+        "RPN/PN: report and support; no silent waiting"
+      ],
+      "metadataSignals": [
+        "Use keywords for inferMedicationBuckets when antibiotics/vasopressors appear",
+        "Region_scope and exam keys aligned to pathway subscriber pool"
+      ]
+    },
+    {
+      "lessonSlug": "high-alert-medications-safety-gold",
+      "topicSlug": "medication-safety",
+      "blueprintDomains": ["pharmacological_therapies", "safety_and_infection"],
+      "clinicalSystems": ["endocrine", "hematology_immuno", "neuro", "gi"],
+      "questionThemes": [
+        "Insulin: hypoglycemia before hyperglycemia, five rights, decimal errors",
+        "Anticoagulants: bleeding, neuro red flags, hold/clarify orders",
+        "Opioids: RR, sedation, SpO₂, naloxone per protocol",
+        "Canadian stems: mmol/L glucose, SI-aware reasoning",
+        "NP: risk stratification, naloxone co-prescribing concepts, renal dosing cues"
+      ],
+      "metadataSignals": [
+        "Explicit insulin / anticoagulant / opioid language for medication breadth metrics",
+        "Rationale length: target strong tier (≥200 words or correct_answer_explanation > 80 chars) on new items"
+      ]
+    },
+    {
+      "lessonSlug": "copd-clinical-judgment-gold",
+      "topicSlug": "copd",
+      "blueprintDomains": ["physiological_adaptation", "management_of_care", "pharmacological_therapies"],
+      "clinicalSystems": ["respiratory"],
+      "questionThemes": [
+        "Oxygen therapy and escalation (PN/RN/NP appropriate forks)",
+        "Exacerbation infection vs over-diuresis overlap in stems",
+        "Patient teaching: inhalers, pursed-lip breathing, cessation"
+      ],
+      "metadataSignals": ["Respiratory topic/subtopic for system rollup"]
+    }
+  ]
+}
