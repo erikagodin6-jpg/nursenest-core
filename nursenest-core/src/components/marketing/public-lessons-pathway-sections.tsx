@@ -90,30 +90,28 @@ export async function PublicLessonsPathwaySections({ locale }: { locale: string 
                 const previews = getCatalogLessonPreviewTitles(p.id, 4);
                 return (
                   <li key={p.id} className="nn-card p-4">
-                    <p className="text-xs font-semibold uppercase text-primary">
+                    <p className="nn-marketing-label nn-marketing-label--accent">
                       {t("pages.examLessons.pathwayBadge", { region: regionLabel(p.countrySlug), shortName: p.shortName })}
                     </p>
-                    <h3 className="mt-1 text-lg font-semibold text-[var(--theme-heading-text)]">{p.displayName}</h3>
-                    <p className="mt-2 text-sm text-muted">{p.seoDescription}</p>
+                    <h3 className="mt-1 nn-marketing-h3">{p.displayName}</h3>
+                    <p className="mt-2 nn-marketing-body-sm text-muted">{p.seoDescription}</p>
                     {previews.length > 0 ? (
                       <div className="mt-3">
-                        <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
-                          Sample lesson topics
-                        </p>
-                        <ul className="mt-2 list-inside list-disc text-sm text-[var(--theme-muted-text)]">
+                        <p className="nn-marketing-label text-[var(--theme-muted-text)]">Sample lesson topics</p>
+                        <ul className="mt-2 list-inside list-disc nn-marketing-body-sm text-[var(--theme-muted-text)]">
                           {previews.map((title) => (
                             <li key={title}>{title}</li>
                           ))}
                         </ul>
                       </div>
                     ) : (
-                      <p className="mt-3 text-sm text-[var(--theme-muted-text)]">
+                      <p className="mt-3 nn-marketing-body-sm text-[var(--theme-muted-text)]">
                         Open the hub for the full lesson list and previews for this pathway.
                       </p>
                     )}
                     <Link
                       href={buildExamPathwayPath(p, "lessons")}
-                      className="mt-3 inline-block text-sm font-semibold text-primary hover:underline"
+                      className="mt-3 inline-block nn-marketing-body-sm font-medium text-primary hover:underline"
                     >
                       {t("pages.examLessons.openHub")}
                     </Link>

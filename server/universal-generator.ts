@@ -506,7 +506,7 @@ ${params.template === "resume_advice" ? "Cover resume formatting, clinical exper
 ${params.template === "transition" ? "Cover the transition from student to professional: orientation survival, preceptor relationships, time management, and confidence building." : ""}
 
 Include internal links to NurseNest resources:
-- [Practice Questions](/test-bank)
+- [Practice Questions](/question-bank)
 - [Study Lessons](/lessons)
 - [ApplyNest Job Board](/new-grad/applynest)
 - [Career Resources](/new-grad)`;

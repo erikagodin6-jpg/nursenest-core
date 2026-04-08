@@ -134,7 +134,7 @@ export default function HomeHeroFeatures() {
                 <div className="nn-theme-gradient-br mb-3 flex h-10 w-10 items-center justify-center rounded-xl shadow-sm transition-transform group-hover:scale-110">
                   <area.icon className="h-5 w-5 text-white" />
                 </div>
-                <h3 className="mb-1 text-sm font-bold text-[var(--theme-heading-text)]">{t(area.labelKey)}</h3>
+                <h3 className="mb-1 nn-marketing-h4">{t(area.labelKey)}</h3>
                 <div className="flex items-center text-xs font-medium text-primary opacity-0 transition-opacity group-hover:opacity-100">
                   <span>{t("home.heroFeatures.explore")}</span>
                   <ArrowRight className="ml-1 h-3 w-3" />

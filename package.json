@@ -41,6 +41,7 @@
     "i18n:ci": "npm run i18n:compile && npm run i18n:validate && npm run i18n:check-drift && npm run i18n:report-placeholder-fallbacks",
     "i18n:repair-marketing": "npm run i18n:compile && cd nursenest-core && npm run i18n:sync-audited-to-marketing-en && cd .. && npm run i18n:compile && cd nursenest-core && npm run i18n:fill-marketing-nav-footer-overlays && cd .. && npm run i18n:compile && npm run i18n:validate && npm run i18n:check-drift && cd nursenest-core && npm run i18n:validate-nav",
     "i18n:report:marketing": "node script/export-marketing-translation-gaps.mjs",
+    "i18n:report:educational": "node script/report-educational-translation-coverage.mjs",
     "i18n:status": "tsx scripts/generate-i18n-status.ts",
     "i18n:scan": "tsx scripts/i18n-scan.ts",
     "i18n:scan:ci": "tsx scripts/i18n-scan.ts --ci",

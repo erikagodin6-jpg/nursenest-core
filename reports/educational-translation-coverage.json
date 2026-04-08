@@ -1,0 +1,191 @@
+{
+  "generatedAt": "2026-04-08T14:35:25.752Z",
+  "pathwayCatalog": {
+    "distinctPathwaySlugCompoundKeys": 382,
+    "distinctSlugsAcrossPathways": 253
+  },
+  "educationalOverlayRoot": "nursenest-core/public/i18n/educational-overlays",
+  "locales": {
+    "en": {
+      "note": "English is canonical DB + catalog source; file overlays are optional for parity tooling only.",
+      "fileOverlays": {
+        "hasLessonsFile": false,
+        "lessonOverlayKeys": 0,
+        "questionOverlayKeys": 0,
+        "flashcardDeckKeys": 0,
+        "flashcardCardKeys": 0,
+        "flashcardTagKeys": 0
+      }
+    },
+    "fr": {
+      "hasLessonsFile": true,
+      "questionOverlayKeys": 0,
+      "flashcardDeckKeys": 0,
+      "flashcardCardKeys": 0,
+      "flashcardTagKeys": 0
+    },
+    "tl": {
+      "hasLessonsFile": true,
+      "questionOverlayKeys": 0,
+      "flashcardDeckKeys": 0,
+      "flashcardCardKeys": 0,
+      "flashcardTagKeys": 0
+    },
+    "hi": {
+      "hasLessonsFile": false,
+      "lessonOverlayKeys": 0,
+      "questionOverlayKeys": 0,
+      "flashcardDeckKeys": 0,
+      "flashcardCardKeys": 0,
+      "flashcardTagKeys": 0
+    },
+    "es": {
+      "hasLessonsFile": true,
+      "questionOverlayKeys": 0,
+      "flashcardDeckKeys": 0,
+      "flashcardCardKeys": 0,
+      "flashcardTagKeys": 0
+    },
+    "zh": {
+      "hasLessonsFile": false,
+      "lessonOverlayKeys": 0,
+      "questionOverlayKeys": 0,
+      "flashcardDeckKeys": 0,
+      "flashcardCardKeys": 0,
+      "flashcardTagKeys": 0
+    },
+    "zh-tw": {
+      "hasLessonsFile": false,
+      "lessonOverlayKeys": 0,
+      "questionOverlayKeys": 0,
+      "flashcardDeckKeys": 0,
+      "flashcardCardKeys": 0,
+      "flashcardTagKeys": 0
+    },
+    "ar": {
+      "hasLessonsFile": false,
+      "lessonOverlayKeys": 0,
+      "questionOverlayKeys": 0,
+      "flashcardDeckKeys": 0,
+      "flashcardCardKeys": 0,
+      "flashcardTagKeys": 0
+    },
+    "ko": {
+      "hasLessonsFile": false,
+      "lessonOverlayKeys": 0,
+      "questionOverlayKeys": 0,
+      "flashcardDeckKeys": 0,
+      "flashcardCardKeys": 0,
+      "flashcardTagKeys": 0
+    },
+    "pt": {
+      "hasLessonsFile": false,
+      "lessonOverlayKeys": 0,
+      "questionOverlayKeys": 0,
+      "flashcardDeckKeys": 0,
+      "flashcardCardKeys": 0,
+      "flashcardTagKeys": 0
+    },
+    "pa": {
+      "hasLessonsFile": false,
+      "lessonOverlayKeys": 0,
+      "questionOverlayKeys": 0,
+      "flashcardDeckKeys": 0,
+      "flashcardCardKeys": 0,
+      "flashcardTagKeys": 0
+    },
+    "vi": {
+      "hasLessonsFile": false,
+      "lessonOverlayKeys": 0,
+      "questionOverlayKeys": 0,
+      "flashcardDeckKeys": 0,
+      "flashcardCardKeys": 0,
+      "flashcardTagKeys": 0
+    },
+    "ht": {
+      "hasLessonsFile": false,
+      "lessonOverlayKeys": 0,
+      "questionOverlayKeys": 0,
+      "flashcardDeckKeys": 0,
+      "flashcardCardKeys": 0,
+      "flashcardTagKeys": 0
+    },
+    "ur": {
+      "hasLessonsFile": false,
+      "lessonOverlayKeys": 0,
+      "questionOverlayKeys": 0,
+      "flashcardDeckKeys": 0,
+      "flashcardCardKeys": 0,
+      "flashcardTagKeys": 0
+    },
+    "ja": {
+      "hasLessonsFile": false,
+      "lessonOverlayKeys": 0,
+      "questionOverlayKeys": 0,
+      "flashcardDeckKeys": 0,
+      "flashcardCardKeys": 0,
+      "flashcardTagKeys": 0
+    },
+    "fa": {
+      "hasLessonsFile": false,
+      "lessonOverlayKeys": 0,
+      "questionOverlayKeys": 0,
+      "flashcardDeckKeys": 0,
+      "flashcardCardKeys": 0,
+      "flashcardTagKeys": 0
+    },
+    "de": {
+      "hasLessonsFile": false,
+      "lessonOverlayKeys": 0,
+      "questionOverlayKeys": 0,
+      "flashcardDeckKeys": 0,
+      "flashcardCardKeys": 0,
+      "flashcardTagKeys": 0
+    },
+    "th": {
+      "hasLessonsFile": false,
+      "lessonOverlayKeys": 0,
+      "questionOverlayKeys": 0,
+      "flashcardDeckKeys": 0,
+      "flashcardCardKeys": 0,
+      "flashcardTagKeys": 0
+    },
+    "tr": {
+      "hasLessonsFile": false,
+      "lessonOverlayKeys": 0,
+      "questionOverlayKeys": 0,
+      "flashcardDeckKeys": 0,
+      "flashcardCardKeys": 0,
+      "flashcardTagKeys": 0
+    },
+    "id": {
+      "hasLessonsFile": false,
+      "lessonOverlayKeys": 0,
+      "questionOverlayKeys": 0,
+      "flashcardDeckKeys": 0,
+      "flashcardCardKeys": 0,
+      "flashcardTagKeys": 0
+    },
+    "it": {
+      "hasLessonsFile": false,
+      "lessonOverlayKeys": 0,
+      "questionOverlayKeys": 0,
+      "flashcardDeckKeys": 0,
+      "flashcardCardKeys": 0,
+      "flashcardTagKeys": 0
+    },
+    "ru": {
+      "hasLessonsFile": false,
+      "lessonOverlayKeys": 0,
+      "questionOverlayKeys": 0,
+      "flashcardDeckKeys": 0,
+      "flashcardCardKeys": 0,
+      "flashcardTagKeys": 0
+    }
+  },
+  "interpretation": {
+    "lessonParity": "lessonOverlayKeys counts keys in lessons.json plus keys only appearing under fragments/*.json. Full parity means one overlay entry per catalog compound key (pathwayId:slug) where translation exists.",
+    "questions": "questionOverlayKeys counts ExamQuestion.id entries in questions.json; DB-published overlays (educationalTranslationOverlay) are not included here — use admin / DB reports for production coverage.",
+    "flashcards": "flashcard* counts are file overlays only; merged at runtime with Prisma educationalTranslationOverlay rows."
+  }
+}

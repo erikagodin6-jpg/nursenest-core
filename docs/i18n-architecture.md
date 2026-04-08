@@ -67,6 +67,7 @@ This runs `script/compile-i18n.ts`, which:
 - **Pre-nursing:** `nursenest-core/src/content/pre-nursing/pre-nursing-i18n.tsx` and `usePreNursingT()` — small, route-scoped tables.
 - **DB-backed content:** Lessons, exams, CMS fields — translated in PostgreSQL (`content_translations`, `content_item_translations`, etc.), not in the flat JSON pipeline.
 - **Legacy lesson JSON packs:** `client/src/lib/getI18n.ts` loads `/api/assets/translations/{lang}.json` for structured lesson overlays — distinct from global UI i18n.
+- **Pathway lesson file overlays:** `nursenest-core/public/i18n/educational-overlays/<locale>/lessons.json` plus optional `fragments/*.json` (sorted, deep-merged per lesson key at runtime in `educational-content-overlay.ts`).
 
 ## Validation commands
 

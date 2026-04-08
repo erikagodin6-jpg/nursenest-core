@@ -1152,7 +1152,7 @@ const COMPARISON_PAGES: SeoContentPage[] = [
       { label: "NCLEX-RN Practice Questions", url: "/nclex-rn-practice-questions", description: "Try NurseNest NCLEX-RN questions" },
       { label: "Free Practice Questions", url: "/free-practice", description: "Start with free questions" },
       { label: "Pricing", url: "/pricing", description: "View NurseNest pricing" },
-      { label: "Mock Exams", url: "/mock-exams", description: "Full-length practice tests" },
+      { label: "Mock Exams", url: "/practice-exams", description: "Full-length practice tests" },
       { label: "Compare NurseNest vs UWorld", url: "/compare/nursenest-vs-uworld", description: "Detailed comparison" }
     ],
     relatedPages: ["compare/best-rex-pn-prep", "compare/uworld-alternative-nursing", "nursing/nclex-rn-practice-questions"],

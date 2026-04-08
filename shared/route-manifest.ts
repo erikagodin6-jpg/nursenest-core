@@ -108,6 +108,7 @@ export const DYNAMIC_ROUTE_PATTERNS: RegExp[] = [
   /^\/clinical-clarity\/.+$/,
   /^\/blog\/.+$/,
   /^\/mock-exams\/.+$/,
+  /^\/practice-exams(\/.+)?$/,
   /^\/topics\/.+$/,
   /^\/glossary\/.+$/,
   /^\/encyclopedia\/.+$/,
