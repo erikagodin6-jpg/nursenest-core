@@ -9,7 +9,7 @@ export const MARKETING_HOME_FAQ_JSONLD: FaqJsonLdItem[] = [
   },
   {
     question: "Is this for the US and Canada?",
-    answer: "Yes. Toggle your country—labels and pathways update for your region.",
+    answer: "Yes. Toggle your country and labels plus pathways update for your region.",
   },
   {
     question: "Do I need a subscription?",
@@ -18,11 +18,11 @@ export const MARKETING_HOME_FAQ_JSONLD: FaqJsonLdItem[] = [
   {
     question: "What is included?",
     answer:
-      "Pathway questions, timed practice, lessons, and flashcards. The homepage shows the live question count; your pathway filters what you see first.",
+      "Everything stays tied to the exam card you pick: scope, totals, and depth follow that pathway. The homepage shows a live question count; filters keep your first screen aligned with the license you are pursuing.",
   },
   {
     question: "Is this like UWorld?",
     answer:
-      "Similar—exam-style items with rationales—but built for nursing and allied licensing, not a generic Qbank.",
+      "Similar in that items are exam-style with rationales, but built for nursing and allied licensing, not a generic Qbank.",
   },
 ];

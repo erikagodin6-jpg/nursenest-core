@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
+import { isPremiumSectionKind } from "@/lib/lessons/pathway-lesson-premium";
 import {
   COPD_GOLD_STANDARD_SLUG,
   copdGoldVariantForPathway,
@@ -22,23 +23,17 @@ describe("copd gold standard scoped lessons", () => {
     }
   });
 
-  it("each variant has five canonical sections and valid quizzes", () => {
-    const kinds = new Set([
-      "clinical_meaning",
-      "exam_relevance",
-      "core_concept",
-      "clinical_scenario",
-      "takeaways",
-    ]);
+  it("each variant has premium spine sections and valid quizzes", () => {
     for (const pid of FIVE_PATHWAYS) {
       const lesson = getCopdGoldStandardLessonInput(pid);
       assert.ok(lesson);
       assert.equal(lesson!.slug, COPD_GOLD_STANDARD_SLUG);
       assert.equal(lesson!.topicSlug, "copd");
-      assert.equal(lesson!.sections.length, 5);
+      assert.ok(lesson!.sections.length >= 10 && lesson!.sections.length <= 11);
       for (const s of lesson!.sections) {
-        assert.ok(kinds.has(s.kind));
-        assert.ok(s.body.length > 80);
+        assert.ok(isPremiumSectionKind(s.kind));
+        const minBody = s.kind === "related_next_steps" ? 40 : 60;
+        assert.ok(s.body.length >= minBody);
       }
       assert.ok((lesson!.preTest?.length ?? 0) >= 3);
       assert.ok((lesson!.postTest?.length ?? 0) >= 3);

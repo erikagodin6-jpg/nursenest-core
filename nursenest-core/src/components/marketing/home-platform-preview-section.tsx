@@ -33,7 +33,10 @@ export function HomePlatformPreviewSection() {
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <header className="mx-auto mb-5 max-w-3xl text-center md:mb-6">
-          <h2 id="home-platform-preview-heading" className="nn-marketing-h2 text-balance">
+          <p className="nn-marketing-caption font-medium tracking-wide text-[color-mix(in_srgb,var(--theme-primary)_78%,var(--theme-heading-text))]">
+            {t("home.landing.platformCarousel.bridge")}
+          </p>
+          <h2 id="home-platform-preview-heading" className="nn-marketing-h2 mt-2 text-balance">
             {t("home.landing.platformCarousel.title")}
           </h2>
           <p className="nn-marketing-body mx-auto mt-2 max-w-2xl text-pretty text-[var(--theme-muted-text)]">

@@ -4,6 +4,7 @@ import {
   createExamCompleteSection,
   examCompleteAuthoringChecklistText,
   EXAM_COMPLETE_SPINE_KINDS,
+  inferExamAudienceFromPathwayId,
   validateExamCompletePremiumSpine,
 } from "./exam-complete-lesson-template";
 import { PREMIUM_SECTION_HEADINGS, PREMIUM_SECTION_KINDS } from "./pathway-lesson-premium";

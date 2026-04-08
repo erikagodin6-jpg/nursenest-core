@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { auth } from "@/lib/auth";
-import { PathwayLessonSectionContentLinked } from "@/components/lessons/pathway-lesson-body-linked";
-import { PathwayLessonRelatedNextSteps } from "@/components/lessons/pathway-lesson-related-next-steps";
+import { PathwayLessonSectionContent } from "@/components/lessons/pathway-lesson-body";
 import { PremiumLessonPublishNotice } from "@/components/lessons/premium-lesson-publish-notice";
 import { PathwayLessonQuizzes } from "@/components/lessons/pathway-lesson-quizzes";
 import { PathwayLessonLockedSectionsPreview } from "@/components/lessons/pathway-lesson-locked-sections-preview";
@@ -80,8 +79,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     .join(", ");
   const strictPublic = process.env.PATHWAY_LESSON_STRICT_PUBLIC_QUALITY === "1";
   const incomplete = Boolean(lesson.structuralQuality && !lesson.structuralQuality.publicComplete);
+  const premiumIncomplete = Boolean(lesson.premiumValidation && !lesson.premiumValidation.publishReady);
   const robots =
-    strictPublic && incomplete ? ({ index: false, follow: true } as const) : ({ index: true, follow: true } as const);
+    premiumIncomplete || (strictPublic && incomplete)
+      ? ({ index: false, follow: true } as const)
+      : ({ index: true, follow: true } as const);
   return {
     title: lesson.seoTitle,
     description: lesson.seoDescription,
@@ -170,6 +172,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
         {pathway.countrySlug === "canada" ? "Canada" : "United States"} · {lesson.topic} · {lesson.bodySystem}
       </p>
       <div className="mt-4 space-y-3">
+        <PremiumLessonPublishNotice validation={lesson.premiumValidation} />
         <LessonQualityNotice tier={lessonQuality.tier} wordCount={lessonQuality.wordCount} />
         <LessonStructuralQualityNotice gate={lesson.structuralQuality} />
         <PathwayLessonQuickReview bullets={buildQuickReviewBullets(lesson)} />

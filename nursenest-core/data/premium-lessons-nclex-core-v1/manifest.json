@@ -118,35 +118,58 @@
     {
       "order": 11,
       "title": "Diabetes Mellitus",
-      "slug": "diabetes-self-management-teaching",
+      "slugByPathway": {
+        "us-rn-nclex-rn": "diabetes-self-management-teaching",
+        "ca-rn-nclex-rn": "diabetes-self-management-teaching",
+        "us-lpn-nclex-pn": "us-pn-insulin-hypoglycemia",
+        "ca-rpn-rex-pn": "ca-rpn-insulin-hypoglycemia"
+      },
       "topicSlug": "endocrine",
       "bodySystem": "endocrine",
       "source": "catalog",
-      "pathwayNote": "Present on RN pathways; PN uses different catalog set—see pathway hub filters."
+      "pathwayNote": "PN hubs use the insulin/hypoglycemia practical-nursing lesson as the catalog anchor (no separate DM self-management slug on PN pathways)."
     },
     {
       "order": 12,
       "title": "DKA vs HHS",
-      "slug": "dka-vs-hhs-priorities-hy",
+      "slugByPathway": {
+        "us-rn-nclex-rn": "dka-vs-hhs-priorities-hy",
+        "ca-rn-nclex-rn": "dka-vs-hhs-priorities-hy",
+        "us-lpn-nclex-pn": "us-pn-acid-base-advanced",
+        "ca-rpn-rex-pn": "ca-rpn-acid-base-advanced"
+      },
       "topicSlug": "endocrine",
       "bodySystem": "endocrine",
-      "source": "catalog"
+      "source": "catalog",
+      "pathwayNote": "PN: acid–base module covers metabolic emergencies at scope; RN has the dedicated DKA vs HHS high-yield page."
     },
     {
       "order": 13,
       "title": "Thyroid Disorders",
-      "slug": "thyroid-storm-myxedema-clues",
+      "slugByPathway": {
+        "us-rn-nclex-rn": "thyroid-storm-myxedema-clues",
+        "ca-rn-nclex-rn": "thyroid-storm-myxedema-clues",
+        "us-lpn-nclex-pn": "us-pn-sodium-imbalance",
+        "ca-rpn-rex-pn": "ca-rpn-sodium-imbalance"
+      },
       "topicSlug": "endocrine",
       "bodySystem": "endocrine",
-      "source": "catalog"
+      "source": "catalog",
+      "pathwayNote": "PN pathways do not ship a standalone thyroid storm lesson; sodium/electrolyte imbalance is the closest catalog page for related exam items."
     },
     {
       "order": 14,
       "title": "Acute Kidney Injury",
-      "slug": "aki-prerenal-vs-intrarenal",
+      "slugByPathway": {
+        "us-rn-nclex-rn": "aki-prerenal-vs-intrarenal",
+        "ca-rn-nclex-rn": "aki-prerenal-vs-intrarenal",
+        "us-lpn-nclex-pn": "us-pn-fluid-balance",
+        "ca-rpn-rex-pn": "ca-rpn-fluid-balance"
+      },
       "topicSlug": "renal-gu",
       "bodySystem": "renal",
-      "source": "catalog"
+      "source": "catalog",
+      "pathwayNote": "PN: fluid-balance lesson anchors perfusion/I&O concepts; RN has dedicated AKI prerenal vs intrarenal page."
     },
     {
       "order": 15,
@@ -180,19 +203,30 @@
     {
       "order": 18,
       "title": "Preeclampsia and Eclampsia",
-      "slug": "preeclampsia-vs-eclampsia",
+      "slugByPathway": {
+        "us-rn-nclex-rn": "preeclampsia-vs-eclampsia",
+        "ca-rn-nclex-rn": "preeclampsia-vs-eclampsia",
+        "us-lpn-nclex-pn": "ob-emergencies-gold-standard",
+        "ca-rpn-rex-pn": "ob-emergencies-gold-standard"
+      },
       "topicSlug": "maternity",
       "bodySystem": "maternity",
-      "source": "catalog"
+      "source": "mixed",
+      "pathwayNote": "PN: scoped-gold OB emergencies lesson covers hypertensive pregnancy emergencies alongside other OB crises."
     },
     {
       "order": 19,
       "title": "Postpartum Hemorrhage",
-      "slug": "postpartum-hemorrhage",
+      "slugByPathway": {
+        "us-rn-nclex-rn": "postpartum-hemorrhage",
+        "ca-rn-nclex-rn": "postpartum-hemorrhage",
+        "us-lpn-nclex-pn": "postpartum-fundus-lochia",
+        "ca-rpn-rex-pn": "postpartum-fundus-lochia"
+      },
       "topicSlug": "maternity",
       "bodySystem": "maternity",
       "source": "catalog",
-      "pathwayNote": "PN pathways may use postpartum-fundus-lochia for related scope preview; full PPH lesson on RN hubs."
+      "pathwayNote": "PN uses fundus/lochia assessment lesson as the hub destination for acute postpartum bleeding recognition at practical scope."
     },
     {
       "order": 20,

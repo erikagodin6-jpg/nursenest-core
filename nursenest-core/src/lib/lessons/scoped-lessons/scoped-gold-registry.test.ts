@@ -18,6 +18,7 @@ import {
   getRenalDialysisAcuteComplicationsGoldLessonInput,
 } from "./renal-dialysis-acute-complications-gold-standard";
 import { SEPSIS_GOLD_SLUG, getSepsisGoldLessonInput } from "./sepsis-early-recognition-gold-standard";
+import { isPremiumSectionKind } from "@/lib/lessons/pathway-lesson-premium";
 import { prependScopedGoldCatalogLessons, SCOPED_GOLD_PROVIDERS } from "./scoped-gold-registry";
 import { SHOCK_GOLD_SLUG, getShockGoldLessonInput } from "./shock-gold-standard";
 import { STROKE_ICP_GOLD_SLUG, getStrokeIcpGoldLessonInput } from "./stroke-increased-icp-gold-standard";
@@ -32,13 +33,15 @@ const CORE_NURSING_PATHWAYS = [
   "us-np-pmhnp",
 ] as const;
 
-const KINDS = new Set([
+const LEGACY_KINDS = new Set([
   "clinical_meaning",
   "exam_relevance",
   "core_concept",
   "clinical_scenario",
   "takeaways",
 ]);
+
+const PREMIUM_KIND_SET = new Set(PREMIUM_SECTION_KINDS);
 
 describe("scoped gold registry", () => {
   it("registry lists injectable slugs in remediation order (waves 1–4 + COPD)", () => {

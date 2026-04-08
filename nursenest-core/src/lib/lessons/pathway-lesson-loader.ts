@@ -385,9 +385,7 @@ function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLessonRec
 
   const incoming = sanitizeIncomingSections(raw.sections as PathwayLessonSection[]);
   const usePremium = lessonUsesPremiumStructure(incoming);
-  const expanded = usePremium
-    ? orderPremiumSections(incoming)
-    : expandToStandardFiveSections(incoming);
+  const expanded = usePremium ? finalizePremiumSections(incoming) : expandToStandardFiveSections(incoming);
 
   const premiumOmitted = raw.premiumOmittedSections;
   const relatedLessonRefs = raw.relatedLessonRefs;
@@ -412,18 +410,16 @@ function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLessonRec
   const preTest = sanitizeQuizItems((raw as { preTest?: unknown }).preTest);
   const postTest = sanitizeQuizItems((raw as { postTest?: unknown }).postTest);
 
-  const withQuizzes = {
+  const withQuizzes: PathwayLessonRecord = {
     ...base,
     previewSectionCount: preview,
     ...(preTest ? { preTest } : {}),
     ...(postTest ? { postTest } : {}),
   };
 
-  if (!usePremium) return withQuizzes;
-
   return {
     ...withQuizzes,
-    premiumValidation: validatePathwayLessonPremium(withQuizzes),
+    structuralQuality: evaluatePathwayLessonStructuralGate(withQuizzes),
   };
 }
 
@@ -787,7 +783,7 @@ export async function getPathwayLessonsPage(
   return {
     items: slice.map((row) =>
       applyLessonEducationalOverlay(
-        withLocaleMeta(normalizeLesson(row), catMeta),
+        withLocaleMeta(normalizeLesson(row, pathwayId), catMeta),
         marketingLocale,
         pathwayId,
         lessonDbOverlays,
@@ -1002,7 +998,7 @@ export async function getLessonsForTopicPage(
   return {
     items: slice.map((row) =>
       applyLessonEducationalOverlay(
-        withLocaleMeta(normalizeLesson(row), catMeta),
+        withLocaleMeta(normalizeLesson(row, pathwayId), catMeta),
         marketingLocale,
         pathwayId,
         lessonDbOverlays,
@@ -1042,7 +1038,7 @@ export async function getPathwayLesson(
   if (rowRequested && rowRequested.status === ContentStatus.PUBLISHED) {
     return applyOverlayAndStructural(
       withLocaleMeta(
-        normalizeLesson(pathwayLessonRowToInput(rowRequested)),
+        normalizeLesson(pathwayLessonRowToInput(rowRequested), pathwayId),
         lessonLocaleMeta(marketingLocale, requested, false, false),
       ),
       marketingLocale,
@@ -1064,7 +1060,7 @@ export async function getPathwayLesson(
     if (rowEn && rowEn.status === ContentStatus.PUBLISHED) {
       return applyOverlayAndStructural(
         withLocaleMeta(
-          normalizeLesson(pathwayLessonRowToInput(rowEn)),
+          normalizeLesson(pathwayLessonRowToInput(rowEn), pathwayId),
           lessonLocaleMeta(marketingLocale, "en", true, false),
         ),
         marketingLocale,
@@ -1085,7 +1081,7 @@ export async function getPathwayLesson(
     });
   }
   return applyOverlayAndStructural(
-    withLocaleMeta(normalizeLesson(hit), lessonLocaleMeta(marketingLocale, "en", requested !== "en", true)),
+    withLocaleMeta(normalizeLesson(hit, pathwayId), lessonLocaleMeta(marketingLocale, "en", requested !== "en", true)),
     marketingLocale,
     pathwayId,
     lessonDbOverlays,
@@ -1104,7 +1100,7 @@ export async function getPathwayLessonForProgress(pathwayId: string, slug: strin
     null,
   );
   if (rowEn && rowEn.status === ContentStatus.PUBLISHED) {
-    return normalizeLesson(pathwayLessonRowToInput(rowEn));
+    return normalizeLesson(pathwayLessonRowToInput(rowEn), pathwayId);
   }
   const rowAny = await dbCall(
     () =>
@@ -1114,9 +1110,9 @@ export async function getPathwayLessonForProgress(pathwayId: string, slug: strin
       }),
     null,
   );
-  if (rowAny) return normalizeLesson(pathwayLessonRowToInput(rowAny));
+  if (rowAny) return normalizeLesson(pathwayLessonRowToInput(rowAny), pathwayId);
   const hit = getCatalogLessonsRaw(pathwayId).find((l) => l.slug === slug);
-  return hit ? normalizeLesson(hit) : undefined;
+  return hit ? normalizeLesson(hit, pathwayId) : undefined;
 }
 
 /**
@@ -1133,7 +1129,7 @@ export async function getPublishedPathwayLessonRecordById(
     normalizePathwayLessonLocale(marketingLocale),
   );
   return applyOverlayAndStructural(
-    normalizeLesson(pathwayLessonRowToInput(row)),
+    normalizeLesson(pathwayLessonRowToInput(row), row.pathwayId),
     marketingLocale,
     row.pathwayId,
     lessonDbOverlays,
@@ -1174,7 +1170,7 @@ export async function getRelatedPathwayLessons(
     const meta = lessonLocaleMeta(marketingLocale, effective, requested !== effective, false);
     const mapped = rows.map((r) =>
       applyLessonEducationalOverlay(
-        withLocaleMeta(normalizeLessonForHubList(pathwayLessonRowToInput({ ...r, sections: [] })), meta),
+        withLocaleMeta(normalizeLessonForHubList(pathwayLessonRowToInput({ ...r, sections: [] }), pathwayId), meta),
         marketingLocale,
         pathwayId,
         lessonDbOverlays,
