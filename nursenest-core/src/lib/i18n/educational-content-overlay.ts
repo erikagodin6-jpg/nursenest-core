@@ -114,12 +114,13 @@ export function loadLessonEducationalBundle(locale: string): Record<string, Path
   if (locale === DEFAULT_MARKETING_LOCALE) return {};
   const hit = lessonBundleCache.get(locale);
   if (hit !== undefined) return (hit ?? {}) as Record<string, PathwayLessonEducationalOverlay>;
-  const base = resolveEducationalI18nRoot();
-  const fp = path.join(base, locale, "lessons.json");
+  const baseRoot = resolveEducationalI18nRoot();
+  const fp = path.join(baseRoot, locale, "lessons.json");
   const data = readJsonFile<Record<string, PathwayLessonEducationalOverlay>>(fp);
-  const normalized = data && typeof data === "object" ? data : null;
-  lessonBundleCache.set(locale, normalized as unknown as Record<string, unknown> | null);
-  return (normalized ?? {}) as Record<string, PathwayLessonEducationalOverlay>;
+  const normalized = data && typeof data === "object" ? data : {};
+  const merged = mergeLessonOverlaysFromFragments(baseRoot, locale, normalized);
+  lessonBundleCache.set(locale, merged as unknown as Record<string, unknown> | null);
+  return merged;
 }
 
 function mergeExamFocus(
