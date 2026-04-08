@@ -62,21 +62,12 @@ const LEAF = (x: GlobalNavLeafItem) => x;
 /** Desktop “Explore” / who we help (icons); not in mobile drawer list. */
 export const GLOBAL_NAV_WHO_WE_HELP: GlobalNavLeafItem[] = [
   LEAF({
-    id: "marketing-exam-prep",
-    labelKey: "nav.examPrep",
-    href: "/exam-prep",
-    group: "who-we-help",
-    surfaces: [DD],
-    order: 10,
-    icon: "book-open",
-  }),
-  LEAF({
     id: "marketing-new-graduate-support",
     labelKey: "nav.newGradSupport",
     href: "/new-graduate-support",
     group: "who-we-help",
     surfaces: [DD],
-    order: 20,
+    order: 10,
     icon: "graduation-cap",
   }),
   LEAF({
@@ -85,17 +76,8 @@ export const GLOBAL_NAV_WHO_WE_HELP: GlobalNavLeafItem[] = [
     href: "/healthcare-careers",
     group: "who-we-help",
     surfaces: [DD],
-    order: 30,
+    order: 20,
     icon: "briefcase",
-  }),
-  LEAF({
-    id: "marketing-allied-health",
-    labelKey: "nav.alliedHealth",
-    href: "/allied-health",
-    group: "who-we-help",
-    surfaces: [DD],
-    order: 40,
-    icon: "heart",
   }),
 ];
 

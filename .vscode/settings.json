@@ -1,12 +1,37 @@
 {
   "git.ignoreLimitWarning": true,
-  "typescript.tsserver.maxTsServerMemory": 6144,
+  "typescript.tsserver.maxTsServerMemory": 8192,
+  "typescript.disableAutomaticTypeAcquisition": true,
   "files.watcherExclude": {
     "**/.git/objects/**": true,
     "**/node_modules/**": true,
     "**/.next/**": true,
     "**/dist/**": true,
+    "**/build/**": true,
+    "**/out/**": true,
     "**/coverage/**": true,
+    "**/data/**": true,
+    "**/public/**": true,
+    "**/.turbo/**": true,
+    "**/replit-export/**": true,
+    "**/nursenest-core/data/**": true,
+    "**/nursenest-core/public/**": true,
+    "**/nursenest-core/.next/**": true,
+    "**/client/public/**": true,
+    "**/client/src/data/translations/**": true,
     "**/client/src/assets/**": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.next": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/coverage": true,
+    "**/data": true,
+    "**/public": true,
+    "**/replit-export": true,
+    "**/nursenest-core/data": true,
+    "**/nursenest-core/public": true,
+    "**/client/src/data/translations": true
   }
 }

@@ -19,6 +19,7 @@ import {
   EXAM_US_RN_FULL_2026_ID,
   FULL_EXAM_2026_QUESTION_TARGET,
   MIXED_PRACTICE_2026_EXAM_ID,
+  MIXED_PRACTICE_2026_QUESTION_TARGET,
   MIXED_PRACTICE_2026_RN_PN_TAG,
 } from "@/lib/exams/practice-exam-presets";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
@@ -42,7 +43,8 @@ function canUsePnFullExams(e: AccessScope): boolean {
 type ExamsPageProps = { searchParams: Promise<{ historyPage?: string }> };
 
 export default async function ExamsPage({ searchParams }: ExamsPageProps) {
-  const { t } = await getLearnerMarketingBundle();
+  const { t, locale } = await getLearnerMarketingBundle();
+  const localeTag = locale.replace(/_/g, "-");
   const sp = await searchParams;
   let requestedHistoryPage = Math.max(1, Number(sp.historyPage ?? "1"));
   if (!Number.isFinite(requestedHistoryPage)) requestedHistoryPage = 1;
@@ -172,43 +174,33 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
       )}
 
       <section className="mt-10 space-y-2">
-        <h2 className="text-xl font-semibold">Mixed clinical practice (20 questions)</h2>
-        <p className="text-sm text-muted">
-          Shuffled US NCLEX-style items across RN and PN tiers (20 items). Tag{" "}
-          <span className="font-mono text-xs">{MIXED_PRACTICE_2026_RN_PN_TAG}</span>. Apply the materialized batch after migrate:{" "}
-          <code className="rounded bg-muted px-1 text-xs">npx tsx scripts/apply-materialized-rn-pn-batch.ts</code>.
-        </p>
+        <h2 className="text-xl font-semibold">{t("learner.exams.preset.mixedClinical.title", { count: MIXED_PRACTICE_2026_QUESTION_TARGET })}</h2>
+        <p className="text-sm text-muted">{t("learner.exams.preset.mixedClinical.body")}</p>
         <ExamPracticeClient
           examId={MIXED_PRACTICE_2026_EXAM_ID}
-          examTitle="Mixed clinical (RN/PN batch)"
+          examTitle={t("learner.exams.examTitle.mixedClinical")}
           questionTag={MIXED_PRACTICE_2026_RN_PN_TAG}
           sessionNamespace="mixed2026"
         />
       </section>
 
       <section className="mt-10 space-y-2">
-        <h2 className="text-xl font-semibold">RN mixed practice (20 questions)</h2>
-        <p className="text-sm text-muted">
-          Shuffled draw from items tagged with the RN preset batch. RN-tier subscribers only. Tag{" "}
-          <span className="font-mono text-xs">{EXAM_PRESET_RN_MIXED_2026_TAG}</span>.
-        </p>
+        <h2 className="text-xl font-semibold">{t("learner.exams.preset.rnMixed.title", { count: MIXED_PRACTICE_2026_QUESTION_TARGET })}</h2>
+        <p className="text-sm text-muted">{t("learner.exams.preset.rnMixed.body")}</p>
         <ExamPracticeClient
           examId={EXAM_RN_MIXED_PRACTICE_2026_ID}
-          examTitle="RN mixed practice"
+          examTitle={t("learner.exams.examTitle.rnMixed")}
           questionTag={EXAM_PRESET_RN_MIXED_2026_TAG}
           sessionNamespace="rnMixed2026"
         />
       </section>
 
       <section className="mt-10 space-y-2">
-        <h2 className="text-xl font-semibold">PN mixed practice (20 questions)</h2>
-        <p className="text-sm text-muted">
-          Shuffled draw from items tagged with the PN preset batch (PN ladder tiers). Tag{" "}
-          <span className="font-mono text-xs">{EXAM_PRESET_PN_MIXED_2026_TAG}</span>.
-        </p>
+        <h2 className="text-xl font-semibold">{t("learner.exams.preset.pnMixed.title", { count: MIXED_PRACTICE_2026_QUESTION_TARGET })}</h2>
+        <p className="text-sm text-muted">{t("learner.exams.preset.pnMixed.body")}</p>
         <ExamPracticeClient
           examId={EXAM_PN_MIXED_PRACTICE_2026_ID}
-          examTitle="PN mixed practice"
+          examTitle={t("learner.exams.examTitle.pnMixed")}
           questionTag={EXAM_PRESET_PN_MIXED_2026_TAG}
           sessionNamespace="pnMixed2026"
         />
@@ -216,23 +208,19 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
 
       <section className="mt-10 space-y-6">
         <div>
-          <h2 className="text-xl font-semibold">Full NCLEX practice ({FULL_EXAM_2026_QUESTION_TARGET} questions)</h2>
-          <p className="mt-1 text-sm text-muted">
-            Mixed-topic draws with balanced difficulty bands, then a final shuffle. RN full exams emphasize prioritization,
-            unstable clients, and delegation; PN full exams emphasize stable clients, tasks, and scope. RN/NP subscribers can
-            still open PN full practice via the tier ladder.
-          </p>
+          <h2 className="text-xl font-semibold">
+            {t("learner.exams.preset.fullSection.title", { count: FULL_EXAM_2026_QUESTION_TARGET })}
+          </h2>
+          <p className="mt-1 text-sm text-muted">{t("learner.exams.preset.fullSection.intro")}</p>
         </div>
 
         {canUseRnFullExams(entitlement) ? (
           <div className="space-y-2">
-            <h3 className="text-lg font-semibold">NCLEX-RN full</h3>
-            <p className="text-sm text-muted">
-              Tag <span className="font-mono text-xs">{EXAM_PRESET_US_RN_FULL_2026_TAG}</span>.
-            </p>
+            <h3 className="text-lg font-semibold">{t("learner.exams.preset.rnFull.title")}</h3>
+            <p className="text-sm text-muted">{t("learner.exams.preset.rnFull.body")}</p>
             <ExamPracticeClient
               examId={EXAM_US_RN_FULL_2026_ID}
-              examTitle="NCLEX-RN full practice"
+              examTitle={t("learner.exams.examTitle.rnFull")}
               questionTag={EXAM_PRESET_US_RN_FULL_2026_TAG}
               sessionNamespace="usRnFull2026"
             />
@@ -241,13 +229,11 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
 
         {canUsePnFullExams(entitlement) ? (
           <div className="space-y-2">
-            <h3 className="text-lg font-semibold">NCLEX-PN full</h3>
-            <p className="text-sm text-muted">
-              Tag <span className="font-mono text-xs">{EXAM_PRESET_US_PN_FULL_2026_TAG}</span>.
-            </p>
+            <h3 className="text-lg font-semibold">{t("learner.exams.preset.pnFull.title")}</h3>
+            <p className="text-sm text-muted">{t("learner.exams.preset.pnFull.body")}</p>
             <ExamPracticeClient
               examId={EXAM_US_PN_FULL_2026_ID}
-              examTitle="NCLEX-PN full practice"
+              examTitle={t("learner.exams.examTitle.pnFull")}
               questionTag={EXAM_PRESET_US_PN_FULL_2026_TAG}
               sessionNamespace="usPnFull2026"
             />
@@ -257,8 +243,17 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
 
       {totalAttempts > 0 ? (
         <p className="mt-4 text-sm text-muted">
-          History: showing {historyFrom}–{historyTo} of {totalAttempts} attempt{totalAttempts === 1 ? "" : "s"}
-          {totalPages > 1 ? ` (page ${historyPage} of ${totalPages})` : ""}.
+          {t("learner.exams.page.historyLine", {
+            from: historyFrom,
+            to: historyTo,
+            total: totalAttempts,
+            attemptWord:
+              totalAttempts === 1 ? t("learner.exams.page.attemptSingular") : t("learner.exams.page.attemptPlural"),
+            pageSuffix:
+              totalPages > 1
+                ? t("learner.exams.page.historyPageSuffix", { current: historyPage, pages: totalPages })
+                : "",
+          })}
         </p>
       ) : null}
 
@@ -266,21 +261,23 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
         {attemptsPage.map((attempt) => (
           <article className="nn-card p-4" key={attempt.id}>
             <p className="font-semibold">
-              Score: {attempt.score}/{attempt.total}
+              {t("examAttempt.scoreLine", { score: attempt.score, total: attempt.total })}
             </p>
-            <p className="text-sm text-muted">{attempt.createdAt.toISOString()}</p>
+            <p className="text-sm text-muted">
+              {attempt.createdAt.toLocaleString(localeTag, { dateStyle: "medium", timeStyle: "short" })}
+            </p>
           </article>
         ))}
       </div>
 
       {totalPages > 1 ? (
-        <nav className="mt-6 flex flex-wrap items-center gap-3 text-sm" aria-label="Attempt history pages">
+        <nav className="mt-6 flex flex-wrap items-center gap-3 text-sm" aria-label={t("learner.exams.page.historyNavAria")}>
           {historyPage > 1 ? (
             <Link
               href={`/app/exams?historyPage=${historyPage - 1}`}
               className="font-semibold text-primary underline underline-offset-2"
             >
-              ← Newer attempts
+              {t("learner.exams.page.historyNewer")}
             </Link>
           ) : null}
           {historyPage < totalPages ? (
@@ -288,7 +285,7 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
               href={`/app/exams?historyPage=${historyPage + 1}`}
               className="font-semibold text-primary underline underline-offset-2"
             >
-              Older attempts →
+              {t("learner.exams.page.historyOlder")}
             </Link>
           ) : null}
         </nav>

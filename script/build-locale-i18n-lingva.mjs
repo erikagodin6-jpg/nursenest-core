@@ -95,16 +95,24 @@ async function fetchLingvaChunk(chunk) {
   const pathSafe = chunk.split("/").join(SLASH_TOKEN);
   const url = `https://lingva.ml/api/v1/en/${localeLower}/${encodeURIComponent(pathSafe)}`;
   let lastErr;
-  for (let attempt = 0; attempt < 6; attempt++) {
+  for (let attempt = 0; attempt < 12; attempt++) {
     try {
       const res = await fetch(url, { headers: { Accept: "application/json" } });
+      if (res.status === 429) {
+        const ra = res.headers.get("retry-after");
+        const sec = ra ? parseInt(ra, 10) : 0;
+        await sleep(Math.min(180_000, (sec > 0 ? sec * 1000 : 45_000) + attempt * 5000));
+        continue;
+      }
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       if (typeof data.translation !== "string") throw new Error(JSON.stringify(data).slice(0, 200));
       return data.translation.split(SLASH_TOKEN).join("/");
     } catch (e) {
       lastErr = e;
-      await sleep(Math.min(30_000, 800 * 2 ** attempt));
+      const msg = e instanceof Error ? e.message : String(e);
+      const is429 = msg.includes("429");
+      await sleep(is429 ? Math.min(120_000, 20_000 + attempt * 8000) : Math.min(30_000, 800 * 2 ** attempt));
     }
   }
   throw lastErr;

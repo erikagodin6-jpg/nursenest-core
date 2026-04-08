@@ -20,6 +20,12 @@
     "scripts/**",
     "server/seeds/**",
     "server/sitemap/**",
-    "server/seed-replit-json-imports.ts"
+    "server/seed-replit-json-imports.ts",
+    "client/src/data/translations/**",
+    "data/**",
+    "replit-export/**",
+    "coverage/**",
+    ".next/**",
+    ".turbo/**"
   ]
 }

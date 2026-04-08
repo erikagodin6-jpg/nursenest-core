@@ -47,7 +47,7 @@ export function ThemePicker({ className = "", labels }: { className?: string; la
           aria-label={L.navTheme}
         >
           <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-[var(--theme-primary)]" />
-          <span className="max-w-[7rem] truncate">{L.navTheme}</span>
+          <span className="max-w-[min(100%,11rem)] text-start leading-tight break-words [overflow-wrap:anywhere]">{L.navTheme}</span>
           <span className="text-[10px] opacity-70">▾</span>
         </button>
       </div>
@@ -67,12 +67,12 @@ export function ThemePicker({ className = "", labels }: { className?: string; la
         aria-haspopup="listbox"
       >
         <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-[var(--theme-primary)]" />
-        <span className="max-w-[7rem] truncate">{L.navTheme}</span>
+        <span className="max-w-[min(100%,11rem)] text-start leading-tight break-words [overflow-wrap:anywhere]">{L.navTheme}</span>
         <span className="text-[10px] opacity-70">▾</span>
       </button>
       {open && (
         <div
-          className="absolute right-0 z-[100] mt-1 max-h-[min(70vh,22rem)] w-56 overflow-y-auto rounded-xl border border-[var(--border-subtle,var(--theme-card-border))] bg-[var(--bg-elevated,var(--theme-card-bg))] py-1 shadow-[var(--shadow-elevated)]"
+          className="absolute end-0 z-[100] mt-1 max-h-[min(70vh,22rem)] w-56 overflow-y-auto rounded-xl border border-[var(--border-subtle,var(--theme-card-border))] bg-[var(--bg-elevated,var(--theme-card-bg))] py-1 shadow-[var(--shadow-elevated)]"
           role="listbox"
         >
           {(["light", "dark"] as const).map((group) => (

@@ -14,9 +14,10 @@ type Props = { params: Promise<{ id: string }> };
 
 /** Private learner session — do not index individual test runs. */
 export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getLearnerMarketingBundle();
   return {
     robots: { index: false, follow: false },
-    title: "Practice test session",
+    title: t("learner.practiceTests.run.metaTitle"),
   };
 }
 

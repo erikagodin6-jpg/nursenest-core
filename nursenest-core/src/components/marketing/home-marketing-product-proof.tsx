@@ -18,12 +18,20 @@ export function HomeMarketingProductProof({ questionCount, lessonCount }: Props)
   const showStatsLine = q != null && l != null;
 
   return (
-    <div className="space-y-4" data-testid="home-product-proof-wrap">
+    <section
+      className="border-t border-[var(--divider)] bg-[var(--bg-page)]"
+      style={{ paddingTop: "var(--space-block)", paddingBottom: "var(--space-block)" }}
+      data-testid="home-product-proof-wrap"
+      aria-labelledby="home-product-proof-heading"
+    >
+      <div className="mx-auto max-w-6xl space-y-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl">
-        <h2 className="text-xl font-bold tracking-tight text-[var(--theme-heading-text)] sm:text-2xl">{t("home.productProof.title")}</h2>
-        <p className="mt-2 max-w-prose text-sm leading-relaxed text-[var(--theme-muted-text)]">{t("home.productProof.sub")}</p>
+        <h2 id="home-product-proof-heading" className="nn-marketing-h2">
+          {t("home.productProof.title")}
+        </h2>
+        <p className="nn-marketing-lead mt-2 text-[var(--theme-muted-text)]">{t("home.productProof.sub")}</p>
         {showStatsLine ? (
-          <p className="mt-2 text-sm font-medium text-[var(--theme-body-text)]">
+          <p className="mt-3 text-sm font-medium text-[var(--theme-body-text)]">
             {t("home.productProof.statsLine", { questions: q!, lessons: l! })}
           </p>
         ) : null}
@@ -37,7 +45,7 @@ export function HomeMarketingProductProof({ questionCount, lessonCount }: Props)
             </p>
             <div className="mt-3 flex flex-wrap items-end justify-between gap-2">
               <div>
-                <p className="text-2xl font-bold tabular-nums text-[var(--theme-heading-text)]">68%</p>
+                <p className="text-2xl font-bold tabular-nums text-[var(--theme-heading-text)]">{t("home.productProof.sessionPctExample")}</p>
                 <p className="text-xs text-[var(--theme-muted-text)]">{t("home.productProof.sessionSub")}</p>
               </div>
               <span className="rounded-full border border-role-warning-border bg-role-warning-soft px-2.5 py-1 text-[11px] font-semibold text-role-warning-text">
@@ -87,6 +95,7 @@ export function HomeMarketingProductProof({ questionCount, lessonCount }: Props)
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </section>
   );
 }

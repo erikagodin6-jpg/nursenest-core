@@ -528,9 +528,10 @@ function ScreenshotCarouselSection() {
 
         {hasSlides ? (
           <div className="mx-auto w-full max-w-5xl">
+            {/* Hero 0–2; marketing preview 3–4; these are 6–8 (screenshots 7–9) to avoid repeating the same stills. */}
             <MarketingScreenshotStack
               slides={platformSlides}
-              pickIndices={[3, 4, 5].filter((i) => i < platformSlides.length)}
+              pickIndices={[6, 7, 8].filter((i) => i < platformSlides.length)}
               testIdPrefix="platform-screenshot-stack"
             />
           </div>

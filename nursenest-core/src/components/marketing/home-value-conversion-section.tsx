@@ -1,15 +1,21 @@
 "use client";
 
 import { ArrowRight } from "lucide-react";
+import { useMemo } from "react";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import type { NursenestMarketingRegion } from "@/lib/marketing/home-hero-gateway-config";
 import { HUB, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
-import { MARKETING_SCREENSHOT_SOURCES } from "@/lib/marketing-assets.generated";
-import { MARKETING_SCREENSHOT_TRIPLE_SIZES, marketingScreenshotBundleDisplaySrc } from "@/lib/marketing-image-delivery";
-import { MarketingCdnScreenshot } from "@/components/marketing/marketing-cdn-screenshot";
+import { buildHomepageHeroSlides } from "@/lib/marketing-assets";
+import { MarketingChainScreenshot } from "@/components/marketing/marketing-screenshot-stack";
+import { MARKETING_SCREENSHOT_TRIPLE_SIZES } from "@/lib/marketing-image-delivery";
 import { PH } from "@/lib/observability/posthog-conversion-events";
+import {
+  MARKETING_PRIMARY_CTA_CLASS,
+  MARKETING_SECONDARY_CTA_CLASS,
+  MARKETING_TERTIARY_LINK_CLASS,
+} from "@/lib/theme/marketing-hero-pattern";
 
 const PLATFORM_STEPS: { title: string; body: string }[] = [
   {
@@ -30,15 +36,18 @@ const PLATFORM_STEPS: { title: string; body: string }[] = [
   },
 ];
 
-const SCREENSHOT_KEYS: { id: keyof typeof MARKETING_SCREENSHOT_SOURCES; label: string }[] = [
-  { id: "screenshot6", label: "Practice UI: topic context and scoring" },
-  { id: "screenshot9", label: "Learner hub: continue, weak areas, next steps" },
-  { id: "screenshot11", label: "Exams and history: timed attempts" },
-];
+/** 0-based indices into `buildHomepageHeroSlides` → screenshots 6, 9, 11 (aligned with legacy bundle picks). */
+const VALUE_SLIDE_INDICES = [5, 8, 10] as const;
+const VALUE_SLIDE_LABELS = [
+  "Practice UI: topic context and scoring",
+  "Learner hub: continue, weak areas, next steps",
+  "Exams and history: timed attempts",
+] as const;
 
 export function HomeValueConversionSection({ region }: { region: NursenestMarketingRegion }) {
-  const { locale } = useMarketingI18n();
+  const { locale, t } = useMarketingI18n();
   const loc = (path: string) => withMarketingLocale(locale, path);
+  const heroSlides = useMemo(() => buildHomepageHeroSlides(t), [t]);
 
   return (
     <section
@@ -61,12 +70,12 @@ export function HomeValueConversionSection({ region }: { region: NursenestMarket
           </p>
         </div>
 
-        <div className="mt-10 flex flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:justify-center">
+        <div className="nn-marketing-cta-group mx-auto mt-10 max-w-xl">
           <MarketingTrackedLink
             href={loc("/signup")}
             event={PH.marketingHomeHeroPrimaryCta}
             eventProps={{ region, surface: "value_section" }}
-            className="nn-btn-primary inline-flex min-h-[48px] w-full min-w-[min(100%,16rem)] items-center justify-center px-8 py-3 text-base font-semibold sm:w-auto"
+            className={`${MARKETING_PRIMARY_CTA_CLASS} min-w-[min(100%,16rem)]`}
           >
             Start free, unlock full prep at checkout
             <ArrowRight className="ml-2 h-5 w-5" />
@@ -75,7 +84,7 @@ export function HomeValueConversionSection({ region }: { region: NursenestMarket
             href={loc(HUB.pricing)}
             event={PH.marketingHomeExploreHubClick}
             eventProps={{ hub: "pricing" }}
-            className="nn-btn-secondary inline-flex min-h-[48px] w-full items-center justify-center px-8 py-3 text-base font-semibold sm:w-auto"
+            className={MARKETING_SECONDARY_CTA_CLASS}
           >
             Compare plans & pricing
           </MarketingTrackedLink>
@@ -85,7 +94,7 @@ export function HomeValueConversionSection({ region }: { region: NursenestMarket
             href={loc(rnQuestions(region))}
             event={PH.marketingHomeHeroSecondaryCta}
             eventProps={{ region, destination: "rn_questions", surface: "value_section" }}
-            className="nn-link-quiet text-sm"
+            className={`${MARKETING_TERTIARY_LINK_CLASS} w-full sm:w-auto`}
           >
             Try sample questions first
           </MarketingTrackedLink>
@@ -106,8 +115,8 @@ export function HomeValueConversionSection({ region }: { region: NursenestMarket
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <div className="min-w-0 text-left">
-                  <h3 className="text-sm font-semibold text-[var(--theme-heading-text)] sm:text-base">{step.title}</h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-[var(--theme-body-text)]">{step.body}</p>
+                  <h3 className="nn-marketing-h4">{step.title}</h3>
+                  <p className="nn-marketing-body-sm mt-1.5">{step.body}</p>
                 </div>
               </div>
             ))}
@@ -115,27 +124,28 @@ export function HomeValueConversionSection({ region }: { region: NursenestMarket
         </div>
 
         <div className="mt-16 md:pl-[4%]">
-          <h3 className="nn-marketing-h2 max-w-xl text-left text-xl sm:text-2xl">Inside the product</h3>
-          <p className="mt-2 max-w-prose text-left text-sm text-[var(--theme-muted-text)]">
+          <h3 className="nn-marketing-h3 max-w-xl text-left">Inside the product</h3>
+          <p className="nn-marketing-caption mt-2 max-w-prose text-left sm:text-sm">
             Screenshots from the live app. They can lag a release or two; the UI moves faster than marketing crops.
           </p>
           <div className="mt-8 grid gap-6 md:grid-cols-12">
-            {SCREENSHOT_KEYS.map(({ id, label }, idx) => {
-              const bundle = MARKETING_SCREENSHOT_SOURCES[id];
-              if (!bundle) return null;
+            {VALUE_SLIDE_INDICES.map((slideIndex, idx) => {
+              const slide = heroSlides[slideIndex];
+              const label = VALUE_SLIDE_LABELS[idx];
+              if (!slide) return null;
               const col =
                 idx === 0 ? "md:col-span-7" : idx === 1 ? "md:col-span-5" : "md:col-span-10 md:col-start-2";
               return (
-                <figure key={id} className={`nn-marketing-card overflow-hidden ${col}`}>
-                  <div className="relative aspect-[16/10] w-full overflow-hidden bg-[var(--bg-inset)]">
-                    <MarketingCdnScreenshot
-                      src={marketingScreenshotBundleDisplaySrc(bundle)}
-                      srcSet={bundle.srcSet}
-                      sizes={MARKETING_SCREENSHOT_TRIPLE_SIZES}
-                      alt={label}
-                      className="absolute inset-0 h-full w-full object-cover object-top"
-                    />
-                  </div>
+                <figure key={slide.objectKey} className={`nn-marketing-card overflow-hidden ${col}`}>
+                  <MarketingChainScreenshot
+                    objectKey={slide.objectKey}
+                    publicUrl={slide.publicUrl}
+                    alt={label}
+                    sizes={MARKETING_SCREENSHOT_TRIPLE_SIZES}
+                    fit="contain"
+                    className="border-0 bg-[var(--bg-inset)] shadow-none"
+                    rounded="rounded-none"
+                  />
                   <figcaption className="border-t border-[var(--border-subtle)] px-3 py-2.5 text-left text-xs font-medium text-[var(--theme-muted-text)]">
                     {label}
                   </figcaption>

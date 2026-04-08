@@ -15,9 +15,12 @@ import { heroPathwayEntryLinks } from "@/lib/marketing/home-hero-gateway-config"
 import { rnQuestions } from "@/lib/marketing/marketing-entry-routes";
 import { HomeHeroMediaPanel } from "@/components/marketing/home-hero-media-panel";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
-import type { HeroPlatformStatsPayload } from "@/legacy/marketing/hero-platform-stats";
 import { PH } from "@/lib/observability/posthog-conversion-events";
-import { MARKETING_HERO_SECTION_CLASS } from "@/lib/theme/marketing-hero-pattern";
+import {
+  MARKETING_HERO_SECTION_CLASS,
+  MARKETING_PRIMARY_CTA_CLASS,
+  MARKETING_SECONDARY_CTA_CLASS,
+} from "@/lib/theme/marketing-hero-pattern";
 
 const HomePageHeroTail = dynamic(() => import("@/components/marketing/home-page-hero-tail"), {
   ssr: false,
@@ -44,46 +47,6 @@ const HomeMarketingProductProof = dynamic(
   { ssr: false, loading: () => <div className="min-h-[148px]" aria-hidden /> },
 );
 
-const HeroPlatformStats = dynamic(() => import("@/legacy/marketing/hero-platform-stats"), {
-  ssr: false,
-  loading: () => <div className="min-h-[120px]" />,
-});
-const HeroFeatureStrip = dynamic(() => import("@/legacy/marketing/hero-feature-strip"), {
-  ssr: false,
-  loading: () => <div className="min-h-[44px]" />,
-});
-const HeroTrustIndicator = dynamic(() => import("@/legacy/marketing/hero-trust-indicator"), {
-  ssr: false,
-  loading: () => <div className="min-h-[40px]" />,
-});
-const HeroExpansionTracker = dynamic(() => import("@/legacy/marketing/hero-expansion-tracker"), {
-  ssr: false,
-  loading: () => <div className="min-h-[120px]" />,
-});
-const HeroGlobalCoverage = dynamic(() => import("@/legacy/marketing/hero-global-coverage"), {
-  ssr: false,
-  loading: () => <div className="min-h-[120px]" />,
-});
-const HeroNursingTiers = dynamic(() => import("@/legacy/marketing/hero-nursing-tiers"), {
-  ssr: false,
-  loading: () => <div className="min-h-[148px]" />,
-});
-const HeroCertifications = dynamic(() => import("@/legacy/marketing/hero-certifications"), {
-  ssr: false,
-  loading: () => <div className="min-h-[120px]" />,
-});
-const HeroAlliedHealth = dynamic(() => import("@/legacy/marketing/hero-allied-health"), {
-  ssr: false,
-  loading: () => <div className="min-h-[148px]" />,
-});
-const HomeDifferentiation = dynamic(() => import("@/legacy/marketing/home-differentiation"), {
-  ssr: false,
-  loading: () => <div className="min-h-[220px]" />,
-});
-const HomeConversionSections = dynamic(() => import("@/legacy/marketing/home-conversion-sections"), {
-  ssr: false,
-  loading: () => <div className="min-h-[148px]" />,
-});
 const HomeCareerCta = dynamic(() => import("@/legacy/marketing/home-career-cta"), {
   ssr: false,
   loading: () => <div className="min-h-[140px]" />,
@@ -184,21 +147,8 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
   const lessonCount = homeStats?.totalLessons ?? 0;
   const questionCount = homeStats?.questionCount ?? 0;
   const flashcardCount = homeStats?.totalFlashcards ?? 0;
-  const deckCount = homeStats?.totalDecks ?? 0;
   const storeProductCount = homeStats?.storeProductCount ?? 0;
   const registeredLearners = homeStats?.registeredLearners;
-
-  const heroPlatformStatsPayload = useMemo((): HeroPlatformStatsPayload | null => {
-    if (!homeStats) return null;
-    return {
-      totalLessons: homeStats.totalLessons ?? 0,
-      questionCount: homeStats.questionCount ?? 0,
-      totalFlashcards: homeStats.totalFlashcards ?? 0,
-      totalDecks: homeStats.totalDecks ?? 0,
-      scenarioCount: homeStats.scenarioCount,
-      registeredLearners: homeStats.registeredLearners,
-    };
-  }, [homeStats]);
 
   const trustStatsFormatted = useMemo(
     () => ({
@@ -231,16 +181,12 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
                 </div>
 
                 <div className="nn-stack-hero-heading">
-                  <h1
-                    className="text-balance font-bold leading-[1.06] tracking-tight text-[var(--theme-heading-text)]"
-                    style={{ fontSize: "var(--text-hero)" }}
-                    data-testid="text-hero-heading"
-                  >
+                  <h1 className="nn-marketing-h1 text-balance" data-testid="text-hero-heading">
                     {t("home.hero.mainTitle")}
                   </h1>
 
                   <p
-                    className="text-pretty max-w-[52ch] text-base leading-relaxed text-[var(--theme-body-text)] md:text-lg"
+                    className="nn-marketing-body text-pretty max-w-[52ch] md:text-lg md:leading-relaxed"
                     data-testid="text-hero-subheading"
                   >
                     {t("home.hero.newSubheadline")}
@@ -286,7 +232,7 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
                   </div>
                   <div className="flex min-w-0 flex-1 items-start gap-1.5 text-xs text-[var(--theme-body-text)] sm:justify-end">
                     <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
-                    <span className="leading-snug">{region === "US" ? t("home.region.usDesc") : t("home.region.caDesc")}</span>
+                    <span className="leading-snug">{t("home.hero.regionPathwayHint")}</span>
                   </div>
                 </div>
 
@@ -295,7 +241,7 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
                     href={withMarketingLocale(locale, "/signup")}
                     event={PH.marketingHomeHeroPrimaryCta}
                     eventProps={{ region }}
-                    className="nn-btn-primary inline-flex min-h-[48px] w-full items-center justify-center px-8 py-3 text-base font-semibold transition-[filter] hover:bg-role-cta-hover sm:min-h-[52px] sm:w-auto sm:px-10 sm:text-lg"
+                    className={MARKETING_PRIMARY_CTA_CLASS}
                     data-testid="button-hero-start-free"
                   >
                     {t("home.hero.ctaPrimary")}
@@ -305,16 +251,19 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
                     href={withMarketingLocale(locale, rnQuestions(region))}
                     event={PH.marketingHomeHeroSecondaryCta}
                     eventProps={{ region, destination: "rn_questions" }}
-                    className="nn-btn-secondary inline-flex min-h-[48px] w-full items-center justify-center px-6 py-3 text-sm font-semibold sm:min-h-[52px] sm:w-auto sm:px-7 sm:text-base"
+                    className={MARKETING_SECONDARY_CTA_CLASS}
                     data-testid="button-hero-browse"
                   >
                     <BookOpen className="mr-2 h-4 w-4 text-[var(--theme-muted-text)]" />
                     {t("home.hero.ctaSecondary")}
                   </MarketingTrackedLink>
                 </div>
+                <p className="nn-marketing-caption -mt-0.5 text-[var(--theme-body-text)] sm:text-sm" data-testid="hero-cta-proof-line">
+                  {t("home.hero.ctaProofLine")}
+                </p>
 
-                <div className="space-y-2.5" data-testid="hero-quick-entry-links">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">{t("nav.chooseYourExam")}</p>
+                <div className="space-y-2" data-testid="hero-quick-entry-links">
+                  <p className="nn-marketing-label">{t("nav.chooseYourExam")}</p>
                   <div className="flex flex-wrap gap-x-1 gap-y-1 sm:gap-x-3">
                     {heroPathwayLinks.map((item, i) => {
                       const label = t(item.labelKey);
@@ -349,11 +298,11 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
                   </p>
                 </div>
 
-                <p className="text-xs text-[var(--theme-body-text)] sm:text-sm" data-testid="text-urgency-microcopy">
+                <p className="nn-marketing-caption max-w-[52ch] sm:text-sm" data-testid="text-urgency-microcopy">
                   {t("home.hero.urgencyMicrocopy")}
                 </p>
 
-                <div className="flex flex-wrap items-center gap-x-3 gap-y-2.5 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-section-alt)] px-3 py-2.5 text-xs text-[var(--theme-body-text)] sm:gap-x-4 sm:text-sm">
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-section-alt)] px-3 py-2 text-xs text-[var(--theme-body-text)] sm:gap-x-4 sm:py-2.5 sm:text-sm">
                   <span className="inline-flex items-center gap-1.5">
                     <CheckCircle2 className="nn-trust-mark h-3.5 w-3.5 shrink-0" aria-hidden />
                     {t("home.hero.noCreditCard")}
@@ -368,32 +317,35 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
                   </span>
                 </div>
 
-                <p className="text-[11px] font-medium text-[var(--theme-muted-text)] sm:text-xs" data-testid="text-trust-tagline">
-                  {t("home.hero.trustPassRate")}
-                </p>
-                <p className="text-xs leading-relaxed text-[var(--theme-body-text)] sm:text-sm" data-testid="hero-trust-indicators">
-                  {trustStatsFormatted.questions
-                    ? `${trustStatsFormatted.questions} ${t("home.hero.trustQuestionsLabel")}`
-                    : t("home.hero.trustQuestions")}
-                  <span className="mx-1.5 text-[var(--theme-muted-text)]" aria-hidden="true">
-                    ·
-                  </span>
-                  {trustStatsFormatted.flashcards
-                    ? `${trustStatsFormatted.flashcards} ${t("home.hero.trustFlashcardsLabel")}`
-                    : t("home.hero.trustFlashcards")}
-                  <span className="mx-1.5 text-[var(--theme-muted-text)]" aria-hidden="true">
-                    ·
-                  </span>
-                  {trustStatsFormatted.lessons
-                    ? `${trustStatsFormatted.lessons} ${t("home.hero.trustLessonsLabel")}`
-                    : t("home.hero.trustLessons")}
-                  <span className="mx-1.5 text-[var(--theme-muted-text)]" aria-hidden="true">
-                    ·
-                  </span>
-                  {trustStatsFormatted.learners
-                    ? `${trustStatsFormatted.learners} ${t("home.hero.trustLearnersLabel")}`
-                    : t("home.hero.trustStudents")}
-                </p>
+                <div className="space-y-1" data-testid="hero-trust-block">
+                  <p className="nn-marketing-caption font-medium sm:text-xs" data-testid="text-trust-tagline">
+                    {t("home.hero.trustPassRate")}
+                  </p>
+                  <p
+                    className="nn-marketing-caption leading-relaxed text-[var(--theme-body-text)] sm:text-sm"
+                    data-testid="hero-trust-indicators"
+                  >
+                    {trustStatsFormatted.questions
+                      ? `${trustStatsFormatted.questions} ${t("home.hero.trustQuestionsLabel")}`
+                      : t("home.hero.trustQuestions")}
+                    <span className="mx-1.5 text-[var(--theme-muted-text)]" aria-hidden="true">
+                      ·
+                    </span>
+                    {(trustStatsFormatted.flashcards
+                      ? `${trustStatsFormatted.flashcards} ${t("home.hero.trustFlashcardsLabel")}`
+                      : t("home.hero.trustFlashcards")) +
+                      " / " +
+                      (trustStatsFormatted.lessons
+                        ? `${trustStatsFormatted.lessons} ${t("home.hero.trustLessonsLabel")}`
+                        : t("home.hero.trustLessons"))}
+                    <span className="mx-1.5 text-[var(--theme-muted-text)]" aria-hidden="true">
+                      ·
+                    </span>
+                    {trustStatsFormatted.learners
+                      ? `${trustStatsFormatted.learners} ${t("home.hero.trustLearnersLabel")}`
+                      : t("home.hero.trustStudents")}
+                  </p>
+                </div>
               </div>
 
               {showHeroMediaColumn ? (
@@ -409,79 +361,15 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
 
         <HomeMarketingConversionBlocks region={region} />
 
-        <LazySection minHeight="44px" rootMargin="400px">
-          <Suspense fallback={<div className="min-h-[44px]" />}>
-            <HeroFeatureStrip />
-          </Suspense>
-        </LazySection>
-        <LazySection minHeight="40px" rootMargin="400px">
-          <Suspense fallback={<div className="min-h-[40px]" />}>
-            <HeroTrustIndicator />
-          </Suspense>
-        </LazySection>
-
         <LazySection minHeight="88px" rootMargin="300px">
           <Suspense fallback={<div className="min-h-[88px]" />}>
             <HomeMarketingFeaturesStack region={region} />
           </Suspense>
         </LazySection>
 
-        <LazySection minHeight="120px" rootMargin="300px">
-          <Suspense fallback={<div className="min-h-[120px]" />}>
-            <HeroPlatformStats stats={heroPlatformStatsPayload} />
-          </Suspense>
-        </LazySection>
-
         <LazySection minHeight="148px" rootMargin="300px">
           <Suspense fallback={<div className="min-h-[148px]" />}>
-            <HomeMarketingProductProof />
-          </Suspense>
-        </LazySection>
-
-        <LazySection minHeight="120px" rootMargin="300px">
-          <Suspense fallback={<div className="min-h-[120px]" />}>
-            <HeroGlobalCoverage />
-          </Suspense>
-        </LazySection>
-
-        <LazySection minHeight="148px" rootMargin="300px">
-          <Suspense fallback={<div className="min-h-[148px]" />}>
-            <HeroNursingTiers />
-          </Suspense>
-        </LazySection>
-
-        <LazySection minHeight="120px" rootMargin="300px">
-          <Suspense fallback={<div className="min-h-[120px]" />}>
-            <HeroCertifications />
-          </Suspense>
-        </LazySection>
-
-        <LazySection minHeight="148px" rootMargin="300px">
-          <Suspense fallback={<div className="min-h-[148px]" />}>
-            <HeroAlliedHealth />
-          </Suspense>
-        </LazySection>
-
-        <LazySection minHeight="120px" rootMargin="300px">
-          <Suspense fallback={<div className="min-h-[120px]" />}>
-            <HeroExpansionTracker />
-          </Suspense>
-        </LazySection>
-
-        <LazySection minHeight="220px" rootMargin="300px">
-          <Suspense fallback={<div className="min-h-[220px]" />}>
-            <HomeDifferentiation />
-          </Suspense>
-        </LazySection>
-
-        <LazySection minHeight="148px" rootMargin="200px">
-          <Suspense fallback={<div className="min-h-[148px]" />}>
-            <HomeConversionSections
-              lessonCount={lessonCount}
-              questionCount={questionCount}
-              flashcardCount={flashcardCount}
-              deckCount={deckCount}
-            />
+            <HomeMarketingProductProof questionCount={questionCount} lessonCount={lessonCount} />
           </Suspense>
         </LazySection>
 

@@ -10,20 +10,22 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const enPath = path.join(__dirname, "../public/i18n/en.json");
 
 const patch = {
-  "home.hero.mainTitle":
-    "Pass your nursing exam with a guided system, not just another question dump",
+  "home.hero.mainTitle": "RN, PN, NP, and Allied exam prep for US and Canada",
   "home.hero.newSubheadline":
-    "Clinical-depth rationales, adaptive review, and readiness tracking for your RN, PN, NP, or allied pathway. US and Canada, with scopes kept separate so stems match what you are sitting for.",
+    "Train in your exact pathway with rationale-first question sets, region-correct exam labels, and readiness tracking built for pass-level decisions.",
   "home.hero.quickEntryLabel": "Jump in without hunting menus",
   "home.hero.trustMicroBadge": "US & Canadian scopes kept separate",
   "home.hero.authorityBadge": "Rationale on every scored option",
   "home.hero.ctaPrimary": "Start free trial",
   "home.hero.ctaSecondary": "Browse practice questions",
+  "home.hero.ctaProofLine": "20,000+ pathway-scoped questions with clinical rationales and readiness tracking.",
   "home.hero.ctaInstant": "Start practicing instantly",
   "home.hero.ctaInstantHint":
     "Opens a short practice path. Free account, no card to start your preview runs.",
   "home.hero.urgencyMicrocopy":
     "Pick RN, PN, NP, or allied and your country first so stems, delegation language, and lesson tags stay aligned to that registration.",
+  "home.hero.regionPathwayHint":
+    "Country changes pathway labels and exam naming (for example, NCLEX-PN vs REx-PN).",
 
   "home.howItWorks.title": "How it works",
   "home.howItWorks.sub": "Three steps from sign-up to a study rhythm you can keep until test day.",
@@ -367,6 +369,7 @@ const patch = {
   "home.productProof.sub":
     "The counts on the homepage pull from the live library. The panels below are a static example of how rationales and category tags read after a set.",
   "home.productProof.sessionLabel": "Session report",
+  "home.productProof.sessionPctExample": "68%",
   "home.productProof.sessionSub": "Last 20 items · Pharmacology (example bucket)",
   "home.productProof.needsReview": "Needs review",
   "home.productProof.priorityRisk": "Priority risk",

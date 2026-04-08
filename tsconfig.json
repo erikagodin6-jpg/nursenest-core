@@ -7,7 +7,13 @@
     "**/*.test.ts",
     "tools/i18n/**",
     "nursenest-core",
-    "client/src/assets"
+    "client/src/assets",
+    "client/src/data/translations/**",
+    "data/**",
+    "replit-export/**",
+    "coverage/**",
+    ".next/**",
+    ".turbo/**"
   ],
   "compilerOptions": {
     "target": "ES2020",

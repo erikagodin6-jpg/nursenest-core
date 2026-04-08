@@ -1,6 +1,8 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
+import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-lesson-pagination";
 import { lessonAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
@@ -38,7 +40,16 @@ function pathwayLessonCardSummary(row: {
 
 type Props = { searchParams: Promise<{ page?: string }> };
 
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getLearnerMarketingBundle();
+  return {
+    title: t("learner.lessons.list.metaTitle"),
+    robots: { index: false, follow: false },
+  };
+}
+
 export default async function LessonsPage({ searchParams }: Props) {
+  const { t } = await getLearnerMarketingBundle();
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
@@ -46,8 +57,7 @@ export default async function LessonsPage({ searchParams }: Props) {
   if (entitlement === "error") {
     return (
       <p className="nn-card p-6 text-sm text-muted">
-        We couldn’t finish checking your subscription (database or billing lookup failed). This is not the same as “no
-        plan.” Refresh shortly, or sign in again if it keeps happening.
+        {t("learner.entitlement.verifyFailed")}
       </p>
     );
   }
@@ -56,13 +66,13 @@ export default async function LessonsPage({ searchParams }: Props) {
     const snap = userId ? await getFreemiumSnapshot(userId) : null;
     return (
       <main>
-        <h1 className="text-3xl font-bold">Lessons</h1>
+        <h1 className="text-3xl font-bold">{t("learner.lessons.list.title")}</h1>
         <p className="mt-2 text-sm text-muted">
-          Structured modules connect pathophysiology to the same-week question practice. Browse{" "}
+          {t("learner.lessons.list.freemiumLead")}{" "}
           <Link className="font-medium text-primary underline" href="/exam-lessons">
-            exam-specific lessons
+            {t("learner.lessons.list.freemiumLink")}
           </Link>{" "}
-          on the marketing site anytime.
+          {t("learner.lessons.list.freemiumTail")}
         </p>
         <div className="mt-6">
           <SubscriptionPaywall context="lessons" freemiumRemainingLessons={snap?.lessonRemaining ?? 0} />
@@ -185,25 +195,22 @@ export default async function LessonsPage({ searchParams }: Props) {
 
   return (
     <main>
-      <h1 className="text-3xl font-bold">Lessons</h1>
-      <p className="mt-2 text-sm text-muted">Continue modules, then lock in retention with the question bank the same day.</p>
+      <h1 className="text-3xl font-bold">{t("learner.lessons.list.title")}</h1>
+      <p className="mt-2 text-sm text-muted">{t("learner.lessons.list.subscriberIntro")}</p>
       <p className="mt-2 text-sm text-muted">
-        Paginated list: <strong className="text-foreground">{APP_LESSONS_PAGE_SIZE}</strong> app lessons per page (newest
-        first) scoped to your region and plan. Use Next below when you have more. Exam pathway lessons (NCLEX-RN, REx-PN,
-        FNP, …) live under{" "}
+        {t("learner.lessons.list.paginationExplainer", { pageSize: APP_LESSONS_PAGE_SIZE })}{" "}
         <Link className="font-medium text-primary underline" href="/exam-lessons">
-          lessons by exam pathway
+          {t("learner.lessons.list.paginationLink")}
         </Link>
-        .
+        {t("learner.lessons.list.paginationEnd")}
       </p>
       <aside className="nn-card mt-4 border-primary/15 bg-primary/5 p-4 text-sm text-muted">
-        <p className="font-semibold text-foreground">Study rhythm</p>
-        <p className="mt-1">Finish a lesson → apply it in 10 timed questions → review rationales. Repeat tomorrow.</p>
+        <p className="font-semibold text-foreground">{t("learner.lessons.list.studyRhythmTitle")}</p>
+        <p className="mt-1">{t("learner.lessons.list.studyRhythmBody")}</p>
       </aside>
       {lessons.length === 0 ? (
         <p className="nn-card mt-4 p-6 text-sm text-muted">
-          The list loaded successfully: there are no lessons in your plan’s region and tier right now (not a loading
-          glitch). If you expected rows here, check your profile country/tier or contact support.
+          {t("learner.lessons.list.emptyList")}
         </p>
       ) : null}
       <div className="mt-4 space-y-3">
@@ -219,7 +226,7 @@ export default async function LessonsPage({ searchParams }: Props) {
               href={`/app/lessons/${lesson.id}`}
               className="mt-3 inline-block text-sm font-semibold text-primary"
             >
-              Open lesson →
+              {t("learner.lessons.list.openLessonCta")}
             </Link>
           </article>
         ))}

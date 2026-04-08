@@ -45,6 +45,8 @@ export default async function ExamPathwayQuestionsHubPage({ params }: Props) {
   const overviewHref = hubBase;
   const npAliasSegment = getNpPracticeTestLandingCopy(locale, slug, examCode) ? examCode : undefined;
   const boardLinkContext = pathwayMarketingHubLinkContext(pathway, npAliasSegment);
+  const countryLabel = pathway.countrySlug === "canada" ? "Canada" : "US";
+  const examName = pathway.contentExamKeys.length ? pathway.contentExamKeys.join(" / ") : pathway.shortName;
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
@@ -55,11 +57,12 @@ export default async function ExamPathwayQuestionsHubPage({ params }: Props) {
       <Link href={overviewHref} className="text-sm font-medium text-primary hover:underline">
         ← {pathway.shortName} overview
       </Link>
-      <h1 className="mt-4 text-3xl font-extrabold text-[var(--theme-heading-text)]">{pathway.shortName} question bank</h1>
+      <h1 className="mt-4 text-3xl font-extrabold text-[var(--theme-heading-text)]">
+        {pathway.shortName} {countryLabel} question bank
+      </h1>
       <p className="mt-3 text-[var(--theme-muted-text)]">
-        The live bank filters by your subscription region and tier; pathway-specific exam labels (
-        {pathway.contentExamKeys.length ? pathway.contentExamKeys.join(", ") : "tier defaults"}) are applied as content is
-        retagged. Sign in to practice. No cross-role leakage at the product gate.
+        Practice for {examName} with pathway-scoped sets, rationale-first feedback, and readiness progress aimed at passing your
+        {countryLabel} exam track.
       </p>
       {pathway.roleTrack === "np" ? (
         <div className="mt-4 rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]/50 p-4 text-sm text-[var(--theme-body-text)]">

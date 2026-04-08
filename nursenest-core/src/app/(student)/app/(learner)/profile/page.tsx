@@ -16,26 +16,32 @@ import { remediationTopicDrillHref, remediationWeakModeTestHref } from "@/lib/le
 import { readinessBandLabel } from "@/lib/learner/readiness-score";
 import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
 import type { Metadata } from "next";
+import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 
-export const metadata: Metadata = {
-  title: "Profile & account",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getLearnerMarketingBundle();
+  return {
+    title: t("learner.profile.metaTitle"),
+    robots: { index: false, follow: false },
+  };
+}
 
 function tierLabel(t: string): string {
   return t.replace(/_/g, " ");
 }
 
 export default async function LearnerProfilePage() {
+  const { t, locale } = await getLearnerMarketingBundle();
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
+  const localeTag = locale.replace(/_/g, "-");
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
       <main className="space-y-6">
-        <h1 className="text-3xl font-bold text-[var(--theme-heading-text)]">Profile</h1>
-        <p className="text-sm text-muted-foreground">Sign in to manage your account.</p>
+        <h1 className="text-3xl font-bold text-[var(--theme-heading-text)]">{t("learner.profile.signedOutTitle")}</h1>
+        <p className="text-sm text-muted-foreground">{t("learner.profile.signedOutHint")}</p>
       </main>
     );
   }
@@ -123,24 +129,22 @@ export default async function LearnerProfilePage() {
   return (
     <main className="space-y-6">
       <div>
-        <p className="text-xs font-semibold uppercase tracking-wide text-primary">Control center</p>
-        <h1 className="mt-1 text-3xl font-bold text-[var(--theme-heading-text)]">Profile & account</h1>
-        <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-          Manage your sign-in, subscription, and see how you are performing. Then jump into your next session.
-        </p>
+        <p className="text-xs font-semibold uppercase tracking-wide text-primary">{t("learner.profile.kicker")}</p>
+        <h1 className="mt-1 text-3xl font-bold text-[var(--theme-heading-text)]">{t("learner.profile.title")}</h1>
+        <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.profile.intro")}</p>
       </div>
 
       <section className="nn-card p-6">
-        <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Account</h2>
-        <p className="mt-1 text-sm text-muted-foreground">Identity and password security.</p>
+        <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">{t("learner.profile.account.heading")}</h2>
+        <p className="mt-1 text-sm text-muted-foreground">{t("learner.profile.account.subtitle")}</p>
         <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
           <div>
-            <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Email</dt>
-            <dd className="mt-0.5 font-medium text-foreground">{userRow?.email ?? "N/A"}</dd>
+            <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("learner.profile.label.email")}</dt>
+            <dd className="mt-0.5 font-medium text-foreground">{userRow?.email ?? t("learner.common.notAvailable")}</dd>
           </div>
           <div>
-            <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Name</dt>
-            <dd className="mt-0.5 font-medium text-foreground">{userRow?.name ?? "N/A"}</dd>
+            <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("learner.profile.label.name")}</dt>
+            <dd className="mt-0.5 font-medium text-foreground">{userRow?.name ?? t("learner.common.notAvailable")}</dd>
           </div>
         </dl>
         <div className="mt-6 border-t border-border/60 pt-6">
@@ -149,44 +153,44 @@ export default async function LearnerProfilePage() {
       </section>
 
       <section className="nn-card p-6">
-        <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Subscription</h2>
-        <p className="mt-1 text-sm text-muted-foreground">What your account is scoped to in NurseNest.</p>
+        <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">{t("learner.profile.subscription.heading")}</h2>
+        <p className="mt-1 text-sm text-muted-foreground">{t("learner.profile.subscription.subtitle")}</p>
         <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
           <div>
-            <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Access</dt>
+            <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("learner.profile.label.access")}</dt>
             <dd className="mt-0.5 font-medium text-foreground">
               {entitlement === "error"
-                ? "Could not verify subscription status."
+                ? t("learner.profile.access.verifyUnknown")
                 : entitlement.hasAccess
-                  ? "Active paid access"
-                  : "No active subscription"}
+                  ? t("learner.profile.access.activePaid")
+                  : t("learner.profile.access.noSubscription")}
             </dd>
           </div>
           <div>
-            <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Profile tier & country</dt>
+            <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("learner.profile.label.profileTierCountry")}</dt>
             <dd className="mt-0.5 font-medium text-foreground">
-              {userRow ? `${tierLabel(userRow.tier)} · ${userRow.country}` : "N/A"}
+              {userRow ? `${tierLabel(userRow.tier)} · ${userRow.country}` : t("learner.common.notAvailable")}
             </dd>
           </div>
           {subscription ? (
             <>
               <div>
-                <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Stripe subscription</dt>
+                <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("learner.profile.label.stripeSubscription")}</dt>
                 <dd className="mt-0.5 font-mono text-xs text-foreground">{subscription.stripeSubscriptionId}</dd>
               </div>
               <div>
-                <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Stripe status</dt>
+                <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("learner.profile.label.stripeStatus")}</dt>
                 <dd className="mt-0.5 font-medium text-foreground">{subscription.status}</dd>
               </div>
               {subscription.planTier ? (
                 <div>
-                  <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Plan tier (checkout)</dt>
+                  <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("learner.profile.label.planTierCheckout")}</dt>
                   <dd className="mt-0.5 font-medium text-foreground">{tierLabel(subscription.planTier)}</dd>
                 </div>
               ) : null}
               {subscription.planCountry ? (
                 <div>
-                  <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Plan country</dt>
+                  <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("learner.profile.label.planCountry")}</dt>
                   <dd className="mt-0.5 font-medium text-foreground">{subscription.planCountry}</dd>
                 </div>
               ) : null}
@@ -194,10 +198,14 @@ export default async function LearnerProfilePage() {
           ) : null}
           {userRow?.trialStatus && userRow.trialStatus !== TrialStatus.NONE ? (
             <div className="sm:col-span-2">
-              <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Trial</dt>
+              <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("learner.profile.label.trial")}</dt>
               <dd className="mt-0.5 text-foreground">
                 {userRow.trialStatus}
-                {userRow.trialEndsAt ? ` · ends ${userRow.trialEndsAt.toLocaleDateString()}` : ""}
+                {userRow.trialEndsAt
+                  ? t("learner.profile.trialEndsAt", {
+                      date: userRow.trialEndsAt.toLocaleDateString(localeTag),
+                    })
+                  : ""}
               </dd>
             </div>
           ) : null}
@@ -207,14 +215,14 @@ export default async function LearnerProfilePage() {
             href="/pricing"
             className="inline-flex rounded-full border border-border px-4 py-2 text-sm font-semibold text-foreground hover:bg-muted/80"
           >
-            Plans & pricing
+            {t("learner.profile.cta.plansPricing")}
           </Link>
           {entitlement !== "error" && entitlement.hasAccess ? (
             <Link
               href="/app/study-plan"
               className="inline-flex rounded-full border border-role-cta/30 bg-role-cta-soft px-4 py-2 text-sm font-semibold text-role-cta-on-soft hover:bg-[color-mix(in_srgb,var(--role-cta)_14%,var(--bg-card))]"
             >
-              Study planner
+              {t("learner.profile.cta.studyPlanner")}
             </Link>
           ) : null}
         </div>
@@ -224,73 +232,74 @@ export default async function LearnerProfilePage() {
 
       {entitlement !== "error" && entitlement.hasAccess && premiumSnapshot ? (
         <section className="nn-card p-6">
-          <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Performance snapshot</h2>
-          <p className="mt-1 text-sm text-muted-foreground">Aggregates from your subscription scope and graded activity.</p>
+          <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">{t("learner.profile.performance.heading")}</h2>
+          <p className="mt-1 text-sm text-muted-foreground">{t("learner.profile.performance.subtitle")}</p>
           <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <div className="rounded-xl border border-border/60 bg-muted/15 p-4">
-              <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Lessons</p>
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">{t("learner.profile.snapshot.lessons")}</p>
               <p className="mt-1 text-2xl font-bold tabular-nums text-primary">
-                {lessons && lessons.total > 0 ? `${lessons.pct}%` : "N/A"}
+                {lessons && lessons.total > 0 ? `${lessons.pct}%` : t("learner.common.notAvailable")}
               </p>
               <p className="text-xs text-muted-foreground">
-                {lessons && lessons.total > 0 ? `${lessons.completed} / ${lessons.total}` : "Start a lesson"}
+                {lessons && lessons.total > 0 ? `${lessons.completed} / ${lessons.total}` : t("learner.profile.snapshot.startLesson")}
               </p>
             </div>
             <div className="rounded-xl border border-border/60 bg-muted/15 p-4">
-              <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Scored accuracy</p>
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">{t("learner.profile.snapshot.scoredAccuracy")}</p>
               <p className="mt-1 text-2xl font-bold tabular-nums text-primary">
-                {practice && practice.gradedTotal > 0 ? `${practice.accuracyPct ?? 0}%` : "N/A"}
+                {practice && practice.gradedTotal > 0 ? `${practice.accuracyPct ?? 0}%` : t("learner.common.notAvailable")}
               </p>
               <p className="text-xs text-muted-foreground">
                 {practice && practice.gradedTotal > 0
-                  ? `${practice.gradedTotal} graded · ${practice.sessionCount} session(s)`
-                  : "Finish a bank or mock block"}
+                  ? t("learner.profile.snapshot.scoredDetail", {
+                      graded: practice.gradedTotal,
+                      sessions: practice.sessionCount,
+                    })
+                  : t("learner.profile.snapshot.scoredEmpty")}
               </p>
             </div>
             <div className="rounded-xl border border-border/60 bg-muted/15 p-4">
-              <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Streak</p>
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">{t("learner.profile.snapshot.streak")}</p>
               <p className="mt-1 text-2xl font-bold tabular-nums text-primary">
-                {premiumSnapshot.studyStreakDays > 0 ? premiumSnapshot.studyStreakDays : "N/A"}
+                {premiumSnapshot.studyStreakDays > 0 ? premiumSnapshot.studyStreakDays : t("learner.common.notAvailable")}
               </p>
-              <p className="text-xs text-muted-foreground">Days with activity</p>
+              <p className="text-xs text-muted-foreground">{t("learner.profile.snapshot.streakSub")}</p>
             </div>
             <div className="rounded-xl border border-border/60 bg-muted/15 p-4">
-              <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Flashcards</p>
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">{t("learner.profile.snapshot.flashcards")}</p>
               <p className="mt-1 text-2xl font-bold tabular-nums text-primary">
-                {fc ? fc.cardsReviewedTotal : "N/A"}
+                {fc ? fc.cardsReviewedTotal : t("learner.common.notAvailable")}
               </p>
-              <p className="text-xs text-muted-foreground">Reviews logged</p>
+              <p className="text-xs text-muted-foreground">{t("learner.profile.snapshot.fcReviews")}</p>
             </div>
           </div>
           {readiness ? (
             <div className="mt-5 rounded-xl border border-role-cta/20 bg-role-cta-soft p-4">
-              <p className="text-xs font-semibold uppercase tracking-wide text-primary">Readiness</p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-primary">{t("learner.profile.readiness.label")}</p>
               <p className="mt-1 text-2xl font-bold tabular-nums text-[var(--theme-heading-text)]">
-                {readiness.score != null ? `${readiness.score}/100` : "N/A"}
+                {readiness.score != null ? `${readiness.score}/100` : t("learner.common.notAvailable")}
                 <span className="ml-2 text-base font-semibold text-muted-foreground">
                   {readinessBandLabel(readiness.band)}
                 </span>
               </p>
               <p className="mt-2 text-sm text-muted-foreground">{readiness.summary}</p>
               {readiness.calibratedPreview ? (
-                <p className="mt-1 text-xs font-medium text-amber-700 dark:text-amber-300">
-                  Conservative calibration is active for this exam track.
-                </p>
+                <p className="mt-1 text-xs font-medium text-amber-700 dark:text-amber-300">{t("learner.profile.readiness.calibrationNote")}</p>
               ) : null}
               {readiness.holdingBack.length > 0 ? (
                 <p className="mt-2 text-sm text-foreground">
-                  <span className="font-medium">Holding back: </span>
+                  <span className="font-medium">{t("learner.profile.readiness.holdingBack")} </span>
                   {readiness.holdingBack.join(" · ")}
                 </p>
               ) : null}
               {readiness.factors.length > 0 ? (
                 <p className="mt-2 text-sm text-muted-foreground">
-                  <span className="font-medium text-foreground">Helping: </span>
+                  <span className="font-medium text-foreground">{t("learner.profile.readiness.helping")} </span>
                   {readiness.factors
                     .filter((f) => f.points > 0)
                     .slice(0, 4)
                     .map((f) => f.label)
-                    .join(" · ") || "Keep practicing. Signals will sharpen."}
+                    .join(" · ") || t("learner.profile.readiness.helpingFallback")}
                 </p>
               ) : null}
             </div>
@@ -299,22 +308,20 @@ export default async function LearnerProfilePage() {
       ) : entitlement !== "error" && !entitlement.hasAccess ? (
         <>
           <section className="nn-card p-6">
-            <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Performance</h2>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Subscribe to unlock full lesson pools, the question bank, CAT practice tests, flashcards, and readiness tracking.
-            </p>
+            <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">{t("learner.profile.performanceGate.heading")}</h2>
+            <p className="mt-2 text-sm text-muted-foreground">{t("learner.profile.performanceGate.body")}</p>
             <div className="mt-4 flex flex-wrap gap-3">
               <Link
                 href="/pricing"
                 className="inline-flex items-center justify-center rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
               >
-                Continue your plan
+                {t("cta.continuePlan")}
               </Link>
               <Link
                 href="/pricing"
                 className="inline-flex items-center justify-center rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold hover:bg-muted/80"
               >
-                Improve your weak areas
+                {t("cta.improveWeakAreas")}
               </Link>
             </div>
           </section>
@@ -324,32 +331,36 @@ export default async function LearnerProfilePage() {
 
       {topicPerf && entitlement !== "error" && entitlement.hasAccess ? (
         <section className="nn-card p-6">
-          <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Strong & weak topics</h2>
-          <p className="mt-1 text-sm text-muted-foreground">From graded question bank, practice tests, and mocks.</p>
+          <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">{t("learner.profile.topics.heading")}</h2>
+          <p className="mt-1 text-sm text-muted-foreground">{t("learner.profile.topics.subtitle")}</p>
           <div className="mt-4 grid gap-6 lg:grid-cols-2">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Priority review</p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("learner.profile.topics.priorityReview")}</p>
               <ul className="mt-2 space-y-2">
                 {topicPerf.weakTopics.slice(0, 5).map((w) => {
                   const insight = insights?.weakAreas.find((x) => x.topic === w.topic);
                   const acc = w.attempted > 0 ? Math.round(100 - w.missRate) : null;
+                  const missLabel =
+                    w.missed === 1
+                      ? t("learner.profile.topics.missOne", { count: w.missed })
+                      : t("learner.profile.topics.missMany", { count: w.missed });
                   return (
                     <li key={w.topic} className="rounded-lg border border-rose-500/20 bg-rose-500/[0.06] px-3 py-2 text-sm">
                       <span className="font-semibold text-foreground">{w.topic}</span>
                       {insight ? (
                         <span className="ml-2 text-xs text-muted-foreground">
-                          ({insight.tier} risk · {insight.risk})
+                          {t("learner.profile.topics.topicRisk", { tier: insight.tier, risk: insight.risk })}
                         </span>
                       ) : null}
                       <p className="mt-1 text-xs text-muted-foreground">
-                        {acc != null ? `${acc}% accuracy` : "N/A"} · {w.missed} miss{w.missed === 1 ? "" : "es"}
+                        {acc != null ? t("learner.profile.topics.accuracyLine", { pct: acc }) : t("learner.common.notAvailable")} · {missLabel}
                       </p>
                       <div className="mt-2 flex flex-wrap gap-3">
                         <Link href={remediationTopicDrillHref(w.topic)} className="text-xs font-semibold text-primary underline">
-                          Remediate in question bank
+                          {t("learner.profile.topics.remediateQbank")}
                         </Link>
                         <Link href={remediationWeakModeTestHref(w.topic)} className="text-xs font-semibold text-primary underline">
-                          Apply in weak-mode test
+                          {t("learner.profile.topics.weakMode")}
                         </Link>
                       </div>
                     </li>
@@ -357,13 +368,11 @@ export default async function LearnerProfilePage() {
                 })}
               </ul>
               {topicPerf.weakTopics.length === 0 ? (
-                <p className="mt-2 text-sm text-muted-foreground">
-                  No weak-topic signal yet. Complete a graded bank block or practice test to populate this list.
-                </p>
+                <p className="mt-2 text-sm text-muted-foreground">{t("learner.profile.topics.emptyWeak")}</p>
               ) : null}
             </div>
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Strong topics</p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("learner.profile.topics.strongHeading")}</p>
               <ul className="mt-2 flex flex-wrap gap-2">
                 {topicPerf.strongTopics.slice(0, 8).map((s) => (
                   <li
@@ -376,7 +385,7 @@ export default async function LearnerProfilePage() {
                 ))}
               </ul>
               {topicPerf.strongTopics.length === 0 ? (
-                <p className="mt-2 text-sm text-muted-foreground">Strong topics appear after enough graded volume per topic.</p>
+                <p className="mt-2 text-sm text-muted-foreground">{t("learner.profile.topics.emptyStrong")}</p>
               ) : null}
             </div>
           </div>
@@ -393,38 +402,38 @@ export default async function LearnerProfilePage() {
 
       {entitlement !== "error" && entitlement.hasAccess ? (
         <section className="nn-card p-6">
-          <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Quick links</h2>
-          <p className="mt-1 text-sm text-muted-foreground">Jump into your study tools.</p>
+          <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">{t("learner.profile.quickLinks.heading")}</h2>
+          <p className="mt-1 text-sm text-muted-foreground">{t("learner.profile.quickLinks.subtitle")}</p>
           <div className="mt-4 flex flex-wrap gap-2">
             <Link
               href="/app/lessons"
               className="rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold hover:bg-muted/80"
             >
-              Lessons
+              {t("learner.profile.quickLinks.lessons")}
             </Link>
             <Link
               href="/app/questions"
               className="rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold hover:bg-muted/80"
             >
-              Question bank
+              {t("learner.profile.quickLinks.questionBank")}
             </Link>
             <Link
               href="/app/flashcards"
               className="rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold hover:bg-muted/80"
             >
-              Flashcards
+              {t("learner.profile.quickLinks.flashcards")}
             </Link>
             <Link
               href="/app/practice-tests"
               className="rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold hover:bg-muted/80"
             >
-              CAT / practice tests
+              {t("learner.profile.quickLinks.catPractice")}
             </Link>
             <Link
               href="/app/study-plan"
               className="rounded-full border border-role-cta/30 bg-role-cta-soft px-4 py-2 text-sm font-semibold text-role-cta-on-soft"
             >
-              Study planner
+              {t("learner.profile.quickLinks.studyPlanner")}
             </Link>
           </div>
         </section>
@@ -432,14 +441,14 @@ export default async function LearnerProfilePage() {
 
       {entitlement !== "error" && entitlement.hasAccess ? (
         <section className="nn-card p-6">
-          <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Recent activity</h2>
-          <p className="mt-1 text-sm text-muted-foreground">Resume where you left off when possible.</p>
+          <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">{t("learner.profile.activity.heading")}</h2>
+          <p className="mt-1 text-sm text-muted-foreground">{t("learner.profile.activity.subtitle")}</p>
           <div className="mt-4 grid gap-6 lg:grid-cols-3">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Mocks</p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("learner.profile.activity.mocks")}</p>
               <ul className="mt-2 space-y-2 text-sm">
                 {activity.mocks.length === 0 ? (
-                  <li className="text-muted-foreground">No mock attempts yet.</li>
+                  <li className="text-muted-foreground">{t("learner.profile.activity.noMocks")}</li>
                 ) : (
                   activity.mocks.map((m) => (
                     <li key={m.id}>
@@ -456,20 +465,20 @@ export default async function LearnerProfilePage() {
               </ul>
             </div>
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Practice tests</p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("learner.profile.activity.practiceTests")}</p>
               <ul className="mt-2 space-y-2 text-sm">
                 {activity.practiceTests.length === 0 ? (
-                  <li className="text-muted-foreground">No adaptive or linear tests yet.</li>
+                  <li className="text-muted-foreground">{t("learner.profile.activity.noAdaptive")}</li>
                 ) : (
-                  activity.practiceTests.map((t) => (
-                    <li key={t.id}>
-                      <Link href={t.href} className="font-medium text-primary underline">
-                        {t.title ?? "Practice test"}
+                  activity.practiceTests.map((pt) => (
+                    <li key={pt.id}>
+                      <Link href={pt.href} className="font-medium text-primary underline">
+                        {pt.title ?? t("learner.profile.activity.practiceTestFallback")}
                       </Link>
                       <span className="text-muted-foreground">
                         {" "}
-                        · {t.status}
-                        {t.accuracyPct != null ? ` · ${t.accuracyPct}%` : ""}
+                        · {pt.status}
+                        {pt.accuracyPct != null ? ` · ${pt.accuracyPct}%` : ""}
                       </span>
                     </li>
                   ))
@@ -477,10 +486,10 @@ export default async function LearnerProfilePage() {
               </ul>
             </div>
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Lessons</p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("learner.profile.activity.lessons")}</p>
               <ul className="mt-2 space-y-2 text-sm">
                 {activity.lessons.length === 0 ? (
-                  <li className="text-muted-foreground">No lesson progress yet.</li>
+                  <li className="text-muted-foreground">{t("learner.profile.activity.noLessons")}</li>
                 ) : (
                   activity.lessons.map((l) => (
                     <li key={l.lessonId}>
@@ -489,7 +498,7 @@ export default async function LearnerProfilePage() {
                       </Link>
                       <span className="text-muted-foreground">
                         {" "}
-                        · {l.completed ? "completed" : "in progress"}
+                        · {l.completed ? t("learner.profile.activity.status.completed") : t("learner.profile.activity.status.inProgress")}
                       </span>
                     </li>
                   ))

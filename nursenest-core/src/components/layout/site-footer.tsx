@@ -13,7 +13,7 @@ import { npPracticeProgrammatic, pnPracticeProgrammatic } from "@/lib/marketing/
 function FLink({
   href,
   children,
-  className = "transition-colors hover:text-primary",
+  className = "break-words leading-snug transition-colors [overflow-wrap:anywhere] hover:text-primary",
 }: {
   href: string;
   children: React.ReactNode;
@@ -52,7 +52,7 @@ export function SiteFooter() {
 
         <div className="mb-6 grid grid-cols-2 gap-6 sm:gap-8 md:grid-cols-4 sm:mb-8">
           <div>
-            <h3 className="mb-3 text-sm font-semibold text-[var(--theme-heading-text)]">{t("footer.studyTools")}</h3>
+            <h3 className="mb-3 break-words text-sm font-semibold text-[var(--theme-heading-text)]">{t("footer.studyTools")}</h3>
             <ul className="space-y-2 text-sm text-[var(--theme-muted-text)]">
               <li>
                 <FLink href="/lessons">{t("footer.clinicalLessons")}</FLink>
@@ -88,7 +88,7 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <h3 className="mb-3 text-sm font-semibold text-[var(--theme-heading-text)]">{t("footer.examPrep")}</h3>
+            <h3 className="mb-3 break-words text-sm font-semibold text-[var(--theme-heading-text)]">{t("footer.examPrep")}</h3>
             <ul className="space-y-2 text-sm text-[var(--theme-muted-text)]">
               <li>
                 <FLink href="/exam-prep">{t("components.footer.nursingExamPrepHub")}</FLink>
@@ -110,7 +110,7 @@ export function SiteFooter() {
                 <FLink href="/question-of-the-day">{t("footer.questionOfTheDay")}</FLink>
               </li>
             </ul>
-            <h3 className="mb-3 mt-6 text-sm font-semibold text-[var(--theme-heading-text)]">{t("footer.newGradSupportSection")}</h3>
+            <h3 className="mb-3 mt-6 break-words text-sm font-semibold text-[var(--theme-heading-text)]">{t("footer.newGradSupportSection")}</h3>
             <ul className="space-y-2 text-sm text-[var(--theme-muted-text)]">
               <li>
                 <FLink href="/newgrad">{t("footer.newGradHub")}</FLink>
@@ -128,7 +128,7 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <h3 className="mb-3 text-sm font-semibold text-[var(--theme-heading-text)]">{t("footer.resources")}</h3>
+            <h3 className="mb-3 break-words text-sm font-semibold text-[var(--theme-heading-text)]">{t("footer.resources")}</h3>
             <ul className="space-y-2 text-sm text-[var(--theme-muted-text)]">
               <li>
                 <FLink href="/shop">{t("nav.store")}</FLink>
@@ -149,7 +149,7 @@ export function SiteFooter() {
                 <FLink href="/for-institutions">{t("footer.forSchools")}</FLink>
               </li>
             </ul>
-            <h3 className="mb-3 mt-6 text-sm font-semibold text-[var(--theme-heading-text)]">{t("footer.nursingSpecialties")}</h3>
+            <h3 className="mb-3 mt-6 break-words text-sm font-semibold text-[var(--theme-heading-text)]">{t("footer.nursingSpecialties")}</h3>
             <ul className="space-y-2 text-sm text-[var(--theme-muted-text)]">
               <li>
                 <FLink href="/nursing-specialties">{t("footer.allSpecialties")}</FLink>
@@ -164,7 +164,7 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <h3 className="mb-3 text-sm font-semibold text-[var(--theme-heading-text)]">{t("footer.legal")}</h3>
+            <h3 className="mb-3 break-words text-sm font-semibold text-[var(--theme-heading-text)]">{t("footer.legal")}</h3>
             <ul className="space-y-2 text-sm text-[var(--theme-muted-text)]">
               <li>
                 <FLink href="/terms">{t("footer.terms")}</FLink>
@@ -182,7 +182,7 @@ export function SiteFooter() {
                 <FLink href="/acceptable-use">{t("footer.acceptableUse")}</FLink>
               </li>
             </ul>
-            <h3 className="mb-3 mt-6 text-sm font-semibold text-[var(--theme-heading-text)]">{t("footer.alliedHealth")}</h3>
+            <h3 className="mb-3 mt-6 break-words text-sm font-semibold text-[var(--theme-heading-text)]">{t("footer.alliedHealth")}</h3>
             <ul className="space-y-2 text-sm text-[var(--theme-muted-text)]">
               <li>
                 <FLink href="/allied-health">{t("footer.alliedHealthExamPrep")}</FLink>
@@ -194,7 +194,7 @@ export function SiteFooter() {
                 <FLink href="/allied-health/paramedic-exam-prep">{t("components.footer.paramedic")}</FLink>
               </li>
             </ul>
-            <h3 className="mb-3 mt-6 text-sm font-semibold text-[var(--theme-heading-text)]">{t("footer.educationEcosystem")}</h3>
+            <h3 className="mb-3 mt-6 break-words text-sm font-semibold text-[var(--theme-heading-text)]">{t("footer.educationEcosystem")}</h3>
             <ul className="space-y-2 text-sm text-[var(--theme-muted-text)]">
               <li>
                 <FLink href="/">{t("components.footer.nursenestNursingAndHealthcareExam")}</FLink>
@@ -209,7 +209,7 @@ export function SiteFooter() {
         </div>
 
         <div className="mb-6 border-t border-[var(--theme-separator)] pb-6 pt-6">
-          <h3 className="mb-3 text-sm font-semibold text-[var(--theme-heading-text)]">{t("footer.studyInYourLanguage")}</h3>
+          <h3 className="mb-3 break-words text-sm font-semibold text-[var(--theme-heading-text)]">{t("footer.studyInYourLanguage")}</h3>
           <div className="mb-3 flex flex-wrap gap-2">
             <MarketingLanguagePreferenceList
               renderItem={({ code, name, flag, disabled, onSelect }) => (
@@ -233,19 +233,19 @@ export function SiteFooter() {
         </div>
 
         <div className="mb-6 border-t border-[var(--theme-separator)] pb-6 pt-6">
-          <h3 className="mb-3 text-sm font-semibold text-[var(--theme-heading-text)]">{t("components.footer.ourEducationEcosystem")}</h3>
+          <h3 className="mb-3 break-words text-sm font-semibold text-[var(--theme-heading-text)]">{t("components.footer.ourEducationEcosystem")}</h3>
           <ul className="space-y-2 text-sm text-[var(--theme-muted-text)]">
             <li>
               <FLink href="/" className="font-medium transition-colors hover:text-primary">
                 {t("brand.nurseNest")}
               </FLink>
-              <span className="ml-1">{t("components.footer.nursingExamPrepClinicalTools")}</span>
+              <span className="ms-1">{t("components.footer.nursingExamPrepClinicalTools")}</span>
             </li>
             <li>
               <a href="https://applynest.ca" target="_blank" rel="noopener noreferrer" className="font-medium transition-colors hover:text-primary">
                 {t("brand.applyNest")}
               </a>
-              <span className="ml-1">{t("components.footer.healthcareProgramApplicationsAdmissionsAnd")}</span>
+              <span className="ms-1">{t("components.footer.healthcareProgramApplicationsAdmissionsAnd")}</span>
             </li>
           </ul>
         </div>

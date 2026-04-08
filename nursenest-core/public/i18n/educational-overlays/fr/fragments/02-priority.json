@@ -1,0 +1,299 @@
+{
+  "ca-rn-nclex-rn:ca-rn-heart-failure": {
+    "title": "Insuffisance cardiaque (NCLEX-RN, Canada)",
+    "seoTitle": "Insuffisance cardiaque | NCLEX-RN Canada | NurseNest",
+    "seoDescription": "Contexte IR Canada : insuffisance cardiaque avec cadrage métrique et langage de portée.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Portée clinique",
+        "body": "Les items sur l'**insuffisance cardiaque** vérifient si vous reliez les **données d'évaluation au risque** : qu'est-ce qui change en premier, qu'est-ce qui exige une escalade, et quels enseignements ou ordres sont **inappropriés** dans le contexte.\n\n**IR Canada :** utilisez les **laboratoires SI** lorsque l'énoncé donne des **mmol/L** (glucose, électrolytes, etc.) et interprétez-les avec le tableau clinique. Les normes provinciales et la politique de l'employeur encadrent toujours la délégation et les actions indépendantes."
+      },
+      "exam_relevance": {
+        "heading": "Pertinence pour l'examen",
+        "body": "Attendez-vous à la **priorisation**, à la **surveillance** et à la **sécurité** — surtout lorsque l'énoncé juxtapose des tâches routinières et une anomalie. Les items canadiens peuvent utiliser des **unités métriques** et des contextes de soins canadiens ; la logique de jugement reste la même."
+      },
+      "core_concept": {
+        "heading": "Concept central — physiopathologie et surveillance",
+        "body": "Reliez les interventions au **mécanisme sous-jacent** (perfusion, oxygénation, charge infectieuse, déplacements électrolytiques ou dynamique glucose–insuline) et à la **surveillance** qui confirme l'effet de l'intervention."
+      },
+      "clinical_scenario": {
+        "heading": "Scénario clinique",
+        "body": "Vous arbitrez des priorités concurrentes. Choisissez le client dont le **risque augmente le plus vite** sans intervention infirmière — puis l'évaluation ou l'ordonnance qui correspond à ce risque. Utilisez le contexte de soins aigus canadien lorsque l'énoncé mentionne des unités ou des rôles."
+      },
+      "takeaways": {
+        "heading": "Points clés",
+        "body": "• Reliez **constantes + laboratoires + récit** avant l'enseignement ou le congé.  \n• Écartez les réponses qui **négligent l'évaluation** ou **retardent l'escalade** lorsque les données montrent une instabilité.  \n• **Banque d'items :** pratiquez les questions étiquetées `topic:heart-failure`.  \n• **Canada :** attention aux **unités métriques** et au vocabulaire de **portée** (IPR) dans certains énoncés."
+      }
+    }
+  },
+  "us-rn-nclex-rn:us-rn-heart-failure": {
+    "title": "Insuffisance cardiaque (NCLEX-RN, É.-U.)",
+    "seoTitle": "Insuffisance cardiaque | NCLEX-RN É.-U. | NurseNest",
+    "seoDescription": "IR É.-U. : insuffisance cardiaque — leçon en cinq sections et banque d'items.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Portée clinique",
+        "body": "Les items sur l'**insuffisance cardiaque** vérifient si vous reliez les **données d'évaluation au risque** : qu'est-ce qui change en premier, qu'est-ce qui exige une escalade, et quels enseignements ou ordres sont **inappropriés** dans le contexte."
+      },
+      "exam_relevance": {
+        "heading": "Pertinence pour l'examen",
+        "body": "Attendez-vous à la **priorisation**, à la **surveillance** et à la **sécurité** — surtout lorsque l'énoncé juxtapose des tâches routinières et une anomalie."
+      },
+      "core_concept": {
+        "heading": "Concept central — physiopathologie et surveillance",
+        "body": "Reliez les interventions au **mécanisme sous-jacent** (perfusion, oxygénation, charge infectieuse, déplacements électrolytiques ou dynamique glucose–insuline) et à la **surveillance** qui confirme l'effet de l'intervention."
+      },
+      "clinical_scenario": {
+        "heading": "Scénario clinique",
+        "body": "Vous arbitrez des priorités concurrentes. Choisissez le client dont le **risque augmente le plus vite** sans intervention infirmière — puis l'évaluation ou l'ordonnance qui correspond à ce risque."
+      },
+      "takeaways": {
+        "heading": "Points clés",
+        "body": "• Reliez **constantes + laboratoires + récit** avant l'enseignement ou le congé.  \n• Écartez les réponses qui **négligent l'évaluation** ou **retardent l'escalade** lorsque les données montrent une instabilité.  \n• **Banque d'items :** pratiquez les questions étiquetées `topic:heart-failure`."
+      }
+    }
+  },
+  "ca-rn-nclex-rn:diabetes-self-management-teaching": {
+    "title": "Enseignement sur l'autogestion du diabète (NCLEX-RN, Canada)",
+    "seoTitle": "Autogestion du diabète | NCLEX-RN Canada | NurseNest",
+    "seoDescription": "Jugement clinique endocrinien : relier données, risque, première action sécuritaire et délégation — cadre Canada.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Portée clinique",
+        "body": "**Enseignement sur l'autogestion du diabète** (Endocrinologie) est un thème de **jugement clinique** : relier les **données d'évaluation au risque**, choisir la **première action infirmière sécuritaire** et savoir quand **déléguer** plutôt que **conserver** une responsabilité d'évaluation. Les items canadiens peuvent utiliser des **unités SI** et un vocabulaire provincial ; la logique de priorisation reste celle du NCLEX-RN."
+      },
+      "exam_relevance": {
+        "heading": "Pertinence pour l'examen",
+        "body": "Les concepteurs utilisent ce thème pour tester la **priorisation**, la **surveillance** et l'**escalade**. Attendez-vous à des **leurreurs** plausibles qui retardent l'évaluation, négligent un client instable ou délèguent à tort un jugement de niveau IR."
+      },
+      "core_concept": {
+        "heading": "Concept central — physiopathologie et surveillance",
+        "body": "Cadrez l'**autogestion du diabète** dans l'**endocrinologie** : reliez les constatations d'**évaluation** attendues aux **interventions** et à la **surveillance** qui démontre que le plan fonctionne. Difficulté par défaut sur la carte thématique : **3** ; priorité : **haut rendement**."
+      },
+      "clinical_scenario": {
+        "heading": "Scénario clinique",
+        "body": "Imaginez plusieurs clients ou tâches : choisissez l'option qui **réduit le préjudice le plus vite** pour le client dont l'état **se détériore** ou est à **haut risque** s'il reste sans surveillance. Si l'énoncé est stable, choisissez tout de même l'action qui **comble d'abord la lacune de données** avant les routines."
+      },
+      "takeaways": {
+        "heading": "Points clés",
+        "body": "• Reliez **constantes + laboratoires + récit** avant le confort ou le congé.  \n• Éliminez les réponses qui **contournent l'évaluation** ou **retardent l'escalade** lorsque les données montrent un risque.  \n• Associez cette page au **slug thématique `endocrine`** dans le hub et aux blocs chronométrés.  \n\n**Sujets liés sur votre carte :** `dka-vs-hhs-priorities`, `thyroid-storm-myxedema-clues`, `addisonian-crisis`, `cushing-syndrome-assessment`, `siadh-vs-di-basics` — utilisez les filtres de la banque et du hub."
+      }
+    }
+  },
+  "us-rn-nclex-rn:diabetes-self-management-teaching": {
+    "title": "Enseignement sur l'autogestion du diabète (NCLEX-RN, É.-U.)",
+    "seoTitle": "Autogestion du diabète | NCLEX-RN É.-U. | NurseNest",
+    "seoDescription": "IR É.-U. : items instable vs stable, délégation et première action dans l'autogestion du diabète.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Portée clinique",
+        "body": "**Enseignement sur l'autogestion du diabète** (Endocrinologie) est un thème de **jugement clinique** : relier les **données au risque**, choisir la **première action sécuritaire** et savoir quand **déléguer** ou **retenir** la responsabilité. Les items NCLEX-RN aux É.-U. testent souvent **instable vs stable**, **délégation** et **première action**."
+      },
+      "exam_relevance": {
+        "heading": "Pertinence pour l'examen",
+        "body": "Les concepteurs utilisent ce thème pour tester la **priorisation**, la **surveillance** et l'**escalade**. Attendez-vous à des **leurreurs** plausibles qui retardent l'évaluation, négligent un client instable ou délèguent à tort un jugement de niveau IR."
+      },
+      "core_concept": {
+        "heading": "Concept central — physiopathologie et surveillance",
+        "body": "Cadrez l'**autogestion du diabète** dans l'**endocrinologie** : reliez les constatations d'**évaluation** aux **interventions** et à la **surveillance** qui démontre que le plan fonctionne. Difficulté par défaut : **3** ; priorité : **haut rendement**."
+      },
+      "clinical_scenario": {
+        "heading": "Scénario clinique",
+        "body": "Imaginez plusieurs clients ou tâches : choisissez l'option qui **réduit le préjudice le plus vite** pour le client dont l'état **se détériore** ou est à **haut risque** s'il reste sans surveillance. Si l'énoncé est stable, choisissez l'action qui **comble d'abord la lacune de données** avant les routines."
+      },
+      "takeaways": {
+        "heading": "Points clés",
+        "body": "• Reliez **constantes + laboratoires + récit** avant le confort ou le congé.  \n• Éliminez les réponses qui **contournent l'évaluation** ou **retardent l'escalade** lorsque les données montrent un risque.  \n• Associez cette page au **slug `endocrine`** dans le hub et aux blocs chronométrés.  \n\n**Sujets liés :** `dka-vs-hhs-priorities`, `thyroid-storm-myxedema-clues`, `addisonian-crisis`, `cushing-syndrome-assessment`, `siadh-vs-di-basics`."
+      }
+    }
+  },
+  "ca-rn-nclex-rn:diuretics-electrolyte-shifts": {
+    "title": "Diurétiques et déplacements électrolytiques (NCLEX-RN, Canada)",
+    "seoTitle": "Diurétiques et électrolytes | NCLEX-RN Canada | NurseNest",
+    "seoDescription": "Pharmacologie et surveillance : diurétiques, K⁺, Mg²⁺, acide-base — cadre Canada.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Portée clinique",
+        "body": "**Diurétiques et déplacements électrolytiques** (Pharmacologie) est un thème de **jugement clinique** : relier les **données au risque**, choisir la **première action sécuritaire** et distinguer **délégation** et **responsabilité IR**. Les items canadiens peuvent utiliser des **unités SI** et un vocabulaire provincial ; la logique de priorisation reste celle du NCLEX-RN."
+      },
+      "exam_relevance": {
+        "heading": "Pertinence pour l'examen",
+        "body": "Les concepteurs testent la **priorisation**, la **surveillance** et l'**escalade**. Attendez-vous à des **leurreurs** qui retardent l'évaluation, négligent un client instable ou délèguent à tort un jugement de niveau IR."
+      },
+      "core_concept": {
+        "heading": "Concept central — physiopathologie et surveillance",
+        "body": "Cadrez les **diurétiques** dans la **pharmacologie** : reliez les constatations d'**évaluation** aux **interventions** et à la **surveillance** qui démontre que le plan fonctionne. Difficulté par défaut : **3** ; priorité : **haut rendement**."
+      },
+      "clinical_scenario": {
+        "heading": "Scénario clinique",
+        "body": "Imaginez plusieurs clients ou tâches : choisissez l'option qui **réduit le préjudice le plus vite** pour le client dont l'état **se détériore** ou est à **haut risque** s'il reste sans surveillance. Si l'énoncé est stable, choisissez l'action qui **comble d'abord la lacune de données** avant les routines."
+      },
+      "takeaways": {
+        "heading": "Points clés",
+        "body": "• Reliez **constantes + laboratoires + récit** avant le confort ou le congé.  \n• Éliminez les réponses qui **contournent l'évaluation** ou **retardent l'escalade** lorsque les données montrent un risque.  \n• Associez cette page au **slug `pharmacology`** dans le hub.  \n\n**Sujets liés :** `insulin-hypoglycemia`, `anticoagulants-bleeding-risk`, `antibiotic-classes-allergies`, `opioids-respiratory-depression`, `cardiac-glycosides-toxicity`."
+      }
+    }
+  },
+  "us-rn-nclex-rn:diuretics-electrolyte-shifts": {
+    "title": "Diurétiques et déplacements électrolytiques (NCLEX-RN, É.-U.)",
+    "seoTitle": "Diurétiques et électrolytes | NCLEX-RN É.-U. | NurseNest",
+    "seoDescription": "Pharmacologie NCLEX-RN É.-U. : diurétiques et surveillance électrolytique.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Portée clinique",
+        "body": "**Diurétiques et déplacements électrolytiques** (Pharmacologie) est un thème de **jugement clinique** : relier les **données au risque**, choisir la **première action sécuritaire** et distinguer **délégation** et **responsabilité IR**. Les items américains testent souvent **instable vs stable**, **délégation** et **première action**."
+      },
+      "exam_relevance": {
+        "heading": "Pertinence pour l'examen",
+        "body": "Les concepteurs testent la **priorisation**, la **surveillance** et l'**escalade**. Attendez-vous à des **leurreurs** plausibles."
+      },
+      "core_concept": {
+        "heading": "Concept central — physiopathologie et surveillance",
+        "body": "Cadrez les **diurétiques** dans la **pharmacologie** : reliez les constatations d'**évaluation** aux **interventions** et à la **surveillance** qui démontre que le plan fonctionne. Difficulté par défaut : **3** ; priorité : **haut rendement**."
+      },
+      "clinical_scenario": {
+        "heading": "Scénario clinique",
+        "body": "Imaginez plusieurs clients ou tâches : choisissez l'option qui **réduit le préjudice le plus vite** pour le client dont l'état **se détériore** ou est à **haut risque** s'il reste sans surveillance."
+      },
+      "takeaways": {
+        "heading": "Points clés",
+        "body": "• Reliez **constantes + laboratoires + récit** avant le confort ou le congé.  \n• Éliminez les réponses qui **contournent l'évaluation** ou **retardent l'escalade**.  \n• Associez au **slug `pharmacology`**.  \n\n**Sujets liés :** `insulin-hypoglycemia`, `anticoagulants-bleeding-risk`, `antibiotic-classes-allergies`, `opioids-respiratory-depression`, `cardiac-glycosides-toxicity`."
+      }
+    }
+  },
+  "ca-rn-nclex-rn:sepsis-early-recognition-hy": {
+    "title": "Reconnaissance précoce de la sepsis (NCLEX-RN, Canada)",
+    "seoTitle": "Sepsis — reconnaissance précoce | NCLEX-RN Canada | NurseNest",
+    "seoDescription": "Infectiologie : repérer la détresse tôt, surveiller et escalader — cadre Canada.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Portée clinique",
+        "body": "**Reconnaissance précoce de la sepsis** (Maladies infectieuses) est un thème de **jugement clinique** : relier les **données au risque**, choisir la **première action sécuritaire** et distinguer **délégation** et **responsabilité IR**. Les items canadiens peuvent utiliser des **unités SI** et un vocabulaire provincial ; la logique de priorisation reste celle du NCLEX-RN."
+      },
+      "exam_relevance": {
+        "heading": "Pertinence pour l'examen",
+        "body": "Les concepteurs testent la **priorisation**, la **surveillance** et l'**escalade**. Attendez-vous à des **leurreurs** plausibles."
+      },
+      "core_concept": {
+        "heading": "Concept central — physiopathologie et surveillance",
+        "body": "Cadrez la **sepsis** dans les **maladies infectieuses** : reliez les constatations d'**évaluation** aux **interventions** et à la **surveillance** qui démontre que le plan fonctionne. Difficulté par défaut : **4** ; priorité : **haut rendement**."
+      },
+      "clinical_scenario": {
+        "heading": "Scénario clinique",
+        "body": "Imaginez plusieurs clients ou tâches : choisissez l'option qui **réduit le préjudice le plus vite** pour le client dont l'état **se détériore** ou est à **haut risque** s'il reste sans surveillance."
+      },
+      "takeaways": {
+        "heading": "Points clés",
+        "body": "• Reliez **constantes + laboratoires + récit** avant le confort ou le congé.  \n• Éliminez les réponses qui **contournent l'évaluation** ou **retardent l'escalade**.  \n• Associez au **slug `infectious`**.  \n\n**Sujets liés :** `sepsis-early-recognition`, `hiv-confidentiality-pep-basics`, `isolation-precautions-in-practice`, `wound-infection-vs-colonization`."
+      }
+    }
+  },
+  "us-rn-nclex-rn:sepsis-early-recognition-hy": {
+    "title": "Reconnaissance précoce de la sepsis (NCLEX-RN, É.-U.)",
+    "seoTitle": "Sepsis — reconnaissance précoce | NCLEX-RN É.-U. | NurseNest",
+    "seoDescription": "Infectiologie NCLEX-RN É.-U. : priorisation et escalade dans la sepsis.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Portée clinique",
+        "body": "**Reconnaissance précoce de la sepsis** (Maladies infectieuses) est un thème de **jugement clinique** : relier les **données au risque**, choisir la **première action sécuritaire** et distinguer **délégation** et **responsabilité IR**. Les items américains testent souvent **instable vs stable**, **délégation** et **première action**."
+      },
+      "exam_relevance": {
+        "heading": "Pertinence pour l'examen",
+        "body": "Les concepteurs testent la **priorisation**, la **surveillance** et l'**escalade**. Attendez-vous à des **leurreurs** plausibles."
+      },
+      "core_concept": {
+        "heading": "Concept central — physiopathologie et surveillance",
+        "body": "Cadrez la **sepsis** dans les **maladies infectieuses** : reliez les constatations d'**évaluation** aux **interventions** et à la **surveillance** qui démontre que le plan fonctionne. Difficulté par défaut : **4** ; priorité : **haut rendement**."
+      },
+      "clinical_scenario": {
+        "heading": "Scénario clinique",
+        "body": "Imaginez plusieurs clients ou tâches : choisissez l'option qui **réduit le préjudice le plus vite** pour le client dont l'état **se détériore** ou est à **haut risque** s'il reste sans surveillance."
+      },
+      "takeaways": {
+        "heading": "Points clés",
+        "body": "• Reliez **constantes + laboratoires + récit** avant le confort ou le congé.  \n• Éliminez les réponses qui **contournent l'évaluation** ou **retardent l'escalade**.  \n• Associez au **slug `infectious`**.  \n\n**Sujets liés :** `sepsis-early-recognition`, `hiv-confidentiality-pep-basics`, `isolation-precautions-in-practice`, `wound-infection-vs-colonization`."
+      }
+    }
+  },
+  "ca-rn-nclex-rn:ca-rn-sepsis": {
+    "title": "Sepsis (NCLEX-RN, Canada)",
+    "seoTitle": "Sepsis | NCLEX-RN Canada | NurseNest",
+    "seoDescription": "Contexte IR Canada : sepsis avec cadrage métrique et langage de portée.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Portée clinique",
+        "body": "Les items sur la **sepsis** vérifient si vous reliez les **données d'évaluation au risque** : qu'est-ce qui change en premier, qu'est-ce qui exige une escalade, et quels enseignements ou ordres sont **inappropriés** dans le contexte.\n\n**IR Canada :** utilisez les **laboratoires SI** lorsque l'énoncé donne des **mmol/L** et interprétez-les avec le tableau clinique. Les normes provinciales et la politique de l'employeur encadrent la délégation et les actions indépendantes."
+      },
+      "exam_relevance": {
+        "heading": "Pertinence pour l'examen",
+        "body": "Attendez-vous à la **priorisation**, à la **surveillance** et à la **sécurité** — surtout lorsque l'énoncé juxtapose des tâches routinières et une anomalie. Les items canadiens peuvent utiliser des **unités métriques** et des contextes de soins canadiens ; la logique de jugement reste la même."
+      },
+      "core_concept": {
+        "heading": "Concept central — physiopathologie et surveillance",
+        "body": "Reliez les interventions au **mécanisme sous-jacent** (perfusion, oxygénation, charge infectieuse, déplacements électrolytiques ou dynamique glucose–insuline) et à la **surveillance** qui confirme l'effet de l'intervention."
+      },
+      "clinical_scenario": {
+        "heading": "Scénario clinique",
+        "body": "Vous arbitrez des priorités concurrentes. Choisissez le client dont le **risque augmente le plus vite** sans intervention infirmière — puis l'évaluation ou l'ordonnance qui correspond à ce risque. Utilisez le contexte de soins aigus canadien lorsque l'énoncé mentionne des unités ou des rôles."
+      },
+      "takeaways": {
+        "heading": "Points clés",
+        "body": "• Reliez **constantes + laboratoires + récit** avant l'enseignement ou le congé.  \n• Écartez les réponses qui **négligent l'évaluation** ou **retardent l'escalade** lorsque les données montrent une instabilité.  \n• **Banque d'items :** pratiquez les questions étiquetées `topic:sepsis`.  \n• **Canada :** attention aux **unités métriques** et au vocabulaire de **portée** (IPR) dans certains énoncés."
+      }
+    }
+  },
+  "us-rn-nclex-rn:us-rn-sepsis": {
+    "title": "Sepsis (NCLEX-RN, É.-U.)",
+    "seoTitle": "Sepsis | NCLEX-RN É.-U. | NurseNest",
+    "seoDescription": "IR É.-U. : sepsis — leçon en cinq sections et banque d'items.",
+    "sections": {
+      "clinical_meaning": {
+        "heading": "Portée clinique",
+        "body": "Les items sur la **sepsis** vérifient si vous reliez les **données d'évaluation au risque** : qu'est-ce qui change en premier, qu'est-ce qui exige une escalade, et quels enseignements ou ordres sont **inappropriés** dans le contexte."
+      },
+      "exam_relevance": {
+        "heading": "Pertinence pour l'examen",
+        "body": "Attendez-vous à la **priorisation**, à la **surveillance** et à la **sécurité** — surtout lorsque l'énoncé juxtapose des tâches routinières et une anomalie."
+      },
+      "core_concept": {
+        "heading": "Concept central — physiopathologie et surveillance",
+        "body": "Reliez les interventions au **mécanisme sous-jacent** (perfusion, oxygénation, charge infectieuse, déplacements électrolytiques ou dynamique glucose–insuline) et à la **surveillance** qui confirme l'effet de l'intervention."
+      },
+      "clinical_scenario": {
+        "heading": "Scénario clinique",
+        "body": "Vous arbitrez des priorités concurrentes. Choisissez le client dont le **risque augmente le plus vite** sans intervention infirmière — puis l'évaluation ou l'ordonnance qui correspond à ce risque."
+      },
+      "takeaways": {
+        "heading": "Points clés",
+        "body": "• Reliez **constantes + laboratoires + récit** avant l'enseignement ou le congé.  \n• Écartez les réponses qui **négligent l'évaluation** ou **retardent l'escalade** lorsque les données montrent une instabilité.  \n• **Banque d'items :** pratiquez les questions étiquetées `topic:sepsis`."
+      }
+    }
+  },
+  "us-np-fnp:fnp-overlay-respiratory-acute": {
+    "title": "EPOC, asthme, SDRA, pneumonie, EP — volet respiratoire aigu IPF/FNP (É.-U.)",
+    "seoTitle": "Volet respiratoire aigu NP | FNP É.-U. | NurseNest",
+    "seoDescription": "Superposition APRN pour pathologies respiratoires aiguës — décisions de niveau NP, jumeler avec la leçon RN.",
+    "sections": {
+      "intro": {
+        "heading": "Introduction",
+        "body": "Il s'agit d'un **volet NP** pour **EPOC, asthme, SDRA, pneumonie, EP** — ce n'est pas la répétition intégrale de la leçon RN. Associez-le à la leçon RN `us-rn-copd-respiratory` du catalogue pour la physiopathologie et les exercices façon NCLEX, puis utilisez ce bloc pour les décisions de **niveau APRN**."
+      },
+      "diagnosis_np": {
+        "heading": "Considérations diagnostiques",
+        "body": "Structurez la **représentation du problème**, les **drapeaux rouges** et les diagnostics **à ne pas manquer**. Les examens favorisent la **prochaine étape diagnostique** plutôt qu'un traitement prématuré — reliez anamnèse, examen et tests ciblés à la probabilité pré-test."
+      },
+      "management_np": {
+        "heading": "Plans de prise en charge",
+        "body": "Exposez la **stabilisation initiale** (lorsque l'énoncé le suggère), une thérapie **conforme aux lignes directrices** lorsque le stem le permet, les **seuils de consultation** et **quand renvoyer** vers une spécialité ou les urgences. Préférez l'option qui correspond à la **gravité** et aux **comorbidités**."
+      },
+      "meds_np": {
+        "heading": "Ajustements médicamenteux",
+        "body": "Attendez-vous à des pièges d'**ajustement posologique** selon la fonction rénale/hépatique, d'**interactions** et de **contre-indications**, de **déprescription** lorsque c'est indiqué, et de **surveillance** après un changement (laboratoires, constantes, signes de toxicité)."
+      },
+      "followup_np": {
+        "heading": "Suivi et surveillance",
+        "body": "Choisissez l'**intervalle de suivi**, l'**éducation du patient**, la **consigne de sécurité** et les **cibles de réévaluation** (symptômes, laboratoires, observance). Les items NP testent souvent si vous **bouclez le risque** — pas seulement la première action de la visite."
+      }
+    }
+  }
+}

@@ -1,20 +1,22 @@
 "use client";
 
-import Image from "next/image";
 import { ArrowRight, BookOpen, ChevronDown } from "lucide-react";
+import { useMemo } from "react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
-import { MARKETING_SCREENSHOT_SOURCES } from "@/lib/marketing-assets.generated";
+import { buildHomepageHeroSlides } from "@/lib/marketing-assets";
+import { MarketingChainScreenshot } from "@/components/marketing/marketing-screenshot-stack";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { HUB, loginWithCallback, rnLessons, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
 import type { NursenestMarketingRegion } from "@/lib/marketing/home-hero-gateway-config";
+import { MARKETING_SCREENSHOT_PAIR_SIZES } from "@/lib/marketing-image-delivery";
 import {
-  MARKETING_PHOTO_QUALITY_BELOW_FOLD,
-  MARKETING_SCREENSHOT_PAIR_SIZES,
-  marketingScreenshotBundleDisplaySrc,
-} from "@/lib/marketing-image-delivery";
-import { MARKETING_FINAL_CTA_ROW_CLASS } from "@/lib/theme/marketing-hero-pattern";
+  MARKETING_FINAL_CTA_ROW_CLASS,
+  MARKETING_PRIMARY_CTA_CLASS,
+  MARKETING_SECONDARY_CTA_CLASS,
+  MARKETING_TERTIARY_LINK_CLASS,
+} from "@/lib/theme/marketing-hero-pattern";
 
 type Props = {
   region: NursenestMarketingRegion;
@@ -24,8 +26,10 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
   const { t, locale } = useMarketingI18n();
   const loc = (path: string) => withMarketingLocale(locale, path);
 
-  const dash = MARKETING_SCREENSHOT_SOURCES["screenshot2"];
-  const qb = MARKETING_SCREENSHOT_SOURCES["screenshot6"];
+  /** Hero uses slides 0–2; legacy stack uses 6–8 — keep preview on 3–4 (screenshots 4–5) to reduce duplicate crops. */
+  const platformSlides = useMemo(() => buildHomepageHeroSlides(t), [t]);
+  const previewDash = platformSlides[3];
+  const previewBank = platformSlides[4];
 
   const faqKeys = ["1", "2", "3", "4", "5", "6"] as const;
 
@@ -77,47 +81,33 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
           </h2>
           <p className="nn-marketing-lead text-[var(--theme-muted-text)]">{t("home.conversion.previewSub")}</p>
           <div className="mt-8 grid gap-[var(--nn-rhythm-card-grid-gap)] lg:grid-cols-2 lg:gap-6">
-            {dash ? (
+            {previewDash ? (
               <figure className="nn-marketing-card overflow-hidden">
-                <div
-                  className="relative w-full bg-[var(--bg-inset)]"
-                  style={{ aspectRatio: `${dash.width} / ${dash.height}` }}
-                >
-                  <Image
-                    src={marketingScreenshotBundleDisplaySrc(dash)}
-                    alt={t("home.conversion.previewCaptionDash")}
-                    fill
-                    sizes={MARKETING_SCREENSHOT_PAIR_SIZES}
-                    quality={MARKETING_PHOTO_QUALITY_BELOW_FOLD}
-                    loading="lazy"
-                    fetchPriority="low"
-                    decoding="async"
-                    className="object-cover object-top"
-                  />
-                </div>
+                <MarketingChainScreenshot
+                  objectKey={previewDash.objectKey}
+                  publicUrl={previewDash.publicUrl}
+                  alt={t("home.conversion.previewCaptionDash")}
+                  sizes={MARKETING_SCREENSHOT_PAIR_SIZES}
+                  fit="contain"
+                  className="border-0 bg-[var(--bg-inset)] shadow-none"
+                  rounded="rounded-none"
+                />
                 <figcaption className="border-t border-[var(--border-subtle)] px-3 py-2.5 text-xs font-medium text-[var(--theme-muted-text)]">
                   {t("home.conversion.previewCaptionDash")}
                 </figcaption>
               </figure>
             ) : null}
-            {qb ? (
+            {previewBank ? (
               <figure className="nn-marketing-card overflow-hidden">
-                <div
-                  className="relative w-full bg-[var(--bg-inset)]"
-                  style={{ aspectRatio: `${qb.width} / ${qb.height}` }}
-                >
-                  <Image
-                    src={marketingScreenshotBundleDisplaySrc(qb)}
-                    alt={t("home.conversion.previewCaptionBank")}
-                    fill
-                    sizes={MARKETING_SCREENSHOT_PAIR_SIZES}
-                    quality={MARKETING_PHOTO_QUALITY_BELOW_FOLD}
-                    loading="lazy"
-                    fetchPriority="low"
-                    decoding="async"
-                    className="object-cover object-top"
-                  />
-                </div>
+                <MarketingChainScreenshot
+                  objectKey={previewBank.objectKey}
+                  publicUrl={previewBank.publicUrl}
+                  alt={t("home.conversion.previewCaptionBank")}
+                  sizes={MARKETING_SCREENSHOT_PAIR_SIZES}
+                  fit="contain"
+                  className="border-0 bg-[var(--bg-inset)] shadow-none"
+                  rounded="rounded-none"
+                />
                 <figcaption className="border-t border-[var(--border-subtle)] px-3 py-2.5 text-xs font-medium text-[var(--theme-muted-text)]">
                   {t("home.conversion.previewCaptionBank")}
                 </figcaption>
@@ -244,7 +234,7 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
               href={loc(HUB.signup)}
               event={PH.marketingHomeFinalCta}
               eventProps={{ choice: "signup" }}
-              className="nn-btn-primary inline-flex min-h-[48px] w-full items-center justify-center px-8 py-3 text-base font-semibold sm:w-auto sm:min-h-[52px] sm:min-w-[200px] sm:text-lg"
+              className={`${MARKETING_PRIMARY_CTA_CLASS} sm:min-w-[200px]`}
             >
               {t("home.conversion.ctaSignup")}
               <ArrowRight className="ml-2 h-5 w-5" />
@@ -253,7 +243,7 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
               href={loc(HUB.pricing)}
               event={PH.marketingHomeFinalCta}
               eventProps={{ choice: "pricing" }}
-              className="nn-btn-secondary inline-flex min-h-[48px] w-full items-center justify-center px-8 py-3 text-base font-semibold sm:w-auto sm:min-h-[52px] sm:min-w-[200px]"
+              className={`${MARKETING_SECONDARY_CTA_CLASS} sm:min-w-[200px]`}
             >
               {t("home.conversion.ctaPricing")}
             </MarketingTrackedLink>
@@ -261,7 +251,7 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
               href={loc(rnQuestions(region))}
               event={PH.marketingHomeFinalCta}
               eventProps={{ choice: "try_rn_questions", region }}
-              className="nn-link-quiet inline-flex min-h-[44px] w-full items-center justify-center px-6 py-2 text-sm sm:w-auto"
+              className={`${MARKETING_TERTIARY_LINK_CLASS} w-full sm:w-auto`}
             >
               {t("home.conversion.ctaTryFree")}
             </MarketingTrackedLink>

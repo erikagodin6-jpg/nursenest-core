@@ -10,52 +10,88 @@ import {
   marketingImageShouldUnoptimize,
 } from "@/lib/marketing-image-delivery";
 
-function ScreenshotFrame({
-  slide,
-  testId,
+type FitMode = "cover" | "contain";
+
+/**
+ * Reliable below-fold product still: same URL chain as hero (PNG first → WebP → proxy → local SVG).
+ * Use for any homepage section that previously relied on `MARKETING_SCREENSHOT_SOURCES` WebP bundles (often 403).
+ */
+export function MarketingChainScreenshot({
+  objectKey,
+  publicUrl,
+  alt,
+  sizes = MARKETING_STACK_SHOT_SIZES,
+  className = "",
+  imgClassName = "",
+  fit = "contain",
+  aspectRatio = "16 / 10",
+  rounded = "rounded-2xl",
 }: {
-  slide: HomeHeroSlide;
-  testId: string;
+  objectKey: string;
+  publicUrl: string;
+  alt: string;
+  sizes?: string;
+  className?: string;
+  imgClassName?: string;
+  fit?: FitMode;
+  aspectRatio?: string;
+  rounded?: string;
 }) {
   const chain = useMemo(
     () =>
       getMarketingHeroImageUrlChain({
-        objectKey: slide.objectKey,
-        publicCdnUrl: slide.publicUrl,
+        objectKey,
+        publicCdnUrl: publicUrl,
       }),
-    [slide.objectKey, slide.publicUrl],
+    [objectKey, publicUrl],
   );
   const [tier, setTier] = useState(0);
-  const src = chain[Math.min(tier, chain.length - 1)] ?? MARKETING_HERO_LOCAL_FALLBACK;
-  const maxTierIndex = chain.length - 1;
-
+  const maxTierIndex = Math.max(0, chain.length - 1);
+  const src = chain[Math.min(tier, maxTierIndex)] ?? MARKETING_HERO_LOCAL_FALLBACK;
   const unoptimized = marketingImageShouldUnoptimize(src);
 
+  const objectClass =
+    fit === "contain" ?
+      "object-contain object-center"
+    : "object-cover object-top";
+
   return (
-    <div className="flex min-w-0 flex-col gap-2">
-      <div
-        className="relative w-full overflow-hidden rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] shadow-[var(--shadow-elevated)]"
-        style={{ aspectRatio: "16 / 10" }}
-      >
-        <Image
-          key={`${slide.objectKey}-${tier}`}
-          src={src}
-          alt={slide.alt}
-          fill
-          sizes={MARKETING_STACK_SHOT_SIZES}
-          quality={MARKETING_PHOTO_QUALITY_BELOW_FOLD}
-          loading="lazy"
-          fetchPriority="low"
-          decoding="async"
-          unoptimized={unoptimized}
-          referrerPolicy="no-referrer"
-          className="object-cover object-top bg-[var(--theme-muted-surface)]"
-          data-testid={testId}
-          onError={() => setTier((t) => (t < maxTierIndex ? t + 1 : t))}
-        />
-      </div>
-      <div className="space-y-0.5 px-0.5">
-        <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{slide.title}</p>
+    <div
+      className={`relative w-full overflow-hidden border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)] shadow-[var(--shadow-elevated)] ${rounded} ${className}`}
+      style={{ aspectRatio }}
+    >
+      <Image
+        key={`${objectKey}-${tier}-${src}`}
+        src={src}
+        alt={alt}
+        fill
+        sizes={sizes}
+        quality={MARKETING_PHOTO_QUALITY_BELOW_FOLD}
+        loading="lazy"
+        fetchPriority="low"
+        decoding="async"
+        unoptimized={unoptimized}
+        referrerPolicy="no-referrer"
+        className={`${objectClass} ${imgClassName}`.trim()}
+        onError={() => setTier((t) => (t < maxTierIndex ? t + 1 : t))}
+      />
+    </div>
+  );
+}
+
+function ScreenshotFrame({ slide }: { slide: HomeHeroSlide }) {
+  return (
+    <div className="flex min-w-0 flex-col gap-3">
+      <MarketingChainScreenshot
+        objectKey={slide.objectKey}
+        publicUrl={slide.publicUrl}
+        alt={slide.alt}
+        sizes={MARKETING_STACK_SHOT_SIZES}
+        fit="contain"
+        rounded="rounded-2xl"
+      />
+      <div className="space-y-1 px-0.5">
+        <p className="text-sm font-semibold leading-snug text-[var(--theme-heading-text)]">{slide.title}</p>
         <p className="text-xs leading-relaxed text-[var(--theme-body-text)]">{slide.caption}</p>
       </div>
     </div>
@@ -63,8 +99,7 @@ function ScreenshotFrame({
 }
 
 /**
- * Static screenshot column/grid using the same optimized WebP → PNG → proxy → local chain as the hero carousel.
- * Prefer over autoplay carousel when a stacked layout should fill the hero.
+ * Static screenshot column/grid using the same PNG-first chain as the hero carousel.
  */
 export function MarketingScreenshotStack({
   slides,
@@ -92,11 +127,13 @@ export function MarketingScreenshotStack({
 
   return (
     <div
-      className={`flex w-full min-w-0 flex-col gap-4 md:gap-5 ${className ?? ""}`}
+      className={`flex w-full min-w-0 flex-col gap-6 md:gap-7 ${className ?? ""}`}
       data-testid={testIdPrefix}
     >
       {picks.map((slide, i) => (
-        <ScreenshotFrame key={`${slide.objectKey}-${i}`} slide={slide} testId={`img-${testIdPrefix}-${i}`} />
+        <div key={`${slide.objectKey}-${i}`} data-testid={`${testIdPrefix}-frame-${i}`}>
+          <ScreenshotFrame slide={slide} />
+        </div>
       ))}
     </div>
   );

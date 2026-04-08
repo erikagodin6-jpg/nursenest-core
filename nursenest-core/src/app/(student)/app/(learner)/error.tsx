@@ -29,7 +29,11 @@ export default function LearnerError({
       </a>
       <h1 className="text-2xl font-bold">{t("learner.error.section.title")}</h1>
       <p className="text-sm text-muted">{t("learner.error.section.description")}</p>
-      {digest ? <p className="text-xs text-muted">Reference: {digest}</p> : null}
+      {digest ? (
+        <p className="text-xs text-muted">
+          {t("learner.error.section.referenceLabel")} {digest}
+        </p>
+      ) : null}
       {showDetail ? <p className="text-xs text-muted">{getErrorMessage(error)}</p> : null}
       <div className="flex flex-wrap gap-2">
         <button type="button" className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white" onClick={() => reset()}>

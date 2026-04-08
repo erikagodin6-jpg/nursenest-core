@@ -46,7 +46,7 @@ function NavDetails({
   dense?: boolean;
 }) {
   return (
-    <details className={`group relative ${subBar ? "shrink-0" : ""}`}>
+    <details className={`group relative ${subBar ? "shrink-0" : "min-w-0 max-w-full"}`}>
       <summary
         className={`flex cursor-pointer list-none items-center gap-1 font-medium text-[var(--theme-menu-text)] hover:bg-[var(--surface-interactive-hover)] hover:text-primary [&::-webkit-details-marker]:hidden ${
           subBar
@@ -56,10 +56,10 @@ function NavDetails({
               : "rounded-full px-3 py-2 text-sm"
         }`}
       >
-        {label}
+        <span className="min-w-0 max-w-[min(100%,16rem)] text-start leading-snug break-words [overflow-wrap:anywhere]">{label}</span>
         <ChevronDown className={`shrink-0 transition-transform group-open:rotate-180 ${subBar ? "h-3 w-3" : "h-3.5 w-3.5"}`} />
       </summary>
-      <div className="absolute left-0 top-full z-50 mt-1 min-w-[12rem] rounded-xl border border-[var(--border-subtle,var(--theme-card-border))] bg-[var(--bg-elevated,var(--theme-card-bg))] py-1 shadow-[var(--shadow-elevated)]">{children}</div>
+      <div className="absolute start-0 top-full z-50 mt-1 min-w-[12rem] max-w-[min(calc(100vw-2rem),20rem)] rounded-xl border border-[var(--border-subtle,var(--theme-card-border))] bg-[var(--bg-elevated,var(--theme-card-bg))] py-1 shadow-[var(--shadow-elevated)]">{children}</div>
     </details>
   );
 }
@@ -68,7 +68,7 @@ function NavLinkItem({ href, children }: { href: string; children: React.ReactNo
   return (
     <Link
       href={href}
-      className="block px-3 py-2 text-sm text-[var(--theme-menu-text)] hover:bg-[var(--surface-interactive-hover)] hover:text-primary"
+      className="block break-words px-3 py-2 text-start text-sm text-[var(--theme-menu-text)] [overflow-wrap:anywhere] hover:bg-[var(--surface-interactive-hover)] hover:text-primary"
     >
       {children}
     </Link>
@@ -110,7 +110,7 @@ export function SiteHeader() {
   const isMarketingHome = pathWithoutLocale === "/" || pathWithoutLocale === "";
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[var(--divider,var(--theme-nav-border))] bg-[color-mix(in_srgb,var(--theme-nav-bg)_94%,var(--theme-primary))]/92 backdrop-blur-md transition-colors duration-200">
+    <header className="sticky top-0 z-50 border-b border-[var(--divider,var(--theme-nav-border))] bg-[var(--theme-header-surface)]/95 backdrop-blur-md transition-colors duration-200">
       {/* Single primary bar: promo links live under “Explore” / mobile menu — removes stacked top bar height */}
 
       <div
@@ -124,10 +124,10 @@ export function SiteHeader() {
           <SiteBrandLogoMark className={isMarketingHome ? HOME_BRAND_LOGO_MARK_CLASSNAME : undefined} />
         </Link>
 
-        <nav className={`hidden items-center md:flex ${isMarketingHome ? "gap-0 lg:gap-0.5" : "gap-0.5 lg:gap-1"}`}>
+        <nav className={`hidden min-w-0 items-center md:flex ${isMarketingHome ? "gap-0 lg:gap-0.5" : "gap-0.5 lg:gap-1"}`}>
           <Link
             href={localizeHref("/")}
-            className={`rounded-full font-medium text-[var(--theme-menu-text)] hover:bg-[var(--theme-menu-hover-bg)] hover:text-[var(--theme-menu-hover-text)] ${isMarketingHome ? "px-2.5 py-1.5 text-sm" : "px-3 py-2 text-sm"}`}
+            className={`rounded-full font-medium leading-snug text-[var(--theme-menu-text)] break-words [overflow-wrap:anywhere] hover:bg-[var(--theme-menu-hover-bg)] hover:text-[var(--theme-menu-hover-text)] ${isMarketingHome ? "px-2.5 py-1.5 text-sm" : "px-3 py-2 text-sm"}`}
           >
             {t("nav.home")}
           </Link>
@@ -191,7 +191,7 @@ export function SiteHeader() {
               <ChevronDown className="h-3.5 w-3.5" />
             </button>
             {langOpen && (
-              <div className="absolute right-0 z-[100] mt-1 max-h-64 w-52 overflow-y-auto rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] py-1 shadow-lg">
+              <div className="absolute end-0 z-[100] mt-1 max-h-64 w-52 overflow-y-auto rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] py-1 shadow-lg">
                 <MarketingLanguagePreferenceList
                   onDone={() => setLangOpen(false)}
                   renderItem={({ code, name, flag, disabled, onSelect }) => (
@@ -220,16 +220,40 @@ export function SiteHeader() {
           </div>
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <div className="inline-flex md:hidden items-center rounded-full border border-[var(--theme-nav-border)] bg-[var(--theme-card-bg)] p-0.5">
+            <button
+              type="button"
+              onClick={() => setRegion("US")}
+              className={`rounded-full px-2 py-0.5 text-[10px] font-semibold leading-none ${
+                region === "US" ? "bg-role-cta-soft text-role-cta-on-soft" : "text-[var(--theme-muted-text)]"
+              }`}
+              aria-label={t("home.region.us")}
+            >
+              US
+            </button>
+            <button
+              type="button"
+              onClick={() => setRegion("CA")}
+              className={`rounded-full px-2 py-0.5 text-[10px] font-semibold leading-none ${
+                region === "CA" ? "bg-role-cta-soft text-role-cta-on-soft" : "text-[var(--theme-muted-text)]"
+              }`}
+              aria-label={t("home.region.ca")}
+            >
+              CA
+            </button>
+          </div>
           <ThemePicker
-            className="shrink-0"
+            className="hidden shrink-0 md:flex"
             labels={{
               navTheme: t("nav.theme"),
               themeGroupLight: t("nav.themeGroupLight"),
               themeGroupDark: t("nav.themeGroupDark"),
             }}
           />
-          <MarketingHeaderAuthDesktop />
+          <div className="hidden md:flex">
+            <MarketingHeaderAuthDesktop />
+          </div>
           <Button
             type="button"
             variant="ghost"
@@ -292,7 +316,7 @@ export function SiteHeader() {
         <div className="fixed inset-0 z-[200] md:hidden">
           <button type="button" className="absolute inset-0 bg-black/40" aria-label={t("nav.closeMenu")} onClick={() => setMobileOpen(false)} />
           {/* h-[100dvh] + min-h-0 scroll region: avoids clipped menu on mobile browsers with dynamic toolbars */}
-          <div className="absolute right-0 top-0 flex h-[100dvh] max-h-[100dvh] w-[min(100%,20rem)] flex-col border-l border-[var(--theme-separator)] bg-[var(--theme-card-bg)] shadow-[var(--shadow-elevated)]">
+          <div className="absolute end-0 top-0 flex h-[100dvh] max-h-[100dvh] w-[min(100%,20rem)] flex-col border-s border-[var(--theme-separator)] bg-[var(--theme-card-bg)] shadow-[var(--shadow-elevated)]">
             <div className="flex shrink-0 items-center justify-between border-b border-[var(--theme-separator)] p-4 pt-[max(1rem,env(safe-area-inset-top))]">
               <Link
                 href={localizeHref("/")}
@@ -369,7 +393,7 @@ export function SiteHeader() {
               </div>
               <Link
                 href={localizeHref("/")}
-                className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-[var(--theme-menu-text)] hover:bg-[var(--theme-menu-hover-bg)]"
+                className="block break-words rounded-xl px-3 py-2.5 text-start text-sm font-semibold leading-snug text-[var(--theme-menu-text)] [overflow-wrap:anywhere] hover:bg-[var(--theme-menu-hover-bg)]"
                 onClick={() => setMobileOpen(false)}
               >
                 {t("nav.home")}
@@ -378,7 +402,7 @@ export function SiteHeader() {
                 <Link
                   key={item.id}
                   href={localizeHref(item.href)}
-                  className="block rounded-xl px-3 py-2.5 text-sm font-semibold text-[var(--theme-menu-text)] hover:bg-[var(--theme-menu-hover-bg)]"
+                  className="block break-words rounded-xl px-3 py-2.5 text-start text-sm font-semibold leading-snug text-[var(--theme-menu-text)] [overflow-wrap:anywhere] hover:bg-[var(--theme-menu-hover-bg)]"
                   onClick={() => setMobileOpen(false)}
                 >
                   {t(item.labelKey)}

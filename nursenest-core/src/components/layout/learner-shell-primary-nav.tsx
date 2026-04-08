@@ -18,8 +18,8 @@ export function LearnerShellPrimaryNav() {
             href={item.href}
             className={
               isDashboard
-                ? "rounded-full border border-role-cta/25 bg-role-cta-soft px-3 py-2 text-role-cta-on-soft"
-                : "rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-2 text-[var(--theme-menu-text)] hover:bg-[var(--accent-soft)]"
+                ? "max-w-full min-w-0 rounded-full border border-role-cta/25 bg-role-cta-soft px-3 py-2 text-start leading-snug text-role-cta-on-soft break-words [overflow-wrap:anywhere]"
+                : "max-w-full min-w-0 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-2 text-start leading-snug text-[var(--theme-menu-text)] break-words [overflow-wrap:anywhere] hover:bg-[var(--accent-soft)]"
             }
           >
             {label}

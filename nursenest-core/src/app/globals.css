@@ -34,6 +34,18 @@ body {
   /* Marketing / exam-prep: one card recipe (padding, radius, shadow) */
   --nn-marketing-card-padding: 1.25rem;
   --nn-marketing-card-padding-md: 1.5rem;
+
+  /* Marketing typography scale — exam-prep (UWorld-like: calm hierarchy, long reading) */
+  --text-marketing-h3: clamp(1.15rem, 2.1vw, 1.4rem);
+  --text-marketing-h4: 1.0625rem;
+  --text-marketing-body: 1rem;
+  --text-marketing-body-sm: 0.875rem;
+  --text-marketing-caption: 0.8125rem;
+  --leading-marketing-body: 1.55;
+  --leading-marketing-snug: 1.35;
+
+  /* Until `[data-theme]` hydrates, header still needs a stable tint */
+  --theme-header-surface: color-mix(in srgb, #ffffff 94%, #9d82dd);
 }
 
 /*
@@ -113,6 +125,9 @@ body {
   --nn-presentation-ribbon: color-mix(in srgb, var(--theme-primary) 4.5%, var(--theme-card-bg));
   --nn-presentation-divider: color-mix(in srgb, var(--theme-primary) 12%, var(--theme-border));
 
+  /* Sticky header: nav surface subtly tinted by theme primary (logo + chrome read as one system) */
+  --theme-header-surface: color-mix(in srgb, var(--theme-nav-bg) 94%, var(--theme-primary));
+
   --color-card-base: var(--bg-card);
   --color-card-fg-base: var(--theme-card-text);
   --color-popover-base: var(--bg-elevated);
@@ -163,6 +178,8 @@ html[data-theme="dark-mode"] {
   --nn-presentation-trust-band: color-mix(in srgb, var(--theme-primary) 11%, var(--bg-page));
   --nn-presentation-ribbon: color-mix(in srgb, var(--theme-primary) 9%, var(--theme-card-bg));
   --nn-presentation-divider: color-mix(in srgb, var(--theme-primary) 22%, var(--theme-border));
+
+  --theme-header-surface: color-mix(in srgb, var(--theme-nav-bg) 90%, var(--theme-primary));
 }
 
 @theme inline {
@@ -283,7 +300,7 @@ a {
   box-shadow: var(--shadow-card);
 }
 
-/* Padded marketing cards: same radius + shadow as .nn-card */
+/* Padded marketing cards: same radius + shadow as .nn-card (single depth — premium prep, not stacked “template” cards) */
 .nn-marketing-card {
   border-radius: var(--radius-xl);
   border: 1px solid var(--border-subtle, var(--theme-card-border));
@@ -301,7 +318,15 @@ a {
   }
 }
 
-/* Section titles: consistent hierarchy above the fold and below */
+/* Section titles: consistent hierarchy (H1 hero → H2 section → H3 subblock) */
+.nn-marketing-h1 {
+  font-size: var(--text-hero);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.06;
+  color: var(--theme-heading-text);
+}
+
 .nn-marketing-h2 {
   font-size: var(--text-section);
   font-weight: 700;
@@ -310,11 +335,44 @@ a {
   color: var(--theme-heading-text);
 }
 
+.nn-marketing-h3 {
+  font-size: var(--text-marketing-h3);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: var(--leading-marketing-snug);
+  color: var(--theme-heading-text);
+}
+
+.nn-marketing-h4 {
+  font-size: var(--text-marketing-h4);
+  font-weight: 600;
+  line-height: var(--leading-marketing-snug);
+  color: var(--theme-heading-text);
+}
+
+.nn-marketing-body {
+  font-size: var(--text-marketing-body);
+  line-height: var(--leading-marketing-body);
+  color: var(--theme-body-text);
+}
+
+.nn-marketing-body-sm {
+  font-size: var(--text-marketing-body-sm);
+  line-height: var(--leading-marketing-body);
+  color: var(--theme-body-text);
+}
+
+.nn-marketing-caption {
+  font-size: var(--text-marketing-caption);
+  line-height: 1.45;
+  color: var(--theme-muted-text);
+}
+
 .nn-marketing-lead {
-  margin-top: 0.75rem;
-  max-width: 42rem;
+  margin-top: var(--nn-rhythm-heading-sub);
+  max-width: 40rem;
   font-size: 0.9375rem;
-  line-height: 1.6;
+  line-height: var(--leading-marketing-body);
   color: var(--theme-body-text);
 }
 
@@ -324,12 +382,33 @@ a {
   }
 }
 
-.nn-marketing-eyebrow {
+.nn-marketing-eyebrow,
+.nn-marketing-label {
   font-size: 0.6875rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--theme-muted-text);
+}
+
+.nn-marketing-label--accent {
+  color: var(--theme-primary);
+}
+
+/** Centered conversion row: one primary (filled) + one secondary (outline); tertiary = `.nn-link-quiet` only */
+.nn-marketing-cta-group {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--nn-rhythm-btn-group-gap);
+}
+@media (min-width: 640px) {
+  .nn-marketing-cta-group {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 .nn-card-interactive {

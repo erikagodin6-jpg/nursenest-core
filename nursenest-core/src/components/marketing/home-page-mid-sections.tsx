@@ -15,9 +15,9 @@ const MemoLessonTeaserGrid = memo(function MemoLessonTeaserGrid({ items }: { ite
         <li key={item.id}>
           <Link
             href={withMarketingLocale(locale, item.lessonsHref)}
-            className="flex h-full flex-col rounded-xl border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] p-4 shadow-sm transition hover:border-primary/35 hover:bg-[var(--surface-interactive-hover)]"
+            className="nn-marketing-card nn-marketing-card-pad flex h-full flex-col transition hover:border-primary/35 hover:bg-[var(--surface-interactive-hover)]"
           >
-            <span className="text-xs font-semibold uppercase text-primary">{item.shortLabel}</span>
+            <span className="nn-marketing-label nn-marketing-label--accent">{item.shortLabel}</span>
             <span className="mt-1 text-sm font-semibold text-[var(--theme-heading-text)]">{item.title}</span>
             <span className="mt-3 text-xs font-medium text-primary">{t("home.lessons.lessonHubCta")}</span>
           </Link>
@@ -43,7 +43,7 @@ export default function HomePageMidSections({ lessonTeasers }: Props) {
         data-testid="section-hero-benefits"
       >
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <h2 className="mb-5 text-center text-lg font-bold text-[var(--theme-heading-text)] sm:mb-6 sm:text-xl" data-testid="text-benefits-heading">
+          <h2 className="nn-marketing-h2 mb-5 text-center sm:mb-6" data-testid="text-benefits-heading">
             {t("home.hero.benefitsHeading")}
           </h2>
           <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
@@ -57,7 +57,7 @@ export default function HomePageMidSections({ lessonTeasers }: Props) {
             ).map((item) => (
               <div
                 key={item.key}
-                className="flex items-start gap-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--nn-presentation-ribbon)] p-3.5 shadow-[var(--shadow-card)]"
+                className="nn-marketing-card nn-marketing-card-pad flex items-start gap-3"
                 data-testid={`hero-${item.key}`}
               >
                 <div className="nn-accent-icon-wrap mt-0.5 h-8 w-8 shrink-0">
@@ -78,8 +78,8 @@ export default function HomePageMidSections({ lessonTeasers }: Props) {
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <h2 className="text-lg font-bold text-[var(--theme-heading-text)] sm:text-xl">{t("home.lessons.title")}</h2>
-              <p className="mt-1 max-w-xl text-sm text-[var(--theme-muted-text)]">{t("home.lessons.subtitle")}</p>
+              <h2 className="nn-marketing-h2">{t("home.lessons.title")}</h2>
+              <p className="nn-marketing-lead mt-1 max-w-xl text-[var(--theme-muted-text)]">{t("home.lessons.subtitle")}</p>
             </div>
             <Link
               href={withMarketingLocale(locale, "/exam-lessons")}
