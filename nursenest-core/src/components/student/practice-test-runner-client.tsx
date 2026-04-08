@@ -48,7 +48,11 @@ export function PracticeTestRunnerClient({
 }) {
   const [phase, setPhase] = useState<"loading" | "ready" | "error">("loading");
   const [error, setError] = useState<string | null>(null);
-  const [questions, setQuestions] = useState<QRow[]>([]);
+  const [questionIds, setQuestionIds] = useState<string[]>([]);
+  const [questionCache, setQuestionCache] = useState<Record<string, QRow>>({});
+  const [qLoading, setQLoading] = useState(false);
+  const cacheRef = useRef<Record<string, QRow>>({});
+  cacheRef.current = questionCache;
   const [answers, setAnswers] = useState<Record<string, unknown>>({});
   const [idx, setIdx] = useState(0);
   const [status, setStatus] = useState<string>("IN_PROGRESS");
@@ -83,9 +87,10 @@ export function PracticeTestRunnerClient({
     setError(null);
     autoSubmitRef.current = false;
     try {
-      const res = await fetch(`/api/practice-tests/${testId}`);
+      const res = await fetch(`/api/practice-tests/${testId}?hydrate=minimal`);
       const data = (await res.json()) as {
         error?: string;
+        questionIds?: string[];
         questions?: QRow[];
         answers?: Record<string, unknown>;
         cursorIndex?: number;
@@ -100,7 +105,18 @@ export function PracticeTestRunnerClient({
         adaptiveState?: { theta?: number; se?: number } | null;
       };
       if (!res.ok) throw new Error(data.error ?? "Could not load test.");
-      setQuestions(data.questions ?? []);
+      const ids =
+        Array.isArray(data.questionIds) && data.questionIds.length > 0
+          ? data.questionIds.filter((x): x is string => typeof x === "string" && x.length > 4)
+          : (data.questions ?? []).map((q) => q.id).filter((x): x is string => typeof x === "string" && x.length > 4);
+      setQuestionIds(ids);
+      if ((data.questions?.length ?? 0) > 0) {
+        const seed: Record<string, QRow> = {};
+        for (const q of data.questions!) seed[q.id] = q;
+        setQuestionCache(seed);
+      } else {
+        setQuestionCache({});
+      }
       setAnswers((data.answers ?? {}) as Record<string, unknown>);
       setIdx(typeof data.cursorIndex === "number" ? data.cursorIndex : 0);
       setStatus(data.status ?? "IN_PROGRESS");
@@ -131,6 +147,34 @@ export function PracticeTestRunnerClient({
   useEffect(() => {
     void load();
   }, [load]);
+
+  useEffect(() => {
+    if (phase !== "ready" || status !== "IN_PROGRESS") return;
+    const id = questionIds[idx];
+    if (!id || cacheRef.current[id]) return;
+
+    const ac = new AbortController();
+    setQLoading(true);
+    void (async () => {
+      try {
+        const res = await fetch(`/api/practice-tests/${testId}/question?index=${idx}`, { signal: ac.signal });
+        const payload = (await res.json()) as { question?: QRow; error?: string };
+        if (!res.ok) {
+          if (!ac.signal.aborted) setError(payload.error ?? "Could not load question.");
+          return;
+        }
+        if (payload.question && !ac.signal.aborted) {
+          setQuestionCache((c) => ({ ...c, [payload.question!.id]: payload.question! }));
+        }
+      } catch {
+        if (!ac.signal.aborted) setError("Could not load question.");
+      } finally {
+        if (!ac.signal.aborted) setQLoading(false);
+      }
+    })();
+
+    return () => ac.abort();
+  }, [phase, status, testId, idx, questionIds]);
 
   useEffect(() => {
     if (phase !== "ready" || !timedMode || status !== "IN_PROGRESS") return;
@@ -182,8 +226,9 @@ export function PracticeTestRunnerClient({
     void submitTest(true);
   }, [remainingSec, status, timedMode, submitTest]);
 
-  const current = questions[idx];
-  const total = questions.length;
+  const qid = questionIds[idx];
+  const current = qid ? questionCache[qid] : undefined;
+  const total = questionIds.length;
   const examSimulation = testConfig?.catPresentationMode === "exam_simulation";
   const aanpNpExamSim = examSimulation && testConfig?.catExamConfigId === "aanp-np-us";
   const catMaxCap = testConfig?.catMaxQuestions ?? total;
@@ -305,7 +350,13 @@ export function PracticeTestRunnerClient({
   }
 
   if (phase === "loading") {
-    return <p className="text-sm text-muted-foreground">Loading test…</p>;
+    return (
+      <div className="nn-card space-y-3 p-6 text-sm text-muted-foreground" aria-busy="true">
+        <p className="font-medium text-foreground">Loading test…</p>
+        <div className="h-2 w-full animate-pulse rounded-full bg-muted" />
+        <p className="text-xs">Restoring session from the server.</p>
+      </div>
+    );
   }
   if (phase === "error") {
     return (
@@ -549,7 +600,7 @@ export function PracticeTestRunnerClient({
     );
   }
 
-  if (phase === "ready" && status === "IN_PROGRESS" && questions.length === 0) {
+  if (phase === "ready" && status === "IN_PROGRESS" && questionIds.length === 0) {
     return (
       <div className="nn-card space-y-3 p-6 text-sm">
         <p className="font-medium text-foreground">No questions in this practice test.</p>
@@ -564,7 +615,7 @@ export function PracticeTestRunnerClient({
     );
   }
 
-  if (status !== "IN_PROGRESS" || !current) {
+  if (status !== "IN_PROGRESS") {
     return (
       <p className="text-sm text-muted-foreground">
         This test is not in progress.{" "}
@@ -572,6 +623,49 @@ export function PracticeTestRunnerClient({
           Back
         </Link>
       </p>
+    );
+  }
+
+  if (!current && (qLoading || questionIds.length > 0)) {
+    return (
+      <div className="space-y-4" aria-busy="true">
+        <ExamSessionShell neutralPalette>
+          <ExamSessionTopBar
+            left={
+              <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                Item {idx + 1} of {total}
+              </p>
+            }
+            center={<span className="text-slate-600 dark:text-slate-400">Loading</span>}
+            right={<ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />}
+          />
+          {total > 0 ? <ExamProgressBar current={idx + 1} total={total} /> : null}
+          <div className="space-y-3 p-6">
+            <div className="h-4 w-3/4 animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
+            <div className="h-4 w-full animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
+            <div className="h-4 w-5/6 animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
+            <p className="text-sm text-slate-500 dark:text-slate-400">Loading question…</p>
+          </div>
+        </ExamSessionShell>
+      </div>
+    );
+  }
+
+  if (!current) {
+    return (
+      <div className="nn-card space-y-3 p-6 text-sm text-muted-foreground">
+        <p>Could not display this item.</p>
+        <button
+          type="button"
+          className="rounded-full border border-border px-4 py-2 text-sm font-semibold"
+          onClick={() => void load()}
+        >
+          Retry
+        </button>
+        <Link className="ml-2 font-medium text-primary underline" href="/app/practice-tests">
+          Back
+        </Link>
+      </div>
     );
   }
 

@@ -6,6 +6,8 @@
 
 **Policy:** Do not inflate counts with thin or near-duplicate lessons. Each row must pass structural / premium gates (`pathway-lesson-premium.ts`, `classifyPathwayLesson`) and remain pathway-scoped (US vs Canada, RN vs PN vs NP).
 
+**Systematic expansion:** See **`docs/master-lesson-blueprint.md`** (topic families, lesson types, sharing rules, phased growth to 500+).
+
 ---
 
 ## A. Current lesson counts by pathway

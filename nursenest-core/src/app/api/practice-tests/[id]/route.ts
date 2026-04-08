@@ -5,6 +5,7 @@ import { z } from "zod";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { prisma } from "@/lib/db";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
+import { withRetry } from "@/lib/resilience/with-retry";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { advanceCatPracticeTest, finalizeCatPracticeTest } from "@/lib/practice-tests/cat-session";
 /**
@@ -63,13 +64,6 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
   }
 
   const ids = asIdList(row.questionIds);
-  const base = questionAccessWhere(gate.entitlement);
-  const qs = await prisma.examQuestion.findMany({
-    where: { AND: [{ id: { in: ids } }, base] },
-    select: previewSelect,
-  });
-  const order = new Map(ids.map((qid, i) => [qid, i]));
-  const questions = [...qs].sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
 
   const answers =
     typeof row.answers === "object" && row.answers !== null && !Array.isArray(row.answers)
@@ -79,6 +73,8 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
   const cfg = row.config as PracticeTestConfigJson;
 
   const teachingReviewRequested = req.nextUrl.searchParams.get("teachingReview") === "1";
+  const hydrateFull = req.nextUrl.searchParams.get("hydrate") === "full";
+
   let teachingReview: Awaited<ReturnType<typeof buildPracticeTestTeachingReview>> | null = null;
   if (teachingReviewRequested && row.status === PracticeTestStatus.COMPLETED) {
     teachingReview = await buildPracticeTestTeachingReview(ids, answers, gate.entitlement);
@@ -86,6 +82,45 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
 
   const educationalLocale = getMarketingLocaleFromRequestCookie(req);
   const questionOverlayBundle = await resolveMergedQuestionOverlayBundle(educationalLocale);
+
+  const base = questionAccessWhere(gate.entitlement);
+  const ID_CHUNK = 200;
+  let questions: Array<Record<string, unknown>> = [];
+
+  if (!teachingReviewRequested && hydrateFull && ids.length > 0) {
+    const qs = await withRetry(async () => {
+      const acc: Array<{
+        id: string;
+        stem: string;
+        questionType: string;
+        options: unknown;
+        topic: string | null;
+        subtopic: string | null;
+        difficulty: number | null;
+        exam: string | null;
+        bodySystem: string | null;
+      }> = [];
+      for (let i = 0; i < ids.length; i += ID_CHUNK) {
+        const chunk = ids.slice(i, i + ID_CHUNK);
+        const part = await prisma.examQuestion.findMany({
+          where: { AND: [{ id: { in: chunk } }, base] },
+          select: previewSelect,
+        });
+        acc.push(...part);
+      }
+      return acc;
+    });
+    const order = new Map(ids.map((qid, i) => [qid, i]));
+    const sorted = [...qs].sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
+    questions = sorted.map((q) => {
+      const merged = mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale, questionOverlayBundle);
+      const stem = String(merged.stem ?? "");
+      return {
+        ...merged,
+        stem: stem.length > 2000 ? `${stem.slice(0, 1997)}…` : stem,
+      };
+    });
+  }
 
   return NextResponse.json({
     id: row.id,
@@ -97,14 +132,10 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
     elapsedMs: row.elapsedMs,
     cursorIndex: row.cursorIndex,
     answers,
-    questions: questions.map((q) => {
-      const merged = mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale, questionOverlayBundle);
-      const stem = String(merged.stem ?? "");
-      return {
-        ...merged,
-        stem: stem.length > 2000 ? `${stem.slice(0, 1997)}…` : stem,
-      };
-    }),
+    questionIds: ids,
+    total: ids.length,
+    questions,
+    hydrate: hydrateFull ? ("full" as const) : ("minimal" as const),
     results: row.results as PracticeTestResultsJson | null,
     startedAt: row.startedAt.toISOString(),
     completedAt: row.completedAt?.toISOString() ?? null,

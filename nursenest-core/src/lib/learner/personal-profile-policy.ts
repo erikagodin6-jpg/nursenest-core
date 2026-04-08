@@ -16,9 +16,12 @@ export function subscriptionLocksProfileRegionAndTier(sub: {
   planCountry: CountryCode | null;
 } | null): boolean {
   if (!sub) return false;
-  if (![SubscriptionStatus.ACTIVE, SubscriptionStatus.GRACE, SubscriptionStatus.PAST_DUE].includes(sub.status)) {
-    return false;
-  }
+  const locksRegionTier = new Set<SubscriptionStatus>([
+    SubscriptionStatus.ACTIVE,
+    SubscriptionStatus.GRACE,
+    SubscriptionStatus.PAST_DUE,
+  ]);
+  if (!locksRegionTier.has(sub.status)) return false;
   return sub.planTier != null && sub.planCountry != null;
 }
 

@@ -364,7 +364,10 @@ export function AdminBlogControlPanelClient({ initialPostId }: { initialPostId?:
       let loadErr: string | null = null;
       if (json.post) {
         hydrateFromPost(json.post);
-        setPlan(json.plan ?? planFromPost(json.post));
+        if (json.plan) {
+          setPlan(json.plan);
+          setImageAttachments((prev) => mergeAttachmentRowsForPlan(json.plan!, prev));
+        }
         loaded = true;
       } else if (json.postId) {
         const g = await fetch(`/api/admin/blog/${json.postId}`);
@@ -1305,14 +1308,16 @@ export function AdminBlogControlPanelClient({ initialPostId }: { initialPostId?:
               <pre className="mt-2 max-h-36 overflow-auto text-xs">{JSON.stringify(plan.breadcrumbs, null, 2)}</pre>
             </div>
             <div className="rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-4">
-              <h3 className="text-sm font-semibold">Image suggestions</h3>
-              <ul className="mt-2 max-h-36 space-y-2 overflow-auto text-xs">
+              <h3 className="text-sm font-semibold">Image concepts (summary)</h3>
+              <ul className="mt-2 max-h-36 space-y-2 overflow-auto text-xs text-muted-foreground">
                 {plan.imagePlacements.map((im, i) => (
                   <li key={i}>
-                    <span className="font-medium">{im.section}</span>: {im.promptIdea} (alt: {im.altIdea})
+                    <span className="font-medium text-foreground">{im.section}</span>: {im.promptIdea.slice(0, 120)}
+                    {im.promptIdea.length > 120 ? "…" : ""}
                   </li>
                 ))}
               </ul>
+              <p className="mt-2 text-[10px] text-muted-foreground">Attach assets and alt text in Visuals &amp; media above.</p>
             </div>
           </div>
 
@@ -1369,7 +1374,8 @@ function buildRegenPayload(
     | "article_html"
     | "faqs"
     | "internal_links"
-    | "apa_sources",
+    | "apa_sources"
+    | "image_placements",
   ctx: {
     topic: string;
     exam: string;

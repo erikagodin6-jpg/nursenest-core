@@ -199,7 +199,7 @@ export function enforceLearnerNotesProtection(req: NextRequest, userId: string):
   return null;
 }
 
-/** GET /api/practice-tests/[id] — full question payloads for review. */
+/** GET /api/practice-tests/[id] — session metadata; question bodies optional (hydrate=full). */
 export function enforcePracticeTestDetailProtection(req: NextRequest, userId: string): NextResponse | null {
   const ip = getTrustedClientIp(req);
   const route = "practice_test_detail";
@@ -211,6 +211,25 @@ export function enforcePracticeTestDetailProtection(req: NextRequest, userId: st
   }
 
   if (!checkRateLimit(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 120 }).ok) {
+    logAbuse("user_rate_limit", route, userId, ip);
+    return tooMany("rate_limited", 60);
+  }
+
+  return null;
+}
+
+/** GET /api/practice-tests/[id]/question — per-index fetch (CAT / long linear runs). */
+export function enforcePracticeTestQuestionProtection(req: NextRequest, userId: string): NextResponse | null {
+  const ip = getTrustedClientIp(req);
+  const route = "practice_test_run_question";
+  checkDeviceMismatch(req, route, userId, ip);
+
+  if (!checkRateLimit(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 120 }).ok) {
+    logAbuse("ip_rate_limit", route, userId, ip);
+    return tooMany("rate_limited", 60);
+  }
+
+  if (!checkRateLimit(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 300 }).ok) {
     logAbuse("user_rate_limit", route, userId, ip);
     return tooMany("rate_limited", 60);
   }
