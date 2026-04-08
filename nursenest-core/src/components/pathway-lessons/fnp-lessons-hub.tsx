@@ -11,7 +11,7 @@ import {
   FNP_LIFESPAN_ORDER,
   FNP_NP_COMMON_MISTAKES,
 } from "@/lib/lessons/fnp-us-lesson-enrichment";
-import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
+import { pathwayLessonHasRenderableHubSlug, type PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import type { TopicCluster } from "@/lib/lessons/pathway-lesson-loader";
 
 type Props = {
@@ -38,9 +38,10 @@ const HASH_BY_LIFESPAN: Record<string, string> = {
 };
 
 export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters }: Props) {
-  const explorerPayload = buildFnpExplorerPayload(lessons);
+  const safeLessons = lessons.filter(pathwayLessonHasRenderableHubSlug);
+  const explorerPayload = buildFnpExplorerPayload(safeLessons);
   const { countsLife, countsDom } = fnpExplorerCounts(explorerPayload);
-  const featured = lessons.length > 0 ? [...lessons].sort((a, b) => a.slug.localeCompare(b.slug))[0] : null;
+  const featured = safeLessons.length > 0 ? [...safeLessons].sort((a, b) => a.slug.localeCompare(b.slug))[0] : null;
   const featuredPreview = featured ? fnpLessonClinicalPreview(featured) : null;
   const questionsHub = buildExamPathwayPath(pathway, "questions");
   const examHub = buildExamPathwayPath(pathway);
@@ -148,7 +149,7 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
       </section>
 
       {/* Featured clinical case */}
-      {featured && featuredPreview && (
+      {featured && featured.slug?.trim() && featuredPreview && (
         <section className="rounded-2xl border-2 border-primary/25 bg-gradient-to-b from-card to-[var(--theme-muted-surface)] p-5 sm:p-7">
           <p className="text-xs font-semibold uppercase tracking-wide text-primary">Featured clinical case</p>
           <h3 className="mt-2 text-xl font-bold text-[var(--theme-heading-text)]">{featured.title}</h3>
@@ -208,7 +209,7 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
             pathway={pathway}
             lessonsBasePath={lessonsBasePath}
             explorerLessons={explorerPayload}
-            excludeSlug={lessons.length > 1 ? featured?.slug ?? null : null}
+            excludeSlug={safeLessons.length > 1 ? featured?.slug ?? null : null}
           />
         </div>
       </section>

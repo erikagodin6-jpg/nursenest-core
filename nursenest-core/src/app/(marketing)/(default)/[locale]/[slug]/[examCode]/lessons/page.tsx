@@ -16,6 +16,7 @@ import {
   getPathwayLessonsPage,
   listTopicClusters,
 } from "@/lib/lessons/pathway-lesson-loader";
+import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
 import { pathwayLessonsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
@@ -65,13 +66,14 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     redirect(pageResult.page > 1 ? `${base}?page=${pageResult.page}` : base);
   }
 
-  const lessons = pageResult.items;
+  const lessons = pageResult.items.filter(pathwayLessonHasRenderableHubSlug);
   const topics = await listTopicClusters(pathway.id, lessonContentLocale);
   const { crumbs, schemaItems } = pathwayLessonsHubBreadcrumbs(pathway);
   const isNclexRnHub = pathway.id === "us-rn-nclex-rn" || pathway.id === "ca-rn-nclex-rn";
   const nclexRnRegion = pathway.id === "ca-rn-nclex-rn" ? "ca" : "us";
   const isUsNclexPnHub = pathway.id === "us-lpn-nclex-pn";
   const isUsFnpHub = pathway.id === "us-np-fnp";
+  const isCaRexPnHub = pathway.id === "ca-rpn-rex-pn";
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
@@ -111,6 +113,12 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
               remain discoverable.
             </>
           )
+        ) : isCaRexPnHub ? (
+          <>
+            Clinical lessons for Canadian practical nursing (RPN) candidates preparing for the REx-PN exam: scope-safe judgment,
+            delegation, and Canadian regulatory context—not generic PN content mixed with US NCLEX-PN. Pair each lesson with
+            pathway-scoped questions and practice. Subscription gates full lesson depth; previews remain discoverable.
+          </>
         ) : (
           <>
             Exam-scoped clinical lessons for this track only. Terminology and scope match{" "}
@@ -137,7 +145,9 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       ) : (
         <>
           <section className="mt-10">
-            <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Browse by system / topic</h2>
+            <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">
+              Browse by topic · {pathway.shortName}
+            </h2>
             <ul className="mt-4 flex flex-wrap gap-2">
               {topics.map((t) => (
                 <li key={t.topicSlug}>
@@ -153,7 +163,9 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
           </section>
 
           <section className="mt-10">
-            <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">All lessons</h2>
+            <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">
+              All {pathway.shortName} lessons
+            </h2>
             <ul className="mt-4 space-y-4">
               {lessons.map((l) => (
                 <li key={l.slug} className="nn-card p-4">

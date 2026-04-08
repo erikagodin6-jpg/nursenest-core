@@ -11,8 +11,11 @@ import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messa
 import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import {
-  NCLEX_RN_PUBLIC_LABEL,
-  nursingTierHeadingPn,
+  pathwayMatchesMarketingRegion,
+  publicLessonsHubSectionHeadingAllied,
+  publicLessonsHubSectionHeadingNp,
+  publicLessonsHubSectionHeadingPn,
+  publicLessonsHubSectionHeadingRn,
 } from "@/lib/marketing/nursing-tier-public-labels";
 
 const cachedPathwayIdsWithLessons = unstable_cache(
@@ -39,7 +42,10 @@ export async function PublicLessonsPathwaySections({
   const pathwayIds = await cachedPathwayIdsWithLessons();
   const pathways = pathwayIds
     .map((id) => getExamPathwayById(id))
-    .filter((p): p is ExamPathwayDefinition => !!p && p.status !== "hidden")
+    .filter(
+      (p): p is ExamPathwayDefinition =>
+        !!p && p.status !== "hidden" && pathwayMatchesMarketingRegion(p.countrySlug, region),
+    )
     .sort((a, b) => {
       const c = a.countrySlug.localeCompare(b.countrySlug);
       if (c !== 0) return c;
@@ -66,10 +72,10 @@ export async function PublicLessonsPathwaySections({
     slug === "canada" ? t("pages.pricing.country.ca") : t("pages.pricing.country.us");
 
   const sectionTitle: Record<"rn" | "pn" | "np" | "allied", string> = {
-    rn: NCLEX_RN_PUBLIC_LABEL,
-    pn: nursingTierHeadingPn(region),
-    np: "Nurse Practitioner (NP)",
-    allied: "Allied health",
+    rn: publicLessonsHubSectionHeadingRn(region),
+    pn: publicLessonsHubSectionHeadingPn(region),
+    np: publicLessonsHubSectionHeadingNp(region),
+    allied: publicLessonsHubSectionHeadingAllied(region),
   };
 
   const sectionLead: Record<"rn" | "pn" | "np" | "allied", string> = {

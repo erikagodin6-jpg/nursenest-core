@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
+import { pathwayLessonHasRenderableHubSlug, type PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import {
   buildNclexRnUsLessonSections,
   nclexRnCommonMistakeBlocks,
@@ -28,9 +28,10 @@ function appQuestionsHref(pathwayId: string, topic?: string): string {
 export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters, region }: Props) {
   const isCa = region === "ca";
   const isUsRn = region === "us";
-  const sections = buildNclexRnUsLessonSections(lessons);
+  const safeLessons = lessons.filter(pathwayLessonHasRenderableHubSlug);
+  const sections = buildNclexRnUsLessonSections(safeLessons);
   const navLinks = sections.filter((s) => s.count > 0);
-  const featured = lessons.length > 0 ? [...lessons].sort((a, b) => a.slug.localeCompare(b.slug))[0] : null;
+  const featured = safeLessons.length > 0 ? [...safeLessons].sort((a, b) => a.slug.localeCompare(b.slug))[0] : null;
   const featuredPreview = featured ? nclexRnLessonExamPreview(featured, region) : null;
   const mistakeBlocks = nclexRnCommonMistakeBlocks(region);
   const questionsHub = buildExamPathwayPath(pathway, "questions");
@@ -138,7 +139,7 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
       )}
 
       {/* Featured + category sections */}
-      {featured && featuredPreview && (
+      {featured && featured.slug?.trim() && featuredPreview && (
         <section className="rounded-2xl border-2 border-primary/25 bg-gradient-to-b from-card to-[var(--theme-muted-surface)] p-5 sm:p-7">
           <p className="text-xs font-semibold uppercase tracking-wide text-primary">Featured lesson</p>
           <h3 className="mt-2 text-xl font-bold text-[var(--theme-heading-text)]">{featured.title}</h3>
