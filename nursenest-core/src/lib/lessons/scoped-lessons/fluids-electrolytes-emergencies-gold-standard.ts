@@ -9,6 +9,7 @@ import type {
   PathwayLessonSection,
 } from "@/lib/lessons/pathway-lesson-types";
 import {
+  ensurePremiumSeoDescription,
   PATHWAY_EXAM_LABEL,
   pathwayIdToTierGeo,
   synthesizeGoldPremiumSections,
@@ -164,7 +165,8 @@ Stay with client, **ensure safety**, **notify RN** with objective data, **prepar
     {
       title: "Electrolyte & fluid emergencies (REx-PN, Canada)",
       seoTitle: "Electrolyte emergencies | REx-PN Canada | NurseNest",
-      seoDescription: "Canadian PN: mmol/L labs, hypovolemia vs overload, ECG cues in items, collaboration.",
+      seoDescription:
+        "Canadian PN: mmol/L sodium potassium and glucose, hypovolemia versus fluid overload, ECG cues with hyperkalemia, safe IV potassium collaboration, and urgent RN notification patterns.",
       clinical_meaning: `**RPN**  
 Canadian stems often show **mmol/L** sodium, potassium, and glucose. Your job is still **trend recognition**, **safe administration**, and **timely reporting** when neuro, cardiac, or perfusion status changes.`,
       exam_relevance: `Same traps as US PN: **routine** before **unstable electrolyte/ECG pattern**, and **scope** errors around **unsupervised bolus decisions**.`,
@@ -256,7 +258,8 @@ This is **severe hyponatremia concern**—notify RN/NP/physician, protect airway
     {
       title: "Electrolyte & fluid crises: RN judgment (NCLEX-RN, US)",
       seoTitle: "Electrolyte emergencies | NCLEX-RN US | NurseNest",
-      seoDescription: "NCLEX-RN: Na/K/Ca/Mg, ECG integration, DKA/HHNS forks, overload, and safe sequencing.",
+      seoDescription:
+        "NCLEX-RN: Na/K/Ca/Mg shifts, ECG integration, DKA and HHNS forks, fluid overload, and safe sequencing.",
       clinical_meaning: `**RN**  
 You **prioritize** airway/neuro protection, **interpret trends** (labs + vitals + ECG + I&O), **implement orders** for replacement/dialysis/diuretics, and **reassess** after each intervention. Items punish **delay** when **ECG shows hyperkalemic progression** or **seizures** with severe sodium disturbance.`,
       exam_relevance: `Classic forks: **hypo vs hypernatremia** management principles as taught, **potassium replacement safety**, **calcium before insulin for hyperK with ECG changes** when the stem follows that teaching pattern, **fluid type** in DKA, and **overload** after resuscitation.`,
@@ -348,7 +351,8 @@ This is **cardiotoxic hyperkalemia concern**—follow **emergent pathway element
     {
       title: "Electrolyte & fluid crises (NCLEX-RN, Canada)",
       seoTitle: "Electrolyte emergencies | NCLEX-RN Canada | NurseNest",
-      seoDescription: "Canadian RN: mmol/L electrolytes, DKA context, ECG integration, and safe escalation.",
+      seoDescription:
+        "Canadian RN: mmol/L electrolytes, DKA context, ECG integration, fluid balance, and safe escalation.",
       clinical_meaning: `**Canadian RN**  
 Read **mmol/L** values precisely. Judgment mirrors US RN items: **protect conduction** in hyperkalemia, **protect brain** in sodium disorders, and **reassess** after therapy.`,
       exam_relevance: `Same forks as US RN—**hypo/hypernatremia** teaching, **K+ replacement safety**, **calcium before insulin** when the stem follows that pattern—but stems add **mmol/L** labs and **metric vitals**. Misreading units or delaying when **ECG + K+** align is the usual wrong-answer pattern.`,
@@ -357,8 +361,9 @@ K+ **6.7 mmol/L** with **ECG changes** and **weakness**.
 
 **Fork**  
 Activate urgent pathway elements per orders, continuous monitoring, prepare for dialysis if indicated in stem—before routine meds.`,
-      takeaways: `• **Hyperkalemia + ECG** = treat as emergency until stabilized per plan.  
-• **Document trends** and communication with provider/anesthesia as needed.`,
+      takeaways: `• **Hyperkalemia + ECG** changes mean **continuous monitoring** and **urgent pathway activation** until stabilized per orders—not routine meds first.  
+• **Document trends** in vitals, neuro status, ECG, and repeat labs after each intervention for anesthesia, nephrology, or rapid response as the stem implies.  
+• **Severe hyponatremia with seizures or decreased LOC** belongs in **higher-acuity monitored care**; outpatient-style fixes fail the item.`,
     },
     {
       preTest: [
@@ -439,7 +444,8 @@ Activate urgent pathway elements per orders, continuous monitoring, prepare for 
     {
       title: "Electrolyte crises: outpatient triage (NP, US)",
       seoTitle: "Electrolyte triage | NP US | NurseNest",
-      seoDescription: "NP: severe Na/K disturbances, ED referral, chronic diuretic monitoring, safety netting.",
+      seoDescription:
+        "NP ambulatory electrolyte triage: symptomatic sodium and potassium extremes, ECG-driven hyperkalemia escalation, DKA and AKI interactions, chronic diuretic monitoring, ED referral, and safety netting.",
       clinical_meaning: `**NP**  
 Items test **risk stratification**: **symptomatic severe hyponatremia/hypernatremia**, **hyperkalemia with ECG changes**, **tetany**, and **DKA** require **ED**—not “call me in a week.” Chronic management tests **medication review**, **renal dosing**, and **patient literacy** for sick-day plans.`,
       exam_relevance: `Trap: **minimizing ECG changes** or **ordering oral potassium** without addressing **acute renal failure + peaked Ts**.`,
@@ -448,8 +454,9 @@ Patient on **ACEI + spironolactone + NSAID** reports **weakness** and **palpitat
 
 **Fork**  
 Think **hyperkalemia** and **AKI** interaction—**direct to ED** for ECG/labs rather than reassurance.`,
-      takeaways: `• **Polypharmacy** stacks potassium risk.  
-• **Red flags** → ED; document **safety-net** instructions.`,
+      takeaways: `• **Polypharmacy** stacks potassium risk when ACE inhibitors, ARBs, spironolactone, or NSAIDs overlap.  
+• **Red flags** such as palpitations with ECG change mean **ED**; document **safety-net** instructions with concrete thresholds.  
+• Plan **repeat labs** after diuretic or insulin therapy changes when renal function may shift.`,
     },
     {
       preTest: [
@@ -549,7 +556,7 @@ function npTitles(pathwayId: string, v: (typeof VARIANTS)["us_np"]) {
     ...v,
     title: `Electrolyte crises: outpatient triage (${suf})`,
     seoTitle: `Electrolyte triage | ${lab} US | NurseNest`,
-    seoDescription: `NP triage for ${lab}: severe electrolyte disturbances, ED referral, and monitoring plans.`,
+    seoDescription: `NP electrolyte triage for ${lab}: severe sodium and potassium disturbances with cardiac symptoms, DKA and renal failure interactions, same-day ED referral, explicit monitoring plans, and documented safety netting.`,
   };
 }
 
@@ -605,7 +612,7 @@ export function getFluidsElectrolytesGoldLessonInput(pathwayId: string): LessonI
     bodySystem: "Renal",
     previewSectionCount: 1,
     seoTitle: v.seoTitle,
-    seoDescription: v.seoDescription,
+    seoDescription: ensurePremiumSeoDescription(v.seoDescription, PATHWAY_EXAM_LABEL[pathwayId] ?? pathwayId),
     sections: syn.sections,
     premiumOmittedSections: syn.premiumOmittedSections,
     relatedLessonRefs: syn.relatedLessonRefs,

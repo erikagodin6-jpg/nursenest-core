@@ -11,32 +11,21 @@ const CARD_KEYS = [
   { quote: "home.landing.reviews.card6.quote", meta: "home.landing.reviews.card6.meta" },
 ] as const;
 
-const CHIP_KEYS = [
-  "home.landing.socialProof.chip.rationales",
-  "home.landing.socialProof.chip.lessons",
-  "home.landing.socialProof.chip.flashcards",
-  "home.landing.socialProof.chip.practiceExams",
-  "home.landing.socialProof.chip.weakArea",
-  "home.landing.socialProof.chip.region",
-] as const;
-
 /**
- * Single block under the platform carousel: testimonials plus compact study-area chips.
- * Not a second duplicate social-proof region elsewhere on the page.
+ * Testimonials directly under the platform carousel. Copy is static scenarios, not a live feed.
  */
-export function HomeSocialProofSection() {
+export function HomeReviewsSection() {
   const { t } = useMarketingI18n();
 
   return (
     <section
-      id="home-social-proof"
       className="border-t border-[var(--border-subtle)] bg-[var(--theme-page-bg)] pt-7 pb-10 md:pt-9 md:pb-12"
-      aria-labelledby="home-social-proof-reviews-heading"
-      data-testid="section-home-social-proof"
+      aria-labelledby="home-reviews-heading"
+      data-testid="section-home-reviews"
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <header className="mx-auto mb-6 max-w-3xl text-center md:mb-8">
-          <h2 id="home-social-proof-reviews-heading" className="nn-marketing-h2 text-balance">
+          <h2 id="home-reviews-heading" className="nn-marketing-h2 text-balance">
             {t("home.landing.reviews.title")}
           </h2>
           <p className="nn-marketing-body mx-auto mt-2 max-w-2xl text-pretty text-[var(--theme-muted-text)]">
@@ -57,29 +46,6 @@ export function HomeSocialProofSection() {
             </li>
           ))}
         </ul>
-
-        <div
-          className="mx-auto mt-10 max-w-4xl border-t border-[var(--border-subtle)] pt-8"
-          aria-labelledby="home-social-proof-chips-heading"
-        >
-          <header className="mb-4 text-center">
-            <h3 id="home-social-proof-chips-heading" className="nn-marketing-h3 text-balance">
-              {t("home.landing.socialProof.chipsTitle")}
-            </h3>
-            <p className="nn-marketing-caption mx-auto mt-1.5 max-w-xl text-[var(--theme-muted-text)]">
-              {t("home.landing.socialProof.chipsSub")}
-            </p>
-          </header>
-          <ul className="flex flex-wrap justify-center gap-2">
-            {CHIP_KEYS.map((key) => (
-              <li key={key}>
-                <span className="inline-flex rounded-full border border-[var(--border-subtle)] bg-[var(--nn-presentation-wash)] px-3 py-1.5 text-left nn-marketing-body-sm text-[var(--theme-body-text)]">
-                  {t(key)}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
       </div>
     </section>
   );

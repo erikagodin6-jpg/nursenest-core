@@ -9,6 +9,7 @@ import type {
   PathwayLessonSection,
 } from "@/lib/lessons/pathway-lesson-types";
 import {
+  ensurePremiumSeoDescription,
   PATHWAY_EXAM_LABEL,
   pathwayIdToTierGeo,
   synthesizeGoldPremiumSections,
@@ -262,7 +263,7 @@ Stabilize and escalate for Client A per protocol; do not defer for linens. Choos
       title: "Clinical judgment: prioritization (NCLEX-RN, US)",
       seoTitle: "Prioritization for NCLEX-RN | US | NurseNest",
       seoDescription:
-        "NCLEX-RN: multi-patient prioritization, unsafe practice recognition, delegation, and first-action clinical judgment.",
+        "NCLEX-RN: multi-patient prioritization, unsafe practice recognition, delegation, first-action clinical judgment, and common board-style traps.",
       clinical_meaning: `**NCLEX-RN clinical judgment**  
 You integrate **assessment**, **risk prediction**, and **intervention sequencing**. The exam rewards **protecting clients from harm** and **using resources** (call for help, delegate appropriate tasks, cluster care when safe).
 
@@ -638,7 +639,7 @@ export function getClinicalJudgmentGoldLessonInput(pathwayId: string): LessonInp
     bodySystem: "General",
     previewSectionCount: 1,
     seoTitle: v.seoTitle,
-    seoDescription: v.seoDescription,
+    seoDescription: ensurePremiumSeoDescription(v.seoDescription, PATHWAY_EXAM_LABEL[pathwayId] ?? pathwayId),
     sections: syn.sections,
     premiumOmittedSections: syn.premiumOmittedSections,
     relatedLessonRefs: syn.relatedLessonRefs,

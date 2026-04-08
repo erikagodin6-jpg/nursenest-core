@@ -227,6 +227,15 @@ function ensureIntroductionWordCount(intro: string): string {
 const PATHO_EXAM_PAD = `**Connecting mechanism to the stem**  
 When new data appear, trace them to the underlying process and the **compensatory response** that is winning or failing. Ask what assessment would **prove improvement** versus **deterioration** in the next few minutes—exam distractors often ignore that trajectory even when the words sound clinically sophisticated.`;
 
+const PEARLS_DEPTH_PAD = `**One more exam habit**  
+When an option feels emotionally “right,” verify it against **vitals, trajectory, and the role named in the stem** so you do not miss a quieter life threat hiding in the same vignette.`;
+
+function ensureClinicalPearlsWordCount(body: string): string {
+  const t = body.trim();
+  if (countWords(stripToPlainText(t)) >= PREMIUM_MIN_WORDS.clinical_pearls) return t;
+  return `${t}\n\n${PEARLS_DEPTH_PAD}`;
+}
+
 function ensurePathophysiologyDepth(body: string): string {
   const t = body.trim();
   if (countWords(stripToPlainText(t)) >= 140) return t;
@@ -284,13 +293,15 @@ export function synthesizeGoldPremiumSections(
     ].join("\n\n"),
   );
 
-  const pearls = [
-    input.takeaways.trim(),
-    `**Exam traps worth rehearsing**  
+  const pearls = ensureClinicalPearlsWordCount(
+    [
+      input.takeaways.trim(),
+      `**Exam traps worth rehearsing**  
 Watch for options that **sound compassionate** but **delay assessment**, **skip monitoring after an intervention**, or **assume stability** you have not established. **Pattern recognition** beats cramming isolated facts: rehearse **if I see X and Y, I think Z and do A** chains aloud.`,
-    `**Quick self-check before you submit your answer**  
+      `**Quick self-check before you submit your answer**  
 Name the **primary risk**, the **first assessment** that protects the client, and the **escalation** you would not skip—if you cannot say all three in one breath, re-read the stem for hidden instability.`,
-  ].join("\n\n");
+    ].join("\n\n"),
+  );
 
   const omitted: PathwayLessonOmittedPremiumSection[] = [];
   const labBody = input.labsDiagnostics?.trim();

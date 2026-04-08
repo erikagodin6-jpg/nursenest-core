@@ -3,6 +3,10 @@
  * Remediation wave 4: maternity high-stakes recognition, escalation, and scope-safe nursing actions.
  */
 import type { PathwayLessonQuizItem, PathwayLessonSection } from "@/lib/lessons/pathway-lesson-types";
+import {
+  ensurePremiumSeoDescription,
+  PATHWAY_EXAM_LABEL,
+} from "@/lib/lessons/scoped-lessons/gold-premium-synthesis";
 import { npExamLabel, npPrimaryCareTitleSuffix } from "@/lib/lessons/scoped-lessons/np-pathway-display";
 
 export const OB_EMERGENCIES_GOLD_SLUG = "ob-emergencies-gold-standard" as const;
@@ -564,7 +568,7 @@ export function getObEmergenciesGoldLessonInput(pathwayId: string): LessonInputS
     bodySystem: "Obstetric",
     previewSectionCount: 1,
     seoTitle: v.seoTitle,
-    seoDescription: v.seoDescription,
+    seoDescription: ensurePremiumSeoDescription(v.seoDescription, PATHWAY_EXAM_LABEL[pathwayId] ?? pathwayId),
     sections: [
       { id: "clinical_meaning", heading: "What this means clinically", kind: "clinical_meaning", body: v.clinical_meaning },
       { id: "exam_relevance", heading: "Why this appears on your exam", kind: "exam_relevance", body: v.exam_relevance },

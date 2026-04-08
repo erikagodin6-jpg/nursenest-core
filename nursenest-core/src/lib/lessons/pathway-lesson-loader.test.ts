@@ -1,3 +1,8 @@
+/**
+ * Loads `pathway-lesson-loader` → i18n overlay modules → `import "server-only"`.
+ * Run with: `NODE_OPTIONS='--require ./scripts/stub-server-only.cjs' npx tsx --test src/lib/lessons/pathway-lesson-loader.test.ts`
+ * (see `npm run test:pathway-lessons`, which appends this file with the stub).
+ */
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { getPathwayLesson } from "./pathway-lesson-loader";

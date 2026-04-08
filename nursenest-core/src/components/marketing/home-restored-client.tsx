@@ -20,7 +20,8 @@ import {
 } from "@/lib/theme/marketing-hero-pattern";
 import { HomeLandingSections } from "@/components/marketing/home-landing-sections";
 import { HomePlatformPreviewSection } from "@/components/marketing/home-platform-preview-section";
-import { HomeSocialProofSection } from "@/components/marketing/home-social-proof-section";
+import { HomeReviewsSection } from "@/components/marketing/home-reviews-section";
+import { HomeStudentsStudyingSection } from "@/components/marketing/home-students-studying-section";
 
 type HomeStatsPayload = {
   totalLessons: number;
@@ -37,7 +38,7 @@ type HomeStatsPayload = {
 
 /**
  * Conversion-focused homepage: hero (region, pathways, CTAs, trust line), platform carousel,
- * one social-proof block (testimonials + study chips), then why / trust / FAQ / final CTA (`HomeLandingSections`).
+ * reviews, static “what students study” modules, then why / trust / FAQ / final CTA (`HomeLandingSections`).
  */
 export default function HomeRestoredClient() {
   const { t, locale } = useMarketingI18n();
@@ -65,30 +66,40 @@ export default function HomeRestoredClient() {
   const questionCount = homeStats?.questionCount ?? 0;
 
   const pathwayRoutes = [
-    { id: "rn" as const, href: rnQuestions(region), titleKey: "home.landing.pathways.rnTitle", descKey: "home.landing.pathways.rnDesc" },
+    {
+      id: "rn" as const,
+      href: rnQuestions(region),
+      titleKey: "home.landing.pathways.rnTitle",
+      descKey: "home.landing.pathways.rnDesc",
+      ctaKey: "home.landing.pathways.ctaRn",
+    },
     {
       id: "pn" as const,
       href: pnQuestions(region),
       titleKey: region === "US" ? "home.landing.pathways.pnTitleUS" : "home.landing.pathways.pnTitleCA",
       descKey: region === "US" ? "home.landing.pathways.pnDescUS" : "home.landing.pathways.pnDescCA",
+      ctaKey: "home.landing.pathways.ctaPn",
     },
     {
       id: "np" as const,
       href: npNpQuestionsForRegion(region),
       titleKey: "home.landing.pathways.npTitle",
       descKey: region === "US" ? "home.landing.pathways.npDescUS" : "home.landing.pathways.npDescCA",
+      ctaKey: "home.landing.pathways.ctaNp",
     },
     {
       id: "allied" as const,
       href: alliedQuestions(region),
       titleKey: "home.landing.pathways.alliedTitle",
       descKey: "home.landing.pathways.alliedDesc",
+      ctaKey: "home.landing.pathways.ctaAllied",
     },
     {
       id: "prenursing" as const,
       href: "/pre-nursing",
       titleKey: "home.landing.pathways.preNursingTitle",
       descKey: "home.landing.pathways.preNursingDesc",
+      ctaKey: "home.landing.pathways.ctaPreNursing",
     },
   ];
 
@@ -150,10 +161,12 @@ export default function HomeRestoredClient() {
                         href={withMarketingLocale(locale, p.href)}
                         event={PH.marketingHomePathwayCardPrimary}
                         eventProps={{ pathway: p.id, region, surface: "hero" }}
-                        className="nn-marketing-card nn-marketing-card-pad flex h-full min-h-[6.75rem] flex-col transition hover:border-[var(--border-medium)]"
+                        className="nn-marketing-card nn-marketing-card-pad flex h-full min-h-[8.5rem] flex-col transition hover:border-[var(--border-medium)]"
+                        aria-label={`${t(p.titleKey)}. ${t(p.ctaKey)}`}
                       >
                         <span className="nn-marketing-h3">{t(p.titleKey)}</span>
                         <span className="nn-marketing-body-sm mt-2 flex-1 text-[var(--theme-muted-text)]">{t(p.descKey)}</span>
+                        <span className="nn-marketing-body-sm mt-3 shrink-0 font-semibold text-[var(--theme-primary)]">{t(p.ctaKey)}</span>
                       </MarketingTrackedLink>
                     </li>
                   ))}
@@ -161,7 +174,7 @@ export default function HomeRestoredClient() {
               </div>
 
               <div className="nn-hero-cta-row space-y-3 border-t border-[var(--border-subtle)] pt-5">
-                <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:gap-3">
                   <MarketingTrackedLink
                     href={withMarketingLocale(locale, HUB.signup)}
                     event={PH.marketingHomeHeroPrimaryCta}
@@ -169,8 +182,8 @@ export default function HomeRestoredClient() {
                     className={MARKETING_PRIMARY_CTA_CLASS}
                     data-testid="button-hero-start-free"
                   >
-                    {t("home.landing.ctaPrimary")}
-                    <ArrowRight className="ml-2 h-5 w-5" />
+                    <span className="whitespace-nowrap">{t("home.landing.ctaPrimary")}</span>
+                    <ArrowRight className="ml-2 h-5 w-5 shrink-0" aria-hidden />
                   </MarketingTrackedLink>
                   <MarketingTrackedLink
                     href="#home-platform-preview"
@@ -179,7 +192,7 @@ export default function HomeRestoredClient() {
                     className={MARKETING_SECONDARY_CTA_CLASS}
                     data-testid="button-hero-see-how-it-works"
                   >
-                    {t("home.landing.ctaSecondary")}
+                    <span className="whitespace-nowrap">{t("home.landing.ctaSecondary")}</span>
                   </MarketingTrackedLink>
                 </div>
                 <p
@@ -195,7 +208,9 @@ export default function HomeRestoredClient() {
 
         <HomePlatformPreviewSection />
 
-        <HomeSocialProofSection />
+        <HomeReviewsSection />
+
+        <HomeStudentsStudyingSection />
 
         <HomeLandingSections questionCount={questionCount} />
 

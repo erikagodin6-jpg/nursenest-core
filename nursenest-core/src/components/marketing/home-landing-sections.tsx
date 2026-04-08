@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown } from "lucide-react";
+import { ArrowRight, ChevronDown } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
@@ -21,7 +21,7 @@ const SECTION_Y = "py-9 md:py-12";
 
 /**
  * Lower homepage stack: why (differentiation), trust (stats + access), FAQ (objections), final CTA.
- * No product preview grid: carousel + social proof already cover surface area and “what people use.”
+ * Carousel, reviews, and study modules above already show the product and social proof.
  */
 export function HomeLandingSections({ questionCount }: Props) {
   const { t, locale } = useMarketingI18n();
@@ -93,8 +93,10 @@ export function HomeLandingSections({ questionCount }: Props) {
               event={PH.marketingHomeFinalCta}
               eventProps={{ choice: "signup_landing" }}
               className={`${MARKETING_PRIMARY_CTA_CLASS} sm:min-w-[220px]`}
+              data-testid="button-final-cta-start-free"
             >
-              {t("home.landing.final.closingCtaPrimary")}
+              <span className="whitespace-nowrap">{t("home.landing.final.closingCtaPrimary")}</span>
+              <ArrowRight className="ml-2 h-5 w-5 shrink-0" aria-hidden />
             </MarketingTrackedLink>
             <MarketingTrackedLink
               href={loc(HUB.questionBank)}

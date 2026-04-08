@@ -9,6 +9,7 @@ import type {
   PathwayLessonSection,
 } from "@/lib/lessons/pathway-lesson-types";
 import {
+  ensurePremiumSeoDescription,
   PATHWAY_EXAM_LABEL,
   pathwayIdToTierGeo,
   synthesizeGoldPremiumSections,
@@ -549,7 +550,7 @@ function npTitles(pathwayId: string, v: (typeof VARIANTS)["us_np"]) {
     ...v,
     title: `TIA & stroke red flags in ambulatory care (${suf})`,
     seoTitle: `Stroke red flags | ${lab} US | NurseNest`,
-    seoDescription: `NP stroke/TIA triage for ${lab}: ED referral, risk factors, and safety netting.`,
+    seoDescription: `NP stroke and TIA triage for ${lab}: last-known-well documentation, EMS activation, blood pressure controversies at high level, anticoagulation counseling, secondary prevention planning, and safety netting.`,
   };
 }
 
@@ -605,7 +606,7 @@ export function getStrokeIcpGoldLessonInput(pathwayId: string): LessonInputShape
     bodySystem: "Neurological",
     previewSectionCount: 1,
     seoTitle: v.seoTitle,
-    seoDescription: v.seoDescription,
+    seoDescription: ensurePremiumSeoDescription(v.seoDescription, PATHWAY_EXAM_LABEL[pathwayId] ?? pathwayId),
     sections: syn.sections,
     premiumOmittedSections: syn.premiumOmittedSections,
     relatedLessonRefs: syn.relatedLessonRefs,

@@ -9,6 +9,7 @@ import type {
   PathwayLessonSection,
 } from "@/lib/lessons/pathway-lesson-types";
 import {
+  ensurePremiumSeoDescription,
   PATHWAY_EXAM_LABEL,
   pathwayIdToTierGeo,
   synthesizeGoldPremiumSections,
@@ -348,7 +349,8 @@ Follow **second-line vasopressor** teaching in item (e.g., vasopressin) and **no
     {
       title: "Shock resuscitation (NCLEX-RN, Canada)",
       seoTitle: "Shock nursing care | NCLEX-RN Canada | NurseNest",
-      seoDescription: "Canadian RN: septic/cardiogenic/anaphylactic forks, metric lactate, collaborative resuscitation.",
+      seoDescription:
+        "Canadian RN: septic, cardiogenic, and anaphylactic shock forks, metric lactate trends, MAP targets, collaborative resuscitation, and escalation.",
       clinical_meaning: `**Canadian RN**  
 You integrate **Surviving Sepsis–style** teaching when stems reference it, use **metric lactate** and **mmHg MAP** targets, and **collaborate** with **rapid response / ICU** teams. **Transfusion** and **massive hemorrhage protocols** follow **blood bank** safety checks and **reaction** monitoring.`,
       exam_relevance: `Same clinical spine as US RN with **Canadian unit** traps and **college-standard** language for **delegation** during **unstable** clients—wrong answers still **fluid-bolus** everyone or **delay** **epinephrine** in **anaphylaxis**.`,
@@ -440,7 +442,8 @@ Think **hemorrhagic shock**—activate **massive transfusion/trauma** elements p
     {
       title: "Shock risk & escalation in ambulatory settings (NP, US)",
       seoTitle: "Shock triage | NP US | NurseNest",
-      seoDescription: "NP: sepsis appearance, anaphylaxis, GI bleed hypotension—ED referral and safety netting.",
+      seoDescription:
+        "NP ambulatory shock triage: toxic sepsis appearance, anaphylaxis with airway compromise, GI bleed with orthostasis or syncope, obstetric hemorrhage red flags, EMS activation, and safety netting after stabilization.",
       clinical_meaning: `**NP**  
 Outpatient items test **who cannot stay in clinic**: **toxic appearance**, **MAP hypotension**, **syncope**, **massive GI bleeding**, **stridor**, **altered mentation**, and **pregnancy with hemorrhage**. You **activate EMS**, **give IM epinephrine** when in-office anaphylaxis kit applies, and **avoid** “drive yourself to ED” for **unstable** clients.`,
       exam_relevance: `Trap: **oral antibiotics alone** for **febrile hypotensive** client, or **scheduling colonoscopy next month** for **acute BRBPR with orthostasis**.`,
@@ -449,9 +452,9 @@ Patient **febrile**, **confused**, **BP 88/52**, **tachypneic** after UTI sympto
 
 **Fork**  
 **EMS/ED**—not “increase PO fluids at home and recheck next week.”`,
-      takeaways: `• **Ambulatory shock** = emergency services, not reassurance.  
-• **Anaphylaxis** kits and training are office-safety content.  
-• **Follow-up** plans only after stabilization.`,
+      takeaways: `• **Ambulatory shock** means **EMS or ED activation**, not oral antibiotics alone, extra fluids at home, or “recheck next week” when MAP is crashing.  
+• **Anaphylaxis** kits, IM epinephrine readiness, and staff training are recurring office-safety exam topics.  
+• **Document vitals, interventions, and disposition**; **follow-up** plans belong only after the patient is stabilized or handed off to acute care.`,
     },
     {
       preTest: [
@@ -551,7 +554,7 @@ function npTitles(pathwayId: string, v: (typeof VARIANTS)["us_np"]) {
     ...v,
     title: `Shock risk & escalation in ambulatory settings (${suf})`,
     seoTitle: `Shock triage | ${lab} US | NurseNest`,
-    seoDescription: `NP shock/sepsis triage for ${lab}: ED referral, anaphylaxis, and bleeding risk.`,
+    seoDescription: `NP shock and sepsis triage for ${lab}: EMS when perfusion fails, anaphylaxis and hemorrhagic patterns, pregnancy-related bleeding emergencies, bleeding risk counseling, and documented safety netting.`,
   };
 }
 
@@ -607,7 +610,7 @@ export function getShockGoldLessonInput(pathwayId: string): LessonInputShape | n
     bodySystem: "Cardiovascular",
     previewSectionCount: 1,
     seoTitle: v.seoTitle,
-    seoDescription: v.seoDescription,
+    seoDescription: ensurePremiumSeoDescription(v.seoDescription, PATHWAY_EXAM_LABEL[pathwayId] ?? pathwayId),
     sections: syn.sections,
     premiumOmittedSections: syn.premiumOmittedSections,
     relatedLessonRefs: syn.relatedLessonRefs,

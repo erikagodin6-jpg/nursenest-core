@@ -9,6 +9,7 @@ import type {
   PathwayLessonSection,
 } from "@/lib/lessons/pathway-lesson-types";
 import {
+  ensurePremiumSeoDescription,
   PATHWAY_EXAM_LABEL,
   pathwayIdToTierGeo,
   synthesizeGoldPremiumSections,
@@ -161,7 +162,8 @@ Client reports **crushing chest pressure** with **diaphoresis** and **nausea**; 
     {
       title: "Chest pain & ACS cues (REx-PN, Canada)",
       seoTitle: "ACS recognition | REx-PN Canada | NurseNest",
-      seoDescription: "Canadian PN: chest pain escalation, metric vitals, collaborative ACS pathway support.",
+      seoDescription:
+        "Canadian PN: ischemic chest pain escalation, metric vitals and SpO₂, aspirin and nitroglycerin per order, 12-lead ECG readiness, collaborative ACS pathway support, and EMS activation teaching.",
       clinical_meaning: `**RPN**  
 Canadian practice emphasizes **interprofessional response** and **clear escalation** when **cardiac ischemia** is suspected. Your actions mirror US PN with **SI/metric** data when shown.`,
       exam_relevance: `Same prioritization: **chest pain cluster** before **routine** tasks; **NTG/BP** traps persist.`,
@@ -170,8 +172,9 @@ Client **diaphoretic**, **substernal pressure**, **HR 118**, **BP 148/88** (stem
 
 **Fork**  
 Oxygen per order/indication, notify RN, ECG per protocol, aspirin/NTG per orders with reassessment.`,
-      takeaways: `• **Do not walk clients** with active ischemic symptoms.  
-• **Objective handoff** to RN/NP/physician speeds care.`,
+      takeaways: `• **Do not walk clients** with active ischemic symptoms; keep them monitored and supported per orders until higher-acuity help arrives.  
+• **Objective handoff** to RN/NP/physician with vitals, pain score, O₂ need, allergies, and last nitro time speeds cath-lab activation.  
+• **Teach EMS-first language** for sudden severe rest pain—driving while symptomatic fails Canadian and US exam safety teaching.`,
     },
     {
       preTest: [
@@ -252,7 +255,8 @@ Oxygen per order/indication, notify RN, ECG per protocol, aspirin/NTG per orders
     {
       title: "ACS & chest pain: RN management (NCLEX-RN, US)",
       seoTitle: "ACS nursing care | NCLEX-RN US | NurseNest",
-      seoDescription: "NCLEX-RN: MONA cautions, 12-lead timing, troponin trends, reperfusion readiness, bleeding risk.",
+      seoDescription:
+        "NCLEX-RN: MONA cautions, 12-lead timing, troponin trends, reperfusion readiness, bleeding risk, and escalation.",
       clinical_meaning: `**RN**  
 You **lead bedside stabilization**: **ECG timing**, **serial troponins per orders**, **antiplatelet/anticoagulant administration**, **nitro/morphine per orders and contraindications**, **oxygen only when indicated**, and **prep for PCI/thrombolysis** as the stem describes. Items test **prioritization** among multiple patients and **contraindication** knowledge.`,
       exam_relevance: `STEMI teaching often stresses **reperfusion urgency**; **NTG** traps with **RV infarct** (inferior MI + JVD/hypotension cues); **morphine** cautions with **respiratory depression**; **O₂** not routine if saturations normal in modern stems.`,
@@ -344,7 +348,8 @@ STEMI pattern on ECG per stem, **chest pain ongoing**, **hemodynamically stable*
     {
       title: "ACS & chest pain (NCLEX-RN, Canada)",
       seoTitle: "ACS nursing care | NCLEX-RN Canada | NurseNest",
-      seoDescription: "Canadian RN: reperfusion pathways, metric labs, collaborative language, and NTG cautions.",
+      seoDescription:
+        "Canadian RN: STEMI and NSTEMI pathways, serial troponin trends, collaborative reperfusion activation, RV infarct nitroglycerin cautions, antithrombotic bleeding surveillance, and metric vital trends.",
       clinical_meaning: `**Canadian RN**  
 Same clinical spine with **Canadian acute-care** terminology and **metric** values when presented. **EMS activation** and **catheterization** pathways mirror NCLEX-style urgency.`,
       exam_relevance: `Read **BP in mmHg** before **NTG**; watch **RV infarct** cues with **inferior MI**. **STEMI** items still punish delays to **reperfusion** and **continuous monitoring**—same structure as US stems, with Canadian collaborative language when shown.`,
@@ -353,8 +358,9 @@ Client with **ongoing ischemic chest pain** and **diagnostic ECG changes** per s
 
 **Fork**  
 Immediate collaboration with **cardiology/intervention** team per protocol; implement ordered antithrombotic therapy; monitor for bleeding.`,
-      takeaways: `• **Team coordination** is as testable as meds.  
-• **Reassess pain** after each intervention.`,
+      takeaways: `• **Team coordination** is as testable as medications, oxygen therapy, and antithrombotic orders—delays to cardiology or the cath team are wrong-answer patterns.  
+• **Reassess pain**, **perfusion**, **rhythm**, and **access-site or bleeding risk** after each intervention and document trends clearly for handoff.  
+• **Inferior MI** cues should trigger **RV infarct awareness** before aggressive preload reduction with nitroglycerin when the stem supports that fork.`,
     },
     {
       preTest: [
@@ -435,7 +441,8 @@ Immediate collaboration with **cardiology/intervention** team per protocol; impl
     {
       title: "Chest pain triage in primary care (NP, US)",
       seoTitle: "Chest pain triage | NP US | NurseNest",
-      seoDescription: "NP: HEART score concepts at high level, ED referral, PE/ACS overlap, shared decision-making.",
+      seoDescription:
+        "NP ambulatory chest pain triage: ACS versus PE and aortic dissection cannot-miss patterns, ECG and risk-stratification documentation, timely ED or EMS activation, and shared decision-making after stabilization.",
       clinical_meaning: `**NP**  
 Ambulatory items test **cannot-miss** chest pain: **ACS**, **PE**, **aortic dissection**, **pneumothorax**. “Reassuring” without **ECG and risk stratification** is a trap. You **document** **red flags**, **refer to ED** when appropriate, and avoid **minimizing** **diabetes/autonomic neuropathy** masking angina.`,
       exam_relevance: `Trap: **scheduling stress test next month** for **acute ongoing pain at rest** with risk factors.`,
@@ -444,8 +451,9 @@ Ambulatory items test **cannot-miss** chest pain: **ACS**, **PE**, **aortic diss
 
 **Fork**  
 **EMS/ED**—not “increase metformin” or “try antacid first” as sole plan.`,
-      takeaways: `• **Acute at-rest pain + risk** → ED.  
-• **Document** **HEART** elements when stem expects risk stratification language.`,
+      takeaways: `• **Acute at-rest pain with diaphoresis, dyspnea, or radiation in a higher-risk patient** means **EMS or ED now**, not a routine follow-up slot.  
+• **Document** **HEART**-style elements—history, ECG, age, risk factors, troponin timing—when the stem rewards structured risk language.  
+• When the vignette hints at **tearing pain**, **pulse deficit**, or **new neurologic findings**, think **aortic dissection** or **stroke mimic** and escalate accordingly—not antacid-only plans.`,
     },
     {
       preTest: [
@@ -545,7 +553,7 @@ function npTitles(pathwayId: string, v: (typeof VARIANTS)["us_np"]) {
     ...v,
     title: `Chest pain triage in primary care (${suf})`,
     seoTitle: `Chest pain triage | ${lab} US | NurseNest`,
-    seoDescription: `NP chest pain triage for ${lab}: ED referral when red flags appear, risk stratification, key differentials, and safety netting.`,
+    seoDescription: `NP chest pain triage for ${lab}: ED or EMS when red flags appear, serial ECG and troponin concepts, ACS versus pulmonary embolism and dissection differentials, risk stratification, and safety netting.`,
   };
 }
 
@@ -601,7 +609,7 @@ export function getAcsGoldLessonInput(pathwayId: string): LessonInputShape | nul
     bodySystem: "Cardiovascular",
     previewSectionCount: 1,
     seoTitle: v.seoTitle,
-    seoDescription: v.seoDescription,
+    seoDescription: ensurePremiumSeoDescription(v.seoDescription, PATHWAY_EXAM_LABEL[pathwayId] ?? pathwayId),
     sections: syn.sections,
     premiumOmittedSections: syn.premiumOmittedSections,
     relatedLessonRefs: syn.relatedLessonRefs,

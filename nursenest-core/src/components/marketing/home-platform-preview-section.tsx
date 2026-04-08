@@ -50,6 +50,7 @@ export function HomePlatformPreviewSection() {
             mediaFrame="default"
             testIdPrefix="home-platform-carousel"
             imgTestIdPrefix="platform"
+            captionOverlay
           />
         </div>
       </div>

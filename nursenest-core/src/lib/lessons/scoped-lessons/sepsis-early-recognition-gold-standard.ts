@@ -9,6 +9,7 @@ import type {
   PathwayLessonSection,
 } from "@/lib/lessons/pathway-lesson-types";
 import {
+  ensurePremiumSeoDescription,
   PATHWAY_EXAM_LABEL,
   pathwayIdToTierGeo,
   synthesizeGoldPremiumSections,
@@ -162,7 +163,8 @@ Stay with client, **support ABCs per order**, **notify RN immediately**, and pre
     {
       title: "Sepsis cues & escalation (REx-PN, Canada)",
       seoTitle: "Sepsis recognition | REx-PN Canada | NurseNest",
-      seoDescription: "Canadian PN: metric vitals, infection + systemic compromise, collaboration, and escalation.",
+      seoDescription:
+        "Canadian PN: metric vitals, infection with systemic compromise, SBAR-style reporting, sepsis pathway support per orders, timely RN escalation, and continuous observation.",
       clinical_meaning: `**RPN**  
 Recognize **early deterioration**, use **SI/metric** values carefully, and **collaborate** for diagnostics and therapy changes. Practical nursing items still reward **trend recognition**: temperature trajectory, mental status, perfusion, urine output, and work of breathing—not isolated “single normal” values that hide decline.`,
       exam_relevance: `Same prioritization spine as US PN with **Canadian context** cues in stems. Expect **multi-task** distractions: linens, scheduled meds, or charting versus a client who is **febrile with rising HR/RR** and **soft BP**. Choose **assessment + notification** before routine tasks.`,
@@ -171,9 +173,9 @@ Client with UTI history now **febrile**, **tachycardic**, **hypotensive**, **tac
 
 **Fork**  
 Escalate immediately; do not defer for routine tasks. Stay with the client, support **oxygen and safety per order**, and bring **objective numbers** (vitals, I&O, recent meds, lines) to the RN so the team can activate sepsis workup elements as authorized.`,
-      takeaways: `• **Early escalation saves lives** when infection meets systemic compromise.  
-• **Objective report** to RN/NP/physician with trends—not vague “patient looks worse.”  
-• **Never minimize** altered mentation with fever and hemodynamic drift.`,
+      takeaways: `• **Early escalation saves lives** when infection meets systemic compromise—delays for linen changes or routine meds fail the stem.  
+• **Objective report** to RN/NP/physician with trends, times, and recent interventions—not vague “patient looks worse.”  
+• **Never minimize** altered mentation with fever and hemodynamic drift; bring **I&O, lines, and culture timing** when known.`,
     },
     {
       preTest: [
@@ -254,7 +256,8 @@ Escalate immediately; do not defer for routine tasks. Stay with the client, supp
     {
       title: "Sepsis: recognition & first-line nursing response (NCLEX-RN, US)",
       seoTitle: "Sepsis nursing care | NCLEX-RN US | NurseNest",
-      seoDescription: "NCLEX-RN: sepsis bundles, labs, antibiotics timing concepts, perfusion, and prioritization.",
+      seoDescription:
+        "NCLEX-RN: sepsis bundles, labs, antibiotics timing concepts, perfusion, lactate trends, and safe prioritization.",
       clinical_meaning: `**RN**  
 You **synthesize assessment**, **initiate protocols**, **coordinate diagnostics**, **administer ordered therapies**, and **monitor response**. Items may reference **qSOFA/SIRS-style teaching** as **screening concepts**—follow the **stem’s criteria**.`,
       exam_relevance: `Prioritize **hypotension + infection concern**, **lactate**, **antibiotics after cultures when ordered**, **fluids when indicated**, and **frequent reassessment**. Trap: **routine tasks** during **shock**.`,
@@ -345,7 +348,8 @@ Airway/oxygen, **large-bore access**, **labs/lactate/cultures per order**, **flu
     {
       title: "Sepsis: recognition & nursing response (NCLEX-RN, Canada)",
       seoTitle: "Sepsis nursing care | NCLEX-RN Canada | NurseNest",
-      seoDescription: "Canadian RN: sepsis pathways, metric labs, collaboration, and time-sensitive stabilization.",
+      seoDescription:
+        "Canadian RN: sepsis pathways, metric lactate and glucose, MAP targets, interprofessional collaboration, bundle timing, frequent reassessment, and escalation when failing to respond.",
       clinical_meaning: `**Canadian RN**  
 Same **time-sensitive** priorities with **SI labs** and **Canadian acute-care** language in stems. Your role is to **integrate assessment**, **initiate ordered sepsis interventions**, and **communicate failure to respond**—not to substitute protocols shown in another country’s numbers for what this stem provides.`,
       exam_relevance: `Watch **temperature in °C**, **glucose mmol/L**, and **MAP** targets as given. Traps still pair **routine tasks** with **unstable perfusion**: choose **stabilize and escalate** before **discharge teaching** or **non-urgent procedures**.`,
@@ -354,9 +358,9 @@ Post-op client **38.6 °C**, **tachycardia**, **hypotension**, **oliguria**, and
 
 **Fork**  
 Sepsis pathway activation, notify provider, support perfusion per orders. Prioritize **airway/oxygen**, **access**, **labs/cultures as ordered**, **antibiotics timing**, and **frequent reassessment**—before routine mobility goals if stability is not established.`,
-      takeaways: `• **Early recognition** is cross-border; unstable infection trumps convenience.  
-• **Document trends** clearly so the team sees trajectory, not snapshots.  
-• **Reassess after interventions** to decide escalation.`,
+      takeaways: `• **Early recognition** is cross-border; unstable infection trumps convenience, discharge teaching, and non-urgent procedures.  
+• **Document trends** clearly—vitals, mentation, I&O, lactate when shown—so the team sees trajectory, not snapshots.  
+• **Reassess after each bolus, antibiotic dose, and oxygen change** to decide vasopressor activation or rapid-response escalation per protocol.`,
     },
     {
       preTest: [
@@ -437,7 +441,8 @@ Sepsis pathway activation, notify provider, support perfusion per orders. Priori
     {
       title: "Sepsis risk in outpatient settings (NP, US)",
       seoTitle: "Sepsis risk | NP US | NurseNest",
-      seoDescription: "NP: who needs ED now vs close follow-up; red flags; safety-netting.",
+      seoDescription:
+        "NP outpatient sepsis triage: toxic appearance, hypotension, hypoxia, altered mentation, ED versus close follow-up, and safety netting.",
       clinical_meaning: `**NP**  
 Differentiate **uncomplicated infection** from **sepsis red flags** (hypotension, altered mentation, hypoxia, oliguria, rapidly worsening symptoms). **Safety-net** instructions are exam-relevant.`,
       exam_relevance: `Trap: **oral outpatient management** when **IV resuscitation** and **ED evaluation** are indicated.`,
@@ -446,8 +451,9 @@ Adult with UTI symptoms appears **toxic**, **tachycardic**, **hypotensive**, **c
 
 **Fork**  
 **Direct to emergency care**—not “increase PO fluids only.”`,
-      takeaways: `• **Toxic appearance** + **perfusion/mental status** issues → ED.  
-• Document **return precautions**.`,
+      takeaways: `• **Toxic appearance** plus **perfusion or mental status** decline means **direct ED evaluation**, not watchful waiting alone.  
+• Document **return precautions**, **worsening thresholds**, and **who to call first** when uncertainty remains.  
+• When the stem is borderline, choose **same-day in-person assessment** over vague reassurance.`,
     },
     {
       preTest: [
@@ -547,7 +553,7 @@ function npTitles(pathwayId: string, v: (typeof VARIANTS)["us_np"]) {
     ...v,
     title: `Sepsis risk & escalation (${suf})`,
     seoTitle: `Sepsis risk | ${lab} US | NurseNest`,
-    seoDescription: `NP-level triage for ${lab}: ED vs outpatient, red flags, and safety netting.`,
+    seoDescription: `NP-level sepsis triage for ${lab}: emergency department versus outpatient management, perfusion and mental-status red flags, documentation of return precautions, and explicit safety netting.`,
   };
 }
 
@@ -607,7 +613,7 @@ export function getSepsisGoldLessonInput(pathwayId: string): LessonInputShape | 
     bodySystem: "Infection / sepsis",
     previewSectionCount: 1,
     seoTitle: v.seoTitle,
-    seoDescription: v.seoDescription,
+    seoDescription: ensurePremiumSeoDescription(v.seoDescription, PATHWAY_EXAM_LABEL[pathwayId] ?? pathwayId),
     sections: syn.sections,
     premiumOmittedSections: syn.premiumOmittedSections,
     relatedLessonRefs: syn.relatedLessonRefs,

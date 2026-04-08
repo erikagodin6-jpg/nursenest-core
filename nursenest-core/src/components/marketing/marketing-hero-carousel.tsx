@@ -30,6 +30,11 @@ export type MarketingHeroCarouselProps = {
   /** Slide images: `img-${imgTestIdPrefix}-slide-{i}` (default `hero` → `img-hero-slide-0`). */
   imgTestIdPrefix?: string;
   autoplayIntervalMs?: number;
+  /**
+   * When true, title and caption render as a lightweight bottom gradient strip over the image
+   * (homepage platform preview). When false, copy sits below the frame (legacy layout).
+   */
+  captionOverlay?: boolean;
 };
 
 /**
@@ -49,6 +54,7 @@ export function MarketingHeroCarousel({
   testIdPrefix = "hero-carousel",
   imgTestIdPrefix = "hero",
   autoplayIntervalMs = 5000,
+  captionOverlay = false,
 }: MarketingHeroCarouselProps) {
   const { t } = useMarketingI18n();
   const [current, setCurrent] = useState(0);
@@ -214,7 +220,7 @@ export function MarketingHeroCarousel({
       data-testid={testIdPrefix}
     >
       <div
-        className={`${frameShell} overflow-hidden rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] shadow-[var(--shadow-elevated)]`}
+        className={`${frameShell} relative overflow-hidden rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] shadow-[var(--shadow-elevated)]`}
         style={{ overflowAnchor: "none" }}
         aria-busy={!hasLoaded && mediaOk}
       >
@@ -262,10 +268,26 @@ export function MarketingHeroCarousel({
             />
           );
         })}
+        {hasLoaded && mediaOk && captionOverlay && currentSlide ? (
+          <div
+            className="pointer-events-none absolute inset-x-0 bottom-0 z-10"
+            data-testid={captionTestId}
+            aria-hidden
+          >
+            <div className="bg-gradient-to-t from-black/78 via-black/35 to-transparent px-3 pb-2.5 pt-8 sm:px-4 sm:pb-3 sm:pt-10">
+              <p className="text-left text-sm font-semibold leading-snug text-white text-balance drop-shadow-sm sm:text-base">
+                {currentSlide.title}
+              </p>
+              <p className="mt-0.5 line-clamp-2 text-left text-xs leading-snug text-white/92 text-balance sm:text-sm">
+                {currentSlide.caption}
+              </p>
+            </div>
+          </div>
+        ) : null}
       </div>
       {hasLoaded && mediaOk ? (
         <>
-          {currentSlide ? (
+          {currentSlide && !captionOverlay ? (
             <div className="mt-3 space-y-1 px-2 text-center sm:px-1" data-testid={captionTestId}>
               <p className="nn-marketing-h4 text-balance">{currentSlide.title}</p>
               <p className="nn-marketing-caption text-balance text-[var(--theme-body-text)]">{currentSlide.caption}</p>

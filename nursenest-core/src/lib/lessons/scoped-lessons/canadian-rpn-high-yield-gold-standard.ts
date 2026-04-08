@@ -9,6 +9,7 @@ import type {
   PathwayLessonSection,
 } from "@/lib/lessons/pathway-lesson-types";
 import {
+  ensurePremiumSeoDescription,
   PATHWAY_EXAM_LABEL,
   pathwayIdToTierGeo,
   synthesizeGoldPremiumSections,
@@ -547,7 +548,7 @@ function npTitles(pathwayId: string, v: (typeof VARIANTS)["us_np"]) {
     ...v,
     title: `Team-based care with LPN/RPN support (${suf})`,
     seoTitle: `NP & practical nursing | ${lab} US | NurseNest`,
-    seoDescription: `NP collaboration with practical nurses for ${lab}: orders, scope, and safety.`,
+    seoDescription: `NP collaboration with practical nurses for ${lab}: clear orders, scope boundaries, safe escalation, and team communication.`,
   };
 }
 
@@ -605,7 +606,7 @@ export function getCanadianRpnHighYieldGoldLessonInput(pathwayId: string): Lesso
     bodySystem: "General",
     previewSectionCount: 1,
     seoTitle: v.seoTitle,
-    seoDescription: v.seoDescription,
+    seoDescription: ensurePremiumSeoDescription(v.seoDescription, PATHWAY_EXAM_LABEL[pathwayId] ?? pathwayId),
     sections: syn.sections,
     premiumOmittedSections: syn.premiumOmittedSections,
     relatedLessonRefs: syn.relatedLessonRefs,

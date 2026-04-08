@@ -9,6 +9,7 @@ import type {
   PathwayLessonSection,
 } from "@/lib/lessons/pathway-lesson-types";
 import {
+  ensurePremiumSeoDescription,
   PATHWAY_EXAM_LABEL,
   pathwayIdToTierGeo,
   synthesizeGoldPremiumSections,
@@ -166,7 +167,8 @@ Treat **hypoglycemia per protocol/order** (e.g., fast carbs, recheck), **stay wi
     {
       title: "High-alert meds: insulin, anticoagulants, opioids (REx-PN, Canada)",
       seoTitle: "High-alert medications | REx-PN Canada | NurseNest",
-      seoDescription: "Canadian PN: metric glucose, college scope, bleeding and respiratory monitoring, collaboration.",
+      seoDescription:
+        "Canadian PN: mmol/L glucose checks before insulin, college scope boundaries, anticoagulation bleeding surveillance, opioid respiratory depression, naloxone escalation themes, collaboration, and structured handoff.",
       clinical_meaning: `**RPN**  
 Use **metric units** in stems (mmol/L glucose). Same safety spine: **verify**, **monitor**, **report**, **escalate**. Canadian items still punish **silent hypoglycemia**, **hidden bleeding** on anticoagulation, and **opioid sedation**—choose **assessment + collaboration** over **routine tasks** when risk is unequal.`,
       exam_relevance: `Traps mirror US PN with **Canadian documentation** language: **scheduled dressing** versus **acute change**, **charting** versus **respiratory depression**, and **client requests** versus **objective instability**. Read **SI glucose** carefully before choosing insulin actions.`,
@@ -258,7 +260,8 @@ Hypoglycemia treatment per protocol + RN notification. Do **not** administer sch
     {
       title: "High-alert meds: nursing management (NCLEX-RN, US)",
       seoTitle: "High-alert medications | NCLEX-RN US | NurseNest",
-      seoDescription: "NCLEX-RN: insulin safety, anticoag monitoring, opioid toxicity, reversal concepts, delegation.",
+      seoDescription:
+        "NCLEX-RN: insulin safety, anticoagulation monitoring, opioid toxicity, reversal concepts, delegation, and escalation.",
       clinical_meaning: `**RN**  
 You **assess**, **interpret trends**, **administer**, **evaluate response**, and **delegate** appropriate monitoring. Know **hypoglycemia/hyperglycemia** forks, **bleeding scales**, and **opioid sedation scales** when stems include them.`,
       exam_relevance: `Prioritize **ABC** with opioid toxicity, **glucose checks** with neuro symptoms on insulin, and **neuro checks** with anticoagulation + headache.`,
@@ -267,8 +270,9 @@ Post-op PCA: **RR 8**, **SpO₂ 89%**, **hard to arouse**.
 
 **Fork**  
 Stop bolus demand if applicable, **support airway**, **notify provider**, **naloxone per order/protocol**—before routine dressing.`,
-      takeaways: `• **Respiratory depression** is an emergency.  
-• **Independent double-check** insulin when required.`,
+      takeaways: `• **Respiratory depression** is an emergency—support airway, notify, and use reversal per order or protocol.  
+• **Independent double-check** insulin when policy requires it, and always reconcile glucose before dosing.  
+• **Anticoagulation + new neuro deficit or GI bleed** beats routine tasks until the provider reassesses risk.`,
     },
     {
       preTest: [
@@ -349,7 +353,8 @@ Stop bolus demand if applicable, **support airway**, **notify provider**, **nalo
     {
       title: "High-alert meds: nursing management (NCLEX-RN, Canada)",
       seoTitle: "High-alert medications | NCLEX-RN Canada | NurseNest",
-      seoDescription: "Canadian RN: SI glucose, anticoag safety, opioid toxicity, and collaboration.",
+      seoDescription:
+        "Canadian RN: SI glucose and insulin double-check culture, anticoagulation and neuraxial opioid safety, naloxone readiness, epidural and PCA sedation surveillance, interprofessional collaboration, and rapid escalation.",
       clinical_meaning: `**Canadian RN**  
 Same management with **metric** labs and Canadian terminology. Your exam still ties **high-alert meds** to **airway protection**, **perfusion**, and **timely reversal/antidotes** when ordered—especially when sedation stacks with regional anesthesia or acute illness.`,
       exam_relevance: `Watch **mmol/L glucose** and **SI INR** presentations. Traps include **treating numbers without symptoms** (or ignoring symptoms because a number “looks okay”) and **delaying escalation** for **opioid toxicity** while completing non-urgent tasks.`,
@@ -441,7 +446,8 @@ Airway first, notify anesthesia/provider per protocol, prepare reversal per orde
     {
       title: "High-alert prescribing & monitoring (NP, US)",
       seoTitle: "High-alert meds | NP US | NurseNest",
-      seoDescription: "NP: opioid risk stratification, anticoag choice concepts, insulin intensification safety.",
+      seoDescription:
+        "NP high-alert outpatient management: opioid risk stratification and naloxone planning, anticoagulation choice and bleeding precautions, insulin titration with hypoglycemia safety netting.",
       clinical_meaning: `**NP**  
 Items may test **risk assessment** (opioid contracts, PDMP awareness at high level), **renal dosing concepts**, **bleeding risk with anticoagulation**, and **patient education** for insulin starts/titrations—without replacing institution-specific protocols.`,
       exam_relevance: `Trap: **escalating opioids** without **respiratory safeguards** or **non-opioid multimodal** plan when appropriate.`,
@@ -450,8 +456,9 @@ Chronic pain patient on opioids with **new daytime somnolence** and **RR 10**.
 
 **Fork**  
 Reduce risk: evaluate sedation, consider **dose reduction/hold**, **naloxone education**, and **ED referral** if unstable—not “refill early blindly.”`,
-      takeaways: `• **Respiratory rate and sedation** guide opioid safety.  
-• **Renal/hepatic** function affects anticoag and insulin choices in vignettes.`,
+      takeaways: `• **Respiratory rate, sedation, and daytime somnolence** guide opioid safety—escalate to urgent care or ED when bradypnea or hypoxia appears.  
+• **Renal and hepatic function** affect anticoagulant selection, insulin doses, and metformin decisions in vignettes—always reconcile with the stem’s eGFR.  
+• **Co-prescribe or teach naloxone** when exam stems stack opioids with benzodiazepines, gabapentinoids, or untreated sleep apnea.`,
     },
     {
       preTest: [
@@ -551,7 +558,7 @@ function npTitles(pathwayId: string, v: (typeof VARIANTS)["us_np"]) {
     ...v,
     title: `High-alert meds: prescribing & monitoring (${suf})`,
     seoTitle: `High-alert meds | ${lab} US | NurseNest`,
-    seoDescription: `NP high-alert medication safety for ${lab}: opioids, anticoagulation, insulin titration, monitoring priorities, and escalation cues.`,
+    seoDescription: `NP high-alert medication safety for ${lab}: opioid stewardship and naloxone, anticoagulation bleeding precautions, insulin titration with glucose checks, renal-aware dosing, monitoring priorities, and escalation cues.`,
   };
 }
 
@@ -611,7 +618,7 @@ export function getHighAlertMedsGoldLessonInput(pathwayId: string): LessonInputS
     bodySystem: "Pharmacology",
     previewSectionCount: 1,
     seoTitle: v.seoTitle,
-    seoDescription: v.seoDescription,
+    seoDescription: ensurePremiumSeoDescription(v.seoDescription, PATHWAY_EXAM_LABEL[pathwayId] ?? pathwayId),
     sections: syn.sections,
     premiumOmittedSections: syn.premiumOmittedSections,
     relatedLessonRefs: syn.relatedLessonRefs,
