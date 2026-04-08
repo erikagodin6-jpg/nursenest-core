@@ -439,7 +439,8 @@ Treat as **neuro emergency**—notify, prepare for **ordered ICP interventions**
     {
       title: "TIA & stroke red flags in ambulatory care (NP, US)",
       seoTitle: "Stroke red flags | NP US | NurseNest",
-      seoDescription: "NP: TIA cannot-miss, ED referral, BP and anticoagulation counseling, time-sensitive teaching.",
+      seoDescription:
+        "NP stroke and TIA triage: last-known-well and focal deficit documentation, EMS when symptoms are acute, ED referral for resolved TIA, anticoagulation counseling, migraine mimic awareness, and written safety netting for recurrent deficits.",
       clinical_meaning: `**NP**  
 Outpatient items test **TIA/stroke risk** recognition: **sudden focal deficits that resolve** still need **urgent evaluation** (ABCD²-style risk concepts when referenced). You **avoid false reassurance**, **coordinate ED transfer** for **acute symptoms**, and **manage chronic risk** (HTN, AFib anticoagulation counseling, diabetes) without replacing **hyperacute** hospital protocols.`,
       exam_relevance: `Trap: **“symptoms resolved—schedule follow-up in a month”** for **recent TIA focal deficits**. Also: **minimizing** **AFib** in **young patient** with **palpitations and neuro symptoms**.`,
@@ -448,9 +449,10 @@ Patient had **20 minutes of slurred speech and hand weakness** yesterday, now as
 
 **Fork**  
 **Same-day ED/workup** or **urgent stroke-prevention pathway** per guideline teaching in stem—not “observe at home indefinitely.”`,
-      takeaways: `• **Resolved neuro symptoms** can still be **TIA**—risk stratification and urgent workup.  
-• **Anticoagulation adherence** and **BP control** are long-game teaching points.  
-• **Acute neuro symptoms now** → **911/ED**, not clinic tweaks.`,
+      takeaways: `• **Resolved neuro symptoms** can still be **TIA**—risk stratification and urgent workup; traps minimize **sudden focal** findings because they “got better.”  
+• **Anticoagulation adherence** and **BP control** are long-game teaching points; know when stems test **reversal or hold** decisions around procedures or bleeding.  
+• **Acute neuro symptoms now** → **911/ED**, not clinic tweaks—**sudden thunderclap headache** or **anticoagulation + neuro change** should not go home without escalation.  
+• Contrast **migraine aura** timing with **TIA** when the stem gives gradual visual symptoms versus abrupt motor or language loss.`,
     },
     {
       preTest: [

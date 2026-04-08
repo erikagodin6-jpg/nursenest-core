@@ -10,6 +10,32 @@ import {
   MARKETING_SECONDARY_CTA_COMPACT_CLASS,
 } from "@/lib/theme/marketing-hero-pattern";
 
+/** Marketing copy for `/allied-health` (loaded from `pages.alliedHealthHub.*`). */
+export type AlliedHealthHubCopy = {
+  scanTracksLabel: string;
+  region: {
+    badgeLabel: string;
+    h2: string;
+    intro: string;
+    pathwayOverviewCta: string;
+    questionBankCta: string;
+  };
+  professions: {
+    badge: string;
+    h2: string;
+    intro: string;
+    openPrepGuide: string;
+    browseLessons: string;
+  };
+  trust: {
+    h2: string;
+    sub: string;
+    tile1: { title: string; body: string };
+    tile2: { title: string; body: string };
+    tile3: { title: string; body: string };
+  };
+};
+
 function professionChipLabel(key: string): string {
   return key
     .split("-")
@@ -20,14 +46,16 @@ function professionChipLabel(key: string): string {
 /** Above-the-fold scan of every track; same links as the grid below. */
 export function AlliedHeroProfessionScan({
   grouped,
+  scanTracksLabel,
 }: {
   grouped: Map<AlliedHubCategoryId, AlliedProfessionMarketing[]>;
+  scanTracksLabel: string;
 }) {
   const flat = ALLIED_HUB_CATEGORY_ORDER.flatMap((id) => grouped.get(id) ?? []);
   if (flat.length === 0) return null;
   return (
     <div className="relative mt-10 border-t border-[color-mix(in_srgb,var(--theme-primary)_18%,transparent)] pt-8">
-      <p className="nn-marketing-label">Allied tracks here</p>
+      <p className="nn-marketing-label">{scanTracksLabel}</p>
       <div className="mt-3 flex flex-wrap gap-2 sm:gap-2.5">
         {flat.map((p) => (
           <Link
@@ -51,7 +79,15 @@ type RegionLinks = {
   pricingHint: string;
 };
 
-export function AlliedHealthRegionStrip({ us, ca }: { us: RegionLinks; ca: RegionLinks }) {
+export function AlliedHealthRegionStrip({
+  us,
+  ca,
+  copy,
+}: {
+  us: RegionLinks;
+  ca: RegionLinks;
+  copy: AlliedHealthHubCopy["region"];
+}) {
   return (
     <section
       className="mt-16 rounded-[1.75rem] border border-[var(--border-subtle)] bg-[var(--bg-section)] p-6 shadow-[var(--shadow-card)] sm:p-10"
@@ -61,25 +97,39 @@ export function AlliedHealthRegionStrip({ us, ca }: { us: RegionLinks; ca: Regio
         <div className="max-w-2xl">
           <div className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-[var(--accent-soft)] px-3 py-1">
             <Globe2 className="h-3.5 w-3.5 text-[var(--theme-primary)]" aria-hidden />
-            <span className="nn-marketing-label nn-marketing-label--accent">Region first</span>
+            <span className="nn-marketing-label nn-marketing-label--accent">{copy.badgeLabel}</span>
           </div>
           <h2 id="allied-region-heading" className="nn-marketing-h2 mt-4">
-            Where are you testing?
+            {copy.h2}
           </h2>
-          <p className="nn-marketing-body-sm mt-2 leading-relaxed text-[var(--theme-muted-text)]">
-            Allied content is scoped by country at signup and checkout. Pick your region first, then your profession below.
-          </p>
+          <p className="nn-marketing-body-sm mt-2 leading-relaxed text-[var(--theme-muted-text)]">{copy.intro}</p>
         </div>
       </div>
       <div className="mt-8 grid gap-5 sm:grid-cols-2 sm:gap-6">
-        <RegionCard {...us} />
-        <RegionCard {...ca} />
+        <RegionCard
+          {...us}
+          pathwayOverviewCta={copy.pathwayOverviewCta}
+          questionBankCta={copy.questionBankCta}
+        />
+        <RegionCard
+          {...ca}
+          pathwayOverviewCta={copy.pathwayOverviewCta}
+          questionBankCta={copy.questionBankCta}
+        />
       </div>
     </section>
   );
 }
 
-function RegionCard({ label, countryLine, overviewHref, questionsHref, pricingHint }: RegionLinks) {
+function RegionCard({
+  label,
+  countryLine,
+  overviewHref,
+  questionsHref,
+  pricingHint,
+  pathwayOverviewCta,
+  questionBankCta,
+}: RegionLinks & { pathwayOverviewCta: string; questionBankCta: string }) {
   return (
     <div className="group relative flex flex-col overflow-hidden rounded-2xl border border-[var(--border-medium)] bg-[var(--bg-card)] p-6 shadow-[var(--shadow-card)] transition-all duration-300 hover:border-primary/35 hover:shadow-[var(--shadow-card-hover)]">
       <div
@@ -96,7 +146,7 @@ function RegionCard({ label, countryLine, overviewHref, questionsHref, pricingHi
       <p className="nn-marketing-body-sm mt-2 flex-1 leading-relaxed text-[var(--theme-muted-text)]">{pricingHint}</p>
       <div className="mt-6 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap">
         <Link href={overviewHref} className={`${MARKETING_PRIMARY_CTA_COMPACT_CLASS} gap-1.5 shadow-sm transition hover:opacity-95`}>
-          Pathway overview
+          {pathwayOverviewCta}
           <ArrowRight className="h-4 w-4" aria-hidden />
         </Link>
         <Link
@@ -104,7 +154,7 @@ function RegionCard({ label, countryLine, overviewHref, questionsHref, pricingHi
           className={`${MARKETING_SECONDARY_CTA_COMPACT_CLASS} gap-1.5 border-[var(--border-medium)] bg-[color-mix(in_srgb,var(--theme-primary)_4%,var(--theme-card-bg))] text-foreground transition hover:border-primary/30 hover:bg-[var(--surface-interactive-hover)]`}
         >
           <ClipboardList className="h-4 w-4" aria-hidden />
-          Question bank hub
+          {questionBankCta}
         </Link>
       </div>
     </div>
@@ -120,23 +170,22 @@ const CATEGORY_ACCENT: Record<AlliedHubCategoryId, string> = {
 
 export function AlliedHubProfessionSections({
   grouped,
+  copy,
 }: {
   grouped: Map<AlliedHubCategoryId, AlliedProfessionMarketing[]>;
+  copy: AlliedHealthHubCopy["professions"];
 }) {
   return (
     <section className="mt-20" aria-labelledby="allied-professions-heading">
       <div className="max-w-2xl">
         <div className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-[var(--accent-soft)] px-3 py-1">
           <Sparkles className="h-3.5 w-3.5 text-[var(--theme-primary)]" aria-hidden />
-          <span className="nn-marketing-label nn-marketing-label--accent">By practice area</span>
+          <span className="nn-marketing-label nn-marketing-label--accent">{copy.badge}</span>
         </div>
         <h2 id="allied-professions-heading" className="nn-marketing-h2 mt-4">
-          Choose your profession
+          {copy.h2}
         </h2>
-        <p className="nn-marketing-body-sm mt-3 leading-relaxed text-[var(--theme-muted-text)]">
-          Each track has a dedicated prep guide plus a paginated lesson hub. Content stays on the allied tier, separate from
-          nursing NCLEX and NP depth.
-        </p>
+        <p className="nn-marketing-body-sm mt-3 leading-relaxed text-[var(--theme-muted-text)]">{copy.intro}</p>
       </div>
       <div className="mt-12 space-y-16 sm:space-y-20">
         {ALLIED_HUB_CATEGORY_ORDER.map((categoryId, sectionIndex) => {
@@ -181,7 +230,7 @@ export function AlliedHubProfessionSections({
                           href={`/allied-health/${p.segment}`}
                           className="nn-link-quiet inline-flex items-center gap-1.5 font-semibold text-[var(--theme-primary)] transition hover:gap-2"
                         >
-                          Open prep guide
+                          {copy.openPrepGuide}
                           <ArrowRight className="h-4 w-4 shrink-0" aria-hidden />
                         </Link>
                         <Link
@@ -189,7 +238,7 @@ export function AlliedHubProfessionSections({
                           className="nn-link-quiet inline-flex items-center gap-2 font-medium text-[var(--theme-muted-text)] transition hover:text-[var(--theme-primary)]"
                         >
                           <BookOpen className="h-4 w-4 shrink-0 opacity-80" aria-hidden />
-                          Browse lessons
+                          {copy.browseLessons}
                         </Link>
                       </div>
                     </article>
@@ -204,31 +253,19 @@ export function AlliedHubProfessionSections({
   );
 }
 
-export function AlliedHealthTrustStrip() {
+export function AlliedHealthTrustStrip({ copy }: { copy: AlliedHealthHubCopy["trust"] }) {
   const items = [
-    {
-      icon: Route,
-      title: "Discipline-first routing",
-      body: "Pick your profession and land on guides and lessons written for that scope, not generic nursing copy.",
-    },
-    {
-      icon: Globe2,
-      title: "Country-aware pathways",
-      body: "United States and Canada each have a dedicated allied hub so entitlements and checkout match your exam market.",
-    },
-    {
-      icon: Sparkles,
-      title: "Study loop in one tier",
-      body: "Lessons, questions, and practice stay inside the allied plan you select. Upgrade paths are explicit, not mixed in by accident.",
-    },
+    { icon: Route, title: copy.tile1.title, body: copy.tile1.body },
+    { icon: Globe2, title: copy.tile2.title, body: copy.tile2.body },
+    { icon: Sparkles, title: copy.tile3.title, body: copy.tile3.body },
   ] as const;
   return (
     <section
       className="mt-20 rounded-[1.75rem] border border-[var(--border-subtle)] bg-gradient-to-b from-[var(--bg-section-alt)] to-[var(--bg-section)] px-5 py-10 shadow-[var(--shadow-card)] sm:px-10 sm:py-12"
       aria-label="Why allied learners use NurseNest"
     >
-      <h2 className="nn-marketing-h2 max-w-xl">Built for allied certification prep</h2>
-      <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">Confidence cues before you commit to a plan.</p>
+      <h2 className="nn-marketing-h2 max-w-xl">{copy.h2}</h2>
+      <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">{copy.sub}</p>
       <ul className="mt-8 grid gap-5 sm:grid-cols-3 sm:gap-6">
         {items.map(({ icon: Icon, title, body }) => (
           <li

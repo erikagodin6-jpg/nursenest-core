@@ -433,7 +433,7 @@ PD: **fever 38.6°C**, **cloudy effluent**, **rebound tenderness**.
       title: "Renal risk & dialysis access in ambulatory care (NP, US)",
       seoTitle: "Renal failure triage | FNP US | NurseNest",
       seoDescription:
-        "NP: AKI recognition, hyperkalemia ED referral, missed dialysis, drug dosing awareness in primary care.",
+        "NP renal and dialysis-access triage: hyperkalemia with ECG changes, missed hemodialysis with volume overload, line infection fever, contrast and triple-whammy AKI patterns, renally cleared medication holds, EMS when perfusion fails, and safety netting for oliguria.",
       clinical_meaning: `**NP**  
 Clinic items test **who needs ED today**: **K+ with ECG changes**, **anuria**, **pulmonary edema** with **missed HD**, **febrile** central line, **rhabdomyolysis** cues, and **ACEI/ARB + spironolactone + NSAID** triple whammy hyperkalemia. You **adjust** **renally cleared meds**, **order** **labs**, and **coordinate** **nephrology**—not “increase NSAIDs” in **CKD**.`,
       exam_relevance: `Trap: **continuing metformin** when **eGFR** contraindicates; **ignoring** **BMP** after **contrast**; **oral potassium** with **K-sparing diuretic** without monitoring.`,
@@ -442,8 +442,9 @@ CKD4: **K+ 6.0**, **peaked T waves** on EKG in office.
 
 **Fork**  
 **EMS/ED** for stabilization and dialysis—not “recheck next month.”`,
-      takeaways: `• **EKG changes + hyperkalemia** = emergency, not outpatient tweak.  
-• **Medication reconciliation** prevents iatrogenic renal injury.  
+      takeaways: `• **EKG changes + hyperkalemia** = emergency, not outpatient tweak—items love **peaked T waves** with **ACEI/ARB/spironolactone/NSAID** stacks.  
+• **Medication reconciliation** prevents iatrogenic renal injury; re-check **metformin**, **diuretics**, and **nephrotoxins** after contrast or acute illness.  
+• **Missed dialysis** with **dyspnea, K+ rise, or fluid overload** belongs in **ED** with clear handoff, not “call Monday.”  
 • **BP control** slows CKD progression when appropriate to guideline.`,
     },
     {
@@ -542,7 +543,7 @@ function npTitles(pathwayId: string, v: (typeof VARIANTS)["us_np"]) {
     ...v,
     title: `Renal risk & dialysis access in ambulatory care (${suf})`,
     seoTitle: `Renal failure triage | ${lab} US | NurseNest`,
-    seoDescription: `NP renal risk triage for ${lab}: hyperkalemia, AKI, and medication safety.`,
+    seoDescription: `NP renal and dialysis-access triage for ${lab}: hyperkalemia with ECG changes, missed dialysis and volume overload, line infection concerns, AKI surveillance after contrast, renally aware prescribing, and documented return precautions.`,
   };
 }
 

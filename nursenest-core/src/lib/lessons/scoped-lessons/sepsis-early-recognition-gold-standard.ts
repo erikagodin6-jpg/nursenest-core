@@ -451,8 +451,8 @@ Adult with UTI symptoms appears **toxic**, **tachycardic**, **hypotensive**, **c
 
 **Fork**  
 **Direct to emergency care**—not “increase PO fluids only.”`,
-      takeaways: `• **Toxic appearance** plus **perfusion or mental status** decline means **direct ED evaluation**, not watchful waiting alone.  
-• Document **return precautions**, **worsening thresholds**, and **who to call first** when uncertainty remains.  
+      takeaways: `• **Toxic appearance** plus **perfusion or mental status** decline means **direct ED evaluation**, not watchful waiting alone—traps pair **oral fluids** or **outpatient antibiotics** with **hypotension and confusion**.  
+• Document **return precautions**, **worsening thresholds**, and **who to call first** when uncertainty remains; peripartum fever with **uterine pain** or **foul lochia** still routes to **urgent OB evaluation** in NP items.  
 • When the stem is borderline, choose **same-day in-person assessment** over vague reassurance.`,
     },
     {

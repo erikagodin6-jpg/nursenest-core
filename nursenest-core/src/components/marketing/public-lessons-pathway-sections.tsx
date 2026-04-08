@@ -129,7 +129,7 @@ export async function PublicLessonsPathwaySections({
                       </div>
                     ) : (
                       <p className="mt-3 nn-marketing-body-sm text-[var(--theme-muted-text)]">
-                        Open the hub for the full lesson list and previews for this pathway.
+                        {t("pages.examLessons.emptyPreviewTopicsHint")}
                       </p>
                     )}
                     <Link

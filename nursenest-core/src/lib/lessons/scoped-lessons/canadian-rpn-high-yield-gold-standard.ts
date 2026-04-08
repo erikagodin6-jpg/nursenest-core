@@ -161,7 +161,7 @@ Your NCLEX-PN scope parallels many **RPN** themes: **carry out orders**, **asses
       title: "REx-PN high yield: scope, meds & collaboration (Canada)",
       seoTitle: "RPN scope & REx-PN | NurseNest Canada",
       seoDescription:
-        "Canadian RPN: regulatory-safe scope, IV/medication boundaries, SBAR handoffs, infection control, and assignment accountability.",
+        "Canadian RPN: college-aligned scope, IV and medication boundaries, frequent reassessment and objective reporting, SBAR escalation to RN or NP, infection control, unsafe assignment pushback, and documentation that shows trajectory.",
       clinical_meaning: `**RPN in Canada**  
 You practice within your **college** standards and **employer policies**. Items test **safe medication administration** (including **controlled drugs** per protocol), **IV therapy** only when **authorized and competent**, **wound care** within scope, **sterile technique** when required, and **immediate RN/NP/physician notification** for unstable clients. You **do not** diagnose or prescribe unless the exam stem explicitly places you in an **extended** authorized role.`,
       exam_relevance: `Top traps: **acting on verbal orders** without **policy-compliant** confirmation, **withholding** critical findings, **accepting** **unsafe RN ratios** without **appropriate reporting**, or **performing** **controlled acts** outside authorization. Items love **SBAR**, **infection outbreaks**, **falls risk**, and **elder abuse** reporting duties.`,
@@ -345,7 +345,8 @@ Charge RN floats **LPN** to **step-down** with **dopamine titration** patients.
     {
       title: "Collaborating with RPNs: assignment & accountability (NCLEX-RN, Canada)",
       seoTitle: "RN–RPN collaboration | NCLEX-RN Canada | NurseNest",
-      seoDescription: "Canadian RN: RPN scope support, shared care, delegation, and unsafe practice escalation.",
+      seoDescription:
+        "Canadian RN: RPN scope support, shared care, clear reassessment and reporting expectations, SBAR-style escalation to NP or physician, assignment rebalancing when acuity exceeds practical-nurse support, and documentation of unsafe staffing concerns.",
       clinical_meaning: `**Canadian RN**  
 You **coordinate** care with **RPNs** in shared models: **clear orders**, **appropriate assignment**, **supervision** of delegated tasks, and **joint response** to deterioration. Items test **accountability** when both roles are present—who performs **controlled acts**, who assesses **acute change**, and how **documentation** reflects each contributor.`,
       exam_relevance: `Traps: **dumping** unstable clients on an **RPN** without support, **assuming** an RPN can titrate **all IV meds**, or **failing** to escalate an **unsafe RPN assignment** from management. **Metric vitals** and Canadian **terminology** appear frequently.`,
@@ -437,7 +438,8 @@ The **RN rebalances** the assignment, **calls for help**, and **documents** the 
     {
       title: "Team-based care with LPN/RPN support (NP, US)",
       seoTitle: "NP & practical nursing | NP US | NurseNest",
-      seoDescription: "NP: clarify orders for practical nurses, scope boundaries in clinic, and Canadian RPN awareness for comparative items.",
+      seoDescription:
+        "NP team leadership: parameter-rich orders for LPN and RPN execution, scope boundaries and collaborative agreements, telephone triage documentation, comparative Canadian RPN items with employer policy language, and escalation when practical nurses report acute change.",
       clinical_meaning: `**NP**  
 You **write clear orders**, **define parameters** for PRN meds, **respect LPN/RPN scope** in your setting, and **avoid ambiguous instructions** that force guessing. In **comparative Canadian items**, an **RPN** may administer meds you order—ensure **route, dose, and monitoring** match **employer policy** and provincial rules when the stem references them.`,
       exam_relevance: `Traps: a vague **“give if needed” insulin** order **without parameters**; expecting an **LPN** to **order labs**; or **ignoring state collaborative agreement** rules where the exam tests NP–RN–LPN relationships.`,
@@ -446,9 +448,9 @@ An **LPN calls**: “Can I give **extra Lasix** because **ankles look bad**?”
 
 **Fork**  
 The **NP obtains data** (weight, BP, symptoms), then issues a **specific order or visit plan**—not informal dose changes by proxy.`,
-      takeaways: `• Orders must be **specific enough** for safe execution at the bedside.  
-• **Telephone encounters** still require **documentation** and **assessment** when therapy changes.  
-• Know **who can administer what** under your **practice agreement**.`,
+      takeaways: `• Orders must be **specific enough** for safe execution at the bedside—vague **PRN** instructions that force unsupervised titration are classic wrong answers.  
+• **Telephone encounters** still require **documentation** and **assessment** when therapy changes; have practical nurses **repeat back vitals and symptoms** before you adjust high-alert meds.  
+• Know **who can administer what** under your **practice agreement**; when an **RPN** reports **instability**, choose **stop-and-assess** and **direct escalation** over **delegating clinical judgment downward**.`,
     },
     {
       preTest: [

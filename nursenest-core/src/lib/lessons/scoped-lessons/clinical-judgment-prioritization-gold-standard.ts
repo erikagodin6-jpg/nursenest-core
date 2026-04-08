@@ -363,7 +363,7 @@ Address **time-sensitive threats** using stem cues: chest pain syndrome, **immin
       title: "Clinical judgment: prioritization (NCLEX-RN, Canada)",
       seoTitle: "Prioritization | NCLEX-RN Canada | NurseNest",
       seoDescription:
-        "Canadian NCLEX-RN context: same judgment spine with metric framing and Canadian acute-care language.",
+        "Canadian NCLEX-RN: metric vitals and SI labs, interprofessional collaboration, objective reassessment, timely RN/NP/physician escalation, and unsafe assignment pushback.",
       clinical_meaning: `**Canadian NCLEX-RN**  
 Judgment mirrors US RN items with **Canadian terminology** and **metric/SI** data when presented. Your **nursing process** and **safety-first sequencing** remain the same.
 
@@ -378,7 +378,8 @@ Client C: **routine dressing**—stable.
 **RN fork**  
 Sepsis/shock concern for Client A outranks paperwork and routine dressing. Initiate **assessment + escalation + ordered interventions** while keeping others safe.`,
       takeaways: `• **Numbers**: read **°C**, **mmol/L**, and **metric** dosing carefully.  
-• **Stability first** is universal.  
+• **Stability first** is universal—pair vitals trends with **concise SBAR-style reporting** when you escalate.  
+• When staffing or scope feels unsafe, choose **rebalancing workload**, **activating chain of command**, and **documenting risk** over silent acceptance.  
 • Pair with **Canada RN** timed sets.`,
     },
     {
@@ -461,7 +462,7 @@ Sepsis/shock concern for Client A outranks paperwork and routine dressing. Initi
       title: "Clinical judgment in ambulatory care (NP, US)",
       seoTitle: "Ambulatory prioritization | NP US | NurseNest",
       seoDescription:
-        "NP-level synthesis: who needs same-day evaluation, red-flag triage, and safe escalation in primary care.",
+        "NP ambulatory judgment: cannot-miss differentials (ACS, PE, sepsis, stroke, ectopic), EMS or ED disposition when red flags appear, visit-versus-phone triage, and documented safety netting with return precautions.",
       clinical_meaning: `**NP / advanced practice framing**  
 Items test **risk stratification**, **differential urgency**, and **appropriate site-of-care** decisions (office today vs urgent care vs ED). You still **prioritize life threats** and **time-sensitive diagnoses** (ACS, PE, sepsis, ectopic pregnancy, stroke, airway compromise).
 
@@ -473,8 +474,9 @@ A 54-year-old with **diabetes** reports **pleuritic chest pain**, **unilateral c
 
 **NP fork**  
 This pattern requires **urgent evaluation for VTE/PE** (and **ACS** remains in differential). The error is **routine follow-up in weeks** or **only ordering oral antibiotics** without addressing cardiopulmonary risk.`,
-      takeaways: `• **Red-flag clusters** beat convenience.  
-• **Document** risk discussion and follow-up instructions.  
+      takeaways: `• **Red-flag clusters** beat convenience—when the stem whispers **time-sensitive organ risk**, pick **in-person or EMS evaluation** over reassurance alone.  
+• **Document** objective data, **differential reasoning at a high level**, **disposition** (office, urgent care, ED), and **specific return precautions** (“call 911 if…”).  
+• Traps reward **watchful waiting** for **focal neuro deficits**, **resting chest pain with diaphoresis**, or **toxic appearance with hypotension**—close those loops with escalation.  
 • Pair with **NP** case-style questions that test **management synthesis**.`,
     },
     {
@@ -576,7 +578,7 @@ function applyNpTitles(pathwayId: string, v: ReturnType<typeof t>): ReturnType<t
     ...v,
     title: `Clinical judgment in ambulatory care (${suf})`,
     seoTitle: `Ambulatory prioritization | ${lab} US | NurseNest`,
-    seoDescription: `NP-level synthesis for ${lab}: same-day risk, red flags, and safe escalation in primary care.`,
+    seoDescription: `NP ambulatory clinical judgment for ${lab}: same-day and EMS/ED disposition for red flags, cannot-miss differential framing, structured risk documentation, and explicit safety netting.`,
   };
 }
 

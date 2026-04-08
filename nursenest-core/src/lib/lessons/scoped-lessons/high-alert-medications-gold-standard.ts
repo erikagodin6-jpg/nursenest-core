@@ -447,7 +447,7 @@ Airway first, notify anesthesia/provider per protocol, prepare reversal per orde
       title: "High-alert prescribing & monitoring (NP, US)",
       seoTitle: "High-alert meds | NP US | NurseNest",
       seoDescription:
-        "NP high-alert outpatient management: opioid risk stratification and naloxone planning, anticoagulation choice and bleeding precautions, insulin titration with hypoglycemia safety netting.",
+        "NP high-alert medication management: opioid sedation and respiratory depression with EMS thresholds, naloxone co-prescribing, anticoagulation bleeding precautions and procedural holds, insulin titration with hypoglycemia return precautions, renal-aware metformin and diuretic decisions, and ED referral when unstable.",
       clinical_meaning: `**NP**  
 Items may test **risk assessment** (opioid contracts, PDMP awareness at high level), **renal dosing concepts**, **bleeding risk with anticoagulation**, and **patient education** for insulin starts/titrations—without replacing institution-specific protocols.`,
       exam_relevance: `Trap: **escalating opioids** without **respiratory safeguards** or **non-opioid multimodal** plan when appropriate.`,
@@ -456,9 +456,10 @@ Chronic pain patient on opioids with **new daytime somnolence** and **RR 10**.
 
 **Fork**  
 Reduce risk: evaluate sedation, consider **dose reduction/hold**, **naloxone education**, and **ED referral** if unstable—not “refill early blindly.”`,
-      takeaways: `• **Respiratory rate, sedation, and daytime somnolence** guide opioid safety—escalate to urgent care or ED when bradypnea or hypoxia appears.  
+      takeaways: `• **Respiratory rate, sedation, and daytime somnolence** guide opioid safety—escalate to urgent care or ED when bradypnea or hypoxia appears; traps refill opioids without addressing **CO₂ retention** or **over-sedation**.  
 • **Renal and hepatic function** affect anticoagulant selection, insulin doses, and metformin decisions in vignettes—always reconcile with the stem’s eGFR.  
-• **Co-prescribe or teach naloxone** when exam stems stack opioids with benzodiazepines, gabapentinoids, or untreated sleep apnea.`,
+• **Co-prescribe or teach naloxone** when exam stems stack opioids with benzodiazepines, gabapentinoids, or untreated sleep apnea.  
+• **Anticoagulation** items punish **hidden head trauma**, **uncontrolled bleeding**, or **procedures** without **hold/reversal planning**—choose **urgent evaluation** when intracranial bleed is plausible.`,
     },
     {
       preTest: [

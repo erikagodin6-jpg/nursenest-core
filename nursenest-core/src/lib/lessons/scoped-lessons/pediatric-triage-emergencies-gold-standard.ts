@@ -430,7 +430,7 @@ Toddler with **10% dehydration** estimate in stem, **tachycardia**, **cap refill
       title: "Pediatric urgent triage in primary care (NP, US)",
       seoTitle: "Pediatric triage | FNP US | NurseNest",
       seoDescription:
-        "NP: infant fever, respiratory distress, dehydration, and EMS/ED referral thresholds in outpatient setting.",
+        "NP pediatric urgent triage: young infant fever thresholds, respiratory distress with hypoxia or retractions, dehydration with lethargy, meningococcemia rash patterns, bilious vomiting in neonates, diabetic ketosis sick-day rules, EMS activation, and concrete caregiver safety netting.",
       clinical_meaning: `**NP**  
 Telehealth and clinic items test **who needs ED now**: **<2–3 month fever**, **respiratory distress with hypoxemia**, **signs of dehydration with lethargy**, **purpuric rash with fever**, **neck stiffness**, and **bilious vomiting** in infant. You **prescribe** **evidence-based** outpatient therapy when safe and **safety-net** with **specific return symptoms**.`,
       exam_relevance: `Trap: **“watchful waiting”** for **ill-appearing** infant; **steroids** for **uncomplicated** **viral** URI; **skip** **umbilical stump** **red flags** in newborn.`,
@@ -439,9 +439,10 @@ Telehealth and clinic items test **who needs ED now**: **<2–3 month fever**, *
 
 **Fork**  
 **EMS/ED**—not “recheck tomorrow.”`,
-      takeaways: `• **Bulging fontanelle + fever** = central nervous system infection concern until ruled out.  
-• **ORT protocols** with **weight-based** guidance for mild GE.  
-• **Parent literacy** affects **follow-up** reliability—lower threshold to escalate when uncertain.`,
+      takeaways: `• **Bulging fontanelle + fever** = central nervous system infection concern until ruled out—do not substitute **phone reassurance** for **in-person emergency evaluation** when the stem shows **ill appearance**.  
+• **ORT protocols** with **weight-based** guidance for mild GE; **bilious vomiting** or **bilious** neonatal emesis patterns should trigger **urgent surgical/emergent** pathways in items.  
+• **Hypoxia, grunting, nasal flaring, or silent chest** outrank **cough syrup** or **watchful waiting** in clinic vignettes.  
+• **Parent literacy** affects **follow-up** reliability—lower threshold to escalate when uncertain and document **specific return symptoms**.`,
     },
     {
       preTest: [
@@ -539,7 +540,7 @@ function npTitles(pathwayId: string, v: (typeof VARIANTS)["us_np"]) {
     ...v,
     title: `Pediatric urgent triage in primary care (${suf})`,
     seoTitle: `Pediatric triage | ${lab} US | NurseNest`,
-    seoDescription: `NP pediatric urgent triage for ${lab}: ED referral, dehydration, respiratory distress.`,
+    seoDescription: `NP pediatric urgent triage for ${lab}: young infant fever rules, hypoxic respiratory distress, severe dehydration, petechial rash with fever, EMS when needed, and caregiver safety netting with return precautions.`,
   };
 }
 

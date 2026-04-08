@@ -427,7 +427,7 @@ Think **uterine atony + hypovolemia**—**fundal massage per protocol**, **large
       title: "OB red flags & emergency referral (NP, US)",
       seoTitle: "Obstetric emergency triage | FNP US | NurseNest",
       seoDescription:
-        "NP: preeclampsia severe features, third-trimester bleeding, decreased fetal movement—ED/L&D referral and safety netting.",
+        "NP obstetric triage: preeclampsia severe features with EMS or L&D disposition, third-trimester bleeding until previa or abruption ruled out, decreased fetal movement same-day testing, postpartum hemorrhage and fever escalation, thromboembolism red flags, and written perinatal safety netting.",
       clinical_meaning: `**NP (primary care / women’s health exposure)**  
 Outpatient items test **who cannot stay in clinic**: **severe-range BP** with symptoms, **third-trimester bleeding**, **decreased fetal movement**, **ROM with prolapse concern**, **postpartum fever with foul lochia**, and **suicidal ideation in perinatal period** (overlap item). You **activate EMS/L&D**, **do not** manage **eclampsia** in the office, and **document** **objective triggers** for referral.`,
       exam_relevance: `Trap: **“recheck BP next week”** for **160/110 + headache**; **oral NSAIDs** as sole plan for **third-trimester bleeding**; **reassurance** for **absent fetal movement** without evaluation.`,
@@ -436,9 +436,10 @@ Outpatient items test **who cannot stay in clinic**: **severe-range BP** with sy
 
 **Fork**  
 **Direct to L&D/ED**—not “start home BP log only.”`,
-      takeaways: `• **Severe features** = emergency obstetric evaluation.  
-• **Vaginal bleeding in third trimester** needs **urgent ultrasound/fetal assessment** pathway.  
-• **Postpartum** chest pain, SOB, unilateral leg swelling → **thromboembolism** differential in boards.`,
+      takeaways: `• **Severe features** = emergency obstetric evaluation—traps offer **home BP logs** or **routine follow-up** when **headache, visual changes, RUQ pain, or severe-range BP** appear together.  
+• **Vaginal bleeding in third trimester** needs **urgent ultrasound/fetal assessment** pathway; avoid **digital exams** when **previa** is suspected in the stem.  
+• **Decreased fetal movement** is not reassurance-only—items expect **same-day fetal assessment** or **L&D** per protocol.  
+• **Postpartum** chest pain, SOB, unilateral leg swelling → **thromboembolism** differential; **heavy bleeding with dizziness** → **hemorrhage** pathway with **EMS** when unstable.`,
     },
     {
       preTest: [
@@ -536,7 +537,7 @@ function npTitles(pathwayId: string, v: (typeof VARIANTS)["us_np"]) {
     ...v,
     title: `OB red flags & emergency referral (${suf})`,
     seoTitle: `Obstetric emergency triage | ${lab} US | NurseNest`,
-    seoDescription: `NP obstetric red flags for ${lab}: L&D referral, bleeding, and severe hypertension.`,
+    seoDescription: `NP obstetric red flags for ${lab}: L&D or ED disposition for severe-range BP and symptoms, third-trimester bleeding pathways, decreased fetal movement, postpartum hemorrhage and infection cues, VTE awareness, and caregiver safety netting.`,
   };
 }
 
