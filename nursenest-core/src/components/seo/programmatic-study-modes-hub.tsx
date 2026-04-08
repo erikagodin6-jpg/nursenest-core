@@ -5,53 +5,59 @@ import { ArrowRight } from "lucide-react";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { buildPracticeHubContext } from "@/lib/seo/programmatic-practice-hub";
+import { programmaticStudyModesI18nPrefix } from "@/lib/seo/programmatic-study-modes";
 
-const NCLEX_RN_PRACTICE_SLUG = "nclex-rn-practice-questions";
+type Props = { slug: string; locale: string };
 
 /**
- * Region-aware primary study modes for the NCLEX-RN programmatic landing.
- * Uses the same pathway URLs as {@link buildPracticeHubContext} (US vs Canada RN hubs).
+ * Region-aware study mode cards for all unified programmatic practice landings (RN, PN, NP).
+ * Copy comes from i18n; URLs from {@link buildPracticeHubContext}.
  */
-export function NclexRnProgrammaticStudyHub({ locale }: { locale: string }) {
+export function ProgrammaticStudyModesHub({ slug, locale }: Props) {
+  const prefix = programmaticStudyModesI18nPrefix(slug);
   const { region } = useNursenestRegion();
   const { t } = useMarketingI18n();
-  const hub = buildPracticeHubContext(NCLEX_RN_PRACTICE_SLUG, region, locale);
+
+  if (!prefix) return null;
+
+  const hub = buildPracticeHubContext(slug, region, locale);
+  const k = (suffix: string) => `${prefix}.${suffix}`;
 
   const modes = [
     {
       href: hub.ctas.questions,
-      titleKey: "programmatic.nclexRnHub.questionBankTitle",
-      descKey: "programmatic.nclexRnHub.questionBankDesc",
-      ctaKey: "programmatic.nclexRnHub.cardCtaQuestions",
+      titleKey: k("questionBankTitle"),
+      descKey: k("questionBankDesc"),
+      ctaKey: k("cardCtaQuestions"),
       primary: true,
     },
     {
       href: hub.ctas.lessons,
-      titleKey: "programmatic.nclexRnHub.lessonsTitle",
-      descKey: "programmatic.nclexRnHub.lessonsDesc",
-      ctaKey: "programmatic.nclexRnHub.cardCtaLessons",
+      titleKey: k("lessonsTitle"),
+      descKey: k("lessonsDesc"),
+      ctaKey: k("cardCtaLessons"),
       primary: false,
     },
     {
       href: hub.ctas.exams,
-      titleKey: "programmatic.nclexRnHub.catTitle",
-      descKey: "programmatic.nclexRnHub.catDesc",
-      ctaKey: "programmatic.nclexRnHub.cardCtaCat",
+      titleKey: k("catTitle"),
+      descKey: k("catDesc"),
+      ctaKey: k("cardCtaCat"),
       primary: false,
     },
   ] as const;
 
+  const headingId = `programmatic-study-modes-${slug.replace(/[^a-z0-9-]/gi, "")}`;
+
   return (
-    <section className="mb-10 scroll-mt-6" aria-labelledby="nclex-rn-study-modes-heading">
+    <section className="mb-10 scroll-mt-6" aria-labelledby={headingId}>
       <h2
-        id="nclex-rn-study-modes-heading"
+        id={headingId}
         className="text-xl font-bold tracking-tight text-[var(--theme-body-text)] sm:text-2xl"
       >
-        {t("programmatic.nclexRnHub.heading")}
+        {t(k("heading"))}
       </h2>
-      <p className="mt-2 text-sm leading-relaxed text-[var(--theme-body-text)]/85 sm:text-base">
-        {t("programmatic.nclexRnHub.lead")}
-      </p>
+      <p className="mt-2 text-sm leading-relaxed text-[var(--theme-body-text)]/85 sm:text-base">{t(k("lead"))}</p>
       <ul className="mt-6 grid list-none grid-cols-1 gap-4 p-0 sm:gap-5 md:grid-cols-3">
         {modes.map((mode) => (
           <li key={mode.href}>

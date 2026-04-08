@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
+import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import {
   Globe,
   Languages,
@@ -20,17 +22,9 @@ import {
   ArrowRight,
 } from "lucide-react";
 
-/** Maps legacy SPA routes to NurseNest Core routes (same destinations, stable app). */
-const CORE_HREF: Record<string, string> = {
-  "/exam-prep": "/pricing",
-  "/lessons": "/lessons",
-  "/nursing-specialties": "/lessons",
-  "/flashcards": "/flashcards",
-};
-
 /** Restored from `client/src/components/home-hero-features.tsx` (links adapted for Next + Core). */
 export default function HomeHeroFeatures() {
-  const { t } = useMarketingI18n();
+  const { t, locale } = useMarketingI18n();
 
   const platformCapabilities = [
     { icon: Languages, labelKey: "home.heroFeatures.multilingual" },
@@ -127,7 +121,7 @@ export default function HomeHeroFeatures() {
             {learningAreas.map((area) => (
               <Link
                 key={area.labelKey}
-                href={CORE_HREF[area.href] ?? area.href}
+                href={withMarketingLocale(locale, mapLegacyMarketingHref(area.href))}
                 className="group no-underline rounded-2xl border border-gray-100/80 bg-white p-5 shadow-[var(--shadow-card)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-card-hover)]"
                 data-testid={`card-learning-area-${area.labelKey.split(".").pop()}`}
               >

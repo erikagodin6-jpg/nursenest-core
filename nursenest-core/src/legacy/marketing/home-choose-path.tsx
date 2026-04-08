@@ -12,10 +12,11 @@ import {
 } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
+import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { MARKETING_PRIMARY_CTA_CLASS } from "@/lib/theme/marketing-hero-pattern";
 
 export default function HomeChoosePath() {
-  const { t } = useMarketingI18n();
+  const { t, locale } = useMarketingI18n();
   const router = useRouter();
 
   const paths = [
@@ -113,7 +114,7 @@ export default function HomeChoosePath() {
               <button
                 type="button"
                 className={`${MARKETING_PRIMARY_CTA_CLASS} w-full justify-center gap-2 shadow-sm`}
-                onClick={() => router.push(mapLegacyMarketingHref(path.href))}
+                onClick={() => router.push(withMarketingLocale(locale, mapLegacyMarketingHref(path.href)))}
                 data-testid={path.btnTestId}
               >
                 {path.cta}

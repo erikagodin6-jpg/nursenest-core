@@ -1,0 +1,41 @@
+# Fails if source contains internal href/navigation strings that do not resolve to App Router pages,
+# API routes, programmatic SEO slugs, or locale-aware marketing paths.
+# See nursenest-core/docs/internal-link-audit.md
+name: internal-links-audit
+
+on:
+  push:
+    paths:
+      - "nursenest-core/src/**"
+      - "nursenest-core/scripts/audit-internal-links.ts"
+      - "nursenest-core/scripts/audit-internal-links.test.ts"
+      - "nursenest-core/next.config.ts"
+      - "nursenest-core/package.json"
+      - ".github/workflows/internal-links-audit.yml"
+  pull_request:
+    paths:
+      - "nursenest-core/src/**"
+      - "nursenest-core/scripts/audit-internal-links.ts"
+      - "nursenest-core/scripts/audit-internal-links.test.ts"
+      - "nursenest-core/next.config.ts"
+      - "nursenest-core/package.json"
+      - ".github/workflows/internal-links-audit.yml"
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: nursenest-core
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: nursenest-core/package-lock.json
+      - run: npm ci
+      - name: Internal link audit
+        run: npm run audit:internal-links
+      - name: Internal link audit unit tests
+        run: npm run test:internal-links-audit

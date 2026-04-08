@@ -11,10 +11,13 @@ const EXACT: Record<string, string> = {
   "/institutional-pricing": "/for-institutions",
   "/pricing/institutional": "/for-institutions",
   "/for-schools": "/for-institutions",
-  "/exam-prep": "/pricing",
+  /** Public lesson index (exam-scoped hubs); avoid sending “exam prep” intent to pricing. */
+  "/exam-prep": "/lessons",
   "/register": "/signup",
-  "/rex-pn": "/pricing",
-  "/nclex-rn": "/pricing",
+  /** Canonical PN programmatic landings (region-aware practice flows live there). */
+  "/rex-pn": "/rex-pn-practice-questions",
+  /** Canonical RN programmatic landing (replaces legacy /nclex-rn → pricing). */
+  "/nclex-rn": "/nclex-rn-practice-questions",
   "/np-exam-practice-questions": "/np-exam-practice-questions",
   "/nursing-certifications": `${PUBLIC_SITE}/nursing-certifications`,
   "/newgrad": `${PUBLIC_SITE}/newgrad`,
@@ -41,6 +44,8 @@ const EXACT: Record<string, string> = {
   "/nclex-rn-guide": `${PUBLIC_SITE}/nclex-rn-guide`,
   "/shop": `${PUBLIC_SITE}/shop`,
   "/pre-nursing": "/pre-nursing",
+  /** No dedicated anatomy route in Core; tools index is the closest internal hub. */
+  "/anatomy": "/tools",
   "/rex-pn-practice-questions": "/rex-pn-practice-questions",
   "/nclex-rn-practice-questions": "/nclex-rn-practice-questions",
   "/nursing-specialties": "/lessons",

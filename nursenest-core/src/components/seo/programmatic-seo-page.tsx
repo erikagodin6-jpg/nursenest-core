@@ -13,7 +13,7 @@ import { ProgrammaticPracticeDynamicHeader } from "@/components/seo/programmatic
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { resolveProgrammaticProductLinks } from "@/lib/seo/programmatic-page-links";
 import { isUnifiedPracticeSlug } from "@/lib/seo/programmatic-practice-hub";
-import { NclexRnProgrammaticStudyHub } from "@/components/seo/nclex-rn-programmatic-study-hub";
+import { ProgrammaticStudyModesHub } from "@/components/seo/programmatic-study-modes-hub";
 import { NpProgrammaticPracticeTestCrossLinks } from "@/components/seo/np-programmatic-practice-test-cross-links";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
@@ -60,7 +60,9 @@ export async function ProgrammaticSeoPage({
       <article className="nn-marketing-surface mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
         <BreadcrumbTrail items={crumbs} />
 
-        {page.slug === "nclex-rn-practice-questions" ? <NclexRnProgrammaticStudyHub locale={locale} /> : null}
+        {page.practiceConversion && isUnifiedPracticeSlug(page.slug) ? (
+          <ProgrammaticStudyModesHub slug={page.slug} locale={locale} />
+        ) : null}
 
         <header className="mb-10 border-b border-[var(--theme-card-border)] pb-8">
           <p className="text-sm font-medium text-primary">{t("programmatic.chrome.kicker")}</p>

@@ -13,6 +13,8 @@
     "build:deploy": "node scripts/check-disk-before-build.mjs && prisma generate && TMPDIR=${TMPDIR:-/tmp} next build && node scripts/post-build-prune.mjs",
     "start": "NODE_ENV=production next start -H 0.0.0.0 -p ${PORT:-3000}",
     "lint": "eslint",
+    "audit:internal-links": "tsx scripts/audit-internal-links.ts",
+    "test:internal-links-audit": "tsx --test scripts/audit-internal-links.test.ts",
     "generate:marketing-assets": "node scripts/generate-marketing-assets.mjs",
     "generate:brand-logos": "node scripts/build-transparent-theme-logos.mjs",
     "generate:theme-logos": "npx tsx scripts/generate-theme-logos-from-registry.ts",
