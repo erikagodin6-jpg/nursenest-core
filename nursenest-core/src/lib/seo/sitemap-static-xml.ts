@@ -107,8 +107,8 @@ export async function collectPathwayLessonSeoUrls(origin: string): Promise<strin
     return true;
   };
 
-  if (!push(`${o}/exam-lessons`)) {
-    safeServerLog("seo", "sitemap_pathway_derived_cap", { cap: MAX_PATHWAY_DERIVED_SITEMAP_URLS, phase: "exam-lessons-index" });
+  if (!push(`${o}/lessons`)) {
+    safeServerLog("seo", "sitemap_pathway_derived_cap", { cap: MAX_PATHWAY_DERIVED_SITEMAP_URLS, phase: "lessons-index" });
     return urls;
   }
 
@@ -230,6 +230,9 @@ export async function collectCoreUrls(origin: string): Promise<string[]> {
   };
   const base = [
     add("/"),
+    add("/lessons"),
+    add("/question-bank"),
+    add("/practice-exams"),
     add("/pricing"),
     add("/for-institutions"),
     add("/blog"),

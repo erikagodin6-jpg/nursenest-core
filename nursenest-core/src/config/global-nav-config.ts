@@ -93,18 +93,9 @@ export const GLOBAL_NAV_LEARN_PRACTICE: GlobalNavLeafItem[] = [
     mobileDrawerOrder: 20,
   }),
   LEAF({
-    id: "marketing-exam-lessons",
-    labelKey: "nav.lessonsByExam",
-    href: "/exam-lessons",
-    group: "learn-practice",
-    surfaces: [DD, MD],
-    order: 20,
-    mobileDrawerOrder: 30,
-  }),
-  LEAF({
     id: "marketing-test-bank",
     labelKey: "nav.questionBank",
-    href: "/test-bank",
+    href: "/question-bank",
     group: "learn-practice",
     surfaces: [DD, MD],
     order: 30,
@@ -113,7 +104,7 @@ export const GLOBAL_NAV_LEARN_PRACTICE: GlobalNavLeafItem[] = [
   LEAF({
     id: "marketing-mock-exams",
     labelKey: "nav.practiceExams",
-    href: "/mock-exams",
+    href: "/practice-exams",
     group: "learn-practice",
     surfaces: [DD, MD],
     order: 40,

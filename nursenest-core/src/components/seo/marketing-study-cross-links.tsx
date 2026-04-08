@@ -21,8 +21,8 @@ export function MarketingStudyCrossLinks({ className = "" }: { className?: strin
       </p>
       <ul className="mt-4 flex flex-col gap-2 text-sm sm:flex-row sm:flex-wrap sm:gap-x-6 sm:gap-y-2">
         <li>
-          <Link href="/exam-lessons" className={linkClass}>
-            Exam lesson hubs
+          <Link href="/lessons" className={linkClass}>
+            Clinical lessons by pathway
           </Link>
         </li>
         <li>

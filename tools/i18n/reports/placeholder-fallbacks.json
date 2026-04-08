@@ -1,10 +1,9 @@
 {
-  "generatedAt": "2026-04-08T13:49:39.367Z",
-  "totalFallbacks": 21,
+  "generatedAt": "2026-04-08T14:05:41.463Z",
+  "totalFallbacks": 18,
   "byLocale": {
     "fr": 4,
     "ko": 3,
-    "vi": 3,
     "ht": 3,
     "fa": 3,
     "th": 2,
@@ -79,38 +78,6 @@
       "locale": "ko",
       "key": "upgrade.usageNote",
       "localizedValue": "무료 카드 {{limit}}개 중 {{used}}개 사용 ({{percentage}}%)",
-      "englishValue": "You",
-      "placeholdersInEnglish": [],
-      "placeholdersInLocalized": [
-        "limit",
-        "percentage",
-        "used"
-      ]
-    },
-    {
-      "locale": "vi",
-      "key": "glossary.relatedTerms",
-      "localizedValue": "Thuật ngữ liên quan",
-      "englishValue": "Related {{category}} Terms",
-      "placeholdersInEnglish": [
-        "category"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "vi",
-      "key": "pricing.save",
-      "localizedValue": "Tiết kiệm",
-      "englishValue": "Save {{percent}}%",
-      "placeholdersInEnglish": [
-        "percent"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "vi",
-      "key": "upgrade.usageNote",
-      "localizedValue": "Bạn đã dùng {{used}} trong {{limit}} thẻ miễn phí ({{percentage}}%)",
       "englishValue": "You",
       "placeholdersInEnglish": [],
       "placeholdersInLocalized": [

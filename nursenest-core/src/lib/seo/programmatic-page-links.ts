@@ -1,5 +1,5 @@
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
-import { ALLIED, HUB, NP, PN, RN, loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { ALLIED, HUB, NP, PN } from "@/lib/marketing/marketing-entry-routes";
 import type { SeoCluster, SeoPageDefinition } from "@/lib/seo/programmatic-registry";
 import { clusterQuestionBankHref } from "@/lib/seo/programmatic-seo-cluster-links";
 
@@ -13,8 +13,8 @@ export type ProgrammaticProductLinks = {
 };
 
 /**
- * Resolves marketing-safe URLs for lessons, pathway questions, public test bank, CAT exams, tools, and flashcards.
- * Flashcards and timed exams use login with return URL so anonymous visitors can start signup from the same intent.
+ * Resolves marketing-safe URLs for lessons, pathway questions, public hubs, tools, and flashcards.
+ * Subscriber app links are avoided for core product surfaces so SEO pages do not funnel straight to login walls.
  */
 export function resolveProgrammaticProductLinks(
   page: SeoPageDefinition,
@@ -24,9 +24,9 @@ export function resolveProgrammaticProductLinks(
   const pack = page.linkPack ?? inferLinkPackFromCluster(page.cluster);
 
   const tools = loc(HUB.tools);
-  const testBank = loc("/test-bank");
-  const exams = loc(loginWithCallback(RN.appExams));
-  const flashcards = loc(loginWithCallback("/app/flashcards"));
+  const testBank = loc(HUB.questionBank);
+  const exams = loc(HUB.practiceExams);
+  const flashcards = loc("/flashcards");
 
   switch (pack) {
     case "nclex-rn":

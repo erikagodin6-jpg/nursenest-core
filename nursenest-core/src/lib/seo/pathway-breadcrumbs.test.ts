@@ -35,7 +35,7 @@ test("no country crumb points to exam-lessons index", () => {
   }
   for (const s of schemaItems) {
     assert.notEqual(s.name, "Canada");
-    if (s.item.includes("/exam-lessons")) {
+    if (s.item.includes("/lessons")) {
       assert.equal(s.name, EXAM_LESSONS_INDEX.label);
     }
   }

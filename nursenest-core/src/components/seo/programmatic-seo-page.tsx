@@ -76,7 +76,7 @@ export async function ProgrammaticSeoPage({
           )}
           <p className="mt-3 text-sm font-medium text-[var(--theme-body-text)]/85">{t("programmatic.chrome.subLead")}</p>
           <nav className="mt-3 text-sm text-primary" aria-label={t("programmatic.chrome.relatedHubsAria")}>
-            <Link href={withMarketingLocale(locale, "/exam-lessons")} className="underline-offset-4 hover:underline">
+            <Link href={withMarketingLocale(locale, "/lessons")} className="underline-offset-4 hover:underline">
               {t("programmatic.nav.examLessons")}
             </Link>
             <span className="mx-2 text-[var(--theme-body-text)]/40" aria-hidden>

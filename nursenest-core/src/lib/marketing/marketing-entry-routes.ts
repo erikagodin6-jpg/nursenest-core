@@ -16,6 +16,7 @@ export const RN = {
   caLessons: "/canada/rn/nclex-rn/lessons",
   usQuestions: "/us/rn/nclex-rn/questions",
   caQuestions: "/canada/rn/nclex-rn/questions",
+  /** Subscriber app route (timed mocks, history). Public entry: {@link HUB.practiceExams}. */
   appExams: "/app/exams",
 } as const;
 
@@ -62,7 +63,10 @@ export const ALLIED = {
 } as const;
 
 export const HUB = {
-  examLessons: "/exam-lessons",
+  /** Canonical public lessons landing (legacy `/exam-lessons` redirects here). */
+  examLessons: "/lessons",
+  questionBank: "/question-bank",
+  practiceExams: "/practice-exams",
   tools: "/tools",
   pricing: "/pricing",
   signup: "/signup",

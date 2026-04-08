@@ -109,7 +109,7 @@ export function HomeValueConversionSection({ region }: { region: NursenestMarket
             {PLATFORM_STEPS.map((step, i) => (
               <div key={step.title} className="nn-marketing-card-pad flex gap-4 sm:gap-5">
                 <span
-                  className="nn-marketing-caption shrink-0 tabular-nums font-bold"
+                  className="nn-marketing-h4 shrink-0 tabular-nums text-[var(--theme-muted-text)]"
                   aria-hidden
                 >
                   {String(i + 1).padStart(2, "0")}

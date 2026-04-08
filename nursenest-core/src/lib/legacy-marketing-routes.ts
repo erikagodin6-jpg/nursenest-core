@@ -19,16 +19,18 @@ const EXACT: Record<string, string> = {
   "/nursing-certifications": `${PUBLIC_SITE}/nursing-certifications`,
   "/newgrad": `${PUBLIC_SITE}/newgrad`,
   "/new-grad": `${PUBLIC_SITE}/new-grad`,
-  "/lessons": "/app/lessons",
-  "/flashcards": "/app/flashcards",
-  "/mock-exams": "/app/exams",
-  "/mock-exam": "/app/exams",
-  "/study": "/app/questions",
-  "/test-bank": "/app/questions",
+  /** Public marketing landings (do not map these to /app/*). */
+  "/lessons": "/lessons",
+  "/exam-lessons": "/lessons",
+  "/flashcards": "/flashcards",
+  "/mock-exams": "/practice-exams",
+  "/mock-exam": "/practice-exams",
+  "/study": "/question-bank",
+  "/test-bank": "/question-bank",
   "/analytics": "/app",
-  "/clinical-scenarios": "/app/lessons",
+  "/clinical-scenarios": "/lessons",
   "/languages": `${PUBLIC_SITE}/languages`,
-  "/free-practice": "/app/questions",
+  "/free-practice": "/question-bank",
   "/study-plan": "/app/study-plan",
   "/reports": "/app",
   "/career-journey": `${PUBLIC_SITE}/career-journey`,
@@ -41,7 +43,7 @@ const EXACT: Record<string, string> = {
   "/pre-nursing": "/pre-nursing",
   "/rex-pn-practice-questions": "/rex-pn-practice-questions",
   "/nclex-rn-practice-questions": "/nclex-rn-practice-questions",
-  "/nursing-specialties": "/app/lessons",
+  "/nursing-specialties": "/lessons",
   "/new-graduate-support": `${PUBLIC_SITE}/new-graduate-support`,
   "/healthcare-careers": `${PUBLIC_SITE}/healthcare-careers`,
   "/blog": "/blog",
@@ -94,7 +96,14 @@ export function resolveMarketingHref(href: string): string {
     mapped === "/disclaimer" ||
     mapped === "/contact" ||
     mapped === "/faq" ||
+    mapped === "/lessons" ||
+    mapped === "/question-bank" ||
+    mapped === "/practice-exams" ||
     mapped === "/exam-lessons" ||
+    mapped === "/test-bank" ||
+    mapped === "/mock-exams" ||
+    mapped === "/flashcards" ||
+    mapped.startsWith("/flashcards/") ||
     mapped === "/tools" ||
     mapped.startsWith("/tools/") ||
     mapped === "/login" ||

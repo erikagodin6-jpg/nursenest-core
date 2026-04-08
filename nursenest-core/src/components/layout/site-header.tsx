@@ -273,10 +273,10 @@ export function SiteHeader() {
           className="mx-auto flex max-w-7xl flex-nowrap items-center gap-x-0.5 overflow-x-auto overflow-y-hidden px-2 py-0.5 sm:px-4 lg:px-8 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           <Link
-            href={localizeHref("/exam-lessons")}
+            href={localizeHref("/lessons")}
             className="shrink-0 px-1.5 py-0.5 text-xs font-medium text-role-cta-on-soft/90 hover:text-role-cta-on-soft lg:px-2"
           >
-            {t("nav.lessonsByExam")}
+            {t("nav.lessons")}
           </Link>
           <span className="hidden text-[var(--theme-muted-text)] sm:inline" aria-hidden="true">
             |

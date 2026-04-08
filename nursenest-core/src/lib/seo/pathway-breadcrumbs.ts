@@ -15,11 +15,11 @@ const HOME: BreadcrumbCrumb = { name: "Home", href: "/", i18nKey: "breadcrumbs.h
 const HOME_ITEM: BreadcrumbSchemaItem = { name: "Home", item: "/", i18nKey: "breadcrumbs.home" };
 
 /**
- * Public index of all exam-scoped lesson hubs. Label matches the `h1` on `/exam-lessons`.
+ * Public index of all exam-scoped lesson hubs. Label aligns with the public `/lessons` landing `h1` (i18n).
  * There is no standalone `/canada` (or other country) page — do not label a crumb “Canada” and link here.
  */
 export const EXAM_LESSONS_INDEX = {
-  path: "/exam-lessons" as const,
+  path: "/lessons" as const,
   label: "Lessons by exam pathway",
 };
 

@@ -82,7 +82,7 @@ export default function HomePageMidSections({ lessonTeasers }: Props) {
               <p className="nn-marketing-lead mt-1 max-w-xl text-[var(--theme-muted-text)]">{t("home.lessons.subtitle")}</p>
             </div>
             <Link
-              href={withMarketingLocale(locale, "/exam-lessons")}
+              href={withMarketingLocale(locale, "/lessons")}
               className="nn-link-quiet inline-flex shrink-0 items-center gap-1 font-semibold text-[var(--theme-primary)] hover:underline"
             >
               <BookOpen className="h-4 w-4" />

@@ -360,6 +360,12 @@ function getCatalogPathwayLessonsSync(pathwayId: string): PathwayLessonRecord[] 
   return getCatalogLessonsRaw(pathwayId).map(normalizeLesson);
 }
 
+/** First N lesson titles from the static catalog (public marketing previews). Empty when catalog has no rows for the pathway. */
+export function getCatalogLessonPreviewTitles(pathwayId: string, limit = 4): string[] {
+  const lessons = getCatalogPathwayLessonsSync(pathwayId);
+  return lessons.slice(0, Math.max(0, limit)).map((l) => l.title);
+}
+
 export type PathwayLessonRuntimeSource = "database" | "catalog" | "none";
 
 function pathwayLessonRowToInput(row: {

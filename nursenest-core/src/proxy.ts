@@ -2,7 +2,7 @@
  * Next.js 16+: `proxy` replaces `middleware` (same matcher + auth behavior).
  * @see https://nextjs.org/docs/messages/middleware-to-proxy
  *
- * Guests on `/app/lessons` are redirected to the public `/exam-lessons` hub; signed-in learners keep
+ * Guests on `/app/lessons` are redirected to the public `/lessons` hub; signed-in learners keep
  * the subscriber lesson list (auth runs after this check).
  */
 import "@/lib/auth-trust-env";
@@ -32,7 +32,7 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
     const secret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET;
     const token = secret ? await getToken({ req: request, secret }) : null;
     if (!token) {
-      return NextResponse.redirect(new URL("/exam-lessons", request.url));
+      return NextResponse.redirect(new URL("/lessons", request.url));
     }
   }
   return runAuthMiddleware(withPathnameHeader(request), event);

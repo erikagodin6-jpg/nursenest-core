@@ -61,7 +61,7 @@ export function buildHeroGatewayClusters(region: NursenestMarketingRegion): Hero
       links: [
         { id: "rn-seo", labelKey: "home.gateway.nursing.link.seoOverview", href: RN.practiceProgrammatic },
         { id: "rn-lessons", labelKey: "home.gateway.nursing.link.lessons", href: rnLessons(region) },
-        { id: "rn-exams", labelKey: "home.gateway.nursing.link.timedMocks", href: RN.appExams },
+        { id: "rn-exams", labelKey: "home.gateway.nursing.link.timedMocks", href: HUB.practiceExams },
       ],
     },
     {
@@ -164,12 +164,12 @@ export function buildHeroGatewayClusters(region: NursenestMarketingRegion): Hero
         {
           id: "flashcards",
           labelKey: "home.gateway.tools.link.flashcards",
-          href: loginWithCallback("/app/flashcards"),
+          href: "/flashcards",
         },
         {
           id: "exams-login",
           labelKey: "home.gateway.tools.link.practiceExams",
-          href: loginWithCallback("/app/exams"),
+          href: HUB.practiceExams,
         },
       ],
     },
