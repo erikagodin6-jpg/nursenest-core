@@ -16,6 +16,10 @@ import {
   publicLessonsHubSectionHeadingNp,
   publicLessonsHubSectionHeadingPn,
   publicLessonsHubSectionHeadingRn,
+  publicLessonsHubSectionLeadAllied,
+  publicLessonsHubSectionLeadNp,
+  publicLessonsHubSectionLeadPn,
+  publicLessonsHubSectionLeadRn,
 } from "@/lib/marketing/nursing-tier-public-labels";
 
 const cachedPathwayIdsWithLessons = unstable_cache(
@@ -79,16 +83,10 @@ export async function PublicLessonsPathwaySections({
   };
 
   const sectionLead: Record<"rn" | "pn" | "np" | "allied", string> = {
-    rn:
-      region === "US"
-        ? "NCLEX-RN hubs for US RN candidates. Each pathway lists modules aligned to NCLEX-RN."
-        : "NCLEX-RN hubs for Canadian RN registration. Each pathway lists modules aligned to NCLEX-RN.",
-    pn:
-      region === "US"
-        ? "NCLEX-PN (LPN) hubs with practical-nursing scope, lessons, and exam-aligned modules."
-        : "REx-PN (RPN) hubs with Canadian practical-nursing scope, lessons, and exam-aligned modules.",
-    np: "Board-specific NP preparation—FNP, AGPCNP, PMHNP, and Canadian NP tracks.",
-    allied: "Discipline-aligned reasoning for allied certification prep.",
+    rn: publicLessonsHubSectionLeadRn(region),
+    pn: publicLessonsHubSectionLeadPn(region),
+    np: publicLessonsHubSectionLeadNp(region),
+    allied: publicLessonsHubSectionLeadAllied(region),
   };
 
   const order: Array<"rn" | "pn" | "np" | "allied"> = ["rn", "pn", "np", "allied"];
@@ -120,7 +118,9 @@ export async function PublicLessonsPathwaySections({
                     <p className="mt-2 nn-marketing-body-sm text-muted">{p.seoDescription}</p>
                     {previews.length > 0 ? (
                       <div className="mt-3">
-                        <p className="nn-marketing-label text-[var(--theme-muted-text)]">Sample lesson topics</p>
+                        <p className="nn-marketing-label text-[var(--theme-muted-text)]">
+                          {t("pages.examLessons.sampleTopicsLabel")}
+                        </p>
                         <ul className="mt-2 list-inside list-disc nn-marketing-body-sm text-[var(--theme-muted-text)]">
                           {previews.map((title) => (
                             <li key={title}>{title}</li>
@@ -136,7 +136,7 @@ export async function PublicLessonsPathwaySections({
                       href={buildExamPathwayPath(p, "lessons")}
                       className="mt-3 inline-block nn-marketing-body-sm font-medium text-primary hover:underline"
                     >
-                      {t("pages.examLessons.openHub")}
+                      {t("pages.examLessons.openLessonHubNamed", { examName: p.displayName })}
                     </Link>
                   </li>
                 );

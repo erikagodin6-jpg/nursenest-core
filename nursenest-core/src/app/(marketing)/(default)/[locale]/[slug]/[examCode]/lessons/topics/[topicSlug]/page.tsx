@@ -12,6 +12,10 @@ import {
   getLessonsForTopicPage,
   listTopicClusters,
 } from "@/lib/lessons/pathway-lesson-loader";
+import {
+  pathwayLessonTopicClusterMetaDescription,
+  pathwayLessonTopicClusterMetaTitle,
+} from "@/lib/lessons/pathway-lesson-hub-seo";
 import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
 import { pathwayTopicClusterBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
@@ -34,13 +38,18 @@ export async function generateMetadata({ params }: Pick<Props, "params">): Promi
   if (!pathway) return {};
   const canonicalPath = buildExamPathwayPath(pathway, `lessons/topics/${topicSlug}`);
   const canonical = absoluteUrl(canonicalPath);
-  const title = `Topic · ${pathway.displayName} | NurseNest`;
-  const description = `Lessons grouped under this topic for ${pathway.shortName} (${pathway.countrySlug === "canada" ? "Canada" : "US"}).`;
+  const loc = defaultPathwayLessonContentLocaleForExamHubRoute();
+  const topicClusters = await listTopicClusters(pathway.id, loc);
+  const label =
+    topicClusters.find((t) => t.topicSlug === topicSlug)?.label ?? topicSlug.replace(/-/g, " ");
+  const title = pathwayLessonTopicClusterMetaTitle(pathway, label);
+  const description = pathwayLessonTopicClusterMetaDescription(pathway, label);
   return {
     title,
     description,
     alternates: { canonical },
     openGraph: { title, description, url: canonical, type: "website" },
+    twitter: { card: "summary_large_image", title, description },
   };
 }
 
@@ -88,8 +97,8 @@ export default async function PathwayLessonTopicClusterPage({ params, searchPara
         {label} · {pathway.shortName}
       </h1>
       <p className="mt-3 text-[var(--theme-muted-text)]">
-        SEO cluster for {pathway.shortName}: lessons in this topic stay in the {pathway.countryCode} / {pathway.roleTrack}{" "}
-        track, with no cross-mix with other exams or countries.
+        {label} lessons for {pathway.displayName}: same {pathway.countrySlug === "canada" ? "Canadian" : "US"} exam scope as
+        the parent hub—topics here are not mixed with other countries or license levels.
       </p>
 
       {pageResult.locale ? <PathwayLessonContentLocaleBanner listLocale={pageResult.locale} /> : null}
@@ -102,11 +111,11 @@ export default async function PathwayLessonTopicClusterPage({ params, searchPara
             </Link>
             <p className="mt-2 text-sm text-muted">{l.seoDescription}</p>
             <div className="mt-3 flex flex-wrap gap-3 text-sm">
-              <Link href={`/app/questions?pathwayId=${encodeURIComponent(pathway.id)}&topic=${encodeURIComponent(l.topic)}`} className="font-semibold text-primary">
-                Practice questions (app) →
-              </Link>
-              <Link href={`${base}/${l.slug}`} className="font-semibold text-muted hover:text-primary">
-                Read lesson →
+              <Link
+                href={`/app/questions?pathwayId=${encodeURIComponent(pathway.id)}&topic=${encodeURIComponent(l.topic)}`}
+                className="font-semibold text-primary hover:underline"
+              >
+                Practice questions for “{l.topic}” (app) →
               </Link>
             </div>
           </li>
@@ -115,12 +124,12 @@ export default async function PathwayLessonTopicClusterPage({ params, searchPara
 
       <div className="mt-10 nn-card p-4 text-sm text-muted">
         <p>
-          <Link href={buildExamPathwayPath(pathway)} className="font-semibold text-primary">
-            Exam hub
+          <Link href={buildExamPathwayPath(pathway)} className="font-semibold text-primary hover:underline">
+            {pathway.shortName} exam hub
           </Link>{" "}
           ·{" "}
-          <Link href={buildExamPathwayPath(pathway, "questions")} className="font-semibold text-primary">
-            Questions
+          <Link href={buildExamPathwayPath(pathway, "questions")} className="font-semibold text-primary hover:underline">
+            {pathway.shortName} question bank
           </Link>
         </p>
       </div>

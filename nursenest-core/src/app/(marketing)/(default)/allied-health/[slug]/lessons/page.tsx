@@ -14,6 +14,7 @@ import {
   isAlliedHeroExamPrepSlug,
 } from "@/lib/allied/allied-professions-registry";
 import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
+import { pathwayCountryLabel } from "@/lib/lessons/pathway-lesson-hub-seo";
 import { getPathwayLessonsPage, PATHWAY_HUB_PAGE_SIZE_MAX } from "@/lib/lessons/pathway-lesson-loader";
 import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
 import { alliedLessonsHubBreadcrumbs } from "@/lib/seo/allied-breadcrumbs";
@@ -48,6 +49,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   if (!resolved) return { title: "Not found" };
   const { prof } = resolved;
   const pathway = getPathwayOrThrow(prof.pathwayId);
+  if (!pathway) return { title: "Not found" };
   const loc = defaultPathwayLessonContentLocaleForExamHubRoute();
   const lessonTotal =
     pathway != null
@@ -60,11 +62,12 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   const emptyHub = lessonTotal === 0;
   const basePath = `/allied-health/${prof.professionKey}/lessons`;
   const canonical = page > 1 ? `${basePath}?page=${page}` : basePath;
+  const place = pathwayCountryLabel(pathway);
   const title =
     page > 1
-      ? `Lessons (${prof.h1}), page ${page} | NurseNest`
-      : `Lessons · ${prof.h1} | NurseNest`;
-  const description = `Paginated allied health lessons for ${prof.h1}. Only metadata and one page of rows load per request.`;
+      ? `${prof.h1} exam prep lessons (page ${page}) · ${place} | NurseNest`
+      : `${prof.h1} allied exam prep lessons · ${place} | NurseNest`;
+  const description = `Clinical lessons for ${prof.h1} (${pathway.shortName}, ${place}): previews are public here; pair with pathway-matched questions in the app. Paginated for fast loads.`;
   return {
     title,
     description,
@@ -164,10 +167,13 @@ export default async function AlliedHealthSlugLessonsPage({ params, searchParams
         <Link href={professionHeroPath} className="text-sm font-medium text-primary hover:underline">
           ← {prof.h1}
         </Link>
-        <h1 className="mt-4 text-3xl font-extrabold text-[var(--theme-heading-text)]">Lessons · {prof.h1}</h1>
+        <h1 className="mt-4 text-3xl font-extrabold text-[var(--theme-heading-text)]">
+          {prof.h1} exam prep lessons · {pathwayCountryLabel(pathway)}
+        </h1>
         <p className="mt-3 text-sm text-muted">
-          Paginated list: only {lessons.length} lesson{lessons.length === 1 ? "" : "s"} on this screen. Pathway:{" "}
-          <span className="font-medium text-foreground">{pathway.shortName}</span>.
+          Pathway <span className="font-medium text-foreground">{pathway.shortName}</span>. This page lists{" "}
+          {lessons.length} lesson{lessons.length === 1 ? "" : "s"}; use pagination to scan the full catalog without loading
+          everything at once.
         </p>
 
         {pageResult.locale ? <PathwayLessonContentLocaleBanner listLocale={pageResult.locale} /> : null}
@@ -186,10 +192,7 @@ export default async function AlliedHealthSlugLessonsPage({ params, searchParams
                 >
                   {l.title}
                 </Link>
-                <p className="mt-2 line-clamp-2 text-sm text-muted">{l.seoDescription}</p>
-                <Link href={`${base}/${l.slug}`} className="mt-3 inline-block text-sm font-semibold text-primary">
-                  Open lesson →
-                </Link>
+                <p className="mt-2 line-clamp-3 text-sm text-muted">{l.seoDescription}</p>
               </li>
             ))}
           </ul>

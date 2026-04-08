@@ -34,20 +34,20 @@ import {
   sepsisGoldHubListInput,
 } from "@/lib/lessons/scoped-lessons/sepsis-early-recognition-gold-standard";
 import {
-  canadianRpnHighYieldGoldHubListInput,
-  CANADIAN_RPN_HIGH_YIELD_GOLD_SLUG,
-  getCanadianRpnHighYieldGoldLessonInput,
-} from "@/lib/lessons/scoped-lessons/canadian-rpn-high-yield-gold-standard";
+  getStrokeIcpGoldLessonInput,
+  STROKE_ICP_GOLD_SLUG,
+  strokeIcpGoldHubListInput,
+} from "@/lib/lessons/scoped-lessons/stroke-increased-icp-gold-standard";
 import {
   getShockGoldLessonInput,
   SHOCK_GOLD_SLUG,
   shockGoldHubListInput,
 } from "@/lib/lessons/scoped-lessons/shock-gold-standard";
 import {
-  getStrokeIcpGoldLessonInput,
-  STROKE_ICP_GOLD_SLUG,
-  strokeIcpGoldHubListInput,
-} from "@/lib/lessons/scoped-lessons/stroke-increased-icp-gold-standard";
+  canadianRpnHighYieldGoldHubListInput,
+  CANADIAN_RPN_HIGH_YIELD_GOLD_SLUG,
+  getCanadianRpnHighYieldGoldLessonInput,
+} from "@/lib/lessons/scoped-lessons/canadian-rpn-high-yield-gold-standard";
 
 /** Minimal lesson row shape for catalog merge (matches pathway-lesson-loader `LessonInput`). */
 export type ScopedGoldLessonInput = {

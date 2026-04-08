@@ -28,6 +28,31 @@ export function publicLessonsHubSectionHeadingAllied(region: MarketingRegionTogg
   return region === "US" ? "Allied health lessons · United States" : "Allied health lessons · Canada";
 }
 
+/** Supporting copy under each tier block on `/lessons` — conversion + clarity (not generic “browse”). */
+export function publicLessonsHubSectionLeadRn(region: MarketingRegionToggle): string {
+  return region === "US"
+    ? "NCLEX-RN lesson hubs for US candidates: Client Needs–aligned modules. Open a pathway to preview topics, then study with pathway-scoped questions in the app."
+    : "NCLEX-RN lesson hubs for Canadian RN registration: same exam structure, Canadian clinical language where it matters—no US-only scope mixed in.";
+}
+
+export function publicLessonsHubSectionLeadPn(region: MarketingRegionToggle): string {
+  return region === "US"
+    ? "NCLEX-PN (LPN) prep: practical-nursing scope, delegation, and safety—built for the US exam. Each hub stays LVN/LPN-appropriate."
+    : "REx-PN (RPN) prep for Canadian practical nurses: Canadian regulatory context—not US NCLEX-PN content repackaged.";
+}
+
+export function publicLessonsHubSectionLeadNp(region: MarketingRegionToggle): string {
+  return region === "US"
+    ? "Nurse practitioner board review (FNP, AGPCNP, PMHNP, and other US boards): case-style depth beyond RN-level lessons."
+    : "Canadian NP and advanced-practice tracks: board-aligned lessons scoped to each pathway.";
+}
+
+export function publicLessonsHubSectionLeadAllied(region: MarketingRegionToggle): string {
+  return region === "US"
+    ? "Allied health certification prep for US tracks—discipline-scoped lessons separate from nursing RN/PN hubs."
+    : "Allied health certification prep for Canadian tracks—clear separation from nursing exam content.";
+}
+
 /** Compact label for nav strip, quick links, and similar. */
 export function nursingTierNavPnLabel(region: MarketingRegionToggle): string {
   return region === "US" ? "NCLEX-PN · LPN" : "REx-PN · RPN";

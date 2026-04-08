@@ -16,6 +16,11 @@ import {
   getPathwayLessonsPage,
   listTopicClusters,
 } from "@/lib/lessons/pathway-lesson-loader";
+import {
+  pathwayLessonHubH1,
+  pathwayLessonHubMetaDescription,
+  pathwayLessonHubMetaTitle,
+} from "@/lib/lessons/pathway-lesson-hub-seo";
 import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
 import { pathwayLessonsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
@@ -38,8 +43,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!pathway) return {};
   const path = buildExamPathwayPath(pathway, "lessons");
   const canonical = absoluteUrl(path);
-  const title = `Lessons · ${pathway.displayName} | NurseNest`;
-  const description = `Clinical lessons for ${pathway.shortName} (${pathway.countrySlug === "canada" ? "Canada" : "US"}). Structured teaching, exam relevance, and practice links. Preview sections are indexable; full depth unlocks with a matching plan.`;
+  const title = pathwayLessonHubMetaTitle(pathway);
+  const description = pathwayLessonHubMetaDescription(pathway);
   return {
     title,
     description,
@@ -84,7 +89,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       <Link href={buildExamPathwayPath(pathway)} className="text-sm font-medium text-primary hover:underline">
         ← {pathway.shortName} hub
       </Link>
-      <h1 className="mt-4 text-3xl font-extrabold text-[var(--theme-heading-text)]">Lessons · {pathway.displayName}</h1>
+      <h1 className="mt-4 text-3xl font-extrabold text-[var(--theme-heading-text)]">{pathwayLessonHubH1(pathway)}</h1>
       <p className="mt-3 text-[var(--theme-muted-text)]">
         {isUsNclexPnHub ? (
           <>
@@ -170,31 +175,34 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
               {lessons.map((l) => (
                 <li key={l.slug} className="nn-card p-4">
                   <p className="text-xs font-medium uppercase text-muted">{l.topic}</p>
-                  <Link href={`${base}/${l.slug}`} className="mt-1 block text-lg font-semibold text-primary hover:underline">
+                  <Link
+                    href={`${base}/${l.slug}`}
+                    className="mt-1 block text-lg font-semibold text-primary hover:underline"
+                  >
                     {l.title}
                   </Link>
-                  <p className="mt-2 line-clamp-2 text-sm text-muted">{l.seoDescription}</p>
-                  <Link href={`${base}/${l.slug}`} className="mt-3 inline-block text-sm font-semibold text-primary">
-                    Open lesson →
-                  </Link>
+                  <p className="mt-2 line-clamp-3 text-sm text-muted">{l.seoDescription}</p>
+                  <p className="mt-3 text-xs text-muted">
+                    Full lesson page includes preview sections; subscription unlocks complete depth.
+                  </p>
                 </li>
               ))}
             </ul>
           </section>
 
           <section className="mt-10 rounded-xl border border-border bg-[var(--theme-muted-surface)] p-4 text-sm text-muted">
-            <p className="font-semibold text-foreground">Study loop</p>
+            <p className="font-semibold text-foreground">Recommended study loop</p>
             <p className="mt-1">
-              Lesson → question bank (same pathway) → timed practice → review rationales → back to the next lesson in a weak
-              area.
+              Read a lesson → practice pathway-matched questions → timed or CAT-style review → read rationales → return to the
+              next topic in a weak area.
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
               <Link href={buildExamPathwayPath(pathway, "questions")} className="font-semibold text-primary">
-                Question bank hub
+                {pathway.shortName} question bank hub
               </Link>
               <span aria-hidden="true">·</span>
               <Link href="/app/questions" className="font-semibold text-primary">
-                App question bank
+                App question bank (signed in)
               </Link>
               <span aria-hidden="true">·</span>
               <Link href="/app/exams" className="font-semibold text-primary">

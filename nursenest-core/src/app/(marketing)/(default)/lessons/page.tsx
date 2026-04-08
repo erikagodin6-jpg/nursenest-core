@@ -51,6 +51,8 @@ export default async function PublicLessonsLandingPage() {
   const m = await loadMarketingMessages(locale);
   const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
   const t = (key: string, params?: Record<string, string | number>) => formatMarketingMessage(m, key, params, en);
+  const h1Key = marketingRegion === "US" ? "pages.publicLessons.h1US" : "pages.publicLessons.h1CA";
+  const introKey = marketingRegion === "US" ? "pages.publicLessons.introUS" : "pages.publicLessons.introCA";
 
   const signupLessons = `${withMarketingLocale(locale, "/signup")}?callbackUrl=${encodeURIComponent("/app/lessons")}`;
 
@@ -68,8 +70,8 @@ export default async function PublicLessonsLandingPage() {
         </nav>
       </div>
       <MarketingPublicStudyLanding
-        h1={t("pages.publicLessons.h1")}
-        intro={t("pages.publicLessons.intro")}
+        h1={t(h1Key)}
+        intro={t(introKey)}
         primaryCta={{
           href: `${withMarketingLocale(locale, "/lessons")}#exam-pathways`,
           label: t("pages.publicLessons.ctaBrowseByExam"),
