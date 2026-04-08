@@ -166,3 +166,42 @@ export function recommendedFirstAdditions(gaps: GapItem[], limit = 6): string[] 
   }
   return [...new Set(out)];
 }
+
+/** Under-covered clinical systems → prioritized lesson topic ideas (gold-standard style). */
+export function recommendedLessonTopicsFromSystems(
+  systems: SystemRow[],
+  limit = 20,
+): Array<{ system: string; label: string; band: CoverageBand; questionCount: number; minQuestions: number }> {
+  const scored = [...systems]
+    .filter((s) => s.band === "missing" || s.band === "insufficient" || s.band === "thin_acceptable")
+    .map((s) => ({
+      system: s.system,
+      label: s.label,
+      band: s.band,
+      questionCount: s.questionCount,
+      minQuestions: s.minQuestions,
+      shortfall: Math.max(0, s.minQuestions - s.questionCount),
+    }))
+    .sort((a, b) => b.shortfall - a.shortfall || a.questionCount - b.questionCount);
+  return scored.slice(0, limit).map(({ shortfall: _s, ...r }) => r);
+}
+
+/** Question-bank expansion targets from weakest domains/systems. */
+export function recommendedQuestionBankTargets(
+  domains: DomainRow[],
+  systems: SystemRow[],
+  limit = 20,
+): string[] {
+  const out: string[] = [];
+  for (const d of domains) {
+    if (d.band === "missing" || d.band === "insufficient") {
+      out.push(`Blueprint domain: ${d.label} (${d.questionCount} vs min ${d.minQuestions})`);
+    }
+  }
+  for (const s of systems) {
+    if (s.band === "missing" || s.band === "insufficient") {
+      out.push(`Clinical system: ${s.label} (${s.questionCount} vs min ${s.minQuestions})`);
+    }
+  }
+  return [...new Set(out)].slice(0, limit);
+}

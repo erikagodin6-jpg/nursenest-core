@@ -3,6 +3,9 @@
  */
 export const RATIONALE_MIN_WORDS = 120;
 
+/** Word-count floor for “strong” rationale tier (operational audit only). */
+export const RATIONALE_STRONG_MIN_WORDS = 200;
+
 /** Minimum published questions per aggregate study bucket (globally, by exam key union). */
 export const MIN_PUBLISHED_BY_BUCKET = {
   rn: 1500,

@@ -123,6 +123,8 @@ export const BLUEPRINT_REPORT_PATHWAY_IDS = [
   "us-rn-nclex-rn",
   "ca-rn-nclex-rn",
   "us-np-fnp",
+  "us-np-agpcnp",
+  "us-np-pmhnp",
 ] as const;
 
 export function buildPathwayBlueprintProfile(p: ExamPathwayDefinition): PathwayBlueprintProfile {
