@@ -6,7 +6,7 @@ export const STATIC_ROUTES: string[] = [
   "/simulators/clinical-skills", "/simulators/osce", "/simulators/clinical-lab",
   "/osce-skills", "/newgrad", "/new-grad", "/exam-prep", "/new-graduate-support",
   "/healthcare-careers", "/allied-health", "/lessons", "/flashcards",
-  "/lectures", "/clinical-clarity", "/mock-exams", "/pricing",
+  "/lectures", "/clinical-clarity", "/practice-exams", "/mock-exams", "/pricing",
   "/faq", "/contact", "/about", "/feedback", "/login", "/register",
   "/profile", "/reports", "/upgrade", "/subscription-success",
   "/refer", "/anatomy", "/terms", "/privacy", "/disclaimer",
@@ -167,7 +167,7 @@ export const DYNAMIC_ROUTE_PATTERNS: RegExp[] = [
 
 export const FOOTER_LINKS: string[] = [
   "/lessons", "/flashcards", "/anatomy", "/pre-nursing", "/med-math",
-  "/medication-mastery", "/clinical-clarity", "/mock-exams", "/test-bank",
+  "/medication-mastery", "/clinical-clarity", "/practice-exams", "/question-bank",
   "/question-of-the-day", "/lab-values", "/case-simulations", "/lectures",
   "/shop", "/blog", "/faq", "/pricing", "/contact", "/feedback", "/about",
   "/for-institutions", "/new-grad", "/new-grad/nursing", "/new-grad/paramedic",

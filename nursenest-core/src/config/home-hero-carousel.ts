@@ -73,23 +73,44 @@ function buildAlt(title: string, caption: string): string {
   return `${t}. ${c}`.slice(0, 220);
 }
 
+function slideFromMeta(t: (key: string) => string, meta: HomeHeroSlideMetadata): HomeHeroSlide {
+  const title = t(homeHeroSlideTitleKey(meta.index));
+  const caption = t(homeHeroSlideCaptionKey(meta.index));
+  return {
+    index: meta.index,
+    objectKey: meta.objectKey,
+    publicUrl: meta.publicUrl,
+    title,
+    caption,
+    alt: buildAlt(title, caption),
+  };
+}
+
+/**
+ * Localize only the slides you need (e.g. `[0,1,2]` for the hero media panel) to avoid work and
+ * string churn for all 15 screenshots on the critical path.
+ */
+export function buildHomepageHeroSlidesAtIndices(
+  t: (key: string) => string,
+  zeroBasedSlideIndices: readonly number[],
+): readonly HomeHeroSlide[] {
+  return zeroBasedSlideIndices.map((i) => {
+    const meta = HOMEPAGE_HERO_SLIDE_METADATA[i];
+    if (!meta) {
+      throw new Error(
+        `buildHomepageHeroSlidesAtIndices: index ${i} out of range (0–${HOMEPAGE_HERO_SLIDE_METADATA.length - 1})`,
+      );
+    }
+    return slideFromMeta(t, meta);
+  });
+}
+
 /**
  * Builds localized hero slides for `MarketingHeroCarousel`. Call from client components inside
  * `MarketingI18nProvider` and memoize on `t` / locale.
  */
 export function buildHomepageHeroSlides(t: (key: string) => string): readonly HomeHeroSlide[] {
-  return HOMEPAGE_HERO_SLIDE_METADATA.map((meta) => {
-    const title = t(homeHeroSlideTitleKey(meta.index));
-    const caption = t(homeHeroSlideCaptionKey(meta.index));
-    return {
-      index: meta.index,
-      objectKey: meta.objectKey,
-      publicUrl: meta.publicUrl,
-      title,
-      caption,
-      alt: buildAlt(title, caption),
-    };
-  });
+  return HOMEPAGE_HERO_SLIDE_METADATA.map((meta) => slideFromMeta(t, meta));
 }
 
 if (process.env.NODE_ENV === "development") {

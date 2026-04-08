@@ -4,7 +4,6 @@ import { MarketingPublicStudyLanding } from "@/components/marketing/marketing-pu
 import { PublicLessonsPathwaySections } from "@/components/marketing/public-lessons-pathway-sections";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
-import { absoluteUrl } from "@/lib/seo/site-origin";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
@@ -29,8 +28,8 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title,
     description,
-    alternates: { canonical: absoluteUrl("/lessons"), languages: alt.languages },
-    openGraph: { title, description, url: absoluteUrl("/lessons"), type: "website" },
+    alternates: { canonical: alt.canonical, languages: alt.languages },
+    openGraph: { title, description, url: alt.canonical, type: "website" },
   };
 }
 

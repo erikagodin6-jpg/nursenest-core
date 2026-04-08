@@ -9,7 +9,7 @@ import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { LazySection } from "@/legacy/marketing/lazy-section";
-import { buildHomepageHeroSlides } from "@/lib/marketing-assets";
+import { buildHomepageHeroSlidesAtIndices } from "@/lib/marketing-assets";
 import type { HomepageLessonTeaser } from "@/lib/marketing/homepage-lesson-teasers";
 import { heroPathwayEntryLinks } from "@/lib/marketing/home-hero-gateway-config";
 import { HomeHeroMediaPanel } from "@/components/marketing/home-hero-media-panel";
@@ -87,7 +87,7 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
   const { region, setRegion } = useNursenestRegion();
   const [homeStats, setHomeStats] = useState<HomeStatsPayload | null>(null);
 
-  const heroSlides = useMemo(() => buildHomepageHeroSlides(t), [t]);
+  const heroSlides = useMemo(() => buildHomepageHeroSlidesAtIndices(t, [0, 1, 2]), [t]);
   /** When false, hero is single-column; media is omitted (no `hidden` placeholder delaying layout). */
   const showHeroMediaColumn = heroSlides.length > 0;
 
@@ -358,7 +358,9 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
 
         <HomePageMidSections lessonTeasers={lessonTeasers} />
 
-        <HomeMarketingConversionBlocks region={region} />
+        <LazySection minHeight="112px" rootMargin="320px">
+          <HomeMarketingConversionBlocks region={region} />
+        </LazySection>
 
         <LazySection minHeight="88px" rootMargin="300px">
           <Suspense fallback={<div className="min-h-[88px]" />}>

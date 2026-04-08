@@ -35,6 +35,7 @@ import { LOGO_PRIMARY as LOGO_PRIMARY_GENERATED, HERO_DASHBOARD_SCREENSHOT } fro
 export {
   HOMEPAGE_HERO_SLIDE_METADATA,
   buildHomepageHeroSlides,
+  buildHomepageHeroSlidesAtIndices,
   homeHeroOgImageUrl,
   homeHeroScreenshotPublicUrl,
   homeHeroScreenshotObjectKey,

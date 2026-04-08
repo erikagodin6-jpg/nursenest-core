@@ -4,7 +4,7 @@ import { ArrowRight, BookOpen, ChevronDown } from "lucide-react";
 import { useMemo } from "react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
-import { buildHomepageHeroSlides } from "@/lib/marketing-assets";
+import { buildHomepageHeroSlidesAtIndices } from "@/lib/marketing-assets";
 import { MarketingChainScreenshot } from "@/components/marketing/marketing-screenshot-stack";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
@@ -26,10 +26,10 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
   const { t, locale } = useMarketingI18n();
   const loc = (path: string) => withMarketingLocale(locale, path);
 
-  /** Hero uses slides 0–2; legacy stack uses 6–8 — keep preview on 3–4 (screenshots 4–5) to reduce duplicate crops. */
-  const platformSlides = useMemo(() => buildHomepageHeroSlides(t), [t]);
-  const previewDash = platformSlides[3];
-  const previewBank = platformSlides[4];
+  /** Hero uses slides 0–2; keep preview on 3–4 (screenshots 4–5) to reduce duplicate crops. */
+  const platformSlides = useMemo(() => buildHomepageHeroSlidesAtIndices(t, [3, 4]), [t]);
+  const previewDash = platformSlides[0];
+  const previewBank = platformSlides[1];
 
   const faqKeys = ["1", "2", "3", "4", "5", "6"] as const;
 

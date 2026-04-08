@@ -57,6 +57,7 @@ export function MarketingHeroCarousel({
   const failedRef = useRef(failed);
   const [heroTierByIndex, setHeroTierByIndex] = useState<Record<number, number>>({});
   const [hasLoaded, setHasLoaded] = useState(false);
+  const [extraSlidesMounted, setExtraSlidesMounted] = useState(false);
   const loadedOnceRef = useRef(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const unavailableReported = useRef(false);
@@ -101,11 +102,12 @@ export function MarketingHeroCarousel({
 
   useEffect(() => {
     if (!hasLoaded || validCount === 0) return;
+    if (!extraSlidesMounted && slides.length > 1) return;
     if (!isHovered) startTimer();
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [isHovered, startTimer, hasLoaded, validCount, slides.length]);
+  }, [isHovered, startTimer, hasLoaded, validCount, slides.length, extraSlidesMounted]);
 
   const handleMouseEnter = useCallback(() => {
     setIsHovered(true);
@@ -115,6 +117,20 @@ export function MarketingHeroCarousel({
   const handleMouseLeave = useCallback(() => {
     setIsHovered(false);
   }, []);
+
+  useEffect(() => {
+    setExtraSlidesMounted(false);
+    const run = () => setExtraSlidesMounted(true);
+    const ric = window.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 320));
+    const id = ric(run);
+    return () => {
+      if (typeof window.cancelIdleCallback === "function") {
+        window.cancelIdleCallback(id as unknown as number);
+      } else {
+        window.clearTimeout(id as unknown as number);
+      }
+    };
+  }, [slideFingerprint]);
 
   useEffect(() => {
     if (slides.length === 0 || !failed.has(current)) return;
@@ -210,6 +226,7 @@ export function MarketingHeroCarousel({
         ) : null}
         {slides.map((slide, index) => {
           if (failed.has(index)) return null;
+          if (index > 0 && !extraSlidesMounted) return null;
           const chain = getMarketingHeroImageUrlChain({
             objectKey: slide.objectKey,
             publicCdnUrl: slide.publicUrl,
@@ -254,25 +271,27 @@ export function MarketingHeroCarousel({
               <p className="nn-marketing-caption text-balance text-[var(--theme-body-text)]">{currentSlide.caption}</p>
             </div>
           ) : null}
-          <div className="mt-3 flex flex-wrap justify-center gap-2" data-testid={dotsTestId}>
-            {slides.map((_, index) => (
-              <button
-                key={index}
-                type="button"
-                disabled={failed.has(index)}
-                onClick={() => {
-                  if (!failed.has(index)) setCurrent(index);
-                }}
-                className={`h-2 rounded-full transition-all duration-300 ${
-                  index === current ? "w-6 bg-role-cta" : "w-2 bg-[var(--theme-muted-text)]/35 hover:bg-[var(--theme-muted-text)]/55"
-                } ${failed.has(index) ? "cursor-not-allowed opacity-40" : ""}`}
-                aria-label={t("components.marketingHeroCarousel.goToSlide", { n: index + 1 })}
-                data-testid={
-                  testIdPrefix === "hero-carousel" ? `button-carousel-dot-${index}` : `button-${testIdPrefix}-dot-${index}`
-                }
-              />
-            ))}
-          </div>
+          {extraSlidesMounted || slides.length <= 1 ? (
+            <div className="mt-3 flex flex-wrap justify-center gap-2" data-testid={dotsTestId}>
+              {slides.map((_, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  disabled={failed.has(index)}
+                  onClick={() => {
+                    if (!failed.has(index)) setCurrent(index);
+                  }}
+                  className={`h-2 rounded-full transition-all duration-300 ${
+                    index === current ? "w-6 bg-role-cta" : "w-2 bg-[var(--theme-muted-text)]/35 hover:bg-[var(--theme-muted-text)]/55"
+                  } ${failed.has(index) ? "cursor-not-allowed opacity-40" : ""}`}
+                  aria-label={t("components.marketingHeroCarousel.goToSlide", { n: index + 1 })}
+                  data-testid={
+                    testIdPrefix === "hero-carousel" ? `button-carousel-dot-${index}` : `button-${testIdPrefix}-dot-${index}`
+                  }
+                />
+              ))}
+            </div>
+          ) : null}
         </>
       ) : null}
     </div>

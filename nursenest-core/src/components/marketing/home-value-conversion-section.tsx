@@ -7,7 +7,7 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import type { NursenestMarketingRegion } from "@/lib/marketing/home-hero-gateway-config";
 import { HUB, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
-import { buildHomepageHeroSlides } from "@/lib/marketing-assets";
+import { buildHomepageHeroSlidesAtIndices } from "@/lib/marketing-assets";
 import { MarketingChainScreenshot } from "@/components/marketing/marketing-screenshot-stack";
 import { MARKETING_SCREENSHOT_TRIPLE_SIZES } from "@/lib/marketing-image-delivery";
 import { PH } from "@/lib/observability/posthog-conversion-events";
@@ -47,7 +47,7 @@ const VALUE_SLIDE_LABELS = [
 export function HomeValueConversionSection({ region }: { region: NursenestMarketingRegion }) {
   const { locale, t } = useMarketingI18n();
   const loc = (path: string) => withMarketingLocale(locale, path);
-  const heroSlides = useMemo(() => buildHomepageHeroSlides(t), [t]);
+  const heroSlides = useMemo(() => buildHomepageHeroSlidesAtIndices(t, [...VALUE_SLIDE_INDICES]), [t]);
 
   return (
     <section
@@ -129,8 +129,8 @@ export function HomeValueConversionSection({ region }: { region: NursenestMarket
             Screenshots from the live app. They can lag a release or two; the UI moves faster than marketing crops.
           </p>
           <div className="mt-8 grid gap-6 md:grid-cols-12">
-            {VALUE_SLIDE_INDICES.map((slideIndex, idx) => {
-              const slide = heroSlides[slideIndex];
+            {VALUE_SLIDE_INDICES.map((_, idx) => {
+              const slide = heroSlides[idx];
               const label = VALUE_SLIDE_LABELS[idx];
               if (!slide) return null;
               const col =

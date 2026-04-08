@@ -127,7 +127,7 @@ export const PLATFORM_FEATURES = [
     key: "explanationEngine",
     headline: "Detailed Explanations",
     description: "In-depth clinical explanations for every question with rationales, distractor analysis, and exam tips.",
-    route: "/test-bank",
+    route: "/question-bank",
   },
   {
     key: "studyGuides",
@@ -163,7 +163,7 @@ export const PLATFORM_FEATURES = [
     key: "globalQuestionBanks",
     headline: "Global Question Banks",
     description: "Thousands of exam-style questions across multiple countries and licensing bodies.",
-    route: "/test-bank",
+    route: "/question-bank",
   },
   {
     key: "multiLanguage",
@@ -175,6 +175,6 @@ export const PLATFORM_FEATURES = [
     key: "mockExams",
     headline: "Mock Exams",
     description: "Realistic exam simulations with timed conditions, performance analytics, and detailed score reports.",
-    route: "/mock-exam",
+    route: "/practice-exams",
   },
 ];

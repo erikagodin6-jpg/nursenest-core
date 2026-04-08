@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
 import HomeRestoredClient from "@/components/marketing/home-restored-client";
-import { HomeStudyNextPreviewSection } from "@/components/marketing/home-study-next-preview-section";
 import { getHomepageLessonTeasers } from "@/lib/marketing/homepage-lesson-teasers";
 import { buildSimulatedAdaptiveRecommendationsForConversionPreview } from "@/lib/learner/adaptive-recommendations";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
@@ -12,6 +12,23 @@ import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messa
 import { marketingHomeSurfaceBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
+
+const HomeStudyNextPreviewSection = dynamic(
+  () =>
+    import("@/components/marketing/home-study-next-preview-section").then((mod) => ({
+      default: mod.HomeStudyNextPreviewSection,
+    })),
+  {
+    loading: () => (
+      <div className="mx-auto max-w-7xl px-4 pb-2 pt-3 sm:px-6 sm:pb-3 sm:pt-4 lg:px-8">
+        <div
+          className="nn-card min-h-[240px] animate-pulse rounded-xl border border-[var(--border-subtle)] bg-[var(--nn-presentation-wash)] p-5 sm:p-6"
+          aria-hidden
+        />
+      </div>
+    ),
+  },
+);
 
 export const revalidate = 600;
 

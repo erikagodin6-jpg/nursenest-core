@@ -9,7 +9,7 @@ const ALLIED_PREFIXES = [
 ];
 
 const EXAM_PREP_PATTERNS = [
-  "/lessons", "/flashcards", "/mock-exams", "/question-bank",
+  "/lessons", "/flashcards", "/practice-exams", "/question-bank",
   "/nclex-rn", "/nclex-pn", "/rex-pn", "/canada-np", "/us-np",
   "/case-simulations", "/first-action-simulator", "/safety-hazard-simulator",
   "/deteriorating-patient-simulator", "/study-coaching", "/seo-quiz",

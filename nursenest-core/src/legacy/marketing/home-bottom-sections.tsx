@@ -162,7 +162,7 @@ export function HomeBottomSections({
 
               <div
                 className="relative bg-card rounded-2xl border border-border/80 shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-all duration-300 hover:-translate-y-1 p-6 cursor-pointer group overflow-hidden"
-                onClick={() => router.push(mapLegacyMarketingHref("/mock-exams"))}
+                onClick={() => router.push("/practice-exams")}
                 data-testid="card-promo-readiness-exam"
               >
                 <div className="absolute top-3 right-3 z-10 rounded-full bg-primary px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-primary-foreground">
@@ -485,7 +485,7 @@ export function HomeBottomSections({
               {/* Mock Exams */}
               <div
                 className="bg-card rounded-2xl border border-border/80 shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-all duration-300 hover:-translate-y-1 p-6 cursor-pointer group relative overflow-hidden"
-                onClick={() => router.push(mapLegacyMarketingHref("/mock-exams"))}
+                onClick={() => router.push("/practice-exams")}
                 data-testid="card-feature-mock-exams"
               >
                 <div className="absolute right-0 top-0 h-24 w-24 rounded-bl-full bg-gradient-to-bl from-primary/15 to-transparent" />
@@ -523,7 +523,7 @@ export function HomeBottomSections({
               {/* Test Bank */}
               <div
                 className="bg-card rounded-2xl border border-border/80 shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-all duration-300 hover:-translate-y-1 p-6 cursor-pointer group relative overflow-hidden"
-                onClick={() => router.push(mapLegacyMarketingHref("/free-practice"))}
+                onClick={() => router.push("/question-bank")}
                 data-testid="card-feature-test-bank"
               >
                 <div className="absolute right-0 top-0 h-24 w-24 rounded-bl-full bg-gradient-to-bl from-primary/15 to-transparent" />

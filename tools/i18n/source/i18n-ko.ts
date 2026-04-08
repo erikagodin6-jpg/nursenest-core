@@ -3838,7 +3838,7 @@ const translations: Record<string, string> = {
     "newGrad.resume.tip1Title": "임상 실습을 강조하세요",
     "newGrad.resume.tip1Desc": "임상 실습을 시간, 환경 및 환자 집단과 함께 나열하세요. 이것은 신입 졸업생으로서의 경험 섹션입니다.",
     "newGrad.resume.tip2Title": "모든 것을 수치화하세요",
-    "newGrad.resume.tip2Desc": "'환자 관리' 대신 '의료-외과 단위에서 교대당 4-6명의 환자 관리'라고 작성하세요.",
+    "newGrad.resume.tip2Desc": "\u2018환자 관리\u2019 대신 \u2018의료-외과 단위에서 교대당 4-6명의 환자 관리\u2019라고 작성하세요.",
     "newGrad.resume.tip3Title": "자격증을 먼저 강조하세요",
     "newGrad.resume.tip3Desc": "BLS, ACLS, PALS — 모든 자격증을 눈에 띄게 나열하세요. 이는 채용 담당자가 즉시 확인하는 필수 요구 사항입니다.",
     "newGrad.resume.tip4Title": "ATS 친화적인 형식을 사용하세요",

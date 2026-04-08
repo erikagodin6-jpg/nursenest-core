@@ -1,10 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import type { HomeHeroSlide } from "@/config/home-hero-carousel";
 import { getMarketingHeroImageUrlChain, MARKETING_HERO_LOCAL_FALLBACK } from "@/lib/marketing-hero-image";
 import {
+  MARKETING_HERO_INTRINSIC_HEIGHT,
+  MARKETING_HERO_INTRINSIC_WIDTH,
   MARKETING_HERO_LCP_SIZES,
   MARKETING_HERO_SECONDARY_SIZES,
   MARKETING_PHOTO_QUALITY,
@@ -49,6 +51,8 @@ function HeroImage({
         key={`${slide.objectKey}-${tier}`}
         src={src}
         alt={slide.alt}
+        width={MARKETING_HERO_INTRINSIC_WIDTH}
+        height={MARKETING_HERO_INTRINSIC_HEIGHT}
         fill
         sizes={sizes}
         quality={quality}
@@ -100,6 +104,20 @@ export function HomeHeroMediaPanel({
   primaryIndex?: number;
   secondaryIndices?: number[];
 }) {
+  const [secondaryRowReady, setSecondaryRowReady] = useState(false);
+  useEffect(() => {
+    const run = () => setSecondaryRowReady(true);
+    const ric = window.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 320));
+    const id = ric(run);
+    return () => {
+      if (typeof window.cancelIdleCallback === "function") {
+        window.cancelIdleCallback(id as unknown as number);
+      } else {
+        window.clearTimeout(id as unknown as number);
+      }
+    };
+  }, []);
+
   const primary = slides[primaryIndex];
   const secondaries = secondaryIndices.map((i) => slides[i]).filter(Boolean) as HomeHeroSlide[];
 
@@ -148,31 +166,42 @@ export function HomeHeroMediaPanel({
       </div>
 
       {secondaries.length > 0 ? (
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-3.5">
-          {secondaries.map((slide, i) => (
-            <div
-              key={`${slide.objectKey}-sec-${i}`}
-              className="overflow-hidden rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] shadow-[var(--shadow-card)]"
-            >
-              <div className="relative aspect-[16/10] w-full min-h-[8.25rem] overflow-hidden bg-[var(--theme-muted-surface)] sm:min-h-[8.75rem]">
-                <HeroImage
-                  key={slide.objectKey}
-                  slide={slide}
-                  priority={false}
-                  testId={`img-hero-media-secondary-${i}`}
-                  className="absolute inset-0 h-full w-full"
-                  imgClassName="h-full w-full object-cover object-top"
-                  sizes={MARKETING_HERO_SECONDARY_SIZES}
-                  quality={MARKETING_PHOTO_QUALITY_BELOW_FOLD}
-                />
+        secondaryRowReady ? (
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-3.5">
+            {secondaries.map((slide, i) => (
+              <div
+                key={`${slide.objectKey}-sec-${i}`}
+                className="overflow-hidden rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] shadow-[var(--shadow-card)]"
+              >
+                <div className="relative aspect-[16/10] w-full min-h-[8.25rem] overflow-hidden bg-[var(--theme-muted-surface)] sm:min-h-[8.75rem]">
+                  <HeroImage
+                    key={slide.objectKey}
+                    slide={slide}
+                    priority={false}
+                    testId={`img-hero-media-secondary-${i}`}
+                    className="absolute inset-0 h-full w-full"
+                    imgClassName="h-full w-full object-cover object-top"
+                    sizes={MARKETING_HERO_SECONDARY_SIZES}
+                    quality={MARKETING_PHOTO_QUALITY_BELOW_FOLD}
+                  />
+                </div>
+                <div className="border-t border-[var(--theme-card-border)]/80 px-3 py-2.5">
+                  <p className="nn-marketing-body-sm text-[var(--theme-heading-text)]">{slide.title}</p>
+                  <p className="mt-0.5 line-clamp-2 nn-marketing-caption text-[var(--theme-body-text)]">{slide.caption}</p>
+                </div>
               </div>
-              <div className="border-t border-[var(--theme-card-border)]/80 px-3 py-2.5">
-                <p className="nn-marketing-body-sm text-[var(--theme-heading-text)]">{slide.title}</p>
-                <p className="mt-0.5 line-clamp-2 nn-marketing-caption text-[var(--theme-body-text)]">{slide.caption}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div
+            className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-3.5"
+            aria-hidden
+            data-testid="hero-media-secondary-skeleton"
+          >
+            <div className="min-h-[8.25rem] rounded-xl border border-[var(--theme-card-border)]/40 bg-[var(--theme-muted-surface)]/60 sm:min-h-[8.75rem]" />
+            <div className="hidden min-h-[8.25rem] rounded-xl border border-[var(--theme-card-border)]/40 bg-[var(--theme-muted-surface)]/60 sm:block sm:min-h-[8.75rem]" />
+          </div>
+        )
       ) : null}
     </div>
   );

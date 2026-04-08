@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { MarketingScreenshotStack } from "@/components/marketing/marketing-screenshot-stack";
-import { buildHomepageHeroSlides } from "@/lib/marketing-assets";
+import { buildHomepageHeroSlidesAtIndices } from "@/lib/marketing-assets";
 import { MARKETING_PRIMARY_CTA_CLASS } from "@/lib/theme/marketing-hero-pattern";
 import {
   ArrowRight,
@@ -430,7 +430,7 @@ function FeatureCardsSection({ questionCount }: { questionCount: number }) {
     { id: "rationales" as const, icon: Lightbulb, href: "/free-practice", layout: "full" as const },
     { id: "questions" as const, icon: Target, href: "/free-practice", layout: "normal" as const },
     { id: "flashcards" as const, icon: Layers, href: "/flashcards", layout: "normal" as const },
-    { id: "mocks" as const, icon: ClipboardCheck, href: "/mock-exams", layout: "normal" as const },
+    { id: "mocks" as const, icon: ClipboardCheck, href: "/practice-exams", layout: "normal" as const },
   ];
 
   return (
@@ -481,7 +481,7 @@ function FeatureCardsSection({ questionCount }: { questionCount: number }) {
 
 function ScreenshotCarouselSection() {
   const { t, locale } = useMarketingI18n();
-  const platformSlides = useMemo(() => buildHomepageHeroSlides(t), [t]);
+  const platformSlides = useMemo(() => buildHomepageHeroSlidesAtIndices(t, [6, 7, 8]), [t]);
   const hasSlides = platformSlides.length > 0;
 
   return (
@@ -510,7 +510,7 @@ function ScreenshotCarouselSection() {
             {/* Hero 0–2; marketing preview 3–4; these are 6–8 (screenshots 7–9) to avoid repeating the same stills. */}
             <MarketingScreenshotStack
               slides={platformSlides}
-              pickIndices={[6, 7, 8].filter((i) => i < platformSlides.length)}
+              pickIndices={[0, 1, 2].filter((i) => i < platformSlides.length)}
               testIdPrefix="platform-screenshot-stack"
             />
           </div>
