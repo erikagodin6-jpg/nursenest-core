@@ -69,7 +69,7 @@ export default async function LessonsPage({ searchParams }: Props) {
         <h1 className="text-3xl font-bold">{t("learner.lessons.list.title")}</h1>
         <p className="mt-2 text-sm text-muted">
           {t("learner.lessons.list.freemiumLead")}{" "}
-          <Link className="font-medium text-primary underline" href="/exam-lessons">
+          <Link className="font-medium text-primary underline" href="/lessons">
             {t("learner.lessons.list.freemiumLink")}
           </Link>{" "}
           {t("learner.lessons.list.freemiumTail")}
@@ -199,7 +199,7 @@ export default async function LessonsPage({ searchParams }: Props) {
       <p className="mt-2 text-sm text-muted">{t("learner.lessons.list.subscriberIntro")}</p>
       <p className="mt-2 text-sm text-muted">
         {t("learner.lessons.list.paginationExplainer", { pageSize: APP_LESSONS_PAGE_SIZE })}{" "}
-        <Link className="font-medium text-primary underline" href="/exam-lessons">
+        <Link className="font-medium text-primary underline" href="/lessons">
           {t("learner.lessons.list.paginationLink")}
         </Link>
         {t("learner.lessons.list.paginationEnd")}

@@ -70,7 +70,7 @@ export function SiteFooter() {
                 <FLink href="/anatomy">{t("footer.anatomyExplorer")}</FLink>
               </li>
               <li>
-                <FLink href="/mock-exams">{t("footer.mockExams")}</FLink>
+                <FLink href="/practice-exams">{t("footer.mockExams")}</FLink>
               </li>
               <li>
                 <FLink href="/free-practice">{t("footer.testBank")}</FLink>

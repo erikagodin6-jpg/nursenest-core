@@ -410,7 +410,7 @@ export function PremiumLearnerHub({
           <Link href="/app/exams" className="inline-flex text-sm font-semibold text-primary hover:underline">
             Open mock exams
           </Link>
-          <Link href="/exam-lessons" className="inline-flex text-sm font-semibold text-primary hover:underline">
+          <Link href="/lessons" className="inline-flex text-sm font-semibold text-primary hover:underline">
             Exam-specific lessons
           </Link>
         </div>

@@ -8,5 +8,5 @@ export function clusterQuestionBankHref(locale: string, cluster: SeoPageDefiniti
   if (cluster === "exam-nclex") return loc(RN.usQuestions);
   if (cluster === "exam-pn") return loc(PN.usQuestions);
   if (cluster === "exam-np") return loc(NP.fnpQuestions);
-  return loc("/test-bank");
+  return loc("/question-bank");
 }

@@ -80,11 +80,11 @@ export default async function PublicFlashcardSlugPage({ params }: Props) {
           <h1 className="text-3xl font-bold text-[var(--theme-heading-text)]">{data.name} flashcards</h1>
           <p className="mt-3 text-sm leading-relaxed text-[var(--theme-muted-text)]">
             Decks below share this topic tag. Use them to reinforce quick recall alongside{" "}
-            <Link href="/exam-lessons" className="font-medium text-primary underline">
+            <Link href="/lessons" className="font-medium text-primary underline">
               pathway lessons
             </Link>{" "}
             and{" "}
-            <Link href="/test-bank" className="font-medium text-primary underline">
+            <Link href="/question-bank" className="font-medium text-primary underline">
               question bank
             </Link>{" "}
             practice. Samples are shortened; subscribers get full cards, scheduling, and weak-area queues.

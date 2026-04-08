@@ -6,7 +6,7 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { MarketingScreenshotStack } from "@/components/marketing/marketing-screenshot-stack";
 import { buildHomepageHeroSlides } from "@/lib/marketing-assets";
-import { MARKETING_PRIMARY_CTA_CLASS, MARKETING_SECONDARY_CTA_CLASS } from "@/lib/theme/marketing-hero-pattern";
+import { MARKETING_PRIMARY_CTA_CLASS } from "@/lib/theme/marketing-hero-pattern";
 import {
   ArrowRight,
   Star,
@@ -365,7 +365,7 @@ function CompetitivePositioningSection({
         <div className="text-center sm:text-left">
           <button
             type="button"
-            className={`${MARKETING_SECONDARY_CTA_CLASS} border border-primary/25 bg-white px-9 text-primary shadow-[var(--shadow-card)] hover:border-primary/40 hover:bg-primary/5`}
+            className="inline-flex items-center justify-center rounded-full border border-primary/25 bg-white px-9 py-3 font-medium text-primary shadow-[var(--shadow-card)] hover:border-primary/40 hover:bg-primary/5"
             onClick={() => router.push(mapLegacyMarketingHref("/pricing"))}
             data-testid="button-competitive-cta"
           >
@@ -394,10 +394,10 @@ function HowItWorksSection() {
             <Zap className="h-3.5 w-3.5 text-primary" />
             <span className="nn-marketing-label nn-marketing-label--accent">{t("components.homeConversionSections.howItWorks")}</span>
           </div>
-          <h2 className="mb-3 font-bold text-[var(--theme-heading-text)]" style={{ fontSize: 'var(--text-section)' }} data-testid="text-how-it-works-heading">
+          <h2 className="mb-3 nn-marketing-h2" data-testid="text-how-it-works-heading">
             {t("components.homeConversionSections.howItWorksHeading")}
           </h2>
-          <p className="text-base text-[var(--theme-muted-text)] lg:text-lg">{t("components.homeConversionSections.howItWorksIntro")}</p>
+          <p className="nn-marketing-body text-[var(--theme-muted-text)]">{t("components.homeConversionSections.howItWorksIntro")}</p>
         </div>
         <div className="mx-auto max-w-2xl space-y-10 border-l-2 border-primary/15 pl-6 md:pl-8">
           {steps.map((item, i) => (
@@ -407,11 +407,11 @@ function HowItWorksSection() {
                   <item.icon className="h-7 w-7 text-white sm:h-8 sm:w-8" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="mb-1 inline-flex h-6 min-w-[1.5rem] items-center justify-center rounded-full bg-primary px-2 text-xs font-bold text-primary-foreground">{item.step}</div>
-                  <h3 className="font-bold text-[var(--theme-heading-text)]" style={{ fontSize: "var(--text-card-title)" }}>
-                    {t(item.titleKey)}
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-[var(--theme-muted-text)]">{t(item.descKey)}</p>
+                  <div className="mb-1 inline-flex h-6 min-w-[1.5rem] items-center justify-center rounded-full bg-primary px-2 nn-marketing-caption text-primary-foreground">
+                    {item.step}
+                  </div>
+                  <h3 className="nn-marketing-h3">{t(item.titleKey)}</h3>
+                  <p className="mt-2 nn-marketing-body-sm leading-relaxed text-[var(--theme-muted-text)]">{t(item.descKey)}</p>
                 </div>
               </div>
             </div>
@@ -437,10 +437,10 @@ function FeatureCardsSection({ questionCount }: { questionCount: number }) {
     <section style={{ paddingTop: "var(--space-section)", paddingBottom: "var(--space-section)" }} data-testid="section-feature-cards">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="mb-12 text-left md:max-w-3xl">
-          <h2 className="mb-3 font-bold text-[var(--theme-heading-text)]" style={{ fontSize: "var(--text-section)" }} data-testid="text-feature-cards-heading">
+          <h2 className="mb-3 nn-marketing-h2" data-testid="text-feature-cards-heading">
             {t("components.homeConversionSections.featureStripHeading")}
           </h2>
-          <p className="text-base text-[var(--theme-muted-text)] lg:text-lg">{t("components.homeConversionSections.featureStripSubcopy")}</p>
+          <p className="nn-marketing-body text-[var(--theme-muted-text)]">{t("components.homeConversionSections.featureStripSubcopy")}</p>
         </div>
         <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-3">
           {features.map((feature) => (
@@ -462,17 +462,13 @@ function FeatureCardsSection({ questionCount }: { questionCount: number }) {
                   <feature.icon className="nn-accent-icon h-6 w-6" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h3 className="mb-2 font-bold text-[var(--theme-heading-text)]" style={{ fontSize: "var(--text-card-title)" }}>
-                    {t(`components.homeConversionSections.featureCard.${feature.id}.title`)}
-                  </h3>
-                  <p className="mb-3 text-sm leading-relaxed text-[var(--theme-muted-text)]">
+                  <h3 className="mb-2 nn-marketing-h3">{t(`components.homeConversionSections.featureCard.${feature.id}.title`)}</h3>
+                  <p className="mb-3 nn-marketing-body-sm leading-relaxed text-[var(--theme-muted-text)]">
                     {feature.id === "questions"
                       ? t(`components.homeConversionSections.featureCard.${feature.id}.desc`, { count: formatCount(questionCount) })
                       : t(`components.homeConversionSections.featureCard.${feature.id}.desc`)}
                   </p>
-                  <p className="text-[11px] font-medium uppercase tracking-wide text-[var(--theme-muted-text)]">
-                    {t(`components.homeConversionSections.featureCard.${feature.id}.tags`)}
-                  </p>
+                  <p className="nn-marketing-label text-[var(--theme-muted-text)]">{t(`components.homeConversionSections.featureCard.${feature.id}.tags`)}</p>
                 </div>
               </div>
             </div>
@@ -501,14 +497,10 @@ function ScreenshotCarouselSection() {
               {t("components.homeConversionSections.platformPreviewBadge")}
             </span>
           </div>
-          <h2
-            className="mb-4 text-balance font-bold text-[var(--theme-heading-text)]"
-            style={{ fontSize: "var(--text-section)" }}
-            data-testid="text-screenshots-heading"
-          >
+          <h2 className="mb-4 nn-marketing-h2 text-balance" data-testid="text-screenshots-heading">
             {t("components.homeConversionSections.platformCarouselHeading")}
           </h2>
-          <p className="mb-8 text-balance text-base leading-relaxed text-muted-foreground">
+          <p className="mb-8 nn-marketing-body text-balance leading-relaxed text-muted-foreground">
             {t("components.homeConversionSections.platformCarouselSubcopy")}
           </p>
         </div>
@@ -524,7 +516,7 @@ function ScreenshotCarouselSection() {
           </div>
         ) : (
           <div
-            className="mx-auto max-w-md rounded-xl border border-dashed border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)] px-4 py-5 text-center text-sm text-muted-foreground"
+            className="mx-auto max-w-md rounded-xl border border-dashed border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)] px-4 py-5 text-center nn-marketing-body-sm text-muted-foreground"
             data-testid="platform-carousel-empty-section"
           >
             {t("components.homeConversionSections.platformCarouselEmpty")}
@@ -555,12 +547,12 @@ function ProfessionSelectorSection() {
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/8 border border-primary/15 shadow-[var(--shadow-card)] mb-5">
             <Brain className="w-3.5 h-3.5 text-primary" />
-            <span className="text-xs font-bold text-primary uppercase tracking-wider">{t("components.homeConversionSections.chooseYourPath")}</span>
+            <span className="nn-marketing-label nn-marketing-label--accent">{t("components.homeConversionSections.chooseYourPath")}</span>
           </div>
-          <h2 className="font-bold text-[var(--theme-heading-text)] mb-3" style={{ fontSize: 'var(--text-section)' }} data-testid="text-profession-heading">
+          <h2 className="mb-3 nn-marketing-h2" data-testid="text-profession-heading">
             {t("components.homeConversionSections.professionHeading")}
           </h2>
-          <p className="text-base lg:text-lg text-[var(--theme-muted-text)] max-w-3xl mx-auto">
+          <p className="mx-auto max-w-3xl nn-marketing-body text-[var(--theme-muted-text)]">
             {t("components.homeConversionSections.professionSubcopy")}
           </p>
         </div>
@@ -595,9 +587,9 @@ function ProfessionSelectorSection() {
                 <div className="nn-accent-icon-wrap mb-4 flex h-11 w-11 items-center justify-center rounded-xl">
                   <IconComp className="nn-accent-icon h-5 w-5" />
                 </div>
-                <h3 className="font-bold text-[var(--theme-heading-text)] text-base mb-0.5">{prof.label}</h3>
-                <p className="text-xs text-[var(--theme-muted-text)]">{prof.sublabel}</p>
-                <div className="mt-3 flex items-center text-xs font-medium text-primary transition-all group-hover:gap-1.5">
+                <h3 className="mb-0.5 nn-marketing-h3">{prof.label}</h3>
+                <p className="nn-marketing-caption text-[var(--theme-muted-text)]">{prof.sublabel}</p>
+                <div className="mt-3 flex items-center nn-marketing-caption text-primary transition-all group-hover:gap-1.5">
                   <span>{t("components.homeConversionSections.explore")}</span>
                   <ArrowRight className="w-3.5 h-3.5 ml-0.5 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
@@ -639,22 +631,22 @@ function SampleQuestionSection() {
             <FileText className="h-3.5 w-3.5 text-primary" />
             <span className="nn-marketing-label nn-marketing-label--accent">{t("components.homeConversionSections.tryItFree")}</span>
           </div>
-          <h2 className="font-bold text-[var(--theme-heading-text)] mb-3" style={{ fontSize: 'var(--text-section)' }} data-testid="text-sample-question-heading">
+          <h2 className="mb-3 nn-marketing-h2" data-testid="text-sample-question-heading">
             {t("components.homeConversionSections.sampleQuestionHeading")}
           </h2>
-          <p className="text-base lg:text-lg text-[var(--theme-muted-text)]">{t("components.homeConversionSections.sampleQuestionSubcopy")}</p>
+          <p className="nn-marketing-body text-[var(--theme-muted-text)]">{t("components.homeConversionSections.sampleQuestionSubcopy")}</p>
         </div>
 
         <div className="bg-white rounded-2xl border border-[var(--theme-card-border)]/80 shadow-[var(--shadow-elevated)] overflow-hidden" data-testid="card-sample-question">
           <div className="bg-[var(--theme-muted-surface)] px-6 py-3 border-b border-[var(--theme-input-border)] flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="rounded-md border border-[var(--theme-input-border)] px-2 py-0.5 text-xs">{sampleQuestion.category}</span>
-              <span className="rounded-md border border-emerald-200 px-2 py-0.5 text-xs text-emerald-600">{sampleQuestion.difficulty}</span>
+              <span className="rounded-md border border-[var(--theme-input-border)] px-2 py-0.5 nn-marketing-body-sm">{sampleQuestion.category}</span>
+              <span className="rounded-md border border-emerald-200 px-2 py-0.5 nn-marketing-body-sm text-emerald-600">{sampleQuestion.difficulty}</span>
             </div>
           </div>
 
           <div className="p-6">
-            <p className="text-[var(--theme-heading-text)] leading-relaxed mb-6 font-medium" data-testid="text-sample-stem">
+            <p className="mb-6 nn-marketing-body font-medium leading-relaxed text-[var(--theme-heading-text)]" data-testid="text-sample-stem">
               {sampleQuestion.stem}
             </p>
 
@@ -689,10 +681,10 @@ function SampleQuestionSection() {
                     data-testid={`option-sample-${option.id}`}
                   >
                     <div className="flex items-start gap-3">
-                      <span className="w-7 h-7 rounded-full border-2 border-[var(--theme-input-border)] flex items-center justify-center text-xs font-bold text-[var(--theme-muted-text)] shrink-0 mt-0.5">
+                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 border-[var(--theme-input-border)] nn-marketing-caption text-[var(--theme-muted-text)] mt-0.5">
                         {option.id}
                       </span>
-                      <span className="text-sm text-[var(--theme-body-text)]">{option.text}</span>
+                      <span className="nn-marketing-body-sm text-[var(--theme-body-text)]">{option.text}</span>
                     </div>
                   </button>
                 );
@@ -729,13 +721,13 @@ function SampleQuestionSection() {
                     ) : (
                       <Lightbulb className="h-5 w-5 text-primary" />
                     )}
-                    <span className="font-bold text-[var(--theme-heading-text)]">
+                    <span className="nn-marketing-h4 text-[var(--theme-heading-text)]">
                       {selectedAnswer === sampleQuestion.correctAnswer
                         ? t("components.homeConversionSections.sampleCorrect")
                         : t("components.homeConversionSections.sampleCorrectAnswerLabel", { letter: sampleQuestion.correctAnswer })}
                     </span>
                   </div>
-                  <p className="text-sm text-[var(--theme-body-text)] leading-relaxed">{sampleQuestion.rationale}</p>
+                  <p className="nn-marketing-body-sm leading-relaxed text-[var(--theme-body-text)]">{sampleQuestion.rationale}</p>
                 </div>
 
                 <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -785,10 +777,10 @@ function TestimonialsSection() {
             <Star className="h-3.5 w-3.5 fill-primary text-primary" />
             <span className="nn-marketing-label nn-marketing-label--accent">{t("components.homeConversionSections.studentReviews")}</span>
           </div>
-          <h2 className="font-bold text-[var(--theme-heading-text)] mb-3" style={{ fontSize: 'var(--text-section)' }} data-testid="text-testimonials-heading">
+          <h2 className="mb-3 nn-marketing-h2" data-testid="text-testimonials-heading">
             {t("components.homeConversionSections.testimonialsHeading")}
           </h2>
-          <p className="text-base lg:text-lg text-[var(--theme-muted-text)] max-w-2xl mx-auto">
+          <p className="mx-auto max-w-2xl nn-marketing-body text-[var(--theme-muted-text)]">
             {t("components.homeConversionSections.testimonialsSubcopy")}
           </p>
         </div>
@@ -806,13 +798,13 @@ function TestimonialsSection() {
                     <Star key={s} className={`h-4 w-4 ${s < review.rating ? "fill-primary text-primary" : "text-[var(--theme-separator)]"}`} />
                   ))}
                 </div>
-                <p className="mb-5 text-sm leading-relaxed text-[var(--theme-body-text)]" data-testid={`text-testimonial-${i}`}>
+                <p className="mb-5 nn-marketing-body-sm leading-relaxed text-[var(--theme-body-text)]" data-testid={`text-testimonial-${i}`}>
                   &quot;{review.text}&quot;
                 </p>
                 <div className="flex items-center justify-between border-t border-[var(--theme-card-border)] pt-4">
                   <div>
-                    <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{review.name}</p>
-                    <p className="text-xs text-[var(--theme-muted-text)]">{review.role}</p>
+                    <p className="nn-marketing-h4 text-[var(--theme-heading-text)]">{review.name}</p>
+                    <p className="nn-marketing-caption text-[var(--theme-muted-text)]">{review.role}</p>
                   </div>
                   <span className="rounded-md border border-[var(--theme-input-border)] px-2 py-0.5 text-xs">{review.tier}</span>
                 </div>
@@ -821,7 +813,7 @@ function TestimonialsSection() {
           ))}
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 text-sm text-[var(--theme-muted-text)]">
+        <div className="flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-8 nn-marketing-body-sm text-[var(--theme-muted-text)]">
           <div className="flex items-center gap-2.5">
             <div className="flex -space-x-2">
               {["bg-primary", "bg-primary/80", "bg-primary/60", "bg-primary/90"].map((bg, i) => (
@@ -834,7 +826,7 @@ function TestimonialsSection() {
           </div>
           <div className="flex items-center gap-1.5">
             <Star className="h-4 w-4 fill-primary text-primary" />
-            <span className="font-semibold text-[var(--theme-body-text)]">4.9/5</span>
+            <span className="nn-marketing-body-sm tabular-nums font-medium text-[var(--theme-body-text)]">4.9/5</span>
             <span>{t("components.homeConversionSections.averageRating")}</span>
           </div>
         </div>
@@ -850,16 +842,16 @@ function FinalCTASection() {
   return (
     <section className="relative overflow-hidden" style={{ paddingTop: 'var(--space-section)', paddingBottom: 'var(--space-section)' }} data-testid="section-final-cta">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-        <h2 className="font-bold text-[var(--theme-heading-text)] mb-5" style={{ fontSize: 'var(--text-section)' }} data-testid="text-final-cta-heading">
+        <h2 className="mb-5 nn-marketing-h2" data-testid="text-final-cta-heading">
           {t("components.homeConversionSections.finalCtaHeading")}
         </h2>
-        <p className="text-lg lg:text-xl text-[var(--theme-muted-text)] mb-10 max-w-2xl mx-auto leading-relaxed">
+        <p className="mx-auto mb-10 mt-0 max-w-2xl nn-marketing-lead leading-relaxed text-[var(--theme-muted-text)]">
           {t("components.homeConversionSections.finalCtaSubcopy")}
         </p>
         <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
           <button
             type="button"
-            className="inline-flex h-14 items-center justify-center rounded-full bg-primary px-10 text-lg font-semibold text-primary-foreground shadow-[var(--shadow-elevated)] shadow-primary/25 transition-all hover:-translate-y-0.5 hover:brightness-110"
+            className={`${MARKETING_PRIMARY_CTA_CLASS} h-14 px-10 shadow-[var(--shadow-elevated)] shadow-primary/25 transition-all hover:-translate-y-0.5 hover:brightness-110`}
             onClick={() => router.push(mapLegacyMarketingHref("/register"))}
             data-testid="button-final-cta-start"
           >
@@ -868,7 +860,7 @@ function FinalCTASection() {
           </button>
           <button
             type="button"
-            className="h-14 rounded-full border border-[var(--theme-input-border)] bg-card px-8 text-lg font-medium text-[var(--theme-body-text)] hover:border-[color-mix(in_srgb,var(--theme-primary)_22%,var(--theme-input-border))] hover:bg-[var(--theme-muted-surface)]"
+            className="h-14 rounded-full border border-[var(--theme-input-border)] bg-card px-8 nn-marketing-body text-lg font-medium text-[var(--theme-body-text)] hover:border-[color-mix(in_srgb,var(--theme-primary)_22%,var(--theme-input-border))] hover:bg-[var(--theme-muted-surface)]"
             onClick={() => router.push(mapLegacyMarketingHref("/pricing"))}
             data-testid="button-final-cta-pricing"
           >
@@ -877,9 +869,9 @@ function FinalCTASection() {
         </div>
         <div className="flex items-center justify-center gap-2 mt-8 mb-2">
           <ShieldCheck className="h-5 w-5 text-primary" />
-          <span className="text-sm font-semibold text-primary">{t("components.homeConversionSections.7dayMoneybackGuarantee")}</span>
+          <span className="nn-marketing-body-sm font-medium text-primary">{t("components.homeConversionSections.7dayMoneybackGuarantee")}</span>
         </div>
-        <p className="text-sm text-[var(--theme-muted-text)]">{t("components.homeConversionSections.freeAccountIncludesPracticeQuestions")}</p>
+        <p className="nn-marketing-body-sm text-[var(--theme-muted-text)]">{t("components.homeConversionSections.freeAccountIncludesPracticeQuestions")}</p>
       </div>
 
       <div className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/[0.03] blur-[80px]" aria-hidden />

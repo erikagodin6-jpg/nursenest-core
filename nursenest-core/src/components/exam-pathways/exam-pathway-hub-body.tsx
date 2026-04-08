@@ -158,14 +158,14 @@ export function ExamPathwayHubBody({
                 </Link>
               )}
               . Or{" "}
-              <Link href="/exam-lessons" className="font-semibold text-primary hover:underline">
+              <Link href="/lessons" className="font-semibold text-primary hover:underline">
                 browse all exam lesson pathways
               </Link>
               .
             </>
           ) : (
             <>
-              <Link href="/exam-lessons" className="font-semibold text-primary hover:underline">
+              <Link href="/lessons" className="font-semibold text-primary hover:underline">
                 Browse all exam lesson pathways
               </Link>{" "}
               to compare tracks.

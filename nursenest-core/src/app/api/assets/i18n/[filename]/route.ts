@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 /** Must match `script/compile-i18n.ts` / `script/merge-marketing-i18n.ts`. */
 const ALLOWED = new Set<string>([
   "en", "fr", "tl", "hi", "es", "zh", "zh-tw", "ar", "ko",
-  "pt", "pa", "vi", "ht", "ur", "ja", "fa", "de", "th", "tr", "id",
+  "pt", "pa", "vi", "ht", "ur", "ja", "fa", "de", "th", "tr", "id", "it", "ru",
 ]);
 
 /** From `…/i18n/[filename]/route.ts` → package `public/i18n` (no `process.cwd()`). */

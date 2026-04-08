@@ -77,7 +77,7 @@ export function PreNursingMilestoneStrip({
           </Link>
         ) : (
           <Link
-            href="/exam-lessons"
+            href="/lessons"
             className="font-semibold text-primary hover:underline"
             onClick={() =>
               trackClientEvent(PH.preNursingExamLessonsHubClicked, {

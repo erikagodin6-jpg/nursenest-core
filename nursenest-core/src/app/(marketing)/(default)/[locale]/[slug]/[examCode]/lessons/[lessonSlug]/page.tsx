@@ -261,7 +261,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
           free tools
         </Link>
         , and{" "}
-        <Link href="/exam-lessons" className="font-medium text-primary hover:underline">
+        <Link href="/lessons" className="font-medium text-primary hover:underline">
           other lesson hubs
         </Link>
         .

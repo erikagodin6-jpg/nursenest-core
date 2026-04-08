@@ -511,7 +511,7 @@ export function ExamPracticeClient({
         {done.studyNext ? <PostTestStudyNextCard bundle={done.studyNext} /> : null}
         <p className="text-sm text-muted">
           Review misses in the question bank, then reinforce weak systems with{" "}
-          <Link href="/exam-lessons" className="font-medium text-primary underline">
+          <Link href="/lessons" className="font-medium text-primary underline">
             exam-specific lessons
           </Link>{" "}
           for your pathway.
@@ -530,7 +530,7 @@ export function ExamPracticeClient({
             Open question bank
           </Link>
           <Link
-            href="/exam-lessons"
+            href="/lessons"
             className="inline-flex rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-gray-50"
           >
             Browse lessons by exam

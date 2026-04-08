@@ -4,7 +4,7 @@ import { REPO_ROOT } from "./repo-root";
 
 const LANGUAGES = [
   "en", "fr", "tl", "hi", "es", "zh", "zh-tw", "ar", "ko",
-  "pt", "pa", "vi", "ht", "ur", "ja", "fa", "de", "th", "tr", "id",
+  "pt", "pa", "vi", "ht", "ur", "ja", "fa", "de", "th", "tr", "id", "it", "ru",
 ];
 
 function extractTranslationsFromSource(filePath: string): Record<string, string> | null {

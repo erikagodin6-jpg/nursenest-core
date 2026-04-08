@@ -94,6 +94,10 @@ const nextConfig: NextConfig = {
       /** Allied hub canonical URL. */
       { source: "/allied-health-exam-prep", destination: "/allied-health", permanent: true },
       { source: "/allied-health-exam-prep/:path*", destination: "/allied-health/:path*", permanent: true },
+      /** Canonical public study hubs (avoid duplicate URLs / ad landing confusion). */
+      { source: "/mock-exams", destination: "/practice-exams", permanent: true },
+      { source: "/mock-exam", destination: "/practice-exams", permanent: true },
+      { source: "/test-bank", destination: "/question-bank", permanent: true },
       ...examPathwayFromProgrammaticRedirects,
     ];
   },

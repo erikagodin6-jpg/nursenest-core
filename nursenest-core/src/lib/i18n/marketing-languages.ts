@@ -39,6 +39,8 @@ export const MARKETING_LANGUAGES: MarketingLanguage[] = [
   { code: "th", name: "\u0e44\u0e17\u0e22", flag: "\uD83C\uDDF9\uD83C\uDDED", tier: "incomplete" },
   { code: "tr", name: "T\u00fcrk\u00e7e", flag: "\uD83C\uDDF9\uD83C\uDDF7", tier: "incomplete" },
   { code: "id", name: "Indonesia", flag: "\uD83C\uDDEE\uD83C\uDDE9", tier: "incomplete" },
+  { code: "it", name: "Italiano", flag: "\uD83C\uDDEE\uD83C\uDDF9", tier: "incomplete" },
+  { code: "ru", name: "\u0420\u0443\u0441\u0441\u043a\u0438\u0439", flag: "\uD83C\uDDF7\uD83C\uDDFA", tier: "incomplete" },
 ];
 
 /** Suffix for partial-tier locales in the switcher (English meta-label on the picker). */

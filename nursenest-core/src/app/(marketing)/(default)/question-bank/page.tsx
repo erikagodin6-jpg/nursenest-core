@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
+import { MarketingPublicStudyLanding } from "@/components/marketing/marketing-public-study-landing";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import {
   ALLIED,
@@ -11,20 +12,14 @@ import {
   pnPrimaryHub,
   type MarketingRegionToggle,
 } from "@/lib/marketing/marketing-entry-routes";
+import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
+import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { formatMarketingMessage, resolveMarketingCopy } from "@/lib/marketing-i18n-core";
+import { withMarketingLocale } from "@/lib/i18n/marketing-path";
+import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 
 export const revalidate = 600;
-
-export const metadata: Metadata = {
-  title: "Exam question banks | NurseNest",
-  description:
-    "Pathway-scoped nursing question banks for NCLEX-RN, NCLEX-PN, REx-PN, NP boards, and allied health. See what each track includes before you sign in.",
-  alternates: { canonical: absoluteUrl("/question-bank") },
-  openGraph: {
-    title: "Exam question banks | NurseNest",
-    url: absoluteUrl("/question-bank"),
-    type: "website",
-  },
-};
 
 type PathwayCard = {
   id: string;
@@ -120,81 +115,91 @@ const CARDS: PathwayCard[] = [
   },
 ];
 
-export default function QuestionBankHubPage() {
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getMarketingLocaleForDefaultRoute();
+  const m = await loadMarketingMessages(locale);
+  const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+  const title = resolveMarketingCopy(m, "pages.publicQuestionBank.metaTitle", en, "NCLEX & REx-PN practice questions | NurseNest");
+  const description = resolveMarketingCopy(
+    m,
+    "pages.publicQuestionBank.metaDescription",
+    en,
+    "Public overview of the NurseNest nursing question bank: practice items for NCLEX-RN, NCLEX-PN, REx-PN, and NP tracks. Sign up to practice in the app.",
+  );
+  const alt = marketingAlternatesSharedPage(locale, "/question-bank");
+  return {
+    title,
+    description,
+    alternates: { canonical: absoluteUrl("/question-bank"), languages: alt.languages },
+    openGraph: { title, description, url: absoluteUrl("/question-bank"), type: "website" },
+  };
+}
+
+export default async function QuestionBankHubPage() {
+  const locale = await getMarketingLocaleForDefaultRoute();
+  const m = await loadMarketingMessages(locale);
+  const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+  const t = (key: string, params?: Record<string, string | number>) => formatMarketingMessage(m, key, params, en);
+
   const appBank = loginWithCallback("/app/questions");
 
   return (
-    <div className="mx-auto flex max-w-3xl flex-col gap-[var(--nn-rhythm-section-y)] nn-marketing-x nn-rhythm-page">
+    <>
       <BreadcrumbJsonLd
         items={[
           { name: "Home", path: "/" },
-          { name: "Question banks", path: "/question-bank" },
+          { name: "Question bank", path: "/question-bank" },
         ]}
       />
-      <nav className="text-sm text-[var(--theme-muted-text)]" aria-label="Breadcrumb">
-        <ol className="flex flex-wrap items-center gap-2">
-          <li>
-            <Link href="/" className="text-primary underline">
-              Home
-            </Link>
-          </li>
-          <li aria-hidden>/</li>
-          <li className="font-medium text-[var(--theme-heading-text)]">Question banks</li>
-        </ol>
-      </nav>
-
-      <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--nn-presentation-wash)] p-5 sm:p-6">
-        <h1 className="text-3xl font-extrabold text-[var(--theme-heading-text)]">Exam question banks</h1>
-        <p className="mt-3 text-[var(--theme-muted-text)]">
-          Every bank is tied to a <strong className="font-semibold text-[var(--theme-heading-text)]">country</strong> and{" "}
-          <strong className="font-semibold text-[var(--theme-heading-text)]">exam pathway</strong> so items, rationales, and scope stay
-          consistent with what you will see on test day. Use the public pathway pages to explore scope; the full personalized bank,
-          weak-area drills, and history live in the app after you sign in.
-        </p>
-        <div className="nn-hero-cta-row mt-[var(--nn-rhythm-text-to-cta)] flex-wrap">
-          <Link
-            href={appBank}
-            className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:brightness-110"
-          >
-            Open question bank in app
+      <div className="mx-auto max-w-7xl px-4 pt-2 sm:px-6 sm:pt-3 lg:px-8">
+        <nav className="text-sm text-[var(--theme-muted-text)]">
+          <Link href={withMarketingLocale(locale, "/")} className="hover:text-primary">
+            {t("nav.home")}
           </Link>
-          <Link
-            href="/lessons"
-            className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] px-5 py-2.5 text-sm font-semibold text-[var(--theme-heading-text)] hover:border-primary/40"
-          >
-            Clinical lessons overview
-          </Link>
-        </div>
+          <span className="mx-1.5" aria-hidden>
+            /
+          </span>
+          <span className="text-[var(--theme-heading-text)]">{t("pages.publicQuestionBank.breadcrumbCurrent")}</span>
+        </nav>
       </div>
+      <MarketingPublicStudyLanding
+        h1={t("pages.publicQuestionBank.h1")}
+        intro={t("pages.publicQuestionBank.intro")}
+        primaryCta={{ href: appBank, label: t("pages.publicQuestionBank.ctaStartPracticing") }}
+        secondaryCta={{
+          href: withMarketingLocale(locale, "/lessons"),
+          label: t("pages.publicQuestionBank.ctaBrowseLessons"),
+        }}
+      >
+        <ul className="flex flex-col gap-3 sm:gap-[var(--nn-rhythm-card-grid-gap)]">
+          {CARDS.map((c) => (
+            <li key={c.id} className="nn-card p-4">
+              <p className="text-xs font-semibold uppercase text-primary">
+                {c.region === "CA" ? "Canada" : "United States"} · {c.examLabel}
+              </p>
+              <h2 className="mt-1 text-lg font-semibold text-[var(--theme-heading-text)]">{c.title}</h2>
+              <p className="mt-2 text-sm text-muted">{c.who}</p>
+              <p className="mt-2 text-sm text-[var(--theme-muted-text)]">{c.includes}</p>
+              <div className="mt-4 flex flex-wrap gap-3">
+                <Link href={c.publicQuestionsHref} className="text-sm font-semibold text-primary hover:underline">
+                  Public questions landing
+                </Link>
+                <Link href={c.hubHref} className="text-sm font-semibold text-primary hover:underline">
+                  Pathway hub
+                </Link>
+              </div>
+            </li>
+          ))}
+        </ul>
 
-      <ul className="flex flex-col gap-3 sm:gap-[var(--nn-rhythm-card-grid-gap)]">
-        {CARDS.map((c) => (
-          <li key={c.id} className="nn-card p-4">
-            <p className="text-xs font-semibold uppercase text-primary">
-              {c.region === "CA" ? "Canada" : "United States"} · {c.examLabel}
-            </p>
-            <h2 className="mt-1 text-lg font-semibold text-[var(--theme-heading-text)]">{c.title}</h2>
-            <p className="mt-2 text-sm text-muted">{c.who}</p>
-            <p className="mt-2 text-sm text-[var(--theme-muted-text)]">{c.includes}</p>
-            <div className="mt-4 flex flex-wrap gap-3">
-              <Link href={c.publicQuestionsHref} className="text-sm font-semibold text-primary hover:underline">
-                Public questions landing
-              </Link>
-              <Link href={c.hubHref} className="text-sm font-semibold text-primary hover:underline">
-                Pathway hub
-              </Link>
-            </div>
-          </li>
-        ))}
-      </ul>
-
-      <p className="text-sm text-[var(--theme-muted-text)]">
-        Looking for timed sets and score review? See{" "}
-        <Link href="/practice-exams" className="font-semibold text-primary hover:underline">
-          Practice exams
-        </Link>{" "}
-        for how mocks and review work in NurseNest.
-      </p>
-    </div>
+        <p className="text-sm text-[var(--theme-muted-text)]">
+          Looking for timed sets and score review? See{" "}
+          <Link href={withMarketingLocale(locale, "/practice-exams")} className="font-semibold text-primary hover:underline">
+            Practice exams
+          </Link>{" "}
+          for how mocks and review work in NurseNest.
+        </p>
+      </MarketingPublicStudyLanding>
+    </>
   );
 }

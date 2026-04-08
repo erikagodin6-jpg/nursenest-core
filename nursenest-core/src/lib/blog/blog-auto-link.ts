@@ -7,7 +7,7 @@ const DEFAULT_LINKS: Array<{ pattern: RegExp; href: string }> = [
   { pattern: /\bNCLEX-RN\b/g, href: "/nclex-rn-practice-questions" },
   { pattern: /\bNCLEX-PN\b/g, href: "/nclex-pn-practice-questions" },
   { pattern: /\bREx-PN\b/g, href: "/rex-pn-practice-questions" },
-  { pattern: /\bexam lesson(s)?\b/gi, href: "/exam-lessons" },
+  { pattern: /\bexam lesson(s)?\b/gi, href: "/lessons" },
   { pattern: /\bpractice question(s)?\b/gi, href: "/nclex-rn-practice-questions" },
   { pattern: /\bstudy plan\b/gi, href: "/app/study-plan" },
   { pattern: /\bfree tools?\b/gi, href: "/tools" },

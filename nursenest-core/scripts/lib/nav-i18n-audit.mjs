@@ -24,6 +24,8 @@ export const MARKETING_LOCALE_CODES = [
   "th",
   "tr",
   "id",
+  "it",
+  "ru",
 ];
 
 export function isAuditedNavKey(key) {

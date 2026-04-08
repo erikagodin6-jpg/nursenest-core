@@ -93,7 +93,10 @@ function loadTranslationKeys(): void {
     enKeysCache = [];
   }
 
-  const LANG_FILES = ["fr", "tl", "hi", "es", "zh", "zh-tw", "ar", "ko", "pt", "pa", "vi", "ht", "ur", "ja", "fa", "de", "th", "tr", "id"];
+  const LANG_FILES = [
+    "fr", "tl", "hi", "es", "zh", "zh-tw", "ar", "ko", "pt", "pa", "vi", "ht", "ur", "ja", "fa", "de", "th", "tr", "id",
+    "it", "ru",
+  ];
   for (const lang of LANG_FILES) {
     try {
       const langPath = path.resolve(__audit_dirname, `../tools/i18n/source/i18n-${lang}.ts`);

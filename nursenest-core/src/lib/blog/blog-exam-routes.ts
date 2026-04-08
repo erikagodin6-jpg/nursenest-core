@@ -12,22 +12,22 @@ export function defaultPracticeHubForExam(exam: string | null | undefined): stri
     case "ALLIED":
       return "/allied-health";
     default:
-      return "/exam-lessons";
+      return "/lessons";
   }
 }
 
 export function defaultLessonsHubForExam(exam: string | null | undefined): string {
   switch (exam) {
     case "RN":
-      return "/exam-lessons";
+      return "/lessons";
     case "PN":
-      return "/exam-lessons";
+      return "/lessons";
     case "NP":
       return "/np-exam-practice-questions";
     case "ALLIED":
       return "/allied-health";
     default:
-      return "/exam-lessons";
+      return "/lessons";
   }
 }
 

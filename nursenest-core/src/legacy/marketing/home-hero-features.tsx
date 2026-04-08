@@ -23,10 +23,9 @@ import {
 /** Maps legacy SPA routes to NurseNest Core routes (same destinations, stable app). */
 const CORE_HREF: Record<string, string> = {
   "/exam-prep": "/pricing",
-  "/lessons": "/app/lessons",
-  "/nursing-specialties": "/app/lessons",
-  "/flashcards": "/app/questions",
-  "/mock-exams": "/app/exams",
+  "/lessons": "/lessons",
+  "/nursing-specialties": "/lessons",
+  "/flashcards": "/flashcards",
 };
 
 /** Restored from `client/src/components/home-hero-features.tsx` (links adapted for Next + Core). */
@@ -57,7 +56,7 @@ export default function HomeHeroFeatures() {
     { icon: HeartPulse, labelKey: "home.heroFeatures.areaCriticalCare", href: "/nursing-specialties" },
     { icon: Baby, labelKey: "home.heroFeatures.areaPediatric", href: "/lessons" },
     { icon: Pill, labelKey: "home.heroFeatures.areaPharmacology", href: "/flashcards" },
-    { icon: Activity, labelKey: "home.heroFeatures.areaPrioritization", href: "/mock-exams" },
+    { icon: Activity, labelKey: "home.heroFeatures.areaPrioritization", href: "/practice-exams" },
   ];
 
   return (

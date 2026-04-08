@@ -5,7 +5,7 @@ import { REPO_ROOT } from "./repo-root";
 /** Must match `script/compile-i18n.ts` */
 export const I18N_LANGUAGES = [
   "en", "fr", "tl", "hi", "es", "zh", "zh-tw", "ar", "ko",
-  "pt", "pa", "vi", "ht", "ur", "ja", "fa", "de", "th", "tr", "id",
+  "pt", "pa", "vi", "ht", "ur", "ja", "fa", "de", "th", "tr", "id", "it", "ru",
 ] as const;
 
 /** Placeholder *names* inside {{ }}, sorted uniquely — must match English merged strings per key. */

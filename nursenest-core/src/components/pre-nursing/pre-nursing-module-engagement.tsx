@@ -281,7 +281,7 @@ export function PreNursingModuleEngagement({
             </li>
             <li>
               <Link
-                href="/exam-lessons"
+                href="/lessons"
                 className="font-medium text-primary hover:underline"
                 onClick={() =>
                   trackClientEvent(PH.preNursingExamLessonsHubClicked, {
@@ -321,7 +321,7 @@ export function PreNursingModuleEngagement({
             ) : (
               <li>
                 <Link
-                  href="/exam-lessons"
+                  href="/lessons"
                   className="font-medium text-primary hover:underline"
                   onClick={() =>
                     trackClientEvent(PH.preNursingExamLessonsHubClicked, {

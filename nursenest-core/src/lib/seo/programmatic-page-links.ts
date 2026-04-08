@@ -1,5 +1,5 @@
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
-import { ALLIED, HUB, NP, PN } from "@/lib/marketing/marketing-entry-routes";
+import { ALLIED, HUB, NP, PN, RN } from "@/lib/marketing/marketing-entry-routes";
 import type { SeoCluster, SeoPageDefinition } from "@/lib/seo/programmatic-registry";
 import { clusterQuestionBankHref } from "@/lib/seo/programmatic-seo-cluster-links";
 

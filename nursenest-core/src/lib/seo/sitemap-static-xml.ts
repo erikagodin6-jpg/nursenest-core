@@ -230,7 +230,6 @@ export async function collectCoreUrls(origin: string): Promise<string[]> {
   };
   const base = [
     add("/"),
-    add("/lessons"),
     add("/question-bank"),
     add("/practice-exams"),
     add("/pricing"),

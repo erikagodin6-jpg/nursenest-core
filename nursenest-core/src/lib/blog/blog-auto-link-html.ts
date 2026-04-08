@@ -43,7 +43,7 @@ export function buildAutoLinkRules(ctx: BlogAutoLinkContext): LinkRule[] {
   }
 
   rules.push(
-    { pattern: /\b(NCLEX)\b/g, href: "/exam-lessons" },
+    { pattern: /\b(NCLEX)\b/g, href: "/lessons" },
     { pattern: /\b(practice questions)\b/gi, href: hub },
     { pattern: /\b(question bank)\b/gi, href: hub },
     { pattern: /\b(study plan)\b/gi, href: "/app/study-plan" },

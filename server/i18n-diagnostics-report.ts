@@ -8,7 +8,7 @@ import path from "path";
 /** Must match script/compile-i18n.ts and script/merge-marketing-i18n.ts */
 export const I18N_LANGS = [
   "en", "fr", "tl", "hi", "es", "zh", "zh-tw", "ar", "ko",
-  "pt", "pa", "vi", "ht", "ur", "ja", "fa", "de", "th", "tr", "id",
+  "pt", "pa", "vi", "ht", "ur", "ja", "fa", "de", "th", "tr", "id", "it", "ru",
 ] as const;
 
 export type I18nSurface = {

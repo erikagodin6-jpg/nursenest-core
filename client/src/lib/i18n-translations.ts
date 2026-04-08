@@ -2,7 +2,7 @@ import type { LanguageCode } from "./i18n-types";
 
 const AVAILABLE_LANGS = new Set([
   "fr", "tl", "hi", "es", "zh", "zh-tw", "ar", "ko",
-  "pt", "pa", "vi", "ht", "ur", "ja", "fa", "de", "th", "tr", "id",
+  "pt", "pa", "vi", "ht", "ur", "ja", "fa", "de", "th", "tr", "id", "it", "ru",
 ]);
 
 const loadedTranslations: Partial<Record<LanguageCode, Record<string, string>>> = {};

@@ -1,24 +1,49 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
+import { MarketingPublicStudyLanding } from "@/components/marketing/marketing-public-study-landing";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
+import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { formatMarketingMessage, resolveMarketingCopy } from "@/lib/marketing-i18n-core";
+import { withMarketingLocale } from "@/lib/i18n/marketing-path";
+import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 
 export const revalidate = 600;
 
-export const metadata: Metadata = {
-  title: "Practice exams & mock tests | NurseNest",
-  description:
-    "Timed practice exams, attempt history, and rationales—scoped by pathway. Learn what NurseNest offers for NCLEX, PN, NP, and allied tracks before you sign in.",
-  alternates: { canonical: absoluteUrl("/practice-exams") },
-  openGraph: {
-    title: "Practice exams & mock tests | NurseNest",
-    url: absoluteUrl("/practice-exams"),
-    type: "website",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getMarketingLocaleForDefaultRoute();
+  const m = await loadMarketingMessages(locale);
+  const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+  const title = resolveMarketingCopy(
+    m,
+    "pages.publicPracticeExams.metaTitle",
+    en,
+    "NCLEX & REx-PN practice exams and mock tests | NurseNest",
+  );
+  const description = resolveMarketingCopy(
+    m,
+    "pages.publicPracticeExams.metaDescription",
+    en,
+    "Timed practice exams and computer-adaptive style sessions for nursing students. Create an account to launch mocks in the app; content is organized by RN, PN, NP, and Allied pathways.",
+  );
+  const alt = marketingAlternatesSharedPage(locale, "/practice-exams");
+  return {
+    title,
+    description,
+    alternates: { canonical: absoluteUrl("/practice-exams"), languages: alt.languages },
+    openGraph: { title, description, url: absoluteUrl("/practice-exams"), type: "website" },
+  };
+}
 
-export default function PracticeExamsHubPage() {
+export default async function PracticeExamsHubPage() {
+  const locale = await getMarketingLocaleForDefaultRoute();
+  const m = await loadMarketingMessages(locale);
+  const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+  const t = (key: string, params?: Record<string, string | number>) => formatMarketingMessage(m, key, params, en);
+
   const appExams = loginWithCallback("/app/exams");
   const appPracticeTests = loginWithCallback("/app/practice-tests");
 
@@ -33,38 +58,24 @@ export default function PracticeExamsHubPage() {
       <nav className="text-sm text-[var(--theme-muted-text)]" aria-label="Breadcrumb">
         <ol className="flex flex-wrap items-center gap-2">
           <li>
-            <Link href="/" className="text-primary underline">
-              Home
+            <Link href={withMarketingLocale(locale, "/")} className="text-primary underline">
+              {t("nav.home")}
             </Link>
           </li>
           <li aria-hidden>/</li>
-          <li className="font-medium text-[var(--theme-heading-text)]">Practice exams</li>
+          <li className="font-medium text-[var(--theme-heading-text)]">{t("pages.publicPracticeExams.breadcrumbCurrent")}</li>
         </ol>
       </nav>
 
-      <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--nn-presentation-wash)] p-5 sm:p-6">
-        <h1 className="text-3xl font-extrabold text-[var(--theme-heading-text)]">Practice exams & mocks</h1>
-        <p className="mt-3 text-[var(--theme-muted-text)]">
-          NurseNest separates <strong className="font-semibold text-[var(--theme-heading-text)]">full-length timed exams</strong> (mock
-          tests with pacing and review) from your{" "}
-          <strong className="font-semibold text-[var(--theme-heading-text)]">question bank</strong> study sessions. Everything is
-          filtered to your subscription pathway so you do not mix RN, PN, NP, or allied scopes by accident.
-        </p>
-        <div className="nn-hero-cta-row mt-[var(--nn-rhythm-text-to-cta)] flex-wrap">
-          <Link
-            href={appExams}
-            className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:brightness-110"
-          >
-            Go to practice exams (sign in)
-          </Link>
-          <Link
-            href="/question-bank"
-            className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] px-5 py-2.5 text-sm font-semibold text-[var(--theme-heading-text)] hover:border-primary/40"
-          >
-            Question bank overview
-          </Link>
-        </div>
-      </div>
+      <MarketingPublicStudyLanding
+        h1={t("pages.publicPracticeExams.h1")}
+        intro={t("pages.publicPracticeExams.intro")}
+        primaryCta={{ href: appExams, label: t("pages.publicPracticeExams.ctaPrimary") }}
+        secondaryCta={{
+          href: withMarketingLocale(locale, "/question-bank"),
+          label: t("pages.publicPracticeExams.ctaSecondaryQuestions"),
+        }}
+      />
 
       <section className="nn-card p-5" aria-labelledby="timed-mocks">
         <h2 id="timed-mocks" className="text-lg font-semibold text-[var(--theme-heading-text)]">
@@ -111,8 +122,8 @@ export default function PracticeExamsHubPage() {
           </li>
         </ul>
         <p className="mt-4 text-sm text-[var(--theme-muted-text)]">
-          Start from your public pathway hub if you are still choosing a track:{" "}
-          <Link href="/lessons" className="font-semibold text-primary hover:underline">
+          Start from your public lessons hub if you are still choosing a track:{" "}
+          <Link href={withMarketingLocale(locale, "/lessons")} className="font-semibold text-primary hover:underline">
             Lessons overview
           </Link>{" "}
           links every exam-specific lesson catalog.

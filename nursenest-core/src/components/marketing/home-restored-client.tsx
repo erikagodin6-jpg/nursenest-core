@@ -237,7 +237,7 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
 
                 <div className="nn-hero-cta-row mt-[var(--nn-rhythm-text-to-cta)]">
                   <MarketingTrackedLink
-                    href={withMarketingLocale(locale, "/test-bank")}
+                    href={withMarketingLocale(locale, "/question-bank")}
                     event={PH.marketingHomeHeroPrimaryCta}
                     eventProps={{ region, destination: "public_test_bank" }}
                     className={MARKETING_PRIMARY_CTA_CLASS}
@@ -247,7 +247,7 @@ export default function HomeRestoredClient({ lessonTeasers }: HomeRestoredClient
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </MarketingTrackedLink>
                   <MarketingTrackedLink
-                    href={withMarketingLocale(locale, "/exam-lessons")}
+                    href={withMarketingLocale(locale, "/lessons")}
                     event={PH.marketingHomeHeroSecondaryCta}
                     eventProps={{ region, destination: "exam_lessons" }}
                     className={MARKETING_SECONDARY_CTA_CLASS}

@@ -116,7 +116,7 @@ export default async function AlliedHealthHubPage() {
 
         <p className="mt-[var(--nn-rhythm-section-y)] border-t border-[var(--border-subtle)] pt-[var(--nn-rhythm-tight-y)] text-center text-xs text-[var(--theme-muted-text)]">
           <Link
-            href="/exam-lessons"
+            href="/lessons"
             className="font-semibold text-primary underline-offset-4 transition hover:underline"
           >
             Looking for NCLEX or NP instead? Browse nursing and advanced practice pathways.

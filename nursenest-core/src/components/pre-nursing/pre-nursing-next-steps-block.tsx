@@ -59,7 +59,7 @@ export function PreNursingNextStepsBlock({ sourceSurface }: { sourceSurface: "hu
       </p>
       <div className="mt-4 grid gap-3 md:grid-cols-2">
         {ROUTES.map((route) => {
-          const href = examPrepHrefForHint(route.key) ?? "/exam-lessons";
+          const href = examPrepHrefForHint(route.key) ?? "/lessons";
           const highlighted = route.key === hint;
           return (
             <Link
@@ -95,7 +95,7 @@ export function PreNursingNextStepsBlock({ sourceSurface }: { sourceSurface: "hu
           Compare plans
         </Link>
         <Link
-          href="/exam-lessons"
+          href="/lessons"
           className="font-semibold text-primary hover:underline"
           onClick={() =>
             trackClientEvent(PH.preNursingExamLessonsHubClicked, {

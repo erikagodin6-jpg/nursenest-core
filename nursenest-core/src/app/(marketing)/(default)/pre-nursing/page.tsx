@@ -82,7 +82,7 @@ export default function PreNursingLandingPage() {
               <Link href="/pricing" className="text-primary hover:underline">
                 View plans
               </Link>
-              <Link href="/exam-lessons" className="text-primary hover:underline">
+              <Link href="/lessons" className="text-primary hover:underline">
                 Exam lesson hubs
               </Link>
             </div>

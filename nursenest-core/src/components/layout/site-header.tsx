@@ -300,7 +300,7 @@ export function SiteHeader() {
             |
           </span>
           <NavDetails label={t("nav.examPrepShort")} subBar>
-            <NavLinkItem href={localizeHref("/mock-exams")}>{t("nav.practiceExams")}</NavLinkItem>
+            <NavLinkItem href={localizeHref("/practice-exams")}>{t("nav.practiceExams")}</NavLinkItem>
             <NavLinkItem href={localizeHref("/pricing")}>{t("nav.pricing")}</NavLinkItem>
           </NavDetails>
           <Link

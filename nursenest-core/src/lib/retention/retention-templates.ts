@@ -47,7 +47,7 @@ export function weakAreaEmailHtml(hint: string): { subject: string; html: string
     <p><strong>${esc(hint)}</strong></p>
     <p>Try five more questions in that area today.</p>
     ${cta("/app/questions", "Open question bank")}
-    ${cta("/exam-lessons", "Review exam lessons")}
+    ${cta("/lessons", "Review exam lessons")}
   `;
   const html = htmlEmailShell(subject, body);
   const text = `Practice tip: ${hint}. Try 5 more questions at ${appOriginForEmail()}/app/questions`;

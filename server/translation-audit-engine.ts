@@ -178,7 +178,9 @@ async function scanUiTranslationKeys(indexingThreshold: number): Promise<AuditRe
     console.error("[TranslationAudit] Failed to load en keys:", e);
   }
 
-  const LANG_FILE_CODES = ["fr", "tl", "hi", "es", "zh", "ar", "ko", "pt", "pa", "vi", "ht", "ur", "ja", "fa", "de", "th", "tr"];
+  const LANG_FILE_CODES = [
+    "fr", "tl", "hi", "es", "zh", "ar", "ko", "pt", "pa", "vi", "ht", "ur", "ja", "fa", "de", "th", "tr", "it", "ru",
+  ];
   const LANG_TO_LOCALE: Record<string, string> = { tl: "fil" };
 
   for (const langCode of LANG_FILE_CODES) {

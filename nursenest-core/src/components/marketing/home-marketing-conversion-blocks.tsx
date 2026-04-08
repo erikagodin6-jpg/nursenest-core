@@ -8,7 +8,7 @@ import { buildHomepageHeroSlides } from "@/lib/marketing-assets";
 import { MarketingChainScreenshot } from "@/components/marketing/marketing-screenshot-stack";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
-import { HUB, loginWithCallback, rnLessons, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
+import { HUB, rnLessons, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
 import type { NursenestMarketingRegion } from "@/lib/marketing/home-hero-gateway-config";
 import { MARKETING_SCREENSHOT_PAIR_SIZES } from "@/lib/marketing-image-delivery";
 import {
@@ -170,7 +170,7 @@ export function HomeMarketingConversionBlocks({ region }: Props) {
             </li>
             <li>
               <MarketingTrackedLink
-                href={loc(loginWithCallback("/app/exams"))}
+                href={loc(HUB.practiceExams)}
                 event={PH.marketingHomeSampleContentClick}
                 eventProps={{ sample: "timed_exams_login", region }}
                 className="nn-marketing-card nn-marketing-card-pad flex h-full min-h-[8.5rem] flex-col transition-colors hover:border-[var(--border-medium)] sm:min-h-0"
