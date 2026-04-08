@@ -8,19 +8,31 @@ import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-s
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { formatMarketingMessage, resolveMarketingCopy } from "@/lib/marketing-i18n-core";
+import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
+import {
+  defaultFlashcardsMetaDescription,
+  defaultFlashcardsMetaTitle,
+} from "@/lib/marketing/nursing-tier-public-labels";
 
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getMarketingLocaleForDefaultRoute();
+  const marketingRegion = await getMarketingRegionFromCookies();
   const m = await loadMarketingMessages(locale);
   const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
-  const title = resolveMarketingCopy(m, "pages.publicFlashcardsHub.metaTitle", en, "NCLEX & nursing flashcards");
+  const metaSfx = marketingRegion === "US" ? "US" : "CA";
+  const title = resolveMarketingCopy(
+    m,
+    `pages.publicFlashcardsHub.metaTitle${metaSfx}`,
+    en,
+    defaultFlashcardsMetaTitle(marketingRegion),
+  );
   const description = resolveMarketingCopy(
     m,
-    "pages.publicFlashcardsHub.metaDescription",
+    `pages.publicFlashcardsHub.metaDescription${metaSfx}`,
     en,
-    "Topic-organized nursing flashcards for NCLEX-RN, NCLEX-PN, and clinical review. Sample cards here; full study inside NurseNest.",
+    defaultFlashcardsMetaDescription(marketingRegion),
   );
   return {
     title,

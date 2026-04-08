@@ -1708,7 +1708,7 @@ router.get("/api/v1/dashboard/summary", async (req, res) => {
         timeSpent: cat.time_spent_seconds,
         lastAccessed: cat.last_active_at,
         isPaused: cat.status === "paused",
-        resumePath: "/mock-exams",
+        resumePath: "/practice-exams",
       });
     }
 
@@ -1725,7 +1725,7 @@ router.get("/api/v1/dashboard/summary", async (req, res) => {
           progress: `${(catState.questionsSeen || []).length}/${cat.total_questions} questions`,
           lastAccessed: cat.started_at,
           isPaused: catState.isPaused || false,
-          resumePath: "/mock-exams",
+          resumePath: "/practice-exams",
         });
       }
     }
@@ -1734,11 +1734,11 @@ router.get("/api/v1/dashboard/summary", async (req, res) => {
       continueWhereYouLeftOff.push({
         type: "mock_exam",
         id: sp.attempt_id,
-        title: `Mock Exam (${sp.tier?.toUpperCase()})`,
+        title: `Practice Exam (${sp.tier?.toUpperCase()})`,
         progress: `Q${(sp.current_question_index || 0) + 1} · ${sp.answered_count || 0} answered`,
         timeRemaining: sp.time_remaining,
         lastAccessed: sp.last_active_at,
-        resumePath: "/mock-exams",
+        resumePath: "/practice-exams",
       });
     }
 
@@ -1748,9 +1748,9 @@ router.get("/api/v1/dashboard/summary", async (req, res) => {
         continueWhereYouLeftOff.push({
           type: "mock_exam",
           id: mock.id,
-          title: `Mock Exam (${mock.tier?.toUpperCase()})`,
+          title: `Practice Exam (${mock.tier?.toUpperCase()})`,
           lastAccessed: mock.started_at,
-          resumePath: "/mock-exams",
+          resumePath: "/practice-exams",
         });
       }
     }
@@ -1813,14 +1813,14 @@ router.get("/api/v1/dashboard/summary", async (req, res) => {
       recommendedNextAction = {
         action: "Resume CAT Exam",
         description: "You have an in-progress CAT exam waiting. Complete it to get your adaptive score.",
-        path: "/mock-exams",
+        path: "/practice-exams",
         priority: "high",
       };
     } else if (inProgressMockResult.rows.length > 0 || mockSessionProgressResult.rows.length > 0) {
       recommendedNextAction = {
-        action: "Complete Mock Exam",
-        description: "Finish your in-progress mock exam to see your results.",
-        path: "/mock-exams",
+        action: "Complete Practice Exam",
+        description: "Finish your in-progress practice exam to see your results.",
+        path: "/practice-exams",
         priority: "high",
       };
     } else if (isNewUser) {
@@ -1861,9 +1861,9 @@ router.get("/api/v1/dashboard/summary", async (req, res) => {
       };
     } else if (mockCompleted === 0 && isPremium) {
       recommendedNextAction = {
-        action: "Take Your First Mock Exam",
+        action: "Take Your First Practice Exam",
         description: "Test your knowledge with a full-length practice exam.",
-        path: "/mock-exams",
+        path: "/practice-exams",
         priority: "medium",
       };
     } else if (streak && !streak.last_answer_date) {
@@ -1877,7 +1877,7 @@ router.get("/api/v1/dashboard/summary", async (req, res) => {
       recommendedNextAction = {
         action: "Take a Practice Exam",
         description: "Continue building your readiness with another practice session.",
-        path: "/mock-exams",
+        path: "/practice-exams",
         priority: "medium",
       };
     }

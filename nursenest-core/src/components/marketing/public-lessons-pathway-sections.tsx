@@ -9,6 +9,11 @@ import { examLessonsIndexBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
+import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
+import {
+  NCLEX_RN_PUBLIC_LABEL,
+  nursingTierHeadingPn,
+} from "@/lib/marketing/nursing-tier-public-labels";
 
 const cachedPathwayIdsWithLessons = unstable_cache(
   () => listPathwayIdsWithLessons(),
@@ -24,7 +29,13 @@ function roleGroup(p: ExamPathwayDefinition): "rn" | "pn" | "np" | "allied" | nu
   return null;
 }
 
-export async function PublicLessonsPathwaySections({ locale }: { locale: string }) {
+export async function PublicLessonsPathwaySections({
+  locale,
+  region,
+}: {
+  locale: string;
+  region: MarketingRegionToggle;
+}) {
   const pathwayIds = await cachedPathwayIdsWithLessons();
   const pathways = pathwayIds
     .map((id) => getExamPathwayById(id))
@@ -55,15 +66,21 @@ export async function PublicLessonsPathwaySections({ locale }: { locale: string 
     slug === "canada" ? t("pages.pricing.country.ca") : t("pages.pricing.country.us");
 
   const sectionTitle: Record<"rn" | "pn" | "np" | "allied", string> = {
-    rn: "Registered Nurse (RN)",
-    pn: "Practical Nurse (PN)",
+    rn: NCLEX_RN_PUBLIC_LABEL,
+    pn: nursingTierHeadingPn(region),
     np: "Nurse Practitioner (NP)",
     allied: "Allied health",
   };
 
   const sectionLead: Record<"rn" | "pn" | "np" | "allied", string> = {
-    rn: "NCLEX-RN and country-specific RN tracks. Each hub lists modules aligned to that exam.",
-    pn: "NCLEX-PN (US) and REx-PN (Canada) hubs with PN-scoped clinical lessons.",
+    rn:
+      region === "US"
+        ? "NCLEX-RN hubs for US RN candidates. Each pathway lists modules aligned to NCLEX-RN."
+        : "NCLEX-RN hubs for Canadian RN registration. Each pathway lists modules aligned to NCLEX-RN.",
+    pn:
+      region === "US"
+        ? "NCLEX-PN (LPN) hubs with practical-nursing scope, lessons, and exam-aligned modules."
+        : "REx-PN (RPN) hubs with Canadian practical-nursing scope, lessons, and exam-aligned modules.",
     np: "Board-specific NP preparation—FNP, AGPCNP, PMHNP, and Canadian NP tracks.",
     allied: "Discipline-aligned reasoning for allied certification prep.",
   };

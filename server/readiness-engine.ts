@@ -438,7 +438,7 @@ export async function generateRecommendations(userId: string): Promise<PracticeR
       title: "Take a practice exam",
       description: "Practice exams simulate real test conditions and help identify gaps in your preparation.",
       priority: "medium",
-      actionUrl: "/mock-exams",
+      actionUrl: "/practice-exams",
     });
   }
 

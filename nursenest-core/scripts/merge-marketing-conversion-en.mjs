@@ -74,16 +74,16 @@ const patch = {
   "nav.examHubsMobile": "Pick your exam",
   "nav.chooseYourExam": "Choose your exam",
   "nav.examStrip.rn": "NCLEX-RN",
-  "nav.examStrip.pnUS": "NCLEX-PN",
-  "nav.examStrip.pnCA": "REx-PN",
+  "nav.examStrip.pnUS": "NCLEX-PN · LPN",
+  "nav.examStrip.pnCA": "REx-PN · RPN",
   "nav.examStrip.npUS": "NP (US certifications)",
   "nav.examStrip.npCA": "NP (CNPLE)",
   "nav.examStrip.alliedUS": "Allied health",
   "nav.examStrip.alliedCA": "Allied health",
 
   "home.quickEntry.rnQuestions": "NCLEX-RN questions",
-  "home.quickEntry.pnQuestionsUS": "NCLEX-PN questions",
-  "home.quickEntry.pnQuestionsCA": "REx-PN questions",
+  "home.quickEntry.pnQuestionsUS": "NCLEX-PN (LPN) questions",
+  "home.quickEntry.pnQuestionsCA": "REx-PN (RPN) questions",
   "home.quickEntry.npQuestionsUS": "NP practice questions (US)",
   "home.quickEntry.npQuestionsCA": "CNPLE / NP questions",
   "home.quickEntry.alliedUS": "Allied health questions (US)",
@@ -101,8 +101,8 @@ const patch = {
   "home.gateway.nursing.link.lessons": "RN lessons",
   "home.gateway.nursing.link.timedMocks": "Timed practice exams",
 
-  "home.gateway.practical.titleUS": "NCLEX-PN (LVN/LPN)",
-  "home.gateway.practical.titleCA": "REx-PN (Canada PN)",
+  "home.gateway.practical.titleUS": "NCLEX-PN (LPN)",
+  "home.gateway.practical.titleCA": "REx-PN (RPN)",
   "home.gateway.practical.introUS":
     "PN-level safety and pharmacology stems with lesson support, not RN material squeezed into an LPN label.",
   "home.gateway.practical.introCA":
@@ -154,10 +154,10 @@ const patch = {
   "pages.pricing.examChoose.subtitleUS": "US terminology and exam naming",
   "pages.pricing.examChoose.subtitleCA": "Canadian terminology and exam naming",
 
-  "pages.pricing.examCard.rnUS": "RN (NCLEX-RN)",
-  "pages.pricing.examCard.rnCA": "RN (NCLEX-RN)",
-  "pages.pricing.examCard.pnUS": "PN (NCLEX-PN)",
-  "pages.pricing.examCard.pnCA": "PN (REx-PN)",
+  "pages.pricing.examCard.rnUS": "NCLEX-RN",
+  "pages.pricing.examCard.rnCA": "NCLEX-RN",
+  "pages.pricing.examCard.pnUS": "NCLEX-PN (LPN)",
+  "pages.pricing.examCard.pnCA": "REx-PN (RPN)",
   "pages.pricing.examCard.npUS": "NP (US certifications)",
   "pages.pricing.examCard.npCA": "NP (CNPLE)",
   "pages.pricing.examCard.alliedUS": "Allied health (US)",
@@ -178,7 +178,7 @@ const patch = {
 
   "home.conversion.why1Title": "Banks that match your registration",
   "home.conversion.why1Body":
-    "RN, PN, NP, and allied pools stay separated. You should not be drilling US delegation language the night before a Canadian sit.",
+    "NCLEX-RN, practical nursing (NCLEX-PN in the US or REx-PN in Canada), NP, and allied pools stay separated. You should not be drilling US delegation language the night before a Canadian sit.",
 
   "home.conversion.why2Title": "Rationales that walk each option",
   "home.conversion.why2Body":

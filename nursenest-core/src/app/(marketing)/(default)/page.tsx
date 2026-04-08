@@ -8,20 +8,35 @@ import { marketingHomeSurfaceBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
+import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
+import { resolveMarketingCopy } from "@/lib/marketing-i18n-core";
+import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
+import { defaultHomeMetaDescription, defaultHomeMetaTitle } from "@/lib/marketing/nursing-tier-public-labels";
 
 /** ISR: homepage shell (lesson teaser strip removed — routing-first layout). */
 export const revalidate = 600;
 
 export async function generateMetadata(): Promise<Metadata> {
-  const m = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
-  const alt = marketingAlternatesSharedPage(DEFAULT_MARKETING_LOCALE, "/");
+  const locale = await getMarketingLocaleForDefaultRoute();
+  const marketingRegion = await getMarketingRegionFromCookies();
+  const m = await loadMarketingMessages(locale);
+  const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+  const metaSfx = marketingRegion === "US" ? "US" : "CA";
+  const title = resolveMarketingCopy(m, `pages.home.metaTitle${metaSfx}`, en, defaultHomeMetaTitle(marketingRegion));
+  const description = resolveMarketingCopy(
+    m,
+    `pages.home.metaDescription${metaSfx}`,
+    en,
+    defaultHomeMetaDescription(marketingRegion),
+  );
+  const alt = marketingAlternatesSharedPage(locale, "/");
   return {
-    title: m["pages.home.metaTitle"],
-    description: m["pages.home.metaDescription"],
+    title,
+    description,
     alternates: { canonical: alt.canonical, languages: alt.languages },
     openGraph: {
-      title: m["pages.home.metaTitle"],
-      description: m["pages.home.metaDescription"],
+      title,
+      description,
       url: alt.canonical,
       type: "website",
     },

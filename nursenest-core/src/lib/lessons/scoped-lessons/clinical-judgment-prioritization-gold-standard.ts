@@ -447,7 +447,7 @@ Sepsis/shock concern for Client A outranks paperwork and routine dressing. Initi
   us_np: t(
     "us_np",
     {
-      title: "Clinical judgment in ambulatory care (NP — placeholder title)",
+      title: "Clinical judgment in ambulatory care (NP, US)",
       seoTitle: "Ambulatory prioritization | NP US | NurseNest",
       seoDescription:
         "NP-level synthesis: who needs same-day evaluation, red-flag triage, and safe escalation in primary care.",

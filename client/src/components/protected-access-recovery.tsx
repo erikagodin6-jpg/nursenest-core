@@ -8,6 +8,7 @@ import {
 import { useLocation } from "wouter";
 import { useAuth } from "@/lib/auth";
 import { generateIncidentId } from "@/lib/resilience";
+import { getLocaleFromPath } from "@/lib/locale-utils";
 
 export type ContentCategory =
   | "exam"
@@ -325,7 +326,12 @@ export function ProtectedAccessRecovery({
       icon: <ArrowLeft className="w-4 h-4" />,
       onClick: () => {
         const path = window.location.pathname;
-        const match = path.match(/^(\/[^/]+)\/mock-exams\//);
+        const { pathWithoutLocale } = getLocaleFromPath(path);
+        if (pathWithoutLocale.startsWith("/mock-exams/")) {
+          navigate(backPath);
+          return;
+        }
+        const match = pathWithoutLocale.match(/^(\/[^/]+)\/mock-exams\//);
         navigate(match ? `${match[1]}/mock-exams` : backPath);
       },
       variant: "outline",

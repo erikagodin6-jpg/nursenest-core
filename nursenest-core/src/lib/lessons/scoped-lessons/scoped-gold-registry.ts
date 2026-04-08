@@ -2,6 +2,7 @@
  * Injectable scoped gold-standard lessons (shared core + pathway overlays).
  * Order = remediation priority for hub injection when not duplicated in catalog.json or DB.
  */
+import type { PathwayLessonQuizItem, PathwayLessonSection } from "@/lib/lessons/pathway-lesson-types";
 import {
   clinicalJudgmentHubListInput,
   CLINICAL_JUDGMENT_GOLD_SLUG,
@@ -18,6 +19,16 @@ import {
   highAlertMedsGoldHubListInput,
 } from "@/lib/lessons/scoped-lessons/high-alert-medications-gold-standard";
 import {
+  acsGoldHubListInput,
+  ACS_GOLD_SLUG,
+  getAcsGoldLessonInput,
+} from "@/lib/lessons/scoped-lessons/acute-coronary-syndrome-gold-standard";
+import {
+  fluidsElectrolytesGoldHubListInput,
+  FLUIDS_ELECTROLYTES_GOLD_SLUG,
+  getFluidsElectrolytesGoldLessonInput,
+} from "@/lib/lessons/scoped-lessons/fluids-electrolytes-emergencies-gold-standard";
+import {
   getSepsisGoldLessonInput,
   SEPSIS_GOLD_SLUG,
   sepsisGoldHubListInput,
@@ -33,9 +44,9 @@ export type ScopedGoldLessonInput = {
   previewSectionCount: number;
   seoTitle: string;
   seoDescription: string;
-  sections: unknown;
-  preTest?: import("@/lib/lessons/pathway-lesson-types").PathwayLessonQuizItem[];
-  postTest?: import("@/lib/lessons/pathway-lesson-types").PathwayLessonQuizItem[];
+  sections: PathwayLessonSection[];
+  preTest?: PathwayLessonQuizItem[];
+  postTest?: PathwayLessonQuizItem[];
 };
 
 export type ScopedGoldProvider = {
@@ -58,6 +69,18 @@ export const SCOPED_GOLD_PROVIDERS: ScopedGoldProvider[] = [
     topicSlug: "sepsis",
     getFullLesson: getSepsisGoldLessonInput,
     getHubListRow: sepsisGoldHubListInput,
+  },
+  {
+    slug: FLUIDS_ELECTROLYTES_GOLD_SLUG,
+    topicSlug: "fluids-electrolytes",
+    getFullLesson: getFluidsElectrolytesGoldLessonInput,
+    getHubListRow: fluidsElectrolytesGoldHubListInput,
+  },
+  {
+    slug: ACS_GOLD_SLUG,
+    topicSlug: "cardiovascular",
+    getFullLesson: getAcsGoldLessonInput,
+    getHubListRow: acsGoldHubListInput,
   },
   {
     slug: HIGH_ALERT_MEDS_GOLD_SLUG,

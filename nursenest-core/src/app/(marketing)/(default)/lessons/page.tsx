@@ -10,19 +10,31 @@ import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messa
 import { formatMarketingMessage, resolveMarketingCopy } from "@/lib/marketing-i18n-core";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
+import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
+import {
+  defaultPublicLessonsMetaDescription,
+  defaultPublicLessonsMetaTitle,
+} from "@/lib/marketing/nursing-tier-public-labels";
 
 export const revalidate = 600;
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getMarketingLocaleForDefaultRoute();
+  const marketingRegion = await getMarketingRegionFromCookies();
   const m = await loadMarketingMessages(locale);
   const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
-  const title = resolveMarketingCopy(m, "pages.publicLessons.metaTitle", en, "Nursing exam lessons | NCLEX-RN, NCLEX-PN, REx-PN, NP | NurseNest");
+  const metaSfx = marketingRegion === "US" ? "US" : "CA";
+  const title = resolveMarketingCopy(
+    m,
+    `pages.publicLessons.metaTitle${metaSfx}`,
+    en,
+    defaultPublicLessonsMetaTitle(marketingRegion),
+  );
   const description = resolveMarketingCopy(
     m,
-    "pages.publicLessons.metaDescription",
+    `pages.publicLessons.metaDescription${metaSfx}`,
     en,
-    "Browse pathway-scoped clinical lessons for US and Canada: NCLEX-RN, NCLEX-PN, REx-PN, and NP tracks. Previews are public; full depth unlocks with a matching plan.",
+    defaultPublicLessonsMetaDescription(marketingRegion),
   );
   const alt = marketingAlternatesSharedPage(locale, "/lessons");
   return {
@@ -35,6 +47,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function PublicLessonsLandingPage() {
   const locale = await getMarketingLocaleForDefaultRoute();
+  const marketingRegion = await getMarketingRegionFromCookies();
   const m = await loadMarketingMessages(locale);
   const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
   const t = (key: string, params?: Record<string, string | number>) => formatMarketingMessage(m, key, params, en);
@@ -64,7 +77,7 @@ export default async function PublicLessonsLandingPage() {
         secondaryCta={{ href: withMarketingLocale(locale, "/question-bank"), label: t("pages.publicLessons.ctaPracticeQuestions") }}
         signupCta={{ href: signupLessons, label: t("pages.publicLessons.ctaCreateAccount") }}
       >
-        <PublicLessonsPathwaySections locale={locale} />
+        <PublicLessonsPathwaySections locale={locale} region={marketingRegion} />
         <p className="nn-marketing-body-sm text-muted">
           {t("pages.examLessons.appLessonsLead")}{" "}
           <Link href={loginWithCallback("/app/lessons")} className="font-semibold text-primary">

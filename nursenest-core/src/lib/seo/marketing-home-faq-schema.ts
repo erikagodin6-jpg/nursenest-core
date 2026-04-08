@@ -5,7 +5,7 @@ export const MARKETING_HOME_FAQ_JSONLD: FaqJsonLdItem[] = [
   {
     question: "Which exam is this for?",
     answer:
-      "RN (NCLEX-RN), practical nursing (NCLEX-PN or REx-PN by country), NP, or allied health. Use the card that matches your goal.",
+      "NCLEX-RN, practical nursing (NCLEX-PN with LPN scope in the US or REx-PN with RPN scope in Canada), NP, or allied health. Use the card that matches your goal.",
   },
   {
     question: "Is this for the US and Canada?",

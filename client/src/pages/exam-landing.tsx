@@ -189,7 +189,7 @@ export default function ExamLandingPage() {
         additionalStructuredData={[faqStructuredData, credentialSchema]}
         breadcrumbs={[
           { name: "Home", url: "https://www.nursenest.ca" },
-          { name: "Practice Exams", url: "https://www.nursenest.ca/mock-exams" },
+          { name: "Practice Exams", url: "https://www.nursenest.ca/practice-exams" },
           { name: examData.examName, url: `https://www.nursenest.ca/${examData.slug}` },
         ]}
       />

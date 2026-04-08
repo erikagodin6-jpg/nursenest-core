@@ -57,6 +57,7 @@ function ScoreRing({ percentage, size = 120 }: { percentage: number; size?: numb
 export default function MockExamReport() {
   const { id: attemptId } = useParams();
   const { user } = useAuth();
+  const { t } = useI18n();
   const { toast } = useToast();
   const { isOnTrial } = useTrialStatus();
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -355,7 +356,8 @@ export default function MockExamReport() {
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full flex-1">
         <LocaleLink href="/practice-exams">
           <Button variant="ghost" className="mb-6 group">
-            <ArrowLeft className="mr-2 w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back to Mock Exams
+            <ArrowLeft className="mr-2 w-4 h-4 group-hover:-translate-x-1 transition-transform" />{" "}
+            {t("pages.mockExamReport.backToMockExams")}
           </Button>
         </LocaleLink>
 

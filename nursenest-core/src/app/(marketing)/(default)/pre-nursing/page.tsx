@@ -75,7 +75,8 @@ export default function PreNursingLandingPage() {
             <h3 className="text-lg font-semibold text-[var(--theme-heading-text)]">What happens next</h3>
             <p className="mt-3 text-sm text-muted">
               When you’re ready, NurseNest offers paid exam pathways with full question banks, mocks, and lessons aligned to
-              NCLEX-RN, NCLEX-PN, REX-PN, and NP tracks. Same product family, with entitlements that match your
+              NCLEX-RN, practical nursing (NCLEX-PN in the US or REx-PN in Canada), and NP tracks. Same product family, with
+              entitlements that match your
               subscription.
             </p>
             <div className="mt-4 flex flex-wrap gap-3 text-sm font-semibold">

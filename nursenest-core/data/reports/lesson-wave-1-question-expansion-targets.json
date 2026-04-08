@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "title": "Question bank expansion targets — scoped gold lesson wave 1",
+  "title": "Question bank expansion targets — scoped gold lessons (waves 1–2)",
   "lessons": [
     {
       "lessonSlug": "clinical-judgment-prioritization-gold",
@@ -64,6 +64,44 @@
         "Patient teaching: inhalers, pursed-lip breathing, cessation"
       ],
       "metadataSignals": ["Respiratory topic/subtopic for system rollup"]
+    },
+    {
+      "lessonSlug": "fluids-electrolytes-emergencies-gold",
+      "topicSlug": "fluids-electrolytes",
+      "wave": 2,
+      "blueprintDomains": ["physiological_adaptation", "risk_reduction", "pharmacological_therapies"],
+      "clinicalSystems": ["fluids_electrolytes", "renal", "cardio", "endocrine"],
+      "questionThemes": [
+        "Hyperkalemia with ECG progression — calcium/insulin/glucose/dialysis teaching per stem",
+        "Hypo/hypernatremia: symptoms, correction speed, neuro changes",
+        "Hypocalcemia tetany / prolonged QT; hypomagnesemia and torsades risk",
+        "DKA/HHNS: fluid and potassium shifts during insulin therapy",
+        "Canadian items: mmol/L sodium, potassium, glucose",
+        "NP: ACEI + spironolactone + NSAID hyperkalemia; ED referral thresholds"
+      ],
+      "metadataSignals": [
+        "Topic/subtopic keywords for fluids, electrolytes, renal, acid-base",
+        "Tag client-need physiological when appropriate"
+      ]
+    },
+    {
+      "lessonSlug": "acute-coronary-syndrome-gold",
+      "topicSlug": "cardiovascular",
+      "wave": 2,
+      "blueprintDomains": ["physiological_adaptation", "management_of_care", "pharmacological_therapies"],
+      "clinicalSystems": ["cardio"],
+      "questionThemes": [
+        "STEMI vs NSTEMI / unstable angina prioritization and reperfusion pathways",
+        "NTG contraindications: hypotension, RV infarct, PDE-5 inhibitors, severe AS",
+        "Aspirin antiplatelet role; anticoagulant and bleeding monitoring",
+        "Atypical ACS in women, diabetes, older adults",
+        "Post-PCI access site and antiplatelet teaching",
+        "NP: chest pain cannot-miss (ACS, PE, dissection) — ED referral"
+      ],
+      "metadataSignals": [
+        "Cardiovascular body_system and topic slugs",
+        "management_of_care for prioritization multi-patient items tied to ACS"
+      ]
     }
   ]
 }

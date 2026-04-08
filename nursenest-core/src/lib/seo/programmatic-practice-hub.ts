@@ -48,11 +48,11 @@ export function buildPracticeHubContext(slug: string, region: MarketingRegionTog
   const examKey = examKeyForSlug(slug);
 
   if (examKey === "RN") {
-    const examLabel = region === "US" ? "NCLEX-RN Practice Questions" : "Canadian RN Entry-to-Practice Questions";
+    const examLabel = "NCLEX-RN Practice Questions";
     const lead =
       region === "US"
         ? "Prepare for the NCLEX-RN with client-needs categories, rationales, and targeted remediation."
-        : "Prepare for Canadian RN entry-to-practice exams with category-driven questions, system review, and realistic rationale feedback.";
+        : "Prepare for the NCLEX-RN with Canadian framing—category-driven questions, system review, and rationale feedback aligned to RN registration.";
     return {
       examKey,
       examLabel,
@@ -71,11 +71,11 @@ export function buildPracticeHubContext(slug: string, region: MarketingRegionTog
   }
 
   if (examKey === "PN") {
-    const examLabel = region === "US" ? "NCLEX-PN Practice Questions" : "REx-PN Practice Questions";
+    const examLabel = region === "US" ? "NCLEX-PN (LPN) Practice Questions" : "REx-PN (RPN) Practice Questions";
     const lead =
       region === "US"
-        ? "Prepare for the NCLEX-PN with practical-nursing scope, safety, and delegation-focused practice."
-        : "Prepare for the REx-PN entry-to-practice exam with Canadian terminology and scope-aware PN scenarios.";
+        ? "Prepare for the NCLEX-PN with LPN scope, safety, and delegation-focused practice."
+        : "Prepare for the REx-PN entry-to-practice exam with Canadian RPN terminology and scope-aware scenarios.";
     return {
       examKey,
       examLabel,

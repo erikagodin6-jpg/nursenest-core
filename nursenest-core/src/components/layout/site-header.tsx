@@ -10,13 +10,13 @@ import { MarketingLanguagePreferenceList } from "@/components/i18n/marketing-lan
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 import { MarketingHeaderAuthDesktop } from "@/components/auth/marketing-header-auth";
+import { MarketingHeaderUtilityStrip } from "@/components/layout/marketing-header-utility-strip";
+import { MarketingSiteSubNav } from "@/components/layout/marketing-site-sub-nav";
+import { ThemePicker } from "@/components/theme/theme-picker";
 import { Button } from "@/components/ui/button";
 
 const NAV_LINK_CLASS =
-  "nn-marketing-body-sm font-medium tracking-normal text-[var(--theme-menu-text)] transition-colors duration-150 hover:text-primary";
-
-const REGION_BTN_CLASS =
-  "nn-marketing-body-sm font-medium tracking-normal rounded-full px-2 py-1 transition-colors duration-150";
+  "nn-marketing-body-sm font-medium tracking-tight text-[var(--theme-menu-text)] transition-colors duration-200 hover:text-primary";
 
 export function SiteHeader() {
   const { t, locale } = useMarketingI18n();
@@ -48,66 +48,49 @@ export function SiteHeader() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[var(--divider,var(--theme-nav-border))] bg-[var(--theme-header-surface)]/95 backdrop-blur-md transition-colors duration-200">
-      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-2 px-2 sm:gap-3 sm:px-4 lg:h-16 lg:px-8">
-        <Link
-          href={localizeHref("/")}
-          className="group flex min-w-0 shrink-0 items-center gap-2 overflow-hidden bg-transparent"
-          aria-label={t("brand.homeAriaLabel")}
-        >
-          <SiteBrandLogoMark />
-        </Link>
+    <div className="sticky top-0 z-50">
+      <MarketingHeaderUtilityStrip />
 
-        <nav
-          aria-label={t("nav.marketingExplore")}
-          className="hidden min-w-0 flex-1 items-center justify-center md:flex md:gap-4 lg:gap-6"
-        >
-          {marketingNav.map((item) => (
-            <Link key={item.href} href={localizeHref(item.href)} className={`${NAV_LINK_CLASS} max-w-[11rem] truncate`}>
-              {t(item.labelKey)}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2 md:gap-3">
-          <div className="inline-flex items-center rounded-full border border-[var(--theme-nav-border)] bg-[var(--theme-card-bg)] p-0.5">
-            <button
-              type="button"
-              onClick={() => setRegion("US")}
-              className={`${REGION_BTN_CLASS} ${
-                region === "US" ? "bg-role-cta-soft text-role-cta-on-soft" : "text-[var(--theme-muted-text)] hover:bg-[var(--theme-menu-hover-bg)]"
-              }`}
-              aria-label={t("home.region.us")}
-            >
-              {t("home.region.us")}
-            </button>
-            <button
-              type="button"
-              onClick={() => setRegion("CA")}
-              className={`${REGION_BTN_CLASS} ${
-                region === "CA" ? "bg-role-cta-soft text-role-cta-on-soft" : "text-[var(--theme-muted-text)] hover:bg-[var(--theme-menu-hover-bg)]"
-              }`}
-              aria-label={t("home.region.ca")}
-            >
-              {t("home.region.ca")}
-            </button>
-          </div>
-
-          <div className="flex min-w-0 items-center">
-            <MarketingHeaderAuthDesktop />
-          </div>
-
-          <Button
-            type="button"
-            variant="ghost"
-            className="h-9 w-9 shrink-0 p-0 text-[var(--theme-menu-text)] md:hidden"
-            aria-label={t("nav.openMenu")}
-            onClick={() => setMobileOpen(true)}
+      <header className="border-b border-[color-mix(in_srgb,var(--theme-nav-border)_55%,transparent)] bg-[var(--theme-page-bg)]">
+        <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-2 px-3 sm:gap-4 sm:px-5 lg:h-[3.75rem] lg:gap-6 lg:px-8">
+          <Link
+            href={localizeHref("/")}
+            className="group flex min-w-0 shrink-0 items-center gap-2 overflow-hidden bg-transparent"
+            aria-label={t("brand.homeAriaLabel")}
           >
-            <Menu className="h-5 w-5" />
-          </Button>
+            <SiteBrandLogoMark />
+          </Link>
+
+          <nav
+            aria-label={t("nav.marketingExplore")}
+            className="hidden min-w-0 flex-1 items-center justify-center md:flex md:gap-5 lg:gap-8"
+          >
+            {marketingNav.map((item) => (
+              <Link key={item.href} href={localizeHref(item.href)} className={`${NAV_LINK_CLASS} max-w-[11rem] truncate`}>
+                {t(item.labelKey)}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="flex shrink-0 items-center gap-1.5 sm:gap-2 md:gap-3">
+            <div className="flex min-w-0 items-center">
+              <MarketingHeaderAuthDesktop />
+            </div>
+
+            <Button
+              type="button"
+              variant="ghost"
+              className="h-9 w-9 shrink-0 p-0 text-[var(--theme-menu-text)] md:hidden"
+              aria-label={t("nav.openMenu")}
+              onClick={() => setMobileOpen(true)}
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
+          </div>
         </div>
-      </div>
+      </header>
+
+      <MarketingSiteSubNav />
 
       {mobileOpen ? (
         <div className="fixed inset-0 z-[200] md:hidden">
@@ -200,10 +183,19 @@ export function SiteHeader() {
                 ) : null}
               </div>
 
+              <div className="mb-2">
+                <ThemePicker
+                  labels={{
+                    navTheme: t("nav.theme"),
+                    themeGroupLight: t("nav.themeGroupLight"),
+                    themeGroupDark: t("nav.themeGroupDark"),
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>
       ) : null}
-    </header>
+    </div>
   );
 }

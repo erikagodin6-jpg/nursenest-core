@@ -1840,7 +1840,7 @@ const SAFE_MODE_STATIC_FALLBACKS: Record<string, any> = {
   "/api/lessons": { items: [], message: "Lessons are temporarily unavailable. Please try again shortly.", _static: true },
   "/api/flashcards": { items: [], message: "Flashcards are temporarily unavailable. Please try again shortly.", _static: true },
   "/api/flashcard-decks": { items: [], message: "Flashcard decks are temporarily unavailable. Please try again shortly.", _static: true },
-  "/api/mock-exams": { items: [], message: "Mock exams are temporarily unavailable. Please try again shortly.", _static: true },
+  "/api/mock-exams": { items: [], message: "Practice exams are temporarily unavailable. Please try again shortly.", _static: true },
   "/api/exam-questions": { items: [], count: 0, message: "Exam questions are temporarily unavailable. Please try again shortly.", _static: true },
   "/api/question-bank": { items: [], count: 0, message: "Question bank is temporarily unavailable. Please try again shortly.", _static: true },
   "/api/downloads": { items: [], message: "Downloads are temporarily unavailable. Please try again shortly.", _static: true },

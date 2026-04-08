@@ -748,7 +748,7 @@ function WelcomeWidget({ user }: { user: any }) {
       { label: "Question of the Day", path: "/question-of-the-day", icon: Target, variant: "outline" },
     ],
     admin: [
-      { label: "Mock Exams", path: "/practice-exams", icon: ClipboardList, variant: "default" },
+      { label: "Practice Exams", path: "/practice-exams", icon: ClipboardList, variant: "default" },
       { label: "Test Bank", path: "/test-bank", icon: FlaskConical, variant: "outline" },
       { label: "Admin Panel", path: "/admin", icon: Activity, variant: "outline" },
       { label: "Question of the Day", path: "/question-of-the-day", icon: Target, variant: "outline" },

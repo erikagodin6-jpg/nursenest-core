@@ -145,15 +145,16 @@ Stay with client, **support ABCs per order**, **notify RN immediately**, and pre
       seoTitle: "Sepsis recognition | REx-PN Canada | NurseNest",
       seoDescription: "Canadian PN: metric vitals, infection + systemic compromise, collaboration, and escalation.",
       clinical_meaning: `**RPN**  
-Recognize **early deterioration**, use **SI/metric** values carefully, and **collaborate** for diagnostics and therapy changes.`,
-      exam_relevance: `Same prioritization spine as US PN with **Canadian context** cues in stems.`,
+Recognize **early deterioration**, use **SI/metric** values carefully, and **collaborate** for diagnostics and therapy changes. Practical nursing items still reward **trend recognition**: temperature trajectory, mental status, perfusion, urine output, and work of breathing—not isolated “single normal” values that hide decline.`,
+      exam_relevance: `Same prioritization spine as US PN with **Canadian context** cues in stems. Expect **multi-task** distractions: linens, scheduled meds, or charting versus a client who is **febrile with rising HR/RR** and **soft BP**. Choose **assessment + notification** before routine tasks.`,
       clinical_scenario: `**Vignette**  
-Client with UTI history now **febrile**, **tachycardic**, **hypotensive**, **tachypneic**.  
+Client with UTI history now **febrile**, **tachycardic**, **hypotensive**, **tachypneic**, and **new confusion** on evening shift.
 
 **Fork**  
-Escalate immediately; do not defer for routine tasks.`,
-      takeaways: `• **Early escalation saves lives.**  
-• **Objective report** to RN/NP/physician with trends.`,
+Escalate immediately; do not defer for routine tasks. Stay with the client, support **oxygen and safety per order**, and bring **objective numbers** (vitals, I&O, recent meds, lines) to the RN so the team can activate sepsis workup elements as authorized.`,
+      takeaways: `• **Early escalation saves lives** when infection meets systemic compromise.  
+• **Objective report** to RN/NP/physician with trends—not vague “patient looks worse.”  
+• **Never minimize** altered mentation with fever and hemodynamic drift.`,
     },
     {
       preTest: [
@@ -327,15 +328,16 @@ Airway/oxygen, **large-bore access**, **labs/lactate/cultures per order**, **flu
       seoTitle: "Sepsis nursing care | NCLEX-RN Canada | NurseNest",
       seoDescription: "Canadian RN: sepsis pathways, metric labs, collaboration, and time-sensitive stabilization.",
       clinical_meaning: `**Canadian RN**  
-Same **time-sensitive** priorities with **SI labs** and **Canadian acute-care** language in stems.`,
-      exam_relevance: `Watch **temperature in °C**, **glucose mmol/L**, and **MAP** targets as given.`,
+Same **time-sensitive** priorities with **SI labs** and **Canadian acute-care** language in stems. Your role is to **integrate assessment**, **initiate ordered sepsis interventions**, and **communicate failure to respond**—not to substitute protocols shown in another country’s numbers for what this stem provides.`,
+      exam_relevance: `Watch **temperature in °C**, **glucose mmol/L**, and **MAP** targets as given. Traps still pair **routine tasks** with **unstable perfusion**: choose **stabilize and escalate** before **discharge teaching** or **non-urgent procedures**.`,
       clinical_scenario: `**Vignette**  
-Post-op **38.6 °C**, **tachycardia**, **hypotension**, **oliguria**.  
+Post-op client **38.6 °C**, **tachycardia**, **hypotension**, **oliguria**, and **increasing confusion** four hours after surgery.
 
 **Fork**  
-Sepsis pathway activation, notify provider, support perfusion per orders.`,
-      takeaways: `• **Early recognition** is cross-border.  
-• **Document trends** clearly.`,
+Sepsis pathway activation, notify provider, support perfusion per orders. Prioritize **airway/oxygen**, **access**, **labs/cultures as ordered**, **antibiotics timing**, and **frequent reassessment**—before routine mobility goals if stability is not established.`,
+      takeaways: `• **Early recognition** is cross-border; unstable infection trumps convenience.  
+• **Document trends** clearly so the team sees trajectory, not snapshots.  
+• **Reassess after interventions** to decide escalation.`,
     },
     {
       preTest: [
@@ -414,7 +416,7 @@ Sepsis pathway activation, notify provider, support perfusion per orders.`,
   us_np: pack(
     "us_np",
     {
-      title: "Sepsis risk in outpatient settings (NP — placeholder)",
+      title: "Sepsis risk in outpatient settings (NP, US)",
       seoTitle: "Sepsis risk | NP US | NurseNest",
       seoDescription: "NP: who needs ED now vs close follow-up; red flags; safety-netting.",
       clinical_meaning: `**NP**  

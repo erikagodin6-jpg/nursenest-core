@@ -149,15 +149,16 @@ Treat **hypoglycemia per protocol/order** (e.g., fast carbs, recheck), **stay wi
       seoTitle: "High-alert medications | REx-PN Canada | NurseNest",
       seoDescription: "Canadian PN: metric glucose, college scope, bleeding and respiratory monitoring, collaboration.",
       clinical_meaning: `**RPN**  
-Use **metric units** in stems (mmol/L glucose). Same safety spine: **verify**, **monitor**, **report**, **escalate**.`,
-      exam_relevance: `Traps mirror US PN with **Canadian documentation** language.`,
+Use **metric units** in stems (mmol/L glucose). Same safety spine: **verify**, **monitor**, **report**, **escalate**. Canadian items still punish **silent hypoglycemia**, **hidden bleeding** on anticoagulation, and **opioid sedation**—choose **assessment + collaboration** over **routine tasks** when risk is unequal.`,
+      exam_relevance: `Traps mirror US PN with **Canadian documentation** language: **scheduled dressing** versus **acute change**, **charting** versus **respiratory depression**, and **client requests** versus **objective instability**. Read **SI glucose** carefully before choosing insulin actions.`,
       clinical_scenario: `**Vignette**  
-Glucose **3.1 mmol/L** with symptoms.
+Glucose **3.1 mmol/L** with **diaphoresis**, **tremor**, and **confusion**; client is on basal bolus insulin per order.
 
 **Fork**  
-Hypoglycemia treatment per protocol + RN notification.`,
-      takeaways: `• Convert reasoning to **SI** when the stem uses it.  
-• **Never minimize** neuro changes on anticoagulation.`,
+Hypoglycemia treatment per protocol + RN notification. Do **not** administer scheduled insulin while hypoglycemia is untreated unless the stem explicitly directs a coordinated plan; prioritize **fast carbs / glucagon per order**, **recheck**, and **continuous observation**.`,
+      takeaways: `• Convert reasoning to **SI** when the stem uses it—do not mentally “translate” into mg/dL incorrectly under time pressure.  
+• **Never minimize** neuro changes on anticoagulation: sudden headache or focal deficits need urgent escalation.  
+• **Opioids + sedation + low RR** outrank non-urgent comfort tasks.`,
     },
     {
       preTest: [
@@ -331,15 +332,16 @@ Stop bolus demand if applicable, **support airway**, **notify provider**, **nalo
       seoTitle: "High-alert medications | NCLEX-RN Canada | NurseNest",
       seoDescription: "Canadian RN: SI glucose, anticoag safety, opioid toxicity, and collaboration.",
       clinical_meaning: `**Canadian RN**  
-Same management with **metric** labs and Canadian terminology.`,
-      exam_relevance: `Watch **mmol/L glucose** and **SI INR** presentations.`,
+Same management with **metric** labs and Canadian terminology. Your exam still ties **high-alert meds** to **airway protection**, **perfusion**, and **timely reversal/antidotes** when ordered—especially when sedation stacks with regional anesthesia or acute illness.`,
+      exam_relevance: `Watch **mmol/L glucose** and **SI INR** presentations. Traps include **treating numbers without symptoms** (or ignoring symptoms because a number “looks okay”) and **delaying escalation** for **opioid toxicity** while completing non-urgent tasks.`,
       clinical_scenario: `**Vignette**  
-Epidural + opioid: **sedation + respiratory depression** cues.
+Epidural infusion running; client becomes **difficult to arouse**, **RR 8**, **snoring**, and **SpO₂ falling** despite supplemental oxygen.
 
 **Fork**  
-Airway first, notify anesthesia/provider per protocol, prepare reversal per order.`,
-      takeaways: `• **Regional anesthesia + opioids** compound risk.  
-• **Team communication** is safety.`,
+Airway first, notify anesthesia/provider per protocol, prepare reversal per order. Stop additional opioid boluses unless ordered, support ventilation per protocol, and **never leave** a bradypneic sedated client unattended while you finish paperwork.`,
+      takeaways: `• **Regional anesthesia + opioids** compound risk—monitor sedation and ventilation aggressively.  
+• **Team communication** is safety: anesthesia, primary team, and rapid response pathways belong in the loop early.  
+• **Anticoagulation + acute neuro change** is treated as emergency until proven otherwise.`,
     },
     {
       preTest: [
@@ -418,7 +420,7 @@ Airway first, notify anesthesia/provider per protocol, prepare reversal per orde
   us_np: pack(
     "us_np",
     {
-      title: "High-alert prescribing & monitoring (NP — placeholder)",
+      title: "High-alert prescribing & monitoring (NP, US)",
       seoTitle: "High-alert meds | NP US | NurseNest",
       seoDescription: "NP: opioid risk stratification, anticoag choice concepts, insulin intensification safety.",
       clinical_meaning: `**NP**  

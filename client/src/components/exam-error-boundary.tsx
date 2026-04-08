@@ -7,6 +7,7 @@ import { useAuth } from "@/lib/auth";
 import { ProtectedAccessBoundary, type ProtectedRouteContext } from "@/components/protected-access-recovery";
 
 import { useI18n } from "@/lib/i18n";
+import { getLocaleFromPath } from "@/lib/locale-utils";
 
 function generateIncidentId(): string {
   const ts = Date.now().toString(36);
@@ -125,7 +126,12 @@ function ExamRecoveryUI({
 
   const backToExams = useCallback(() => {
     const path = window.location.pathname;
-    const match = path.match(/^(\/[^/]+)\/mock-exams\//);
+    const { pathWithoutLocale } = getLocaleFromPath(path);
+    if (pathWithoutLocale.startsWith("/mock-exams/")) {
+      navigate("/practice-exams");
+      return;
+    }
+    const match = pathWithoutLocale.match(/^(\/[^/]+)\/mock-exams\//);
     navigate(match ? `${match[1]}/mock-exams` : "/practice-exams");
   }, [navigate]);
 

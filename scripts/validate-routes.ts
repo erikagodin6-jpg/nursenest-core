@@ -245,7 +245,7 @@ for (const tier of nursingTiers) {
 }
 
 const expectedMainSections = [
-  "/lessons", "/flashcards", "/mock-exams", "/question-bank",
+  "/lessons", "/flashcards", "/mock-exams", "/practice-exams", "/question-bank",
   "/clinical-clarity", "/glossary", "/topics",
 ];
 for (const section of expectedMainSections) {
@@ -261,7 +261,7 @@ ok("Content structure check complete");
 console.log("\n--- 8. Sitemap Includes Key Public Pages ---");
 const sitemapPathSet = new Set(sitemapPaths);
 const criticalPages = [
-  "/", "/lessons", "/flashcards", "/pricing", "/mock-exams",
+  "/", "/lessons", "/flashcards", "/pricing", "/mock-exams", "/practice-exams",
   "/clinical-clarity", "/blog", "/question-bank", "/glossary",
   "/exam-prep", "/new-graduate-support", "/healthcare-careers",
   "/nursing", "/nursing-specialties", "/nursing-certifications",

@@ -245,7 +245,7 @@ describe("E2E: Protected recovery messaging visible instead of dead end", () => 
         message: "This exam is temporarily unavailable. Please try again shortly.",
         recoveryOptions: [
           { label: "Return to Dashboard", path: "/dashboard" },
-          { label: "Try Another Exam", path: "/mock-exams" },
+          { label: "Try Another Exam", path: "/practice-exams" },
           { label: "Contact Support", path: "/contact" },
         ],
       }),

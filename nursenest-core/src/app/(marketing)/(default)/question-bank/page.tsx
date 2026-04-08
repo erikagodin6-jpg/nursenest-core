@@ -17,6 +17,11 @@ import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messa
 import { formatMarketingMessage, resolveMarketingCopy } from "@/lib/marketing-i18n-core";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
+import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
+import {
+  defaultQuestionBankMetaDescription,
+  defaultQuestionBankMetaTitle,
+} from "@/lib/marketing/nursing-tier-public-labels";
 
 export const revalidate = 600;
 
@@ -90,14 +95,21 @@ const CARDS: PathwayCard[] = [
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getMarketingLocaleForDefaultRoute();
+  const marketingRegion = await getMarketingRegionFromCookies();
   const m = await loadMarketingMessages(locale);
   const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
-  const title = resolveMarketingCopy(m, "pages.publicQuestionBank.metaTitle", en, "NCLEX & REx-PN practice questions | NurseNest");
+  const metaSfx = marketingRegion === "US" ? "US" : "CA";
+  const title = resolveMarketingCopy(
+    m,
+    `pages.publicQuestionBank.metaTitle${metaSfx}`,
+    en,
+    defaultQuestionBankMetaTitle(marketingRegion),
+  );
   const description = resolveMarketingCopy(
     m,
-    "pages.publicQuestionBank.metaDescription",
+    `pages.publicQuestionBank.metaDescription${metaSfx}`,
     en,
-    "Public overview of the NurseNest nursing question bank: practice items for NCLEX-RN, NCLEX-PN, REx-PN, and NP tracks. Sign up to practice in the app.",
+    defaultQuestionBankMetaDescription(marketingRegion),
   );
   const alt = marketingAlternatesSharedPage(locale, "/question-bank");
   return {

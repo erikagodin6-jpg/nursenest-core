@@ -9,24 +9,31 @@ import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messa
 import { formatMarketingMessage, resolveMarketingCopy } from "@/lib/marketing-i18n-core";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
+import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
+import {
+  defaultPracticeExamsMetaDescription,
+  defaultPracticeExamsMetaTitle,
+} from "@/lib/marketing/nursing-tier-public-labels";
 
 export const revalidate = 600;
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getMarketingLocaleForDefaultRoute();
+  const marketingRegion = await getMarketingRegionFromCookies();
   const m = await loadMarketingMessages(locale);
   const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+  const metaSfx = marketingRegion === "US" ? "US" : "CA";
   const title = resolveMarketingCopy(
     m,
-    "pages.publicPracticeExams.metaTitle",
+    `pages.publicPracticeExams.metaTitle${metaSfx}`,
     en,
-    "NCLEX & REx-PN practice exams and mock tests | NurseNest",
+    defaultPracticeExamsMetaTitle(marketingRegion),
   );
   const description = resolveMarketingCopy(
     m,
-    "pages.publicPracticeExams.metaDescription",
+    `pages.publicPracticeExams.metaDescription${metaSfx}`,
     en,
-    "Timed practice exams and computer-adaptive style sessions for nursing students. Create an account to launch mocks in the app; content is organized by RN, PN, NP, and Allied pathways.",
+    defaultPracticeExamsMetaDescription(marketingRegion),
   );
   const alt = marketingAlternatesSharedPage(locale, "/practice-exams");
   return {

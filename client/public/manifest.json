@@ -106,10 +106,10 @@
       "icons": [{ "src": "/icons/icon-96x96.png", "sizes": "96x96", "type": "image/png" }]
     },
     {
-      "name": "Mock Exams",
+      "name": "Practice Exams",
       "short_name": "Exams",
       "description": "Take practice exams",
-      "url": "/mock-exams",
+      "url": "/practice-exams",
       "icons": [{ "src": "/icons/icon-96x96.png", "sizes": "96x96", "type": "image/png" }]
     },
     {

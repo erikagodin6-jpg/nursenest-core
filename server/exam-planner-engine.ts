@@ -312,7 +312,7 @@ export function generateRecommendations(
       title: "Take Your First Practice Exam",
       description: "Practice exams are a great way to gauge your readiness and identify areas to focus on.",
       priority: "high",
-      actionUrl: "/mock-exams",
+      actionUrl: "/practice-exams",
       actionLabel: "Start Practice Exam",
     });
   }
