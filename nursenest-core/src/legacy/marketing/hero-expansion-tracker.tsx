@@ -27,8 +27,8 @@ function ProgressRow({
   const barW = goal > 0 && current > 0 ? Math.max(pct, 3) : 0;
   return (
     <div className="space-y-1.5" data-testid={`tracker-row-${label.toLowerCase().replace(/[\s()/]+/g, "-")}`}>
-      <div className="flex items-center justify-between text-sm">
-        <span className="font-medium text-[var(--theme-body-text)]">{label}</span>
+      <div className="flex items-center justify-between nn-marketing-body-sm">
+        <span className="text-[var(--theme-body-text)]">{label}</span>
         <span className="tabular-nums text-xs text-[var(--theme-muted-text)]">
           {current.toLocaleString()} / {goal.toLocaleString()}
         </span>
@@ -118,13 +118,13 @@ export default function HeroExpansionTracker() {
 
         <div className="nn-marketing-card divide-y divide-[var(--border-subtle)] overflow-hidden">
           <div className="space-y-5 p-6">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-[var(--theme-muted-text)]">{t("components.heroExpansionTracker.nursingTiers")}</h3>
+            <h3 className="nn-marketing-label">{t("components.heroExpansionTracker.nursingTiers")}</h3>
             {tierRows.map((row) => (
               <ProgressRow key={row.label} {...row} />
             ))}
           </div>
           <div className="space-y-5 p-6">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-[var(--theme-muted-text)]">{t("components.heroExpansionTracker.alliedHealthMajorCareers")}</h3>
+            <h3 className="nn-marketing-label">{t("components.heroExpansionTracker.alliedHealthMajorCareers")}</h3>
             {alliedRows.map((row) => (
               <ProgressRow key={row.label} {...row} />
             ))}

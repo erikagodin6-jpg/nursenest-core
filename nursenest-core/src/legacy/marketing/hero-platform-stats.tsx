@@ -48,14 +48,10 @@ export default function HeroPlatformStats({ stats }: { stats: HeroPlatformStatsP
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="mb-6 text-center">
-          <h2
-            className="mb-2 font-bold text-[var(--theme-heading-text)]"
-            style={{ fontSize: "var(--text-section)" }}
-            data-testid="text-platform-stats-heading"
-          >
+          <h2 className="mb-2 nn-marketing-h2" data-testid="text-platform-stats-heading">
             Your Complete Healthcare Exam Preparation Platform
           </h2>
-          <p className="mx-auto max-w-2xl text-base text-[var(--theme-muted-text)] lg:text-lg">
+          <p className="mx-auto max-w-2xl nn-marketing-body text-[var(--theme-muted-text)]">
             Everything you need to pass your nursing, NP, or allied health exam: built by educators, backed by evidence.
           </p>
         </div>
@@ -71,12 +67,12 @@ export default function HeroPlatformStats({ stats }: { stats: HeroPlatformStatsP
                 <stat.icon className="h-5 w-5 text-primary" />
               </div>
               <div
-                className="mb-1 text-2xl font-extrabold tabular-nums text-[var(--theme-heading-text)] sm:text-3xl"
+                className="mb-1 nn-marketing-h2 tabular-nums"
                 data-testid={`stat-value-${stat.label.toLowerCase().replace(/\s+/g, "-")}`}
               >
                 {stat.value}
               </div>
-              <div className="text-xs font-medium text-[var(--theme-muted-text)] sm:text-sm">{stat.label}</div>
+              <div className="nn-marketing-body-sm text-[var(--theme-muted-text)]">{stat.label}</div>
             </div>
           ))}
         </div>

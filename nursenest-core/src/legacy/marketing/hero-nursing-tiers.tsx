@@ -57,8 +57,8 @@ export default function HeroNursingTiers() {
                 <div className="border-b border-[var(--border-subtle)] bg-[var(--bg-inset)] px-6 py-5">
                   <h3 className="nn-marketing-h3 text-[var(--theme-primary)]">{tier.label}</h3>
                   <div className="mt-1 flex items-baseline gap-1">
-                    <span className="text-3xl font-bold tabular-nums text-[var(--theme-heading-text)]">{formatK(tier.goalQuestions)}+</span>
-                    <span className="text-sm text-[var(--theme-muted-text)]">{t("components.heroNursingTiers.questionsGoal")}</span>
+                    <span className="nn-marketing-h2 tabular-nums">{formatK(tier.goalQuestions)}+</span>
+                    <span className="nn-marketing-body-sm text-[var(--theme-muted-text)]">{t("components.heroNursingTiers.questionsGoal")}</span>
                   </div>
                   {current > 0 && (
                     <div className="mt-3">

@@ -142,8 +142,8 @@ export function HomeHeroMediaPanel({
           </div>
         </BrowserChrome>
         <div className="mt-2 px-1">
-          <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{primary.title}</p>
-          <p className="mt-0.5 text-xs leading-relaxed text-[var(--theme-body-text)]">{primary.caption}</p>
+          <p className="nn-marketing-h4">{primary.title}</p>
+          <p className="mt-0.5 nn-marketing-caption text-[var(--theme-body-text)]">{primary.caption}</p>
         </div>
       </div>
 
@@ -167,8 +167,8 @@ export function HomeHeroMediaPanel({
                 />
               </div>
               <div className="border-t border-[var(--theme-card-border)]/80 px-3 py-2.5">
-                <p className="text-xs font-semibold text-[var(--theme-heading-text)]">{slide.title}</p>
-                <p className="mt-0.5 line-clamp-2 text-[11px] leading-snug text-[var(--theme-body-text)]">{slide.caption}</p>
+                <p className="nn-marketing-body-sm text-[var(--theme-heading-text)]">{slide.title}</p>
+                <p className="mt-0.5 line-clamp-2 nn-marketing-caption text-[var(--theme-body-text)]">{slide.caption}</p>
               </div>
             </div>
           ))}

@@ -6,6 +6,7 @@ import { Briefcase, GraduationCap, BookOpen, ArrowRight } from "lucide-react";
 import { getQuestionCount, getQuestionCountDisplay } from "@/legacy/data/career-question-counts";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
+import { MARKETING_TERTIARY_LINK_CLASS } from "@/lib/theme/marketing-hero-pattern";
 
 function getSlugFromRoute(route: string): string {
   return route.split("/").pop() || "";
@@ -42,11 +43,11 @@ export default function HeroAlliedHealth() {
               <div className="nn-accent-icon-wrap flex h-10 w-10 items-center justify-center rounded-xl">
                 <BookOpen className="nn-accent-icon h-5 w-5" />
               </div>
-              <h3 className="text-lg font-bold text-[var(--theme-heading-text)]">{t("components.heroAlliedHealth.prenursing")}</h3>
+              <h3 className="nn-marketing-h3">{t("components.heroAlliedHealth.prenursing")}</h3>
             </div>
             <div className="mb-3 flex items-baseline gap-1">
-              <span className="text-3xl font-extrabold text-[var(--theme-heading-text)]">{PRE_NURSING_GOAL.goalQuestions.toLocaleString()}+</span>
-              <span className="text-sm text-muted-foreground">{t("components.heroAlliedHealth.questionsGoal")}</span>
+              <span className="nn-marketing-h2 tabular-nums">{PRE_NURSING_GOAL.goalQuestions.toLocaleString()}+</span>
+              <span className="nn-marketing-body-sm text-muted-foreground">{t("components.heroAlliedHealth.questionsGoal")}</span>
             </div>
             <div className="mb-4 flex flex-wrap gap-1.5">
               {PRE_NURSING_GOAL.subjects.map((s) => (
@@ -55,10 +56,10 @@ export default function HeroAlliedHealth() {
                 </span>
               ))}
             </div>
-            <p className="mb-4 text-sm text-muted-foreground">{t("components.heroAlliedHealth.prepareForNursingSchoolSuccess")}</p>
+            <p className="mb-4 nn-marketing-body-sm text-muted-foreground">{t("components.heroAlliedHealth.prepareForNursingSchoolSuccess")}</p>
             <Link
               href={mapLegacyMarketingHref(PRE_NURSING_GOAL.route)}
-              className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary no-underline hover:underline"
+              className={`${MARKETING_TERTIARY_LINK_CLASS} gap-1.5 px-0 no-underline hover:underline`}
               data-testid="link-pre-nursing"
             >
               Explore lessons <ArrowRight className="h-3.5 w-3.5" />
@@ -73,11 +74,11 @@ export default function HeroAlliedHealth() {
               <div className="nn-accent-icon-wrap flex h-10 w-10 items-center justify-center rounded-xl">
                 <GraduationCap className="nn-accent-icon h-5 w-5" />
               </div>
-              <h3 className="text-lg font-bold text-[var(--theme-heading-text)]">{t("components.heroAlliedHealth.newGraduate")}</h3>
+              <h3 className="nn-marketing-h3">{t("components.heroAlliedHealth.newGraduate")}</h3>
             </div>
             <div className="mb-3 flex items-baseline gap-1">
-              <span className="text-3xl font-extrabold text-[var(--theme-heading-text)]">{NEW_GRAD_GOAL.goalScenarios.toLocaleString()}+</span>
-              <span className="text-sm text-muted-foreground">{t("components.heroAlliedHealth.careerreadinessScenariosGoal")}</span>
+              <span className="nn-marketing-h2 tabular-nums">{NEW_GRAD_GOAL.goalScenarios.toLocaleString()}+</span>
+              <span className="nn-marketing-body-sm text-muted-foreground">{t("components.heroAlliedHealth.careerreadinessScenariosGoal")}</span>
             </div>
             <div className="mb-4 flex flex-wrap gap-1.5">
               {NEW_GRAD_GOAL.sections.map((s) => (
@@ -86,10 +87,10 @@ export default function HeroAlliedHealth() {
                 </span>
               ))}
             </div>
-            <p className="mb-4 text-sm text-muted-foreground">{t("components.heroAlliedHealth.transitionFromStudentToConfident")}</p>
+            <p className="mb-4 nn-marketing-body-sm text-muted-foreground">{t("components.heroAlliedHealth.transitionFromStudentToConfident")}</p>
             <Link
               href={mapLegacyMarketingHref(NEW_GRAD_GOAL.route)}
-              className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary no-underline hover:underline"
+              className={`${MARKETING_TERTIARY_LINK_CLASS} gap-1.5 px-0 no-underline hover:underline`}
               data-testid="link-new-grad"
             >
               New grad hub <ArrowRight className="h-3.5 w-3.5" />
@@ -99,17 +100,17 @@ export default function HeroAlliedHealth() {
 
         <div>
           <div className="mb-8 text-center">
-            <h2 className="mb-2 font-bold text-[var(--theme-heading-text)]" style={{ fontSize: "var(--text-section)" }} data-testid="text-allied-health-heading">
+            <h2 className="mb-2 nn-marketing-h2" data-testid="text-allied-health-heading">
               Allied Health Exam Prep
             </h2>
-            <p className="mx-auto max-w-2xl text-base text-muted-foreground lg:text-lg">
+            <p className="mx-auto max-w-2xl nn-marketing-body text-center text-muted-foreground">
               Targeted question banks for major and mid-size allied health careers, from respiratory therapy to psychotherapy.
             </p>
           </div>
 
           <div className="space-y-6">
             <div>
-              <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+              <h3 className="mb-3 nn-marketing-label">
                 Major Careers: {computeCountRange(majorCareers)}
               </h3>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -128,14 +129,15 @@ export default function HeroAlliedHealth() {
                         <Briefcase className="nn-accent-icon h-5 w-5" />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <h4 className="truncate text-sm font-bold text-[var(--theme-heading-text)]">{career.label}</h4>
-                        <p className="text-xs text-muted-foreground">
+                        <h4 className="truncate nn-marketing-h4">{career.label}</h4>
+                        <p className="nn-marketing-caption text-muted-foreground">
                           {count > 0 ? (
                             <>
-                              <span className="font-semibold text-[var(--theme-heading-text)]">{display}</span> {t("components.heroAlliedHealth.questions")}
+                              <span className="tabular-nums text-[var(--theme-heading-text)]">{display}</span>{" "}
+                              {t("components.heroAlliedHealth.questions")}
                             </>
                           ) : (
-                            <span className="font-semibold text-primary">{t("components.heroAlliedHealth.comingSoon")}</span>
+                            <span className="nn-marketing-label--accent">{t("components.heroAlliedHealth.comingSoon")}</span>
                           )}
                         </p>
                       </div>
@@ -147,7 +149,7 @@ export default function HeroAlliedHealth() {
             </div>
 
             <div>
-              <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+              <h3 className="mb-3 nn-marketing-label">
                 Mid-Size Careers: {computeCountRange(midCareers)}
               </h3>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -166,14 +168,15 @@ export default function HeroAlliedHealth() {
                         <Briefcase className="nn-accent-icon h-5 w-5" />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <h4 className="truncate text-sm font-bold text-[var(--theme-heading-text)]">{career.label}</h4>
-                        <p className="text-xs text-muted-foreground">
+                        <h4 className="truncate nn-marketing-h4">{career.label}</h4>
+                        <p className="nn-marketing-caption text-muted-foreground">
                           {count > 0 ? (
                             <>
-                              <span className="font-semibold text-[var(--theme-heading-text)]">{display}</span> {t("components.heroAlliedHealth.questions2")}
+                              <span className="tabular-nums text-[var(--theme-heading-text)]">{display}</span>{" "}
+                              {t("components.heroAlliedHealth.questions2")}
                             </>
                           ) : (
-                            <span className="font-semibold text-primary">{t("components.heroAlliedHealth.comingSoon2")}</span>
+                            <span className="nn-marketing-label--accent">{t("components.heroAlliedHealth.comingSoon2")}</span>
                           )}
                         </p>
                       </div>

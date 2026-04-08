@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-04-08T13:37:19.287Z",
-  "totalFallbacks": 30,
+  "generatedAt": "2026-04-08T13:41:32.114Z",
+  "totalFallbacks": 28,
   "byLocale": {
     "fr": 4,
     "ko": 3,
@@ -9,7 +9,6 @@
     "ht": 3,
     "ur": 3,
     "fa": 3,
-    "de": 2,
     "th": 2,
     "tr": 1,
     "id": 2
@@ -252,28 +251,6 @@
       "locale": "fa",
       "key": "upgrade.usageNote",
       "localizedValue": "شما از {{used}} از {{limit}} کارت رایگان استفاده کرده‌اید ({{percentage}}%)",
-      "englishValue": "You",
-      "placeholdersInEnglish": [],
-      "placeholdersInLocalized": [
-        "limit",
-        "percentage",
-        "used"
-      ]
-    },
-    {
-      "locale": "de",
-      "key": "glossary.relatedTerms",
-      "localizedValue": "Verwandte Begriffe",
-      "englishValue": "Related {{category}} Terms",
-      "placeholdersInEnglish": [
-        "category"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "de",
-      "key": "upgrade.usageNote",
-      "localizedValue": "Sie haben {{used}} von {{limit}} kostenlosen Karten verwendet ({{percentage}}%)",
       "englishValue": "You",
       "placeholdersInEnglish": [],
       "placeholdersInLocalized": [

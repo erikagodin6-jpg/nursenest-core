@@ -46,15 +46,15 @@ export function MarketingTrustSection({
         </h2>
 
         <div className="flex flex-col gap-3 rounded-2xl border border-[var(--theme-card-border)] bg-card/90 px-4 py-4 shadow-sm sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4 sm:px-6">
-          <p className="flex items-start gap-2 text-sm text-[var(--theme-body-text)] sm:max-w-[32%]">
+          <p className="flex items-start gap-2 nn-marketing-body-sm sm:max-w-[32%]">
             <Layers className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
             <span>{t("home.trust.barLine1")}</span>
           </p>
-          <p className="flex items-start gap-2 text-sm text-[var(--theme-body-text)] sm:max-w-[32%]">
+          <p className="flex items-start gap-2 nn-marketing-body-sm sm:max-w-[32%]">
             <Globe2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
             <span>{t("home.trust.barLine2")}</span>
           </p>
-          <p className="flex items-start gap-2 text-sm text-[var(--theme-body-text)] sm:max-w-[32%]">
+          <p className="flex items-start gap-2 nn-marketing-body-sm sm:max-w-[32%]">
             <GraduationCap className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
             <span>{t("home.trust.barLine3")}</span>
           </p>
@@ -63,15 +63,15 @@ export function MarketingTrustSection({
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
           <div className="rounded-2xl border border-[var(--theme-card-border)] bg-card p-4 text-center shadow-sm">
             <p className="nn-marketing-h3 tabular-nums">{formatStat(questionCount)}</p>
-            <p className="mt-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("home.trust.statQuestions")}</p>
+            <p className="mt-1 nn-marketing-label">{t("home.trust.statQuestions")}</p>
           </div>
           <div className="rounded-2xl border border-[var(--theme-card-border)] bg-card p-4 text-center shadow-sm">
             <p className="nn-marketing-h3 tabular-nums">{formatStat(lessonCount)}</p>
-            <p className="mt-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("home.trust.statLessons")}</p>
+            <p className="mt-1 nn-marketing-label">{t("home.trust.statLessons")}</p>
           </div>
           <div className="rounded-2xl border border-[var(--theme-card-border)] bg-card p-4 text-center shadow-sm">
             <p className="nn-marketing-h3 tabular-nums">{cat}</p>
-            <p className="mt-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("home.trust.statCategories")}</p>
+            <p className="mt-1 nn-marketing-label">{t("home.trust.statCategories")}</p>
           </div>
         </div>
 
@@ -85,27 +85,27 @@ export function MarketingTrustSection({
               <div className="mb-2 flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
                 <BookOpen className="h-4 w-4 text-primary" aria-hidden />
               </div>
-              <p className="font-semibold text-[var(--theme-heading-text)]">{t("home.trust.why1Title")}</p>
-              <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{t("home.trust.why1Body")}</p>
+              <p className="nn-marketing-h4">{t("home.trust.why1Title")}</p>
+              <p className="mt-1 nn-marketing-body-sm text-muted-foreground">{t("home.trust.why1Body")}</p>
             </li>
             <li className="rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]/50 p-4">
               <div className="mb-2 flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
                 <Target className="h-4 w-4 text-primary" aria-hidden />
               </div>
-              <p className="font-semibold text-[var(--theme-heading-text)]">{t("home.trust.why2Title")}</p>
-              <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{t("home.trust.why2Body")}</p>
+              <p className="nn-marketing-h4">{t("home.trust.why2Title")}</p>
+              <p className="mt-1 nn-marketing-body-sm text-muted-foreground">{t("home.trust.why2Body")}</p>
             </li>
             <li className="rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]/50 p-4">
               <div className="mb-2 flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10">
                 <Layers className="h-4 w-4 text-primary" aria-hidden />
               </div>
-              <p className="font-semibold text-[var(--theme-heading-text)]">{t("home.trust.why3Title")}</p>
-              <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{t("home.trust.why3Body")}</p>
+              <p className="nn-marketing-h4">{t("home.trust.why3Title")}</p>
+              <p className="mt-1 nn-marketing-body-sm text-muted-foreground">{t("home.trust.why3Body")}</p>
             </li>
           </ul>
         </div>
 
-        <p className="mt-6 text-center text-xs text-muted-foreground">{t("home.trust.urgencyLine")}</p>
+        <p className="mt-6 nn-marketing-caption text-center text-muted-foreground">{t("home.trust.urgencyLine")}</p>
       </div>
     </section>
   );

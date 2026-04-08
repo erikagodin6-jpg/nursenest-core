@@ -16,7 +16,7 @@ export default function HomePageHeroTail() {
   return (
     <>
       <div className="mt-[var(--nn-rhythm-tight-y)] sm:mt-6" data-testid="section-careers-supported">
-        <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-[var(--theme-body-text)]">
+        <p className="mb-3 nn-marketing-label text-[var(--theme-body-text)]">
           {t("home.hero.examPrepFor", {
             region: region === "CA" ? t("home.region.ca") : t("home.region.us"),
           })}
@@ -35,7 +35,7 @@ export default function HomePageHeroTail() {
             );
           })}
           {enabledCareers.length > 8 && (
-            <span className="inline-flex items-center rounded-full border border-primary/15 bg-primary/5 px-3 py-1.5 text-xs font-semibold text-primary">
+            <span className="inline-flex items-center rounded-full border border-primary/15 bg-primary/5 px-3 py-1.5 nn-marketing-caption text-primary">
               {t("home.hero.moreCount", { count: String(enabledCareers.length - 8) })}
             </span>
           )}

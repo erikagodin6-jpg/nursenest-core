@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
+import { MARKETING_PRIMARY_CTA_CLASS } from "@/lib/theme/marketing-hero-pattern";
 
 export default function HomeChoosePath() {
   const { t } = useMarketingI18n();
@@ -90,8 +91,8 @@ export default function HomeChoosePath() {
     <section className="border-t border-gray-100" style={{ paddingTop: "var(--space-block)", paddingBottom: "var(--space-block)" }} data-testid="section-choose-your-path">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="mb-10 text-center">
-          <h2 className="mb-3 text-2xl font-bold text-[var(--theme-heading-text)] sm:text-3xl">{t("components.homeChoosePath.chooseYourPath")}</h2>
-          <p className="mx-auto max-w-2xl text-base text-gray-600 sm:text-lg">{t("components.homeChoosePath.whetherYoureANursingStudent")}</p>
+          <h2 className="mb-3 nn-marketing-h2">{t("components.homeChoosePath.chooseYourPath")}</h2>
+          <p className="mx-auto max-w-2xl nn-marketing-body text-muted-foreground">{t("components.homeChoosePath.whetherYoureANursingStudent")}</p>
         </div>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -105,13 +106,13 @@ export default function HomeChoosePath() {
                 <div className="nn-accent-icon-wrap flex h-10 w-10 items-center justify-center rounded-xl">
                   <path.icon className="nn-accent-icon h-5 w-5" />
                 </div>
-                <h3 className="text-lg font-semibold text-[var(--theme-heading-text)]">{path.title}</h3>
+                <h3 className="nn-marketing-h3">{path.title}</h3>
               </div>
-              <p className="mb-3 ml-[52px] text-xs font-medium uppercase tracking-wide text-gray-400">{path.subtitle}</p>
-              <p className="mb-6 flex-1 text-sm text-gray-600">{path.desc}</p>
+              <p className="mb-3 ml-[52px] nn-marketing-label text-muted-foreground">{path.subtitle}</p>
+              <p className="mb-6 flex-1 nn-marketing-body-sm text-muted-foreground">{path.desc}</p>
               <button
                 type="button"
-                className="inline-flex w-full items-center justify-center rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:brightness-110"
+                className={`${MARKETING_PRIMARY_CTA_CLASS} w-full justify-center gap-2 shadow-sm`}
                 onClick={() => router.push(mapLegacyMarketingHref(path.href))}
                 data-testid={path.btnTestId}
               >
@@ -124,20 +125,20 @@ export default function HomeChoosePath() {
 
         <div className="mt-10 grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-4" data-testid="metrics-credibility-bar">
           <div className="p-4 text-center" data-testid="metric-practice-questions">
-            <p className="text-2xl font-bold text-[var(--theme-heading-text)] sm:text-3xl">40,000+</p>
-            <p className="mt-1 text-sm text-gray-500">{t("components.homeChoosePath.practiceQuestions")}</p>
+            <p className="nn-marketing-h2 tabular-nums">40,000+</p>
+            <p className="mt-1 nn-marketing-body-sm text-muted-foreground">{t("components.homeChoosePath.practiceQuestions")}</p>
           </div>
           <div className="p-4 text-center" data-testid="metric-flashcards">
-            <p className="text-2xl font-bold text-[var(--theme-heading-text)] sm:text-3xl">13,000+</p>
-            <p className="mt-1 text-sm text-gray-500">{t("components.homeChoosePath.flashcards")}</p>
+            <p className="nn-marketing-h2 tabular-nums">13,000+</p>
+            <p className="mt-1 nn-marketing-body-sm text-muted-foreground">{t("components.homeChoosePath.flashcards")}</p>
           </div>
           <div className="p-4 text-center" data-testid="metric-clinical-lessons">
-            <p className="text-2xl font-bold text-[var(--theme-heading-text)] sm:text-3xl">8,000+</p>
-            <p className="mt-1 text-sm text-gray-500">{t("components.homeChoosePath.clinicalLessons")}</p>
+            <p className="nn-marketing-h2 tabular-nums">8,000+</p>
+            <p className="mt-1 nn-marketing-body-sm text-muted-foreground">{t("components.homeChoosePath.clinicalLessons")}</p>
           </div>
           <div className="p-4 text-center" data-testid="metric-languages">
-            <p className="text-2xl font-bold text-[var(--theme-heading-text)] sm:text-3xl">15</p>
-            <p className="mt-1 text-sm text-gray-500">{t("components.homeChoosePath.languagesSupported")}</p>
+            <p className="nn-marketing-h2 tabular-nums">15</p>
+            <p className="mt-1 nn-marketing-body-sm text-muted-foreground">{t("components.homeChoosePath.languagesSupported")}</p>
           </div>
         </div>
       </div>
