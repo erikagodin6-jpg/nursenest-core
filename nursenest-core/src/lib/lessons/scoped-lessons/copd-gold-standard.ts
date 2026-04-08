@@ -38,6 +38,15 @@ Tie **respiratory rate**, **accessory muscle use**, **mental status**, **SpO₂*
 **Therapy you will see tested**  
 Ordered **bronchodilators**, **corticosteroids**, **antibiotics when infection is suspected**, **oxygen titrated to prescribed targets**, **early mobility when safe**, and **patient teaching** (inhaler technique, pursed-lip breathing, energy conservation, smoking cessation, immunizations, and a clear **when to seek urgent care** plan).`;
 
+const COPD_LABS_DIAGNOSTICS = `**Pulse oximetry and CO₂ retention**  
+COPD exacerbations are tracked with **SpO₂** in context of **baseline** and **prescribed oxygen targets**—some clients are managed with **permissive hypercapnia** when the stem references a plan. Nursing items test **delivery device fit**, **reassessment after changes**, and **reporting** acute desaturation or **somnolence** suggesting **CO₂ narcosis**.
+
+**ABG when ordered**  
+**Arterial blood gases** may appear when the vignette evaluates **acute ventilatory failure** or **pH changes**. Your role is **specimen handling**, **timely transport to lab** when applicable, **continuous monitoring**, and **communicating** worsening work of breathing or mentation—not independent ventilator changes unless the item defines extended competency.
+
+**Supporting tests**  
+**Chest imaging** or **CBC** may accompany infection-driven exacerbations. Tie results to **antibiotic stewardship**, **oxygen therapy**, **bronchodilator response**, and **early mobilization when safe** as described in the stem.`;
+
 function t(
   variant: CopdVariant,
   blocks: {
@@ -602,6 +611,8 @@ type LessonInputShape = {
   sections: PathwayLessonSection[];
   preTest: PathwayLessonQuizItem[];
   postTest: PathwayLessonQuizItem[];
+  premiumOmittedSections?: PathwayLessonOmittedPremiumSection[];
+  relatedLessonRefs?: PathwayLessonRelatedRef[];
 };
 
 export function copdGoldVariantForPathway(pathwayId: string): CopdVariant | undefined {
@@ -628,6 +639,30 @@ export function getCopdGoldStandardLessonInput(pathwayId: string): LessonInputSh
   const variant = PATHWAY_VARIANT[pathwayId];
   if (!variant) return null;
   const v = VARIANTS[variant];
+  const geo = pathwayIdToTierGeo(pathwayId);
+  if (!geo) return null;
+  const syn = synthesizeGoldPremiumSections({
+    sharedCore: SHARED_CORE_BODY,
+    clinical_meaning: v.clinical_meaning,
+    exam_relevance: v.exam_relevance,
+    clinical_scenario: v.clinical_scenario,
+    takeaways: v.takeaways,
+    tierGeo: geo,
+    examLabel: PATHWAY_EXAM_LABEL[pathwayId] ?? "your nursing licensure exam",
+    labsDiagnostics: COPD_LABS_DIAGNOSTICS,
+    relatedSlugs: [
+      "sepsis-early-recognition-gold",
+      "fluids-electrolytes-emergencies-gold",
+      "clinical-judgment-prioritization-gold",
+      "high-alert-medications-safety-gold",
+    ],
+    relatedTitlesBySlug: {
+      "sepsis-early-recognition-gold": "Sepsis early recognition",
+      "fluids-electrolytes-emergencies-gold": "Fluids & electrolyte emergencies",
+      "clinical-judgment-prioritization-gold": "Clinical judgment & prioritization",
+      "high-alert-medications-safety-gold": "High-alert medication safety",
+    },
+  });
   return {
     slug: COPD_GOLD_STANDARD_SLUG,
     title: v.title,
@@ -637,38 +672,9 @@ export function getCopdGoldStandardLessonInput(pathwayId: string): LessonInputSh
     previewSectionCount: 1,
     seoTitle: v.seoTitle,
     seoDescription: v.seoDescription,
-    sections: [
-      {
-        id: "clinical_meaning",
-        heading: "What this means clinically",
-        kind: "clinical_meaning",
-        body: v.clinical_meaning,
-      },
-      {
-        id: "exam_relevance",
-        heading: "Why this appears on your exam",
-        kind: "exam_relevance",
-        body: v.exam_relevance,
-      },
-      {
-        id: "core_concept",
-        heading: "Core concept — pathophysiology and monitoring",
-        kind: "core_concept",
-        body: SHARED_CORE_BODY,
-      },
-      {
-        id: "clinical_scenario",
-        heading: "Clinical scenario",
-        kind: "clinical_scenario",
-        body: v.clinical_scenario,
-      },
-      {
-        id: "takeaways",
-        heading: "Key takeaways",
-        kind: "takeaways",
-        body: v.takeaways,
-      },
-    ],
+    sections: syn.sections,
+    premiumOmittedSections: syn.premiumOmittedSections,
+    relatedLessonRefs: syn.relatedLessonRefs,
     preTest: v.quizzes.preTest,
     postTest: v.quizzes.postTest,
   };

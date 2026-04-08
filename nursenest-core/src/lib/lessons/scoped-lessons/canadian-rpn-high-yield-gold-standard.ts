@@ -573,6 +573,30 @@ export function getCanadianRpnHighYieldGoldLessonInput(pathwayId: string): Lesso
   if (!key) return null;
   let v = VARIANTS[key];
   if (key === "us_np") v = npTitles(pathwayId, v);
+  const geo = pathwayIdToTierGeo(pathwayId);
+  if (!geo) return null;
+  const syn = synthesizeGoldPremiumSections({
+    sharedCore: SHARED_CORE_BODY,
+    clinical_meaning: v.clinical_meaning,
+    exam_relevance: v.exam_relevance,
+    clinical_scenario: v.clinical_scenario,
+    takeaways: v.takeaways,
+    tierGeo: geo,
+    examLabel: PATHWAY_EXAM_LABEL[pathwayId] ?? "your nursing licensure exam",
+    labsOmitReason: RPN_SCOPE_LABS_OMIT_REASON,
+    relatedSlugs: [
+      "clinical-judgment-prioritization-gold",
+      "high-alert-medications-safety-gold",
+      "sepsis-early-recognition-gold",
+      "fluids-electrolytes-emergencies-gold",
+    ],
+    relatedTitlesBySlug: {
+      "clinical-judgment-prioritization-gold": "Clinical judgment & prioritization",
+      "high-alert-medications-safety-gold": "High-alert medication safety",
+      "sepsis-early-recognition-gold": "Sepsis early recognition",
+      "fluids-electrolytes-emergencies-gold": "Fluids & electrolyte emergencies",
+    },
+  });
   return {
     slug: CANADIAN_RPN_HIGH_YIELD_GOLD_SLUG,
     title: v.title,
@@ -582,13 +606,9 @@ export function getCanadianRpnHighYieldGoldLessonInput(pathwayId: string): Lesso
     previewSectionCount: 1,
     seoTitle: v.seoTitle,
     seoDescription: v.seoDescription,
-    sections: [
-      { id: "clinical_meaning", heading: "What this means clinically", kind: "clinical_meaning", body: v.clinical_meaning },
-      { id: "exam_relevance", heading: "Why this appears on your exam", kind: "exam_relevance", body: v.exam_relevance },
-      { id: "core_concept", heading: "Core concept — RPN scope & teamwork", kind: "core_concept", body: SHARED_CORE_BODY },
-      { id: "clinical_scenario", heading: "Clinical scenario", kind: "clinical_scenario", body: v.clinical_scenario },
-      { id: "takeaways", heading: "Key takeaways", kind: "takeaways", body: v.takeaways },
-    ],
+    sections: syn.sections,
+    premiumOmittedSections: syn.premiumOmittedSections,
+    relatedLessonRefs: syn.relatedLessonRefs,
     preTest: v.quizzes.preTest,
     postTest: v.quizzes.postTest,
   };

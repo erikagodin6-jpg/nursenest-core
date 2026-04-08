@@ -2,8 +2,17 @@
 
 import { useMemo } from "react";
 import { MarketingHeroCarousel } from "@/components/marketing/marketing-hero-carousel";
-import { buildHomepageHeroSlides } from "@/config/home-hero-carousel";
+import { buildHomepageHeroSlidesAtIndices } from "@/config/home-hero-carousel";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+
+/**
+ * Order screenshots so the first passes highlight bank, rationales/lessons, flashcards, dashboard,
+ * lesson library, reports, and NGN-style items before the rest (still all 15 slides, no duplicates).
+ * Indices are zero-based against `HOMEPAGE_HERO_SLIDE_METADATA` (screenshot1 … screenshot15).
+ */
+const PLATFORM_PREVIEW_SLIDE_ORDER: readonly number[] = [
+  0, 1, 2, 9, 12, 11, 4, 3, 5, 6, 7, 8, 10, 13, 14,
+];
 
 /**
  * Full screenshot carousel directly under the homepage hero CTAs so visitors see the product early.
@@ -11,7 +20,10 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
  */
 export function HomePlatformPreviewSection() {
   const { t, locale } = useMarketingI18n();
-  const slides = useMemo(() => buildHomepageHeroSlides(t), [t, locale]);
+  const slides = useMemo(
+    () => buildHomepageHeroSlidesAtIndices(t, PLATFORM_PREVIEW_SLIDE_ORDER),
+    [t, locale],
+  );
 
   return (
     <section

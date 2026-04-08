@@ -11,7 +11,12 @@ import {
   PREMIUM_SECTION_HEADINGS,
   PREMIUM_SECTION_KINDS,
 } from "@/lib/lessons/pathway-lesson-premium";
-import type { PathwayLessonPremiumSectionKind, PathwayLessonSection } from "@/lib/lessons/pathway-lesson-types";
+import type {
+  PathwayLessonAudienceTier,
+  PathwayLessonCountryScope,
+  PathwayLessonPremiumSectionKind,
+  PathwayLessonSection,
+} from "@/lib/lessons/pathway-lesson-types";
 
 /** Ordered premium kinds — the mandatory exam-complete spine (includes Related / Next Steps). */
 export const EXAM_COMPLETE_SPINE_KINDS = PREMIUM_SECTION_KINDS;
@@ -93,4 +98,22 @@ export function examCompleteAuthoringChecklistText(): string {
   return EXAM_COMPLETE_TEMPLATE_STEPS.map((s) => `${s.step}. ${s.heading} (${s.kind}) — min ~${s.minWordsWhenPresent} words. ${s.authorPrompt}`).join(
     "\n",
   );
+}
+
+/**
+ * Default tier + country tags when catalog rows omit `audienceTiers` / `countryScope`.
+ * Pathway id remains authoritative for entitlements; this supports hub filtering and bank alignment.
+ */
+export function inferExamAudienceFromPathwayId(pathwayId: string): {
+  audienceTiers: PathwayLessonAudienceTier[];
+  countryScope: PathwayLessonCountryScope;
+} {
+  const id = pathwayId.toLowerCase();
+  const audienceTiers: PathwayLessonAudienceTier[] = id.includes("np")
+    ? ["np"]
+    : id.includes("rpn") || id.includes("lpn") || id.includes("-pn-") || id.endsWith("-pn")
+      ? ["pn"]
+      : ["rn"];
+  const countryScope: PathwayLessonCountryScope = id.startsWith("ca-") ? "ca" : id.startsWith("us-") ? "us" : "both";
+  return { audienceTiers, countryScope };
 }

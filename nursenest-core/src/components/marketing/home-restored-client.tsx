@@ -20,6 +20,7 @@ import {
 } from "@/lib/theme/marketing-hero-pattern";
 import { HomeLandingSections } from "@/components/marketing/home-landing-sections";
 import { HomePlatformPreviewSection } from "@/components/marketing/home-platform-preview-section";
+import { HomeSocialProofSection } from "@/components/marketing/home-social-proof-section";
 
 type HomeStatsPayload = {
   totalLessons: number;
@@ -35,8 +36,8 @@ type HomeStatsPayload = {
 };
 
 /**
- * Conversion-focused homepage: hero (value + CTAs + country + pathways), then supporting sections once.
- * All visible hero/home copy uses `home.landing.*` (and `home.region.*` / `nav.*` where noted). The old gateway i18n tree under `home` is retired.
+ * Conversion-focused homepage: hero (region + pathways + CTAs), platform screenshot carousel, social proof,
+ * then why / product preview / trust / FAQ / final CTA (`HomeLandingSections`). Copy uses `home.landing.*` plus `nav.*` / `home.region.*` where noted.
  */
 export default function HomeRestoredClient() {
   const { t, locale } = useMarketingI18n();
@@ -186,6 +187,8 @@ export default function HomeRestoredClient() {
         </section>
 
         <HomePlatformPreviewSection />
+
+        <HomeSocialProofSection />
 
         <HomeLandingSections questionCount={questionCount} />
 

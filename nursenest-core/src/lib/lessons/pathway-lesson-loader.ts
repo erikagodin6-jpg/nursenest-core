@@ -8,6 +8,7 @@ import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import type { PathwayLessonEducationalOverlay } from "@/lib/i18n/educational-content-overlay";
 import { applyPathwayLessonEducationalOverlay } from "@/lib/i18n/educational-content-overlay";
 import { fetchPublishedPathwayLessonOverlayMapSafe } from "@/lib/i18n/educational-translation-db";
+import { inferExamAudienceFromPathwayId } from "@/lib/lessons/exam-complete-lesson-template";
 import { normalizePathwayLessonLocale, PATHWAY_LESSON_SITEMAP_LOCALE } from "@/lib/lessons/pathway-lesson-locale";
 import {
   evaluatePathwayLessonStructuralGate,
@@ -205,6 +206,22 @@ function lessonMetadataFields(raw: LessonInput): Pick<
   };
 }
 
+function mergeLessonAudienceMetadata(
+  raw: LessonInput,
+  pathwayId?: string,
+): Pick<PathwayLessonRecord, "audienceTiers" | "countryScope" | "examRelevance"> {
+  const explicit = lessonMetadataFields(raw);
+  if (!pathwayId) return explicit;
+  const inferred = inferExamAudienceFromPathwayId(pathwayId);
+  const audienceTiers = explicit.audienceTiers?.length ? explicit.audienceTiers : inferred.audienceTiers;
+  const countryScope = explicit.countryScope ?? inferred.countryScope;
+  return {
+    audienceTiers,
+    countryScope,
+    ...(explicit.examRelevance ? { examRelevance: explicit.examRelevance } : {}),
+  };
+}
+
 function expandToStandardFiveSections(sections: PathwayLessonSection[]): PathwayLessonSection[] {
   const cleaned = sanitizeIncomingSections(sections);
 
@@ -318,7 +335,7 @@ function defaultBodyFor(kind: PathwayLessonSectionKind): string {
  * Hub / list / related-link rows: metadata only — no `sections` JSON loaded from DB.
  * Enrichment (FNP, NCLEX hubs) falls back to {@link PathwayLessonRecord.seoDescription} when bodies are absent.
  */
-function normalizeLessonForHubList(raw: LessonInput): PathwayLessonRecord {
+function normalizeLessonForHubList(raw: LessonInput, pathwayId?: string): PathwayLessonRecord {
   const title = typeof raw.title === "string" ? raw.title : "Lesson";
   const seoTitle = typeof raw.seoTitle === "string" ? raw.seoTitle : title;
   const seoDescription = typeof raw.seoDescription === "string" ? raw.seoDescription : "";
@@ -336,7 +353,7 @@ function normalizeLessonForHubList(raw: LessonInput): PathwayLessonRecord {
     seoTitle,
     seoDescription,
     sections: [],
-    ...lessonMetadataFields(raw),
+    ...mergeLessonAudienceMetadata(raw, pathwayId),
   };
 }
 
@@ -358,7 +375,7 @@ export function sanitizeQuizItems(raw: unknown): PathwayLessonQuizItem[] | undef
   return out.length ? out : undefined;
 }
 
-function normalizeLesson(raw: LessonInput): PathwayLessonRecord {
+function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLessonRecord {
   const title = typeof raw.title === "string" ? raw.title : "Lesson";
   const seoTitle = typeof raw.seoTitle === "string" ? raw.seoTitle : title;
   const seoDescription = typeof raw.seoDescription === "string" ? raw.seoDescription : "";

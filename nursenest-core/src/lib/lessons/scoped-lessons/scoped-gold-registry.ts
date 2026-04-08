@@ -2,7 +2,12 @@
  * Injectable scoped gold-standard lessons (shared core + pathway overlays).
  * Order = remediation priority for hub injection when not duplicated in catalog.json or DB.
  */
-import type { PathwayLessonQuizItem, PathwayLessonSection } from "@/lib/lessons/pathway-lesson-types";
+import type {
+  PathwayLessonOmittedPremiumSection,
+  PathwayLessonQuizItem,
+  PathwayLessonRelatedRef,
+  PathwayLessonSection,
+} from "@/lib/lessons/pathway-lesson-types";
 import {
   clinicalJudgmentHubListInput,
   CLINICAL_JUDGMENT_GOLD_SLUG,
@@ -77,6 +82,8 @@ export type ScopedGoldLessonInput = {
   sections: PathwayLessonSection[];
   preTest?: PathwayLessonQuizItem[];
   postTest?: PathwayLessonQuizItem[];
+  premiumOmittedSections?: PathwayLessonOmittedPremiumSection[];
+  relatedLessonRefs?: PathwayLessonRelatedRef[];
 };
 
 export type ScopedGoldProvider = {

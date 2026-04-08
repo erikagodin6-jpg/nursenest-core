@@ -4,9 +4,9 @@ import {
   countInternalStudyLinks,
   evaluatePathwayLessonStructuralGate,
   lessonUsesPremiumStructure,
+  PREMIUM_SECTION_HEADINGS,
   validatePathwayLessonPremium,
 } from "./pathway-lesson-premium";
-import { PREMIUM_SECTION_HEADINGS } from "./pathway-lesson-premium";
 import type { PathwayLessonRecord, PathwayLessonSection } from "./pathway-lesson-types";
 
 function fillerWords(n: number): string {
