@@ -18,6 +18,9 @@ import {
 } from "@/lib/lessons/pathway-lesson-premium";
 import {
   pathwayLessonHasRenderableHubSlug,
+  type PathwayLessonAudienceTier,
+  type PathwayLessonCountryScope,
+  type PathwayLessonExamRelevance,
   type PathwayLessonFigure,
   type PathwayLessonFigureKind,
   type PathwayLessonLocaleMeta,
@@ -30,6 +33,7 @@ import {
 } from "@/lib/lessons/pathway-lesson-types";
 import { ContentStatus } from "@prisma/client";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { sortPathwayLessonsForPublicPreview } from "@/lib/lessons/pathway-lesson-public-preview-priority";
 
 type CatalogShape = {
   version: number;
@@ -50,6 +54,9 @@ type CatalogShape = {
         postTest?: PathwayLessonQuizItem[];
         premiumOmittedSections?: PathwayLessonOmittedPremiumSection[];
         relatedLessonRefs?: PathwayLessonRelatedRef[];
+        audienceTiers?: PathwayLessonAudienceTier[];
+        countryScope?: PathwayLessonCountryScope;
+        examRelevance?: PathwayLessonExamRelevance;
       }>;
     }
   >;
@@ -163,6 +170,39 @@ function sanitizeSection(raw: Partial<PathwayLessonSection>, index: number): Pat
 function sanitizeIncomingSections(sections: unknown): PathwayLessonSection[] {
   if (!Array.isArray(sections)) return [];
   return sections.map((s, i) => sanitizeSection(s as Partial<PathwayLessonSection>, i));
+}
+
+function sanitizeAudienceTiers(raw: unknown): PathwayLessonAudienceTier[] | undefined {
+  if (!Array.isArray(raw)) return undefined;
+  const out: PathwayLessonAudienceTier[] = [];
+  for (const x of raw) {
+    if (x === "rn" || x === "pn" || x === "np") out.push(x);
+  }
+  return out.length ? [...new Set(out)] : undefined;
+}
+
+function sanitizeCountryScope(raw: unknown): PathwayLessonCountryScope | undefined {
+  if (raw === "us" || raw === "ca" || raw === "both") return raw;
+  return undefined;
+}
+
+function sanitizeExamRelevance(raw: unknown): PathwayLessonExamRelevance | undefined {
+  if (raw === "high_yield" || raw === "core" || raw === "specialty") return raw;
+  return undefined;
+}
+
+function lessonMetadataFields(raw: LessonInput): Pick<
+  PathwayLessonRecord,
+  "audienceTiers" | "countryScope" | "examRelevance"
+> {
+  const audienceTiers = sanitizeAudienceTiers((raw as { audienceTiers?: unknown }).audienceTiers);
+  const countryScope = sanitizeCountryScope((raw as { countryScope?: unknown }).countryScope);
+  const examRelevance = sanitizeExamRelevance((raw as { examRelevance?: unknown }).examRelevance);
+  return {
+    ...(audienceTiers?.length ? { audienceTiers } : {}),
+    ...(countryScope ? { countryScope } : {}),
+    ...(examRelevance ? { examRelevance } : {}),
+  };
 }
 
 function expandToStandardFiveSections(sections: PathwayLessonSection[]): PathwayLessonSection[] {
@@ -296,6 +336,7 @@ function normalizeLessonForHubList(raw: LessonInput): PathwayLessonRecord {
     seoTitle,
     seoDescription,
     sections: [],
+    ...lessonMetadataFields(raw),
   };
 }
 
@@ -346,6 +387,7 @@ function normalizeLesson(raw: LessonInput): PathwayLessonRecord {
     sections: expanded,
     ...(premiumOmitted?.length ? { premiumOmittedSections: premiumOmitted } : {}),
     ...(relatedLessonRefs?.length ? { relatedLessonRefs } : {}),
+    ...lessonMetadataFields(raw),
   };
 
   const maxPreview = Math.min(expanded.length, usePremium ? 11 : 5);
@@ -391,7 +433,7 @@ function getCatalogPathwayLessonsSync(pathwayId: string): PathwayLessonRecord[] 
 
 /** First N lesson titles from the static catalog (public marketing previews). Empty when catalog has no rows for the pathway. */
 export function getCatalogLessonPreviewTitles(pathwayId: string, limit = 4): string[] {
-  const lessons = getCatalogPathwayLessonsSync(pathwayId);
+  const lessons = sortPathwayLessonsForPublicPreview(pathwayId, getCatalogPathwayLessonsSync(pathwayId));
   return lessons.slice(0, Math.max(0, limit)).map((l) => l.title);
 }
 

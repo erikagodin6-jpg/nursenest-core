@@ -42,6 +42,15 @@ Exams love **insulin** (decimal errors, sliding scale vs correction, hypoglycemi
 **Scope**  
 Teach **within your role**: RNs carry broader assessment authority; PNs/RPNs reinforce teaching, administer per order, observe/report; NPs integrate prescribing where items allow—still emphasize **monitoring** and **patient education**.`;
 
+const HIGH_ALERT_LABS_DIAGNOSTICS = `**Glucose and insulin safety**  
+Point-of-care **capillary glucose** trends matter more than a single value during insulin therapy or hypoglycemia recovery. Items may include **critical low glucose** with neuro symptoms—choose **fast-acting carbohydrate or glucagon per order/protocol**, **recheck timing**, and **continuous observation** rather than leaving the client alone.
+
+**Anticoagulation monitoring**  
+**INR** for warfarin and **aPTT/anti-Xa** patterns for heparins appear when stems test bleeding risk versus therapeutic targets. Nursing priorities include **neuro checks**, **stool/urine blood assessment**, **fall precautions**, and **reporting** unexpected bruising or sudden headache.
+
+**Opioid vigilance**  
+Watch **respiratory rate**, **sedation scale**, and **oxygenation** together. Some items reference **ABG** or **capnography** in higher-acuity settings—choose answers that **increase monitoring frequency** or **activate reversal agents per order** when depression patterns emerge.`;
+
 function pack(
   variant: HamVariant,
   meta: {
@@ -531,6 +540,8 @@ type LessonInputShape = {
   sections: PathwayLessonSection[];
   preTest: PathwayLessonQuizItem[];
   postTest: PathwayLessonQuizItem[];
+  premiumOmittedSections?: PathwayLessonOmittedPremiumSection[];
+  relatedLessonRefs?: PathwayLessonRelatedRef[];
 };
 
 function npTitles(pathwayId: string, v: (typeof VARIANTS)["us_np"]) {
@@ -568,6 +579,30 @@ export function getHighAlertMedsGoldLessonInput(pathwayId: string): LessonInputS
   if (!key) return null;
   let v = VARIANTS[key];
   if (key === "us_np") v = npTitles(pathwayId, v);
+  const geo = pathwayIdToTierGeo(pathwayId);
+  if (!geo) return null;
+  const syn = synthesizeGoldPremiumSections({
+    sharedCore: SHARED_CORE_BODY,
+    clinical_meaning: v.clinical_meaning,
+    exam_relevance: v.exam_relevance,
+    clinical_scenario: v.clinical_scenario,
+    takeaways: v.takeaways,
+    tierGeo: geo,
+    examLabel: PATHWAY_EXAM_LABEL[pathwayId] ?? "your nursing licensure exam",
+    labsDiagnostics: HIGH_ALERT_LABS_DIAGNOSTICS,
+    relatedSlugs: [
+      "fluids-electrolytes-emergencies-gold",
+      "sepsis-early-recognition-gold",
+      "shock-emergencies-gold",
+      "clinical-judgment-prioritization-gold",
+    ],
+    relatedTitlesBySlug: {
+      "fluids-electrolytes-emergencies-gold": "Fluids & electrolyte emergencies",
+      "sepsis-early-recognition-gold": "Sepsis early recognition",
+      "shock-emergencies-gold": "Shock emergencies",
+      "clinical-judgment-prioritization-gold": "Clinical judgment & prioritization",
+    },
+  });
   return {
     slug: HIGH_ALERT_MEDS_GOLD_SLUG,
     title: v.title,
@@ -577,13 +612,9 @@ export function getHighAlertMedsGoldLessonInput(pathwayId: string): LessonInputS
     previewSectionCount: 1,
     seoTitle: v.seoTitle,
     seoDescription: v.seoDescription,
-    sections: [
-      { id: "clinical_meaning", heading: "What this means clinically", kind: "clinical_meaning", body: v.clinical_meaning },
-      { id: "exam_relevance", heading: "Why this appears on your exam", kind: "exam_relevance", body: v.exam_relevance },
-      { id: "core_concept", heading: "Core concept — insulin, anticoagulants, opioids", kind: "core_concept", body: SHARED_CORE_BODY },
-      { id: "clinical_scenario", heading: "Clinical scenario", kind: "clinical_scenario", body: v.clinical_scenario },
-      { id: "takeaways", heading: "Key takeaways", kind: "takeaways", body: v.takeaways },
-    ],
+    sections: syn.sections,
+    premiumOmittedSections: syn.premiumOmittedSections,
+    relatedLessonRefs: syn.relatedLessonRefs,
     preTest: v.quizzes.preTest,
     postTest: v.quizzes.postTest,
   };

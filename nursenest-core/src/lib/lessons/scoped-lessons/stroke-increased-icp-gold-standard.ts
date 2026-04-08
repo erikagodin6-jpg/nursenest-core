@@ -2,7 +2,17 @@
  * Stroke recognition & increased ICP — nursing assessment, time-critical escalation, neuro protection.
  * Remediation wave 3: neurological system + management_of_care / safety.
  */
-import type { PathwayLessonQuizItem, PathwayLessonSection } from "@/lib/lessons/pathway-lesson-types";
+import type {
+  PathwayLessonOmittedPremiumSection,
+  PathwayLessonQuizItem,
+  PathwayLessonRelatedRef,
+  PathwayLessonSection,
+} from "@/lib/lessons/pathway-lesson-types";
+import {
+  PATHWAY_EXAM_LABEL,
+  pathwayIdToTierGeo,
+  synthesizeGoldPremiumSections,
+} from "@/lib/lessons/scoped-lessons/gold-premium-synthesis";
 import { npExamLabel, npPrimaryCareTitleSuffix } from "@/lib/lessons/scoped-lessons/np-pathway-display";
 
 export const STROKE_ICP_GOLD_SLUG = "stroke-increased-icp-gold" as const;
@@ -27,6 +37,15 @@ Items reward **sudden focal neuro deficit** recognition (facial droop, arm drift
 
 **Reperfusion & BP teaching (exam-level)**  
 Stems test **blood pressure targets** around **thrombolysis eligibility** and **post-tPA** monitoring without expecting you to prescribe—follow **the order and protocol in the item**. Avoid **hypotension** that worsens perfusion in acute stroke workups when the vignette emphasizes it.`;
+
+const STROKE_LABS_DIAGNOSTICS = `**Non-contrast CT and advanced imaging**  
+Acute stroke pathways hinge on **timely brain imaging** to separate **ischemia** from **hemorrhage** and to evaluate **large vessel occlusion** when CT angiography appears in the stem. Nursing items test **preparation**, **NPO status when ordered**, **neuro checks before/after transfer**, and **avoiding interventions** that delay the scan when time-sensitive therapy is in play.
+
+**Point-of-care glucose**  
+**Hypoglycemia can mimic stroke**; check **capillary glucose early** when the vignette allows it and the client is altered—treat **reversible causes** before anchoring on a stroke diagnosis alone.
+
+**NIHSS and monitoring**  
+Some stems reference **stroke scale scores** to communicate severity. Your role is **accurate, frequent neuro assessment**, **airway vigilance**, **BP monitoring per protocol**, and **reporting sudden changes** that suggest **hemorrhagic conversion** or **rising ICP**.`;
 
 function pack(
   variant: StrokeVariant,
@@ -519,6 +538,8 @@ type LessonInputShape = {
   sections: PathwayLessonSection[];
   preTest: PathwayLessonQuizItem[];
   postTest: PathwayLessonQuizItem[];
+  premiumOmittedSections?: PathwayLessonOmittedPremiumSection[];
+  relatedLessonRefs?: PathwayLessonRelatedRef[];
 };
 
 function npTitles(pathwayId: string, v: (typeof VARIANTS)["us_np"]) {
@@ -552,6 +573,30 @@ export function getStrokeIcpGoldLessonInput(pathwayId: string): LessonInputShape
   if (!key) return null;
   let v = VARIANTS[key];
   if (key === "us_np") v = npTitles(pathwayId, v);
+  const geo = pathwayIdToTierGeo(pathwayId);
+  if (!geo) return null;
+  const syn = synthesizeGoldPremiumSections({
+    sharedCore: SHARED_CORE_BODY,
+    clinical_meaning: v.clinical_meaning,
+    exam_relevance: v.exam_relevance,
+    clinical_scenario: v.clinical_scenario,
+    takeaways: v.takeaways,
+    tierGeo: geo,
+    examLabel: PATHWAY_EXAM_LABEL[pathwayId] ?? "your nursing licensure exam",
+    labsDiagnostics: STROKE_LABS_DIAGNOSTICS,
+    relatedSlugs: [
+      "shock-emergencies-gold",
+      "sepsis-early-recognition-gold",
+      "acute-coronary-syndrome-gold",
+      "clinical-judgment-prioritization-gold",
+    ],
+    relatedTitlesBySlug: {
+      "shock-emergencies-gold": "Shock emergencies",
+      "sepsis-early-recognition-gold": "Sepsis early recognition",
+      "acute-coronary-syndrome-gold": "Acute coronary syndrome",
+      "clinical-judgment-prioritization-gold": "Clinical judgment & prioritization",
+    },
+  });
   return {
     slug: STROKE_ICP_GOLD_SLUG,
     title: v.title,
@@ -561,13 +606,9 @@ export function getStrokeIcpGoldLessonInput(pathwayId: string): LessonInputShape
     previewSectionCount: 1,
     seoTitle: v.seoTitle,
     seoDescription: v.seoDescription,
-    sections: [
-      { id: "clinical_meaning", heading: "What this means clinically", kind: "clinical_meaning", body: v.clinical_meaning },
-      { id: "exam_relevance", heading: "Why this appears on your exam", kind: "exam_relevance", body: v.exam_relevance },
-      { id: "core_concept", heading: "Core concept — stroke & ICP", kind: "core_concept", body: SHARED_CORE_BODY },
-      { id: "clinical_scenario", heading: "Clinical scenario", kind: "clinical_scenario", body: v.clinical_scenario },
-      { id: "takeaways", heading: "Key takeaways", kind: "takeaways", body: v.takeaways },
-    ],
+    sections: syn.sections,
+    premiumOmittedSections: syn.premiumOmittedSections,
+    relatedLessonRefs: syn.relatedLessonRefs,
     preTest: v.quizzes.preTest,
     postTest: v.quizzes.postTest,
   };

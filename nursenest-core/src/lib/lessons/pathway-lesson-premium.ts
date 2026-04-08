@@ -1,6 +1,8 @@
 /**
  * Premium pathway lesson standard: section order, minimum prose depth, internal links, publish readiness.
  * Legacy catalog lessons use five-block normalization; premium kinds opt into the full spine + validation.
+ *
+ * Exam-complete spine checklist / builders live in `exam-complete-lesson-template.ts` (same folder).
  */
 import type {
   PathwayLessonOmittedPremiumSection,

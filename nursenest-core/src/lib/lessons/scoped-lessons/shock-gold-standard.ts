@@ -2,7 +2,17 @@
  * Shock recognition & stabilization support — types, perfusion, escalation beyond sepsis alone.
  * Remediation wave 3: cardiovascular / perfusion + physiological adaptation.
  */
-import type { PathwayLessonQuizItem, PathwayLessonSection } from "@/lib/lessons/pathway-lesson-types";
+import type {
+  PathwayLessonOmittedPremiumSection,
+  PathwayLessonQuizItem,
+  PathwayLessonRelatedRef,
+  PathwayLessonSection,
+} from "@/lib/lessons/pathway-lesson-types";
+import {
+  PATHWAY_EXAM_LABEL,
+  pathwayIdToTierGeo,
+  synthesizeGoldPremiumSections,
+} from "@/lib/lessons/scoped-lessons/gold-premium-synthesis";
 import { npExamLabel, npPrimaryCareTitleSuffix } from "@/lib/lessons/scoped-lessons/np-pathway-display";
 
 export const SHOCK_GOLD_SLUG = "shock-emergencies-gold" as const;
@@ -30,6 +40,15 @@ Shock means **inadequate tissue perfusion** relative to metabolic need. Exams cl
 
 **Monitoring & safety**  
 Trend **MAP/BP**, **HR**, **RR**, **SpO₂**, **UOP**, **mental status**, **skin**, **cap refill**, **bleeding** on anticoagulation, and **infusion site** integrity for vasopressors.`;
+
+const SHOCK_LABS_DIAGNOSTICS = `**Lactate and perfusion**  
+**Lactate** often appears as a marker of **cellular hypoperfusion** in septic and other shock states. Nursing priorities include **drawing labs when ordered**, **reporting rising lactate**, and pairing numbers with **clinical trajectory** (mentation, urine output, skin, blood pressure trends).
+
+**ABG and oxygenation**  
+**Metabolic acidosis** patterns and **PaO₂/FiO₂** changes support escalation decisions in critical vignettes. Choose answers that **increase monitoring**, **optimize oxygen delivery**, and **notify** when ventilation or perfusion is failing—not answers that **ignore widening acidosis**.
+
+**Hemoglobin and hemorrhage**  
+In **hemorrhagic shock**, **falling hemoglobin/hematocrit** with tachycardia and hypotension supports **blood product pathways** per orders. Your role is **recognition**, **large-bore access support**, **sample collection**, and **continuous reassessment** after interventions.`;
 
 function pack(
   variant: ShockVariant,
@@ -521,6 +540,8 @@ type LessonInputShape = {
   sections: PathwayLessonSection[];
   preTest: PathwayLessonQuizItem[];
   postTest: PathwayLessonQuizItem[];
+  premiumOmittedSections?: PathwayLessonOmittedPremiumSection[];
+  relatedLessonRefs?: PathwayLessonRelatedRef[];
 };
 
 function npTitles(pathwayId: string, v: (typeof VARIANTS)["us_np"]) {
@@ -554,6 +575,30 @@ export function getShockGoldLessonInput(pathwayId: string): LessonInputShape | n
   if (!key) return null;
   let v = VARIANTS[key];
   if (key === "us_np") v = npTitles(pathwayId, v);
+  const geo = pathwayIdToTierGeo(pathwayId);
+  if (!geo) return null;
+  const syn = synthesizeGoldPremiumSections({
+    sharedCore: SHARED_CORE_BODY,
+    clinical_meaning: v.clinical_meaning,
+    exam_relevance: v.exam_relevance,
+    clinical_scenario: v.clinical_scenario,
+    takeaways: v.takeaways,
+    tierGeo: geo,
+    examLabel: PATHWAY_EXAM_LABEL[pathwayId] ?? "your nursing licensure exam",
+    labsDiagnostics: SHOCK_LABS_DIAGNOSTICS,
+    relatedSlugs: [
+      "sepsis-early-recognition-gold",
+      "fluids-electrolytes-emergencies-gold",
+      "acute-coronary-syndrome-gold",
+      "clinical-judgment-prioritization-gold",
+    ],
+    relatedTitlesBySlug: {
+      "sepsis-early-recognition-gold": "Sepsis early recognition",
+      "fluids-electrolytes-emergencies-gold": "Fluids & electrolyte emergencies",
+      "acute-coronary-syndrome-gold": "Acute coronary syndrome",
+      "clinical-judgment-prioritization-gold": "Clinical judgment & prioritization",
+    },
+  });
   return {
     slug: SHOCK_GOLD_SLUG,
     title: v.title,
@@ -563,13 +608,9 @@ export function getShockGoldLessonInput(pathwayId: string): LessonInputShape | n
     previewSectionCount: 1,
     seoTitle: v.seoTitle,
     seoDescription: v.seoDescription,
-    sections: [
-      { id: "clinical_meaning", heading: "What this means clinically", kind: "clinical_meaning", body: v.clinical_meaning },
-      { id: "exam_relevance", heading: "Why this appears on your exam", kind: "exam_relevance", body: v.exam_relevance },
-      { id: "core_concept", heading: "Core concept — shock types & perfusion", kind: "core_concept", body: SHARED_CORE_BODY },
-      { id: "clinical_scenario", heading: "Clinical scenario", kind: "clinical_scenario", body: v.clinical_scenario },
-      { id: "takeaways", heading: "Key takeaways", kind: "takeaways", body: v.takeaways },
-    ],
+    sections: syn.sections,
+    premiumOmittedSections: syn.premiumOmittedSections,
+    relatedLessonRefs: syn.relatedLessonRefs,
     preTest: v.quizzes.preTest,
     postTest: v.quizzes.postTest,
   };

@@ -19,6 +19,9 @@ describe("pathway-lesson-loader normalization", () => {
       assert.ok(typeof s.body === "string" && s.body.length > 0, `empty body for ${s.kind}`);
     }
     assert.ok(lesson!.previewSectionCount >= 1 && lesson!.previewSectionCount <= lesson!.sections.length);
+    assert.ok(lesson!.structuralQuality);
+    assert.equal(lesson!.structuralQuality!.structureMode, "legacy");
+    assert.equal(lesson!.structuralQuality!.publicComplete, true);
   });
 
   it("returns undefined for unknown slug", async () => {

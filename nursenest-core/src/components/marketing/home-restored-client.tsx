@@ -19,6 +19,7 @@ import {
   MARKETING_SECONDARY_CTA_CLASS,
 } from "@/lib/theme/marketing-hero-pattern";
 import { HomeLandingSections } from "@/components/marketing/home-landing-sections";
+import { HomePlatformPreviewSection } from "@/components/marketing/home-platform-preview-section";
 
 type HomeStatsPayload = {
   totalLessons: number;
@@ -183,6 +184,8 @@ export default function HomeRestoredClient() {
             </div>
           </div>
         </section>
+
+        <HomePlatformPreviewSection />
 
         <HomeLandingSections questionCount={questionCount} />
 

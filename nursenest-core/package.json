@@ -67,7 +67,7 @@
     "export:blog-json": "tsx scripts/export-monolith-blog-to-json.ts",
     "db:rewrite-lesson-screenshots": "tsx scripts/rewrite-lesson-screenshot-urls.ts",
     "test:entitlements": "tsx --test src/lib/entitlements/*.test.ts",
-    "test:pathway-lessons": "tsx --test src/lib/entitlements/country-code.test.ts src/lib/entitlements/subscription-plan.test.ts src/lib/exam-pathways/pathway-entitlements.test.ts src/lib/lessons/pathway-lesson-access.test.ts src/lib/lessons/pathway-lesson-loader.test.ts src/lib/lessons/pathway-lesson-preview-kind.test.ts src/lib/lessons/scoped-lessons/copd-gold-standard.test.ts src/lib/lessons/scoped-lessons/scoped-gold-registry.test.ts",
+    "test:pathway-lessons": "tsx --test src/lib/entitlements/country-code.test.ts src/lib/entitlements/subscription-plan.test.ts src/lib/exam-pathways/pathway-entitlements.test.ts src/lib/lessons/pathway-lesson-access.test.ts src/lib/lessons/pathway-lesson-loader.test.ts src/lib/lessons/pathway-lesson-preview-kind.test.ts src/lib/lessons/exam-complete-lesson-template.test.ts src/lib/lessons/scoped-lessons/copd-gold-standard.test.ts src/lib/lessons/scoped-lessons/scoped-gold-registry.test.ts",
     "test:breadcrumbs": "tsx --test src/lib/seo/pathway-breadcrumbs.test.ts src/lib/seo/pathway-programmatic-seo.test.ts src/lib/exam-pathways/programmatic-slug-redirects.test.ts",
     "test:content-quality": "tsx --test src/lib/content-quality/plain-text.test.ts",
     "test:question-bank": "tsx --test src/lib/questions/question-bank-taxonomy.test.ts src/lib/questions/adaptive-question-selection.test.ts",

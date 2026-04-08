@@ -40,6 +40,15 @@ Small shifts in **sodium**, **potassium**, **calcium**, and **magnesium** change
 **Fluids**  
 **Hypovolemia** vs **overload** forks still use **vitals, mucosa, I&O, lung sounds, edema, orthostasis** and **provider-directed** boluses or diuretics—avoid independent “fix the number” without an order.`;
 
+const FLUIDS_LABS_DIAGNOSTICS = `**Core panels**  
+Expect stems to quote **basic metabolic panels** (sodium, potassium, chloride, bicarbonate, BUN, creatinine, glucose), **ionized calcium** or total calcium with albumin context, **magnesium**, and sometimes **phosphate** in refeeding or renal failure scenarios. Nursing items test whether you **recognize critical values**, **repeat labs per order**, and **connect trends** to symptoms and ECG changes.
+
+**Osmolality and glucose states**  
+**Serum osmolality** and **glucose** appear in hyperglycemic crises and mixed pictures; tie them to **volume status** and **K shifts** during treatment pathways described in the item. Choose monitoring that matches **insulin protocols**, **potassium repletion rules**, and **frequent reassessment** rather than one-time fixes.
+
+**Urinalysis and I&O**  
+**Concentrated urine**, **poor output**, or **sudden diuresis** support volume and renal storylines. Pair **strict I&O**, **daily weights**, and **orthostatic vitals** with lab trajectories when the stem tests your judgment on **overload versus dehydration**.`;
+
 function pack(
   variant: FeVariant,
   meta: {
@@ -529,6 +538,8 @@ type LessonInputShape = {
   sections: PathwayLessonSection[];
   preTest: PathwayLessonQuizItem[];
   postTest: PathwayLessonQuizItem[];
+  premiumOmittedSections?: PathwayLessonOmittedPremiumSection[];
+  relatedLessonRefs?: PathwayLessonRelatedRef[];
 };
 
 function npTitles(pathwayId: string, v: (typeof VARIANTS)["us_np"]) {
@@ -562,6 +573,30 @@ export function getFluidsElectrolytesGoldLessonInput(pathwayId: string): LessonI
   if (!key) return null;
   let v = VARIANTS[key];
   if (key === "us_np") v = npTitles(pathwayId, v);
+  const geo = pathwayIdToTierGeo(pathwayId);
+  if (!geo) return null;
+  const syn = synthesizeGoldPremiumSections({
+    sharedCore: SHARED_CORE_BODY,
+    clinical_meaning: v.clinical_meaning,
+    exam_relevance: v.exam_relevance,
+    clinical_scenario: v.clinical_scenario,
+    takeaways: v.takeaways,
+    tierGeo: geo,
+    examLabel: PATHWAY_EXAM_LABEL[pathwayId] ?? "your nursing licensure exam",
+    labsDiagnostics: FLUIDS_LABS_DIAGNOSTICS,
+    relatedSlugs: [
+      "sepsis-early-recognition-gold",
+      "shock-emergencies-gold",
+      "acute-coronary-syndrome-gold",
+      "clinical-judgment-prioritization-gold",
+    ],
+    relatedTitlesBySlug: {
+      "sepsis-early-recognition-gold": "Sepsis early recognition",
+      "shock-emergencies-gold": "Shock emergencies",
+      "acute-coronary-syndrome-gold": "Acute coronary syndrome",
+      "clinical-judgment-prioritization-gold": "Clinical judgment & prioritization",
+    },
+  });
   return {
     slug: FLUIDS_ELECTROLYTES_GOLD_SLUG,
     title: v.title,
@@ -571,13 +606,9 @@ export function getFluidsElectrolytesGoldLessonInput(pathwayId: string): LessonI
     previewSectionCount: 1,
     seoTitle: v.seoTitle,
     seoDescription: v.seoDescription,
-    sections: [
-      { id: "clinical_meaning", heading: "What this means clinically", kind: "clinical_meaning", body: v.clinical_meaning },
-      { id: "exam_relevance", heading: "Why this appears on your exam", kind: "exam_relevance", body: v.exam_relevance },
-      { id: "core_concept", heading: "Core concept — Na, K, Ca, Mg, fluids", kind: "core_concept", body: SHARED_CORE_BODY },
-      { id: "clinical_scenario", heading: "Clinical scenario", kind: "clinical_scenario", body: v.clinical_scenario },
-      { id: "takeaways", heading: "Key takeaways", kind: "takeaways", body: v.takeaways },
-    ],
+    sections: syn.sections,
+    premiumOmittedSections: syn.premiumOmittedSections,
+    relatedLessonRefs: syn.relatedLessonRefs,
     preTest: v.quizzes.preTest,
     postTest: v.quizzes.postTest,
   };

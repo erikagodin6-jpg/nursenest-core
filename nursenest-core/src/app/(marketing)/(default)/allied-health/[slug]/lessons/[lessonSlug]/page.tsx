@@ -24,7 +24,11 @@ import {
   defaultPathwayLessonContentLocaleForExamHubRoute,
   normalizePathwayLessonLocale,
 } from "@/lib/lessons/pathway-lesson-locale";
-import { getPathwayLesson, getRelatedPathwayLessons } from "@/lib/lessons/pathway-lesson-loader";
+import {
+  getPathwayLesson,
+  getRelatedPathwayLessons,
+  RELATED_PATHWAY_LESSONS_LIMIT,
+} from "@/lib/lessons/pathway-lesson-loader";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { prisma } from "@/lib/db";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
@@ -37,7 +41,12 @@ import { PathwayLessonQuickReview } from "@/components/lessons/pathway-lesson-qu
 import { classifyPathwayLesson } from "@/lib/content-quality/classify-lesson";
 import { buildQuickReviewBullets } from "@/lib/lessons/pathway-lesson-quick-review";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
-import { pathwayLessonHasRenderableHubSlug, pathwayLessonMarketingDetailHref } from "@/lib/lessons/pathway-lesson-types";
+import {
+  mergeRelatedLessonDisplayList,
+  pathwayLessonHasRenderableHubSlug,
+  pathwayLessonMarketingDetailHref,
+} from "@/lib/lessons/pathway-lesson-types";
+import { LessonStructuralQualityNotice } from "@/components/lessons/lesson-structural-quality-notice";
 
 export const revalidate = 86400;
 export const dynamicParams = true;
@@ -68,11 +77,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!alliedLessonMatchesProfessionFilter(lesson, prof.topicSlugsIn)) return {};
   const path = `/allied-health/${prof.professionKey}/lessons/${lesson.slug}`;
   const canonical = absoluteUrl(path);
+  const strictPublic = process.env.PATHWAY_LESSON_STRICT_PUBLIC_QUALITY === "1";
+  const incomplete = Boolean(lesson.structuralQuality && !lesson.structuralQuality.publicComplete);
+  const robots =
+    strictPublic && incomplete ? ({ index: false, follow: true } as const) : ({ index: true, follow: true } as const);
   return {
     title: lesson.seoTitle,
     description: lesson.seoDescription,
     alternates: { canonical },
     openGraph: { title: lesson.seoTitle, description: lesson.seoDescription, url: canonical, type: "article" },
+    robots,
   };
 }
 
@@ -132,6 +146,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
   } catch {
     related = [];
   }
+  const relatedDisplay = mergeRelatedLessonDisplayList(lesson.relatedLessonRefs, related, RELATED_PATHWAY_LESSONS_LIMIT);
 
   const { crumbs, schemaItems } = alliedLessonDetailBreadcrumbs(
     prof.h1,
@@ -164,6 +179,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
       </p>
       <div className="mt-4 space-y-3">
         <LessonQualityNotice tier={lessonQuality.tier} wordCount={lessonQuality.wordCount} />
+        <LessonStructuralQualityNotice gate={lesson.structuralQuality} />
         <PathwayLessonQuickReview bullets={buildQuickReviewBullets(lesson)} />
       </div>
       {showLocaleFallbackNotice ? (
@@ -213,7 +229,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
               {section.heading?.trim() || "Section"}
             </h2>
             <div className="mt-3">
-              <PathwayLessonBody text={typeof section.body === "string" ? section.body : ""} />
+              <PathwayLessonBody text={typeof section.body === "string" ? section.body : ""} lessonWikiBasePath={base} />
             </div>
           </section>
         ))}
@@ -244,11 +260,11 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
         .
       </p>
 
-      {related.length > 0 ? (
+      {relatedDisplay.length > 0 ? (
         <section className="mt-10">
-          <h2 className="text-lg font-semibold">Related lessons · {lesson.topic}</h2>
+          <h2 className="text-lg font-semibold">Related lessons & next steps · {lesson.topic}</h2>
           <ul className="mt-3 space-y-2">
-            {related.map((r) => {
+            {relatedDisplay.map((r) => {
               const href = pathwayLessonMarketingDetailHref(base, r.slug);
               if (!href) return null;
               return (

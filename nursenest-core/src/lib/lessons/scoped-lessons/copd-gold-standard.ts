@@ -3,7 +3,17 @@
  * (US PN, CA RPN, US RN, CA RN, US FNP). Injected beside catalog JSON — see
  * {@link getCatalogLessonsRaw} in pathway-lesson-loader.
  */
-import type { PathwayLessonQuizItem, PathwayLessonSection } from "@/lib/lessons/pathway-lesson-types";
+import type {
+  PathwayLessonOmittedPremiumSection,
+  PathwayLessonQuizItem,
+  PathwayLessonRelatedRef,
+  PathwayLessonSection,
+} from "@/lib/lessons/pathway-lesson-types";
+import {
+  PATHWAY_EXAM_LABEL,
+  pathwayIdToTierGeo,
+  synthesizeGoldPremiumSections,
+} from "@/lib/lessons/scoped-lessons/gold-premium-synthesis";
 
 /** Stable slug — use in URLs and DB seeding; do not rename without redirects. */
 export const COPD_GOLD_STANDARD_SLUG = "copd-clinical-judgment-gold" as const;

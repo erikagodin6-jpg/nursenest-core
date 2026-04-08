@@ -24,6 +24,15 @@ export type PathwayLessonRelatedRef = {
   titleHint?: string;
 };
 
+/** Primary exam tier(s) this lesson targets (pathway still scopes catalog rows; this tags cross-surface alignment). */
+export type PathwayLessonAudienceTier = "rn" | "pn" | "np";
+
+/** Geographic / exam-framework emphasis for authoring and bank tagging. */
+export type PathwayLessonCountryScope = "us" | "ca" | "both";
+
+/** Relative exam weight for prioritization in expansion / hub ordering. */
+export type PathwayLessonExamRelevance = "high_yield" | "core" | "specialty";
+
 export type PathwayLessonOmittedPremiumSection = {
   kind: PathwayLessonPremiumSectionKind;
   reason: string;
@@ -139,6 +148,10 @@ export type PathwayLessonRecord = {
   structuralQuality?: PathwayLessonStructuralGate;
   /** Present when lesson uses premium section kinds; filled in {@link normalizeLesson}. */
   premiumValidation?: PathwayLessonPremiumValidation;
+  /** Optional catalog metadata for filtering and hub labeling (when present on `LessonInput`). */
+  audienceTiers?: PathwayLessonAudienceTier[];
+  countryScope?: PathwayLessonCountryScope;
+  examRelevance?: PathwayLessonExamRelevance;
 };
 
 /** Hub cards must not link with empty or whitespace slugs (defensive; DB/catalog should always set slug). */
@@ -171,6 +184,7 @@ export function mergeRelatedLessonDisplayList(
   const out: { slug: string; title: string }[] = [];
   const seen = new Set<string>();
   for (const r of refs ?? []) {
+    if (out.length >= cap) break;
     const slug = typeof r.slug === "string" ? r.slug.trim() : "";
     if (!slug || seen.has(slug)) continue;
     seen.add(slug);
@@ -178,12 +192,12 @@ export function mergeRelatedLessonDisplayList(
     out.push({ slug, title: hint && hint.length > 0 ? hint : slug.replace(/-/g, " ") });
   }
   for (const row of topicRelated) {
+    if (out.length >= cap) break;
     if (!pathwayLessonHasRenderableHubSlug(row)) continue;
     const slug = row.slug.trim();
     if (seen.has(slug)) continue;
     seen.add(slug);
     out.push({ slug, title: row.title });
-    if (out.length >= cap) break;
   }
-  return out.slice(0, cap);
+  return out;
 }

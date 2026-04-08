@@ -2,7 +2,17 @@
  * Canadian RPN (REx-PN) high-yield slice — scope, collaboration, delegation, and safe practice.
  * Remediation wave 3: practical nursing exam depth with Canadian regulatory framing; other pathways get collaboration/delegation overlays.
  */
-import type { PathwayLessonQuizItem, PathwayLessonSection } from "@/lib/lessons/pathway-lesson-types";
+import type {
+  PathwayLessonOmittedPremiumSection,
+  PathwayLessonQuizItem,
+  PathwayLessonRelatedRef,
+  PathwayLessonSection,
+} from "@/lib/lessons/pathway-lesson-types";
+import {
+  PATHWAY_EXAM_LABEL,
+  pathwayIdToTierGeo,
+  synthesizeGoldPremiumSections,
+} from "@/lib/lessons/scoped-lessons/gold-premium-synthesis";
 import { npExamLabel, npPrimaryCareTitleSuffix } from "@/lib/lessons/scoped-lessons/np-pathway-display";
 
 export const CANADIAN_RPN_HIGH_YIELD_GOLD_SLUG = "canadian-rpn-scope-collaboration-gold" as const;
@@ -30,6 +40,9 @@ const SHARED_CORE_BODY = `**Why this lesson exists**
 
 **Exam tip**  
 When the stem says **Canada** or **RPN**, select answers that show **collaboration**, **clear orders**, and **policy**—not independent medical decision-making unless the item explicitly defines extended authority.`;
+
+const RPN_SCOPE_LABS_OMIT_REASON =
+  "This lesson targets scope, delegation, and interprofessional collaboration rather than standalone laboratory interpretation; apply fluids, sepsis, and electrolyte lessons when stems quote critical labs.";
 
 function pack(
   variant: RpnSliceVariant,
@@ -523,6 +536,8 @@ type LessonInputShape = {
   sections: PathwayLessonSection[];
   preTest: PathwayLessonQuizItem[];
   postTest: PathwayLessonQuizItem[];
+  premiumOmittedSections?: PathwayLessonOmittedPremiumSection[];
+  relatedLessonRefs?: PathwayLessonRelatedRef[];
 };
 
 function npTitles(pathwayId: string, v: (typeof VARIANTS)["us_np"]) {

@@ -1,0 +1,250 @@
+{
+  "version": 1,
+  "description": "Maps the 24-topic NCLEX-core curriculum to canonical on-site lesson slugs. Site URLs: /{country}/{role}/{exam}/lessons/{slug} via buildExamPathwayPath.",
+  "notes": [
+    "Scoped gold lessons inject the same slug across pathways (prependScopedGoldCatalogLessons).",
+    "Stroke and increased ICP share stroke-increased-icp-gold.",
+    "Pediatric dehydration and pediatric respiratory distress share pediatric-triage-emergencies-gold-standard.",
+    "PN pathways use scope-appropriate catalog slugs (e.g. seizure-observation vs seizure-precautions-rescue-meds)."
+  ],
+  "lessons": [
+    {
+      "order": 1,
+      "title": "Acute Coronary Syndrome",
+      "slug": "acute-coronary-syndrome-gold",
+      "topicSlug": "cardiovascular",
+      "bodySystem": "cardiovascular",
+      "source": "scoped_gold"
+    },
+    {
+      "order": 2,
+      "title": "Heart Failure",
+      "slugByPathway": {
+        "us-rn-nclex-rn": "us-rn-heart-failure",
+        "ca-rn-nclex-rn": "ca-rn-heart-failure",
+        "us-lpn-nclex-pn": "us-pn-heart-failure",
+        "ca-rpn-rex-pn": "ca-rpn-heart-failure"
+      },
+      "topicSlug": "heart-failure",
+      "bodySystem": "cardiovascular",
+      "source": "catalog"
+    },
+    {
+      "order": 3,
+      "title": "Dysrhythmias",
+      "slugByPathway": {
+        "us-rn-nclex-rn": "us-rn-dysrhythmias",
+        "ca-rn-nclex-rn": "ca-rn-dysrhythmias",
+        "us-lpn-nclex-pn": "us-pn-dysrhythmias",
+        "ca-rpn-rex-pn": "ca-rpn-dysrhythmias"
+      },
+      "topicSlug": "cardiovascular",
+      "bodySystem": "cardiovascular",
+      "source": "catalog"
+    },
+    {
+      "order": 4,
+      "title": "Shock",
+      "slug": "shock-emergencies-gold",
+      "topicSlug": "shock",
+      "bodySystem": "cardiovascular",
+      "source": "scoped_gold"
+    },
+    {
+      "order": 5,
+      "title": "COPD",
+      "slug": "copd-clinical-judgment-gold",
+      "topicSlug": "copd",
+      "bodySystem": "respiratory",
+      "source": "scoped_gold"
+    },
+    {
+      "order": 6,
+      "title": "Asthma",
+      "slugByPathway": {
+        "us-rn-nclex-rn": "us-rn-asthma",
+        "ca-rn-nclex-rn": "ca-rn-asthma",
+        "us-lpn-nclex-pn": "us-pn-asthma",
+        "ca-rpn-rex-pn": "ca-rpn-asthma"
+      },
+      "topicSlug": "respiratory",
+      "bodySystem": "respiratory",
+      "source": "catalog"
+    },
+    {
+      "order": 7,
+      "title": "Pneumonia",
+      "slugByPathway": {
+        "us-rn-nclex-rn": "us-rn-pneumonia",
+        "ca-rn-nclex-rn": "ca-rn-pneumonia",
+        "us-lpn-nclex-pn": "us-pn-pneumonia",
+        "ca-rpn-rex-pn": "ca-rpn-pneumonia"
+      },
+      "topicSlug": "respiratory",
+      "bodySystem": "respiratory",
+      "source": "catalog"
+    },
+    {
+      "order": 8,
+      "title": "Stroke",
+      "slug": "stroke-increased-icp-gold",
+      "topicSlug": "neurological",
+      "bodySystem": "neurological",
+      "source": "scoped_gold",
+      "pairedTopic": "Increased Intracranial Pressure (same lesson page)"
+    },
+    {
+      "order": 9,
+      "title": "Increased Intracranial Pressure",
+      "slug": "stroke-increased-icp-gold",
+      "topicSlug": "neurological",
+      "bodySystem": "neurological",
+      "source": "scoped_gold",
+      "pairedTopic": "Stroke (same lesson page)"
+    },
+    {
+      "order": 10,
+      "title": "Seizures",
+      "slugByPathway": {
+        "us-rn-nclex-rn": "seizure-precautions-rescue-meds",
+        "ca-rn-nclex-rn": "seizure-precautions-rescue-meds",
+        "us-lpn-nclex-pn": "seizure-observation",
+        "ca-rpn-rex-pn": "seizure-observation"
+      },
+      "topicSlug": "neurological",
+      "bodySystem": "neurological",
+      "source": "catalog"
+    },
+    {
+      "order": 11,
+      "title": "Diabetes Mellitus",
+      "slug": "diabetes-self-management-teaching",
+      "topicSlug": "endocrine",
+      "bodySystem": "endocrine",
+      "source": "catalog",
+      "pathwayNote": "Present on RN pathways; PN uses different catalog set—see pathway hub filters."
+    },
+    {
+      "order": 12,
+      "title": "DKA vs HHS",
+      "slug": "dka-vs-hhs-priorities-hy",
+      "topicSlug": "endocrine",
+      "bodySystem": "endocrine",
+      "source": "catalog"
+    },
+    {
+      "order": 13,
+      "title": "Thyroid Disorders",
+      "slug": "thyroid-storm-myxedema-clues",
+      "topicSlug": "endocrine",
+      "bodySystem": "endocrine",
+      "source": "catalog"
+    },
+    {
+      "order": 14,
+      "title": "Acute Kidney Injury",
+      "slug": "aki-prerenal-vs-intrarenal",
+      "topicSlug": "renal-gu",
+      "bodySystem": "renal",
+      "source": "catalog"
+    },
+    {
+      "order": 15,
+      "title": "Electrolyte Imbalances",
+      "slug": "fluids-electrolytes-emergencies-gold",
+      "topicSlug": "fluids-electrolytes",
+      "bodySystem": "fluids-electrolytes",
+      "source": "scoped_gold"
+    },
+    {
+      "order": 16,
+      "title": "Sepsis",
+      "slug": "sepsis-early-recognition-gold",
+      "topicSlug": "sepsis",
+      "bodySystem": "immune",
+      "source": "scoped_gold"
+    },
+    {
+      "order": 17,
+      "title": "Infection Control and Isolation",
+      "slugByPathway": {
+        "us-rn-nclex-rn": "us-rn-infection-control",
+        "ca-rn-nclex-rn": "ca-rn-infection-control",
+        "us-lpn-nclex-pn": "us-pn-infection-control",
+        "ca-rpn-rex-pn": "ca-rpn-infection-control"
+      },
+      "topicSlug": "infection-control",
+      "bodySystem": "immune",
+      "source": "catalog"
+    },
+    {
+      "order": 18,
+      "title": "Preeclampsia and Eclampsia",
+      "slug": "preeclampsia-vs-eclampsia",
+      "topicSlug": "maternity",
+      "bodySystem": "maternity",
+      "source": "catalog"
+    },
+    {
+      "order": 19,
+      "title": "Postpartum Hemorrhage",
+      "slug": "postpartum-hemorrhage",
+      "topicSlug": "maternity",
+      "bodySystem": "maternity",
+      "source": "catalog",
+      "pathwayNote": "PN pathways may use postpartum-fundus-lochia for related scope preview; full PPH lesson on RN hubs."
+    },
+    {
+      "order": 20,
+      "title": "Pediatric Dehydration",
+      "slug": "pediatric-triage-emergencies-gold-standard",
+      "topicSlug": "pediatrics",
+      "bodySystem": "pediatrics",
+      "source": "scoped_gold",
+      "pairedTopic": "Pediatric Respiratory Distress (same lesson page)"
+    },
+    {
+      "order": 21,
+      "title": "Pediatric Respiratory Distress",
+      "slug": "pediatric-triage-emergencies-gold-standard",
+      "topicSlug": "pediatrics",
+      "bodySystem": "pediatrics",
+      "source": "scoped_gold",
+      "pairedTopic": "Pediatric Dehydration (same lesson page)"
+    },
+    {
+      "order": 22,
+      "title": "Suicide Risk and Mental Health Crisis",
+      "slugByPathway": {
+        "us-rn-nclex-rn": "suicide-risk-assessment-hy",
+        "ca-rn-nclex-rn": "suicide-risk-assessment-hy",
+        "us-lpn-nclex-pn": "suicide-precautions-observation",
+        "ca-rpn-rex-pn": "suicide-precautions-observation"
+      },
+      "topicSlug": "mental-health",
+      "bodySystem": "psychiatric",
+      "source": "catalog"
+    },
+    {
+      "order": 23,
+      "title": "High-Alert Medications",
+      "slug": "high-alert-medications-safety-gold",
+      "topicSlug": "medication-safety",
+      "bodySystem": "pharmacology",
+      "source": "scoped_gold"
+    },
+    {
+      "order": 24,
+      "title": "Pain Management",
+      "slugByPathway": {
+        "us-rn-nclex-rn": "us-rn-pain-management",
+        "ca-rn-nclex-rn": "ca-rn-pain-management",
+        "us-lpn-nclex-pn": "us-pn-pain-management",
+        "ca-rpn-rex-pn": "ca-rpn-pain-management"
+      },
+      "topicSlug": "comfort-pain",
+      "bodySystem": "comfort",
+      "source": "catalog"
+    }
+  ]
+}

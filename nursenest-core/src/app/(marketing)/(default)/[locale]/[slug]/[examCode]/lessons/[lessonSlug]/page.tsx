@@ -77,8 +77,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     .filter(Boolean)
     .join(", ");
   const strictPublic = process.env.PATHWAY_LESSON_STRICT_PUBLIC_QUALITY === "1";
-  const incomplete =
-    Boolean(lesson.structuralQuality) && lesson.structuralQuality && !lesson.structuralQuality.publicComplete;
+  const incomplete = Boolean(lesson.structuralQuality && !lesson.structuralQuality.publicComplete);
   const robots =
     strictPublic && incomplete ? ({ index: false, follow: true } as const) : ({ index: true, follow: true } as const);
   return {
@@ -250,6 +249,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
               <PathwayLessonSectionContent
                 text={typeof section.body === "string" ? section.body : ""}
                 figures={section.figures}
+                lessonWikiBasePath={base}
               />
             </div>
           </section>
@@ -285,20 +285,21 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
         .
       </p>
 
-      {related.length > 0 ? (
+      {relatedDisplay.length > 0 ? (
         <section className="mt-10">
-          <h2 className="text-lg font-semibold">Related lessons · {lesson.topic}</h2>
+          <h2 className="text-lg font-semibold">Related lessons & next steps · {lesson.topic}</h2>
           <ul className="mt-3 space-y-2">
-            {related.map((r) => (
-              <li key={r.slug}>
-                <Link
-                  href={pathwayLessonMarketingDetailHref(base, r.slug)!}
-                  className="text-primary hover:underline"
-                >
-                  {r.title}
-                </Link>
-              </li>
-            ))}
+            {relatedDisplay.map((r) => {
+              const href = pathwayLessonMarketingDetailHref(base, r.slug);
+              if (!href) return null;
+              return (
+                <li key={r.slug}>
+                  <Link href={href} className="text-primary hover:underline">
+                    {r.title}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </section>
       ) : null}
