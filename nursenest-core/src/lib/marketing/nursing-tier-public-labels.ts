@@ -1,3 +1,4 @@
+import type { CountrySlug } from "@/lib/exam-pathways/types";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 
 /**
@@ -5,6 +6,27 @@ import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-rout
  * RN uses NCLEX-RN in both countries. PN uses NCLEX-PN + LPN (US) or REx-PN + RPN (Canada).
  */
 export const NCLEX_RN_PUBLIC_LABEL = "NCLEX-RN" as const;
+
+/** Public /lessons index: only list pathways whose catalog country matches the visitor region (US vs Canada). */
+export function pathwayMatchesMarketingRegion(countrySlug: CountrySlug, region: MarketingRegionToggle): boolean {
+  return region === "US" ? countrySlug === "us" : countrySlug === "canada";
+}
+
+export function publicLessonsHubSectionHeadingRn(region: MarketingRegionToggle): string {
+  return region === "US" ? "NCLEX-RN lessons · United States" : "NCLEX-RN lessons · Canada";
+}
+
+export function publicLessonsHubSectionHeadingPn(region: MarketingRegionToggle): string {
+  return region === "US" ? "NCLEX-PN (LPN) lessons · United States" : "REx-PN (RPN) lessons · Canada";
+}
+
+export function publicLessonsHubSectionHeadingNp(region: MarketingRegionToggle): string {
+  return region === "US" ? "Nurse Practitioner lessons · United States" : "Nurse Practitioner lessons · Canada";
+}
+
+export function publicLessonsHubSectionHeadingAllied(region: MarketingRegionToggle): string {
+  return region === "US" ? "Allied health lessons · United States" : "Allied health lessons · Canada";
+}
 
 /** Compact label for nav strip, quick links, and similar. */
 export function nursingTierNavPnLabel(region: MarketingRegionToggle): string {

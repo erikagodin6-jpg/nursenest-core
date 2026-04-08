@@ -88,3 +88,8 @@ export type PathwayLessonRecord = {
   postTest?: PathwayLessonQuizItem[];
   localeMeta?: PathwayLessonLocaleMeta;
 };
+
+/** Hub cards must not link with empty or whitespace slugs (defensive; DB/catalog should always set slug). */
+export function pathwayLessonHasRenderableHubSlug(l: Pick<PathwayLessonRecord, "slug">): boolean {
+  return typeof l.slug === "string" && l.slug.trim().length > 0;
+}

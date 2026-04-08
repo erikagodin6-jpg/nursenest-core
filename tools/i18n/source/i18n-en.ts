@@ -4036,7 +4036,7 @@ const enTranslations: Record<string, string> = {
     "examHub.rnGuideDesc": "NCLEX-RN prep, clinical transition & career path",
     "examHub.rpnGuide": "Complete RPN/LVN Career Guide",
     "examHub.rpnGuideDesc": "REx-PN & NCLEX-PN prep, scope of practice & career path",
-    "examHub.startMockExam": "Start Mock Exam",
+    "examHub.startMockExam": "Start Practice Exam",
     "examHub.studyHub": "Study Hub",
     "examHub.studyResources": "Study Resources",
     "examHub.timeLimit": "Time Limit",
