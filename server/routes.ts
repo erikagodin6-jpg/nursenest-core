@@ -15465,7 +15465,7 @@ Generate 8-15 slides and 10-20 flashcards. Be thorough and clinically accurate.`
       const baseline = calculatePassProbability(overallAccuracy, totalQuestions, trend, mockAvg, { tier: effectiveTier, strictMockCount });
 
       const actionCandidates = [
-        { action: "Complete a strict CAT simulation", link: "/mock-exams", deltaFn: () => calculatePassProbability(overallAccuracy, totalQuestions, trend, mockAvg, { tier: effectiveTier, strictMockCount: strictMockCount + 1 }) },
+        { action: "Complete a strict CAT simulation", link: "/practice-exams", deltaFn: () => calculatePassProbability(overallAccuracy, totalQuestions, trend, mockAvg, { tier: effectiveTier, strictMockCount: strictMockCount + 1 }) },
         { action: "Practice 20 SATA questions", link: "/lessons", deltaFn: () => calculatePassProbability(Math.min(100, overallAccuracy + 2), totalQuestions + 20, trend, mockAvg, { tier: effectiveTier, strictMockCount }) },
         { action: "Complete 50 mixed-difficulty questions", link: "/lessons", deltaFn: () => calculatePassProbability(overallAccuracy, totalQuestions + 50, trend, mockAvg, { tier: effectiveTier, strictMockCount }) },
         { action: "Review pharmacology flashcards", link: "/flashcard-study", deltaFn: () => calculatePassProbability(Math.min(100, overallAccuracy + 1.5), totalQuestions + 25, trend, mockAvg, { tier: effectiveTier, strictMockCount }) },
@@ -19582,7 +19582,7 @@ Return ONLY valid JSON with this exact structure:
 
   const TRANSLATION_AUDIT_ROUTES = [
     "/", "/lessons", "/flashcards", "/pricing", "/start-free", "/anatomy",
-    "/med-math", "/lab-values", "/mock-exams", "/clinical-clarity", "/blog",
+    "/med-math", "/lab-values", "/practice-exams", "/clinical-clarity", "/blog",
     "/pre-nursing", "/question-of-the-day", "/question-bank", "/lectures",
     "/nursing", "/nursing-specialties", "/faq", "/about", "/contact",
     "/terms", "/privacy", "/nclex-rn-practice-questions", "/nclex-pn-practice-questions",

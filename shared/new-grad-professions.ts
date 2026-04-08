@@ -52,7 +52,7 @@ export const NEW_GRAD_PROFESSIONS: Record<string, NewGradProfession> = {
       "Practice SBAR communication until it becomes second nature",
       "Keep a pocket reference for common medications and lab values",
     ],
-    nurseNestExamPrepLink: "/mock-exams",
+    nurseNestExamPrepLink: "/practice-exams",
     relatedProfessions: ["paramedic", "respiratory-therapy", "np"],
     unitTypes: ["med-surg", "emergency", "critical-care", "pediatrics", "oncology", "long-term-care"],
     clinicalSkillCategories: ["giving-report", "managing-multiple-patients", "handling-emergencies", "documentation-tips", "shift-organization"],

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { MarketingPublicStudyLanding } from "@/components/marketing/marketing-public-study-landing";
-import { absoluteUrl } from "@/lib/seo/site-origin";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
@@ -33,8 +32,8 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title,
     description,
-    alternates: { canonical: absoluteUrl("/practice-exams"), languages: alt.languages },
-    openGraph: { title, description, url: absoluteUrl("/practice-exams"), type: "website" },
+    alternates: { canonical: alt.canonical, languages: alt.languages },
+    openGraph: { title, description, url: alt.canonical, type: "website" },
   };
 }
 

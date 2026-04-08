@@ -91,7 +91,7 @@ export const PROFESSION_AUTHORITY_DATA: Record<string, ProfessionAuthorityData> 
     seoTitle: "Nursing Career Guide — Education, Licensing, Salary & Exam Prep | NurseNest",
     seoDescription: "Complete guide to nursing careers in Canada and the USA. Learn about education requirements, NCLEX/REx-PN licensing, salary ranges ($55K–$130K+), career pathways, and exam prep resources.",
     seoKeywords: "nursing career, NCLEX-RN, REx-PN, nursing salary, nursing education, RN career path, nurse practitioner, nursing exam prep, nursing license requirements",
-    ctaPrimary: { label: "Start Free Diagnostic", href: "/mock-exams" },
+    ctaPrimary: { label: "Start Free Diagnostic", href: "/practice-exams" },
     ctaSecondary: { label: "Browse Lessons", href: "/lessons" },
     flashcardsHref: "/flashcards",
   },

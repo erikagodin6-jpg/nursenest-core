@@ -42,7 +42,7 @@ const EXAM_DATA: Record<ExamType, {
     intro: "The NCLEX-RN uses the Next Generation format with clinical judgment measurement items including case studies, drag-and-drop, and extended multiple response questions. NurseNest provides system-based question banks aligned to the current NCLEX-RN test plan, covering all eight client needs categories with detailed rationales for every answer option.",
     features: [
       { icon: Target, title: "NCLEX-RN Test Bank", desc: "Thousands of RN-level practice questions organized by body system and client needs category.", href: "/free-practice", cta: "Browse Questions" },
-      { icon: Stethoscope, title: "Timed Mock Exams", desc: "Simulate the CAT-adaptive NCLEX-RN exam with timed, randomized question sets.", href: "/mock-exams", cta: "Start Mock Exam" },
+      { icon: Stethoscope, title: "Timed Mock Exams", desc: "Simulate the CAT-adaptive NCLEX-RN exam with timed, randomized question sets.", href: "/practice-exams", cta: "Start Mock Exam" },
       { icon: FileText, title: "Printable Exam Packs", desc: "250-question PDF exam packs with answer keys. Print and practice offline.", href: "/shop", cta: "View Exam Packs" },
       { icon: BookOpen, title: "Flashcard Decks", desc: "High-yield pharmacology, lab values, and pathophysiology flashcards for rapid review.", href: "/flashcards", cta: "Study Flashcards" },
     ],
@@ -65,7 +65,7 @@ const EXAM_DATA: Record<ExamType, {
     intro: "The NCLEX-PN tests practical/vocational nursing competencies at the PN scope of practice. NurseNest provides PN-level question banks covering all client needs categories within the PN scope, including medication administration, basic care and comfort, safety, and coordinated care under RN supervision.",
     features: [
       { icon: Target, title: "NCLEX-PN Test Bank", desc: "Practice questions at the PN scope covering fundamentals, med-surg, pharmacology, and maternal-child.", href: "/free-practice", cta: "Browse Questions" },
-      { icon: Stethoscope, title: "Timed Mock Exams", desc: "Take practice exams that simulate the CAT format used in the NCLEX-PN.", href: "/mock-exams", cta: "Start Mock Exam" },
+      { icon: Stethoscope, title: "Timed Mock Exams", desc: "Take practice exams that simulate the CAT format used in the NCLEX-PN.", href: "/practice-exams", cta: "Start Mock Exam" },
       { icon: FileText, title: "Printable Study Packs", desc: "Downloadable PDF question packs with answer keys for offline study.", href: "/shop", cta: "View Study Packs" },
       { icon: BookOpen, title: "Flashcard Decks", desc: "Quick-review flashcards covering PN-level pharmacology and nursing fundamentals.", href: "/flashcards", cta: "Study Flashcards" },
     ],
@@ -86,7 +86,7 @@ const EXAM_DATA: Record<ExamType, {
     intro: "The REx-PN (Regulatory Exam - Practical Nurse) is Canada's licensure exam for practical nurses, administered by the NCSBN. NurseNest is the first platform to deliver REx-PN prep with Canadian lab values (SI units: mmol/L, umol/L), Canadian medication names, and content aligned to Canadian provincial scope-of-practice regulations.",
     features: [
       { icon: Target, title: "REx-PN Test Bank", desc: "Canadian-focused practice questions with SI units, Canadian drug names, and provincial scope references.", href: "/free-practice", cta: "Browse Questions" },
-      { icon: Stethoscope, title: "Timed Mock Exams", desc: "Simulated REx-PN exams with adaptive question selection and time pressure.", href: "/mock-exams", cta: "Start Mock Exam" },
+      { icon: Stethoscope, title: "Timed Mock Exams", desc: "Simulated REx-PN exams with adaptive question selection and time pressure.", href: "/practice-exams", cta: "Start Mock Exam" },
       { icon: FileText, title: "Printable Exam Packs", desc: "250-question PDF bundles aligned to the REx-PN competency framework.", href: "/shop", cta: "View Exam Packs" },
       { icon: BookOpen, title: "Flashcard Decks", desc: "Pharmacology and pathophysiology flashcards using Canadian standards and SI units.", href: "/flashcards", cta: "Study Flashcards" },
     ],
@@ -108,7 +108,7 @@ const EXAM_DATA: Record<ExamType, {
     intro: "NurseNest provides NP-level practice questions covering advanced assessment, differential diagnosis, pharmacological management, and clinical decision-making. Questions are aligned to AANP and ANCC certification exam blueprints for FNP-BC, AGPCNP-BC, AGACNP-BC, PMHNP-BC, and other NP specialties.",
     features: [
       { icon: Target, title: "NP Test Bank", desc: "Advanced practice-level questions covering diagnosis, management, and prescribing at the NP scope.", href: "/free-practice", cta: "Browse Questions" },
-      { icon: Stethoscope, title: "Timed Mock Exams", desc: "Full-length NP certification practice exams with performance analytics.", href: "/mock-exams", cta: "Start Mock Exam" },
+      { icon: Stethoscope, title: "Timed Mock Exams", desc: "Full-length NP certification practice exams with performance analytics.", href: "/practice-exams", cta: "Start Mock Exam" },
       { icon: FileText, title: "NP Exam Prep Hub", desc: "Compare AANP vs ANCC vs CNPLE exams and choose your certification pathway.", href: "/np-exam-prep", cta: "View Exam Hub" },
       { icon: Layers, title: "Clinical Lessons", desc: "179+ NP-scope pathophysiology lessons covering all major body systems.", href: "/lessons?tier=np", cta: "Browse Lessons" },
     ],
@@ -294,7 +294,7 @@ function MockExamSection({ examName }: { examName: string }) {
           <p className="font-medium text-gray-800 mb-1">{t("pages.examPracticeLanding.simulateRealExamConditions")}</p>
           <p>{t("pages.examPracticeLanding.timedRandomizedQuestionsWithInstant")}</p>
         </div>
-        <LocaleLink href="/mock-exams">
+        <LocaleLink href="/practice-exams">
           <Button size="sm" className="bg-orange-500 hover:bg-orange-600 text-white shrink-0" data-testid="button-start-mock-exam">
             Start Mock Exam <ArrowRight className="ml-1 w-3 h-3" />
           </Button>
@@ -461,7 +461,7 @@ export default function ExamPracticeLanding({ examType }: { examType: ExamType }
                 size="lg"
                 variant="outline"
                 className="h-12 px-8 rounded-full border-2"
-                onClick={() => setLocation("/mock-exams")}
+                onClick={() => setLocation("/practice-exams")}
                 data-testid="button-mock-exams"
               >
                 <Stethoscope className="mr-2 w-4 h-4" /> Take Mock Exam

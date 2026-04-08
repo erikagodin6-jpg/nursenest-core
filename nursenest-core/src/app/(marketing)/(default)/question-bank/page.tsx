@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { MarketingPublicStudyLanding } from "@/components/marketing/marketing-public-study-landing";
-import { absoluteUrl } from "@/lib/seo/site-origin";
 import {
   ALLIED,
   NP,
@@ -130,8 +129,8 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title,
     description,
-    alternates: { canonical: absoluteUrl("/question-bank"), languages: alt.languages },
-    openGraph: { title, description, url: absoluteUrl("/question-bank"), type: "website" },
+    alternates: { canonical: alt.canonical, languages: alt.languages },
+    openGraph: { title, description, url: alt.canonical, type: "website" },
   };
 }
 
