@@ -222,6 +222,31 @@ export function mergePathwayLessonEducationalOverlayPatches(
 }
 
 /**
+ * Deep-merge `fragments/*.json` into the base `lessons.json` map (same keys as {@link mergePathwayLessonEducationalOverlayPatches}).
+ * Keeps authoring ergonomic: translators can split large pathway overlays without running a separate merge script before deploy.
+ */
+function mergeLessonOverlaysFromFragments(
+  baseRoot: string,
+  locale: string,
+  base: Record<string, PathwayLessonEducationalOverlay>,
+): Record<string, PathwayLessonEducationalOverlay> {
+  const fragDir = path.join(baseRoot, locale, "fragments");
+  if (!existsSync(fragDir)) return base;
+  let merged: Record<string, PathwayLessonEducationalOverlay> = { ...base };
+  const files = readdirSync(fragDir)
+    .filter((x) => x.endsWith(".json"))
+    .sort();
+  for (const f of files) {
+    const part = readJsonFile<Record<string, PathwayLessonEducationalOverlay>>(path.join(fragDir, f));
+    if (!part || typeof part !== "object") continue;
+    for (const [k, v] of Object.entries(part)) {
+      merged[k] = mergePathwayLessonEducationalOverlayPatches(merged[k], v) ?? v;
+    }
+  }
+  return merged;
+}
+
+/**
  * Merge file-based lesson JSON with optional DB-published overlays (same keys: `slug` or `pathwayId:slug`).
  */
 export function mergePathwayLessonOverlayRecordBundles(

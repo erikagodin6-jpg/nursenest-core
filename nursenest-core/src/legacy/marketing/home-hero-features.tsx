@@ -117,10 +117,10 @@ export default function HomeHeroFeatures() {
       >
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="mb-8 text-center">
-            <h2 className="mb-2 font-bold text-[var(--theme-heading-text)]" style={{ fontSize: "var(--text-section)" }} data-testid="text-learning-areas-heading">
+            <h2 className="mb-2 nn-marketing-h2" data-testid="text-learning-areas-heading">
               {t("home.heroFeatures.learningAreasHeading")}
             </h2>
-            <p className="mx-auto max-w-2xl text-base text-gray-500 lg:text-lg">{t("home.heroFeatures.learningAreasSubtitle")}</p>
+            <p className="mx-auto max-w-2xl nn-marketing-body text-gray-500">{t("home.heroFeatures.learningAreasSubtitle")}</p>
           </div>
 
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">

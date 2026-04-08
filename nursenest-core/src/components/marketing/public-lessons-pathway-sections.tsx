@@ -81,10 +81,10 @@ export async function PublicLessonsPathwaySections({ locale }: { locale: string 
         if (rows.length === 0) return null;
         return (
           <section key={key} className="mb-10 scroll-mt-8" aria-labelledby={`lessons-section-${key}`}>
-            <h2 id={`lessons-section-${key}`} className="text-xl font-bold text-[var(--theme-heading-text)]">
+            <h2 id={`lessons-section-${key}`} className="nn-marketing-h2">
               {sectionTitle[key]}
             </h2>
-            <p className="mt-1 text-sm text-muted">{sectionLead[key]}</p>
+            <p className="mt-1 nn-marketing-body-sm text-muted">{sectionLead[key]}</p>
             <ul className="mt-4 flex flex-col gap-3 sm:gap-[var(--nn-rhythm-card-grid-gap)]">
               {rows.map((p) => {
                 const previews = getCatalogLessonPreviewTitles(p.id, 4);

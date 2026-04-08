@@ -48,18 +48,14 @@ function WhyNurseNestGrid({ headline, subtitle, context = "general" }: WhyNurseN
         <div className="mx-auto mb-12 max-w-3xl md:mx-0 md:max-w-2xl">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/8 px-4 py-1.5 shadow-[var(--shadow-card)]">
             <Sparkles className="h-3.5 w-3.5 text-primary" />
-            <span className="text-xs font-bold uppercase tracking-wider text-primary">
+            <span className="nn-marketing-label nn-marketing-label--accent">
               {t("components.competitiveDifferentiation.clinicalLearningSystem")}
             </span>
           </div>
-          <h2
-            className="mb-4 font-bold text-[var(--theme-heading-text)]"
-            style={{ fontSize: "var(--text-section)" }}
-            data-testid="text-why-grid-heading"
-          >
+          <h2 className="mb-4 nn-marketing-h2" data-testid="text-why-grid-heading">
             {headline || defaultHeadline}
           </h2>
-          <p className="text-base leading-relaxed text-muted-foreground" data-testid="text-why-grid-subtitle">
+          <p className="nn-marketing-body leading-relaxed text-muted-foreground" data-testid="text-why-grid-subtitle">
             {subtitle || defaultSubtitle}
           </p>
         </div>
@@ -73,10 +69,8 @@ function WhyNurseNestGrid({ headline, subtitle, context = "general" }: WhyNurseN
               <div className="nn-theme-gradient-br mb-4 flex h-11 w-11 items-center justify-center rounded-xl shadow-sm">
                 <item.icon className="h-5 w-5 text-white" />
               </div>
-              <h3 className="mb-2 font-bold text-[var(--theme-heading-text)]" style={{ fontSize: "var(--text-card-title)" }}>
-                {t(`components.homeDifferentiation.grid.${item.id}.title`)}
-              </h3>
-              <p className="text-sm leading-relaxed text-gray-500">{t(`components.homeDifferentiation.grid.${item.id}.description`)}</p>
+              <h3 className="mb-2 nn-marketing-h3">{t(`components.homeDifferentiation.grid.${item.id}.title`)}</h3>
+              <p className="nn-marketing-body-sm leading-relaxed text-gray-500">{t(`components.homeDifferentiation.grid.${item.id}.description`)}</p>
             </div>
           ))}
         </div>
@@ -116,18 +110,14 @@ function ComparisonTable({ headline, subtitle }: ComparisonTableProps) {
         <div className="mb-10 max-w-3xl text-left md:mx-0">
           <div className="nn-accent-soft-ring mb-5 inline-flex items-center gap-2 rounded-full px-4 py-1.5 shadow-[var(--shadow-card)]">
             <Shield className="h-3.5 w-3.5 text-primary" />
-            <span className="text-xs font-bold uppercase tracking-wider text-primary">
+            <span className="nn-marketing-label nn-marketing-label--accent">
               {t("components.competitiveDifferentiation.platformComparison")}
             </span>
           </div>
-          <h2
-            className="mb-3 font-bold text-[var(--theme-heading-text)]"
-            style={{ fontSize: "var(--text-section)" }}
-            data-testid="text-comparison-table-heading"
-          >
+          <h2 className="mb-3 nn-marketing-h2" data-testid="text-comparison-table-heading">
             {headline || defaultHeadline}
           </h2>
-          <p className="max-w-2xl text-base text-gray-500 lg:text-lg" data-testid="text-comparison-table-subtitle">
+          <p className="max-w-2xl nn-marketing-body text-gray-500" data-testid="text-comparison-table-subtitle">
             {subtitle || defaultSubtitle}
           </p>
         </div>
@@ -139,7 +129,7 @@ function ComparisonTable({ headline, subtitle }: ComparisonTableProps) {
                 <th className="min-w-[220px] px-6 py-4 text-left font-semibold text-gray-700">
                   {t("components.competitiveDifferentiation.feature")}
                 </th>
-                <th className="bg-primary/5 px-6 py-4 text-left font-bold text-primary">NurseNest</th>
+                <th className="bg-primary/5 px-6 py-4 text-left nn-marketing-body-sm font-semibold text-primary">NurseNest</th>
                 <th className="px-6 py-4 text-left font-semibold text-gray-500">
                   {t("components.competitiveDifferentiation.typicalPlatforms")}
                 </th>
@@ -176,9 +166,7 @@ function ComparisonTable({ headline, subtitle }: ComparisonTableProps) {
               className="rounded-xl border border-gray-100 bg-white p-5 shadow-[var(--shadow-card)]"
               data-testid={`card-comparison-mobile-${idx}`}
             >
-              <h4 className="mb-3 text-sm font-bold text-[var(--theme-heading-text)]">
-                {t(`components.homeDifferentiation.comparison.${rowId}.feature`)}
-              </h4>
+              <h4 className="mb-3 nn-marketing-h4">{t(`components.homeDifferentiation.comparison.${rowId}.feature`)}</h4>
               <div className="space-y-2">
                 <div className="flex items-start gap-2">
                   <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />

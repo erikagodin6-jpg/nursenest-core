@@ -72,7 +72,6 @@ export function isNoindexPath(path: string, locale?: string): boolean {
     if (
       path.startsWith("/cat-exam") ||
       path.startsWith("/qbank") ||
-      path.startsWith("/mock-exams") ||
       path.startsWith("/dashboard") ||
       path.startsWith("/admin")
     ) {
@@ -766,6 +765,14 @@ const staticPages: Record<string, { title: string; description: string }> = {
   "/test-bank": {
     title: "Test Bank - 1,200+ Nursing Practice Questions | NurseNest",
     description: "Practice with 1,200+ nursing questions organized by body system and tier. Instant rationale display and progress tracking for NCLEX, NCLEX-PN, and REx-PN prep. New questions added weekly.",
+  },
+  "/question-bank": {
+    title: "Nursing Question Bank - NCLEX & REx-PN Practice | NurseNest",
+    description: "Pathway-scoped nursing practice questions for NCLEX-RN, NCLEX-PN, REx-PN, and NP tracks. Explore public hubs by exam, then sign in for the full bank in the app.",
+  },
+  "/practice-exams": {
+    title: "Practice Exams & Timed Mock Tests | NurseNest",
+    description: "Full-length timed practice exams and CAT-style sessions for nursing licensure. See how mocks work on NurseNest, then sign in to run exams matched to your pathway.",
   },
   "/nclex-rn/mock-exam": {
     title: "NCLEX-RN Mock Exam Simulator | Free Practice Test | NurseNest",
@@ -1770,7 +1777,7 @@ const LOCALE_META_OVERRIDES: Record<string, Record<string, { title: string; desc
       title: "聯繫我們 | NurseNest",
       description: "聯繫NurseNest團隊。我們隨時為您解答關於護理考試準備平台的問題。",
     },
-    "/mock-exams": {
+    "/practice-exams": {
       title: "模擬考試 - NCLEX與REx-PN練習測驗 | NurseNest",
       description: "參加模擬NCLEX、NCLEX-PN和REx-PN格式的計時考試。追蹤成績，找出薄弱環節，查看詳細解析。",
     },
@@ -1889,7 +1896,7 @@ const localeMatch = cleanPath.match(/^\/(en|fr|es|fil|hi|zh-tw|zh|ar|ko|pt|pa|vi
           ],
         },
       });
-    } else if (cleanPath === "/test-bank") {
+    } else if (cleanPath === "/test-bank" || cleanPath === "/question-bank") {
       result.jsonLd = JSON.stringify({
         "@context": "https://schema.org",
         "@type": "LearningResource",
@@ -1912,7 +1919,7 @@ const localeMatch = cleanPath.match(/^\/(en|fr|es|fil|hi|zh-tw|zh|ar|ko|pt|pa|vi
         "isAccessibleForFree": true,
         "provider": { "@type": "Organization", "name": "NurseNest", "url": SITE_BASE },
       });
-    } else if (cleanPath === "/mock-exams") {
+    } else if (cleanPath === "/mock-exams" || cleanPath === "/practice-exams") {
       result.jsonLd = JSON.stringify({
         "@context": "https://schema.org",
         "@type": "LearningResource",
@@ -2459,7 +2466,7 @@ const localeMatch = cleanPath.match(/^\/(en|fr|es|fil|hi|zh-tw|zh|ar|ko|pt|pa|vi
 
 const KNOWN_STATIC_PATHS = new Set(Object.keys(staticPages).concat([
   "/", "/lessons", "/flashcards", "/pricing", "/start-free", "/anatomy",
-  "/med-math", "/lab-values", "/mock-exams", "/clinical-clarity", "/blog",
+  "/med-math", "/lab-values", "/practice-exams", "/clinical-clarity", "/blog",
   "/pre-nursing", "/question-of-the-day", "/daily-question", "/question-bank", "/lectures",
   "/nursing", "/nursing-specialties", "/nursing-certifications", "/healthcare-certifications", "/nursing-schools",
   "/nurse-residency-programs", "/nursing-regulatory-bodies", "/study-pathways",
@@ -2516,7 +2523,7 @@ const KNOWN_DYNAMIC_PREFIXES = [
   "/compare/", "/topics/", "/guides/", "/newgrad/", "/healthcare-careers/", "/healthcare-policy-and-updates/",
   "/allied-health/", "/flashcards/deck/",
   "/medical-imaging/", "/practice-questions/",
-  "/mock-exams/", "/applynest/",
+  "/practice-exams/", "/mock-exams/", "/applynest/",
   "/perioperative-", "/preoperative-",
   "/nclex-rn/", "/nclex-pn/", "/rex-pn/", "/np-exam/", "/canada-np/", "/us-np/",
   "/rpn/", "/rn/", "/np/",
@@ -2737,7 +2744,7 @@ const localeMatch = pathname.match(/^\/(en|fr|es|fil|hi|zh-tw|zh|ar|ko|pt|pa|vi|
   }
 
   const EDUCATIONAL_ORG_LANDING_PAGES = new Set([
-    "/", "/lessons", "/flashcards", "/test-bank", "/mock-exams",
+    "/", "/lessons", "/flashcards", "/question-bank", "/practice-exams",
     "/pricing", "/about", "/pre-nursing", "/free-practice",
     "/nclex-rn", "/nclex-pn", "/canada-np", "/us-np",
     "/medical-imaging", "/new-grad",
