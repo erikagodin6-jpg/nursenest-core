@@ -1,10 +1,9 @@
 {
-  "generatedAt": "2026-04-08T13:30:35.357Z",
-  "totalFallbacks": 38,
+  "generatedAt": "2026-04-08T13:37:19.287Z",
+  "totalFallbacks": 30,
   "byLocale": {
     "fr": 4,
     "ko": 3,
-    "pt": 8,
     "pa": 4,
     "vi": 3,
     "ht": 3,
@@ -83,90 +82,6 @@
       "locale": "ko",
       "key": "upgrade.usageNote",
       "localizedValue": "무료 카드 {{limit}}개 중 {{used}}개 사용 ({{percentage}}%)",
-      "englishValue": "You",
-      "placeholdersInEnglish": [],
-      "placeholdersInLocalized": [
-        "limit",
-        "percentage",
-        "used"
-      ]
-    },
-    {
-      "locale": "pt",
-      "key": "glossary.relatedTerms",
-      "localizedValue": "Termos Relacionados",
-      "englishValue": "Related {{category}} Terms",
-      "placeholdersInEnglish": [
-        "category"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "pt",
-      "key": "pricing.save",
-      "localizedValue": "Save",
-      "englishValue": "Save {{percent}}%",
-      "placeholdersInEnglish": [
-        "percent"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "pt",
-      "key": "qbank.freePreviewNote",
-      "localizedValue": "Prévia gratuita — faça upgrade para acesso completo",
-      "englishValue": "Sign in to access the full question bank. Free preview: {{count}} questions.",
-      "placeholdersInEnglish": [
-        "count"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "pt",
-      "key": "qbank.practiceQuestions",
-      "localizedValue": "Questões Práticas",
-      "englishValue": "Practice {{count}} questions with detailed rationales",
-      "placeholdersInEnglish": [
-        "count"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "pt",
-      "key": "qbank.requiresSubscription",
-      "localizedValue": "Requer Assinatura",
-      "englishValue": "{{tier}} Questions Require a Subscription",
-      "placeholdersInEnglish": [
-        "tier"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "pt",
-      "key": "qbank.showingPreview",
-      "localizedValue": "Mostrando prévia",
-      "englishValue": "Showing {{shown}} preview questions. Subscribe to unlock all {{total}} questions.",
-      "placeholdersInEnglish": [
-        "shown",
-        "total"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "pt",
-      "key": "qbank.startPracticeExam",
-      "localizedValue": "Iniciar Simulado",
-      "englishValue": "Start Practice Exam ({{count}} questions, {{time}} min)",
-      "placeholdersInEnglish": [
-        "count",
-        "time"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "pt",
-      "key": "upgrade.usageNote",
-      "localizedValue": "Você usou {{used}} de {{limit}} cartões gratuitos ({{percentage}}%)",
       "englishValue": "You",
       "placeholdersInEnglish": [],
       "placeholdersInLocalized": [

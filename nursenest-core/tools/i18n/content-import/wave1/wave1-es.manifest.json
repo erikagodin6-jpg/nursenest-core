@@ -1,0 +1,712 @@
+{
+  "version": 1,
+  "locale": "es",
+  "items": [
+    {
+      "sourceKind": "PATHWAY_LESSON",
+      "sourceId": "ca-rn-nclex-rn:ca-rn-ards",
+      "status": "PUBLISHED",
+      "payload": {
+        "title": "SDRA / ARDS (NCLEX-RN, Canadá)",
+        "topic": "SDRA (ARDS)",
+        "seoTitle": "SDRA (ARDS) | NCLEX-RN Canadá | NurseNest",
+        "seoDescription": "Contexto clínico en Canadá: SDRA (ARDS) — oxigenación, ventilación protectora y monitorización en unidad.",
+        "sections": {
+          "clinical_meaning": {
+            "heading": "Significado clínico",
+            "body": "Los ítems sobre **SDRA (ARDS)** evalúan si conecta los datos de valoración con el riesgo: qué cambia primero, qué requiere escalada y qué es **inseguro** en el contexto.\n\n**Enfermería en Canadá:** use **unidades SI** cuando el enunciado muestre mmol/L e interprete con el contexto clínico."
+          },
+          "exam_relevance": {
+            "heading": "Relevancia para el examen",
+            "body": "Espere **priorización**, **monitorización** y **seguridad**, especialmente cuando el enunciado mezcla tareas rutinarias con un hallazgo anormal."
+          },
+          "core_concept": {
+            "heading": "Concepto central",
+            "body": "Vincule las intervenciones al patrón subyacente (perfusión, oxigenación, carga infecciosa, electrolitos o dinámica glucosa–insulina) y a la monitorización que demuestra respuesta."
+          },
+          "clinical_scenario": {
+            "heading": "Escenario clínico",
+            "body": "Elija al cliente cuyo **riesgo aumenta más rápido** sin intervención de enfermería; luego la valoración u orden que corresponda. Use el contexto de cuidados agudos en Canadá cuando el enunciado cite unidades o roles."
+          },
+          "takeaways": {
+            "heading": "Conclusiones",
+            "body": "- Una **historia + gasometría + signos vitales** antes de enseñar o dar el alta.\n- Elimine opciones que **omiten la valoración** o **retrasan la escalada** cuando hay inestabilidad.\n- **Banco:** ítems `topic:ards`.\n- **Canadá:** atención a **unidades SI** y al **alcance** en enunciados de PN."
+          }
+        },
+        "preTest": [
+          {
+            "question": "Un cliente de 50 años con ARDS empeora la función renal. BUN 38 mg/dL, creatinina 2,8 mg/dL. PA 88/54, FC 116, FR 20 (ventilador), SpO2 90 % con FiO2 70 % y PEEP 14. Diuresis 80 mL en 8 h. ¿Qué complicación es más probable?",
+            "options": [
+              "Disfunción multiorgánica (MODS): ARDS con fallo renal e inestabilidad hemodinámica indica deterioro sistémico",
+              "Lesión renal aguda aislada por contraste",
+              "Respuesta renal normal a la ventilación mecánica",
+              "Nefrotoxicidad medicamentosa que se corregirá ajustando dosis"
+            ],
+            "rationale": "El ARDS puede desencadenar inflamación sistémica y MODS. Creatinina/BUN altos con oliguria, hipotensión y taquicardia en este contexto sugieren MODS y requieren soporte agresivo."
+          },
+          {
+            "question": "Un cliente tiene pancreatitis aguda grave; el score de Ranson al ingreso es 6. La enfermera debe reconocer que esto indica:",
+            "options": [
+              "Alto riesgo de mortalidad con vigilancia en UCI y soporte agresivo",
+              "Pancreatitis leve con recuperación completa esperada",
+              "Pancreatitis moderada con manejo médico estándar",
+              "Candidato a cirugía temprana"
+            ],
+            "rationale": "Ranson predice gravedad y mortalidad. Un score de 5–6 implica mortalidad aproximada del 40 % y manejo en UCI con vigilancia de complicaciones (necrosis, ARDS, fallo multiorgánico)."
+          },
+          {
+            "question": "Mujer de 75 años con antecedentes de EPOC ingresa por distrés respiratorio agudo. SpO2 88 % en aire ambiente. ¿Qué hace primero el PN?",
+            "options": [
+              "Administrar oxígeno suplementario según orden",
+              "Fomentar respiración con labios fruncidos",
+              "Auscultar pulmones y valorar esfuerzo respiratorio",
+              "Obtener hemograma completo según orden"
+            ],
+            "rationale": "En distrés respiratorio agudo, la auscultación y la valoración del esfuerzo preceden a las intervenciones y orientan la gravedad de la hipoxemia."
+          },
+          {
+            "question": "Una enfermera vigila a un paciente con neumonía en oxigenoterapia. ¿Qué hallazgo indica necesidad de intervención adicional?",
+            "options": [
+              "Frecuencia respiratoria 20/min",
+              "SpO2 88 % con 2 L/min por cánula nasal",
+              "Uso del diafragma para respirar",
+              "Murmullo vesicular claro"
+            ],
+            "rationale": "SpO2 88 % con 2 L/min indica hipoxemia y requiere reevaluación y, con frecuencia, ajuste de oxígeno; el objetivo suele ser >92 % según el contexto."
+          },
+          {
+            "question": "Un cliente en transfusión desarrolla TRALI. La enfermera debe:",
+            "options": [
+              "Continuar la transfusión más lentamente",
+              "Detener la transfusión de inmediato y brindar soporte respiratorio",
+              "Administrar diuréticos para edema pulmonar",
+              "Reiniciar la transfusión con filtro nuevo"
+            ],
+            "rationale": "TRALI: distrés respiratorio hipoxémico agudo en las 6 h posteriores a la transfusión. Detener la transfusión y soporte (oxígeno, VM si aplica). Los diuréticos no son el enfoque como en sobrecarga de volumen (TACO)."
+          }
+        ],
+        "postTest": [
+          {
+            "question": "¿Qué hallazgo de valoración es más coherente con ARDS?",
+            "options": [
+              "Hiperinsuflación pulmonar",
+              "Infiltrados bilaterales",
+              "Derrame pleural",
+              "Auscultación limpia"
+            ],
+            "rationale": "El ARDS suele asociarse a infiltrados bilaterales e hipoxemia grave refractaria al oxígeno convencional."
+          },
+          {
+            "question": "¿Qué hallazgos clínicos se asocian con ARDS?",
+            "options": [
+              "Hipoxemia grave",
+              "Infiltrados pulmonares bilaterales",
+              "Compliance pulmonar disminuida",
+              "Daño alveolar difuso",
+              "Saturación de oxígeno normal"
+            ],
+            "rationale": "El ARDS combina hipoxemia grave, infiltrados bilaterales, compliance baja y daño alveolar difuso; la saturación no permanece normal."
+          },
+          {
+            "question": "Enfermera cuida a un hombre de 68 años con neumonía y EPOC: tos productiva, disnea aumentada. ¿Acción prioritaria?",
+            "options": [
+              "Administrar broncodilatador según orden",
+              "Obtener esputo para cultivo",
+              "Aumentar flujo de oxígeno",
+              "Fomentar tos y respiraciones profundas"
+            ],
+            "rationale": "En distrés agudo con EPOC, abrir vías aéreas con broncodilatador prescrito suele ser prioritario para reducir disnea; el resto sigue según valoración."
+          },
+          {
+            "question": "Cliente de 55 años con ARDS en VM (FiO2 80 %, PEEP 12). SpO2 90 %; cae a 82 % con picos de presión. ¿Complicación sospechar primero?",
+            "options": [
+              "Neumotórax por barotrauma por presiones altas y PEEP",
+              "Neumonía asociada al ventilador en minutos",
+              "Mejora de compliance que reduce necesidad de PEEP",
+              "Falla del oxímetro"
+            ],
+            "rationale": "Desaturación brusca con aumento de presión de pico sugiere neumotórax en VM con PEEP/FiO2 altos; es urgencia."
+          },
+          {
+            "question": "Hombre de 30 años con distrés respiratorio agudo tras exposición a humo de cigarrillo. ¿Intervención prioritaria?",
+            "options": [
+              "Corticosteroide",
+              "Posición de Fowler alto",
+              "Compresa caliente en tórax",
+              "Fisioterapia respiratoria"
+            ],
+            "rationale": "Fowler alto optimiza expansión pulmonar y confort ventilatorio en distrés agudo."
+          },
+          {
+            "question": "Cliente con EPOC en distrés agudo. VBG/ABG: pH 7,28, PaCO2 58 mmHg, PaO2 55 mmHg, HCO3 26 mmol/L. ¿Interpretación?",
+            "options": [
+              "Acidosis metabólica con compensación respiratoria",
+              "Alcalosis respiratoria por hiperventilación",
+              "Acidosis respiratoria no compensada con fallo ventilatorio agudo",
+              "Valores normales"
+            ],
+            "rationale": "pH bajo, PaCO2 alto, HCO3 normal: acidosis respiratoria no compensada con hipoxemia; puede requerir VMNI o intubación."
+          },
+          {
+            "question": "Cliente con ARDS en VM tiene relación P/F de 85. Esto indica:",
+            "options": [
+              "ARDS leve",
+              "ARDS moderado",
+              "ARDS grave — considerar decúbito prono",
+              "Oxigenación normal"
+            ],
+            "rationale": "Criterios de Berlín: P/F <100 = ARDS grave; decúbito prono prolongado, bloqueo neuromuscular o ECMO según protocolo."
+          },
+          {
+            "question": "Cliente con ARDS intubado y ventilado. ABG: pH 7,28, PaCO2 52 mmHg, PaO2 58 mmHg, HCO3 24 mEq/L. ¿Interpretación?",
+            "options": [
+              "Acidosis respiratoria no compensada con hipoxemia",
+              "Alcalosis metabólica compensada",
+              "Acidosis mixta respiratoria y metabólica",
+              "Acidosis metabólica no compensada"
+            ],
+            "rationale": "pH bajo, PaCO2 alto, PaO2 bajo, HCO3 normal: acidosis respiratoria con hipoxemia; ajustar ventilador para mejorar ventilación y oxigenación."
+          },
+          {
+            "question": "Un cliente con ARDS requiere ventilación protectora. Esto incluye:",
+            "options": [
+              "Volúmenes corrientes altos para maximizar oxigenación",
+              "Volúmenes corrientes bajos (6 mL/kg de peso ideal) con presión de meseta <30 cmH2O",
+              "PEEP máxima sin monitorizar compliance",
+              "Ciclado ventilatorio muy rápido"
+            ],
+            "rationale": "Protocolo ARDSNet: volúmenes bajos para reducir volutrauma; meseta <30 cmH2O; PEEP para reclutamiento; hipercapnia permisiva posible."
+          },
+          {
+            "question": "Hombre de 30 años con fibrosis quística en terapia pulmonar; empeoran tos y disnea. ¿Acción prioritaria?",
+            "options": [
+              "Broncodilatador según orden",
+              "Notificar de inmediato al médico",
+              "Valorar SpO2 del paciente",
+              "Incentivar espirómetro de incentivo"
+            ],
+            "rationale": "Valorar primero SpO2 para cuantificar distrés agudo; orienta oxígeno y escalada; el broncodilatador puede seguir según valoración."
+          }
+        ]
+      }
+    },
+    {
+      "sourceKind": "PATHWAY_LESSON",
+      "sourceId": "ca-rn-nclex-rn:ca-rn-copd-respiratory",
+      "status": "PUBLISHED",
+      "payload": {
+        "title": "EPOC y fundamentos respiratorios (NCLEX-RN, Canadá)",
+        "topic": "EPOC y fundamentos respiratorios",
+        "seoTitle": "EPOC y fundamentos respiratorios | NCLEX-RN Canadá | NurseNest",
+        "seoDescription": "Contexto clínico en Canadá: EPOC y fundamentos respiratorios — unidades métricas y alcance de práctica.",
+        "sections": {
+          "clinical_meaning": {
+            "heading": "Significado clínico",
+            "body": "Los ítems sobre **EPOC** y la vía aérea evalúan si conecta los datos de valoración con el riesgo: qué cambia primero, qué requiere escalada y qué es **inseguro** en el contexto.\n\n**Enfermería en Canadá:** use **unidades SI** cuando el enunciado muestre mmol/L e interprete con el contexto clínico. Las normas provinciales y las políticas del empleador siguen gobernando la delegación y el alcance."
+          },
+          "exam_relevance": {
+            "heading": "Relevancia para el examen",
+            "body": "Espere **priorización**, **monitorización** y **seguridad**, especialmente cuando el enunciado mezcla tareas rutinarias con un hallazgo anormal. Los ítems canadienses pueden usar unidades métricas; el razonamiento clínico es el mismo."
+          },
+          "core_concept": {
+            "heading": "Concepto central",
+            "body": "Vincule las intervenciones al patrón subyacente (perfusión, oxigenación, carga infecciosa, electrolitos o dinámica glucosa–insulina) y a la monitorización que demuestra respuesta."
+          },
+          "clinical_scenario": {
+            "heading": "Escenario clínico",
+            "body": "Arbitra prioridades concurrentes. Elija al cliente cuyo **riesgo aumenta más rápido** sin intervención de enfermería; luego la valoración u orden que corresponda. Use contexto de cuidados agudos en Canadá cuando el enunciado cite unidades o roles."
+          },
+          "takeaways": {
+            "heading": "Conclusiones",
+            "body": "- Una **historia + signos vitales + laboratorios** antes de enseñar o dar el alta.\n- Elimine opciones que **omiten la valoración** o **retrasan la escalada** cuando hay inestabilidad.\n- **Banco:** practique ítems etiquetados `topic:copd-respiratory`.\n- **Canadá:** atención a **laboratorios métricos** y al lenguaje del **alcance** en enunciados de PN."
+          }
+        }
+      }
+    },
+    {
+      "sourceKind": "PATHWAY_LESSON",
+      "sourceId": "ca-rn-nclex-rn:ca-rn-fluid-balance",
+      "status": "PUBLISHED",
+      "payload": {
+        "title": "Déficit vs exceso de volumen (NCLEX-RN, Canadá)",
+        "topic": "Déficit vs exceso de volumen",
+        "seoTitle": "Déficit vs exceso de volumen | NCLEX-RN Canadá | NurseNest",
+        "seoDescription": "Contexto clínico en Canadá: balance hídrico — electrolitos SI y juicio clínico.",
+        "sections": {
+          "clinical_meaning": {
+            "heading": "Significado clínico",
+            "body": "Los ítems sobre **déficit vs exceso de volumen** evalúan si conecta los datos de valoración con el riesgo: qué cambia primero, qué requiere escalada y qué es **inseguro** en el contexto.\n\n**Enfermería en Canadá:** use **unidades SI** para electrolitos cuando el enunciado lo indique."
+          },
+          "exam_relevance": {
+            "heading": "Relevancia para el examen",
+            "body": "Espere **priorización**, **monitorización** y **seguridad**, especialmente cuando el enunciado mezcla tareas rutinarias con un hallazgo anormal."
+          },
+          "core_concept": {
+            "heading": "Concepto central",
+            "body": "Vincule las intervenciones al patrón subyacente (perfusión, equilibrio hidroelectrolítico, función renal/cardíaca) y a la monitorización que demuestra respuesta."
+          },
+          "clinical_scenario": {
+            "heading": "Escenario clínico",
+            "body": "Elija al cliente cuyo **riesgo aumenta más rápido** sin intervención de enfermería; luego la valoración u orden que corresponda."
+          },
+          "takeaways": {
+            "heading": "Conclusiones",
+            "body": "- Una **historia + entradas/salidas + laboratorios** antes de enseñar o dar el alta.\n- **Banco:** ítems `topic:fluid-balance`.\n- **Canadá:** atención a **unidades métricas** y al **alcance**."
+          }
+        }
+      }
+    },
+    {
+      "sourceKind": "PATHWAY_LESSON",
+      "sourceId": "ca-rn-nclex-rn:ca-rn-heart-failure",
+      "status": "PUBLISHED",
+      "payload": {
+        "title": "Insuficiencia cardíaca (NCLEX-RN, Canadá)",
+        "topic": "Insuficiencia cardíaca",
+        "seoTitle": "Insuficiencia cardíaca | NCLEX-RN Canadá | NurseNest",
+        "seoDescription": "Contexto clínico en Canadá: insuficiencia cardíaca — datos métricos y alcance de práctica.",
+        "sections": {
+          "clinical_meaning": {
+            "heading": "Significado clínico",
+            "body": "Los ítems sobre **insuficiencia cardíaca** evalúan si conecta los datos de valoración con el riesgo: qué cambia primero, qué requiere escalada y qué es **inseguro** en el contexto.\n\n**Enfermería en Canadá:** use **unidades SI** cuando el enunciado muestre mmol/L. Las normas provinciales y las políticas del empleador gobiernan la delegación y el alcance."
+          },
+          "exam_relevance": {
+            "heading": "Relevancia para el examen",
+            "body": "Espere **priorización**, **monitorización** y **seguridad**, especialmente cuando el enunciado mezcla tareas rutinarias con un hallazgo anormal. Los ítems canadienses pueden usar unidades métricas; el razonamiento clínico es el mismo."
+          },
+          "core_concept": {
+            "heading": "Concepto central",
+            "body": "Vincule las intervenciones al patrón subyacente (perfusión, oxigenación, carga infecciosa, electrolitos o dinámica glucosa–insulina) y a la monitorización que demuestra respuesta."
+          },
+          "clinical_scenario": {
+            "heading": "Escenario clínico",
+            "body": "Arbitra prioridades concurrentes. Elija al cliente cuyo **riesgo aumenta más rápido** sin intervención de enfermería; luego la valoración u orden que corresponda. Use contexto de cuidados agudos en Canadá cuando el enunciado cite unidades o roles."
+          },
+          "takeaways": {
+            "heading": "Conclusiones",
+            "body": "- Una **historia + signos vitales + laboratorios** antes de enseñar o dar el alta.\n- Elimine opciones que **omiten la valoración** o **retrasan la escalada** cuando hay inestabilidad.\n- **Banco:** ítems `topic:heart-failure`.\n- **Canadá:** atención a **laboratorios métricos** y al lenguaje del **alcance** en enunciados de PN."
+          }
+        }
+      }
+    },
+    {
+      "sourceKind": "PATHWAY_LESSON",
+      "sourceId": "ca-rn-nclex-rn:ca-rn-insulin-hypoglycemia",
+      "status": "PUBLISHED",
+      "payload": {
+        "title": "Insulina e hipoglucemia (NCLEX-RN, Canadá)",
+        "topic": "Insulina e hipoglucemia",
+        "seoTitle": "Insulina e hipoglucemia | NCLEX-RN Canadá | NurseNest",
+        "seoDescription": "Contexto clínico en Canadá: insulina e hipoglucemia — mmol/L, seguridad del medicamento y alcance.",
+        "sections": {
+          "clinical_meaning": {
+            "heading": "Significado clínico",
+            "body": "Los ítems sobre **insulina** e **hipoglucemia** evalúan si conecta los datos de valoración con el riesgo: qué cambia primero, qué requiere escalada y qué es **inseguro** en el contexto.\n\n**Enfermería en Canadá:** use **mmol/L** para glucosa cuando el enunciado lo indique. Las normas provinciales gobiernan la delegación y el alcance."
+          },
+          "exam_relevance": {
+            "heading": "Relevancia para el examen",
+            "body": "Espere **priorización**, **monitorización** y **seguridad**, especialmente cuando el enunciado mezcla tareas rutinarias con un hallazgo anormal."
+          },
+          "core_concept": {
+            "heading": "Concepto central",
+            "body": "Vincule las intervenciones a la dinámica **glucosa–insulina**, a los signos de **neuroglucopenia** y a la monitorización que demuestra respuesta."
+          },
+          "clinical_scenario": {
+            "heading": "Escenario clínico",
+            "body": "Elija al cliente cuyo **riesgo aumenta más rápido** sin intervención de enfermería; luego la valoración u orden que corresponda."
+          },
+          "takeaways": {
+            "heading": "Conclusiones",
+            "body": "- Una **historia + signos vitales + glucosa** antes de enseñar o dar el alta.\n- **Banco:** ítems `topic:insulin-hypoglycemia`.\n- **Canadá:** atención a **unidades SI** y al **alcance** en enunciados de PN."
+          }
+        }
+      }
+    },
+    {
+      "sourceKind": "PATHWAY_LESSON",
+      "sourceId": "ca-rn-nclex-rn:ca-rn-sepsis",
+      "status": "PUBLISHED",
+      "payload": {
+        "title": "Sepsis (NCLEX-RN, Canadá)",
+        "topic": "Sepsis",
+        "seoTitle": "Sepsis | NCLEX-RN Canadá | NurseNest",
+        "seoDescription": "Contexto clínico en Canadá: sepsis — lactato, antibióticos tempranos y monitorización.",
+        "sections": {
+          "clinical_meaning": {
+            "heading": "Significado clínico",
+            "body": "Los ítems sobre **sepsis** evalúan si conecta los datos de valoración con el riesgo: qué cambia primero, qué requiere escalada y qué es **inseguro** en el contexto.\n\n**Enfermería en Canadá:** use **unidades SI** (p. ej., lactato en mmol/L) y el contexto de atención canadiense."
+          },
+          "exam_relevance": {
+            "heading": "Relevancia para el examen",
+            "body": "Espere **priorización**, **monitorización** y **seguridad**, especialmente cuando el enunciado mezcla tareas rutinarias con un hallazgo anormal."
+          },
+          "core_concept": {
+            "heading": "Concepto central",
+            "body": "Vincule las intervenciones a la **perfusión tisular**, a la **respuesta inflamatoria** y a la monitorización (lactato, perfusión, respuesta a fluidos, cultivos) que demuestra respuesta al tratamiento."
+          },
+          "clinical_scenario": {
+            "heading": "Escenario clínico",
+            "body": "Elija al cliente cuyo **riesgo aumenta más rápido** sin intervención de enfermería; luego la valoración u orden que corresponda."
+          },
+          "takeaways": {
+            "heading": "Conclusiones",
+            "body": "- Una **historia + signos vitales + laboratorios** antes de enseñar o dar el alta.\n- **Banco:** ítems `topic:sepsis`.\n- **Canadá:** atención a **umbrales métricos** y al **alcance** en enunciados de PN."
+          }
+        }
+      }
+    },
+    {
+      "sourceKind": "PATHWAY_LESSON",
+      "sourceId": "us-rn-nclex-rn:us-rn-ards",
+      "status": "PUBLISHED",
+      "payload": {
+        "title": "SDRA / ARDS (NCLEX-RN, EE. UU.)",
+        "topic": "SDRA (ARDS)",
+        "seoTitle": "SDRA (ARDS) | NCLEX-RN EE. UU. | NurseNest",
+        "seoDescription": "NCLEX-RN (EE. UU.): SDRA (ARDS) — oxigenación, ventilación protectora y monitorización.",
+        "sections": {
+          "clinical_meaning": {
+            "heading": "Significado clínico",
+            "body": "Los ítems sobre **SDRA (ARDS)** evalúan si conecta los datos de valoración con el riesgo: qué cambia primero, qué requiere escalada y qué es **inseguro** en el contexto."
+          },
+          "exam_relevance": {
+            "heading": "Relevancia para el examen",
+            "body": "Espere **priorización**, **monitorización** y **seguridad**, especialmente cuando el enunciado mezcla tareas rutinarias con un hallazgo anormal."
+          },
+          "core_concept": {
+            "heading": "Concepto central",
+            "body": "Vincule las intervenciones al patrón subyacente (perfusión, oxigenación, carga infecciosa, electrolitos o dinámica glucosa–insulina) y a la monitorización que demuestra respuesta."
+          },
+          "clinical_scenario": {
+            "heading": "Escenario clínico",
+            "body": "Elija al cliente cuyo **riesgo aumenta más rápido** sin intervención de enfermería; luego la valoración u orden que corresponda."
+          },
+          "takeaways": {
+            "heading": "Conclusiones",
+            "body": "- Una **historia + gasometría + signos vitales** antes de enseñar o dar el alta.\n- Elimine opciones que **omiten la valoración** o **retrasan la escalada** cuando hay inestabilidad.\n- **Banco:** ítems `topic:ards`."
+          }
+        },
+        "preTest": [
+          {
+            "question": "Un cliente de 50 años con ARDS empeora la función renal. BUN 38 mg/dL, creatinina 2,8 mg/dL. PA 88/54, FC 116, FR 20 (ventilador), SpO2 90 % con FiO2 70 % y PEEP 14. Diuresis 80 mL en 8 h. ¿Qué complicación es más probable?",
+            "options": [
+              "Disfunción multiorgánica (MODS): ARDS con fallo renal e inestabilidad hemodinámica indica deterioro sistémico",
+              "Lesión renal aguda aislada por contraste",
+              "Respuesta renal normal a la ventilación mecánica",
+              "Nefrotoxicidad medicamentosa que se corregirá ajustando dosis"
+            ],
+            "rationale": "El ARDS puede desencadenar inflamación sistémica y MODS. Creatinina/BUN altos con oliguria, hipotensión y taquicardia en este contexto sugieren MODS y requieren soporte agresivo."
+          },
+          {
+            "question": "Un cliente tiene pancreatitis aguda grave; el score de Ranson al ingreso es 6. La enfermera debe reconocer que esto indica:",
+            "options": [
+              "Alto riesgo de mortalidad con vigilancia en UCI y soporte agresivo",
+              "Pancreatitis leve con recuperación completa esperada",
+              "Pancreatitis moderada con manejo médico estándar",
+              "Candidato a cirugía temprana"
+            ],
+            "rationale": "Ranson predice gravedad y mortalidad. Un score de 5–6 implica mortalidad aproximada del 40 % y manejo en UCI con vigilancia de complicaciones (necrosis, ARDS, fallo multiorgánico)."
+          },
+          {
+            "question": "Mujer de 75 años con antecedentes de EPOC ingresa por distrés respiratorio agudo. SpO2 88 % en aire ambiente. ¿Qué hace primero el PN?",
+            "options": [
+              "Administrar oxígeno suplementario según orden",
+              "Fomentar respiración con labios fruncidos",
+              "Auscultar pulmones y valorar esfuerzo respiratorio",
+              "Obtener hemograma completo según orden"
+            ],
+            "rationale": "En distrés respiratorio agudo, la auscultación y la valoración del esfuerzo preceden a las intervenciones y orientan la gravedad de la hipoxemia."
+          },
+          {
+            "question": "Una enfermera vigila a un paciente con neumonía en oxigenoterapia. ¿Qué hallazgo indica necesidad de intervención adicional?",
+            "options": [
+              "Frecuencia respiratoria 20/min",
+              "SpO2 88 % con 2 L/min por cánula nasal",
+              "Uso del diafragma para respirar",
+              "Murmullo vesicular claro"
+            ],
+            "rationale": "SpO2 88 % con 2 L/min indica hipoxemia y requiere reevaluación y, con frecuencia, ajuste de oxígeno; el objetivo suele ser >92 % según el contexto."
+          },
+          {
+            "question": "Un cliente en transfusión desarrolla TRALI. La enfermera debe:",
+            "options": [
+              "Continuar la transfusión más lentamente",
+              "Detener la transfusión de inmediato y brindar soporte respiratorio",
+              "Administrar diuréticos para edema pulmonar",
+              "Reiniciar la transfusión con filtro nuevo"
+            ],
+            "rationale": "TRALI: distrés respiratorio hipoxémico agudo en las 6 h posteriores a la transfusión. Detener la transfusión y soporte (oxígeno, VM si aplica). Los diuréticos no son el enfoque como en sobrecarga de volumen (TACO)."
+          }
+        ],
+        "postTest": [
+          {
+            "question": "¿Qué hallazgo de valoración es más coherente con ARDS?",
+            "options": [
+              "Hiperinsuflación pulmonar",
+              "Infiltrados bilaterales",
+              "Derrame pleural",
+              "Auscultación limpia"
+            ],
+            "rationale": "El ARDS suele asociarse a infiltrados bilaterales e hipoxemia grave refractaria al oxígeno convencional."
+          },
+          {
+            "question": "¿Qué hallazgos clínicos se asocian con ARDS?",
+            "options": [
+              "Hipoxemia grave",
+              "Infiltrados pulmonares bilaterales",
+              "Compliance pulmonar disminuida",
+              "Daño alveolar difuso",
+              "Saturación de oxígeno normal"
+            ],
+            "rationale": "El ARDS combina hipoxemia grave, infiltrados bilaterales, compliance baja y daño alveolar difuso; la saturación no permanece normal."
+          },
+          {
+            "question": "Enfermera cuida a un hombre de 68 años con neumonía y EPOC: tos productiva, disnea aumentada. ¿Acción prioritaria?",
+            "options": [
+              "Administrar broncodilatador según orden",
+              "Obtener esputo para cultivo",
+              "Aumentar flujo de oxígeno",
+              "Fomentar tos y respiraciones profundas"
+            ],
+            "rationale": "En distrés agudo con EPOC, abrir vías aéreas con broncodilatador prescrito suele ser prioritario para reducir disnea; el resto sigue según valoración."
+          },
+          {
+            "question": "Cliente de 55 años con ARDS en VM (FiO2 80 %, PEEP 12). SpO2 90 %; cae a 82 % con picos de presión. ¿Complicación sospechar primero?",
+            "options": [
+              "Neumotórax por barotrauma por presiones altas y PEEP",
+              "Neumonía asociada al ventilador en minutos",
+              "Mejora de compliance que reduce necesidad de PEEP",
+              "Falla del oxímetro"
+            ],
+            "rationale": "Desaturación brusca con aumento de presión de pico sugiere neumotórax en VM con PEEP/FiO2 altos; es urgencia."
+          },
+          {
+            "question": "Hombre de 30 años con distrés respiratorio agudo tras exposición a humo de cigarrillo. ¿Intervención prioritaria?",
+            "options": [
+              "Corticosteroide",
+              "Posición de Fowler alto",
+              "Compresa caliente en tórax",
+              "Fisioterapia respiratoria"
+            ],
+            "rationale": "Fowler alto optimiza expansión pulmonar y confort ventilatorio en distrés agudo."
+          },
+          {
+            "question": "Cliente con EPOC en distrés agudo. VBG/ABG: pH 7,28, PaCO2 58 mmHg, PaO2 55 mmHg, HCO3 26 mmol/L. ¿Interpretación?",
+            "options": [
+              "Acidosis metabólica con compensación respiratoria",
+              "Alcalosis respiratoria por hiperventilación",
+              "Acidosis respiratoria no compensada con fallo ventilatorio agudo",
+              "Valores normales"
+            ],
+            "rationale": "pH bajo, PaCO2 alto, HCO3 normal: acidosis respiratoria no compensada con hipoxemia; puede requerir VMNI o intubación."
+          },
+          {
+            "question": "Cliente con ARDS en VM tiene relación P/F de 85. Esto indica:",
+            "options": [
+              "ARDS leve",
+              "ARDS moderado",
+              "ARDS grave — considerar decúbito prono",
+              "Oxigenación normal"
+            ],
+            "rationale": "Criterios de Berlín: P/F <100 = ARDS grave; decúbito prono prolongado, bloqueo neuromuscular o ECMO según protocolo."
+          },
+          {
+            "question": "Cliente con ARDS intubado y ventilado. ABG: pH 7,28, PaCO2 52 mmHg, PaO2 58 mmHg, HCO3 24 mEq/L. ¿Interpretación?",
+            "options": [
+              "Acidosis respiratoria no compensada con hipoxemia",
+              "Alcalosis metabólica compensada",
+              "Acidosis mixta respiratoria y metabólica",
+              "Acidosis metabólica no compensada"
+            ],
+            "rationale": "pH bajo, PaCO2 alto, PaO2 bajo, HCO3 normal: acidosis respiratoria con hipoxemia; ajustar ventilador para mejorar ventilación y oxigenación."
+          },
+          {
+            "question": "Un cliente con ARDS requiere ventilación protectora. Esto incluye:",
+            "options": [
+              "Volúmenes corrientes altos para maximizar oxigenación",
+              "Volúmenes corrientes bajos (6 mL/kg de peso ideal) con presión de meseta <30 cmH2O",
+              "PEEP máxima sin monitorizar compliance",
+              "Ciclado ventilatorio muy rápido"
+            ],
+            "rationale": "Protocolo ARDSNet: volúmenes bajos para reducir volutrauma; meseta <30 cmH2O; PEEP para reclutamiento; hipercapnia permisiva posible."
+          },
+          {
+            "question": "Hombre de 30 años con fibrosis quística en terapia pulmonar; empeoran tos y disnea. ¿Acción prioritaria?",
+            "options": [
+              "Broncodilatador según orden",
+              "Notificar de inmediato al médico",
+              "Valorar SpO2 del paciente",
+              "Incentivar espirómetro de incentivo"
+            ],
+            "rationale": "Valorar primero SpO2 para cuantificar distrés agudo; orienta oxígeno y escalada; el broncodilatador puede seguir según valoración."
+          }
+        ]
+      }
+    },
+    {
+      "sourceKind": "PATHWAY_LESSON",
+      "sourceId": "us-rn-nclex-rn:us-rn-copd-respiratory",
+      "status": "PUBLISHED",
+      "payload": {
+        "title": "EPOC y fundamentos respiratorios (NCLEX-RN, EE. UU.)",
+        "topic": "EPOC y fundamentos respiratorios",
+        "seoTitle": "EPOC y fundamentos respiratorios | NCLEX-RN EE. UU. | NurseNest",
+        "seoDescription": "NCLEX-RN (EE. UU.): EPOC y fundamentos respiratorios — banco alineado, lección de cinco secciones.",
+        "sections": {
+          "clinical_meaning": {
+            "heading": "Significado clínico",
+            "body": "Los ítems sobre **EPOC** y la vía aérea evalúan si conecta los datos de valoración con el riesgo: qué cambia primero, qué requiere escalada y qué es **inseguro** en el contexto."
+          },
+          "exam_relevance": {
+            "heading": "Relevancia para el examen",
+            "body": "Espere **priorización**, **monitorización** y **seguridad**, especialmente cuando el enunciado mezcla tareas rutinarias con un hallazgo anormal."
+          },
+          "core_concept": {
+            "heading": "Concepto central",
+            "body": "Vincule las intervenciones al patrón subyacente (perfusión, oxigenación, carga infecciosa, electrolitos o dinámica glucosa–insulina) y a la monitorización que demuestra respuesta."
+          },
+          "clinical_scenario": {
+            "heading": "Escenario clínico",
+            "body": "Arbitra prioridades concurrentes. Elija al cliente cuyo **riesgo aumenta más rápido** sin intervención de enfermería; luego la valoración u orden que corresponda."
+          },
+          "takeaways": {
+            "heading": "Conclusiones",
+            "body": "- Una **historia + signos vitales + laboratorios** antes de enseñar o dar el alta.\n- Elimine opciones que **omiten la valoración** o **retrasan la escalada** cuando hay inestabilidad.\n- **Banco:** practique ítems etiquetados `topic:copd-respiratory`."
+          }
+        }
+      }
+    },
+    {
+      "sourceKind": "PATHWAY_LESSON",
+      "sourceId": "us-rn-nclex-rn:us-rn-fluid-balance",
+      "status": "PUBLISHED",
+      "payload": {
+        "title": "Déficit vs exceso de volumen (NCLEX-RN, EE. UU.)",
+        "topic": "Déficit vs exceso de volumen",
+        "seoTitle": "Déficit vs exceso de volumen | NCLEX-RN EE. UU. | NurseNest",
+        "seoDescription": "NCLEX-RN (EE. UU.): balance hídrico — electrolitos y monitorización.",
+        "sections": {
+          "clinical_meaning": {
+            "heading": "Significado clínico",
+            "body": "Los ítems sobre **déficit vs exceso de volumen** evalúan si conecta los datos de valoración con el riesgo: qué cambia primero, qué requiere escalada y qué es **inseguro** en el contexto."
+          },
+          "exam_relevance": {
+            "heading": "Relevancia para el examen",
+            "body": "Espere **priorización**, **monitorización** y **seguridad**, especialmente cuando el enunciado mezcla tareas rutinarias con un hallazgo anormal."
+          },
+          "core_concept": {
+            "heading": "Concepto central",
+            "body": "Vincule las intervenciones al patrón subyacente (perfusión, equilibrio hidroelectrolítico, función renal/cardíaca) y a la monitorización que demuestra respuesta."
+          },
+          "clinical_scenario": {
+            "heading": "Escenario clínico",
+            "body": "Elija al cliente cuyo **riesgo aumenta más rápido** sin intervención de enfermería; luego la valoración u orden que corresponda."
+          },
+          "takeaways": {
+            "heading": "Conclusiones",
+            "body": "- Una **historia + entradas/salidas + laboratorios** antes de enseñar o dar el alta.\n- **Banco:** ítems `topic:fluid-balance`."
+          }
+        }
+      }
+    },
+    {
+      "sourceKind": "PATHWAY_LESSON",
+      "sourceId": "us-rn-nclex-rn:us-rn-heart-failure",
+      "status": "PUBLISHED",
+      "payload": {
+        "title": "Insuficiencia cardíaca (NCLEX-RN, EE. UU.)",
+        "topic": "Insuficiencia cardíaca",
+        "seoTitle": "Insuficiencia cardíaca | NCLEX-RN EE. UU. | NurseNest",
+        "seoDescription": "NCLEX-RN (EE. UU.): insuficiencia cardíaca — banco alineado, lección de cinco secciones.",
+        "sections": {
+          "clinical_meaning": {
+            "heading": "Significado clínico",
+            "body": "Los ítems sobre **insuficiencia cardíaca** evalúan si conecta los datos de valoración con el riesgo: qué cambia primero, qué requiere escalada y qué es **inseguro** en el contexto."
+          },
+          "exam_relevance": {
+            "heading": "Relevancia para el examen",
+            "body": "Espere **priorización**, **monitorización** y **seguridad**, especialmente cuando el enunciado mezcla tareas rutinarias con un hallazgo anormal."
+          },
+          "core_concept": {
+            "heading": "Concepto central",
+            "body": "Vincule las intervenciones al patrón subyacente (perfusión, oxigenación, carga infecciosa, electrolitos o dinámica glucosa–insulina) y a la monitorización que demuestra respuesta."
+          },
+          "clinical_scenario": {
+            "heading": "Escenario clínico",
+            "body": "Arbitra prioridades concurrentes. Elija al cliente cuyo **riesgo aumenta más rápido** sin intervención de enfermería; luego la valoración u orden que corresponda."
+          },
+          "takeaways": {
+            "heading": "Conclusiones",
+            "body": "- Una **historia + signos vitales + laboratorios** antes de enseñar o dar el alta.\n- Elimine opciones que **omiten la valoración** o **retrasan la escalada** cuando hay inestabilidad.\n- **Banco:** ítems `topic:heart-failure`."
+          }
+        }
+      }
+    },
+    {
+      "sourceKind": "PATHWAY_LESSON",
+      "sourceId": "us-rn-nclex-rn:us-rn-insulin-hypoglycemia",
+      "status": "PUBLISHED",
+      "payload": {
+        "title": "Insulina e hipoglucemia (NCLEX-RN, EE. UU.)",
+        "topic": "Insulina e hipoglucemia",
+        "seoTitle": "Insulina e hipoglucemia | NCLEX-RN EE. UU. | NurseNest",
+        "seoDescription": "NCLEX-RN (EE. UU.): insulina e hipoglucemia — seguridad del medicamento y monitorización.",
+        "sections": {
+          "clinical_meaning": {
+            "heading": "Significado clínico",
+            "body": "Los ítems sobre **insulina** e **hipoglucemia** evalúan si conecta los datos de valoración con el riesgo: qué cambia primero, qué requiere escalada y qué es **inseguro** en el contexto."
+          },
+          "exam_relevance": {
+            "heading": "Relevancia para el examen",
+            "body": "Espere **priorización**, **monitorización** y **seguridad**, especialmente cuando el enunciado mezcla tareas rutinarias con un hallazgo anormal."
+          },
+          "core_concept": {
+            "heading": "Concepto central",
+            "body": "Vincule las intervenciones a la dinámica **glucosa–insulina**, a los signos de **neuroglucopenia** y a la monitorización que demuestra respuesta."
+          },
+          "clinical_scenario": {
+            "heading": "Escenario clínico",
+            "body": "Elija al cliente cuyo **riesgo aumenta más rápido** sin intervención de enfermería; luego la valoración u orden que corresponda."
+          },
+          "takeaways": {
+            "heading": "Conclusiones",
+            "body": "- Una **historia + signos vitales + glucosa** antes de enseñar o dar el alta.\n- **Banco:** ítems `topic:insulin-hypoglycemia`."
+          }
+        }
+      }
+    },
+    {
+      "sourceKind": "PATHWAY_LESSON",
+      "sourceId": "us-rn-nclex-rn:us-rn-sepsis",
+      "status": "PUBLISHED",
+      "payload": {
+        "title": "Sepsis (NCLEX-RN, EE. UU.)",
+        "topic": "Sepsis",
+        "seoTitle": "Sepsis | NCLEX-RN EE. UU. | NurseNest",
+        "seoDescription": "NCLEX-RN (EE. UU.): sepsis — reconocimiento temprano, antibióticos y reanimación.",
+        "sections": {
+          "clinical_meaning": {
+            "heading": "Significado clínico",
+            "body": "Los ítems sobre **sepsis** evalúan si conecta los datos de valoración con el riesgo: qué cambia primero, qué requiere escalada y qué es **inseguro** en el contexto."
+          },
+          "exam_relevance": {
+            "heading": "Relevancia para el examen",
+            "body": "Espere **priorización**, **monitorización** y **seguridad**, especialmente cuando el enunciado mezcla tareas rutinarias con un hallazgo anormal."
+          },
+          "core_concept": {
+            "heading": "Concepto central",
+            "body": "Vincule las intervenciones a la **perfusión tisular**, a la **respuesta inflamatoria** y a la monitorización (lactato, perfusión, respuesta a fluidos, cultivos)."
+          },
+          "clinical_scenario": {
+            "heading": "Escenario clínico",
+            "body": "Elija al cliente cuyo **riesgo aumenta más rápido** sin intervención de enfermería; luego la valoración u orden que corresponda."
+          },
+          "takeaways": {
+            "heading": "Conclusiones",
+            "body": "- Una **historia + signos vitales + laboratorios** antes de enseñar o dar el alta.\n- **Banco:** ítems `topic:sepsis`."
+          }
+        }
+      }
+    }
+  ]
+}
