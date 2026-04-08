@@ -152,17 +152,17 @@ export default async function QuestionBankHubPage() {
             const p = `pages.publicQuestionBank.${c.cardKey}`;
             return (
               <li key={c.cardKey} className="nn-card p-4">
-                <p className="text-xs font-semibold uppercase text-primary">
+                <p className="nn-marketing-label nn-marketing-label--accent">
                   {regionLabel(c.region)} · {t(`${p}.examLabel`)}
                 </p>
-                <h2 className="mt-1 text-lg font-semibold text-[var(--theme-heading-text)]">{t(`${p}.title`)}</h2>
-                <p className="mt-2 text-sm text-muted">{t(`${p}.who`)}</p>
-                <p className="mt-2 text-sm text-[var(--theme-muted-text)]">{t(`${p}.includes`)}</p>
+                <h2 className="mt-1 nn-marketing-h3">{t(`${p}.title`)}</h2>
+                <p className="mt-2 nn-marketing-body-sm text-muted">{t(`${p}.who`)}</p>
+                <p className="mt-2 nn-marketing-body-sm text-[var(--theme-muted-text)]">{t(`${p}.includes`)}</p>
                 <div className="mt-4 flex flex-wrap gap-3">
-                  <Link href={c.publicQuestionsHref} className="text-sm font-semibold text-primary hover:underline">
+                  <Link href={c.publicQuestionsHref} className="nn-marketing-body-sm font-semibold text-primary hover:underline">
                     {t("pages.publicQuestionBank.linkPublicQuestionsLanding")}
                   </Link>
-                  <Link href={c.hubHref} className="text-sm font-semibold text-primary hover:underline">
+                  <Link href={c.hubHref} className="nn-marketing-body-sm font-semibold text-primary hover:underline">
                     {t("pages.publicQuestionBank.linkPathwayHub")}
                   </Link>
                 </div>
@@ -171,7 +171,7 @@ export default async function QuestionBankHubPage() {
           })}
         </ul>
 
-        <p className="text-sm text-[var(--theme-muted-text)]">
+        <p className="nn-marketing-body-sm text-[var(--theme-muted-text)]">
           {t("pages.publicQuestionBank.footerTimedSetsP1")}
           <Link href={withMarketingLocale(locale, "/practice-exams")} className="font-semibold text-primary hover:underline">
             {t("pages.publicQuestionBank.linkPracticeExams")}

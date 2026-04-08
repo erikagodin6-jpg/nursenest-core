@@ -65,7 +65,7 @@ export default async function PublicLessonsLandingPage() {
         signupCta={{ href: signupLessons, label: t("pages.publicLessons.ctaCreateAccount") }}
       >
         <PublicLessonsPathwaySections locale={locale} />
-        <p className="text-sm text-muted">
+        <p className="nn-marketing-body-sm text-muted">
           {t("pages.examLessons.appLessonsLead")}{" "}
           <Link href={loginWithCallback("/app/lessons")} className="font-semibold text-primary">
             {t("pages.examLessons.appLessonsLink")}

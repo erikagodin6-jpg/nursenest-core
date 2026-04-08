@@ -72,7 +72,7 @@ export function PathwayLessonActions({
       </Link>
       {!userId ? (
         <p className="text-sm text-muted">
-          <Link href="/login" className="font-semibold text-primary underline">
+          <Link href="/login" className="nn-marketing-body-sm font-semibold text-primary underline">
             Sign in
           </Link>{" "}
           to save progress on this lesson.

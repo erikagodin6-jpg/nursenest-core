@@ -77,17 +77,17 @@ export default async function PracticeExamsHubPage() {
       />
 
       <section className="nn-card p-5" aria-labelledby="timed-mocks">
-        <h2 id="timed-mocks" className="text-lg font-semibold text-[var(--theme-heading-text)]">
+        <h2 id="timed-mocks" className="nn-marketing-h3">
           {t("pages.publicPracticeExams.sectionTimedMocksTitle")}
         </h2>
-        <p className="mt-2 text-sm text-[var(--theme-muted-text)]">{t("pages.publicPracticeExams.sectionTimedMocksBody")}</p>
+        <p className="mt-2 nn-marketing-body-sm text-[var(--theme-muted-text)]">{t("pages.publicPracticeExams.sectionTimedMocksBody")}</p>
       </section>
 
       <section className="nn-card p-5" aria-labelledby="cat-practice">
-        <h2 id="cat-practice" className="text-lg font-semibold text-[var(--theme-heading-text)]">
+        <h2 id="cat-practice" className="nn-marketing-h3">
           {t("pages.publicPracticeExams.sectionCatTitle")}
         </h2>
-        <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
+        <p className="mt-2 nn-marketing-body-sm text-[var(--theme-muted-text)]">
           {t("pages.publicPracticeExams.catP1")}
           <strong className="font-semibold text-[var(--theme-heading-text)]">{t("pages.publicPracticeExams.catP1Strong")}</strong>
           {t("pages.publicPracticeExams.catP2")}
@@ -99,15 +99,15 @@ export default async function PracticeExamsHubPage() {
       </section>
 
       <section className="nn-card p-5" aria-labelledby="pathway-sections">
-        <h2 id="pathway-sections" className="text-lg font-semibold text-[var(--theme-heading-text)]">
+        <h2 id="pathway-sections" className="nn-marketing-h3">
           {t("pages.publicPracticeExams.sectionPathwaysTitle")}
         </h2>
-        <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-[var(--theme-muted-text)]">
+        <ul className="mt-3 list-inside list-disc space-y-2 nn-marketing-body-sm text-[var(--theme-muted-text)]">
           <li>{t("pages.publicPracticeExams.pathwayRnPnBullet")}</li>
           <li>{t("pages.publicPracticeExams.pathwayNpBullet")}</li>
           <li>{t("pages.publicPracticeExams.pathwayAlliedBullet")}</li>
         </ul>
-        <p className="mt-4 text-sm text-[var(--theme-muted-text)]">
+        <p className="mt-4 nn-marketing-body-sm text-[var(--theme-muted-text)]">
           {t("pages.publicPracticeExams.sectionPathwaysFooterBeforeLink")}
           <Link href={withMarketingLocale(locale, "/lessons")} className="font-semibold text-primary hover:underline">
             {t("pages.publicPracticeExams.lessonsOverviewLink")}

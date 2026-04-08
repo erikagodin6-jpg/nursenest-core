@@ -5,7 +5,7 @@ import type { LessonContent, MedicationEntry, QuizQuestion } from "@legacy-clien
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="border-b border-border pb-6 last:border-0">
-      <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">{title}</h2>
+      <h2 className="nn-marketing-h3">{title}</h2>
       <div className="mt-2">{children}</div>
     </section>
   );

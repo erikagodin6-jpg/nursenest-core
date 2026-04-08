@@ -12,8 +12,8 @@ function QuizList({
   if (!items?.length) return null;
   return (
     <section className="border-b border-[var(--theme-separator)] pb-8">
-      <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">{title}</h2>
-      <ol className="mt-3 list-decimal space-y-4 pl-5 text-sm text-[var(--theme-body-text)]">
+      <h2 className="nn-marketing-h3">{title}</h2>
+      <ol className="mt-3 list-decimal space-y-4 pl-5 nn-marketing-body-sm text-[var(--theme-body-text)]">
         {items.map((q, i) => (
           <li key={i} className="marker:font-semibold">
             <p className="font-medium text-foreground">{q.question}</p>

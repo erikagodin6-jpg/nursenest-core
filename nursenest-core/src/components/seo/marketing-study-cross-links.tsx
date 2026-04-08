@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-const linkClass = "font-semibold text-primary underline-offset-4 hover:underline";
+const linkClass = "nn-marketing-body-sm font-semibold text-primary underline-offset-4 hover:underline";
 
 /**
  * Shared internal links for crawl paths: lessons hub, tools, blog, pricing.
@@ -12,14 +12,14 @@ export function MarketingStudyCrossLinks({ className = "" }: { className?: strin
       className={`rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] p-6 sm:p-8 ${className}`}
       aria-labelledby="study-cross-links-heading"
     >
-      <h2 id="study-cross-links-heading" className="text-lg font-semibold text-[var(--theme-heading-text)]">
+      <h2 id="study-cross-links-heading" className="nn-marketing-h3">
         Keep building readiness
       </h2>
-      <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
+      <p className="mt-2 nn-marketing-body-sm text-[var(--theme-muted-text)]">
         Pair reading with structured lessons, free calculators, and guides. Then choose a pathway-aligned plan when you want
         full question banks and exams.
       </p>
-      <ul className="mt-4 flex flex-col gap-2 text-sm sm:flex-row sm:flex-wrap sm:gap-x-6 sm:gap-y-2">
+      <ul className="mt-4 flex flex-col gap-2 nn-marketing-body-sm sm:flex-row sm:flex-wrap sm:gap-x-6 sm:gap-y-2">
         <li>
           <Link href="/lessons" className={linkClass}>
             Clinical lessons by pathway

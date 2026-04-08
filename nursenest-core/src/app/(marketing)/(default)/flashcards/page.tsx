@@ -60,11 +60,11 @@ export default async function PublicFlashcardsHubPage() {
         </ol>
       </nav>
 
-      <h1 className="text-3xl font-bold tracking-tight text-[var(--theme-heading-text)]">{t("pages.publicFlashcardsHub.h1")}</h1>
-      <p className="mt-3 max-w-2xl text-sm text-[var(--theme-muted-text)]">{t("pages.publicFlashcardsHub.intro")}</p>
+      <h1 className="nn-marketing-h1">{t("pages.publicFlashcardsHub.h1")}</h1>
+      <p className="mt-3 max-w-2xl nn-marketing-body-sm text-[var(--theme-muted-text)]">{t("pages.publicFlashcardsHub.intro")}</p>
 
       <section className="mt-10">
-        <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">{t("pages.publicFlashcardsHub.sectionTopicsTitle")}</h2>
+        <h2 className="nn-marketing-h3">{t("pages.publicFlashcardsHub.sectionTopicsTitle")}</h2>
         <ul className="mt-4 flex flex-wrap gap-2">
           {topics.length === 0 ? (
             <li className="text-sm text-[var(--theme-muted-text)]">{t("pages.publicFlashcardsHub.topicsEmpty")}</li>
@@ -84,8 +84,8 @@ export default async function PublicFlashcardsHubPage() {
       </section>
 
       <section className="mt-12">
-        <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">{t("pages.publicFlashcardsHub.sectionFeaturedTitle")}</h2>
-        <p className="mt-1 text-sm text-[var(--theme-muted-text)]">{t("pages.publicFlashcardsHub.featuredSubtitle")}</p>
+        <h2 className="nn-marketing-h3">{t("pages.publicFlashcardsHub.sectionFeaturedTitle")}</h2>
+        <p className="mt-1 nn-marketing-body-sm text-[var(--theme-muted-text)]">{t("pages.publicFlashcardsHub.featuredSubtitle")}</p>
         <ul className="mt-6 space-y-6">
           {featuredDecks.length === 0 ? (
             <li className="text-sm text-[var(--theme-muted-text)]">{t("pages.publicFlashcardsHub.featuredEmpty")}</li>
@@ -94,7 +94,7 @@ export default async function PublicFlashcardsHubPage() {
               <li key={d.slug} className="nn-card p-5">
                 <Link
                   href={withMarketingLocale(locale, `/flashcards/${d.slug}`)}
-                  className="text-lg font-semibold text-primary hover:underline"
+                  className="nn-marketing-h3 text-primary hover:underline"
                 >
                   {d.title}
                 </Link>

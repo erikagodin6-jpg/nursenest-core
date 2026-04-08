@@ -14,8 +14,8 @@ export function PathwayLessonLockedSectionsPreview({ sections }: { sections: Sec
         <div className="space-y-6 p-6">
           {sections.map((s) => (
             <div key={s.id}>
-              <h3 className="text-lg font-semibold text-[var(--theme-heading-text)]">{s.heading?.trim() || "Section"}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-[var(--theme-body-text)]">
+              <h3 className="nn-marketing-h4">{s.heading?.trim() || "Section"}</h3>
+              <p className="mt-2 nn-marketing-body-sm leading-relaxed text-[var(--theme-body-text)]">
                 Additional clinical detail, exam hooks, and takeaways continue in the full lesson.
               </p>
             </div>
@@ -23,10 +23,10 @@ export function PathwayLessonLockedSectionsPreview({ sections }: { sections: Sec
         </div>
       </div>
       <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-b from-background/70 via-background/90 to-background p-6 text-center">
-        <p className="max-w-md text-sm font-semibold text-[var(--theme-heading-text)]">
+        <p className="max-w-md nn-marketing-body-sm font-semibold text-[var(--theme-heading-text)]">
           Unlock full lesson + practice questions
         </p>
-        <p className="mt-2 max-w-md text-xs text-muted-foreground">
+        <p className="mt-2 max-w-md nn-marketing-caption">
           {sections.length} more section{sections.length === 1 ? "" : "s"} with scenarios, priorities, and review drills.
         </p>
         <Link

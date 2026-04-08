@@ -34,8 +34,8 @@ export function MarketingPublicStudyLanding({
     <div className="mx-auto flex max-w-3xl flex-col gap-[var(--nn-rhythm-section-y)] nn-marketing-x nn-rhythm-page pb-16">
       <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--nn-presentation-wash)] p-5 sm:p-6">
         <div className="nn-stack-hero-heading">
-          <h1 className="text-3xl font-extrabold text-[var(--theme-heading-text)] text-balance">{h1}</h1>
-          <p className="text-[var(--theme-muted-text)] text-pretty sm:text-base">{intro}</p>
+          <h1 className="nn-marketing-h1 text-balance">{h1}</h1>
+          <p className="nn-marketing-body text-pretty text-[var(--theme-muted-text)] sm:text-base">{intro}</p>
         </div>
         <div className="nn-hero-cta-row mt-[var(--nn-rhythm-text-to-cta)] flex-wrap">
           <Link href={primaryCta.href} className={MARKETING_PRIMARY_CTA_CLASS}>
@@ -48,7 +48,7 @@ export function MarketingPublicStudyLanding({
           ) : null}
         </div>
         {signupCta ? (
-          <p className="mt-3 text-sm text-[var(--theme-muted-text)]">
+          <p className="mt-3 nn-marketing-body-sm text-[var(--theme-muted-text)]">
             <Link href={signupCta.href} className="font-semibold text-primary hover:underline">
               {signupCta.label}
             </Link>

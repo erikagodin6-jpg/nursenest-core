@@ -19,7 +19,7 @@ const T = {
     "pages.publicPracticeExams.catP2":
       " dans l’application, y compris des sessions adaptatives (style TAO) lorsque le produit les offre. La disponibilité varie selon la filière et le pack de contenu — ouvrez les ",
     "pages.publicPracticeExams.catP3":
-      " après connexion pour voir ce qu’inclut votre abonnement. Ceci ne remplace pas les règles ni la planification officielles du NCLEX ni des ordres professionnels.",
+      " après connexion pour voir ce qu’inclut votre abonnement. Ceci ne remplace pas les règles ni la planification officielles du NCLEX ni celles de l’organisme d’examen compétent.",
   },
   es: {
     "pages.publicPracticeExams.catLinkPracticeTests": "pruebas de práctica",
@@ -154,7 +154,7 @@ const T = {
     "pages.publicPracticeExams.catP2":
       " ਐਪ ਵਿੱਚ ਅਭਿਆਸ ਟੈਸਟ, ਜਿਸ ਵਿੱਚ ਅਨੁਕੂਲ (CAT-ਸ਼ੈਲੀ) ਸੈਸ਼ਨ ਵੀ ਸ਼ਾਮਲ ਹਨ ਜਿੱਥੇ ਉਤਪਾਦ ਉਹਨਾਂ ਨੂੰ ਲਾਗੂ ਕਰਦਾ ਹੈ। ਉਪਲਬਧਤਾ ਮਾਰਗ ਅਤੇ ਸਮਗਰੀ ਪੈਕ ਅਨੁਸਾਰ ਬਦਲਦੀ ਹੈ — ਸਾਈਨ-ਇਨ ਤੋਂ ਬਾਅਦ ",
     "pages.publicPracticeExams.catP3":
-      " ਖੋਲ੍ਹੋ ਤਾਂ ਜੋ ਦੇਖ ਸਕੋ ਕਿ ਸਬਸਕ੍ਰਿਪਸ਼ਨ ਵਿੱਚ ਕੀ ਹੈ। ਇਹ ਅਧਿਕਾਰਤ NCLEX ਜਾਂ ਬੋਰ� ਨਿਯਮਾਂ/ਸਮਾਂ-ਸੂਚੀ ਦਾ ਵਿਕਲਪ ਨਹੀਂ।",
+      " ਖੋਲ੍ਹੋ ਤਾਂ ਜੋ ਦੇਖ ਸਕੋ ਕਿ ਸਬਸਕ੍ਰਿਪਸ਼ਨ ਵਿੱਚ ਕੀ ਹੈ। ਇਹ ਅਧਿਕਾਰਤ NCLEX ਜਾਂ ਬੋਰਡ ਨਿਯਮਾਂ/ਸਮਾਂ-ਸੂਚੀ ਦਾ ਵਿਕਲਪ ਨਹੀਂ।",
   },
   ru: {
     "pages.publicPracticeExams.catLinkPracticeTests": "тренировочные тесты",

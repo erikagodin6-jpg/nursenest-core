@@ -22,8 +22,8 @@ export function PathwayLessonLinkToPractice({
 
   return (
     <section className="nn-card border-border bg-muted/30 p-5">
-      <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Link to practice</h2>
-      <p className="mt-2 text-sm text-muted">
+      <h2 className="nn-marketing-h3">Link to practice</h2>
+      <p className="mt-2 nn-marketing-body-sm text-muted">
         Reinforce this lesson with questions in your bank, then loop back if a topic stays weak.
       </p>
       <div className="mt-4 flex flex-wrap gap-2">

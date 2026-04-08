@@ -40,7 +40,7 @@ export function PathwayLessonPreviewBanner({ kind, pathwayShortName, pathwayCoun
 
   return (
     <aside className="nn-card mt-6 border-primary/20 bg-primary/5 p-4 text-sm text-[var(--theme-body-text)]">
-      <p className="font-semibold">{title}</p>
+      <p className="nn-marketing-body-sm font-semibold">{title}</p>
       <p className="mt-1 text-muted">{body}</p>
       <div className="mt-3 flex flex-wrap gap-2">
         {kind === "anonymous" ? (
