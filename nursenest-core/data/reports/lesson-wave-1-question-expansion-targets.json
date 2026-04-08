@@ -1,10 +1,11 @@
 {
   "version": 1,
-  "title": "Question bank expansion targets — scoped gold lessons (waves 1–3)",
+  "title": "Question bank expansion targets — scoped gold lessons (waves 1–4)",
   "lessons": [
     {
       "lessonSlug": "clinical-judgment-prioritization-gold",
       "topicSlug": "prioritization-delegation",
+      "wave": 1,
       "blueprintDomains": ["management_of_care", "safety_and_infection"],
       "clinicalSystems": ["general", "cardio", "respiratory", "neuro"],
       "questionThemes": [
@@ -22,6 +23,7 @@
     {
       "lessonSlug": "sepsis-early-recognition-gold",
       "topicSlug": "sepsis",
+      "wave": 1,
       "blueprintDomains": ["physiological_adaptation", "risk_reduction", "pharmacological_therapies"],
       "clinicalSystems": ["infection_sepsis", "renal", "fluids_electrolytes"],
       "questionThemes": [
@@ -39,6 +41,7 @@
     {
       "lessonSlug": "high-alert-medications-safety-gold",
       "topicSlug": "medication-safety",
+      "wave": 1,
       "blueprintDomains": ["pharmacological_therapies", "safety_and_infection"],
       "clinicalSystems": ["endocrine", "hematology_immuno", "neuro", "gi"],
       "questionThemes": [
@@ -56,6 +59,7 @@
     {
       "lessonSlug": "copd-clinical-judgment-gold",
       "topicSlug": "copd",
+      "wave": 1,
       "blueprintDomains": ["physiological_adaptation", "management_of_care", "pharmacological_therapies"],
       "clinicalSystems": ["respiratory"],
       "questionThemes": [
@@ -157,6 +161,67 @@
       "metadataSignals": [
         "delegation topic slug and management_of_care client-need tagging",
         "Region_scope CA for RPN-heavy stems; US parallels for LPN comparison items"
+      ]
+    },
+    {
+      "lessonSlug": "ob-emergencies-gold-standard",
+      "topicSlug": "maternity",
+      "wave": 4,
+      "blueprintDomains": ["physiological_adaptation", "management_of_care", "safety_and_infection", "pharmacological_therapies"],
+      "clinicalSystems": ["reproductive_ob", "fluids_electrolytes", "cardio", "neuro"],
+      "questionThemes": [
+        "Postpartum hemorrhage: boggy uterus, quantified loss, uterotonic sequence, massive transfusion cues",
+        "Preeclampsia/eclampsia: severe features, magnesium safety and toxicity, antihypertensive monitoring",
+        "Prolapsed cord and non-reassuring FHR — positioning and STAT obstetric activation",
+        "Antepartum bleeding: abruption vs previa forks until imaging/diagnosis",
+        "Canadian: mmHg BP, metric labs, interprofessional maternity escalation",
+        "NP: third-trimester bleeding, severe-range BP with neuro symptoms — L&D/ED referral"
+      ],
+      "metadataSignals": [
+        "topicSlug maternity and reproductive_ob-style body_system keywords for hub filters",
+        "management_of_care multi-patient stems: OB emergency vs stable couplet tasks",
+        "Region US vs CA: same clinical spine; watch unit and scope wording"
+      ]
+    },
+    {
+      "lessonSlug": "pediatric-triage-emergencies-gold-standard",
+      "topicSlug": "pediatrics",
+      "wave": 4,
+      "blueprintDomains": ["physiological_adaptation", "management_of_care", "safety_and_infection", "health_promotion"],
+      "clinicalSystems": ["respiratory", "fluids_electrolytes", "infection_sepsis", "general"],
+      "questionThemes": [
+        "Dehydration: ORT vs IV, appearance, cap refill, fontanelle, urine output",
+        "Respiratory distress: retractions, grunting, SpO₂, asthma vs bronchiolitis vs croup vs epiglottitis-style forks",
+        "Febrile infant pathways by age; neonatal sepsis appearance",
+        "Silent chest / impending respiratory failure in asthma",
+        "Canadian: °C, kg weight-based dosing awareness in stems",
+        "NP: ED/EMS thresholds for ill-appearing child; return precautions for mild GE"
+      ],
+      "metadataSignals": [
+        "pediatrics topic slug and respiratory/dehydration keywords for inferClinicalSystemForRow",
+        "Age in stem (neonate vs toddler vs adolescent) for expansion clustering",
+        "NP primary care vs acute care boundary items for FNP/AGPCNP pools"
+      ]
+    },
+    {
+      "lessonSlug": "renal-dialysis-acute-complications-gold-standard",
+      "topicSlug": "renal-gu",
+      "wave": 4,
+      "blueprintDomains": ["physiological_adaptation", "pharmacological_therapies", "risk_reduction", "management_of_care"],
+      "clinicalSystems": ["renal", "fluids_electrolytes", "cardio", "infection_sepsis"],
+      "questionThemes": [
+        "Hyperkalemia with ECG: calcium vs insulin/glucose sequencing; dialysis indication when anuric",
+        "Intradialytic hypotension, cramping, UF adjustment; access arm protection (no BP/sticks)",
+        "Dialysis disequilibrium vs stroke — neuro checks during/first HD",
+        "Catheter/tunnel infection vs exit-site care; PD peritonitis cloudy effluent",
+        "AKI: I&O, nephrotoxins, contrast-induced AKI surveillance, drug clearance teaching",
+        "Canadian: mmol/L K+, creatinine; collaborative nephrology themes",
+        "NP: RAAS + NSAID + K-sparing hyperkalemia; missed HD volume/K+ emergencies"
+      ],
+      "metadataSignals": [
+        "renal-gu topic slug and dialysis/HDF/PD keywords for content breadth",
+        "Medication buckets when stem includes binders, ESA, antihypertensives, diuretics",
+        "Tag physiological adaptation when fluid-electrolyte-acid-base is primary"
       ]
     }
   ]

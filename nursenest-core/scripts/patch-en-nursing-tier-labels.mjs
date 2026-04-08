@@ -17,9 +17,6 @@ const patch = {
   "home.quickEntry.pnQuestionsUS": "NCLEX-PN (LPN) questions",
   "home.quickEntry.pnQuestionsCA": "REx-PN (RPN) questions",
 
-  "home.gateway.practical.titleUS": "NCLEX-PN (LPN)",
-  "home.gateway.practical.titleCA": "REx-PN (RPN)",
-
   "home.landing.heroPath.rnTitle": "NCLEX-RN",
   "home.landing.heroPath.pnTitleUS": "NCLEX-PN (LPN)",
   "home.landing.heroPath.pnTitleCA": "REx-PN (RPN)",

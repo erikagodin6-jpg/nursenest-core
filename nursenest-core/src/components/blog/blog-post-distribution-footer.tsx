@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { defaultPracticeHubForExam, toolPathForSlug } from "@/lib/blog/blog-exam-routes";
+import { isPlausibleMarketingLessonDetailPath } from "@/lib/lessons/marketing-lesson-path-guard";
 import { HUB, loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 
 type Props = {
@@ -14,7 +15,10 @@ type Props = {
  */
 export function BlogPostDistributionFooter({ exam, relatedLessonPaths, relatedQuestionIds, relatedTools }: Props) {
   const practiceHub = defaultPracticeHubForExam(exam ?? null);
-  const lessons = relatedLessonPaths.filter(Boolean).slice(0, 5);
+  const lessons = relatedLessonPaths
+    .filter(Boolean)
+    .filter(isPlausibleMarketingLessonDetailPath)
+    .slice(0, 5);
   const tools = relatedTools.filter(Boolean).slice(0, 5);
   const hasQuestionIds = relatedQuestionIds.length > 0;
 

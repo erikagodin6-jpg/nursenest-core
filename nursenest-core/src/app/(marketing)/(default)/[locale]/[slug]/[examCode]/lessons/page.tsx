@@ -21,7 +21,10 @@ import {
   pathwayLessonHubMetaDescription,
   pathwayLessonHubMetaTitle,
 } from "@/lib/lessons/pathway-lesson-hub-seo";
-import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
+import {
+  pathwayLessonHasRenderableHubSlug,
+  pathwayLessonMarketingDetailHref,
+} from "@/lib/lessons/pathway-lesson-types";
 import { pathwayLessonsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
@@ -172,11 +175,14 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
               All {pathway.shortName} lessons
             </h2>
             <ul className="mt-4 space-y-4">
-              {lessons.map((l) => (
+              {lessons.map((l) => {
+                const href = pathwayLessonMarketingDetailHref(base, l.slug);
+                if (!href) return null;
+                return (
                 <li key={l.slug} className="nn-card p-4">
                   <p className="text-xs font-medium uppercase text-muted">{l.topic}</p>
                   <Link
-                    href={`${base}/${l.slug}`}
+                    href={href}
                     className="mt-1 block text-lg font-semibold text-primary hover:underline"
                   >
                     {l.title}
@@ -186,7 +192,8 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
                     Full lesson page includes preview sections; subscription unlocks complete depth.
                   </p>
                 </li>
-              ))}
+                );
+              })}
             </ul>
           </section>
 

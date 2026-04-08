@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { pathwayLessonMarketingDetailHref } from "@/lib/lessons/pathway-lesson-types";
 import {
   type FnpClinicalDomain,
   type FnpDomainFilter,
@@ -172,6 +173,7 @@ function FnpLessonCard({
 }) {
   const l = enriched.meta;
   const p = enriched.clinicalPreview;
+  const detailHref = pathwayLessonMarketingDetailHref(lessonsBasePath, l.slug);
   return (
     <li className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
@@ -180,9 +182,13 @@ function FnpLessonCard({
           {lifespanLabel(enriched.primaryLifespan)}
         </span>
       </div>
-      <Link href={`${lessonsBasePath}/${l.slug}`} className="mt-1 block text-lg font-semibold text-primary hover:underline">
-        {l.title}
-      </Link>
+      {detailHref ? (
+        <Link href={detailHref} className="mt-1 block text-lg font-semibold text-primary hover:underline">
+          {l.title}
+        </Link>
+      ) : (
+        <p className="mt-1 text-lg font-semibold text-[var(--theme-heading-text)]">{l.title}</p>
+      )}
 
       <div className="mt-4 grid gap-3 border-t border-border pt-4 text-sm sm:grid-cols-2">
         <div className="sm:col-span-2">
@@ -219,9 +225,11 @@ function FnpLessonCard({
       </div>
 
       <div className="mt-4 flex flex-wrap gap-2">
-        <Link href={`${lessonsBasePath}/${l.slug}`} className="text-sm font-semibold text-primary">
-          Open lesson →
-        </Link>
+        {detailHref ? (
+          <Link href={detailHref} className="text-sm font-semibold text-primary">
+            Open lesson →
+          </Link>
+        ) : null}
         <Link href={appQuestionsHref(pathway.id, l.topic)} className="text-sm font-semibold text-primary">
           Case-based questions →
         </Link>

@@ -7,6 +7,10 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
+import {
+  marketingRegionToggleSegment,
+  marketingRegionToggleShell,
+} from "@/lib/theme/marketing-region-toggle";
 import { HUB, alliedQuestions, npNpQuestionsForRegion, pnQuestions, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
@@ -31,6 +35,7 @@ type HomeStatsPayload = {
 
 /**
  * Conversion-focused homepage: hero (value + CTAs + country + pathways), then supporting sections once.
+ * All visible hero/home copy uses `home.landing.*` (and `home.region.*` / `nav.*` where noted). The old gateway i18n tree under `home` is retired.
  */
 export default function HomeRestoredClient() {
   const { t, locale } = useMarketingI18n();
@@ -106,36 +111,22 @@ export default function HomeRestoredClient() {
                 data-testid="region-toggle-hero"
               >
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="nn-marketing-body-sm text-[var(--theme-body-text)]">{t("nav.regionLabel")}</span>
-                  <div className="inline-flex rounded-lg border border-[var(--theme-input-border)] bg-[var(--theme-card-bg)] p-0.5">
+                  <span className="nn-marketing-caption text-[var(--theme-muted-text)]">{t("nav.regionLabel")}</span>
+                  <div className={marketingRegionToggleShell("rounded")} role="group" aria-label={t("nav.regionLabel")}>
                     <button
                       type="button"
                       onClick={() => setRegion("US")}
-                      className={`rounded-md px-2.5 py-1.5 text-sm sm:px-3 ${
-                        region === "US"
-                          ? "bg-[var(--surface-selected)] text-[var(--theme-heading-text)] ring-1 ring-[var(--border-medium)]"
-                          : "text-[var(--theme-muted-text)] hover:text-[var(--theme-body-text)]"
-                      }`}
+                      className={marketingRegionToggleSegment(region === "US", "default")}
                       data-testid="button-region-us"
                     >
-                      <span className="mr-1" role="img" aria-label={t("pages.home.usFlag")}>
-                        🇺🇸
-                      </span>
                       {t("home.region.us")}
                     </button>
                     <button
                       type="button"
                       onClick={() => setRegion("CA")}
-                      className={`rounded-md px-2.5 py-1.5 text-sm sm:px-3 ${
-                        region === "CA"
-                          ? "bg-[var(--surface-selected)] text-[var(--theme-heading-text)] ring-1 ring-[var(--border-medium)]"
-                          : "text-[var(--theme-muted-text)] hover:text-[var(--theme-body-text)]"
-                      }`}
+                      className={marketingRegionToggleSegment(region === "CA", "default")}
                       data-testid="button-region-ca"
                     >
-                      <span className="mr-1" role="img" aria-label={t("pages.home.canadianFlag")}>
-                        🇨🇦
-                      </span>
                       {t("home.region.ca")}
                     </button>
                   </div>

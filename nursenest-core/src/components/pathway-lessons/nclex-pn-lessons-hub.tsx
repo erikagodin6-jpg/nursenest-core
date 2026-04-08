@@ -1,6 +1,10 @@
 import Link from "next/link";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { pathwayLessonHasRenderableHubSlug, type PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
+import {
+  pathwayLessonHasRenderableHubSlug,
+  pathwayLessonMarketingDetailHref,
+  type PathwayLessonRecord,
+} from "@/lib/lessons/pathway-lesson-types";
 import {
   buildNclexPnUsLessonSections,
   nclexPnLessonExamPreview,
@@ -132,7 +136,7 @@ export function NclexPnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
           </div>
           <div className="mt-5 flex flex-wrap gap-2">
             <Link
-              href={`${lessonsBasePath}/${featured.slug}`}
+              href={pathwayLessonMarketingDetailHref(lessonsBasePath, featured.slug)!}
               className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
             >
               Open lesson
@@ -170,7 +174,10 @@ export function NclexPnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
                   return (
                     <li key={l.slug} className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
                       <p className="text-xs font-medium uppercase text-muted">{l.topic}</p>
-                      <Link href={`${lessonsBasePath}/${l.slug}`} className="mt-1 block text-lg font-semibold text-primary hover:underline">
+                      <Link
+                        href={pathwayLessonMarketingDetailHref(lessonsBasePath, l.slug)!}
+                        className="mt-1 block text-lg font-semibold text-primary hover:underline"
+                      >
                         {l.title}
                       </Link>
                       <div className="mt-4 grid gap-3 border-t border-border pt-4 text-sm sm:grid-cols-2">
@@ -196,7 +203,10 @@ export function NclexPnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
                         </div>
                       </div>
                       <div className="mt-4 flex flex-wrap gap-2">
-                        <Link href={`${lessonsBasePath}/${l.slug}`} className="text-sm font-semibold text-primary">
+                        <Link
+                          href={pathwayLessonMarketingDetailHref(lessonsBasePath, l.slug)!}
+                          className="text-sm font-semibold text-primary"
+                        >
                           Read lesson →
                         </Link>
                         <Link href={appQuestionsHref(pathway.id, l.topic)} className="text-sm font-semibold text-primary">

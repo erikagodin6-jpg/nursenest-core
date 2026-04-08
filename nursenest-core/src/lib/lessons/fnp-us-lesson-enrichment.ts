@@ -1,4 +1,4 @@
-import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
+import { pathwayLessonHasRenderableHubSlug, type PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 
 /** Population bands for FNP board preparation (exam stems vary age; lessons map to primary focus). */
 export type FnpLifespanGroup =
@@ -247,7 +247,7 @@ export type FnpExplorerLesson = {
 };
 
 export function buildFnpExplorerPayload(lessons: PathwayLessonRecord[]): FnpExplorerLesson[] {
-  return lessons.map((lesson) => ({
+  return lessons.filter(pathwayLessonHasRenderableHubSlug).map((lesson) => ({
     meta: {
       slug: lesson.slug,
       title: lesson.title,

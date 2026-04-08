@@ -11,7 +11,11 @@ import {
   FNP_LIFESPAN_ORDER,
   FNP_NP_COMMON_MISTAKES,
 } from "@/lib/lessons/fnp-us-lesson-enrichment";
-import { pathwayLessonHasRenderableHubSlug, type PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
+import {
+  pathwayLessonHasRenderableHubSlug,
+  pathwayLessonMarketingDetailHref,
+  type PathwayLessonRecord,
+} from "@/lib/lessons/pathway-lesson-types";
 import type { TopicCluster } from "@/lib/lessons/pathway-lesson-loader";
 
 type Props = {
@@ -177,7 +181,7 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
           </div>
           <div className="mt-5 flex flex-wrap gap-2">
             <Link
-              href={`${lessonsBasePath}/${featured.slug}`}
+              href={pathwayLessonMarketingDetailHref(lessonsBasePath, featured.slug)!}
               className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
             >
               Open lesson

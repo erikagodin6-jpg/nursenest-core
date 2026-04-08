@@ -8,6 +8,15 @@ import {
 import { CLINICAL_JUDGMENT_GOLD_SLUG, getClinicalJudgmentGoldLessonInput } from "./clinical-judgment-prioritization-gold-standard";
 import { FLUIDS_ELECTROLYTES_GOLD_SLUG, getFluidsElectrolytesGoldLessonInput } from "./fluids-electrolytes-emergencies-gold-standard";
 import { HIGH_ALERT_MEDS_GOLD_SLUG, getHighAlertMedsGoldLessonInput } from "./high-alert-medications-gold-standard";
+import { OB_EMERGENCIES_GOLD_SLUG, getObEmergenciesGoldLessonInput } from "./ob-emergencies-gold-standard";
+import {
+  PEDIATRIC_TRIAGE_EMERGENCIES_GOLD_SLUG,
+  getPediatricTriageEmergenciesGoldLessonInput,
+} from "./pediatric-triage-emergencies-gold-standard";
+import {
+  RENAL_DIALYSIS_ACUTE_COMPLICATIONS_GOLD_SLUG,
+  getRenalDialysisAcuteComplicationsGoldLessonInput,
+} from "./renal-dialysis-acute-complications-gold-standard";
 import { SEPSIS_GOLD_SLUG, getSepsisGoldLessonInput } from "./sepsis-early-recognition-gold-standard";
 import { prependScopedGoldCatalogLessons, SCOPED_GOLD_PROVIDERS } from "./scoped-gold-registry";
 import { SHOCK_GOLD_SLUG, getShockGoldLessonInput } from "./shock-gold-standard";
@@ -32,7 +41,7 @@ const KINDS = new Set([
 ]);
 
 describe("scoped gold registry", () => {
-  it("registry lists injectable slugs in remediation order (waves 1–3 + COPD)", () => {
+  it("registry lists injectable slugs in remediation order (waves 1–4 + COPD)", () => {
     assert.deepEqual(
       SCOPED_GOLD_PROVIDERS.map((p) => p.slug),
       [
@@ -44,6 +53,9 @@ describe("scoped gold registry", () => {
         STROKE_ICP_GOLD_SLUG,
         SHOCK_GOLD_SLUG,
         CANADIAN_RPN_HIGH_YIELD_GOLD_SLUG,
+        OB_EMERGENCIES_GOLD_SLUG,
+        PEDIATRIC_TRIAGE_EMERGENCIES_GOLD_SLUG,
+        RENAL_DIALYSIS_ACUTE_COMPLICATIONS_GOLD_SLUG,
         "copd-clinical-judgment-gold",
       ],
     );
@@ -190,6 +202,51 @@ describe("Canadian RPN scope & collaboration gold standard", () => {
   it("all pathways have full lesson", () => {
     for (const pid of CORE_NURSING_PATHWAYS) {
       assertLessonQuality(getCanadianRpnHighYieldGoldLessonInput(pid)!);
+    }
+  });
+});
+
+describe("OB emergencies gold standard", () => {
+  it("topic and slug stable", () => {
+    const lesson = getObEmergenciesGoldLessonInput("us-rn-nclex-rn");
+    assert.ok(lesson);
+    assert.equal(lesson!.slug, OB_EMERGENCIES_GOLD_SLUG);
+    assert.equal(lesson!.topicSlug, "maternity");
+  });
+
+  it("all pathways have full lesson", () => {
+    for (const pid of CORE_NURSING_PATHWAYS) {
+      assertLessonQuality(getObEmergenciesGoldLessonInput(pid)!);
+    }
+  });
+});
+
+describe("pediatric triage emergencies gold standard", () => {
+  it("topic and slug stable", () => {
+    const lesson = getPediatricTriageEmergenciesGoldLessonInput("ca-rn-nclex-rn");
+    assert.ok(lesson);
+    assert.equal(lesson!.slug, PEDIATRIC_TRIAGE_EMERGENCIES_GOLD_SLUG);
+    assert.equal(lesson!.topicSlug, "pediatrics");
+  });
+
+  it("all pathways have full lesson", () => {
+    for (const pid of CORE_NURSING_PATHWAYS) {
+      assertLessonQuality(getPediatricTriageEmergenciesGoldLessonInput(pid)!);
+    }
+  });
+});
+
+describe("renal dialysis acute complications gold standard", () => {
+  it("topic and slug stable", () => {
+    const lesson = getRenalDialysisAcuteComplicationsGoldLessonInput("us-lpn-nclex-pn");
+    assert.ok(lesson);
+    assert.equal(lesson!.slug, RENAL_DIALYSIS_ACUTE_COMPLICATIONS_GOLD_SLUG);
+    assert.equal(lesson!.topicSlug, "renal-gu");
+  });
+
+  it("all pathways have full lesson", () => {
+    for (const pid of CORE_NURSING_PATHWAYS) {
+      assertLessonQuality(getRenalDialysisAcuteComplicationsGoldLessonInput(pid)!);
     }
   });
 });

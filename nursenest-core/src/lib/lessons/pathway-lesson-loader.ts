@@ -9,14 +9,22 @@ import type { PathwayLessonEducationalOverlay } from "@/lib/i18n/educational-con
 import { applyPathwayLessonEducationalOverlay } from "@/lib/i18n/educational-content-overlay";
 import { fetchPublishedPathwayLessonOverlayMapSafe } from "@/lib/i18n/educational-translation-db";
 import { normalizePathwayLessonLocale, PATHWAY_LESSON_SITEMAP_LOCALE } from "@/lib/lessons/pathway-lesson-locale";
-import type {
-  PathwayLessonFigure,
-  PathwayLessonFigureKind,
-  PathwayLessonLocaleMeta,
-  PathwayLessonQuizItem,
-  PathwayLessonRecord,
-  PathwayLessonSection,
-  PathwayLessonSectionKind,
+import {
+  lessonUsesPremiumSections,
+  orderPremiumSections,
+  validatePathwayLessonPremium,
+} from "@/lib/lessons/pathway-lesson-premium";
+import {
+  pathwayLessonHasRenderableHubSlug,
+  type PathwayLessonFigure,
+  type PathwayLessonFigureKind,
+  type PathwayLessonLocaleMeta,
+  type PathwayLessonOmittedPremiumSection,
+  type PathwayLessonQuizItem,
+  type PathwayLessonRecord,
+  type PathwayLessonRelatedRef,
+  type PathwayLessonSection,
+  type PathwayLessonSectionKind,
 } from "@/lib/lessons/pathway-lesson-types";
 import { ContentStatus } from "@prisma/client";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -38,6 +46,8 @@ type CatalogShape = {
         sections: PathwayLessonRecord["sections"];
         preTest?: PathwayLessonQuizItem[];
         postTest?: PathwayLessonQuizItem[];
+        premiumOmittedSections?: PathwayLessonOmittedPremiumSection[];
+        relatedLessonRefs?: PathwayLessonRelatedRef[];
       }>;
     }
   >;
@@ -304,28 +314,46 @@ function normalizeLesson(raw: LessonInput): PathwayLessonRecord {
   const previewCandidate =
     typeof rawPc === "number" && Number.isFinite(rawPc) && rawPc > 0 ? Math.floor(rawPc) : 1;
 
+  const incoming = sanitizeIncomingSections(raw.sections as PathwayLessonSection[]);
+  const usePremium = lessonUsesPremiumSections(incoming);
+  const expanded = usePremium
+    ? orderPremiumSections(incoming)
+    : expandToStandardFiveSections(incoming);
+
+  const premiumOmitted = raw.premiumOmittedSections;
+  const relatedLessonRefs = raw.relatedLessonRefs;
+
   const base: PathwayLessonRecord = {
     slug: raw.slug,
     title,
     topic: typeof raw.topic === "string" ? raw.topic : "",
     topicSlug: typeof raw.topicSlug === "string" ? raw.topicSlug : "",
     bodySystem: typeof raw.bodySystem === "string" ? raw.bodySystem : "",
-    previewSectionCount: Math.max(1, Math.min(previewCandidate, 5)),
+    previewSectionCount: Math.max(1, Math.min(previewCandidate, usePremium ? 11 : 5)),
     seoTitle,
     seoDescription,
-    sections: raw.sections as PathwayLessonRecord["sections"],
+    sections: expanded,
+    ...(premiumOmitted?.length ? { premiumOmittedSections: premiumOmitted } : {}),
+    ...(relatedLessonRefs?.length ? { relatedLessonRefs } : {}),
   };
-  const expanded = expandToStandardFiveSections(base.sections as PathwayLessonSection[]);
-  const maxPreview = Math.min(expanded.length, 5);
+
+  const maxPreview = Math.min(expanded.length, usePremium ? 11 : 5);
   const preview = Math.max(1, Math.min(base.previewSectionCount, maxPreview || 1));
   const preTest = sanitizeQuizItems((raw as { preTest?: unknown }).preTest);
   const postTest = sanitizeQuizItems((raw as { postTest?: unknown }).postTest);
-  return {
+
+  const withQuizzes = {
     ...base,
-    sections: expanded,
     previewSectionCount: preview,
     ...(preTest ? { preTest } : {}),
     ...(postTest ? { postTest } : {}),
+  };
+
+  if (!usePremium) return withQuizzes;
+
+  return {
+    ...withQuizzes,
+    premiumValidation: validatePathwayLessonPremium(withQuizzes),
   };
 }
 
@@ -1063,7 +1091,7 @@ export async function getRelatedPathwayLessons(
       [],
     );
     const meta = lessonLocaleMeta(marketingLocale, effective, requested !== effective, false);
-    return rows.map((r) =>
+    const mapped = rows.map((r) =>
       applyLessonEducationalOverlay(
         withLocaleMeta(normalizeLessonForHubList(pathwayLessonRowToInput({ ...r, sections: [] })), meta),
         marketingLocale,
@@ -1071,6 +1099,7 @@ export async function getRelatedPathwayLessons(
         lessonDbOverlays,
       ),
     );
+    return mapped.filter(pathwayLessonHasRenderableHubSlug);
   }
 
   const catMeta = lessonLocaleMeta(marketingLocale, "en", requested !== "en", true);
@@ -1079,7 +1108,8 @@ export async function getRelatedPathwayLessons(
     .slice(0, cap)
     .map((l) =>
       applyLessonEducationalOverlay(withLocaleMeta(l, catMeta), marketingLocale, pathwayId, lessonDbOverlays),
-    );
+    )
+    .filter(pathwayLessonHasRenderableHubSlug);
 }
 
 async function listPathwayIdsWithDbLessons(): Promise<string[]> {

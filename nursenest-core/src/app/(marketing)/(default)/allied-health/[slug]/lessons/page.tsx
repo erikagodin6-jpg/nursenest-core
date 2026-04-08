@@ -16,7 +16,10 @@ import {
 import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
 import { pathwayCountryLabel } from "@/lib/lessons/pathway-lesson-hub-seo";
 import { getPathwayLessonsPage, PATHWAY_HUB_PAGE_SIZE_MAX } from "@/lib/lessons/pathway-lesson-loader";
-import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
+import {
+  pathwayLessonHasRenderableHubSlug,
+  pathwayLessonMarketingDetailHref,
+} from "@/lib/lessons/pathway-lesson-types";
 import { alliedLessonsHubBreadcrumbs } from "@/lib/seo/allied-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
@@ -183,18 +186,22 @@ export default async function AlliedHealthSlugLessonsPage({ params, searchParams
             All {prof.h1} lessons · {pathway.shortName}
           </h2>
           <ul className="mt-4 space-y-4">
-            {lessons.map((l) => (
+            {lessons.map((l) => {
+              const href = pathwayLessonMarketingDetailHref(base, l.slug);
+              if (!href) return null;
+              return (
               <li key={l.slug} className="nn-card p-4">
                 <p className="text-xs font-medium uppercase text-muted">{l.topic}</p>
                 <Link
-                  href={`${base}/${l.slug}`}
+                  href={href}
                   className="mt-1 block text-lg font-semibold text-primary hover:underline"
                 >
                   {l.title}
                 </Link>
                 <p className="mt-2 line-clamp-3 text-sm text-muted">{l.seoDescription}</p>
               </li>
-            ))}
+              );
+            })}
           </ul>
         </section>
 

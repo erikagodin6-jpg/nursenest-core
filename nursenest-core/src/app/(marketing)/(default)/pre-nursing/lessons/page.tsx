@@ -7,6 +7,7 @@ import { AlliedMarketingPagination } from "@/components/marketing/allied-paginat
 import { PreNursingMilestoneStrip } from "@/components/pre-nursing/pre-nursing-milestone-strip";
 import { PreNursingSurfaceAnalytics } from "@/components/pre-nursing/pre-nursing-surface-analytics";
 import { PRE_NURSING_MODULE_REGISTRY } from "@/content/pre-nursing/pre-nursing-registry";
+import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
 import strings from "@/content/pre-nursing/pre-nursing-strings-en.json";
 import { PRE_NURSING_LESSON_HUB_PAGE_SIZE } from "@/lib/pre-nursing/pre-nursing-constants";
 import { preNursingLessonsHubBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
@@ -41,7 +42,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 export default async function PreNursingLessonsHubPage({ searchParams }: Props) {
   const sp = await searchParams;
   const pageRequested = Math.max(1, Number(sp.page ?? "1") || 1);
-  const all = [...PRE_NURSING_MODULE_REGISTRY];
+  const all = [...PRE_NURSING_MODULE_REGISTRY].filter(pathwayLessonHasRenderableHubSlug);
   const pageSize = PRE_NURSING_LESSON_HUB_PAGE_SIZE;
   const total = all.length;
   const pageCount = Math.max(1, Math.ceil(total / pageSize));

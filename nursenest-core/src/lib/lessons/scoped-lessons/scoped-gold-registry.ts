@@ -48,6 +48,21 @@ import {
   CANADIAN_RPN_HIGH_YIELD_GOLD_SLUG,
   getCanadianRpnHighYieldGoldLessonInput,
 } from "@/lib/lessons/scoped-lessons/canadian-rpn-high-yield-gold-standard";
+import {
+  getObEmergenciesGoldLessonInput,
+  OB_EMERGENCIES_GOLD_SLUG,
+  obEmergenciesGoldHubListInput,
+} from "@/lib/lessons/scoped-lessons/ob-emergencies-gold-standard";
+import {
+  getPediatricTriageEmergenciesGoldLessonInput,
+  PEDIATRIC_TRIAGE_EMERGENCIES_GOLD_SLUG,
+  pediatricTriageEmergenciesGoldHubListInput,
+} from "@/lib/lessons/scoped-lessons/pediatric-triage-emergencies-gold-standard";
+import {
+  getRenalDialysisAcuteComplicationsGoldLessonInput,
+  RENAL_DIALYSIS_ACUTE_COMPLICATIONS_GOLD_SLUG,
+  renalDialysisAcuteComplicationsGoldHubListInput,
+} from "@/lib/lessons/scoped-lessons/renal-dialysis-acute-complications-gold-standard";
 
 /** Minimal lesson row shape for catalog merge (matches pathway-lesson-loader `LessonInput`). */
 export type ScopedGoldLessonInput = {
@@ -71,7 +86,7 @@ export type ScopedGoldProvider = {
   getHubListRow: (pathwayId: string) => Omit<ScopedGoldLessonInput, "sections" | "preTest" | "postTest"> | null;
 };
 
-/** Highest-yield remediation wave first; wave 3 neuro/shock/RPN slice; COPD legacy gold remains last. */
+/** Waves 1–3 acute core + RPN slice; wave 4 maternal–child + renal dialysis; COPD legacy gold remains last. */
 export const SCOPED_GOLD_PROVIDERS: ScopedGoldProvider[] = [
   {
     slug: CLINICAL_JUDGMENT_GOLD_SLUG,
@@ -120,6 +135,24 @@ export const SCOPED_GOLD_PROVIDERS: ScopedGoldProvider[] = [
     topicSlug: "delegation",
     getFullLesson: getCanadianRpnHighYieldGoldLessonInput,
     getHubListRow: canadianRpnHighYieldGoldHubListInput,
+  },
+  {
+    slug: OB_EMERGENCIES_GOLD_SLUG,
+    topicSlug: "maternity",
+    getFullLesson: getObEmergenciesGoldLessonInput,
+    getHubListRow: obEmergenciesGoldHubListInput,
+  },
+  {
+    slug: PEDIATRIC_TRIAGE_EMERGENCIES_GOLD_SLUG,
+    topicSlug: "pediatrics",
+    getFullLesson: getPediatricTriageEmergenciesGoldLessonInput,
+    getHubListRow: pediatricTriageEmergenciesGoldHubListInput,
+  },
+  {
+    slug: RENAL_DIALYSIS_ACUTE_COMPLICATIONS_GOLD_SLUG,
+    topicSlug: "renal-gu",
+    getFullLesson: getRenalDialysisAcuteComplicationsGoldLessonInput,
+    getHubListRow: renalDialysisAcuteComplicationsGoldHubListInput,
   },
   {
     slug: COPD_GOLD_STANDARD_SLUG,

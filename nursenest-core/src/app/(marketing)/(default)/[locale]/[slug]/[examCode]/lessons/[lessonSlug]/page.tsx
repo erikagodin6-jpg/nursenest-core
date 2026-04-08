@@ -32,6 +32,10 @@ import { classifyPathwayLesson } from "@/lib/content-quality/classify-lesson";
 import { buildQuickReviewBullets } from "@/lib/lessons/pathway-lesson-quick-review";
 import { matchConceptImage } from "@/lib/education-images/match-concept-image";
 import { PathwayLessonFigures } from "@/components/lessons/pathway-lesson-figures";
+import {
+  pathwayLessonHasRenderableHubSlug,
+  pathwayLessonMarketingDetailHref,
+} from "@/lib/lessons/pathway-lesson-types";
 
 export const dynamic = "force-dynamic";
 
@@ -121,7 +125,8 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
 
   const hubBase = `/${countrySlug}/${roleTrack}/${examCode}`;
   const base = `${hubBase}/lessons`;
-  const related = await getRelatedPathwayLessons(pathway.id, lesson.topicSlug, lesson.slug, undefined, lessonContentLocale);
+  const relatedRaw = await getRelatedPathwayLessons(pathway.id, lesson.topicSlug, lesson.slug, undefined, lessonContentLocale);
+  const related = relatedRaw.filter(pathwayLessonHasRenderableHubSlug);
   const { crumbs, schemaItems } = pathwayLessonDetailBreadcrumbs(pathway, lesson.slug, lesson.title);
   const lessonQuality = classifyPathwayLesson(lesson);
   const matchedLessonImage = matchConceptImage({
@@ -273,7 +278,10 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
           <ul className="mt-3 space-y-2">
             {related.map((r) => (
               <li key={r.slug}>
-                <Link href={`${base}/${r.slug}`} className="text-primary hover:underline">
+                <Link
+                  href={pathwayLessonMarketingDetailHref(base, r.slug)!}
+                  className="text-primary hover:underline"
+                >
                   {r.title}
                 </Link>
               </li>

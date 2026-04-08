@@ -1,6 +1,8 @@
 /**
  * One-time merge of marketing/conversion strings into public/i18n/en.json.
  * Run: node scripts/merge-marketing-conversion-en.mjs
+ *
+ * Homepage hero uses `home.landing.*` only (`home-restored-client.tsx`). Do not re-add `home.gateway.*`.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -61,15 +63,6 @@ const patch = {
   "home.featuresStack.ctaPricing": "Compare plans",
   "home.featuresStack.ctaSignIn": "Sign in to continue",
 
-  "home.gateway.title": "Start from the exam you are registered for",
-  "home.gateway.subtitle":
-    "Nursing and allied hubs link the same-pathway question bank, lessons, and pricing. Pick US or Canada first so scope and delegation language match your authorization.",
-  "home.gateway.regionHint": "Filters content to this region",
-  "home.gateway.badgePrimary": "Nursing: licensure & progression",
-  "home.gateway.quickLinks": "Practice, lessons, and hubs",
-  "home.gateway.frictionNote":
-    "A free account opens starter runs and previews. A paid plan unlocks the full bank for your tier, lesson depth, timed mocks, saved history, and weak-area tools.",
-
   "nav.marketingExplore": "Who we help",
   "nav.examHubsMobile": "Pick your exam",
   "nav.chooseYourExam": "Choose your exam",
@@ -89,65 +82,6 @@ const patch = {
   "home.quickEntry.alliedUS": "Allied health questions (US)",
   "home.quickEntry.alliedCA": "Allied health questions (Canada)",
   "home.quickEntry.studyTools": "Study tools",
-
-  "home.gateway.nursing.title": "NCLEX-RN",
-  "home.gateway.nursing.introUS":
-    "Clinical judgment practice for US RN candidates: NGN-style stems, rationales per option, and full-length mocks when you are ready.",
-  "home.gateway.nursing.introCA":
-    "Canadian RN registration: same high-stakes reasoning skills, scoped to your NCLEX-RN track and Canadian lesson hubs.",
-  "home.gateway.nursing.ctaPrimary": "Run NCLEX-RN questions",
-  "home.gateway.nursing.ctaPrimaryDesc": "Starts in your selected region",
-  "home.gateway.nursing.link.seoOverview": "NCLEX-RN prep overview",
-  "home.gateway.nursing.link.lessons": "RN lessons",
-  "home.gateway.nursing.link.timedMocks": "Timed practice exams",
-
-  "home.gateway.practical.titleUS": "NCLEX-PN (LPN)",
-  "home.gateway.practical.titleCA": "REx-PN (RPN)",
-  "home.gateway.practical.introUS":
-    "PN-level safety and pharmacology stems with lesson support, not RN material squeezed into an LPN label.",
-  "home.gateway.practical.introCA":
-    "REx-PN is its own exam. Use the Canadian PN bank and lessons built for REx-PN, not a relabeled US mix.",
-  "home.gateway.practical.ctaUS": "Run NCLEX-PN questions",
-  "home.gateway.practical.ctaCA": "Run REx-PN questions",
-  "home.gateway.practical.ctaDesc": "Pathway-filtered bank",
-  "home.gateway.practical.link.lessons": "PN lessons",
-  "home.gateway.practical.link.hub": "PN exam hub",
-  "home.gateway.practical.link.seoOverview": "PN prep overview",
-
-  "home.gateway.np.title": "Nurse practitioner",
-  "home.gateway.np.introUS":
-    "FNP and AGPCNP each have dedicated lessons and banks. Pick the board you are sitting. Do not cross-train on the wrong blueprint.",
-  "home.gateway.np.introCA":
-    "Canadian NP: start from the CNPLE hub. US FNP/AGPCNP stays available if you sit US certification exams.",
-  "home.gateway.np.ctaUS": "Open NP question bank (US)",
-  "home.gateway.np.ctaCA": "Open CNPLE questions",
-  "home.gateway.np.ctaDescUS": "US NP clinical cases",
-  "home.gateway.np.ctaDescCA": "Canadian NP track",
-  "home.gateway.np.link.seoOverview": "NP certification overview (US)",
-  "home.gateway.np.link.seoOverviewCa": "CNPLE / NP prep overview",
-  "home.gateway.np.link.fnpLessons": "FNP lessons",
-  "home.gateway.np.link.agpcnpLessons": "AGPCNP lessons",
-  "home.gateway.np.link.caHub": "Canadian NP hub",
-  "home.gateway.np.link.fnpLessonsUs": "FNP lessons (US)",
-  "home.gateway.np.link.agpcnpLessonsUs": "AGPCNP lessons (US)",
-
-  "home.gateway.allied.title": "Allied health exams",
-  "home.gateway.allied.intro":
-    "Same pathway model as nursing: open your regional question bank first, then use the hub for lessons and context. The careers brochure lists supported certifications if you are still choosing an exam.",
-  "home.gateway.allied.ctaPrimary": "Open allied question bank",
-  "home.gateway.allied.ctaDesc": "Region-scoped bank",
-  "home.gateway.allied.link.hub": "Allied exam hub",
-  "home.gateway.allied.link.brochure": "Supported careers & exams (brochure)",
-
-  "home.gateway.tools.title": "Tools & new grad",
-  "home.gateway.tools.intro":
-    "Dose calculators, lesson index, timed exams (sign in), and first-year roadmaps when you need a break from board mode.",
-  "home.gateway.tools.ctaPrimary": "Use study tools",
-  "home.gateway.tools.link.examLessons": "Exam lesson hubs",
-  "home.gateway.tools.link.roadmap": "New graduate roadmap",
-  "home.gateway.tools.link.newGradSupport": "New graduate support",
-  "home.gateway.tools.link.flashcards": "Flashcards (sign in)",
-  "home.gateway.tools.link.practiceExams": "Practice exams (sign in)",
 
   "home.conversion.sampleRnQuestionRun": "NCLEX-RN question run",
 

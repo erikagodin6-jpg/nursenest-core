@@ -5,6 +5,49 @@ export type PathwayLessonExamFocus = {
   prioritizationCues?: string;
 };
 
+/** Premium lesson spine section ids (see pathway-lesson-premium.ts). */
+export type PathwayLessonPremiumSectionKind =
+  | "introduction"
+  | "pathophysiology_overview"
+  | "signs_symptoms"
+  | "red_flags"
+  | "labs_diagnostics"
+  | "nursing_assessment_interventions"
+  | "clinical_pearls"
+  | "client_education"
+  | "tier_specific_relevance"
+  | "country_specific_notes"
+  | "related_next_steps";
+
+export type PathwayLessonRelatedRef = {
+  slug: string;
+  titleHint?: string;
+};
+
+export type PathwayLessonOmittedPremiumSection = {
+  kind: PathwayLessonPremiumSectionKind;
+  reason: string;
+};
+
+export type PathwayLessonPremiumValidation = {
+  publishReady: boolean;
+  premiumReady: boolean;
+  issues: string[];
+  internalLinkCount: number;
+  omittedSections: PathwayLessonOmittedPremiumSection[];
+  introParagraphCount: number;
+};
+
+/** Unified structural / SEO gate for public surfacing (premium spine vs legacy five-block). */
+export type PathwayLessonStructuralGate = {
+  structureMode: "premium" | "legacy";
+  /** When false, lesson should be treated as incomplete for SEO / “complete” badges. */
+  publicComplete: boolean;
+  issues: string[];
+  warnings: string[];
+  internalStudyLinkCount: number;
+};
+
 /** Canonical five-block structure (render order). Legacy catalog kinds are normalized into these. */
 export type PathwayLessonSectionKind =
   | "clinical_meaning"
@@ -16,7 +59,8 @@ export type PathwayLessonSectionKind =
   | "core"
   | "clinical_application"
   | "exam_tips"
-  | "exam_focus";
+  | "exam_focus"
+  | PathwayLessonPremiumSectionKind;
 
 /** Optional educational figures for a lesson section (HTTPS URLs only after sanitization). */
 export type PathwayLessonFigureKind =
@@ -87,9 +131,57 @@ export type PathwayLessonRecord = {
   preTest?: PathwayLessonQuizItem[];
   postTest?: PathwayLessonQuizItem[];
   localeMeta?: PathwayLessonLocaleMeta;
+  /** Scoped gold premium lessons: documented omissions (e.g. labs not applicable). */
+  premiumOmittedSections?: PathwayLessonOmittedPremiumSection[];
+  /** Related slugs for hubs / related block (metadata). */
+  relatedLessonRefs?: PathwayLessonRelatedRef[];
+  /** Word counts, internal links, required sections — computed at normalize time for gating + UI. */
+  structuralQuality?: PathwayLessonStructuralGate;
 };
 
 /** Hub cards must not link with empty or whitespace slugs (defensive; DB/catalog should always set slug). */
 export function pathwayLessonHasRenderableHubSlug(l: Pick<PathwayLessonRecord, "slug">): boolean {
   return typeof l.slug === "string" && l.slug.trim().length > 0;
+}
+
+/**
+ * Safe href for marketing pathway lesson detail: `{lessonsBasePath}/{slug}`.
+ * Returns null if slug is unusable — callers must not render a link.
+ */
+export function pathwayLessonMarketingDetailHref(
+  lessonsBasePath: string,
+  slug: string | null | undefined,
+): string | null {
+  if (!pathwayLessonHasRenderableHubSlug({ slug: slug ?? "" })) return null;
+  const base = lessonsBasePath.replace(/\/$/, "");
+  return `${base}/${encodeURIComponent(String(slug).trim())}`;
+}
+
+/**
+ * Detail-page related list: metadata refs first (study flow / SEO), then same-topic neighbors, deduped.
+ */
+export function mergeRelatedLessonDisplayList(
+  refs: PathwayLessonRelatedRef[] | undefined,
+  topicRelated: PathwayLessonRecord[],
+  limit: number = 8,
+): { slug: string; title: string }[] {
+  const cap = Math.min(24, Math.max(1, Math.floor(limit)));
+  const out: { slug: string; title: string }[] = [];
+  const seen = new Set<string>();
+  for (const r of refs ?? []) {
+    const slug = typeof r.slug === "string" ? r.slug.trim() : "";
+    if (!slug || seen.has(slug)) continue;
+    seen.add(slug);
+    const hint = r.titleHint?.trim();
+    out.push({ slug, title: hint && hint.length > 0 ? hint : slug.replace(/-/g, " ") });
+  }
+  for (const row of topicRelated) {
+    if (!pathwayLessonHasRenderableHubSlug(row)) continue;
+    const slug = row.slug.trim();
+    if (seen.has(slug)) continue;
+    seen.add(slug);
+    out.push({ slug, title: row.title });
+    if (out.length >= cap) break;
+  }
+  return out.slice(0, cap);
 }

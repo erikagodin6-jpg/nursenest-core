@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Copy region-aware nursing tier / gateway / metadata strings from en.json into every other
+ * Copy region-aware nursing tier / metadata strings from en.json into every other
  * `public/i18n/*.json` locale bundle so marketing no longer depends on runtime fallback for these keys.
  *
  * Exam names (NCLEX-RN, NCLEX-PN, REx-PN) stay in English per product rules; surrounding copy is
@@ -21,7 +21,6 @@ const EN_PATH = path.join(I18N_DIR, "en.json");
 function isNursingTierParityKey(x) {
   if (x.startsWith("nav.examStrip.")) return true;
   if (x.startsWith("home.quickEntry.")) return true;
-  if (x.startsWith("home.gateway.")) return true;
   if (/^home\.landing\.(heroPath|pathways)\./.test(x)) return true;
   if (x.startsWith("home.region.")) return true;
   if (/^pages\.home\.meta/.test(x)) return true;

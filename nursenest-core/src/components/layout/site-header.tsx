@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { CheckCircle2, ChevronDown, MapPin, Menu, X } from "lucide-react";
+import { ChevronDown, MapPin, Menu, X } from "lucide-react";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
@@ -14,6 +14,10 @@ import { MarketingHeaderUtilityStrip } from "@/components/layout/marketing-heade
 import { MarketingSiteSubNav } from "@/components/layout/marketing-site-sub-nav";
 import { ThemePicker } from "@/components/theme/theme-picker";
 import { Button } from "@/components/ui/button";
+import {
+  marketingRegionToggleSegment,
+  marketingRegionToggleShellMobileRow,
+} from "@/lib/theme/marketing-region-toggle";
 
 const NAV_LINK_CLASS =
   "nn-marketing-body-sm font-medium tracking-tight text-[var(--theme-menu-text)] transition-colors duration-200 hover:text-primary";
@@ -123,27 +127,13 @@ export function SiteHeader() {
                 ))}
               </div>
 
-              <p className="mb-2 nn-marketing-body-sm font-medium tracking-normal text-[var(--theme-muted-text)]">{t("nav.regionLabel")}</p>
-              <div className="mb-3 flex gap-2">
-                <button
-                  type="button"
-                  onClick={() => setRegion("US")}
-                  className={`flex flex-1 items-center justify-center gap-2 rounded-xl border px-3 py-2 nn-marketing-body-sm font-medium tracking-normal ${
-                    region === "US" ? "border-role-cta/40 bg-role-cta-soft text-role-cta-on-soft" : "border-[var(--theme-card-border)] text-[var(--theme-muted-text)]"
-                  }`}
-                >
+              <p className="mb-2 nn-marketing-caption text-[var(--theme-muted-text)]">{t("nav.regionLabel")}</p>
+              <div className={`mb-3 ${marketingRegionToggleShellMobileRow()}`} role="group" aria-label={t("nav.regionLabel")}>
+                <button type="button" onClick={() => setRegion("US")} className={marketingRegionToggleSegment(region === "US", "mobile")}>
                   {t("home.region.us")}
-                  {region === "US" ? <CheckCircle2 className="h-4 w-4" /> : null}
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setRegion("CA")}
-                  className={`flex flex-1 items-center justify-center gap-2 rounded-xl border px-3 py-2 nn-marketing-body-sm font-medium tracking-normal ${
-                    region === "CA" ? "border-role-cta/40 bg-role-cta-soft text-role-cta-on-soft" : "border-[var(--theme-card-border)] text-[var(--theme-muted-text)]"
-                  }`}
-                >
+                <button type="button" onClick={() => setRegion("CA")} className={marketingRegionToggleSegment(region === "CA", "mobile")}>
                   {t("home.region.ca")}
-                  {region === "CA" ? <CheckCircle2 className="h-4 w-4" /> : null}
                 </button>
               </div>
               <p className="mb-3 flex items-start gap-2 nn-marketing-body-sm font-medium tracking-normal text-[var(--theme-muted-text)]">

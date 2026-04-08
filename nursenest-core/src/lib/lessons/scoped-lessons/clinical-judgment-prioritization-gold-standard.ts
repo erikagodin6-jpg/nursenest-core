@@ -2,7 +2,17 @@
  * Gold-standard clinical judgment / prioritization lesson — shared core + pathway overlays.
  * Remediation wave 1: management_of_care proxy + exam prioritization spine.
  */
-import type { PathwayLessonQuizItem, PathwayLessonSection } from "@/lib/lessons/pathway-lesson-types";
+import type {
+  PathwayLessonOmittedPremiumSection,
+  PathwayLessonQuizItem,
+  PathwayLessonRelatedRef,
+  PathwayLessonSection,
+} from "@/lib/lessons/pathway-lesson-types";
+import {
+  PATHWAY_EXAM_LABEL,
+  pathwayIdToTierGeo,
+  synthesizeGoldPremiumSections,
+} from "@/lib/lessons/scoped-lessons/gold-premium-synthesis";
 import { npExamLabel, npPrimaryCareTitleSuffix } from "@/lib/lessons/scoped-lessons/np-pathway-display";
 
 export const CLINICAL_JUDGMENT_GOLD_SLUG = "clinical-judgment-prioritization-gold" as const;

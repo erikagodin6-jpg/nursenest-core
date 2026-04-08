@@ -37,6 +37,7 @@ import { PathwayLessonQuickReview } from "@/components/lessons/pathway-lesson-qu
 import { classifyPathwayLesson } from "@/lib/content-quality/classify-lesson";
 import { buildQuickReviewBullets } from "@/lib/lessons/pathway-lesson-quick-review";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import { pathwayLessonHasRenderableHubSlug, pathwayLessonMarketingDetailHref } from "@/lib/lessons/pathway-lesson-types";
 
 export const revalidate = 86400;
 export const dynamicParams = true;
@@ -124,7 +125,10 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
   let related: Awaited<ReturnType<typeof getRelatedPathwayLessons>> = [];
   try {
     const raw = await getRelatedPathwayLessons(pathway.id, lesson.topicSlug, lesson.slug, 8, lessonContentLocale);
-    related = raw.filter((r) => alliedLessonMatchesProfessionFilter(r, prof.topicSlugsIn));
+    related = raw.filter(
+      (r) =>
+        pathwayLessonHasRenderableHubSlug(r) && alliedLessonMatchesProfessionFilter(r, prof.topicSlugsIn),
+    );
   } catch {
     related = [];
   }
@@ -244,13 +248,17 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
         <section className="mt-10">
           <h2 className="text-lg font-semibold">Related lessons · {lesson.topic}</h2>
           <ul className="mt-3 space-y-2">
-            {related.map((r) => (
-              <li key={r.slug}>
-                <Link href={`${base}/${r.slug}`} className="text-primary hover:underline">
-                  {r.title}
-                </Link>
-              </li>
-            ))}
+            {related.map((r) => {
+              const href = pathwayLessonMarketingDetailHref(base, r.slug);
+              if (!href) return null;
+              return (
+                <li key={r.slug}>
+                  <Link href={href} className="text-primary hover:underline">
+                    {r.title}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         </section>
       ) : null}

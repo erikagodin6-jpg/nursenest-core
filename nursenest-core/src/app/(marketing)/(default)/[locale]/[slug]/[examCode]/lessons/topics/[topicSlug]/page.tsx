@@ -16,7 +16,10 @@ import {
   pathwayLessonTopicClusterMetaDescription,
   pathwayLessonTopicClusterMetaTitle,
 } from "@/lib/lessons/pathway-lesson-hub-seo";
-import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
+import {
+  pathwayLessonHasRenderableHubSlug,
+  pathwayLessonMarketingDetailHref,
+} from "@/lib/lessons/pathway-lesson-types";
 import { pathwayTopicClusterBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
@@ -104,9 +107,12 @@ export default async function PathwayLessonTopicClusterPage({ params, searchPara
       {pageResult.locale ? <PathwayLessonContentLocaleBanner listLocale={pageResult.locale} /> : null}
 
       <ul className="mt-8 space-y-4">
-        {lessons.map((l) => (
+        {lessons.map((l) => {
+          const href = pathwayLessonMarketingDetailHref(base, l.slug);
+          if (!href) return null;
+          return (
           <li key={l.slug} className="nn-card p-4">
-            <Link href={`${base}/${l.slug}`} className="text-lg font-semibold text-primary hover:underline">
+            <Link href={href} className="text-lg font-semibold text-primary hover:underline">
               {l.title}
             </Link>
             <p className="mt-2 text-sm text-muted">{l.seoDescription}</p>
@@ -119,7 +125,8 @@ export default async function PathwayLessonTopicClusterPage({ params, searchPara
               </Link>
             </div>
           </li>
-        ))}
+          );
+        })}
       </ul>
 
       <div className="mt-10 nn-card p-4 text-sm text-muted">

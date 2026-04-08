@@ -6,9 +6,10 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { MarketingLanguagePreferenceList } from "@/components/i18n/marketing-language-preference";
 import { ThemePicker } from "@/components/theme/theme-picker";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
-
-const REGION_BTN =
-  "rounded-full px-2 py-px text-[11px] font-normal leading-tight tracking-wide transition-[background,color] duration-200";
+import {
+  marketingRegionToggleSegment,
+  marketingRegionToggleShell,
+} from "@/lib/theme/marketing-region-toggle";
 
 /**
  * Desktop-only preferences rail — visually recessive; must not compete with primary header.
@@ -30,29 +31,24 @@ export function MarketingHeaderUtilityStrip() {
   return (
     <div className="hidden border-b border-[color-mix(in_srgb,var(--theme-nav-border)_35%,transparent)] bg-[color-mix(in_srgb,var(--theme-muted-text)_3.5%,var(--theme-page-bg))] md:block">
       <div className="mx-auto flex h-7 max-w-7xl items-center justify-end gap-2 px-4 lg:gap-2.5 lg:px-8">
-        <div className="inline-flex items-center rounded-full bg-[color-mix(in_srgb,var(--theme-muted-text)_6%,transparent)] p-px">
-          <button
-            type="button"
-            onClick={() => setRegion("US")}
-            className={`${REGION_BTN} ${
-              region === "US"
-                ? "bg-[var(--theme-page-bg)] text-[var(--theme-body-text)] shadow-[0_1px_2px_rgba(0,0,0,0.04)]"
-                : "text-[var(--theme-muted-text)] hover:text-[color-mix(in_srgb,var(--theme-body-text)_75%,var(--theme-muted-text))]"
-            }`}
-          >
-            {t("home.region.us")}
-          </button>
-          <button
-            type="button"
-            onClick={() => setRegion("CA")}
-            className={`${REGION_BTN} ${
-              region === "CA"
-                ? "bg-[var(--theme-page-bg)] text-[var(--theme-body-text)] shadow-[0_1px_2px_rgba(0,0,0,0.04)]"
-                : "text-[var(--theme-muted-text)] hover:text-[color-mix(in_srgb,var(--theme-body-text)_75%,var(--theme-muted-text))]"
-            }`}
-          >
-            {t("home.region.ca")}
-          </button>
+        <div className="flex items-center gap-1.5">
+          <span className="nn-marketing-caption shrink-0 leading-none text-[var(--theme-muted-text)]">{t("nav.regionLabel")}</span>
+          <div className={marketingRegionToggleShell("pill")} role="group" aria-label={t("nav.regionLabel")}>
+            <button
+              type="button"
+              onClick={() => setRegion("US")}
+              className={marketingRegionToggleSegment(region === "US", "compact")}
+            >
+              {t("home.region.us")}
+            </button>
+            <button
+              type="button"
+              onClick={() => setRegion("CA")}
+              className={marketingRegionToggleSegment(region === "CA", "compact")}
+            >
+              {t("home.region.ca")}
+            </button>
+          </div>
         </div>
 
         <div className="relative" ref={langRef}>
