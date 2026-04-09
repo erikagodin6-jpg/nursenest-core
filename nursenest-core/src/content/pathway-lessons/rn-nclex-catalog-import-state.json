@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "runs": [
+    {
+      "ts": "2026-04-09T10:19:49.136Z",
+      "categoryId": "cardiovascular",
+      "pathwayId": "us-rn-nclex-rn",
+      "added": 14,
+      "slugs": [
+        "abdominal-aortic-aneurysm-nclex-rn",
+        "acute-coronary-syndrome-nclex-rn",
+        "atrial-fibrillation-nclex-rn",
+        "cabg-and-postoperative-cabg-complications-nclex-rn",
+        "cardiac-tamponade-nclex-rn",
+        "deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn",
+        "defibrillation-vs-synchronized-cardioversion-nclex-rn",
+        "heart-failure-nclex-rn",
+        "hypertensive-encephalopathy-nclex-rn",
+        "infective-endocarditis-nclex-rn",
+        "myocardial-infarction-nclex-rn",
+        "peripheral-artery-disease-nclex-rn",
+        "phlebostatic-axis-nclex-rn",
+        "pulmonary-embolism-nclex-rn"
+      ]
+    },
+    {
+      "ts": "2026-04-09T10:19:49.136Z",
+      "categoryId": "cardiovascular",
+      "pathwayId": "ca-rn-nclex-rn",
+      "added": 14,
+      "slugs": [
+        "abdominal-aortic-aneurysm-nclex-rn",
+        "acute-coronary-syndrome-nclex-rn",
+        "atrial-fibrillation-nclex-rn",
+        "cabg-and-postoperative-cabg-complications-nclex-rn",
+        "cardiac-tamponade-nclex-rn",
+        "deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn",
+        "defibrillation-vs-synchronized-cardioversion-nclex-rn",
+        "heart-failure-nclex-rn",
+        "hypertensive-encephalopathy-nclex-rn",
+        "infective-endocarditis-nclex-rn",
+        "myocardial-infarction-nclex-rn",
+        "peripheral-artery-disease-nclex-rn",
+        "phlebostatic-axis-nclex-rn",
+        "pulmonary-embolism-nclex-rn"
+      ]
+    }
+  ]
+}

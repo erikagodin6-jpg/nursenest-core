@@ -9560,6 +9560,482 @@
               "body": "- Tie **vitals + labs + story** before comfort measures or discharge teaching.\n- Eliminate answers that **skip assessment** or **delay escalation** when data show risk.\n- Pair this page with **topic slug `nutrition`** in the hub and timed question blocks.\n\n**Related topics in your map:** `enteral-feeding-tube-safety` — use the question bank and lesson hub filters to cluster practice."
             }
           ]
+        },
+        {
+          "slug": "abdominal-aortic-aneurysm-nclex-rn",
+          "title": "Abdominal Aortic Aneurysm (NCLEX-RN, Canada)",
+          "topic": "Cardiovascular",
+          "topicSlug": "cardiovascular",
+          "bodySystem": "Cardiovascular",
+          "previewSectionCount": 1,
+          "seoTitle": "Abdominal Aortic Aneurysm | NCLEX-RN Canada lesson",
+          "seoDescription": "Abdominal Aortic Aneurysm: NCLEX-RN Canada study focus for Cardiovascular — assessment, prioritization, interventions, and exam-style judgment. Tier A lesson target 1800–2600 words when expanded.",
+          "sections": [],
+          "audienceTiers": [
+            "rn"
+          ],
+          "countryScope": "ca",
+          "examRelevance": "high_yield",
+          "relatedLessonRefs": [
+            {
+              "slug": "acute-coronary-syndrome-nclex-rn",
+              "titleHint": "Acute Coronary Syndrome"
+            },
+            {
+              "slug": "atrial-fibrillation-nclex-rn",
+              "titleHint": "Atrial Fibrillation"
+            },
+            {
+              "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
+              "titleHint": "CABG and Postoperative CABG Complications"
+            },
+            {
+              "slug": "cardiac-tamponade-nclex-rn",
+              "titleHint": "Cardiac Tamponade"
+            }
+          ]
+        },
+        {
+          "slug": "acute-coronary-syndrome-nclex-rn",
+          "title": "Acute Coronary Syndrome (NCLEX-RN, Canada)",
+          "topic": "Cardiovascular",
+          "topicSlug": "cardiovascular",
+          "bodySystem": "Cardiovascular",
+          "previewSectionCount": 1,
+          "seoTitle": "Acute Coronary Syndrome | NCLEX-RN Canada lesson",
+          "seoDescription": "Acute Coronary Syndrome: NCLEX-RN Canada study focus for Cardiovascular — assessment, prioritization, interventions, and exam-style judgment. Tier A lesson target 1800–2600 words when expanded.",
+          "sections": [],
+          "audienceTiers": [
+            "rn"
+          ],
+          "countryScope": "ca",
+          "examRelevance": "high_yield",
+          "relatedLessonRefs": [
+            {
+              "slug": "abdominal-aortic-aneurysm-nclex-rn",
+              "titleHint": "Abdominal Aortic Aneurysm"
+            },
+            {
+              "slug": "atrial-fibrillation-nclex-rn",
+              "titleHint": "Atrial Fibrillation"
+            },
+            {
+              "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
+              "titleHint": "CABG and Postoperative CABG Complications"
+            },
+            {
+              "slug": "cardiac-tamponade-nclex-rn",
+              "titleHint": "Cardiac Tamponade"
+            }
+          ]
+        },
+        {
+          "slug": "atrial-fibrillation-nclex-rn",
+          "title": "Atrial Fibrillation (NCLEX-RN, Canada)",
+          "topic": "Cardiovascular",
+          "topicSlug": "cardiovascular",
+          "bodySystem": "Cardiovascular",
+          "previewSectionCount": 1,
+          "seoTitle": "Atrial Fibrillation | NCLEX-RN Canada lesson",
+          "seoDescription": "Atrial Fibrillation: NCLEX-RN Canada study focus for Cardiovascular — assessment, prioritization, interventions, and exam-style judgment. Tier A lesson target 1800–2600 words when expanded.",
+          "sections": [],
+          "audienceTiers": [
+            "rn"
+          ],
+          "countryScope": "ca",
+          "examRelevance": "high_yield",
+          "relatedLessonRefs": [
+            {
+              "slug": "abdominal-aortic-aneurysm-nclex-rn",
+              "titleHint": "Abdominal Aortic Aneurysm"
+            },
+            {
+              "slug": "acute-coronary-syndrome-nclex-rn",
+              "titleHint": "Acute Coronary Syndrome"
+            },
+            {
+              "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
+              "titleHint": "CABG and Postoperative CABG Complications"
+            },
+            {
+              "slug": "cardiac-tamponade-nclex-rn",
+              "titleHint": "Cardiac Tamponade"
+            }
+          ]
+        },
+        {
+          "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
+          "title": "CABG and Postoperative CABG Complications (NCLEX-RN, Canada)",
+          "topic": "Cardiovascular",
+          "topicSlug": "cardiovascular",
+          "bodySystem": "Cardiovascular",
+          "previewSectionCount": 1,
+          "seoTitle": "CABG and Postoperative CABG Complications | NCLEX-RN Canada lesson",
+          "seoDescription": "CABG and Postoperative CABG Complications: NCLEX-RN Canada study focus for Cardiovascular — assessment, prioritization, interventions, and exam-style judgment. Tier A lesson target 1800–2600 words when expanded.",
+          "sections": [],
+          "audienceTiers": [
+            "rn"
+          ],
+          "countryScope": "ca",
+          "examRelevance": "high_yield",
+          "relatedLessonRefs": [
+            {
+              "slug": "abdominal-aortic-aneurysm-nclex-rn",
+              "titleHint": "Abdominal Aortic Aneurysm"
+            },
+            {
+              "slug": "acute-coronary-syndrome-nclex-rn",
+              "titleHint": "Acute Coronary Syndrome"
+            },
+            {
+              "slug": "atrial-fibrillation-nclex-rn",
+              "titleHint": "Atrial Fibrillation"
+            },
+            {
+              "slug": "cardiac-tamponade-nclex-rn",
+              "titleHint": "Cardiac Tamponade"
+            }
+          ]
+        },
+        {
+          "slug": "cardiac-tamponade-nclex-rn",
+          "title": "Cardiac Tamponade (NCLEX-RN, Canada)",
+          "topic": "Cardiovascular",
+          "topicSlug": "cardiovascular",
+          "bodySystem": "Cardiovascular",
+          "previewSectionCount": 1,
+          "seoTitle": "Cardiac Tamponade | NCLEX-RN Canada lesson",
+          "seoDescription": "Cardiac Tamponade: NCLEX-RN Canada study focus for Cardiovascular — assessment, prioritization, interventions, and exam-style judgment. Tier A lesson target 1800–2600 words when expanded.",
+          "sections": [],
+          "audienceTiers": [
+            "rn"
+          ],
+          "countryScope": "ca",
+          "examRelevance": "high_yield",
+          "relatedLessonRefs": [
+            {
+              "slug": "abdominal-aortic-aneurysm-nclex-rn",
+              "titleHint": "Abdominal Aortic Aneurysm"
+            },
+            {
+              "slug": "acute-coronary-syndrome-nclex-rn",
+              "titleHint": "Acute Coronary Syndrome"
+            },
+            {
+              "slug": "atrial-fibrillation-nclex-rn",
+              "titleHint": "Atrial Fibrillation"
+            },
+            {
+              "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
+              "titleHint": "CABG and Postoperative CABG Complications"
+            }
+          ]
+        },
+        {
+          "slug": "deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn",
+          "title": "Deep Vein Thrombosis (DVT): Prevention and Nursing Management (NCLEX-RN, Canada)",
+          "topic": "Cardiovascular",
+          "topicSlug": "cardiovascular",
+          "bodySystem": "Cardiovascular",
+          "previewSectionCount": 1,
+          "seoTitle": "Deep Vein Thrombosis (DVT): Prevention and Nursing Management | NCLEX-RN Canada lesson",
+          "seoDescription": "Deep Vein Thrombosis (DVT): Prevention and Nursing Management: NCLEX-RN Canada study focus for Cardiovascular — assessment, prioritization, interventions, and exam-style judgment. Tier A lesson target 1800–2600 words when expanded.",
+          "sections": [],
+          "audienceTiers": [
+            "rn"
+          ],
+          "countryScope": "ca",
+          "examRelevance": "high_yield",
+          "relatedLessonRefs": [
+            {
+              "slug": "abdominal-aortic-aneurysm-nclex-rn",
+              "titleHint": "Abdominal Aortic Aneurysm"
+            },
+            {
+              "slug": "acute-coronary-syndrome-nclex-rn",
+              "titleHint": "Acute Coronary Syndrome"
+            },
+            {
+              "slug": "atrial-fibrillation-nclex-rn",
+              "titleHint": "Atrial Fibrillation"
+            },
+            {
+              "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
+              "titleHint": "CABG and Postoperative CABG Complications"
+            }
+          ]
+        },
+        {
+          "slug": "defibrillation-vs-synchronized-cardioversion-nclex-rn",
+          "title": "Defibrillation vs Synchronized Cardioversion (NCLEX-RN, Canada)",
+          "topic": "Cardiovascular",
+          "topicSlug": "cardiovascular",
+          "bodySystem": "Cardiovascular",
+          "previewSectionCount": 1,
+          "seoTitle": "Defibrillation vs Synchronized Cardioversion | NCLEX-RN Canada lesson",
+          "seoDescription": "Defibrillation vs Synchronized Cardioversion: NCLEX-RN Canada study focus for Cardiovascular — assessment, prioritization, interventions, and exam-style judgment. Tier C lesson target 900–1400 words when expanded.",
+          "sections": [],
+          "audienceTiers": [
+            "rn"
+          ],
+          "countryScope": "ca",
+          "examRelevance": "specialty",
+          "relatedLessonRefs": [
+            {
+              "slug": "abdominal-aortic-aneurysm-nclex-rn",
+              "titleHint": "Abdominal Aortic Aneurysm"
+            },
+            {
+              "slug": "acute-coronary-syndrome-nclex-rn",
+              "titleHint": "Acute Coronary Syndrome"
+            },
+            {
+              "slug": "atrial-fibrillation-nclex-rn",
+              "titleHint": "Atrial Fibrillation"
+            },
+            {
+              "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
+              "titleHint": "CABG and Postoperative CABG Complications"
+            }
+          ]
+        },
+        {
+          "slug": "heart-failure-nclex-rn",
+          "title": "Heart Failure (NCLEX-RN, Canada)",
+          "topic": "Cardiovascular",
+          "topicSlug": "cardiovascular",
+          "bodySystem": "Cardiovascular",
+          "previewSectionCount": 1,
+          "seoTitle": "Heart Failure | NCLEX-RN Canada lesson",
+          "seoDescription": "Heart Failure: NCLEX-RN Canada study focus for Cardiovascular — assessment, prioritization, interventions, and exam-style judgment. Tier A lesson target 1800–2600 words when expanded.",
+          "sections": [],
+          "audienceTiers": [
+            "rn"
+          ],
+          "countryScope": "ca",
+          "examRelevance": "high_yield",
+          "relatedLessonRefs": [
+            {
+              "slug": "abdominal-aortic-aneurysm-nclex-rn",
+              "titleHint": "Abdominal Aortic Aneurysm"
+            },
+            {
+              "slug": "acute-coronary-syndrome-nclex-rn",
+              "titleHint": "Acute Coronary Syndrome"
+            },
+            {
+              "slug": "atrial-fibrillation-nclex-rn",
+              "titleHint": "Atrial Fibrillation"
+            },
+            {
+              "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
+              "titleHint": "CABG and Postoperative CABG Complications"
+            }
+          ]
+        },
+        {
+          "slug": "hypertensive-encephalopathy-nclex-rn",
+          "title": "Hypertensive Encephalopathy (NCLEX-RN, Canada)",
+          "topic": "Cardiovascular",
+          "topicSlug": "cardiovascular",
+          "bodySystem": "Cardiovascular",
+          "previewSectionCount": 1,
+          "seoTitle": "Hypertensive Encephalopathy | NCLEX-RN Canada lesson",
+          "seoDescription": "Hypertensive Encephalopathy: NCLEX-RN Canada study focus for Cardiovascular — assessment, prioritization, interventions, and exam-style judgment. Tier A lesson target 1800–2600 words when expanded.",
+          "sections": [],
+          "audienceTiers": [
+            "rn"
+          ],
+          "countryScope": "ca",
+          "examRelevance": "high_yield",
+          "relatedLessonRefs": [
+            {
+              "slug": "abdominal-aortic-aneurysm-nclex-rn",
+              "titleHint": "Abdominal Aortic Aneurysm"
+            },
+            {
+              "slug": "acute-coronary-syndrome-nclex-rn",
+              "titleHint": "Acute Coronary Syndrome"
+            },
+            {
+              "slug": "atrial-fibrillation-nclex-rn",
+              "titleHint": "Atrial Fibrillation"
+            },
+            {
+              "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
+              "titleHint": "CABG and Postoperative CABG Complications"
+            }
+          ]
+        },
+        {
+          "slug": "infective-endocarditis-nclex-rn",
+          "title": "Infective Endocarditis (NCLEX-RN, Canada)",
+          "topic": "Cardiovascular",
+          "topicSlug": "cardiovascular",
+          "bodySystem": "Cardiovascular",
+          "previewSectionCount": 1,
+          "seoTitle": "Infective Endocarditis | NCLEX-RN Canada lesson",
+          "seoDescription": "Infective Endocarditis: NCLEX-RN Canada study focus for Cardiovascular — assessment, prioritization, interventions, and exam-style judgment. Tier A lesson target 1800–2600 words when expanded.",
+          "sections": [],
+          "audienceTiers": [
+            "rn"
+          ],
+          "countryScope": "ca",
+          "examRelevance": "high_yield",
+          "relatedLessonRefs": [
+            {
+              "slug": "abdominal-aortic-aneurysm-nclex-rn",
+              "titleHint": "Abdominal Aortic Aneurysm"
+            },
+            {
+              "slug": "acute-coronary-syndrome-nclex-rn",
+              "titleHint": "Acute Coronary Syndrome"
+            },
+            {
+              "slug": "atrial-fibrillation-nclex-rn",
+              "titleHint": "Atrial Fibrillation"
+            },
+            {
+              "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
+              "titleHint": "CABG and Postoperative CABG Complications"
+            }
+          ]
+        },
+        {
+          "slug": "myocardial-infarction-nclex-rn",
+          "title": "Myocardial Infarction (NCLEX-RN, Canada)",
+          "topic": "Cardiovascular",
+          "topicSlug": "cardiovascular",
+          "bodySystem": "Cardiovascular",
+          "previewSectionCount": 1,
+          "seoTitle": "Myocardial Infarction | NCLEX-RN Canada lesson",
+          "seoDescription": "Myocardial Infarction: NCLEX-RN Canada study focus for Cardiovascular — assessment, prioritization, interventions, and exam-style judgment. Tier A lesson target 1800–2600 words when expanded.",
+          "sections": [],
+          "audienceTiers": [
+            "rn"
+          ],
+          "countryScope": "ca",
+          "examRelevance": "high_yield",
+          "relatedLessonRefs": [
+            {
+              "slug": "abdominal-aortic-aneurysm-nclex-rn",
+              "titleHint": "Abdominal Aortic Aneurysm"
+            },
+            {
+              "slug": "acute-coronary-syndrome-nclex-rn",
+              "titleHint": "Acute Coronary Syndrome"
+            },
+            {
+              "slug": "atrial-fibrillation-nclex-rn",
+              "titleHint": "Atrial Fibrillation"
+            },
+            {
+              "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
+              "titleHint": "CABG and Postoperative CABG Complications"
+            }
+          ]
+        },
+        {
+          "slug": "peripheral-artery-disease-nclex-rn",
+          "title": "Peripheral Artery Disease (NCLEX-RN, Canada)",
+          "topic": "Cardiovascular",
+          "topicSlug": "cardiovascular",
+          "bodySystem": "Cardiovascular",
+          "previewSectionCount": 1,
+          "seoTitle": "Peripheral Artery Disease | NCLEX-RN Canada lesson",
+          "seoDescription": "Peripheral Artery Disease: NCLEX-RN Canada study focus for Cardiovascular — assessment, prioritization, interventions, and exam-style judgment. Tier B lesson target 1200–1800 words when expanded.",
+          "sections": [],
+          "audienceTiers": [
+            "rn"
+          ],
+          "countryScope": "ca",
+          "examRelevance": "core",
+          "relatedLessonRefs": [
+            {
+              "slug": "abdominal-aortic-aneurysm-nclex-rn",
+              "titleHint": "Abdominal Aortic Aneurysm"
+            },
+            {
+              "slug": "acute-coronary-syndrome-nclex-rn",
+              "titleHint": "Acute Coronary Syndrome"
+            },
+            {
+              "slug": "atrial-fibrillation-nclex-rn",
+              "titleHint": "Atrial Fibrillation"
+            },
+            {
+              "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
+              "titleHint": "CABG and Postoperative CABG Complications"
+            }
+          ]
+        },
+        {
+          "slug": "phlebostatic-axis-nclex-rn",
+          "title": "Phlebostatic Axis (NCLEX-RN, Canada)",
+          "topic": "Cardiovascular",
+          "topicSlug": "cardiovascular",
+          "bodySystem": "Cardiovascular",
+          "previewSectionCount": 1,
+          "seoTitle": "Phlebostatic Axis | NCLEX-RN Canada lesson",
+          "seoDescription": "Phlebostatic Axis: NCLEX-RN Canada study focus for Cardiovascular — assessment, prioritization, interventions, and exam-style judgment. Tier C lesson target 900–1400 words when expanded.",
+          "sections": [],
+          "audienceTiers": [
+            "rn"
+          ],
+          "countryScope": "ca",
+          "examRelevance": "specialty",
+          "relatedLessonRefs": [
+            {
+              "slug": "abdominal-aortic-aneurysm-nclex-rn",
+              "titleHint": "Abdominal Aortic Aneurysm"
+            },
+            {
+              "slug": "acute-coronary-syndrome-nclex-rn",
+              "titleHint": "Acute Coronary Syndrome"
+            },
+            {
+              "slug": "atrial-fibrillation-nclex-rn",
+              "titleHint": "Atrial Fibrillation"
+            },
+            {
+              "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
+              "titleHint": "CABG and Postoperative CABG Complications"
+            }
+          ]
+        },
+        {
+          "slug": "pulmonary-embolism-nclex-rn",
+          "title": "Pulmonary Embolism (NCLEX-RN, Canada)",
+          "topic": "Cardiovascular",
+          "topicSlug": "cardiovascular",
+          "bodySystem": "Cardiovascular",
+          "previewSectionCount": 1,
+          "seoTitle": "Pulmonary Embolism | NCLEX-RN Canada lesson",
+          "seoDescription": "Pulmonary Embolism: NCLEX-RN Canada study focus for Cardiovascular — assessment, prioritization, interventions, and exam-style judgment. Tier A lesson target 1800–2600 words when expanded.",
+          "sections": [],
+          "audienceTiers": [
+            "rn"
+          ],
+          "countryScope": "ca",
+          "examRelevance": "high_yield",
+          "relatedLessonRefs": [
+            {
+              "slug": "abdominal-aortic-aneurysm-nclex-rn",
+              "titleHint": "Abdominal Aortic Aneurysm"
+            },
+            {
+              "slug": "acute-coronary-syndrome-nclex-rn",
+              "titleHint": "Acute Coronary Syndrome"
+            },
+            {
+              "slug": "atrial-fibrillation-nclex-rn",
+              "titleHint": "Atrial Fibrillation"
+            },
+            {
+              "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
+              "titleHint": "CABG and Postoperative CABG Complications"
+            }
+          ]
         }
       ]
     },
@@ -27071,6 +27547,482 @@
               "heading": "Takeaways",
               "kind": "takeaways",
               "body": "- Tie **vitals + labs + story** before comfort measures or discharge teaching.\n- Eliminate answers that **skip assessment** or **delay escalation** when data show risk.\n- Pair this page with **topic slug `nutrition`** in the hub and timed question blocks.\n\n**Related topics in your map:** `enteral-feeding-tube-safety` — use the question bank and lesson hub filters to cluster practice."
+            }
+          ]
+        },
+        {
+          "slug": "abdominal-aortic-aneurysm-nclex-rn",
+          "title": "Abdominal Aortic Aneurysm (NCLEX-RN, US)",
+          "topic": "Cardiovascular",
+          "topicSlug": "cardiovascular",
+          "bodySystem": "Cardiovascular",
+          "previewSectionCount": 1,
+          "seoTitle": "Abdominal Aortic Aneurysm | NCLEX-RN US lesson",
+          "seoDescription": "Abdominal Aortic Aneurysm: NCLEX-RN US study focus for Cardiovascular — assessment, prioritization, interventions, and exam-style judgment. Tier A lesson target 1800–2600 words when expanded.",
+          "sections": [],
+          "audienceTiers": [
+            "rn"
+          ],
+          "countryScope": "us",
+          "examRelevance": "high_yield",
+          "relatedLessonRefs": [
+            {
+              "slug": "acute-coronary-syndrome-nclex-rn",
+              "titleHint": "Acute Coronary Syndrome"
+            },
+            {
+              "slug": "atrial-fibrillation-nclex-rn",
+              "titleHint": "Atrial Fibrillation"
+            },
+            {
+              "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
+              "titleHint": "CABG and Postoperative CABG Complications"
+            },
+            {
+              "slug": "cardiac-tamponade-nclex-rn",
+              "titleHint": "Cardiac Tamponade"
+            }
+          ]
+        },
+        {
+          "slug": "acute-coronary-syndrome-nclex-rn",
+          "title": "Acute Coronary Syndrome (NCLEX-RN, US)",
+          "topic": "Cardiovascular",
+          "topicSlug": "cardiovascular",
+          "bodySystem": "Cardiovascular",
+          "previewSectionCount": 1,
+          "seoTitle": "Acute Coronary Syndrome | NCLEX-RN US lesson",
+          "seoDescription": "Acute Coronary Syndrome: NCLEX-RN US study focus for Cardiovascular — assessment, prioritization, interventions, and exam-style judgment. Tier A lesson target 1800–2600 words when expanded.",
+          "sections": [],
+          "audienceTiers": [
+            "rn"
+          ],
+          "countryScope": "us",
+          "examRelevance": "high_yield",
+          "relatedLessonRefs": [
+            {
+              "slug": "abdominal-aortic-aneurysm-nclex-rn",
+              "titleHint": "Abdominal Aortic Aneurysm"
+            },
+            {
+              "slug": "atrial-fibrillation-nclex-rn",
+              "titleHint": "Atrial Fibrillation"
+            },
+            {
+              "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
+              "titleHint": "CABG and Postoperative CABG Complications"
+            },
+            {
+              "slug": "cardiac-tamponade-nclex-rn",
+              "titleHint": "Cardiac Tamponade"
+            }
+          ]
+        },
+        {
+          "slug": "atrial-fibrillation-nclex-rn",
+          "title": "Atrial Fibrillation (NCLEX-RN, US)",
+          "topic": "Cardiovascular",
+          "topicSlug": "cardiovascular",
+          "bodySystem": "Cardiovascular",
+          "previewSectionCount": 1,
+          "seoTitle": "Atrial Fibrillation | NCLEX-RN US lesson",
+          "seoDescription": "Atrial Fibrillation: NCLEX-RN US study focus for Cardiovascular — assessment, prioritization, interventions, and exam-style judgment. Tier A lesson target 1800–2600 words when expanded.",
+          "sections": [],
+          "audienceTiers": [
+            "rn"
+          ],
+          "countryScope": "us",
+          "examRelevance": "high_yield",
+          "relatedLessonRefs": [
+            {
+              "slug": "abdominal-aortic-aneurysm-nclex-rn",
+              "titleHint": "Abdominal Aortic Aneurysm"
+            },
+            {
+              "slug": "acute-coronary-syndrome-nclex-rn",
+              "titleHint": "Acute Coronary Syndrome"
+            },
+            {
+              "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
+              "titleHint": "CABG and Postoperative CABG Complications"
+            },
+            {
+              "slug": "cardiac-tamponade-nclex-rn",
+              "titleHint": "Cardiac Tamponade"
+            }
+          ]
+        },
+        {
+          "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
+          "title": "CABG and Postoperative CABG Complications (NCLEX-RN, US)",
+          "topic": "Cardiovascular",
+          "topicSlug": "cardiovascular",
+          "bodySystem": "Cardiovascular",
+          "previewSectionCount": 1,
+          "seoTitle": "CABG and Postoperative CABG Complications | NCLEX-RN US lesson",
+          "seoDescription": "CABG and Postoperative CABG Complications: NCLEX-RN US study focus for Cardiovascular — assessment, prioritization, interventions, and exam-style judgment. Tier A lesson target 1800–2600 words when expanded.",
+          "sections": [],
+          "audienceTiers": [
+            "rn"
+          ],
+          "countryScope": "us",
+          "examRelevance": "high_yield",
+          "relatedLessonRefs": [
+            {
+              "slug": "abdominal-aortic-aneurysm-nclex-rn",
+              "titleHint": "Abdominal Aortic Aneurysm"
+            },
+            {
+              "slug": "acute-coronary-syndrome-nclex-rn",
+              "titleHint": "Acute Coronary Syndrome"
+            },
+            {
+              "slug": "atrial-fibrillation-nclex-rn",
+              "titleHint": "Atrial Fibrillation"
+            },
+            {
+              "slug": "cardiac-tamponade-nclex-rn",
+              "titleHint": "Cardiac Tamponade"
+            }
+          ]
+        },
+        {
+          "slug": "cardiac-tamponade-nclex-rn",
+          "title": "Cardiac Tamponade (NCLEX-RN, US)",
+          "topic": "Cardiovascular",
+          "topicSlug": "cardiovascular",
+          "bodySystem": "Cardiovascular",
+          "previewSectionCount": 1,
+          "seoTitle": "Cardiac Tamponade | NCLEX-RN US lesson",
+          "seoDescription": "Cardiac Tamponade: NCLEX-RN US study focus for Cardiovascular — assessment, prioritization, interventions, and exam-style judgment. Tier A lesson target 1800–2600 words when expanded.",
+          "sections": [],
+          "audienceTiers": [
+            "rn"
+          ],
+          "countryScope": "us",
+          "examRelevance": "high_yield",
+          "relatedLessonRefs": [
+            {
+              "slug": "abdominal-aortic-aneurysm-nclex-rn",
+              "titleHint": "Abdominal Aortic Aneurysm"
+            },
+            {
+              "slug": "acute-coronary-syndrome-nclex-rn",
+              "titleHint": "Acute Coronary Syndrome"
+            },
+            {
+              "slug": "atrial-fibrillation-nclex-rn",
+              "titleHint": "Atrial Fibrillation"
+            },
+            {
+              "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
+              "titleHint": "CABG and Postoperative CABG Complications"
+            }
+          ]
+        },
+        {
+          "slug": "deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn",
+          "title": "Deep Vein Thrombosis (DVT): Prevention and Nursing Management (NCLEX-RN, US)",
+          "topic": "Cardiovascular",
+          "topicSlug": "cardiovascular",
+          "bodySystem": "Cardiovascular",
+          "previewSectionCount": 1,
+          "seoTitle": "Deep Vein Thrombosis (DVT): Prevention and Nursing Management | NCLEX-RN US lesson",
+          "seoDescription": "Deep Vein Thrombosis (DVT): Prevention and Nursing Management: NCLEX-RN US study focus for Cardiovascular — assessment, prioritization, interventions, and exam-style judgment. Tier A lesson target 1800–2600 words when expanded.",
+          "sections": [],
+          "audienceTiers": [
+            "rn"
+          ],
+          "countryScope": "us",
+          "examRelevance": "high_yield",
+          "relatedLessonRefs": [
+            {
+              "slug": "abdominal-aortic-aneurysm-nclex-rn",
+              "titleHint": "Abdominal Aortic Aneurysm"
+            },
+            {
+              "slug": "acute-coronary-syndrome-nclex-rn",
+              "titleHint": "Acute Coronary Syndrome"
+            },
+            {
+              "slug": "atrial-fibrillation-nclex-rn",
+              "titleHint": "Atrial Fibrillation"
+            },
+            {
+              "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
+              "titleHint": "CABG and Postoperative CABG Complications"
+            }
+          ]
+        },
+        {
+          "slug": "defibrillation-vs-synchronized-cardioversion-nclex-rn",
+          "title": "Defibrillation vs Synchronized Cardioversion (NCLEX-RN, US)",
+          "topic": "Cardiovascular",
+          "topicSlug": "cardiovascular",
+          "bodySystem": "Cardiovascular",
+          "previewSectionCount": 1,
+          "seoTitle": "Defibrillation vs Synchronized Cardioversion | NCLEX-RN US lesson",
+          "seoDescription": "Defibrillation vs Synchronized Cardioversion: NCLEX-RN US study focus for Cardiovascular — assessment, prioritization, interventions, and exam-style judgment. Tier C lesson target 900–1400 words when expanded.",
+          "sections": [],
+          "audienceTiers": [
+            "rn"
+          ],
+          "countryScope": "us",
+          "examRelevance": "specialty",
+          "relatedLessonRefs": [
+            {
+              "slug": "abdominal-aortic-aneurysm-nclex-rn",
+              "titleHint": "Abdominal Aortic Aneurysm"
+            },
+            {
+              "slug": "acute-coronary-syndrome-nclex-rn",
+              "titleHint": "Acute Coronary Syndrome"
+            },
+            {
+              "slug": "atrial-fibrillation-nclex-rn",
+              "titleHint": "Atrial Fibrillation"
+            },
+            {
+              "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
+              "titleHint": "CABG and Postoperative CABG Complications"
+            }
+          ]
+        },
+        {
+          "slug": "heart-failure-nclex-rn",
+          "title": "Heart Failure (NCLEX-RN, US)",
+          "topic": "Cardiovascular",
+          "topicSlug": "cardiovascular",
+          "bodySystem": "Cardiovascular",
+          "previewSectionCount": 1,
+          "seoTitle": "Heart Failure | NCLEX-RN US lesson",
+          "seoDescription": "Heart Failure: NCLEX-RN US study focus for Cardiovascular — assessment, prioritization, interventions, and exam-style judgment. Tier A lesson target 1800–2600 words when expanded.",
+          "sections": [],
+          "audienceTiers": [
+            "rn"
+          ],
+          "countryScope": "us",
+          "examRelevance": "high_yield",
+          "relatedLessonRefs": [
+            {
+              "slug": "abdominal-aortic-aneurysm-nclex-rn",
+              "titleHint": "Abdominal Aortic Aneurysm"
+            },
+            {
+              "slug": "acute-coronary-syndrome-nclex-rn",
+              "titleHint": "Acute Coronary Syndrome"
+            },
+            {
+              "slug": "atrial-fibrillation-nclex-rn",
+              "titleHint": "Atrial Fibrillation"
+            },
+            {
+              "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
+              "titleHint": "CABG and Postoperative CABG Complications"
+            }
+          ]
+        },
+        {
+          "slug": "hypertensive-encephalopathy-nclex-rn",
+          "title": "Hypertensive Encephalopathy (NCLEX-RN, US)",
+          "topic": "Cardiovascular",
+          "topicSlug": "cardiovascular",
+          "bodySystem": "Cardiovascular",
+          "previewSectionCount": 1,
+          "seoTitle": "Hypertensive Encephalopathy | NCLEX-RN US lesson",
+          "seoDescription": "Hypertensive Encephalopathy: NCLEX-RN US study focus for Cardiovascular — assessment, prioritization, interventions, and exam-style judgment. Tier A lesson target 1800–2600 words when expanded.",
+          "sections": [],
+          "audienceTiers": [
+            "rn"
+          ],
+          "countryScope": "us",
+          "examRelevance": "high_yield",
+          "relatedLessonRefs": [
+            {
+              "slug": "abdominal-aortic-aneurysm-nclex-rn",
+              "titleHint": "Abdominal Aortic Aneurysm"
+            },
+            {
+              "slug": "acute-coronary-syndrome-nclex-rn",
+              "titleHint": "Acute Coronary Syndrome"
+            },
+            {
+              "slug": "atrial-fibrillation-nclex-rn",
+              "titleHint": "Atrial Fibrillation"
+            },
+            {
+              "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
+              "titleHint": "CABG and Postoperative CABG Complications"
+            }
+          ]
+        },
+        {
+          "slug": "infective-endocarditis-nclex-rn",
+          "title": "Infective Endocarditis (NCLEX-RN, US)",
+          "topic": "Cardiovascular",
+          "topicSlug": "cardiovascular",
+          "bodySystem": "Cardiovascular",
+          "previewSectionCount": 1,
+          "seoTitle": "Infective Endocarditis | NCLEX-RN US lesson",
+          "seoDescription": "Infective Endocarditis: NCLEX-RN US study focus for Cardiovascular — assessment, prioritization, interventions, and exam-style judgment. Tier A lesson target 1800–2600 words when expanded.",
+          "sections": [],
+          "audienceTiers": [
+            "rn"
+          ],
+          "countryScope": "us",
+          "examRelevance": "high_yield",
+          "relatedLessonRefs": [
+            {
+              "slug": "abdominal-aortic-aneurysm-nclex-rn",
+              "titleHint": "Abdominal Aortic Aneurysm"
+            },
+            {
+              "slug": "acute-coronary-syndrome-nclex-rn",
+              "titleHint": "Acute Coronary Syndrome"
+            },
+            {
+              "slug": "atrial-fibrillation-nclex-rn",
+              "titleHint": "Atrial Fibrillation"
+            },
+            {
+              "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
+              "titleHint": "CABG and Postoperative CABG Complications"
+            }
+          ]
+        },
+        {
+          "slug": "myocardial-infarction-nclex-rn",
+          "title": "Myocardial Infarction (NCLEX-RN, US)",
+          "topic": "Cardiovascular",
+          "topicSlug": "cardiovascular",
+          "bodySystem": "Cardiovascular",
+          "previewSectionCount": 1,
+          "seoTitle": "Myocardial Infarction | NCLEX-RN US lesson",
+          "seoDescription": "Myocardial Infarction: NCLEX-RN US study focus for Cardiovascular — assessment, prioritization, interventions, and exam-style judgment. Tier A lesson target 1800–2600 words when expanded.",
+          "sections": [],
+          "audienceTiers": [
+            "rn"
+          ],
+          "countryScope": "us",
+          "examRelevance": "high_yield",
+          "relatedLessonRefs": [
+            {
+              "slug": "abdominal-aortic-aneurysm-nclex-rn",
+              "titleHint": "Abdominal Aortic Aneurysm"
+            },
+            {
+              "slug": "acute-coronary-syndrome-nclex-rn",
+              "titleHint": "Acute Coronary Syndrome"
+            },
+            {
+              "slug": "atrial-fibrillation-nclex-rn",
+              "titleHint": "Atrial Fibrillation"
+            },
+            {
+              "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
+              "titleHint": "CABG and Postoperative CABG Complications"
+            }
+          ]
+        },
+        {
+          "slug": "peripheral-artery-disease-nclex-rn",
+          "title": "Peripheral Artery Disease (NCLEX-RN, US)",
+          "topic": "Cardiovascular",
+          "topicSlug": "cardiovascular",
+          "bodySystem": "Cardiovascular",
+          "previewSectionCount": 1,
+          "seoTitle": "Peripheral Artery Disease | NCLEX-RN US lesson",
+          "seoDescription": "Peripheral Artery Disease: NCLEX-RN US study focus for Cardiovascular — assessment, prioritization, interventions, and exam-style judgment. Tier B lesson target 1200–1800 words when expanded.",
+          "sections": [],
+          "audienceTiers": [
+            "rn"
+          ],
+          "countryScope": "us",
+          "examRelevance": "core",
+          "relatedLessonRefs": [
+            {
+              "slug": "abdominal-aortic-aneurysm-nclex-rn",
+              "titleHint": "Abdominal Aortic Aneurysm"
+            },
+            {
+              "slug": "acute-coronary-syndrome-nclex-rn",
+              "titleHint": "Acute Coronary Syndrome"
+            },
+            {
+              "slug": "atrial-fibrillation-nclex-rn",
+              "titleHint": "Atrial Fibrillation"
+            },
+            {
+              "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
+              "titleHint": "CABG and Postoperative CABG Complications"
+            }
+          ]
+        },
+        {
+          "slug": "phlebostatic-axis-nclex-rn",
+          "title": "Phlebostatic Axis (NCLEX-RN, US)",
+          "topic": "Cardiovascular",
+          "topicSlug": "cardiovascular",
+          "bodySystem": "Cardiovascular",
+          "previewSectionCount": 1,
+          "seoTitle": "Phlebostatic Axis | NCLEX-RN US lesson",
+          "seoDescription": "Phlebostatic Axis: NCLEX-RN US study focus for Cardiovascular — assessment, prioritization, interventions, and exam-style judgment. Tier C lesson target 900–1400 words when expanded.",
+          "sections": [],
+          "audienceTiers": [
+            "rn"
+          ],
+          "countryScope": "us",
+          "examRelevance": "specialty",
+          "relatedLessonRefs": [
+            {
+              "slug": "abdominal-aortic-aneurysm-nclex-rn",
+              "titleHint": "Abdominal Aortic Aneurysm"
+            },
+            {
+              "slug": "acute-coronary-syndrome-nclex-rn",
+              "titleHint": "Acute Coronary Syndrome"
+            },
+            {
+              "slug": "atrial-fibrillation-nclex-rn",
+              "titleHint": "Atrial Fibrillation"
+            },
+            {
+              "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
+              "titleHint": "CABG and Postoperative CABG Complications"
+            }
+          ]
+        },
+        {
+          "slug": "pulmonary-embolism-nclex-rn",
+          "title": "Pulmonary Embolism (NCLEX-RN, US)",
+          "topic": "Cardiovascular",
+          "topicSlug": "cardiovascular",
+          "bodySystem": "Cardiovascular",
+          "previewSectionCount": 1,
+          "seoTitle": "Pulmonary Embolism | NCLEX-RN US lesson",
+          "seoDescription": "Pulmonary Embolism: NCLEX-RN US study focus for Cardiovascular — assessment, prioritization, interventions, and exam-style judgment. Tier A lesson target 1800–2600 words when expanded.",
+          "sections": [],
+          "audienceTiers": [
+            "rn"
+          ],
+          "countryScope": "us",
+          "examRelevance": "high_yield",
+          "relatedLessonRefs": [
+            {
+              "slug": "abdominal-aortic-aneurysm-nclex-rn",
+              "titleHint": "Abdominal Aortic Aneurysm"
+            },
+            {
+              "slug": "acute-coronary-syndrome-nclex-rn",
+              "titleHint": "Acute Coronary Syndrome"
+            },
+            {
+              "slug": "atrial-fibrillation-nclex-rn",
+              "titleHint": "Atrial Fibrillation"
+            },
+            {
+              "slug": "cabg-and-postoperative-cabg-complications-nclex-rn",
+              "titleHint": "CABG and Postoperative CABG Complications"
             }
           ]
         }
