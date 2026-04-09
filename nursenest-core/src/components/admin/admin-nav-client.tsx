@@ -29,6 +29,7 @@ import {
   Megaphone,
   ListTodo,
   Cpu,
+  Server,
 } from "lucide-react";
 
 type Item = { href: string; label: string; icon: React.ElementType };
@@ -102,6 +103,7 @@ const GROUPS: NavGroup[] = [
     title: "Platform",
     items: [
       { href: "/admin/operations", label: "System health", icon: Wrench },
+      { href: "/admin/system-status", label: "System status", icon: Server },
       { href: "/admin/automation-logs", label: "Automation logs", icon: Activity },
       { href: "/admin/diagnostics", label: "Diagnostics", icon: BarChart3 },
       { href: "/admin/diagnostics/cat-blueprint-sessions", label: "CAT blueprint sessions", icon: BarChart3 },

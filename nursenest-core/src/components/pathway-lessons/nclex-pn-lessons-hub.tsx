@@ -141,7 +141,7 @@ export function NclexPnLessonsHub({
             ) : null}
           </div>
           <h3 className="nn-marketing-h2 mt-2">{featured.title}</h3>
-          <div className="mt-4 grid gap-3 border-t border-border/80 pt-4 sm:grid-cols-2">
+          <div className="mt-4 grid gap-3 border-t border-[var(--border-subtle)] pt-4 sm:grid-cols-2">
             <div>
               <p className="nn-marketing-caption font-semibold uppercase">Clinical scenario type</p>
               <p className="nn-marketing-body-sm mt-1 text-[var(--theme-body-text)]">{featuredPreview.scenarioType}</p>
@@ -196,6 +196,7 @@ export function NclexPnLessonsHub({
           section={section}
           featuredSlug={featured?.slug}
           variant="pn"
+          pnExamShortLabel={labels.examShort}
           progressMap={progressMap}
         />
       ))}

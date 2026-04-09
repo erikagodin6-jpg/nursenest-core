@@ -76,29 +76,31 @@ export function PathwayNclexScalableLessonSection({
         >
           {l.title}
         </Link>
-        <div className="mt-4 grid gap-3 border-t border-border pt-4 text-sm sm:grid-cols-2">
+        <div className="mt-4 grid gap-3 border-t border-[var(--border-subtle)] pt-4 text-sm sm:grid-cols-2">
           <div>
-            <p className="text-xs font-semibold uppercase text-muted">Scenario focus</p>
+            <p className="text-xs font-semibold uppercase text-[var(--theme-muted-text)]">Scenario focus</p>
             <p className="mt-0.5">{p.scenarioType}</p>
           </div>
           <div>
-            <p className="text-xs font-semibold uppercase text-muted">
+            <p className="text-xs font-semibold uppercase text-[var(--theme-muted-text)]">
               {variant === "rn" ? "Likely NCLEX item types" : "Likely item types"}
             </p>
             <p className="mt-0.5">{p.examQuestionTypes}</p>
           </div>
           <div className="sm:col-span-2">
-            <p className="text-xs font-semibold uppercase text-muted">
-              {variant === "rn" ? "What this lesson prepares you for" : "Why it matters on NCLEX-PN"}
+            <p className="text-xs font-semibold uppercase text-[var(--theme-muted-text)]">
+              {variant === "rn"
+                ? "What this lesson prepares you for"
+                : `Why it matters on ${pnExamShortLabel}`}
             </p>
             <p className="mt-0.5 text-[var(--theme-muted-text)]">{p.whyOnExam}</p>
           </div>
-          <div className="sm:col-span-2 rounded-lg bg-[var(--theme-muted-surface)] p-3">
-            <p className="text-xs font-semibold text-muted">{variant === "rn" ? "Clinical scenario preview" : "Clinical preview"}</p>
+          <div className="sm:col-span-2 rounded-xl border border-[var(--border-subtle)] bg-[var(--theme-muted-surface)] p-3">
+            <p className="text-xs font-semibold text-[var(--theme-muted-text)]">{variant === "rn" ? "Clinical scenario preview" : "Clinical preview"}</p>
             <p className="mt-1">{p.miniScenario}</p>
           </div>
-          <div className="sm:col-span-2 rounded-lg bg-[var(--theme-muted-surface)] p-3">
-            <p className="text-xs font-semibold text-muted">{variant === "rn" ? "Reasoning snippet" : "Rationale snippet"}</p>
+          <div className="sm:col-span-2 rounded-xl border border-[var(--border-subtle)] bg-[var(--theme-muted-surface)] p-3">
+            <p className="text-xs font-semibold text-[var(--theme-muted-text)]">{variant === "rn" ? "Reasoning snippet" : "Rationale snippet"}</p>
             <p className="mt-1 italic text-[var(--theme-muted-text)]">&ldquo;{p.rationaleSnippet}&rdquo;</p>
           </div>
         </div>
@@ -167,11 +169,11 @@ export function PathwayNclexScalableLessonSection({
               );
             })}
           </ul>
-          <details className="mt-5 rounded-xl border border-border bg-[var(--theme-muted-surface)]/40">
+          <details className="mt-5 rounded-2xl border border-[var(--border-subtle)] bg-[color-mix(in_srgb,var(--theme-muted-surface)_55%,var(--bg-card))] shadow-[var(--shadow-card)]">
             <summary className="cursor-pointer list-none px-4 py-3 text-sm font-semibold text-primary [&::-webkit-details-marker]:hidden">
               <span className="underline-offset-2">Exam previews & clinical context — expand (optional)</span>
             </summary>
-            <ul className="space-y-6 border-t border-border bg-card/30 px-3 py-4 sm:px-4">{display.map((l) => richCard(l))}</ul>
+            <ul className="space-y-6 border-t border-[var(--border-subtle)] bg-[var(--bg-card)]/80 px-3 py-4 sm:px-4">{display.map((l) => richCard(l))}</ul>
           </details>
         </>
       ) : (

@@ -183,7 +183,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
   );
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-12">
+    <div className="mx-auto max-w-4xl rounded-[1.75rem] border border-[var(--border-subtle)] bg-gradient-to-b from-[var(--nn-presentation-wash)] via-[var(--theme-page-bg)] to-[var(--bg-section)] px-4 py-10 shadow-[var(--shadow-card)] sm:px-8 sm:py-12">
       <BreadcrumbJsonLd items={schemaItems} />
       <div className="mb-6">
         <BreadcrumbTrail items={crumbs} />
