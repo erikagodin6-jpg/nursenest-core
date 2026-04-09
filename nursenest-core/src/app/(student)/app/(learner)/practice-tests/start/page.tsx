@@ -65,17 +65,14 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
   const learnerPathRow = userId
     ? await prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } })
     : null;
-  const defaultPathwayId = defaultPracticeTestPathwayId(
-    catEligiblePathways.length > 0 ? catEligiblePathways : compatiblePathways,
-    learnerPathRow?.learnerPath,
-    entitlement.country,
-  );
+  const defaultPathwayId =
+    catEligiblePathways.length > 0
+      ? defaultPracticeTestPathwayId(catEligiblePathways, learnerPathRow?.learnerPath, entitlement.country)
+      : null;
   const initialPathwayId =
     requestedPathwayId && catEligiblePathways.some((p) => p.id === requestedPathwayId)
       ? requestedPathwayId
-      : catEligiblePathways.some((p) => p.id === defaultPathwayId)
-        ? defaultPathwayId
-        : catEligiblePathways[0]?.id ?? null;
+      : defaultPathwayId ?? catEligiblePathways[0]?.id ?? null;
 
   const pathwayOptions = catEligiblePathways.map((p) => ({
     id: p.id,

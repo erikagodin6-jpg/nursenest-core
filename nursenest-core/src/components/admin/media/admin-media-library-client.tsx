@@ -384,10 +384,22 @@ export function AdminMediaLibraryClient() {
                                 {refs.map((r) => (
                                   <li key={`${r.type}-${r.id}`} className="truncate">
                                     <span className="text-muted-foreground">{r.type}:</span>{" "}
-                                    <Link className="text-primary underline" href={r.href}>
-                                      {r.label.slice(0, 48)}
-                                      {r.label.length > 48 ? "…" : ""}
-                                    </Link>
+                                    {r.href.startsWith("/api/") ? (
+                                      <a
+                                        href={r.href}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="text-primary underline"
+                                      >
+                                        {r.label.slice(0, 48)}
+                                        {r.label.length > 48 ? "…" : ""}
+                                      </a>
+                                    ) : (
+                                      <Link className="text-primary underline" href={r.href}>
+                                        {r.label.slice(0, 48)}
+                                        {r.label.length > 48 ? "…" : ""}
+                                      </Link>
+                                    )}
                                   </li>
                                 ))}
                               </ul>

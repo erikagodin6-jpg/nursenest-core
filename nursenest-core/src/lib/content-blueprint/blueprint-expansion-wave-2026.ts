@@ -165,7 +165,7 @@ function padSlotsToMinimum(base: BlueprintExpansionSlot[], min: number): Bluepri
           topic: tp.topic,
           topicSlug: tp.topicSlug,
           bodySystem: tp.body,
-          blueprintRole: `Padded spread: ${dom} × ${cat} × ${tp.topicSlug}`,
+          blueprintRole: `Extended practice: ${dom} × ${cat} × ${tp.topicSlug}`,
         }),
       );
     }

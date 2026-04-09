@@ -64,8 +64,8 @@ export async function POST(req: Request) {
       altText: altText || null,
       tags,
       uploadedById: gate.admin.userId,
-      usageRefCount: 0,
-      usageRefs: [],
+      usageRefCount: null,
+      usageRefs: null,
     },
   });
 

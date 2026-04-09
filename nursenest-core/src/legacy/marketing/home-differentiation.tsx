@@ -43,7 +43,7 @@ function WhyNurseNestGrid({ headline, subtitle, context = "general" }: WhyNurseN
   const defaultSubtitle = t("components.homeDifferentiation.defaultSubtitle");
 
   return (
-    <section className="border-t border-gray-100 py-16 md:py-24" data-testid="section-why-nursenest-grid">
+    <section className="border-t border-border py-16 md:py-24" data-testid="section-why-nursenest-grid">
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto mb-12 max-w-3xl md:mx-0 md:max-w-2xl">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/8 px-4 py-1.5 shadow-[var(--shadow-card)]">
@@ -63,14 +63,14 @@ function WhyNurseNestGrid({ headline, subtitle, context = "general" }: WhyNurseN
           {GRID_ITEMS.map((item) => (
             <div
               key={item.id}
-              className="rounded-2xl border border-gray-100/80 bg-white p-7 shadow-[var(--shadow-card)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-card-hover)]"
+              className="rounded-2xl border border-border bg-card p-7 shadow-[var(--shadow-card)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[var(--shadow-card-hover)]"
               data-testid={`card-why-${item.id}`}
             >
               <div className="nn-theme-gradient-br mb-4 flex h-11 w-11 items-center justify-center rounded-xl shadow-sm">
                 <item.icon className="h-5 w-5 text-white" />
               </div>
               <h3 className="mb-2 nn-marketing-h3">{t(`components.homeDifferentiation.grid.${item.id}.title`)}</h3>
-              <p className="nn-marketing-body-sm leading-relaxed text-gray-500">{t(`components.homeDifferentiation.grid.${item.id}.description`)}</p>
+              <p className="nn-marketing-body-sm leading-relaxed text-muted-foreground">{t(`components.homeDifferentiation.grid.${item.id}.description`)}</p>
             </div>
           ))}
         </div>
@@ -102,7 +102,7 @@ function ComparisonTable({ headline, subtitle }: ComparisonTableProps) {
 
   return (
     <section
-      className="border-t border-gray-100"
+      className="border-t border-border"
       style={{ paddingTop: "var(--space-section)", paddingBottom: "var(--space-section)" }}
       data-testid="section-comparison-table"
     >
@@ -117,34 +117,34 @@ function ComparisonTable({ headline, subtitle }: ComparisonTableProps) {
           <h2 className="mb-3 nn-marketing-h2" data-testid="text-comparison-table-heading">
             {headline || defaultHeadline}
           </h2>
-          <p className="max-w-2xl nn-marketing-body text-gray-500" data-testid="text-comparison-table-subtitle">
+          <p className="max-w-2xl nn-marketing-body text-muted-foreground" data-testid="text-comparison-table-subtitle">
             {subtitle || defaultSubtitle}
           </p>
         </div>
 
-        <div className="hidden overflow-hidden rounded-2xl border border-gray-200/60 bg-white shadow-[var(--shadow-card)] md:block">
+        <div className="hidden overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-card)] md:block">
           <table className="w-full text-sm" data-testid="table-platform-comparison">
             <thead>
-              <tr className="border-b border-gray-200 bg-gray-50/50">
-                <th className="min-w-[220px] px-6 py-4 text-left font-semibold text-gray-700">
+              <tr className="border-b border-border bg-muted/50">
+                <th className="min-w-[220px] px-6 py-4 text-left font-semibold text-foreground">
                   {t("components.competitiveDifferentiation.feature")}
                 </th>
                 <th className="bg-primary/5 px-6 py-4 text-left nn-marketing-body-sm font-semibold text-primary">NurseNest</th>
-                <th className="px-6 py-4 text-left font-semibold text-gray-500">
+                <th className="px-6 py-4 text-left font-semibold text-muted-foreground">
                   {t("components.competitiveDifferentiation.typicalPlatforms")}
                 </th>
               </tr>
             </thead>
             <tbody>
               {COMPARISON_ROW_IDS.map((rowId, idx) => (
-                <tr key={rowId} className="border-b border-gray-100 last:border-0" data-testid={`row-comparison-${idx}`}>
-                  <td className="px-6 py-4 font-semibold text-gray-800">
+                <tr key={rowId} className="border-b border-border last:border-0" data-testid={`row-comparison-${idx}`}>
+                  <td className="px-6 py-4 font-semibold text-foreground">
                     {t(`components.homeDifferentiation.comparison.${rowId}.feature`)}
                   </td>
                   <td className="bg-primary/[0.02] px-6 py-4">
                     <div className="flex items-start gap-2">
                       <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                      <span className="text-gray-700">{t(`components.homeDifferentiation.comparison.${rowId}.nursenest`)}</span>
+                      <span className="text-foreground">{t(`components.homeDifferentiation.comparison.${rowId}.nursenest`)}</span>
                     </div>
                   </td>
                   <td className="px-6 py-4">

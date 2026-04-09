@@ -92,6 +92,12 @@ export function PremiumLearnerHub({
   recentNotes = [],
   /** Hide flashcard weak-topic sentence when the adaptive focus card already lists weak areas. */
   suppressFlashcardWeakLine = false,
+  /** When the dashboard shows the readiness breakdown above the fold, omit the duplicate block here. */
+  omitReadinessBreakdown = false,
+  /** When recent mocks are shown in the insight panels, omit the duplicate list here. */
+  omitRecentMocks = false,
+  /** Shown when readiness breakdown is omitted (e.g. surfaced above the fold). */
+  readinessDeferHint,
 }: {
   snapshot: PremiumDashboardSnapshot;
   /** From practice stats — surfaces weak-area flashcard link context. */
@@ -100,6 +106,9 @@ export function PremiumLearnerHub({
   /** Metadata + links only (no note bodies). */
   recentNotes?: RecentLearnerNoteSummary[];
   suppressFlashcardWeakLine?: boolean;
+  omitReadinessBreakdown?: boolean;
+  omitRecentMocks?: boolean;
+  readinessDeferHint?: string;
 }) {
   const {
     readiness,
@@ -345,28 +354,35 @@ export function PremiumLearnerHub({
             </div>
           )}
 
-          <div className="rounded-xl border border-border/60 bg-muted/10 p-4">
-            <p className="text-sm font-semibold text-foreground">Readiness breakdown</p>
-            <p className="mt-1 text-xs text-muted">{readiness.summary}</p>
-            <div className="mt-4 space-y-4">
-              {readiness.holdingBack.length > 0 ? (
-                <p className="text-sm text-foreground">
-                  <span className="font-medium">Limiting factors: </span>
-                  {readiness.holdingBack.join(" · ")}
-                </p>
-              ) : null}
-              {readiness.factors.length > 0 ? (
-                readiness.factors.map((f) => (
-                  <FactorBar key={f.id} label={f.label} points={f.points} maxPoints={f.maxPoints} detail={f.detail} />
-                ))
-              ) : (
-                <p className="text-sm text-muted">
-                  We will chart practice accuracy, mocks, topic load, and lesson completion here once you have enough scored
-                  activity. See the checklist in your readiness band above.
-                </p>
-              )}
+          {!omitReadinessBreakdown ? (
+            <div className="rounded-xl border border-border/60 bg-muted/10 p-4">
+              <p className="text-sm font-semibold text-foreground">Readiness breakdown</p>
+              <p className="mt-1 text-xs text-muted">{readiness.summary}</p>
+              <div className="mt-4 space-y-4">
+                {readiness.holdingBack.length > 0 ? (
+                  <p className="text-sm text-foreground">
+                    <span className="font-medium">Limiting factors: </span>
+                    {readiness.holdingBack.join(" · ")}
+                  </p>
+                ) : null}
+                {readiness.factors.length > 0 ? (
+                  readiness.factors.map((f) => (
+                    <FactorBar key={f.id} label={f.label} points={f.points} maxPoints={f.maxPoints} detail={f.detail} />
+                  ))
+                ) : (
+                  <p className="text-sm text-muted">
+                    We will chart practice accuracy, mocks, topic load, and lesson completion here once you have enough scored
+                    activity. See the checklist in your readiness band above.
+                  </p>
+                )}
+              </div>
             </div>
-          </div>
+          ) : (
+            <p className="rounded-lg border border-border/60 bg-muted/10 px-4 py-3 text-sm text-muted">
+              {readinessDeferHint ??
+                "Readiness factors and score are summarized in the card above. This section still tracks lesson completion and recent session accuracy."}
+            </p>
+          )}
         </div>
       </section>
 
@@ -404,35 +420,37 @@ export function PremiumLearnerHub({
         ) : null}
       </section>
 
-      <section className="nn-card p-6">
-        <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Recent mocks</h2>
-        <p className="mt-1 text-xs text-muted">Last five attempts. Watch the trend, not one score.</p>
-        {recentMocks.length > 0 ? (
-          <ul className="mt-4 divide-y divide-border/60">
-            {recentMocks.map((m) => (
-              <li key={m.id} className="flex flex-wrap items-center justify-between gap-2 py-3 text-sm first:pt-0">
-                <span className="font-medium text-foreground">{m.examTitle}</span>
-                <span className="tabular-nums text-muted">
-                  {m.pct}% ({m.score}/{m.total})
-                </span>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="mt-4 rounded-lg border border-dashed border-border bg-muted/15 px-4 py-3 text-sm text-muted">
-            No mocks logged yet. When you complete one from the exams page, scores and trends will appear here for a
-            high-level view.
-          </p>
-        )}
-        <div className="mt-4 flex flex-wrap gap-4">
-          <Link href="/app/exams" className="inline-flex text-sm font-semibold text-primary hover:underline">
-            Open mock exams
-          </Link>
-          <Link href="/app/lessons" className="inline-flex text-sm font-semibold text-primary hover:underline">
-            Exam-specific lessons
-          </Link>
-        </div>
-      </section>
+      {!omitRecentMocks ? (
+        <section className="nn-card p-6">
+          <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Recent mocks</h2>
+          <p className="mt-1 text-xs text-muted">Last five attempts. Watch the trend, not one score.</p>
+          {recentMocks.length > 0 ? (
+            <ul className="mt-4 divide-y divide-border/60">
+              {recentMocks.map((m) => (
+                <li key={m.id} className="flex flex-wrap items-center justify-between gap-2 py-3 text-sm first:pt-0">
+                  <span className="font-medium text-foreground">{m.examTitle}</span>
+                  <span className="tabular-nums text-muted">
+                    {m.pct}% ({m.score}/{m.total})
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="mt-4 rounded-lg border border-dashed border-border bg-muted/15 px-4 py-3 text-sm text-muted">
+              No mocks logged yet. When you complete one from the exams page, scores and trends will appear here for a
+              high-level view.
+            </p>
+          )}
+          <div className="mt-4 flex flex-wrap gap-4">
+            <Link href="/app/exams" className="inline-flex text-sm font-semibold text-primary hover:underline">
+              Open mock exams
+            </Link>
+            <Link href="/app/lessons" className="inline-flex text-sm font-semibold text-primary hover:underline">
+              Exam-specific lessons
+            </Link>
+          </div>
+        </section>
+      ) : null}
     </div>
   );
 }

@@ -33,7 +33,7 @@ function wordy(...parts: string[]): string {
 
 function clinicalMeaning(slot: BlueprintExpansionSlot, examLabel: string): string {
   return wordy(
-    `**${slot.titleStem}** anchors this lesson to the blueprint domain **${slot.blueprintDomain.replace(/_/g, " ")}** with editorial role: *${slot.blueprintRole}*.`,
+    `**${slot.titleStem}** anchors this lesson to the planning domain **${slot.blueprintDomain.replace(/_/g, " ")}** with teaching focus: *${slot.blueprintRole}*.`,
     `For **${examLabel}**, practice translating assessment data into the **safest next nursing action** when the stem mixes routine tasks with abnormal findings. Exams reward recognizing **trend**, **scope**, and **escalation timing**—not the longest teaching paragraph.`,
     `Connect **${slot.topic}** concepts to monitoring, reporting, and ordered interventions appropriate to your license level. When the vignette names a policy, protocol, or provider order, choose answers that **respect that frame** while protecting the client.`,
     `Use this page as a **structured rehearsal**: read once for meaning, then run a **pathway-scoped question block** filtered to related topics so rationales reinforce the same judgment pattern.`,
@@ -66,7 +66,7 @@ function clinicalScenario(slot: BlueprintExpansionSlot, examLabel: string): stri
 
 function takeaways(slot: BlueprintExpansionSlot): string {
   return wordy(
-    `- **Blueprint:** ${slot.expansionCategory} · ${slot.blueprintDomain.replace(/_/g, " ")} · ${slot.blueprintRole}`,
+    `- **Study plan:** ${slot.expansionCategory} · ${slot.blueprintDomain.replace(/_/g, " ")} · ${slot.blueprintRole}`,
     `- **Study loop:** pair this lesson with timed questions tagged around **${slot.topicSlug}**, then review rationales for **wrong-option traps** (scope, delay, teaching too early).`,
     `- **Related lessons:** ${LINK_TRIO.join(" · ")}`,
     `- **Bank drill:** filter your pathway question bank to the same topic cluster and complete a short block before revisiting this page.`,
@@ -84,7 +84,7 @@ export function buildExpansionCatalogLesson(
 
   const title = `${slot.titleStem} — ${examLabel}`;
   const seoTitle = `${slot.titleStem} | NurseNest`;
-  const seoDescription = `Blueprint expansion: ${slot.blueprintRole}. Pathway-scoped practice for ${examLabel} with exam-style prioritization and safety framing—distinct teaching goal, not a duplicate lesson.`;
+  const seoDescription = `Clinical focus: ${slot.blueprintRole}. Pathway-scoped practice for ${examLabel}—exam-style prioritization, monitoring, and scope-safe actions you can rehearse with timed questions in the bank.`;
 
   return {
     slug,
