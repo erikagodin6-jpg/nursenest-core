@@ -23,7 +23,7 @@ export function HomeTrustProofSection({ questionCount }: Props) {
 
   return (
     <section
-      className="border-b border-[var(--border-subtle)] bg-[var(--theme-page-bg)] py-12 md:py-16"
+      className="nn-section-soft border-b border-[var(--border-subtle)] py-12 md:py-16"
       aria-labelledby="home-trust-proof-heading"
       data-testid="section-trust-proof"
     >

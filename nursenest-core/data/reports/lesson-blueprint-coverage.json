@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-09T06:29:52.284Z",
+  "generatedAt": "2026-04-09T11:03:53.453Z",
   "dataSource": "src/content/pathway-lessons/catalog.json",
   "pathwayIdsIncluded": [
     "ca-rn-nclex-rn",
@@ -12,85 +12,85 @@
     {
       "pathwayId": "ca-rn-nclex-rn",
       "displayName": "NCLEX-RN (Canada)",
-      "totalLessons": 123,
+      "totalLessons": 137,
       "progress": {
         "minFloor": 150,
         "stretchGoal": 500,
-        "pctOfMinFloor": 82,
-        "pctOfStretchGoal": 24.6,
-        "lessonsShortOfMin": 27,
-        "lessonsShortOfStretch": 377
+        "pctOfMinFloor": 91.3,
+        "pctOfStretchGoal": 27.4,
+        "lessonsShortOfMin": 13,
+        "lessonsShortOfStretch": 363
       },
       "byDomain": [
         {
           "domain": "management_of_care",
           "label": "Management of care / coordination / delegation",
           "count": 10,
-          "pctOfPathway": 8.1,
+          "pctOfPathway": 7.3,
           "planningWeight": 0.2,
-          "expectedApprox": 25
+          "expectedApprox": 27
         },
         {
           "domain": "safety_and_infection",
           "label": "Safety and infection control",
           "count": 12,
-          "pctOfPathway": 9.8,
+          "pctOfPathway": 8.8,
           "planningWeight": 0.14,
-          "expectedApprox": 17
+          "expectedApprox": 19
         },
         {
           "domain": "health_promotion_maintenance",
           "label": "Health promotion and maintenance",
           "count": 1,
-          "pctOfPathway": 0.8,
+          "pctOfPathway": 0.7,
           "planningWeight": 0.12,
-          "expectedApprox": 15
+          "expectedApprox": 16
         },
         {
           "domain": "psychosocial_integrity",
           "label": "Psychosocial integrity",
           "count": 3,
-          "pctOfPathway": 2.4,
+          "pctOfPathway": 2.2,
           "planningWeight": 0.1,
-          "expectedApprox": 12
+          "expectedApprox": 14
         },
         {
           "domain": "basic_care_comfort",
           "label": "Basic care and comfort",
           "count": 1,
-          "pctOfPathway": 0.8,
+          "pctOfPathway": 0.7,
           "planningWeight": 0.1,
-          "expectedApprox": 12
+          "expectedApprox": 14
         },
         {
           "domain": "pharmacological_therapies",
           "label": "Pharmacological and parenteral therapies",
           "count": 11,
-          "pctOfPathway": 8.9,
+          "pctOfPathway": 8,
           "planningWeight": 0.14,
-          "expectedApprox": 17
+          "expectedApprox": 19
         },
         {
           "domain": "risk_reduction",
           "label": "Reduction of risk potential",
           "count": 1,
-          "pctOfPathway": 0.8,
+          "pctOfPathway": 0.7,
           "planningWeight": 0.1,
-          "expectedApprox": 12
+          "expectedApprox": 14
         },
         {
           "domain": "physiological_adaptation",
           "label": "Physiological adaptation",
-          "count": 49,
-          "pctOfPathway": 39.8,
+          "count": 63,
+          "pctOfPathway": 46,
           "planningWeight": 0.1,
-          "expectedApprox": 12
+          "expectedApprox": 14
         },
         {
           "domain": "uncategorized",
           "label": "Uncategorized / needs tagging",
           "count": 35,
-          "pctOfPathway": 28.5,
+          "pctOfPathway": 25.5,
           "planningWeight": 0,
           "expectedApprox": 0
         },
@@ -98,7 +98,7 @@
           "domain": "uncategorized",
           "label": "Uncategorized / needs tagging",
           "count": 35,
-          "pctOfPathway": 28.5,
+          "pctOfPathway": 25.5,
           "planningWeight": 0,
           "expectedApprox": 0
         }
@@ -108,92 +108,92 @@
           "system": "general",
           "label": "General / multi-system",
           "count": 39,
-          "pctOfPathway": 31.7
+          "pctOfPathway": 28.5
         },
         {
           "system": "cardio",
           "label": "Cardiovascular",
-          "count": 15,
-          "pctOfPathway": 12.2
+          "count": 29,
+          "pctOfPathway": 21.2
         },
         {
           "system": "respiratory",
           "label": "Respiratory",
           "count": 13,
-          "pctOfPathway": 10.6
+          "pctOfPathway": 9.5
         },
         {
           "system": "fluids_electrolytes",
           "label": "Fluids & electrolytes",
           "count": 10,
-          "pctOfPathway": 8.1
+          "pctOfPathway": 7.3
         },
         {
           "system": "renal",
           "label": "Renal / GU",
           "count": 9,
-          "pctOfPathway": 7.3
+          "pctOfPathway": 6.6
         },
         {
           "system": "neuro",
           "label": "Neurological",
           "count": 8,
-          "pctOfPathway": 6.5
+          "pctOfPathway": 5.8
         },
         {
           "system": "endocrine",
           "label": "Endocrine",
           "count": 7,
-          "pctOfPathway": 5.7
+          "pctOfPathway": 5.1
         },
         {
           "system": "maternity",
           "label": "Maternity",
           "count": 5,
-          "pctOfPathway": 4.1
+          "pctOfPathway": 3.6
         },
         {
           "system": "peds",
           "label": "Pediatrics",
           "count": 5,
-          "pctOfPathway": 4.1
+          "pctOfPathway": 3.6
         },
         {
           "system": "msk",
           "label": "MSK / integumentary",
           "count": 4,
-          "pctOfPathway": 3.3
+          "pctOfPathway": 2.9
         },
         {
           "system": "mental_health",
           "label": "Mental health",
           "count": 3,
-          "pctOfPathway": 2.4
+          "pctOfPathway": 2.2
         },
         {
           "system": "gi",
           "label": "GI / nutrition",
           "count": 2,
-          "pctOfPathway": 1.6
+          "pctOfPathway": 1.5
         },
         {
           "system": "infection_sepsis",
           "label": "Infection / sepsis",
           "count": 2,
-          "pctOfPathway": 1.6
+          "pctOfPathway": 1.5
         },
         {
           "system": "hematology_immuno",
           "label": "Hematology / immunology",
           "count": 1,
-          "pctOfPathway": 0.8
+          "pctOfPathway": 0.7
         }
       ],
       "byLessonType": [
         {
           "type": "catalog_legacy",
           "label": "Catalog (pre-wave)",
-          "count": 123,
+          "count": 137,
           "pctOfPathway": 100
         },
         {
@@ -214,31 +214,31 @@
           "domain": "health_promotion_maintenance",
           "label": "Health promotion and maintenance",
           "count": 1,
-          "expectedApprox": 15
+          "expectedApprox": 16
         },
         {
           "domain": "basic_care_comfort",
           "label": "Basic care and comfort",
           "count": 1,
-          "expectedApprox": 12
+          "expectedApprox": 14
         },
         {
           "domain": "risk_reduction",
           "label": "Reduction of risk potential",
           "count": 1,
-          "expectedApprox": 12
+          "expectedApprox": 14
         },
         {
           "domain": "psychosocial_integrity",
           "label": "Psychosocial integrity",
           "count": 3,
-          "expectedApprox": 12
+          "expectedApprox": 14
         },
         {
           "domain": "management_of_care",
           "label": "Management of care / coordination / delegation",
           "count": 10,
-          "expectedApprox": 25
+          "expectedApprox": 27
         }
       ],
       "weakSystems": [
@@ -274,11 +274,11 @@
         }
       ],
       "majorGaps": [
-        "Below 150-lesson editorial floor: add 27 lessons (or confirm pathway intentionally smaller).",
-        "Stretch catalog goal (500): 377 lessons remaining for long-term depth.",
-        "Domain gap — Health promotion and maintenance: 1 lessons vs ~15 weight-adjusted expectation.",
-        "Domain gap — Basic care and comfort: 1 lessons vs ~12 weight-adjusted expectation.",
-        "Domain gap — Reduction of risk potential: 1 lessons vs ~12 weight-adjusted expectation."
+        "Below 150-lesson editorial floor: add 13 lessons (or confirm pathway intentionally smaller).",
+        "Stretch catalog goal (500): 363 lessons remaining for long-term depth.",
+        "Domain gap — Health promotion and maintenance: 1 lessons vs ~16 weight-adjusted expectation.",
+        "Domain gap — Basic care and comfort: 1 lessons vs ~14 weight-adjusted expectation.",
+        "Domain gap — Reduction of risk potential: 1 lessons vs ~14 weight-adjusted expectation."
       ]
     },
     {
@@ -1076,85 +1076,85 @@
     {
       "pathwayId": "us-rn-nclex-rn",
       "displayName": "NCLEX-RN (United States)",
-      "totalLessons": 122,
+      "totalLessons": 136,
       "progress": {
         "minFloor": 150,
         "stretchGoal": 500,
-        "pctOfMinFloor": 81.3,
-        "pctOfStretchGoal": 24.4,
-        "lessonsShortOfMin": 28,
-        "lessonsShortOfStretch": 378
+        "pctOfMinFloor": 90.7,
+        "pctOfStretchGoal": 27.2,
+        "lessonsShortOfMin": 14,
+        "lessonsShortOfStretch": 364
       },
       "byDomain": [
         {
           "domain": "management_of_care",
           "label": "Management of care / coordination / delegation",
           "count": 9,
-          "pctOfPathway": 7.4,
+          "pctOfPathway": 6.6,
           "planningWeight": 0.2,
-          "expectedApprox": 24
+          "expectedApprox": 27
         },
         {
           "domain": "safety_and_infection",
           "label": "Safety and infection control",
           "count": 12,
-          "pctOfPathway": 9.8,
+          "pctOfPathway": 8.8,
           "planningWeight": 0.14,
-          "expectedApprox": 17
+          "expectedApprox": 19
         },
         {
           "domain": "health_promotion_maintenance",
           "label": "Health promotion and maintenance",
           "count": 1,
-          "pctOfPathway": 0.8,
+          "pctOfPathway": 0.7,
           "planningWeight": 0.12,
-          "expectedApprox": 15
+          "expectedApprox": 16
         },
         {
           "domain": "psychosocial_integrity",
           "label": "Psychosocial integrity",
           "count": 3,
-          "pctOfPathway": 2.5,
+          "pctOfPathway": 2.2,
           "planningWeight": 0.1,
-          "expectedApprox": 12
+          "expectedApprox": 14
         },
         {
           "domain": "basic_care_comfort",
           "label": "Basic care and comfort",
           "count": 1,
-          "pctOfPathway": 0.8,
+          "pctOfPathway": 0.7,
           "planningWeight": 0.1,
-          "expectedApprox": 12
+          "expectedApprox": 14
         },
         {
           "domain": "pharmacological_therapies",
           "label": "Pharmacological and parenteral therapies",
           "count": 11,
-          "pctOfPathway": 9,
+          "pctOfPathway": 8.1,
           "planningWeight": 0.14,
-          "expectedApprox": 17
+          "expectedApprox": 19
         },
         {
           "domain": "risk_reduction",
           "label": "Reduction of risk potential",
           "count": 1,
-          "pctOfPathway": 0.8,
+          "pctOfPathway": 0.7,
           "planningWeight": 0.1,
-          "expectedApprox": 12
+          "expectedApprox": 14
         },
         {
           "domain": "physiological_adaptation",
           "label": "Physiological adaptation",
-          "count": 49,
-          "pctOfPathway": 40.2,
+          "count": 63,
+          "pctOfPathway": 46.3,
           "planningWeight": 0.1,
-          "expectedApprox": 12
+          "expectedApprox": 14
         },
         {
           "domain": "uncategorized",
           "label": "Uncategorized / needs tagging",
           "count": 35,
-          "pctOfPathway": 28.7,
+          "pctOfPathway": 25.7,
           "planningWeight": 0,
           "expectedApprox": 0
         },
@@ -1162,7 +1162,7 @@
           "domain": "uncategorized",
           "label": "Uncategorized / needs tagging",
           "count": 35,
-          "pctOfPathway": 28.7,
+          "pctOfPathway": 25.7,
           "planningWeight": 0,
           "expectedApprox": 0
         }
@@ -1172,92 +1172,92 @@
           "system": "general",
           "label": "General / multi-system",
           "count": 39,
-          "pctOfPathway": 32
+          "pctOfPathway": 28.7
         },
         {
           "system": "cardio",
           "label": "Cardiovascular",
-          "count": 14,
-          "pctOfPathway": 11.5
+          "count": 28,
+          "pctOfPathway": 20.6
         },
         {
           "system": "respiratory",
           "label": "Respiratory",
           "count": 14,
-          "pctOfPathway": 11.5
+          "pctOfPathway": 10.3
         },
         {
           "system": "renal",
           "label": "Renal / GU",
           "count": 9,
-          "pctOfPathway": 7.4
+          "pctOfPathway": 6.6
         },
         {
           "system": "fluids_electrolytes",
           "label": "Fluids & electrolytes",
           "count": 9,
-          "pctOfPathway": 7.4
+          "pctOfPathway": 6.6
         },
         {
           "system": "neuro",
           "label": "Neurological",
           "count": 8,
-          "pctOfPathway": 6.6
+          "pctOfPathway": 5.9
         },
         {
           "system": "endocrine",
           "label": "Endocrine",
           "count": 7,
-          "pctOfPathway": 5.7
+          "pctOfPathway": 5.1
         },
         {
           "system": "maternity",
           "label": "Maternity",
           "count": 5,
-          "pctOfPathway": 4.1
+          "pctOfPathway": 3.7
         },
         {
           "system": "peds",
           "label": "Pediatrics",
           "count": 5,
-          "pctOfPathway": 4.1
+          "pctOfPathway": 3.7
         },
         {
           "system": "msk",
           "label": "MSK / integumentary",
           "count": 4,
-          "pctOfPathway": 3.3
+          "pctOfPathway": 2.9
         },
         {
           "system": "mental_health",
           "label": "Mental health",
           "count": 3,
-          "pctOfPathway": 2.5
+          "pctOfPathway": 2.2
         },
         {
           "system": "gi",
           "label": "GI / nutrition",
           "count": 2,
-          "pctOfPathway": 1.6
+          "pctOfPathway": 1.5
         },
         {
           "system": "infection_sepsis",
           "label": "Infection / sepsis",
           "count": 2,
-          "pctOfPathway": 1.6
+          "pctOfPathway": 1.5
         },
         {
           "system": "hematology_immuno",
           "label": "Hematology / immunology",
           "count": 1,
-          "pctOfPathway": 0.8
+          "pctOfPathway": 0.7
         }
       ],
       "byLessonType": [
         {
           "type": "catalog_legacy",
           "label": "Catalog (pre-wave)",
-          "count": 122,
+          "count": 136,
           "pctOfPathway": 100
         },
         {
@@ -1278,31 +1278,31 @@
           "domain": "health_promotion_maintenance",
           "label": "Health promotion and maintenance",
           "count": 1,
-          "expectedApprox": 15
+          "expectedApprox": 16
         },
         {
           "domain": "basic_care_comfort",
           "label": "Basic care and comfort",
           "count": 1,
-          "expectedApprox": 12
+          "expectedApprox": 14
         },
         {
           "domain": "risk_reduction",
           "label": "Reduction of risk potential",
           "count": 1,
-          "expectedApprox": 12
+          "expectedApprox": 14
         },
         {
           "domain": "psychosocial_integrity",
           "label": "Psychosocial integrity",
           "count": 3,
-          "expectedApprox": 12
+          "expectedApprox": 14
         },
         {
           "domain": "management_of_care",
           "label": "Management of care / coordination / delegation",
           "count": 9,
-          "expectedApprox": 24
+          "expectedApprox": 27
         }
       ],
       "weakSystems": [
@@ -1338,11 +1338,11 @@
         }
       ],
       "majorGaps": [
-        "Below 150-lesson editorial floor: add 28 lessons (or confirm pathway intentionally smaller).",
-        "Stretch catalog goal (500): 378 lessons remaining for long-term depth.",
-        "Domain gap — Health promotion and maintenance: 1 lessons vs ~15 weight-adjusted expectation.",
-        "Domain gap — Basic care and comfort: 1 lessons vs ~12 weight-adjusted expectation.",
-        "Domain gap — Reduction of risk potential: 1 lessons vs ~12 weight-adjusted expectation."
+        "Below 150-lesson editorial floor: add 14 lessons (or confirm pathway intentionally smaller).",
+        "Stretch catalog goal (500): 364 lessons remaining for long-term depth.",
+        "Domain gap — Health promotion and maintenance: 1 lessons vs ~16 weight-adjusted expectation.",
+        "Domain gap — Basic care and comfort: 1 lessons vs ~14 weight-adjusted expectation.",
+        "Domain gap — Reduction of risk potential: 1 lessons vs ~14 weight-adjusted expectation."
       ]
     }
   ]

@@ -67,9 +67,9 @@ export function HomeHowItWorksSection() {
 
         <ol className="grid gap-6 md:grid-cols-3">
           {steps.map((s, i) => (
-            <li key={s.testId} className="relative flex flex-col rounded-2xl border border-[var(--border-subtle)] bg-[var(--nn-presentation-ribbon)] p-6 shadow-sm">
+            <li key={s.testId} className="nn-card-soft relative flex flex-col p-6">
               <div className="mb-4 flex items-center gap-3">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-sm font-bold tabular-nums text-primary">
+                <span className="nn-accent-icon-wrap flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-sm font-bold tabular-nums text-[var(--theme-primary)]">
                   {i + 1}
                 </span>
                 <s.icon className="h-6 w-6 text-[color-mix(in_srgb,var(--theme-primary)_85%,var(--theme-heading-text))]" aria-hidden />
@@ -80,7 +80,7 @@ export function HomeHowItWorksSection() {
                 href={s.href}
                 event={PH.marketingHomeExploreHubClick}
                 eventProps={{ surface: "how_it_works", step: i + 1, region }}
-                className="mt-4 inline-flex text-sm font-semibold text-primary underline-offset-4 hover:underline"
+                className="mt-4 inline-flex text-sm font-semibold text-[var(--theme-primary)] underline-offset-4 hover:underline"
                 data-testid={s.testId}
               >
                 {s.label}

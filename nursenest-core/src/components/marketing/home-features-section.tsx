@@ -14,7 +14,7 @@ export function HomeFeaturesSection() {
 
   return (
     <section
-      className="border-b border-[var(--border-subtle)] bg-[var(--nn-presentation-wash)] py-12 md:py-16"
+      className="nn-section-soft border-b border-[var(--border-subtle)] py-12 md:py-16"
       aria-labelledby="home-features-heading"
       data-testid="section-features"
     >
@@ -32,12 +32,9 @@ export function HomeFeaturesSection() {
           {IDS.map((id, i) => {
             const Icon = ICONS[i]!;
             return (
-              <li
-                key={id}
-                className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] p-5 shadow-sm"
-              >
-                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                  <Icon className="h-5 w-5 text-primary" aria-hidden />
+              <li key={id} className="nn-card-soft p-5">
+                <div className="nn-accent-icon-wrap mb-3 flex h-10 w-10 items-center justify-center rounded-lg">
+                  <Icon className="nn-accent-icon h-5 w-5" aria-hidden />
                 </div>
                 <h3 className="nn-marketing-h4 text-[var(--theme-heading-text)]">{t(`home.conversion.features.${id}Title`)}</h3>
                 <p className="nn-marketing-body-sm mt-2 text-pretty text-[var(--theme-muted-text)]">

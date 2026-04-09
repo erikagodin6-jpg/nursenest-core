@@ -20,6 +20,10 @@
  * **Legacy:** some pathways still list the same slug in multiple `catalog.json` buckets (maintain two
  *   copies). Do **not** add more cross-bucket duplication — consolidate when editing (see catalog
  *   redundancy test).
+ *
+ * **Scaling (150 → 500+ lessons per pathway):** List and API surfaces stay **O(page size)**; growth must be
+ * **new distinct slugs** (real outcomes) plus **scoped providers / DB overlays** — not parallel JSON copies of
+ * the same spine. See `pathway-lesson-catalog-redundancy.test.ts` for the duplication ratchet.
  */
 import type {
   PathwayLessonOmittedPremiumSection,

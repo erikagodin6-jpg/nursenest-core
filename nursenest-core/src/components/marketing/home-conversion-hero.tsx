@@ -52,10 +52,7 @@ export function HomeConversionHero() {
       data-testid="hero-section"
       aria-labelledby="home-conversion-hero-heading"
     >
-      <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,color-mix(in_srgb,var(--theme-primary)_14%,transparent),transparent_55%)]"
-        aria-hidden
-      />
+      <div className="pointer-events-none absolute inset-0 nn-hero-pastel-layers" aria-hidden />
       <div className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6 md:py-16 lg:px-8">
         <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:gap-12">
           <div className="min-w-0 space-y-6">
@@ -162,7 +159,10 @@ export function HomeConversionHero() {
             className="relative mx-auto w-full max-w-md rounded-2xl border border-[var(--border-subtle)] bg-[var(--theme-card-bg)]/80 p-2 shadow-[var(--shadow-elevated)] backdrop-blur-sm lg:mx-0 lg:max-w-none"
             data-testid="home-hero-platform-preview"
           >
-            <div className="pointer-events-none absolute -inset-px rounded-2xl bg-gradient-to-br from-primary/[0.12] via-transparent to-emerald-500/[0.08] opacity-90" aria-hidden />
+            <div
+              className="pointer-events-none absolute -inset-px rounded-2xl opacity-90 [background-image:var(--nn-aesthetic-frame-shine)]"
+              aria-hidden
+            />
             <div className="relative overflow-hidden rounded-xl">
               <MarketingHeroCarousel
                 slides={slides}

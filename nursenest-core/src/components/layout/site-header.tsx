@@ -24,7 +24,7 @@ import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 
 const NAV_LINK_CLASS =
-  "nn-marketing-body-sm font-medium tracking-tight text-[var(--theme-menu-text)] transition-colors duration-200 hover:text-primary";
+  "nn-marketing-body-sm nn-marketing-nav-link font-medium tracking-tight text-[var(--theme-menu-text)]";
 
 export function SiteHeader() {
   const { t, locale } = useMarketingI18n();
@@ -63,7 +63,7 @@ export function SiteHeader() {
     <div className="sticky top-0 z-50">
       <MarketingHeaderUtilityStrip />
 
-      <header className="border-b border-[color-mix(in_srgb,var(--theme-nav-border)_55%,transparent)] bg-[var(--theme-page-bg)]">
+      <header className="border-b border-[color-mix(in_srgb,var(--theme-nav-border)_55%,transparent)] bg-[color-mix(in_srgb,var(--theme-header-surface)_92%,transparent)] backdrop-blur-md supports-[backdrop-filter]:bg-[color-mix(in_srgb,var(--theme-header-surface)_88%,transparent)]">
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-2 px-3 sm:gap-4 sm:px-5 lg:h-[3.75rem] lg:gap-6 lg:px-8">
           <Link
             href={localizeHref("/")}

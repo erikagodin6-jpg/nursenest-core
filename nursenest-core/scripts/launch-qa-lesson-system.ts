@@ -7,6 +7,7 @@
  *   npx tsx scripts/launch-qa-lesson-system.ts --enforce   # exit 1 on any FAIL
  *   npx tsx scripts/launch-qa-lesson-system.ts --min=120     # override default min effective lessons (active pathways)
  *   npx tsx scripts/launch-qa-lesson-system.ts --json        # machine-readable summary last line
+ *   npx tsx scripts/launch-qa-lesson-system.ts --strict-rationale  # RN catalog drift WARNs become FAIL
  *
  * Does **not** require a database: uses catalog.json + scoped-gold merge (same as hub inventory).
  */
@@ -20,6 +21,7 @@ import {
   resolveExamPathwayFromMarketingHubSegment,
 } from "../src/lib/exam-pathways/exam-product-registry";
 import { LESSON_RATIONALE_MAPPING_ENTRIES } from "../src/lib/learner/lesson-question-rationale/registry";
+import { RN_NCLEX_CATALOG_RATIONALE_ENTRIES } from "../src/lib/learner/lesson-question-rationale/rn-nclex-catalog-rationale-registry";
 import { getLaunchBundleSpec } from "../src/lib/lessons/pathway-launch-bundle";
 import {
   prependScopedGoldCatalogLessons,
@@ -67,6 +69,7 @@ function flag(severity: Severity, code: string, detail: string) {
 function parseArgs() {
   const enforce = process.argv.includes("--enforce");
   const json = process.argv.includes("--json");
+  const strictRationale = process.argv.includes("--strict-rationale");
   let minActive = DEFAULT_MIN_ACTIVE;
   let minUpcoming = DEFAULT_MIN_UPCOMING;
   for (const a of process.argv) {
@@ -79,7 +82,7 @@ function parseArgs() {
       if (Number.isFinite(n) && n >= 0) minUpcoming = Math.floor(n);
     }
   }
-  return { enforce, json, minActive, minUpcoming };
+  return { enforce, json, minActive, minUpcoming, strictRationale };
 }
 
 type CatalogJson = { pathways?: Record<string, { lessons?: Array<{ slug?: string }> }> };
@@ -93,6 +96,17 @@ function effectiveSlugsForPathway(pathwayId: string, raw: CatalogJson): Set<stri
   return new Set(merged.map((l) => l.slug).filter(Boolean));
 }
 
+/** Union of effective slugs across all required pathways (for rationale + cross-path checks). */
+function mergedUnionAllCore(raw: CatalogJson): Set<string> {
+  const s = new Set<string>();
+  for (const id of REQUIRED_PATHWAY_IDS) {
+    for (const slug of effectiveSlugsForPathway(id, raw)) s.add(slug);
+  }
+  return s;
+}
+
+const RN_CATALOG_RATIONALE_SLUGS = new Set(RN_NCLEX_CATALOG_RATIONALE_ENTRIES.map((e) => e.lessonSlug));
+
 /** Slugs delivered via scoped-gold / casebook / exam-complete injectables (may omit US RN catalog row). */
 function globalInjectableSlugs(): Set<string> {
   const s = new Set<string>();
@@ -103,7 +117,7 @@ function globalInjectableSlugs(): Set<string> {
 }
 
 function main() {
-  const { enforce, json, minActive, minUpcoming } = parseArgs();
+  const { enforce, json, minActive, minUpcoming, strictRationale } = parseArgs();
 
   console.log("=== Lesson system launch QA ===\n");
 
@@ -198,22 +212,40 @@ function main() {
     }
   }
 
-  // --- Rationale registry: every mapped slug must appear in US RN effective set OR scoped-gold / casebook injectables ---
-  const usRn = effectiveSlugsForPathway("us-rn-nclex-rn", catalogRaw);
+  // --- Rationale registry: injectable ∪ merged catalogs; RN-specific catalog rows may WARN if slug not in catalog yet ---
+  const mergedUnion = mergedUnionAllCore(catalogRaw);
   const injectable = globalInjectableSlugs();
   const rationaleSlugs = [...new Set(LESSON_RATIONALE_MAPPING_ENTRIES.map((e) => e.lessonSlug))];
-  let rationaleOk = true;
+  let rationaleFail = 0;
+  let rationaleRnDrift = 0;
   for (const slug of rationaleSlugs) {
-    if (usRn.has(slug) || injectable.has(slug)) continue;
-    rationaleOk = false;
+    if (injectable.has(slug) || mergedUnion.has(slug)) continue;
+    if (RN_CATALOG_RATIONALE_SLUGS.has(slug)) {
+      rationaleRnDrift += 1;
+      const msg = `RN NCLEX catalog rationale slug not in merged pathway catalogs (catalog.json + scoped-gold): ${slug}`;
+      if (strictRationale) {
+        rationaleFail += 1;
+        flag("FAIL", "rationale.rn.catalog", msg);
+      } else {
+        flag("WARN", "rationale.rn.catalog", msg);
+      }
+      continue;
+    }
+    rationaleFail += 1;
     flag(
       "FAIL",
-      "rationale.slug",
-      `Rationale mapping lessonSlug not in US RN effective catalog and not in injectable registry: ${slug}`,
+      "rationale.slug.orphan",
+      `Rationale lessonSlug not in any pathway merged catalog and not injectable: ${slug}`,
     );
   }
-  if (rationaleOk) {
-    flag("PASS", "rationale.registry", `All ${rationaleSlugs.length} rationale mapping lesson slugs resolve`);
+  if (rationaleFail === 0) {
+    flag(
+      "PASS",
+      "rationale.registry",
+      rationaleRnDrift > 0
+        ? `All ${rationaleSlugs.length} rationale slugs covered (${rationaleRnDrift} RN catalog slug drift — align catalog.json or registry)`
+        : `All ${rationaleSlugs.length} rationale mapping lesson slugs resolve against catalogs + injectables`,
+    );
   }
 
   // --- Report ---

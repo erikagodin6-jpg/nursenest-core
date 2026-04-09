@@ -37,7 +37,7 @@ export function HomeReviewsSection() {
           {CARD_KEYS.map((c) => (
             <li
               key={c.quote}
-              className="nn-marketing-card nn-marketing-card-pad flex flex-col border-t-2 border-t-[color-mix(in_srgb,var(--theme-primary)_45%,transparent)] shadow-[var(--shadow-elevated)]"
+              className="nn-card-soft nn-marketing-card-pad flex flex-col border-t-2 border-t-[color-mix(in_srgb,var(--theme-primary)_45%,transparent)]"
             >
               <blockquote className="nn-marketing-body-sm flex-1 text-pretty text-[var(--theme-body-text)]">
                 &ldquo;{t(c.quote)}&rdquo;
