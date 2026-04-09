@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { startTransition, useEffect, useMemo, useState, type ReactNode } from "react";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { pathwayLessonMarketingDetailHref } from "@/lib/lessons/pathway-lesson-types";
 import {
   type FnpClinicalDomain,
@@ -22,6 +24,22 @@ function appQuestionsHref(pathwayId: string, topic?: string): string {
   q.set("pathwayId", pathwayId);
   if (topic) q.set("topic", topic);
   return `/app/questions?${q.toString()}`;
+}
+
+function marketingQuestionsTopicHref(pathway: ExamPathwayDefinition, topic: string): string {
+  const base = buildExamPathwayPath(pathway, "questions");
+  const t = topic.trim();
+  if (!t) return base;
+  return `${base}?topic=${encodeURIComponent(t)}`;
+}
+
+function pickRelatedPeers(peers: FnpExplorerLesson[], current: FnpExplorerLesson, max: number): FnpExplorerLesson[] {
+  const topic = current.meta.topic.trim();
+  const sameTopic = peers.filter(
+    (e) => e.meta.slug !== current.meta.slug && e.meta.topic.trim() === topic && topic.length > 0,
+  );
+  const pool = sameTopic.length > 0 ? sameTopic : peers.filter((e) => e.meta.slug !== current.meta.slug);
+  return pool.slice(0, max);
 }
 
 type Props = {
@@ -67,8 +85,8 @@ export function FnpLessonExplorer({ pathway, lessonsBasePath, explorerLessons, e
 
   return (
     <div id="fnp-explorer" className="scroll-mt-24 space-y-5">
-      <div className="rounded-xl border border-border bg-[var(--theme-muted-surface)] p-4">
-        <p className="text-xs font-semibold uppercase tracking-wide text-muted">Filter lessons</p>
+      <div className="nn-study-card nn-study-card--wash p-4 sm:p-5">
+        <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-muted">Filter lessons</p>
         <p className="mt-1 text-xs text-[var(--theme-muted-text)]">
           Combine a <strong className="text-foreground">population</strong> lane with a{" "}
           <strong className="text-foreground">competency</strong> lane: mirrors how board items layer age and task.
@@ -166,6 +184,7 @@ export function FnpLessonExplorer({ pathway, lessonsBasePath, explorerLessons, e
               pathway={pathway}
               lessonsBasePath={lessonsBasePath}
               enriched={e}
+              pagePeers={filtered}
               progressStatus={progressMap[e.meta.slug] ?? "not_started"}
               showProgress={Object.keys(progressMap).length > 0}
             />
@@ -189,11 +208,8 @@ function FilterChip({
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-full border px-3 py-1.5 text-left text-sm font-medium transition-colors ${
-        active
-          ? "border-primary bg-primary/10 text-foreground"
-          : "border-border bg-card text-[var(--theme-muted-text)] hover:border-primary/40"
-      }`}
+      className="nn-chip px-3 py-1.5 text-left text-sm font-medium transition-colors hover:border-primary/40"
+      data-selected={active ? "true" : undefined}
     >
       {children}
     </button>
@@ -208,20 +224,30 @@ function FnpLessonCard({
   pathway,
   lessonsBasePath,
   enriched,
+  pagePeers,
   progressStatus,
   showProgress,
 }: {
   pathway: ExamPathwayDefinition;
   lessonsBasePath: string;
   enriched: FnpExplorerLesson;
+  pagePeers: FnpExplorerLesson[];
   progressStatus: PathwayLessonProgressStatus;
   showProgress: boolean;
 }) {
   const l = enriched.meta;
   const p = enriched.clinicalPreview;
   const detailHref = pathwayLessonMarketingDetailHref(lessonsBasePath, l.slug);
+  const related = useMemo(() => pickRelatedPeers(pagePeers, enriched, 3), [pagePeers, enriched]);
+  const topicHubSlug = l.topicSlug?.trim();
+  const topicHubHref =
+    topicHubSlug && !topicHubSlug.startsWith("_")
+      ? `${lessonsBasePath}/topics/${encodeURIComponent(topicHubSlug)}`
+      : null;
+  const gridCols = topicHubHref ? "sm:grid-cols-2 lg:grid-cols-3" : "sm:grid-cols-2";
+
   return (
-    <li className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
+    <li className="nn-study-card p-4 sm:p-5">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <p className="text-xs font-medium uppercase text-muted">{l.topic}</p>
         <div className="flex flex-wrap items-center gap-2">
@@ -260,33 +286,78 @@ function FnpLessonCard({
           <p className="text-xs font-semibold text-muted">Sample clinical decision</p>
           <p className="mt-1 text-foreground">{p.sampleDecision}</p>
         </div>
-        <div className="sm:col-span-2 rounded-lg border border-border bg-card/80 p-3">
+        <div className="sm:col-span-2 nn-surface-inset rounded-xl p-3">
           <p className="text-xs font-semibold text-muted">Rationale snippet</p>
           <p className="mt-1 italic text-[var(--theme-muted-text)]">&ldquo;{p.rationaleSnippet}&rdquo;</p>
         </div>
         <div className="sm:col-span-2 flex flex-wrap gap-1.5">
           {enriched.domains.map((d: FnpClinicalDomain) => (
-            <span key={d} className="rounded-md border border-border px-2 py-0.5 text-xs text-muted">
+            <span key={d} className="nn-accent-pill rounded-full px-2.5 py-0.5 text-xs font-medium">
               {FNP_DOMAIN_ORDER.find((x) => x.id === d)?.label ?? d}
             </span>
           ))}
         </div>
       </div>
 
-      <div className="mt-4 flex flex-wrap gap-2">
-        {detailHref ? (
-          <Link href={detailHref} className="text-sm font-semibold text-primary">
-            Open lesson →
+      {related.length > 0 ? (
+        <div className="mt-4 border-t border-border/50 pt-4">
+          <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-heading-text)]">Related on this page</p>
+          <ul className="mt-2 grid list-none gap-2 p-0 sm:grid-cols-2 lg:grid-cols-3">
+            {related.map((peer) => {
+              const rh = pathwayLessonMarketingDetailHref(lessonsBasePath, peer.meta.slug);
+              if (!rh) return null;
+              return (
+                <li key={peer.meta.slug}>
+                  <Link
+                    href={rh}
+                    className="nn-surface-inset block rounded-xl px-3 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary/35"
+                  >
+                    {peer.meta.title}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ) : null}
+
+      <div className={`mt-4 grid gap-2 ${gridCols}`}>
+        {topicHubHref ? (
+          <Link href={topicHubHref} className="nn-surface-elevated block rounded-xl p-3 transition-colors hover:border-primary/35">
+            <p className="text-xs font-semibold text-[var(--theme-primary)]">Topic hub</p>
+            <p className="mt-0.5 text-sm text-[var(--theme-muted-text)]">Curated lessons for this cluster</p>
           </Link>
         ) : null}
-        <Link href={appQuestionsHref(pathway.id, l.topic)} className="text-sm font-semibold text-primary">
-          Case-based questions →
+        <Link
+          href={marketingQuestionsTopicHref(pathway, l.topic)}
+          className="nn-surface-elevated block rounded-xl p-3 transition-colors hover:border-primary/35"
+        >
+          <p className="text-xs font-semibold text-[var(--theme-primary)]">Question bank</p>
+          <p className="mt-0.5 text-sm text-[var(--theme-muted-text)]">Hub practice for this topic</p>
         </Link>
-        <Link href="/app/flashcards" className="text-sm font-semibold text-muted hover:text-primary">
-          Flashcards →
+        <Link
+          href={loginWithCallback(appQuestionsHref(pathway.id, l.topic))}
+          className="nn-surface-elevated block rounded-xl p-3 transition-colors hover:border-primary/35"
+        >
+          <p className="text-xs font-semibold text-[var(--theme-primary)]">App practice</p>
+          <p className="mt-0.5 text-sm text-[var(--theme-muted-text)]">Cases with full rationales</p>
         </Link>
-        <Link href="/app/exams" className="text-sm font-semibold text-muted hover:text-primary">
-          Exam simulations →
+      </div>
+
+      <div className="mt-4 flex flex-wrap gap-2 border-t border-border/60 pt-4">
+        {detailHref ? (
+          <Link href={detailHref} className="inline-flex min-h-10 items-center rounded-full nn-btn-primary px-4 py-2 text-sm font-semibold shadow-none">
+            Open lesson
+          </Link>
+        ) : null}
+        <Link
+          href="/app/flashcards"
+          className="inline-flex min-h-10 items-center rounded-full nn-btn-secondary px-4 py-2 text-sm font-semibold"
+        >
+          Flashcards
+        </Link>
+        <Link href="/app/exams" className="inline-flex min-h-10 items-center rounded-full nn-btn-secondary px-4 py-2 text-sm font-semibold">
+          Exam simulations
         </Link>
       </div>
     </li>

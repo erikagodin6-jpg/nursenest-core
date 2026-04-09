@@ -1,8 +1,11 @@
+import type { CountryCode } from "@prisma/client";
 import { isAllowedBlogInternalHref } from "@/lib/blog/blog-internal-lesson-links";
+import { blogCountryFromPrismaTarget, marketingStudyHubsForBlogExam } from "@/lib/blog/blog-study-cta";
 import { defaultPracticeHubForExam, toolPathForSlug } from "./blog-exam-routes";
 
 export type BlogAutoLinkContext = {
   exam?: string | null;
+  countryTarget?: CountryCode | null;
   /** Absolute or root-relative lesson paths already curated on the post */
   relatedLessonPaths?: string[];
   relatedTools?: string[];
@@ -19,7 +22,8 @@ function escapeRegex(s: string): string {
 /** Build phrase → link rules from post context (longest phrases first to avoid partial matches). */
 export function buildAutoLinkRules(ctx: BlogAutoLinkContext): LinkRule[] {
   const rules: LinkRule[] = [];
-  const hub = defaultPracticeHubForExam(ctx.exam ?? null);
+  const hub = defaultPracticeHubForExam(ctx.exam ?? null, ctx.countryTarget ?? null);
+  const catHub = marketingStudyHubsForBlogExam(ctx.exam ?? "", blogCountryFromPrismaTarget(ctx.countryTarget)).practiceExamsHub;
 
   for (const raw of ctx.relatedLessonPaths ?? []) {
     const path = raw.trim();
@@ -49,6 +53,8 @@ export function buildAutoLinkRules(ctx: BlogAutoLinkContext): LinkRule[] {
     { pattern: /\b(NCLEX)\b/g, href: "/lessons" },
     { pattern: /\b(practice questions)\b/gi, href: hub },
     { pattern: /\b(question bank)\b/gi, href: hub },
+    { pattern: /\b(CAT exam|adaptive practice exam|computerized adaptive test)\b/gi, href: catHub },
+    { pattern: /\b(practice exam)\b/gi, href: catHub },
     { pattern: /\b(study plan)\b/gi, href: "/app/study-plan" },
   );
 

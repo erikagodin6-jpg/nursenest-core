@@ -16,6 +16,7 @@ test("isAllowedBlogInternalHref rejects app and accepts pathway lessons", () => 
 test("effectiveLessonHref respects removal and replacement", () => {
   assert.equal(
     effectiveLessonHref({
+      label: "Removed row",
       suggestedPath: "/us/rn/nclex-rn/lessons/foo",
       replacementPath: null,
       reviewStatus: "removed",
@@ -23,6 +24,7 @@ test("effectiveLessonHref respects removal and replacement", () => {
     null,
   );
   const rep = effectiveLessonHref({
+    label: "Replacement row",
     suggestedPath: "/us/rn/nclex-rn/lessons/foo",
     replacementPath: "/us/rn/nclex-rn/questions",
     reviewStatus: "active",
@@ -30,18 +32,40 @@ test("effectiveLessonHref respects removal and replacement", () => {
   assert.equal(rep, "/us/rn/nclex-rn/questions");
 });
 
+test("effectiveLessonHref hides not_found lesson paths until replacement is set", () => {
+  assert.equal(
+    effectiveLessonHref({
+      label: "Missing lesson",
+      suggestedPath: "/us/rn/nclex-rn/lessons/ghost-slug",
+      reviewStatus: "active",
+      pathStatus: "not_found",
+    }),
+    null,
+  );
+  assert.equal(
+    effectiveLessonHref({
+      label: "Fixed",
+      suggestedPath: "/us/rn/nclex-rn/lessons/ghost-slug",
+      replacementPath: "/us/rn/nclex-rn/questions",
+      reviewStatus: "active",
+      pathStatus: "not_found",
+    }),
+    "/us/rn/nclex-rn/questions",
+  );
+});
+
 test("lessonRowsToRelatedPaths dedupes and aligns country", () => {
   const paths = lessonRowsToRelatedPaths(
     [
       {
         id: "a",
-        label: "L",
+        label: "Lesson A",
         suggestedPath: "/us/rn/nclex-rn/lessons/a",
         reviewStatus: "active",
       },
       {
         id: "b",
-        label: "L2",
+        label: "Lesson B",
         suggestedPath: "/us/rn/nclex-rn/lessons/a",
         reviewStatus: "active",
       },

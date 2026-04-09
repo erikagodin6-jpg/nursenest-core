@@ -21,6 +21,21 @@ import {
   parseInternalLinkPlanJson,
 } from "@/lib/blog/blog-image-workflow";
 import { parseBlogAdminPublishLog } from "@/lib/blog/blog-admin-publish-log";
+
+/** Mirrors API `prePublish` payload (avoid importing server validation module in client). */
+type PrePublishIssueClient = {
+  id: string;
+  severity: "block" | "warn";
+  message: string;
+  fix: string;
+};
+type PrePublishResultClient = {
+  issues: PrePublishIssueClient[];
+  blocking: PrePublishIssueClient[];
+  warnings: PrePublishIssueClient[];
+  okToPublish: boolean;
+  hasWarnings: boolean;
+};
 import { buildPersistedSeoBundle, buildSchemaSummaryPayload } from "@/lib/blog/blog-seo-automation";
 import { AdminBlogDraftEditorShell, DraftSectionCard } from "@/components/admin/blog/admin-blog-draft-editor-shell";
 import { AdminBlogHtmlPreview } from "@/components/admin/blog/admin-blog-html-preview";
@@ -153,7 +168,7 @@ function planFromPost(post: AdminPostPayload): BlogControlPanelPlan {
     metaTitle: post.seoTitle ?? post.metaTitleVariant ?? post.title,
     metaDescription: post.seoDescription ?? post.metaDescriptionVariant ?? "",
     outline: outline.length ? outline : [{ h2: "Introduction", bullets: ["Generated outline missing — regenerate outline."] }],
-    suggestedInternalLessons: normalizeLessonRowsFromStorage(internal?.lessons ?? []),
+    suggestedInternalLessons: normalizeLessonRowsFromStorage(internal?.lessons ?? []) as BlogControlPanelPlan["suggestedInternalLessons"],
     faqs: faqBlock?.items ?? [],
     breadcrumbs,
     imagePlacements: internal?.imagePlacements ?? [],
@@ -219,6 +234,9 @@ export function AdminBlogControlPanelClient({
   const [slugDraft, setSlugDraft] = useState("");
   const [previewOpen, setPreviewOpen] = useState(Boolean(initialPreviewOpen));
   const [publishAtLocal, setPublishAtLocal] = useState("");
+  const [prePublish, setPrePublish] = useState<PrePublishResultClient | null>(null);
+  const [prePublishLoading, setPrePublishLoading] = useState(false);
+  const [acknowledgePrePublishWarnings, setAcknowledgePrePublishWarnings] = useState(false);
   const [workflowFailureNote, setWorkflowFailureNote] = useState("");
   const [outlineJsonText, setOutlineJsonText] = useState("");
   const [outlineJsonErr, setOutlineJsonErr] = useState<string | null>(null);
@@ -307,6 +325,32 @@ export function AdminBlogControlPanelClient({
       cancelled = true;
     };
   }, [initialPostId, hydrateFromPost]);
+
+  const refreshPrePublishValidation = useCallback(async (id: string | null) => {
+    if (!id) {
+      setPrePublish(null);
+      return;
+    }
+    setPrePublishLoading(true);
+    try {
+      const res = await fetch(`/api/admin/blog/${id}/pre-publish-validation`, { cache: "no-store" });
+      const json = (await res.json()) as { ok?: boolean; prePublish?: PrePublishResultClient; error?: string };
+      if (res.ok && json.prePublish) {
+        setPrePublish(json.prePublish);
+        if (!json.prePublish.hasWarnings) setAcknowledgePrePublishWarnings(false);
+      } else {
+        setPrePublish(null);
+      }
+    } catch {
+      setPrePublish(null);
+    } finally {
+      setPrePublishLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void refreshPrePublishValidation(postId);
+  }, [postId, refreshPrePublishValidation]);
 
   const formDisabled = genState === "generating" || Boolean(sectionBusy);
 
@@ -622,7 +666,10 @@ export function AdminBlogControlPanelClient({
         );
         return;
       }
-      if (json.post) hydrateFromPost(json.post);
+      if (json.post) {
+        hydrateFromPost(json.post);
+        void refreshPrePublishValidation(json.post.id);
+      }
       setSaveMsg("Draft saved.");
     } catch (err) {
       setSaveErr(err instanceof Error ? err.message : String(err));
@@ -637,18 +684,39 @@ export function AdminBlogControlPanelClient({
       const res = await fetch(`/api/admin/blog/${postId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "publish_now" }),
+        body: JSON.stringify({
+          action: "publish_now",
+          ...(acknowledgePrePublishWarnings ? { acknowledgePrePublishWarnings: true } : {}),
+        }),
       });
-      const json = (await res.json()) as { error?: string; post?: AdminPostPayload; reasons?: string[] };
+      const json = (await res.json()) as {
+        error?: string;
+        post?: AdminPostPayload;
+        reasons?: string[];
+        prePublish?: PrePublishResultClient;
+        needsAcknowledgement?: boolean;
+      };
       if (!res.ok) {
-        if (res.status === 422 && Array.isArray(json.reasons) && json.reasons.length > 0) {
-          setSaveErr(`Cannot publish yet: ${json.reasons.join(" · ")}`);
-          return;
+        if (json.prePublish) setPrePublish(json.prePublish);
+        if (res.status === 422) {
+          if (json.needsAcknowledgement) {
+            setSaveErr(
+              json.error ??
+                "There are pre-publish warnings. Review the list below, check the acknowledgment box, then try again.",
+            );
+            return;
+          }
+          if (Array.isArray(json.reasons) && json.reasons.length > 0) {
+            setSaveErr(`Cannot publish: ${json.reasons.join(" · ")} — see “How to fix” under each item below.`);
+            return;
+          }
         }
         setSaveErr(json.error ?? "Publish failed");
         return;
       }
       if (json.post) hydrateFromPost(json.post);
+      setAcknowledgePrePublishWarnings(false);
+      void refreshPrePublishValidation(postId);
       setSaveMsg("Published.");
     } catch (err) {
       setSaveErr(err instanceof Error ? err.message : String(err));
@@ -665,11 +733,24 @@ export function AdminBlogControlPanelClient({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      const json = (await res.json()) as { error?: string; post?: AdminPostPayload; reasons?: string[] };
+      const json = (await res.json()) as {
+        error?: string;
+        post?: AdminPostPayload;
+        reasons?: string[];
+        prePublish?: PrePublishResultClient;
+        needsAcknowledgement?: boolean;
+      };
       if (!res.ok) {
-        if (res.status === 422 && Array.isArray(json.reasons) && json.reasons.length > 0) {
-          setSaveErr(json.reasons.join(" · "));
-          return;
+        if (json.prePublish) setPrePublish(json.prePublish);
+        if (res.status === 422) {
+          if (json.needsAcknowledgement) {
+            setSaveErr(json.error ?? "Review pre-publish warnings and acknowledge if appropriate.");
+            return;
+          }
+          if (Array.isArray(json.reasons) && json.reasons.length > 0) {
+            setSaveErr(json.reasons.join(" · "));
+            return;
+          }
         }
         setSaveErr(json.error ?? "Update failed");
         return;
@@ -940,14 +1021,37 @@ export function AdminBlogControlPanelClient({
         body: JSON.stringify({
           action: "schedule",
           publishAt: when.toISOString(),
+          ...(acknowledgePrePublishWarnings ? { acknowledgePrePublishWarnings: true } : {}),
         }),
       });
-      const json = (await res.json()) as { error?: string; post?: AdminPostPayload };
+      const json = (await res.json()) as {
+        error?: string;
+        post?: AdminPostPayload;
+        reasons?: string[];
+        prePublish?: PrePublishResultClient;
+        needsAcknowledgement?: boolean;
+      };
       if (!res.ok) {
+        if (json.prePublish) setPrePublish(json.prePublish);
+        if (res.status === 422) {
+          if (json.needsAcknowledgement) {
+            setSaveErr(
+              json.error ??
+                "There are pre-publish warnings. Review below, check acknowledgment, then schedule again.",
+            );
+            return;
+          }
+          if (Array.isArray(json.reasons) && json.reasons.length > 0) {
+            setSaveErr(`Cannot schedule: ${json.reasons.join(" · ")}`);
+            return;
+          }
+        }
         setSaveErr(json.error ?? "Schedule failed");
         return;
       }
       if (json.post) hydrateFromPost(json.post);
+      setAcknowledgePrePublishWarnings(false);
+      void refreshPrePublishValidation(postId);
       setSaveMsg("Scheduled.");
     } catch (err) {
       setSaveErr(err instanceof Error ? err.message : String(err));
@@ -1021,6 +1125,8 @@ export function AdminBlogControlPanelClient({
     if (genState === "success") return { label: "Ready", className: "bg-emerald-500/15 text-emerald-900 dark:text-emerald-100" };
     return { label: "Failed", className: "bg-rose-500/15 text-rose-900 dark:text-rose-100" };
   }, [genState]);
+
+  const publishBlockedByValidation = Boolean(prePublish && !prePublish.okToPublish);
 
   return (
     <div className="space-y-10">
@@ -1249,7 +1355,12 @@ export function AdminBlogControlPanelClient({
               <button
                 type="button"
                 onClick={() => void publishNow()}
-                disabled={!postId}
+                disabled={!postId || publishBlockedByValidation}
+                title={
+                  publishBlockedByValidation
+                    ? "Fix blocking pre-publish issues (see Publish status section) or save draft first."
+                    : undefined
+                }
                 className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-40"
               >
                 Publish now
@@ -1339,6 +1450,96 @@ export function AdminBlogControlPanelClient({
               }
             >
               <div className="space-y-4 text-sm">
+                {postId ? (
+                  <div className="space-y-3 rounded-lg border border-border/80 bg-muted/15 p-3">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <p className="text-xs font-semibold text-foreground">Pre-publish validation</p>
+                      <button
+                        type="button"
+                        disabled={prePublishLoading}
+                        onClick={() => void refreshPrePublishValidation(postId)}
+                        className="rounded-md border border-border bg-background px-2 py-1 text-[11px] font-semibold hover:bg-muted/60 disabled:opacity-50"
+                      >
+                        {prePublishLoading ? "Checking…" : "Re-run checks"}
+                      </button>
+                    </div>
+                    <p className="text-[10px] leading-snug text-muted-foreground">
+                      Validates the <strong>saved</strong> post in the database. Click Save draft before publishing if you edited title, body, SEO, links, or images above.
+                    </p>
+                    {prePublishLoading && !prePublish ? (
+                      <p className="text-xs text-muted-foreground">Running checks…</p>
+                    ) : null}
+                    {prePublish ? (
+                      <>
+                        {!prePublish.okToPublish ? (
+                          <div className="rounded-md border border-rose-500/45 bg-rose-500/[0.08] p-3">
+                            <p className="text-xs font-semibold text-rose-900 dark:text-rose-100">
+                              Blocking — fix before publish or schedule
+                            </p>
+                            <ul className="mt-2 list-none space-y-3 text-xs text-rose-950 dark:text-rose-50">
+                              {prePublish.blocking.map((row) => (
+                                <li key={`b-${row.id}-${row.message.slice(0, 24)}`} className="border-b border-rose-500/20 pb-2 last:border-0 last:pb-0">
+                                  <p className="font-medium">{row.message}</p>
+                                  <p className="mt-1 text-[11px] opacity-90">
+                                    <span className="text-muted-foreground">How to fix: </span>
+                                    {row.fix}
+                                  </p>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ) : null}
+                        {prePublish.hasWarnings ? (
+                          <div
+                            className={`rounded-md border p-3 ${
+                              prePublish.okToPublish
+                                ? "border-amber-500/45 bg-amber-500/[0.08]"
+                                : "border-border/60 bg-muted/20"
+                            }`}
+                          >
+                            <p
+                              className={`text-xs font-semibold ${
+                                prePublish.okToPublish
+                                  ? "text-amber-950 dark:text-amber-100"
+                                  : "text-muted-foreground"
+                              }`}
+                            >
+                              Warnings {prePublish.okToPublish ? "(acknowledge to publish or schedule)" : ""}
+                            </p>
+                            <ul className="mt-2 list-none space-y-3 text-xs">
+                              {prePublish.warnings.map((row) => (
+                                <li key={`w-${row.id}-${row.message.slice(0, 24)}`} className="border-b border-border/30 pb-2 last:border-0 last:pb-0">
+                                  <p className="font-medium text-foreground">{row.message}</p>
+                                  <p className="mt-1 text-[11px] text-muted-foreground">{row.fix}</p>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ) : null}
+                        {prePublish.okToPublish && !prePublish.hasWarnings ? (
+                          <p className="text-xs font-medium text-emerald-800 dark:text-emerald-200">
+                            Required checks pass. You can publish or schedule.
+                          </p>
+                        ) : null}
+                        {prePublish.okToPublish && prePublish.hasWarnings ? (
+                          <label className="flex cursor-pointer items-start gap-2 text-xs">
+                            <input
+                              type="checkbox"
+                              className="mt-0.5"
+                              checked={acknowledgePrePublishWarnings}
+                              onChange={(e) => setAcknowledgePrePublishWarnings(e.target.checked)}
+                            />
+                            <span>
+                              I reviewed the warnings above and accept publishing or scheduling with them (required when warnings are present).
+                            </span>
+                          </label>
+                        ) : null}
+                      </>
+                    ) : !prePublishLoading ? (
+                      <p className="text-xs text-muted-foreground">Validation could not be loaded. Use Re-run checks or refresh the page.</p>
+                    ) : null}
+                  </div>
+                ) : null}
                 {postId && post ? (
                   <>
                     <label className="block space-y-1">
@@ -1455,7 +1656,13 @@ export function AdminBlogControlPanelClient({
                       <button
                         type="button"
                         onClick={() => void applySchedule()}
-                        className="shrink-0 rounded-lg border border-border bg-muted/50 px-4 py-2 text-xs font-semibold hover:bg-muted/80"
+                        disabled={publishBlockedByValidation}
+                        title={
+                          publishBlockedByValidation
+                            ? "Fix blocking validation issues before scheduling."
+                            : undefined
+                        }
+                        className="shrink-0 rounded-lg border border-border bg-muted/50 px-4 py-2 text-xs font-semibold hover:bg-muted/80 disabled:opacity-40"
                       >
                         Save as scheduled
                       </button>
@@ -1923,8 +2130,8 @@ export function AdminBlogControlPanelClient({
 
           <DraftSectionCard
             id="draft-links"
-            title="Internal lesson links"
-            description="Active rows drive auto-links and footer. Country alignment runs on save."
+            title="Study product links (review)"
+            description="Lessons, question banks, practice exams — verified against allowlists and lesson DB where possible. Active rows drive in-article auto-links and the public footer."
             actions={
               <button
                 type="button"
@@ -1937,27 +2144,43 @@ export function AdminBlogControlPanelClient({
             }
           >
               <p className="text-[11px] text-muted-foreground">
-                Active rows drive phrase auto-links in the published article (capped) and the footer. Country: <strong>{country}</strong> — paths are aligned on save. Remove off-topic rows or replace targets with a valid https-root path.
+                Path check: <strong>ok</strong> = safe to surface; <strong>not found</strong> = lesson slug missing in DB (fix path or remove); <strong>skipped</strong> = hub/programmatic URL (no slug check). Country: <strong>{country}</strong>. Replace target overrides a bad suggestion. Save / persist re-runs verification.
               </p>
               <ul className="mt-3 max-h-[min(28rem,55vh)] space-y-3 overflow-auto text-xs">
                 {plan.suggestedInternalLessons.map((l, i) => {
                   const eff = effectiveLessonHref(l);
                   const ok = Boolean(eff && isAllowedBlogInternalHref(eff));
+                  const ps = l.pathStatus ?? "unchecked";
+                  const pathLabel =
+                    ps === "ok"
+                      ? "path · ok"
+                      : ps === "not_found"
+                        ? "path · lesson not in DB"
+                        : ps === "invalid_allowlist"
+                          ? "path · blocked pattern"
+                          : ps === "skipped_non_lesson"
+                            ? "path · hub/programmatic"
+                            : "path · unchecked";
                   return (
                     <li key={l.id ?? i} className="rounded-lg border border-border/60 p-3">
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <span className="font-semibold text-foreground">{l.label}</span>
-                        <span
-                          className={`rounded-full px-2 py-0.5 text-[10px] font-medium uppercase ${
-                            l.reviewStatus === "removed"
-                              ? "bg-muted text-muted-foreground"
-                              : ok
-                                ? "bg-emerald-500/15 text-emerald-900 dark:text-emerald-100"
-                                : "bg-amber-500/15 text-amber-950 dark:text-amber-100"
-                          }`}
-                        >
-                          {l.reviewStatus === "removed" ? "removed" : ok ? "active · valid" : "active · check URL"}
-                        </span>
+                        <div className="flex flex-wrap items-center gap-1.5">
+                          <span
+                            className={`rounded-full px-2 py-0.5 text-[10px] font-medium uppercase ${
+                              l.reviewStatus === "removed"
+                                ? "bg-muted text-muted-foreground"
+                                : ok
+                                  ? "bg-emerald-500/15 text-emerald-900 dark:text-emerald-100"
+                                  : "bg-amber-500/15 text-amber-950 dark:text-amber-100"
+                            }`}
+                          >
+                            {l.reviewStatus === "removed" ? "removed" : ok ? "live href" : "needs fix"}
+                          </span>
+                          <span className="rounded-full bg-muted/80 px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+                            {pathLabel}
+                          </span>
+                        </div>
                       </div>
                       {l.linkKind ? (
                         <p className="mt-1 text-[10px] uppercase tracking-wide text-muted-foreground">Kind: {l.linkKind.replace(/_/g, " ")}</p>
@@ -1965,6 +2188,16 @@ export function AdminBlogControlPanelClient({
                       <p className="mt-1 font-mono text-[11px] text-muted-foreground">Suggested: {l.suggestedPath}</p>
                       {eff && eff !== l.suggestedPath.trim() ? (
                         <p className="mt-0.5 font-mono text-[11px] text-primary">Effective: {eff}</p>
+                      ) : null}
+                      {eff ? (
+                        <a
+                          href={eff}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="mt-1 inline-block text-[11px] font-semibold text-primary underline"
+                        >
+                          Open in new tab
+                        </a>
                       ) : null}
                       <label className="mt-2 block space-y-1">
                         <span className="text-[11px] text-muted-foreground">Replace target (optional, root-relative)</span>

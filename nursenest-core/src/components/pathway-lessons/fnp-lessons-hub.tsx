@@ -145,9 +145,9 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
         <p className="nn-marketing-caption mt-1">
           Pair a population filter with assessment, diagnosis, management, or evaluation. Items on the exam cross these lanes.
         </p>
-        <ul className="nn-marketing-body-sm mt-3 flex flex-wrap gap-2 text-muted-foreground">
+        <ul className="nn-marketing-body-sm mt-3 flex flex-wrap gap-2">
           {FNP_DOMAIN_ORDER.map((row) => (
-            <li key={row.id} className="nn-chip rounded-full px-3 py-1">
+            <li key={row.id} className="nn-accent-pill rounded-full px-3 py-1.5 text-sm">
               {row.label}: <span className="font-semibold text-[var(--theme-heading-text)]">{countsDom[row.id]}</span>
             </li>
           ))}

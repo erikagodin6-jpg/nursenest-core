@@ -3,6 +3,7 @@ import { ContentStatus } from "@prisma/client";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { prisma } from "@/lib/db";
+import { contentStatusToDb } from "@/lib/prisma/content-status";
 
 const schema = z.discriminatedUnion("action", [
   z.object({
@@ -31,20 +32,20 @@ export async function POST(req: Request) {
 
   const body = parsed.data;
   if (body.action === "delete") {
-    const res = await prisma.contentItem.deleteMany({ where: { id: { in: body.ids } } });
+    const res = await prisma.contentItem.deleteMany({ where: { id: { in: body.ids }, type: "lesson" } });
     return NextResponse.json({ deleted: res.count });
   }
 
   if (body.action === "set_status") {
     const res = await prisma.contentItem.updateMany({
-      where: { id: { in: body.ids } },
-      data: { status: body.status },
+      where: { id: { in: body.ids }, type: "lesson" },
+      data: { status: contentStatusToDb(body.status) },
     });
     return NextResponse.json({ updated: res.count });
   }
 
   const rows = await prisma.contentItem.findMany({
-    where: { id: { in: body.ids } },
+    where: { id: { in: body.ids }, type: "lesson" },
     select: { id: true, tags: true },
   });
 

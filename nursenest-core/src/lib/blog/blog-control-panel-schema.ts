@@ -8,15 +8,39 @@ export function lessonLinkStableId(row: { suggestedPath: string; label: string }
 }
 
 /** Single curated internal link row (lesson, hub, or question bank path). Exported for storage normalization. */
+export const blogLinkPathStatusSchema = z.enum([
+  "unchecked",
+  "ok",
+  "invalid_allowlist",
+  "not_found",
+  "skipped_non_lesson",
+]);
+
+export type BlogLinkPathStatus = z.infer<typeof blogLinkPathStatusSchema>;
+
 export const blogLessonLinkRowSchema = z.object({
   label: z.string().min(2).max(200),
   suggestedPath: z.string().min(2).max(500),
   rationale: z.string().max(400).optional(),
   id: z.string().max(80).optional(),
-  linkKind: z.enum(["lesson", "lessons_hub", "question_bank", "topic_cluster", "general"]).optional(),
+  linkKind: z
+    .enum([
+      "lesson",
+      "lessons_hub",
+      "question_bank",
+      "topic_cluster",
+      "practice_exams",
+      "practice_programmatic",
+      "general",
+    ])
+    .optional(),
   reviewStatus: z.enum(["active", "removed"]).optional(),
   replacementPath: z.string().max(500).nullable().optional(),
+  /** Set by server verification; admin UI shows review state. */
+  pathStatus: blogLinkPathStatusSchema.optional(),
 });
+
+export type BlogLessonLinkRow = z.infer<typeof blogLessonLinkRowSchema>;
 
 const blogControlPanelPlanBase = z.object({
   titleOptions: z.array(z.string().min(3).max(200)).min(2).max(6),

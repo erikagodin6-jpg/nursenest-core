@@ -10,10 +10,7 @@ type Props = {
 
 const chip = (lessonsBasePath: string, t: TopicCluster) => (
   <li key={t.topicSlug}>
-    <Link
-      href={`${lessonsBasePath}/topics/${t.topicSlug}`}
-      className="inline-flex rounded-full border border-border bg-[var(--theme-muted-surface)] px-3 py-1.5 text-sm font-medium hover:border-primary/40"
-    >
+    <Link href={`${lessonsBasePath}/topics/${t.topicSlug}`} className="nn-chip px-3 py-1.5 text-sm font-medium hover:border-primary/40">
       {t.label} ({t.count})
     </Link>
   </li>
@@ -28,9 +25,9 @@ export function PathwayTopicClusterGroupedNav({ lessonsBasePath, topicClusters, 
   const groups = groupTopicClustersForNavigation(topicClusters);
 
   return (
-    <section aria-label="Browse by topic" className="rounded-xl border border-border bg-card p-4">
-      <h2 className="text-sm font-bold text-[var(--theme-heading-text)]">Browse by topic cluster</h2>
-      <p className="mt-1 text-xs text-muted">
+    <section aria-label="Browse by topic" className="nn-study-card nn-study-card--wash p-4 sm:p-5">
+      <h2 className="nn-marketing-h4 text-[var(--theme-heading-text)]">Browse by topic cluster</h2>
+      <p className="nn-marketing-caption mt-1 text-muted">
         Organized by clinical theme — same lessons as the full list ({pathwayShortName}).
       </p>
       <div className="mt-4 space-y-5">

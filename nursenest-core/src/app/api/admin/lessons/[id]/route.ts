@@ -26,6 +26,7 @@ const patchSchema = z
     tags: z.array(z.string()).optional(),
     sourceNotes: z.string().nullable().optional(),
     acknowledgeBelowQualityBar: z.boolean().optional(),
+    versionKey: z.string().max(200).nullable().optional(),
   })
   .strict();
 
@@ -46,11 +47,35 @@ export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> 
     { acknowledgeBelowQualityBar: false },
   );
 
+  const [category, qDrafts, fcDrafts, enhDrafts, progressOpened, progressCompleted] = await Promise.all([
+    existing.category
+      ? prisma.category.findFirst({
+          where: {
+            OR: [{ name: existing.category }, { slug: existing.category }],
+          },
+          select: { id: true, name: true, slug: true },
+        })
+      : Promise.resolve(null),
+    prisma.generatedQuestionDraft.count({ where: { lessonId: id } }),
+    prisma.generatedFlashcardDraft.count({ where: { lessonId: id } }),
+    prisma.generatedLessonDraft.count({ where: { targetLessonId: id } }),
+    prisma.progress.count({ where: { lessonId: id } }),
+    prisma.progress.count({ where: { lessonId: id, completed: true } }),
+  ]);
+
   return NextResponse.json({
     lesson: existing,
     body,
     lessonQuality,
     publishPreview,
+    categoryMatch: category,
+    linkMapping: {
+      generatedQuestionDrafts: qDrafts,
+      generatedFlashcardDrafts: fcDrafts,
+      generatedLessonEnhancements: enhDrafts,
+      progressUsersOpened: progressOpened,
+      progressUsersCompleted: progressCompleted,
+    },
   });
 }
 
@@ -107,6 +132,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
       tags: d.tags,
       category: category ?? undefined,
       bodySystem: d.systemTag ?? d.topicTag ?? undefined,
+      ...(d.versionKey !== undefined ? { versionKey: d.versionKey } : {}),
     },
   });
 

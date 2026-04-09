@@ -2,9 +2,18 @@ import { BlogFunnelStage, BlogPostIntent, BlogPostTemplate } from "@prisma/clien
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
+import {
+  logControlPanelPersistFailure,
+  logControlPanelPersistSkipped,
+  logControlPanelPersistSuccess,
+  logPipelineDuplicateTopic,
+  logReferenceGate,
+} from "@/lib/admin/blog-content-automation-log";
 import { coerceBlogSourceRows } from "@/lib/blog/apa7";
-import { blogControlPanelPlanSchema } from "@/lib/blog/blog-control-panel-schema";
+import { blogControlPanelPlanSchema, type BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema";
 import { persistControlPanelDraft } from "@/lib/blog/blog-control-panel-generation";
+import { annotateBlogInternalLinkRowsWithVerification } from "@/lib/blog/blog-internal-link-verify";
+import { normalizePlanSuggestedLessonRows } from "@/lib/blog/blog-internal-lesson-links";
 import { BLOG_ARTICLE_MIN_BODY_CHARS } from "@/lib/blog/blog-article-generation-pipeline";
 import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
 import { prisma } from "@/lib/db";
@@ -49,6 +58,12 @@ export async function POST(req: Request) {
 
   const planParsed = blogControlPanelPlanSchema.safeParse(d.plan);
   if (!planParsed.success) {
+    await logControlPanelPersistFailure({
+      topic: d.topic,
+      code: "INVALID_PLAN",
+      message: "Plan JSON failed schema validation",
+      createdById: gate.admin.userId,
+    });
     return NextResponse.json(
       { error: "Invalid plan", details: planParsed.error.flatten() },
       { status: 400 },
@@ -59,6 +74,12 @@ export async function POST(req: Request) {
   if (normalizedTopic) {
     const dup = await findExistingBlogByCanonicalIntent({ exam: d.exam, normalizedTopic });
     if (dup) {
+      await logPipelineDuplicateTopic({
+        topic: d.topic,
+        existingSlug: dup.slug,
+        createdById: gate.admin.userId,
+        source: "persist_draft",
+      });
       return NextResponse.json(
         {
           error: "duplicate_topic",
@@ -89,10 +110,24 @@ export async function POST(req: Request) {
     allowInsufficientCitations: d.allowInsufficientCitations,
   };
 
-  const persistResult = await persistControlPanelDraft(input, planParsed.data, d.bodyHtml);
+  const planVerified = {
+    ...planParsed.data,
+    suggestedInternalLessons: normalizePlanSuggestedLessonRows(
+      await annotateBlogInternalLinkRowsWithVerification(planParsed.data.suggestedInternalLessons, d.country),
+    ) as BlogControlPanelPlan["suggestedInternalLessons"],
+  };
+
+  const persistResult = await persistControlPanelDraft(input, planVerified, d.bodyHtml);
 
   if (!persistResult.ok) {
     if (persistResult.code === "INSUFFICIENT_CITATIONS") {
+      await logReferenceGate({
+        topic: d.topic,
+        message: persistResult.error,
+        riskFlags: persistResult.riskFlags ?? [],
+        source: "persist_draft",
+        createdById: gate.admin.userId,
+      });
       return NextResponse.json(
         {
           error: "insufficient_citations",
@@ -103,11 +138,23 @@ export async function POST(req: Request) {
         { status: 422 },
       );
     }
+    await logControlPanelPersistFailure({
+      topic: d.topic,
+      code: "PERSIST_FAILED",
+      message: persistResult.error,
+      createdById: gate.admin.userId,
+    });
     return NextResponse.json({ error: "persist_failed", message: persistResult.error }, { status: 500 });
   }
 
   if (persistResult.skipped) {
     const sk = persistResult;
+    await logControlPanelPersistSkipped({
+      topic: d.topic,
+      reason: sk.reason,
+      existingSlug: sk.existingSlug,
+      createdById: gate.admin.userId,
+    });
     return NextResponse.json(
       {
         skipped: true,
@@ -122,6 +169,14 @@ export async function POST(req: Request) {
   }
 
   const result = persistResult;
+  await logControlPanelPersistSuccess({
+    topic: d.topic,
+    blogPostId: result.post.id,
+    slug: result.post.slug,
+    plan: planVerified,
+    createdById: gate.admin.userId,
+  });
+
   const full = await prisma.blogPost.findUnique({
     where: { id: result.post.id },
     select: {

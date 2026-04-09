@@ -2,6 +2,13 @@ import { BlogFunnelStage, BlogPostIntent, BlogPostTemplate } from "@prisma/clien
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
+import {
+  logControlPanelPipelineFailure,
+  logControlPanelPipelineSuccess,
+  logPipelineDuplicateTopic,
+  logPipelinePersistSkipped,
+  logReferenceGate,
+} from "@/lib/admin/blog-content-automation-log";
 import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
 import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
 import { coerceBlogSourceRows } from "@/lib/blog/apa7";
@@ -60,6 +67,12 @@ export async function POST(req: Request) {
   if (normalizedTopic) {
     const dup = await findExistingBlogByCanonicalIntent({ exam: d.exam, normalizedTopic });
     if (dup) {
+      await logPipelineDuplicateTopic({
+        topic: d.topic,
+        existingSlug: dup.slug,
+        createdById: gate.admin.userId,
+        source: "control_panel_generate",
+      });
       return NextResponse.json(
         {
           error: "duplicate_topic",
@@ -93,9 +106,22 @@ export async function POST(req: Request) {
   const pipelineResult = await runBlogArticleGenerationPipeline(input, { persist: true });
   if (!pipelineResult.ok) {
     if (pipelineResult.stage === "plan") {
+      await logControlPanelPipelineFailure({
+        topic: d.topic,
+        stage: "plan",
+        message: pipelineResult.error,
+        createdById: gate.admin.userId,
+      });
       return NextResponse.json({ error: "plan_generation_failed", message: pipelineResult.error }, { status: 502 });
     }
     if (pipelineResult.stage === "body") {
+      await logControlPanelPipelineFailure({
+        topic: d.topic,
+        stage: "body",
+        message: pipelineResult.error,
+        createdById: gate.admin.userId,
+        metadata: { hasPlan: Boolean(pipelineResult.plan) },
+      });
       return NextResponse.json(
         {
           error: "body_generation_failed",
@@ -107,6 +133,13 @@ export async function POST(req: Request) {
       );
     }
     if (pipelineResult.stage === "citations") {
+      await logReferenceGate({
+        topic: d.topic,
+        message: pipelineResult.error,
+        riskFlags: pipelineResult.riskFlags ?? [],
+        source: "control_panel_pipeline",
+        createdById: gate.admin.userId,
+      });
       return NextResponse.json(
         {
           error: "insufficient_citations",
@@ -120,6 +153,12 @@ export async function POST(req: Request) {
         { status: 422 },
       );
     }
+    await logControlPanelPipelineFailure({
+      topic: d.topic,
+      stage: "persist",
+      message: pipelineResult.error,
+      createdById: gate.admin.userId,
+    });
     return NextResponse.json(
       { error: "persist_failed", message: pipelineResult.error, plan: pipelineResult.plan, bodyHtml: pipelineResult.bodyHtml },
       { status: 500 },
@@ -128,6 +167,13 @@ export async function POST(req: Request) {
 
   if (pipelineResult.persistSkipped) {
     const sk = pipelineResult.persistSkipped;
+    await logPipelinePersistSkipped({
+      topic: d.topic,
+      reason: sk.reason,
+      existingSlug: sk.existingSlug,
+      normalizedTopic: sk.normalizedTopic,
+      createdById: gate.admin.userId,
+    });
     return NextResponse.json(
       {
         skipped: true,
@@ -143,8 +189,22 @@ export async function POST(req: Request) {
 
   const result = pipelineResult.persist;
   if (!result) {
+    await logControlPanelPipelineFailure({
+      topic: d.topic,
+      stage: "persist_missing",
+      message: "Pipeline returned no persist result",
+      createdById: gate.admin.userId,
+    });
     return NextResponse.json({ error: "persist_missing" }, { status: 500 });
   }
+
+  await logControlPanelPipelineSuccess({
+    topic: d.topic,
+    blogPostId: result.post.id,
+    slug: result.post.slug,
+    plan: pipelineResult.plan,
+    createdById: gate.admin.userId,
+  });
 
   const full = await prisma.blogPost.findUnique({
     where: { id: result.post.id },

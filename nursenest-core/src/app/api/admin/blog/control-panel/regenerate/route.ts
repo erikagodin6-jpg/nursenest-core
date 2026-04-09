@@ -6,6 +6,8 @@ import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
 import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
 import { blogControlPanelPlanSchema } from "@/lib/blog/blog-control-panel-schema";
 import { regenerateControlPanelSection } from "@/lib/blog/blog-control-panel-generation";
+import { annotateBlogInternalLinkRowsWithVerification } from "@/lib/blog/blog-internal-link-verify";
+import { normalizePlanSuggestedLessonRows } from "@/lib/blog/blog-internal-lesson-links";
 
 const sectionSchema = z.enum([
   "title_options",
@@ -73,6 +75,18 @@ export async function POST(req: Request) {
       currentBody: d.currentBody,
       currentTitle: d.currentTitle,
     });
+    if (out.section === "internal_links") {
+      const verified = normalizePlanSuggestedLessonRows(
+        await annotateBlogInternalLinkRowsWithVerification(
+          normalizePlanSuggestedLessonRows(out.suggestedInternalLessons),
+          d.country,
+        ),
+      );
+      return NextResponse.json({
+        ok: true,
+        result: { ...out, suggestedInternalLessons: verified },
+      });
+    }
     return NextResponse.json({ ok: true, result: out });
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);

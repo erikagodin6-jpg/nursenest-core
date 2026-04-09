@@ -196,7 +196,9 @@ model User {
   protectionAbuseReviews    ProtectionAbuseReview[]
   /** Abuse review rows this admin closed (dismiss / resolve). */
   abuseReviewsDismissed     ProtectionAbuseReview[] @relation("ProtectionAbuseReviewDismissedBy")
-  blogBatchSchedules        BlogBatchSchedule[]
+  blogBatchSchedules           BlogBatchSchedule[]
+  blogDraftGenerationBatches   BlogDraftGenerationBatch[]
+  contentAutomationLogs        ContentAutomationLog[]
 
   @@index([alliedProfessionKey])
 }
@@ -480,6 +482,21 @@ enum BlogBatchScheduleItemStatus {
   SKIPPED
 }
 
+/** Ad-hoc admin batch: generate drafts from a topic list (no publish cadence). */
+enum BlogDraftGenerationBatchStatus {
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum BlogDraftGenerationBatchItemStatus {
+  PENDING
+  GENERATING
+  COMPLETED
+  FAILED
+  SKIPPED
+}
+
 enum BlogImageStatus {
   NONE
   REQUESTED
@@ -530,7 +547,9 @@ model BlogPost {
   campaignId   String?
   campaign     BlogCampaign? @relation(fields: [campaignId], references: [id], onDelete: SetNull)
   campaignItems BlogCampaignItem[]
-  batchScheduleItems BlogBatchScheduleItem[]
+  batchScheduleItems           BlogBatchScheduleItem[]
+  draftGenerationBatchItems    BlogDraftGenerationBatchItem[]
+  contentAutomationLogs        ContentAutomationLog[]
   targetKeyword String?
   keywordCluster String?
   countryTarget CountryCode?
@@ -693,6 +712,102 @@ model BlogBatchScheduleItem {
   @@unique([scheduleId, ordinal])
   @@index([scheduleId, status, plannedPublishAt])
   @@index([plannedPublishAt, status])
+}
+
+/**
+ * Admin paste-many-topics draft batch: one `BlogPost` draft per line when processed.
+ * Progress is persisted; call process API in chunks to stay within request timeouts.
+ */
+model BlogDraftGenerationBatch {
+  id                           String                         @id @default(cuid())
+  status                       BlogDraftGenerationBatchStatus @default(ACTIVE)
+  exam                         String
+  country                      String                         @default("unspecified")
+  defaultTemplate              BlogPostTemplate               @default(TOPIC_EXPLAINED)
+  defaultIntent                BlogPostIntent?
+  funnelStage                  BlogFunnelStage?
+  tone                         String                         @default("professional") @db.VarChar(32)
+  keywords                     String?                        @db.Text
+  keywordCluster               String?
+  countryTarget                CountryCode?
+  includeImage                 Boolean                        @default(true)
+  includeAiImage               Boolean                        @default(false)
+  allowDuplicateCanonicalTopic Boolean                        @default(false)
+  totalItems                   Int
+  completedCount               Int                            @default(0)
+  failedCount                  Int                            @default(0)
+  skippedCount                 Int                            @default(0)
+  createdById                  String?
+  createdBy                    User?                          @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  items                        BlogDraftGenerationBatchItem[]
+  createdAt                    DateTime                       @default(now())
+  updatedAt                    DateTime                       @updatedAt
+
+  @@index([status, createdAt])
+}
+
+model BlogDraftGenerationBatchItem {
+  id                String                             @id @default(cuid())
+  batchId           String
+  batch             BlogDraftGenerationBatch           @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  ordinal           Int
+  topicRaw          String
+  canonicalTopicKey String?
+  status            BlogDraftGenerationBatchItemStatus @default(PENDING)
+  blogPostId        String?
+  blogPost          BlogPost?                          @relation(fields: [blogPostId], references: [id], onDelete: SetNull)
+  error             String?                            @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([batchId, ordinal])
+  @@index([batchId, status, ordinal])
+}
+
+/** Admin-only audit trail for blog/content automation (generation, publish gates, validation). */
+enum ContentAutomationLogCategory {
+  BLOG_AI_SIMPLE
+  BLOG_AI_BATCH_ITEM
+  BLOG_CONTROL_PANEL_PIPELINE
+  BLOG_CONTROL_PANEL_PERSIST
+  BLOG_PUBLISH
+  BLOG_PUBLISH_BLOCKED
+  BLOG_MARK_FAILED
+  BLOG_REFERENCE_GATE
+  BLOG_INTERNAL_LINK_CHECK
+}
+
+enum ContentAutomationLogStatus {
+  SUCCEEDED
+  FAILED
+  SKIPPED
+  WARNING
+}
+
+model ContentAutomationLog {
+  id            String                       @id @default(cuid())
+  category      ContentAutomationLogCategory
+  jobType       String                       @db.VarChar(96)
+  status        ContentAutomationLogStatus
+  topic         String?                      @db.Text
+  summary       String?                      @db.VarChar(480)
+  error         String?                      @db.Text
+  metadata      Json?
+  blogPostId    String?
+  blogPost      BlogPost?                    @relation(fields: [blogPostId], references: [id], onDelete: SetNull)
+  correlationId String?                      @db.VarChar(64)
+  sourceItemId  String?                      @db.VarChar(64)
+  retryOfId     String?                      @db.VarChar(64)
+  completedAt   DateTime?
+  createdById   String?
+  createdBy     User?                        @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt     DateTime                     @default(now())
+  updatedAt     DateTime                     @updatedAt
+
+  @@index([category, status, createdAt])
+  @@index([createdAt])
+  @@index([blogPostId])
+  @@index([correlationId])
 }
 
 /** Production `content_items` — lessons are `type = "lesson"`. */

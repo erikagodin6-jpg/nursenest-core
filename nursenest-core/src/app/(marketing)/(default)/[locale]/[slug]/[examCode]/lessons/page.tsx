@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ExamFamily } from "@prisma/client";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { PathwayLessonContentLocaleBanner } from "@/components/lessons/pathway-lesson-content-locale-banner";
@@ -363,6 +364,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
             topicClusters={topics}
             progressMap={progressMap}
             canShowProgressMap={canShowProgressMap}
+            visualTone={pathway.examFamily === ExamFamily.NP ? "np" : "default"}
           />
         </div>
       )}

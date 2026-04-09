@@ -37,7 +37,8 @@ import {
 } from "@/lib/blog/blog-article-pipeline-prompts";
 import type { BlogImageSlotAttachment } from "@/lib/blog/blog-image-workflow";
 import { seedBlogAdminPublishLog } from "@/lib/blog/blog-admin-publish-log";
-import { ctaFor, detectRiskFlags, thinDraftWarning } from "@/lib/blog/seo-campaign-engine";
+import { blogPrimaryStudyCta } from "@/lib/blog/blog-study-cta";
+import { detectRiskFlags, thinDraftWarning } from "@/lib/blog/seo-campaign-engine";
 import { prisma } from "@/lib/db";
 
 export type ControlPanelGenerateInput = {
@@ -241,7 +242,13 @@ export async function persistControlPanelDraft(
   const apaReferences = partition.apaLines;
   const sourceCheck = partition.sourceCheck;
 
-  const cta = ctaFor({ intent: input.intent, funnel: input.funnelStage, template: input.template });
+  const cta = blogPrimaryStudyCta({
+    exam: input.exam,
+    country: input.country,
+    intent: input.intent,
+    funnel: input.funnelStage,
+    template: input.template,
+  });
   const riskFlags = detectRiskFlags({ template: input.template, keyword: input.targetKeyword ?? input.topic });
   const thinWarning = thinDraftWarning(bodyHtml);
 
@@ -462,7 +469,7 @@ Current outline for reference: ${JSON.stringify(params.currentPlan?.outline ?? [
 
     faqs: `Return {"faqs": array of {q,a} } with 4-6 new exam-prep FAQs for topic "${params.topic}" (${params.exam}).`,
 
-    internal_links: `Return {"suggestedInternalLessons": array of { label, suggestedPath, rationale?, optional linkKind ("lesson"|"lessons_hub"|"question_bank"|"topic_cluster"|"general") } } — 4-10 **strictly relevant** destinations only (no filler). Match audience country when possible (/us/... vs /canada/...).
+    internal_links: `Return {"suggestedInternalLessons": array of { label, suggestedPath, rationale?, optional linkKind ("lesson"|"lessons_hub"|"question_bank"|"topic_cluster"|"practice_exams"|"practice_programmatic"|"general") } } — 5-12 **strictly relevant** destinations: lessons, question bank hub, /practice-exams, programmatic practice when applicable, topic clusters. No filler. Match audience country (/us/... vs /canada/...).
 
 ${getBlogInternalLinkPathHintsForPrompt(params.exam, params.country)}`,
 
@@ -536,7 +543,7 @@ Current placements for reference: ${JSON.stringify(params.currentPlan?.imagePlac
       if (!parsed.success) throw new Error("Invalid internal links payload");
       return {
         section: "internal_links",
-        suggestedInternalLessons: normalizePlanSuggestedLessonRows(parsed.data),
+        suggestedInternalLessons: normalizePlanSuggestedLessonRows(parsed.data) as BlogControlPanelPlan["suggestedInternalLessons"],
       };
     }
     case "apa_sources": {

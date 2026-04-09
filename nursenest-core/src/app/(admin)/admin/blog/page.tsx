@@ -151,6 +151,18 @@ export default async function AdminBlogHubPage() {
           Topic batch schedule →
         </Link>
         <Link
+          href="/admin/blog/draft-batch"
+          className="rounded-xl border border-primary/30 bg-primary/10 p-6 text-center font-semibold text-primary hover:bg-primary/15"
+        >
+          Batch draft queue →
+        </Link>
+        <Link
+          href="/admin/automation-logs"
+          className="rounded-xl border border-border/80 bg-[var(--theme-card-bg)] p-6 text-center font-semibold hover:bg-muted/40"
+        >
+          Automation logs →
+        </Link>
+        <Link
           href="/admin/seo"
           className="rounded-xl border border-border/80 bg-[var(--theme-card-bg)] p-6 text-center font-semibold hover:bg-muted/40"
         >

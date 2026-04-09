@@ -5,11 +5,12 @@
 import { z } from "zod";
 import { equivalentExamHubUrlAfterRegionToggle } from "@/lib/marketing/marketing-region-equivalent-hub";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
-import { ALLIED, NP, PN, RN } from "@/lib/marketing/marketing-entry-routes";
+import { ALLIED, HUB, NP, PN, RN } from "@/lib/marketing/marketing-entry-routes";
 import { blogLessonLinkRowSchema, lessonLinkStableId } from "@/lib/blog/blog-control-panel-schema";
 import type { BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema";
+import type { BlogLessonLinkRow } from "@/lib/blog/blog-control-panel-schema";
 
-export type BlogLessonLinkRow = BlogControlPanelPlan["suggestedInternalLessons"][number];
+export type { BlogLessonLinkRow };
 
 /** Root-relative marketing paths safe to inject from blog tooling (no app/API). */
 export function isAllowedBlogInternalHref(href: string): boolean {
@@ -36,13 +37,14 @@ export function alignLessonPathForAudienceCountry(
   return equivalentExamHubUrlAfterRegionToggle(path, want) ?? path;
 }
 
-export function effectiveLessonHref(row: Pick<BlogLessonLinkRow, "suggestedPath" | "replacementPath" | "reviewStatus">): string | null {
+export function effectiveLessonHref(row: BlogLessonLinkRow): string | null {
   if (row.reviewStatus === "removed") return null;
   const primary = (row.replacementPath ?? "").trim();
+  if (primary && isAllowedBlogInternalHref(primary)) return primary;
+  if (row.pathStatus === "not_found" || row.pathStatus === "invalid_allowlist") return null;
   const fallback = row.suggestedPath.trim();
-  const candidate = primary && isAllowedBlogInternalHref(primary) ? primary : fallback;
-  if (!candidate || !isAllowedBlogInternalHref(candidate)) return null;
-  return candidate;
+  if (!fallback || !isAllowedBlogInternalHref(fallback)) return null;
+  return fallback;
 }
 
 export function lessonRowsToRelatedPaths(
@@ -121,11 +123,22 @@ export function getBlogInternalLinkPathHintsForPrompt(exam: string, country: "US
     if (ca) add("Allied Canada", [`${ALLIED.caHub}/lessons`, ALLIED.caQuestions]);
   }
 
+  lines.push(
+    `Public practice exam directory (CAT-style mocks marketing entry): ${HUB.practiceExams}`,
+    `Question bank discovery hub: ${HUB.questionBank}`,
+    "When recommending adaptive/CAT practice, link practice_exams or practice_programmatic kinds — never /app/exams in article HTML.",
+  );
+
   if (country === "unspecified") {
     lines.push("Country unspecified: you may include both /us/... and /canada/... variants only when each is clearly justified; otherwise default to US hubs.");
   }
 
-  lines.push("Do not link to /app/*, /api/*, or external domains. Limit suggestions to highly relevant lessons or hubs (max 10).");
+  lines.push(
+    "Do not link to /app/*, /api/*, or external domains.",
+    "Include a mix where relevant: 1–2 lesson detail URLs (only if confident path matches a real lesson slug pattern), lessons hub, question bank hub, /practice-exams, and optional programmatic practice landing for the exam.",
+    "linkKind: lesson | lessons_hub | question_bank | topic_cluster | practice_exams | practice_programmatic | general",
+    "Max 12 suggestions total.",
+  );
   return lines.join("\n");
 }
 

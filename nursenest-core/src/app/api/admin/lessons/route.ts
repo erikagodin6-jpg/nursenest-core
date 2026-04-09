@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ContentStatus } from "@prisma/client";
 import { z } from "zod";
+import {
+  buildContentLessonWhere,
+  regionScopeToCountryLabel,
+  tierDbToPathwayLabel,
+  type AdminContentLessonListQuery,
+} from "@/lib/admin/admin-content-lessons-query";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { validateLessonForPublish } from "@/lib/content/publish-validation";
 import { prisma } from "@/lib/db";
@@ -23,19 +29,36 @@ const createSchema = z.object({
   systemTag: z.string().optional(),
   tags: z.array(z.string()).optional(),
   sourceNotes: z.string().optional(),
+  /** Shared-core key when this row is a scoped variant of canonical content. */
+  versionKey: z.string().max(200).nullable().optional(),
 });
+
+function parseListQuery(sp: URLSearchParams): AdminContentLessonListQuery {
+  const page = Math.max(1, Number(sp.get("page") ?? "1"));
+  const pageSize = Math.min(100, Math.max(10, Number(sp.get("pageSize") ?? "50")));
+  const statusRaw = sp.get("status");
+  const status =
+    statusRaw && Object.values(ContentStatus).includes(statusRaw as ContentStatus)
+      ? (statusRaw as ContentStatus)
+      : null;
+  const tierParam = sp.get("tier")?.toLowerCase() ?? null;
+  const tier =
+    tierParam && ["rpn", "lvn", "rn", "np", "allied"].includes(tierParam) ? tierParam : tierParam === "lvn_lpn" ? "lvn" : null;
+  const countryRaw = sp.get("country")?.toLowerCase() ?? null;
+  const country =
+    countryRaw === "ca" ? "CA" : countryRaw === "us" ? "US" : countryRaw === "both" ? "both" : null;
+  const topicDomain = sp.get("topicDomain")?.trim() || null;
+  const search = sp.get("q")?.trim() || sp.get("search")?.trim() || null;
+  return { page, pageSize, status, tier, country, topicDomain, search };
+}
 
 export async function GET(req: NextRequest) {
   const gate = await requireAdmin();
   if (!gate.ok) return gate.response;
 
-  const sp = req.nextUrl.searchParams;
-  const page = Math.max(1, Number(sp.get("page") ?? "1"));
-  const pageSize = Math.min(100, Math.max(10, Number(sp.get("pageSize") ?? "50")));
-  const statusParam = sp.get("status") as ContentStatus | null;
-
-  const where: { type: string; status?: string } = { type: "lesson" };
-  if (statusParam) where.status = contentStatusToDb(statusParam);
+  const q = parseListQuery(req.nextUrl.searchParams);
+  const where = buildContentLessonWhere(q);
+  const skip = (q.page - 1) * q.pageSize;
 
   const [total, lessons] = await Promise.all([
     prisma.contentItem.count({ where }),
@@ -49,15 +72,85 @@ export async function GET(req: NextRequest) {
         tier: true,
         regionScope: true,
         category: true,
+        bodySystem: true,
+        type: true,
+        versionKey: true,
+        summary: true,
         updatedAt: true,
+        publishedAt: true,
       },
       orderBy: { updatedAt: "desc" },
-      skip: (page - 1) * pageSize,
-      take: pageSize,
+      skip,
+      take: q.pageSize,
     }),
   ]);
 
-  return NextResponse.json({ page, pageSize, total, lessons });
+  const ids = lessons.map((l) => l.id);
+
+  const [openedGroup, completedGroup] = await Promise.all([
+    ids.length
+      ? prisma.progress.groupBy({
+          by: ["lessonId"],
+          where: { lessonId: { in: ids } },
+          _count: { _all: true },
+        })
+      : Promise.resolve([]),
+    ids.length
+      ? prisma.progress.groupBy({
+          by: ["lessonId"],
+          where: { lessonId: { in: ids }, completed: true },
+          _count: { _all: true },
+        })
+      : Promise.resolve([]),
+  ]);
+
+  const openedMap = new Map(openedGroup.map((g) => [g.lessonId, g._count._all]));
+  const completedMap = new Map(completedGroup.map((g) => [g.lessonId, g._count._all]));
+
+  const rows = lessons.map((l) => {
+    const summaryLen = (l.summary ?? "").trim().length;
+    return {
+      id: l.id,
+      title: l.title,
+      slug: l.slug,
+      pathwayLabel: tierDbToPathwayLabel(l.tier),
+      countryLabel: regionScopeToCountryLabel(l.regionScope),
+      topicDomain: l.bodySystem ?? l.category ?? null,
+      category: l.category,
+      bodySystem: l.bodySystem,
+      lessonType: l.type,
+      versionKey: l.versionKey,
+      status: l.status,
+      updatedAt: l.updatedAt.toISOString(),
+      publishedAt: l.publishedAt?.toISOString() ?? null,
+      gapWeakSummary: summaryLen > 0 && summaryLen < 40,
+      gapNoSummary: summaryLen === 0,
+      progressUsersOpened: openedMap.get(l.id) ?? 0,
+      progressUsersCompleted: completedMap.get(l.id) ?? 0,
+    };
+  });
+
+  return NextResponse.json({
+    page: q.page,
+    pageSize: q.pageSize,
+    total,
+    lessons: rows,
+    filters: {
+      tierOptions: [
+        { value: "rn", label: "RN" },
+        { value: "rpn", label: "RPN" },
+        { value: "lvn", label: "LPN/LVN" },
+        { value: "np", label: "NP" },
+        { value: "allied", label: "Allied" },
+      ],
+      statusOptions: ["DRAFT", "PUBLISHED", "IN_REVIEW", "ARCHIVED"] as const,
+      countryOptions: [
+        { value: "ca", label: "Canada (CA_ONLY)" },
+        { value: "us", label: "United States (US_ONLY)" },
+        { value: "both", label: "Both regions" },
+      ],
+    },
+  });
 }
 
 export async function POST(req: Request) {
@@ -71,6 +164,11 @@ export async function POST(req: Request) {
   if (data.status === ContentStatus.PUBLISHED) {
     const v = validateLessonForPublish({ title: data.title, summary: data.summary, body: data.body });
     if (!v.ok) return NextResponse.json({ error: "Publish validation failed", reasons: v.reasons }, { status: 400 });
+  }
+
+  const clash = await prisma.contentItem.findUnique({ where: { slug: data.slug }, select: { id: true } });
+  if (clash) {
+    return NextResponse.json({ error: "Slug already in use", slug: data.slug }, { status: 409 });
   }
 
   const cat = await prisma.category.findUnique({ where: { id: data.categoryId } });
@@ -87,6 +185,7 @@ export async function POST(req: Request) {
       tags: data.tags ?? [],
       category: cat?.name ?? cat?.slug,
       bodySystem: data.systemTag ?? data.topicTag,
+      versionKey: data.versionKey ?? undefined,
     },
   });
 

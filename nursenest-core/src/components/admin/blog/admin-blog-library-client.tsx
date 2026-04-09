@@ -125,9 +125,18 @@ export function AdminBlogLibraryClient() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      const j = (await res.json()) as { error?: string; reasons?: string[] };
+      const j = (await res.json()) as {
+        error?: string;
+        reasons?: string[];
+        needsAcknowledgement?: boolean;
+      };
       if (!res.ok) {
-        setErr(j.reasons?.length ? j.reasons.join(" · ") : j.error ?? "Action failed");
+        const base = j.reasons?.length ? j.reasons.join(" · ") : j.error ?? "Action failed";
+        const hint =
+          res.status === 422
+            ? " Open this post in the control panel for full pre-publish checks, fixes, and optional warning acknowledgment."
+            : "";
+        setErr(`${base}${hint}`);
         return;
       }
       await load();

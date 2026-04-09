@@ -53,6 +53,7 @@ export function computeCadenceDates(params: {
   return out.sort((a, b) => a.getTime() - b.getTime());
 }
 
+/** Prefer {@link blogPrimaryStudyCta} from `@/lib/blog/blog-study-cta` for new blog drafts (marketing-safe hubs). */
 export function ctaFor(params: {
   intent?: BlogPostIntent | null;
   funnel?: BlogFunnelStage | null;

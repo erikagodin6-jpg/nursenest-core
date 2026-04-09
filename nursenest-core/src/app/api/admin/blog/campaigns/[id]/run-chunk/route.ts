@@ -7,6 +7,7 @@ import {
   BlogPostStatus,
   BlogPostTemplate,
   BlogWorkflowStatus,
+  CountryCode,
 } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { z } from "zod";
@@ -14,7 +15,8 @@ import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
 import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
 import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
-import { buildOutline, ctaFor, detectRiskFlags, slugify, thinDraftWarning } from "@/lib/blog/seo-campaign-engine";
+import { blogPrimaryStudyCta } from "@/lib/blog/blog-study-cta";
+import { buildOutline, detectRiskFlags, slugify, thinDraftWarning } from "@/lib/blog/seo-campaign-engine";
 import { prisma } from "@/lib/db";
 
 const schema = z.object({
@@ -98,7 +100,15 @@ export async function POST(req: Request, { params }: Props) {
         body = ai.content.trim();
       }
       const excerpt = body.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 420);
-      const cta = ctaFor({ intent, funnel, template });
+      const countryCtx =
+        campaign.countryTarget === CountryCode.CA ? "CA" : campaign.countryTarget === CountryCode.US ? "US" : "unspecified";
+      const cta = blogPrimaryStudyCta({
+        exam: campaign.targetExam ?? "NCLEX-RN",
+        country: countryCtx,
+        intent,
+        funnel,
+        template,
+      });
       const risks = detectRiskFlags({ template, keyword: item.plannedKeyword });
       const thin = thinDraftWarning(body);
       const publishAt = d.exactPublishAt ? new Date(d.exactPublishAt) : item.plannedPublishAt;

@@ -11,7 +11,10 @@ import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
 import { BLOG_TEMPLATE_TITLE_PATTERNS } from "@/lib/blog/blog-template-copy";
 import { buildApa7References, type BlogSourceRecord, validateSources } from "@/lib/blog/apa7";
 import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
-import { buildOutline, ctaFor, detectRiskFlags, thinDraftWarning } from "@/lib/blog/seo-campaign-engine";
+import type { BlogLessonLinkRow } from "@/lib/blog/blog-control-panel-schema";
+import { fetchSimpleDraftStudyLinks } from "@/lib/blog/blog-simple-draft-study-links";
+import { blogPrimaryStudyCta } from "@/lib/blog/blog-study-cta";
+import { buildOutline, detectRiskFlags, thinDraftWarning } from "@/lib/blog/seo-campaign-engine";
 import { prisma } from "@/lib/db";
 
 export type GenerateBlogAiDraftInput = {
@@ -35,6 +38,11 @@ export type GenerateBlogAiDraftInput = {
    * Used by batch topic scheduler; manual generator omits this.
    */
   publishAt?: Date;
+  /**
+   * When true, skips canonical-intent dedupe (`findExistingBlogByCanonicalIntent`). Slug uniqueness still enforced.
+   * Use only when an admin explicitly accepts duplicate topic coverage (e.g. variant angles).
+   */
+  allowDuplicateCanonicalTopic?: boolean;
 };
 
 export type GenerateBlogAiDraftResult =
@@ -95,17 +103,19 @@ export async function generateBlogAiDraft(d: GenerateBlogAiDraftInput): Promise<
   if (dupBySlug) {
     return { ok: true, skipped: true, reason: "duplicate_slug", slug };
   }
-  const dupByTopic = normalizedTopic
-    ? await findExistingBlogByCanonicalIntent({ exam: d.exam, normalizedTopic })
-    : null;
-  if (dupByTopic) {
-    return {
-      ok: true,
-      skipped: true,
-      reason: "duplicate_topic",
-      existingSlug: dupByTopic.slug,
-      normalizedTopic,
-    };
+  if (!d.allowDuplicateCanonicalTopic) {
+    const dupByTopic = normalizedTopic
+      ? await findExistingBlogByCanonicalIntent({ exam: d.exam, normalizedTopic })
+      : null;
+    if (dupByTopic) {
+      return {
+        ok: true,
+        skipped: true,
+        reason: "duplicate_topic",
+        existingSlug: dupByTopic.slug,
+        normalizedTopic,
+      };
+    }
   }
 
   const system = `You write SEO-aware HTML for NurseNest nursing education blog posts. Output valid HTML only: use <h2>, <h3>, <p>, <ul>, <li>, <strong>. No markdown. No fabricated statistics or pass-rate claims. Be accurate and conservative. Audience: nursing students preparing for licensure exams.
@@ -151,7 +161,32 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
     return { ok: false, error: e instanceof Error ? e.message : String(e) };
   }
 
-  const excerpt = bodyHtml.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 480);
+  const countryForLinks = d.country ?? "unspecified";
+  let studyAppendix = "";
+  let studyRows: BlogLessonLinkRow[] = [];
+  let studyRelatedPaths: string[] = [];
+  try {
+    const study = await fetchSimpleDraftStudyLinks({
+      topic: d.topic,
+      exam: d.exam,
+      country: countryForLinks,
+      targetKeyword: d.targetKeyword,
+      keywords: d.keywords,
+      bodyPreview: bodyHtml,
+    });
+    studyRows = study.rows;
+    studyRelatedPaths = study.relatedPaths;
+    studyAppendix = study.appendixHtml;
+  } catch {
+    studyAppendix = "";
+    studyRows = [];
+    studyRelatedPaths = [];
+  }
+
+  const bodyWithStudy =
+    studyAppendix && !bodyHtml.includes("Study next in NurseNest") ? `${bodyHtml.trim()}\n${studyAppendix}` : bodyHtml;
+
+  const excerpt = bodyWithStudy.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 480);
   const seoDescription = excerpt.slice(0, 320);
   const sources = (d.sourceRecords ?? []) as BlogSourceRecord[];
   const apaReferences = buildApa7References(sources);
@@ -162,9 +197,16 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
     intent: d.intent ?? BlogPostIntent.EXAM_PREP,
     template: d.template,
   });
-  const cta = ctaFor({ intent: d.intent, funnel: d.funnelStage, template: d.template });
+  const countryForCta = d.country ?? "unspecified";
+  const cta = blogPrimaryStudyCta({
+    exam: d.exam,
+    country: countryForCta,
+    intent: d.intent,
+    funnel: d.funnelStage,
+    template: d.template,
+  });
   const riskFlags = detectRiskFlags({ template: d.template, keyword: d.targetKeyword ?? d.topic });
-  const thinWarning = thinDraftWarning(bodyHtml);
+  const thinWarning = thinDraftWarning(bodyWithStudy);
   const workflowStatusBase =
     !seoDescription || !title ? BlogWorkflowStatus.NEEDS_METADATA :
     sources.length === 0 && riskFlags.length > 0 ? BlogWorkflowStatus.NEEDS_SOURCE_REVIEW :
@@ -175,16 +217,18 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
   if (dupSlugLate) {
     return { ok: true, skipped: true, reason: "duplicate_slug", slug };
   }
-  const dupTopicLate =
-    normalizedTopic && (await findExistingBlogByCanonicalIntent({ exam: d.exam, normalizedTopic }));
-  if (dupTopicLate) {
-    return {
-      ok: true,
-      skipped: true,
-      reason: "duplicate_topic",
-      existingSlug: dupTopicLate.slug,
-      normalizedTopic,
-    };
+  if (!d.allowDuplicateCanonicalTopic) {
+    const dupTopicLate =
+      normalizedTopic && (await findExistingBlogByCanonicalIntent({ exam: d.exam, normalizedTopic }));
+    if (dupTopicLate) {
+      return {
+        ok: true,
+        skipped: true,
+        reason: "duplicate_topic",
+        existingSlug: dupTopicLate.slug,
+        normalizedTopic,
+      };
+    }
   }
 
   const { postStatus, publishAt } = resolvePostStatusForPublishAt(d.publishAt, now);
@@ -199,7 +243,7 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
         slug,
         title,
         excerpt: excerpt.length >= 10 ? excerpt : `${title.slice(0, 200)}. Draft excerpt; edit before publish.`,
-        body: bodyHtml,
+        body: bodyWithStudy,
         exam: d.exam,
         targetKeyword: normalizedTopic || (d.targetKeyword ?? d.topic),
         keywordCluster: d.keywordCluster ?? null,
@@ -218,6 +262,17 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
           `What mistakes should students avoid for ${d.topic}?`,
         ],
         keywordPlan: [d.targetKeyword ?? d.topic, ...(d.keywords ? d.keywords.split(",").map((s) => s.trim()).filter(Boolean).slice(0, 8) : [])],
+        ...(studyRows.length > 0
+          ? {
+              relatedLessonPaths: studyRelatedPaths,
+              internalLinkPlan: {
+                lessons: studyRows,
+                imagePlacements: [],
+                imageAttachments: [],
+                seo: null,
+              } as Prisma.InputJsonValue,
+            }
+          : {}),
         ctaType: cta.type,
         ctaText: cta.text,
         ctaHref: cta.href,

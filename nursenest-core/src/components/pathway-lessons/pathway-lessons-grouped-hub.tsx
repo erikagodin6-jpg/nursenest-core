@@ -66,12 +66,34 @@ type Props = {
   topicClusters: TopicCluster[];
   progressMap?: Record<string, PathwayLessonProgressStatus>;
   canShowProgressMap?: boolean;
+  /** NP pathways (AGPCNP, PMHNP, CNPLE, …): richer cards, related rows, practice tiles — still one list per page. */
+  visualTone?: "default" | "np";
 };
 
 /**
  * Generic pathway lessons hub: topic-grouped cards, progression cues, practice links.
  * Used when a pathway does not use the NCLEX-RN / PN / FNP bespoke hubs.
  */
+function relatedLessonsForCard(
+  groupLessons: PathwayLessonRecord[],
+  current: PathwayLessonRecord,
+  lessonsBasePath: string,
+  max: number,
+): { href: string; title: string }[] {
+  const topic = (current.topic ?? "").trim();
+  const sameTopic = groupLessons.filter(
+    (x) => x.slug !== current.slug && (x.topic ?? "").trim() === topic && topic.length > 0,
+  );
+  const pool = sameTopic.length > 0 ? sameTopic : groupLessons.filter((x) => x.slug !== current.slug);
+  const out: { href: string; title: string }[] = [];
+  for (const x of pool) {
+    const href = pathwayLessonMarketingDetailHref(lessonsBasePath, x.slug);
+    if (href) out.push({ href, title: x.title });
+    if (out.length >= max) break;
+  }
+  return out;
+}
+
 export function PathwayLessonsGroupedHub({
   pathway,
   lessons,
@@ -79,9 +101,11 @@ export function PathwayLessonsGroupedHub({
   topicClusters,
   progressMap = {},
   canShowProgressMap = false,
+  visualTone = "default",
 }: Props) {
   const groups = buildTopicGroups(lessons, topicClusters);
   const showProgress = canShowProgressMap && Object.keys(progressMap).length > 0;
+  const isNp = visualTone === "np";
 
   return (
     <div className="space-y-10">
@@ -120,7 +144,13 @@ export function PathwayLessonsGroupedHub({
             className="scroll-mt-28"
             aria-labelledby={`topic-heading-${group.topicSlug}`}
           >
-            <div className="flex flex-wrap items-end justify-between gap-3 border-b border-border/70 pb-4">
+            <div
+              className={
+                isNp
+                  ? "nn-study-card nn-study-card--wash flex flex-wrap items-end justify-between gap-3 p-4 sm:p-5"
+                  : "flex flex-wrap items-end justify-between gap-3 border-b border-border/70 pb-4"
+              }
+            >
               <div>
                 <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-primary)]">
                   Topic {gi + 1} · {group.lessons.length} lesson{group.lessons.length === 1 ? "" : "s"}
@@ -158,6 +188,7 @@ export function PathwayLessonsGroupedHub({
                 const href = pathwayLessonMarketingDetailHref(lessonsBasePath, l.slug);
                 if (!href) return null;
                 const ps = progressMap[l.slug] ?? "not_started";
+                const related = isNp ? relatedLessonsForCard(group.lessons, l, lessonsBasePath, 3) : [];
                 return (
                   <li key={l.slug}>
                     <div className="nn-study-card flex h-full flex-col p-4 sm:p-5">
@@ -173,6 +204,47 @@ export function PathwayLessonsGroupedHub({
                       <p className="nn-marketing-body-sm mt-2 line-clamp-3 flex-1 text-[var(--theme-muted-text)]">
                         {l.seoDescription}
                       </p>
+                      {isNp && related.length > 0 ? (
+                        <div className="mt-4 border-t border-border/50 pt-4">
+                          <p className="nn-marketing-caption font-semibold text-[var(--theme-heading-text)]">
+                            Related lessons on this page
+                          </p>
+                          <ul className="mt-2 grid list-none gap-2 p-0 sm:grid-cols-2">
+                            {related.map((r) => (
+                              <li key={r.href}>
+                                <Link
+                                  href={r.href}
+                                  className="nn-surface-inset block rounded-xl px-3 py-2.5 text-sm font-semibold text-primary transition-colors hover:border-primary/35"
+                                >
+                                  {r.title}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ) : null}
+                      {isNp ? (
+                        <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                          <Link
+                            href={marketingQuestionsTopicHref(pathway, l.topic ?? group.label)}
+                            className="nn-surface-elevated block rounded-xl p-3 transition-colors hover:border-primary/35"
+                          >
+                            <p className="nn-marketing-caption font-semibold text-[var(--theme-primary)]">Question bank</p>
+                            <p className="nn-marketing-body-sm mt-0.5 text-[var(--theme-muted-text)]">
+                              Hub practice for this topic
+                            </p>
+                          </Link>
+                          <Link
+                            href={appPracticeTopicHref(pathway, l.topic ?? group.label)}
+                            className="nn-surface-elevated block rounded-xl p-3 transition-colors hover:border-primary/35"
+                          >
+                            <p className="nn-marketing-caption font-semibold text-[var(--theme-primary)]">App practice</p>
+                            <p className="nn-marketing-body-sm mt-0.5 text-[var(--theme-muted-text)]">
+                              Case items with rationales
+                            </p>
+                          </Link>
+                        </div>
+                      ) : null}
                       <div className="mt-4 flex flex-wrap gap-2 border-t border-border/60 pt-4">
                         <Link
                           href={href}
@@ -180,12 +252,14 @@ export function PathwayLessonsGroupedHub({
                         >
                           Open lesson
                         </Link>
-                        <Link
-                          href={appPracticeTopicHref(pathway, l.topic)}
-                          className="inline-flex min-h-10 items-center rounded-full nn-btn-secondary px-4 py-2 text-sm font-semibold"
-                        >
-                          Practice this topic
-                        </Link>
+                        {!isNp ? (
+                          <Link
+                            href={appPracticeTopicHref(pathway, l.topic)}
+                            className="inline-flex min-h-10 items-center rounded-full nn-btn-secondary px-4 py-2 text-sm font-semibold"
+                          >
+                            Practice this topic
+                          </Link>
+                        ) : null}
                       </div>
                     </div>
                   </li>

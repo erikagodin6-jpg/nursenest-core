@@ -25,7 +25,7 @@ Required keys (exact names):
 - optional canonicalPath: only use "/blog/{recommendedSlug}" when it matches recommendedSlug exactly; otherwise omit (site defaults canonical to the live slug)
 - optional seoFocusKeywords: string[] (3-8) — include exam + 2-4 clinical nouns from the article (no vague words like "guide", "ultimate", "complete" alone)
 - outline: array of { "h2", optional "h3"[], optional "bullets"[] } — 4-7 sections; H2s must be topic-specific (not "Introduction" only)
-- suggestedInternalLessons: { "label", "suggestedPath", optional "rationale", optional "linkKind" ("lesson"|"lessons_hub"|"question_bank"|"topic_cluster"|"general") }[] — root-relative paths like /us/rn/nclex-rn/lessons/..., /.../questions, or /blog/...; match pathway + country from the brief; no /app/ or /api/
+- suggestedInternalLessons: { "label", "suggestedPath", optional "rationale", optional "linkKind" ("lesson"|"lessons_hub"|"question_bank"|"topic_cluster"|"practice_exams"|"practice_programmatic"|"general") }[] — root-relative paths: pathway lessons + /questions hubs, /practice-exams, programmatic practice landings from the brief; match country (/us/ vs /canada/); no /app/ or /api/
 - faqs: { "q", "a" }[] — 4-7 items; answers must teach a concrete exam-relevant point
 - breadcrumbs: { "label", "href" }[] — **exact pattern** for NurseNest marketing: [ { "label": "Home", "href": "/" }, { "label": "Blog", "href": "/blog" }, optional middle crumbs with root-relative hrefs only if they are real site paths, then { "label": "<article H1 or shorter>", "href": "/blog/<recommendedSlug>" } ]. Never use /app/, /api/, or external URLs. Last href must be /blog/<recommendedSlug>.
 - imagePlacements: { optional "slotKey" (e.g. hero, inline_1), optional "role" (hero|inline), "section", "promptIdea", "altIdea", optional "captionIdea" }[] — one hero + 1-3 optional inline; clinically relevant, NurseNest brand (professional nursing education, dignified, inclusive; no gore, no identifiable patients, no real institutional logos)
@@ -74,7 +74,7 @@ Rules:
 - Do **not** output <img> tags or empty image placeholders. Inline visuals are attached later in the CMS; prose may reference concepts only.
 - Follow the outline order; expand each H2 with substantive paragraphs and, where useful, bullets.
 - Include <h2>Key takeaways</h2> (bullet list) and <h2>FAQs</h2> using the supplied FAQ items (you may tighten wording slightly).
-- Include <h2>Related study paths</h2> — one short paragraph weaving in the internal paths as plain text.
+- Include <h2>Related study paths</h2> — one short paragraph weaving in the internal paths as plain text (lessons, question bank hub, practice exams directory — never raw /app/ URLs).
 - Educational exam-prep framing only — no directive treatment orders for real patients.
 - No fabricated statistics or pass-rate claims.
 - Do **not** cite specific journals, studies, DOIs, or URLs in the prose unless they will appear in the admin-verified reference list supplied separately to the CMS. Prefer generic phrasing ("clinical practice resources", "accrediting bodies") when no verified source is attached.`;

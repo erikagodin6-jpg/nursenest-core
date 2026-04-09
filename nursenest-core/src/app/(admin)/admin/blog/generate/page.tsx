@@ -36,6 +36,10 @@ export default async function AdminBlogGeneratePage() {
           <Link href="/admin/blog/campaigns" className="font-semibold text-primary underline">
             SEO campaigns
           </Link>
+          . Paste many topics for immediate drafts? Use{" "}
+          <Link href="/admin/blog/draft-batch" className="font-semibold text-primary underline">
+            batch draft queue
+          </Link>
           .
         </div>
         <AdminBlogGenerateClient />

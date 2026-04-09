@@ -1,10 +1,13 @@
 import Link from "next/link";
+import type { CountryCode } from "@prisma/client";
 import { defaultPracticeHubForExam, toolPathForSlug } from "@/lib/blog/blog-exam-routes";
+import { blogCountryFromPrismaTarget, marketingStudyHubsForBlogExam } from "@/lib/blog/blog-study-cta";
 import { isPlausibleMarketingLessonDetailPath } from "@/lib/lessons/marketing-lesson-path-guard";
 import { HUB, loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 
 type Props = {
   exam: string | null | undefined;
+  countryTarget?: CountryCode | null;
   relatedLessonPaths: string[];
   relatedQuestionIds: string[];
   relatedTools: string[];
@@ -13,8 +16,15 @@ type Props = {
 /**
  * Bottom-of-post distribution: lessons, practice (public hubs), study plan — no rationales, no full lesson bodies.
  */
-export function BlogPostDistributionFooter({ exam, relatedLessonPaths, relatedQuestionIds, relatedTools }: Props) {
-  const practiceHub = defaultPracticeHubForExam(exam ?? null);
+export function BlogPostDistributionFooter({
+  exam,
+  countryTarget,
+  relatedLessonPaths,
+  relatedQuestionIds,
+  relatedTools,
+}: Props) {
+  const practiceHub = defaultPracticeHubForExam(exam ?? null, countryTarget ?? null);
+  const studyHubs = marketingStudyHubsForBlogExam(exam ?? "", blogCountryFromPrismaTarget(countryTarget));
   const lessons = relatedLessonPaths
     .filter(Boolean)
     .filter(isPlausibleMarketingLessonDetailPath)
@@ -53,6 +63,20 @@ export function BlogPostDistributionFooter({ exam, relatedLessonPaths, relatedQu
           >
             Practice questions (public hub)
           </Link>
+          <Link
+            href={studyHubs.practiceExamsHub}
+            className="inline-flex rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold text-[var(--theme-heading-text)] hover:bg-muted/80"
+          >
+            CAT-style practice exams
+          </Link>
+          {studyHubs.practiceProgrammatic ? (
+            <Link
+              href={studyHubs.practiceProgrammatic}
+              className="inline-flex rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold text-[var(--theme-heading-text)] hover:bg-muted/80"
+            >
+              Focused practice test
+            </Link>
+          ) : null}
           <Link
             href={loginWithCallback("/app/questions")}
             className="inline-flex rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold text-[var(--theme-heading-text)] hover:bg-muted/80"

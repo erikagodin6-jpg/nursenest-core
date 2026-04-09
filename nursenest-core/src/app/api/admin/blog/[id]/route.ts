@@ -16,7 +16,18 @@ import {
   type BlogAdminPublishLogInput,
 } from "@/lib/blog/blog-admin-publish-log";
 import { stripBrokenOrEmptyImagesFromHtml } from "@/lib/blog/blog-image-workflow";
-import { evaluateBlogPublishReadiness, type BlogPublishReadinessRow } from "@/lib/blog/blog-publish-readiness";
+import {
+  logMarkFailed,
+  logPublishBlocked,
+  logPublishSucceeded,
+} from "@/lib/admin/blog-content-automation-log";
+import {
+  blogPrePublishValidationSelect,
+  mergeBlogPostForPrePublishPatch,
+  type BlogPostPrePublishPayload,
+  type PrePublishPatch,
+  validateBlogPrePublish,
+} from "@/lib/blog/blog-pre-publish-validation";
 import { prisma } from "@/lib/db";
 
 const slugSchema = z
@@ -79,6 +90,8 @@ const patchSchema = z.object({
   faqBlock: z.unknown().optional(),
   internalLinkPlan: z.unknown().optional(),
   keyQuestions: z.array(z.string().max(400)).max(20).optional(),
+  /** When pre-publish returns warnings only, set true to proceed with publish_now or schedule. */
+  acknowledgePrePublishWarnings: z.boolean().optional(),
 });
 
 const adminBlogPostSelect = {
@@ -128,6 +141,31 @@ const adminBlogPostSelect = {
 
 type Props = { params: Promise<{ id: string }> };
 
+function partialPrePublishFromPatch(d: z.infer<typeof patchSchema>): Partial<PrePublishPatch> {
+  const p: Partial<PrePublishPatch> = {};
+  if (d.slug !== undefined) p.slug = d.slug;
+  if (d.title !== undefined) p.title = d.title;
+  if (d.excerpt !== undefined) p.excerpt = d.excerpt;
+  if (d.body !== undefined) p.body = d.body;
+  if (d.seoTitle !== undefined) p.seoTitle = d.seoTitle;
+  if (d.seoDescription !== undefined) p.seoDescription = d.seoDescription;
+  if (d.metaTitleVariant !== undefined) p.metaTitleVariant = d.metaTitleVariant;
+  if (d.metaDescriptionVariant !== undefined) p.metaDescriptionVariant = d.metaDescriptionVariant;
+  if (d.requiresReferences !== undefined) p.requiresReferences = d.requiresReferences;
+  if (d.apaReferences !== undefined) p.apaReferences = d.apaReferences;
+  if (d.sourcesJson !== undefined) p.sourcesJson = d.sourcesJson;
+  if (d.internalLinkPlan !== undefined) p.internalLinkPlan = d.internalLinkPlan;
+  if (d.outlineJson !== undefined) p.outlineJson = d.outlineJson;
+  if (d.faqBlock !== undefined) p.faqBlock = d.faqBlock;
+  if (d.schemaSummary !== undefined) p.schemaSummary = d.schemaSummary;
+  if (d.coverImage !== undefined) p.coverImage = d.coverImage;
+  if (d.coverImageAlt !== undefined) p.coverImageAlt = d.coverImageAlt;
+  if (d.coverImageCaption !== undefined) p.coverImageCaption = d.coverImageCaption;
+  if (d.coverImagePrompt !== undefined) p.coverImagePrompt = d.coverImagePrompt;
+  if (d.imageStatus !== undefined) p.imageStatus = d.imageStatus;
+  return p;
+}
+
 export async function GET(_req: Request, { params }: Props) {
   const gate = await requireAdmin();
   if (!gate.ok) return gate.response;
@@ -136,31 +174,6 @@ export async function GET(_req: Request, { params }: Props) {
   const post = await prisma.blogPost.findUnique({ where: { id }, select: adminBlogPostSelect });
   if (!post) return NextResponse.json({ error: "Blog post not found" }, { status: 404 });
   return NextResponse.json({ post });
-}
-
-function mergedReadinessRow(
-  current: {
-    title: string;
-    excerpt: string;
-    body: string;
-    slug: string;
-    seoTitle: string | null;
-    seoDescription: string | null;
-    requiresReferences: boolean;
-    apaReferences: string[];
-  },
-  d: z.infer<typeof patchSchema>,
-): BlogPublishReadinessRow {
-  return {
-    title: d.title ?? current.title,
-    excerpt: d.excerpt ?? current.excerpt,
-    body: d.body ?? current.body,
-    slug: d.slug ?? current.slug,
-    seoTitle: d.seoTitle !== undefined ? d.seoTitle : current.seoTitle,
-    seoDescription: d.seoDescription !== undefined ? d.seoDescription : current.seoDescription,
-    requiresReferences: d.requiresReferences !== undefined ? d.requiresReferences : current.requiresReferences,
-    apaReferences: d.apaReferences ?? current.apaReferences,
-  };
 }
 
 function contentFieldsTouched(d: z.infer<typeof patchSchema>): boolean {
@@ -201,17 +214,8 @@ export async function PATCH(req: Request, { params }: Props) {
   const current = await prisma.blogPost.findUnique({
     where,
     select: {
-      id: true,
+      ...blogPrePublishValidationSelect,
       adminPublishLog: true,
-      title: true,
-      excerpt: true,
-      body: true,
-      slug: true,
-      seoTitle: true,
-      seoDescription: true,
-      requiresReferences: true,
-      apaReferences: true,
-      postStatus: true,
     },
   });
   if (!current) return NextResponse.json({ error: "Blog post not found" }, { status: 404 });
@@ -229,6 +233,55 @@ export async function PATCH(req: Request, { params }: Props) {
   const logQueue: BlogAdminPublishLogInput[] = [];
   const now = new Date();
 
+  const runPrePublishGate = async (): Promise<NextResponse | null> => {
+    const { adminPublishLog, ...postSlice } = current;
+    const merged = mergeBlogPostForPrePublishPatch(
+      postSlice as unknown as BlogPostPrePublishPayload,
+      partialPrePublishFromPatch(d),
+    );
+    const prePublish = await validateBlogPrePublish(merged, id);
+    if (!prePublish.okToPublish) {
+      const nextLog = appendBlogAdminPublishLog(adminPublishLog, {
+        level: "error",
+        event: "publish_blocked",
+        message: "Publish blocked — pre-publish validation failed",
+        detail: {
+          prePublish: {
+            blocking: prePublish.blocking,
+            warnings: prePublish.warnings.slice(0, 20),
+          },
+        },
+      });
+      await prisma.blogPost.update({ where, data: { adminPublishLog: nextLog } });
+      await logPublishBlocked({
+        blogPostId: current.id,
+        title: current.title,
+        reasons: prePublish.blocking.map((i) => i.message),
+        createdById: gate.admin.userId,
+      });
+      return NextResponse.json(
+        {
+          error: "Publish blocked — fix validation issues.",
+          prePublish,
+          reasons: prePublish.blocking.map((i) => i.message),
+        },
+        { status: 422 },
+      );
+    }
+    if (prePublish.hasWarnings && !d.acknowledgePrePublishWarnings) {
+      return NextResponse.json(
+        {
+          error: "Pre-publish warnings — review and acknowledge to continue.",
+          prePublish,
+          needsAcknowledgement: true,
+          reasons: prePublish.warnings.map((w) => w.message),
+        },
+        { status: 422 },
+      );
+    }
+    return null;
+  };
+
   type ActionPatch = {
     postStatus?: BlogPostStatus;
     publishAt?: Date | null;
@@ -237,20 +290,8 @@ export async function PATCH(req: Request, { params }: Props) {
   let actionPatch: ActionPatch = {};
 
   if (d.action === "publish_now") {
-    const readiness = evaluateBlogPublishReadiness(mergedReadinessRow(current, d));
-    if (!readiness.ok) {
-      const nextLog = appendBlogAdminPublishLog(current.adminPublishLog, {
-        level: "error",
-        event: "publish_blocked",
-        message: "Publish blocked — fix validation issues",
-        detail: { reasons: readiness.reasons },
-      });
-      await prisma.blogPost.update({ where, data: { adminPublishLog: nextLog } });
-      return NextResponse.json(
-        { error: "Publish blocked — content is not ready to go live.", reasons: readiness.reasons },
-        { status: 422 },
-      );
-    }
+    const blocked = await runPrePublishGate();
+    if (blocked) return blocked;
     actionPatch = {
       postStatus: BlogPostStatus.PUBLISHED,
       publishAt: now,
@@ -274,6 +315,8 @@ export async function PATCH(req: Request, { params }: Props) {
     if (Number.isNaN(when.getTime())) {
       return NextResponse.json({ error: "Invalid publishAt" }, { status: 400 });
     }
+    const schedGate = await runPrePublishGate();
+    if (schedGate) return schedGate;
     actionPatch = { postStatus: BlogPostStatus.SCHEDULED, publishAt: when };
     logQueue.push({
       level: "info",
@@ -433,6 +476,24 @@ export async function PATCH(req: Request, { params }: Props) {
     },
     select: adminBlogPostSelect,
   });
+
+  if (d.action === "publish_now") {
+    await logPublishSucceeded({
+      blogPostId: updated.id,
+      title: updated.title,
+      slug: updated.slug,
+      createdById: gate.admin.userId,
+    });
+  }
+  if (d.action === "mark_failed") {
+    const failMsg = d.failureReason?.trim() || "Marked as failed (incomplete draft or generation issue).";
+    await logMarkFailed({
+      blogPostId: updated.id,
+      title: updated.title,
+      reason: failMsg,
+      createdById: gate.admin.userId,
+    });
+  }
 
   return NextResponse.json({ post: updated });
 }

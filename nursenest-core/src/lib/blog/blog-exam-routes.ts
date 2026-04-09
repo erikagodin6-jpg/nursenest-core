@@ -1,35 +1,17 @@
 /**
  * Public marketing URLs for blog CTAs (no app-only or API routes; no rationales).
- * Prefer canonical exam pathway hubs over programmatic SEO slugs.
+ * Prefer canonical exam pathway hubs over generic fallbacks.
  */
-export function defaultPracticeHubForExam(exam: string | null | undefined): string {
-  switch (exam) {
-    case "RN":
-      return "/us/rn/nclex-rn/questions";
-    case "PN":
-      return "/us/lpn/nclex-pn/questions";
-    case "NP":
-      return "/us/np/fnp/questions";
-    case "ALLIED":
-      return "/us/allied/allied-health/questions";
-    default:
-      return "/lessons";
-  }
+
+import { CountryCode } from "@prisma/client";
+import { blogCountryFromPrismaTarget, marketingStudyHubsForBlogExam } from "@/lib/blog/blog-study-cta";
+
+export function defaultPracticeHubForExam(exam: string | null | undefined, countryTarget?: CountryCode | null): string {
+  return marketingStudyHubsForBlogExam(exam ?? "", blogCountryFromPrismaTarget(countryTarget)).questionBankHub;
 }
 
-export function defaultLessonsHubForExam(exam: string | null | undefined): string {
-  switch (exam) {
-    case "RN":
-      return "/us/rn/nclex-rn/lessons";
-    case "PN":
-      return "/us/lpn/nclex-pn/lessons";
-    case "NP":
-      return "/us/np/fnp/lessons";
-    case "ALLIED":
-      return "/us/allied/allied-health/lessons";
-    default:
-      return "/lessons";
-  }
+export function defaultLessonsHubForExam(exam: string | null | undefined, countryTarget?: CountryCode | null): string {
+  return marketingStudyHubsForBlogExam(exam ?? "", blogCountryFromPrismaTarget(countryTarget)).lessonsHub;
 }
 
 /** Map tool slug from BlogPost.relatedTools to a public path */

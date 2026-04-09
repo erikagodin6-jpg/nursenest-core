@@ -89,6 +89,7 @@ export default async function BlogPostPage({ params }: Props) {
     ? stripBrokenOrEmptyImagesFromHtml(
         applyAutoLinksToHtml(post.body, {
           exam: post.exam,
+          countryTarget: post.countryTarget,
           relatedLessonPaths: post.relatedLessonPaths,
           relatedTools: post.relatedTools,
           maxTotalAutoLinks: 14,
@@ -151,6 +152,7 @@ export default async function BlogPostPage({ params }: Props) {
       {isDbPost(post) ? (
         <BlogPostDistributionFooter
           exam={post.exam}
+          countryTarget={post.countryTarget}
           relatedLessonPaths={post.relatedLessonPaths}
           relatedQuestionIds={post.relatedQuestionIds}
           relatedTools={post.relatedTools}

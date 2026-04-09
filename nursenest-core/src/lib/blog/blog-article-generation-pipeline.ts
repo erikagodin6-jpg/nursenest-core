@@ -37,6 +37,8 @@ import {
   persistControlPanelDraft,
 } from "@/lib/blog/blog-control-panel-generation";
 import type { BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema";
+import { annotateBlogInternalLinkRowsWithVerification } from "@/lib/blog/blog-internal-link-verify";
+import { normalizePlanSuggestedLessonRows } from "@/lib/blog/blog-internal-lesson-links";
 
 export const BLOG_ARTICLE_MIN_BODY_CHARS = 450;
 
@@ -88,6 +90,13 @@ export async function runBlogArticleGenerationPipeline(
   let plan: BlogControlPanelPlan;
   try {
     plan = await fetchControlPanelPlan(input);
+    const verifiedLessons = normalizePlanSuggestedLessonRows(
+      await annotateBlogInternalLinkRowsWithVerification(plan.suggestedInternalLessons, input.country),
+    );
+    plan = {
+      ...plan,
+      suggestedInternalLessons: verifiedLessons as BlogControlPanelPlan["suggestedInternalLessons"],
+    };
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     return { ok: false, stage: "plan", error: msg };
