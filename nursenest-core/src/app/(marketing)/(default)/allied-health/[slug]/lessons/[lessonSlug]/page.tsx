@@ -166,6 +166,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
 
   const relatedQuestionStems = await loadRelatedExamQuestionStemsForPathwayLesson({
     pathway,
+    lessonTitle: lesson.title,
     lessonTopic: lesson.topic,
     lessonTopicSlug: lesson.topicSlug,
     bodySystem: lesson.bodySystem,

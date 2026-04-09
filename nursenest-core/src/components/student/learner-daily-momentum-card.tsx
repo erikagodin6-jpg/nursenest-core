@@ -98,6 +98,12 @@ export function LearnerDailyMomentumCard({
             </ul>
           </div>
 
+          {showStreakProtectNudge && !complete ? (
+            <p className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-950 dark:text-amber-100">
+              {t("learner.retention.streakProtectShort")}
+            </p>
+          ) : null}
+
           {complete ? (
             <p className="rounded-lg border border-emerald-500/25 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-950 dark:text-emerald-100">
               {t("learner.dailyGoal.complete")}

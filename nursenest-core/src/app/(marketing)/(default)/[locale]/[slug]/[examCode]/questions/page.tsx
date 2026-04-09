@@ -11,15 +11,16 @@ import { pathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-ana
 import { PathwayLiveInventoryStrip } from "@/components/exam-pathways/pathway-live-inventory-strip";
 import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import { PathwayQuestionHubRelatedLessons } from "@/components/pathway-lessons/pathway-question-hub-related-lessons";
+import { pathwayAppQuestionBankTopicHref } from "@/components/lessons/pathway-lesson-link-practice";
 import {
   RELATED_LESSONS_EXCLUDE_SLUG_SENTINEL,
-  RELATED_LESSONS_FOR_TOPIC_CAP,
   resolveTopicSlugForPathwayTopicLabel,
 } from "@/lib/lessons/lesson-question-cross-links";
 import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
 import {
   countPathwayLessons,
   getRelatedPathwayLessons,
+  RELATED_LESSONS_FOR_TOPIC_CAP,
   RELATED_PATHWAY_LESSONS_LIMIT,
 } from "@/lib/lessons/pathway-lesson-loader";
 import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
@@ -99,13 +100,9 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
   const countryLabel = pathway.countrySlug === "canada" ? "Canada" : "US";
   const examName = pathway.contentExamKeys.length ? pathway.contentExamKeys.join(" / ") : pathway.shortName;
   const lessonsHref = buildExamPathwayPath(pathway, "lessons");
-  const appQs = new URLSearchParams();
-  appQs.set("pathwayId", pathway.id);
-  if (topicFilter) {
-    appQs.set("topic", topicFilter);
-    appQs.set("preset", "topic_drill");
-  }
-  const appQuestionsScoped = loginWithCallback(`/app/questions?${appQs.toString()}`);
+  const appQuestionsScoped = topicFilterTrim
+    ? pathwayAppQuestionBankTopicHref(pathway, topicFilterTrim)
+    : loginWithCallback(`/app/questions?${new URLSearchParams({ pathwayId: pathway.id }).toString()}`);
   const questionsHubPath = buildExamPathwayPath(pathway, "questions");
 
   return (

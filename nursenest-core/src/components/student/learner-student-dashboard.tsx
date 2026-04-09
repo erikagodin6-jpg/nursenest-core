@@ -38,7 +38,7 @@ function weakTierLabel(t: LearnerMarketingT, tier: WeaknessTier): string {
   }
 }
 
-type ActivityRow = { id: string; atMs: number; node: React.ReactNode };
+type ActivityRow = { id: string; atMs: number; node: ReactNode };
 
 export function LearnerStudentDashboard({
   snapshot,
@@ -62,23 +62,18 @@ export function LearnerStudentDashboard({
       ? studySnap.weakTopics.slice(0, 5).map((w) => w.topic)
       : [];
 
-  const activityRows: ActivityRow[] = [];
-
-  if (studyStreakDays >= 2) {
-    activityRows.push({
-      id: "streak",
-      atMs: Date.now(),
-      node: (
-        <div className="flex items-start justify-between gap-2 rounded-lg border border-primary/20 bg-primary/[0.06] px-3 py-2.5">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-primary">{t("learner.dashboard.student.momentumLine")}</p>
-            <p className="mt-0.5 text-sm font-medium text-foreground">{t("learner.dashboard.student.activityStreak", { n: studyStreakDays })}</p>
-          </div>
-          <Zap className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
+  const streakBanner =
+    studyStreakDays >= 2 ? (
+      <div className="mb-3 flex items-start justify-between gap-2 rounded-lg border border-primary/20 bg-primary/[0.06] px-3 py-2.5">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wide text-primary">{t("learner.dashboard.student.momentumLine")}</p>
+          <p className="mt-0.5 text-sm font-medium text-foreground">{t("learner.dashboard.student.activityStreak", { n: studyStreakDays })}</p>
         </div>
-      ),
-    });
-  }
+        <Zap className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
+      </div>
+    ) : null;
+
+  const activityRows: ActivityRow[] = [];
 
   for (const m of recentMocks.slice(0, 3)) {
     const atMs = new Date(m.at).getTime();
@@ -126,15 +121,15 @@ export function LearnerStudentDashboard({
             </p>
           </div>
           <Link href={n.href} className="shrink-0 text-sm font-semibold text-primary underline-offset-4 hover:underline">
-            {t("learner.dashboard.insight.viewReport")}
-          </Link>
+              {t("learner.dashboard.student.openNote")}
+            </Link>
         </div>
       ),
     });
   }
 
   activityRows.sort((a, b) => b.atMs - a.atMs);
-  const sortedActivity = activityRows.slice(0, 6);
+  const sortedActivity = activityRows.slice(0, 5);
 
   const lessonsHref = continueLesson?.href ?? "/app/lessons";
 
@@ -229,8 +224,13 @@ export function LearnerStudentDashboard({
               <p className="text-xs text-muted-foreground">{t("learner.dashboard.student.activityHint")}</p>
             </div>
           </div>
-          {sortedActivity.length > 0 ? (
-            <div className="mt-4 flex min-h-[120px] flex-1 flex-col">{sortedActivity.map((r) => <div key={r.id}>{r.node}</div>)}</div>
+          {streakBanner || sortedActivity.length > 0 ? (
+            <div className="mt-4 flex min-h-[120px] flex-1 flex-col">
+              {streakBanner}
+              {sortedActivity.map((r) => (
+                <div key={r.id}>{r.node}</div>
+              ))}
+            </div>
           ) : (
             <p className="mt-4 flex-1 text-sm text-muted-foreground">{t("learner.dashboard.student.activityEmpty")}</p>
           )}
@@ -304,7 +304,7 @@ export function LearnerStudentDashboard({
                 <div className="min-w-0">
                   <p className="font-semibold text-foreground">{t("learner.dashboard.student.quick.reviewLessons")}</p>
                   <p className="text-xs text-muted-foreground">{t("learner.dashboard.student.quick.reviewLessonsSub")}</p>
-                  {continueLesson && continueLesson.href === lessonsHref ? (
+                  {continueLesson ? (
                     <p className="mt-1 truncate text-[11px] text-primary/90">{t("learner.dashboard.student.quick.resumeHint", { title: continueLesson.title })}</p>
                   ) : null}
                 </div>

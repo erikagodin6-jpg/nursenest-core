@@ -228,8 +228,8 @@ export async function loadAdminAnalyticsDashboard(): Promise<AdminAnalyticsDashb
     const examGroups = await prisma.examAttempt.groupBy({
       by: ["examId"],
       where: { createdAt: { gte: weekAgo } },
-      _count: { _all: true },
-      orderBy: { _count: { _all: "desc" } },
+      _count: { id: true },
+      orderBy: { _count: { id: "desc" } },
       take: 10,
     });
     const examIds = examGroups.map((g) => g.examId);
@@ -244,7 +244,7 @@ export async function loadAdminAnalyticsDashboard(): Promise<AdminAnalyticsDashb
     topExamsByAttempts7d = examGroups.map((g) => ({
       examId: g.examId,
       examTitle: titleByExam.get(g.examId) ?? null,
-      attempts: g._count._all,
+      attempts: g._count.id,
     }));
 
     const topicRows = await prisma.$queryRaw<Array<{ topic: string; n: bigint }>>`

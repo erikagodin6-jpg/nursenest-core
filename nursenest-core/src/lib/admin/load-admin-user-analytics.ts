@@ -334,7 +334,7 @@ export async function loadAdminUserAnalytics(
     }));
 
     if (q.pathway === "ALL") {
-      const distRows = await prisma.$queryRaw<Array<{ pid: string | null; n: bigint }]>`
+      const distRows = await prisma.$queryRaw<Array<{ pid: string | null; n: bigint }>>`
         SELECT u."targetExamPathwayId" AS pid, COUNT(*)::bigint AS n
         FROM "User" u
         WHERE u.role = 'LEARNER' ${subFrag} ${countryPathwaySql({ ...q, pathway: "ALL" })}

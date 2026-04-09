@@ -2,8 +2,6 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { auth } from "@/lib/auth";
 import { LearnerDailyMomentumCard } from "@/components/student/learner-daily-momentum-card";
-import { LearnerDashboardAdvantageStrip } from "@/components/student/learner-dashboard-advantage-strip";
-import { PremiumLearnerHub } from "@/components/student/premium-learner-hub";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { LockedStudyNextPreview } from "@/components/student/locked-study-next-preview";
@@ -13,8 +11,7 @@ import { buildLearnerStudySnapshot } from "@/lib/learner/build-learner-study-sna
 import { loadTodayGoalProgress } from "@/lib/learner/load-today-goal-progress";
 import { loadPremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
 import { loadRecentLearnerNotesSummary } from "@/lib/learner/load-recent-learner-notes-summary";
-import { LearnerAdaptiveFocusCard } from "@/components/student/learner-adaptive-focus-card";
-import { LearnerDashboardInsightPanels } from "@/components/student/learner-dashboard-insight-panels";
+import { LearnerStudentDashboard } from "@/components/student/learner-student-dashboard";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 
@@ -111,19 +108,7 @@ export default async function LearnerDashboardPage() {
               focusTopic={weakTopicTitles[0] ?? null}
             />
           ) : null}
-          <LearnerDashboardAdvantageStrip t={t} />
-          <LearnerDashboardInsightPanels snapshot={snapshot} t={t} />
-          {studySnap ? <LearnerAdaptiveFocusCard snapshot={studySnap} /> : null}
-          <PremiumLearnerHub
-            snapshot={snapshot}
-            weakTopicTitles={weakTopicTitles}
-            recentNotes={notes}
-            suppressFlashcardWeakLine={weakTopicTitles.length > 0}
-            compactIntro
-            omitReadinessBreakdown
-            omitRecentMocks
-            readinessDeferHint={t("learner.dashboard.hub.readinessDeferHint")}
-          />
+          <LearnerStudentDashboard snapshot={snapshot} studySnap={studySnap} recentNotes={notes} t={t} />
           <section className="nn-card flex flex-col gap-3 p-5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
             <p className="text-sm text-muted-foreground">{t("learner.dashboard.accountTeaser")}</p>
             <Link

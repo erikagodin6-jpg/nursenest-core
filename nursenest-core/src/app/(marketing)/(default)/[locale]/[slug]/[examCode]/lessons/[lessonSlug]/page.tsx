@@ -23,11 +23,8 @@ import {
   defaultPathwayLessonContentLocaleForExamHubRoute,
   normalizePathwayLessonLocale,
 } from "@/lib/lessons/pathway-lesson-locale";
-import {
-  getPathwayLesson,
-  getRelatedPathwayLessons,
-  RELATED_PATHWAY_LESSONS_LIMIT,
-} from "@/lib/lessons/pathway-lesson-loader";
+import { getRelatedPathwayLessons, RELATED_PATHWAY_LESSONS_LIMIT } from "@/lib/lessons/pathway-lesson-loader";
+import { loadPathwayLessonWithLegacySlugRedirect } from "@/lib/lessons/pathway-lesson-detail-redirect";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { prisma } from "@/lib/db";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
@@ -65,7 +62,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale: countrySlug, slug: roleTrack, examCode, lessonSlug } = await params;
   const pathway = resolveExamPathwayFromMarketingHubSegment(countrySlug, roleTrack, examCode);
   const contentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
-  const lesson = pathway ? await getPathwayLesson(pathway.id, lessonSlug, contentLocale) : undefined;
+  const lesson = pathway ? await loadPathwayLessonWithLegacySlugRedirect(pathway, lessonSlug, contentLocale) : undefined;
   if (!pathway || !lesson) return {};
   const path = buildExamPathwayPath(pathway, `lessons/${lesson.slug}`);
   const canonical = absoluteUrl(path);
@@ -115,7 +112,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
   const lessonContentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
 
   const [lesson, session] = await Promise.all([
-    getPathwayLesson(pathway.id, lessonSlug, lessonContentLocale),
+    loadPathwayLessonWithLegacySlugRedirect(pathway, lessonSlug, lessonContentLocale),
     auth(),
   ]);
   if (!lesson) notFound();
@@ -153,6 +150,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
     getRelatedPathwayLessons(pathway.id, lesson.topicSlug, lesson.slug, undefined, lessonContentLocale),
     loadRelatedExamQuestionStemsForPathwayLesson({
       pathway,
+      lessonTitle: lesson.title,
       lessonTopic: lesson.topic,
       lessonTopicSlug: lesson.topicSlug,
       bodySystem: lesson.bodySystem,

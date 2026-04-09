@@ -1,3 +1,6 @@
+import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+
 /** Structured “exam focus” block for pathway lessons (how tested, traps, prioritization). */
 export type PathwayLessonExamFocus = {
   howTested?: string;
@@ -170,6 +173,18 @@ export function pathwayLessonMarketingDetailHref(
   if (!pathwayLessonHasRenderableHubSlug({ slug: slug ?? "" })) return null;
   const base = lessonsBasePath.replace(/\/$/, "");
   return `${base}/${encodeURIComponent(String(slug).trim())}`;
+}
+
+/**
+ * Single helper for public marketing lesson URLs: `/{country}/{role}/{exam}/lessons/{slug}`.
+ * Prefer this over manual string concat so redirects and link audits stay aligned.
+ */
+export function pathwayLessonPublicDetailPath(
+  pathway: Pick<ExamPathwayDefinition, "countrySlug" | "roleTrack" | "examCode">,
+  lessonSlug: string | null | undefined,
+): string | null {
+  const base = buildExamPathwayPath(pathway, "lessons");
+  return pathwayLessonMarketingDetailHref(base, lessonSlug);
 }
 
 /**

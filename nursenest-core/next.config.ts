@@ -12,6 +12,7 @@ import { fileURLToPath } from "url";
 import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
 import { PROGRAMMATIC_SLUG_TO_PATHWAY_PATH } from "./src/lib/exam-pathways/programmatic-slug-redirects";
+import { buildPathwayLessonSlugRedirectsForNextConfig } from "./src/lib/lessons/pathway-lesson-slug-redirects";
 import { CORE_HOSTED_MARKETING_LOCALES } from "./src/lib/i18n/marketing-locale-policy";
 import { getAllProgrammaticSlugs } from "./src/lib/seo/programmatic-registry";
 
@@ -99,6 +100,8 @@ const nextConfig: NextConfig = {
       { source: "/mock-exam", destination: "/practice-exams", permanent: true },
       { source: "/test-bank", destination: "/question-bank", permanent: true },
       ...examPathwayFromProgrammaticRedirects,
+      /** Pathway lesson slug renames — see `PATHWAY_LESSON_SLUG_REDIRECTS`. */
+      ...buildPathwayLessonSlugRedirectsForNextConfig(),
     ];
   },
   async rewrites() {
