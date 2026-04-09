@@ -5,6 +5,8 @@ import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { NpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
 import { pathwayOverviewBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { pathwayHubFaqSchema } from "@/lib/seo/pathway-hub-faq-schema";
+import { ExamPathwayWaitlistBanner } from "@/components/exam-pathways/exam-pathway-waitlist-banner";
+import { ExamHubComparisonLink } from "@/components/marketing/exam-hub-comparison-link";
 import { MarketingTrustSignalsStrip } from "@/components/marketing/marketing-trust-signals-strip";
 import { FunnelExamHubViewBeacon } from "@/components/marketing/funnel-analytics-beacons";
 import { ExamPathwayHubBody } from "@/components/exam-pathways/exam-pathway-hub-body";
@@ -82,28 +84,13 @@ export function ExamPathwayHub({
       <div className="mt-6 max-w-2xl">
         <MarketingTrustSignalsStrip variant="compact" examHub />
       </div>
+      <ExamHubComparisonLink />
 
       {pathway.status === "upcoming" || pathway.acquisitionMode === "waitlist" ? (
-        <aside className="nn-study-card mt-8 border-[var(--role-warning-border)] bg-[var(--role-warning-soft)] p-4 sm:p-5">
-          <p className="nn-marketing-h4 text-[var(--role-warning-text)]">
-            {pathway.acquisitionMode === "waitlist" ? "Coming soon — join the waitlist" : "Upcoming or transitioning pathway"}
-          </p>
-          <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">
-            {pathway.id === "ca-np-cnple" ? (
-              <>
-                Canadian NP licensure (CNPLE) integration is still evolving. This hub shows what is available today—lessons and
-                questions grow as requirements finalize. Subscribe/checkout for this track opens when the product is active;
-                use <strong className="text-[var(--theme-body-text)]">Join waitlist</strong> below to hear when we launch billing
-                for CNPLE.
-              </>
-            ) : (
-              <>
-                Exam branding and registration rules can change. This hub stays updated: join the list or start from an active
-                track if you test sooner.
-              </>
-            )}
-          </p>
-        </aside>
+        <ExamPathwayWaitlistBanner
+          pathwayId={pathway.id}
+          variant={pathway.acquisitionMode === "waitlist" ? "waitlist" : "upcoming"}
+        />
       ) : null}
 
       <PathwayLiveInventoryStrip

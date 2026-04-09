@@ -1,13 +1,14 @@
 "use client";
 
+import { Activity, Route } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 
 const ROWS = ["clarity", "simplicity", "adaptive", "integrated", "guided", "readiness"] as const;
-const HIGHLIGHT_ROWS = new Set<typeof ROWS[number]>(["guided", "readiness"]);
+const HIGHLIGHT_ROWS = new Set<(typeof ROWS)[number]>(["guided", "readiness"]);
 
 /**
- * Explicit comparison vs typical high-volume question banks: concrete product-shape differences
- * (integrated rail, CAT, readiness signals)—not vague “we’re the best” claims.
+ * Explicit comparison vs drill-first Qbanks (e.g. UWorld-class volume banks): concrete product-shape
+ * differences—integrated rail, CAT, guided loop, readiness signals—not vague superiority claims.
  */
 export function HomeComparisonSection() {
   const { t } = useMarketingI18n();
@@ -26,7 +27,17 @@ export function HomeComparisonSection() {
           <p className="nn-marketing-body mx-auto mt-3 max-w-3xl text-pretty text-[var(--theme-muted-text)]">
             {t("home.comparison.sub")}
           </p>
-          <p className="nn-marketing-caption mt-3 text-[var(--theme-muted-text)]">{t("home.comparison.disclaimer")}</p>
+          <div className="mx-auto mt-6 grid max-w-3xl gap-3 sm:grid-cols-2">
+            <div className="flex gap-3 rounded-xl border border-primary/25 bg-[color-mix(in_srgb,var(--theme-primary)_8%,var(--theme-card-bg))] px-4 py-3 text-left">
+              <Route className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden />
+              <p className="nn-marketing-body-sm text-pretty text-[var(--theme-body-text)]">{t("home.comparison.highlightGuided")}</p>
+            </div>
+            <div className="flex gap-3 rounded-xl border border-primary/25 bg-[color-mix(in_srgb,var(--theme-primary)_8%,var(--theme-card-bg))] px-4 py-3 text-left">
+              <Activity className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden />
+              <p className="nn-marketing-body-sm text-pretty text-[var(--theme-body-text)]">{t("home.comparison.highlightReadiness")}</p>
+            </div>
+          </div>
+          <p className="nn-marketing-caption mt-4 text-[var(--theme-muted-text)]">{t("home.comparison.disclaimer")}</p>
         </header>
 
         <div className="hidden md:block overflow-x-auto rounded-2xl border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] shadow-sm">

@@ -12,13 +12,14 @@ function parseEnumValue<T extends string>(raw: string | null, allowed: readonly 
 
 /**
  * Admin-only list of content automation / blog generation logs (newest first).
- * Optional: `hours` (1–2160) filters createdAt; `search` matches summary/error/topic (min 2 chars).
+ * Optional: `hours` (1–2160) filters createdAt; `search` matches summary/error/topic (min 2 chars); `id` for one row.
  */
 export async function GET(req: Request) {
   const gate = await requireAdmin();
   if (!gate.ok) return gate.response;
 
   const { searchParams } = new URL(req.url);
+  const logId = searchParams.get("id")?.trim() ?? "";
   const limit = Math.min(100, Math.max(1, Number(searchParams.get("limit") ?? "50") || 50));
   const offset = Math.max(0, Number(searchParams.get("offset") ?? "0") || 0);
   const category = parseEnumValue(searchParams.get("category"), Object.values(ContentAutomationLogCategory));
@@ -44,12 +45,15 @@ export async function GET(req: Request) {
         }
       : undefined;
 
-  const where: Prisma.ContentAutomationLogWhereInput = {
-    ...(category ? { category } : {}),
-    ...(status ? { status } : {}),
-    ...(since ? { createdAt: { gte: since } } : {}),
-    ...(searchFilter ? searchFilter : {}),
-  };
+  const where: Prisma.ContentAutomationLogWhereInput =
+    logId.length > 0
+      ? { id: logId }
+      : {
+          ...(category ? { category } : {}),
+          ...(status ? { status } : {}),
+          ...(since ? { createdAt: { gte: since } } : {}),
+          ...(searchFilter ? searchFilter : {}),
+        };
 
   const [rows, total] = await Promise.all([
     prisma.contentAutomationLog.findMany({

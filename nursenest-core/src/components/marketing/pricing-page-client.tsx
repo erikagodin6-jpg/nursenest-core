@@ -116,6 +116,7 @@ export function PricingPageClient({
   }, [region]);
 
   const localize = useCallback((href: string) => withMarketingLocale(locale, href), [locale]);
+  const comparisonSectionHref = `${localize("/")}#home-comparison-heading`;
 
   useEffect(() => {
     let cancelled = false;
@@ -251,6 +252,11 @@ export function PricingPageClient({
             <MarketingTrustSignalsStrip variant="compact" />
           </div>
           <p className="nn-marketing-caption mx-auto mt-4 max-w-lg text-muted-foreground">{t("pages.pricing.conversion.checkoutTrust")}</p>
+          <p className="nn-marketing-body-sm mx-auto mt-3 max-w-lg text-center text-muted-foreground">
+            <Link href={comparisonSectionHref} className="font-semibold text-primary underline-offset-4 hover:underline">
+              {t("home.comparison.pricingLink")}
+            </Link>
+          </p>
         </div>
       </header>
 

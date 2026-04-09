@@ -1,7 +1,7 @@
 {
   "version": 1,
   "generatedBy": "scripts/generate-rn-nclex-master-map.mjs",
-  "sourceOfTruth": "Align lesson bodies to your uploaded NCLEX outline/PDF. Completeness checklist (audit targets): src/content/pathway-lessons/nclex-rn-source-checklist.json — run node scripts/audit-rn-nclex-map.mjs after map changes.",
+  "sourceOfTruth": "Inventory + pipeline: docs/rn-nclex-rn-lesson-library.md. Authoring alignment: data/premium-lessons-nclex-core-v1/ + src/content/pathway-lessons/nclex-rn-source-checklist.json — run node scripts/audit-rn-nclex-map.mjs after map changes.",
   "pathways": [
     "us-rn-nclex-rn",
     "ca-rn-nclex-rn"
@@ -12,11 +12,17 @@
     "endocrine_metabolic_fluids",
     "gastrointestinal",
     "neurological",
+    "renal_genitourinary",
+    "hematology_oncology_immunology",
+    "musculoskeletal",
+    "integumentary_immune_autoimmune",
+    "infectious_disease",
     "emergency_critical_perioperative",
     "pharmacology_master",
     "maternity_newborn",
     "pediatrics",
-    "mental_health"
+    "mental_health",
+    "nclex_nursing_priorities_safety"
   ],
   "contentSpine": "premium_exam_complete",
   "contentSpineReference": "src/lib/lessons/exam-complete-lesson-template.ts + pathway-lesson-premium.ts",
@@ -127,13 +133,33 @@
       "minLessons": 20,
       "maxLessons": 28,
       "tierMix": "2–4 A, 10–14 C, 6–10 D"
+    },
+    "musculoskeletal": {
+      "minLessons": 6,
+      "maxLessons": 10,
+      "tierMix": "2–4 A, 3–5 B, 1–2 C"
+    },
+    "integumentary_immune_autoimmune": {
+      "minLessons": 4,
+      "maxLessons": 8,
+      "tierMix": "2–3 A, 2–4 B"
+    },
+    "infectious_disease": {
+      "minLessons": 5,
+      "maxLessons": 8,
+      "tierMix": "3–4 A, 2–3 B"
+    },
+    "nclex_nursing_priorities_safety": {
+      "minLessons": 5,
+      "maxLessons": 8,
+      "tierMix": "2–3 A, 2–4 B"
     }
   },
   "aggregates": {
-    "uniqueLessonCount": 162,
+    "uniqueLessonCount": 182,
     "byTier": {
-      "A": 74,
-      "B": 52,
+      "A": 83,
+      "B": 63,
       "C": 35,
       "D": 1
     },
@@ -149,7 +175,11 @@
       "mental_health": 11,
       "gastrointestinal": 13,
       "maternity_newborn": 17,
-      "renal_genitourinary": 10
+      "infectious_disease": 5,
+      "musculoskeletal": 6,
+      "nclex_nursing_priorities_safety": 5,
+      "renal_genitourinary": 10,
+      "integumentary_immune_autoimmune": 4
     },
     "visibleInCategory": {
       "cardiovascular": 21,
@@ -159,11 +189,15 @@
       "renal_genitourinary": 10,
       "endocrine_metabolic_fluids": 14,
       "hematology_oncology_immunology": 11,
+      "musculoskeletal": 7,
+      "integumentary_immune_autoimmune": 4,
+      "infectious_disease": 5,
       "pediatrics": 24,
       "maternity_newborn": 19,
       "mental_health": 14,
       "emergency_critical_perioperative": 21,
-      "pharmacology_master": 24
+      "pharmacology_master": 24,
+      "nclex_nursing_priorities_safety": 5
     }
   },
   "lessons": [
@@ -693,6 +727,19 @@
       "bodySystem": "Pediatrics"
     },
     {
+      "id": "rn-map-0176",
+      "canonicalTitle": "Clostridioides difficile Infection",
+      "slug": "clostridioides-difficile-infection-nclex-rn",
+      "tier": "A",
+      "wordTargetMin": 1800,
+      "wordTargetMax": 2600,
+      "primaryCategoryId": "infectious_disease",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "infectious-disease",
+      "bodySystem": "Infectious Disease"
+    },
+    {
       "id": "rn-map-0031",
       "canonicalTitle": "Community-Acquired Pneumonia",
       "slug": "community-acquired-pneumonia-nclex-rn",
@@ -704,6 +751,19 @@
       "mergeNote": null,
       "topicSlug": "respiratory",
       "bodySystem": "Respiratory"
+    },
+    {
+      "id": "rn-map-0168",
+      "canonicalTitle": "Compartment Syndrome",
+      "slug": "compartment-syndrome-nclex-rn",
+      "tier": "A",
+      "wordTargetMin": 1800,
+      "wordTargetMax": 2600,
+      "primaryCategoryId": "musculoskeletal",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "musculoskeletal",
+      "bodySystem": "Musculoskeletal"
     },
     {
       "id": "rn-map-0134",
@@ -769,6 +829,19 @@
       "mergeNote": null,
       "topicSlug": "cardiovascular",
       "bodySystem": "Cardiovascular"
+    },
+    {
+      "id": "rn-map-0179",
+      "canonicalTitle": "Delegation and Scope of Practice",
+      "slug": "delegation-and-scope-of-practice-nclex-rn",
+      "tier": "A",
+      "wordTargetMin": 1800,
+      "wordTargetMax": 2600,
+      "primaryCategoryId": "nclex_nursing_priorities_safety",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "nclex-nursing-priorities-safety",
+      "bodySystem": "NCLEX Nursing Priorities / Safety / Delegation"
     },
     {
       "id": "rn-map-0045",
@@ -972,6 +1045,19 @@
       "bodySystem": "Gastrointestinal"
     },
     {
+      "id": "rn-map-0180",
+      "canonicalTitle": "Error Prevention and Incident Reporting",
+      "slug": "error-prevention-and-incident-reporting-nclex-rn",
+      "tier": "B",
+      "wordTargetMin": 1200,
+      "wordTargetMax": 1800,
+      "primaryCategoryId": "nclex_nursing_priorities_safety",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "nclex-nursing-priorities-safety",
+      "bodySystem": "NCLEX Nursing Priorities / Safety / Delegation"
+    },
+    {
       "id": "rn-map-0145",
       "canonicalTitle": "Extravasation",
       "slug": "extravasation-nclex-rn",
@@ -1067,6 +1153,19 @@
       "mergeNote": "Cross-listed from endocrine.",
       "topicSlug": "pharmacology-master",
       "bodySystem": "Pharmacology"
+    },
+    {
+      "id": "rn-map-0165",
+      "canonicalTitle": "Gout",
+      "slug": "gout-nclex-rn",
+      "tier": "B",
+      "wordTargetMin": 1200,
+      "wordTargetMax": 1800,
+      "primaryCategoryId": "musculoskeletal",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "musculoskeletal",
+      "bodySystem": "Musculoskeletal"
     },
     {
       "id": "rn-map-0162",
@@ -1188,6 +1287,19 @@
       "bodySystem": "Gastrointestinal"
     },
     {
+      "id": "rn-map-0166",
+      "canonicalTitle": "Hip Fracture and Surgical Repair",
+      "slug": "hip-fracture-and-surgical-repair-nclex-rn",
+      "tier": "A",
+      "wordTargetMin": 1800,
+      "wordTargetMax": 2600,
+      "primaryCategoryId": "musculoskeletal",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "musculoskeletal",
+      "bodySystem": "Musculoskeletal"
+    },
+    {
       "id": "rn-map-0103",
       "canonicalTitle": "Hirschsprung Disease",
       "slug": "hirschsprung-disease-nclex-rn",
@@ -1199,6 +1311,19 @@
       "mergeNote": null,
       "topicSlug": "pediatrics",
       "bodySystem": "Pediatrics"
+    },
+    {
+      "id": "rn-map-0174",
+      "canonicalTitle": "HIV/AIDS: Nursing Care and Post-Exposure Prophylaxis",
+      "slug": "hiv-aids-nursing-care-and-post-exposure-prophylaxis-nclex-rn",
+      "tier": "A",
+      "wordTargetMin": 1800,
+      "wordTargetMax": 2600,
+      "primaryCategoryId": "infectious_disease",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "infectious-disease",
+      "bodySystem": "Infectious Disease"
     },
     {
       "id": "rn-map-0037",
@@ -1329,6 +1454,32 @@
       "mergeNote": null,
       "topicSlug": "gastrointestinal",
       "bodySystem": "Gastrointestinal"
+    },
+    {
+      "id": "rn-map-0175",
+      "canonicalTitle": "Influenza and Antiviral Therapy",
+      "slug": "influenza-and-antiviral-therapy-nclex-rn",
+      "tier": "B",
+      "wordTargetMin": 1200,
+      "wordTargetMax": 1800,
+      "primaryCategoryId": "infectious_disease",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "infectious-disease",
+      "bodySystem": "Infectious Disease"
+    },
+    {
+      "id": "rn-map-0181",
+      "canonicalTitle": "Informed Consent and Surrogate Decision Making",
+      "slug": "informed-consent-and-surrogate-decision-making-nclex-rn",
+      "tier": "B",
+      "wordTargetMin": 1200,
+      "wordTargetMax": 1800,
+      "primaryCategoryId": "nclex_nursing_priorities_safety",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "nclex-nursing-priorities-safety",
+      "bodySystem": "NCLEX Nursing Priorities / Safety / Delegation"
     },
     {
       "id": "rn-map-0056",
@@ -1724,6 +1875,19 @@
       "bodySystem": "Pharmacology"
     },
     {
+      "id": "rn-map-0178",
+      "canonicalTitle": "Nursing Prioritization: ABCs and Urgent vs Important",
+      "slug": "nursing-prioritization-abcs-and-urgent-vs-important-nclex-rn",
+      "tier": "A",
+      "wordTargetMin": 1800,
+      "wordTargetMax": 2600,
+      "primaryCategoryId": "nclex_nursing_priorities_safety",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "nclex-nursing-priorities-safety",
+      "bodySystem": "NCLEX Nursing Priorities / Safety / Delegation"
+    },
+    {
       "id": "rn-map-0132",
       "canonicalTitle": "Opioid Withdrawal",
       "slug": "opioid-withdrawal-nclex-rn",
@@ -1735,6 +1899,45 @@
       "mergeNote": null,
       "topicSlug": "mental-health",
       "bodySystem": "Mental Health"
+    },
+    {
+      "id": "rn-map-0163",
+      "canonicalTitle": "Osteoarthritis",
+      "slug": "osteoarthritis-nclex-rn",
+      "tier": "B",
+      "wordTargetMin": 1200,
+      "wordTargetMax": 1800,
+      "primaryCategoryId": "musculoskeletal",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "musculoskeletal",
+      "bodySystem": "Musculoskeletal"
+    },
+    {
+      "id": "rn-map-0177",
+      "canonicalTitle": "Osteomyelitis",
+      "slug": "osteomyelitis-nclex-rn",
+      "tier": "B",
+      "wordTargetMin": 1200,
+      "wordTargetMax": 1800,
+      "primaryCategoryId": "infectious_disease",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "infectious-disease",
+      "bodySystem": "Infectious Disease"
+    },
+    {
+      "id": "rn-map-0167",
+      "canonicalTitle": "Osteoporosis and Fracture Prevention",
+      "slug": "osteoporosis-and-fracture-prevention-nclex-rn",
+      "tier": "B",
+      "wordTargetMin": 1200,
+      "wordTargetMax": 1800,
+      "primaryCategoryId": "musculoskeletal",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "musculoskeletal",
+      "bodySystem": "Musculoskeletal"
     },
     {
       "id": "rn-map-0118",
@@ -1953,6 +2156,19 @@
       "bodySystem": "Emergency / Critical Care / Perioperative"
     },
     {
+      "id": "rn-map-0182",
+      "canonicalTitle": "Professional Boundaries and Ethical Communication",
+      "slug": "professional-boundaries-and-ethical-communication-nclex-rn",
+      "tier": "B",
+      "wordTargetMin": 1200,
+      "wordTargetMax": 1800,
+      "primaryCategoryId": "nclex_nursing_priorities_safety",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "nclex-nursing-priorities-safety",
+      "bodySystem": "NCLEX Nursing Priorities / Safety / Delegation"
+    },
+    {
       "id": "rn-map-0070",
       "canonicalTitle": "Prostate Cancer",
       "slug": "prostate-cancer-nclex-rn",
@@ -1964,6 +2180,19 @@
       "mergeNote": null,
       "topicSlug": "renal-genitourinary",
       "bodySystem": "Renal / Genitourinary"
+    },
+    {
+      "id": "rn-map-0170",
+      "canonicalTitle": "Psoriasis and Biologic Therapy",
+      "slug": "psoriasis-and-biologic-therapy-nclex-rn",
+      "tier": "B",
+      "wordTargetMin": 1200,
+      "wordTargetMax": 1800,
+      "primaryCategoryId": "integumentary_immune_autoimmune",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "integumentary-immune-autoimmune",
+      "bodySystem": "Integumentary / Immune / Autoimmune"
     },
     {
       "id": "rn-map-0130",
@@ -2033,6 +2262,19 @@
       "bodySystem": "Endocrine / Metabolic / Fluids"
     },
     {
+      "id": "rn-map-0164",
+      "canonicalTitle": "Rheumatoid Arthritis",
+      "slug": "rheumatoid-arthritis-nclex-rn",
+      "tier": "B",
+      "wordTargetMin": 1200,
+      "wordTargetMax": 1800,
+      "primaryCategoryId": "musculoskeletal",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "musculoskeletal",
+      "bodySystem": "Musculoskeletal"
+    },
+    {
       "id": "rn-map-0128",
       "canonicalTitle": "Ruptured Ectopic Pregnancy",
       "slug": "ruptured-ectopic-pregnancy-nclex-rn",
@@ -2059,6 +2301,19 @@
       "bodySystem": "Mental Health"
     },
     {
+      "id": "rn-map-0172",
+      "canonicalTitle": "Scleroderma (Systemic Sclerosis)",
+      "slug": "scleroderma-systemic-sclerosis-nclex-rn",
+      "tier": "B",
+      "wordTargetMin": 1200,
+      "wordTargetMax": 1800,
+      "primaryCategoryId": "integumentary_immune_autoimmune",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "integumentary-immune-autoimmune",
+      "bodySystem": "Integumentary / Immune / Autoimmune"
+    },
+    {
       "id": "rn-map-0094",
       "canonicalTitle": "Sepsis",
       "slug": "sepsis-nclex-rn",
@@ -2081,7 +2336,9 @@
       "wordTargetMin": 1200,
       "wordTargetMax": 1800,
       "primaryCategoryId": "pediatrics",
-      "secondaryCategoryIds": [],
+      "secondaryCategoryIds": [
+        "musculoskeletal"
+      ],
       "mergeNote": null,
       "topicSlug": "pediatrics",
       "bodySystem": "Pediatrics"
@@ -2143,6 +2400,19 @@
       "bodySystem": "Pharmacology"
     },
     {
+      "id": "rn-map-0171",
+      "canonicalTitle": "Stevens-Johnson Syndrome and Toxic Epidermal Necrolysis",
+      "slug": "stevens-johnson-syndrome-and-toxic-epidermal-necrolysis-nclex-rn",
+      "tier": "A",
+      "wordTargetMin": 1800,
+      "wordTargetMax": 2600,
+      "primaryCategoryId": "integumentary_immune_autoimmune",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "integumentary-immune-autoimmune",
+      "bodySystem": "Integumentary / Immune / Autoimmune"
+    },
+    {
       "id": "rn-map-0044",
       "canonicalTitle": "Stroke and Transient Ischemic Attack",
       "slug": "stroke-and-transient-ischemic-attack-nclex-rn",
@@ -2167,6 +2437,19 @@
       "mergeNote": null,
       "topicSlug": "emergency-critical-perioperative",
       "bodySystem": "Emergency / Critical Care / Perioperative"
+    },
+    {
+      "id": "rn-map-0169",
+      "canonicalTitle": "Systemic Lupus Erythematosus",
+      "slug": "systemic-lupus-erythematosus-nclex-rn",
+      "tier": "A",
+      "wordTargetMin": 1800,
+      "wordTargetMax": 2600,
+      "primaryCategoryId": "integumentary_immune_autoimmune",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "integumentary-immune-autoimmune",
+      "bodySystem": "Integumentary / Immune / Autoimmune"
     },
     {
       "id": "rn-map-0098",
@@ -2236,6 +2519,19 @@
       "mergeNote": null,
       "topicSlug": "pediatrics",
       "bodySystem": "Pediatrics"
+    },
+    {
+      "id": "rn-map-0173",
+      "canonicalTitle": "Tuberculosis (Latent and Active)",
+      "slug": "tuberculosis-latent-and-active-nclex-rn",
+      "tier": "A",
+      "wordTargetMin": 1800,
+      "wordTargetMax": 2600,
+      "primaryCategoryId": "infectious_disease",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "infectious-disease",
+      "bodySystem": "Infectious Disease"
     },
     {
       "id": "rn-map-0059",

@@ -99,7 +99,7 @@ const CATEGORIES = {
     ["Community-Acquired Pneumonia", "A"],
     ["Chest Tubes", "B"],
     ["Inhaled Spacers", "C"],
-    ["Airborne Precautions", "C"],
+    ["Isolation Precautions: Contact, Droplet, and Airborne", "B"],
   ],
   neurological: [
     ["Increased Intracranial Pressure", "A"],
@@ -108,6 +108,7 @@ const CATEGORIES = {
     ["Ventriculoperitoneal Shunt", "B"],
     ["Bacterial Meningitis", "A"],
     ["Febrile Seizures", "B"],
+    ["Seizures and Status Epilepticus: Acute Nursing Management", "A"],
     ["Cauda Equina Syndrome", "A"],
     ["Cerebral Palsy", "B"],
     ["Parkinson Disease", "A"],
@@ -134,6 +135,7 @@ const CATEGORIES = {
   ],
   renal_genitourinary: [
     ["Nephrolithiasis", "A"],
+    ["Acute Kidney Injury: Prerenal, Intrarenal, and Postrenal Patterns", "A"],
     ["Diabetic Nephropathy", "A"],
     ["Nephrotic Syndrome", "A"],
     ["Hematuria and Kidney-Related Red Flags", "B"],
@@ -145,7 +147,9 @@ const CATEGORIES = {
     ["IUD Patient Teaching", "C"],
   ],
   endocrine_metabolic_fluids: [
+    ["Diabetes Mellitus: Type 1 and Type 2 Nursing Management", "B"],
     ["Diabetic Ketoacidosis", "A"],
+    ["Thyroid Storm and Myxedema Coma", "A"],
     ["Refeeding Syndrome", "A"],
     ["Hypoparathyroidism", "B"],
     ["Addison Disease / Primary Adrenal Insufficiency", "A"],
@@ -285,6 +289,39 @@ const CATEGORIES = {
     ["Cisplatin", "B"],
     ["Grapefruit Juice Drug Interactions", "D"],
   ],
+  /** Musculoskeletal + trauma patterns frequently tested as prioritization + complications. */
+  musculoskeletal: [
+    ["Osteoarthritis", "B"],
+    ["Rheumatoid Arthritis", "B"],
+    ["Gout", "B"],
+    ["Hip Fracture and Surgical Repair", "A"],
+    ["Osteoporosis and Fracture Prevention", "B"],
+    ["Compartment Syndrome", "A"],
+    ["Septic Arthritis", "B"],
+  ],
+  /** Integumentary + immune-mediated conditions (distinct from generic infection control lessons). */
+  integumentary_immune_autoimmune: [
+    ["Systemic Lupus Erythematosus", "A"],
+    ["Psoriasis and Biologic Therapy", "B"],
+    ["Stevens-Johnson Syndrome and Toxic Epidermal Necrolysis", "A"],
+    ["Scleroderma (Systemic Sclerosis)", "B"],
+  ],
+  /** Systemic infectious disease nursing (isolation, monitoring, public-health tie-ins where exam-relevant). */
+  infectious_disease: [
+    ["Tuberculosis (Latent and Active)", "A"],
+    ["HIV/AIDS: Nursing Care and Post-Exposure Prophylaxis", "A"],
+    ["Influenza and Antiviral Therapy", "B"],
+    ["Clostridioides difficile Infection", "A"],
+    ["Osteomyelitis", "B"],
+  ],
+  /** Cross-cutting NCLEX Client Needs: prioritization, delegation, ethics, safety systems. */
+  nclex_nursing_priorities_safety: [
+    ["Nursing Prioritization: ABCs and Urgent vs Important", "A"],
+    ["Delegation and Scope of Practice", "A"],
+    ["Error Prevention and Incident Reporting", "B"],
+    ["Informed Consent and Surrogate Decision Making", "B"],
+    ["Professional Boundaries and Ethical Communication", "B"],
+  ],
 };
 
 /**
@@ -352,11 +389,17 @@ const BUILD_ORDER = [
   "endocrine_metabolic_fluids",
   "gastrointestinal",
   "neurological",
+  "renal_genitourinary",
+  "hematology_oncology_immunology",
+  "musculoskeletal",
+  "integumentary_immune_autoimmune",
+  "infectious_disease",
   "emergency_critical_perioperative",
   "pharmacology_master",
   "maternity_newborn",
   "pediatrics",
   "mental_health",
+  "nclex_nursing_priorities_safety",
 ];
 
 function slugify(title) {
@@ -428,7 +471,7 @@ function main() {
     version: 1,
     generatedBy: "scripts/generate-rn-nclex-master-map.mjs",
     sourceOfTruth:
-      "Align lesson bodies to your uploaded NCLEX outline/PDF. Completeness checklist (audit targets): src/content/pathway-lessons/nclex-rn-source-checklist.json — run node scripts/audit-rn-nclex-map.mjs after map changes.",
+      "Inventory + pipeline: docs/rn-nclex-rn-lesson-library.md. Authoring alignment: data/premium-lessons-nclex-core-v1/ + src/content/pathway-lessons/nclex-rn-source-checklist.json — run node scripts/audit-rn-nclex-map.mjs after map changes.",
     pathways: ["us-rn-nclex-rn", "ca-rn-nclex-rn"],
     buildOrder: BUILD_ORDER,
     contentSpine: "premium_exam_complete",
@@ -447,6 +490,10 @@ function main() {
       mental_health: { minLessons: 10, maxLessons: 14, tierMix: "3–5 A, 4–5 B, 3–4 C" },
       emergency_critical_perioperative: { minLessons: 14, maxLessons: 18, tierMix: "5–7 A, 5–7 B, 3–4 C" },
       pharmacology_master: { minLessons: 20, maxLessons: 28, tierMix: "2–4 A, 10–14 C, 6–10 D" },
+      musculoskeletal: { minLessons: 6, maxLessons: 10, tierMix: "2–4 A, 3–5 B, 1–2 C" },
+      integumentary_immune_autoimmune: { minLessons: 4, maxLessons: 8, tierMix: "2–3 A, 2–4 B" },
+      infectious_disease: { minLessons: 5, maxLessons: 8, tierMix: "3–4 A, 2–3 B" },
+      nclex_nursing_priorities_safety: { minLessons: 5, maxLessons: 8, tierMix: "2–3 A, 2–4 B" },
     },
     aggregates: {
       uniqueLessonCount: lessons.length,
@@ -471,11 +518,15 @@ function humanizeCategory(id) {
     renal_genitourinary: "Renal / Genitourinary",
     endocrine_metabolic_fluids: "Endocrine / Metabolic / Fluids",
     hematology_oncology_immunology: "Hematology / Oncology / Immunology",
+    musculoskeletal: "Musculoskeletal",
+    integumentary_immune_autoimmune: "Integumentary / Immune / Autoimmune",
+    infectious_disease: "Infectious Disease",
     pediatrics: "Pediatrics",
     maternity_newborn: "Maternity / Newborn",
     mental_health: "Mental Health",
     emergency_critical_perioperative: "Emergency / Critical Care / Perioperative",
     pharmacology_master: "Pharmacology",
+    nclex_nursing_priorities_safety: "NCLEX Nursing Priorities / Safety / Delegation",
   };
   return m[id] ?? id;
 }
@@ -497,11 +548,15 @@ function visibleCounts(lessons) {
     "renal_genitourinary",
     "endocrine_metabolic_fluids",
     "hematology_oncology_immunology",
+    "musculoskeletal",
+    "integumentary_immune_autoimmune",
+    "infectious_disease",
     "pediatrics",
     "maternity_newborn",
     "mental_health",
     "emergency_critical_perioperative",
     "pharmacology_master",
+    "nclex_nursing_priorities_safety",
   ];
   const o = {};
   for (const cid of ids) {

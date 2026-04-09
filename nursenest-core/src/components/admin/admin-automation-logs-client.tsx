@@ -58,6 +58,7 @@ export function AdminAutomationLogsClient() {
   const [category, setCategory] = useState<string>("");
   const [status, setStatus] = useState<string>("");
   const [hours, setHours] = useState<string>("");
+  const [logId, setLogId] = useState<string>("");
   const [searchInput, setSearchInput] = useState<string>("");
   const [searchApplied, setSearchApplied] = useState<string>("");
   const [busyId, setBusyId] = useState<string | null>(null);
@@ -69,9 +70,11 @@ export function AdminAutomationLogsClient() {
     const s = searchParams.get("status") ?? "";
     const h = searchParams.get("hours") ?? "";
     const q = searchParams.get("search") ?? "";
+    const id = searchParams.get("id") ?? "";
     setCategory(c);
     setStatus(s);
     setHours(h);
+    setLogId(id);
     setSearchInput(q);
     setSearchApplied(q.trim());
     setOffset(0);
@@ -90,6 +93,7 @@ export function AdminAutomationLogsClient() {
     if (category) params.set("category", category);
     if (status) params.set("status", status);
     if (hours && Number(hours) > 0) params.set("hours", hours);
+    if (logId.trim()) params.set("id", logId.trim());
     if (searchApplied.length >= 2) params.set("search", searchApplied);
     const res = await fetch(`/api/admin/automation-logs?${params.toString()}`);
     const json = (await res.json()) as { ok?: boolean; logs?: LogRow[]; total?: number; error?: string };
@@ -99,7 +103,7 @@ export function AdminAutomationLogsClient() {
     }
     setLogs(json.logs ?? []);
     setTotal(json.total ?? 0);
-  }, [limit, offset, category, status, hours, searchApplied]);
+  }, [limit, offset, category, status, hours, logId, searchApplied]);
 
   useEffect(() => {
     void load();
@@ -179,6 +183,18 @@ export function AdminAutomationLogsClient() {
             <option value="168">Last 7d</option>
             <option value="720">Last 30d</option>
           </select>
+        </label>
+        <label className="block space-y-1 text-sm">
+          <span className="text-xs font-medium text-muted-foreground">Log id (exact)</span>
+          <input
+            className="w-52 rounded-md border border-border px-2 py-1.5 font-mono text-xs"
+            value={logId}
+            onChange={(e) => {
+              setOffset(0);
+              setLogId(e.target.value);
+            }}
+            placeholder="cuid"
+          />
         </label>
         <label className="block min-w-[200px] space-y-1 text-sm">
           <span className="text-xs font-medium text-muted-foreground">Search (error/summary/topic)</span>

@@ -157,8 +157,10 @@ export async function loadAdminOperationsHealth(): Promise<AdminOperationsHealth
     database = { configured: true, status: "error", error: dbProbe.error };
   } else if ("skipped" in dbProbe && dbProbe.skipped) {
     database = { configured: true, status: "skipped" };
-  } else {
+  } else if ("latencyMs" in dbProbe) {
     database = { configured: true, status: "ok", latencyMs: dbProbe.latencyMs };
+  } else {
+    database = { configured: true, status: "skipped" };
   }
 
   if (database.status === "error") {
@@ -315,16 +317,16 @@ export async function loadAdminOperationsHealth(): Promise<AdminOperationsHealth
         }),
         prisma.blogDraftGenerationBatchItem.count({
           where: {
-            status: "FAILED",
+            status: BlogDraftGenerationBatchItemStatus.FAILED,
             updatedAt: { gte: since7d },
           },
         }),
         prisma.blogBatchScheduleItem.count({
-          where: { status: "FAILED" },
+          where: { status: BlogBatchScheduleItemStatus.FAILED },
         }),
         prisma.blogBatchScheduleItem.count({
           where: {
-            status: "PENDING",
+            status: BlogBatchScheduleItemStatus.PENDING,
             plannedPublishAt: { lt: now },
           },
         }),

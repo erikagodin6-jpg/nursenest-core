@@ -52,6 +52,20 @@ const CATEGORY_ALIASES: Record<string, string> = {
   "emergency-critical": "emergency_critical_perioperative",
   pharmacology: "pharmacology_master",
   pharm: "pharmacology_master",
+  renal: "renal_genitourinary",
+  "renal-genitourinary": "renal_genitourinary",
+  renal_genitourinary: "renal_genitourinary",
+  hematology: "hematology_oncology_immunology",
+  "hematology-oncology": "hematology_oncology_immunology",
+  hematology_oncology_immunology: "hematology_oncology_immunology",
+  musculoskeletal: "musculoskeletal",
+  "integumentary-immune": "integumentary_immune_autoimmune",
+  integumentary_immune_autoimmune: "integumentary_immune_autoimmune",
+  "infectious-disease": "infectious_disease",
+  infectious_disease: "infectious_disease",
+  "nclex-priorities": "nclex_nursing_priorities_safety",
+  "nclex-safety": "nclex_nursing_priorities_safety",
+  nclex_nursing_priorities_safety: "nclex_nursing_priorities_safety",
 };
 
 type MapLesson = {
