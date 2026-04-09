@@ -124,7 +124,7 @@ export function PremiumLearnerHub({
 
   const momentumSection =
     momentumMessages.length > 0 ? (
-      <ul className={compactIntro ? "space-y-2" : "relative mt-5 space-y-2 border-t border-border/50 pt-4"}>
+      <ul className={compactIntro ? "space-y-2" : "relative mt-5 space-y-2 border-t border-[var(--semantic-border-soft)] pt-4"}>
         {momentumMessages.map((line) => (
           <li key={line} className="flex gap-2 text-sm text-foreground/90">
             <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
@@ -133,7 +133,7 @@ export function PremiumLearnerHub({
         ))}
       </ul>
     ) : (
-      <p className={compactIntro ? "text-sm text-muted" : "relative mt-5 border-t border-border/50 pt-4 text-sm text-muted"}>
+      <p className={compactIntro ? "text-sm text-muted" : "relative mt-5 border-t border-[var(--semantic-border-soft)] pt-4 text-sm text-muted"}>
         Finish a lesson, a graded bank block, or a mock. Personal notes show up here once we have a trend to compare.
       </p>
     );
@@ -144,7 +144,7 @@ export function PremiumLearnerHub({
         <LessonContinuationStrip rows={lessonContinuations} />
       ) : null}
       {compactIntro ? (
-        <section className="nn-card p-6">
+        <section className="nn-card nn-student-card-lift p-6">
           <div className="flex flex-wrap items-center gap-2">
             <Crown className="h-4 w-4 text-primary" aria-hidden />
             <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Momentum this week</h2>
@@ -172,7 +172,7 @@ export function PremiumLearnerHub({
                 </p>
               )}
               <p className="mt-1 flex flex-wrap items-center gap-2 text-sm text-muted">
-                <span className="inline-flex items-center gap-1 rounded-md bg-black/5 px-2 py-0.5 dark:bg-white/10">
+                <span className="inline-flex items-center gap-1 rounded-md bg-[var(--semantic-panel-muted)] px-2 py-0.5">
                   <Target className="h-3.5 w-3.5 text-primary" aria-hidden />
                   Readiness: {readinessBandLabel(readiness.band)}
                 </span>
@@ -193,7 +193,7 @@ export function PremiumLearnerHub({
       )}
 
       {recentNotes.length > 0 ? (
-        <section className="nn-card p-6">
+        <section className="nn-card nn-student-card-lift p-6">
           <div className="flex flex-wrap items-center gap-2">
             <FileText className="h-4 w-4 text-primary" aria-hidden />
             <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Recent study notes</h2>
@@ -204,7 +204,7 @@ export function PremiumLearnerHub({
               <li key={`${n.scope}-${n.contextId}`}>
                 <Link
                   href={n.href}
-                  className="flex flex-wrap items-baseline justify-between gap-2 rounded-lg border border-border/60 bg-muted/20 px-3 py-2 text-sm transition-colors hover:bg-muted/40"
+                  className="flex flex-wrap items-baseline justify-between gap-2 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-2 text-sm transition-colors hover:bg-[var(--semantic-panel-cool)]"
                 >
                   <span className="min-w-0 font-medium text-foreground">
                     {n.title?.trim() || "Untitled note"}
@@ -221,7 +221,7 @@ export function PremiumLearnerHub({
       ) : null}
 
       {snapshot.flashcards ? (
-        <section className="nn-card p-6">
+        <section className="nn-card nn-student-card-lift p-6">
           <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Flashcards</h2>
           <p className="mt-1 text-xs text-muted">
             Spaced repetition ties to your decks; weak-area study pulls cards that match topics you have missed in the bank.
@@ -251,13 +251,13 @@ export function PremiumLearnerHub({
             </Link>
             <Link
               href="/app/flashcards/weak-areas"
-              className="inline-flex rounded-full border border-border px-4 py-2 text-sm font-semibold text-foreground"
+              className="inline-flex rounded-full border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-semibold text-foreground"
             >
               Study priority review
             </Link>
           </div>
           {snapshot.flashcards.suggestedDecks.length > 0 ? (
-            <div className="mt-5 border-t border-border/60 pt-4">
+            <div className="mt-5 border-t border-[var(--semantic-border-soft)] pt-4">
               <p className="text-sm font-medium text-foreground">Suggested decks</p>
               <ul className="mt-2 space-y-2 text-sm">
                 {snapshot.flashcards.suggestedDecks.map((d) => (
@@ -274,7 +274,7 @@ export function PremiumLearnerHub({
         </section>
       ) : null}
 
-      <section className="nn-card p-6">
+      <section className="nn-card nn-student-card-lift p-6">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
             <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Pathway progress</h2>
@@ -292,7 +292,7 @@ export function PremiumLearnerHub({
         </div>
         <ul className="mt-5 space-y-5">
           {pathways.length === 0 ? (
-            <li className="rounded-lg border border-dashed border-border bg-muted/20 px-4 py-3 text-sm text-muted">
+            <li className="rounded-lg border border-dashed border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 text-sm text-muted">
               Pathway lessons for your plan will list here when the catalog is available for your tier and region.
             </li>
           ) : (
@@ -323,7 +323,7 @@ export function PremiumLearnerHub({
         </ul>
       </section>
 
-      <section className="nn-card p-6">
+      <section className="nn-card nn-student-card-lift p-6">
         <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Performance summary</h2>
         <p className="mt-1 text-xs text-muted">Blended signals from your plan. Indicative only, not a pass guarantee.</p>
 
@@ -345,7 +345,7 @@ export function PremiumLearnerHub({
               sublabel={`${practice.gradedCorrect} correct of ${practice.gradedTotal} graded items across ${practice.sessionCount} completed session(s) in your tier scope.`}
             />
           ) : (
-            <div className="rounded-lg border border-border/70 bg-muted/15 px-4 py-3">
+            <div className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 shadow-sm">
               <p className="text-sm font-medium text-foreground">Recent scored session accuracy</p>
               <p className="mt-1 text-xs text-muted">
                 Finish a timed exam session or mock so we can chart accuracy from graded items in your plan. The question
@@ -355,7 +355,7 @@ export function PremiumLearnerHub({
           )}
 
           {!omitReadinessBreakdown ? (
-            <div className="rounded-xl border border-border/60 bg-muted/10 p-4">
+            <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-4 shadow-sm">
               <p className="text-sm font-semibold text-foreground">Readiness breakdown</p>
               <p className="mt-1 text-xs text-muted">{readiness.summary}</p>
               <div className="mt-4 space-y-4">
@@ -378,7 +378,7 @@ export function PremiumLearnerHub({
               </div>
             </div>
           ) : (
-            <p className="rounded-lg border border-border/60 bg-muted/10 px-4 py-3 text-sm text-muted">
+            <p className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 text-sm text-muted">
               {readinessDeferHint ??
                 "Readiness factors and score are summarized in the card above. This section still tracks lesson completion and recent session accuracy."}
             </p>
@@ -386,7 +386,7 @@ export function PremiumLearnerHub({
         </div>
       </section>
 
-      <section className="nn-card p-6">
+      <section className="nn-card nn-student-card-lift p-6">
         <div className="flex flex-wrap items-center gap-2">
           <Flame className="h-5 w-5 text-role-heat-text" aria-hidden />
           <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Milestones and streaks</h2>
@@ -405,7 +405,7 @@ export function PremiumLearnerHub({
           {milestones.map((m) => (
             <span
               key={m}
-              className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground"
+              className="inline-flex items-center gap-1.5 rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-1.5 text-xs font-medium text-foreground shadow-sm"
             >
               <Award className="h-3.5 w-3.5 text-primary" aria-hidden />
               {m}
@@ -421,11 +421,11 @@ export function PremiumLearnerHub({
       </section>
 
       {!omitRecentMocks ? (
-        <section className="nn-card p-6">
+        <section className="nn-card nn-student-card-lift p-6">
           <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Recent mocks</h2>
           <p className="mt-1 text-xs text-muted">Last five attempts. Watch the trend, not one score.</p>
           {recentMocks.length > 0 ? (
-            <ul className="mt-4 divide-y divide-border/60">
+            <ul className="mt-4 divide-y divide-[var(--semantic-border-soft)]">
               {recentMocks.map((m) => (
                 <li key={m.id} className="flex flex-wrap items-center justify-between gap-2 py-3 text-sm first:pt-0">
                   <span className="font-medium text-foreground">{m.examTitle}</span>
@@ -436,7 +436,7 @@ export function PremiumLearnerHub({
               ))}
             </ul>
           ) : (
-            <p className="mt-4 rounded-lg border border-dashed border-border bg-muted/15 px-4 py-3 text-sm text-muted">
+            <p className="mt-4 rounded-lg border border-dashed border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 text-sm text-muted">
               No mocks logged yet. When you complete one from the exams page, scores and trends will appear here for a
               high-level view.
             </p>

@@ -1,8 +1,24 @@
 import { Target } from "lucide-react";
-import type { ReadinessResult } from "@/lib/learner/readiness-score";
-import { readinessBandLabel } from "@/lib/learner/readiness-score";
+import type { ReadinessBand, ReadinessResult } from "@/lib/learner/readiness-score";
+import { readinessBandLabel, readinessBandProgressFillClass } from "@/lib/learner/readiness-score";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import { ProgressBarSemantic } from "@/components/student/product/progress-bar-semantic";
+
+function readinessBandTopBorderClass(band: ReadinessBand): string {
+  switch (band) {
+    case "ready":
+      return "border-t-[var(--semantic-success)]";
+    case "near_ready":
+      return "border-t-[color-mix(in_srgb,var(--semantic-brand)_92%,var(--semantic-success))]";
+    case "improving":
+      return "border-t-[var(--semantic-info)]";
+    case "not_ready":
+      return "border-t-[var(--semantic-warning)]";
+    case "insufficient_data":
+    default:
+      return "border-t-[color-mix(in_srgb,var(--semantic-border-soft)_90%,var(--semantic-text-muted))]";
+  }
+}
 
 function InsightFactorBar({
   label,
@@ -51,8 +67,13 @@ export function ReadinessScoreCard({
   const scorePct = readiness.score != null ? Math.min(100, Math.max(0, readiness.score)) : null;
   const factors = readiness.factors.slice(0, maxFactors);
 
+  const meterFill = readinessBandProgressFillClass(readiness.band);
+  const topAccent = readinessBandTopBorderClass(readiness.band);
+
   return (
-    <article className="nn-student-card-lift relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_26%,var(--semantic-border-soft))] bg-gradient-to-br from-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] via-[var(--semantic-surface)] to-[color-mix(in_srgb,var(--semantic-info)_7%,var(--semantic-surface))] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6">
+    <article
+      className={`nn-card nn-student-card-lift relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_26%,var(--semantic-border-soft))] border-t-4 ${topAccent} bg-gradient-to-br from-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] via-[var(--semantic-surface)] to-[color-mix(in_srgb,var(--semantic-info)_7%,var(--semantic-surface))] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6`}
+    >
       <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-[radial-gradient(circle_at_center,color-mix(in_srgb,var(--semantic-brand)_16%,transparent),transparent_62%)] blur-2xl" aria-hidden />
       <div className="relative flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div className="flex min-w-0 flex-1 items-start gap-4">
@@ -71,6 +92,19 @@ export function ReadinessScoreCard({
                 <span className="nn-badge-semantic-warning px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide">{t("learner.dashboard.insight.calibrated")}</span>
               ) : null}
             </div>
+            <p className="mt-3 max-w-prose text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+              {t(
+                (
+                  {
+                    insufficient_data: "learner.dashboard.readinessBandExplain.insufficient_data",
+                    not_ready: "learner.dashboard.readinessBandExplain.not_ready",
+                    improving: "learner.dashboard.readinessBandExplain.improving",
+                    near_ready: "learner.dashboard.readinessBandExplain.near_ready",
+                    ready: "learner.dashboard.readinessBandExplain.ready",
+                  } as const
+                )[readiness.band],
+              )}
+            </p>
           </div>
         </div>
         <div className="shrink-0 text-left lg:text-right">
@@ -98,7 +132,7 @@ export function ReadinessScoreCard({
             aria-valuemax={100}
           >
           <div
-            className="h-full rounded-full nn-progress-fill-semantic-readiness nn-progress-fill-reveal transition-[width] duration-700 ease-out"
+            className={`h-full rounded-full ${meterFill} nn-progress-fill-reveal transition-[width] duration-700 ease-out`}
             style={{ width: `${scorePct ?? 0}%` }}
           />
         </div>

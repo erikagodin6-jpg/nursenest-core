@@ -86,19 +86,19 @@ export function LearnerDashboardHero({
             <span
               className={`rounded-full border px-3 py-1.5 text-xs font-semibold shadow-sm ${
                 adaptive.planTrack.status === "at_risk" || adaptive.planTrack.status === "overdue"
-                  ? "border-amber-500/35 bg-amber-500/[0.09] text-amber-950 dark:text-amber-100"
+                  ? "nn-badge-semantic-warning shadow-none"
                   : adaptive.planTrack.status === "slightly_behind"
-                    ? "border-border/80 bg-background/80 font-medium text-foreground"
-                    : "border-emerald-500/30 bg-emerald-500/[0.07] font-medium text-foreground"
+                    ? "border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] font-medium text-[var(--semantic-text-primary)]"
+                    : "border-[color-mix(in_srgb,var(--semantic-success)_32%,var(--semantic-border-soft))] bg-[var(--semantic-success-soft)] font-medium text-[var(--semantic-success-contrast)]"
               }`}
             >
               {adaptive.planTrack.label}
             </span>
-            <span className="rounded-full border border-border/80 bg-background/80 px-3 py-1.5 text-xs font-medium text-foreground shadow-sm">
+            <span className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-1.5 text-xs font-medium text-[var(--semantic-text-primary)] shadow-sm">
               {trajectoryShort(adaptive.trajectory)}
             </span>
             {countdown.urgencyLabel ? (
-              <span className="rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary">
+              <span className="rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-brand)]">
                 {countdown.urgencyLabel}
               </span>
             ) : null}
@@ -113,7 +113,7 @@ export function LearnerDashboardHero({
                   <Link
                     key={t}
                     href={remediationTopicDrillHref(t)}
-                    className="rounded-full border border-rose-500/25 bg-rose-500/[0.08] px-3 py-1 text-xs font-medium text-foreground transition hover:border-primary/30 hover:bg-primary/5"
+                    className="rounded-full border border-[color-mix(in_srgb,var(--semantic-danger)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_08%,var(--semantic-surface))] px-3 py-1 text-xs font-medium text-[var(--semantic-text-primary)] transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] hover:bg-[color-mix(in_srgb,var(--semantic-brand)_06%,var(--semantic-surface))]"
                   >
                     {t}
                   </Link>
@@ -137,7 +137,7 @@ export function LearnerDashboardHero({
           <p className="max-w-xl text-xs text-muted-foreground">{primaryReason}</p>
         </div>
 
-        <aside className="rounded-2xl border border-border/60 bg-background/60 p-5 backdrop-blur-sm dark:bg-slate-950/40">
+        <aside className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-info)_06%,var(--semantic-surface))] p-5 shadow-[var(--semantic-shadow-soft)] backdrop-blur-sm">
           <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Exam readiness</p>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-4xl font-bold tabular-nums tracking-tight text-[var(--theme-heading-text)]">
@@ -149,7 +149,7 @@ export function LearnerDashboardHero({
           </div>
           <p className="mt-1 text-sm font-medium text-foreground">{readinessBandLabel(readiness.band)}</p>
           {readiness.calibratedPreview ? (
-            <p className="mt-1 text-[11px] font-medium text-amber-700 dark:text-amber-300">Conservative calibration active</p>
+            <p className="mt-1 text-[11px] font-medium text-[var(--semantic-warning)]">Conservative calibration active</p>
           ) : null}
           <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
             Confidence: <span className="font-medium text-foreground">{readiness.confidence}</span>
@@ -158,8 +158,8 @@ export function LearnerDashboardHero({
         </aside>
       </div>
 
-      <div className="relative mt-8 grid gap-3 border-t border-border/50 pt-6 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded-xl border border-border/40 bg-background/50 px-4 py-3">
+      <div className="relative mt-8 grid gap-3 border-t border-[var(--semantic-border-soft)] pt-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 shadow-sm">
           <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Lessons</p>
           <p className="mt-1 text-lg font-bold tabular-nums text-foreground">
             {overallLessons.total > 0 ? `${overallLessons.pct}%` : "N/A"}
@@ -168,7 +168,7 @@ export function LearnerDashboardHero({
             {overallLessons.total > 0 ? `${overallLessons.completed} / ${overallLessons.total}` : "Pool loading"}
           </p>
         </div>
-        <div className="rounded-xl border border-border/40 bg-background/50 px-4 py-3">
+        <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 shadow-sm">
           <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Scored items</p>
           <p className="mt-1 text-lg font-bold tabular-nums text-foreground">
             {practice.gradedTotal > 0 ? `${practice.accuracyPct ?? 0}%` : "N/A"}
@@ -179,12 +179,12 @@ export function LearnerDashboardHero({
               : "Finish a session to chart"}
           </p>
         </div>
-        <div className="rounded-xl border border-border/40 bg-background/50 px-4 py-3">
+        <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 shadow-sm">
           <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Streak</p>
           <p className="mt-1 text-lg font-bold tabular-nums text-foreground">{streakDays > 0 ? streakDays : "N/A"}</p>
           <p className="text-[11px] text-muted-foreground">Days with activity</p>
         </div>
-        <div className="rounded-xl border border-border/40 bg-background/50 px-4 py-3">
+        <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 shadow-sm">
           <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Flashcards</p>
           <p className="mt-1 text-lg font-bold tabular-nums text-foreground">
             {flashcardReviews != null ? flashcardReviews : "N/A"}

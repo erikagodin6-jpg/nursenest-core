@@ -148,7 +148,7 @@ export function StudyPlannerShell({ ctx }: { ctx: StudyPlannerContext }) {
 
         <section className="nn-card p-6">
           <div className="flex items-center gap-2">
-            <Flame className="h-5 w-5 text-amber-600" aria-hidden />
+            <Flame className="h-5 w-5 text-role-heat-text" aria-hidden />
             <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Priority review queue</h2>
           </div>
           <p className="mt-1 text-xs text-muted-foreground">From recent mock performance (scoped questions only).</p>

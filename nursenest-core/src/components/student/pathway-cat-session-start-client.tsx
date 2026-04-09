@@ -178,7 +178,7 @@ export function PathwayCatSessionStartClient({
         <p className="text-sm text-muted-foreground">Checking adaptive question pool for this pathway…</p>
       ) : null}
       {readiness && !readiness.ok ? (
-        <aside className="rounded-lg border border-amber-200/90 bg-amber-50/80 p-4 text-sm text-foreground dark:border-amber-900/50 dark:bg-amber-950/35">
+        <aside className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-warning-soft)] p-4 text-sm text-[var(--semantic-text-primary)] shadow-sm">
           <p className="font-semibold">CAT cannot start yet</p>
           <p className="mt-1 text-muted-foreground">{readiness.message}</p>
           <ul className="mt-3 list-inside list-disc space-y-1 text-muted-foreground">

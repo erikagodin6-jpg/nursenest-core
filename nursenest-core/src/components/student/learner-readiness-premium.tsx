@@ -173,7 +173,7 @@ export function LearnerReadinessPremium({
             <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">{readiness.summary}</p>
             <p className="text-xs text-muted-foreground">{t("learner.readinessPage.indexFootnote")}</p>
           </div>
-          <div className="shrink-0 rounded-xl border border-border/50 bg-muted/10 px-4 py-3 lg:max-w-xs">
+          <div className="shrink-0 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 shadow-sm lg:max-w-xs">
             <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
               {t("learner.readinessPage.confidenceTitle")}
             </p>
@@ -182,7 +182,7 @@ export function LearnerReadinessPremium({
           </div>
         </div>
         {readiness.calibratedPreview ? (
-          <p className="mt-4 rounded-lg border border-amber-500/20 bg-amber-500/10 px-3 py-2 text-xs font-medium text-amber-900 dark:text-amber-200">
+          <p className="mt-4 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-warning-soft)] px-3 py-2 text-xs font-medium text-[var(--semantic-warning-contrast)]">
             {t("learner.profile.readiness.calibrationNote")}
           </p>
         ) : null}

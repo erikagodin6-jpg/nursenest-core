@@ -176,7 +176,7 @@ export function StudyPlanTool() {
         <label className="block text-sm">
           <span className="font-medium">Exam target</span>
           <select
-            className="mt-1 w-full rounded-md border border-border bg-white px-3 py-2 text-sm dark:bg-neutral-900"
+            className="mt-1 w-full rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 text-sm text-[var(--semantic-text-primary)]"
             value={examTarget}
             onChange={(e) => setExamTarget(e.target.value as (typeof EXAMS)[number]["value"])}
           >
@@ -193,7 +193,7 @@ export function StudyPlanTool() {
             type="number"
             min={1}
             max={52}
-            className="mt-1 w-full rounded-md border border-border bg-white px-3 py-2 text-sm dark:bg-neutral-900"
+            className="mt-1 w-full rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 text-sm text-[var(--semantic-text-primary)]"
             value={weeksUntilExam}
             onChange={(e) => setWeeksUntilExam(Number(e.target.value))}
           />
@@ -205,7 +205,7 @@ export function StudyPlanTool() {
           type="number"
           min={1}
           max={40}
-          className="mt-1 w-full rounded-md border border-border bg-white px-3 py-2 text-sm dark:bg-neutral-900"
+          className="mt-1 w-full rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 text-sm text-[var(--semantic-text-primary)]"
           value={hoursPerWeek}
           onChange={(e) => setHoursPerWeek(Number(e.target.value))}
         />
@@ -213,14 +213,14 @@ export function StudyPlanTool() {
       <label className="block text-sm">
         <span className="font-medium">Weak areas (optional)</span>
         <textarea
-          className="mt-1 min-h-[88px] w-full rounded-md border border-border bg-white px-3 py-2 text-sm dark:bg-neutral-900"
+          className="mt-1 min-h-[88px] w-full rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 text-sm text-[var(--semantic-text-primary)]"
           placeholder="e.g. pharmacology calculations, cardiac meds, SATA questions"
           value={weakAreas}
           onChange={(e) => setWeakAreas(e.target.value)}
         />
       </label>
       {suggestedWeakAreas.length > 0 ? (
-        <div className="rounded-xl border border-border/60 bg-muted/20 p-3">
+        <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-cool)] p-3">
           <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             Use my priority review queue
           </p>
@@ -265,7 +265,7 @@ export function StudyPlanTool() {
       </button>
 
       {error ? (
-        <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-900 dark:border-red-900 dark:bg-red-950/40 dark:text-red-100">
+        <div className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-danger)_35%,var(--semantic-border-soft))] bg-[var(--semantic-danger-soft)] px-3 py-2 text-sm text-[var(--semantic-danger-contrast)]">
           {error}
         </div>
       ) : null}
@@ -292,7 +292,7 @@ export function StudyPlanTool() {
               </button>
               <textarea
                 readOnly
-                className="h-64 w-full resize-y rounded-md border border-border bg-black/[0.03] p-3 font-mono text-xs dark:bg-white/5"
+                className="h-64 w-full resize-y rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-3 font-mono text-xs text-[var(--semantic-text-primary)]"
                 value={JSON.stringify(plan, null, 2)}
               />
             </div>

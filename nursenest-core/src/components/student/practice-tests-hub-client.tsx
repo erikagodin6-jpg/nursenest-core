@@ -337,7 +337,7 @@ export function PracticeTestsHubClient({
         </div>
 
         {selectionMode !== "cat" ? (
-          <div className="mt-4 rounded-lg border border-border bg-muted/20 p-4">
+          <div className="mt-4 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-4 shadow-sm">
             <span className="text-sm font-medium text-foreground">Linear session style</span>
             <div className="mt-2 flex flex-wrap gap-2">
               <button
@@ -345,8 +345,8 @@ export function PracticeTestsHubClient({
                 onClick={() => setLinearDeliveryMode("practice")}
                 className={`rounded-full px-4 py-1.5 text-sm font-medium ${
                   linearDeliveryMode === "practice"
-                    ? "bg-sky-600 text-white dark:bg-sky-700"
-                    : "border border-border hover:bg-muted"
+                    ? "bg-[var(--semantic-info)] text-white shadow-sm"
+                    : "border border-[var(--semantic-border-soft)] hover:bg-[var(--semantic-panel-muted)]"
                 }`}
               >
                 Practice (per-item feedback)
@@ -356,8 +356,8 @@ export function PracticeTestsHubClient({
                 onClick={() => setLinearDeliveryMode("exam")}
                 className={`rounded-full px-4 py-1.5 text-sm font-medium ${
                   linearDeliveryMode === "exam"
-                    ? "bg-sky-600 text-white dark:bg-sky-700"
-                    : "border border-border hover:bg-muted"
+                    ? "bg-[var(--semantic-info)] text-white shadow-sm"
+                    : "border border-[var(--semantic-border-soft)] hover:bg-[var(--semantic-panel-muted)]"
                 }`}
               >
                 Exam (lock until end)
@@ -371,7 +371,7 @@ export function PracticeTestsHubClient({
         ) : null}
 
         {selectionMode === "cat" && examSimulationEnabled ? (
-          <div className="mt-4 rounded-lg border border-border bg-muted/25 p-4">
+          <div className="mt-4 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-4 shadow-sm">
             <span className="text-sm font-medium text-foreground">CAT format</span>
             <div className="mt-2 flex flex-wrap gap-2">
               <button
@@ -383,7 +383,7 @@ export function PracticeTestsHubClient({
                 className={`rounded-full px-4 py-1.5 text-sm font-medium ${
                   catPresentationMode === "practice"
                     ? "bg-primary text-primary-foreground"
-                    : "border border-border hover:bg-muted"
+                    : "border border-[var(--semantic-border-soft)] hover:bg-[var(--semantic-panel-muted)]"
                 }`}
               >
                 Practice CAT
@@ -406,7 +406,7 @@ export function PracticeTestsHubClient({
                 className={`rounded-full px-4 py-1.5 text-sm font-medium ${
                   catPresentationMode === "exam_simulation"
                     ? "bg-primary text-primary-foreground"
-                    : "border border-border hover:bg-muted"
+                    : "border border-[var(--semantic-border-soft)] hover:bg-[var(--semantic-panel-muted)]"
                 }`}
               >
                 Exam simulation
@@ -448,7 +448,9 @@ export function PracticeTestsHubClient({
                   type="button"
                   onClick={() => setCatSelectionBasis(v)}
                   className={`rounded-full px-4 py-1.5 text-sm font-medium ${
-                    catSelectionBasis === v ? "bg-sky-600 text-white dark:bg-sky-700" : "border border-border hover:bg-muted"
+                    catSelectionBasis === v
+                      ? "bg-[var(--semantic-info)] text-white shadow-sm"
+                      : "border border-[var(--semantic-border-soft)] hover:bg-[var(--semantic-panel-muted)]"
                   }`}
                 >
                   {label}
@@ -534,7 +536,7 @@ export function PracticeTestsHubClient({
           Bank uses numeric difficulty when set; items without a level still qualify when filters are loose.
         </p>
 
-        <div className="mt-6 flex flex-wrap items-center gap-4 border-t border-border pt-4">
+        <div className="mt-6 flex flex-wrap items-center gap-4 border-t border-[var(--semantic-border-soft)] pt-4">
           <label className="flex items-center gap-2 text-sm">
             <input type="checkbox" checked={timedMode} onChange={(e) => setTimedMode(e.target.checked)} />
             Timed mode
@@ -556,7 +558,7 @@ export function PracticeTestsHubClient({
           )}
         </div>
 
-        {error ? <p className="mt-4 text-sm text-amber-800">{error}</p> : null}
+        {error ? <p className="mt-4 text-sm text-[var(--semantic-warning-contrast)]">{error}</p> : null}
 
         <button
           type="button"

@@ -5,12 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { remediationTopicDrillHref, remediationWeakModeTestHref } from "@/lib/learner/remediation-links";
 import type { TopicPerformanceSnapshot } from "@/lib/learner/topic-performance";
 import type { TopicStrength } from "@/lib/learner/weak-topics-from-sessions";
-
-function strengthBadgeClass(s: TopicStrength): string {
-  if (s === "strong") return "bg-emerald-500/15 text-emerald-800 dark:text-emerald-200";
-  if (s === "weak") return "bg-rose-500/15 text-rose-900 dark:text-rose-100";
-  return "bg-amber-500/15 text-amber-950 dark:text-amber-100";
-}
+import { topicStrengthChipClass } from "@/lib/ui/learner-semantic-chips";
 
 type Props = { initial: TopicPerformanceSnapshot | null };
 
@@ -71,7 +66,7 @@ export function WeakAreasDashboardClient({ initial }: Props) {
   const firstWeakTopic = data?.weakTopics[0]?.topic ?? null;
 
   return (
-    <section className="nn-card p-6">
+    <section className="nn-card nn-student-card-lift border-[var(--semantic-border-soft)] p-6 shadow-[var(--semantic-shadow-soft)]">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-[10px] font-semibold uppercase tracking-wider text-primary/80">Member insight</p>
@@ -81,7 +76,10 @@ export function WeakAreasDashboardClient({ initial }: Props) {
             {loading ? <span className="ml-2 opacity-70">Refreshing…</span> : null}
           </p>
           {refreshError ? (
-            <p className="mt-2 text-xs text-amber-800 dark:text-amber-200" role="status">
+            <p
+              className="mt-2 rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[var(--semantic-warning-soft)] px-3 py-2 text-xs text-[var(--semantic-warning-contrast)]"
+              role="status"
+            >
               {refreshError} Showing last loaded data.
             </p>
           ) : null}
@@ -132,10 +130,7 @@ export function WeakAreasDashboardClient({ initial }: Props) {
               </p>
               <ul className="mt-2 flex flex-wrap gap-1.5">
                 {data.strongTopics.slice(0, 6).map((s) => (
-                  <li
-                    key={`st-${s.topic}`}
-                    className="rounded-full bg-emerald-500/12 px-2.5 py-0.5 text-xs font-medium text-emerald-900 dark:text-emerald-100"
-                  >
+                  <li key={`st-${s.topic}`} className={`${topicStrengthChipClass("strong")} font-medium`}>
                     {s.topic}{" "}
                     <span className="tabular-nums opacity-80">({100 - s.missRate}%)</span>
                   </li>
@@ -151,7 +146,7 @@ export function WeakAreasDashboardClient({ initial }: Props) {
                 {data.trends.slice(0, 5).map((t) => (
                   <li
                     key={`tr-${t.topic}-${t.momentum}`}
-                    className="rounded-lg border border-border/70 bg-muted/20 px-3 py-2 text-sm text-muted"
+                    className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-2 text-sm text-[var(--semantic-text-secondary)]"
                   >
                     <span className="font-medium text-foreground">{t.topic}</span>
                     <span className="ml-2 text-xs uppercase tracking-wide text-muted">{t.momentum}</span>
@@ -172,7 +167,7 @@ export function WeakAreasDashboardClient({ initial }: Props) {
                 {data.weakTopics.slice(0, 6).map((w, i) => (
                   <li
                     key={w.topic}
-                    className="rounded-lg border border-border/80 bg-muted/30 px-3 py-2 text-sm"
+                    className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-danger)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_05%,var(--semantic-surface))] px-3 py-2 text-sm shadow-sm"
                   >
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <span className="font-medium text-foreground">
@@ -224,7 +219,7 @@ export function WeakAreasDashboardClient({ initial }: Props) {
                   {rows.slice(0, 8).map((r) => (
                     <li
                       key={`${label}-${r.topic}`}
-                      className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${strengthBadgeClass(r.strength ?? (label as TopicStrength))}`}
+                      className={`${topicStrengthChipClass(r.strength ?? (label as TopicStrength))} font-medium`}
                     >
                       {r.topic}
                     </li>

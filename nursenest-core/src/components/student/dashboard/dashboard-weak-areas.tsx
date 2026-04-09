@@ -69,6 +69,7 @@ export function DashboardWeakAreasCard({
             <Crosshair className="h-4 w-4 text-[var(--semantic-danger)]" aria-hidden strokeWidth={2} />
           </div>
           <div>
+            <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[var(--semantic-danger)]">{t("learner.dashboard.insight.weakKicker")}</p>
             <h3 className="text-base font-semibold text-[var(--semantic-text-primary)]">{t("learner.dashboard.insight.weakTitle")}</h3>
             <p className="text-xs text-[var(--semantic-text-secondary)]">{t("learner.dashboard.insight.weakHint")}</p>
           </div>

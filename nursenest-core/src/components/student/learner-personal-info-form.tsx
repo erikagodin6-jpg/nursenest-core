@@ -149,8 +149,8 @@ export function LearnerPersonalInfoForm({
   return (
     <div className="space-y-8">
       <form onSubmit={(e) => void onSubmit(e)} className="space-y-8">
-        <section className="overflow-hidden rounded-2xl border border-border/60 bg-[var(--bg-card)] shadow-sm">
-          <div className="border-b border-border/60 bg-gradient-to-r from-primary/[0.05] to-transparent px-5 py-4">
+        <section className="overflow-hidden rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--bg-card)] shadow-sm">
+          <div className="border-b border-[var(--semantic-border-soft)] bg-gradient-to-r from-primary/[0.05] to-transparent px-5 py-4">
             <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">{t("learner.personalPage.section.identity")}</h2>
             <p className="mt-1 text-xs text-muted-foreground">{t("learner.personalPage.section.identitySub")}</p>
           </div>
@@ -167,7 +167,7 @@ export function LearnerPersonalInfoForm({
                 maxLength={120}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="mt-1 w-full max-w-lg rounded-lg border border-border bg-card px-3 py-2 text-sm"
+                className="mt-1 w-full max-w-lg rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 text-sm"
               />
             </div>
             <div>
@@ -178,14 +178,14 @@ export function LearnerPersonalInfoForm({
           </div>
         </section>
 
-        <section className="overflow-hidden rounded-2xl border border-border/60 bg-[var(--bg-card)] shadow-sm">
-          <div className="border-b border-border/60 px-5 py-4">
+        <section className="overflow-hidden rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--bg-card)] shadow-sm">
+          <div className="border-b border-[var(--semantic-border-soft)] px-5 py-4">
             <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">{t("learner.personalPage.section.region")}</h2>
             <p className="mt-1 text-xs text-muted-foreground">{t("learner.personalPage.section.regionSub")}</p>
           </div>
           <div className="space-y-4 p-5">
             {regionTierLocked ? (
-              <div className="rounded-lg border border-amber-500/20 bg-amber-500/10 px-3 py-2 text-sm text-amber-950 dark:text-amber-100">
+              <div className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-warning-soft)] px-3 py-2 text-sm text-[var(--semantic-warning-contrast)]">
                 {t("learner.personalPage.regionLocked")}
               </div>
             ) : null}
@@ -199,7 +199,7 @@ export function LearnerPersonalInfoForm({
                   disabled={regionTierLocked}
                   value={country}
                   onChange={(e) => setCountry(e.target.value as CountryCode)}
-                  className="mt-1 w-full rounded-lg border border-border bg-card px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-60"
+                  className="mt-1 w-full rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {COUNTRIES.map((c) => (
                     <option key={c} value={c}>
@@ -217,7 +217,7 @@ export function LearnerPersonalInfoForm({
                   disabled={regionTierLocked}
                   value={tier}
                   onChange={(e) => setTier(e.target.value as TierCode)}
-                  className="mt-1 w-full rounded-lg border border-border bg-card px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-60"
+                  className="mt-1 w-full rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {TIERS.map((tc) => (
                     <option key={tc} value={tc}>
@@ -233,8 +233,8 @@ export function LearnerPersonalInfoForm({
           </div>
         </section>
 
-        <section className="overflow-hidden rounded-2xl border border-border/60 bg-[var(--bg-card)] shadow-sm">
-          <div className="border-b border-border/60 px-5 py-4">
+        <section className="overflow-hidden rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--bg-card)] shadow-sm">
+          <div className="border-b border-[var(--semantic-border-soft)] px-5 py-4">
             <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">{t("learner.personalPage.section.pathway")}</h2>
             <p className="mt-1 text-xs text-muted-foreground">{t("learner.personalPage.section.pathwaySub")}</p>
           </div>
@@ -246,7 +246,7 @@ export function LearnerPersonalInfoForm({
               id="pi-path"
               value={learnerPath}
               onChange={(e) => setLearnerPath(e.target.value)}
-              className="mt-1 w-full max-w-lg rounded-lg border border-border bg-card px-3 py-2 text-sm"
+              className="mt-1 w-full max-w-lg rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 text-sm"
             >
               <option value="">{t("learner.personalPage.pathwayUnset")}</option>
               {pathwayOptions.map((o) => (
@@ -259,8 +259,8 @@ export function LearnerPersonalInfoForm({
           </div>
         </section>
 
-        <section className="overflow-hidden rounded-2xl border border-border/60 bg-[var(--bg-card)] shadow-sm">
-          <div className="border-b border-border/60 px-5 py-4">
+        <section className="overflow-hidden rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--bg-card)] shadow-sm">
+          <div className="border-b border-[var(--semantic-border-soft)] px-5 py-4">
             <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">{t("learner.personalPage.section.study")}</h2>
             <p className="mt-1 text-xs text-muted-foreground">{t("learner.personalPage.section.studySub")}</p>
           </div>
@@ -274,7 +274,7 @@ export function LearnerPersonalInfoForm({
                 maxLength={240}
                 value={examFocus}
                 onChange={(e) => setExamFocus(e.target.value)}
-                className="mt-1 w-full max-w-lg rounded-lg border border-border bg-card px-3 py-2 text-sm"
+                className="mt-1 w-full max-w-lg rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 text-sm"
               />
             </div>
             <div>
@@ -287,14 +287,14 @@ export function LearnerPersonalInfoForm({
                 maxLength={2000}
                 value={studyGoal}
                 onChange={(e) => setStudyGoal(e.target.value)}
-                className="mt-1 w-full max-w-2xl rounded-lg border border-border bg-card px-3 py-2 text-sm"
+                className="mt-1 w-full max-w-2xl rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 text-sm"
               />
             </div>
           </div>
         </section>
 
-        <section className="overflow-hidden rounded-2xl border border-border/60 bg-muted/10">
-          <div className="border-b border-border/60 px-5 py-4">
+        <section className="overflow-hidden rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)]">
+          <div className="border-b border-[var(--semantic-border-soft)] px-5 py-4">
             <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">{t("learner.personalPage.section.examPlan")}</h2>
             <p className="mt-1 text-xs text-muted-foreground">{t("learner.personalPage.section.examPlanSub")}</p>
           </div>
@@ -328,7 +328,7 @@ export function LearnerPersonalInfoForm({
               </dd>
             </div>
           </dl>
-          <div className="border-t border-border/50 px-5 py-4">
+          <div className="border-t border-[var(--semantic-border-soft)] px-5 py-4">
             <Link href="/app/account/study-preferences" className="text-sm font-semibold text-primary underline-offset-2 hover:underline">
               {t("learner.personalPage.editExamPlan")}
             </Link>
@@ -336,7 +336,7 @@ export function LearnerPersonalInfoForm({
         </section>
 
         {error ? (
-          <p className="text-sm text-red-700 dark:text-red-300" role="alert">
+          <p className="text-sm text-[var(--semantic-danger-contrast)]" role="alert">
             {error}
           </p>
         ) : null}
@@ -358,11 +358,11 @@ export function LearnerPersonalInfoForm({
       </form>
 
       {initial.entitlementVerifyFailed ? (
-        <p className="text-sm text-amber-800 dark:text-amber-200">{t("learner.personalPage.entitlementWarning")}</p>
+        <p className="text-sm text-[var(--semantic-warning-contrast)]">{t("learner.personalPage.entitlementWarning")}</p>
       ) : null}
 
-      <section className="overflow-hidden rounded-2xl border border-border/60 bg-[var(--bg-card)] shadow-sm">
-        <div className="border-b border-border/60 px-5 py-4">
+      <section className="overflow-hidden rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--bg-card)] shadow-sm">
+        <div className="border-b border-[var(--semantic-border-soft)] px-5 py-4">
           <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">{t("learner.account.personal.securityHeading")}</h2>
           <p className="mt-1 text-xs text-muted-foreground">{t("learner.account.personal.securityBody")}</p>
         </div>

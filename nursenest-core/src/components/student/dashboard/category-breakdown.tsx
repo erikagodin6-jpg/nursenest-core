@@ -53,7 +53,7 @@ export function CategoryBreakdown({
         </div>
 
         {slice.length > 0 ? (
-          <ul className="mt-5 space-y-4">
+          <ul className="nn-panel-chart-fade mt-5 space-y-4 rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_92%,transparent)] bg-[color-mix(in_srgb,var(--semantic-success)_04%,var(--semantic-panel-muted))] p-4 sm:p-5">
             {slice.map((row) => {
               const acc = numericAccuracy(row);
               const pct = acc != null ? Math.min(100, Math.max(0, acc)) : 0;
@@ -79,7 +79,10 @@ export function CategoryBreakdown({
                       </span>
                     </div>
                   </div>
-                  <div className="nn-progress-track-semantic nn-progress-track-semantic--md mt-2">
+                  <div
+                    className="nn-progress-track-semantic nn-progress-track-semantic--md mt-2 shadow-[inset_0_1px_2px_color-mix(in_srgb,var(--semantic-text-primary)_06%,transparent)]"
+                    aria-hidden
+                  >
                     <div
                       className={`h-full rounded-full ${semanticFillClassForAccuracyPct(acc)} nn-progress-fill-reveal transition-[width] duration-500`}
                       style={{ width: `${acc != null ? pct : 0}%` }}

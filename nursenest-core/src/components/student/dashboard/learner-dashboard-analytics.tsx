@@ -55,6 +55,7 @@ export function LearnerDashboardAnalytics({
           trendSummary={trend}
           practiceAccuracyPct={snapshot.practice.accuracyPct}
           practiceGradedLine={practiceLine}
+          recentMocks={snapshot.recentMocks}
         />
       </div>
 

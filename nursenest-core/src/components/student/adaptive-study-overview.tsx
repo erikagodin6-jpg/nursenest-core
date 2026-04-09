@@ -135,7 +135,7 @@ export function AdaptiveStudyOverview({
           </ul>
         </div>
 
-        <div className="rounded-xl border border-border/70 bg-muted/15 p-4">
+        <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-4 shadow-sm">
           <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Milestones</p>
           <ul className="mt-3 space-y-2">
             {milestones.map((m) => (
@@ -145,7 +145,7 @@ export function AdaptiveStudyOverview({
                   className="flex items-start gap-2 rounded-lg border border-transparent px-1 py-0.5 text-sm transition hover:border-border hover:bg-background/60"
                 >
                   {m.complete ? (
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" aria-hidden />
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[var(--semantic-success)]" aria-hidden />
                   ) : (
                     <Circle className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
                   )}

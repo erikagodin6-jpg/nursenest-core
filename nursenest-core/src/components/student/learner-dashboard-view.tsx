@@ -12,28 +12,12 @@ import {
 } from "lucide-react";
 import type { LearnerDashboardModel } from "@/lib/learner/load-learner-dashboard";
 import { remediationTopicDrillHref, remediationWeakModeTestHref } from "@/lib/learner/remediation-links";
-import { readinessBandLabel, type ReadinessBand } from "@/lib/learner/readiness-score";
+import { readinessBandLabel } from "@/lib/learner/readiness-score";
+import { readinessBandChipClass } from "@/lib/ui/learner-semantic-chips";
 
 function pctLine(current: number, total: number): string {
   if (total <= 0) return "N/A";
   return `${Math.min(100, Math.round((current / total) * 100))}%`;
-}
-
-function bandStyles(band: ReadinessBand): string {
-  switch (band) {
-    case "insufficient_data":
-      return "border-muted-foreground/30 bg-muted/40 text-muted-foreground";
-    case "not_ready":
-      return "border-destructive/40 bg-destructive/10 text-destructive";
-    case "improving":
-      return "border-amber-500/50 bg-amber-500/10 text-amber-800 dark:text-amber-200";
-    case "near_ready":
-      return "border-sky-500/50 bg-sky-500/10 text-sky-900 dark:text-sky-100";
-    case "ready":
-      return "border-emerald-500/50 bg-emerald-500/10 text-emerald-900 dark:text-emerald-100";
-    default:
-      return "border-border bg-muted/30";
-  }
 }
 
 export function LearnerDashboardView({ data }: { data: LearnerDashboardModel }) {
@@ -70,11 +54,7 @@ export function LearnerDashboardView({ data }: { data: LearnerDashboardModel }) 
             <Activity className="h-5 w-5 text-primary" aria-hidden />
             <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Exam readiness</h2>
           </div>
-          <span
-            className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold ${bandStyles(r.band)}`}
-          >
-            {readinessBandLabel(r.band)}
-          </span>
+          <span className={readinessBandChipClass(r.band)}>{readinessBandLabel(r.band)}</span>
         </div>
         <p className="mt-2 text-xs text-muted-foreground">
           Indicative only, based on practice in this app. Not a pass/fail prediction.
@@ -341,7 +321,7 @@ export function LearnerDashboardView({ data }: { data: LearnerDashboardModel }) 
       <div className="grid gap-6 lg:grid-cols-2">
         <section className="nn-card p-6">
           <div className="flex items-center gap-2">
-            <Flame className="h-5 w-5 text-amber-600" aria-hidden />
+            <Flame className="h-5 w-5 text-role-heat-text" aria-hidden />
             <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Priority review queue</h2>
           </div>
           <p className="mt-1 text-xs text-muted-foreground">From recent scored mock sessions (your plan only).</p>

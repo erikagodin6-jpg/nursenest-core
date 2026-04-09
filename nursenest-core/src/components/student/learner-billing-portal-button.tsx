@@ -48,7 +48,7 @@ export function LearnerBillingPortalButton({
         {busy ? busyLabel : label}
       </button>
       {error ? (
-        <p className="text-sm text-red-700 dark:text-red-300" role="alert">
+        <p className="text-sm text-[var(--semantic-danger-contrast)]" role="alert">
           {error}
         </p>
       ) : null}

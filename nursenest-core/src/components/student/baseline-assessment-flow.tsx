@@ -296,7 +296,9 @@ export function BaselineAssessmentFlow() {
           </ul>
         )}
 
-        {error ? <p className="text-sm text-red-600">{error}</p> : null}
+        {error ? (
+          <p className="text-sm text-[var(--semantic-danger-contrast)]">{error}</p>
+        ) : null}
 
         <div className="flex flex-wrap gap-3 pt-2">
           <button

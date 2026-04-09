@@ -69,14 +69,19 @@ function includesListKeys(tier: BillingPagePayload["effectiveTier"]): string[] {
 
 function StatusBanner({ surface, t }: { surface: BillingPagePayload["surface"]; t: LearnerMarketingT }) {
   const styles: Record<BillingPagePayload["surface"], string> = {
-    active_paid: "border-emerald-500/25 bg-emerald-500/10 text-emerald-950 dark:text-emerald-100",
-    grace: "border-amber-500/30 bg-amber-500/10 text-amber-950 dark:text-amber-100",
-    past_due: "border-rose-500/30 bg-rose-500/10 text-rose-950 dark:text-rose-100",
-    cancelled: "border-border bg-muted/30 text-foreground",
-    trial: "border-primary/25 bg-primary/10 text-foreground",
-    trial_ending: "border-amber-500/35 bg-amber-500/15 text-amber-950 dark:text-amber-100",
-    inactive: "border-border bg-muted/20 text-muted-foreground",
-    admin: "border-violet-500/25 bg-violet-500/10 text-violet-950 dark:text-violet-100",
+    active_paid:
+      "border-[color-mix(in_srgb,var(--semantic-success)_28%,var(--semantic-border-soft))] bg-[var(--semantic-success-soft)] text-[var(--semantic-success-contrast)]",
+    grace:
+      "border-[color-mix(in_srgb,var(--semantic-warning)_30%,var(--semantic-border-soft))] bg-[var(--semantic-warning-soft)] text-[var(--semantic-warning-contrast)]",
+    past_due:
+      "border-[color-mix(in_srgb,var(--semantic-danger)_30%,var(--semantic-border-soft))] bg-[var(--semantic-danger-soft)] text-[var(--semantic-danger-contrast)]",
+    cancelled: "border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] text-[var(--semantic-text-primary)]",
+    trial: "border-[color-mix(in_srgb,var(--semantic-brand)_25%,var(--semantic-border-soft))] bg-[var(--semantic-panel-muted)] text-[var(--semantic-text-primary)]",
+    trial_ending:
+      "border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] bg-[var(--semantic-panel-warm)] text-[var(--semantic-warning-contrast)]",
+    inactive: "border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] text-muted-foreground",
+    admin:
+      "border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] text-[var(--semantic-info-contrast)]",
   };
   const titleKey = `learner.billingPage.surface.${surface}.title` as const;
   const bodyKey = `learner.billingPage.surface.${surface}.body` as const;
@@ -117,15 +122,15 @@ export function LearnerBillingPageContent({
   return (
     <div className="space-y-8">
       {verifyFailed ? (
-        <div className="rounded-xl border border-rose-500/25 bg-rose-500/10 px-4 py-3 text-sm text-rose-900 dark:text-rose-100">
+        <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-danger)_28%,var(--semantic-border-soft))] bg-[var(--semantic-danger-soft)] px-4 py-3 text-sm text-[var(--semantic-danger-contrast)]">
           {t("learner.billingPage.verifyFailed")}
         </div>
       ) : null}
 
       <StatusBanner surface={surface} t={t} />
 
-      <section className="overflow-hidden rounded-2xl border border-border/60 bg-[var(--bg-card)] shadow-sm">
-        <div className="border-b border-border/60 bg-gradient-to-r from-primary/[0.06] to-transparent px-5 py-4">
+      <section className="overflow-hidden rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--bg-card)] shadow-sm">
+        <div className="border-b border-[var(--semantic-border-soft)] bg-gradient-to-r from-primary/[0.06] to-transparent px-5 py-4">
           <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">{t("learner.billingPage.planTitle")}</h2>
           <p className="mt-1 text-xs text-muted-foreground">{t("learner.billingPage.planSub")}</p>
         </div>
@@ -172,8 +177,8 @@ export function LearnerBillingPageContent({
         </div>
       </section>
 
-      <section className="overflow-hidden rounded-2xl border border-border/60 bg-[var(--bg-card)] shadow-sm">
-        <div className="border-b border-border/60 px-5 py-4">
+      <section className="overflow-hidden rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--bg-card)] shadow-sm">
+        <div className="border-b border-[var(--semantic-border-soft)] px-5 py-4">
           <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">{t("learner.billingPage.billingTitle")}</h2>
           <p className="mt-1 text-xs text-muted-foreground">{t("learner.billingPage.billingSub")}</p>
         </div>
@@ -203,7 +208,9 @@ export function LearnerBillingPageContent({
                 : t("learner.billingPage.renewalUnknown")}
             </dd>
             {stripeRenewal?.cancelAtPeriodEnd ? (
-              <p className="mt-1 text-xs font-medium text-amber-800 dark:text-amber-200">{t("learner.billingPage.cancelAtPeriodEnd")}</p>
+              <p className="mt-1 text-xs font-medium text-[var(--semantic-warning-contrast)]">
+                {t("learner.billingPage.cancelAtPeriodEnd")}
+              </p>
             ) : null}
             {!stripeRenewal?.currentPeriodEnd ? (
               <p className="mt-1 text-xs text-muted-foreground">{t("learner.billingPage.renewalHint")}</p>

@@ -365,3 +365,20 @@ export function readinessBandLabel(band: ReadinessBand): string {
       return band;
   }
 }
+
+/** CSS class for the main readiness meter fill — aligns color with band semantics. */
+export function readinessBandProgressFillClass(band: ReadinessBand): string {
+  switch (band) {
+    case "ready":
+      return "nn-progress-fill-semantic-success";
+    case "near_ready":
+      return "nn-progress-fill-semantic-brand";
+    case "improving":
+      return "nn-progress-fill-semantic-readiness";
+    case "not_ready":
+      return "nn-progress-fill-semantic-warning";
+    case "insufficient_data":
+    default:
+      return "nn-progress-fill-semantic-muted";
+  }
+}

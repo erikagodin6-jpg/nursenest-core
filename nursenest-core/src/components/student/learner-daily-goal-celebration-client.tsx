@@ -33,7 +33,7 @@ export function LearnerDailyGoalCelebrationClient({
   if (!visible) return null;
 
   return (
-    <p className="text-xs font-medium text-emerald-800 dark:text-emerald-200" role="status" aria-live="polite">
+    <p className="text-xs font-medium text-[var(--semantic-success-contrast)]" role="status" aria-live="polite">
       {message}
     </p>
   );
