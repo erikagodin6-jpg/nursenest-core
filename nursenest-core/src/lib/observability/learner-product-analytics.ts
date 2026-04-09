@@ -1,4 +1,5 @@
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import { buildGlobalExamContext, examContextAnalyticsProps } from "@/lib/exam-context";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
@@ -50,12 +51,15 @@ export function capturePracticeTestCompletedAnalytics(
           .join(",")
       : undefined;
 
+  const examCtx = buildGlobalExamContext(cfg.pathwayId ?? null, "en");
+
   captureLearnerProductEvent(userId, entitlement, PH.learnerPracticeTestSessionCompleted, {
     selection_mode: String(sel),
     cat_mode: cat,
     exam_simulation: examSim,
     cat_exam_feedback_mode: catFeedback,
     pathway_id: cfg.pathwayId ?? undefined,
+    ...examContextAnalyticsProps(examCtx),
     score_total: res.scoreTotal,
     score_correct: res.scoreCorrect,
     accuracy_pct: res.accuracyPct,
@@ -73,6 +77,7 @@ export function capturePracticeTestCompletedAnalytics(
       exam_simulation: examSim,
       cat_exam_feedback_mode: catFeedback,
       pathway_id: cfg.pathwayId ?? undefined,
+      ...examContextAnalyticsProps(examCtx),
     });
   }
 }

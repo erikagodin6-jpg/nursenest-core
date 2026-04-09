@@ -31,6 +31,12 @@ export {
   loginCallbackMarketingCatForOffering,
 };
 
+export {
+  ensureMarketingExamHubPath,
+  fallbackNursingExamHubForRegion,
+  isWellFormedExamHubPath,
+} from "@/lib/marketing/nursing-exam-nav-validation";
+
 /** Canonical exam hub roots for footer, cross-links, and “exam first” CTAs. */
 export function marketingExamPrepHubs(region: MarketingRegionToggle): Record<CountryExamOfferingId, string> {
   return {
