@@ -24,7 +24,7 @@ export const blogSeoBundleSchema = z.object({
   canonicalPath: z.string().max(220).nullable().optional(),
   openGraphTitle: z.string().max(120).nullable().optional(),
   openGraphDescription: z.string().max(320).nullable().optional(),
-  suggestedExcerpt: z.string().min(10).max(500),
+  suggestedExcerpt: z.string().min(1).max(500),
   emitFaqSchema: z.boolean(),
   focusKeywords: z.array(z.string().min(1).max(80)).max(12),
   heroImageAlt: z.string().max(240).nullable().optional(),

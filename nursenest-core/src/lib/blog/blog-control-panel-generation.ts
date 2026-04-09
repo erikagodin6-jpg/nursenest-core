@@ -28,6 +28,7 @@ import {
   lessonRowsToRelatedPaths,
   normalizePlanSuggestedLessonRows,
 } from "@/lib/blog/blog-internal-lesson-links";
+import { buildPersistedSeoBundle, buildSchemaSummaryPayload } from "@/lib/blog/blog-seo-automation";
 import {
   buildArticleBodySystemPrompt,
   buildArticleBodyUserPrompt,
@@ -225,7 +226,13 @@ export async function persistControlPanelDraft(
     }
   }
 
-  const excerpt = bodyHtml.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 480);
+  const excerptFromBody = bodyHtml.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 480);
+  const excerpt =
+    plan.suggestedExcerpt.trim().length >= 80
+      ? plan.suggestedExcerpt.trim().slice(0, 500)
+      : excerptFromBody.length >= 10
+        ? excerptFromBody.slice(0, 500)
+        : `${pageTitle.slice(0, 200)}. Draft excerpt; edit before publish.`;
   const adminSupplied = input.sourceRecordsJson ?? [];
   const aiSuggested = coerceBlogSourceRows(plan.apaSourceStubs as unknown[]);
   const partition = partitionCitationsForBlog(adminSupplied, aiSuggested);
@@ -255,11 +262,17 @@ export async function persistControlPanelDraft(
 
   const relatedPaths = lessonRowsToRelatedPaths(plan.suggestedInternalLessons, input.country);
 
+  const tagsForSeo = input.keywords
+    ? input.keywords.split(",").map((s) => s.trim()).filter(Boolean).slice(0, 12)
+    : [];
+
   const faqBlock = { items: plan.faqs };
+  const seoBundle = buildPersistedSeoBundle(plan, slug, tagsForSeo);
   const internalLinkPlan = {
     lessons: plan.suggestedInternalLessons,
     imagePlacements: plan.imagePlacements,
     imageAttachments: [] as BlogImageSlotAttachment[],
+    seo: seoBundle,
   };
 
   const hasAiCitationStubs = partition.excluded.some((e) => e.provenance === "ai_suggested");
@@ -294,9 +307,7 @@ export async function persistControlPanelDraft(
         seoDescription: plan.metaDescription.slice(0, 500),
         metaTitleVariant: plan.metaTitle.slice(0, 200),
         metaDescriptionVariant: plan.metaDescription.slice(0, 500),
-        tags: input.keywords
-          ? input.keywords.split(",").map((s) => s.trim()).filter(Boolean).slice(0, 12)
-          : [],
+        tags: tagsForSeo,
         outlineJson: plan.outline as unknown as Prisma.InputJsonValue,
         keyQuestions: plan.faqs.slice(0, 6).map((f) => f.q),
         keywordPlan: [
@@ -308,7 +319,7 @@ export async function persistControlPanelDraft(
         faqBlock: faqBlock as unknown as Prisma.InputJsonValue,
         internalLinkPlan: internalLinkPlan as unknown as Prisma.InputJsonValue,
         relatedLessonPaths: relatedPaths,
-        schemaSummary: JSON.stringify({ breadcrumbs: plan.breadcrumbs, type: "Article" }),
+        schemaSummary: buildSchemaSummaryPayload(seoBundle),
         ctaType: cta.type,
         ctaText: cta.text,
         ctaHref: cta.href,
@@ -328,8 +339,8 @@ export async function persistControlPanelDraft(
         coverImageAlt: plan.imagePlacements[0]?.altIdea?.slice(0, 240) ?? null,
         coverImageCaption: plan.imagePlacements[0]?.captionIdea?.slice(0, 300) ?? null,
         featuredSnippet: plan.featuredSnippetHint?.slice(0, 2000) ?? null,
-        shortSummary: excerpt.slice(0, 220),
-        socialCaption: `${pageTitle.slice(0, 120)}. ${excerpt.slice(0, 100)}…`,
+        shortSummary: plan.suggestedExcerpt.trim().slice(0, 220) || excerpt.slice(0, 220),
+        socialCaption: `${pageTitle.slice(0, 120)}. ${(plan.suggestedExcerpt.trim().slice(0, 100) || excerpt.slice(0, 100))}…`,
         promoBlurb: cta.text,
         updateNeeded: Boolean(thinWarning),
         rankingNote: thinWarning ?? null,
@@ -389,7 +400,17 @@ export async function regenerateControlPanelSection(params: {
   currentTitle?: string;
 }): Promise<
   | { section: "title_options"; titleOptions: string[] }
-  | { section: "meta"; metaTitle: string; metaDescription: string; recommendedSlug: string }
+  | {
+      section: "meta";
+      metaTitle: string;
+      metaDescription: string;
+      recommendedSlug: string;
+      suggestedExcerpt?: string;
+      openGraphTitle?: string;
+      openGraphDescription?: string;
+      canonicalPath?: string | null;
+      seoFocusKeywords?: string[];
+    }
   | { section: "outline"; outline: BlogControlPanelPlan["outline"] }
   | { section: "article_html"; bodyHtml: string }
   | { section: "faqs"; faqs: BlogControlPanelPlan["faqs"] }
@@ -423,8 +444,16 @@ export async function regenerateControlPanelSection(params: {
     title_options: `Return {"titleOptions": string[] } with 4 new title variants for:
 Topic: ${params.topic}, exam: ${params.exam}, ${countryLine}, template ${params.template}.`,
 
-    meta: `Return {"metaTitle": string (<=60c), "metaDescription": string (120-155c), "recommendedSlug": string (kebab-case) } for:
-Topic: ${params.topic}, exam: ${params.exam}, primary keyword: ${params.keywords ?? params.topic}.`,
+    meta: `Return JSON only for topic "${params.topic}", exam ${params.exam}, primary keyword: ${params.keywords ?? params.topic}.
+Keys:
+- metaTitle: <=60 chars; name a concrete clinical or exam decision this article covers (no generic "nursing guide").
+- metaDescription: 120-155 chars; promise must match the article body themes, not boilerplate.
+- recommendedSlug: kebab-case, 3-80 chars.
+- suggestedExcerpt: 140-220 chars; card/social blurb; must not copy metaDescription verbatim.
+- optional openGraphTitle (<=60c), openGraphDescription (<=110c) if tighter than meta fields.
+- optional canonicalPath: "/blog/{recommendedSlug}" only when identical to recommendedSlug; else omit.
+- optional seoFocusKeywords: string[] length 3-8 (exam + specific clinical terms).
+Current: metaTitle=${JSON.stringify(params.currentPlan?.metaTitle ?? "")}, metaDescription=${JSON.stringify((params.currentPlan?.metaDescription ?? "").slice(0, 160))}`,
 
     outline: `Return {"outline": same shape as before: array of {h2, h3?, bullets?} } with 4-6 sections for template ${params.template}, topic ${params.topic}, exam ${params.exam}.
 Current outline for reference: ${JSON.stringify(params.currentPlan?.outline ?? [])}`,
@@ -462,11 +491,30 @@ Current placements for reference: ${JSON.stringify(params.currentPlan?.imagePlac
       return { section: "title_options", titleOptions: titles.slice(0, 6) };
     }
     case "meta": {
-      const metaTitle = typeof json.metaTitle === "string" ? json.metaTitle : "";
-      const metaDescription = typeof json.metaDescription === "string" ? json.metaDescription : "";
-      const recommendedSlug = typeof json.recommendedSlug === "string" ? json.recommendedSlug : "";
-      if (!metaTitle || !metaDescription || !recommendedSlug) throw new Error("Invalid meta payload");
-      return { section: "meta", metaTitle, metaDescription, recommendedSlug };
+      const metaRegenSchema = z.object({
+        metaTitle: z.string().min(3).max(70),
+        metaDescription: z.string().min(20).max(340),
+        recommendedSlug: z.string().min(3).max(120),
+        suggestedExcerpt: z.string().max(360).optional(),
+        openGraphTitle: z.string().max(90).optional(),
+        openGraphDescription: z.string().max(200).optional(),
+        canonicalPath: z.string().max(220).nullable().optional(),
+        seoFocusKeywords: z.array(z.string().min(1).max(80)).max(10).optional(),
+      });
+      const parsed = metaRegenSchema.safeParse(json);
+      if (!parsed.success) throw new Error("Invalid meta payload");
+      const m = parsed.data;
+      return {
+        section: "meta",
+        metaTitle: m.metaTitle,
+        metaDescription: m.metaDescription,
+        recommendedSlug: m.recommendedSlug,
+        ...(m.suggestedExcerpt !== undefined ? { suggestedExcerpt: m.suggestedExcerpt } : {}),
+        ...(m.openGraphTitle !== undefined ? { openGraphTitle: m.openGraphTitle } : {}),
+        ...(m.openGraphDescription !== undefined ? { openGraphDescription: m.openGraphDescription } : {}),
+        ...(m.canonicalPath !== undefined ? { canonicalPath: m.canonicalPath } : {}),
+        ...(m.seoFocusKeywords !== undefined ? { seoFocusKeywords: m.seoFocusKeywords } : {}),
+      };
     }
     case "outline": {
       const outline = json.outline;

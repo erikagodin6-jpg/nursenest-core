@@ -20,6 +20,7 @@ import {
   normalizeImagePlacementsFromPlan,
   parseInternalLinkPlanJson,
 } from "@/lib/blog/blog-image-workflow";
+import { buildPersistedSeoBundle, buildSchemaSummaryPayload } from "@/lib/blog/blog-seo-automation";
 
 type GenState = "idle" | "generating" | "success" | "failed";
 
@@ -84,22 +85,31 @@ function mergeAttachmentRowsForPlan(plan: BlogControlPanelPlan, stored: BlogImag
 
 function planFromPost(post: AdminPostPayload): BlogControlPanelPlan {
   const faqBlock = post.faqBlock as { items?: { q: string; a: string }[] } | null;
+  const parsedPlan = parseInternalLinkPlanJson(post.internalLinkPlan);
   const internal = post.internalLinkPlan as {
     lessons?: BlogControlPanelPlan["suggestedInternalLessons"];
     imagePlacements?: BlogControlPanelPlan["imagePlacements"];
   } | null;
+  const seo = parsedPlan.seo;
   let breadcrumbs: BlogControlPanelPlan["breadcrumbs"] = [];
-  try {
-    if (post.schemaSummary) {
-      const j = JSON.parse(post.schemaSummary) as { breadcrumbs?: BlogControlPanelPlan["breadcrumbs"] };
-      if (Array.isArray(j?.breadcrumbs)) breadcrumbs = j.breadcrumbs;
+  if (seo?.normalizedBreadcrumbs?.length) {
+    breadcrumbs = seo.normalizedBreadcrumbs;
+  } else {
+    try {
+      if (post.schemaSummary) {
+        const j = JSON.parse(post.schemaSummary) as { breadcrumbs?: BlogControlPanelPlan["breadcrumbs"] };
+        if (Array.isArray(j?.breadcrumbs)) breadcrumbs = j.breadcrumbs;
+      }
+    } catch {
+      /* ignore */
     }
-  } catch {
-    /* ignore */
   }
   const outline = Array.isArray(post.outlineJson)
     ? (post.outlineJson as BlogControlPanelPlan["outline"])
     : [];
+
+  const excerptFallback = post.excerpt?.trim().slice(0, 360) || "Edit excerpt before publish.";
+  const focusFromTags = (post.tags ?? []).map((t) => t.trim()).filter(Boolean).slice(0, 10);
 
   return {
     titleOptions: [post.title, ...(post.titleAlternates ?? [])].filter((t) => t && t.trim().length > 0),
@@ -115,6 +125,11 @@ function planFromPost(post: AdminPostPayload): BlogControlPanelPlan {
     apaSourceStubs: [],
     keyTakeaways: post.keyTakeaways?.length ? post.keyTakeaways : [],
     featuredSnippetHint: post.featuredSnippet ?? undefined,
+    suggestedExcerpt: seo?.suggestedExcerpt ?? excerptFallback,
+    openGraphTitle: seo?.openGraphTitle ?? undefined,
+    openGraphDescription: seo?.openGraphDescription ?? undefined,
+    canonicalPath: seo?.canonicalPath ?? undefined,
+    seoFocusKeywords: seo?.focusKeywords?.length ? seo.focusKeywords : focusFromTags,
   };
 }
 
@@ -478,11 +493,24 @@ export function AdminBlogControlPanelClient({ initialPostId }: { initialPostId?:
       .filter(Boolean)
       .slice(0, 40);
     const faqBlock = plan ? { items: plan.faqs } : undefined;
+    const planForSeo =
+      plan && post
+        ? {
+            ...plan,
+            metaTitle: seoTitle.trim() || plan.metaTitle,
+            metaDescription: seoDescription.trim() || plan.metaDescription,
+            suggestedExcerpt:
+              excerpt.trim().length >= 40 ? excerpt.trim().slice(0, 360) : plan.suggestedExcerpt,
+          }
+        : null;
+    const seoBundle =
+      planForSeo && post ? buildPersistedSeoBundle(planForSeo, post.slug, post.tags ?? []) : null;
     const internalLinkPlan = plan
       ? {
           lessons: plan.suggestedInternalLessons,
           imagePlacements: plan.imagePlacements,
           imageAttachments: mergeAttachmentsBySlotKey(imageAttachments),
+          ...(seoBundle ? { seo: seoBundle } : {}),
         }
       : undefined;
     try {
@@ -506,7 +534,7 @@ export function AdminBlogControlPanelClient({ initialPostId }: { initialPostId?:
           titleAlternates: plan?.titleOptions.slice(1) ?? undefined,
           keyTakeaways: plan?.keyTakeaways ?? undefined,
           relatedLessonPaths: plan ? lessonRowsToRelatedPaths(plan.suggestedInternalLessons, country) : undefined,
-          schemaSummary: plan ? JSON.stringify({ breadcrumbs: plan.breadcrumbs, type: "Article" }) : undefined,
+          schemaSummary: seoBundle ? buildSchemaSummaryPayload(seoBundle) : undefined,
           metaTitleVariant: seoTitle || null,
           metaDescriptionVariant: seoDescription || null,
           featuredSnippet: plan?.featuredSnippetHint ?? null,

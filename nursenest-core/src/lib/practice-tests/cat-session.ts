@@ -25,6 +25,7 @@ import {
   validateCatQuestionPool,
   validatePracticeCatPool,
 } from "@/lib/exams/cat-engine";
+import { catHighYieldPracticeBoost } from "@/lib/exams/cat-adaptive-policy";
 import { logCatBlueprintSessionMappingQualityFromReport } from "@/lib/exams/cat-blueprint-mapping-quality";
 import {
   examSimulationConfigForPathway,
@@ -282,8 +283,8 @@ export async function createCatPracticeTestPayload(
 
   const delivered = new Map<string, number>();
   const practiceBoost = mergeCatBoosts(
-    catBoostFromWeakPriorities(weakPlan.priorityByCanonical),
-    sessionMissBoost(state),
+    mergeCatBoosts(catBoostFromWeakPriorities(weakPlan.priorityByCanonical), sessionMissBoost(state)),
+    catHighYieldPracticeBoost(),
   );
   const selectOpts: CatSelectOptions = sim
     ? { blueprintWeights }
@@ -401,7 +402,10 @@ export async function advanceCatPracticeTest(params: {
         })()
       : ({} as CatSelectOptions);
 
-  const practiceBoost = mergeCatBoosts(weakBoost, sessionMissBoost(state));
+  const practiceBoost = mergeCatBoosts(
+    mergeCatBoosts(weakBoost, sessionMissBoost(state)),
+    sim ? {} : catHighYieldPracticeBoost(),
+  );
   const selectOpts: CatSelectOptions = sim
     ? { blueprintWeights }
     : mergeBlueprintIntoBoost(practiceBoost, blueprintWeights);

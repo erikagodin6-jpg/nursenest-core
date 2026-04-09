@@ -10,6 +10,7 @@ import { LearnerAppSectionAnalytics } from "@/components/observability/learner-a
 import { SentryLearnerShell } from "@/components/observability/sentry-learner-shell";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { loadLearnerStudyNextBlock } from "@/lib/learner/load-learner-study-next-block";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { userShouldSeeBaselinePrompt } from "@/lib/baseline/baseline-assessment";
@@ -28,6 +29,7 @@ export default async function LearnerShellLayout({ children }: { children: React
 
   let studyNextBlock = null;
   let showBaselinePrompt = false;
+  let pathwayShortLabel: string | null = null;
   if (userId) {
     const ent = await resolveEntitlementForPage(userId);
     if (ent !== "error" && ent.hasAccess) {
@@ -37,9 +39,18 @@ export default async function LearnerShellLayout({ children }: { children: React
       try {
         const u = await prisma.user.findUnique({
           where: { id: userId },
-          select: { baselineAssessmentSkippedAt: true, baselineAssessmentCompletedAt: true },
+          select: {
+            baselineAssessmentSkippedAt: true,
+            baselineAssessmentCompletedAt: true,
+            learnerPath: true,
+          },
         });
         showBaselinePrompt = u != null && userShouldSeeBaselinePrompt(u);
+        const lp = u?.learnerPath?.trim();
+        if (lp) {
+          const p = getExamPathwayById(lp);
+          pathwayShortLabel = p ? p.shortName || p.displayName : lp.slice(0, 48);
+        }
       } catch {
         showBaselinePrompt = false;
       }
@@ -62,7 +73,7 @@ export default async function LearnerShellLayout({ children }: { children: React
               <LearnerShellPrimaryNav />
             </div>
             <div className="flex flex-wrap items-center gap-3">
-              <LearnerShellUserBar />
+              <LearnerShellUserBar pathwayShortLabel={pathwayShortLabel} />
               <LearnerShellLanguageControl />
               <LearnerThemeControl />
             </div>

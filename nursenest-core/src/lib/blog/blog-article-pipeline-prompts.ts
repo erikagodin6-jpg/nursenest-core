@@ -17,12 +17,17 @@ Required keys (exact names):
 - titleOptions: string[] (3-5 titles; at least two must name the exam track or audience, e.g. NCLEX, REx-PN, FNP where applicable)
 - h1: string — the on-page main headline (clear, human, may be slightly shorter than SEO title; not keyword-stuffed)
 - recommendedSlug: kebab-case, 3-80 chars
-- metaTitle: <=60 chars, primary intent near start
-- metaDescription: 120-155 chars, specific benefit + audience
+- metaTitle: <=60 chars; must include a specific clinical or exam angle from this topic (not "Nursing tips" / "Everything you need" style platitudes)
+- metaDescription: 120-155 chars; must restate a concrete promise from the outline (skills, decisions, or errors addressed) and the exam audience when known
+- suggestedExcerpt: 140-220 chars; standalone blurb for blog cards / social — no "click here", no duplicate of metaDescription verbatim; name the topic + payoff
+- optional openGraphTitle: <=60 chars if you need a punchier share title than metaTitle (else omit)
+- optional openGraphDescription: <=110 chars for social preview (else omit)
+- optional canonicalPath: only use "/blog/{recommendedSlug}" when it matches recommendedSlug exactly; otherwise omit (site defaults canonical to the live slug)
+- optional seoFocusKeywords: string[] (3-8) — include exam + 2-4 clinical nouns from the article (no vague words like "guide", "ultimate", "complete" alone)
 - outline: array of { "h2", optional "h3"[], optional "bullets"[] } — 4-7 sections; H2s must be topic-specific (not "Introduction" only)
 - suggestedInternalLessons: { "label", "suggestedPath", optional "rationale", optional "linkKind" ("lesson"|"lessons_hub"|"question_bank"|"topic_cluster"|"general") }[] — root-relative paths like /us/rn/nclex-rn/lessons/..., /.../questions, or /blog/...; match pathway + country from the brief; no /app/ or /api/
 - faqs: { "q", "a" }[] — 4-7 items; answers must teach a concrete exam-relevant point
-- breadcrumbs: { "label", "href" }[] — logical trail from Home
+- breadcrumbs: { "label", "href" }[] — **exact pattern** for NurseNest marketing: [ { "label": "Home", "href": "/" }, { "label": "Blog", "href": "/blog" }, optional middle crumbs with root-relative hrefs only if they are real site paths, then { "label": "<article H1 or shorter>", "href": "/blog/<recommendedSlug>" } ]. Never use /app/, /api/, or external URLs. Last href must be /blog/<recommendedSlug>.
 - imagePlacements: { optional "slotKey" (e.g. hero, inline_1), optional "role" (hero|inline), "section", "promptIdea", "altIdea", optional "captionIdea" }[] — one hero + 1-3 optional inline; clinically relevant, NurseNest brand (professional nursing education, dignified, inclusive; no gore, no identifiable patients, no real institutional logos)
 - apaSourceStubs: objects with optional authors[], year, title, source, publisher, url, doi, authority (regulator|guideline_body|peer_reviewed|academic_hospital|association|general_web|low_authority) — **brainstorming only**; these are NOT published as bibliography and must NOT be treated as verified. Never fabricate DOIs, URLs, journal names, or volume/issue/page numbers. Use placeholders only where clearly marked as uncertain.
 - keyTakeaways: 3-5 bullets with specific clinical or test-taking substance

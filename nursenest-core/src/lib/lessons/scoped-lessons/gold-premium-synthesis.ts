@@ -442,6 +442,18 @@ function syntheticGoldInput(examLabel: string, tierGeo: GoldTierGeo): GoldPremiu
   };
 }
 
+/** Merge overflow paragraphs so premium intro stays within 2–3 blocks (validator). */
+function capPremiumIntroParagraphs(body: string, maxParagraphs: number): string {
+  const paras = body
+    .split(/\n\n+/)
+    .map((p) => p.trim())
+    .filter(Boolean);
+  if (paras.length <= maxParagraphs) return paras.join("\n\n");
+  const head = paras.slice(0, maxParagraphs - 1);
+  const tail = paras.slice(maxParagraphs - 1).join(" ");
+  return [...head, tail].join("\n\n");
+}
+
 /**
  * Premium case-study lesson: explicit narrative blocks mapped to the exam-complete spine.
  * Use for RN / PN / NP pathway-scoped “casebook” lessons that differentiate from topic-overview gold lessons.
@@ -452,19 +464,45 @@ export function synthesizeCaseStudyCasebookSections(input: CaseStudyCasebookInpu
   relatedLessonRefs: PathwayLessonRelatedRef[];
 } {
   const syn = syntheticGoldInput(input.examLabel, input.tierGeo);
-  const intro = ensureMinimumWords(
-    ensureIntroductionWordCount(
-      [
-        `**Scenario setup**\n\n${input.scenarioSetup.trim()}`,
-        collapseInlineParagraphs(input.clinical_meaning),
-        collapseInlineParagraphs(input.exam_relevance),
-        `This **case-study format** is intentional: boards reward **trajectory thinking**—what changed, what is unstable, and what you do **next** for the **role** named in the stem. For **${input.examLabel}**, read the **assignment line** before you eliminate answers.`,
-      ].join("\n\n"),
-    ),
-    PREMIUM_MIN_WORDS.introduction,
-    `**Slow read**  
-Re-scan the stem for **vitals trends**, **oxygen settings**, **allergies**, and **time since onset**—case items often hide the decisive clue in a single line.`,
-  );
+  /** Exactly 3 `\n\n`-separated blocks (premium intro allows 2–3 paragraphs). */
+  const scenarioFlattened = input.scenarioSetup.trim().replace(/\s+/g, " ");
+  const introCore = [
+    `**Scenario setup**\n\n${scenarioFlattened}`,
+    `${collapseInlineParagraphs(input.clinical_meaning)} ${collapseInlineParagraphs(input.exam_relevance)}`.trim(),
+    `This **case-study format** is intentional: boards reward **trajectory thinking**—what changed, what is unstable, and what you do **next** for the **role** named in the stem. For **${input.examLabel}**, read the **assignment line** before you eliminate answers. **Slow read:** re-scan the stem for **vitals trends**, **oxygen settings**, **allergies**, and **time since onset**—case items often hide the decisive clue in a single line.`,
+  ].join("\n\n");
+  let intro = ensureIntroductionWordCount(introCore);
+  if (countWords(stripToPlainText(intro)) < PREMIUM_MIN_WORDS.introduction) {
+    intro = ensureMinimumWords(
+      intro,
+      PREMIUM_MIN_WORDS.introduction,
+      `**Exam habit**  
+Name the **single highest-risk problem** in one sentence before you read the options; case stems reward that discipline for **${input.examLabel}**.`,
+    );
+  }
+  intro = capPremiumIntroParagraphs(intro, 3);
+  let introWc = countWords(stripToPlainText(intro));
+  let introPad = 0;
+  while (introWc < PREMIUM_MIN_WORDS.introduction && introPad < 40) {
+    const paras = intro.split(/\n\n+/).map((p) => p.trim()).filter(Boolean);
+    if (paras.length === 0) break;
+    paras[paras.length - 1] = `${paras[paras.length - 1]} ${INTRO_TOP_UP_SENTENCES[introPad % INTRO_TOP_UP_SENTENCES.length]}`;
+    intro = paras.join("\n\n");
+    introWc = countWords(stripToPlainText(intro));
+    introPad += 1;
+  }
+  while (introWc > 250) {
+    intro = intro.replace(/\s+[^\s.]+[.?!]\s*$/, "").trim();
+    introWc = countWords(stripToPlainText(intro));
+  }
+  while (introWc < PREMIUM_MIN_WORDS.introduction) {
+    const paras = intro.split(/\n\n+/).map((p) => p.trim()).filter(Boolean);
+    if (paras.length === 0) break;
+    paras[paras.length - 1] = `${paras[paras.length - 1]} ${INTRO_TOP_UP_SENTENCES[introPad % INTRO_TOP_UP_SENTENCES.length]}`;
+    intro = paras.join("\n\n");
+    introWc = countWords(stripToPlainText(intro));
+    introPad += 1;
+  }
 
   const signsBody = padKind(
     "signs_symptoms",
@@ -507,8 +545,13 @@ Name **return precautions** with concrete triggers (worsening shortness of breat
   );
 
   const omitted: PathwayLessonOmittedPremiumSection[] = [];
-  const labBody = input.labsDiagnostics?.trim();
-  if (!labBody) {
+  const labBodyRaw = input.labsDiagnostics?.trim();
+  const LAB_DIAGNOSTICS_PAD = `**Stem integration**  
+When labs appear, tie each line to **physiology** and **what you do next**—stems often hide the decisive value in a parenthetical or a number you skimmed past. Re-check **units** (mg/dL vs mmol/L) before you eliminate an answer.`;
+  const labBody = labBodyRaw
+    ? padKind("labs_diagnostics", labBodyRaw, LAB_DIAGNOSTICS_PAD)
+    : undefined;
+  if (!labBodyRaw) {
     omitted.push({
       kind: "labs_diagnostics",
       reason:
@@ -529,7 +572,11 @@ Name **return precautions** with concrete triggers (worsening shortness of breat
       id: "pathophysiology_overview",
       heading: PREMIUM_SECTION_HEADINGS.pathophysiology_overview,
       kind: "pathophysiology_overview",
-      body: ensurePathophysiologyDepth(input.pathophysiologyCore),
+      body: padKind(
+        "pathophysiology_overview",
+        ensurePathophysiologyDepth(input.pathophysiologyCore),
+        PATHO_EXAM_PAD,
+      ),
     },
     {
       id: "signs_symptoms",

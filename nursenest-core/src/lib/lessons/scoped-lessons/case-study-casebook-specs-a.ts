@@ -143,7 +143,7 @@ Use **clear return precautions** for **worsening infection signs**; align teachi
 5) **Reassess** after each intervention: **BP**, **mental status**, **urine output**, **work of breathing**.`,
         rationaleDecisions: `**Why not “medicate for fever first”?**  
 Antipyretics do not fix **perfusion failure**. **Why not “educate about diabetes” first?**  
-Teaching is inappropriate while **mentation** and **BP** are failing. **Why rapid response wins** over “finish charting”?**  
+Teaching is inappropriate while **mentation** and **BP** are failing. **Why rapid response wins** over “finish charting”?  
 **Delayed escalation** increases harm; the exam rewards **life-safety sequencing**.`,
         escalationSafetyTeaching: `**Safety**  
 If **MAP remains low** after ordered boluses, expect **escalation** to **vasopressors** in monitored settings—your role is **monitoring**, **preparation**, and **communication**.

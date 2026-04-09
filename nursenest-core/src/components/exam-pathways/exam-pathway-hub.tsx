@@ -64,20 +64,18 @@ export function ExamPathwayHub({
       <div className="mb-8">
         <BreadcrumbTrail items={crumbs} />
       </div>
-      <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+      <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-primary)]">
         {countryLine} · {pathway.boardLabel ?? pathway.roleTrack.toUpperCase()}
       </p>
-      <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)] sm:text-4xl">
-        {heroTitle ?? pathway.displayName}
-      </h1>
-      <p className="mt-4 max-w-2xl text-base leading-relaxed text-[var(--theme-muted-text)] sm:text-lg">
+      <h1 className="nn-marketing-h1 mt-2">{heroTitle ?? pathway.displayName}</h1>
+      <p className="nn-marketing-body mt-4 max-w-2xl text-[var(--theme-muted-text)] sm:text-[1.0625rem] sm:leading-relaxed">
         {heroLead ?? pathway.seoDescription}
       </p>
 
       {pathway.status === "upcoming" ? (
-        <aside className="nn-card mt-8 border-amber-200/80 bg-amber-50/60 p-4 text-sm text-foreground">
-          <p className="font-semibold">Upcoming or transitioning pathway</p>
-          <p className="mt-1 text-[var(--theme-muted-text)]">
+        <aside className="nn-study-card mt-8 border-[var(--role-warning-border)] bg-[var(--role-warning-soft)] p-4 sm:p-5">
+          <p className="nn-marketing-h4 text-[var(--role-warning-text)]">Upcoming or transitioning pathway</p>
+          <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">
             Exam branding and registration rules can change (especially Canadian NP integration). This hub stays updated: join the list or
             start from an active track if you test sooner.
           </p>
@@ -92,18 +90,18 @@ export function ExamPathwayHub({
       />
 
       {npInventory?.belowThreshold ? (
-        <aside className="nn-card mt-6 border-border bg-[var(--theme-muted-surface)] p-4 text-sm text-[var(--theme-body-text)]">
-          <p className="font-semibold text-[var(--theme-heading-text)]">Content depth (transparent)</p>
-          <p className="mt-1 leading-relaxed text-[var(--theme-muted-text)]">{npInventory.noticeMarkdown}</p>
+        <aside className="nn-study-card nn-study-card--wash mt-6 p-4 sm:p-5">
+          <p className="nn-marketing-h4">Content depth (transparent)</p>
+          <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">{npInventory.noticeMarkdown}</p>
         </aside>
       ) : null}
 
       {npPracticeSeo ? (
-        <section className="nn-card mt-8 border border-[var(--theme-card-border)] bg-card p-4 sm:p-5" aria-labelledby="np-alias-support-heading">
-          <h2 id="np-alias-support-heading" className="text-base font-bold text-[var(--theme-heading-text)]">
+        <section className="nn-study-card mt-8 p-4 sm:p-5" aria-labelledby="np-alias-support-heading">
+          <h2 id="np-alias-support-heading" className="nn-marketing-h3">
             {npPracticeSeo.supportSectionHeading}
           </h2>
-          <p className="mt-2 text-sm leading-relaxed text-[var(--theme-muted-text)]">{npPracticeSeo.supportSectionBody}</p>
+          <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">{npPracticeSeo.supportSectionBody}</p>
         </section>
       ) : null}
 

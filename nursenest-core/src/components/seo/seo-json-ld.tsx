@@ -50,14 +50,20 @@ export function BlogPostingJsonLd({
   description,
   datePublished,
   coverImage,
+  keywords,
+  articleSection,
 }: {
   slug: string;
   title: string;
   description: string;
   datePublished: string;
   coverImage?: string | null;
+  /** From SEO bundle / tags — comma-separated in JSON-LD. */
+  keywords?: string[];
+  articleSection?: string | null;
 }) {
   const url = absoluteUrl(`/blog/${slug}`);
+  const kw = keywords?.map((k) => k.trim()).filter(Boolean) ?? [];
   return (
     <JsonLd
       data={{
@@ -67,9 +73,28 @@ export function BlogPostingJsonLd({
         description,
         datePublished,
         url,
-        mainEntityOfPage: url,
+        mainEntityOfPage: { "@type": "WebPage", "@id": url },
         publisher: { "@id": ORG_ID },
         ...(coverImage ? { image: coverImage } : {}),
+        ...(kw.length ? { keywords: kw.join(", ") } : {}),
+        ...(articleSection?.trim() ? { articleSection: articleSection.trim() } : {}),
+      }}
+    />
+  );
+}
+
+export function BlogFaqPageJsonLd({ items }: { items: { question: string; answer: string }[] }) {
+  if (!items.length) return null;
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: items.map((item) => ({
+          "@type": "Question",
+          name: item.question,
+          acceptedAnswer: { "@type": "Answer", text: item.answer },
+        })),
       }}
     />
   );

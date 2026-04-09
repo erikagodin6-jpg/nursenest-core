@@ -22,13 +22,13 @@ type Props = {
 };
 
 const CARD =
-  "group flex h-full min-h-[17rem] flex-col rounded-2xl border-2 border-[var(--theme-card-border)] bg-card p-6 shadow-sm transition hover:border-primary/40 hover:shadow-[var(--shadow-card)] md:min-h-[18rem] md:p-7";
+  "group nn-study-card nn-card-interactive flex h-full min-h-[17rem] flex-col p-6 transition md:min-h-[18rem] md:p-7";
 
 const CTA_BTN =
-  "mt-auto inline-flex w-full items-center justify-center rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition group-hover:brightness-105";
+  "mt-auto inline-flex w-full items-center justify-center rounded-full nn-btn-primary px-5 py-3 text-sm font-semibold shadow-none transition group-hover:brightness-[1.03]";
 
 const CTA_BTN_SECONDARY =
-  "mt-auto inline-flex w-full items-center justify-center rounded-full border-2 border-primary/35 bg-primary/5 px-5 py-3 text-sm font-semibold text-primary transition hover:bg-primary/10";
+  "mt-auto inline-flex w-full items-center justify-center rounded-full border border-border bg-[var(--accent-soft)] px-5 py-3 text-sm font-semibold text-[var(--theme-primary)] transition hover:bg-[var(--surface-interactive-hover)] hover:border-[var(--border-medium)]";
 
 /**
  * Primary exam hub study flow: three large cards (lessons, pathway question bank, CAT / practice exams).
@@ -51,10 +51,12 @@ export function ExamPathwayHubPrimaryStudyCards({
 
   return (
     <section className="mt-10" aria-labelledby="exam-hub-primary-study-heading">
-      <h2 id="exam-hub-primary-study-heading" className="text-xl font-bold text-[var(--theme-heading-text)] sm:text-2xl">
+      <h2 id="exam-hub-primary-study-heading" className="nn-marketing-h2">
         {t("components.examPathwayHub.studyModes.heading")}
       </h2>
-      <p className="mt-2 max-w-2xl text-sm text-[var(--theme-muted-text)]">{t("components.examPathwayHub.studyModes.subhead")}</p>
+      <p className="nn-marketing-body-sm mt-2 max-w-2xl text-[var(--theme-muted-text)]">
+        {t("components.examPathwayHub.studyModes.subhead")}
+      </p>
       <ul className="mt-8 grid list-none gap-5 p-0 md:grid-cols-3">
         <li>
           <MarketingTrackedLink
@@ -70,10 +72,10 @@ export function ExamPathwayHubPrimaryStudyCards({
             className={CARD}
           >
             <BookOpen className="h-7 w-7 text-primary" aria-hidden />
-            <span className="mt-4 text-lg font-bold text-[var(--theme-heading-text)] md:text-xl">
+            <span className="nn-marketing-h3 mt-4">
               {t("components.examPathwayHub.studyModes.lessonsTitle")}
             </span>
-            <span className="mt-2 flex-1 text-sm leading-relaxed text-[var(--theme-body-text)]">
+            <span className="nn-marketing-body-sm mt-2 flex-1 text-[var(--theme-body-text)]">
               {t("components.examPathwayHub.studyModes.lessonsBody")}
             </span>
             <span className={CTA_BTN}>{t("components.examPathwayHub.studyModes.lessonsCta")}</span>
@@ -93,10 +95,10 @@ export function ExamPathwayHubPrimaryStudyCards({
             className={CARD}
           >
             <ClipboardList className="h-7 w-7 text-primary" aria-hidden />
-            <span className="mt-4 text-lg font-bold text-[var(--theme-heading-text)] md:text-xl">
+            <span className="nn-marketing-h3 mt-4">
               {t("components.examPathwayHub.studyModes.questionsTitle")}
             </span>
-            <span className="mt-2 flex-1 text-sm leading-relaxed text-[var(--theme-body-text)]">
+            <span className="nn-marketing-body-sm mt-2 flex-1 text-[var(--theme-body-text)]">
               {t("components.examPathwayHub.studyModes.questionsBody")}
             </span>
             <span className={CTA_BTN_SECONDARY}>{t("components.examPathwayHub.studyModes.questionsCta")}</span>
@@ -116,17 +118,17 @@ export function ExamPathwayHubPrimaryStudyCards({
             className={CARD}
           >
             <GraduationCap className="h-7 w-7 text-primary" aria-hidden />
-            <span className="mt-4 text-lg font-bold text-[var(--theme-heading-text)] md:text-xl">
+            <span className="nn-marketing-h3 mt-4">
               {t("components.examPathwayHub.studyModes.practiceCatTitle")}
             </span>
-            <span className="mt-2 flex-1 text-sm leading-relaxed text-[var(--theme-body-text)]">
+            <span className="nn-marketing-body-sm mt-2 flex-1 text-[var(--theme-body-text)]">
               {t("components.examPathwayHub.studyModes.practiceCatBody")}
             </span>
             <span className={CTA_BTN_SECONDARY}>{t("components.examPathwayHub.studyModes.practiceCta")}</span>
           </MarketingTrackedLink>
         </li>
       </ul>
-      <p className="mt-4 text-xs text-[var(--theme-muted-text)]">
+      <p className="nn-marketing-caption mt-4">
         {t("components.examPathwayHub.studyModes.signInNote")}{" "}
         <Link href={signInContinueHref} className="font-medium text-primary underline-offset-4 hover:underline">
           {t("components.examPathwayHub.studyModes.signInLink")}

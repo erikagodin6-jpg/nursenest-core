@@ -7,6 +7,8 @@ export const PRACTICE_TEST_CAT_CREATE_CODE = {
   cat_weak_areas_empty: "cat_weak_areas_empty",
   cat_pool_invalid: "cat_pool_invalid",
   cat_pick_failed: "cat_pick_failed",
+  /** No pathway in request and no default pathway from subscription profile. */
+  cat_pathway_required: "cat_pathway_required",
   cat_create_failed: "cat_create_failed",
 } as const;
 

@@ -26,6 +26,7 @@ import {
 import { prependScopedGoldCatalogLessons, SCOPED_GOLD_PROVIDERS } from "./scoped-gold-registry";
 import { SHOCK_GOLD_SLUG, getShockGoldLessonInput } from "./shock-gold-standard";
 import { STROKE_ICP_GOLD_SLUG, getStrokeIcpGoldLessonInput } from "./stroke-increased-icp-gold-standard";
+import { CASE_STUDY_CASEBOOK_PROVIDERS, CASE_STUDY_CASEBOOK_SLUGS } from "./case-study-casebook-specs";
 import { BULK_ROWS } from "./launch-wave-1-bulk-rows";
 import { LAUNCH_WAVE_1A_SPECS } from "./launch-wave-1a-high-yield-gold";
 
@@ -68,6 +69,7 @@ describe("scoped gold registry", () => {
         "copd-clinical-judgment-gold",
         ...LAUNCH_WAVE_1A_SPECS.map((s) => s.slug),
         ...BULK_ROWS.map((r) => r.slug),
+        ...CASE_STUDY_CASEBOOK_SLUGS,
       ],
     );
   });
@@ -278,6 +280,25 @@ describe("renal dialysis acute complications gold standard", () => {
   it("all pathways have full lesson", () => {
     for (const pid of CORE_NURSING_PATHWAYS) {
       assertLessonQuality(getRenalDialysisAcuteComplicationsGoldLessonInput(pid)!);
+    }
+  });
+});
+
+describe("clinical casebook case-study lessons", () => {
+  it("provider slugs match exported slug list", () => {
+    assert.deepEqual(
+      CASE_STUDY_CASEBOOK_PROVIDERS.map((p) => p.slug),
+      CASE_STUDY_CASEBOOK_SLUGS,
+    );
+  });
+
+  it("all pathways have valid premium casebook lessons", () => {
+    for (const provider of CASE_STUDY_CASEBOOK_PROVIDERS) {
+      for (const pid of CORE_NURSING_PATHWAYS) {
+        const lesson = provider.getFullLesson(pid);
+        assert.ok(lesson, `${provider.slug} missing for ${pid}`);
+        assertLessonQuality(lesson!);
+      }
     }
   });
 });

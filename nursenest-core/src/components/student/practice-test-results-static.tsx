@@ -124,12 +124,6 @@ export function PracticeTestResultsStatic({
               </li>
             ))}
           </ul>
-          <Link
-            href={`/app/practice-tests/${testId}`}
-            className="mt-4 inline-flex text-sm font-semibold text-primary underline"
-          >
-            Open full review on test page
-          </Link>
         </div>
       ) : results.incorrectQuestionIds && results.incorrectQuestionIds.length > 0 ? (
         <div className="nn-card p-6">

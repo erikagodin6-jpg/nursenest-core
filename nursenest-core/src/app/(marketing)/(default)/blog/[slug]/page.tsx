@@ -5,17 +5,23 @@ import { BlogPostDistributionFooter } from "@/components/blog/blog-post-distribu
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { applyAutoLinksToHtml } from "@/lib/blog/blog-auto-link-html";
-import { stripBrokenOrEmptyImagesFromHtml } from "@/lib/blog/blog-image-workflow";
+import { parseInternalLinkPlanJson, stripBrokenOrEmptyImagesFromHtml } from "@/lib/blog/blog-image-workflow";
 import {
   getBlogPostMetaBySlug,
   getPublishedBlogPostBySlug,
   isBlogPostMetaVisible,
 } from "@/lib/blog/safe-blog-queries";
 import { getStaticBlogPost, staticRecordToBlogDisplay } from "@/lib/blog/static-blog-posts";
-import { BlogPostingJsonLd } from "@/components/seo/seo-json-ld";
+import { BlogFaqPageJsonLd, BlogPostingJsonLd } from "@/components/seo/seo-json-ld";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
+import {
+  blogDisplayCrumbsFromSeo,
+  blogPostSchemaItemsForPublic,
+  blogSchemaKeywords,
+  resolveOpenGraphCopy,
+  resolvePublicCanonicalUrl,
+} from "@/lib/blog/blog-seo-automation";
 import { blogPostBreadcrumbsWithOptionalCategory } from "@/lib/seo/pathway-breadcrumbs";
-import { absoluteUrl } from "@/lib/seo/site-origin";
 import type { BlogPost } from "@prisma/client";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -29,16 +35,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!visible) return {};
   const post = await getBlogPostMetaBySlug(slug);
   if (!post) return {};
+  const seo = parseInternalLinkPlanJson(post.internalLinkPlan).seo;
   const title = post.seoTitle?.trim() || post.title;
   const description = (post.seoDescription?.trim() || post.excerpt).slice(0, 160);
+  const og = resolveOpenGraphCopy(seo, title, description);
+  const canonical = resolvePublicCanonicalUrl(slug, seo);
   return {
     title,
     description,
-    alternates: { canonical: absoluteUrl(`/blog/${slug}`) },
+    alternates: { canonical },
     openGraph: {
-      title,
-      description,
-      url: absoluteUrl(`/blog/${slug}`),
+      title: og.title,
+      description: og.description,
+      url: canonical,
       type: "article",
     },
   };
@@ -60,7 +69,20 @@ export default async function BlogPostPage({ params }: Props) {
   }
   if (!post) notFound();
 
-  const { crumbs, schemaItems } = blogPostBreadcrumbsWithOptionalCategory(post.title, slug, post.category);
+  const seo = isDbPost(post) ? parseInternalLinkPlanJson(post.internalLinkPlan).seo : null;
+  const crumbs = isDbPost(post)
+    ? blogDisplayCrumbsFromSeo(seo, post.title, slug, post.category)
+    : blogPostBreadcrumbsWithOptionalCategory(post.title, slug, post.category).crumbs;
+  const schemaItems = isDbPost(post)
+    ? blogPostSchemaItemsForPublic(post.title, slug, post.category)
+    : blogPostBreadcrumbsWithOptionalCategory(post.title, slug, post.category).schemaItems;
+
+  const faqItems =
+    isDbPost(post) && post.faqBlock && typeof post.faqBlock === "object" && "items" in post.faqBlock
+      ? ((post.faqBlock as { items?: { q: string; a: string }[] }).items ?? []).filter((x) => x.q?.trim() && x.a?.trim())
+      : [];
+  const emitFaqJsonLd =
+    faqItems.length >= 2 && (seo === null ? true : seo.emitFaqSchema !== false);
 
   const publishedAt = isDbPost(post) ? post.publishAt ?? post.createdAt : post.publishAt ?? post.createdAt;
   const bodyHtml = isDbPost(post)
@@ -74,6 +96,8 @@ export default async function BlogPostPage({ params }: Props) {
       )
     : stripBrokenOrEmptyImagesFromHtml(post.body);
 
+  const schemaKeywords = isDbPost(post) ? blogSchemaKeywords(seo, post.tags) : blogSchemaKeywords(null, post.tags);
+
   return (
     <article className="mx-auto max-w-3xl px-4 py-12">
       <BlogPostingJsonLd
@@ -82,7 +106,12 @@ export default async function BlogPostPage({ params }: Props) {
         description={(post.seoDescription?.trim() || post.excerpt).slice(0, 320)}
         datePublished={publishedAt.toISOString()}
         coverImage={post.coverImage ?? null}
+        keywords={schemaKeywords.length ? schemaKeywords : undefined}
+        articleSection={isDbPost(post) ? post.category : post.category ?? null}
       />
+      {emitFaqJsonLd ? (
+        <BlogFaqPageJsonLd items={faqItems.map((f) => ({ question: f.q, answer: f.a }))} />
+      ) : null}
       <BreadcrumbJsonLd items={schemaItems} />
       <div className="mb-6">
         <BreadcrumbTrail items={crumbs} />

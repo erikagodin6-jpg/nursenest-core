@@ -749,6 +749,35 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   display: none !important;
 }
 
+/*
+ * Study flow cards (pathway hubs, lessons, bank panels): one radius + shadow recipe.
+ * Prefer over ad-hoc `border-2 shadow-sm` stacks.
+ */
+.nn-study-card {
+  border-radius: 1rem;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-card);
+}
+
+.nn-study-card--wash {
+  background: var(--nn-presentation-ribbon);
+  border-color: color-mix(in srgb, var(--theme-primary) 10%, var(--border-subtle));
+}
+
+.nn-study-callout {
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--theme-primary) 14%, var(--border-subtle));
+  background: color-mix(in srgb, var(--theme-primary) 5%, var(--bg-card));
+}
+
+/* Default CAT / timed session chrome: theme-native wash (not flat slate) */
+html[data-theme] .nn-exam-session {
+  background: var(--nn-presentation-wash);
+  border-color: var(--border-subtle);
+  box-shadow: var(--shadow-card);
+}
+
 /* Themed exam shell: inherits tonal layers when `[data-theme]` is set */
 html[data-theme] .nn-exam-session.nn-exam-session--neutral {
   background: var(--bg-section-alt);
@@ -770,4 +799,11 @@ html[data-theme] .nn-exam-session.nn-exam-session--neutral {
   background: rgb(15 23 42 / 0.92);
   border-color: #334155;
   box-shadow: 0 1px 0 rgb(0 0 0 / 0.25);
+}
+
+html[data-theme="dark-clinical"] .nn-exam-session:not(.nn-exam-session--neutral),
+html[data-theme="dark-academia"] .nn-exam-session:not(.nn-exam-session--neutral),
+html[data-theme="dark-mode"] .nn-exam-session:not(.nn-exam-session--neutral) {
+  background: var(--bg-section-alt);
+  border-color: var(--border-medium);
 }

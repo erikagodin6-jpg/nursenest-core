@@ -7,6 +7,7 @@ import { prisma } from "@/lib/db";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { isCatExamSimulationFeatureEnabled } from "@/lib/exams/cat-exam-simulation";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import {
   resolveCatPostExamTimedLimitSec,
   resolveCatSelectionBasisForPost,

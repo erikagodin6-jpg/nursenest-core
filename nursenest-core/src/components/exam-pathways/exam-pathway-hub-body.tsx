@@ -67,7 +67,7 @@ export function ExamPathwayHubBody({
             destination_type: "signup",
             link_target: "signup",
           }}
-          className="inline-flex min-h-[52px] w-full items-center justify-center rounded-full bg-primary px-8 py-3 text-base font-semibold text-primary-foreground shadow-sm transition hover:brightness-110 sm:w-auto sm:min-h-[56px]"
+          className="inline-flex min-h-[52px] w-full items-center justify-center rounded-full nn-btn-primary px-8 py-3 text-base font-semibold shadow-none transition hover:brightness-[1.03] sm:w-auto sm:min-h-[56px]"
         >
           {isWaitlist ? "Join or sign in" : "Create free account"}
           <ArrowRight className="ml-2 h-5 w-5" />
@@ -82,7 +82,7 @@ export function ExamPathwayHubBody({
             destination_type: "marketing_questions",
             link_target: "marketing_questions_hub",
           }}
-          className="inline-flex min-h-[52px] w-full items-center justify-center rounded-full border-2 border-primary/35 bg-primary/5 px-8 py-3 text-base font-semibold text-primary transition hover:bg-primary/10 sm:w-auto sm:min-h-[56px]"
+          className="inline-flex min-h-[52px] w-full items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--theme-primary)_24%,var(--border-subtle))] bg-[color-mix(in_srgb,var(--theme-primary)_6%,var(--bg-card))] px-8 py-3 text-base font-semibold text-[var(--theme-primary)] transition hover:bg-[color-mix(in_srgb,var(--theme-primary)_10%,var(--bg-card))] sm:w-auto sm:min-h-[56px]"
         >
           Try {pathway.shortName} questions
         </MarketingTrackedLink>
@@ -97,16 +97,16 @@ export function ExamPathwayHubBody({
             destination_type: isSignedIn ? "app_entry" : "marketing_pricing",
             link_target: isSignedIn ? "app_dashboard" : "marketing_pricing_hub",
           }}
-          className="inline-flex min-h-[48px] w-full items-center justify-center rounded-full border border-[var(--theme-input-border)] px-6 py-2.5 text-sm font-semibold text-[var(--theme-heading-text)] hover:bg-[var(--theme-muted-surface)] sm:w-auto"
+          className="inline-flex min-h-[48px] w-full items-center justify-center rounded-full nn-btn-secondary px-6 py-2.5 text-sm font-semibold sm:w-auto"
         >
           {tertiaryLabel}
         </MarketingTrackedLink>
       </div>
 
       {emphasizeCatPracticeTests ? (
-        <div className="mt-6 rounded-xl border border-primary/20 bg-primary/5 px-4 py-4 text-sm text-[var(--theme-body-text)] sm:px-5">
-          <p className="font-semibold text-[var(--theme-heading-text)]">Computerized adaptive (CAT) practice tests</p>
-          <p className="mt-1 text-[var(--theme-muted-text)]">
+        <div className="nn-study-callout mt-6 px-4 py-4 sm:px-5">
+          <p className="nn-marketing-h4">Computerized adaptive (CAT) practice tests</p>
+          <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">
             After sign-in, open Practice tests to run CAT-style sessions matched to your pathway (length, topics, and review
             flow). Full adaptive depth unlocks with a plan that covers this track.
           </p>
@@ -122,7 +122,7 @@ export function ExamPathwayHubBody({
                 destination_type: "cat_practice_tests",
                 link_target: "app_pathway_cat_start",
               }}
-              className="mt-3 inline-flex font-semibold text-primary hover:underline"
+              className="nn-marketing-body-sm mt-3 inline-flex font-semibold text-primary hover:underline"
             >
               Start pathway CAT →
             </MarketingTrackedLink>
@@ -138,7 +138,7 @@ export function ExamPathwayHubBody({
                 destination_type: "signup",
                 link_target: "signup",
               }}
-              className="mt-3 inline-flex font-semibold text-primary hover:underline"
+              className="nn-marketing-body-sm mt-3 inline-flex font-semibold text-primary hover:underline"
             >
               Create a free account to start →
             </MarketingTrackedLink>
@@ -146,9 +146,9 @@ export function ExamPathwayHubBody({
         </div>
       ) : null}
 
-      <aside className="mt-10 rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]/80 px-4 py-4 text-sm text-[var(--theme-body-text)] sm:px-5">
-        <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">Study loop</p>
-        <p className="mt-2 text-[var(--theme-muted-text)]">
+      <aside className="nn-study-card nn-study-card--wash mt-10 px-4 py-4 sm:px-5">
+        <p className="nn-marketing-label">Study loop</p>
+        <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">
           Start from{" "}
           <Link href={lessonsHref} className="font-semibold text-primary hover:underline">
             clinical lessons
