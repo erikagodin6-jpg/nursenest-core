@@ -339,7 +339,7 @@ function MetadataTables({
             </thead>
             <tbody>
               {data.lessons.map((l) => (
-                <tr key={l.slug} className="border-b border-border/40">
+                <tr key={l.id} className="border-b border-border/40">
                   <td className="px-3 py-2">
                     <span className="font-mono text-xs">{l.slug}</span>
                     <div className="text-xs text-muted-foreground">{l.title}</div>
@@ -441,6 +441,7 @@ function SlugTable({ rows }: { rows: SlugRow[] }) {
 }
 
 type LinkingRow = {
+  id: string;
   slug: string;
   title: string;
   internalAnchors: number;
@@ -469,7 +470,7 @@ function LinkingTable({ rows }: { rows: LinkingRow[] }) {
           </thead>
           <tbody>
             {rows.map((r) => (
-              <tr key={r.slug} className="border-b border-border/40">
+              <tr key={r.id} className="border-b border-border/40">
                 <td className="py-2">
                   <span className="font-mono text-xs">{r.slug}</span>
                   <div className="text-xs text-muted-foreground">{r.title}</div>
@@ -545,7 +546,7 @@ function BrokenTable({ rows }: { rows: BrokenRow[] }) {
   );
 }
 
-type OppRow = { slug: string; title: string; exam: string | null; hint: string; editHref: string };
+type OppRow = { id: string; slug: string; title: string; exam: string | null; hints: string[]; editHref: string };
 
 function OppTable({ rows }: { rows: OppRow[] }) {
   return (
@@ -558,19 +559,25 @@ function OppTable({ rows }: { rows: OppRow[] }) {
             <tr>
               <th className="py-2">Post</th>
               <th className="py-2">Exam</th>
-              <th className="py-2">Hint</th>
+              <th className="py-2">Hints</th>
               <th className="py-2 text-right">Open</th>
             </tr>
           </thead>
           <tbody>
             {rows.map((r) => (
-              <tr key={`${r.slug}-${r.hint.slice(0, 20)}`} className="border-b border-border/40 align-top">
+              <tr key={r.id} className="border-b border-border/40 align-top">
                 <td className="py-2">
                   <span className="font-mono text-xs">{r.slug}</span>
                   <div className="text-xs text-muted-foreground">{r.title}</div>
                 </td>
                 <td className="py-2 text-xs">{r.exam ?? "—"}</td>
-                <td className="py-2 text-xs">{r.hint}</td>
+                <td className="py-2 text-xs">
+                  <ul className="list-disc space-y-1 pl-4">
+                    {r.hints.map((h) => (
+                      <li key={h}>{h}</li>
+                    ))}
+                  </ul>
+                </td>
                 <td className="py-2 text-right">
                   <Link className="text-primary underline" href={r.editHref}>
                     Control panel

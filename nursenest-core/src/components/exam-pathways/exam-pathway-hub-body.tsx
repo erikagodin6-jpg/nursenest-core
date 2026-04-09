@@ -66,6 +66,29 @@ export function ExamPathwayHubBody({
         npSeoAliasSegment={npSeoAliasSegment}
       />
 
+      {usNpSiblings.length > 0 ? (
+        <aside className="nn-study-card nn-study-card--wash mt-8 px-4 py-4 sm:px-5" aria-labelledby="us-np-sibling-tracks">
+          <p id="us-np-sibling-tracks" className="nn-marketing-label">
+            Other US NP tracks
+          </p>
+          <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">
+            Studying a different board focus? Each specialty has its own hub and question scope.
+          </p>
+          <ul className="mt-3 flex flex-wrap gap-2">
+            {usNpSiblings.map((p) => (
+              <li key={p.id}>
+                <Link
+                  href={buildExamPathwayPath(p)}
+                  className="inline-flex rounded-full border border-border bg-card px-3 py-1.5 text-sm font-medium text-primary hover:border-primary/40"
+                >
+                  {p.shortName}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </aside>
+      ) : null}
+
       <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
         <MarketingTrackedLink
           href="/signup"

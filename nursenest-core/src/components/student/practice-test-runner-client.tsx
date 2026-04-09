@@ -305,7 +305,7 @@ export function PracticeTestRunnerClient({
   function linearPracticeMcqClasses(canonical: string): string {
     const selected = raw === canonical;
     const base =
-      "nn-qopt-surface min-h-[3.25rem] w-full px-4 py-4 text-left text-base font-normal leading-relaxed text-[var(--theme-body-text)] transition sm:min-h-[3.5rem] sm:px-5";
+      "nn-qopt-surface flex min-h-[3.25rem] w-full items-start gap-3 px-4 py-4 text-left text-base font-normal leading-relaxed text-[var(--theme-body-text)] transition sm:min-h-[3.5rem] sm:px-5";
     const idle = "nn-qopt-surface--interactive";
     const picked = "nn-qopt-surface--selected";
     if (isLinearEngine && currentCommitted && linearDelivery === "exam") {
@@ -944,7 +944,7 @@ export function PracticeTestRunnerClient({
                   <p className="nn-question-stem">{current.stem}</p>
                 </div>
                 {isSata ? (
-                  <ul className="space-y-3">
+                  <ul className="space-y-3" role="group" aria-label="Answer choices">
                     {optsCanonical.map((canonical, i) => {
                       const label = optsDisplay[i] ?? canonical;
                       const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
@@ -963,14 +963,15 @@ export function PracticeTestRunnerClient({
                               }}
                               className="mt-1 size-[1.125rem] shrink-0 rounded border-border text-primary focus-visible:ring-2 focus-visible:ring-primary/30 disabled:opacity-50 sm:size-4"
                             />
-                            <span className="text-[var(--theme-body-text)]">{label}</span>
+                            <QuestionChoiceLetter index={i} />
+                            <span className="min-w-0 flex-1 text-[var(--theme-body-text)]">{label}</span>
                           </label>
                         </li>
                       );
                     })}
                   </ul>
                 ) : (
-                  <ul className="space-y-3">
+                  <ul className="space-y-3" role="radiogroup" aria-label="Answer choices">
                     {optsCanonical.map((canonical, i) => {
                       const label = optsDisplay[i] ?? canonical;
                       const locked = isLinearEngine && currentCommitted;
@@ -982,7 +983,8 @@ export function PracticeTestRunnerClient({
                             onClick={() => setAnswerForCurrent(canonical)}
                             className={linearPracticeMcqClasses(canonical)}
                           >
-                            {label}
+                            <QuestionChoiceLetter index={i} />
+                            <span className="min-w-0 flex-1">{label}</span>
                           </button>
                         </li>
                       );
@@ -1015,7 +1017,7 @@ export function PracticeTestRunnerClient({
                     Hide rationale
                   </span>
                 </summary>
-                <div className="nn-question-rationale-card__body nn-marketing-body-sm px-4 py-4 sm:px-6 sm:py-5">
+                <div className="nn-question-rationale-card__body nn-rationale-prose nn-marketing-body-sm px-4 py-4 sm:px-6 sm:py-5">
                   {linearFeedback.rationale ? (
                     <p className="leading-relaxed text-[var(--theme-body-text)]">{linearFeedback.rationale}</p>
                   ) : (

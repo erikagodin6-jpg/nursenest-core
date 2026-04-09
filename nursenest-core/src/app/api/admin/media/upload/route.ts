@@ -1,5 +1,6 @@
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { prisma } from "@/lib/db";
+import { Prisma } from "@prisma/client";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { parseUploadKind, uploadAdminFileToSpaces } from "@/lib/storage/admin-upload-file-to-spaces";
 import { isSpacesUploadConfigured } from "@/lib/storage/spaces-config";
@@ -65,7 +66,7 @@ export async function POST(req: Request) {
       tags,
       uploadedById: gate.admin.userId,
       usageRefCount: null,
-      usageRefs: null,
+      usageRefs: Prisma.JsonNull,
     },
   });
 

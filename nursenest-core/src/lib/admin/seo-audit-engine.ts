@@ -203,25 +203,24 @@ export async function loadMetadataAudit(prisma: PrismaClient): Promise<{
     },
   });
 
-  const blogRows: MetadataRow[] = blogs
-    .map((p) => {
-      const issues: MetadataIssue[] = [];
-      if (!p.seoTitle?.trim()) issues.push("seoTitle");
-      if (!p.seoDescription?.trim()) issues.push("seoDescription");
-      if (!p.excerpt?.trim()) issues.push("excerpt");
-      if (issues.length === 0) return null;
-      return {
-        kind: "blog" as const,
-        id: p.id,
-        slug: p.slug,
-        title: p.title,
-        postStatus: p.postStatus,
-        issues,
-        editHref: `/admin/blog/control-panel?id=${encodeURIComponent(p.id)}`,
-        publicHref: `/blog/${encodeURIComponent(p.slug)}`,
-      };
-    })
-    .filter((x): x is MetadataRow => x !== null);
+  const blogRows: MetadataRow[] = [];
+  for (const p of blogs) {
+    const issues: MetadataIssue[] = [];
+    if (!p.seoTitle?.trim()) issues.push("seoTitle");
+    if (!p.seoDescription?.trim()) issues.push("seoDescription");
+    if (!p.excerpt?.trim()) issues.push("excerpt");
+    if (issues.length === 0) continue;
+    blogRows.push({
+      kind: "blog",
+      id: p.id,
+      slug: p.slug,
+      title: p.title,
+      postStatus: String(p.postStatus),
+      issues,
+      editHref: `/admin/blog/control-panel?id=${encodeURIComponent(p.id)}`,
+      publicHref: `/blog/${encodeURIComponent(p.slug)}`,
+    });
+  }
 
   const lessons = await prisma.contentItem.findMany({
     where: { type: "lesson" },
@@ -238,24 +237,23 @@ export async function loadMetadataAudit(prisma: PrismaClient): Promise<{
     },
   });
 
-  const lessonRows: LessonMetaRow[] = lessons
-    .map((l) => {
-      const issues: Array<"seoTitle" | "seoDescription" | "summary"> = [];
-      if (!l.seoTitle?.trim()) issues.push("seoTitle");
-      if (!l.seoDescription?.trim()) issues.push("seoDescription");
-      if (!l.summary?.trim()) issues.push("summary");
-      if (issues.length === 0) return null;
-      return {
-        kind: "lesson" as const,
-        id: l.id,
-        slug: l.slug,
-        title: l.title,
-        status: l.status,
-        issues,
-        editHref: `/admin/lessons/${encodeURIComponent(l.id)}`,
-      };
-    })
-    .filter((x): x is LessonMetaRow => x !== null);
+  const lessonRows: LessonMetaRow[] = [];
+  for (const l of lessons) {
+    const issues: Array<"seoTitle" | "seoDescription" | "summary"> = [];
+    if (!l.seoTitle?.trim()) issues.push("seoTitle");
+    if (!l.seoDescription?.trim()) issues.push("seoDescription");
+    if (!l.summary?.trim()) issues.push("summary");
+    if (issues.length === 0) continue;
+    lessonRows.push({
+      kind: "lesson",
+      id: l.id,
+      slug: l.slug,
+      title: l.title,
+      status: l.status,
+      issues,
+      editHref: `/admin/lessons/${encodeURIComponent(l.id)}`,
+    });
+  }
 
   const pls = await prisma.pathwayLesson.findMany({
     orderBy: { updatedAt: "desc" },

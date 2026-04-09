@@ -16,6 +16,7 @@ import type { EmptyCopyI18n } from "@/lib/student/gated-state-messages-i18n";
 import { examPoolEmptyKeys, examStartFailureKey } from "@/lib/student/gated-state-messages-i18n";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { readLearnerStudyDefaults } from "@/lib/student/learner-study-defaults";
+import { QuestionChoiceLetter } from "@/components/student/question-choice-letter";
 import { PostSessionExamInsights } from "@/components/student/post-session-exam-insights";
 import { PostTestStudyNextCard } from "@/components/student/post-test-study-next-card";
 
@@ -728,7 +729,7 @@ export function ExamPracticeClient({
           </div>
 
           {q.questionType === "SATA" ? (
-            <ul className="space-y-3">
+            <ul className="space-y-3" role="group" aria-label={t("learner.qbank.examUi.answersHeading")}>
               {optsCanonical.map((canonical, i) => {
                 const label = optsDisplay[i] ?? canonical;
                 const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
@@ -749,14 +750,15 @@ export function ExamPracticeClient({
                         }}
                         className="mt-1 size-[1.125rem] shrink-0 rounded border-border text-primary focus-visible:ring-2 focus-visible:ring-primary/30 sm:size-4"
                       />
-                      <span className="text-[var(--theme-body-text)]">{label}</span>
+                      <QuestionChoiceLetter index={i} />
+                      <span className="min-w-0 flex-1 text-[var(--theme-body-text)]">{label}</span>
                     </label>
                   </li>
                 );
               })}
             </ul>
           ) : (
-            <ul className="space-y-3">
+            <ul className="space-y-3" role="radiogroup" aria-label={t("learner.qbank.examUi.answersHeading")}>
               {optsCanonical.map((canonical, i) => {
                 const label = optsDisplay[i] ?? canonical;
                 const picked = raw === canonical;
@@ -765,11 +767,12 @@ export function ExamPracticeClient({
                     <button
                       type="button"
                       onClick={() => setAnswers((a) => ({ ...a, [q.id]: canonical }))}
-                      className={`min-h-[3.25rem] w-full px-4 py-4 text-left text-base font-normal leading-relaxed text-[var(--theme-body-text)] transition sm:min-h-[3.5rem] sm:px-5 nn-qopt-surface nn-qopt-surface--interactive ${
-                        picked ? "nn-qopt-surface--selected font-medium" : ""
+                      className={`flex min-h-[3.25rem] w-full items-start gap-3 px-4 py-4 text-left text-base font-normal leading-relaxed text-[var(--theme-body-text)] transition sm:min-h-[3.5rem] sm:px-5 nn-qopt-surface nn-qopt-surface--interactive ${
+                        picked ? "nn-qopt-surface--selected" : ""
                       }`}
                     >
-                      {label}
+                      <QuestionChoiceLetter index={i} />
+                      <span className={`min-w-0 flex-1 ${picked ? "font-semibold" : ""}`}>{label}</span>
                     </button>
                   </li>
                 );

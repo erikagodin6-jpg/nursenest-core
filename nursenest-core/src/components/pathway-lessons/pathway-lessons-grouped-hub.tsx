@@ -110,22 +110,22 @@ export function PathwayLessonsGroupedHub({
   return (
     <div className="space-y-10">
       <section className="nn-study-card nn-study-card--wash p-5 sm:p-6" aria-labelledby="lessons-guided-path">
-        <p className="nn-marketing-label nn-marketing-label--accent">Your study path</p>
+        <p className="nn-marketing-label nn-marketing-label--accent">How to use this hub</p>
         <h2 id="lessons-guided-path" className="nn-marketing-h3 mt-2">
-          Work by topic, then drill questions in the same exam track
+          Learn the concept, then stress-test it under exam rules
         </h2>
         <ol className="nn-marketing-body-sm mt-4 list-none space-y-2.5 pl-0 text-[var(--theme-muted-text)]">
           <li>
-            <span className="font-semibold text-[var(--theme-heading-text)]">1. Pick a topic</span> below — groups follow
-            published lesson categories for {pathway.shortName}.
+            <span className="font-semibold text-[var(--theme-heading-text)]">1. Choose a clinical topic</span> — grouped the way{" "}
+            {pathway.shortName} expects you to think on the floor and on the exam.
           </li>
           <li>
-            <span className="font-semibold text-[var(--theme-heading-text)]">2. Read the lesson</span> — preview sections stay
-            public; full depth matches your plan.
+            <span className="font-semibold text-[var(--theme-heading-text)]">2. Read for judgment</span> — previews stay public;
+            subscribers see full depth aligned to your plan.
           </li>
           <li>
-            <span className="font-semibold text-[var(--theme-heading-text)]">3. Practice the topic</span> in the question bank
-            with the same pathway scope, then revisit weak areas.
+            <span className="font-semibold text-[var(--theme-heading-text)]">3. Drill items in the same scope</span> — practice
+            questions match this pathway, then circle back wherever rationales still bite.
           </li>
         </ol>
       </section>
@@ -153,7 +153,7 @@ export function PathwayLessonsGroupedHub({
             >
               <div>
                 <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-primary)]">
-                  Topic {gi + 1} · {group.lessons.length} lesson{group.lessons.length === 1 ? "" : "s"}
+                  Block {gi + 1} · {group.lessons.length} lesson{group.lessons.length === 1 ? "" : "s"}
                 </p>
                 <h2 id={`topic-heading-${group.topicSlug}`} className="nn-marketing-h2 mt-1">
                   {group.label}
@@ -165,20 +165,20 @@ export function PathwayLessonsGroupedHub({
                     href={`${lessonsBasePath}/topics/${encodeURIComponent(group.topicSlug)}`}
                     className="inline-flex min-h-11 items-center rounded-full nn-btn-secondary px-4 py-2 text-sm font-semibold"
                   >
-                    Topic hub
+                    Topic index
                   </Link>
                 ) : null}
                 <Link
                   href={marketingQuestionsTopicHref(pathway, group.lessons[0]?.topic ?? group.label)}
                   className="inline-flex min-h-11 items-center rounded-full nn-btn-secondary px-4 py-2 text-sm font-semibold"
                 >
-                  Question bank · this topic
+                  Practice questions · this topic
                 </Link>
                 <Link
                   href={appPracticeTopicHref(pathway, group.lessons[0]?.topic ?? group.label)}
                   className="inline-flex min-h-11 items-center rounded-full nn-btn-primary px-4 py-2 text-sm font-semibold shadow-none"
                 >
-                  Practice in app
+                  Drill in app
                 </Link>
               </div>
             </div>
@@ -194,7 +194,7 @@ export function PathwayLessonsGroupedHub({
                     <div className="nn-study-card flex h-full flex-col p-4 sm:p-5">
                       <div className="flex flex-wrap items-start justify-between gap-2">
                         <p className="nn-marketing-caption font-semibold text-[var(--theme-muted-text)]">
-                          Step {idx + 1} · {l.topic}
+                          Item {idx + 1} · {l.topic}
                         </p>
                         {showProgress ? <PathwayLessonProgressBadge status={ps} /> : null}
                       </div>
@@ -207,7 +207,7 @@ export function PathwayLessonsGroupedHub({
                       {isNp && related.length > 0 ? (
                         <div className="mt-4 border-t border-border/50 pt-4">
                           <p className="nn-marketing-caption font-semibold text-[var(--theme-heading-text)]">
-                            Related lessons on this page
+                            More in this topic
                           </p>
                           <ul className="mt-2 grid list-none gap-2 p-0 sm:grid-cols-2">
                             {related.map((r) => (
@@ -229,9 +229,9 @@ export function PathwayLessonsGroupedHub({
                             href={marketingQuestionsTopicHref(pathway, l.topic ?? group.label)}
                             className="nn-surface-elevated block rounded-xl p-3 transition-colors hover:border-primary/35"
                           >
-                            <p className="nn-marketing-caption font-semibold text-[var(--theme-primary)]">Question bank</p>
+                            <p className="nn-marketing-caption font-semibold text-[var(--theme-primary)]">Practice hub</p>
                             <p className="nn-marketing-body-sm mt-0.5 text-[var(--theme-muted-text)]">
-                              Hub practice for this topic
+                              Items filtered to this topic
                             </p>
                           </Link>
                           <Link
@@ -250,14 +250,14 @@ export function PathwayLessonsGroupedHub({
                           href={href}
                           className="inline-flex min-h-10 items-center rounded-full nn-btn-primary px-4 py-2 text-sm font-semibold shadow-none"
                         >
-                          Open lesson
+                          Read lesson
                         </Link>
                         {!isNp ? (
                           <Link
                             href={appPracticeTopicHref(pathway, l.topic)}
                             className="inline-flex min-h-10 items-center rounded-full nn-btn-secondary px-4 py-2 text-sm font-semibold"
                           >
-                            Practice this topic
+                            Drill this topic
                           </Link>
                         ) : null}
                       </div>
@@ -271,10 +271,10 @@ export function PathwayLessonsGroupedHub({
       </div>
 
       <section className="nn-study-callout p-5 sm:p-6">
-        <h2 className="nn-marketing-h3">Recommended loop</h2>
+        <h2 className="nn-marketing-h3">What works on the floor and on the test</h2>
         <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">
-          Lesson → pathway-scoped questions → rationales → next weak topic. Stay inside {pathway.shortName} so scope and
-          language match your exam.
+          Read → answer items in this same licensure scope → read rationales → chase the topic that still feels shaky. Keeping
+          everything inside {pathway.shortName} protects you from mixed US/Canada language or out-of-scope content.
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
           <Link

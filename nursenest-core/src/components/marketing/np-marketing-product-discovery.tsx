@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ExamFamily } from "@prisma/client";
 import { buildExamPathwayPath, EXAM_PATHWAYS, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 
 const US_NP_TRACK_ORDER = ["us-np-fnp", "us-np-agpcnp", "us-np-pmhnp"] as const;
@@ -47,9 +48,12 @@ function CaNpCnmpleSection() {
 }
 
 function UsNpTracksSection() {
-  const tracks = US_NP_TRACK_ORDER.map((id) => EXAM_PATHWAYS.find((p) => p.id === id)).filter(
-    (p): p is (typeof EXAM_PATHWAYS)[number] =>
-      Boolean(p) && p.examFamily === ExamFamily.NP && p.countrySlug === "us" && p.status === "active",
+  const tracks = US_NP_TRACK_ORDER.map((id) => EXAM_PATHWAYS.find((row) => row.id === id)).filter(
+    (p): p is ExamPathwayDefinition =>
+      p !== undefined &&
+      p.examFamily === ExamFamily.NP &&
+      p.countrySlug === "us" &&
+      p.status === "active",
   );
 
   return (
