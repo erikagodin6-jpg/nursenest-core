@@ -22,21 +22,28 @@ const schema = z.object({
   ]),
 });
 
+/** Paths under `data/materialized/` only — keeps runtime reads and NFT tracing scoped (see turbopackIgnore). */
+const MATERIALIZED_JSON_KEYS = [
+  "data/materialized/rn-pn-replit-batch-2026/generation-stats.json",
+  "data/materialized/rn-pn-replit-batch-2026/source-map.json",
+  "data/materialized/rn-pn-replit-batch-2026/practice-exam-presets.json",
+  "data/materialized/np-clinical-layer-2026/practice-exam-presets.json",
+] as const;
+
 function loadMaterializedMetadata() {
-  const root = process.cwd();
-  const files = [
-    "data/materialized/rn-pn-replit-batch-2026/generation-stats.json",
-    "data/materialized/rn-pn-replit-batch-2026/source-map.json",
-    "data/materialized/rn-pn-replit-batch-2026/practice-exam-presets.json",
-    "data/materialized/np-clinical-layer-2026/practice-exam-presets.json",
-  ];
+  const materializedRoot = path.join(
+    /* turbopackIgnore: true */ process.cwd(),
+    "data",
+    "materialized",
+  );
   const out: Record<string, unknown> = {};
-  for (const rel of files) {
+  for (const key of MATERIALIZED_JSON_KEYS) {
+    const relFromRepoRoot = key.slice("data/materialized/".length);
     try {
-      const abs = path.join(root, rel);
-      out[rel] = JSON.parse(readFileSync(abs, "utf8"));
+      const abs = path.join(materializedRoot, relFromRepoRoot);
+      out[key] = JSON.parse(readFileSync(/* turbopackIgnore: true */ abs, "utf8"));
     } catch {
-      out[rel] = null;
+      out[key] = null;
     }
   }
   return out;

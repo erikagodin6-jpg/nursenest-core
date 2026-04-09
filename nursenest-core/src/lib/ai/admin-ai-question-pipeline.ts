@@ -223,3 +223,26 @@ export function payloadRecordFromNormalized(n: NormalizedQuestionDraft): Record<
   }
   return base;
 }
+
+/** Calls the model for one or more items; batch steps use `quantity: 1`. */
+export async function openAiExamQuestionItemsForContext(
+  ctx: QuestionGenerationContext,
+): Promise<{ items: unknown[]; totalTokens?: number }> {
+  const userPrompt = `${buildExamQuestionUserPrompt(ctx)}\n\nReturn ONLY a JSON array, no markdown.`;
+  const response = await openAiChatCompletion({
+    messages: [
+      { role: "system", content: buildExamQuestionSystemPrompt() },
+      { role: "user", content: userPrompt },
+    ],
+    temperature: 0.72,
+    maxTokens: ctx.quantity <= 1 ? 4500 : 12_000,
+  });
+  const raw = response.content?.trim() ?? "[]";
+  let items: unknown[] = [];
+  try {
+    items = parseJsonArrayFromModel(raw);
+  } catch {
+    throw new Error("Invalid JSON from model");
+  }
+  return { items, totalTokens: response.totalTokens };
+}

@@ -95,6 +95,11 @@ export function ExamQuestionsTool() {
 
   return (
     <div className="space-y-8">
+      <p className="text-sm">
+        <Link href="/admin/ai/exam-questions/batch" className="font-semibold text-primary underline">
+          Batch: one draft per topic (queue + dedup)
+        </Link>
+      </p>
       <div className="nn-card space-y-4 p-6">
         <p className="text-sm text-muted">
           Generates <strong>draft records</strong> for review (pathway/country/exam-aware prompts, rationales, lesson-link

@@ -113,11 +113,11 @@ const nextConfig: NextConfig = {
       return [];
     }
     return [
-      {
-        source: "/_next/static/:path*",
-        headers: [{ key: "Cache-Control", value: STATIC_ASSET_CACHE_CONTROL }],
-      },
-      /** Public marketing fallbacks + static marks (`/marketing/*`); complements long TTL on `/_next/static`. */
+      /**
+       * Do not set Cache-Control on `/_next/static/*`: Next.js already applies fingerprinted immutable caching,
+       * and overriding it triggers framework warnings without improving behavior.
+       */
+      /** Public marketing fallbacks + static marks (`/marketing/*`). */
       {
         source: "/marketing/:path*",
         headers: [{ key: "Cache-Control", value: STATIC_ASSET_CACHE_CONTROL }],

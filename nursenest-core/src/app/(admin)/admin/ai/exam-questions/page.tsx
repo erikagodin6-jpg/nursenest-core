@@ -7,9 +7,14 @@ export default async function AdminExamQuestionsPage() {
 
   return (
     <main className="mx-auto w-full max-w-3xl px-6 py-10">
-      <Link href="/admin" className="text-sm text-primary underline">
-        ← Admin
-      </Link>
+      <div className="flex flex-wrap gap-3 text-sm">
+        <Link href="/admin" className="text-primary underline">
+          ← Admin
+        </Link>
+        <Link href="/admin/ai/exam-questions/batch" className="text-primary underline">
+          Batch topics →
+        </Link>
+      </div>
       <h1 className="mt-4 text-2xl font-bold">AI question studio</h1>
       <p className="mt-2 text-sm text-muted">
         Requires <code className="rounded bg-black/5 px-1">AI_ADMIN_GENERATION_ENABLED=true</code> and OpenAI-compatible credentials.

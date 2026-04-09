@@ -2,6 +2,10 @@
   "name": "nursenest-core",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=20.9.0 <25",
+    "npm": ">=10.0.0"
+  },
   "overrides": {
     "next-auth": {
       "@auth/core": "0.37.2"
@@ -10,7 +14,7 @@
   "scripts": {
     "dev": "TMPDIR=${TMPDIR:-/tmp} next dev",
     "build": "node scripts/check-disk-before-build.mjs && prisma generate && TMPDIR=${TMPDIR:-/tmp} next build",
-    "build:deploy": "node scripts/check-disk-before-build.mjs && prisma generate && TMPDIR=${TMPDIR:-/tmp} next build && node scripts/post-build-prune.mjs",
+    "build:deploy": "npm run build && node scripts/post-build-prune.mjs",
     "start": "NODE_ENV=production next start -H 0.0.0.0 -p ${PORT:-3000}",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",

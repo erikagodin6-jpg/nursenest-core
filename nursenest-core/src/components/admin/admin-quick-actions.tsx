@@ -31,6 +31,7 @@ const actions = [
   { href: "/admin/users", label: "Users", desc: "Growth & roles", icon: Users, tone: "from-cyan-500/12 to-primary/10" },
   { href: "/admin/operations", label: "Site health", desc: "DB, APIs, safe mode", icon: Wrench, tone: "from-red-500/10 to-amber-500/10" },
   { href: "/admin/ai/exam-questions", label: "AI question studio", desc: "Drafts & section regen", icon: Stethoscope, tone: "from-indigo-500/12 to-purple-500/10" },
+  { href: "/admin/ai/exam-questions/batch", label: "AI question batch", desc: "One draft per topic + queue", icon: Stethoscope, tone: "from-sky-500/12 to-indigo-500/10" },
 ] as const;
 
 export function AdminQuickActions() {

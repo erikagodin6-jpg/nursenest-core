@@ -43,7 +43,6 @@ else
   npm install
 fi
 
-npx prisma generate
 npx prisma migrate deploy
 
 npm run build:deploy
