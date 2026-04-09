@@ -4,7 +4,10 @@ import { prisma } from "@/lib/db";
 import { withDatabaseFallback } from "@/lib/db/safe-database";
 import { pathwayExamQuestionMarketingWhere } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { getRnNclexLessonQuestionBankBridgeClauses } from "@/lib/lessons/rn-nclex-lesson-question-bank-bridge";
+import {
+  getRnNclexLessonQuestionBankBridgeClauses,
+  hasExplicitRnNclexLessonBridge,
+} from "@/lib/lessons/rn-nclex-lesson-question-bank-bridge";
 
 /** Upper bound for cross-link lists (lesson ↔ question bank). Single `findMany` uses `take` with this value. */
 export const RELATED_EXAM_QUESTIONS_CAP = 8;
@@ -190,6 +193,7 @@ export async function loadRelatedExamQuestionStemsForPathwayLesson(args: {
   const tokens = deriveTopicMatchTokens(lessonTitle, lessonTopicSlug);
 
   const bridgeFirst = getRnNclexLessonQuestionBankBridgeClauses(pathway.id, lessonSlug ?? "");
+  const skipTitleSlugTokenFallback = hasExplicitRnNclexLessonBridge(pathway.id, lessonSlug ?? "");
 
   const orClauses: Prisma.ExamQuestionWhereInput[] = [...bridgeFirst];
   if (topicTrim.length > 0) {
@@ -198,8 +202,10 @@ export async function loadRelatedExamQuestionStemsForPathwayLesson(args: {
   if (fromSlugPhrase.length > 0 && fromSlugPhrase !== topicTrim.toLowerCase()) {
     orClauses.push({ topic: { equals: fromSlugPhrase, mode: "insensitive" } });
   }
-  for (const tok of tokens) {
-    orClauses.push({ topic: { contains: tok, mode: "insensitive" } });
+  if (!skipTitleSlugTokenFallback) {
+    for (const tok of tokens) {
+      orClauses.push({ topic: { contains: tok, mode: "insensitive" } });
+    }
   }
   if (bodySystem?.trim()) {
     orClauses.push({ bodySystem: { equals: bodySystem.trim(), mode: "insensitive" } });

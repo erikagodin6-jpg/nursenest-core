@@ -28,6 +28,9 @@ import { LessonContinueStudyNextBlock } from "@/components/student/lesson-contin
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { loadLessonContinueStudyNext } from "@/lib/learner/lesson-context-study-next";
 import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { loadRelatedExamQuestionStemsForPathwayLesson } from "@/lib/lessons/lesson-question-cross-links";
+import { PathwayLessonRelatedQuestions } from "@/components/lessons/pathway-lesson-related-questions";
 
 function LessonBody({ content }: { content: unknown }) {
   if (Array.isArray(content)) {
@@ -273,6 +276,18 @@ export default async function LessonDetailPage({ params }: Props) {
     const record = resolvedLesson.record;
     const visible = visibleSectionsForLesson(record, true);
     const pathwayId = resolvedLesson.pathwayId;
+    const pathway = getExamPathwayById(pathwayId);
+    const relatedQuestionStems =
+      pathway != null
+        ? await loadRelatedExamQuestionStemsForPathwayLesson({
+            pathway,
+            lessonSlug: record.slug,
+            lessonTitle: record.title,
+            lessonTopic: record.topic,
+            lessonTopicSlug: record.topicSlug,
+            bodySystem: record.bodySystem,
+          })
+        : [];
     const pathwayQuality = classifyPathwayLesson(record);
     let pathwayContinue = null;
     if (userId && pathwayId) {
@@ -321,6 +336,14 @@ export default async function LessonDetailPage({ params }: Props) {
           </PremiumLessonShell>
         </div>
         <LessonContinueStudyNextBlock bundle={pathwayContinue} />
+        {pathway ? (
+          <PathwayLessonRelatedQuestions
+            pathway={pathway}
+            lessonTopic={record.topic}
+            topicSlug={record.topicSlug}
+            items={relatedQuestionStems}
+          />
+        ) : null}
         <div className="mt-10 flex flex-wrap gap-2 border-t border-border pt-6">
           <Link
             href="/app/questions"

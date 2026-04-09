@@ -10,14 +10,17 @@ const RN_NCLEX = ["us-rn-nclex-rn", "ca-rn-nclex-rn"] as const;
 /**
  * Tighter haystacks than legacy gold rows where we want the **map-aligned** lesson to win for RN candidates.
  */
+/** Above legacy gold-standard rows (max ~101 with topic bonus) so catalog RN lessons win on US/CA RN pathways. */
+const RN_CATALOG_WEIGHT = 103;
+
 export const RN_NCLEX_CATALOG_RATIONALE_ENTRIES: LessonRationaleMappingEntry[] = [
   {
     id: "rn-catalog-mi",
     lessonSlug: "myocardial-infarction-nclex-rn",
     domain: "disease",
     linkKind: "disease_process",
-    haystackPattern: /\b(myocardial\s+infarction|\bMI\b|stemi|nstemi|infarct(ion)?)\b/i,
-    baseWeight: 96,
+    haystackPattern: /\b(?:myocardial\s+infarction|stemi|nstemi|infarction|troponin)\b/i,
+    baseWeight: RN_CATALOG_WEIGHT,
     pathwayIdsAllow: [...RN_NCLEX],
   },
   {
@@ -26,7 +29,7 @@ export const RN_NCLEX_CATALOG_RATIONALE_ENTRIES: LessonRationaleMappingEntry[] =
     domain: "disease",
     linkKind: "disease_process",
     haystackPattern: /\b(heart\s+failure|\bCHF\b|HFrEF|HFpEF|reduced\s+ejection)\b/i,
-    baseWeight: 96,
+    baseWeight: RN_CATALOG_WEIGHT,
     pathwayIdsAllow: [...RN_NCLEX],
   },
   {
@@ -35,7 +38,7 @@ export const RN_NCLEX_CATALOG_RATIONALE_ENTRIES: LessonRationaleMappingEntry[] =
     domain: "disease",
     linkKind: "disease_process",
     haystackPattern: /\b(COPD|emphysema|chronic\s+bronchitis)\b/i,
-    baseWeight: 96,
+    baseWeight: RN_CATALOG_WEIGHT,
     pathwayIdsAllow: [...RN_NCLEX],
   },
   {
@@ -43,8 +46,8 @@ export const RN_NCLEX_CATALOG_RATIONALE_ENTRIES: LessonRationaleMappingEntry[] =
     lessonSlug: "pulmonary-embolism-nclex-rn",
     domain: "disease",
     linkKind: "disease_process",
-    haystackPattern: /\b(pulmonary\s+emboli|PE\b|VTE|deep\s+vein\s+thrombosis|DVT)\b/i,
-    baseWeight: 96,
+    haystackPattern: /\b(pulmonary\s+embol|pulmonary\s+emboli|\bpe\b|VTE|deep\s+vein\s+thrombosis|DVT)\b/i,
+    baseWeight: RN_CATALOG_WEIGHT,
     pathwayIdsAllow: [...RN_NCLEX],
   },
   {
@@ -53,7 +56,7 @@ export const RN_NCLEX_CATALOG_RATIONALE_ENTRIES: LessonRationaleMappingEntry[] =
     domain: "disease",
     linkKind: "disease_process",
     haystackPattern: /\b(sepsis|septic\s+shock|qSOFA|SOFA|lactate\s+clearance)\b/i,
-    baseWeight: 97,
+    baseWeight: RN_CATALOG_WEIGHT,
     pathwayIdsAllow: [...RN_NCLEX],
   },
   {
@@ -62,7 +65,7 @@ export const RN_NCLEX_CATALOG_RATIONALE_ENTRIES: LessonRationaleMappingEntry[] =
     domain: "disease",
     linkKind: "disease_process",
     haystackPattern: /\b(DKA|diabetic\s+ketoacidosis|ketoacidosis)\b/i,
-    baseWeight: 97,
+    baseWeight: RN_CATALOG_WEIGHT,
     pathwayIdsAllow: [...RN_NCLEX],
   },
   {
@@ -70,8 +73,8 @@ export const RN_NCLEX_CATALOG_RATIONALE_ENTRIES: LessonRationaleMappingEntry[] =
     lessonSlug: "eclampsia-nclex-rn",
     domain: "disease",
     linkKind: "disease_process",
-    haystackPattern: /\b(eclampsia|preeclampsia|seizure.*pregnan|magnesium.*obstetr)\b/i,
-    baseWeight: 96,
+    haystackPattern: /\b(eclampsia|preeclampsia|magnesium\s+sulfate|magnesium\s+for\s+seizure)\b/i,
+    baseWeight: RN_CATALOG_WEIGHT,
     pathwayIdsAllow: [...RN_NCLEX],
   },
   {
@@ -80,7 +83,7 @@ export const RN_NCLEX_CATALOG_RATIONALE_ENTRIES: LessonRationaleMappingEntry[] =
     domain: "disease",
     linkKind: "disease_process",
     haystackPattern: /\b(HELLP|hemolysis.*liver.*platelet)\b/i,
-    baseWeight: 96,
+    baseWeight: RN_CATALOG_WEIGHT,
     pathwayIdsAllow: [...RN_NCLEX],
   },
   {
@@ -89,7 +92,7 @@ export const RN_NCLEX_CATALOG_RATIONALE_ENTRIES: LessonRationaleMappingEntry[] =
     domain: "disease",
     linkKind: "disease_process",
     haystackPattern: /\b(Kawasaki|mucocutaneous\s+lymph)\b/i,
-    baseWeight: 96,
+    baseWeight: RN_CATALOG_WEIGHT,
     pathwayIdsAllow: [...RN_NCLEX],
   },
   {
@@ -98,7 +101,7 @@ export const RN_NCLEX_CATALOG_RATIONALE_ENTRIES: LessonRationaleMappingEntry[] =
     domain: "disease",
     linkKind: "disease_process",
     haystackPattern: /\b(RSV|respiratory\s+syncytial|bronchiolitis)\b/i,
-    baseWeight: 96,
+    baseWeight: RN_CATALOG_WEIGHT,
     pathwayIdsAllow: [...RN_NCLEX],
   },
   {
@@ -107,7 +110,7 @@ export const RN_NCLEX_CATALOG_RATIONALE_ENTRIES: LessonRationaleMappingEntry[] =
     domain: "disease",
     linkKind: "disease_process",
     haystackPattern: /\b(appendicitis|RLQ\s+pain|McBurney)\b/i,
-    baseWeight: 96,
+    baseWeight: RN_CATALOG_WEIGHT,
     pathwayIdsAllow: [...RN_NCLEX],
   },
   {
@@ -116,7 +119,7 @@ export const RN_NCLEX_CATALOG_RATIONALE_ENTRIES: LessonRationaleMappingEntry[] =
     domain: "disease",
     linkKind: "disease_process",
     haystackPattern: /\b(cholecystitis|gallbladder|biliary\s+colic|Murphy)\b/i,
-    baseWeight: 96,
+    baseWeight: RN_CATALOG_WEIGHT,
     pathwayIdsAllow: [...RN_NCLEX],
   },
   {
@@ -125,7 +128,7 @@ export const RN_NCLEX_CATALOG_RATIONALE_ENTRIES: LessonRationaleMappingEntry[] =
     domain: "disease",
     linkKind: "disease_process",
     haystackPattern: /\b(bowel\s+obstruction|intestinal\s+obstruction|ileus)\b/i,
-    baseWeight: 96,
+    baseWeight: RN_CATALOG_WEIGHT,
     pathwayIdsAllow: [...RN_NCLEX],
   },
   {
@@ -134,7 +137,7 @@ export const RN_NCLEX_CATALOG_RATIONALE_ENTRIES: LessonRationaleMappingEntry[] =
     domain: "disease",
     linkKind: "disease_process",
     haystackPattern: /\b(increased\s+intracranial|ICP|herniat|Cushing\s*(response|triad)?)\b/i,
-    baseWeight: 96,
+    baseWeight: RN_CATALOG_WEIGHT,
     pathwayIdsAllow: [...RN_NCLEX],
   },
   {
@@ -143,7 +146,7 @@ export const RN_NCLEX_CATALOG_RATIONALE_ENTRIES: LessonRationaleMappingEntry[] =
     domain: "disease",
     linkKind: "disease_process",
     haystackPattern: /\b(bacterial\s+meningitis|meningitis|kernig|brudzinski|CSF)\b/i,
-    baseWeight: 96,
+    baseWeight: RN_CATALOG_WEIGHT,
     pathwayIdsAllow: [...RN_NCLEX],
   },
   {
@@ -152,7 +155,7 @@ export const RN_NCLEX_CATALOG_RATIONALE_ENTRIES: LessonRationaleMappingEntry[] =
     domain: "disease",
     linkKind: "disease_process",
     haystackPattern: /\b(nephrotic|proteinuria|edema.*renal)\b/i,
-    baseWeight: 96,
+    baseWeight: RN_CATALOG_WEIGHT,
     pathwayIdsAllow: [...RN_NCLEX],
   },
   {
@@ -161,7 +164,7 @@ export const RN_NCLEX_CATALOG_RATIONALE_ENTRIES: LessonRationaleMappingEntry[] =
     domain: "disease",
     linkKind: "disease_process",
     haystackPattern: /\b(sickle\s+cell|vaso[\s-]?occlusive|acute\s+chest)\b/i,
-    baseWeight: 96,
+    baseWeight: RN_CATALOG_WEIGHT,
     pathwayIdsAllow: [...RN_NCLEX],
   },
   {
@@ -169,8 +172,9 @@ export const RN_NCLEX_CATALOG_RATIONALE_ENTRIES: LessonRationaleMappingEntry[] =
     lessonSlug: "acute-lymphoblastic-leukemia-nclex-rn",
     domain: "disease",
     linkKind: "disease_process",
-    haystackPattern: /\b(ALL\b|acute\s+lymphoblastic|lymphoblastic\s+leukemia)\b/i,
-    baseWeight: 96,
+    /** Haystack is lowercased — do not match bare “all” (ambiguous). */
+    haystackPattern: /\b(?:acute\s+lymphoblastic|lymphoblastic\s+leukemia|lymphoblastic)\b/i,
+    baseWeight: RN_CATALOG_WEIGHT,
     pathwayIdsAllow: [...RN_NCLEX],
   },
   {
@@ -178,8 +182,8 @@ export const RN_NCLEX_CATALOG_RATIONALE_ENTRIES: LessonRationaleMappingEntry[] =
     lessonSlug: "acute-myelogenous-leukemia-nclex-rn",
     domain: "disease",
     linkKind: "disease_process",
-    haystackPattern: /\b(AML\b|acute\s+myelogenous|myeloid\s+leukemia)\b/i,
-    baseWeight: 96,
+    haystackPattern: /\b(?:acute\s+myelogenous|acute\s+myeloid|myeloid\s+leukemia|myelogenous|aml)\b/i,
+    baseWeight: RN_CATALOG_WEIGHT,
     pathwayIdsAllow: [...RN_NCLEX],
   },
 ];
