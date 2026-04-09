@@ -1,6 +1,7 @@
 "use client";
 
 import type { AdminSubscriptionAnalyticsData } from "@/lib/admin/load-admin-subscription-analytics";
+import { Progress } from "@/components/ui/progress";
 import { Loader2, RefreshCw } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -302,12 +303,11 @@ export function AdminSubscriptionAnalyticsDashboard({
                     {p.subscriptions} rows · {p.activePaid} ACTIVE
                   </span>
                 </div>
-                <div className="h-2 overflow-hidden rounded-full bg-muted/60">
-                  <div
-                    className="h-2 rounded-full bg-emerald-600/80"
-                    style={{ width: `${(p.subscriptions / maxPath) * 100}%` }}
-                  />
-                </div>
+                <Progress
+                  value={maxPath > 0 ? (p.subscriptions / maxPath) * 100 : 0}
+                  variant="success"
+                  className="border-0 bg-muted/60"
+                />
               </div>
             ))
           )}

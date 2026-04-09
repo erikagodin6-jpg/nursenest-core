@@ -1,6 +1,7 @@
 "use client";
 
 import type { AdminStudyPerformanceData } from "@/lib/admin/load-admin-study-performance-analytics";
+import { Progress } from "@/components/ui/progress";
 import { Loader2, RefreshCw } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -37,9 +38,7 @@ function HBar({ label, value, max, suffix = "" }: { label: string; value: number
           {suffix}
         </span>
       </div>
-      <div className="h-2 overflow-hidden rounded-full bg-muted/60">
-        <div className="h-2 rounded-full bg-primary/75" style={{ width: `${pct}%` }} />
-      </div>
+      <Progress value={pct} variant="accent" className="border-0 bg-muted/60" />
     </div>
   );
 }

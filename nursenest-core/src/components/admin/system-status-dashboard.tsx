@@ -16,13 +16,23 @@ function pillClass(status: SystemCheckResult["status"]): string {
   return "bg-red-500/15 text-red-900 dark:text-red-100";
 }
 
+/** API uses `failed`; banner copy matches spec “down”. */
+function overallDisplayLabel(overall: OverallSystemStatus): string {
+  if (overall === "failed") return "Down";
+  return overall.charAt(0).toUpperCase() + overall.slice(1);
+}
+
 function CheckCard({ check }: { check: SystemCheckResult }) {
   const [open, setOpen] = useState(false);
+  const qd = check.details as {
+    stuckRunningOlderThan30Min?: number;
+    oldestPendingAgeMinutes?: number | null;
+  };
   const warnQueue =
     check.id === "queueHealth" &&
     check.status !== "healthy" &&
-    (Number((check.details as { stuckRunningOlderThan30Min?: number }).stuckRunningOlderThan30Min) > 0 ||
-      (check.details as { oldestPendingAgeMinutes?: number | null }).oldestPendingAgeMinutes != null);
+    ((qd.stuckRunningOlderThan30Min ?? 0) > 0 ||
+      (qd.oldestPendingAgeMinutes != null && qd.oldestPendingAgeMinutes > 120));
 
   return (
     <article
@@ -81,22 +91,36 @@ export function SystemStatusDashboard({ initial }: { initial: SystemStatusPayloa
     }
   }, []);
 
-  const stuck =
-    data.checks.find((c) => c.id === "queueHealth")?.details as
-      | { stuckRunningOlderThan30Min?: number }
-      | undefined;
+  const queueDetails = data.checks.find((c) => c.id === "queueHealth")?.details as
+    | {
+        stuckRunningOlderThan30Min?: number;
+        oldestPendingAgeMinutes?: number | null;
+      }
+    | undefined;
+  const stuckRun = queueDetails?.stuckRunningOlderThan30Min ?? 0;
+  const oldPending = queueDetails?.oldestPendingAgeMinutes;
+  const showQueueBanner =
+    stuckRun > 0 || (oldPending != null && oldPending > 120);
 
   return (
     <div className="space-y-8">
       <div className={`rounded-xl border px-4 py-3 ${overallBannerClass(data.overall)}`}>
         <p className="text-sm font-semibold uppercase tracking-wide">Overall</p>
-        <p className="mt-1 text-2xl font-bold capitalize">{data.overall}</p>
+        <p className="mt-1 text-2xl font-bold">{overallDisplayLabel(data.overall)}</p>
         <p className="mt-1 text-sm opacity-90">
           Snapshot {new Date(data.checkedAt).toLocaleString()} · total probe wall time {data.totalResponseTimeMs} ms
         </p>
-        {(stuck?.stuckRunningOlderThan30Min ?? 0) > 0 ? (
+        {showQueueBanner ? (
           <p className="mt-2 text-sm font-semibold text-amber-900 dark:text-amber-100">
-            Warning: AI jobs stuck in RUNNING ({stuck?.stuckRunningOlderThan30Min}) older than 30 minutes — see queue card and{" "}
+            {stuckRun > 0 ? (
+              <>
+                Warning: {stuckRun} AI job(s) stuck in RUNNING (&gt;30 minutes).{" "}
+              </>
+            ) : null}
+            {oldPending != null && oldPending > 120 ? (
+              <>Oldest PENDING job is ~{oldPending} minutes old. </>
+            ) : null}
+            See the queue card and{" "}
             <Link href="/admin/automation-logs" className="underline">
               automation logs
             </Link>
@@ -151,8 +175,23 @@ export function SystemStatusDashboard({ initial }: { initial: SystemStatusPayloa
             </Link>
           </li>
           <li>
+            <Link href="/admin/lessons/generate" className="underline-offset-4 hover:underline">
+              Lesson AI (single)
+            </Link>
+          </li>
+          <li>
+            <Link href="/admin/blog/studio" className="underline-offset-4 hover:underline">
+              Blog article studio
+            </Link>
+          </li>
+          <li>
+            <Link href="/admin/ai/exam-questions" className="underline-offset-4 hover:underline">
+              Exam question AI
+            </Link>
+          </li>
+          <li>
             <Link href="/admin/ai/review" className="underline-offset-4 hover:underline">
-              AI review queue
+              AI review queue (drafts)
             </Link>
           </li>
           <li>

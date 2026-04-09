@@ -192,7 +192,7 @@ export function LearnerReportCardPremium({
               {data.weakTopics.map((w) => (
                 <li
                   key={w.normalizedTopic ?? w.topic}
-                  className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-rose-500/15 bg-rose-500/[0.06] px-3 py-2 text-sm"
+                  className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-border/50 border-l-rose-500/35 bg-muted/10 px-3 py-2.5 text-sm"
                 >
                   <span className="font-medium text-foreground">{w.topic}</span>
                   <span className="tabular-nums text-xs text-muted-foreground">
@@ -283,56 +283,34 @@ export function LearnerReportCardPremium({
         )}
       </section>
 
-      {/* Recent sessions */}
-      <div className="grid gap-6 lg:grid-cols-2">
-        <section className="rounded-2xl border border-border/60 p-5">
-          <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">{t("learner.reportCard.section.recentBank")}</h2>
-          <p className="mt-1 text-xs text-muted-foreground">{t("learner.reportCard.section.recentBankSub")}</p>
-          {data.recentBankSessions.some((s) => s.total > 0) ? (
-            <ul className="mt-4 divide-y divide-border/50">
-              {data.recentBankSessions
-                .filter((s) => s.total > 0)
-                .map((s) => (
-                  <li key={s.id} className="flex flex-wrap items-center justify-between gap-2 py-3 first:pt-0">
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-medium text-foreground">{s.examTitle ?? t("learner.reportCard.sessionUntitled")}</p>
-                      <p className="text-[11px] text-muted-foreground">
-                        {s.examMode === "cat" ? "CAT" : s.examMode} · {s.updatedAt.toLocaleDateString(localeTag)}
-                      </p>
-                    </div>
-                    <span className="shrink-0 tabular-nums text-sm text-muted-foreground">
-                      {s.accuracyPct != null ? `${s.accuracyPct}%` : "—"} ({s.correct}/{s.total})
-                    </span>
-                  </li>
-                ))}
-            </ul>
-          ) : (
-            <div className="mt-4">
-              <Na>{t("learner.reportCard.recentBankNa")}</Na>
-            </div>
-          )}
-        </section>
-        <section className="rounded-2xl border border-border/60 p-5">
-          <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">{t("learner.reportCard.section.recentMocks")}</h2>
-          <p className="mt-1 text-xs text-muted-foreground">{t("learner.reportCard.section.recentMocksSub")}</p>
-          {data.recentMocks.length > 0 ? (
-            <ul className="mt-4 divide-y divide-border/50">
-              {data.recentMocks.map((m) => (
-                <li key={m.id} className="flex flex-wrap items-center justify-between gap-2 py-3 first:pt-0">
-                  <span className="min-w-0 truncate text-sm font-medium text-foreground">{m.examTitle}</span>
+      {/* Recent bank sessions (mocks: see full log below — avoids duplicating dashboard / top of log) */}
+      <section className="rounded-2xl border border-border/60 p-5">
+        <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">{t("learner.reportCard.section.recentBank")}</h2>
+        <p className="mt-1 text-xs text-muted-foreground">{t("learner.reportCard.section.recentBankSub")}</p>
+        {data.recentBankSessions.some((s) => s.total > 0) ? (
+          <ul className="mt-4 divide-y divide-border/50">
+            {data.recentBankSessions
+              .filter((s) => s.total > 0)
+              .map((s) => (
+                <li key={s.id} className="flex flex-wrap items-center justify-between gap-2 py-3 first:pt-0">
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-medium text-foreground">{s.examTitle ?? t("learner.reportCard.sessionUntitled")}</p>
+                    <p className="text-[11px] text-muted-foreground">
+                      {s.examMode === "cat" ? "CAT" : s.examMode} · {s.updatedAt.toLocaleDateString(localeTag)}
+                    </p>
+                  </div>
                   <span className="shrink-0 tabular-nums text-sm text-muted-foreground">
-                    {m.pct}% ({m.score}/{m.total})
+                    {s.accuracyPct != null ? `${s.accuracyPct}%` : "—"} ({s.correct}/{s.total})
                   </span>
                 </li>
               ))}
-            </ul>
-          ) : (
-            <div className="mt-4">
-              <Na>{t("learner.reportCard.recentMocksNa")}</Na>
-            </div>
-          )}
-        </section>
-      </div>
+          </ul>
+        ) : (
+          <div className="mt-4">
+            <Na>{t("learner.reportCard.recentBankNa")}</Na>
+          </div>
+        )}
+      </section>
 
       {/* Practice tests / CAT builder */}
       <section className="rounded-2xl border border-border/60 p-5">
@@ -432,18 +410,19 @@ export function LearnerReportCardPremium({
           <p className="mt-0.5 text-xs text-muted-foreground">{t("learner.reportCard.mockLogSub")}</p>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[20rem] text-left text-sm">
+          <table className="w-full min-w-[24rem] text-left text-sm">
             <thead>
               <tr className="border-b border-border/60 text-xs uppercase tracking-wide text-muted-foreground">
                 <th className="px-4 py-3 font-medium">{t("learner.account.reportCard.colExam")}</th>
                 <th className="px-4 py-3 font-medium">{t("learner.account.reportCard.colScore")}</th>
                 <th className="px-4 py-3 font-medium">{t("learner.account.reportCard.colDate")}</th>
+                <th className="px-4 py-3 font-medium text-right">{t("learner.reportCard.mockLogColActions")}</th>
               </tr>
             </thead>
             <tbody>
               {data.mockLog.length === 0 ? (
                 <tr>
-                  <td colSpan={3} className="px-4 py-8 text-center text-muted-foreground">
+                  <td colSpan={4} className="px-4 py-8 text-center text-muted-foreground">
                     {t("learner.account.reportCard.empty")}
                   </td>
                 </tr>
@@ -455,6 +434,14 @@ export function LearnerReportCardPremium({
                       {a.pct}% ({a.score}/{a.total})
                     </td>
                     <td className="px-4 py-3 text-muted-foreground">{a.createdAt.toLocaleDateString(localeTag)}</td>
+                    <td className="px-4 py-3 text-right">
+                      <Link
+                        href={`/app/exams/attempts/${a.id}`}
+                        className="font-semibold text-primary underline-offset-4 hover:underline"
+                      >
+                        {t("learner.dashboard.insight.viewReport")}
+                      </Link>
+                    </td>
                   </tr>
                 ))
               )}

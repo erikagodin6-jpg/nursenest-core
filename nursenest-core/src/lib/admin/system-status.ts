@@ -370,9 +370,24 @@ async function probeQueueHealth(): Promise<SystemCheckResult> {
         ? Math.round((Date.now() - oldestRow.value.createdAt.getTime()) / 60000)
         : null;
 
+    const blogBatchByStatus = await withPrismaReadFallback(
+      "blog_draft_batch_items_group",
+      () =>
+        prisma.blogDraftGenerationBatchItem.groupBy({
+          by: ["status"],
+          _count: { _all: true },
+        }),
+      [],
+    );
+
     const byStatus: Record<string, number> = {};
     for (const row of statusCounts.value) {
       byStatus[row.status] = row._count._all;
+    }
+
+    const blogDraftBatchItemsByStatus: Record<string, number> = {};
+    for (const row of blogBatchByStatus.value) {
+      blogDraftBatchItemsByStatus[row.status] = row._count._all;
     }
 
     return {
@@ -380,7 +395,13 @@ async function probeQueueHealth(): Promise<SystemCheckResult> {
       byStatus,
       stuckRunningCount: stuckRunning.value,
       oldestPendingAgeMinutes,
-      warnings: [statusCounts.warning, stuckRunning.warning, oldestRow.warning].filter(Boolean) as string[],
+      blogDraftBatchItemsByStatus,
+      warnings: [
+        statusCounts.warning,
+        stuckRunning.warning,
+        oldestRow.warning,
+        blogBatchByStatus.warning,
+      ].filter(Boolean) as string[],
     };
   });
 
@@ -395,6 +416,7 @@ async function probeQueueHealth(): Promise<SystemCheckResult> {
     byStatus: Record<string, number>;
     stuckRunningCount: number;
     oldestPendingAgeMinutes: number | null;
+    blogDraftBatchItemsByStatus: Record<string, number>;
     warnings: string[];
   };
   const stuck = v.stuckRunningCount;
@@ -413,6 +435,7 @@ async function probeQueueHealth(): Promise<SystemCheckResult> {
       jobStatusCounts: v.byStatus,
       stuckRunningOlderThan30Min: stuck,
       oldestPendingAgeMinutes: v.oldestPendingAgeMinutes,
+      blogDraftBatchItemsByStatus: v.blogDraftBatchItemsByStatus,
       prismaWarnings: v.warnings,
     },
   );
@@ -492,12 +515,21 @@ async function probeContentHealth(): Promise<SystemCheckResult> {
 function probeDeployInfo(): SystemCheckResult {
   const { ms, value } = (() => {
     const start = Date.now();
+    /** Optional CI/build injection — not required; safe ISO or opaque string only. */
+    const deployedAtOrBuildTime =
+      process.env.NURSE_NEST_DEPLOYED_AT?.trim() ||
+      process.env.NURSE_NEST_BUILD_TIME?.trim() ||
+      process.env.NEXT_PUBLIC_BUILD_TIME?.trim() ||
+      process.env.BUILD_TIME?.trim() ||
+      null;
     const v = {
       commitSha: process.env.VERCEL_GIT_COMMIT_SHA?.trim() || process.env.GITHUB_SHA?.trim() || null,
       branch: process.env.VERCEL_GIT_COMMIT_REF?.trim() || process.env.GITHUB_REF_NAME?.trim() || null,
       deploymentId: process.env.VERCEL_DEPLOYMENT_ID?.trim() || null,
       vercelEnv: process.env.VERCEL_ENV?.trim() || null,
       nodeEnv: process.env.NODE_ENV ?? null,
+      deployedAtOrBuildTime,
+      sentryRelease: process.env.SENTRY_RELEASE?.trim() || null,
     };
     return { ms: Date.now() - start, value: v };
   })();

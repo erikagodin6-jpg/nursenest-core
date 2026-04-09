@@ -1455,6 +1455,7 @@
   "learner.reportCard.mockExamsLabel": "Mock exams (full exams)",
   "learner.reportCard.mockLogHeading": "Mock exam log",
   "learner.reportCard.mockLogSub": "Newest first (up to 30 attempts).",
+  "learner.reportCard.mockLogColActions": "Actions",
   "learner.reportCard.mockNa": "No scored mock attempts yet. Start a practice exam to see accuracy here.",
   "learner.reportCard.mockTierAttempts": "{n} attempt(s)",
   "learner.reportCard.mockTierNa": "No mock attempts grouped by exam track yet.",

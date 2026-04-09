@@ -1,6 +1,7 @@
 "use client";
 
 import type { AdminUserAnalyticsData } from "@/lib/admin/load-admin-user-analytics";
+import { Progress } from "@/components/ui/progress";
 import { Loader2, RefreshCw } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -306,12 +307,11 @@ export function AdminUserAnalyticsDashboard({
                     <span className="truncate text-muted-foreground">{row.label}</span>
                     <span className="shrink-0 tabular-nums font-medium">{row.users}</span>
                   </div>
-                  <div className="h-2 overflow-hidden rounded-full bg-muted/60">
-                    <div
-                      className="h-2 rounded-full bg-primary/70"
-                      style={{ width: `${(row.users / maxPath) * 100}%` }}
-                    />
-                  </div>
+                  <Progress
+                    value={maxPath > 0 ? (row.users / maxPath) * 100 : 0}
+                    variant="accent"
+                    className="border-0 bg-muted/60"
+                  />
                 </div>
               ))}
             </div>

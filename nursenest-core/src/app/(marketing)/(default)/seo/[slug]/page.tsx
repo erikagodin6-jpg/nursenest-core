@@ -10,7 +10,7 @@ import { resolveProgrammaticSeoForLocale } from "@/lib/seo/resolve-programmatic-
 /** Build-time prerender disabled: full slug list inflates `.next` on disk-limited hosts; pages are ISR on demand. */
 export const dynamicParams = true;
 /** Keep in sync with `PROGRAMMATIC_SEO_ISR_REVALIDATE_SECONDS` — literal required for Next segment config parsing. */
-export const revalidate = 86_400;
+export const revalidate = 86400;
 
 export function generateStaticParams(): { slug: string }[] {
   return [];
