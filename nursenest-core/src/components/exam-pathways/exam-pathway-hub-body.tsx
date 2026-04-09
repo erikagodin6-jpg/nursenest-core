@@ -181,23 +181,23 @@ export function ExamPathwayHubBody({
       ) : null}
 
       <aside className="nn-study-card nn-study-card--wash mt-10 px-4 py-4 sm:px-5">
-        <p className="nn-marketing-label">Study loop</p>
+        <p className="nn-marketing-label">Prep rhythm</p>
         <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">
-          Start from{" "}
+          Anchor with{" "}
           <Link href={lessonsHref} className="font-semibold text-primary hover:underline">
-            clinical lessons
+            pathway lessons
           </Link>
           , then{" "}
           <Link href={questionsHref} className="font-semibold text-primary hover:underline">
-            pathway question reps
+            practice questions with rationales
           </Link>
           , then{" "}
           <Link href={HUB.practiceExams} className="font-semibold text-primary hover:underline">
-            timed practice exams
+            timed mocks
           </Link>
-          . Compare every exam track from the{" "}
+          . Browse other licensure tracks from the{" "}
           <Link href="/lessons" className="font-semibold text-primary hover:underline">
-            lessons overview
+            lessons directory
           </Link>
           .
         </p>
@@ -208,7 +208,7 @@ export function ExamPathwayHubBody({
       </h2>
       <p className="nn-marketing-body-sm mt-2 max-w-2xl text-[var(--theme-muted-text)]">
         {conversionSectionLead ??
-          "Same-pathway question runs, structured lessons, spaced flashcards, study planner, and readiness sit behind one login after you subscribe. Timed and exam-style practice (including mocks) unlock in the app once your plan matches this pathway."}
+          "After you subscribe, one login holds pathway-matched practice, lessons, flashcards, planner, and readiness for this exam family. Timed and mock sessions unlock in-app when your plan covers this track."}
       </p>
       <ul className="nn-marketing-body-sm mt-4 list-inside list-disc space-y-1.5 text-[var(--theme-body-text)]">
         <li>

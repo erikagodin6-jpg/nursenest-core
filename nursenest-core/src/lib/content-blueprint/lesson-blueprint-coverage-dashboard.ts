@@ -6,7 +6,7 @@ import type { BlueprintDomainId } from "./blueprint-domain";
 import { BLUEPRINT_DOMAIN_LABELS } from "./blueprint-domain";
 import type { ClinicalSystemId } from "./clinical-system-id";
 import { CLINICAL_SYSTEM_LABELS, inferClinicalSystemFromHaystack } from "./clinical-system-id";
-import { BLUEPRINT_REPORT_PATHWAY_IDS, buildPathwayBlueprintProfile } from "./pathway-blueprint-profiles";
+import { buildPathwayBlueprintProfile } from "./pathway-blueprint-profiles";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 
 /** Editorial floor / long-term stretch for static pathway lesson libraries. */
@@ -315,16 +315,14 @@ function buildPathwayRow(
 
 /**
  * Build a planning dashboard from static catalog JSON.
- * Defaults to pathways in {@link BLUEPRINT_REPORT_PATHWAY_IDS} that exist in the file; pass `pathwayIds` to override.
+ * Defaults to every pathway key present in the catalog file; pass `pathwayIds` to limit (e.g. {@link BLUEPRINT_REPORT_PATHWAY_IDS} only).
  */
 export function buildLessonBlueprintCoverageDashboard(
   catalog: { pathways?: Record<string, { lessons?: RawLesson[] }> },
   options?: { pathwayIds?: readonly string[] },
 ): LessonBlueprintCoverageDashboard {
   const allKeys = Object.keys(catalog.pathways ?? {});
-  const wanted = options?.pathwayIds?.length
-    ? [...options.pathwayIds]
-    : allKeys.filter((id) => (BLUEPRINT_REPORT_PATHWAY_IDS as readonly string[]).includes(id));
+  const wanted = options?.pathwayIds?.length ? [...options.pathwayIds] : allKeys;
   const pathwayIdsIncluded = wanted.filter((id) => {
     const L = catalog.pathways?.[id]?.lessons;
     return Array.isArray(L);

@@ -41,26 +41,26 @@ export function PathwayLessonPracticeTopicCta({
       className="nn-study-callout nn-study-card mt-10 p-5 sm:p-6"
       aria-labelledby="lesson-practice-topic-cta"
     >
-      <p className="nn-marketing-label nn-marketing-label--accent">Next step in this exam track</p>
+      <p className="nn-marketing-label nn-marketing-label--accent">Same scope as this lesson</p>
       <h2 id="lesson-practice-topic-cta" className="nn-marketing-h3 mt-2 text-[var(--theme-heading-text)]">
-        Practice this topic
+        Drill {topic.trim() || "this topic"} with items
       </h2>
       <p className="nn-marketing-body-sm mt-2 max-w-prose text-[var(--theme-muted-text)]">
-        Reinforce {topic.trim() || "this area"} with pathway-scoped questions ({pathway.shortName}), then revisit the lesson
-        hub if rationales show gaps.
+        Answer {pathway.shortName}-scoped questions on {topic.trim() || "this content"} while the clinical story is still fresh.
+        If rationales expose a weak spot, jump back to this topic in lessons—not a generic review.
       </p>
       <div className="mt-5 flex flex-wrap gap-2">
         <Link
           href={appPracticeTopicHref(pathway, topic)}
           className="inline-flex min-h-11 items-center rounded-full nn-btn-primary px-5 py-2.5 text-sm font-semibold shadow-none"
         >
-          Open question bank (app)
+          Open practice (app)
         </Link>
         <Link
           href={marketingQuestionsTopicHref(pathway, topic)}
           className="inline-flex min-h-11 items-center rounded-full nn-btn-secondary px-5 py-2.5 text-sm font-semibold"
         >
-          Question bank hub · filtered
+          Practice hub · same topic
         </Link>
         <Link
           href={topicHubHref}

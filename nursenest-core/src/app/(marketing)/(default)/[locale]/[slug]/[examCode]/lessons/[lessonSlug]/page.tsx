@@ -212,8 +212,8 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
           {pathway.countrySlug === "canada" ? "Canada" : "United States"} · {pathway.shortName} · {lesson.bodySystem}
         </p>
         <p className="nn-marketing-body-sm mt-2 max-w-prose text-[var(--theme-muted-text)]">
-          Exam-scoped lesson for this track only. Finish reading, then use “Practice this topic” below to drill the same scope in
-          the question bank.
+          Written for {pathway.shortName} judgment—not a generic overview. When you finish, use the practice strip below to answer
+          items in the same clinical scope while prioritization is still in your head.
         </p>
       </header>
       <div className="mt-4 space-y-3">

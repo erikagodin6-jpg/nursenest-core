@@ -35,3 +35,12 @@ export { loadPathwayCatalogLessonStats } from "./pathway-catalog-lesson-stats";
 export {
   buildExamBlueprintCoverageReport,
 } from "./build-blueprint-coverage-report";
+export {
+  buildLessonBlueprintCoverageDashboard,
+  inferLessonBlueprintDomain,
+  inferLessonCatalogType,
+  LESSON_LIBRARY_MIN,
+  LESSON_LIBRARY_STRETCH,
+  type LessonBlueprintCoverageDashboard,
+  type PathwayLessonBlueprintCoverage,
+} from "./lesson-blueprint-coverage-dashboard";

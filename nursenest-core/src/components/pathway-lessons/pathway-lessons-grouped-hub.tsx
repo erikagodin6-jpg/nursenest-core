@@ -281,13 +281,13 @@ export function PathwayLessonsGroupedHub({
             href={buildExamPathwayPath(pathway, "questions")}
             className="inline-flex min-h-11 items-center rounded-full nn-btn-secondary px-4 py-2 text-sm font-semibold"
           >
-            {pathway.shortName} question bank (hub)
+            {pathway.shortName} practice hub
           </Link>
           <Link
             href={loginWithCallback(`/app/questions?pathwayId=${encodeURIComponent(pathway.id)}`)}
             className="inline-flex min-h-11 items-center rounded-full nn-btn-primary px-4 py-2 text-sm font-semibold shadow-none"
           >
-            Open app question bank
+            Open practice in app
           </Link>
           <Link href="/app/exams" className="inline-flex min-h-11 items-center rounded-full nn-btn-secondary px-4 py-2 text-sm font-semibold">
             Practice exams

@@ -269,23 +269,22 @@ export async function loadMetadataAudit(prisma: PrismaClient): Promise<{
     },
   });
 
-  const pathwayRows: PathwayMetaRow[] = pls
-    .map((p) => {
-      const issues: Array<"seoTitle" | "seoDescription"> = [];
-      if (!p.seoTitle?.trim()) issues.push("seoTitle");
-      if (!p.seoDescription?.trim()) issues.push("seoDescription");
-      if (issues.length === 0) return null;
-      return {
-        kind: "pathway_lesson" as const,
-        id: p.id,
-        pathwayId: p.pathwayId,
-        slug: p.slug,
-        title: p.title,
-        locale: p.locale,
-        issues,
-      };
-    })
-    .filter((x): x is PathwayMetaRow => x !== null);
+  const pathwayRows: PathwayMetaRow[] = [];
+  for (const p of pls) {
+    const issues: Array<"seoTitle" | "seoDescription"> = [];
+    if (!p.seoTitle?.trim()) issues.push("seoTitle");
+    if (!p.seoDescription?.trim()) issues.push("seoDescription");
+    if (issues.length === 0) continue;
+    pathwayRows.push({
+      kind: "pathway_lesson",
+      id: p.id,
+      pathwayId: p.pathwayId,
+      slug: p.slug,
+      title: p.title,
+      locale: p.locale,
+      issues,
+    });
+  }
 
   return { blogs: blogRows, lessons: lessonRows, pathwayLessons: pathwayRows };
 }

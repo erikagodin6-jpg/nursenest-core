@@ -17,16 +17,67 @@ const TABS: Array<{ id: TabId; label: string; desc: string }> = [
   { id: "validate", label: "Validate URL", desc: "Check a path against inventory" },
 ];
 
+type MetaBlog = {
+  id: string;
+  slug: string;
+  title: string;
+  postStatus: string;
+  issues: string[];
+  editHref: string;
+  publicHref: string;
+};
+
+type MetaLesson = {
+  id: string;
+  slug: string;
+  title: string;
+  status: string | null;
+  issues: string[];
+  editHref: string;
+};
+
+type MetaPath = {
+  id: string;
+  pathwayId: string;
+  slug: string;
+  title: string;
+  locale: string;
+  issues: string[];
+};
+
+type SlugRow = { slug: string; locations: Array<{ type: string; label: string; href: string }> };
+
+type LinkingRow = {
+  id: string;
+  slug: string;
+  title: string;
+  internalAnchors: number;
+  relatedPaths: number;
+  reasons: string[];
+  editHref: string;
+};
+
+type BrokenRow = {
+  sourceKind: string;
+  sourceLabel: string;
+  href: string;
+  status: string;
+  detail: string;
+  editHref: string;
+};
+
+type OppRow = { id: string; slug: string; title: string; exam: string | null; hints: string[]; editHref: string };
+
 type FullReport = {
   metadata: {
-    blogs: unknown[];
-    lessons: unknown[];
-    pathwayLessons: unknown[];
+    blogs: MetaBlog[];
+    lessons: MetaLesson[];
+    pathwayLessons: MetaPath[];
   };
-  slugs: unknown[];
-  linking: unknown[];
-  broken: unknown[];
-  opportunities: unknown[];
+  slugs: SlugRow[];
+  linking: LinkingRow[];
+  broken: BrokenRow[];
+  opportunities: OppRow[];
   generatedAt: string;
 };
 
