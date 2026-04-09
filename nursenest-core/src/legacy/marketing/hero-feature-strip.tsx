@@ -16,7 +16,7 @@ export default function HeroFeatureStrip() {
 
   return (
     <section
-      className="border-t border-gray-100 bg-gradient-to-b from-gray-50/80 to-white py-4 sm:py-5"
+      className="border-t border-border bg-gradient-to-b from-muted/80 to-background py-4 sm:py-5"
       data-testid="section-hero-feature-strip"
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
@@ -33,7 +33,7 @@ export default function HeroFeatureStrip() {
                 <div className="nn-accent-icon-wrap h-8 w-8 shrink-0">
                   <f.icon className="nn-accent-icon h-4 w-4" />
                 </div>
-                <span className="whitespace-nowrap text-xs font-medium text-gray-700 sm:text-sm">{label}</span>
+                <span className="whitespace-nowrap text-xs font-medium text-foreground sm:text-sm">{label}</span>
               </div>
             );
           })}

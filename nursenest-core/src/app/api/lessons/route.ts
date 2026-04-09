@@ -1,5 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
+import {
+  decodeLessonListCursor,
+  encodeLessonListCursor,
+  LESSON_LIST_ORDER_BY,
+  lessonListKeysetWhereAfter,
+} from "@/lib/api/lessons-list-cursor";
 import { freemiumLessonWhereForProfile, lessonAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
@@ -23,6 +29,13 @@ import {
 } from "@/lib/api/api-pagination-limits";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
+function wantsCursorMode(req: NextRequest): boolean {
+  const mode = req.nextUrl.searchParams.get("paginationMode");
+  if (mode === "cursor") return true;
+  const c = req.nextUrl.searchParams.get("cursor");
+  return c !== null && c !== "";
+}
+
 export async function GET(req: NextRequest) {
   const session = await auth();
   const userId = (session?.user as { id?: string } | undefined)?.id;
@@ -30,11 +43,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const pageParsed = parseListPage(req.nextUrl.searchParams.get("page"));
-  if (!pageParsed.ok) {
-    return NextResponse.json({ error: pageParsed.error, code: "invalid_page" }, { status: 400 });
-  }
-  const page = pageParsed.page;
+  const useCursor = wantsCursorMode(req);
 
   const sizeParsed = parseBoundedPageSize(req.nextUrl.searchParams.get("pageSize"), LESSON_PAGE);
   if (!sizeParsed.ok) {
@@ -49,35 +58,45 @@ export async function GET(req: NextRequest) {
   }
   const pageSize = sizeParsed.pageSize;
 
-  const maxPage = maxSafeOffsetPage(pageSize);
-  if (page > maxPage) {
-    return NextResponse.json(
-      {
-        error: `page must be at most ${maxPage} for this pageSize (offset cap ${MAX_LIST_SKIP_ROWS_DEFAULT}).`,
-        code: "page_out_of_range",
-        maxPage,
-      },
-      { status: 400 },
-    );
-  }
+  let page = 1;
+  let skipRows = 0;
+  if (!useCursor) {
+    const pageParsed = parseListPage(req.nextUrl.searchParams.get("page"));
+    if (!pageParsed.ok) {
+      return NextResponse.json({ error: pageParsed.error, code: "invalid_page" }, { status: 400 });
+    }
+    page = pageParsed.page;
 
-  const skipRows = listSkipRows(page, pageSize);
-  if (isSkipBeyondLimit(skipRows)) {
-    safeServerLog("api_lessons", "pagination_depth_rejected", {
-      skipRows,
-      maxSkipRows: MAX_LIST_SKIP_ROWS_DEFAULT,
-      page,
-      pageSize,
-      userId,
-    });
-    return NextResponse.json(
-      {
-        error: `Pagination too deep; use filters or a smaller page (max offset ${MAX_LIST_SKIP_ROWS_DEFAULT} rows).`,
-        code: "pagination_depth_limit",
+    const maxPage = maxSafeOffsetPage(pageSize);
+    if (page > maxPage) {
+      return NextResponse.json(
+        {
+          error: `page must be at most ${maxPage} for this pageSize (offset cap ${MAX_LIST_SKIP_ROWS_DEFAULT}).`,
+          code: "page_out_of_range",
+          maxPage,
+        },
+        { status: 400 },
+      );
+    }
+
+    skipRows = listSkipRows(page, pageSize);
+    if (isSkipBeyondLimit(skipRows)) {
+      safeServerLog("api_lessons", "pagination_depth_rejected", {
+        skipRows,
         maxSkipRows: MAX_LIST_SKIP_ROWS_DEFAULT,
-      },
-      { status: 400 },
-    );
+        page,
+        pageSize,
+        userId,
+      });
+      return NextResponse.json(
+        {
+          error: `Pagination too deep; use filters or a smaller page (max offset ${MAX_LIST_SKIP_ROWS_DEFAULT} rows).`,
+          code: "pagination_depth_limit",
+          maxSkipRows: MAX_LIST_SKIP_ROWS_DEFAULT,
+        },
+        { status: 400 },
+      );
+    }
   }
 
   let entitlement;
@@ -88,28 +107,92 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unable to verify access. Try again shortly." }, { status: 503 });
   }
 
+  if (useCursor && !entitlement.hasAccess) {
+    return NextResponse.json(
+      {
+        error: "Cursor pagination requires an active subscription.",
+        code: "cursor_requires_subscriber",
+      },
+      { status: 400 },
+    );
+  }
+
   if (entitlement.hasAccess) {
     const gate = await requireSubscriberSession();
     if (!gate.ok) return gate.response;
 
     setSentryServerContext({ route: "/api/lessons", feature: SERVER_FEATURE.lesson, userId: gate.userId });
 
+    const whereBase = lessonAccessWhere(gate.entitlement);
+
+    if (useCursor) {
+      const rawCursor = req.nextUrl.searchParams.get("cursor");
+      let cursor: { updatedAt: Date; id: string } | null = null;
+      if (rawCursor !== null && rawCursor !== "") {
+        const decoded = decodeLessonListCursor(rawCursor);
+        if (!decoded.ok) {
+          return NextResponse.json({ error: decoded.message, code: decoded.code }, { status: 400 });
+        }
+        cursor = { updatedAt: decoded.updatedAt, id: decoded.id };
+      }
+
+      try {
+        const where: typeof whereBase =
+          cursor === null ? whereBase : { AND: [whereBase, lessonListKeysetWhereAfter(cursor)] };
+
+        const rawRows = await withRetry(() =>
+          prisma.contentItem.findMany({
+            where,
+            select: { id: true, slug: true, title: true, summary: true, updatedAt: true },
+            orderBy: LESSON_LIST_ORDER_BY,
+            take: pageSize + 1,
+          }),
+        );
+
+        const hasMore = rawRows.length > pageSize;
+        const slice = hasMore ? rawRows.slice(0, pageSize) : rawRows;
+        const lessons = slice.map(({ updatedAt: _u, ...rest }) => rest);
+
+        const last = slice[pageSize - 1];
+        const nextCursor =
+          hasMore && last ? encodeLessonListCursor(last.updatedAt, last.id) : null;
+
+        const subscriberCursorBody = {
+          pageSize,
+          lessons,
+          mode: "subscriber" as const,
+          pagination: {
+            mode: "cursor" as const,
+            pageSize,
+            hasMore,
+            nextCursor,
+          },
+        };
+        logLargeApiResponse("/api/lessons", estimateJsonUtf8Bytes(subscriberCursorBody));
+        return NextResponse.json(subscriberCursorBody);
+      } catch (e) {
+        safeServerLogCritical("api_lessons", "prisma_find_failed_cursor", { pageSize }, e);
+        return NextResponse.json({ error: "Unable to load lessons. Try again shortly." }, { status: 503 });
+      }
+    }
+
     try {
-      const where = lessonAccessWhere(gate.entitlement);
       const [lessons, total] = await Promise.all([
         withRetry(() =>
           prisma.contentItem.findMany({
-            where,
+            where: whereBase,
             select: { id: true, slug: true, title: true, summary: true },
-            orderBy: { updatedAt: "desc" },
+            orderBy: LESSON_LIST_ORDER_BY,
             skip: skipRows,
             take: pageSize,
           }),
         ),
-        withRetry(() => prisma.contentItem.count({ where })),
+        withRetry(() => prisma.contentItem.count({ where: whereBase })),
       ]);
 
       const pageCount = Math.max(1, Math.ceil(total / pageSize));
+      const maxPage = maxSafeOffsetPage(pageSize);
+      const hasMore = page < pageCount;
 
       const subscriberBody = {
         page,
@@ -118,6 +201,14 @@ export async function GET(req: NextRequest) {
         pageCount,
         lessons,
         mode: "subscriber" as const,
+        pagination: {
+          mode: "offset" as const,
+          pageSize,
+          hasMore,
+          totalCount: total,
+          page,
+          maxPage,
+        },
       };
       logLargeApiResponse("/api/lessons", estimateJsonUtf8Bytes(subscriberBody));
       return NextResponse.json(subscriberBody);
@@ -164,7 +255,7 @@ export async function GET(req: NextRequest) {
       prisma.contentItem.findMany({
         where,
         select: { id: true, slug: true, title: true, summary: true },
-        orderBy: { updatedAt: "desc" },
+        orderBy: LESSON_LIST_ORDER_BY,
         skip: 0,
         take,
       }),
@@ -193,6 +284,12 @@ export async function GET(req: NextRequest) {
       lessons: trimmedSummary,
       mode: "freemium" as const,
       freemiumRemainingAfterBatch: remaining,
+      pagination: {
+        mode: "offset" as const,
+        pageSize: take,
+        hasMore: false,
+        page: 1,
+      },
     };
     logLargeApiResponse("/api/lessons", estimateJsonUtf8Bytes(freemiumBody));
     return NextResponse.json(freemiumBody);
