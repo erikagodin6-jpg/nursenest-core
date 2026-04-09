@@ -77,7 +77,7 @@ export function NclexPnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
         </ul>
       </section>
 
-      <PathwayTopicClusterNav
+      <PathwayTopicClusterGroupedNav
         lessonsBasePath={lessonsBasePath}
         topicClusters={topicClusters}
         pathwayShortName={pathway.shortName}

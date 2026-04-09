@@ -4,15 +4,28 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { flashcardAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
-import { filterWeakTopicsForAlliedProfession } from "@/lib/allied/allied-weak-topic-filter";
+import {
+  filterTopicRowsForAlliedProfession,
+  filterWeakTopicsForAlliedProfession,
+} from "@/lib/allied/allied-weak-topic-filter";
 import { resolvePathwayLessonForWeakTopic, resolvePathwayNextLesson, type PathwayNextLesson } from "@/lib/learner/resolve-pathway-next-lesson";
-import { loadUnifiedTopicPerformance, type TopicPerformanceSnapshot } from "@/lib/learner/topic-performance";
+import {
+  loadUnifiedTopicPerformance,
+  type TopicPerformanceSnapshot,
+  type TopicTrendRow,
+} from "@/lib/learner/topic-performance";
 import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
 
 export type LearnerStudySnapshot = {
   weakTopics: WeakTopicRow[];
   topicPerformanceSource: TopicPerformanceSnapshot["source"];
+  /** Trajectory hints from scored history (declining → improving sort). */
+  topicTrends: TopicTrendRow[];
+  /** Topics with solid accuracy for reinforcement copy. */
+  strongTopicsHighlight: WeakTopicRow[];
+  /** Primary weak topic label for CTAs (null when none). */
+  recommendedFocusTopic: string | null;
   /** Strongest weak row after allied filtering (if any). */
   topWeak: WeakTopicRow | null;
   pathwayNext: PathwayNextLesson | null;
@@ -72,12 +85,19 @@ export async function buildLearnerStudySnapshot(
 
   const userRow = await prisma.user.findUnique({
     where: { id: userId },
-    select: { alliedProfessionKey: true, tier: true },
+    select: { alliedProfessionKey: true, tier: true, learnerPath: true },
   });
+
+  const learnerPathResolved = (learnerPath ?? userRow?.learnerPath ?? null)?.trim() || null;
+
+  let topicTrends = perf.trends.slice(0, 3);
+  let strongTopicsHighlight = perf.strongTopics.slice(0, 3);
 
   if (userRow?.tier === TierCode.ALLIED && userRow.alliedProfessionKey) {
     const ap = getAlliedProfessionByProfessionKey(userRow.alliedProfessionKey);
     weakTopics = filterWeakTopicsForAlliedProfession(weakTopics, ap);
+    topicTrends = filterTopicRowsForAlliedProfession(topicTrends, ap).slice(0, 3);
+    strongTopicsHighlight = filterWeakTopicsForAlliedProfession(strongTopicsHighlight, ap).slice(0, 3);
     perf = {
       ...perf,
       weakTopics,
@@ -85,13 +105,14 @@ export async function buildLearnerStudySnapshot(
   }
 
   const topWeak = weakTopics[0] ?? null;
+  const recommendedFocusTopic = topWeak?.topic?.trim() || null;
 
-  const pathwayNext = await resolvePathwayNextLesson(userId, entitlement, learnerPath);
+  const pathwayNext = await resolvePathwayNextLesson(userId, entitlement, learnerPathResolved);
 
   const weakKey = topWeak ? (topWeak.normalizedTopic ?? normalizeTopicKey(topWeak.topic)) : "";
   const weakTopicPathwayLesson =
     topWeak && weakKey.length > 1
-      ? await resolvePathwayLessonForWeakTopic(userId, entitlement, learnerPath, weakKey)
+      ? await resolvePathwayLessonForWeakTopic(userId, entitlement, learnerPathResolved, weakKey)
       : null;
 
   const weakTopicCodes = weakTopicCodesFromRows(weakTopics);
@@ -101,6 +122,9 @@ export async function buildLearnerStudySnapshot(
   return {
     weakTopics,
     topicPerformanceSource: perf.source,
+    topicTrends,
+    strongTopicsHighlight,
+    recommendedFocusTopic,
     topWeak,
     pathwayNext,
     weakTopicPathwayLesson,

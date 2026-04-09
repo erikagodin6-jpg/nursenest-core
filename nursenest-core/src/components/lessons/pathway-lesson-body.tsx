@@ -70,7 +70,7 @@ export function PathwayLessonBody({
   const paragraphs = safe.split(/\n\n/).filter((p) => p.trim().length > 0);
   if (paragraphs.length === 0) {
     return (
-      <p className="text-sm italic text-muted-foreground">
+      <p className="nn-lesson-prose italic text-muted-foreground">
         This section has no content yet. Check back after the next content update.
       </p>
     );

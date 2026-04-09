@@ -106,7 +106,7 @@ export function PathwayLessonsGroupedHub({
         </ol>
       </section>
 
-      <PathwayTopicClusterNav
+      <PathwayTopicClusterGroupedNav
         lessonsBasePath={lessonsBasePath}
         topicClusters={topicClusters}
         pathwayShortName={pathway.shortName}

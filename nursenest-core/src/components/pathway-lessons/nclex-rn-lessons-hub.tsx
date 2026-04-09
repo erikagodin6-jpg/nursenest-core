@@ -110,7 +110,7 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
       </section>
 
       {/* Topic clusters (body system / SEO hubs) */}
-      <PathwayTopicClusterNav
+      <PathwayTopicClusterGroupedNav
         lessonsBasePath={lessonsBasePath}
         topicClusters={topicClusters}
         pathwayShortName={pathway.shortName}

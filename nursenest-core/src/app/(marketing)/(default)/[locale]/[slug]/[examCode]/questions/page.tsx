@@ -21,26 +21,38 @@ export function generateStaticParams() {
   return [];
 }
 
-type Props = { params: Promise<{ locale: string; slug: string; examCode: string }> };
+type Props = {
+  params: Promise<{ locale: string; slug: string; examCode: string }>;
+  searchParams?: Promise<{ topic?: string }>;
+};
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const { locale, slug, examCode } = await params;
+  const sp = searchParams ? await searchParams : {};
+  const topicFilter = sp.topic?.trim() ?? "";
   const pathway = resolveExamPathwayFromMarketingHubSegment(locale, slug, examCode);
   if (!pathway) return {};
   const canonicalPath = buildExamPathwayPath(pathway, "questions");
   const canonical = absoluteUrl(canonicalPath);
-  const title = `Question bank · ${pathway.displayName} | NurseNest`;
-  const description = `Pathway-scoped practice for ${pathway.shortName} (${pathway.countrySlug === "canada" ? "Canada" : "US"}). Sign in to run sets filtered by your plan.`;
+  const title = topicFilter
+    ? `${topicFilter} · Question bank · ${pathway.displayName} | NurseNest`
+    : `Question bank · ${pathway.displayName} | NurseNest`;
+  const description = topicFilter
+    ? `Pathway-scoped practice for ${pathway.shortName} with a topic focus on ${topicFilter}. Sign in to run sets filtered to your plan.`
+    : `Pathway-scoped practice for ${pathway.shortName} (${pathway.countrySlug === "canada" ? "Canada" : "US"}). Sign in to run sets filtered by your plan.`;
   return {
     title,
     description,
     alternates: { canonical },
     openGraph: { title, description, url: canonical, type: "website" },
+    ...(topicFilter ? { robots: { index: false, follow: true } } : {}),
   };
 }
 
-export default async function ExamPathwayQuestionsHubPage({ params }: Props) {
+export default async function ExamPathwayQuestionsHubPage({ params, searchParams }: Props) {
   const { locale, slug, examCode } = await params;
+  const sp = searchParams ? await searchParams : {};
+  const topicFilter = sp.topic?.trim() ?? "";
   const pathway = resolveExamPathwayFromMarketingHubSegment(locale, slug, examCode);
   if (!pathway) notFound();
 
@@ -57,7 +69,14 @@ export default async function ExamPathwayQuestionsHubPage({ params }: Props) {
   const countryLabel = pathway.countrySlug === "canada" ? "Canada" : "US";
   const examName = pathway.contentExamKeys.length ? pathway.contentExamKeys.join(" / ") : pathway.shortName;
   const lessonsHref = buildExamPathwayPath(pathway, "lessons");
-  const appQuestionsScoped = loginWithCallback(`/app/questions?pathwayId=${encodeURIComponent(pathway.id)}`);
+  const appQs = new URLSearchParams();
+  appQs.set("pathwayId", pathway.id);
+  if (topicFilter) {
+    appQs.set("topic", topicFilter);
+    appQs.set("preset", "topic_drill");
+  }
+  const appQuestionsScoped = loginWithCallback(`/app/questions?${appQs.toString()}`);
+  const questionsHubPath = buildExamPathwayPath(pathway, "questions");
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
@@ -72,8 +91,17 @@ export default async function ExamPathwayQuestionsHubPage({ params }: Props) {
         {pathway.shortName} {countryLabel} question bank
       </h1>
       <p className="mt-3 text-[var(--theme-muted-text)]">
-        Practice for {examName} with pathway-scoped sets, rationale-first feedback, and readiness progress aimed at passing your
-        {countryLabel} exam track.
+        {topicFilter ? (
+          <>
+            Topic focus: <span className="font-semibold text-[var(--theme-heading-text)]">{topicFilter}</span>. Practice for{" "}
+            {examName} stays scoped to {pathway.shortName}; sign in to run sets with this topic applied in the app.
+          </>
+        ) : (
+          <>
+            Practice for {examName} with pathway-scoped sets, rationale-first feedback, and readiness progress aimed at passing
+            your {countryLabel} exam track.
+          </>
+        )}
       </p>
       <PathwayLiveInventoryStrip
         pathway={pathway}
@@ -81,6 +109,20 @@ export default async function ExamPathwayQuestionsHubPage({ params }: Props) {
         lessonCount={pathwayLessonCount}
         variant="questions"
       />
+      {topicFilter ? (
+        <aside className="nn-study-card nn-study-card--wash mt-6 p-4 sm:p-5">
+          <p className="text-sm font-semibold text-[var(--theme-heading-text)]">Filtered from lessons or topic hub</p>
+          <p className="mt-1 text-sm text-[var(--theme-muted-text)]">
+            This page is scoped to one topic for faster navigation. The canonical bank hub covers the full pathway.
+          </p>
+          <Link
+            href={questionsHubPath}
+            className="mt-3 inline-flex text-sm font-semibold text-primary underline underline-offset-2 hover:no-underline"
+          >
+            Clear topic — open full question bank hub
+          </Link>
+        </aside>
+      ) : null}
       {pathway.roleTrack === "np" ? (
         <div className="mt-4 rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]/50 p-4 text-sm text-[var(--theme-body-text)]">
           <NpQuestionsHubBoardLinks pathwayId={pathway.id} linkContext={boardLinkContext} />

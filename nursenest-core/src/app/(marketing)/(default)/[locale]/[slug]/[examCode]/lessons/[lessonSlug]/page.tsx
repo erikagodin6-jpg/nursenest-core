@@ -175,7 +175,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
   );
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12">
+    <div className="mx-auto max-w-4xl px-4 py-12">
       <BreadcrumbJsonLd items={schemaItems} />
       <div className="mb-6">
         <BreadcrumbTrail items={crumbs} />
@@ -289,13 +289,16 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
         </aside>
       ) : null}
 
-      <article className="mt-8 space-y-8">
-        {visible.map((section) => (
-          <section key={section.id} className="border-b border-[var(--theme-separator)] pb-8 last:border-0">
-            <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">
+      <article className="mt-10 space-y-5">
+        {visible.map((section, idx) => (
+          <section
+            key={section.id}
+            className={`nn-lesson-article-section ${idx % 2 === 1 ? "nn-lesson-article-section--alt" : ""}`}
+          >
+            <h2 className="text-xl font-semibold tracking-tight text-[var(--theme-heading-text)]">
               {section.heading?.trim() || "Section"}
             </h2>
-            <div className="mt-3">
+            <div className="mt-4">
               <PathwayLessonSectionContent
                 text={typeof section.body === "string" ? section.body : ""}
                 figures={section.figures}
@@ -318,6 +321,13 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
         userId={userId}
         canMarkComplete={fullAccess}
         initialProgress={lessonProgress}
+      />
+
+      <PathwayLessonPracticeTopicCta
+        pathway={pathway}
+        topic={lesson.topic}
+        topicSlug={lesson.topicSlug}
+        lessonsBasePath={base}
       />
 
       <p className="mt-6 text-sm text-muted">

@@ -7,6 +7,9 @@ function baseSnapshot(over: Partial<LearnerStudySnapshot>): LearnerStudySnapshot
   return {
     weakTopics: [],
     topicPerformanceSource: "ledger",
+    topicTrends: [],
+    strongTopicsHighlight: [],
+    recommendedFocusTopic: null,
     topWeak: null,
     pathwayNext: null,
     weakTopicPathwayLesson: null,
