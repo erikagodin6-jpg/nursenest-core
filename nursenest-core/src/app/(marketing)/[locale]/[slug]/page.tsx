@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { ProgrammaticSeoPage } from "@/components/seo/programmatic-seo-page";
 import { buildProgrammaticMetadata } from "@/lib/seo/programmatic-metadata";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
-import { PROGRAMMATIC_SEO_ISR_REVALIDATE_SECONDS } from "@/lib/seo/programmatic-registry";
 import { resolveProgrammaticSeoForLocale } from "@/lib/seo/resolve-programmatic-seo";
 
 /**
@@ -12,7 +11,8 @@ import { resolveProgrammaticSeoForLocale } from "@/lib/seo/resolve-programmatic-
  * `generateStaticParams` is empty: each locale+slug is generated on first request and cached (ISR).
  */
 export const dynamicParams = true;
-export const revalidate = PROGRAMMATIC_SEO_ISR_REVALIDATE_SECONDS;
+/** Keep in sync with `PROGRAMMATIC_SEO_ISR_REVALIDATE_SECONDS` — literal required for Next segment config parsing. */
+export const revalidate = 86_400;
 
 export function generateStaticParams(): { locale: string; slug: string }[] {
   return [];

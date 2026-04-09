@@ -6,12 +6,14 @@
  */
 
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
+import { CANONICAL_PATHWAY_HUB } from "@/lib/marketing/canonical-pathway-hubs";
 
 export type MarketingRegionToggle = "US" | "CA";
 
 /** RN / NCLEX-RN */
 export const RN = {
-  practiceProgrammatic: "/nclex-rn-practice-questions",
+  /** Legacy name: canonical US RN pathway hub (not the old `/nclex-rn-practice-questions` slug). */
+  practiceProgrammatic: CANONICAL_PATHWAY_HUB.usRn,
   usLessons: "/us/rn/nclex-rn/lessons",
   caLessons: "/canada/rn/nclex-rn/lessons",
   usQuestions: "/us/rn/nclex-rn/questions",
@@ -27,22 +29,22 @@ export const PN = {
   caHub: "/canada/rpn/rex-pn",
   caLessons: "/canada/rpn/rex-pn/lessons",
   caQuestions: "/canada/rpn/rex-pn/questions",
-  /** Canadian PN programmatic SEO landing (REx-PN). */
-  practiceProgrammatic: "/rex-pn-practice-questions",
-  /** US LVN/LPN programmatic SEO landing (NCLEX-PN). */
-  practiceProgrammaticUs: "/nclex-pn-practice-questions",
+  /** Legacy: Canada PN canonical pathway hub (not `/rex-pn-practice-questions`). */
+  practiceProgrammatic: CANONICAL_PATHWAY_HUB.caPn,
+  /** Legacy: US PN canonical pathway hub (not `/nclex-pn-practice-questions`). */
+  practiceProgrammaticUs: CANONICAL_PATHWAY_HUB.usPn,
 } as const;
 
 /** NP (US tracks in product) */
 export const NP = {
-  practiceProgrammatic: "/np-exam-practice-questions",
+  practiceProgrammatic: CANONICAL_PATHWAY_HUB.usNp,
   /** Strict SEO hubs → same pathways as `fnp` / `pmhnp` / CNPLE (see `np-practice-test-segments.ts`). */
   aanpPracticeTest: "/us/np/aanp-practice-test",
   anccFnpPracticeTest: "/us/np/ancc-fnp-practice-test",
   pmhnpPracticeTest: "/us/np/pmhnp-practice-test",
   cnplePracticeTest: "/canada/np/cnple-practice-test",
-  /** Canadian NP programmatic SEO landing (CNPLE). */
-  practiceProgrammaticCa: "/cnple-practice-questions",
+  /** Legacy: Canada NP canonical pathway hub (not `/cnple-practice-questions`). */
+  practiceProgrammaticCa: CANONICAL_PATHWAY_HUB.caNp,
   fnpLessons: "/us/np/fnp/lessons",
   agpcnpLessons: "/us/np/agpcnp/lessons",
   fnpQuestions: "/us/np/fnp/questions",

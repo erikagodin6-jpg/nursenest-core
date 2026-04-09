@@ -1,3 +1,4 @@
+import { CANONICAL_PATHWAY_HUB } from "@/lib/marketing/canonical-pathway-hubs";
 import { isProgrammaticSeoSlug } from "@/lib/seo/programmatic-registry";
 
 /**
@@ -18,7 +19,7 @@ const EXACT: Record<string, string> = {
   "/rex-pn": "/canada/rpn/rex-pn",
   /** Legacy short path: send to public lessons index (region + exam picked there and in nav). */
   "/nclex-rn": "/lessons",
-  "/np-exam-practice-questions": "/np-exam-practice-questions",
+  "/np-exam-practice-questions": CANONICAL_PATHWAY_HUB.usNp,
   "/nursing-certifications": `${PUBLIC_SITE}/nursing-certifications`,
   "/newgrad": `${PUBLIC_SITE}/newgrad`,
   "/new-grad": `${PUBLIC_SITE}/new-grad`,
@@ -48,8 +49,10 @@ const EXACT: Record<string, string> = {
   "/pre-nursing": "/pre-nursing",
   /** No dedicated anatomy route in Core; tools index is the closest internal hub. */
   "/anatomy": "/tools",
-  "/rex-pn-practice-questions": "/rex-pn-practice-questions",
-  "/nclex-rn-practice-questions": "/nclex-rn-practice-questions",
+  "/rex-pn-practice-questions": CANONICAL_PATHWAY_HUB.caPn,
+  "/nclex-rn-practice-questions": CANONICAL_PATHWAY_HUB.usRn,
+  "/nclex-pn-practice-questions": CANONICAL_PATHWAY_HUB.usPn,
+  "/cnple-practice-questions": CANONICAL_PATHWAY_HUB.caNp,
   "/nursing-specialties": "/lessons",
   "/new-graduate-support": `${PUBLIC_SITE}/new-graduate-support`,
   "/healthcare-careers": `${PUBLIC_SITE}/healthcare-careers`,

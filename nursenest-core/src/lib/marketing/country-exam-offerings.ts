@@ -7,14 +7,15 @@
  * Paths stay aligned with `marketing-entry-routes.ts` and programmatic SEO slugs — do not rename routes here.
  *
  * **NP:** US → default pathway hub `/us/np/fnp` (FNP). Canada → canonical CNPLE hub (`/canada/np/cnple`).
- * Programmatic umbrella `/np-exam-practice-questions` remains for SEO; primary nav and CTAs use pathway hubs.
+ * Legacy programmatic SEO slugs 301 to these hubs (`canonical-pathway-hubs` + `next.config` redirects).
  *
- * **Strip vs hero:** RN/PN/Allied use canonical pathway hub URLs; NP US uses the umbrella above.
+ * **Strip vs hero:** RN/PN/NP/Allied use canonical pathway hub URLs from the registry.
  * Order is always RN → PN → NP → Allied (`EXAM_PATHWAY_ORDER`).
  */
 import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { CANONICAL_PATHWAY_HUB } from "@/lib/marketing/canonical-pathway-hubs";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
-import { NP, RN, alliedHub, pnPrimaryHub } from "@/lib/marketing/marketing-entry-routes";
+import { alliedHub, pnPrimaryHub } from "@/lib/marketing/marketing-entry-routes";
 
 export type CountryExamOfferingId = "rn" | "pn" | "np" | "allied";
 
@@ -39,17 +40,17 @@ export function marketingExamHubPath(region: MarketingRegionToggle, id: CountryE
   switch (id) {
     case "rn": {
       const p = getExamPathwayById(isUs ? "us-rn-nclex-rn" : "ca-rn-nclex-rn");
-      return p ? buildExamPathwayPath(p) : RN.practiceProgrammatic;
+      return p ? buildExamPathwayPath(p) : isUs ? CANONICAL_PATHWAY_HUB.usRn : CANONICAL_PATHWAY_HUB.caRn;
     }
     case "pn":
       return pnPrimaryHub(region);
     case "np": {
       if (isUs) {
         const usNp = getExamPathwayById("us-np-fnp");
-        return usNp ? buildExamPathwayPath(usNp) : NP.practiceProgrammatic;
+        return usNp ? buildExamPathwayPath(usNp) : CANONICAL_PATHWAY_HUB.usNp;
       }
       const caNp = getExamPathwayById("ca-np-cnple");
-      return caNp ? buildExamPathwayPath(caNp) : NP.practiceProgrammaticCa;
+      return caNp ? buildExamPathwayPath(caNp) : CANONICAL_PATHWAY_HUB.caNp;
     }
     case "allied":
       return alliedHub(region);

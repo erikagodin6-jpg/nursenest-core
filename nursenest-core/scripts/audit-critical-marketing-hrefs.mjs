@@ -13,8 +13,8 @@ const src = readFileSync(loaderPath, "utf8");
 
 const checks = [
   { re: /["']\/exam-prep["']\s*:\s*["']\/lessons["']/, msg: "/exam-prep must map to /lessons" },
-  { re: /["']\/nclex-rn["']\s*:\s*["']\/nclex-rn-practice-questions["']/, msg: "/nclex-rn must map to /nclex-rn-practice-questions" },
-  { re: /["']\/rex-pn["']\s*:\s*["']\/rex-pn-practice-questions["']/, msg: "/rex-pn must map to /rex-pn-practice-questions" },
+  { re: /["']\/nclex-rn["']\s*:\s*["']\/lessons["']/, msg: "/nclex-rn must map to /lessons" },
+  { re: /["']\/rex-pn["']\s*:\s*["']\/canada\/rpn\/rex-pn["']/, msg: "/rex-pn must map to /canada/rpn/rex-pn" },
   { re: /["']\/exam-prep["']\s*:\s*["']\/pricing["']/, msg: "/exam-prep must NOT map to /pricing", invert: true },
 ];
 

@@ -13,6 +13,7 @@ import {
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
+import { CANONICAL_PATHWAY_HUB } from "@/lib/marketing/canonical-pathway-hubs";
 import { MARKETING_PRIMARY_CTA_CLASS } from "@/lib/theme/marketing-hero-pattern";
 
 export default function HomeChoosePath() {
@@ -38,7 +39,7 @@ export default function HomeChoosePath() {
       subtitle: "AANP / ANCC / FNP-BC & More",
       desc: "Advanced NP certification exam prep covering FNP-BC, AGPCNP-BC, AGACNP-BC, PMHNP-BC, PNP-BC, NNP-BC, ENP-C, and CNM exams.",
       cta: "Explore NP Prep",
-      href: "/np-exam-practice-questions",
+      href: CANONICAL_PATHWAY_HUB.usNp,
       testId: "card-np-certification",
       btnTestId: "button-explore-np-prep",
     },

@@ -14,14 +14,20 @@ import type { NextConfig } from "next";
 import { PROGRAMMATIC_SLUG_TO_PATHWAY_PATH } from "./src/lib/exam-pathways/programmatic-slug-redirects";
 import { buildPathwayLessonSlugRedirectsForNextConfig } from "./src/lib/lessons/pathway-lesson-slug-redirects";
 import { CORE_HOSTED_MARKETING_LOCALES } from "./src/lib/i18n/marketing-locale-policy";
+import {
+  buildLegacyProgrammaticSeoRedirectsToPathwayHubs,
+  LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT,
+} from "./src/lib/marketing/canonical-pathway-hubs";
 import { getAllProgrammaticSlugs } from "./src/lib/seo/programmatic-registry";
 
 /** Parent of `nursenest-core/` (repo root); avoids `path` in config bundle (fixes ESM load). */
 const monorepoRoot = fileURLToPath(new URL("..", import.meta.url));
-const programmaticSeoRewrites = getAllProgrammaticSlugs().map((slug) => ({
-  source: `/${slug}`,
-  destination: `/seo/${slug}`,
-}));
+const programmaticSeoRewrites = getAllProgrammaticSlugs()
+  .filter((slug) => !LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT.has(slug))
+  .map((slug) => ({
+    source: `/${slug}`,
+    destination: `/seo/${slug}`,
+  }));
 
 const legacyMedMathRedirect = {
   source: "/med-math",
@@ -30,11 +36,13 @@ const legacyMedMathRedirect = {
 } as const;
 
 /** Consolidate on public programmatic URLs (`/{slug}`); `/seo/{slug}` is internal rewrite target only. */
-const seoCanonicalRedirects = getAllProgrammaticSlugs().map((slug) => ({
-  source: `/seo/${slug}`,
-  destination: `/${slug}`,
-  permanent: true,
-}));
+const seoCanonicalRedirects = getAllProgrammaticSlugs()
+  .filter((slug) => !LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT.has(slug))
+  .map((slug) => ({
+    source: `/seo/${slug}`,
+    destination: `/${slug}`,
+    permanent: true,
+  }));
 
 const examPathwayFromProgrammaticRedirects = Object.entries(PROGRAMMATIC_SLUG_TO_PATHWAY_PATH).map(([slug, dest]) => ({
   source: `/${slug}`,
@@ -84,6 +92,11 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       legacyMedMathRedirect,
+      /**
+       * Legacy programmatic SEO slugs (`/{slug}`, `/seo/{slug}`, `/{locale}/{slug}`) → canonical pathway hubs.
+       * Runs before rewrites so broken umbrella landings never 500; backlinks consolidate on exam hubs.
+       */
+      ...buildLegacyProgrammaticSeoRedirectsToPathwayHubs(CORE_HOSTED_MARKETING_LOCALES),
       /** Older Next split-sitemap routes → unified `/sitemap.xml` for GSC + bookmarks. */
       { source: "/sitemap/0.xml", destination: "/sitemap.xml", permanent: true },
       { source: "/sitemap/1.xml", destination: "/sitemap.xml", permanent: true },
