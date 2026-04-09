@@ -702,15 +702,20 @@ export async function loadAdminUserAnalytics(
     pushWarn(e, "cohortRetention");
   }
 
-  const distinctPathways = await prisma.user.findMany({
-    where: { role: UserRole.LEARNER, targetExamPathwayId: { not: null } },
-    select: { targetExamPathwayId: true },
-    distinct: ["targetExamPathwayId"],
-  });
-  const pathwaysForSelect = distinctPathways
-    .map((r) => r.targetExamPathwayId)
-    .filter((x): x is string => Boolean(x))
-    .sort();
+  let pathwaysForSelect: string[] = [];
+  try {
+    const distinctPathways = await prisma.user.findMany({
+      where: { role: UserRole.LEARNER, targetExamPathwayId: { not: null } },
+      select: { targetExamPathwayId: true },
+      distinct: ["targetExamPathwayId"],
+    });
+    pathwaysForSelect = distinctPathways
+      .map((r) => r.targetExamPathwayId)
+      .filter((x): x is string => Boolean(x))
+      .sort();
+  } catch (e) {
+    pushWarn(e, "pathwayOptions");
+  }
 
   const filterOptions: AdminUserAnalyticsData["filterOptions"] = {
     countries: [

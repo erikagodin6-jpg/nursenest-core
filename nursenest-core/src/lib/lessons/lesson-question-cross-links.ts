@@ -8,56 +8,129 @@ import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 /** Upper bound for cross-link lists (lesson ↔ question bank). Single `findMany` uses `take` with this value. */
 export const RELATED_EXAM_QUESTIONS_CAP = 8;
 
-const TOPIC_TOKEN_STOPWORDS = new Set([
-  "the",
+/** Max `topic.contains` OR branches from title/slug tokens (additive only; direct matches stay separate). */
+const MAX_TOPIC_CONTAINS_TOKENS = 6;
+
+/** Conservative stop list for title/slug-derived `contains` tokens only (not used for exact `lessonTopic` / slug-phrase). */
+const TITLE_TOPIC_TOKEN_STOPWORDS = new Set([
+  "all",
   "and",
-  "for",
-  "with",
-  "from",
-  "this",
-  "that",
-  "your",
+  "any",
   "are",
+  "adult",
+  "adults",
+  "assessment",
+  "basic",
+  "basics",
+  "been",
+  "but",
+  "can",
+  "care",
+  "case",
+  "cases",
+  "clinical",
+  "disease",
+  "diseases",
+  "disorders",
+  "exam",
+  "for",
+  "from",
   "has",
   "have",
-  "been",
-  "into",
-  "when",
-  "will",
-  "can",
-  "not",
-  "you",
-  "may",
-  "but",
-  "use",
   "how",
+  "into",
+  "introduction",
+  "interventions",
+  "lesson",
+  "lessons",
+  "management",
+  "may",
+  "not",
+  "nurse",
+  "nurses",
+  "nursing",
+  "overview",
+  "patient",
+  "patients",
+  "paediatric",
+  "pediatric",
+  "practice",
+  "prioritization",
+  "review",
+  "safety",
+  "study",
+  "studies",
+  "syndrome",
+  "syndromes",
+  "that",
+  "the",
+  "this",
+  "use",
   "what",
+  "when",
   "why",
-  "all",
-  "any",
+  "will",
+  "with",
+  "without",
+  "your",
+  "you",
 ]);
 
 /**
- * Short tokens from lesson title + topicSlug segments for `topic` matching (bounded OR list, no full-text scan).
+ * Short tokens that are valid length but too generic for `topic.contains` (common slug fragments / abbrev noise).
+ */
+const WEAK_TOPIC_CONTAINS_TOKENS = new Set([
+  "ca",
+  "iv",
+  "med",
+  "np",
+  "pn",
+  "rn",
+  "us",
+]);
+
+/**
+ * Lowercase, trim, strip apostrophes and punctuation, split on non-alphanumeric runs (covers space, hyphen, slash, underscore).
+ * Bounded input (lesson titles / slugs); simple linear passes, no backtracking-heavy patterns.
+ */
+function rawTokensFromNormalizedSource(source: string): string[] {
+  const collapsed = source
+    .toLowerCase()
+    .trim()
+    .replace(/['’`]/g, "")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+  if (!collapsed) return [];
+  return collapsed.split(/\s+/).filter(Boolean);
+}
+
+function shouldEmitContainsToken(t: string): boolean {
+  if (t.length < 3) return false;
+  if (TITLE_TOPIC_TOKEN_STOPWORDS.has(t)) return false;
+  if (WEAK_TOPIC_CONTAINS_TOKENS.has(t)) return false;
+  return true;
+}
+
+/**
+ * Deterministic: title tokens first, then slug-derived tokens; dedupe; cap {@link MAX_TOPIC_CONTAINS_TOKENS}.
+ * Additive `topic.contains` only — exact `lessonTopic` / slug-phrase / bodySystem / tags stay separate.
  */
 function deriveTopicMatchTokens(lessonTitle: string, topicSlug: string): string[] {
-  const titleWords = lessonTitle
-    .toLowerCase()
-    .split(/[^a-z0-9]+/g)
-    .filter((w) => w.length >= 3 && !TOPIC_TOKEN_STOPWORDS.has(w));
-  const slugWords = topicSlug
-    .toLowerCase()
-    .split(/-+/)
-    .map((s) => s.trim())
-    .filter((w) => w.length >= 3 && !TOPIC_TOKEN_STOPWORDS.has(w));
-  const merged = [...titleWords, ...slugWords];
+  const titlePart = rawTokensFromNormalizedSource(lessonTitle);
+  const slugPart = rawTokensFromNormalizedSource(topicSlug);
   const seen = new Set<string>();
   const out: string[] = [];
-  for (const t of merged) {
-    if (seen.has(t)) continue;
+  for (const t of titlePart) {
+    if (!shouldEmitContainsToken(t) || seen.has(t)) continue;
     seen.add(t);
     out.push(t);
-    if (out.length >= 6) break;
+    if (out.length >= MAX_TOPIC_CONTAINS_TOKENS) return out;
+  }
+  for (const t of slugPart) {
+    if (!shouldEmitContainsToken(t) || seen.has(t)) continue;
+    seen.add(t);
+    out.push(t);
+    if (out.length >= MAX_TOPIC_CONTAINS_TOKENS) break;
   }
   return out;
 }

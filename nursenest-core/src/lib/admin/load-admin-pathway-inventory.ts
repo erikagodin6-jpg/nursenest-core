@@ -36,18 +36,18 @@ export async function loadAdminPathwayInventory(filter: AdminPathwayInventoryFil
     prisma.pathwayLesson
       .groupBy({
         by: ["pathwayId", "status"],
-        _count: { id: true },
+        _count: { _all: true },
       })
       .catch(() => {
         degraded = true;
-        return [] as Array<{ pathwayId: string; status: ContentStatus; _count: { id: number } }>;
+        return [] as Array<{ pathwayId: string; status: ContentStatus; _count: { _all: number } }>;
       }),
   ]);
 
   const pubByPathway = new Map<string, number>();
   const draftByPathway = new Map<string, number>();
   for (const row of pathwayGroup) {
-    const n = row._count.id;
+    const n = row._count._all;
     if (row.status === ContentStatus.PUBLISHED) pubByPathway.set(row.pathwayId, (pubByPathway.get(row.pathwayId) ?? 0) + n);
     if (row.status === ContentStatus.DRAFT) draftByPathway.set(row.pathwayId, (draftByPathway.get(row.pathwayId) ?? 0) + n);
   }

@@ -38,7 +38,11 @@ import { classifyPathwayLesson } from "@/lib/content-quality/classify-lesson";
 import { buildQuickReviewBullets } from "@/lib/lessons/pathway-lesson-quick-review";
 import { matchConceptImage } from "@/lib/education-images/match-concept-image";
 import { PathwayLessonFigures } from "@/components/lessons/pathway-lesson-figures";
-import { mergeRelatedLessonDisplayList, pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
+import {
+  mergeRelatedLessonDisplayList,
+  pathwayLessonHasRenderableHubSlug,
+  pathwayLessonPublicDetailPath,
+} from "@/lib/lessons/pathway-lesson-types";
 import {
   loadPathwayLessonProgressForSlug,
   type PathwayLessonProgressStatus,
@@ -64,7 +68,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const contentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
   const lesson = pathway ? await loadPathwayLessonWithLegacySlugRedirect(pathway, lessonSlug, contentLocale) : undefined;
   if (!pathway || !lesson) return {};
-  const path = buildExamPathwayPath(pathway, `lessons/${lesson.slug}`);
+  const path = pathwayLessonPublicDetailPath(pathway, lesson.slug);
+  if (!path) return {};
   const canonical = absoluteUrl(path);
   const keywords = [
     pathway.shortName,

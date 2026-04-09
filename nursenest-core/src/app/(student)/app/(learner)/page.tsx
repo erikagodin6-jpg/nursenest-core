@@ -2,18 +2,39 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { auth } from "@/lib/auth";
 import { LearnerDailyMomentumCard } from "@/components/student/learner-daily-momentum-card";
+import { LearnerDashboardAdvantageStrip } from "@/components/student/learner-dashboard-advantage-strip";
+import { PremiumLearnerHub } from "@/components/student/premium-learner-hub";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { LockedStudyNextPreview } from "@/components/student/locked-study-next-preview";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { buildLearnerStudySnapshot } from "@/lib/learner/build-learner-study-snapshot";
+import {
+  buildContinueLearningItems,
+  continueLearningItemsToLinks,
+} from "@/lib/learner/build-continue-learning-items";
+import { loadLearnerRetentionPreferences } from "@/lib/learner/load-learner-retention-preferences";
 import { loadTodayGoalProgress } from "@/lib/learner/load-today-goal-progress";
 import { loadPremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
 import { loadRecentLearnerNotesSummary } from "@/lib/learner/load-recent-learner-notes-summary";
-import { LearnerStudentDashboard } from "@/components/student/learner-student-dashboard";
+import { LearnerAdaptiveFocusCard } from "@/components/student/learner-adaptive-focus-card";
+import { LearnerContinueLearningCard } from "@/components/student/learner-continue-learning-card";
+import { LearnerDashboardInsightPanels } from "@/components/student/learner-dashboard-insight-panels";
+import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
+
+function retentionPersonalNote(t: LearnerMarketingT, prefs: Awaited<ReturnType<typeof loadLearnerRetentionPreferences>>): string | null {
+  if (!prefs) return null;
+  if (prefs.dailyStudyMinutes != null) {
+    return t("learner.retention.personalMinutesHint", { n: prefs.dailyStudyMinutes });
+  }
+  if (prefs.studyGoal?.trim()) {
+    return t("learner.retention.studyGoalEcho", { goal: prefs.studyGoal.trim() });
+  }
+  return null;
+}
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getLearnerMarketingBundle();
@@ -73,11 +94,12 @@ export default async function LearnerDashboardPage() {
   let studySnap: Awaited<ReturnType<typeof buildLearnerStudySnapshot>> = null;
   let weakTopicTitles: string[] = [];
   try {
-    const [snap, nextSnap, notes, todayGoal] = await Promise.all([
+    const [snap, nextSnap, notes, todayGoal, retentionPrefs] = await Promise.all([
       loadPremiumDashboardSnapshot(userId, entitlement),
       buildLearnerStudySnapshot(userId, entitlement, undefined),
       loadRecentLearnerNotesSummary(userId),
       loadTodayGoalProgress(userId),
+      loadLearnerRetentionPreferences(userId),
     ]);
     snapshot = snap;
     studySnap = nextSnap;
@@ -89,6 +111,10 @@ export default async function LearnerDashboardPage() {
           ? { title: snapshot.lessonContinuations[0].title, href: snapshot.lessonContinuations[0].href }
           : null);
       const momentumLine = snapshot.momentumMessages[0] ?? null;
+      const continueLinks = continueLearningItemsToLinks(buildContinueLearningItems(snapshot), t);
+      const personalNote = retentionPersonalNote(t, retentionPrefs);
+      const streakProtect =
+        todayGoal != null && snapshot.studyStreakDays > 0 && todayGoal.credits < todayGoal.target;
 
       return (
         <main className="space-y-6">
@@ -106,9 +132,24 @@ export default async function LearnerDashboardPage() {
               resume={resume}
               momentumLine={momentumLine}
               focusTopic={weakTopicTitles[0] ?? null}
+              personalNote={personalNote}
+              showStreakProtectNudge={streakProtect}
             />
           ) : null}
-          <LearnerStudentDashboard snapshot={snapshot} studySnap={studySnap} recentNotes={notes} t={t} />
+          <LearnerContinueLearningCard t={t} links={continueLinks} />
+          <LearnerDashboardAdvantageStrip t={t} />
+          <LearnerDashboardInsightPanels snapshot={snapshot} t={t} />
+          {studySnap ? <LearnerAdaptiveFocusCard snapshot={studySnap} /> : null}
+          <PremiumLearnerHub
+            snapshot={snapshot}
+            weakTopicTitles={weakTopicTitles}
+            recentNotes={notes}
+            suppressFlashcardWeakLine={weakTopicTitles.length > 0}
+            compactIntro
+            omitReadinessBreakdown
+            omitRecentMocks
+            readinessDeferHint={t("learner.dashboard.hub.readinessDeferHint")}
+          />
           <section className="nn-card flex flex-col gap-3 p-5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
             <p className="text-sm text-muted-foreground">{t("learner.dashboard.accountTeaser")}</p>
             <Link

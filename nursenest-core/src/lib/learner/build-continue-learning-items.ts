@@ -87,8 +87,6 @@ export function continueLearningItemsToLinks(items: ContinueLearningItem[], t: L
               : t("learner.retention.fallbackBank"),
           href: it.target === "lessons" ? "/app/lessons" : "/app/questions",
         };
-      default:
-        return { title: "", href: "/" };
     }
   });
 }

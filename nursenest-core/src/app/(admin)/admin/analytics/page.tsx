@@ -30,6 +30,9 @@ export default async function AdminAnalyticsPage() {
           <Link href="/admin/diagnostics" className="text-muted-foreground underline">
             Diagnostics
           </Link>
+          <Link href="/admin/analytics/users" className="text-primary underline">
+            User analytics →
+          </Link>
         </div>
       </div>
 
