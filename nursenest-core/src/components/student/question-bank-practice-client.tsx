@@ -44,6 +44,7 @@ import {
   parsePersistedQuestionBankSessionJson,
   parseSavedQuestionBankPresetsJson,
 } from "@/lib/questions/question-bank-client-types";
+import { mergeRationaleLessonLinksWithTopicFallback } from "@/lib/questions/merge-rationale-lesson-links";
 import { parseCommaSeparatedQuestionIds } from "@/lib/questions/question-id-list-param";
 
 export type { QuestionBankDifficultyBand, QuestionBankPreset, SavedQuestionBankPreset } from "@/lib/questions/question-bank-client-types";
@@ -628,6 +629,10 @@ export function QuestionBankPracticeClient({
   }, [current, optsCanonical]);
 
   const g = current ? graded[current.id] : undefined;
+  const rationaleLessonLinksMerged = useMemo(
+    () => mergeRationaleLessonLinksWithTopicFallback(g?.rationaleLessonLinks, current?.topic ?? null),
+    [g?.rationaleLessonLinks, current?.topic],
+  );
 
   async function checkAnswer() {
     if (!current) return;
@@ -1316,7 +1321,7 @@ export function QuestionBankPracticeClient({
                     referenceMedia={g.referenceMedia}
                     teaching={g.teaching}
                     teachingMedia={g.teachingMedia}
-                    rationaleLessonLinks={g.rationaleLessonLinks}
+                    rationaleLessonLinks={rationaleLessonLinksMerged}
                     variant="exam"
                     defaultOpenExplanation={!g.correct}
                   />
@@ -1365,10 +1370,10 @@ export function QuestionBankPracticeClient({
                 {g.learningLoop &&
                 (g.learningLoop.topicDrillHref ||
                   g.learningLoop.flashcardsHref ||
-                  (g.learningLoop.lessonHref && !(g.rationaleLessonLinks && g.rationaleLessonLinks.length > 0))) ? (
+                  (g.learningLoop.lessonHref && rationaleLessonLinksMerged.length === 0)) ? (
                   <div className="rounded-xl border border-border/80 bg-muted/15 p-4">
                     <div className="flex flex-wrap gap-2">
-                      {g.learningLoop.lessonHref && !(g.rationaleLessonLinks && g.rationaleLessonLinks.length > 0) ? (
+                      {g.learningLoop.lessonHref && rationaleLessonLinksMerged.length === 0 ? (
                         <Link
                           href={g.learningLoop.lessonHref}
                           className="inline-flex min-h-11 items-center rounded-full border border-border bg-card px-4 text-xs font-semibold hover:bg-muted/80"

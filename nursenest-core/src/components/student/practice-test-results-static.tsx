@@ -1,7 +1,22 @@
 import Link from "next/link";
 import { BarChart3 } from "lucide-react";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
+import {
+  remediationLessonsTopicHref,
+  remediationTopicDrillHref,
+  remediationWeakModeTestHref,
+} from "@/lib/learner/remediation-links";
 import { semanticFillClassForAccuracyPct } from "@/lib/ui/semantic-progress-fill";
+
+export type PracticeTestWeakFollowUpCopy = {
+  weakTitle: string;
+  weakHint: string;
+  reviewLessons: string;
+  topicDrill: string;
+  suggestedFollowUp: string;
+  retestWeak: string;
+  adaptiveSamePathway: string;
+};
 
 export type PracticeTestIncorrectReviewItem = {
   id: string;
@@ -22,6 +37,7 @@ export function PracticeTestResultsStatic({
   incorrectReviewItems = [],
   sessionInsightStruggle = null,
   sessionInsightFocus = null,
+  weakFollowUpCopy = null,
 }: {
   testId: string;
   title: string | null;
@@ -32,6 +48,8 @@ export function PracticeTestResultsStatic({
   /** Pre-resolved i18n from the results page (grounded in this run’s weak areas). */
   sessionInsightStruggle?: string | null;
   sessionInsightFocus?: string | null;
+  /** Labels for weak-topic remediation links (from `t()` on the results page). */
+  weakFollowUpCopy?: PracticeTestWeakFollowUpCopy | null;
 }) {
   const cat = config?.selectionMode === "cat";
   const incorrect = Math.max(0, results.scoreTotal - results.scoreCorrect);
@@ -130,26 +148,50 @@ export function PracticeTestResultsStatic({
         </div>
       ) : null}
 
-      {results.weakAreas.length > 0 ? (
+      {results.weakAreas.length > 0 && weakFollowUpCopy ? (
         <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] bg-[var(--semantic-warning-soft)] p-6 shadow-sm">
-          <h3 className="text-base font-semibold text-[var(--semantic-text-primary)]">Weak areas</h3>
-          <p className="mt-1 text-sm text-[var(--semantic-text-muted)]">Topics to review from this run.</p>
-          <ul className="mt-3 space-y-2 text-sm">
-            {results.weakAreas.map((w, i) => (
-              <li key={w}>
-                <Link
-                  className={
-                    i % 2 === 0
-                      ? "font-medium text-[var(--semantic-info)] underline decoration-[color-mix(in_srgb,var(--semantic-info)_45%,transparent)] underline-offset-2 hover:decoration-[var(--semantic-info)]"
-                      : "font-medium text-[var(--semantic-warning-contrast)] underline decoration-[color-mix(in_srgb,var(--semantic-warning)_40%,transparent)] underline-offset-2 hover:decoration-[var(--semantic-warning)]"
-                  }
-                  href={`/app/questions?topic=${encodeURIComponent(w)}`}
-                >
-                  {w}
-                </Link>
+          <h3 className="text-base font-semibold text-[var(--semantic-text-primary)]">{weakFollowUpCopy.weakTitle}</h3>
+          <p className="mt-1 text-sm text-[var(--semantic-text-muted)]">{weakFollowUpCopy.weakHint}</p>
+          <ul className="mt-4 space-y-4 text-sm">
+            {results.weakAreas.map((w) => (
+              <li key={w} className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_85%,transparent)] bg-[var(--semantic-surface)] px-3 py-3">
+                <p className="font-medium text-[var(--semantic-text-primary)]">{w}</p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  <Link
+                    href={remediationLessonsTopicHref(w)}
+                    className="inline-flex rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_30%,var(--semantic-border-soft))] bg-[var(--semantic-panel-muted)] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-brand)] hover:bg-[color-mix(in_srgb,var(--semantic-brand)_08%,var(--semantic-surface))]"
+                  >
+                    {weakFollowUpCopy.reviewLessons}
+                  </Link>
+                  <Link
+                    href={remediationTopicDrillHref(w)}
+                    className="inline-flex rounded-full border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-info)] hover:opacity-95"
+                  >
+                    {weakFollowUpCopy.topicDrill}
+                  </Link>
+                </div>
               </li>
             ))}
           </ul>
+          <p className="mt-4 text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
+            {weakFollowUpCopy.suggestedFollowUp}
+          </p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            <Link
+              href={remediationWeakModeTestHref(results.weakAreas[0])}
+              className="inline-flex rounded-full bg-role-cta px-4 py-2 text-xs font-semibold text-role-cta-foreground shadow-sm hover:opacity-95"
+            >
+              {weakFollowUpCopy.retestWeak}
+            </Link>
+            {config?.pathwayId ? (
+              <Link
+                href={`/app/practice-tests/start?pathwayId=${encodeURIComponent(config.pathwayId)}`}
+                className="inline-flex rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-2 text-xs font-semibold text-[var(--semantic-text-primary)] hover:bg-[var(--semantic-panel-muted)]"
+              >
+                {weakFollowUpCopy.adaptiveSamePathway}
+              </Link>
+            ) : null}
+          </div>
         </div>
       ) : null}
 
@@ -169,7 +211,7 @@ export function PracticeTestResultsStatic({
                       Topic:{" "}
                       <Link
                         className="font-medium text-[var(--semantic-brand)] underline underline-offset-2"
-                        href={`/app/questions?topic=${encodeURIComponent(item.topic)}`}
+                        href={remediationTopicDrillHref(item.topic)}
                       >
                         {item.topic}
                       </Link>

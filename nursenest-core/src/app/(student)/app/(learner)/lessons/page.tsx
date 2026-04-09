@@ -10,7 +10,10 @@ import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlemen
 import { maxSafeOffsetPage } from "@/lib/api/api-pagination-limits";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallback } from "@/lib/db/safe-database";
-import { pathwayLessonsAppListWhere } from "@/lib/lessons/app-pathway-lesson-list-scope";
+import {
+  pathwayLessonsAppListWhere,
+  pathwayLessonsAppListWhereWithTopicFilter,
+} from "@/lib/lessons/app-pathway-lesson-list-scope";
 import { paginateLegacyContentMapLessons } from "@/lib/lessons/legacy-content-map-lessons";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { FreemiumLessonPeek } from "@/components/student/freemium-lesson-peek";
@@ -49,7 +52,17 @@ function pathwayLessonCardSummary(row: {
   return parts.length ? parts.join(" · ") : null;
 }
 
-type Props = { searchParams: Promise<{ page?: string }> };
+type Props = { searchParams: Promise<{ page?: string; topic?: string; topicSlug?: string }> };
+
+function appLessonsListQuery(page: number, topic: string | null, topicSlug: string | null): string {
+  const qs = new URLSearchParams();
+  if (page > 1) qs.set("page", String(page));
+  const ts = topicSlug?.trim().toLowerCase();
+  if (ts) qs.set("topicSlug", ts);
+  else if (topic?.trim()) qs.set("topic", topic.trim());
+  const s = qs.toString();
+  return s ? `?${s}` : "";
+}
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getLearnerMarketingBundle();
@@ -97,6 +110,10 @@ export default async function LessonsPage({ searchParams }: Props) {
   const rawPage = Math.max(1, Number(sp.page ?? "1") || 1);
   const maxOffsetPage = maxSafeOffsetPage(LEARNER_APP_LESSONS_PAGE_SIZE);
   const pageRequested = Math.min(rawPage, maxOffsetPage);
+  const topicSlugFilter =
+    typeof sp.topicSlug === "string" && sp.topicSlug.trim().length > 0 ? sp.topicSlug.trim().toLowerCase() : null;
+  const topicFilter =
+    !topicSlugFilter && typeof sp.topic === "string" && sp.topic.trim().length > 0 ? sp.topic.trim() : null;
 
   const lessonsBlockFromDb = await withDatabaseFallback(async () => {
     const learnerPathRow = userId
@@ -131,7 +148,10 @@ export default async function LessonsPage({ searchParams }: Props) {
       };
     }
 
-    const pathwayWhere = pathwayLessonsAppListWhere(entitlement, learnerPath);
+    const pathwayWhere = pathwayLessonsAppListWhereWithTopicFilter(entitlement, learnerPath, {
+      topic: topicFilter,
+      topicSlug: topicSlugFilter,
+    });
     const pathwayTotal = await prisma.pathwayLesson.count({ where: pathwayWhere });
 
     if (pathwayTotal > 0) {
@@ -206,7 +226,8 @@ export default async function LessonsPage({ searchParams }: Props) {
   }
 
   if (rawPage !== lessonsBlock.page) {
-    redirect(lessonsBlock.page > 1 ? `/app/lessons?page=${lessonsBlock.page}` : "/app/lessons");
+    const q = appLessonsListQuery(lessonsBlock.page, topicFilter, topicSlugFilter);
+    redirect(q ? `/app/lessons${q}` : "/app/lessons");
   }
 
   const lessons = lessonsBlock.rows;
@@ -247,6 +268,23 @@ export default async function LessonsPage({ searchParams }: Props) {
         </p>
       </div>
       <LearnerStudyQuickLinksCard t={t} id="lessons-study-quick-links" />
+      {(topicFilter || topicSlugFilter) && lessonsBlock.source === "pathway_lessons" ? (
+        <div className="nn-card border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] p-4 text-sm text-[var(--semantic-text-secondary)]">
+          <p className="font-semibold text-[var(--semantic-text-primary)]">{t("learner.lessons.list.topicFilterTitle")}</p>
+          <p className="mt-1">
+            {t("learner.lessons.list.topicFilterBody", {
+              label: topicSlugFilter ?? topicFilter ?? "",
+            })}{" "}
+            <Link className="font-medium text-[var(--semantic-brand)] underline underline-offset-2" href="/app/lessons">
+              {t("learner.lessons.list.topicFilterClear")}
+            </Link>
+          </p>
+        </div>
+      ) : (topicFilter || topicSlugFilter) && lessonsBlock.source !== "pathway_lessons" ? (
+        <div className="nn-card border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-4 text-sm text-[var(--semantic-text-secondary)]">
+          <p>{t("learner.lessons.list.topicFilterIgnored")}</p>
+        </div>
+      ) : null}
       <aside className="nn-card border-[color-mix(in_srgb,var(--semantic-success)_22%,var(--semantic-border-soft))] bg-[var(--semantic-panel-positive)] p-4 text-sm text-[var(--semantic-text-secondary)] shadow-[var(--semantic-shadow-soft)]">
         <p className="font-semibold text-[var(--semantic-text-primary)]">{t("learner.lessons.list.studyRhythmTitle")}</p>
         <p className="mt-1">{t("learner.lessons.list.studyRhythmBody")}</p>
@@ -296,6 +334,8 @@ export default async function LessonsPage({ searchParams }: Props) {
         pageCount={lessonsBlock.pageCount}
         total={lessonsBlock.total}
         pageSize={LEARNER_APP_LESSONS_PAGE_SIZE}
+        topic={topicFilter ?? undefined}
+        topicSlug={topicSlugFilter ?? undefined}
       />
     </main>
   );

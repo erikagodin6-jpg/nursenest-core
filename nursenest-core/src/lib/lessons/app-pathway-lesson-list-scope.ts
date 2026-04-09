@@ -62,6 +62,31 @@ export function pathwayLessonsAppListWhere(
   return { AND: base };
 }
 
+/**
+ * Narrows pathway lessons by catalog `topic` or `topic_slug` (from weak-area / post-test links).
+ */
+export function pathwayLessonsAppListWhereWithTopicFilter(
+  scope: AccessScope,
+  learnerPath: string | null | undefined,
+  filter: { topic?: string | null; topicSlug?: string | null },
+): Prisma.PathwayLessonWhereInput {
+  const base = pathwayLessonsAppListWhere(scope, learnerPath);
+  const slugTrim = filter.topicSlug?.trim().toLowerCase();
+  const topicTrim = filter.topic?.trim();
+  const topicClause: Prisma.PathwayLessonWhereInput | null = slugTrim
+    ? { topicSlug: slugTrim }
+    : topicTrim
+      ? { topic: { equals: topicTrim, mode: "insensitive" } }
+      : null;
+  if (!topicClause) return base;
+
+  if ("AND" in base && Array.isArray((base as { AND: Prisma.PathwayLessonWhereInput[] }).AND)) {
+    const b = base as { AND: Prisma.PathwayLessonWhereInput[] };
+    return { AND: [...b.AND, topicClause] };
+  }
+  return { AND: [base, topicClause] };
+}
+
 /** Gate `/app/lessons/[id]` for a pathway_lessons row (subscriber or admin). */
 export function appPathwayLessonVisibleToSubscriber(
   scope: AccessScope,

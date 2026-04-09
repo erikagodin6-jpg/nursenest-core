@@ -24,6 +24,7 @@ export function LearnerDashboardAnalytics({
 }) {
   const byTopic = snapshot.insights?.performance.byTopic.slice(0, MAX_TOPIC) ?? [];
   const weakAreas = snapshot.insights?.weakAreas.slice(0, MAX_WEAK) ?? [];
+  const continueLesson = snapshot.continueLesson;
   const trend = snapshot.insights?.performance.trendSummary?.trim();
   const practiceLine =
     snapshot.practice.gradedTotal > 0
@@ -38,7 +39,14 @@ export function LearnerDashboardAnalytics({
     <div className="space-y-6" aria-label={t("learner.dashboard.insight.regionLabel")}>
       <ReadinessScoreCard readiness={snapshot.readiness} t={t} />
 
-      <QuickActionPanel t={t} id="dashboard-quick-actions" />
+      <QuickActionPanel
+        t={t}
+        id="dashboard-quick-actions"
+        guided={{
+          continueLesson,
+          hasWeakAreas: weakAreas.length > 0,
+        }}
+      />
 
       <div className="grid gap-4 lg:grid-cols-2">
         <ProgressSummary snapshot={snapshot} t={t} />

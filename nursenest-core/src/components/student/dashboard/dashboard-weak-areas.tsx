@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Crosshair } from "lucide-react";
 import type { WeakAreaInsight, WeaknessTier } from "@/lib/insights/types";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
+import { remediationLessonsTopicHref, remediationTopicDrillHref } from "@/lib/learner/remediation-links";
 
 function tierClass(tier: WeaknessTier): string {
   switch (tier) {
@@ -58,7 +59,10 @@ export function DashboardWeakAreasCard({
   const rows = weakAreas.slice(0, maxRows);
 
   return (
-    <section className="nn-card nn-product-surface-accent nn-student-card-lift relative overflow-hidden border-[color-mix(in_srgb,var(--semantic-danger)_18%,var(--semantic-border-soft))] bg-gradient-to-b from-[color-mix(in_srgb,var(--semantic-danger)_06%,var(--semantic-surface))] to-[var(--semantic-surface)] pt-7 shadow-[var(--semantic-shadow-soft)]">
+    <section
+      id="dashboard-weak-areas"
+      className="nn-card nn-product-surface-accent nn-student-card-lift relative scroll-mt-24 overflow-hidden border-[color-mix(in_srgb,var(--semantic-danger)_18%,var(--semantic-border-soft))] bg-gradient-to-b from-[color-mix(in_srgb,var(--semantic-danger)_06%,var(--semantic-surface))] to-[var(--semantic-surface)] pt-7 shadow-[var(--semantic-shadow-soft)]"
+    >
       <div className="px-5 pb-5 sm:px-6 sm:pb-6">
         <div className="flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--semantic-danger)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_10%,var(--semantic-surface))]">
@@ -85,6 +89,20 @@ export function DashboardWeakAreasCard({
                 </div>
                 <p className="mt-1 line-clamp-2 text-xs text-[var(--semantic-text-secondary)]">{w.why}</p>
                 <p className="mt-1 text-[11px] text-[var(--semantic-text-muted)]">{riskLabel(t, w.risk)}</p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  <Link
+                    href={remediationLessonsTopicHref(w.topic, w.normalizedTopic ?? null)}
+                    className="inline-flex rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] px-2.5 py-1 text-[11px] font-semibold text-[var(--semantic-brand)] hover:bg-[var(--semantic-panel-muted)]"
+                  >
+                    {t("learner.dashboard.insight.reviewLessonsCta")}
+                  </Link>
+                  <Link
+                    href={remediationTopicDrillHref(w.topic)}
+                    className="inline-flex rounded-full border border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] px-2.5 py-1 text-[11px] font-semibold text-[var(--semantic-info)] hover:opacity-95"
+                  >
+                    {t("learner.dashboard.insight.practiceQuestionsCta")}
+                  </Link>
+                </div>
               </li>
             ))}
           </ul>

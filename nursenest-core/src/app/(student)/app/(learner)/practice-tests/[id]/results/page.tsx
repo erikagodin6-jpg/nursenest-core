@@ -157,6 +157,18 @@ export default async function PracticeTestResultsPage({ params }: Props) {
       ? t("learner.practiceTest.insight.struggle", { topics: weakTop.slice(0, 3).join(", ") })
       : null;
   const sessionInsightFocus = weakTop.length > 0 ? t("learner.practiceTest.insight.focus") : null;
+  const weakFollowUpCopy =
+    weakTop.length > 0
+      ? {
+          weakTitle: t("learner.practiceTest.results.weakTitle"),
+          weakHint: t("learner.practiceTest.results.weakHint"),
+          reviewLessons: t("learner.practiceTest.results.reviewLessons"),
+          topicDrill: t("learner.practiceTest.results.topicDrill"),
+          suggestedFollowUp: t("learner.practiceTest.results.suggestedFollowUp"),
+          retestWeak: t("learner.practiceTest.results.retestWeak"),
+          adaptiveSamePathway: t("learner.practiceTest.results.adaptiveSamePathway"),
+        }
+      : null;
 
   return (
     <main>
@@ -183,6 +195,7 @@ export default async function PracticeTestResultsPage({ params }: Props) {
           incorrectReviewItems={incorrectReviewItems}
           sessionInsightStruggle={sessionInsightStruggle}
           sessionInsightFocus={sessionInsightFocus}
+          weakFollowUpCopy={weakFollowUpCopy}
         />
       </div>
     </main>

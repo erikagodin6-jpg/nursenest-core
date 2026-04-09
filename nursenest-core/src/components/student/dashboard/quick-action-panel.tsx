@@ -8,10 +8,16 @@ import {
   GraduationCap,
   LayoutList,
   ListTodo,
+  PlayCircle,
   Zap,
   Target,
 } from "lucide-react";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
+
+export type QuickActionGuided = {
+  continueLesson?: { title: string; href: string } | null;
+  hasWeakAreas?: boolean;
+};
 
 const ACTIONS: {
   href: string;
@@ -42,7 +48,15 @@ const TONE: Record<(typeof ACTIONS)[number]["tone"], string> = {
     "border-[color-mix(in_srgb,var(--semantic-danger)_32%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_10%,var(--semantic-surface))] text-[var(--semantic-danger)] hover:bg-[color-mix(in_srgb,var(--semantic-danger)_14%,var(--semantic-surface))]",
 };
 
-export function QuickActionPanel({ t, id = "quick-actions" }: { t: LearnerMarketingT; id?: string }) {
+export function QuickActionPanel({
+  t,
+  id = "quick-actions",
+  guided,
+}: {
+  t: LearnerMarketingT;
+  id?: string;
+  guided?: QuickActionGuided | null;
+}) {
   return (
     <section
       className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-brand)_04%,var(--semantic-surface))] p-4 shadow-[var(--semantic-shadow-soft)] sm:p-5"
@@ -56,6 +70,38 @@ export function QuickActionPanel({ t, id = "quick-actions" }: { t: LearnerMarket
       </div>
       <p className="mt-1 text-xs text-[var(--semantic-text-secondary)]">{t("learner.dashboard.quickActions.subtitle")}</p>
       <ul className="mt-4 flex list-none flex-wrap gap-2">
+        {guided?.continueLesson?.href ? (
+          <li key="guided-continue">
+            <Link
+              href={guided.continueLesson.href}
+              aria-label={`${t("learner.dashboard.quickActions.continueLearningShort")}: ${guided.continueLesson.title}`}
+              className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-2 text-xs font-semibold shadow-sm transition-colors ${TONE.success}`}
+            >
+              <PlayCircle className="h-3.5 w-3.5 shrink-0 opacity-90" strokeWidth={2} aria-hidden />
+              {t("learner.dashboard.quickActions.continueLearningShort")}
+            </Link>
+          </li>
+        ) : null}
+        {guided?.hasWeakAreas ? (
+          <li key="guided-weak">
+            <Link
+              href="/app#dashboard-weak-areas"
+              className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-2 text-xs font-semibold shadow-sm transition-colors ${TONE.warning}`}
+            >
+              <Crosshair className="h-3.5 w-3.5 shrink-0 opacity-90" strokeWidth={2} aria-hidden />
+              {t("learner.dashboard.quickActions.reviewWeakAreas")}
+            </Link>
+          </li>
+        ) : null}
+        <li key="guided-new-test">
+          <Link
+            href="/app/practice-tests/start"
+            className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-2 text-xs font-semibold shadow-sm transition-colors ${TONE.brand}`}
+          >
+            <GraduationCap className="h-3.5 w-3.5 shrink-0 opacity-90" strokeWidth={2} aria-hidden />
+            {t("learner.dashboard.quickActions.startNewTest")}
+          </Link>
+        </li>
         {ACTIONS.map(({ href, labelKey, icon: Icon, tone }) => (
           <li key={href}>
             <Link
