@@ -145,12 +145,12 @@ function buildLegacySections(args: {
   const l1 = rel[0] ? `[${rel[0].replace(/-nclex-rn$/, "").replace(/-/g, " ")}](LESSON:${rel[0]})` : "";
   const l2 = rel[1] ? `[${rel[1].replace(/-nclex-rn$/, "").replace(/-/g, " ")}](LESSON:${rel[1]})` : "";
   const l3 = rel[2] ? `[${rel[2].replace(/-nclex-rn$/, "").replace(/-/g, " ")}](LESSON:${rel[2]})` : "";
-  const hub = `[lesson hub](/us/rn/nclex-rn/lessons)`;
 
+  const qbank = `[question bank](/app/question-bank)`;
   const linkLine =
     rel.length >= 3
-      ? `Cross-study anchors: ${l1}, ${l2}, and ${l3}. Continue with timed practice from the ${hub}.`
-      : `Continue with timed practice from the ${hub} and filter by **${bodySystem}** topics.`;
+      ? `Cross-study anchors: ${l1}, ${l2}, and ${l3}. Continue with timed practice from the ${qbank}.`
+      : `Continue with timed practice from the ${qbank} and filter by **${bodySystem}** topics.`;
 
   let clinical_meaning = paragraph(
     `**${canonicalTitle}** sits in **${bodySystem}** for RN exam prep. Your job on the exam is to connect **assessment data** to **risk**, choose the **first safe nursing action**, and recognize when teaching, delegation, or escalation must change.\n\n${rn}\n\n` +

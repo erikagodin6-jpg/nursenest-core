@@ -58,7 +58,8 @@ export function AdminAutomationLogsClient() {
   const [category, setCategory] = useState<string>("");
   const [status, setStatus] = useState<string>("");
   const [hours, setHours] = useState<string>("");
-  const [search, setSearch] = useState<string>("");
+  const [searchInput, setSearchInput] = useState<string>("");
+  const [searchApplied, setSearchApplied] = useState<string>("");
   const [busyId, setBusyId] = useState<string | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
@@ -71,20 +72,26 @@ export function AdminAutomationLogsClient() {
     setCategory(c);
     setStatus(s);
     setHours(h);
-    setSearch(q);
+    setSearchInput(q);
+    setSearchApplied(q.trim());
     setOffset(0);
   }, [searchParams]);
 
+  useEffect(() => {
+    const t = setTimeout(() => setSearchApplied(searchInput.trim()), 400);
+    return () => clearTimeout(t);
+  }, [searchInput]);
+
   const load = useCallback(async () => {
     setErr(null);
-    const q = new URLSearchParams();
-    q.set("limit", String(limit));
-    q.set("offset", String(offset));
-    if (category) q.set("category", category);
-    if (status) q.set("status", status);
-    if (hours && Number(hours) > 0) q.set("hours", hours);
-    if (search.trim().length >= 2) q.set("search", search.trim());
-    const res = await fetch(`/api/admin/automation-logs?${q.toString()}`);
+    const params = new URLSearchParams();
+    params.set("limit", String(limit));
+    params.set("offset", String(offset));
+    if (category) params.set("category", category);
+    if (status) params.set("status", status);
+    if (hours && Number(hours) > 0) params.set("hours", hours);
+    if (searchApplied.length >= 2) params.set("search", searchApplied);
+    const res = await fetch(`/api/admin/automation-logs?${params.toString()}`);
     const json = (await res.json()) as { ok?: boolean; logs?: LogRow[]; total?: number; error?: string };
     if (!res.ok) {
       setErr(json.error ?? "Failed to load logs");
@@ -92,7 +99,7 @@ export function AdminAutomationLogsClient() {
     }
     setLogs(json.logs ?? []);
     setTotal(json.total ?? 0);
-  }, [limit, offset, category, status, hours, search]);
+  }, [limit, offset, category, status, hours, searchApplied]);
 
   useEffect(() => {
     void load();

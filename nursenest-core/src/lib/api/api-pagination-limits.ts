@@ -75,3 +75,12 @@ export function listSkipRows(page: number, pageSize: number): number {
 export function isSkipBeyondLimit(skipRows: number, maxSkipRows: number = MAX_LIST_SKIP_ROWS_DEFAULT): boolean {
   return skipRows > maxSkipRows;
 }
+
+/**
+ * Largest valid 1-based `page` for offset pagination so `(page - 1) * pageSize <= maxSkipRows`.
+ * Keeps list endpoints and Prisma `skip` in a bounded range as catalogs grow toward 500+ rows.
+ */
+export function maxSafeOffsetPage(pageSize: number, maxSkipRows: number = MAX_LIST_SKIP_ROWS_DEFAULT): number {
+  if (!Number.isFinite(pageSize) || pageSize < 1) return 1;
+  return Math.max(1, Math.floor(maxSkipRows / pageSize) + 1);
+}

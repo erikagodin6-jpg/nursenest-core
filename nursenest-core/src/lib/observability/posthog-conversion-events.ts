@@ -97,6 +97,8 @@ export const PH = {
   marketingToolOpenClick: "marketing_tool_open_click",
   /** Marketing pathway strip (hub shortcuts). */
   marketingSubNavClick: "marketing_sub_nav_click",
+  /** Pathway lesson explorer: user changed lifespan/domain filter (debounced). */
+  pathwayExplorerFilterApplied: "pathway_explorer_filter_applied",
   /** Question bank: first batch loaded for a new session (not append). */
   learnerQuestionBankSessionStarted: "learner_question_bank_session_started",
   /** Practice test API: adaptive (CAT) session created. */

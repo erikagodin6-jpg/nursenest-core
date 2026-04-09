@@ -4,6 +4,8 @@
 import { ContentStatus, CountryCode, TierCode } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-product-registry";
+import { countPathwayLessons } from "@/lib/lessons/pathway-lesson-loader";
+import { MIN_PATHWAY_LESSONS_SCALE_TARGET } from "@/lib/lessons/pathway-lesson-scale";
 import { buildQuestionBankCoverageReport } from "@/lib/questions/build-question-bank-diagnostics";
 
 export type AdminPathwayInventoryRow = {
@@ -12,9 +14,13 @@ export type AdminPathwayInventoryRow = {
   shortName: string;
   countryCode: CountryCode;
   stripeTier: TierCode;
+  /** Published rows in DB for this pathway (all locales). */
   lessonsPublished: number;
+  /** Effective total for UX/planning: DB if any published row exists, else catalog.json length (see countPathwayLessons). */
+  lessonsEffective: number;
   lessonsDraft: number;
   questionsMatched: number;
+  meetsLessonScaleTarget: boolean;
   readiness: "ready" | "partial" | "not_ready";
 };
 

@@ -236,7 +236,7 @@ export default async function LessonsPage({ searchParams }: Props) {
         page={lessonsBlock.page}
         pageCount={lessonsBlock.pageCount}
         total={lessonsBlock.total}
-        pageSize={APP_LESSONS_PAGE_SIZE}
+        pageSize={LEARNER_APP_LESSONS_PAGE_SIZE}
       />
     </main>
   );

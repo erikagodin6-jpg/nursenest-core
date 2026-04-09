@@ -1,7 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { startTransition, useEffect, useMemo, useState, type ReactNode } from "react";
+import { usePathname } from "next/navigation";
+import { startTransition, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { trackClientEvent } from "@/lib/observability/posthog-client";
+import { PH } from "@/lib/observability/posthog-conversion-events";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
@@ -61,15 +64,38 @@ const HASH_TO_LIFESPAN: Record<string, FnpLifespanGroup> = {
 };
 
 export function FnpLessonExplorer({ pathway, lessonsBasePath, explorerLessons, excludeSlug, progressMap = {} }: Props) {
+  const pathname = usePathname() ?? "";
   const [lifespan, setLifespan] = useState<FnpLifespanFilter>("all");
   const [domain, setDomain] = useState<FnpDomainFilter>("all");
   const [textQ, setTextQ] = useState("");
+  const filterDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const skipFirstFilterEffect = useRef(true);
 
   useEffect(() => {
     const h = window.location.hash;
     const mapped = HASH_TO_LIFESPAN[h];
     if (mapped) startTransition(() => setLifespan(mapped));
   }, []);
+
+  useEffect(() => {
+    if (skipFirstFilterEffect.current) {
+      skipFirstFilterEffect.current = false;
+      return;
+    }
+    if (filterDebounceRef.current) clearTimeout(filterDebounceRef.current);
+    filterDebounceRef.current = setTimeout(() => {
+      trackClientEvent(PH.pathwayExplorerFilterApplied, {
+        actor: pathname.startsWith("/app") ? "authenticated" : "anonymous",
+        pathway_id: pathway.id,
+        lifespan: String(lifespan),
+        domain: String(domain),
+        text_active: textQ.trim().length >= 2,
+      });
+    }, 900);
+    return () => {
+      if (filterDebounceRef.current) clearTimeout(filterDebounceRef.current);
+    };
+  }, [pathname, pathway.id, lifespan, domain, textQ]);
 
   const filtered = useMemo(() => {
     const t = textQ.trim().toLowerCase();

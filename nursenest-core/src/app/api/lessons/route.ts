@@ -17,6 +17,7 @@ import {
   MAX_LIST_SKIP_ROWS_DEFAULT,
   isSkipBeyondLimit,
   listSkipRows,
+  maxSafeOffsetPage,
   parseBoundedPageSize,
   parseListPage,
 } from "@/lib/api/api-pagination-limits";
@@ -47,6 +48,18 @@ export async function GET(req: NextRequest) {
     );
   }
   const pageSize = sizeParsed.pageSize;
+
+  const maxPage = maxSafeOffsetPage(pageSize);
+  if (page > maxPage) {
+    return NextResponse.json(
+      {
+        error: `page must be at most ${maxPage} for this pageSize (offset cap ${MAX_LIST_SKIP_ROWS_DEFAULT}).`,
+        code: "page_out_of_range",
+        maxPage,
+      },
+      { status: 400 },
+    );
+  }
 
   const skipRows = listSkipRows(page, pageSize);
   if (isSkipBeyondLimit(skipRows)) {

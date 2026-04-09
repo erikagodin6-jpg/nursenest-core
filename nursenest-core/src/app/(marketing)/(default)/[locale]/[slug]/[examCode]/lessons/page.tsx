@@ -99,9 +99,6 @@ function PathwayLessonsEmptyHub({
           Back to exam overview
         </Link>
       </div>
-      <p className="mt-4 text-xs text-muted">
-        Path: <span className="font-mono">{lessonsBasePath}</span>
-      </p>
     </div>
   );
 }
