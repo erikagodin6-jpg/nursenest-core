@@ -156,6 +156,18 @@ export function AdminLessonsLibraryClient() {
         </div>
         <div className="flex flex-wrap gap-2">
           <Link
+            href="/admin/lessons/generate"
+            className="rounded-full border border-primary/50 bg-primary/10 px-5 py-2.5 text-sm font-semibold text-primary shadow-sm hover:bg-primary/15"
+          >
+            AI generate draft
+          </Link>
+          <Link
+            href="/admin/lessons/generate-batch"
+            className="rounded-full border border-sky-500/40 bg-sky-500/10 px-5 py-2.5 text-sm font-semibold text-sky-800 shadow-sm hover:bg-sky-500/15 dark:text-sky-200"
+          >
+            Batch AI drafts
+          </Link>
+          <Link
             href="/admin/lessons/new"
             className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm"
           >

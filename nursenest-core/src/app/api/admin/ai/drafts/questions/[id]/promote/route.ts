@@ -9,6 +9,7 @@ import { prisma } from "@/lib/db";
 import { contentStatusToDb } from "@/lib/prisma/content-status";
 import {
   adminQuestionTypeToDb,
+  difficultyBandToInt,
   examFamilyToExamColumn,
   tierCodeToExamDbTier,
 } from "@/lib/prisma/exam-question-maps";
@@ -51,6 +52,16 @@ export async function POST(req: Request, ctx: Props) {
   }
 
   const n = draft.normalizedJson as unknown as NormalizedQuestionDraft;
+  const meta = n.metadata;
+  const wrongLines = meta?.wrongAnswerRationales?.filter((x) => String(x).trim().length > 0);
+  const distractorRationales = wrongLines && wrongLines.length > 0 ? wrongLines : undefined;
+  const draftTags = meta?.tags?.length ? meta.tags : [];
+  const diffLabel = meta?.difficultyLabel?.toUpperCase();
+  const difficultyInt =
+    diffLabel === "FOUNDATION" || diffLabel === "INTERMEDIATE" || diffLabel === "ADVANCED"
+      ? difficultyBandToInt(diffLabel)
+      : undefined;
+
   const gov = governExamQuestionPublish(
     {
       stem: n.stem,
@@ -91,7 +102,9 @@ export async function POST(req: Request, ctx: Props) {
       careerType: "nursing",
       regionScope: "BOTH",
       stemHash: hash,
-      tags: [],
+      tags: draftTags,
+      ...(difficultyInt !== undefined ? { difficulty: difficultyInt } : {}),
+      ...(distractorRationales ? { distractorRationales } : {}),
     },
   });
 

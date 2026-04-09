@@ -69,7 +69,7 @@ const sections: NavSection[] = [
       { href: "/admin/diagnostics", label: "Diagnostics", icon: Stethoscope },
       { href: "/admin/premium-protection", label: "Premium protection", icon: Shield },
       { href: "/admin/i18n", label: "i18n", icon: Globe },
-      { href: "/admin/ai/exam-questions", label: "AI · Exam questions", icon: Sparkles },
+      { href: "/admin/ai/exam-questions", label: "AI · Question studio", icon: Sparkles },
       { href: "/admin/ai/flashcards", label: "AI · Flashcards", icon: Sparkles },
       { href: "/admin/ai/review", label: "AI · Review queue", icon: FileText },
     ],

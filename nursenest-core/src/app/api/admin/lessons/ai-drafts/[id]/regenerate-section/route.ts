@@ -53,15 +53,17 @@ export async function POST(req: Request, ctx: RouteContext) {
     };
 
     const model = getOpenAiChatModel();
+    const prevVal =
+      typeof draft.validationJson === "object" && draft.validationJson !== null && !Array.isArray(draft.validationJson)
+        ? (draft.validationJson as Record<string, unknown>)
+        : {};
     await prisma.generatedLessonDraft.update({
       where: { id },
       data: {
         normalizedJson: nextNormalized as object,
         titlePreview: nextLesson.title.slice(0, 500),
         validationJson: {
-          ...(typeof draft.validationJson === "object" && draft.validationJson !== null
-            ? (draft.validationJson as object)
-            : {}),
+          ...prevVal,
           lastRegen: new Date().toISOString(),
           model,
         },

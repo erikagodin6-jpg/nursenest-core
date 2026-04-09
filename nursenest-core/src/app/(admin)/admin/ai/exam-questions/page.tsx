@@ -10,10 +10,11 @@ export default async function AdminExamQuestionsPage() {
       <Link href="/admin" className="text-sm text-primary underline">
         ← Admin
       </Link>
-      <h1 className="mt-4 text-2xl font-bold">AI exam question drafts</h1>
+      <h1 className="mt-4 text-2xl font-bold">AI question studio</h1>
       <p className="mt-2 text-sm text-muted">
         Requires <code className="rounded bg-black/5 px-1">AI_ADMIN_GENERATION_ENABLED=true</code> and OpenAI-compatible credentials.
-        Outputs are stored as <strong>GeneratedQuestionDraft</strong> — review before promotion.
+        Pathway- and country-aware generation with rationales, wrong-answer notes, and lesson-link suggestions. Drafts are{" "}
+        <strong>GeneratedQuestionDraft</strong> — open a row to regenerate sections, then approve and promote.
       </p>
       <div className="mt-8">
         <ExamQuestionsGateway />

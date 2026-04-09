@@ -11,16 +11,40 @@ export type DraftValidationResult = {
   duplicateRisk: boolean;
 };
 
+const lessonLinkSuggestionSchema = z.object({
+  lessonId: z.string().optional(),
+  title: z.string(),
+  slug: z.string().optional(),
+  reason: z.string(),
+  confidence: z.string().optional(),
+});
+
 const aiQuestionItemSchema = z.object({
   question: z.string().optional(),
   stem: z.string().optional(),
   type: z.string().optional(),
   options: z.array(z.string()).min(2).optional(),
   correctIndex: z.number().int().min(0).optional(),
+  correctIndices: z.array(z.number().int().min(0)).optional(),
   rationale: z.string().optional(),
   tags: z.array(z.string()).optional(),
   difficulty: z.string().optional(),
+  wrongAnswerRationales: z.array(z.string()).optional(),
+  lessonLinkSuggestions: z.array(lessonLinkSuggestionSchema).optional(),
 });
+
+export type LessonLinkSuggestion = z.infer<typeof lessonLinkSuggestionSchema>;
+
+/** Extra teaching / mapping fields stored in `normalizedJson` alongside core stem/options (promote reads core + optional metadata). */
+export type QuestionDraftMetadata = {
+  difficultyLabel?: string;
+  tags?: string[];
+  pathwayLabel?: string;
+  examContextLabel?: string;
+  /** One entry per option index; may be empty for correct option slots. */
+  wrongAnswerRationales?: string[];
+  lessonLinkSuggestions?: LessonLinkSuggestion[];
+};
 
 export type NormalizedQuestionDraft = {
   stem: string;
@@ -29,7 +53,25 @@ export type NormalizedQuestionDraft = {
   answerKey: string[];
   questionType: QuestionType;
   topicTag?: string;
+  metadata?: QuestionDraftMetadata;
 };
+
+function normalizeWrongRationales(optionsLen: number, raw: string[] | undefined): string[] | undefined {
+  if (!raw?.length) return undefined;
+  const out = raw.map((s) => String(s ?? "").trim());
+  if (out.length === optionsLen) return out;
+  if (out.length > optionsLen) return out.slice(0, optionsLen);
+  return [...out, ...Array(optionsLen - out.length).fill("")];
+}
+
+function inferQuestionTypeFromAi(o: z.infer<typeof aiQuestionItemSchema>): "MCQ" | "SATA" {
+  const t = (o.type ?? "").toLowerCase();
+  if (t.includes("mcq") || t.includes("multiple")) return "MCQ";
+  if (t.includes("sata") || t.includes("select all")) return "SATA";
+  const multi = o.correctIndices?.length ?? 0;
+  if (multi >= 2) return "SATA";
+  return "MCQ";
+}
 
 export function normalizeAiQuestionItem(raw: unknown): { ok: true; value: NormalizedQuestionDraft } | { ok: false; error: string } {
   const p = aiQuestionItemSchema.safeParse(raw);
@@ -39,22 +81,70 @@ export function normalizeAiQuestionItem(raw: unknown): { ok: true; value: Normal
   if (stem.length < 10) return { ok: false, error: "Stem too short" };
   const options = o.options ?? [];
   if (options.length < 2) return { ok: false, error: "Need at least 2 options" };
-  const idx = o.correctIndex ?? 0;
-  if (idx < 0 || idx >= options.length) return { ok: false, error: "correctIndex out of range" };
-  const correct = options[idx];
-  if (!correct) return { ok: false, error: "Missing correct option" };
   const rationale = (o.rationale ?? "").trim();
+
+  const mode = inferQuestionTypeFromAi(o);
+  let answerKey: string[];
+  let questionType: QuestionType;
+
+  if (mode === "SATA") {
+    const indices =
+      o.correctIndices && o.correctIndices.length > 0
+        ? [...new Set(o.correctIndices)].sort((a, b) => a - b)
+        : o.correctIndex !== undefined
+          ? [o.correctIndex]
+          : [];
+    if (indices.length < 1) return { ok: false, error: "SATA requires correctIndices (or correctIndex)" };
+    for (const i of indices) {
+      if (i < 0 || i >= options.length) return { ok: false, error: "correctIndices out of range" };
+    }
+    answerKey = indices.map((i) => options[i]).filter((x): x is string => Boolean(x));
+    if (answerKey.length < 1) return { ok: false, error: "SATA answerKey empty" };
+    questionType = QuestionType.SATA;
+  } else {
+    const idx = o.correctIndex ?? 0;
+    if (idx < 0 || idx >= options.length) return { ok: false, error: "correctIndex out of range" };
+    const correct = options[idx];
+    if (!correct) return { ok: false, error: "Missing correct option" };
+    answerKey = [correct];
+    questionType = QuestionType.MCQ;
+  }
+
+  const wrongR = normalizeWrongRationales(options.length, o.wrongAnswerRationales);
+  const metadata: QuestionDraftMetadata = {};
+  if (wrongR) metadata.wrongAnswerRationales = wrongR;
+  if (o.lessonLinkSuggestions?.length) metadata.lessonLinkSuggestions = o.lessonLinkSuggestions;
+  if (o.difficulty?.trim()) metadata.difficultyLabel = o.difficulty.trim();
+  if (o.tags?.length) metadata.tags = o.tags;
+
+  const hasMeta = Object.keys(metadata).length > 0;
+
   return {
     ok: true,
     value: {
       stem,
       rationale,
       options,
-      answerKey: [correct],
-      questionType: QuestionType.MCQ,
+      answerKey,
+      questionType,
       topicTag: o.tags?.[0],
+      metadata: hasMeta ? metadata : undefined,
     },
   };
+}
+
+/** Merge pathway/exam context from the generation request into draft metadata (deterministic, not model-invented). */
+export function withQuestionDraftContext(
+  draft: NormalizedQuestionDraft,
+  ctx: { pathwayLabel?: string; examContextLabel?: string },
+): NormalizedQuestionDraft {
+  if (!ctx.pathwayLabel?.trim() && !ctx.examContextLabel?.trim()) return draft;
+  const nextMeta: QuestionDraftMetadata = {
+    ...draft.metadata,
+    pathwayLabel: ctx.pathwayLabel?.trim() || draft.metadata?.pathwayLabel,
+    examContextLabel: ctx.examContextLabel?.trim() || draft.metadata?.examContextLabel,
+  };
+  return { ...draft, metadata: nextMeta };
 }
 
 export function validateNormalizedQuestion(
@@ -85,6 +175,9 @@ export function validateNormalizedQuestion(
   if (!pub.ok) errors.push(...pub.reasons);
 
   if (n.rationale.length < 20) warnings.push("Rationale is short — expand before publish.");
+  if (n.questionType === QuestionType.SATA && n.answerKey.length < 2) {
+    warnings.push("SATA with only one keyed answer — confirm this is intentional (NCLEX-style SATA usually has 2+ correct).");
+  }
 
   return {
     ok: errors.length === 0,

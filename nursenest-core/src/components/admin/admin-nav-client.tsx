@@ -26,6 +26,8 @@ const links: Array<{ href: string; label: string; icon: React.ElementType }> = [
   { href: "/admin/subscriptions", label: "Subscriptions", icon: Activity },
   { href: "/admin/content", label: "Content", icon: Layers },
   { href: "/admin/lessons", label: "Lessons", icon: GraduationCap },
+  { href: "/admin/lessons/generate", label: "Lesson AI", icon: Sparkles },
+  { href: "/admin/lessons/generate-batch", label: "Lesson batch AI", icon: Sparkles },
   { href: "/admin/questions", label: "Questions", icon: ClipboardList },
   { href: "/admin/blog", label: "Blog", icon: FileText },
   { href: "/admin/blog/control-panel", label: "Blog AI panel", icon: Wand2 },

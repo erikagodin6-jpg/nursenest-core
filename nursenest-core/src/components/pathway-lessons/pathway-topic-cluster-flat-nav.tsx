@@ -1,8 +1,12 @@
+/**
+ * Optional flat topic-cluster navigation (single chip list + overflow disclosure).
+ * Current marketing hubs use PathwayTopicClusterGroupedNav; import this module when a flat index is explicitly desired.
+ */
 import Link from "next/link";
 import type { TopicCluster } from "@/lib/lessons/pathway-lesson-loader";
 
 /** Beyond this, chips collapse behind a disclosure to avoid giant scroll walls on mobile. */
-export const PATHWAY_TOPIC_CLUSTER_NAV_COLLAPSE_AFTER = 14;
+export const PATHWAY_TOPIC_CLUSTER_FLAT_NAV_COLLAPSE_AFTER = 14;
 
 type Props = {
   lessonsBasePath: string;
@@ -11,13 +15,14 @@ type Props = {
 };
 
 /**
- * Crawlable topic links: every topic stays a real `<Link>` in the document (inside `<details>` when collapsed).
+ * Flat list of crawlable topic links: every topic stays a real `<Link>` in the document (inside `<details>` when collapsed).
+ * Marketing hubs typically use `PathwayTopicClusterGroupedNav` for grouped-by-theme navigation at scale.
  */
-export function PathwayTopicClusterNav({ lessonsBasePath, topicClusters, pathwayShortName }: Props) {
+export function PathwayTopicClusterFlatNav({ lessonsBasePath, topicClusters, pathwayShortName }: Props) {
   if (topicClusters.length === 0) return null;
 
-  const visible = topicClusters.slice(0, PATHWAY_TOPIC_CLUSTER_NAV_COLLAPSE_AFTER);
-  const overflow = topicClusters.slice(PATHWAY_TOPIC_CLUSTER_NAV_COLLAPSE_AFTER);
+  const visible = topicClusters.slice(0, PATHWAY_TOPIC_CLUSTER_FLAT_NAV_COLLAPSE_AFTER);
+  const overflow = topicClusters.slice(PATHWAY_TOPIC_CLUSTER_FLAT_NAV_COLLAPSE_AFTER);
   const hasOverflow = overflow.length > 0;
 
   const chip = (t: TopicCluster) => (

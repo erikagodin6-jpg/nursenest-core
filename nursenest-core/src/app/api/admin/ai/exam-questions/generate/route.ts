@@ -2,6 +2,13 @@ import { DraftReviewStatus, JobStatus } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
+import {
+  buildExamQuestionSystemPrompt,
+  buildExamQuestionUserPrompt,
+  ADMIN_AI_QUESTION_TOOL,
+  parseJsonArrayFromModel,
+  type LessonHintRow,
+} from "@/lib/ai/admin-ai-question-pipeline";
 import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
 import { checkAdminAiGenerateLimit } from "@/lib/ai/admin-rate-limit";
 import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
@@ -12,6 +19,7 @@ import {
   normalizeAiQuestionItem,
   tierFromApi,
   validateNormalizedQuestion,
+  withQuestionDraftContext,
 } from "@/lib/content/ai-draft-validation";
 import { stemHash } from "@/lib/content/stem-hash";
 import { prisma } from "@/lib/db";
@@ -25,9 +33,15 @@ const bodySchema = z.object({
   examFamily: z.enum(["NCLEX_RN", "NCLEX_PN", "REX_PN", "NP", "ALLIED", "GENERIC"]).default("GENERIC"),
   lessonId: z.string().optional(),
   categoryId: z.string().optional(),
+  /** Human pathway label (FNP, Med-Surg RN, etc.) — steers tone and scope */
+  pathway: z.string().trim().max(120).optional(),
+  difficulty: z.enum(["FOUNDATION", "INTERMEDIATE", "ADVANCED"]).default("INTERMEDIATE"),
+  questionTypeMode: z.enum(["auto", "mcq", "sata"]).default("auto"),
+  /** Optional lesson ContentItem ids to anchor lessonLinkSuggestions */
+  lessonTargets: z.array(z.string().min(5)).max(20).optional(),
 });
 
-const TOOL = "EXAM_QUESTION_BATCH";
+const TOOL = ADMIN_AI_QUESTION_TOOL;
 
 export async function POST(req: Request) {
   const gate = await requireAdmin();
@@ -53,13 +67,69 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid body", details: parsed.error.flatten() }, { status: 400 });
   }
 
-  const { tier, topic, quantity, questionTypes, country, examFamily, lessonId, categoryId } = parsed.data;
-  const types = questionTypes?.length
-    ? questionTypes
-    : ["mcq", "sata", "prioritization", "pharmacology", "lab-values"];
+  const {
+    tier,
+    topic,
+    quantity,
+    questionTypes,
+    country,
+    examFamily,
+    lessonId,
+    categoryId,
+    pathway,
+    difficulty,
+    questionTypeMode,
+    lessonTargets,
+  } = parsed.data;
 
+  const styleHints =
+    questionTypes?.length && questionTypeMode === "auto"
+      ? questionTypes
+      : questionTypes?.length
+        ? questionTypes
+        : questionTypeMode === "auto"
+          ? ["prioritization", "pharmacology", "lab-values", "clinical judgment"]
+          : [];
+
+  let categoryLabel: string | undefined;
+  if (categoryId?.trim()) {
+    const cat = await prisma.category.findUnique({
+      where: { id: categoryId.trim() },
+      select: { name: true, slug: true },
+    });
+    if (cat) categoryLabel = `${cat.name} (${cat.slug})`;
+  }
+
+  let lessonHints: LessonHintRow[] = [];
+  const targetIds = [...new Set((lessonTargets ?? []).map((x) => x.trim()).filter(Boolean))];
+  if (targetIds.length > 0) {
+    const rows = await prisma.contentItem.findMany({
+      where: { id: { in: targetIds }, type: "lesson" },
+      select: { id: true, title: true, slug: true },
+    });
+    lessonHints = rows.map((r) => ({ id: r.id, title: r.title, slug: r.slug }));
+  }
+
+  const pathwayLabel =
+    pathway?.trim() ||
+    (tier === "np" ? "NP / advanced practice" : tier === "rpn" ? "RPN/LPN" : tier === "rn" ? "RN" : "RN");
+
+  const genCtx = {
+    topic,
+    quantity,
+    tier,
+    pathwayLabel,
+    country,
+    examFamily,
+    difficulty,
+    categoryLabel,
+    questionTypeMode,
+    questionStyleHints: styleHints,
+    lessonHints,
+  };
+
+  const sourcePrompt = `${buildExamQuestionUserPrompt(genCtx)}\n\n[system spec: exam-style items with rationales + lesson links]`;
   const batchId = `q-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-  const sourcePrompt = `Generate ${quantity} nursing exam questions for "${topic}" at ${tier.toUpperCase()} level. Mix types: ${types.join(", ")}. JSON array fields per item: question, type, options (4 strings), correctIndex, rationale, difficulty, tags.`;
 
   const job = await prisma.aiGenerationJob.create({
     data: {
@@ -77,28 +147,21 @@ export async function POST(req: Request) {
   });
 
   try {
-    const prompt = `${sourcePrompt}
-Return ONLY a JSON array, no markdown.`;
+    const userPrompt = `${buildExamQuestionUserPrompt(genCtx)}\n\nReturn ONLY a JSON array, no markdown.`;
 
     const response = await openAiChatCompletion({
       messages: [
-        {
-          role: "system",
-          content:
-            "You are a nursing exam question writer. Output valid JSON array only. Each item must include rationale and four options.",
-        },
-        { role: "user", content: prompt },
+        { role: "system", content: buildExamQuestionSystemPrompt() },
+        { role: "user", content: userPrompt },
       ],
-      temperature: 0.75,
-      maxTokens: 4000,
+      temperature: 0.72,
+      maxTokens: 8000,
     });
 
     const raw = response.content?.trim() ?? "[]";
-    const cleaned = raw.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
     let items: unknown[] = [];
     try {
-      const parsedJson = JSON.parse(cleaned);
-      items = Array.isArray(parsedJson) ? parsedJson : [];
+      items = parseJsonArrayFromModel(raw);
     } catch {
       await prisma.aiGenerationJob.update({
         where: { id: job.id },
@@ -113,17 +176,19 @@ Return ONLY a JSON array, no markdown.`;
     const dupSet = new Set<string>();
     const draftIds: string[] = [];
 
+    const examContextLabel = `${examFamily} · ${country}`;
+
     for (const item of items) {
-      const norm = normalizeAiQuestionItem(item);
+      const normBase = normalizeAiQuestionItem(item);
       const payloadJson = item as object;
-      if (!norm.ok) {
+      if (!normBase.ok) {
         await prisma.generatedQuestionDraft.create({
           data: {
             jobId: job.id,
             tool: TOOL,
             batchId,
             payloadJson,
-            validationJson: { ok: false, errors: [norm.error], warnings: [], duplicateRisk: false },
+            validationJson: { ok: false, errors: [normBase.error], warnings: [], duplicateRisk: false },
             reviewStatus: DraftReviewStatus.PENDING_REVIEW,
             tier: tierCode,
             country: cc,
@@ -139,7 +204,9 @@ Return ONLY a JSON array, no markdown.`;
         continue;
       }
 
-      const sh = stemHash(norm.value.stem);
+      const norm = withQuestionDraftContext(normBase.value, { pathwayLabel, examContextLabel });
+
+      const sh = stemHash(norm.stem);
       const [existingQ, existingDraft] = await Promise.all([
         prisma.examQuestion.findFirst({ where: { stemHash: sh }, select: { id: true } }),
         prisma.generatedQuestionDraft.findFirst({
@@ -151,7 +218,7 @@ Return ONLY a JSON array, no markdown.`;
         }),
       ]);
 
-      const v = validateNormalizedQuestion(norm.value, { duplicateStemHashes: dupSet });
+      const v = validateNormalizedQuestion(norm, { duplicateStemHashes: dupSet });
       const warnings = [...v.warnings];
       if (existingQ) warnings.push("Stem hash matches an existing Question in the bank.");
       if (existingDraft) warnings.push("Stem hash matches another pending/approved draft.");
@@ -170,11 +237,11 @@ Return ONLY a JSON array, no markdown.`;
           tool: TOOL,
           batchId,
           payloadJson,
-          normalizedJson: norm.value as object,
+          normalizedJson: norm as object,
           validationJson,
           reviewStatus: DraftReviewStatus.PENDING_REVIEW,
           stemHash: sh,
-          stemPreview: norm.value.stem.slice(0, 280),
+          stemPreview: norm.stem.slice(0, 280),
           lessonId: lessonId ?? null,
           categoryId: categoryId ?? null,
           examFamily: ef,

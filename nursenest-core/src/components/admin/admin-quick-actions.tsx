@@ -30,7 +30,7 @@ const actions = [
   { href: "/admin/subscriptions", label: "Subscriptions", desc: "Plans & Stripe gaps", icon: CreditCard, tone: "from-rose-500/12 to-pink-500/10" },
   { href: "/admin/users", label: "Users", desc: "Growth & roles", icon: Users, tone: "from-cyan-500/12 to-primary/10" },
   { href: "/admin/operations", label: "Site health", desc: "DB, APIs, safe mode", icon: Wrench, tone: "from-red-500/10 to-amber-500/10" },
-  { href: "/admin/ai/exam-questions", label: "AI exam tools", desc: "Question drafts", icon: Stethoscope, tone: "from-indigo-500/12 to-purple-500/10" },
+  { href: "/admin/ai/exam-questions", label: "AI question studio", desc: "Drafts & section regen", icon: Stethoscope, tone: "from-indigo-500/12 to-purple-500/10" },
 ] as const;
 
 export function AdminQuickActions() {

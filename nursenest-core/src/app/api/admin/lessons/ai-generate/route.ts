@@ -10,6 +10,7 @@ import {
   adminAiLessonTypeSchema,
   adminAiLessonDifficultySchema,
 } from "@/lib/lessons/admin-ai-lesson-schema";
+import { lessonBatchTopicKey } from "@/lib/lessons/admin-ai-lesson-batch";
 import {
   ADMIN_AI_LESSON_GENERATOR_TOOL,
   buildDraftNormalized,
@@ -75,6 +76,8 @@ export async function POST(req: Request) {
     const normalized = buildDraftNormalized(input, lesson);
     const model = getOpenAiChatModel();
 
+    const batchTopicKey = lessonBatchTopicKey(d.topic, d.pathway, d.country, d.lessonType);
+
     const draft = await prisma.generatedLessonDraft.create({
       data: {
         tool: ADMIN_AI_LESSON_GENERATOR_TOOL,
@@ -86,6 +89,7 @@ export async function POST(req: Request) {
           lessonType: d.lessonType,
           difficulty: d.difficulty ?? null,
           relatedCategoryIds: d.relatedCategoryIds ?? [],
+          batchTopicKey,
         },
         normalizedJson: normalized as object,
         validationJson: {
