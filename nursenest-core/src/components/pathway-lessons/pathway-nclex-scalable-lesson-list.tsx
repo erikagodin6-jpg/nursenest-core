@@ -32,6 +32,8 @@ type Props = {
   section: SectionShape;
   featuredSlug: string | null | undefined;
   variant: "rn" | "pn";
+  /** When variant is PN (US NCLEX-PN vs Canada REx-PN), used in exam-specific copy only. */
+  pnExamShortLabel?: string;
   rnRegion?: NclexRnHubRegion;
   progressMap?: Record<string, PathwayLessonProgressStatus>;
 };
@@ -42,6 +44,7 @@ export function PathwayNclexScalableLessonSection({
   section,
   featuredSlug,
   variant,
+  pnExamShortLabel = "NCLEX-PN",
   rnRegion = "us",
   progressMap = {},
 }: Props) {
@@ -57,9 +60,14 @@ export function PathwayNclexScalableLessonSection({
         : nclexPnLessonExamPreview(l);
     const showProgress = Object.keys(progressMap).length > 0;
     return (
-      <li key={l.slug} className="rounded-xl border border-border bg-card p-4 sm:p-5 shadow-sm">
+      <li
+        key={l.slug}
+        className="nn-study-card rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-card)] p-4 shadow-[var(--shadow-card)] transition-[box-shadow,transform,border-color] duration-200 hover:-translate-y-px hover:shadow-[var(--shadow-card-hover)] sm:p-5"
+      >
         <div className="flex flex-wrap items-start justify-between gap-2">
-          <p className="text-xs font-medium uppercase text-muted">{l.topic}</p>
+          <span className="inline-flex max-w-[min(100%,28rem)] items-center rounded-full border border-[var(--border-subtle)] bg-[var(--surface-chip)] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
+            {l.topic}
+          </span>
           {showProgress ? <PathwayLessonProgressBadge status={progressMap[l.slug] ?? "not_started"} /> : null}
         </div>
         <Link
@@ -117,10 +125,10 @@ export function PathwayNclexScalableLessonSection({
 
   return (
     <section id={section.anchor} className="scroll-mt-24">
-      <div className="border-b border-border pb-3">
+      <div className="border-b border-[var(--border-subtle)] pb-3">
         <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">{section.title}</h2>
         {section.subtitle && (
-          <p className="mt-1 text-sm text-muted">
+          <p className="mt-1 text-sm text-[var(--theme-muted-text)]">
             {section.subtitle} · <span className="font-medium text-foreground">{section.count} lesson(s) on this page</span>
           </p>
         )}
@@ -136,10 +144,10 @@ export function PathwayNclexScalableLessonSection({
               return (
                 <li
                   key={l.slug}
-                  className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-border/70 bg-card/70 px-3 py-2.5"
+                  className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-2.5 shadow-[var(--shadow-card)] transition-[box-shadow,transform] duration-200 hover:shadow-[var(--shadow-card-hover)]"
                 >
                   <div className="min-w-0">
-                    <p className="text-[10px] font-medium uppercase tracking-wide text-muted">{l.topic}</p>
+                    <p className="text-[10px] font-medium uppercase tracking-wide text-[var(--theme-muted-text)]">{l.topic}</p>
                     <Link href={href} className="block truncate text-sm font-semibold text-primary hover:underline sm:text-base">
                       {l.title}
                     </Link>

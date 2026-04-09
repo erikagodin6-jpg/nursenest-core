@@ -1,0 +1,1725 @@
+{
+  "summary": {
+    "generatedAt": "2026-04-09T10:31:12.522Z",
+    "catalogLessonCounts": {
+      "ca-rpn-rex-pn": 99,
+      "us-lpn-nclex-pn": 99
+    },
+    "requiredTopicCount": 140,
+    "byStatus": {
+      "CREATE_NEW": 58,
+      "EXISTS_STRONG_SKIP": 77,
+      "EXISTS_UPGRADE": 5
+    },
+    "skippedStrong": 77,
+    "upgrade": 5,
+    "createNew": 58
+  },
+  "rows": [
+    {
+      "requiredTopic": "Nursing Process (ADPIE)",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Practical Nurse Scope of Practice",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": null,
+      "us": null,
+      "ca": {
+        "slug": "bp26-carpn-mo-legal-scope",
+        "title": "Scope of practice & unsafe orders — REx-PN (Canada)",
+        "matchScore": 0.5,
+        "approxWords": 393
+      }
+    },
+    {
+      "requiredTopic": "RPN vs RN Scope",
+      "status": "EXISTS_UPGRADE",
+      "mergeNote": "PARALLEL_TITLES_REVIEW",
+      "us": {
+        "slug": "lpn-scope-delegation-priority",
+        "title": "PN scope, delegation & prioritization (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 123
+      },
+      "ca": {
+        "slug": "pn-scope-safety-basics",
+        "title": "PN scope & safety foundations (REx-PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 88
+      }
+    },
+    {
+      "requiredTopic": "PN/LPN vs RN Scope",
+      "status": "EXISTS_UPGRADE",
+      "mergeNote": "PARALLEL_TITLES_REVIEW",
+      "us": {
+        "slug": "lpn-scope-delegation-priority",
+        "title": "PN scope, delegation & prioritization (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 123
+      },
+      "ca": {
+        "slug": "pn-scope-safety-basics",
+        "title": "PN scope & safety foundations (REx-PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 88
+      }
+    },
+    {
+      "requiredTopic": "Stable vs Unstable Client Recognition",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": null,
+      "us": {
+        "slug": "bp26-uslpn-cs-two-patients",
+        "title": "Case: choosing between two unstable clients — NCLEX-PN (United States)",
+        "matchScore": 0.75,
+        "approxWords": 399
+      },
+      "ca": null
+    },
+    {
+      "requiredTopic": "Prioritization Basics",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "PARALLEL_TITLES_REVIEW",
+      "us": {
+        "slug": "lpn-scope-delegation-priority",
+        "title": "PN scope, delegation & prioritization (NCLEX-PN, US)",
+        "matchScore": 1,
+        "approxWords": 123
+      },
+      "ca": {
+        "slug": "ca-rpn-prioritization-abcs",
+        "title": "Prioritization, ABCs & safety (REx-PN / PN, Canada)",
+        "matchScore": 1,
+        "approxWords": 213
+      }
+    },
+    {
+      "requiredTopic": "ABCs",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "PARALLEL_TITLES_REVIEW",
+      "us": {
+        "slug": "us-pn-prioritization-abcs",
+        "title": "Prioritization, ABCs & safety — PN scope (NCLEX-PN, US)",
+        "matchScore": 1,
+        "approxWords": 134
+      },
+      "ca": {
+        "slug": "ca-rpn-prioritization-abcs",
+        "title": "Prioritization, ABCs & safety (REx-PN / PN, Canada)",
+        "matchScore": 1,
+        "approxWords": 213
+      }
+    },
+    {
+      "requiredTopic": "Safety and Risk Reduction",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Documentation and Charting",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "SHARED_SLUG_BOTH_PATHWAYS",
+      "us": {
+        "slug": "documentation-do-nots",
+        "title": "Documentation Do-Nots (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 190
+      },
+      "ca": {
+        "slug": "documentation-do-nots",
+        "title": "Documentation Do-Nots (REx-PN / PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 188
+      }
+    },
+    {
+      "requiredTopic": "Therapeutic Communication",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "SHARED_SLUG_BOTH_PATHWAYS",
+      "us": {
+        "slug": "therapeutic-communication",
+        "title": "Therapeutic Communication (NCLEX-PN, US)",
+        "matchScore": 1,
+        "approxWords": 190
+      },
+      "ca": {
+        "slug": "therapeutic-communication",
+        "title": "Therapeutic Communication (REx-PN / PN, Canada)",
+        "matchScore": 1,
+        "approxWords": 188
+      }
+    },
+    {
+      "requiredTopic": "Cultural Safety / Culturally Sensitive Care",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Consent and Confidentiality",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "SHARED_SLUG_BOTH_PATHWAYS",
+      "us": {
+        "slug": "immunization-consent",
+        "title": "Immunization Consent (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 186
+      },
+      "ca": {
+        "slug": "immunization-consent",
+        "title": "Immunization Consent (REx-PN / PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 184
+      }
+    },
+    {
+      "requiredTopic": "Delegation Basics",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "PARALLEL_TITLES_REVIEW",
+      "us": {
+        "slug": "lpn-scope-delegation-priority",
+        "title": "PN scope, delegation & prioritization (NCLEX-PN, US)",
+        "matchScore": 1,
+        "approxWords": 123
+      },
+      "ca": {
+        "slug": "ca-rpn-delegation",
+        "title": "Delegation & assignment (REx-PN / PN, Canada)",
+        "matchScore": 1,
+        "approxWords": 212
+      }
+    },
+    {
+      "requiredTopic": "Infection Prevention and Control",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "PARALLEL_TITLES_REVIEW",
+      "us": {
+        "slug": "us-pn-infection-control",
+        "title": "Infection control — PN scope (NCLEX-PN, US)",
+        "matchScore": 0.6666666666666666,
+        "approxWords": 132
+      },
+      "ca": {
+        "slug": "ca-rpn-infection-control",
+        "title": "Infection control (REx-PN / PN, Canada)",
+        "matchScore": 0.6666666666666666,
+        "approxWords": 196
+      }
+    },
+    {
+      "requiredTopic": "Standard Precautions",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "SHARED_SLUG_BOTH_PATHWAYS",
+      "us": {
+        "slug": "c-diff-contact-precautions",
+        "title": "C. diff Contact Precautions (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 194
+      },
+      "ca": {
+        "slug": "c-diff-contact-precautions",
+        "title": "C. diff Contact Precautions (REx-PN / PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 192
+      }
+    },
+    {
+      "requiredTopic": "Contact Precautions",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "SHARED_SLUG_BOTH_PATHWAYS",
+      "us": {
+        "slug": "c-diff-contact-precautions",
+        "title": "C. diff Contact Precautions (NCLEX-PN, US)",
+        "matchScore": 1,
+        "approxWords": 194
+      },
+      "ca": {
+        "slug": "c-diff-contact-precautions",
+        "title": "C. diff Contact Precautions (REx-PN / PN, Canada)",
+        "matchScore": 1,
+        "approxWords": 192
+      }
+    },
+    {
+      "requiredTopic": "Droplet Precautions",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "SHARED_SLUG_BOTH_PATHWAYS",
+      "us": {
+        "slug": "c-diff-contact-precautions",
+        "title": "C. diff Contact Precautions (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 194
+      },
+      "ca": {
+        "slug": "c-diff-contact-precautions",
+        "title": "C. diff Contact Precautions (REx-PN / PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 192
+      }
+    },
+    {
+      "requiredTopic": "Airborne Precautions",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "SHARED_SLUG_BOTH_PATHWAYS",
+      "us": {
+        "slug": "c-diff-contact-precautions",
+        "title": "C. diff Contact Precautions (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 194
+      },
+      "ca": {
+        "slug": "c-diff-contact-precautions",
+        "title": "C. diff Contact Precautions (REx-PN / PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 192
+      }
+    },
+    {
+      "requiredTopic": "Hand Hygiene",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": null,
+      "us": {
+        "slug": "bp26-uslpn-mo-shift-report-sbar",
+        "title": "SBAR handoff & shift report — NCLEX-PN (United States)",
+        "matchScore": 0.5,
+        "approxWords": 392
+      },
+      "ca": null
+    },
+    {
+      "requiredTopic": "PPE",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "SHARED_SLUG_BOTH_PATHWAYS",
+      "us": {
+        "slug": "ppe-transmission-basics",
+        "title": "PPE & Transmission Basics (NCLEX-PN, US)",
+        "matchScore": 1,
+        "approxWords": 194
+      },
+      "ca": {
+        "slug": "ppe-transmission-basics",
+        "title": "PPE & Transmission Basics (REx-PN / PN, Canada)",
+        "matchScore": 1,
+        "approxWords": 192
+      }
+    },
+    {
+      "requiredTopic": "Pain Assessment",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "PARALLEL_TITLES_REVIEW",
+      "us": {
+        "slug": "us-pn-pain-management",
+        "title": "Pain management — PN scope (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 132
+      },
+      "ca": {
+        "slug": "ca-rpn-pain-management",
+        "title": "Pain management (REx-PN / PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 196
+      }
+    },
+    {
+      "requiredTopic": "Vital Signs Interpretation",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "SHARED_SLUG_BOTH_PATHWAYS",
+      "us": {
+        "slug": "vital-signs-escalation",
+        "title": "Vital Signs & Escalation (NCLEX-PN, US)",
+        "matchScore": 0.6666666666666666,
+        "approxWords": 196
+      },
+      "ca": {
+        "slug": "vital-signs-escalation",
+        "title": "Vital Signs & Escalation (REx-PN / PN, Canada)",
+        "matchScore": 0.6666666666666666,
+        "approxWords": 194
+      }
+    },
+    {
+      "requiredTopic": "Intake and Output",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": null,
+      "us": {
+        "slug": "bp26-uslpn-pa-aki-urine-labs",
+        "title": "AKI: urine output & creatinine cues — NCLEX-PN (United States)",
+        "matchScore": 0.5,
+        "approxWords": 394
+      },
+      "ca": null
+    },
+    {
+      "requiredTopic": "Daily Weights",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "SHARED_SLUG_BOTH_PATHWAYS",
+      "us": {
+        "slug": "edema-daily-weights",
+        "title": "Edema & Daily Weights (NCLEX-PN, US)",
+        "matchScore": 1,
+        "approxWords": 193
+      },
+      "ca": {
+        "slug": "edema-daily-weights",
+        "title": "Edema & Daily Weights (REx-PN / PN, Canada)",
+        "matchScore": 1,
+        "approxWords": 191
+      }
+    },
+    {
+      "requiredTopic": "Fall Prevention",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "SHARED_SLUG_BOTH_PATHWAYS",
+      "us": {
+        "slug": "catheter-care-cauti-prevention",
+        "title": "Catheter Care & CAUTI Prevention (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 199
+      },
+      "ca": {
+        "slug": "catheter-care-cauti-prevention",
+        "title": "Catheter Care & CAUTI Prevention (REx-PN / PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 197
+      }
+    },
+    {
+      "requiredTopic": "Pressure Injury Prevention",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": null,
+      "us": {
+        "slug": "bp26-uslpn-rr-pressure-injury",
+        "title": "Pressure injury prevention bundle — NCLEX-PN (United States)",
+        "matchScore": 1,
+        "approxWords": 395
+      },
+      "ca": null
+    },
+    {
+      "requiredTopic": "Restraint Safety",
+      "status": "EXISTS_UPGRADE",
+      "mergeNote": "PARALLEL_TITLES_REVIEW",
+      "us": {
+        "slug": "us-pn-prioritization-abcs",
+        "title": "Prioritization, ABCs & safety — PN scope (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 134
+      },
+      "ca": {
+        "slug": "pn-scope-safety-basics",
+        "title": "PN scope & safety foundations (REx-PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 88
+      }
+    },
+    {
+      "requiredTopic": "Patient Education Basics",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "PARALLEL_TITLES_REVIEW",
+      "us": {
+        "slug": "bp26-uslpn-hp-immunization-ed",
+        "title": "Immunization education essentials — NCLEX-PN (United States)",
+        "matchScore": 0.5,
+        "approxWords": 396
+      },
+      "ca": {
+        "slug": "bp26-carpn-x024-wrong-patient-near-miss-reporting",
+        "title": "Wrong-patient near-miss reporting — REx-PN (Canada)",
+        "matchScore": 0.5,
+        "approxWords": 396
+      }
+    },
+    {
+      "requiredTopic": "Rights of Medication Administration",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Medication Error Prevention",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Oral Medications",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "SHARED_SLUG_BOTH_PATHWAYS",
+      "us": {
+        "slug": "oral-hypoglycemics",
+        "title": "Oral Hypoglycemics (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 187
+      },
+      "ca": {
+        "slug": "oral-hypoglycemics",
+        "title": "Oral Hypoglycemics (REx-PN / PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 185
+      }
+    },
+    {
+      "requiredTopic": "Subcutaneous Medications",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": null,
+      "us": null,
+      "ca": {
+        "slug": "bp26-carpn-ph-high-alert-rounds",
+        "title": "High-alert medications: double checks — REx-PN (Canada)",
+        "matchScore": 0.5,
+        "approxWords": 389
+      }
+    },
+    {
+      "requiredTopic": "Intramuscular Medications",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": null,
+      "us": null,
+      "ca": {
+        "slug": "bp26-carpn-ph-high-alert-rounds",
+        "title": "High-alert medications: double checks — REx-PN (Canada)",
+        "matchScore": 0.5,
+        "approxWords": 389
+      }
+    },
+    {
+      "requiredTopic": "Basic IV Medication Safety",
+      "status": "EXISTS_UPGRADE",
+      "mergeNote": "PARALLEL_TITLES_REVIEW",
+      "us": {
+        "slug": "us-pn-prioritization-abcs",
+        "title": "Prioritization, ABCs & safety — PN scope (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 134
+      },
+      "ca": {
+        "slug": "pn-scope-safety-basics",
+        "title": "PN scope & safety foundations (REx-PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 88
+      }
+    },
+    {
+      "requiredTopic": "High-Alert Medications",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": null,
+      "us": null,
+      "ca": {
+        "slug": "bp26-carpn-ph-high-alert-rounds",
+        "title": "High-alert medications: double checks — REx-PN (Canada)",
+        "matchScore": 1,
+        "approxWords": 389
+      }
+    },
+    {
+      "requiredTopic": "Insulin Basics",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "PARALLEL_TITLES_REVIEW",
+      "us": {
+        "slug": "us-pn-insulin-hypoglycemia",
+        "title": "Insulin & hypoglycemia — PN scope (NCLEX-PN, US)",
+        "matchScore": 1,
+        "approxWords": 133
+      },
+      "ca": {
+        "slug": "ca-rpn-insulin-hypoglycemia",
+        "title": "Insulin & hypoglycemia (REx-PN / PN, Canada)",
+        "matchScore": 1,
+        "approxWords": 197
+      }
+    },
+    {
+      "requiredTopic": "Hypoglycemia Recognition",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "PARALLEL_TITLES_REVIEW",
+      "us": {
+        "slug": "us-pn-insulin-hypoglycemia",
+        "title": "Insulin & hypoglycemia — PN scope (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 133
+      },
+      "ca": {
+        "slug": "ca-rpn-insulin-hypoglycemia",
+        "title": "Insulin & hypoglycemia (REx-PN / PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 197
+      }
+    },
+    {
+      "requiredTopic": "Hyperglycemia Basics",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Anticoagulant Basics",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "PARALLEL_TITLES_REVIEW",
+      "us": {
+        "slug": "us-pn-anticoagulants",
+        "title": "Anticoagulants — PN scope (NCLEX-PN, US)",
+        "matchScore": 1,
+        "approxWords": 131
+      },
+      "ca": {
+        "slug": "ca-rpn-anticoagulants",
+        "title": "Anticoagulants (REx-PN / PN, Canada)",
+        "matchScore": 1,
+        "approxWords": 195
+      }
+    },
+    {
+      "requiredTopic": "Heparin Basics",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Warfarin Basics",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Antihypertensive Basics",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Diuretic Basics",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": null,
+      "us": null,
+      "ca": {
+        "slug": "bp26-carpn-x013-diuretic-teaching-orthostasis",
+        "title": "Diuretic teaching & orthostasis — REx-PN (Canada)",
+        "matchScore": 1,
+        "approxWords": 395
+      }
+    },
+    {
+      "requiredTopic": "Opioid Safety",
+      "status": "EXISTS_UPGRADE",
+      "mergeNote": "PARALLEL_TITLES_REVIEW",
+      "us": {
+        "slug": "us-pn-prioritization-abcs",
+        "title": "Prioritization, ABCs & safety — PN scope (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 134
+      },
+      "ca": {
+        "slug": "pn-scope-safety-basics",
+        "title": "PN scope & safety foundations (REx-PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 88
+      }
+    },
+    {
+      "requiredTopic": "Antibiotic Basics",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "PARALLEL_TITLES_REVIEW",
+      "us": {
+        "slug": "us-pn-antibiotics",
+        "title": "Antibiotics — PN scope (NCLEX-PN, US)",
+        "matchScore": 1,
+        "approxWords": 131
+      },
+      "ca": {
+        "slug": "ca-rpn-antibiotics",
+        "title": "Antibiotics (REx-PN / PN, Canada)",
+        "matchScore": 1,
+        "approxWords": 195
+      }
+    },
+    {
+      "requiredTopic": "Steroid Basics",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": null,
+      "us": null,
+      "ca": {
+        "slug": "bp26-carpn-x014-steroid-taper-teaching",
+        "title": "Steroid taper teaching — REx-PN (Canada)",
+        "matchScore": 1,
+        "approxWords": 391
+      }
+    },
+    {
+      "requiredTopic": "Patient Teaching for Common Medications",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Medication Side Effects and Reporting",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "SHARED_SLUG_BOTH_PATHWAYS",
+      "us": {
+        "slug": "antibiotic-side-effect-reporting",
+        "title": "Antibiotic Side Effect Reporting (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 193
+      },
+      "ca": {
+        "slug": "antibiotic-side-effect-reporting",
+        "title": "Antibiotic Side Effect Reporting (REx-PN / PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 191
+      }
+    },
+    {
+      "requiredTopic": "Safe Dosage / Monitoring Concepts",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Hypertension",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "PARALLEL_TITLES_REVIEW",
+      "us": {
+        "slug": "us-pn-hypertension",
+        "title": "Hypertension — PN scope (NCLEX-PN, US)",
+        "matchScore": 1,
+        "approxWords": 131
+      },
+      "ca": {
+        "slug": "ca-rpn-hypertension",
+        "title": "Hypertension (REx-PN / PN, Canada)",
+        "matchScore": 1,
+        "approxWords": 195
+      }
+    },
+    {
+      "requiredTopic": "Hypotension",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Chest Pain Assessment",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Angina Recognition",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "PARALLEL_TITLES_REVIEW",
+      "us": {
+        "slug": "us-pn-angina",
+        "title": "Angina — PN scope (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 131
+      },
+      "ca": {
+        "slug": "ca-rpn-angina",
+        "title": "Angina (REx-PN / PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 195
+      }
+    },
+    {
+      "requiredTopic": "Myocardial Infarction Recognition for Practical Nurses",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Heart Failure Basics",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "PARALLEL_TITLES_REVIEW",
+      "us": {
+        "slug": "us-pn-heart-failure",
+        "title": "Heart failure — PN scope (NCLEX-PN, US)",
+        "matchScore": 1,
+        "approxWords": 132
+      },
+      "ca": {
+        "slug": "ca-rpn-heart-failure",
+        "title": "Heart failure (REx-PN / PN, Canada)",
+        "matchScore": 1,
+        "approxWords": 196
+      }
+    },
+    {
+      "requiredTopic": "Edema and Fluid Overload",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Peripheral Vascular Disease / Peripheral Artery Disease Basics",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "DVT Basics",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Cardiac Monitoring Basics",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "SHARED_SLUG_BOTH_PATHWAYS",
+      "us": {
+        "slug": "heart-failure-monitoring",
+        "title": "Heart Failure Monitoring (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 190
+      },
+      "ca": {
+        "slug": "heart-failure-monitoring",
+        "title": "Heart Failure Monitoring (REx-PN / PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 188
+      }
+    },
+    {
+      "requiredTopic": "When to Escalate Cardiac Findings",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Oxygen Therapy",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "SHARED_SLUG_BOTH_PATHWAYS",
+      "us": {
+        "slug": "oxygen-devices-for-pn-care",
+        "title": "Oxygen Devices for PN Care (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 196
+      },
+      "ca": {
+        "slug": "oxygen-devices-for-pn-care",
+        "title": "Oxygen Devices for PN Care (REx-PN / PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 194
+      }
+    },
+    {
+      "requiredTopic": "Pulse Oximetry",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "COPD",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "PARALLEL_TITLES_REVIEW",
+      "us": {
+        "slug": "us-pn-copd-respiratory",
+        "title": "COPD & respiratory basics — PN scope (NCLEX-PN, US)",
+        "matchScore": 1,
+        "approxWords": 134
+      },
+      "ca": {
+        "slug": "ca-rpn-copd-respiratory",
+        "title": "COPD & respiratory basics (REx-PN / PN, Canada)",
+        "matchScore": 1,
+        "approxWords": 198
+      }
+    },
+    {
+      "requiredTopic": "Asthma",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "PARALLEL_TITLES_REVIEW",
+      "us": {
+        "slug": "us-pn-asthma",
+        "title": "Asthma — PN scope (NCLEX-PN, US)",
+        "matchScore": 1,
+        "approxWords": 131
+      },
+      "ca": {
+        "slug": "ca-rpn-asthma",
+        "title": "Asthma (REx-PN / PN, Canada)",
+        "matchScore": 1,
+        "approxWords": 195
+      }
+    },
+    {
+      "requiredTopic": "Pneumonia",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "PARALLEL_TITLES_REVIEW",
+      "us": {
+        "slug": "us-pn-pneumonia",
+        "title": "Pneumonia — PN scope (NCLEX-PN, US)",
+        "matchScore": 1,
+        "approxWords": 131
+      },
+      "ca": {
+        "slug": "ca-rpn-pneumonia",
+        "title": "Pneumonia (REx-PN / PN, Canada)",
+        "matchScore": 1,
+        "approxWords": 195
+      }
+    },
+    {
+      "requiredTopic": "Respiratory Distress Recognition",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Airway Management Basics",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "PARALLEL_TITLES_REVIEW",
+      "us": {
+        "slug": "us-pn-pain-management",
+        "title": "Pain management — PN scope (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 132
+      },
+      "ca": {
+        "slug": "ca-rpn-pain-management",
+        "title": "Pain management (REx-PN / PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 196
+      }
+    },
+    {
+      "requiredTopic": "Suctioning Basics",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Incentive Spirometry",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Smoking Cessation Teaching",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Cough and Sputum Assessment",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Stroke Recognition (FAST)",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Seizure Precautions",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "SHARED_SLUG_BOTH_PATHWAYS",
+      "us": {
+        "slug": "seizure-observation",
+        "title": "Seizure Observation (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 186
+      },
+      "ca": {
+        "slug": "seizure-observation",
+        "title": "Seizure Observation (REx-PN / PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 184
+      }
+    },
+    {
+      "requiredTopic": "Confusion vs Delirium vs Dementia",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": null,
+      "us": null,
+      "ca": {
+        "slug": "bp26-carpn-x015-delirium-vs-dementia-nursing-differentia",
+        "title": "Delirium vs dementia: nursing differentiation — REx-PN (Canada)",
+        "matchScore": 0.6666666666666666,
+        "approxWords": 402
+      }
+    },
+    {
+      "requiredTopic": "Level of Consciousness",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Basic Neuro Checks",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "PARALLEL_TITLES_REVIEW",
+      "us": {
+        "slug": "bp26-uslpn-pa-ich-nih",
+        "title": "Neuro checks after ICH pathway — NCLEX-PN (United States)",
+        "matchScore": 1,
+        "approxWords": 393
+      },
+      "ca": {
+        "slug": "insulin-administration-checks",
+        "title": "Insulin Administration Checks (REx-PN / PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 188
+      }
+    },
+    {
+      "requiredTopic": "Head Injury Warning Signs",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Parkinson Disease Basics",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "When Neuro Findings Require Immediate Escalation",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Nausea and Vomiting",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Diarrhea",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Constipation",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Dysphagia",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Hydration",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Tube Feeding Basics",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": null,
+      "us": null,
+      "ca": {
+        "slug": "bp26-carpn-proc-ngt-placement-care",
+        "title": "NG tube care & placement checks — REx-PN (Canada)",
+        "matchScore": 0.5,
+        "approxWords": 390
+      }
+    },
+    {
+      "requiredTopic": "NG Tube Care Basics",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "PARALLEL_TITLES_REVIEW",
+      "us": {
+        "slug": "us-pn-wound-care",
+        "title": "Wound care — PN scope (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 132
+      },
+      "ca": {
+        "slug": "bp26-carpn-proc-ngt-placement-care",
+        "title": "NG tube care & placement checks — REx-PN (Canada)",
+        "matchScore": 1,
+        "approxWords": 390
+      }
+    },
+    {
+      "requiredTopic": "Bowel Assessment",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "SHARED_SLUG_BOTH_PATHWAYS",
+      "us": {
+        "slug": "stool-assessment-report",
+        "title": "Stool Assessment & Report (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 192
+      },
+      "ca": {
+        "slug": "stool-assessment-report",
+        "title": "Stool Assessment & Report (REx-PN / PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 190
+      }
+    },
+    {
+      "requiredTopic": "GI Bleeding Red Flags",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Ostomy Basics",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Urinary Tract Infection",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Foley Catheter Care",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "SHARED_SLUG_BOTH_PATHWAYS",
+      "us": {
+        "slug": "catheter-care-cauti-prevention",
+        "title": "Catheter Care & CAUTI Prevention (NCLEX-PN, US)",
+        "matchScore": 0.6666666666666666,
+        "approxWords": 199
+      },
+      "ca": {
+        "slug": "catheter-care-cauti-prevention",
+        "title": "Catheter Care & CAUTI Prevention (REx-PN / PN, Canada)",
+        "matchScore": 0.6666666666666666,
+        "approxWords": 197
+      }
+    },
+    {
+      "requiredTopic": "Urinary Retention",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Dehydration",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Fluid Overload",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "PARALLEL_TITLES_REVIEW",
+      "us": {
+        "slug": "us-pn-fluid-balance",
+        "title": "Fluid deficit vs excess — PN scope (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 134
+      },
+      "ca": {
+        "slug": "ca-rpn-fluid-balance",
+        "title": "Fluid deficit vs excess (REx-PN / PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 198
+      }
+    },
+    {
+      "requiredTopic": "Electrolyte Basics",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Renal Monitoring Basics",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "SHARED_SLUG_BOTH_PATHWAYS",
+      "us": {
+        "slug": "heart-failure-monitoring",
+        "title": "Heart Failure Monitoring (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 190
+      },
+      "ca": {
+        "slug": "heart-failure-monitoring",
+        "title": "Heart Failure Monitoring (REx-PN / PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 188
+      }
+    },
+    {
+      "requiredTopic": "When to Report Reduced Urine Output",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": null,
+      "us": {
+        "slug": "bp26-uslpn-pa-aki-urine-labs",
+        "title": "AKI: urine output & creatinine cues — NCLEX-PN (United States)",
+        "matchScore": 0.5,
+        "approxWords": 394
+      },
+      "ca": null
+    },
+    {
+      "requiredTopic": "Diabetes Mellitus Basics",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Blood Glucose Monitoring",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Hypoglycemia vs Hyperglycemia",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "PARALLEL_TITLES_REVIEW",
+      "us": {
+        "slug": "us-pn-insulin-hypoglycemia",
+        "title": "Insulin & hypoglycemia — PN scope (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 133
+      },
+      "ca": {
+        "slug": "ca-rpn-insulin-hypoglycemia",
+        "title": "Insulin & hypoglycemia (REx-PN / PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 197
+      }
+    },
+    {
+      "requiredTopic": "Insulin Administration",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "SHARED_SLUG_BOTH_PATHWAYS",
+      "us": {
+        "slug": "insulin-administration-checks",
+        "title": "Insulin Administration Checks (NCLEX-PN, US)",
+        "matchScore": 1,
+        "approxWords": 190
+      },
+      "ca": {
+        "slug": "insulin-administration-checks",
+        "title": "Insulin Administration Checks (REx-PN / PN, Canada)",
+        "matchScore": 1,
+        "approxWords": 188
+      }
+    },
+    {
+      "requiredTopic": "Diabetic Foot Care",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Sick Day Teaching Basics",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Anemia Basics",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Infection Signs and Symptoms",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Fever Management",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "PARALLEL_TITLES_REVIEW",
+      "us": {
+        "slug": "us-pn-pain-management",
+        "title": "Pain management — PN scope (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 132
+      },
+      "ca": {
+        "slug": "ca-rpn-pain-management",
+        "title": "Pain management (REx-PN / PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 196
+      }
+    },
+    {
+      "requiredTopic": "Bleeding Precautions",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "SHARED_SLUG_BOTH_PATHWAYS",
+      "us": {
+        "slug": "c-diff-contact-precautions",
+        "title": "C. diff Contact Precautions (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 194
+      },
+      "ca": {
+        "slug": "c-diff-contact-precautions",
+        "title": "C. diff Contact Precautions (REx-PN / PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 192
+      }
+    },
+    {
+      "requiredTopic": "Neutropenic Precautions Basics",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "SHARED_SLUG_BOTH_PATHWAYS",
+      "us": {
+        "slug": "c-diff-contact-precautions",
+        "title": "C. diff Contact Precautions (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 194
+      },
+      "ca": {
+        "slug": "c-diff-contact-precautions",
+        "title": "C. diff Contact Precautions (REx-PN / PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 192
+      }
+    },
+    {
+      "requiredTopic": "Normal Pregnancy Basics",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Prenatal Care Basics",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "PARALLEL_TITLES_REVIEW",
+      "us": {
+        "slug": "us-pn-wound-care",
+        "title": "Wound care — PN scope (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 132
+      },
+      "ca": {
+        "slug": "ca-rpn-wound-care",
+        "title": "Wound care (REx-PN / PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 196
+      }
+    },
+    {
+      "requiredTopic": "Postpartum Care",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "PARALLEL_TITLES_REVIEW",
+      "us": {
+        "slug": "us-pn-wound-care",
+        "title": "Wound care — PN scope (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 132
+      },
+      "ca": {
+        "slug": "ca-rpn-wound-care",
+        "title": "Wound care (REx-PN / PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 196
+      }
+    },
+    {
+      "requiredTopic": "Fundus Assessment Basics",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "SHARED_SLUG_BOTH_PATHWAYS",
+      "us": {
+        "slug": "stool-assessment-report",
+        "title": "Stool Assessment & Report (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 192
+      },
+      "ca": {
+        "slug": "stool-assessment-report",
+        "title": "Stool Assessment & Report (REx-PN / PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 190
+      }
+    },
+    {
+      "requiredTopic": "Lochia Basics",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "SHARED_SLUG_BOTH_PATHWAYS",
+      "us": {
+        "slug": "postpartum-fundus-lochia",
+        "title": "Postpartum Fundus & Lochia (NCLEX-PN, US)",
+        "matchScore": 1,
+        "approxWords": 192
+      },
+      "ca": {
+        "slug": "postpartum-fundus-lochia",
+        "title": "Postpartum Fundus & Lochia (REx-PN / PN, Canada)",
+        "matchScore": 1,
+        "approxWords": 190
+      }
+    },
+    {
+      "requiredTopic": "Breastfeeding Support",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": null,
+      "us": null,
+      "ca": {
+        "slug": "bp26-carpn-x020-breastfeeding-latch-troubleshooting",
+        "title": "Breastfeeding latch troubleshooting — REx-PN (Canada)",
+        "matchScore": 0.5,
+        "approxWords": 391
+      }
+    },
+    {
+      "requiredTopic": "Newborn Assessment Basics",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "SHARED_SLUG_BOTH_PATHWAYS",
+      "us": {
+        "slug": "stool-assessment-report",
+        "title": "Stool Assessment & Report (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 192
+      },
+      "ca": {
+        "slug": "stool-assessment-report",
+        "title": "Stool Assessment & Report (REx-PN / PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 190
+      }
+    },
+    {
+      "requiredTopic": "APGAR Basics",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Newborn Safety",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "SHARED_SLUG_BOTH_PATHWAYS",
+      "us": {
+        "slug": "newborn-safety-bath",
+        "title": "Newborn Safety & Bath (NCLEX-PN, US)",
+        "matchScore": 1,
+        "approxWords": 192
+      },
+      "ca": {
+        "slug": "newborn-safety-bath",
+        "title": "Newborn Safety & Bath (REx-PN / PN, Canada)",
+        "matchScore": 1,
+        "approxWords": 190
+      }
+    },
+    {
+      "requiredTopic": "Newborn Jaundice Basics",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "SHARED_SLUG_BOTH_PATHWAYS",
+      "us": {
+        "slug": "newborn-safety-bath",
+        "title": "Newborn Safety & Bath (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 192
+      },
+      "ca": {
+        "slug": "newborn-safety-bath",
+        "title": "Newborn Safety & Bath (REx-PN / PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 190
+      }
+    },
+    {
+      "requiredTopic": "Pregnancy Warning Signs",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "When to Escalate Maternal / Newborn Findings",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Growth and Development Basics",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "SHARED_SLUG_BOTH_PATHWAYS",
+      "us": {
+        "slug": "growth-chart-basics",
+        "title": "Growth Chart Basics (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 189
+      },
+      "ca": {
+        "slug": "growth-chart-basics",
+        "title": "Growth Chart Basics (REx-PN / PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 187
+      }
+    },
+    {
+      "requiredTopic": "Pediatric Vital Signs",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "SHARED_SLUG_BOTH_PATHWAYS",
+      "us": {
+        "slug": "vital-signs-escalation",
+        "title": "Vital Signs & Escalation (NCLEX-PN, US)",
+        "matchScore": 0.6666666666666666,
+        "approxWords": 196
+      },
+      "ca": {
+        "slug": "vital-signs-escalation",
+        "title": "Vital Signs & Escalation (REx-PN / PN, Canada)",
+        "matchScore": 0.6666666666666666,
+        "approxWords": 194
+      }
+    },
+    {
+      "requiredTopic": "Fever in Children",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Pediatric Medication Safety",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Immunization Basics",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "SHARED_SLUG_BOTH_PATHWAYS",
+      "us": {
+        "slug": "immunization-consent",
+        "title": "Immunization Consent (NCLEX-PN, US)",
+        "matchScore": 1,
+        "approxWords": 186
+      },
+      "ca": {
+        "slug": "immunization-consent",
+        "title": "Immunization Consent (REx-PN / PN, Canada)",
+        "matchScore": 1,
+        "approxWords": 184
+      }
+    },
+    {
+      "requiredTopic": "Family-Centered Care",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Therapeutic Communication in Mental Health",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "SHARED_SLUG_BOTH_PATHWAYS",
+      "us": {
+        "slug": "therapeutic-communication",
+        "title": "Therapeutic Communication (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 190
+      },
+      "ca": {
+        "slug": "therapeutic-communication",
+        "title": "Therapeutic Communication (REx-PN / PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 188
+      }
+    },
+    {
+      "requiredTopic": "Anxiety Basics",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": null,
+      "us": {
+        "slug": "bp26-uslpn-psy-anxiety-therapeutic",
+        "title": "Therapeutic communication for anxiety — NCLEX-PN (United States)",
+        "matchScore": 1,
+        "approxWords": 398
+      },
+      "ca": null
+    },
+    {
+      "requiredTopic": "Depression Basics",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": null,
+      "us": {
+        "slug": "bp26-uslpn-ph-opioid-resp-depr",
+        "title": "Opioids & respiratory depression — NCLEX-PN (United States)",
+        "matchScore": 1,
+        "approxWords": 395
+      },
+      "ca": null
+    },
+    {
+      "requiredTopic": "Suicide Risk Recognition",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": null,
+      "us": {
+        "slug": "bp26-uslpn-psy-suicide-safety",
+        "title": "Suicide risk: nursing priorities — NCLEX-PN (United States)",
+        "matchScore": 0.6666666666666666,
+        "approxWords": 395
+      },
+      "ca": null
+    },
+    {
+      "requiredTopic": "Substance Withdrawal Basics",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": null,
+      "us": null,
+      "ca": {
+        "slug": "bp26-carpn-x016-substance-withdrawal-monitoring",
+        "title": "Substance withdrawal monitoring — REx-PN (Canada)",
+        "matchScore": 1,
+        "approxWords": 394
+      }
+    },
+    {
+      "requiredTopic": "Crisis Intervention Basics",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Trauma-Informed Care Basics",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": null,
+      "us": null,
+      "ca": {
+        "slug": "bp26-carpn-x017-trauma-informed-care-basics",
+        "title": "Trauma-informed care basics — REx-PN (Canada)",
+        "matchScore": 1,
+        "approxWords": 394
+      }
+    },
+    {
+      "requiredTopic": "ABC Priorities",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "PARALLEL_TITLES_REVIEW",
+      "us": {
+        "slug": "us-pn-prioritization-abcs",
+        "title": "Prioritization, ABCs & safety — PN scope (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 134
+      },
+      "ca": {
+        "slug": "ca-rpn-prioritization-abcs",
+        "title": "Prioritization, ABCs & safety (REx-PN / PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 213
+      }
+    },
+    {
+      "requiredTopic": "Shock Recognition Basics",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "PARALLEL_TITLES_REVIEW",
+      "us": {
+        "slug": "us-pn-shock",
+        "title": "Shock — PN scope (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 131
+      },
+      "ca": {
+        "slug": "ca-rpn-shock",
+        "title": "Shock (REx-PN / PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 195
+      }
+    },
+    {
+      "requiredTopic": "Sepsis Early Warning Signs",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Fall Injury Response",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "When to Escalate Immediately",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    },
+    {
+      "requiredTopic": "Reporting Using SBAR",
+      "status": "EXISTS_STRONG_SKIP",
+      "mergeNote": "SHARED_SLUG_BOTH_PATHWAYS",
+      "us": {
+        "slug": "antibiotic-side-effect-reporting",
+        "title": "Antibiotic Side Effect Reporting (NCLEX-PN, US)",
+        "matchScore": 0.5,
+        "approxWords": 193
+      },
+      "ca": {
+        "slug": "antibiotic-side-effect-reporting",
+        "title": "Antibiotic Side Effect Reporting (REx-PN / PN, Canada)",
+        "matchScore": 0.5,
+        "approxWords": 191
+      }
+    },
+    {
+      "requiredTopic": "Basic CPR / emergency response awareness",
+      "status": "CREATE_NEW",
+      "mergeNote": null,
+      "us": null,
+      "ca": null
+    }
+  ]
+}

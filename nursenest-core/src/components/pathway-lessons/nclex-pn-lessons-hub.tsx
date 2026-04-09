@@ -18,13 +18,28 @@ import type { TopicCluster } from "@/lib/lessons/pathway-lesson-loader";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 import { PathwayLessonProgressBadge } from "@/components/lessons/pathway-lesson-progress-badge";
 
+/** US NCLEX-PN vs Canada REx-PN — shared PN hub, exam-specific copy only. */
+export type PnLessonsHubFraming = "nclex-pn-us" | "rex-pn-ca";
+
 type Props = {
   pathway: ExamPathwayDefinition;
   lessons: PathwayLessonRecord[];
   lessonsBasePath: string;
   topicClusters: TopicCluster[];
   progressMap?: Record<string, PathwayLessonProgressStatus>;
+  framing?: PnLessonsHubFraming;
 };
+
+function pnExamLabels(framing: PnLessonsHubFraming) {
+  const rex = framing === "rex-pn-ca";
+  return {
+    examShort: rex ? "REx-PN" : "NCLEX-PN",
+    candidate: rex ? "Canadian practical nursing (RPN)" : "US LVN/LPN",
+    regulatorTone: rex
+      ? "Canadian regulatory language and practical-nurse scope — recognition, monitoring, reporting, and escalation."
+      : "NCLEX-PN Client Needs — scope-safe judgment, delegation, and ordered care.",
+  };
+}
 
 function appQuestionsHref(pathwayId: string, topic?: string): string {
   const q = new URLSearchParams();
@@ -33,7 +48,15 @@ function appQuestionsHref(pathwayId: string, topic?: string): string {
   return `/app/questions?${q.toString()}`;
 }
 
-export function NclexPnLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters, progressMap = {} }: Props) {
+export function NclexPnLessonsHub({
+  pathway,
+  lessons,
+  lessonsBasePath,
+  topicClusters,
+  progressMap = {},
+  framing = "nclex-pn-us",
+}: Props) {
+  const labels = pnExamLabels(framing);
   const safeLessons = lessons.filter(pathwayLessonHasRenderableHubSlug);
   const sections = buildNclexPnUsLessonSections(safeLessons);
   const navLinks = sections.filter((s) => s.count > 0);
@@ -43,15 +66,16 @@ export function NclexPnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
   const examHub = buildExamPathwayPath(pathway);
 
   return (
-    <div className="space-y-14">
-      <section className="nn-study-card p-5 sm:p-6" aria-labelledby="how-use-nclex-pn">
-        <h2 id="how-use-nclex-pn" className="nn-marketing-h3">
-          How to use these lessons for NCLEX-PN
+    <div className="space-y-14 rounded-[1.75rem] border border-[var(--border-subtle)] bg-gradient-to-b from-[var(--nn-presentation-wash)] via-[var(--theme-page-bg)] to-[var(--theme-page-bg)] p-4 sm:p-6 md:p-8">
+      <section className="nn-study-card nn-study-card--wash p-5 sm:p-6" aria-labelledby="how-use-pn-hub">
+        <p className="nn-marketing-label nn-marketing-label--accent">{labels.examShort} · practical nursing</p>
+        <h2 id="how-use-pn-hub" className="nn-marketing-h3 mt-2">
+          How to use these lessons for {labels.examShort}
         </h2>
         <ol className="nn-marketing-body-sm mt-4 list-none space-y-3 pl-0 text-[var(--theme-muted-text)]">
           <li>
-            <span className="font-semibold text-[var(--theme-heading-text)]">1. Learn the concept.</span> Focus on what the LVN/LPN can do,
-            must report, and must not do. NCLEX-PN tests scope as often as content.
+            <span className="font-semibold text-[var(--theme-heading-text)]">1. Learn the concept.</span> Focus on what the practical nurse
+            can do, must report, and must not do. {labels.examShort} tests scope as often as content.
           </li>
           <li>
             <span className="font-semibold text-[var(--theme-heading-text)]">2. Apply with questions.</span> Use this pathway in the bank so
@@ -68,12 +92,16 @@ export function NclexPnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
         </ol>
       </section>
 
-      <section className="nn-study-callout p-5 sm:p-6">
-        <h2 className="nn-marketing-h3">NCLEX-PN: explicit, not generic prep</h2>
+      <section className="nn-study-callout border-[var(--border-subtle)] p-5 sm:p-6 shadow-[var(--shadow-card)]">
+        <h2 className="nn-marketing-h3">
+          {labels.examShort}: explicit, not generic prep
+        </h2>
         <ul className="nn-marketing-body-sm mt-3 list-disc space-y-2 pl-5 text-[var(--theme-muted-text)]">
-          <li>Aligned with the NCLEX-PN test plan Client Needs framework used to group lessons below.</li>
-          <li>Built around practical/vocational scope: delegation, safety, and ordered care, not RN leadership disguised as PN.</li>
-          <li>Supports clinical judgment and NGN-style stems: multiple “reasonable” options with one safest, scope-correct choice.</li>
+          <li>
+            {labels.regulatorTone} Lessons are grouped by Client Needs below.
+          </li>
+          <li>Built around {labels.candidate} priorities: stable vs unstable recognition, monitoring, reporting, safety, and delegation.</li>
+          <li>Supports clinical judgment stems: multiple reasonable options with one safest, scope-correct choice.</li>
         </ul>
       </section>
 
@@ -84,7 +112,7 @@ export function NclexPnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
       />
 
       {navLinks.length > 0 && (
-        <nav aria-label="NCLEX-PN lesson categories" className="nn-study-card nn-study-card--wash p-4">
+        <nav aria-label={`${labels.examShort} lesson categories`} className="nn-study-card nn-study-card--wash p-4">
           <p className="nn-marketing-label">Jump to Client Needs</p>
           <p className="nn-marketing-caption mt-1">Counts reflect lessons on this page (paginated hub).</p>
           <ul className="mt-3 flex flex-wrap gap-2">
@@ -123,7 +151,7 @@ export function NclexPnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
               <p className="nn-marketing-body-sm mt-1 text-[var(--theme-body-text)]">{featuredPreview.examQuestionTypes}</p>
             </div>
             <div className="sm:col-span-2">
-              <p className="nn-marketing-caption font-semibold uppercase">What this lesson prepares you for (NCLEX-PN)</p>
+              <p className="nn-marketing-caption font-semibold uppercase">What this lesson prepares you for ({labels.examShort})</p>
               <p className="nn-marketing-body-sm mt-1 text-[var(--theme-muted-text)]">{featuredPreview.whyOnExam}</p>
             </div>
             <div className="nn-surface-inset sm:col-span-2 rounded-xl p-3">
@@ -183,7 +211,7 @@ export function NclexPnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
         </h2>
         <div className="mt-3 space-y-3 text-sm leading-relaxed text-[var(--theme-muted-text)]">
           <p>
-            NCLEX-PN measures whether you can apply knowledge to <em>safe decisions</em> in the practical nurse role, not
+            {labels.examShort} measures whether you can apply knowledge to <em>safe decisions</em> in the practical nurse role, not
             whether you can list facts. CAT adjusts difficulty as you go; weak scope boundaries show up fast.
           </p>
           <ul className="list-disc space-y-2 pl-5">
@@ -234,7 +262,7 @@ export function NclexPnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
 
       <section className="nn-study-card p-5 sm:p-6" aria-labelledby="reasoning-nclex-pn">
         <h2 id="reasoning-nclex-pn" className="nn-marketing-h3">
-          What strong NCLEX-PN reasoning looks like
+          What strong {labels.examShort} reasoning looks like
         </h2>
         <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
           Illustrative delegation stem: eliminate options that confuse task completion with patient safety or licensed duty.
@@ -259,7 +287,7 @@ export function NclexPnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
             after higher-risk needs are covered.
           </p>
           <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">
-            <strong className="text-[var(--theme-heading-text)]">Takeaway:</strong> NCLEX-PN prioritization still follows patient outcome
+            <strong className="text-[var(--theme-heading-text)]">Takeaway:</strong> {labels.examShort} prioritization still follows patient outcome
             risk. Then stay inside what you can assess, perform, and report within PN scope.
           </p>
         </div>

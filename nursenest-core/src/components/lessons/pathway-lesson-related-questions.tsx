@@ -9,23 +9,28 @@ import { pathwayAppQuestionBankTopicHref, pathwayMarketingQuestionBankTopicHref 
 export function PathwayLessonRelatedQuestions({
   pathway,
   lessonTopic,
+  topicSlug,
   items,
 }: {
   pathway: ExamPathwayDefinition;
   lessonTopic: string;
+  /** Normalized cluster slug — narrows app/marketing bank links via `topicCode` when present. */
+  topicSlug?: string;
   items: RelatedExamQuestionStem[];
 }) {
   if (items.length === 0) return null;
 
+  const topicCode = topicSlug?.trim() || undefined;
+
   return (
     <section className="nn-study-card nn-study-card--wash mt-10 p-5 sm:p-6" aria-labelledby="lesson-related-questions-heading">
-      <p className="nn-marketing-label nn-marketing-label--accent">Question bank · same topic</p>
+      <p className="nn-marketing-label nn-marketing-label--accent">Question bank · related practice</p>
       <h2 id="lesson-related-questions-heading" className="nn-marketing-h3 mt-2 text-[var(--theme-heading-text)]">
-        Related questions
+        Related practice questions
       </h2>
       <p className="nn-marketing-body-sm mt-2 max-w-prose text-[var(--theme-muted-text)]">
-        Sample items from the {pathway.shortName} pool tagged like this lesson (topic / category). Open the hub to run a full
-        drill—stays pathway-scoped in the app.
+        Sample items from the {pathway.shortName} pool matched to this lesson’s topic and tags (limited list). Open the hub for a
+        full drill—stays pathway-scoped in the app.
       </p>
       <ol className="mt-4 list-decimal space-y-3 pl-5 text-sm text-[var(--theme-body-text)]">
         {items.map((q) => (
@@ -36,13 +41,13 @@ export function PathwayLessonRelatedQuestions({
       </ol>
       <div className="mt-5 flex flex-wrap gap-2">
         <Link
-          href={pathwayAppQuestionBankTopicHref(pathway, lessonTopic)}
+          href={pathwayAppQuestionBankTopicHref(pathway, lessonTopic, topicCode)}
           className="inline-flex min-h-11 items-center rounded-full nn-btn-primary px-5 py-2.5 text-sm font-semibold shadow-none"
         >
           Topic drill (app)
         </Link>
         <Link
-          href={pathwayMarketingQuestionBankTopicHref(pathway, lessonTopic)}
+          href={pathwayMarketingQuestionBankTopicHref(pathway, lessonTopic, topicCode)}
           className="inline-flex min-h-11 items-center rounded-full nn-btn-secondary px-5 py-2.5 text-sm font-semibold"
         >
           Question hub · filtered

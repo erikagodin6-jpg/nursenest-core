@@ -166,6 +166,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
 
   const relatedQuestionStems = await loadRelatedExamQuestionStemsForPathwayLesson({
     pathway,
+    lessonSlug: lesson.slug,
     lessonTitle: lesson.title,
     lessonTopic: lesson.topic,
     lessonTopicSlug: lesson.topicSlug,
@@ -301,7 +302,12 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
         .
       </p>
 
-      <PathwayLessonRelatedQuestions pathway={pathway} lessonTopic={lesson.topic} items={relatedQuestionStems} />
+      <PathwayLessonRelatedQuestions
+        pathway={pathway}
+        lessonTopic={lesson.topic}
+        topicSlug={lesson.topicSlug}
+        items={relatedQuestionStems}
+      />
 
       {relatedDisplay.length > 0 ? (
         <section className="mt-10">

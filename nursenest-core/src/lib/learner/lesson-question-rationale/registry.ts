@@ -15,6 +15,7 @@ import { SHOCK_GOLD_SLUG } from "@/lib/lessons/scoped-lessons/shock-gold-standar
 import { CANADIAN_RPN_HIGH_YIELD_GOLD_SLUG } from "@/lib/lessons/scoped-lessons/canadian-rpn-high-yield-gold-standard";
 import { COPD_GOLD_STANDARD_SLUG } from "@/lib/lessons/scoped-lessons/copd-gold-standard";
 import type { LessonRationaleMappingEntry } from "@/lib/learner/lesson-question-rationale/types";
+import { RN_NCLEX_CATALOG_RATIONALE_ENTRIES } from "@/lib/learner/lesson-question-rationale/rn-nclex-catalog-rationale-registry";
 
 const CA = CountryCode.CA;
 
@@ -312,4 +313,5 @@ export const LESSON_RATIONALE_MAPPING_ENTRIES: LessonRationaleMappingEntry[] = [
       /(?=.*\b(case\s+study|casebook|clinical\s+case|vignette)\b)(?=.*\b(suicid|self[\s-]?harm|psychiatr|agitation|hallucin)\b)/i,
     baseWeight: 90,
   },
+  ...RN_NCLEX_CATALOG_RATIONALE_ENTRIES,
 ];

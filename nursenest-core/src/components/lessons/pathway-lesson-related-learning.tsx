@@ -39,6 +39,7 @@ export function PathwayLessonRelatedLearningBlock({
     : lessonsBasePath;
 
   const filtered = relatedLessons.filter((r) => r.slug !== currentSlug).slice(0, RELATED_CAP);
+  const topicCode = topicSlug?.trim() || undefined;
   const showCat = pathwayAllowsCatAdaptiveStart(pathway);
   const catHref = loginWithCallback(appPathwayCatSessionStartPath(pathway.id));
 
@@ -103,13 +104,13 @@ export function PathwayLessonRelatedLearningBlock({
           </p>
           <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
             <Link
-              href={pathwayAppQuestionBankTopicHref(pathway, topic)}
+              href={pathwayAppQuestionBankTopicHref(pathway, topic, topicCode)}
               className="inline-flex min-h-11 flex-1 items-center justify-center rounded-full nn-btn-primary px-5 py-2.5 text-sm font-semibold shadow-none"
             >
               Open practice (app)
             </Link>
             <Link
-              href={pathwayMarketingQuestionBankTopicHref(pathway, topic)}
+              href={pathwayMarketingQuestionBankTopicHref(pathway, topic, topicCode)}
               className="inline-flex min-h-11 flex-1 items-center justify-center rounded-full nn-btn-secondary px-5 py-2.5 text-sm font-semibold"
             >
               Question bank hub

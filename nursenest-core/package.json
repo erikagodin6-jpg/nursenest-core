@@ -48,6 +48,8 @@
     "db:seed": "tsx prisma/seed.ts",
     "db:seed-pathway-lessons": "tsx scripts/seed-pathway-lessons-from-catalog.ts",
     "db:append-topic-map-lessons": "tsx scripts/bulk-append-topic-map-lessons-to-catalog.ts",
+    "content:rn-nclex-catalog-import": "node scripts/rn-nclex-catalog-import-category.mjs",
+    "content:rn-nclex-catalog-verify": "node scripts/rn-nclex-catalog-verify-category.mjs",
     "ops:pathway-lesson-sources": "tsx scripts/report-pathway-lesson-sources.ts",
     "ops:pathway-lesson-translations": "tsx scripts/report-pathway-lesson-translations.ts",
     "ops:question-bank-diagnostics": "tsx scripts/report-question-bank-diagnostics.ts",

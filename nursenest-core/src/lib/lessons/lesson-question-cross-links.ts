@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db";
 import { withDatabaseFallback } from "@/lib/db/safe-database";
 import { pathwayExamQuestionMarketingWhere } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { getRnNclexLessonQuestionBankBridgeClauses } from "@/lib/lessons/rn-nclex-lesson-question-bank-bridge";
 
 /** Upper bound for cross-link lists (lesson ↔ question bank). Single `findMany` uses `take` with this value. */
 export const RELATED_EXAM_QUESTIONS_CAP = 8;
@@ -151,6 +152,21 @@ function stemPreview(stem: string, max = 155): string {
   return `${t.slice(0, max - 1)}…`;
 }
 
+function dedupeOrClauses(clauses: Prisma.ExamQuestionWhereInput[]): Prisma.ExamQuestionWhereInput[] {
+  const seen = new Set<string>();
+  const out: Prisma.ExamQuestionWhereInput[] = [];
+  for (const c of clauses) {
+    const k = JSON.stringify(c);
+    if (seen.has(k)) continue;
+    seen.add(k);
+    out.push(c);
+  }
+  return out;
+}
+
+/** Keep OR fan-in bounded when RN bridge + title tokens are merged. */
+const MAX_RELATED_QUESTION_OR_CLAUSES = 26;
+
 /**
  * Published exam questions in the pathway’s marketing-scoped pool that match the lesson (topic labels/tokens
  * from title + slug, optional `bodySystem`, optional `tags` has `topicSlug`). Single bounded `findMany`; no in-memory fallbacks.
@@ -163,15 +179,19 @@ export async function loadRelatedExamQuestionStemsForPathwayLesson(args: {
   lessonTopic: string;
   lessonTopicSlug: string;
   bodySystem?: string | null;
+  /** Catalog / DB lesson slug — enables RN NCLEX bridge hints (single query). */
+  lessonSlug?: string;
 }): Promise<RelatedExamQuestionStem[]> {
-  const { pathway, lessonTitle, lessonTopic, lessonTopicSlug, bodySystem } = args;
+  const { pathway, lessonTitle, lessonTopic, lessonTopicSlug, bodySystem, lessonSlug } = args;
   const base = pathwayExamQuestionMarketingWhere(pathway);
   const topicTrim = lessonTopic.trim();
   const slug = lessonTopicSlug.trim().toLowerCase();
   const fromSlugPhrase = slug.replace(/-/g, " ").trim();
   const tokens = deriveTopicMatchTokens(lessonTitle, lessonTopicSlug);
 
-  const orClauses: Prisma.ExamQuestionWhereInput[] = [];
+  const bridgeFirst = getRnNclexLessonQuestionBankBridgeClauses(pathway.id, lessonSlug ?? "");
+
+  const orClauses: Prisma.ExamQuestionWhereInput[] = [...bridgeFirst];
   if (topicTrim.length > 0) {
     orClauses.push({ topic: { equals: topicTrim, mode: "insensitive" } });
   }
@@ -188,13 +208,15 @@ export async function loadRelatedExamQuestionStemsForPathwayLesson(args: {
     orClauses.push({ tags: { has: slug } });
   }
 
-  if (orClauses.length === 0) return [];
+  const orMerged = dedupeOrClauses(orClauses).slice(0, MAX_RELATED_QUESTION_OR_CLAUSES);
+
+  if (orMerged.length === 0) return [];
 
   return withDatabaseFallback(
     async () => {
       const rows = await prisma.examQuestion.findMany({
         where: {
-          AND: [base, { OR: orClauses }],
+          AND: [base, { OR: orMerged }],
         },
         select: { id: true, stem: true },
         orderBy: { updatedAt: "desc" },

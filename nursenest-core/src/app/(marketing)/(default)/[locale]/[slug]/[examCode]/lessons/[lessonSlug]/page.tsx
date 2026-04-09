@@ -155,6 +155,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
     getRelatedPathwayLessons(pathway.id, lesson.topicSlug, lesson.slug, undefined, lessonContentLocale),
     loadRelatedExamQuestionStemsForPathwayLesson({
       pathway,
+      lessonSlug: lesson.slug,
       lessonTitle: lesson.title,
       lessonTopic: lesson.topic,
       lessonTopicSlug: lesson.topicSlug,
@@ -339,7 +340,12 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
         currentSlug={lesson.slug}
       />
 
-      <PathwayLessonRelatedQuestions pathway={pathway} lessonTopic={lesson.topic} items={relatedQuestionStems} />
+      <PathwayLessonRelatedQuestions
+        pathway={pathway}
+        lessonTopic={lesson.topic}
+        topicSlug={lesson.topicSlug}
+        items={relatedQuestionStems}
+      />
 
       <p className="mt-8 text-sm text-muted">
         More resources:{" "}

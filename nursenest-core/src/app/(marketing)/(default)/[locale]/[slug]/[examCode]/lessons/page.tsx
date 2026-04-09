@@ -165,6 +165,8 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const isUsNclexPnHub = pathway.id === "us-lpn-nclex-pn";
   const isUsFnpHub = pathway.id === "us-np-fnp";
   const isCaRexPnHub = pathway.id === "ca-rpn-rex-pn";
+  /** Shared practical-nursing hub (US NCLEX-PN + Canada REx-PN). */
+  const isPnLessonsHub = isUsNclexPnHub || isCaRexPnHub;
 
   if (pageResult.total === 0) {
     const { crumbs, schemaItems } = pathwayLessonsHubBreadcrumbs(pathway);
@@ -348,13 +350,14 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       ) : null}
 
       <div id="pathway-lesson-library">
-        {isUsNclexPnHub ? (
+        {isPnLessonsHub ? (
           <NclexPnLessonsHub
             pathway={pathway}
             lessons={lessons}
             lessonsBasePath={base}
             topicClusters={topics}
             progressMap={progressMap}
+            framing={isCaRexPnHub ? "rex-pn-ca" : "nclex-pn-us"}
           />
         ) : isUsFnpHub ? (
           <FnpLessonsHub pathway={pathway} lessons={lessons} lessonsBasePath={base} topicClusters={topics} progressMap={progressMap} />
