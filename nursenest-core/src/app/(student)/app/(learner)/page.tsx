@@ -9,10 +9,11 @@ import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { LockedStudyNextPreview } from "@/components/student/locked-study-next-preview";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
+import { buildLearnerStudySnapshot } from "@/lib/learner/build-learner-study-snapshot";
 import { loadTodayGoalProgress } from "@/lib/learner/load-today-goal-progress";
 import { loadPremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
-import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
 import { loadRecentLearnerNotesSummary } from "@/lib/learner/load-recent-learner-notes-summary";
+import { LearnerAdaptiveFocusCard } from "@/components/student/learner-adaptive-focus-card";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 
@@ -71,16 +72,18 @@ export default async function LearnerDashboardPage() {
   }
 
   let snapshot = null;
+  let studySnap: Awaited<ReturnType<typeof buildLearnerStudySnapshot>> = null;
   let weakTopicTitles: string[] = [];
   try {
-    const [snap, topicPerf, notes, todayGoal] = await Promise.all([
+    const [snap, nextSnap, notes, todayGoal] = await Promise.all([
       loadPremiumDashboardSnapshot(userId, entitlement),
-      loadUnifiedTopicPerformance(userId, entitlement, 8),
+      buildLearnerStudySnapshot(userId, entitlement, undefined),
       loadRecentLearnerNotesSummary(userId),
       loadTodayGoalProgress(userId),
     ]);
     snapshot = snap;
-    weakTopicTitles = topicPerf?.weakTopics.map((w) => w.topic) ?? [];
+    studySnap = nextSnap;
+    weakTopicTitles = studySnap?.weakTopics.map((w) => w.topic) ?? [];
     if (snapshot) {
       const resume =
         snapshot.continueLesson ??
@@ -108,7 +111,13 @@ export default async function LearnerDashboardPage() {
             />
           ) : null}
           <LearnerDashboardAdvantageStrip t={t} />
-          <PremiumLearnerHub snapshot={snapshot} weakTopicTitles={weakTopicTitles} recentNotes={notes} />
+          {studySnap ? <LearnerAdaptiveFocusCard snapshot={studySnap} /> : null}
+          <PremiumLearnerHub
+            snapshot={snapshot}
+            weakTopicTitles={weakTopicTitles}
+            recentNotes={notes}
+            suppressFlashcardWeakLine={weakTopicTitles.length > 0}
+          />
           <section className="nn-card flex flex-col gap-3 p-5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
             <p className="text-sm text-muted-foreground">{t("learner.dashboard.accountTeaser")}</p>
             <Link

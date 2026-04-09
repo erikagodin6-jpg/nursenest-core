@@ -16,6 +16,7 @@ import type { EmptyCopyI18n } from "@/lib/student/gated-state-messages-i18n";
 import { examPoolEmptyKeys, examStartFailureKey } from "@/lib/student/gated-state-messages-i18n";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { readLearnerStudyDefaults } from "@/lib/student/learner-study-defaults";
+import { PostSessionExamInsights } from "@/components/student/post-session-exam-insights";
 import { PostTestStudyNextCard } from "@/components/student/post-test-study-next-card";
 
 type ExamQuestion = {
@@ -553,12 +554,7 @@ export function ExamPracticeClient({
             </ul>
           </div>
         ) : null}
-        {r?.weakAreas && r.weakAreas.length > 0 ? (
-          <p className="text-sm text-muted">
-            <span className="font-medium text-foreground">{t("examAttempt.reviewTopicsLabel")} </span>
-            {r.weakAreas.slice(0, 8).join(", ")}
-          </p>
-        ) : null}
+        <PostSessionExamInsights review={r ?? null} studyNext={done.studyNext ?? null} />
         {done.studyNext ? <PostTestStudyNextCard bundle={done.studyNext} /> : null}
         <p className="text-sm text-muted">
           Review misses in the question bank, then reinforce weak systems with{" "}

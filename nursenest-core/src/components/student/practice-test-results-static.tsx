@@ -18,6 +18,8 @@ export function PracticeTestResultsStatic({
   config,
   completedAtLabel,
   incorrectReviewItems = [],
+  sessionInsightStruggle = null,
+  sessionInsightFocus = null,
 }: {
   testId: string;
   title: string | null;
@@ -25,6 +27,9 @@ export function PracticeTestResultsStatic({
   config: PracticeTestConfigJson | null;
   completedAtLabel: string;
   incorrectReviewItems?: PracticeTestIncorrectReviewItem[];
+  /** Pre-resolved i18n from the results page (grounded in this run’s weak areas). */
+  sessionInsightStruggle?: string | null;
+  sessionInsightFocus?: string | null;
 }) {
   const cat = config?.selectionMode === "cat";
   const incorrect = Math.max(0, results.scoreTotal - results.scoreCorrect);
@@ -63,6 +68,15 @@ export function PracticeTestResultsStatic({
           </p>
         ) : null}
       </div>
+
+      {sessionInsightStruggle || sessionInsightFocus ? (
+        <div className="nn-card border border-border/70 bg-muted/20 p-5">
+          {sessionInsightStruggle ? <p className="text-sm text-foreground/90">{sessionInsightStruggle}</p> : null}
+          {sessionInsightFocus ? (
+            <p className={`text-sm text-muted-foreground ${sessionInsightStruggle ? "mt-2" : ""}`}>{sessionInsightFocus}</p>
+          ) : null}
+        </div>
+      ) : null}
 
       {Object.keys(results.byTopic).length > 0 ? (
         <div className="nn-card p-6">

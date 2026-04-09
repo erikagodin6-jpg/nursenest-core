@@ -90,6 +90,8 @@ export function PremiumLearnerHub({
   /** When the dashboard hero already shows readiness — keep momentum only, avoid duplicate score band. */
   compactIntro = false,
   recentNotes = [],
+  /** Hide flashcard weak-topic sentence when the adaptive focus card already lists weak areas. */
+  suppressFlashcardWeakLine = false,
 }: {
   snapshot: PremiumDashboardSnapshot;
   /** From practice stats — surfaces weak-area flashcard link context. */
@@ -97,6 +99,7 @@ export function PremiumLearnerHub({
   compactIntro?: boolean;
   /** Metadata + links only (no note bodies). */
   recentNotes?: RecentLearnerNoteSummary[];
+  suppressFlashcardWeakLine?: boolean;
 }) {
   const {
     readiness,
@@ -224,7 +227,7 @@ export function PremiumLearnerHub({
               <p className="text-2xl font-bold tabular-nums text-foreground">{snapshot.flashcards.reviewStreak}</p>
             </div>
           </div>
-          {weakTopicTitles.length > 0 ? (
+          {!suppressFlashcardWeakLine && weakTopicTitles.length > 0 ? (
             <p className="mt-3 text-xs text-muted">
               Priority review queue matched to flashcards:{" "}
               <span className="font-medium text-foreground">{weakTopicTitles.slice(0, 5).join(", ")}</span>

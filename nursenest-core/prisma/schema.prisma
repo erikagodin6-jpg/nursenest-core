@@ -199,8 +199,37 @@ model User {
   blogBatchSchedules           BlogBatchSchedule[]
   blogDraftGenerationBatches   BlogDraftGenerationBatch[]
   contentAutomationLogs        ContentAutomationLog[]
+  mediaAssetsUploaded          MediaAsset[]                 @relation("MediaAssetUploadedBy")
 
   @@index([alliedProfessionKey])
+}
+
+/** Admin-managed binary assets on Spaces (blogs, lessons, marketing). */
+model MediaAsset {
+  id              String    @id @default(cuid())
+  publicUrl       String    @unique
+  storageKey      String    @unique
+  filename        String
+  mimeType        String
+  kind            String    @default("image") @db.VarChar(16)
+  fileSizeBytes   Int
+  width           Int?
+  height          Int?
+  altText         String?   @db.Text
+  tags            String[]  @default([])
+  uploadedById    String?
+  uploadedBy      User?     @relation("MediaAssetUploadedBy", fields: [uploadedById], references: [id], onDelete: SetNull)
+  /** Best-effort count from last usage scan (null = never scanned). */
+  usageRefCount   Int?
+  usageRefs       Json?
+  usageScannedAt  DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([createdAt(sort: Desc)])
+  @@index([kind])
+  @@index([mimeType])
+  @@map("media_assets")
 }
 
 /** Aggregated premium UX telemetry (UTC day; global counts, no user PII). */

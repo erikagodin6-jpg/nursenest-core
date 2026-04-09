@@ -151,6 +151,13 @@ export default async function PracticeTestResultsPage({ params }: Props) {
     }
   }
 
+  const weakTop = results.weakAreas?.filter(Boolean) ?? [];
+  const sessionInsightStruggle =
+    weakTop.length > 0
+      ? t("learner.practiceTest.insight.struggle", { topics: weakTop.slice(0, 3).join(", ") })
+      : null;
+  const sessionInsightFocus = weakTop.length > 0 ? t("learner.practiceTest.insight.focus") : null;
+
   return (
     <main>
       <div className="mb-4">
@@ -174,6 +181,8 @@ export default async function PracticeTestResultsPage({ params }: Props) {
           config={cfg}
           completedAtLabel={completedAtLabel}
           incorrectReviewItems={incorrectReviewItems}
+          sessionInsightStruggle={sessionInsightStruggle}
+          sessionInsightFocus={sessionInsightFocus}
         />
       </div>
     </main>

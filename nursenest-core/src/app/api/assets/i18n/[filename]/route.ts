@@ -1,6 +1,5 @@
 import { readFileSync, existsSync } from "fs";
 import path from "path";
-import { fileURLToPath } from "url";
 import { NextResponse } from "next/server";
 
 /** Must match `script/compile-i18n.ts` / `script/merge-marketing-i18n.ts`. */
@@ -9,18 +8,8 @@ const ALLOWED = new Set<string>([
   "pt", "pa", "vi", "ht", "ur", "ja", "fa", "de", "th", "tr", "id", "it", "ru",
 ]);
 
-/** From `…/i18n/[filename]/route.ts` → package `public/i18n` (no `process.cwd()`). */
-const I18N_DIR = path.join(
-  /*turbopackIgnore: true*/ path.dirname(fileURLToPath(import.meta.url)),
-  "..",
-  "..",
-  "..",
-  "..",
-  "..",
-  "..",
-  "public",
-  "i18n",
-);
+/** Scoped to `public/i18n` under the app root (matches `source_dir` / `process.cwd()` on DO App Platform). */
+const I18N_DIR = path.join(/* turbopackIgnore: true */ process.cwd(), "public", "i18n");
 
 function resolvePath(lang: string): string | null {
   if (!ALLOWED.has(lang)) return null;
@@ -53,7 +42,7 @@ export async function GET(
     return new NextResponse("Not found", { status: 404 });
   }
   try {
-    const body = readFileSync(fp, "utf8");
+    const body = readFileSync(/* turbopackIgnore: true */ fp, "utf8");
     return new NextResponse(body, {
       status: 200,
       headers: {
