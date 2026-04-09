@@ -1,5 +1,5 @@
-import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { marketingLessonDetailHref, marketingPathwayLessonDetailPath } from "@/lib/lessons/lesson-routes";
 
 /** Structured “exam focus” block for pathway lessons (how tested, traps, prioritization). */
 export type PathwayLessonExamFocus = {
@@ -184,8 +184,7 @@ export function pathwayLessonMarketingDetailHref(
   slug: string | null | undefined,
 ): string | null {
   if (!pathwayLessonHasRenderableHubSlug({ slug: slug ?? "" })) return null;
-  const base = lessonsBasePath.replace(/\/$/, "");
-  return `${base}/${encodeURIComponent(String(slug).trim())}`;
+  return marketingLessonDetailHref(lessonsBasePath, slug);
 }
 
 /**
@@ -196,8 +195,7 @@ export function pathwayLessonPublicDetailPath(
   pathway: Pick<ExamPathwayDefinition, "countrySlug" | "roleTrack" | "examCode">,
   lessonSlug: string | null | undefined,
 ): string | null {
-  const base = buildExamPathwayPath(pathway, "lessons");
-  return pathwayLessonMarketingDetailHref(base, lessonSlug);
+  return marketingPathwayLessonDetailPath(pathway, lessonSlug);
 }
 
 /**

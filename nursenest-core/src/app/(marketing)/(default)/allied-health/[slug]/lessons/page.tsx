@@ -24,6 +24,7 @@ import {
   pathwayLessonHasRenderableHubSlug,
   pathwayLessonMarketingDetailHref,
 } from "@/lib/lessons/pathway-lesson-types";
+import { alliedHealthLessonsIndexPath, alliedHealthSegmentPath } from "@/lib/lessons/lesson-routes";
 import { alliedLessonsHubBreadcrumbs } from "@/lib/seo/allied-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
@@ -67,7 +68,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
         )
       : null;
   const emptyHub = lessonTotal === 0;
-  const basePath = `/allied-health/${prof.professionKey}/lessons`;
+  const basePath = alliedHealthLessonsIndexPath(prof.professionKey);
   const canonical = page > 1 ? `${basePath}?page=${page}` : basePath;
   const place = pathwayCountryLabel(pathway);
   const title =
@@ -91,15 +92,15 @@ export default async function AlliedHealthSlugLessonsPage({ params, searchParams
   const { prof, mode } = resolved;
 
   if (mode === "hero") {
-    redirect(`/allied-health/${prof.professionKey}/lessons`);
+    redirect(alliedHealthLessonsIndexPath(prof.professionKey));
   }
 
   const pathway = getPathwayOrThrow(prof.pathwayId);
   if (!pathway) notFound();
 
-  const professionHeroPath = `/allied-health/${prof.segment}`;
+  const professionHeroPath = alliedHealthSegmentPath(prof.segment);
   const lessonContentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
-  const base = `/allied-health/${prof.professionKey}/lessons`;
+  const base = alliedHealthLessonsIndexPath(prof.professionKey);
   const sp = await searchParams;
   const pageRequested = Math.max(1, Number(sp.page ?? "1") || 1);
   const rawSize = Number(sp.pageSize ?? String(ALLIED_LESSON_HUB_PAGE_SIZE)) || ALLIED_LESSON_HUB_PAGE_SIZE;

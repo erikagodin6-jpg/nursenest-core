@@ -13,6 +13,7 @@ import { PathwayLessonProgressBadgeLive } from "@/components/lessons/pathway-les
 import { PathwayLessonProgressTracker } from "@/components/lessons/pathway-lesson-progress-tracker";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { buildExamPathwayPath, resolveExamPathwayFromMarketingHubSegment } from "@/lib/exam-pathways/exam-product-registry";
+import { marketingExamHubBasePath, marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 import { PathwayLessonPreviewBanner } from "@/components/lessons/pathway-lesson-preview-banner";
 import {
   canViewFullPathwayLesson,
@@ -147,8 +148,8 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
   const fullAccess = canViewFullPathwayLesson(scope, pathway, learnerPath);
   const visible = visibleSectionsForLesson(lesson, fullAccess);
 
-  const hubBase = `/${countrySlug}/${roleTrack}/${examCode}`;
-  const base = `${hubBase}/lessons`;
+  const hubBase = marketingExamHubBasePath(pathway);
+  const base = marketingPathwayLessonsIndexPath(pathway);
 
   const [lessonProgress, relatedRaw, relatedQuestionStems] = await Promise.all([
     userId && fullAccess

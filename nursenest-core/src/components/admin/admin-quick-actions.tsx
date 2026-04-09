@@ -20,6 +20,7 @@ import {
   Cpu,
   Workflow,
   BookMarked,
+  Upload,
 } from "lucide-react";
 import { isNavHrefAllowedForStaffTier } from "@/lib/auth/admin-path-policy";
 import type { StaffTier } from "@/lib/auth/staff-roles";
@@ -27,6 +28,7 @@ import type { StaffTier } from "@/lib/auth/staff-roles";
 const actions = [
   { href: "/admin/blog/studio", label: "Article studio", desc: "AI blog package → draft → publish", icon: Sparkles, tone: "from-violet-500/14 to-fuchsia-500/10" },
   { href: "/admin/analytics", label: "Analytics hub", desc: "Usage, CAT, subs, content jobs", icon: BarChart3, tone: "from-cyan-500/12 to-sky-500/10" },
+  { href: "/admin/analytics/content", label: "Content analytics", desc: "Lessons, topics, learner activity", icon: BookMarked, tone: "from-teal-500/12 to-cyan-500/10" },
   { href: "/admin/inventory", label: "Inventory drill-down", desc: "Lessons & bank by pathway", icon: Package, tone: "from-emerald-500/12 to-teal-500/10" },
   { href: "/admin/hub/publishing", label: "Publishing hub", desc: "Blog + SEO entry", icon: Megaphone, tone: "from-violet-500/12 to-fuchsia-500/10" },
   { href: "/admin/blog/generate", label: "Blog generator", desc: "AI drafts + SEO shells", icon: Sparkles, tone: "from-violet-500/15 to-fuchsia-500/10" },
@@ -42,6 +44,7 @@ const actions = [
   { href: "/admin/content", label: "Content coverage", desc: "Lessons, bank, pathways", icon: Layers, tone: "from-sky-500/15 to-blue-500/10" },
   { href: "/admin/lessons", label: "Lessons", desc: "Admin entry + JSON endpoints", icon: FileEdit, tone: "from-slate-500/12 to-zinc-500/8" },
   { href: "/admin/questions", label: "Questions", desc: "Bank tools + diagnostics", icon: ClipboardList, tone: "from-slate-500/12 to-zinc-500/8" },
+  { href: "/admin/questions/import", label: "Bulk question import", desc: "JSON validate + stem dedupe", icon: Upload, tone: "from-zinc-500/12 to-slate-500/8" },
   { href: "/admin/subscriptions", label: "Subscriptions", desc: "Plans & Stripe gaps", icon: CreditCard, tone: "from-rose-500/12 to-pink-500/10" },
   { href: "/admin/users", label: "Users", desc: "Growth & roles", icon: Users, tone: "from-cyan-500/12 to-primary/10" },
   { href: "/admin/operations", label: "Site health", desc: "DB, APIs, safe mode", icon: Wrench, tone: "from-red-500/10 to-amber-500/10" },

@@ -14,6 +14,7 @@ import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
 import { buildExamPathwayPath, resolveExamPathwayFromMarketingHubSegment } from "@/lib/exam-pathways/exam-product-registry";
+import { marketingExamHubBasePath, marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
 import {
   PATHWAY_HUB_PAGE_SIZE_DEFAULT,
@@ -147,8 +148,8 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const pathway = resolveExamPathwayFromMarketingHubSegment(countrySlug, roleTrack, examCode);
   if (!pathway) notFound();
 
-  const hubBase = `/${countrySlug}/${roleTrack}/${examCode}`;
-  const base = `${hubBase}/lessons`;
+  const hubBase = marketingExamHubBasePath(pathway);
+  const base = marketingPathwayLessonsIndexPath(pathway);
   const sp = await searchParams;
   const pageRequested = Math.max(1, Number(sp.page ?? "1") || 1);
   const pageSizeRequested = Number(sp.pageSize ?? String(PATHWAY_HUB_PAGE_SIZE_DEFAULT)) || PATHWAY_HUB_PAGE_SIZE_DEFAULT;

@@ -443,7 +443,7 @@ export function PremiumLearnerHub({
           )}
           <div className="mt-4 flex flex-wrap gap-4">
             <Link href="/app/exams" className="inline-flex text-sm font-semibold text-primary hover:underline">
-              Open mock exams
+              Open practice exams
             </Link>
             <Link href="/app/lessons" className="inline-flex text-sm font-semibold text-primary hover:underline">
               Exam-specific lessons

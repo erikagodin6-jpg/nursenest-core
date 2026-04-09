@@ -4,6 +4,7 @@ import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry"
 import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { marketingLessonsTopicClusterPath } from "@/lib/lessons/lesson-routes";
 
 /** Marketing question hub with optional topic filter (pathway-scoped). */
 export function pathwayMarketingQuestionBankTopicHref(
@@ -96,10 +97,7 @@ export function lessonStudyLoopPracticeHrefs(
 
 /** Topic cluster index or full lesson hub. */
 export function lessonStudyLoopRelatedLessonsHubHref(lessonsBasePath: string, topicSlug: string | null | undefined): string {
-  const hub = lessonsBasePath.replace(/\/$/, "");
-  const slug = (topicSlug ?? "").trim();
-  if (!slug) return hub;
-  return `${hub}/topics/${encodeURIComponent(slug)}`;
+  return marketingLessonsTopicClusterPath(lessonsBasePath, topicSlug);
 }
 
 export type LessonStudyLoopCatHrefs = {

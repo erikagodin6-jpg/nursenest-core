@@ -7,7 +7,10 @@ import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-p
 import { PathwayLessonProgressBadge } from "@/components/lessons/pathway-lesson-progress-badge";
 import { PathwayLessonRecordChips } from "@/components/pathway-lessons/pathway-lesson-record-chips";
 import { nclexRnLessonExamPreview, type NclexRnHubRegion } from "@/lib/lessons/nclex-rn-us-lesson-enrichment";
-import { nclexPnLessonExamPreview } from "@/lib/lessons/nclex-pn-us-lesson-enrichment";
+import {
+  nclexPnLessonExamPreview,
+  type NclexPnLessonPreviewFraming,
+} from "@/lib/lessons/nclex-pn-us-lesson-enrichment";
 import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 
 /** Above this count per Client Needs section, show a compact link list first and tuck rich previews behind a disclosure. */
@@ -29,6 +32,7 @@ type Props = {
   variant: "rn" | "pn";
   /** When variant is PN (US NCLEX-PN vs Canada REx-PN), used in exam-specific copy only. */
   pnExamShortLabel?: string;
+  pnPreviewFraming?: NclexPnLessonPreviewFraming;
   rnRegion?: NclexRnHubRegion;
   progressMap?: Record<string, PathwayLessonProgressStatus>;
 };
@@ -40,6 +44,7 @@ export function PathwayNclexScalableLessonSection({
   featuredSlug,
   variant,
   pnExamShortLabel = "NCLEX-PN",
+  pnPreviewFraming = "nclex-pn-us",
   rnRegion = "us",
   progressMap = {},
 }: Props) {
@@ -52,7 +57,7 @@ export function PathwayNclexScalableLessonSection({
     const p =
       variant === "rn"
         ? nclexRnLessonExamPreview(l, rnRegion)
-        : nclexPnLessonExamPreview(l);
+        : nclexPnLessonExamPreview(l, pnPreviewFraming);
     const showProgress = Object.keys(progressMap).length > 0;
     return (
       <li

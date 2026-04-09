@@ -43,7 +43,7 @@ export function pathwayLessonHubMetaTitle(pathway: ExamPathwayDefinition): strin
 export function pathwayLessonHubMetaDescription(pathway: ExamPathwayDefinition): string {
   const place = pathway.countrySlug === "canada" ? "Canada" : "the United States";
   const exam = pathway.displayName;
-  return `Indexable clinical lessons for ${exam} (${place}): exam-style reasoning, safety focus, and links to pathway-matched practice. Preview on the web; full lesson depth unlocks with a matching plan.`;
+  return `Clinical lessons for ${exam} (${place}): exam-style reasoning, safety focus, and pathway-matched practice. Preview on the web; full lesson depth unlocks with a plan that includes this track.`;
 }
 
 export function pathwayLessonTopicClusterMetaTitle(pathway: ExamPathwayDefinition, topicLabel: string): string {

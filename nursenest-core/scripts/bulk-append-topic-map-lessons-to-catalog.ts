@@ -155,7 +155,7 @@ function lessonForPathway(
       ? `${topic.name} | NCLEX-RN | NurseNest`
       : `${topic.name} | NCLEX-PN / PN | NurseNest`;
 
-  const seoDescription = `Study guide: ${topic.name} — ${category.name}. Five-section pathway lesson aligned to the master topic map (coverage-first).`;
+  const seoDescription = `Study guide: ${topic.name} — ${category.name}. Pathway-scoped clinical lesson with exam-style reasoning and practice links.`;
 
   return {
     slug: topic.id,

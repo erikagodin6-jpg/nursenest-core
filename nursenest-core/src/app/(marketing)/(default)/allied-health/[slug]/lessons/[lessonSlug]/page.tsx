@@ -42,6 +42,11 @@ import { classifyPathwayLesson } from "@/lib/content-quality/classify-lesson";
 import { buildQuickReviewBullets } from "@/lib/lessons/pathway-lesson-quick-review";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import {
+  alliedHealthLessonDetailPath,
+  alliedHealthLessonsIndexPath,
+  alliedHealthSegmentPath,
+} from "@/lib/lessons/lesson-routes";
+import {
   mergeRelatedLessonDisplayList,
   pathwayLessonHasRenderableHubSlug,
 } from "@/lib/lessons/pathway-lesson-types";
@@ -83,7 +88,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const lesson = pathway ? await getPathwayLesson(pathway.id, lessonSlug, lessonContentLocale) : undefined;
   if (!prof || !pathway || !lesson) return {};
   if (!alliedLessonMatchesProfessionFilter(lesson, prof.topicSlugsIn)) return {};
-  const path = `/allied-health/${prof.professionKey}/lessons/${lesson.slug}`;
+  const path = alliedHealthLessonDetailPath(prof.professionKey, lesson.slug);
   const canonical = absoluteUrl(path);
   const strictPublic = process.env.PATHWAY_LESSON_STRICT_PUBLIC_QUALITY === "1";
   const gate = lesson.structuralQuality;
@@ -108,7 +113,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
   const { prof, mode } = resolved;
 
   if (mode === "hero") {
-    redirect(`/allied-health/${prof.professionKey}/lessons/${encodeURIComponent(lessonSlug)}`);
+    redirect(alliedHealthLessonDetailPath(prof.professionKey, lessonSlug));
   }
 
   const pathway = getPathwayOrThrow(prof.pathwayId);
@@ -148,9 +153,9 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
       ? await loadPathwayLessonProgressForSlug(userId, pathway.id, lesson.slug)
       : "not_started";
 
-  const professionHeroPath = `/allied-health/${prof.segment}`;
-  const base = `/allied-health/${prof.professionKey}/lessons`;
-  const lessonPath = `${base}/${lesson.slug}`;
+  const professionHeroPath = alliedHealthSegmentPath(prof.segment);
+  const base = alliedHealthLessonsIndexPath(prof.professionKey);
+  const lessonPath = alliedHealthLessonDetailPath(prof.professionKey, lesson.slug);
 
   let related: Awaited<ReturnType<typeof getRelatedPathwayLessons>> = [];
   try {

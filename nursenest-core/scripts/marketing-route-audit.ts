@@ -27,6 +27,11 @@ import {
   rnQuestions,
 } from "../src/lib/marketing/marketing-entry-routes";
 import { mapLegacyMarketingHref, resolveMarketingHref } from "../src/lib/legacy-marketing-routes";
+import {
+  APP_LEARNER_LESSONS_INDEX_PATH,
+  alliedHealthLessonsIndexPath,
+  alliedHealthSegmentPath,
+} from "../src/lib/lessons/lesson-routes";
 
 const BASE = (process.env.BASE_URL ?? "http://127.0.0.1:3000").replace(/\/$/, "");
 const DELAY_MS = Number(process.env.AUDIT_DELAY_MS ?? "120");
@@ -152,8 +157,8 @@ async function main() {
 
   // Allied marketing heroes
   for (const prof of ALLIED_PROFESSIONS) {
-    paths.push(`/allied-health/${prof.segment}`);
-    paths.push(`/allied-health/${prof.professionKey}/lessons`);
+    paths.push(alliedHealthSegmentPath(prof.segment));
+    paths.push(alliedHealthLessonsIndexPath(prof.professionKey));
   }
 
   // Footer / legacy targets that should stay on Core (resolveMarketingHref)
@@ -191,7 +196,14 @@ async function main() {
   }
 
   // App entry (may 307 to login)
-  paths.push("/app/questions", "/app/exams", "/app/practice-tests", "/app/practice-tests/start", "/app", "/app/lessons");
+  paths.push(
+    "/app/questions",
+    "/app/exams",
+    "/app/practice-tests",
+    "/app/practice-tests/start",
+    "/app",
+    APP_LEARNER_LESSONS_INDEX_PATH,
+  );
 
   const unique = uniq(paths);
   const results: { path: string; status: number; finalUrl: string }[] = [];

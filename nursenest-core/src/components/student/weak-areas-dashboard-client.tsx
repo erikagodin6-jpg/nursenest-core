@@ -118,7 +118,7 @@ export function WeakAreasDashboardClient({ initial }: Props) {
         !data.byStrength.weak.length) ? (
         <p className="mt-4 text-sm text-muted">
           Your topic profile will appear after you answer graded questions in the bank, finish a practice test, or submit
-          a mock exam.
+          a practice exam.
         </p>
       ) : (
         <div className="mt-5 space-y-5">

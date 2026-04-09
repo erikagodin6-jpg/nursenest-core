@@ -43,7 +43,7 @@ function Inner() {
     <div className="mb-6 rounded-2xl border border-[color-mix(in_srgb,var(--semantic-success)_35%,var(--semantic-border-soft))] bg-[var(--semantic-success-soft)] px-4 py-3 text-sm text-[var(--semantic-success-contrast)] shadow-[var(--semantic-shadow-soft)]">
       <p className="font-semibold">You are in. Welcome to full access.</p>
       <p className="mt-1 text-[color-mix(in_srgb,var(--semantic-success-contrast)_92%,var(--semantic-text-primary))]">
-        Billing confirmed. Jump into your question bank or start a mock exam while your session refreshes entitlements.
+        Billing confirmed. Jump into your question bank or start a practice exam while your session refreshes entitlements.
       </p>
       <div className="mt-2 flex flex-wrap gap-2">
         <Link

@@ -9,6 +9,7 @@ import {
   getPathwayOrThrow,
   isAlliedHeroExamPrepSlug,
 } from "@/lib/allied/allied-professions-registry";
+import { alliedHealthLessonsIndexPath, alliedHealthSegmentPath } from "@/lib/lessons/lesson-routes";
 import { alliedProfessionBreadcrumbs } from "@/lib/seo/allied-breadcrumbs";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { absoluteUrl } from "@/lib/seo/site-origin";
@@ -29,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const prof =
     getAlliedProfessionByHeroSegment(slug) ?? getAlliedProfessionByProfessionKey(slug);
   if (!prof) return { title: "Not found" };
-  const path = `/allied-health/${prof.segment}`;
+  const path = alliedHealthSegmentPath(prof.segment);
   return {
     title: prof.title,
     description: prof.description,
@@ -46,14 +47,14 @@ export default async function AlliedHealthSlugPage({ params }: Props) {
   if (!prof) notFound();
 
   if (!isAlliedHeroExamPrepSlug(slug)) {
-    redirect(`/allied-health/${prof.segment}`);
+    redirect(alliedHealthSegmentPath(prof.segment));
   }
 
   const pathway = getPathwayOrThrow(prof.pathwayId);
   if (!pathway) notFound();
 
-  const professionHeroPath = `/allied-health/${prof.segment}`;
-  const lessonsPath = `/allied-health/${prof.professionKey}/lessons`;
+  const professionHeroPath = alliedHealthSegmentPath(prof.segment);
+  const lessonsPath = alliedHealthLessonsIndexPath(prof.professionKey);
   const pathwayHub = buildExamPathwayPath(pathway);
 
   let sampleStem: string | null = null;

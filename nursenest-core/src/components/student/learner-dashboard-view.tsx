@@ -299,7 +299,7 @@ export function LearnerDashboardView({ data }: { data: LearnerDashboardModel }) 
                     Practice “{data.recommendedQuizTopic}” in the bank
                   </Link>
                 ) : (
-                  <p className="text-muted-foreground">Complete a mock exam to unlock topic-level drill-downs.</p>
+                  <p className="text-muted-foreground">Complete a practice exam to unlock topic-level drill-downs.</p>
                 )}
               </div>
             </li>
@@ -310,7 +310,7 @@ export function LearnerDashboardView({ data }: { data: LearnerDashboardModel }) 
               <div>
                 <p className="font-medium text-foreground">Timed practice</p>
                 <Link href="/app/exams" className="text-primary underline-offset-4 hover:underline">
-                  Run a mock exam in your tier
+                  Run a practice exam in your tier
                 </Link>
               </div>
             </li>

@@ -9,6 +9,7 @@ import {
   MARKETING_PRIMARY_CTA_COMPACT_CLASS,
   MARKETING_SECONDARY_CTA_COMPACT_CLASS,
 } from "@/lib/theme/marketing-hero-pattern";
+import { alliedHealthLessonsIndexPath, alliedHealthSegmentPath } from "@/lib/lessons/lesson-routes";
 
 /** Marketing copy for `/allied-health` (loaded from `pages.alliedHealthHub.*`). */
 export type AlliedHealthHubCopy = {
@@ -60,7 +61,7 @@ export function AlliedHeroProfessionScan({
         {flat.map((p) => (
           <Link
             key={p.segment}
-            href={`/allied-health/${p.segment}`}
+            href={alliedHealthSegmentPath(p.segment)}
             className="rounded-full border border-[var(--border-medium)] bg-[color-mix(in_srgb,var(--theme-primary)_6%,var(--theme-card-bg))] px-3 py-1.5 text-xs font-semibold text-[var(--theme-heading-text)] shadow-sm transition hover:border-primary/45 hover:bg-[var(--surface-interactive-hover)] hover:shadow-[var(--shadow-card)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-halo-strong)]"
           >
             {professionChipLabel(p.professionKey)}
@@ -227,14 +228,14 @@ export function AlliedHubProfessionSections({
                       </p>
                       <div className="mt-6 flex flex-col gap-2 border-t border-[var(--border-subtle)] pt-5">
                         <Link
-                          href={`/allied-health/${p.segment}`}
+                          href={alliedHealthSegmentPath(p.segment)}
                           className="nn-link-quiet inline-flex items-center gap-1.5 font-semibold text-[var(--theme-primary)] transition hover:gap-2"
                         >
                           {copy.openPrepGuide}
                           <ArrowRight className="h-4 w-4 shrink-0" aria-hidden />
                         </Link>
                         <Link
-                          href={`/allied-health/${p.professionKey}/lessons`}
+                          href={alliedHealthLessonsIndexPath(p.professionKey)}
                           className="nn-link-quiet inline-flex items-center gap-2 font-medium text-[var(--theme-muted-text)] transition hover:text-[var(--theme-primary)]"
                         >
                           <BookOpen className="h-4 w-4 shrink-0 opacity-80" aria-hidden />

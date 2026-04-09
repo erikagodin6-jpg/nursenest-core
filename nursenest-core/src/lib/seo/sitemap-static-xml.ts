@@ -24,6 +24,12 @@
 export const SITEMAP_SINGLE_URLSET_SOFT_WARN_URLS = 45_000;
 
 import { ALLIED_PROFESSIONS } from "@/lib/allied/allied-professions-registry";
+import {
+  alliedHealthLessonsIndexPath,
+  alliedHealthSegmentPath,
+  preNursingLessonDetailPath,
+  PRE_NURSING_LESSONS_INDEX_PATH,
+} from "@/lib/lessons/lesson-routes";
 import { PRE_NURSING_MODULE_REGISTRY } from "@/content/pre-nursing/pre-nursing-registry";
 import { PROGRAMMATIC_SLUG_TO_PATHWAY_PATH } from "@/lib/exam-pathways/programmatic-slug-redirects";
 import { buildExamPathwayPath, getExamPathwayById, listPublicExamPathways } from "@/lib/exam-pathways/exam-product-registry";
@@ -93,8 +99,8 @@ export function collectAlliedMarketingUrls(origin: string): string[] {
   const o = normalizeOrigin(origin);
   const urls: string[] = [`${o}/allied-health`];
   for (const p of ALLIED_PROFESSIONS) {
-    urls.push(`${o}/allied-health/${p.segment}`);
-    urls.push(`${o}/allied-health/${p.professionKey}/lessons`);
+    urls.push(`${o}${alliedHealthSegmentPath(p.segment)}`);
+    urls.push(`${o}${alliedHealthLessonsIndexPath(p.professionKey)}`);
   }
   return urls;
 }
@@ -102,9 +108,9 @@ export function collectAlliedMarketingUrls(origin: string): string[] {
 /** Pre-Nursing public hub, lesson index, study planning, and module pages (registry-backed). */
 export function collectPreNursingSeoUrls(origin: string): string[] {
   const o = normalizeOrigin(origin);
-  const urls = [`${o}/pre-nursing`, `${o}/pre-nursing/lessons`, `${o}/pre-nursing/study-plan`];
+  const urls = [`${o}/pre-nursing`, `${o}${PRE_NURSING_LESSONS_INDEX_PATH}`, `${o}/pre-nursing/study-plan`];
   for (const m of PRE_NURSING_MODULE_REGISTRY) {
-    urls.push(`${o}/pre-nursing/lessons/${m.slug}`);
+    urls.push(`${o}${preNursingLessonDetailPath(m.slug)}`);
   }
   return urls;
 }

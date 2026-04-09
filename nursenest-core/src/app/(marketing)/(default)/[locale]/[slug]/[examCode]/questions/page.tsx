@@ -15,6 +15,7 @@ import {
   humanizeTopicSlug,
   pathwayAppQuestionBankTopicHref,
 } from "@/components/lessons/pathway-lesson-link-practice";
+import { marketingExamHubBasePath, marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 import {
   RELATED_LESSONS_EXCLUDE_SLUG_SENTINEL,
   resolveTopicSlugForPathwayTopicLabel,
@@ -104,14 +105,14 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
   const displayTopicLabel = topicFilterTrim || (topicSlugFromUrl ? humanizeTopicSlug(topicSlugFromUrl) : "");
   const isTopicNarrowed = Boolean(topicFilterTrim || topicSlugFromUrl);
 
-  const hubBase = `/${locale}/${slug}/${examCode}`;
+  const hubBase = marketingExamHubBasePath(pathway);
   const { crumbs, schemaItems } = pathwayQuestionsHubBreadcrumbs(pathway);
   const overviewHref = hubBase;
   const npAliasSegment = getNpPracticeTestLandingCopy(locale, slug, examCode) ? examCode : undefined;
   const boardLinkContext = pathwayMarketingHubLinkContext(pathway, npAliasSegment);
   const countryLabel = pathway.countrySlug === "canada" ? "Canada" : "US";
   const examName = pathway.contentExamKeys.length ? pathway.contentExamKeys.join(" / ") : pathway.shortName;
-  const lessonsHref = buildExamPathwayPath(pathway, "lessons");
+  const lessonsHref = marketingPathwayLessonsIndexPath(pathway);
   const catHref = buildExamPathwayPath(pathway, "cat");
   const appQuestionsScoped = isTopicNarrowed
     ? pathwayAppQuestionBankTopicHref(pathway, topicFilterTrim, topicSlugFromUrl || clusterSlugForLessons || undefined)
@@ -166,7 +167,7 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
           </aside>
           <PathwayQuestionHubRelatedLessons
             topicLabel={displayTopicLabel}
-            lessonsBasePath={`${hubBase}/lessons`}
+            lessonsBasePath={marketingPathwayLessonsIndexPath(pathway)}
             lessons={relatedLessonsForTopic}
           />
         </>

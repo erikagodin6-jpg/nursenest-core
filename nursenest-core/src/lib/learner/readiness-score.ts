@@ -156,7 +156,7 @@ export function computeReadiness(args: {
           : "We need more scored practice (about 15+ graded items in timed sessions) or at least one mock with 5+ questions before a readiness number is meaningful.",
       factors: [],
       whatToImprove: [
-        "Complete a timed practice or mock exam so we can measure accuracy and topics.",
+        "Complete a timed practice session or full practice exam so we can measure accuracy and topics.",
         "Finish lessons in your plan to raise completion toward your exam date.",
       ],
       nextActions: [

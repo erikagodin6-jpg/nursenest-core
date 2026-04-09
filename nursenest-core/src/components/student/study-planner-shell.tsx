@@ -201,7 +201,7 @@ export function StudyPlannerShell({ ctx }: { ctx: StudyPlannerContext }) {
           </li>
           <li className="flex items-start gap-2 text-sm text-[var(--theme-body-text)]">
             <Circle className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
-            <span>Schedule one full mock exam weekly. Use the score to reorder weak-topic drills.</span>
+            <span>Schedule one full practice exam weekly. Use the score to reorder weak-topic drills.</span>
           </li>
         </ul>
       </section>

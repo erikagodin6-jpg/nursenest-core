@@ -147,13 +147,20 @@ function firstSentencePn(text: string, max = 220): string {
   return cut.length > max ? `${cut.slice(0, max).trim()}…` : cut;
 }
 
-export function nclexPnLessonExamPreview(l: PathwayLessonRecord): {
+/** US NCLEX-PN vs Canada REx-PN — only affects learner-facing preview blurbs, not catalog slugs. */
+export type NclexPnLessonPreviewFraming = "nclex-pn-us" | "rex-pn-ca";
+
+export function nclexPnLessonExamPreview(
+  l: PathwayLessonRecord,
+  framing: NclexPnLessonPreviewFraming = "nclex-pn-us",
+): {
   scenarioType: string;
   examQuestionTypes: string;
   whyOnExam: string;
   miniScenario: string;
   rationaleSnippet: string;
 } {
+  const ca = framing === "rex-pn-ca";
   const h = haystack(l);
   const intro = l.sections.find((s) => s.kind === "intro")?.body ?? "";
   const clinical = l.sections.find((s) => s.kind === "clinical_application")?.body ?? "";
@@ -165,7 +172,9 @@ export function nclexPnLessonExamPreview(l: PathwayLessonRecord): {
     scenarioType = "Delegation, assignment, and RN communication";
   }
   if (/med|insulin|injection|pharm|drug|mar|five rights/.test(h)) {
-    scenarioType = "Medication administration and monitoring within LVN/LPN role";
+    scenarioType = ca
+      ? "Medication administration and monitoring within PN (RPN) scope"
+      : "Medication administration and monitoring within LVN/LPN role";
   }
   if (/infection|ppe|isolation|hand|sterile/.test(h)) {
     scenarioType = "Infection prevention and patient/environment safety";
@@ -175,10 +184,15 @@ export function nclexPnLessonExamPreview(l: PathwayLessonRecord): {
 
   let examQuestionTypes = "Priority, best next action, delegation, SATA";
   if (/ngn|case|multiple tab/.test(h)) examQuestionTypes = "NGN-style cases, priority, SATA when several actions apply";
-  if (/delegate|scope/.test(h)) examQuestionTypes = "Delegation to UAP, scope boundaries, escalation to RN";
+  if (/delegate|scope/.test(h)) {
+    examQuestionTypes = ca
+      ? "Delegation, scope boundaries, and collaboration per Canadian PN practice"
+      : "Delegation to UAP, scope boundaries, escalation to RN";
+  }
 
-  const whyOnExam =
-    "NCLEX-PN rewards safe judgment at the practical nurse scope—knowing what you can do, what needs an RN, and what threatens the patient first.";
+  const whyOnExam = ca
+    ? "REx-PN rewards safe judgment at the practical nurse scope in Canada—recognition, monitoring, reporting, and escalation when care exceeds PN practice."
+    : "NCLEX-PN rewards safe judgment at the practical nurse scope—knowing what you can do, what needs an RN, and what threatens the patient first.";
 
   const miniScenario =
     clinical.length > 20

@@ -6,6 +6,7 @@ import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-le
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { buildExamPathwayPath, resolveExamPathwayFromMarketingHubSegment } from "@/lib/exam-pathways/exam-product-registry";
+import { marketingPathwayLessonTopicClusterPath, marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
 import {
   PATHWAY_HUB_PAGE_SIZE_DEFAULT,
@@ -40,7 +41,7 @@ export async function generateMetadata({ params }: Pick<Props, "params">): Promi
   const { locale: countrySlug, slug: roleTrack, examCode, topicSlug } = await params;
   const pathway = resolveExamPathwayFromMarketingHubSegment(countrySlug, roleTrack, examCode);
   if (!pathway) return {};
-  const canonicalPath = buildExamPathwayPath(pathway, `lessons/topics/${topicSlug}`);
+  const canonicalPath = marketingPathwayLessonTopicClusterPath(pathway, topicSlug);
   const canonical = absoluteUrl(canonicalPath);
   const loc = defaultPathwayLessonContentLocaleForExamHubRoute();
   const topicClusters = await listTopicClusters(pathway.id, loc);
@@ -63,9 +64,8 @@ export default async function PathwayLessonTopicClusterPage({ params, searchPara
   const pathway = resolveExamPathwayFromMarketingHubSegment(countrySlug, roleTrack, examCode);
   if (!pathway) notFound();
 
-  const hubBase = `/${countrySlug}/${roleTrack}/${examCode}`;
-  const base = `${hubBase}/lessons`;
-  const topicBase = `${base}/topics/${topicSlug}`;
+  const base = marketingPathwayLessonsIndexPath(pathway);
+  const topicBase = marketingPathwayLessonTopicClusterPath(pathway, topicSlug);
   const sp = await searchParams;
   const pageRequested = Math.max(1, Number(sp.page ?? "1") || 1);
   const pageSizeRequested = Number(sp.pageSize ?? String(PATHWAY_HUB_PAGE_SIZE_DEFAULT)) || PATHWAY_HUB_PAGE_SIZE_DEFAULT;

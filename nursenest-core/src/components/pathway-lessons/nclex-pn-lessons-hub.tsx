@@ -52,11 +52,12 @@ export function NclexPnLessonsHub({
   framing = "nclex-pn-us",
 }: Props) {
   const labels = pnExamLabels(framing);
+  const previewFraming = framing === "rex-pn-ca" ? "rex-pn-ca" : "nclex-pn-us";
   const safeLessons = lessons.filter(pathwayLessonHasRenderableHubSlug);
   const sections = buildNclexPnUsLessonSections(safeLessons);
   const navLinks = sections.filter((s) => s.count > 0);
   const featured = safeLessons.length > 0 ? [...safeLessons].sort((a, b) => a.slug.localeCompare(b.slug))[0] : null;
-  const featuredPreview = featured ? nclexPnLessonExamPreview(featured) : null;
+  const featuredPreview = featured ? nclexPnLessonExamPreview(featured, previewFraming) : null;
   const questionsHub = buildExamPathwayPath(pathway, "questions");
   const examHub = buildExamPathwayPath(pathway);
 
@@ -192,6 +193,7 @@ export function NclexPnLessonsHub({
           featuredSlug={featured?.slug}
           variant="pn"
           pnExamShortLabel={labels.examShort}
+          pnPreviewFraming={previewFraming}
           progressMap={progressMap}
         />
       ))}
@@ -235,7 +237,9 @@ export function NclexPnLessonsHub({
           <li>Lesson: pattern recognition for PN-appropriate actions and delegation.</li>
           <li>Practice: commit under time; read every distractor against scope and safety.</li>
           <li>Weak areas: let rationales drive what you re-study. Avoid endless new topics.</li>
-          <li>CAT mock: adaptive stops and length mirror the real exam more than untimed blocks alone.</li>
+          <li>
+            Adaptive practice (CAT): difficulty and session flow track the real exam more closely than untimed blocks alone.
+          </li>
         </ol>
         <div className="mt-3 flex flex-wrap gap-2 text-sm">
           <Link href={questionsHub} className="font-semibold text-primary">
@@ -291,7 +295,7 @@ export function NclexPnLessonsHub({
 
       <section aria-labelledby="mistakes-nclex-pn">
         <h2 id="mistakes-nclex-pn" className="nn-marketing-h3">
-          Common mistakes for LPN/LVN students
+          {framing === "rex-pn-ca" ? "Common mistakes for Canadian PN (RPN) students" : "Common mistakes for LPN/LVN students"}
         </h2>
         <div className="mt-4 space-y-6">
           {NCLEX_PN_US_COMMON_MISTAKES.map((block) => (
