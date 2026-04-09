@@ -5,6 +5,8 @@ import { Calculator, Droplets, Activity, Shield } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { getAllToolSlugs } from "@/lib/tools/tool-registry";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
+import { trackClientEvent } from "@/lib/observability/posthog-client";
+import { PH } from "@/lib/observability/posthog-conversion-events";
 
 function cardKeyPrefix(slug: string): string {
   if (slug === "med-math") return "medMath";
@@ -42,6 +44,12 @@ export function ToolsHubClient() {
               <Link
                 href={href}
                 className="flex gap-4 rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] p-5 shadow-sm transition hover:border-primary/30 hover:shadow-md"
+                onClick={() =>
+                  trackClientEvent(PH.marketingToolOpenClick, {
+                    actor: "anonymous",
+                    tool_slug: slug,
+                  })
+                }
               >
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
                   <Icon className="h-6 w-6" />

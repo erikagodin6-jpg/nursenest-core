@@ -199,7 +199,7 @@ export const LESSON_RATIONALE_MAPPING_ENTRIES: LessonRationaleMappingEntry[] = [
   },
   {
     id: "safety-med-admin",
-    lessonSlug: "safety-family-medication-administration-safety-gold",
+    lessonSlug: "safety-family-medication-administration-gold",
     domain: "safety",
     linkKind: "safety",
     haystackPattern: /\b(med(ication)?\s+safety|five\s+rights|six\s+rights|barcode|wrong\s+dose)\b/i,

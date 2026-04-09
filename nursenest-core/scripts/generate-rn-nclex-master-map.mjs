@@ -13,6 +13,46 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 const OUT = path.join(ROOT, "src/content/pathway-lessons/rn-nclex-master-map.json");
 
+/**
+ * Keep in sync with `src/lib/content-blueprint/rn-nclex-content-depth-rules.ts` (canonical prose + gates).
+ * Embedded here so the JSON artifact is self-describing for content ops.
+ */
+const CONTENT_DEPTH_RULES = {
+  version: 1,
+  canonicalModule: "src/lib/content-blueprint/rn-nclex-content-depth-rules.ts",
+  tierWordBands: {
+    A: [1800, 2600],
+    B: [1200, 1800],
+    C: [900, 1400],
+    D: [600, 900],
+  },
+  tierAMustInclude: [
+    "Full pathophysiology",
+    "Assessment (monitoring, trending, focused cues)",
+    "Interventions (independent nursing, escalation, teaching)",
+    "Complications",
+    "NCLEX red flags / unsafe options / first actions",
+  ],
+  tierSummary: {
+    A: "High-yield med-surg, emergency, ICU concepts, maternity emergencies, major pediatric disorders.",
+    B: "Standard condition lessons — still detailed and exam useful.",
+    C: "Medication/class, procedure/device, safety and monitoring.",
+    D: "Narrow support or quick-reference teaching — still a complete idea, not a stub.",
+  },
+  principles: [
+    "No shallow notes; no unstructured bloat — follow the exam-complete premium spine (section kinds + headings).",
+    "Scan-friendly: clear headings, short paragraphs, bold key terms sparingly.",
+    "Clinically useful: every block ties to assessment, action, or an exam trap.",
+    "Written for RN exam prep: prioritization, safety, scope, communication.",
+  ],
+  antiPatterns: [
+    "Notes below the tier word band or below premium section minimums",
+    "Giant essays without the structured spine",
+    "Filler repetition to inflate word count",
+    "Generic intros that could apply to any topic",
+  ],
+};
+
 /** @type {Record<string, { tier: 'A'|'B'|'C'|'D', words: [number, number] }>} */
 const TIER = {
   A: { tier: "A", words: [1800, 2600] },
@@ -393,6 +433,7 @@ function main() {
     buildOrder: BUILD_ORDER,
     contentSpine: "premium_exam_complete",
     contentSpineReference: "src/lib/lessons/exam-complete-lesson-template.ts + pathway-lesson-premium.ts",
+    contentDepthRules: CONTENT_DEPTH_RULES,
     categoryTargets: {
       cardiovascular: { minLessons: 18, maxLessons: 24, tierMix: "8–10 A, 6–8 B, 4–6 C" },
       respiratory: { minLessons: 10, maxLessons: 14, tierMix: "4–6 A, 4–6 B, 2–4 C" },

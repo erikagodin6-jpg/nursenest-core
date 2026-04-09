@@ -3,7 +3,6 @@
  * `rn-nclex-master-map.json` — total plain-text words vs tier band from the map.
  */
 import { countWords, stripToPlainText } from "@/lib/content-quality/plain-text";
-import type { ExpansionQualityViolation } from "@/lib/content-quality/lesson-expansion-quality-gate";
 import map from "@/content/pathway-lessons/rn-nclex-master-map.json";
 import {
   type RnNclexTier,
@@ -21,7 +20,7 @@ export function evaluateRnNclexMapDepthForCatalogRow(input: {
   pathwayId: string;
   slug: string;
   sections: Array<{ body?: string }>;
-}): ExpansionQualityViolation[] {
+}): Array<{ ruleId: string; severity: "warn"; message: string; slug: string }> {
   if (!RN_PATHWAYS.has(input.pathwayId)) return [];
   const row = bySlug.get(input.slug);
   if (!row) return [];

@@ -20,6 +20,7 @@
     "typecheck": "tsc --noEmit",
     "audit:internal-links": "tsx scripts/audit-internal-links.ts",
     "audit:pathway-lessons": "tsx scripts/audit-pathway-lesson-inventory.ts",
+    "qa:lesson-system": "tsx scripts/launch-qa-lesson-system.ts",
     "test:internal-links-audit": "tsx --test scripts/audit-internal-links.test.ts",
     "generate:marketing-assets": "node scripts/generate-marketing-assets.mjs",
     "generate:brand-logos": "node scripts/build-transparent-theme-logos.mjs",

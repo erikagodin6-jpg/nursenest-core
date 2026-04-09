@@ -4,8 +4,9 @@
  * Completeness audit vs checklist: `nclex-rn-source-checklist.json` + `scripts/audit-rn-nclex-map.mjs`.
  *
  * **Content:** Bodies are authored against your uploaded NCLEX source document; use the
- * exam-complete premium spine (`exam-complete-lesson-template.ts`). Do not bulk-append thin
- * placeholders to `catalog.json` — merge in batches with full prose meeting tier word targets.
+ * exam-complete premium spine (`exam-complete-lesson-template.ts`) and **RN tier depth rules**
+ * (`rn-nclex-content-depth-rules.ts`). Do not bulk-append thin placeholders to `catalog.json` —
+ * merge in batches with full prose meeting tier word targets.
  */
 import raw from "@/content/pathway-lessons/rn-nclex-master-map.json";
 import type { RnNclexTier } from "@/lib/content-blueprint/rn-nclex-content-depth-rules";

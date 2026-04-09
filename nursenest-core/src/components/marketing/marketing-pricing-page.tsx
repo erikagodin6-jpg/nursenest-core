@@ -7,18 +7,18 @@ import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messa
 export async function MarketingPricingPage({ locale }: { locale: string }) {
   const m = await loadMarketingMessages(locale);
   const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
-  const heading = resolveMarketingCopy(m, "pages.pricing.conversion.h1", en, "Choose your study plan");
+  const heading = resolveMarketingCopy(m, "pages.pricing.conversion.h1", en, "Plans by exam pathway");
   const intro = resolveMarketingCopy(
     m,
     "pages.pricing.conversion.trustLine",
     en,
-    "Secure checkout with Stripe. Prices are shown in your currency before you pay.",
+    "Prices in CAD or USD for your selected region. No surprise charges at checkout.",
   );
   const heroSub = resolveMarketingCopy(
     m,
     "pages.pricing.conversion.lead",
     en,
-    "Select your exam track and billing term. Longer terms reduce your effective monthly cost.",
+    "Choose your exam track, country, and billing term. Totals are shown before you pay; longer terms usually lower your effective monthly cost.",
   );
   return (
     <PricingPageErrorBoundary>

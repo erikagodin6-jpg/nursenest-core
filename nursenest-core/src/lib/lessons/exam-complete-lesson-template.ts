@@ -2,6 +2,9 @@
  * Exam-complete premium lesson template — single spine for RN/PN/NP × US/Canada authoring.
  * Maps 1:1 to {@link PREMIUM_SECTION_KINDS} / {@link validatePathwayLessonPremium} in pathway-lesson-premium.ts.
  *
+ * **NCLEX-RN depth:** For US/Canada RN pathways, follow tier bands and must-include lists in
+ * `src/lib/content-blueprint/rn-nclex-content-depth-rules.ts` (scan-friendly, no shallow notes, no unstructured bloat).
+ *
  * Use {@link createExamCompleteSection} when generating catalog JSON or migrations;
  * use {@link validateExamCompletePremiumSpine} in CI or authoring tools to ensure no duplicate/missing kinds.
  */

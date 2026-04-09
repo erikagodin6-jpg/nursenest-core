@@ -198,15 +198,21 @@ function main() {
     }
   }
 
-  // --- Rationale registry: every mapped slug must resolve for US RN hub OR be in global injectable union ---
+  // --- Rationale registry: every mapped slug must appear in US RN effective set OR scoped-gold / casebook injectables ---
   const usRn = effectiveSlugsForPathway("us-rn-nclex-rn", catalogRaw);
   const injectable = globalInjectableSlugs();
   const rationaleSlugs = [...new Set(LESSON_RATIONALE_MAPPING_ENTRIES.map((e) => e.lessonSlug))];
+  let rationaleOk = true;
   for (const slug of rationaleSlugs) {
     if (usRn.has(slug) || injectable.has(slug)) continue;
-    flag("FAIL", "rationale.slug", `Rationale mapping references lessonSlug not in US RN effective set and not in global injectable union: ${slug}`);
+    rationaleOk = false;
+    flag(
+      "FAIL",
+      "rationale.slug",
+      `Rationale mapping lessonSlug not in US RN effective catalog and not in injectable registry: ${slug}`,
+    );
   }
-  if (rationaleSlugs.every((s) => usRn.has(s) || injectable.has(s))) {
+  if (rationaleOk) {
     flag("PASS", "rationale.registry", `All ${rationaleSlugs.length} rationale mapping lesson slugs resolve`);
   }
 

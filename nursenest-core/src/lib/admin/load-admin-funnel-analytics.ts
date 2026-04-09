@@ -40,6 +40,8 @@ export type AdminFunnelAnalyticsData = {
   warnings: string[];
   degraded: boolean;
   steps: FunnelStepRow[];
+  /** Product engagement volumes (same HogQL semantics as `steps`; not an ordered funnel). */
+  engagementSteps: FunnelStepRow[];
   posthogConfigured: boolean;
 };
 
@@ -145,6 +147,58 @@ const STEP_DEF: Array<{ id: string; label: string; event: string; note?: string 
   { id: "renewal", label: "Subscription renewal (invoice)", event: PH.funnelSubscriptionRenewed },
 ];
 
+const ENGAGEMENT_STEP_DEF: Array<{ id: string; label: string; event: string; note?: string }> = [
+  { id: "lesson_completed", label: "Lessons marked complete", event: PH.learnerLessonCompleted },
+  { id: "qbank_session_done", label: "Question bank session completed", event: PH.learnerQuestionBankSessionCompleted },
+  { id: "practice_session_done", label: "Practice / CAT session completed", event: PH.learnerPracticeTestSessionCompleted },
+  { id: "paywall", label: "Paywall encountered", event: PH.paywallEncounter },
+  { id: "pathway_pref", label: "Exam pathway preference saved", event: PH.learnerPathwayPreferenceSaved },
+];
+
+async function hogqlStepRows(
+  defs: Array<{ id: string; label: string; event: string; note?: string }>,
+  q: ParsedFunnelQuery,
+): Promise<{ rows: FunnelStepRow[]; warnings: string[] }> {
+  const warnings: string[] = [];
+  const rows: FunnelStepRow[] = [];
+  let prior: number | null = null;
+  for (const def of defs) {
+    const sql = buildUniquesQuery(def.event, q.fromDay, q.toDay, q.segment);
+    const res = await posthogHogqlScalar(sql);
+    if (!res.ok || res.scalar === null) {
+      warnings.push(`${def.event}: ${res.error ?? "no result"}`);
+      rows.push({
+        id: def.id,
+        label: def.label,
+        event: def.event,
+        count: null,
+        conversionFromPriorPct: null,
+        dropOffFromPriorPct: null,
+        note: def.note,
+      });
+      continue;
+    }
+    const count = Math.round(res.scalar);
+    let conversionFromPriorPct: number | null = null;
+    let dropOffFromPriorPct: number | null = null;
+    if (prior !== null && prior > 0) {
+      conversionFromPriorPct = Math.round((count / prior) * 1000) / 10;
+      dropOffFromPriorPct = Math.round((1 - count / prior) * 1000) / 10;
+    }
+    prior = count;
+    rows.push({
+      id: def.id,
+      label: def.label,
+      event: def.event,
+      count,
+      conversionFromPriorPct,
+      dropOffFromPriorPct,
+      note: def.note,
+    });
+  }
+  return { rows, warnings };
+}
+
 export async function loadAdminFunnelAnalytics(q: ParsedFunnelQuery): Promise<AdminFunnelAnalyticsData | null> {
   if (!isDatabaseUrlConfigured() || isRuntimeSafeMode()) {
     return null;
@@ -156,6 +210,7 @@ export async function loadAdminFunnelAnalytics(q: ParsedFunnelQuery): Promise<Ad
     "Step counts are **unique persons** in the selected window who fired each event (not necessarily the same users in sequence). For strict ordered funnels, use PostHog’s Funnel insight on these event names.",
     "Segment filters match `properties` we attach in code (`marketing_region`, `country`, `pathway_id`). Events without those properties may be excluded when a segment is set.",
     "Database fallback counts are operational proxies (signups, subscriptions, progress) — not identical to PostHog uniques.",
+    "Engagement rows are **not** a sequential funnel — they show independent volumes for product signals (lessons, bank, practice, paywall).",
   ];
 
   const from = startOfUtcDay(q.fromDay);
@@ -164,45 +219,9 @@ export async function loadAdminFunnelAnalytics(q: ParsedFunnelQuery): Promise<Ad
   const posthogConfigured = posthogProjectConfigured();
 
   if (posthogConfigured) {
-    const steps: FunnelStepRow[] = [];
-    let prior: number | null = null;
-
-    for (const def of STEP_DEF) {
-      const sql = buildUniquesQuery(def.event, q.fromDay, q.toDay, q.segment);
-      const res = await posthogHogqlScalar(sql);
-      if (!res.ok || res.scalar === null) {
-        warnings.push(`${def.event}: ${res.error ?? "no result"}`);
-        steps.push({
-          id: def.id,
-          label: def.label,
-          event: def.event,
-          count: null,
-          conversionFromPriorPct: null,
-          dropOffFromPriorPct: null,
-          note: def.note,
-        });
-        continue;
-      }
-
-      const count = Math.round(res.scalar);
-      let conversionFromPriorPct: number | null = null;
-      let dropOffFromPriorPct: number | null = null;
-      if (prior !== null && prior > 0) {
-        conversionFromPriorPct = Math.round((count / prior) * 1000) / 10;
-        dropOffFromPriorPct = Math.round((1 - count / prior) * 1000) / 10;
-      }
-      prior = count;
-
-      steps.push({
-        id: def.id,
-        label: def.label,
-        event: def.event,
-        count,
-        conversionFromPriorPct,
-        dropOffFromPriorPct,
-        note: def.note,
-      });
-    }
+    const funnel = await hogqlStepRows(STEP_DEF, q);
+    const engagement = await hogqlStepRows(ENGAGEMENT_STEP_DEF, q);
+    warnings.push(...funnel.warnings, ...engagement.warnings);
 
     return {
       generatedAt,
@@ -211,7 +230,8 @@ export async function loadAdminFunnelAnalytics(q: ParsedFunnelQuery): Promise<Ad
       dataNotes,
       warnings,
       degraded: warnings.length > 0,
-      steps,
+      steps: funnel.rows,
+      engagementSteps: engagement.rows,
       posthogConfigured: true,
     };
   }
@@ -308,6 +328,7 @@ export async function loadAdminFunnelAnalytics(q: ParsedFunnelQuery): Promise<Ad
       warnings,
       degraded: true,
       steps,
+      engagementSteps: [],
       posthogConfigured: false,
     };
   } catch (e) {
@@ -320,6 +341,7 @@ export async function loadAdminFunnelAnalytics(q: ParsedFunnelQuery): Promise<Ad
       warnings,
       degraded: true,
       steps: [],
+      engagementSteps: [],
       posthogConfigured: false,
     };
   }
