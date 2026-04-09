@@ -7,11 +7,12 @@ export const dynamic = "force-dynamic";
 export default async function AdminBlogControlPanelPage({
   searchParams,
 }: {
-  searchParams?: Promise<{ id?: string }>;
+  searchParams?: Promise<{ id?: string; preview?: string }>;
 }) {
   await requireAdmin();
   const sp = (await searchParams) ?? {};
   const initialPostId = typeof sp.id === "string" && sp.id.length > 0 ? sp.id : null;
+  const initialPreviewOpen = sp.preview === "1" || sp.preview === "true";
 
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -35,7 +36,7 @@ export default async function AdminBlogControlPanelPage({
       </div>
 
       <div className="mt-8">
-        <AdminBlogControlPanelClient initialPostId={initialPostId} />
+        <AdminBlogControlPanelClient initialPostId={initialPostId} initialPreviewOpen={initialPreviewOpen} />
       </div>
     </main>
   );

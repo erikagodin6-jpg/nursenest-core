@@ -20,6 +20,7 @@ import {
   normalizeImagePlacementsFromPlan,
   parseInternalLinkPlanJson,
 } from "@/lib/blog/blog-image-workflow";
+import { parseBlogAdminPublishLog } from "@/lib/blog/blog-admin-publish-log";
 import { buildPersistedSeoBundle, buildSchemaSummaryPayload } from "@/lib/blog/blog-seo-automation";
 import { AdminBlogDraftEditorShell, DraftSectionCard } from "@/components/admin/blog/admin-blog-draft-editor-shell";
 import { AdminBlogHtmlPreview } from "@/components/admin/blog/admin-blog-html-preview";
@@ -34,6 +35,8 @@ type AdminPostPayload = {
   body: string;
   exam: string | null;
   postStatus: string;
+  workflowStatus?: string | null;
+  adminPublishLog?: unknown;
   seoTitle: string | null;
   seoDescription: string | null;
   targetKeyword: string | null;
@@ -85,6 +88,23 @@ function mergeAttachmentRowsForPlan(plan: BlogControlPanelPlan, stored: BlogImag
       sourceKind: "none" as const,
     };
   });
+}
+
+function controlPanelPostStatusChipClass(status: string) {
+  switch (status) {
+    case "PUBLISHED":
+      return "bg-emerald-500/15 text-emerald-900 dark:text-emerald-100";
+    case "SCHEDULED":
+      return "bg-amber-500/15 text-amber-950 dark:text-amber-100";
+    case "APPROVED":
+      return "bg-sky-500/15 text-sky-950 dark:text-sky-100";
+    case "NEEDS_REVIEW":
+      return "bg-orange-500/15 text-orange-950 dark:text-orange-100";
+    case "FAILED":
+      return "bg-red-500/15 text-red-950 dark:text-red-100";
+    default:
+      return "bg-muted text-foreground";
+  }
 }
 
 function normalizeAdminBlogSlug(raw: string): string | null {
@@ -148,7 +168,14 @@ function planFromPost(post: AdminPostPayload): BlogControlPanelPlan {
   };
 }
 
-export function AdminBlogControlPanelClient({ initialPostId }: { initialPostId?: string | null }) {
+export function AdminBlogControlPanelClient({
+  initialPostId,
+  initialPreviewOpen,
+}: {
+  initialPostId?: string | null;
+  /** Open HTML preview column when arriving from library “Preview” for non-live posts */
+  initialPreviewOpen?: boolean;
+}) {
   const [topic, setTopic] = useState("");
   const [exam, setExam] = useState(ADMIN_BLOG_TARGET_EXAM_OPTIONS[0].value);
   const [country, setCountry] = useState<"US" | "CA" | "unspecified">("unspecified");
@@ -190,8 +217,9 @@ export function AdminBlogControlPanelClient({ initialPostId }: { initialPostId?:
   const [coverImagePromptInput, setCoverImagePromptInput] = useState("");
   const [imageWorkflowMsg, setImageWorkflowMsg] = useState<string | null>(null);
   const [slugDraft, setSlugDraft] = useState("");
-  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(Boolean(initialPreviewOpen));
   const [publishAtLocal, setPublishAtLocal] = useState("");
+  const [workflowFailureNote, setWorkflowFailureNote] = useState("");
   const [outlineJsonText, setOutlineJsonText] = useState("");
   const [outlineJsonErr, setOutlineJsonErr] = useState<string | null>(null);
   const [outlineEditorOpen, setOutlineEditorOpen] = useState(false);
@@ -255,6 +283,11 @@ export function AdminBlogControlPanelClient({ initialPostId }: { initialPostId?:
     }
     return null;
   }, [post?.sourcesJson]);
+
+  const adminPublishLogEntries = useMemo(
+    () => (post ? parseBlogAdminPublishLog(post.adminPublishLog) : []),
+    [post],
+  );
 
   useEffect(() => {
     if (!initialPostId) return;
@@ -606,13 +639,44 @@ export function AdminBlogControlPanelClient({ initialPostId }: { initialPostId?:
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action: "publish_now" }),
       });
-      const json = (await res.json()) as { error?: string; post?: AdminPostPayload };
+      const json = (await res.json()) as { error?: string; post?: AdminPostPayload; reasons?: string[] };
       if (!res.ok) {
+        if (res.status === 422 && Array.isArray(json.reasons) && json.reasons.length > 0) {
+          setSaveErr(`Cannot publish yet: ${json.reasons.join(" · ")}`);
+          return;
+        }
         setSaveErr(json.error ?? "Publish failed");
         return;
       }
       if (json.post) hydrateFromPost(json.post);
       setSaveMsg("Published.");
+    } catch (err) {
+      setSaveErr(err instanceof Error ? err.message : String(err));
+    }
+  }
+
+  async function runWorkflowAction(payload: Record<string, unknown>, successMsg: string) {
+    if (!postId) return;
+    setSaveMsg(null);
+    setSaveErr(null);
+    try {
+      const res = await fetch(`/api/admin/blog/${postId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const json = (await res.json()) as { error?: string; post?: AdminPostPayload; reasons?: string[] };
+      if (!res.ok) {
+        if (res.status === 422 && Array.isArray(json.reasons) && json.reasons.length > 0) {
+          setSaveErr(json.reasons.join(" · "));
+          return;
+        }
+        setSaveErr(json.error ?? "Update failed");
+        return;
+      }
+      if (json.post) hydrateFromPost(json.post);
+      setSaveMsg(successMsg);
+      setWorkflowFailureNote("");
     } catch (err) {
       setSaveErr(err instanceof Error ? err.message : String(err));
     }
@@ -1287,11 +1351,97 @@ export function AdminBlogControlPanelClient({ initialPostId }: { initialPostId?:
                       />
                     </label>
                     <p className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-                      <span className="rounded-full bg-muted px-2 py-0.5 font-medium text-foreground">{post.postStatus}</span>
+                      <span
+                        className={`rounded-full px-2 py-0.5 font-medium ${controlPanelPostStatusChipClass(post.postStatus)}`}
+                      >
+                        {post.postStatus.replaceAll("_", " ")}
+                      </span>
+                      {post.workflowStatus ? (
+                        <span className="rounded-full bg-muted/80 px-2 py-0.5 font-mono text-[10px] text-muted-foreground">
+                          workflow: {post.workflowStatus.replaceAll("_", " ")}
+                        </span>
+                      ) : null}
                       {post.publishAt ? (
                         <span>Publish: {new Date(post.publishAt).toLocaleString()}</span>
                       ) : null}
                     </p>
+                    <div className="flex flex-wrap gap-2 border-t border-border/60 pt-3">
+                      <button
+                        type="button"
+                        disabled={post.postStatus === "PUBLISHED"}
+                        onClick={() => void runWorkflowAction({ action: "submit_for_review" }, "Submitted for review.")}
+                        className="rounded-lg border border-border px-3 py-2 text-xs font-semibold hover:bg-muted/60 disabled:opacity-40"
+                      >
+                        Submit for review
+                      </button>
+                      <button
+                        type="button"
+                        disabled={post.postStatus === "PUBLISHED"}
+                        onClick={() => void runWorkflowAction({ action: "approve" }, "Approved for publish.")}
+                        className="rounded-lg border border-border px-3 py-2 text-xs font-semibold hover:bg-muted/60 disabled:opacity-40"
+                      >
+                        Approve
+                      </button>
+                      <button
+                        type="button"
+                        disabled={post.postStatus !== "NEEDS_REVIEW"}
+                        onClick={() => void runWorkflowAction({ action: "reject_review" }, "Returned to draft.")}
+                        className="rounded-lg border border-border px-3 py-2 text-xs font-semibold hover:bg-muted/60 disabled:opacity-40"
+                      >
+                        Reject to draft
+                      </button>
+                    </div>
+                    <div className="space-y-2 rounded-lg border border-border/60 bg-muted/20 p-3">
+                      <p className="text-[11px] font-medium text-muted-foreground">Mark failed (blocks publish until fixed)</p>
+                      <textarea
+                        className="min-h-[56px] w-full rounded-md border border-border px-2 py-1.5 text-xs"
+                        placeholder="Optional note (logged)"
+                        value={workflowFailureNote}
+                        onChange={(e) => setWorkflowFailureNote(e.target.value)}
+                        disabled={post.postStatus === "PUBLISHED"}
+                      />
+                      <button
+                        type="button"
+                        disabled={post.postStatus === "PUBLISHED"}
+                        onClick={() =>
+                          void runWorkflowAction(
+                            {
+                              action: "mark_failed",
+                              ...(workflowFailureNote.trim() ? { failureReason: workflowFailureNote.trim() } : {}),
+                            },
+                            "Marked as failed.",
+                          )
+                        }
+                        className="rounded-lg border border-rose-500/40 px-3 py-1.5 text-xs font-semibold text-rose-700 hover:bg-rose-500/10 disabled:opacity-40 dark:text-rose-300"
+                      >
+                        Mark failed
+                      </button>
+                    </div>
+                    <details className="rounded-lg border border-border/60 bg-muted/10 p-3 text-xs">
+                      <summary className="cursor-pointer font-semibold text-muted-foreground">Activity log (newest last)</summary>
+                      <ul className="mt-2 max-h-48 space-y-2 overflow-auto font-mono text-[10px] text-muted-foreground">
+                        {adminPublishLogEntries.map((row, i) => (
+                          <li key={`${row.at}-${i}`} className="border-b border-border/30 pb-2 last:border-0">
+                            <span className="text-foreground/80">{row.at}</span>{" "}
+                            <span
+                              className={
+                                row.level === "error"
+                                  ? "text-rose-600"
+                                  : row.level === "warn"
+                                    ? "text-amber-600"
+                                    : "text-emerald-700 dark:text-emerald-400"
+                              }
+                            >
+                              [{row.event}]
+                            </span>{" "}
+                            {row.message}
+                          </li>
+                        ))}
+                        {adminPublishLogEntries.length === 0 ? (
+                          <li className="text-muted-foreground">No log entries yet — they appear after save, workflow steps, or publish attempts.</li>
+                        ) : null}
+                      </ul>
+                    </details>
                     <div className="flex flex-col gap-3 border-t border-border/60 pt-3 sm:flex-row sm:items-end">
                       <label className="min-w-0 flex-1 space-y-1">
                         <span className="text-xs text-muted-foreground">Schedule publish (local)</span>

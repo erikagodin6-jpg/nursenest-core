@@ -2,7 +2,7 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { PathwayHubSupplementaryDisclosure } from "@/components/pathway-lessons/pathway-hub-supplementary-disclosure";
-import { PathwayTopicClusterNav } from "@/components/pathway-lessons/pathway-topic-cluster-nav";
+import { PathwayTopicClusterGroupedNav } from "@/components/pathway-lessons/pathway-topic-cluster-grouped-nav";
 
 const FnpLessonExplorer = dynamic(
   () => import("@/components/pathway-lessons/fnp-lesson-explorer").then((m) => m.FnpLessonExplorer),

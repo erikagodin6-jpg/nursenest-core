@@ -13,7 +13,7 @@ import { requireAdmin } from "@/lib/admin/ensure-admin";
 import {
   appendBlogAdminPublishLogMany,
   appendBlogAdminPublishLog,
-  type BlogAdminPublishLogEntry,
+  type BlogAdminPublishLogInput,
 } from "@/lib/blog/blog-admin-publish-log";
 import { stripBrokenOrEmptyImagesFromHtml } from "@/lib/blog/blog-image-workflow";
 import { evaluateBlogPublishReadiness, type BlogPublishReadinessRow } from "@/lib/blog/blog-publish-readiness";
@@ -226,8 +226,7 @@ export async function PATCH(req: Request, { params }: Props) {
     }
   }
 
-  const logQueue: { level?: "info" | "warn" | "error"; event: string; message: string; detail?: Record<string, unknown> }[] =
-    [];
+  const logQueue: BlogAdminPublishLogInput[] = [];
   const now = new Date();
 
   type ActionPatch = {
@@ -252,7 +251,6 @@ export async function PATCH(req: Request, { params }: Props) {
         { status: 422 },
       );
     }
-    const prevBody = d.body ?? current.body;
     actionPatch = {
       postStatus: BlogPostStatus.PUBLISHED,
       publishAt: now,
@@ -437,4 +435,24 @@ export async function PATCH(req: Request, { params }: Props) {
   });
 
   return NextResponse.json({ post: updated });
+}
+
+export async function DELETE(_req: Request, { params }: Props) {
+  const gate = await requireAdmin();
+  if (!gate.ok) return gate.response;
+
+  const { id } = await params;
+  const row = await prisma.blogPost.findUnique({
+    where: { id },
+    select: { id: true, postStatus: true, slug: true },
+  });
+  if (!row) return NextResponse.json({ error: "Blog post not found" }, { status: 404 });
+  if (row.postStatus === BlogPostStatus.PUBLISHED) {
+    return NextResponse.json(
+      { error: "Unpublish this post before deleting it from the library." },
+      { status: 400 },
+    );
+  }
+  await prisma.blogPost.delete({ where: { id } });
+  return NextResponse.json({ ok: true, deletedId: id, slug: row.slug });
 }

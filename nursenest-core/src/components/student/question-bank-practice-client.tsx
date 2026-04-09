@@ -612,10 +612,14 @@ export function QuestionBankPracticeClient({
         return;
       }
       const correct = Boolean(data.correct);
+      const ckRaw = data.correctKeys;
+      const correctKeys =
+        Array.isArray(ckRaw) && ckRaw.every((x) => typeof x === "string") ? (ckRaw as string[]) : undefined;
       setGraded((prev) => ({
         ...prev,
         [current.id]: {
           correct,
+          ...(correctKeys && correctKeys.length > 0 ? { correctKeys } : {}),
           rationale: data.rationale ?? null,
           rationaleQuality: data.rationaleQuality ?? null,
           rationaleSections: data.rationaleSections ?? null,
@@ -1020,57 +1024,56 @@ export function QuestionBankPracticeClient({
           <ExamSessionTopBar
             left={
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
                   {t("learner.qbank.ui.questionOf", { n: idx + 1, total })}
                 </p>
                 {current.topic ? (
-                  <p className="mt-0.5 line-clamp-2 text-sm font-medium text-slate-800 dark:text-slate-100">{current.topic}</p>
+                  <p className="mt-1 line-clamp-2 nn-marketing-body-sm font-medium text-[var(--theme-heading-text)]">
+                    {current.topic}
+                  </p>
                 ) : null}
               </div>
             }
             center={
-              <span className="tabular-nums text-slate-600 dark:text-slate-300">
+              <span className="nn-marketing-caption font-semibold text-[var(--theme-muted-text)]">
                 {sortForApi === "random" ? t("learner.qbank.ui.sortRandom") : t("learner.qbank.ui.sortRecent")}
               </span>
             }
             right={
-              <span className="text-[10px] font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">
+              <span className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
                 {current.questionType}
               </span>
             }
           />
           <ExamProgressBar current={idx + 1} total={total} />
 
-          <div className="space-y-6 p-4 sm:p-6">
-            <div className="border-b border-slate-200/90 pb-6 dark:border-slate-700/90">
-              <p className="text-lg font-normal leading-[1.55] text-slate-900 dark:text-slate-100 sm:text-xl md:text-[1.35rem] md:leading-snug">
-                {current.stem}
-              </p>
+          <div className="nn-question-session space-y-8">
+            <div className="nn-question-stem-wrap">
+              <p className="nn-question-stem">{current.stem}</p>
             </div>
 
             <div>
-              <p className="mb-3 text-[11px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                {t("learner.qbank.examUi.answersHeading")}
-              </p>
+              <p className="nn-question-options-label">{t("learner.qbank.examUi.answersHeading")}</p>
               {!g ? (
                 <p className="mb-3 text-xs text-muted-foreground">{t("learner.qbank.examUi.toolsHint")}</p>
               ) : null}
 
               {isSata ? (
-                <ul className="space-y-3">
+                <ul className="space-y-3.5">
                   {optsCanonical.map((canonical, i) => {
                     const label = optsDisplay[i] ?? canonical;
                     const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
                     const struck = Boolean(strikeOut[canonical]);
                     const hi = Boolean(highlightOn[canonical]);
+                    const rowClass = g
+                      ? gradedAnswerSurfaceClass(true, g, canonical, selected)
+                      : activeAnswerSurfaceClass(selected, hi, false);
                     return (
                       <li key={canonical}>
-                        <div
-                          className={`flex gap-2 rounded-xl border-2 border-slate-200 bg-white p-1 dark:border-slate-700 dark:bg-slate-900/40 sm:gap-3 ${
-                            hi ? "border-amber-400/70 bg-amber-50/40 ring-1 ring-amber-400/35 dark:border-amber-700/50 dark:bg-amber-950/25" : ""
-                          } ${selected ? "border-primary/55 ring-1 ring-primary/25" : ""}`}
-                        >
-                          <label className="flex min-h-[3.25rem] flex-1 cursor-pointer items-center gap-3 px-3 py-2 sm:px-4">
+                        <div className={`flex gap-2 p-1 sm:gap-3 ${rowClass}`}>
+                          <label
+                            className={`flex min-h-[3.25rem] flex-1 cursor-pointer items-center gap-3 px-3 py-2.5 sm:min-h-[3.5rem] sm:px-4 ${g ? "cursor-default" : ""}`}
+                          >
                             <input
                               type="checkbox"
                               checked={selected}
@@ -1080,10 +1083,10 @@ export function QuestionBankPracticeClient({
                                 const next = e.target.checked ? [...prevAns, canonical] : prevAns.filter((x) => x !== canonical);
                                 setAnswer(next);
                               }}
-                              className="size-5 shrink-0 rounded border-slate-300 text-primary"
+                              className="size-[1.125rem] shrink-0 rounded border-border text-primary focus-visible:ring-2 focus-visible:ring-primary/30 sm:size-5"
                             />
                             <span
-                              className={`text-base leading-snug text-slate-800 dark:text-slate-100 ${struck ? "text-slate-400 line-through dark:text-slate-500" : ""}`}
+                              className={`text-base leading-relaxed text-[var(--theme-body-text)] ${struck && !g ? "text-muted-foreground line-through" : ""}`}
                             >
                               {label}
                             </span>
@@ -1095,7 +1098,7 @@ export function QuestionBankPracticeClient({
                                 aria-label={t("learner.qbank.examUi.ariaStrike")}
                                 title={t("learner.qbank.examUi.ariaStrike")}
                                 onClick={() => setStrikeOut((p) => ({ ...p, [canonical]: !p[canonical] }))}
-                                className="flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-slate-200 text-sm font-bold text-slate-500 hover:bg-slate-100 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-800"
+                                className="nn-qopt-tool text-base"
                               >
                                 ∅
                               </button>
@@ -1104,7 +1107,7 @@ export function QuestionBankPracticeClient({
                                 aria-label={t("learner.qbank.examUi.ariaHighlight")}
                                 title={t("learner.qbank.examUi.ariaHighlight")}
                                 onClick={() => setHighlightOn((p) => ({ ...p, [canonical]: !p[canonical] }))}
-                                className="flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-slate-200 text-xs font-semibold text-amber-700 hover:bg-amber-50 dark:border-slate-600 dark:text-amber-400 dark:hover:bg-amber-950/40"
+                                className="nn-qopt-tool nn-qopt-tool--mark text-xs font-bold"
                               >
                                 H
                               </button>
@@ -1116,25 +1119,22 @@ export function QuestionBankPracticeClient({
                   })}
                 </ul>
               ) : (
-                <ul className="space-y-3">
+                <ul className="space-y-3.5">
                   {optsCanonical.map((canonical, i) => {
                     const label = optsDisplay[i] ?? canonical;
                     const struck = Boolean(strikeOut[canonical]);
                     const hi = Boolean(highlightOn[canonical]);
                     const picked = raw === canonical;
+                    const surface = g
+                      ? gradedAnswerSurfaceClass(true, g, canonical, picked)
+                      : activeAnswerSurfaceClass(picked, hi, struck);
                     return (
-                      <li key={canonical} className="flex gap-2 sm:gap-3">
+                      <li key={canonical} className="flex gap-2.5 sm:gap-3">
                         <button
                           type="button"
                           disabled={!!g}
                           onClick={() => setAnswer(canonical)}
-                          className={`min-h-[3.25rem] flex-1 rounded-xl border-2 px-4 py-4 text-left text-base leading-snug transition sm:min-h-[3.5rem] sm:px-5 ${
-                            picked
-                              ? "border-primary bg-primary/[0.08] font-medium text-foreground ring-2 ring-primary/20"
-                              : "border-slate-200 bg-white text-slate-800 hover:border-slate-300 hover:bg-slate-50/80 dark:border-slate-700 dark:bg-slate-900/40 dark:text-slate-100 dark:hover:border-slate-600"
-                          } ${struck ? "opacity-65 line-through" : ""} ${
-                            hi ? "ring-2 ring-amber-400/50 dark:ring-amber-600/45" : ""
-                          }`}
+                          className={`flex-1 px-4 py-4 text-left text-base font-normal leading-relaxed text-[var(--theme-body-text)] transition sm:px-5 ${surface}`}
                         >
                           {label}
                         </button>
@@ -1148,7 +1148,7 @@ export function QuestionBankPracticeClient({
                                 e.preventDefault();
                                 setStrikeOut((p) => ({ ...p, [canonical]: !p[canonical] }));
                               }}
-                              className="flex min-h-11 min-w-11 items-center justify-center rounded-xl border border-slate-200 text-lg font-bold leading-none text-slate-500 hover:bg-slate-100 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-800"
+                              className="nn-qopt-tool text-lg leading-none"
                             >
                               ∅
                             </button>
@@ -1160,7 +1160,7 @@ export function QuestionBankPracticeClient({
                                 e.preventDefault();
                                 setHighlightOn((p) => ({ ...p, [canonical]: !p[canonical] }));
                               }}
-                              className="flex min-h-11 min-w-11 items-center justify-center rounded-xl border border-slate-200 text-sm font-bold text-amber-700 hover:bg-amber-50 dark:border-slate-600 dark:text-amber-400 dark:hover:bg-amber-950/40"
+                              className="nn-qopt-tool nn-qopt-tool--mark text-sm font-bold"
                             >
                               H
                             </button>
@@ -1174,11 +1174,11 @@ export function QuestionBankPracticeClient({
             </div>
 
             {!g ? (
-              <div className="flex flex-col gap-3 border-t border-slate-200/80 pt-5 dark:border-slate-800 sm:flex-row sm:flex-wrap sm:items-center">
+              <div className="nn-question-nav-actions !flex-col !items-stretch sm:!flex-row sm:!items-center">
                 <button
                   type="button"
                   disabled={grading || answer === null || (Array.isArray(answer) && answer.length === 0)}
-                  className="nn-btn-primary inline-flex min-h-12 w-full items-center justify-center rounded-full px-8 text-base font-semibold disabled:opacity-50 sm:w-auto sm:px-10"
+                  className="nn-btn-primary inline-flex min-h-[3rem] w-full items-center justify-center rounded-full px-8 text-base font-semibold shadow-none disabled:opacity-50 sm:w-auto sm:px-10"
                   onClick={() => void checkAnswer()}
                 >
                   {grading ? t("learner.qbank.ui.checking") : t("learner.qbank.ui.checkAnswer")}
@@ -1187,7 +1187,7 @@ export function QuestionBankPracticeClient({
                   <button
                     type="button"
                     disabled={idx === 0}
-                    className="min-h-12 flex-1 rounded-full border-2 border-slate-200 px-4 text-sm font-semibold text-slate-700 disabled:opacity-40 dark:border-slate-600 dark:text-slate-200 sm:flex-none sm:px-5"
+                    className="nn-btn-secondary min-h-[3rem] flex-1 rounded-full px-4 text-sm font-semibold disabled:opacity-40 sm:flex-none sm:px-5"
                     onClick={prev}
                   >
                     {t("learner.qbank.ui.previous")}
@@ -1195,7 +1195,7 @@ export function QuestionBankPracticeClient({
                   <button
                     type="button"
                     disabled={idx >= total - 1}
-                    className="min-h-12 flex-1 rounded-full border-2 border-slate-200 px-4 text-sm font-semibold text-slate-700 disabled:opacity-40 dark:border-slate-600 dark:text-slate-200 sm:flex-none sm:px-5"
+                    className="nn-btn-secondary min-h-[3rem] flex-1 rounded-full px-4 text-sm font-semibold disabled:opacity-40 sm:flex-none sm:px-5"
                     onClick={next}
                   >
                     {t("learner.qbank.ui.skipForNow")}
@@ -1205,24 +1205,26 @@ export function QuestionBankPracticeClient({
             ) : (
               <>
                 {examShell && !examShowExplanation ? (
-                  <div className="overflow-hidden rounded-xl border-2 border-border bg-card shadow-sm">
+                  <div className="nn-question-rationale-card">
                     <div
-                      className={`border-b border-border px-4 py-4 sm:px-5 ${
-                        g.correct ? "bg-role-success-soft" : "bg-destructive/10 dark:bg-destructive/15"
+                      className={`nn-question-rationale-card__verdict ${
+                        g.correct ? "nn-question-rationale-card__verdict--ok" : "nn-question-rationale-card__verdict--miss"
                       }`}
                     >
                       <p
-                        className={`text-lg font-bold sm:text-xl ${g.correct ? "text-role-success" : "text-destructive"}`}
+                        className={`text-base font-semibold sm:text-lg ${
+                          g.correct ? "text-[var(--role-success-text)]" : "text-[var(--theme-heading-text)]"
+                        }`}
                         role="status"
                       >
                         {g.correct ? t("learner.qbank.ui.correct") : t("learner.qbank.ui.incorrect")}
                       </p>
                     </div>
-                    <div className="space-y-3 px-4 py-4 sm:px-5">
-                      <p className="text-sm text-muted-foreground">{t("learner.qbank.ui.examShellHint")}</p>
+                    <div className="space-y-3 px-4 py-4 sm:px-6 sm:py-5">
+                      <p className="nn-marketing-body-sm text-[var(--theme-muted-text)]">{t("learner.qbank.ui.examShellHint")}</p>
                       <button
                         type="button"
-                        className="nn-btn-secondary inline-flex min-h-12 w-full items-center justify-center rounded-full px-6 text-sm font-semibold sm:w-auto"
+                        className="nn-btn-secondary inline-flex min-h-[3rem] w-full items-center justify-center rounded-full px-6 text-sm font-semibold sm:w-auto"
                         onClick={() => setExamShowExplanation(true)}
                       >
                         {t("learner.qbank.ui.showExplanation")}
@@ -1243,11 +1245,11 @@ export function QuestionBankPracticeClient({
                     defaultOpenExplanation={!g.correct}
                   />
                 )}
-                <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <div className="nn-question-nav-actions">
                   <button
                     type="button"
                     disabled={idx === 0}
-                    className="min-h-12 rounded-full border-2 border-slate-200 px-5 text-sm font-semibold disabled:opacity-40 dark:border-slate-600"
+                    className="nn-btn-secondary min-h-[3rem] rounded-full px-5 text-sm font-semibold disabled:opacity-40"
                     onClick={prev}
                   >
                     {t("learner.qbank.ui.previous")}
@@ -1255,7 +1257,7 @@ export function QuestionBankPracticeClient({
                   {idx < total - 1 ? (
                     <button
                       type="button"
-                      className="nn-btn-primary inline-flex min-h-12 flex-1 items-center justify-center rounded-full px-8 text-base font-semibold sm:flex-none sm:px-10"
+                      className="nn-btn-primary nn-question-nav-actions__next inline-flex items-center justify-center rounded-full px-8 text-base font-semibold shadow-none"
                       onClick={next}
                     >
                       {t("learner.qbank.ui.nextQuestion")}
@@ -1263,7 +1265,7 @@ export function QuestionBankPracticeClient({
                   ) : (
                     <button
                       type="button"
-                      className="inline-flex min-h-12 flex-1 items-center justify-center rounded-full border-2 border-primary px-6 text-base font-semibold text-primary sm:flex-none"
+                      className="nn-btn-secondary nn-question-nav-actions__next inline-flex items-center justify-center rounded-full px-6 text-base font-semibold"
                       onClick={() => void loadBatch(true)}
                     >
                       {t("learner.qbank.ui.loadMore")}

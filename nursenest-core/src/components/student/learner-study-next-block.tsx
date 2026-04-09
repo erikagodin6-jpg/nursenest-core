@@ -123,8 +123,9 @@ export async function LearnerStudyNextBlock({ model }: { model: LearnerStudyNext
         >
           {t("studyNext.title")}
         </h2>
+        <p className="mt-1.5 text-[11px] leading-relaxed text-muted-foreground">{t("studyNext.integratedExplanation")}</p>
 
-        <p className="mt-2 text-xs font-medium text-[var(--theme-heading-text)]">{t("studyNext.primary")}</p>
+        <p className="mt-3 text-xs font-medium text-[var(--theme-heading-text)]">{t("studyNext.primary")}</p>
         <div className="mt-1.5">
           <RecommendationRow rec={model.primary} t={t} variant="primary" />
         </div>

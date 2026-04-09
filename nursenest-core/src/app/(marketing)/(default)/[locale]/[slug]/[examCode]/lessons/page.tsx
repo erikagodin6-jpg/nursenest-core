@@ -23,16 +23,13 @@ import {
 } from "@/lib/lessons/pathway-lesson-loader";
 import { PathwayLessonsHubSearch } from "@/components/pathway-lessons/pathway-lessons-hub-search";
 import { PathwayLessonsResumeHub } from "@/components/pathway-lessons/pathway-lessons-resume-hub";
-import { PathwayTopicClusterNav } from "@/components/pathway-lessons/pathway-topic-cluster-nav";
+import { PathwayLessonsGroupedHub } from "@/components/pathway-lessons/pathway-lessons-grouped-hub";
 import {
   pathwayLessonHubH1,
   pathwayLessonHubMetaDescription,
   pathwayLessonHubMetaTitle,
 } from "@/lib/lessons/pathway-lesson-hub-seo";
-import {
-  pathwayLessonHasRenderableHubSlug,
-  pathwayLessonMarketingDetailHref,
-} from "@/lib/lessons/pathway-lesson-types";
+import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { pathwayLessonsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
@@ -172,7 +169,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     const { crumbs, schemaItems } = pathwayLessonsHubBreadcrumbs(pathway);
     if (qEffective) {
       return (
-        <div className="mx-auto max-w-3xl px-4 py-12">
+        <div className="mx-auto max-w-4xl px-4 py-12">
           <BreadcrumbJsonLd items={schemaItems} />
           <div className="mb-6">
             <BreadcrumbTrail items={crumbs} />
@@ -202,7 +199,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       );
     }
     return (
-      <div className="mx-auto max-w-3xl px-4 py-12">
+      <div className="mx-auto max-w-4xl px-4 py-12">
         <BreadcrumbJsonLd items={schemaItems} />
         <div className="mb-6">
           <BreadcrumbTrail items={crumbs} />
@@ -249,7 +246,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   let resumePayload: PathwayHubResumePayload = { lastTouched: null, nextRecommended: null, lessonsCompleted: 0 };
 
   const canShowResume =
-    userId && scope.hasAccess && canViewFullPathwayLesson(scope, pathway, learnerPath);
+    Boolean(userId) && scope.hasAccess && canViewFullPathwayLesson(scope, pathway, learnerPath);
   const canShowProgressMap = canShowResume && lessons.length > 0;
 
   if (canShowResume) {
@@ -267,7 +264,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12">
+    <div className="mx-auto max-w-4xl px-4 py-12">
       <BreadcrumbJsonLd items={schemaItems} />
       <div className="mb-6">
         <BreadcrumbTrail items={crumbs} />
@@ -358,70 +355,16 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
           progressMap={progressMap}
         />
       ) : (
-        <>
-          <div className="mt-10">
-            <PathwayTopicClusterNav lessonsBasePath={base} topicClusters={topics} pathwayShortName={pathway.shortName} />
-          </div>
-
-          <section className="mt-10">
-            <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">
-              All {pathway.shortName} lessons
-            </h2>
-            <p className="mt-1 text-xs text-[var(--theme-muted-text)]">
-              Paginated list — use topic clusters above or search to narrow without loading everything at once.
-            </p>
-            <ul className="mt-4 space-y-4">
-              {lessons.map((l) => {
-                const href = pathwayLessonMarketingDetailHref(base, l.slug);
-                if (!href) return null;
-                const ps = progressMap[l.slug] ?? "not_started";
-                return (
-                <li key={l.slug} className="nn-card p-4">
-                  <div className="flex flex-wrap items-start justify-between gap-2">
-                    <p className="text-xs font-medium uppercase text-muted">{l.topic}</p>
-                    {canShowProgressMap ? (
-                      <span className="text-[11px] font-semibold text-muted">
-                        {ps === "completed" ? "Completed" : ps === "in_progress" ? "In progress" : "Not started"}
-                      </span>
-                    ) : null}
-                  </div>
-                  <Link
-                    href={href}
-                    className="mt-1 block text-lg font-semibold text-primary hover:underline"
-                  >
-                    {l.title}
-                  </Link>
-                  <p className="mt-2 line-clamp-3 text-sm text-muted">{l.seoDescription}</p>
-                  <p className="mt-3 text-xs text-muted">
-                    Full lesson page includes preview sections; subscription unlocks complete depth.
-                  </p>
-                </li>
-                );
-              })}
-            </ul>
-          </section>
-
-          <section className="mt-10 rounded-xl border border-border bg-[var(--theme-muted-surface)] p-4 text-sm text-muted">
-            <p className="font-semibold text-foreground">Recommended study loop</p>
-            <p className="mt-1">
-              Read a lesson → practice pathway-matched questions → timed or CAT-style review → read rationales → return to the
-              next topic in a weak area.
-            </p>
-            <div className="mt-3 flex flex-wrap gap-2">
-              <Link href={buildExamPathwayPath(pathway, "questions")} className="font-semibold text-primary">
-                {pathway.shortName} question bank hub
-              </Link>
-              <span aria-hidden="true">·</span>
-              <Link href="/app/questions" className="font-semibold text-primary">
-                App question bank (signed in)
-              </Link>
-              <span aria-hidden="true">·</span>
-              <Link href="/app/exams" className="font-semibold text-primary">
-                Practice exams
-              </Link>
-            </div>
-          </section>
-        </>
+        <div className="mt-10">
+          <PathwayLessonsGroupedHub
+            pathway={pathway}
+            lessons={lessons}
+            lessonsBasePath={base}
+            topicClusters={topics}
+            progressMap={progressMap}
+            canShowProgressMap={canShowProgressMap}
+          />
+        </div>
       )}
 
       <MarketingStudyCrossLinks className="mt-14" />

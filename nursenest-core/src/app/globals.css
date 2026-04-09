@@ -771,6 +771,40 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   background: color-mix(in srgb, var(--theme-primary) 5%, var(--bg-card));
 }
 
+/* Pathway lesson article: soft bands + comfortable long-read typography */
+.nn-lesson-article-section {
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--theme-primary) 9%, var(--border-subtle));
+  background: color-mix(in srgb, var(--theme-primary) 4%, var(--bg-card));
+  padding: 1.35rem 1.15rem 1.5rem;
+  box-shadow: var(--shadow-card);
+}
+
+@media (min-width: 640px) {
+  .nn-lesson-article-section {
+    padding: 1.6rem 1.4rem 1.75rem;
+  }
+}
+
+.nn-lesson-article-section--alt {
+  background: var(--nn-presentation-ribbon);
+  border-color: color-mix(in srgb, var(--theme-primary) 11%, var(--border-subtle));
+}
+
+.nn-lesson-prose {
+  font-size: 1.0625rem;
+  line-height: 1.72;
+  letter-spacing: -0.01em;
+  color: var(--theme-body-text);
+}
+
+@media (min-width: 768px) {
+  .nn-lesson-prose {
+    font-size: 1.075rem;
+    line-height: 1.74;
+  }
+}
+
 /*
  * Learner question surfaces (bank, practice tests, exam widget): calm clinical testing — not gamified.
  * Uses theme + role tokens; correct/incorrect are muted tints, not neon.

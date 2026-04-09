@@ -7,9 +7,11 @@ import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/ex
 import {
   inferRationaleLessonSlugCandidates,
   normalizedTopicCodeForQuestion,
-  topicClusterSlugForHub,
-  type RationaleLessonLinkKind,
 } from "@/lib/learner/rationale-lesson-link-engine";
+import type { RationaleLessonLinkKind } from "@/lib/learner/lesson-question-rationale/types";
+import { pickTopicClusterSlugForPathway } from "@/lib/lessons/lesson-topic-cluster-registry";
+import { listTopicClusters } from "@/lib/lessons/pathway-lesson-loader";
+import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
 import { SCOPED_GOLD_PROVIDERS } from "@/lib/lessons/scoped-lessons/scoped-gold-registry";
 
 const SLUG_TO_TOPIC_SLUG = new Map<string, string>(
@@ -60,14 +62,14 @@ async function resolveSlugHref(
   return { href: hub, title: titleFromSlug || slug, hrefSource: "hub" };
 }
 
-function topicHubFallback(pathwayId: string, topicSlug: string): RationaleLessonLinkResolved | null {
+function topicHubFallback(pathwayId: string, topicSlug: string, titleLabel?: string): RationaleLessonLinkResolved | null {
   const pathway = getExamPathwayById(pathwayId);
   if (!pathway) return null;
   const href = buildExamPathwayPath(pathway, `lessons/topics/${topicSlug}`);
   return {
     kind: "topic_hub",
     slug: `topic:${topicSlug}`,
-    title: topicSlug.replace(/-/g, " "),
+    title: titleLabel?.trim() || topicSlug.replace(/-/g, " "),
     href,
     hrefSource: "hub",
     ctaKey: "learner.qbank.rationaleLinks.browseTopicHub",
@@ -143,9 +145,12 @@ export async function resolveRationaleLessonLinksForQuestion(
     }
   }
 
-  const hubSlug = topicClusterSlugForHub(topicCode);
+  const clusters = await listTopicClusters(pathwayId, defaultPathwayLessonContentLocaleForExamHubRoute());
+  const pathwaySlugs = new Set(clusters.map((c) => c.topicSlug));
+  const hubSlug = pickTopicClusterSlugForPathway(topicCode, pathwaySlugs);
   if (hubSlug) {
-    const hub = topicHubFallback(pathwayId, hubSlug);
+    const label = clusters.find((c) => c.topicSlug === hubSlug)?.label;
+    const hub = topicHubFallback(pathwayId, hubSlug, label);
     return hub ? [hub] : [];
   }
 

@@ -2,8 +2,38 @@ import { BlogFunnelStage, BlogImageStatus, BlogPostIntent, BlogPostStatus, BlogP
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
+import { buildAdminBlogListWhere, parseAdminBlogPagination } from "@/lib/blog/blog-admin-library-query";
 import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
 import { prisma } from "@/lib/db";
+
+const adminBlogListSelect = {
+  id: true,
+  slug: true,
+  title: true,
+  excerpt: true,
+  exam: true,
+  category: true,
+  tags: true,
+  seoTitle: true,
+  seoDescription: true,
+  targetKeyword: true,
+  keywordCluster: true,
+  intent: true,
+  funnelStage: true,
+  workflowStatus: true,
+  coverImage: true,
+  coverImageAlt: true,
+  imageStatus: true,
+  apaReferences: true,
+  requiresReferences: true,
+  postStatus: true,
+  publishAt: true,
+  updatedAt: true,
+  createdAt: true,
+  countryTarget: true,
+  legacySource: true,
+  campaignId: true,
+} as const;
 
 const createSchema = z.object({
   slug: z.string().min(3).max(180).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
@@ -36,54 +66,38 @@ export async function GET(req: NextRequest) {
   if (!gate.ok) return gate.response;
 
   const sp = req.nextUrl.searchParams;
-  const status = sp.get("status");
-  const take = Math.min(200, Math.max(10, Number(sp.get("take") ?? "80")));
-  const where =
-    status && Object.values(BlogPostStatus).includes(status as BlogPostStatus)
-      ? { postStatus: status as BlogPostStatus }
-      : {};
+  const where = buildAdminBlogListWhere(sp);
+  const { skip, take, page } = parseAdminBlogPagination(sp);
+  /** Legacy: `take=80` without page — used by older callers */
+  const legacyTake = sp.get("page") == null && sp.get("pageSize") == null ? Math.min(200, Math.max(10, Number(sp.get("take") ?? "80"))) : null;
+  const effectiveTake = legacyTake ?? take;
+  const effectiveSkip = legacyTake != null ? 0 : skip;
 
-  const posts = await prisma.blogPost.findMany({
-    where,
-    orderBy: [{ publishAt: "asc" }, { updatedAt: "desc" }],
-    take,
-    select: {
-      id: true,
-      slug: true,
-      title: true,
-      excerpt: true,
-      exam: true,
-      category: true,
-      tags: true,
-      seoTitle: true,
-      seoDescription: true,
-      targetKeyword: true,
-      keywordCluster: true,
-      intent: true,
-      funnelStage: true,
-      workflowStatus: true,
-      coverImage: true,
-      coverImageAlt: true,
-      imageStatus: true,
-      apaReferences: true,
-      requiresReferences: true,
-      postStatus: true,
-      publishAt: true,
-      updatedAt: true,
-      createdAt: true,
-    },
-  });
-
-  const [draftCount, scheduledCount, publishedCount, nextScheduled] = await Promise.all([
-    prisma.blogPost.count({ where: { postStatus: BlogPostStatus.DRAFT } }),
-    prisma.blogPost.count({ where: { postStatus: BlogPostStatus.SCHEDULED } }),
-    prisma.blogPost.count({ where: { postStatus: BlogPostStatus.PUBLISHED } }),
-    prisma.blogPost.findFirst({
-      where: { postStatus: BlogPostStatus.SCHEDULED, publishAt: { not: null } },
-      orderBy: { publishAt: "asc" },
-      select: { id: true, slug: true, publishAt: true, title: true },
+  const [posts, total] = await Promise.all([
+    prisma.blogPost.findMany({
+      where,
+      orderBy: legacyTake != null ? [{ publishAt: "asc" }, { updatedAt: "desc" }] : { updatedAt: "desc" },
+      skip: effectiveSkip,
+      take: effectiveTake,
+      select: adminBlogListSelect,
     }),
+    prisma.blogPost.count({ where }),
   ]);
+
+  const [draftCount, needsReviewCount, approvedCount, scheduledCount, publishedCount, failedCount, nextScheduled] =
+    await Promise.all([
+      prisma.blogPost.count({ where: { postStatus: BlogPostStatus.DRAFT } }),
+      prisma.blogPost.count({ where: { postStatus: BlogPostStatus.NEEDS_REVIEW } }),
+      prisma.blogPost.count({ where: { postStatus: BlogPostStatus.APPROVED } }),
+      prisma.blogPost.count({ where: { postStatus: BlogPostStatus.SCHEDULED } }),
+      prisma.blogPost.count({ where: { postStatus: BlogPostStatus.PUBLISHED } }),
+      prisma.blogPost.count({ where: { postStatus: BlogPostStatus.FAILED } }),
+      prisma.blogPost.findFirst({
+        where: { postStatus: BlogPostStatus.SCHEDULED, publishAt: { not: null } },
+        orderBy: { publishAt: "asc" },
+        select: { id: true, slug: true, publishAt: true, title: true },
+      }),
+    ]);
 
   const warnings = posts
     .filter((p) => !p.title.trim() || !p.excerpt.trim() || !p.seoTitle?.trim() || !p.seoDescription?.trim() || (p.requiresReferences && p.apaReferences.length === 0))
@@ -110,7 +124,17 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json({
     posts,
-    counts: { draft: draftCount, scheduled: scheduledCount, published: publishedCount },
+    total,
+    page: legacyTake != null ? 1 : page,
+    pageSize: effectiveTake,
+    counts: {
+      draft: draftCount,
+      needsReview: needsReviewCount,
+      approved: approvedCount,
+      scheduled: scheduledCount,
+      published: publishedCount,
+      failed: failedCount,
+    },
     nextScheduled,
     warnings,
     cannibalization,

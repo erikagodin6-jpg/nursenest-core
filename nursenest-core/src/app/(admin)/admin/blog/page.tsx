@@ -5,16 +5,48 @@ import { prisma } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
+function statusBadgeClass(status: BlogPostStatus) {
+  switch (status) {
+    case BlogPostStatus.PUBLISHED:
+      return "bg-emerald-500/15 text-emerald-950 dark:text-emerald-100";
+    case BlogPostStatus.SCHEDULED:
+      return "bg-amber-500/15 text-amber-950 dark:text-amber-100";
+    case BlogPostStatus.APPROVED:
+      return "bg-sky-500/15 text-sky-950 dark:text-sky-100";
+    case BlogPostStatus.NEEDS_REVIEW:
+      return "bg-orange-500/15 text-orange-950 dark:text-orange-100";
+    case BlogPostStatus.FAILED:
+      return "bg-red-500/15 text-red-950 dark:text-red-100";
+    default:
+      return "bg-muted text-foreground";
+  }
+}
+
 export default async function AdminBlogHubPage() {
   await requireAdmin();
-  const [draft, scheduled, published, recent, next, campaignCount, queuedItems, failedItems] = await Promise.all([
+  const [
+    draft,
+    needsReview,
+    approved,
+    scheduled,
+    published,
+    failedPosts,
+    recent,
+    next,
+    campaignCount,
+    queuedItems,
+    failedItems,
+  ] = await Promise.all([
     prisma.blogPost.count({ where: { postStatus: BlogPostStatus.DRAFT } }),
+    prisma.blogPost.count({ where: { postStatus: BlogPostStatus.NEEDS_REVIEW } }),
+    prisma.blogPost.count({ where: { postStatus: BlogPostStatus.APPROVED } }),
     prisma.blogPost.count({ where: { postStatus: BlogPostStatus.SCHEDULED } }),
     prisma.blogPost.count({ where: { postStatus: BlogPostStatus.PUBLISHED } }),
+    prisma.blogPost.count({ where: { postStatus: BlogPostStatus.FAILED } }),
     prisma.blogPost.findMany({
       orderBy: { updatedAt: "desc" },
       take: 8,
-      select: { slug: true, title: true, postStatus: true, publishAt: true, updatedAt: true },
+      select: { id: true, slug: true, title: true, postStatus: true, publishAt: true, updatedAt: true },
     }),
     prisma.blogPost.findFirst({
       where: { postStatus: BlogPostStatus.SCHEDULED, publishAt: { gte: new Date() } },
@@ -38,17 +70,27 @@ export default async function AdminBlogHubPage() {
         <div>
           <p className="text-xs font-semibold uppercase tracking-wide text-primary">Admin</p>
           <h1 className="mt-1 text-3xl font-bold text-[var(--theme-heading-text)]">Blog operations</h1>
-          <p className="mt-1 text-sm text-muted-foreground">SEO engine: drafts, scheduling, and bulk shells.</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Draft → review → approved → scheduled / published. Slugs stay unique; non-public statuses never hit the live blog.
+          </p>
         </div>
         <Link href="/admin" className="text-sm font-semibold text-primary underline">
           ← Overview
         </Link>
       </div>
 
-      <section className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <section className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
         <div className="rounded-xl border border-border/70 bg-gradient-to-br from-slate-500/10 to-transparent p-5">
           <p className="text-xs font-medium uppercase text-muted-foreground">Drafts</p>
           <p className="mt-1 text-3xl font-bold text-[var(--theme-heading-text)]">{draft}</p>
+        </div>
+        <div className="rounded-xl border border-orange-500/25 bg-gradient-to-br from-orange-500/10 to-transparent p-5">
+          <p className="text-xs font-medium uppercase text-muted-foreground">Needs review</p>
+          <p className="mt-1 text-3xl font-bold text-[var(--theme-heading-text)]">{needsReview}</p>
+        </div>
+        <div className="rounded-xl border border-sky-500/25 bg-gradient-to-br from-sky-500/10 to-transparent p-5">
+          <p className="text-xs font-medium uppercase text-muted-foreground">Approved</p>
+          <p className="mt-1 text-3xl font-bold text-[var(--theme-heading-text)]">{approved}</p>
         </div>
         <div className="rounded-xl border border-amber-500/25 bg-gradient-to-br from-amber-500/12 to-transparent p-5">
           <p className="text-xs font-medium uppercase text-muted-foreground">Scheduled</p>
@@ -58,13 +100,26 @@ export default async function AdminBlogHubPage() {
           <p className="text-xs font-medium uppercase text-muted-foreground">Published</p>
           <p className="mt-1 text-3xl font-bold text-[var(--theme-heading-text)]">{published}</p>
         </div>
-        <div className="rounded-xl border border-rose-500/20 bg-gradient-to-br from-rose-500/10 to-transparent p-5">
-          <p className="text-xs font-medium uppercase text-muted-foreground">Missing SEO</p>
-          <p className="mt-1 text-3xl font-bold text-[var(--theme-heading-text)]">{missingSeo}</p>
+        <div className="rounded-xl border border-red-500/20 bg-gradient-to-br from-red-500/10 to-transparent p-5">
+          <p className="text-xs font-medium uppercase text-muted-foreground">Failed</p>
+          <p className="mt-1 text-3xl font-bold text-[var(--theme-heading-text)]">{failedPosts}</p>
+        </div>
+      </section>
+
+      <section className="mt-4">
+        <div className="rounded-xl border border-rose-500/20 bg-gradient-to-br from-rose-500/10 to-transparent p-5 sm:inline-block sm:min-w-[14rem]">
+          <p className="text-xs font-medium uppercase text-muted-foreground">Missing SEO (all posts)</p>
+          <p className="mt-1 text-2xl font-bold text-[var(--theme-heading-text)]">{missingSeo}</p>
         </div>
       </section>
 
       <section className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <Link
+          href="/admin/blog/library"
+          className="rounded-xl border border-primary/40 bg-gradient-to-br from-primary/12 to-sky-500/10 p-6 text-center font-semibold text-primary hover:bg-primary/18"
+        >
+          Blog library →
+        </Link>
         <Link
           href="/admin/blog/control-panel"
           className="rounded-xl border border-primary/35 bg-gradient-to-br from-primary/15 to-emerald-500/10 p-6 text-center font-semibold text-primary hover:bg-primary/20"
@@ -117,10 +172,17 @@ export default async function AdminBlogHubPage() {
         <h2 className="text-lg font-semibold">Recently updated</h2>
         <ul className="mt-3 space-y-2 text-sm">
           {recent.map((p) => (
-            <li key={p.slug} className="flex flex-wrap justify-between gap-2 border-b border-border/40 py-2">
-              <span className="font-medium">{p.title}</span>
-              <span className="text-xs text-muted-foreground">
-                {p.postStatus} · {p.updatedAt.toISOString().slice(0, 10)}
+            <li key={p.id} className="flex flex-wrap items-center justify-between gap-2 border-b border-border/40 py-2">
+              <Link
+                href={`/admin/blog/control-panel?id=${encodeURIComponent(p.id)}`}
+                className="font-medium text-primary underline-offset-2 hover:underline"
+              >
+                {p.title}
+              </Link>
+              <span className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                <span className={`rounded-full px-2 py-0.5 font-medium ${statusBadgeClass(p.postStatus)}`}>{p.postStatus}</span>
+                <span>{p.updatedAt.toISOString().slice(0, 10)}</span>
+                <span className="font-mono text-[10px] opacity-80">{p.slug}</span>
               </span>
             </li>
           ))}

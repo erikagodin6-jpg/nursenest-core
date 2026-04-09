@@ -99,6 +99,9 @@ export default async function QuestionBankPage() {
           </li>
         </ul>
         <p className="mt-3 text-xs">{t("learner.questions.howTo.footer")}</p>
+        <p className="mt-3 border-t border-border/50 pt-3 text-xs leading-relaxed text-muted-foreground">
+          {t("learner.questions.howTo.integratedLoop")}
+        </p>
       </aside>
       {userId ? (
         <Suspense fallback={<p className="text-sm text-muted">{t("learner.loading.questionBank")}</p>}>

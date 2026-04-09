@@ -1,12 +1,15 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { auth } from "@/lib/auth";
+import { LearnerDailyMomentumCard } from "@/components/student/learner-daily-momentum-card";
+import { LearnerDashboardAdvantageStrip } from "@/components/student/learner-dashboard-advantage-strip";
 import { PremiumLearnerHub } from "@/components/student/premium-learner-hub";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { LockedStudyNextPreview } from "@/components/student/locked-study-next-preview";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
+import { loadTodayGoalProgress } from "@/lib/learner/load-today-goal-progress";
 import { loadPremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
 import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
 import { loadRecentLearnerNotesSummary } from "@/lib/learner/load-recent-learner-notes-summary";
@@ -70,14 +73,22 @@ export default async function LearnerDashboardPage() {
   let snapshot = null;
   let weakTopicTitles: string[] = [];
   try {
-    const [snap, topicPerf, notes] = await Promise.all([
+    const [snap, topicPerf, notes, todayGoal] = await Promise.all([
       loadPremiumDashboardSnapshot(userId, entitlement),
       loadUnifiedTopicPerformance(userId, entitlement, 8),
       loadRecentLearnerNotesSummary(userId),
+      loadTodayGoalProgress(userId),
     ]);
     snapshot = snap;
     weakTopicTitles = topicPerf?.weakTopics.map((w) => w.topic) ?? [];
     if (snapshot) {
+      const resume =
+        snapshot.continueLesson ??
+        (snapshot.lessonContinuations[0]
+          ? { title: snapshot.lessonContinuations[0].title, href: snapshot.lessonContinuations[0].href }
+          : null);
+      const momentumLine = snapshot.momentumMessages[0] ?? null;
+
       return (
         <main className="space-y-6">
           <BreadcrumbTrail items={crumbs} />
@@ -86,6 +97,17 @@ export default async function LearnerDashboardPage() {
             <h1 className="mt-1 text-3xl font-bold tracking-tight text-[var(--theme-heading-text)]">{t("learner.dashboard.title")}</h1>
             <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.dashboard.subtitle.subscriber")}</p>
           </div>
+          {todayGoal ? (
+            <LearnerDailyMomentumCard
+              t={t}
+              streakDays={snapshot.studyStreakDays}
+              todayGoal={todayGoal}
+              resume={resume}
+              momentumLine={momentumLine}
+              focusTopic={weakTopicTitles[0] ?? null}
+            />
+          ) : null}
+          <LearnerDashboardAdvantageStrip t={t} />
           <PremiumLearnerHub snapshot={snapshot} weakTopicTitles={weakTopicTitles} recentNotes={notes} />
           <section className="nn-card flex flex-col gap-3 p-5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
             <p className="text-sm text-muted-foreground">{t("learner.dashboard.accountTeaser")}</p>

@@ -304,14 +304,12 @@ export function PracticeTestRunnerClient({
   function linearPracticeMcqClasses(canonical: string): string {
     const selected = raw === canonical;
     const base =
-      "min-h-[2.75rem] w-full rounded-lg border px-4 py-3 text-left text-sm leading-snug transition";
-    const idle =
-      "border border-slate-200 bg-white text-slate-800 hover:border-slate-300 dark:border-slate-700 dark:bg-slate-900/30 dark:text-slate-100 dark:hover:border-slate-600";
-    const picked =
-      "border-primary/50 bg-primary/[0.05] font-medium text-slate-900 ring-1 ring-primary/30 dark:text-slate-50";
+      "nn-qopt-surface min-h-[3.25rem] w-full px-4 py-4 text-left text-base font-normal leading-relaxed text-[var(--theme-body-text)] transition sm:min-h-[3.5rem] sm:px-5";
+    const idle = "nn-qopt-surface--interactive";
+    const picked = "nn-qopt-surface--selected";
     if (isLinearEngine && currentCommitted && linearDelivery === "exam") {
-      return `${base} cursor-default border-slate-200 bg-slate-50/90 text-slate-800 dark:border-slate-600 dark:bg-slate-900/45 dark:text-slate-100 ${
-        selected ? "ring-1 ring-slate-300/70 dark:ring-slate-600" : "opacity-85"
+      return `${base} cursor-default opacity-90 nn-qopt-surface--dim ${
+        selected ? "ring-1 ring-[color-mix(in_srgb,var(--theme-primary)_15%,transparent)] opacity-100" : ""
       }`;
     }
     if (
@@ -326,23 +324,22 @@ export function PracticeTestRunnerClient({
     const ck = new Set(linearFeedback.correctKeys);
     const ok = ck.has(canonical);
     if (ok) {
-      return `${base} border-emerald-500/55 bg-emerald-50/90 font-medium text-slate-900 ring-1 ring-emerald-400/35 dark:border-emerald-500/40 dark:bg-emerald-950/35 dark:text-slate-50`;
+      return `${base} nn-qopt-surface--correct font-medium`;
     }
     if (selected) {
-      return `${base} border-red-500/55 bg-red-50/90 font-medium text-slate-900 ring-1 ring-red-400/35 dark:border-red-500/40 dark:bg-red-950/30 dark:text-slate-50`;
+      return `${base} nn-qopt-surface--incorrect font-medium`;
     }
-    return `${base} ${idle} opacity-75`;
+    return `${base} nn-qopt-surface--dim`;
   }
 
   function linearPracticeSataClasses(canonical: string, selected: boolean): string {
     const base =
-      "flex min-h-[2.75rem] items-start gap-3 rounded-lg border px-4 py-3 text-sm leading-snug transition";
-    const idleUnsel = "border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900/30";
-    const idleSel =
-      "border-primary/45 bg-primary/[0.05] ring-1 ring-primary/25 dark:bg-primary/[0.07]";
+      "flex min-h-[3.25rem] items-start gap-3 px-4 py-3.5 text-base leading-relaxed transition sm:min-h-[3.5rem] nn-qopt-surface";
+    const idleUnsel = "nn-qopt-surface--interactive cursor-pointer";
+    const idleSel = "nn-qopt-surface--interactive nn-qopt-surface--selected cursor-pointer";
     if (isLinearEngine && currentCommitted && linearDelivery === "exam") {
-      return `${base} cursor-default border-slate-200/90 bg-slate-50/50 dark:border-slate-600 dark:bg-slate-900/40 ${
-        selected ? "ring-1 ring-slate-300/50 dark:ring-slate-600" : ""
+      return `${base} cursor-default nn-qopt-surface--dim ${
+        selected ? "ring-1 ring-[color-mix(in_srgb,var(--theme-primary)_12%,transparent)]" : ""
       }`;
     }
     if (
@@ -352,17 +349,17 @@ export function PracticeTestRunnerClient({
       !current ||
       !currentCommitted
     ) {
-      return `${base} ${selected ? idleSel : idleUnsel} cursor-pointer`;
+      return `${base} ${selected ? idleSel : idleUnsel}`;
     }
     const ck = new Set(linearFeedback.correctKeys);
     const ok = ck.has(canonical);
     if (ok) {
-      return `${base} cursor-default border-emerald-500/55 bg-emerald-50/90 ring-1 ring-emerald-400/35 dark:border-emerald-500/40 dark:bg-emerald-950/35`;
+      return `${base} cursor-default nn-qopt-surface--correct`;
     }
     if (selected && !ok) {
-      return `${base} cursor-default border-red-500/55 bg-red-50/90 ring-1 ring-red-400/35 dark:border-red-500/40 dark:bg-red-950/30`;
+      return `${base} cursor-default nn-qopt-surface--incorrect`;
     }
-    return `${base} cursor-default ${idleUnsel} opacity-70`;
+    return `${base} cursor-default nn-qopt-surface--dim`;
   }
 
   async function persistSave(nextAnswers: Record<string, unknown>, nextIdx: number) {
@@ -838,19 +835,19 @@ export function PracticeTestRunnerClient({
         <ExamSessionShell neutralPalette>
           <ExamSessionTopBar
             left={
-              <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+              <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
                 Item {idx + 1} of {total}
               </p>
             }
-            center={<span className="text-slate-600 dark:text-slate-400">Loading</span>}
+            center={<span className="nn-marketing-caption text-[var(--theme-muted-text)]">Loading</span>}
             right={<ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />}
           />
           {total > 0 ? <ExamProgressBar current={idx + 1} total={total} /> : null}
-          <div className="space-y-3 p-6">
-            <div className="h-4 w-[75%] animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
-            <div className="h-4 w-full animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
-            <div className="h-4 w-[83%] animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
-            <p className="text-sm text-slate-500 dark:text-slate-400">Loading question…</p>
+          <div className="nn-question-session space-y-4">
+            <div className="h-4 w-[75%] animate-pulse rounded-md bg-muted/60" />
+            <div className="h-4 w-full animate-pulse rounded-md bg-muted/60" />
+            <div className="h-4 w-[83%] animate-pulse rounded-md bg-muted/60" />
+            <p className="nn-marketing-body-sm text-[var(--theme-muted-text)]">Loading question…</p>
           </div>
         </ExamSessionShell>
       </div>
@@ -882,20 +879,20 @@ export function PracticeTestRunnerClient({
           <ExamSessionTopBar
             left={
               <div>
-                <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
                   {catMode ? "Adaptive item" : "Item"} {idx + 1} of {total}
                   {isLinearEngine ? (
-                    <span className="block normal-case text-[10px] font-normal text-slate-500 dark:text-slate-400">
+                    <span className="mt-1 block normal-case nn-marketing-caption font-normal text-[var(--theme-muted-text)]">
                       {committedAnsweredPct}% submitted · {committedCount}/{total} answered
                     </span>
                   ) : null}
                   {catMode ? (
-                    <span className="block normal-case text-[10px] font-normal text-slate-500 dark:text-slate-400">
+                    <span className="mt-1 block normal-case nn-marketing-caption font-normal text-[var(--theme-muted-text)]">
                       Up to {catMaxCap} scored (variable stop)
                     </span>
                   ) : null}
                 </p>
-                {saving ? <p className="mt-0.5 text-xs text-slate-500">Saving…</p> : null}
+                {saving ? <p className="mt-1 nn-marketing-caption text-[var(--theme-muted-text)]">Saving…</p> : null}
               </div>
             }
             center={
@@ -916,8 +913,8 @@ export function PracticeTestRunnerClient({
             right={<ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />}
           />
           <ExamProgressBar current={idx + 1} total={total} />
-          <div className="space-y-5 p-5 md:p-6">
-            <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">
+          <div className="nn-question-session space-y-6">
+            <p className="nn-marketing-body-sm leading-relaxed text-[var(--theme-muted-text)]">
               {isLinearEngine
                 ? linearDelivery === "exam"
                   ? "Exam delivery: submit each answer to lock it in. Rationales and correct keys stay hidden until you finish the whole test."
@@ -931,20 +928,22 @@ export function PracticeTestRunnerClient({
                   : "Pacing practice only. Not a copy of any official exam interface."}
             </p>
 
-            <div className="overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900/50">
-              <div className="border-b border-slate-200 px-3 py-2 text-[11px] text-slate-600 dark:border-slate-700 dark:text-slate-400">
-                {current.topic ? <span className="font-medium text-slate-700 dark:text-slate-200">{current.topic}</span> : null}
-                {current.subtopic ? <span className="ml-2 text-slate-500">· {current.subtopic}</span> : null}
+            <div className="overflow-hidden rounded-2xl border border-border/80 bg-card shadow-sm">
+              <div className="border-b border-border/70 px-4 py-2.5 nn-marketing-caption text-[var(--theme-muted-text)] sm:px-5">
+                {current.topic ? (
+                  <span className="font-semibold text-[var(--theme-heading-text)]">{current.topic}</span>
+                ) : null}
+                {current.subtopic ? <span className="ml-2">· {current.subtopic}</span> : null}
                 {current.difficulty != null ? (
-                  <span className="ml-2 text-slate-500">· {difficultyBandLabel(current.difficulty)}</span>
+                  <span className="ml-2">· {difficultyBandLabel(current.difficulty)}</span>
                 ) : null}
               </div>
-              <div className="space-y-4 p-5 md:p-6">
-                <div className="min-h-[4rem] border-b border-slate-200/80 pb-4 dark:border-slate-700/80">
-                  <p className="text-base font-normal leading-[1.65] text-slate-900 dark:text-slate-100">{current.stem}</p>
+              <div className="space-y-5 px-4 py-5 sm:px-6 sm:py-6">
+                <div className="nn-question-stem-wrap min-h-0">
+                  <p className="nn-question-stem">{current.stem}</p>
                 </div>
                 {isSata ? (
-                  <ul className="space-y-2">
+                  <ul className="space-y-3">
                     {optsCanonical.map((canonical, i) => {
                       const label = optsDisplay[i] ?? canonical;
                       const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
@@ -961,16 +960,16 @@ export function PracticeTestRunnerClient({
                                 const next = e.target.checked ? [...prev, canonical] : prev.filter((x) => x !== canonical);
                                 setAnswerForCurrent(next);
                               }}
-                              className="mt-0.5 size-4 shrink-0 rounded border-slate-300 text-primary focus:ring-primary/30 disabled:opacity-50"
+                              className="mt-1 size-[1.125rem] shrink-0 rounded border-border text-primary focus-visible:ring-2 focus-visible:ring-primary/30 disabled:opacity-50 sm:size-4"
                             />
-                            <span className="text-slate-800 dark:text-slate-100">{label}</span>
+                            <span className="text-[var(--theme-body-text)]">{label}</span>
                           </label>
                         </li>
                       );
                     })}
                   </ul>
                 ) : (
-                  <ul className="space-y-2">
+                  <ul className="space-y-3">
                     {optsCanonical.map((canonical, i) => {
                       const label = optsDisplay[i] ?? canonical;
                       const locked = isLinearEngine && currentCommitted;
@@ -993,37 +992,52 @@ export function PracticeTestRunnerClient({
             </div>
 
             {isLinearEngine && linearDelivery === "practice" && currentCommitted && linearFeedback ? (
-              <div
-                className={`rounded-xl border px-4 py-3 text-sm ${
-                  linearFeedback.isCorrect
-                    ? "border-emerald-200/80 bg-emerald-50/50 dark:border-emerald-900/50 dark:bg-emerald-950/25"
-                    : "border-red-200/80 bg-red-50/40 dark:border-red-900/45 dark:bg-red-950/20"
-                }`}
-              >
-                <p className="text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-300">
-                  {linearFeedback.isCorrect ? "Correct" : "Incorrect"}
-                </p>
-                {linearFeedback.rationale ? (
-                  <p className="mt-2 leading-relaxed text-slate-800 dark:text-slate-100">{linearFeedback.rationale}</p>
-                ) : (
-                  <p className="mt-2 text-slate-600 dark:text-slate-400">No rationale on file for this item.</p>
-                )}
-              </div>
+              <details className="nn-question-rationale-card group" open={!linearFeedback.isCorrect}>
+                <summary
+                  className={`nn-question-rationale-card__verdict flex cursor-pointer list-none items-center justify-between gap-3 outline-none marker:hidden [&::-webkit-details-marker]:hidden ${
+                    linearFeedback.isCorrect
+                      ? "nn-question-rationale-card__verdict--ok"
+                      : "nn-question-rationale-card__verdict--miss"
+                  }`}
+                >
+                  <span
+                    className={`text-sm font-semibold sm:text-base ${
+                      linearFeedback.isCorrect ? "text-[var(--role-success-text)]" : "text-[var(--theme-heading-text)]"
+                    }`}
+                  >
+                    {linearFeedback.isCorrect ? "Correct" : "Incorrect"}
+                  </span>
+                  <span className="shrink-0 text-xs font-normal text-[var(--theme-muted-text)] group-open:hidden">
+                    Show rationale
+                  </span>
+                  <span className="hidden shrink-0 text-xs font-normal text-[var(--theme-muted-text)] group-open:inline">
+                    Hide rationale
+                  </span>
+                </summary>
+                <div className="nn-question-rationale-card__body nn-marketing-body-sm px-4 py-4 sm:px-6 sm:py-5">
+                  {linearFeedback.rationale ? (
+                    <p className="leading-relaxed text-[var(--theme-body-text)]">{linearFeedback.rationale}</p>
+                  ) : (
+                    <p className="text-[var(--theme-muted-text)]">No rationale on file for this item.</p>
+                  )}
+                </div>
+              </details>
             ) : null}
             {isLinearEngine && linearDelivery === "exam" && currentCommitted ? (
-              <p className="rounded-lg border border-slate-200/80 bg-slate-50/80 px-4 py-3 text-sm text-slate-600 dark:border-slate-700 dark:bg-slate-900/40 dark:text-slate-300">
-                Answer submitted and locked. Use <span className="font-medium text-foreground">Next</span> to continue.
+              <p className="rounded-xl border border-border/80 bg-[color-mix(in_srgb,var(--theme-primary)_4%,var(--theme-card-bg))] px-4 py-3 nn-marketing-body-sm text-[var(--theme-muted-text)]">
+                Answer submitted and locked. Use <span className="font-medium text-[var(--theme-heading-text)]">Next</span>{" "}
+                to continue.
               </p>
             ) : null}
 
-            <div className="flex flex-wrap items-center gap-2 border-t border-slate-200/70 pt-4 dark:border-slate-800">
+            <div className="nn-question-nav-actions border-t-0 pt-0">
               <button
                 type="button"
                 aria-pressed={Boolean(flagged[current.id])}
-                className={`inline-flex items-center rounded-lg border px-3 py-2 text-xs font-semibold uppercase tracking-wide transition ${
+                className={`inline-flex min-h-[2.75rem] items-center rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-wide transition ${
                   flagged[current.id]
-                    ? "border-primary/35 bg-primary/[0.07] text-slate-800 dark:text-slate-100"
-                    : "border-slate-300 text-slate-600 hover:border-slate-400 dark:border-slate-600 dark:text-slate-300"
+                    ? "border-[color-mix(in_srgb,var(--theme-primary)_22%,var(--border-subtle))] bg-[color-mix(in_srgb,var(--theme-primary)_7%,var(--theme-card-bg))] text-[var(--theme-heading-text)]"
+                    : "border-border text-[var(--theme-muted-text)] hover:bg-muted/40"
                 }`}
                 onClick={() => setFlagged((f) => ({ ...f, [current.id]: !f[current.id] }))}
               >
@@ -1031,11 +1045,11 @@ export function PracticeTestRunnerClient({
               </button>
             </div>
 
-            <div className="flex flex-wrap gap-2 border-t border-slate-200/70 pt-4 dark:border-slate-800">
+            <div className="nn-question-nav-actions">
               <button
                 type="button"
                 disabled={idx === 0 || catMode || isLinearEngine}
-                className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-medium text-slate-800 hover:bg-slate-50 disabled:opacity-40 dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-900"
+                className="nn-btn-secondary min-h-[3rem] rounded-full px-5 text-sm font-semibold disabled:opacity-40"
                 onClick={() => void goPrev()}
               >
                 Previous
@@ -1044,7 +1058,7 @@ export function PracticeTestRunnerClient({
                 idx < total - 1 ? (
                   <button
                     type="button"
-                    className="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm"
+                    className="nn-btn-primary nn-question-nav-actions__next rounded-full px-6 text-sm font-semibold shadow-none"
                     onClick={() => void goNext()}
                   >
                     Next
@@ -1054,7 +1068,7 @@ export function PracticeTestRunnerClient({
                     <button
                       type="button"
                       disabled={saving}
-                      className="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm"
+                      className="nn-btn-primary nn-question-nav-actions__next rounded-full px-6 text-sm font-semibold shadow-none"
                       onClick={() => void catAdvance()}
                     >
                       {saving ? "Working…" : "Next question"}
@@ -1062,7 +1076,7 @@ export function PracticeTestRunnerClient({
                     <button
                       type="button"
                       disabled={saving}
-                      className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-medium text-slate-700 dark:border-slate-600 dark:text-slate-200"
+                      className="nn-btn-secondary min-h-[3rem] rounded-full px-5 text-sm font-semibold"
                       onClick={() => void submitTest()}
                     >
                       End session
@@ -1075,7 +1089,7 @@ export function PracticeTestRunnerClient({
                     <button
                       type="button"
                       disabled={saving || !hasMeaningfulAnswer(current.id)}
-                      className="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm disabled:opacity-40"
+                      className="nn-btn-primary min-h-[3rem] rounded-full px-6 text-sm font-semibold shadow-none disabled:opacity-40"
                       onClick={() => void submitLinearCommit()}
                     >
                       {saving ? "Submitting…" : "Submit answer"}
@@ -1085,7 +1099,7 @@ export function PracticeTestRunnerClient({
                     <button
                       type="button"
                       disabled={isLinearEngine && !currentCommitted}
-                      className="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm disabled:opacity-40"
+                      className="nn-btn-primary nn-question-nav-actions__next rounded-full px-6 text-sm font-semibold shadow-none disabled:opacity-40"
                       onClick={() => void goNext()}
                     >
                       Next
@@ -1094,7 +1108,7 @@ export function PracticeTestRunnerClient({
                     <button
                       type="button"
                       disabled={saving || (isLinearEngine && !currentCommitted)}
-                      className="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm disabled:opacity-40"
+                      className="nn-btn-primary nn-question-nav-actions__next rounded-full px-6 text-sm font-semibold shadow-none disabled:opacity-40"
                       onClick={() => void submitTest()}
                     >
                       {saving ? "Submitting…" : "Submit test"}
@@ -1104,7 +1118,7 @@ export function PracticeTestRunnerClient({
               )}
               <button
                 type="button"
-                className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm text-slate-600 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-400 dark:hover:bg-slate-900"
+                className="nn-btn-secondary min-h-[3rem] rounded-full px-5 text-sm font-medium text-[var(--theme-muted-text)]"
                 onClick={() => void abandon()}
               >
                 Abandon

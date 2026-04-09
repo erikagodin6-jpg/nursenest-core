@@ -8,10 +8,22 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminBlogSchedulerPage() {
   await requireAdmin();
-  const [totalBlogPosts, publishedBlogPosts, scheduledBlogPosts, nextScheduledBlog, blogRows] = await Promise.all([
-    prisma.blogPost.count(),
+  const [
+    draftBlogPosts,
+    needsReviewBlogPosts,
+    approvedBlogPosts,
+    publishedBlogPosts,
+    scheduledBlogPosts,
+    failedBlogPosts,
+    nextScheduledBlog,
+    blogRows,
+  ] = await Promise.all([
+    prisma.blogPost.count({ where: { postStatus: BlogPostStatus.DRAFT } }),
+    prisma.blogPost.count({ where: { postStatus: BlogPostStatus.NEEDS_REVIEW } }),
+    prisma.blogPost.count({ where: { postStatus: BlogPostStatus.APPROVED } }),
     prisma.blogPost.count({ where: { postStatus: BlogPostStatus.PUBLISHED } }),
     prisma.blogPost.count({ where: { postStatus: BlogPostStatus.SCHEDULED } }),
+    prisma.blogPost.count({ where: { postStatus: BlogPostStatus.FAILED } }),
     prisma.blogPost.findFirst({
       where: { postStatus: BlogPostStatus.SCHEDULED, publishAt: { not: null } },
       orderBy: { publishAt: "asc" },
@@ -71,9 +83,12 @@ export default async function AdminBlogSchedulerPage() {
             updatedAt: p.updatedAt.toISOString(),
           }))}
           counts={{
-            draft: totalBlogPosts - (publishedBlogPosts + scheduledBlogPosts),
+            draft: draftBlogPosts,
+            needsReview: needsReviewBlogPosts,
+            approved: approvedBlogPosts,
             scheduled: scheduledBlogPosts,
             published: publishedBlogPosts,
+            failed: failedBlogPosts,
           }}
           nextScheduledAt={nextScheduledBlog?.publishAt ? nextScheduledBlog.publishAt.toISOString() : null}
           missingSeoCount={missingBlogSeoCount}

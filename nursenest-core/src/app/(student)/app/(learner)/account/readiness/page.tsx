@@ -82,6 +82,11 @@ export default async function AccountReadinessPage() {
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.account.readiness.intro")}</p>
       </div>
 
+      <div className="rounded-xl border border-primary/20 bg-primary/[0.04] px-4 py-3 text-sm">
+        <p className="font-semibold text-[var(--theme-heading-text)]">{t("learner.readinessPage.integratedCallout.title")}</p>
+        <p className="mt-1 text-muted-foreground">{t("learner.readinessPage.integratedCallout.body")}</p>
+      </div>
+
       <LearnerReadinessPremium payload={payload} t={t} localeTag={localeTag} />
 
       <LearnerAccountCrossLinks variant="readiness" t={t} />

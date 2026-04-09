@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { PathwayHubSupplementaryDisclosure } from "@/components/pathway-lessons/pathway-hub-supplementary-disclosure";
 import { PathwayNclexScalableLessonSection } from "@/components/pathway-lessons/pathway-nclex-scalable-lesson-list";
-import { PathwayTopicClusterNav } from "@/components/pathway-lessons/pathway-topic-cluster-nav";
+import { PathwayTopicClusterGroupedNav } from "@/components/pathway-lessons/pathway-topic-cluster-grouped-nav";
 import {
   pathwayLessonHasRenderableHubSlug,
   pathwayLessonMarketingDetailHref,

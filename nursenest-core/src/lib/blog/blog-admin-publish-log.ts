@@ -10,6 +10,12 @@ export type BlogAdminPublishLogEntry = {
   detail?: Record<string, unknown>;
 };
 
+/** Input for appends: `level` defaults to `"info"` when omitted. */
+export type BlogAdminPublishLogInput = Omit<BlogAdminPublishLogEntry, "at" | "level"> & {
+  at?: string;
+  level?: BlogAdminPublishLogLevel;
+};
+
 const MAX_LOG_ENTRIES = 200;
 
 function isRecord(v: unknown): v is Record<string, unknown> {
@@ -33,10 +39,7 @@ export function parseBlogAdminPublishLog(existing: unknown): BlogAdminPublishLog
   return out;
 }
 
-export function appendBlogAdminPublishLog(
-  existing: unknown,
-  entry: Omit<BlogAdminPublishLogEntry, "at"> & { at?: string },
-): Prisma.InputJsonValue {
+export function appendBlogAdminPublishLog(existing: unknown, entry: BlogAdminPublishLogInput): Prisma.InputJsonValue {
   const prev = parseBlogAdminPublishLog(existing);
   const row: BlogAdminPublishLogEntry = {
     at: entry.at ?? new Date().toISOString(),
@@ -48,10 +51,7 @@ export function appendBlogAdminPublishLog(
   return [...prev, row].slice(-MAX_LOG_ENTRIES) as unknown as Prisma.InputJsonValue;
 }
 
-export function appendBlogAdminPublishLogMany(
-  existing: unknown,
-  entries: (Omit<BlogAdminPublishLogEntry, "at"> & { at?: string })[],
-): Prisma.InputJsonValue {
+export function appendBlogAdminPublishLogMany(existing: unknown, entries: BlogAdminPublishLogInput[]): Prisma.InputJsonValue {
   let cur: unknown = existing;
   for (const e of entries) {
     cur = appendBlogAdminPublishLog(cur, e);

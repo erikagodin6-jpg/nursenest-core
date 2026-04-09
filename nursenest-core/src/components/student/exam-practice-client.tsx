@@ -708,126 +708,125 @@ export function ExamPracticeClient({
   const raw = answers[q.id];
 
   return (
-    <ExamSessionShell className="mt-6 overflow-hidden" neutralPalette>
-      <ExamSessionTopBar
-        left={
-          <div>
-            <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-              Item {currentIndex + 1} of {total}
-            </p>
-            {unansweredCount > 0 ? (
-              <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">{unansweredCount} still unanswered</p>
+      <ExamSessionShell className="mt-6 overflow-hidden" neutralPalette>
+        <ExamSessionTopBar
+          left={
+            <div>
+              <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
+                Item {currentIndex + 1} of {total}
+              </p>
+              {unansweredCount > 0 ? (
+                <p className="mt-1 nn-marketing-caption text-[var(--theme-muted-text)]">{unansweredCount} still unanswered</p>
+              ) : (
+                <p className="mt-1 nn-marketing-caption text-[var(--theme-muted-text)]">All items have a selection</p>
+              )}
+            </div>
+          }
+          center={examTitle ? <span className="line-clamp-2 normal-case nn-marketing-body-sm">{examTitle}</span> : null}
+          right={<ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />}
+        />
+        <ExamProgressBar current={currentIndex + 1} total={total} />
+        <div className="nn-question-session space-y-6">
+          <div className="nn-question-stem-wrap min-h-[3rem]">
+            <p className="nn-question-stem">{q.stem}</p>
+          </div>
+
+          {q.questionType === "SATA" ? (
+            <ul className="space-y-3">
+              {optsCanonical.map((canonical, i) => {
+                const label = optsDisplay[i] ?? canonical;
+                const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
+                return (
+                  <li key={canonical}>
+                    <label
+                      className={`flex min-h-[3.25rem] cursor-pointer items-start gap-3 px-4 py-3.5 text-base leading-relaxed transition sm:min-h-[3.5rem] nn-qopt-surface nn-qopt-surface--interactive ${
+                        selected ? "nn-qopt-surface--selected" : ""
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selected}
+                        onChange={(e) => {
+                          const prev = Array.isArray(raw) ? [...raw] : [];
+                          const next = e.target.checked ? [...prev, canonical] : prev.filter((x) => x !== canonical);
+                          setAnswers((a) => ({ ...a, [q.id]: next }));
+                        }}
+                        className="mt-1 size-[1.125rem] shrink-0 rounded border-border text-primary focus-visible:ring-2 focus-visible:ring-primary/30 sm:size-4"
+                      />
+                      <span className="text-[var(--theme-body-text)]">{label}</span>
+                    </label>
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <ul className="space-y-3">
+              {optsCanonical.map((canonical, i) => {
+                const label = optsDisplay[i] ?? canonical;
+                const picked = raw === canonical;
+                return (
+                  <li key={canonical}>
+                    <button
+                      type="button"
+                      onClick={() => setAnswers((a) => ({ ...a, [q.id]: canonical }))}
+                      className={`min-h-[3.25rem] w-full px-4 py-4 text-left text-base font-normal leading-relaxed text-[var(--theme-body-text)] transition sm:min-h-[3.5rem] sm:px-5 nn-qopt-surface nn-qopt-surface--interactive ${
+                        picked ? "nn-qopt-surface--selected font-medium" : ""
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+
+          <div className="nn-question-nav-actions border-t-0 pt-0">
+            <button
+              type="button"
+              aria-pressed={Boolean(flagged[q.id])}
+              className={`inline-flex min-h-[2.75rem] items-center rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-wide transition ${
+                flagged[q.id]
+                  ? "border-[color-mix(in_srgb,var(--theme-primary)_22%,var(--border-subtle))] bg-[color-mix(in_srgb,var(--theme-primary)_7%,var(--theme-card-bg))] text-[var(--theme-heading-text)]"
+                  : "border-border text-[var(--theme-muted-text)] hover:bg-muted/40"
+              }`}
+              onClick={() => setFlagged((f) => ({ ...f, [q.id]: !f[q.id] }))}
+            >
+              {flagged[q.id] ? "Marked for review" : "Mark for review"}
+            </button>
+          </div>
+
+          <div className="nn-question-nav-actions">
+            <button
+              type="button"
+              className="nn-btn-secondary min-h-[3rem] rounded-full px-5 text-sm font-semibold disabled:opacity-40"
+              disabled={currentIndex === 0}
+              onClick={() => setCurrentIndex((i) => Math.max(0, i - 1))}
+            >
+              Previous
+            </button>
+            {currentIndex < total - 1 ? (
+              <button
+                type="button"
+                className="nn-btn-primary nn-question-nav-actions__next rounded-full px-6 text-sm font-semibold shadow-none"
+                onClick={() => setCurrentIndex((i) => Math.min(total - 1, i + 1))}
+              >
+                Next
+              </button>
             ) : (
-              <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">All items have a selection</p>
+              <button
+                type="button"
+                className="nn-btn-primary nn-question-nav-actions__next rounded-full px-6 text-sm font-semibold shadow-none"
+                onClick={() => setSessionPhase("review")}
+              >
+                Review answers
+              </button>
             )}
           </div>
-        }
-        center={examTitle ? <span className="line-clamp-2 normal-case">{examTitle}</span> : null}
-        right={<ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />}
-      />
-      <ExamProgressBar current={currentIndex + 1} total={total} />
-      <div className="space-y-5 p-5 md:p-6">
-        <div className="min-h-[4.5rem] border-b border-slate-200/80 pb-4 dark:border-slate-700/80">
-          <p className="text-base font-normal leading-[1.65] text-slate-900 dark:text-slate-100">{q.stem}</p>
+          <p className="nn-marketing-caption text-[var(--theme-muted-text)]">
+            Progress saves automatically. You can refresh and resume.
+          </p>
         </div>
-
-        {q.questionType === "SATA" ? (
-          <ul className="space-y-2">
-            {optsCanonical.map((canonical, i) => {
-              const label = optsDisplay[i] ?? canonical;
-              const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
-              return (
-                <li key={canonical}>
-                  <label
-                    className={`flex min-h-[2.75rem] cursor-pointer items-start gap-3 rounded-lg border px-4 py-3 text-sm leading-snug transition ${
-                      selected
-                        ? "border-primary/45 bg-primary/[0.05] ring-1 ring-primary/25 dark:bg-primary/[0.07]"
-                        : "border-slate-200 bg-white hover:border-slate-300 dark:border-slate-700 dark:bg-slate-900/40 dark:hover:border-slate-600"
-                    }`}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={selected}
-                      onChange={(e) => {
-                        const prev = Array.isArray(raw) ? [...raw] : [];
-                        const next = e.target.checked ? [...prev, canonical] : prev.filter((x) => x !== canonical);
-                        setAnswers((a) => ({ ...a, [q.id]: next }));
-                      }}
-                      className="mt-0.5 size-4 shrink-0 rounded border-slate-300 text-primary focus:ring-primary/30"
-                    />
-                    <span className="text-slate-800 dark:text-slate-100">{label}</span>
-                  </label>
-                </li>
-              );
-            })}
-          </ul>
-        ) : (
-          <ul className="space-y-2">
-            {optsCanonical.map((canonical, i) => {
-              const label = optsDisplay[i] ?? canonical;
-              return (
-                <li key={canonical}>
-                  <button
-                    type="button"
-                    onClick={() => setAnswers((a) => ({ ...a, [q.id]: canonical }))}
-                    className={`min-h-[2.75rem] w-full rounded-lg border px-4 py-3 text-left text-sm leading-snug transition ${
-                      raw === canonical
-                        ? "border-primary/50 bg-primary/[0.05] font-medium text-slate-900 ring-1 ring-primary/30 dark:text-slate-50"
-                        : "border border-slate-200 bg-white text-slate-800 hover:border-slate-300 dark:border-slate-700 dark:bg-slate-900/40 dark:text-slate-100 dark:hover:border-slate-600"
-                    }`}
-                  >
-                    {label}
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-
-        <div className="flex flex-wrap items-center gap-2 border-t border-slate-200/70 pt-4 dark:border-slate-800">
-          <button
-            type="button"
-            aria-pressed={Boolean(flagged[q.id])}
-            className={`inline-flex items-center rounded-lg border px-3 py-2 text-xs font-semibold uppercase tracking-wide transition ${
-              flagged[q.id]
-                ? "border-primary/35 bg-primary/[0.07] text-slate-800 dark:text-slate-100"
-                : "border-slate-300 text-slate-600 hover:border-slate-400 dark:border-slate-600 dark:text-slate-300"
-            }`}
-            onClick={() => setFlagged((f) => ({ ...f, [q.id]: !f[q.id] }))}
-          >
-            {flagged[q.id] ? "Marked for review" : "Mark for review"}
-          </button>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          <button
-            type="button"
-            className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-medium text-slate-800 hover:bg-slate-50 disabled:opacity-40 dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-900"
-            disabled={currentIndex === 0}
-            onClick={() => setCurrentIndex((i) => Math.max(0, i - 1))}
-          >
-            Previous
-          </button>
-          {currentIndex < total - 1 ? (
-            <button
-              type="button"
-              className="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm"
-              onClick={() => setCurrentIndex((i) => Math.min(total - 1, i + 1))}
-            >
-              Next
-            </button>
-          ) : (
-            <button
-              type="button"
-              className="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm"
-              onClick={() => setSessionPhase("review")}
-            >
-              Review answers
-            </button>
-          )}
-        </div>
-        <p className="text-[11px] text-slate-500 dark:text-slate-400">Progress saves automatically. You can refresh and resume.</p>
-      </div>
-    </ExamSessionShell>
+      </ExamSessionShell>
   );
 }

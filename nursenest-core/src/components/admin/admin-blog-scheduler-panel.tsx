@@ -1,6 +1,7 @@
 "use client";
 
 import { BlogPostStatus } from "@prisma/client";
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -43,7 +44,14 @@ export function AdminBlogSchedulerPanel({
   missingImageAltCount,
 }: {
   initialPosts: BlogRow[];
-  counts: { draft: number; scheduled: number; published: number };
+  counts: {
+    draft: number;
+    needsReview: number;
+    approved: number;
+    scheduled: number;
+    published: number;
+    failed: number;
+  };
   nextScheduledAt: string | null;
   missingSeoCount: number;
   missingReferencesCount: number;
@@ -114,10 +122,13 @@ export function AdminBlogSchedulerPanel({
           <h2 className="text-lg font-semibold">Blog scheduler</h2>
           <p className="mt-1 text-sm text-muted-foreground">Draft, schedule, publish, and monitor blog readiness.</p>
         </div>
-        <div className="grid grid-cols-2 gap-2 text-xs sm:grid-cols-6">
+        <div className="flex flex-wrap gap-2 text-xs">
           <div className="rounded-md bg-muted px-2 py-1">Draft: {counts.draft}</div>
-          <div className="rounded-md bg-muted px-2 py-1">Scheduled: {counts.scheduled}</div>
-          <div className="rounded-md bg-muted px-2 py-1">Published: {counts.published}</div>
+          <div className="rounded-md bg-orange-500/15 px-2 py-1 text-orange-950 dark:text-orange-100">Review: {counts.needsReview}</div>
+          <div className="rounded-md bg-sky-500/15 px-2 py-1 text-sky-950 dark:text-sky-100">Approved: {counts.approved}</div>
+          <div className="rounded-md bg-amber-500/15 px-2 py-1 text-amber-950 dark:text-amber-100">Scheduled: {counts.scheduled}</div>
+          <div className="rounded-md bg-emerald-500/15 px-2 py-1 text-emerald-950 dark:text-emerald-100">Published: {counts.published}</div>
+          <div className="rounded-md bg-red-500/15 px-2 py-1 text-red-950 dark:text-red-100">Failed: {counts.failed}</div>
           <div className="rounded-md bg-muted px-2 py-1">Missing SEO: {missingSeoCount}</div>
           <div className="rounded-md bg-muted px-2 py-1">Missing refs: {missingReferencesCount}</div>
           <div className="rounded-md bg-muted px-2 py-1">Missing alt: {missingImageAltCount}</div>
@@ -239,14 +250,58 @@ export function AdminBlogSchedulerPanel({
                       const value = e.currentTarget.value;
                       if (!value) return;
                       void patchPost(p.id, {
+                        action: "schedule",
                         publishAt: new Date(value).toISOString(),
-                        postStatus: "SCHEDULED",
                       });
                     }}
                   />
                 </td>
                 <td className="px-2 py-2">
                   <div className="flex flex-col gap-1">
+                    <Link
+                      href={`/admin/blog/control-panel?id=${encodeURIComponent(p.id)}`}
+                      className="rounded border border-primary/40 px-2 py-1 text-left text-primary hover:bg-primary/10"
+                    >
+                      AI control panel →
+                    </Link>
+                    <button
+                      type="button"
+                      disabled={busyId === p.id || p.postStatus === BlogPostStatus.PUBLISHED}
+                      className="rounded border border-border px-2 py-1 text-left hover:border-primary/40 disabled:opacity-60"
+                      onClick={() => patchPost(p.id, { action: "submit_for_review" })}
+                    >
+                      Submit for review
+                    </button>
+                    <button
+                      type="button"
+                      disabled={busyId === p.id || p.postStatus === BlogPostStatus.PUBLISHED}
+                      className="rounded border border-border px-2 py-1 text-left hover:border-primary/40 disabled:opacity-60"
+                      onClick={() => patchPost(p.id, { action: "approve" })}
+                    >
+                      Approve
+                    </button>
+                    <button
+                      type="button"
+                      disabled={busyId === p.id || p.postStatus !== BlogPostStatus.NEEDS_REVIEW}
+                      className="rounded border border-border px-2 py-1 text-left hover:border-primary/40 disabled:opacity-60"
+                      onClick={() => patchPost(p.id, { action: "reject_review" })}
+                    >
+                      Reject to draft
+                    </button>
+                    <button
+                      type="button"
+                      disabled={busyId === p.id || p.postStatus === BlogPostStatus.PUBLISHED}
+                      className="rounded border border-border px-2 py-1 text-left hover:border-rose-500/40 disabled:opacity-60"
+                      onClick={() => {
+                        const reason = typeof window !== "undefined" ? window.prompt("Failure note (optional):") : null;
+                        void patchPost(p.id, {
+                          action: "mark_failed",
+                          ...(reason?.trim() ? { failureReason: reason.trim() } : {}),
+                        });
+                      }}
+                    >
+                      Mark failed
+                    </button>
                     <button
                       type="button"
                       disabled={busyId === p.id}

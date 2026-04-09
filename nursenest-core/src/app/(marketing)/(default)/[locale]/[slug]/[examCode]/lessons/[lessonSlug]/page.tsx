@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { PathwayLessonSectionContent } from "@/components/lessons/pathway-lesson-body";
+import { PathwayLessonPracticeTopicCta } from "@/components/lessons/pathway-lesson-link-practice";
 import { PremiumLessonPublishNotice } from "@/components/lessons/premium-lesson-publish-notice";
 import { PathwayLessonQuizzes } from "@/components/lessons/pathway-lesson-quizzes";
 import { PathwayLessonLockedSectionsPreview } from "@/components/lessons/pathway-lesson-locked-sections-preview";
@@ -188,21 +189,33 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
       <Link href={base} className="text-sm font-medium text-primary hover:underline">
         ← Lessons ({pathway.shortName})
       </Link>
-      <p className="mt-3 text-xs font-semibold uppercase text-primary">{pathway.displayName}</p>
-      <div className="mt-2 flex flex-wrap items-start justify-between gap-3">
-        <h1 className="text-3xl font-extrabold text-[var(--theme-heading-text)]">{lesson.title}</h1>
-        {userId && fullAccess ? (
-          <PathwayLessonProgressBadgeLive
-            pathwayId={pathway.id}
-            lessonSlug={lesson.slug}
-            initial={lessonProgress}
-            className="shrink-0"
-          />
-        ) : null}
-      </div>
-      <p className="mt-2 text-sm text-muted">
-        {pathway.countrySlug === "canada" ? "Canada" : "United States"} · {lesson.topic} · {lesson.bodySystem}
-      </p>
+      <header className="nn-study-card nn-study-card--wash mt-6 p-6 sm:p-8">
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-semibold uppercase tracking-wide text-primary">
+          <span>{lesson.topic}</span>
+          <span aria-hidden className="text-[var(--theme-muted-text)]">
+            ·
+          </span>
+          <span>{pathway.displayName}</span>
+        </div>
+        <div className="mt-4 flex flex-wrap items-start justify-between gap-3">
+          <h1 className="nn-marketing-h2 text-[var(--theme-heading-text)]">{lesson.title}</h1>
+          {userId && fullAccess ? (
+            <PathwayLessonProgressBadgeLive
+              pathwayId={pathway.id}
+              lessonSlug={lesson.slug}
+              initial={lessonProgress}
+              className="shrink-0"
+            />
+          ) : null}
+        </div>
+        <p className="nn-marketing-body-sm mt-3 text-[var(--theme-muted-text)]">
+          {pathway.countrySlug === "canada" ? "Canada" : "United States"} · {pathway.shortName} · {lesson.bodySystem}
+        </p>
+        <p className="nn-marketing-body-sm mt-2 max-w-prose text-[var(--theme-muted-text)]">
+          Exam-scoped lesson for this track only. Finish reading, then use “Practice this topic” below to drill the same scope in
+          the question bank.
+        </p>
+      </header>
       <div className="mt-4 space-y-3">
         <PremiumLessonPublishNotice validation={lesson.premiumValidation} />
         <LessonQualityNotice tier={lessonQuality.tier} wordCount={lessonQuality.wordCount} />
