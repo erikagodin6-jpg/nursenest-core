@@ -461,16 +461,6 @@ function SlugTable({ rows }: { rows: SlugRow[] }) {
   );
 }
 
-type LinkingRow = {
-  id: string;
-  slug: string;
-  title: string;
-  internalAnchors: number;
-  relatedPaths: number;
-  reasons: string[];
-  editHref: string;
-};
-
 function LinkingTable({ rows }: { rows: LinkingRow[] }) {
   return (
     <section className="nn-card space-y-3 p-6">
@@ -513,15 +503,6 @@ function LinkingTable({ rows }: { rows: LinkingRow[] }) {
     </section>
   );
 }
-
-type BrokenRow = {
-  sourceKind: string;
-  sourceLabel: string;
-  href: string;
-  status: string;
-  detail: string;
-  editHref: string;
-};
 
 function BrokenTable({ rows }: { rows: BrokenRow[] }) {
   return (
@@ -566,8 +547,6 @@ function BrokenTable({ rows }: { rows: BrokenRow[] }) {
     </section>
   );
 }
-
-type OppRow = { id: string; slug: string; title: string; exam: string | null; hints: string[]; editHref: string };
 
 function OppTable({ rows }: { rows: OppRow[] }) {
   return (

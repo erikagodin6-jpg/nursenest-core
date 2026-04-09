@@ -38,6 +38,7 @@ export {
 export {
   buildLessonBlueprintCoverageDashboard,
   inferLessonBlueprintDomain,
+  inferBlueprintDomainFromLessonHaystack,
   inferLessonCatalogType,
   LESSON_LIBRARY_MIN,
   LESSON_LIBRARY_STRETCH,

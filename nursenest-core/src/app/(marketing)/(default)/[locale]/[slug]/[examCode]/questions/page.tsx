@@ -10,7 +10,15 @@ import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-te
 import { pathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-analytics-props";
 import { PathwayLiveInventoryStrip } from "@/components/exam-pathways/pathway-live-inventory-strip";
 import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
-import { countPathwayLessons } from "@/lib/lessons/pathway-lesson-loader";
+import { PathwayQuestionHubRelatedLessons } from "@/components/pathway-lessons/pathway-question-hub-related-lessons";
+import {
+  RELATED_LESSONS_EXCLUDE_SLUG_SENTINEL,
+  RELATED_LESSONS_FOR_TOPIC_CAP,
+  resolveTopicSlugForPathwayTopicLabel,
+} from "@/lib/lessons/lesson-question-cross-links";
+import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
+import { getRelatedPathwayLessons, RELATED_PATHWAY_LESSONS_LIMIT } from "@/lib/lessons/pathway-lesson-loader";
+import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
 import { pathwayQuestionsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
@@ -35,11 +43,11 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   const canonicalPath = buildExamPathwayPath(pathway, "questions");
   const canonical = absoluteUrl(canonicalPath);
   const title = topicFilter
-    ? `${topicFilter} · Question bank · ${pathway.displayName} | NurseNest`
-    : `Question bank · ${pathway.displayName} | NurseNest`;
+    ? `${topicFilter} · Practice questions · ${pathway.displayName} | NurseNest`
+    : `Practice questions · ${pathway.displayName} | NurseNest`;
   const description = topicFilter
-    ? `Pathway-scoped practice for ${pathway.shortName} with a topic focus on ${topicFilter}. Sign in to run sets filtered to your plan.`
-    : `Pathway-scoped practice for ${pathway.shortName} (${pathway.countrySlug === "canada" ? "Canada" : "US"}). Sign in to run sets filtered by your plan.`;
+    ? `Board-style items for ${pathway.shortName} focused on ${topicFilter}. Sign in to run sets that stay inside this exam’s scope.`
+    : `Clinical vignettes and rationales scoped to ${pathway.shortName} (${pathway.countrySlug === "canada" ? "Canada" : "US"}). Sign in to practice with your plan.`;
   return {
     title,
     description,
@@ -60,6 +68,24 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
     loadPathwayQuestionBankSnapshot(pathway.id),
     countPathwayLessons(pathway.id),
   ]);
+
+  const topicFilterTrim = topicFilter.trim();
+  const lessonContentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
+  let relatedLessonsForTopic: Awaited<ReturnType<typeof getRelatedPathwayLessons>> = [];
+  if (topicFilterTrim) {
+    const topicSlug = await resolveTopicSlugForPathwayTopicLabel(pathway.id, topicFilterTrim);
+    if (topicSlug) {
+      relatedLessonsForTopic = (
+        await getRelatedPathwayLessons(
+          pathway.id,
+          topicSlug,
+          RELATED_LESSONS_EXCLUDE_SLUG_SENTINEL,
+          Math.min(RELATED_PATHWAY_LESSONS_LIMIT, RELATED_LESSONS_FOR_TOPIC_CAP),
+          lessonContentLocale,
+        )
+      ).filter(pathwayLessonHasRenderableHubSlug);
+    }
+  }
 
   const hubBase = `/${locale}/${slug}/${examCode}`;
   const { crumbs, schemaItems } = pathwayQuestionsHubBreadcrumbs(pathway);
@@ -88,18 +114,18 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
         ← {pathway.shortName} overview
       </Link>
       <h1 className="mt-4 text-3xl font-extrabold text-[var(--theme-heading-text)]">
-        {pathway.shortName} {countryLabel} question bank
+        {pathway.shortName} {countryLabel} practice questions
       </h1>
       <p className="mt-3 text-[var(--theme-muted-text)]">
         {topicFilter ? (
           <>
-            Topic focus: <span className="font-semibold text-[var(--theme-heading-text)]">{topicFilter}</span>. Practice for{" "}
-            {examName} stays scoped to {pathway.shortName}; sign in to run sets with this topic applied in the app.
+            You’re narrowing to <span className="font-semibold text-[var(--theme-heading-text)]">{topicFilter}</span>. Items stay
+            inside {pathway.shortName} and {examName}; sign in to run the same filter in the app.
           </>
         ) : (
           <>
-            Practice for {examName} with pathway-scoped sets, rationale-first feedback, and readiness progress aimed at passing
-            your {countryLabel} exam track.
+            Vignettes, distractors, and rationales written for {examName}—same scope and language you’ll see on test day for your{" "}
+            {countryLabel} track.
           </>
         )}
       </p>
@@ -110,18 +136,25 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
         variant="questions"
       />
       {topicFilter ? (
-        <aside className="nn-study-card nn-study-card--wash mt-6 p-4 sm:p-5">
-          <p className="text-sm font-semibold text-[var(--theme-heading-text)]">Filtered from lessons or topic hub</p>
-          <p className="mt-1 text-sm text-[var(--theme-muted-text)]">
-            This page is scoped to one topic for faster navigation. The canonical bank hub covers the full pathway.
-          </p>
-          <Link
-            href={questionsHubPath}
-            className="mt-3 inline-flex text-sm font-semibold text-primary underline underline-offset-2 hover:no-underline"
-          >
-            Clear topic — open full question bank hub
-          </Link>
-        </aside>
+        <>
+          <aside className="nn-study-card nn-study-card--wash mt-6 p-4 sm:p-5">
+            <p className="text-sm font-semibold text-[var(--theme-heading-text)]">Narrowed to one clinical topic</p>
+            <p className="mt-1 text-sm text-[var(--theme-muted-text)]">
+              You landed here from a lesson or topic link. Open the full hub anytime to see every topic in this pathway.
+            </p>
+            <Link
+              href={questionsHubPath}
+              className="mt-3 inline-flex text-sm font-semibold text-primary underline underline-offset-2 hover:no-underline"
+            >
+              Clear topic — full practice hub
+            </Link>
+          </aside>
+          <PathwayQuestionHubRelatedLessons
+            topicLabel={topicFilterTrim}
+            lessonsBasePath={`${hubBase}/lessons`}
+            lessons={relatedLessonsForTopic}
+          />
+        </>
       ) : null}
       {pathway.roleTrack === "np" ? (
         <div className="mt-4 rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]/50 p-4 text-sm text-[var(--theme-body-text)]">
@@ -129,22 +162,23 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
         </div>
       ) : null}
       <div className="mt-8 flex flex-col gap-4 rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]/30 p-5 sm:p-6">
-        <p className="text-sm font-semibold text-[var(--theme-heading-text)]">Start pathway-scoped practice</p>
+        <p className="text-sm font-semibold text-[var(--theme-heading-text)]">Start in the app</p>
         <p className="text-sm text-[var(--theme-muted-text)]">
-          Run sets in the app filtered to this exam track ({pathway.shortName}). New here? Create an account, then open the question bank.
+          Signed-in practice keeps items, rationales, and filters locked to {pathway.shortName}. New here? Create an account, then
+          jump straight into items.
         </p>
         <div className="flex flex-wrap gap-3">
           <Link
             href={appQuestionsScoped}
             className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground"
           >
-            Start practice
+            Start items
           </Link>
           <Link
             href="/app/questions"
             className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-border px-6 py-2.5 text-sm font-semibold hover:bg-card"
           >
-            Open question bank
+            Open practice
           </Link>
           <Link href="/signup" className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-primary/30 px-6 py-2.5 text-sm font-semibold text-primary hover:bg-primary/5">
             Create account

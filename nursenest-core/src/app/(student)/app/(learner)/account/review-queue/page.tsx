@@ -1,0 +1,120 @@
+import Link from "next/link";
+import type { Metadata } from "next";
+import { auth } from "@/lib/auth";
+import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
+import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
+import { remediationTopicDrillHref } from "@/lib/learner/remediation-links";
+import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
+import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
+import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getLearnerMarketingBundle();
+  return {
+    title: t("learner.account.reviewQueue.metaTitle"),
+    robots: { index: false, follow: false },
+  };
+}
+
+export default async function AccountReviewQueuePage() {
+  const { t } = await getLearnerMarketingBundle();
+  const session = await auth();
+  const userId = (session?.user as { id?: string })?.id ?? "";
+  const crumbs = appAccountBreadcrumbs(t("learner.account.nav.reviewQueue"));
+  const entitlement = await resolveEntitlementForPage(userId);
+
+  if (!userId || !isDatabaseUrlConfigured()) {
+    return (
+      <main className="space-y-4">
+        <BreadcrumbTrail items={crumbs} />
+        <p className="text-sm text-muted-foreground">{t("learner.profile.signedOutHint")}</p>
+      </main>
+    );
+  }
+
+  if (entitlement === "error") {
+    return (
+      <main className="space-y-4">
+        <BreadcrumbTrail items={crumbs} />
+        <p className="text-sm text-muted-foreground">{t("learner.entitlement.verifyFailed")}</p>
+      </main>
+    );
+  }
+
+  if (!entitlement.hasAccess) {
+    return (
+      <main className="space-y-6">
+        <BreadcrumbTrail items={crumbs} />
+        <div>
+          <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.reviewQueue.title")}</h1>
+          <p className="mt-2 text-sm text-muted-foreground">{t("learner.account.reviewQueue.lockedBody")}</p>
+        </div>
+        <SubscriptionPaywall context="questions" />
+      </main>
+    );
+  }
+
+  const topicPerf = await loadUnifiedTopicPerformance(userId, entitlement, 12);
+  const reviewTopics = topicPerf.weakTopics.slice(0, 8);
+
+  return (
+    <main className="space-y-6">
+      <BreadcrumbTrail items={crumbs} />
+      <div>
+        <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.reviewQueue.title")}</h1>
+        <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.account.reviewQueue.intro")}</p>
+      </div>
+
+      <section className="nn-card border border-primary/15 bg-gradient-to-br from-primary/[0.05] to-transparent p-6">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-primary">{t("learner.account.reviewQueue.howHeading")}</h2>
+        <p className="mt-2 text-sm text-muted-foreground">{t("learner.account.reviewQueue.howBody")}</p>
+      </section>
+
+      <section className="nn-card p-6">
+        <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">{t("learner.account.reviewQueue.topicQueueHeading")}</h2>
+        <p className="mt-1 text-sm text-muted-foreground">{t("learner.account.reviewQueue.topicQueueSub")}</p>
+        {reviewTopics.length === 0 ? (
+          <p className="mt-6 rounded-xl border border-dashed border-border/80 bg-muted/20 p-6 text-sm text-muted-foreground">
+            {t("learner.account.reviewQueue.emptyQueue")}
+          </p>
+        ) : (
+          <ul className="mt-4 space-y-3">
+            {reviewTopics.map((w) => (
+              <li
+                key={w.topic}
+                className="flex flex-col gap-2 rounded-xl border border-border/60 bg-card/50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
+              >
+                <div>
+                  <p className="font-semibold text-foreground">{w.topic}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {t("learner.account.reviewQueue.topicMeta", { attempted: w.attempted, missRate: w.missRate })}
+                  </p>
+                </div>
+                <Link
+                  href={remediationTopicDrillHref(w.topic)}
+                  className="inline-flex shrink-0 rounded-full border border-role-cta/30 bg-role-cta-soft px-4 py-2 text-sm font-semibold text-role-cta-on-soft"
+                >
+                  {t("learner.account.reviewQueue.drillTopic")}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      <div className="flex flex-wrap gap-2">
+        <Link href="/app/questions" className="inline-flex rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">
+          {t("learner.profile.quickLinks.questionBank")}
+        </Link>
+        <Link href="/app/practice-tests?focus=weak" className="inline-flex rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-muted/80">
+          {t("learner.account.reviewQueue.weakTests")}
+        </Link>
+        <Link href="/app/account/focus-areas" className="inline-flex rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-muted/80">
+          {t("learner.account.nav.focusAreas")}
+        </Link>
+      </div>
+    </main>
+  );
+}

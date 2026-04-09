@@ -52,6 +52,7 @@
     "ops:question-bank-diagnostics": "tsx scripts/report-question-bank-diagnostics.ts",
     "ops:question-bank-coverage": "tsx scripts/report-question-bank-coverage.ts",
     "ops:exam-blueprint-coverage": "tsx scripts/report-exam-blueprint-coverage.ts",
+    "ops:lesson-blueprint-coverage": "tsx scripts/report-lesson-blueprint-coverage.ts",
     "ops:exam-coverage-audit": "tsx scripts/run-exam-coverage-audit.ts",
     "ops:app-visible-counts": "tsx scripts/report-app-visible-content-counts.ts",
     "ops:admin-dashboard": "tsx scripts/report-admin-operations-dashboard.ts",

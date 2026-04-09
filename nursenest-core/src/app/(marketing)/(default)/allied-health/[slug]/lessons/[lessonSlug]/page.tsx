@@ -53,6 +53,8 @@ import {
   loadPathwayLessonProgressForSlug,
   type PathwayLessonProgressStatus,
 } from "@/lib/lessons/pathway-lesson-progress";
+import { loadRelatedExamQuestionStemsForPathwayLesson } from "@/lib/lessons/lesson-question-cross-links";
+import { PathwayLessonRelatedQuestions } from "@/components/lessons/pathway-lesson-related-questions";
 
 export const revalidate = 86400;
 export const dynamicParams = true;

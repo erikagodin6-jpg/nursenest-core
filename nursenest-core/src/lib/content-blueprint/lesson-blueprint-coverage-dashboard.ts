@@ -62,12 +62,66 @@ function inferDomainFromSections(sections: CatalogSection[] | undefined): Bluepr
   return null;
 }
 
+/** Heuristic mapping for legacy catalog rows (no bp26 slug) — topic/title/slug strings only. */
+export function inferBlueprintDomainFromLessonHaystack(
+  topic?: string,
+  topicSlug?: string,
+  title?: string,
+): BlueprintDomainId | null {
+  const h = `${topic ?? ""} ${topicSlug ?? ""} ${title ?? ""}`.toLowerCase();
+  if (!h.trim()) return null;
+  if (
+    /(delegat|priorit|sbar|handoff|ethical|leadership|care conference|legal scope|scope of practice|assignment|care coordination|multi-?patient)/.test(
+      h,
+    )
+  ) {
+    return "management_of_care";
+  }
+  if (/(infection|ppe|isolation|sterile|medication safety|fall risk|restraint|fire safety|blood culture|clabsi)/.test(h)) {
+    return "safety_and_infection";
+  }
+  if (/(pharmac|insulin|antibiotic|opioid|anticoag|high-alert|parenteral|medication admin)/.test(h)) {
+    return "pharmacological_therapies";
+  }
+  if (/(psych|mental health|suicide|dementia|therapeutic communication|anxiety|grief|abuse)/.test(h)) {
+    return "psychosocial_integrity";
+  }
+  if (/(immuniz|screen|health promotion|health teaching|growth chart|teach-back|literacy)/.test(h)) {
+    return "health_promotion_maintenance";
+  }
+  if (/(comfort care|adl|hygiene|ng tube|basic care|palliative|end of life)/.test(h)) {
+    return "basic_care_comfort";
+  }
+  if (/(pressure injury|vte prophylax|risk reduction|complication potential)/.test(h)) {
+    return "risk_reduction";
+  }
+  if (
+    /(fluid|electrolyte|renal|shock|sepsis|respiratory|cardio|neuro|gi\b|maternity|pediatr|stroke|dka|aki|pathophys|physiological)/.test(
+      h,
+    )
+  ) {
+    return "physiological_adaptation";
+  }
+  return null;
+}
+
+export type LessonBlueprintDomainInput = {
+  slug?: string;
+  title?: string;
+  topic?: string;
+  topicSlug?: string;
+  sections?: CatalogSection[];
+};
+
 /**
  * Map a catalog row to an NCLEX-style blueprint domain (best-effort).
  * Prefers explicit `pad-*` slug segments, then wave codes (sf/mo/pa/…),
- * then clinical_meaning parsing, else uncategorized.
+ * then clinical_meaning parsing, then topic/title heuristics for legacy rows.
  */
-export function inferLessonBlueprintDomain(slug: string, sections?: CatalogSection[]): BlueprintDomainId {
+export function inferLessonBlueprintDomain(lesson: LessonBlueprintDomainInput): BlueprintDomainId {
+  const slug = typeof lesson.slug === "string" ? lesson.slug : "";
+  const { sections, topic, topicSlug, title } = lesson;
+
   const pad = slug.match(PAD_DOMAIN_RE);
   if (pad?.[1] && isBlueprintDomainId(pad[1])) return pad[1];
 
@@ -76,15 +130,23 @@ export function inferLessonBlueprintDomain(slug: string, sections?: CatalogSecti
     const code = wave?.[1]?.toLowerCase();
     if (code && WAVE_CODE_TO_DOMAIN[code]) return WAVE_CODE_TO_DOMAIN[code]!;
     if (/^bp26-[^-]+-x\d+-/i.test(slug)) {
-      return inferDomainFromSections(sections) ?? "uncategorized";
+      return (
+        inferDomainFromSections(sections) ??
+        inferBlueprintDomainFromLessonHaystack(topic, topicSlug, title) ??
+        "uncategorized"
+      );
     }
   }
 
   if (!slug.startsWith("bp26-")) {
-    return inferDomainFromSections(sections) ?? "uncategorized";
+    return (
+      inferDomainFromSections(sections) ??
+      inferBlueprintDomainFromLessonHaystack(topic, topicSlug, title) ??
+      "uncategorized"
+    );
   }
 
-  return inferDomainFromSections(sections) ?? "uncategorized";
+  return inferDomainFromSections(sections) ?? inferBlueprintDomainFromLessonHaystack(topic, topicSlug, title) ?? "uncategorized";
 }
 
 export function inferLessonCatalogType(slug: string): LessonCatalogLessonType {
@@ -181,7 +243,7 @@ function buildPathwayRow(
 
   for (const L of lessons) {
     const slug = typeof L.slug === "string" ? L.slug : "";
-    const dom = inferLessonBlueprintDomain(slug, L.sections);
+    const dom = inferLessonBlueprintDomain(L);
     domainRaw[dom] = (domainRaw[dom] ?? 0) + 1;
     const sys = clinicalSystemForLesson(L);
     systemRaw[sys] = (systemRaw[sys] ?? 0) + 1;

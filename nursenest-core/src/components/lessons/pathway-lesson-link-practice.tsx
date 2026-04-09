@@ -3,14 +3,16 @@ import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 
-function marketingQuestionsTopicHref(pathway: ExamPathwayDefinition, topic: string): string {
+/** Marketing question hub with optional topic filter (pathway-scoped). */
+export function pathwayMarketingQuestionBankTopicHref(pathway: ExamPathwayDefinition, topic: string): string {
   const base = buildExamPathwayPath(pathway, "questions");
   const t = topic.trim();
   if (!t) return base;
   return `${base}?topic=${encodeURIComponent(t)}`;
 }
 
-function appPracticeTopicHref(pathway: ExamPathwayDefinition, topic: string): string {
+/** Signed-in app question bank: topic drill for this pathway. */
+export function pathwayAppQuestionBankTopicHref(pathway: ExamPathwayDefinition, topic: string): string {
   const qs = new URLSearchParams();
   qs.set("pathwayId", pathway.id);
   if (topic.trim()) qs.set("topic", topic.trim());
@@ -51,13 +53,13 @@ export function PathwayLessonPracticeTopicCta({
       </p>
       <div className="mt-5 flex flex-wrap gap-2">
         <Link
-          href={appPracticeTopicHref(pathway, topic)}
+          href={pathwayAppQuestionBankTopicHref(pathway, topic)}
           className="inline-flex min-h-11 items-center rounded-full nn-btn-primary px-5 py-2.5 text-sm font-semibold shadow-none"
         >
           Open practice (app)
         </Link>
         <Link
-          href={marketingQuestionsTopicHref(pathway, topic)}
+          href={pathwayMarketingQuestionBankTopicHref(pathway, topic)}
           className="inline-flex min-h-11 items-center rounded-full nn-btn-secondary px-5 py-2.5 text-sm font-semibold"
         >
           Practice hub · same topic

@@ -204,7 +204,7 @@ export function ExamPathwayHubBody({
       </aside>
 
       <h2 className="nn-marketing-h2 mt-14">
-        {conversionSectionHeading ?? "Everything for this exam in one platform"}
+        {conversionSectionHeading ?? "What you get for this licensure track"}
       </h2>
       <p className="nn-marketing-body-sm mt-2 max-w-2xl text-[var(--theme-muted-text)]">
         {conversionSectionLead ??

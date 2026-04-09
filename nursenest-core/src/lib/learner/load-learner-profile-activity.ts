@@ -38,16 +38,29 @@ export type LearnerProfileActivity = {
   lessons: ProfileActivityLesson[];
 };
 
-export async function loadLearnerProfileActivity(userId: string): Promise<LearnerProfileActivity> {
+export type LearnerProfileActivityLimits = {
+  mocks?: number;
+  practiceTests?: number;
+  lessons?: number;
+};
+
+export async function loadLearnerProfileActivity(
+  userId: string,
+  limits?: LearnerProfileActivityLimits,
+): Promise<LearnerProfileActivity> {
   const empty: LearnerProfileActivity = { mocks: [], practiceTests: [], lessons: [] };
   if (!userId || !isDatabaseUrlConfigured()) return empty;
+
+  const mockTake = limits?.mocks ?? 5;
+  const testTake = limits?.practiceTests ?? 5;
+  const lessonTake = limits?.lessons ?? 8;
 
   try {
     const [attempts, tests, progressRows] = await Promise.all([
       prisma.examAttempt.findMany({
         where: { userId },
         orderBy: { createdAt: "desc" },
-        take: 5,
+        take: mockTake,
         select: {
           id: true,
           score: true,
@@ -59,7 +72,7 @@ export async function loadLearnerProfileActivity(userId: string): Promise<Learne
       prisma.practiceTest.findMany({
         where: { userId },
         orderBy: { updatedAt: "desc" },
-        take: 5,
+        take: testTake,
         select: {
           id: true,
           title: true,
@@ -71,7 +84,7 @@ export async function loadLearnerProfileActivity(userId: string): Promise<Learne
       prisma.progress.findMany({
         where: { userId },
         orderBy: { updatedAt: "desc" },
-        take: 8,
+        take: lessonTake,
         select: { lessonId: true, completed: true, updatedAt: true },
       }),
     ]);
@@ -117,7 +130,7 @@ export async function loadLearnerProfileActivity(userId: string): Promise<Learne
           };
         }),
       )
-    ).slice(0, 6);
+    ).slice(0, Math.min(lessonTake, 50));
 
     return { mocks, practiceTests, lessons: lessonActivity };
   } catch {

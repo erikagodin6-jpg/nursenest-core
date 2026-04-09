@@ -558,11 +558,11 @@ export function ExamPracticeClient({
         <PostSessionExamInsights review={r ?? null} studyNext={done.studyNext ?? null} />
         {done.studyNext ? <PostTestStudyNextCard bundle={done.studyNext} /> : null}
         <p className="text-sm text-muted">
-          Review misses in the question bank, then reinforce weak systems with{" "}
+          Re-run missed topics in practice, then shore up systems with{" "}
           <Link href="/lessons" className="font-medium text-primary underline">
-            exam-specific lessons
-          </Link>{" "}
-          for your pathway.
+            lessons matched to your exam
+          </Link>
+          .
         </p>
         <div className="flex flex-wrap gap-2">
           <Link
@@ -573,15 +573,15 @@ export function ExamPracticeClient({
           </Link>
           <Link
             href="/app/questions"
-            className="inline-flex rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-gray-50"
+            className="inline-flex rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-muted"
           >
-            Open question bank
+            Back to practice
           </Link>
           <Link
             href="/lessons"
-            className="inline-flex rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-gray-50"
+            className="inline-flex rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-muted"
           >
-            Browse lessons by exam
+            Find lessons for your exam
           </Link>
         </div>
       </div>

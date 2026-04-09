@@ -3,7 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { PathwayLessonSectionContent } from "@/components/lessons/pathway-lesson-body";
-import { PathwayLessonPracticeTopicCta } from "@/components/lessons/pathway-lesson-link-practice";
+import { PathwayLessonRelatedLearningBlock } from "@/components/lessons/pathway-lesson-related-learning";
+import { PathwayLessonRelatedQuestions } from "@/components/lessons/pathway-lesson-related-questions";
 import { PremiumLessonPublishNotice } from "@/components/lessons/premium-lesson-publish-notice";
 import { PathwayLessonQuizzes } from "@/components/lessons/pathway-lesson-quizzes";
 import { PathwayLessonLockedSectionsPreview } from "@/components/lessons/pathway-lesson-locked-sections-preview";
@@ -49,6 +50,7 @@ import {
   loadPathwayLessonProgressForSlug,
   type PathwayLessonProgressStatus,
 } from "@/lib/lessons/pathway-lesson-progress";
+import { loadRelatedExamQuestionStemsForPathwayLesson } from "@/lib/lessons/lesson-question-cross-links";
 import { LessonStructuralQualityNotice } from "@/components/lessons/lesson-structural-quality-notice";
 
 /** Avoid enumerating every lesson at build (large `.next` output + ENOSPC on small disks). */
@@ -148,11 +150,17 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
   const hubBase = `/${countrySlug}/${roleTrack}/${examCode}`;
   const base = `${hubBase}/lessons`;
 
-  const [lessonProgress, relatedRaw] = await Promise.all([
+  const [lessonProgress, relatedRaw, relatedQuestionStems] = await Promise.all([
     userId && fullAccess
       ? loadPathwayLessonProgressForSlug(userId, pathway.id, lesson.slug)
       : Promise.resolve<PathwayLessonProgressStatus>("not_started"),
     getRelatedPathwayLessons(pathway.id, lesson.topicSlug, lesson.slug, undefined, lessonContentLocale),
+    loadRelatedExamQuestionStemsForPathwayLesson({
+      pathway,
+      lessonTopic: lesson.topic,
+      lessonTopicSlug: lesson.topicSlug,
+      bodySystem: lesson.bodySystem,
+    }),
   ]);
 
   const lockedSections =
@@ -329,6 +337,8 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
         topicSlug={lesson.topicSlug}
         lessonsBasePath={base}
       />
+
+      <PathwayLessonRelatedQuestions pathway={pathway} lessonTopic={lesson.topic} items={relatedQuestionStems} />
 
       <p className="mt-6 text-sm text-muted">
         Also see:{" "}

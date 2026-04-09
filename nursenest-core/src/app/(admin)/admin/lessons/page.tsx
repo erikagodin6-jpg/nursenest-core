@@ -16,6 +16,9 @@ export default async function AdminLessonsLibraryPage() {
         <Link href="/admin/content" className="text-muted-foreground underline">
           Content & coverage
         </Link>
+        <Link href="/admin/lessons/blueprint-coverage" className="text-muted-foreground underline">
+          Lesson blueprint coverage
+        </Link>
       </div>
       <AdminLessonsLibraryClient />
     </main>

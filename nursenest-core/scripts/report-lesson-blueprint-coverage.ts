@@ -19,7 +19,7 @@ function summarize(dashboard: ReturnType<typeof buildLessonBlueprintCoverageDash
         `  lessons: ${p.totalLessons} | min ${pr.minFloor}: ${pr.pctOfMinFloor}% | stretch ${pr.stretchGoal}: ${pr.pctOfStretchGoal}%\n` +
         `  short of min: ${pr.lessonsShortOfMin} | short of stretch: ${pr.lessonsShortOfStretch}`,
     );
-    const types = p.byLessonType.map((t) => `${t.label.split("(")[0].trim()}: ${t.count}`).join(" · ");
+    const types = p.byLessonType.map((t) => `${t.type.replace(/_/g, " ")}: ${t.count}`).join(" · ");
     console.log(`  types: ${types}`);
     const topWeak = p.weakDomains[0];
     if (topWeak) {

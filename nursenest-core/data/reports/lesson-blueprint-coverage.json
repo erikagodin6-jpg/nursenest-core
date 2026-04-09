@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-09T06:26:40.039Z",
+  "generatedAt": "2026-04-09T06:29:52.284Z",
   "dataSource": "src/content/pathway-lessons/catalog.json",
   "pathwayIdsIncluded": [
     "ca-rn-nclex-rn",
@@ -25,80 +25,80 @@
         {
           "domain": "management_of_care",
           "label": "Management of care / coordination / delegation",
-          "count": 0,
-          "pctOfPathway": 0,
+          "count": 10,
+          "pctOfPathway": 8.1,
           "planningWeight": 0.2,
           "expectedApprox": 25
         },
         {
           "domain": "safety_and_infection",
           "label": "Safety and infection control",
-          "count": 0,
-          "pctOfPathway": 0,
+          "count": 12,
+          "pctOfPathway": 9.8,
           "planningWeight": 0.14,
           "expectedApprox": 17
         },
         {
           "domain": "health_promotion_maintenance",
           "label": "Health promotion and maintenance",
-          "count": 0,
-          "pctOfPathway": 0,
+          "count": 1,
+          "pctOfPathway": 0.8,
           "planningWeight": 0.12,
           "expectedApprox": 15
         },
         {
           "domain": "psychosocial_integrity",
           "label": "Psychosocial integrity",
-          "count": 0,
-          "pctOfPathway": 0,
+          "count": 3,
+          "pctOfPathway": 2.4,
           "planningWeight": 0.1,
           "expectedApprox": 12
         },
         {
           "domain": "basic_care_comfort",
           "label": "Basic care and comfort",
-          "count": 0,
-          "pctOfPathway": 0,
+          "count": 1,
+          "pctOfPathway": 0.8,
           "planningWeight": 0.1,
           "expectedApprox": 12
         },
         {
           "domain": "pharmacological_therapies",
           "label": "Pharmacological and parenteral therapies",
-          "count": 0,
-          "pctOfPathway": 0,
+          "count": 11,
+          "pctOfPathway": 8.9,
           "planningWeight": 0.14,
           "expectedApprox": 17
         },
         {
           "domain": "risk_reduction",
           "label": "Reduction of risk potential",
-          "count": 0,
-          "pctOfPathway": 0,
+          "count": 1,
+          "pctOfPathway": 0.8,
           "planningWeight": 0.1,
           "expectedApprox": 12
         },
         {
           "domain": "physiological_adaptation",
           "label": "Physiological adaptation",
-          "count": 0,
-          "pctOfPathway": 0,
+          "count": 49,
+          "pctOfPathway": 39.8,
           "planningWeight": 0.1,
           "expectedApprox": 12
         },
         {
           "domain": "uncategorized",
           "label": "Uncategorized / needs tagging",
-          "count": 123,
-          "pctOfPathway": 100,
+          "count": 35,
+          "pctOfPathway": 28.5,
           "planningWeight": 0,
           "expectedApprox": 0
         },
         {
           "domain": "uncategorized",
           "label": "Uncategorized / needs tagging",
-          "count": 123,
-          "pctOfPathway": 100,
+          "count": 35,
+          "pctOfPathway": 28.5,
           "planningWeight": 0,
           "expectedApprox": 0
         }
@@ -211,34 +211,34 @@
       ],
       "weakDomains": [
         {
-          "domain": "management_of_care",
-          "label": "Management of care / coordination / delegation",
-          "count": 0,
-          "expectedApprox": 25
-        },
-        {
-          "domain": "safety_and_infection",
-          "label": "Safety and infection control",
-          "count": 0,
-          "expectedApprox": 17
-        },
-        {
           "domain": "health_promotion_maintenance",
           "label": "Health promotion and maintenance",
-          "count": 0,
+          "count": 1,
           "expectedApprox": 15
-        },
-        {
-          "domain": "psychosocial_integrity",
-          "label": "Psychosocial integrity",
-          "count": 0,
-          "expectedApprox": 12
         },
         {
           "domain": "basic_care_comfort",
           "label": "Basic care and comfort",
-          "count": 0,
+          "count": 1,
           "expectedApprox": 12
+        },
+        {
+          "domain": "risk_reduction",
+          "label": "Reduction of risk potential",
+          "count": 1,
+          "expectedApprox": 12
+        },
+        {
+          "domain": "psychosocial_integrity",
+          "label": "Psychosocial integrity",
+          "count": 3,
+          "expectedApprox": 12
+        },
+        {
+          "domain": "management_of_care",
+          "label": "Management of care / coordination / delegation",
+          "count": 10,
+          "expectedApprox": 25
         }
       ],
       "weakSystems": [
@@ -276,12 +276,9 @@
       "majorGaps": [
         "Below 150-lesson editorial floor: add 27 lessons (or confirm pathway intentionally smaller).",
         "Stretch catalog goal (500): 377 lessons remaining for long-term depth.",
-        "Domain gap — Management of care / coordination / delegation: 0 lessons vs ~25 weight-adjusted expectation.",
-        "Domain gap — Safety and infection control: 0 lessons vs ~17 weight-adjusted expectation.",
-        "Domain gap — Health promotion and maintenance: 0 lessons vs ~15 weight-adjusted expectation.",
-        "No lessons tagged to Management of care / coordination / delegation — add at least one high-yield lesson in this NCLEX domain.",
-        "No lessons tagged to Safety and infection control — add at least one high-yield lesson in this NCLEX domain.",
-        "No lessons tagged to Health promotion and maintenance — add at least one high-yield lesson in this NCLEX domain."
+        "Domain gap — Health promotion and maintenance: 1 lessons vs ~15 weight-adjusted expectation.",
+        "Domain gap — Basic care and comfort: 1 lessons vs ~12 weight-adjusted expectation.",
+        "Domain gap — Reduction of risk potential: 1 lessons vs ~12 weight-adjusted expectation."
       ]
     },
     {
@@ -300,32 +297,32 @@
         {
           "domain": "management_of_care",
           "label": "Management of care / coordination / delegation",
-          "count": 1,
-          "pctOfPathway": 1,
+          "count": 4,
+          "pctOfPathway": 4,
           "planningWeight": 0.18,
           "expectedApprox": 18
         },
         {
           "domain": "safety_and_infection",
           "label": "Safety and infection control",
-          "count": 1,
-          "pctOfPathway": 1,
+          "count": 5,
+          "pctOfPathway": 5.1,
           "planningWeight": 0.16,
           "expectedApprox": 16
         },
         {
           "domain": "health_promotion_maintenance",
           "label": "Health promotion and maintenance",
-          "count": 0,
-          "pctOfPathway": 0,
+          "count": 3,
+          "pctOfPathway": 3,
           "planningWeight": 0.12,
           "expectedApprox": 12
         },
         {
           "domain": "psychosocial_integrity",
           "label": "Psychosocial integrity",
-          "count": 1,
-          "pctOfPathway": 1,
+          "count": 7,
+          "pctOfPathway": 7.1,
           "planningWeight": 0.1,
           "expectedApprox": 10
         },
@@ -340,8 +337,8 @@
         {
           "domain": "pharmacological_therapies",
           "label": "Pharmacological and parenteral therapies",
-          "count": 1,
-          "pctOfPathway": 1,
+          "count": 10,
+          "pctOfPathway": 10.1,
           "planningWeight": 0.12,
           "expectedApprox": 12
         },
@@ -356,24 +353,24 @@
         {
           "domain": "physiological_adaptation",
           "label": "Physiological adaptation",
-          "count": 6,
-          "pctOfPathway": 6.1,
+          "count": 43,
+          "pctOfPathway": 43.4,
           "planningWeight": 0.08,
           "expectedApprox": 8
         },
         {
           "domain": "uncategorized",
           "label": "Uncategorized / needs tagging",
-          "count": 87,
-          "pctOfPathway": 87.9,
+          "count": 25,
+          "pctOfPathway": 25.3,
           "planningWeight": 0,
           "expectedApprox": 0
         },
         {
           "domain": "uncategorized",
           "label": "Uncategorized / needs tagging",
-          "count": 87,
-          "pctOfPathway": 87.9,
+          "count": 25,
+          "pctOfPathway": 25.3,
           "planningWeight": 0,
           "expectedApprox": 0
         }
@@ -486,34 +483,34 @@
       ],
       "weakDomains": [
         {
-          "domain": "health_promotion_maintenance",
-          "label": "Health promotion and maintenance",
-          "count": 0,
-          "expectedApprox": 12
-        },
-        {
           "domain": "risk_reduction",
           "label": "Reduction of risk potential",
           "count": 0,
           "expectedApprox": 10
         },
         {
+          "domain": "basic_care_comfort",
+          "label": "Basic care and comfort",
+          "count": 2,
+          "expectedApprox": 14
+        },
+        {
           "domain": "management_of_care",
           "label": "Management of care / coordination / delegation",
-          "count": 1,
+          "count": 4,
           "expectedApprox": 18
+        },
+        {
+          "domain": "health_promotion_maintenance",
+          "label": "Health promotion and maintenance",
+          "count": 3,
+          "expectedApprox": 12
         },
         {
           "domain": "safety_and_infection",
           "label": "Safety and infection control",
-          "count": 1,
+          "count": 5,
           "expectedApprox": 16
-        },
-        {
-          "domain": "pharmacological_therapies",
-          "label": "Pharmacological and parenteral therapies",
-          "count": 1,
-          "expectedApprox": 12
         }
       ],
       "weakSystems": [
@@ -551,10 +548,9 @@
       "majorGaps": [
         "Below 150-lesson editorial floor: add 51 lessons (or confirm pathway intentionally smaller).",
         "Stretch catalog goal (500): 401 lessons remaining for long-term depth.",
-        "Domain gap — Health promotion and maintenance: 0 lessons vs ~12 weight-adjusted expectation.",
         "Domain gap — Reduction of risk potential: 0 lessons vs ~10 weight-adjusted expectation.",
-        "Domain gap — Management of care / coordination / delegation: 1 lessons vs ~18 weight-adjusted expectation.",
-        "No lessons tagged to Health promotion and maintenance — add at least one high-yield lesson in this NCLEX domain.",
+        "Domain gap — Basic care and comfort: 2 lessons vs ~14 weight-adjusted expectation.",
+        "Domain gap — Management of care / coordination / delegation: 4 lessons vs ~18 weight-adjusted expectation.",
         "No lessons tagged to Reduction of risk potential — add at least one high-yield lesson in this NCLEX domain."
       ]
     },
@@ -574,32 +570,32 @@
         {
           "domain": "management_of_care",
           "label": "Management of care / coordination / delegation",
-          "count": 6,
-          "pctOfPathway": 6.1,
+          "count": 10,
+          "pctOfPathway": 10.1,
           "planningWeight": 0.18,
           "expectedApprox": 18
         },
         {
           "domain": "safety_and_infection",
           "label": "Safety and infection control",
-          "count": 4,
-          "pctOfPathway": 4,
+          "count": 8,
+          "pctOfPathway": 8.1,
           "planningWeight": 0.16,
           "expectedApprox": 16
         },
         {
           "domain": "health_promotion_maintenance",
           "label": "Health promotion and maintenance",
-          "count": 1,
-          "pctOfPathway": 1,
+          "count": 3,
+          "pctOfPathway": 3,
           "planningWeight": 0.12,
           "expectedApprox": 12
         },
         {
           "domain": "psychosocial_integrity",
           "label": "Psychosocial integrity",
-          "count": 2,
-          "pctOfPathway": 2,
+          "count": 5,
+          "pctOfPathway": 5.1,
           "planningWeight": 0.1,
           "expectedApprox": 10
         },
@@ -614,8 +610,8 @@
         {
           "domain": "pharmacological_therapies",
           "label": "Pharmacological and parenteral therapies",
-          "count": 4,
-          "pctOfPathway": 4,
+          "count": 10,
+          "pctOfPathway": 10.1,
           "planningWeight": 0.12,
           "expectedApprox": 12
         },
@@ -630,24 +626,24 @@
         {
           "domain": "physiological_adaptation",
           "label": "Physiological adaptation",
-          "count": 18,
-          "pctOfPathway": 18.2,
+          "count": 39,
+          "pctOfPathway": 39.4,
           "planningWeight": 0.08,
           "expectedApprox": 8
         },
         {
           "domain": "uncategorized",
           "label": "Uncategorized / needs tagging",
-          "count": 61,
-          "pctOfPathway": 61.6,
+          "count": 21,
+          "pctOfPathway": 21.2,
           "planningWeight": 0,
           "expectedApprox": 0
         },
         {
           "domain": "uncategorized",
           "label": "Uncategorized / needs tagging",
-          "count": 61,
-          "pctOfPathway": 61.6,
+          "count": 21,
+          "pctOfPathway": 21.2,
           "planningWeight": 0,
           "expectedApprox": 0
         }
@@ -766,28 +762,28 @@
           "expectedApprox": 14
         },
         {
-          "domain": "health_promotion_maintenance",
-          "label": "Health promotion and maintenance",
-          "count": 1,
-          "expectedApprox": 12
-        },
-        {
-          "domain": "psychosocial_integrity",
-          "label": "Psychosocial integrity",
-          "count": 2,
-          "expectedApprox": 10
-        },
-        {
           "domain": "risk_reduction",
           "label": "Reduction of risk potential",
           "count": 2,
           "expectedApprox": 10
         },
         {
+          "domain": "health_promotion_maintenance",
+          "label": "Health promotion and maintenance",
+          "count": 3,
+          "expectedApprox": 12
+        },
+        {
           "domain": "safety_and_infection",
           "label": "Safety and infection control",
-          "count": 4,
+          "count": 8,
           "expectedApprox": 16
+        },
+        {
+          "domain": "psychosocial_integrity",
+          "label": "Psychosocial integrity",
+          "count": 5,
+          "expectedApprox": 10
         }
       ],
       "weakSystems": [
@@ -826,8 +822,8 @@
         "Below 150-lesson editorial floor: add 51 lessons (or confirm pathway intentionally smaller).",
         "Stretch catalog goal (500): 401 lessons remaining for long-term depth.",
         "Domain gap — Basic care and comfort: 1 lessons vs ~14 weight-adjusted expectation.",
-        "Domain gap — Health promotion and maintenance: 1 lessons vs ~12 weight-adjusted expectation.",
-        "Domain gap — Psychosocial integrity: 2 lessons vs ~10 weight-adjusted expectation."
+        "Domain gap — Reduction of risk potential: 2 lessons vs ~10 weight-adjusted expectation.",
+        "Domain gap — Health promotion and maintenance: 3 lessons vs ~12 weight-adjusted expectation."
       ]
     },
     {
@@ -846,24 +842,24 @@
         {
           "domain": "management_of_care",
           "label": "Management of care / coordination / delegation",
-          "count": 10,
-          "pctOfPathway": 10.1,
+          "count": 16,
+          "pctOfPathway": 16.2,
           "planningWeight": 0.18,
           "expectedApprox": 18
         },
         {
           "domain": "safety_and_infection",
           "label": "Safety and infection control",
-          "count": 10,
-          "pctOfPathway": 10.1,
+          "count": 11,
+          "pctOfPathway": 11.1,
           "planningWeight": 0.1,
           "expectedApprox": 10
         },
         {
           "domain": "health_promotion_maintenance",
           "label": "Health promotion and maintenance",
-          "count": 9,
-          "pctOfPathway": 9.1,
+          "count": 10,
+          "pctOfPathway": 10.1,
           "planningWeight": 0.06,
           "expectedApprox": 6
         },
@@ -902,24 +898,24 @@
         {
           "domain": "physiological_adaptation",
           "label": "Physiological adaptation",
-          "count": 10,
-          "pctOfPathway": 10.1,
+          "count": 15,
+          "pctOfPathway": 15.2,
           "planningWeight": 0.2,
           "expectedApprox": 20
         },
         {
           "domain": "uncategorized",
           "label": "Uncategorized / needs tagging",
-          "count": 21,
-          "pctOfPathway": 21.2,
+          "count": 8,
+          "pctOfPathway": 8.1,
           "planningWeight": 0,
           "expectedApprox": 0
         },
         {
           "domain": "uncategorized",
           "label": "Uncategorized / needs tagging",
-          "count": 21,
-          "pctOfPathway": 21.2,
+          "count": 8,
+          "pctOfPathway": 8.1,
           "planningWeight": 0,
           "expectedApprox": 0
         }
@@ -1036,12 +1032,6 @@
           "label": "Pharmacological and parenteral therapies",
           "count": 10,
           "expectedApprox": 22
-        },
-        {
-          "domain": "physiological_adaptation",
-          "label": "Physiological adaptation",
-          "count": 10,
-          "expectedApprox": 20
         }
       ],
       "weakSystems": [
@@ -1080,7 +1070,6 @@
         "Below 150-lesson editorial floor: add 51 lessons (or confirm pathway intentionally smaller).",
         "Stretch catalog goal (500): 401 lessons remaining for long-term depth.",
         "Domain gap — Pharmacological and parenteral therapies: 10 lessons vs ~22 weight-adjusted expectation.",
-        "Domain gap — Physiological adaptation: 10 lessons vs ~20 weight-adjusted expectation.",
         "Padded integrated-review share is 79% — prioritize replacing placeholders with specific titles where editorial capacity allows."
       ]
     },
@@ -1100,80 +1089,80 @@
         {
           "domain": "management_of_care",
           "label": "Management of care / coordination / delegation",
-          "count": 0,
-          "pctOfPathway": 0,
+          "count": 9,
+          "pctOfPathway": 7.4,
           "planningWeight": 0.2,
           "expectedApprox": 24
         },
         {
           "domain": "safety_and_infection",
           "label": "Safety and infection control",
-          "count": 0,
-          "pctOfPathway": 0,
+          "count": 12,
+          "pctOfPathway": 9.8,
           "planningWeight": 0.14,
           "expectedApprox": 17
         },
         {
           "domain": "health_promotion_maintenance",
           "label": "Health promotion and maintenance",
-          "count": 0,
-          "pctOfPathway": 0,
+          "count": 1,
+          "pctOfPathway": 0.8,
           "planningWeight": 0.12,
           "expectedApprox": 15
         },
         {
           "domain": "psychosocial_integrity",
           "label": "Psychosocial integrity",
-          "count": 0,
-          "pctOfPathway": 0,
+          "count": 3,
+          "pctOfPathway": 2.5,
           "planningWeight": 0.1,
           "expectedApprox": 12
         },
         {
           "domain": "basic_care_comfort",
           "label": "Basic care and comfort",
-          "count": 0,
-          "pctOfPathway": 0,
+          "count": 1,
+          "pctOfPathway": 0.8,
           "planningWeight": 0.1,
           "expectedApprox": 12
         },
         {
           "domain": "pharmacological_therapies",
           "label": "Pharmacological and parenteral therapies",
-          "count": 0,
-          "pctOfPathway": 0,
+          "count": 11,
+          "pctOfPathway": 9,
           "planningWeight": 0.14,
           "expectedApprox": 17
         },
         {
           "domain": "risk_reduction",
           "label": "Reduction of risk potential",
-          "count": 0,
-          "pctOfPathway": 0,
+          "count": 1,
+          "pctOfPathway": 0.8,
           "planningWeight": 0.1,
           "expectedApprox": 12
         },
         {
           "domain": "physiological_adaptation",
           "label": "Physiological adaptation",
-          "count": 0,
-          "pctOfPathway": 0,
+          "count": 49,
+          "pctOfPathway": 40.2,
           "planningWeight": 0.1,
           "expectedApprox": 12
         },
         {
           "domain": "uncategorized",
           "label": "Uncategorized / needs tagging",
-          "count": 122,
-          "pctOfPathway": 100,
+          "count": 35,
+          "pctOfPathway": 28.7,
           "planningWeight": 0,
           "expectedApprox": 0
         },
         {
           "domain": "uncategorized",
           "label": "Uncategorized / needs tagging",
-          "count": 122,
-          "pctOfPathway": 100,
+          "count": 35,
+          "pctOfPathway": 28.7,
           "planningWeight": 0,
           "expectedApprox": 0
         }
@@ -1286,34 +1275,34 @@
       ],
       "weakDomains": [
         {
-          "domain": "management_of_care",
-          "label": "Management of care / coordination / delegation",
-          "count": 0,
-          "expectedApprox": 24
-        },
-        {
-          "domain": "safety_and_infection",
-          "label": "Safety and infection control",
-          "count": 0,
-          "expectedApprox": 17
-        },
-        {
           "domain": "health_promotion_maintenance",
           "label": "Health promotion and maintenance",
-          "count": 0,
+          "count": 1,
           "expectedApprox": 15
-        },
-        {
-          "domain": "psychosocial_integrity",
-          "label": "Psychosocial integrity",
-          "count": 0,
-          "expectedApprox": 12
         },
         {
           "domain": "basic_care_comfort",
           "label": "Basic care and comfort",
-          "count": 0,
+          "count": 1,
           "expectedApprox": 12
+        },
+        {
+          "domain": "risk_reduction",
+          "label": "Reduction of risk potential",
+          "count": 1,
+          "expectedApprox": 12
+        },
+        {
+          "domain": "psychosocial_integrity",
+          "label": "Psychosocial integrity",
+          "count": 3,
+          "expectedApprox": 12
+        },
+        {
+          "domain": "management_of_care",
+          "label": "Management of care / coordination / delegation",
+          "count": 9,
+          "expectedApprox": 24
         }
       ],
       "weakSystems": [
@@ -1351,12 +1340,9 @@
       "majorGaps": [
         "Below 150-lesson editorial floor: add 28 lessons (or confirm pathway intentionally smaller).",
         "Stretch catalog goal (500): 378 lessons remaining for long-term depth.",
-        "Domain gap — Management of care / coordination / delegation: 0 lessons vs ~24 weight-adjusted expectation.",
-        "Domain gap — Safety and infection control: 0 lessons vs ~17 weight-adjusted expectation.",
-        "Domain gap — Health promotion and maintenance: 0 lessons vs ~15 weight-adjusted expectation.",
-        "No lessons tagged to Management of care / coordination / delegation — add at least one high-yield lesson in this NCLEX domain.",
-        "No lessons tagged to Safety and infection control — add at least one high-yield lesson in this NCLEX domain.",
-        "No lessons tagged to Health promotion and maintenance — add at least one high-yield lesson in this NCLEX domain."
+        "Domain gap — Health promotion and maintenance: 1 lessons vs ~15 weight-adjusted expectation.",
+        "Domain gap — Basic care and comfort: 1 lessons vs ~12 weight-adjusted expectation.",
+        "Domain gap — Reduction of risk potential: 1 lessons vs ~12 weight-adjusted expectation."
       ]
     }
   ]
