@@ -33,6 +33,14 @@
   --role-premium-text: color-mix(in srgb, #9d82dd 48%, #111827);
   --role-premium-glow: color-mix(in srgb, #9d82dd 14%, transparent);
   --role-heat-text: color-mix(in srgb, #c2410c 42%, #111827);
+
+  /* Semantic UI (design system): first paint before `[data-theme]` hydrates */
+  --semantic-progress-track: #e8eaef;
+  --semantic-progress-fill: var(--role-success);
+  --semantic-progress-fill-accent: #9d82dd;
+  --semantic-info-bg: color-mix(in srgb, #9d82dd 8%, #ffffff);
+  --semantic-info-border: color-mix(in srgb, #9d82dd 22%, #e5e7eb);
+  --semantic-info-text: #111827;
 }
 
 /* Theme-scoped overrides (lavender, ocean, sage, dark-*, …): same roles, hue from --theme-primary */
@@ -94,4 +102,11 @@ html[data-theme="dark-mode"] {
 
   --role-premium-text: color-mix(in srgb, var(--theme-primary) 65%, #ffffff);
   --role-heat-text: color-mix(in srgb, #fdba74 58%, #ffffff);
+
+  --semantic-progress-track: color-mix(in srgb, var(--theme-body-text) 12%, var(--bg-inset, var(--theme-card-bg)));
+  --semantic-progress-fill: var(--role-success);
+  --semantic-progress-fill-accent: var(--accent-primary, var(--theme-primary));
+  --semantic-info-bg: color-mix(in srgb, var(--theme-primary) 14%, var(--bg-card, var(--theme-card-bg)));
+  --semantic-info-border: color-mix(in srgb, var(--theme-primary) 28%, var(--border-subtle));
+  --semantic-info-text: var(--theme-heading-text);
 }

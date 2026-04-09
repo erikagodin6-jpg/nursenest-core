@@ -598,17 +598,17 @@ export function ExamPracticeClient({
     return (
       <ExamSessionShell className="mt-6 overflow-hidden" neutralPalette>
         <ExamSessionTopBar
-          left={<span className="font-medium text-slate-800 dark:text-slate-100">Review before scoring</span>}
+          left={<span className="font-medium text-foreground">Review before scoring</span>}
           center={<span>Pre-submit checklist</span>}
           right={<ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />}
         />
         <ExamProgressBar current={total} total={total} />
         <div className="space-y-4 p-5 md:p-6">
-          <p className="text-sm tabular-nums text-slate-600 dark:text-slate-400">
-            Unanswered: <span className="font-semibold text-slate-800 dark:text-slate-200">{unansweredCount}</span>
+          <p className="text-sm tabular-nums text-muted-foreground">
+            Unanswered: <span className="font-semibold text-foreground">{unansweredCount}</span>
             {" · "}
             Marked for review:{" "}
-            <span className="font-semibold text-slate-800 dark:text-slate-200">
+            <span className="font-semibold text-foreground">
               {Object.values(flagged).filter(Boolean).length}
             </span>
           </p>
@@ -619,11 +619,11 @@ export function ExamPracticeClient({
               return (
                 <li
                   key={id}
-                  className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-slate-200/90 bg-white px-3 py-2.5 dark:border-slate-700 dark:bg-slate-900/50"
+                  className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-border bg-card px-3 py-2.5"
                 >
                   <button
                     type="button"
-                    className="min-w-0 text-left font-medium text-slate-800 underline decoration-slate-300 underline-offset-2 transition hover:text-primary hover:decoration-primary dark:text-slate-100 dark:decoration-slate-600"
+                    className="min-w-0 text-left font-medium text-foreground underline decoration-border underline-offset-2 transition hover:text-primary hover:decoration-primary"
                     onClick={() => {
                       setSessionPhase("active");
                       setCurrentIndex(i);
@@ -635,14 +635,14 @@ export function ExamPracticeClient({
                     <span
                       className={`rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
                         answered
-                          ? "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300"
-                          : "border border-amber-300/80 bg-amber-50/90 text-amber-950 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-100"
+                          ? "bg-muted text-muted-foreground"
+                          : "border border-role-warning-border bg-role-warning-soft text-role-warning-text"
                       }`}
                     >
                       {answered ? "Answered" : "Unanswered"}
                     </span>
                     {flagged[id] ? (
-                      <span className="rounded border border-primary/30 bg-primary/[0.06] px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-slate-700 dark:text-slate-200">
+                      <span className="rounded border border-primary/30 bg-primary/[0.06] px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-foreground">
                         Marked
                       </span>
                     ) : null}
@@ -651,10 +651,10 @@ export function ExamPracticeClient({
               );
             })}
           </ul>
-          <div className="flex flex-wrap gap-2 border-t border-slate-200/80 pt-4 dark:border-slate-800">
+          <div className="flex flex-wrap gap-2 border-t border-border pt-4">
             <button
               type="button"
-              className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-medium text-slate-800 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-900"
+              className="rounded-lg border border-border bg-background px-4 py-2.5 text-sm font-medium text-foreground hover:bg-muted"
               onClick={() => setSessionPhase("active")}
             >
               Back to items
@@ -668,7 +668,7 @@ export function ExamPracticeClient({
               {submitting ? "Submitting…" : "Submit for scoring"}
             </button>
           </div>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-muted-foreground">
             Rationales and explanations appear only after scoring, same discipline as many high-stakes exams.
           </p>
         </div>

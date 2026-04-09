@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { AdminMediaPickerDialog } from "@/components/admin/media/admin-media-picker-dialog";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ContentStatus } from "@prisma/client";
@@ -22,6 +23,16 @@ const STATUSES = [
   ContentStatus.PUBLISHED,
   ContentStatus.ARCHIVED,
 ] as const;
+
+function escapeAttrHtml(s: string) {
+  return s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function lessonImageHtmlSnippet(url: string, alt: string) {
+  const safeAlt = escapeAttrHtml(alt || "Lesson illustration");
+  const safeUrl = escapeAttrHtml(url);
+  return `\n<p><img src="${safeUrl}" alt="${safeAlt}" loading="lazy" decoding="async" class="max-w-full rounded-lg border border-border/40" /></p>\n`;
+}
 
 export function AdminLessonFormClient({ lessonId }: { lessonId?: string }) {
   const router = useRouter();

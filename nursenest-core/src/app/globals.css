@@ -535,7 +535,8 @@ html[data-theme] .nn-marketing-surface {
   );
 }
 .nn-trust-check {
-  color: color-mix(in srgb, var(--theme-primary) 92%, #0f172a);
+  /* Heading tone so contrast holds on every light theme (avoid fixed slate hex). */
+  color: color-mix(in srgb, var(--theme-primary) 88%, var(--theme-heading-text));
 }
 
 .nn-btn-primary {

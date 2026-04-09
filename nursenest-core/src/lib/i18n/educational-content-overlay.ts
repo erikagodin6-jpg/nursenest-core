@@ -60,21 +60,18 @@ export type PathwayLessonEducationalOverlay = {
 };
 
 function resolveEducationalI18nRoot(): string {
-  const root = process.cwd();
-  const candidates = [
-    path.join(root, "public", "i18n", "educational-overlays"),
-    path.join(root, "nursenest-core", "public", "i18n", "educational-overlays"),
-  ];
-  for (const c of candidates) {
-    if (existsSync(c)) return c;
-  }
-  return path.join(root, "public", "i18n", "educational-overlays");
+  const cwd = /* turbopackIgnore: true */ process.cwd();
+  const primary = path.join(cwd, "public", "i18n", "educational-overlays");
+  const nestedMonorepo = path.join(cwd, "nursenest-core", "public", "i18n", "educational-overlays");
+  if (existsSync(primary)) return primary;
+  if (existsSync(nestedMonorepo)) return nestedMonorepo;
+  return primary;
 }
 
 function readJsonFile<T>(fp: string): T | null {
   if (!existsSync(fp)) return null;
   try {
-    return JSON.parse(readFileSync(fp, "utf8")) as T;
+    return JSON.parse(readFileSync(/* turbopackIgnore: true */ fp, "utf8")) as T;
   } catch (e) {
     safeServerLog("i18n", "educational_overlay_parse_failed", {
       path: fp,
@@ -233,7 +230,7 @@ function mergeLessonOverlaysFromFragments(
   const fragDir = path.join(baseRoot, locale, "fragments");
   if (!existsSync(fragDir)) return base;
   let merged: Record<string, PathwayLessonEducationalOverlay> = { ...base };
-  const files = readdirSync(fragDir)
+  const files = readdirSync(/* turbopackIgnore: true */ fragDir)
     .filter((x) => x.endsWith(".json"))
     .sort();
   for (const f of files) {

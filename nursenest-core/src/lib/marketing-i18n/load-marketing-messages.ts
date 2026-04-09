@@ -1,7 +1,6 @@
 import "server-only";
 import { existsSync, readFileSync, statSync } from "fs";
 import path from "path";
-import { fileURLToPath } from "url";
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -10,10 +9,8 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
  * Canonical merged bundles live at `public/i18n/{locale}.json` (built by
  * `script/compile-i18n.ts` + `script/merge-marketing-i18n.ts`).
  *
- * Resolution order:
- * 1) Walk up from this module until `public/i18n/{locale}.json` exists (works when `process.cwd()`
- *    is the monorepo root, the app package, or `.next` output differs from deploy cwd).
- * 2) `process.cwd()`-relative paths for `public/i18n` and `nursenest-core/public/i18n`.
+ * Resolution: `process.cwd()`-relative paths only (app root on DO, or monorepo root in dev) so NFT
+ * tracing stays scoped — see `/* turbopackIgnore: true */` on dynamic paths.
  *
  * Optional: `MARKETING_I18N_CDN_BASE` loads bundles when files are not on disk. CDN payloads are
  * merged with on-disk English for any missing/empty keys so stale CDN objects cannot drop groups
@@ -36,21 +33,11 @@ function mergeMissingMessageKeys(primary: MarketingMessages, fallback: Marketing
 
 function resolveMergedI18nPath(locale: string): string | null {
   const file = `${locale}.json`;
-
-  let dir = path.dirname(fileURLToPath(import.meta.url));
-  for (let depth = 0; depth < 20; depth += 1) {
-    const candidate = path.join(dir, "public", "i18n", file);
-    if (existsSync(candidate)) return candidate;
-    const parent = path.dirname(dir);
-    if (parent === dir) break;
-    dir = parent;
-  }
-
-  const root = process.cwd();
+  const cwd = /* turbopackIgnore: true */ process.cwd();
   const cwdCandidates = [
-    path.join(root, "public", "i18n", file),
-    path.join(root, "nursenest-core", "public", "i18n", file),
-    path.join(root, "..", "nursenest-core", "public", "i18n", file),
+    path.join(cwd, "public", "i18n", file),
+    path.join(cwd, "nursenest-core", "public", "i18n", file),
+    path.join(cwd, "..", "nursenest-core", "public", "i18n", file),
   ];
   for (const p of cwdCandidates) {
     if (existsSync(p)) return p;
@@ -81,7 +68,7 @@ function tryLoadEnglishDiskBundle(): MarketingMessages | null {
     return null;
   }
   try {
-    const st = statSync(fp);
+    const st = statSync(/* turbopackIgnore: true */ fp);
     if (st.size > MAX_MERGED_BUNDLE_BYTES) {
       safeServerLog("i18n", "merged_bundle_unusually_large", {
         locale: DEFAULT_MARKETING_LOCALE,

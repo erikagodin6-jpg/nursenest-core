@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { BlogFunnelStage, BlogImageStatus, BlogPostIntent, BlogPostTemplate } from "@prisma/client";
 import { ADMIN_BLOG_TARGET_EXAM_OPTIONS } from "@/lib/marketing/blog-admin-exam-options";
@@ -39,6 +39,17 @@ type PrePublishResultClient = {
 import { buildPersistedSeoBundle, buildSchemaSummaryPayload } from "@/lib/blog/blog-seo-automation";
 import { AdminBlogDraftEditorShell, DraftSectionCard } from "@/components/admin/blog/admin-blog-draft-editor-shell";
 import { AdminBlogHtmlPreview } from "@/components/admin/blog/admin-blog-html-preview";
+import { AdminMediaPickerDialog } from "@/components/admin/media/admin-media-picker-dialog";
+
+function escapeAttrHtml(s: string) {
+  return s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function blogImageHtmlSnippet(url: string, alt: string) {
+  const safeAlt = escapeAttrHtml(alt || "Educational illustration");
+  const safeUrl = escapeAttrHtml(url);
+  return `\n<p><img src="${safeUrl}" alt="${safeAlt}" loading="lazy" decoding="async" class="max-w-full rounded-lg border border-border/40" /></p>\n`;
+}
 
 type GenState = "idle" | "generating" | "success" | "failed";
 
@@ -241,6 +252,10 @@ export function AdminBlogControlPanelClient({
   const [outlineJsonText, setOutlineJsonText] = useState("");
   const [outlineJsonErr, setOutlineJsonErr] = useState<string | null>(null);
   const [outlineEditorOpen, setOutlineEditorOpen] = useState(false);
+
+  const bodyTextareaRef = useRef<HTMLTextAreaElement>(null);
+  const [mediaPickerOpen, setMediaPickerOpen] = useState(false);
+  const [mediaPickerMode, setMediaPickerMode] = useState<"cover" | "body" | null>(null);
 
   const hydrateFromPost = useCallback((p: AdminPostPayload) => {
     setPost(p);
@@ -1062,13 +1077,32 @@ export function AdminBlogControlPanelClient({
     const fd = new FormData();
     fd.append("file", file);
     fd.append("kind", "image");
-    const res = await fetch("/api/admin/storage/upload", { method: "POST", body: fd });
-    const j = (await res.json()) as { publicUrl?: string; error?: string };
+    const res = await fetch("/api/admin/media/upload", { method: "POST", body: fd });
+    const j = (await res.json()) as { publicUrl?: string; error?: string; asset?: { publicUrl?: string } };
     if (!res.ok) {
       setImageWorkflowMsg(j.error ?? "Upload failed");
       return null;
     }
-    return j.publicUrl ?? null;
+    return j.publicUrl ?? j.asset?.publicUrl ?? null;
+  }
+
+  function insertBodyImageFromLibrary(url: string, alt: string) {
+    const snippet = blogImageHtmlSnippet(url, alt);
+    const el = bodyTextareaRef.current;
+    if (!el) {
+      setBody((v) => v + snippet);
+      setImageWorkflowMsg("Image HTML appended to article body.");
+      return;
+    }
+    const start = el.selectionStart;
+    const end = el.selectionEnd;
+    setBody((v) => v.slice(0, start) + snippet + v.slice(end));
+    const pos = start + snippet.length;
+    requestAnimationFrame(() => {
+      bodyTextareaRef.current?.focus();
+      bodyTextareaRef.current?.setSelectionRange(pos, pos);
+    });
+    setImageWorkflowMsg("Image HTML inserted into article body.");
   }
 
   async function onCoverFileSelected(e: React.ChangeEvent<HTMLInputElement>) {
@@ -1856,17 +1890,30 @@ export function AdminBlogControlPanelClient({
             title="Article body (HTML)"
             description="Valid HTML for published article. Regenerate replaces the full body."
             actions={
-              <button
-                type="button"
-                disabled={Boolean(sectionBusy)}
-                onClick={() => void runRegenerate("article_html")}
-                className="text-xs font-semibold text-primary underline disabled:opacity-50"
-              >
-                {sectionBusy === "article_html" ? "…" : "Regenerate body"}
-              </button>
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  disabled={Boolean(sectionBusy)}
+                  onClick={() => void runRegenerate("article_html")}
+                  className="text-xs font-semibold text-primary underline disabled:opacity-50"
+                >
+                  {sectionBusy === "article_html" ? "…" : "Regenerate body"}
+                </button>
+                <button
+                  type="button"
+                  className="text-xs font-semibold text-muted-foreground underline"
+                  onClick={() => {
+                    setMediaPickerMode("body");
+                    setMediaPickerOpen(true);
+                  }}
+                >
+                  Insert from library
+                </button>
+              </div>
             }
           >
             <textarea
+              ref={bodyTextareaRef}
               className="min-h-[min(420px,50vh)] w-full rounded-md border border-border px-3 py-2 font-mono text-xs"
               value={body}
               onChange={(e) => setBody(e.target.value)}
@@ -1960,6 +2007,16 @@ export function AdminBlogControlPanelClient({
                   Upload to Spaces
                   <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" className="sr-only" onChange={(e) => void onCoverFileSelected(e)} />
                 </label>
+                <button
+                  type="button"
+                  className="rounded-lg border border-border bg-[var(--theme-card-bg)] px-3 py-2 text-xs font-semibold hover:bg-muted/60"
+                  onClick={() => {
+                    setMediaPickerMode("cover");
+                    setMediaPickerOpen(true);
+                  }}
+                >
+                  Pick from library
+                </button>
                 <button
                   type="button"
                   onClick={() => void queueFeaturedAiImage()}
@@ -2326,6 +2383,23 @@ export function AdminBlogControlPanelClient({
           </AdminBlogDraftEditorShell>
         </section>
       ) : null}
+
+      <AdminMediaPickerDialog
+        open={mediaPickerOpen}
+        onOpenChange={(o) => {
+          setMediaPickerOpen(o);
+          if (!o) setMediaPickerMode(null);
+        }}
+        onPick={(sel) => {
+          if (mediaPickerMode === "cover") {
+            setCoverImageUrl(sel.url);
+            setCoverImageAltInput((prev) => prev || sel.alt);
+            setImageWorkflowMsg("Cover set from media library.");
+          } else if (mediaPickerMode === "body") {
+            insertBodyImageFromLibrary(sel.url, sel.alt);
+          }
+        }}
+      />
     </div>
   );
 }

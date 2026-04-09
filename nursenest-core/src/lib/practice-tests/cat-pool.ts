@@ -4,6 +4,7 @@ import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { questionAccessWhereWithPathway } from "@/lib/exam-pathways/pathway-content-scope";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { subscriptionCoversPathwayBase } from "@/lib/exam-pathways/pathway-entitlements";
+import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import type { CatPoolRow } from "@/lib/exams/cat-engine";
 import { getWeakTopicNamesForPractice } from "@/lib/learner/topic-performance";
@@ -21,9 +22,14 @@ export async function fetchCatPracticePool(
   entitlement: AccessScope,
   input: PickQuestionsInput,
 ): Promise<CatPoolRow[]> {
-  let pathway = input.pathwayId ? getExamPathwayById(input.pathwayId) ?? null : null;
+  const pathwayIdTrim = input.pathwayId?.trim() ?? "";
+  let pathway: ExamPathwayDefinition | null = pathwayIdTrim ? getExamPathwayById(pathwayIdTrim) ?? null : null;
+  if (pathwayIdTrim && !pathway) {
+    return [];
+  }
   if (pathway && !subscriptionCoversPathwayBase(entitlement, pathway)) {
-    pathway = null;
+    // Fail closed when a pathway was requested: never widen to a broader tier pool.
+    return [];
   }
 
   const base: Prisma.ExamQuestionWhereInput = pathway

@@ -9,6 +9,8 @@ export const PRACTICE_TEST_CAT_CREATE_CODE = {
   cat_pick_failed: "cat_pick_failed",
   /** No pathway in request and no default pathway from subscription profile. */
   cat_pathway_required: "cat_pathway_required",
+  /** Upcoming / waitlist / info-only — CAT not offered for this track yet. */
+  pathway_track_not_ready: "pathway_track_not_ready",
   cat_create_failed: "cat_create_failed",
 } as const;
 

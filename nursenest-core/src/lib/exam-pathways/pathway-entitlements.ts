@@ -5,6 +5,17 @@ import { EXAM_PATHWAYS, getExamPathwayById } from "@/lib/exam-pathways/exam-prod
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 
 /**
+ * Whether pathway-scoped adaptive (CAT) **practice** may be started for this catalog row.
+ * Waitlist / upcoming tracks stay discoverable for lessons and the question bank, but CAT stays off until the product is ready.
+ */
+export function pathwayAllowsCatAdaptiveStart(pathway: ExamPathwayDefinition): boolean {
+  if (pathway.status === "hidden") return false;
+  if (pathway.acquisitionMode === "info_only") return false;
+  if (pathway.status === "upcoming" && pathway.acquisitionMode === "waitlist") return false;
+  return true;
+}
+
+/**
  * Phase 1: subscription still uses Prisma `TierCode` + `CountryCode`.
  * Pathway compatibility = same stripe tier + same country + active subscription (or admin).
  * NP specialties share the NP tier until Stripe supports per-pathway prices — use `User.learnerPath` = pathway.id to pick content.

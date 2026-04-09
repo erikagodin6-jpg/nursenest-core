@@ -82,7 +82,7 @@ export async function scanMediaUsage(
         type: "lesson",
         id: r.id,
         label: r.title.slice(0, 120),
-        href: `/admin/lessons/${encodeURIComponent(r.id)}/edit`,
+        href: `/admin/lessons/${encodeURIComponent(r.id)}`,
       });
     }
 
@@ -114,7 +114,7 @@ export async function scanMediaUsage(
         type: "exam_question",
         id: r.id,
         label: (r.stem ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 120) || r.id.slice(0, 12),
-        href: `/admin/questions?focus=${encodeURIComponent(r.id)}`,
+        href: `/api/admin/questions/${encodeURIComponent(r.id)}`,
       });
     }
   }
@@ -135,7 +135,7 @@ export async function scanMediaUsage(
       type: "lesson",
       id: r.id,
       label: r.title.slice(0, 120),
-      href: `/admin/lessons/${encodeURIComponent(r.id)}/edit`,
+      href: `/admin/lessons/${encodeURIComponent(r.id)}`,
     });
   }
 
@@ -173,7 +173,7 @@ export async function scanMediaUsage(
       type: "exam_question",
       id: r.id,
       label: (r.stem ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 120) || r.id.slice(0, 12),
-      href: `/admin/questions?focus=${encodeURIComponent(r.id)}`,
+      href: `/api/admin/questions/${encodeURIComponent(r.id)}`,
     });
   }
 

@@ -107,12 +107,29 @@ export default async function ExamAttemptReportPage({ params }: Props) {
         </div>
       ) : null}
 
-      {r?.weakAreas && r.weakAreas.length > 0 ? (
-        <p className="text-sm text-muted-foreground">
-          <span className="font-medium text-foreground">{t("examAttempt.reviewTopicsLabel")} </span>
-          {r.weakAreas.slice(0, 8).join(", ")}
-        </p>
-      ) : null}
+      {(() => {
+        const weak = r?.weakAreas?.filter(Boolean) ?? [];
+        const struggleTopics = weak.slice(0, 3).join(", ");
+        const primaryNext = data.studyNext?.primary?.title?.trim() || "";
+        const topWeak = weak[0]?.trim() || "";
+        if (!struggleTopics && !primaryNext && !topWeak) return null;
+        return (
+          <div className="rounded-lg border border-border/70 bg-muted/20 px-4 py-3">
+            {struggleTopics ? (
+              <p className="text-sm text-foreground/90">{t("learner.sessionInsight.struggle", { topics: struggleTopics })}</p>
+            ) : null}
+            {primaryNext ? (
+              <p className={`text-sm text-muted-foreground ${struggleTopics ? "mt-2" : ""}`}>
+                {t("learner.sessionInsight.focusNext", { label: primaryNext })}
+              </p>
+            ) : topWeak ? (
+              <p className={`text-sm text-muted-foreground ${struggleTopics ? "mt-2" : ""}`}>
+                {t("learner.sessionInsight.focusTopicDrill", { topic: topWeak })}
+              </p>
+            ) : null}
+          </div>
+        );
+      })()}
 
       {data.studyNext ? <PostTestStudyNextCard bundle={data.studyNext} /> : null}
 

@@ -4,7 +4,10 @@ import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { subscriptionCoversPathwayBase } from "@/lib/exam-pathways/pathway-entitlements";
+import {
+  pathwayAllowsCatAdaptiveStart,
+  subscriptionCoversPathwayBase,
+} from "@/lib/exam-pathways/pathway-entitlements";
 import { answerMatches } from "@/lib/exams/score-session-answers";
 import {
   appendScoredResult,
@@ -210,18 +213,23 @@ export async function createCatPracticeTestPayload(
     }
     const covered = subscriptionCoversPathwayBase(entitlement, resolved);
     if (!covered) {
-      if (sim) {
-        return {
-          ok: false,
-          code: PRACTICE_TEST_CAT_CREATE_CODE.pathway_not_entitled,
-          message:
-            "Your subscription does not include the selected exam pathway. Pick a pathway that matches your plan, or choose a different track for exam simulation.",
-        };
-      }
-      pathway = null;
-    } else {
-      pathway = resolved;
+      return {
+        ok: false,
+        code: PRACTICE_TEST_CAT_CREATE_CODE.pathway_not_entitled,
+        message: sim
+          ? "Your subscription does not include the selected exam pathway. Pick a pathway that matches your plan, or choose a different track for exam simulation."
+          : "Your subscription does not cover this exam pathway. Choose a track that matches your plan and region (Account → Billing to upgrade), or pick another pathway from the list.",
+      };
     }
+    if (!pathwayAllowsCatAdaptiveStart(resolved)) {
+      return {
+        ok: false,
+        code: PRACTICE_TEST_CAT_CREATE_CODE.pathway_track_not_ready,
+        message:
+          "Adaptive (CAT) practice is not available for this track yet. Use pathway lessons and the question bank, join the waitlist from the pathway hub if offered, or switch to an active exam track your plan includes.",
+      };
+    }
+    pathway = resolved;
   }
 
   if (sim && !pathwaySupportsCatExamSimulation(pathway)) {
