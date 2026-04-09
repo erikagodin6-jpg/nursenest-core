@@ -300,34 +300,6 @@ function StatCard({ label, value, onClick }: { label: string; value: number; onC
   );
 }
 
-type MetaBlog = {
-  id: string;
-  slug: string;
-  title: string;
-  postStatus: string;
-  issues: string[];
-  editHref: string;
-  publicHref: string;
-};
-
-type MetaLesson = {
-  id: string;
-  slug: string;
-  title: string;
-  status: string | null;
-  issues: string[];
-  editHref: string;
-};
-
-type MetaPath = {
-  id: string;
-  pathwayId: string;
-  slug: string;
-  title: string;
-  locale: string;
-  issues: string[];
-};
-
 function MetadataTables({
   data,
 }: {
@@ -445,8 +417,6 @@ function MetadataTables({
     </div>
   );
 }
-
-type SlugRow = { slug: string; locations: Array<{ type: string; label: string; href: string }> };
 
 function SlugTable({ rows }: { rows: SlugRow[] }) {
   return (

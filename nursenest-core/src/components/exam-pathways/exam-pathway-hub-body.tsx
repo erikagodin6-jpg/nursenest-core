@@ -212,10 +212,10 @@ export function ExamPathwayHubBody({
       </p>
       <ul className="nn-marketing-body-sm mt-4 list-inside list-disc space-y-1.5 text-[var(--theme-body-text)]">
         <li>
-          <span className="font-semibold text-[var(--theme-heading-text)]">Question bank:</span> short reps with rationales on every option.
+          <span className="font-semibold text-[var(--theme-heading-text)]">Practice items:</span> short sets with rationales that explain distractors, not just the key.
         </li>
         <li>
-          <span className="font-semibold text-[var(--theme-heading-text)]">Lessons:</span> system and safety topics aligned to this exam’s framing.
+          <span className="font-semibold text-[var(--theme-heading-text)]">Lessons:</span> clinical priorities and safety rules framed the way this board asks.
         </li>
         <li>
           <span className="font-semibold text-[var(--theme-heading-text)]">Flashcards &amp; planner:</span> weak-topic decks and pacing after sign-in.
@@ -271,7 +271,7 @@ export function ExamPathwayHubBody({
                 }}
                 className="nn-study-card nn-card-interactive block px-4 py-3 text-sm font-semibold text-[var(--theme-heading-text)]"
               >
-                In-app question bank →
+                Practice questions in app →
               </MarketingTrackedLink>
             </li>
             {emphasizeCatPracticeTests ? (

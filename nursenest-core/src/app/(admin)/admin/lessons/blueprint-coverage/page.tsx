@@ -7,9 +7,7 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminLessonBlueprintCoveragePage() {
   await requireAdmin();
-  const dashboard = buildLessonBlueprintCoverageDashboard(
-    catalog as Parameters<typeof buildLessonBlueprintCoverageDashboard>[0],
-  );
+  const dashboard = buildLessonBlueprintCoverageDashboard(catalog);
 
   return (
     <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
