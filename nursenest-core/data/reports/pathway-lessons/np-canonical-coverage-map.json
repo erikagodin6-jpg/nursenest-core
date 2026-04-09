@@ -1,0 +1,2316 @@
+{
+  "version": 1,
+  "generated": "2026-04-08",
+  "description": "Canonical NP topic spine: one logical lesson per concept where possible; pathway overlays (CA vs US, FNP vs AGPCNP vs WHNP vs PNP-PC vs PMHNP) live in lesson metadata and country_specific_notes — not duplicate full libraries per exam.",
+  "pathways": [
+    {
+      "pathwayId": "ca-np-cnple",
+      "examTags": [
+        "CA_NP"
+      ],
+      "notes": "Canadian NP / primary health care NP — use country_specific_notes vs US tracks."
+    },
+    {
+      "pathwayId": "us-np-fnp",
+      "examTags": [
+        "FNP"
+      ]
+    },
+    {
+      "pathwayId": "us-np-agpcnp",
+      "examTags": [
+        "AGPCNP"
+      ]
+    },
+    {
+      "pathwayId": "us-np-whnp",
+      "examTags": [
+        "WHNP"
+      ]
+    },
+    {
+      "pathwayId": "us-np-pnp-pc",
+      "examTags": [
+        "PNP_PC"
+      ]
+    },
+    {
+      "pathwayId": "us-np-pmhnp",
+      "examTags": [
+        "PMHNP"
+      ]
+    }
+  ],
+  "auditLegend": {
+    "VERIFY_DB": "Compare topic to PathwayLesson rows by pathway — classify EXISTS_STRONG_SKIP | EXISTS_UPGRADE | CREATE_NEW | MERGE.",
+    "MERGE": "Do not author a second lesson; fold into mergeInto canonical id."
+  },
+  "systems": [
+    {
+      "id": "cardiovascular",
+      "name": "Cardiovascular",
+      "topics": [
+        {
+          "id": "cv-hypertension",
+          "title": "Hypertension — all stages and management",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "cv-heart-failure",
+          "title": "Heart failure — HFrEF and HFpEF",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "cv-cad",
+          "title": "Coronary artery disease",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "cv-stable-angina",
+          "title": "Stable angina",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "cv-acs",
+          "title": "Acute coronary syndrome — recognition and initial management",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "cv-afib",
+          "title": "Atrial fibrillation",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "cv-arrhythmias-overview",
+          "title": "Other arrhythmias — overview",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "cv-dyslipidemia",
+          "title": "Hyperlipidemia / dyslipidemia",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "cv-pad",
+          "title": "Peripheral artery disease",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "cv-dvt-vte",
+          "title": "DVT / VTE",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "cv-pe",
+          "title": "Pulmonary embolism — recognition and initial management",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB",
+          "dedupeNote": "Share pathophysiology with respiratory PE lesson — MERGE content where one canonical PE lesson suffices."
+        },
+        {
+          "id": "cv-valvular-overview",
+          "title": "Valvular heart disease — overview",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "cv-risk-stratification",
+          "title": "Cardiovascular risk stratification",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "cv-ecg-np",
+          "title": "ECG basics for NP practice",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "cv-pharm-antihypertensives",
+          "title": "Antihypertensive pharmacology",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "cv-pharm-hf",
+          "title": "Heart failure pharmacology",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "cv-pharm-anticoagulation",
+          "title": "Anticoagulation",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "cv-pharm-lipids",
+          "title": "Lipid management pharmacology",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        }
+      ]
+    },
+    {
+      "id": "respiratory",
+      "name": "Respiratory",
+      "topics": [
+        {
+          "id": "resp-asthma",
+          "title": "Asthma",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "resp-copd",
+          "title": "COPD",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "resp-pneumonia",
+          "title": "Pneumonia",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "resp-bronchitis",
+          "title": "Bronchitis (acute / chronic context)",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "resp-tb",
+          "title": "Tuberculosis — screening and basics",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "resp-pe",
+          "title": "Pulmonary embolism",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "MERGE",
+          "mergeInto": "cv-pe"
+        },
+        {
+          "id": "resp-sleep-apnea",
+          "title": "Obstructive sleep apnea",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "resp-urti-lrti",
+          "title": "URTI vs LRTI differentiation",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "resp-oxygen",
+          "title": "Oxygen therapy",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "resp-inhalers",
+          "title": "Inhaler pharmacology and technique",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "resp-smoking-patho",
+          "title": "Smoking and vaping — pathophysiology",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "resp-cessation",
+          "title": "Smoking cessation",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        }
+      ]
+    },
+    {
+      "id": "gastrointestinal",
+      "name": "Gastrointestinal",
+      "topics": [
+        {
+          "id": "gi-gerd",
+          "title": "GERD",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "gi-pud",
+          "title": "Peptic ulcer disease",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "gi-bleed",
+          "title": "GI bleeding — recognition and stabilization",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "gi-ibs",
+          "title": "Irritable bowel syndrome",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "gi-ibd",
+          "title": "IBD — Crohn disease and ulcerative colitis",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "gi-hepatitis",
+          "title": "Viral hepatitis A, B, and C",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "gi-nafld",
+          "title": "NAFLD / MASLD",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "gi-cirrhosis",
+          "title": "Cirrhosis and complications",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "gi-biliary",
+          "title": "Gallbladder and biliary disease",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "gi-pancreatitis",
+          "title": "Pancreatitis",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "gi-constipation",
+          "title": "Constipation",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "gi-diarrhea",
+          "title": "Diarrhea — acute and chronic",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "gi-nausea",
+          "title": "Nausea and vomiting",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "gi-colon-screening",
+          "title": "Colon cancer screening",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "gi-lfts",
+          "title": "Liver function tests — interpretation",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        }
+      ]
+    },
+    {
+      "id": "endocrine_metabolic",
+      "name": "Endocrine / metabolic",
+      "topics": [
+        {
+          "id": "endo-t1dm",
+          "title": "Type 1 diabetes",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "endo-t2dm",
+          "title": "Type 2 diabetes",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "endo-dka",
+          "title": "Diabetic ketoacidosis",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "endo-hypoglycemia",
+          "title": "Hypoglycemia",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "endo-insulin",
+          "title": "Insulin pharmacology",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "endo-oral-dm",
+          "title": "Oral and non-insulin glucose-lowering agents",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "endo-thyroid",
+          "title": "Thyroid disorders — hypo- and hyperthyroidism",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "endo-adrenal",
+          "title": "Adrenal disorders — Cushing and Addison",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "endo-hyperaldo",
+          "title": "Hyperaldosteronism",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "endo-calcium",
+          "title": "Calcium and parathyroid disorders",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "endo-osteoporosis",
+          "title": "Osteoporosis — diagnosis and management",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "endo-metabolic-syndrome",
+          "title": "Metabolic syndrome",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "endo-obesity",
+          "title": "Obesity — evaluation and lifestyle",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "endo-weight-pharm",
+          "title": "Weight management pharmacology",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "endo-hpa",
+          "title": "HPA axis and stress physiology — clinical relevance",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC",
+            "PMHNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        }
+      ]
+    },
+    {
+      "id": "renal_gu",
+      "name": "Renal / genitourinary",
+      "topics": [
+        {
+          "id": "renal-aki",
+          "title": "Acute kidney injury",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "renal-ckd",
+          "title": "Chronic kidney disease",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "renal-electrolytes",
+          "title": "Electrolyte disorders",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "renal-uti",
+          "title": "Urinary tract infections",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "renal-pyelo",
+          "title": "Pyelonephritis",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "renal-bph",
+          "title": "Benign prostatic hyperplasia",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "renal-prostatitis",
+          "title": "Prostatitis",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "renal-ed",
+          "title": "Erectile dysfunction",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "renal-male-infertility",
+          "title": "Male infertility — basics",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "renal-hematuria",
+          "title": "Hematuria workup",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "renal-dosing",
+          "title": "Renal dosing considerations",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        }
+      ]
+    },
+    {
+      "id": "neurology",
+      "name": "Neurology",
+      "topics": [
+        {
+          "id": "neuro-stroke-tia",
+          "title": "Stroke and TIA",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "neuro-dementia",
+          "title": "Dementia",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "neuro-delirium",
+          "title": "Delirium",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC",
+            "PMHNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "neuro-parkinson",
+          "title": "Parkinson disease",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "neuro-seizure",
+          "title": "Seizures and epilepsy — outpatient basics",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "neuro-headache",
+          "title": "Headache — migraine, tension, cluster",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "neuro-meningitis",
+          "title": "Meningitis — recognition and referral",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "neuro-vertigo",
+          "title": "Vertigo — BPPV and vestibular neuritis",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "neuro-sleep",
+          "title": "Sleep disorders — beyond OSA",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "neuro-neuropathic-pain",
+          "title": "Neuropathic pain",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "neuro-cns-pharm",
+          "title": "CNS pharmacology basics",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC",
+            "PMHNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        }
+      ]
+    },
+    {
+      "id": "msk_rheum",
+      "name": "Musculoskeletal / rheumatology",
+      "topics": [
+        {
+          "id": "msk-oa",
+          "title": "Osteoarthritis",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "msk-ra",
+          "title": "Rheumatoid arthritis",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "msk-gout",
+          "title": "Gout",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "msk-as",
+          "title": "Ankylosing spondylitis",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "msk-fibromyalgia",
+          "title": "Fibromyalgia",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC",
+            "PMHNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "msk-osteoporosis",
+          "title": "Osteoporosis",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "MERGE",
+          "mergeInto": "endo-osteoporosis"
+        },
+        {
+          "id": "msk-septic-joint",
+          "title": "Septic arthritis",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "msk-osteomyelitis",
+          "title": "Osteomyelitis",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "msk-rhabdo",
+          "title": "Rhabdomyolysis",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "msk-sprains",
+          "title": "Sprains, strains, and acute MSK injuries",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "msk-rheum-pharm",
+          "title": "Rheumatologic pharmacology",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        }
+      ]
+    },
+    {
+      "id": "womens_health",
+      "name": "Women’s health",
+      "topics": [
+        {
+          "id": "wh-cycle",
+          "title": "Menstrual cycle physiology",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "wh-contraception",
+          "title": "Contraception",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "WHNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "wh-pregnancy-basics",
+          "title": "Pregnancy — basics and triage",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "wh-prenatal",
+          "title": "Prenatal care — primary care NP scope",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "WHNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "wh-menopause",
+          "title": "Menopause",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "WHNP",
+            "AGPCNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "wh-osteoporosis",
+          "title": "Osteoporosis in women",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "WHNP",
+            "AGPCNP"
+          ],
+          "auditDefault": "MERGE",
+          "mergeInto": "endo-osteoporosis"
+        },
+        {
+          "id": "wh-vaginitis",
+          "title": "Vaginitis",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "wh-pid",
+          "title": "Pelvic inflammatory disease",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "WHNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "wh-pcos",
+          "title": "PCOS",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "WHNP",
+            "AGPCNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "wh-endometriosis",
+          "title": "Endometriosis",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "WHNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "wh-aub",
+          "title": "Abnormal uterine bleeding",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "WHNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "wh-amenorrhea",
+          "title": "Amenorrhea",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "wh-fertility",
+          "title": "Fertility basics",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "WHNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "wh-screening",
+          "title": "Cervical and breast cancer screening",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "WHNP",
+            "AGPCNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        }
+      ]
+    },
+    {
+      "id": "mens_health",
+      "name": "Men’s health",
+      "topics": [
+        {
+          "id": "mens-ed",
+          "title": "Erectile dysfunction",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP"
+          ],
+          "auditDefault": "MERGE",
+          "mergeInto": "renal-ed"
+        },
+        {
+          "id": "mens-testosterone",
+          "title": "Testosterone deficiency",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "mens-bph",
+          "title": "BPH",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP"
+          ],
+          "auditDefault": "MERGE",
+          "mergeInto": "renal-bph"
+        },
+        {
+          "id": "mens-prostate-ca-screen",
+          "title": "Prostate cancer screening",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "mens-infertility",
+          "title": "Male infertility",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP"
+          ],
+          "auditDefault": "MERGE",
+          "mergeInto": "renal-male-infertility"
+        },
+        {
+          "id": "mens-prostatitis",
+          "title": "Prostatitis",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP"
+          ],
+          "auditDefault": "MERGE",
+          "mergeInto": "renal-prostatitis"
+        },
+        {
+          "id": "mens-uti",
+          "title": "UTI in males",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        }
+      ]
+    },
+    {
+      "id": "pediatrics",
+      "name": "Pediatrics",
+      "topics": [
+        {
+          "id": "peds-growth",
+          "title": "Growth and development",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "peds-vitals",
+          "title": "Pediatric vital signs and red flags",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "peds-infections",
+          "title": "Common pediatric infections",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "peds-fever",
+          "title": "Fever in children",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "peds-immunizations",
+          "title": "Immunizations — pediatric focus",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "peds-pharm",
+          "title": "Pediatric pharmacology basics",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "peds-common",
+          "title": "Common ambulatory pediatric conditions",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        }
+      ]
+    },
+    {
+      "id": "infectious_disease",
+      "name": "Infectious disease",
+      "topics": [
+        {
+          "id": "id-abx-classes",
+          "title": "Antibiotic classes",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "id-gram",
+          "title": "Gram-positive vs gram-negative — empiric implications",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "id-empiric",
+          "title": "Empiric therapy selection",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "id-stewardship",
+          "title": "Antibiotic stewardship",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "id-resistance",
+          "title": "Resistance mechanisms — overview",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "id-outpatient",
+          "title": "Common outpatient infections",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "id-antifungal",
+          "title": "Antifungals — basics",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "id-sti",
+          "title": "STI management",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "id-travel",
+          "title": "Travel medicine — basics",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        }
+      ]
+    },
+    {
+      "id": "immunology_vaccines",
+      "name": "Immunology / vaccines",
+      "topics": [
+        {
+          "id": "imm-vaccine-types",
+          "title": "Vaccine types",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "imm-active-passive",
+          "title": "Active vs passive immunity",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "imm-mrna-adeno",
+          "title": "mRNA vs adenovirus platforms — conceptual",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "imm-schedules",
+          "title": "Vaccine schedules — conceptual (US vs Canada overlays)",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "imm-herd",
+          "title": "Herd immunity",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "imm-travel-vax",
+          "title": "Travel vaccines",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "imm-safety",
+          "title": "Vaccine counseling and safety communication",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        }
+      ]
+    },
+    {
+      "id": "mental_health",
+      "name": "Mental health",
+      "topics": [
+        {
+          "id": "mh-depression",
+          "title": "Depression",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC",
+            "PMHNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "mh-anxiety",
+          "title": "Anxiety disorders",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC",
+            "PMHNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "mh-ptsd",
+          "title": "PTSD",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC",
+            "PMHNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "mh-sud",
+          "title": "Substance use disorders",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC",
+            "PMHNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "mh-suicide",
+          "title": "Suicide risk assessment",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC",
+            "PMHNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "mh-psychopharm",
+          "title": "Psychopharmacology basics",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC",
+            "PMHNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "mh-behavioral",
+          "title": "Behavioral therapy — basics for NPs",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC",
+            "PMHNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        }
+      ]
+    },
+    {
+      "id": "dermatology",
+      "name": "Dermatology",
+      "topics": [
+        {
+          "id": "derm-rashes",
+          "title": "Common rashes — morphologic approach",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "derm-acne",
+          "title": "Acne",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "derm-eczema",
+          "title": "Eczema / atopic dermatitis",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "derm-psoriasis",
+          "title": "Psoriasis",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "derm-infections",
+          "title": "Skin infections",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "derm-cancer",
+          "title": "Skin cancer basics",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        }
+      ]
+    },
+    {
+      "id": "hematology_oncology",
+      "name": "Hematology / oncology",
+      "topics": [
+        {
+          "id": "heme-anemia",
+          "title": "Anemia — classification and workup",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "heme-coag",
+          "title": "Coagulopathies — outpatient recognition",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "heme-leukemia",
+          "title": "Leukemia — recognition and referral",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "onco-screening",
+          "title": "Cancer screening — cross-system summary",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "onco-red-flags",
+          "title": "Oncology red flags",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        }
+      ]
+    },
+    {
+      "id": "geriatrics",
+      "name": "Geriatrics",
+      "topics": [
+        {
+          "id": "geri-polypharm",
+          "title": "Polypharmacy",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC",
+            "PMHNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "geri-deprescribing",
+          "title": "Deprescribing",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC",
+            "PMHNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "geri-beers",
+          "title": "Beers criteria — high-level application",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC",
+            "PMHNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "geri-falls",
+          "title": "Falls prevention and evaluation",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC",
+            "PMHNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "geri-cognitive",
+          "title": "Cognitive decline — evaluation basics",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC",
+            "PMHNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "geri-frailty",
+          "title": "Frailty",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "PMHNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        }
+      ]
+    },
+    {
+      "id": "preventive_primary_core",
+      "name": "Preventive care / primary care core",
+      "topics": [
+        {
+          "id": "prev-screening",
+          "title": "Evidence-based screening guidelines (US vs Canada overlays)",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "prev-health-promotion",
+          "title": "Health promotion",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "prev-lifestyle",
+          "title": "Lifestyle medicine",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "prev-risk",
+          "title": "Cardiometabolic and cancer risk reduction",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "prev-vax-counsel",
+          "title": "Vaccination counseling",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "prev-chronic-prev",
+          "title": "Chronic disease prevention",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC"
+          ],
+          "auditDefault": "VERIFY_DB"
+        }
+      ]
+    },
+    {
+      "id": "pharmacology_systemwide",
+      "name": "Pharmacology (system-wide)",
+      "topics": [
+        {
+          "id": "pharm-classes",
+          "title": "Major drug classes across organ systems",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC",
+            "PMHNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "pharm-mechanisms",
+          "title": "Mechanisms — high-yield for boards",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC",
+            "PMHNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "pharm-adverse",
+          "title": "Adverse effects and monitoring",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC",
+            "PMHNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "pharm-contra",
+          "title": "Contraindications",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC",
+            "PMHNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "pharm-interactions",
+          "title": "Drug interactions",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC",
+            "PMHNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "pharm-prescribing",
+          "title": "Prescribing decision logic",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC",
+            "PMHNP"
+          ],
+          "auditDefault": "VERIFY_DB"
+        },
+        {
+          "id": "pharm-polypharm-cross",
+          "title": "Polypharmacy and deprescribing integration",
+          "exams": [
+            "CA_NP",
+            "FNP",
+            "AGPCNP",
+            "WHNP",
+            "PNP_PC",
+            "PMHNP"
+          ],
+          "auditDefault": "MERGE",
+          "mergeInto": "geri-polypharm"
+        }
+      ]
+    }
+  ],
+  "summaryBySystem": {
+    "cardiovascular": {
+      "topicCount": 18
+    },
+    "respiratory": {
+      "topicCount": 12
+    },
+    "gastrointestinal": {
+      "topicCount": 15
+    },
+    "endocrine_metabolic": {
+      "topicCount": 15
+    },
+    "renal_gu": {
+      "topicCount": 11
+    },
+    "neurology": {
+      "topicCount": 11
+    },
+    "msk_rheum": {
+      "topicCount": 11
+    },
+    "womens_health": {
+      "topicCount": 14
+    },
+    "mens_health": {
+      "topicCount": 7
+    },
+    "pediatrics": {
+      "topicCount": 7
+    },
+    "infectious_disease": {
+      "topicCount": 9
+    },
+    "immunology_vaccines": {
+      "topicCount": 7
+    },
+    "mental_health": {
+      "topicCount": 7
+    },
+    "dermatology": {
+      "topicCount": 6
+    },
+    "hematology_oncology": {
+      "topicCount": 5
+    },
+    "geriatrics": {
+      "topicCount": 6
+    },
+    "preventive_primary_core": {
+      "topicCount": 6
+    },
+    "pharmacology_systemwide": {
+      "topicCount": 7
+    }
+  },
+  "totals": {
+    "systems": 18,
+    "topics": 174,
+    "mergeHints": [
+      {
+        "id": "resp-pe",
+        "mergeInto": "cv-pe"
+      },
+      {
+        "id": "msk-osteoporosis",
+        "mergeInto": "endo-osteoporosis"
+      },
+      {
+        "id": "wh-osteoporosis",
+        "mergeInto": "endo-osteoporosis"
+      },
+      {
+        "id": "mens-ed",
+        "mergeInto": "renal-ed"
+      },
+      {
+        "id": "mens-bph",
+        "mergeInto": "renal-bph"
+      },
+      {
+        "id": "mens-infertility",
+        "mergeInto": "renal-male-infertility"
+      },
+      {
+        "id": "mens-prostatitis",
+        "mergeInto": "renal-prostatitis"
+      },
+      {
+        "id": "pharm-polypharm-cross",
+        "mergeInto": "geri-polypharm"
+      }
+    ]
+  }
+}

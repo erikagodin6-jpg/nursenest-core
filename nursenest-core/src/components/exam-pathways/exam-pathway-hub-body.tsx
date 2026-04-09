@@ -13,7 +13,13 @@ import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 
-const US_NP_SIBLING_IDS = ["us-np-fnp", "us-np-agpcnp", "us-np-pmhnp"] as const;
+const US_NP_SIBLING_IDS = [
+  "us-np-fnp",
+  "us-np-agpcnp",
+  "us-np-whnp",
+  "us-np-pnp-pc",
+  "us-np-pmhnp",
+] as const;
 
 type Props = {
   pathway: ExamPathwayDefinition;

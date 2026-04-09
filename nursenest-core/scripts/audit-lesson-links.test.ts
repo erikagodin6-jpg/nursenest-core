@@ -18,6 +18,12 @@ test("isResolvableExamPathwayLessonsPath accepts the six core marketing hubs", (
   assert.equal(isResolvableExamPathwayLessonsPath("/canada/np/cnple/lessons"), true);
 });
 
+test("US NP specialty hubs resolve (WHNP, PNP-PC, AGPCNP)", () => {
+  assert.equal(isResolvableExamPathwayLessonsPath("/us/np/whnp/lessons"), true);
+  assert.equal(isResolvableExamPathwayLessonsPath("/us/np/pnp-pc/lessons"), true);
+  assert.equal(isResolvableExamPathwayLessonsPath("/us/np/agpcnp/lessons"), true);
+});
+
 test("wrong role slug for US PN is rejected (use lpn, not pn)", () => {
   assert.equal(isResolvableExamPathwayLessonsPath("/us/pn/nclex-pn/lessons"), false);
 });

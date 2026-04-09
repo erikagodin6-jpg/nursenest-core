@@ -300,11 +300,11 @@ function FnpLessonCard({
           <p className="mt-0.5 text-[var(--theme-muted-text)]">{p.whyBoards}</p>
         </div>
         <div className="sm:col-span-2 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-info-soft)] p-3">
-          <p className="text-xs font-semibold text-[var(--semantic-info-text)]">Mini patient scenario</p>
+          <p className="text-xs font-semibold text-[var(--theme-heading-text)]">Mini patient scenario</p>
           <p className="mt-1 text-foreground">{p.miniScenario}</p>
         </div>
         <div className="sm:col-span-2 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-success-soft)] p-3">
-          <p className="text-xs font-semibold text-[var(--semantic-success-text)]">Sample clinical decision</p>
+          <p className="text-xs font-semibold text-[var(--semantic-success-contrast)]">Sample clinical decision</p>
           <p className="mt-1 text-foreground">{p.sampleDecision}</p>
         </div>
         <div className="sm:col-span-2 nn-surface-inset rounded-xl p-3">

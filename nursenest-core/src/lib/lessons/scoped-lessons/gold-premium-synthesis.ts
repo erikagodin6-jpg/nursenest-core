@@ -21,6 +21,8 @@ export const PATHWAY_EXAM_LABEL: Record<string, string> = {
   "us-np-fnp": "NP certification preparation (United States)",
   "us-np-agpcnp": "NP certification preparation (United States)",
   "us-np-pmhnp": "NP certification preparation (United States)",
+  "us-np-whnp": "NP certification preparation (United States)",
+  "us-np-pnp-pc": "NP certification preparation (United States)",
 };
 
 export function pathwayIdToTierGeo(pathwayId: string): GoldTierGeo | null {
@@ -32,6 +34,8 @@ export function pathwayIdToTierGeo(pathwayId: string): GoldTierGeo | null {
     "us-np-fnp": "us_np",
     "us-np-agpcnp": "us_np",
     "us-np-pmhnp": "us_np",
+    "us-np-whnp": "us_np",
+    "us-np-pnp-pc": "us_np",
   };
   return m[pathwayId] ?? null;
 }

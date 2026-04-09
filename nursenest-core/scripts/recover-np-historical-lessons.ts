@@ -16,7 +16,14 @@ import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/ex
 import { getPathwayLesson, listPathwayLessonSlugBatch } from "@/lib/lessons/pathway-lesson-loader";
 import { loadAdminDashboardStats } from "@/lib/admin/load-admin-dashboard-stats";
 
-const NP_PATHWAYS = ["us-np-fnp", "us-np-agpcnp", "us-np-pmhnp", "ca-np-cnple"] as const;
+const NP_PATHWAYS = [
+  "us-np-fnp",
+  "us-np-agpcnp",
+  "us-np-whnp",
+  "us-np-pnp-pc",
+  "us-np-pmhnp",
+  "ca-np-cnple",
+] as const;
 const REPORT_DIR = path.join(process.cwd(), "data/reports/pathway-lessons");
 
 function arg(name: string): string | null {
@@ -103,6 +110,8 @@ function lessonQualityScore(sections: Array<{ body: string }>): number {
 const NP_TRACK_SEO: Record<string, string> = {
   "us-np-fnp": "Family NP (FNP)",
   "us-np-agpcnp": "Adult-Gerontology Primary Care NP (AGPCNP)",
+  "us-np-whnp": "Women’s Health NP (WHNP)",
+  "us-np-pnp-pc": "Pediatric Primary Care NP (PNP-PC)",
   "us-np-pmhnp": "Psychiatric-Mental Health NP (PMHNP)",
   "ca-np-cnple": "Canadian NP (CNPLE)",
 };

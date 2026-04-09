@@ -46,7 +46,10 @@ const NP_BOARD_CROSSLINK_DIMS: Record<
   { canonical_pathway_hub_path: string; pathway_country_slug: string; exam_family: string }
 > = {
   "us-np-fnp": { canonical_pathway_hub_path: "/us/np/fnp", pathway_country_slug: "us", exam_family: "NP" },
+  "us-np-agpcnp": { canonical_pathway_hub_path: "/us/np/agpcnp", pathway_country_slug: "us", exam_family: "NP" },
   "us-np-pmhnp": { canonical_pathway_hub_path: "/us/np/pmhnp", pathway_country_slug: "us", exam_family: "NP" },
+  "us-np-whnp": { canonical_pathway_hub_path: "/us/np/whnp", pathway_country_slug: "us", exam_family: "NP" },
+  "us-np-pnp-pc": { canonical_pathway_hub_path: "/us/np/pnp-pc", pathway_country_slug: "us", exam_family: "NP" },
   "ca-np-cnple": { canonical_pathway_hub_path: "/canada/np/cnple", pathway_country_slug: "canada", exam_family: "NP" },
 };
 

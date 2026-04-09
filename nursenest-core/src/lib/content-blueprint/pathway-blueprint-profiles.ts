@@ -124,6 +124,8 @@ export const BLUEPRINT_REPORT_PATHWAY_IDS = [
   "ca-rn-nclex-rn",
   "us-np-fnp",
   "us-np-agpcnp",
+  "us-np-whnp",
+  "us-np-pnp-pc",
   "us-np-pmhnp",
 ] as const;
 

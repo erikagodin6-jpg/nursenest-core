@@ -4,7 +4,13 @@ import { buildExamPathwayPath, EXAM_PATHWAYS, getExamPathwayById } from "@/lib/e
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 
-const US_NP_TRACK_ORDER = ["us-np-fnp", "us-np-agpcnp", "us-np-pmhnp"] as const;
+const US_NP_TRACK_ORDER = [
+  "us-np-fnp",
+  "us-np-agpcnp",
+  "us-np-whnp",
+  "us-np-pnp-pc",
+  "us-np-pmhnp",
+] as const;
 
 function CaNpCnmpleSection() {
   const ca = getExamPathwayById("ca-np-cnple");
@@ -62,10 +68,10 @@ function UsNpTracksSection() {
         US NP certification tracks
       </h2>
       <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
-        Each specialty has its own hub—Family NP (FNP), Adult-Gerontology Primary Care NP (AGPCNP), and Psychiatric-Mental
-        Health NP (PMHNP). Boards and item styles differ; content never mixes between tracks.
+        Each specialty has its own hub—FNP, AGPCNP, WHNP, PNP-PC, and PMHNP. Boards and item styles differ; marketing URLs and
+        entitlements stay pathway-scoped even when clinical concepts overlap.
       </p>
-      <ul className="mt-6 grid gap-4 sm:grid-cols-3">
+      <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {tracks.map((p) => (
           <li key={p.id}>
             <Link

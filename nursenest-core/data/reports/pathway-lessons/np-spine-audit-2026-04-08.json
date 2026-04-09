@@ -1,0 +1,54 @@
+{
+  "generatedAt": "2026-04-08T00:00:00.000Z",
+  "sourceNote": "Uploaded NP unit PDFs were not present in the monorepo workspace; this audit maps the user's Part 4 spine to static catalog.json (us-np-fnp, 99 rows) and references production DB scale from np-gap-analysis.json (~1408 lessons per NP pathway after legacy import).",
+  "registryPathways": {
+    "ca-np-cnple": { "label": "Canadian NP (CNPLE)", "staticCatalogLessons": 0, "hubUi": "np_primary_care_explorer" },
+    "us-np-fnp": { "label": "FNP", "staticCatalogLessons": 99, "hubUi": "np_primary_care_explorer" },
+    "us-np-agpcnp": { "label": "AGPCNP", "staticCatalogLessons": 0, "hubUi": "np_primary_care_explorer" },
+    "us-np-pmhnp": { "label": "PMHNP", "staticCatalogLessons": 0, "hubUi": "topic_grouped_np_visual" }
+  },
+  "notInRegistry": {
+    "WHNP": "No dedicated marketing pathway row; use shared primary-care lessons plus future contentExamKeys/topic tags when a product row is added.",
+    "PNP": "Same as WHNP — scale via registry + catalog/DB, not duplicate JSON blobs."
+  },
+  "classificationLegend": {
+    "EXISTS_STRONG_SKIP": "Strong lesson likely present — do not clone; verify slug in DB only.",
+    "EXISTS_CATALOG_SAMPLE": "Matched static catalog.json us-np-fnp sample (offline bootstrap).",
+    "VERIFY_DB": "Not in 99-row catalog slice — assume covered in DB per np-gap-analysis; run SQL/title audit before net-new.",
+    "CREATE_NEW": "No safe match — author one canonical slug after DB search.",
+    "MERGE_INTO_EXISTING": "Consolidate into listed canonical slug."
+  },
+  "spineSummaryByCategory": [
+    { "id": "A", "name": "Foundations NP primary care", "verifyDb": "high", "catalogHints": 0 },
+    { "id": "B", "name": "Neuro / primary care neuro", "verifyDb": "high", "catalogHints": 1 },
+    { "id": "C", "name": "Endocrine / diabetes / thyroid", "verifyDb": "high", "catalogHints": 8 },
+    { "id": "D", "name": "Stress / HPA / metabolic", "verifyDb": "high", "catalogHints": 0 },
+    { "id": "E", "name": "MSK / rheumatology", "verifyDb": "high", "catalogHints": 0 },
+    { "id": "F", "name": "Women's health", "verifyDb": "high", "catalogHints": 1 },
+    { "id": "G", "name": "Men's health", "verifyDb": "high", "catalogHints": 0 },
+    { "id": "H", "name": "HEENT / eye", "verifyDb": "high", "catalogHints": 0 },
+    { "id": "I", "name": "Anti-infectives / stewardship", "verifyDb": "high", "catalogHints": 1 },
+    { "id": "J", "name": "Vaccines / travel / virology", "verifyDb": "high", "catalogHints": 0 },
+    { "id": "K", "name": "Obesity / tobacco / exercise", "verifyDb": "high", "catalogHints": 0 },
+    { "id": "L", "name": "Polypharmacy / deprescribing / older adult", "verifyDb": "high", "catalogHints": 3 }
+  ],
+  "staticCatalogKeywordHits": {
+    "endocrine": 8,
+    "womensPrenatal": ["fnp-womens-prenatal-anemia-workup"],
+    "pediatricFeverAntibioticMention": ["fnp-pediatric-fever-urgency"],
+    "geriatricFallsDeprescribingAdjacent": ["fnp-geriatric-falls-syncope"]
+  },
+  "representativeTopics": [
+    { "topic": "Stroke / TIA outpatient recognition", "classification": "VERIFY_DB", "notes": "No keyword hit in 99-row catalog; likely in full DB set." },
+    { "topic": "Type 2 diabetes management", "classification": "VERIFY_DB", "notes": "Endocrine bucket represented in catalog sample." },
+    { "topic": "Vaccine platforms (mRNA vs vector)", "classification": "VERIFY_DB", "notes": "No static catalog row; typical NP board gap-fill candidate if DB search empty." },
+    { "topic": "Glaucoma pharmacology primary care", "classification": "VERIFY_DB", "notes": "HEENT board area; create only if DB lacks consolidated lesson." },
+    { "topic": "Beers / STOPP deprescribing", "classification": "VERIFY_DB", "notes": "Geriatric hub; overlaps Part L — canonical geriatrics lesson preferred." }
+  ],
+  "engineeringActions2026_04_08": [
+    "Route us-np-agpcnp and ca-np-cnple through the same primary-care NP hub UI as FNP (population/domain explorer).",
+    "Keep us-np-pmhnp on topic-grouped hub with np visual frame.",
+    "NP lesson hero + detail shell: secondary accent via --theme-secondary and semantic soft panels (no hardcoded hex in components).",
+    "Hub lead copy added for AGPCNP and PMHNP in pathway-lessons-hub-intro.ts."
+  ]
+}

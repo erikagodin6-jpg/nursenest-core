@@ -18,6 +18,8 @@ const CROSS_BORDER_PEER: Record<string, string> = {
   "us-np-fnp": "ca-np-cnple",
   "us-np-agpcnp": "ca-np-cnple",
   "us-np-pmhnp": "ca-np-cnple",
+  "us-np-whnp": "ca-np-cnple",
+  "us-np-pnp-pc": "ca-np-cnple",
   "ca-np-cnple": "us-np-fnp",
   "us-allied-core": "ca-allied-core",
   "ca-allied-core": "us-allied-core",

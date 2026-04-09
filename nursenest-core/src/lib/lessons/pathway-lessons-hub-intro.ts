@@ -19,6 +19,10 @@ export function pathwayLessonsHubLead(pathway: ExamPathwayDefinition): string {
       return "Adult–gerontology primary care NP lessons—chronic disease, geriatric prescribing, prevention, and escalation judgment scoped to AGPCNP (not FNP or PMHNP). Pair reading with pathway-scoped questions and simulations; subscription unlocks full depth.";
     case "us-np-pmhnp":
       return "Psychiatric–mental health NP lessons focus on assessment, safety, psychopharmacology, and therapeutic standards for PMHNP boards—scoped separately from FNP/AGPCNP primary care tracks. Pair lessons with pathway questions and simulations; subscription unlocks full depth.";
+    case "us-np-whnp":
+      return "Women’s Health NP lessons emphasize reproductive life stages, contraception, pregnancy-related primary care, gynecologic problems, and prevention—scoped to WHNP (not mixed with FNP lifespan defaults or PMHNP psychiatry). Pair reading with pathway-scoped questions; subscription unlocks full depth.";
+    case "us-np-pnp-pc":
+      return "Pediatric primary care NP lessons center on growth, development, common childhood conditions, immunizations, and family-centered management for PNP-PC boards—scoped separately from adult-only AGPCNP tracks. Pair lessons with pathway questions; subscription unlocks full depth.";
     case "ca-np-cnple":
       return "Canadian NP licensure (CNPLE) is evolving—this hub stays aligned as requirements finalize. Use pathway-scoped questions and CAT practice now; structured lessons will deepen here as they publish. Join the waitlist on the exam hub if checkout is not yet open for this track.";
     default: {

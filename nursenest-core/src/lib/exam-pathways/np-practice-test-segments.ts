@@ -67,6 +67,54 @@ register("us", "np", "ancc-fnp-practice-test", {
     "Questions, lessons, flashcards, and adaptive practice tests stay scoped to US Family NP. Subscribe on the NP tier that matches your profile country.",
 });
 
+register("us", "np", "agpcnp-practice-test", {
+  pathwayId: "us-np-agpcnp",
+  title: "AGPCNP Practice Test | Adult-Gerontology Primary Care NP | NurseNest",
+  description:
+    "AGPCNP-oriented prep: adult and gerontology primary care depth with pathway-scoped questions, lessons, and adaptive practice tests.",
+  heroTitle: "AGPCNP practice test & primary care prep",
+  heroLead:
+    "Adult–gerontology primary care NP candidates use the AGPCNP pathway—items and lessons are not shared with FNP, WHNP, PNP-PC, or PMHNP hubs.",
+  supportSectionHeading: "Dedicated AGPCNP product track",
+  supportSectionBody:
+    "This keyword entry resolves to `/us/np/agpcnp`—one pathway row, one entitlement scope. Deeper routes canonicalize to the core examCode URL per NP SEO policy.",
+  conversionSectionHeading: "AGPCNP bank, lessons, and CAT practice",
+  conversionSectionLead:
+    "Open questions for reps, lessons for systems depth, then adaptive tests in the app on a matching NP subscription.",
+});
+
+register("us", "np", "whnp-practice-test", {
+  pathwayId: "us-np-whnp",
+  title: "WHNP Practice Test | Women’s Health NP Prep | NurseNest",
+  description:
+    "Women’s Health NP preparation with pathway-scoped lessons, questions, and adaptive sessions aligned to WHNP boards.",
+  heroTitle: "WHNP practice test & women’s health NP prep",
+  heroLead:
+    "WHNP candidates get a dedicated hub—reproductive health, pregnancy-related primary care, and gynecology stay scoped to this pathway (not FNP or PMHNP).",
+  supportSectionHeading: "Women’s Health NP, pathway-scoped",
+  supportSectionBody:
+    "Board names differ; NurseNest keeps WHNP on `/us/np/whnp`. This URL is for search and sharing; subpages consolidate canonical URLs like other NP tracks.",
+  conversionSectionHeading: "WHNP lessons, bank, and adaptive tests",
+  conversionSectionLead:
+    "Use the links below for pathway-scoped study modes, then sign in for full adaptive depth on an NP plan.",
+});
+
+register("us", "np", "pnp-pc-practice-test", {
+  pathwayId: "us-np-pnp-pc",
+  title: "PNP-PC Practice Test | Pediatric Primary Care NP | NurseNest",
+  description:
+    "Pediatric primary care NP prep: growth, development, immunizations, and common outpatient conditions with pathway-scoped content.",
+  heroTitle: "PNP-PC practice test & pediatric primary care prep",
+  heroLead:
+    "PNP-PC uses its own hub—pediatric primary care depth without mixing adult AGPCNP framing or WHNP women’s health lanes.",
+  supportSectionHeading: "Pediatric primary care NP track",
+  supportSectionBody:
+    "This page maps to `/us/np/pnp-pc`. Content, lessons, and the question bank filter to the PNP-PC pathway id for entitlements and analytics.",
+  conversionSectionHeading: "PNP-PC bank, lessons, and CAT practice",
+  conversionSectionLead:
+    "Start with lessons and pathway questions; unlock full adaptive sessions after sign-in on a matching NP tier.",
+});
+
 register("us", "np", "pmhnp-practice-test", {
   pathwayId: "us-np-pmhnp",
   title: "PMHNP Practice Test | Adaptive Psych NP Prep | NurseNest",
@@ -112,6 +160,9 @@ export function listNpPracticeTestSegmentPaths(): { countrySlug: string; roleTra
   return [
     { countrySlug: "us", roleTrack: "np", segment: "aanp-practice-test" },
     { countrySlug: "us", roleTrack: "np", segment: "ancc-fnp-practice-test" },
+    { countrySlug: "us", roleTrack: "np", segment: "agpcnp-practice-test" },
+    { countrySlug: "us", roleTrack: "np", segment: "whnp-practice-test" },
+    { countrySlug: "us", roleTrack: "np", segment: "pnp-pc-practice-test" },
     { countrySlug: "us", roleTrack: "np", segment: "pmhnp-practice-test" },
     { countrySlug: "canada", roleTrack: "np", segment: "cnple-practice-test" },
   ];
