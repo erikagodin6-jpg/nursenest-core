@@ -37,6 +37,8 @@ import { unstable_cache } from "next/cache";
 import { cache } from "react";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { sortPathwayLessonsForPublicPreview } from "@/lib/lessons/pathway-lesson-public-preview-priority";
+import type { LaunchBundleEntry, PathwayLaunchBundleSpec } from "@/lib/lessons/pathway-launch-bundle";
+import { getLaunchBundleSpec } from "@/lib/lessons/pathway-launch-bundle";
 
 type CatalogShape = {
   version: number;
@@ -1205,6 +1207,34 @@ async function getPathwayLessonWithDataCache(
 
 /** Dedupes metadata + page lesson fetches in the same request. */
 export const getPathwayLesson = cache(getPathwayLessonWithDataCache);
+
+export type ResolvedPathwayLaunchBundle = {
+  spec: PathwayLaunchBundleSpec;
+  resolved: Array<{ entry: LaunchBundleEntry; lesson: PathwayLessonRecord }>;
+};
+
+/**
+ * Resolves the editorial **launch essentials** list for a pathway (independent of hub pagination).
+ * Missing slugs are skipped — content can roll out incrementally.
+ */
+export const resolvePathwayLaunchBundle = cache(async function resolvePathwayLaunchBundle(
+  pathwayId: string,
+  marketingLocale?: string,
+): Promise<ResolvedPathwayLaunchBundle | null> {
+  const spec = getLaunchBundleSpec(pathwayId);
+  if (!spec) return null;
+  const lessons = await Promise.all(
+    spec.entries.map((e) => getPathwayLesson(pathwayId, e.slug, marketingLocale)),
+  );
+  const resolved = spec.entries
+    .map((entry, i) => {
+      const lesson = lessons[i];
+      if (!lesson) return null;
+      return { entry, lesson };
+    })
+    .filter((x): x is { entry: LaunchBundleEntry; lesson: PathwayLessonRecord } => x !== null);
+  return { spec, resolved };
+});
 
 /**
  * Progress API: accept lesson completion if slug exists in any published locale (prefer `en` row when duplicated).

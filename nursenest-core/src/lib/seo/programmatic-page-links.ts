@@ -11,17 +11,83 @@ import {
   rnLessons,
   rnQuestions,
 } from "@/lib/marketing/marketing-entry-routes";
+import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { SeoCluster, SeoPageDefinition } from "@/lib/seo/programmatic-registry";
 import { clusterQuestionBankHref } from "@/lib/seo/programmatic-seo-cluster-links";
 
 export type ProgrammaticProductLinks = {
   lessons: string;
   questions: string;
+  /** Pathway-scoped CAT practice landing (public marketing route). */
+  cat: string;
   testBank: string;
   exams: string;
   tools: string;
   flashcards: string;
 };
+
+function catPathForPathwayId(id: string): string | null {
+  const p = getExamPathwayById(id);
+  return p ? buildExamPathwayPath(p, "cat") : null;
+}
+
+/**
+ * Public `/…/cat` route for the same pathway as lessons/questions (sign-in to run a session).
+ */
+function resolveProgrammaticCatHref(
+  page: SeoPageDefinition,
+  marketingRegion: MarketingRegionToggle,
+  loc: (p: string) => string,
+): string {
+  const slug = page.slug;
+  if (slug.startsWith("rex-pn")) {
+    const raw = catPathForPathwayId("ca-rpn-rex-pn");
+    return raw ? loc(raw) : loc(HUB.practiceExams);
+  }
+  if (slug.startsWith("nclex-pn")) {
+    const raw = catPathForPathwayId("us-lpn-nclex-pn");
+    return raw ? loc(raw) : loc(HUB.practiceExams);
+  }
+  if (slug === "cnple-practice-questions" || slug === "np-study-guide-canada" || slug === "canada-np-exam-prep") {
+    const raw = catPathForPathwayId("ca-np-cnple");
+    return raw ? loc(raw) : loc(HUB.practiceExams);
+  }
+  if (slug === "np-exam-practice-questions" || slug === "np-exam-prep" || slug === "np-clinical-cases") {
+    const id = marketingRegion === "CA" ? "ca-np-cnple" : "us-np-fnp";
+    const raw = catPathForPathwayId(id);
+    return raw ? loc(raw) : loc(HUB.practiceExams);
+  }
+
+  const pack = page.linkPack ?? inferLinkPackFromCluster(page.cluster);
+  switch (pack) {
+    case "nclex-rn": {
+      const id = marketingRegion === "US" ? "us-rn-nclex-rn" : "ca-rn-nclex-rn";
+      const raw = catPathForPathwayId(id);
+      return raw ? loc(raw) : loc(HUB.practiceExams);
+    }
+    case "nclex-pn": {
+      const id = marketingRegion === "US" ? "us-lpn-nclex-pn" : "ca-rpn-rex-pn";
+      const raw = catPathForPathwayId(id);
+      return raw ? loc(raw) : loc(HUB.practiceExams);
+    }
+    case "np": {
+      const id = marketingRegion === "US" ? "us-np-fnp" : "ca-np-cnple";
+      const raw = catPathForPathwayId(id);
+      return raw ? loc(raw) : loc(HUB.practiceExams);
+    }
+    case "allied": {
+      const id = marketingRegion === "US" ? "us-allied-core" : "ca-allied-core";
+      const raw = catPathForPathwayId(id);
+      return raw ? loc(raw) : loc(HUB.practiceExams);
+    }
+    case "general":
+    default: {
+      const id = marketingRegion === "US" ? "us-rn-nclex-rn" : "ca-rn-nclex-rn";
+      const raw = catPathForPathwayId(id);
+      return raw ? loc(raw) : loc(HUB.practiceExams);
+    }
+  }
+}
 
 /**
  * Map programmatic slug → canonical pathway lessons/questions when the slug encodes a specific exam
@@ -69,12 +135,14 @@ export function resolveProgrammaticProductLinks(
   const testBank = loc(HUB.questionBank);
   const exams = loc(HUB.practiceExams);
   const flashcards = loc("/flashcards");
+  const cat = resolveProgrammaticCatHref(page, marketingRegion, loc);
 
   const slugHub = pathwayLessonsQuestionsFromProgrammaticSlug(page.slug, marketingRegion);
   if (slugHub) {
     return {
       lessons: loc(slugHub.lessons),
       questions: loc(slugHub.questions),
+      cat,
       testBank,
       exams,
       tools,
@@ -87,6 +155,7 @@ export function resolveProgrammaticProductLinks(
       return {
         lessons: loc(rnLessons(marketingRegion)),
         questions: loc(rnQuestions(marketingRegion)),
+        cat,
         testBank,
         exams,
         tools,
@@ -96,6 +165,7 @@ export function resolveProgrammaticProductLinks(
       return {
         lessons: loc(pnLessons(marketingRegion)),
         questions: loc(pnQuestions(marketingRegion)),
+        cat,
         testBank,
         exams,
         tools,
@@ -105,6 +175,7 @@ export function resolveProgrammaticProductLinks(
       return {
         lessons: loc(marketingRegion === "CA" ? NP.caNpLessons : NP.fnpLessons),
         questions: loc(marketingRegion === "CA" ? NP.caNpQuestions : NP.fnpQuestions),
+        cat,
         testBank,
         exams,
         tools,
@@ -114,6 +185,7 @@ export function resolveProgrammaticProductLinks(
       return {
         lessons: loc(HUB.examLessons),
         questions: loc(alliedQuestions(marketingRegion)),
+        cat,
         testBank,
         exams,
         tools,
@@ -124,6 +196,7 @@ export function resolveProgrammaticProductLinks(
       return {
         lessons: loc(HUB.examLessons),
         questions: clusterQuestionBankHref(locale, page.cluster, marketingRegion),
+        cat,
         testBank,
         exams,
         tools,

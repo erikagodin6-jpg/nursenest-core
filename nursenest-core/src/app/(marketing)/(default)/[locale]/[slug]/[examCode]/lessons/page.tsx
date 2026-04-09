@@ -21,7 +21,9 @@ import {
   getPathwayLessonsPage,
   listTopicClusters,
   normalizePathwayHubSearchQuery,
+  resolvePathwayLaunchBundle,
 } from "@/lib/lessons/pathway-lesson-loader";
+import { PathwayLaunchEssentials } from "@/components/pathway-lessons/pathway-launch-essentials";
 import { PathwayLessonsHubSearch } from "@/components/pathway-lessons/pathway-lessons-hub-search";
 import { PathwayLessonsResumeHub } from "@/components/pathway-lessons/pathway-lessons-resume-hub";
 import { PathwayLessonsGroupedHub } from "@/components/pathway-lessons/pathway-lessons-grouped-hub";
@@ -137,10 +139,11 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const qEffective = normalizePathwayHubSearchQuery(sp.q);
   const listOpts = typeof sp.q === "string" && sp.q.trim().length > 0 ? { q: sp.q } : undefined;
 
-  const [pageResult, questionSnapshot, pathwayLessonTotal] = await Promise.all([
+  const [pageResult, questionSnapshot, pathwayLessonTotal, launchBundle] = await Promise.all([
     getPathwayLessonsPage(pathway.id, pageRequested, pageSizeRequested, lessonContentLocale, listOpts),
     loadPathwayQuestionBankSnapshot(pathway.id),
     countPathwayLessons(pathway.id),
+    pageRequested === 1 && !qEffective ? resolvePathwayLaunchBundle(pathway.id, lessonContentLocale) : Promise.resolve(null),
   ]);
 
   const hubQuerySuffix = (page: number) => {
@@ -329,6 +332,12 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       <div className="mt-8">
         <PathwayLessonsHubSearch basePath={base} initialQuery={qEffective} />
       </div>
+
+      {launchBundle && launchBundle.resolved.length > 0 ? (
+        <div className="mt-8">
+          <PathwayLaunchEssentials bundle={launchBundle} lessonsBasePath={base} />
+        </div>
+      ) : null}
 
       {canShowResume && pathwayHubResumeHasContent(resumePayload) ? (
         <div className="mt-6">

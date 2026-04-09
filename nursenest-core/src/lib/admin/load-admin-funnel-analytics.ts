@@ -218,7 +218,7 @@ export async function loadAdminFunnelAnalytics(q: ParsedFunnelQuery): Promise<Ad
 
   /** DB-only proxies — no marketing funnel without PostHog. */
   try {
-    const userWhere: Parameters<typeof prisma.user.count>[0]["where"] = {
+    const userWhere: Prisma.UserWhereInput = {
       role: UserRole.LEARNER,
       createdAt: { gte: from, lte: to },
     };

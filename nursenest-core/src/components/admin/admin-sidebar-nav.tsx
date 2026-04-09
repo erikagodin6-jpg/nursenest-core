@@ -53,7 +53,7 @@ const sections: NavSection[] = [
       { href: "/admin/media", label: "Media & images", icon: ImageIcon },
       { href: "/admin/users", label: "Users", icon: Users },
       { href: "/admin/analytics/users", label: "User analytics", icon: Users2 },
-      { href: "/admin/analytics/funnels", label: "Funnels", icon: BarChart3 },
+      { href: "/admin/analytics/funnels", label: "Funnels", icon: Workflow },
       { href: "/admin/subscriptions", label: "Subscriptions", icon: Activity },
     ],
   },

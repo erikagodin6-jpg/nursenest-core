@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Fragment } from "react";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import type { SeoPageDefinition } from "@/lib/seo/programmatic-registry";
@@ -13,6 +14,8 @@ import { ProgrammaticPracticeDynamicHeader } from "@/components/seo/programmatic
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { resolveProgrammaticProductLinks } from "@/lib/seo/programmatic-page-links";
+import { ProgrammaticStudyHubBlock } from "@/components/seo/programmatic-study-hub-block";
+import { ProgrammaticFinalFunnelCta, ProgrammaticMidPagePracticeCta } from "@/components/seo/programmatic-funnel-ctas";
 import { isUnifiedPracticeSlug } from "@/lib/seo/programmatic-practice-hub";
 import { NpMarketingProductDiscovery } from "@/components/marketing/np-marketing-product-discovery";
 import { ProgrammaticStudyModesHub } from "@/components/seo/programmatic-study-modes-hub";
@@ -43,7 +46,7 @@ export async function ProgrammaticSeoPage({
   const signup = withMarketingLocale(locale, "/signup");
   const pricing = withMarketingLocale(locale, HUB.pricing);
   const product = resolveProgrammaticProductLinks(page, locale, marketingRegion);
-  const { lessons, questions, testBank, exams, tools, flashcards } = product;
+  const { lessons, questions, cat, testBank, exams, tools, flashcards } = product;
 
   const pathForProgrammatic = (slug: string) =>
     localizedUrl && locale !== DEFAULT_MARKETING_LOCALE ? `/${locale}/${slug}` : `/${slug}`;
