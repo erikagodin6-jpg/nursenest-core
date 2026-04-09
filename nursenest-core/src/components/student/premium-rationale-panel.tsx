@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ChevronDown } from "lucide-react";
+import { BookOpen, ChevronDown } from "lucide-react";
 import type { ContentQualityTier } from "@/lib/content-quality/standards";
 import type { RationaleReferenceMedia } from "@/lib/content-quality/rationale-media";
 import type { NormalizedTeachingPayload, TeachingMediaBundle } from "@/lib/content-quality/teaching-payload";
@@ -73,7 +73,9 @@ export function PremiumRationalePanel({
   defaultOpenExplanation?: boolean;
 }) {
   const { t } = useMarketingI18n();
-  const lessonLinks = (rationaleLessonLinks ?? []).filter((l) => l.href?.trim() && l.ctaKey);
+  const rawLessonLinks = (rationaleLessonLinks ?? []).filter((l) => l.href?.trim() && l.ctaKey);
+  /** Exam UI: show at most two lesson links to avoid crowding the rationale card. */
+  const lessonLinks = variant === "exam" ? rawLessonLinks.slice(0, 2) : rawLessonLinks.slice(0, 3);
   const sections = (rationaleSections ?? []).filter((s) => s.body?.trim());
   const tier = rationaleQuality?.tier;
   const showEnrichment =
@@ -119,17 +121,22 @@ export function PremiumRationalePanel({
         <LegacyReferenceFigures items={referenceMedia} />
       ) : null}
       {lessonLinks.length > 0 ? (
-        <div className="mt-4 space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-wide text-primary">{t("learner.qbank.rationaleLinks.heading")}</p>
-          <ul className="space-y-2">
+        <div className="nn-rationale-lesson-links mt-4 rounded-xl border border-primary/15 bg-[linear-gradient(135deg,color-mix(in_srgb,var(--theme-primary)_8%,transparent),transparent)] p-4">
+          <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-primary">
+            <BookOpen className="h-3.5 w-3.5 shrink-0 opacity-90" aria-hidden />
+            <span>{t("learner.qbank.rationaleLinks.heading")}</span>
+          </p>
+          <ul className="mt-3 space-y-2">
             {lessonLinks.map((l) => (
               <li key={`${l.href}-${l.slug}`}>
                 <Link
                   href={l.href}
-                  className="group inline-flex w-full flex-col gap-0.5 rounded-lg border border-border/80 bg-muted/20 px-3 py-2.5 text-left transition-colors hover:border-primary/40 hover:bg-muted/40 sm:flex-row sm:items-center sm:justify-between"
+                  className="group flex flex-col gap-0.5 rounded-lg border border-border/70 bg-background/70 px-3 py-2.5 text-left shadow-sm transition-colors hover:border-primary/45 hover:bg-background sm:flex-row sm:items-center sm:justify-between"
                 >
-                  <span className="text-sm font-semibold text-foreground group-hover:text-primary">{t(l.ctaKey)}</span>
-                  <span className="text-xs text-muted-foreground">{l.title}</span>
+                  <span className="text-[13px] font-semibold leading-snug text-foreground group-hover:text-primary">
+                    {t(l.ctaKey)}
+                  </span>
+                  <span className="text-xs text-muted-foreground sm:max-w-[55%] sm:text-right">{l.title}</span>
                 </Link>
               </li>
             ))}

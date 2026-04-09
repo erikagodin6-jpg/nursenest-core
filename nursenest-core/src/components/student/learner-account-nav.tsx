@@ -21,6 +21,16 @@ const GROUPS: readonly NavGroup[] = [
       { href: "/app/account/report-card", key: "learner.account.nav.reportCard" },
       { href: "/app/account/readiness", key: "learner.account.nav.readiness" },
       { href: "/app/account/progress", key: "learner.account.nav.progress" },
+      { href: "/app/account/question-bank-performance", key: "learner.account.nav.questionBankPerf" },
+      { href: "/app/account/focus-areas", key: "learner.account.nav.focusAreas" },
+    ],
+  },
+  {
+    sectionKey: "learner.account.nav.groupActivity",
+    items: [
+      { href: "/app/account/study-history", key: "learner.account.nav.studyHistory" },
+      { href: "/app/account/cat-history", key: "learner.account.nav.catHistory" },
+      { href: "/app/account/review-queue", key: "learner.account.nav.reviewQueue" },
     ],
   },
   {

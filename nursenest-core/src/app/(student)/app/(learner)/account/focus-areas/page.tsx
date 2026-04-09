@@ -6,7 +6,6 @@ import { LearnerAccountEmptyState } from "@/components/student/learner-account-e
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import { buildLearnerInsightSnapshot } from "@/lib/insights/learner-insight-engine";
 import { remediationTopicDrillHref, remediationWeakModeTestHref } from "@/lib/learner/remediation-links";
 import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
@@ -59,12 +58,6 @@ export default async function AccountFocusAreasPage() {
   }
 
   const topicPerf = await loadUnifiedTopicPerformance(userId, entitlement, 18);
-  let insights = null;
-  try {
-    insights = await buildLearnerInsightSnapshot(userId, entitlement);
-  } catch {
-    insights = null;
-  }
 
   const weak = topicPerf.weakTopics;
   const strong = topicPerf.strongTopics;
@@ -95,7 +88,6 @@ export default async function AccountFocusAreasPage() {
           <p className="mt-1 text-sm text-muted-foreground">{t("learner.account.focusAreas.weakLead")}</p>
           <ul className="mt-4 space-y-3">
             {weak.slice(0, 12).map((w) => {
-              const insight = insights?.weakAreas.find((x) => x.topic === w.topic);
               const acc = w.attempted > 0 ? Math.round(100 - w.missRate) : null;
               const missLabel =
                 w.missed === 1
@@ -104,11 +96,6 @@ export default async function AccountFocusAreasPage() {
               return (
                 <li key={w.topic} className="rounded-xl border border-rose-500/20 bg-rose-500/[0.06] px-4 py-3 text-sm">
                   <span className="font-semibold text-foreground">{w.topic}</span>
-                  {insight ? (
-                    <span className="ml-2 text-xs text-muted-foreground">
-                      {t("learner.profile.topics.topicRisk", { tier: insight.tier, risk: insight.risk })}
-                    </span>
-                  ) : null}
                   <p className="mt-1 text-xs text-muted-foreground">
                     {acc != null ? t("learner.profile.topics.accuracyLine", { pct: acc }) : t("learner.common.notAvailable")} · {missLabel}
                   </p>

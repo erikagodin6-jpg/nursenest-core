@@ -21,7 +21,9 @@ export function pathwayAppQuestionBankTopicHref(pathway: ExamPathwayDefinition, 
 }
 
 /**
- * End-of-lesson CTA: same exam track in the question bank (marketing + signed-in app), optional topic cluster.
+ * Standalone practice strip (marketing question bank + app + topic cluster).
+ * **Prefer** `PathwayLessonRelatedLearningBlock` on public pathway lesson pages — it unifies related lessons,
+ * practice, and CAT in one premium block.
  */
 export function PathwayLessonPracticeTopicCta({
   pathway,

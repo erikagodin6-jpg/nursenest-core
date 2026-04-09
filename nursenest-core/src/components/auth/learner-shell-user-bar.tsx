@@ -21,6 +21,14 @@ const PERFORMANCE_LINKS: MenuItem[] = [
   { href: "/app/account/report-card", i18nKey: "learner.userBar.link.reportCard" },
   { href: "/app/account/readiness", i18nKey: "learner.userBar.link.readiness" },
   { href: "/app/account/progress", i18nKey: "learner.userBar.link.progress" },
+  { href: "/app/account/question-bank-performance", i18nKey: "learner.userBar.link.questionBankPerf" },
+  { href: "/app/account/focus-areas", i18nKey: "learner.userBar.link.focusAreas" },
+];
+
+const ACTIVITY_LINKS: MenuItem[] = [
+  { href: "/app/account/study-history", i18nKey: "learner.userBar.link.studyHistory" },
+  { href: "/app/account/cat-history", i18nKey: "learner.userBar.link.catHistory" },
+  { href: "/app/account/review-queue", i18nKey: "learner.userBar.link.reviewQueue" },
 ];
 
 const ACCOUNT_LINKS: MenuItem[] = [
@@ -176,6 +184,8 @@ export function LearnerShellUserBar({ pathwayShortLabel = null }: { pathwayShort
             {renderGroup("learner.userBar.section.study", STUDY_LINKS)}
             <div className="mx-3 my-1 h-px bg-[var(--border-subtle)]/90" aria-hidden />
             {renderGroup("learner.userBar.section.performance", PERFORMANCE_LINKS)}
+            <div className="mx-3 my-1 h-px bg-[var(--border-subtle)]/90" aria-hidden />
+            {renderGroup("learner.userBar.section.activity", ACTIVITY_LINKS)}
             <div className="mx-3 my-1 h-px bg-[var(--border-subtle)]/90" aria-hidden />
             {renderGroup("learner.userBar.section.account", ACCOUNT_LINKS)}
           </div>

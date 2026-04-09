@@ -30,7 +30,6 @@ export function PathwayLessonRelatedQuestions({
       <ol className="mt-4 list-decimal space-y-3 pl-5 text-sm text-[var(--theme-body-text)]">
         {items.map((q) => (
           <li key={q.id} className="leading-relaxed">
-            <span className="text-[var(--theme-muted-text)]">#{q.id.slice(0, 8)}… — </span>
             {q.stemPreview}
           </li>
         ))}

@@ -21,6 +21,7 @@ import {
   pathwayLessonMarketingDetailHref,
 } from "@/lib/lessons/pathway-lesson-types";
 import { pathwayTopicClusterBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
+import { PathwayTopicClusterSiblingNav } from "@/components/pathway-lessons/pathway-topic-cluster-sibling-nav";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
 export const dynamicParams = true;
@@ -103,6 +104,14 @@ export default async function PathwayLessonTopicClusterPage({ params, searchPara
         {label} lessons for {pathway.displayName}: same {pathway.countrySlug === "canada" ? "Canadian" : "US"} exam scope as
         the parent hub—topics here are not mixed with other countries or license levels.
       </p>
+
+      <div className="mt-6">
+        <PathwayTopicClusterSiblingNav
+          lessonsBasePath={base}
+          topicClusters={topicClusters}
+          currentTopicSlug={topicSlug}
+        />
+      </div>
 
       {pageResult.locale ? <PathwayLessonContentLocaleBanner listLocale={pageResult.locale} /> : null}
 

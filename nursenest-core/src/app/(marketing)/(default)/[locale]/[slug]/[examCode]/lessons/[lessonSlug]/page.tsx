@@ -41,11 +41,7 @@ import { classifyPathwayLesson } from "@/lib/content-quality/classify-lesson";
 import { buildQuickReviewBullets } from "@/lib/lessons/pathway-lesson-quick-review";
 import { matchConceptImage } from "@/lib/education-images/match-concept-image";
 import { PathwayLessonFigures } from "@/components/lessons/pathway-lesson-figures";
-import {
-  mergeRelatedLessonDisplayList,
-  pathwayLessonHasRenderableHubSlug,
-  pathwayLessonMarketingDetailHref,
-} from "@/lib/lessons/pathway-lesson-types";
+import { mergeRelatedLessonDisplayList, pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
 import {
   loadPathwayLessonProgressForSlug,
   type PathwayLessonProgressStatus,
@@ -331,57 +327,36 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
         initialProgress={lessonProgress}
       />
 
-      <PathwayLessonPracticeTopicCta
+      <PathwayLessonRelatedLearningBlock
         pathway={pathway}
         topic={lesson.topic}
         topicSlug={lesson.topicSlug}
         lessonsBasePath={base}
+        relatedLessons={relatedDisplay}
+        currentSlug={lesson.slug}
       />
 
       <PathwayLessonRelatedQuestions pathway={pathway} lessonTopic={lesson.topic} items={relatedQuestionStems} />
 
-      <p className="mt-6 text-sm text-muted">
-        Also see:{" "}
+      <p className="mt-8 text-sm text-muted">
+        More resources:{" "}
         <Link href="/blog" className="font-medium text-primary hover:underline">
           clinical blog
         </Link>
-        ,{" "}
+        {" · "}
         <Link href="/tools" className="font-medium text-primary hover:underline">
-          free tools
+          tools
         </Link>
-        , and{" "}
+        {" · "}
         <Link href="/lessons" className="font-medium text-primary hover:underline">
-          other lesson hubs
+          all lesson hubs
         </Link>
         .
       </p>
 
-      {relatedDisplay.length > 0 ? (
-        <section className="mt-10">
-          <h2 className="text-lg font-semibold">Related lessons & next steps · {lesson.topic}</h2>
-          <ul className="mt-3 space-y-2">
-            {relatedDisplay.map((r) => {
-              const href = pathwayLessonMarketingDetailHref(base, r.slug);
-              if (!href) return null;
-              return (
-                <li key={r.slug}>
-                  <Link href={href} className="text-primary hover:underline">
-                    {r.title}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-      ) : null}
-
-      <div className="mt-10 text-sm text-muted">
-        <Link href={buildExamPathwayPath(pathway)} className="font-medium text-primary">
-          Exam hub
-        </Link>
-        {" · "}
-        <Link href={`${base}/topics/${lesson.topicSlug}`} className="font-medium text-primary">
-          {lesson.topic} cluster
+      <div className="mt-6 text-sm text-muted">
+        <Link href={buildExamPathwayPath(pathway)} className="font-medium text-primary hover:underline">
+          {pathway.shortName} exam hub
         </Link>
       </div>
 

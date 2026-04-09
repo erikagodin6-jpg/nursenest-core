@@ -17,7 +17,7 @@ import { isRuntimeSafeMode } from "@/lib/runtime/safe-mode";
 
 export type TimeSeriesPoint = { label: string; value: number };
 
-export type AdminAnalyticsDashboard = {
+export type AdminAnalyticsDashboardData = {
   generatedAt: string;
   degraded: boolean;
   warnings: string[];
@@ -102,7 +102,7 @@ function daysAgo(n: number): Date {
   return new Date(Date.now() - n * 86400000);
 }
 
-export async function loadAdminAnalyticsDashboard(): Promise<AdminAnalyticsDashboard | null> {
+export async function loadAdminAnalyticsDashboard(): Promise<AdminAnalyticsDashboardData | null> {
   if (!isDatabaseUrlConfigured() || isRuntimeSafeMode()) {
     return null;
   }
@@ -121,7 +121,7 @@ export async function loadAdminAnalyticsDashboard(): Promise<AdminAnalyticsDashb
     warnings.push(`${label}: ${e instanceof Error ? e.message : String(e)}`.slice(0, 240));
   };
 
-  let blogPerformance: AdminAnalyticsDashboard["traffic"]["blogPerformance"] = [];
+  let blogPerformance: AdminAnalyticsDashboardData["traffic"]["blogPerformance"] = [];
   try {
     const posts = await prisma.blogPost.findMany({
       where: {
@@ -183,7 +183,7 @@ export async function loadAdminAnalyticsDashboard(): Promise<AdminAnalyticsDashb
     pushWarn(e, "learnerPathwayGoals");
   }
 
-  let topLessonsByProgressRows: AdminAnalyticsDashboard["lessonUsage"]["topLessonsByProgressRows"] = [];
+  let topLessonsByProgressRows: AdminAnalyticsDashboardData["lessonUsage"]["topLessonsByProgressRows"] = [];
   let progressRowsTotal = 0;
   let distinctLearnersWithProgress7d = 0;
   try {
@@ -221,7 +221,7 @@ export async function loadAdminAnalyticsDashboard(): Promise<AdminAnalyticsDashb
   }
 
   let examAttempts7d = 0;
-  let topExamsByAttempts7d: AdminAnalyticsDashboard["questionUsage"]["topExamsByAttempts7d"] = [];
+  let topExamsByAttempts7d: AdminAnalyticsDashboardData["questionUsage"]["topExamsByAttempts7d"] = [];
   let topTopicsByVolume: Array<{ topic: string; totalAttempts: number }> = [];
   try {
     examAttempts7d = await prisma.examAttempt.count({ where: { createdAt: { gte: weekAgo } } });
@@ -229,7 +229,7 @@ export async function loadAdminAnalyticsDashboard(): Promise<AdminAnalyticsDashb
       by: ["examId"],
       where: { createdAt: { gte: weekAgo } },
       _count: { _all: true },
-      orderBy: { _count: { examId: "desc" } },
+      orderBy: { _count: { _all: "desc" } },
       take: 10,
     });
     const examIds = examGroups.map((g) => g.examId);
@@ -329,7 +329,7 @@ export async function loadAdminAnalyticsDashboard(): Promise<AdminAnalyticsDashb
   }
 
   let jobs7d = { completed: 0, failed: 0, pendingOrRunning: 0 };
-  let recentJobs: AdminAnalyticsDashboard["contentGeneration"]["recentJobs"] = [];
+  let recentJobs: AdminAnalyticsDashboardData["contentGeneration"]["recentJobs"] = [];
   try {
     const since7d = weekAgo;
     const [completed, failed, pend] = await Promise.all([
@@ -369,7 +369,7 @@ export async function loadAdminAnalyticsDashboard(): Promise<AdminAnalyticsDashb
     pushWarn(e, "contentGeneration");
   }
 
-  let recentLogs: AdminAnalyticsDashboard["automation"]["recentLogs"] = [];
+  let recentLogs: AdminAnalyticsDashboardData["automation"]["recentLogs"] = [];
   try {
     const logs = await prisma.contentAutomationLog.findMany({
       orderBy: { createdAt: "desc" },
@@ -397,9 +397,9 @@ export async function loadAdminAnalyticsDashboard(): Promise<AdminAnalyticsDashb
     pushWarn(e, "automation");
   }
 
-  let backgroundJobsFailed: AdminAnalyticsDashboard["failures"]["backgroundJobsFailed"] = [];
-  let aiJobsWithErrors: AdminAnalyticsDashboard["failures"]["aiJobsWithErrors"] = [];
-  let automationFailures: AdminAnalyticsDashboard["failures"]["automationFailures"] = [];
+  let backgroundJobsFailed: AdminAnalyticsDashboardData["failures"]["backgroundJobsFailed"] = [];
+  let aiJobsWithErrors: AdminAnalyticsDashboardData["failures"]["aiJobsWithErrors"] = [];
+  let automationFailures: AdminAnalyticsDashboardData["failures"]["automationFailures"] = [];
   try {
     const bj = await prisma.backgroundJob.findMany({
       where: { status: JobStatus.FAILED },

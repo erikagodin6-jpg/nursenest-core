@@ -164,6 +164,13 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
   }
   const relatedDisplay = mergeRelatedLessonDisplayList(lesson.relatedLessonRefs, related, RELATED_PATHWAY_LESSONS_LIMIT);
 
+  const relatedQuestionStems = await loadRelatedExamQuestionStemsForPathwayLesson({
+    pathway,
+    lessonTopic: lesson.topic,
+    lessonTopicSlug: lesson.topicSlug,
+    bodySystem: lesson.bodySystem,
+  });
+
   const { crumbs, schemaItems } = alliedLessonDetailBreadcrumbs(
     prof.h1,
     professionHeroPath,
@@ -292,6 +299,8 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
         </Link>
         .
       </p>
+
+      <PathwayLessonRelatedQuestions pathway={pathway} lessonTopic={lesson.topic} items={relatedQuestionStems} />
 
       {relatedDisplay.length > 0 ? (
         <section className="mt-10">

@@ -17,7 +17,11 @@ import {
   resolveTopicSlugForPathwayTopicLabel,
 } from "@/lib/lessons/lesson-question-cross-links";
 import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
-import { getRelatedPathwayLessons, RELATED_PATHWAY_LESSONS_LIMIT } from "@/lib/lessons/pathway-lesson-loader";
+import {
+  countPathwayLessons,
+  getRelatedPathwayLessons,
+  RELATED_PATHWAY_LESSONS_LIMIT,
+} from "@/lib/lessons/pathway-lesson-loader";
 import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
 import { pathwayQuestionsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";

@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { ExamPlanSettingsCard } from "@/components/student/exam-plan-settings-card";
 import { LearnerInsightEnginePanel } from "@/components/student/learner-insight-engine-panel";
+import { LearnerAccountToolGrid } from "@/components/student/learner-account-tool-grid";
 import { LearnerProfileAccountActions } from "@/components/student/learner-profile-account-actions";
 import { AdaptiveStudyOverview } from "@/components/student/adaptive-study-overview";
 import { LockedStudyNextPreview } from "@/components/student/locked-study-next-preview";
@@ -147,6 +148,8 @@ export default async function LearnerAccountOverviewPage() {
         <h1 className="mt-1 text-3xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.overview.title")}</h1>
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.account.overview.intro")}</p>
       </div>
+
+      {entitlement !== "error" && entitlement.hasAccess ? <LearnerAccountToolGrid t={t} /> : null}
 
       <section className="nn-card p-6">
         <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">{t("learner.profile.account.heading")}</h2>
