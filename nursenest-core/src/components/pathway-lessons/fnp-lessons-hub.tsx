@@ -13,7 +13,7 @@ const FnpLessonExplorer = dynamic(
         aria-busy="true"
         aria-label="Loading FNP lesson explorer"
       >
-        <p className="nn-marketing-label nn-marketing-label--accent">FNP lesson library</p>
+        <p className="nn-marketing-label nn-marketing-label--accent">NP lesson library</p>
         <p className="mt-2 text-sm font-medium text-[var(--theme-heading-text)]">Loading domain and lifespan explorer…</p>
         <p className="mt-2 max-w-md text-sm text-[var(--theme-muted-text)]">
           One moment while we prepare your interactive lesson map—grouped by clinical domain and population.
@@ -70,13 +70,15 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
   const featuredPreview = featured ? fnpLessonClinicalPreview(featured) : null;
   const questionsHub = buildExamPathwayPath(pathway, "questions");
   const examHub = buildExamPathwayPath(pathway);
+  const catHub = buildExamPathwayPath(pathway, "cat");
+  const boardFraming = pathway.boardLabel ?? pathway.shortName;
 
   return (
-    <div className="space-y-14">
+    <div className="nn-np-hub-root space-y-14">
       {/* 1: How to use */}
       <section className="nn-study-card p-5 sm:p-6" aria-labelledby="how-use-fnp">
         <h2 id="how-use-fnp" className="nn-marketing-h3">
-          How to use these lessons for FNP boards
+          How to use these lessons for {boardFraming}
         </h2>
         <ol className="nn-marketing-body-sm mt-4 list-none space-y-3 pl-0 text-[var(--theme-muted-text)]">
           <li>
@@ -104,9 +106,14 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
 
       {/* Trust anchors */}
       <section className="nn-study-callout p-5 sm:p-6">
-        <h2 className="nn-marketing-h3">Built for FNP certification, not generic nursing review</h2>
+        <h2 className="nn-marketing-h3">
+          Built for {pathway.shortName} certification, not generic nursing review
+        </h2>
         <ul className="nn-marketing-body-sm mt-3 list-disc space-y-2 pl-5 text-[var(--theme-muted-text)]">
-          <li>Structured around the <strong className="text-[var(--theme-heading-text)]">AANP and ANCC</strong> emphasis on assessment → diagnosis → plan → evaluation across settings.</li>
+          <li>
+            Structured around <strong className="text-[var(--theme-heading-text)]">{boardFraming}</strong> expectations:
+            assessment → diagnosis → plan → evaluation across outpatient primary care settings.
+          </li>
           <li>
             <strong className="text-[var(--theme-heading-text)]">Full lifespan</strong>: from prenatal/women&apos;s health through geriatrics. How
             items embed age in the stem, not just the topic label.
@@ -125,7 +132,7 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
       />
 
       {/* Lifespan quick nav + counts */}
-      <nav aria-label="FNP lessons by population" className="nn-study-card nn-study-card--wash p-4">
+      <nav aria-label={`${pathway.shortName} lessons by population`} className="nn-study-card nn-study-card--wash p-4">
         <p className="nn-marketing-label">Jump to population lane</p>
         <p className="nn-marketing-caption mt-1">
           Counts reflect lessons on this page (paginated hub). Use the domain chips below for assessment vs management.
@@ -239,7 +246,7 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
       {/* Differential diagnosis emphasis */}
       <section className="nn-study-card p-5 sm:p-6" aria-labelledby="fnp-diff">
         <h2 id="fnp-diff" className="nn-marketing-h3">
-          How FNP questions test differential thinking
+          How {pathway.shortName} board items test differential thinking
         </h2>
         <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
           Boards rarely ask for a textbook definition. They present a symptom and force you to discriminate among plausible
@@ -344,11 +351,11 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
             App question bank
           </Link>
           <span aria-hidden>·</span>
-          <Link href="/app/exams" className="font-semibold text-primary">
-            Exam simulations
+          <Link href={catHub} className="font-semibold text-primary">
+            Exam simulations · this pathway
           </Link>
           <span aria-hidden>·</span>
-          <Link href="/app/flashcards" className="font-semibold text-primary">
+          <Link href="/flashcards" className="font-semibold text-primary">
             Flashcards
           </Link>
         </div>
@@ -357,10 +364,10 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
       {/* Advanced reasoning */}
       <section className="nn-study-card p-5 sm:p-6" aria-labelledby="fnp-advanced">
         <h2 id="fnp-advanced" className="nn-marketing-h3">
-          What advanced FNP reasoning looks like
+          What advanced {pathway.shortName} primary care reasoning looks like
         </h2>
         <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">
-          Illustrative primary-care vignette: focus on sequence and elimination, not memorizing this exact answer.
+          Illustrative outpatient vignette: focus on sequence and elimination, not memorizing this exact answer.
         </p>
         <div className="nn-study-card--wash mt-4 rounded-xl border border-border/80 p-4">
           <p className="nn-marketing-body-sm font-medium text-[var(--theme-body-text)]">
@@ -436,7 +443,7 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
               Test your diagnostic reasoning (this topic)
             </Link>
           )}
-          <Link href="/app/exams" className="inline-flex rounded-full nn-btn-secondary bg-card px-4 py-2 text-sm font-semibold">
+          <Link href={catHub} className="inline-flex rounded-full nn-btn-secondary bg-card px-4 py-2 text-sm font-semibold">
             See how you perform across age groups
           </Link>
           <Link href="/app/questions" className="inline-flex rounded-full nn-btn-secondary bg-card px-4 py-2 text-sm font-semibold">

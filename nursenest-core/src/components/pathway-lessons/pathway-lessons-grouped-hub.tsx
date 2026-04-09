@@ -108,7 +108,7 @@ export function PathwayLessonsGroupedHub({
   const isNp = visualTone === "np";
 
   return (
-    <div className="space-y-10">
+    <div className={isNp ? "nn-np-hub-root space-y-10" : "space-y-10"}>
       <section className="nn-study-card nn-study-card--wash p-5 sm:p-6" aria-labelledby="lessons-guided-path">
         <p className="nn-marketing-label nn-marketing-label--accent">How to use this hub</p>
         <h2 id="lessons-guided-path" className="nn-marketing-h3 mt-2">
@@ -148,7 +148,7 @@ export function PathwayLessonsGroupedHub({
               className={
                 isNp
                   ? "nn-study-card nn-study-card--wash flex flex-wrap items-end justify-between gap-3 p-4 sm:p-5"
-                  : "flex flex-wrap items-end justify-between gap-3 border-b border-border/70 pb-4"
+                  : "flex flex-wrap items-end justify-between gap-3 border-b border-[color-mix(in_srgb,var(--border-subtle)_82%,var(--theme-primary))] pb-4"
               }
             >
               <div>
@@ -198,7 +198,10 @@ export function PathwayLessonsGroupedHub({
                         </p>
                         {showProgress ? <PathwayLessonProgressBadge status={ps} /> : null}
                       </div>
-                      <Link href={href} className="nn-marketing-h4 mt-2 text-primary hover:underline">
+                      <Link
+                        href={href}
+                        className="nn-marketing-h4 mt-2 text-[var(--theme-heading-text)] underline-offset-4 transition hover:text-primary hover:underline"
+                      >
                         {l.title}
                       </Link>
                       <p className="nn-marketing-body-sm mt-2 line-clamp-3 flex-1 text-[var(--theme-muted-text)]">
@@ -289,8 +292,11 @@ export function PathwayLessonsGroupedHub({
           >
             Open practice in app
           </Link>
-          <Link href="/app/exams" className="inline-flex min-h-11 items-center rounded-full nn-btn-secondary px-4 py-2 text-sm font-semibold">
-            Practice exams
+          <Link
+            href={buildExamPathwayPath(pathway, "cat")}
+            className="inline-flex min-h-11 items-center rounded-full nn-btn-secondary px-4 py-2 text-sm font-semibold"
+          >
+            CAT prep · this pathway
           </Link>
         </div>
       </section>

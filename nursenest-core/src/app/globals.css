@@ -1142,43 +1142,101 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
 /*
  * Study flow cards (pathway hubs, lessons, bank panels): one radius + shadow recipe.
  * Prefer over ad-hoc `border-2 shadow-sm` stacks.
+ * Soft clinical: theme-tinted border, calm shadow — premium without harsh contrast.
  */
 .nn-study-card {
-  border-radius: 1rem;
-  border: 1px solid var(--border-subtle);
+  border-radius: 1.125rem;
+  border: 1px solid color-mix(in srgb, var(--theme-primary) 9%, var(--border-subtle));
   background: var(--bg-card);
   box-shadow: var(--shadow-card);
 }
 
 .nn-study-card--wash {
-  background: var(--nn-presentation-ribbon);
-  border-color: color-mix(in srgb, var(--theme-primary) 10%, var(--border-subtle));
+  background: color-mix(in srgb, var(--theme-primary) 3.5%, var(--nn-presentation-ribbon));
+  border-color: color-mix(in srgb, var(--theme-primary) 11%, var(--border-subtle));
 }
 
 .nn-study-callout {
-  border-radius: 1rem;
-  border: 1px solid color-mix(in srgb, var(--theme-primary) 14%, var(--border-subtle));
-  background: color-mix(in srgb, var(--theme-primary) 5%, var(--bg-card));
+  border-radius: 1.125rem;
+  border: 1px solid color-mix(in srgb, var(--theme-primary) 12%, var(--border-subtle));
+  background: color-mix(in srgb, var(--theme-primary) 4.5%, var(--bg-card));
+  box-shadow: var(--shadow-card);
+}
+
+/* Marketing pathway lesson detail: one soft band for long-form reading */
+.nn-lesson-page-shell {
+  border-radius: 1.75rem;
+  border: 1px solid color-mix(in srgb, var(--theme-primary) 8%, var(--border-subtle));
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--theme-primary) 3.5%, var(--theme-page-bg)) 0%,
+    var(--theme-page-bg) 38%,
+    var(--bg-section) 100%
+  );
+  box-shadow: var(--shadow-card);
+}
+
+/* NP lesson detail: second accent band from `--theme-secondary` (theme-switch safe, not monochrome). */
+.nn-lesson-page-shell--np {
+  border-color: color-mix(
+    in srgb,
+    var(--theme-primary) 7%,
+    color-mix(in srgb, var(--theme-secondary) 14%, var(--border-subtle))
+  );
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--theme-primary) 3.2%, var(--theme-page-bg)) 0%,
+    var(--theme-page-bg) 42%,
+    color-mix(in srgb, var(--theme-secondary) 5%, var(--bg-section)) 100%
+  );
+}
+
+/* NP lessons hub root: soft frame + depth without hardcoded hues */
+.nn-np-hub-root {
+  border-radius: 1.5rem;
+  padding: clamp(0.5rem, 1.5vw, 1.25rem);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--theme-secondary) 4%, var(--theme-page-bg)) 0%,
+    transparent 42%
+  );
+  border: 1px solid color-mix(in srgb, var(--theme-secondary) 12%, var(--border-subtle));
+  box-shadow: var(--shadow-card);
+}
+
+@media (min-width: 640px) {
+  .nn-np-hub-root {
+    padding: clamp(0.75rem, 2vw, 1.5rem);
+  }
+}
+
+/* Study hero: NP variant hook (extra glow is on the element in TSX). */
+.nn-lessons-hero--np {
+  border-color: color-mix(
+    in srgb,
+    var(--theme-secondary) 10%,
+    color-mix(in srgb, var(--theme-primary) 10%, var(--border-subtle))
+  );
 }
 
 /* Pathway lesson article: soft bands + comfortable long-read typography */
 .nn-lesson-article-section {
-  border-radius: 1rem;
-  border: 1px solid color-mix(in srgb, var(--theme-primary) 9%, var(--border-subtle));
-  background: color-mix(in srgb, var(--theme-primary) 4%, var(--bg-card));
-  padding: 1.5rem 1.25rem 1.65rem;
+  border-radius: 1.125rem;
+  border: 1px solid color-mix(in srgb, var(--theme-primary) 8%, var(--border-subtle));
+  background: color-mix(in srgb, var(--theme-primary) 3.5%, var(--bg-card));
+  padding: 1.35rem 1.15rem 1.5rem;
   box-shadow: var(--shadow-card);
 }
 
 @media (min-width: 640px) {
   .nn-lesson-article-section {
-    padding: 1.75rem 1.5rem 1.9rem;
+    padding: 1.65rem 1.45rem 1.85rem;
   }
 }
 
 .nn-lesson-article-section--alt {
-  background: var(--nn-presentation-ribbon);
-  border-color: color-mix(in srgb, var(--theme-primary) 11%, var(--border-subtle));
+  background: color-mix(in srgb, var(--theme-primary) 2.5%, var(--nn-presentation-ribbon));
+  border-color: color-mix(in srgb, var(--theme-primary) 10%, var(--border-subtle));
 }
 
 .nn-lesson-prose {

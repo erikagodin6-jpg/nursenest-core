@@ -26,7 +26,7 @@ export function PathwayLaunchEssentials({ bundle, lessonsBasePath }: Props) {
 
   return (
     <section
-      className="nn-study-card border border-primary/25 bg-[color-mix(in_srgb,var(--theme-primary)_6%,transparent)] p-5 sm:p-6"
+      className="nn-study-card nn-study-card--wash p-5 sm:p-6"
       aria-labelledby="pathway-launch-essentials-heading"
     >
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">

@@ -48,6 +48,8 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 
 export const dynamicParams = true;
 export const revalidate = 86400;
+/** Aggregates + paginated hub queries can run long on cold DB; avoid hard serverless timeouts under spike load. */
+export const maxDuration = 60;
 
 export function generateStaticParams() {
   return [];
@@ -66,7 +68,7 @@ function PathwayLessonsZeroCatalogPanel({ pathway }: { pathway: ExamPathwayDefin
   const upcoming = pathway.status === "upcoming" || pathway.acquisitionMode === "waitlist";
 
   return (
-    <div className="mt-10 rounded-2xl border border-[var(--border-subtle)] bg-[var(--theme-muted-surface)]/35 p-6 sm:p-8">
+    <div className="nn-study-card nn-study-card--wash mt-10 p-6 sm:p-8">
       <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Lesson library · building for this pathway</h2>
       <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[var(--theme-muted-text)]">
         {upcoming
@@ -156,11 +158,12 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const qEffective = normalizePathwayHubSearchQuery(sp.q);
   const listOpts = typeof sp.q === "string" && sp.q.trim().length > 0 ? { q: sp.q } : undefined;
 
-  const [pageResult, questionSnapshot, pathwayLessonTotal, launchBundle] = await Promise.all([
+  const [pageResult, questionSnapshot, pathwayLessonTotal, launchBundle, topics] = await Promise.all([
     getPathwayLessonsPage(pathway.id, pageRequested, pageSizeRequested, lessonContentLocale, listOpts),
     loadPathwayQuestionBankSnapshot(pathway.id),
     countPathwayLessons(pathway.id),
     pageRequested === 1 && !qEffective ? resolvePathwayLaunchBundle(pathway.id, lessonContentLocale) : Promise.resolve(null),
+    listTopicClusters(pathway.id, lessonContentLocale),
   ]);
 
   const hubQuerySuffix = (page: number) => {
@@ -178,12 +181,13 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   }
 
   const lessons = pageResult.items.filter(pathwayLessonHasRenderableHubSlug);
-  const topics = await listTopicClusters(pathway.id, lessonContentLocale);
   const { crumbs, schemaItems } = pathwayLessonsHubBreadcrumbs(pathway);
   const isNclexRnHub = pathway.id === "us-rn-nclex-rn" || pathway.id === "ca-rn-nclex-rn";
   const nclexRnRegion = pathway.id === "ca-rn-nclex-rn" ? "ca" : "us";
   const isUsNclexPnHub = pathway.id === "us-lpn-nclex-pn";
-  const isUsFnpHub = pathway.id === "us-np-fnp";
+  /** Rich primary-care NP hub (FNP-style explorer). PMHNP keeps topic-grouped hub — lifespan lanes fit psychiatry less well. */
+  const isNpPrimaryCareLessonsHub =
+    pathway.examFamily === ExamFamily.NP && pathway.id !== "us-np-pmhnp";
   const isCaRexPnHub = pathway.id === "ca-rpn-rex-pn";
   /** Shared practical-nursing hub (US NCLEX-PN + Canada REx-PN). */
   const isPnLessonsHub = isUsNclexPnHub || isCaRexPnHub;
@@ -197,7 +201,12 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
           <div className="mb-6">
             <BreadcrumbTrail items={crumbs} />
           </div>
-          <PathwayLessonsStudyHero pathway={pathway} lessonsBasePath={base} initialQuery={qEffective} />
+          <PathwayLessonsStudyHero
+            pathway={pathway}
+            lessonsBasePath={base}
+            initialQuery={qEffective}
+            heroAccent={pathway.examFamily === ExamFamily.NP ? "np" : "default"}
+          />
           <p className="mt-6 text-[var(--theme-muted-text)]">
             No lessons matched &ldquo;{qEffective}&rdquo; for {pathway.shortName}. Try a shorter term, browse by topic, or clear
             the search.
@@ -224,7 +233,12 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         <div className="mb-6">
           <BreadcrumbTrail items={crumbs} />
         </div>
-        <PathwayLessonsStudyHero pathway={pathway} lessonsBasePath={base} showSearch={false} />
+        <PathwayLessonsStudyHero
+          pathway={pathway}
+          lessonsBasePath={base}
+          showSearch={false}
+          heroAccent={pathway.examFamily === ExamFamily.NP ? "np" : "default"}
+        />
         <PathwayLessonsNextStepCtas pathway={pathway} emphasizeStudyLoop />
         <PathwayLiveInventoryStrip
           pathway={pathway}
@@ -289,7 +303,12 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         <BreadcrumbTrail items={crumbs} />
       </div>
 
-      <PathwayLessonsStudyHero pathway={pathway} lessonsBasePath={base} initialQuery={qEffective} />
+      <PathwayLessonsStudyHero
+        pathway={pathway}
+        lessonsBasePath={base}
+        initialQuery={qEffective}
+        heroAccent={pathway.examFamily === ExamFamily.NP ? "np" : "default"}
+      />
 
       <PathwayLiveInventoryStrip
         pathway={pathway}
@@ -324,7 +343,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
             progressMap={progressMap}
             framing={isCaRexPnHub ? "rex-pn-ca" : "nclex-pn-us"}
           />
-        ) : isUsFnpHub ? (
+        ) : isNpPrimaryCareLessonsHub ? (
           <FnpLessonsHub pathway={pathway} lessons={lessons} lessonsBasePath={base} topicClusters={topics} progressMap={progressMap} />
         ) : isNclexRnHub ? (
           <NclexRnLessonsHub

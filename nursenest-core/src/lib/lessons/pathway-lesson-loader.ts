@@ -1,3 +1,12 @@
+/**
+ * Pathway lesson data layer (marketing + sitemap).
+ *
+ * **Scale:** Hub/topic lists use offset pagination and hub-list selects (no `sections` JSON).
+ * **Build:** Marketing lesson routes use `generateStaticParams() => []` + `dynamicParams` so builds
+ * do not pre-render every lesson slug.
+ * **Catalog:** `catalog.json` is bundled with server code; full-lesson bodies load only for detail/sitemap
+ * batches — avoid passing entire pathway catalogs to client components.
+ */
 import catalog from "@/content/pathway-lessons/catalog.json";
 import {
   prependScopedGoldCatalogLessons,
@@ -80,10 +89,11 @@ export { PATHWAY_HUB_PAGE_SIZE_DEFAULT, PATHWAY_HUB_PAGE_SIZE_MAX } from "@/lib/
 /** DB read timeout for pathway lesson queries (marketing paths). */
 export const PATHWAY_LESSON_DB_TIMEOUT_MS = 12_000;
 /**
- * Cross-request Data Cache for public lesson payloads (no user/session).
+ * Cross-request Data Cache TTL for public lesson payloads (no user/session).
  * Personalized progress stays outside this layer (see pathway-lesson-progress).
+ * Also use as `export const revalidate` on marketing lesson detail so page ISR matches Data Cache.
  */
-const PATHWAY_LESSON_PUBLIC_CACHE_SECONDS = 3600;
+export const PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS = 3600;
 /** Related lessons block on lesson detail — small bounded list. */
 export const RELATED_PATHWAY_LESSONS_LIMIT = 8;
 /** Topic-filtered question hub / cross-links: same numeric cap as {@link RELATED_PATHWAY_LESSONS_LIMIT}. */
@@ -884,7 +894,7 @@ async function getPathwayLessonsPageWithDataCache(
   return unstable_cache(
     async () => getPathwayLessonsPageImpl(pathwayId, page, pageSize, marketingLocale, listOptions),
     ["pathway-hub", pathwayId, String(page), String(pageSize), marketingLocale ?? "", topicKey, qKey],
-    { revalidate: PATHWAY_LESSON_PUBLIC_CACHE_SECONDS, tags: [`pathway-lessons:${pathwayId}`] },
+    { revalidate: PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS, tags: [`pathway-lessons:${pathwayId}`] },
   )();
 }
 
@@ -1116,7 +1126,7 @@ async function getLessonsForTopicPageWithDataCache(
   return unstable_cache(
     async () => getLessonsForTopicPageImpl(pathwayId, topicSlug, page, pageSize, marketingLocale),
     ["pathway-topic-page", pathwayId, topicSlug, String(page), String(pageSize), marketingLocale ?? ""],
-    { revalidate: PATHWAY_LESSON_PUBLIC_CACHE_SECONDS, tags: [`pathway-lessons:${pathwayId}`] },
+    { revalidate: PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS, tags: [`pathway-lessons:${pathwayId}`] },
   )();
 }
 
@@ -1202,7 +1212,7 @@ async function getPathwayLessonWithDataCache(
     async () => getPathwayLessonImpl(pathwayId, slug, marketingLocale),
     ["pathway-lesson-detail", pathwayId, slug, marketingLocale ?? ""],
     {
-      revalidate: PATHWAY_LESSON_PUBLIC_CACHE_SECONDS,
+      revalidate: PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS,
       tags: [`pathway-lessons:${pathwayId}`, `pathway-lesson:${pathwayId}:${slug}`],
     },
   )();
@@ -1362,7 +1372,7 @@ async function getRelatedPathwayLessonsWithDataCache(
       String(limit),
       marketingLocale ?? "",
     ],
-    { revalidate: PATHWAY_LESSON_PUBLIC_CACHE_SECONDS, tags: [`pathway-lessons:${pathwayId}`] },
+    { revalidate: PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS, tags: [`pathway-lessons:${pathwayId}`] },
   )();
 }
 
@@ -1462,7 +1472,7 @@ async function listTopicClustersWithDataCache(pathwayId: string, marketingLocale
   return unstable_cache(
     async () => listTopicClustersImpl(pathwayId, marketingLocale),
     ["pathway-topic-clusters", pathwayId, marketingLocale ?? ""],
-    { revalidate: PATHWAY_LESSON_PUBLIC_CACHE_SECONDS, tags: [`pathway-lessons:${pathwayId}`] },
+    { revalidate: PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS, tags: [`pathway-lessons:${pathwayId}`] },
   )();
 }
 

@@ -15,6 +15,10 @@ export function pathwayLessonsHubLead(pathway: ExamPathwayDefinition): string {
       return "Clinical lessons for Canadian practical nursing (RPN) candidates preparing for REx-PN: scope-safe judgment, delegation, and Canadian regulatory context. Pair lessons with pathway-scoped questions and practice. Subscription unlocks full depth; previews stay discoverable.";
     case "us-np-fnp":
       return "Advanced-practice lessons for US Family NP candidates—assessment → diagnosis → plan → evaluation across the full lifespan. Pair lessons with case-based questions and exam simulations; subscription unlocks full depth; previews stay discoverable.";
+    case "us-np-agpcnp":
+      return "Adult–gerontology primary care NP lessons—chronic disease, geriatric prescribing, prevention, and escalation judgment scoped to AGPCNP (not FNP or PMHNP). Pair reading with pathway-scoped questions and simulations; subscription unlocks full depth.";
+    case "us-np-pmhnp":
+      return "Psychiatric–mental health NP lessons focus on assessment, safety, psychopharmacology, and therapeutic standards for PMHNP boards—scoped separately from FNP/AGPCNP primary care tracks. Pair lessons with pathway questions and simulations; subscription unlocks full depth.";
     case "ca-np-cnple":
       return "Canadian NP licensure (CNPLE) is evolving—this hub stays aligned as requirements finalize. Use pathway-scoped questions and CAT practice now; structured lessons will deepen here as they publish. Join the waitlist on the exam hub if checkout is not yet open for this track.";
     default: {

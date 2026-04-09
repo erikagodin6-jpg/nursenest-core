@@ -12,6 +12,7 @@ import {
   type NclexPnLessonPreviewFraming,
 } from "@/lib/lessons/nclex-pn-us-lesson-enrichment";
 import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
+import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 
 /** Above this count per Client Needs section, show a compact link list first and tuck rich previews behind a disclosure. */
 export const NCLEX_HUB_RICH_PREVIEWS_COLLAPSE_AFTER = 5;
@@ -50,6 +51,9 @@ export function PathwayNclexScalableLessonSection({
 }: Props) {
   if (section.count === 0) return null;
 
+  const pathwayDef = getExamPathwayById(pathwayId);
+  const catHubHref = pathwayDef ? buildExamPathwayPath(pathwayDef, "cat") : null;
+
   const display = section.lessons.filter((l) => !featuredSlug || l.slug !== featuredSlug);
   const useCollapsedRich = display.length > NCLEX_HUB_RICH_PREVIEWS_COLLAPSE_AFTER;
 
@@ -62,7 +66,7 @@ export function PathwayNclexScalableLessonSection({
     return (
       <li
         key={l.slug}
-        className="nn-study-card nn-student-card-lift rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 shadow-[var(--semantic-shadow-soft)] transition-[box-shadow,transform,border-color] duration-200 hover:-translate-y-px hover:shadow-[var(--shadow-card-hover)] sm:p-5"
+        className="nn-study-card nn-study-card--wash nn-student-card-lift p-4 transition-[box-shadow,transform,border-color] duration-200 hover:-translate-y-px hover:shadow-[var(--shadow-card-hover)] sm:p-5"
       >
         <div className="flex flex-wrap items-start justify-between gap-2">
           <PathwayLessonRecordChips lesson={l} className="min-w-0 flex-1" />
@@ -70,11 +74,11 @@ export function PathwayNclexScalableLessonSection({
         </div>
         <Link
           href={pathwayLessonMarketingDetailHref(lessonsBasePath, l.slug)!}
-          className="mt-1 block text-lg font-semibold text-primary hover:underline"
+          className="mt-1 block text-lg font-semibold leading-snug text-[var(--theme-heading-text)] underline-offset-4 transition hover:text-primary hover:underline"
         >
           {l.title}
         </Link>
-        <div className="mt-4 grid gap-3 border-t border-[var(--semantic-border-soft)] pt-4 text-sm sm:grid-cols-2">
+        <div className="mt-4 grid gap-3 border-t border-[color-mix(in_srgb,var(--theme-primary)_10%,var(--border-subtle))] pt-4 text-sm sm:grid-cols-2">
           <div>
             <p className="text-xs font-semibold uppercase text-[var(--theme-muted-text)]">Scenario focus</p>
             <p className="mt-0.5">{p.scenarioType}</p>
@@ -93,11 +97,11 @@ export function PathwayNclexScalableLessonSection({
             </p>
             <p className="mt-0.5 text-[var(--theme-muted-text)]">{p.whyOnExam}</p>
           </div>
-          <div className="sm:col-span-2 rounded-xl border border-[var(--border-subtle)] bg-[var(--theme-muted-surface)] p-3">
+          <div className="nn-surface-inset sm:col-span-2 p-3">
             <p className="text-xs font-semibold text-[var(--theme-muted-text)]">{variant === "rn" ? "Clinical scenario preview" : "Clinical preview"}</p>
-            <p className="mt-1">{p.miniScenario}</p>
+            <p className="mt-1 text-[var(--theme-body-text)]">{p.miniScenario}</p>
           </div>
-          <div className="sm:col-span-2 rounded-xl border border-[var(--border-subtle)] bg-[var(--theme-muted-surface)] p-3">
+          <div className="nn-surface-inset sm:col-span-2 p-3">
             <p className="text-xs font-semibold text-[var(--theme-muted-text)]">{variant === "rn" ? "Reasoning snippet" : "Rationale snippet"}</p>
             <p className="mt-1 italic text-[var(--theme-muted-text)]">&ldquo;{p.rationaleSnippet}&rdquo;</p>
           </div>
@@ -112,12 +116,14 @@ export function PathwayNclexScalableLessonSection({
           <Link href={pathwayHubAppQuestionsHref(pathwayId, l.topic)} className="text-sm font-semibold text-primary">
             Practice questions →
           </Link>
-          <Link href="/app/flashcards" className="text-sm font-semibold text-muted hover:text-primary">
+          <Link href="/flashcards" className="text-sm font-semibold text-muted hover:text-primary">
             Flashcards →
           </Link>
-          <Link href="/app/exams" className="text-sm font-semibold text-muted hover:text-primary">
-            CAT exams →
-          </Link>
+          {catHubHref ? (
+            <Link href={catHubHref} className="text-sm font-semibold text-muted hover:text-primary">
+              CAT prep →
+            </Link>
+          ) : null}
         </div>
       </li>
     );

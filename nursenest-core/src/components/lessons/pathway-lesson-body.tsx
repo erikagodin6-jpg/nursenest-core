@@ -76,7 +76,7 @@ export function PathwayLessonBody({
     );
   }
   return (
-    <div className="nn-lesson-prose space-y-5">
+    <div className="nn-lesson-prose space-y-6">
       {paragraphs.map((p, idx) => (
         <p key={idx} className="whitespace-pre-wrap">
           {renderParagraphWithLinks(p.trim(), lessonWikiBasePath, `para-${idx}`)}

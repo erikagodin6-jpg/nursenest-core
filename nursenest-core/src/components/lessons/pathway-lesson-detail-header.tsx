@@ -30,7 +30,7 @@ export function PathwayLessonDetailHeader({
   const place = pathwayCountryLabel(pathway);
 
   return (
-    <header className="relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--theme-primary)_12%,var(--border-subtle))] bg-gradient-to-br from-[var(--nn-presentation-wash)] via-[var(--theme-page-bg)] to-[color-mix(in_srgb,var(--theme-primary)_5%,var(--theme-page-bg))] px-5 py-7 shadow-[var(--shadow-card)] sm:px-8 sm:py-9">
+    <header className="relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--theme-primary)_10%,var(--border-subtle))] bg-gradient-to-br from-[var(--nn-presentation-wash)] via-[var(--theme-page-bg)] to-[color-mix(in_srgb,var(--theme-primary)_4%,var(--theme-page-bg))] px-5 py-7 shadow-[var(--shadow-card)] sm:px-8 sm:py-9">
       <div
         className="pointer-events-none absolute -right-12 -top-16 h-48 w-48 rounded-full bg-[color-mix(in_srgb,var(--theme-primary)_7%,transparent)] blur-3xl"
         aria-hidden
@@ -64,10 +64,10 @@ export function PathwayLessonDetailHeader({
           </div>
           {trailing ? <div className="shrink-0">{trailing}</div> : null}
         </div>
-        <div className="mt-6 border-t border-[color-mix(in_srgb,var(--border-subtle)_85%,transparent)] pt-5">
+        <div className="mt-6 border-t border-[color-mix(in_srgb,var(--border-subtle)_88%,var(--theme-primary))] pt-5">
           <Link
             href={lessonsBasePath}
-            className="inline-flex min-h-10 items-center text-sm font-semibold text-primary hover:underline"
+            className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-card/90 px-5 py-2.5 text-sm font-semibold text-foreground shadow-sm backdrop-blur-sm transition hover:border-primary/25 hover:bg-card hover:text-primary"
           >
             ← All lessons · {pathway.shortName}
           </Link>

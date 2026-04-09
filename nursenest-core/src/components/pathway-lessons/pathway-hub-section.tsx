@@ -18,8 +18,7 @@ const KIND_CLASS: Record<PathwayHubSectionKind, string> = {
   card: "nn-study-card p-5 sm:p-6",
   cardWash: "nn-study-card nn-study-card--wash p-5 sm:p-6",
   callout: "nn-study-callout p-5 sm:p-6",
-  calloutEmphasis:
-    "nn-study-callout border-[var(--border-subtle)] p-5 sm:p-6 shadow-[var(--shadow-card)]",
+  calloutEmphasis: "nn-study-callout border-[var(--border-subtle)] p-5 sm:p-6",
   navWash: "nn-study-card nn-study-card--wash p-4",
   featuredCard: "nn-study-card bg-gradient-to-b from-[var(--bg-card)] to-[var(--nn-presentation-wash)] p-5 sm:p-7",
 };

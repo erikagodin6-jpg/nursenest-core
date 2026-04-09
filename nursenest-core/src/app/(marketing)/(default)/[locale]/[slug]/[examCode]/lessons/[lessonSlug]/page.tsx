@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
+import { ExamFamily } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { PathwayLessonSectionContent } from "@/components/lessons/pathway-lesson-body";
-import { PathwayLessonStudyLoopCta } from "@/components/lessons/pathway-lesson-study-loop-cta";
-import { PathwayLessonRelatedQuestions } from "@/components/lessons/pathway-lesson-related-questions";
 import { PremiumLessonPublishNotice } from "@/components/lessons/premium-lesson-publish-notice";
 import { PathwayLessonQuizzes } from "@/components/lessons/pathway-lesson-quizzes";
 import { PathwayLessonLockedSectionsPreview } from "@/components/lessons/pathway-lesson-locked-sections-preview";
@@ -24,7 +24,6 @@ import {
   defaultPathwayLessonContentLocaleForExamHubRoute,
   normalizePathwayLessonLocale,
 } from "@/lib/lessons/pathway-lesson-locale";
-import { getRelatedPathwayLessons, RELATED_PATHWAY_LESSONS_LIMIT } from "@/lib/lessons/pathway-lesson-loader";
 import { loadPathwayLessonWithLegacySlugRedirect } from "@/lib/lessons/pathway-lesson-detail-redirect";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { prisma } from "@/lib/db";
@@ -39,22 +38,25 @@ import { classifyPathwayLesson } from "@/lib/content-quality/classify-lesson";
 import { buildQuickReviewBullets } from "@/lib/lessons/pathway-lesson-quick-review";
 import { matchConceptImage } from "@/lib/education-images/match-concept-image";
 import { PathwayLessonFigures } from "@/components/lessons/pathway-lesson-figures";
-import {
-  mergeRelatedLessonDisplayList,
-  pathwayLessonHasRenderableHubSlug,
-  pathwayLessonPublicDetailPath,
-} from "@/lib/lessons/pathway-lesson-types";
+import { pathwayLessonPublicDetailPath } from "@/lib/lessons/pathway-lesson-types";
 import {
   loadPathwayLessonProgressForSlug,
   type PathwayLessonProgressStatus,
 } from "@/lib/lessons/pathway-lesson-progress";
-import { loadRelatedExamQuestionStemsForPathwayLesson } from "@/lib/lessons/lesson-question-cross-links";
 import { LessonStructuralQualityNotice } from "@/components/lessons/lesson-structural-quality-notice";
 import { PathwayLessonDetailHeader } from "@/components/lessons/pathway-lesson-detail-header";
+import {
+  PathwayLessonDetailDeferred,
+  PathwayLessonDetailDeferredSkeleton,
+} from "@/components/lessons/pathway-lesson-detail-deferred";
 import { PathwayLessonRecordChips } from "@/components/pathway-lessons/pathway-lesson-record-chips";
+import { PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS } from "@/lib/lessons/pathway-lesson-loader";
 
 /** Avoid enumerating every lesson at build (large `.next` output + ENOSPC on small disks). */
 export const dynamicParams = true;
+export const revalidate = PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS;
+/** Room for lesson body + related queries on cold DB under traffic spikes (Vercel Fluid / Node). */
+export const maxDuration = 60;
 
 export function generateStaticParams() {
   return [];
@@ -151,25 +153,13 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
   const hubBase = marketingExamHubBasePath(pathway);
   const base = marketingPathwayLessonsIndexPath(pathway);
 
-  const [lessonProgress, relatedRaw, relatedQuestionStems] = await Promise.all([
+  const lessonProgress =
     userId && fullAccess
-      ? loadPathwayLessonProgressForSlug(userId, pathway.id, lesson.slug)
-      : Promise.resolve<PathwayLessonProgressStatus>("not_started"),
-    getRelatedPathwayLessons(pathway.id, lesson.topicSlug, lesson.slug, undefined, lessonContentLocale),
-    loadRelatedExamQuestionStemsForPathwayLesson({
-      pathway,
-      lessonSlug: lesson.slug,
-      lessonTitle: lesson.title,
-      lessonTopic: lesson.topic,
-      lessonTopicSlug: lesson.topicSlug,
-      bodySystem: lesson.bodySystem,
-    }),
-  ]);
+      ? await loadPathwayLessonProgressForSlug(userId, pathway.id, lesson.slug)
+      : ("not_started" satisfies PathwayLessonProgressStatus);
 
   const lockedSections =
     !fullAccess && lesson.sections.length > visible.length ? lesson.sections.slice(visible.length) : [];
-  const relatedTopicRows = relatedRaw.filter(pathwayLessonHasRenderableHubSlug);
-  const relatedDisplay = mergeRelatedLessonDisplayList(lesson.relatedLessonRefs, relatedTopicRows, RELATED_PATHWAY_LESSONS_LIMIT);
   const { crumbs, schemaItems } = pathwayLessonDetailBreadcrumbs(pathway, lesson.slug, lesson.title);
   const lessonQuality = classifyPathwayLesson(lesson);
   const matchedLessonImage = matchConceptImage({
@@ -186,8 +176,10 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
   );
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
-      <div className="rounded-[1.75rem] border border-[var(--border-subtle)] bg-gradient-to-b from-[var(--nn-presentation-wash)] via-[var(--theme-page-bg)] to-[var(--bg-section)] px-4 py-10 shadow-[var(--shadow-card)] sm:px-8 sm:py-12">
+    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
+      <div
+        className={`nn-lesson-page-shell px-4 py-9 sm:px-8 sm:py-11${pathway.examFamily === ExamFamily.NP ? " nn-lesson-page-shell--np" : ""}`}
+      >
         <BreadcrumbJsonLd items={schemaItems} />
         <div className="mb-6">
           <BreadcrumbTrail items={crumbs} />
@@ -296,7 +288,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
                 key={section.id}
                 className={`nn-lesson-article-section ${idx % 2 === 1 ? "nn-lesson-article-section--alt" : ""}`}
               >
-                <h2 className="nn-marketing-h3 border-b border-[color-mix(in_srgb,var(--border-subtle)_90%,var(--theme-primary))] pb-3 text-[var(--theme-heading-text)]">
+                <h2 className="nn-marketing-h3 border-b border-[color-mix(in_srgb,var(--border-subtle)_85%,var(--theme-primary))] pb-3.5 text-[var(--theme-heading-text)]">
                   {section.heading?.trim() || "Section"}
                 </h2>
                 <div className="mt-5">
@@ -331,21 +323,14 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
           initialProgress={lessonProgress}
         />
 
-        <PathwayLessonRelatedQuestions
-          pathway={pathway}
-          lessonTopic={lesson.topic}
-          topicSlug={lesson.topicSlug}
-          items={relatedQuestionStems}
-        />
-
-        <PathwayLessonStudyLoopCta
-          pathway={pathway}
-          lessonsBasePath={base}
-          topicLabel={lesson.topic}
-          topicSlug={lesson.topicSlug}
-          relatedLessons={relatedDisplay}
-          currentSlug={lesson.slug}
-        />
+        <Suspense fallback={<PathwayLessonDetailDeferredSkeleton />}>
+          <PathwayLessonDetailDeferred
+            pathway={pathway}
+            lesson={lesson}
+            lessonsBasePath={base}
+            contentLocale={lessonContentLocale}
+          />
+        </Suspense>
 
         <p className="mt-10 text-center text-xs text-[var(--theme-muted-text)]">
           <Link href="/blog" className="font-medium text-primary hover:underline">

@@ -60,6 +60,7 @@ export function NclexPnLessonsHub({
   const featuredPreview = featured ? nclexPnLessonExamPreview(featured, previewFraming) : null;
   const questionsHub = buildExamPathwayPath(pathway, "questions");
   const examHub = buildExamPathwayPath(pathway);
+  const catHub = buildExamPathwayPath(pathway, "cat");
 
   return (
     <div className="space-y-14 rounded-[1.75rem] border border-[var(--border-subtle)] bg-gradient-to-b from-[var(--nn-presentation-wash)] via-[var(--theme-page-bg)] to-[var(--theme-page-bg)] p-4 sm:p-6 md:p-8">
@@ -250,11 +251,11 @@ export function NclexPnLessonsHub({
             App question bank
           </Link>
           <span aria-hidden>·</span>
-          <Link href="/app/exams" className="font-semibold text-primary">
-            Practice exams (CAT)
+          <Link href={catHub} className="font-semibold text-primary">
+            CAT prep · this pathway
           </Link>
           <span aria-hidden>·</span>
-          <Link href="/app/flashcards" className="font-semibold text-primary">
+          <Link href="/flashcards" className="font-semibold text-primary">
             Flashcards
           </Link>
         </div>
@@ -331,7 +332,7 @@ export function NclexPnLessonsHub({
           <Link href="/app/questions" className="inline-flex rounded-full nn-btn-secondary bg-card px-4 py-2 text-sm font-semibold">
             Open app question bank
           </Link>
-          <Link href="/app/exams" className="inline-flex rounded-full nn-btn-secondary bg-card px-4 py-2 text-sm font-semibold">
+          <Link href={catHub} className="inline-flex rounded-full nn-btn-secondary bg-card px-4 py-2 text-sm font-semibold">
             See your weak areas instantly (after a session)
           </Link>
         </div>

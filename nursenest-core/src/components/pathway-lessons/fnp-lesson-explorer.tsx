@@ -232,6 +232,7 @@ function FilterChip({
       onClick={onClick}
       className="nn-chip px-3 py-1.5 text-left text-sm font-medium transition-colors hover:border-primary/40"
       data-selected={active ? "true" : undefined}
+      aria-pressed={active}
     >
       {children}
     </button>
@@ -298,12 +299,12 @@ function FnpLessonCard({
           <p className="text-xs font-semibold uppercase text-muted">Why it appears on boards</p>
           <p className="mt-0.5 text-[var(--theme-muted-text)]">{p.whyBoards}</p>
         </div>
-        <div className="sm:col-span-2 rounded-lg bg-[var(--theme-muted-surface)] p-3">
-          <p className="text-xs font-semibold text-muted">Mini patient scenario</p>
+        <div className="sm:col-span-2 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-info-soft)] p-3">
+          <p className="text-xs font-semibold text-[var(--semantic-info-text)]">Mini patient scenario</p>
           <p className="mt-1 text-foreground">{p.miniScenario}</p>
         </div>
-        <div className="sm:col-span-2 rounded-lg bg-[var(--theme-muted-surface)] p-3">
-          <p className="text-xs font-semibold text-muted">Sample clinical decision</p>
+        <div className="sm:col-span-2 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-success-soft)] p-3">
+          <p className="text-xs font-semibold text-[var(--semantic-success-text)]">Sample clinical decision</p>
           <p className="mt-1 text-foreground">{p.sampleDecision}</p>
         </div>
         <div className="sm:col-span-2 nn-surface-inset rounded-xl p-3">
@@ -371,12 +372,15 @@ function FnpLessonCard({
           </Link>
         ) : null}
         <Link
-          href="/app/flashcards"
+          href="/flashcards"
           className="inline-flex min-h-10 items-center rounded-full nn-btn-secondary px-4 py-2 text-sm font-semibold"
         >
           Flashcards
         </Link>
-        <Link href="/app/exams" className="inline-flex min-h-10 items-center rounded-full nn-btn-secondary px-4 py-2 text-sm font-semibold">
+        <Link
+          href={buildExamPathwayPath(pathway, "cat")}
+          className="inline-flex min-h-10 items-center rounded-full nn-btn-secondary px-4 py-2 text-sm font-semibold"
+        >
           Exam simulations
         </Link>
       </div>

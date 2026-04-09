@@ -41,7 +41,7 @@ export function PathwayLessonStudyLoopCta({
 
   return (
     <section
-      className="relative mt-12 overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--theme-primary)_14%,var(--border-subtle))] bg-gradient-to-br from-[var(--nn-presentation-wash)] via-[var(--theme-page-bg)] to-[color-mix(in_srgb,var(--theme-primary)_6%,var(--theme-page-bg))] p-6 shadow-[var(--shadow-card)] sm:p-8"
+      className="relative mt-12 overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--theme-primary)_10%,var(--border-subtle))] bg-gradient-to-br from-[var(--nn-presentation-wash)] via-[var(--theme-page-bg)] to-[color-mix(in_srgb,var(--theme-primary)_5%,var(--theme-page-bg))] p-5 shadow-[var(--shadow-card)] sm:p-8"
       aria-labelledby="lesson-study-loop-heading"
     >
       <div
@@ -70,9 +70,9 @@ export function PathwayLessonStudyLoopCta({
           )}
         </p>
 
-        <div className="mt-8 grid gap-6 lg:grid-cols-3">
+        <div className="mt-8 grid gap-5 sm:gap-6 lg:grid-cols-3">
           {/* Practice */}
-          <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-card)]/90 p-5 shadow-[var(--shadow-card)] backdrop-blur-sm">
+          <div className="nn-study-card nn-study-card--wash flex flex-col p-5 backdrop-blur-sm">
             <div className="flex items-center gap-2 text-[var(--theme-heading-text)]">
               <ClipboardList className="h-5 w-5 shrink-0 text-primary" aria-hidden />
               <h3 className="text-sm font-semibold tracking-tight">Practice this topic</h3>
@@ -99,7 +99,7 @@ export function PathwayLessonStudyLoopCta({
           </div>
 
           {/* Related lessons */}
-          <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-card)]/90 p-5 shadow-[var(--shadow-card)] backdrop-blur-sm">
+          <div className="nn-study-card nn-study-card--wash flex flex-col p-5 backdrop-blur-sm">
             <div className="flex items-center gap-2 text-[var(--theme-heading-text)]">
               <BookOpen className="h-5 w-5 shrink-0 text-primary" aria-hidden />
               <h3 className="text-sm font-semibold tracking-tight">Review related lessons</h3>
@@ -135,7 +135,7 @@ export function PathwayLessonStudyLoopCta({
           </div>
 
           {/* CAT */}
-          <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-card)]/90 p-5 shadow-[var(--shadow-card)] backdrop-blur-sm">
+          <div className="nn-study-card nn-study-card--wash flex flex-col p-5 backdrop-blur-sm">
             <div className="flex items-center gap-2 text-[var(--theme-heading-text)]">
               <LineChart className="h-5 w-5 shrink-0 text-primary" aria-hidden />
               <h3 className="text-sm font-semibold tracking-tight">Take a CAT exam</h3>

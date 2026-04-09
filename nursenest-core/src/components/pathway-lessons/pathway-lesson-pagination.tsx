@@ -34,16 +34,20 @@ export function PathwayLessonPagination({ basePath, page, pageCount, total, page
   const from = total === 0 ? 0 : (page - 1) * pageSize + 1;
   const to = Math.min(page * pageSize, total);
   return (
-    <nav className="mt-10 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-6 text-sm" aria-label="Lesson list pages">
+    <nav
+      className="mt-12 flex flex-col gap-4 border-t border-[color-mix(in_srgb,var(--border-subtle)_90%,var(--theme-primary))] pt-8 text-sm sm:flex-row sm:flex-wrap sm:items-center sm:justify-between"
+      aria-label="Lesson list pages"
+    >
       <p className="text-[var(--theme-muted-text)]">
-        Showing <span className="font-medium text-foreground">{from}</span>–<span className="font-medium text-foreground">{to}</span> of{" "}
-        <span className="font-medium text-foreground">{total}</span> lessons
+        Showing <span className="font-medium text-[var(--theme-heading-text)]">{from}</span>–
+        <span className="font-medium text-[var(--theme-heading-text)]">{to}</span> of{" "}
+        <span className="font-medium text-[var(--theme-heading-text)]">{total}</span> lessons
       </p>
       <div className="flex flex-wrap gap-2">
         {page > 1 ? (
           <Link
             href={href(page - 1)}
-            className="rounded-md border border-[var(--theme-card-border)] bg-card px-3 py-1.5 font-medium text-foreground hover:border-primary/40"
+            className="inline-flex min-h-10 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--theme-primary)_10%,var(--border-subtle))] bg-card px-4 py-2 font-medium text-[var(--theme-heading-text)] shadow-sm transition hover:border-primary/35 hover:bg-[color-mix(in_srgb,var(--theme-primary)_4%,var(--bg-card))]"
           >
             Previous
           </Link>
@@ -51,7 +55,7 @@ export function PathwayLessonPagination({ basePath, page, pageCount, total, page
         {page < pageCount ? (
           <Link
             href={href(page + 1)}
-            className="rounded-md border border-[var(--theme-card-border)] bg-card px-3 py-1.5 font-medium text-foreground hover:border-primary/40"
+            className="inline-flex min-h-10 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--theme-primary)_10%,var(--border-subtle))] bg-card px-4 py-2 font-medium text-[var(--theme-heading-text)] shadow-sm transition hover:border-primary/35 hover:bg-[color-mix(in_srgb,var(--theme-primary)_4%,var(--bg-card))]"
           >
             Next
           </Link>

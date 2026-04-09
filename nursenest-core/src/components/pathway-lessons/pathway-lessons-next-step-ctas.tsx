@@ -18,7 +18,7 @@ export function PathwayLessonsNextStepCtas({ pathway, emphasizeStudyLoop }: Prop
 
   return (
     <section
-      className="nn-study-card nn-study-card--wash mt-10 border-[color-mix(in_srgb,var(--theme-primary)_10%,var(--border-subtle))] p-5 sm:p-6"
+      className="nn-study-card nn-study-card--wash mt-10 p-5 sm:p-6"
       aria-labelledby="lessons-next-steps-heading"
     >
       <h2 id="lessons-next-steps-heading" className="nn-marketing-h3">
@@ -29,10 +29,10 @@ export function PathwayLessonsNextStepCtas({ pathway, emphasizeStudyLoop }: Prop
           ? "Lessons pair with the same exam scope in the bank. Run items and CAT practice so rationales and difficulty track what you are sitting."
           : "After each lesson, stress-test judgment with pathway-matched items, then adaptive CAT sessions to approximate exam pacing."}
       </p>
-      <div className="mt-5 grid gap-4 sm:grid-cols-2">
+      <div className="mt-6 grid gap-4 sm:grid-cols-2">
         <Link
           href={questionsHref}
-          className="group flex gap-4 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-card)] p-4 shadow-[var(--shadow-card)] transition hover:-translate-y-px hover:border-primary/25 hover:shadow-[var(--shadow-card-hover)]"
+          className="group flex gap-4 rounded-2xl border border-[color-mix(in_srgb,var(--theme-primary)_9%,var(--border-subtle))] bg-[color-mix(in_srgb,var(--theme-primary)_2.5%,var(--bg-card))] p-4 shadow-[var(--shadow-card)] transition hover:-translate-y-px hover:border-primary/22 hover:shadow-[var(--shadow-card-hover)]"
         >
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--theme-primary)_12%,transparent)] text-primary">
             <ClipboardList className="h-5 w-5" aria-hidden />
@@ -48,7 +48,7 @@ export function PathwayLessonsNextStepCtas({ pathway, emphasizeStudyLoop }: Prop
         </Link>
         <Link
           href={catHref}
-          className="group flex gap-4 rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-card)] p-4 shadow-[var(--shadow-card)] transition hover:-translate-y-px hover:border-primary/25 hover:shadow-[var(--shadow-card-hover)]"
+          className="group flex gap-4 rounded-2xl border border-[color-mix(in_srgb,var(--theme-primary)_9%,var(--border-subtle))] bg-[color-mix(in_srgb,var(--theme-primary)_2.5%,var(--bg-card))] p-4 shadow-[var(--shadow-card)] transition hover:-translate-y-px hover:border-primary/22 hover:shadow-[var(--shadow-card-hover)]"
         >
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--theme-primary)_12%,transparent)] text-primary">
             <LineChart className="h-5 w-5" aria-hidden />

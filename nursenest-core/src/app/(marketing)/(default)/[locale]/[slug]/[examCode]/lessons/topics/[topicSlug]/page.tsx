@@ -27,6 +27,7 @@ import { absoluteUrl } from "@/lib/seo/site-origin";
 
 export const dynamicParams = true;
 export const revalidate = 86400;
+export const maxDuration = 60;
 
 export function generateStaticParams() {
   return [];

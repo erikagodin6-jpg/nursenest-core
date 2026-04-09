@@ -22,7 +22,7 @@ function audienceLabel(t: PathwayLessonAudienceTier): string {
     case "rn":
       return "RN";
     case "pn":
-      return "PN / LPN";
+      return "PN · LPN · RPN";
     case "np":
       return "NP";
     default:

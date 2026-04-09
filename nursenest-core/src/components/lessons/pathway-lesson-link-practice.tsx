@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
@@ -167,10 +167,10 @@ export function PathwayLessonPracticeTopicCta({
           {topic.trim() || "Topic"} cluster
         </Link>
         <Link
-          href="/app/exams"
+          href={buildExamPathwayPath(pathway, "cat")}
           className="inline-flex min-h-11 items-center rounded-full nn-btn-secondary px-5 py-2.5 text-sm font-semibold"
         >
-          Practice exams
+          CAT prep · this pathway
         </Link>
       </div>
     </section>
@@ -191,6 +191,9 @@ export function PathwayLessonLinkToPractice({
   const pathwayParam = pathwayId?.trim() ? `pathwayId=${encodeURIComponent(pathwayId.trim())}` : "";
   const qs = [topicParam, pathwayParam, "preset=topic_drill"].filter(Boolean).join("&");
   const questionsHref = qs ? `/app/questions?${qs}` : "/app/questions";
+
+  const pathwayForCat = pathwayId?.trim() ? getExamPathwayById(pathwayId.trim()) : undefined;
+  const catHref = pathwayForCat ? buildExamPathwayPath(pathwayForCat, "cat") : "/app/exams";
 
   const lessonsForTopicHref = topicSlug?.trim()
     ? `/app/lessons?topicSlug=${encodeURIComponent(topicSlug.trim())}`
@@ -218,10 +221,10 @@ export function PathwayLessonLinkToPractice({
           More lessons in this topic
         </Link>
         <Link
-          href="/app/exams"
+          href={catHref}
           className="inline-flex rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-muted"
         >
-          Timed exam
+          CAT prep
         </Link>
       </div>
     </section>
