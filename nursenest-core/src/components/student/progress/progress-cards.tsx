@@ -19,9 +19,9 @@ export function ProgressCardShell({
 }) {
   return (
     <section
-      className={`overflow-hidden rounded-2xl border border-border/60 bg-[var(--bg-card)] shadow-sm ${className}`.trim()}
+      className={`overflow-hidden rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] shadow-[var(--semantic-shadow-soft)] ${className}`.trim()}
     >
-      <div className="flex flex-col gap-2 border-b border-border/60 bg-gradient-to-r from-primary/[0.05] via-transparent to-role-success/[0.04] px-4 py-4 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
+      <div className="flex flex-col gap-2 border-b border-[var(--semantic-border-soft)] bg-gradient-to-r from-[color-mix(in_srgb,var(--semantic-brand)_10%,transparent)] via-transparent to-[color-mix(in_srgb,var(--semantic-success)_10%,transparent)] px-4 py-4 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
         <div className="min-w-0">
           <h2 className="text-base font-semibold tracking-tight text-[var(--theme-heading-text)]">{title}</h2>
           {subtitle ? <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{subtitle}</p> : null}
@@ -52,14 +52,14 @@ export function ProgressMeter({
   const pct = max > 0 ? Math.min(100, Math.round((value / max) * 100)) : 0;
   return (
     <div
-      className="h-2.5 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10"
+      className="nn-progress-track-semantic nn-progress-track-semantic--md"
       role="progressbar"
       aria-valuenow={pct}
       aria-valuemin={0}
       aria-valuemax={100}
       aria-label={ariaLabel}
     >
-      <div className="h-full rounded-full bg-role-success transition-[width] duration-500 ease-out" style={{ width: `${pct}%` }} />
+      <div className="h-full rounded-full nn-progress-fill-semantic-success transition-[width] duration-500 ease-out" style={{ width: `${pct}%` }} />
     </div>
   );
 }
@@ -74,7 +74,7 @@ export function StatBlock({
   hint?: string;
 }) {
   return (
-    <div className="rounded-xl border border-border/50 bg-muted/10 px-3 py-3 text-center sm:px-4">
+    <div className="nn-semantic-inset rounded-xl px-3 py-3 text-center sm:px-4">
       <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">{label}</p>
       <p className="mt-1 text-xl font-bold tabular-nums text-[var(--theme-heading-text)] sm:text-2xl">{value}</p>
       {hint ? <p className="mt-1 text-[11px] text-muted-foreground">{hint}</p> : null}

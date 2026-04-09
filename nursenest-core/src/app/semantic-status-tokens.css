@@ -1,0 +1,362 @@
+/**
+ * Multi-color semantic status system (learner product, charts, reports).
+ * - Complements `theme-palettes.css` (identity) + `color-roles.css` (CTA / conversion).
+ * - Success / info / warning / danger are NOT derived from `--theme-primary` alone.
+ * - Foundation aliases map to globals tonal layers when `[data-theme]` is active.
+ *
+ * First-paint `:root` mirrors lavender-friendly defaults; `[data-theme]` overrides.
+ */
+:root {
+  --semantic-bg-base: #fdfcfa;
+  --semantic-bg-soft: #f9fafb;
+  --semantic-surface: #ffffff;
+  --semantic-surface-elevated: #ffffff;
+  --semantic-border-soft: #e5e7eb;
+  --semantic-shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.05);
+  --semantic-text-primary: #111827;
+  --semantic-text-secondary: #6b7280;
+  --semantic-text-muted: #9ca3af;
+  --semantic-brand: #9d82dd;
+  --semantic-brand-soft: #ede9fe;
+  --semantic-brand-contrast: #ffffff;
+  --semantic-success: #16a34a;
+  --semantic-success-soft: #ecfdf5;
+  --semantic-success-contrast: #14532d;
+  --semantic-info: #0ea5e9;
+  --semantic-info-soft: #e0f2fe;
+  --semantic-info-contrast: #0c4a6e;
+  --semantic-warning: #d97706;
+  --semantic-warning-soft: #fffbeb;
+  --semantic-warning-contrast: #78350f;
+  --semantic-danger: #e11d48;
+  --semantic-danger-soft: #fff1f2;
+  --semantic-danger-contrast: #9f1239;
+  --semantic-mastery-high: #16a34a;
+  --semantic-mastery-mid: #d97706;
+  --semantic-mastery-low: #e11d48;
+  --semantic-chart-1: #9d82dd;
+  --semantic-chart-2: #22c55e;
+  --semantic-chart-3: #0ea5e9;
+  --semantic-chart-4: #f59e0b;
+  --semantic-chart-5: #ec4899;
+}
+
+:where([data-theme]) {
+  --semantic-bg-base: var(--bg-page);
+  --semantic-bg-soft: var(--bg-section-alt);
+  --semantic-surface: var(--bg-card);
+  --semantic-surface-elevated: var(--bg-elevated);
+  --semantic-border-soft: var(--border-subtle);
+  --semantic-shadow-soft: var(--shadow-card);
+  --semantic-text-primary: var(--theme-heading-text);
+  --semantic-text-secondary: var(--theme-body-text);
+  --semantic-text-muted: var(--theme-muted-text);
+  --semantic-brand: var(--theme-primary);
+  --semantic-brand-soft: var(--accent-soft);
+  --semantic-brand-contrast: var(--text-on-accent);
+  /* Default light-UI multi-color semantics (overridden per theme below) */
+  --semantic-success: #16a34a;
+  --semantic-success-soft: color-mix(in srgb, #16a34a 12%, var(--bg-card));
+  --semantic-success-contrast: #14532d;
+  --semantic-info: #0284c7;
+  --semantic-info-soft: color-mix(in srgb, #0284c7 11%, var(--bg-card));
+  --semantic-info-contrast: #0c4a6e;
+  --semantic-warning: #d97706;
+  --semantic-warning-soft: color-mix(in srgb, #d97706 12%, var(--bg-card));
+  --semantic-warning-contrast: #78350f;
+  --semantic-danger: #e11d48;
+  --semantic-danger-soft: color-mix(in srgb, #e11d48 10%, var(--bg-card));
+  --semantic-danger-contrast: #9f1239;
+  --semantic-mastery-high: var(--semantic-success);
+  --semantic-mastery-mid: var(--semantic-warning);
+  --semantic-mastery-low: var(--semantic-danger);
+  --semantic-chart-1: var(--semantic-brand);
+  --semantic-chart-2: var(--semantic-success);
+  --semantic-chart-3: var(--semantic-info);
+  --semantic-chart-4: var(--semantic-warning);
+  --semantic-chart-5: #a855f7;
+  /* Learner surfaces: tinted panels instead of flat muted gray */
+  --semantic-panel-muted: color-mix(in srgb, var(--theme-primary) 4%, var(--bg-card));
+  --semantic-panel-warm: color-mix(in srgb, var(--semantic-warning) 6%, var(--bg-card));
+  --semantic-panel-cool: color-mix(in srgb, var(--semantic-info) 6%, var(--bg-card));
+  --semantic-panel-positive: color-mix(in srgb, var(--semantic-success) 7%, var(--bg-card));
+}
+
+/* Lavender: brand violet — success mint, info sky, warning amber, danger coral-rose */
+html[data-theme="lavender"],
+html[data-theme="pastel-lavender"],
+html[data-theme="lavender-dream"] {
+  --semantic-success: #22c55e;
+  --semantic-success-soft: color-mix(in srgb, #22c55e 11%, var(--bg-card));
+  --semantic-success-contrast: #166534;
+  --semantic-info: #38bdf8;
+  --semantic-info-soft: color-mix(in srgb, #38bdf8 11%, var(--bg-card));
+  --semantic-info-contrast: #075985;
+  --semantic-warning: #fbbf24;
+  --semantic-warning-soft: color-mix(in srgb, #fbbf24 12%, var(--bg-card));
+  --semantic-warning-contrast: #92400e;
+  --semantic-danger: #fb7185;
+  --semantic-danger-soft: color-mix(in srgb, #fb7185 11%, var(--bg-card));
+  --semantic-danger-contrast: #9f1239;
+  --semantic-chart-2: #22c55e;
+  --semantic-chart-3: #38bdf8;
+  --semantic-chart-4: #fbbf24;
+  --semantic-chart-5: #f472b6;
+}
+
+/* Mint / teal brand — success deeper green, info blue, danger coral */
+html[data-theme="mint"],
+html[data-theme="pastel-mint"],
+html[data-theme="forest"] {
+  --semantic-success: #059669;
+  --semantic-success-soft: color-mix(in srgb, #059669 11%, var(--bg-card));
+  --semantic-info: #2563eb;
+  --semantic-info-soft: color-mix(in srgb, #2563eb 10%, var(--bg-card));
+  --semantic-info-contrast: #1e3a8a;
+  --semantic-warning: #f59e0b;
+  --semantic-warning-soft: color-mix(in srgb, #f59e0b 11%, var(--bg-card));
+  --semantic-danger: #f97316;
+  --semantic-danger-soft: color-mix(in srgb, #f97316 10%, var(--bg-card));
+  --semantic-chart-2: #10b981;
+  --semantic-chart-3: #3b82f6;
+  --semantic-chart-4: #f59e0b;
+  --semantic-chart-5: #8b5cf6;
+}
+
+/* Blush / rose brand — success mint, info periwinkle */
+html[data-theme="blush"],
+html[data-theme="pastel-blush"] {
+  --semantic-success: #34d399;
+  --semantic-success-soft: color-mix(in srgb, #34d399 11%, var(--bg-card));
+  --semantic-info: #818cf8;
+  --semantic-info-soft: color-mix(in srgb, #818cf8 10%, var(--bg-card));
+  --semantic-info-contrast: #3730a3;
+  --semantic-warning: #fcd34d;
+  --semantic-warning-soft: color-mix(in srgb, #fcd34d 12%, var(--bg-card));
+  --semantic-warning-contrast: #92400e;
+  --semantic-danger: #e11d48;
+  --semantic-danger-soft: color-mix(in srgb, #e11d48 10%, var(--bg-card));
+  --semantic-chart-2: #34d399;
+  --semantic-chart-3: #818cf8;
+  --semantic-chart-4: #fbbf24;
+  --semantic-chart-5: #f472b6;
+}
+
+/* Ocean / clinical blue — keep success green distinct from brand blue */
+html[data-theme="ocean"],
+html[data-theme="clinical-light"] {
+  --semantic-success: #16a34a;
+  --semantic-success-soft: color-mix(in srgb, #16a34a 11%, var(--bg-card));
+  --semantic-info: #06b6d4;
+  --semantic-info-soft: color-mix(in srgb, #06b6d4 10%, var(--bg-card));
+  --semantic-chart-3: #06b6d4;
+}
+
+html[data-theme="dark-clinical"],
+html[data-theme="dark-academia"],
+html[data-theme="dark-mode"] {
+  --semantic-success: #34d399;
+  --semantic-success-soft: color-mix(in srgb, #34d399 14%, var(--bg-card));
+  --semantic-success-contrast: #a7f3d0;
+  --semantic-info: #38bdf8;
+  --semantic-info-soft: color-mix(in srgb, #38bdf8 14%, var(--bg-card));
+  --semantic-info-contrast: #bae6fd;
+  --semantic-warning: #fbbf24;
+  --semantic-warning-soft: color-mix(in srgb, #fbbf24 14%, var(--bg-card));
+  --semantic-warning-contrast: #fde68a;
+  --semantic-danger: #fb7185;
+  --semantic-danger-soft: color-mix(in srgb, #fb7185 12%, var(--bg-card));
+  --semantic-danger-contrast: #fecdd3;
+  --semantic-mastery-high: #34d399;
+  --semantic-mastery-mid: #fbbf24;
+  --semantic-mastery-low: #fb7185;
+  --semantic-chart-2: #34d399;
+  --semantic-chart-3: #38bdf8;
+  --semantic-chart-4: #fbbf24;
+  --semantic-chart-5: #c084fc;
+  --semantic-panel-muted: color-mix(in srgb, var(--theme-primary) 10%, var(--bg-card));
+  --semantic-panel-warm: color-mix(in srgb, var(--semantic-warning) 10%, var(--bg-card));
+  --semantic-panel-cool: color-mix(in srgb, var(--semantic-info) 10%, var(--bg-card));
+  --semantic-panel-positive: color-mix(in srgb, var(--semantic-success) 10%, var(--bg-card));
+}
+
+/* -------------------------------------------------------------------------- */
+/* Learner / analytics presentation (token-only — use in TSX as class names) */
+/* -------------------------------------------------------------------------- */
+
+.nn-learner-app {
+  background: linear-gradient(180deg, var(--semantic-bg-base) 0%, var(--semantic-bg-soft) 100%);
+}
+
+.nn-semantic-inset {
+  background: var(--semantic-panel-muted);
+  border: 1px solid var(--semantic-border-soft);
+  border-radius: var(--radius-lg, 0.75rem);
+}
+
+.nn-semantic-inset--positive {
+  background: var(--semantic-panel-positive);
+}
+
+.nn-semantic-inset--cool {
+  background: var(--semantic-panel-cool);
+  border: 1px solid var(--semantic-border-soft);
+  border-radius: var(--radius-lg, 0.75rem);
+}
+
+.nn-semantic-inset--warm {
+  background: var(--semantic-panel-warm);
+  border: 1px solid var(--semantic-border-soft);
+  border-radius: var(--radius-lg, 0.75rem);
+}
+
+.nn-semantic-inset--risk {
+  background: var(--semantic-danger-soft);
+  border: 1px solid color-mix(in srgb, var(--semantic-danger) 22%, var(--semantic-border-soft));
+  border-radius: var(--radius-lg, 0.75rem);
+}
+
+.nn-section-header-learner {
+  border-bottom: 1px solid color-mix(in srgb, var(--semantic-border-soft) 75%, transparent);
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--semantic-brand) 8%, var(--semantic-surface)),
+    transparent,
+    color-mix(in srgb, var(--semantic-success) 6%, var(--semantic-surface))
+  );
+}
+
+.nn-section-header-learner--muted {
+  border-bottom: 1px solid color-mix(in srgb, var(--semantic-border-soft) 70%, transparent);
+  background: linear-gradient(180deg, var(--semantic-panel-muted), var(--semantic-surface));
+}
+
+.nn-progress-track-semantic {
+  height: 0.5rem;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 9999px;
+  background: var(--semantic-progress-track);
+}
+
+.nn-progress-track-semantic--md {
+  height: 0.625rem;
+}
+
+.nn-progress-track-semantic--lg {
+  height: 0.75rem;
+}
+
+.nn-progress-track-semantic--xs {
+  height: 0.375rem;
+}
+
+.nn-progress-fill-semantic-success {
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(
+    90deg,
+    var(--semantic-success),
+    color-mix(in srgb, var(--semantic-success) 78%, var(--semantic-brand))
+  );
+}
+
+.nn-progress-fill-semantic-brand {
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, var(--semantic-brand), color-mix(in srgb, var(--semantic-brand) 82%, var(--semantic-info)));
+}
+
+.nn-progress-fill-semantic-readiness {
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--semantic-brand) 88%, var(--semantic-text-primary)),
+    var(--semantic-success)
+  );
+}
+
+.nn-badge-semantic-success {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  background: var(--semantic-success-soft);
+  color: var(--semantic-success-contrast);
+  border: 1px solid color-mix(in srgb, var(--semantic-success) 28%, var(--semantic-border-soft));
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.125rem 0.625rem;
+}
+
+.nn-badge-semantic-warning {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  background: var(--semantic-warning-soft);
+  color: var(--semantic-warning-contrast);
+  border: 1px solid color-mix(in srgb, var(--semantic-warning) 30%, var(--semantic-border-soft));
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.125rem 0.625rem;
+}
+
+.nn-badge-semantic-danger {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  background: var(--semantic-danger-soft);
+  color: var(--semantic-danger-contrast);
+  border: 1px solid color-mix(in srgb, var(--semantic-danger) 26%, var(--semantic-border-soft));
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.125rem 0.625rem;
+}
+
+.nn-badge-semantic-info {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  background: var(--semantic-info-soft);
+  color: var(--semantic-info-contrast);
+  border: 1px solid color-mix(in srgb, var(--semantic-info) 26%, var(--semantic-border-soft));
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.125rem 0.625rem;
+}
+
+.nn-metric-tile {
+  border-radius: 1rem;
+  border: 1px solid var(--semantic-border-soft);
+  background: var(--semantic-surface);
+  box-shadow: var(--semantic-shadow-soft);
+  position: relative;
+  overflow: hidden;
+}
+
+.nn-metric-tile::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--semantic-brand), var(--semantic-info));
+  opacity: 0.85;
+}
+
+.nn-momentum-glow {
+  background: radial-gradient(
+    circle at 90% 0%,
+    color-mix(in srgb, var(--semantic-success) 14%, transparent),
+    transparent 55%
+  );
+}
+
+.nn-readiness-hero-glow {
+  background: radial-gradient(
+    circle at center,
+    color-mix(in srgb, var(--semantic-brand) 18%, transparent),
+    transparent 65%
+  );
+}

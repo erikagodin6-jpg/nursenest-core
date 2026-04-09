@@ -22,7 +22,7 @@ function InsightFactorBar({
 }) {
   if (maxPoints <= 0) {
     return (
-      <div className="rounded-lg border border-border/60 bg-muted/20 px-3 py-2">
+      <div className="nn-semantic-inset rounded-lg px-3 py-2">
         <p className="text-xs font-medium text-foreground">{label}</p>
         <p className="mt-1 text-xs text-muted-foreground">{detail}</p>
       </div>
@@ -37,8 +37,8 @@ function InsightFactorBar({
           {points}/{maxPoints}
         </span>
       </div>
-      <div className="h-1.5 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
-        <div className="h-full rounded-full bg-role-success" style={{ width: `${pct}%` }} />
+      <div className="nn-progress-track-semantic">
+        <div className="h-full rounded-full nn-progress-fill-semantic-success" style={{ width: `${pct}%` }} />
       </div>
       <p className="text-[11px] leading-snug text-muted-foreground">{detail}</p>
     </div>
@@ -48,15 +48,15 @@ function InsightFactorBar({
 function tierClass(tier: WeaknessTier): string {
   switch (tier) {
     case "critical":
-      return "border-role-danger-border bg-role-danger-soft text-role-danger-text";
+      return "border-[color-mix(in_srgb,var(--semantic-danger)_38%,var(--semantic-border-soft))] bg-[var(--semantic-danger-soft)] text-[var(--semantic-danger-contrast)]";
     case "weak":
-      return "border-role-warning-border bg-role-warning-soft text-role-warning-text";
+      return "border-[color-mix(in_srgb,var(--semantic-warning)_38%,var(--semantic-border-soft))] bg-[var(--semantic-warning-soft)] text-[var(--semantic-warning-contrast)]";
     case "moderate":
-      return "border-border bg-muted/30 text-foreground";
+      return "border-[color-mix(in_srgb,var(--semantic-info)_32%,var(--semantic-border-soft))] bg-[var(--semantic-info-soft)] text-[var(--semantic-info-contrast)]";
     case "strong":
-      return "border-border/60 bg-muted/15 text-muted-foreground";
+      return "border-[color-mix(in_srgb,var(--semantic-success)_32%,var(--semantic-border-soft))] bg-[var(--semantic-success-soft)] text-[var(--semantic-success-contrast)]";
     default:
-      return "border-border bg-muted/20 text-foreground";
+      return "border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] text-[var(--semantic-text-primary)]";
   }
 }
 
@@ -105,8 +105,8 @@ export function LearnerDashboardInsightPanels({
 
   return (
     <section className="space-y-4" aria-label={t("learner.dashboard.insight.regionLabel")}>
-      <div className="relative overflow-hidden rounded-2xl border border-role-premium-border bg-gradient-to-br from-role-premium-surface via-[var(--theme-card-bg)] to-primary/[0.07] p-5 shadow-sm sm:p-6">
-        <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-role-premium-glow blur-3xl" aria-hidden />
+      <div className="relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] bg-gradient-to-br from-[var(--semantic-panel-muted)] via-[var(--semantic-surface)] to-[color-mix(in_srgb,var(--semantic-info)_08%,var(--semantic-surface))] p-5 shadow-[var(--semantic-shadow-soft)] sm:p-6">
+        <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full nn-readiness-hero-glow blur-3xl" aria-hidden />
         <div className="relative flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex min-w-0 flex-1 items-start gap-3">
             <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-role-premium-border bg-card/80 shadow-sm">
@@ -145,14 +145,14 @@ export function LearnerDashboardInsightPanels({
             {scorePct != null ? <span className="tabular-nums">{scorePct}%</span> : null}
           </div>
           <div
-            className="h-3 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10"
+            className="nn-progress-track-semantic nn-progress-track-semantic--lg"
             role="progressbar"
             aria-valuenow={scorePct ?? 0}
             aria-valuemin={0}
             aria-valuemax={100}
           >
             <div
-              className="h-full rounded-full bg-gradient-to-r from-primary/90 to-role-success transition-[width] duration-500 ease-out"
+              className="h-full rounded-full nn-progress-fill-semantic-readiness transition-[width] duration-500 ease-out"
               style={{ width: `${scorePct ?? 0}%` }}
             />
           </div>

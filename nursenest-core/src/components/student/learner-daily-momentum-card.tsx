@@ -30,10 +30,10 @@ export function LearnerDailyMomentumCard({
 
   return (
     <section
-      className="relative overflow-hidden rounded-2xl border border-border/60 bg-gradient-to-br from-[var(--bg-card)] via-[var(--bg-card)] to-primary/[0.04] p-5 shadow-sm"
+      className="nn-metric-tile relative overflow-hidden rounded-2xl p-5 pt-6"
       aria-labelledby="daily-momentum-heading"
     >
-      <div className="pointer-events-none absolute -right-16 top-0 h-40 w-40 rounded-full bg-emerald-500/10 blur-3xl" aria-hidden />
+      <div className="pointer-events-none absolute -right-16 top-0 h-40 w-40 rounded-full nn-momentum-glow blur-3xl opacity-90" aria-hidden />
       <div className="relative grid gap-5 lg:grid-cols-[1fr_auto] lg:items-start">
         <div className="min-w-0 space-y-4">
           <div className="flex flex-wrap items-end justify-between gap-3">
@@ -51,12 +51,9 @@ export function LearnerDailyMomentumCard({
                 {t("learner.dailyGoal.streakLabel")}
               </p>
               <p className="text-2xl font-bold tabular-nums text-[var(--theme-heading-text)]">{streakDays}</p>
-              <div
-                className="mt-1 h-1 w-full min-w-[4.5rem] overflow-hidden rounded-full bg-black/10 dark:bg-white/10"
-                aria-hidden
-              >
+              <div className="mt-1 h-1 w-full min-w-[4.5rem] overflow-hidden rounded-full bg-[var(--semantic-progress-track)]" aria-hidden>
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-emerald-600/80 to-primary/90"
+                  className="h-full rounded-full nn-progress-fill-semantic-success"
                   style={{ width: `${Math.min(100, streakDays * 8)}%` }}
                 />
               </div>
@@ -71,14 +68,14 @@ export function LearnerDailyMomentumCard({
               </span>
             </div>
             <div
-              className="mt-2 h-2.5 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10"
+              className="nn-progress-track-semantic nn-progress-track-semantic--md"
               role="progressbar"
               aria-valuenow={todayGoal.credits}
               aria-valuemin={0}
               aria-valuemax={todayGoal.target}
             >
               <div
-                className="h-full rounded-full bg-gradient-to-r from-primary/90 to-emerald-600/85 transition-[width] duration-500"
+                className="nn-progress-fill-semantic-brand transition-[width] duration-500"
                 style={{ width: `${pct}%` }}
               />
             </div>
@@ -99,13 +96,13 @@ export function LearnerDailyMomentumCard({
           </div>
 
           {showStreakProtectNudge && !complete ? (
-            <p className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-950 dark:text-amber-100">
+            <p className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] bg-[var(--semantic-warning-soft)] px-3 py-2 text-xs text-[var(--semantic-warning-contrast)]">
               {t("learner.retention.streakProtectShort")}
             </p>
           ) : null}
 
           {complete ? (
-            <p className="rounded-lg border border-emerald-500/25 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-950 dark:text-emerald-100">
+            <p className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-success)_30%,var(--semantic-border-soft))] bg-[var(--semantic-success-soft)] px-3 py-2 text-sm text-[var(--semantic-success-contrast)]">
               {t("learner.dailyGoal.complete")}
             </p>
           ) : (
@@ -135,7 +132,7 @@ export function LearnerDailyMomentumCard({
           <p className="text-[10px] text-muted-foreground/90">{t("learner.dailyGoal.utcNote")}</p>
         </div>
 
-        <div className="flex min-w-[min(100%,16rem)] flex-col gap-2 rounded-xl border border-border/50 bg-muted/20 p-4 lg:max-w-xs">
+        <div className="nn-semantic-inset--cool flex min-w-[min(100%,16rem)] flex-col gap-2 rounded-xl p-4 lg:max-w-xs">
           <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
             {t("learner.dailyGoal.resumeHeading")}
           </p>

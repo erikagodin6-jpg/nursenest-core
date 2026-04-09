@@ -11,15 +11,15 @@ import type { RecentLearnerNoteSummary } from "@/components/student/premium-lear
 function tierClass(tier: WeaknessTier): string {
   switch (tier) {
     case "critical":
-      return "border-role-danger-border bg-role-danger-soft text-role-danger-text";
+      return "border-[color-mix(in_srgb,var(--semantic-danger)_38%,var(--semantic-border-soft))] bg-[var(--semantic-danger-soft)] text-[var(--semantic-danger-contrast)]";
     case "weak":
-      return "border-role-warning-border bg-role-warning-soft text-role-warning-text";
+      return "border-[color-mix(in_srgb,var(--semantic-warning)_38%,var(--semantic-border-soft))] bg-[var(--semantic-warning-soft)] text-[var(--semantic-warning-contrast)]";
     case "moderate":
-      return "border-border bg-muted/30 text-foreground";
+      return "border-[color-mix(in_srgb,var(--semantic-info)_32%,var(--semantic-border-soft))] bg-[var(--semantic-info-soft)] text-[var(--semantic-info-contrast)]";
     case "strong":
-      return "border-border/60 bg-muted/15 text-muted-foreground";
+      return "border-[color-mix(in_srgb,var(--semantic-success)_32%,var(--semantic-border-soft))] bg-[var(--semantic-success-soft)] text-[var(--semantic-success-contrast)]";
     default:
-      return "border-border bg-muted/20 text-foreground";
+      return "border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] text-[var(--semantic-text-primary)]";
   }
 }
 
@@ -183,14 +183,14 @@ export function LearnerStudentDashboard({
               <span className="tabular-nums">{scorePct}%</span>
             </div>
             <div
-              className="h-3 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10"
+              className="nn-progress-track-semantic nn-progress-track-semantic--lg"
               role="progressbar"
               aria-valuenow={scorePct}
               aria-valuemin={0}
               aria-valuemax={100}
             >
               <div
-                className="h-full rounded-full bg-gradient-to-r from-primary/90 to-role-success transition-[width] duration-500 ease-out"
+                className="h-full rounded-full nn-progress-fill-semantic-readiness transition-[width] duration-500 ease-out"
                 style={{ width: `${scorePct}%` }}
               />
             </div>

@@ -40,7 +40,7 @@ function FactorCard({ factor, t }: { factor: ReadinessFactor; t: LearnerMarketin
   const hasWeight = factor.maxPoints > 0;
   const pct = hasWeight ? Math.round((factor.points / factor.maxPoints) * 100) : null;
   return (
-    <div className="rounded-xl border border-border/55 bg-muted/10 p-4">
+    <div className="nn-semantic-inset p-4">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h3 className="text-sm font-semibold text-[var(--theme-heading-text)]">{factor.label}</h3>
         {hasWeight ? (
@@ -53,13 +53,13 @@ function FactorCard({ factor, t }: { factor: ReadinessFactor; t: LearnerMarketin
       </div>
       {pct != null ? (
         <div
-          className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10"
+          className="nn-progress-track-semantic nn-progress-track-semantic--xs mt-2"
           role="progressbar"
           aria-valuenow={pct}
           aria-valuemin={0}
           aria-valuemax={100}
         >
-          <div className="h-full rounded-full bg-primary/85" style={{ width: `${pct}%` }} />
+          <div className="h-full rounded-full nn-progress-fill-semantic-brand" style={{ width: `${pct}%` }} />
         </div>
       ) : null}
       <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{factor.detail}</p>
@@ -82,7 +82,7 @@ function WeakTopicRowUi({ w, t }: { w: WeakTopicRow; t: LearnerMarketingT }) {
   const key = w.normalizedTopic?.trim() || w.topic;
   const drill = remediationTopicDrillHref(key);
   return (
-    <li className="rounded-xl border border-rose-500/15 bg-rose-500/[0.05] px-4 py-3">
+    <li className="nn-semantic-inset--risk px-4 py-3">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <span className="font-medium text-foreground">{w.topic}</span>
         {w.attempted > 0 ? (
@@ -122,7 +122,7 @@ function Section({
 }) {
   return (
     <section className="overflow-hidden rounded-2xl border border-border/60 shadow-sm">
-      <div className="border-b border-border/60 bg-gradient-to-r from-primary/[0.06] via-transparent to-role-success/[0.05] px-5 py-4">
+      <div className="nn-section-header-learner px-5 py-4">
         <h2 className="text-base font-semibold tracking-tight text-[var(--theme-heading-text)]">{title}</h2>
         {subtitle ? <p className="mt-1 text-xs text-muted-foreground">{subtitle}</p> : null}
       </div>

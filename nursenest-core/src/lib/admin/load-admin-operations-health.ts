@@ -1,6 +1,6 @@
 /**
  * Bounded aggregates for /admin/operations — jobs, automation logs, AI drafts, billing signals.
- * No placeholder metrics; omits or notes unavailable data.
+ * No Stripe API calls; webhook receipt counts are DB-only.
  */
 import {
   BlogBatchScheduleItemStatus,
@@ -17,7 +17,8 @@ import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured, withDatabaseFallback } from "@/lib/db/safe-database";
 import { isRuntimeSafeMode } from "@/lib/runtime/safe-mode";
 
-export const OPERATIONS_LOG_WINDOW_HOURS_DEFAULT = 24 * 7;
+const WINDOW_7D_MS = 7 * 24 * 60 * 60 * 1000;
+const WINDOW_24H_MS = 24 * 60 * 60 * 1000;
 
 export type AdminOperationsHealth = {
   generatedAt: string;
@@ -28,70 +29,67 @@ export type AdminOperationsHealth = {
     latencyMs?: number;
     error?: string;
   };
-  windows: { automationLogHours: number; aiJobHours: number };
+  dataNotes: string[];
   backgroundJobs: {
     byStatus: Record<string, number>;
     pendingReady: number;
     pendingScheduledFuture: number;
-    running: number;
     recentFailed: Array<{
       id: string;
       type: string;
-      status: JobStatus;
+      status: string;
       attempts: number;
       maxAttempts: number;
       lastError: string | null;
       scheduledFor: string;
-      createdAt: string;
       updatedAt: string;
     }>;
   };
   contentAutomation: {
+    windowDays: number;
     failedByCategory: Array<{ category: string; count: number }>;
     warningsByCategory: Array<{ category: string; count: number }>;
-    linkCheckWarnings: number;
-    publishFailures: number;
+    linkCheckWarnings7d: number;
     recentFailures: Array<{
       id: string;
       category: string;
       jobType: string;
+      status: string;
       summary: string | null;
       error: string | null;
       createdAt: string;
       blogPostId: string | null;
     }>;
   };
-  aiGeneration: {
-    failedByTool: Array<{ tool: string; count: number }>;
-    running: number;
+  aiGenerationJobs: {
+    windowDays: number;
+    failedByTool7d: Array<{ tool: string; count: number }>;
+    runningCount: number;
     recentFailures: Array<{
       id: string;
       tool: string;
+      status: string;
       error: string | null;
       createdAt: string;
       updatedAt: string;
     }>;
   };
-  blogPublishing: {
+  draftReview: {
+    questionDrafts: { pending: number; rejected: number };
+    lessonDrafts: { pending: number; rejected: number };
+    flashcardDrafts: { pending: number; rejected: number };
+  };
+  blogAndPublish: {
     postsFailed: number;
-    draftBatchItemsFailedWindow: number;
+    draftBatchItemsFailed7d: number;
     scheduleItemsFailed: number;
     scheduleItemsOverdue: number;
-  };
-  draftReview: {
-    questionPending: number;
-    questionRejected: number;
-    lessonPending: number;
-    lessonRejected: number;
-    flashcardPending: number;
-    flashcardRejected: number;
   };
   subscriptionsBilling: {
     pastDue: number;
     grace: number;
     stripeWebhookEvents24h: number;
   };
-  dataNotes: string[];
 };
 
 function emptyHealth(generatedAt: string): AdminOperationsHealth {
@@ -99,116 +97,118 @@ function emptyHealth(generatedAt: string): AdminOperationsHealth {
     generatedAt,
     safeMode: isRuntimeSafeMode(),
     database: { configured: false, status: "skipped" },
-    windows: { automationLogHours: OPERATIONS_LOG_WINDOW_HOURS_DEFAULT, aiJobHours: OPERATIONS_LOG_WINDOW_HOURS_DEFAULT },
+    dataNotes: ["Database URL not configured — operational metrics unavailable."],
     backgroundJobs: {
       byStatus: {},
       pendingReady: 0,
       pendingScheduledFuture: 0,
-      running: 0,
       recentFailed: [],
     },
     contentAutomation: {
+      windowDays: 7,
       failedByCategory: [],
       warningsByCategory: [],
-      linkCheckWarnings: 0,
-      publishFailures: 0,
+      linkCheckWarnings7d: 0,
       recentFailures: [],
     },
-    aiGeneration: { failedByTool: [], running: 0, recentFailures: [] },
-    blogPublishing: {
-      postsFailed: 0,
-      draftBatchItemsFailedWindow: 0,
-      scheduleItemsFailed: 0,
-      scheduleItemsOverdue: 0,
+    aiGenerationJobs: {
+      windowDays: 7,
+      failedByTool7d: [],
+      runningCount: 0,
+      recentFailures: [],
     },
     draftReview: {
-      questionPending: 0,
-      questionRejected: 0,
-      lessonPending: 0,
-      lessonRejected: 0,
-      flashcardPending: 0,
-      flashcardRejected: 0,
+      questionDrafts: { pending: -1, rejected: -1 },
+      lessonDrafts: { pending: -1, rejected: -1 },
+      flashcardDrafts: { pending: -1, rejected: -1 },
     },
-    subscriptionsBilling: { pastDue: 0, grace: 0, stripeWebhookEvents24h: 0 },
-    dataNotes: ["Database URL not configured — operational metrics unavailable."],
+    blogAndPublish: {
+      postsFailed: -1,
+      draftBatchItemsFailed7d: -1,
+      scheduleItemsFailed: -1,
+      scheduleItemsOverdue: -1,
+    },
+    subscriptionsBilling: {
+      pastDue: -1,
+      grace: -1,
+      stripeWebhookEvents24h: -1,
+    },
   };
 }
 
 export async function loadAdminOperationsHealth(): Promise<AdminOperationsHealth> {
   const generatedAt = new Date().toISOString();
-  const safeMode = isRuntimeSafeMode();
-  const dataNotes: string[] = [];
-
   if (!isDatabaseUrlConfigured()) {
-    const h = emptyHealth(generatedAt);
-    h.safeMode = safeMode;
-    return h;
+    return emptyHealth(generatedAt);
+  }
+
+  const now = new Date();
+  const since7d = new Date(now.getTime() - WINDOW_7D_MS);
+  const since24h = new Date(now.getTime() - WINDOW_24H_MS);
+
+  const dataNotes: string[] = [];
+  if (isRuntimeSafeMode()) {
+    dataNotes.push("Safe mode is ON — some writes and metrics may be reduced.");
   }
 
   const dbProbe = await checkDatabaseReadiness(4000);
-  const database =
-    dbProbe.ok && "latencyMs" in dbProbe
-      ? { configured: true, status: "ok" as const, latencyMs: dbProbe.latencyMs }
-      : dbProbe.ok && "skipped" in dbProbe
-        ? { configured: true, status: "skipped" as const }
-        : {
-            configured: true,
-            status: "error" as const,
-            error: "error" in dbProbe ? dbProbe.error : "unavailable",
-          };
+  let database: AdminOperationsHealth["database"];
+  if (!dbProbe.ok) {
+    database = { configured: true, status: "error", error: dbProbe.error };
+  } else if ("skipped" in dbProbe && dbProbe.skipped) {
+    database = { configured: true, status: "skipped" };
+  } else {
+    database = { configured: true, status: "ok", latencyMs: dbProbe.latencyMs };
+  }
 
   if (database.status === "error") {
     dataNotes.push("Database probe failed — counts below may be incomplete.");
   }
 
-  const automationLogHours = OPERATIONS_LOG_WINDOW_HOURS_DEFAULT;
-  const aiJobHours = OPERATIONS_LOG_WINDOW_HOURS_DEFAULT;
-  const sinceAuto = new Date(Date.now() - automationLogHours * 60 * 60 * 1000);
-  const sinceAi = new Date(Date.now() - aiJobHours * 60 * 60 * 1000);
-  const since24h = new Date(Date.now() - 24 * 60 * 60 * 1000);
-  const now = new Date();
-
-  const [
-    bgGroup,
-    pendingReady,
-    pendingFuture,
-    bgRunning,
-    bgFailedRecent,
-    autoFailedGroup,
-    autoWarnGroup,
-    linkWarn,
-    publishFailCount,
-    autoRecentFail,
-    aiFailGroup,
-    aiRunning,
-    aiFailRecent,
-    blogFailedPosts,
-    batchItemsFailed,
-    schedFailed,
-    schedOverdue,
-    qPending,
-    qRej,
-    lPending,
-    lRej,
-    fPending,
-    fRej,
-    subPastDue,
-    subGrace,
-    stripeEv,
-  ] = await withDatabaseFallback(
-    () =>
-      Promise.all([
+  const result = await withDatabaseFallback(
+    async () => {
+      const [
+        bgGroups,
+        pendingReady,
+        pendingFuture,
+        bgFailed,
+        autoFailedGroups,
+        autoWarnGroups,
+        linkWarnings,
+        autoRecent,
+        aiFailedTools,
+        aiRunning,
+        aiRecentFailed,
+        qPending,
+        qRejected,
+        lPending,
+        lRejected,
+        fPending,
+        fRejected,
+        blogFailed,
+        batchItemsFailed,
+        schedFailed,
+        schedOverdue,
+        subPastDue,
+        subGrace,
+        stripe24h,
+      ] = await Promise.all([
         prisma.backgroundJob.groupBy({
           by: ["status"],
           _count: { _all: true },
         }),
         prisma.backgroundJob.count({
-          where: { status: JobStatus.PENDING, scheduledFor: { lte: now } },
+          where: {
+            status: JobStatus.PENDING,
+            scheduledFor: { lte: now },
+          },
         }),
         prisma.backgroundJob.count({
-          where: { status: JobStatus.PENDING, scheduledFor: { gt: now } },
+          where: {
+            status: JobStatus.PENDING,
+            scheduledFor: { gt: now },
+          },
         }),
-        prisma.backgroundJob.count({ where: { status: JobStatus.RUNNING } }),
         prisma.backgroundJob.findMany({
           where: { status: JobStatus.FAILED },
           orderBy: { updatedAt: "desc" },
@@ -221,7 +221,6 @@ export async function loadAdminOperationsHealth(): Promise<AdminOperationsHealth
             maxAttempts: true,
             lastError: true,
             scheduledFor: true,
-            createdAt: true,
             updatedAt: true,
           },
         }),
@@ -229,7 +228,7 @@ export async function loadAdminOperationsHealth(): Promise<AdminOperationsHealth
           by: ["category"],
           where: {
             status: ContentAutomationLogStatus.FAILED,
-            createdAt: { gte: sinceAuto },
+            createdAt: { gte: since7d },
           },
           _count: { _all: true },
         }),
@@ -237,7 +236,7 @@ export async function loadAdminOperationsHealth(): Promise<AdminOperationsHealth
           by: ["category"],
           where: {
             status: ContentAutomationLogStatus.WARNING,
-            createdAt: { gte: sinceAuto },
+            createdAt: { gte: since7d },
           },
           _count: { _all: true },
         }),
@@ -245,24 +244,21 @@ export async function loadAdminOperationsHealth(): Promise<AdminOperationsHealth
           where: {
             category: ContentAutomationLogCategory.BLOG_INTERNAL_LINK_CHECK,
             status: ContentAutomationLogStatus.WARNING,
-            createdAt: { gte: sinceAuto },
-          },
-        }),
-        prisma.contentAutomationLog.count({
-          where: {
-            category: { in: [ContentAutomationLogCategory.BLOG_PUBLISH, ContentAutomationLogCategory.BLOG_MARK_FAILED] },
-            status: ContentAutomationLogStatus.FAILED,
-            createdAt: { gte: sinceAuto },
+            createdAt: { gte: since7d },
           },
         }),
         prisma.contentAutomationLog.findMany({
-          where: { status: ContentAutomationLogStatus.FAILED, createdAt: { gte: sinceAuto } },
+          where: {
+            status: ContentAutomationLogStatus.FAILED,
+            createdAt: { gte: since7d },
+          },
           orderBy: { createdAt: "desc" },
           take: 40,
           select: {
             id: true,
             category: true,
             jobType: true,
+            status: true,
             summary: true,
             error: true,
             createdAt: true,
@@ -271,141 +267,172 @@ export async function loadAdminOperationsHealth(): Promise<AdminOperationsHealth
         }),
         prisma.aiGenerationJob.groupBy({
           by: ["tool"],
-          where: { status: JobStatus.FAILED, createdAt: { gte: sinceAi } },
+          where: {
+            status: JobStatus.FAILED,
+            createdAt: { gte: since7d },
+          },
           _count: { _all: true },
         }),
-        prisma.aiGenerationJob.count({ where: { status: JobStatus.RUNNING } }),
+        prisma.aiGenerationJob.count({
+          where: { status: JobStatus.RUNNING },
+        }),
         prisma.aiGenerationJob.findMany({
-          where: { status: JobStatus.FAILED, createdAt: { gte: sinceAi } },
+          where: {
+            status: JobStatus.FAILED,
+            createdAt: { gte: since7d },
+          },
           orderBy: { updatedAt: "desc" },
-          take: 25,
-          select: { id: true, tool: true, error: true, createdAt: true, updatedAt: true },
+          take: 20,
+          select: {
+            id: true,
+            tool: true,
+            status: true,
+            error: true,
+            createdAt: true,
+            updatedAt: true,
+          },
         }),
-        prisma.blogPost.count({ where: { postStatus: BlogPostStatus.FAILED } }),
+        prisma.generatedQuestionDraft.count({
+          where: { reviewStatus: DraftReviewStatus.PENDING_REVIEW },
+        }),
+        prisma.generatedQuestionDraft.count({
+          where: { reviewStatus: DraftReviewStatus.REJECTED },
+        }),
+        prisma.generatedLessonDraft.count({
+          where: { reviewStatus: DraftReviewStatus.PENDING_REVIEW },
+        }),
+        prisma.generatedLessonDraft.count({
+          where: { reviewStatus: DraftReviewStatus.REJECTED },
+        }),
+        prisma.generatedFlashcardDraft.count({
+          where: { reviewStatus: DraftReviewStatus.PENDING_REVIEW },
+        }),
+        prisma.generatedFlashcardDraft.count({
+          where: { reviewStatus: DraftReviewStatus.REJECTED },
+        }),
+        prisma.blogPost.count({
+          where: { postStatus: BlogPostStatus.FAILED },
+        }),
         prisma.blogDraftGenerationBatchItem.count({
-          where: { status: BlogDraftGenerationBatchItemStatus.FAILED, updatedAt: { gte: sinceAuto } },
+          where: {
+            status: "FAILED",
+            updatedAt: { gte: since7d },
+          },
         }),
-        prisma.blogBatchScheduleItem.count({ where: { status: BlogBatchScheduleItemStatus.FAILED } }),
         prisma.blogBatchScheduleItem.count({
-          where: { status: BlogBatchScheduleItemStatus.PENDING, plannedPublishAt: { lt: now } },
+          where: { status: "FAILED" },
         }),
-        prisma.generatedQuestionDraft.count({ where: { reviewStatus: DraftReviewStatus.PENDING_REVIEW } }),
-        prisma.generatedQuestionDraft.count({ where: { reviewStatus: DraftReviewStatus.REJECTED } }),
-        prisma.generatedLessonDraft.count({ where: { reviewStatus: DraftReviewStatus.PENDING_REVIEW } }),
-        prisma.generatedLessonDraft.count({ where: { reviewStatus: DraftReviewStatus.REJECTED } }),
-        prisma.generatedFlashcardDraft.count({ where: { reviewStatus: DraftReviewStatus.PENDING_REVIEW } }),
-        prisma.generatedFlashcardDraft.count({ where: { reviewStatus: DraftReviewStatus.REJECTED } }),
-        prisma.subscription.count({ where: { status: SubscriptionStatus.PAST_DUE } }),
-        prisma.subscription.count({ where: { status: SubscriptionStatus.GRACE } }),
-        prisma.stripeWebhookEvent.count({ where: { createdAt: { gte: since24h } } }),
-      ]),
-    [
-      [],
-      0,
-      0,
-      0,
-      [],
-      [],
-      [],
-      0,
-      0,
-      [],
-      [],
-      0,
-      [],
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-    ],
+        prisma.blogBatchScheduleItem.count({
+          where: {
+            status: "PENDING",
+            plannedPublishAt: { lt: now },
+          },
+        }),
+        prisma.subscription.count({
+          where: { status: SubscriptionStatus.PAST_DUE },
+        }),
+        prisma.subscription.count({
+          where: { status: SubscriptionStatus.GRACE },
+        }),
+        prisma.stripeWebhookEvent.count({
+          where: { createdAt: { gte: since24h } },
+        }),
+      ]);
+
+      const byStatus: Record<string, number> = {};
+      for (const g of bgGroups) {
+        byStatus[g.status] = g._count._all;
+      }
+
+      return {
+        backgroundJobs: {
+          byStatus,
+          pendingReady,
+          pendingScheduledFuture: pendingFuture,
+          recentFailed: bgFailed.map((j) => ({
+            ...j,
+            scheduledFor: j.scheduledFor.toISOString(),
+            updatedAt: j.updatedAt.toISOString(),
+          })),
+        },
+        contentAutomation: {
+          windowDays: 7,
+          failedByCategory: autoFailedGroups.map((g) => ({
+            category: g.category,
+            count: g._count._all,
+          })),
+          warningsByCategory: autoWarnGroups.map((g) => ({
+            category: g.category,
+            count: g._count._all,
+          })),
+          linkCheckWarnings7d: linkWarnings,
+          recentFailures: autoRecent.map((r) => ({
+            id: r.id,
+            category: r.category,
+            jobType: r.jobType,
+            status: r.status,
+            summary: r.summary,
+            error: r.error,
+            createdAt: r.createdAt.toISOString(),
+            blogPostId: r.blogPostId,
+          })),
+        },
+        aiGenerationJobs: {
+          windowDays: 7,
+          failedByTool7d: aiFailedTools.map((g) => ({
+            tool: g.tool,
+            count: g._count._all,
+          })),
+          runningCount: aiRunning,
+          recentFailures: aiRecentFailed.map((j) => ({
+            id: j.id,
+            tool: j.tool,
+            status: j.status,
+            error: j.error,
+            createdAt: j.createdAt.toISOString(),
+            updatedAt: j.updatedAt.toISOString(),
+          })),
+        },
+        draftReview: {
+          questionDrafts: { pending: qPending, rejected: qRejected },
+          lessonDrafts: { pending: lPending, rejected: lRejected },
+          flashcardDrafts: { pending: fPending, rejected: fRejected },
+        },
+        blogAndPublish: {
+          postsFailed: blogFailed,
+          draftBatchItemsFailed7d: batchItemsFailed,
+          scheduleItemsFailed: schedFailed,
+          scheduleItemsOverdue: schedOverdue,
+        },
+        subscriptionsBilling: {
+          pastDue: subPastDue,
+          grace: subGrace,
+          stripeWebhookEvents24h: stripe24h,
+        },
+      };
+    },
+    null,
   );
 
-  const byStatus: Record<string, number> = {};
-  for (const row of bgGroup) {
-    byStatus[row.status] = row._count._all;
+  if (!result) {
+    dataNotes.push("Database read failed — showing empty operational snapshot.");
+    return {
+      ...emptyHealth(generatedAt),
+      safeMode: isRuntimeSafeMode(),
+      database,
+      dataNotes: [...dataNotes, ...emptyHealth(generatedAt).dataNotes],
+    };
   }
 
   dataNotes.push(
-    `Automation log aggregates: last ${automationLogHours}h. AI job failures: last ${aiJobHours}h. Stripe webhook count is a 24h delivery dedupe signal, not revenue.`,
+    "MRR, renewal dates, and Stripe Dashboard–only disputes are not queried here — use Stripe for billing detail.",
   );
 
   return {
     generatedAt,
-    safeMode,
+    safeMode: isRuntimeSafeMode(),
     database,
-    windows: { automationLogHours, aiJobHours },
-    backgroundJobs: {
-      byStatus,
-      pendingReady,
-      pendingScheduledFuture: pendingFuture,
-      running: bgRunning,
-      recentFailed: bgFailedRecent.map((j) => ({
-        ...j,
-        scheduledFor: j.scheduledFor.toISOString(),
-        createdAt: j.createdAt.toISOString(),
-        updatedAt: j.updatedAt.toISOString(),
-      })),
-    },
-    contentAutomation: {
-      failedByCategory: autoFailedGroup
-        .map((r) => ({ category: r.category, count: r._count._all }))
-        .sort((a, b) => b.count - a.count),
-      warningsByCategory: autoWarnGroup
-        .map((r) => ({ category: r.category, count: r._count._all }))
-        .sort((a, b) => b.count - a.count),
-      linkCheckWarnings: linkWarn,
-      publishFailures: publishFailCount,
-      recentFailures: autoRecentFail.map((r) => ({
-        id: r.id,
-        category: r.category,
-        jobType: r.jobType,
-        summary: r.summary,
-        error: r.error,
-        createdAt: r.createdAt.toISOString(),
-        blogPostId: r.blogPostId,
-      })),
-    },
-    aiGeneration: {
-      failedByTool: aiFailGroup
-        .map((r) => ({ tool: r.tool, count: r._count._all }))
-        .sort((a, b) => b.count - a.count),
-      running: aiRunning,
-      recentFailures: aiFailRecent.map((r) => ({
-        id: r.id,
-        tool: r.tool,
-        error: r.error,
-        createdAt: r.createdAt.toISOString(),
-        updatedAt: r.updatedAt.toISOString(),
-      })),
-    },
-    blogPublishing: {
-      postsFailed: blogFailedPosts,
-      draftBatchItemsFailedWindow: batchItemsFailed,
-      scheduleItemsFailed: schedFailed,
-      scheduleItemsOverdue: schedOverdue,
-    },
-    draftReview: {
-      questionPending: qPending,
-      questionRejected: qRej,
-      lessonPending: lPending,
-      lessonRejected: lRej,
-      flashcardPending: fPending,
-      flashcardRejected: fRej,
-    },
-    subscriptionsBilling: {
-      pastDue: subPastDue,
-      grace: subGrace,
-      stripeWebhookEvents24h: stripeEv,
-    },
     dataNotes,
+    ...result,
   };
 }

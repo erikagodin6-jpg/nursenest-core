@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "./theme-palettes.css";
 @import "./color-roles.css";
+@import "./semantic-status-tokens.css";
 
 html,
 body {
@@ -319,6 +320,28 @@ html[data-theme="dark-mode"] {
   --color-semantic-info-bg: var(--semantic-info-bg);
   --color-semantic-info-border: var(--semantic-info-border);
   --color-semantic-info-text: var(--semantic-info-text);
+
+  /* Multi-color learner / analytics (see semantic-status-tokens.css) */
+  --color-semantic-success: var(--semantic-success);
+  --color-semantic-success-soft: var(--semantic-success-soft);
+  --color-semantic-success-contrast: var(--semantic-success-contrast);
+  --color-semantic-info: var(--semantic-info);
+  --color-semantic-info-soft: var(--semantic-info-soft);
+  --color-semantic-info-contrast: var(--semantic-info-contrast);
+  --color-semantic-warning: var(--semantic-warning);
+  --color-semantic-warning-soft: var(--semantic-warning-soft);
+  --color-semantic-warning-contrast: var(--semantic-warning-contrast);
+  --color-semantic-danger: var(--semantic-danger);
+  --color-semantic-danger-soft: var(--semantic-danger-soft);
+  --color-semantic-danger-contrast: var(--semantic-danger-contrast);
+  --color-semantic-mastery-high: var(--semantic-mastery-high);
+  --color-semantic-mastery-mid: var(--semantic-mastery-mid);
+  --color-semantic-mastery-low: var(--semantic-mastery-low);
+  --color-semantic-chart-1: var(--semantic-chart-1);
+  --color-semantic-chart-2: var(--semantic-chart-2);
+  --color-semantic-chart-3: var(--semantic-chart-3);
+  --color-semantic-chart-4: var(--semantic-chart-4);
+  --color-semantic-chart-5: var(--semantic-chart-5);
 }
 
 @layer utilities {

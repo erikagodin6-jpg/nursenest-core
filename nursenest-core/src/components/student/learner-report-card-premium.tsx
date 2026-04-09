@@ -13,13 +13,16 @@ function pctBar(pct: number | null, label: string) {
         <span className="tabular-nums font-medium text-foreground">{pct == null ? "—" : `${pct}%`}</span>
       </div>
       <div
-        className="h-2 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10"
+        className="nn-progress-track-semantic"
         role="progressbar"
         aria-valuenow={v}
         aria-valuemin={0}
         aria-valuemax={100}
       >
-        <div className="h-full rounded-full bg-role-success transition-[width] duration-500" style={{ width: `${v}%` }} />
+        <div
+          className="h-full rounded-full nn-progress-fill-semantic-success transition-[width] duration-500"
+          style={{ width: `${v}%` }}
+        />
       </div>
     </div>
   );
@@ -55,14 +58,14 @@ export function LearnerReportCardPremium({
 
       {/* Overall */}
       <section className="overflow-hidden rounded-2xl border border-border/60 shadow-sm">
-        <div className="border-b border-border/60 bg-gradient-to-r from-primary/[0.07] via-transparent to-role-success/[0.06] px-5 py-4">
+        <div className="nn-section-header-learner px-5 py-4">
           <h2 className="text-lg font-semibold tracking-tight text-[var(--theme-heading-text)]">
             {t("learner.reportCard.section.overall")}
           </h2>
           <p className="mt-1 text-xs text-muted-foreground">{t("learner.reportCard.section.overallSub")}</p>
         </div>
         <div className="grid gap-6 p-5 sm:grid-cols-2">
-          <div className="rounded-xl border border-border/50 bg-muted/10 p-4">
+          <div className="nn-semantic-inset p-4">
             <p className="text-[11px] font-semibold uppercase tracking-wide text-primary">
               {t("learner.reportCard.bankSessionsLabel")}
             </p>
@@ -81,7 +84,7 @@ export function LearnerReportCardPremium({
               <Na>{t("learner.reportCard.bankSessionsNa")}</Na>
             )}
           </div>
-          <div className="rounded-xl border border-border/50 bg-muted/10 p-4">
+          <div className="nn-semantic-inset p-4">
             <p className="text-[11px] font-semibold uppercase tracking-wide text-primary">
               {t("learner.reportCard.mockExamsLabel")}
             </p>
@@ -166,7 +169,7 @@ export function LearnerReportCardPremium({
         {data.mockByExamTier.length > 0 ? (
           <ul className="mt-4 grid gap-4 sm:grid-cols-2">
             {data.mockByExamTier.map((m) => (
-              <li key={m.tierKey} className="rounded-xl border border-border/50 bg-muted/10 p-4">
+              <li key={m.tierKey} className="nn-semantic-inset p-4">
                 <p className="text-sm font-medium text-foreground">{m.displayLabel}</p>
                 <p className="mt-1 text-xs text-muted-foreground">
                   {t("learner.reportCard.mockTierAttempts", { n: m.attempts })}
@@ -192,7 +195,7 @@ export function LearnerReportCardPremium({
               {data.weakTopics.map((w) => (
                 <li
                   key={w.normalizedTopic ?? w.topic}
-                  className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-border/50 border-l-rose-500/35 bg-muted/10 px-3 py-2.5 text-sm"
+                  className="flex flex-wrap items-center justify-between gap-2 nn-semantic-inset--risk px-3 py-2.5 text-sm"
                 >
                   <span className="font-medium text-foreground">{w.topic}</span>
                   <span className="tabular-nums text-xs text-muted-foreground">
@@ -241,7 +244,7 @@ export function LearnerReportCardPremium({
           <p className="mt-1 text-xs text-muted-foreground">{t("learner.reportCard.section.trendsSub")}</p>
           <ul className="mt-4 space-y-3">
             {data.topicTrends.map((tr) => (
-              <li key={tr.topic} className="rounded-lg border border-border/40 bg-muted/10 px-3 py-2 text-sm">
+              <li key={tr.topic} className="nn-semantic-inset px-3 py-2 text-sm">
                 <span className="font-medium text-foreground">{tr.topic}</span>
                 <span className="ml-2 text-xs text-muted-foreground">· {tr.momentum}</span>
                 <p className="mt-1 text-xs leading-snug text-muted-foreground">{tr.summary}</p>
@@ -269,8 +272,11 @@ export function LearnerReportCardPremium({
                     </span>
                     <span className="tabular-nums font-medium text-foreground">{pt.avgPct}%</span>
                   </div>
-                  <div className="h-2 overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
-                    <div className="h-full rounded-full bg-primary/80" style={{ width: `${pt.avgPct}%` }} />
+                  <div className="nn-progress-track-semantic">
+                    <div
+                      className="h-full rounded-full nn-progress-fill-semantic-readiness transition-[width] duration-300"
+                      style={{ width: `${pt.avgPct}%` }}
+                    />
                   </div>
                 </div>
               </div>
@@ -405,7 +411,7 @@ export function LearnerReportCardPremium({
 
       {/* Full mock log */}
       <section className="overflow-hidden rounded-2xl border border-border/60">
-        <div className="border-b border-border/60 bg-muted/15 px-4 py-3">
+        <div className="nn-section-header-learner--muted px-4 py-3">
           <h2 className="text-sm font-semibold text-[var(--theme-heading-text)]">{t("learner.reportCard.mockLogHeading")}</h2>
           <p className="mt-0.5 text-xs text-muted-foreground">{t("learner.reportCard.mockLogSub")}</p>
         </div>

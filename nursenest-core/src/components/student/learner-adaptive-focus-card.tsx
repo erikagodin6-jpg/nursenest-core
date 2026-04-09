@@ -30,11 +30,11 @@ export async function LearnerAdaptiveFocusCard({ snapshot }: { snapshot: Learner
 
   return (
     <section
-      className="nn-card border border-primary/20 bg-gradient-to-br from-primary/[0.05] via-[var(--theme-card-bg)] to-transparent p-6 shadow-sm"
+      className="nn-card border border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))] bg-gradient-to-br from-[var(--semantic-info-soft)] via-[var(--semantic-surface)] to-[color-mix(in_srgb,var(--semantic-brand)_04%,var(--semantic-surface))] p-6 shadow-[var(--semantic-shadow-soft)]"
       aria-labelledby="nn-adaptive-focus-heading"
     >
       <div className="flex flex-wrap items-start gap-3">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--semantic-info-soft)] text-[var(--semantic-info)]">
           <Compass className="h-5 w-5" aria-hidden />
         </div>
         <div className="min-w-0 flex-1">
@@ -97,7 +97,7 @@ export async function LearnerAdaptiveFocusCard({ snapshot }: { snapshot: Learner
             {recs.map((r) => (
               <li
                 key={`${r.href}-${r.type}`}
-                className="flex flex-col gap-2 rounded-lg border border-border/50 bg-muted/15 px-3 py-2.5 sm:flex-row sm:items-center sm:justify-between"
+                className="flex flex-col gap-2 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-2.5 sm:flex-row sm:items-center sm:justify-between"
               >
                 <div className="min-w-0">
                   <p className="text-sm font-medium text-[var(--theme-heading-text)] [overflow-wrap:anywhere]">{r.title}</p>

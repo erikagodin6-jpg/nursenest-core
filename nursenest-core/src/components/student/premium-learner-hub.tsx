@@ -34,14 +34,14 @@ function Bar({
       )}
       {sublabel && !compact ? <p className="text-xs text-muted">{sublabel}</p> : null}
       <div
-        className="h-2.5 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10"
+        className="nn-progress-track-semantic nn-progress-track-semantic--md"
         role="progressbar"
         aria-valuenow={pct}
         aria-valuemin={0}
         aria-valuemax={100}
       >
         <div
-          className="h-full rounded-full bg-role-success transition-[width] duration-500 ease-out"
+          className="h-full rounded-full nn-progress-fill-semantic-success transition-[width] duration-500 ease-out"
           style={{ width: `${pct}%` }}
         />
       </div>
@@ -52,7 +52,7 @@ function Bar({
 function FactorBar({ label, points, maxPoints, detail }: { label: string; points: number; maxPoints: number; detail: string }) {
   if (maxPoints <= 0) {
     return (
-      <div className="rounded-lg border border-border/60 bg-muted/20 px-3 py-2">
+      <div className="nn-semantic-inset rounded-lg px-3 py-2">
         <p className="text-xs font-medium text-foreground">{label}</p>
         <p className="mt-1 text-xs text-muted">{detail}</p>
       </div>
@@ -67,8 +67,8 @@ function FactorBar({ label, points, maxPoints, detail }: { label: string; points
           {points}/{maxPoints}
         </span>
       </div>
-      <div className="h-1.5 w-full overflow-hidden rounded-full bg-black/10 dark:bg-white/10">
-        <div className="h-full rounded-full bg-role-success" style={{ width: `${pct}%` }} />
+      <div className="nn-progress-track-semantic">
+        <div className="h-full rounded-full nn-progress-fill-semantic-success" style={{ width: `${pct}%` }} />
       </div>
       <p className="text-[11px] leading-snug text-muted">{detail}</p>
     </div>
