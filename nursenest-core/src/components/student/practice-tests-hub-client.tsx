@@ -157,6 +157,9 @@ export function PracticeTestsHubClient({
     setCreating(true);
     setError(null);
     try {
+      if (selectionMode === "cat" && !pathwayId.trim()) {
+        throw new Error("Choose an exam pathway before starting adaptive (CAT) practice.");
+      }
       const res = await fetch("/api/practice-tests", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

@@ -5,7 +5,9 @@ import { PathwayLessonContentLocaleBanner } from "@/components/lessons/pathway-l
 import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-lesson-pagination";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
-import { buildExamPathwayPath, resolveExamPathwayFromMarketingHubSegment } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
+import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { marketingPathwayLessonTopicClusterPath, marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
 import {
@@ -24,6 +26,7 @@ import {
 import { pathwayTopicClusterBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { PathwayTopicClusterSiblingNav } from "@/components/pathway-lessons/pathway-topic-cluster-sibling-nav";
 import { absoluteUrl } from "@/lib/seo/site-origin";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export const dynamicParams = true;
 export const revalidate = 86400;
@@ -38,54 +41,137 @@ type Props = {
   searchParams: Promise<{ page?: string; pageSize?: string }>;
 };
 
+function TopicClusterLoadFailed({ pathway, base }: { pathway: ExamPathwayDefinition; base: string }) {
+  return (
+    <div className="mx-auto max-w-3xl px-4 py-12">
+      <Link href={base} className="text-sm font-medium text-primary hover:underline">
+        ← All lessons ({pathway.shortName})
+      </Link>
+      <h1 className="mt-4 text-2xl font-bold text-[var(--theme-heading-text)]">Topic lessons temporarily unavailable</h1>
+      <p className="mt-3 text-sm text-[var(--theme-muted-text)]">
+        We couldn&apos;t load the lesson list for this topic. You can still open the full lesson index or exam hub for{" "}
+        {pathway.shortName}.
+      </p>
+      <div className="mt-6 flex flex-wrap gap-3">
+        <Link
+          href={base}
+          className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground"
+        >
+          Browse all lessons
+        </Link>
+        <Link
+          href={buildExamPathwayPath(pathway)}
+          className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-border px-5 py-2.5 text-sm font-semibold hover:bg-card"
+        >
+          {pathway.shortName} exam hub
+        </Link>
+      </div>
+    </div>
+  );
+}
+
 export async function generateMetadata({ params }: Pick<Props, "params">): Promise<Metadata> {
   const { locale: countrySlug, slug: roleTrack, examCode, topicSlug } = await params;
-  const pathway = resolveExamPathwayFromMarketingHubSegment(countrySlug, roleTrack, examCode);
+  const pathname = `/${countrySlug}/${roleTrack}/${examCode}/lessons/topics/${topicSlug}`;
+  const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
   if (!pathway) return {};
   const canonicalPath = marketingPathwayLessonTopicClusterPath(pathway, topicSlug);
   const canonical = absoluteUrl(canonicalPath);
   const loc = defaultPathwayLessonContentLocaleForExamHubRoute();
-  const topicClusters = await listTopicClusters(pathway.id, loc);
-  const label =
-    topicClusters.find((t) => t.topicSlug === topicSlug)?.label ?? topicSlug.replace(/-/g, " ");
-  const title = pathwayLessonTopicClusterMetaTitle(pathway, label);
-  const description = pathwayLessonTopicClusterMetaDescription(pathway, label);
-  return {
-    title,
-    description,
-    alternates: { canonical },
-    openGraph: { title, description, url: canonical, type: "website" },
-    twitter: { card: "summary_large_image", title, description },
-  };
+  try {
+    const topicClusters = await listTopicClusters(pathway.id, loc);
+    const label =
+      topicClusters.find((t) => t.topicSlug === topicSlug)?.label ?? topicSlug.replace(/-/g, " ");
+    const title = pathwayLessonTopicClusterMetaTitle(pathway, label);
+    const description = pathwayLessonTopicClusterMetaDescription(pathway, label);
+    return {
+      title,
+      description,
+      alternates: { canonical },
+      openGraph: { title, description, url: canonical, type: "website" },
+      twitter: { card: "summary_large_image", title, description },
+    };
+  } catch (e) {
+    const message = e instanceof Error ? e.message : String(e);
+    safeServerLog("exam_pathway_hub", "hub_data_load_failed", {
+      event: "hub_data_load_failed",
+      pathname,
+      locale: countrySlug,
+      country: countrySlug,
+      examCode,
+      dependency: "listTopicClusters_metadata",
+      error_message: message.slice(0, 500),
+    });
+    const fallbackLabel = topicSlug.replace(/-/g, " ");
+    return {
+      title: `${fallbackLabel} · ${pathway.shortName} | NurseNest`,
+      robots: { index: false, follow: true },
+      alternates: { canonical },
+      openGraph: { url: canonical, type: "website" },
+    };
+  }
 }
 
 export default async function PathwayLessonTopicClusterPage({ params, searchParams }: Props) {
   const { locale: countrySlug, slug: roleTrack, examCode, topicSlug } = await params;
+  const pathname = `/${countrySlug}/${roleTrack}/${examCode}/lessons/topics/${topicSlug}`;
   const lessonContentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
-  const pathway = resolveExamPathwayFromMarketingHubSegment(countrySlug, roleTrack, examCode);
+  const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
   if (!pathway) notFound();
 
   const base = marketingPathwayLessonsIndexPath(pathway);
+  const basePrefix = (base.split("?")[0] ?? base).replace(/\/$/, "");
   const topicBase = marketingPathwayLessonTopicClusterPath(pathway, topicSlug);
   const sp = await searchParams;
   const pageRequested = Math.max(1, Number(sp.page ?? "1") || 1);
   const pageSizeRequested = Number(sp.pageSize ?? String(PATHWAY_HUB_PAGE_SIZE_DEFAULT)) || PATHWAY_HUB_PAGE_SIZE_DEFAULT;
 
-  const pageResult = await getLessonsForTopicPage(
-    pathway.id,
-    topicSlug,
-    pageRequested,
-    pageSizeRequested,
-    lessonContentLocale,
-  );
+  let pageResult: Awaited<ReturnType<typeof getLessonsForTopicPage>>;
+  try {
+    pageResult = await getLessonsForTopicPage(
+      pathway.id,
+      topicSlug,
+      pageRequested,
+      pageSizeRequested,
+      lessonContentLocale,
+    );
+  } catch (e) {
+    const message = e instanceof Error ? e.message : String(e);
+    safeServerLog("exam_pathway_hub", "hub_data_load_failed", {
+      event: "hub_data_load_failed",
+      pathname,
+      locale: countrySlug,
+      country: countrySlug,
+      examCode,
+      dependency: "getLessonsForTopicPage",
+      error_message: message.slice(0, 500),
+    });
+    return <TopicClusterLoadFailed pathway={pathway} base={base} />;
+  }
+
   if (pageResult.total === 0) notFound();
   if (pageRequested !== pageResult.page) {
     redirect(pageResult.page > 1 ? `${topicBase}?page=${pageResult.page}` : topicBase);
   }
 
+  let topicClusters: Awaited<ReturnType<typeof listTopicClusters>> = [];
+  try {
+    topicClusters = await listTopicClusters(pathway.id, lessonContentLocale);
+  } catch (e) {
+    const message = e instanceof Error ? e.message : String(e);
+    safeServerLog("exam_pathway_hub", "hub_data_load_failed", {
+      event: "hub_data_load_failed",
+      pathname,
+      locale: countrySlug,
+      country: countrySlug,
+      examCode,
+      dependency: "listTopicClusters",
+      error_message: message.slice(0, 500),
+    });
+  }
+
   const lessons = pageResult.items.filter(pathwayLessonHasRenderableHubSlug);
-  const topicClusters = await listTopicClusters(pathway.id, lessonContentLocale);
-  const label = topicClusters.find((t) => t.topicSlug === topicSlug)?.label ?? topicSlug;
+  const label = topicClusters.find((t) => t.topicSlug === topicSlug)?.label ?? topicSlug.replace(/-/g, " ");
   const { crumbs, schemaItems } = pathwayTopicClusterBreadcrumbs(pathway, topicSlug, label);
 
   return (
@@ -120,21 +206,30 @@ export default async function PathwayLessonTopicClusterPage({ params, searchPara
         {lessons.map((l) => {
           const href = pathwayLessonMarketingDetailHref(base, l.slug);
           if (!href) return null;
+          const pathOnly = href.split("?")[0] ?? href;
+          if (!pathOnly.startsWith(basePrefix)) {
+            safeServerLog("exam_pathway_hub", "lesson_link_mismatch_suppressed", {
+              event: "lesson_link_mismatch_suppressed",
+              lessons_base: base.slice(0, 160),
+              slug: l.slug.slice(0, 120),
+            });
+            return null;
+          }
           return (
-          <li key={l.slug} className="nn-card p-4">
-            <Link href={href} className="text-lg font-semibold text-primary hover:underline">
-              {l.title}
-            </Link>
-            <p className="mt-2 text-sm text-muted">{l.seoDescription}</p>
-            <div className="mt-3 flex flex-wrap gap-3 text-sm">
-              <Link
-                href={`/app/questions?pathwayId=${encodeURIComponent(pathway.id)}&topic=${encodeURIComponent(l.topic)}`}
-                className="font-semibold text-primary hover:underline"
-              >
-                Practice questions for “{l.topic}” (app) →
+            <li key={l.slug} className="nn-card p-4">
+              <Link href={href} className="text-lg font-semibold text-primary hover:underline">
+                {l.title}
               </Link>
-            </div>
-          </li>
+              <p className="mt-2 text-sm text-muted">{l.seoDescription}</p>
+              <div className="mt-3 flex flex-wrap gap-3 text-sm">
+                <Link
+                  href={`/app/questions?pathwayId=${encodeURIComponent(pathway.id)}&topic=${encodeURIComponent(l.topic)}`}
+                  className="font-semibold text-primary hover:underline"
+                >
+                  Practice questions for “{l.topic}” (app) →
+                </Link>
+              </div>
+            </li>
           );
         })}
       </ul>

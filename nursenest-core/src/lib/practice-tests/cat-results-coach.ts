@@ -2,10 +2,11 @@
  * CAT results "coach" layer: presentation + light analytics only.
  * Does not modify theta, SE, stopping rules, or item selection.
  */
-import type { CatExamReport, CatPresentationMode } from "@/lib/exams/cat-types";
+import type { CatConfidenceLevel, CatExamReport, CatPresentationMode } from "@/lib/exams/cat-types";
 import { getLearnerExamFraming } from "@/lib/learner/learner-exam-framing";
 import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
 import { remediationLessonsTopicHref, remediationTopicDrillHref } from "@/lib/learner/remediation-links";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export type CatCoachStudyLinkKind = "lesson" | "flashcards" | "drill";
 
@@ -59,6 +60,14 @@ export type CatResultsCoachSnapshot = {
   multiSessionGuidance: string;
   /** Exam pathway context — presentation only. */
   examPassingStandardLine?: string;
+  /**
+   * When true, UI omits the confidence card instead of showing placeholder copy (legacy / partial payloads).
+   */
+  confidenceOmitted?: boolean;
+  /**
+   * When true, pass outlook block uses neutral copy — omit false precision for legacy rows missing outlook.
+   */
+  passOutlookOmitted?: boolean;
 };
 
 /** UI-only fallback when coach payload is missing or failed to deserialize — does not affect scoring. */
@@ -86,6 +95,11 @@ export const EMPTY_CAT_RESULTS_COACH_SNAPSHOT: CatResultsCoachSnapshot = {
   errorPatterns: [],
   multiSessionGuidance: "Compare multiple sessions over time from your practice history when available.",
 };
+
+/** Fresh timestamp; use when enrichment or coach build fails. */
+export function buildFallbackCatResultsCoachSnapshot(): CatResultsCoachSnapshot {
+  return { ...EMPTY_CAT_RESULTS_COACH_SNAPSHOT, generatedAt: new Date().toISOString() };
+}
 
 export type CatCoachIncorrectRow = {
   questionType: string;
@@ -151,7 +165,8 @@ function rowHaystack(r: CatCoachIncorrectRow): string {
 }
 
 function pickStudyTopics(report: CatExamReport, patterns: CatCoachErrorPattern[]): Array<{ title: string; reason: string }> {
-  const weakCats = report.categoryBreakdown
+  const breakdown = Array.isArray(report.categoryBreakdown) ? report.categoryBreakdown : [];
+  const weakCats = breakdown
     .filter((c) => c.total > 0 && c.strength !== "strong")
     .map((c) => ({
       title: c.category,
@@ -369,7 +384,8 @@ function errorPatternsFromIncorrect(rows: CatCoachIncorrectRow[], pathwayId: str
 
 function weaknessInsights(report: CatExamReport, incorrect: CatCoachIncorrectRow[]): string[] {
   const out: string[] = [];
-  const weakest = report.categoryBreakdown
+  const breakdown = Array.isArray(report.categoryBreakdown) ? report.categoryBreakdown : [];
+  const weakest = breakdown
     .filter((c) => c.total > 0 && c.correct < c.total)
     .sort((a, b) => a.correct / a.total - b.correct / b.total)[0];
   if (weakest) {
@@ -518,12 +534,131 @@ function passingBandCopy(
 
 function keyRisk(report: CatExamReport, patterns: CatCoachErrorPattern[]): string | null {
   if (patterns[0]) return patterns[0].title;
-  const w = report.categoryBreakdown
+  const breakdown = Array.isArray(report.categoryBreakdown) ? report.categoryBreakdown : [];
+  const w = breakdown
     .filter((c) => c.total > 0)
     .sort((a, b) => a.correct / a.total - b.correct / b.total)[0];
   if (w && w.correct < w.total) return `Weakest domain right now: ${w.category}.`;
   if (report.confidenceLevel === "low") return "Estimate still volatile — stopping early can misread readiness.";
   return null;
+}
+
+const VALID_CAT_STOP_REASONS = new Set<string>([
+  "max_length_reached",
+  "max_length",
+  "confidence_pass",
+  "confidence_fail",
+  "pool_exhausted",
+  "user_completed",
+  "completed",
+]);
+
+function sanitizeCategoryRow(row: unknown): CatExamReport["categoryBreakdown"][number] | null {
+  if (!row || typeof row !== "object") return null;
+  const o = row as Record<string, unknown>;
+  const category = typeof o.category === "string" ? o.category.trim() : "";
+  if (!category) return null;
+  const correct = typeof o.correct === "number" && Number.isFinite(o.correct) ? Math.max(0, Math.floor(o.correct)) : 0;
+  const total = typeof o.total === "number" && Number.isFinite(o.total) ? Math.max(0, Math.floor(o.total)) : 0;
+  const strength =
+    o.strength === "strong" || o.strength === "weak" || o.strength === "mixed" ? o.strength : ("mixed" as const);
+  const blueprintKey = typeof o.blueprintKey === "string" && o.blueprintKey.trim() ? o.blueprintKey.trim() : category;
+  return { category, blueprintKey, correct, total, strength };
+}
+
+function sanitizeCatCoachIncorrectRow(r: unknown): CatCoachIncorrectRow | null {
+  if (!r || typeof r !== "object") return null;
+  const o = r as Record<string, unknown>;
+  const questionType = typeof o.questionType === "string" && o.questionType.trim() ? o.questionType : "UNKNOWN";
+  return {
+    questionType,
+    topic: typeof o.topic === "string" ? o.topic : null,
+    subtopic: typeof o.subtopic === "string" ? o.subtopic : null,
+    stem: typeof o.stem === "string" ? o.stem : null,
+    tags: Array.isArray(o.tags) ? o.tags.filter((t): t is string => typeof t === "string") : [],
+    bodySystem: typeof o.bodySystem === "string" ? o.bodySystem : null,
+  };
+}
+
+/** Coerce persisted / partial CAT report JSON into a shape the coach builder can use. */
+export function sanitizeCatExamReportForCoach(input: unknown): CatExamReport | null {
+  if (!input || typeof input !== "object") return null;
+  const r = input as Record<string, unknown>;
+  if (r.decision !== "pass" && r.decision !== "fail" && r.decision !== "uncertain") return null;
+
+  const categoryBreakdown: CatExamReport["categoryBreakdown"] = [];
+  if (Array.isArray(r.categoryBreakdown)) {
+    for (const row of r.categoryBreakdown) {
+      const s = sanitizeCategoryRow(row);
+      if (s) categoryBreakdown.push(s);
+    }
+  }
+
+  const weakAreas = Array.isArray(r.weakAreas)
+    ? r.weakAreas.filter((x): x is string => typeof x === "string")
+    : [];
+  const suggestedNextSteps = Array.isArray(r.suggestedNextSteps)
+    ? r.suggestedNextSteps.filter((x): x is string => typeof x === "string")
+    : [];
+
+  const readinessScore =
+    typeof r.readinessScore === "number" && Number.isFinite(r.readinessScore)
+      ? Math.max(0, Math.min(100, r.readinessScore))
+      : 0;
+
+  const confidenceLevel: CatConfidenceLevel =
+    r.confidenceLevel === "low" || r.confidenceLevel === "medium" || r.confidenceLevel === "high"
+      ? r.confidenceLevel
+      : "low";
+  const confidenceText =
+    typeof r.confidenceText === "string" && r.confidenceText.trim().length > 0 ? r.confidenceText : "—";
+
+  const trajectory: CatExamReport["trajectory"] =
+    r.trajectory === "improving" ||
+    r.trajectory === "slipping" ||
+    r.trajectory === "steady" ||
+    r.trajectory === "insufficient"
+      ? r.trajectory
+      : "insufficient";
+
+  const stoppedRaw = r.stoppedReason;
+  const stoppedReason: CatExamReport["stoppedReason"] =
+    typeof stoppedRaw === "string" && VALID_CAT_STOP_REASONS.has(stoppedRaw)
+      ? (stoppedRaw as CatExamReport["stoppedReason"])
+      : "completed";
+
+  const theta = typeof r.theta === "number" && Number.isFinite(r.theta) ? r.theta : 0;
+  const se = typeof r.se === "number" && Number.isFinite(r.se) ? r.se : 0;
+  const totalQuestions =
+    typeof r.totalQuestions === "number" && Number.isFinite(r.totalQuestions)
+      ? Math.max(0, Math.floor(r.totalQuestions))
+      : 0;
+  const correctCount =
+    typeof r.correctCount === "number" && Number.isFinite(r.correctCount) ? Math.max(0, Math.floor(r.correctCount)) : 0;
+
+  const readinessHeadline =
+    typeof r.readinessHeadline === "string" && r.readinessHeadline.trim().length > 0
+      ? r.readinessHeadline.trim()
+      : "Readiness summary";
+
+  return {
+    decision: r.decision,
+    theta,
+    se,
+    totalQuestions,
+    correctCount,
+    stoppedReason,
+    categoryBreakdown,
+    weakAreas,
+    suggestedNextSteps,
+    readinessScore,
+    confidenceLevel,
+    confidenceText,
+    trajectory,
+    readinessHeadline,
+    blueprintDiagnostics: (r.blueprintDiagnostics ?? null) as CatExamReport["blueprintDiagnostics"],
+    blueprintAdminDiagnostics: (r.blueprintAdminDiagnostics ?? null) as CatExamReport["blueprintAdminDiagnostics"],
+  };
 }
 
 /**
@@ -537,69 +672,94 @@ export function buildCatResultsCoach(args: {
   thetaHistory: number[];
   incorrectRows: CatCoachIncorrectRow[];
 }): CatResultsCoachSnapshot {
-  const { report, presentationMode, pathwayId, difficultyHistory, thetaHistory, incorrectRows } = args;
-  const sim = presentationMode === "exam_simulation";
-  const framing = getLearnerExamFraming(pathwayId);
-  const patterns = errorPatternsFromIncorrect(incorrectRows, pathwayId);
+  try {
+    const report = sanitizeCatExamReportForCoach(args.report);
+    if (!report) {
+      safeServerLog("cat_results", "cat_results_coach_fallback_used", { reason: "invalid_report_shape" });
+      return buildFallbackCatResultsCoachSnapshot();
+    }
 
-  const strongestDomains = report.categoryBreakdown
-    .filter((c) => c.strength === "strong" && c.total > 0)
-    .map((c) => c.category)
-    .slice(0, 4);
+    const difficultyHistory = Array.isArray(args.difficultyHistory)
+      ? args.difficultyHistory.filter((n): n is number => typeof n === "number" && Number.isFinite(n))
+      : [];
+    const thetaHistory = Array.isArray(args.thetaHistory)
+      ? args.thetaHistory.filter((n): n is number => typeof n === "number" && Number.isFinite(n))
+      : [];
+    const incorrectRows = Array.isArray(args.incorrectRows)
+      ? args.incorrectRows.map(sanitizeCatCoachIncorrectRow).filter((x): x is CatCoachIncorrectRow => x !== null)
+      : [];
 
-  const weakestDomains = report.categoryBreakdown
-    .filter((c) => c.total > 0 && (c.strength === "weak" || c.correct < c.total))
-    .sort((a, b) => a.correct / a.total - b.correct / b.total)
-    .map((c) => c.category)
-    .slice(0, 4);
+    const { presentationMode, pathwayId } = args;
+    const sim = presentationMode === "exam_simulation";
+    const framing = getLearnerExamFraming(pathwayId);
+    const patterns = errorPatternsFromIncorrect(incorrectRows, pathwayId);
 
-  const studyTopics = pickStudyTopics(report, patterns);
-  const studyNext: CatCoachStudyNextTopic[] = studyTopics.map((s) => ({
-    title: s.title,
-    reason: s.reason,
-    links: linksForTopic(s.title, pathwayId),
-  }));
+    const breakdown = Array.isArray(report.categoryBreakdown) ? report.categoryBreakdown : [];
+    const strongestDomains = breakdown
+      .filter((c) => c.strength === "strong" && c.total > 0)
+      .map((c) => c.category)
+      .slice(0, 4);
 
-  const band = passingBandCopy(report, presentationMode, pathwayId);
-  const stability = thetaStability(thetaHistory);
-  const narrative = readinessNarrative({
-    report,
-    strongest: strongestDomains,
-    weakest: weakestDomains,
-    patterns,
-    presentationMode,
-  });
-  const weakestLabel = weakestDomains[0] ?? null;
-  const specificStudyActionsList = specificStudyActions(report, patterns, weakestLabel, pathwayId);
+    const weakestDomains = breakdown
+      .filter((c) => c.total > 0 && (c.strength === "weak" || c.correct < c.total))
+      .sort((a, b) => a.correct / a.total - b.correct / b.total)
+      .map((c) => c.category)
+      .slice(0, 4);
 
-  return {
-    generatedAt: new Date().toISOString(),
-    passOutlookPercent: report.readinessScore,
-    passOutlookDisclaimer: sim
-      ? "Exam simulations mirror pacing and stop rules; they are not a prediction of NCLEX, AANP, or board outcomes."
-      : "Practice CAT uses the same adaptive engine as test mode, but no home platform can guarantee your licensure result.",
-    confidenceLevel: report.confidenceLevel,
-    confidenceSummary: report.confidenceText,
-    readinessHeadline: plainHeadline({ report, presentationMode }),
-    readinessNarrative: narrative,
-    strongestDomains,
-    weakestDomains,
-    keyRiskFactor: keyRisk(report, patterns),
-    studyNext,
-    specificStudyActions: specificStudyActionsList,
-    difficultySeries: [...difficultyHistory],
-    difficultyTrendLabel: difficultyTrend(difficultyHistory),
-    stabilityTrendLabel: stability.stabilityTrendLabel,
-    stabilityInterpretation: stability.stabilityInterpretation,
-    passingBandRelative: band.relative,
-    passingBandCopy: band.copy,
-    weaknessInsights: weaknessInsights(report, incorrectRows),
-    errorPatterns: patterns,
-    multiSessionGuidance:
-      "Readiness is most reliable when you compare several CAT runs over time — use the CAT readiness dashboard to see whether your outlook is trending up.",
-    examPassingStandardLine:
-      framing.region === "unknown"
-        ? undefined
-        : `Performance is interpreted relative to ${framing.passingStandardPhrase}.`,
-  };
+    const studyTopics = pickStudyTopics(report, patterns);
+    const studyNext: CatCoachStudyNextTopic[] = studyTopics.map((s) => ({
+      title: s.title,
+      reason: s.reason,
+      links: linksForTopic(s.title, pathwayId),
+    }));
+
+    const band = passingBandCopy(report, presentationMode, pathwayId);
+    const stability = thetaStability(thetaHistory);
+    const narrative = readinessNarrative({
+      report,
+      strongest: strongestDomains,
+      weakest: weakestDomains,
+      patterns,
+      presentationMode,
+    });
+    const weakestLabel = weakestDomains[0] ?? null;
+    const specificStudyActionsList = specificStudyActions(report, patterns, weakestLabel, pathwayId);
+
+    return {
+      generatedAt: new Date().toISOString(),
+      passOutlookPercent: report.readinessScore,
+      passOutlookDisclaimer: sim
+        ? "Exam simulations mirror pacing and stop rules; they are not a prediction of NCLEX, AANP, or board outcomes."
+        : "Practice CAT uses the same adaptive engine as test mode, but no home platform can guarantee your licensure result.",
+      confidenceLevel: report.confidenceLevel,
+      confidenceSummary: report.confidenceText,
+      readinessHeadline: plainHeadline({ report, presentationMode }),
+      readinessNarrative: narrative,
+      strongestDomains,
+      weakestDomains,
+      keyRiskFactor: keyRisk(report, patterns),
+      studyNext,
+      specificStudyActions: specificStudyActionsList,
+      difficultySeries: [...difficultyHistory],
+      difficultyTrendLabel: difficultyTrend(difficultyHistory),
+      stabilityTrendLabel: stability.stabilityTrendLabel,
+      stabilityInterpretation: stability.stabilityInterpretation,
+      passingBandRelative: band.relative,
+      passingBandCopy: band.copy,
+      weaknessInsights: weaknessInsights(report, incorrectRows),
+      errorPatterns: patterns,
+      multiSessionGuidance:
+        "Readiness is most reliable when you compare several CAT runs over time — use the CAT readiness dashboard to see whether your outlook is trending up.",
+      examPassingStandardLine:
+        framing.region === "unknown"
+          ? undefined
+          : `Performance is interpreted relative to ${framing.passingStandardPhrase}.`,
+    };
+  } catch (e) {
+    const message = e instanceof Error ? e.message : String(e);
+    safeServerLog("cat_results", "cat_results_coach_fallback_used", {
+      error_message: message.slice(0, 400),
+    });
+    return buildFallbackCatResultsCoachSnapshot();
+  }
 }

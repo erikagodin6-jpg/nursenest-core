@@ -103,12 +103,14 @@ export function PathwayLessonActions({
   const saving = pending !== "idle";
 
   return (
-    <div className="mt-10 flex flex-col gap-4 border-t border-[var(--theme-separator)] pt-8 sm:flex-row sm:flex-wrap sm:items-center">
+    <div className="mt-10 space-y-4 border-t border-[color-mix(in_srgb,var(--border-subtle)_88%,var(--theme-primary))] pt-8">
+      {/* Primary CTA stays role-cta; secondary actions use nn-study-pill-* (globals) for consistent hover/focus/touch. */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
       <Link
         href={qbHref}
         data-testid="pathway-lesson-cta-practice-topic"
         data-nn-pathway-id={pathwayId}
-        className="inline-flex justify-center rounded-full bg-role-cta px-5 py-2.5 text-sm font-semibold text-role-cta-foreground shadow-[0_4px_14px_var(--role-cta-shadow)]"
+        className="inline-flex min-h-11 justify-center rounded-full bg-role-cta px-5 py-2.5 text-sm font-semibold text-role-cta-foreground shadow-[0_4px_14px_var(--role-cta-shadow)] transition hover:brightness-[1.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--role-cta-shadow)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)]"
       >
         {t("learner.studyLoop.practiceThisTopicCta")}
       </Link>
@@ -116,7 +118,7 @@ export function PathwayLessonActions({
         href={flashcardsHref}
         data-testid="pathway-lesson-cta-flashcards"
         data-nn-pathway-id={pathwayId}
-        className="inline-flex justify-center rounded-full border border-border px-5 py-2.5 text-sm font-semibold hover:bg-gray-50"
+        className="nn-study-pill-secondary"
       >
         {t("learner.studyLoop.sameTopicFlashcards")}
       </Link>
@@ -124,14 +126,14 @@ export function PathwayLessonActions({
         href={catWeakHref}
         data-testid="pathway-lesson-cta-cat-practice"
         data-nn-pathway-id={pathwayId}
-        className="inline-flex justify-center rounded-full border border-border px-5 py-2.5 text-sm font-semibold hover:bg-gray-50"
+        className="nn-study-pill-secondary nn-study-pill-secondary--accent"
       >
         {t("learner.studyLoop.catFromLesson")}
       </Link>
       <Link
         href="/app/exams"
         data-testid="pathway-lesson-cta-timed-exams"
-        className="inline-flex justify-center rounded-full border border-border px-5 py-2.5 text-sm font-semibold hover:bg-gray-50"
+        className="nn-study-pill-secondary"
       >
         {t("learner.studyLoop.timedMocksHistory")}
       </Link>
@@ -149,7 +151,7 @@ export function PathwayLessonActions({
               type="button"
               disabled={saving}
               onClick={() => void markUncomplete()}
-              className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-gray-50 disabled:opacity-60"
+              className="nn-study-pill-secondary min-h-11 px-4 disabled:opacity-60"
             >
               {pending === "uncomplete" ? t("learner.studyLoop.markStudiedUndoSaving") : t("learner.studyLoop.markStudiedUndo")}
             </button>
@@ -158,7 +160,7 @@ export function PathwayLessonActions({
               type="button"
               disabled={saving}
               onClick={() => void markComplete()}
-              className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-gray-50 disabled:opacity-60"
+              className="nn-study-pill-secondary min-h-11 px-4 disabled:opacity-60"
             >
               {pending === "complete" ? t("learner.studyLoop.markStudiedSaving") : t("learner.studyLoop.markStudied")}
             </button>
@@ -168,6 +170,7 @@ export function PathwayLessonActions({
       ) : (
         <p className="text-sm text-muted">{t("learner.studyLoop.subscribePathwayHint")}</p>
       )}
+      </div>
     </div>
   );
 }

@@ -11,9 +11,9 @@ function QuizList({
 }) {
   if (!items?.length) return null;
   return (
-    <section className="border-b border-[var(--theme-separator)] pb-8">
-      <h2 className="nn-marketing-h3">{title}</h2>
-      <ol className="mt-3 list-decimal space-y-4 pl-5 nn-marketing-body-sm text-[var(--theme-body-text)]">
+    <section className="border-b border-[color-mix(in_srgb,var(--border-subtle)_88%,var(--theme-primary))] pb-8 last:border-b-0 last:pb-0">
+      <h2 className="nn-marketing-h3 text-[var(--theme-heading-text)]">{title}</h2>
+      <ol className="mt-4 list-decimal space-y-5 pl-5 nn-marketing-body-sm text-[var(--theme-body-text)] marker:font-semibold marker:text-[var(--theme-heading-text)]">
         {items.map((q, i) => (
           <li key={i} className="marker:font-semibold">
             <p className="font-medium text-foreground">{q.question}</p>
@@ -52,9 +52,9 @@ export function PathwayLessonQuizzes({
 }) {
   if (!preTest?.length && !postTest?.length) return null;
   return (
-    <div className="mt-10 space-y-8">
+    <div className="nn-study-card nn-study-card--wash mt-10 space-y-8 p-5 sm:p-6">
       {!fullAccess ? (
-        <aside className="nn-card rounded-lg border border-border bg-[var(--theme-muted-surface)]/50 p-3 text-sm text-muted-foreground">
+        <aside className="nn-study-callout border-[color-mix(in_srgb,var(--theme-primary)_10%,var(--border-subtle))] p-4 text-sm text-[var(--theme-body-text)]">
           <span className="font-medium text-foreground">Preview mode: </span>
           Pre/post questions are shown without highlighted answers or rationales. Full lesson access unlocks scoring-style
           review aligned with your plan.

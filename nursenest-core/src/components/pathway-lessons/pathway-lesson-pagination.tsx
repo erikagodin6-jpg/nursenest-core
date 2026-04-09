@@ -47,7 +47,7 @@ export function PathwayLessonPagination({ basePath, page, pageCount, total, page
         {page > 1 ? (
           <Link
             href={href(page - 1)}
-            className="inline-flex min-h-10 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--theme-primary)_10%,var(--border-subtle))] bg-card px-4 py-2 font-medium text-[var(--theme-heading-text)] shadow-sm transition hover:border-primary/35 hover:bg-[color-mix(in_srgb,var(--theme-primary)_4%,var(--bg-card))]"
+            className="nn-study-pill-secondary inline-flex min-h-11 items-center justify-center px-4 py-2 text-sm font-semibold"
           >
             Previous
           </Link>
@@ -55,7 +55,7 @@ export function PathwayLessonPagination({ basePath, page, pageCount, total, page
         {page < pageCount ? (
           <Link
             href={href(page + 1)}
-            className="inline-flex min-h-10 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--theme-primary)_10%,var(--border-subtle))] bg-card px-4 py-2 font-medium text-[var(--theme-heading-text)] shadow-sm transition hover:border-primary/35 hover:bg-[color-mix(in_srgb,var(--theme-primary)_4%,var(--bg-card))]"
+            className="nn-study-pill-secondary inline-flex min-h-11 items-center justify-center px-4 py-2 text-sm font-semibold"
           >
             Next
           </Link>

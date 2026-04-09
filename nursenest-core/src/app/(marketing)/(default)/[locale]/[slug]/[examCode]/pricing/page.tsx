@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
-import { buildExamPathwayPath, resolveExamPathwayFromMarketingHubSegment } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import { pathwayPricingBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
@@ -19,7 +19,8 @@ type Props = { params: Promise<{ locale: string; slug: string; examCode: string 
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug, examCode } = await params;
-  const pathway = resolveExamPathwayFromMarketingHubSegment(locale, slug, examCode);
+  const pathname = `/${locale}/${slug}/${examCode}`;
+  const pathway = resolveExamPathwaySafe(locale, slug, examCode, { pathname: `${pathname}/pricing` });
   if (!pathway) return {};
   const canonicalPath = buildExamPathwayPath(pathway, "pricing");
   const canonical = absoluteUrl(canonicalPath);

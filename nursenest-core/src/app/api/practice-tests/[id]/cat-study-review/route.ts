@@ -6,6 +6,8 @@ import { prisma } from "@/lib/db";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { parseAdaptiveState } from "@/lib/exams/cat-engine";
 import { buildCatStudyFeedback } from "@/lib/practice-tests/build-cat-study-feedback";
+import { buildMinimalCatStudyFeedbackPayload } from "@/lib/practice-tests/cat-practice-fallbacks";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { enforcePracticeTestDetailProtection } from "@/lib/http/api-protection";
 import type { PracticeTestConfigJson } from "@/lib/practice-tests/types";
 
@@ -70,12 +72,30 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
 
   const last = state.results[state.results.length - 1];
   if (!last || last.questionId !== qid) {
-    return NextResponse.json({ error: "Session out of sync" }, { status: 409 });
+    safeServerLog("cat_runner", "cat_resume_state_invalid", {
+      event: "cat_resume_state_invalid",
+      route: "cat_study_review",
+    });
+    const fallback = buildMinimalCatStudyFeedbackPayload({
+      questionId: qid,
+      isCorrect: Boolean(last?.correct),
+      correctKeys: [],
+    });
+    return NextResponse.json({ studyFeedback: fallback, degraded: true });
   }
 
-  const feedback = await buildCatStudyFeedback(qid, userAns, gate.entitlement, cfg.pathwayId ?? null);
+  let feedback = await buildCatStudyFeedback(qid, userAns, gate.entitlement, cfg.pathwayId ?? null);
   if (!feedback) {
-    return NextResponse.json({ error: "Could not load teaching content" }, { status: 404 });
+    safeServerLog("cat_runner", "cat_study_feedback_build_failed", {
+      event: "cat_study_feedback_build_failed",
+      route: "cat_study_review",
+    });
+    feedback = buildMinimalCatStudyFeedbackPayload({
+      questionId: qid,
+      isCorrect: last.correct,
+      correctKeys: [],
+    });
+    return NextResponse.json({ studyFeedback: feedback, degraded: true });
   }
 
   return NextResponse.json({ studyFeedback: feedback });

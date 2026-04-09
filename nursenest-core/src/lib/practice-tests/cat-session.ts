@@ -51,6 +51,8 @@ import { practiceCatBounds } from "@/lib/practice-tests/cat-practice-config";
 import { configFromInput, type PickQuestionsInput } from "@/lib/practice-tests/pick-question-ids";
 import { computePracticeTestResults } from "@/lib/practice-tests/score-practice-test";
 import { buildCatStudyFeedback } from "@/lib/practice-tests/build-cat-study-feedback";
+import { buildMinimalCatStudyFeedbackPayload } from "@/lib/practice-tests/cat-practice-fallbacks";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 import type { CatStudyFeedbackPayload } from "@/lib/practice-tests/types";
 import type {
   CatExamFeedbackMode,
@@ -502,10 +504,13 @@ export async function advanceCatPracticeTest(params: {
   if (study && state.catStudyAwaitingContinue === true) {
     const last = state.results[state.results.length - 1];
     if (!last || last.questionId !== currentId) {
-      return { kind: "error", message: "Study step out of sync. Refresh the page to continue safely." };
-    }
-    state = { ...state, catStudyAwaitingContinue: false };
-    return catAfterScoredStep({
+      safeServerLog("cat_runner", "cat_resume_state_invalid", {
+        event: "cat_resume_state_invalid",
+        current_question: currentId.slice(0, 16),
+        last_recorded: last?.questionId?.slice(0, 16),
+      });
+      state = { ...state, catStudyAwaitingContinue: false };
+      return catAfterScoredStep({
       ids,
       cursor,
       state,
@@ -556,26 +561,45 @@ export async function advanceCatPracticeTest(params: {
       entitlement: params.entitlement,
     });
     if (tail.kind === "completed" && study) {
-      const studyFeedback = await buildCatStudyFeedback(
+      let studyFeedback = await buildCatStudyFeedback(
         currentId,
         userAns,
         params.entitlement,
         params.config.pathwayId ?? null,
       );
+      if (!studyFeedback) {
+        safeServerLog("cat_runner", "cat_study_feedback_build_failed", {
+          event: "cat_study_feedback_build_failed",
+          phase: "final_item",
+        });
+        studyFeedback = buildMinimalCatStudyFeedbackPayload({
+          questionId: currentId,
+          isCorrect: result.correct,
+          correctKeys: [],
+        });
+      }
       return { ...tail, studyFeedback };
     }
     return tail;
   }
 
   if (study) {
-    const studyFeedback = await buildCatStudyFeedback(
+    let studyFeedback = await buildCatStudyFeedback(
       currentId,
       userAns,
       params.entitlement,
       params.config.pathwayId ?? null,
     );
     if (!studyFeedback) {
-      return { kind: "error", message: "Could not load teaching content for this item. Try again or switch to Test Mode." };
+      safeServerLog("cat_runner", "cat_study_feedback_build_failed", {
+        event: "cat_study_feedback_build_failed",
+        phase: "mid_session",
+      });
+      studyFeedback = buildMinimalCatStudyFeedbackPayload({
+        questionId: currentId,
+        isCorrect: result.correct,
+        correctKeys: [],
+      });
     }
     state = { ...state, catStudyAwaitingContinue: true };
     return { kind: "study_reveal", studyFeedback, adaptiveState: state };

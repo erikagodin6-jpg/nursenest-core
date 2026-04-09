@@ -40,16 +40,21 @@ export function PathwayLessonDetailHeader({
         aria-hidden
       />
       <div className="relative">
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-semibold uppercase tracking-wide text-primary">
-          <span>{lessonTopic}</span>
+        {/* Exam-first trust band: shortName + country before topic so REx-PN / NCLEX-PN identity reads clearly (hierarchy). */}
+        <div
+          className="flex max-w-full flex-wrap items-center gap-x-2.5 gap-y-1.5 rounded-xl border border-[color-mix(in_srgb,var(--theme-primary)_12%,var(--border-subtle))] bg-[color-mix(in_srgb,var(--theme-primary)_4.5%,var(--bg-card))] px-3 py-2.5 text-sm shadow-[var(--shadow-card)]"
+          role="group"
+          aria-label={`${pathway.shortName}, ${place}`}
+        >
+          <span className="font-semibold text-[var(--theme-heading-text)]">{pathway.shortName}</span>
           <span aria-hidden className="text-[var(--theme-muted-text)]">
             ·
           </span>
-          <span>{pathway.shortName}</span>
+          <span className="text-[var(--theme-body-text)]">{place}</span>
           <span aria-hidden className="text-[var(--theme-muted-text)]">
             ·
           </span>
-          <span>{place}</span>
+          <span className="text-[var(--theme-muted-text)]">{lessonTopic}</span>
         </div>
         {metaChips ? <div className="mt-3 flex flex-wrap gap-1.5">{metaChips}</div> : null}
         <div className="mt-5 flex flex-wrap items-start justify-between gap-4">
@@ -71,7 +76,7 @@ export function PathwayLessonDetailHeader({
         <div className="mt-6 border-t border-[color-mix(in_srgb,var(--border-subtle)_88%,var(--theme-primary))] pt-5">
           <Link
             href={lessonsBasePath}
-            className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-card/90 px-5 py-2.5 text-sm font-semibold text-foreground shadow-sm backdrop-blur-sm transition hover:border-primary/25 hover:bg-card hover:text-primary"
+            className="nn-study-pill-secondary inline-flex min-h-11 items-center justify-center px-5 py-2.5 text-sm font-semibold text-primary"
           >
             ← All lessons · {pathway.shortName}
           </Link>

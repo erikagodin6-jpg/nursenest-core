@@ -12,7 +12,7 @@ import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-le
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
-import { buildExamPathwayPath, resolveExamPathwayFromMarketingHubSegment } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { loadPathwayLessonsHubAggregates } from "@/lib/exam-pathways/marketing-hub-optional-data";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import { marketingExamHubBasePath, marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
@@ -124,9 +124,10 @@ function PathwayLessonsZeroCatalogPanel({ pathway }: { pathway: ExamPathwayDefin
 
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const { locale: countrySlug, slug: roleTrack, examCode } = await params;
+  const pathname = `/${countrySlug}/${roleTrack}/${examCode}`;
   const sp = await searchParams;
   const q = normalizePathwayHubSearchQuery(sp.q);
-  const pathway = resolveExamPathwayFromMarketingHubSegment(countrySlug, roleTrack, examCode);
+  const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
   if (!pathway) return {};
   const path = buildExamPathwayPath(pathway, "lessons");
   const canonical = absoluteUrl(path);
@@ -163,7 +164,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       pageSizeRequested,
       lessonContentLocale,
       listOpts,
-      qEffective,
+      qEffective: qEffective ?? "",
       skipLaunchBundle: pageRequested !== 1 || Boolean(qEffective),
     },
     {

@@ -12,8 +12,8 @@ type Props = {
  */
 export function PathwayLessonsHubSearch({ basePath, initialQuery }: Props) {
   return (
-    <div className="rounded-2xl border border-[color-mix(in_srgb,var(--theme-primary)_10%,var(--border-subtle))] bg-[color-mix(in_srgb,var(--theme-primary)_2.5%,var(--bg-card))] p-4 shadow-[var(--shadow-card)] sm:p-5">
-      <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-heading-text)]">Find a lesson</p>
+    <div className="nn-study-card nn-study-card--wash p-4 sm:p-5">
+      <p className="nn-marketing-label nn-marketing-label--accent">Find a lesson</p>
       <p className="mt-1 text-xs leading-relaxed text-[var(--theme-muted-text)]">
         Searches title, topic, and URL slug across this pathway. Results stay paginated for fast loads.
       </p>
@@ -34,14 +34,14 @@ export function PathwayLessonsHubSearch({ basePath, initialQuery }: Props) {
         <div className="flex flex-wrap gap-2">
           <button
             type="submit"
-            className="min-h-11 rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-95"
+            className="min-h-11 rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)]"
           >
             Search
           </button>
           {initialQuery ? (
             <Link
               href={basePath}
-              className="min-h-11 rounded-full border border-[color-mix(in_srgb,var(--theme-primary)_10%,var(--border-subtle))] bg-card px-4 py-2 text-sm font-semibold text-foreground shadow-sm transition hover:border-primary/25 hover:bg-[color-mix(in_srgb,var(--theme-primary)_4%,var(--bg-card))]"
+              className="nn-study-pill-secondary min-h-11 px-4 py-2 text-sm font-semibold"
             >
               Clear
             </Link>

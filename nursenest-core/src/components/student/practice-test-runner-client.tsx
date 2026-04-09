@@ -323,6 +323,7 @@ export function PracticeTestRunnerClient({
 
   const isSata =
     current &&
+    typeof current.questionType === "string" &&
     (current.questionType.toUpperCase() === "SATA" || current.questionType.toUpperCase() === "SELECT_ALL_THAT_APPLY");
   const raw = current ? answers[current.id] : undefined;
 
@@ -513,7 +514,7 @@ export function PracticeTestRunnerClient({
           ...(elapsedMs !== undefined ? { elapsedMs } : {}),
         }),
       });
-      const data = (await res.json()) as {
+      let data: {
         results?: PracticeTestResultsJson;
         error?: string;
         catAdvanced?: boolean;
@@ -521,6 +522,11 @@ export function PracticeTestRunnerClient({
         catStudyReveal?: boolean;
         studyFeedback?: CatStudyFeedbackPayload | null;
       };
+      try {
+        data = (await res.json()) as typeof data;
+      } catch {
+        throw new Error("Could not read the server response for this step.");
+      }
       if (!res.ok) throw new Error(data.error ?? "Could not advance.");
       if (data.catStudyReveal) {
         await load();
@@ -698,7 +704,7 @@ export function PracticeTestRunnerClient({
             </Link>{" "}
             (bookmark or share this view; full teaching review stays below.)
           </p>
-          {results.catCoach ? (
+          {results.catReport ? (
             <div className="mt-4">
               <CatResultsCoachPanel
                 coach={results.catCoach}
@@ -784,12 +790,12 @@ export function PracticeTestRunnerClient({
             ))}
           </ul>
         </div>
-        {results.weakAreas.length > 0 ? (
+        {(results.weakAreas ?? []).length > 0 ? (
           <div className="nn-card border-[color-mix(in_srgb,var(--semantic-warning)_32%,var(--semantic-border-soft))] bg-[var(--semantic-warning-soft)] p-6 shadow-[var(--semantic-shadow-soft)]">
             <h3 className="font-semibold text-[var(--semantic-text-primary)]">Weak areas</h3>
             <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">Topics with at least one mistake in this run.</p>
             <ul className="mt-2 list-inside list-disc text-sm">
-              {results.weakAreas.map((w) => (
+              {(results.weakAreas ?? []).map((w) => (
                 <li key={w}>
                   <Link className="text-primary underline" href={`/app/questions?topic=${encodeURIComponent(w)}`}>
                     {w}

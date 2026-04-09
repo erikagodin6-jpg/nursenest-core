@@ -11,6 +11,11 @@ import {
 import { resolveRationaleLessonLinksForQuestion } from "@/lib/learner/rationale-lesson-link-resolve";
 import { getLearnerExamFraming } from "@/lib/learner/learner-exam-framing";
 import type { CatStudyFeedbackPayload, CatStudyFeedbackSection } from "@/lib/practice-tests/types";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
+import {
+  SAFE_EMPTY_LESSON_LINKS,
+  buildMinimalCatStudyFeedbackPayload,
+} from "@/lib/practice-tests/cat-practice-fallbacks";
 
 export type { CatStudyFeedbackPayload } from "@/lib/practice-tests/types";
 
@@ -40,7 +45,7 @@ function buildLevel1Short(args: {
 }
 
 function questionFormatHint(questionType: string): string {
-  const u = questionType.toUpperCase();
+  const u = (questionType ?? "").toUpperCase();
   if (u.includes("SATA") || u.includes("SELECT_ALL")) {
     return "This is a select-all-that-apply item: decide each option on its own merits before submitting.";
   }
@@ -61,8 +66,11 @@ function partitionLayers(
   level2: CatStudyFeedbackSection[];
   level3: string;
 } {
-  const level2 = sections.filter((s) => s.heading.trim().toLowerCase() !== "exam strategy");
-  const strat = sections.find((s) => s.heading.trim().toLowerCase() === "exam strategy");
+  const safe = Array.isArray(sections)
+    ? sections.filter((s) => s && typeof s.heading === "string" && typeof s.body === "string")
+    : [];
+  const level2 = safe.filter((s) => s.heading.trim().toLowerCase() !== "exam strategy");
+  const strat = safe.find((s) => s.heading.trim().toLowerCase() === "exam strategy");
   const stratBody =
     strat && stripToPlainText(strat.body).length > 4
       ? stripToPlainText(strat.body)
@@ -107,18 +115,25 @@ export async function buildCatStudyFeedback(
   const correctAnswer = q.correctAnswer as Prisma.JsonValue;
   const isCorrect = answerMatches(q.questionType, correctAnswer, userAnswer);
   const correctKeys = canonicalCorrectKeysForQuestion(q.questionType, correctAnswer);
-  const sections = buildRationaleSectionsFromQuestion({
-    rationale: q.rationale,
-    correctAnswerExplanation: q.correctAnswerExplanation,
-    clinicalReasoning: q.clinicalReasoning,
-    keyTakeaway: q.keyTakeaway,
-    clinicalPearl: q.clinicalPearl,
-    examStrategy: q.examStrategy,
-    memoryHook: q.memoryHook,
-    clinicalTrap: q.clinicalTrap,
-    distractorRationales: q.distractorRationales,
-    incorrectAnswerRationale: q.incorrectAnswerRationale,
-  });
+
+  try {
+  let sections: CatStudyFeedbackSection[] = [];
+  try {
+    sections = buildRationaleSectionsFromQuestion({
+      rationale: q.rationale,
+      correctAnswerExplanation: q.correctAnswerExplanation,
+      clinicalReasoning: q.clinicalReasoning,
+      keyTakeaway: q.keyTakeaway,
+      clinicalPearl: q.clinicalPearl,
+      examStrategy: q.examStrategy,
+      memoryHook: q.memoryHook,
+      clinicalTrap: q.clinicalTrap,
+      distractorRationales: q.distractorRationales,
+      incorrectAnswerRationale: q.incorrectAnswerRationale,
+    });
+  } catch {
+    sections = [];
+  }
 
   const why = sections.find((s) => s.heading === "Why this is correct")?.body ?? "";
   const clinicalTake = sections.find((s) => s.heading === "Clinical takeaway")?.body ?? "";
@@ -129,15 +144,29 @@ export async function buildCatStudyFeedback(
     clinicalTakeawayBody: clinicalTake,
   });
 
-  const related = await resolveRationaleLessonLinksForQuestion(prisma, {
-    pathwayId,
-    topic: q.topic,
-    subtopic: q.subtopic,
-    bodySystem: q.bodySystem,
-    tags: q.tags ?? [],
-    stem: typeof q.stem === "string" ? q.stem.slice(0, 520) : null,
-  });
-  const relatedLessons = related.slice(0, 3).map((r) => ({ title: r.title, href: r.href }));
+  let relatedLessons: Array<{ title: string; href: string }> = SAFE_EMPTY_LESSON_LINKS;
+  try {
+    const related = await resolveRationaleLessonLinksForQuestion(prisma, {
+      pathwayId,
+      topic: q.topic,
+      subtopic: q.subtopic,
+      bodySystem: q.bodySystem,
+      tags: q.tags ?? [],
+      stem: typeof q.stem === "string" ? q.stem.slice(0, 520) : null,
+    });
+    relatedLessons = related
+      .filter((r) => r && typeof r.title === "string" && typeof r.href === "string" && r.href.trim().startsWith("/"))
+      .slice(0, 3)
+      .map((r) => ({ title: r.title, href: r.href }));
+  } catch (e) {
+    const message = e instanceof Error ? e.message : String(e);
+    safeServerLog("cat_study", "cat_lesson_link_suppressed", {
+      event: "cat_lesson_link_suppressed",
+      questionId: questionId.slice(0, 24),
+      error_message: message.slice(0, 300),
+    });
+    relatedLessons = SAFE_EMPTY_LESSON_LINKS;
+  }
   const framing = getLearnerExamFraming(pathwayId);
   const examFramingNote =
     framing.region === "unknown"
@@ -159,4 +188,17 @@ export async function buildCatStudyFeedback(
       ...(examFramingNote ? { examFramingNote } : {}),
     },
   };
+  } catch (e) {
+    const message = e instanceof Error ? e.message : String(e);
+    safeServerLog("cat_study", "cat_study_feedback_build_failed", {
+      event: "cat_study_feedback_build_failed",
+      questionId: q.id.slice(0, 24),
+      error_message: message.slice(0, 400),
+    });
+    return buildMinimalCatStudyFeedbackPayload({
+      questionId: q.id,
+      isCorrect,
+      correctKeys,
+    });
+  }
 }

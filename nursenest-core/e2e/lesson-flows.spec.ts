@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Page } from "@playwright/test";
 import {
   LESSON_FLOW_PATHWAY_QA,
   throwIfUrlNotAllowedForPathway,
@@ -11,7 +11,7 @@ function assertPathwayNav(url: string, cfg: (typeof LESSON_FLOW_PATHWAY_QA)[numb
   throwIfUrlNotAllowedForPathway(url, cfg);
 }
 
-function lessonsBreadcrumbLocator(page: { locator: (s: string) => import("@playwright/test").Locator }, lessonsPath: string) {
+function lessonsBreadcrumbLocator(page: Page, lessonsPath: string) {
   const p = lessonsPath.replace(/\/$/, "");
   return page.locator(`nav[aria-label="Breadcrumb"] a[href="${p}"], nav[aria-label="Breadcrumb"] a[href="${p}/"]`);
 }

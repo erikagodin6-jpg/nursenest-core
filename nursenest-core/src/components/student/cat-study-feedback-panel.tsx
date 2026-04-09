@@ -20,6 +20,9 @@ export function CatStudyFeedbackPanel({
   continueDisabled?: boolean;
 }) {
   const layers = feedback.layers;
+  const level2 = layers?.level2Sections ?? [];
+  const related = layers?.relatedLessons ?? [];
+  const level3 = layers?.level3Strategy?.trim() ?? "";
 
   return (
     <div className="motion-reduce:transition-none space-y-4">
@@ -60,24 +63,28 @@ export function CatStudyFeedbackPanel({
                 <summary className="cursor-pointer text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
                   Quick take (2–3 sentences)
                 </summary>
-                <p className="mt-2 leading-relaxed text-[var(--theme-body-text)]">{layers.level1Short}</p>
+                <p className="mt-2 leading-relaxed text-[var(--theme-body-text)]">
+                  {layers.level1Short?.trim() || "Quick summary is not available for this item."}
+                </p>
               </details>
               <details className="rounded-lg border border-border/80 bg-background/60 px-3 py-2">
                 <summary className="cursor-pointer text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
                   Full rationale
                 </summary>
                 <div className="mt-2 space-y-3">
-                  {layers.level2Sections.length === 0 ? (
+                  {level2.length === 0 ? (
                     <p className="text-[var(--theme-muted-text)]">No structured rationale on file for this item.</p>
                   ) : (
-                    layers.level2Sections.map((s) => (
-                      <div key={`${s.heading}-${s.body.slice(0, 40)}`}>
-                        {s.heading.trim() ? (
+                    level2.map((s) => (
+                      <div key={`${s.heading}-${(s.body ?? "").slice(0, 40)}`}>
+                        {s.heading?.trim() ? (
                           <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
                             {s.heading}
                           </p>
                         ) : null}
-                        <p className="mt-1 whitespace-pre-wrap leading-relaxed text-[var(--theme-body-text)]">{s.body}</p>
+                        <p className="mt-1 whitespace-pre-wrap leading-relaxed text-[var(--theme-body-text)]">
+                          {s.body ?? ""}
+                        </p>
                       </div>
                     ))
                   )}
@@ -87,20 +94,22 @@ export function CatStudyFeedbackPanel({
                 <summary className="cursor-pointer text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
                   Test-taking strategy
                 </summary>
-                <p className="mt-2 leading-relaxed text-[var(--theme-body-text)]">{layers.level3Strategy}</p>
+                <p className="mt-2 leading-relaxed text-[var(--theme-body-text)]">
+                  {level3 || "Strategy notes are not on file for this item."}
+                </p>
                 {layers.examFramingNote ? (
                   <p className="mt-2 border-t border-border/60 pt-2 text-xs leading-relaxed text-[var(--theme-muted-text)]">
                     {layers.examFramingNote}
                   </p>
                 ) : null}
               </details>
-              {layers.relatedLessons.length ? (
+              {related.length ? (
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
                     Related learning (pathway-aware)
                   </p>
                   <ul className="mt-2 flex flex-wrap gap-2">
-                    {layers.relatedLessons.map((l, i) => (
+                    {related.map((l, i) => (
                       <li key={l.href}>
                         <Link
                           href={l.href}
@@ -122,15 +131,17 @@ export function CatStudyFeedbackPanel({
                 </div>
               ) : null}
             </div>
-          ) : feedback.sections.length === 0 ? (
+          ) : !(feedback.sections ?? []).length ? (
             <p className="text-[var(--theme-muted-text)]">No structured rationale on file for this item.</p>
           ) : (
-            feedback.sections.map((s) => (
-              <div key={`${s.heading}-${s.body.slice(0, 40)}`}>
-                {s.heading.trim() ? (
+            (feedback.sections ?? []).map((s) => (
+              <div key={`${s.heading}-${(s.body ?? "").slice(0, 40)}`}>
+                {s.heading?.trim() ? (
                   <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">{s.heading}</p>
                 ) : null}
-                <p className="mt-1 whitespace-pre-wrap leading-relaxed text-[var(--theme-body-text)]">{s.body}</p>
+                {(s.body ?? "").trim() ? (
+                  <p className="mt-1 whitespace-pre-wrap leading-relaxed text-[var(--theme-body-text)]">{s.body}</p>
+                ) : null}
               </div>
             ))
           )}

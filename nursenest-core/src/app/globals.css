@@ -1268,6 +1268,86 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   }
 }
 
+/* Hierarchy: lists / emphasis inside lesson bodies (when markup includes ul/ol). */
+.nn-lesson-prose ul,
+.nn-lesson-prose ol {
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  padding-left: 1.35rem;
+}
+.nn-lesson-prose li {
+  margin-top: 0.4rem;
+  margin-bottom: 0.4rem;
+}
+.nn-lesson-prose ul {
+  list-style-type: disc;
+}
+.nn-lesson-prose ol {
+  list-style-type: decimal;
+}
+.nn-lesson-prose strong {
+  font-weight: 600;
+  color: var(--theme-heading-text);
+}
+
+/*
+ * End-of-lesson study loop: slightly stronger frame than a wash card so the block reads as “what’s next”
+ * without loud chrome (hierarchy fix: guided loop vs body copy).
+ */
+.nn-study-loop-outer {
+  border-radius: 1.125rem;
+  border: 1px solid color-mix(in srgb, var(--theme-primary) 13%, var(--border-subtle));
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--theme-primary) 4.5%, var(--nn-presentation-wash)) 0%,
+    var(--theme-page-bg) 48%,
+    color-mix(in srgb, var(--theme-primary) 2.8%, var(--bg-card)) 100%
+  );
+  box-shadow: var(--shadow-card);
+}
+
+/* Secondary pills on lesson detail (flashcards, CAT, mocks) — replaces one-off gray-50 hovers. */
+.nn-study-pill-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25;
+  border: 1px solid color-mix(in srgb, var(--theme-primary) 11%, var(--border-subtle));
+  background: var(--bg-card);
+  color: var(--theme-heading-text);
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.nn-study-pill-secondary:hover {
+  border-color: color-mix(in srgb, var(--theme-primary) 26%, var(--border-subtle));
+  background: color-mix(in srgb, var(--theme-primary) 5.5%, var(--bg-card));
+}
+.nn-study-pill-secondary:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--theme-page-bg),
+    0 0 0 4px color-mix(in srgb, var(--theme-primary) 32%, transparent);
+}
+
+/* CAT / adaptive: one step more emphasis than flashcards, still calm. */
+.nn-study-pill-secondary--accent {
+  border-color: color-mix(in srgb, var(--theme-primary) 20%, var(--border-subtle));
+  background: color-mix(in srgb, var(--theme-primary) 5%, var(--bg-card));
+}
+
+/* Related-questions band: left edge accent via system class (was inline border-l). */
+.nn-study-card.nn-study-card--accent-leading {
+  border-left-width: 3px;
+  border-left-color: color-mix(in srgb, var(--theme-primary) 40%, var(--border-subtle));
+}
+
 /*
  * Learner question surfaces (bank, practice tests, exam widget): calm clinical testing — not gamified.
  * Uses theme + role tokens; correct/incorrect are muted tints, not neon.

@@ -21,7 +21,7 @@ export function PathwayLessonsNextStepCtas({ pathway, emphasizeStudyLoop }: Prop
       className="nn-study-card nn-study-card--wash mt-10 p-5 sm:p-6"
       aria-labelledby="lessons-next-steps-heading"
     >
-      <h2 id="lessons-next-steps-heading" className="nn-marketing-h3">
+      <h2 id="lessons-next-steps-heading" className="nn-marketing-h3 max-w-3xl">
         Next steps on this pathway
       </h2>
       <p className="nn-marketing-body-sm mt-2 max-w-2xl text-[var(--theme-muted-text)]">
@@ -29,10 +29,11 @@ export function PathwayLessonsNextStepCtas({ pathway, emphasizeStudyLoop }: Prop
           ? "Lessons pair with the same exam scope in the bank. Run items and CAT practice so rationales and difficulty track what you are sitting."
           : "After each lesson, stress-test judgment with pathway-matched items, then adaptive CAT sessions to approximate exam pacing."}
       </p>
+      {/* nn-study-card + nn-card-interactive: same recipe as exam hub study tiles (drift fix). */}
       <div className="mt-6 grid gap-4 sm:grid-cols-2">
         <Link
           href={questionsHref}
-          className="group flex gap-4 rounded-2xl border border-[color-mix(in_srgb,var(--theme-primary)_9%,var(--border-subtle))] bg-[color-mix(in_srgb,var(--theme-primary)_2.5%,var(--bg-card))] p-4 shadow-[var(--shadow-card)] transition hover:-translate-y-px hover:border-primary/22 hover:shadow-[var(--shadow-card-hover)]"
+          className="nn-study-card nn-card-interactive group flex min-h-[5.5rem] gap-4 p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)] sm:p-5"
         >
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--theme-primary)_12%,transparent)] text-primary">
             <ClipboardList className="h-5 w-5" aria-hidden />
@@ -48,7 +49,7 @@ export function PathwayLessonsNextStepCtas({ pathway, emphasizeStudyLoop }: Prop
         </Link>
         <Link
           href={catHref}
-          className="group flex gap-4 rounded-2xl border border-[color-mix(in_srgb,var(--theme-primary)_9%,var(--border-subtle))] bg-[color-mix(in_srgb,var(--theme-primary)_2.5%,var(--bg-card))] p-4 shadow-[var(--shadow-card)] transition hover:-translate-y-px hover:border-primary/22 hover:shadow-[var(--shadow-card-hover)]"
+          className="nn-study-card nn-study-card--wash nn-card-interactive group flex min-h-[5.5rem] gap-4 p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)] sm:p-5"
         >
           <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--theme-primary)_12%,transparent)] text-primary">
             <LineChart className="h-5 w-5" aria-hidden />

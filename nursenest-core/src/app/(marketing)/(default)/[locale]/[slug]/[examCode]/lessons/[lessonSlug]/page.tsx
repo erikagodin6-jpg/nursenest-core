@@ -12,7 +12,7 @@ import { PathwayLessonActions } from "@/components/lessons/pathway-lesson-action
 import { PathwayLessonProgressBadgeLive } from "@/components/lessons/pathway-lesson-progress-badge-live";
 import { PathwayLessonProgressTracker } from "@/components/lessons/pathway-lesson-progress-tracker";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import { buildExamPathwayPath, resolveExamPathwayFromMarketingHubSegment } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import { marketingExamHubBasePath, marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 import { PathwayLessonPreviewBanner } from "@/components/lessons/pathway-lesson-preview-banner";
@@ -70,7 +70,9 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale: countrySlug, slug: roleTrack, examCode, lessonSlug } = await params;
-  const pathway = resolveExamPathwayFromMarketingHubSegment(countrySlug, roleTrack, examCode);
+  const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, {
+    pathname: `/${countrySlug}/${roleTrack}/${examCode}/lessons/${lessonSlug}`,
+  });
   const contentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
   const lesson = pathway ? await loadPathwayLessonWithLegacySlugRedirect(pathway, lessonSlug, contentLocale) : undefined;
   if (!pathway || !lesson) return {};
@@ -271,8 +273,8 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
         ) : null}
 
         {matchedLessonImage.url ? (
-          <aside className="mx-auto mt-8 max-w-[42rem] overflow-hidden rounded-2xl border border-border bg-[var(--theme-muted-surface)]/50 p-4">
-            <p className="text-xs font-semibold uppercase tracking-wide text-primary">Concept illustration</p>
+          <aside className="nn-study-card nn-study-card--wash mx-auto mt-8 max-w-[42rem] overflow-hidden p-4 sm:p-5">
+            <p className="nn-marketing-label">Concept illustration</p>
             <div className="mt-3">
               <PathwayLessonFigures
                 figures={[
@@ -290,16 +292,17 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
         ) : null}
 
         <main className="mt-10">
-          <article className="mx-auto max-w-[42rem] space-y-8">
+          {/* space-y-9: clearer chunking between long sections (readability). */}
+          <article className="mx-auto max-w-[42rem] space-y-9">
             {visible.map((section, idx) => (
               <section
                 key={section.id}
-                className={`nn-lesson-article-section ${idx % 2 === 1 ? "nn-lesson-article-section--alt" : ""}`}
+                className={`nn-lesson-article-section scroll-mt-24 ${idx % 2 === 1 ? "nn-lesson-article-section--alt" : ""}`}
               >
-                <h2 className="nn-marketing-h3 border-b border-[color-mix(in_srgb,var(--border-subtle)_85%,var(--theme-primary))] pb-3.5 text-[var(--theme-heading-text)]">
+                <h2 className="nn-marketing-h3 border-b border-[color-mix(in_srgb,var(--border-subtle)_78%,var(--theme-primary))] pb-3.5 text-[var(--theme-heading-text)]">
                   {section.heading?.trim() || "Section"}
                 </h2>
-                <div className="mt-5">
+                <div className="mt-6">
                   <PathwayLessonSectionContent
                     text={typeof section.body === "string" ? section.body : ""}
                     figures={section.figures}

@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { NpQuestionsHubBoardLinks } from "@/components/exam-pathways/np-questions-hub-board-links";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
-import { buildExamPathwayPath, resolveExamPathwayFromMarketingHubSegment } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { loadMarketingExamHubOptionalBlocks } from "@/lib/exam-pathways/marketing-hub-optional-data";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import { HUB, loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
@@ -30,6 +30,7 @@ import {
 import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
 import { pathwayQuestionsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export const dynamicParams = true;
 export const revalidate = 86400;
@@ -45,10 +46,11 @@ type Props = {
 
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const { locale, slug, examCode } = await params;
+  const pathname = `/${locale}/${slug}/${examCode}`;
   const sp = searchParams ? await searchParams : {};
   const topicFilter = sp.topic?.trim() ?? "";
   const topicSlugParam = sp.topicSlug?.trim().toLowerCase() ?? "";
-  const pathway = resolveExamPathwayFromMarketingHubSegment(locale, slug, examCode);
+  const pathway = resolveExamPathwaySafe(locale, slug, examCode, { pathname: `${pathname}/questions` });
   if (!pathway) return {};
   const canonicalPath = buildExamPathwayPath(pathway, "questions");
   const canonical = absoluteUrl(canonicalPath);
@@ -92,19 +94,47 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
 
   let clusterSlugForLessons: string | null = topicSlugFromUrl || null;
   if (!clusterSlugForLessons && topicFilterTrim) {
-    clusterSlugForLessons = await resolveTopicSlugForPathwayTopicLabel(pathway.id, topicFilterTrim);
+    try {
+      clusterSlugForLessons = await resolveTopicSlugForPathwayTopicLabel(pathway.id, topicFilterTrim);
+    } catch (e) {
+      const message = e instanceof Error ? e.message : String(e);
+      safeServerLog("exam_pathway_hub", "hub_data_load_failed", {
+        event: "hub_data_load_failed",
+        pathname: `${pathname}/questions`,
+        locale,
+        country: locale,
+        examCode,
+        dependency: "resolveTopicSlugForPathwayTopicLabel",
+        error_message: message.slice(0, 500),
+      });
+      clusterSlugForLessons = null;
+    }
   }
 
   if (clusterSlugForLessons) {
-    relatedLessonsForTopic = (
-      await getRelatedPathwayLessons(
-        pathway.id,
-        clusterSlugForLessons,
-        RELATED_LESSONS_EXCLUDE_SLUG_SENTINEL,
-        Math.min(RELATED_PATHWAY_LESSONS_LIMIT, RELATED_LESSONS_FOR_TOPIC_CAP),
-        lessonContentLocale,
-      )
-    ).filter(pathwayLessonHasRenderableHubSlug);
+    try {
+      relatedLessonsForTopic = (
+        await getRelatedPathwayLessons(
+          pathway.id,
+          clusterSlugForLessons,
+          RELATED_LESSONS_EXCLUDE_SLUG_SENTINEL,
+          Math.min(RELATED_PATHWAY_LESSONS_LIMIT, RELATED_LESSONS_FOR_TOPIC_CAP),
+          lessonContentLocale,
+        )
+      ).filter(pathwayLessonHasRenderableHubSlug);
+    } catch (e) {
+      const message = e instanceof Error ? e.message : String(e);
+      safeServerLog("exam_pathway_hub", "hub_data_load_failed", {
+        event: "hub_data_load_failed",
+        pathname: `${pathname}/questions`,
+        locale,
+        country: locale,
+        examCode,
+        dependency: "getRelatedPathwayLessons",
+        error_message: message.slice(0, 500),
+      });
+      relatedLessonsForTopic = [];
+    }
   }
 
   const displayTopicLabel = topicFilterTrim || (topicSlugFromUrl ? humanizeTopicSlug(topicSlugFromUrl) : "");

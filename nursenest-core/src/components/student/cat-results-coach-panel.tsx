@@ -4,7 +4,11 @@ import Link from "next/link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import type { CatExamFeedbackMode } from "@/lib/practice-tests/types";
-import { EMPTY_CAT_RESULTS_COACH_SNAPSHOT, type CatResultsCoachSnapshot } from "@/lib/practice-tests/cat-results-coach";
+import type { CatResultsCoachSnapshot } from "@/lib/practice-tests/cat-results-coach";
+import {
+  isSafeInternalStudyLinkHref,
+  normalizeCatResultsCoachSnapshot,
+} from "@/lib/practice-tests/cat-practice-fallbacks";
 
 function difficultySparkline(series: number[], height = 40, width = 200) {
   if (series.length === 0) {
@@ -44,13 +48,13 @@ export function CatResultsCoachPanel({
   coach: CatResultsCoachSnapshot | null | undefined;
   catExamFeedbackMode?: CatExamFeedbackMode | null;
 }) {
-  const coach = coachProp ?? EMPTY_CAT_RESULTS_COACH_SNAPSHOT;
+  const coach = normalizeCatResultsCoachSnapshot(coachProp);
   const modeLabel =
     catExamFeedbackMode === "study"
       ? "Study Mode"
       : catExamFeedbackMode === "test"
         ? "Test Mode"
-        : null;
+        : "Test Mode";
 
   return (
     <div className="nn-semantic-inset--cool space-y-5 rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-brand)_3%,var(--semantic-surface))] p-5 sm:p-6">
@@ -62,24 +66,40 @@ export function CatResultsCoachPanel({
           </p>
           <p className="mt-3 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{coach.readinessNarrative}</p>
         </div>
-        {modeLabel ? (
-          <span className="shrink-0 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-            {modeLabel}
-          </span>
-        ) : null}
+        <span className="shrink-0 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+          {modeLabel}
+        </span>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-[1fr_auto] sm:items-end">
         <div>
           <p className="text-xs text-muted-foreground">Practice pass outlook</p>
-          <p className="text-3xl font-bold tabular-nums text-[var(--semantic-brand)]">{coach.passOutlookPercent}%</p>
-          <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{coach.passOutlookDisclaimer}</p>
+          {coach.passOutlookOmitted ? (
+            <>
+              <p className="mt-1 text-lg font-semibold text-[var(--semantic-text-primary)]">Outlook not stored</p>
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                This run predates detailed outlook labels. Your score and classification above are still valid; compare newer
+                CAT sessions for trend-style coaching.
+              </p>
+            </>
+          ) : (
+            <>
+              <p className="text-3xl font-bold tabular-nums text-[var(--semantic-brand)]">{coach.passOutlookPercent}%</p>
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{coach.passOutlookDisclaimer}</p>
+            </>
+          )}
         </div>
-        <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3">
-          <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Confidence</p>
-          <p className="text-sm font-medium capitalize text-foreground">{coach.confidenceLevel}</p>
-          <p className="mt-1 max-w-[14rem] text-xs text-muted-foreground">{coach.confidenceSummary}</p>
-        </div>
+        {!coach.confidenceOmitted ? (
+          <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3">
+            <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">Confidence</p>
+            <p className="text-sm font-medium capitalize text-foreground">{coach.confidenceLevel}</p>
+            <p className="mt-1 max-w-[14rem] text-xs text-muted-foreground">{coach.confidenceSummary}</p>
+          </div>
+        ) : (
+          <div className="rounded-xl border border-dashed border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)]/40 px-4 py-3 text-xs text-muted-foreground">
+            Confidence detail was not stored for this session.
+          </div>
+        )}
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
@@ -187,9 +207,11 @@ export function CatResultsCoachPanel({
               </p>
               <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{s.reason}</p>
               <div className="mt-3 flex flex-wrap gap-2">
-                {(s.links ?? []).map((l) => (
+                {(s.links ?? [])
+                  .filter((l) => l && typeof l.href === "string" && isSafeInternalStudyLinkHref(l.href))
+                  .map((l) => (
                   <Link
-                    key={`${s.title}-${l.kind}`}
+                    key={`${s.title}-${l.kind}-${l.href.slice(0, 40)}`}
                     href={l.href}
                     className="inline-flex rounded-full border border-primary/25 bg-primary/5 px-3 py-1.5 text-xs font-semibold text-primary hover:bg-primary/10"
                     onClick={() =>

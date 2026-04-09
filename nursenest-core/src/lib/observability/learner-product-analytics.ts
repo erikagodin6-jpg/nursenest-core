@@ -35,49 +35,57 @@ export function capturePracticeTestCompletedAnalytics(
   cfg: PracticeTestConfigJson,
   results: unknown,
 ): void {
-  const res = results as PracticeTestResultsJson;
-  const sel = cfg.selectionMode ?? "unknown";
-  const cat = sel === "cat";
-  const examSim = cfg.catPresentationMode === "exam_simulation";
-  const readiness = readinessFromResults(results);
+  try {
+    const res = results as PracticeTestResultsJson;
+    const sel = cfg?.selectionMode ?? "unknown";
+    const cat = sel === "cat";
+    const examSim = cfg?.catPresentationMode === "exam_simulation";
+    const readiness = readinessFromResults(results);
 
-  const catFeedback = cfg.selectionMode === "cat" ? (cfg.catExamFeedbackMode ?? "test") : undefined;
-  const coach = res.catCoach;
-  const patternCodes =
-    coach?.errorPatterns?.length && cat
-      ? coach.errorPatterns
-          .map((p) => p.code)
-          .filter(Boolean)
-          .join(",")
-      : undefined;
+    const catFeedback = cfg?.selectionMode === "cat" ? (cfg.catExamFeedbackMode ?? "test") : undefined;
+    const coach = res?.catCoach;
+    const patternCodes =
+      Array.isArray(coach?.errorPatterns) && cat
+        ? coach.errorPatterns
+            .map((p) => (p && typeof p === "object" && "code" in p ? String((p as { code?: string }).code ?? "") : ""))
+            .filter(Boolean)
+            .join(",")
+        : undefined;
 
-  const examCtx = buildGlobalExamContext(cfg.pathwayId ?? null, "en");
+    const examCtx = buildGlobalExamContext(cfg?.pathwayId ?? null, "en");
 
-  captureLearnerProductEvent(userId, entitlement, PH.learnerPracticeTestSessionCompleted, {
-    selection_mode: String(sel),
-    cat_mode: cat,
-    exam_simulation: examSim,
-    cat_exam_feedback_mode: catFeedback,
-    pathway_id: cfg.pathwayId ?? undefined,
-    ...examContextAnalyticsProps(examCtx),
-    score_total: res.scoreTotal,
-    score_correct: res.scoreCorrect,
-    accuracy_pct: res.accuracyPct,
-    readiness_label: readiness,
-    pass_outlook_pct: coach != null ? coach.passOutlookPercent : undefined,
-    cat_coach_present: coach != null,
-    cat_confidence_level: coach?.confidenceLevel,
-    cat_pattern_codes: patternCodes,
-  });
-
-  if (readiness) {
-    captureLearnerProductEvent(userId, entitlement, PH.learnerReadinessScoreReached, {
-      readiness_label: readiness,
+    captureLearnerProductEvent(userId, entitlement, PH.learnerPracticeTestSessionCompleted, {
       selection_mode: String(sel),
+      cat_mode: cat,
       exam_simulation: examSim,
       cat_exam_feedback_mode: catFeedback,
-      pathway_id: cfg.pathwayId ?? undefined,
+      pathway_id: cfg?.pathwayId ?? undefined,
       ...examContextAnalyticsProps(examCtx),
+      score_total: typeof res?.scoreTotal === "number" ? res.scoreTotal : undefined,
+      score_correct: typeof res?.scoreCorrect === "number" ? res.scoreCorrect : undefined,
+      accuracy_pct: typeof res?.accuracyPct === "number" ? res.accuracyPct : undefined,
+      readiness_label: readiness,
+      pass_outlook_pct:
+        coach != null && typeof coach.passOutlookPercent === "number" ? coach.passOutlookPercent : undefined,
+      cat_coach_present: coach != null,
+      cat_confidence_level:
+        coach?.confidenceLevel === "low" || coach?.confidenceLevel === "medium" || coach?.confidenceLevel === "high"
+          ? coach.confidenceLevel
+          : undefined,
+      cat_pattern_codes: patternCodes || undefined,
     });
+
+    if (readiness) {
+      captureLearnerProductEvent(userId, entitlement, PH.learnerReadinessScoreReached, {
+        readiness_label: readiness,
+        selection_mode: String(sel),
+        exam_simulation: examSim,
+        cat_exam_feedback_mode: catFeedback,
+        pathway_id: cfg?.pathwayId ?? undefined,
+        ...examContextAnalyticsProps(examCtx),
+      });
+    }
+  } catch {
+    /* Analytics must never block completion or server responses. */
   }
 }

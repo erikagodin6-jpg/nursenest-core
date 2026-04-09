@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ExamPathwayHub } from "@/components/exam-pathways/exam-pathway-hub";
-import { buildExamPathwayPath, resolveExamPathwayFromMarketingHubSegment } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
 import { loadMarketingExamHubOptionalBlocks } from "@/lib/exam-pathways/marketing-hub-optional-data";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
@@ -19,7 +19,8 @@ type Props = { params: Promise<{ locale: string; slug: string; examCode: string 
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug, examCode } = await params;
-  const pathway = resolveExamPathwayFromMarketingHubSegment(locale, slug, examCode);
+  const pathname = `/${locale}/${slug}/${examCode}`;
+  const pathway = resolveExamPathwaySafe(locale, slug, examCode, { pathname });
   if (!pathway) return {};
   const seo = getNpPracticeTestLandingCopy(locale, slug, examCode);
   const requestPath = `/${locale}/${slug}/${examCode}`;

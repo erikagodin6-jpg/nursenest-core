@@ -41,7 +41,7 @@ export function PathwayLessonStudyLoopCta({
 
   return (
     <section
-      className="relative mt-12 overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--theme-primary)_10%,var(--border-subtle))] bg-gradient-to-br from-[var(--nn-presentation-wash)] via-[var(--theme-page-bg)] to-[color-mix(in_srgb,var(--theme-primary)_5%,var(--theme-page-bg))] p-5 shadow-[var(--shadow-card)] sm:p-8"
+      className="nn-study-loop-outer relative mt-12 overflow-hidden p-5 sm:p-8"
       aria-labelledby="lesson-study-loop-heading"
       data-nn-qa-study-loop="true"
     >
@@ -71,12 +71,13 @@ export function PathwayLessonStudyLoopCta({
           )}
         </p>
 
+        {/* Primary column = solid nn-study-card; siblings stay wash so practice leads the loop (hierarchy). */}
         <div className="mt-8 grid gap-5 sm:gap-6 lg:grid-cols-3">
           {/* Practice */}
-          <div className="nn-study-card nn-study-card--wash flex flex-col p-5 backdrop-blur-sm">
+          <div className="nn-study-card flex flex-col p-5 sm:p-6">
             <div className="flex items-center gap-2 text-[var(--theme-heading-text)]">
               <ClipboardList className="h-5 w-5 shrink-0 text-primary" aria-hidden />
-              <h3 className="text-sm font-semibold tracking-tight">Practice this topic</h3>
+              <h3 className="text-base font-semibold tracking-tight">Practice this topic</h3>
             </div>
             <p className="nn-marketing-body-sm mt-3 text-[var(--theme-muted-text)]">
               {hasTopicFilter
@@ -86,13 +87,13 @@ export function PathwayLessonStudyLoopCta({
             <div className="mt-4 flex flex-col gap-2">
               <Link
                 href={practice.app}
-                className="inline-flex min-h-11 items-center justify-center rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm hover:opacity-95"
+                className="inline-flex min-h-11 items-center justify-center rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)]"
               >
                 Start practice (sign in)
               </Link>
               <Link
                 href={practice.marketing}
-                className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-card px-4 py-2.5 text-sm font-semibold text-foreground hover:border-primary/25"
+                className="nn-study-pill-secondary inline-flex min-h-11 items-center justify-center px-4 py-2.5"
               >
                 Question hub{hasTopicFilter ? " · filtered" : ""}
               </Link>
@@ -100,10 +101,10 @@ export function PathwayLessonStudyLoopCta({
           </div>
 
           {/* Related lessons */}
-          <div className="nn-study-card nn-study-card--wash flex flex-col p-5 backdrop-blur-sm">
+          <div className="nn-study-card nn-study-card--wash flex flex-col p-5 sm:p-6">
             <div className="flex items-center gap-2 text-[var(--theme-heading-text)]">
               <BookOpen className="h-5 w-5 shrink-0 text-primary" aria-hidden />
-              <h3 className="text-sm font-semibold tracking-tight">Review related lessons</h3>
+              <h3 className="text-base font-semibold tracking-tight">Review related lessons</h3>
             </div>
             {filtered.length > 0 ? (
               <ul className="mt-3 space-y-2">
@@ -115,7 +116,7 @@ export function PathwayLessonStudyLoopCta({
                       <Link
                         href={href}
                         data-nn-qa-related-lesson={relIdx === 0 ? "true" : undefined}
-                        className="block rounded-xl border border-transparent px-2 py-1.5 text-sm font-semibold text-primary transition hover:border-primary/25 hover:bg-[var(--theme-muted-surface)]/50"
+                        className="block min-h-11 rounded-xl border border-transparent px-2 py-2.5 text-sm font-semibold text-primary transition hover:border-primary/25 hover:bg-[var(--theme-muted-surface)]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
                       >
                         {r.title}
                       </Link>
@@ -130,17 +131,17 @@ export function PathwayLessonStudyLoopCta({
             )}
             <Link
               href={relatedHub}
-              className="mt-4 inline-flex min-h-11 w-full items-center justify-center rounded-full border border-primary/30 bg-[color-mix(in_srgb,var(--theme-primary)_8%,transparent)] px-4 py-2.5 text-sm font-semibold text-primary hover:bg-[color-mix(in_srgb,var(--theme-primary)_14%,transparent)]"
+              className="nn-study-pill-secondary nn-study-pill-secondary--accent mt-4 inline-flex min-h-11 w-full items-center justify-center px-4 py-2.5 text-sm font-semibold text-primary"
             >
               {hasTopicFilter ? "All lessons in this topic" : "Back to lesson hub"}
             </Link>
           </div>
 
           {/* CAT */}
-          <div className="nn-study-card nn-study-card--wash flex flex-col p-5 backdrop-blur-sm">
+          <div className="nn-study-card nn-study-card--wash flex flex-col p-5 sm:p-6">
             <div className="flex items-center gap-2 text-[var(--theme-heading-text)]">
               <LineChart className="h-5 w-5 shrink-0 text-primary" aria-hidden />
-              <h3 className="text-sm font-semibold tracking-tight">Take a CAT exam</h3>
+              <h3 className="text-base font-semibold tracking-tight">Take a CAT exam</h3>
             </div>
             <p className="nn-marketing-body-sm mt-3 text-[var(--theme-muted-text)]">
               Adaptive difficulty matches this pathway. Use the public CAT landing to learn how sessions work, then sign in when
@@ -149,14 +150,14 @@ export function PathwayLessonStudyLoopCta({
             <div className="mt-4 flex flex-col gap-2">
               <Link
                 href={cat.marketing}
-                className="inline-flex min-h-11 items-center justify-center rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm hover:opacity-95"
+                className="inline-flex min-h-11 items-center justify-center rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)]"
               >
                 CAT prep · this pathway
               </Link>
               {cat.showAdaptiveShortcut && cat.appSession ? (
                 <Link
                   href={cat.appSession}
-                  className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border-subtle)] px-4 py-2.5 text-sm font-semibold hover:border-primary/25"
+                  className="nn-study-pill-secondary inline-flex min-h-11 items-center justify-center px-4 py-2.5"
                 >
                   Start adaptive session
                 </Link>

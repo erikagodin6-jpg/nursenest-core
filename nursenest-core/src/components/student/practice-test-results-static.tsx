@@ -117,7 +117,7 @@ export function PracticeTestResultsStatic({
         ) : null}
       </div>
 
-      {results.catCoach ? (
+      {cat && results.catReport ? (
         <CatResultsCoachPanel
           coach={results.catCoach}
           catExamFeedbackMode={results.catExamFeedbackMode ?? config?.catExamFeedbackMode ?? null}

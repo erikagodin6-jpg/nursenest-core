@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { resolveExamPathwayFromMarketingHubSegment } from "@/lib/exam-pathways/exam-product-registry";
+import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 
 type Props = {
   children: React.ReactNode;
@@ -14,7 +14,8 @@ type Props = {
 
 export default async function ExamPathwayLayout({ children, params }: Props) {
   const { locale, slug, examCode } = await params;
-  const pathway = resolveExamPathwayFromMarketingHubSegment(locale, slug, examCode);
+  const pathname = `/${locale}/${slug}/${examCode}`;
+  const pathway = resolveExamPathwaySafe(locale, slug, examCode, { pathname });
   if (!pathway || pathway.status === "hidden") {
     notFound();
   }

@@ -43,7 +43,7 @@ export function PathwayLessonRelatedQuestions({
 
   return (
     <section
-      className="nn-study-card nn-study-card--wash mt-10 border-l-[3px] border-l-[color-mix(in_srgb,var(--theme-primary)_38%,var(--border-subtle))] p-5 sm:p-6"
+      className="nn-study-card nn-study-card--wash nn-study-card--accent-leading mt-10 p-5 sm:p-6"
       aria-labelledby="lesson-related-questions-heading"
       data-testid="lesson-practice-questions-topic"
     >

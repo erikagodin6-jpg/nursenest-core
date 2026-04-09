@@ -70,7 +70,7 @@ export function PathwayLessonsStudyHero({
         <div className="mt-6">
           <Link
             href={examOverviewHref}
-            className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-card/90 px-5 py-2.5 text-sm font-semibold text-foreground shadow-sm backdrop-blur-sm transition hover:border-primary/25 hover:bg-card"
+            className="nn-study-pill-secondary inline-flex min-h-11 items-center justify-center px-5 py-2.5 text-sm font-semibold"
           >
             ← {pathway.shortName} exam hub
           </Link>

@@ -26,7 +26,10 @@
     "audit:np-coverage": "tsx scripts/audit-np-coverage-vs-catalog.ts",
     "qa:lesson-system": "tsx scripts/launch-qa-lesson-system.ts",
     "qa:lesson-flows": "tsx scripts/qa-lesson-flows.mts",
+    "qa:lesson-flows:browser": "playwright test e2e/lesson-flows.spec.ts",
+    "qa:lesson-flows:all": "npm run qa:lesson-flows && npm run qa:lesson-flows:browser",
     "test:internal-links-audit": "tsx --test scripts/audit-internal-links.test.ts",
+    "test:marketing-exam-hub-smoke": "tsx --test scripts/marketing-exam-hub-smoke.test.ts",
     "generate:marketing-assets": "node scripts/generate-marketing-assets.mjs",
     "generate:brand-logos": "node scripts/build-transparent-theme-logos.mjs",
     "generate:theme-logos": "npx tsx scripts/generate-theme-logos-from-registry.ts",
@@ -138,6 +141,7 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@playwright/test": "^1.51.0",
     "@tailwindcss/postcss": "^4",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
