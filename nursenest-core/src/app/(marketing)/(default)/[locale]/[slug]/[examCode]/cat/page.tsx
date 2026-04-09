@@ -7,7 +7,10 @@ import {
   buildExamPathwayPath,
   resolveExamPathwayFromMarketingHubSegment,
 } from "@/lib/exam-pathways/exam-product-registry";
-import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements";
+import {
+  assessCatEligibilityForSubscriberAndPathway,
+  assessMarketingCatSurfaceWithoutAuth,
+} from "@/lib/exam-pathways/cat-eligibility";
 import {
   PATHWAY_CAT_PRACTICE_DEFAULT_MAX_QUESTIONS,
   appPathwayCatSessionStartPath,
@@ -17,6 +20,8 @@ import { PathwayLiveInventoryStrip } from "@/components/exam-pathways/pathway-li
 import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import { pathwayCatPracticeBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { auth } from "@/lib/auth";
+import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export const dynamicParams = true;
 export const revalidate = 86400;
@@ -28,8 +33,8 @@ export function generateStaticParams() {
 type Props = { params: Promise<{ locale: string; slug: string; examCode: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { locale, slug, examCode } = await params;
-  const pathway = resolveExamPathwayFromMarketingHubSegment(locale, slug, examCode);
+  const { locale: countrySlug, slug: roleTrack, examCode } = await params;
+  const pathway = resolveExamPathwayFromMarketingHubSegment(countrySlug, roleTrack, examCode);
   if (!pathway) {
     return { robots: { index: false, follow: true } };
   }
@@ -42,24 +47,69 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function PathwayCatEntryPage({ params }: Props) {
-  const { locale, slug, examCode } = await params;
-  const pathway = resolveExamPathwayFromMarketingHubSegment(locale, slug, examCode);
+  const { locale: countrySlug, slug: roleTrack, examCode } = await params;
+  const pathway = resolveExamPathwayFromMarketingHubSegment(countrySlug, roleTrack, examCode);
   if (!pathway) notFound();
 
   const questionSnapshot = await loadPathwayQuestionBankSnapshot(pathway.id);
 
   const session = await auth();
-  const isSignedIn = Boolean(session?.user);
-  const hubBase = `/${locale}/${slug}/${examCode}`;
+  const userId = (session?.user as { id?: string })?.id ?? "";
+  const isSignedIn = Boolean(userId);
+
+  const hubBase = `/${countrySlug}/${roleTrack}/${examCode}`;
   const { crumbs, schemaItems } = pathwayCatPracticeBreadcrumbs(pathway);
   const overviewHref = hubBase;
-  const appStart = appPathwayCatSessionStartPath(pathway.id);
-  const catTrackReady = pathwayAllowsCatAdaptiveStart(pathway);
-  const adaptivePoolOk =
-    questionSnapshot.status === "ok" && questionSnapshot.adaptiveEligibleCount >= 8;
-  const marketingCatStartOk = catTrackReady && adaptivePoolOk;
-  const startHref = isSignedIn ? appStart : loginWithCallback(appStart);
+  const marketingCatPath = buildExamPathwayPath(pathway, "cat");
+  /** After login, return to this public CAT page (exam URLs are not locale-prefixed). */
+  const signInReturnHref = loginWithCallback(marketingCatPath);
+
+  let assessment = assessMarketingCatSurfaceWithoutAuth(pathway, questionSnapshot);
+
+  if (isSignedIn) {
+    const entitlement = await resolveEntitlementForPage(userId);
+    if (entitlement === "error") {
+      assessment = {
+        eligible: false,
+        reason: "internal_error",
+        nextAction: "retry",
+        marketingPrimaryCta: "none",
+        safeUserMessage:
+          "We could not verify your subscription right now. Try refreshing, or open the question bank while we sort this out.",
+        pathway,
+        pathwayId: pathway.id,
+        marketingCatPath,
+        appCatStartPath: appPathwayCatSessionStartPath(pathway.id),
+        logCode: "CAT_ENTITLEMENT_VERIFY_FAILED",
+      };
+      safeServerLog("cat_marketing", "CAT_ENTITLEMENT_VERIFY_FAILED", {
+        pathwayId: pathway.id,
+        userIdPrefix: userId.slice(0, 8),
+      });
+    } else {
+      assessment = await assessCatEligibilityForSubscriberAndPathway({
+        userId,
+        entitlement,
+        pathway,
+      });
+    }
+    if (!assessment.eligible && assessment.logCode !== "CAT_OK") {
+      safeServerLog("cat_marketing", assessment.logCode, {
+        pathwayId: pathway.id,
+        reason: assessment.reason,
+        userIdPrefix: userId.slice(0, 8),
+      });
+    }
+  }
+
   const countryLabel = pathway.countrySlug === "canada" ? "Canada" : "US";
+  const lessonsHref = buildExamPathwayPath(pathway, "lessons");
+  const questionsHref = buildExamPathwayPath(pathway, "questions");
+  const pricingHref = buildExamPathwayPath(pathway, "pricing");
+  const appBankHref = `/app/questions?pathwayId=${encodeURIComponent(pathway.id)}`;
+
+  const showExplainerAside =
+    assessment.marketingPrimaryCta === "none" || (isSignedIn && !assessment.eligible && assessment.reason !== "ok");
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
@@ -87,63 +137,98 @@ export default async function PathwayCatEntryPage({ params }: Props) {
           (server may stop earlier based on adaptive rules)
         </li>
         <li>
-          <span className="font-semibold">Requires:</span> an active plan that covers this pathway
+          <span className="font-semibold">Requires:</span> an active plan that covers this pathway when you start in the app
         </li>
       </ul>
-      {!catTrackReady ? (
-        <aside className="nn-card mt-6 border-amber-200/80 bg-amber-50/60 p-4 text-sm text-foreground">
-          <p className="font-semibold">Adaptive CAT is not open for this track yet</p>
-          <p className="mt-1 text-[var(--theme-muted-text)]">
-            This pathway is still on waitlist or ramp-up. Use lessons and the question bank below; join a waitlist from the
-            pathway hub when available. Your subscription is still enforced in the app.
-          </p>
-        </aside>
-      ) : pathway.status === "upcoming" ? (
-        <aside className="nn-card mt-6 border-amber-200/80 bg-amber-50/60 p-4 text-sm text-foreground">
-          <p className="font-semibold">Upcoming pathway</p>
-          <p className="mt-1 text-[var(--theme-muted-text)]">
-            Content depth may be limited while this track is still ramping. CAT is available only when the adaptive pool
-            meets quality checks.
-          </p>
+
+      {showExplainerAside ? (
+        <aside
+          className="nn-card mt-6 border border-[var(--semantic-border-soft)] bg-[var(--semantic-warning-soft)] p-4 text-sm text-[var(--theme-body-text)] shadow-sm"
+          role="status"
+        >
+          <p className="font-semibold text-[var(--theme-heading-text)]">CAT is not available yet for this visit</p>
+          <p className="mt-1 text-[var(--theme-muted-text)]">{assessment.safeUserMessage}</p>
+          <ul className="mt-3 list-inside list-disc space-y-1 text-[var(--theme-muted-text)]">
+            {assessment.nextAction === "upgrade" || assessment.nextAction === "switch_pathway" ? (
+              <li>
+                <Link className="font-medium text-primary underline" href="/app/account/billing">
+                  Account → Billing
+                </Link>{" "}
+                to review your plan or pathway.
+              </li>
+            ) : null}
+            {assessment.nextAction === "join_waitlist" ? (
+              <li>
+                <Link className="font-medium text-primary underline" href={overviewHref}>
+                  Open pathway hub
+                </Link>{" "}
+                for waitlist or status.
+              </li>
+            ) : null}
+            {(assessment.nextAction === "use_question_bank" || assessment.reason === "insufficient_cat_pool") && (
+              <li>
+                <Link className="font-medium text-primary underline" href={questionsHref}>
+                  Pathway question bank
+                </Link>{" "}
+                (practice without adaptive CAT)
+              </li>
+            )}
+            <li>
+              <Link className="font-medium text-primary underline" href={lessonsHref}>
+                Browse lessons
+              </Link>
+            </li>
+            {isSignedIn ? (
+              <li>
+                <Link className="font-medium text-primary underline" href={appBankHref}>
+                  App question bank
+                </Link>
+              </li>
+            ) : null}
+          </ul>
         </aside>
       ) : null}
-      {!marketingCatStartOk && catTrackReady && questionSnapshot.status === "ok" ? (
-        <aside className="nn-card mt-6 border-border bg-muted/40 p-4 text-sm text-foreground">
-          <p className="font-semibold">Adaptive pool is still building</p>
-          <p className="mt-1 text-[var(--theme-muted-text)]">
-            We need more pathway-scoped, adaptive-eligible questions before CAT can run reliably. Use the question bank and
-            lessons — the app will confirm eligibility when you start a session.
-          </p>
-        </aside>
-      ) : null}
+
       <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-        {marketingCatStartOk || !isSignedIn ? (
+        {assessment.marketingPrimaryCta === "open_app_cat" && assessment.appCatStartPath ? (
           <Link
-            href={startHref}
+            href={assessment.appCatStartPath}
             className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground shadow-sm"
           >
-            {isSignedIn ? "Start CAT session" : "Sign in to start"}
+            Start CAT session
+          </Link>
+        ) : assessment.marketingPrimaryCta === "sign_in_to_cat" ? (
+          <Link
+            href={signInReturnHref}
+            className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground shadow-sm"
+          >
+            Sign in to continue
           </Link>
         ) : (
-          <span
-            className="inline-flex min-h-[48px] cursor-not-allowed items-center justify-center rounded-full bg-muted px-8 py-3 text-sm font-semibold text-muted-foreground"
-            title="CAT start is available once the adaptive pool is ready or from the in-app checker."
-          >
-            CAT start unavailable (see above)
+          <span className="inline-flex min-h-[48px] cursor-default items-center justify-center rounded-full border border-border bg-muted/50 px-8 py-3 text-sm font-semibold text-muted-foreground">
+            CAT start unavailable — use links below
           </span>
         )}
         <Link
-          href={buildExamPathwayPath(pathway, "lessons")}
+          href={lessonsHref}
           className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-border px-8 py-3 text-sm font-semibold hover:bg-card"
         >
           Lessons
         </Link>
         <Link
-          href={buildExamPathwayPath(pathway, "questions")}
+          href={questionsHref}
           className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-border px-8 py-3 text-sm font-semibold hover:bg-card"
         >
           Question bank
         </Link>
+        {(assessment.reason === "no_subscription" || assessment.reason === "wrong_subscription_tier") && (
+          <Link
+            href={pricingHref}
+            className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-primary/30 px-8 py-3 text-sm font-semibold text-primary hover:bg-primary/5"
+          >
+            Plans &amp; pricing
+          </Link>
+        )}
         {!isSignedIn ? (
           <Link
             href="/signup"

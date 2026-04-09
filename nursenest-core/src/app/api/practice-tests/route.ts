@@ -11,6 +11,7 @@ import {
   listPathwaysCompatibleWithSubscription,
   pathwayAllowsCatAdaptiveStart,
 } from "@/lib/exam-pathways/pathway-entitlements";
+import { assessCatPracticeReadinessForPathway } from "@/lib/practice-tests/cat-practice-readiness";
 import {
   resolveCatPostExamTimedLimitSec,
   resolveCatSelectionBasisForPost,
@@ -35,6 +36,11 @@ const createSchema = z
     catSelectionBasis: z.enum(["random", "targeted", "weak"]).optional(),
     /** Exam simulation uses pathway-specific bounds (NCLEX-RN 75–145, AANP-style NP 75–150) and blueprint balancing. */
     catPresentationMode: z.enum(["practice", "exam_simulation"]).optional().default("practice"),
+    /**
+     * CAT only: Study Mode (rationales after each item) vs Test Mode (rationales after completion).
+     * Ignored for non-CAT; exam simulation coerces to Test Mode on the server.
+     */
+    catExamFeedbackMode: z.enum(["study", "test"]).optional().default("test"),
     pathwayId: z.union([z.string().min(2).max(80), z.null()]).optional(),
     timedMode: z.boolean(),
     /** Timed exam simulation: up to 5h NCLEX default or 3h AANP-style NP when pathway is NP (overridable). */
@@ -117,6 +123,7 @@ export async function GET(req: NextRequest) {
       questionCount: cfg?.selectionMode === "cat" ? maxCap : ids.length,
       selectionMode: cfg?.selectionMode ?? null,
       catPresentationMode: cfg?.catPresentationMode ?? "practice",
+      catExamFeedbackMode: cfg?.selectionMode === "cat" ? (cfg?.catExamFeedbackMode ?? "test") : null,
       timedMode: r.timedMode,
       timeLimitSec: r.timeLimitSec,
       elapsedMs: r.elapsedMs,
@@ -173,6 +180,11 @@ export async function POST(req: Request) {
       pathwayIdForCat = catEligible[0]?.id ?? null;
     }
     if (!pathwayIdForCat) {
+      safeServerLog("practice_tests", "CAT_PATHWAY_REQUIRED", {
+        userIdPrefix: gate.userId.slice(0, 8),
+        catEligibleCount: catEligible.length,
+        compatibleCount: compatible.length,
+      });
       return NextResponse.json(
         {
           error:
@@ -185,6 +197,10 @@ export async function POST(req: Request) {
       );
     }
     if (pathwayIdForCat && !getExamPathwayById(pathwayIdForCat)) {
+      safeServerLog("practice_tests", "CAT_INVALID_PATHWAY", {
+        pathwayIdPrefix: pathwayIdForCat.slice(0, 14),
+        userIdPrefix: gate.userId.slice(0, 8),
+      });
       return NextResponse.json(
         {
           error: "Unknown exam pathway id. Refresh the page and pick a pathway from the list.",
@@ -197,6 +213,10 @@ export async function POST(req: Request) {
       const inCompatible = compatible.some((p) => p.id === pathwayIdForCat);
       const p = getExamPathwayById(pathwayIdForCat);
       if (!inCompatible) {
+        safeServerLog("practice_tests", "CAT_WRONG_TIER", {
+          pathwayIdPrefix: pathwayIdForCat.length > 14 ? `${pathwayIdForCat.slice(0, 14)}…` : pathwayIdForCat,
+          userIdPrefix: gate.userId.slice(0, 8),
+        });
         return NextResponse.json(
           {
             error:
@@ -206,6 +226,10 @@ export async function POST(req: Request) {
           { status: 400 },
         );
       }
+      safeServerLog("practice_tests", "CAT_PATHWAY_UPCOMING", {
+        pathwayIdPrefix: pathwayIdForCat.length > 14 ? `${pathwayIdForCat.slice(0, 14)}…` : pathwayIdForCat,
+        userIdPrefix: gate.userId.slice(0, 8),
+      });
       return NextResponse.json(
         {
           error:
@@ -214,6 +238,28 @@ export async function POST(req: Request) {
               : "That pathway is not available for adaptive practice. Pick another track from the list.",
           code: PRACTICE_TEST_CAT_CREATE_CODE.pathway_track_not_ready,
         },
+        { status: 400 },
+      );
+    }
+    const catReadiness = await assessCatPracticeReadinessForPathway(gate.userId, gate.entitlement, pathwayIdForCat);
+    if (!catReadiness.ok) {
+      const logKey =
+        catReadiness.code === PRACTICE_TEST_CAT_CREATE_CODE.cat_pool_invalid
+          ? "CAT_POOL_TOO_SMALL"
+          : catReadiness.code === PRACTICE_TEST_CAT_CREATE_CODE.pathway_not_found
+            ? "CAT_INVALID_PATHWAY"
+            : catReadiness.code === PRACTICE_TEST_CAT_CREATE_CODE.pathway_not_entitled
+              ? "CAT_WRONG_TIER"
+              : catReadiness.code === PRACTICE_TEST_CAT_CREATE_CODE.pathway_track_not_ready
+                ? "CAT_PATHWAY_WAITLIST"
+                : "CAT_SESSION_BLOCKED";
+      safeServerLog("practice_tests", logKey, {
+        code: catReadiness.code,
+        pathwayIdPrefix: pathwayIdForCat.length > 14 ? `${pathwayIdForCat.slice(0, 14)}…` : pathwayIdForCat,
+        userIdPrefix: gate.userId.slice(0, 8),
+      });
+      return NextResponse.json(
+        { error: catReadiness.message, code: catReadiness.code },
         { status: 400 },
       );
     }
@@ -240,6 +286,7 @@ export async function POST(req: Request) {
       d.timedMode,
       examTimedLimit,
       d.catPresentationMode,
+      d.catExamFeedbackMode,
     );
     if (!cat.ok) {
       safeServerLog("practice_tests", "cat_create_rejected", {
@@ -270,6 +317,7 @@ export async function POST(req: Request) {
     captureLearnerProductEvent(gate.userId, gate.entitlement, PH.learnerCatExamStarted, {
       pathway_id: pathwayIdForCat,
       exam_simulation: d.catPresentationMode === "exam_simulation",
+      cat_exam_feedback_mode: cat.config.catExamFeedbackMode ?? "test",
       question_cap: d.questionCount,
       timed: d.timedMode,
     });

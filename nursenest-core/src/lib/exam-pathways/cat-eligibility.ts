@@ -2,7 +2,6 @@
  * Server-side CAT (adaptive practice) eligibility — **source of truth** for marketing CAT page and API hardening.
  * Client UI must mirror this for UX only; never rely on client checks for security.
  */
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import {
   pathwayAllowsCatAdaptiveStart,
@@ -106,28 +105,14 @@ function pathwayWaitlistOrUpcomingBlock(pathway: ExamPathwayDefinition): CatElig
       logCode: "CAT_PATHWAY_WAITLIST",
     };
   }
-  if (pathway.status === "upcoming") {
-    return {
-      eligible: false,
-      reason: "pathway_upcoming",
-      nextAction: "browse_lessons",
-      marketingPrimaryCta: "none",
-      safeUserMessage:
-        "This pathway is still ramping. Lessons and the question bank are available; CAT starts once the adaptive pool meets quality checks.",
-      pathway,
-      pathwayId: pathway.id,
-      marketingCatPath: marketingCatPathForPathway(pathway),
-      appCatStartPath: null,
-      logCode: "CAT_PATHWAY_UPCOMING",
-    };
-  }
   if (!pathwayAllowsCatAdaptiveStart(pathway)) {
     return {
       eligible: false,
       reason: "pathway_upcoming",
       nextAction: "browse_pathway_hub",
       marketingPrimaryCta: "none",
-      safeUserMessage: "Adaptive CAT is not available for this track right now. Use lessons and the question bank instead.",
+      safeUserMessage:
+        "Adaptive CAT is not enabled for this track yet (for example, hidden or restricted rollout). Use lessons and the question bank on the pathway hub.",
       pathway,
       pathwayId: pathway.id,
       marketingCatPath: marketingCatPathForPathway(pathway),
@@ -247,12 +232,15 @@ export async function assessCatEligibilityForSubscriberAndPathway(input: Subscri
   const readiness = await assessCatPracticeReadinessForPathway(userId, entitlement, pathway.id);
   if (!readiness.ok) {
     const poolTooSmall = readiness.code === "cat_pool_invalid";
+    const safeUserMessage = poolTooSmall
+      ? readiness.message
+      : "We could not start adaptive practice right now. Use the pathway question bank or lessons, refresh and try again, or contact support if this keeps happening.";
     return {
       eligible: false,
       reason: poolTooSmall ? "insufficient_cat_pool" : "internal_error",
       nextAction: poolTooSmall ? "use_question_bank" : "browse_pathway_hub",
       marketingPrimaryCta: "none",
-      safeUserMessage: readiness.message,
+      safeUserMessage,
       pathway,
       pathwayId: pathway.id,
       marketingCatPath,
@@ -276,19 +264,3 @@ export async function assessCatEligibilityForSubscriberAndPathway(input: Subscri
   };
 }
 
-/** Resolve pathway by id string; returns assessment with invalid_pathway when unknown. */
-export function catEligibilityInvalidPathway(pathwayIdRaw: string): CatEligibilityAssessment {
-  return {
-    eligible: false,
-    reason: "invalid_pathway",
-    nextAction: "browse_pathway_hub",
-    marketingPrimaryCta: "none",
-    safeUserMessage: "That exam pathway is not recognized. Choose a track from the practice exams or exam hub menu.",
-    pathway: null,
-    pathwayId: null,
-    marketingCatPath: null,
-    appCatStartPath: null,
-    logCode: "CAT_INVALID_PATHWAY",
-    debugDetail: pathwayIdRaw.slice(0, 80),
-  };
-}

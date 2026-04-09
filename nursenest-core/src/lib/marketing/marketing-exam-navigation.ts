@@ -6,14 +6,13 @@
  */
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import {
-  defaultPathwayIdForMarketingOffering,
-  defaultRnPathwayIdForMarketingRegion,
   loginCallbackAppCatStartForOffering,
   loginCallbackMarketingCatForOffering,
   publicMarketingCatHrefForOffering,
 } from "@/lib/exam-pathways/practice-exams-cat-start";
 import {
   marketingExamHubPath,
+  defaultPathwayIdForMarketingOffering,
   type CountryExamOfferingId,
   EXAM_PATHWAY_ORDER,
   getExamNavStripItems,
@@ -27,8 +26,9 @@ export {
   getExamPathwayHeroItems,
   type CountryExamOfferingId,
   defaultPathwayIdForMarketingOffering,
-  defaultRnPathwayIdForMarketingRegion,
   publicMarketingCatHrefForOffering,
+  loginCallbackAppCatStartForOffering,
+  loginCallbackMarketingCatForOffering,
 };
 
 /** Canonical exam hub roots for footer, cross-links, and “exam first” CTAs. */
@@ -49,33 +49,12 @@ export function defaultNursingExamMarketingHub(region: MarketingRegionToggle): s
   return marketingExamHubPath(region, "rn");
 }
 
-/** Region’s NCLEX-RN pathway id (for `/app/practice-tests/start?pathwayId=…` callbacks). */
-export { defaultRnPathwayIdForMarketingRegion as defaultRnPathwayIdForMarketingRegion };
-
-/** Default app pathway id for a marketing offering (RN / PN / NP / Allied) in this region. */
-export { defaultPathwayIdForMarketingOffering };
-
 /**
- * Public marketing CAT landing for the offering (`/us/rn/nclex-rn/cat`, …). Use on `/practice-exams` tiles.
- */
-export { publicMarketingCatHrefForOffering };
-
-/**
- * Sign-in → return to **public** CAT explainer for the selected offering (pathway-aware).
- * @deprecated Prefer {@link publicMarketingCatHrefForOffering} for direct navigation; use this only when login must come first.
+ * Sign-in → return to the **public** CAT page for the selected offering (`/us/rn/nclex-rn/cat`, …).
+ * Prefer {@link publicMarketingCatHrefForOffering} when the user can browse the CAT page without forcing login first.
  */
 export function loginCallbackCatStartForOffering(region: MarketingRegionToggle, offering: CountryExamOfferingId): string {
   return loginCallbackMarketingCatForOffering(region, offering);
-}
-
-/**
- * Sign-in → **app** CAT builder with correct `pathwayId` (when skipping the marketing CAT page is intentional).
- */
-export function loginCallbackAppCatStartForOfferingExport(
-  region: MarketingRegionToggle,
-  offering: CountryExamOfferingId,
-): string {
-  return loginCallbackAppCatStartForOffering(region, offering);
 }
 
 /** Sign-in → public CAT page for the region’s default RN track. */

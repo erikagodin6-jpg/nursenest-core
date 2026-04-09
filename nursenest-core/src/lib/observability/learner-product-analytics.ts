@@ -40,10 +40,13 @@ export function capturePracticeTestCompletedAnalytics(
   const examSim = cfg.catPresentationMode === "exam_simulation";
   const readiness = readinessFromResults(results);
 
+  const catFeedback = cfg.selectionMode === "cat" ? (cfg.catExamFeedbackMode ?? "test") : undefined;
+
   captureLearnerProductEvent(userId, entitlement, PH.learnerPracticeTestSessionCompleted, {
     selection_mode: String(sel),
     cat_mode: cat,
     exam_simulation: examSim,
+    cat_exam_feedback_mode: catFeedback,
     pathway_id: cfg.pathwayId ?? undefined,
     score_total: res.scoreTotal,
     score_correct: res.scoreCorrect,
@@ -56,6 +59,7 @@ export function capturePracticeTestCompletedAnalytics(
       readiness_label: readiness,
       selection_mode: String(sel),
       exam_simulation: examSim,
+      cat_exam_feedback_mode: catFeedback,
       pathway_id: cfg.pathwayId ?? undefined,
     });
   }

@@ -1,6 +1,38 @@
 import type { CatExamReport, CatPresentationMode } from "@/lib/exams/cat-types";
+import type { CatResultsCoachSnapshot } from "@/lib/practice-tests/cat-results-coach";
 
 export type { CatPresentationMode };
+export type { CatResultsCoachSnapshot } from "@/lib/practice-tests/cat-results-coach";
+
+/**
+ * CAT session feedback policy (UI only). Does not change item selection, scoring, or stopping rules.
+ * - `study`: show correctness + rationales after each item before the next adaptive item.
+ * - `test`: exam-style — no live rationales; teaching review after completion.
+ */
+export type CatExamFeedbackMode = "study" | "test";
+
+/** Sections built from DB rationale fields (CAT Study Mode). */
+export type CatStudyFeedbackSection = { heading: string; body: string };
+
+/** Layered teaching (Study Mode): short → full → strategy; optional micro-lesson links. */
+export type CatStudyFeedbackLayers = {
+  level1Short: string;
+  level2Sections: CatStudyFeedbackSection[];
+  level3Strategy: string;
+  relatedLessons: Array<{ title: string; href: string }>;
+};
+
+/** Serializable teaching payload for CAT Study Mode (after each item). */
+export type CatStudyFeedbackPayload = {
+  questionId: string;
+  isCorrect: boolean;
+  correctKeys: string[];
+  sections: CatStudyFeedbackSection[];
+  topic: string | null;
+  subtopic: string | null;
+  /** When set, the study panel uses accordion layers + lesson links. */
+  layers?: CatStudyFeedbackLayers;
+};
 
 export type PracticeTestSelectionMode = "random" | "targeted" | "weak" | "cat";
 
@@ -43,6 +75,11 @@ export type PracticeTestConfigJson = {
   catWeakPriorityByCanonical?: Record<string, number>;
   /** Practice CAT vs NCLEX-style exam simulation (bounds, copy, pool validation). */
   catPresentationMode?: CatPresentationMode;
+  /**
+   * Instant rationales vs end-only explanations for CAT (`selectionMode === "cat"`).
+   * Exam simulation coerces to `test` on the server.
+   */
+  catExamFeedbackMode?: CatExamFeedbackMode;
   /** Blueprint used for weights + diagnostics (e.g. nclex-rn-us). */
   catExamConfigId?: string | null;
 };
@@ -61,4 +98,10 @@ export type PracticeTestResultsJson = {
   estimatedAbility?: number;
   abilityStdError?: number;
   readinessLabel?: string;
+  /** Echo of config for analytics / review UI when session was CAT. */
+  catExamFeedbackMode?: CatExamFeedbackMode;
+  /** Study mode: every scored item had an in-session rationale step before continuing. */
+  catStudyRationaleSteps?: number;
+  /** Premium coach card: pass outlook, study-next links, patterns (no psychometric changes). */
+  catCoach?: CatResultsCoachSnapshot | null;
 };

@@ -9,42 +9,15 @@
 import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
-import type { CountryExamOfferingId } from "@/lib/marketing/country-exam-offerings";
+import {
+  defaultPathwayIdForMarketingOffering,
+  type CountryExamOfferingId,
+} from "@/lib/marketing/country-exam-offerings";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
-import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { HUB, loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
-const RN_PATHWAY_ID_BY_REGION: Record<MarketingRegionToggle, string> = {
-  US: "us-rn-nclex-rn",
-  CA: "ca-rn-nclex-rn",
-};
-
-const DEFAULT_PATHWAY_ID_BY_OFFERING: Record<MarketingRegionToggle, Record<CountryExamOfferingId, string>> = {
-  US: {
-    rn: "us-rn-nclex-rn",
-    pn: "us-lpn-nclex-pn",
-    np: "us-np-fnp",
-    allied: "us-allied-core",
-  },
-  CA: {
-    rn: "ca-rn-nclex-rn",
-    pn: "ca-rpn-rex-pn",
-    np: "ca-np-cnple",
-    allied: "ca-allied-core",
-  },
-};
-
-/** Region’s NCLEX-RN pathway id (single-link RN defaults). */
-export function defaultRnPathwayIdForMarketingRegion(region: MarketingRegionToggle): string {
-  return RN_PATHWAY_ID_BY_REGION[region];
-}
-
-/** Canonical pathway id per region and marketing offering (matches `EXAM_PATHWAYS`). */
-export function defaultPathwayIdForMarketingOffering(
-  region: MarketingRegionToggle,
-  offering: CountryExamOfferingId,
-): string {
-  return DEFAULT_PATHWAY_ID_BY_OFFERING[region][offering];
-}
+export { defaultPathwayIdForMarketingOffering } from "@/lib/marketing/country-exam-offerings";
 
 /** Public marketing CAT path: `/us/rn/nclex-rn/cat`, `/canada/np/cnple/cat`, etc. */
 export function marketingCatPathForPathway(pathway: ExamPathwayDefinition): string {
@@ -87,7 +60,12 @@ export function publicMarketingCatHrefForOffering(
   region: MarketingRegionToggle,
   offering: CountryExamOfferingId,
 ): string {
-  return practiceExamsCatStartMetaForOffering(region, offering)?.marketingCatPath ?? "/practice-exams";
+  const meta = practiceExamsCatStartMetaForOffering(region, offering);
+  if (!meta) {
+    safeServerLog("practice_exams_cat", "CAT_MARKETING_PATHWAY_MISSING", { region, offering });
+    return HUB.practiceExams;
+  }
+  return meta.marketingCatPath;
 }
 
 /**
@@ -98,17 +76,16 @@ export function loginCallbackMarketingCatForOffering(
   region: MarketingRegionToggle,
   offering: CountryExamOfferingId,
 ): string {
-  return practiceExamsCatStartMetaForOffering(region, offering)?.loginCallbackMarketingCatHref ?? loginWithCallback("/practice-exams");
+  const meta = practiceExamsCatStartMetaForOffering(region, offering);
+  if (!meta) {
+    safeServerLog("practice_exams_cat", "CAT_MARKETING_LOGIN_CALLBACK_MISSING", { region, offering });
+    return loginWithCallback(HUB.practiceExams);
+  }
+  return meta.loginCallbackMarketingCatHref;
 }
 
 /** Sign-in → app CAT builder with correct `pathwayId` (legacy “start immediately in app” flows). */
 export function loginCallbackAppCatStartForOffering(region: MarketingRegionToggle, offering: CountryExamOfferingId): string {
   const id = defaultPathwayIdForMarketingOffering(region, offering);
   return loginWithCallback(appPathwayCatSessionStartPath(id));
-}
-
-export function loginCallbackAppCatStartForPathwayId(pathwayId: string): string {
-  const trimmed = pathwayId.trim();
-  if (!getExamPathwayById(trimmed)) return loginWithCallback("/app/practice-tests/start");
-  return loginWithCallback(appPathwayCatSessionStartPath(trimmed));
 }

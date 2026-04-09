@@ -3,11 +3,8 @@ import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { MarketingPublicStudyLanding } from "@/components/marketing/marketing-public-study-landing";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
-import {
-  getExamNavStripItems,
-  loginCallbackCatStartForOffering,
-  marketingExamHubPath,
-} from "@/lib/marketing/marketing-exam-navigation";
+import { getExamNavStripItems, publicMarketingCatHrefForOffering } from "@/lib/marketing/marketing-exam-navigation";
+import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
@@ -25,7 +22,7 @@ export async function PracticeExamsHubContent({ locale }: Props) {
   const appExams = loginWithCallback("/app/exams");
   const examStripItems = getExamNavStripItems(marketingRegion);
   const practiceExamsPath = withMarketingLocale(locale, "/practice-exams");
-  const rnExamHub = withMarketingLocale(locale, marketingExamHubPath(marketingRegion, "rn"));
+  const questionBankHref = withMarketingLocale(locale, HUB.questionBank);
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-[var(--nn-rhythm-section-y)] nn-marketing-x nn-rhythm-page">
@@ -52,7 +49,7 @@ export async function PracticeExamsHubContent({ locale }: Props) {
         intro={t("pages.publicPracticeExams.intro")}
         primaryCta={{ href: appExams, label: t("pages.publicPracticeExams.ctaPrimary") }}
         secondaryCta={{
-          href: rnExamHub,
+          href: questionBankHref,
           label: t("pages.publicPracticeExams.ctaSecondaryQuestions"),
         }}
       />
@@ -77,7 +74,7 @@ export async function PracticeExamsHubContent({ locale }: Props) {
           {examStripItems.map((item) => (
             <li key={item.id}>
               <Link
-                href={loginCallbackCatStartForOffering(marketingRegion, item.id)}
+                href={publicMarketingCatHrefForOffering(marketingRegion, item.id)}
                 className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-md border border-[var(--theme-border)] bg-[var(--theme-surface-elevated)] px-3 py-2 text-sm font-semibold text-primary underline-offset-4 hover:bg-[var(--theme-surface)] hover:underline"
               >
                 {t(item.labelKey)}

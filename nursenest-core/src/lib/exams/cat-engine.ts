@@ -144,6 +144,7 @@ export function parseAdaptiveState(raw: unknown): CatAdaptiveState | null {
     stoppedReason: o.stoppedReason ?? null,
     decision: o.decision ?? null,
     catPresentationMode: o.catPresentationMode,
+    catStudyAwaitingContinue: o.catStudyAwaitingContinue === true,
     catBlueprintDiagnostics: coerceCatBlueprintDiagnostics(o.catBlueprintDiagnostics),
   };
 }

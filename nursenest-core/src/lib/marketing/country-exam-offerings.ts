@@ -34,24 +34,41 @@ export type ExamPathwayHeroItem = ExamNavStripItem;
  */
 export const EXAM_PATHWAY_ORDER: readonly CountryExamOfferingId[] = ["rn", "pn", "np", "allied"];
 
+/**
+ * Canonical pathway id for each marketing offering (RN/PN/NP/Allied), aligned with {@link marketingExamHubPath}.
+ * Use for CAT URLs, app deep links, and analytics — avoids duplicating hub ↔ registry mapping elsewhere.
+ */
+export function defaultPathwayIdForMarketingOffering(region: MarketingRegionToggle, id: CountryExamOfferingId): string {
+  const isUs = region === "US";
+  switch (id) {
+    case "rn":
+      return isUs ? "us-rn-nclex-rn" : "ca-rn-nclex-rn";
+    case "pn":
+      return isUs ? "us-lpn-nclex-pn" : "ca-rpn-rex-pn";
+    case "np":
+      return isUs ? "us-np-fnp" : "ca-np-cnple";
+    case "allied":
+      return isUs ? "us-allied-core" : "ca-allied-core";
+    default: {
+      const _exhaustive: never = id;
+      return _exhaustive;
+    }
+  }
+}
+
 /** Primary marketing landing for each exam (pathway hub root, not programmatic SEO slugs). */
 export function marketingExamHubPath(region: MarketingRegionToggle, id: CountryExamOfferingId): string {
   const isUs = region === "US";
+  const pathwayId = defaultPathwayIdForMarketingOffering(region, id);
+  const p = getExamPathwayById(pathwayId);
+  if (p) return buildExamPathwayPath(p);
   switch (id) {
-    case "rn": {
-      const p = getExamPathwayById(isUs ? "us-rn-nclex-rn" : "ca-rn-nclex-rn");
-      return p ? buildExamPathwayPath(p) : isUs ? CANONICAL_PATHWAY_HUB.usRn : CANONICAL_PATHWAY_HUB.caRn;
-    }
+    case "rn":
+      return isUs ? CANONICAL_PATHWAY_HUB.usRn : CANONICAL_PATHWAY_HUB.caRn;
     case "pn":
       return pnPrimaryHub(region);
-    case "np": {
-      if (isUs) {
-        const usNp = getExamPathwayById("us-np-fnp");
-        return usNp ? buildExamPathwayPath(usNp) : CANONICAL_PATHWAY_HUB.usNp;
-      }
-      const caNp = getExamPathwayById("ca-np-cnple");
-      return caNp ? buildExamPathwayPath(caNp) : CANONICAL_PATHWAY_HUB.caNp;
-    }
+    case "np":
+      return isUs ? CANONICAL_PATHWAY_HUB.usNp : CANONICAL_PATHWAY_HUB.caNp;
     case "allied":
       return alliedHub(region);
     default: {

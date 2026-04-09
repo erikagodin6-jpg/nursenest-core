@@ -25,6 +25,7 @@ export function PathwayCatSessionStartClient({
   });
   const [questionCap, setQuestionCap] = useState(PATHWAY_CAT_PRACTICE_DEFAULT_MAX_QUESTIONS);
   const [catBasis, setCatBasis] = useState<"random" | "weak">("random");
+  const [catExamFeedbackMode, setCatExamFeedbackMode] = useState<"study" | "test">("test");
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [errorCode, setErrorCode] = useState<string | null>(null);
@@ -86,6 +87,7 @@ export function PathwayCatSessionStartClient({
           selectionMode: "cat",
           catSelectionBasis: catBasis,
           catPresentationMode: "practice",
+          catExamFeedbackMode,
           pathwayId,
           timedMode: false,
           timeLimitSec: null,
@@ -104,7 +106,7 @@ export function PathwayCatSessionStartClient({
     } finally {
       setCreating(false);
     }
-  }, [pathwayId, questionCap, catBasis, pathwayMeta?.shortName]);
+  }, [pathwayId, questionCap, catBasis, catExamFeedbackMode, pathwayMeta?.shortName]);
 
   if (pathwayOptions.length === 0) {
     return (
@@ -123,8 +125,8 @@ export function PathwayCatSessionStartClient({
         <p className="text-[10px] font-bold uppercase tracking-widest text-primary">CAT practice</p>
         <h2 className="mt-1 text-xl font-bold text-[var(--theme-heading-text)]">{examTitle}</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          Adaptive session: one question at a time, pool filtered to this pathway and your plan. Rationales unlock after you
-          finish (same behavior as other CAT runs).
+          Adaptive session: one question at a time, pool filtered to this pathway and your plan. Choose whether you want
+          explanations after each item (Study Mode) or only after the session (Test Mode).
         </p>
       </div>
 
@@ -154,6 +156,30 @@ export function PathwayCatSessionStartClient({
           onChange={(e) => setQuestionCap(Number(e.target.value))}
         />
       </label>
+
+      <fieldset className="text-sm">
+        <legend className="text-muted-foreground">CAT feedback</legend>
+        <div className="mt-2 flex flex-wrap gap-4">
+          <label className="inline-flex items-center gap-2">
+            <input
+              type="radio"
+              name="catFeedback"
+              checked={catExamFeedbackMode === "study"}
+              onChange={() => setCatExamFeedbackMode("study")}
+            />
+            Study Mode — see rationales as you go
+          </label>
+          <label className="inline-flex items-center gap-2">
+            <input
+              type="radio"
+              name="catFeedback"
+              checked={catExamFeedbackMode === "test"}
+              onChange={() => setCatExamFeedbackMode("test")}
+            />
+            Test Mode — no rationales until the end
+          </label>
+        </div>
+      </fieldset>
 
       <fieldset className="text-sm">
         <legend className="text-muted-foreground">Pool basis</legend>

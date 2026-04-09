@@ -11,7 +11,12 @@ import {
 } from "@/components/exam/exam-session-shell";
 import { difficultyBandLabel } from "@/lib/questions/difficulty-label";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
-import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
+import type {
+  CatStudyFeedbackPayload,
+  PracticeTestConfigJson,
+  PracticeTestResultsJson,
+} from "@/lib/practice-tests/types";
+import { CatStudyFeedbackPanel } from "@/components/student/cat-study-feedback-panel";
 import { ProtectedPremiumContent } from "@/components/student/protected-premium-content";
 import { StudyNotesPanel } from "@/components/student/study-notes-panel";
 import { QuestionChoiceLetter } from "@/components/student/question-choice-letter";
@@ -83,6 +88,10 @@ export function PracticeTestRunnerClient({
   const [linearPracticeFeedback, setLinearPracticeFeedback] = useState<
     Record<string, { isCorrect: boolean; rationale: string | null; correctKeys: string[] }>
   >({});
+  /** CAT Study Mode: rationale for the current item after scoring, before the next adaptive pick. */
+  const [catStudyFeedback, setCatStudyFeedback] = useState<CatStudyFeedbackPayload | null>(null);
+  /** CAT Study Mode: last item explanation before switching to the results layout. */
+  const [catFinalStudyFeedback, setCatFinalStudyFeedback] = useState<CatStudyFeedbackPayload | null>(null);
   const autoSubmitRef = useRef(false);
   const answersRef = useRef<Record<string, unknown>>({});
   const idxRef = useRef(0);
@@ -146,6 +155,24 @@ export function PracticeTestRunnerClient({
       setAdaptiveSe(typeof astObj?.se === "number" ? astObj.se : null);
       setLinearCommittedIds(getLinearCommittedQuestionIds(ast));
       setLinearPracticeFeedback({});
+      setCatFinalStudyFeedback(null);
+      const catStudyAwaiting =
+        Boolean(data.catMode) &&
+        (data.config?.catExamFeedbackMode ?? "test") === "study" &&
+        astObj?.catStudyAwaitingContinue === true;
+      if (catStudyAwaiting && data.status === "IN_PROGRESS") {
+        void (async () => {
+          try {
+            const fr = await fetch(`/api/practice-tests/${testId}/cat-study-review`);
+            const fd = (await fr.json()) as { studyFeedback?: CatStudyFeedbackPayload; error?: string };
+            if (fr.ok && fd.studyFeedback) setCatStudyFeedback(fd.studyFeedback);
+          } catch {
+            /* ignore — user can retry via reload */
+          }
+        })();
+      } else {
+        setCatStudyFeedback(null);
+      }
       if (data.status === "IN_PROGRESS" && data.timedMode && data.timeLimitSec) {
         const usedSec = data.elapsedMs != null ? Math.floor(data.elapsedMs / 1000) : 0;
         setRemainingSec(Math.max(0, data.timeLimitSec - usedSec));
@@ -271,6 +298,10 @@ export function PracticeTestRunnerClient({
   const current = qid ? questionCache[qid] : undefined;
   const total = questionIds.length;
   const examSimulation = testConfig?.catPresentationMode === "exam_simulation";
+  const catFeedbackStudy = Boolean(catMode && (testConfig?.catExamFeedbackMode ?? "test") === "study");
+  const catStudyLocked =
+    catFeedbackStudy &&
+    Boolean(catStudyFeedback && current && catStudyFeedback.questionId === current.id && idx === total - 1);
   const aanpNpExamSim = examSimulation && testConfig?.catExamConfigId === "aanp-np-us";
   const catMaxCap = testConfig?.catMaxQuestions ?? total;
   const optsCanonical = useMemo(() => (current ? parseOptions(current.options) : []), [current]);
@@ -478,13 +509,25 @@ export function PracticeTestRunnerClient({
         error?: string;
         catAdvanced?: boolean;
         catCompleted?: boolean;
+        catStudyReveal?: boolean;
+        studyFeedback?: CatStudyFeedbackPayload | null;
       };
       if (!res.ok) throw new Error(data.error ?? "Could not advance.");
-      if (data.results) {
-        setResults(data.results);
-        setStatus("COMPLETED");
+      if (data.catStudyReveal) {
+        await load();
+        return;
+      }
+      if (data.catCompleted && data.results) {
         setSavedElapsedMs(elapsedMs ?? null);
-      } else if (data.catAdvanced) {
+        setResults(data.results);
+        if (data.studyFeedback && catFeedbackStudy) {
+          setCatFinalStudyFeedback(data.studyFeedback);
+        }
+        setStatus("COMPLETED");
+        return;
+      }
+      if (data.catAdvanced) {
+        setCatStudyFeedback(null);
         await load();
       }
     } catch (e) {
@@ -556,6 +599,27 @@ export function PracticeTestRunnerClient({
       savedElapsedMs != null
         ? `${Math.floor(savedElapsedMs / 60000)}m ${Math.round((savedElapsedMs % 60000) / 1000)}s`
         : "N/A";
+    if (catFinalStudyFeedback) {
+      return (
+        <div className="space-y-6">
+          <div className="nn-card border-[var(--semantic-border-soft)] p-6">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-primary">Session complete</p>
+            <h2 className="mt-1 text-lg font-bold text-[var(--theme-heading-text)]">Final item — review</h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Study Mode: you saw rationales as you went. Here is the last explanation before your summary.
+            </p>
+            <div className="mt-4">
+              <CatStudyFeedbackPanel
+                feedback={catFinalStudyFeedback}
+                continueLabel="View results summary"
+                onContinue={() => setCatFinalStudyFeedback(null)}
+                continueDisabled={false}
+              />
+            </div>
+          </div>
+        </div>
+      );
+    }
     return (
       <div className="space-y-6">
         <div className="nn-card nn-product-surface-accent relative overflow-hidden p-6 pt-7">
@@ -565,6 +629,12 @@ export function PracticeTestRunnerClient({
               ? "Exam simulation complete"
               : "Test complete"}
           </h2>
+          {results.catExamFeedbackMode === "study" && typeof results.catStudyRationaleSteps === "number" ? (
+            <p className="mt-2 text-sm text-muted-foreground">
+              Study Mode · In-session rationale steps:{" "}
+              <span className="font-medium text-foreground">{results.catStudyRationaleSteps}</span>
+            </p>
+          ) : null}
           <p className="mt-2 text-3xl font-bold tabular-nums text-[var(--semantic-brand)]">
             {results.scoreCorrect}/{results.scoreTotal}{" "}
             <span className="text-lg font-semibold text-muted-foreground">({results.accuracyPct}%)</span>
@@ -716,8 +786,9 @@ export function PracticeTestRunnerClient({
         <div className="nn-card space-y-3 border border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_4%,var(--semantic-surface))] p-6">
           <h3 className="font-semibold text-[var(--semantic-text-primary)]">Post-exam teaching review</h3>
           <p className="text-sm text-[var(--semantic-text-secondary)]">
-            During CAT, rationales stay hidden to mirror exam pacing. After completion, open the full teaching breakdown
-            (correct logic, distractors, strategy, and figures when available).
+            {results.catExamFeedbackMode === "study"
+              ? "You already saw explanations after each item in Study Mode. Open the full teaching breakdown for consolidated distractors, strategy, and figures when available."
+              : "Test Mode keeps rationales hidden until the end. After completion, open the full teaching breakdown (correct logic, distractors, strategy, and figures when available)."}
           </p>
           {teachingReviewItems === null ? (
             <button
@@ -907,7 +978,9 @@ export function PracticeTestRunnerClient({
                       ? aanpNpExamSim
                         ? "NP exam simulation (AANP-style CAT)"
                         : "NCLEX-RN exam simulation (CAT)"
-                      : "Computer-adaptive (practice)"
+                      : catFeedbackStudy
+                        ? "CAT — Study Mode"
+                        : "CAT — Test Mode"
                     : "Practice test"}
               </span>
             }
@@ -925,7 +998,9 @@ export function PracticeTestRunnerClient({
                     ? aanpNpExamSim
                       ? "AANP-style NP band (75–150) with adaptive stop rules on this server. The live AANP exam is not CAT. Rationales unlock after completion."
                       : "NCLEX-style length band (75–145) and stop rules on this server. Not the live NCLEX. Rationales unlock after completion."
-                    : "Each response updates difficulty. Explanations and coaching appear after the session."
+                    : catFeedbackStudy
+                      ? "Study Mode — see rationales as you go after each answer. CAT still adapts from your responses; scoring and item selection rules are the same as Test Mode."
+                      : "Test Mode — no rationales until the end. Same adaptive engine and scoring as Study Mode; only on-screen feedback differs."
                   : "Pacing practice only. Not a copy of any official exam interface."}
             </p>
 
@@ -948,7 +1023,7 @@ export function PracticeTestRunnerClient({
                     {optsCanonical.map((canonical, i) => {
                       const label = optsDisplay[i] ?? canonical;
                       const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
-                      const locked = isLinearEngine && currentCommitted;
+                      const locked = (isLinearEngine && currentCommitted) || catStudyLocked;
                       return (
                         <li key={canonical}>
                           <label className={linearPracticeSataClasses(canonical, selected)}>
@@ -974,7 +1049,7 @@ export function PracticeTestRunnerClient({
                   <ul className="nn-qopt-list" role="radiogroup" aria-label="Answer choices">
                     {optsCanonical.map((canonical, i) => {
                       const label = optsDisplay[i] ?? canonical;
-                      const locked = isLinearEngine && currentCommitted;
+                      const locked = (isLinearEngine && currentCommitted) || catStudyLocked;
                       return (
                         <li key={canonical}>
                           <button
@@ -1033,6 +1108,15 @@ export function PracticeTestRunnerClient({
               </p>
             ) : null}
 
+            {catMode && !examSimulation && catFeedbackStudy && catStudyFeedback && idx === total - 1 ? (
+              <CatStudyFeedbackPanel
+                feedback={catStudyFeedback}
+                continueLabel="Next adaptive item"
+                onContinue={() => void catAdvance()}
+                continueDisabled={saving}
+              />
+            ) : null}
+
             <div className="nn-question-nav-actions">
               <button
                 type="button"
@@ -1063,15 +1147,28 @@ export function PracticeTestRunnerClient({
                   >
                     Next
                   </button>
+                ) : catFeedbackStudy && catStudyLocked ? (
+                  <button
+                    type="button"
+                    disabled={saving}
+                    className="nn-btn-secondary min-h-[3rem] rounded-full px-5 text-sm font-semibold"
+                    onClick={() => void submitTest()}
+                  >
+                    End session
+                  </button>
                 ) : (
                   <>
                     <button
                       type="button"
-                      disabled={saving}
+                      disabled={saving || !hasMeaningfulAnswer(current.id)}
                       className="nn-btn-primary nn-question-nav-actions__next rounded-full px-6 text-sm font-semibold shadow-none"
                       onClick={() => void catAdvance()}
                     >
-                      {saving ? "Working…" : "Next question"}
+                      {saving
+                        ? "Working…"
+                        : catFeedbackStudy
+                          ? "See explanation"
+                          : "Next question"}
                     </button>
                     <button
                       type="button"

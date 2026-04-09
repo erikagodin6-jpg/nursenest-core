@@ -62,6 +62,19 @@ export function PracticeTestResultsStatic({
           {title?.trim() || (cat ? "Adaptive (CAT) practice" : "Practice test")}
         </h2>
         <p className="mt-1 text-sm text-[var(--semantic-text-muted)]">Completed {completedAtLabel}</p>
+        {cat && (results.catExamFeedbackMode ?? config?.catExamFeedbackMode) === "study" ? (
+          <p className="mt-2 text-xs text-[var(--semantic-text-muted)]">
+            Study Mode — you could review explanations after each item. In-session rationale steps recorded:{" "}
+            <span className="font-medium text-[var(--semantic-text-primary)]">
+              {typeof results.catStudyRationaleSteps === "number" ? results.catStudyRationaleSteps : "—"}
+            </span>
+            .
+          </p>
+        ) : cat && (results.catExamFeedbackMode ?? config?.catExamFeedbackMode) === "test" ? (
+          <p className="mt-2 text-xs text-[var(--semantic-text-muted)]">
+            Test Mode — rationales were held until after completion for this CAT run.
+          </p>
+        ) : null}
 
         <div className="mt-6 grid gap-4 sm:grid-cols-3">
           <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3">

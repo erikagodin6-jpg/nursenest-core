@@ -16,8 +16,23 @@ import { advanceCatPracticeTest, finalizeCatPracticeTest } from "@/lib/practice-
 import { recordTopicOutcomesFromPracticeTest } from "@/lib/learner/topic-performance";
 import { buildLinearCommitFeedback } from "@/lib/practice-tests/build-linear-commit-feedback";
 import { getLinearCommittedQuestionIds, mergeLinearCommittedQuestionId } from "@/lib/practice-tests/practice-linear-engine";
+import { enrichPracticeTestResultsWithCatCoach } from "@/lib/practice-tests/enrich-cat-results-coach";
 import { computePracticeTestResults } from "@/lib/practice-tests/score-practice-test";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
+
+function withCatSessionResultMeta(
+  results: PracticeTestResultsJson,
+  cfg: PracticeTestConfigJson,
+  answeredInSession: number,
+): PracticeTestResultsJson {
+  if (cfg.selectionMode !== "cat") return results;
+  const mode = cfg.catExamFeedbackMode ?? "test";
+  return {
+    ...results,
+    catExamFeedbackMode: mode,
+    ...(mode === "study" && answeredInSession > 0 ? { catStudyRationaleSteps: answeredInSession } : {}),
+  };
+}
 import { buildPracticeTestTeachingReview } from "@/lib/practice-tests/build-teaching-review";
 import {
   enforcePracticeTestDetailProtection,
@@ -310,7 +325,32 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
       return NextResponse.json({ error: adv.message }, { status: 400 });
     }
 
+    if (adv.kind === "study_reveal") {
+      await prisma.practiceTest.update({
+        where: { id },
+        data: {
+          answers: merged as object,
+          cursorIndex,
+          adaptiveState: adv.adaptiveState as object,
+          ...(elapsedMs !== undefined ? { elapsedMs } : {}),
+        },
+      });
+      return NextResponse.json({
+        ok: true,
+        catStudyReveal: true as const,
+        studyFeedback: adv.studyFeedback,
+      });
+    }
+
     if (adv.kind === "completed") {
+      const answeredCount = ids.filter((qid) => merged[qid] !== undefined).length;
+      const resultsWithMeta = withCatSessionResultMeta(adv.results, cfg, answeredCount);
+      const resultsFinal = await enrichPracticeTestResultsWithCatCoach(
+        resultsWithMeta,
+        adv.adaptiveState,
+        cfg,
+        gate.entitlement,
+      );
       await prisma.practiceTest.update({
         where: { id },
         data: {
@@ -318,7 +358,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
           answers: merged as object,
           cursorIndex,
           completedAt: new Date(),
-          results: adv.results as object,
+          results: resultsFinal as object,
           adaptiveState: adv.adaptiveState as object,
           questionIds: ids as object,
           ...(elapsedMs !== undefined ? { elapsedMs } : {}),
@@ -330,8 +370,14 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
       } catch {
         topicStatsSynced = false;
       }
-      capturePracticeTestCompletedAnalytics(gate.userId, gate.entitlement, cfg, adv.results);
-      return NextResponse.json({ ok: true, results: adv.results, catCompleted: true, topicStatsSynced });
+      capturePracticeTestCompletedAnalytics(gate.userId, gate.entitlement, cfg, resultsFinal);
+      return NextResponse.json({
+        ok: true,
+        results: resultsFinal,
+        catCompleted: true,
+        topicStatsSynced,
+        studyFeedback: adv.studyFeedback ?? null,
+      });
     }
 
     await prisma.practiceTest.update({
@@ -350,6 +396,14 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
   if (parsed.data.action === "complete") {
     if (cfg.selectionMode === "cat") {
       const fin = await finalizeCatPracticeTest(ids, merged, gate.entitlement, row.adaptiveState);
+      const answeredCount = ids.filter((qid) => merged[qid] !== undefined).length;
+      const resultsWithMeta = withCatSessionResultMeta(fin.results, cfg, answeredCount);
+      const resultsFinal = await enrichPracticeTestResultsWithCatCoach(
+        resultsWithMeta,
+        fin.adaptiveState,
+        cfg,
+        gate.entitlement,
+      );
       await prisma.practiceTest.update({
         where: { id },
         data: {
@@ -357,7 +411,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
           answers: merged as object,
           cursorIndex,
           completedAt: new Date(),
-          results: fin.results as object,
+          results: resultsFinal as object,
           adaptiveState: fin.adaptiveState as object,
           ...(elapsedMs !== undefined ? { elapsedMs } : {}),
         },
@@ -368,8 +422,8 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
       } catch {
         topicStatsSynced = false;
       }
-      capturePracticeTestCompletedAnalytics(gate.userId, gate.entitlement, cfg, fin.results);
-      return NextResponse.json({ ok: true, results: fin.results, topicStatsSynced });
+      capturePracticeTestCompletedAnalytics(gate.userId, gate.entitlement, cfg, resultsFinal);
+      return NextResponse.json({ ok: true, results: resultsFinal, topicStatsSynced });
     }
 
     const results = await computePracticeTestResults(ids, merged, gate.entitlement);

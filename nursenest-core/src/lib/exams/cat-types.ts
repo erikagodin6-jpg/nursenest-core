@@ -99,6 +99,11 @@ export type CatAdaptiveState = {
   decision: "pass" | "fail" | "uncertain" | null;
   /** How the learner chose to run CAT (affects UI only; server still scores the same). */
   catPresentationMode?: CatPresentationMode;
+  /**
+   * Study-mode CAT: after scoring an item, wait for learner to review rationale before picking the next item.
+   * Cleared when the next item is appended.
+   */
+  catStudyAwaitingContinue?: boolean;
   /** Blueprint pool + running session distribution (exam + practice when mapping exists). */
   catBlueprintDiagnostics?: CatBlueprintDiagnostics;
 };
