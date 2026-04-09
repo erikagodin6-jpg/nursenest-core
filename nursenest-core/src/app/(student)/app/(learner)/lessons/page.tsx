@@ -14,8 +14,7 @@ import { paginateLegacyContentMapLessons } from "@/lib/lessons/legacy-content-ma
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { FreemiumLessonPeek } from "@/components/student/freemium-lesson-peek";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
-
-const APP_LESSONS_PAGE_SIZE = 15;
+import { LEARNER_APP_LESSONS_PAGE_SIZE } from "@/lib/lessons/pathway-lesson-scale";
 
 type AppLessonListRow = { id: string; title: string; summary: string | null };
 
@@ -95,14 +94,14 @@ export default async function LessonsPage({ searchParams }: Props) {
     const contentTotal = await prisma.contentItem.count({ where: contentWhere });
 
     if (contentTotal > 0) {
-      const pageCount = Math.max(1, Math.ceil(contentTotal / APP_LESSONS_PAGE_SIZE) || 1);
+      const pageCount = Math.max(1, Math.ceil(contentTotal / LEARNER_APP_LESSONS_PAGE_SIZE) || 1);
       const safePage = Math.min(pageRequested, pageCount);
       const rowsRaw = await prisma.contentItem.findMany({
         where: contentWhere,
         select: { id: true, title: true, summary: true },
         orderBy: { updatedAt: "desc" },
-        skip: (safePage - 1) * APP_LESSONS_PAGE_SIZE,
-        take: APP_LESSONS_PAGE_SIZE,
+        skip: (safePage - 1) * LEARNER_APP_LESSONS_PAGE_SIZE,
+        take: LEARNER_APP_LESSONS_PAGE_SIZE,
       });
       const rows: AppLessonListRow[] = rowsRaw.map((r) => ({
         id: r.id,
@@ -122,7 +121,7 @@ export default async function LessonsPage({ searchParams }: Props) {
     const pathwayTotal = await prisma.pathwayLesson.count({ where: pathwayWhere });
 
     if (pathwayTotal > 0) {
-      const pageCount = Math.max(1, Math.ceil(pathwayTotal / APP_LESSONS_PAGE_SIZE) || 1);
+      const pageCount = Math.max(1, Math.ceil(pathwayTotal / LEARNER_APP_LESSONS_PAGE_SIZE) || 1);
       const safePage = Math.min(pageRequested, pageCount);
       const pathwayRows = await prisma.pathwayLesson.findMany({
         where: pathwayWhere,
@@ -135,8 +134,8 @@ export default async function LessonsPage({ searchParams }: Props) {
           updatedAt: true,
         },
         orderBy: { updatedAt: "desc" },
-        skip: (safePage - 1) * APP_LESSONS_PAGE_SIZE,
-        take: APP_LESSONS_PAGE_SIZE,
+        skip: (safePage - 1) * LEARNER_APP_LESSONS_PAGE_SIZE,
+        take: LEARNER_APP_LESSONS_PAGE_SIZE,
       });
       const rows: AppLessonListRow[] = pathwayRows.map((r) => ({
         id: r.id,
@@ -152,7 +151,7 @@ export default async function LessonsPage({ searchParams }: Props) {
       };
     }
 
-    const legacy = await paginateLegacyContentMapLessons(entitlement, pageRequested, APP_LESSONS_PAGE_SIZE);
+    const legacy = await paginateLegacyContentMapLessons(entitlement, pageRequested, LEARNER_APP_LESSONS_PAGE_SIZE);
     const rows: AppLessonListRow[] = legacy.rows.map((r) => ({
       id: r.id,
       title: r.title,
@@ -172,7 +171,7 @@ export default async function LessonsPage({ searchParams }: Props) {
     lessonsBlock = lessonsBlockFromDb;
   } else {
     safeServerLog("page_lessons", "lesson_list_db_unavailable_fallback_legacy", {});
-    const legacy = await paginateLegacyContentMapLessons(entitlement, pageRequested, APP_LESSONS_PAGE_SIZE);
+    const legacy = await paginateLegacyContentMapLessons(entitlement, pageRequested, LEARNER_APP_LESSONS_PAGE_SIZE);
     const rows: AppLessonListRow[] = legacy.rows.map((r) => ({
       id: r.id,
       title: r.title,
@@ -198,7 +197,7 @@ export default async function LessonsPage({ searchParams }: Props) {
       <h1 className="text-3xl font-bold">{t("learner.lessons.list.title")}</h1>
       <p className="mt-2 text-sm text-muted">{t("learner.lessons.list.subscriberIntro")}</p>
       <p className="mt-2 text-sm text-muted">
-        {t("learner.lessons.list.paginationExplainer", { pageSize: APP_LESSONS_PAGE_SIZE })}{" "}
+        {t("learner.lessons.list.paginationExplainer", { pageSize: LEARNER_APP_LESSONS_PAGE_SIZE })}{" "}
         <Link className="font-medium text-primary underline" href="/lessons">
           {t("learner.lessons.list.paginationLink")}
         </Link>

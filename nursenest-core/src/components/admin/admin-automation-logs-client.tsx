@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { ContentAutomationLogCategory, ContentAutomationLogStatus } from "@prisma/client";
 
@@ -49,15 +50,30 @@ function canRetry(log: LogRow): boolean {
 }
 
 export function AdminAutomationLogsClient() {
+  const searchParams = useSearchParams();
   const [logs, setLogs] = useState<LogRow[]>([]);
   const [total, setTotal] = useState(0);
   const [offset, setOffset] = useState(0);
   const [limit] = useState(50);
   const [category, setCategory] = useState<string>("");
   const [status, setStatus] = useState<string>("");
+  const [hours, setHours] = useState<string>("");
+  const [search, setSearch] = useState<string>("");
   const [busyId, setBusyId] = useState<string | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
+
+  useEffect(() => {
+    const c = searchParams.get("category") ?? "";
+    const s = searchParams.get("status") ?? "";
+    const h = searchParams.get("hours") ?? "";
+    const q = searchParams.get("search") ?? "";
+    setCategory(c);
+    setStatus(s);
+    setHours(h);
+    setSearch(q);
+    setOffset(0);
+  }, [searchParams]);
 
   const load = useCallback(async () => {
     setErr(null);
@@ -66,6 +82,8 @@ export function AdminAutomationLogsClient() {
     q.set("offset", String(offset));
     if (category) q.set("category", category);
     if (status) q.set("status", status);
+    if (hours && Number(hours) > 0) q.set("hours", hours);
+    if (search.trim().length >= 2) q.set("search", search.trim());
     const res = await fetch(`/api/admin/automation-logs?${q.toString()}`);
     const json = (await res.json()) as { ok?: boolean; logs?: LogRow[]; total?: number; error?: string };
     if (!res.ok) {
@@ -74,7 +92,7 @@ export function AdminAutomationLogsClient() {
     }
     setLogs(json.logs ?? []);
     setTotal(json.total ?? 0);
-  }, [limit, offset, category, status]);
+  }, [limit, offset, category, status, hours, search]);
 
   useEffect(() => {
     void load();
@@ -138,6 +156,31 @@ export function AdminAutomationLogsClient() {
               </option>
             ))}
           </select>
+        </label>
+        <label className="block space-y-1 text-sm">
+          <span className="text-xs font-medium text-muted-foreground">Time window</span>
+          <select
+            className="rounded-md border border-border px-2 py-1.5 text-sm"
+            value={hours}
+            onChange={(e) => {
+              setOffset(0);
+              setHours(e.target.value);
+            }}
+          >
+            <option value="">All time</option>
+            <option value="24">Last 24h</option>
+            <option value="168">Last 7d</option>
+            <option value="720">Last 30d</option>
+          </select>
+        </label>
+        <label className="block min-w-[200px] space-y-1 text-sm">
+          <span className="text-xs font-medium text-muted-foreground">Search (error/summary/topic)</span>
+          <input
+            className="w-full rounded-md border border-border px-2 py-1.5 text-sm"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Min 2 characters"
+          />
         </label>
         <button
           type="button"

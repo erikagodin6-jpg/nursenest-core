@@ -1,14 +1,25 @@
 /**
  * **Shared core + scoped variant** — how premium pathway lessons scale without “count inflation”.
  *
- * - **One stable `slug` per teachable unit** across pathways. Exam/country/role differences live in
- *   `getFullLesson(pathwayId)` / `getHubListRow(pathwayId)` (see `*-gold-standard.ts`), not as separate
- *   catalog rows that duplicate the same clinical spine.
- * - **Do not** paste near-identical `catalog.json` lessons into multiple `pathways.*.lessons` arrays just
- *   to raise lesson totals — that becomes uncontrolled duplication and erodes editorial quality.
- * - **Registry merge**: {@link prependScopedGoldCatalogLessons} prepends injectables only when the slug is
- *   absent from the pathway’s catalog slice (catalog/DB rows win on slug collision).
- * - **Order** = remediation priority for hub injection when the slug is not already in catalog.json or DB.
+ * **Authoring rules (net-new work)**
+ * - **One `slug` = one teachable unit.** If RN US and RN CA need the same lesson, do **not** paste two full
+ *   JSON blobs under `pathways.us-rn-nclex-rn` and `pathways.ca-rn-nclex-rn`. Prefer: (1) a
+ *   {@link ScopedGoldProvider} with pathway logic in `getFullLesson(pathwayId)` / `getHubListRow`, or
+ *   (2) a single catalog row in one pathway bucket plus registry injection for other hubs, or (3) DB +
+ *   overlays — not duplicate static rows.
+ * - **Variants belong in code:** exam framing, units, jurisdiction notes, and NCLEX vs REx-PN emphasis
+ *   branch inside `getFullLesson`, not a second slug that repeats the same spine.
+ * - **No filler:** new slugs only when there is a distinct learning outcome; never fork a lesson into
+ *   A/B slugs to pad counts.
+ *
+ * **Merge semantics**
+ * - {@link prependScopedGoldCatalogLessons} prepends registry lessons only when the slug is absent from
+ *   that pathway’s catalog slice (catalog/DB rows win on slug collision).
+ * - Injection order = remediation priority when the slug is missing from catalog/DB.
+ *
+ * **Legacy:** some pathways still list the same slug in multiple `catalog.json` buckets (maintain two
+ *   copies). Do **not** add more cross-bucket duplication — consolidate when editing (see catalog
+ *   redundancy test).
  */
 import type {
   PathwayLessonOmittedPremiumSection,

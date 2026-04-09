@@ -479,8 +479,9 @@ function filterCatalogLessonsByTopicSlugs(raw: LessonInput[], topicSlugsIn?: str
 }
 
 /**
- * Static catalog slice for one pathway, merged with scoped-gold injectables (shared core + per-pathway variant
- * in code — see `scoped-gold-registry.ts`). Catalog rows take precedence when slugs match.
+ * Static catalog slice for one pathway, merged with scoped-gold injectables (shared core + per-pathway
+ * variant in code — see `scoped-gold-registry.ts`). Catalog rows take precedence when slugs match.
+ * Prefer registry/providers for cross-pathway lessons so the hub list scales without duplicate JSON rows.
  */
 function getCatalogLessonsRaw(pathwayId: string): LessonInput[] {
   const bucket = data.pathways[pathwayId];

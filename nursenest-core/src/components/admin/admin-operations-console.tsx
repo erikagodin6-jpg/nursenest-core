@@ -135,8 +135,8 @@ export function AdminOperationsConsole({
         </div>
       </div>
 
-      {h.dataNotes.map((note) => (
-        <p key={note.slice(0, 24)} className="text-xs text-muted-foreground">
+      {h.dataNotes.map((note, i) => (
+        <p key={i} className="text-xs text-muted-foreground">
           {note}
         </p>
       ))}

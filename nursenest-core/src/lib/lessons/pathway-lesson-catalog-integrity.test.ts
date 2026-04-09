@@ -1,6 +1,8 @@
 /**
  * Catalog shape checks aligned with **shared core + scoped variant** authoring (see `scoped-gold-registry.ts`).
- * Run: `npx tsx --test src/lib/lessons/pathway-lesson-catalog-integrity.test.ts`
+ * Run:
+ * - `npx tsx --test src/lib/lessons/pathway-lesson-catalog-integrity.test.ts`
+ * - `npx tsx --test src/lib/lessons/pathway-lesson-catalog-redundancy.test.ts`
  */
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";

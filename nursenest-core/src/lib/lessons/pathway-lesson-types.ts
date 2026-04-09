@@ -36,6 +36,19 @@ export type PathwayLessonCountryScope = "us" | "ca" | "both";
 /** Relative exam weight for prioritization in expansion / hub ordering. */
 export type PathwayLessonExamRelevance = "high_yield" | "core" | "specialty";
 
+/**
+ * Optional authoring tag for cross-cutting exam domains (catalog / future DB metadata).
+ * Hub lists still group primarily by `topicSlug` / `bodySystem`; this supports filters and rationale linking.
+ */
+export type PathwayLessonContentDomain =
+  | "disease"
+  | "syndrome"
+  | "medication"
+  | "safety"
+  | "prioritization"
+  | "case_study"
+  | "other";
+
 export type PathwayLessonOmittedPremiumSection = {
   kind: PathwayLessonPremiumSectionKind;
   reason: string;
