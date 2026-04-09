@@ -109,3 +109,10 @@ export function practiceTestsWeakFocusHref(pathwayId: string | null): string {
   if (!pathwayId?.trim()) return base;
   return `${base}&pathwayId=${encodeURIComponent(pathwayId.trim())}`;
 }
+
+/** Signed-in practice-tests hub with pathway pre-selected (`PracticeTestsHubClient` reads `pathwayId`). */
+export function buildAppPracticeTestsHubHref(pathwayId: string): string {
+  const id = pathwayId.trim();
+  if (!id) return "/app/practice-tests";
+  return `/app/practice-tests?pathwayId=${encodeURIComponent(id)}`;
+}

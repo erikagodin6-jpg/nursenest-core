@@ -4,6 +4,7 @@ import Link from "next/link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import type { CatStudyFeedbackPayload } from "@/lib/practice-tests/types";
+import { isSafeInternalStudyLinkHref } from "@/lib/practice-tests/cat-practice-fallbacks";
 
 /**
  * Shared CAT Study Mode rationale surface — matches linear practice / question-bank rationale card classes.
@@ -21,7 +22,10 @@ export function CatStudyFeedbackPanel({
 }) {
   const layers = feedback.layers;
   const level2 = layers?.level2Sections ?? [];
-  const related = layers?.relatedLessons ?? [];
+  const relatedRaw = layers?.relatedLessons ?? [];
+  const relatedSafe = relatedRaw.filter(
+    (l) => l && typeof l.href === "string" && isSafeInternalStudyLinkHref(l.href),
+  );
   const level3 = layers?.level3Strategy?.trim() ?? "";
 
   return (
@@ -103,14 +107,14 @@ export function CatStudyFeedbackPanel({
                   </p>
                 ) : null}
               </details>
-              {related.length ? (
+              {relatedSafe.length ? (
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
                     Related learning (pathway-aware)
                   </p>
                   <ul className="mt-2 flex flex-wrap gap-2">
-                    {related.map((l, i) => (
-                      <li key={l.href}>
+                    {relatedSafe.map((l, i) => (
+                      <li key={`${l.href}-${i}`}>
                         <Link
                           href={l.href}
                           className="inline-flex rounded-full border border-primary/30 bg-primary/5 px-3 py-1 text-xs font-semibold text-primary hover:bg-primary/10"
@@ -123,7 +127,7 @@ export function CatStudyFeedbackPanel({
                           }
                         >
                           {i === 0 ? "Review this lesson — " : "Related — "}
-                          {l.title}
+                          {typeof l.title === "string" && l.title.trim() ? l.title : "Lesson"}
                         </Link>
                       </li>
                     ))}

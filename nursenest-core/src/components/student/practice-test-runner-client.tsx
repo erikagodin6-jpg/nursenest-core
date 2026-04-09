@@ -833,7 +833,7 @@ export function PracticeTestRunnerClient({
           userId={userId}
           scope={LearnerNoteScope.PRACTICE_TEST}
           contextId={testId}
-          topic={results.weakAreas[0] ?? null}
+          topic={(results.weakAreas ?? [])[0] ?? null}
           sourceLabel={`Practice test ${testId.slice(0, 8)}…`}
           userLabel={userLabel}
           flags={protectionFlags}
@@ -1054,9 +1054,18 @@ export function PracticeTestRunnerClient({
               </div>
               <div className="space-y-5 px-4 py-5 sm:px-6 sm:py-6">
                 <div className="nn-question-stem-wrap min-h-0">
-                  <p className="nn-question-stem">{current.stem}</p>
+                  <p className="nn-question-stem">
+                    {typeof current.stem === "string" && current.stem.trim().length > 0
+                      ? current.stem
+                      : "Question text is unavailable. Try reloading this item."}
+                  </p>
                 </div>
-                {isSata ? (
+                {optsCanonical.length === 0 ? (
+                  <p className="rounded-lg border border-border/60 bg-muted/30 px-4 py-3 text-sm text-muted-foreground">
+                    No answer choices were returned for this item. Use Retry, reload the test, or contact support if this
+                    persists.
+                  </p>
+                ) : isSata ? (
                   <ul className="nn-qopt-list" role="group" aria-label="Answer choices">
                     {optsCanonical.map((canonical, i) => {
                       const label = optsDisplay[i] ?? canonical;

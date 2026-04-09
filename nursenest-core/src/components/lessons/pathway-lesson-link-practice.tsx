@@ -193,7 +193,10 @@ export function PathwayLessonLinkToPractice({
   const questionsHref = qs ? `/app/questions?${qs}` : "/app/questions";
 
   const pathwayForCat = pathwayId?.trim() ? getExamPathwayById(pathwayId.trim()) : undefined;
-  const catHref = pathwayForCat ? buildExamPathwayPath(pathwayForCat, "cat") : "/app/exams";
+  /** Never fall back to `/app/exams` without pathway context — that page is cross-exam history / timed mocks, not CAT prep. */
+  const catHref = pathwayForCat
+    ? buildExamPathwayPath(pathwayForCat, "cat")
+    : loginWithCallback("/app/practice-tests");
 
   const lessonsForTopicHref = topicSlug?.trim()
     ? `/app/lessons?topicSlug=${encodeURIComponent(topicSlug.trim())}`
@@ -224,7 +227,7 @@ export function PathwayLessonLinkToPractice({
           href={catHref}
           className="inline-flex rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-muted"
         >
-          CAT prep
+          {pathwayForCat ? "CAT prep" : "Practice tests"}
         </Link>
       </div>
     </section>

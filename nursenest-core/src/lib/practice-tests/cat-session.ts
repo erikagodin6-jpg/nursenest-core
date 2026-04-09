@@ -511,14 +511,15 @@ export async function advanceCatPracticeTest(params: {
       });
       state = { ...state, catStudyAwaitingContinue: false };
       return catAfterScoredStep({
-      ids,
-      cursor,
-      state,
-      mergedAnswers: params.mergedAnswers,
-      config: params.config,
-      userId: params.userId,
-      entitlement: params.entitlement,
-    });
+        ids,
+        cursor,
+        state,
+        mergedAnswers: params.mergedAnswers,
+        config: params.config,
+        userId: params.userId,
+        entitlement: params.entitlement,
+      });
+    }
   }
 
   if (state.results.some((r) => r.questionId === currentId)) {

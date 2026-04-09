@@ -57,8 +57,20 @@ export async function enrichPracticeTestResultsWithCatCoach(
   adaptiveState: unknown,
   config: PracticeTestConfigJson,
   entitlement: AccessScope,
+  logContext?: { practiceTestId?: string },
 ): Promise<PracticeTestResultsJson> {
-  if (config.selectionMode !== "cat" || !results.catReport) return results;
+  if (config.selectionMode !== "cat") return results;
+
+  if (!results.catReport) {
+    safeServerLog("cat_results", "cat_results_render_missing_fields", {
+      event: "cat_results_render_missing_fields",
+      reason: "missing_cat_report",
+      practiceTestId: logContext?.practiceTestId?.slice(0, 16),
+      pathway: config.pathwayId ?? undefined,
+      mode: config.catExamFeedbackMode ?? "test",
+    });
+    return results;
+  }
 
   try {
     const state = parseAdaptiveState(adaptiveState);

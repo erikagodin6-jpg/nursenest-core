@@ -87,6 +87,7 @@ export async function buildCatStudyFeedback(
   entitlement: AccessScope,
   pathwayId: string | null = null,
 ): Promise<CatStudyFeedbackPayload | null> {
+  try {
   const base = questionAccessWhere(entitlement);
   const q = await prisma.examQuestion.findFirst({
     where: { AND: [{ id: questionId }, base] },
@@ -116,7 +117,6 @@ export async function buildCatStudyFeedback(
   const isCorrect = answerMatches(q.questionType, correctAnswer, userAnswer);
   const correctKeys = canonicalCorrectKeysForQuestion(q.questionType, correctAnswer);
 
-  try {
   let sections: CatStudyFeedbackSection[] = [];
   try {
     sections = buildRationaleSectionsFromQuestion({
@@ -192,13 +192,13 @@ export async function buildCatStudyFeedback(
     const message = e instanceof Error ? e.message : String(e);
     safeServerLog("cat_study", "cat_study_feedback_build_failed", {
       event: "cat_study_feedback_build_failed",
-      questionId: q.id.slice(0, 24),
+      questionId: questionId.slice(0, 24),
       error_message: message.slice(0, 400),
     });
     return buildMinimalCatStudyFeedbackPayload({
-      questionId: q.id,
-      isCorrect,
-      correctKeys,
+      questionId,
+      isCorrect: false,
+      correctKeys: [],
     });
   }
 }

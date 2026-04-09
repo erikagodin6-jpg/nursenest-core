@@ -9,7 +9,10 @@ import {
   type PathwayLessonProgressEventDetail,
 } from "@/lib/lessons/pathway-lesson-progress-events";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
-import { practiceTestsWeakFocusHref } from "@/lib/learner/study-loop-recommendations";
+import {
+  buildAppPracticeTestsHubHref,
+  practiceTestsWeakFocusHref,
+} from "@/lib/learner/study-loop-recommendations";
 
 export function PathwayLessonActions({
   pathwayId,
@@ -96,6 +99,7 @@ export function PathwayLessonActions({
   const topicLabelParam = topicLabel?.trim() ? `&topic=${encodeURIComponent(topicLabel.trim())}` : "";
   const qbHref = `/app/questions?pathwayId=${encodeURIComponent(pathwayId)}${topicCodeParam}${topicLabelParam}&preset=topic_drill`;
   const catWeakHref = practiceTestsWeakFocusHref(pathwayId);
+  const practiceTestsHubHref = buildAppPracticeTestsHubHref(pathwayId);
   const flashcardsHref = topicCode?.trim()
     ? `/app/flashcards?pathwayId=${encodeURIComponent(pathwayId)}&topicCode=${encodeURIComponent(topicCode.trim())}`
     : `/app/flashcards?pathwayId=${encodeURIComponent(pathwayId)}`;
@@ -131,11 +135,11 @@ export function PathwayLessonActions({
         {t("learner.studyLoop.catFromLesson")}
       </Link>
       <Link
-        href="/app/exams"
-        data-testid="pathway-lesson-cta-timed-exams"
+        href={practiceTestsHubHref}
+        data-testid="pathway-lesson-cta-practice-tests-hub"
         className="nn-study-pill-secondary"
       >
-        {t("learner.studyLoop.timedMocksHistory")}
+        {t("learner.studyLoop.practiceTestsHubPathway")}
       </Link>
       {!userId ? (
         <p className="text-sm text-muted">

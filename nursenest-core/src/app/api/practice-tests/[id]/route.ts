@@ -42,6 +42,7 @@ import { mergeQuestionApiPayload } from "@/lib/i18n/educational-content-overlay"
 import { resolveMergedQuestionOverlayBundle } from "@/lib/i18n/educational-translation-db";
 import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
 import { capturePracticeTestCompletedAnalytics } from "@/lib/observability/learner-product-analytics";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 const previewSelect = {
   id: true,
@@ -192,11 +193,26 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
   try {
     body = await req.json();
   } catch {
+    safeServerLog("cat_runner", "cat_runner_payload_invalid", {
+      event: "cat_runner_payload_invalid",
+      reason: "json_parse",
+      practiceTestId: id.slice(0, 16),
+    });
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
   const parsed = patchSchema.safeParse(body);
   if (!parsed.success) {
+    const actionProbe =
+      body && typeof body === "object" && body !== null && "action" in body
+        ? String((body as { action?: unknown }).action ?? "")
+        : "";
+    if (actionProbe === "cat_advance") {
+      safeServerLog("cat_runner", "cat_runner_payload_invalid", {
+        event: "cat_runner_payload_invalid",
+        practiceTestId: id.slice(0, 16),
+      });
+    }
     return NextResponse.json({ error: "Invalid body" }, { status: 400 });
   }
 
@@ -350,6 +366,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
         adv.adaptiveState,
         cfg,
         gate.entitlement,
+        { practiceTestId: id },
       );
       await prisma.practiceTest.update({
         where: { id },
@@ -403,6 +420,7 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
         fin.adaptiveState,
         cfg,
         gate.entitlement,
+        { practiceTestId: id },
       );
       await prisma.practiceTest.update({
         where: { id },

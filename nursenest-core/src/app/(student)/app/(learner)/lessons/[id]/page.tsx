@@ -33,6 +33,7 @@ import { getLearnerExamFraming } from "@/lib/learner/learner-exam-framing";
 import { loadRelatedExamQuestionStemsForPathwayLesson } from "@/lib/lessons/lesson-question-cross-links";
 import { PathwayLessonRelatedQuestions } from "@/components/lessons/pathway-lesson-related-questions";
 import { buildAppQuestionBankTopicDrillHref } from "@/components/lessons/pathway-lesson-link-practice";
+import { buildAppPracticeTestsHubHref } from "@/lib/learner/study-loop-recommendations";
 
 function LessonBody({ content }: { content: unknown }) {
   if (Array.isArray(content)) {
@@ -365,10 +366,10 @@ export default async function LessonDetailPage({ params }: Props) {
             {t("learner.lessons.detail.ctaQuestionBank")}
           </Link>
           <Link
-            href="/app/exams"
+            href={buildAppPracticeTestsHubHref(pathwayId)}
             className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-gray-50"
           >
-            {t("learner.lessons.detail.ctaTimedExam")}
+            {t("learner.lessons.detail.ctaPathwayPracticeTests")}
           </Link>
         </div>
       </main>

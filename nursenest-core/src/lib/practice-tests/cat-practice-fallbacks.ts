@@ -129,13 +129,19 @@ export function normalizeCatResultsCoachSnapshot(raw: unknown): CatResultsCoachS
 
   merged.studyNext = Array.isArray(merged.studyNext)
     ? merged.studyNext
-        .filter((s) => isRecord(s) && typeof s.title === "string")
+        .filter((s) => isRecord(s) && typeof s.title === "string" && String(s.title).trim().length > 0)
         .map((s) => ({
-          title: String(s.title),
+          title: String(s.title).trim(),
           reason: typeof s.reason === "string" ? s.reason : "",
           links: Array.isArray(s.links)
             ? s.links
-                .filter((l) => isRecord(l) && typeof l.href === "string" && typeof l.label === "string")
+                .filter(
+                  (l) =>
+                    isRecord(l) &&
+                    typeof l.href === "string" &&
+                    typeof l.label === "string" &&
+                    isSafeInternalStudyLinkHref(l.href),
+                )
                 .map((l) => ({
                   label: String(l.label),
                   href: String(l.href),
