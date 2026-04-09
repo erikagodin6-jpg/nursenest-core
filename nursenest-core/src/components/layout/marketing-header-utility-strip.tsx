@@ -18,7 +18,10 @@ import {
 export function MarketingHeaderUtilityStrip() {
   const { t, locale } = useMarketingI18n();
   const { region, setRegion } = useNursenestRegion();
-  const setRegionAndRefresh = useMarketingRegionToggleWithRefresh(setRegion);
+  const setRegionAndRefresh = useMarketingRegionToggleWithRefresh(setRegion, {
+    currentRegion: region,
+    surface: "utility_strip",
+  });
   const [langOpen, setLangOpen] = useState(false);
   const langRef = useRef<HTMLDivElement>(null);
 

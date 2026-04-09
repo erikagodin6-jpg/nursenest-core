@@ -67,6 +67,8 @@ export async function ProgrammaticSeoPage({
       <article className="nn-marketing-surface mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
         <BreadcrumbTrail items={crumbs} />
 
+        <ProgrammaticStudyHubBlock lessonsHref={lessons} questionsHref={questions} catHref={cat} t={t} />
+
         {page.practiceConversion && isUnifiedPracticeSlug(page.slug) ? (
           <ProgrammaticStudyModesHub slug={page.slug} locale={locale} />
         ) : null}
@@ -157,14 +159,19 @@ export async function ProgrammaticSeoPage({
           {page.sections.map((section, idx) => {
             const Tag = section.level === 2 ? "h2" : "h3";
             return (
-              <section key={idx} className="mb-10">
-                <Tag className="mb-3 text-xl font-semibold sm:text-2xl">{section.heading}</Tag>
-                {section.body.map((para, j) => (
-                  <p key={j} className="mb-3 leading-relaxed">
-                    {para}
-                  </p>
-                ))}
-              </section>
+              <Fragment key={idx}>
+                <section className="mb-10">
+                  <Tag className="mb-3 text-xl font-semibold sm:text-2xl">{section.heading}</Tag>
+                  {section.body.map((para, j) => (
+                    <p key={j} className="mb-3 leading-relaxed">
+                      {para}
+                    </p>
+                  ))}
+                </section>
+                {idx === 0 ? (
+                  <ProgrammaticMidPagePracticeCta questionsHref={questions} pricingHref={pricing} signupHref={signup} t={t} />
+                ) : null}
+              </Fragment>
             );
           })}
         </div>
@@ -183,10 +190,12 @@ export async function ProgrammaticSeoPage({
           </section>
         ) : null}
 
-        <section className="mt-14 rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]/40 p-6 sm:p-8">
-          <h2 className="text-xl font-semibold text-[var(--theme-body-text)]">{t("programmatic.studyInside.heading")}</h2>
-          <p className="mt-2 text-sm leading-relaxed text-[var(--theme-body-text)]/85">{t("programmatic.studyInside.body")}</p>
-          <ul className="mt-6 flex flex-col gap-2 text-sm font-medium text-primary sm:flex-row sm:flex-wrap sm:gap-4">
+        <ProgrammaticFinalFunnelCta questionsHref={questions} signupHref={signup} pricingHref={pricing} t={t} />
+
+        <section className="mt-10 rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] p-6 sm:p-8">
+          <h2 className="text-lg font-semibold text-[var(--theme-body-text)]">{t("programmatic.studyInside.moreHeading")}</h2>
+          <p className="mt-2 text-sm leading-relaxed text-[var(--theme-body-text)]/85">{t("programmatic.studyInside.moreBody")}</p>
+          <ul className="mt-5 flex flex-col gap-2 text-sm font-medium text-primary sm:flex-row sm:flex-wrap sm:gap-x-6 sm:gap-y-2">
             <li>
               <Link href={lessons} className="underline-offset-4 hover:underline">
                 {t("programmatic.studyInside.linkExamLessons")}
@@ -195,6 +204,11 @@ export async function ProgrammaticSeoPage({
             <li>
               <Link href={questions} className="underline-offset-4 hover:underline">
                 {t("programmatic.studyInside.linkPracticeQuestions")}
+              </Link>
+            </li>
+            <li>
+              <Link href={cat} className="underline-offset-4 hover:underline">
+                {t("programmatic.studyInside.linkCat")}
               </Link>
             </li>
             <li>

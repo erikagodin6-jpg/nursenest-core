@@ -38,7 +38,7 @@ export function PathwayLaunchEssentials({ bundle, lessonsBasePath }: Props) {
           <p className="nn-marketing-body-sm mt-2 max-w-2xl text-[var(--theme-muted-text)]">{spec.subhead}</p>
         </div>
         <Link
-          href="#topic-cluster-nav"
+          href="#pathway-lesson-library"
           className="nn-marketing-body-sm shrink-0 font-semibold text-primary underline underline-offset-2 hover:text-primary/90"
         >
           Jump to full library

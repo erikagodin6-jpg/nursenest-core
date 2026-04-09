@@ -345,38 +345,40 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         </div>
       ) : null}
 
-      {isUsNclexPnHub ? (
-        <NclexPnLessonsHub
-          pathway={pathway}
-          lessons={lessons}
-          lessonsBasePath={base}
-          topicClusters={topics}
-          progressMap={progressMap}
-        />
-      ) : isUsFnpHub ? (
-        <FnpLessonsHub pathway={pathway} lessons={lessons} lessonsBasePath={base} topicClusters={topics} progressMap={progressMap} />
-      ) : isNclexRnHub ? (
-        <NclexRnLessonsHub
-          pathway={pathway}
-          lessons={lessons}
-          lessonsBasePath={base}
-          topicClusters={topics}
-          region={nclexRnRegion}
-          progressMap={progressMap}
-        />
-      ) : (
-        <div className="mt-10">
-          <PathwayLessonsGroupedHub
+      <div id="pathway-lesson-library">
+        {isUsNclexPnHub ? (
+          <NclexPnLessonsHub
             pathway={pathway}
             lessons={lessons}
             lessonsBasePath={base}
             topicClusters={topics}
             progressMap={progressMap}
-            canShowProgressMap={canShowProgressMap}
-            visualTone={pathway.examFamily === ExamFamily.NP ? "np" : "default"}
           />
-        </div>
-      )}
+        ) : isUsFnpHub ? (
+          <FnpLessonsHub pathway={pathway} lessons={lessons} lessonsBasePath={base} topicClusters={topics} progressMap={progressMap} />
+        ) : isNclexRnHub ? (
+          <NclexRnLessonsHub
+            pathway={pathway}
+            lessons={lessons}
+            lessonsBasePath={base}
+            topicClusters={topics}
+            region={nclexRnRegion}
+            progressMap={progressMap}
+          />
+        ) : (
+          <div className="mt-10">
+            <PathwayLessonsGroupedHub
+              pathway={pathway}
+              lessons={lessons}
+              lessonsBasePath={base}
+              topicClusters={topics}
+              progressMap={progressMap}
+              canShowProgressMap={canShowProgressMap}
+              visualTone={pathway.examFamily === ExamFamily.NP ? "np" : "default"}
+            />
+          </div>
+        )}
+      </div>
 
       <MarketingStudyCrossLinks className="mt-14" />
 

@@ -14,6 +14,7 @@ export function captureLearnerProductEvent(
   props: Record<string, string | number | boolean | undefined> = {},
 ): void {
   void captureServerEvent(analyticsDistinctId(userId), event, {
+    actor: "authenticated",
     ...props,
     country: entitlement.country ?? undefined,
     tier: entitlement.tier ?? undefined,

@@ -20,6 +20,8 @@ import {
   marketingRegionToggleShellMobileRow,
 } from "@/lib/theme/marketing-region-toggle";
 import { defaultNursingExamMarketingHub } from "@/lib/marketing/marketing-exam-navigation";
+import { trackClientEvent } from "@/lib/observability/posthog-client";
+import { PH } from "@/lib/observability/posthog-conversion-events";
 
 const NAV_LINK_CLASS =
   "nn-marketing-body-sm font-medium tracking-tight text-[var(--theme-menu-text)] transition-colors duration-200 hover:text-primary";
@@ -27,7 +29,10 @@ const NAV_LINK_CLASS =
 export function SiteHeader() {
   const { t, locale } = useMarketingI18n();
   const { region, setRegion } = useNursenestRegion();
-  const setRegionAndRefresh = useMarketingRegionToggleWithRefresh(setRegion);
+  const setRegionAndRefresh = useMarketingRegionToggleWithRefresh(setRegion, {
+    currentRegion: region,
+    surface: "site_header",
+  });
   const [mobileOpen, setMobileOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const langRef = useRef<HTMLDivElement>(null);

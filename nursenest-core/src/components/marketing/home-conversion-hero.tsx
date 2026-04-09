@@ -26,7 +26,10 @@ const PREVIEW_SLIDE_INDICES: readonly number[] = [0, 1, 2];
 export function HomeConversionHero() {
   const { t, locale } = useMarketingI18n();
   const { region, setRegion } = useNursenestRegion();
-  const setRegionAndRefresh = useMarketingRegionToggleWithRefresh(setRegion);
+  const setRegionAndRefresh = useMarketingRegionToggleWithRefresh(setRegion, {
+    currentRegion: region,
+    surface: "home_hero",
+  });
 
   const slides = useMemo(
     () => buildHomepageHeroSlidesAtIndices(t, PREVIEW_SLIDE_INDICES),

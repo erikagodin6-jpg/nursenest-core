@@ -281,7 +281,7 @@ export async function loadAdminStudyPerformanceAnalytics(
         COUNT(*)::bigint AS n,
         AVG((results->>'accuracyPct')::double precision) AS avg
       FROM "practice_tests"
-      WHERE status = 'COMPLETED'::"PracticeTestStatus"
+      WHERE status = 'COMPLETED'
         AND "updatedAt" >= ${q.from} AND "updatedAt" <= ${q.to}
         AND (
           (config->>'selectionMode') = 'cat'
@@ -296,7 +296,7 @@ export async function loadAdminStudyPerformanceAnalytics(
       SELECT
         NULLIF(TRIM(config->>'pathwayId'), '') AS pathway_id,
         COUNT(*)::bigint AS n,
-        COUNT(*) FILTER (WHERE status = 'COMPLETED'::"PracticeTestStatus")::bigint AS done
+        COUNT(*) FILTER (WHERE status = 'COMPLETED')::bigint AS done
       FROM "practice_tests"
       WHERE "startedAt" >= ${q.from} AND "startedAt" <= ${q.to}
         AND (
@@ -316,7 +316,7 @@ export async function loadAdminStudyPerformanceAnalytics(
     const [es] = await prisma.$queryRaw<[{ cat: bigint; done: bigint }]>`
       SELECT
         COUNT(*)::bigint AS cat,
-        COUNT(*) FILTER (WHERE status = 'COMPLETED'::"ExamSessionStatus")::bigint AS done
+        COUNT(*) FILTER (WHERE status = 'COMPLETED')::bigint AS done
       FROM "ExamSession"
       WHERE "updatedAt" >= ${q.from} AND "updatedAt" <= ${q.to}
         AND adaptive_state IS NOT NULL
@@ -330,7 +330,7 @@ export async function loadAdminStudyPerformanceAnalytics(
         NULLIF(TRIM(results->>'readinessLabel'), '') AS label,
         COUNT(*)::bigint AS n
       FROM "practice_tests"
-      WHERE status = 'COMPLETED'::"PracticeTestStatus"
+      WHERE status = 'COMPLETED'
         AND "updatedAt" >= ${q.from} AND "updatedAt" <= ${q.to}
         AND adaptive_state IS NOT NULL
         AND results IS NOT NULL

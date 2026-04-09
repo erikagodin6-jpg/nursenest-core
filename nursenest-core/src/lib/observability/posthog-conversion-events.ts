@@ -77,6 +77,26 @@ export const PH = {
   funnelSubscriptionRenewed: "funnel_subscription_renewed",
   /** Learner shell: user clicked primary nav Lessons. */
   learnerNavLessonsClick: "learner_nav_lessons_click",
+  /** Learner shell or marketing chrome: nav intent (prefer over per-link legacy events). */
+  learnerNavClick: "learner_nav_click",
+  marketingNavClick: "marketing_nav_click",
+  /** Marketing: US/CA preference toggle (dedupe: only when region actually changes). */
+  marketingRegionToggled: "marketing_region_toggled",
+  /** Learner: first progress row for a lesson (pathway synthetic id or CMS lesson id). */
+  learnerLessonStarted: "learner_lesson_started",
+  learnerLessonCompleted: "learner_lesson_completed",
+  /** Learner: user graded enough questions to finish the configured session batch. */
+  learnerQuestionBankSessionCompleted: "learner_question_bank_session_completed",
+  /** Paywall block shown in app (once per mount; context distinguishes placement). */
+  paywallEncounter: "paywall_encounter",
+  /** Learner saved target exam pathway on exam plan settings. */
+  learnerPathwayPreferenceSaved: "learner_pathway_preference_saved",
+  /** Blog distribution footer / related links (no query strings; use link_kind). */
+  blogDistributionLinkClick: "blog_distribution_link_click",
+  /** Public tools hub: user opened a tool. */
+  marketingToolOpenClick: "marketing_tool_open_click",
+  /** Marketing pathway strip (hub shortcuts). */
+  marketingSubNavClick: "marketing_sub_nav_click",
   /** Question bank: first batch loaded for a new session (not append). */
   learnerQuestionBankSessionStarted: "learner_question_bank_session_started",
   /** Practice test API: adaptive (CAT) session created. */

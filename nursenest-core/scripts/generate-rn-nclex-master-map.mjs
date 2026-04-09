@@ -149,6 +149,7 @@ const CATEGORIES = {
     ["Administering Medication to Infants", "C"],
   ],
   maternity_newborn: [
+    ["Newborn Hypoglycemia", "A"],
     ["Eclampsia", "A"],
     ["HELLP Syndrome", "A"],
     ["Placenta Previa", "A"],
@@ -249,8 +250,14 @@ const PRIMARY_OWNER = {
   Linezolid: { primaryCategoryId: "pharmacology_master", note: "Cross-listed from hematology_oncology_immunology." },
   Oxytocin: { primaryCategoryId: "pharmacology_master", note: "Cross-listed from maternity_newborn." },
   Misoprostol: { primaryCategoryId: "pharmacology_master", note: "Cross-listed from maternity_newborn." },
-  Phenelzine: { primaryCategoryId: "pharmacology_master", note: "Cross-listed from mental_health (tyramine crisis in mental_health spine links here)." },
-  Ziprasidone: { primaryCategoryId: "pharmacology_master", note: "Cross-listed from mental_health." },
+  "Phenelzine and Tyramine Crisis": {
+    primaryCategoryId: "pharmacology_master",
+    note: "Mental health category lists same title; single monograph with tyramine dietary counseling.",
+  },
+  "Ziprasidone and QT Prolongation": {
+    primaryCategoryId: "pharmacology_master",
+    note: "Mental health cross-list; QT/ECG monitoring emphasized.",
+  },
   Memantine: { primaryCategoryId: "pharmacology_master", note: "Cross-listed from mental_health." },
   // Conditions
   "Pulmonary Embolism": { primaryCategoryId: "cardiovascular", note: "Also emergency/critical; one RN lesson, PE pathophys + nursing + anticoag." },
@@ -270,7 +277,10 @@ const PRIMARY_OWNER = {
   Epiglottitis: { primaryCategoryId: "respiratory", note: "Pediatrics cross-index." },
   "Wilms Tumor": { primaryCategoryId: "renal_genitourinary", note: "Pediatrics oncology nursing cross-index." },
   "Iron Deficiency Anemia": { primaryCategoryId: "hematology_oncology_immunology", note: "Pediatrics cross-index." },
-  "Newborn Hypoglycemia": { primaryCategoryId: "endocrine_metabolic_fluids", note: "Maternity list cross-index; neonatal management." },
+  "Newborn Hypoglycemia": {
+    primaryCategoryId: "maternity_newborn",
+    note: "Cross-listed from endocrine_metabolic_fluids; canonical lesson emphasizes newborn assessment, feeds, and protocols.",
+  },
 };
 
 const BUILD_ORDER = [
@@ -378,6 +388,8 @@ function main() {
       uniqueLessonCount: lessons.length,
       byTier,
       byPrimaryCategory: countPrimary(lessons),
+      /** Includes secondaryCategoryIds so hub “coverage” matches cross-listed titles. */
+      visibleInCategory: visibleCounts(lessons),
     },
     lessons,
   };
@@ -408,6 +420,30 @@ function countPrimary(lessons) {
   const o = {};
   for (const l of lessons) {
     o[l.primaryCategoryId] = (o[l.primaryCategoryId] ?? 0) + 1;
+  }
+  return o;
+}
+
+function visibleCounts(lessons) {
+  const ids = [
+    "cardiovascular",
+    "respiratory",
+    "neurological",
+    "gastrointestinal",
+    "renal_genitourinary",
+    "endocrine_metabolic_fluids",
+    "hematology_oncology_immunology",
+    "pediatrics",
+    "maternity_newborn",
+    "mental_health",
+    "emergency_critical_perioperative",
+    "pharmacology_master",
+  ];
+  const o = {};
+  for (const cid of ids) {
+    o[cid] = lessons.filter(
+      (l) => l.primaryCategoryId === cid || (l.secondaryCategoryIds && l.secondaryCategoryIds.includes(cid)),
+    ).length;
   }
   return o;
 }
