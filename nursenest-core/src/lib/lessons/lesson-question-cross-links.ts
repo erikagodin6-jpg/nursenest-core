@@ -170,11 +170,7 @@ function dedupeOrClauses(clauses: Prisma.ExamQuestionWhereInput[]): Prisma.ExamQ
 /** Keep OR fan-in bounded when RN bridge + title tokens are merged. */
 const MAX_RELATED_QUESTION_OR_CLAUSES = 26;
 
-/**
- * Published exam questions in the pathway’s marketing-scoped pool that match the lesson (topic labels/tokens
- * from title + slug, optional `bodySystem`, optional `tags` has `topicSlug`). Single bounded `findMany`; no in-memory fallbacks.
- */
-export async function loadRelatedExamQuestionStemsForPathwayLesson(args: {
+export type RelatedExamQuestionPathwayLessonArgs = {
   pathway: ExamPathwayDefinition;
   /** Lesson display title — tokenized for `topic` substring matches. */
   lessonTitle: string;
@@ -184,7 +180,15 @@ export async function loadRelatedExamQuestionStemsForPathwayLesson(args: {
   bodySystem?: string | null;
   /** Catalog / DB lesson slug — enables RN NCLEX bridge hints (single query). */
   lessonSlug?: string;
-}): Promise<RelatedExamQuestionStem[]> {
+};
+
+/**
+ * Same `AND` + `OR` predicate as {@link loadRelatedExamQuestionStemsForPathwayLesson} (pathway pool + lesson match).
+ * Use for bounded `count` / audits; does not execute a query.
+ */
+export function buildRelatedExamQuestionWhereForPathwayLesson(
+  args: RelatedExamQuestionPathwayLessonArgs,
+): Prisma.ExamQuestionWhereInput | null {
   const { pathway, lessonTitle, lessonTopic, lessonTopicSlug, bodySystem, lessonSlug } = args;
   const base = pathwayExamQuestionMarketingWhere(pathway);
   const topicTrim = lessonTopic.trim();
@@ -216,14 +220,25 @@ export async function loadRelatedExamQuestionStemsForPathwayLesson(args: {
 
   const orMerged = dedupeOrClauses(orClauses).slice(0, MAX_RELATED_QUESTION_OR_CLAUSES);
 
-  if (orMerged.length === 0) return [];
+  if (orMerged.length === 0) return null;
+
+  return { AND: [base, { OR: orMerged }] };
+}
+
+/**
+ * Published exam questions in the pathway’s marketing-scoped pool that match the lesson (topic labels/tokens
+ * from title + slug, optional `bodySystem`, optional `tags` has `topicSlug`). Single bounded `findMany`; no in-memory fallbacks.
+ */
+export async function loadRelatedExamQuestionStemsForPathwayLesson(
+  args: RelatedExamQuestionPathwayLessonArgs,
+): Promise<RelatedExamQuestionStem[]> {
+  const where = buildRelatedExamQuestionWhereForPathwayLesson(args);
+  if (!where) return [];
 
   return withDatabaseFallback(
     async () => {
       const rows = await prisma.examQuestion.findMany({
-        where: {
-          AND: [base, { OR: orMerged }],
-        },
+        where,
         select: { id: true, stem: true },
         orderBy: { updatedAt: "desc" },
         take: RELATED_EXAM_QUESTIONS_CAP,
