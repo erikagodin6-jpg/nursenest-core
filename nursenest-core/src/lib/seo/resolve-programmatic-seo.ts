@@ -3,6 +3,7 @@ import {
   getCrossClusterLinks,
   getProgrammaticSeoPage,
   getRelatedProgrammaticPages,
+  MAX_RELATED_PROGRAMMATIC_LINKS,
 } from "@/lib/seo/programmatic-registry";
 import { mergeProgrammaticPage } from "@/lib/seo/merge-programmatic-page";
 import { loadProgrammaticOverlayBundle } from "@/lib/seo/load-programmatic-overlay";
@@ -20,7 +21,7 @@ export function resolveProgrammaticSeoForLocale(slug: string, locale: string): P
   const bundle = loadProgrammaticOverlayBundle(locale);
   const page = mergeProgrammaticPage(base, bundle[slug]);
 
-  const relatedRaw = getRelatedProgrammaticPages(slug, 6);
+  const relatedRaw = getRelatedProgrammaticPages(slug, MAX_RELATED_PROGRAMMATIC_LINKS);
   const related = relatedRaw.map((r) => ({
     slug: r.slug,
     title: mergeProgrammaticPage(r, bundle[r.slug]).title,

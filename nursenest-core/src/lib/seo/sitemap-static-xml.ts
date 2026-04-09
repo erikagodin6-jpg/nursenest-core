@@ -38,13 +38,27 @@ import { PATHWAY_LESSON_SITEMAP_LOCALE } from "@/lib/lessons/pathway-lesson-loca
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { resolveCanonicalSiteOrigin } from "@/lib/seo/canonical-site";
 import { CORE_HOSTED_MARKETING_LOCALES } from "@/lib/i18n/marketing-locale-policy";
-import { getAllProgrammaticSlugs } from "@/lib/seo/programmatic-registry";
+import {
+  getAllProgrammaticSlugs,
+  MAX_PROGRAMMATIC_SEO_SITEMAP_SLUGS,
+} from "@/lib/seo/programmatic-registry";
 import { getAllToolSlugs } from "@/lib/tools/tool-registry";
 
 const SORTED_LOCALES = [...CORE_HOSTED_MARKETING_LOCALES].sort();
 
 /** Hard cap for pathway lesson + topic URLs in core sitemap (prevents multi‑GB XML / OOM). */
 const MAX_PATHWAY_DERIVED_SITEMAP_URLS = 48_000;
+
+/** Programmatic SEO slugs for sitemap URL lists (bounded; logs if registry exceeds cap). */
+function getProgrammaticSlugsForSitemap(): string[] {
+  const all = getAllProgrammaticSlugs();
+  if (all.length <= MAX_PROGRAMMATIC_SEO_SITEMAP_SLUGS) return all;
+  safeServerLog("seo", "programmatic_sitemap_slug_cap", {
+    total: all.length,
+    cap: MAX_PROGRAMMATIC_SEO_SITEMAP_SLUGS,
+  });
+  return all.slice(0, MAX_PROGRAMMATIC_SEO_SITEMAP_SLUGS);
+}
 
 export function resolveSitemapOrigin(): string {
   return resolveCanonicalSiteOrigin();
@@ -259,7 +273,7 @@ export async function collectCoreUrls(origin: string): Promise<string[]> {
 /** seo-pages.xml — English canonical programmatic URLs at `/{slug}` (rewritten to /seo/[slug] internally). */
 export function collectSeoPagesUrls(origin: string): string[] {
   const o = normalizeOrigin(origin);
-  return getAllProgrammaticSlugs()
+  return getProgrammaticSlugsForSitemap()
     .filter((slug) => !(slug in PROGRAMMATIC_SLUG_TO_PATHWAY_PATH))
     .map((slug) => `${o}/${slug}`);
 }
@@ -289,7 +303,7 @@ export function collectLocaleMarketingUrls(origin: string, locale: string): stri
   urls.push(add(`/${locale}/signup`));
   urls.push(add(`/${locale}/forgot-password`));
   urls.push(add(`/${locale}/reset-password`));
-  for (const slug of getAllProgrammaticSlugs()) {
+  for (const slug of getProgrammaticSlugsForSitemap()) {
     if (slug in PROGRAMMATIC_SLUG_TO_PATHWAY_PATH) continue;
     urls.push(add(`/${locale}/${slug}`));
   }

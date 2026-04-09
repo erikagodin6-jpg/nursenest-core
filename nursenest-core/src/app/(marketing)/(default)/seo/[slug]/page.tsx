@@ -5,11 +5,12 @@ import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { buildProgrammaticMetadata } from "@/lib/seo/programmatic-metadata";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
+import { PROGRAMMATIC_SEO_ISR_REVALIDATE_SECONDS } from "@/lib/seo/programmatic-registry";
 import { resolveProgrammaticSeoForLocale } from "@/lib/seo/resolve-programmatic-seo";
 
 /** Build-time prerender disabled: full slug list inflates `.next` on disk-limited hosts; pages are ISR on demand. */
 export const dynamicParams = true;
-export const revalidate = 86400;
+export const revalidate = PROGRAMMATIC_SEO_ISR_REVALIDATE_SECONDS;
 
 export function generateStaticParams(): { slug: string }[] {
   return [];

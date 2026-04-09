@@ -23,15 +23,35 @@ export function HomeExamSelectionSection() {
     const titleKey =
       id === "pn"
         ? region === "US"
-          ? ("home.conversion.examCard.pnTitleUS" as const)
-          : ("home.conversion.examCard.pnTitleCA" as const)
-        : (`home.conversion.examCard.${id}Title` as const);
-    const descKey = (`home.conversion.examCard.${id}Desc` as const) as
-      | "home.conversion.examCard.rnDesc"
-      | "home.conversion.examCard.pnDesc"
-      | "home.conversion.examCard.npDesc"
-      | "home.conversion.examCard.alliedDesc";
-    const ctaKey = (`home.conversion.examCard.cta${id === "allied" ? "Allied" : id === "np" ? "Np" : id === "pn" ? "Pn" : "Rn"}` as const);
+          ? "home.conversion.examCard.pnTitleUS"
+          : "home.conversion.examCard.pnTitleCA"
+        : id === "np"
+          ? region === "US"
+            ? "home.conversion.examCard.npTitleUS"
+            : "home.conversion.examCard.npTitleCA"
+          : id === "rn"
+            ? "home.conversion.examCard.rnTitle"
+            : "home.conversion.examCard.alliedTitle";
+    const descKey =
+      id === "pn"
+        ? region === "US"
+          ? "home.conversion.examCard.pnDescUS"
+          : "home.conversion.examCard.pnDescCA"
+        : id === "np"
+          ? region === "US"
+            ? "home.conversion.examCard.npDescUS"
+            : "home.conversion.examCard.npDescCA"
+          : id === "rn"
+            ? "home.conversion.examCard.rnDesc"
+            : "home.conversion.examCard.alliedDesc";
+    const ctaKey =
+      id === "rn"
+        ? "home.conversion.examCard.ctaRn"
+        : id === "pn"
+          ? "home.conversion.examCard.ctaPn"
+          : id === "np"
+            ? "home.conversion.examCard.ctaNp"
+            : "home.conversion.examCard.ctaAllied";
 
     return { id, href, titleKey, descKey, ctaKey };
   });

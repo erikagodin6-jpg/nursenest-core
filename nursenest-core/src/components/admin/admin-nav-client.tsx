@@ -13,6 +13,7 @@ import {
   Globe,
   ImageIcon,
   LayoutDashboard,
+  LineChart,
   Layers,
   Menu,
   Search,
@@ -44,6 +45,7 @@ const GROUPS: NavGroup[] = [
     title: "Growth & revenue",
     items: [
       { href: "/admin/analytics", label: "Analytics hub", icon: BarChart3 },
+      { href: "/admin/analytics/users", label: "User analytics", icon: LineChart },
       { href: "/admin/users", label: "Users", icon: Users },
       { href: "/admin/subscriptions", label: "Revenue & subscriptions", icon: Activity },
     ],
@@ -110,6 +112,8 @@ const GROUPS: NavGroup[] = [
 
 function isActive(pathname: string, href: string): boolean {
   if (href === "/admin") return pathname === "/admin";
+  /** Avoid highlighting the parent “Analytics hub” when a child route (e.g. /admin/analytics/users) is open. */
+  if (href === "/admin/analytics") return pathname === "/admin/analytics";
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 

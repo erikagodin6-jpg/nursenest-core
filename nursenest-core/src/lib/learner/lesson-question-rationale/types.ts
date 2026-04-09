@@ -65,6 +65,8 @@ export type QuestionRationaleSignals = {
   tags: string[];
   /** From {@link deriveTopicCode} / bank metadata. */
   topicCode?: string | null;
+  /** Optional stem snippet for token overlap with lesson titles (graded questions only). */
+  stem?: string | null;
 };
 
 export type RankedLessonSlug = {

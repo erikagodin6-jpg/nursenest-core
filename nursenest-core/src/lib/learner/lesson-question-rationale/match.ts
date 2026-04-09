@@ -20,11 +20,13 @@ const SLUG_ALLOWLIST = new Set<string>([
 ]);
 
 export function haystackFromQuestionSignals(signals: QuestionRationaleSignals): string {
+  const stem = typeof signals.stem === "string" ? signals.stem.trim().slice(0, 520) : "";
   const parts = [
     ...signals.tags.map((t) => String(t)),
     signals.topic ?? "",
     signals.subtopic ?? "",
     signals.bodySystem ?? "",
+    stem,
   ];
   return parts.join(" ").toLowerCase();
 }

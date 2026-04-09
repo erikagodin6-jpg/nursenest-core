@@ -24,6 +24,12 @@ export default async function AdminAnalyticsPage() {
           <Link href="/admin" className="text-primary underline">
             ← Overview
           </Link>
+          <Link href="/admin/inventory" className="text-muted-foreground underline">
+            Inventory
+          </Link>
+          <Link href="/admin/hub/publishing" className="text-muted-foreground underline">
+            Publishing
+          </Link>
           <Link href="/admin/operations" className="text-muted-foreground underline">
             Operations
           </Link>

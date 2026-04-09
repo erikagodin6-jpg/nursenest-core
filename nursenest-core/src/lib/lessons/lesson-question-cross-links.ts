@@ -101,7 +101,10 @@ function rawTokensFromNormalizedSource(source: string): string[] {
     .replace(/[^a-z0-9]+/g, " ")
     .trim();
   if (!collapsed) return [];
-  return collapsed.split(/\s+/).filter(Boolean);
+  return collapsed
+    .split(/\s+/)
+    .map((t) => t.trim())
+    .filter((t) => t.length > 0);
 }
 
 function shouldEmitContainsToken(t: string): boolean {
@@ -112,25 +115,27 @@ function shouldEmitContainsToken(t: string): boolean {
 }
 
 /**
- * Deterministic: title tokens first, then slug-derived tokens; dedupe; cap {@link MAX_TOPIC_CONTAINS_TOKENS}.
- * Additive `topic.contains` only — exact `lessonTopic` / slug-phrase / bodySystem / tags stay separate.
+ * Deterministic: emit eligible title tokens in order, then slug tokens not already seen; first-seen wins dedupe.
+ * At most {@link MAX_TOPIC_CONTAINS_TOKENS} `topic.contains` branches — additive only (exact topic / body / tags unchanged).
  */
 function deriveTopicMatchTokens(lessonTitle: string, topicSlug: string): string[] {
   const titlePart = rawTokensFromNormalizedSource(lessonTitle);
   const slugPart = rawTokensFromNormalizedSource(topicSlug);
   const seen = new Set<string>();
   const out: string[] = [];
-  for (const t of titlePart) {
-    if (!shouldEmitContainsToken(t) || seen.has(t)) continue;
+
+  const pushIfEligible = (t: string): boolean => {
+    if (!shouldEmitContainsToken(t) || seen.has(t)) return false;
     seen.add(t);
     out.push(t);
-    if (out.length >= MAX_TOPIC_CONTAINS_TOKENS) return out;
+    return out.length >= MAX_TOPIC_CONTAINS_TOKENS;
+  };
+
+  for (const t of titlePart) {
+    if (pushIfEligible(t)) return out;
   }
   for (const t of slugPart) {
-    if (!shouldEmitContainsToken(t) || seen.has(t)) continue;
-    seen.add(t);
-    out.push(t);
-    if (out.length >= MAX_TOPIC_CONTAINS_TOKENS) break;
+    if (pushIfEligible(t)) return out;
   }
   return out;
 }
