@@ -131,15 +131,21 @@ export function buildPersistedSeoBundle(
   };
 }
 
-/** `schemaSummary` JSON for legacy readers + sitemap-style hints. */
-export function buildSchemaSummaryPayload(seo: BlogSeoBundle): string {
+export type BlogSchemaSummaryExtra = {
+  /** Editorial suggestions — implementation may emit JSON-LD after validation. */
+  schemaOpportunities?: Array<{ type: string; rationale: string }>;
+};
+
+/** `schemaSummary` JSON for legacy readers + sitemap-style hints (version bumps when fields added). */
+export function buildSchemaSummaryPayload(seo: BlogSeoBundle, extra?: BlogSchemaSummaryExtra): string {
   return JSON.stringify({
-    version: 2,
+    version: 3,
     type: "BlogPosting",
     breadcrumbs: seo.normalizedBreadcrumbs,
     canonicalPath: seo.canonicalPath,
     emitFaqSchema: seo.emitFaqSchema,
     focusKeywords: seo.focusKeywords,
+    ...(extra?.schemaOpportunities?.length ? { schemaOpportunities: extra.schemaOpportunities } : {}),
   });
 }
 

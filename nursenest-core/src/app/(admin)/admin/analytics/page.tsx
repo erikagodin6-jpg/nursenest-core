@@ -37,7 +37,10 @@ export default async function AdminAnalyticsPage() {
             Diagnostics
           </Link>
           <Link href="/admin/analytics/users" className="text-primary underline">
-            User analytics →
+            User analytics
+          </Link>
+          <Link href="/admin/analytics/funnels" className="text-primary underline">
+            Funnels →
           </Link>
         </div>
       </div>

@@ -6,8 +6,8 @@
  *
  * Paths stay aligned with `marketing-entry-routes.ts` and programmatic SEO slugs — do not rename routes here.
  *
- * **NP:** US → `/np-exam-practice-questions` (programmatic umbrella listing FNP, AGPCNP, PMHNP). Canada → canonical CNPLE hub
- * (`/canada/np/cnple`) for product truth + waitlist/upcoming messaging.
+ * **NP:** US → default pathway hub `/us/np/fnp` (FNP). Canada → canonical CNPLE hub (`/canada/np/cnple`).
+ * Programmatic umbrella `/np-exam-practice-questions` remains for SEO; primary nav and CTAs use pathway hubs.
  *
  * **Strip vs hero:** RN/PN/Allied use canonical pathway hub URLs; NP US uses the umbrella above.
  * Order is always RN → PN → NP → Allied (`EXAM_PATHWAY_ORDER`).
@@ -45,7 +45,8 @@ export function marketingExamHubPath(region: MarketingRegionToggle, id: CountryE
       return pnPrimaryHub(region);
     case "np": {
       if (isUs) {
-        return NP.practiceProgrammatic;
+        const usNp = getExamPathwayById("us-np-fnp");
+        return usNp ? buildExamPathwayPath(usNp) : NP.practiceProgrammatic;
       }
       const caNp = getExamPathwayById("ca-np-cnple");
       return caNp ? buildExamPathwayPath(caNp) : NP.practiceProgrammaticCa;

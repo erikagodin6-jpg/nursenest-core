@@ -8,6 +8,10 @@ import { requireSubscriberSession, notSubscribedResponse } from "@/lib/entitleme
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import {
+  captureStudyProgressFunnelAfterUpsert,
+  loadStudyFunnelBeforeSnapshot,
+} from "@/lib/observability/study-funnel-capture";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 
 const bodySchema = z
@@ -80,6 +84,8 @@ export async function POST(req: Request) {
       select: { completed: true, engagedAt: true },
     });
 
+    const funnelBefore = await loadStudyFunnelBeforeSnapshot(userId);
+
     if (wantsUncomplete) {
       await prisma.progress.upsert({
         where: { userId_lessonId: { userId, lessonId: syntheticLessonId } },
@@ -91,6 +97,7 @@ export async function POST(req: Request) {
         },
         update: { completed: false },
       });
+      captureStudyProgressFunnelAfterUpsert(userId, gate.entitlement, funnelBefore);
       return NextResponse.json({ ok: true });
     }
 
@@ -107,6 +114,7 @@ export async function POST(req: Request) {
           engagedAt: existing?.engagedAt ?? new Date(),
         },
       });
+      captureStudyProgressFunnelAfterUpsert(userId, gate.entitlement, funnelBefore);
       return NextResponse.json({ ok: true });
     }
 
@@ -118,6 +126,7 @@ export async function POST(req: Request) {
           engagedAt: existing?.engagedAt ?? new Date(),
         },
       });
+      captureStudyProgressFunnelAfterUpsert(userId, gate.entitlement, funnelBefore);
       return NextResponse.json({ ok: true });
     }
 
@@ -127,6 +136,7 @@ export async function POST(req: Request) {
         create: { userId, lessonId: syntheticLessonId, completed: false },
         update: { completed: false },
       });
+      captureStudyProgressFunnelAfterUpsert(userId, gate.entitlement, funnelBefore);
       return NextResponse.json({ ok: true });
     }
 

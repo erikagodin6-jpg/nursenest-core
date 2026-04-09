@@ -8,7 +8,15 @@ import {
   inferRationaleLessonSlugCandidates,
   normalizedTopicCodeForQuestion,
 } from "@/lib/learner/rationale-lesson-link-engine";
+import {
+  RATIONALE_DB_EXACT_MIN_SCORE,
+  RATIONALE_DB_WEAK_MIN_SCORE,
+  rankPathwayLessonRowsForQuestion,
+  type PathwayLessonScoreRow,
+} from "@/lib/learner/lesson-question-rationale/pathway-lesson-match";
+import { pathwayRationaleContextFromId } from "@/lib/learner/lesson-question-rationale/pathway-context";
 import type { RationaleLessonLinkKind } from "@/lib/learner/lesson-question-rationale/types";
+import { deriveTopicCode } from "@/lib/learner/topic-linking";
 import { pickTopicClusterSlugForPathway } from "@/lib/lessons/lesson-topic-cluster-registry";
 import { listTopicClusters } from "@/lib/lessons/pathway-lesson-loader";
 import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
@@ -88,10 +96,62 @@ export async function resolveRationaleLessonLinksForQuestion(
     subtopic?: string | null;
     bodySystem?: string | null;
     tags: string[];
+    /** Improves DB + registry matching (token overlap with lesson titles). */
+    stem?: string | null;
   },
 ): Promise<RationaleLessonLinkResolved[]> {
   const pathwayId = args.pathwayId;
   if (!pathwayId || !getExamPathwayById(pathwayId)) return [];
+
+  const topicCodeDerived = deriveTopicCode({
+    topic: args.topic,
+    subtopic: args.subtopic,
+    bodySystem: args.bodySystem,
+  });
+  const pathwayCtx = pathwayRationaleContextFromId(pathwayId);
+
+  let dbRanked: Array<{
+    row: PathwayLessonScoreRow;
+    score: number;
+    kind: RationaleLessonLinkKind;
+  }> = [];
+  if (topicCodeDerived && pathwayCtx) {
+    const rows = await prisma.pathwayLesson.findMany({
+      where: {
+        pathwayId,
+        topicSlug: topicCodeDerived,
+        status: ContentStatus.PUBLISHED,
+        locale: "en",
+      },
+      select: {
+        id: true,
+        slug: true,
+        title: true,
+        topic: true,
+        topicSlug: true,
+        bodySystem: true,
+        countryCode: true,
+      },
+    });
+    dbRanked = rankPathwayLessonRowsForQuestion(
+      {
+        topic: args.topic,
+        subtopic: args.subtopic,
+        bodySystem: args.bodySystem,
+        tags: args.tags ?? [],
+        topicCode: topicCodeDerived,
+        stem: args.stem ?? null,
+      },
+      pathwayCtx,
+      rows,
+      topicCodeDerived,
+    );
+  }
+
+  const dbExact = dbRanked.filter((x) => x.score >= RATIONALE_DB_EXACT_MIN_SCORE);
+  const dbWeak = dbRanked.filter(
+    (x) => x.score >= RATIONALE_DB_WEAK_MIN_SCORE && x.score < RATIONALE_DB_EXACT_MIN_SCORE,
+  );
 
   const candidates = inferRationaleLessonSlugCandidates(
     {
@@ -100,14 +160,43 @@ export async function resolveRationaleLessonLinksForQuestion(
       bodySystem: args.bodySystem,
       tags: args.tags ?? [],
       pathwayId,
+      stem: args.stem ?? null,
     },
-    3,
+    5,
   );
 
   const out: RationaleLessonLinkResolved[] = [];
+  const seenSlug = new Set<string>();
+  const seenHref = new Set<string>();
+
+  const pushDb = (entry: (typeof dbRanked)[number]) => {
+    const href = `/app/lessons/${entry.row.id}`;
+    if (seenHref.has(href) || seenSlug.has(entry.row.slug)) return;
+    seenHref.add(href);
+    seenSlug.add(entry.row.slug);
+    out.push({
+      kind: entry.kind,
+      slug: entry.row.slug,
+      title: entry.row.title,
+      href,
+      hrefSource: "app",
+      ctaKey: ctaKeyForCandidate(entry.kind, out.length),
+    });
+  };
+
+  for (const d of dbExact.slice(0, 2)) {
+    pushDb(d);
+    if (out.length >= 2) break;
+  }
+
   for (const c of candidates) {
+    if (out.length >= 3) break;
+    if (seenSlug.has(c.slug)) continue;
     const resolved = await resolveSlugHref(prisma, pathwayId, c.slug);
     if (!resolved) continue;
+    if (seenHref.has(resolved.href)) continue;
+    seenSlug.add(c.slug);
+    seenHref.add(resolved.href);
     out.push({
       kind: c.kind,
       slug: c.slug,
@@ -116,6 +205,13 @@ export async function resolveRationaleLessonLinksForQuestion(
       hrefSource: resolved.hrefSource,
       ctaKey: ctaKeyForCandidate(c.kind, out.length),
     });
+  }
+
+  if (out.length === 0) {
+    for (const d of dbWeak.slice(0, 1)) {
+      pushDb(d);
+      break;
+    }
   }
 
   if (out.length > 0) return dedupeByHref(out);

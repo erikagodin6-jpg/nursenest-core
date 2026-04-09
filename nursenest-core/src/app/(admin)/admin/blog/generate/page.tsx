@@ -21,14 +21,24 @@ export default async function AdminBlogGeneratePage() {
             shells.
           </p>
         </div>
-        <Link href="/admin/blog" className="text-sm font-semibold text-primary underline">
-          ← Blog hub
-        </Link>
+        <div className="flex flex-wrap gap-3 text-sm font-semibold">
+          <Link href="/admin/blog" className="text-primary underline">
+            ← Blog hub
+          </Link>
+          <Link href="/admin/blog/studio" className="text-primary underline">
+            Article studio (recommended)
+          </Link>
+        </div>
       </div>
 
       <div className="mt-8 space-y-8">
         <div className="rounded-xl border border-border/70 bg-muted/20 p-4 text-sm">
-          For the full structured workflow (titles, outline, FAQs, internal links, APA, section regen), use the{" "}
+          For the <strong>full structured workflow</strong> (SEO bundle, outline, FAQs, internal links, APA, schema notes, publish
+          validation), start at the{" "}
+          <Link href="/admin/blog/studio" className="font-semibold text-primary underline">
+            Article studio
+          </Link>{" "}
+          or the{" "}
           <Link href="/admin/blog/control-panel" className="font-semibold text-primary underline">
             AI control panel
           </Link>

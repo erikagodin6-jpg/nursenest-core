@@ -28,6 +28,8 @@ export function inferRationaleLessonSlugCandidates(
     bodySystem?: string | null;
     tags: string[];
     pathwayId?: string | null;
+    /** Question stem (graded flows) — improves token overlap with lesson titles. */
+    stem?: string | null;
   },
   max = 3,
 ): RationaleLessonSlugCandidate[] {
@@ -42,6 +44,7 @@ export function inferRationaleLessonSlugCandidates(
       bodySystem: args.bodySystem,
       tags: args.tags ?? [],
       topicCode,
+      stem: args.stem ?? null,
     },
     pathwayCtx,
     { maxLinks: max },

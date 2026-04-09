@@ -8,7 +8,7 @@ const CARDS = [
   {
     href: "/admin/lessons/generate",
     title: "Lesson AI (single)",
-    body: "Draft or extend pathway lessons with section regen.",
+    body: "Queued async generation (batch pipeline, one topic); section regen stays on-demand.",
     icon: GraduationCap,
   },
   {

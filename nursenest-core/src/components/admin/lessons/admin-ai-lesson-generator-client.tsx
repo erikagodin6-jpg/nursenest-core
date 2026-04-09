@@ -3,8 +3,14 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import {
+  createLessonAiBatch,
+  pickLessonDraftIdFromBatchSummary,
+  runLessonAiBatchSteps,
+} from "@/lib/admin/admin-lesson-ai-queue";
 import type { AdminAiGeneratedLesson } from "@/lib/lessons/admin-ai-lesson-schema";
 import type { AdminAiLessonDraftNormalized } from "@/lib/lessons/admin-ai-lesson-schema";
+import type { LessonBatchResultSummaryV1 } from "@/lib/lessons/admin-ai-lesson-batch";
 
 type CategoryOpt = { id: string; name: string; slug: string };
 
@@ -43,6 +49,7 @@ export function AdminAiLessonGeneratorClient() {
   const [categories, setCategories] = useState<CategoryOpt[]>([]);
 
   const [busy, setBusy] = useState(false);
+  const [batchSummary, setBatchSummary] = useState<LessonBatchResultSummaryV1 | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const [draftId, setDraftId] = useState<string | null>(null);
   const [lesson, setLesson] = useState<AdminAiGeneratedLesson | null>(null);
@@ -81,42 +88,28 @@ export function AdminAiLessonGeneratorClient() {
     e.preventDefault();
     setErr(null);
     setBusy(true);
+    setBatchSummary(null);
     setDraftId(null);
     setLesson(null);
     setNormalized(null);
     try {
-      const res = await fetch("/api/admin/lessons/ai-generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          topic,
-          pathway,
-          country,
-          topicDomain,
-          lessonType,
-          ...(difficulty ? { difficulty } : {}),
-          ...(categoryIds.length ? { relatedCategoryIds: categoryIds } : {}),
-        }),
+      const { jobId } = await createLessonAiBatch({
+        topicsRaw: topic,
+        pathway,
+        country,
+        topicDomain,
+        lessonType,
+        allowDuplicates: false,
+        ...(difficulty ? { difficulty } : {}),
+        ...(categoryIds.length ? { relatedCategoryIds: categoryIds } : {}),
       });
-      const j = (await res.json()) as {
-        error?: string;
-        message?: string;
-        draftId?: string;
-        normalized?: AdminAiLessonDraftNormalized;
-        lesson?: AdminAiGeneratedLesson;
-      };
-      if (!res.ok) {
-        setErr(j.message ?? j.error ?? "Generation failed");
-        return;
-      }
-      if (j.draftId && j.normalized?.lesson) {
-        setDraftId(j.draftId);
-        setNormalized(j.normalized);
-        setLesson(j.normalized.lesson);
-      } else if (j.lesson && j.normalized) {
-        setLesson(j.lesson);
-        setNormalized(j.normalized);
-      }
+      const summary = await runLessonAiBatchSteps(jobId, {
+        onSummary: (s) => setBatchSummary(s),
+      });
+      setBatchSummary(summary);
+      const id = pickLessonDraftIdFromBatchSummary(summary);
+      setDraftId(id);
+      await reloadDraft(id);
     } catch (e) {
       setErr(e instanceof Error ? e.message : String(e));
     } finally {
@@ -182,7 +175,10 @@ export function AdminAiLessonGeneratorClient() {
         <h1 className="text-2xl font-bold text-[var(--theme-heading-text)] sm:text-3xl">AI lesson generator</h1>
         <p className="mt-2 max-w-3xl text-sm text-muted-foreground">
           Generates a structured draft stored in <code className="rounded bg-muted px-1">GeneratedLessonDraft</code> for
-          review. Pathway and country steer scope, tone, and internal link patterns. Promote when ready to create a real{" "}
+          review. Generation is{" "}
+          <span className="font-semibold text-foreground">queued and stepped asynchronously</span>{" "}
+          (same pipeline as batch) so the browser is not blocked on one long HTTP request. Pathway and country steer scope,
+          tone, and internal link patterns. Promote when ready to create a real{" "}
           <code className="rounded bg-muted px-1">ContentItem</code> lesson (still DRAFT).
         </p>
         <p className="mt-2 text-xs text-muted-foreground">
@@ -294,12 +290,19 @@ export function AdminAiLessonGeneratorClient() {
 
         {err ? <p className="text-sm text-rose-700 dark:text-rose-300">{err}</p> : null}
 
+        {busy && batchSummary?.items?.length ? (
+          <p className="text-xs text-muted-foreground" aria-live="polite">
+            Batch step:{" "}
+            {batchSummary.items.map((it) => `${it.topic.slice(0, 48)}${it.topic.length > 48 ? "…" : ""} (${it.status})`).join(" · ")}
+          </p>
+        ) : null}
+
         <button
           type="submit"
           disabled={busy}
           className="rounded-full bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground disabled:opacity-50"
         >
-          {busy ? "Generating…" : "Generate structured draft"}
+          {busy ? "Running async steps…" : "Generate structured draft"}
         </button>
       </form>
 

@@ -3,9 +3,11 @@
  * Complements registry regex matching — prefers same-topic-cluster lessons with lexical overlap.
  */
 import type { CountryCode } from "@prisma/client";
-import type { PathwayRationaleContext } from "@/lib/learner/lesson-question-rationale/types";
-import type { QuestionRationaleSignals } from "@/lib/learner/lesson-question-rationale/types";
-import type { RationaleLessonLinkKind } from "@/lib/learner/lesson-question-rationale/types";
+import type {
+  PathwayRationaleContext,
+  QuestionRationaleSignals,
+  RationaleLessonLinkKind,
+} from "@/lib/learner/lesson-question-rationale/types";
 import { haystackFromQuestionSignals } from "@/lib/learner/lesson-question-rationale/match";
 
 const STOP = new Set([

@@ -102,6 +102,16 @@ const blogControlPanelPlanBase = z.object({
   /** Only `/blog/{slug}` allowed after sanitize; omit for default canonical. */
   canonicalPath: z.string().max(220).optional(),
   seoFocusKeywords: z.array(z.string().min(2).max(80)).max(10).optional(),
+  /** JSON-LD / structured data opportunities for engineering review (not auto-injected without validation). */
+  schemaOpportunities: z
+    .array(
+      z.object({
+        type: z.enum(["BlogPosting", "FAQPage", "BreadcrumbList", "HowTo", "Speakable", "VideoObject"]),
+        rationale: z.string().min(5).max(400),
+      }),
+    )
+    .max(8)
+    .optional(),
 });
 
 /**

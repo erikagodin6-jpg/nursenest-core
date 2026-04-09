@@ -60,6 +60,21 @@ export const PH = {
 
   /** Marketing homepage → nursing exam hub (funnel; complements pathway card / final CTA events). */
   funnelHomeToExamHub: "funnel_home_to_exam_hub",
+  /** Homepage shell viewed (once per load; use with marketing_region for segmentation). */
+  funnelHomepageViewed: "funnel_homepage_viewed",
+  /** Exam pathway marketing hub overview viewed (canonical hub route). */
+  funnelExamHubViewed: "funnel_exam_hub_viewed",
+  /**
+   * User clicked lessons, questions, or CAT card on the hub (intent to study).
+   * Prefer this over generic hub CTA for funnel drop-off from hub → study surfaces.
+   */
+  funnelExamHubStudyIntent: "funnel_exam_hub_study_intent",
+  /** First saved lesson progress row for this learner (subscriber app). */
+  funnelFirstStudyProgress: "funnel_first_study_progress",
+  /** Learner crossed a second distinct UTC calendar day with any progress activity (repeat study signal). */
+  funnelRepeatStudyDay: "funnel_repeat_study_day",
+  /** Stripe invoice paid for an existing subscription cycle (renewal / continuation — not first checkout). */
+  funnelSubscriptionRenewed: "funnel_subscription_renewed",
   /** Learner shell: user clicked primary nav Lessons. */
   learnerNavLessonsClick: "learner_nav_lessons_click",
   /** Question bank: first batch loaded for a new session (not append). */

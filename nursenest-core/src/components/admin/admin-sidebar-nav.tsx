@@ -26,6 +26,7 @@ import {
   Wrench,
   X,
   Globe,
+  Workflow,
 } from "lucide-react";
 
 type NavItem = { href: string; label: string; icon: React.ElementType; badge?: number };
@@ -52,6 +53,7 @@ const sections: NavSection[] = [
       { href: "/admin/media", label: "Media & images", icon: ImageIcon },
       { href: "/admin/users", label: "Users", icon: Users },
       { href: "/admin/analytics/users", label: "User analytics", icon: Users2 },
+      { href: "/admin/analytics/funnels", label: "Funnels", icon: BarChart3 },
       { href: "/admin/subscriptions", label: "Subscriptions", icon: Activity },
     ],
   },

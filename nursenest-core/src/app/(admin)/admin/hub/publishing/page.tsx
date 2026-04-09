@@ -6,6 +6,12 @@ export const dynamic = "force-dynamic";
 
 const CARDS = [
   {
+    href: "/admin/blog/studio",
+    title: "Article studio",
+    body: "Topic → structured SEO package, draft HTML, review gates, then full editor.",
+    icon: Sparkles,
+  },
+  {
     href: "/admin/blog",
     title: "Blog library",
     body: "List, edit, schedule, and publish articles.",

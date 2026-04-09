@@ -327,7 +327,9 @@ export async function persistControlPanelDraft(
         faqBlock: faqBlock as unknown as Prisma.InputJsonValue,
         internalLinkPlan: internalLinkPlan as unknown as Prisma.InputJsonValue,
         relatedLessonPaths: relatedPaths,
-        schemaSummary: buildSchemaSummaryPayload(seoBundle),
+        schemaSummary: buildSchemaSummaryPayload(seoBundle, {
+          schemaOpportunities: plan.schemaOpportunities,
+        }),
         ctaType: cta.type,
         ctaText: cta.text,
         ctaHref: cta.href,

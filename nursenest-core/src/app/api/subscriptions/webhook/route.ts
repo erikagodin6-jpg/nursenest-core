@@ -195,6 +195,7 @@ export async function POST(req: Request) {
 
     if (event.type === "invoice.payment_succeeded") {
       const invoice = event.data.object as Stripe.Invoice;
+      const billingReason = (invoice as Stripe.Invoice & { billing_reason?: string | null }).billing_reason;
       const subRaw = (invoice as unknown as { subscription?: string | { id: string } | null }).subscription;
       const subId = typeof subRaw === "string" ? subRaw : subRaw?.id;
       if (subId) {
@@ -204,6 +205,18 @@ export async function POST(req: Request) {
             data: { status: SubscriptionStatus.ACTIVE },
           });
         });
+        if (billingReason === "subscription_cycle") {
+          const row = await prisma.subscription.findUnique({
+            where: { stripeSubscriptionId: subId },
+            select: { userId: true },
+          });
+          if (row?.userId) {
+            void captureServerEvent(analyticsDistinctId(row.userId), PH.funnelSubscriptionRenewed, {
+              source: "stripe_invoice_payment_succeeded",
+              billing_reason: billingReason,
+            });
+          }
+        }
       }
     }
 

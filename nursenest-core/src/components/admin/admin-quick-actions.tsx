@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 
 const actions = [
+  { href: "/admin/blog/studio", label: "Article studio", desc: "AI blog package → draft → publish", icon: Sparkles, tone: "from-violet-500/14 to-fuchsia-500/10" },
   { href: "/admin/analytics", label: "Analytics hub", desc: "Usage, CAT, subs, content jobs", icon: BarChart3, tone: "from-cyan-500/12 to-sky-500/10" },
   { href: "/admin/inventory", label: "Inventory drill-down", desc: "Lessons & bank by pathway", icon: Package, tone: "from-emerald-500/12 to-teal-500/10" },
   { href: "/admin/hub/publishing", label: "Publishing hub", desc: "Blog + SEO entry", icon: Megaphone, tone: "from-violet-500/12 to-fuchsia-500/10" },

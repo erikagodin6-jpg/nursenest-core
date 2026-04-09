@@ -5,6 +5,7 @@ import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { NpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
 import { pathwayOverviewBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { pathwayHubFaqSchema } from "@/lib/seo/pathway-hub-faq-schema";
+import { FunnelExamHubViewBeacon } from "@/components/marketing/funnel-analytics-beacons";
 import { ExamPathwayHubBody } from "@/components/exam-pathways/exam-pathway-hub-body";
 import { PathwayLiveInventoryStrip } from "@/components/exam-pathways/pathway-live-inventory-strip";
 import { NpSeoAliasHubAnalytics } from "@/components/marketing/np-seo-alias-hub-analytics";
@@ -50,6 +51,11 @@ export function ExamPathwayHub({
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-10 sm:py-14">
+      <FunnelExamHubViewBeacon
+        pathwayId={pathway.id}
+        hubPath={marketingHubPath}
+        countrySlug={pathway.countrySlug}
+      />
       {npSeoAliasSegment ? (
         <NpSeoAliasHubAnalytics
           pathwayId={pathway.id}

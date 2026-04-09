@@ -130,6 +130,15 @@ export function ExamPathwayHubPrimaryStudyCards({
                   destination_type: card.destination_type,
                   link_target: card.link_target,
                 }}
+                secondaryCapture={{
+                  event: PH.funnelExamHubStudyIntent,
+                  eventProps: {
+                    ...linkCtx,
+                    pathway_id: pathway.id,
+                    destination_type: card.destination_type,
+                    link_target: card.link_target,
+                  },
+                }}
                 className={`group nn-exam-hub-study-card ${variantClass}`}
               >
                 <div className="nn-exam-hub-study-card__icon" aria-hidden>

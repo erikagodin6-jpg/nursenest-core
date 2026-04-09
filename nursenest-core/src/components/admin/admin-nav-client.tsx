@@ -66,6 +66,7 @@ const GROUPS: NavGroup[] = [
     title: "Publishing & SEO",
     items: [
       { href: "/admin/hub/publishing", label: "Publishing hub", icon: Megaphone },
+      { href: "/admin/blog/studio", label: "Article studio", icon: Sparkles },
       { href: "/admin/blog", label: "Blog posts", icon: FileText },
       { href: "/admin/blog/control-panel", label: "Blog AI panel", icon: Wand2 },
       { href: "/admin/blog/generate", label: "Blog generator", icon: Sparkles },

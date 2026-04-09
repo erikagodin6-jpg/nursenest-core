@@ -152,6 +152,7 @@ export async function POST(req: Request) {
       subtopic: row.subtopic ?? null,
       bodySystem: row.bodySystem ?? null,
       tags: Array.isArray(row.tags) ? row.tags.map(String) : [],
+      stem: displayRow.stem ?? row.stem ?? null,
     });
 
     const [linkedContentLesson, linkedDeck] = topicCode

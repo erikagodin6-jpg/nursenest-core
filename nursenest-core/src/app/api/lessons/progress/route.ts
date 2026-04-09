@@ -9,6 +9,10 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { appPathwayLessonVisibleToSubscriber } from "@/lib/lessons/app-pathway-lesson-list-scope";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import {
+  captureStudyProgressFunnelAfterUpsert,
+  loadStudyFunnelBeforeSnapshot,
+} from "@/lib/observability/study-funnel-capture";
 
 const bodySchema = z.object({
   lessonId: z.string().min(5),
@@ -56,11 +60,13 @@ export async function POST(req: Request) {
       });
       return notSubscribedResponse();
     }
+    const funnelBefore = await loadStudyFunnelBeforeSnapshot(userId);
     await prisma.progress.upsert({
       where: { userId_lessonId: { userId, lessonId } },
       create: { userId, lessonId, completed },
       update: { completed },
     });
+    captureStudyProgressFunnelAfterUpsert(userId, gate.entitlement, funnelBefore);
     return NextResponse.json({ ok: true });
   }
 
@@ -69,11 +75,13 @@ export async function POST(req: Request) {
     select: { id: true },
   });
   if (contentRow) {
+    const funnelBefore = await loadStudyFunnelBeforeSnapshot(userId);
     await prisma.progress.upsert({
       where: { userId_lessonId: { userId, lessonId } },
       create: { userId, lessonId, completed },
       update: { completed },
     });
+    captureStudyProgressFunnelAfterUpsert(userId, gate.entitlement, funnelBefore);
     return NextResponse.json({ ok: true });
   }
 

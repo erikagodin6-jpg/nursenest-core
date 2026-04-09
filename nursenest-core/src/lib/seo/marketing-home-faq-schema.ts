@@ -1,6 +1,6 @@
 import type { FaqJsonLdItem } from "@/components/seo/faq-json-ld";
 
-/** Keep in sync with `home.landing.faq.q1`–`q5` / `a1`–`a5` in `public/i18n/en.json` and `HomeLandingSections` FAQ keys. */
+/** Keep in sync with `home.landing.faq.q1`–`q5` / `a1`–`a5` in merged `en.json` (homepage FAQ UI may be omitted; schema still answers common questions). */
 export const MARKETING_HOME_FAQ_JSONLD: FaqJsonLdItem[] = [
   {
     question: "Which exam is this for?",
