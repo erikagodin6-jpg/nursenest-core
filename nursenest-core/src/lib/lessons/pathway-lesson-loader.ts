@@ -82,6 +82,8 @@ export const PATHWAY_LESSON_DB_TIMEOUT_MS = 12_000;
 const PATHWAY_LESSON_PUBLIC_CACHE_SECONDS = 3600;
 /** Related lessons block on lesson detail — small bounded list. */
 export const RELATED_PATHWAY_LESSONS_LIMIT = 8;
+/** Topic-filtered question hub / cross-links: same numeric cap as {@link RELATED_PATHWAY_LESSONS_LIMIT}. */
+export const RELATED_LESSONS_FOR_TOPIC_CAP = RELATED_PATHWAY_LESSONS_LIMIT;
 /** Sitemap / batch reads: rows per round-trip. */
 export const PATHWAY_LESSON_SITEMAP_BATCH = 600;
 /** Absolute safety cap: catalog pathways with more lessons are truncated for list/hub pagination math. */

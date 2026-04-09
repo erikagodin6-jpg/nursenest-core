@@ -5,9 +5,62 @@ import { withDatabaseFallback } from "@/lib/db/safe-database";
 import { pathwayExamQuestionMarketingWhere } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 
-/** Upper bound for cross-link lists (lesson ↔ question bank). */
+/** Upper bound for cross-link lists (lesson ↔ question bank). Single `findMany` uses `take` with this value. */
 export const RELATED_EXAM_QUESTIONS_CAP = 8;
-export const RELATED_LESSONS_FOR_TOPIC_CAP = 8;
+
+const TOPIC_TOKEN_STOPWORDS = new Set([
+  "the",
+  "and",
+  "for",
+  "with",
+  "from",
+  "this",
+  "that",
+  "your",
+  "are",
+  "has",
+  "have",
+  "been",
+  "into",
+  "when",
+  "will",
+  "can",
+  "not",
+  "you",
+  "may",
+  "but",
+  "use",
+  "how",
+  "what",
+  "why",
+  "all",
+  "any",
+]);
+
+/**
+ * Short tokens from lesson title + topicSlug segments for `topic` matching (bounded OR list, no full-text scan).
+ */
+function deriveTopicMatchTokens(lessonTitle: string, topicSlug: string): string[] {
+  const titleWords = lessonTitle
+    .toLowerCase()
+    .split(/[^a-z0-9]+/g)
+    .filter((w) => w.length >= 3 && !TOPIC_TOKEN_STOPWORDS.has(w));
+  const slugWords = topicSlug
+    .toLowerCase()
+    .split(/-+/)
+    .map((s) => s.trim())
+    .filter((w) => w.length >= 3 && !TOPIC_TOKEN_STOPWORDS.has(w));
+  const merged = [...titleWords, ...slugWords];
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const t of merged) {
+    if (seen.has(t)) continue;
+    seen.add(t);
+    out.push(t);
+    if (out.length >= 6) break;
+  }
+  return out;
+}
 
 export type RelatedExamQuestionStem = {
   id: string;
@@ -21,27 +74,34 @@ function stemPreview(stem: string, max = 155): string {
 }
 
 /**
- * Published exam questions in the pathway’s marketing-scoped pool that match the lesson’s topic tags
- * (`topic`, `bodySystem`, optional `tags` overlap with `topicSlug`). Single bounded query; no scans.
+ * Published exam questions in the pathway’s marketing-scoped pool that match the lesson (topic labels/tokens
+ * from title + slug, optional `bodySystem`, optional `tags` has `topicSlug`). Single bounded `findMany`; no in-memory fallbacks.
  */
 export async function loadRelatedExamQuestionStemsForPathwayLesson(args: {
   pathway: ExamPathwayDefinition;
+  /** Lesson display title — tokenized for `topic` substring matches. */
+  lessonTitle: string;
+  /** Pathway lesson topic label (often matches `exam_questions.topic` exactly). */
   lessonTopic: string;
   lessonTopicSlug: string;
   bodySystem?: string | null;
 }): Promise<RelatedExamQuestionStem[]> {
-  const { pathway, lessonTopic, lessonTopicSlug, bodySystem } = args;
+  const { pathway, lessonTitle, lessonTopic, lessonTopicSlug, bodySystem } = args;
   const base = pathwayExamQuestionMarketingWhere(pathway);
   const topicTrim = lessonTopic.trim();
   const slug = lessonTopicSlug.trim().toLowerCase();
-  const fromSlugWords = slug.replace(/-/g, " ").trim();
+  const fromSlugPhrase = slug.replace(/-/g, " ").trim();
+  const tokens = deriveTopicMatchTokens(lessonTitle, lessonTopicSlug);
 
   const orClauses: Prisma.ExamQuestionWhereInput[] = [];
   if (topicTrim.length > 0) {
     orClauses.push({ topic: { equals: topicTrim, mode: "insensitive" } });
   }
-  if (fromSlugWords.length > 0 && fromSlugWords !== topicTrim.toLowerCase()) {
-    orClauses.push({ topic: { equals: fromSlugWords, mode: "insensitive" } });
+  if (fromSlugPhrase.length > 0 && fromSlugPhrase !== topicTrim.toLowerCase()) {
+    orClauses.push({ topic: { equals: fromSlugPhrase, mode: "insensitive" } });
+  }
+  for (const tok of tokens) {
+    orClauses.push({ topic: { contains: tok, mode: "insensitive" } });
   }
   if (bodySystem?.trim()) {
     orClauses.push({ bodySystem: { equals: bodySystem.trim(), mode: "insensitive" } });

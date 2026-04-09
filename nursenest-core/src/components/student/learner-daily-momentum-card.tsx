@@ -10,6 +10,10 @@ export function LearnerDailyMomentumCard({
   resume,
   momentumLine,
   focusTopic,
+  /** From profile (study goal / minutes) — display only, no writes. */
+  personalNote,
+  /** When the learner has a streak but has not yet earned a credit today (UTC). */
+  showStreakProtectNudge,
 }: {
   t: LearnerMarketingT;
   streakDays: number;
@@ -18,6 +22,8 @@ export function LearnerDailyMomentumCard({
   momentumLine: string | null;
   /** Optional weak-area label for a grounded “where to improve” line. */
   focusTopic?: string | null;
+  personalNote?: string | null;
+  showStreakProtectNudge?: boolean;
 }) {
   const pct = Math.min(100, Math.round((todayGoal.credits / todayGoal.target) * 100));
   const complete = todayGoal.credits >= todayGoal.target;
@@ -36,6 +42,9 @@ export function LearnerDailyMomentumCard({
                 {t("learner.dailyGoal.title")}
               </h2>
               <p className="mt-0.5 text-xs text-muted-foreground">{t("learner.dailyGoal.subtitle")}</p>
+              {personalNote?.trim() ? (
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{personalNote.trim()}</p>
+              ) : null}
             </div>
             <div className="text-right">
               <p className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
