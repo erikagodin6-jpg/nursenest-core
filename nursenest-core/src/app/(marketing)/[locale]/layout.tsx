@@ -6,6 +6,8 @@ import { MarketingI18nProvider } from "@/components/marketing/marketing-i18n-pro
 import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/seo-json-ld";
 import { DEFAULT_MARKETING_LOCALE, isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
+import { NursenestRegionRoot } from "@/lib/region/use-nursenest-region";
 
 export default async function MarketingLocaleLayout({
   children,
@@ -17,19 +19,22 @@ export default async function MarketingLocaleLayout({
   const { locale } = await params;
   if (!isCoreHostedNonDefaultLocale(locale)) notFound();
   /** Cookie sync: `cookies().set` is not allowed in RSC; {@link MarketingLocaleUrlSync} calls the server action. */
+  const serverRegion = await getMarketingRegionFromCookies();
   const messages = await loadMarketingMessages(locale);
   const fallbackMessages =
     locale === DEFAULT_MARKETING_LOCALE ? undefined : await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
   return (
     <MarketingI18nProvider key={locale} locale={locale} messages={messages} fallbackMessages={fallbackMessages}>
-      <MarketingLocaleUrlSync locale={locale} />
-      <OrganizationJsonLd />
-      <WebSiteJsonLd />
-      <div className="nn-marketing-surface flex min-h-screen flex-col">
-        <SiteHeader />
-        <main className="flex-1">{children}</main>
-        <SiteFooter />
-      </div>
+      <NursenestRegionRoot serverRegion={serverRegion}>
+        <MarketingLocaleUrlSync locale={locale} />
+        <OrganizationJsonLd />
+        <WebSiteJsonLd />
+        <div className="nn-marketing-surface flex min-h-screen flex-col">
+          <SiteHeader />
+          <main className="flex-1">{children}</main>
+          <SiteFooter />
+        </div>
+      </NursenestRegionRoot>
     </MarketingI18nProvider>
   );
 }

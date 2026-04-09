@@ -6,9 +6,12 @@ import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/seo-json-ld"
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
+import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
+import { NursenestRegionRoot } from "@/lib/region/use-nursenest-region";
 
 export default async function MarketingDefaultLocaleLayout({ children }: { children: React.ReactNode }) {
   const resolvedLocale = await getMarketingLocaleForDefaultRoute();
+  const serverRegion = await getMarketingRegionFromCookies();
   const messages = await loadMarketingMessages(resolvedLocale);
   const fallbackMessages =
     resolvedLocale === DEFAULT_MARKETING_LOCALE ? undefined : await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
@@ -19,14 +22,16 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
       messages={messages}
       fallbackMessages={fallbackMessages}
     >
-      <OrganizationJsonLd />
-      <WebSiteJsonLd />
-      <div className="nn-marketing-surface flex min-h-screen flex-col">
-        <SiteHeader />
-        <PathwayLessonProgressRefreshListener />
-        <main className="flex min-h-0 flex-1 flex-col">{children}</main>
-        <SiteFooter />
-      </div>
+      <NursenestRegionRoot serverRegion={serverRegion}>
+        <OrganizationJsonLd />
+        <WebSiteJsonLd />
+        <div className="nn-marketing-surface flex min-h-screen flex-col">
+          <SiteHeader />
+          <PathwayLessonProgressRefreshListener />
+          <main className="flex min-h-0 flex-1 flex-col">{children}</main>
+          <SiteFooter />
+        </div>
+      </NursenestRegionRoot>
     </MarketingI18nProvider>
   );
 }
