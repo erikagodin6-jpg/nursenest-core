@@ -1,0 +1,30 @@
+---
+description: Multi-hue semantic color system — no monochrome UI, no hardcoded colors, theme-safe tokens.
+alwaysApply: true
+---
+
+# Semantic color guardrails (learner product + marketing study surfaces)
+
+## Goals
+
+- **Soft, colorful, premium, motivating, calm** — not flat gray grids, not single-hue screens, not “everything is primary.”
+- **Theme switching must keep working** — `[data-theme]` in `theme-palettes.css` drives identity; semantics layer on top.
+
+## Do
+
+- Use **CSS variables** from `semantic-status-tokens.css`: `--semantic-success`, `--semantic-info`, `--semantic-warning`, `--semantic-danger`, `--semantic-brand`, `--semantic-chart-1` … `--semantic-chart-5`, `--semantic-panel-cool`, `--semantic-panel-warm`, `--semantic-panel-positive`, `--role-success-*`, etc.
+- Prefer **prebuilt classes** where they exist: `nn-progress-fill-semantic-success|info|warning|danger|readiness|brand|muted`, `nn-badge-semantic-*`, `nn-progress-track-semantic`.
+- For **dashboards, charts, progress bars, question states**, use **multiple semantic hues** (e.g. accuracy bands: green → sky → amber → rose), not one brand bar for every row.
+- Use **`color-mix(in srgb, var(--semantic-*) …, var(--semantic-border-soft))`** for borders when you need tints — still token-based.
+
+## Don’t
+
+- **Do not** collapse large UI regions to a single color (e.g. every card `border-brand`, every bar `bg-primary`).
+- **Do not** rely on **only** `--semantic-brand` / `primary` for data visualization or status.
+- **Do not** introduce **hardcoded** hex/rgb in TSX/CSS for product UI (e.g. `#111827`, `rgb(…)`, `bg-gray-200` as the only surface). Exceptions: third-party embeds or print-only HTML that cannot load app styles — document the exception inline.
+- **Do not** redefine `--theme-*` on `:root` in a way that overrides `[data-theme]` (see `globals.css` comment).
+
+## Quick reference
+
+- **File**: `nursenest-core/src/app/semantic-status-tokens.css` — semantic tokens + `.nn-progress-fill-*` + badges.
+- **Helper**: `semanticFillClassForAccuracyPct` in `nursenest-core/src/lib/ui/semantic-progress-fill.ts` for topic/accuracy bars.

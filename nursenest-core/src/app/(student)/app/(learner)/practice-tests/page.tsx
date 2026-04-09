@@ -11,6 +11,7 @@ import {
   listPathwaysCompatibleWithSubscription,
 } from "@/lib/exam-pathways/pathway-entitlements";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
+import { LearnerStudyQuickLinksCard } from "@/components/student/learner-study-quick-links-card";
 import { prisma } from "@/lib/db";
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 
@@ -34,13 +35,15 @@ export default async function PracticeTestsPage() {
   if (!entitlement.hasAccess) {
     const snap = userId ? await getFreemiumSnapshot(userId) : null;
     return (
-      <main>
+      <main className="space-y-6">
         <div className="mb-4">
           <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
         </div>
-        <h1 className="text-3xl font-bold">{t("learner.practiceTests.title")}</h1>
-        <p className="mt-2 text-sm text-muted">{t("learner.practiceTests.subtitle.locked")}</p>
-        <div className="mt-6">
+        <div className="nn-learner-page-hero">
+          <h1 className="text-3xl font-bold text-[var(--semantic-text-primary)]">{t("learner.practiceTests.title")}</h1>
+          <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("learner.practiceTests.subtitle.locked")}</p>
+        </div>
+        <div>
           <SubscriptionPaywall context="questions" freemiumRemainingQuestions={snap?.questionRemaining ?? 0} />
         </div>
       </main>
@@ -63,13 +66,16 @@ export default async function PracticeTestsPage() {
   }));
 
   return (
-    <main>
+    <main className="space-y-6">
       <div className="mb-4">
         <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
       </div>
-      <h1 className="text-3xl font-bold">{t("learner.practiceTests.title")}</h1>
-      <p className="mt-2 text-sm text-muted">{t("learner.practiceTests.subtitle.subscriber")}</p>
-      <Suspense fallback={<p className="mt-6 text-sm text-muted">{t("learner.loading.section")}</p>}>
+      <div className="nn-learner-page-hero">
+        <h1 className="text-3xl font-bold text-[var(--semantic-text-primary)]">{t("learner.practiceTests.title")}</h1>
+        <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("learner.practiceTests.subtitle.subscriber")}</p>
+      </div>
+      <LearnerStudyQuickLinksCard t={t} id="practice-tests-study-quick-links" />
+      <Suspense fallback={<p className="text-sm text-[var(--semantic-text-secondary)]">{t("learner.loading.section")}</p>}>
         <PracticeTestsHubClient
           pathwayOptions={pathwayOptions}
           defaultPathwayId={defaultPathwayId}

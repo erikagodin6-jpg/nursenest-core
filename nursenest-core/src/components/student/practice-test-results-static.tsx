@@ -1,5 +1,7 @@
 import Link from "next/link";
+import { BarChart3 } from "lucide-react";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
+import { semanticFillClassForAccuracyPct } from "@/lib/ui/semantic-progress-fill";
 
 export type PracticeTestIncorrectReviewItem = {
   id: string;
@@ -36,33 +38,47 @@ export function PracticeTestResultsStatic({
 
   return (
     <div className="space-y-6">
-      <div className="nn-card p-6">
-        <p className="text-[10px] font-bold uppercase tracking-widest text-primary">Results</p>
-        <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">
+      <div className="overflow-hidden rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 shadow-[var(--shadow-card)]">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--semantic-text-muted)]">Results</p>
+        <h2 className="mt-1 text-xl font-bold text-[var(--semantic-text-primary)]">
           {title?.trim() || (cat ? "Adaptive (CAT) practice" : "Practice test")}
         </h2>
-        <p className="mt-1 text-sm text-muted-foreground">Completed {completedAtLabel}</p>
-        <p className="mt-4 text-3xl font-bold tabular-nums text-primary">
-          {results.scoreCorrect}/{results.scoreTotal}{" "}
-          <span className="text-lg font-semibold text-muted-foreground">({results.accuracyPct}%)</span>
-        </p>
-        <p className="mt-2 text-sm text-muted-foreground">
-          <span className="font-medium text-foreground">Correct:</span> {results.scoreCorrect}
-          <span className="mx-2 text-border">·</span>
-          <span className="font-medium text-foreground">Incorrect:</span> {incorrect}
-        </p>
+        <p className="mt-1 text-sm text-[var(--semantic-text-muted)]">Completed {completedAtLabel}</p>
+
+        <div className="mt-6 grid gap-4 sm:grid-cols-3">
+          <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3">
+            <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">Score</p>
+            <p className="mt-1 text-2xl font-bold tabular-nums text-[var(--semantic-text-primary)]">
+              {results.scoreCorrect}/{results.scoreTotal}
+            </p>
+            <p className="text-sm font-medium text-[var(--semantic-brand)]">{results.accuracyPct}% accuracy</p>
+          </div>
+          <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3">
+            <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">Correct</p>
+            <p className="mt-1 text-2xl font-bold tabular-nums text-[var(--role-success-text)]">{results.scoreCorrect}</p>
+          </div>
+          <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3">
+            <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">Incorrect</p>
+            <p className="mt-1 text-2xl font-bold tabular-nums text-[var(--semantic-text-primary)]">{incorrect}</p>
+          </div>
+        </div>
+
         {results.readinessLabel != null ? (
-          <p className="mt-3 text-lg font-semibold text-foreground">Readiness: {results.readinessLabel}</p>
+          <p className="mt-5 text-lg font-semibold text-[var(--semantic-text-primary)]">
+            Readiness: {results.readinessLabel}
+          </p>
         ) : null}
         {results.catReport ? (
-          <p className="mt-2 text-sm text-muted-foreground">
+          <p className="mt-2 text-sm text-[var(--semantic-text-muted)]">
             Classification:{" "}
-            <span className="font-semibold capitalize text-foreground">{results.catReport.decision}</span>
+            <span className="font-semibold capitalize text-[var(--semantic-text-primary)]">{results.catReport.decision}</span>
             {results.catReport.stoppedReason !== "completed" ? (
               <>
                 {" "}
                 · Stopped:{" "}
-                <span className="text-foreground">{results.catReport.stoppedReason.replace(/_/g, " ")}</span>
+                <span className="text-[var(--semantic-text-primary)]">
+                  {results.catReport.stoppedReason.replace(/_/g, " ")}
+                </span>
               </>
             ) : null}
           </p>
@@ -70,38 +86,65 @@ export function PracticeTestResultsStatic({
       </div>
 
       {sessionInsightStruggle || sessionInsightFocus ? (
-        <div className="nn-card border border-border/70 bg-muted/20 p-5">
-          {sessionInsightStruggle ? <p className="text-sm text-foreground/90">{sessionInsightStruggle}</p> : null}
+        <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-brand)_4%,var(--semantic-surface))] px-5 py-4 shadow-sm">
+          {sessionInsightStruggle ? (
+            <p className="text-sm text-[var(--semantic-text-primary)]">{sessionInsightStruggle}</p>
+          ) : null}
           {sessionInsightFocus ? (
-            <p className={`text-sm text-muted-foreground ${sessionInsightStruggle ? "mt-2" : ""}`}>{sessionInsightFocus}</p>
+            <p className={`text-sm text-[var(--semantic-text-muted)] ${sessionInsightStruggle ? "mt-2" : ""}`}>
+              {sessionInsightFocus}
+            </p>
           ) : null}
         </div>
       ) : null}
 
       {Object.keys(results.byTopic).length > 0 ? (
-        <div className="nn-card p-6">
-          <h3 className="font-semibold text-foreground">By topic</h3>
-          <ul className="mt-3 space-y-2 text-sm">
-            {Object.entries(results.byTopic).map(([topic, { correct, total }]) => (
-              <li key={topic} className="flex justify-between gap-2 border-b border-border/50 py-1">
-                <span>{topic}</span>
-                <span className="tabular-nums text-muted-foreground">
-                  {correct}/{total} ({total > 0 ? Math.round((correct / total) * 100) : 0}%)
-                </span>
-              </li>
-            ))}
+        <div className="nn-panel-chart-fade rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 shadow-sm">
+          <div className="flex items-center gap-2">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)]">
+              <BarChart3 className="h-4 w-4 text-[var(--semantic-info)]" aria-hidden strokeWidth={2} />
+            </div>
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">Topic breakdown</h3>
+          </div>
+          <ul className="mt-4 space-y-3">
+            {Object.entries(results.byTopic).map(([topic, { correct, total }]) => {
+              const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
+              return (
+                <li key={topic}>
+                  <div className="flex justify-between gap-3 text-sm">
+                    <span className="font-medium text-[var(--semantic-text-primary)]">{topic}</span>
+                    <span className="shrink-0 tabular-nums text-[var(--semantic-text-muted)]">
+                      {correct}/{total} ({pct}%)
+                    </span>
+                  </div>
+                  <div className="nn-progress-track-semantic nn-progress-track-semantic--md mt-2" role="presentation">
+                    <div
+                      className={`h-full rounded-full ${semanticFillClassForAccuracyPct(pct)} nn-progress-fill-reveal transition-[width] duration-500`}
+                      style={{ width: `${pct}%` }}
+                    />
+                  </div>
+                </li>
+              );
+            })}
           </ul>
         </div>
       ) : null}
 
       {results.weakAreas.length > 0 ? (
-        <div className="nn-card border-amber-200/60 bg-amber-50/40 p-6 dark:border-amber-900/40 dark:bg-amber-950/20">
-          <h3 className="font-semibold text-foreground">Weak areas</h3>
-          <p className="mt-1 text-sm text-muted-foreground">Topics to review from this run.</p>
-          <ul className="mt-2 list-inside list-disc text-sm">
-            {results.weakAreas.map((w) => (
+        <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] bg-[var(--semantic-warning-soft)] p-6 shadow-sm">
+          <h3 className="text-base font-semibold text-[var(--semantic-text-primary)]">Weak areas</h3>
+          <p className="mt-1 text-sm text-[var(--semantic-text-muted)]">Topics to review from this run.</p>
+          <ul className="mt-3 space-y-2 text-sm">
+            {results.weakAreas.map((w, i) => (
               <li key={w}>
-                <Link className="text-primary underline" href={`/app/questions?topic=${encodeURIComponent(w)}`}>
+                <Link
+                  className={
+                    i % 2 === 0
+                      ? "font-medium text-[var(--semantic-info)] underline decoration-[color-mix(in_srgb,var(--semantic-info)_45%,transparent)] underline-offset-2 hover:decoration-[var(--semantic-info)]"
+                      : "font-medium text-[var(--semantic-warning-contrast)] underline decoration-[color-mix(in_srgb,var(--semantic-warning)_40%,transparent)] underline-offset-2 hover:decoration-[var(--semantic-warning)]"
+                  }
+                  href={`/app/questions?topic=${encodeURIComponent(w)}`}
+                >
                   {w}
                 </Link>
               </li>
@@ -111,21 +154,21 @@ export function PracticeTestResultsStatic({
       ) : null}
 
       {incorrectReviewItems.length > 0 ? (
-        <div className="nn-card p-6">
-          <h3 className="font-semibold text-foreground">Missed items</h3>
-          <p className="mt-1 text-sm text-muted-foreground">
+        <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 shadow-sm">
+          <h3 className="text-base font-semibold text-[var(--semantic-text-primary)]">Missed items</h3>
+          <p className="mt-1 text-sm text-[var(--semantic-text-muted)]">
             Short previews from your session. Open the test page for full rationales and teaching review.
           </p>
-          <ul className="mt-3 space-y-3 text-sm">
+          <ul className="mt-4 space-y-4 text-sm">
             {incorrectReviewItems.map((item) => (
-              <li key={item.id} className="border-b border-border/50 pb-3 last:border-0 last:pb-0">
-                <p className="text-foreground">{item.stemPreview}</p>
-                <p className="mt-1 text-xs text-muted-foreground">
+              <li key={item.id} className="border-b border-[var(--semantic-border-soft)] pb-4 last:border-0 last:pb-0">
+                <p className="text-[var(--semantic-text-primary)]">{item.stemPreview}</p>
+                <p className="mt-1.5 text-xs text-[var(--semantic-text-muted)]">
                   {item.topic ? (
                     <>
                       Topic:{" "}
                       <Link
-                        className="font-medium text-primary underline"
+                        className="font-medium text-[var(--semantic-brand)] underline underline-offset-2"
                         href={`/app/questions?topic=${encodeURIComponent(item.topic)}`}
                       >
                         {item.topic}
@@ -140,14 +183,14 @@ export function PracticeTestResultsStatic({
           </ul>
         </div>
       ) : results.incorrectQuestionIds && results.incorrectQuestionIds.length > 0 ? (
-        <div className="nn-card p-6">
-          <h3 className="font-semibold text-foreground">Missed items</h3>
-          <p className="mt-1 text-sm text-muted-foreground">
+        <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 shadow-sm">
+          <h3 className="text-base font-semibold text-[var(--semantic-text-primary)]">Missed items</h3>
+          <p className="mt-1 text-sm text-[var(--semantic-text-muted)]">
             {results.incorrectQuestionIds.length} question(s) marked incorrect. Open the test page for full review.
           </p>
           <Link
             href={`/app/practice-tests/${testId}`}
-            className="mt-3 inline-flex text-sm font-semibold text-primary underline"
+            className="mt-4 inline-flex text-sm font-semibold text-[var(--semantic-brand)] underline underline-offset-2"
           >
             Open full review on test page
           </Link>
@@ -157,13 +200,13 @@ export function PracticeTestResultsStatic({
       <div className="flex flex-wrap gap-3">
         <Link
           href={`/app/practice-tests/${testId}`}
-          className="inline-flex rounded-full bg-role-cta px-5 py-2.5 text-sm font-semibold text-role-cta-foreground"
+          className="inline-flex rounded-full bg-role-cta px-5 py-2.5 text-sm font-semibold text-role-cta-foreground shadow-sm transition hover:opacity-95"
         >
           Open full review on test page
         </Link>
         <Link
           href="/app/practice-tests"
-          className="inline-flex rounded-full border border-border px-5 py-2.5 text-sm font-semibold hover:bg-card"
+          className="inline-flex rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-5 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] hover:bg-[var(--semantic-panel-muted)]"
         >
           Practice tests home
         </Link>

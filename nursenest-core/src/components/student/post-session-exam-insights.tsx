@@ -23,7 +23,7 @@ export function PostSessionExamInsights({
   if (!struggleTopics && !primaryNext && !topWeak) return null;
 
   return (
-    <div className="rounded-lg border border-border/70 bg-muted/20 px-4 py-3">
+    <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-brand)_5%,var(--semantic-surface))] px-4 py-3.5 shadow-sm">
       {struggleTopics ? (
         <p className="text-sm text-foreground/90">{t("learner.sessionInsight.struggle", { topics: struggleTopics })}</p>
       ) : null}

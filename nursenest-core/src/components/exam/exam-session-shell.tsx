@@ -33,7 +33,7 @@ export function ExamSessionTopBar({
   right?: ReactNode;
 }) {
   return (
-    <div className="border-b border-b-primary/[0.12] border-border/80 bg-card/90 px-4 py-3 backdrop-blur-[2px]">
+    <div className="border-b border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-brand)_6%,var(--semantic-surface))] px-4 py-3 backdrop-blur-[2px]">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="nn-marketing-body-sm min-w-0 flex-1 leading-snug text-[var(--theme-body-text)]">{left}</div>
         {center ? (
@@ -51,15 +51,15 @@ export function ExamSessionTopBar({
 export function ExamProgressBar({ current, total }: { current: number; total: number }) {
   const pct = total > 0 ? Math.min(100, Math.max(0, (current / total) * 100)) : 0;
   return (
-    <div className="nn-exam-progress border-b border-border/70 bg-[var(--bg-inset)]/50 px-4 py-2.5">
-      <div className="nn-marketing-caption mb-1.5 flex justify-between gap-3 font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
+    <div className="nn-exam-progress border-b border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-2.5">
+      <div className="nn-marketing-caption mb-1.5 flex justify-between gap-3 font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
         <span>Session progress</span>
-        <span className="shrink-0 tabular-nums text-[var(--theme-heading-text)]">
+        <span className="shrink-0 tabular-nums text-[var(--semantic-text-primary)]">
           {current} / {total}
         </span>
       </div>
       <div
-        className="h-2 w-full overflow-hidden rounded-full bg-muted/50"
+        className="nn-progress-track-semantic nn-progress-track-semantic--md"
         role="progressbar"
         aria-valuemin={0}
         aria-valuemax={100}
@@ -67,7 +67,7 @@ export function ExamProgressBar({ current, total }: { current: number; total: nu
         aria-label={`Session progress ${current} of ${total}`}
       >
         <div
-          className="h-full rounded-full bg-primary/45 transition-[width] duration-500 ease-out"
+          className="nn-progress-fill-semantic-readiness nn-progress-fill-reveal transition-[width] duration-500 ease-out"
           style={{ width: `${pct}%` }}
         />
       </div>
@@ -101,10 +101,10 @@ export function ExamTimerReadout({
       <span
         className={`font-mono text-lg font-semibold tabular-nums tracking-tight ${
           critical
-            ? "text-[color-mix(in_srgb,#b91c1c_78%,var(--theme-heading-text))] dark:text-[color-mix(in_srgb,#fca5a5_75%,var(--theme-heading-text))]"
+            ? "text-[var(--semantic-danger)]"
             : warn
-              ? "text-[var(--role-warning-text)]"
-              : "text-[var(--theme-heading-text)]"
+              ? "text-[var(--semantic-warning-contrast)]"
+              : "text-[var(--semantic-text-primary)]"
         }`}
         aria-live="polite"
       >

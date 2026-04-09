@@ -2,6 +2,8 @@ import Link from "next/link";
 import {
   BookOpen,
   FileEdit,
+  ImageIcon,
+  KeyRound,
   Layers,
   Search,
   ShieldCheck,
@@ -14,7 +16,13 @@ import {
   BarChart3,
   Package,
   Megaphone,
+  Activity,
+  Cpu,
+  Workflow,
+  BookMarked,
 } from "lucide-react";
+import { isNavHrefAllowedForStaffTier } from "@/lib/auth/admin-path-policy";
+import type { StaffTier } from "@/lib/auth/staff-roles";
 
 const actions = [
   { href: "/admin/blog/studio", label: "Article studio", desc: "AI blog package → draft → publish", icon: Sparkles, tone: "from-violet-500/14 to-fuchsia-500/10" },
@@ -39,15 +47,26 @@ const actions = [
   { href: "/admin/operations", label: "Site health", desc: "DB, APIs, safe mode", icon: Wrench, tone: "from-red-500/10 to-amber-500/10" },
   { href: "/admin/ai/exam-questions", label: "AI question studio", desc: "Drafts & section regen", icon: Stethoscope, tone: "from-indigo-500/12 to-purple-500/10" },
   { href: "/admin/ai/exam-questions/batch", label: "AI question batch", desc: "One draft per topic + queue", icon: Stethoscope, tone: "from-sky-500/12 to-indigo-500/10" },
+  { href: "/admin/media", label: "Media library", desc: "Uploads & CDN URLs", icon: ImageIcon, tone: "from-fuchsia-500/12 to-pink-500/10" },
+  { href: "/admin/hub/ai", label: "AI tools hub", desc: "Generation entry points", icon: Cpu, tone: "from-indigo-500/12 to-violet-500/10" },
+  { href: "/admin/lessons/generate", label: "Lesson AI", desc: "Single-lesson generation", icon: Sparkles, tone: "from-teal-500/12 to-cyan-500/10" },
+  { href: "/admin/analytics/funnels", label: "Funnel analytics", desc: "Steps & conversion", icon: Workflow, tone: "from-orange-500/12 to-amber-500/10" },
+  { href: "/admin/analytics/study-performance", label: "Study & CAT analytics", desc: "Lessons, bank, CAT sessions", icon: BookMarked, tone: "from-lime-500/10 to-emerald-500/10" },
+  { href: "/admin/automation-logs", label: "Automation logs", desc: "Jobs & schedulers", icon: Activity, tone: "from-neutral-500/12 to-stone-500/10" },
+  { href: "/admin/access", label: "Access & roles", desc: "RBAC reference", icon: KeyRound, tone: "from-primary/15 to-primary/8" },
 ] as const;
 
-export function AdminQuickActions() {
+export function AdminQuickActions({ staffTier = "super" }: { staffTier?: StaffTier }) {
+  const visible = actions.filter((a) => isNavHrefAllowedForStaffTier(staffTier, a.href));
+
   return (
     <section className="rounded-2xl border border-border/80 bg-gradient-to-br from-primary/[0.06] via-transparent to-emerald-500/[0.05] p-6 shadow-sm">
       <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Quick actions</h2>
-      <p className="mt-1 text-sm text-muted-foreground">Operational shortcuts. All routes require admin access.</p>
+      <p className="mt-1 text-sm text-muted-foreground">
+        Operational shortcuts filtered by your role. Server routes remain authoritative.
+      </p>
       <ul className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-        {actions.map((a) => (
+        {visible.map((a) => (
           <li key={a.href}>
             <Link
               href={a.href}

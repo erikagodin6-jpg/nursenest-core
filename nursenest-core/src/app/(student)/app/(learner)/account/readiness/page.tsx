@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerReadinessPremium } from "@/components/student/learner-readiness-premium";
+import { LearnerStudyQuickLinksCard } from "@/components/student/learner-study-quick-links-card";
 import { LockedStudyNextPreview } from "@/components/student/locked-study-next-preview";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
@@ -50,9 +51,9 @@ export default async function AccountReadinessPage() {
     return (
       <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <div>
-          <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.readiness.title")}</h1>
-          <p className="mt-2 text-sm text-muted-foreground">{t("learner.profile.performanceGate.body")}</p>
+        <div className="nn-learner-page-hero">
+          <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">{t("learner.account.readiness.title")}</h1>
+          <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("learner.profile.performanceGate.body")}</p>
         </div>
         <LockedStudyNextPreview className="nn-card space-y-2 p-6" />
         <SubscriptionPaywall context="dashboard" />
@@ -66,9 +67,9 @@ export default async function AccountReadinessPage() {
     return (
       <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <div>
-          <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.readiness.title")}</h1>
-          <p className="mt-2 text-sm text-muted-foreground">{t("learner.account.loadFailed")}</p>
+        <div className="nn-learner-page-hero">
+          <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">{t("learner.account.readiness.title")}</h1>
+          <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("learner.account.loadFailed")}</p>
         </div>
       </main>
     );
@@ -77,14 +78,16 @@ export default async function AccountReadinessPage() {
   return (
     <main className="space-y-6">
       <BreadcrumbTrail items={crumbs} />
-      <div>
-        <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.readiness.title")}</h1>
-        <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.account.readiness.intro")}</p>
+      <div className="nn-learner-page-hero">
+        <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">{t("learner.account.readiness.title")}</h1>
+        <p className="mt-2 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">{t("learner.account.readiness.intro")}</p>
       </div>
 
-      <div className="rounded-xl border border-primary/20 bg-primary/[0.04] px-4 py-3 text-sm">
-        <p className="font-semibold text-[var(--theme-heading-text)]">{t("learner.readinessPage.integratedCallout.title")}</p>
-        <p className="mt-1 text-muted-foreground">{t("learner.readinessPage.integratedCallout.body")}</p>
+      <LearnerStudyQuickLinksCard t={t} id="readiness-study-quick-links" />
+
+      <div className="nn-learner-readiness-integrated-callout px-4 py-3 text-sm">
+        <p className="font-semibold text-[var(--semantic-text-primary)]">{t("learner.readinessPage.integratedCallout.title")}</p>
+        <p className="mt-1 text-[var(--semantic-text-secondary)]">{t("learner.readinessPage.integratedCallout.body")}</p>
       </div>
 
       <LearnerReadinessPremium payload={payload} t={t} localeTag={localeTag} />

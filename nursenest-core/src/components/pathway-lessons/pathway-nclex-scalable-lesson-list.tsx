@@ -5,6 +5,7 @@ import {
 } from "@/lib/lessons/pathway-lesson-types";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 import { PathwayLessonProgressBadge } from "@/components/lessons/pathway-lesson-progress-badge";
+import { PathwayLessonRecordChips } from "@/components/pathway-lessons/pathway-lesson-record-chips";
 import { nclexRnLessonExamPreview, type NclexRnHubRegion } from "@/lib/lessons/nclex-rn-us-lesson-enrichment";
 import { nclexPnLessonExamPreview } from "@/lib/lessons/nclex-pn-us-lesson-enrichment";
 import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
@@ -59,9 +60,7 @@ export function PathwayNclexScalableLessonSection({
         className="nn-study-card rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-card)] p-4 shadow-[var(--shadow-card)] transition-[box-shadow,transform,border-color] duration-200 hover:-translate-y-px hover:shadow-[var(--shadow-card-hover)] sm:p-5"
       >
         <div className="flex flex-wrap items-start justify-between gap-2">
-          <span className="inline-flex max-w-[min(100%,28rem)] items-center rounded-full border border-[var(--border-subtle)] bg-[var(--surface-chip)] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
-            {l.topic}
-          </span>
+          <PathwayLessonRecordChips lesson={l} className="min-w-0 flex-1" />
           {showProgress ? <PathwayLessonProgressBadge status={progressMap[l.slug] ?? "not_started"} /> : null}
         </div>
         <Link
@@ -143,6 +142,7 @@ export function PathwayNclexScalableLessonSection({
                   className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-2.5 shadow-[var(--shadow-card)] transition-[box-shadow,transform] duration-200 hover:shadow-[var(--shadow-card-hover)]"
                 >
                   <div className="min-w-0">
+                    <PathwayLessonRecordChips lesson={l} omitTopic className="mb-1" />
                     <p className="text-[10px] font-medium uppercase tracking-wide text-[var(--theme-muted-text)]">{l.topic}</p>
                     <Link href={href} className="block truncate text-sm font-semibold text-primary hover:underline sm:text-base">
                       {l.title}

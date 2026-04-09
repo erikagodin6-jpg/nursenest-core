@@ -1,4 +1,10 @@
-import { pathwayLessonHasRenderableHubSlug, type PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
+import {
+  pathwayLessonHasRenderableHubSlug,
+  type PathwayLessonAudienceTier,
+  type PathwayLessonCountryScope,
+  type PathwayLessonExamRelevance,
+  type PathwayLessonRecord,
+} from "@/lib/lessons/pathway-lesson-types";
 
 /** Population bands for FNP board preparation (exam stems vary age; lessons map to primary focus). */
 export type FnpLifespanGroup =
@@ -240,6 +246,9 @@ export type FnpExplorerLesson = {
     topicSlug: string;
     bodySystem: string;
     seoDescription: string;
+    examRelevance?: PathwayLessonExamRelevance;
+    audienceTiers?: PathwayLessonAudienceTier[];
+    countryScope?: PathwayLessonCountryScope;
   };
   primaryLifespan: FnpLifespanGroup;
   domains: FnpClinicalDomain[];
@@ -255,6 +264,9 @@ export function buildFnpExplorerPayload(lessons: PathwayLessonRecord[]): FnpExpl
       topicSlug: lesson.topicSlug,
       bodySystem: lesson.bodySystem,
       seoDescription: lesson.seoDescription,
+      examRelevance: lesson.examRelevance,
+      audienceTiers: lesson.audienceTiers,
+      countryScope: lesson.countryScope,
     },
     primaryLifespan: fnpPrimaryLifespanForLesson(lesson),
     domains: fnpDomainsForLesson(lesson),

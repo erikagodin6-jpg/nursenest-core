@@ -1,15 +1,16 @@
 "use client";
 
-import { BookOpen, ClipboardList, Layers } from "lucide-react";
+import { BookOpen, ClipboardList, Flag, LayoutDashboard } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 
 /**
- * Three-step system: questions → lessons → CAT. Links use the region’s default RN pathway as the concrete example.
+ * Four-step path: Learn → Practice → Track → Pass. Concrete links use the region’s default RN pathway where applicable.
  */
 export function HomeHowItWorksSection() {
   const { t, locale } = useMarketingI18n();
@@ -19,32 +20,40 @@ export function HomeHowItWorksSection() {
   const rnPathway = getExamPathwayById(region === "US" ? "us-rn-nclex-rn" : "ca-rn-nclex-rn");
   const questionsHref = rnPathway ? loc(buildExamPathwayPath(rnPathway, "questions")) : loc("/us/rn/nclex-rn/questions");
   const lessonsHref = rnPathway ? loc(buildExamPathwayPath(rnPathway, "lessons")) : loc("/us/rn/nclex-rn/lessons");
-  const catHref = rnPathway ? loc(buildExamPathwayPath(rnPathway, "cat")) : loc("/us/rn/nclex-rn/cat");
+  const practiceExamsHref = loc(HUB.practiceExams);
 
   const steps = [
     {
-      icon: ClipboardList,
+      icon: BookOpen,
       title: t("home.conversion.how.step1Title"),
       body: t("home.conversion.how.step1Body"),
-      href: questionsHref,
+      href: lessonsHref,
       label: t("home.conversion.how.step1Cta"),
-      testId: "how-step-questions",
+      testId: "how-step-learn",
     },
     {
-      icon: BookOpen,
+      icon: ClipboardList,
       title: t("home.conversion.how.step2Title"),
       body: t("home.conversion.how.step2Body"),
-      href: lessonsHref,
+      href: questionsHref,
       label: t("home.conversion.how.step2Cta"),
-      testId: "how-step-lessons",
+      testId: "how-step-practice",
     },
     {
-      icon: Layers,
+      icon: LayoutDashboard,
       title: t("home.conversion.how.step3Title"),
       body: t("home.conversion.how.step3Body"),
-      href: catHref,
+      href: loc(HUB.signup),
       label: t("home.conversion.how.step3Cta"),
-      testId: "how-step-cat",
+      testId: "how-step-track",
+    },
+    {
+      icon: Flag,
+      title: t("home.conversion.how.step4Title"),
+      body: t("home.conversion.how.step4Body"),
+      href: practiceExamsHref,
+      label: t("home.conversion.how.step4Cta"),
+      testId: "how-step-pass",
     },
   ] as const;
 
@@ -65,7 +74,7 @@ export function HomeHowItWorksSection() {
           </p>
         </header>
 
-        <ol className="grid gap-6 md:grid-cols-3">
+        <ol className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {steps.map((s, i) => (
             <li key={s.testId} className="nn-card-soft relative flex flex-col p-6">
               <div className="mb-4 flex items-center gap-3">

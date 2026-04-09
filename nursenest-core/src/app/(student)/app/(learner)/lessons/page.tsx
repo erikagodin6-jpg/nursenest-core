@@ -14,10 +14,21 @@ import { pathwayLessonsAppListWhere } from "@/lib/lessons/app-pathway-lesson-lis
 import { paginateLegacyContentMapLessons } from "@/lib/lessons/legacy-content-map-lessons";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { FreemiumLessonPeek } from "@/components/student/freemium-lesson-peek";
+import { LearnerStudyQuickLinksCard } from "@/components/student/learner-study-quick-links-card";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { LEARNER_APP_LESSONS_PAGE_SIZE } from "@/lib/lessons/pathway-lesson-scale";
+import { loadPathwayLessonProgressMap, type PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
+import { LessonCard, LessonCardChip } from "@/components/student/product/lesson-card";
 
-type AppLessonListRow = { id: string; title: string; summary: string | null };
+type AppLessonListRow = {
+  id: string;
+  title: string;
+  summary: string | null;
+  topic?: string | null;
+  bodySystem?: string | null;
+  /** Present for `pathway_lessons` rows — used for hub-style progress + chips. */
+  pathwayMeta?: { pathwayId: string; slug: string };
+};
 
 type LessonsListBlock = {
   source: "content_items" | "pathway_lessons" | "legacy_content_map";
@@ -134,6 +145,8 @@ export default async function LessonsPage({ searchParams }: Props) {
           seoDescription: true,
           topic: true,
           bodySystem: true,
+          slug: true,
+          pathwayId: true,
           updatedAt: true,
         },
         orderBy: { updatedAt: "desc" },
@@ -144,6 +157,9 @@ export default async function LessonsPage({ searchParams }: Props) {
         id: r.id,
         title: r.title,
         summary: pathwayLessonCardSummary(r),
+        topic: r.topic,
+        bodySystem: r.bodySystem,
+        pathwayMeta: { pathwayId: r.pathwayId, slug: r.slug },
       }));
       return {
         source: "pathway_lessons" as const,
@@ -195,19 +211,44 @@ export default async function LessonsPage({ searchParams }: Props) {
 
   const lessons = lessonsBlock.rows;
 
+  const progressByRowId: Record<string, PathwayLessonProgressStatus> = {};
+  if (userId && lessonsBlock.source === "pathway_lessons") {
+    const byPathway = new Map<string, string[]>();
+    for (const row of lessons) {
+      const pm = row.pathwayMeta;
+      if (!pm?.slug) continue;
+      const list = byPathway.get(pm.pathwayId) ?? [];
+      list.push(pm.slug);
+      byPathway.set(pm.pathwayId, list);
+    }
+    for (const [pathwayId, slugs] of byPathway) {
+      const unique = [...new Set(slugs)];
+      const map = await loadPathwayLessonProgressMap(userId, pathwayId, unique);
+      for (const row of lessons) {
+        const pm = row.pathwayMeta;
+        if (pm && pm.pathwayId === pathwayId && pm.slug) {
+          progressByRowId[row.id] = map[pm.slug] ?? "not_started";
+        }
+      }
+    }
+  }
+
   return (
-    <main>
-      <h1 className="text-3xl font-bold">{t("learner.lessons.list.title")}</h1>
-      <p className="mt-2 text-sm text-muted">{t("learner.lessons.list.subscriberIntro")}</p>
-      <p className="mt-2 text-sm text-muted">
-        {t("learner.lessons.list.paginationExplainer", { pageSize: LEARNER_APP_LESSONS_PAGE_SIZE })}{" "}
-        <Link className="font-medium text-primary underline" href="/lessons">
-          {t("learner.lessons.list.paginationLink")}
-        </Link>
-        {t("learner.lessons.list.paginationEnd")}
-      </p>
-      <aside className="nn-card mt-4 border-primary/15 bg-primary/5 p-4 text-sm text-muted">
-        <p className="font-semibold text-foreground">{t("learner.lessons.list.studyRhythmTitle")}</p>
+    <main className="space-y-6">
+      <div className="nn-learner-page-hero">
+        <h1 className="text-3xl font-bold text-[var(--semantic-text-primary)]">{t("learner.lessons.list.title")}</h1>
+        <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("learner.lessons.list.subscriberIntro")}</p>
+        <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">
+          {t("learner.lessons.list.paginationExplainer", { pageSize: LEARNER_APP_LESSONS_PAGE_SIZE })}{" "}
+          <Link className="font-medium text-[var(--semantic-info)] underline decoration-[color-mix(in_srgb,var(--semantic-info)_35%,transparent)] underline-offset-2" href="/lessons">
+            {t("learner.lessons.list.paginationLink")}
+          </Link>
+          {t("learner.lessons.list.paginationEnd")}
+        </p>
+      </div>
+      <LearnerStudyQuickLinksCard t={t} id="lessons-study-quick-links" />
+      <aside className="nn-card border-[color-mix(in_srgb,var(--semantic-success)_22%,var(--semantic-border-soft))] bg-[var(--semantic-panel-positive)] p-4 text-sm text-[var(--semantic-text-secondary)] shadow-[var(--semantic-shadow-soft)]">
+        <p className="font-semibold text-[var(--semantic-text-primary)]">{t("learner.lessons.list.studyRhythmTitle")}</p>
         <p className="mt-1">{t("learner.lessons.list.studyRhythmBody")}</p>
       </aside>
       {lessons.length === 0 ? (
@@ -216,22 +257,37 @@ export default async function LessonsPage({ searchParams }: Props) {
         </p>
       ) : null}
       <div className="mt-4 space-y-3">
-        {lessons.map((lesson) => (
-          <article className="nn-card p-4" key={lesson.id}>
-            <h2 className="font-semibold">
-              <Link href={`/app/lessons/${lesson.id}`} className="hover:text-primary hover:underline">
-                {lesson.title}
-              </Link>
-            </h2>
-            <p className="mt-2 text-sm text-muted">{lesson.summary}</p>
-            <Link
+        {lessons.map((lesson) => {
+          const chips =
+            lesson.topic?.trim() || lesson.bodySystem?.trim() ? (
+              <>
+                {lesson.topic?.trim() ? (
+                  <LessonCardChip variant="category">{lesson.topic.trim()}</LessonCardChip>
+                ) : null}
+                {lesson.bodySystem?.trim() ? (
+                  <LessonCardChip variant="body">{lesson.bodySystem.trim()}</LessonCardChip>
+                ) : null}
+              </>
+            ) : undefined;
+          return (
+            <LessonCard
+              key={lesson.id}
               href={`/app/lessons/${lesson.id}`}
-              className="mt-3 inline-block text-sm font-semibold text-primary"
-            >
-              {t("learner.lessons.list.openLessonCta")}
-            </Link>
-          </article>
-        ))}
+              title={lesson.title}
+              summary={lesson.summary}
+              chips={chips}
+              progressStatus={lesson.pathwayMeta ? (progressByRowId[lesson.id] ?? "not_started") : undefined}
+              footer={
+                <Link
+                  href={`/app/lessons/${lesson.id}`}
+                  className="inline-flex text-sm font-semibold text-[var(--semantic-brand)] hover:underline"
+                >
+                  {t("learner.lessons.list.openLessonCta")}
+                </Link>
+              }
+            />
+          );
+        })}
       </div>
 
       <PathwayLessonPagination

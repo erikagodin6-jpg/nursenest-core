@@ -558,14 +558,14 @@ export function PracticeTestRunnerClient({
         : "N/A";
     return (
       <div className="space-y-6">
-        <div className="nn-card p-6">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-primary">Results</p>
-          <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">
+        <div className="nn-card nn-product-surface-accent relative overflow-hidden p-6 pt-7">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--semantic-brand)]">Results</p>
+          <h2 className="text-xl font-bold text-[var(--semantic-text-primary)]">
             {results.catReport && testConfig?.catPresentationMode === "exam_simulation"
               ? "Exam simulation complete"
               : "Test complete"}
           </h2>
-          <p className="mt-2 text-3xl font-bold tabular-nums text-primary">
+          <p className="mt-2 text-3xl font-bold tabular-nums text-[var(--semantic-brand)]">
             {results.scoreCorrect}/{results.scoreTotal}{" "}
             <span className="text-lg font-semibold text-muted-foreground">({results.accuracyPct}%)</span>
           </p>
@@ -620,8 +620,8 @@ export function PracticeTestRunnerClient({
             (bookmark or share this view; full teaching review stays below.)
           </p>
           {results.catReport?.suggestedNextSteps?.length ? (
-            <div className="mt-4 rounded-lg border border-border/60 bg-muted/20 p-3">
-              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Next steps</p>
+            <div className="nn-semantic-inset--cool mt-4 p-3">
+              <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">Next steps</p>
               <ul className="mt-2 list-inside list-disc space-y-1 text-sm text-muted-foreground">
                 {results.catReport.suggestedNextSteps.map((line) => (
                   <li key={line.slice(0, 120)}>{line}</li>
@@ -634,8 +634,8 @@ export function PracticeTestRunnerClient({
             <PracticeTestStudyLoopNext results={results} pathwayId={testConfig?.pathwayId ?? null} />
           </div>
           {results.catReport?.blueprintDiagnostics ? (
-            <div className="mt-4 rounded-lg border border-border/60 bg-muted/15 p-3">
-              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            <div className="nn-semantic-inset mt-4 p-3">
+              <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
                 Blueprint diagnostics (
                 {testConfig?.catExamConfigId === "aanp-np-us" ? "AANP-style NP domains" : "NCLEX client-needs coverage"})
               </p>
@@ -684,13 +684,13 @@ export function PracticeTestRunnerClient({
             </div>
           ) : null}
         </div>
-        <div className="nn-card p-6">
-          <h3 className="font-semibold text-foreground">Breakdown by topic</h3>
+        <div className="nn-card border-[var(--semantic-border-soft)] p-6 shadow-[var(--semantic-shadow-soft)]">
+          <h3 className="font-semibold text-[var(--semantic-text-primary)]">Breakdown by topic</h3>
           <ul className="mt-3 space-y-2 text-sm">
             {Object.entries(results.byTopic).map(([topic, { correct, total: tt }]) => (
-              <li key={topic} className="flex justify-between gap-2 border-b border-border/50 py-1">
+              <li key={topic} className="flex justify-between gap-2 border-b border-[color-mix(in_srgb,var(--semantic-border-soft)_85%,transparent)] py-1">
                 <span>{topic}</span>
-                <span className="tabular-nums text-muted-foreground">
+                <span className="tabular-nums text-[var(--semantic-text-secondary)]">
                   {correct}/{tt} ({tt > 0 ? Math.round((correct / tt) * 100) : 0}%)
                 </span>
               </li>
@@ -698,9 +698,9 @@ export function PracticeTestRunnerClient({
           </ul>
         </div>
         {results.weakAreas.length > 0 ? (
-          <div className="nn-card border-amber-200/60 bg-amber-50/40 p-6 dark:border-amber-900/40 dark:bg-amber-950/20">
-            <h3 className="font-semibold text-foreground">Weak areas</h3>
-            <p className="mt-1 text-sm text-muted-foreground">Topics with at least one mistake in this run.</p>
+          <div className="nn-card border-[color-mix(in_srgb,var(--semantic-warning)_32%,var(--semantic-border-soft))] bg-[var(--semantic-warning-soft)] p-6 shadow-[var(--semantic-shadow-soft)]">
+            <h3 className="font-semibold text-[var(--semantic-text-primary)]">Weak areas</h3>
+            <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">Topics with at least one mistake in this run.</p>
             <ul className="mt-2 list-inside list-disc text-sm">
               {results.weakAreas.map((w) => (
                 <li key={w}>
@@ -713,9 +713,9 @@ export function PracticeTestRunnerClient({
           </div>
         ) : null}
 
-        <div className="nn-card space-y-3 border border-primary/20 p-6">
-          <h3 className="font-semibold text-foreground">Post-exam teaching review</h3>
-          <p className="text-sm text-muted-foreground">
+        <div className="nn-card space-y-3 border border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_4%,var(--semantic-surface))] p-6">
+          <h3 className="font-semibold text-[var(--semantic-text-primary)]">Post-exam teaching review</h3>
+          <p className="text-sm text-[var(--semantic-text-secondary)]">
             During CAT, rationales stay hidden to mirror exam pacing. After completion, open the full teaching breakdown
             (correct logic, distractors, strategy, and figures when available).
           </p>
@@ -944,7 +944,7 @@ export function PracticeTestRunnerClient({
                   <p className="nn-question-stem">{current.stem}</p>
                 </div>
                 {isSata ? (
-                  <ul className="space-y-3" role="group" aria-label="Answer choices">
+                  <ul className="nn-qopt-list" role="group" aria-label="Answer choices">
                     {optsCanonical.map((canonical, i) => {
                       const label = optsDisplay[i] ?? canonical;
                       const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
@@ -971,7 +971,7 @@ export function PracticeTestRunnerClient({
                     })}
                   </ul>
                 ) : (
-                  <ul className="space-y-3" role="radiogroup" aria-label="Answer choices">
+                  <ul className="nn-qopt-list" role="radiogroup" aria-label="Answer choices">
                     {optsCanonical.map((canonical, i) => {
                       const label = optsDisplay[i] ?? canonical;
                       const locked = isLinearEngine && currentCommitted;
@@ -1033,22 +1033,19 @@ export function PracticeTestRunnerClient({
               </p>
             ) : null}
 
-            <div className="nn-question-nav-actions border-t-0 pt-0">
+            <div className="nn-question-nav-actions">
               <button
                 type="button"
                 aria-pressed={Boolean(flagged[current.id])}
-                className={`inline-flex min-h-[2.75rem] items-center rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-wide transition ${
+                className={`inline-flex min-h-[2.75rem] shrink-0 items-center rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-wide transition ${
                   flagged[current.id]
-                    ? "border-[color-mix(in_srgb,var(--theme-primary)_22%,var(--border-subtle))] bg-[color-mix(in_srgb,var(--theme-primary)_7%,var(--theme-card-bg))] text-[var(--theme-heading-text)]"
-                    : "border-border text-[var(--theme-muted-text)] hover:bg-muted/40"
+                    ? "border-[color-mix(in_srgb,var(--semantic-brand)_26%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_8%,var(--semantic-surface))] text-[var(--semantic-text-primary)]"
+                    : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-muted)] hover:bg-[var(--semantic-panel-muted)]"
                 }`}
                 onClick={() => setFlagged((f) => ({ ...f, [current.id]: !f[current.id] }))}
               >
                 {flagged[current.id] ? "Marked for review" : "Mark for review"}
               </button>
-            </div>
-
-            <div className="nn-question-nav-actions">
               <button
                 type="button"
                 disabled={idx === 0 || catMode || isLinearEngine}

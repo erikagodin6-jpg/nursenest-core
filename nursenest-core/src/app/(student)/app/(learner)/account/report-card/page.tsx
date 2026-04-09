@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerReportCardPremium } from "@/components/student/learner-report-card-premium";
+import { LearnerStudyQuickLinksCard } from "@/components/student/learner-study-quick-links-card";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
@@ -49,9 +50,9 @@ export default async function AccountReportCardPage() {
     return (
       <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <div>
-          <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.reportCard.title")}</h1>
-          <p className="mt-2 text-sm text-muted-foreground">{t("learner.account.reportCard.lockedBody")}</p>
+        <div className="nn-learner-page-hero">
+          <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">{t("learner.account.reportCard.title")}</h1>
+          <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("learner.account.reportCard.lockedBody")}</p>
         </div>
         <SubscriptionPaywall context="exams" />
         <Link href="/pricing" className="inline-flex text-sm font-semibold text-primary underline">
@@ -67,9 +68,9 @@ export default async function AccountReportCardPage() {
     return (
       <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <div>
-          <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.reportCard.title")}</h1>
-          <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.reportCard.loadFailed")}</p>
+        <div className="nn-learner-page-hero">
+          <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">{t("learner.account.reportCard.title")}</h1>
+          <p className="mt-2 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">{t("learner.reportCard.loadFailed")}</p>
         </div>
       </main>
     );
@@ -84,10 +85,12 @@ export default async function AccountReportCardPage() {
   return (
     <main className="space-y-6">
       <BreadcrumbTrail items={crumbs} />
-      <div>
-        <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.reportCard.title")}</h1>
-        <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.account.reportCard.intro")}</p>
+      <div className="nn-learner-page-hero">
+        <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">{t("learner.account.reportCard.title")}</h1>
+        <p className="mt-2 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">{t("learner.account.reportCard.intro")}</p>
       </div>
+
+      <LearnerStudyQuickLinksCard t={t} id="report-card-study-quick-links" />
 
       <LearnerReportCardPremium data={report} t={t} localeTag={localeTag} />
 

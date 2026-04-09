@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { LessonCardChip } from "@/components/student/product/lesson-card";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { RelatedExamQuestionStem } from "@/lib/lessons/lesson-question-cross-links";
 import {
@@ -9,6 +10,7 @@ import {
 
 /**
  * Bounded list of sample stems from `exam_questions` matched by lesson topic / tags — no large payloads.
+ * When no stems match, still surfaces topic-scoped bank links (no invented items).
  */
 export function PathwayLessonRelatedQuestions({
   pathway,
@@ -25,8 +27,6 @@ export function PathwayLessonRelatedQuestions({
   items: RelatedExamQuestionStem[];
   appLinksMode?: "login" | "direct";
 }) {
-  if (items.length === 0) return null;
-
   const topicCode = topicSlug?.trim() || undefined;
   const appTopicHref =
     appLinksMode === "direct"
@@ -39,34 +39,51 @@ export function PathwayLessonRelatedQuestions({
       : pathwayAppQuestionBankTopicHref(pathway, lessonTopic, topicCode, { includeIds: [id] });
   }
 
+  const hasSamples = items.length > 0;
+
   return (
-    <section className="nn-study-card nn-study-card--wash mt-10 p-5 sm:p-6" aria-labelledby="lesson-related-questions-heading">
-      <p className="nn-marketing-label nn-marketing-label--accent">Question bank · related practice</p>
+    <section
+      className="nn-study-card nn-study-card--wash mt-10 border-l-[3px] border-l-[color-mix(in_srgb,var(--semantic-brand)_55%,var(--semantic-border-soft))] p-5 sm:p-6"
+      aria-labelledby="lesson-related-questions-heading"
+      data-testid="lesson-practice-questions-topic"
+    >
+      <div className="flex flex-wrap items-center gap-2">
+        <p className="nn-marketing-label nn-marketing-label--accent">Question bank · lesson-linked</p>
+        <LessonCardChip variant="exam">{pathway.shortName}</LessonCardChip>
+      </div>
       <h2 id="lesson-related-questions-heading" className="nn-marketing-h3 mt-2 text-[var(--theme-heading-text)]">
-        Related practice questions
+        Practice questions for this topic
       </h2>
       <p className="nn-marketing-body-sm mt-2 max-w-prose text-[var(--theme-muted-text)]">
-        Sample items from the {pathway.shortName} pool matched to this lesson’s topic and tags (limited list). Tap a stem to open
-        that item in the app bank, or run a full topic drill—stays pathway-scoped.
+        {hasSamples ? (
+          <>
+            Sample stems from the same {pathway.shortName} pool tagged to this topic—open any item in the app bank or run a
+            full topic drill.
+          </>
+        ) : (
+          <>
+            We didn’t match sample stems to this lesson in the bank yet. You can still run a topic-scoped drill with the same
+            pathway filters—items load from your live {pathway.shortName} pool.
+          </>
+        )}
       </p>
-      <ol className="mt-4 list-decimal space-y-3 pl-5 text-sm text-[var(--theme-body-text)]">
-        {items.map((q) => (
-          <li key={q.id} className="leading-relaxed">
-            <Link
-              href={appHrefForQuestion(q.id)}
-              className="text-primary underline-offset-2 hover:underline"
-            >
-              {q.stemPreview}
-            </Link>
-          </li>
-        ))}
-      </ol>
+      {hasSamples ? (
+        <ol className="mt-4 list-decimal space-y-3 pl-5 text-sm text-[var(--theme-body-text)]">
+          {items.map((q) => (
+            <li key={q.id} className="leading-relaxed">
+              <Link href={appHrefForQuestion(q.id)} className="text-primary underline-offset-2 hover:underline">
+                {q.stemPreview}
+              </Link>
+            </li>
+          ))}
+        </ol>
+      ) : null}
       <div className="mt-5 flex flex-wrap gap-2">
         <Link
           href={appTopicHref}
           className="inline-flex min-h-11 items-center rounded-full nn-btn-primary px-5 py-2.5 text-sm font-semibold shadow-none"
         >
-          Practice this topic (app)
+          {hasSamples ? "Practice this topic (app)" : "Open topic drill (app)"}
         </Link>
         <Link
           href={pathwayMarketingQuestionBankTopicHref(pathway, lessonTopic, topicCode)}

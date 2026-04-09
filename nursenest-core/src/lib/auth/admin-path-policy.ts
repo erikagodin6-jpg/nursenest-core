@@ -32,6 +32,7 @@ const CONTENT_FORBIDDEN_PREFIXES = [
  * Order: longest / most specific concepts — never use a bare `/admin` prefix match for all routes.
  */
 const SUPPORT_ALLOWED_PREFIXES = [
+  "/admin/access",
   "/admin/analytics",
   "/admin/automation-logs",
   "/admin/diagnostics",

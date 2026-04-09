@@ -3,7 +3,6 @@
 import { ArrowRight } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
-import { marketingExamHubPath } from "@/lib/marketing/country-exam-offerings";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
@@ -11,7 +10,7 @@ import { PH } from "@/lib/observability/posthog-conversion-events";
 import { MARKETING_PRIMARY_CTA_CLASS, MARKETING_TERTIARY_LINK_CLASS } from "@/lib/theme/marketing-hero-pattern";
 
 /**
- * Closing conversion block: start studying today — exam hub + signup.
+ * Closing conversion block: exam prep headline — signup primary, pathway + resource links.
  */
 export function HomeFinalStudyCta() {
   const { t, locale } = useMarketingI18n();
@@ -20,7 +19,7 @@ export function HomeFinalStudyCta() {
 
   return (
     <section
-      className="border-t border-[var(--border-subtle)] bg-[var(--nn-presentation-panel)] py-12 md:py-16"
+      className="border-t border-[var(--border-subtle)] bg-[color-mix(in_srgb,var(--theme-primary)_6%,var(--nn-presentation-panel))] py-12 md:py-16"
       aria-labelledby="home-final-cta-heading"
       data-testid="section-final-study-cta"
     >
@@ -33,25 +32,21 @@ export function HomeFinalStudyCta() {
         </p>
         <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row sm:flex-wrap">
           <MarketingTrackedLink
-            href={loc(marketingExamHubPath(region, "rn"))}
+            href={loc(HUB.signup)}
             event={PH.marketingHomeFinalCta}
-            eventProps={{ choice: "exam_hub_rn", region, surface: "final" }}
-            secondaryCapture={{
-              event: PH.funnelHomeToExamHub,
-              eventProps: { placement: "final_cta", pathway: "rn", region },
-            }}
-            className={`${MARKETING_PRIMARY_CTA_CLASS} sm:min-w-[220px]`}
-            data-testid="button-final-start-rn-hub"
+            eventProps={{ choice: "signup", region, surface: "final" }}
+            className={`${MARKETING_PRIMARY_CTA_CLASS} rounded-xl shadow-[var(--shadow-card)] sm:min-w-[240px]`}
+            data-testid="button-final-signup-primary"
           >
             <span className="whitespace-nowrap">{t("home.conversion.final.ctaPrimary")}</span>
             <ArrowRight className="ml-2 h-5 w-5 shrink-0" aria-hidden />
           </MarketingTrackedLink>
           <MarketingTrackedLink
-            href={loc(HUB.signup)}
+            href="#home-exam-paths"
             event={PH.marketingHomeFinalCta}
-            eventProps={{ choice: "signup", region, surface: "final" }}
+            eventProps={{ choice: "exam_paths_anchor", region, surface: "final" }}
             className={MARKETING_TERTIARY_LINK_CLASS}
-            data-testid="button-final-signup"
+            data-testid="button-final-choose-exam"
           >
             {t("home.conversion.final.ctaSecondary")}
           </MarketingTrackedLink>
@@ -63,7 +58,7 @@ export function HomeFinalStudyCta() {
             eventProps={{ choice: "practice_exams_overview", region, surface: "final" }}
             className="font-semibold text-primary underline-offset-4 hover:underline"
           >
-            Practice exams overview
+            {t("home.conversion.final.linkPracticeExams")}
           </MarketingTrackedLink>
           {" · "}
           <MarketingTrackedLink
@@ -72,7 +67,7 @@ export function HomeFinalStudyCta() {
             eventProps={{ choice: "question_bank_overview", region, surface: "final" }}
             className="font-semibold text-primary underline-offset-4 hover:underline"
           >
-            Question bank overview
+            {t("home.conversion.final.linkQuestionBank")}
           </MarketingTrackedLink>
         </p>
       </div>

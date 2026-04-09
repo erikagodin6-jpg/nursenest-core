@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ExamSessionErrorBoundary } from "@/components/exam/exam-session-error-boundary";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { ExamPracticeClient } from "@/components/student/exam-practice-client";
+import { LearnerStudyQuickLinksCard } from "@/components/student/learner-study-quick-links-card";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
@@ -143,12 +144,15 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
   const defaultExam = userId ? await resolveDefaultExamForUser(userId) : null;
 
   return (
-    <main>
+    <main className="space-y-6">
       <div className="mb-4">
         <BreadcrumbTrail items={examCrumbs} />
       </div>
-      <h1 className="text-3xl font-bold">{t("learner.exams.page.title")}</h1>
-      <p className="mt-2 text-muted">{t("learner.exams.page.subscriberIntro")}</p>
+      <div className="nn-learner-page-hero">
+        <h1 className="text-3xl font-bold text-[var(--semantic-text-primary)]">{t("learner.exams.page.title")}</h1>
+        <p className="mt-2 text-[var(--semantic-text-secondary)]">{t("learner.exams.page.subscriberIntro")}</p>
+      </div>
+      <LearnerStudyQuickLinksCard t={t} id="exams-study-quick-links" />
       {pct !== null ? (
         <p className="mt-3 text-sm font-medium text-foreground">
           {t("learner.exams.page.latestAttempt", { score: last?.score ?? 0, total: last?.total ?? 0, pct })}{" "}
@@ -157,8 +161,8 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
       ) : (
         <p className="mt-3 text-sm text-muted">{t("learner.exams.page.noAttempts")}</p>
       )}
-      <aside className="nn-card mt-4 border-primary/15 bg-primary/5 p-4 text-sm text-muted">
-        <p className="font-semibold text-foreground">{t("learner.exams.page.reportCardTitle")}</p>
+      <aside className="nn-card border-[color-mix(in_srgb,var(--semantic-info)_24%,var(--semantic-border-soft))] bg-[var(--semantic-info-soft)] p-4 text-sm text-[var(--semantic-text-secondary)] shadow-[var(--semantic-shadow-soft)]">
+        <p className="font-semibold text-[var(--semantic-text-primary)]">{t("learner.exams.page.reportCardTitle")}</p>
         <p className="mt-1">{t("learner.exams.page.reportCardBody")}</p>
       </aside>
 
@@ -167,10 +171,10 @@ export default async function ExamsPage({ searchParams }: ExamsPageProps) {
           <ExamPracticeClient userId={userId} examId={defaultExam.id} examTitle={defaultExam.title} />
         </ExamSessionErrorBoundary>
       ) : (
-        <aside className="nn-card mt-4 border-amber-200/80 bg-amber-50/50 p-4 text-sm text-foreground">
+        <aside className="nn-card border-[color-mix(in_srgb,var(--semantic-warning)_32%,var(--semantic-border-soft))] bg-[var(--semantic-warning-soft)] p-4 text-sm text-[var(--semantic-warning-contrast)] shadow-[var(--semantic-shadow-soft)]">
           <p className="font-semibold">{t("learner.exams.page.defaultExamTitle")}</p>
-          <p className="mt-1 text-muted">{t("learner.exams.page.defaultExamBody")}</p>
-          <Link href="/app/questions" className="mt-3 inline-flex text-sm font-semibold text-primary underline underline-offset-2">
+          <p className="mt-1 opacity-95">{t("learner.exams.page.defaultExamBody")}</p>
+          <Link href="/app/questions" className="mt-3 inline-flex text-sm font-semibold text-[var(--semantic-brand)] underline underline-offset-2">
             {t("learner.exams.page.openQuestionBankArrow")}
           </Link>
         </aside>

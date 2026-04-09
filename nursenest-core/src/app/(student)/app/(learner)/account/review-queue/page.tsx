@@ -67,9 +67,11 @@ export default async function AccountReviewQueuePage() {
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.account.reviewQueue.intro")}</p>
       </div>
 
-      <section className="nn-card border border-primary/15 bg-gradient-to-br from-primary/[0.05] to-transparent p-6">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-primary">{t("learner.account.reviewQueue.howHeading")}</h2>
-        <p className="mt-2 text-sm text-muted-foreground">{t("learner.account.reviewQueue.howBody")}</p>
+      <section className="nn-card nn-learner-review-queue-intro p-6">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-[var(--semantic-chart-4)]">
+          {t("learner.account.reviewQueue.howHeading")}
+        </h2>
+        <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("learner.account.reviewQueue.howBody")}</p>
       </section>
 
       <section className="nn-card p-6">

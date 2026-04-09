@@ -232,6 +232,10 @@ export function QuestionBankPracticeClient({
   /** Per-option exam tools (reset each item). */
   const [strikeOut, setStrikeOut] = useState<Record<string, boolean>>({});
   const [highlightOn, setHighlightOn] = useState<Record<string, boolean>>({});
+  /** Session-local mark for review (exam-style bank); not persisted server-side. */
+  const [markedForReview, setMarkedForReview] = useState<Record<string, boolean>>({});
+  const feedbackAnchorRef = useRef<HTMLDivElement | null>(null);
+  const feedbackScrollMarkerRef = useRef<string | null>(null);
 
   const incorrectMistakeIds = useMemo(() => {
     void graded;
@@ -270,6 +274,28 @@ export function QuestionBankPracticeClient({
     setStrikeOut({});
     setHighlightOn({});
   }, [current?.id]);
+
+  useEffect(() => {
+    feedbackScrollMarkerRef.current = null;
+  }, [current?.id]);
+
+  /** Scroll feedback into view once per question after grading (smooth unless reduced motion). */
+  useEffect(() => {
+    const id = current?.id;
+    if (!id || !graded[id]) return;
+    if (feedbackScrollMarkerRef.current === id) return;
+    feedbackScrollMarkerRef.current = id;
+    const reduce =
+      typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const frame = window.requestAnimationFrame(() => {
+      feedbackAnchorRef.current?.scrollIntoView({
+        behavior: reduce ? "auto" : "smooth",
+        block: "nearest",
+        inline: "nearest",
+      });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [graded, current?.id]);
 
   /** Optional topic narrow for any preset; topic drill still uses “recent” sort below. */
   const topicForApi = topic && topic.trim().length > 0 ? topic.trim() : null;
@@ -1077,8 +1103,13 @@ export function QuestionBankPracticeClient({
           <ExamProgressBar current={idx + 1} total={total} />
 
           <div className="nn-question-session space-y-8">
-            <div className="nn-question-stem-wrap">
-              <p className="nn-question-stem">{current.stem}</p>
+            <div className="nn-question-stem-card">
+              {current.subtopic ? (
+                <p className="mb-2 nn-marketing-caption font-medium text-[var(--semantic-text-muted)]">{current.subtopic}</p>
+              ) : null}
+              <div className="nn-question-stem-wrap">
+                <p className="nn-question-stem">{current.stem}</p>
+              </div>
             </div>
 
             <div>
@@ -1088,7 +1119,7 @@ export function QuestionBankPracticeClient({
               ) : null}
 
               {isSata ? (
-                <ul className="space-y-3.5" role="group" aria-label={t("learner.qbank.examUi.answersHeading")}>
+                <ul className="nn-qopt-list" role="group" aria-label={t("learner.qbank.examUi.answersHeading")}>
                   {optsCanonical.map((canonical, i) => {
                     const label = optsDisplay[i] ?? canonical;
                     const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
@@ -1099,9 +1130,9 @@ export function QuestionBankPracticeClient({
                       : activeAnswerSurfaceClass(selected, hi, false);
                     return (
                       <li key={canonical}>
-                        <div className={`flex gap-2 p-1 sm:gap-3 ${rowClass}`}>
+                        <div className={`flex min-w-0 gap-1.5 sm:gap-2 ${rowClass}`}>
                           <label
-                            className={`flex min-h-[3.25rem] flex-1 cursor-pointer items-start gap-3 px-3 py-2.5 sm:min-h-[3.5rem] sm:px-4 ${g ? "cursor-default" : ""}`}
+                            className={`flex min-h-[3.25rem] min-w-0 flex-1 cursor-pointer items-start gap-3 rounded-[inherit] px-3 py-2.5 sm:min-h-[3.5rem] sm:px-4 ${g ? "cursor-default" : ""}`}
                           >
                             <input
                               type="checkbox"
@@ -1149,7 +1180,7 @@ export function QuestionBankPracticeClient({
                   })}
                 </ul>
               ) : (
-                <ul className="space-y-3.5" role="radiogroup" aria-label={t("learner.qbank.examUi.answersHeading")}>
+                <ul className="nn-qopt-list" role="radiogroup" aria-label={t("learner.qbank.examUi.answersHeading")}>
                   {optsCanonical.map((canonical, i) => {
                     const label = optsDisplay[i] ?? canonical;
                     const struck = Boolean(strikeOut[canonical]);
@@ -1206,6 +1237,20 @@ export function QuestionBankPracticeClient({
 
             {!g ? (
               <div className="nn-question-nav-actions !flex-col !items-stretch sm:!flex-row sm:!items-center">
+                {examShell ? (
+                  <button
+                    type="button"
+                    aria-pressed={Boolean(markedForReview[current.id])}
+                    className={`order-first inline-flex min-h-[2.75rem] shrink-0 items-center rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-wide transition sm:order-none ${
+                      markedForReview[current.id]
+                        ? "border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_8%,var(--semantic-surface))] text-[var(--semantic-text-primary)]"
+                        : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-muted)] hover:bg-[var(--semantic-panel-muted)]"
+                    }`}
+                    onClick={() => setMarkedForReview((f) => ({ ...f, [current.id]: !f[current.id] }))}
+                  >
+                    {markedForReview[current.id] ? t("learner.qbank.examUi.markedReview") : t("learner.qbank.examUi.markReview")}
+                  </button>
+                ) : null}
                 <button
                   type="button"
                   disabled={grading || answer === null || (Array.isArray(answer) && answer.length === 0)}
@@ -1234,7 +1279,7 @@ export function QuestionBankPracticeClient({
                 </div>
               </div>
             ) : (
-              <>
+              <div ref={feedbackAnchorRef} className="flex flex-col gap-4">
                 {examShell && !examShowExplanation ? (
                   <div className="nn-question-rationale-card">
                     <div
@@ -1277,6 +1322,20 @@ export function QuestionBankPracticeClient({
                   />
                 )}
                 <div className="nn-question-nav-actions">
+                  {examShell ? (
+                    <button
+                      type="button"
+                      aria-pressed={Boolean(markedForReview[current.id])}
+                      className={`inline-flex min-h-[2.75rem] shrink-0 items-center rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-wide transition ${
+                        markedForReview[current.id]
+                          ? "border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_8%,var(--semantic-surface))] text-[var(--semantic-text-primary)]"
+                          : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-muted)] hover:bg-[var(--semantic-panel-muted)]"
+                      }`}
+                      onClick={() => setMarkedForReview((f) => ({ ...f, [current.id]: !f[current.id] }))}
+                    >
+                      {markedForReview[current.id] ? t("learner.qbank.examUi.markedReview") : t("learner.qbank.examUi.markReview")}
+                    </button>
+                  ) : null}
                   <button
                     type="button"
                     disabled={idx === 0}
@@ -1343,7 +1402,7 @@ export function QuestionBankPracticeClient({
                   pathwayId={pathwayIdFilter}
                   visible={idx === total - 1 && !!g}
                 />
-              </>
+              </div>
             )}
           </div>
         </ExamSessionShell>

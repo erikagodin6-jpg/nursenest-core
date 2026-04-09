@@ -22,6 +22,8 @@ import {
 } from "@/lib/lessons/fnp-us-lesson-enrichment";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 import { PathwayLessonProgressBadge } from "@/components/lessons/pathway-lesson-progress-badge";
+import { LessonCardChip } from "@/components/student/product/lesson-card";
+import { PathwayLessonRecordChips } from "@/components/pathway-lessons/pathway-lesson-record-chips";
 
 function marketingQuestionsTopicHref(pathway: ExamPathwayDefinition, topic: string): string {
   const base = buildExamPathwayPath(pathway, "questions");
@@ -267,15 +269,13 @@ function FnpLessonCard({
   const gridCols = topicHubHref ? "sm:grid-cols-2 lg:grid-cols-3" : "sm:grid-cols-2";
 
   return (
-    <li className="nn-study-card p-4 sm:p-5">
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <p className="text-xs font-medium uppercase text-muted">{l.topic}</p>
-        <div className="flex flex-wrap items-center gap-2">
-          {showProgress ? <PathwayLessonProgressBadge status={progressStatus} /> : null}
-          <span className="rounded-full bg-[var(--theme-muted-surface)] px-2 py-0.5 text-[11px] font-medium text-muted">
-            {lifespanLabel(enriched.primaryLifespan)}
-          </span>
+    <li className="nn-study-card border-[var(--semantic-border-soft)] p-4 sm:p-5">
+      <div className="flex flex-wrap items-start justify-between gap-2">
+        <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1.5">
+          <PathwayLessonRecordChips lesson={l} />
+          <LessonCardChip variant="neutral">{lifespanLabel(enriched.primaryLifespan)}</LessonCardChip>
         </div>
+        {showProgress ? <PathwayLessonProgressBadge status={progressStatus} className="shrink-0" /> : null}
       </div>
       {detailHref ? (
         <Link href={detailHref} className="mt-1 block text-lg font-semibold text-primary hover:underline">

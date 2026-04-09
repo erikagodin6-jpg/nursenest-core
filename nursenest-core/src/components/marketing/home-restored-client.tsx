@@ -6,12 +6,12 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { HomeConversionHero } from "@/components/marketing/home-conversion-hero";
 import { HomeExamSelectionSection } from "@/components/marketing/home-exam-selection-section";
+import { HomeProductPillarsSection } from "@/components/marketing/home-product-pillars-section";
 import { HomeHowItWorksSection } from "@/components/marketing/home-how-it-works-section";
 import { HomeComparisonSection } from "@/components/marketing/home-comparison-section";
 import { HomePlatformPreviewSection } from "@/components/marketing/home-platform-preview-section";
 import { HomeTrustProofSection } from "@/components/marketing/home-trust-proof-section";
 import { HomeReviewsSection } from "@/components/marketing/home-reviews-section";
-import { HomeFeaturesSection } from "@/components/marketing/home-features-section";
 import { HomeFinalStudyCta } from "@/components/marketing/home-final-study-cta";
 import { FunnelHomepageViewBeacon } from "@/components/marketing/funnel-analytics-beacons";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
@@ -21,8 +21,8 @@ type HomeStatsPayload = {
 };
 
 /**
- * Conversion-focused homepage: exam-first hero, hub selection, how-it-works, competitor comparison,
- * platform preview, trust + testimonials, features, final study CTA.
+ * Conversion-focused homepage: hero with primary CTAs, pathway cards, product pillars, platform preview,
+ * competitor comparison, how it works, trust, reviews, final CTA.
  */
 export default function HomeRestoredClient() {
   const { t } = useMarketingI18n();
@@ -56,12 +56,12 @@ export default function HomeRestoredClient() {
       <div className="flex-grow overflow-x-hidden">
         <HomeConversionHero />
         <HomeExamSelectionSection />
-        <HomeHowItWorksSection />
-        <HomeComparisonSection />
+        <HomeProductPillarsSection />
         <HomePlatformPreviewSection />
+        <HomeComparisonSection />
+        <HomeHowItWorksSection />
         <HomeTrustProofSection questionCount={questionCount} />
         <HomeReviewsSection />
-        <HomeFeaturesSection />
         <HomeFinalStudyCta />
 
         <div className="mx-auto max-w-6xl px-4 py-8 text-center sm:px-6 lg:px-8">

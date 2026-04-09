@@ -49,6 +49,9 @@ import {
 } from "@/lib/lessons/pathway-lesson-progress";
 import { loadRelatedExamQuestionStemsForPathwayLesson } from "@/lib/lessons/lesson-question-cross-links";
 import { LessonStructuralQualityNotice } from "@/components/lessons/lesson-structural-quality-notice";
+import { PathwayLessonDetailEndCtas } from "@/components/lessons/pathway-lesson-detail-end-ctas";
+import { PathwayLessonDetailHeader } from "@/components/lessons/pathway-lesson-detail-header";
+import { PathwayLessonRecordChips } from "@/components/pathway-lessons/pathway-lesson-record-chips";
 
 /** Avoid enumerating every lesson at build (large `.next` output + ENOSPC on small disks). */
 export const dynamicParams = true;
@@ -183,193 +186,194 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
   );
 
   return (
-    <div className="mx-auto max-w-4xl rounded-[1.75rem] border border-[var(--border-subtle)] bg-gradient-to-b from-[var(--nn-presentation-wash)] via-[var(--theme-page-bg)] to-[var(--bg-section)] px-4 py-10 shadow-[var(--shadow-card)] sm:px-8 sm:py-12">
-      <BreadcrumbJsonLd items={schemaItems} />
-      <div className="mb-6">
-        <BreadcrumbTrail items={crumbs} />
-      </div>
-      <PathwayLessonProgressTracker
-        pathwayId={pathway.id}
-        lessonSlug={lesson.slug}
-        enabled={Boolean(userId) && fullAccess}
-        initialProgress={lessonProgress}
-      />
-      <Link href={base} className="text-sm font-medium text-primary hover:underline">
-        ← Lessons ({pathway.shortName})
-      </Link>
-      <header className="nn-study-card nn-study-card--wash mt-6 p-6 sm:p-8">
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-semibold uppercase tracking-wide text-primary">
-          <span>{lesson.topic}</span>
-          <span aria-hidden className="text-[var(--theme-muted-text)]">
-            ·
-          </span>
-          <span>{pathway.displayName}</span>
+    <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+      <div className="rounded-[1.75rem] border border-[var(--border-subtle)] bg-gradient-to-b from-[var(--nn-presentation-wash)] via-[var(--theme-page-bg)] to-[var(--bg-section)] px-4 py-10 shadow-[var(--shadow-card)] sm:px-8 sm:py-12">
+        <BreadcrumbJsonLd items={schemaItems} />
+        <div className="mb-6">
+          <BreadcrumbTrail items={crumbs} />
         </div>
-        <div className="mt-4 flex flex-wrap items-start justify-between gap-3">
-          <h1 className="nn-marketing-h2 text-[var(--theme-heading-text)]">{lesson.title}</h1>
-          {userId && fullAccess ? (
-            <PathwayLessonProgressBadgeLive
-              pathwayId={pathway.id}
-              lessonSlug={lesson.slug}
-              initial={lessonProgress}
-              className="shrink-0"
-            />
-          ) : null}
+        <PathwayLessonProgressTracker
+          pathwayId={pathway.id}
+          lessonSlug={lesson.slug}
+          enabled={Boolean(userId) && fullAccess}
+          initialProgress={lessonProgress}
+        />
+        <PathwayLessonDetailHeader
+          pathway={pathway}
+          lessonsBasePath={base}
+          lessonTitle={lesson.title}
+          lessonTopic={lesson.topic}
+          bodySystem={lesson.bodySystem}
+          metaChips={<PathwayLessonRecordChips lesson={lesson} omitTopic />}
+          trailing={
+            userId && fullAccess ? (
+              <PathwayLessonProgressBadgeLive
+                pathwayId={pathway.id}
+                lessonSlug={lesson.slug}
+                initial={lessonProgress}
+                className="shrink-0"
+              />
+            ) : null
+          }
+        />
+        <div className="mt-6 space-y-3">
+          <PremiumLessonPublishNotice validation={lesson.premiumValidation} />
+          <LessonQualityNotice tier={lessonQuality.tier} wordCount={lessonQuality.wordCount} />
+          <LessonStructuralQualityNotice gate={lesson.structuralQuality} />
+          <PathwayLessonQuickReview bullets={buildQuickReviewBullets(lesson)} />
         </div>
-        <p className="nn-marketing-body-sm mt-3 text-[var(--theme-muted-text)]">
-          {pathway.countrySlug === "canada" ? "Canada" : "United States"} · {pathway.shortName} · {lesson.bodySystem}
-        </p>
-        <p className="nn-marketing-body-sm mt-2 max-w-prose text-[var(--theme-muted-text)]">
-          Written for {pathway.shortName} judgment—not a generic overview. When you finish, use the practice strip below to answer
-          items in the same clinical scope while prioritization is still in your head.
-        </p>
-      </header>
-      <div className="mt-4 space-y-3">
-        <PremiumLessonPublishNotice validation={lesson.premiumValidation} />
-        <LessonQualityNotice tier={lessonQuality.tier} wordCount={lessonQuality.wordCount} />
-        <LessonStructuralQualityNotice gate={lesson.structuralQuality} />
-        <PathwayLessonQuickReview bullets={buildQuickReviewBullets(lesson)} />
-      </div>
-      {showLocaleFallbackNotice ? (
-        <aside
-          className="nn-card mt-4 border-border bg-[var(--theme-muted-surface)] p-3 text-sm text-muted"
-          data-testid="aside-pathway-lesson-locale-en"
-        >
-          {lesson.localeMeta?.isCatalogEnglishSource ? (
-            <>
-              This lesson body is <span className="font-medium text-foreground">English</span> (bundled catalog or seed
-              data). A <span className="font-medium text-foreground">{lesson.localeMeta.requestedContentLocale}</span>{" "}
-              version will appear here once a matching row is published in{" "}
-              <span className="font-medium text-foreground">pathway_lessons</span>.
-            </>
-          ) : lesson.localeMeta?.usedLocaleFallback ? (
-            <>
-              No published lesson was found for{" "}
-              <span className="font-medium text-foreground">{lesson.localeMeta.requestedContentLocale}</span>; showing the{" "}
-              <span className="font-medium text-foreground">{lesson.localeMeta.contentLocale}</span> version instead.
-            </>
-          ) : null}
-        </aside>
-      ) : null}
+        {showLocaleFallbackNotice ? (
+          <aside
+            className="nn-card mt-4 border-border bg-[var(--theme-muted-surface)] p-3 text-sm text-muted"
+            data-testid="aside-pathway-lesson-locale-en"
+          >
+            {lesson.localeMeta?.isCatalogEnglishSource ? (
+              <>
+                This lesson body is <span className="font-medium text-foreground">English</span> (bundled catalog or seed
+                data). A <span className="font-medium text-foreground">{lesson.localeMeta.requestedContentLocale}</span>{" "}
+                version will appear here once a matching row is published in{" "}
+                <span className="font-medium text-foreground">pathway_lessons</span>.
+              </>
+            ) : lesson.localeMeta?.usedLocaleFallback ? (
+              <>
+                No published lesson was found for{" "}
+                <span className="font-medium text-foreground">{lesson.localeMeta.requestedContentLocale}</span>; showing the{" "}
+                <span className="font-medium text-foreground">{lesson.localeMeta.contentLocale}</span> version instead.
+              </>
+            ) : null}
+          </aside>
+        ) : null}
 
-      {!fullAccess ? (
-        entitlement === "error" ? (
-          <>
-            <aside className="nn-card mt-6 border-amber-200 bg-amber-50 p-4 text-sm text-[var(--theme-body-text)] dark:border-amber-900/40 dark:bg-amber-950/30">
-              <p className="font-semibold">Access check didn’t complete</p>
-              <p className="mt-1 text-muted">
-                We couldn’t confirm your plan (temporary server or data issue). This is not the same as being denied access.
-                Refresh in a moment; you can still read the preview sections below. Sign in again or contact support if it
-                persists.
-              </p>
-            </aside>
+        {!fullAccess ? (
+          entitlement === "error" ? (
+            <>
+              <aside className="nn-card mt-6 border-amber-200 bg-amber-50 p-4 text-sm text-[var(--theme-body-text)] dark:border-amber-900/40 dark:bg-amber-950/30">
+                <p className="font-semibold">Access check didn’t complete</p>
+                <p className="mt-1 text-muted">
+                  We couldn’t confirm your plan (temporary server or data issue). This is not the same as being denied access.
+                  Refresh in a moment; you can still read the preview sections below. Sign in again or contact support if it
+                  persists.
+                </p>
+              </aside>
+              <PathwayLessonPreviewBanner
+                kind="default_preview"
+                pathwayShortName={pathway.shortName}
+                pathwayCountryLabel={pathway.countryCode === "CA" ? "Canada" : "United States"}
+              />
+            </>
+          ) : (
             <PathwayLessonPreviewBanner
-              kind="default_preview"
+              kind={getPathwayLessonPreviewKind(scope, pathway, learnerPath, userId)}
               pathwayShortName={pathway.shortName}
               pathwayCountryLabel={pathway.countryCode === "CA" ? "Canada" : "United States"}
             />
-          </>
-        ) : (
-          <PathwayLessonPreviewBanner
-            kind={getPathwayLessonPreviewKind(scope, pathway, learnerPath, userId)}
-            pathwayShortName={pathway.shortName}
-            pathwayCountryLabel={pathway.countryCode === "CA" ? "Canada" : "United States"}
-          />
-        )
-      ) : null}
+          )
+        ) : null}
 
-      {matchedLessonImage.url ? (
-        <aside className="mt-8 overflow-hidden rounded-2xl border border-border bg-[var(--theme-muted-surface)]/50 p-4">
-          <p className="text-xs font-semibold uppercase tracking-wide text-primary">Concept illustration</p>
-          <div className="mt-3">
-            <PathwayLessonFigures
-              figures={[
-                {
-                  id: "lesson-matched-media",
-                  url: matchedLessonImage.url,
-                  alt: matchedLessonImage.alt,
-                  caption: "Matched from NurseNest media library using lesson title and topic.",
-                  kind: "clinical_reference",
-                },
-              ]}
-            />
-          </div>
-        </aside>
-      ) : null}
-
-      <article className="mt-10 space-y-5">
-        {visible.map((section, idx) => (
-          <section
-            key={section.id}
-            className={`nn-lesson-article-section ${idx % 2 === 1 ? "nn-lesson-article-section--alt" : ""}`}
-          >
-            <h2 className="text-xl font-semibold tracking-tight text-[var(--theme-heading-text)]">
-              {section.heading?.trim() || "Section"}
-            </h2>
-            <div className="mt-4">
-              <PathwayLessonSectionContent
-                text={typeof section.body === "string" ? section.body : ""}
-                figures={section.figures}
-                lessonWikiBasePath={base}
+        {matchedLessonImage.url ? (
+          <aside className="mx-auto mt-8 max-w-[42rem] overflow-hidden rounded-2xl border border-border bg-[var(--theme-muted-surface)]/50 p-4">
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary">Concept illustration</p>
+            <div className="mt-3">
+              <PathwayLessonFigures
+                figures={[
+                  {
+                    id: "lesson-matched-media",
+                    url: matchedLessonImage.url,
+                    alt: matchedLessonImage.alt,
+                    caption: "Matched from NurseNest media library using lesson title and topic.",
+                    kind: "clinical_reference",
+                  },
+                ]}
               />
             </div>
-          </section>
-        ))}
-      </article>
+          </aside>
+        ) : null}
 
-      <PathwayLessonQuizzes preTest={lesson.preTest} postTest={lesson.postTest} fullAccess={fullAccess} />
+        <main className="mt-10">
+          <article className="mx-auto max-w-[42rem] space-y-8">
+            {visible.map((section, idx) => (
+              <section
+                key={section.id}
+                className={`nn-lesson-article-section ${idx % 2 === 1 ? "nn-lesson-article-section--alt" : ""}`}
+              >
+                <h2 className="nn-marketing-h3 border-b border-[color-mix(in_srgb,var(--border-subtle)_90%,var(--theme-primary))] pb-3 text-[var(--theme-heading-text)]">
+                  {section.heading?.trim() || "Section"}
+                </h2>
+                <div className="mt-5">
+                  <PathwayLessonSectionContent
+                    text={typeof section.body === "string" ? section.body : ""}
+                    figures={section.figures}
+                    lessonWikiBasePath={base}
+                  />
+                </div>
+              </section>
+            ))}
+          </article>
+        </main>
 
-      {lockedSections.length > 0 ? <PathwayLessonLockedSectionsPreview sections={lockedSections} /> : null}
+        <div className="mx-auto mt-10 max-w-[42rem]">
+          <PathwayLessonQuizzes preTest={lesson.preTest} postTest={lesson.postTest} fullAccess={fullAccess} />
+        </div>
 
-      <PathwayLessonActions
-        pathwayId={pathway.id}
-        lessonSlug={lesson.slug}
-        topicCode={lesson.topicSlug}
-        topicLabel={lesson.topic}
-        userId={userId}
-        canMarkComplete={fullAccess}
-        initialProgress={lessonProgress}
-      />
+        {lockedSections.length > 0 ? (
+          <div className="mx-auto mt-8 max-w-[42rem]">
+            <PathwayLessonLockedSectionsPreview sections={lockedSections} />
+          </div>
+        ) : null}
 
-      <PathwayLessonRelatedLearningBlock
-        pathway={pathway}
-        topic={lesson.topic}
-        topicSlug={lesson.topicSlug}
-        lessonsBasePath={base}
-        relatedLessons={relatedDisplay}
-        currentSlug={lesson.slug}
-      />
+        <PathwayLessonActions
+          pathwayId={pathway.id}
+          lessonSlug={lesson.slug}
+          topicCode={lesson.topicSlug}
+          topicLabel={lesson.topic}
+          userId={userId}
+          canMarkComplete={fullAccess}
+          initialProgress={lessonProgress}
+        />
 
-      <PathwayLessonRelatedQuestions
-        pathway={pathway}
-        lessonTopic={lesson.topic}
-        topicSlug={lesson.topicSlug}
-        items={relatedQuestionStems}
-      />
+        <PathwayLessonRelatedQuestions
+          pathway={pathway}
+          lessonTopic={lesson.topic}
+          topicSlug={lesson.topicSlug}
+          items={relatedQuestionStems}
+        />
 
-      <p className="mt-8 text-sm text-muted">
-        More resources:{" "}
-        <Link href="/blog" className="font-medium text-primary hover:underline">
-          clinical blog
-        </Link>
-        {" · "}
-        <Link href="/tools" className="font-medium text-primary hover:underline">
-          tools
-        </Link>
-        {" · "}
-        <Link href="/lessons" className="font-medium text-primary hover:underline">
-          all lesson hubs
-        </Link>
-        .
-      </p>
+        <PathwayLessonRelatedLearningBlock
+          pathway={pathway}
+          topic={lesson.topic}
+          topicSlug={lesson.topicSlug}
+          lessonsBasePath={base}
+          relatedLessons={relatedDisplay}
+          currentSlug={lesson.slug}
+        />
 
-      <div className="mt-6 text-sm text-muted">
-        <Link href={buildExamPathwayPath(pathway)} className="font-medium text-primary hover:underline">
-          {pathway.shortName} exam hub
-        </Link>
+        <PathwayLessonDetailEndCtas
+          pathway={pathway}
+          lessonsBasePath={base}
+          topicLabel={lesson.topic}
+          topicSlug={lesson.topicSlug ?? ""}
+        />
+
+        <p className="mt-10 text-center text-xs text-[var(--theme-muted-text)]">
+          <Link href="/blog" className="font-medium text-primary hover:underline">
+            Clinical blog
+          </Link>
+          {" · "}
+          <Link href="/tools" className="font-medium text-primary hover:underline">
+            Tools
+          </Link>
+          {" · "}
+          <Link href="/lessons" className="font-medium text-primary hover:underline">
+            All lesson hubs
+          </Link>
+          {" · "}
+          <Link href={buildExamPathwayPath(pathway)} className="font-medium text-primary hover:underline">
+            {pathway.shortName} exam hub
+          </Link>
+        </p>
+
+        <MarketingStudyCrossLinks className="mt-12" />
       </div>
-
-      <MarketingStudyCrossLinks className="mt-12" />
     </div>
   );
 }

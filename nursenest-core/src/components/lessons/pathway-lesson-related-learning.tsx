@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BookOpen, Layers, Sparkles } from "lucide-react";
+import { LessonCardChip } from "@/components/student/product/lesson-card";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements";
@@ -50,12 +51,15 @@ export function PathwayLessonRelatedLearningBlock({
     >
       <div className="border-b border-border/60 pb-5">
         <p className="nn-marketing-label nn-marketing-label--accent">Next steps</p>
-        <h2 id="related-learning-heading" className="nn-marketing-h3 mt-2 text-[var(--theme-heading-text)]">
-          Keep momentum on {pathway.shortName}
-        </h2>
+        <div className="mt-2 flex flex-wrap items-center gap-2">
+          <h2 id="related-learning-heading" className="nn-marketing-h3 text-[var(--theme-heading-text)]">
+            Keep momentum on {pathway.shortName}
+          </h2>
+          <LessonCardChip variant="pathway">Exam-linked flow</LessonCardChip>
+        </div>
         <p className="nn-marketing-body-sm mt-2 max-w-prose text-[var(--theme-muted-text)]">
-          Related lessons, pathway-scoped questions, then adaptive practice when you want exam-style pressure—kept to a small,
-          intentional set.
+          Related lessons stay in the same topic cluster, then pathway-scoped questions and adaptive practice—so reading never
+          floats away from how you will be tested.
         </p>
       </div>
 
@@ -82,9 +86,14 @@ export function PathwayLessonRelatedLearningBlock({
                   <li key={r.slug}>
                     <Link
                       href={href}
-                      className="group block rounded-lg border border-transparent bg-background/30 px-3 py-2.5 text-sm font-semibold text-foreground transition-colors hover:border-primary/40 hover:bg-background/80 hover:text-primary"
+                      className="group block rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2.5 shadow-sm transition-colors hover:border-[color-mix(in_srgb,var(--semantic-brand)_30%,var(--semantic-border-soft))] hover:bg-[var(--semantic-panel-muted)]"
                     >
-                      {r.title}
+                      <span className="flex flex-wrap items-center gap-2">
+                        <LessonCardChip variant="category">Related lesson</LessonCardChip>
+                        <span className="text-sm font-semibold text-[var(--semantic-text-primary)] group-hover:text-[var(--semantic-brand)]">
+                          {r.title}
+                        </span>
+                      </span>
                     </Link>
                   </li>
                 );

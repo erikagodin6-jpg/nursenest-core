@@ -1,0 +1,103 @@
+import Link from "next/link";
+import { BarChart3 } from "lucide-react";
+import type { TopicAccuracyRow } from "@/lib/insights/types";
+import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
+import { semanticFillClassForAccuracyPct } from "@/lib/ui/semantic-progress-fill";
+
+function bandPillClass(acc: number | null): string {
+  if (acc == null)
+    return "border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] text-[var(--semantic-text-secondary)]";
+  if (acc >= 80) return "nn-badge-semantic-success";
+  if (acc >= 65) return "nn-badge-semantic-info";
+  if (acc >= 50) return "nn-badge-semantic-warning";
+  return "border-[color-mix(in_srgb,var(--semantic-danger)_32%,var(--semantic-border-soft))] bg-[var(--semantic-danger-soft)] text-[var(--semantic-danger-contrast)]";
+}
+
+function bandLabel(t: LearnerMarketingT, acc: number | null): string {
+  if (acc == null) return t("learner.dashboard.categoryBand.na");
+  if (acc >= 80) return t("learner.dashboard.categoryBand.strong");
+  if (acc >= 65) return t("learner.dashboard.categoryBand.progress");
+  if (acc >= 50) return t("learner.dashboard.categoryBand.developing");
+  return t("learner.dashboard.categoryBand.focus");
+}
+
+function numericAccuracy(row: TopicAccuracyRow): number | null {
+  if (row.accuracyPct != null) return row.accuracyPct;
+  if (row.weightedAccuracy != null) return Math.round(row.weightedAccuracy * 100);
+  if (row.attempted > 0) return Math.round((row.correct / row.attempted) * 100);
+  return null;
+}
+
+export function CategoryBreakdown({
+  rows,
+  t,
+  maxRows = 8,
+}: {
+  rows: TopicAccuracyRow[];
+  t: LearnerMarketingT;
+  maxRows?: number;
+}) {
+  const slice = rows.slice(0, maxRows);
+
+  return (
+    <section className="nn-card nn-product-surface-accent nn-student-card-lift relative overflow-hidden border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] pt-7 shadow-[var(--semantic-shadow-soft)]">
+      <div className="px-5 pb-5 sm:px-6 sm:pb-6">
+        <div className="flex items-center gap-2">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--semantic-success)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_10%,var(--semantic-surface))]">
+            <BarChart3 className="h-4 w-4 text-[var(--semantic-success)]" aria-hidden strokeWidth={2} />
+          </div>
+          <div>
+            <h3 className="text-base font-semibold text-[var(--semantic-text-primary)]">{t("learner.dashboard.insight.categoryTitle")}</h3>
+            <p className="text-xs text-[var(--semantic-text-secondary)]">{t("learner.dashboard.categoryBreakdown.hint")}</p>
+          </div>
+        </div>
+
+        {slice.length > 0 ? (
+          <ul className="mt-5 space-y-4">
+            {slice.map((row) => {
+              const acc = numericAccuracy(row);
+              const pct = acc != null ? Math.min(100, Math.max(0, acc)) : 0;
+              const display =
+                row.accuracyPct != null
+                  ? `${row.accuracyPct}%`
+                  : row.weightedAccuracy != null
+                    ? `${Math.round(row.weightedAccuracy * 100)}%`
+                    : row.attempted > 0
+                      ? `${Math.round((row.correct / row.attempted) * 100)}%`
+                      : "—";
+              return (
+                <li key={row.topic}>
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className="min-w-0 font-medium text-[var(--semantic-text-primary)]">{row.topic}</span>
+                    <div className="flex shrink-0 flex-wrap items-center gap-2">
+                      <span className={`inline-flex rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${bandPillClass(acc)}`}>
+                        {bandLabel(t, acc)}
+                      </span>
+                      <span className="text-sm tabular-nums text-[var(--semantic-text-secondary)]">
+                        <span className="font-semibold text-[var(--semantic-text-primary)]">{display}</span>
+                        <span className="ml-1.5 text-xs">· {t("learner.dashboard.insight.topicAttempts", { n: row.attempted })}</span>
+                      </span>
+                    </div>
+                  </div>
+                  <div className="nn-progress-track-semantic nn-progress-track-semantic--md mt-2">
+                    <div
+                      className={`h-full rounded-full ${semanticFillClassForAccuracyPct(acc)} nn-progress-fill-reveal transition-[width] duration-500`}
+                      style={{ width: `${acc != null ? pct : 0}%` }}
+                    />
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        ) : (
+          <div className="mt-5 rounded-xl border border-dashed border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-6 text-sm text-[var(--semantic-text-secondary)]">
+            <p>{t("learner.dashboard.insight.categoryEmpty")}</p>
+            <Link href="/app/questions" className="nn-dashboard-empty-cta">
+              {t("learner.dashboard.empty.startPracticeCta")}
+            </Link>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}

@@ -47,7 +47,8 @@ export type RationaleLessonLinkClient = {
     | "learner.qbank.rationaleLinks.reviewTopic"
     | "learner.qbank.rationaleLinks.readRelatedLesson"
     | "learner.qbank.rationaleLinks.reviewPrioritization"
-    | "learner.qbank.rationaleLinks.browseTopicHub";
+    | "learner.qbank.rationaleLinks.browseTopicHub"
+    | "learner.qbank.rationaleLinks.openTopicLessons";
 };
 
 /** Matches graded map values in `QuestionBankPracticeClient` state. */

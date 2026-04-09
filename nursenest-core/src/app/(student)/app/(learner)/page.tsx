@@ -119,10 +119,10 @@ export default async function LearnerDashboardPage() {
       return (
         <main className="space-y-6">
           <BreadcrumbTrail items={crumbs} />
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-primary">{t("learner.dashboard.kicker")}</p>
-            <h1 className="mt-1 text-3xl font-bold tracking-tight text-[var(--theme-heading-text)]">{t("learner.dashboard.title")}</h1>
-            <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.dashboard.subtitle.subscriber")}</p>
+          <div className="nn-learner-page-hero">
+            <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-brand)]">{t("learner.dashboard.kicker")}</p>
+            <h1 className="mt-1 text-3xl font-bold tracking-tight text-[var(--semantic-text-primary)]">{t("learner.dashboard.title")}</h1>
+            <p className="mt-2 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">{t("learner.dashboard.subtitle.subscriber")}</p>
           </div>
           {todayGoal ? (
             <LearnerDailyMomentumCard

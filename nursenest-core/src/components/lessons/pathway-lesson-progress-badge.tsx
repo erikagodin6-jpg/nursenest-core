@@ -11,7 +11,7 @@ export function PathwayLessonProgressBadge({
   if (status === "completed") {
     return (
       <span
-        className={`inline-flex min-h-[1.5rem] items-center gap-1 rounded-full border border-border bg-role-success-soft px-2 py-0.5 text-[11px] font-semibold text-role-success-text ${className}`}
+        className={`inline-flex min-h-[1.5rem] items-center gap-1 rounded-full border border-[color-mix(in_srgb,var(--role-success)_35%,var(--semantic-border-soft))] bg-[var(--role-success-soft)] px-2 py-0.5 text-[11px] font-semibold text-[var(--role-success-text)] ${className}`}
       >
         <CheckCircle2 className="h-3.5 w-3.5 shrink-0" aria-hidden />
         Completed
@@ -21,16 +21,16 @@ export function PathwayLessonProgressBadge({
   if (status === "in_progress") {
     return (
       <span
-        className={`inline-flex min-h-[1.5rem] items-center gap-1 rounded-full border border-primary/30 bg-primary/[0.08] px-2 py-0.5 text-[11px] font-semibold text-primary ${className}`}
+        className={`inline-flex min-h-[1.5rem] items-center gap-1 rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] px-2 py-0.5 text-[11px] font-semibold text-[var(--semantic-text-primary)] ${className}`}
       >
-        <CircleDot className="h-3.5 w-3.5 shrink-0" aria-hidden />
+        <CircleDot className="h-3.5 w-3.5 shrink-0 text-[var(--semantic-brand)]" aria-hidden />
         In progress
       </span>
     );
   }
   return (
     <span
-      className={`inline-flex min-h-[1.5rem] items-center gap-1 rounded-full border border-border bg-muted/40 px-2 py-0.5 text-[11px] font-medium text-muted ${className}`}
+      className={`inline-flex min-h-[1.5rem] items-center gap-1 rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-2 py-0.5 text-[11px] font-medium text-[var(--semantic-text-muted)] ${className}`}
     >
       <Circle className="h-3.5 w-3.5 shrink-0" aria-hidden />
       Not started

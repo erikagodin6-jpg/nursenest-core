@@ -58,7 +58,8 @@ export function HomeExamSelectionSection() {
 
   return (
     <section
-      className="nn-section-soft border-b border-[var(--border-subtle)] py-12 md:py-16"
+      id="home-exam-paths"
+      className="nn-section-soft scroll-mt-20 border-b border-[var(--border-subtle)] py-12 md:py-16"
       aria-labelledby="home-exam-selection-heading"
       data-testid="section-exam-selection"
     >
@@ -83,7 +84,7 @@ export function HomeExamSelectionSection() {
                   event: PH.funnelHomeToExamHub,
                   eventProps: { placement: "exam_selection_grid", pathway: c.id, region },
                 }}
-                className="nn-card-soft group flex h-full min-h-[12rem] flex-col p-5 transition hover:border-[color-mix(in_srgb,var(--theme-primary)_40%,var(--border-subtle))]"
+                className="nn-card-soft nn-student-card-lift group flex h-full min-h-[12rem] flex-col p-5 transition hover:border-[color-mix(in_srgb,var(--theme-primary)_40%,var(--border-subtle))]"
               >
                 <span className="nn-marketing-h3 text-balance">{t(c.titleKey)}</span>
                 <span className="nn-marketing-body-sm mt-2 flex-1 text-[var(--theme-muted-text)]">{t(c.descKey)}</span>

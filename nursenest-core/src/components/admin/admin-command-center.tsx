@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Activity, AlertTriangle, CheckCircle2, Database, Flame, ShieldAlert } from "lucide-react";
 import type { AdminCommandCenterData } from "@/lib/admin/load-admin-command-center";
 import type { ContentQualityCorpusPayload } from "@/lib/admin/content-quality-corpus-refresh";
+import type { StaffTier } from "@/lib/auth/staff-roles";
 import { AdminQuickActions } from "@/components/admin/admin-quick-actions";
 import { AdminSimpleBarChart } from "@/components/admin/admin-simple-bar-chart";
 import { RATIONALE_MIN_WORDS } from "@/lib/content-quality/standards";
@@ -68,7 +69,7 @@ function MetricTile({
   );
 }
 
-export function AdminCommandCenter({ data }: { data: AdminCommandCenterData }) {
+export function AdminCommandCenter({ data, staffTier = "super" }: { data: AdminCommandCenterData; staffTier?: StaffTier }) {
   const t = data.stats?.totals;
   const dbOk = data.diagnostics?.dbHealth.status === "ok";
 
@@ -131,7 +132,7 @@ export function AdminCommandCenter({ data }: { data: AdminCommandCenterData }) {
         </p>
       </section>
 
-      <AdminQuickActions />
+      <AdminQuickActions staffTier={staffTier} />
 
       {data.premiumProtection ? (
         <section className="rounded-2xl border border-sky-500/25 bg-gradient-to-br from-sky-500/[0.06] via-[var(--theme-card-bg)] to-primary/[0.05] p-6 shadow-sm">

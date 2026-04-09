@@ -729,7 +729,7 @@ export function ExamPracticeClient({
           </div>
 
           {q.questionType === "SATA" ? (
-            <ul className="space-y-3" role="group" aria-label={t("learner.qbank.examUi.answersHeading")}>
+            <ul className="nn-qopt-list" role="group" aria-label={t("learner.qbank.examUi.answersHeading")}>
               {optsCanonical.map((canonical, i) => {
                 const label = optsDisplay[i] ?? canonical;
                 const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
@@ -758,7 +758,7 @@ export function ExamPracticeClient({
               })}
             </ul>
           ) : (
-            <ul className="space-y-3" role="radiogroup" aria-label={t("learner.qbank.examUi.answersHeading")}>
+            <ul className="nn-qopt-list" role="radiogroup" aria-label={t("learner.qbank.examUi.answersHeading")}>
               {optsCanonical.map((canonical, i) => {
                 const label = optsDisplay[i] ?? canonical;
                 const picked = raw === canonical;

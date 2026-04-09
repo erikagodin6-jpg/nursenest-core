@@ -229,7 +229,7 @@ export function PremiumLearnerHub({
           <div className="mt-4 flex flex-wrap gap-4 text-sm">
             <div>
               <p className="text-xs font-medium uppercase tracking-wide text-muted">Reviews logged</p>
-              <p className="text-2xl font-bold tabular-nums text-primary">{snapshot.flashcards.cardsReviewedTotal}</p>
+              <p className="text-2xl font-bold tabular-nums text-[var(--semantic-chart-3)]">{snapshot.flashcards.cardsReviewedTotal}</p>
             </div>
             <div>
               <p className="text-xs font-medium uppercase tracking-wide text-muted">Card streak</p>

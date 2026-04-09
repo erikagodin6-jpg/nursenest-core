@@ -7,6 +7,7 @@ import {
   Activity,
   BarChart3,
   BookOpen,
+  BookMarked,
   ClipboardList,
   CircleDollarSign,
   GraduationCap,
@@ -30,6 +31,7 @@ import {
   ListTodo,
   Cpu,
   Server,
+  Workflow,
 } from "lucide-react";
 import { isNavHrefAllowedForStaffTier } from "@/lib/auth/admin-path-policy";
 import type { StaffTier } from "@/lib/auth/staff-roles";
@@ -42,7 +44,10 @@ const GROUPS: NavGroup[] = [
   {
     id: "overview",
     title: "Overview",
-    items: [{ href: "/admin", label: "Command center", icon: LayoutDashboard }],
+    items: [
+      { href: "/admin", label: "Command center", icon: LayoutDashboard },
+      { href: "/admin/access", label: "Access & roles", icon: Shield },
+    ],
   },
   {
     id: "growth",
@@ -51,6 +56,8 @@ const GROUPS: NavGroup[] = [
       { href: "/admin/analytics", label: "Analytics hub", icon: BarChart3 },
       { href: "/admin/analytics/users", label: "User analytics", icon: LineChart },
       { href: "/admin/analytics/subscriptions", label: "Subscription analytics", icon: CircleDollarSign },
+      { href: "/admin/analytics/funnels", label: "Funnel analytics", icon: Workflow },
+      { href: "/admin/analytics/study-performance", label: "Study & CAT performance", icon: BookMarked },
       { href: "/admin/users", label: "Users & support", icon: Users },
       { href: "/admin/subscriptions", label: "Revenue & subscriptions", icon: Activity },
     ],

@@ -10,6 +10,7 @@ import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
+import { LearnerStudyQuickLinksCard } from "@/components/student/learner-study-quick-links-card";
 import { getServerPremiumProtectionFlags } from "@/lib/premium-protection/config";
 import { maskUserLabelForWatermark } from "@/lib/premium-protection/mask-user-label";
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
@@ -60,13 +61,15 @@ export default async function QuestionBankPage() {
   if (!entitlement.hasAccess) {
     const snap = userId ? await getFreemiumSnapshot(userId) : null;
     return (
-      <main>
+      <main className="space-y-6">
         <div className="mb-4">
           <BreadcrumbTrail items={appShellBreadcrumbs("questions")} />
         </div>
-        <h1 className="text-3xl font-bold">{t("learner.questions.title")}</h1>
-        <p className="mt-2 text-sm text-muted">{t("learner.questions.subtitle.locked")}</p>
-        <div className="mt-6">
+        <div className="nn-learner-page-hero">
+          <h1 className="text-3xl font-bold text-[var(--semantic-text-primary)]">{t("learner.questions.title")}</h1>
+          <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("learner.questions.subtitle.locked")}</p>
+        </div>
+        <div>
           <SubscriptionPaywall
             context="questions"
             freemiumRemainingQuestions={snap?.questionRemaining ?? 0}
@@ -78,14 +81,17 @@ export default async function QuestionBankPage() {
   }
 
   return (
-    <main>
+    <main className="space-y-6">
       <div className="mb-4">
         <BreadcrumbTrail items={appShellBreadcrumbs("questions")} />
       </div>
-      <h1 className="text-3xl font-bold">{t("learner.questions.title")}</h1>
-      <p className="mt-2 text-sm text-muted">{t("learner.questions.subtitle.subscriber")}</p>
-      <aside className="nn-card mt-4 border-primary/15 bg-primary/5 p-4 text-sm text-muted">
-        <p className="font-semibold text-foreground">{t("learner.questions.howTo.title")}</p>
+      <div className="nn-learner-page-hero">
+        <h1 className="text-3xl font-bold text-[var(--semantic-text-primary)]">{t("learner.questions.title")}</h1>
+        <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("learner.questions.subtitle.subscriber")}</p>
+      </div>
+      <LearnerStudyQuickLinksCard t={t} id="questions-study-quick-links" />
+      <aside className="nn-card border-[color-mix(in_srgb,var(--semantic-info)_20%,var(--semantic-border-soft))] bg-[var(--semantic-info-soft)] p-4 text-sm text-[var(--semantic-text-secondary)] shadow-[var(--semantic-shadow-soft)]">
+        <p className="font-semibold text-[var(--semantic-text-primary)]">{t("learner.questions.howTo.title")}</p>
         <ul className="mt-2 list-inside list-disc space-y-1">
           <li>{t("learner.questions.howTo.li1")}</li>
           <li>{t("learner.questions.howTo.li2")}</li>
