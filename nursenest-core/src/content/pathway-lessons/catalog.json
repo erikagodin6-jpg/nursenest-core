@@ -14131,7 +14131,7 @@
               "rationale": "Wounds with mixed tissue types benefit from autolytic debridement using moisture-retentive dressings (hydrogel, hydrocolloid) that soften slough while protecting granulation tissue. Mechanical debridement may damage healthy tissue. Povidone-iodine is cytotoxic to new tissue."
             },
             {
-              "question": "A nurse is delegating tasks for the shift. Which task is appropriate to delegate to an unlicensed assistive personnel (UAP)?",
+              "question": "A nurse is delegating tasks for the shift. Which task is appropriate to delegate to an unregulated care provider (care aide / UCP)?",
               "options": [
                 "Teaching a newly diagnosed diabetic client how to check blood glucose",
                 "Obtaining vital signs on a stable postoperative client",
@@ -14139,7 +14139,7 @@
                 "Administering a scheduled oral pain medication"
               ],
               "correct": 1,
-              "rationale": "Obtaining vital signs on a stable client is a routine task within the UAP scope of practice. Teaching requires assessment and clinical judgment and must be performed by the RN. Wound assessment requires nursing judgment to evaluate for complications. Medication administration cannot be delegated to UAP (in most jurisdictions). The RN must ensure the task is appropriate, the client is stable, and proper supervision is available."
+              "rationale": "Obtaining vital signs on a stable client is often appropriate for an unregulated care provider when directed by the nurse and allowed by facility policy and provincial standards. Teaching requires assessment and clinical judgment and stays with the regulated nurse. Wound assessment requires nursing judgment to evaluate for complications. Medication administration is not delegated to unregulated providers. The nurse remains accountable for delegation, supervision, and follow-up."
             },
             {
               "question": "A client has a wound VAC (vacuum-assisted closure) device. The nurse should ensure:",
@@ -14309,7 +14309,7 @@
               "rationale": "Nurses have an independent obligation to ensure safe medication administration. Looking up an unfamiliar medication allows the nurse to verify the indication, appropriate dose, route, and potential adverse effects. Administering blindly based on a physician order does not meet the standard of safe practice. Refusing without explanation or delegating does not resolve the knowledge gap."
             },
             {
-              "question": "The RPN delegates vital sign measurement to unlicensed assistive personnel. The RPN remains responsible for:",
+              "question": "The RPN delegates vital sign measurement to an unregulated care provider (UCP). The RPN remains responsible for:",
               "options": [
                 "Nothing once delegated",
                 "Supervising the task and evaluating the results",
@@ -14317,7 +14317,7 @@
                 "Performing the task themselves"
               ],
               "correct": 1,
-              "rationale": "Delegation does not transfer accountability. The RPN retains responsibility for: ensuring the task is appropriate for the UAP, providing clear instructions, supervising performance, evaluating results, and intervening if values are abnormal. The five rights of delegation guide this process."
+              "rationale": "Delegation does not transfer accountability. The RPN retains responsibility for: ensuring the task is appropriate for the UCP, providing clear instructions, supervising performance, evaluating results, and intervening if values are abnormal. The five rights of delegation guide this process."
             },
             {
               "question": "A nurse is caring for a terminally ill client who has expressed a desire to discontinue all treatments, including IV fluids and antibiotics. The client's family is insisting that all treatments be continued. What is the nurse's primary obligation?",
@@ -14336,7 +14336,7 @@
                 "Refuse to float because the assignment is unsafe and leave the unit",
                 "Accept the assignment and rely on the labor and delivery nurses for guidance throughout the shift",
                 "Communicate concerns to the charge nurse, request an orientation or assignment to tasks within competency, and document the communication",
-                "File a formal complaint with the state board of nursing before accepting the assignment"
+                "File a formal complaint with the provincial regulatory college before discussing the assignment with the charge nurse"
               ],
               "correct": 2,
               "rationale": "When asked to float to an unfamiliar unit, the nurse should communicate competency concerns to the charge nurse and request an assignment appropriate to their skill level. The nurse can perform tasks within their general competency (vital signs, medication administration, basic assessments) while specialized tasks (fetal monitoring interpretation, labor management) should remain with experienced L&D nurses. Documentation of the communication protects both the nurse and the patients. Refusing and leaving constitutes patient abandonment once the nurse has accepted the assignment. Blindly accepting without communicating limitations puts patients at risk and exposes the nurse to liability for practicing outside their competency. Filing a complaint before attempting resolution through appropriate channels is premature."
@@ -14366,7 +14366,7 @@
               "rationale": "Restraint application requires a healthcare provider order specifying the type of restraint, indication, and duration. Applying restraints without an order violates client rights and institutional policy. Family consent does not replace a provider order. Restraint application must be performed by a regulated health professional, not delegated to unregulated staff."
             },
             {
-              "question": "An RPN/LPN receives an order that seems inappropriate. The nurse should:",
+              "question": "An RPN receives an order that seems inappropriate. The nurse should:",
               "options": [
                 "Follow the order as written since the provider gave it",
                 "Clarify the order with the prescribing provider before carrying it out",
@@ -14410,7 +14410,7 @@
               "rationale": "The charge nurse must balance patient safety with operational needs. Accepting the admission while strategically assigning the new client to the nurse whose existing patients are most stable ensures safe care distribution. Notifying the nursing supervisor documents the staffing concern through proper channels and may result in additional resources such as a float nurse or agency staff. Refusing an admission from the ED can jeopardize patient safety by keeping a sick client in an overcrowded emergency department. Closing the unit without administrative approval exceeds the charge nurse's authority. Assigning all admissions to the least experienced nurse creates an unsafe patient care situation and is not appropriate delegation or workload management."
             },
             {
-              "question": "The RPN/LPN should recognize that which task cannot be delegated to unlicensed assistive personnel?",
+              "question": "The RPN should recognize that which task cannot be delegated to an unregulated care provider (UCP)?",
               "options": [
                 "Measuring vital signs on a stable client",
                 "Administering medications",
@@ -14418,18 +14418,18 @@
                 "Measuring intake and output"
               ],
               "correct": 1,
-              "rationale": "Medication administration requires a licensed nurse (RN, RPN/LPN). It involves assessment, clinical judgment, knowledge of pharmacology, and potential for adverse effects. UAP tasks: vital signs on stable clients, I&O measurement, ambulation, bathing, feeding (non-complex), and specimen collection."
+              "rationale": "Medication administration requires a licensed nurse (RN or RPN). It involves assessment, clinical judgment, knowledge of pharmacology, and potential for adverse effects. Tasks appropriate for a UCP when delegated and supervised may include vital signs on stable clients, I&O measurement, ambulation, bathing, feeding (non-complex), and specimen collection—per facility policy and provincial standards."
             },
             {
-              "question": "A charge nurse receives report that the unit is short-staffed with one RN, one LPN, and one unlicensed assistive personnel (UAP) for 12 clients. Which assignment is most appropriate?",
+              "question": "A charge nurse receives report that the unit is short-staffed with one RN, one RPN, and one unregulated care provider (UCP) for 12 clients. Which assignment is most appropriate?",
               "options": [
-                "RN takes the most complex/unstable clients, LPN takes stable medical clients, UAP assists with activities of daily living",
-                "UAP takes the most stable clients independently including medication administration",
+                "RN takes the most complex/unstable clients, RPN takes stable medical clients, UCP assists with activities of daily living",
+                "UCP takes the most stable clients independently including medication administration",
                 "LPN performs all initial assessments while the RN handles administrative tasks",
                 "All three staff members share clients equally regardless of complexity"
               ],
               "correct": 0,
-              "rationale": "Safe delegation follows the principle of matching client needs with provider competency. The RN must care for unstable, complex clients requiring assessment, clinical judgment, and evaluation. The LPN can care for stable clients with predictable outcomes, performing delegated nursing tasks. The UAP can perform tasks such as vital signs, ADL assistance, and ambulation under supervision. UAPs cannot administer medications or perform assessments. Equal distribution ignores scope of practice."
+              "rationale": "Safe delegation follows the principle of matching client needs with provider competency. The RN must care for unstable, complex clients requiring assessment, clinical judgment, and evaluation. The RPN can care for stable clients with predictable outcomes within practical nursing scope. The UCP can perform appropriate delegated tasks such as vital signs, ADL assistance, and ambulation under supervision. Unregulated providers cannot administer medications or perform nursing assessments. Equal distribution ignores scope of practice."
             }
           ]
         },

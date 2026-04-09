@@ -1,5 +1,8 @@
 "use client";
 
+import Link from "next/link";
+import { PH } from "@/lib/observability/posthog-conversion-events";
+import { trackClientEvent } from "@/lib/observability/posthog-client";
 import type { CatStudyFeedbackPayload } from "@/lib/practice-tests/types";
 
 /**
@@ -16,8 +19,10 @@ export function CatStudyFeedbackPanel({
   onContinue: () => void;
   continueDisabled?: boolean;
 }) {
+  const layers = feedback.layers;
+
   return (
-    <div className="space-y-4">
+    <div className="motion-reduce:transition-none space-y-4">
       <details className="nn-question-rationale-card group" open={!feedback.isCorrect}>
         <summary
           className={`nn-question-rationale-card__verdict flex cursor-pointer list-none items-center justify-between gap-3 outline-none marker:hidden [&::-webkit-details-marker]:hidden ${
@@ -41,12 +46,83 @@ export function CatStudyFeedbackPanel({
         <div className="nn-question-rationale-card__body nn-rationale-prose nn-marketing-body-sm space-y-4 px-4 py-4 sm:px-6 sm:py-5">
           {(feedback.topic || feedback.subtopic) && (
             <p className="text-xs text-[var(--theme-muted-text)]">
-              {feedback.topic ? <span className="font-semibold text-[var(--theme-heading-text)]">{feedback.topic}</span> : null}
+              {feedback.topic ? (
+                <span className="font-semibold text-[var(--theme-heading-text)]">{feedback.topic}</span>
+              ) : null}
               {feedback.topic && feedback.subtopic ? <span> · </span> : null}
               {feedback.subtopic ? <span>{feedback.subtopic}</span> : null}
             </p>
           )}
-          {feedback.sections.length === 0 ? (
+
+          {layers ? (
+            <div className="space-y-3">
+              <details className="rounded-lg border border-border/80 bg-background/60 px-3 py-2" open>
+                <summary className="cursor-pointer text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
+                  Quick take (2–3 sentences)
+                </summary>
+                <p className="mt-2 leading-relaxed text-[var(--theme-body-text)]">{layers.level1Short}</p>
+              </details>
+              <details className="rounded-lg border border-border/80 bg-background/60 px-3 py-2">
+                <summary className="cursor-pointer text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
+                  Full rationale
+                </summary>
+                <div className="mt-2 space-y-3">
+                  {layers.level2Sections.length === 0 ? (
+                    <p className="text-[var(--theme-muted-text)]">No structured rationale on file for this item.</p>
+                  ) : (
+                    layers.level2Sections.map((s) => (
+                      <div key={`${s.heading}-${s.body.slice(0, 40)}`}>
+                        {s.heading.trim() ? (
+                          <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
+                            {s.heading}
+                          </p>
+                        ) : null}
+                        <p className="mt-1 whitespace-pre-wrap leading-relaxed text-[var(--theme-body-text)]">{s.body}</p>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </details>
+              <details className="rounded-lg border border-border/80 bg-background/60 px-3 py-2">
+                <summary className="cursor-pointer text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
+                  Test-taking strategy
+                </summary>
+                <p className="mt-2 leading-relaxed text-[var(--theme-body-text)]">{layers.level3Strategy}</p>
+                {layers.examFramingNote ? (
+                  <p className="mt-2 border-t border-border/60 pt-2 text-xs leading-relaxed text-[var(--theme-muted-text)]">
+                    {layers.examFramingNote}
+                  </p>
+                ) : null}
+              </details>
+              {layers.relatedLessons.length ? (
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
+                    Related learning (pathway-aware)
+                  </p>
+                  <ul className="mt-2 flex flex-wrap gap-2">
+                    {layers.relatedLessons.map((l, i) => (
+                      <li key={l.href}>
+                        <Link
+                          href={l.href}
+                          className="inline-flex rounded-full border border-primary/30 bg-primary/5 px-3 py-1 text-xs font-semibold text-primary hover:bg-primary/10"
+                          onClick={() =>
+                            trackClientEvent(PH.learnerCatLearningLinkClicked, {
+                              surface: "cat_study_rationale",
+                              link_index: i,
+                              href_kind: "lesson",
+                            })
+                          }
+                        >
+                          {i === 0 ? "Review this lesson — " : "Related — "}
+                          {l.title}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+            </div>
+          ) : feedback.sections.length === 0 ? (
             <p className="text-[var(--theme-muted-text)]">No structured rationale on file for this item.</p>
           ) : (
             feedback.sections.map((s) => (

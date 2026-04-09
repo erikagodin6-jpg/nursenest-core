@@ -1,0 +1,14 @@
+{
+  "purpose": "Canada vs US exam alignment — English source lives in public/i18n/en.json. Non-English locales: sync these concepts on purpose; do not blindly machine-translate.",
+  "terminology": {
+    "preferPracticeExamOverMock": "Product copy still mixes “mock” and “practice exam” in learner.* strings. When translating, prefer “practice exam” for nursing licensure surfaces unless the UI label must stay ultra-short.",
+    "regionSpecificExamNames": "REx-PN / Canadian PN vs NCLEX-PN (US) vs NCLEX-RN — keep exam names aligned to pathway, not a single global string."
+  },
+  "enJsonKeysToReview": [
+    "learner.dashboard.student.activityMock",
+    "learner.reportCard.mockExamsLabel",
+    "learner.reportCard.mockLogHeading",
+    "learner.progressPage.examsCtaMocks"
+  ],
+  "notes": "Full grep for “mock” under learner.* in en.json recommended before locale sweep."
+}

@@ -107,7 +107,7 @@ export async function loadAdminStudyPerformanceAnalytics(
     "“Never engaged” = progress row exists but `engagedAt` is null — proxy for drop-off before read-depth; not scroll-mapped.",
     "Question topics use aggregated `UserTopicStat` (correct/wrong counts) — not per-attempt rows.",
     "CAT practice tests: CAT = `practice_tests` where `config.selectionMode = cat` or `adaptive_state` is set. Exam hub CAT intros may use `ExamSession` without a practice test row.",
-    "CAT Study vs Test mode: JSON `config.catExamFeedbackMode` is `study` or `test` (default test; exam simulation is always test). Example: `WHERE (config->>'selectionMode')='cat' AND (config->>'catExamFeedbackMode')='study'`. PostHog `learner_cat_exam_started` and `learner_practice_test_session_completed` include `cat_exam_feedback_mode`.",
+    "CAT Study vs Test mode: JSON `config.catExamFeedbackMode` is `study` or `test` (default test; exam simulation is always test). Example: `WHERE (config->>'selectionMode')='cat' AND (config->>'catExamFeedbackMode')='study'`. PostHog `learner_cat_exam_started` and `learner_practice_test_session_completed` include `cat_exam_feedback_mode`, and completion may include `pass_outlook_pct`, `cat_coach_present`, `cat_confidence_level`, `cat_pattern_codes`. Link follow-through: `learner_cat_learning_link_clicked`.",
     "Rationale link clicks are not stored in Postgres. Use PostHog for `freemium_see_rationale_cta`, `lesson_preview_unlock_cta`, and question-bank explanation toggles.",
   ];
 

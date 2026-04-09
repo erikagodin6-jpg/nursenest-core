@@ -16,6 +16,7 @@ import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/ex
 import { CANONICAL_PATHWAY_HUB } from "@/lib/marketing/canonical-pathway-hubs";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import { alliedHub, pnPrimaryHub } from "@/lib/marketing/marketing-entry-routes";
+import { ensureMarketingExamHubPath } from "@/lib/marketing/nursing-exam-nav-validation";
 
 export type CountryExamOfferingId = "rn" | "pn" | "np" | "allied";
 
@@ -61,21 +62,30 @@ export function marketingExamHubPath(region: MarketingRegionToggle, id: CountryE
   const isUs = region === "US";
   const pathwayId = defaultPathwayIdForMarketingOffering(region, id);
   const p = getExamPathwayById(pathwayId);
-  if (p) return buildExamPathwayPath(p);
-  switch (id) {
-    case "rn":
-      return isUs ? CANONICAL_PATHWAY_HUB.usRn : CANONICAL_PATHWAY_HUB.caRn;
-    case "pn":
-      return pnPrimaryHub(region);
-    case "np":
-      return isUs ? CANONICAL_PATHWAY_HUB.usNp : CANONICAL_PATHWAY_HUB.caNp;
-    case "allied":
-      return alliedHub(region);
-    default: {
-      const _exhaustive: never = id;
-      return _exhaustive;
+  let href: string;
+  if (p) {
+    href = buildExamPathwayPath(p);
+  } else {
+    switch (id) {
+      case "rn":
+        href = isUs ? CANONICAL_PATHWAY_HUB.usRn : CANONICAL_PATHWAY_HUB.caRn;
+        break;
+      case "pn":
+        href = pnPrimaryHub(region);
+        break;
+      case "np":
+        href = isUs ? CANONICAL_PATHWAY_HUB.usNp : CANONICAL_PATHWAY_HUB.caNp;
+        break;
+      case "allied":
+        href = alliedHub(region);
+        break;
+      default: {
+        const _exhaustive: never = id;
+        return _exhaustive;
+      }
     }
   }
+  return ensureMarketingExamHubPath(region, href);
 }
 
 function examNavStripItemFor(region: MarketingRegionToggle, id: CountryExamOfferingId): ExamNavStripItem {

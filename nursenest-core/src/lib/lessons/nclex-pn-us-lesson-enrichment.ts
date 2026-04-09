@@ -30,7 +30,7 @@ export function nclexPnClientNeedsForLesson(l: PathwayLessonRecord): {
     return { group: "safe" };
   }
   if (
-    /delegate|delegation|lpn|lvn|pn |practical|vocational|uap|cna|scope|supervision|assign|report to rn|chain|error|incident/.test(
+    /delegate|delegation|lpn|lvn|pn |practical|vocational|uap|cna|ucp|care aide|unregulated|scope|supervision|assign|report to rn|chain|error|incident/.test(
       h,
     )
   ) {
@@ -168,8 +168,10 @@ export function nclexPnLessonExamPreview(
   const examTips = l.sections.find((s) => s.kind === "exam_tips")?.body ?? "";
 
   let scenarioType = "Prioritization & safe action within PN scope";
-  if (/delegate|uap|cna|scope|assign|supervision|report/.test(h)) {
-    scenarioType = "Delegation, assignment, and RN communication";
+  if (/delegate|uap|cna|ucp|care aide|unregulated|scope|assign|supervision|report/.test(h)) {
+    scenarioType = ca
+      ? "Delegation, assignment, and collaboration (RN / RPN / unregulated care provider)"
+      : "Delegation, assignment, and RN communication";
   }
   if (/med|insulin|injection|pharm|drug|mar|five rights/.test(h)) {
     scenarioType = ca
@@ -232,6 +234,32 @@ export const NCLEX_PN_US_COMMON_MISTAKES: { group: NclexPnClientNeedsGroup | "al
     items: [
       "Picking a medication action without confirming order clarity, rights, and monitoring—PN items love unsafe sequencing.",
       "Treating a stable chronic picture as urgent when the stem adds an acute red flag (vitals, neuro, bleeding).",
+    ],
+  },
+];
+
+/** Canadian PN (RPN) / REx-PN — use on `rex-pn-ca` hubs only; not interchangeable with US NCLEX-PN mistake copy. */
+export const REX_PN_CA_COMMON_MISTAKES: { group: NclexPnClientNeedsGroup | "all"; items: string[] }[] = [
+  {
+    group: "all",
+    items: [
+      "Treating US-style “Client Needs” labels as law—REx-PN rewards provincial college scope, documentation, and safe delegation in Canadian care settings.",
+      "Choosing tasks that ‘look productive’ when the stem expects escalation, clarification of orders, or RN collaboration for unstable clients.",
+      "Ignoring metric units, interprofessional titles, and facility policy language that often appear in Canadian stems.",
+    ],
+  },
+  {
+    group: "safe",
+    items: [
+      "Delegating or assigning work to an unregulated care provider that still requires nursing judgment, initial assessment, or teaching that is outside their role.",
+      "Using LVN/UAP mental models: in Canada, match RN ↔ RPN ↔ unregulated care provider (UCP) / care aide per provincial standards—not US state LVN/UAP framing.",
+    ],
+  },
+  {
+    group: "physio",
+    items: [
+      "Skipping infection-control sequence (hand hygiene, PPE, transmission-based precautions) when the stem embeds outbreak or isolation context.",
+      "Documenting before observing or reporting critical change—Canadian items often test timely communication and factual charting.",
     ],
   },
 ];

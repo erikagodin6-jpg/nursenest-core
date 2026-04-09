@@ -73,7 +73,7 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
     return NextResponse.json({ error: "Session out of sync" }, { status: 409 });
   }
 
-  const feedback = await buildCatStudyFeedback(qid, userAns, gate.entitlement);
+  const feedback = await buildCatStudyFeedback(qid, userAns, gate.entitlement, cfg.pathwayId ?? null);
   if (!feedback) {
     return NextResponse.json({ error: "Could not load teaching content" }, { status: 404 });
   }

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BarChart3 } from "lucide-react";
+import { CatResultsCoachPanel } from "@/components/student/cat-results-coach-panel";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
 import {
   remediationLessonsTopicHref,
@@ -115,6 +116,13 @@ export function PracticeTestResultsStatic({
           </p>
         ) : null}
       </div>
+
+      {results.catCoach ? (
+        <CatResultsCoachPanel
+          coach={results.catCoach}
+          catExamFeedbackMode={results.catExamFeedbackMode ?? config?.catExamFeedbackMode ?? null}
+        />
+      ) : null}
 
       {sessionInsightStruggle || sessionInsightFocus ? (
         <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-brand)_4%,var(--semantic-surface))] px-5 py-4 shadow-sm">

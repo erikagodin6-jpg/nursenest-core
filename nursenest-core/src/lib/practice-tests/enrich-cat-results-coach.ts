@@ -19,7 +19,7 @@ async function loadIncorrectRows(
   const base = questionAccessWhere(entitlement);
   const rows = await prisma.examQuestion.findMany({
     where: { AND: [{ id: { in: ids } }, base] },
-    select: { questionType: true, topic: true, subtopic: true, stem: true },
+    select: { questionType: true, topic: true, subtopic: true, stem: true, tags: true, bodySystem: true },
   });
   return rows.map((r) => ({
     questionType: r.questionType,
@@ -29,6 +29,8 @@ async function loadIncorrectRows(
       typeof r.stem === "string" && r.stem.length > STEM_PREVIEW
         ? `${r.stem.slice(0, STEM_PREVIEW)}…`
         : r.stem,
+    tags: r.tags ?? [],
+    bodySystem: r.bodySystem,
   }));
 }
 
@@ -45,6 +47,7 @@ export async function enrichPracticeTestResultsWithCatCoach(
 
   const state = parseAdaptiveState(adaptiveState);
   const difficultyHistory = state?.difficultyHistory?.length ? state.difficultyHistory : [];
+  const thetaHistory = state?.thetaHistory?.length ? state.thetaHistory : [];
 
   const incorrectIds = results.incorrectQuestionIds ?? [];
   const incorrectRows = await loadIncorrectRows(incorrectIds, entitlement);
@@ -54,6 +57,7 @@ export async function enrichPracticeTestResultsWithCatCoach(
     presentationMode: state?.catPresentationMode,
     pathwayId: config.pathwayId ?? null,
     difficultyHistory,
+    thetaHistory,
     incorrectRows,
   });
 

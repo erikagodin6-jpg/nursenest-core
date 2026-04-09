@@ -12,6 +12,7 @@ import {
 } from "@/lib/exam-pathways/pathway-entitlements";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { LearnerStudyQuickLinksCard } from "@/components/student/learner-study-quick-links-card";
+import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 
@@ -73,6 +74,12 @@ export default async function PracticeTestsPage() {
       <div className="nn-learner-page-hero">
         <h1 className="text-3xl font-bold text-[var(--semantic-text-primary)]">{t("learner.practiceTests.title")}</h1>
         <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("learner.practiceTests.subtitle.subscriber")}</p>
+        <p className="mt-3 text-sm text-[var(--semantic-text-secondary)]">
+          <Link href="/app/practice-tests/cat-insights" className="font-semibold text-primary underline">
+            CAT readiness dashboard
+          </Link>{" "}
+          — pass outlook trends across your completed adaptive sessions.
+        </p>
       </div>
       <LearnerStudyQuickLinksCard t={t} id="practice-tests-study-quick-links" />
       <Suspense fallback={<p className="text-sm text-[var(--semantic-text-secondary)]">{t("learner.loading.section")}</p>}>

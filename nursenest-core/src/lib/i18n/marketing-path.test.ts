@@ -19,3 +19,9 @@ test("isExamHubMarketingPath detects us/canada hubs", () => {
   assert.equal(isExamHubMarketingPath("/fr/pricing"), false);
   assert.equal(isExamHubMarketingPath("/pricing"), false);
 });
+
+test("isExamHubMarketingPath detects hubs after a non-English locale prefix", () => {
+  assert.equal(isExamHubMarketingPath("/fr/us/rn/nclex-rn"), true);
+  assert.equal(isExamHubMarketingPath("/es/canada/np/cnple"), true);
+  assert.equal(isExamHubMarketingPath("/fr/pricing"), false);
+});

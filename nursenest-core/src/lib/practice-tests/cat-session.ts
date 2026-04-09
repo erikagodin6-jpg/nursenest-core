@@ -556,14 +556,24 @@ export async function advanceCatPracticeTest(params: {
       entitlement: params.entitlement,
     });
     if (tail.kind === "completed" && study) {
-      const studyFeedback = await buildCatStudyFeedback(currentId, userAns, params.entitlement);
+      const studyFeedback = await buildCatStudyFeedback(
+        currentId,
+        userAns,
+        params.entitlement,
+        params.config.pathwayId ?? null,
+      );
       return { ...tail, studyFeedback };
     }
     return tail;
   }
 
   if (study) {
-    const studyFeedback = await buildCatStudyFeedback(currentId, userAns, params.entitlement);
+    const studyFeedback = await buildCatStudyFeedback(
+      currentId,
+      userAns,
+      params.entitlement,
+      params.config.pathwayId ?? null,
+    );
     if (!studyFeedback) {
       return { kind: "error", message: "Could not load teaching content for this item. Try again or switch to Test Mode." };
     }

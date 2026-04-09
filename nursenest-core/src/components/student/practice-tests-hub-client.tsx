@@ -465,38 +465,37 @@ export function PracticeTestsHubClient({
             <p className="mt-2 text-xs text-muted-foreground">
               Same tier rules apply. Weak-area mode needs prior scored exam history.
             </p>
-            <div className="mt-4 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-3">
-              <span className="text-sm font-medium text-foreground">CAT feedback while testing</span>
-              <div className="mt-2 flex flex-wrap gap-2">
+            <div className="mt-4 space-y-2">
+              <span className="text-sm font-medium text-foreground">CAT mode</span>
+              <p className="text-xs text-muted-foreground">
+                Same adaptive engine for both — choose whether you want teaching after each item or a stricter run.
+              </p>
+              <div className="grid gap-2 sm:grid-cols-2">
                 <button
                   type="button"
                   onClick={() => setCatExamFeedbackMode("study")}
-                  className={`rounded-full px-4 py-1.5 text-sm font-medium ${
+                  className={`rounded-2xl border p-3 text-left text-sm transition ${
                     catExamFeedbackMode === "study"
-                      ? "bg-[var(--semantic-info)] text-white shadow-sm"
-                      : "border border-[var(--semantic-border-soft)] hover:bg-[var(--semantic-panel-muted)]"
+                      ? "border-primary bg-primary/10 shadow-sm"
+                      : "border-[var(--semantic-border-soft)] hover:bg-[var(--semantic-panel-muted)]"
                   }`}
                 >
-                  Study Mode
+                  <span className="font-semibold text-foreground">Study Mode</span>
+                  <span className="mt-1 block text-xs text-muted-foreground">Rationales as you go · adaptive learning</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setCatExamFeedbackMode("test")}
-                  className={`rounded-full px-4 py-1.5 text-sm font-medium ${
+                  className={`rounded-2xl border p-3 text-left text-sm transition ${
                     catExamFeedbackMode === "test"
-                      ? "bg-[var(--semantic-info)] text-white shadow-sm"
-                      : "border border-[var(--semantic-border-soft)] hover:bg-[var(--semantic-panel-muted)]"
+                      ? "border-primary bg-primary/10 shadow-sm"
+                      : "border-[var(--semantic-border-soft)] hover:bg-[var(--semantic-panel-muted)]"
                   }`}
                 >
-                  Test Mode
+                  <span className="font-semibold text-foreground">Test Mode</span>
+                  <span className="mt-1 block text-xs text-muted-foreground">No hints until the end · exam-style</span>
                 </button>
               </div>
-              <p className="mt-2 text-xs text-muted-foreground">
-                <strong className="text-foreground">Study Mode</strong> — see rationales as you go after each answer.
-                <span className="mx-1 text-border">·</span>
-                <strong className="text-foreground">Test Mode</strong> — no rationales until the end. Same adaptive
-                engine for both.
-              </p>
             </div>
           </div>
         ) : null}

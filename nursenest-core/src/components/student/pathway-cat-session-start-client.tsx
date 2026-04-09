@@ -157,29 +157,45 @@ export function PathwayCatSessionStartClient({
         />
       </label>
 
-      <fieldset className="text-sm">
-        <legend className="text-muted-foreground">CAT feedback</legend>
-        <div className="mt-2 flex flex-wrap gap-4">
-          <label className="inline-flex items-center gap-2">
-            <input
-              type="radio"
-              name="catFeedback"
-              checked={catExamFeedbackMode === "study"}
-              onChange={() => setCatExamFeedbackMode("study")}
-            />
-            Study Mode — see rationales as you go
-          </label>
-          <label className="inline-flex items-center gap-2">
-            <input
-              type="radio"
-              name="catFeedback"
-              checked={catExamFeedbackMode === "test"}
-              onChange={() => setCatExamFeedbackMode("test")}
-            />
-            Test Mode — no rationales until the end
-          </label>
+      <div>
+        <p className="text-sm font-medium text-foreground">How do you want to run this CAT?</p>
+        <p className="mt-1 text-xs text-muted-foreground">
+          Same adaptive engine and scoring either way — only on-screen teaching and pacing differ.
+        </p>
+        <div className="mt-3 grid gap-3 sm:grid-cols-2">
+          <button
+            type="button"
+            onClick={() => setCatExamFeedbackMode("study")}
+            className={`rounded-2xl border p-4 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
+              catExamFeedbackMode === "study"
+                ? "border-primary bg-primary/8 shadow-sm"
+                : "border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] hover:bg-[var(--semantic-panel-muted)]"
+            }`}
+          >
+            <p className="text-xs font-bold uppercase tracking-widest text-primary">Study Mode</p>
+            <p className="mt-2 text-sm font-semibold text-foreground">See rationales as you go</p>
+            <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+              Correctness and full teaching support after each item. Best when you are learning and want immediate
+              clinical context.
+            </p>
+          </button>
+          <button
+            type="button"
+            onClick={() => setCatExamFeedbackMode("test")}
+            className={`rounded-2xl border p-4 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
+              catExamFeedbackMode === "test"
+                ? "border-primary bg-primary/8 shadow-sm"
+                : "border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] hover:bg-[var(--semantic-panel-muted)]"
+            }`}
+          >
+            <p className="text-xs font-bold uppercase tracking-widest text-primary">Test Mode</p>
+            <p className="mt-2 text-sm font-semibold text-foreground">No rationales until the end</p>
+            <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+              Exam-style focus — no hints during the live CAT. Explanations unlock in post-exam review.
+            </p>
+          </button>
         </div>
-      </fieldset>
+      </div>
 
       <fieldset className="text-sm">
         <legend className="text-muted-foreground">Pool basis</legend>

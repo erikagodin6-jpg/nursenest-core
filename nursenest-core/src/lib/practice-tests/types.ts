@@ -20,6 +20,8 @@ export type CatStudyFeedbackLayers = {
   level2Sections: CatStudyFeedbackSection[];
   level3Strategy: string;
   relatedLessons: Array<{ title: string; href: string }>;
+  /** Exam identity — presentation only; does not change scoring. */
+  examFramingNote?: string;
 };
 
 /** Serializable teaching payload for CAT Study Mode (after each item). */

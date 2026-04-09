@@ -29,6 +29,7 @@ import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { loadLessonContinueStudyNext } from "@/lib/learner/lesson-context-study-next";
 import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { getLearnerExamFraming } from "@/lib/learner/learner-exam-framing";
 import { loadRelatedExamQuestionStemsForPathwayLesson } from "@/lib/lessons/lesson-question-cross-links";
 import { PathwayLessonRelatedQuestions } from "@/components/lessons/pathway-lesson-related-questions";
 import { buildAppQuestionBankTopicDrillHref } from "@/components/lessons/pathway-lesson-link-practice";
@@ -278,6 +279,7 @@ export default async function LessonDetailPage({ params }: Props) {
     const visible = visibleSectionsForLesson(record, true);
     const pathwayId = resolvedLesson.pathwayId;
     const pathway = getExamPathwayById(pathwayId);
+    const examFraming = getLearnerExamFraming(pathwayId);
     const relatedQuestionStems =
       pathway != null
         ? await loadRelatedExamQuestionStemsForPathwayLesson({
@@ -309,6 +311,11 @@ export default async function LessonDetailPage({ params }: Props) {
           {t("learner.lessons.detail.allLessons")}
         </Link>
         <h1 className="mt-4 text-3xl font-bold">{record.title}</h1>
+        {examFraming.region !== "unknown" ? (
+          <p className="mt-2 text-xs text-muted-foreground">
+            Aligned to {examFraming.examIdentityLabel} expectations (study content; follow your regulator for authoritative scope).
+          </p>
+        ) : null}
         {record.seoDescription ? <p className="mt-2 text-sm text-muted">{record.seoDescription}</p> : null}
         <div className="mt-6">
           <PremiumLessonShell

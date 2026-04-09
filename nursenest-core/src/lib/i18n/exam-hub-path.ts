@@ -1,4 +1,5 @@
 import type { CountrySlug } from "@/lib/exam-pathways/types";
+import { DEFAULT_MARKETING_LOCALE, isMarketingLocaleCode } from "@/lib/i18n/marketing-locale-policy";
 
 /** First URL segment for marketing exam pathway hubs (`/{country}/{role}/{exam}/…`). */
 export function isExamPathwayCountrySlug(segment: string): segment is CountrySlug {
@@ -7,13 +8,18 @@ export function isExamPathwayCountrySlug(segment: string): segment is CountrySlu
 
 /**
  * True when the pathname is an exam hub path (country slug first), not a BCP marketing locale prefix.
- * Uses the raw pathname (e.g. from `usePathname()`), including any leading `/fr` if present.
+ * Uses the raw pathname (e.g. from `usePathname()`). If the URL is `/{lang}/us/…` or `/{lang}/canada/…`
+ * (non-English UI locale prefix), the country segment is detected after stripping that prefix.
  */
 export function isExamHubMarketingPath(pathname: string): boolean {
   const p = pathname.startsWith("/") ? pathname : `/${pathname}`;
   const parts = p.split("/").filter(Boolean);
-  const first = parts[0];
-  if (!first) return false;
-  if (isExamPathwayCountrySlug(first)) return true;
-  return false;
+  if (parts.length === 0) return false;
+  let idx = 0;
+  const maybeLocale = parts[0]!;
+  if (isMarketingLocaleCode(maybeLocale) && maybeLocale !== DEFAULT_MARKETING_LOCALE) {
+    idx = 1;
+  }
+  const country = parts[idx];
+  return country ? isExamPathwayCountrySlug(country) : false;
 }

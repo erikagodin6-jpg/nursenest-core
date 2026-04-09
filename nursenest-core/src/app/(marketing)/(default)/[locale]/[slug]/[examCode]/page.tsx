@@ -7,9 +7,13 @@ import {
 } from "@/lib/exam-pathways/exam-product-registry";
 import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
 import { auth } from "@/lib/auth";
-import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
+import {
+  loadPathwayQuestionBankSnapshot,
+  type PathwayQuestionBankSnapshot,
+} from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import { countPathwayLessons } from "@/lib/lessons/pathway-lesson-loader";
 import { loadNpCanadaInventoryGate } from "@/lib/np/np-pathway-inventory-gate";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
 export const dynamicParams = true;
@@ -59,11 +63,22 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
   const isSignedIn = Boolean(session?.user);
   const npPracticeSeo = getNpPracticeTestLandingCopy(locale, slug, examCode) ?? null;
   const marketingHubPath = `/${locale}/${slug}/${examCode}`;
-  const [npInventory, questionSnapshot, pathwayLessonCount] = await Promise.all([
-    pathway.id === "ca-np-cnple" ? loadNpCanadaInventoryGate() : Promise.resolve(null),
-    loadPathwayQuestionBankSnapshot(pathway.id),
-    countPathwayLessons(pathway.id),
-  ]);
+  let questionSnapshot: PathwayQuestionBankSnapshot = { status: "unavailable" };
+  let pathwayLessonCount = 0;
+  let npInventory: Awaited<ReturnType<typeof loadNpCanadaInventoryGate>> = null;
+  try {
+    [npInventory, questionSnapshot, pathwayLessonCount] = await Promise.all([
+      pathway.id === "ca-np-cnple" ? loadNpCanadaInventoryGate() : Promise.resolve(null),
+      loadPathwayQuestionBankSnapshot(pathway.id),
+      countPathwayLessons(pathway.id),
+    ]);
+  } catch (e) {
+    const message = e instanceof Error ? e.message : String(e);
+    safeServerLog("exam_pathway_hub", "hub_data_load_failed", {
+      pathwayId: pathway.id,
+      detail: message.slice(0, 240),
+    });
+  }
   return (
     <ExamPathwayHub
       pathway={pathway}

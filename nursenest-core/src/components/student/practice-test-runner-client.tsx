@@ -16,6 +16,8 @@ import type {
   PracticeTestConfigJson,
   PracticeTestResultsJson,
 } from "@/lib/practice-tests/types";
+import { CatLiveTransparencyStrip } from "@/components/student/cat-live-transparency-strip";
+import { CatResultsCoachPanel } from "@/components/student/cat-results-coach-panel";
 import { CatStudyFeedbackPanel } from "@/components/student/cat-study-feedback-panel";
 import { ProtectedPremiumContent } from "@/components/student/protected-premium-content";
 import { StudyNotesPanel } from "@/components/student/study-notes-panel";
@@ -75,6 +77,8 @@ export function PracticeTestRunnerClient({
   const [catMode, setCatMode] = useState(false);
   const [adaptiveTheta, setAdaptiveTheta] = useState<number | null>(null);
   const [adaptiveSe, setAdaptiveSe] = useState<number | null>(null);
+  const [adaptiveDifficultyHistory, setAdaptiveDifficultyHistory] = useState<number[]>([]);
+  const [catLiveTransparency, setCatLiveTransparency] = useState(false);
   const [saving, setSaving] = useState(false);
   const [teachingReviewItems, setTeachingReviewItems] = useState<PracticeTestTeachingItem[] | null>(null);
   const [teachingReviewLoading, setTeachingReviewLoading] = useState(false);
@@ -153,6 +157,11 @@ export function PracticeTestRunnerClient({
       const astObj = ast && typeof ast === "object" && !Array.isArray(ast) ? (ast as Record<string, unknown>) : null;
       setAdaptiveTheta(typeof astObj?.theta === "number" ? astObj.theta : null);
       setAdaptiveSe(typeof astObj?.se === "number" ? astObj.se : null);
+      const dhRaw = astObj?.difficultyHistory;
+      const dhParsed = Array.isArray(dhRaw)
+        ? dhRaw.filter((x): x is number => typeof x === "number" && Number.isFinite(x))
+        : [];
+      setAdaptiveDifficultyHistory(dhParsed);
       setLinearCommittedIds(getLinearCommittedQuestionIds(ast));
       setLinearPracticeFeedback({});
       setCatFinalStudyFeedback(null);
@@ -689,6 +698,14 @@ export function PracticeTestRunnerClient({
             </Link>{" "}
             (bookmark or share this view; full teaching review stays below.)
           </p>
+          {results.catCoach ? (
+            <div className="mt-4">
+              <CatResultsCoachPanel
+                coach={results.catCoach}
+                catExamFeedbackMode={results.catExamFeedbackMode ?? testConfig?.catExamFeedbackMode ?? null}
+              />
+            </div>
+          ) : null}
           {results.catReport?.suggestedNextSteps?.length ? (
             <div className="nn-semantic-inset--cool mt-4 p-3">
               <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">Next steps</p>
@@ -1003,6 +1020,21 @@ export function PracticeTestRunnerClient({
                       : "Test Mode — no rationales until the end. Same adaptive engine and scoring as Study Mode; only on-screen feedback differs."
                   : "Pacing practice only. Not a copy of any official exam interface."}
             </p>
+            {catMode && timedMode && timeLimitSec != null ? (
+              <p className="rounded-lg border border-amber-500/25 bg-amber-500/10 px-3 py-2 text-xs font-medium text-amber-950 dark:text-amber-100">
+                Strict timing is on — when the timer reaches zero, this session can end automatically. Pace each item
+                accordingly.
+              </p>
+            ) : null}
+            {catMode ? (
+              <CatLiveTransparencyStrip
+                difficultyTail={adaptiveDifficultyHistory}
+                theta={adaptiveTheta}
+                se={adaptiveSe}
+                show={catLiveTransparency}
+                onToggle={setCatLiveTransparency}
+              />
+            ) : null}
 
             <div className="overflow-hidden rounded-2xl border border-border/80 bg-card shadow-sm">
               <div className="border-b border-border/70 px-4 py-2.5 nn-marketing-caption text-[var(--theme-muted-text)] sm:px-5">

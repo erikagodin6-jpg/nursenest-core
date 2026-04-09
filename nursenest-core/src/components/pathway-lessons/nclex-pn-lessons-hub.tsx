@@ -12,6 +12,7 @@ import {
   buildNclexPnUsLessonSections,
   nclexPnLessonExamPreview,
   NCLEX_PN_US_COMMON_MISTAKES,
+  REX_PN_CA_COMMON_MISTAKES,
 } from "@/lib/lessons/nclex-pn-us-lesson-enrichment";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import type { TopicCluster } from "@/lib/lessons/pathway-lesson-loader";
@@ -40,6 +41,10 @@ function pnExamLabels(framing: PnLessonsHubFraming) {
     regulatorTone: rex
       ? "Canadian regulatory language and practical-nurse scope — recognition, monitoring, reporting, and escalation."
       : "NCLEX-PN Client Needs — scope-safe judgment, delegation, and ordered care.",
+    lessonGroupNavLabel: rex ? "Jump to competency areas" : "Jump to Client Needs",
+    howToStep4: rex
+      ? "Revisit the matching competency section here before stacking new topics; adaptive difficulty only helps after gaps shrink."
+      : "Return to the matching Client Needs section here before stacking new topics; CAT difficulty only helps after gaps shrink.",
   };
 }
 
@@ -52,6 +57,7 @@ export function NclexPnLessonsHub({
   framing = "nclex-pn-us",
 }: Props) {
   const labels = pnExamLabels(framing);
+  const commonMistakes = framing === "rex-pn-ca" ? REX_PN_CA_COMMON_MISTAKES : NCLEX_PN_US_COMMON_MISTAKES;
   const previewFraming = framing === "rex-pn-ca" ? "rex-pn-ca" : "nclex-pn-us";
   const safeLessons = lessons.filter(pathwayLessonHasRenderableHubSlug);
   const sections = buildNclexPnUsLessonSections(safeLessons);
@@ -66,6 +72,11 @@ export function NclexPnLessonsHub({
     <div className="space-y-14 rounded-[1.75rem] border border-[var(--border-subtle)] bg-gradient-to-b from-[var(--nn-presentation-wash)] via-[var(--theme-page-bg)] to-[var(--theme-page-bg)] p-4 sm:p-6 md:p-8">
       <PathwayHubSection kind="cardWash" aria-labelledby="how-use-pn-hub">
         <p className="nn-marketing-label nn-marketing-label--accent">{labels.examShort} · practical nursing</p>
+        {framing === "rex-pn-ca" ? (
+          <p className="nn-marketing-caption mt-2 text-[var(--theme-muted-text)]">
+            Aligned to REx-PN (Canada RPN) exam expectations — provincial college scope applies.
+          </p>
+        ) : null}
         <h2 id="how-use-pn-hub" className="nn-marketing-h3 mt-2">
           How to use these lessons for {labels.examShort}
         </h2>
@@ -83,8 +94,7 @@ export function NclexPnLessonsHub({
             unsafe for the patient, out of scope, or right idea but wrong sequence?
           </li>
           <li>
-            <span className="font-semibold text-[var(--theme-heading-text)]">4. Revisit weak areas.</span> Return to the matching Client Needs
-            section here before stacking new topics; CAT difficulty only helps after gaps shrink.
+            <span className="font-semibold text-[var(--theme-heading-text)]">4. Revisit weak areas.</span> {labels.howToStep4}
           </li>
         </ol>
       </PathwayHubSection>
@@ -95,7 +105,10 @@ export function NclexPnLessonsHub({
         </h2>
         <ul className="nn-marketing-body-sm mt-3 list-disc space-y-2 pl-5 text-[var(--theme-muted-text)]">
           <li>
-            {labels.regulatorTone} Lessons are grouped by Client Needs below.
+            {labels.regulatorTone}{" "}
+            {framing === "rex-pn-ca"
+              ? "Lessons are grouped into practical-nurse competency areas below (mirrors how many learners organize REx-PN prep)."
+              : "Lessons are grouped by Client Needs below."}
           </li>
           <li>Built around {labels.candidate} priorities: stable vs unstable recognition, monitoring, reporting, safety, and delegation.</li>
           <li>Supports clinical judgment stems: multiple reasonable options with one safest, scope-correct choice.</li>
@@ -110,7 +123,7 @@ export function NclexPnLessonsHub({
 
       {navLinks.length > 0 && (
         <PathwayHubSection kind="navWash" as="nav" aria-label={`${labels.examShort} lesson categories`}>
-          <p className="nn-marketing-label">Jump to Client Needs</p>
+          <p className="nn-marketing-label">{labels.lessonGroupNavLabel}</p>
           <p className="nn-marketing-caption mt-1">Counts reflect lessons on this page (paginated hub).</p>
           <ul className="mt-3 flex flex-wrap gap-2">
             {navLinks.map((s) => (
@@ -276,7 +289,11 @@ export function NclexPnLessonsHub({
             <li>A. Stable post-op waiting for discharge teaching</li>
             <li>B. New onset chest pressure with diaphoresis and BP drop</li>
             <li>C. Diabetic patient due for scheduled insulin per protocol</li>
-            <li>D. UAP asks for help turning a patient on bedrest</li>
+            <li>
+              {framing === "rex-pn-ca"
+                ? "D. A care aide asks for help turning a client on bedrest"
+                : "D. UAP asks for help turning a patient on bedrest"}
+            </li>
           </ul>
           <p className="nn-marketing-body-sm mt-3 text-[var(--theme-body-text)]">
             <strong>Correct logic:</strong> See the patient with acute cardiopulmonary compromise first. Potential
@@ -284,8 +301,10 @@ export function NclexPnLessonsHub({
           </p>
           <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">
             <strong className="text-[var(--theme-heading-text)]">Eliminate distractors:</strong> Discharge teaching and routine insulin matter,
-            but not before unstable symptoms are addressed or escalated per facility policy. Helping the UAP may be valid only
-            after higher-risk needs are covered.
+            but not before unstable symptoms are addressed or escalated per facility policy.{" "}
+            {framing === "rex-pn-ca"
+              ? "Helping the care aide may be appropriate only after higher-risk needs are covered."
+              : "Helping the UAP may be valid only after higher-risk needs are covered."}
           </p>
           <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">
             <strong className="text-[var(--theme-heading-text)]">Takeaway:</strong> {labels.examShort} prioritization still follows patient outcome
@@ -299,7 +318,7 @@ export function NclexPnLessonsHub({
           {framing === "rex-pn-ca" ? "Common mistakes for Canadian PN (RPN) students" : "Common mistakes for LPN/LVN students"}
         </h2>
         <div className="mt-4 space-y-6">
-          {NCLEX_PN_US_COMMON_MISTAKES.map((block) => (
+          {commonMistakes.map((block) => (
             <div key={block.group}>
               {block.group !== "all" && (
                 <p className="text-xs font-semibold uppercase text-muted">

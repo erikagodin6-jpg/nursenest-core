@@ -41,6 +41,14 @@ export function capturePracticeTestCompletedAnalytics(
   const readiness = readinessFromResults(results);
 
   const catFeedback = cfg.selectionMode === "cat" ? (cfg.catExamFeedbackMode ?? "test") : undefined;
+  const coach = res.catCoach;
+  const patternCodes =
+    coach?.errorPatterns?.length && cat
+      ? coach.errorPatterns
+          .map((p) => p.code)
+          .filter(Boolean)
+          .join(",")
+      : undefined;
 
   captureLearnerProductEvent(userId, entitlement, PH.learnerPracticeTestSessionCompleted, {
     selection_mode: String(sel),
@@ -52,6 +60,10 @@ export function capturePracticeTestCompletedAnalytics(
     score_correct: res.scoreCorrect,
     accuracy_pct: res.accuracyPct,
     readiness_label: readiness,
+    pass_outlook_pct: coach != null ? coach.passOutlookPercent : undefined,
+    cat_coach_present: coach != null,
+    cat_confidence_level: coach?.confidenceLevel,
+    cat_pattern_codes: patternCodes,
   });
 
   if (readiness) {

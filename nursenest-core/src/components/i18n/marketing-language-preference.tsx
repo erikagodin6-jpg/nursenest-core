@@ -35,7 +35,8 @@ export function MarketingLanguagePreferenceList({ onDone, renderItem }: Props) {
   const [pending, startTransition] = useTransition();
   const { pathname: barePath } = stripMarketingLocalePrefix(pathname);
   const basePath = barePath || "/";
-  const onExamHub = isExamHubMarketingPath(pathname);
+  /** Prefer stripped path so `/fr/us/…` is treated like an exam hub (cookie + refresh, no bad `push`). */
+  const onExamHub = isExamHubMarketingPath(barePath) || isExamHubMarketingPath(pathname);
   /** `/app/…` URLs are not under `(marketing)/[locale]`; keep path stable and rely on the cookie + refresh. */
   const onAppShell = /^\/app(\/|$)/.test(pathname);
 

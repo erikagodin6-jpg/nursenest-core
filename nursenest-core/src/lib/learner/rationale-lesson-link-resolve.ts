@@ -2,7 +2,7 @@
  * Resolve **app-safe** and **marketing-fallback** hrefs for rationale lesson links.
  */
 import type { PrismaClient } from "@prisma/client";
-import { ContentStatus } from "@prisma/client";
+import { ContentStatus, CountryCode } from "@prisma/client";
 import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import {
   inferRationaleLessonSlugCandidates,
@@ -59,6 +59,10 @@ async function resolveSlugHref(
 
   if (row) {
     return { href: `/app/lessons/${row.id}`, title: row.title, hrefSource: "app" };
+  }
+  /** Avoid synthesizing marketing lesson URLs without a published row for Canadian pathways — reduces cross-catalog mismatches. */
+  if (pathway.countryCode === CountryCode.CA) {
+    return null;
   }
   const hub = buildExamPathwayPath(pathway, `lessons/${slug}`);
   const titleFromSlug = slug
