@@ -163,6 +163,7 @@ export async function POST(req: Request) {
       coverImageCaption: true,
       coverImagePrompt: true,
       imageStatus: true,
+      adminPublishLog: true,
     },
   });
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { auth } from "@/lib/auth";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerBillingPageContent } from "@/components/student/learner-billing-page-content";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { loadBillingPagePayload } from "@/lib/learner/load-billing-page-payload";
@@ -49,6 +50,8 @@ export default async function AccountBillingPage() {
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.account.billing.intro")}</p>
       </div>
       <LearnerBillingPageContent payload={payload} t={t} localeTag={localeTag} />
+
+      <LearnerAccountCrossLinks variant="billing" t={t} />
     </main>
   );
 }

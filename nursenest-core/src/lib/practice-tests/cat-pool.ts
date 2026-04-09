@@ -13,6 +13,8 @@ const MAX_POOL = 4000;
 
 /**
  * Tier-scoped pool for adaptive practice (same gates as linear practice tests).
+ * With `pathwayId`, RN / PN / NP isolation uses `questionAccessWhereWithPathway` (`exam` in pathway keys).
+ * Narrative spec: `src/lib/exams/cat-adaptive-policy.ts`.
  */
 export async function fetchCatPracticePool(
   userId: string,

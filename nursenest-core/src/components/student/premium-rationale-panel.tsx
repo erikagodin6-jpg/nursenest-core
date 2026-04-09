@@ -1,10 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import type { ContentQualityTier } from "@/lib/content-quality/standards";
 import type { RationaleReferenceMedia } from "@/lib/content-quality/rationale-media";
 import type { NormalizedTeachingPayload, TeachingMediaBundle } from "@/lib/content-quality/teaching-payload";
 import { TeachingBreakdown } from "@/components/student/teaching-breakdown";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import type { RationaleLessonLinkClient } from "@/lib/questions/question-bank-client-types";
 
 function LegacyReferenceFigures({ items }: { items: RationaleReferenceMedia[] }) {
   if (items.length === 0) return null;
@@ -50,6 +52,8 @@ export function PremiumRationalePanel({
   referenceMedia,
   teaching,
   teachingMedia,
+  /** Pathway-aware lesson links (from `/api/questions/grade`). */
+  rationaleLessonLinks,
   /** `exam`: prominent verdict + collapsible explanation (question bank). */
   variant = "default",
   /** When `variant` is `exam`, start with rationale expanded (e.g. after incorrect). */
@@ -63,10 +67,12 @@ export function PremiumRationalePanel({
   referenceMedia?: RationaleReferenceMedia[] | null;
   teaching?: NormalizedTeachingPayload | null;
   teachingMedia?: TeachingMediaBundle | null;
+  rationaleLessonLinks?: RationaleLessonLinkClient[] | null;
   variant?: "default" | "exam";
   defaultOpenExplanation?: boolean;
 }) {
   const { t } = useMarketingI18n();
+  const lessonLinks = (rationaleLessonLinks ?? []).filter((l) => l.href?.trim() && l.ctaKey);
   const sections = (rationaleSections ?? []).filter((s) => s.body?.trim());
   const tier = rationaleQuality?.tier;
   const showEnrichment =
@@ -111,20 +117,38 @@ export function PremiumRationalePanel({
       {!useTeaching && referenceMedia && referenceMedia.length > 0 ? (
         <LegacyReferenceFigures items={referenceMedia} />
       ) : null}
+      {lessonLinks.length > 0 ? (
+        <div className="mt-4 space-y-2">
+          <p className="text-xs font-semibold uppercase tracking-wide text-primary">{t("learner.qbank.rationaleLinks.heading")}</p>
+          <ul className="space-y-2">
+            {lessonLinks.map((l) => (
+              <li key={`${l.href}-${l.slug}`}>
+                <Link
+                  href={l.href}
+                  className="group inline-flex w-full flex-col gap-0.5 rounded-lg border border-border/80 bg-muted/20 px-3 py-2.5 text-left transition-colors hover:border-primary/40 hover:bg-muted/40 sm:flex-row sm:items-center sm:justify-between"
+                >
+                  <span className="text-sm font-semibold text-foreground group-hover:text-primary">{t(l.ctaKey)}</span>
+                  <span className="text-xs text-muted-foreground">{l.title}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
     </>
   );
 
   if (variant === "exam") {
     return (
-      <div className="overflow-hidden rounded-xl border-2 border-border bg-card text-sm shadow-sm">
+      <div className="nn-question-rationale-card text-sm">
         <div
-          className={`border-b border-border px-4 py-4 sm:px-5 ${
-            correct ? "bg-role-success-soft" : "bg-destructive/10 dark:bg-destructive/15"
+          className={`nn-question-rationale-card__verdict sm:px-6 sm:py-5 ${
+            correct ? "nn-question-rationale-card__verdict--ok" : "nn-question-rationale-card__verdict--miss"
           }`}
         >
           <p
-            className={`text-lg font-bold tracking-tight sm:text-xl ${
-              correct ? "text-role-success" : "text-destructive"
+            className={`text-base font-semibold tracking-tight sm:text-lg ${
+              correct ? "text-[var(--role-success-text)]" : "text-[var(--theme-heading-text)]"
             }`}
             role="status"
           >
@@ -132,14 +156,18 @@ export function PremiumRationalePanel({
           </p>
         </div>
         <details className="group" open={defaultOpenExplanation}>
-          <summary className="cursor-pointer list-none px-4 py-3.5 text-sm font-semibold text-foreground outline-none ring-inset marker:hidden hover:bg-muted/40 sm:px-5 [&::-webkit-details-marker]:hidden">
-            <span className="flex items-center justify-between gap-2">
-              {t("learner.qbank.examUi.rationaleSummary")}
-              <span className="text-xs font-normal text-muted-foreground group-open:hidden">{t("learner.qbank.examUi.tapToExpand")}</span>
-              <span className="hidden text-xs font-normal text-muted-foreground group-open:inline">{t("learner.qbank.examUi.tapToCollapse")}</span>
+          <summary className="cursor-pointer list-none px-4 py-3.5 text-sm font-semibold text-[var(--theme-heading-text)] outline-none ring-inset marker:hidden transition-colors hover:bg-[color-mix(in_srgb,var(--theme-primary)_4%,var(--theme-card-bg))] sm:px-6 [&::-webkit-details-marker]:hidden">
+            <span className="flex items-center justify-between gap-3">
+              <span>{t("learner.qbank.examUi.rationaleSummary")}</span>
+              <span className="text-xs font-normal text-[var(--theme-muted-text)] group-open:hidden">
+                {t("learner.qbank.examUi.tapToExpand")}
+              </span>
+              <span className="hidden text-xs font-normal text-[var(--theme-muted-text)] group-open:inline">
+                {t("learner.qbank.examUi.tapToCollapse")}
+              </span>
             </span>
           </summary>
-          <div className="border-t border-border bg-[var(--theme-muted-surface)]/50 px-4 py-4 sm:px-5">{body}</div>
+          <div className="nn-question-rationale-card__body px-4 py-4 sm:px-6 sm:py-5">{body}</div>
         </details>
       </div>
     );

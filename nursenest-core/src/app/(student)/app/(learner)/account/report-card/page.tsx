@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { auth } from "@/lib/auth";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerReportCardPremium } from "@/components/student/learner-report-card-premium";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
@@ -74,6 +75,12 @@ export default async function AccountReportCardPage() {
     );
   }
 
+  const weakTopicKey =
+    report.weakTopics[0]?.normalizedTopic?.trim() ||
+    report.weakTopics[0]?.topic?.trim() ||
+    report.recommendedQuizTopic?.trim() ||
+    undefined;
+
   return (
     <main className="space-y-6">
       <BreadcrumbTrail items={crumbs} />
@@ -83,6 +90,8 @@ export default async function AccountReportCardPage() {
       </div>
 
       <LearnerReportCardPremium data={report} t={t} localeTag={localeTag} />
+
+      <LearnerAccountCrossLinks variant="report-card" t={t} weakTopicKey={weakTopicKey} />
     </main>
   );
 }

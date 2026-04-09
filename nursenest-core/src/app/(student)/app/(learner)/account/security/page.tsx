@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { auth } from "@/lib/auth";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerSecurityHub } from "@/components/student/learner-security-hub";
 import { JWT_SESSION_MAX_AGE_SEC } from "@/lib/auth/auth-session-constants";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
@@ -43,6 +44,8 @@ export default async function AccountSecurityPage() {
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.account.security.intro")}</p>
       </div>
       <LearnerSecurityHub hasPassword={hasPassword} sessionMaxDays={sessionMaxDays} />
+
+      <LearnerAccountCrossLinks variant="settings" t={t} />
     </main>
   );
 }

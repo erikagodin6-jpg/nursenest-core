@@ -237,9 +237,13 @@ function ensureClinicalPearlsWordCount(body: string): string {
 }
 
 function ensurePathophysiologyDepth(body: string): string {
-  const t = body.trim();
-  if (countWords(stripToPlainText(t)) >= 140) return t;
-  return `${t}\n\n${PATHO_EXAM_PAD}`;
+  let t = body.trim();
+  const pad = PATHO_EXAM_PAD.trim();
+  const min = PREMIUM_MIN_WORDS.pathophysiology_overview;
+  while (countWords(stripToPlainText(t)) < min) {
+    t = `${t}\n\n${pad}`;
+  }
+  return t;
 }
 
 /** Keeps premium validators satisfied when shared tier templates sit just under the floor. */

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { auth } from "@/lib/auth";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerStudySettingsHub } from "@/components/student/learner-study-settings-hub";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { prisma } from "@/lib/db";
@@ -78,6 +79,8 @@ export default async function AccountStudyPreferencesPage() {
           <SubscriptionPaywall context="dashboard" />
         </div>
       ) : null}
+
+      <LearnerAccountCrossLinks variant="settings" t={t} />
     </main>
   );
 }

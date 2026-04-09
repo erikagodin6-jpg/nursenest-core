@@ -771,6 +771,329 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   background: color-mix(in srgb, var(--theme-primary) 5%, var(--bg-card));
 }
 
+/*
+ * Learner question surfaces (bank, practice tests, exam widget): calm clinical testing — not gamified.
+ * Uses theme + role tokens; correct/incorrect are muted tints, not neon.
+ */
+.nn-question-session {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 42rem;
+  padding: 1.25rem 1rem 1.75rem;
+}
+
+@media (min-width: 640px) {
+  .nn-question-session {
+    padding: 1.75rem 1.5rem 2.25rem;
+  }
+}
+
+.nn-question-stem {
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  font-weight: 400;
+  letter-spacing: -0.012em;
+  color: var(--theme-heading-text);
+}
+
+@media (min-width: 768px) {
+  .nn-question-stem {
+    font-size: 1.1875rem;
+    line-height: 1.62;
+  }
+}
+
+.nn-question-stem-wrap {
+  margin-bottom: 0.25rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--theme-primary) 8%, var(--border-subtle));
+}
+
+.nn-question-options-label {
+  margin-bottom: 0.875rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--theme-muted-text);
+}
+
+.nn-qopt-surface {
+  min-height: 3.25rem;
+  border-radius: 0.875rem;
+  border: 1px solid color-mix(in srgb, var(--theme-primary) 10%, var(--border-subtle));
+  background: color-mix(in srgb, var(--theme-primary) 2.5%, var(--theme-card-bg));
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease,
+    box-shadow 0.15s ease,
+    opacity 0.15s ease;
+}
+
+@media (min-width: 640px) {
+  .nn-qopt-surface {
+    min-height: 3.5rem;
+  }
+}
+
+.nn-qopt-surface--interactive:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--theme-primary) 20%, var(--border-subtle));
+  background: color-mix(in srgb, var(--theme-primary) 5%, var(--theme-card-bg));
+}
+
+.nn-qopt-surface--selected {
+  border-color: color-mix(in srgb, var(--theme-primary) 26%, var(--border-subtle));
+  background: color-mix(in srgb, var(--theme-primary) 8%, var(--theme-card-bg));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--theme-primary) 10%, transparent);
+}
+
+.nn-qopt-surface--highlight {
+  border-color: color-mix(in srgb, var(--role-warning) 28%, var(--border-subtle));
+  background: color-mix(in srgb, var(--role-warning) 7%, var(--theme-card-bg));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--role-warning) 12%, transparent);
+}
+
+.nn-qopt-surface--correct {
+  border-color: color-mix(in srgb, var(--role-success) 24%, var(--border-subtle));
+  background: var(--role-success-soft);
+}
+
+.nn-qopt-surface--incorrect {
+  border-color: color-mix(in srgb, #b91c1c 16%, var(--border-subtle));
+  background: color-mix(in srgb, #b91c1c 5.5%, var(--theme-card-bg));
+}
+
+html[data-theme="dark-clinical"] .nn-qopt-surface--incorrect,
+html[data-theme="dark-academia"] .nn-qopt-surface--incorrect,
+html[data-theme="dark-mode"] .nn-qopt-surface--incorrect {
+  border-color: color-mix(in srgb, #f87171 20%, var(--border-subtle));
+  background: color-mix(in srgb, #f87171 8%, var(--theme-card-bg));
+}
+
+.nn-qopt-surface--dim {
+  opacity: 0.72;
+}
+
+.nn-qopt-tool {
+  display: flex;
+  min-height: 2.75rem;
+  min-width: 2.75rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--theme-primary) 8%, var(--border-subtle));
+  background: color-mix(in srgb, var(--theme-primary) 3%, var(--theme-card-bg));
+  font-weight: 600;
+  color: var(--theme-muted-text);
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.nn-qopt-tool:hover {
+  border-color: color-mix(in srgb, var(--theme-primary) 16%, var(--border-subtle));
+  background: color-mix(in srgb, var(--theme-primary) 6%, var(--theme-card-bg));
+}
+
+.nn-qopt-tool--mark {
+  border-color: color-mix(in srgb, var(--role-warning) 22%, var(--border-subtle));
+  color: var(--role-warning-text);
+  background: color-mix(in srgb, var(--role-warning) 6%, var(--theme-card-bg));
+}
+
+.nn-question-rationale-card {
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--theme-primary) 12%, var(--border-subtle));
+  background: var(--theme-card-bg);
+  box-shadow: var(--shadow-card);
+}
+
+.nn-question-rationale-card__verdict {
+  border-bottom: 1px solid color-mix(in srgb, var(--theme-primary) 8%, var(--border-subtle));
+  padding: 1rem 1.125rem;
+}
+
+.nn-question-rationale-card__verdict--ok {
+  background: color-mix(in srgb, var(--role-success) 9%, var(--theme-card-bg));
+}
+
+.nn-question-rationale-card__verdict--miss {
+  background: color-mix(in srgb, #b91c1c 6%, var(--theme-card-bg));
+}
+
+html[data-theme="dark-clinical"] .nn-question-rationale-card__verdict--miss,
+html[data-theme="dark-academia"] .nn-question-rationale-card__verdict--miss,
+html[data-theme="dark-mode"] .nn-question-rationale-card__verdict--miss {
+  background: color-mix(in srgb, #f87171 9%, var(--theme-card-bg));
+}
+
+.nn-question-rationale-card__body {
+  border-top: 1px solid color-mix(in srgb, var(--theme-primary) 6%, var(--border-subtle));
+  background: color-mix(in srgb, var(--theme-primary) 4%, var(--theme-card-bg));
+}
+
+.nn-question-nav-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0.75rem;
+  padding-top: 1.25rem;
+  margin-top: 0.25rem;
+  border-top: 1px solid color-mix(in srgb, var(--theme-primary) 8%, var(--border-subtle));
+}
+
+@media (min-width: 640px) {
+  .nn-question-nav-actions {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.nn-question-nav-actions__next {
+  min-height: 3rem;
+  flex: 1 1 12rem;
+}
+
+@media (min-width: 640px) {
+  .nn-question-nav-actions__next {
+    flex: 0 1 auto;
+    min-width: 11rem;
+  }
+}
+
+/*
+ * Exam pathway hub — premium conversion strip (lavender / sage / sand follow `[data-theme]` primary).
+ * Soft gradients from `--theme-primary`; featured card = question bank (stronger depth + ring).
+ */
+.nn-exam-hub-conversion {
+  margin-top: 2.5rem;
+  padding: clamp(1.35rem, 3.5vw, 2rem);
+  border-radius: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--theme-primary) 11%, var(--border-subtle));
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--theme-primary) 6%, var(--theme-page-bg)) 0%,
+    var(--theme-page-bg) 42%,
+    color-mix(in srgb, var(--theme-primary) 3.5%, var(--theme-page-bg)) 100%
+  );
+  box-shadow: var(--shadow-card);
+}
+
+.nn-exam-hub-study-card {
+  position: relative;
+  display: flex;
+  height: 100%;
+  min-height: 17.5rem;
+  flex-direction: column;
+  border-radius: 1rem;
+  padding: 1.35rem 1.35rem 1.25rem;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid color-mix(in srgb, var(--theme-primary) 14%, var(--border-subtle));
+  background: linear-gradient(
+    155deg,
+    color-mix(in srgb, var(--theme-primary) 10%, var(--theme-card-bg)) 0%,
+    color-mix(in srgb, var(--theme-primary) 3.5%, var(--theme-page-bg)) 52%,
+    var(--theme-card-bg) 100%
+  );
+  box-shadow: var(--shadow-card);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+@media (min-width: 768px) {
+  .nn-exam-hub-study-card {
+    min-height: 18.5rem;
+    padding: 1.5rem 1.5rem 1.35rem;
+  }
+}
+
+.nn-exam-hub-study-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card-hover);
+  border-color: var(--border-strong);
+}
+
+.nn-exam-hub-study-card:focus-visible {
+  outline: 2px solid var(--theme-primary);
+  outline-offset: 3px;
+}
+
+.nn-exam-hub-study-card:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Calmer wash — lessons */
+.nn-exam-hub-study-card--lessons {
+  background: linear-gradient(
+    148deg,
+    color-mix(in srgb, var(--theme-primary) 7%, var(--theme-card-bg)) 0%,
+    color-mix(in srgb, var(--theme-primary) 2.5%, var(--theme-page-bg)) 55%,
+    var(--theme-card-bg) 100%
+  );
+  border-color: color-mix(in srgb, var(--theme-primary) 11%, var(--border-subtle));
+}
+
+/* Featured — question bank */
+.nn-exam-hub-study-card--featured {
+  border-color: color-mix(in srgb, var(--theme-primary) 26%, var(--border-subtle));
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--theme-primary) 18%, var(--theme-card-bg)) 0%,
+    color-mix(in srgb, var(--theme-primary) 6%, var(--theme-page-bg)) 45%,
+    var(--theme-card-bg) 100%
+  );
+  box-shadow: var(--shadow-elevated);
+}
+
+.nn-exam-hub-study-card--featured:hover {
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--theme-heading-text) 5%, transparent),
+    0 6px 22px -8px color-mix(in srgb, var(--theme-heading-text) 9%, transparent),
+    0 22px 52px -22px color-mix(in srgb, var(--theme-primary) 18%, transparent);
+}
+
+/* Mid-depth — CAT / practice */
+.nn-exam-hub-study-card--cat {
+  background: linear-gradient(
+    152deg,
+    color-mix(in srgb, var(--theme-primary) 12%, var(--theme-card-bg)) 0%,
+    color-mix(in srgb, var(--theme-primary) 4%, var(--theme-page-bg)) 50%,
+    var(--theme-card-bg) 100%
+  );
+  border-color: color-mix(in srgb, var(--theme-primary) 16%, var(--border-subtle));
+}
+
+.nn-exam-hub-study-card__icon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--theme-primary) 11%, var(--theme-card-bg));
+  border: 1px solid color-mix(in srgb, var(--theme-primary) 16%, var(--border-subtle));
+  color: var(--theme-primary);
+}
+
+.nn-exam-hub-study-card--featured .nn-exam-hub-study-card__icon {
+  background: color-mix(in srgb, var(--theme-primary) 15%, var(--theme-card-bg));
+  border-color: color-mix(in srgb, var(--theme-primary) 22%, var(--border-subtle));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-exam-hub-study-card {
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .nn-exam-hub-study-card:hover {
+    transform: none;
+  }
+}
+
 /* Default CAT / timed session chrome: theme-native wash (not flat slate) */
 html[data-theme] .nn-exam-session {
   background: var(--nn-presentation-wash);

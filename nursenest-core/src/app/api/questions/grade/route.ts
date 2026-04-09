@@ -16,12 +16,25 @@ import { ContentStatus } from "@prisma/client";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { mergeQuestionOverlayForGradeResponse } from "@/lib/i18n/educational-content-overlay";
 import { resolveMergedQuestionOverlayBundle } from "@/lib/i18n/educational-translation-db";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { resolveRationaleLessonLinksForQuestion } from "@/lib/learner/rationale-lesson-link-resolve";
 
 function topicRoutingConfidence(row: { subtopic?: string | null; topic?: string | null; bodySystem?: string | null }): RecommendationConfidence {
   if ((row.subtopic ?? "").trim().length > 1) return "high";
   if ((row.topic ?? "").trim().length > 1) return "medium";
   if ((row.bodySystem ?? "").trim().length > 1) return "low";
   return "low";
+}
+
+function effectivePathwayIdForGrade(
+  requestPathway: unknown,
+  storedLearnerPath: string | null | undefined,
+): string | null {
+  const req = typeof requestPathway === "string" ? requestPathway.trim() : "";
+  if (req && getExamPathwayById(req)) return req;
+  const stored = (storedLearnerPath ?? "").trim();
+  if (stored && getExamPathwayById(stored)) return stored;
+  return null;
 }
 
 function appendTopicCodeToDrillHref(href: string, topicCode: string): string {
@@ -55,9 +68,9 @@ export async function POST(req: Request) {
 
   setSentryServerContext({ route: "/api/questions/grade", feature: SERVER_FEATURE.question, userId: gate.userId });
 
-  let body: { questionId?: string; answer?: unknown };
+  let body: { questionId?: string; answer?: unknown; pathwayId?: string };
   try {
-    body = (await req.json()) as { questionId?: string; answer?: unknown };
+    body = (await req.json()) as { questionId?: string; answer?: unknown; pathwayId?: string };
   } catch {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
@@ -127,13 +140,22 @@ export async function POST(req: Request) {
     const topicCode = deriveTopicCode({ topic: row.topic, subtopic: row.subtopic, bodySystem: row.bodySystem });
     const linkConfidence = topicRoutingConfidence(row);
 
-    const [linkedPathwayLesson, linkedContentLesson, linkedDeck] = topicCode
+    const userPathwayRow = await prisma.user.findUnique({
+      where: { id: gate.userId },
+      select: { learnerPath: true },
+    });
+    const effectivePathwayId = effectivePathwayIdForGrade(body.pathwayId, userPathwayRow?.learnerPath ?? null);
+
+    const rationaleLessonLinks = await resolveRationaleLessonLinksForQuestion(prisma, {
+      pathwayId: effectivePathwayId,
+      topic: row.topic ?? null,
+      subtopic: row.subtopic ?? null,
+      bodySystem: row.bodySystem ?? null,
+      tags: Array.isArray(row.tags) ? row.tags.map(String) : [],
+    });
+
+    const [linkedContentLesson, linkedDeck] = topicCode
       ? await Promise.all([
-          prisma.pathwayLesson.findFirst({
-            where: { topicSlug: topicCode, status: ContentStatus.PUBLISHED, locale: "en" },
-            select: { id: true },
-            orderBy: { sortOrder: "asc" },
-          }),
           prisma.contentItem.findFirst({
             where: { type: "lesson", status: "published", bodySystem: topicCode },
             select: { id: true },
@@ -153,13 +175,11 @@ export async function POST(req: Request) {
             orderBy: { sortOrder: "asc" },
           }),
         ])
-      : [null, null, null];
+      : [null, null];
 
-    const lessonHref = linkedPathwayLesson
-      ? `/app/lessons/${linkedPathwayLesson.id}`
-      : linkedContentLesson
-        ? `/app/lessons/${linkedContentLesson.id}`
-        : null;
+    const lessonHrefFromRationale = rationaleLessonLinks[0]?.href ?? null;
+    const lessonHrefFromContent = linkedContentLesson ? `/app/lessons/${linkedContentLesson.id}` : null;
+    const lessonHref = lessonHrefFromRationale ?? lessonHrefFromContent;
     const flashcardsHref = topicCode
       ? linkedDeck
         ? `/app/flashcards/${linkedDeck.slug}/study?topicCode=${encodeURIComponent(topicCode)}`
@@ -175,6 +195,8 @@ export async function POST(req: Request) {
 
     return NextResponse.json({
       correct,
+      /** Canonical option key(s) for client-side review styling (same strings as `options` JSON). */
+      correctKeys: expected,
       rationale: displayRow.rationale ?? null,
       rationaleQuality: rationaleBundle.rationaleQuality,
       rationaleSections: rationaleBundle.sections,
@@ -194,6 +216,14 @@ export async function POST(req: Request) {
         flashcardsHref,
         topicDrillHref,
       },
+      rationaleLessonLinks: rationaleLessonLinks.map((l) => ({
+        kind: l.kind,
+        slug: l.slug,
+        title: l.title,
+        href: l.href,
+        hrefSource: l.hrefSource,
+        ctaKey: l.ctaKey,
+      })),
       topicStatsUpdated: true,
     });
   } catch (e) {

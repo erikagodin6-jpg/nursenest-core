@@ -36,6 +36,7 @@ import {
   buildStructuredPlanUserPrompt,
 } from "@/lib/blog/blog-article-pipeline-prompts";
 import type { BlogImageSlotAttachment } from "@/lib/blog/blog-image-workflow";
+import { seedBlogAdminPublishLog } from "@/lib/blog/blog-admin-publish-log";
 import { ctaFor, detectRiskFlags, thinDraftWarning } from "@/lib/blog/seo-campaign-engine";
 import { prisma } from "@/lib/db";
 
@@ -344,6 +345,7 @@ export async function persistControlPanelDraft(
         promoBlurb: cta.text,
         updateNeeded: Boolean(thinWarning),
         rankingNote: thinWarning ?? null,
+        adminPublishLog: seedBlogAdminPublishLog("draft_created", "AI draft created and saved as DRAFT (control panel)."),
       },
       select: { id: true, slug: true, title: true, postStatus: true, updatedAt: true },
     });

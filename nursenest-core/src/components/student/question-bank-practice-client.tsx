@@ -30,6 +30,21 @@ import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { QuestionSessionStudyLoopPanel } from "@/components/student/question-session-study-loop-panel";
 import { ExamProgressBar, ExamSessionShell, ExamSessionTopBar } from "@/components/exam/exam-session-shell";
+import type {
+  QuestionBankDifficultyBand,
+  QuestionBankDiscoveryResponse,
+  QuestionBankGradedStateMap,
+  QuestionBankPreset,
+  RationaleLessonLinkClient,
+  SavedQuestionBankPreset,
+} from "@/lib/questions/question-bank-client-types";
+import {
+  normalizeQuestionBankDifficultyBand,
+  parsePersistedQuestionBankSessionJson,
+  parseSavedQuestionBankPresetsJson,
+} from "@/lib/questions/question-bank-client-types";
+
+export type { QuestionBankDifficultyBand, QuestionBankPreset, SavedQuestionBankPreset } from "@/lib/questions/question-bank-client-types";
 
 type QFull = {
   id: string;
@@ -44,12 +59,39 @@ type QFull = {
   exam?: string | null;
 };
 
-/** Study preset: matches product “random quiz”, “topic drill”, “pathway mixed exam”. */
-export type QuestionBankPreset = "random_bank" | "topic_drill" | "pathway_mixed";
-
 function parseOptions(raw: unknown): string[] {
   if (Array.isArray(raw)) return raw.map((x) => String(x));
   return [];
+}
+
+/** Calm clinical row states; uses `correctKeys` from grade API when present. */
+function gradedAnswerSurfaceClass(
+  graded: boolean,
+  grade: { correct: boolean; correctKeys?: string[] } | undefined,
+  canonical: string,
+  picked: boolean,
+): string {
+  const base = "nn-qopt-surface";
+  if (!graded || !grade) return base;
+  const keys = grade.correctKeys;
+  if (keys && keys.length > 0) {
+    const ck = new Set(keys);
+    if (ck.has(canonical)) return `${base} nn-qopt-surface--correct`;
+    if (picked) return `${base} nn-qopt-surface--incorrect`;
+    return `${base} nn-qopt-surface--dim`;
+  }
+  if (picked) {
+    return grade.correct ? `${base} nn-qopt-surface--correct` : `${base} nn-qopt-surface--incorrect`;
+  }
+  return `${base} nn-qopt-surface--dim`;
+}
+
+function activeAnswerSurfaceClass(picked: boolean, highlight: boolean, struck: boolean): string {
+  const parts = ["nn-qopt-surface", "nn-qopt-surface--interactive"];
+  if (picked) parts.push("nn-qopt-surface--selected");
+  if (highlight) parts.push("nn-qopt-surface--highlight");
+  if (struck) parts.push("line-through opacity-[0.72]");
+  return parts.join(" ");
 }
 
 function sessionKey(userId: string) {
@@ -59,8 +101,6 @@ function sessionKey(userId: string) {
 function presetsStorageKey(userId: string) {
   return `nn_qbank_presets_${userId}`;
 }
-
-export type QuestionBankDifficultyBand = "" | "easy" | "moderate" | "hard";
 
 function difficultyQueryBounds(band: QuestionBankDifficultyBand): { min: number | null; max: number | null } {
   switch (band) {
@@ -74,21 +114,6 @@ function difficultyQueryBounds(band: QuestionBankDifficultyBand): { min: number 
       return { min: null, max: null };
   }
 }
-
-export type SavedQuestionBankPreset = {
-  id: string;
-  name: string;
-  savedAt: number;
-  preset: QuestionBankPreset;
-  pathwayId: string | null;
-  topic: string | null;
-  exam: string | null;
-  difficultyBand: QuestionBankDifficultyBand;
-  incorrectOnly: boolean;
-  sessionSize: number;
-  examShell: boolean;
-  efficiencyMode: string | null;
-};
 
 function rollupsKey(userId: string) {
   return `nn_qbank_rollups_${userId}`;
@@ -193,27 +218,7 @@ export function QuestionBankPracticeClient({
   const [emptyCopy, setEmptyCopy] = useState<EmptyCopyI18n | "pick_topic" | "no_mistakes" | null>(null);
   const [idx, setIdx] = useState(0);
   const [answer, setAnswer] = useState<unknown>(null);
-  const [graded, setGraded] = useState<
-    Record<
-      string,
-      {
-        correct: boolean;
-        rationale: string | null;
-        rationaleQuality?: RationaleQualityClient | null;
-        rationaleSections?: Array<{ heading: string; body: string }> | null;
-        referenceMedia?: RationaleReferenceMedia[] | null;
-        teaching?: NormalizedTeachingPayload | null;
-        teachingMedia?: TeachingMediaBundle | null;
-        learningLoop?: {
-          topicCode: string | null;
-          confidence: "high" | "medium" | "low";
-          lessonHref: string | null;
-          flashcardsHref: string | null;
-          topicDrillHref: string | null;
-        } | null;
-      }
-    >
-  >({});
+  const [graded, setGraded] = useState<QuestionBankGradedStateMap>({});
   const [grading, setGrading] = useState(false);
   const questionOpenedAtMsRef = useRef<number | null>(null);
   /** Per-option exam tools (reset each item). */
@@ -367,55 +372,27 @@ export function QuestionBankPracticeClient({
           setAnswer(null);
           setGraded({});
 
-          try {
-            const sk = sessionKey(userId);
-            const raw = localStorage.getItem(sk);
-            if (raw) {
-              const saved = JSON.parse(raw) as {
-                ids?: string[];
-                idx?: number;
-                topic?: string | null;
-                pathwayId?: string | null;
-                preset?: QuestionBankPreset;
-                graded?: Record<
-                  string,
-                  {
-                    correct: boolean;
-                    rationale: string | null;
-                    rationaleQuality?: RationaleQualityClient | null;
-                    rationaleSections?: Array<{ heading: string; body: string }> | null;
-                    referenceMedia?: RationaleReferenceMedia[] | null;
-                    teaching?: NormalizedTeachingPayload | null;
-                    teachingMedia?: TeachingMediaBundle | null;
-                    learningLoop?: {
-                      topicCode: string | null;
-                      confidence: "high" | "medium" | "low";
-                      lessonHref: string | null;
-                      flashcardsHref: string | null;
-                      topicDrillHref: string | null;
-                    } | null;
-                  }
-                >;
-              };
-              const listIds = list.map((q) => q.id);
-              if (
-                saved.preset === preset &&
-                (saved.topic ?? null) === (topicForApi ?? null) &&
-                (saved.pathwayId ?? null) === (pathwayIdFilter ?? null) &&
-                (saved.sessionSize ?? 20) === sessionSize &&
-                (saved.difficultyBand ?? "") === difficultyBand &&
-                (saved.examFilter ?? null) === (examFilter ?? null) &&
-                Boolean(saved.incorrectOnly) === incorrectOnly &&
-                Boolean(saved.examShell) === examShell &&
-                saved.ids &&
-                sameIdListOrderIndependent(saved.ids, listIds)
-              ) {
-                setIdx(Math.min(saved.idx ?? 0, list.length - 1));
-                if (saved.graded) setGraded(saved.graded);
-              }
+          const sk = sessionKey(userId);
+          const saved = parsePersistedQuestionBankSessionJson(localStorage.getItem(sk));
+          if (saved) {
+            const listIds = list.map((q) => q.id);
+            const bandMatches =
+              normalizeQuestionBankDifficultyBand(saved.difficultyBand ?? "") === difficultyBand;
+            if (
+              saved.preset === preset &&
+              (saved.topic ?? null) === (topicForApi ?? null) &&
+              (saved.pathwayId ?? null) === (pathwayIdFilter ?? null) &&
+              (saved.sessionSize ?? 20) === sessionSize &&
+              bandMatches &&
+              (saved.examFilter ?? null) === (examFilter ?? null) &&
+              Boolean(saved.incorrectOnly) === incorrectOnly &&
+              Boolean(saved.examShell) === examShell &&
+              saved.ids &&
+              sameIdListOrderIndependent(saved.ids, listIds)
+            ) {
+              setIdx(Math.min(saved.idx ?? 0, list.length - 1));
+              if (saved.graded) setGraded(saved.graded);
             }
-          } catch {
-            /* ignore */
           }
         }
 
@@ -511,14 +488,7 @@ export function QuestionBankPracticeClient({
           }
           return;
         }
-        const data = (await res.json()) as {
-          buckets?: { topic: string; count: number }[];
-          limits?: {
-            topicsTruncated?: boolean;
-            topicsOmittedCount?: number;
-            topicBucketCap?: number;
-          };
-        };
+        const data = (await res.json()) as QuestionBankDiscoveryResponse;
         if (cancelled) return;
         setDiscoveryNotice(null);
         if (data.buckets) setTopics(data.buckets);
@@ -545,21 +515,7 @@ export function QuestionBankPracticeClient({
   }, [loadBatch, pathwayMixedReady]);
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(presetsStorageKey(userId));
-      if (!raw) return;
-      const parsed = JSON.parse(raw) as unknown;
-      if (!Array.isArray(parsed)) return;
-      const cleaned = parsed.filter(
-        (x): x is SavedQuestionBankPreset =>
-          Boolean(x) &&
-          typeof (x as SavedQuestionBankPreset).name === "string" &&
-          typeof (x as SavedQuestionBankPreset).id === "string",
-      );
-      setSavedPresets(cleaned);
-    } catch {
-      /* ignore */
-    }
+    setSavedPresets(parseSavedQuestionBankPresetsJson(localStorage.getItem(presetsStorageKey(userId))));
   }, [userId]);
 
   useEffect(() => {
@@ -626,16 +582,22 @@ export function QuestionBankPracticeClient({
       const res = await fetch("/api/questions/grade", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ questionId: current.id, answer }),
+        body: JSON.stringify({
+          questionId: current.id,
+          answer,
+          pathwayId: pathwayIdFilter ?? undefined,
+        }),
       });
       const data = (await res.json()) as {
         correct?: boolean;
+        correctKeys?: unknown;
         rationale?: string | null;
         rationaleQuality?: RationaleQualityClient | null;
         rationaleSections?: Array<{ heading: string; body: string }> | null;
         referenceMedia?: RationaleReferenceMedia[] | null;
         teaching?: NormalizedTeachingPayload | null;
         teachingMedia?: TeachingMediaBundle | null;
+        rationaleLessonLinks?: RationaleLessonLinkClient[] | null;
         learningLoop?: {
           topicCode: string | null;
           confidence: "high" | "medium" | "low";
@@ -661,6 +623,7 @@ export function QuestionBankPracticeClient({
           teaching: data.teaching ?? null,
           teachingMedia: data.teachingMedia ?? null,
           learningLoop: data.learningLoop ?? null,
+          rationaleLessonLinks: data.rationaleLessonLinks ?? null,
         },
       }));
       const opened = questionOpenedAtMsRef.current;
@@ -689,7 +652,7 @@ export function QuestionBankPracticeClient({
     setPathwayIdFilter(p.pathwayId);
     setTopic(p.topic);
     setExamFilter(p.exam);
-    setDifficultyBand((p.difficultyBand ?? "") as QuestionBankDifficultyBand);
+    setDifficultyBand(normalizeQuestionBankDifficultyBand(p.difficultyBand));
     setIncorrectOnly(p.incorrectOnly);
     setSessionSize(p.sessionSize);
     setExamShell(p.examShell);
@@ -1275,6 +1238,7 @@ export function QuestionBankPracticeClient({
                     referenceMedia={g.referenceMedia}
                     teaching={g.teaching}
                     teachingMedia={g.teachingMedia}
+                    rationaleLessonLinks={g.rationaleLessonLinks}
                     variant="exam"
                     defaultOpenExplanation={!g.correct}
                   />
@@ -1309,7 +1273,7 @@ export function QuestionBankPracticeClient({
                 {g.learningLoop?.topicCode ? (
                   <div className="rounded-xl border border-border/80 bg-muted/15 p-4">
                     <div className="flex flex-wrap gap-2">
-                      {g.learningLoop.lessonHref ? (
+                      {g.learningLoop.lessonHref && !(g.rationaleLessonLinks && g.rationaleLessonLinks.length > 0) ? (
                         <Link
                           href={g.learningLoop.lessonHref}
                           className="inline-flex min-h-11 items-center rounded-full border border-border bg-card px-4 text-xs font-semibold hover:bg-muted/80"

@@ -27,6 +27,7 @@ import { prependScopedGoldCatalogLessons, SCOPED_GOLD_PROVIDERS } from "./scoped
 import { SHOCK_GOLD_SLUG, getShockGoldLessonInput } from "./shock-gold-standard";
 import { STROKE_ICP_GOLD_SLUG, getStrokeIcpGoldLessonInput } from "./stroke-increased-icp-gold-standard";
 import { CASE_STUDY_CASEBOOK_PROVIDERS, CASE_STUDY_CASEBOOK_SLUGS } from "./case-study-casebook-specs";
+import { EXAM_COMPLETE_MED_SAFETY_PROVIDERS, EXAM_COMPLETE_MED_SAFETY_SLUGS } from "./exam-complete-med-safety-specs";
 import { BULK_ROWS } from "./launch-wave-1-bulk-rows";
 import { LAUNCH_WAVE_1A_SPECS } from "./launch-wave-1a-high-yield-gold";
 
@@ -70,6 +71,7 @@ describe("scoped gold registry", () => {
         ...LAUNCH_WAVE_1A_SPECS.map((s) => s.slug),
         ...BULK_ROWS.map((r) => r.slug),
         ...CASE_STUDY_CASEBOOK_SLUGS,
+        ...EXAM_COMPLETE_MED_SAFETY_SLUGS,
       ],
     );
   });
@@ -294,6 +296,25 @@ describe("clinical casebook case-study lessons", () => {
 
   it("all pathways have valid premium casebook lessons", () => {
     for (const provider of CASE_STUDY_CASEBOOK_PROVIDERS) {
+      for (const pid of CORE_NURSING_PATHWAYS) {
+        const lesson = provider.getFullLesson(pid);
+        assert.ok(lesson, `${provider.slug} missing for ${pid}`);
+        assertLessonQuality(lesson!);
+      }
+    }
+  });
+});
+
+describe("exam-complete medication & safety family lessons", () => {
+  it("provider slugs match exported slug list", () => {
+    assert.deepEqual(
+      EXAM_COMPLETE_MED_SAFETY_PROVIDERS.map((p) => p.slug),
+      EXAM_COMPLETE_MED_SAFETY_SLUGS,
+    );
+  });
+
+  it("all pathways have valid premium lessons", () => {
+    for (const provider of EXAM_COMPLETE_MED_SAFETY_PROVIDERS) {
       for (const pid of CORE_NURSING_PATHWAYS) {
         const lesson = provider.getFullLesson(pid);
         assert.ok(lesson, `${provider.slug} missing for ${pid}`);

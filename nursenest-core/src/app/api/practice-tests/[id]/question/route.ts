@@ -31,21 +31,28 @@ function asIdList(raw: unknown): string[] {
   return raw.filter((x): x is string => typeof x === "string" && x.length > 4);
 }
 
+function parsePracticeTestRouteParams(raw: unknown): { id: string } | null {
+  if (!raw || typeof raw !== "object") return null;
+  const id = (raw as Record<string, unknown>).id;
+  return typeof id === "string" && id.trim().length > 0 ? { id: id.trim() } : null;
+}
+
 /**
  * One practice-test item at a time (same pattern as /api/exams/session/question).
  * Keeps large CAT/linear runs off the wire and out of React state in one payload.
  */
-export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
+export async function GET(req: NextRequest, ctx: { params: Promise<unknown> }) {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
 
   const limited = enforcePracticeTestQuestionProtection(req, gate.userId);
   if (limited) return limited;
 
-  const { id } = await ctx.params;
-  if (!id || id.length < 8) {
+  const parsedParams = parsePracticeTestRouteParams(await ctx.params);
+  if (!parsedParams || parsedParams.id.length < 8) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
+  const { id } = parsedParams;
 
   const indexRaw = req.nextUrl.searchParams.get("index");
   if (indexRaw === null) {

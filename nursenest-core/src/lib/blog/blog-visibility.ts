@@ -6,6 +6,9 @@ export function blogPostIsLive(
   now: Date = new Date(),
 ): boolean {
   if (row.postStatus === BlogPostStatus.DRAFT) return false;
+  if (row.postStatus === BlogPostStatus.NEEDS_REVIEW) return false;
+  if (row.postStatus === BlogPostStatus.APPROVED) return false;
+  if (row.postStatus === BlogPostStatus.FAILED) return false;
   if (row.postStatus === BlogPostStatus.PUBLISHED) return true;
   if (row.postStatus === BlogPostStatus.SCHEDULED) {
     return row.publishAt != null && row.publishAt.getTime() <= now.getTime();

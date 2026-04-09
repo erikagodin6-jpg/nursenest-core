@@ -17,9 +17,10 @@
  * | Meta description | `seoDescription`, `metaDescriptionVariant` |
  * | Structured outline | `outlineJson` (JSON) |
  * | Article body | `body` (HTML text) |
- * | Internal link suggestions | `internalLinkPlan` (JSON: lessons + imagePlacements), `relatedLessonPaths` |
+ * | Internal link suggestions | `internalLinkPlan` (JSON: lessons + imagePlacements + attachments + **`seo` bundle**), `relatedLessonPaths` |
  * | FAQ section | `faqBlock` (`{ items: {q,a}[] }`), `keyQuestions` |
- * | Breadcrumbs | `schemaSummary` (JSON string: `{ breadcrumbs, type }`) |
+ * | SEO bundle (canonical, OG, excerpt, crumbs, FAQ schema flag, keywords, image alts) | `internalLinkPlan.seo` from `blog-seo-automation.ts` + `schemaSummary` (JSON v2 summary for tooling) |
+ * | List excerpt / cards | `excerpt` (prefers AI `suggestedExcerpt` when strong) |
  * | Image prompts / placements | `internalLinkPlan.imagePlacements`, `coverImagePrompt`, `coverImageAlt`, `imageStatus` |
  * | APA 7 lines | `apaReferences` (string[]), `sourcesJson` |
  * | Alternate titles | `titleAlternates` |

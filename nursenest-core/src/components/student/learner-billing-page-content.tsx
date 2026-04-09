@@ -222,7 +222,10 @@ export function LearnerBillingPageContent({
           )}
         </dl>
 
-        <div className="flex flex-col gap-3 border-t border-border/50 px-5 py-5 sm:flex-row sm:flex-wrap sm:items-center">
+        <div
+          id="account-billing-manage"
+          className="flex scroll-mt-24 flex-col gap-3 border-t border-border/50 px-5 py-5 sm:flex-row sm:flex-wrap sm:items-center"
+        >
           <Link
             href="/pricing"
             className="inline-flex w-full items-center justify-center rounded-full border border-border px-5 py-3 text-sm font-semibold text-foreground hover:bg-muted/80 sm:w-auto"

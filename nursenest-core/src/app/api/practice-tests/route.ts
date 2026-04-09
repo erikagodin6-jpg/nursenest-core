@@ -162,8 +162,22 @@ export async function POST(req: Request) {
         { status: 403 },
       );
     }
+    let pathwayIdForCat = d.pathwayId?.trim() || null;
+    if (!pathwayIdForCat) {
+      pathwayIdForCat = listPathwaysCompatibleWithSubscription(gate.entitlement)[0]?.id ?? null;
+    }
+    if (!pathwayIdForCat) {
+      return NextResponse.json(
+        {
+          error:
+            "Choose an exam pathway for adaptive practice (RN, PN, or NP). If your profile has no country or tier, update account settings.",
+          code: PRACTICE_TEST_CAT_CREATE_CODE.cat_pathway_required,
+        },
+        { status: 400 },
+      );
+    }
     const basis = resolveCatSelectionBasisForPost(d.catPresentationMode, d.catSelectionBasis);
-    const simPathway = d.pathwayId?.trim() ? getExamPathwayById(d.pathwayId.trim()) ?? null : null;
+    const simPathway = getExamPathwayById(pathwayIdForCat) ?? null;
     const examTimedLimit = resolveCatPostExamTimedLimitSec({
       timedMode: d.timedMode,
       timeLimitSec: d.timeLimitSec,
@@ -180,7 +194,7 @@ export async function POST(req: Request) {
         topicNames,
         difficultyMin,
         difficultyMax,
-        pathwayId: d.pathwayId?.trim() || null,
+        pathwayId: pathwayIdForCat,
       },
       d.timedMode,
       examTimedLimit,
@@ -208,7 +222,7 @@ export async function POST(req: Request) {
     });
 
     captureLearnerProductEvent(gate.userId, gate.entitlement, PH.learnerCatExamStarted, {
-      pathway_id: d.pathwayId?.trim() || undefined,
+      pathway_id: pathwayIdForCat,
       exam_simulation: d.catPresentationMode === "exam_simulation",
       question_cap: d.questionCount,
       timed: d.timedMode,

@@ -12,7 +12,10 @@ function isAdminRole(role: unknown): boolean {
 
 type MenuItem = { href: string; i18nKey: string };
 
-const STUDY_LINKS: MenuItem[] = [{ href: "/app", i18nKey: "learner.userBar.link.dashboard" }];
+const STUDY_LINKS: MenuItem[] = [
+  { href: "/app", i18nKey: "learner.userBar.link.dashboard" },
+  { href: "/app/account/overview", i18nKey: "learner.userBar.link.accountOverview" },
+];
 
 const PERFORMANCE_LINKS: MenuItem[] = [
   { href: "/app/account/report-card", i18nKey: "learner.userBar.link.reportCard" },
@@ -100,7 +103,7 @@ export function LearnerShellUserBar({ pathwayShortLabel = null }: { pathwayShort
         : "";
 
   const linkClass =
-    "block rounded-lg px-3 py-2 text-sm text-[var(--theme-menu-text)] transition-colors hover:bg-[var(--surface-interactive-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25";
+    "block touch-manipulation rounded-lg px-3 py-2 text-sm text-[var(--theme-menu-text)] transition-colors hover:bg-[var(--surface-interactive-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25";
 
   const sectionLabelClass =
     "px-3 pb-1.5 pt-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground first:pt-2";
@@ -129,7 +132,7 @@ export function LearnerShellUserBar({ pathwayShortLabel = null }: { pathwayShort
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="flex max-w-[min(17rem,72vw)] items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-2 text-left text-sm font-medium text-[var(--theme-menu-text)] shadow-sm transition-[box-shadow,background-color] hover:bg-[var(--surface-interactive-hover)] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+        className="flex max-w-[min(17rem,72vw)] touch-manipulation items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-3 py-2 text-left text-sm font-medium text-[var(--theme-menu-text)] shadow-sm transition-[box-shadow,background-color] hover:bg-[var(--surface-interactive-hover)] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
         aria-expanded={open}
         aria-haspopup="menu"
       >
@@ -150,7 +153,7 @@ export function LearnerShellUserBar({ pathwayShortLabel = null }: { pathwayShort
       {open ? (
         <div
           role="menu"
-          className="absolute right-0 z-50 mt-2 w-[min(19.5rem,calc(100vw-1.5rem))] overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] shadow-[var(--shadow-elevated)] ring-1 ring-black/[0.03] dark:ring-white/[0.04]"
+          className="absolute right-0 z-50 mt-2 w-[min(19.5rem,calc(100vw-1.5rem))] max-w-[calc(100vw-1.5rem)] overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] shadow-[var(--shadow-elevated)] ring-1 ring-black/[0.03] dark:ring-white/[0.04]"
         >
           <div className="border-b border-[var(--border-subtle)] bg-gradient-to-br from-primary/[0.07] via-transparent to-emerald-500/[0.04] px-4 py-3">
             <p className="text-[11px] font-medium leading-relaxed text-muted-foreground">{t(planKey)}</p>
@@ -192,7 +195,7 @@ export function LearnerShellUserBar({ pathwayShortLabel = null }: { pathwayShort
           <div className="border-t border-[var(--border-subtle)] bg-[var(--bg-muted)]/30 p-2">
             <button
               type="button"
-              className="w-full rounded-xl px-3 py-2.5 text-left text-sm font-medium text-foreground transition-colors hover:bg-[var(--surface-interactive-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25"
+              className="w-full touch-manipulation rounded-xl px-3 py-2.5 text-left text-sm font-medium text-foreground transition-colors hover:bg-[var(--surface-interactive-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25"
               role="menuitem"
               onClick={() => void signOut({ callbackUrl: "/" })}
             >

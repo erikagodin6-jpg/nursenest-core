@@ -275,7 +275,7 @@ export async function createCatPracticeTestPayload(
     userId,
   });
 
-  let state: CatAdaptiveState = {
+  const state: CatAdaptiveState = {
     ...createInitialAdaptiveState(),
     catPresentationMode: presentationMode,
     catBlueprintDiagnostics: diagnostics,

@@ -107,7 +107,7 @@ export default async function BlogPostPage({ params }: Props) {
         datePublished={publishedAt.toISOString()}
         coverImage={post.coverImage ?? null}
         keywords={schemaKeywords.length ? schemaKeywords : undefined}
-        articleSection={isDbPost(post) ? post.category : post.category ?? null}
+        articleSection={post.category ?? null}
       />
       {emitFaqJsonLd ? (
         <BlogFaqPageJsonLd items={faqItems.map((f) => ({ question: f.q, answer: f.a }))} />

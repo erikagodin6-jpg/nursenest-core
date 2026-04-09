@@ -51,16 +51,23 @@ export function ExamSessionTopBar({
 export function ExamProgressBar({ current, total }: { current: number; total: number }) {
   const pct = total > 0 ? Math.min(100, Math.max(0, (current / total) * 100)) : 0;
   return (
-    <div className="nn-exam-progress border-b border-border/70 bg-[var(--bg-inset)]/60 px-4 py-2">
-      <div className="nn-marketing-caption mb-1 flex justify-between font-semibold uppercase tracking-wide">
-        <span>Progress</span>
-        <span className="tabular-nums text-[var(--theme-heading-text)]">
+    <div className="nn-exam-progress border-b border-border/70 bg-[var(--bg-inset)]/50 px-4 py-2.5">
+      <div className="nn-marketing-caption mb-1.5 flex justify-between gap-3 font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
+        <span>Session progress</span>
+        <span className="shrink-0 tabular-nums text-[var(--theme-heading-text)]">
           {current} / {total}
         </span>
       </div>
-      <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted/55">
+      <div
+        className="h-2 w-full overflow-hidden rounded-full bg-muted/50"
+        role="progressbar"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={Math.round(pct)}
+        aria-label={`Session progress ${current} of ${total}`}
+      >
         <div
-          className="h-full rounded-full bg-primary/50 transition-[width] duration-500 ease-out"
+          className="h-full rounded-full bg-primary/45 transition-[width] duration-500 ease-out"
           style={{ width: `${pct}%` }}
         />
       </div>
@@ -94,9 +101,9 @@ export function ExamTimerReadout({
       <span
         className={`font-mono text-lg font-semibold tabular-nums tracking-tight ${
           critical
-            ? "text-red-600 dark:text-red-400"
+            ? "text-[color-mix(in_srgb,#b91c1c_78%,var(--theme-heading-text))] dark:text-[color-mix(in_srgb,#fca5a5_75%,var(--theme-heading-text))]"
             : warn
-              ? "text-amber-800 dark:text-amber-400"
+              ? "text-[var(--role-warning-text)]"
               : "text-[var(--theme-heading-text)]"
         }`}
         aria-live="polite"

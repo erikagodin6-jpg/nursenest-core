@@ -79,6 +79,7 @@ import {
 import { LAUNCH_WAVE_1_BULK_PROVIDERS } from "@/lib/lessons/scoped-lessons/launch-wave-1-bulk-specs";
 import { LAUNCH_WAVE_1A_PROVIDERS } from "@/lib/lessons/scoped-lessons/launch-wave-1a-high-yield-gold";
 import { CASE_STUDY_CASEBOOK_PROVIDERS } from "@/lib/lessons/scoped-lessons/case-study-casebook-specs";
+import { EXAM_COMPLETE_MED_SAFETY_PROVIDERS } from "@/lib/lessons/scoped-lessons/exam-complete-med-safety-specs";
 
 /** Minimal lesson row shape for catalog merge (matches pathway-lesson-loader `LessonInput`). */
 export type ScopedGoldLessonInput = {
@@ -185,6 +186,7 @@ export const SCOPED_GOLD_PROVIDERS: ScopedGoldProvider[] = [
   ...LAUNCH_WAVE_1A_PROVIDERS,
   ...LAUNCH_WAVE_1_BULK_PROVIDERS,
   ...CASE_STUDY_CASEBOOK_PROVIDERS,
+  ...EXAM_COMPLETE_MED_SAFETY_PROVIDERS,
 ];
 
 /**

@@ -21,6 +21,8 @@ import {
   parseInternalLinkPlanJson,
 } from "@/lib/blog/blog-image-workflow";
 import { buildPersistedSeoBundle, buildSchemaSummaryPayload } from "@/lib/blog/blog-seo-automation";
+import { AdminBlogDraftEditorShell, DraftSectionCard } from "@/components/admin/blog/admin-blog-draft-editor-shell";
+import { AdminBlogHtmlPreview } from "@/components/admin/blog/admin-blog-html-preview";
 
 type GenState = "idle" | "generating" | "success" | "failed";
 
@@ -54,6 +56,8 @@ type AdminPostPayload = {
   tags: string[];
   keyQuestions: string[];
   updatedAt: string;
+  /** ISO datetime when the post is scheduled or was published */
+  publishAt?: string | null;
   sourcesJson?: unknown;
   requiresReferences?: boolean;
   medicalRiskFlags?: string[];
@@ -81,6 +85,17 @@ function mergeAttachmentRowsForPlan(plan: BlogControlPanelPlan, stored: BlogImag
       sourceKind: "none" as const,
     };
   });
+}
+
+function normalizeAdminBlogSlug(raw: string): string | null {
+  const s = raw
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 120);
+  if (s.length < 3 || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(s)) return null;
+  return s;
 }
 
 function planFromPost(post: AdminPostPayload): BlogControlPanelPlan {
@@ -174,6 +189,12 @@ export function AdminBlogControlPanelClient({ initialPostId }: { initialPostId?:
   const [coverImageCaptionInput, setCoverImageCaptionInput] = useState("");
   const [coverImagePromptInput, setCoverImagePromptInput] = useState("");
   const [imageWorkflowMsg, setImageWorkflowMsg] = useState<string | null>(null);
+  const [slugDraft, setSlugDraft] = useState("");
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [publishAtLocal, setPublishAtLocal] = useState("");
+  const [outlineJsonText, setOutlineJsonText] = useState("");
+  const [outlineJsonErr, setOutlineJsonErr] = useState<string | null>(null);
+  const [outlineEditorOpen, setOutlineEditorOpen] = useState(false);
 
   const hydrateFromPost = useCallback((p: AdminPostPayload) => {
     setPost(p);
@@ -203,7 +224,19 @@ export function AdminBlogControlPanelClient({ initialPostId }: { initialPostId?:
     if (p.targetKeyword) setTargetKeyword(p.targetKeyword);
     if (p.keywordCluster) setKeywordCluster(p.keywordCluster);
     setKeywords((p.tags ?? []).join(", "));
+    setSlugDraft(p.slug);
+    setPublishAtLocal(datetimeLocalFromIso(p.publishAt));
+    setOutlineJsonErr(null);
+    setOutlineEditorOpen(false);
   }, []);
+
+  function datetimeLocalFromIso(iso: string | null | undefined): string {
+    if (!iso) return "";
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return "";
+    const pad = (n: number) => String(n).padStart(2, "0");
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  }
 
   const citationReview = useMemo(() => {
     if (!post?.sourcesJson) return null;
@@ -503,8 +536,13 @@ export function AdminBlogControlPanelClient({ initialPostId }: { initialPostId?:
               excerpt.trim().length >= 40 ? excerpt.trim().slice(0, 360) : plan.suggestedExcerpt,
           }
         : null;
+    const normalizedSlug = post ? normalizeAdminBlogSlug(slugDraft) : null;
+    const slugForSeo =
+      normalizedSlug ?? post?.slug ?? plan?.recommendedSlug ?? "draft";
+    const slugPatch =
+      postId && post && normalizedSlug && normalizedSlug !== post.slug ? { slug: normalizedSlug } : {};
     const seoBundle =
-      planForSeo && post ? buildPersistedSeoBundle(planForSeo, post.slug, post.tags ?? []) : null;
+      planForSeo && post ? buildPersistedSeoBundle(planForSeo, slugForSeo, post.tags ?? []) : null;
     const internalLinkPlan = plan
       ? {
           lessons: plan.suggestedInternalLessons,
@@ -518,6 +556,7 @@ export function AdminBlogControlPanelClient({ initialPostId }: { initialPostId?:
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          ...slugPatch,
           title,
           excerpt,
           body,
@@ -543,7 +582,11 @@ export function AdminBlogControlPanelClient({ initialPostId }: { initialPostId?:
       });
       const json = (await res.json()) as { error?: string; post?: AdminPostPayload };
       if (!res.ok) {
-        setSaveErr(json.error ?? "Save failed");
+        setSaveErr(
+          res.status === 409
+            ? (json.error ?? "Slug already taken — pick another.")
+            : (json.error ?? "Save failed"),
+        );
         return;
       }
       if (json.post) hydrateFromPost(json.post);
@@ -628,10 +671,44 @@ export function AdminBlogControlPanelClient({ initialPostId }: { initialPostId?:
         } else if (next.titleOptions[0]) setTitle(next.titleOptions[0]);
       }
       if (r.section === "meta") {
-        const m = r as { metaTitle: string; metaDescription: string; recommendedSlug: string };
-        setPlan((prev) => (prev ? { ...prev, metaTitle: m.metaTitle, metaDescription: m.metaDescription, recommendedSlug: m.recommendedSlug } : prev));
+        const m = r as {
+          metaTitle: string;
+          metaDescription: string;
+          recommendedSlug: string;
+          suggestedExcerpt?: string;
+          openGraphTitle?: string;
+          openGraphDescription?: string;
+          canonicalPath?: string | null;
+          seoFocusKeywords?: string[];
+        };
+        setPlan((prev) =>
+          prev
+            ? {
+                ...prev,
+                metaTitle: m.metaTitle,
+                metaDescription: m.metaDescription,
+                recommendedSlug: m.recommendedSlug,
+                ...(m.suggestedExcerpt !== undefined ? { suggestedExcerpt: m.suggestedExcerpt.slice(0, 360) } : {}),
+                ...(m.openGraphTitle !== undefined
+                  ? { openGraphTitle: m.openGraphTitle.trim() ? m.openGraphTitle.slice(0, 90) : undefined }
+                  : {}),
+                ...(m.openGraphDescription !== undefined
+                  ? {
+                      openGraphDescription: m.openGraphDescription.trim()
+                        ? m.openGraphDescription.slice(0, 200)
+                        : undefined,
+                    }
+                  : {}),
+                ...(m.canonicalPath !== undefined
+                  ? { canonicalPath: m.canonicalPath?.trim() ? m.canonicalPath.trim().slice(0, 220) : undefined }
+                  : {}),
+                ...(m.seoFocusKeywords !== undefined ? { seoFocusKeywords: m.seoFocusKeywords.slice(0, 10) } : {}),
+              }
+            : prev,
+        );
         setSeoTitle(m.metaTitle);
         setSeoDescription(m.metaDescription);
+        if (m.suggestedExcerpt?.trim()) setExcerpt(m.suggestedExcerpt.trim().slice(0, 500));
       }
       if (r.section === "outline") {
         const o = r as { outline: BlogControlPanelPlan["outline"] };
@@ -688,6 +765,129 @@ export function AdminBlogControlPanelClient({ initialPostId }: { initialPostId?:
           }
         : prev,
     );
+  }
+
+  function patchFaqRow(i: number, patch: Partial<BlogControlPanelPlan["faqs"][number]>) {
+    setPlan((prev) =>
+      prev ? { ...prev, faqs: prev.faqs.map((row, j) => (j === i ? { ...row, ...patch } : row)) } : prev,
+    );
+  }
+
+  function addFaqRow() {
+    setPlan((prev) =>
+      prev
+        ? {
+            ...prev,
+            faqs: [...prev.faqs, { q: "New question", a: "Answer with a concrete exam-prep teaching point." }],
+          }
+        : prev,
+    );
+  }
+
+  function removeFaqRow(i: number) {
+    setPlan((prev) => (prev ? { ...prev, faqs: prev.faqs.filter((_, j) => j !== i) } : prev));
+  }
+
+  function patchBreadcrumbRow(i: number, patch: Partial<BlogControlPanelPlan["breadcrumbs"][number]>) {
+    setPlan((prev) =>
+      prev ? { ...prev, breadcrumbs: prev.breadcrumbs.map((row, j) => (j === i ? { ...row, ...patch } : row)) } : prev,
+    );
+  }
+
+  function addBreadcrumbRow() {
+    setPlan((prev) =>
+      prev ? { ...prev, breadcrumbs: [...prev.breadcrumbs, { label: "Section", href: "/" }] } : prev,
+    );
+  }
+
+  function removeBreadcrumbRow(i: number) {
+    setPlan((prev) => (prev ? { ...prev, breadcrumbs: prev.breadcrumbs.filter((_, j) => j !== i) } : prev));
+  }
+
+  function applyOutlineJsonFromEditor() {
+    if (!plan) return;
+    setOutlineJsonErr(null);
+    try {
+      const parsed = JSON.parse(outlineJsonText || "[]") as unknown;
+      if (!Array.isArray(parsed)) {
+        setOutlineJsonErr("Outline must be a JSON array.");
+        return;
+      }
+      const next: BlogControlPanelPlan["outline"] = [];
+      for (const row of parsed) {
+        if (!row || typeof row !== "object") continue;
+        const r = row as Record<string, unknown>;
+        const h2 = typeof r.h2 === "string" ? r.h2.trim() : "";
+        if (h2.length < 2) continue;
+        const h3 = Array.isArray(r.h3) ? r.h3.filter((x): x is string => typeof x === "string") : undefined;
+        const bullets = Array.isArray(r.bullets) ? r.bullets.filter((x): x is string => typeof x === "string") : undefined;
+        next.push({ h2: h2.slice(0, 200), h3, bullets });
+      }
+      if (next.length < 3) {
+        setOutlineJsonErr("Need at least 3 sections with valid h2 strings.");
+        return;
+      }
+      setPlan({ ...plan, outline: next.slice(0, 10) });
+      setOutlineJsonErr(null);
+      setSaveMsg("Outline updated in plan — Save draft to persist.");
+    } catch {
+      setOutlineJsonErr("Invalid JSON.");
+    }
+  }
+
+  async function revertToDraft() {
+    if (!postId) return;
+    setSaveMsg(null);
+    setSaveErr(null);
+    try {
+      const res = await fetch(`/api/admin/blog/${postId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "revert_to_draft" }),
+      });
+      const json = (await res.json()) as { error?: string; post?: AdminPostPayload };
+      if (!res.ok) {
+        setSaveErr(json.error ?? "Could not revert to draft");
+        return;
+      }
+      if (json.post) hydrateFromPost(json.post);
+      setSaveMsg("Reverted to draft.");
+    } catch (err) {
+      setSaveErr(err instanceof Error ? err.message : String(err));
+    }
+  }
+
+  async function applySchedule() {
+    if (!postId || !publishAtLocal.trim()) {
+      setSaveErr("Set a publish date/time first.");
+      return;
+    }
+    setSaveMsg(null);
+    setSaveErr(null);
+    const when = new Date(publishAtLocal);
+    if (Number.isNaN(when.getTime())) {
+      setSaveErr("Invalid date/time.");
+      return;
+    }
+    try {
+      const res = await fetch(`/api/admin/blog/${postId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "schedule",
+          publishAt: when.toISOString(),
+        }),
+      });
+      const json = (await res.json()) as { error?: string; post?: AdminPostPayload };
+      if (!res.ok) {
+        setSaveErr(json.error ?? "Schedule failed");
+        return;
+      }
+      if (json.post) hydrateFromPost(json.post);
+      setSaveMsg("Scheduled.");
+    } catch (err) {
+      setSaveErr(err instanceof Error ? err.message : String(err));
+    }
   }
 
   async function uploadImageToSpaces(file: File): Promise<string | null> {
@@ -991,7 +1191,10 @@ export function AdminBlogControlPanelClient({ initialPostId }: { initialPostId?:
                 Publish now
               </button>
               {post ? (
-                <Link href={`/blog/${post.slug}`} className="rounded-lg border border-border px-4 py-2 text-sm font-semibold text-primary hover:bg-muted/60">
+                <Link
+                  href={`/blog/${normalizeAdminBlogSlug(slugDraft) ?? post.slug}`}
+                  className="rounded-lg border border-border px-4 py-2 text-sm font-semibold text-primary hover:bg-muted/60"
+                >
                   Open public URL →
                 </Link>
               ) : null}
@@ -1036,10 +1239,100 @@ export function AdminBlogControlPanelClient({ initialPostId }: { initialPostId?:
             <p className="text-xs text-muted-foreground">{citationReview.note}</p>
           ) : null}
 
-          <div className="grid gap-4 lg:grid-cols-2">
-            <div className="space-y-3 rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-4">
-              <div className="flex items-center justify-between gap-2">
-                <h3 className="text-sm font-semibold">Title options</h3>
+          <AdminBlogDraftEditorShell
+            navItems={[
+              { id: "draft-publish", label: "Publish & URL" },
+              { id: "draft-title", label: "Title" },
+              { id: "draft-seo", label: "Meta & SEO" },
+              { id: "draft-outline", label: "Outline" },
+              { id: "draft-body", label: "Article body" },
+              { id: "draft-media", label: "Images" },
+              { id: "draft-faq", label: "FAQs" },
+              { id: "draft-links", label: "Internal links" },
+              { id: "draft-breadcrumbs", label: "Breadcrumbs" },
+              { id: "draft-references", label: "References" },
+              { id: "draft-excerpt", label: "Excerpt" },
+            ]}
+            previewOpen={previewOpen}
+            onTogglePreview={() => setPreviewOpen((v) => !v)}
+            previewPanel={
+              <AdminBlogHtmlPreview
+                title={title}
+                excerpt={excerpt}
+                coverImageUrl={coverImageUrl}
+                coverAlt={coverImageAltInput}
+                bodyHtml={body}
+              />
+            }
+          >
+            <DraftSectionCard
+              id="draft-publish"
+              title="Publish status & URL"
+              description={
+                postId
+                  ? "Slug is written on Save draft. Use kebab-case. Scheduling stores UTC from the datetime you pick."
+                  : "Persist the draft first to edit slug and schedule."
+              }
+            >
+              <div className="space-y-4 text-sm">
+                {postId && post ? (
+                  <>
+                    <label className="block space-y-1">
+                      <span className="text-xs text-muted-foreground">URL slug</span>
+                      <input
+                        className="w-full rounded-md border border-border px-3 py-2 font-mono text-sm"
+                        value={slugDraft}
+                        onChange={(e) => setSlugDraft(e.target.value)}
+                        spellCheck={false}
+                      />
+                    </label>
+                    <p className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                      <span className="rounded-full bg-muted px-2 py-0.5 font-medium text-foreground">{post.postStatus}</span>
+                      {post.publishAt ? (
+                        <span>Publish: {new Date(post.publishAt).toLocaleString()}</span>
+                      ) : null}
+                    </p>
+                    <div className="flex flex-col gap-3 border-t border-border/60 pt-3 sm:flex-row sm:items-end">
+                      <label className="min-w-0 flex-1 space-y-1">
+                        <span className="text-xs text-muted-foreground">Schedule publish (local)</span>
+                        <input
+                          type="datetime-local"
+                          className="w-full rounded-md border border-border px-3 py-2 text-sm"
+                          value={publishAtLocal}
+                          onChange={(e) => setPublishAtLocal(e.target.value)}
+                        />
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => void applySchedule()}
+                        className="shrink-0 rounded-lg border border-border bg-muted/50 px-4 py-2 text-xs font-semibold hover:bg-muted/80"
+                      >
+                        Save as scheduled
+                      </button>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => void revertToDraft()}
+                      className="rounded-lg border border-border px-3 py-2 text-xs font-semibold hover:bg-muted/60"
+                    >
+                      Revert to draft
+                    </button>
+                  </>
+                ) : (
+                  <p className="text-xs text-muted-foreground">
+                    After persist, slug will match AI suggestion when possible:{" "}
+                    <code className="rounded bg-muted px-1">{plan.recommendedSlug}</code>
+                  </p>
+                )}
+              </div>
+            </DraftSectionCard>
+
+            <div className="grid gap-4 lg:grid-cols-2">
+            <DraftSectionCard
+              id="draft-title"
+              title="Title"
+              description="Pick a generated option or type your own on-page headline."
+              actions={
                 <button
                   type="button"
                   disabled={Boolean(sectionBusy)}
@@ -1048,7 +1341,9 @@ export function AdminBlogControlPanelClient({ initialPostId }: { initialPostId?:
                 >
                   {sectionBusy === "title_options" ? "…" : "Regenerate"}
                 </button>
-              </div>
+              }
+            >
+              <div className="space-y-3">
               <ul className="space-y-2 text-sm">
                 {plan.titleOptions.map((topt, i) => (
                   <li key={`${i}-${topt.slice(0, 24)}`}>
@@ -1063,20 +1358,14 @@ export function AdminBlogControlPanelClient({ initialPostId }: { initialPostId?:
                 <span className="text-xs text-muted-foreground">Display title (editable)</span>
                 <input className="w-full rounded-md border border-border px-3 py-2 text-sm" value={title} onChange={(e) => setTitle(e.target.value)} />
               </label>
-              {post ? (
-                <p className="text-xs text-muted-foreground">
-                  Slug: <code className="rounded bg-muted px-1">{post.slug}</code> (set at create; change via DB if required)
-                </p>
-              ) : (
-                <p className="text-xs text-muted-foreground">
-                  Slug: <code className="rounded bg-muted px-1">{plan.recommendedSlug}</code> (assigned on persist)
-                </p>
-              )}
             </div>
+            </DraftSectionCard>
 
-            <div className="space-y-3 rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-4">
-              <div className="flex items-center justify-between gap-2">
-                <h3 className="text-sm font-semibold">Meta &amp; SEO</h3>
+            <DraftSectionCard
+              id="draft-seo"
+              title="Meta & SEO"
+              description="Search title and description; optional Open Graph and canonical overrides."
+              actions={
                 <button
                   type="button"
                   disabled={Boolean(sectionBusy)}
@@ -1085,7 +1374,9 @@ export function AdminBlogControlPanelClient({ initialPostId }: { initialPostId?:
                 >
                   {sectionBusy === "meta" ? "…" : "Regenerate"}
                 </button>
-              </div>
+              }
+            >
+            <div className="space-y-3">
               <label className="block space-y-1">
                 <span className="text-xs text-muted-foreground">Meta title</span>
                 <input className="w-full rounded-md border border-border px-3 py-2 text-sm" value={seoTitle} onChange={(e) => setSeoTitle(e.target.value)} />
@@ -1094,27 +1385,120 @@ export function AdminBlogControlPanelClient({ initialPostId }: { initialPostId?:
                 <span className="text-xs text-muted-foreground">Meta description</span>
                 <textarea className="min-h-[88px] w-full rounded-md border border-border px-3 py-2 text-sm" value={seoDescription} onChange={(e) => setSeoDescription(e.target.value)} />
               </label>
+              {plan ? (
+                <>
+                  <label className="block space-y-1">
+                    <span className="text-xs text-muted-foreground">Open Graph title (optional)</span>
+                    <input
+                      className="w-full rounded-md border border-border px-3 py-2 text-sm"
+                      value={plan.openGraphTitle ?? ""}
+                      placeholder="Defaults to meta title"
+                      onChange={(e) => {
+                        const v = e.target.value.trim();
+                        setPlan((p) => (p ? { ...p, openGraphTitle: v ? v.slice(0, 90) : undefined } : p));
+                      }}
+                    />
+                  </label>
+                  <label className="block space-y-1">
+                    <span className="text-xs text-muted-foreground">Open Graph description (optional)</span>
+                    <input
+                      className="w-full rounded-md border border-border px-3 py-2 text-sm"
+                      value={plan.openGraphDescription ?? ""}
+                      placeholder="Shorter social preview"
+                      onChange={(e) => {
+                        const v = e.target.value.trim();
+                        setPlan((p) => (p ? { ...p, openGraphDescription: v ? v.slice(0, 200) : undefined } : p));
+                      }}
+                    />
+                  </label>
+                  <label className="block space-y-1">
+                    <span className="text-xs text-muted-foreground">Canonical path (optional)</span>
+                    <input
+                      className="w-full rounded-md border border-border px-3 py-2 font-mono text-xs"
+                      value={plan.canonicalPath ?? ""}
+                      placeholder={post ? `/blog/${post.slug}` : "/blog/your-slug"}
+                      onChange={(e) => {
+                        const v = e.target.value.trim();
+                        setPlan((p) => (p ? { ...p, canonicalPath: v ? v.slice(0, 220) : undefined } : p));
+                      }}
+                    />
+                    <span className="text-[10px] text-muted-foreground">Only <code className="rounded bg-muted px-0.5">/blog/{"{slug}"}</code> for this post is accepted on save.</span>
+                  </label>
+                  <label className="block space-y-1">
+                    <span className="text-xs text-muted-foreground">SEO focus keywords (comma-separated)</span>
+                    <input
+                      className="w-full rounded-md border border-border px-3 py-2 text-sm"
+                      value={(plan.seoFocusKeywords ?? []).join(", ")}
+                      onChange={(e) => {
+                        const parts = e.target.value
+                          .split(",")
+                          .map((s) => s.trim())
+                          .filter(Boolean)
+                          .slice(0, 10);
+                        setPlan((p) => (p ? { ...p, seoFocusKeywords: parts.length ? parts : undefined } : p));
+                      }}
+                    />
+                  </label>
+                </>
+              ) : null}
             </div>
+            </DraftSectionCard>
           </div>
 
-          <div className="rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-4">
-            <div className="flex items-center justify-between gap-2">
-              <h3 className="text-sm font-semibold">Outline (structured)</h3>
-              <button
-                type="button"
-                disabled={Boolean(sectionBusy)}
-                onClick={() => void runRegenerate("outline")}
-                className="text-xs font-semibold text-primary underline disabled:opacity-50"
-              >
-                {sectionBusy === "outline" ? "…" : "Regenerate"}
-              </button>
-            </div>
-            <pre className="mt-2 max-h-48 overflow-auto rounded-md bg-muted/40 p-3 text-xs">{JSON.stringify(plan.outline, null, 2)}</pre>
-          </div>
+          <DraftSectionCard
+            id="draft-outline"
+            title="Outline (structure)"
+            description="Guides sections in the article. Edit JSON carefully or regenerate."
+            actions={
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  disabled={Boolean(sectionBusy)}
+                  onClick={() => void runRegenerate("outline")}
+                  className="text-xs font-semibold text-primary underline disabled:opacity-50"
+                >
+                  {sectionBusy === "outline" ? "…" : "Regenerate"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOutlineJsonText(JSON.stringify(plan.outline, null, 2));
+                    setOutlineEditorOpen((o) => !o);
+                    setOutlineJsonErr(null);
+                  }}
+                  className="text-xs font-semibold text-muted-foreground underline"
+                >
+                  {outlineEditorOpen ? "Hide JSON editor" : "Edit as JSON"}
+                </button>
+              </div>
+            }
+          >
+            <pre className="max-h-48 overflow-auto rounded-md bg-muted/40 p-3 text-xs">{JSON.stringify(plan.outline, null, 2)}</pre>
+            {outlineEditorOpen ? (
+              <div className="mt-3 space-y-2 border-t border-border/60 pt-3">
+                <textarea
+                  className="min-h-[200px] w-full rounded-md border border-border px-3 py-2 font-mono text-xs"
+                  value={outlineJsonText}
+                  onChange={(e) => setOutlineJsonText(e.target.value)}
+                  spellCheck={false}
+                />
+                {outlineJsonErr ? <p className="text-xs text-rose-600">{outlineJsonErr}</p> : null}
+                <button
+                  type="button"
+                  onClick={() => applyOutlineJsonFromEditor()}
+                  className="rounded-lg border border-border bg-muted/40 px-3 py-1.5 text-xs font-semibold hover:bg-muted/70"
+                >
+                  Apply outline JSON
+                </button>
+              </div>
+            ) : null}
+          </DraftSectionCard>
 
-          <div className="rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-4">
-            <div className="flex items-center justify-between gap-2">
-              <h3 className="text-sm font-semibold">Article HTML</h3>
+          <DraftSectionCard
+            id="draft-body"
+            title="Article body (HTML)"
+            description="Valid HTML for published article. Regenerate replaces the full body."
+            actions={
               <button
                 type="button"
                 disabled={Boolean(sectionBusy)}
@@ -1123,17 +1507,20 @@ export function AdminBlogControlPanelClient({ initialPostId }: { initialPostId?:
               >
                 {sectionBusy === "article_html" ? "…" : "Regenerate body"}
               </button>
-            </div>
+            }
+          >
             <textarea
-              className="mt-2 min-h-[280px] w-full rounded-md border border-border px-3 py-2 font-mono text-xs"
+              className="min-h-[min(420px,50vh)] w-full rounded-md border border-border px-3 py-2 font-mono text-xs"
               value={body}
               onChange={(e) => setBody(e.target.value)}
             />
-          </div>
+          </DraftSectionCard>
 
-          <div className="rounded-xl border border-primary/20 bg-gradient-to-br from-primary/[0.03] to-transparent p-4">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <h3 className="text-sm font-semibold text-[var(--theme-heading-text)]">Visuals &amp; media</h3>
+          <DraftSectionCard
+            id="draft-media"
+            title="Visuals & media"
+            description="Hero cover and inline slots; copy figure HTML into the body when ready."
+            actions={
               <div className="flex flex-wrap items-center gap-2">
                 {post?.imageStatus ? (
                   <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium uppercase text-muted-foreground">
@@ -1149,8 +1536,10 @@ export function AdminBlogControlPanelClient({ initialPostId }: { initialPostId?:
                   {sectionBusy === "image_placements" ? "…" : "Regenerate image concepts"}
                 </button>
               </div>
-            </div>
-            <p className="mt-1 text-[11px] text-muted-foreground">
+            }
+          >
+            <div className="rounded-xl border border-primary/15 bg-gradient-to-br from-primary/[0.03] to-transparent p-4">
+            <p className="text-[11px] text-muted-foreground">
               Featured image renders above the article when the cover URL is set. Inline images are not auto-inserted into HTML — attach a URL (upload or stock), then copy the figure snippet into the body so we never ship empty{" "}
               <code className="rounded bg-muted px-1">&lt;img&gt;</code> tags.
             </p>
@@ -1308,36 +1697,96 @@ export function AdminBlogControlPanelClient({ initialPostId }: { initialPostId?:
                 </div>
               </div>
             ) : null}
-          </div>
 
-          <div className="grid gap-4 lg:grid-cols-2">
-            <div className="rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-4">
-              <div className="flex items-center justify-between gap-2">
-                <h3 className="text-sm font-semibold">FAQs (JSON)</h3>
-                <button
-                  type="button"
-                  disabled={Boolean(sectionBusy)}
-                  onClick={() => void runRegenerate("faqs")}
-                  className="text-xs font-semibold text-primary underline disabled:opacity-50"
-                >
-                  {sectionBusy === "faqs" ? "…" : "Regenerate"}
-                </button>
+            {plan.imagePlacements.length > 0 ? (
+              <div className="mt-4 border-t border-border/50 pt-4">
+                <p className="text-xs font-semibold">AI image concepts (from plan)</p>
+                <p className="mt-1 text-[10px] text-muted-foreground">Quick reference for prompts; attach URLs and alt text in the slots above.</p>
+                <ul className="mt-2 max-h-40 space-y-2 overflow-auto text-xs text-muted-foreground">
+                  {plan.imagePlacements.map((im, i) => (
+                    <li key={i}>
+                      <span className="font-medium text-foreground">{im.section}</span>
+                      {im.slotKey ? (
+                        <code className="ml-1 rounded bg-muted px-1 text-[10px]">{im.slotKey}</code>
+                      ) : null}
+                      : {im.promptIdea}
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <pre className="mt-2 max-h-40 overflow-auto text-xs">{JSON.stringify(plan.faqs, null, 2)}</pre>
+            ) : null}
             </div>
-            <div className="rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-4">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <h3 className="text-sm font-semibold">Internal lesson links</h3>
-                <button
-                  type="button"
-                  disabled={Boolean(sectionBusy)}
-                  onClick={() => void runRegenerate("internal_links")}
-                  className="text-xs font-semibold text-primary underline disabled:opacity-50"
-                >
-                  {sectionBusy === "internal_links" ? "…" : "Regenerate suggestions"}
-                </button>
-              </div>
-              <p className="mt-1 text-[11px] text-muted-foreground">
+          </DraftSectionCard>
+
+          <DraftSectionCard
+            id="draft-faq"
+            title="FAQ section"
+            description="Structured Q&A stored with the post; edit text directly or regenerate."
+            actions={
+              <button
+                type="button"
+                disabled={Boolean(sectionBusy)}
+                onClick={() => void runRegenerate("faqs")}
+                className="text-xs font-semibold text-primary underline disabled:opacity-50"
+              >
+                {sectionBusy === "faqs" ? "…" : "Regenerate"}
+              </button>
+            }
+          >
+            <div className="space-y-4">
+              {plan.faqs.map((f, i) => (
+                <div key={i} className="rounded-lg border border-border/60 p-3">
+                  <label className="block space-y-1">
+                    <span className="text-[11px] text-muted-foreground">Question</span>
+                    <input
+                      className="w-full rounded-md border border-border px-2 py-1.5 text-sm"
+                      value={f.q}
+                      onChange={(e) => patchFaqRow(i, { q: e.target.value.slice(0, 300) })}
+                    />
+                  </label>
+                  <label className="mt-2 block space-y-1">
+                    <span className="text-[11px] text-muted-foreground">Answer</span>
+                    <textarea
+                      className="min-h-[72px] w-full rounded-md border border-border px-2 py-1.5 text-sm"
+                      value={f.a}
+                      onChange={(e) => patchFaqRow(i, { a: e.target.value.slice(0, 1200) })}
+                    />
+                  </label>
+                  <button
+                    type="button"
+                    className="mt-2 text-[11px] font-medium text-rose-600 underline"
+                    onClick={() => removeFaqRow(i)}
+                  >
+                    Remove FAQ
+                  </button>
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={() => addFaqRow()}
+                className="rounded-lg border border-dashed border-border px-3 py-2 text-xs font-semibold text-muted-foreground hover:bg-muted/40"
+              >
+                + Add FAQ
+              </button>
+            </div>
+          </DraftSectionCard>
+
+          <DraftSectionCard
+            id="draft-links"
+            title="Internal lesson links"
+            description="Active rows drive auto-links and footer. Country alignment runs on save."
+            actions={
+              <button
+                type="button"
+                disabled={Boolean(sectionBusy)}
+                onClick={() => void runRegenerate("internal_links")}
+                className="text-xs font-semibold text-primary underline disabled:opacity-50"
+              >
+                {sectionBusy === "internal_links" ? "…" : "Regenerate suggestions"}
+              </button>
+            }
+          >
+              <p className="text-[11px] text-muted-foreground">
                 Active rows drive phrase auto-links in the published article (capped) and the footer. Country: <strong>{country}</strong> — paths are aligned on save. Remove off-topic rows or replace targets with a valid https-root path.
               </p>
               <ul className="mt-3 max-h-[min(28rem,55vh)] space-y-3 overflow-auto text-xs">
@@ -1405,31 +1854,57 @@ export function AdminBlogControlPanelClient({ initialPostId }: { initialPostId?:
                   );
                 })}
               </ul>
-            </div>
-          </div>
+          </DraftSectionCard>
 
-          <div className="grid gap-4 lg:grid-cols-2">
-            <div className="rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-4">
-              <h3 className="text-sm font-semibold">Breadcrumb data</h3>
-              <pre className="mt-2 max-h-36 overflow-auto text-xs">{JSON.stringify(plan.breadcrumbs, null, 2)}</pre>
+          <DraftSectionCard
+            id="draft-breadcrumbs"
+            title="Breadcrumb data"
+            description="Label and root-relative href per crumb. Last item should match this post’s /blog/slug path."
+          >
+            <div className="space-y-3">
+              {plan.breadcrumbs.map((row, i) => (
+                <div key={i} className="flex flex-col gap-2 rounded-lg border border-border/60 p-3 sm:flex-row sm:flex-wrap sm:items-end">
+                  <label className="min-w-0 flex-1 space-y-1">
+                    <span className="text-[11px] text-muted-foreground">Label</span>
+                    <input
+                      className="w-full rounded-md border border-border px-2 py-1.5 text-sm"
+                      value={row.label}
+                      onChange={(e) => patchBreadcrumbRow(i, { label: e.target.value.slice(0, 80) })}
+                    />
+                  </label>
+                  <label className="min-w-0 flex-[2] space-y-1">
+                    <span className="text-[11px] text-muted-foreground">Href (root-relative)</span>
+                    <input
+                      className="w-full rounded-md border border-border px-2 py-1.5 font-mono text-xs"
+                      value={row.href}
+                      onChange={(e) => patchBreadcrumbRow(i, { href: e.target.value.slice(0, 500) })}
+                      placeholder="/blog/…"
+                    />
+                  </label>
+                  <button
+                    type="button"
+                    className="shrink-0 rounded-md border border-border px-2 py-1.5 text-[11px] font-medium text-rose-600 hover:bg-muted/50"
+                    onClick={() => removeBreadcrumbRow(i)}
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={() => addBreadcrumbRow()}
+                className="rounded-lg border border-dashed border-border px-3 py-2 text-xs font-semibold text-muted-foreground hover:bg-muted/40"
+              >
+                + Add breadcrumb
+              </button>
             </div>
-            <div className="rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-4">
-              <h3 className="text-sm font-semibold">Image concepts (summary)</h3>
-              <ul className="mt-2 max-h-36 space-y-2 overflow-auto text-xs text-muted-foreground">
-                {plan.imagePlacements.map((im, i) => (
-                  <li key={i}>
-                    <span className="font-medium text-foreground">{im.section}</span>: {im.promptIdea.slice(0, 120)}
-                    {im.promptIdea.length > 120 ? "…" : ""}
-                  </li>
-                ))}
-              </ul>
-              <p className="mt-2 text-[10px] text-muted-foreground">Attach assets and alt text in Visuals &amp; media above.</p>
-            </div>
-          </div>
+          </DraftSectionCard>
 
-          <div className="rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-4">
-            <div className="flex items-center justify-between gap-2">
-              <h3 className="text-sm font-semibold">APA 7 references (one per line)</h3>
+          <DraftSectionCard
+            id="draft-references"
+            title="APA 7 references"
+            description="One citation per line. Regenerate fills stubs from the plan; manual edits persist on Save draft."
+            actions={
               <button
                 type="button"
                 disabled={Boolean(sectionBusy)}
@@ -1438,34 +1913,34 @@ export function AdminBlogControlPanelClient({ initialPostId }: { initialPostId?:
               >
                 {sectionBusy === "apa_sources" ? "…" : "Regenerate stubs"}
               </button>
-            </div>
-            <textarea className="mt-2 min-h-[120px] w-full rounded-md border border-border px-3 py-2 font-mono text-xs" value={apaText} onChange={(e) => setApaText(e.target.value)} />
-            <p className="mt-1 text-[11px] text-muted-foreground">
+            }
+          >
+            <textarea
+              className="min-h-[120px] w-full rounded-md border border-border px-3 py-2 font-mono text-xs"
+              value={apaText}
+              onChange={(e) => setApaText(e.target.value)}
+            />
+            <p className="mt-2 text-[11px] text-muted-foreground">
               Published APA lines come from verified admin JSON on generate/persist. Editing here overrides stored strings on Save — prefer fixing structured sources when possible.
             </p>
-          </div>
+          </DraftSectionCard>
 
-          <label className="block space-y-1">
-            <span className="text-xs font-medium text-muted-foreground">Excerpt / teaser</span>
-            <textarea className="min-h-[72px] w-full rounded-md border border-border px-3 py-2 text-sm" value={excerpt} onChange={(e) => setExcerpt(e.target.value)} />
-          </label>
-
-          <div className="flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={() => void saveDraft()}
-              className="rounded-lg border border-border bg-[var(--theme-card-bg)] px-4 py-2 text-sm font-semibold hover:bg-muted/60"
-            >
-              Save draft
-            </button>
-            <button
-              type="button"
-              onClick={() => void publishNow()}
-              className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700"
-            >
-              Publish now
-            </button>
-          </div>
+          <DraftSectionCard
+            id="draft-excerpt"
+            title="Excerpt / teaser"
+            description="Shown in listings and social fallbacks; kept in sync with suggestedExcerpt in the plan JSON."
+          >
+            <textarea
+              className="min-h-[72px] w-full rounded-md border border-border px-3 py-2 text-sm"
+              value={excerpt}
+              onChange={(e) => {
+                const v = e.target.value;
+                setExcerpt(v);
+                setPlan((p) => (p ? { ...p, suggestedExcerpt: v.slice(0, 360) } : p));
+              }}
+            />
+          </DraftSectionCard>
+          </AdminBlogDraftEditorShell>
         </section>
       ) : null}
     </div>

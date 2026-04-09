@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { auth } from "@/lib/auth";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerProgressPageContent } from "@/components/student/learner-progress-page-content";
 import { LockedStudyNextPreview } from "@/components/student/locked-study-next-preview";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
@@ -81,6 +82,8 @@ export default async function AccountProgressPage() {
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.account.progress.intro")}</p>
       </div>
       <LearnerProgressPageContent data={payload} t={t} localeTag={localeTag} />
+
+      <LearnerAccountCrossLinks variant="progress" t={t} continueLesson={payload.continueLesson} />
     </main>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { BlogPostStatus } from "@prisma/client";
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -19,14 +20,17 @@ type BlogRow = {
   coverImage?: string | null;
   coverImageAlt?: string | null;
   imageStatus?: string;
-  postStatus: "DRAFT" | "SCHEDULED" | "PUBLISHED";
+  postStatus: BlogPostStatus;
   publishAt: string | null;
   updatedAt: string;
 };
 
-function statusChip(status: BlogRow["postStatus"]) {
-  if (status === "PUBLISHED") return "bg-emerald-100 text-emerald-900";
-  if (status === "SCHEDULED") return "bg-amber-100 text-amber-900";
+function statusChip(status: BlogPostStatus) {
+  if (status === BlogPostStatus.PUBLISHED) return "bg-emerald-100 text-emerald-900";
+  if (status === BlogPostStatus.SCHEDULED) return "bg-amber-100 text-amber-900";
+  if (status === BlogPostStatus.APPROVED) return "bg-sky-100 text-sky-900";
+  if (status === BlogPostStatus.NEEDS_REVIEW) return "bg-orange-100 text-orange-900";
+  if (status === BlogPostStatus.FAILED) return "bg-red-100 text-red-900";
   return "bg-slate-200 text-slate-900";
 }
 
@@ -46,7 +50,7 @@ export function AdminBlogSchedulerPanel({
   missingImageAltCount: number;
 }) {
   const router = useRouter();
-  const [statusFilter, setStatusFilter] = useState<"ALL" | BlogRow["postStatus"]>("ALL");
+  const [statusFilter, setStatusFilter] = useState<"ALL" | BlogPostStatus>("ALL");
   const [busyId, setBusyId] = useState<string | null>(null);
   const [createBusy, setCreateBusy] = useState(false);
   const [newPost, setNewPost] = useState({
@@ -178,13 +182,15 @@ export function AdminBlogSchedulerPanel({
         <select
           id="blog-status-filter"
           value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value as "ALL" | BlogRow["postStatus"])}
+          onChange={(e) => setStatusFilter(e.target.value as "ALL" | BlogPostStatus)}
           className="rounded-md border border-border px-2 py-1"
         >
           <option value="ALL">All</option>
-          <option value="DRAFT">Draft</option>
-          <option value="SCHEDULED">Scheduled</option>
-          <option value="PUBLISHED">Published</option>
+          {Object.values(BlogPostStatus).map((s) => (
+            <option key={s} value={s}>
+              {s.replaceAll("_", " ")}
+            </option>
+          ))}
         </select>
       </div>
 

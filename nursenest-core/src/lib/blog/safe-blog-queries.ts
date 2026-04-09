@@ -123,7 +123,14 @@ export async function getBlogPostMetaBySlug(slug: string): Promise<BlogPostMeta 
 export async function isBlogPostMetaVisible(slug: string): Promise<boolean> {
   const meta = await getBlogPostMetaBySlug(slug);
   if (!meta) return false;
-  if (meta.postStatus === BlogPostStatus.DRAFT) return false;
+  if (
+    meta.postStatus === BlogPostStatus.DRAFT ||
+    meta.postStatus === BlogPostStatus.NEEDS_REVIEW ||
+    meta.postStatus === BlogPostStatus.APPROVED ||
+    meta.postStatus === BlogPostStatus.FAILED
+  ) {
+    return false;
+  }
   return blogPostIsLive({ postStatus: meta.postStatus, publishAt: meta.publishAt });
 }
 

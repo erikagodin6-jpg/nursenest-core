@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { auth } from "@/lib/auth";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerReadinessPremium } from "@/components/student/learner-readiness-premium";
 import { LockedStudyNextPreview } from "@/components/student/locked-study-next-preview";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
@@ -82,6 +83,8 @@ export default async function AccountReadinessPage() {
       </div>
 
       <LearnerReadinessPremium payload={payload} t={t} localeTag={localeTag} />
+
+      <LearnerAccountCrossLinks variant="readiness" t={t} />
     </main>
   );
 }

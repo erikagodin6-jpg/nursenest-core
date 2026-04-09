@@ -50,17 +50,17 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
   return (
     <div className="space-y-14">
       {/* 1: How to use */}
-      <section className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-sm" aria-labelledby="how-use-nclex-rn">
-        <h2 id="how-use-nclex-rn" className="text-lg font-bold text-[var(--theme-heading-text)]">
+      <section className="nn-study-card p-5 sm:p-6" aria-labelledby="how-use-nclex-rn">
+        <h2 id="how-use-nclex-rn" className="nn-marketing-h3">
           How to use these lessons for NCLEX-RN
         </h2>
-        <ol className="mt-4 space-y-3 text-sm leading-relaxed text-[var(--theme-muted-text)]">
+        <ol className="nn-marketing-body-sm mt-4 list-none space-y-3 pl-0 text-[var(--theme-muted-text)]">
           <li>
-            <span className="font-semibold text-foreground">1. Learn the concept.</span> Extract the decision rule (what
+            <span className="font-semibold text-[var(--theme-heading-text)]">1. Learn the concept.</span> Extract the decision rule (what
             changes risk, what must be assessed first), not isolated facts to recite.
           </li>
           <li>
-            <span className="font-semibold text-foreground">2. Apply with exam-style questions.</span>{" "}
+            <span className="font-semibold text-[var(--theme-heading-text)]">2. Apply with exam-style questions.</span>{" "}
             {isCa ? (
               <>
                 Use the same pathway in the question bank so scope, units, and language stay consistent with Canadian RN
@@ -73,24 +73,24 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
             )}
           </li>
           <li>
-            <span className="font-semibold text-foreground">3. Review rationale deeply.</span> For every option, name the
+            <span className="font-semibold text-[var(--theme-heading-text)]">3. Review rationale deeply.</span> For every option, name the
             patient outcome if it were correct. Then compare to the stem’s urgency and data.
           </li>
           <li>
-            <span className="font-semibold text-foreground">4. Identify weak areas.</span> Tag misses by Client Needs bucket
+            <span className="font-semibold text-[var(--theme-heading-text)]">4. Identify weak areas.</span> Tag misses by Client Needs bucket
             and symptom pattern (e.g., “missed hypoxia cue”) before adding new volume.
           </li>
           <li>
-            <span className="font-semibold text-foreground">5. Retest.</span> Run a timed or CAT-style block after you can
+            <span className="font-semibold text-[var(--theme-heading-text)]">5. Retest.</span> Run a timed or CAT-style block after you can
             explain prior errors. Retesting without analysis reinforces guesses.
           </li>
         </ol>
       </section>
 
       {/* Trust anchors */}
-      <section className="rounded-2xl border border-primary/20 bg-primary/[0.04] p-5 sm:p-6">
-        <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Built for NCLEX-RN, not generic “nursing content”</h2>
-        <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-[var(--theme-muted-text)]">
+      <section className="nn-study-callout p-5 sm:p-6">
+        <h2 className="nn-marketing-h3">Built for NCLEX-RN, not generic “nursing content”</h2>
+        <ul className="nn-marketing-body-sm mt-3 list-disc space-y-2 pl-5 text-[var(--theme-muted-text)]">
           <li>Aligned with the NCLEX-RN test plan Client Needs framework used to group lessons below.</li>
           <li>Built for clinical judgment: unsafe vs safe, urgent vs routine, not recognition of the longest answer.</li>
           <li>Includes NGN-style reasoning: layered data, multiple plausible options, one best action for this patient.</li>
@@ -118,15 +118,15 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
 
       {/* Anchor navigation */}
       {navLinks.length > 0 && (
-        <nav aria-label="NCLEX-RN lesson categories" className="rounded-xl border border-border bg-[var(--theme-muted-surface)] p-4">
-          <p className="text-xs font-semibold uppercase tracking-wide text-muted">Jump to Client Needs</p>
-          <p className="mt-1 text-xs text-[var(--theme-muted-text)]">Counts reflect lessons on this page (paginated hub).</p>
+        <nav aria-label="NCLEX-RN lesson categories" className="nn-study-card nn-study-card--wash p-4">
+          <p className="nn-marketing-label">Jump to Client Needs</p>
+          <p className="nn-marketing-caption mt-1">Counts reflect lessons on this page (paginated hub).</p>
           <ul className="mt-3 flex flex-wrap gap-2">
             {navLinks.map((s) => (
               <li key={s.anchor}>
                 <a
                   href={`#${s.anchor}`}
-                  className="inline-flex rounded-full border border-border bg-card px-3 py-1.5 text-sm font-medium hover:border-primary/40"
+                  className="nn-chip nn-marketing-body-sm px-3 py-1.5 font-medium hover:border-[color-mix(in_srgb,var(--theme-primary)_30%,var(--border-subtle))]"
                 >
                   {s.title === "Physiological Integrity" ? `${s.subtitle}` : s.title} ({s.count})
                 </a>
@@ -138,34 +138,36 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
 
       {/* Featured + category sections */}
       {featured && featured.slug?.trim() && featuredPreview && (
-        <section className="rounded-2xl border-2 border-primary/25 bg-gradient-to-b from-card to-[var(--theme-muted-surface)] p-5 sm:p-7">
+        <section className="nn-study-card bg-gradient-to-b from-[var(--bg-card)] to-[var(--nn-presentation-wash)] p-5 sm:p-7">
           <div className="flex flex-wrap items-start justify-between gap-2">
-            <p className="text-xs font-semibold uppercase tracking-wide text-primary">Featured lesson</p>
+            <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-primary)]">
+              Featured lesson
+            </p>
             {Object.keys(progressMap).length > 0 ? (
               <PathwayLessonProgressBadge status={progressMap[featured.slug] ?? "not_started"} />
             ) : null}
           </div>
-          <h3 className="mt-2 text-xl font-bold text-[var(--theme-heading-text)]">{featured.title}</h3>
-          <div className="mt-4 grid gap-3 border-t border-border pt-4 text-sm sm:grid-cols-2">
+          <h3 className="nn-marketing-h2 mt-2">{featured.title}</h3>
+          <div className="mt-4 grid gap-3 border-t border-border/80 pt-4 sm:grid-cols-2">
             <div>
-              <p className="text-xs font-semibold uppercase text-muted">Clinical scenario type</p>
-              <p className="mt-1 text-foreground">{featuredPreview.scenarioType}</p>
+              <p className="nn-marketing-caption font-semibold uppercase">Clinical scenario type</p>
+              <p className="nn-marketing-body-sm mt-1 text-[var(--theme-body-text)]">{featuredPreview.scenarioType}</p>
             </div>
             <div>
-              <p className="text-xs font-semibold uppercase text-muted">Likely NCLEX item types</p>
-              <p className="mt-1 text-foreground">{featuredPreview.examQuestionTypes}</p>
+              <p className="nn-marketing-caption font-semibold uppercase">Likely NCLEX item types</p>
+              <p className="nn-marketing-body-sm mt-1 text-[var(--theme-body-text)]">{featuredPreview.examQuestionTypes}</p>
             </div>
             <div className="sm:col-span-2">
-              <p className="text-xs font-semibold uppercase text-muted">What this lesson prepares you for</p>
-              <p className="mt-1 text-[var(--theme-muted-text)]">{featuredPreview.whyOnExam}</p>
+              <p className="nn-marketing-caption font-semibold uppercase">What this lesson prepares you for</p>
+              <p className="nn-marketing-body-sm mt-1 text-[var(--theme-muted-text)]">{featuredPreview.whyOnExam}</p>
             </div>
-            <div className="sm:col-span-2 rounded-lg bg-card/80 p-3 border border-border">
-              <p className="text-xs font-semibold text-muted">Scenario preview</p>
-              <p className="mt-1 text-foreground">{featuredPreview.miniScenario}</p>
+            <div className="nn-surface-inset sm:col-span-2 rounded-xl p-3">
+              <p className="nn-marketing-caption font-semibold">Scenario preview</p>
+              <p className="nn-marketing-body-sm mt-1 text-[var(--theme-body-text)]">{featuredPreview.miniScenario}</p>
             </div>
-            <div className="sm:col-span-2 rounded-lg bg-card/80 p-3 border border-border">
-              <p className="text-xs font-semibold text-muted">Reasoning excerpt (from lesson core)</p>
-              <p className="mt-1 italic text-[var(--theme-muted-text)]">
+            <div className="nn-surface-inset sm:col-span-2 rounded-xl p-3">
+              <p className="nn-marketing-caption font-semibold">Reasoning excerpt (from lesson core)</p>
+              <p className="nn-marketing-body-sm mt-1 italic text-[var(--theme-muted-text)]">
                 &ldquo;{featuredPreview.rationaleSnippet}&rdquo;
               </p>
             </div>
@@ -173,17 +175,20 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
           <div className="mt-5 flex flex-wrap gap-2">
             <Link
               href={pathwayLessonMarketingDetailHref(lessonsBasePath, featured.slug)!}
-              className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+              className="inline-flex rounded-full nn-btn-primary px-4 py-2 text-sm font-semibold shadow-none"
             >
               Open lesson
             </Link>
             <Link
               href={appQuestionsHref(pathway.id, featured.topic)}
-              className="rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold hover:bg-gray-50"
+              className="inline-flex rounded-full nn-btn-secondary bg-card px-4 py-2 text-sm font-semibold"
             >
               Start 5-question quiz from this topic
             </Link>
-            <Link href={appQuestionsHref(pathway.id)} className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-gray-50">
+            <Link
+              href={appQuestionsHref(pathway.id)}
+              className="inline-flex rounded-full nn-btn-secondary px-4 py-2 text-sm font-semibold"
+            >
               Test this lesson now
             </Link>
           </div>
@@ -209,8 +214,8 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
         className="mt-2"
       >
       {/* Clinical judgment */}
-      <section className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-sm" aria-labelledby="cj-nclex-rn">
-        <h2 id="cj-nclex-rn" className="text-lg font-bold text-[var(--theme-heading-text)]">
+      <section className="nn-study-card p-5 sm:p-6" aria-labelledby="cj-nclex-rn">
+        <h2 id="cj-nclex-rn" className="nn-marketing-h3">
           Clinical judgment system: from knowledge to a selected action
         </h2>
         <div className="mt-3 space-y-3 text-sm leading-relaxed text-[var(--theme-muted-text)]">
@@ -240,8 +245,8 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
       </section>
 
       {/* Flow */}
-      <section className="rounded-2xl border border-border bg-[var(--theme-muted-surface)] p-5 sm:p-6" aria-labelledby="flow-nclex-rn">
-        <h2 id="flow-nclex-rn" className="text-lg font-bold text-[var(--theme-heading-text)]">
+      <section className="nn-study-card nn-study-card--wash p-5 sm:p-6" aria-labelledby="flow-nclex-rn">
+        <h2 id="flow-nclex-rn" className="nn-marketing-h3">
           Structured pathway: lesson → questions → weak areas → CAT → readiness
         </h2>
         <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
@@ -259,8 +264,10 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
             { step: "5", label: "Readiness", detail: "Predict errors before you click" },
           ].map((item, i, arr) => (
             <div key={item.label} className="flex min-w-0 flex-1 items-center gap-2 sm:flex-col sm:gap-1">
-              <div className="flex w-full min-w-0 flex-col rounded-lg border border-border bg-card px-3 py-2.5 text-center shadow-sm sm:py-3">
-                <span className="text-[10px] font-bold uppercase tracking-wide text-primary">{item.step}</span>
+              <div className="flex w-full min-w-0 flex-col rounded-xl border border-border/80 bg-card px-3 py-2.5 text-center sm:py-3">
+                <span className="nn-marketing-caption font-bold uppercase tracking-wide text-[var(--theme-primary)]">
+                  {item.step}
+                </span>
                 <span className="text-sm font-semibold text-[var(--theme-heading-text)]">{item.label}</span>
                 <span className="mt-0.5 text-xs text-muted">{item.detail}</span>
               </div>
@@ -299,8 +306,8 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
       </section>
 
       {/* Strong reasoning sample */}
-      <section className="rounded-2xl border border-border bg-card p-5 sm:p-6 shadow-sm" aria-labelledby="reasoning-nclex-rn">
-        <h2 id="reasoning-nclex-rn" className="text-lg font-bold text-[var(--theme-heading-text)]">
+      <section className="nn-study-card p-5 sm:p-6" aria-labelledby="reasoning-nclex-rn">
+        <h2 id="reasoning-nclex-rn" className="nn-marketing-h3">
           What strong NCLEX-RN reasoning looks like
         </h2>
         <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
@@ -334,7 +341,7 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
 
       {/* Common mistakes */}
       <section aria-labelledby="mistakes-nclex-rn">
-        <h2 id="mistakes-nclex-rn" className="text-lg font-bold text-[var(--theme-heading-text)]">
+        <h2 id="mistakes-nclex-rn" className="nn-marketing-h3">
           Common mistakes RN students make
         </h2>
         <div className="mt-4 space-y-6">
@@ -356,8 +363,8 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
       </section>
 
       {/* CTAs */}
-      <section className="rounded-2xl border border-primary/20 bg-primary/[0.06] p-5 sm:p-6">
-        <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Start without friction</h2>
+      <section className="nn-study-callout p-5 sm:p-6">
+        <h2 className="nn-marketing-h3">Start without friction</h2>
         <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
           Try a short bank pass first; full sessions may prompt sign-in depending on product rules, not a forced login at the
           first click.

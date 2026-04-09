@@ -387,8 +387,11 @@ model Category {
 
 enum BlogPostStatus {
   DRAFT
+  NEEDS_REVIEW
+  APPROVED
   SCHEDULED
   PUBLISHED
+  FAILED
 }
 
 /** Editorial templates for generation + internal linking (not shown as raw enum in UI). */
@@ -576,6 +579,8 @@ model BlogPost {
   perfSubscriptionAssists Int?
   updateNeeded Boolean @default(false)
   rankingNote  String? @db.Text
+  /** Admin-only append-only JSON array: generation, saves, publish attempts, status transitions. */
+  adminPublishLog Json @default("[]")
 
   @@index([postStatus, publishAt])
   @@index([createdAt])

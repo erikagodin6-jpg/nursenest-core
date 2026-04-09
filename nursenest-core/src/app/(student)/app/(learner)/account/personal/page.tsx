@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { auth } from "@/lib/auth";
+import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerPersonalInfoForm } from "@/components/student/learner-personal-info-form";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
@@ -50,6 +51,8 @@ export default async function AccountPersonalPage() {
       </div>
 
       <LearnerPersonalInfoForm initial={profile} t={t} localeTag={localeTag} />
+
+      <LearnerAccountCrossLinks variant="settings" t={t} />
     </main>
   );
 }

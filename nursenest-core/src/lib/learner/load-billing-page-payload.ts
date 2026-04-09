@@ -99,7 +99,7 @@ async function loadStripeRenewalSnapshot(stripeSubscriptionId: string | null | u
       rawInterval === "day" || rawInterval === "week" || rawInterval === "month" || rawInterval === "year"
         ? rawInterval
         : null;
-    const endSec = sub.current_period_end;
+    const endSec = item?.current_period_end;
     const currentPeriodEnd = typeof endSec === "number" && endSec > 0 ? new Date(endSec * 1000) : null;
     return {
       billingInterval,
@@ -206,7 +206,8 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
     : null;
 
   const subForEffective =
-    subscription && [SubscriptionStatus.ACTIVE, SubscriptionStatus.GRACE].includes(subscription.status)
+    subscription &&
+    (subscription.status === SubscriptionStatus.ACTIVE || subscription.status === SubscriptionStatus.GRACE)
       ? {
           planTier: subscription.planTier,
           planCountry: subscription.planCountry,
@@ -235,7 +236,9 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
 
   const portalEligibleSub =
     subscription &&
-    [SubscriptionStatus.ACTIVE, SubscriptionStatus.GRACE, SubscriptionStatus.PAST_DUE].includes(subscription.status);
+    (subscription.status === SubscriptionStatus.ACTIVE ||
+      subscription.status === SubscriptionStatus.GRACE ||
+      subscription.status === SubscriptionStatus.PAST_DUE);
   const showBillingPortal = Boolean(portalEligibleSub && subscription.stripeCustomerId?.trim());
 
   const now = Date.now();

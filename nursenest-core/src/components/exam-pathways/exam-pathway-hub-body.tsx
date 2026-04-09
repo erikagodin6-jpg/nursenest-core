@@ -169,25 +169,25 @@ export function ExamPathwayHubBody({
         </p>
       </aside>
 
-      <h2 className="mt-14 text-lg font-bold text-[var(--theme-heading-text)] sm:text-xl">
+      <h2 className="nn-marketing-h2 mt-14">
         {conversionSectionHeading ?? "Everything for this exam in one platform"}
       </h2>
-      <p className="mt-2 max-w-2xl text-sm text-[var(--theme-muted-text)]">
+      <p className="nn-marketing-body-sm mt-2 max-w-2xl text-[var(--theme-muted-text)]">
         {conversionSectionLead ??
           "Same-pathway question runs, structured lessons, spaced flashcards, study planner, and readiness sit behind one login after you subscribe. Timed and exam-style practice (including mocks) unlock in the app once your plan matches this pathway."}
       </p>
-      <ul className="mt-4 list-inside list-disc space-y-1.5 text-sm text-[var(--theme-body-text)]">
+      <ul className="nn-marketing-body-sm mt-4 list-inside list-disc space-y-1.5 text-[var(--theme-body-text)]">
         <li>
-          <span className="font-medium text-[var(--theme-heading-text)]">Question bank:</span> short reps with rationales on every option.
+          <span className="font-semibold text-[var(--theme-heading-text)]">Question bank:</span> short reps with rationales on every option.
         </li>
         <li>
-          <span className="font-medium text-[var(--theme-heading-text)]">Lessons:</span> system and safety topics aligned to this exam’s framing.
+          <span className="font-semibold text-[var(--theme-heading-text)]">Lessons:</span> system and safety topics aligned to this exam’s framing.
         </li>
         <li>
-          <span className="font-medium text-[var(--theme-heading-text)]">Flashcards &amp; planner:</span> weak-topic decks and pacing after sign-in.
+          <span className="font-semibold text-[var(--theme-heading-text)]">Flashcards &amp; planner:</span> weak-topic decks and pacing after sign-in.
         </li>
         <li>
-          <span className="font-medium text-[var(--theme-heading-text)]">Exam mode &amp; mocks:</span> full-length timing and review flags in-app.
+          <span className="font-semibold text-[var(--theme-heading-text)]">Exam mode &amp; mocks:</span> full-length timing and review flags in-app.
         </li>
       </ul>
 
@@ -202,15 +202,15 @@ export function ExamPathwayHubBody({
             destination_type: "marketing_pricing",
             link_target: "marketing_pricing_hub",
           }}
-          className="flex h-full min-h-[11rem] flex-col rounded-2xl border border-[var(--theme-card-border)] bg-card p-5 shadow-sm transition hover:border-primary/30 hover:shadow-[var(--shadow-card)] sm:min-h-[12rem]"
+          className="nn-study-card nn-card-interactive flex h-full min-h-[11rem] flex-col p-5 sm:min-h-[12rem]"
         >
           <ClipboardList className="h-5 w-5 text-primary" aria-hidden />
-          <span className="mt-3 text-base font-bold text-[var(--theme-heading-text)]">Pricing & plans</span>
-          <span className="mt-2 text-sm text-[var(--theme-body-text)]">
+          <span className="nn-marketing-h4 mt-3">Pricing & plans</span>
+          <span className="nn-marketing-body-sm mt-2 text-[var(--theme-body-text)]">
             See the NurseNest tier for this pathway in {pathway.countryCode}. NP specialties may share the NP tier until per-pathway billing
             ships.
           </span>
-          <span className="mt-auto inline-flex items-center pt-4 text-sm font-semibold text-primary">
+          <span className="nn-marketing-body-sm mt-auto inline-flex items-center pt-4 font-semibold text-primary">
             Compare plans
             <ArrowRight className="ml-1 h-4 w-4" />
           </span>
@@ -219,7 +219,7 @@ export function ExamPathwayHubBody({
 
       {isSignedIn ? (
         <>
-          <h2 className="mt-14 text-lg font-bold text-[var(--theme-heading-text)] sm:text-xl">Already studying inside NurseNest?</h2>
+          <h2 className="nn-marketing-h2 mt-14">Already studying inside NurseNest?</h2>
           <ul
             className={`mt-4 grid gap-3 ${emphasizeCatPracticeTests ? "sm:grid-cols-2 lg:grid-cols-3" : "sm:grid-cols-2"}`}
           >
@@ -235,7 +235,7 @@ export function ExamPathwayHubBody({
                   destination_type: "app_questions",
                   link_target: "app_questions",
                 }}
-                className="block rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)] px-4 py-3 text-sm font-semibold text-[var(--theme-heading-text)] hover:border-primary/25"
+                className="nn-study-card nn-card-interactive block px-4 py-3 text-sm font-semibold text-[var(--theme-heading-text)]"
               >
                 In-app question bank →
               </MarketingTrackedLink>
@@ -253,7 +253,7 @@ export function ExamPathwayHubBody({
                     destination_type: "cat_practice_tests",
                     link_target: "app_pathway_cat_start",
                   }}
-                  className="block rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)] px-4 py-3 text-sm font-semibold text-[var(--theme-heading-text)] hover:border-primary/25"
+                  className="nn-study-card nn-card-interactive block px-4 py-3 text-sm font-semibold text-[var(--theme-heading-text)]"
                 >
                   Start pathway CAT →
                 </MarketingTrackedLink>
@@ -271,7 +271,7 @@ export function ExamPathwayHubBody({
                   destination_type: "app_entry",
                   link_target: "app_dashboard",
                 }}
-                className="block rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)] px-4 py-3 text-sm font-semibold text-[var(--theme-heading-text)] hover:border-primary/25"
+                className="nn-study-card nn-card-interactive block px-4 py-3 text-sm font-semibold text-[var(--theme-heading-text)]"
               >
                 Open your dashboard →
               </MarketingTrackedLink>
@@ -280,8 +280,8 @@ export function ExamPathwayHubBody({
         </>
       ) : null}
 
-      <div className="mt-12 rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)] p-5 text-sm text-[var(--theme-body-text)]">
-        <p>
+      <div className="nn-study-card nn-study-card--wash mt-12 p-5">
+        <p className="nn-marketing-body-sm text-[var(--theme-body-text)]">
           Checkout and content entitlements use your <strong className="text-[var(--theme-heading-text)]">{pathway.shortName}</strong> track with
           NurseNest&apos;s <strong className="text-[var(--theme-heading-text)]">{pathway.stripeTier}</strong> tier for{" "}
           <strong className="text-[var(--theme-heading-text)]">{pathway.countryCode}</strong>. Pick the correct pathway in your profile so
