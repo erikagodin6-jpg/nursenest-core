@@ -8,6 +8,7 @@ import {
   pathwayMarketingQuestionBankTopicHref,
 } from "@/components/lessons/pathway-lesson-link-practice";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { pathwayLessonMarketingDetailHref } from "@/lib/lessons/pathway-lesson-types";
 
 const RELATED_CAP = 5;
 
@@ -74,7 +75,8 @@ export function PathwayLessonRelatedLearningBlock({
           ) : (
             <ul className="mt-3 space-y-2">
               {filtered.map((r) => {
-                const href = `${lessonsBasePath.replace(/\/$/, "")}/${encodeURIComponent(r.slug)}`;
+                const href = pathwayLessonMarketingDetailHref(lessonsBasePath, r.slug);
+                if (!href) return null;
                 return (
                   <li key={r.slug}>
                     <Link
