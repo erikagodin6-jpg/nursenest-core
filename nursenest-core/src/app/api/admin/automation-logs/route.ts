@@ -1,7 +1,9 @@
-import { ContentAutomationLogCategory, ContentAutomationLogStatus } from "@prisma/client";
+import { ContentAutomationLogCategory, ContentAutomationLogStatus, Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { prisma } from "@/lib/db";
+
+const MAX_HOURS = 24 * 90;
 
 function parseEnumValue<T extends string>(raw: string | null, allowed: readonly T[]): T | undefined {
   if (!raw) return undefined;
@@ -10,6 +12,7 @@ function parseEnumValue<T extends string>(raw: string | null, allowed: readonly 
 
 /**
  * Admin-only list of content automation / blog generation logs (newest first).
+ * Optional: `hours` (1–2160) filters createdAt; `search` matches summary/error/topic (min 2 chars).
  */
 export async function GET(req: Request) {
   const gate = await requireAdmin();
@@ -20,10 +23,32 @@ export async function GET(req: Request) {
   const offset = Math.max(0, Number(searchParams.get("offset") ?? "0") || 0);
   const category = parseEnumValue(searchParams.get("category"), Object.values(ContentAutomationLogCategory));
   const status = parseEnumValue(searchParams.get("status"), Object.values(ContentAutomationLogStatus));
+  const hoursRaw = searchParams.get("hours");
+  const hours =
+    hoursRaw != null && hoursRaw !== ""
+      ? Math.min(MAX_HOURS, Math.max(1, Math.floor(Number(hoursRaw) || 0)))
+      : undefined;
+  const searchRaw = searchParams.get("search")?.trim() ?? "";
 
-  const where = {
+  const since =
+    hours != null ? new Date(Date.now() - hours * 60 * 60 * 1000) : undefined;
+
+  const searchFilter: Prisma.ContentAutomationLogWhereInput | undefined =
+    searchRaw.length >= 2
+      ? {
+          OR: [
+            { summary: { contains: searchRaw, mode: "insensitive" } },
+            { error: { contains: searchRaw, mode: "insensitive" } },
+            { topic: { contains: searchRaw, mode: "insensitive" } },
+          ],
+        }
+      : undefined;
+
+  const where: Prisma.ContentAutomationLogWhereInput = {
     ...(category ? { category } : {}),
     ...(status ? { status } : {}),
+    ...(since ? { createdAt: { gte: since } } : {}),
+    ...(searchFilter ? searchFilter : {}),
   };
 
   const [rows, total] = await Promise.all([

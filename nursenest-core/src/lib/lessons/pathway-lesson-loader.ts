@@ -39,6 +39,10 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { sortPathwayLessonsForPublicPreview } from "@/lib/lessons/pathway-lesson-public-preview-priority";
 import type { LaunchBundleEntry, PathwayLaunchBundleSpec } from "@/lib/lessons/pathway-launch-bundle";
 import { getLaunchBundleSpec } from "@/lib/lessons/pathway-launch-bundle";
+import {
+  PATHWAY_HUB_PAGE_SIZE_DEFAULT,
+  PATHWAY_HUB_PAGE_SIZE_MAX,
+} from "@/lib/lessons/pathway-lesson-scale";
 
 type CatalogShape = {
   version: number;
@@ -71,10 +75,7 @@ const data = catalog as CatalogShape;
 
 type LessonInput = CatalogShape["pathways"][string]["lessons"][number];
 
-/** Default page size for pathway lesson hubs (safe render + memory). */
-export const PATHWAY_HUB_PAGE_SIZE_DEFAULT = 40;
-/** Hard cap per hub request — larger values need cursor-based pagination later. */
-export const PATHWAY_HUB_PAGE_SIZE_MAX = 60;
+export { PATHWAY_HUB_PAGE_SIZE_DEFAULT, PATHWAY_HUB_PAGE_SIZE_MAX } from "@/lib/lessons/pathway-lesson-scale";
 /** DB read timeout for pathway lesson queries (marketing paths). */
 export const PATHWAY_LESSON_DB_TIMEOUT_MS = 12_000;
 /**

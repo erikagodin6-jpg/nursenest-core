@@ -7,6 +7,7 @@ import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { HomeConversionHero } from "@/components/marketing/home-conversion-hero";
 import { HomeExamSelectionSection } from "@/components/marketing/home-exam-selection-section";
 import { HomeHowItWorksSection } from "@/components/marketing/home-how-it-works-section";
+import { HomeComparisonSection } from "@/components/marketing/home-comparison-section";
 import { HomePlatformPreviewSection } from "@/components/marketing/home-platform-preview-section";
 import { HomeTrustProofSection } from "@/components/marketing/home-trust-proof-section";
 import { HomeReviewsSection } from "@/components/marketing/home-reviews-section";
@@ -20,8 +21,8 @@ type HomeStatsPayload = {
 };
 
 /**
- * Conversion-focused homepage: exam-first hero, hub selection, how-it-works, platform preview,
- * trust + testimonials, features, final study CTA.
+ * Conversion-focused homepage: exam-first hero, hub selection, how-it-works, competitor comparison,
+ * platform preview, trust + testimonials, features, final study CTA.
  */
 export default function HomeRestoredClient() {
   const { t } = useMarketingI18n();
@@ -56,6 +57,7 @@ export default function HomeRestoredClient() {
         <HomeConversionHero />
         <HomeExamSelectionSection />
         <HomeHowItWorksSection />
+        <HomeComparisonSection />
         <HomePlatformPreviewSection />
         <HomeTrustProofSection questionCount={questionCount} />
         <HomeReviewsSection />

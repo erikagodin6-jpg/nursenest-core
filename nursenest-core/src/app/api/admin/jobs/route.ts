@@ -1,3 +1,4 @@
+import { JobStatus } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import type { Prisma } from "@prisma/client";
 import { z } from "zod";
@@ -9,14 +10,27 @@ const DEFAULT_TAKE = 50;
 const MAX_TAKE = 100;
 const MAX_OFFSET = 20_000;
 
+function parseJobStatus(raw: string | null): JobStatus | undefined {
+  if (!raw) return undefined;
+  return Object.values(JobStatus).includes(raw as JobStatus) ? (raw as JobStatus) : undefined;
+}
+
 export async function GET(req: NextRequest) {
   const gate = await requireAdmin();
   if (!gate.ok) return gate.response;
 
   const take = Math.min(MAX_TAKE, Math.max(1, Number(req.nextUrl.searchParams.get("take") ?? String(DEFAULT_TAKE))));
   const offset = Math.min(MAX_OFFSET, Math.max(0, Number(req.nextUrl.searchParams.get("offset") ?? "0")));
+  const status = parseJobStatus(req.nextUrl.searchParams.get("status"));
+  const typePrefix = req.nextUrl.searchParams.get("typePrefix")?.trim();
+
+  const where: Prisma.BackgroundJobWhereInput = {
+    ...(status ? { status } : {}),
+    ...(typePrefix ? { type: { startsWith: typePrefix } } : {}),
+  };
 
   const jobs = await prisma.backgroundJob.findMany({
+    where,
     orderBy: { createdAt: "desc" },
     skip: offset,
     take,
@@ -29,10 +43,18 @@ export async function GET(req: NextRequest) {
       lastError: true,
       scheduledFor: true,
       createdAt: true,
+      updatedAt: true,
     },
   });
 
-  return NextResponse.json({ jobs, take, offset, maxTake: MAX_TAKE, maxOffset: MAX_OFFSET });
+  return NextResponse.json({
+    jobs,
+    take,
+    offset,
+    maxTake: MAX_TAKE,
+    maxOffset: MAX_OFFSET,
+    filters: { status: status ?? null, typePrefix: typePrefix ?? null },
+  });
 }
 
 const enqueueSchema = z.object({

@@ -35,7 +35,7 @@ export function HomeConversionHero() {
 
   const slides = useMemo(
     () => buildHomepageHeroSlidesAtIndices(t, PREVIEW_SLIDE_INDICES),
-    [t, locale],
+    [t],
   );
 
   const loc = (path: string) => withMarketingLocale(locale, path);

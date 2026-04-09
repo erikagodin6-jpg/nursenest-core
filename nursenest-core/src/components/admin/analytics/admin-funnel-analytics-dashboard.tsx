@@ -1,6 +1,7 @@
 "use client";
 
 import type { AdminFunnelAnalyticsData } from "@/lib/admin/load-admin-funnel-analytics";
+import { PH } from "@/lib/observability/posthog-conversion-events";
 import { Loader2, RefreshCw } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -217,6 +218,63 @@ export function AdminFunnelAnalyticsDashboard({
           </tbody>
         </table>
       </div>
+
+      {d.engagementSteps.length > 0 ? (
+        <section className="rounded-2xl border border-border/70 bg-[var(--theme-card-bg)] p-5 shadow-sm">
+          <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Engagement &amp; product signals</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Independent event volumes (not a strict funnel). Use pathway/country filters where events include those
+            properties.
+          </p>
+          <div className="mt-4 overflow-x-auto rounded-xl border border-border/70">
+            <table className="w-full min-w-[720px] border-collapse text-sm">
+              <thead>
+                <tr className="border-b border-border bg-muted/30 text-left text-xs text-muted-foreground">
+                  <th className="p-3">Signal</th>
+                  <th className="p-3">Event</th>
+                  <th className="p-3">Uniques</th>
+                  <th className="p-3">Conv. vs prior</th>
+                  <th className="p-3">Drop-off vs prior</th>
+                </tr>
+              </thead>
+              <tbody>
+                {d.engagementSteps.map((row) => (
+                  <tr key={row.id} className="border-b border-border/50">
+                    <td className="p-3 font-medium">{row.label}</td>
+                    <td className="p-3 font-mono text-xs text-muted-foreground">{row.event}</td>
+                    <td className="p-3 tabular-nums">{row.count !== null ? row.count.toLocaleString() : "—"}</td>
+                    <td className="p-3 tabular-nums">
+                      {row.conversionFromPriorPct !== null ? `${row.conversionFromPriorPct}%` : "—"}
+                    </td>
+                    <td className="p-3 tabular-nums">
+                      {row.dropOffFromPriorPct !== null ? `${row.dropOffFromPriorPct}%` : "—"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      ) : null}
+
+      <section className="rounded-2xl border border-border/70 bg-[var(--theme-card-bg)] p-5 shadow-sm">
+        <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Event name reference</h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Stable PostHog event strings from <code className="rounded bg-muted px-1">PH</code> — use in Insights / HogQL.
+        </p>
+        <details className="mt-3">
+          <summary className="cursor-pointer text-sm font-medium text-primary">Show taxonomy ({Object.keys(PH).length} events)</summary>
+          <ul className="mt-3 max-h-64 list-inside list-disc space-y-0.5 overflow-y-auto font-mono text-xs text-muted-foreground">
+            {Object.entries(PH)
+              .sort((a, b) => a[1].localeCompare(b[1]))
+              .map(([k, v]) => (
+                <li key={k}>
+                  <span className="text-foreground">{v}</span> <span className="text-muted-foreground">({k})</span>
+                </li>
+              ))}
+          </ul>
+        </details>
+      </section>
     </div>
   );
 }
