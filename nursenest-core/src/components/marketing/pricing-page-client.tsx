@@ -4,7 +4,7 @@ import type { TierCode } from "@prisma/client";
 import Link from "next/link";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ArrowRight, Check, Sparkles } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { buildTierPricingNarrative } from "@/lib/conversion/pricing-catalog";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
@@ -34,6 +34,7 @@ import {
   MARKETING_SECONDARY_CTA_CLASS,
   MARKETING_TERTIARY_LINK_CLASS,
 } from "@/lib/theme/marketing-hero-pattern";
+import { MarketingTrustSignalsStrip } from "@/components/marketing/marketing-trust-signals-strip";
 
 type PlanRow = {
   tier: TierCode;
@@ -246,10 +247,10 @@ export function PricingPageClient({
           <h1 className="nn-marketing-h1 text-balance">{heading}</h1>
           <p className="nn-marketing-body mt-3 text-pretty text-muted-foreground">{heroSub}</p>
           <p className="nn-marketing-body-sm mt-2 text-pretty text-muted-foreground">{intro}</p>
-          <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-emerald-500/25 bg-emerald-500/[0.07] px-4 py-2 text-sm font-medium text-[var(--theme-body-text)]">
-            <Sparkles className="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" aria-hidden />
-            {t("pages.pricing.conversion.trustPill")}
-          </p>
+          <div className="mx-auto mt-6 max-w-xl text-left">
+            <MarketingTrustSignalsStrip variant="compact" />
+          </div>
+          <p className="nn-marketing-caption mx-auto mt-4 max-w-lg text-muted-foreground">{t("pages.pricing.conversion.checkoutTrust")}</p>
         </div>
       </header>
 

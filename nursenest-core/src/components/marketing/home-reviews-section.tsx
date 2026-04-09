@@ -46,6 +46,9 @@ export function HomeReviewsSection() {
             </li>
           ))}
         </ul>
+        <p className="nn-marketing-caption mx-auto mt-8 max-w-2xl text-center text-[var(--theme-muted-text)]">
+          {t("home.landing.reviews.disclaimer")}
+        </p>
       </div>
     </section>
   );

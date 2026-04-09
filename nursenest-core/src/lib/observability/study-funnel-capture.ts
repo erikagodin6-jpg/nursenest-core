@@ -37,6 +37,7 @@ export function captureStudyProgressFunnelAfterUpsert(
       const totalAfter = await prisma.progress.count({ where: { userId } });
       if (before.progressCount === 0 && totalAfter >= 1) {
         await captureServerEvent(analyticsDistinctId(userId), PH.funnelFirstStudyProgress, {
+          actor: "authenticated",
           country: scope.country ? String(scope.country) : undefined,
           tier: scope.tier ? String(scope.tier) : undefined,
         });
@@ -45,6 +46,7 @@ export function captureStudyProgressFunnelAfterUpsert(
       const daysAfter = await distinctUtcProgressDays(userId);
       if (before.utcDistinctDays < 2 && daysAfter >= 2) {
         await captureServerEvent(analyticsDistinctId(userId), PH.funnelRepeatStudyDay, {
+          actor: "authenticated",
           distinct_study_days_utc: daysAfter,
           country: scope.country ? String(scope.country) : undefined,
           tier: scope.tier ? String(scope.tier) : undefined,

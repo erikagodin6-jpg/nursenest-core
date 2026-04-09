@@ -16,7 +16,7 @@ export function LearnerAppSectionAnalytics() {
     const key = `${section}:${pathname}`;
     if (last.current === key) return;
     last.current = key;
-    trackClientEvent(PH.appSectionView, { section, path: pathname });
+    trackClientEvent(PH.appSectionView, { actor: "authenticated", section, path: pathname });
   }, [pathname]);
 
   return null;

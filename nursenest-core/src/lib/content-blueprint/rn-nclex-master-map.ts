@@ -8,8 +8,9 @@
  * placeholders to `catalog.json` — merge in batches with full prose meeting tier word targets.
  */
 import raw from "@/content/pathway-lessons/rn-nclex-master-map.json";
+import type { RnNclexTier } from "@/lib/content-blueprint/rn-nclex-content-depth-rules";
 
-export type RnNclexTier = "A" | "B" | "C" | "D";
+export type { RnNclexTier } from "@/lib/content-blueprint/rn-nclex-content-depth-rules";
 
 export type RnNclexMasterLesson = {
   id: string;

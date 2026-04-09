@@ -21,7 +21,10 @@ export function FunnelHomepageViewBeacon({ marketingRegion }: { marketingRegion:
   useEffect(() => {
     if (sent.current) return;
     sent.current = true;
-    captureWhenConfigured(PH.funnelHomepageViewed, { marketing_region: marketingRegion });
+    captureWhenConfigured(PH.funnelHomepageViewed, {
+      actor: "anonymous",
+      marketing_region: marketingRegion,
+    });
   }, [marketingRegion]);
   return null;
 }
@@ -41,6 +44,7 @@ export function FunnelExamHubViewBeacon({
     if (sent.current) return;
     sent.current = true;
     captureWhenConfigured(PH.funnelExamHubViewed, {
+      actor: "anonymous",
       pathway_id: pathwayId,
       hub_path: hubPath,
       country_slug: countrySlug,

@@ -13,6 +13,7 @@ import {
   marketingRegionToggleSegment,
   marketingRegionToggleShell,
 } from "@/lib/theme/marketing-region-toggle";
+import { MarketingTrustSignalsStrip } from "@/components/marketing/marketing-trust-signals-strip";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { MARKETING_SECONDARY_CTA_CLASS } from "@/lib/theme/marketing-hero-pattern";
@@ -68,6 +69,10 @@ export function HomeConversionHero() {
             <p className="nn-marketing-body max-w-xl text-pretty text-[var(--theme-muted-text)]" data-testid="text-hero-subheading">
               {t("home.conversion.heroSub")}
             </p>
+
+            <div className="max-w-xl">
+              <MarketingTrustSignalsStrip variant="default" />
+            </div>
 
             <div
               className="flex flex-col gap-2 rounded-xl border border-[var(--border-subtle)] bg-[var(--nn-presentation-wash)]/90 px-3 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-4"

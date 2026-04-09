@@ -462,6 +462,23 @@ export function QuestionBankPracticeClient({
   }, [searchParams]);
 
   useEffect(() => {
+    if (phase !== "ready") return;
+    const n = questions.length;
+    if (n === 0) return;
+    const target = Math.min(sessionSize, n);
+    const gradedCount = Object.keys(graded).length;
+    if (gradedCount < target || qbankSessionCompleteSentRef.current) return;
+    qbankSessionCompleteSentRef.current = true;
+    trackClientEvent(PH.learnerQuestionBankSessionCompleted, {
+      actor: "authenticated",
+      country: readMarketingRegionFromDocument(),
+      pathway_id: pathwayIdFilter ?? undefined,
+      preset,
+      session_target: target,
+    });
+  }, [phase, questions.length, graded, sessionSize, pathwayIdFilter, preset]);
+
+  useEffect(() => {
     if (preset === "random_bank") return;
     if (defaultPathwayId && pathwayIdFilter === null) {
       setPathwayIdFilter(defaultPathwayId);

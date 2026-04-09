@@ -3,6 +3,7 @@
  * Complements structural validators in `pathway-lesson-premium.ts` — focuses on uniqueness, learner value,
  * and metadata hygiene as the library scales past 150 lessons per pathway.
  */
+import { evaluateRnNclexMapDepthForCatalogRow } from "@/lib/content-blueprint/rn-nclex-lesson-depth-gate";
 import { countWords, stripToPlainText } from "@/lib/content-quality/plain-text";
 
 export type ExpansionQualitySeverity = "error" | "warn";
@@ -26,6 +27,9 @@ export const LESSON_EXPANSION_QUALITY_RULEBOOK = {
     "Q2: At least one legacy section (`exam_relevance`) must exist with sufficient prose (≥ 40 words) so “exam relevance” is real, not a label.",
     "Q3: Pathway-accurate scope: US PN vs Canada RPN vs US NP vs RN titles/SEO must not mis-brand the target exam.",
     "Q4: Learner outcome: takeaways section should reference study actions (e.g. question bank, practice, related lesson links) — thin takeaways warn.",
+  ],
+  rnNclexDepth: [
+    "RN-DEPTH: For `us-rn-nclex-rn` / `ca-rn-nclex-rn`, when the slug exists in `rn-nclex-master-map.json`, total lesson body words should fall in the tier band (A–D). See `rn-nclex-content-depth-rules.ts`. Warns if outside band — fix prose or map tier.",
   ],
   metadata: [
     "M1: No internal operations language in title, seoTitle, or seoDescription (e.g. “Blueprint expansion”, “slot pool”, “padded spread”, editorial-only blueprint labels).",
@@ -225,6 +229,14 @@ export function evaluateLessonExpansionQuality(
       break;
     }
   }
+
+  v.push(
+    ...evaluateRnNclexMapDepthForCatalogRow({
+      pathwayId: ctx.pathwayId,
+      slug,
+      sections: row.sections,
+    }),
+  );
 
   return v;
 }

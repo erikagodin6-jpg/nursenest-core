@@ -5,6 +5,7 @@ import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { NpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
 import { pathwayOverviewBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { pathwayHubFaqSchema } from "@/lib/seo/pathway-hub-faq-schema";
+import { MarketingTrustSignalsStrip } from "@/components/marketing/marketing-trust-signals-strip";
 import { FunnelExamHubViewBeacon } from "@/components/marketing/funnel-analytics-beacons";
 import { ExamPathwayHubBody } from "@/components/exam-pathways/exam-pathway-hub-body";
 import { PathwayLiveInventoryStrip } from "@/components/exam-pathways/pathway-live-inventory-strip";
@@ -77,6 +78,10 @@ export function ExamPathwayHub({
       <p className="nn-marketing-body mt-4 max-w-2xl text-[var(--theme-muted-text)] sm:text-[1.0625rem] sm:leading-relaxed">
         {heroLead ?? pathway.seoDescription}
       </p>
+
+      <div className="mt-6 max-w-2xl">
+        <MarketingTrustSignalsStrip variant="compact" examHub />
+      </div>
 
       {pathway.status === "upcoming" || pathway.acquisitionMode === "waitlist" ? (
         <aside className="nn-study-card mt-8 border-[var(--role-warning-border)] bg-[var(--role-warning-soft)] p-4 sm:p-5">

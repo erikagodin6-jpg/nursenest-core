@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
+import { trackClientEvent } from "@/lib/observability/posthog-client";
+import { PH } from "@/lib/observability/posthog-conversion-events";
 
 type PathwayOpt = { id: string; label: string; shortLabel: string };
 
@@ -90,6 +92,16 @@ export function ExamPlanSettingsCard() {
         setError(typeof j.error === "string" ? j.error : "Save failed.");
         setSaving(false);
         return;
+      }
+      const prevPathway = data?.targetExamPathwayId ?? "";
+      const nextPathway = pathwayId || "";
+      if (prevPathway !== nextPathway) {
+        trackClientEvent(PH.learnerPathwayPreferenceSaved, {
+          actor: "authenticated",
+          surface: "exam_plan_settings",
+          pathway_id: nextPathway || undefined,
+          had_previous: Boolean(prevPathway),
+        });
       }
       await load();
     } catch {
