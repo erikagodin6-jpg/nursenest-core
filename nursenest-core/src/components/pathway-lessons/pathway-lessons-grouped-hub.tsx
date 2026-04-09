@@ -191,7 +191,9 @@ export function PathwayLessonsGroupedHub({
                 const related = isNp ? relatedLessonsForCard(group.lessons, l, lessonsBasePath, 3) : [];
                 return (
                   <li key={l.slug}>
-                    <div className="nn-study-card flex h-full flex-col p-4 sm:p-5">
+                    <div
+                      className={`nn-study-card flex h-full flex-col p-4 sm:p-5${isNp ? " nn-lesson-list-card" : ""}`}
+                    >
                       <div className="flex flex-wrap items-start justify-between gap-2">
                         <p className="nn-marketing-caption font-semibold text-[var(--theme-muted-text)]">
                           Item {idx + 1} · {l.topic}

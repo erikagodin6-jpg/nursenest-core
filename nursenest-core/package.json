@@ -22,6 +22,7 @@
     "audit:lesson-links": "tsx scripts/audit-lesson-links.ts",
     "test:lesson-links-audit": "tsx --test scripts/audit-lesson-links.test.ts",
     "audit:pathway-lessons": "tsx scripts/audit-pathway-lesson-inventory.ts",
+    "audit:np-coverage": "tsx scripts/audit-np-coverage-vs-catalog.ts",
     "qa:lesson-system": "tsx scripts/launch-qa-lesson-system.ts",
     "qa:lesson-flows": "tsx scripts/qa-lesson-flows.mts",
     "test:internal-links-audit": "tsx --test scripts/audit-internal-links.test.ts",

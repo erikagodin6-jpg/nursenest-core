@@ -26,6 +26,15 @@ describe("exam-product-registry marketing hub resolution", () => {
     assert.equal(p.id, "us-np-fnp");
   });
 
+  it("resolves WHNP and PNP-PC SEO alias segments", () => {
+    const w = resolveExamPathwayFromMarketingHubSegment("us", "np", "whnp-practice-test");
+    assert.ok(w);
+    assert.equal(w.id, "us-np-whnp");
+    const p = resolveExamPathwayFromMarketingHubSegment("us", "np", "pnp-pc-practice-test");
+    assert.ok(p);
+    assert.equal(p.id, "us-np-pnp-pc");
+  });
+
   it("returns undefined for unknown routes", () => {
     assert.equal(resolveExamPathwayFromMarketingHubSegment("us", "pn", "nclex-pn"), undefined);
   });

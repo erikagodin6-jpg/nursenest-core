@@ -5,12 +5,11 @@
     "ca-np-cnple": { "label": "Canadian NP (CNPLE)", "staticCatalogLessons": 0, "hubUi": "np_primary_care_explorer" },
     "us-np-fnp": { "label": "FNP", "staticCatalogLessons": 99, "hubUi": "np_primary_care_explorer" },
     "us-np-agpcnp": { "label": "AGPCNP", "staticCatalogLessons": 0, "hubUi": "np_primary_care_explorer" },
+    "us-np-whnp": { "label": "WHNP", "staticCatalogLessons": 0, "hubUi": "np_primary_care_explorer" },
+    "us-np-pnp-pc": { "label": "PNP-PC", "staticCatalogLessons": 0, "hubUi": "np_primary_care_explorer" },
     "us-np-pmhnp": { "label": "PMHNP", "staticCatalogLessons": 0, "hubUi": "topic_grouped_np_visual" }
   },
-  "notInRegistry": {
-    "WHNP": "No dedicated marketing pathway row; use shared primary-care lessons plus future contentExamKeys/topic tags when a product row is added.",
-    "PNP": "Same as WHNP — scale via registry + catalog/DB, not duplicate JSON blobs."
-  },
+  "canonicalCoverageMap": "data/reports/pathway-lessons/np-canonical-coverage-map.json",
   "classificationLegend": {
     "EXISTS_STRONG_SKIP": "Strong lesson likely present — do not clone; verify slug in DB only.",
     "EXISTS_CATALOG_SAMPLE": "Matched static catalog.json us-np-fnp sample (offline bootstrap).",
@@ -46,6 +45,7 @@
     { "topic": "Beers / STOPP deprescribing", "classification": "VERIFY_DB", "notes": "Geriatric hub; overlaps Part L — canonical geriatrics lesson preferred." }
   ],
   "engineeringActions2026_04_08": [
+    "Added us-np-whnp (/us/np/whnp) and us-np-pnp-pc (/us/np/pnp-pc) to EXAM_PATHWAYS; SEO aliases whnp-practice-test, pnp-pc-practice-test, agpcnp-practice-test.",
     "Route us-np-agpcnp and ca-np-cnple through the same primary-care NP hub UI as FNP (population/domain explorer).",
     "Keep us-np-pmhnp on topic-grouped hub with np visual frame.",
     "NP lesson hero + detail shell: secondary accent via --theme-secondary and semantic soft panels (no hardcoded hex in components).",

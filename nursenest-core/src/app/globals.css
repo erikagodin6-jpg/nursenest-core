@@ -1156,6 +1156,21 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   border-color: color-mix(in srgb, var(--theme-primary) 11%, var(--border-subtle));
 }
 
+/* Lesson hub rows: soft secondary tint so lists stay multi-hue under theme switching */
+.nn-lesson-list-card {
+  border-color: color-mix(
+    in srgb,
+    var(--theme-primary) 7%,
+    color-mix(in srgb, var(--theme-secondary) 11%, var(--border-subtle))
+  );
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--theme-secondary) 2.8%, var(--bg-card)) 0%,
+    var(--bg-card) 52%
+  );
+  box-shadow: var(--shadow-card);
+}
+
 .nn-study-callout {
   border-radius: 1.125rem;
   border: 1px solid color-mix(in srgb, var(--theme-primary) 12%, var(--border-subtle));

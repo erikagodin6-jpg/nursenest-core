@@ -270,7 +270,7 @@ function FnpLessonCard({
   const gridCols = topicHubHref ? "sm:grid-cols-2 lg:grid-cols-3" : "sm:grid-cols-2";
 
   return (
-    <li className="nn-study-card border-[var(--semantic-border-soft)] p-4 sm:p-5">
+    <li className="nn-study-card nn-lesson-list-card border-[var(--semantic-border-soft)] p-4 sm:p-5">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1.5">
           <PathwayLessonRecordChips lesson={l} />

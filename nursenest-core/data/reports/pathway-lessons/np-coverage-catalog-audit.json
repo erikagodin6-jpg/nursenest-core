@@ -1,0 +1,2125 @@
+{
+  "generatedAt": "2026-04-09T21:24:05.179Z",
+  "source": "np-canonical-coverage-map.json + catalog.json + scoped gold injection (no DB)",
+  "pathwayLessonCounts": {
+    "ca-np-cnple": 0,
+    "us-np-fnp": 150,
+    "us-np-agpcnp": 50,
+    "us-np-whnp": 0,
+    "us-np-pnp-pc": 0
+  },
+  "duplicateSlugsAcrossPathways": [
+    {
+      "slug": "clinical-judgment-prioritization-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "sepsis-early-recognition-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "fluids-electrolytes-emergencies-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "acute-coronary-syndrome-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "high-alert-medications-safety-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "stroke-increased-icp-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "shock-emergencies-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "canadian-rpn-scope-collaboration-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "ob-emergencies-gold-standard",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "pediatric-triage-emergencies-gold-standard",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "renal-dialysis-acute-complications-gold-standard",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "dka-hhs-hyperglycemic-emergencies-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "pulmonary-embolism-recognition-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "atrial-fibrillation-stroke-prevention-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "pneumonia-cap-nursing-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "upper-gi-bleed-prioritization-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "acute-kidney-injury-nursing-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "meningitis-emergency-recognition-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "opioid-toxicity-naloxone-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "falls-injury-prevention-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "nurse-patient-assignment-acuity-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "adrenal-crisis-addisonian-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "ards-acute-respiratory-failure-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "thyroid-storm-emergency-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "delirium-acute-confusion-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "clinical-casebook-sepsis-rapid-response-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "clinical-casebook-acs-chest-pain-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "clinical-casebook-respiratory-distress-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "clinical-casebook-glucose-dka-hypoglycemia-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "clinical-casebook-electrolyte-crisis-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "clinical-casebook-maternal-newborn-emergency-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "clinical-casebook-pediatric-fever-dehydration-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "clinical-casebook-mental-health-safety-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "med-family-antibiotics-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "med-family-anticoagulants-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "med-family-insulin-diabetes-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "med-family-cardiac-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "med-family-antihypertensives-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "med-family-respiratory-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "med-family-psychotropic-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "med-family-pain-sedation-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "med-family-emergency-response-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "safety-family-infection-control-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "safety-family-isolation-precautions-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "safety-family-falls-prevention-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "safety-family-restraints-alternatives-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "safety-family-medication-administration-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "safety-family-delegation-supervision-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "safety-family-escalation-notification-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    },
+    {
+      "slug": "safety-family-prioritization-uncertainty-gold",
+      "pathwayIds": [
+        "us-np-fnp",
+        "us-np-agpcnp"
+      ]
+    }
+  ],
+  "classificationCounts": {
+    "CREATE_NEW": 145,
+    "EXISTS_STRONG_SKIP": 14,
+    "EXISTS_UPGRADE": 7,
+    "MERGE_INTO_EXISTING": 8
+  },
+  "bySystem": [
+    {
+      "systemId": "cardiovascular",
+      "systemName": "Cardiovascular",
+      "topicCount": 18,
+      "classifications": {
+        "CREATE_NEW": 12,
+        "EXISTS_STRONG_SKIP": 4,
+        "EXISTS_UPGRADE": 2
+      }
+    },
+    {
+      "systemId": "respiratory",
+      "systemName": "Respiratory",
+      "topicCount": 12,
+      "classifications": {
+        "CREATE_NEW": 10,
+        "MERGE_INTO_EXISTING": 1,
+        "EXISTS_STRONG_SKIP": 1
+      }
+    },
+    {
+      "systemId": "gastrointestinal",
+      "systemName": "Gastrointestinal",
+      "topicCount": 15,
+      "classifications": {
+        "CREATE_NEW": 14,
+        "EXISTS_UPGRADE": 1
+      }
+    },
+    {
+      "systemId": "endocrine_metabolic",
+      "systemName": "Endocrine / metabolic",
+      "topicCount": 15,
+      "classifications": {
+        "CREATE_NEW": 13,
+        "EXISTS_STRONG_SKIP": 2
+      }
+    },
+    {
+      "systemId": "renal_gu",
+      "systemName": "Renal / genitourinary",
+      "topicCount": 11,
+      "classifications": {
+        "EXISTS_UPGRADE": 1,
+        "CREATE_NEW": 10
+      }
+    },
+    {
+      "systemId": "neurology",
+      "systemName": "Neurology",
+      "topicCount": 11,
+      "classifications": {
+        "EXISTS_STRONG_SKIP": 1,
+        "CREATE_NEW": 9,
+        "EXISTS_UPGRADE": 1
+      }
+    },
+    {
+      "systemId": "msk_rheum",
+      "systemName": "Musculoskeletal / rheumatology",
+      "topicCount": 11,
+      "classifications": {
+        "CREATE_NEW": 10,
+        "MERGE_INTO_EXISTING": 1
+      }
+    },
+    {
+      "systemId": "womens_health",
+      "systemName": "Women’s health",
+      "topicCount": 14,
+      "classifications": {
+        "CREATE_NEW": 13,
+        "MERGE_INTO_EXISTING": 1
+      }
+    },
+    {
+      "systemId": "mens_health",
+      "systemName": "Men’s health",
+      "topicCount": 7,
+      "classifications": {
+        "MERGE_INTO_EXISTING": 4,
+        "CREATE_NEW": 3
+      }
+    },
+    {
+      "systemId": "pediatrics",
+      "systemName": "Pediatrics",
+      "topicCount": 7,
+      "classifications": {
+        "CREATE_NEW": 7
+      }
+    },
+    {
+      "systemId": "infectious_disease",
+      "systemName": "Infectious disease",
+      "topicCount": 9,
+      "classifications": {
+        "CREATE_NEW": 9
+      }
+    },
+    {
+      "systemId": "immunology_vaccines",
+      "systemName": "Immunology / vaccines",
+      "topicCount": 7,
+      "classifications": {
+        "CREATE_NEW": 6,
+        "EXISTS_STRONG_SKIP": 1
+      }
+    },
+    {
+      "systemId": "mental_health",
+      "systemName": "Mental health",
+      "topicCount": 7,
+      "classifications": {
+        "CREATE_NEW": 6,
+        "EXISTS_STRONG_SKIP": 1
+      }
+    },
+    {
+      "systemId": "dermatology",
+      "systemName": "Dermatology",
+      "topicCount": 6,
+      "classifications": {
+        "CREATE_NEW": 6
+      }
+    },
+    {
+      "systemId": "hematology_oncology",
+      "systemName": "Hematology / oncology",
+      "topicCount": 5,
+      "classifications": {
+        "EXISTS_STRONG_SKIP": 2,
+        "CREATE_NEW": 2,
+        "EXISTS_UPGRADE": 1
+      }
+    },
+    {
+      "systemId": "geriatrics",
+      "systemName": "Geriatrics",
+      "topicCount": 6,
+      "classifications": {
+        "CREATE_NEW": 5,
+        "EXISTS_UPGRADE": 1
+      }
+    },
+    {
+      "systemId": "preventive_primary_core",
+      "systemName": "Preventive care / primary care core",
+      "topicCount": 6,
+      "classifications": {
+        "CREATE_NEW": 4,
+        "EXISTS_STRONG_SKIP": 2
+      }
+    },
+    {
+      "systemId": "pharmacology_systemwide",
+      "systemName": "Pharmacology (system-wide)",
+      "topicCount": 7,
+      "classifications": {
+        "CREATE_NEW": 6,
+        "MERGE_INTO_EXISTING": 1
+      }
+    }
+  ],
+  "rows": [
+    {
+      "topicId": "cv-hypertension",
+      "systemId": "cardiovascular",
+      "systemName": "Cardiovascular",
+      "topicTitle": "Hypertension — all stages and management",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "cv-heart-failure",
+      "systemId": "cardiovascular",
+      "systemName": "Cardiovascular",
+      "topicTitle": "Heart failure — HFrEF and HFpEF",
+      "classification": "EXISTS_STRONG_SKIP",
+      "bestMatch": {
+        "slug": "fnp-overlay-heart-failure",
+        "pathwayId": "us-np-fnp",
+        "score": 2
+      },
+      "usesPremiumStructure": false,
+      "premiumIssueCount": 13,
+      "publishReady": true,
+      "structureMode": "legacy",
+      "notes": "Publish-ready (legacy); skip net-new for this topic unless clinical update."
+    },
+    {
+      "topicId": "cv-cad",
+      "systemId": "cardiovascular",
+      "systemName": "Cardiovascular",
+      "topicTitle": "Coronary artery disease",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "cv-stable-angina",
+      "systemId": "cardiovascular",
+      "systemName": "Cardiovascular",
+      "topicTitle": "Stable angina",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "cv-acs",
+      "systemId": "cardiovascular",
+      "systemName": "Cardiovascular",
+      "topicTitle": "Acute coronary syndrome — recognition and initial management",
+      "classification": "EXISTS_STRONG_SKIP",
+      "bestMatch": {
+        "slug": "acute-coronary-syndrome-gold",
+        "pathwayId": "us-np-fnp",
+        "score": 2
+      },
+      "usesPremiumStructure": true,
+      "premiumIssueCount": 0,
+      "publishReady": true,
+      "structureMode": "premium",
+      "notes": "Publish-ready (premium); skip net-new for this topic unless clinical update."
+    },
+    {
+      "topicId": "cv-afib",
+      "systemId": "cardiovascular",
+      "systemName": "Cardiovascular",
+      "topicTitle": "Atrial fibrillation",
+      "classification": "EXISTS_UPGRADE",
+      "bestMatch": {
+        "slug": "atrial-fibrillation-stroke-prevention-gold",
+        "pathwayId": "us-np-fnp",
+        "score": 2
+      },
+      "usesPremiumStructure": true,
+      "premiumIssueCount": 1,
+      "publishReady": false,
+      "structureMode": "premium",
+      "notes": "Upgrade in place (atrial-fibrillation-stroke-prevention-gold, premium): 1 structural/premium note(s)."
+    },
+    {
+      "topicId": "cv-arrhythmias-overview",
+      "systemId": "cardiovascular",
+      "systemName": "Cardiovascular",
+      "topicTitle": "Other arrhythmias — overview",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "cv-dyslipidemia",
+      "systemId": "cardiovascular",
+      "systemName": "Cardiovascular",
+      "topicTitle": "Hyperlipidemia / dyslipidemia",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "cv-pad",
+      "systemId": "cardiovascular",
+      "systemName": "Cardiovascular",
+      "topicTitle": "Peripheral artery disease",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "cv-dvt-vte",
+      "systemId": "cardiovascular",
+      "systemName": "Cardiovascular",
+      "topicTitle": "DVT / VTE",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "cv-pe",
+      "systemId": "cardiovascular",
+      "systemName": "Cardiovascular",
+      "topicTitle": "Pulmonary embolism — recognition and initial management",
+      "classification": "EXISTS_UPGRADE",
+      "bestMatch": {
+        "slug": "pulmonary-embolism-recognition-gold",
+        "pathwayId": "us-np-fnp",
+        "score": 3
+      },
+      "usesPremiumStructure": true,
+      "premiumIssueCount": 1,
+      "publishReady": false,
+      "structureMode": "premium",
+      "notes": "Upgrade in place (pulmonary-embolism-recognition-gold, premium): 1 structural/premium note(s)."
+    },
+    {
+      "topicId": "cv-valvular-overview",
+      "systemId": "cardiovascular",
+      "systemName": "Cardiovascular",
+      "topicTitle": "Valvular heart disease — overview",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "cv-risk-stratification",
+      "systemId": "cardiovascular",
+      "systemName": "Cardiovascular",
+      "topicTitle": "Cardiovascular risk stratification",
+      "classification": "EXISTS_STRONG_SKIP",
+      "bestMatch": {
+        "slug": "clinical-casebook-acs-chest-pain-gold",
+        "pathwayId": "us-np-fnp",
+        "score": 3
+      },
+      "usesPremiumStructure": true,
+      "premiumIssueCount": 0,
+      "publishReady": true,
+      "structureMode": "premium",
+      "notes": "Publish-ready (premium); skip net-new for this topic unless clinical update."
+    },
+    {
+      "topicId": "cv-ecg-np",
+      "systemId": "cardiovascular",
+      "systemName": "Cardiovascular",
+      "topicTitle": "ECG basics for NP practice",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "cv-pharm-antihypertensives",
+      "systemId": "cardiovascular",
+      "systemName": "Cardiovascular",
+      "topicTitle": "Antihypertensive pharmacology",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "cv-pharm-hf",
+      "systemId": "cardiovascular",
+      "systemName": "Cardiovascular",
+      "topicTitle": "Heart failure pharmacology",
+      "classification": "EXISTS_STRONG_SKIP",
+      "bestMatch": {
+        "slug": "fnp-overlay-heart-failure",
+        "pathwayId": "us-np-fnp",
+        "score": 2
+      },
+      "usesPremiumStructure": false,
+      "premiumIssueCount": 13,
+      "publishReady": true,
+      "structureMode": "legacy",
+      "notes": "Publish-ready (legacy); skip net-new for this topic unless clinical update."
+    },
+    {
+      "topicId": "cv-pharm-anticoagulation",
+      "systemId": "cardiovascular",
+      "systemName": "Cardiovascular",
+      "topicTitle": "Anticoagulation",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "cv-pharm-lipids",
+      "systemId": "cardiovascular",
+      "systemName": "Cardiovascular",
+      "topicTitle": "Lipid management pharmacology",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "resp-asthma",
+      "systemId": "respiratory",
+      "systemName": "Respiratory",
+      "topicTitle": "Asthma",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "resp-copd",
+      "systemId": "respiratory",
+      "systemName": "Respiratory",
+      "topicTitle": "COPD",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "resp-pneumonia",
+      "systemId": "respiratory",
+      "systemName": "Respiratory",
+      "topicTitle": "Pneumonia",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "resp-bronchitis",
+      "systemId": "respiratory",
+      "systemName": "Respiratory",
+      "topicTitle": "Bronchitis (acute / chronic context)",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "resp-tb",
+      "systemId": "respiratory",
+      "systemName": "Respiratory",
+      "topicTitle": "Tuberculosis — screening and basics",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "resp-pe",
+      "systemId": "respiratory",
+      "systemName": "Respiratory",
+      "topicTitle": "Pulmonary embolism",
+      "classification": "MERGE_INTO_EXISTING",
+      "mergeTarget": "cv-pe",
+      "notes": "Canonical spine: do not author a separate lesson; link or fold into target."
+    },
+    {
+      "topicId": "resp-sleep-apnea",
+      "systemId": "respiratory",
+      "systemName": "Respiratory",
+      "topicTitle": "Obstructive sleep apnea",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "resp-urti-lrti",
+      "systemId": "respiratory",
+      "systemName": "Respiratory",
+      "topicTitle": "URTI vs LRTI differentiation",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "resp-oxygen",
+      "systemId": "respiratory",
+      "systemName": "Respiratory",
+      "topicTitle": "Oxygen therapy",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "resp-inhalers",
+      "systemId": "respiratory",
+      "systemName": "Respiratory",
+      "topicTitle": "Inhaler pharmacology and technique",
+      "classification": "EXISTS_STRONG_SKIP",
+      "bestMatch": {
+        "slug": "med-family-respiratory-gold",
+        "pathwayId": "us-np-fnp",
+        "score": 2
+      },
+      "usesPremiumStructure": true,
+      "premiumIssueCount": 0,
+      "publishReady": true,
+      "structureMode": "premium",
+      "notes": "Publish-ready (premium); skip net-new for this topic unless clinical update."
+    },
+    {
+      "topicId": "resp-smoking-patho",
+      "systemId": "respiratory",
+      "systemName": "Respiratory",
+      "topicTitle": "Smoking and vaping — pathophysiology",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "resp-cessation",
+      "systemId": "respiratory",
+      "systemName": "Respiratory",
+      "topicTitle": "Smoking cessation",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "gi-gerd",
+      "systemId": "gastrointestinal",
+      "systemName": "Gastrointestinal",
+      "topicTitle": "GERD",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "gi-pud",
+      "systemId": "gastrointestinal",
+      "systemName": "Gastrointestinal",
+      "topicTitle": "Peptic ulcer disease",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "gi-bleed",
+      "systemId": "gastrointestinal",
+      "systemName": "Gastrointestinal",
+      "topicTitle": "GI bleeding — recognition and stabilization",
+      "classification": "EXISTS_UPGRADE",
+      "bestMatch": {
+        "slug": "upper-gi-bleed-prioritization-gold",
+        "pathwayId": "us-np-fnp",
+        "score": 2
+      },
+      "usesPremiumStructure": true,
+      "premiumIssueCount": 1,
+      "publishReady": false,
+      "structureMode": "premium",
+      "notes": "Upgrade in place (upper-gi-bleed-prioritization-gold, premium): 1 structural/premium note(s)."
+    },
+    {
+      "topicId": "gi-ibs",
+      "systemId": "gastrointestinal",
+      "systemName": "Gastrointestinal",
+      "topicTitle": "Irritable bowel syndrome",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "gi-ibd",
+      "systemId": "gastrointestinal",
+      "systemName": "Gastrointestinal",
+      "topicTitle": "IBD — Crohn disease and ulcerative colitis",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "gi-hepatitis",
+      "systemId": "gastrointestinal",
+      "systemName": "Gastrointestinal",
+      "topicTitle": "Viral hepatitis A, B, and C",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "gi-nafld",
+      "systemId": "gastrointestinal",
+      "systemName": "Gastrointestinal",
+      "topicTitle": "NAFLD / MASLD",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "gi-cirrhosis",
+      "systemId": "gastrointestinal",
+      "systemName": "Gastrointestinal",
+      "topicTitle": "Cirrhosis and complications",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "gi-biliary",
+      "systemId": "gastrointestinal",
+      "systemName": "Gastrointestinal",
+      "topicTitle": "Gallbladder and biliary disease",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "gi-pancreatitis",
+      "systemId": "gastrointestinal",
+      "systemName": "Gastrointestinal",
+      "topicTitle": "Pancreatitis",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "gi-constipation",
+      "systemId": "gastrointestinal",
+      "systemName": "Gastrointestinal",
+      "topicTitle": "Constipation",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "gi-diarrhea",
+      "systemId": "gastrointestinal",
+      "systemName": "Gastrointestinal",
+      "topicTitle": "Diarrhea — acute and chronic",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "gi-nausea",
+      "systemId": "gastrointestinal",
+      "systemName": "Gastrointestinal",
+      "topicTitle": "Nausea and vomiting",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "gi-colon-screening",
+      "systemId": "gastrointestinal",
+      "systemName": "Gastrointestinal",
+      "topicTitle": "Colon cancer screening",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "gi-lfts",
+      "systemId": "gastrointestinal",
+      "systemName": "Gastrointestinal",
+      "topicTitle": "Liver function tests — interpretation",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "endo-t1dm",
+      "systemId": "endocrine_metabolic",
+      "systemName": "Endocrine / metabolic",
+      "topicTitle": "Type 1 diabetes",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "endo-t2dm",
+      "systemId": "endocrine_metabolic",
+      "systemName": "Endocrine / metabolic",
+      "topicTitle": "Type 2 diabetes",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "endo-dka",
+      "systemId": "endocrine_metabolic",
+      "systemName": "Endocrine / metabolic",
+      "topicTitle": "Diabetic ketoacidosis",
+      "classification": "EXISTS_STRONG_SKIP",
+      "bestMatch": {
+        "slug": "dka-hhs-hyperglycemic-emergencies-gold",
+        "pathwayId": "us-np-fnp",
+        "score": 2
+      },
+      "usesPremiumStructure": true,
+      "premiumIssueCount": 0,
+      "publishReady": true,
+      "structureMode": "premium",
+      "notes": "Publish-ready (premium); skip net-new for this topic unless clinical update."
+    },
+    {
+      "topicId": "endo-hypoglycemia",
+      "systemId": "endocrine_metabolic",
+      "systemName": "Endocrine / metabolic",
+      "topicTitle": "Hypoglycemia",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "endo-insulin",
+      "systemId": "endocrine_metabolic",
+      "systemName": "Endocrine / metabolic",
+      "topicTitle": "Insulin pharmacology",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "endo-oral-dm",
+      "systemId": "endocrine_metabolic",
+      "systemName": "Endocrine / metabolic",
+      "topicTitle": "Oral and non-insulin glucose-lowering agents",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "endo-thyroid",
+      "systemId": "endocrine_metabolic",
+      "systemName": "Endocrine / metabolic",
+      "topicTitle": "Thyroid disorders — hypo- and hyperthyroidism",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "endo-adrenal",
+      "systemId": "endocrine_metabolic",
+      "systemName": "Endocrine / metabolic",
+      "topicTitle": "Adrenal disorders — Cushing and Addison",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "endo-hyperaldo",
+      "systemId": "endocrine_metabolic",
+      "systemName": "Endocrine / metabolic",
+      "topicTitle": "Hyperaldosteronism",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "endo-calcium",
+      "systemId": "endocrine_metabolic",
+      "systemName": "Endocrine / metabolic",
+      "topicTitle": "Calcium and parathyroid disorders",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "endo-osteoporosis",
+      "systemId": "endocrine_metabolic",
+      "systemName": "Endocrine / metabolic",
+      "topicTitle": "Osteoporosis — diagnosis and management",
+      "classification": "EXISTS_STRONG_SKIP",
+      "bestMatch": {
+        "slug": "fnp-overlay-heart-failure",
+        "pathwayId": "us-np-fnp",
+        "score": 2
+      },
+      "usesPremiumStructure": false,
+      "premiumIssueCount": 13,
+      "publishReady": true,
+      "structureMode": "legacy",
+      "notes": "Publish-ready (legacy); skip net-new for this topic unless clinical update."
+    },
+    {
+      "topicId": "endo-metabolic-syndrome",
+      "systemId": "endocrine_metabolic",
+      "systemName": "Endocrine / metabolic",
+      "topicTitle": "Metabolic syndrome",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "endo-obesity",
+      "systemId": "endocrine_metabolic",
+      "systemName": "Endocrine / metabolic",
+      "topicTitle": "Obesity — evaluation and lifestyle",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "endo-weight-pharm",
+      "systemId": "endocrine_metabolic",
+      "systemName": "Endocrine / metabolic",
+      "topicTitle": "Weight management pharmacology",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "endo-hpa",
+      "systemId": "endocrine_metabolic",
+      "systemName": "Endocrine / metabolic",
+      "topicTitle": "HPA axis and stress physiology — clinical relevance",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "renal-aki",
+      "systemId": "renal_gu",
+      "systemName": "Renal / genitourinary",
+      "topicTitle": "Acute kidney injury",
+      "classification": "EXISTS_UPGRADE",
+      "bestMatch": {
+        "slug": "acute-kidney-injury-nursing-gold",
+        "pathwayId": "us-np-fnp",
+        "score": 2
+      },
+      "usesPremiumStructure": true,
+      "premiumIssueCount": 1,
+      "publishReady": false,
+      "structureMode": "premium",
+      "notes": "Upgrade in place (acute-kidney-injury-nursing-gold, premium): 1 structural/premium note(s)."
+    },
+    {
+      "topicId": "renal-ckd",
+      "systemId": "renal_gu",
+      "systemName": "Renal / genitourinary",
+      "topicTitle": "Chronic kidney disease",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "renal-electrolytes",
+      "systemId": "renal_gu",
+      "systemName": "Renal / genitourinary",
+      "topicTitle": "Electrolyte disorders",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "renal-uti",
+      "systemId": "renal_gu",
+      "systemName": "Renal / genitourinary",
+      "topicTitle": "Urinary tract infections",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "renal-pyelo",
+      "systemId": "renal_gu",
+      "systemName": "Renal / genitourinary",
+      "topicTitle": "Pyelonephritis",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "renal-bph",
+      "systemId": "renal_gu",
+      "systemName": "Renal / genitourinary",
+      "topicTitle": "Benign prostatic hyperplasia",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "renal-prostatitis",
+      "systemId": "renal_gu",
+      "systemName": "Renal / genitourinary",
+      "topicTitle": "Prostatitis",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "renal-ed",
+      "systemId": "renal_gu",
+      "systemName": "Renal / genitourinary",
+      "topicTitle": "Erectile dysfunction",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "renal-male-infertility",
+      "systemId": "renal_gu",
+      "systemName": "Renal / genitourinary",
+      "topicTitle": "Male infertility — basics",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "renal-hematuria",
+      "systemId": "renal_gu",
+      "systemName": "Renal / genitourinary",
+      "topicTitle": "Hematuria workup",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "renal-dosing",
+      "systemId": "renal_gu",
+      "systemName": "Renal / genitourinary",
+      "topicTitle": "Renal dosing considerations",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "neuro-stroke-tia",
+      "systemId": "neurology",
+      "systemName": "Neurology",
+      "topicTitle": "Stroke and TIA",
+      "classification": "EXISTS_STRONG_SKIP",
+      "bestMatch": {
+        "slug": "stroke-increased-icp-gold",
+        "pathwayId": "us-np-fnp",
+        "score": 2
+      },
+      "usesPremiumStructure": true,
+      "premiumIssueCount": 0,
+      "publishReady": true,
+      "structureMode": "premium",
+      "notes": "Publish-ready (premium); skip net-new for this topic unless clinical update."
+    },
+    {
+      "topicId": "neuro-dementia",
+      "systemId": "neurology",
+      "systemName": "Neurology",
+      "topicTitle": "Dementia",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "neuro-delirium",
+      "systemId": "neurology",
+      "systemName": "Neurology",
+      "topicTitle": "Delirium",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "neuro-parkinson",
+      "systemId": "neurology",
+      "systemName": "Neurology",
+      "topicTitle": "Parkinson disease",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "neuro-seizure",
+      "systemId": "neurology",
+      "systemName": "Neurology",
+      "topicTitle": "Seizures and epilepsy — outpatient basics",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "neuro-headache",
+      "systemId": "neurology",
+      "systemName": "Neurology",
+      "topicTitle": "Headache — migraine, tension, cluster",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "neuro-meningitis",
+      "systemId": "neurology",
+      "systemName": "Neurology",
+      "topicTitle": "Meningitis — recognition and referral",
+      "classification": "EXISTS_UPGRADE",
+      "bestMatch": {
+        "slug": "meningitis-emergency-recognition-gold",
+        "pathwayId": "us-np-fnp",
+        "score": 3
+      },
+      "usesPremiumStructure": true,
+      "premiumIssueCount": 1,
+      "publishReady": false,
+      "structureMode": "premium",
+      "notes": "Upgrade in place (meningitis-emergency-recognition-gold, premium): 1 structural/premium note(s)."
+    },
+    {
+      "topicId": "neuro-vertigo",
+      "systemId": "neurology",
+      "systemName": "Neurology",
+      "topicTitle": "Vertigo — BPPV and vestibular neuritis",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "neuro-sleep",
+      "systemId": "neurology",
+      "systemName": "Neurology",
+      "topicTitle": "Sleep disorders — beyond OSA",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "neuro-neuropathic-pain",
+      "systemId": "neurology",
+      "systemName": "Neurology",
+      "topicTitle": "Neuropathic pain",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "neuro-cns-pharm",
+      "systemId": "neurology",
+      "systemName": "Neurology",
+      "topicTitle": "CNS pharmacology basics",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "msk-oa",
+      "systemId": "msk_rheum",
+      "systemName": "Musculoskeletal / rheumatology",
+      "topicTitle": "Osteoarthritis",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "msk-ra",
+      "systemId": "msk_rheum",
+      "systemName": "Musculoskeletal / rheumatology",
+      "topicTitle": "Rheumatoid arthritis",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "msk-gout",
+      "systemId": "msk_rheum",
+      "systemName": "Musculoskeletal / rheumatology",
+      "topicTitle": "Gout",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "msk-as",
+      "systemId": "msk_rheum",
+      "systemName": "Musculoskeletal / rheumatology",
+      "topicTitle": "Ankylosing spondylitis",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "msk-fibromyalgia",
+      "systemId": "msk_rheum",
+      "systemName": "Musculoskeletal / rheumatology",
+      "topicTitle": "Fibromyalgia",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "msk-osteoporosis",
+      "systemId": "msk_rheum",
+      "systemName": "Musculoskeletal / rheumatology",
+      "topicTitle": "Osteoporosis",
+      "classification": "MERGE_INTO_EXISTING",
+      "mergeTarget": "endo-osteoporosis",
+      "notes": "Canonical spine: do not author a separate lesson; link or fold into target."
+    },
+    {
+      "topicId": "msk-septic-joint",
+      "systemId": "msk_rheum",
+      "systemName": "Musculoskeletal / rheumatology",
+      "topicTitle": "Septic arthritis",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "msk-osteomyelitis",
+      "systemId": "msk_rheum",
+      "systemName": "Musculoskeletal / rheumatology",
+      "topicTitle": "Osteomyelitis",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "msk-rhabdo",
+      "systemId": "msk_rheum",
+      "systemName": "Musculoskeletal / rheumatology",
+      "topicTitle": "Rhabdomyolysis",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "msk-sprains",
+      "systemId": "msk_rheum",
+      "systemName": "Musculoskeletal / rheumatology",
+      "topicTitle": "Sprains, strains, and acute MSK injuries",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "msk-rheum-pharm",
+      "systemId": "msk_rheum",
+      "systemName": "Musculoskeletal / rheumatology",
+      "topicTitle": "Rheumatologic pharmacology",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "wh-cycle",
+      "systemId": "womens_health",
+      "systemName": "Women’s health",
+      "topicTitle": "Menstrual cycle physiology",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "wh-contraception",
+      "systemId": "womens_health",
+      "systemName": "Women’s health",
+      "topicTitle": "Contraception",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "wh-pregnancy-basics",
+      "systemId": "womens_health",
+      "systemName": "Women’s health",
+      "topicTitle": "Pregnancy — basics and triage",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "wh-prenatal",
+      "systemId": "womens_health",
+      "systemName": "Women’s health",
+      "topicTitle": "Prenatal care — primary care NP scope",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "wh-menopause",
+      "systemId": "womens_health",
+      "systemName": "Women’s health",
+      "topicTitle": "Menopause",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "wh-osteoporosis",
+      "systemId": "womens_health",
+      "systemName": "Women’s health",
+      "topicTitle": "Osteoporosis in women",
+      "classification": "MERGE_INTO_EXISTING",
+      "mergeTarget": "endo-osteoporosis",
+      "notes": "Canonical spine: do not author a separate lesson; link or fold into target."
+    },
+    {
+      "topicId": "wh-vaginitis",
+      "systemId": "womens_health",
+      "systemName": "Women’s health",
+      "topicTitle": "Vaginitis",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "wh-pid",
+      "systemId": "womens_health",
+      "systemName": "Women’s health",
+      "topicTitle": "Pelvic inflammatory disease",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "wh-pcos",
+      "systemId": "womens_health",
+      "systemName": "Women’s health",
+      "topicTitle": "PCOS",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "wh-endometriosis",
+      "systemId": "womens_health",
+      "systemName": "Women’s health",
+      "topicTitle": "Endometriosis",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "wh-aub",
+      "systemId": "womens_health",
+      "systemName": "Women’s health",
+      "topicTitle": "Abnormal uterine bleeding",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "wh-amenorrhea",
+      "systemId": "womens_health",
+      "systemName": "Women’s health",
+      "topicTitle": "Amenorrhea",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "wh-fertility",
+      "systemId": "womens_health",
+      "systemName": "Women’s health",
+      "topicTitle": "Fertility basics",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "wh-screening",
+      "systemId": "womens_health",
+      "systemName": "Women’s health",
+      "topicTitle": "Cervical and breast cancer screening",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "mens-ed",
+      "systemId": "mens_health",
+      "systemName": "Men’s health",
+      "topicTitle": "Erectile dysfunction",
+      "classification": "MERGE_INTO_EXISTING",
+      "mergeTarget": "renal-ed",
+      "notes": "Canonical spine: do not author a separate lesson; link or fold into target."
+    },
+    {
+      "topicId": "mens-testosterone",
+      "systemId": "mens_health",
+      "systemName": "Men’s health",
+      "topicTitle": "Testosterone deficiency",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "mens-bph",
+      "systemId": "mens_health",
+      "systemName": "Men’s health",
+      "topicTitle": "BPH",
+      "classification": "MERGE_INTO_EXISTING",
+      "mergeTarget": "renal-bph",
+      "notes": "Canonical spine: do not author a separate lesson; link or fold into target."
+    },
+    {
+      "topicId": "mens-prostate-ca-screen",
+      "systemId": "mens_health",
+      "systemName": "Men’s health",
+      "topicTitle": "Prostate cancer screening",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "mens-infertility",
+      "systemId": "mens_health",
+      "systemName": "Men’s health",
+      "topicTitle": "Male infertility",
+      "classification": "MERGE_INTO_EXISTING",
+      "mergeTarget": "renal-male-infertility",
+      "notes": "Canonical spine: do not author a separate lesson; link or fold into target."
+    },
+    {
+      "topicId": "mens-prostatitis",
+      "systemId": "mens_health",
+      "systemName": "Men’s health",
+      "topicTitle": "Prostatitis",
+      "classification": "MERGE_INTO_EXISTING",
+      "mergeTarget": "renal-prostatitis",
+      "notes": "Canonical spine: do not author a separate lesson; link or fold into target."
+    },
+    {
+      "topicId": "mens-uti",
+      "systemId": "mens_health",
+      "systemName": "Men’s health",
+      "topicTitle": "UTI in males",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "peds-growth",
+      "systemId": "pediatrics",
+      "systemName": "Pediatrics",
+      "topicTitle": "Growth and development",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "peds-vitals",
+      "systemId": "pediatrics",
+      "systemName": "Pediatrics",
+      "topicTitle": "Pediatric vital signs and red flags",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "peds-infections",
+      "systemId": "pediatrics",
+      "systemName": "Pediatrics",
+      "topicTitle": "Common pediatric infections",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "peds-fever",
+      "systemId": "pediatrics",
+      "systemName": "Pediatrics",
+      "topicTitle": "Fever in children",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "peds-immunizations",
+      "systemId": "pediatrics",
+      "systemName": "Pediatrics",
+      "topicTitle": "Immunizations — pediatric focus",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "peds-pharm",
+      "systemId": "pediatrics",
+      "systemName": "Pediatrics",
+      "topicTitle": "Pediatric pharmacology basics",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "peds-common",
+      "systemId": "pediatrics",
+      "systemName": "Pediatrics",
+      "topicTitle": "Common ambulatory pediatric conditions",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "id-abx-classes",
+      "systemId": "infectious_disease",
+      "systemName": "Infectious disease",
+      "topicTitle": "Antibiotic classes",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "id-gram",
+      "systemId": "infectious_disease",
+      "systemName": "Infectious disease",
+      "topicTitle": "Gram-positive vs gram-negative — empiric implications",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "id-empiric",
+      "systemId": "infectious_disease",
+      "systemName": "Infectious disease",
+      "topicTitle": "Empiric therapy selection",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "id-stewardship",
+      "systemId": "infectious_disease",
+      "systemName": "Infectious disease",
+      "topicTitle": "Antibiotic stewardship",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "id-resistance",
+      "systemId": "infectious_disease",
+      "systemName": "Infectious disease",
+      "topicTitle": "Resistance mechanisms — overview",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "id-outpatient",
+      "systemId": "infectious_disease",
+      "systemName": "Infectious disease",
+      "topicTitle": "Common outpatient infections",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "id-antifungal",
+      "systemId": "infectious_disease",
+      "systemName": "Infectious disease",
+      "topicTitle": "Antifungals — basics",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "id-sti",
+      "systemId": "infectious_disease",
+      "systemName": "Infectious disease",
+      "topicTitle": "STI management",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "id-travel",
+      "systemId": "infectious_disease",
+      "systemName": "Infectious disease",
+      "topicTitle": "Travel medicine — basics",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "imm-vaccine-types",
+      "systemId": "immunology_vaccines",
+      "systemName": "Immunology / vaccines",
+      "topicTitle": "Vaccine types",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "imm-active-passive",
+      "systemId": "immunology_vaccines",
+      "systemName": "Immunology / vaccines",
+      "topicTitle": "Active vs passive immunity",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "imm-mrna-adeno",
+      "systemId": "immunology_vaccines",
+      "systemName": "Immunology / vaccines",
+      "topicTitle": "mRNA vs adenovirus platforms — conceptual",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "imm-schedules",
+      "systemId": "immunology_vaccines",
+      "systemName": "Immunology / vaccines",
+      "topicTitle": "Vaccine schedules — conceptual (US vs Canada overlays)",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "imm-herd",
+      "systemId": "immunology_vaccines",
+      "systemName": "Immunology / vaccines",
+      "topicTitle": "Herd immunity",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "imm-travel-vax",
+      "systemId": "immunology_vaccines",
+      "systemName": "Immunology / vaccines",
+      "topicTitle": "Travel vaccines",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "imm-safety",
+      "systemId": "immunology_vaccines",
+      "systemName": "Immunology / vaccines",
+      "topicTitle": "Vaccine counseling and safety communication",
+      "classification": "EXISTS_STRONG_SKIP",
+      "bestMatch": {
+        "slug": "med-family-antibiotics-gold",
+        "pathwayId": "us-np-fnp",
+        "score": 2
+      },
+      "usesPremiumStructure": true,
+      "premiumIssueCount": 0,
+      "publishReady": true,
+      "structureMode": "premium",
+      "notes": "Publish-ready (premium); skip net-new for this topic unless clinical update."
+    },
+    {
+      "topicId": "mh-depression",
+      "systemId": "mental_health",
+      "systemName": "Mental health",
+      "topicTitle": "Depression",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "mh-anxiety",
+      "systemId": "mental_health",
+      "systemName": "Mental health",
+      "topicTitle": "Anxiety disorders",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "mh-ptsd",
+      "systemId": "mental_health",
+      "systemName": "Mental health",
+      "topicTitle": "PTSD",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "mh-sud",
+      "systemId": "mental_health",
+      "systemName": "Mental health",
+      "topicTitle": "Substance use disorders",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "mh-suicide",
+      "systemId": "mental_health",
+      "systemName": "Mental health",
+      "topicTitle": "Suicide risk assessment",
+      "classification": "EXISTS_STRONG_SKIP",
+      "bestMatch": {
+        "slug": "clinical-casebook-mental-health-safety-gold",
+        "pathwayId": "us-np-fnp",
+        "score": 2
+      },
+      "usesPremiumStructure": true,
+      "premiumIssueCount": 0,
+      "publishReady": true,
+      "structureMode": "premium",
+      "notes": "Publish-ready (premium); skip net-new for this topic unless clinical update."
+    },
+    {
+      "topicId": "mh-psychopharm",
+      "systemId": "mental_health",
+      "systemName": "Mental health",
+      "topicTitle": "Psychopharmacology basics",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "mh-behavioral",
+      "systemId": "mental_health",
+      "systemName": "Mental health",
+      "topicTitle": "Behavioral therapy — basics for NPs",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "derm-rashes",
+      "systemId": "dermatology",
+      "systemName": "Dermatology",
+      "topicTitle": "Common rashes — morphologic approach",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "derm-acne",
+      "systemId": "dermatology",
+      "systemName": "Dermatology",
+      "topicTitle": "Acne",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "derm-eczema",
+      "systemId": "dermatology",
+      "systemName": "Dermatology",
+      "topicTitle": "Eczema / atopic dermatitis",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "derm-psoriasis",
+      "systemId": "dermatology",
+      "systemName": "Dermatology",
+      "topicTitle": "Psoriasis",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "derm-infections",
+      "systemId": "dermatology",
+      "systemName": "Dermatology",
+      "topicTitle": "Skin infections",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "derm-cancer",
+      "systemId": "dermatology",
+      "systemName": "Dermatology",
+      "topicTitle": "Skin cancer basics",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "heme-anemia",
+      "systemId": "hematology_oncology",
+      "systemName": "Hematology / oncology",
+      "topicTitle": "Anemia — classification and workup",
+      "classification": "EXISTS_STRONG_SKIP",
+      "bestMatch": {
+        "slug": "fnp-womens-prenatal-anemia-workup",
+        "pathwayId": "us-np-fnp",
+        "score": 2
+      },
+      "usesPremiumStructure": false,
+      "premiumIssueCount": 13,
+      "publishReady": true,
+      "structureMode": "legacy",
+      "notes": "Publish-ready (legacy); skip net-new for this topic unless clinical update."
+    },
+    {
+      "topicId": "heme-coag",
+      "systemId": "hematology_oncology",
+      "systemName": "Hematology / oncology",
+      "topicTitle": "Coagulopathies — outpatient recognition",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "heme-leukemia",
+      "systemId": "hematology_oncology",
+      "systemName": "Hematology / oncology",
+      "topicTitle": "Leukemia — recognition and referral",
+      "classification": "EXISTS_UPGRADE",
+      "bestMatch": {
+        "slug": "meningitis-emergency-recognition-gold",
+        "pathwayId": "us-np-fnp",
+        "score": 2
+      },
+      "usesPremiumStructure": true,
+      "premiumIssueCount": 1,
+      "publishReady": false,
+      "structureMode": "premium",
+      "notes": "Upgrade in place (meningitis-emergency-recognition-gold, premium): 1 structural/premium note(s)."
+    },
+    {
+      "topicId": "onco-screening",
+      "systemId": "hematology_oncology",
+      "systemName": "Hematology / oncology",
+      "topicTitle": "Cancer screening — cross-system summary",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "onco-red-flags",
+      "systemId": "hematology_oncology",
+      "systemName": "Hematology / oncology",
+      "topicTitle": "Oncology red flags",
+      "classification": "EXISTS_STRONG_SKIP",
+      "bestMatch": {
+        "slug": "ob-emergencies-gold-standard",
+        "pathwayId": "us-np-fnp",
+        "score": 2
+      },
+      "usesPremiumStructure": false,
+      "premiumIssueCount": 13,
+      "publishReady": true,
+      "structureMode": "legacy",
+      "notes": "Publish-ready (legacy); skip net-new for this topic unless clinical update."
+    },
+    {
+      "topicId": "geri-polypharm",
+      "systemId": "geriatrics",
+      "systemName": "Geriatrics",
+      "topicTitle": "Polypharmacy",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "geri-deprescribing",
+      "systemId": "geriatrics",
+      "systemName": "Geriatrics",
+      "topicTitle": "Deprescribing",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "geri-beers",
+      "systemId": "geriatrics",
+      "systemName": "Geriatrics",
+      "topicTitle": "Beers criteria — high-level application",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "geri-falls",
+      "systemId": "geriatrics",
+      "systemName": "Geriatrics",
+      "topicTitle": "Falls prevention and evaluation",
+      "classification": "EXISTS_UPGRADE",
+      "bestMatch": {
+        "slug": "falls-injury-prevention-gold",
+        "pathwayId": "us-np-fnp",
+        "score": 2
+      },
+      "usesPremiumStructure": true,
+      "premiumIssueCount": 1,
+      "publishReady": false,
+      "structureMode": "premium",
+      "notes": "Upgrade in place (falls-injury-prevention-gold, premium): 1 structural/premium note(s)."
+    },
+    {
+      "topicId": "geri-cognitive",
+      "systemId": "geriatrics",
+      "systemName": "Geriatrics",
+      "topicTitle": "Cognitive decline — evaluation basics",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "geri-frailty",
+      "systemId": "geriatrics",
+      "systemName": "Geriatrics",
+      "topicTitle": "Frailty",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "prev-screening",
+      "systemId": "preventive_primary_core",
+      "systemName": "Preventive care / primary care core",
+      "topicTitle": "Evidence-based screening guidelines (US vs Canada overlays)",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "prev-health-promotion",
+      "systemId": "preventive_primary_core",
+      "systemName": "Preventive care / primary care core",
+      "topicTitle": "Health promotion",
+      "classification": "EXISTS_STRONG_SKIP",
+      "bestMatch": {
+        "slug": "bp26-usnp-pad-006-health_promotion_maintenance-fluids-electrolytes",
+        "pathwayId": "us-np-fnp",
+        "score": 2
+      },
+      "usesPremiumStructure": false,
+      "premiumIssueCount": 12,
+      "publishReady": true,
+      "structureMode": "legacy",
+      "notes": "Publish-ready (legacy); skip net-new for this topic unless clinical update."
+    },
+    {
+      "topicId": "prev-lifestyle",
+      "systemId": "preventive_primary_core",
+      "systemName": "Preventive care / primary care core",
+      "topicTitle": "Lifestyle medicine",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "prev-risk",
+      "systemId": "preventive_primary_core",
+      "systemName": "Preventive care / primary care core",
+      "topicTitle": "Cardiometabolic and cancer risk reduction",
+      "classification": "EXISTS_STRONG_SKIP",
+      "bestMatch": {
+        "slug": "bp26-usnp-pad-005-risk_reduction-gastrointestinal",
+        "pathwayId": "us-np-fnp",
+        "score": 2
+      },
+      "usesPremiumStructure": false,
+      "premiumIssueCount": 12,
+      "publishReady": true,
+      "structureMode": "legacy",
+      "notes": "Publish-ready (legacy); skip net-new for this topic unless clinical update."
+    },
+    {
+      "topicId": "prev-vax-counsel",
+      "systemId": "preventive_primary_core",
+      "systemName": "Preventive care / primary care core",
+      "topicTitle": "Vaccination counseling",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "prev-chronic-prev",
+      "systemId": "preventive_primary_core",
+      "systemName": "Preventive care / primary care core",
+      "topicTitle": "Chronic disease prevention",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "pharm-classes",
+      "systemId": "pharmacology_systemwide",
+      "systemName": "Pharmacology (system-wide)",
+      "topicTitle": "Major drug classes across organ systems",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "pharm-mechanisms",
+      "systemId": "pharmacology_systemwide",
+      "systemName": "Pharmacology (system-wide)",
+      "topicTitle": "Mechanisms — high-yield for boards",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "pharm-adverse",
+      "systemId": "pharmacology_systemwide",
+      "systemName": "Pharmacology (system-wide)",
+      "topicTitle": "Adverse effects and monitoring",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "pharm-contra",
+      "systemId": "pharmacology_systemwide",
+      "systemName": "Pharmacology (system-wide)",
+      "topicTitle": "Contraindications",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "pharm-interactions",
+      "systemId": "pharmacology_systemwide",
+      "systemName": "Pharmacology (system-wide)",
+      "topicTitle": "Drug interactions",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "pharm-prescribing",
+      "systemId": "pharmacology_systemwide",
+      "systemName": "Pharmacology (system-wide)",
+      "topicTitle": "Prescribing decision logic",
+      "classification": "CREATE_NEW",
+      "notes": "No merged-catalog lesson met token overlap threshold; verify DB before authoring."
+    },
+    {
+      "topicId": "pharm-polypharm-cross",
+      "systemId": "pharmacology_systemwide",
+      "systemName": "Pharmacology (system-wide)",
+      "topicTitle": "Polypharmacy and deprescribing integration",
+      "classification": "MERGE_INTO_EXISTING",
+      "mergeTarget": "geri-polypharm",
+      "notes": "Canonical spine: do not author a separate lesson; link or fold into target."
+    }
+  ]
+}
