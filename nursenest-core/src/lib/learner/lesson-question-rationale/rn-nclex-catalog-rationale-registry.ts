@@ -70,7 +70,7 @@ export const RN_NCLEX_CATALOG_RATIONALE_ENTRIES: LessonRationaleMappingEntry[] =
   },
   {
     id: "rn-catalog-eclampsia",
-    lessonSlug: "eclampsia-nclex-rn",
+    lessonSlug: "preeclampsia-and-eclampsia-nclex-rn",
     domain: "disease",
     linkKind: "disease_process",
     haystackPattern: /\b(eclampsia|preeclampsia|magnesium\s+sulfate|magnesium\s+for\s+seizure)\b/i,

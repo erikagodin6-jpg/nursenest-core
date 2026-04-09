@@ -1,12 +1,22 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/auth/guards";
 import { prisma } from "@/lib/db";
+import { loadAdminUserSearch } from "@/lib/admin/load-admin-user-search";
+import { AdminUserSearchPanel } from "@/components/admin/admin-user-search-panel";
 import { UserRole } from "@prisma/client";
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminUsersPage() {
+export default async function AdminUsersPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string }>;
+}) {
   await requireAdmin();
+  const sp = await searchParams;
+  const q = sp.q?.trim() ?? "";
+  const initialRows = q.length >= 2 ? await loadAdminUserSearch(q) : null;
+
   const [recent, byCountry, byTier] = await Promise.all([
     prisma.user.findMany({
       orderBy: { createdAt: "desc" },
@@ -24,12 +34,19 @@ export default async function AdminUsersPage() {
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wide text-primary">Admin</p>
-          <h1 className="mt-1 text-3xl font-bold text-[var(--theme-heading-text)]">Users</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Learners: {learners.toLocaleString()} · All roles in table.</p>
+          <h1 className="mt-1 text-3xl font-bold text-[var(--theme-heading-text)]">Users &amp; support lookup</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Learners: {learners.toLocaleString()} · Search links to a read-only support profile (subscription, usage, recent
+            activity).
+          </p>
         </div>
         <Link href="/admin" className="text-sm font-semibold text-primary underline">
           ← Overview
         </Link>
+      </div>
+
+      <div className="mt-8">
+        <AdminUserSearchPanel key={q || "home"} initialQuery={q} initialRows={initialRows} />
       </div>
 
       <section className="mt-8 grid gap-6 lg:grid-cols-2">
@@ -70,6 +87,7 @@ export default async function AdminUsersPage() {
                 <th className="py-2">Tier</th>
                 <th className="py-2">Trial</th>
                 <th className="py-2">Created</th>
+                <th className="py-2" />
               </tr>
             </thead>
             <tbody>
@@ -82,14 +100,16 @@ export default async function AdminUsersPage() {
                   <td className="py-2">{u.tier}</td>
                   <td className="py-2">{u.trialStatus}</td>
                   <td className="py-2 text-xs">{u.createdAt.toISOString().slice(0, 10)}</td>
+                  <td className="py-2">
+                    <Link href={`/admin/users/${encodeURIComponent(u.id)}`} className="text-primary underline">
+                      View
+                    </Link>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        <p className="mt-3 text-xs text-muted-foreground">
-          No per-user “activity score” column in schema. Use command center DAU for aggregate signals.
-        </p>
       </section>
     </main>
   );

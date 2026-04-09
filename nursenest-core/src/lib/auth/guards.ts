@@ -1,6 +1,8 @@
+import { headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
-import { userHasAdminRoleInDatabase } from "@/lib/auth/admin-authority";
+import { isPathAllowedForStaffTier } from "@/lib/auth/admin-path-policy";
+import { getStaffSession } from "@/lib/auth/staff-session";
 
 /**
  * Server-only session check. Unauthenticated `/app/*` and `/admin/*` requests are turned away in
@@ -8,7 +10,6 @@ import { userHasAdminRoleInDatabase } from "@/lib/auth/admin-authority";
  * session: it interacted with Next.js 16 streaming and surfaced raw Flight payloads in the document.
  *
  * Must agree with `authorized()` in `src/lib/auth-middleware.ts`, which treats `id` **or** `email` as signed-in.
- * Requiring `id` alone caused 404 on `/admin` when the session had email but `id` was not yet hydrated.
  */
 export async function requireUser() {
   const session = await auth();
@@ -19,14 +20,18 @@ export async function requireUser() {
   return session;
 }
 
+/**
+ * Admin UI: database is source of truth for staff role (JWT may lag after promotion/demotion).
+ */
 export async function requireAdmin() {
   const session = await requireUser();
-  const u = session.user as { id?: string; email?: string | null; role?: string };
-  if (u.role === "ADMIN") {
-    return session;
+  const staff = await getStaffSession();
+  if (!staff) {
+    redirect("/app");
   }
-  if (u.id && (await userHasAdminRoleInDatabase(u.id))) {
-    return session;
+  const path = (await headers()).get("x-nn-admin-path") ?? "";
+  if (path && !isPathAllowedForStaffTier(staff.tier, path)) {
+    redirect("/admin");
   }
-  redirect("/app");
+  return session;
 }

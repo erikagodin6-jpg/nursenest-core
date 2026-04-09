@@ -16,15 +16,28 @@ const runAuthMiddleware = middlewareAuth as unknown as NextMiddleware;
 
 function withPathnameHeader(request: NextRequest): NextRequest {
   const pathname = request.nextUrl.pathname;
+  const requestHeaders = new Headers(request.headers);
+
+  if (
+    pathname.startsWith("/admin") ||
+    pathname.startsWith("/api/admin")
+  ) {
+    requestHeaders.set("x-nn-admin-path", pathname);
+  }
+
   const isExamHub =
     pathname === "/us" ||
     pathname.startsWith("/us/") ||
     pathname === "/canada" ||
     pathname.startsWith("/canada/");
-  if (!isExamHub) return request;
-  const requestHeaders = new Headers(request.headers);
-  requestHeaders.set("x-nn-pathname", pathname);
-  return new NextRequest(request.url, { headers: requestHeaders });
+  if (isExamHub) {
+    requestHeaders.set("x-nn-pathname", pathname);
+  }
+
+  if (isExamHub || pathname.startsWith("/admin") || pathname.startsWith("/api/admin")) {
+    return new NextRequest(request.url, { headers: requestHeaders });
+  }
+  return request;
 }
 
 export async function proxy(request: NextRequest, event: NextFetchEvent) {
@@ -43,5 +56,16 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
  * `/us/*` and `/canada/*` run proxy so `x-nn-pathname` reaches `(default)/layout` for cookie-backed i18n on exam hubs.
  */
 export const config = {
-  matcher: ["/app", "/app/:path*", "/admin", "/admin/:path*", "/us", "/us/:path*", "/canada", "/canada/:path*"],
+  matcher: [
+    "/app",
+    "/app/:path*",
+    "/admin",
+    "/admin/:path*",
+    "/api/admin",
+    "/api/admin/:path*",
+    "/us",
+    "/us/:path*",
+    "/canada",
+    "/canada/:path*",
+  ],
 };

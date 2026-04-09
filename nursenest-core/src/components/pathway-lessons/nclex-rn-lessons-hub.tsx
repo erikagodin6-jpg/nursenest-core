@@ -18,6 +18,8 @@ import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry"
 import type { TopicCluster } from "@/lib/lessons/pathway-lesson-loader";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 import { PathwayLessonProgressBadge } from "@/components/lessons/pathway-lesson-progress-badge";
+import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
+import { PathwayHubSection } from "@/components/pathway-lessons/pathway-hub-section";
 
 type Props = {
   pathway: ExamPathwayDefinition;
@@ -27,13 +29,6 @@ type Props = {
   region: NclexRnHubRegion;
   progressMap?: Record<string, PathwayLessonProgressStatus>;
 };
-
-function appQuestionsHref(pathwayId: string, topic?: string): string {
-  const q = new URLSearchParams();
-  q.set("pathwayId", pathwayId);
-  if (topic) q.set("topic", topic);
-  return `/app/questions?${q.toString()}`;
-}
 
 export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters, region, progressMap = {} }: Props) {
   const isCa = region === "ca";
@@ -50,7 +45,7 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
   return (
     <div className="space-y-14">
       {/* 1: How to use */}
-      <section className="nn-study-card p-5 sm:p-6" aria-labelledby="how-use-nclex-rn">
+      <PathwayHubSection kind="card" aria-labelledby="how-use-nclex-rn">
         <h2 id="how-use-nclex-rn" className="nn-marketing-h3">
           How to use these lessons for NCLEX-RN
         </h2>
@@ -85,10 +80,10 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
             explain prior errors. Retesting without analysis reinforces guesses.
           </li>
         </ol>
-      </section>
+      </PathwayHubSection>
 
       {/* Trust anchors */}
-      <section className="nn-study-callout p-5 sm:p-6">
+      <PathwayHubSection kind="callout">
         <h2 className="nn-marketing-h3">Built for NCLEX-RN, not generic “nursing content”</h2>
         <ul className="nn-marketing-body-sm mt-3 list-disc space-y-2 pl-5 text-[var(--theme-muted-text)]">
           <li>Aligned with the NCLEX-RN test plan Client Needs framework used to group lessons below.</li>
@@ -107,7 +102,7 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
             </li>
           )}
         </ul>
-      </section>
+      </PathwayHubSection>
 
       {/* Topic clusters (body system / SEO hubs) */}
       <PathwayTopicClusterGroupedNav
@@ -118,7 +113,7 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
 
       {/* Anchor navigation */}
       {navLinks.length > 0 && (
-        <nav aria-label="NCLEX-RN lesson categories" className="nn-study-card nn-study-card--wash p-4">
+        <PathwayHubSection kind="navWash" as="nav" aria-label="NCLEX-RN lesson categories">
           <p className="nn-marketing-label">Jump to Client Needs</p>
           <p className="nn-marketing-caption mt-1">Counts reflect lessons on this page (paginated hub).</p>
           <ul className="mt-3 flex flex-wrap gap-2">
@@ -133,12 +128,12 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
               </li>
             ))}
           </ul>
-        </nav>
+        </PathwayHubSection>
       )}
 
       {/* Featured + category sections */}
       {featured && featured.slug?.trim() && featuredPreview && (
-        <section className="nn-study-card bg-gradient-to-b from-[var(--bg-card)] to-[var(--nn-presentation-wash)] p-5 sm:p-7">
+        <PathwayHubSection kind="featuredCard">
           <div className="flex flex-wrap items-start justify-between gap-2">
             <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-primary)]">
               Featured lesson
@@ -180,19 +175,19 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
               Open lesson
             </Link>
             <Link
-              href={appQuestionsHref(pathway.id, featured.topic)}
+              href={pathwayHubAppQuestionsHref(pathway.id, featured.topic)}
               className="inline-flex rounded-full nn-btn-secondary bg-card px-4 py-2 text-sm font-semibold"
             >
               Start 5-question quiz from this topic
             </Link>
             <Link
-              href={appQuestionsHref(pathway.id)}
+              href={pathwayHubAppQuestionsHref(pathway.id)}
               className="inline-flex rounded-full nn-btn-secondary px-4 py-2 text-sm font-semibold"
             >
               Test this lesson now
             </Link>
           </div>
-        </section>
+        </PathwayHubSection>
       )}
 
       {sections.map((section) => (
@@ -214,7 +209,7 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
         className="mt-2"
       >
       {/* Clinical judgment */}
-      <section className="nn-study-card p-5 sm:p-6" aria-labelledby="cj-nclex-rn">
+      <PathwayHubSection kind="card" aria-labelledby="cj-nclex-rn">
         <h2 id="cj-nclex-rn" className="nn-marketing-h3">
           Clinical judgment system: from knowledge to a selected action
         </h2>
@@ -242,10 +237,10 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
             </li>
           </ul>
         </div>
-      </section>
+      </PathwayHubSection>
 
       {/* Flow */}
-      <section className="nn-study-card nn-study-card--wash p-5 sm:p-6" aria-labelledby="flow-nclex-rn">
+      <PathwayHubSection kind="cardWash" aria-labelledby="flow-nclex-rn">
         <h2 id="flow-nclex-rn" className="nn-marketing-h3">
           Structured pathway: lesson → questions → weak areas → CAT → readiness
         </h2>
@@ -303,10 +298,10 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
             Flashcards
           </Link>
         </div>
-      </section>
+      </PathwayHubSection>
 
       {/* Strong reasoning sample */}
-      <section className="nn-study-card p-5 sm:p-6" aria-labelledby="reasoning-nclex-rn">
+      <PathwayHubSection kind="card" aria-labelledby="reasoning-nclex-rn">
         <h2 id="reasoning-nclex-rn" className="nn-marketing-h3">
           What strong NCLEX-RN reasoning looks like
         </h2>
@@ -337,7 +332,7 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
             directly reduces death in the next minutes, not the most detailed nursing task.
           </p>
         </div>
-      </section>
+      </PathwayHubSection>
 
       {/* Common mistakes */}
       <section aria-labelledby="mistakes-nclex-rn">
@@ -363,19 +358,19 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
       </section>
 
       {/* CTAs */}
-      <section className="nn-study-callout p-5 sm:p-6">
+      <PathwayHubSection kind="callout">
         <h2 className="nn-marketing-h3">Start without friction</h2>
         <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
           Try a short bank pass first; full sessions may prompt sign-in depending on product rules, not a forced login at the
           first click.
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
-          <Link href={appQuestionsHref(pathway.id)} className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">
+          <Link href={pathwayHubAppQuestionsHref(pathway.id)} className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">
             Start quick quiz (pathway-scoped)
           </Link>
           {featured && (
             <Link
-              href={appQuestionsHref(pathway.id, featured.topic)}
+              href={pathwayHubAppQuestionsHref(pathway.id, featured.topic)}
               className="rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold"
             >
               Start 5-question quiz from this topic
@@ -397,7 +392,7 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
             Questions
           </Link>
         </p>
-      </section>
+      </PathwayHubSection>
       </PathwayHubSupplementaryDisclosure>
     </div>
   );

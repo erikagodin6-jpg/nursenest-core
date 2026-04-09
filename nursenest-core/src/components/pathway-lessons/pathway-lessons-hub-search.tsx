@@ -12,9 +12,9 @@ type Props = {
  */
 export function PathwayLessonsHubSearch({ basePath, initialQuery }: Props) {
   return (
-    <div className="rounded-xl border border-border bg-[var(--theme-muted-surface)] p-4">
-      <p className="text-xs font-semibold uppercase tracking-wide text-muted">Find a lesson</p>
-      <p className="mt-1 text-xs text-[var(--theme-muted-text)]">
+    <div className="rounded-xl border border-[color-mix(in_srgb,var(--border-subtle)_90%,var(--theme-primary))] bg-[color-mix(in_srgb,var(--card)_88%,var(--theme-muted-surface))] p-4 shadow-inner sm:p-5">
+      <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-heading-text)]">Find a lesson</p>
+      <p className="mt-1 text-xs leading-relaxed text-[var(--theme-muted-text)]">
         Searches title, topic, and URL slug across this pathway. Results stay paginated for fast loads.
       </p>
       <form method="get" action={basePath} className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center">

@@ -5,10 +5,7 @@ import Link from "next/link";
 import { ChevronDown, User } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
-
-function isAdminRole(role: unknown): boolean {
-  return role === "ADMIN";
-}
+import { isStaffRole } from "@/lib/auth/staff-roles";
 
 type MenuItem = { href: string; i18nKey: string };
 
@@ -91,7 +88,7 @@ export function LearnerShellUserBar({ pathwayShortLabel = null }: { pathwayShort
   const user = session.user;
   const displayName = user.name?.trim() || user.email?.split("@")[0] || t("learner.userBar.fallbackName");
   const emailLine = user.email?.trim() ?? "";
-  const admin = isAdminRole(user.role);
+  const admin = isStaffRole(user.role);
   const sub = user.subscriptionStatus ?? "none";
   const tier = user.tier ?? "";
   const country = user.country ?? "";

@@ -8,6 +8,7 @@ import { PH } from "@/lib/observability/posthog-conversion-events";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { pathwayLessonMarketingDetailHref } from "@/lib/lessons/pathway-lesson-types";
 import {
   type FnpClinicalDomain,
@@ -21,13 +22,6 @@ import {
 } from "@/lib/lessons/fnp-us-lesson-enrichment";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 import { PathwayLessonProgressBadge } from "@/components/lessons/pathway-lesson-progress-badge";
-
-function appQuestionsHref(pathwayId: string, topic?: string): string {
-  const q = new URLSearchParams();
-  q.set("pathwayId", pathwayId);
-  if (topic) q.set("topic", topic);
-  return `/app/questions?${q.toString()}`;
-}
 
 function marketingQuestionsTopicHref(pathway: ExamPathwayDefinition, topic: string): string {
   const base = buildExamPathwayPath(pathway, "questions");
@@ -362,7 +356,7 @@ function FnpLessonCard({
           <p className="mt-0.5 text-sm text-[var(--theme-muted-text)]">Hub practice for this topic</p>
         </Link>
         <Link
-          href={loginWithCallback(appQuestionsHref(pathway.id, l.topic))}
+          href={loginWithCallback(pathwayHubAppQuestionsHref(pathway.id, l.topic))}
           className="nn-surface-elevated block rounded-xl p-3 transition-colors hover:border-primary/35"
         >
           <p className="text-xs font-semibold text-[var(--theme-primary)]">App practice</p>

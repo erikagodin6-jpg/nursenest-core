@@ -24,14 +24,11 @@ import {
   resolvePathwayLaunchBundle,
 } from "@/lib/lessons/pathway-lesson-loader";
 import { PathwayLaunchEssentials } from "@/components/pathway-lessons/pathway-launch-essentials";
-import { PathwayLessonsHubSearch } from "@/components/pathway-lessons/pathway-lessons-hub-search";
+import { PathwayLessonsNextStepCtas } from "@/components/pathway-lessons/pathway-lessons-next-step-ctas";
+import { PathwayLessonsStudyHero } from "@/components/pathway-lessons/pathway-lessons-study-hero";
 import { PathwayLessonsResumeHub } from "@/components/pathway-lessons/pathway-lessons-resume-hub";
 import { PathwayLessonsGroupedHub } from "@/components/pathway-lessons/pathway-lessons-grouped-hub";
-import {
-  pathwayLessonHubH1,
-  pathwayLessonHubMetaDescription,
-  pathwayLessonHubMetaTitle,
-} from "@/lib/lessons/pathway-lesson-hub-seo";
+import { pathwayLessonHubMetaDescription, pathwayLessonHubMetaTitle } from "@/lib/lessons/pathway-lesson-hub-seo";
 import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
@@ -60,25 +57,35 @@ type Props = {
   searchParams: Promise<{ page?: string; pageSize?: string; q?: string }>;
 };
 
-function PathwayLessonsEmptyHub({
-  pathway,
-  lessonsBasePath,
-}: {
-  pathway: ExamPathwayDefinition;
-  lessonsBasePath: string;
-}) {
+/** When the catalog has no rows yet: still a complete “study hub” with bank, CAT, and account entry points. */
+function PathwayLessonsZeroCatalogPanel({ pathway }: { pathway: ExamPathwayDefinition }) {
   const questionsHref = buildExamPathwayPath(pathway, "questions");
+  const catHref = buildExamPathwayPath(pathway, "cat");
   const overviewHref = buildExamPathwayPath(pathway);
   const upcoming = pathway.status === "upcoming" || pathway.acquisitionMode === "waitlist";
 
   return (
-    <div className="nn-card mt-10 border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]/40 p-6 sm:p-8">
-      <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Lesson library for this pathway</h2>
-      <p className="mt-3 text-sm leading-relaxed text-[var(--theme-muted-text)]">
+    <div className="mt-10 rounded-2xl border border-[var(--border-subtle)] bg-[var(--theme-muted-surface)]/35 p-6 sm:p-8">
+      <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Lesson library · building for this pathway</h2>
+      <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[var(--theme-muted-text)]">
         {upcoming
-          ? "This track is still ramping up in NurseNest. You can start with pathway-scoped questions and public practice exams now; structured lessons will appear here as they ship."
-          : "No public lesson pages are available for this pathway yet. Use the question bank hub and practice exams to start studying; lessons will appear here when published for this track."}
+          ? "Structured lessons will appear here as this track ships. You can already study with pathway-scoped questions, adaptive CAT practice, and timed practice exams—the same scope you will see in lessons."
+          : "Published lesson pages are not in the index yet for this pathway. Start with the question bank and CAT sessions so your rationales and weak-area signals are exam-scoped; lessons will list here when live."}
       </p>
+      <ul className="mt-5 space-y-2 text-sm text-[var(--theme-muted-text)]">
+        <li className="flex gap-2">
+          <span className="font-semibold text-[var(--theme-heading-text)]">1.</span>
+          Open the pathway question bank and run items with full rationales.
+        </li>
+        <li className="flex gap-2">
+          <span className="font-semibold text-[var(--theme-heading-text)]">2.</span>
+          Run a CAT session when you are signed in and eligible—difficulty adapts like the real exam.
+        </li>
+        <li className="flex gap-2">
+          <span className="font-semibold text-[var(--theme-heading-text)]">3.</span>
+          Create an account to sync progress across devices and unlock subscriber depth when your plan matches this track.
+        </li>
+      </ul>
       <div className="mt-6 flex flex-wrap gap-3">
         <Link
           href={questionsHref}
@@ -87,16 +94,28 @@ function PathwayLessonsEmptyHub({
           Open question bank hub
         </Link>
         <Link
+          href={catHref}
+          className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-primary/35 bg-card px-5 py-2.5 text-sm font-semibold text-primary hover:bg-muted/40"
+        >
+          CAT practice landing
+        </Link>
+        <Link
           href={HUB.practiceExams}
           className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-border px-5 py-2.5 text-sm font-semibold hover:bg-card"
         >
-          Practice exams
+          Practice exams directory
         </Link>
-        <Link href="/signup" className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-primary/30 px-5 py-2.5 text-sm font-semibold text-primary hover:bg-primary/5">
+        <Link
+          href="/signup"
+          className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-primary/30 px-5 py-2.5 text-sm font-semibold text-primary hover:bg-primary/5"
+        >
           Create account
         </Link>
-        <Link href={overviewHref} className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-border px-5 py-2.5 text-sm font-semibold hover:bg-card">
-          Back to exam overview
+        <Link
+          href={overviewHref}
+          className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-border px-5 py-2.5 text-sm font-semibold hover:bg-card"
+        >
+          Exam overview
         </Link>
       </div>
     </div>
@@ -172,16 +191,13 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     const { crumbs, schemaItems } = pathwayLessonsHubBreadcrumbs(pathway);
     if (qEffective) {
       return (
-        <div className="mx-auto max-w-4xl px-4 py-12">
+        <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
           <BreadcrumbJsonLd items={schemaItems} />
           <div className="mb-6">
             <BreadcrumbTrail items={crumbs} />
           </div>
-          <Link href={buildExamPathwayPath(pathway)} className="text-sm font-medium text-primary hover:underline">
-            ← {pathway.shortName} hub
-          </Link>
-          <h1 className="mt-4 text-3xl font-extrabold text-[var(--theme-heading-text)]">{pathwayLessonHubH1(pathway)}</h1>
-          <p className="mt-3 text-[var(--theme-muted-text)]">
+          <PathwayLessonsStudyHero pathway={pathway} lessonsBasePath={base} initialQuery={qEffective} />
+          <p className="mt-6 text-[var(--theme-muted-text)]">
             No lessons matched &ldquo;{qEffective}&rdquo; for {pathway.shortName}. Try a shorter term, browse by topic, or clear
             the search.
           </p>
@@ -191,8 +207,8 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
             lessonCount={pathwayLessonTotal}
             variant="lessons"
           />
-          <div className="mt-8 space-y-6">
-            <PathwayLessonsHubSearch basePath={base} initialQuery={qEffective} />
+          <PathwayLessonsNextStepCtas pathway={pathway} />
+          <div className="mt-6">
             <Link href={base} className="text-sm font-semibold text-primary underline">
               View all lessons (clear search)
             </Link>
@@ -202,19 +218,13 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       );
     }
     return (
-      <div className="mx-auto max-w-4xl px-4 py-12">
+      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
         <BreadcrumbJsonLd items={schemaItems} />
         <div className="mb-6">
           <BreadcrumbTrail items={crumbs} />
         </div>
-        <Link href={buildExamPathwayPath(pathway)} className="text-sm font-medium text-primary hover:underline">
-          ← {pathway.shortName} hub
-        </Link>
-        <h1 className="mt-4 text-3xl font-extrabold text-[var(--theme-heading-text)]">{pathwayLessonHubH1(pathway)}</h1>
-        <p className="mt-3 text-[var(--theme-muted-text)]">
-          Exam-scoped clinical lessons for {pathway.countrySlug === "canada" ? "Canada" : "the United States"} ({pathway.shortName}
-          ). When lesson pages go live for this pathway, they will be listed here.
-        </p>
+        <PathwayLessonsStudyHero pathway={pathway} lessonsBasePath={base} showSearch={false} />
+        <PathwayLessonsNextStepCtas pathway={pathway} emphasizeStudyLoop />
         <PathwayLiveInventoryStrip
           pathway={pathway}
           questionSnapshot={questionSnapshot}
@@ -222,7 +232,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
           variant="lessons"
         />
         {pageResult.locale ? <PathwayLessonContentLocaleBanner listLocale={pageResult.locale} /> : null}
-        <PathwayLessonsEmptyHub pathway={pathway} lessonsBasePath={base} />
+        <PathwayLessonsZeroCatalogPanel pathway={pathway} />
         <MarketingStudyCrossLinks className="mt-14" />
       </div>
     );
@@ -272,57 +282,13 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   }
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-12">
+    <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
       <BreadcrumbJsonLd items={schemaItems} />
       <div className="mb-6">
         <BreadcrumbTrail items={crumbs} />
       </div>
-      <Link href={buildExamPathwayPath(pathway)} className="text-sm font-medium text-primary hover:underline">
-        ← {pathway.shortName} hub
-      </Link>
-      <h1 className="mt-4 text-3xl font-extrabold text-[var(--theme-heading-text)]">{pathwayLessonHubH1(pathway)}</h1>
-      <p className="mt-3 text-[var(--theme-muted-text)]">
-        {isUsNclexPnHub ? (
-          <>
-            Clinical lessons for US LVN/LPN candidates, organized by NCLEX-PN Client Needs, focused on scope-safe judgment and
-            delegation, not textbook lists. Pair each lesson with pathway-scoped questions and CAT practice. Subscription gates
-            full lesson depth; previews remain discoverable.
-          </>
-        ) : isUsFnpHub ? (
-          <>
-            Advanced-practice lessons for US Family NP candidates, structured for board-style assessment → diagnosis → plan →
-            evaluation across the lifespan (prenatal through geriatrics), not RN-level task lists. Pair each lesson with
-            case-based questions and exam simulations; subscription gates full lesson depth; previews remain discoverable.
-          </>
-        ) : isNclexRnHub ? (
-          pathway.id === "ca-rn-nclex-rn" ? (
-            <>
-              Clinical lessons for Canadian RN candidates, written for decision-making and safety, not isolated facts. Content
-              follows the NCLEX-RN Client Needs structure below; pair each lesson with pathway-scoped questions and CAT
-              practice. Subscription gates full lesson depth; previews remain discoverable.
-            </>
-          ) : (
-            <>
-              Clinical lessons for US RN candidates, written for decision-making and safety, not isolated facts. Content follows
-              the NCLEX-RN Client Needs structure below; pair each lesson with pathway-scoped questions, adaptive practice, and
-              performance feedback. Lessons alone are not a full prep pathway. Subscription gates full lesson depth; previews
-              remain discoverable.
-            </>
-          )
-        ) : isCaRexPnHub ? (
-          <>
-            Clinical lessons for Canadian practical nursing (RPN) candidates preparing for the REx-PN exam: scope-safe judgment,
-            delegation, and Canadian regulatory context—not generic PN content mixed with US NCLEX-PN. Pair each lesson with
-            pathway-scoped questions and practice. Subscription gates full lesson depth; previews remain discoverable.
-          </>
-        ) : (
-          <>
-            Exam-scoped clinical lessons for this track only. Terminology and scope match{" "}
-            {pathway.countrySlug === "canada" ? "Canada" : "United States"} ({pathway.shortName}). Deeper sections unlock with
-            a matching subscription; previews stay indexable for discovery.
-          </>
-        )}
-      </p>
+
+      <PathwayLessonsStudyHero pathway={pathway} lessonsBasePath={base} initialQuery={qEffective} />
 
       <PathwayLiveInventoryStrip
         pathway={pathway}
@@ -333,9 +299,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
 
       {pageResult.locale ? <PathwayLessonContentLocaleBanner listLocale={pageResult.locale} /> : null}
 
-      <div className="mt-8">
-        <PathwayLessonsHubSearch basePath={base} initialQuery={qEffective} />
-      </div>
+      <PathwayLessonsNextStepCtas pathway={pathway} />
 
       {launchBundle && launchBundle.resolved.length > 0 ? (
         <div className="mt-8">
@@ -349,7 +313,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         </div>
       ) : null}
 
-      <div id="pathway-lesson-library">
+      <div id="pathway-lesson-library" className="scroll-mt-24">
         {isPnLessonsHub ? (
           <NclexPnLessonsHub
             pathway={pathway}

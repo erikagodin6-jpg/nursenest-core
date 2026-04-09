@@ -27,6 +27,7 @@ import { logLargeApiResponse } from "@/lib/observability/perf-log";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { MAX_LIST_SKIP_ROWS_DEFAULT } from "@/lib/api/api-pagination-limits";
 import { FREEMIUM_QUESTION_LIST_MAX_PER_REQUEST } from "@/lib/conversion/constants";
+import { parseCommaSeparatedQuestionIds } from "@/lib/questions/question-id-list-param";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { localizeQuestionListForApi } from "@/lib/i18n/educational-content-overlay";
 import { resolveMergedQuestionOverlayBundle } from "@/lib/i18n/educational-translation-db";
@@ -161,6 +162,9 @@ export async function GET(req: NextRequest) {
   const sort = sortRaw === "random" ? "random" : "recent";
   const excludeIds = parseExcludeIdsParam(searchParams.get("excludeIds"));
   const mistakeIds = parseMistakeIdsParam(searchParams.get("mistakeIds"));
+  /** Deep-link drill: restrict pool to these ids (takes precedence over `mistakeIds` when non-empty). */
+  const includeIds = parseCommaSeparatedQuestionIds(searchParams.get("includeIds"));
+  const focusIds = includeIds.length > 0 ? includeIds : mistakeIds;
   const examFilterRaw = searchParams.get("exam")?.trim() ?? "";
   const examFilter = examFilterRaw.length > 0 && examFilterRaw.length <= 64 ? examFilterRaw : null;
   const difficultyMin = parseDifficultyBound(searchParams.get("difficultyMin"));
@@ -319,8 +323,8 @@ export async function GET(req: NextRequest) {
             },
           });
         }
-        if (mistakeIds.length > 0) {
-          parts.push({ id: { in: mistakeIds } });
+        if (focusIds.length > 0) {
+          parts.push({ id: { in: focusIds } });
         }
         if (excludeIds.length > 0) {
           parts.push({ id: { notIn: excludeIds } });
@@ -328,7 +332,7 @@ export async function GET(req: NextRequest) {
         return parts.length === 1 ? parts[0]! : { AND: parts };
       };
 
-      const mistakeSql = includeQuestionIdsSql(mistakeIds);
+      const focusPoolSql = includeQuestionIdsSql(focusIds);
       const examExtraSql = examFilter ? examEqualsFilterSql(examFilter) : Prisma.empty;
       const difficultySqlFrag = difficultyBoundsSql(difficultyMin, difficultyMax);
       const subtopicSql =
@@ -360,7 +364,7 @@ export async function GET(req: NextRequest) {
           let idRows = await withRetry(() =>
             prisma.$queryRaw<{ id: string }[]>`
             SELECT id FROM exam_questions
-            WHERE ${accessSql} ${pathSql} ${topicSql} ${subtopicSql} ${examExtraSql} ${difficultySqlFrag} ${mistakeSql} ${exSql}
+            WHERE ${accessSql} ${pathSql} ${topicSql} ${subtopicSql} ${examExtraSql} ${difficultySqlFrag} ${focusPoolSql} ${exSql}
             ORDER BY random()
             LIMIT ${effectivePageSize}
           `,
@@ -371,7 +375,7 @@ export async function GET(req: NextRequest) {
             idRows = await withRetry(() =>
               prisma.$queryRaw<{ id: string }[]>`
               SELECT id FROM exam_questions
-              WHERE ${accessSql} ${pathSql} ${topicSql} ${subtopicSql} ${examExtraSql} ${difficultySqlFrag} ${mistakeSql} ${exSql}
+              WHERE ${accessSql} ${pathSql} ${topicSql} ${subtopicSql} ${examExtraSql} ${difficultySqlFrag} ${focusPoolSql} ${exSql}
               ORDER BY random()
               LIMIT ${effectivePageSize}
             `,

@@ -37,12 +37,6 @@ function effectivePathwayIdForGrade(
   return null;
 }
 
-function appendTopicCodeToDrillHref(href: string, topicCode: string): string {
-  if (!topicCode || href.includes("topicCode=")) return href;
-  const join = href.includes("?") ? "&" : "?";
-  return `${href}${join}topicCode=${encodeURIComponent(topicCode)}`;
-}
-
 function normalizeCorrect(correctAnswer: Prisma.JsonValue | null | undefined): string[] {
   if (correctAnswer == null) return [];
   if (Array.isArray(correctAnswer)) return correctAnswer.map((x) => String(x));
@@ -186,13 +180,22 @@ export async function POST(req: Request) {
         ? `/app/flashcards/${linkedDeck.slug}/study?topicCode=${encodeURIComponent(topicCode)}`
         : `/app/flashcards?topicCode=${encodeURIComponent(topicCode)}`
       : null;
+    const topicDrillQs = new URLSearchParams();
+    topicDrillQs.set("preset", "topic_drill");
+    if (effectivePathwayId) topicDrillQs.set("pathwayId", effectivePathwayId);
+    if (topicCode && row.topic) {
+      topicDrillQs.set("topic", row.topic);
+    } else if (topicCode) {
+      topicDrillQs.set("topic", topicCode);
+    } else if (row.topic) {
+      topicDrillQs.set("topic", row.topic);
+    }
+    if (topicCode) topicDrillQs.set("topicCode", topicCode);
     const topicDrillBase =
-      topicCode && row.topic
-        ? `/app/questions?preset=topic_drill&topic=${encodeURIComponent(row.topic)}`
-        : topicCode
-          ? `/app/questions?preset=topic_drill&topic=${encodeURIComponent(topicCode)}`
-          : null;
-    const topicDrillHref = topicDrillBase && topicCode ? appendTopicCodeToDrillHref(topicDrillBase, topicCode) : topicDrillBase;
+      topicDrillQs.has("topic") || topicDrillQs.has("topicCode")
+        ? `/app/questions?${topicDrillQs.toString()}`
+        : null;
+    const topicDrillHref = topicDrillBase;
 
     return NextResponse.json({
       correct,

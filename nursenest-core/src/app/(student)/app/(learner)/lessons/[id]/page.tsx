@@ -31,6 +31,7 @@ import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { loadRelatedExamQuestionStemsForPathwayLesson } from "@/lib/lessons/lesson-question-cross-links";
 import { PathwayLessonRelatedQuestions } from "@/components/lessons/pathway-lesson-related-questions";
+import { buildAppQuestionBankTopicDrillHref } from "@/components/lessons/pathway-lesson-link-practice";
 
 function LessonBody({ content }: { content: unknown }) {
   if (Array.isArray(content)) {
@@ -342,11 +343,16 @@ export default async function LessonDetailPage({ params }: Props) {
             lessonTopic={record.topic}
             topicSlug={record.topicSlug}
             items={relatedQuestionStems}
+            appLinksMode="direct"
           />
         ) : null}
         <div className="mt-10 flex flex-wrap gap-2 border-t border-border pt-6">
           <Link
-            href="/app/questions"
+            href={
+              pathway
+                ? buildAppQuestionBankTopicDrillHref(pathway, record.topic, record.topicSlug ?? undefined)
+                : "/app/questions"
+            }
             className="rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground"
           >
             {t("learner.lessons.detail.ctaQuestionBank")}

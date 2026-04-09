@@ -30,6 +30,8 @@ import {
   Globe,
   Workflow,
 } from "lucide-react";
+import { isNavHrefAllowedForStaffTier } from "@/lib/auth/admin-path-policy";
+import type { StaffTier } from "@/lib/auth/staff-roles";
 
 type NavItem = { href: string; label: string; icon: React.ElementType; badge?: number };
 
@@ -53,7 +55,7 @@ const sections: NavSection[] = [
     items: [
       { href: "/admin/seo", label: "SEO & internal links", icon: Link2 },
       { href: "/admin/media", label: "Media & images", icon: ImageIcon },
-      { href: "/admin/users", label: "Users", icon: Users },
+      { href: "/admin/users", label: "Users & support lookup", icon: Users },
       { href: "/admin/analytics/users", label: "User analytics", icon: Users2 },
       { href: "/admin/analytics/subscriptions", label: "Subscription analytics", icon: CircleDollarSign },
       { href: "/admin/analytics/funnels", label: "Funnels", icon: Workflow },
@@ -119,9 +121,11 @@ function NavLink({
 export function AdminSidebarNav({
   queuedBlogHint,
   pendingAiHint,
+  staffTier = "super",
 }: {
   queuedBlogHint?: number;
   pendingAiHint?: number;
+  staffTier?: StaffTier;
 }) {
   const pathname = usePathname() || "/admin";
   const [open, setOpen] = useState(false);
@@ -132,6 +136,13 @@ export function AdminSidebarNav({
 
   const isActive = (href: string) =>
     pathname === href || (href !== "/admin" && pathname.startsWith(href + "/"));
+
+  const visibleSections = sections
+    .map((sec) => ({
+      ...sec,
+      items: sec.items.filter((item) => isNavHrefAllowedForStaffTier(staffTier, item.href)),
+    }))
+    .filter((sec) => sec.items.length > 0);
 
   const asideClass =
     "fixed inset-y-0 left-0 z-50 flex w-[min(100vw-3rem,17.5rem)] flex-col border-r border-white/10 bg-slate-950 text-slate-100 shadow-2xl transition-transform duration-200 lg:static lg:z-0 lg:w-64 lg:translate-x-0 lg:shadow-none " +
@@ -154,7 +165,12 @@ export function AdminSidebarNav({
           </button>
         </div>
         <nav className="flex-1 overflow-y-auto px-2 py-4">
-          {sections.map((sec) => (
+          {staffTier !== "super" ? (
+            <p className="mb-3 rounded-md border border-amber-500/30 bg-amber-500/10 px-2 py-1.5 text-[10px] font-medium leading-snug text-amber-100">
+              {staffTier === "content" ? "Content admin" : "Support / viewer"} — limited navigation.
+            </p>
+          ) : null}
+          {visibleSections.map((sec) => (
             <div key={sec.title} className="mb-6">
               <p className="mb-2 px-3 text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">{sec.title}</p>
               <ul className="space-y-0.5">

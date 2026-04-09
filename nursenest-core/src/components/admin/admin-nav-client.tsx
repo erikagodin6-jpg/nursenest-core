@@ -31,6 +31,8 @@ import {
   Cpu,
   Server,
 } from "lucide-react";
+import { isNavHrefAllowedForStaffTier } from "@/lib/auth/admin-path-policy";
+import type { StaffTier } from "@/lib/auth/staff-roles";
 
 type Item = { href: string; label: string; icon: React.ElementType };
 
@@ -49,7 +51,7 @@ const GROUPS: NavGroup[] = [
       { href: "/admin/analytics", label: "Analytics hub", icon: BarChart3 },
       { href: "/admin/analytics/users", label: "User analytics", icon: LineChart },
       { href: "/admin/analytics/subscriptions", label: "Subscription analytics", icon: CircleDollarSign },
-      { href: "/admin/users", label: "Users", icon: Users },
+      { href: "/admin/users", label: "Users & support", icon: Users },
       { href: "/admin/subscriptions", label: "Revenue & subscriptions", icon: Activity },
     ],
   },
@@ -122,9 +124,14 @@ function isActive(pathname: string, href: string): boolean {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-export function AdminNavClient() {
+export function AdminNavClient({ staffTier = "super" }: { staffTier?: StaffTier }) {
   const pathname = usePathname() || "/admin";
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const groups = GROUPS.map((g) => ({
+    ...g,
+    items: g.items.filter((item) => isNavHrefAllowedForStaffTier(staffTier, item.href)),
+  })).filter((g) => g.items.length > 0);
 
   const close = useCallback(() => setMobileOpen(false), []);
 
@@ -151,7 +158,16 @@ export function AdminNavClient() {
         <LayoutDashboard className="h-4 w-4 text-primary" aria-hidden />
         Operations center
       </Link>
-      {GROUPS.map((group) => (
+      {staffTier !== "super" ? (
+        <p className="mb-3 rounded-md border border-amber-500/30 bg-amber-500/10 px-2 py-1.5 text-[10px] font-medium leading-snug text-amber-950 dark:text-amber-100">
+          Signed in as{" "}
+          <span className="font-semibold">
+            {staffTier === "content" ? "Content admin" : "Support / viewer"}
+          </span>
+          — navigation is limited to your role.
+        </p>
+      ) : null}
+      {groups.map((group) => (
         <div key={group.id} className="mb-5 last:mb-0">
           <p className="px-2 pb-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">{group.title}</p>
           <ul className="space-y-0.5">

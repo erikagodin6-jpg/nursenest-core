@@ -13,6 +13,13 @@ import type { RnNclexTier } from "@/lib/content-blueprint/rn-nclex-content-depth
 
 export type { RnNclexTier } from "@/lib/content-blueprint/rn-nclex-content-depth-rules";
 
+/** Planning filter — derived from primary category (see `rn-nclex-master-map.json` `sourceMap.archetypeDefinitions`). */
+export type RnNclexLessonArchetype =
+  | "condition_disease"
+  | "medication_monograph"
+  | "emergency_critical_care"
+  | "nursing_priorities_safety";
+
 export type RnNclexMasterLesson = {
   id: string;
   canonicalTitle: string;
@@ -23,6 +30,7 @@ export type RnNclexMasterLesson = {
   primaryCategoryId: string;
   secondaryCategoryIds: string[];
   mergeNote: string | null;
+  archetype: RnNclexLessonArchetype;
   topicSlug: string;
   bodySystem: string;
 };
@@ -32,6 +40,15 @@ export type RnNclexMasterMap = typeof raw;
 export const RN_NCLEX_MASTER_MAP: RnNclexMasterMap = raw;
 
 export const RN_NCLEX_BUILD_ORDER = raw.buildOrder as readonly string[];
+
+export type RnNclexStagedBuildPhase = {
+  phase: number;
+  label: string;
+  description: string;
+  categoryIds: readonly string[];
+};
+
+export const RN_NCLEX_STAGED_BUILD_PHASES = raw.stagedBuildPhases as readonly RnNclexStagedBuildPhase[];
 
 export function rnNclexLessonsForCategory(categoryId: string): RnNclexMasterLesson[] {
   return (raw.lessons as RnNclexMasterLesson[]).filter(
@@ -51,5 +68,28 @@ export function rnNclexMergeDecisions(): Array<{ title: string; note: string; pr
       title: l.canonicalTitle,
       note: l.mergeNote as string,
       primaryCategoryId: l.primaryCategoryId,
+    }));
+}
+
+export function rnNclexLessonsByArchetype(archetype: RnNclexLessonArchetype): RnNclexMasterLesson[] {
+  return (raw.lessons as RnNclexMasterLesson[]).filter((l) => l.archetype === archetype);
+}
+
+/** Lessons that appear in more than one category bucket (secondary hub coverage; one canonical slug). */
+export function rnNclexCrossListedLessons(): Array<{
+  canonicalTitle: string;
+  slug: string;
+  primaryCategoryId: string;
+  secondaryCategoryIds: string[];
+  mergeNote: string | null;
+}> {
+  return (raw.lessons as RnNclexMasterLesson[])
+    .filter((l) => l.secondaryCategoryIds.length > 0)
+    .map((l) => ({
+      canonicalTitle: l.canonicalTitle,
+      slug: l.slug,
+      primaryCategoryId: l.primaryCategoryId,
+      secondaryCategoryIds: l.secondaryCategoryIds,
+      mergeNote: l.mergeNote,
     }));
 }

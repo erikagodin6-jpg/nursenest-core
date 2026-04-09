@@ -7,16 +7,10 @@ import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-p
 import { PathwayLessonProgressBadge } from "@/components/lessons/pathway-lesson-progress-badge";
 import { nclexRnLessonExamPreview, type NclexRnHubRegion } from "@/lib/lessons/nclex-rn-us-lesson-enrichment";
 import { nclexPnLessonExamPreview } from "@/lib/lessons/nclex-pn-us-lesson-enrichment";
+import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 
 /** Above this count per Client Needs section, show a compact link list first and tuck rich previews behind a disclosure. */
 export const NCLEX_HUB_RICH_PREVIEWS_COLLAPSE_AFTER = 5;
-
-function appQuestionsHref(pathwayId: string, topic?: string): string {
-  const q = new URLSearchParams();
-  q.set("pathwayId", pathwayId);
-  if (topic) q.set("topic", topic);
-  return `/app/questions?${q.toString()}`;
-}
 
 type SectionShape = {
   anchor: string;
@@ -111,7 +105,7 @@ export function PathwayNclexScalableLessonSection({
           >
             Read lesson →
           </Link>
-          <Link href={appQuestionsHref(pathwayId, l.topic)} className="text-sm font-semibold text-primary">
+          <Link href={pathwayHubAppQuestionsHref(pathwayId, l.topic)} className="text-sm font-semibold text-primary">
             Practice questions →
           </Link>
           <Link href="/app/flashcards" className="text-sm font-semibold text-muted hover:text-primary">
@@ -159,7 +153,7 @@ export function PathwayNclexScalableLessonSection({
                       <PathwayLessonProgressBadge status={progressMap[l.slug] ?? "not_started"} />
                     ) : null}
                     <Link
-                      href={appQuestionsHref(pathwayId, l.topic)}
+                      href={pathwayHubAppQuestionsHref(pathwayId, l.topic)}
                       className="shrink-0 text-xs font-medium text-muted hover:text-primary"
                     >
                       Questions →

@@ -10,6 +10,7 @@ import { hashLoginIdentifierForLog } from "@/lib/auth/log-auth-identifier";
 import { isEmailLikeIdentifier, normalizeLoginIdentifier } from "@/lib/auth/normalize-login-identifier";
 import { checkRateLimit } from "@/lib/http/rate-limit-in-memory";
 import { SubscriptionStatus, UserRole } from "@prisma/client";
+import { isLearnerEntitlementAdminOverrideRole } from "@/lib/auth/staff-roles";
 import { prisma } from "@/lib/db";
 import * as Sentry from "@sentry/nextjs";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
@@ -153,7 +154,7 @@ export const authConfig: NextAuthConfig = {
         });
 
         let subscriptionStatus: "active" | "grace" | "none" = "none";
-        if (user.role === UserRole.ADMIN) {
+        if (isLearnerEntitlementAdminOverrideRole(user.role)) {
           subscriptionStatus = "active";
         } else {
           try {

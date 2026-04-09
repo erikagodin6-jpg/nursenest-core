@@ -1,6 +1,7 @@
 import "server-only";
 
 import { SubscriptionStatus, TrialStatus, UserRole, type CountryCode, type TierCode } from "@prisma/client";
+import { isLearnerEntitlementAdminOverrideRole } from "@/lib/auth/staff-roles";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
@@ -117,7 +118,7 @@ function deriveSurface(args: {
   hasAccess: boolean;
   trialEndsAt: Date | null;
 }): BillingStatusSurface {
-  if (args.user.role === UserRole.ADMIN) return "admin";
+  if (isLearnerEntitlementAdminOverrideRole(args.user.role)) return "admin";
 
   const sub = args.subscription;
   const now = Date.now();

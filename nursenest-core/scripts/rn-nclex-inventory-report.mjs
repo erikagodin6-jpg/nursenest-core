@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Prints RN NCLEX master map aggregates: counts by primary category and tier.
+ * Prints RN NCLEX master map aggregates: counts by primary category, tier, and archetype; lists staged phases.
  * Run: node scripts/rn-nclex-inventory-report.mjs
  */
 import fs from "node:fs";
@@ -32,6 +32,21 @@ function main() {
     console.log("\nVisible in category (primary + secondary index):");
     for (const [k, v] of Object.entries(doc.aggregates.visibleInCategory).sort(([a], [b]) => a.localeCompare(b))) {
       console.log(`  ${k}: ${v}`);
+    }
+  }
+  if (doc.aggregates?.byArchetype) {
+    console.log("\nBy archetype (planning filter):");
+    for (const [k, v] of Object.entries(doc.aggregates.byArchetype).sort(([a], [b]) => a.localeCompare(b))) {
+      console.log(`  ${k}: ${v}`);
+    }
+  }
+  if (doc.overlapsAndCrossLists?.crossListedLessonCount != null) {
+    console.log(`\nCross-listed titles (secondary hub coverage): ${doc.overlapsAndCrossLists.crossListedLessonCount}`);
+  }
+  if (Array.isArray(doc.stagedBuildPhases) && doc.stagedBuildPhases.length > 0) {
+    console.log("\nStaged build phases (rollout order):");
+    for (const p of doc.stagedBuildPhases) {
+      console.log(`  ${p.phase}. ${p.label} — ${p.categoryIds?.join(", ") ?? ""}`);
     }
   }
 }

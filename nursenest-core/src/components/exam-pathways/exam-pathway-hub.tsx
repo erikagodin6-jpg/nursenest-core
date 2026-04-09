@@ -5,6 +5,7 @@ import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { NpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
 import { pathwayOverviewBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { pathwayHubFaqSchema } from "@/lib/seo/pathway-hub-faq-schema";
+import { NpInventoryHeading } from "@/components/exam-pathways/exam-pathway-np-inventory-heading";
 import { ExamPathwayWaitlistBanner } from "@/components/exam-pathways/exam-pathway-waitlist-banner";
 import { ExamHubComparisonLink } from "@/components/marketing/exam-hub-comparison-link";
 import { MarketingTrustSignalsStrip } from "@/components/marketing/marketing-trust-signals-strip";
@@ -102,7 +103,7 @@ export function ExamPathwayHub({
 
       {npInventory?.belowThreshold ? (
         <aside className="nn-study-card nn-study-card--wash mt-6 p-4 sm:p-5">
-          <p className="nn-marketing-h4">Content depth (transparent)</p>
+          <NpInventoryHeading />
           <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">{npInventory.noticeMarkdown}</p>
         </aside>
       ) : null}

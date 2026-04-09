@@ -9,10 +9,21 @@ const FnpLessonExplorer = dynamic(
   {
     loading: () => (
       <div
-        className="min-h-[240px] animate-pulse rounded-xl border border-border bg-[var(--theme-muted-surface)]/60"
+        className="min-h-[220px] rounded-2xl border border-[var(--border-subtle)] bg-gradient-to-b from-[var(--nn-presentation-wash)] to-[var(--theme-muted-surface)]/50 p-6 shadow-[var(--shadow-card)]"
         aria-busy="true"
-        aria-label="Loading lesson library"
-      />
+        aria-label="Loading FNP lesson explorer"
+      >
+        <p className="nn-marketing-label nn-marketing-label--accent">FNP lesson library</p>
+        <p className="mt-2 text-sm font-medium text-[var(--theme-heading-text)]">Loading domain and lifespan explorer…</p>
+        <p className="mt-2 max-w-md text-sm text-[var(--theme-muted-text)]">
+          One moment while we prepare your interactive lesson map—grouped by clinical domain and population.
+        </p>
+        <div className="mt-6 flex gap-2">
+          <span className="h-9 w-24 animate-pulse rounded-full bg-[var(--theme-muted-surface)]" />
+          <span className="h-9 w-28 animate-pulse rounded-full bg-[var(--theme-muted-surface)]" />
+          <span className="h-9 w-20 animate-pulse rounded-full bg-[var(--theme-muted-surface)]" />
+        </div>
+      </div>
     ),
   },
 );
@@ -32,6 +43,7 @@ import {
 } from "@/lib/lessons/pathway-lesson-types";
 import type { TopicCluster } from "@/lib/lessons/pathway-lesson-loader";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
+import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 
 type Props = {
   pathway: ExamPathwayDefinition;
@@ -40,13 +52,6 @@ type Props = {
   topicClusters: TopicCluster[];
   progressMap?: Record<string, PathwayLessonProgressStatus>;
 };
-
-function appQuestionsHref(pathwayId: string, topic?: string): string {
-  const q = new URLSearchParams();
-  q.set("pathwayId", pathwayId);
-  if (topic) q.set("topic", topic);
-  return `/app/questions?${q.toString()}`;
-}
 
 const HASH_BY_LIFESPAN: Record<string, string> = {
   prenatal_womens: "#fnp-prenatal",
@@ -191,13 +196,13 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
               Open lesson
             </Link>
             <Link
-              href={appQuestionsHref(pathway.id, featured.topic)}
+              href={pathwayHubAppQuestionsHref(pathway.id, featured.topic)}
               className="inline-flex rounded-full nn-btn-secondary bg-card px-4 py-2 text-sm font-semibold"
             >
               Try a clinical case now
             </Link>
             <Link
-              href={appQuestionsHref(pathway.id)}
+              href={pathwayHubAppQuestionsHref(pathway.id)}
               className="inline-flex rounded-full nn-btn-secondary px-4 py-2 text-sm font-semibold"
             >
               Test your diagnostic reasoning
@@ -418,14 +423,14 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
           <Link
-            href={appQuestionsHref(pathway.id)}
+            href={pathwayHubAppQuestionsHref(pathway.id)}
             className="inline-flex rounded-full nn-btn-primary px-4 py-2 text-sm font-semibold shadow-none"
           >
             Try a clinical case now
           </Link>
           {featured && (
             <Link
-              href={appQuestionsHref(pathway.id, featured.topic)}
+              href={pathwayHubAppQuestionsHref(pathway.id, featured.topic)}
               className="inline-flex rounded-full nn-btn-secondary bg-card px-4 py-2 text-sm font-semibold"
             >
               Test your diagnostic reasoning (this topic)

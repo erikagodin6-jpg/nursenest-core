@@ -44,6 +44,7 @@ import {
   parsePersistedQuestionBankSessionJson,
   parseSavedQuestionBankPresetsJson,
 } from "@/lib/questions/question-bank-client-types";
+import { parseCommaSeparatedQuestionIds } from "@/lib/questions/question-id-list-param";
 
 export type { QuestionBankDifficultyBand, QuestionBankPreset, SavedQuestionBankPreset } from "@/lib/questions/question-bank-client-types";
 
@@ -193,6 +194,10 @@ export function QuestionBankPracticeClient({
   const router = useRouter();
   const pathname = usePathname();
   const { t } = useMarketingI18n();
+  const includeIdsFromUrl = useMemo(
+    () => parseCommaSeparatedQuestionIds(searchParams.get("includeIds")),
+    [searchParams],
+  );
   const [phase, setPhase] = useState<"loading" | "ready" | "empty" | "error">("loading");
   const [error, setError] = useState<string | null>(null);
   const [softNotice, setSoftNotice] = useState<string | null>(null);
@@ -279,7 +284,7 @@ export function QuestionBankPracticeClient({
       setPhase("loading");
       setError(null);
       try {
-        if (preset === "topic_drill" && !topic) {
+        if (preset === "topic_drill" && !topic && includeIdsFromUrl.length === 0) {
           setQuestions([]);
           setEmptyCopy("pick_topic");
           setPhase("empty");
@@ -308,6 +313,7 @@ export function QuestionBankPracticeClient({
         if (dBounds.max != null) qs.set("difficultyMax", String(dBounds.max));
         if (examFilter) qs.set("exam", examFilter);
         if (incorrectMistakeIds.length > 0) qs.set("mistakeIds", incorrectMistakeIds.join(","));
+        if (!append && includeIdsFromUrl.length > 0) qs.set("includeIds", includeIdsFromUrl.join(","));
         if (append && seenIdsRef.current.length > 0) {
           qs.set("excludeIds", seenIdsRef.current.join(","));
         }
@@ -432,6 +438,7 @@ export function QuestionBankPracticeClient({
       examFilter,
       incorrectOnly,
       incorrectMistakeIds,
+      includeIdsFromUrl,
       examShell,
       t,
     ],
@@ -1296,7 +1303,10 @@ export function QuestionBankPracticeClient({
                     </button>
                   )}
                 </div>
-                {g.learningLoop?.topicCode ? (
+                {g.learningLoop &&
+                (g.learningLoop.topicDrillHref ||
+                  g.learningLoop.flashcardsHref ||
+                  (g.learningLoop.lessonHref && !(g.rationaleLessonLinks && g.rationaleLessonLinks.length > 0))) ? (
                   <div className="rounded-xl border border-border/80 bg-muted/15 p-4">
                     <div className="flex flex-wrap gap-2">
                       {g.learningLoop.lessonHref && !(g.rationaleLessonLinks && g.rationaleLessonLinks.length > 0) ? (

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { AdminSidebarNav } from "@/components/admin/admin-sidebar-nav";
+import type { StaffTier } from "@/lib/auth/staff-roles";
 
 export function AdminShell({
   children,
@@ -9,16 +10,18 @@ export function AdminShell({
   queuedBlogHint,
   pendingAiHint,
   userLabel,
+  staffTier = "super",
 }: {
   children: React.ReactNode;
   strip: React.ReactNode;
   queuedBlogHint?: number;
   pendingAiHint?: number;
   userLabel?: string | null;
+  staffTier?: StaffTier;
 }) {
   return (
     <div className="flex min-h-screen bg-[var(--theme-page-bg)]">
-      <AdminSidebarNav queuedBlogHint={queuedBlogHint} pendingAiHint={pendingAiHint} />
+      <AdminSidebarNav queuedBlogHint={queuedBlogHint} pendingAiHint={pendingAiHint} staffTier={staffTier} />
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="sticky top-0 z-30 flex h-14 items-center justify-between gap-3 border-b border-border/80 bg-[var(--theme-card-bg)]/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-[var(--theme-card-bg)]/80 lg:h-16 lg:px-6">
           <div className="flex items-center gap-3">

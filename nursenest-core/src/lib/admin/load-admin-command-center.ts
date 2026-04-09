@@ -196,7 +196,18 @@ export async function loadAdminCommandCenter(): Promise<AdminCommandCenterData |
     ] = await Promise.all([
       prisma.user.count(),
       prisma.user.count({ where: { role: UserRole.LEARNER } }),
-      prisma.user.count({ where: { role: UserRole.ADMIN } }),
+      prisma.user.count({
+        where: {
+          role: {
+            in: [
+              UserRole.ADMIN,
+              UserRole.SUPER_ADMIN,
+              UserRole.CONTENT_ADMIN,
+              UserRole.SUPPORT_ADMIN,
+            ],
+          },
+        },
+      }),
       prisma.user.count({ where: { createdAt: { gte: todayStart } } }),
       prisma.user.count({ where: { createdAt: { gte: weekAgo } } }),
       prisma.user.count({ where: { createdAt: { gte: monthAgo } } }),

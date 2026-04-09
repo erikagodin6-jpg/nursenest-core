@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
+import { isStaffRole } from "@/lib/auth/staff-roles";
 
 const SIGN_IN_CLASS =
   "nn-marketing-body-sm font-medium tracking-normal text-[var(--theme-menu-text)] transition-colors duration-150 hover:text-primary inline-flex items-center rounded-full px-2 py-1.5 sm:px-3 sm:py-2";
@@ -24,10 +25,6 @@ function useLocalizeHref() {
     },
     [locale],
   );
-}
-
-function isAdminRole(role: unknown): boolean {
-  return role === "ADMIN";
 }
 
 /**
@@ -69,7 +66,7 @@ export function MarketingHeaderAuthDesktop() {
 
   const user = session.user;
   const label = user.email ?? user.name ?? (user.id ? `${user.id.slice(0, 8)}…` : t("nav.account"));
-  const admin = isAdminRole(user.role);
+  const admin = isStaffRole(user.role);
 
   return (
     <div className="relative inline-block max-w-full" ref={ref}>
@@ -158,7 +155,7 @@ export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => vo
 
   const user = session.user;
   const label = user.email ?? user.name ?? `${t("account.idPrefix")} ${user.id?.slice(0, 8)}…`;
-  const admin = isAdminRole(user.role);
+  const admin = isStaffRole(user.role);
 
   return (
     <div className="mt-4 space-y-2 border-t border-[var(--theme-separator)] pt-4">

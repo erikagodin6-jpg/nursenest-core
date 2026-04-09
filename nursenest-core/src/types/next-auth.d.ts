@@ -1,12 +1,20 @@
 import "next-auth";
 
+/** Mirrors Prisma `UserRole` string values exposed on the JWT/session. */
+export type SessionUserRole =
+  | "LEARNER"
+  | "ADMIN"
+  | "SUPER_ADMIN"
+  | "CONTENT_ADMIN"
+  | "SUPPORT_ADMIN";
+
 declare module "next-auth" {
   interface Session {
     user: {
       id: string;
       email: string;
       name: string;
-      role: "LEARNER" | "ADMIN";
+      role: SessionUserRole;
       country: "CA" | "US";
       tier: "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED";
       /** Mirrors last login; server routes still use resolveEntitlement — never trust alone for gating. */
@@ -21,7 +29,7 @@ declare module "next-auth/jwt" {
   interface JWT {
     email?: string | null;
     name?: string | null;
-    role?: "LEARNER" | "ADMIN";
+    role?: SessionUserRole;
     country?: "CA" | "US";
     tier?: "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED";
     subscriptionStatus?: "active" | "grace" | "none";

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import { SubscriptionStatus, UserRole } from "@prisma/client";
+import { SubscriptionStatus } from "@prisma/client";
 import { auth } from "@/lib/auth";
+import { isLearnerEntitlementAdminOverrideRole } from "@/lib/auth/staff-roles";
 import { prisma } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -24,7 +25,7 @@ export async function GET() {
   }
 
   let subscriptionStatus: "active" | "grace" | "none" = "none";
-  if (user.role === UserRole.ADMIN) {
+  if (isLearnerEntitlementAdminOverrideRole(user.role)) {
     subscriptionStatus = "active";
   } else {
     const sub = await prisma.subscription.findFirst({

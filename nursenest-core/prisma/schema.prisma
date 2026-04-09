@@ -22,7 +22,14 @@ enum TierCode {
 
 enum UserRole {
   LEARNER
+  /** @deprecated Prefer SUPER_ADMIN — retained for existing rows and JWT compatibility. */
   ADMIN
+  /** Full admin: billing, support tools, publishing, dangerous ops. */
+  SUPER_ADMIN
+  /** Content & publishing: lessons, blog, SEO, generation — not user PII/support or raw billing lists. */
+  CONTENT_ADMIN
+  /** Support: user lookup, subscription/analytics read, ops health — not publishing or AI generation. */
+  SUPPORT_ADMIN
 }
 
 enum TrialStatus {

@@ -40,7 +40,7 @@ export const { auth: middlewareAuth } = NextAuth({
       const path = request.nextUrl.pathname;
       const hasUser =
         !!(auth?.user && ((auth.user as { id?: string }).id || auth.user.email));
-      if (path.startsWith("/app") || path.startsWith("/admin")) {
+      if (path.startsWith("/app") || path.startsWith("/admin") || path.startsWith("/api/admin")) {
         return hasUser;
       }
       return true;

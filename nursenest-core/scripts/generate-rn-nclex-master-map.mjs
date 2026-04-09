@@ -205,7 +205,8 @@ const CATEGORIES = {
   ],
   maternity_newborn: [
     ["Newborn Hypoglycemia", "A"],
-    ["Eclampsia", "A"],
+    ["Preeclampsia and Eclampsia", "A"],
+    ["Postpartum Hemorrhage", "A"],
     ["HELLP Syndrome", "A"],
     ["Placenta Previa", "A"],
     ["Placental Abruption", "A"],
@@ -235,6 +236,7 @@ const CATEGORIES = {
     ["Elder Mistreatment", "A"],
     ["Schizophrenia Spectrum Disorders", "A"],
     ["Bipolar Disorders", "A"],
+    ["Suicide Risk Assessment and Safety Planning", "A"],
     ["Lithium Toxicity", "C"],
     ["Phenelzine and Tyramine Crisis", "C"],
     ["Ziprasidone and QT Prolongation", "C"],
@@ -253,7 +255,7 @@ const CATEGORIES = {
     ["Carotid Endarterectomy", "B"],
     ["Postmortem Care", "B"],
     ["Submersion Injury", "A"],
-    ["Malignant Dysrhythmia Red Flags", "A"],
+    ["Dysrhythmias: Stable vs Unstable Management", "A"],
     ["Cardiac Tamponade", "A"],
     ["Positive Pressure Ventilation", "A"],
     ["Shock: Recognition, Classification, and Nursing Priorities", "A"],
@@ -287,6 +289,10 @@ const CATEGORIES = {
     ["Oxytocin", "C"],
     ["Misoprostol", "C"],
     ["Cisplatin", "B"],
+    ["Insulin: Types, Administration, and Hypoglycemia Response", "B"],
+    ["Warfarin and INR Monitoring", "C"],
+    ["Beta-Blockers: Indications and Nursing Monitoring", "C"],
+    ["Opioid Analgesics: Respiratory Depression and Naloxone Reversal", "B"],
     ["Grapefruit Juice Drug Interactions", "D"],
   ],
   /** Musculoskeletal + trauma patterns frequently tested as prioritization + complications. */
@@ -321,6 +327,8 @@ const CATEGORIES = {
     ["Error Prevention and Incident Reporting", "B"],
     ["Informed Consent and Surrogate Decision Making", "B"],
     ["Professional Boundaries and Ethical Communication", "B"],
+    ["High-Alert Medications: Systems Safety and Independent Double Checks", "B"],
+    ["Multimodal Pain Management: Assessment and Escalation", "B"],
   ],
 };
 
@@ -383,24 +391,76 @@ const PRIMARY_OWNER = {
   },
 };
 
-const BUILD_ORDER = [
-  "cardiovascular",
-  "respiratory",
-  "endocrine_metabolic_fluids",
-  "gastrointestinal",
-  "neurological",
-  "renal_genitourinary",
-  "hematology_oncology_immunology",
-  "musculoskeletal",
-  "integumentary_immune_autoimmune",
-  "infectious_disease",
-  "emergency_critical_perioperative",
-  "pharmacology_master",
-  "maternity_newborn",
-  "pediatrics",
-  "mental_health",
-  "nclex_nursing_priorities_safety",
+/**
+ * Staged rollout — **do not** bulk-author all lessons at once. Each phase is a stable import batch.
+ * Order: adult high-yield systems → emergency → pharmacology → maternity → pediatrics → mental health → NCLEX priorities/safety.
+ */
+const STAGED_BUILD_PHASES = [
+  {
+    phase: 1,
+    label: "Adult health (high-yield RN systems)",
+    description:
+      "Core med-surg and systems nursing: cardiovascular through infectious disease. Highest exam volume per lesson hour.",
+    categoryIds: [
+      "cardiovascular",
+      "respiratory",
+      "endocrine_metabolic_fluids",
+      "gastrointestinal",
+      "neurological",
+      "renal_genitourinary",
+      "hematology_oncology_immunology",
+      "musculoskeletal",
+      "integumentary_immune_autoimmune",
+      "infectious_disease",
+    ],
+  },
+  {
+    phase: 2,
+    label: "Emergency / critical care",
+    description: "Resuscitation, shock, airway, procedural emergencies, unstable presentations — after core systems are in catalog.",
+    categoryIds: ["emergency_critical_perioperative"],
+  },
+  {
+    phase: 3,
+    label: "Pharmacology",
+    description: "Drug/class monographs and high-alert systems (canonical rows often owned here even when cross-listed under systems).",
+    categoryIds: ["pharmacology_master"],
+  },
+  {
+    phase: 4,
+    label: "Maternity / newborn",
+    description: "OB and neonatal high-yield topics.",
+    categoryIds: ["maternity_newborn"],
+  },
+  {
+    phase: 5,
+    label: "Pediatrics",
+    description: "Age-specific and pediatric-predominant conditions (cross-refs from adult map deduplicated to one primary slug).",
+    categoryIds: ["pediatrics"],
+  },
+  {
+    phase: 6,
+    label: "Mental health",
+    description: "Psychiatric conditions, crises, and related medication safety.",
+    categoryIds: ["mental_health"],
+  },
+  {
+    phase: 7,
+    label: "Remaining supportive / NCLEX priorities",
+    description: "Prioritization, delegation, safety systems, consent, pain multimodal — capstone supportive lessons.",
+    categoryIds: ["nclex_nursing_priorities_safety"],
+  },
 ];
+
+const BUILD_ORDER = STAGED_BUILD_PHASES.flatMap((p) => p.categoryIds);
+
+/** Lesson archetype for planning filters — derived from primary category (single source of truth per title). */
+function archetypeFor(primaryCategoryId) {
+  if (primaryCategoryId === "pharmacology_master") return "medication_monograph";
+  if (primaryCategoryId === "emergency_critical_perioperative") return "emergency_critical_care";
+  if (primaryCategoryId === "nclex_nursing_priorities_safety") return "nursing_priorities_safety";
+  return "condition_disease";
+}
 
 function slugify(title) {
   return (
@@ -457,6 +517,7 @@ function main() {
       primaryCategoryId,
       secondaryCategoryIds,
       mergeNote: owner?.note ?? null,
+      archetype: archetypeFor(primaryCategoryId),
       topicSlug: primaryCategoryId.replace(/_/g, "-"),
       bodySystem: humanizeCategory(primaryCategoryId),
     });
@@ -467,13 +528,56 @@ function main() {
   const byTier = { A: 0, B: 0, C: 0, D: 0 };
   for (const l of lessons) byTier[l.tier]++;
 
+  const byArchetype = {
+    condition_disease: 0,
+    medication_monograph: 0,
+    emergency_critical_care: 0,
+    nursing_priorities_safety: 0,
+  };
+  for (const l of lessons) {
+    const a = l.archetype;
+    if (byArchetype[a] !== undefined) byArchetype[a]++;
+  }
+
+  const crossListed = lessons
+    .filter((l) => l.secondaryCategoryIds.length > 0)
+    .map((l) => ({
+      canonicalTitle: l.canonicalTitle,
+      slug: l.slug,
+      primaryCategoryId: l.primaryCategoryId,
+      secondaryCategoryIds: l.secondaryCategoryIds,
+      mergeNote: l.mergeNote,
+    }))
+    .sort((a, b) => a.canonicalTitle.localeCompare(b.canonicalTitle));
+
   const doc = {
     version: 1,
     generatedBy: "scripts/generate-rn-nclex-master-map.mjs",
     sourceOfTruth:
       "Inventory + pipeline: docs/rn-nclex-rn-lesson-library.md. Authoring alignment: data/premium-lessons-nclex-core-v1/ + src/content/pathway-lessons/nclex-rn-source-checklist.json — run node scripts/audit-rn-nclex-map.mjs after map changes.",
     pathways: ["us-rn-nclex-rn", "ca-rn-nclex-rn"],
+    /** Same categories as `STAGED_BUILD_PHASES` — order preserved for staged rollout. */
     buildOrder: BUILD_ORDER,
+    stagedBuildPhases: STAGED_BUILD_PHASES,
+    sourceMap: {
+      derivedFrom: [
+        "NCLEX-aligned curriculum markdown: data/premium-lessons-nclex-core-v1/PREMIUM_CURRICULUM_LESSONS_V1_PART_*.md",
+        "Completeness checklist: src/content/pathway-lessons/nclex-rn-source-checklist.json",
+        "Per-category title inventory: CATEGORIES in this script (single source before JSON export)",
+      ],
+      archetypeDefinitions: {
+        condition_disease: "Disease, syndrome, or system-specific clinical lesson (primary owner not pharm / emergency / NCLEX-priorities).",
+        medication_monograph: "Drug or drug-class lesson (primary category pharmacology_master).",
+        emergency_critical_care: "Emergency, critical care, perioperative crisis, or unstable-presentation lesson (primary category emergency_critical_perioperative).",
+        nursing_priorities_safety: "Prioritization, delegation, ethics, safety systems (primary category nclex_nursing_priorities_safety).",
+      },
+      duplicateHandling:
+        "Titles appearing in multiple CATEGORIES are merged to one canonical row; PRIMARY_OWNER + mergeNote set primary hub; secondaryCategoryIds preserve hub navigation without second catalog slugs.",
+    },
+    overlapsAndCrossLists: {
+      crossListedLessonCount: crossListed.length,
+      crossListedLessons: crossListed,
+    },
     contentSpine: "premium_exam_complete",
     contentSpineReference: "src/lib/lessons/exam-complete-lesson-template.ts + pathway-lesson-premium.ts",
     contentDepthRules: CONTENT_DEPTH_RULES,
@@ -498,6 +602,7 @@ function main() {
     aggregates: {
       uniqueLessonCount: lessons.length,
       byTier,
+      byArchetype,
       byPrimaryCategory: countPrimary(lessons),
       /** Includes secondaryCategoryIds so hub “coverage” matches cross-listed titles. */
       visibleInCategory: visibleCounts(lessons),

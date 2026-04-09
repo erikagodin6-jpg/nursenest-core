@@ -1,6 +1,7 @@
 import { SubscriptionStatus, UserRole } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { isLearnerEntitlementAdminOverrideRole } from "@/lib/auth/staff-roles";
 import { normalizeCountryCodeForEntitlement } from "@/lib/entitlements/country-code";
 import { effectiveTierCountryForAccess } from "@/lib/entitlements/subscription-plan";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -29,7 +30,7 @@ export async function resolveEntitlement(userId: string): Promise<AccessScope> {
     return { hasAccess: false, reason: "no_access", tier: null, country: null };
   }
 
-  if (user.role === UserRole.ADMIN) {
+  if (isLearnerEntitlementAdminOverrideRole(user.role)) {
     return {
       hasAccess: true,
       reason: "admin_override",

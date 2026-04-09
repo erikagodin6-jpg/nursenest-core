@@ -62,7 +62,15 @@ const EXPLICIT_SLUG_BRIDGES: Record<string, Clause[]> = {
   ],
   "sepsis-nclex-rn": [tagHas("sepsis"), icContains("sepsis"), icContains("septic"), subContains("sepsis")],
   "diabetic-ketoacidosis-nclex-rn": [tagHas("dka"), icContains("DKA"), icContains("ketoacidosis"), bodyContains("Endocrine")],
+  /** Canonical map title merged pree/eclampsia; keep legacy key for older slug references. */
   "eclampsia-nclex-rn": [
+    tagHas("eclampsia"),
+    tagHas("preeclampsia"),
+    icContains("eclampsia"),
+    icContains("preeclampsia"),
+    icContains("magnesium sulfate"),
+  ],
+  "preeclampsia-and-eclampsia-nclex-rn": [
     tagHas("eclampsia"),
     tagHas("preeclampsia"),
     icContains("eclampsia"),

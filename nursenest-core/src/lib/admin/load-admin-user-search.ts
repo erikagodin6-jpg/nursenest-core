@@ -1,5 +1,6 @@
+import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
-import { isDatabaseUrlConfigured, withDatabaseFallback } from "@/lib/db/safe-database";
+import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 
 export type AdminUserSearchRow = {
   id: string;
@@ -29,40 +30,39 @@ export async function loadAdminUserSearch(rawQuery: string): Promise<AdminUserSe
     return [];
   }
 
-  return withDatabaseFallback(
-    async () => {
-      const or: Parameters<typeof prisma.user.findMany>[0] extends { where?: infer W } ? W["OR"] : never = [];
+  try {
+    const or: Prisma.UserWhereInput[] = [
+      { email: { contains: q, mode: "insensitive" } },
+      { name: { contains: q, mode: "insensitive" } },
+      { username: { contains: q, mode: "insensitive" } },
+    ];
+    if (looksLikeCuid(q)) {
+      or.unshift({ id: q });
+      or.splice(1, 0, { id: { startsWith: q } });
+    }
 
-      if (looksLikeCuid(q)) {
-        or.push({ id: q });
-        or.push({ id: { startsWith: q } });
-      }
-      or.push({ email: { contains: q, mode: "insensitive" } });
-      or.push({ name: { contains: q, mode: "insensitive" } });
-      or.push({ username: { contains: q, mode: "insensitive" } });
+    const rows = await prisma.user.findMany({
+      where: { OR: or },
+      orderBy: { updatedAt: "desc" },
+      take: MAX_RESULTS,
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        username: true,
+        role: true,
+        country: true,
+        tier: true,
+        trialStatus: true,
+        createdAt: true,
+      },
+    });
 
-      const rows = await prisma.user.findMany({
-        where: { OR: or },
-        orderBy: { updatedAt: "desc" },
-        take: MAX_RESULTS,
-        select: {
-          id: true,
-          email: true,
-          name: true,
-          username: true,
-          role: true,
-          country: true,
-          tier: true,
-          trialStatus: true,
-          createdAt: true,
-        },
-      });
-
-      return rows.map((u) => ({
-        ...u,
-        createdAt: u.createdAt.toISOString(),
-      }));
-    },
-    [],
-  );
+    return rows.map((u) => ({
+      ...u,
+      createdAt: u.createdAt.toISOString(),
+    }));
+  } catch {
+    return [];
+  }
 }

@@ -18,18 +18,38 @@ export function pathwayMarketingQuestionBankTopicHref(
   return s ? `${base}?${s}` : base;
 }
 
-/** Signed-in app question bank: topic drill for this pathway. */
-export function pathwayAppQuestionBankTopicHref(
+export type AppQuestionBankDrillOpts = {
+  /** Narrow the bank session to specific question ids (comma-separated in URL; max 16). */
+  includeIds?: string[];
+};
+
+/**
+ * Direct `/app/questions` topic drill URL (no login redirect). Use from authenticated app surfaces.
+ */
+export function buildAppQuestionBankTopicDrillHref(
   pathway: ExamPathwayDefinition,
   topic: string,
   topicCode?: string,
+  opts?: AppQuestionBankDrillOpts,
 ): string {
   const qs = new URLSearchParams();
   qs.set("pathwayId", pathway.id);
   if (topic.trim()) qs.set("topic", topic.trim());
   if (topicCode?.trim()) qs.set("topicCode", topicCode.trim().toLowerCase());
   qs.set("preset", "topic_drill");
-  return loginWithCallback(`/app/questions?${qs.toString()}`);
+  const ids = (opts?.includeIds ?? []).map((id) => id.trim()).filter((id) => id.length >= 8);
+  if (ids.length > 0) qs.set("includeIds", ids.slice(0, 16).join(","));
+  return `/app/questions?${qs.toString()}`;
+}
+
+/** Signed-in app question bank: topic drill for this pathway (via login callback for marketing). */
+export function pathwayAppQuestionBankTopicHref(
+  pathway: ExamPathwayDefinition,
+  topic: string,
+  topicCode?: string,
+  opts?: AppQuestionBankDrillOpts,
+): string {
+  return loginWithCallback(buildAppQuestionBankTopicDrillHref(pathway, topic, topicCode, opts));
 }
 
 /**

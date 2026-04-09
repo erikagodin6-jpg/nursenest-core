@@ -10,6 +10,7 @@ import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-l
 import { ExamPathwayHubPrimaryStudyCards } from "@/components/exam-pathways/exam-pathway-hub-study-modes";
 import { pathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-analytics-props";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
+import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 
 const US_NP_SIBLING_IDS = ["us-np-fnp", "us-np-agpcnp", "us-np-pmhnp"] as const;
@@ -36,6 +37,7 @@ export function ExamPathwayHubBody({
   conversionSectionHeading,
   conversionSectionLead,
 }: Props) {
+  const { t } = useMarketingI18n();
   const isWaitlist = pathway.acquisitionMode === "waitlist" || pathway.status === "upcoming";
   const pathwayCatIntroHref = `${marketingHubPath.replace(/\/$/, "")}/cat`;
   const catAppStartHref = appPathwayCatSessionStartPath(pathway.id);
@@ -43,7 +45,7 @@ export function ExamPathwayHubBody({
   const lessonsHref = buildExamPathwayPath(pathway, "lessons");
   const pricingHref = buildExamPathwayPath(pathway, "pricing");
   const tertiaryHref = isSignedIn ? "/app" : pricingHref;
-  const tertiaryLabel = isSignedIn ? "Open your study hub" : "Plans & pricing";
+  const tertiaryLabel = isSignedIn ? t("components.examPathwayHub.body.tertiaryApp") : t("components.examPathwayHub.body.tertiaryPricing");
   const linkCtx = pathwayMarketingHubLinkContext(pathway, npSeoAliasSegment);
   const usNpSiblings =
     pathway.examFamily === ExamFamily.NP &&
@@ -69,10 +71,10 @@ export function ExamPathwayHubBody({
       {usNpSiblings.length > 0 ? (
         <aside className="nn-study-card nn-study-card--wash mt-8 px-4 py-4 sm:px-5" aria-labelledby="us-np-sibling-tracks">
           <p id="us-np-sibling-tracks" className="nn-marketing-label">
-            Other US NP tracks
+            {t("components.examPathwayHub.body.npSiblingsLabel")}
           </p>
           <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">
-            Studying a different board focus? Each specialty has its own hub and question scope.
+            {t("components.examPathwayHub.body.npSiblingsLead")}
           </p>
           <ul className="mt-3 flex flex-wrap gap-2">
             {usNpSiblings.map((p) => (
@@ -103,7 +105,7 @@ export function ExamPathwayHubBody({
           }}
           className="inline-flex min-h-[52px] w-full items-center justify-center rounded-full nn-btn-primary px-8 py-3 text-base font-semibold shadow-none transition hover:brightness-[1.03] sm:w-auto sm:min-h-[56px]"
         >
-          {isWaitlist ? "Join or sign in" : "Create free account"}
+          {isWaitlist ? t("components.examPathwayHub.body.ctaJoinOrSignIn") : t("components.examPathwayHub.body.ctaCreateAccount")}
           <ArrowRight className="ml-2 h-5 w-5" />
         </MarketingTrackedLink>
         <MarketingTrackedLink
@@ -118,7 +120,7 @@ export function ExamPathwayHubBody({
           }}
           className="inline-flex min-h-[52px] w-full items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--theme-primary)_24%,var(--border-subtle))] bg-[color-mix(in_srgb,var(--theme-primary)_6%,var(--bg-card))] px-8 py-3 text-base font-semibold text-[var(--theme-primary)] transition hover:bg-[color-mix(in_srgb,var(--theme-primary)_10%,var(--bg-card))] sm:w-auto sm:min-h-[56px]"
         >
-          Try {pathway.shortName} questions
+          {t("components.examPathwayHub.body.tryQuestions", { shortName: pathway.shortName })}
         </MarketingTrackedLink>
         <MarketingTrackedLink
           href={tertiaryHref}
@@ -139,11 +141,8 @@ export function ExamPathwayHubBody({
 
       {emphasizeCatPracticeTests ? (
         <div className="nn-study-callout mt-6 px-4 py-4 sm:px-5">
-          <p className="nn-marketing-h4">CAT &amp; practice exams</p>
-          <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">
-            After sign-in, run adaptive (CAT) sessions and timed practice exams from your study hub—scoped to this pathway
-            (length, topics, review flow). Full adaptive depth unlocks with a plan that covers this track.
-          </p>
+          <p className="nn-marketing-h4">{t("components.examPathwayHub.body.catStripTitle")}</p>
+          <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">{t("components.examPathwayHub.body.catStripBody")}</p>
           {isSignedIn ? (
             <MarketingTrackedLink
               href={catAppStartHref}
@@ -158,7 +157,7 @@ export function ExamPathwayHubBody({
               }}
               className="nn-marketing-body-sm mt-3 inline-flex font-semibold text-primary hover:underline"
             >
-              Start pathway CAT →
+              {t("components.examPathwayHub.body.catCtaSignedIn")}
             </MarketingTrackedLink>
           ) : (
             <MarketingTrackedLink
@@ -174,54 +173,57 @@ export function ExamPathwayHubBody({
               }}
               className="nn-marketing-body-sm mt-3 inline-flex font-semibold text-primary hover:underline"
             >
-              Create a free account to start →
+              {t("components.examPathwayHub.body.catCtaSignup")}
             </MarketingTrackedLink>
           )}
         </div>
       ) : null}
 
       <aside className="nn-study-card nn-study-card--wash mt-10 px-4 py-4 sm:px-5">
-        <p className="nn-marketing-label">Prep rhythm</p>
+        <p className="nn-marketing-label">{t("components.examPathwayHub.body.prepRhythmLabel")}</p>
         <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">
-          Anchor with{" "}
+          {t("components.examPathwayHub.body.prepRhythmLine1")}{" "}
           <Link href={lessonsHref} className="font-semibold text-primary hover:underline">
-            pathway lessons
+            {t("components.examPathwayHub.body.prepLessonsLink")}
           </Link>
-          , then{" "}
+          {t("components.examPathwayHub.body.prepRhythmLine2")}{" "}
           <Link href={questionsHref} className="font-semibold text-primary hover:underline">
-            practice questions with rationales
+            {t("components.examPathwayHub.body.prepQuestionsLink")}
           </Link>
-          , then{" "}
+          {t("components.examPathwayHub.body.prepRhythmLine3")}{" "}
           <Link href={HUB.practiceExams} className="font-semibold text-primary hover:underline">
-            practice exams
+            {t("components.examPathwayHub.body.prepExamsLink")}
           </Link>
-          . Browse other licensure tracks from the{" "}
+          {t("components.examPathwayHub.body.prepRhythmLine4")}{" "}
           <Link href="/lessons" className="font-semibold text-primary hover:underline">
-            lessons directory
+            {t("components.examPathwayHub.body.prepDirectoryLink")}
           </Link>
-          .
+          {t("components.examPathwayHub.body.prepRhythmEnd")}
         </p>
       </aside>
 
       <h2 className="nn-marketing-h2 mt-14">
-        {conversionSectionHeading ?? "What you get for this licensure track"}
+        {conversionSectionHeading ?? t("components.examPathwayHub.body.conversionHeadingDefault")}
       </h2>
       <p className="nn-marketing-body-sm mt-2 max-w-2xl text-[var(--theme-muted-text)]">
-        {conversionSectionLead ??
-          "After you subscribe, one login holds pathway-matched practice, lessons, flashcards, planner, and readiness for this exam family. Timed practice exams and CAT sessions unlock in-app when your plan covers this track."}
+        {conversionSectionLead ?? t("components.examPathwayHub.body.conversionLeadDefault")}
       </p>
       <ul className="nn-marketing-body-sm mt-4 list-inside list-disc space-y-1.5 text-[var(--theme-body-text)]">
         <li>
-          <span className="font-semibold text-[var(--theme-heading-text)]">Practice items:</span> short sets with rationales that explain distractors, not just the key.
+          <span className="font-semibold text-[var(--theme-heading-text)]">{t("components.examPathwayHub.body.bulletPracticeItems")}</span>{" "}
+          {t("components.examPathwayHub.body.bulletPracticeItemsBody")}
         </li>
         <li>
-          <span className="font-semibold text-[var(--theme-heading-text)]">Lessons:</span> clinical priorities and safety rules framed the way this board asks.
+          <span className="font-semibold text-[var(--theme-heading-text)]">{t("components.examPathwayHub.body.bulletLessons")}</span>{" "}
+          {t("components.examPathwayHub.body.bulletLessonsBody")}
         </li>
         <li>
-          <span className="font-semibold text-[var(--theme-heading-text)]">Flashcards &amp; planner:</span> weak-topic decks and pacing after sign-in.
+          <span className="font-semibold text-[var(--theme-heading-text)]">{t("components.examPathwayHub.body.bulletFlashcards")}</span>{" "}
+          {t("components.examPathwayHub.body.bulletFlashcardsBody")}
         </li>
         <li>
-          <span className="font-semibold text-[var(--theme-heading-text)]">Practice exams:</span> full-length timing and review flags in-app.
+          <span className="font-semibold text-[var(--theme-heading-text)]">{t("components.examPathwayHub.body.bulletPracticeExams")}</span>{" "}
+          {t("components.examPathwayHub.body.bulletPracticeExamsBody")}
         </li>
       </ul>
 
@@ -239,13 +241,12 @@ export function ExamPathwayHubBody({
           className="nn-study-card nn-card-interactive flex h-full min-h-[11rem] flex-col p-5 sm:min-h-[12rem]"
         >
           <ClipboardList className="h-5 w-5 text-primary" aria-hidden />
-          <span className="nn-marketing-h4 mt-3">Pricing & plans</span>
+          <span className="nn-marketing-h4 mt-3">{t("components.examPathwayHub.body.pricingCardTitle")}</span>
           <span className="nn-marketing-body-sm mt-2 text-[var(--theme-body-text)]">
-            See the NurseNest tier for this pathway in {pathway.countryCode}. NP specialties may share the NP tier until per-pathway billing
-            ships.
+            {t("components.examPathwayHub.body.pricingCardBody", { countryCode: pathway.countryCode })}
           </span>
           <span className="nn-marketing-body-sm mt-auto inline-flex items-center pt-4 font-semibold text-primary">
-            Compare plans
+            {t("components.examPathwayHub.body.pricingCardCta")}
             <ArrowRight className="ml-1 h-4 w-4" />
           </span>
         </MarketingTrackedLink>
@@ -253,7 +254,7 @@ export function ExamPathwayHubBody({
 
       {isSignedIn ? (
         <>
-          <h2 className="nn-marketing-h2 mt-14">Already studying inside NurseNest?</h2>
+          <h2 className="nn-marketing-h2 mt-14">{t("components.examPathwayHub.body.signedInHeading")}</h2>
           <ul
             className={`mt-4 grid gap-3 ${emphasizeCatPracticeTests ? "sm:grid-cols-2 lg:grid-cols-3" : "sm:grid-cols-2"}`}
           >
@@ -271,7 +272,7 @@ export function ExamPathwayHubBody({
                 }}
                 className="nn-study-card nn-card-interactive block px-4 py-3 text-sm font-semibold text-[var(--theme-heading-text)]"
               >
-                Practice questions in app →
+                {t("components.examPathwayHub.body.shortcutQuestions")}
               </MarketingTrackedLink>
             </li>
             {emphasizeCatPracticeTests ? (
@@ -289,7 +290,7 @@ export function ExamPathwayHubBody({
                   }}
                   className="nn-study-card nn-card-interactive block px-4 py-3 text-sm font-semibold text-[var(--theme-heading-text)]"
                 >
-                  Start pathway CAT →
+                  {t("components.examPathwayHub.body.shortcutCat")}
                 </MarketingTrackedLink>
               </li>
             ) : null}
@@ -307,7 +308,7 @@ export function ExamPathwayHubBody({
                 }}
                 className="nn-study-card nn-card-interactive block px-4 py-3 text-sm font-semibold text-[var(--theme-heading-text)]"
               >
-                Open your dashboard →
+                {t("components.examPathwayHub.body.shortcutDashboard")}
               </MarketingTrackedLink>
             </li>
           </ul>
@@ -316,10 +317,11 @@ export function ExamPathwayHubBody({
 
       <div className="nn-study-card nn-study-card--wash mt-12 p-5">
         <p className="nn-marketing-body-sm text-[var(--theme-body-text)]">
-          Checkout and content entitlements use your <strong className="text-[var(--theme-heading-text)]">{pathway.shortName}</strong> track with
-          NurseNest&apos;s <strong className="text-[var(--theme-heading-text)]">{pathway.stripeTier}</strong> tier for{" "}
-          <strong className="text-[var(--theme-heading-text)]">{pathway.countryCode}</strong>. Pick the correct pathway in your profile so
-          lessons and banks stay exam-specific.
+          {t("components.examPathwayHub.body.footerEntitlements", {
+            shortName: pathway.shortName,
+            tier: String(pathway.stripeTier),
+            countryCode: pathway.countryCode,
+          })}
         </p>
         {isWaitlist ? (
           <MarketingTrackedLink
@@ -334,7 +336,7 @@ export function ExamPathwayHubBody({
             }}
             className="mt-4 inline-flex items-center font-semibold text-primary"
           >
-            Join or sign in →
+            {t("components.examPathwayHub.body.ctaJoinOrSignInFooter")}
           </MarketingTrackedLink>
         ) : (
           <MarketingTrackedLink
@@ -349,7 +351,7 @@ export function ExamPathwayHubBody({
             }}
             className="mt-4 inline-flex items-center font-semibold text-primary"
           >
-            View all plans →
+            {t("components.examPathwayHub.body.viewAllPlans")}
           </MarketingTrackedLink>
         )}
       </div>
