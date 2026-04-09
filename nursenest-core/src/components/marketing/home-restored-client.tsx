@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { HomeConversionHero } from "@/components/marketing/home-conversion-hero";
+import { HomeConversionFreeAccessBand } from "@/components/marketing/home-conversion-free-access-band";
 import { HomeExamSelectionSection } from "@/components/marketing/home-exam-selection-section";
 import { HomeProductPillarsSection } from "@/components/marketing/home-product-pillars-section";
 import { HomeHowItWorksSection } from "@/components/marketing/home-how-it-works-section";
@@ -55,6 +56,7 @@ export default function HomeRestoredClient() {
       <FunnelHomepageViewBeacon marketingRegion={marketingRegion} />
       <div className="flex-grow overflow-x-hidden">
         <HomeConversionHero />
+        <HomeConversionFreeAccessBand />
         <HomeExamSelectionSection />
         <HomeProductPillarsSection />
         <HomePlatformPreviewSection />

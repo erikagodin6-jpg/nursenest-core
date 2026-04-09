@@ -4,6 +4,7 @@ import { ArrowRight, BookOpen, ClipboardList, Layers } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
+import { HomeConversionCtaStrip } from "@/components/marketing/home-conversion-cta-strip";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 
@@ -79,6 +80,10 @@ export function HomeProductPillarsSection() {
             );
           })}
         </ul>
+
+        <div className="mx-auto mt-10 max-w-5xl border-t border-[var(--border-subtle)] pt-10">
+          <HomeConversionCtaStrip placement="after_pillars" />
+        </div>
       </div>
     </section>
   );

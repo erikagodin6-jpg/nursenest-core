@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
+import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 
 /** Marketing question hub with optional topic filter (pathway-scoped). */
@@ -13,7 +15,8 @@ export function pathwayMarketingQuestionBankTopicHref(
   const t = topic.trim();
   const qs = new URLSearchParams();
   if (t) qs.set("topic", t);
-  if (topicCode?.trim()) qs.set("topicCode", topicCode.trim().toLowerCase());
+  /** Cluster slug for the public questions hub (`topicSlug` search param). */
+  if (topicCode?.trim()) qs.set("topicSlug", topicCode.trim().toLowerCase());
   const s = qs.toString();
   return s ? `${base}?${s}` : base;
 }
@@ -52,10 +55,71 @@ export function pathwayAppQuestionBankTopicHref(
   return loginWithCallback(buildAppQuestionBankTopicDrillHref(pathway, topic, topicCode, opts));
 }
 
+/** Display string when only a topic slug is known (e.g. `fluid-balance` → `Fluid Balance`). */
+export function humanizeTopicSlug(slug: string): string {
+  const s = slug.trim();
+  if (!s) return "";
+  return s
+    .split("-")
+    .filter(Boolean)
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+    .join(" ");
+}
+
+export function normalizeLessonTopicContext(topicLabel: string | null | undefined, topicSlug: string | null | undefined) {
+  const slug = (topicSlug ?? "").trim().toLowerCase();
+  const label = (topicLabel ?? "").trim();
+  const effectiveLabel = label || (slug ? humanizeTopicSlug(slug) : "");
+  const hasTopicFilter = Boolean(slug) || Boolean(label);
+  return { slug, label, effectiveLabel, hasTopicFilter };
+}
+
+export type LessonStudyLoopPracticeHrefs = {
+  marketing: string;
+  app: string;
+  hasTopicFilter: boolean;
+};
+
+/** Valid marketing + app practice URLs for the lesson study loop (pathway hub at minimum). */
+export function lessonStudyLoopPracticeHrefs(
+  pathway: ExamPathwayDefinition,
+  topicLabel: string | null | undefined,
+  topicSlug: string | null | undefined,
+): LessonStudyLoopPracticeHrefs {
+  const { slug, label, hasTopicFilter } = normalizeLessonTopicContext(topicLabel, topicSlug);
+  return {
+    marketing: pathwayMarketingQuestionBankTopicHref(pathway, label, slug || undefined),
+    app: pathwayAppQuestionBankTopicHref(pathway, label, slug || undefined),
+    hasTopicFilter,
+  };
+}
+
+/** Topic cluster index or full lesson hub. */
+export function lessonStudyLoopRelatedLessonsHubHref(lessonsBasePath: string, topicSlug: string | null | undefined): string {
+  const hub = lessonsBasePath.replace(/\/$/, "");
+  const slug = (topicSlug ?? "").trim();
+  if (!slug) return hub;
+  return `${hub}/topics/${encodeURIComponent(slug)}`;
+}
+
+export type LessonStudyLoopCatHrefs = {
+  marketing: string;
+  appSession: string | null;
+  showAdaptiveShortcut: boolean;
+};
+
+export function lessonStudyLoopCatHrefs(pathway: ExamPathwayDefinition): LessonStudyLoopCatHrefs {
+  const show = pathwayAllowsCatAdaptiveStart(pathway);
+  return {
+    marketing: buildExamPathwayPath(pathway, "cat"),
+    appSession: show ? loginWithCallback(appPathwayCatSessionStartPath(pathway.id)) : null,
+    showAdaptiveShortcut: show,
+  };
+}
+
 /**
  * Standalone practice strip (marketing question bank + app + topic cluster).
- * **Prefer** `PathwayLessonRelatedLearningBlock` on public pathway lesson pages — it unifies related lessons,
- * practice, and CAT in one premium block.
+ * On lesson detail pages, prefer `PathwayLessonStudyLoopCta`.
  */
 export function PathwayLessonPracticeTopicCta({
   pathway,

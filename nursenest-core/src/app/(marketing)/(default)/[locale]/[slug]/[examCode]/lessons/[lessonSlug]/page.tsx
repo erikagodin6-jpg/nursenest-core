@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { PathwayLessonSectionContent } from "@/components/lessons/pathway-lesson-body";
-import { PathwayLessonRelatedLearningBlock } from "@/components/lessons/pathway-lesson-related-learning";
+import { PathwayLessonStudyLoopCta } from "@/components/lessons/pathway-lesson-study-loop-cta";
 import { PathwayLessonRelatedQuestions } from "@/components/lessons/pathway-lesson-related-questions";
 import { PremiumLessonPublishNotice } from "@/components/lessons/premium-lesson-publish-notice";
 import { PathwayLessonQuizzes } from "@/components/lessons/pathway-lesson-quizzes";
@@ -49,7 +49,6 @@ import {
 } from "@/lib/lessons/pathway-lesson-progress";
 import { loadRelatedExamQuestionStemsForPathwayLesson } from "@/lib/lessons/lesson-question-cross-links";
 import { LessonStructuralQualityNotice } from "@/components/lessons/lesson-structural-quality-notice";
-import { PathwayLessonDetailEndCtas } from "@/components/lessons/pathway-lesson-detail-end-ctas";
 import { PathwayLessonDetailHeader } from "@/components/lessons/pathway-lesson-detail-header";
 import { PathwayLessonRecordChips } from "@/components/pathway-lessons/pathway-lesson-record-chips";
 
@@ -338,20 +337,13 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
           items={relatedQuestionStems}
         />
 
-        <PathwayLessonRelatedLearningBlock
-          pathway={pathway}
-          topic={lesson.topic}
-          topicSlug={lesson.topicSlug}
-          lessonsBasePath={base}
-          relatedLessons={relatedDisplay}
-          currentSlug={lesson.slug}
-        />
-
-        <PathwayLessonDetailEndCtas
+        <PathwayLessonStudyLoopCta
           pathway={pathway}
           lessonsBasePath={base}
           topicLabel={lesson.topic}
-          topicSlug={lesson.topicSlug ?? ""}
+          topicSlug={lesson.topicSlug}
+          relatedLessons={relatedDisplay}
+          currentSlug={lesson.slug}
         />
 
         <p className="mt-10 text-center text-xs text-[var(--theme-muted-text)]">

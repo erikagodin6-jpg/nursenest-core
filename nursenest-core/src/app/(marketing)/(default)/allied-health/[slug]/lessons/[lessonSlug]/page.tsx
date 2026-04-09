@@ -44,7 +44,6 @@ import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry"
 import {
   mergeRelatedLessonDisplayList,
   pathwayLessonHasRenderableHubSlug,
-  pathwayLessonMarketingDetailHref,
 } from "@/lib/lessons/pathway-lesson-types";
 import { LessonStructuralQualityNotice } from "@/components/lessons/lesson-structural-quality-notice";
 import { PathwayLessonProgressBadgeLive } from "@/components/lessons/pathway-lesson-progress-badge-live";
@@ -55,6 +54,7 @@ import {
 } from "@/lib/lessons/pathway-lesson-progress";
 import { loadRelatedExamQuestionStemsForPathwayLesson } from "@/lib/lessons/lesson-question-cross-links";
 import { PathwayLessonRelatedQuestions } from "@/components/lessons/pathway-lesson-related-questions";
+import { PathwayLessonStudyLoopCta } from "@/components/lessons/pathway-lesson-study-loop-cta";
 
 export const revalidate = 86400;
 export const dynamicParams = true;
@@ -309,24 +309,14 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
         items={relatedQuestionStems}
       />
 
-      {relatedDisplay.length > 0 ? (
-        <section className="mt-10">
-          <h2 className="text-lg font-semibold">Related lessons & next steps · {lesson.topic}</h2>
-          <ul className="mt-3 space-y-2">
-            {relatedDisplay.map((r) => {
-              const href = pathwayLessonMarketingDetailHref(base, r.slug);
-              if (!href) return null;
-              return (
-                <li key={r.slug}>
-                  <Link href={href} className="text-primary hover:underline">
-                    {r.title}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-      ) : null}
+      <PathwayLessonStudyLoopCta
+        pathway={pathway}
+        lessonsBasePath={base}
+        topicLabel={lesson.topic}
+        topicSlug={lesson.topicSlug}
+        relatedLessons={relatedDisplay}
+        currentSlug={lesson.slug}
+      />
 
       <div className="mt-10 text-sm text-muted">
         <Link href={buildExamPathwayPath(pathway)} className="font-medium text-primary">

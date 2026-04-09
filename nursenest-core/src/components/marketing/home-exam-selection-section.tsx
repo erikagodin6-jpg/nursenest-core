@@ -5,6 +5,7 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { marketingExamHubPath } from "@/lib/marketing/country-exam-offerings";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
+import { HomeConversionCtaStrip } from "@/components/marketing/home-conversion-cta-strip";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 
@@ -71,6 +72,9 @@ export function HomeExamSelectionSection() {
           <p className="nn-marketing-body mx-auto mt-2 max-w-xl text-pretty text-[var(--theme-muted-text)]">
             {t("home.conversion.examSelectionSub")}
           </p>
+          <p className="nn-marketing-caption mx-auto mt-3 max-w-lg text-pretty text-[var(--theme-muted-text)]">
+            {t("home.conversion.examSelectionFreeHint")}
+          </p>
         </header>
 
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -96,6 +100,10 @@ export function HomeExamSelectionSection() {
             </li>
           ))}
         </ul>
+
+        <div className="mx-auto mt-10 max-w-5xl border-t border-[var(--border-subtle)] pt-10">
+          <HomeConversionCtaStrip placement="after_exam_paths" />
+        </div>
       </div>
     </section>
   );

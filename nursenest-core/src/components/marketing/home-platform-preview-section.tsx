@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { MarketingHeroCarousel } from "@/components/marketing/marketing-hero-carousel";
 import { buildHomepageHeroSlidesAtIndices } from "@/config/home-hero-carousel";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { HomeConversionCtaStrip } from "@/components/marketing/home-conversion-cta-strip";
 
 /**
  * Order screenshots so the first passes highlight bank, rationales/lessons, flashcards, dashboard,
@@ -11,7 +12,7 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
  * Indices are zero-based against `HOMEPAGE_HERO_SLIDE_METADATA` (screenshot1 … screenshot15).
  */
 const PLATFORM_PREVIEW_SLIDE_ORDER: readonly number[] = [
-  0, 1, 2, 9, 12, 11, 4, 3, 5, 6, 7, 8, 10, 13, 14,
+  9, 0, 11, 1, 2, 12, 4, 3, 5, 6, 7, 8, 10, 13, 14,
 ];
 
 /**
@@ -43,6 +44,9 @@ export function HomePlatformPreviewSection() {
           <p className="nn-marketing-body mx-auto mt-2 max-w-2xl text-pretty text-[var(--theme-muted-text)]">
             {t("home.landing.platformCarousel.sub")}
           </p>
+          <p className="nn-marketing-caption mx-auto mt-3 max-w-2xl text-pretty text-[color-mix(in_srgb,var(--theme-primary)_70%,var(--theme-muted-text))]">
+            {t("home.landing.platformCarousel.previewLabels")}
+          </p>
         </header>
         <div className="mx-auto w-full max-w-5xl min-w-0">
           <MarketingHeroCarousel
@@ -52,6 +56,9 @@ export function HomePlatformPreviewSection() {
             imgTestIdPrefix="platform"
             captionOverlay
           />
+        </div>
+        <div className="mx-auto mt-8 max-w-5xl border-t border-[var(--border-subtle)] pt-8">
+          <HomeConversionCtaStrip placement="after_platform_preview" />
         </div>
       </div>
     </section>

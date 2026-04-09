@@ -46,6 +46,10 @@ export default async function AdminQuestionsPage({
     <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <h1 className="text-3xl font-bold text-[var(--theme-heading-text)]">Question bank admin</h1>
       <p className="mt-2 text-sm text-muted-foreground">
+        <Link className="font-semibold text-primary underline" href="/admin/questions/import">
+          Bulk JSON import
+        </Link>
+        {" · "}
         Operational remediation queue for rationale/stem quality. AI drafting lives under{" "}
         <Link className="font-semibold text-primary underline" href="/admin/ai/exam-questions">
           AI exam questions

@@ -61,7 +61,7 @@ export function HomeTrustProofSection({ questionCount }: Props) {
                 key={k}
                 className="flex gap-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] px-4 py-3 text-left"
               >
-                <Check className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600 dark:text-emerald-400" aria-hidden />
+                <Check className="mt-0.5 h-5 w-5 shrink-0 text-[var(--semantic-success)]" aria-hidden />
                 <span className="nn-marketing-body-sm text-[var(--theme-body-text)]">{t(`home.conversion.proof.compare${k}`)}</span>
               </li>
             ))}

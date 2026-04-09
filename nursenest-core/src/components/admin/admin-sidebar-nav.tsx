@@ -29,6 +29,7 @@ import {
   X,
   Globe,
   Workflow,
+  Upload,
 } from "lucide-react";
 import { isNavHrefAllowedForStaffTier } from "@/lib/auth/admin-path-policy";
 import type { StaffTier } from "@/lib/auth/staff-roles";
@@ -47,6 +48,7 @@ const sections: NavSection[] = [
       { href: "/admin/blog/control-panel", label: "Blog AI panel", icon: Sparkles },
       { href: "/admin/lessons", label: "Lessons", icon: GraduationCap },
       { href: "/admin/questions", label: "Question bank", icon: ClipboardList },
+      { href: "/admin/questions/import", label: "Bulk question import", icon: Upload },
       { href: "/admin/content", label: "Pathway coverage", icon: Layers },
     ],
   },
@@ -57,6 +59,7 @@ const sections: NavSection[] = [
       { href: "/admin/media", label: "Media & images", icon: ImageIcon },
       { href: "/admin/users", label: "Users & support lookup", icon: Users },
       { href: "/admin/analytics/users", label: "User analytics", icon: Users2 },
+      { href: "/admin/analytics/content", label: "Content analytics", icon: BookMarked },
       { href: "/admin/analytics/subscriptions", label: "Subscription analytics", icon: CircleDollarSign },
       { href: "/admin/analytics/funnels", label: "Funnels", icon: Workflow },
       { href: "/admin/analytics/study-performance", label: "Study performance", icon: BookMarked },

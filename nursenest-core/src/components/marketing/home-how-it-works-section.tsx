@@ -6,6 +6,7 @@ import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
+import { HomeConversionCtaStrip } from "@/components/marketing/home-conversion-cta-strip";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 
@@ -97,6 +98,10 @@ export function HomeHowItWorksSection() {
             </li>
           ))}
         </ol>
+
+        <div className="mx-auto mt-10 max-w-5xl border-t border-[var(--border-subtle)] pt-10">
+          <HomeConversionCtaStrip placement="after_how_it_works" />
+        </div>
       </div>
     </section>
   );

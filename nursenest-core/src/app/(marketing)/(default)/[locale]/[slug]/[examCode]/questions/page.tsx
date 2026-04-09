@@ -11,7 +11,10 @@ import { pathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-ana
 import { PathwayLiveInventoryStrip } from "@/components/exam-pathways/pathway-live-inventory-strip";
 import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import { PathwayQuestionHubRelatedLessons } from "@/components/pathway-lessons/pathway-question-hub-related-lessons";
-import { pathwayAppQuestionBankTopicHref } from "@/components/lessons/pathway-lesson-link-practice";
+import {
+  humanizeTopicSlug,
+  pathwayAppQuestionBankTopicHref,
+} from "@/components/lessons/pathway-lesson-link-practice";
 import {
   RELATED_LESSONS_EXCLUDE_SLUG_SENTINEL,
   resolveTopicSlugForPathwayTopicLabel,
@@ -36,29 +39,31 @@ export function generateStaticParams() {
 
 type Props = {
   params: Promise<{ locale: string; slug: string; examCode: string }>;
-  searchParams?: Promise<{ topic?: string }>;
+  searchParams?: Promise<{ topic?: string; topicSlug?: string }>;
 };
 
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const { locale, slug, examCode } = await params;
   const sp = searchParams ? await searchParams : {};
   const topicFilter = sp.topic?.trim() ?? "";
+  const topicSlugParam = sp.topicSlug?.trim().toLowerCase() ?? "";
   const pathway = resolveExamPathwayFromMarketingHubSegment(locale, slug, examCode);
   if (!pathway) return {};
   const canonicalPath = buildExamPathwayPath(pathway, "questions");
   const canonical = absoluteUrl(canonicalPath);
-  const title = topicFilter
-    ? `${topicFilter} · Practice questions · ${pathway.displayName} | NurseNest`
+  const narrowedLabel = topicFilter || (topicSlugParam ? humanizeTopicSlug(topicSlugParam) : "");
+  const title = narrowedLabel
+    ? `${narrowedLabel} · Practice questions · ${pathway.displayName} | NurseNest`
     : `Practice questions · ${pathway.displayName} | NurseNest`;
-  const description = topicFilter
-    ? `Board-style items for ${pathway.shortName} focused on ${topicFilter}. Sign in to run sets that stay inside this exam’s scope.`
+  const description = narrowedLabel
+    ? `Board-style items for ${pathway.shortName} focused on ${narrowedLabel}. Sign in to run sets that stay inside this exam’s scope.`
     : `Clinical vignettes and rationales scoped to ${pathway.shortName} (${pathway.countrySlug === "canada" ? "Canada" : "US"}). Sign in to practice with your plan.`;
   return {
     title,
     description,
     alternates: { canonical },
     openGraph: { title, description, url: canonical, type: "website" },
-    ...(topicFilter ? { robots: { index: false, follow: true } } : {}),
+    ...(narrowedLabel ? { robots: { index: false, follow: true } } : {}),
   };
 }
 
@@ -66,6 +71,7 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
   const { locale, slug, examCode } = await params;
   const sp = searchParams ? await searchParams : {};
   const topicFilter = sp.topic?.trim() ?? "";
+  const topicSlugFromUrl = sp.topicSlug?.trim().toLowerCase() ?? "";
   const pathway = resolveExamPathwayFromMarketingHubSegment(locale, slug, examCode);
   if (!pathway) notFound();
 
@@ -77,20 +83,26 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
   const topicFilterTrim = topicFilter.trim();
   const lessonContentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
   let relatedLessonsForTopic: Awaited<ReturnType<typeof getRelatedPathwayLessons>> = [];
-  if (topicFilterTrim) {
-    const topicSlug = await resolveTopicSlugForPathwayTopicLabel(pathway.id, topicFilterTrim);
-    if (topicSlug) {
-      relatedLessonsForTopic = (
-        await getRelatedPathwayLessons(
-          pathway.id,
-          topicSlug,
-          RELATED_LESSONS_EXCLUDE_SLUG_SENTINEL,
-          Math.min(RELATED_PATHWAY_LESSONS_LIMIT, RELATED_LESSONS_FOR_TOPIC_CAP),
-          lessonContentLocale,
-        )
-      ).filter(pathwayLessonHasRenderableHubSlug);
-    }
+
+  let clusterSlugForLessons: string | null = topicSlugFromUrl || null;
+  if (!clusterSlugForLessons && topicFilterTrim) {
+    clusterSlugForLessons = await resolveTopicSlugForPathwayTopicLabel(pathway.id, topicFilterTrim);
   }
+
+  if (clusterSlugForLessons) {
+    relatedLessonsForTopic = (
+      await getRelatedPathwayLessons(
+        pathway.id,
+        clusterSlugForLessons,
+        RELATED_LESSONS_EXCLUDE_SLUG_SENTINEL,
+        Math.min(RELATED_PATHWAY_LESSONS_LIMIT, RELATED_LESSONS_FOR_TOPIC_CAP),
+        lessonContentLocale,
+      )
+    ).filter(pathwayLessonHasRenderableHubSlug);
+  }
+
+  const displayTopicLabel = topicFilterTrim || (topicSlugFromUrl ? humanizeTopicSlug(topicSlugFromUrl) : "");
+  const isTopicNarrowed = Boolean(topicFilterTrim || topicSlugFromUrl);
 
   const hubBase = `/${locale}/${slug}/${examCode}`;
   const { crumbs, schemaItems } = pathwayQuestionsHubBreadcrumbs(pathway);
@@ -101,8 +113,8 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
   const examName = pathway.contentExamKeys.length ? pathway.contentExamKeys.join(" / ") : pathway.shortName;
   const lessonsHref = buildExamPathwayPath(pathway, "lessons");
   const catHref = buildExamPathwayPath(pathway, "cat");
-  const appQuestionsScoped = topicFilterTrim
-    ? pathwayAppQuestionBankTopicHref(pathway, topicFilterTrim)
+  const appQuestionsScoped = isTopicNarrowed
+    ? pathwayAppQuestionBankTopicHref(pathway, topicFilterTrim, topicSlugFromUrl || clusterSlugForLessons || undefined)
     : loginWithCallback(`/app/questions?${new URLSearchParams({ pathwayId: pathway.id }).toString()}`);
   const questionsHubPath = buildExamPathwayPath(pathway, "questions");
 
@@ -119,10 +131,11 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
         {pathway.shortName} {countryLabel} practice questions
       </h1>
       <p className="mt-3 text-[var(--theme-muted-text)]">
-        {topicFilter ? (
+        {isTopicNarrowed ? (
           <>
-            You’re narrowing to <span className="font-semibold text-[var(--theme-heading-text)]">{topicFilter}</span>. Items stay
-            inside {pathway.shortName} and {examName}; sign in to run the same filter in the app.
+            You’re narrowing to{" "}
+            <span className="font-semibold text-[var(--theme-heading-text)]">{displayTopicLabel}</span>. Items stay inside{" "}
+            {pathway.shortName} and {examName}; sign in to run the same filter in the app.
           </>
         ) : (
           <>
@@ -137,7 +150,7 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
         lessonCount={pathwayLessonCount}
         variant="questions"
       />
-      {topicFilter ? (
+      {isTopicNarrowed ? (
         <>
           <aside className="nn-study-card nn-study-card--wash mt-6 p-4 sm:p-5">
             <p className="text-sm font-semibold text-[var(--theme-heading-text)]">Narrowed to one clinical topic</p>
@@ -152,7 +165,7 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
             </Link>
           </aside>
           <PathwayQuestionHubRelatedLessons
-            topicLabel={topicFilterTrim}
+            topicLabel={displayTopicLabel}
             lessonsBasePath={`${hubBase}/lessons`}
             lessons={relatedLessonsForTopic}
           />

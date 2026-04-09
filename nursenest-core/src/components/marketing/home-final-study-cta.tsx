@@ -51,7 +51,7 @@ export function HomeFinalStudyCta() {
             {t("home.conversion.final.ctaSecondary")}
           </MarketingTrackedLink>
         </div>
-        <p className="nn-marketing-body-sm mx-auto mt-6 max-w-lg text-[var(--theme-muted-text)]">
+        <p className="nn-marketing-body-sm mx-auto mt-6 flex max-w-xl flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[var(--theme-muted-text)]">
           <MarketingTrackedLink
             href={loc(HUB.practiceExams)}
             event={PH.marketingHomeFinalCta}
@@ -60,7 +60,9 @@ export function HomeFinalStudyCta() {
           >
             {t("home.conversion.final.linkPracticeExams")}
           </MarketingTrackedLink>
-          {" · "}
+          <span className="text-[var(--theme-muted-text)]" aria-hidden>
+            ·
+          </span>
           <MarketingTrackedLink
             href={loc(HUB.questionBank)}
             event={PH.marketingHomeFinalCta}
@@ -68,6 +70,17 @@ export function HomeFinalStudyCta() {
             className="font-semibold text-primary underline-offset-4 hover:underline"
           >
             {t("home.conversion.final.linkQuestionBank")}
+          </MarketingTrackedLink>
+          <span className="text-[var(--theme-muted-text)]" aria-hidden>
+            ·
+          </span>
+          <MarketingTrackedLink
+            href={loc(HUB.examLessons)}
+            event={PH.marketingHomeFinalCta}
+            eventProps={{ choice: "lessons_overview", region, surface: "final" }}
+            className="font-semibold text-primary underline-offset-4 hover:underline"
+          >
+            {t("home.conversion.final.linkExploreLessons")}
           </MarketingTrackedLink>
         </p>
       </div>

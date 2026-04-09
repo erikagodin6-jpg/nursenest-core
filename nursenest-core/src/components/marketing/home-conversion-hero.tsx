@@ -22,7 +22,8 @@ import {
   MARKETING_TERTIARY_LINK_CLASS,
 } from "@/lib/theme/marketing-hero-pattern";
 
-const PREVIEW_SLIDE_INDICES: readonly number[] = [0, 1, 2];
+/** Learner home, question UI, session reports — instant product comprehension. */
+const PREVIEW_SLIDE_INDICES: readonly number[] = [9, 0, 11];
 
 /**
  * Above-the-fold hero: outcome headline, benefit subhead, primary signup CTA, secondary lessons + bank links,
@@ -54,6 +55,9 @@ export function HomeConversionHero() {
       <div className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6 md:py-16 lg:px-8">
         <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:gap-12">
           <div className="min-w-0 space-y-6">
+            <p className="nn-marketing-caption mb-2 font-semibold uppercase tracking-[0.12em] text-[color-mix(in_srgb,var(--theme-primary)_82%,var(--theme-heading-text))]">
+              {t("home.conversion.heroEyebrow")}
+            </p>
             <h1
               id="home-conversion-hero-heading"
               className="nn-marketing-h1 text-balance text-[var(--theme-heading-text)]"
@@ -66,7 +70,7 @@ export function HomeConversionHero() {
             </p>
 
             <div className="max-w-xl">
-              <MarketingTrustSignalsStrip variant="default" />
+              <MarketingTrustSignalsStrip variant="default" homeHeroTrust />
             </div>
 
             <div
@@ -106,25 +110,25 @@ export function HomeConversionHero() {
                 <ArrowRight className="ml-2 h-5 w-5 shrink-0" aria-hidden />
               </MarketingTrackedLink>
               <MarketingTrackedLink
+                href={loc(HUB.questionBank)}
+                event={PH.marketingHomeHeroSecondaryCta}
+                eventProps={{ region, destination: "question_bank", surface: "hero_try_free" }}
+                className={`${MARKETING_SECONDARY_CTA_CLASS} rounded-xl border border-[var(--border-subtle)] shadow-sm`}
+                data-testid="button-hero-try-free-questions"
+              >
+                {t("home.conversion.ctaTryFreeBank")}
+              </MarketingTrackedLink>
+            </div>
+
+            <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
+              <MarketingTrackedLink
                 href={loc(HUB.examLessons)}
                 event={PH.marketingHomeHeroSecondaryCta}
-                eventProps={{ region, destination: "lessons", surface: "hero_secondary" }}
+                eventProps={{ region, destination: "lessons", surface: "hero_explore_lessons" }}
                 className={`${MARKETING_SECONDARY_CTA_CLASS} rounded-xl`}
                 data-testid="button-hero-explore-lessons"
               >
                 {t("home.conversion.ctaExploreLessons")}
-              </MarketingTrackedLink>
-            </div>
-
-            <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-6">
-              <MarketingTrackedLink
-                href={loc(HUB.questionBank)}
-                event={PH.marketingHomeHeroSecondaryCta}
-                eventProps={{ region, destination: "question_bank", surface: "hero_tertiary" }}
-                className={`${MARKETING_TERTIARY_LINK_CLASS} font-semibold text-[var(--theme-primary)] underline-offset-4 hover:underline`}
-                data-testid="button-hero-try-bank"
-              >
-                {t("home.conversion.ctaTryFreeBank")}
               </MarketingTrackedLink>
               <MarketingTrackedLink
                 href="#home-platform-preview"
@@ -137,6 +141,7 @@ export function HomeConversionHero() {
               </MarketingTrackedLink>
             </div>
 
+            <p className="nn-marketing-body-sm max-w-lg text-pretty text-[var(--theme-body-text)]">{t("home.conversion.heroFreeLine")}</p>
             <p className="nn-marketing-caption max-w-lg text-pretty text-[var(--theme-muted-text)]">{t("home.conversion.heroTrustMicro")}</p>
           </div>
 
