@@ -100,6 +100,7 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
   const countryLabel = pathway.countrySlug === "canada" ? "Canada" : "US";
   const examName = pathway.contentExamKeys.length ? pathway.contentExamKeys.join(" / ") : pathway.shortName;
   const lessonsHref = buildExamPathwayPath(pathway, "lessons");
+  const catHref = buildExamPathwayPath(pathway, "cat");
   const appQuestionsScoped = topicFilterTrim
     ? pathwayAppQuestionBankTopicHref(pathway, topicFilterTrim)
     : loginWithCallback(`/app/questions?${new URLSearchParams({ pathwayId: pathway.id }).toString()}`);
@@ -189,8 +190,11 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
           <Link href={lessonsHref} className="font-semibold text-primary hover:underline">
             Clinical lessons for this exam
           </Link>
+          <Link href={catHref} className="font-semibold text-primary hover:underline">
+            CAT prep for this pathway
+          </Link>
           <Link href={HUB.practiceExams} className="font-semibold text-primary hover:underline">
-            Practice exams (public)
+            Practice exams
           </Link>
           <Link href={overviewHref} className="font-semibold text-primary hover:underline">
             Exam overview

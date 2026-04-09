@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
+import { trackClientEvent } from "@/lib/observability/posthog-client";
+import { PH } from "@/lib/observability/posthog-conversion-events";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { stripMarketingLocalePrefix, withMarketingLocale } from "@/lib/i18n/marketing-path";
@@ -65,6 +67,13 @@ export function MarketingSiteSubNav() {
                       ? "bg-[color-mix(in_srgb,var(--theme-primary)_14%,var(--theme-page-bg))] text-[var(--theme-heading-text)] shadow-[inset_0_1px_0_rgba(255,255,255,0.45)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
                       : "text-[color-mix(in_srgb,var(--theme-muted-text)_92%,var(--theme-heading-text))] hover:bg-[color-mix(in_srgb,var(--theme-primary)_8%,var(--theme-page-bg))] hover:text-[var(--theme-heading-text)]"
                   } `}
+                  onClick={() =>
+                    trackClientEvent(PH.marketingSubNavClick, {
+                      actor: "anonymous",
+                      nav_key: item.key,
+                      marketing_region: region,
+                    })
+                  }
                 >
                   {t(item.labelKey)}
                 </Link>

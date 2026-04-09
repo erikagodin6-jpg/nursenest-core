@@ -8,6 +8,7 @@ import {
   BarChart3,
   BookOpen,
   ClipboardList,
+  CircleDollarSign,
   GraduationCap,
   FileText,
   Globe,
@@ -46,6 +47,7 @@ const GROUPS: NavGroup[] = [
     items: [
       { href: "/admin/analytics", label: "Analytics hub", icon: BarChart3 },
       { href: "/admin/analytics/users", label: "User analytics", icon: LineChart },
+      { href: "/admin/analytics/subscriptions", label: "Subscription analytics", icon: CircleDollarSign },
       { href: "/admin/users", label: "Users", icon: Users },
       { href: "/admin/subscriptions", label: "Revenue & subscriptions", icon: Activity },
     ],

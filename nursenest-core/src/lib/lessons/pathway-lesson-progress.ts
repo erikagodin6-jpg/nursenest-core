@@ -1,6 +1,9 @@
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 
+/** Never issue more than this many `lessonId IN (...)` keys per hub request (matches hub page cap). */
+export const PATHWAY_HUB_PROGRESS_SLUG_CAP = 64;
+
 export type PathwayLessonProgressStatus = "not_started" | "in_progress" | "completed";
 
 export function syntheticPathwayLessonId(pathwayId: string, slug: string): string {
@@ -38,7 +41,8 @@ export async function loadPathwayLessonProgressMap(
     return Object.fromEntries(slugs.map((s) => [s, "not_started" as const]));
   }
 
-  const ids = slugs.map((s) => syntheticPathwayLessonId(pathwayId, s));
+  const capped = slugs.slice(0, PATHWAY_HUB_PROGRESS_SLUG_CAP);
+  const ids = capped.map((s) => syntheticPathwayLessonId(pathwayId, s));
   const rows = await prisma.progress.findMany({
     where: { userId, lessonId: { in: ids } },
     select: { lessonId: true, completed: true },
@@ -58,6 +62,45 @@ export async function loadPathwayLessonProgressMap(
 }
 
 /**
+ * Single DB round-trip for pathway-scoped completed vs in-progress row counts (synthetic `pathway:{id}:` ids).
+ */
+export async function aggregatePathwayProgressCounts(
+  userId: string,
+  pathwayId: string,
+): Promise<{ lessonsCompleted: number; lessonsInProgress: number }> {
+  if (!userId || !isDatabaseUrlConfigured()) {
+    return { lessonsCompleted: 0, lessonsInProgress: 0 };
+  }
+  const prefix = `pathway:${pathwayId}:`;
+  const pattern = `${prefix}%`;
+  try {
+    const rows = await prisma.$queryRaw<{ completed: bigint; in_progress: bigint }[]>`
+      SELECT
+        COUNT(*) FILTER (WHERE "completed")::bigint AS completed,
+        COUNT(*) FILTER (WHERE NOT "completed")::bigint AS in_progress
+      FROM "Progress"
+      WHERE "userId" = ${userId}
+        AND "lessonId" LIKE ${pattern}
+    `;
+    const r = rows[0];
+    return {
+      lessonsCompleted: Number(r?.completed ?? 0),
+      lessonsInProgress: Number(r?.in_progress ?? 0),
+    };
+  } catch {
+    const [lessonsCompleted, lessonsInProgress] = await Promise.all([
+      prisma.progress.count({
+        where: { userId, completed: true, lessonId: { startsWith: prefix } },
+      }),
+      prisma.progress.count({
+        where: { userId, completed: false, lessonId: { startsWith: prefix } },
+      }),
+    ]);
+    return { lessonsCompleted, lessonsInProgress };
+  }
+}
+
+/**
  * Single round-trip for hub subscriber UI: page-level progress map + resume stats.
  * Does not cache (user-specific).
  */
@@ -69,19 +112,22 @@ export async function loadPathwayHubProgressBatch(
   progressMap: Record<string, PathwayLessonProgressStatus>;
   lastForResume: { slug: string; completed: boolean } | null;
   lessonsCompleted: number;
+  lessonsInProgress: number;
 }> {
   if (!userId || !isDatabaseUrlConfigured()) {
     return {
       progressMap: Object.fromEntries(hubSlugs.map((s) => [s, "not_started" as const])),
       lastForResume: null,
       lessonsCompleted: 0,
+      lessonsInProgress: 0,
     };
   }
 
   const prefix = `pathway:${pathwayId}:`;
-  const narrowIds = hubSlugs.map((s) => syntheticPathwayLessonId(pathwayId, s));
+  const cappedSlugs = hubSlugs.slice(0, PATHWAY_HUB_PROGRESS_SLUG_CAP);
+  const narrowIds = cappedSlugs.map((s) => syntheticPathwayLessonId(pathwayId, s));
 
-  const [idRows, lastRow, lessonsCompleted] = await Promise.all([
+  const [idRows, lastRow, counts] = await Promise.all([
     narrowIds.length > 0
       ? prisma.progress.findMany({
           where: { userId, lessonId: { in: narrowIds } },
@@ -93,9 +139,7 @@ export async function loadPathwayHubProgressBatch(
       orderBy: { updatedAt: "desc" },
       select: { lessonId: true, completed: true },
     }),
-    prisma.progress.count({
-      where: { userId, completed: true, lessonId: { startsWith: prefix } },
-    }),
+    aggregatePathwayProgressCounts(userId, pathwayId),
   ]);
 
   const progressMap: Record<string, PathwayLessonProgressStatus> = {};
@@ -111,5 +155,10 @@ export async function loadPathwayHubProgressBatch(
     if (slug) lastForResume = { slug, completed: lastRow.completed };
   }
 
-  return { progressMap, lastForResume, lessonsCompleted };
+  return {
+    progressMap,
+    lastForResume,
+    lessonsCompleted: counts.lessonsCompleted,
+    lessonsInProgress: counts.lessonsInProgress,
+  };
 }

@@ -56,6 +56,25 @@ export function HomeFinalStudyCta() {
             {t("home.conversion.final.ctaSecondary")}
           </MarketingTrackedLink>
         </div>
+        <p className="nn-marketing-body-sm mx-auto mt-6 max-w-lg text-[var(--theme-muted-text)]">
+          <MarketingTrackedLink
+            href={loc(HUB.practiceExams)}
+            event={PH.marketingHomeFinalCta}
+            eventProps={{ choice: "practice_exams_overview", region, surface: "final" }}
+            className="font-semibold text-primary underline-offset-4 hover:underline"
+          >
+            Practice exams overview
+          </MarketingTrackedLink>
+          {" · "}
+          <MarketingTrackedLink
+            href={loc(HUB.questionBank)}
+            event={PH.marketingHomeFinalCta}
+            eventProps={{ choice: "question_bank_overview", region, surface: "final" }}
+            className="font-semibold text-primary underline-offset-4 hover:underline"
+          >
+            Question bank overview
+          </MarketingTrackedLink>
+        </p>
       </div>
     </section>
   );

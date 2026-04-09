@@ -185,6 +185,8 @@ export function PricingPageClient({
       }
       setCheckoutLoading(true);
       trackClientEvent(PH.checkoutStarted, {
+        actor: "anonymous",
+        funnel_step: "checkout_initiated",
         country: effectiveCountry,
         tier: String(tier),
         duration: String(duration),

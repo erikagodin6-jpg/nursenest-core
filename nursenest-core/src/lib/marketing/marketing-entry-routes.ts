@@ -16,7 +16,7 @@ export const RN = {
   caLessons: "/canada/rn/nclex-rn/lessons",
   usQuestions: "/us/rn/nclex-rn/questions",
   caQuestions: "/canada/rn/nclex-rn/questions",
-  /** Subscriber app route (timed mocks, history). Public entry: {@link HUB.practiceExams}. */
+  /** Subscriber app route (timed practice exams, history). Public entry: {@link HUB.practiceExams}. */
   appExams: "/app/exams",
 } as const;
 

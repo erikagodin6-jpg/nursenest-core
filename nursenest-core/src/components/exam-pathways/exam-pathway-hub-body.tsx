@@ -139,10 +139,10 @@ export function ExamPathwayHubBody({
 
       {emphasizeCatPracticeTests ? (
         <div className="nn-study-callout mt-6 px-4 py-4 sm:px-5">
-          <p className="nn-marketing-h4">Computerized adaptive (CAT) practice tests</p>
+          <p className="nn-marketing-h4">CAT &amp; practice exams</p>
           <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">
-            After sign-in, open Practice tests to run CAT-style sessions matched to your pathway (length, topics, and review
-            flow). Full adaptive depth unlocks with a plan that covers this track.
+            After sign-in, run adaptive (CAT) sessions and timed practice exams from your study hub—scoped to this pathway
+            (length, topics, review flow). Full adaptive depth unlocks with a plan that covers this track.
           </p>
           {isSignedIn ? (
             <MarketingTrackedLink
@@ -193,7 +193,7 @@ export function ExamPathwayHubBody({
           </Link>
           , then{" "}
           <Link href={HUB.practiceExams} className="font-semibold text-primary hover:underline">
-            timed mocks
+            practice exams
           </Link>
           . Browse other licensure tracks from the{" "}
           <Link href="/lessons" className="font-semibold text-primary hover:underline">
@@ -208,7 +208,7 @@ export function ExamPathwayHubBody({
       </h2>
       <p className="nn-marketing-body-sm mt-2 max-w-2xl text-[var(--theme-muted-text)]">
         {conversionSectionLead ??
-          "After you subscribe, one login holds pathway-matched practice, lessons, flashcards, planner, and readiness for this exam family. Timed and mock sessions unlock in-app when your plan covers this track."}
+          "After you subscribe, one login holds pathway-matched practice, lessons, flashcards, planner, and readiness for this exam family. Timed practice exams and CAT sessions unlock in-app when your plan covers this track."}
       </p>
       <ul className="nn-marketing-body-sm mt-4 list-inside list-disc space-y-1.5 text-[var(--theme-body-text)]">
         <li>
@@ -221,7 +221,7 @@ export function ExamPathwayHubBody({
           <span className="font-semibold text-[var(--theme-heading-text)]">Flashcards &amp; planner:</span> weak-topic decks and pacing after sign-in.
         </li>
         <li>
-          <span className="font-semibold text-[var(--theme-heading-text)]">Exam mode &amp; mocks:</span> full-length timing and review flags in-app.
+          <span className="font-semibold text-[var(--theme-heading-text)]">Practice exams:</span> full-length timing and review flags in-app.
         </li>
       </ul>
 

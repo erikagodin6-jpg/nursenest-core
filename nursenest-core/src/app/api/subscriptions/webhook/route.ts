@@ -141,6 +141,8 @@ export async function POST(req: Request) {
         });
         if (activeBefore === 0) {
           void captureServerEvent(analyticsDistinctId(userId), PH.learnerConversionSubscribed, {
+            actor: "authenticated",
+            funnel_step: "paid_subscription_active",
             country: plan?.country,
             tier: plan?.tier ? String(plan.tier) : undefined,
             source: "stripe_checkout_session_completed",

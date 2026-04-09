@@ -20,12 +20,13 @@ export function LearnerShellPrimaryNav() {
             key={item.id}
             href={item.href}
             onClick={() => {
-              if (item.id === "learner-lessons") {
-                trackClientEvent(PH.learnerNavLessonsClick, {
-                  country: readMarketingRegionFromDocument(),
-                  surface: "learner_primary_nav",
-                });
-              }
+              trackClientEvent(PH.learnerNavClick, {
+                actor: "authenticated",
+                nav_id: item.id,
+                href: item.href,
+                country: readMarketingRegionFromDocument(),
+                surface: "learner_primary_nav",
+              });
             }}
             className={
               isDashboard

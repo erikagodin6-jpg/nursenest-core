@@ -222,6 +222,8 @@ export function QuestionBankPracticeClient({
   const [graded, setGraded] = useState<QuestionBankGradedStateMap>({});
   const [grading, setGrading] = useState(false);
   const questionOpenedAtMsRef = useRef<number | null>(null);
+  /** One completion event per fresh batch (reset when `loadBatch(false)` clears graded). */
+  const qbankSessionCompleteSentRef = useRef(false);
   /** Per-option exam tools (reset each item). */
   const [strikeOut, setStrikeOut] = useState<Record<string, boolean>>({});
   const [highlightOn, setHighlightOn] = useState<Record<string, boolean>>({});
@@ -372,6 +374,7 @@ export function QuestionBankPracticeClient({
           setIdx(0);
           setAnswer(null);
           setGraded({});
+          qbankSessionCompleteSentRef.current = false;
 
           const sk = sessionKey(userId);
           const saved = parsePersistedQuestionBankSessionJson(localStorage.getItem(sk));
@@ -399,6 +402,7 @@ export function QuestionBankPracticeClient({
 
         if (!append && list.length > 0) {
           trackClientEvent(PH.learnerQuestionBankSessionStarted, {
+            actor: "authenticated",
             country: readMarketingRegionFromDocument(),
             pathway_id: pathwayIdFilter ?? undefined,
             preset,

@@ -8,6 +8,7 @@ import { requireSubscriberSession, notSubscribedResponse } from "@/lib/entitleme
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { captureLessonProgressAnalytics } from "@/lib/observability/lesson-progress-analytics";
 import {
   captureStudyProgressFunnelAfterUpsert,
   loadStudyFunnelBeforeSnapshot,
@@ -97,6 +98,15 @@ export async function POST(req: Request) {
         },
         update: { completed: false },
       });
+      captureLessonProgressAnalytics(userId, gate.entitlement, {
+        lessonId: syntheticLessonId,
+        pathwayId,
+        lessonSlug,
+        source: "pathway_synthetic",
+        hadExistingRow: !!existing,
+        priorCompleted: existing?.completed ?? false,
+        nextCompleted: false,
+      });
       captureStudyProgressFunnelAfterUpsert(userId, gate.entitlement, funnelBefore);
       return NextResponse.json({ ok: true });
     }
@@ -114,6 +124,15 @@ export async function POST(req: Request) {
           engagedAt: existing?.engagedAt ?? new Date(),
         },
       });
+      captureLessonProgressAnalytics(userId, gate.entitlement, {
+        lessonId: syntheticLessonId,
+        pathwayId,
+        lessonSlug,
+        source: "pathway_synthetic",
+        hadExistingRow: !!existing,
+        priorCompleted: existing?.completed ?? false,
+        nextCompleted: true,
+      });
       captureStudyProgressFunnelAfterUpsert(userId, gate.entitlement, funnelBefore);
       return NextResponse.json({ ok: true });
     }
@@ -126,6 +145,15 @@ export async function POST(req: Request) {
           engagedAt: existing?.engagedAt ?? new Date(),
         },
       });
+      captureLessonProgressAnalytics(userId, gate.entitlement, {
+        lessonId: syntheticLessonId,
+        pathwayId,
+        lessonSlug,
+        source: "pathway_synthetic",
+        hadExistingRow: !!existing,
+        priorCompleted: existing?.completed ?? false,
+        nextCompleted: existing?.completed ?? false,
+      });
       captureStudyProgressFunnelAfterUpsert(userId, gate.entitlement, funnelBefore);
       return NextResponse.json({ ok: true });
     }
@@ -135,6 +163,15 @@ export async function POST(req: Request) {
         where: { userId_lessonId: { userId, lessonId: syntheticLessonId } },
         create: { userId, lessonId: syntheticLessonId, completed: false },
         update: { completed: false },
+      });
+      captureLessonProgressAnalytics(userId, gate.entitlement, {
+        lessonId: syntheticLessonId,
+        pathwayId,
+        lessonSlug,
+        source: "pathway_synthetic",
+        hadExistingRow: !!existing,
+        priorCompleted: existing?.completed ?? false,
+        nextCompleted: false,
       });
       captureStudyProgressFunnelAfterUpsert(userId, gate.entitlement, funnelBefore);
       return NextResponse.json({ ok: true });

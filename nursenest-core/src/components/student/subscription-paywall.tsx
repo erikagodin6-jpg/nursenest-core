@@ -1,7 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useRef } from "react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { trackClientEvent } from "@/lib/observability/posthog-client";
+import { PH } from "@/lib/observability/posthog-conversion-events";
 
 export type PaywallContext = "questions" | "lessons" | "exams" | "dashboard";
 
@@ -36,6 +39,18 @@ export function SubscriptionPaywall({
   const progressTemplate = t(`${p}.progress`);
   const progressLine =
     progressBits.length > 0 ? `${progressBits.join(" · ")}. ${progressTemplate}` : progressTemplate;
+
+  const sent = useRef(false);
+  useEffect(() => {
+    if (sent.current) return;
+    sent.current = true;
+    trackClientEvent(PH.paywallEncounter, {
+      actor: "authenticated",
+      context,
+      freemium_questions_remaining: freemiumRemainingQuestions,
+      freemium_lessons_remaining: freemiumRemainingLessons,
+    });
+  }, [context, freemiumRemainingQuestions, freemiumRemainingLessons]);
 
   return (
     <section className="nn-card space-y-4 p-6">

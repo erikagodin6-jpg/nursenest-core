@@ -32,7 +32,10 @@ export function SignupForm({
 
   async function onSubmit(formData: FormData) {
     setError(null);
-    trackClientEvent(PH.signupSubmitAttempt, {});
+    trackClientEvent(PH.signupSubmitAttempt, {
+      actor: "anonymous",
+      funnel_step: "signup_submit",
+    });
     const payload = {
       name: String(formData.get("name") ?? ""),
       username: String(formData.get("username") ?? ""),
@@ -59,7 +62,12 @@ export function SignupForm({
       setError(typeof data.error === "string" ? data.error : t("pages.signup.errorGeneric"));
       return;
     }
-    trackClientEvent(PH.signupSuccessClient, {});
+    trackClientEvent(PH.signupSuccessClient, {
+      actor: "anonymous",
+      funnel_step: "account_created",
+      exam_focus: examFocus,
+      country,
+    });
     router.push("/login");
   }
 

@@ -1,7 +1,7 @@
 {
   "version": 1,
   "generatedBy": "scripts/generate-rn-nclex-master-map.mjs",
-  "sourceOfTruth": "Place your uploaded NCLEX outline/PDF in secure content storage and align lesson bodies to it. This map defines titles, tiers, and merge rules only.",
+  "sourceOfTruth": "Align lesson bodies to your uploaded NCLEX outline/PDF. Completeness checklist (audit targets): src/content/pathway-lessons/nclex-rn-source-checklist.json — run node scripts/audit-rn-nclex-map.mjs after map changes.",
   "pathways": [
     "us-rn-nclex-rn",
     "ca-rn-nclex-rn"
@@ -83,39 +83,39 @@
     }
   },
   "aggregates": {
-    "uniqueLessonCount": 143,
+    "uniqueLessonCount": 162,
     "byTier": {
-      "A": 64,
-      "B": 44,
-      "C": 34,
+      "A": 74,
+      "B": 52,
+      "C": 35,
       "D": 1
     },
     "byPrimaryCategory": {
-      "cardiovascular": 13,
-      "neurological": 11,
+      "cardiovascular": 14,
+      "neurological": 13,
       "pharmacology_master": 24,
-      "hematology_oncology_immunology": 7,
+      "hematology_oncology_immunology": 8,
       "pediatrics": 14,
-      "endocrine_metabolic_fluids": 8,
-      "respiratory": 11,
-      "mental_health": 9,
-      "gastrointestinal": 12,
-      "emergency_critical_perioperative": 9,
+      "endocrine_metabolic_fluids": 10,
+      "respiratory": 13,
+      "emergency_critical_perioperative": 15,
+      "mental_health": 11,
+      "gastrointestinal": 13,
       "maternity_newborn": 17,
-      "renal_genitourinary": 8
+      "renal_genitourinary": 10
     },
     "visibleInCategory": {
-      "cardiovascular": 20,
-      "respiratory": 11,
-      "neurological": 12,
-      "gastrointestinal": 12,
-      "renal_genitourinary": 8,
-      "endocrine_metabolic_fluids": 12,
-      "hematology_oncology_immunology": 10,
+      "cardiovascular": 21,
+      "respiratory": 13,
+      "neurological": 14,
+      "gastrointestinal": 13,
+      "renal_genitourinary": 10,
+      "endocrine_metabolic_fluids": 14,
+      "hematology_oncology_immunology": 11,
       "pediatrics": 24,
       "maternity_newborn": 19,
-      "mental_health": 12,
-      "emergency_critical_perioperative": 15,
+      "mental_health": 14,
+      "emergency_critical_perioperative": 21,
       "pharmacology_master": 24
     }
   },
@@ -134,7 +134,7 @@
       "bodySystem": "Cardiovascular"
     },
     {
-      "id": "rn-map-0043",
+      "id": "rn-map-0048",
       "canonicalTitle": "Abnormal Neurological Assessment Findings",
       "slug": "abnormal-neurological-assessment-findings-nclex-rn",
       "tier": "B",
@@ -147,7 +147,7 @@
       "bodySystem": "Neurological"
     },
     {
-      "id": "rn-map-0015",
+      "id": "rn-map-0016",
       "canonicalTitle": "ACE Inhibitors",
       "slug": "ace-inhibitors-nclex-rn",
       "tier": "C",
@@ -175,7 +175,7 @@
       "bodySystem": "Cardiovascular"
     },
     {
-      "id": "rn-map-0076",
+      "id": "rn-map-0086",
       "canonicalTitle": "Acute Lymphoblastic Leukemia",
       "slug": "acute-lymphoblastic-leukemia-nclex-rn",
       "tier": "A",
@@ -190,7 +190,7 @@
       "bodySystem": "Hematology / Oncology / Immunology"
     },
     {
-      "id": "rn-map-0077",
+      "id": "rn-map-0087",
       "canonicalTitle": "Acute Myelogenous Leukemia",
       "slug": "acute-myelogenous-leukemia-nclex-rn",
       "tier": "A",
@@ -205,7 +205,7 @@
       "bodySystem": "Hematology / Oncology / Immunology"
     },
     {
-      "id": "rn-map-0091",
+      "id": "rn-map-0102",
       "canonicalTitle": "Acute Rheumatic Fever",
       "slug": "acute-rheumatic-fever-nclex-rn",
       "tier": "B",
@@ -218,7 +218,7 @@
       "bodySystem": "Pediatrics"
     },
     {
-      "id": "rn-map-0067",
+      "id": "rn-map-0075",
       "canonicalTitle": "Addison Disease / Primary Adrenal Insufficiency",
       "slug": "addison-disease-primary-adrenal-insufficiency-nclex-rn",
       "tier": "A",
@@ -231,7 +231,7 @@
       "bodySystem": "Endocrine / Metabolic / Fluids"
     },
     {
-      "id": "rn-map-0099",
+      "id": "rn-map-0110",
       "canonicalTitle": "Administering Medication to Infants",
       "slug": "administering-medication-to-infants-nclex-rn",
       "tier": "C",
@@ -244,7 +244,7 @@
       "bodySystem": "Pediatrics"
     },
     {
-      "id": "rn-map-0031",
+      "id": "rn-map-0034",
       "canonicalTitle": "Airborne Precautions",
       "slug": "airborne-precautions-nclex-rn",
       "tier": "C",
@@ -257,7 +257,7 @@
       "bodySystem": "Respiratory"
     },
     {
-      "id": "rn-map-0074",
+      "id": "rn-map-0084",
       "canonicalTitle": "Albumin and Oncotic Pressure",
       "slug": "albumin-and-oncotic-pressure-nclex-rn",
       "tier": "B",
@@ -270,7 +270,7 @@
       "bodySystem": "Endocrine / Metabolic / Fluids"
     },
     {
-      "id": "rn-map-0085",
+      "id": "rn-map-0096",
       "canonicalTitle": "Allopurinol",
       "slug": "allopurinol-nclex-rn",
       "tier": "C",
@@ -285,7 +285,20 @@
       "bodySystem": "Pharmacology"
     },
     {
-      "id": "rn-map-0124",
+      "id": "rn-map-0152",
+      "canonicalTitle": "Anaphylaxis",
+      "slug": "anaphylaxis-nclex-rn",
+      "tier": "A",
+      "wordTargetMin": 1800,
+      "wordTargetMax": 2600,
+      "primaryCategoryId": "emergency_critical_perioperative",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "emergency-critical-perioperative",
+      "bodySystem": "Emergency / Critical Care / Perioperative"
+    },
+    {
+      "id": "rn-map-0135",
       "canonicalTitle": "Antisocial Personality Disorder",
       "slug": "antisocial-personality-disorder-nclex-rn",
       "tier": "B",
@@ -298,7 +311,7 @@
       "bodySystem": "Mental Health"
     },
     {
-      "id": "rn-map-0045",
+      "id": "rn-map-0050",
       "canonicalTitle": "Appendicitis",
       "slug": "appendicitis-nclex-rn",
       "tier": "A",
@@ -311,7 +324,7 @@
       "bodySystem": "Gastrointestinal"
     },
     {
-      "id": "rn-map-0139",
+      "id": "rn-map-0158",
       "canonicalTitle": "ARBs",
       "slug": "arbs-nclex-rn",
       "tier": "C",
@@ -324,7 +337,7 @@
       "bodySystem": "Pharmacology"
     },
     {
-      "id": "rn-map-0022",
+      "id": "rn-map-0023",
       "canonicalTitle": "ARDS",
       "slug": "ards-nclex-rn",
       "tier": "A",
@@ -335,6 +348,19 @@
         "emergency_critical_perioperative"
       ],
       "mergeNote": "Also emergency; single lesson with ventilator content.",
+      "topicSlug": "respiratory",
+      "bodySystem": "Respiratory"
+    },
+    {
+      "id": "rn-map-0030",
+      "canonicalTitle": "Asthma",
+      "slug": "asthma-nclex-rn",
+      "tier": "A",
+      "wordTargetMin": 1800,
+      "wordTargetMax": 2600,
+      "primaryCategoryId": "respiratory",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
       "topicSlug": "respiratory",
       "bodySystem": "Respiratory"
     },
@@ -352,7 +378,7 @@
       "bodySystem": "Cardiovascular"
     },
     {
-      "id": "rn-map-0131",
+      "id": "rn-map-0144",
       "canonicalTitle": "Autonomic Dysreflexia",
       "slug": "autonomic-dysreflexia-nclex-rn",
       "tier": "A",
@@ -365,7 +391,7 @@
       "bodySystem": "Emergency / Critical Care / Perioperative"
     },
     {
-      "id": "rn-map-0036",
+      "id": "rn-map-0039",
       "canonicalTitle": "Bacterial Meningitis",
       "slug": "bacterial-meningitis-nclex-rn",
       "tier": "A",
@@ -378,7 +404,20 @@
       "bodySystem": "Neurological"
     },
     {
-      "id": "rn-map-0110",
+      "id": "rn-map-0138",
+      "canonicalTitle": "Bipolar Disorders",
+      "slug": "bipolar-disorders-nclex-rn",
+      "tier": "A",
+      "wordTargetMin": 1800,
+      "wordTargetMax": 2600,
+      "primaryCategoryId": "mental_health",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "mental-health",
+      "bodySystem": "Mental Health"
+    },
+    {
+      "id": "rn-map-0121",
       "canonicalTitle": "Bishop Score",
       "slug": "bishop-score-nclex-rn",
       "tier": "C",
@@ -391,7 +430,20 @@
       "bodySystem": "Maternity / Newborn"
     },
     {
-      "id": "rn-map-0097",
+      "id": "rn-map-0093",
+      "canonicalTitle": "Blood Product Administration and Transfusion Reactions",
+      "slug": "blood-product-administration-and-transfusion-reactions-nclex-rn",
+      "tier": "A",
+      "wordTargetMin": 1800,
+      "wordTargetMax": 2600,
+      "primaryCategoryId": "hematology_oncology_immunology",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "hematology-oncology-immunology",
+      "bodySystem": "Hematology / Oncology / Immunology"
+    },
+    {
+      "id": "rn-map-0108",
       "canonicalTitle": "Botulism",
       "slug": "botulism-nclex-rn",
       "tier": "A",
@@ -404,20 +456,20 @@
       "bodySystem": "Pediatrics"
     },
     {
-      "id": "rn-map-0046",
-      "canonicalTitle": "Bowel Obstruction",
-      "slug": "bowel-obstruction-nclex-rn",
+      "id": "rn-map-0051",
+      "canonicalTitle": "Bowel Obstruction (Mechanical and Functional)",
+      "slug": "bowel-obstruction-mechanical-and-functional-nclex-rn",
       "tier": "A",
       "wordTargetMin": 1800,
       "wordTargetMax": 2600,
       "primaryCategoryId": "gastrointestinal",
       "secondaryCategoryIds": [],
-      "mergeNote": null,
+      "mergeNote": "Replaces separate 'Bowel Obstruction' + 'Mechanical Bowel Obstruction' rows — one lesson covering mechanical ileus, obstruction patterns, and priority nursing actions.",
       "topicSlug": "gastrointestinal",
       "bodySystem": "Gastrointestinal"
     },
     {
-      "id": "rn-map-0106",
+      "id": "rn-map-0117",
       "canonicalTitle": "Breast Engorgement",
       "slug": "breast-engorgement-nclex-rn",
       "tier": "B",
@@ -430,7 +482,7 @@
       "bodySystem": "Maternity / Newborn"
     },
     {
-      "id": "rn-map-0026",
+      "id": "rn-map-0027",
       "canonicalTitle": "Bronchiolitis and RSV",
       "slug": "bronchiolitis-and-rsv-nclex-rn",
       "tier": "B",
@@ -473,7 +525,7 @@
       "bodySystem": "Cardiovascular"
     },
     {
-      "id": "rn-map-0134",
+      "id": "rn-map-0147",
       "canonicalTitle": "Carotid Endarterectomy",
       "slug": "carotid-endarterectomy-nclex-rn",
       "tier": "B",
@@ -486,7 +538,7 @@
       "bodySystem": "Emergency / Critical Care / Perioperative"
     },
     {
-      "id": "rn-map-0038",
+      "id": "rn-map-0041",
       "canonicalTitle": "Cauda Equina Syndrome",
       "slug": "cauda-equina-syndrome-nclex-rn",
       "tier": "A",
@@ -499,7 +551,20 @@
       "bodySystem": "Neurological"
     },
     {
-      "id": "rn-map-0039",
+      "id": "rn-map-0153",
+      "canonicalTitle": "Cellulitis and Skin and Soft-Tissue Infection",
+      "slug": "cellulitis-and-skin-and-soft-tissue-infection-nclex-rn",
+      "tier": "B",
+      "wordTargetMin": 1200,
+      "wordTargetMax": 1800,
+      "primaryCategoryId": "emergency_critical_perioperative",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "emergency-critical-perioperative",
+      "bodySystem": "Emergency / Critical Care / Perioperative"
+    },
+    {
+      "id": "rn-map-0042",
       "canonicalTitle": "Cerebral Palsy",
       "slug": "cerebral-palsy-nclex-rn",
       "tier": "B",
@@ -514,7 +579,7 @@
       "bodySystem": "Neurological"
     },
     {
-      "id": "rn-map-0029",
+      "id": "rn-map-0032",
       "canonicalTitle": "Chest Tubes",
       "slug": "chest-tubes-nclex-rn",
       "tier": "B",
@@ -529,7 +594,7 @@
       "bodySystem": "Respiratory"
     },
     {
-      "id": "rn-map-0044",
+      "id": "rn-map-0049",
       "canonicalTitle": "Cholecystitis",
       "slug": "cholecystitis-nclex-rn",
       "tier": "A",
@@ -542,7 +607,7 @@
       "bodySystem": "Gastrointestinal"
     },
     {
-      "id": "rn-map-0049",
+      "id": "rn-map-0053",
       "canonicalTitle": "Cirrhosis",
       "slug": "cirrhosis-nclex-rn",
       "tier": "A",
@@ -555,7 +620,7 @@
       "bodySystem": "Gastrointestinal"
     },
     {
-      "id": "rn-map-0142",
+      "id": "rn-map-0161",
       "canonicalTitle": "Cisplatin",
       "slug": "cisplatin-nclex-rn",
       "tier": "B",
@@ -568,7 +633,7 @@
       "bodySystem": "Pharmacology"
     },
     {
-      "id": "rn-map-0096",
+      "id": "rn-map-0107",
       "canonicalTitle": "Cleft Palate",
       "slug": "cleft-palate-nclex-rn",
       "tier": "B",
@@ -581,7 +646,20 @@
       "bodySystem": "Pediatrics"
     },
     {
-      "id": "rn-map-0123",
+      "id": "rn-map-0031",
+      "canonicalTitle": "Community-Acquired Pneumonia",
+      "slug": "community-acquired-pneumonia-nclex-rn",
+      "tier": "A",
+      "wordTargetMin": 1800,
+      "wordTargetMax": 2600,
+      "primaryCategoryId": "respiratory",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "respiratory",
+      "bodySystem": "Respiratory"
+    },
+    {
+      "id": "rn-map-0134",
       "canonicalTitle": "Conversion Disorder",
       "slug": "conversion-disorder-nclex-rn",
       "tier": "B",
@@ -594,7 +672,7 @@
       "bodySystem": "Mental Health"
     },
     {
-      "id": "rn-map-0021",
+      "id": "rn-map-0022",
       "canonicalTitle": "COPD",
       "slug": "copd-nclex-rn",
       "tier": "A",
@@ -607,7 +685,7 @@
       "bodySystem": "Respiratory"
     },
     {
-      "id": "rn-map-0028",
+      "id": "rn-map-0029",
       "canonicalTitle": "Cystic Fibrosis",
       "slug": "cystic-fibrosis-nclex-rn",
       "tier": "A",
@@ -620,7 +698,20 @@
       "bodySystem": "Respiratory"
     },
     {
-      "id": "rn-map-0019",
+      "id": "rn-map-0012",
+      "canonicalTitle": "Deep Vein Thrombosis (DVT): Prevention and Nursing Management",
+      "slug": "deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn",
+      "tier": "A",
+      "wordTargetMin": 1800,
+      "wordTargetMax": 2600,
+      "primaryCategoryId": "cardiovascular",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "cardiovascular",
+      "bodySystem": "Cardiovascular"
+    },
+    {
+      "id": "rn-map-0020",
       "canonicalTitle": "Defibrillation vs Synchronized Cardioversion",
       "slug": "defibrillation-vs-synchronized-cardioversion-nclex-rn",
       "tier": "C",
@@ -633,7 +724,33 @@
       "bodySystem": "Cardiovascular"
     },
     {
-      "id": "rn-map-0064",
+      "id": "rn-map-0045",
+      "canonicalTitle": "Delirium in Hospitalized Adults",
+      "slug": "delirium-in-hospitalized-adults-nclex-rn",
+      "tier": "B",
+      "wordTargetMin": 1200,
+      "wordTargetMax": 1800,
+      "primaryCategoryId": "neurological",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "neurological",
+      "bodySystem": "Neurological"
+    },
+    {
+      "id": "rn-map-0079",
+      "canonicalTitle": "Diabetes Insipidus",
+      "slug": "diabetes-insipidus-nclex-rn",
+      "tier": "B",
+      "wordTargetMin": 1200,
+      "wordTargetMax": 1800,
+      "primaryCategoryId": "endocrine_metabolic_fluids",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "endocrine-metabolic-fluids",
+      "bodySystem": "Endocrine / Metabolic / Fluids"
+    },
+    {
+      "id": "rn-map-0072",
       "canonicalTitle": "Diabetic Ketoacidosis",
       "slug": "diabetic-ketoacidosis-nclex-rn",
       "tier": "A",
@@ -646,7 +763,7 @@
       "bodySystem": "Endocrine / Metabolic / Fluids"
     },
     {
-      "id": "rn-map-0057",
+      "id": "rn-map-0063",
       "canonicalTitle": "Diabetic Nephropathy",
       "slug": "diabetic-nephropathy-nclex-rn",
       "tier": "A",
@@ -659,7 +776,7 @@
       "bodySystem": "Renal / Genitourinary"
     },
     {
-      "id": "rn-map-0013",
+      "id": "rn-map-0014",
       "canonicalTitle": "Digoxin",
       "slug": "digoxin-nclex-rn",
       "tier": "C",
@@ -674,7 +791,7 @@
       "bodySystem": "Pharmacology"
     },
     {
-      "id": "rn-map-0050",
+      "id": "rn-map-0054",
       "canonicalTitle": "Diverticulosis vs Diverticulitis",
       "slug": "diverticulosis-vs-diverticulitis-nclex-rn",
       "tier": "B",
@@ -687,7 +804,7 @@
       "bodySystem": "Gastrointestinal"
     },
     {
-      "id": "rn-map-0012",
+      "id": "rn-map-0013",
       "canonicalTitle": "Dopamine",
       "slug": "dopamine-nclex-rn",
       "tier": "C",
@@ -702,7 +819,7 @@
       "bodySystem": "Pharmacology"
     },
     {
-      "id": "rn-map-0095",
+      "id": "rn-map-0106",
       "canonicalTitle": "Duchenne Muscular Dystrophy",
       "slug": "duchenne-muscular-dystrophy-nclex-rn",
       "tier": "B",
@@ -715,7 +832,7 @@
       "bodySystem": "Pediatrics"
     },
     {
-      "id": "rn-map-0100",
+      "id": "rn-map-0111",
       "canonicalTitle": "Eclampsia",
       "slug": "eclampsia-nclex-rn",
       "tier": "A",
@@ -728,7 +845,7 @@
       "bodySystem": "Maternity / Newborn"
     },
     {
-      "id": "rn-map-0042",
+      "id": "rn-map-0047",
       "canonicalTitle": "ECT",
       "slug": "ect-nclex-rn",
       "tier": "C",
@@ -741,7 +858,7 @@
       "bodySystem": "Neurological"
     },
     {
-      "id": "rn-map-0125",
+      "id": "rn-map-0136",
       "canonicalTitle": "Elder Mistreatment",
       "slug": "elder-mistreatment-nclex-rn",
       "tier": "A",
@@ -754,7 +871,7 @@
       "bodySystem": "Mental Health"
     },
     {
-      "id": "rn-map-0088",
+      "id": "rn-map-0099",
       "canonicalTitle": "Encopresis",
       "slug": "encopresis-nclex-rn",
       "tier": "B",
@@ -767,7 +884,7 @@
       "bodySystem": "Pediatrics"
     },
     {
-      "id": "rn-map-0109",
+      "id": "rn-map-0120",
       "canonicalTitle": "Epidural Block Complications",
       "slug": "epidural-block-complications-nclex-rn",
       "tier": "B",
@@ -780,7 +897,7 @@
       "bodySystem": "Maternity / Newborn"
     },
     {
-      "id": "rn-map-0023",
+      "id": "rn-map-0024",
       "canonicalTitle": "Epiglottitis",
       "slug": "epiglottitis-nclex-rn",
       "tier": "A",
@@ -795,7 +912,7 @@
       "bodySystem": "Respiratory"
     },
     {
-      "id": "rn-map-0053",
+      "id": "rn-map-0057",
       "canonicalTitle": "ERCP and Post-Procedure Pancreatitis",
       "slug": "ercp-and-post-procedure-pancreatitis-nclex-rn",
       "tier": "B",
@@ -808,7 +925,7 @@
       "bodySystem": "Gastrointestinal"
     },
     {
-      "id": "rn-map-0132",
+      "id": "rn-map-0145",
       "canonicalTitle": "Extravasation",
       "slug": "extravasation-nclex-rn",
       "tier": "B",
@@ -821,7 +938,7 @@
       "bodySystem": "Emergency / Critical Care / Perioperative"
     },
     {
-      "id": "rn-map-0017",
+      "id": "rn-map-0018",
       "canonicalTitle": "Factor Xa Inhibitors",
       "slug": "factor-xa-inhibitors-nclex-rn",
       "tier": "C",
@@ -836,7 +953,20 @@
       "bodySystem": "Pharmacology"
     },
     {
-      "id": "rn-map-0037",
+      "id": "rn-map-0155",
+      "canonicalTitle": "Falls and Injury Prevention in Acute Care",
+      "slug": "falls-and-injury-prevention-in-acute-care-nclex-rn",
+      "tier": "B",
+      "wordTargetMin": 1200,
+      "wordTargetMax": 1800,
+      "primaryCategoryId": "emergency_critical_perioperative",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "emergency-critical-perioperative",
+      "bodySystem": "Emergency / Critical Care / Perioperative"
+    },
+    {
+      "id": "rn-map-0040",
       "canonicalTitle": "Febrile Seizures",
       "slug": "febrile-seizures-nclex-rn",
       "tier": "B",
@@ -851,7 +981,7 @@
       "bodySystem": "Neurological"
     },
     {
-      "id": "rn-map-0133",
+      "id": "rn-map-0146",
       "canonicalTitle": "Femoral Cardiac Catheterization",
       "slug": "femoral-cardiac-catheterization-nclex-rn",
       "tier": "B",
@@ -864,7 +994,7 @@
       "bodySystem": "Emergency / Critical Care / Perioperative"
     },
     {
-      "id": "rn-map-0113",
+      "id": "rn-map-0124",
       "canonicalTitle": "Fetal Metabolic Acidemia",
       "slug": "fetal-metabolic-acidemia-nclex-rn",
       "tier": "A",
@@ -877,7 +1007,7 @@
       "bodySystem": "Maternity / Newborn"
     },
     {
-      "id": "rn-map-0072",
+      "id": "rn-map-0082",
       "canonicalTitle": "Glyburide",
       "slug": "glyburide-nclex-rn",
       "tier": "C",
@@ -892,7 +1022,7 @@
       "bodySystem": "Pharmacology"
     },
     {
-      "id": "rn-map-0143",
+      "id": "rn-map-0162",
       "canonicalTitle": "Grapefruit Juice Drug Interactions",
       "slug": "grapefruit-juice-drug-interactions-nclex-rn",
       "tier": "D",
@@ -905,7 +1035,7 @@
       "bodySystem": "Pharmacology"
     },
     {
-      "id": "rn-map-0055",
+      "id": "rn-map-0061",
       "canonicalTitle": "Guaiac Fecal Occult Blood Testing",
       "slug": "guaiac-fecal-occult-blood-testing-nclex-rn",
       "tier": "C",
@@ -931,7 +1061,7 @@
       "bodySystem": "Cardiovascular"
     },
     {
-      "id": "rn-map-0101",
+      "id": "rn-map-0112",
       "canonicalTitle": "HELLP Syndrome",
       "slug": "hellp-syndrome-nclex-rn",
       "tier": "A",
@@ -944,7 +1074,7 @@
       "bodySystem": "Maternity / Newborn"
     },
     {
-      "id": "rn-map-0059",
+      "id": "rn-map-0065",
       "canonicalTitle": "Hematuria and Kidney-Related Red Flags",
       "slug": "hematuria-and-kidney-related-red-flags-nclex-rn",
       "tier": "B",
@@ -957,7 +1087,7 @@
       "bodySystem": "Renal / Genitourinary"
     },
     {
-      "id": "rn-map-0081",
+      "id": "rn-map-0091",
       "canonicalTitle": "Hemophilia",
       "slug": "hemophilia-nclex-rn",
       "tier": "A",
@@ -970,7 +1100,7 @@
       "bodySystem": "Hematology / Oncology / Immunology"
     },
     {
-      "id": "rn-map-0016",
+      "id": "rn-map-0017",
       "canonicalTitle": "Heparin and aPTT Monitoring",
       "slug": "heparin-and-aptt-monitoring-nclex-rn",
       "tier": "C",
@@ -985,7 +1115,7 @@
       "bodySystem": "Pharmacology"
     },
     {
-      "id": "rn-map-0112",
+      "id": "rn-map-0123",
       "canonicalTitle": "Herpes Simplex Virus in Pregnancy and Neonate",
       "slug": "herpes-simplex-virus-in-pregnancy-and-neonate-nclex-rn",
       "tier": "A",
@@ -998,7 +1128,7 @@
       "bodySystem": "Maternity / Newborn"
     },
     {
-      "id": "rn-map-0051",
+      "id": "rn-map-0055",
       "canonicalTitle": "Hiatal Hernia",
       "slug": "hiatal-hernia-nclex-rn",
       "tier": "B",
@@ -1011,7 +1141,7 @@
       "bodySystem": "Gastrointestinal"
     },
     {
-      "id": "rn-map-0092",
+      "id": "rn-map-0103",
       "canonicalTitle": "Hirschsprung Disease",
       "slug": "hirschsprung-disease-nclex-rn",
       "tier": "A",
@@ -1024,7 +1154,7 @@
       "bodySystem": "Pediatrics"
     },
     {
-      "id": "rn-map-0034",
+      "id": "rn-map-0037",
       "canonicalTitle": "Hydrocephalus in Children",
       "slug": "hydrocephalus-in-children-nclex-rn",
       "tier": "B",
@@ -1037,7 +1167,7 @@
       "bodySystem": "Neurological"
     },
     {
-      "id": "rn-map-0068",
+      "id": "rn-map-0076",
       "canonicalTitle": "Hyperkalemia: Recognition and Correction",
       "slug": "hyperkalemia-recognition-and-correction-nclex-rn",
       "tier": "A",
@@ -1063,7 +1193,7 @@
       "bodySystem": "Cardiovascular"
     },
     {
-      "id": "rn-map-0090",
+      "id": "rn-map-0101",
       "canonicalTitle": "Hypertrophic Pyloric Stenosis",
       "slug": "hypertrophic-pyloric-stenosis-nclex-rn",
       "tier": "A",
@@ -1076,7 +1206,7 @@
       "bodySystem": "Pediatrics"
     },
     {
-      "id": "rn-map-0069",
+      "id": "rn-map-0077",
       "canonicalTitle": "Hypoglycemia",
       "slug": "hypoglycemia-nclex-rn",
       "tier": "A",
@@ -1089,7 +1219,7 @@
       "bodySystem": "Endocrine / Metabolic / Fluids"
     },
     {
-      "id": "rn-map-0066",
+      "id": "rn-map-0074",
       "canonicalTitle": "Hypoparathyroidism",
       "slug": "hypoparathyroidism-nclex-rn",
       "tier": "B",
@@ -1102,7 +1232,7 @@
       "bodySystem": "Endocrine / Metabolic / Fluids"
     },
     {
-      "id": "rn-map-0033",
+      "id": "rn-map-0036",
       "canonicalTitle": "Increased ICP in Infants",
       "slug": "increased-icp-in-infants-nclex-rn",
       "tier": "A",
@@ -1115,7 +1245,7 @@
       "bodySystem": "Neurological"
     },
     {
-      "id": "rn-map-0032",
+      "id": "rn-map-0035",
       "canonicalTitle": "Increased Intracranial Pressure",
       "slug": "increased-intracranial-pressure-nclex-rn",
       "tier": "A",
@@ -1141,7 +1271,20 @@
       "bodySystem": "Cardiovascular"
     },
     {
-      "id": "rn-map-0052",
+      "id": "rn-map-0058",
+      "canonicalTitle": "Inflammatory Bowel Disease (Crohn Disease and Ulcerative Colitis)",
+      "slug": "inflammatory-bowel-disease-crohn-disease-and-ulcerative-colitis-nclex-rn",
+      "tier": "B",
+      "wordTargetMin": 1200,
+      "wordTargetMax": 1800,
+      "primaryCategoryId": "gastrointestinal",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "gastrointestinal",
+      "bodySystem": "Gastrointestinal"
+    },
+    {
+      "id": "rn-map-0056",
       "canonicalTitle": "Inguinal Hernia",
       "slug": "inguinal-hernia-nclex-rn",
       "tier": "B",
@@ -1154,7 +1297,7 @@
       "bodySystem": "Gastrointestinal"
     },
     {
-      "id": "rn-map-0030",
+      "id": "rn-map-0033",
       "canonicalTitle": "Inhaled Spacers",
       "slug": "inhaled-spacers-nclex-rn",
       "tier": "C",
@@ -1167,7 +1310,7 @@
       "bodySystem": "Respiratory"
     },
     {
-      "id": "rn-map-0093",
+      "id": "rn-map-0104",
       "canonicalTitle": "Intussusception",
       "slug": "intussusception-nclex-rn",
       "tier": "A",
@@ -1180,7 +1323,7 @@
       "bodySystem": "Pediatrics"
     },
     {
-      "id": "rn-map-0080",
+      "id": "rn-map-0090",
       "canonicalTitle": "Iron Deficiency Anemia",
       "slug": "iron-deficiency-anemia-nclex-rn",
       "tier": "B",
@@ -1195,7 +1338,7 @@
       "bodySystem": "Hematology / Oncology / Immunology"
     },
     {
-      "id": "rn-map-0063",
+      "id": "rn-map-0071",
       "canonicalTitle": "IUD Patient Teaching",
       "slug": "iud-patient-teaching-nclex-rn",
       "tier": "C",
@@ -1208,7 +1351,7 @@
       "bodySystem": "Renal / Genitourinary"
     },
     {
-      "id": "rn-map-0086",
+      "id": "rn-map-0097",
       "canonicalTitle": "Kawasaki Disease",
       "slug": "kawasaki-disease-nclex-rn",
       "tier": "A",
@@ -1221,7 +1364,7 @@
       "bodySystem": "Pediatrics"
     },
     {
-      "id": "rn-map-0114",
+      "id": "rn-map-0125",
       "canonicalTitle": "Large for Gestational Age Newborn",
       "slug": "large-for-gestational-age-newborn-nclex-rn",
       "tier": "B",
@@ -1234,7 +1377,7 @@
       "bodySystem": "Maternity / Newborn"
     },
     {
-      "id": "rn-map-0084",
+      "id": "rn-map-0095",
       "canonicalTitle": "Linezolid",
       "slug": "linezolid-nclex-rn",
       "tier": "C",
@@ -1249,7 +1392,7 @@
       "bodySystem": "Pharmacology"
     },
     {
-      "id": "rn-map-0126",
+      "id": "rn-map-0139",
       "canonicalTitle": "Lithium Toxicity",
       "slug": "lithium-toxicity-nclex-rn",
       "tier": "C",
@@ -1262,7 +1405,7 @@
       "bodySystem": "Mental Health"
     },
     {
-      "id": "rn-map-0141",
+      "id": "rn-map-0160",
       "canonicalTitle": "Macrolide Antibiotics",
       "slug": "macrolide-antibiotics-nclex-rn",
       "tier": "C",
@@ -1275,7 +1418,7 @@
       "bodySystem": "Pharmacology"
     },
     {
-      "id": "rn-map-0138",
+      "id": "rn-map-0157",
       "canonicalTitle": "Magnesium Sulfate",
       "slug": "magnesium-sulfate-nclex-rn",
       "tier": "C",
@@ -1288,7 +1431,7 @@
       "bodySystem": "Pharmacology"
     },
     {
-      "id": "rn-map-0120",
+      "id": "rn-map-0131",
       "canonicalTitle": "Major Depressive Disorder",
       "slug": "major-depressive-disorder-nclex-rn",
       "tier": "A",
@@ -1301,7 +1444,7 @@
       "bodySystem": "Mental Health"
     },
     {
-      "id": "rn-map-0137",
+      "id": "rn-map-0150",
       "canonicalTitle": "Malignant Dysrhythmia Red Flags",
       "slug": "malignant-dysrhythmia-red-flags-nclex-rn",
       "tier": "A",
@@ -1314,7 +1457,7 @@
       "bodySystem": "Emergency / Critical Care / Perioperative"
     },
     {
-      "id": "rn-map-0130",
+      "id": "rn-map-0143",
       "canonicalTitle": "Malignant Hyperthermia",
       "slug": "malignant-hyperthermia-nclex-rn",
       "tier": "A",
@@ -1327,20 +1470,7 @@
       "bodySystem": "Emergency / Critical Care / Perioperative"
     },
     {
-      "id": "rn-map-0047",
-      "canonicalTitle": "Mechanical Bowel Obstruction",
-      "slug": "mechanical-bowel-obstruction-nclex-rn",
-      "tier": "A",
-      "wordTargetMin": 1800,
-      "wordTargetMax": 2600,
-      "primaryCategoryId": "gastrointestinal",
-      "secondaryCategoryIds": [],
-      "mergeNote": null,
-      "topicSlug": "gastrointestinal",
-      "bodySystem": "Gastrointestinal"
-    },
-    {
-      "id": "rn-map-0129",
+      "id": "rn-map-0142",
       "canonicalTitle": "Memantine",
       "slug": "memantine-nclex-rn",
       "tier": "C",
@@ -1355,7 +1485,7 @@
       "bodySystem": "Pharmacology"
     },
     {
-      "id": "rn-map-0071",
+      "id": "rn-map-0081",
       "canonicalTitle": "Metformin",
       "slug": "metformin-nclex-rn",
       "tier": "C",
@@ -1370,7 +1500,7 @@
       "bodySystem": "Pharmacology"
     },
     {
-      "id": "rn-map-0014",
+      "id": "rn-map-0015",
       "canonicalTitle": "Milrinone",
       "slug": "milrinone-nclex-rn",
       "tier": "C",
@@ -1385,7 +1515,7 @@
       "bodySystem": "Pharmacology"
     },
     {
-      "id": "rn-map-0108",
+      "id": "rn-map-0119",
       "canonicalTitle": "Misoprostol",
       "slug": "misoprostol-nclex-rn",
       "tier": "C",
@@ -1400,7 +1530,7 @@
       "bodySystem": "Pharmacology"
     },
     {
-      "id": "rn-map-0082",
+      "id": "rn-map-0092",
       "canonicalTitle": "Mononucleosis and Splenic Rupture",
       "slug": "mononucleosis-and-splenic-rupture-nclex-rn",
       "tier": "B",
@@ -1413,7 +1543,7 @@
       "bodySystem": "Hematology / Oncology / Immunology"
     },
     {
-      "id": "rn-map-0105",
+      "id": "rn-map-0116",
       "canonicalTitle": "Morning Sickness",
       "slug": "morning-sickness-nclex-rn",
       "tier": "B",
@@ -1439,7 +1569,7 @@
       "bodySystem": "Cardiovascular"
     },
     {
-      "id": "rn-map-0111",
+      "id": "rn-map-0122",
       "canonicalTitle": "Naegele’s Rule",
       "slug": "naegele-s-rule-nclex-rn",
       "tier": "C",
@@ -1452,7 +1582,7 @@
       "bodySystem": "Maternity / Newborn"
     },
     {
-      "id": "rn-map-0115",
+      "id": "rn-map-0126",
       "canonicalTitle": "Neonatal Abstinence Syndrome",
       "slug": "neonatal-abstinence-syndrome-nclex-rn",
       "tier": "A",
@@ -1465,7 +1595,7 @@
       "bodySystem": "Maternity / Newborn"
     },
     {
-      "id": "rn-map-0056",
+      "id": "rn-map-0062",
       "canonicalTitle": "Nephrolithiasis",
       "slug": "nephrolithiasis-nclex-rn",
       "tier": "A",
@@ -1478,7 +1608,7 @@
       "bodySystem": "Renal / Genitourinary"
     },
     {
-      "id": "rn-map-0058",
+      "id": "rn-map-0064",
       "canonicalTitle": "Nephrotic Syndrome",
       "slug": "nephrotic-syndrome-nclex-rn",
       "tier": "A",
@@ -1491,7 +1621,7 @@
       "bodySystem": "Renal / Genitourinary"
     },
     {
-      "id": "rn-map-0122",
+      "id": "rn-map-0133",
       "canonicalTitle": "Neuroleptic Malignant Syndrome",
       "slug": "neuroleptic-malignant-syndrome-nclex-rn",
       "tier": "A",
@@ -1506,7 +1636,7 @@
       "bodySystem": "Mental Health"
     },
     {
-      "id": "rn-map-0070",
+      "id": "rn-map-0080",
       "canonicalTitle": "Newborn Hypoglycemia",
       "slug": "newborn-hypoglycemia-nclex-rn",
       "tier": "A",
@@ -1521,7 +1651,7 @@
       "bodySystem": "Maternity / Newborn"
     },
     {
-      "id": "rn-map-0098",
+      "id": "rn-map-0109",
       "canonicalTitle": "Newborns of Mothers with Diabetes",
       "slug": "newborns-of-mothers-with-diabetes-nclex-rn",
       "tier": "B",
@@ -1534,7 +1664,7 @@
       "bodySystem": "Pediatrics"
     },
     {
-      "id": "rn-map-0140",
+      "id": "rn-map-0159",
       "canonicalTitle": "NSAIDs",
       "slug": "nsaids-nclex-rn",
       "tier": "B",
@@ -1547,7 +1677,7 @@
       "bodySystem": "Pharmacology"
     },
     {
-      "id": "rn-map-0121",
+      "id": "rn-map-0132",
       "canonicalTitle": "Opioid Withdrawal",
       "slug": "opioid-withdrawal-nclex-rn",
       "tier": "A",
@@ -1560,7 +1690,7 @@
       "bodySystem": "Mental Health"
     },
     {
-      "id": "rn-map-0107",
+      "id": "rn-map-0118",
       "canonicalTitle": "Oxytocin",
       "slug": "oxytocin-nclex-rn",
       "tier": "C",
@@ -1575,7 +1705,7 @@
       "bodySystem": "Pharmacology"
     },
     {
-      "id": "rn-map-0118",
+      "id": "rn-map-0129",
       "canonicalTitle": "Panic Disorder",
       "slug": "panic-disorder-nclex-rn",
       "tier": "B",
@@ -1588,7 +1718,7 @@
       "bodySystem": "Mental Health"
     },
     {
-      "id": "rn-map-0040",
+      "id": "rn-map-0043",
       "canonicalTitle": "Parkinson Disease",
       "slug": "parkinson-disease-nclex-rn",
       "tier": "A",
@@ -1601,7 +1731,7 @@
       "bodySystem": "Neurological"
     },
     {
-      "id": "rn-map-0048",
+      "id": "rn-map-0052",
       "canonicalTitle": "Peptic Ulcer Disease",
       "slug": "peptic-ulcer-disease-nclex-rn",
       "tier": "A",
@@ -1627,7 +1757,7 @@
       "bodySystem": "Cardiovascular"
     },
     {
-      "id": "rn-map-0027",
+      "id": "rn-map-0028",
       "canonicalTitle": "Pertussis",
       "slug": "pertussis-nclex-rn",
       "tier": "B",
@@ -1640,7 +1770,7 @@
       "bodySystem": "Respiratory"
     },
     {
-      "id": "rn-map-0127",
+      "id": "rn-map-0140",
       "canonicalTitle": "Phenelzine and Tyramine Crisis",
       "slug": "phenelzine-and-tyramine-crisis-nclex-rn",
       "tier": "C",
@@ -1655,7 +1785,7 @@
       "bodySystem": "Pharmacology"
     },
     {
-      "id": "rn-map-0041",
+      "id": "rn-map-0046",
       "canonicalTitle": "Phenytoin",
       "slug": "phenytoin-nclex-rn",
       "tier": "C",
@@ -1670,7 +1800,7 @@
       "bodySystem": "Pharmacology"
     },
     {
-      "id": "rn-map-0020",
+      "id": "rn-map-0021",
       "canonicalTitle": "Phlebostatic Axis",
       "slug": "phlebostatic-axis-nclex-rn",
       "tier": "C",
@@ -1683,7 +1813,20 @@
       "bodySystem": "Cardiovascular"
     },
     {
-      "id": "rn-map-0102",
+      "id": "rn-map-0156",
+      "canonicalTitle": "Physical Restraints: Indications, Monitoring, and Alternatives",
+      "slug": "physical-restraints-indications-monitoring-and-alternatives-nclex-rn",
+      "tier": "C",
+      "wordTargetMin": 900,
+      "wordTargetMax": 1400,
+      "primaryCategoryId": "emergency_critical_perioperative",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "emergency-critical-perioperative",
+      "bodySystem": "Emergency / Critical Care / Perioperative"
+    },
+    {
+      "id": "rn-map-0113",
       "canonicalTitle": "Placenta Previa",
       "slug": "placenta-previa-nclex-rn",
       "tier": "A",
@@ -1696,7 +1839,7 @@
       "bodySystem": "Maternity / Newborn"
     },
     {
-      "id": "rn-map-0103",
+      "id": "rn-map-0114",
       "canonicalTitle": "Placental Abruption",
       "slug": "placental-abruption-nclex-rn",
       "tier": "A",
@@ -1709,7 +1852,7 @@
       "bodySystem": "Maternity / Newborn"
     },
     {
-      "id": "rn-map-0024",
+      "id": "rn-map-0025",
       "canonicalTitle": "Pleurisy",
       "slug": "pleurisy-nclex-rn",
       "tier": "B",
@@ -1722,7 +1865,7 @@
       "bodySystem": "Respiratory"
     },
     {
-      "id": "rn-map-0025",
+      "id": "rn-map-0026",
       "canonicalTitle": "Positive Pressure Ventilation",
       "slug": "positive-pressure-ventilation-nclex-rn",
       "tier": "A",
@@ -1737,7 +1880,7 @@
       "bodySystem": "Respiratory"
     },
     {
-      "id": "rn-map-0135",
+      "id": "rn-map-0148",
       "canonicalTitle": "Postmortem Care",
       "slug": "postmortem-care-nclex-rn",
       "tier": "B",
@@ -1750,7 +1893,20 @@
       "bodySystem": "Emergency / Critical Care / Perioperative"
     },
     {
-      "id": "rn-map-0062",
+      "id": "rn-map-0154",
+      "canonicalTitle": "Pressure Injury: Staging, Prevention, and Wound Care",
+      "slug": "pressure-injury-staging-prevention-and-wound-care-nclex-rn",
+      "tier": "B",
+      "wordTargetMin": 1200,
+      "wordTargetMax": 1800,
+      "primaryCategoryId": "emergency_critical_perioperative",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "emergency-critical-perioperative",
+      "bodySystem": "Emergency / Critical Care / Perioperative"
+    },
+    {
+      "id": "rn-map-0070",
       "canonicalTitle": "Prostate Cancer",
       "slug": "prostate-cancer-nclex-rn",
       "tier": "B",
@@ -1763,7 +1919,7 @@
       "bodySystem": "Renal / Genitourinary"
     },
     {
-      "id": "rn-map-0119",
+      "id": "rn-map-0130",
       "canonicalTitle": "PTSD",
       "slug": "ptsd-nclex-rn",
       "tier": "B",
@@ -1791,7 +1947,20 @@
       "bodySystem": "Cardiovascular"
     },
     {
-      "id": "rn-map-0054",
+      "id": "rn-map-0068",
+      "canonicalTitle": "Pyelonephritis",
+      "slug": "pyelonephritis-nclex-rn",
+      "tier": "B",
+      "wordTargetMin": 1200,
+      "wordTargetMax": 1800,
+      "primaryCategoryId": "renal_genitourinary",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "renal-genitourinary",
+      "bodySystem": "Renal / Genitourinary"
+    },
+    {
+      "id": "rn-map-0060",
       "canonicalTitle": "Pyrosis in Pregnancy",
       "slug": "pyrosis-in-pregnancy-nclex-rn",
       "tier": "C",
@@ -1804,7 +1973,7 @@
       "bodySystem": "Gastrointestinal"
     },
     {
-      "id": "rn-map-0065",
+      "id": "rn-map-0073",
       "canonicalTitle": "Refeeding Syndrome",
       "slug": "refeeding-syndrome-nclex-rn",
       "tier": "A",
@@ -1817,7 +1986,7 @@
       "bodySystem": "Endocrine / Metabolic / Fluids"
     },
     {
-      "id": "rn-map-0117",
+      "id": "rn-map-0128",
       "canonicalTitle": "Ruptured Ectopic Pregnancy",
       "slug": "ruptured-ectopic-pregnancy-nclex-rn",
       "tier": "A",
@@ -1830,7 +1999,20 @@
       "bodySystem": "Maternity / Newborn"
     },
     {
-      "id": "rn-map-0083",
+      "id": "rn-map-0137",
+      "canonicalTitle": "Schizophrenia Spectrum Disorders",
+      "slug": "schizophrenia-spectrum-disorders-nclex-rn",
+      "tier": "A",
+      "wordTargetMin": 1800,
+      "wordTargetMax": 2600,
+      "primaryCategoryId": "mental_health",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "mental-health",
+      "bodySystem": "Mental Health"
+    },
+    {
+      "id": "rn-map-0094",
       "canonicalTitle": "Sepsis",
       "slug": "sepsis-nclex-rn",
       "tier": "A",
@@ -1845,7 +2027,7 @@
       "bodySystem": "Emergency / Critical Care / Perioperative"
     },
     {
-      "id": "rn-map-0094",
+      "id": "rn-map-0105",
       "canonicalTitle": "Septic Arthritis",
       "slug": "septic-arthritis-nclex-rn",
       "tier": "B",
@@ -1858,7 +2040,33 @@
       "bodySystem": "Pediatrics"
     },
     {
+      "id": "rn-map-0151",
+      "canonicalTitle": "Shock: Recognition, Classification, and Nursing Priorities",
+      "slug": "shock-recognition-classification-and-nursing-priorities-nclex-rn",
+      "tier": "A",
+      "wordTargetMin": 1800,
+      "wordTargetMax": 2600,
+      "primaryCategoryId": "emergency_critical_perioperative",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "emergency-critical-perioperative",
+      "bodySystem": "Emergency / Critical Care / Perioperative"
+    },
+    {
       "id": "rn-map-0078",
+      "canonicalTitle": "SIADH (Syndrome of Inappropriate Antidiuretic Hormone Secretion)",
+      "slug": "siadh-syndrome-of-inappropriate-antidiuretic-hormone-secretion-nclex-rn",
+      "tier": "A",
+      "wordTargetMin": 1800,
+      "wordTargetMax": 2600,
+      "primaryCategoryId": "endocrine_metabolic_fluids",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "endocrine-metabolic-fluids",
+      "bodySystem": "Endocrine / Metabolic / Fluids"
+    },
+    {
+      "id": "rn-map-0088",
       "canonicalTitle": "Sickle Cell Disease",
       "slug": "sickle-cell-disease-nclex-rn",
       "tier": "A",
@@ -1873,7 +2081,7 @@
       "bodySystem": "Hematology / Oncology / Immunology"
     },
     {
-      "id": "rn-map-0018",
+      "id": "rn-map-0019",
       "canonicalTitle": "Statins",
       "slug": "statins-nclex-rn",
       "tier": "C",
@@ -1888,7 +2096,20 @@
       "bodySystem": "Pharmacology"
     },
     {
-      "id": "rn-map-0136",
+      "id": "rn-map-0044",
+      "canonicalTitle": "Stroke and Transient Ischemic Attack",
+      "slug": "stroke-and-transient-ischemic-attack-nclex-rn",
+      "tier": "A",
+      "wordTargetMin": 1800,
+      "wordTargetMax": 2600,
+      "primaryCategoryId": "neurological",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "neurological",
+      "bodySystem": "Neurological"
+    },
+    {
+      "id": "rn-map-0149",
       "canonicalTitle": "Submersion Injury",
       "slug": "submersion-injury-nclex-rn",
       "tier": "A",
@@ -1901,7 +2122,7 @@
       "bodySystem": "Emergency / Critical Care / Perioperative"
     },
     {
-      "id": "rn-map-0087",
+      "id": "rn-map-0098",
       "canonicalTitle": "Tetralogy of Fallot",
       "slug": "tetralogy-of-fallot-nclex-rn",
       "tier": "A",
@@ -1914,7 +2135,7 @@
       "bodySystem": "Pediatrics"
     },
     {
-      "id": "rn-map-0079",
+      "id": "rn-map-0089",
       "canonicalTitle": "Thalassemia",
       "slug": "thalassemia-nclex-rn",
       "tier": "B",
@@ -1929,7 +2150,7 @@
       "bodySystem": "Hematology / Oncology / Immunology"
     },
     {
-      "id": "rn-map-0073",
+      "id": "rn-map-0083",
       "canonicalTitle": "Thiazide Diuretics",
       "slug": "thiazide-diuretics-nclex-rn",
       "tier": "C",
@@ -1944,7 +2165,7 @@
       "bodySystem": "Pharmacology"
     },
     {
-      "id": "rn-map-0075",
+      "id": "rn-map-0085",
       "canonicalTitle": "TPN Nursing Management",
       "slug": "tpn-nursing-management-nclex-rn",
       "tier": "B",
@@ -1957,7 +2178,7 @@
       "bodySystem": "Endocrine / Metabolic / Fluids"
     },
     {
-      "id": "rn-map-0089",
+      "id": "rn-map-0100",
       "canonicalTitle": "Tracheoesophageal Fistula and Esophageal Atresia",
       "slug": "tracheoesophageal-fistula-and-esophageal-atresia-nclex-rn",
       "tier": "A",
@@ -1970,7 +2191,33 @@
       "bodySystem": "Pediatrics"
     },
     {
-      "id": "rn-map-0104",
+      "id": "rn-map-0059",
+      "canonicalTitle": "Upper and Lower Gastrointestinal Bleeding",
+      "slug": "upper-and-lower-gastrointestinal-bleeding-nclex-rn",
+      "tier": "A",
+      "wordTargetMin": 1800,
+      "wordTargetMax": 2600,
+      "primaryCategoryId": "gastrointestinal",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "gastrointestinal",
+      "bodySystem": "Gastrointestinal"
+    },
+    {
+      "id": "rn-map-0067",
+      "canonicalTitle": "Urinary Tract Infection and Catheter-Associated UTI",
+      "slug": "urinary-tract-infection-and-catheter-associated-uti-nclex-rn",
+      "tier": "B",
+      "wordTargetMin": 1200,
+      "wordTargetMax": 1800,
+      "primaryCategoryId": "renal_genitourinary",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "topicSlug": "renal-genitourinary",
+      "bodySystem": "Renal / Genitourinary"
+    },
+    {
+      "id": "rn-map-0115",
       "canonicalTitle": "Uterine Rupture",
       "slug": "uterine-rupture-nclex-rn",
       "tier": "A",
@@ -1983,7 +2230,7 @@
       "bodySystem": "Maternity / Newborn"
     },
     {
-      "id": "rn-map-0116",
+      "id": "rn-map-0127",
       "canonicalTitle": "Vacuum-Assisted Vaginal Birth Complications",
       "slug": "vacuum-assisted-vaginal-birth-complications-nclex-rn",
       "tier": "B",
@@ -1996,7 +2243,7 @@
       "bodySystem": "Maternity / Newborn"
     },
     {
-      "id": "rn-map-0061",
+      "id": "rn-map-0069",
       "canonicalTitle": "Vasectomy Teaching",
       "slug": "vasectomy-teaching-nclex-rn",
       "tier": "C",
@@ -2009,7 +2256,7 @@
       "bodySystem": "Renal / Genitourinary"
     },
     {
-      "id": "rn-map-0035",
+      "id": "rn-map-0038",
       "canonicalTitle": "Ventriculoperitoneal Shunt",
       "slug": "ventriculoperitoneal-shunt-nclex-rn",
       "tier": "B",
@@ -2022,7 +2269,7 @@
       "bodySystem": "Neurological"
     },
     {
-      "id": "rn-map-0060",
+      "id": "rn-map-0066",
       "canonicalTitle": "Wilms Tumor",
       "slug": "wilms-tumor-nclex-rn",
       "tier": "B",
@@ -2037,7 +2284,7 @@
       "bodySystem": "Renal / Genitourinary"
     },
     {
-      "id": "rn-map-0128",
+      "id": "rn-map-0141",
       "canonicalTitle": "Ziprasidone and QT Prolongation",
       "slug": "ziprasidone-and-qt-prolongation-nclex-rn",
       "tier": "C",

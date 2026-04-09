@@ -31,7 +31,7 @@ export type AdminStudyPerformanceData = {
       neverEngagedRows: number;
       distinctLearners: number;
     }>;
-    pathwayDistribution: Array<{ pathwayId: string; progressRows: number; distinctLearners: number }>;
+    pathwayDistribution: Array<{ pathwayId: string | null; progressRows: number; distinctLearners: number }>;
     note: string;
   };
   questions: {

@@ -17,7 +17,7 @@ export function captureLessonProgressAnalytics(
     lessonId: string;
     pathwayId?: string;
     lessonSlug?: string;
-    source: "pathway_synthetic" | "cms_lesson";
+    source: "pathway_synthetic" | "pathway_lesson_row" | "cms_lesson";
     hadExistingRow: boolean;
     priorCompleted: boolean;
     nextCompleted: boolean;

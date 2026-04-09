@@ -40,6 +40,8 @@ export type PathwayHubResumePayload = {
   lastTouched: { title: string; href: string; slug: string; completed: boolean } | null;
   nextRecommended: { title: string; href: string; slug: string } | null;
   lessonsCompleted: number;
+  /** Rows with `completed = false` for this pathway’s synthetic lesson ids. */
+  lessonsInProgress: number;
 };
 
 /**
@@ -56,7 +58,12 @@ export async function loadPathwayHubSubscriberData(
   resume: PathwayHubResumePayload;
   progressMap: Record<string, PathwayLessonProgressStatus>;
 }> {
-  const emptyResume: PathwayHubResumePayload = { lastTouched: null, nextRecommended: null, lessonsCompleted: 0 };
+  const emptyResume: PathwayHubResumePayload = {
+    lastTouched: null,
+    nextRecommended: null,
+    lessonsCompleted: 0,
+    lessonsInProgress: 0,
+  };
   const emptyMap = Object.fromEntries(hubSlugs.map((s) => [s, "not_started" as PathwayLessonProgressStatus]));
 
   if (!userId || !entitlement.hasAccess || !isDatabaseUrlConfigured()) {
@@ -93,6 +100,7 @@ export async function loadPathwayHubSubscriberData(
     lastTouched,
     nextRecommended,
     lessonsCompleted: batch.lessonsCompleted,
+    lessonsInProgress: batch.lessonsInProgress,
   };
 
   return { resume, progressMap: batch.progressMap };
@@ -110,7 +118,12 @@ export async function loadPathwayHubResumePayload(
 }
 
 export function pathwayHubResumeHasContent(p: PathwayHubResumePayload): boolean {
-  return p.lastTouched != null || p.nextRecommended != null || p.lessonsCompleted > 0;
+  return (
+    p.lastTouched != null ||
+    p.nextRecommended != null ||
+    p.lessonsCompleted > 0 ||
+    p.lessonsInProgress > 0
+  );
 }
 
 export type LessonContinuationRow = {

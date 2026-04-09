@@ -9,11 +9,11 @@ export function PathwayLessonsResumeHub({
   pathwayShortName: string;
   resume: PathwayHubResumePayload;
 }) {
-  const { lastTouched, nextRecommended, lessonsCompleted } = resume;
+  const { lastTouched, nextRecommended, lessonsCompleted, lessonsInProgress } = resume;
   const nextBlock =
     nextRecommended && (!lastTouched || nextRecommended.slug !== lastTouched.slug) ? nextRecommended : null;
 
-  if (!lastTouched && !nextBlock && lessonsCompleted === 0) return null;
+  if (!lastTouched && !nextBlock && lessonsCompleted === 0 && lessonsInProgress === 0) return null;
 
   return (
     <div className="nn-card space-y-4 border-primary/25 bg-primary/[0.04] p-4 sm:p-5">
@@ -49,10 +49,20 @@ export function PathwayLessonsResumeHub({
         </div>
       ) : null}
 
-      {lessonsCompleted > 0 ? (
+      {lessonsCompleted > 0 || lessonsInProgress > 0 ? (
         <p className="text-sm text-muted">
-          <span className="font-medium text-foreground">{lessonsCompleted}</span> lesson
-          {lessonsCompleted === 1 ? "" : "s"} completed in {pathwayShortName}
+          {lessonsCompleted > 0 ? (
+            <>
+              <span className="font-medium text-foreground">{lessonsCompleted}</span> completed
+            </>
+          ) : null}
+          {lessonsCompleted > 0 && lessonsInProgress > 0 ? " · " : null}
+          {lessonsInProgress > 0 ? (
+            <>
+              <span className="font-medium text-foreground">{lessonsInProgress}</span> in progress
+            </>
+          ) : null}
+          <span className="text-muted"> · {pathwayShortName}</span>
         </p>
       ) : null}
     </div>

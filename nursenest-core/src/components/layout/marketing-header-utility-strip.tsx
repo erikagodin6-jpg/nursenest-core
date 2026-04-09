@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { MarketingLanguagePreferenceList } from "@/components/i18n/marketing-language-preference";
@@ -18,10 +18,11 @@ import {
 export function MarketingHeaderUtilityStrip() {
   const { t, locale } = useMarketingI18n();
   const { region, setRegion } = useNursenestRegion();
-  const setRegionAndRefresh = useMarketingRegionToggleWithRefresh(setRegion, {
-    currentRegion: region,
-    surface: "utility_strip",
-  });
+  const regionToggleAnalytics = useMemo(
+    () => ({ currentRegion: region, surface: "utility_strip" as const }),
+    [region],
+  );
+  const setRegionAndRefresh = useMarketingRegionToggleWithRefresh(setRegion, regionToggleAnalytics);
   const [langOpen, setLangOpen] = useState(false);
   const langRef = useRef<HTMLDivElement>(null);
 

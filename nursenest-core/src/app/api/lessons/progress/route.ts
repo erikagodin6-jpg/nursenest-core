@@ -9,6 +9,7 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { appPathwayLessonVisibleToSubscriber } from "@/lib/lessons/app-pathway-lesson-list-scope";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { captureLessonProgressAnalytics } from "@/lib/observability/lesson-progress-analytics";
 import {
   captureStudyProgressFunnelAfterUpsert,
   loadStudyFunnelBeforeSnapshot,
@@ -61,10 +62,23 @@ export async function POST(req: Request) {
       return notSubscribedResponse();
     }
     const funnelBefore = await loadStudyFunnelBeforeSnapshot(userId);
+    const existingPathway = await prisma.progress.findUnique({
+      where: { userId_lessonId: { userId, lessonId } },
+      select: { completed: true },
+    });
     await prisma.progress.upsert({
       where: { userId_lessonId: { userId, lessonId } },
       create: { userId, lessonId, completed },
       update: { completed },
+    });
+    captureLessonProgressAnalytics(userId, gate.entitlement, {
+      lessonId,
+      pathwayId: pw.pathwayId,
+      lessonSlug: pw.slug,
+      source: "pathway_lesson_row",
+      hadExistingRow: !!existingPathway,
+      priorCompleted: existingPathway?.completed ?? false,
+      nextCompleted: completed,
     });
     captureStudyProgressFunnelAfterUpsert(userId, gate.entitlement, funnelBefore);
     return NextResponse.json({ ok: true });
@@ -76,10 +90,21 @@ export async function POST(req: Request) {
   });
   if (contentRow) {
     const funnelBefore = await loadStudyFunnelBeforeSnapshot(userId);
+    const existingContent = await prisma.progress.findUnique({
+      where: { userId_lessonId: { userId, lessonId } },
+      select: { completed: true },
+    });
     await prisma.progress.upsert({
       where: { userId_lessonId: { userId, lessonId } },
       create: { userId, lessonId, completed },
       update: { completed },
+    });
+    captureLessonProgressAnalytics(userId, gate.entitlement, {
+      lessonId,
+      source: "cms_lesson",
+      hadExistingRow: !!existingContent,
+      priorCompleted: existingContent?.completed ?? false,
+      nextCompleted: completed,
     });
     captureStudyProgressFunnelAfterUpsert(userId, gate.entitlement, funnelBefore);
     return NextResponse.json({ ok: true });

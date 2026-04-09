@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "description": "Completeness audit targets for the RN lesson map. When an official NCLEX outline PDF is added to the repo, reconcile its table of contents against these auditIds. This file is the machine-readable checklist; it is not a substitute for clinical source documents.",
+  "aliases": {
+    "AAA": "Abdominal Aortic Aneurysm",
+    "MI": "Myocardial Infarction",
+    "ACS": "Acute Coronary Syndrome",
+    "HF": "Heart Failure",
+    "AF": "Atrial Fibrillation",
+    "PE": "Pulmonary Embolism",
+    "DVT": "Deep Vein Thrombosis (DVT): Prevention and Nursing Management",
+    "COPD": "COPD",
+    "ARDS": "ARDS",
+    "DKA": "Diabetic Ketoacidosis",
+    "PUD": "Peptic Ulcer Disease",
+    "HELLP": "HELLP Syndrome",
+    "NAS": "Neonatal Abstinence Syndrome",
+    "NMS": "Neuroleptic Malignant Syndrome",
+    "MDD": "Major Depressive Disorder",
+    "PTSD": "PTSD",
+    "SIADH": "SIADH (Syndrome of Inappropriate Antidiuretic Hormone Secretion)",
+    "DI": "Diabetes Insipidus",
+    "IBD": "Inflammatory Bowel Disease (Crohn Disease and Ulcerative Colitis)",
+    "GI bleed": "Upper and Lower Gastrointestinal Bleeding",
+    "UTI": "Urinary Tract Infection and Catheter-Associated UTI",
+    "TIA": "Stroke and Transient Ischemic Attack"
+  },
+  "requiredTopics": [
+    { "group": "user_explicit_acronyms", "items": ["AAA", "MI", "HF", "COPD", "PE", "Sepsis", "ARDS", "DKA", "PUD"] },
+    { "group": "pediatrics_high_yield", "items": ["Kawasaki Disease", "Febrile Seizures", "Bronchiolitis and RSV", "Tetralogy of Fallot", "Hirschsprung Disease", "Intussusception", "Wilms Tumor"] },
+    { "group": "maternity_newborn", "items": ["Eclampsia", "HELLP Syndrome", "Placenta Previa", "Placental Abruption", "Uterine Rupture", "Neonatal Abstinence Syndrome", "Newborn Hypoglycemia"] },
+    { "group": "mental_health", "items": ["Panic Disorder", "PTSD", "Opioid Withdrawal", "Major Depressive Disorder", "Neuroleptic Malignant Syndrome", "Lithium Toxicity"] },
+    { "group": "pharmacology_watchlist", "items": ["Digoxin", "Dopamine", "Phenytoin", "Magnesium Sulfate", "Heparin and aPTT Monitoring", "ACE Inhibitors", "Metformin", "Glyburide", "Linezolid", "Allopurinol", "Thiazide Diuretics", "Factor Xa Inhibitors"] },
+    { "group": "completeness_gaps_addressed_v2", "items": ["Stroke and Transient Ischemic Attack", "Deep Vein Thrombosis (DVT): Prevention and Nursing Management", "Shock: Recognition, Classification, and Nursing Priorities", "Anaphylaxis", "Asthma", "Community-Acquired Pneumonia", "SIADH (Syndrome of Inappropriate Antidiuretic Hormone Secretion)", "Diabetes Insipidus", "Inflammatory Bowel Disease (Crohn Disease and Ulcerative Colitis)", "Upper and Lower Gastrointestinal Bleeding", "Urinary Tract Infection and Catheter-Associated UTI", "Pyelonephritis", "Blood Product Administration and Transfusion Reactions", "Schizophrenia Spectrum Disorders", "Bipolar Disorders", "Cellulitis and Skin and Soft-Tissue Infection", "Pressure Injury: Staging, Prevention, and Wound Care", "Falls and Injury Prevention in Acute Care", "Physical Restraints: Indications, Monitoring, and Alternatives"] }
+  ]
+}

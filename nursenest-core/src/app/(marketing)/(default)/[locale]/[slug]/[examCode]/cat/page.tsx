@@ -12,7 +12,7 @@ import {
   PATHWAY_CAT_PRACTICE_DEFAULT_MAX_QUESTIONS,
   appPathwayCatSessionStartPath,
 } from "@/lib/exam-pathways/pathway-cat-flow";
-import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { HUB, loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { PathwayLiveInventoryStrip } from "@/components/exam-pathways/pathway-live-inventory-strip";
 import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import { pathwayCatPracticeBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
@@ -152,6 +152,12 @@ export default async function PathwayCatEntryPage({ params }: Props) {
             Create account
           </Link>
         ) : null}
+        <Link
+          href={HUB.practiceExams}
+          className="inline-flex min-h-[48px] w-full items-center justify-center rounded-full border border-dashed border-border px-8 py-3 text-sm font-semibold text-[var(--theme-muted-text)] hover:bg-card sm:w-auto"
+        >
+          All practice exams (every pathway)
+        </Link>
       </div>
     </div>
   );

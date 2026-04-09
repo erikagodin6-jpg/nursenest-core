@@ -102,6 +102,7 @@ export function AdminStudyPerformanceDashboard({
   const maxLessonRows = Math.max(1, ...d.lessons.topLessons.map((x) => x.progressRows));
   const maxTopicAtt = Math.max(1, ...d.questions.topTopicsByAttempts.map((x) => x.attempts));
   const maxCatPath = Math.max(1, ...d.cat.pathwayDistribution.map((x) => x.sessions));
+  const maxPathLesson = Math.max(1, ...d.lessons.pathwayDistribution.map((x) => x.progressRows));
 
   return (
     <div className="space-y-6">
@@ -202,7 +203,7 @@ export function AdminStudyPerformanceDashboard({
                     key={String(p.pathwayId)}
                     label={String(p.pathwayId)}
                     value={p.progressRows}
-                    max={Math.max(1, ...d.lessons.pathwayDistribution.map((x) => x.progressRows))}
+                    max={maxPathLesson}
                     suffix={` · ${p.distinctLearners} learners`}
                   />
                 ))

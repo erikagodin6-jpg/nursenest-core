@@ -2,7 +2,10 @@ import { prisma } from "@/lib/db";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { pathwayLessonsAppListWhere, visiblePathwayIdsForAppLessons } from "@/lib/lessons/app-pathway-lesson-list-scope";
 import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
+import { syntheticPathwayLessonId } from "@/lib/lessons/pathway-lesson-progress";
 import { pathwayLessonMarketingDetailHref } from "@/lib/lessons/pathway-lesson-types";
+
+const NEXT_LESSON_CHUNK = 80;
 
 export type PathwayNextLesson = {
   title: string;
@@ -49,7 +52,7 @@ export async function resolvePathwayNextLesson(
       prisma.pathwayLesson.findMany({
         where: { AND: [pathwayWhere, { pathwayId }] },
         orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
-        take: 250,
+        take: 500,
         select: { id: true, title: true, slug: true },
       }),
       prisma.progress.count({
@@ -64,35 +67,35 @@ export async function resolvePathwayNextLesson(
 
     if (lessons.length === 0) continue;
 
-    const completedLessonIds = new Set(
-      (
-        await prisma.progress.findMany({
-          where: { userId, completed: true, lessonId: { startsWith: prefix } },
-          select: { lessonId: true },
-          take: 500,
-        })
-      ).map((r) => r.lessonId),
-    );
+    for (let i = 0; i < lessons.length; i += NEXT_LESSON_CHUNK) {
+      const chunk = lessons.slice(i, i + NEXT_LESSON_CHUNK);
+      const ids = chunk.map((l) => syntheticPathwayLessonId(pathwayId, l.slug));
+      const rows = await prisma.progress.findMany({
+        where: { userId, lessonId: { in: ids } },
+        select: { lessonId: true, completed: true },
+      });
+      const byLesson = new Map(rows.map((r) => [r.lessonId, r.completed]));
 
-    for (const l of lessons) {
-      const synthetic = `${prefix}${l.slug}`;
-      if (completedLessonIds.has(synthetic)) continue;
+      for (const l of chunk) {
+        const synthetic = syntheticPathwayLessonId(pathwayId, l.slug);
+        if (byLesson.get(synthetic) === true) continue;
 
-      const engagedInPathway =
-        completedCount > 0 || (lastProgress != null && lastProgress.lessonId.startsWith(prefix));
-      const stalled =
-        completedCount > 0 &&
-        lastProgress != null &&
-        now - lastProgress.updatedAt.getTime() > stallMs;
+        const engagedInPathway =
+          completedCount > 0 || (lastProgress != null && lastProgress.lessonId.startsWith(prefix));
+        const stalled =
+          completedCount > 0 &&
+          lastProgress != null &&
+          now - lastProgress.updatedAt.getTime() > stallMs;
 
-      return {
-        title: l.title,
-        href: `/app/lessons/${l.id}`,
-        pathwayId,
-        slug: l.slug,
-        engagedInPathway,
-        stalled,
-      };
+        return {
+          title: l.title,
+          href: `/app/lessons/${l.id}`,
+          pathwayId,
+          slug: l.slug,
+          engagedInPathway,
+          stalled,
+        };
+      }
     }
   }
 
@@ -123,20 +126,22 @@ export async function resolveNextIncompleteMarketingPathwayLesson(
   });
   if (lessons.length === 0) return null;
 
-  const prefix = `pathway:${pathwayId}:`;
-  const completedRows = await prisma.progress.findMany({
-    where: { userId, completed: true, lessonId: { startsWith: prefix } },
-    select: { lessonId: true },
-    take: 600,
-  });
-  const completedSet = new Set(completedRows.map((r) => r.lessonId));
+  for (let i = 0; i < lessons.length; i += NEXT_LESSON_CHUNK) {
+    const chunk = lessons.slice(i, i + NEXT_LESSON_CHUNK);
+    const ids = chunk.map((l) => syntheticPathwayLessonId(pathwayId, l.slug));
+    const rows = await prisma.progress.findMany({
+      where: { userId, lessonId: { in: ids } },
+      select: { lessonId: true, completed: true },
+    });
+    const byLesson = new Map(rows.map((r) => [r.lessonId, r.completed]));
 
-  for (const l of lessons) {
-    const synthetic = `${prefix}${l.slug}`;
-    if (completedSet.has(synthetic)) continue;
-    const href = pathwayLessonMarketingDetailHref(lessonsBasePath, l.slug);
-    if (!href) continue;
-    return { title: l.title, href, slug: l.slug };
+    for (const l of chunk) {
+      const synthetic = syntheticPathwayLessonId(pathwayId, l.slug);
+      if (byLesson.get(synthetic) === true) continue;
+      const href = pathwayLessonMarketingDetailHref(lessonsBasePath, l.slug);
+      if (!href) continue;
+      return { title: l.title, href, slug: l.slug };
+    }
   }
 
   return null;

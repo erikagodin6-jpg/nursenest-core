@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronDown, MapPin, Menu, X } from "lucide-react";
 import { mapLegacyMarketingHref } from "@/lib/legacy-marketing-routes";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
@@ -29,10 +29,11 @@ const NAV_LINK_CLASS =
 export function SiteHeader() {
   const { t, locale } = useMarketingI18n();
   const { region, setRegion } = useNursenestRegion();
-  const setRegionAndRefresh = useMarketingRegionToggleWithRefresh(setRegion, {
-    currentRegion: region,
-    surface: "site_header",
-  });
+  const regionToggleAnalytics = useMemo(
+    () => ({ currentRegion: region, surface: "site_header_mobile_drawer" as const }),
+    [region],
+  );
+  const setRegionAndRefresh = useMarketingRegionToggleWithRefresh(setRegion, regionToggleAnalytics);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const langRef = useRef<HTMLDivElement>(null);
@@ -77,7 +78,19 @@ export function SiteHeader() {
             className="hidden min-w-0 flex-1 items-center justify-center md:flex md:gap-5 lg:gap-8"
           >
             {marketingNav.map((item) => (
-              <Link key={item.href} href={localizeHref(item.href)} className={`${NAV_LINK_CLASS} max-w-[11rem] truncate`}>
+              <Link
+                key={item.href}
+                href={localizeHref(item.href)}
+                className={`${NAV_LINK_CLASS} max-w-[11rem] truncate`}
+                onClick={() =>
+                  trackClientEvent(PH.marketingNavClick, {
+                    actor: "anonymous",
+                    nav_id: item.href,
+                    surface: "site_header_desktop",
+                    marketing_region: region,
+                  })
+                }
+              >
                 {t(item.labelKey)}
               </Link>
             ))}
@@ -127,7 +140,15 @@ export function SiteHeader() {
                     key={item.href}
                     href={localizeHref(item.href)}
                     className={`${NAV_LINK_CLASS} rounded-xl px-3 py-2.5`}
-                    onClick={() => setMobileOpen(false)}
+                    onClick={() => {
+                      trackClientEvent(PH.marketingNavClick, {
+                        actor: "anonymous",
+                        nav_id: item.href,
+                        surface: "site_header_mobile_drawer",
+                        marketing_region: region,
+                      });
+                      setMobileOpen(false);
+                    }}
                   >
                     {t(item.labelKey)}
                   </Link>

@@ -247,7 +247,12 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       : entitlement;
 
   let progressMap: Record<string, PathwayLessonProgressStatus> = {};
-  let resumePayload: PathwayHubResumePayload = { lastTouched: null, nextRecommended: null, lessonsCompleted: 0 };
+  let resumePayload: PathwayHubResumePayload = {
+    lastTouched: null,
+    nextRecommended: null,
+    lessonsCompleted: 0,
+    lessonsInProgress: 0,
+  };
 
   const canShowResume =
     Boolean(userId) && scope.hasAccess && canViewFullPathwayLesson(scope, pathway, learnerPath);
