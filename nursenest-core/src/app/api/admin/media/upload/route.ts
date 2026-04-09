@@ -40,7 +40,8 @@ export async function POST(req: Request) {
   }
 
   const kind = parseUploadKind(form.get("kind"));
-  const altText = typeof form.get("altText") === "string" ? form.get("altText")!.trim().slice(0, 2000) : "";
+  const altTextRaw = form.get("altText");
+  const altText = typeof altTextRaw === "string" ? altTextRaw.trim().slice(0, 2000) : "";
   const tags = parseTags(typeof form.get("tags") === "string" ? (form.get("tags") as string) : null);
 
   const up = await uploadAdminFileToSpaces(file, kind);
@@ -75,6 +76,7 @@ export async function POST(req: Request) {
   });
 
   return NextResponse.json({
+    publicUrl: row.publicUrl,
     asset: {
       id: row.id,
       publicUrl: row.publicUrl,

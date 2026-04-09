@@ -54,7 +54,11 @@ export default async function AdminQuestionsPage({
         <Link className="font-semibold text-primary underline" href="/admin/questions/nclex-mapping">
           NCLEX mapping
         </Link>
-        .
+        . Image URLs for stems, exhibits, or rationales: pick from the{" "}
+        <Link className="font-semibold text-primary underline" href="/admin/media">
+          media library
+        </Link>{" "}
+        (copy URL into JSON via <span className="font-mono">Open JSON</span>).
       </p>
 
       <div className="mt-4 flex flex-wrap gap-3 text-xs">

@@ -74,7 +74,7 @@ export function SubscriptionPaywall({
         </Link>
         <Link
           href="/pricing"
-          className="inline-flex items-center justify-center rounded-full border border-border bg-white px-5 py-2.5 text-sm font-semibold hover:bg-gray-50"
+          className="inline-flex items-center justify-center rounded-full border border-border bg-card px-5 py-2.5 text-sm font-semibold text-foreground hover:bg-muted"
         >
           {t("cta.improveWeakAreas")}
         </Link>

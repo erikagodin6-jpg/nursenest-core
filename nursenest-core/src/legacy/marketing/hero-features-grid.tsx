@@ -36,7 +36,7 @@ export default function HeroFeaturesGrid() {
   const { t } = useMarketingI18n();
   return (
     <section
-      className="bg-white"
+      className="bg-background"
       style={{ paddingTop: "var(--space-block)", paddingBottom: "var(--space-block)" }}
       data-testid="section-features-grid"
     >
@@ -58,7 +58,7 @@ export default function HeroFeaturesGrid() {
               <Link
                 key={feature.key}
                 href={mapLegacyMarketingHref(feature.route)}
-                className="group no-underline rounded-2xl border border-gray-100 bg-white p-6 shadow-[var(--shadow-card)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-card-hover)]"
+                className="group no-underline rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-card-hover)]"
                 data-testid={`card-feature-${feature.key}`}
               >
                 <div className="nn-theme-gradient-br mb-4 flex h-12 w-12 items-center justify-center rounded-xl shadow-sm transition-transform group-hover:scale-110">

@@ -75,7 +75,7 @@ export function LoginForm({
         </label>
         <input
           id="login-identifier"
-          className="w-full rounded-xl border border-border bg-white px-3 py-2"
+          className="w-full rounded-xl border border-border bg-background px-3 py-2"
           type="text"
           name="email"
           placeholder={t("pages.login.placeholderIdentifier")}
@@ -85,7 +85,7 @@ export function LoginForm({
       </div>
       <div className="space-y-1.5">
         <input
-          className="w-full rounded-xl border border-border bg-white px-3 py-2"
+          className="w-full rounded-xl border border-border bg-background px-3 py-2"
           type="password"
           name="password"
           placeholder={t("pages.login.placeholderPassword")}

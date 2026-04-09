@@ -62,6 +62,8 @@ export function AdminLessonFormClient({ lessonId }: { lessonId?: string }) {
   const [adaptCountry, setAdaptCountry] = useState<"CA" | "US">("CA");
   const [adaptSuffix, setAdaptSuffix] = useState("");
   const [actionBusy, setActionBusy] = useState(false);
+  const bodyTextareaRef = useRef<HTMLTextAreaElement>(null);
+  const [mediaPickerOpen, setMediaPickerOpen] = useState(false);
 
   const loadCategories = useCallback(async () => {
     const res = await fetch("/api/admin/categories?pageSize=500");
@@ -295,6 +297,7 @@ export function AdminLessonFormClient({ lessonId }: { lessonId?: string }) {
   }
 
   return (
+    <>
     <form onSubmit={onSave} className="space-y-8">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
@@ -446,8 +449,18 @@ export function AdminLessonFormClient({ lessonId }: { lessonId?: string }) {
             />
           </label>
           <label className="block space-y-1">
-            <span className="text-xs font-medium text-muted-foreground">Body (HTML/text) *</span>
+            <span className="flex flex-wrap items-center justify-between gap-2 text-xs font-medium text-muted-foreground">
+              <span>Body (HTML/text) *</span>
+              <button
+                type="button"
+                className="font-semibold text-primary underline"
+                onClick={() => setMediaPickerOpen(true)}
+              >
+                Insert image from library
+              </button>
+            </span>
             <textarea
+              ref={bodyTextareaRef}
               className="min-h-[min(360px,45vh)] w-full rounded-lg border border-border px-3 py-2 font-mono text-xs"
               value={body}
               onChange={(e) => setBody(e.target.value)}
@@ -599,5 +612,28 @@ export function AdminLessonFormClient({ lessonId }: { lessonId?: string }) {
         </aside>
       </div>
     </form>
+    <AdminMediaPickerDialog
+      open={mediaPickerOpen}
+      onOpenChange={setMediaPickerOpen}
+      onPick={(sel) => {
+        const snippet = lessonImageHtmlSnippet(sel.url, sel.alt);
+        const el = bodyTextareaRef.current;
+        if (!el) {
+          setBody((b) => b + snippet);
+          setMsg("Image HTML appended to body.");
+          return;
+        }
+        const start = el.selectionStart;
+        const end = el.selectionEnd;
+        setBody((b) => b.slice(0, start) + snippet + b.slice(end));
+        const pos = start + snippet.length;
+        requestAnimationFrame(() => {
+          bodyTextareaRef.current?.focus();
+          bodyTextareaRef.current?.setSelectionRange(pos, pos);
+        });
+        setMsg("Inserted image HTML from library.");
+      }}
+    />
+    </>
   );
 }

@@ -229,7 +229,7 @@ function mergeLessonOverlaysFromFragments(
 ): Record<string, PathwayLessonEducationalOverlay> {
   const fragDir = path.join(baseRoot, locale, "fragments");
   if (!existsSync(fragDir)) return base;
-  let merged: Record<string, PathwayLessonEducationalOverlay> = { ...base };
+  const merged: Record<string, PathwayLessonEducationalOverlay> = { ...base };
   const files = readdirSync(/* turbopackIgnore: true */ fragDir)
     .filter((x) => x.endsWith(".json"))
     .sort();

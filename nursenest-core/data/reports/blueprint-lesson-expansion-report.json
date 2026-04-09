@@ -1,0 +1,49 @@
+{
+  "before": {
+    "us-lpn-nclex-pn": 112,
+    "ca-rpn-rex-pn": 112,
+    "us-np-fnp": 66
+  },
+  "after": {
+    "us-lpn-nclex-pn": 150,
+    "ca-rpn-rex-pn": 150,
+    "us-np-fnp": 150
+  },
+  "addedByPathway": {
+    "us-lpn-nclex-pn": 38,
+    "ca-rpn-rex-pn": 38,
+    "us-np-fnp": 84
+  },
+  "addedByDomain": {
+    "us-lpn-nclex-pn": {
+      "safety_and_infection": 4,
+      "management_of_care": 6,
+      "pharmacological_therapies": 4,
+      "physiological_adaptation": 17,
+      "risk_reduction": 2,
+      "psychosocial_integrity": 2,
+      "health_promotion_maintenance": 2,
+      "basic_care_comfort": 1
+    },
+    "ca-rpn-rex-pn": {
+      "physiological_adaptation": 19,
+      "safety_and_infection": 6,
+      "basic_care_comfort": 1,
+      "management_of_care": 1,
+      "psychosocial_integrity": 4,
+      "pharmacological_therapies": 4,
+      "risk_reduction": 3
+    },
+    "us-np-fnp": {
+      "management_of_care": 13,
+      "health_promotion_maintenance": 12,
+      "safety_and_infection": 10,
+      "pharmacological_therapies": 10,
+      "physiological_adaptation": 10,
+      "psychosocial_integrity": 10,
+      "risk_reduction": 10,
+      "basic_care_comfort": 9
+    }
+  },
+  "skippedDuplicates": []
+}

@@ -294,6 +294,25 @@ export function enforcePracticeTestsListProtection(req: NextRequest, userId: str
   return null;
 }
 
+/** GET /api/practice-tests/cat-readiness — lightweight pool preflight (per pathway). */
+export function enforcePracticeTestsCatReadinessProtection(req: NextRequest, userId: string): NextResponse | null {
+  const ip = getTrustedClientIp(req);
+  const route = "practice_tests_cat_readiness";
+  checkDeviceMismatch(req, route, userId, ip);
+
+  if (!checkRateLimit(ipRateLimitKey(ip, route), { windowMs: 60_000, max: 200 }).ok) {
+    logAbuse("ip_rate_limit", route, userId, ip);
+    return tooMany("rate_limited", 60);
+  }
+
+  if (!checkRateLimit(`api:user:${userId}:${route}`, { windowMs: 60_000, max: 72 }).ok) {
+    logAbuse("user_rate_limit", route, userId, ip);
+    return tooMany("rate_limited", 60);
+  }
+
+  return null;
+}
+
 /** GET /api/flashcards/decks/[deckRef]/study — subscriber card batches. */
 export function enforceFlashcardStudyProtection(req: NextRequest, userId: string): NextResponse | null {
   const ip = getTrustedClientIp(req);

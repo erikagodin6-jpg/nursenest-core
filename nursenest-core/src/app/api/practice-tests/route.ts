@@ -7,7 +7,10 @@ import { prisma } from "@/lib/db";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { isCatExamSimulationFeatureEnabled } from "@/lib/exams/cat-exam-simulation";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
-import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
+import {
+  listPathwaysCompatibleWithSubscription,
+  pathwayAllowsCatAdaptiveStart,
+} from "@/lib/exam-pathways/pathway-entitlements";
 import {
   resolveCatPostExamTimedLimitSec,
   resolveCatSelectionBasisForPost,
@@ -18,6 +21,7 @@ import { configFromInput, pickPracticeQuestionIds } from "@/lib/practice-tests/p
 import type { PracticeTestConfigJson } from "@/lib/practice-tests/types";
 import { captureLearnerProductEvent } from "@/lib/observability/learner-product-analytics";
 import { PH } from "@/lib/observability/posthog-conversion-events";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 const createSchema = z
   .object({
@@ -162,16 +166,44 @@ export async function POST(req: Request) {
         { status: 403 },
       );
     }
+    const compatible = listPathwaysCompatibleWithSubscription(gate.entitlement);
+    const catEligible = compatible.filter(pathwayAllowsCatAdaptiveStart);
     let pathwayIdForCat = d.pathwayId?.trim() || null;
     if (!pathwayIdForCat) {
-      pathwayIdForCat = listPathwaysCompatibleWithSubscription(gate.entitlement)[0]?.id ?? null;
+      pathwayIdForCat = catEligible[0]?.id ?? null;
     }
     if (!pathwayIdForCat) {
       return NextResponse.json(
         {
           error:
-            "Choose an exam pathway for adaptive practice (RN, PN, or NP). If your profile has no country or tier, update account settings.",
+            catEligible.length === 0 && compatible.length > 0
+              ? "No adaptive (CAT) sessions are available for your current pathways yet. Use lessons and the question bank on each pathway hub, or join a waitlist where offered."
+              : "Choose an exam pathway for adaptive practice. If your profile is missing country or tier, update Account settings or Billing.",
           code: PRACTICE_TEST_CAT_CREATE_CODE.cat_pathway_required,
+        },
+        { status: 400 },
+      );
+    }
+    if (pathwayIdForCat && !catEligible.some((p) => p.id === pathwayIdForCat)) {
+      const inCompatible = compatible.some((p) => p.id === pathwayIdForCat);
+      const p = getExamPathwayById(pathwayIdForCat);
+      if (!inCompatible) {
+        return NextResponse.json(
+          {
+            error:
+              "That pathway is not included with your subscription. Pick a track that matches your plan and region, or review Account → Billing.",
+            code: PRACTICE_TEST_CAT_CREATE_CODE.pathway_not_entitled,
+          },
+          { status: 400 },
+        );
+      }
+      return NextResponse.json(
+        {
+          error:
+            p && !pathwayAllowsCatAdaptiveStart(p)
+              ? "Adaptive practice is not open for this track yet. Use the question bank and lessons, or pick another active pathway your plan includes."
+              : "That pathway is not available for adaptive practice. Pick another track from the list.",
+          code: PRACTICE_TEST_CAT_CREATE_CODE.pathway_track_not_ready,
         },
         { status: 400 },
       );
@@ -201,6 +233,11 @@ export async function POST(req: Request) {
       d.catPresentationMode,
     );
     if (!cat.ok) {
+      safeServerLog("practice_tests", "cat_create_rejected", {
+        code: String(cat.code ?? PRACTICE_TEST_CAT_CREATE_CODE.cat_create_failed),
+        pathwayIdPrefix: pathwayIdForCat.length > 14 ? `${pathwayIdForCat.slice(0, 14)}…` : pathwayIdForCat,
+        userIdPrefix: gate.userId.slice(0, 8),
+      });
       return NextResponse.json(
         { error: cat.message, code: cat.code ?? PRACTICE_TEST_CAT_CREATE_CODE.cat_create_failed },
         { status: 400 },

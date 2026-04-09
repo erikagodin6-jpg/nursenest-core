@@ -3,7 +3,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
-import { buildExamPathwayPath, resolveExamPathwayFromMarketingHubSegment } from "@/lib/exam-pathways/exam-product-registry";
+import {
+  buildExamPathwayPath,
+  resolveExamPathwayFromMarketingHubSegment,
+} from "@/lib/exam-pathways/exam-product-registry";
+import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements";
 import {
   PATHWAY_CAT_PRACTICE_DEFAULT_MAX_QUESTIONS,
   appPathwayCatSessionStartPath,
@@ -50,6 +54,10 @@ export default async function PathwayCatEntryPage({ params }: Props) {
   const { crumbs, schemaItems } = pathwayCatPracticeBreadcrumbs(pathway);
   const overviewHref = hubBase;
   const appStart = appPathwayCatSessionStartPath(pathway.id);
+  const catTrackReady = pathwayAllowsCatAdaptiveStart(pathway);
+  const adaptivePoolOk =
+    questionSnapshot.status === "ok" && questionSnapshot.adaptiveEligibleCount >= 8;
+  const marketingCatStartOk = catTrackReady && adaptivePoolOk;
   const startHref = isSignedIn ? appStart : loginWithCallback(appStart);
   const countryLabel = pathway.countrySlug === "canada" ? "Canada" : "US";
 

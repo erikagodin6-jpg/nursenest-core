@@ -89,7 +89,7 @@ export default function HomeChoosePath() {
   ];
 
   return (
-    <section className="border-t border-gray-100" style={{ paddingTop: "var(--space-block)", paddingBottom: "var(--space-block)" }} data-testid="section-choose-your-path">
+    <section className="border-t border-border" style={{ paddingTop: "var(--space-block)", paddingBottom: "var(--space-block)" }} data-testid="section-choose-your-path">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="mb-10 text-center">
           <h2 className="mb-3 nn-marketing-h2">{t("components.homeChoosePath.chooseYourPath")}</h2>
@@ -100,7 +100,7 @@ export default function HomeChoosePath() {
           {paths.map((path) => (
             <div
               key={path.id}
-              className="flex flex-col rounded-2xl border border-gray-150 bg-white p-6 shadow-[var(--shadow-card)] transition-all duration-200 hover:-translate-y-1 hover:shadow-lg sm:p-8"
+              className="flex flex-col rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-card)] transition-all duration-200 hover:-translate-y-1 hover:shadow-lg sm:p-8"
               data-testid={path.testId}
             >
               <div className="mb-1 flex items-center gap-3">

@@ -39,7 +39,7 @@ export default function GlobalError({
             <a href="/" className="mb-6 inline-flex items-center gap-2 bg-transparent">
               <SiteBrandLogoMark variant="auth" />
             </a>
-            <div className="rounded-2xl border border-border bg-white p-8 shadow-sm">
+            <div className="rounded-2xl border border-border bg-card p-8 shadow-sm">
               <h1 className="text-2xl font-bold">Something went wrong</h1>
               <p className="mt-3 text-sm text-muted">A critical error occurred. Please reload or return home.</p>
               {error.digest ? (

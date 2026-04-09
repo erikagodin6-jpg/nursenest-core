@@ -42,6 +42,7 @@ export default function MedMathTool() {
       <div className="flex gap-2">
         <Button
           type="button"
+          unstyled
           className={`rounded-full px-4 py-2 text-sm font-semibold ${mode === "iv" ? "bg-primary text-white" : "border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)]"}`}
           onClick={() => setMode("iv")}
         >
@@ -49,6 +50,7 @@ export default function MedMathTool() {
         </Button>
         <Button
           type="button"
+          unstyled
           className={`rounded-full px-4 py-2 text-sm font-semibold ${mode === "dose" ? "bg-primary text-white" : "border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)]"}`}
           onClick={() => setMode("dose")}
         >

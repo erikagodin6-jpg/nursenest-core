@@ -79,6 +79,13 @@
   --role-premium-glow: color-mix(in srgb, var(--theme-primary) 14%, transparent);
   /* Urgency copy (deadlines, savings): warm, not alarm red */
   --role-heat-text: color-mix(in srgb, #c2410c 42%, var(--theme-heading-text));
+
+  --semantic-progress-track: color-mix(in srgb, var(--theme-body-text) 8%, var(--bg-inset, var(--theme-card-bg)));
+  --semantic-progress-fill: var(--role-success);
+  --semantic-progress-fill-accent: var(--accent-primary, var(--theme-primary));
+  --semantic-info-bg: color-mix(in srgb, var(--theme-primary) 8%, var(--bg-card, var(--theme-card-bg)));
+  --semantic-info-border: color-mix(in srgb, var(--theme-primary) 22%, var(--border-subtle));
+  --semantic-info-text: var(--theme-heading-text);
 }
 
 html[data-theme="dark-clinical"],

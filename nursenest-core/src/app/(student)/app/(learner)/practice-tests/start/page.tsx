@@ -8,6 +8,7 @@ import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlemen
 import {
   defaultPracticeTestPathwayId,
   listPathwaysCompatibleWithSubscription,
+  pathwayAllowsCatAdaptiveStart,
 } from "@/lib/exam-pathways/pathway-entitlements";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
@@ -59,20 +60,24 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
   }
 
   const compatiblePathways = listPathwaysCompatibleWithSubscription(entitlement);
+  const catEligiblePathways = compatiblePathways.filter(pathwayAllowsCatAdaptiveStart);
+  const waitlistOnlyPathways = compatiblePathways.filter((p) => !pathwayAllowsCatAdaptiveStart(p));
   const learnerPathRow = userId
     ? await prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } })
     : null;
   const defaultPathwayId = defaultPracticeTestPathwayId(
-    compatiblePathways,
+    catEligiblePathways.length > 0 ? catEligiblePathways : compatiblePathways,
     learnerPathRow?.learnerPath,
     entitlement.country,
   );
   const initialPathwayId =
-    requestedPathwayId && compatiblePathways.some((p) => p.id === requestedPathwayId)
+    requestedPathwayId && catEligiblePathways.some((p) => p.id === requestedPathwayId)
       ? requestedPathwayId
-      : defaultPathwayId;
+      : catEligiblePathways.some((p) => p.id === defaultPathwayId)
+        ? defaultPathwayId
+        : catEligiblePathways[0]?.id ?? null;
 
-  const pathwayOptions = compatiblePathways.map((p) => ({
+  const pathwayOptions = catEligiblePathways.map((p) => ({
     id: p.id,
     label: `${p.shortName} — ${p.displayName}`,
     examFamily: String(p.examFamily),
@@ -87,6 +92,17 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
       <p className="mt-2 text-sm text-muted">
         Confirm the pathway and length, then start. You can switch pathways or open the full builder anytime.
       </p>
+      {waitlistOnlyPathways.length > 0 && catEligiblePathways.length === 0 ? (
+        <aside className="nn-card mt-6 border-amber-200/80 bg-amber-50/70 p-4 text-sm text-foreground dark:border-amber-900/40 dark:bg-amber-950/30">
+          <p className="font-semibold">Adaptive (CAT) is not open for your current pathway yet</p>
+          <p className="mt-1 text-muted-foreground">
+            Your plan matches one or more tracks that are still on waitlist or ramp-up. Use{" "}
+            <strong>lessons</strong> and the <strong>question bank</strong> from each pathway hub, join a waitlist from
+            marketing pages if available, or switch to an active exam track (e.g. US RN/PN) if your subscription includes
+            it.
+          </p>
+        </aside>
+      ) : null}
       <div className="mt-6">
         <PathwayCatSessionStartClient initialPathwayId={initialPathwayId} pathwayOptions={pathwayOptions} />
       </div>

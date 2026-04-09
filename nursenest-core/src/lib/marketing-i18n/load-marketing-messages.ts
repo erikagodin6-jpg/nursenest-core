@@ -10,7 +10,7 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
  * `script/compile-i18n.ts` + `script/merge-marketing-i18n.ts`).
  *
  * Resolution: `process.cwd()`-relative paths only (app root on DO, or monorepo root in dev) so NFT
- * tracing stays scoped — see `/* turbopackIgnore: true */` on dynamic paths.
+ * tracing stays scoped — dynamic `readFile`/`stat` paths use Turbopack ignore comments in source.
  *
  * Optional: `MARKETING_I18N_CDN_BASE` loads bundles when files are not on disk. CDN payloads are
  * merged with on-disk English for any missing/empty keys so stale CDN objects cannot drop groups
@@ -79,7 +79,7 @@ function tryLoadEnglishDiskBundle(): MarketingMessages | null {
     /* best-effort stat */
   }
   try {
-    const raw = readFileSync(fp, "utf8");
+    const raw = readFileSync(/* turbopackIgnore: true */ fp, "utf8");
     const parsed = JSON.parse(raw) as MarketingMessages;
     englishDiskBundleCache = parsed;
     return parsed;
@@ -97,7 +97,7 @@ function loadFromDiskSync(locale: string): MarketingMessages | null {
   const fp = resolveMergedI18nPath(locale);
   if (!fp) return null;
   try {
-    const raw = readFileSync(fp, "utf8");
+    const raw = readFileSync(/* turbopackIgnore: true */ fp, "utf8");
     return JSON.parse(raw) as MarketingMessages;
   } catch {
     safeServerLog("i18n", "merged_bundle_read_failed", { locale });

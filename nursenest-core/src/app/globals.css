@@ -241,6 +241,14 @@ html[data-theme="dark-mode"] {
   --color-role-premium-border: var(--role-premium-border);
   --color-role-premium-text: var(--role-premium-text);
   --color-role-heat-text: var(--role-heat-text);
+
+  /* Design-system semantic aliases (progress, info callouts) — mirror `color-roles.css` */
+  --color-semantic-progress-track: var(--semantic-progress-track);
+  --color-semantic-progress-fill: var(--semantic-progress-fill);
+  --color-semantic-progress-fill-accent: var(--semantic-progress-fill-accent);
+  --color-semantic-info-bg: var(--semantic-info-bg);
+  --color-semantic-info-border: var(--semantic-info-border);
+  --color-semantic-info-text: var(--semantic-info-text);
 }
 
 @layer utilities {
@@ -313,6 +321,172 @@ a {
   border: 1px solid var(--border-subtle, var(--theme-card-border));
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-card);
+}
+
+/**
+ * Shared UI primitives (`components/ui/*`) — token-only, theme-safe.
+ * Variants compose with optional `className` from callers (Tailwind utilities win when later in the stylesheet).
+ */
+.nn-ui-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.25;
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease,
+    filter 0.15s ease;
+}
+.nn-ui-btn:focus-visible {
+  outline: 2px solid var(--focus-halo-strong, var(--focus-halo));
+  outline-offset: 2px;
+}
+.nn-ui-btn:disabled,
+.nn-ui-btn[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.nn-ui-btn--md {
+  padding: 0.5rem 1rem;
+  min-height: 2.375rem;
+}
+.nn-ui-btn--sm {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.8125rem;
+  min-height: 2rem;
+}
+.nn-ui-btn--lg {
+  padding: 0.625rem 1.25rem;
+  font-size: 0.9375rem;
+  min-height: 2.75rem;
+}
+.nn-ui-btn--icon {
+  padding: 0;
+  min-height: 2.25rem;
+  min-width: 2.25rem;
+}
+.nn-ui-btn--primary {
+  background: var(--role-cta);
+  color: var(--role-cta-foreground);
+  box-shadow: 0 4px 14px var(--role-cta-shadow);
+}
+.nn-ui-btn--primary:hover:not(:disabled):not([aria-disabled="true"]) {
+  background: var(--role-cta-hover);
+  filter: brightness(1.02);
+}
+.nn-ui-btn--secondary {
+  background: var(--role-secondary-action-bg);
+  color: var(--role-secondary-action-text);
+  border-color: var(--role-secondary-action-border);
+}
+.nn-ui-btn--secondary:hover:not(:disabled):not([aria-disabled="true"]) {
+  background: var(--role-secondary-action-hover-bg);
+  border-color: var(--border-medium);
+  color: var(--theme-heading-text);
+}
+.nn-ui-btn--outline {
+  background: transparent;
+  color: var(--theme-menu-text);
+  border-color: var(--role-secondary-action-border);
+}
+.nn-ui-btn--outline:hover:not(:disabled):not([aria-disabled="true"]) {
+  background: var(--accent-soft);
+  border-color: var(--border-medium);
+  color: var(--theme-heading-text);
+}
+.nn-ui-btn--ghost {
+  background: transparent;
+  color: var(--theme-menu-text);
+  border-color: transparent;
+}
+.nn-ui-btn--ghost:hover:not(:disabled):not([aria-disabled="true"]) {
+  background: var(--surface-interactive-hover);
+  color: var(--theme-heading-text);
+}
+.nn-ui-btn--destructive {
+  background: color-mix(in srgb, #b91c1c 10%, var(--bg-card, var(--theme-card-bg)));
+  color: #b91c1c;
+  border-color: color-mix(in srgb, #b91c1c 28%, var(--border-subtle));
+}
+html[data-theme="dark-clinical"] .nn-ui-btn--destructive,
+html[data-theme="dark-academia"] .nn-ui-btn--destructive,
+html[data-theme="dark-mode"] .nn-ui-btn--destructive {
+  color: #fca5a5;
+  border-color: color-mix(in srgb, #f87171 35%, var(--border-subtle));
+  background: color-mix(in srgb, #f87171 10%, var(--bg-card, var(--theme-card-bg)));
+}
+.nn-ui-btn--link {
+  background: transparent;
+  border-color: transparent;
+  color: var(--theme-primary);
+  box-shadow: none;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 600;
+}
+.nn-ui-btn--link:hover:not(:disabled):not([aria-disabled="true"]) {
+  color: var(--accent-hover);
+}
+
+.nn-ui-badge {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  font-weight: 600;
+  font-size: 0.75rem;
+  line-height: 1.2;
+  border-radius: 9999px;
+}
+.nn-ui-badge--surface {
+  border: 1px solid var(--border-subtle);
+  background: var(--surface-chip);
+  color: var(--theme-heading-text);
+}
+.nn-ui-badge--secondary {
+  background: var(--bg-inset);
+  color: var(--theme-muted-text);
+  border-color: var(--border-medium);
+}
+.nn-ui-badge--outline {
+  background: transparent;
+  color: var(--theme-menu-text);
+}
+.nn-ui-badge--success {
+  background: var(--role-success-soft);
+  color: var(--role-success-text);
+  border-color: color-mix(in srgb, var(--role-success) 35%, var(--border-subtle));
+}
+.nn-ui-badge--warning {
+  background: var(--role-warning-soft);
+  color: var(--role-warning-text);
+  border-color: var(--role-warning-border);
+}
+
+.nn-ui-progress {
+  position: relative;
+  height: 0.5rem;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 9999px;
+  border: 1px solid var(--border-subtle);
+  background: var(--semantic-progress-track);
+}
+.nn-ui-progress__fill {
+  height: 100%;
+  border-radius: 9999px;
+  background: var(--semantic-progress-fill);
+  transition: width 0.35s ease;
+}
+.nn-ui-progress[data-variant="accent"] .nn-ui-progress__fill {
+  background: var(--semantic-progress-fill-accent);
 }
 
 /* Padded marketing cards: same radius + shadow as .nn-card (single depth — premium prep, not stacked “template” cards) */

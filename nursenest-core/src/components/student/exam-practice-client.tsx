@@ -680,13 +680,13 @@ export function ExamPracticeClient({
     return (
       <ExamSessionShell className="mt-6 overflow-hidden" neutralPalette>
         <ExamSessionTopBar
-          left={examTitle ? <span className="font-medium text-slate-800 dark:text-slate-100">{examTitle}</span> : null}
+          left={examTitle ? <span className="font-medium text-foreground">{examTitle}</span> : null}
           center={<span>Loading</span>}
           right={<ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />}
         />
         {total > 0 ? <ExamProgressBar current={Math.min(currentIndex + 1, total)} total={total} /> : null}
         <div className="p-6">
-          <p className="text-sm text-slate-600 dark:text-slate-400">Loading question…</p>
+          <p className="text-sm text-muted-foreground">Loading question…</p>
         </div>
       </ExamSessionShell>
     );

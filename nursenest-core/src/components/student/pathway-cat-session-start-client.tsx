@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { PracticeTestPathwayOption } from "@/lib/practice-tests/types";
 import { PATHWAY_CAT_PRACTICE_DEFAULT_MAX_QUESTIONS } from "@/lib/exam-pathways/pathway-cat-flow";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import type { CatPracticeReadinessResult } from "@/lib/practice-tests/cat-practice-readiness";
+import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
 
 const MIN_CAT = 10;
 const MAX_CAT_PRACTICE = 75;
@@ -25,14 +27,51 @@ export function PathwayCatSessionStartClient({
   const [catBasis, setCatBasis] = useState<"random" | "weak">("random");
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [errorCode, setErrorCode] = useState<string | null>(null);
+  const [readinessLoading, setReadinessLoading] = useState(false);
+  const [readiness, setReadiness] = useState<CatPracticeReadinessResult | null>(null);
 
   const pathwayMeta = useMemo(() => (pathwayId ? getExamPathwayById(pathwayId) : undefined), [pathwayId]);
   const examTitle = pathwayMeta?.displayName ?? "Exam pathway";
+
+  useEffect(() => {
+    if (!pathwayId) {
+      setReadiness(null);
+      return;
+    }
+    let cancelled = false;
+    setReadinessLoading(true);
+    setReadiness(null);
+    void (async () => {
+      try {
+        const res = await fetch(`/api/practice-tests/cat-readiness?pathwayId=${encodeURIComponent(pathwayId)}`, {
+          method: "GET",
+          credentials: "same-origin",
+        });
+        const data = (await res.json()) as CatPracticeReadinessResult;
+        if (!cancelled) setReadiness(data);
+      } catch {
+        if (!cancelled) {
+          setReadiness({
+            ok: false,
+            code: "readiness_fetch_failed",
+            message: "Could not verify adaptive pool readiness. Check your connection and try again.",
+          });
+        }
+      } finally {
+        if (!cancelled) setReadinessLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [pathwayId]);
 
   const start = useCallback(async () => {
     if (!pathwayId) return;
     setCreating(true);
     setError(null);
+    setErrorCode(null);
     try {
       const cap = Math.min(MAX_CAT_PRACTICE, Math.max(MIN_CAT, Math.round(questionCap)));
       const res = await fetch("/api/practice-tests", {
@@ -52,8 +91,11 @@ export function PathwayCatSessionStartClient({
           timeLimitSec: null,
         }),
       });
-      const data = (await res.json()) as { id?: string; error?: string };
-      if (!res.ok) throw new Error(data.error ?? "Could not start session.");
+      const data = (await res.json()) as { id?: string; error?: string; code?: string };
+      if (!res.ok) {
+        setErrorCode(typeof data.code === "string" ? data.code : null);
+        throw new Error(data.error ?? "Could not start session.");
+      }
       if (data.id) {
         window.location.href = `/app/practice-tests/${data.id}`;
       }
@@ -132,16 +174,69 @@ export function PathwayCatSessionStartClient({
         </div>
       </fieldset>
 
-      {error ? <p className="text-sm font-medium text-destructive">{error}</p> : null}
+      {readinessLoading ? (
+        <p className="text-sm text-muted-foreground">Checking adaptive question pool for this pathway…</p>
+      ) : null}
+      {readiness && !readiness.ok ? (
+        <aside className="rounded-lg border border-amber-200/90 bg-amber-50/80 p-4 text-sm text-foreground dark:border-amber-900/50 dark:bg-amber-950/35">
+          <p className="font-semibold">CAT cannot start yet</p>
+          <p className="mt-1 text-muted-foreground">{readiness.message}</p>
+          <ul className="mt-3 list-inside list-disc space-y-1 text-muted-foreground">
+            {readiness.code === PRACTICE_TEST_CAT_CREATE_CODE.cat_pool_invalid && pathwayMeta ? (
+              <li>
+                <Link className="font-medium text-primary underline" href={buildExamPathwayPath(pathwayMeta, "questions")}>
+                  Open pathway question bank
+                </Link>{" "}
+                (practice items may still be available)
+              </li>
+            ) : null}
+            {readiness.code === PRACTICE_TEST_CAT_CREATE_CODE.pathway_not_entitled ? (
+              <li>
+                <Link className="font-medium text-primary underline" href="/app/account/billing">
+                  Review subscription &amp; billing
+                </Link>
+              </li>
+            ) : null}
+            {(readiness.code === PRACTICE_TEST_CAT_CREATE_CODE.pathway_track_not_ready ||
+              readiness.code === PRACTICE_TEST_CAT_CREATE_CODE.pathway_not_found) &&
+            pathwayMeta ? (
+              <li>
+                <Link className="font-medium text-primary underline" href={buildExamPathwayPath(pathwayMeta)}>
+                  Pathway hub
+                </Link>{" "}
+                for lessons, waitlist, or alternate tracks
+              </li>
+            ) : null}
+            <li>
+              <Link className="font-medium text-primary underline" href="/app/questions">
+                App question bank
+              </Link>
+            </li>
+          </ul>
+        </aside>
+      ) : null}
+
+      {error ? (
+        <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-sm">
+          <p className="font-semibold text-destructive">Something went wrong</p>
+          <p className="mt-1 text-foreground">{error}</p>
+          {errorCode === PRACTICE_TEST_CAT_CREATE_CODE.cat_weak_areas_empty ? (
+            <p className="mt-2 text-muted-foreground">
+              Tip: switch <strong>Pool basis</strong> to <strong>Balanced pool</strong>, use the question bank, then try weak
+              areas again.
+            </p>
+          ) : null}
+        </div>
+      ) : null}
 
       <div className="flex flex-wrap gap-3">
         <button
           type="button"
-          disabled={creating || !pathwayId}
+          disabled={creating || !pathwayId || readinessLoading || (readiness !== null && !readiness.ok)}
           className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-50"
           onClick={() => void start()}
         >
-          {creating ? "Starting…" : "Start session"}
+          {creating ? "Starting…" : readinessLoading ? "Checking…" : "Start session"}
         </button>
         <Link
           href="/app/practice-tests"
