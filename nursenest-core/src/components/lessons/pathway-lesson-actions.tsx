@@ -106,24 +106,31 @@ export function PathwayLessonActions({
     <div className="mt-10 flex flex-col gap-4 border-t border-[var(--theme-separator)] pt-8 sm:flex-row sm:flex-wrap sm:items-center">
       <Link
         href={qbHref}
+        data-testid="pathway-lesson-cta-practice-topic"
+        data-nn-pathway-id={pathwayId}
         className="inline-flex justify-center rounded-full bg-role-cta px-5 py-2.5 text-sm font-semibold text-role-cta-foreground shadow-[0_4px_14px_var(--role-cta-shadow)]"
       >
         {t("learner.studyLoop.practiceThisTopicCta")}
       </Link>
       <Link
         href={flashcardsHref}
+        data-testid="pathway-lesson-cta-flashcards"
+        data-nn-pathway-id={pathwayId}
         className="inline-flex justify-center rounded-full border border-border px-5 py-2.5 text-sm font-semibold hover:bg-gray-50"
       >
         {t("learner.studyLoop.sameTopicFlashcards")}
       </Link>
       <Link
         href={catWeakHref}
+        data-testid="pathway-lesson-cta-cat-practice"
+        data-nn-pathway-id={pathwayId}
         className="inline-flex justify-center rounded-full border border-border px-5 py-2.5 text-sm font-semibold hover:bg-gray-50"
       >
         {t("learner.studyLoop.catFromLesson")}
       </Link>
       <Link
         href="/app/exams"
+        data-testid="pathway-lesson-cta-timed-exams"
         className="inline-flex justify-center rounded-full border border-border px-5 py-2.5 text-sm font-semibold hover:bg-gray-50"
       >
         {t("learner.studyLoop.timedMocksHistory")}

@@ -1,5 +1,6 @@
 import { CANONICAL_PATHWAY_HUB } from "@/lib/marketing/canonical-pathway-hubs";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 /**
  * Guards nav and CTAs: marketing exam hubs must be `/{us|canada}/{role}/{exam}[/…]`.
@@ -17,5 +18,12 @@ export function fallbackNursingExamHubForRegion(region: MarketingRegionToggle): 
 }
 
 export function ensureMarketingExamHubPath(region: MarketingRegionToggle, href: string): string {
-  return isWellFormedExamHubPath(href) ? href : fallbackNursingExamHubForRegion(region);
+  if (isWellFormedExamHubPath(href)) return href;
+  safeServerLog("exam_pathway_hub", "invalid_exam_path_detected", {
+    event: "invalid_exam_path_detected",
+    region,
+    href: href.slice(0, 200),
+    fallback: fallbackNursingExamHubForRegion(region),
+  });
+  return fallbackNursingExamHubForRegion(region);
 }

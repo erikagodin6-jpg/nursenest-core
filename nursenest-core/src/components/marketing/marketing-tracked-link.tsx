@@ -14,6 +14,9 @@ type Props = {
   children: ReactNode;
   "aria-label"?: string;
   "data-testid"?: string;
+  /** Stable QA hooks for homepage exam grid (region + card id) — HTTP/Playwright regression. */
+  "data-nn-marketing-region"?: "US" | "CA";
+  "data-nn-exam-card-id"?: string;
 };
 
 /**

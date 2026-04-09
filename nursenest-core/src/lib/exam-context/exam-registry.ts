@@ -52,7 +52,7 @@ function tierLabelFromPathway(p: ExamPathwayDefinition): string {
     case "allied":
       return "ALLIED";
     default:
-      return p.roleTrack.toUpperCase();
+      return String(p.roleTrack).toUpperCase();
   }
 }
 

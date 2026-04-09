@@ -4,7 +4,7 @@ import Link from "next/link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import type { CatExamFeedbackMode } from "@/lib/practice-tests/types";
-import type { CatResultsCoachSnapshot } from "@/lib/practice-tests/cat-results-coach";
+import { EMPTY_CAT_RESULTS_COACH_SNAPSHOT, type CatResultsCoachSnapshot } from "@/lib/practice-tests/cat-results-coach";
 
 function difficultySparkline(series: number[], height = 40, width = 200) {
   if (series.length === 0) {
@@ -38,12 +38,13 @@ function difficultySparkline(series: number[], height = 40, width = 200) {
 }
 
 export function CatResultsCoachPanel({
-  coach,
+  coach: coachProp,
   catExamFeedbackMode,
 }: {
-  coach: CatResultsCoachSnapshot;
+  coach: CatResultsCoachSnapshot | null | undefined;
   catExamFeedbackMode?: CatExamFeedbackMode | null;
 }) {
+  const coach = coachProp ?? EMPTY_CAT_RESULTS_COACH_SNAPSHOT;
   const modeLabel =
     catExamFeedbackMode === "study"
       ? "Study Mode"
@@ -179,14 +180,14 @@ export function CatResultsCoachPanel({
       <div>
         <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">What to study next</p>
         <ol className="mt-3 space-y-4">
-          {coach.studyNext.map((s, i) => (
+          {(coach.studyNext ?? []).map((s, i) => (
             <li key={`${s.title}-${i}`} className="rounded-xl border border-[var(--semantic-border-soft)] bg-background/80 p-4">
               <p className="text-sm font-semibold text-foreground">
                 {i + 1}. {s.title}
               </p>
               <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{s.reason}</p>
               <div className="mt-3 flex flex-wrap gap-2">
-                {s.links.map((l) => (
+                {(s.links ?? []).map((l) => (
                   <Link
                     key={`${s.title}-${l.kind}`}
                     href={l.href}

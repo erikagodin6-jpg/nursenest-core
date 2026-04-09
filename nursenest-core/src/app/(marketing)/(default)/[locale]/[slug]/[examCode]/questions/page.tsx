@@ -5,11 +5,12 @@ import { NpQuestionsHubBoardLinks } from "@/components/exam-pathways/np-question
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { buildExamPathwayPath, resolveExamPathwayFromMarketingHubSegment } from "@/lib/exam-pathways/exam-product-registry";
+import { loadMarketingExamHubOptionalBlocks } from "@/lib/exam-pathways/marketing-hub-optional-data";
+import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import { HUB, loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
 import { pathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-analytics-props";
 import { PathwayLiveInventoryStrip } from "@/components/exam-pathways/pathway-live-inventory-strip";
-import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import { PathwayQuestionHubRelatedLessons } from "@/components/pathway-lessons/pathway-question-hub-related-lessons";
 import {
   humanizeTopicSlug,
@@ -22,7 +23,6 @@ import {
 } from "@/lib/lessons/lesson-question-cross-links";
 import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
 import {
-  countPathwayLessons,
   getRelatedPathwayLessons,
   RELATED_LESSONS_FOR_TOPIC_CAP,
   RELATED_PATHWAY_LESSONS_LIMIT,
@@ -70,16 +70,21 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
 
 export default async function ExamPathwayQuestionsHubPage({ params, searchParams }: Props) {
   const { locale, slug, examCode } = await params;
+  const pathname = `/${locale}/${slug}/${examCode}`;
   const sp = searchParams ? await searchParams : {};
   const topicFilter = sp.topic?.trim() ?? "";
   const topicSlugFromUrl = sp.topicSlug?.trim().toLowerCase() ?? "";
-  const pathway = resolveExamPathwayFromMarketingHubSegment(locale, slug, examCode);
+  const pathway = resolveExamPathwaySafe(locale, slug, examCode, { pathname: `${pathname}/questions` });
   if (!pathway) notFound();
 
-  const [questionSnapshot, pathwayLessonCount] = await Promise.all([
-    loadPathwayQuestionBankSnapshot(pathway.id),
-    countPathwayLessons(pathway.id),
-  ]);
+  const { questionSnapshot, pathwayLessonCount } = await loadMarketingExamHubOptionalBlocks(pathway, {
+    pathname: `${pathname}/questions`,
+    locale,
+    country: locale,
+    examCode,
+    pathwayId: pathway.id,
+    roleTrack: slug,
+  });
 
   const topicFilterTrim = topicFilter.trim();
   const lessonContentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();

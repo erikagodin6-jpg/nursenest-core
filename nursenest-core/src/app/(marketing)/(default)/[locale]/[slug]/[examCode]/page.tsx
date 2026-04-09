@@ -1,19 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ExamPathwayHub } from "@/components/exam-pathways/exam-pathway-hub";
-import {
-  buildExamPathwayPath,
-  resolveExamPathwayFromMarketingHubSegment,
-} from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath, resolveExamPathwayFromMarketingHubSegment } from "@/lib/exam-pathways/exam-product-registry";
 import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
+import { loadMarketingExamHubOptionalBlocks } from "@/lib/exam-pathways/marketing-hub-optional-data";
+import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import { auth } from "@/lib/auth";
-import {
-  loadPathwayQuestionBankSnapshot,
-  type PathwayQuestionBankSnapshot,
-} from "@/lib/exam-pathways/pathway-question-bank-snapshot";
-import { countPathwayLessons } from "@/lib/lessons/pathway-lesson-loader";
-import { loadNpCanadaInventoryGate } from "@/lib/np/np-pathway-inventory-gate";
-import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
 export const dynamicParams = true;
@@ -57,28 +49,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ExamPathwayOverviewPage({ params }: Props) {
   const { locale, slug, examCode } = await params;
-  const pathway = resolveExamPathwayFromMarketingHubSegment(locale, slug, examCode);
+  const pathname = `/${locale}/${slug}/${examCode}`;
+  const pathway = resolveExamPathwaySafe(locale, slug, examCode, { pathname });
   if (!pathway) notFound();
+
   const session = await auth();
   const isSignedIn = Boolean(session?.user);
   const npPracticeSeo = getNpPracticeTestLandingCopy(locale, slug, examCode) ?? null;
-  const marketingHubPath = `/${locale}/${slug}/${examCode}`;
-  let questionSnapshot: PathwayQuestionBankSnapshot = { status: "unavailable" };
-  let pathwayLessonCount = 0;
-  let npInventory: Awaited<ReturnType<typeof loadNpCanadaInventoryGate>> = null;
-  try {
-    [npInventory, questionSnapshot, pathwayLessonCount] = await Promise.all([
-      pathway.id === "ca-np-cnple" ? loadNpCanadaInventoryGate() : Promise.resolve(null),
-      loadPathwayQuestionBankSnapshot(pathway.id),
-      countPathwayLessons(pathway.id),
-    ]);
-  } catch (e) {
-    const message = e instanceof Error ? e.message : String(e);
-    safeServerLog("exam_pathway_hub", "hub_data_load_failed", {
-      pathwayId: pathway.id,
-      detail: message.slice(0, 240),
-    });
-  }
+  const marketingHubPath = pathname;
+
+  const { npInventory, questionSnapshot, pathwayLessonCount } = await loadMarketingExamHubOptionalBlocks(pathway, {
+    pathname,
+    locale,
+    country: locale,
+    examCode,
+    pathwayId: pathway.id,
+    roleTrack: slug,
+  });
+
   return (
     <ExamPathwayHub
       pathway={pathway}

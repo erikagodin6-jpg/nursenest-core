@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import type { PathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
+import { EMPTY_QUESTION_SNAPSHOT } from "@/lib/exam-pathways/marketing-hub-fallbacks";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
@@ -11,15 +12,16 @@ type Variant = "hub" | "lessons" | "questions" | "cat";
 
 export function PathwayLiveInventoryStrip({
   pathway,
-  questionSnapshot,
+  questionSnapshot: questionSnapshotProp,
   lessonCount,
   variant = "hub",
 }: {
   pathway: ExamPathwayDefinition;
-  questionSnapshot: PathwayQuestionBankSnapshot;
+  questionSnapshot?: PathwayQuestionBankSnapshot | null;
   lessonCount?: number;
   variant?: Variant;
 }) {
+  const questionSnapshot = questionSnapshotProp ?? EMPTY_QUESTION_SNAPSHOT;
   const { t } = useMarketingI18n();
   const region = pathway.countrySlug === "canada" ? "Canada" : "US";
   const lessonsHref = buildExamPathwayPath(pathway, "lessons");

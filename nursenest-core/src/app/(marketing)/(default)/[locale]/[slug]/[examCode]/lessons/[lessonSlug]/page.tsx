@@ -13,6 +13,7 @@ import { PathwayLessonProgressBadgeLive } from "@/components/lessons/pathway-les
 import { PathwayLessonProgressTracker } from "@/components/lessons/pathway-lesson-progress-tracker";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { buildExamPathwayPath, resolveExamPathwayFromMarketingHubSegment } from "@/lib/exam-pathways/exam-product-registry";
+import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import { marketingExamHubBasePath, marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 import { PathwayLessonPreviewBanner } from "@/components/lessons/pathway-lesson-preview-banner";
 import {
@@ -117,19 +118,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function PathwayLessonDetailPage({ params }: Props) {
   const { locale: countrySlug, slug: roleTrack, examCode, lessonSlug } = await params;
-  const pathway = resolveExamPathwayFromMarketingHubSegment(countrySlug, roleTrack, examCode);
+  const pathname = `/${countrySlug}/${roleTrack}/${examCode}/lessons/${lessonSlug}`;
+  const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
   if (!pathway) notFound();
   const lessonContentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
 
-  const [lesson, session] = await Promise.all([
+  const [lessonResult, sessionResult] = await Promise.allSettled([
     loadPathwayLessonWithLegacySlugRedirect(pathway, lessonSlug, lessonContentLocale),
     auth(),
   ]);
+  const lesson =
+    lessonResult.status === "fulfilled" ? lessonResult.value : undefined;
   if (!lesson) notFound();
+
+  const session = sessionResult.status === "fulfilled" ? sessionResult.value : null;
 
   const userId = (session?.user as { id?: string })?.id ?? "";
 
-  const [entitlement, learnerPath] = await Promise.all([
+  const [entRes, lpRes] = await Promise.allSettled([
     resolveEntitlementForPage(userId),
     (async (): Promise<string | null> => {
       if (!userId || !isDatabaseUrlConfigured()) return null;
@@ -141,13 +147,15 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
       }
     })(),
   ]);
+  const entitlement = entRes.status === "fulfilled" ? entRes.value : "error";
+  const learnerPathResolved = lpRes.status === "fulfilled" ? lpRes.value : null;
 
   const scope =
     entitlement === "error"
       ? { hasAccess: false, reason: "no_access" as const, tier: null, country: null }
       : entitlement;
 
-  const fullAccess = canViewFullPathwayLesson(scope, pathway, learnerPath);
+  const fullAccess = canViewFullPathwayLesson(scope, pathway, learnerPathResolved);
   const visible = visibleSectionsForLesson(lesson, fullAccess);
 
   const hubBase = marketingExamHubBasePath(pathway);
@@ -255,7 +263,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
             </>
           ) : (
             <PathwayLessonPreviewBanner
-              kind={getPathwayLessonPreviewKind(scope, pathway, learnerPath, userId)}
+              kind={getPathwayLessonPreviewKind(scope, pathway, learnerPathResolved, userId)}
               pathwayShortName={pathway.shortName}
               pathwayCountryLabel={pathway.countryCode === "CA" ? "Canada" : "United States"}
             />

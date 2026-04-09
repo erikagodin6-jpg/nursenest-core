@@ -202,6 +202,7 @@ export function PathwayLessonsGroupedHub({
                       </div>
                       <Link
                         href={href}
+                        data-nn-qa-primary-lesson={gi === 0 && idx === 0 ? "true" : undefined}
                         className="nn-marketing-h4 mt-2 text-[var(--theme-heading-text)] underline-offset-4 transition hover:text-primary hover:underline"
                       >
                         {l.title}

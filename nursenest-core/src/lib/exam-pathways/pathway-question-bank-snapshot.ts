@@ -5,6 +5,7 @@ import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { questionBankWhereForProfile } from "@/lib/entitlements/content-access-scope";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 const SNAPSHOT_TIMEOUT_MS = 10_000;
 const REVALIDATE_SECONDS = 3600;
@@ -35,12 +36,30 @@ async function computePathwayQuestionBankSnapshot(pathway: ExamPathwayDefinition
   return withDatabaseFallbackTimeout<PathwayQuestionBankSnapshot>(
     async (): Promise<PathwayQuestionBankSnapshot> => {
       const base = pathwayExamQuestionMarketingWhere(pathway);
-      const [pathwayScopedCount, adaptiveEligibleCount] = await Promise.all([
+      const counts = await Promise.allSettled([
         prisma.examQuestion.count({ where: base }),
         prisma.examQuestion.count({
           where: { AND: [base, { isAdaptiveEligible: true }] },
         }),
       ]);
+      const pathwayScopedCount =
+        counts[0]?.status === "fulfilled" && typeof counts[0].value === "number" ? counts[0].value : 0;
+      const adaptiveEligibleCount =
+        counts[1]?.status === "fulfilled" && typeof counts[1].value === "number" ? counts[1].value : 0;
+      if (counts[0]?.status === "rejected" || counts[1]?.status === "rejected") {
+        safeServerLog("exam_pathway_hub", "hub_data_load_failed", {
+          event: "hub_data_load_failed",
+          dependency_name: "question_snapshot_prisma_count",
+          pathway_id: pathway.id,
+          error_message: String(
+            counts[0]?.status === "rejected"
+              ? counts[0].reason
+              : counts[1]?.status === "rejected"
+                ? counts[1].reason
+                : "",
+          ).slice(0, 500),
+        });
+      }
       return {
         status: "ok",
         pathwayScopedCount,
@@ -57,13 +76,24 @@ async function computePathwayQuestionBankSnapshot(pathway: ExamPathwayDefinition
  * Cached aggregate for marketing surfaces — mirrors in-app pool scoping for the pathway’s default subscription tier.
  */
 export async function loadPathwayQuestionBankSnapshot(pathwayId: string): Promise<PathwayQuestionBankSnapshot> {
-  return unstable_cache(
-    async (): Promise<PathwayQuestionBankSnapshot> => {
-      const pathway = getExamPathwayById(pathwayId);
-      if (!pathway) return { status: "unavailable" };
-      return computePathwayQuestionBankSnapshot(pathway);
-    },
-    ["pathway-question-bank-snapshot", pathwayId],
-    { revalidate: REVALIDATE_SECONDS, tags: [`pathway-questions:${pathwayId}`] },
-  )();
+  try {
+    return await unstable_cache(
+      async (): Promise<PathwayQuestionBankSnapshot> => {
+        const pathway = getExamPathwayById(pathwayId);
+        if (!pathway) return { status: "unavailable" };
+        return computePathwayQuestionBankSnapshot(pathway);
+      },
+      ["pathway-question-bank-snapshot", pathwayId],
+      { revalidate: REVALIDATE_SECONDS, tags: [`pathway-questions:${pathwayId}`] },
+    )();
+  } catch (e) {
+    const message = e instanceof Error ? e.message : String(e);
+    safeServerLog("exam_pathway_hub", "hub_data_load_failed", {
+      event: "hub_data_load_failed",
+      dependency_name: "pathway_question_bank_snapshot_cache",
+      pathway_id: pathwayId,
+      error_message: message.slice(0, 500),
+    });
+    return { status: "unavailable" };
+  }
 }

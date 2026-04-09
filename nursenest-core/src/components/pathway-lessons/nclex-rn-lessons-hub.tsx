@@ -171,6 +171,7 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
           <div className="mt-5 flex flex-wrap gap-2">
             <Link
               href={pathwayLessonMarketingDetailHref(lessonsBasePath, featured.slug)!}
+              data-nn-qa-primary-lesson="true"
               className="inline-flex rounded-full nn-btn-primary px-4 py-2 text-sm font-semibold shadow-none"
             >
               Open lesson

@@ -88,6 +88,8 @@ export function HomeExamSelectionSection() {
                   event: PH.funnelHomeToExamHub,
                   eventProps: { placement: "exam_selection_grid", pathway: c.id, region },
                 }}
+                data-nn-marketing-region={region}
+                data-nn-exam-card-id={c.id}
                 className="nn-card-soft nn-student-card-lift group flex h-full min-h-[12rem] flex-col p-5 transition hover:border-[color-mix(in_srgb,var(--theme-primary)_40%,var(--border-subtle))]"
               >
                 <span className="nn-marketing-h3 text-balance">{t(c.titleKey)}</span>

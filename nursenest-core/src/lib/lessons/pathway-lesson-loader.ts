@@ -1236,12 +1236,13 @@ export const resolvePathwayLaunchBundle = cache(async function resolvePathwayLau
 ): Promise<ResolvedPathwayLaunchBundle | null> {
   const spec = getLaunchBundleSpec(pathwayId);
   if (!spec) return null;
-  const lessons = await Promise.all(
+  const settled = await Promise.allSettled(
     spec.entries.map((e) => getPathwayLesson(pathwayId, e.slug, marketingLocale)),
   );
   const resolved = spec.entries
     .map((entry, i) => {
-      const lesson = lessons[i];
+      const r = settled[i];
+      const lesson = r?.status === "fulfilled" ? r.value : undefined;
       if (!lesson) return null;
       return { entry, lesson };
     })

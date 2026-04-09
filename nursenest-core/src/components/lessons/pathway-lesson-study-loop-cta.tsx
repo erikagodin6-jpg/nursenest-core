@@ -43,6 +43,7 @@ export function PathwayLessonStudyLoopCta({
     <section
       className="relative mt-12 overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--theme-primary)_10%,var(--border-subtle))] bg-gradient-to-br from-[var(--nn-presentation-wash)] via-[var(--theme-page-bg)] to-[color-mix(in_srgb,var(--theme-primary)_5%,var(--theme-page-bg))] p-5 shadow-[var(--shadow-card)] sm:p-8"
       aria-labelledby="lesson-study-loop-heading"
+      data-nn-qa-study-loop="true"
     >
       <div
         className="pointer-events-none absolute -right-10 -top-14 h-40 w-40 rounded-full bg-[color-mix(in_srgb,var(--theme-primary)_8%,transparent)] blur-3xl"
@@ -106,13 +107,14 @@ export function PathwayLessonStudyLoopCta({
             </div>
             {filtered.length > 0 ? (
               <ul className="mt-3 space-y-2">
-                {filtered.map((r) => {
+                {filtered.map((r, relIdx) => {
                   const href = pathwayLessonMarketingDetailHref(lessonsBasePath, r.slug);
                   if (!href) return null;
                   return (
                     <li key={r.slug}>
                       <Link
                         href={href}
+                        data-nn-qa-related-lesson={relIdx === 0 ? "true" : undefined}
                         className="block rounded-xl border border-transparent px-2 py-1.5 text-sm font-semibold text-primary transition hover:border-primary/25 hover:bg-[var(--theme-muted-surface)]/50"
                       >
                         {r.title}

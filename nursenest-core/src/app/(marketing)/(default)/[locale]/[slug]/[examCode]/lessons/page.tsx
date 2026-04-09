@@ -9,20 +9,17 @@ import { NclexPnLessonsHub } from "@/components/pathway-lessons/nclex-pn-lessons
 import { NclexRnLessonsHub } from "@/components/pathway-lessons/nclex-rn-lessons-hub";
 import { PathwayLiveInventoryStrip } from "@/components/exam-pathways/pathway-live-inventory-strip";
 import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-lesson-pagination";
-import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
 import { buildExamPathwayPath, resolveExamPathwayFromMarketingHubSegment } from "@/lib/exam-pathways/exam-product-registry";
+import { loadPathwayLessonsHubAggregates } from "@/lib/exam-pathways/marketing-hub-optional-data";
+import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import { marketingExamHubBasePath, marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
 import {
   PATHWAY_HUB_PAGE_SIZE_DEFAULT,
-  countPathwayLessons,
-  getPathwayLessonsPage,
-  listTopicClusters,
   normalizePathwayHubSearchQuery,
-  resolvePathwayLaunchBundle,
 } from "@/lib/lessons/pathway-lesson-loader";
 import { PathwayLaunchEssentials } from "@/components/pathway-lessons/pathway-launch-essentials";
 import { PathwayLessonsNextStepCtas } from "@/components/pathway-lessons/pathway-lessons-next-step-ctas";
@@ -146,8 +143,9 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
 
 export default async function PathwayLessonsHubPage({ params, searchParams }: Props) {
   const { locale: countrySlug, slug: roleTrack, examCode } = await params;
+  const pathname = `/${countrySlug}/${roleTrack}/${examCode}`;
   const lessonContentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
-  const pathway = resolveExamPathwayFromMarketingHubSegment(countrySlug, roleTrack, examCode);
+  const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
   if (!pathway) notFound();
 
   const hubBase = marketingExamHubBasePath(pathway);
@@ -158,13 +156,25 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const qEffective = normalizePathwayHubSearchQuery(sp.q);
   const listOpts = typeof sp.q === "string" && sp.q.trim().length > 0 ? { q: sp.q } : undefined;
 
-  const [pageResult, questionSnapshot, pathwayLessonTotal, launchBundle, topics] = await Promise.all([
-    getPathwayLessonsPage(pathway.id, pageRequested, pageSizeRequested, lessonContentLocale, listOpts),
-    loadPathwayQuestionBankSnapshot(pathway.id),
-    countPathwayLessons(pathway.id),
-    pageRequested === 1 && !qEffective ? resolvePathwayLaunchBundle(pathway.id, lessonContentLocale) : Promise.resolve(null),
-    listTopicClusters(pathway.id, lessonContentLocale),
-  ]);
+  const { pageResult, questionSnapshot, pathwayLessonTotal, launchBundle, topics } = await loadPathwayLessonsHubAggregates(
+    pathway,
+    {
+      pageRequested,
+      pageSizeRequested,
+      lessonContentLocale,
+      listOpts,
+      qEffective,
+      skipLaunchBundle: pageRequested !== 1 || Boolean(qEffective),
+    },
+    {
+      pathname: `${pathname}/lessons`,
+      locale: countrySlug,
+      country: countrySlug,
+      examCode,
+      pathwayId: pathway.id,
+      roleTrack,
+    },
+  );
 
   const hubQuerySuffix = (page: number) => {
     const qs = new URLSearchParams();

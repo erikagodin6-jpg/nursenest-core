@@ -3,10 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
-import {
-  buildExamPathwayPath,
-  resolveExamPathwayFromMarketingHubSegment,
-} from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath, resolveExamPathwayFromMarketingHubSegment } from "@/lib/exam-pathways/exam-product-registry";
+import { loadMarketingExamHubOptionalBlocks } from "@/lib/exam-pathways/marketing-hub-optional-data";
+import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import {
   assessCatEligibilityForSubscriberAndPathway,
   assessMarketingCatSurfaceWithoutAuth,
@@ -17,7 +16,6 @@ import {
 } from "@/lib/exam-pathways/pathway-cat-flow";
 import { HUB, loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { PathwayLiveInventoryStrip } from "@/components/exam-pathways/pathway-live-inventory-strip";
-import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import { pathwayCatPracticeBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { auth } from "@/lib/auth";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
@@ -48,10 +46,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function PathwayCatEntryPage({ params }: Props) {
   const { locale: countrySlug, slug: roleTrack, examCode } = await params;
-  const pathway = resolveExamPathwayFromMarketingHubSegment(countrySlug, roleTrack, examCode);
+  const pathname = `/${countrySlug}/${roleTrack}/${examCode}`;
+  const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname: `${pathname}/cat` });
   if (!pathway) notFound();
 
-  const questionSnapshot = await loadPathwayQuestionBankSnapshot(pathway.id);
+  const { questionSnapshot } = await loadMarketingExamHubOptionalBlocks(pathway, {
+    pathname: `${pathname}/cat`,
+    locale: countrySlug,
+    country: countrySlug,
+    examCode,
+    pathwayId: pathway.id,
+    roleTrack,
+  });
 
   const session = await auth();
   const userId = (session?.user as { id?: string })?.id ?? "";

@@ -61,6 +61,32 @@ export type CatResultsCoachSnapshot = {
   examPassingStandardLine?: string;
 };
 
+/** UI-only fallback when coach payload is missing or failed to deserialize — does not affect scoring. */
+export const EMPTY_CAT_RESULTS_COACH_SNAPSHOT: CatResultsCoachSnapshot = {
+  generatedAt: new Date(0).toISOString(),
+  passOutlookPercent: 0,
+  passOutlookDisclaimer: "Summary unavailable for this session.",
+  confidenceLevel: "low",
+  confidenceSummary: "—",
+  readinessHeadline: "CAT summary unavailable",
+  readinessNarrative:
+    "We could not load your coaching summary. Your results are still saved; try refreshing or open practice tests from the dashboard.",
+  strongestDomains: [],
+  weakestDomains: [],
+  keyRiskFactor: null,
+  studyNext: [],
+  specificStudyActions: [],
+  difficultySeries: [],
+  difficultyTrendLabel: "flat",
+  stabilityTrendLabel: "insufficient",
+  stabilityInterpretation: "Not enough data to describe a trend for this session.",
+  passingBandRelative: "uncertain",
+  passingBandCopy: "Practice band comparison is unavailable.",
+  weaknessInsights: [],
+  errorPatterns: [],
+  multiSessionGuidance: "Compare multiple sessions over time from your practice history when available.",
+};
+
 export type CatCoachIncorrectRow = {
   questionType: string;
   topic: string | null;

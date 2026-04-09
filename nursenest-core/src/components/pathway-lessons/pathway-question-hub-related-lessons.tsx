@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import { pathwayLessonMarketingDetailHref } from "@/lib/lessons/pathway-lesson-types";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 /**
  * When the question hub is topic-filtered, surface a few pathway lessons from the same topic cluster (bounded list).
@@ -16,6 +17,8 @@ export function PathwayQuestionHubRelatedLessons({
 }) {
   if (lessons.length === 0) return null;
 
+  const basePrefix = (lessonsBasePath.split("?")[0] ?? lessonsBasePath).replace(/\/$/, "");
+
   return (
     <section className="nn-study-card nn-study-card--wash mt-8 p-5 sm:p-6" aria-labelledby="qhub-related-lessons-heading">
       <p className="nn-marketing-label nn-marketing-label--accent">Lessons · same cluster</p>
@@ -30,6 +33,15 @@ export function PathwayQuestionHubRelatedLessons({
         {lessons.map((l) => {
           const href = pathwayLessonMarketingDetailHref(lessonsBasePath, l.slug);
           if (!href) return null;
+          const pathOnly = href.split("?")[0] ?? href;
+          if (!pathOnly.startsWith(basePrefix)) {
+            safeServerLog("exam_pathway_hub", "lesson_link_mismatch_suppressed", {
+              event: "lesson_link_mismatch_suppressed",
+              lessons_base: lessonsBasePath.slice(0, 160),
+              slug: l.slug.slice(0, 120),
+            });
+            return null;
+          }
           return (
             <li key={l.slug}>
               <Link href={href} className="font-medium text-primary hover:underline">
