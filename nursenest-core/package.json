@@ -87,6 +87,7 @@
     "verify:auth-db": "tsx scripts/verify-auth-db.ts",
     "disk:audit": "node scripts/disk-audit.mjs",
     "build:risk-audit": "tsx scripts/build-risk-audit.ts",
+    "blueprint:lesson-expansion": "tsx scripts/run-blueprint-lesson-expansion.ts",
     "storage:check": "node scripts/storage-guardrails.mjs",
     "verify:theme-logos": "node scripts/verify-theme-logos.mjs",
     "storage:check:strict": "node scripts/storage-guardrails.mjs --strict",

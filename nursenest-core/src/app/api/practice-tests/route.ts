@@ -184,6 +184,15 @@ export async function POST(req: Request) {
         { status: 400 },
       );
     }
+    if (pathwayIdForCat && !getExamPathwayById(pathwayIdForCat)) {
+      return NextResponse.json(
+        {
+          error: "Unknown exam pathway id. Refresh the page and pick a pathway from the list.",
+          code: PRACTICE_TEST_CAT_CREATE_CODE.pathway_not_found,
+        },
+        { status: 400 },
+      );
+    }
     if (pathwayIdForCat && !catEligible.some((p) => p.id === pathwayIdForCat)) {
       const inCompatible = compatible.some((p) => p.id === pathwayIdForCat);
       const p = getExamPathwayById(pathwayIdForCat);

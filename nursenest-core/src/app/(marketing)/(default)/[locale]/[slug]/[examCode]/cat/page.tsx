@@ -90,22 +90,48 @@ export default async function PathwayCatEntryPage({ params }: Props) {
           <span className="font-semibold">Requires:</span> an active plan that covers this pathway
         </li>
       </ul>
-      {pathway.status === "upcoming" ? (
+      {!catTrackReady ? (
+        <aside className="nn-card mt-6 border-amber-200/80 bg-amber-50/60 p-4 text-sm text-foreground">
+          <p className="font-semibold">Adaptive CAT is not open for this track yet</p>
+          <p className="mt-1 text-[var(--theme-muted-text)]">
+            This pathway is still on waitlist or ramp-up. Use lessons and the question bank below; join a waitlist from the
+            pathway hub when available. Your subscription is still enforced in the app.
+          </p>
+        </aside>
+      ) : pathway.status === "upcoming" ? (
         <aside className="nn-card mt-6 border-amber-200/80 bg-amber-50/60 p-4 text-sm text-foreground">
           <p className="font-semibold">Upcoming pathway</p>
           <p className="mt-1 text-[var(--theme-muted-text)]">
-            Content depth may be limited while this track is still ramping. You can still try CAT if your subscription
-            includes it.
+            Content depth may be limited while this track is still ramping. CAT is available only when the adaptive pool
+            meets quality checks.
+          </p>
+        </aside>
+      ) : null}
+      {!marketingCatStartOk && catTrackReady && questionSnapshot.status === "ok" ? (
+        <aside className="nn-card mt-6 border-border bg-muted/40 p-4 text-sm text-foreground">
+          <p className="font-semibold">Adaptive pool is still building</p>
+          <p className="mt-1 text-[var(--theme-muted-text)]">
+            We need more pathway-scoped, adaptive-eligible questions before CAT can run reliably. Use the question bank and
+            lessons — the app will confirm eligibility when you start a session.
           </p>
         </aside>
       ) : null}
       <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-        <Link
-          href={startHref}
-          className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground shadow-sm"
-        >
-          {isSignedIn ? "Start CAT session" : "Sign in to start"}
-        </Link>
+        {marketingCatStartOk || !isSignedIn ? (
+          <Link
+            href={startHref}
+            className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground shadow-sm"
+          >
+            {isSignedIn ? "Start CAT session" : "Sign in to start"}
+          </Link>
+        ) : (
+          <span
+            className="inline-flex min-h-[48px] cursor-not-allowed items-center justify-center rounded-full bg-muted px-8 py-3 text-sm font-semibold text-muted-foreground"
+            title="CAT start is available once the adaptive pool is ready or from the in-app checker."
+          >
+            CAT start unavailable (see above)
+          </span>
+        )}
         <Link
           href={buildExamPathwayPath(pathway, "lessons")}
           className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-border px-8 py-3 text-sm font-semibold hover:bg-card"
