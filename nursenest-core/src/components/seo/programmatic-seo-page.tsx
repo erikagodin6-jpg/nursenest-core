@@ -14,6 +14,7 @@ import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-rout
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { resolveProgrammaticProductLinks } from "@/lib/seo/programmatic-page-links";
 import { isUnifiedPracticeSlug } from "@/lib/seo/programmatic-practice-hub";
+import { NpMarketingProductDiscovery } from "@/components/marketing/np-marketing-product-discovery";
 import { ProgrammaticStudyModesHub } from "@/components/seo/programmatic-study-modes-hub";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
@@ -142,6 +143,8 @@ export async function ProgrammaticSeoPage({
             </div>
           )}
         </header>
+
+        <NpMarketingProductDiscovery marketingRegion={marketingRegion} slug={page.slug} />
 
         {practiceConfig && page.practiceConversion ? (
           <ProgrammaticPracticeConversionBlocks slug={page.slug} locale={locale} config={practiceConfig} />

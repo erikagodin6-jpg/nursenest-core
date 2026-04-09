@@ -11,6 +11,11 @@ import { fileURLToPath } from "node:url";
 import { allBlueprintExpansionSlots2026 } from "@/lib/content-blueprint/blueprint-expansion-wave-2026";
 import { buildExpansionCatalogLesson } from "@/lib/content-blueprint/blueprint-expansion-catalog-builder";
 import { prependScopedGoldCatalogLessons } from "@/lib/lessons/scoped-lessons/scoped-gold-registry";
+import {
+  evaluateLessonExpansionQuality,
+  gateErrors,
+  type CatalogLessonRowInput,
+} from "@/lib/content-quality/lesson-expansion-quality-gate";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
@@ -85,6 +90,8 @@ function main(): void {
       (bucket.lessons as { slug?: string }[]).map((l) => (typeof l.slug === "string" ? l.slug : "")).filter(Boolean),
     );
 
+    const cohort: CatalogLessonRowInput[] = [...(bucket.lessons as CatalogLessonRowInput[])];
+
     const domainCounts: Record<string, number> = {};
     let added = 0;
     for (const slot of slice) {
@@ -93,7 +100,15 @@ function main(): void {
         report.skippedDuplicates.push({ pathwayId: p.pathwayId, slug: row.slug });
         continue;
       }
+      const q = evaluateLessonExpansionQuality(row, { pathwayId: p.pathwayId, cohort });
+      const err = gateErrors(q);
+      if (err.length > 0) {
+        throw new Error(
+          `Lesson expansion quality gate failed for ${p.pathwayId} / ${row.slug}: ${err.map((e) => e.message).join(" | ")}`,
+        );
+      }
       bucket.lessons.push(row);
+      cohort.push(row);
       existing.add(row.slug);
       added += 1;
       const dk = slot.blueprintDomain;

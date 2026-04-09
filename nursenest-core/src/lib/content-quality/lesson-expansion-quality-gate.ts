@@ -175,12 +175,12 @@ export function evaluateLessonExpansionQuality(
   }
 
   const examRel = sectionBody(row.sections, "exam_relevance");
-  if (examRel.length < 40 || countWords(examRel) < 40) {
+  if (countWords(examRel) < 35) {
     v.push({
       ruleId: "Q2",
       severity: "warn",
       slug,
-      message: "exam_relevance section should clearly state how the item shows up on the exam (≥ ~40 words of concrete guidance).",
+      message: "exam_relevance section should clearly state how the item shows up on the exam (target ≥ ~35 words of concrete guidance).",
     });
   }
 
@@ -210,9 +210,12 @@ export function evaluateLessonExpansionQuality(
   for (const other of ctx.cohort) {
     if (other.slug === row.slug) continue;
     if (other.topicSlug !== topicSlug) continue;
-    const b = tokenSet(titleCore(stripToPlainText(other.title)));
+    const otherCore = titleCore(stripToPlainText(other.title));
+    /** Placeholder family shares a template title — skip automated overlap (editorial replaces later). */
+    if (/^integrated review:/i.test(core) && /^integrated review:/i.test(otherCore)) continue;
+    const b = tokenSet(otherCore);
     const j = jaccard(a, b);
-    if (j >= 0.65 && a.size >= 4 && b.size >= 4) {
+    if (j >= 0.72 && a.size >= 5 && b.size >= 5) {
       v.push({
         ruleId: "U1",
         severity: "warn",

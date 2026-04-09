@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ChevronDown } from "lucide-react";
 import type { ContentQualityTier } from "@/lib/content-quality/standards";
 import type { RationaleReferenceMedia } from "@/lib/content-quality/rationale-media";
 import type { NormalizedTeachingPayload, TeachingMediaBundle } from "@/lib/content-quality/teaching-payload";
@@ -155,19 +156,24 @@ export function PremiumRationalePanel({
             {correct ? t("learner.qbank.ui.correct") : t("learner.qbank.ui.incorrect")}
           </p>
         </div>
-        <details className="group" open={defaultOpenExplanation}>
+        <details className="nn-rationale-details group" open={defaultOpenExplanation}>
           <summary className="cursor-pointer list-none px-4 py-3.5 text-sm font-semibold text-[var(--theme-heading-text)] outline-none ring-inset marker:hidden transition-colors hover:bg-[color-mix(in_srgb,var(--theme-primary)_4%,var(--theme-card-bg))] sm:px-6 [&::-webkit-details-marker]:hidden">
             <span className="flex items-center justify-between gap-3">
-              <span>{t("learner.qbank.examUi.rationaleSummary")}</span>
-              <span className="text-xs font-normal text-[var(--theme-muted-text)] group-open:hidden">
+              <span className="flex min-w-0 items-center gap-2">
+                <ChevronDown className="nn-rationale-chevron h-4 w-4 shrink-0 text-[var(--theme-muted-text)]" aria-hidden />
+                <span>{t("learner.qbank.examUi.rationaleSummary")}</span>
+              </span>
+              <span className="shrink-0 text-xs font-normal text-[var(--theme-muted-text)] group-open:hidden">
                 {t("learner.qbank.examUi.tapToExpand")}
               </span>
-              <span className="hidden text-xs font-normal text-[var(--theme-muted-text)] group-open:inline">
+              <span className="hidden shrink-0 text-xs font-normal text-[var(--theme-muted-text)] group-open:inline">
                 {t("learner.qbank.examUi.tapToCollapse")}
               </span>
             </span>
           </summary>
-          <div className="nn-question-rationale-card__body px-4 py-4 sm:px-6 sm:py-5">{body}</div>
+          <div className="nn-question-rationale-card__body nn-rationale-prose px-4 py-4 text-[var(--theme-body-text)] sm:px-6 sm:py-5">
+            {body}
+          </div>
         </details>
       </div>
     );

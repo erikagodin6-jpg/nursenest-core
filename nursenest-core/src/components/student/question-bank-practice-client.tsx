@@ -28,6 +28,7 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { readMarketingRegionFromDocument } from "@/lib/observability/learner-analytics-context.client";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
+import { QuestionChoiceLetter } from "@/components/student/question-choice-letter";
 import { QuestionSessionStudyLoopPanel } from "@/components/student/question-session-study-loop-panel";
 import { ExamProgressBar, ExamSessionShell, ExamSessionTopBar } from "@/components/exam/exam-session-shell";
 import type {
@@ -1059,7 +1060,7 @@ export function QuestionBankPracticeClient({
               ) : null}
 
               {isSata ? (
-                <ul className="space-y-3.5">
+                <ul className="space-y-3.5" role="group" aria-label={t("learner.qbank.examUi.answersHeading")}>
                   {optsCanonical.map((canonical, i) => {
                     const label = optsDisplay[i] ?? canonical;
                     const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
@@ -1072,7 +1073,7 @@ export function QuestionBankPracticeClient({
                       <li key={canonical}>
                         <div className={`flex gap-2 p-1 sm:gap-3 ${rowClass}`}>
                           <label
-                            className={`flex min-h-[3.25rem] flex-1 cursor-pointer items-center gap-3 px-3 py-2.5 sm:min-h-[3.5rem] sm:px-4 ${g ? "cursor-default" : ""}`}
+                            className={`flex min-h-[3.25rem] flex-1 cursor-pointer items-start gap-3 px-3 py-2.5 sm:min-h-[3.5rem] sm:px-4 ${g ? "cursor-default" : ""}`}
                           >
                             <input
                               type="checkbox"
@@ -1083,10 +1084,11 @@ export function QuestionBankPracticeClient({
                                 const next = e.target.checked ? [...prevAns, canonical] : prevAns.filter((x) => x !== canonical);
                                 setAnswer(next);
                               }}
-                              className="size-[1.125rem] shrink-0 rounded border-border text-primary focus-visible:ring-2 focus-visible:ring-primary/30 sm:size-5"
+                              className="mt-1 size-[1.125rem] shrink-0 rounded border-border text-primary focus-visible:ring-2 focus-visible:ring-primary/30 sm:size-5"
                             />
+                            <QuestionChoiceLetter index={i} />
                             <span
-                              className={`text-base leading-relaxed text-[var(--theme-body-text)] ${struck && !g ? "text-muted-foreground line-through" : ""}`}
+                              className={`min-w-0 flex-1 text-base leading-relaxed text-[var(--theme-body-text)] ${struck && !g ? "text-muted-foreground line-through" : ""}`}
                             >
                               {label}
                             </span>
@@ -1119,7 +1121,7 @@ export function QuestionBankPracticeClient({
                   })}
                 </ul>
               ) : (
-                <ul className="space-y-3.5">
+                <ul className="space-y-3.5" role="radiogroup" aria-label={t("learner.qbank.examUi.answersHeading")}>
                   {optsCanonical.map((canonical, i) => {
                     const label = optsDisplay[i] ?? canonical;
                     const struck = Boolean(strikeOut[canonical]);
@@ -1134,9 +1136,10 @@ export function QuestionBankPracticeClient({
                           type="button"
                           disabled={!!g}
                           onClick={() => setAnswer(canonical)}
-                          className={`flex-1 px-4 py-4 text-left text-base font-normal leading-relaxed text-[var(--theme-body-text)] transition sm:px-5 ${surface}`}
+                          className={`flex flex-1 items-start gap-3 px-4 py-4 text-left text-base font-normal leading-relaxed text-[var(--theme-body-text)] transition sm:px-5 ${surface}`}
                         >
-                          {label}
+                          <QuestionChoiceLetter index={i} />
+                          <span className="min-w-0 flex-1">{label}</span>
                         </button>
                         {!g ? (
                           <div className="flex shrink-0 flex-col gap-2 sm:flex-row sm:items-stretch">

@@ -1,15 +1,18 @@
 "use client";
 
 import Link from "next/link";
+import { ExamFamily } from "@prisma/client";
 import { ArrowRight, ClipboardList } from "lucide-react";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { ExamPathwayHubPrimaryStudyCards } from "@/components/exam-pathways/exam-pathway-hub-study-modes";
 import { pathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-analytics-props";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { PH } from "@/lib/observability/posthog-conversion-events";
+
+const US_NP_SIBLING_IDS = ["us-np-fnp", "us-np-agpcnp", "us-np-pmhnp"] as const;
 
 type Props = {
   pathway: ExamPathwayDefinition;
@@ -42,6 +45,14 @@ export function ExamPathwayHubBody({
   const tertiaryHref = isSignedIn ? "/app" : pricingHref;
   const tertiaryLabel = isSignedIn ? "Open your study hub" : "Plans & pricing";
   const linkCtx = pathwayMarketingHubLinkContext(pathway, npSeoAliasSegment);
+  const usNpSiblings =
+    pathway.examFamily === ExamFamily.NP &&
+    pathway.countrySlug === "us" &&
+    pathway.status === "active" &&
+    US_NP_SIBLING_IDS.includes(pathway.id as (typeof US_NP_SIBLING_IDS)[number])
+      ? US_NP_SIBLING_IDS.map((id) => getExamPathwayById(id)).filter((p): p is ExamPathwayDefinition => Boolean(p && p.id !== pathway.id))
+      : [];
+
   return (
     <>
       <ExamPathwayHubPrimaryStudyCards

@@ -1,6 +1,6 @@
 import "server-only";
 
-import { getStaticBlogPost, listStaticBlogPostsForIndex } from "@/lib/blog/static-blog-posts";
+import { listStaticBlogPostsForIndex } from "@/lib/blog/static-blog-posts";
 import { isProgrammaticSeoSlug, PROGRAMMATIC_SEO_PAGES } from "@/lib/seo/programmatic-registry";
 import type { PrismaClient } from "@prisma/client";
 
@@ -113,7 +113,7 @@ export function validateInternalPath(pathnameWithQuery: string, ctx: SeoAuditCon
   if (first === "blog") {
     const slug = segments[1];
     if (!slug) return { path: pathnameWithQuery, status: "ok", detail: "Blog index" };
-    if (ctx.blogSlugs.has(slug) || ctx.staticBlogSlugs.has(slug) || getStaticBlogPost(slug)) {
+    if (ctx.blogSlugs.has(slug) || ctx.staticBlogSlugs.has(slug)) {
       return { path: pathnameWithQuery, status: "ok", detail: "Blog slug found" };
     }
     return { path: pathnameWithQuery, status: "broken", detail: `No blog post or static post for slug “${slug}”` };
@@ -349,7 +349,7 @@ export type WeakLinkRow = {
 
 export async function loadWeakInternalLinking(prisma: PrismaClient): Promise<WeakLinkRow[]> {
   const rows = await prisma.blogPost.findMany({
-    where: { postStatus: "PUBLISHED" },
+    where: { postStatus: { in: ["PUBLISHED", "SCHEDULED"] } },
     orderBy: { updatedAt: "desc" },
     take: 200,
     select: {
@@ -458,18 +458,17 @@ export async function loadBrokenInternalLinks(prisma: PrismaClient, ctx: SeoAudi
 }
 
 export type OpportunityRow = {
-  kind: "blog_exam_no_lessons" | "blog_no_internal_anchors";
   id: string;
   slug: string;
   title: string;
   exam: string | null;
-  hint: string;
+  hints: string[];
   editHref: string;
 };
 
 export async function loadLinkOpportunities(prisma: PrismaClient): Promise<OpportunityRow[]> {
   const rows = await prisma.blogPost.findMany({
-    where: { postStatus: "PUBLISHED" },
+    where: { postStatus: { in: ["PUBLISHED", "SCHEDULED"] } },
     orderBy: { updatedAt: "desc" },
     take: 150,
     select: {
@@ -484,26 +483,21 @@ export async function loadLinkOpportunities(prisma: PrismaClient): Promise<Oppor
 
   const out: OpportunityRow[] = [];
   for (const p of rows) {
+    const hints: string[] = [];
     const paths = p.relatedLessonPaths?.length ?? 0;
     if (p.exam?.trim() && paths === 0) {
-      out.push({
-        kind: "blog_exam_no_lessons",
-        id: p.id,
-        slug: p.slug,
-        title: p.title,
-        exam: p.exam,
-        hint: "Exam is set but relatedLessonPaths is empty — add pathway lesson links in the control panel.",
-        editHref: `/admin/blog/control-panel?id=${encodeURIComponent(p.id)}`,
-      });
+      hints.push("Exam is set but relatedLessonPaths is empty — add pathway lesson links in the control panel.");
     }
     if (countInternalAnchors(p.body) === 0 && p.body.length > 400) {
+      hints.push("Long body with no root-relative <a href> links — add internal links to lessons, hubs, or tools.");
+    }
+    if (hints.length > 0) {
       out.push({
-        kind: "blog_no_internal_anchors",
         id: p.id,
         slug: p.slug,
         title: p.title,
         exam: p.exam,
-        hint: "Long body with no root-relative <a href> links — add internal links to lessons, hubs, or tools.",
+        hints,
         editHref: `/admin/blog/control-panel?id=${encodeURIComponent(p.id)}`,
       });
     }

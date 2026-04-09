@@ -149,8 +149,8 @@ function ComparisonTable({ headline, subtitle }: ComparisonTableProps) {
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-start gap-2">
-                      <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-gray-300" />
-                      <span className="text-gray-500">{t(`components.homeDifferentiation.comparison.${rowId}.typical`)}</span>
+                      <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground/60" />
+                      <span className="text-muted-foreground">{t(`components.homeDifferentiation.comparison.${rowId}.typical`)}</span>
                     </div>
                   </td>
                 </tr>
@@ -163,7 +163,7 @@ function ComparisonTable({ headline, subtitle }: ComparisonTableProps) {
           {COMPARISON_ROW_IDS.map((rowId, idx) => (
             <div
               key={rowId}
-              className="rounded-xl border border-gray-100 bg-white p-5 shadow-[var(--shadow-card)]"
+              className="rounded-xl border border-border bg-card p-5 shadow-[var(--shadow-card)]"
               data-testid={`card-comparison-mobile-${idx}`}
             >
               <h4 className="mb-3 nn-marketing-h4">{t(`components.homeDifferentiation.comparison.${rowId}.feature`)}</h4>
@@ -172,16 +172,16 @@ function ComparisonTable({ headline, subtitle }: ComparisonTableProps) {
                   <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                   <div>
                     <span className="mb-0.5 block text-xs font-semibold text-primary">NurseNest</span>
-                    <span className="text-sm text-gray-700">{t(`components.homeDifferentiation.comparison.${rowId}.nursenest`)}</span>
+                    <span className="text-sm text-foreground">{t(`components.homeDifferentiation.comparison.${rowId}.nursenest`)}</span>
                   </div>
                 </div>
                 <div className="flex items-start gap-2">
-                  <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-gray-300" />
+                  <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground/60" />
                   <div>
-                    <span className="mb-0.5 block text-xs font-semibold text-gray-400">
+                    <span className="mb-0.5 block text-xs font-semibold text-muted-foreground">
                       {t("components.competitiveDifferentiation.typicalPlatforms2")}
                     </span>
-                    <span className="text-sm text-gray-500">{t(`components.homeDifferentiation.comparison.${rowId}.typical`)}</span>
+                    <span className="text-sm text-muted-foreground">{t(`components.homeDifferentiation.comparison.${rowId}.typical`)}</span>
                   </div>
                 </div>
               </div>

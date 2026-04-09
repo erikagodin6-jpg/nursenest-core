@@ -6,12 +6,15 @@
  *
  * Paths stay aligned with `marketing-entry-routes.ts` and programmatic SEO slugs — do not rename routes here.
  *
- * **Strip vs hero:** Both point at canonical pathway hub URLs (exam first, then study modes on the hub).
+ * **NP:** US → `/np-exam-practice-questions` (programmatic umbrella listing FNP, AGPCNP, PMHNP). Canada → canonical CNPLE hub
+ * (`/canada/np/cnple`) for product truth + waitlist/upcoming messaging.
+ *
+ * **Strip vs hero:** RN/PN/Allied use canonical pathway hub URLs; NP US uses the umbrella above.
  * Order is always RN → PN → NP → Allied (`EXAM_PATHWAY_ORDER`).
  */
 import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
-import { RN, alliedHub, npPracticeProgrammatic, pnPrimaryHub } from "@/lib/marketing/marketing-entry-routes";
+import { NP, RN, alliedHub, pnPrimaryHub } from "@/lib/marketing/marketing-entry-routes";
 
 export type CountryExamOfferingId = "rn" | "pn" | "np" | "allied";
 
@@ -41,8 +44,11 @@ export function marketingExamHubPath(region: MarketingRegionToggle, id: CountryE
     case "pn":
       return pnPrimaryHub(region);
     case "np": {
-      const p = getExamPathwayById(isUs ? "us-np-fnp" : "ca-np-cnple");
-      return p ? buildExamPathwayPath(p) : npPracticeProgrammatic(region);
+      if (isUs) {
+        return NP.practiceProgrammatic;
+      }
+      const caNp = getExamPathwayById("ca-np-cnple");
+      return caNp ? buildExamPathwayPath(caNp) : NP.practiceProgrammaticCa;
     }
     case "allied":
       return alliedHub(region);
