@@ -1,10 +1,6 @@
 import { DraftReviewStatus } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import {
-  ADMIN_AI_SYNC_ROUTE_MAX_DURATION_SEC,
-  ADMIN_API_RUNTIME_NODE,
-} from "@/lib/admin/admin-api-route-config";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { assertOpenAiKeyConfigured, getOpenAiChatModel } from "@/lib/ai/openai-env";
 import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
@@ -22,8 +18,8 @@ import {
 } from "@/lib/lessons/admin-ai-lesson-pipeline";
 import { prisma } from "@/lib/db";
 
-export const runtime = ADMIN_API_RUNTIME_NODE;
-export const maxDuration = ADMIN_AI_SYNC_ROUTE_MAX_DURATION_SEC;
+export const runtime = "nodejs";
+export const maxDuration = 120;
 
 /** Prefer `/api/admin/lessons/ai-generate-batch` + `/step` from interactive UIs (non-blocking). */
 

@@ -35,8 +35,10 @@ export default async function AdminInventoryPage({
           <p className="text-xs font-semibold uppercase tracking-wide text-primary">Admin · Inventory</p>
           <h1 className="mt-1 text-3xl font-bold text-[var(--theme-heading-text)]">Pathway & bank inventory</h1>
           <p className="mt-2 max-w-3xl text-sm text-muted-foreground">
-            Published pathway lessons vs pathway-scoped question matches. Filter by country and tier; thresholds for “ready” are
-            operational heuristics (10+ lessons, 200+ questions)—tune in code if your launch bar differs.
+            Published rows vs <strong className="font-semibold text-foreground">effective</strong> lesson totals (DB + catalog
+            fallback via <code className="rounded bg-muted px-1">countPathwayLessons</code>). “≥150” follows the content scale
+            target; “ready” also expects 200+ pathway-matched questions. Architecture supports 500+ lessons with bounded
+            pagination.
           </p>
         </div>
         <Link href="/admin/analytics" className="text-sm font-semibold text-primary underline">
@@ -61,7 +63,9 @@ export default async function AdminInventoryPage({
                 <th className="px-4 py-3">Pathway</th>
                 <th className="px-4 py-3">Country</th>
                 <th className="px-4 py-3">Tier</th>
-                <th className="px-4 py-3 text-right">Lessons pub</th>
+                <th className="px-4 py-3 text-right">Pub (DB)</th>
+                <th className="px-4 py-3 text-right">Effective</th>
+                <th className="px-4 py-3 text-center">≥150</th>
                 <th className="px-4 py-3 text-right">Draft</th>
                 <th className="px-4 py-3 text-right">Questions</th>
                 <th className="px-4 py-3">Readiness</th>
@@ -74,6 +78,14 @@ export default async function AdminInventoryPage({
                   <td className="px-4 py-3 text-muted-foreground">{r.countryCode}</td>
                   <td className="px-4 py-3 text-muted-foreground">{r.stripeTier}</td>
                   <td className="px-4 py-3 text-right tabular-nums">{r.lessonsPublished}</td>
+                  <td className="px-4 py-3 text-right tabular-nums">{r.lessonsEffective}</td>
+                  <td className="px-4 py-3 text-center">
+                    {r.meetsLessonScaleTarget ? (
+                      <span className="text-emerald-700 dark:text-emerald-300">Yes</span>
+                    ) : (
+                      <span className="text-muted-foreground">No</span>
+                    )}
+                  </td>
                   <td className="px-4 py-3 text-right tabular-nums">{r.lessonsDraft}</td>
                   <td className="px-4 py-3 text-right tabular-nums">{r.questionsMatched}</td>
                   <td className="px-4 py-3">

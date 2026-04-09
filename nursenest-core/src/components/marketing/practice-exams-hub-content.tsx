@@ -3,7 +3,11 @@ import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { MarketingPublicStudyLanding } from "@/components/marketing/marketing-public-study-landing";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
-import { loginCallbackDefaultRnCatStart, marketingExamHubPath } from "@/lib/marketing/marketing-exam-navigation";
+import {
+  getExamNavStripItems,
+  loginCallbackCatStartForOffering,
+  marketingExamHubPath,
+} from "@/lib/marketing/marketing-exam-navigation";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
@@ -19,7 +23,7 @@ export async function PracticeExamsHubContent({ locale }: Props) {
   const marketingRegion = await getMarketingRegionFromCookies();
 
   const appExams = loginWithCallback("/app/exams");
-  const appCatStartRn = loginCallbackDefaultRnCatStart(marketingRegion);
+  const examStripItems = getExamNavStripItems(marketingRegion);
   const practiceExamsPath = withMarketingLocale(locale, "/practice-exams");
   const rnExamHub = withMarketingLocale(locale, marketingExamHubPath(marketingRegion, "rn"));
 
@@ -67,12 +71,21 @@ export async function PracticeExamsHubContent({ locale }: Props) {
         <p className="mt-2 nn-marketing-body-sm text-[var(--theme-muted-text)]">
           {t("pages.publicPracticeExams.catP1")}
           <strong className="font-semibold text-[var(--theme-heading-text)]">{t("pages.publicPracticeExams.catP1Strong")}</strong>
-          {t("pages.publicPracticeExams.catP2")}
-          <Link href={appCatStartRn} className="font-semibold text-primary underline">
-            {t("pages.publicPracticeExams.catLinkPracticeTests")}
-          </Link>
-          {t("pages.publicPracticeExams.catP3")}
+          {t("pages.publicPracticeExams.catP2AfterStrong")}
         </p>
+        <ul className="mt-4 flex flex-wrap gap-2" aria-labelledby="cat-practice">
+          {examStripItems.map((item) => (
+            <li key={item.id}>
+              <Link
+                href={loginCallbackCatStartForOffering(marketingRegion, item.id)}
+                className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-md border border-[var(--theme-border)] bg-[var(--theme-surface-elevated)] px-3 py-2 text-sm font-semibold text-primary underline-offset-4 hover:bg-[var(--theme-surface)] hover:underline"
+              >
+                {t(item.labelKey)}
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 nn-marketing-body-sm text-[var(--theme-muted-text)]">{t("pages.publicPracticeExams.catP3Closing")}</p>
       </section>
 
       <section className="nn-card p-5" aria-labelledby="pathway-sections">

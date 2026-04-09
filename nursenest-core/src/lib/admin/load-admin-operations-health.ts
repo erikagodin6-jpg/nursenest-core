@@ -346,7 +346,7 @@ export async function loadAdminOperationsHealth(): Promise<AdminOperationsHealth
     backgroundJobs: {
       byStatus,
       pendingReady,
-      pendingScheduledFuture,
+      pendingScheduledFuture: pendingFuture,
       running: bgRunning,
       recentFailed: bgFailedRecent.map((j) => ({
         ...j,

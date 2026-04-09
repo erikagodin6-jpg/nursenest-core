@@ -7,6 +7,7 @@ import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-le
 import { lessonAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
+import { maxSafeOffsetPage } from "@/lib/api/api-pagination-limits";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallback } from "@/lib/db/safe-database";
 import { pathwayLessonsAppListWhere } from "@/lib/lessons/app-pathway-lesson-list-scope";
@@ -82,7 +83,9 @@ export default async function LessonsPage({ searchParams }: Props) {
   }
 
   const sp = await searchParams;
-  const pageRequested = Math.max(1, Number(sp.page ?? "1") || 1);
+  const rawPage = Math.max(1, Number(sp.page ?? "1") || 1);
+  const maxOffsetPage = maxSafeOffsetPage(LEARNER_APP_LESSONS_PAGE_SIZE);
+  const pageRequested = Math.min(rawPage, maxOffsetPage);
 
   const lessonsBlockFromDb = await withDatabaseFallback(async () => {
     const learnerPathRow = userId
@@ -186,7 +189,7 @@ export default async function LessonsPage({ searchParams }: Props) {
     };
   }
 
-  if (pageRequested !== lessonsBlock.page) {
+  if (rawPage !== lessonsBlock.page) {
     redirect(lessonsBlock.page > 1 ? `/app/lessons?page=${lessonsBlock.page}` : "/app/lessons");
   }
 

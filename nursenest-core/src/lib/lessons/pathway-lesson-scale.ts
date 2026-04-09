@@ -7,8 +7,8 @@
  * - Progress APIs are unchanged: they key off `lessonId` / synthetic pathway ids, not hub pages.
  * - Subscriber and API lists use {@link maxSafeOffsetPage} from `api-pagination-limits` so deep page numbers
  *   cannot force huge `skip` values (scales to 500+ lessons without unbounded offsets).
- * - Exam **domain** tagging for editorial planning lives in {@link inferLessonExamDomains} (topic/body/title
- *   heuristics); rationale→lesson matching uses `topicSlug` + ranking in `rationale-lesson-link-resolve`.
+ * - Exam **domain** tagging for editorial planning: `lib/lessons/lesson-exam-domain.ts` (`inferLessonExamDomains`).
+ *   Rationale→lesson matching uses `topicSlug` + ranking in `rationale-lesson-link-resolve`.
  */
 /** Default rows per marketing pathway hub page (tunable; keep ≤ max for predictable memory). */
 export const PATHWAY_HUB_PAGE_SIZE_DEFAULT = 48;

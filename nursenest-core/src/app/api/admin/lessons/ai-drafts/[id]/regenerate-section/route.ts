@@ -1,8 +1,4 @@
 import { NextResponse } from "next/server";
-import {
-  ADMIN_AI_SYNC_ROUTE_MAX_DURATION_SEC,
-  ADMIN_API_RUNTIME_NODE,
-} from "@/lib/admin/admin-api-route-config";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { assertOpenAiKeyConfigured, getOpenAiChatModel } from "@/lib/ai/openai-env";
 import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
@@ -12,8 +8,8 @@ import type { AdminAiLessonDraftNormalized } from "@/lib/lessons/admin-ai-lesson
 import { ADMIN_AI_LESSON_GENERATOR_TOOL, regenerateAdminAiLessonSection } from "@/lib/lessons/admin-ai-lesson-pipeline";
 import { prisma } from "@/lib/db";
 
-export const runtime = ADMIN_API_RUNTIME_NODE;
-export const maxDuration = ADMIN_AI_SYNC_ROUTE_MAX_DURATION_SEC;
+export const runtime = "nodejs";
+export const maxDuration = 120;
 
 type RouteContext = { params: Promise<{ id: string }> };
 

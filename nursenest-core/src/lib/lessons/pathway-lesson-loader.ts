@@ -39,6 +39,7 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { sortPathwayLessonsForPublicPreview } from "@/lib/lessons/pathway-lesson-public-preview-priority";
 import type { LaunchBundleEntry, PathwayLaunchBundleSpec } from "@/lib/lessons/pathway-launch-bundle";
 import { getLaunchBundleSpec } from "@/lib/lessons/pathway-launch-bundle";
+import { maxSafeOffsetPage } from "@/lib/api/api-pagination-limits";
 import {
   PATHWAY_HUB_PAGE_SIZE_DEFAULT,
   PATHWAY_HUB_PAGE_SIZE_MAX,
@@ -756,7 +757,7 @@ async function getPathwayLessonsPageImpl(
   listOptions?: { topicSlugsIn?: string[]; q?: string },
 ): Promise<PathwayLessonsPageResult> {
   const ps = clampPageSize(pageSize);
-  const p = clampPage(page);
+  const p = Math.min(clampPage(page), maxSafeOffsetPage(ps));
   const requested = normalizePathwayLessonLocale(marketingLocale);
   const lessonDbOverlays = await fetchPublishedPathwayLessonOverlayMapSafe(requested);
   const topicSlugsIn = listOptions?.topicSlugsIn;
@@ -901,7 +902,7 @@ async function getLessonsForTopicPageImpl(
   marketingLocale?: string,
 ): Promise<TopicLessonsPageResult> {
   const ps = clampPageSize(pageSize);
-  const p = clampPage(page);
+  const p = Math.min(clampPage(page), maxSafeOffsetPage(ps));
   const requested = normalizePathwayLessonLocale(marketingLocale);
   const lessonDbOverlays = await fetchPublishedPathwayLessonOverlayMapSafe(requested);
 

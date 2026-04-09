@@ -10,7 +10,7 @@
  *
  * **Rules:** `fromSlug` ≠ `toSlug`; avoid cycles; one row per rename (chains are resolved in code).
  */
-import { buildExamPathwayPath, EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-product-registry";
+import { buildExamPathwayPath, EXAM_PATHWAYS } from "../exam-pathways/exam-product-registry";
 
 export type PathwayLessonSlugRedirect = {
   pathwayId: string;

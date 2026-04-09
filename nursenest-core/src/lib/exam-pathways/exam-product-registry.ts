@@ -1,6 +1,6 @@
 import { CountryCode, ExamFamily, TierCode } from "@prisma/client";
-import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
-import type { CountrySlug, ExamPathwayDefinition, ExamPathwayStatus, RoleTrackSlug } from "@/lib/exam-pathways/types";
+import { getNpPracticeTestLandingCopy } from "./np-practice-test-segments";
+import type { CountrySlug, ExamPathwayDefinition, ExamPathwayStatus, RoleTrackSlug } from "./types";
 
 /**
  * Central exam / product catalog. Add rows here to expose new pathways without rewiring the app.

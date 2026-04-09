@@ -8,8 +8,8 @@ export const MAX_LIST_SKIP_ROWS_DEFAULT = 4_000;
 
 export const LESSON_PAGE = {
   min: 5,
-  max: 20,
-  default: 10,
+  max: 36,
+  default: 12,
 } as const;
 
 export const FLASHCARD_PAGE = {

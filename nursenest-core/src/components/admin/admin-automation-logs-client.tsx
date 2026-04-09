@@ -184,8 +184,8 @@ export function AdminAutomationLogsClient() {
           <span className="text-xs font-medium text-muted-foreground">Search (error/summary/topic)</span>
           <input
             className="w-full rounded-md border border-border px-2 py-1.5 text-sm"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
             placeholder="Min 2 characters"
           />
         </label>

@@ -2707,6 +2707,8 @@
   "pages.publicPracticeExams.catP1Strong": "topic-level",
   "pages.publicPracticeExams.catP2": " practice exams in the app, including adaptive (CAT-style) sessions where the product implements them. Availability varies by pathway and content pack—open ",
   "pages.publicPracticeExams.catP3": " after sign-in to see what your subscription includes. This is not a substitute for official NCLEX or board scheduling or rules.",
+  "pages.publicPracticeExams.catP2AfterStrong": " practice exams in the app, including adaptive (CAT-style) sessions where the product implements them. Availability varies by pathway and content pack.",
+  "pages.publicPracticeExams.catP3Closing": " Choose your track below to sign in and start a CAT-style session for that pathway. After sign-in, confirm what your subscription includes in the app. This is not a substitute for official NCLEX or board scheduling or rules.",
   "pages.publicPracticeExams.ctaPrimary": "Start a practice exam",
   "pages.publicPracticeExams.ctaSecondaryLessons": "Browse lessons by exam",
   "pages.publicPracticeExams.ctaSecondaryQuestions": "Start practicing questions",

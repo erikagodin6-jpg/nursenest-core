@@ -5,7 +5,7 @@ import { ContentStatus, CountryCode, TierCode } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-product-registry";
 import { countPathwayLessons } from "@/lib/lessons/pathway-lesson-loader";
-import { MIN_PATHWAY_LESSONS_SCALE_TARGET } from "@/lib/lessons/pathway-lesson-scale";
+import { MIN_PATHWAY_LESSONS_SCALE_TARGET, PATHWAY_LESSONS_SCALE_CEILING } from "@/lib/lessons/pathway-lesson-scale";
 import { buildQuestionBankCoverageReport } from "@/lib/questions/build-question-bank-diagnostics";
 
 export type AdminPathwayInventoryRow = {
@@ -20,7 +20,10 @@ export type AdminPathwayInventoryRow = {
   lessonsEffective: number;
   lessonsDraft: number;
   questionsMatched: number;
+  /** True when effective lesson count meets the scale target (150+). */
   meetsLessonScaleTarget: boolean;
+  /** True when effective count is within the 500-lesson planning ceiling. */
+  withinScaleCeiling: boolean;
   readiness: "ready" | "partial" | "not_ready";
 };
 
@@ -70,12 +73,29 @@ export async function loadAdminPathwayInventory(filter: AdminPathwayInventoryFil
     pathways = pathways.filter((p) => p.stripeTier === filter.tier);
   }
 
-  const rows: AdminPathwayInventoryRow[] = pathways.map((p) => {
+  const effectiveCounts = await Promise.all(
+    pathways.map((p) =>
+      countPathwayLessons(p.id).catch(() => {
+        degraded = true;
+        return -1;
+      }),
+    ),
+  );
+
+  const rows: AdminPathwayInventoryRow[] = pathways.map((p, i) => {
     const lessonsPublished = pubByPathway.get(p.id) ?? 0;
     const lessonsDraft = draftByPathway.get(p.id) ?? 0;
     const questionsMatched = matchByPathway.get(p.id) ?? 0;
+    const rawEff = effectiveCounts[i] ?? -1;
+    const lessonsEffective = rawEff >= 0 ? rawEff : lessonsPublished;
+    const meetsLessonScaleTarget = lessonsEffective >= MIN_PATHWAY_LESSONS_SCALE_TARGET;
+    const withinScaleCeiling = lessonsEffective <= PATHWAY_LESSONS_SCALE_CEILING;
     const readiness =
-      lessonsPublished >= 10 && questionsMatched >= 200 ? "ready" : lessonsPublished > 0 || questionsMatched > 0 ? "partial" : "not_ready";
+      meetsLessonScaleTarget && questionsMatched >= 200
+        ? "ready"
+        : lessonsPublished > 0 || lessonsEffective > 0 || questionsMatched > 0
+          ? "partial"
+          : "not_ready";
     return {
       pathwayId: p.id,
       displayName: p.displayName,
@@ -83,8 +103,11 @@ export async function loadAdminPathwayInventory(filter: AdminPathwayInventoryFil
       countryCode: p.countryCode,
       stripeTier: p.stripeTier,
       lessonsPublished,
+      lessonsEffective,
       lessonsDraft,
       questionsMatched,
+      meetsLessonScaleTarget,
+      withinScaleCeiling,
       readiness,
     };
   });

@@ -1,9 +1,5 @@
 import { DraftReviewStatus, JobStatus } from "@prisma/client";
 import { NextResponse } from "next/server";
-import {
-  ADMIN_AI_STEP_ROUTE_MAX_DURATION_SEC,
-  ADMIN_API_RUNTIME_NODE,
-} from "@/lib/admin/admin-api-route-config";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
 import { checkAdminAiGenerateLimit } from "@/lib/ai/admin-rate-limit";
@@ -26,8 +22,8 @@ import {
 } from "@/lib/lessons/admin-ai-lesson-pipeline";
 import { prisma } from "@/lib/db";
 
-export const runtime = ADMIN_API_RUNTIME_NODE;
-export const maxDuration = ADMIN_AI_STEP_ROUTE_MAX_DURATION_SEC;
+export const runtime = "nodejs";
+export const maxDuration = 180;
 
 type Props = { params: Promise<{ jobId: string }> };
 

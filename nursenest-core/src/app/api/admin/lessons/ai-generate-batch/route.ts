@@ -2,7 +2,6 @@ import { JobStatus } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
 import { z } from "zod";
-import { ADMIN_API_RUNTIME_NODE } from "@/lib/admin/admin-api-route-config";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
 import { assertOpenAiKeyConfigured, getOpenAiChatModel } from "@/lib/ai/openai-env";
@@ -19,7 +18,7 @@ import {
 } from "@/lib/lessons/admin-ai-lesson-schema";
 import { prisma } from "@/lib/db";
 
-export const runtime = ADMIN_API_RUNTIME_NODE;
+export const runtime = "nodejs";
 
 const MAX_TOPICS = 35;
 

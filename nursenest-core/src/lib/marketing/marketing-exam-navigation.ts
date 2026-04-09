@@ -46,12 +46,41 @@ const RN_PATHWAY_ID_BY_REGION: Record<MarketingRegionToggle, string> = {
   CA: "ca-rn-nclex-rn",
 };
 
+/** Canonical pathway id per region and marketing offering (matches `EXAM_PATHWAYS`). */
+const DEFAULT_PATHWAY_ID_BY_OFFERING: Record<MarketingRegionToggle, Record<CountryExamOfferingId, string>> = {
+  US: {
+    rn: "us-rn-nclex-rn",
+    pn: "us-lpn-nclex-pn",
+    np: "us-np-fnp",
+    allied: "us-allied-core",
+  },
+  CA: {
+    rn: "ca-rn-nclex-rn",
+    pn: "ca-rpn-rex-pn",
+    np: "ca-np-cnple",
+    allied: "ca-allied-core",
+  },
+};
+
 /** Region’s NCLEX-RN pathway id (for `/app/practice-tests/start?pathwayId=…` callbacks). */
 export function defaultRnPathwayIdForMarketingRegion(region: MarketingRegionToggle): string {
   return RN_PATHWAY_ID_BY_REGION[region];
 }
 
-/** Sign-in → app CAT start for the region’s default RN track (public practice-exams page, etc.). */
+/** Default app pathway id for a marketing offering (RN / PN / NP / Allied) in this region. */
+export function defaultPathwayIdForMarketingOffering(
+  region: MarketingRegionToggle,
+  offering: CountryExamOfferingId,
+): string {
+  return DEFAULT_PATHWAY_ID_BY_OFFERING[region][offering];
+}
+
+/** Sign-in → app CAT start for the given marketing offering and region (`/practice-exams`, strips, etc.). */
+export function loginCallbackCatStartForOffering(region: MarketingRegionToggle, offering: CountryExamOfferingId): string {
+  return loginWithCallback(appPathwayCatSessionStartPath(defaultPathwayIdForMarketingOffering(region, offering)));
+}
+
+/** Sign-in → app CAT start for the region’s default RN track (single-link CTAs that stay RN-first). */
 export function loginCallbackDefaultRnCatStart(region: MarketingRegionToggle): string {
-  return loginWithCallback(appPathwayCatSessionStartPath(defaultRnPathwayIdForMarketingRegion(region)));
+  return loginCallbackCatStartForOffering(region, "rn");
 }
