@@ -110,7 +110,7 @@ export function PremiumEmptyState({
 
   const visualEl = visual ?? (Icon ? (
     <span
-      className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-page-bg))] text-[var(--semantic-brand)] ${split ? "mt-0.5" : "mx-auto mb-4 sm:mx-0"}`}
+      className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-bg-base))] text-[var(--semantic-brand)] ${split ? "mt-0.5" : "mx-auto mb-4 sm:mx-0"}`}
     >
       <Icon className="h-5 w-5" strokeWidth={1.75} aria-hidden />
     </span>

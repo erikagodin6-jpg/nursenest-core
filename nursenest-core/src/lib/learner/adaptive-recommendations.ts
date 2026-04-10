@@ -1,4 +1,5 @@
 import { ExamDatePlanType } from "@prisma/client";
+import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-routing";
 import { computeReadiness, type ReadinessBand, type ReadinessResult } from "@/lib/learner/readiness-score";
 import type { TopicTrendRow } from "@/lib/learner/topic-performance";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
@@ -256,10 +257,13 @@ export function buildAdaptiveRecommendations(args: {
     matchedRec?.topic ?? weakTopicsOrdered[0]?.topic ?? (args.recommendedQuizTopic ? args.recommendedQuizTopic : null);
 
   const weakMixedBankHref = "/app/questions?studyMode=weak";
-  const catStartHref = resolveStudySurfaceCatHref({
+  const catStartHref = resolveStudyLoopCatHref({
+    authState: "signed_in",
     pathwayId: args.preferredPathwayId,
     availablePathwayIds: args.availablePathwayIds,
+    intent: "start",
   });
+  const catNeedsPathwayChoice = catStartHref === "/app/practice-tests/start";
   const quizHref = topic
     ? `/app/questions?preset=topic_drill&topic=${encodeTopic(topic)}`
     : weakMixedBankHref;
@@ -415,11 +419,19 @@ export function buildAdaptiveRecommendations(args: {
   });
   if (urgency === "near" || urgency === "final_stretch") {
     secondaryCandidates.push({
-      title: isCanadaSubscriber ? "Adaptive practice test" : "Adaptive (CAT) practice test",
+      title: catNeedsPathwayChoice
+        ? "Choose a pathway for adaptive practice"
+        : isCanadaSubscriber
+          ? "Adaptive practice test"
+          : "Adaptive (CAT) practice test",
       href: catStartHref,
       reason: isCanadaSubscriber
-        ? "Computer-adaptive practice adjusts difficulty—useful when your exam is close."
-        : "CAT adjusts difficulty. Useful when the exam is close.",
+        ? catNeedsPathwayChoice
+          ? "Pick the exam pathway first, then launch the adaptive practice that matches it."
+          : "Computer-adaptive practice adjusts difficulty—useful when your exam is close."
+        : catNeedsPathwayChoice
+          ? "Choose the pathway first so the next CAT matches the right exam track."
+          : "CAT adjusts difficulty. Useful when the exam is close.",
       kind: "cat",
     });
   } else {

@@ -146,6 +146,7 @@ body {
    * Header layers — three visually distinct bands from top to bottom.
    *   utility  → topbar-tinted, slightly darker than nav (preferences rail)
    *   nav      → clean card surface, strong bottom border + shadow
+   *   footer   → grounded lower frame, denser than regular section surfaces
    *
    * --header-utility-surface   preferences/region rail background
    * --header-utility-border    bottom border of utility rail
@@ -153,15 +154,15 @@ body {
    * --header-nav-surface       main sticky nav background
    * --header-nav-border        main nav bottom border (stronger than utility)
    * --header-nav-shadow        nav drop shadow — separates it from hero below
+   * --footer-surface           footer background, slightly heavier than page sections
    */
-  --header-utility-surface: color-mix(in srgb, var(--theme-topbar-bg) 10%, var(--theme-page-bg));
-  --header-utility-border: color-mix(in srgb, var(--theme-topbar-bg) 25%, var(--theme-border));
-  --header-utility-text: color-mix(in srgb, var(--theme-heading-text) 62%, var(--theme-muted-text));
-  --header-nav-surface: var(--theme-card-bg);
-  --header-nav-border: color-mix(in srgb, var(--theme-primary) 22%, var(--border-subtle));
-  --header-nav-shadow:
-    0 1px 0 color-mix(in srgb, var(--theme-heading-text) 5%, transparent),
-    0 2px 10px color-mix(in srgb, var(--theme-primary) 9%, transparent);
+  --header-utility-surface: color-mix(in srgb, var(--theme-topbar-bg) 12%, var(--bg-page));
+  --header-utility-border: color-mix(in srgb, var(--theme-topbar-bg) 28%, var(--border-subtle));
+  --header-utility-text: color-mix(in srgb, var(--theme-heading-text) 70%, var(--theme-muted-text));
+  --header-nav-surface: color-mix(in srgb, var(--theme-heading-text) 4%, var(--bg-page));
+  --header-nav-border: color-mix(in srgb, var(--theme-primary) 18%, var(--border-medium));
+  --header-nav-shadow: var(--shadow-card);
+  --footer-surface: color-mix(in srgb, var(--theme-heading-text) 5%, var(--bg-section));
 
   /*
    * Hero branded wash — used as hero section base background.
@@ -316,15 +317,14 @@ html[data-theme="dark-mode"] {
   --bg-inset: color-mix(in srgb, var(--theme-body-text) 9%, var(--bg-card));
   --bg-elevated: color-mix(in srgb, var(--theme-card-bg) 76%, var(--theme-primary));
   --accent-soft: color-mix(in srgb, var(--theme-primary) 14%, var(--theme-card-bg));
-  /* Dark header layers — utility bar is slightly lighter (not darker) than nav in dark mode */
-  --header-utility-surface: color-mix(in srgb, var(--theme-primary) 7%, var(--theme-nav-bg));
-  --header-utility-border: color-mix(in srgb, var(--theme-primary) 20%, var(--theme-border));
-  --header-utility-text: var(--theme-muted-text);
-  --header-nav-surface: var(--theme-nav-bg);
-  --header-nav-border: color-mix(in srgb, var(--theme-primary) 28%, var(--theme-border));
-  --header-nav-shadow:
-    0 1px 0 color-mix(in srgb, var(--theme-primary) 12%, transparent),
-    0 3px 12px rgba(0, 0, 0, 0.28);
+  /* Dark header/footer layers stay below the page lightness without becoming pure black. */
+  --header-utility-surface: color-mix(in srgb, hsl(from var(--bg-page) h s calc(l - 4%)) 90%, var(--theme-topbar-bg));
+  --header-utility-border: color-mix(in srgb, var(--theme-primary) 20%, var(--border-medium));
+  --header-utility-text: color-mix(in srgb, var(--theme-heading-text) 78%, var(--theme-muted-text));
+  --header-nav-surface: color-mix(in srgb, hsl(from var(--bg-page) h s calc(l - 2.5%)) 94%, var(--theme-primary));
+  --header-nav-border: color-mix(in srgb, var(--theme-primary) 24%, var(--border-medium));
+  --header-nav-shadow: var(--shadow-card);
+  --footer-surface: color-mix(in srgb, hsl(from var(--bg-page) h s calc(l - 3.5%)) 92%, var(--theme-primary));
   --hero-branded-wash: color-mix(in srgb, var(--theme-primary) 14%, var(--theme-page-bg));
   /* Dark accent surfaces — stronger percentages for contrast on dark backgrounds */
   --accent-surface-a: color-mix(in srgb, var(--theme-primary) 18%, var(--theme-card-bg));
@@ -455,6 +455,7 @@ html[data-theme="dark-mode"] {
   --color-header-utility-border: var(--header-utility-border);
   --color-header-nav-surface: var(--header-nav-surface);
   --color-header-nav-border: var(--header-nav-border);
+  --color-footer-surface: var(--footer-surface);
   /* Hero branded wash */
   --color-hero-branded-wash: var(--hero-branded-wash);
   /* Multi-role accent surfaces */
@@ -1041,6 +1042,26 @@ html[data-theme] .nn-marketing-surface {
   background: var(--header-nav-surface);
   border-bottom: 1px solid var(--header-nav-border);
   box-shadow: var(--header-nav-shadow);
+}
+
+.nn-footer-surface {
+  background: var(--footer-surface);
+  border-top: 1px solid var(--border-medium);
+}
+
+.nn-footer-link {
+  color: var(--theme-body-text);
+  transition:
+    color 0.18s ease,
+    text-decoration-color 0.18s ease;
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+  text-decoration-color: color-mix(in srgb, var(--theme-muted-text) 38%, transparent);
+}
+
+.nn-footer-link:hover {
+  color: var(--theme-heading-text);
+  text-decoration-color: color-mix(in srgb, var(--theme-heading-text) 38%, transparent);
 }
 
 /* Hero branded surface — opt-in wash for above-fold sections */

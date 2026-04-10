@@ -47,9 +47,9 @@ export function appPathwayCatWeakFocusPath(pathwayId: string, topic?: string | n
 }
 
 /**
- * Shared study-surface resolver for CAT CTAs.
- * Uses a pathway-scoped CAT URL whenever the pathway is known or unambiguous.
- * Falls back to the explicit CAT start chooser when the learner still needs to pick a pathway.
+ * Signed-in study-surface resolver for app CAT CTAs.
+ * Prefer `resolveStudyLoopCatDestination` / `resolveStudyLoopCatHref` from
+ * `study-loop-cat-routing.ts` when a surface may be public or needs destination metadata.
  */
 export function resolveStudySurfaceCatHref({
   pathwayId,

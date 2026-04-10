@@ -116,6 +116,8 @@ export const PH = {
   learnerCatCoachGenerated: "learner_cat_coach_generated",
   /** Learner opened a lesson / study link from CAT rationale or coach (follow-through). */
   learnerCatLearningLinkClicked: "learner_cat_learning_link_clicked",
+  /** Learner clicked a CAT CTA from study-loop surfaces. */
+  learnerStudyLoopCatCtaClicked: "learner_study_loop_cat_cta_clicked",
   /** CAT / exam simulation produced a non-empty readiness label on completion. */
   learnerReadinessScoreReached: "learner_readiness_score_reached",
   /** Exam hub mock: graded attempt persisted via /api/exams/submit. */

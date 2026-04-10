@@ -37,8 +37,6 @@ const HOME_HERO_TRACK_ICONS: Record<HomeHeroPrimaryTrackId, LucideIcon> = {
   allied: Dna,
 };
 
-type StudyModeKind = "lessons" | "questions" | "cat" | "flashcards";
-
 /**
  * Above-the-fold hero: headline, exam-hub track cards (primary), signup CTAs, de-emphasized study modes and tertiary links.
  */
@@ -223,7 +221,7 @@ export function HomeConversionHero() {
                         eventProps={{
                           region,
                           surface: "hero_study_mode",
-                          kind: sm.kind satisfies StudyModeKind,
+                          kind: sm.kind,
                         }}
                         className="nn-marketing-body-sm text-[var(--theme-muted-text)] underline decoration-[color-mix(in_srgb,var(--theme-muted-text)_45%,transparent)] underline-offset-2 transition hover:text-[var(--theme-body-text)]"
                         data-testid={`link-hero-study-${sm.kind}`}

@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import type { ReportCardData } from "@/lib/learner/load-report-card-data";
-import { resolveStudySurfaceCatHref } from "@/lib/exam-pathways/pathway-cat-flow";
+import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-routing";
 import { remediationCatPracticeHref, remediationTopicDrillHref } from "@/lib/learner/remediation-links";
 import { readinessBandLabel, readinessBandProgressFillClass } from "@/lib/learner/readiness-score";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
@@ -51,9 +51,11 @@ export function LearnerReportCardPremium({
   const primaryTopic = data.recommendedQuizTopic?.trim() || data.weakTopics[0]?.topic?.trim() || "";
   const preferredPathwayId =
     data.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ?? data.pathways[0]?.pathwayId ?? null;
-  const catStartHref = resolveStudySurfaceCatHref({
+  const catStartHref = resolveStudyLoopCatHref({
+    authState: "signed_in",
     pathwayId: preferredPathwayId,
     availablePathwayIds: data.pathways.map((p) => p.pathwayId),
+    intent: "start",
   });
 
   return (

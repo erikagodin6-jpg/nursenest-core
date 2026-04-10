@@ -111,7 +111,12 @@ export function LearnerDashboardAnalytics({
       <div className="grid gap-4 lg:grid-cols-2">
         <CategoryBreakdown rows={byTopic} t={t} maxRows={MAX_TOPIC} topicTrends={topicTrends} />
         <div className="space-y-4">
-          <DashboardWeakAreasCard weakAreas={weakAreas} t={t} maxRows={MAX_WEAK} />
+          <DashboardWeakAreasCard
+            weakAreas={weakAreas}
+            t={t}
+            maxRows={MAX_WEAK}
+            pathwayId={resolvePreferredCatPathwayId(snapshot.learnerPath, snapshot.pathways.map((p) => p.pathwayId))}
+          />
           <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 shadow-sm">
             <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]">{t("learner.dashboard.masteryKey.title")}</p>
             <MasteryLegend t={t} className="mt-2" />

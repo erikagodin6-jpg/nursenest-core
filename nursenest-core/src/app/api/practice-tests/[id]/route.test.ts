@@ -100,7 +100,7 @@ describe("PATCH /api/practice-tests/[id] CAT completion paths", () => {
     mock.method(practiceTestRouteDeps, "enforcePracticeTestMutationProtection", () => null);
     mock.method(practiceTestRouteDeps, "setSentryServerContext", () => {});
     mock.method(practiceTestRouteDeps, "parsePracticeTestConfigAtBoundary", () => catConfig);
-    mock.method(practiceTestRouteDeps.prisma.practiceTest, "findFirst", async () => ({
+    mock.method(practiceTestRouteDeps, "findPracticeTest", async () => ({
       id: "test_12345678",
       userId: gate.userId,
       status: PracticeTestStatus.IN_PROGRESS,
@@ -111,7 +111,7 @@ describe("PATCH /api/practice-tests/[id] CAT completion paths", () => {
       config: {},
       adaptiveState: {},
     }));
-    mock.method(practiceTestRouteDeps.prisma.practiceTest, "update", update);
+    mock.method(practiceTestRouteDeps, "updatePracticeTest", update);
     mock.method(practiceTestRouteDeps, "advanceCatPracticeTest", async () => ({
       kind: "completed" as const,
       results: catResults,
@@ -148,7 +148,7 @@ describe("PATCH /api/practice-tests/[id] CAT completion paths", () => {
     mock.method(practiceTestRouteDeps, "enforcePracticeTestMutationProtection", () => null);
     mock.method(practiceTestRouteDeps, "setSentryServerContext", () => {});
     mock.method(practiceTestRouteDeps, "parsePracticeTestConfigAtBoundary", () => catConfig);
-    mock.method(practiceTestRouteDeps.prisma.practiceTest, "findFirst", async () => ({
+    mock.method(practiceTestRouteDeps, "findPracticeTest", async () => ({
       id: "test_12345678",
       userId: gate.userId,
       status: PracticeTestStatus.IN_PROGRESS,
@@ -159,7 +159,7 @@ describe("PATCH /api/practice-tests/[id] CAT completion paths", () => {
       config: {},
       adaptiveState: {},
     }));
-    mock.method(practiceTestRouteDeps.prisma.practiceTest, "update", update);
+    mock.method(practiceTestRouteDeps, "updatePracticeTest", update);
     mock.method(practiceTestRouteDeps, "finalizeCatPracticeTest", async () => ({
       results: catResults,
       adaptiveState: { theta: 0.32, se: 0.58 },
