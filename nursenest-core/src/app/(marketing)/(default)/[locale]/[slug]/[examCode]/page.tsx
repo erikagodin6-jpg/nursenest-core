@@ -12,6 +12,7 @@ import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 export const dynamicParams = true;
+export const dynamic = "force-dynamic";
 
 type Props = { params: Promise<{ locale: string; slug: string; examCode: string }> };
 

@@ -1,5 +1,5 @@
 /**
- * Hub-page skeleton loaders for lessons, questions, CAT intro, and pricing.
+ * Hub-page skeleton loaders for exam hub overview, lessons, questions, CAT intro, and pricing.
  * Uses `.nn-skeleton` (globals.css shimmer) so they stay visually aligned
  * with the actual content that replaces them.
  *
@@ -76,6 +76,56 @@ export function LessonsHubSkeleton() {
       <div className="mt-6 space-y-3">
         {Array.from({ length: 5 }).map((_, i) => (
           <LessonCardSkeleton key={i} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Skeleton for the exam pathway hub overview page (e.g. /us/rn/nclex-rn).
+ * Shown while the server fetches session, question counts, and lesson counts.
+ */
+export function HubPageSkeleton() {
+  return (
+    <div className="mx-auto max-w-4xl px-4 py-10 sm:py-14" aria-busy="true" aria-label="Loading exam hub…">
+      {/* Breadcrumb */}
+      <Bar w="12rem" h="0.75rem" className="rounded-full" />
+
+      {/* Eyebrow + H1 */}
+      <Bar w="8rem" h="0.75rem" className="mt-8 rounded-full" />
+      <Bar w="65%" h="2.25rem" className="mt-3 rounded-xl" />
+      <div className="mt-4 space-y-2">
+        <Bar w="95%" h="0.875rem" />
+        <Bar w="80%" h="0.875rem" />
+      </div>
+
+      {/* Trust strip */}
+      <div className="mt-6 flex flex-wrap gap-2" aria-hidden>
+        {Array.from({ length: 3 }).map((_, i) => (
+          <Bar key={i} w={`${7 + i}rem`} h="2rem" className="rounded-full" />
+        ))}
+      </div>
+
+      {/* Inventory strip */}
+      <div className="mt-6 rounded-2xl border border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)]/30 p-4" aria-hidden>
+        <div className="flex gap-4">
+          <Bar w="6rem" h="0.75rem" />
+          <Bar w="6rem" h="0.75rem" />
+          <Bar w="6rem" h="0.75rem" />
+        </div>
+      </div>
+
+      {/* 3 primary study cards */}
+      <div className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-3" aria-hidden>
+        {Array.from({ length: 3 }).map((_, i) => (
+          <div key={i} className="nn-study-card nn-study-card--wash flex flex-col gap-3 p-5" aria-hidden>
+            <Bar w="2.5rem" h="2.5rem" className="rounded-lg" />
+            <Bar w="60%" h="1.25rem" />
+            <Bar w="90%" h="0.75rem" />
+            <Bar w="75%" h="0.75rem" />
+            <Bar w="5rem" h="2.25rem" className="mt-2 rounded-full" />
+          </div>
         ))}
       </div>
     </div>
