@@ -150,7 +150,7 @@ function hubCardClass(variant: CardVariant): string {
 }
 
 function listCardClass(variant: CardVariant): string {
-  const base = "nn-study-card flex h-full flex-col p-4 transition-[box-shadow,transform,border-color] duration-200 hover:-translate-y-px hover:shadow-[var(--shadow-card-hover)] focus-within:ring-2 focus-within:ring-[var(--theme-primary)]/40 sm:p-5";
+  const base = "nn-study-card flex h-full flex-col p-4 transition-[box-shadow,transform,border-color] duration-200 hover:-translate-y-px hover:shadow-[var(--shadow-card-hover)] focus-within:ring-2 focus-within:ring-[var(--ring-accent)] sm:p-5";
   switch (variant) {
     case "featured":
       return `${base} nn-study-card--wash`;
@@ -164,7 +164,7 @@ function listCardClass(variant: CardVariant): string {
 }
 
 function appCardClass(variant: CardVariant): string {
-  const base = "nn-card flex h-full flex-col overflow-hidden p-4 transition-shadow hover:shadow-md focus-within:ring-2 focus-within:ring-[var(--theme-primary)]/40 sm:p-5";
+  const base = "nn-card flex h-full flex-col overflow-hidden p-4 transition-shadow hover:shadow-md focus-within:ring-2 focus-within:ring-[var(--ring-accent)] sm:p-5";
   switch (variant) {
     case "completed":
       return `${base} nn-card--completed`;
@@ -179,7 +179,7 @@ function appCardClass(variant: CardVariant): string {
 const CTA_PRIMARY =
   "mt-auto inline-flex w-full items-center justify-center rounded-full nn-btn-primary px-5 py-3 text-sm font-semibold shadow-none transition group-hover:brightness-[1.03]";
 const CTA_SECONDARY =
-  "mt-auto inline-flex w-full items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--theme-primary)_22%,var(--border-subtle))] bg-[color-mix(in_srgb,var(--theme-primary)_5%,var(--theme-card-bg))] px-5 py-3 text-sm font-semibold text-[var(--theme-primary)] transition group-hover:bg-[color-mix(in_srgb,var(--theme-primary)_9%,var(--theme-card-bg))]";
+  "mt-auto inline-flex w-full items-center justify-center rounded-full border border-[var(--surface-bubble-border)] bg-[var(--surface-accent-soft)] px-5 py-3 text-sm font-semibold text-[var(--text-accent)] transition hover:bg-[var(--surface-bubble)] hover:border-[var(--surface-bubble-border)]";
 
 // ---------------------------------------------------------------------------
 // StudyCard

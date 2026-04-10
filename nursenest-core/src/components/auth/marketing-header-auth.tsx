@@ -52,12 +52,14 @@ export function MarketingHeaderAuthDesktop() {
   }
 
   if (status !== "authenticated" || !session?.user) {
+    const loginToApp = localizeHref(`/login?callbackUrl=${encodeURIComponent("/app")}`);
+    const signupToApp = localizeHref(`/signup?callbackUrl=${encodeURIComponent("/app")}`);
     return (
       <div className="flex max-w-[100vw] items-center gap-1.5 sm:gap-2">
-        <Link href={localizeHref("/login")} className={SIGN_IN_CLASS}>
+        <Link href={loginToApp} className={SIGN_IN_CLASS}>
           {t("nav.logIn")}
         </Link>
-        <Link href={localizeHref("/signup")} className={GET_STARTED_CLASS}>
+        <Link href={signupToApp} className={GET_STARTED_CLASS}>
           {t("nav.getStarted")}
         </Link>
       </div>
@@ -141,12 +143,14 @@ export function MarketingHeaderAuthMobile({ onNavigate }: { onNavigate: () => vo
   }
 
   if (status !== "authenticated" || !session?.user) {
+    const loginToApp = localizeHref(`/login?callbackUrl=${encodeURIComponent("/app")}`);
+    const signupToApp = localizeHref(`/signup?callbackUrl=${encodeURIComponent("/app")}`);
     return (
       <div className="mt-4 flex gap-2">
-        <Link href={localizeHref("/login")} className={`${SIGN_IN_CLASS} flex-1 justify-center border border-[var(--theme-nav-border)] py-2`} onClick={onNavigate}>
+        <Link href={loginToApp} className={`${SIGN_IN_CLASS} flex-1 justify-center border border-[var(--theme-nav-border)] py-2`} onClick={onNavigate}>
           {t("nav.logIn")}
         </Link>
-        <Link href={localizeHref("/signup")} className={`${GET_STARTED_CLASS} flex-1`} onClick={onNavigate}>
+        <Link href={signupToApp} className={`${GET_STARTED_CLASS} flex-1`} onClick={onNavigate}>
           {t("nav.getStarted")}
         </Link>
       </div>

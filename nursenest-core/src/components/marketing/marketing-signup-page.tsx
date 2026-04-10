@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { SignupForm } from "@/components/auth/signup-form";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
@@ -13,10 +14,12 @@ export async function MarketingSignupPage({ locale }: { locale: string }) {
         </div>
         <h1 className="nn-marketing-h1">{m["pages.signup.h1"]}</h1>
         <p className="nn-marketing-body-sm mt-2 text-muted">{m["pages.signup.subtitle"]}</p>
-        <SignupForm
-          termsHref={withMarketingLocale(locale, "/terms")}
-          privacyHref={withMarketingLocale(locale, "/privacy")}
-        />
+        <Suspense fallback={<div className="mt-6 h-64 animate-pulse rounded-xl bg-muted/40" aria-hidden />}>
+          <SignupForm
+            termsHref={withMarketingLocale(locale, "/terms")}
+            privacyHref={withMarketingLocale(locale, "/privacy")}
+          />
+        </Suspense>
       </div>
     </main>
   );

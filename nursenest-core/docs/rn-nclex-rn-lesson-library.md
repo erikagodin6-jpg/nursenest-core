@@ -47,6 +47,17 @@ Do **not** bulk-append empty `sections` rows to `catalog.json` for production: t
 | `node scripts/rn-nclex-inventory-report.mjs` | Print counts by primary category + tier |
 | `node scripts/rn-nclex-completeness-diff.mjs` | Manifest (24-topic premium core) ↔ master map keyword coverage |
 | `node scripts/rn-nclex-catalog-import-category.mjs --category <id> [--dry-run]` | Idempotent catalog row append (metadata; see script header) |
+| `node scripts/rn-nclex-explicit-inventory-audit.mjs` | Audit topic lines vs master map + US catalog (writes `docs/rn-nclex-explicit-inventory-audit-report.md`) |
+
+## Explicit inventory audit (topic list vs map vs catalog)
+
+Use this when reconciling a **long external outline** (or internal checklist) against the repo:
+
+1. Add one topic per line to `src/content/pathway-lessons/rn-nclex-explicit-inventory-topics.txt` (optional `#` comments).
+2. Add merge/synonym rows to `src/content/pathway-lessons/rn-nclex-explicit-inventory-aliases.json` so user phrasing maps to an existing **canonicalTitle** (avoid duplicate lessons).
+3. Run `node scripts/rn-nclex-explicit-inventory-audit.mjs` and read `docs/rn-nclex-explicit-inventory-audit-report.md`.
+
+Rows flagged **CATALOG_ROW_METADATA_ONLY_PENDING_FULL_BODY** mean the slug exists under `us-rn-nclex-rn` but **`sections` is still empty** — the lesson is planned/imported as metadata; full exam-complete authoring must follow `pathway-lesson-premium` + depth gates before claiming “strong / skip.”
 
 ## Completeness pass (inventory)
 

@@ -59,7 +59,7 @@ export function QuickActionPanel({
 
   return (
     <section
-      className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-brand)_04%,var(--semantic-surface))] p-4 shadow-[var(--semantic-shadow-soft)] sm:p-5"
+      className="nn-surface-bubble rounded-2xl p-4 shadow-[var(--shadow-card)] sm:p-5"
       aria-labelledby={`${id}-heading`}
     >
       <div className="flex flex-wrap items-center gap-2">

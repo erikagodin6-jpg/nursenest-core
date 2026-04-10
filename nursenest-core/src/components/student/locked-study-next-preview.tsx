@@ -4,12 +4,16 @@ import Link from "next/link";
 import { AdaptiveStudyOverview } from "@/components/student/adaptive-study-overview";
 import { buildSimulatedAdaptiveRecommendationsForConversionPreview } from "@/lib/learner/adaptive-recommendations";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { withMarketingLocale } from "@/lib/i18n/marketing-path";
+import { HUB } from "@/lib/marketing/marketing-entry-routes";
 
 /**
  * Blurred Study Next preview for non-subscribers. Uses simulated engine output, clearly not user-specific.
  */
 export function LockedStudyNextPreview({ className }: { className?: string }) {
-  const { t } = useMarketingI18n();
+  const { t, locale } = useMarketingI18n();
+  const signupToApp = `${withMarketingLocale(locale, "/signup")}?callbackUrl=${encodeURIComponent("/app")}`;
+  const tryQuestions = withMarketingLocale(locale, HUB.questionBank);
   const adaptive = buildSimulatedAdaptiveRecommendationsForConversionPreview();
 
   return (
@@ -29,6 +33,20 @@ export function LockedStudyNextPreview({ className }: { className?: string }) {
           >
             {t("cta.seePlansPricing")}
           </Link>
+          <div className="flex w-full max-w-md flex-col gap-2 sm:flex-row sm:justify-center">
+            <Link
+              href={signupToApp}
+              className="inline-flex min-h-[2.5rem] flex-1 items-center justify-center rounded-full border border-primary/35 bg-background/90 px-4 py-2 text-center text-sm font-semibold text-primary sm:flex-initial"
+            >
+              {t("conversion.lockedStudyNext.ctaSignup")}
+            </Link>
+            <Link
+              href={tryQuestions}
+              className="inline-flex min-h-[2.5rem] flex-1 items-center justify-center rounded-full border border-border bg-background/90 px-4 py-2 text-center text-sm font-semibold text-foreground sm:flex-initial"
+            >
+              {t("conversion.lockedStudyNext.ctaTryQuestions")}
+            </Link>
+          </div>
         </div>
       </div>
     </section>

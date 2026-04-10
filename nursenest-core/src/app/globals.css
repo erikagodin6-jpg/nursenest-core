@@ -977,19 +977,26 @@ html[data-theme="dark-mode"] .nn-brand-header-logo-slot .nn-brand-header-logo {
   background: var(--surface-chip);
   border: 1px solid var(--border-subtle);
   color: var(--theme-heading-text);
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
 }
 
+/* Selected/active chip → accent-soft surface with themed text */
 .nn-chip[data-selected="true"],
 .nn-chip[aria-pressed="true"] {
-  background: var(--surface-selected);
-  border-color: var(--border-medium);
+  background: var(--surface-accent-soft);
+  border-color: var(--surface-bubble-border);
+  color: var(--text-accent);
+  font-weight: 600;
 }
 
 /* Tab-style pills (segmented controls) */
 .nn-tab-pill {
   border-radius: 9999px;
   border: 1px solid var(--border-subtle);
-  background: var(--bg-card);
+  background: var(--surface-chip);
   color: var(--theme-menu-text);
   transition:
     background-color 0.15s ease,
@@ -998,15 +1005,18 @@ html[data-theme="dark-mode"] .nn-brand-header-logo-slot .nn-brand-header-logo {
 }
 
 .nn-tab-pill:hover {
-  background: var(--surface-interactive-hover);
-  border-color: var(--border-medium);
+  background: var(--surface-accent-soft);
+  border-color: var(--surface-bubble-border);
+  color: var(--text-accent);
 }
 
+/* Active tab → strong accent fill so switching themes produces visibly different pill colors */
 .nn-tab-pill[data-active="true"],
 .nn-tab-pill[aria-selected="true"] {
-  background: var(--theme-primary);
-  border-color: color-mix(in srgb, var(--theme-primary) 40%, transparent);
+  background: var(--surface-bubble-strong);
+  border-color: var(--surface-bubble-border);
   color: var(--text-on-accent);
+  font-weight: 600;
 }
 
 /* Accent surfaces — use instead of scattered bg-*-50 / text-*-600 Tailwind palettes */
@@ -1015,19 +1025,20 @@ html[data-theme="dark-mode"] .nn-brand-header-logo-slot .nn-brand-header-logo {
   align-items: center;
   justify-content: center;
   border-radius: 0.5rem;
-  background: var(--accent-soft);
+  background: var(--surface-accent-soft);
 }
 .nn-accent-icon {
-  color: var(--theme-primary);
+  color: var(--text-accent);
 }
+/* Pill badge — soft themed background with contrasting themed text */
 .nn-accent-pill {
-  background: var(--accent-soft);
-  border: 1px solid var(--border-strong);
-  color: color-mix(in srgb, var(--theme-primary) 88%, var(--theme-heading-text));
+  background: var(--surface-accent-soft);
+  border: 1px solid var(--surface-bubble-border);
+  color: var(--text-accent);
 }
 .nn-accent-soft-ring {
-  border-color: var(--border-strong);
-  background: var(--accent-soft);
+  border-color: var(--surface-bubble-border);
+  background: var(--surface-accent-soft);
 }
 .nn-theme-gradient-br {
   background-image: linear-gradient(
@@ -1277,8 +1288,8 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
 }
 
 .nn-study-card--wash {
-  background: color-mix(in srgb, var(--theme-primary) 3.5%, var(--nn-presentation-ribbon));
-  border-color: color-mix(in srgb, var(--theme-primary) 11%, var(--border-subtle));
+  background: var(--surface-bubble);
+  border-color: var(--surface-bubble-border);
 }
 
 /* Lesson hub rows: soft secondary tint so lists stay multi-hue under theme switching */
@@ -1298,20 +1309,20 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
 
 .nn-study-callout {
   border-radius: 1.125rem;
-  border: 1px solid color-mix(in srgb, var(--theme-primary) 12%, var(--border-subtle));
-  background: color-mix(in srgb, var(--theme-primary) 4.5%, var(--bg-card));
+  border: 1px solid var(--surface-bubble-border);
+  background: var(--surface-bubble);
   box-shadow: var(--shadow-card);
 }
 
-/* Marketing pathway lesson detail: one soft band for long-form reading */
+/* Marketing pathway lesson detail: themed top-band fades to neutral for long-form reading */
 .nn-lesson-page-shell {
   border-radius: 1.75rem;
-  border: 1px solid color-mix(in srgb, var(--theme-primary) 8%, var(--border-subtle));
+  border: 1px solid var(--surface-bubble-border);
   background: linear-gradient(
     180deg,
-    color-mix(in srgb, var(--theme-primary) 3.5%, var(--theme-page-bg)) 0%,
-    var(--theme-page-bg) 38%,
-    var(--bg-section) 100%
+    var(--surface-bubble) 0%,
+    var(--bg-card) 28%,
+    var(--bg-page) 100%
   );
   box-shadow: var(--shadow-card);
 }
@@ -1461,16 +1472,17 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
     0 0 0 4px color-mix(in srgb, var(--theme-primary) 32%, transparent);
 }
 
-/* CAT / adaptive: one step more emphasis than flashcards, still calm. */
+/* CAT / adaptive: themed accent pill — use surface-accent-soft for visible theme presence */
 .nn-study-pill-secondary--accent {
-  border-color: color-mix(in srgb, var(--theme-primary) 20%, var(--border-subtle));
-  background: color-mix(in srgb, var(--theme-primary) 5%, var(--bg-card));
+  border-color: var(--surface-bubble-border);
+  background: var(--surface-accent-soft);
+  color: var(--text-accent);
 }
 
-/* Related-questions band: left edge accent via system class (was inline border-l). */
+/* Related-questions band: left edge accent — full bubble-strong color for clear theme marker */
 .nn-study-card.nn-study-card--accent-leading {
   border-left-width: 3px;
-  border-left-color: color-mix(in srgb, var(--theme-primary) 40%, var(--border-subtle));
+  border-left-color: var(--surface-bubble-strong);
 }
 
 /*

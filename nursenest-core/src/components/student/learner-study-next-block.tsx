@@ -43,7 +43,7 @@ function RecommendationRow({
 
   if (variant === "primary") {
     return (
-      <div className="rounded-lg border border-[var(--border-subtle)] bg-[var(--nn-presentation-badge)] p-3 sm:p-3.5">
+      <div className="rounded-lg border border-[var(--surface-bubble-border)] bg-[var(--surface-accent-soft)] p-3 sm:p-3.5">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
           <div className="min-w-0 flex-1">
             <p className="text-sm font-semibold leading-snug text-[var(--theme-heading-text)] [overflow-wrap:anywhere]">
@@ -98,7 +98,7 @@ export async function LearnerStudyNextBlock({ model }: { model: LearnerStudyNext
 
   return (
     <section
-      className="rounded-xl border border-[var(--nn-presentation-divider)] bg-[var(--nn-presentation-wash)] shadow-[0_1px_0_color-mix(in_srgb,var(--theme-heading-text)_4%,transparent)]"
+      className="nn-surface-bubble rounded-xl shadow-[var(--shadow-card)]"
       aria-labelledby="nn-study-next-heading"
     >
       <div className="flex flex-col gap-1 border-b border-border/50 px-3 py-2.5 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:px-3.5">

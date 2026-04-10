@@ -9,7 +9,7 @@ import { MarketingLanguagePreferenceList } from "@/components/i18n/marketing-lan
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { marketingExamPrepHubs } from "@/lib/marketing/marketing-exam-navigation";
-import { rnQuestions } from "@/lib/marketing/marketing-entry-routes";
+import { loginWithCallback, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
 
 function FLink({
   href,
@@ -42,6 +42,7 @@ export function SiteFooter() {
   const { t, locale } = useMarketingI18n();
   const { region } = useNursenestRegion();
   const examHubs = marketingExamPrepHubs(region);
+  const learnerSignInHref = withMarketingLocale(locale, loginWithCallback("/app"));
 
   return (
     <footer className="mt-auto border-t border-[var(--divider,var(--theme-nav-border))] bg-[var(--bg-section,var(--theme-card-bg))] py-[var(--nn-rhythm-footer-y)]">
@@ -135,6 +136,9 @@ export function SiteFooter() {
               </li>
               <li>
                 <FLink href="/pricing">{t("footer.pricing")}</FLink>
+              </li>
+              <li>
+                <FLink href={learnerSignInHref}>{t("footer.learnerSignIn")}</FLink>
               </li>
               <li>
                 <FLink href="/faq">{t("footer.faq")}</FLink>

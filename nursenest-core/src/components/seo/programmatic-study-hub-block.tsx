@@ -10,11 +10,17 @@ export function ProgrammaticStudyHubBlock({
   lessonsHref,
   questionsHref,
   catHref,
+  signupHref,
+  loginHref,
+  pricingHref,
   t,
 }: {
   lessonsHref: string;
   questionsHref: string;
   catHref: string;
+  signupHref: string;
+  loginHref: string;
+  pricingHref: string;
   t: TFn;
 }) {
   const items = [
@@ -48,6 +54,26 @@ export function ProgrammaticStudyHubBlock({
           </li>
         ))}
       </ul>
+      <nav
+        className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-primary/15 pt-4 text-xs text-muted-foreground"
+        aria-label={t("programmatic.hub.accountNavAria")}
+      >
+        <Link href={signupHref} className="font-semibold text-primary underline-offset-2 hover:underline">
+          {t("programmatic.hub.footerSignup")}
+        </Link>
+        <span className="text-[var(--theme-body-text)]/30" aria-hidden>
+          ·
+        </span>
+        <Link href={loginHref} className="font-medium underline-offset-2 hover:text-foreground hover:underline">
+          {t("programmatic.hub.footerLogin")}
+        </Link>
+        <span className="text-[var(--theme-body-text)]/30" aria-hidden>
+          ·
+        </span>
+        <Link href={pricingHref} className="font-medium underline-offset-2 hover:text-foreground hover:underline">
+          {t("programmatic.hub.footerPricing")}
+        </Link>
+      </nav>
     </section>
   );
 }

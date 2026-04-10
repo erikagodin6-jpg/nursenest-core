@@ -88,10 +88,10 @@ export function SubscriptionPaywall({
           {t("cta.continuePlan")}
         </Link>
         <Link
-          href="/pricing"
+          href="/app"
           className="inline-flex items-center justify-center rounded-full border border-border bg-card px-5 py-2.5 text-sm font-semibold text-foreground hover:bg-muted"
         >
-          {t("cta.improveWeakAreas")}
+          {t("paywall.cta.openStudyHub")}
         </Link>
       </div>
       <p className="text-xs text-muted">{t("paywall.footerHint")}</p>

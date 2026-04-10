@@ -17,6 +17,7 @@ CREATE TABLE "practice_tests" (
     "startedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "completedAt" TIMESTAMP(3),
     "results" JSONB,
+    "adaptiveState" JSONB,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "practice_tests_pkey" PRIMARY KEY ("id")

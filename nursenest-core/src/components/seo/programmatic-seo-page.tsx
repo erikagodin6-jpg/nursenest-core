@@ -45,6 +45,7 @@ export async function ProgrammaticSeoPage({
 
   const signup = withMarketingLocale(locale, "/signup");
   const pricing = withMarketingLocale(locale, HUB.pricing);
+  const loginToApp = withMarketingLocale(locale, `/login?callbackUrl=${encodeURIComponent("/app")}`);
   const product = resolveProgrammaticProductLinks(page, locale, marketingRegion);
   const { lessons, questions, cat, testBank, exams, tools, flashcards } = product;
 
@@ -67,7 +68,15 @@ export async function ProgrammaticSeoPage({
       <article className="nn-marketing-surface mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
         <BreadcrumbTrail items={crumbs} />
 
-        <ProgrammaticStudyHubBlock lessonsHref={lessons} questionsHref={questions} catHref={cat} t={t} />
+        <ProgrammaticStudyHubBlock
+          lessonsHref={lessons}
+          questionsHref={questions}
+          catHref={cat}
+          signupHref={signup}
+          loginHref={loginToApp}
+          pricingHref={pricing}
+          t={t}
+        />
 
         {page.practiceConversion && isUnifiedPracticeSlug(page.slug) ? (
           <ProgrammaticStudyModesHub slug={page.slug} locale={locale} />

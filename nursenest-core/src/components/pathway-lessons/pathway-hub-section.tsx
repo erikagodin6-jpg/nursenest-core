@@ -17,10 +17,13 @@ export type PathwayHubSectionKind =
 const KIND_CLASS: Record<PathwayHubSectionKind, string> = {
   card: "nn-study-card p-5 sm:p-6",
   cardWash: "nn-study-card nn-study-card--wash p-5 sm:p-6",
-  callout: "nn-study-callout p-5 sm:p-6",
-  calloutEmphasis: "nn-study-callout border-[var(--border-subtle)] p-5 sm:p-6",
+  /* callout → left-bordered accent panel with bubble surface — clearly themed */
+  callout: "nn-callout-accent p-5 sm:p-6",
+  /* calloutEmphasis → stronger bubble surface with top border accent */
+  calloutEmphasis: "nn-surface-bubble rounded-[1.125rem] border border-[var(--surface-bubble-border)] shadow-[var(--shadow-card)] border-t-2 border-t-[var(--surface-bubble-strong)] p-5 sm:p-6",
   navWash: "nn-study-card nn-study-card--wash p-4",
-  featuredCard: "nn-study-card bg-gradient-to-b from-[var(--bg-card)] to-[var(--nn-presentation-wash)] p-5 sm:p-7",
+  /* featuredCard → bubble surface gradient so it visibly shifts between themes */
+  featuredCard: "nn-study-card nn-study-card--wash bg-gradient-to-b from-[var(--surface-bubble)] to-[var(--bg-card)] border-[var(--surface-bubble-border)] p-5 sm:p-7",
 };
 
 export type PathwayHubSectionProps = {

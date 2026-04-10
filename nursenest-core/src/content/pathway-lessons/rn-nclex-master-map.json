@@ -549,9 +549,9 @@
       "tierMix": "5–7 A, 5–7 B, 3–4 C"
     },
     "pharmacology_master": {
-      "minLessons": 20,
-      "maxLessons": 28,
-      "tierMix": "2–4 A, 10–14 C, 6–10 D"
+      "minLessons": 28,
+      "maxLessons": 52,
+      "tierMix": "2–4 A, 14–22 C, 8–16 D"
     },
     "musculoskeletal": {
       "minLessons": 6,
@@ -575,23 +575,23 @@
     }
   },
   "aggregates": {
-    "uniqueLessonCount": 194,
+    "uniqueLessonCount": 216,
     "byTier": {
       "A": 88,
-      "B": 69,
-      "C": 36,
-      "D": 1
+      "B": 71,
+      "C": 51,
+      "D": 6
     },
     "byArchetype": {
       "condition_disease": 144,
-      "medication_monograph": 28,
+      "medication_monograph": 50,
       "emergency_critical_care": 15,
       "nursing_priorities_safety": 7
     },
     "byPrimaryCategory": {
       "cardiovascular": 14,
       "neurological": 14,
-      "pharmacology_master": 28,
+      "pharmacology_master": 50,
       "renal_genitourinary": 11,
       "hematology_oncology_immunology": 8,
       "pediatrics": 14,
@@ -621,7 +621,7 @@
       "maternity_newborn": 20,
       "mental_health": 15,
       "emergency_critical_perioperative": 21,
-      "pharmacology_master": 28,
+      "pharmacology_master": 50,
       "nclex_nursing_priorities_safety": 7
     }
   },
@@ -787,6 +787,20 @@
       "bodySystem": "Endocrine / Metabolic / Fluids"
     },
     {
+      "id": "rn-map-0189",
+      "canonicalTitle": "Albuterol and Beta-Agonists in Bronchospasm and Adjunct Hyperkalemia Therapy",
+      "slug": "albuterol-and-beta-agonists-in-bronchospasm-and-adjunct-hyperkalemia-therapy-nclex-rn",
+      "tier": "C",
+      "wordTargetMin": 900,
+      "wordTargetMax": 1400,
+      "primaryCategoryId": "pharmacology_master",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "archetype": "medication_monograph",
+      "topicSlug": "pharmacology-master",
+      "bodySystem": "Pharmacology"
+    },
+    {
       "id": "rn-map-0100",
       "canonicalTitle": "Allopurinol",
       "slug": "allopurinol-nclex-rn",
@@ -798,6 +812,20 @@
         "hematology_oncology_immunology"
       ],
       "mergeNote": "Cross-listed from hematology_oncology_immunology.",
+      "archetype": "medication_monograph",
+      "topicSlug": "pharmacology-master",
+      "bodySystem": "Pharmacology"
+    },
+    {
+      "id": "rn-map-0184",
+      "canonicalTitle": "Alprazolam",
+      "slug": "alprazolam-nclex-rn",
+      "tier": "C",
+      "wordTargetMin": 900,
+      "wordTargetMax": 1400,
+      "primaryCategoryId": "pharmacology_master",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
       "archetype": "medication_monograph",
       "topicSlug": "pharmacology-master",
       "bodySystem": "Pharmacology"
@@ -931,6 +959,20 @@
       "bodySystem": "Neurological"
     },
     {
+      "id": "rn-map-0188",
+      "canonicalTitle": "Benzodiazepines in Alcohol Withdrawal",
+      "slug": "benzodiazepines-in-alcohol-withdrawal-nclex-rn",
+      "tier": "C",
+      "wordTargetMin": 900,
+      "wordTargetMax": 1400,
+      "primaryCategoryId": "pharmacology_master",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "archetype": "medication_monograph",
+      "topicSlug": "pharmacology-master",
+      "bodySystem": "Pharmacology"
+    },
+    {
       "id": "rn-map-0170",
       "canonicalTitle": "Beta-Blockers: Indications and Nursing Monitoring",
       "slug": "beta-blockers-indications-and-nursing-monitoring-nclex-rn",
@@ -1001,6 +1043,20 @@
       "bodySystem": "Pediatrics"
     },
     {
+      "id": "rn-map-0193",
+      "canonicalTitle": "Botulism Immune Globulin",
+      "slug": "botulism-immune-globulin-nclex-rn",
+      "tier": "D",
+      "wordTargetMin": 600,
+      "wordTargetMax": 900,
+      "primaryCategoryId": "pharmacology_master",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "archetype": "medication_monograph",
+      "topicSlug": "pharmacology-master",
+      "bodySystem": "Pharmacology"
+    },
+    {
       "id": "rn-map-0052",
       "canonicalTitle": "Bowel Obstruction (Mechanical and Functional)",
       "slug": "bowel-obstruction-mechanical-and-functional-nclex-rn",
@@ -1043,6 +1099,20 @@
       "archetype": "condition_disease",
       "topicSlug": "respiratory",
       "bodySystem": "Respiratory"
+    },
+    {
+      "id": "rn-map-0182",
+      "canonicalTitle": "Buprenorphine",
+      "slug": "buprenorphine-nclex-rn",
+      "tier": "C",
+      "wordTargetMin": 900,
+      "wordTargetMax": 1400,
+      "primaryCategoryId": "pharmacology_master",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "archetype": "medication_monograph",
+      "topicSlug": "pharmacology-master",
+      "bodySystem": "Pharmacology"
     },
     {
       "id": "rn-map-0006",
@@ -1163,6 +1233,20 @@
       "bodySystem": "Gastrointestinal"
     },
     {
+      "id": "rn-map-0178",
+      "canonicalTitle": "Cholestyramine",
+      "slug": "cholestyramine-nclex-rn",
+      "tier": "D",
+      "wordTargetMin": 600,
+      "wordTargetMax": 900,
+      "primaryCategoryId": "pharmacology_master",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "archetype": "medication_monograph",
+      "topicSlug": "pharmacology-master",
+      "bodySystem": "Pharmacology"
+    },
+    {
       "id": "rn-map-0054",
       "canonicalTitle": "Cirrhosis",
       "slug": "cirrhosis-nclex-rn",
@@ -1205,7 +1289,7 @@
       "bodySystem": "Pediatrics"
     },
     {
-      "id": "rn-map-0186",
+      "id": "rn-map-0208",
       "canonicalTitle": "Clostridioides difficile Infection",
       "slug": "clostridioides-difficile-infection-nclex-rn",
       "tier": "A",
@@ -1233,7 +1317,7 @@
       "bodySystem": "Respiratory"
     },
     {
-      "id": "rn-map-0178",
+      "id": "rn-map-0200",
       "canonicalTitle": "Compartment Syndrome",
       "slug": "compartment-syndrome-nclex-rn",
       "tier": "A",
@@ -1317,7 +1401,7 @@
       "bodySystem": "Cardiovascular"
     },
     {
-      "id": "rn-map-0189",
+      "id": "rn-map-0211",
       "canonicalTitle": "Delegation and Scope of Practice",
       "slug": "delegation-and-scope-of-practice-nclex-rn",
       "tier": "A",
@@ -1343,6 +1427,20 @@
       "archetype": "condition_disease",
       "topicSlug": "neurological",
       "bodySystem": "Neurological"
+    },
+    {
+      "id": "rn-map-0190",
+      "canonicalTitle": "Dextrose: Hypoglycemia Rescue and DKA Adjunct Therapy",
+      "slug": "dextrose-hypoglycemia-rescue-and-dka-adjunct-therapy-nclex-rn",
+      "tier": "C",
+      "wordTargetMin": 900,
+      "wordTargetMax": 1400,
+      "primaryCategoryId": "pharmacology_master",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "archetype": "medication_monograph",
+      "topicSlug": "pharmacology-master",
+      "bodySystem": "Pharmacology"
     },
     {
       "id": "rn-map-0083",
@@ -1561,7 +1659,7 @@
       "bodySystem": "Gastrointestinal"
     },
     {
-      "id": "rn-map-0190",
+      "id": "rn-map-0212",
       "canonicalTitle": "Error Prevention and Incident Reporting",
       "slug": "error-prevention-and-incident-reporting-nclex-rn",
       "tier": "B",
@@ -1679,7 +1777,7 @@
       "bodySystem": "Pharmacology"
     },
     {
-      "id": "rn-map-0175",
+      "id": "rn-map-0197",
       "canonicalTitle": "Gout",
       "slug": "gout-nclex-rn",
       "tier": "B",
@@ -1821,7 +1919,7 @@
       "bodySystem": "Gastrointestinal"
     },
     {
-      "id": "rn-map-0193",
+      "id": "rn-map-0215",
       "canonicalTitle": "High-Alert Medications: Systems Safety and Independent Double Checks",
       "slug": "high-alert-medications-systems-safety-and-independent-double-checks-nclex-rn",
       "tier": "B",
@@ -1835,7 +1933,7 @@
       "bodySystem": "NCLEX Nursing Priorities / Safety / Delegation"
     },
     {
-      "id": "rn-map-0176",
+      "id": "rn-map-0198",
       "canonicalTitle": "Hip Fracture and Surgical Repair",
       "slug": "hip-fracture-and-surgical-repair-nclex-rn",
       "tier": "A",
@@ -1863,7 +1961,7 @@
       "bodySystem": "Pediatrics"
     },
     {
-      "id": "rn-map-0184",
+      "id": "rn-map-0206",
       "canonicalTitle": "HIV/AIDS: Nursing Care and Post-Exposure Prophylaxis",
       "slug": "hiv-aids-nursing-care-and-post-exposure-prophylaxis-nclex-rn",
       "tier": "A",
@@ -2017,7 +2115,7 @@
       "bodySystem": "Gastrointestinal"
     },
     {
-      "id": "rn-map-0185",
+      "id": "rn-map-0207",
       "canonicalTitle": "Influenza and Antiviral Therapy",
       "slug": "influenza-and-antiviral-therapy-nclex-rn",
       "tier": "B",
@@ -2031,7 +2129,7 @@
       "bodySystem": "Infectious Disease"
     },
     {
-      "id": "rn-map-0191",
+      "id": "rn-map-0213",
       "canonicalTitle": "Informed Consent and Surrogate Decision Making",
       "slug": "informed-consent-and-surrogate-decision-making-nclex-rn",
       "tier": "B",
@@ -2203,6 +2301,48 @@
       "bodySystem": "Mental Health"
     },
     {
+      "id": "rn-map-0173",
+      "canonicalTitle": "Loop Diuretics",
+      "slug": "loop-diuretics-nclex-rn",
+      "tier": "C",
+      "wordTargetMin": 900,
+      "wordTargetMax": 1400,
+      "primaryCategoryId": "pharmacology_master",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "archetype": "medication_monograph",
+      "topicSlug": "pharmacology-master",
+      "bodySystem": "Pharmacology"
+    },
+    {
+      "id": "rn-map-0180",
+      "canonicalTitle": "Loperamide",
+      "slug": "loperamide-nclex-rn",
+      "tier": "D",
+      "wordTargetMin": 600,
+      "wordTargetMax": 900,
+      "primaryCategoryId": "pharmacology_master",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "archetype": "medication_monograph",
+      "topicSlug": "pharmacology-master",
+      "bodySystem": "Pharmacology"
+    },
+    {
+      "id": "rn-map-0183",
+      "canonicalTitle": "Lorazepam",
+      "slug": "lorazepam-nclex-rn",
+      "tier": "C",
+      "wordTargetMin": 900,
+      "wordTargetMax": 1400,
+      "primaryCategoryId": "pharmacology_master",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "archetype": "medication_monograph",
+      "topicSlug": "pharmacology-master",
+      "bodySystem": "Pharmacology"
+    },
+    {
       "id": "rn-map-0166",
       "canonicalTitle": "Macrolide Antibiotics",
       "slug": "macrolide-antibiotics-nclex-rn",
@@ -2291,6 +2431,20 @@
       "bodySystem": "Pharmacology"
     },
     {
+      "id": "rn-map-0185",
+      "canonicalTitle": "Methadone",
+      "slug": "methadone-nclex-rn",
+      "tier": "C",
+      "wordTargetMin": 900,
+      "wordTargetMax": 1400,
+      "primaryCategoryId": "pharmacology_master",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "archetype": "medication_monograph",
+      "topicSlug": "pharmacology-master",
+      "bodySystem": "Pharmacology"
+    },
+    {
       "id": "rn-map-0015",
       "canonicalTitle": "Milrinone",
       "slug": "milrinone-nclex-rn",
@@ -2351,7 +2505,21 @@
       "bodySystem": "Maternity / Newborn"
     },
     {
-      "id": "rn-map-0194",
+      "id": "rn-map-0186",
+      "canonicalTitle": "Morphine: ACS, PE, and Respiratory Depression Monitoring",
+      "slug": "morphine-acs-pe-and-respiratory-depression-monitoring-nclex-rn",
+      "tier": "B",
+      "wordTargetMin": 1200,
+      "wordTargetMax": 1800,
+      "primaryCategoryId": "pharmacology_master",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "archetype": "medication_monograph",
+      "topicSlug": "pharmacology-master",
+      "bodySystem": "Pharmacology"
+    },
+    {
+      "id": "rn-map-0216",
       "canonicalTitle": "Multimodal Pain Management: Assessment and Escalation",
       "slug": "multimodal-pain-management-assessment-and-escalation-nclex-rn",
       "tier": "B",
@@ -2481,6 +2649,20 @@
       "bodySystem": "Pediatrics"
     },
     {
+      "id": "rn-map-0175",
+      "canonicalTitle": "Nitrates and Nitroglycerin: Routes and Monitoring",
+      "slug": "nitrates-and-nitroglycerin-routes-and-monitoring-nclex-rn",
+      "tier": "C",
+      "wordTargetMin": 900,
+      "wordTargetMax": 1400,
+      "primaryCategoryId": "pharmacology_master",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "archetype": "medication_monograph",
+      "topicSlug": "pharmacology-master",
+      "bodySystem": "Pharmacology"
+    },
+    {
       "id": "rn-map-0165",
       "canonicalTitle": "NSAIDs",
       "slug": "nsaids-nclex-rn",
@@ -2495,7 +2677,7 @@
       "bodySystem": "Pharmacology"
     },
     {
-      "id": "rn-map-0188",
+      "id": "rn-map-0210",
       "canonicalTitle": "Nursing Prioritization: ABCs and Urgent vs Important",
       "slug": "nursing-prioritization-abcs-and-urgent-vs-important-nclex-rn",
       "tier": "A",
@@ -2537,7 +2719,7 @@
       "bodySystem": "Mental Health"
     },
     {
-      "id": "rn-map-0173",
+      "id": "rn-map-0195",
       "canonicalTitle": "Osteoarthritis",
       "slug": "osteoarthritis-nclex-rn",
       "tier": "B",
@@ -2551,7 +2733,7 @@
       "bodySystem": "Musculoskeletal"
     },
     {
-      "id": "rn-map-0187",
+      "id": "rn-map-0209",
       "canonicalTitle": "Osteomyelitis",
       "slug": "osteomyelitis-nclex-rn",
       "tier": "B",
@@ -2565,7 +2747,7 @@
       "bodySystem": "Infectious Disease"
     },
     {
-      "id": "rn-map-0177",
+      "id": "rn-map-0199",
       "canonicalTitle": "Osteoporosis and Fracture Prevention",
       "slug": "osteoporosis-and-fracture-prevention-nclex-rn",
       "tier": "B",
@@ -2590,6 +2772,20 @@
         "maternity_newborn"
       ],
       "mergeNote": "Cross-listed from maternity_newborn.",
+      "archetype": "medication_monograph",
+      "topicSlug": "pharmacology-master",
+      "bodySystem": "Pharmacology"
+    },
+    {
+      "id": "rn-map-0191",
+      "canonicalTitle": "Pancreatic Enzyme Replacement (Cystic Fibrosis)",
+      "slug": "pancreatic-enzyme-replacement-cystic-fibrosis-nclex-rn",
+      "tier": "C",
+      "wordTargetMin": 900,
+      "wordTargetMax": 1400,
+      "primaryCategoryId": "pharmacology_master",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
       "archetype": "medication_monograph",
       "topicSlug": "pharmacology-master",
       "bodySystem": "Pharmacology"
@@ -2621,6 +2817,20 @@
       "archetype": "condition_disease",
       "topicSlug": "neurological",
       "bodySystem": "Neurological"
+    },
+    {
+      "id": "rn-map-0192",
+      "canonicalTitle": "Penicillin for Rheumatic Fever Prophylaxis",
+      "slug": "penicillin-for-rheumatic-fever-prophylaxis-nclex-rn",
+      "tier": "D",
+      "wordTargetMin": 600,
+      "wordTargetMax": 900,
+      "primaryCategoryId": "pharmacology_master",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "archetype": "medication_monograph",
+      "topicSlug": "pharmacology-master",
+      "bodySystem": "Pharmacology"
     },
     {
       "id": "rn-map-0053",
@@ -2811,6 +3021,20 @@
       "bodySystem": "Maternity / Newborn"
     },
     {
+      "id": "rn-map-0174",
+      "canonicalTitle": "Potassium-Sparing Diuretics",
+      "slug": "potassium-sparing-diuretics-nclex-rn",
+      "tier": "C",
+      "wordTargetMin": 900,
+      "wordTargetMax": 1400,
+      "primaryCategoryId": "pharmacology_master",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "archetype": "medication_monograph",
+      "topicSlug": "pharmacology-master",
+      "bodySystem": "Pharmacology"
+    },
+    {
       "id": "rn-map-0115",
       "canonicalTitle": "Preeclampsia and Eclampsia",
       "slug": "preeclampsia-and-eclampsia-nclex-rn",
@@ -2839,7 +3063,7 @@
       "bodySystem": "Emergency / Critical Care / Perioperative"
     },
     {
-      "id": "rn-map-0192",
+      "id": "rn-map-0214",
       "canonicalTitle": "Professional Boundaries and Ethical Communication",
       "slug": "professional-boundaries-and-ethical-communication-nclex-rn",
       "tier": "B",
@@ -2851,6 +3075,20 @@
       "archetype": "nursing_priorities_safety",
       "topicSlug": "nclex-nursing-priorities-safety",
       "bodySystem": "NCLEX Nursing Priorities / Safety / Delegation"
+    },
+    {
+      "id": "rn-map-0181",
+      "canonicalTitle": "Promethazine",
+      "slug": "promethazine-nclex-rn",
+      "tier": "C",
+      "wordTargetMin": 900,
+      "wordTargetMax": 1400,
+      "primaryCategoryId": "pharmacology_master",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "archetype": "medication_monograph",
+      "topicSlug": "pharmacology-master",
+      "bodySystem": "Pharmacology"
     },
     {
       "id": "rn-map-0072",
@@ -2867,7 +3105,21 @@
       "bodySystem": "Renal / Genitourinary"
     },
     {
-      "id": "rn-map-0180",
+      "id": "rn-map-0176",
+      "canonicalTitle": "Proton Pump Inhibitors",
+      "slug": "proton-pump-inhibitors-nclex-rn",
+      "tier": "C",
+      "wordTargetMin": 900,
+      "wordTargetMax": 1400,
+      "primaryCategoryId": "pharmacology_master",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "archetype": "medication_monograph",
+      "topicSlug": "pharmacology-master",
+      "bodySystem": "Pharmacology"
+    },
+    {
+      "id": "rn-map-0202",
       "canonicalTitle": "Psoriasis and Biologic Therapy",
       "slug": "psoriasis-and-biologic-therapy-nclex-rn",
       "tier": "B",
@@ -2953,7 +3205,7 @@
       "bodySystem": "Endocrine / Metabolic / Fluids"
     },
     {
-      "id": "rn-map-0174",
+      "id": "rn-map-0196",
       "canonicalTitle": "Rheumatoid Arthritis",
       "slug": "rheumatoid-arthritis-nclex-rn",
       "tier": "B",
@@ -2995,7 +3247,7 @@
       "bodySystem": "Mental Health"
     },
     {
-      "id": "rn-map-0182",
+      "id": "rn-map-0204",
       "canonicalTitle": "Scleroderma (Systemic Sclerosis)",
       "slug": "scleroderma-systemic-sclerosis-nclex-rn",
       "tier": "B",
@@ -3099,6 +3351,34 @@
       "bodySystem": "Hematology / Oncology / Immunology"
     },
     {
+      "id": "rn-map-0179",
+      "canonicalTitle": "Sodium Polystyrene Sulfonate (Kayexalate)",
+      "slug": "sodium-polystyrene-sulfonate-kayexalate-nclex-rn",
+      "tier": "C",
+      "wordTargetMin": 900,
+      "wordTargetMax": 1400,
+      "primaryCategoryId": "pharmacology_master",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "archetype": "medication_monograph",
+      "topicSlug": "pharmacology-master",
+      "bodySystem": "Pharmacology"
+    },
+    {
+      "id": "rn-map-0187",
+      "canonicalTitle": "SSRIs and SNRIs: Initiation, Monitoring, and Serotonin Syndrome",
+      "slug": "ssris-and-snris-initiation-monitoring-and-serotonin-syndrome-nclex-rn",
+      "tier": "B",
+      "wordTargetMin": 1200,
+      "wordTargetMax": 1800,
+      "primaryCategoryId": "pharmacology_master",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "archetype": "medication_monograph",
+      "topicSlug": "pharmacology-master",
+      "bodySystem": "Pharmacology"
+    },
+    {
       "id": "rn-map-0019",
       "canonicalTitle": "Statins",
       "slug": "statins-nclex-rn",
@@ -3115,7 +3395,7 @@
       "bodySystem": "Pharmacology"
     },
     {
-      "id": "rn-map-0181",
+      "id": "rn-map-0203",
       "canonicalTitle": "Stevens-Johnson Syndrome and Toxic Epidermal Necrolysis",
       "slug": "stevens-johnson-syndrome-and-toxic-epidermal-necrolysis-nclex-rn",
       "tier": "A",
@@ -3157,6 +3437,20 @@
       "bodySystem": "Emergency / Critical Care / Perioperative"
     },
     {
+      "id": "rn-map-0177",
+      "canonicalTitle": "Sucralfate",
+      "slug": "sucralfate-nclex-rn",
+      "tier": "D",
+      "wordTargetMin": 600,
+      "wordTargetMax": 900,
+      "primaryCategoryId": "pharmacology_master",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "archetype": "medication_monograph",
+      "topicSlug": "pharmacology-master",
+      "bodySystem": "Pharmacology"
+    },
+    {
       "id": "rn-map-0144",
       "canonicalTitle": "Suicide Risk Assessment and Safety Planning",
       "slug": "suicide-risk-assessment-and-safety-planning-nclex-rn",
@@ -3171,7 +3465,7 @@
       "bodySystem": "Mental Health"
     },
     {
-      "id": "rn-map-0179",
+      "id": "rn-map-0201",
       "canonicalTitle": "Systemic Lupus Erythematosus",
       "slug": "systemic-lupus-erythematosus-nclex-rn",
       "tier": "A",
@@ -3231,6 +3525,20 @@
       "bodySystem": "Pharmacology"
     },
     {
+      "id": "rn-map-0194",
+      "canonicalTitle": "Thrombolytic Therapy: tPA, Indications, and Bleeding Monitoring",
+      "slug": "thrombolytic-therapy-tpa-indications-and-bleeding-monitoring-nclex-rn",
+      "tier": "C",
+      "wordTargetMin": 900,
+      "wordTargetMax": 1400,
+      "primaryCategoryId": "pharmacology_master",
+      "secondaryCategoryIds": [],
+      "mergeNote": null,
+      "archetype": "medication_monograph",
+      "topicSlug": "pharmacology-master",
+      "bodySystem": "Pharmacology"
+    },
+    {
       "id": "rn-map-0076",
       "canonicalTitle": "Thyroid Storm and Myxedema Coma",
       "slug": "thyroid-storm-and-myxedema-coma-nclex-rn",
@@ -3273,7 +3581,7 @@
       "bodySystem": "Pediatrics"
     },
     {
-      "id": "rn-map-0183",
+      "id": "rn-map-0205",
       "canonicalTitle": "Tuberculosis (Latent and Active)",
       "slug": "tuberculosis-latent-and-active-nclex-rn",
       "tier": "A",
