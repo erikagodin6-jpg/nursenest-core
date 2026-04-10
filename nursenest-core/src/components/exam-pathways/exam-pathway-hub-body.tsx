@@ -7,7 +7,7 @@ import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
-import { ExamPathwayHubPrimaryStudyCards } from "@/components/exam-pathways/exam-pathway-hub-study-modes";
+import { ExamPathwayHubPrimaryStudyCards, type HubLessonProgress } from "@/components/exam-pathways/exam-pathway-hub-study-modes";
 import { pathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-analytics-props";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
@@ -32,6 +32,10 @@ type Props = {
   npSeoAliasSegment?: string;
   conversionSectionHeading?: string;
   conversionSectionLead?: string;
+  /** Lesson completion snapshot for signed-in learners. */
+  hubProgress?: HubLessonProgress | null;
+  /** Pathway lesson catalogue total — passed through to the Lessons card progress bar. */
+  pathwayLessonCount?: number;
 };
 
 export function ExamPathwayHubBody({
@@ -42,6 +46,8 @@ export function ExamPathwayHubBody({
   npSeoAliasSegment,
   conversionSectionHeading,
   conversionSectionLead,
+  hubProgress,
+  pathwayLessonCount,
 }: Props) {
   const { t } = useMarketingI18n();
   const isWaitlist = pathway.acquisitionMode === "waitlist" || pathway.status === "upcoming";
@@ -72,6 +78,8 @@ export function ExamPathwayHubBody({
         isSignedIn={isSignedIn}
         emphasizeCatPracticeTests={emphasizeCatPracticeTests}
         npSeoAliasSegment={npSeoAliasSegment}
+        hubProgress={hubProgress}
+        pathwayLessonCount={pathwayLessonCount}
       />
 
       {usNpSiblings.length > 0 ? (

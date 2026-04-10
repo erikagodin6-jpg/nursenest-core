@@ -8,9 +8,26 @@ import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway
 import { auth } from "@/lib/auth";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { prisma } from "@/lib/db";
+import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import type { HubLessonProgress } from "@/components/exam-pathways/exam-pathway-hub-study-modes";
 
 export const dynamicParams = true;
 export const revalidate = 86400;
+
+async function fetchHubLessonProgress(userId: string | undefined, pathwayId: string): Promise<HubLessonProgress | null> {
+  if (!userId || !isDatabaseUrlConfigured()) return null;
+  try {
+    const prefix = `pathway:${pathwayId}:`;
+    const [completed, total] = await Promise.all([
+      prisma.progress.count({ where: { userId, lessonId: { startsWith: prefix }, completed: true } }),
+      prisma.progress.count({ where: { userId, lessonId: { startsWith: prefix } } }),
+    ]);
+    return { completed, total };
+  } catch {
+    return null;
+  }
+}
 
 export function generateStaticParams() {
   return [];
@@ -58,18 +75,22 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
   if (!pathway) notFound();
 
   const session = await auth();
-  const isSignedIn = Boolean(session?.user);
+  const userId = (session?.user as { id?: string } | undefined)?.id;
+  const isSignedIn = Boolean(userId);
   const npPracticeSeo = getNpPracticeTestLandingCopy(locale, slug, examCode) ?? null;
   const marketingHubPath = pathname;
 
-  const { npInventory, questionSnapshot, pathwayLessonCount } = await loadMarketingExamHubOptionalBlocks(pathway, {
-    pathname,
-    locale,
-    country: locale,
-    examCode,
-    pathwayId: pathway.id,
-    roleTrack: slug,
-  });
+  const [{ npInventory, questionSnapshot, pathwayLessonCount }, hubProgress] = await Promise.all([
+    loadMarketingExamHubOptionalBlocks(pathway, {
+      pathname,
+      locale,
+      country: locale,
+      examCode,
+      pathwayId: pathway.id,
+      roleTrack: slug,
+    }),
+    fetchHubLessonProgress(userId, pathway.id),
+  ]);
 
   return (
     <ExamPathwayHub
@@ -84,6 +105,7 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
       marketingHubPath={marketingHubPath}
       npPracticeSeo={npPracticeSeo}
       npSeoAliasSegment={npPracticeSeo ? examCode : undefined}
+      hubProgress={hubProgress}
     />
   );
 }

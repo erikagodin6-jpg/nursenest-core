@@ -18,6 +18,7 @@ import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry"
 import type { PathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import { EMPTY_QUESTION_SNAPSHOT, ZERO_LESSON_COUNT } from "@/lib/exam-pathways/marketing-hub-fallbacks";
 import type { NpPathwayInventoryGate } from "@/lib/np/np-pathway-inventory-gate";
+import type { HubLessonProgress } from "@/components/exam-pathways/exam-pathway-hub-study-modes";
 
 export function ExamPathwayHub({
   pathway,
@@ -31,6 +32,7 @@ export function ExamPathwayHub({
   npSeoAliasSegment,
   questionSnapshot: questionSnapshotProp,
   pathwayLessonCount: pathwayLessonCountProp,
+  hubProgress,
 }: {
   pathway: ExamPathwayDefinition;
   isSignedIn?: boolean;
@@ -50,6 +52,8 @@ export function ExamPathwayHub({
   questionSnapshot?: PathwayQuestionBankSnapshot | null;
   /** Pathway lesson total — {@link countPathwayLessons}. */
   pathwayLessonCount?: number;
+  /** Lesson completion snapshot for signed-in learners. Drives progress indicator on the Lessons card. */
+  hubProgress?: HubLessonProgress | null;
 }) {
   const questionSnapshot = questionSnapshotProp ?? EMPTY_QUESTION_SNAPSHOT;
   const pathwayLessonCount = pathwayLessonCountProp ?? ZERO_LESSON_COUNT;
@@ -131,6 +135,8 @@ export function ExamPathwayHub({
         npSeoAliasSegment={npSeoAliasSegment}
         conversionSectionHeading={npPracticeSeo?.conversionSectionHeading}
         conversionSectionLead={npPracticeSeo?.conversionSectionLead}
+        hubProgress={hubProgress}
+        pathwayLessonCount={pathwayLessonCount}
       />
     </div>
   );

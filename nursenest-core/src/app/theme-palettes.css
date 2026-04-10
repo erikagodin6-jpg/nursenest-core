@@ -32,25 +32,27 @@
 }
 
 [data-theme="mint"] {
-  --theme-primary: #5ed3ae;
-  --theme-secondary: #e0f8f0;
-  --theme-secondary-foreground: #5ed3ae;
-  --theme-accent: #f3fcf9;
-  --theme-accent-foreground: #5ed3ae;
-  --theme-border: #c2f0e1;
-  --theme-ring: #5ed3ae;
-  --theme-topbar-bg: var(--theme-primary);
+  --theme-primary: #66b2b2;
+  --theme-primary-foreground: #ffffff;
+  --theme-secondary: #e0f0f0;
+  --theme-secondary-foreground: #3d8a8a;
+  --theme-accent: #f0f9f9;
+  --theme-accent-foreground: #66b2b2;
+  --theme-border: #b2d8d8;
+  --theme-ring: #66b2b2;
+  --theme-topbar-bg: #008080;
   --theme-topbar-text: #ffffff;
 }
 
 [data-theme="blush"] {
-  --theme-primary: #f4909f;
-  --theme-secondary: #fdeef0;
-  --theme-secondary-foreground: #f4909f;
-  --theme-accent: #fef7f8;
-  --theme-accent-foreground: #f4909f;
-  --theme-border: #fcd9de;
-  --theme-ring: #f4909f;
+  --theme-primary: #e899b0;
+  --theme-primary-foreground: #ffffff;
+  --theme-secondary: #fee1e8;
+  --theme-secondary-foreground: #c4607d;
+  --theme-accent: #fcf2f3;
+  --theme-accent-foreground: #e899b0;
+  --theme-border: #f3c8d5;
+  --theme-ring: #e899b0;
   --theme-topbar-bg: var(--theme-primary);
   --theme-topbar-text: #ffffff;
 }
@@ -78,14 +80,15 @@
 }
 
 [data-theme="ocean"] {
-  --theme-primary: #0ea5e9;
-  --theme-secondary: #f0f9ff;
-  --theme-secondary-foreground: #0ea5e9;
-  --theme-accent: #e0f2fe;
-  --theme-accent-foreground: #0ea5e9;
-  --theme-border: #bae6fd;
-  --theme-ring: #0ea5e9;
-  --theme-topbar-bg: var(--theme-primary);
+  --theme-primary: #1da2d8;
+  --theme-primary-foreground: #ffffff;
+  --theme-secondary: #def3f6;
+  --theme-secondary-foreground: #0d7aaa;
+  --theme-accent: #e8f7fc;
+  --theme-accent-foreground: #1da2d8;
+  --theme-border: #7fcdff;
+  --theme-ring: #1da2d8;
+  --theme-topbar-bg: #064273;
   --theme-topbar-text: #ffffff;
 }
 
@@ -159,14 +162,14 @@
 }
 
 [data-theme="pastel-blush"] {
-  --theme-primary: #ec8899;
+  --theme-primary: #f5838e;
   --theme-primary-foreground: #ffffff;
-  --theme-secondary: #fff1f3;
-  --theme-secondary-foreground: #e06b7e;
-  --theme-accent: #ffe4e8;
-  --theme-accent-foreground: #f5a3b1;
-  --theme-border: #fecdd3;
-  --theme-ring: #f5a3b1;
+  --theme-secondary: #fff0f2;
+  --theme-secondary-foreground: #d4505c;
+  --theme-accent: #ffe8eb;
+  --theme-accent-foreground: #f5838e;
+  --theme-border: #ffc4ca;
+  --theme-ring: #f5838e;
 }
 
 [data-theme="pastel-lavender"] {
@@ -347,49 +350,77 @@
 
 [data-theme="dark-mode"] {
   color-scheme: dark;
-  --theme-primary: #818cf8;
+  --theme-primary: #4a6fa5;
   --theme-primary-foreground: #ffffff;
-  --theme-secondary: #1f2937;
-  --theme-secondary-foreground: #818cf8;
-  --theme-accent: #111827;
-  --theme-accent-foreground: #818cf8;
-  --theme-border: #374151;
-  --theme-ring: #818cf8;
-  --color-warmwhite: #111827;
-  --color-softgray: #e5e7eb;
-  --color-background: #111827;
-  --color-foreground: #e5e7eb;
-  --color-card: #1f2937;
-  --color-card-foreground: #e5e7eb;
-  --color-popover: #1f2937;
-  --color-popover-foreground: #e5e7eb;
-  --color-card-base: #1f2937;
-  --color-card-fg-base: #e5e7eb;
-  --color-popover-base: #1f2937;
-  --color-popover-fg-base: #e5e7eb;
-  --theme-page-bg: #111827;
-  --theme-nav-bg: #1f2937;
-  --theme-nav-text: #e5e7eb;
-  --theme-nav-border: #374151;
-  --theme-topbar-bg: #1f2937;
-  --theme-topbar-text: #818cf8;
-  --theme-menu-text: #e5e7eb;
-  --theme-menu-hover-bg: color-mix(in srgb, #818cf8 12%, transparent);
-  --theme-menu-hover-text: #818cf8;
-  --theme-menu-active-bg: color-mix(in srgb, #818cf8 18%, transparent);
-  --theme-card-bg: #1f2937;
-  --theme-card-border: #374151;
-  --theme-card-text: #e5e7eb;
-  --theme-input-bg: #1f2937;
-  --theme-input-border: #374151;
-  --theme-heading-text: #f9fafb;
-  --theme-body-text: #e5e7eb;
-  --theme-muted-text: #9ca3af;
-  --theme-focus-ring: #818cf8;
-  --theme-separator: #374151;
+  --theme-secondary: #2e3b4e;
+  --theme-secondary-foreground: #7ba3d4;
+  --theme-accent: #c4687a;
+  --theme-accent-foreground: #ffffff;
+  --theme-border: #3a4a60;
+  --theme-ring: #4a6fa5;
+  --color-warmwhite: #1e1e2f;
+  --color-softgray: #c8d5e8;
+  --color-background: #1e1e2f;
+  --color-foreground: #c8d5e8;
+  --color-card: #2e3b4e;
+  --color-card-foreground: #c8d5e8;
+  --color-popover: #2e3b4e;
+  --color-popover-foreground: #c8d5e8;
+  --color-card-base: #2e3b4e;
+  --color-card-fg-base: #c8d5e8;
+  --color-popover-base: #2e3b4e;
+  --color-popover-fg-base: #c8d5e8;
+  --theme-page-bg: #1e1e2f;
+  --theme-nav-bg: #252540;
+  --theme-nav-text: #c8d5e8;
+  --theme-nav-border: #3a4a60;
+  --theme-topbar-bg: #252540;
+  --theme-topbar-text: #7ba3d4;
+  --theme-menu-text: #c8d5e8;
+  --theme-menu-hover-bg: color-mix(in srgb, #4a6fa5 14%, transparent);
+  --theme-menu-hover-text: #7ba3d4;
+  --theme-menu-active-bg: color-mix(in srgb, #4a6fa5 20%, transparent);
+  --theme-card-bg: #2e3b4e;
+  --theme-card-border: #3a4a60;
+  --theme-card-text: #c8d5e8;
+  --theme-input-bg: #252540;
+  --theme-input-border: #3a4a60;
+  --theme-heading-text: #e8eef7;
+  --theme-body-text: #c8d5e8;
+  --theme-muted-text: #8b9eb8;
+  --theme-focus-ring: #4a6fa5;
+  --theme-separator: #3a4a60;
 }
 
-/* Shared light-UI surfaces: every non-dark theme gets the same neutral shell so `--theme-primary` drives accents consistently. */
+/* Strawberry — Pink Set 3 (#fd9cb3 / #fdb0c2 / #fec4d1 / #fed7e1 / #ffebf0) */
+[data-theme="strawberry"] {
+  --theme-primary: #fd9cb3;
+  --theme-primary-foreground: #ffffff;
+  --theme-secondary: #ffebf0;
+  --theme-secondary-foreground: #d06585;
+  --theme-accent: #fff5f8;
+  --theme-accent-foreground: #fd9cb3;
+  --theme-border: #fec4d1;
+  --theme-ring: #fd9cb3;
+  --theme-topbar-bg: var(--theme-primary);
+  --theme-topbar-text: #ffffff;
+}
+
+/* Multi-Pastel — Cozy pastels (#c8e6f7 / #c8f7f0 / #c8cef7 / #f7c8ce / #e6f7c8) */
+[data-theme="multi-pastel"] {
+  --theme-primary: #90b4d4;
+  --theme-primary-foreground: #ffffff;
+  --theme-secondary: #c8e6f7;
+  --theme-secondary-foreground: #4d7fa8;
+  --theme-accent: #f7c8ce;
+  --theme-accent-foreground: #b04458;
+  --theme-border: #c8cef7;
+  --theme-ring: #90b4d4;
+  --theme-topbar-bg: var(--theme-primary);
+  --theme-topbar-text: #ffffff;
+}
+
+/* Shared light-UI surfaces: every non-dark theme gets consistent chrome so --theme-primary drives accents. */
 :is(
   [data-theme="lavender"],
   [data-theme="mint"],
@@ -411,35 +442,42 @@
   [data-theme="coral"],
   [data-theme="indigo"],
   [data-theme="teal"],
-  [data-theme="berry"]
+  [data-theme="berry"],
+  [data-theme="strawberry"],
+  [data-theme="multi-pastel"]
 ) {
   --theme-primary-foreground: #ffffff;
-  /* Promo top bar follows the active accent (some per-theme blocks omitted these). */
   --theme-topbar-bg: var(--theme-primary);
   --theme-topbar-text: #ffffff;
-  --theme-page-bg: #fdfcfa;
-  /* Slight primary wash so chrome/cards don’t read as flat white vs page */
-  --theme-nav-bg: color-mix(in srgb, #ffffff 96.5%, var(--theme-primary));
+  /* Pastel-tinted page background: each theme gets a whisper of its primary hue (no plain gray) */
+  --theme-page-bg: color-mix(in srgb, #ffffff 95%, var(--theme-primary));
+  /* Nav: slightly stronger tint so it reads as chrome, not blank paper */
+  --theme-nav-bg: color-mix(in srgb, #ffffff 96%, var(--theme-primary));
   --theme-nav-text: #6b7280;
   --theme-nav-border: color-mix(in srgb, var(--theme-primary) 10%, transparent);
   --theme-menu-text: #374151;
   --theme-menu-hover-bg: color-mix(in srgb, var(--theme-primary) 8%, transparent);
   --theme-menu-hover-text: var(--theme-primary);
   --theme-menu-active-bg: color-mix(in srgb, var(--theme-primary) 12%, transparent);
-  --theme-card-bg: color-mix(in srgb, #ffffff 97.5%, var(--theme-primary));
+  /* Cards: warm white with a trace of primary - lifts off the tinted page */
+  --theme-card-bg: color-mix(in srgb, #ffffff 97%, var(--theme-primary));
   --theme-card-border: color-mix(in srgb, var(--theme-border) 60%, transparent);
-  --theme-card-text: #6b7280;
+  --theme-card-text: color-mix(in srgb, #374151 90%, var(--theme-primary));
   --theme-input-bg: #ffffff;
-  --theme-input-border: #e5e7eb;
+  --theme-input-border: color-mix(in srgb, var(--theme-border) 70%, #e5e7eb);
   --theme-heading-text: #111827;
-  --theme-body-text: #6b7280;
-  --theme-muted-text: #9ca3af;
+  --theme-body-text: color-mix(in srgb, #4b5563 88%, var(--theme-primary));
+  --theme-muted-text: color-mix(in srgb, #9ca3af 82%, var(--theme-primary));
   --theme-focus-ring: var(--theme-primary);
-  --theme-separator: #f3f4f6;
-  --color-warmwhite: #fdfcfa;
-  --color-softgray: #6b7280;
-  --color-card-base: #ffffff;
-  --color-card-fg-base: #6b7280;
-  --color-popover-base: #ffffff;
-  --color-popover-fg-base: #6b7280;
+  --theme-separator: color-mix(in srgb, var(--theme-border) 30%, #f3f4f6);
+  --color-warmwhite: color-mix(in srgb, #ffffff 95%, var(--theme-primary));
+  --color-softgray: color-mix(in srgb, #4b5563 88%, var(--theme-primary));
+  --color-card-base: color-mix(in srgb, #ffffff 97%, var(--theme-primary));
+  --color-card-fg-base: color-mix(in srgb, #374151 90%, var(--theme-primary));
+  --color-popover-base: color-mix(in srgb, #ffffff 97%, var(--theme-primary));
+  --color-popover-fg-base: color-mix(in srgb, #374151 90%, var(--theme-primary));
 }
+
+/* Per-theme topbar overrides with stronger brand identity than auto-primary */
+[data-theme="ocean"] { --theme-topbar-bg: #064273; }
+[data-theme="mint"] { --theme-topbar-bg: #008080; }

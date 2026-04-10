@@ -1,0 +1,63 @@
+import { NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/db";
+import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
+
+export const dynamic = "force-dynamic";
+
+/**
+ * GET /api/learner/pathway-hub-stats?pathwayId=<id>
+ *
+ * Returns lesson completion counts for the signed-in user scoped to one pathway.
+ * Used by the marketing hub page to display a progress indicator on the Lessons card.
+ * Returns { completed, total } — total is all opened lesson rows (not the pathway lesson
+ * catalogue total, which is passed from the server as `pathwayLessonCount`).
+ */
+export async function GET(req: Request) {
+  const session = await auth();
+  const userId = (session?.user as { id?: string } | undefined)?.id;
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { searchParams } = new URL(req.url);
+  const pathwayId = searchParams.get("pathwayId");
+  if (!pathwayId || pathwayId.length < 3) {
+    return NextResponse.json({ error: "Missing pathwayId" }, { status: 400 });
+  }
+
+  setSentryServerContext({
+    route: "/api/learner/pathway-hub-stats",
+    feature: SERVER_FEATURE.lesson,
+    userId,
+  });
+
+  if (!isDatabaseUrlConfigured()) {
+    return NextResponse.json({ completed: 0, total: 0 });
+  }
+
+  try {
+    const prefix = `pathway:${pathwayId}:`;
+
+    const [completed, total] = await Promise.all([
+      prisma.progress.count({
+        where: {
+          userId,
+          lessonId: { startsWith: prefix },
+          completed: true,
+        },
+      }),
+      prisma.progress.count({
+        where: {
+          userId,
+          lessonId: { startsWith: prefix },
+        },
+      }),
+    ]);
+
+    return NextResponse.json({ completed, total });
+  } catch {
+    return NextResponse.json({ completed: 0, total: 0 });
+  }
+}

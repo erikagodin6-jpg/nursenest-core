@@ -9,7 +9,8 @@
  * :root mirrors lavender for first paint before data-theme hydrates.
  */
 :root {
-  --role-cta: color-mix(in srgb, #9d82dd 78%, #ea580c);
+  /* First-paint defaults (ocean/clinical-blue) — replaced once [data-theme] hydrates */
+  --role-cta: color-mix(in srgb, #1da2d8 78%, #ea580c);
   --role-cta-foreground: #ffffff;
   --role-cta-hover: color-mix(in srgb, var(--role-cta) 89%, #111827);
   --role-cta-pressed: color-mix(in srgb, var(--role-cta) 76%, #111827);
@@ -19,7 +20,7 @@
   --role-secondary-action-bg: #ffffff;
   --role-secondary-action-border: #e5e7eb;
   --role-secondary-action-text: #374151;
-  --role-secondary-action-hover-bg: color-mix(in srgb, #9d82dd 11%, #ffffff);
+  --role-secondary-action-hover-bg: color-mix(in srgb, #1da2d8 11%, #ffffff);
   --role-success: #15803d;
   --role-success-soft: color-mix(in srgb, #15803d 11%, #ffffff);
   --role-success-text: #14532d;

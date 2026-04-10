@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": ">=20.9.0 <25",
+    "node": ">=22.0.0 <23",
     "npm": ">=10.0.0"
   },
   "overrides": {
@@ -12,12 +12,15 @@
     }
   },
   "scripts": {
+    "prepare": "cd .. && husky nursenest-core/.husky",
     "dev": "TMPDIR=${TMPDIR:-/tmp} next dev",
     "build": "node scripts/check-disk-before-build.mjs && prisma generate && TMPDIR=${TMPDIR:-/tmp} next build",
+    "build:verify": "npm run typecheck && npm run build",
     "build:deploy": "npm run build && node scripts/post-build-prune.mjs",
     "start": "NODE_ENV=production next start -H 0.0.0.0 -p ${PORT:-3000}",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
+    "ci:verify": "npm run db:generate && npm run typecheck && npm run build",
     "audit:internal-links": "tsx scripts/audit-internal-links.ts",
     "audit:lesson-links": "tsx scripts/audit-lesson-links.ts",
     "test:lesson-links-audit": "tsx --test scripts/audit-lesson-links.test.ts",
@@ -160,6 +163,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.1",
     "google-translate-api-x": "^10.7.2",
+    "husky": "^9.1.7",
     "mime-types": "^2.1.35",
     "pg": "^8.20.0",
     "png-to-ico": "^3.0.1",

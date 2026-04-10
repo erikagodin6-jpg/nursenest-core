@@ -51,24 +51,24 @@ body {
   --leading-marketing-body: 1.55;
   --leading-marketing-snug: 1.35;
 
-  /* Until `[data-theme]` hydrates, header still needs a stable tint */
-  --theme-header-surface: color-mix(in srgb, #ffffff 94%, #9d82dd);
-  /* Pastel hero layers — lavender first paint only; replaced by `[data-theme]` tokens when hydrated */
+  /* Until `[data-theme]` hydrates, header still needs a stable tint (ocean default) */
+  --theme-header-surface: color-mix(in srgb, #ffffff 94%, #1da2d8);
+  /* Hero layers for first paint (ocean/clinical-blue); replaced by [data-theme] tokens when hydrated */
   --nn-aesthetic-hero-glow: radial-gradient(
     ellipse 88% 68% at 50% -8%,
-    color-mix(in srgb, #9d82dd 22%, transparent),
+    color-mix(in srgb, #1da2d8 22%, transparent),
     transparent 58%
   );
   --nn-aesthetic-hero-mesh: radial-gradient(
     circle at 78% 18%,
-    color-mix(in srgb, #9d82dd 11%, transparent),
+    color-mix(in srgb, #1da2d8 11%, transparent),
     transparent 42%
   );
   --nn-aesthetic-frame-shine: linear-gradient(
     135deg,
-    color-mix(in srgb, #9d82dd 22%, transparent),
+    color-mix(in srgb, #1da2d8 22%, transparent),
     transparent 42%,
-    color-mix(in srgb, #f3efff 35%, transparent)
+    color-mix(in srgb, #def3f6 35%, transparent)
   );
 }
 
@@ -1887,6 +1887,11 @@ html[data-theme="dark-mode"] .nn-exam-session:not(.nn-exam-session--neutral) {
 }
 
 /* Richer pastel CTA gradients for flagship light themes (overrides generic color-mix) */
+html[data-theme="ocean"],
+html[data-theme="clinical-light"] {
+  --nn-aesthetic-gradient-primary: linear-gradient(135deg, #7fcdff, #def3f6, #e8f7fc);
+}
+
 html[data-theme="lavender"],
 html[data-theme="pastel-lavender"],
 html[data-theme="lavender-dream"] {
@@ -1894,13 +1899,25 @@ html[data-theme="lavender-dream"] {
 }
 
 html[data-theme="mint"],
-html[data-theme="pastel-mint"] {
-  --nn-aesthetic-gradient-primary: linear-gradient(135deg, #6ee7b7, #a7f3d0);
+html[data-theme="pastel-mint"],
+html[data-theme="teal"] {
+  --nn-aesthetic-gradient-primary: linear-gradient(135deg, #66b2b2, #b2d8d8, #e0f0f0);
 }
 
-html[data-theme="blush"],
+html[data-theme="blush"] {
+  --nn-aesthetic-gradient-primary: linear-gradient(135deg, #f3b0c3, #fee1e8, #fcf2f3);
+}
+
 html[data-theme="pastel-blush"] {
-  --nn-aesthetic-gradient-primary: linear-gradient(135deg, #f9a8d4, #fbcfe8);
+  --nn-aesthetic-gradient-primary: linear-gradient(135deg, #ff93ac, #ffaaa5, #fff0f2);
+}
+
+html[data-theme="strawberry"] {
+  --nn-aesthetic-gradient-primary: linear-gradient(135deg, #fd9cb3, #fec4d1, #ffebf0);
+}
+
+html[data-theme="multi-pastel"] {
+  --nn-aesthetic-gradient-primary: linear-gradient(135deg, #c8e6f7, #c8cef7, #f7c8ce, #c8f7f0);
 }
 
 /* --- Learner UX: rationale segments, skeletons, calm card lift --- */

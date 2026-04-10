@@ -8,7 +8,7 @@ export const COMMITTED_THEME_LOGO_PUBLIC_PREFIX = "/branding/theme-logos/" as co
 /**
  * Global site logo fallbacks (header uses `SiteBrandLogoMark` → `getHeaderBrandLogoLoadChain`:
  * committed transparent PNG first, then CDN/proxy, then `PRIMARY_LOGO_URL`, then local SVG).
- * Default brand theme is lavender (`NURSENEST_DEFAULT_THEME`).
+ * Default brand theme is ocean/clinical-blue (`NURSENEST_DEFAULT_THEME`).
  */
 export const PRIMARY_LOGO_URL = `${COMMITTED_THEME_LOGO_PUBLIC_PREFIX}lavenderbrandlogo_transparent.png` as const;
 

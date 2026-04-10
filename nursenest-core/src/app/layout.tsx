@@ -79,7 +79,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${dmSans.variable} h-full antialiased`}
-      data-theme="lavender"
+      data-theme="ocean"
       suppressHydrationWarning
     >
       <head>

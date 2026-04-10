@@ -10,6 +10,13 @@ import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { pathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-analytics-props";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 
+export type HubLessonProgress = {
+  /** Lessons the learner has marked complete for this pathway. */
+  completed: number;
+  /** Total lessons opened (used as denominator when catalogue count unavailable). */
+  total: number;
+};
+
 type Props = {
   pathway: ExamPathwayDefinition;
   lessonsHref: string;
@@ -20,7 +27,38 @@ type Props = {
   isSignedIn: boolean;
   emphasizeCatPracticeTests?: boolean;
   npSeoAliasSegment?: string;
+  /** Lesson completion snapshot for signed-in learners. Displayed on the Lessons card when present. */
+  hubProgress?: HubLessonProgress | null;
+  /** Pathway lesson catalogue total (from server). Used as the denominator for the progress bar. */
+  pathwayLessonCount?: number;
 };
+
+function LessonProgressPip({
+  completed,
+  catalogueTotal,
+  t,
+}: {
+  completed: number;
+  catalogueTotal: number;
+  t: (key: string, vars?: Record<string, string | number>) => string;
+}) {
+  const denominator = Math.max(catalogueTotal, completed);
+  const pct = denominator > 0 ? Math.round((completed / denominator) * 100) : 0;
+  return (
+    <span className="mt-3 flex flex-col gap-1.5" aria-label={`${completed} of ${denominator} lessons complete`}>
+      <span className="text-[12px] font-medium leading-none text-[var(--theme-muted-text)]">
+        {t("nav.hub.lessonProgress", { completed, total: denominator })}
+      </span>
+      <span className="h-1.5 w-full overflow-hidden rounded-full bg-[color-mix(in_srgb,var(--theme-primary)_12%,var(--theme-page-bg))]">
+        <span
+          className="nn-progress-fill-semantic-success block h-full rounded-full transition-[width] duration-500"
+          style={{ width: `${pct}%` }}
+          aria-hidden
+        />
+      </span>
+    </span>
+  );
+}
 
 const CTA_PRIMARY =
   "mt-auto inline-flex w-full items-center justify-center rounded-full nn-btn-primary px-5 py-3 text-sm font-semibold shadow-none transition group-hover:brightness-[1.03]";
@@ -41,6 +79,8 @@ export function ExamPathwayHubPrimaryStudyCards({
   isSignedIn,
   emphasizeCatPracticeTests = false,
   npSeoAliasSegment,
+  hubProgress,
+  pathwayLessonCount,
 }: Props) {
   const { t } = useMarketingI18n();
   const linkCtx = pathwayMarketingHubLinkContext(pathway, npSeoAliasSegment);
@@ -151,6 +191,13 @@ export function ExamPathwayHubPrimaryStudyCards({
                   </span>
                 ) : null}
                 <span className="nn-marketing-body-sm mt-2 flex-1 text-[var(--theme-body-text)]">{t(card.bodyKey)}</span>
+                {card.variant === "lessons" && hubProgress && hubProgress.completed > 0 ? (
+                  <LessonProgressPip
+                    completed={hubProgress.completed}
+                    catalogueTotal={pathwayLessonCount ?? hubProgress.total}
+                    t={t}
+                  />
+                ) : null}
                 <span className={card.ctaClass}>{t(card.ctaKey)}</span>
               </MarketingTrackedLink>
             </li>

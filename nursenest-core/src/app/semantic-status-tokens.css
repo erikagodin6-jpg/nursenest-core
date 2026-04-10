@@ -158,7 +158,9 @@ html[data-theme="lavender-dream"] {
 /* Mint / teal brand — success deeper green, info blue, danger coral */
 html[data-theme="mint"],
 html[data-theme="pastel-mint"],
-html[data-theme="forest"] {
+html[data-theme="forest"],
+html[data-theme="teal"],
+html[data-theme="soft-sage"] {
   --semantic-success: #059669;
   --semantic-success-soft: color-mix(in srgb, #059669 11%, var(--bg-card));
   --semantic-info: #2563eb;
@@ -174,9 +176,10 @@ html[data-theme="forest"] {
   --semantic-chart-5: #8b5cf6;
 }
 
-/* Blush / rose brand — success mint, info periwinkle */
+/* Blush / rose / strawberry brand — success mint, info periwinkle */
 html[data-theme="blush"],
-html[data-theme="pastel-blush"] {
+html[data-theme="pastel-blush"],
+html[data-theme="strawberry"] {
   --semantic-success: #34d399;
   --semantic-success-soft: color-mix(in srgb, #34d399 11%, var(--bg-card));
   --semantic-info: #818cf8;
@@ -198,9 +201,35 @@ html[data-theme="ocean"],
 html[data-theme="clinical-light"] {
   --semantic-success: #16a34a;
   --semantic-success-soft: color-mix(in srgb, #16a34a 11%, var(--bg-card));
-  --semantic-info: #06b6d4;
-  --semantic-info-soft: color-mix(in srgb, #06b6d4 10%, var(--bg-card));
-  --semantic-chart-3: #06b6d4;
+  --semantic-success-contrast: #14532d;
+  --semantic-info: #76b6c4;
+  --semantic-info-soft: color-mix(in srgb, #76b6c4 10%, var(--bg-card));
+  --semantic-info-contrast: #064273;
+  --semantic-warning: #f59e0b;
+  --semantic-warning-soft: color-mix(in srgb, #f59e0b 11%, var(--bg-card));
+  --semantic-danger: #f87171;
+  --semantic-danger-soft: color-mix(in srgb, #f87171 10%, var(--bg-card));
+  --semantic-chart-2: #16a34a;
+  --semantic-chart-3: #76b6c4;
+  --semantic-chart-4: #f59e0b;
+  --semantic-chart-5: #f3b0c3;
+}
+
+/* Multi-pastel — balanced across all hues */
+html[data-theme="multi-pastel"] {
+  --semantic-success: #22c55e;
+  --semantic-success-soft: color-mix(in srgb, #22c55e 11%, var(--bg-card));
+  --semantic-info: #90b4d4;
+  --semantic-info-soft: color-mix(in srgb, #90b4d4 10%, var(--bg-card));
+  --semantic-warning: #fbbf24;
+  --semantic-warning-soft: color-mix(in srgb, #fbbf24 12%, var(--bg-card));
+  --semantic-danger: #f97316;
+  --semantic-danger-soft: color-mix(in srgb, #f97316 10%, var(--bg-card));
+  --semantic-chart-1: #90b4d4;
+  --semantic-chart-2: #c8f7f0;
+  --semantic-chart-3: #c8cef7;
+  --semantic-chart-4: #f7c8ce;
+  --semantic-chart-5: #e6f7c8;
 }
 
 html[data-theme="dark-clinical"],
