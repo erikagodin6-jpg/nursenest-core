@@ -1,0 +1,349 @@
+{
+  "auditDate": "2026-04-10",
+  "sourceBlueprint": "data/blueprints/rn-content-blueprint.json",
+  "totalTopics": 187,
+  "slugCollisions": [],
+  "realDuplications": [
+    {
+      "slugA": "acute-mi-emergency",
+      "domainA": "Emergency / Critical Care",
+      "slugB": "myocardial-infarction",
+      "domainB": "Cardiac",
+      "risk": "HIGH",
+      "resolution": "Emergency scope = recognition + first 60 min (MONA/door-to-balloon). Cardiac scope = pathophysiology + STEMI vs NSTEMI + post-MI day 1 to discharge."
+    },
+    {
+      "slugA": "dvt-pulmonary-embolism",
+      "domainA": "Cardiac",
+      "slugB": "pulmonary-embolism",
+      "domainB": "Respiratory",
+      "risk": "HIGH",
+      "resolution": "Option A: merge pulmonary-embolism into dvt-pulmonary-embolism. Option B: Cardiac = DVT only; Respiratory = PE acute hemodynamic instability only."
+    }
+  ],
+  "moderateOverlaps": [
+    {
+      "slugA": "stroke-recognition-fast",
+      "slugB": "stroke-ischemic-hemorrhagic",
+      "risk": "MODERATE",
+      "scopeLine": "Emergency = FAST + tPA decision + door-to-needle. Neuro = post-CT management + deficits + rehab."
+    },
+    {
+      "slugA": "blood-transfusion",
+      "slugB": "transfusion-reactions",
+      "risk": "MODERATE",
+      "scopeLine": "blood-transfusion is prerequisite of transfusion-reactions. Admin procedure vs reaction taxonomy."
+    },
+    {
+      "slugA": "mechanical-ventilation",
+      "slugB": "ventilation-weaning",
+      "risk": "LOW",
+      "scopeLine": "Complementary: modes/settings/alarms vs SBT/extubation readiness."
+    },
+    {
+      "slugA": "pediatric-meningitis",
+      "slugB": "bacterial-meningitis",
+      "risk": "LOW",
+      "scopeLine": "Justified population split. Different presentations and management nuances."
+    },
+    {
+      "slugA": "pediatric-type1-diabetes",
+      "slugB": "diabetes-mellitus-t1-t2",
+      "risk": "MODERATE",
+      "scopeLine": "Peds = pump, school nursing, ketone monitoring in children. Endocrine = adult pathophysiology + pharmacology."
+    },
+    {
+      "slugA": "pediatric-vital-signs",
+      "slugB": "vital-signs-measurement",
+      "risk": "LOW",
+      "scopeLine": "Adult norms vs age-stratified norms. Questions naturally differ."
+    }
+  ],
+  "lessonCountAdjustments": [
+    {
+      "slug": "diuretics",
+      "currentL": 1,
+      "currentQ": 30,
+      "action": "ADD_LESSON",
+      "recommendedL": 2
+    },
+    {
+      "slug": "digoxin-monitoring",
+      "currentL": 1,
+      "currentQ": 30,
+      "action": "ADD_LESSON",
+      "recommendedL": 2
+    },
+    {
+      "slug": "croup-vs-epiglottitis",
+      "currentL": 1,
+      "currentQ": 30,
+      "action": "ADD_LESSON",
+      "recommendedL": 2
+    },
+    {
+      "slug": "anaphylaxis-management",
+      "currentL": 1,
+      "currentQ": 30,
+      "action": "ADD_LESSON",
+      "recommendedL": 2
+    },
+    {
+      "slug": "iv-fluid-types",
+      "currentL": 1,
+      "currentQ": 30,
+      "action": "ADD_LESSON",
+      "recommendedL": 2
+    },
+    {
+      "slug": "sodium-imbalances",
+      "currentL": 1,
+      "currentQ": 30,
+      "action": "ADD_LESSON",
+      "recommendedL": 2
+    },
+    {
+      "slug": "potassium-imbalances",
+      "currentL": 1,
+      "currentQ": 35,
+      "action": "ADD_LESSON",
+      "recommendedL": 2
+    },
+    {
+      "slug": "hyperthyroidism-thyroid-storm",
+      "currentL": 1,
+      "currentQ": 30,
+      "action": "ADD_LESSON",
+      "recommendedL": 2
+    },
+    {
+      "slug": "pleural-effusion-pneumothorax",
+      "currentL": 1,
+      "currentQ": 30,
+      "action": "ADD_LESSON",
+      "recommendedL": 2
+    },
+    {
+      "slug": "seizure-disorders",
+      "currentL": 1,
+      "currentQ": 30,
+      "action": "ADD_LESSON",
+      "recommendedL": 2
+    }
+  ],
+  "questionCountAdjustments": [
+    {
+      "slug": "standard-precautions-ppe",
+      "currentQ": 30,
+      "recommendedQ": 20,
+      "reason": "Narrow procedural topic; 1 lesson saturates at 20Q"
+    },
+    {
+      "slug": "respiratory-assessment",
+      "currentQ": 30,
+      "recommendedQ": 20,
+      "reason": "Assessment skill; bounded content"
+    },
+    {
+      "slug": "cardiovascular-assessment",
+      "currentQ": 30,
+      "recommendedQ": 20,
+      "reason": "Assessment skill; bounded content"
+    },
+    {
+      "slug": "primary-survey-abcde",
+      "currentQ": 30,
+      "recommendedQ": 20,
+      "reason": "Sequential framework; 20Q saturates"
+    },
+    {
+      "slug": "overdose-toxicology",
+      "currentQ": 30,
+      "recommendedQ": 20,
+      "reason": "Narrow antidote/priority topic"
+    },
+    {
+      "slug": "hypoglycemia",
+      "currentQ": 30,
+      "recommendedQ": 20,
+      "reason": "Rule-of-15 + glucagon; 20Q sufficient"
+    },
+    {
+      "slug": "gi-bleeding",
+      "currentQ": 30,
+      "recommendedQ": 20,
+      "reason": "Reduce or add 2nd lesson"
+    },
+    {
+      "slug": "dic-coagulation",
+      "currentQ": 30,
+      "recommendedQ": 20,
+      "reason": "Reduce or add 2nd lesson"
+    },
+    {
+      "slug": "transfusion-reactions",
+      "currentQ": 30,
+      "recommendedQ": 20,
+      "reason": "Companion to blood-transfusion; 20Q sufficient"
+    }
+  ],
+  "executionOrder": [
+    {
+      "phase": 1,
+      "label": "Foundations",
+      "domains": [
+        "Fundamentals",
+        "Health Assessment",
+        "Safety / Infection Control"
+      ],
+      "topicRange": "1-27"
+    },
+    {
+      "phase": 2,
+      "label": "Core Enabling Knowledge",
+      "domains": [
+        "Pharmacology",
+        "Fluids / Electrolytes / Acid-Base",
+        "Prioritization",
+        "Leadership / Delegation"
+      ],
+      "topicRange": "28-64"
+    },
+    {
+      "phase": 3,
+      "label": "Clinical Body Systems",
+      "domains": [
+        "Adult Health / Med-Surg",
+        "Cardiac",
+        "Respiratory",
+        "Renal",
+        "Neuro",
+        "GI",
+        "Endocrine",
+        "Hematology / Oncology"
+      ],
+      "topicRange": "65-141"
+    },
+    {
+      "phase": 4,
+      "label": "Specialty Populations",
+      "domains": [
+        "Mental Health",
+        "Maternal Newborn",
+        "Pediatrics"
+      ],
+      "topicRange": "142-176"
+    },
+    {
+      "phase": 5,
+      "label": "Emergency / Critical Care (synthesis)",
+      "domains": [
+        "Emergency / Critical Care"
+      ],
+      "topicRange": "177-187"
+    }
+  ],
+  "canadianTaggingGaps": {
+    "allTopicsTagged": true,
+    "discriminating": false,
+    "note": "All 187 topics carry both us-rn and canadian-rn. Tags are non-discriminating for filtered delivery. Add examVariant field for 6 topics.",
+    "topicsNeedingVariant": [
+      {
+        "slug": "scope-of-practice-rn-lpn-uap",
+        "usNote": "LPN/UAP terminology",
+        "canadaNote": "RPN/CLPN/PSW; provincial regulatory scope (CNO, CRNBC, etc.)"
+      },
+      {
+        "slug": "national-patient-safety-goals",
+        "usNote": "TJC NPSG",
+        "canadaNote": "CPSI + Accreditation Canada standards"
+      },
+      {
+        "slug": "advance-directives-dnr",
+        "usNote": "POLST, DNR, Five Wishes",
+        "canadaNote": "Goals of Care, MOST forms, provincial DNR orders"
+      },
+      {
+        "slug": "five-rights-of-delegation",
+        "usNote": "UAP delegation framework",
+        "canadaNote": "UCP delegation; province-specific rules"
+      },
+      {
+        "slug": "chain-of-command",
+        "usNote": "US hospital hierarchy",
+        "canadaNote": "CNO practice standards; union/college structure"
+      },
+      {
+        "slug": "informed-consent",
+        "usNote": "HIPAA context",
+        "canadaNote": "PIPEDA + provincial health privacy legislation"
+      }
+    ]
+  },
+  "blockers": [
+    {
+      "id": "B1",
+      "severity": "HIGH",
+      "description": "Scope boundary undefined for MI",
+      "affected": [
+        "acute-mi-emergency",
+        "myocardial-infarction"
+      ],
+      "resolution": "Write scope line: Emergency = recognition + first 60 min. Cardiac = STEMI vs NSTEMI + post-MI day 1 to discharge."
+    },
+    {
+      "id": "B2",
+      "severity": "HIGH",
+      "description": "PE question overlap risk between Cardiac and Respiratory",
+      "affected": [
+        "dvt-pulmonary-embolism",
+        "pulmonary-embolism"
+      ],
+      "resolution": "Merge OR explicitly split: Cardiac = DVT only, Respiratory = PE acute mgmt only."
+    },
+    {
+      "id": "B3",
+      "severity": "HIGH",
+      "description": "19 topics have Q/lesson ratio >25",
+      "affected": "see lessonCountAdjustments + questionCountAdjustments",
+      "resolution": "Apply adjustments before handing to content writers."
+    }
+  ],
+  "cautions": [
+    {
+      "id": "C1",
+      "description": "Canadian regulatory content variants needed",
+      "affected": 6,
+      "resolution": "Add examVariant field in amendment pass"
+    },
+    {
+      "id": "C2",
+      "description": "Diabetes cluster deduplication",
+      "affected": 10,
+      "resolution": "Add cluster:diabetes tag to all 10 topics"
+    },
+    {
+      "id": "C3",
+      "description": "transfusion-reactions has implicit prerequisite",
+      "resolution": "Mark blood-transfusion as soft prerequisite in lesson metadata"
+    },
+    {
+      "id": "C4",
+      "description": "Stroke scope lines needed",
+      "affected": [
+        "stroke-recognition-fast",
+        "stroke-ischemic-hemorrhagic"
+      ],
+      "resolution": "Emergency = pre-hospital to CT. Neuro = post-CT management + rehab."
+    }
+  ],
+  "summary": {
+    "slugCollisions": 0,
+    "realDuplications": 2,
+    "moderateOverlaps": 6,
+    "ratioOutliers": 19,
+    "canadianVariantTopics": 6,
+    "blockersBeforeGeneration": 3,
+    "topicsClearToGenerate": 185
+  }
+}
