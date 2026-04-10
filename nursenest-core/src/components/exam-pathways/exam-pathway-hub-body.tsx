@@ -5,6 +5,7 @@ import { ExamFamily } from "@prisma/client";
 import { ArrowRight, ClipboardList } from "lucide-react";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { catPathwayExamCodeLabel } from "@/lib/exam-pathways/cat-pathway-labels";
 import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { ExamPathwayHubPrimaryStudyCards, type HubLessonProgress } from "@/components/exam-pathways/exam-pathway-hub-study-modes";
@@ -59,6 +60,7 @@ export function ExamPathwayHubBody({
   const tertiaryHref = isSignedIn ? "/app" : pricingHref;
   const tertiaryLabel = isSignedIn ? t("components.examPathwayHub.body.tertiaryApp") : t("components.examPathwayHub.body.tertiaryPricing");
   const linkCtx = pathwayMarketingHubLinkContext(pathway, npSeoAliasSegment);
+  const catExamLabel = catPathwayExamCodeLabel(pathway);
   const usNpSiblings =
     pathway.examFamily === ExamFamily.NP &&
     pathway.countrySlug === "us" &&
@@ -171,7 +173,7 @@ export function ExamPathwayHubBody({
               }}
               className="nn-marketing-body-sm mt-3 inline-flex font-semibold text-primary hover:underline"
             >
-              {t("components.examPathwayHub.body.catCtaSignedIn")}
+              {t("components.examPathwayHub.body.catCtaSignedIn", { exam: catExamLabel })}
             </MarketingTrackedLink>
           ) : (
             <MarketingTrackedLink
@@ -187,7 +189,7 @@ export function ExamPathwayHubBody({
               }}
               className="nn-marketing-body-sm mt-3 inline-flex font-semibold text-primary hover:underline"
             >
-              {t("components.examPathwayHub.body.catCtaSignup")}
+              {t("components.examPathwayHub.body.catCtaSignup", { exam: catExamLabel })}
             </MarketingTrackedLink>
           )}
         </div>
@@ -304,7 +306,7 @@ export function ExamPathwayHubBody({
                   }}
                   className="nn-study-card nn-card-interactive block px-4 py-3 text-sm font-semibold text-[var(--theme-heading-text)]"
                 >
-                  {t("components.examPathwayHub.body.shortcutCat")}
+                  {t("components.examPathwayHub.body.shortcutCat", { exam: catExamLabel })}
                 </MarketingTrackedLink>
               </li>
             ) : null}

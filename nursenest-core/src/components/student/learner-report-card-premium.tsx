@@ -1,7 +1,8 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import type { ReportCardData } from "@/lib/learner/load-report-card-data";
-import { remediationTopicDrillHref, remediationWeakModeTestHref } from "@/lib/learner/remediation-links";
+import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
+import { remediationCatPracticeHref, remediationTopicDrillHref } from "@/lib/learner/remediation-links";
 import { readinessBandLabel, readinessBandProgressFillClass } from "@/lib/learner/readiness-score";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 
@@ -48,6 +49,9 @@ export function LearnerReportCardPremium({
 }) {
   const scopeBits = [data.scopeTier, data.scopeCountry].filter(Boolean).join(" · ");
   const primaryTopic = data.recommendedQuizTopic?.trim() || data.weakTopics[0]?.topic?.trim() || "";
+  const preferredPathwayId =
+    data.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ?? data.pathways[0]?.pathwayId ?? null;
+  const catStartHref = preferredPathwayId ? appPathwayCatSessionStartPath(preferredPathwayId) : "/app/practice-tests/start";
 
   return (
     <div className="space-y-8">
@@ -513,7 +517,7 @@ export function LearnerReportCardPremium({
                 {t("learner.reportCard.next.catMocks")}
               </Link>
               <Link
-                href={primaryTopic ? remediationWeakModeTestHref(primaryTopic) : "/app/practice-tests?focus=weak"}
+                href={remediationCatPracticeHref(primaryTopic || undefined, preferredPathwayId)}
                 className="inline-flex text-xs font-semibold text-primary hover:underline"
               >
                 {t("learner.reportCard.next.catBuilder")}
@@ -582,7 +586,7 @@ export function LearnerReportCardPremium({
         <Link href="/app/questions" className="inline-flex rounded-full border border-border px-4 py-2.5 text-sm font-semibold hover:bg-muted/80">
           {t("learner.profile.quickLinks.questionBank")}
         </Link>
-        <Link href="/app/practice-tests" className="inline-flex rounded-full border border-border px-4 py-2.5 text-sm font-semibold hover:bg-muted/80">
+        <Link href={catStartHref} className="inline-flex rounded-full border border-border px-4 py-2.5 text-sm font-semibold hover:bg-muted/80">
           {t("learner.profile.quickLinks.catPractice")}
         </Link>
       </div>

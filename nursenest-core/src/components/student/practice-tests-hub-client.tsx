@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type {
   CatExamFeedbackMode,
   CatPresentationMode,
@@ -10,6 +10,12 @@ import type {
   PracticeTestPathwayOption,
   PracticeTestSelectionMode,
 } from "@/lib/practice-tests/types";
+import {
+  catEligiblePathwayOptions,
+  hubCatStartBlocked,
+  pathwayIdWhenEnteringCatMode,
+  pathwayIdWhenLeavingCatMode,
+} from "@/lib/practice-tests/practice-tests-hub-cat-pathway";
 
 type TestListRow = {
   id: string;
@@ -34,10 +40,13 @@ export function PracticeTestsHubClient({
   examSimulationEnabled = false,
   pathwayOptions = [],
   defaultPathwayId = null,
+  catEligiblePathwayIds = [],
 }: {
   examSimulationEnabled?: boolean;
   pathwayOptions?: PracticeTestPathwayOption[];
   defaultPathwayId?: string | null;
+  /** Pathway ids that support CAT adaptive start (server-aligned with POST /api/practice-tests). */
+  catEligiblePathwayIds?: string[];
 }) {
   const searchParams = useSearchParams();
   const [topics, setTopics] = useState<{ topic: string; count: number }[]>([]);
@@ -63,8 +72,34 @@ export function PracticeTestsHubClient({
     () => defaultPathwayId ?? pathwayOptions[0]?.id ?? "",
   );
 
-  const selectedPathway = pathwayOptions.find((p) => p.id === pathwayId);
+  const catOptions = useMemo(
+    () => catEligiblePathwayOptions(pathwayOptions, catEligiblePathwayIds),
+    [pathwayOptions, catEligiblePathwayIds],
+  );
+  const pathwayOptionsForSelect = useMemo(
+    () => (selectionMode === "cat" ? catOptions : pathwayOptions),
+    [selectionMode, catOptions, pathwayOptions],
+  );
+  const selectedPathway =
+    pathwayOptionsForSelect.find((p) => p.id === pathwayId) ?? pathwayOptions.find((p) => p.id === pathwayId);
   const isNpPathway = selectedPathway?.examFamily === "NP";
+  const prevSelectionModeRef = useRef(selectionMode);
+
+  useEffect(() => {
+    const prev = prevSelectionModeRef.current;
+    if (prev !== "cat" && selectionMode === "cat") {
+      const urlPid = searchParams.get("pathwayId");
+      setPathwayId(
+        pathwayIdWhenEnteringCatMode({
+          catEligibleOptions: catOptions,
+          pathwayIdFromUrl: urlPid,
+        }),
+      );
+    } else if (prev === "cat" && selectionMode !== "cat") {
+      setPathwayId(pathwayIdWhenLeavingCatMode(defaultPathwayId, pathwayOptions));
+    }
+    prevSelectionModeRef.current = selectionMode;
+  }, [selectionMode, catOptions, defaultPathwayId, pathwayOptions, searchParams]);
 
   const loadList = useCallback(async () => {
     setError(null);
@@ -96,7 +131,7 @@ export function PracticeTestsHubClient({
   }
 
   useEffect(() => {
-    const pid = searchParams.get("pathwayId");
+    const pid = searchParams.get("pathwayId")?.trim();
     if (pid && pathwayOptions.some((p) => p.id === pid)) {
       setPathwayId(pid);
     }
@@ -112,12 +147,6 @@ export function PracticeTestsHubClient({
       }
       return "weak";
     });
-  }, [searchParams, pathwayOptions]);
-
-  useEffect(() => {
-    const pid = searchParams.get("pathwayId")?.trim();
-    if (!pid || !pathwayOptions.some((p) => p.id === pid)) return;
-    setPathwayId(pid);
   }, [searchParams, pathwayOptions]);
 
   useEffect(() => {
@@ -157,8 +186,13 @@ export function PracticeTestsHubClient({
     setCreating(true);
     setError(null);
     try {
-      if (selectionMode === "cat" && !pathwayId.trim()) {
-        throw new Error("Choose an exam pathway before starting adaptive (CAT) practice.");
+      if (selectionMode === "cat") {
+        if (catOptions.length === 0) {
+          throw new Error("No adaptive (CAT) exam tracks are available for your plan right now.");
+        }
+        if (!pathwayId.trim()) {
+          throw new Error("Choose which exam pathway you want to practice before starting adaptive (CAT).");
+        }
       }
       const res = await fetch("/api/practice-tests", {
         method: "POST",
@@ -218,6 +252,7 @@ export function PracticeTestsHubClient({
             <label className="block text-sm">
               <span className="text-muted-foreground">Exam pathway (filters the question pool)</span>
               <select
+                data-nn-qa-practice-hub-pathway-select
                 className="mt-1 w-full max-w-xl rounded-lg border border-border px-3 py-2 text-sm"
                 value={pathwayId}
                 onChange={(e) => {
@@ -228,7 +263,10 @@ export function PracticeTestsHubClient({
                   }
                 }}
               >
-                {pathwayOptions.map((p) => (
+                {selectionMode === "cat" && catOptions.length > 1 ? (
+                  <option value="">Choose which exam pathway you want to practice…</option>
+                ) : null}
+                {pathwayOptionsForSelect.map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.label}
                   </option>
@@ -239,9 +277,24 @@ export function PracticeTestsHubClient({
               NP tracks use the NP question bank and AANP-style blueprint when you run exam simulation. RN tracks use
               the NCLEX-RN bank and NCLEX client-needs blueprint.
             </p>
-            {pathwayOptions.length > 1 && selectionMode === "cat" ? (
-              <p className="mt-2 text-xs text-[var(--semantic-text-secondary)]">
-                Multiple exam tracks on your plan — confirm this pathway matches the CAT you intend before starting.
+            {selectionMode === "cat" && catOptions.length > 1 ? (
+              <>
+                <p className="mt-3 text-sm text-[var(--semantic-text-secondary)]">
+                  Your plan includes more than one adaptive exam track —{" "}
+                  <span className="font-medium text-[var(--semantic-text-primary)]">
+                    pick which pathway this CAT session is for
+                  </span>{" "}
+                  before starting so items stay exam-scoped.
+                </p>
+                <p className="mt-2 text-xs text-[var(--semantic-text-secondary)]">
+                  We need your pathway before starting CAT so the adaptive pool matches the right exam.
+                </p>
+              </>
+            ) : null}
+            {selectionMode === "cat" && catOptions.length === 0 ? (
+              <p className="mt-2 text-xs text-[var(--semantic-warning-contrast)]">
+                Adaptive (CAT) is not available for your current pathways yet. Use linear practice or pick a track with
+                an active CAT pool.
               </p>
             ) : null}
           </div>
@@ -407,7 +460,8 @@ export function PracticeTestsHubClient({
                   setCatPresentationMode("exam_simulation");
                   setCatSelectionBasis("random");
                   setTimedMode(true);
-                  const np = pathwayOptions.find((p) => p.id === pathwayId)?.examFamily === "NP";
+                  const np =
+                    (pathwayId.trim() ? pathwayOptions.find((p) => p.id === pathwayId) : undefined)?.examFamily === "NP";
                   if (np) {
                     setTimeLimitMin(180);
                     setQuestionCount((q) => (q < 75 ? 150 : Math.min(150, Math.max(75, q))));
@@ -607,7 +661,15 @@ export function PracticeTestsHubClient({
 
         <button
           type="button"
-          disabled={creating}
+          data-nn-qa-practice-hub-start-test
+          disabled={
+            creating ||
+            hubCatStartBlocked({
+              selectionMode,
+              pathwayId,
+              catEligibleOptionCount: catOptions.length,
+            })
+          }
           onClick={() => void createTest()}
           className="mt-6 rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-50"
         >

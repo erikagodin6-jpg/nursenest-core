@@ -18,7 +18,7 @@ describe("buildNursingTierHubContent", () => {
       [
         ["lessons", "Lessons", "/us/rn/nclex-rn/lessons"],
         ["practice", "Practice", "/us/rn/nclex-rn/questions"],
-        ["cat", "CAT Exams", "/us/rn/nclex-rn/cat"],
+        ["cat", "CAT prep", "/us/rn/nclex-rn/cat"],
       ],
     );
   });

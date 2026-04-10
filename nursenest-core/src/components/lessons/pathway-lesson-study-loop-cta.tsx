@@ -159,7 +159,7 @@ export function PathwayLessonStudyLoopCta({
                   href={cat.appSession}
                   className="nn-study-pill-secondary inline-flex min-h-11 items-center justify-center px-4 py-2.5"
                 >
-                  Start adaptive session
+                  Sign in to start CAT
                 </Link>
               ) : (
                 <p className="text-xs text-[var(--theme-muted-text)]">

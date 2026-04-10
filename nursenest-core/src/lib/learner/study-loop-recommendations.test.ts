@@ -17,7 +17,7 @@ test("buildAppPracticeTestsHubHref encodes pathwayId", () => {
 test("practiceTestsWeakFocusHref keeps weak focus and pathwayId", () => {
   assert.equal(
     practiceTestsWeakFocusHref("ca-rpn-rex-pn"),
-    "/app/practice-tests?focus=weak&pathwayId=ca-rpn-rex-pn",
+    "/app/practice-tests?cat=1&focus=weak&pathwayId=ca-rpn-rex-pn",
   );
-  assert.equal(practiceTestsWeakFocusHref(null), "/app/practice-tests?focus=weak");
+  assert.equal(practiceTestsWeakFocusHref(null), "/app/practice-tests?cat=1&focus=weak");
 });

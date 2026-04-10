@@ -1,5 +1,6 @@
 import type { PremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
+import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import { MasteryLegend } from "@/components/student/product/mastery-legend";
 import { ReadinessScoreCard } from "@/components/student/dashboard/readiness-score-card";
 import { QuickActionPanel } from "@/components/student/dashboard/quick-action-panel";
@@ -30,6 +31,8 @@ export function LearnerDashboardAnalytics({
   const topicTrends = snapshot.insights?.topicTrends ?? [];
   const weakAreas = snapshot.insights?.weakAreas.slice(0, MAX_WEAK) ?? [];
   const continueLesson = snapshot.continueLesson;
+  const preferredPathwayId = snapshot.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ?? snapshot.pathways[0]?.pathwayId ?? null;
+  const catStartHref = preferredPathwayId ? appPathwayCatSessionStartPath(preferredPathwayId) : "/app/practice-tests/start";
   const trend = snapshot.insights?.performance.trendSummary?.trim();
   const practiceLine =
     snapshot.practice.gradedTotal > 0
@@ -49,6 +52,7 @@ export function LearnerDashboardAnalytics({
         guided={{
           continueLesson,
           hasWeakAreas: weakAreas.length > 0,
+          catStartHref,
         }}
       />
 

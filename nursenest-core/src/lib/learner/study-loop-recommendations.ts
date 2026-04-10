@@ -1,3 +1,5 @@
+import { appCatWeakFocusPath } from "@/lib/exam-pathways/pathway-cat-flow";
+
 /**
  * Client-safe study-loop helpers: aggregate per-session performance and build next-step URLs.
  * Recommendations prioritize topics with incorrect answers, then tie-break by volume.
@@ -105,9 +107,7 @@ export function buildAppTopicDrillHref(args: {
 }
 
 export function practiceTestsWeakFocusHref(pathwayId: string | null): string {
-  const base = "/app/practice-tests?focus=weak";
-  if (!pathwayId?.trim()) return base;
-  return `${base}&pathwayId=${encodeURIComponent(pathwayId.trim())}`;
+  return appCatWeakFocusPath(pathwayId);
 }
 
 /** Signed-in practice-tests hub with pathway pre-selected (`PracticeTestsHubClient` reads `pathwayId`). */

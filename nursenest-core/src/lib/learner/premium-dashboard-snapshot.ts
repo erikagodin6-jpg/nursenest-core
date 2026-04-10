@@ -208,6 +208,8 @@ function milestoneLines(args: {
 }
 
 export type PremiumDashboardSnapshot = {
+  /** User's selected exam track from profile — drives pathway-specific CAT shortcuts when unambiguous. */
+  learnerPath: string | null;
   pathways: PathwayProgressRow[];
   overallLessons: { completed: number; total: number; pct: number };
   readiness: ReadinessResult;
@@ -335,6 +337,7 @@ export async function loadPremiumDashboardSnapshot(
   }
 
   return {
+    learnerPath: userRow?.learnerPath?.trim() || null,
     pathways,
     overallLessons: {
       completed: dash.lessonsCompleted,

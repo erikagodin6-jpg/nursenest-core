@@ -1,7 +1,6 @@
 import Link from "next/link";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
-import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { marketingLessonsTopicClusterPath } from "@/lib/lessons/lesson-routes";
@@ -108,9 +107,10 @@ export type LessonStudyLoopCatHrefs = {
 
 export function lessonStudyLoopCatHrefs(pathway: ExamPathwayDefinition): LessonStudyLoopCatHrefs {
   const show = pathwayAllowsCatAdaptiveStart(pathway);
+  const marketingCatPath = buildExamPathwayPath(pathway, "cat");
   return {
-    marketing: buildExamPathwayPath(pathway, "cat"),
-    appSession: show ? loginWithCallback(appPathwayCatSessionStartPath(pathway.id)) : null,
+    marketing: marketingCatPath,
+    appSession: show ? loginWithCallback(marketingCatPath) : null,
     showAdaptiveShortcut: show,
   };
 }
@@ -196,7 +196,7 @@ export function PathwayLessonLinkToPractice({
   /** Never fall back to `/app/exams` without pathway context — that page is cross-exam history / timed mocks, not CAT prep. */
   const catHref = pathwayForCat
     ? buildExamPathwayPath(pathwayForCat, "cat")
-    : loginWithCallback("/app/practice-tests");
+    : loginWithCallback("/app/practice-tests/start");
 
   const lessonsForTopicHref = topicSlug?.trim()
     ? `/app/lessons?topicSlug=${encodeURIComponent(topicSlug.trim())}`

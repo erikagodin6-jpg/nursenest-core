@@ -129,7 +129,7 @@ export function NursingTierHubPage({
                   icon={Icon}
                   title={action.label}
                   description={action.description}
-                  cta={index === 0 ? "Open lessons" : index === 1 ? "Open practice" : "Open CAT exams"}
+                  cta={index === 0 ? "Open lessons" : index === 1 ? "Open practice" : "Open CAT prep"}
                   ctaVariant={ctaVariant}
                   footer={footer}
                   className={ACTION_CLASS[action.id]}

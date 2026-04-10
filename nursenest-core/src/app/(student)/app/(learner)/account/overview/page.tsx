@@ -11,10 +11,15 @@ import { LockedStudyNextPreview } from "@/components/student/locked-study-next-p
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
+import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import { buildAdaptiveRecommendations } from "@/lib/learner/adaptive-recommendations";
 import { loadLearnerProfileActivity } from "@/lib/learner/load-learner-profile-activity";
 import { loadPremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
-import { remediationTopicDrillHref, remediationWeakModeTestHref } from "@/lib/learner/remediation-links";
+import {
+  remediationCatPracticeHref,
+  remediationTopicDrillHref,
+  remediationWeakModeTestHrefForPathway,
+} from "@/lib/learner/remediation-links";
 import { readinessBandLabel } from "@/lib/learner/readiness-score";
 import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
 import type { Metadata } from "next";
@@ -142,9 +147,14 @@ export default async function LearnerAccountOverviewPage() {
     weakTop3[0]?.topic?.trim() ||
     premiumSnapshot?.recommendedQuizTopic?.trim() ||
     "";
+  const preferredPathwayId =
+    premiumSnapshot?.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ??
+    premiumSnapshot?.pathways[0]?.pathwayId ??
+    null;
+  const catStartHref = preferredPathwayId ? appPathwayCatSessionStartPath(preferredPathwayId) : "/app/practice-tests/start";
   const practiceNextHref = primaryWeakTopic ? remediationTopicDrillHref(primaryWeakTopic) : "/app/questions";
   const lessonsNextHref = premiumSnapshot?.continueLesson?.href?.trim() || "/app/lessons";
-  const catNextHref = primaryWeakTopic ? remediationWeakModeTestHref(primaryWeakTopic) : "/app/practice-tests";
+  const catNextHref = remediationCatPracticeHref(primaryWeakTopic || undefined, preferredPathwayId);
 
   return (
     <main className="space-y-6">
@@ -424,7 +434,7 @@ export default async function LearnerAccountOverviewPage() {
                         <Link href={remediationTopicDrillHref(w.topic)} className="text-xs font-semibold text-primary underline">
                           {t("learner.profile.topics.remediateQbank")}
                         </Link>
-                        <Link href={remediationWeakModeTestHref(w.topic)} className="text-xs font-semibold text-primary underline">
+                        <Link href={remediationWeakModeTestHrefForPathway(w.topic, preferredPathwayId)} className="text-xs font-semibold text-primary underline">
                           {t("learner.profile.topics.weakMode")}
                         </Link>
                       </div>
@@ -488,10 +498,7 @@ export default async function LearnerAccountOverviewPage() {
             >
               {t("learner.profile.quickLinks.flashcards")}
             </Link>
-            <Link
-              href="/app/practice-tests"
-              className="rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold hover:bg-muted/80"
-            >
+            <Link href={catStartHref} className="rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold hover:bg-muted/80">
               {t("learner.profile.quickLinks.catPractice")}
             </Link>
             <Link

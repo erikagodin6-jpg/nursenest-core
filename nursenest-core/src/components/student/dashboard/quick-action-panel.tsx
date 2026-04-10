@@ -16,6 +16,7 @@ import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 export type QuickActionGuided = {
   continueLesson?: { title: string; href: string } | null;
   hasWeakAreas?: boolean;
+  catStartHref?: string | null;
 };
 
 /** Secondary navigation — direct links to key app areas. */
@@ -56,6 +57,7 @@ export function QuickActionPanel({
   const resumeHref = guided?.continueLesson?.href ?? "/app/lessons";
   const resumeTitle = guided?.continueLesson?.title ?? null;
   const weakHref = guided?.hasWeakAreas ? "#dashboard-weak-areas" : "/app/questions";
+  const catStartHref = guided?.catStartHref?.trim() || "/app/practice-tests/start";
 
   return (
     <section
@@ -98,7 +100,7 @@ export function QuickActionPanel({
 
         {/* Card 2: Start CAT */}
         <Link
-          href="/app/practice-tests/start"
+          href={catStartHref}
           className="flex flex-col gap-1.5 rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_32%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] px-4 py-3.5 transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-brand)_16%,var(--semantic-surface))]"
         >
           <div className="flex items-center gap-2">

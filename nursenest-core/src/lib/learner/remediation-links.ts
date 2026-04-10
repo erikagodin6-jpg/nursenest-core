@@ -1,3 +1,5 @@
+import { appCatWeakFocusPath } from "@/lib/exam-pathways/pathway-cat-flow";
+
 export function remediationTopicDrillHref(topic: string): string {
   return `/app/questions?preset=topic_drill&topic=${encodeURIComponent(topic)}`;
 }
@@ -12,8 +14,22 @@ export function remediationLessonsTopicHref(topic: string, topicSlug?: string | 
 }
 
 export function remediationWeakModeTestHref(topic?: string): string {
-  const base = "/app/practice-tests?focus=weak";
-  if (!topic) return base;
-  return `${base}&topic=${encodeURIComponent(topic)}`;
+  return remediationWeakModeTestHrefForPathway(topic, null);
+}
+
+export function remediationWeakModeTestHrefForPathway(
+  topic?: string,
+  pathwayId?: string | null,
+): string {
+  const q = new URLSearchParams({ focus: "weak" });
+  const topicLabel = topic?.trim();
+  if (topicLabel) q.set("topic", topicLabel);
+  const pathway = pathwayId?.trim();
+  if (pathway) q.set("pathwayId", pathway);
+  return `/app/practice-tests?${q.toString()}`;
+}
+
+export function remediationCatPracticeHref(topic?: string, pathwayId?: string | null): string {
+  return appCatWeakFocusPath(pathwayId, topic);
 }
 

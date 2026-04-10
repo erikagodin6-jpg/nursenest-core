@@ -87,6 +87,8 @@ export default async function AccountReportCardPage() {
     report.weakTopics[0]?.topic?.trim() ||
     report.recommendedQuizTopic?.trim() ||
     undefined;
+  const preferredPathwayId =
+    report.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ?? report.pathways[0]?.pathwayId ?? null;
 
   return (
     <main className="space-y-6">
@@ -100,7 +102,7 @@ export default async function AccountReportCardPage() {
 
       <LearnerReportCardPremium data={report} t={t} localeTag={localeTag} />
 
-      <LearnerAccountCrossLinks variant="report-card" t={t} weakTopicKey={weakTopicKey} />
+      <LearnerAccountCrossLinks variant="report-card" t={t} weakTopicKey={weakTopicKey} pathwayId={preferredPathwayId} />
     </main>
   );
 }

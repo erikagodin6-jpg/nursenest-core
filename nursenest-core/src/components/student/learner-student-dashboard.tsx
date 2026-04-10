@@ -7,6 +7,7 @@ import { readinessBandLabel } from "@/lib/learner/readiness-score";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import type { WeakAreaInsight, WeaknessTier } from "@/lib/insights/types";
 import type { RecentLearnerNoteSummary } from "@/components/student/premium-learner-hub";
+import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 
 function tierClass(tier: WeaknessTier): string {
   switch (tier) {
@@ -132,6 +133,8 @@ export function LearnerStudentDashboard({
   const sortedActivity = activityRows.slice(0, 5);
 
   const lessonsHref = continueLesson?.href ?? "/app/lessons";
+  const preferredPathwayId = snapshot.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ?? snapshot.pathways[0]?.pathwayId ?? null;
+  const catStartHref = preferredPathwayId ? appPathwayCatSessionStartPath(preferredPathwayId) : "/app/practice-tests/start";
 
   return (
     <div className="space-y-5">
@@ -313,7 +316,7 @@ export function LearnerStudentDashboard({
             </li>
             <li>
               <Link
-                href="/app/practice-tests/start"
+                href={catStartHref}
                 className="group flex items-center justify-between gap-3 rounded-xl border border-border/60 bg-muted/5 px-3 py-3 transition-colors hover:bg-muted/20"
               >
                 <div className="min-w-0">

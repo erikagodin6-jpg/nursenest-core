@@ -4,7 +4,7 @@ import type { ReadinessBand, ReadinessFactor, ReadinessResult } from "@/lib/lear
 import type { ReadinessPagePayload } from "@/lib/learner/load-readiness-page-payload";
 import type { RecentMock } from "@/lib/learner/load-learner-dashboard";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
-import { remediationTopicDrillHref, remediationWeakModeTestHref } from "@/lib/learner/remediation-links";
+import { remediationCatPracticeHref, remediationTopicDrillHref } from "@/lib/learner/remediation-links";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 
 function bandStatusLabel(band: ReadinessBand, t: LearnerMarketingT): string {
@@ -145,8 +145,10 @@ export function LearnerReadinessPremium({
   const weakTopics = topicPerf?.weakTopics ?? [];
   const weakDisplay = weakTopics.slice(0, 8);
   const primaryWeak = weakDisplay[0]?.normalizedTopic?.trim() || weakDisplay[0]?.topic?.trim() || "";
+  const preferredPathwayId =
+    snapshot.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ?? snapshot.pathways[0]?.pathwayId ?? null;
   const practiceNextHref = primaryWeak ? remediationTopicDrillHref(primaryWeak) : "/app/questions";
-  const catNextHref = primaryWeak ? remediationWeakModeTestHref(primaryWeak) : "/app/practice-tests";
+  const catNextHref = remediationCatPracticeHref(primaryWeak || undefined, preferredPathwayId);
   const lessonsNextHref = snapshot.continueLesson?.href?.trim() || "/app/lessons";
 
   const factorOrder: ReadinessFactor["id"][] = ["practice_accuracy", "mock_performance", "topic_errors", "lesson_completion"];

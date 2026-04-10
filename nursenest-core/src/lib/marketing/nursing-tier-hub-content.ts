@@ -66,11 +66,11 @@ export function buildNursingTierHubContent(pathway: ExamPathwayDefinition): Nurs
     examLabel,
     title: `${audienceLabel} learning and exam prep`,
     intro: `Choose how you want to study for ${audienceLabel} in ${countryLabel}.`,
-    description: `This area contains ${examLabel} learning and exam-prep resources, with clear paths into lessons, practice questions, and CAT exam simulation.`,
+    description: `This area contains ${examLabel} learning and exam-prep resources, with clear paths into lessons, practice questions, and pathway-specific CAT prep.`,
     includedNote: `Included for this tier: ${examLabel} study resources, pathway-specific lessons, exam-style practice, and CAT readiness work for ${audienceLabel} learners in ${countryLabel}.`,
-    startHere: "Start with Lessons if you are new to the material, then move into Practice and CAT Exams as your accuracy and speed improve.",
+    startHere: "Start with Lessons if you are new to the material, then move into Practice and CAT prep as your accuracy and speed improve.",
     differenceHeading: "What is the difference?",
-    differenceBody: "Choose Lessons for teaching, Practice for question drilling with rationales, and CAT Exams for adaptive exam simulation.",
+    differenceBody: "Choose Lessons for teaching, Practice for question drilling with rationales, and CAT prep for pathway-scoped adaptive sessions.",
     actions: [
       {
         id: "lessons",
@@ -87,8 +87,8 @@ export function buildNursingTierHubContent(pathway: ExamPathwayDefinition): Nurs
       },
       {
         id: "cat",
-        label: "CAT Exams",
-        description: "Take adaptive exam simulations to check readiness.",
+        label: "CAT prep",
+        description: "Open the pathway CAT page and start adaptive practice when ready.",
         href: buildExamPathwayPath(pathway, "cat"),
       },
     ],

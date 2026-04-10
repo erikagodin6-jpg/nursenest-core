@@ -12,6 +12,7 @@ import { PH } from "@/lib/observability/posthog-conversion-events";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { StudyCard } from "@/components/ui/study-card";
 import type { CardVariant } from "@/components/ui/study-card";
+import { catPathwayExamCodeLabel, catPathwayRegionalExamLine } from "@/lib/exam-pathways/cat-pathway-labels";
 
 export type HubLessonProgress = {
   /** Lessons the learner has marked complete for this pathway. */
@@ -119,6 +120,9 @@ export function ExamPathwayHubPrimaryStudyCards({
     </span>
   );
 
+  const catExam = catPathwayExamCodeLabel(pathway);
+  const catPathwayLine = catPathwayRegionalExamLine(pathway);
+
   const cardDefs: CardDef[] = [
     {
       key: "lessons",
@@ -193,21 +197,38 @@ export function ExamPathwayHubPrimaryStudyCards({
             });
           };
 
+          const title =
+            card.key === "cat"
+              ? t("components.examPathwayHub.studyModes.practiceCatTitle", { exam: catExam })
+              : t(card.titleKey);
+          const description =
+            card.key === "cat"
+              ? t("components.examPathwayHub.studyModes.practiceCatBody", { pathwayLine: catPathwayLine })
+              : t(card.bodyKey);
+          const cta =
+            card.key === "cat"
+              ? t("components.examPathwayHub.studyModes.practiceCta", { exam: catExam })
+              : t(card.ctaKey);
+
           return (
-            <li key={card.key}>
+            <li key={card.key} {...(card.key === "cat" ? { "data-nn-qa-cat-hub-card": catExam } : {})}>
               <StudyCard
                 surface="hub"
                 variant={card.variant}
                 href={card.href}
                 icon={card.icon}
-                title={t(card.titleKey)}
-                description={t(card.bodyKey)}
-                cta={t(card.ctaKey)}
+                title={title}
+                description={description}
+                cta={cta}
                 ctaVariant={card.ctaVariant}
                 footer={card.footer}
                 onClick={trackEvent}
                 className={card.extraClass}
-                ariaLabel={`${t(card.titleKey)} — ${pathway.shortName}`}
+                ariaLabel={
+                  card.key === "cat"
+                    ? `${title} — ${catPathwayLine}`
+                    : `${t(card.titleKey)} — ${pathway.shortName}`
+                }
               />
             </li>
           );

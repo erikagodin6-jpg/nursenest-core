@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
-import { remediationTopicDrillHref, remediationWeakModeTestHref } from "@/lib/learner/remediation-links";
+import { remediationTopicDrillHref, remediationWeakModeTestHrefForPathway } from "@/lib/learner/remediation-links";
 
 export type LearnerAccountCrossLinksVariant = "report-card" | "readiness" | "progress" | "billing" | "settings";
 
@@ -16,12 +16,14 @@ export function LearnerAccountCrossLinks({
   variant,
   t,
   weakTopicKey,
+  pathwayId,
   continueLesson,
 }: {
   variant: LearnerAccountCrossLinksVariant;
   t: LearnerMarketingT;
   /** Normalized or display topic for remediation URLs */
   weakTopicKey?: string;
+  pathwayId?: string | null;
   continueLesson?: ContinueLesson | null;
 }) {
   const links: { href: string; label: string }[] = [];
@@ -34,13 +36,13 @@ export function LearnerAccountCrossLinks({
           label: t("learner.account.crossLinks.reportCard.topicDrill"),
         });
         links.push({
-          href: remediationWeakModeTestHref(weakTopicKey),
+          href: remediationWeakModeTestHrefForPathway(weakTopicKey, pathwayId ?? null),
           label: t("learner.account.crossLinks.reportCard.weakMode"),
         });
       } else {
         links.push({ href: "/app/questions", label: t("learner.account.crossLinks.reportCard.qbankFallback") });
         links.push({
-          href: "/app/practice-tests?focus=weak",
+          href: remediationWeakModeTestHrefForPathway(undefined, pathwayId ?? null),
           label: t("learner.account.crossLinks.reportCard.weakModeGeneric"),
         });
       }

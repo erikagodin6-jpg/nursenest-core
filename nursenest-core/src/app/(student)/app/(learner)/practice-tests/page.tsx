@@ -9,6 +9,7 @@ import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlemen
 import {
   defaultPracticeTestPathwayId,
   listPathwaysCompatibleWithSubscription,
+  pathwayAllowsCatAdaptiveStart,
 } from "@/lib/exam-pathways/pathway-entitlements";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { LearnerStudyQuickLinksCard } from "@/components/student/learner-study-quick-links-card";
@@ -65,6 +66,7 @@ export default async function PracticeTestsPage() {
     label: `${p.shortName} — ${p.displayName}`,
     examFamily: p.examFamily,
   }));
+  const catEligiblePathwayIds = compatiblePathways.filter(pathwayAllowsCatAdaptiveStart).map((p) => p.id);
 
   return (
     <main className="space-y-6">
@@ -86,6 +88,7 @@ export default async function PracticeTestsPage() {
         <PracticeTestsHubClient
           pathwayOptions={pathwayOptions}
           defaultPathwayId={defaultPathwayId}
+          catEligiblePathwayIds={catEligiblePathwayIds}
           examSimulationEnabled={isCatExamSimulationFeatureEnabled()}
         />
       </Suspense>
