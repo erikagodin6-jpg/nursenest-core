@@ -1,0 +1,215 @@
+{
+  "version": 1,
+  "appliedDate": "2026-04-10",
+  "description": "Enforced scope boundaries for NP advanced practice content generation. All generators must consult this file before producing content for fenced topics. Violations must be flagged in the post-generation duplication report.",
+  "fences": [
+    {
+      "fenceId": "SF-01",
+      "severity": "CRITICAL",
+      "slugA": "t2dm-intensification-beyond-metformin",
+      "slugB": "glp1-sglt2-comorbidity-selection",
+      "boundary": {
+        "slugA_owns": [
+          "all agent classes at a map level (SU, DPP-4, TZD, GLP-1, SGLT-2, insulin — listed as options only)",
+          "A1c target selection by patient profile",
+          "hypoglycemia risk stratification across agents",
+          "cost and adherence considerations",
+          "insulin initiation decision tree (when to start, basal vs prandial)",
+          "sulfonylurea and DPP-4 inhibitor comparative selection",
+          "TZD use cases and contraindications"
+        ],
+        "slugA_may_not_include": [
+          "mechanism of GLP-1 receptor agonism",
+          "SGLT-2 mechanism and glycosuria",
+          "specific cardiorenal trial data (EMPA-REG OUTCOME, LEADER, DECLARE-TIMI 58, CREDENCE, DAPA-CKD, DAPA-HF)",
+          "GLP-1 adverse effects: nausea, vomiting, pancreatitis, thyroid C-cell tumor risk",
+          "SGLT-2 adverse effects: UTI, DKA risk, volume depletion, Fournier gangrene",
+          "agent-level differences within GLP-1 class (semaglutide vs liraglutide vs dulaglutide)",
+          "agent-level differences within SGLT-2 class (empagliflozin vs dapagliflozin vs canagliflozin)"
+        ],
+        "slugB_owns": [
+          "cardiorenal indication-driven selection: T2DM + established ASCVD, T2DM + HFrEF, T2DM + CKD",
+          "specific cardiovascular and renal outcome trial data per agent class",
+          "GLP-1 class mechanism, adverse effect profile, and contraindications in detail",
+          "SGLT-2 class mechanism, adverse effect profile, and contraindications in detail",
+          "agent-level selection within GLP-1 class",
+          "agent-level selection within SGLT-2 class",
+          "overlap cases (GLP-1 preferred with ASCVD; SGLT-2 preferred with HF/CKD)"
+        ],
+        "slugB_may_not_include": [
+          "general T2DM step therapy decision tree",
+          "A1c targets by patient profile",
+          "sulfonylurea or DPP-4 inhibitor comparative selection",
+          "TZD use cases",
+          "insulin initiation pathway"
+        ]
+      }
+    },
+    {
+      "fenceId": "SF-02",
+      "severity": "HIGH",
+      "slugA": "thyroid-disease-diagnosis-management",
+      "slugB": "levothyroxine-dosing-monitoring-interactions",
+      "boundary": {
+        "slugA_owns": [
+          "TSH interpretation: low vs normal vs high, primary vs central thyroid disease",
+          "free T4 and free T3 role and when to order",
+          "clinical presentation of hypothyroidism (cold intolerance, constipation, bradycardia, myxedema)",
+          "clinical presentation of hyperthyroidism (heat intolerance, tremor, palpitations, exophthalmos)",
+          "subclinical vs overt thresholds for treatment initiation",
+          "Graves disease vs Hashimoto vs thyroid nodule workup overview",
+          "when to initiate levothyroxine (clinical decision — TSH thresholds)",
+          "treatment goal concept (target TSH range for age group)",
+          "thyroid cancer red flags and referral criteria",
+          "referral indications to endocrinology"
+        ],
+        "slugA_may_not_include": [
+          "levothyroxine starting dose calculation or formula",
+          "weight-based dosing (mcg/kg/day)",
+          "administration timing (30–60 min before food)",
+          "specific absorption interactions: calcium, iron, PPIs, sucralfate, cholestyramine",
+          "drug interactions that alter levothyroxine requirements: warfarin, digoxin, rifampin, phenytoin",
+          "TSH monitoring interval after dose change",
+          "dose titration step size"
+        ],
+        "slugB_owns": [
+          "starting dose calculation: 1.6 mcg/kg/day full replacement; 25–50 mcg elderly/cardiac",
+          "administration timing: 30–60 min before food, bedtime alternative",
+          "absorption interactions: calcium, iron, PPIs, sucralfate, cholestyramine (take 4 hrs apart)",
+          "drug interactions that increase levothyroxine clearance or displacement: rifampin, phenytoin, carbamazepine, warfarin effect",
+          "TSH monitoring: recheck at 6–8 weeks after each dose change",
+          "dose titration: 12.5–25 mcg increments",
+          "brand vs generic switching caution"
+        ],
+        "slugB_may_not_include": [
+          "clinical diagnosis of hypothyroidism or hyperthyroidism",
+          "TSH interpretation ranges for diagnosis",
+          "when to initiate levothyroxine therapy",
+          "Graves vs Hashimoto differentiation",
+          "thyroid cancer workup"
+        ]
+      }
+    },
+    {
+      "fenceId": "SF-03",
+      "severity": "HIGH",
+      "slugA": "ckd-progression-monitoring-medication",
+      "slugB": "medication-dose-adjustment-ckd",
+      "boundary": {
+        "slugA_owns": [
+          "CKD staging: G1–G5 by eGFR and albuminuria (KDIGO framework)",
+          "renoprotective agents: RAAS inhibitors (ACE/ARB) for albuminuria reduction",
+          "SGLT-2 inhibitors for CKD progression (CREDENCE/DAPA-CKD data summary)",
+          "blood pressure targets in CKD (<130/80 with proteinuria)",
+          "dietary management: sodium, potassium, phosphate, protein restriction thresholds",
+          "monitoring labs and frequency: eGFR, serum potassium, creatinine, urine albumin:creatinine, CBC, PTH, phosphorus",
+          "when to refer nephrology: eGFR <30 G4–G5, rapidly declining eGFR, refractory hyperkalemia",
+          "anemia of CKD: EPO deficiency concept and when to consider treatment",
+          "metabolic acidosis management in CKD: sodium bicarbonate threshold",
+          "mineral bone disease: calcium, phosphate, vitamin D overview"
+        ],
+        "slugA_may_not_include": [
+          "Cockcroft-Gault formula application for drug dosing",
+          "specific drugs to avoid below eGFR thresholds (NSAIDs, metformin, nitrofurantoin)",
+          "dose adjustment tables for antibiotics in CKD",
+          "DOAC dosing adjustments in CKD",
+          "contrast nephropathy prevention protocol",
+          "opioid caution in CKD with specific agents named"
+        ],
+        "slugB_owns": [
+          "Cockcroft-Gault creatinine clearance formula and when to use vs MDRD/CKD-EPI",
+          "high-yield drugs to avoid entirely: NSAIDs (worsen CKD), metformin (hold if eGFR <30, caution 30–45), nitrofurantoin (ineffective and toxic if eGFR <30)",
+          "antibiotic dose adjustment in CKD: fluoroquinolones, aminoglycosides, beta-lactams, vancomycin",
+          "DOAC dose adjustment: apixaban renal criteria (2 of 3: age ≥80, weight ≤60kg, Cr ≥1.5), rivaroxaban/dabigatran thresholds",
+          "opioid caution: morphine and codeine active metabolite accumulation, prefer hydromorphone",
+          "contrast nephropathy: hold metformin, NSAIDs; pre-hydration protocol; NAC role",
+          "potassium-sparing diuretics and RAAS: hyperkalemia risk monitoring intervals in CKD"
+        ],
+        "slugB_may_not_include": [
+          "CKD staging or KDIGO framework",
+          "renoprotective therapy strategies (RAAS, SGLT-2 for CKD)",
+          "blood pressure targets in CKD",
+          "dietary management in CKD",
+          "CKD monitoring labs and surveillance frequency",
+          "nephrology referral criteria"
+        ]
+      }
+    },
+    {
+      "fenceId": "SF-04",
+      "severity": "HIGH",
+      "slugA": "mdd-diagnosis-risk-initial-management",
+      "slugB": "antidepressant-selection-ssri-snri-primary-care",
+      "boundary": {
+        "slugA_owns": [
+          "DSM-5 MDD criteria: 9 symptoms (SIGECAPS + depressed mood), 5+ for 2 weeks, functional impairment, exclusion of medical/substance cause",
+          "PHQ-9 scoring and severity staging: mild 5–9, moderate 10–14, moderately severe 15–19, severe 20–27",
+          "PHQ-9 item 9 (suicidal ideation) response protocol",
+          "Columbia Suicide Severity Rating Scale (C-SSRS): ideation vs intent vs plan vs means",
+          "suicide risk stratification: low / moderate / high and corresponding clinical actions",
+          "safety planning components: warning signs, coping strategies, support contacts, means restriction",
+          "clinical decision framework: mild → watchful wait + therapy; moderate → therapy + medication option; severe → medication + therapy + close follow-up; high risk → same-day psychiatry or ED",
+          "indications to refer to psychiatry vs manage in primary care",
+          "psychotherapy options at decision level (CBT, behavioral activation — name only, not detailed)"
+        ],
+        "slugA_may_not_include": [
+          "comparative SSRI profiles (fluoxetine vs sertraline vs escitalopram vs paroxetine)",
+          "SNRI profiles (venlafaxine vs duloxetine)",
+          "bupropion or mirtazapine profiles",
+          "adverse effect comparison across antidepressants",
+          "CYP450 interaction profiles of specific antidepressants",
+          "antidepressant switching protocols",
+          "dose ranges for specific antidepressants",
+          "black box warning details for specific agents"
+        ],
+        "slugB_owns": [
+          "SSRI agent comparison: fluoxetine (long half-life, activating, CYP2D6 inhibitor), sertraline (neutral, broad indications, safest in cardiac), escitalopram (most tolerated, fewest interactions), paroxetine (most anticholinergic, shortest half-life, avoid in pregnancy, strong CYP2D6 inhibitor)",
+          "SNRI comparison: venlafaxine (dose-dependent BP elevation, discontinuation syndrome), duloxetine (pain indication, hepatotoxicity risk)",
+          "bupropion: smoking cessation, weight neutral, contraindicated with seizure disorder or eating disorders, activating",
+          "mirtazapine: sedating, appetite stimulation, useful in elderly or underweight patients, NaSSA mechanism",
+          "black box warning: suicidality risk in patients <25 years",
+          "serotonin syndrome recognition and risk combinations",
+          "switching strategies: cross-taper vs direct switch vs washout (fluoxetine 5-week washout before MAOI)",
+          "dose titration timelines and typical therapeutic dose ranges",
+          "CYP450 interaction profiles for each agent"
+        ],
+        "slugB_may_not_include": [
+          "DSM-5 MDD criteria",
+          "PHQ-9 scoring or interpretation",
+          "Columbia Suicide Severity Rating Scale",
+          "suicide risk stratification",
+          "safety planning",
+          "decision to prescribe vs refer to psychiatry"
+        ]
+      }
+    }
+  ],
+  "phase1_generation_rules": {
+    "description": "Rules enforced during Phase 1 (Diagnostic Foundations) content generation. All 14 topics are differential diagnosis / diagnostic reasoning topics. These rules are absolute.",
+    "permitted_question_types": [
+      "Most likely diagnosis (pattern recognition)",
+      "Most appropriate next diagnostic step",
+      "Which finding most supports diagnosis X over Y",
+      "Which condition is most consistent with this presentation",
+      "Which patient requires immediate referral / transfer (disposition only, not treatment)",
+      "Which workup should be ordered first"
+    ],
+    "forbidden_question_types": [
+      "Most appropriate medication or antibiotic",
+      "Correct starting dose",
+      "How would you treat this condition",
+      "Appropriate follow-up interval for chronic management",
+      "Which medication should be discontinued"
+    ],
+    "stem_anchor_uniqueness": "No two questions across Phase 1 may share the same combination of: chief complaint + patient age group + key differentiating finding. Each question must register a unique stem anchor.",
+    "endocrine_crisis_scope": "Topic endocrine-crisis-differentials-recognition covers recognition and triage disposition ONLY. No management mechanics (no fluids, no hydrocortisone dosing, no antithyroid drug selection) may appear in questions or lesson sections.",
+    "recognition_vs_management_boundary": "Phase 1 lessons may state what condition a presentation represents and what initial diagnostic test to order. They may NOT detail treatment protocols, prescribing decisions, or chronic management — those belong to Phase 3–4.",
+    "cross_topic_duplication_guard": "After generating each topic's questions, check all prior question stem anchors. Flag any stem that reuses the same chief complaint + demographic + key finding combination across any two Phase 1 topics."
+  },
+  "renamed_topic": {
+    "oldSlug": "adrenal-insufficiency-thyroid-storm-recognition",
+    "newSlug": "endocrine-crisis-differentials-recognition",
+    "reason": "Original slug implied adrenal insufficiency management. Renamed to reflect recognition-only differential scope across AI, thyroid storm, DKA, HHS, myxedema coma, and hypoglycemic crisis.",
+    "effectiveDate": "2026-04-10"
+  }
+}
