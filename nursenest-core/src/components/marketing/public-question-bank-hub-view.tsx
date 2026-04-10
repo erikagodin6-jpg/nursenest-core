@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
+import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { questionBankIndexBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { MarketingPublicStudyLanding } from "@/components/marketing/marketing-public-study-landing";
 import {
   ALLIED,
@@ -53,24 +55,13 @@ export async function PublicQuestionBankHubView({ locale }: { locale: string }) 
   const regionLabel = (r: MarketingRegionToggle) =>
     r === "CA" ? t("pages.publicQuestionBank.regionCanada") : t("pages.publicQuestionBank.regionUnitedStates");
 
+  const { crumbs, schemaItems } = questionBankIndexBreadcrumbs();
+
   return (
     <>
-      <BreadcrumbJsonLd
-        items={[
-          { name: t("nav.home"), path: "/" },
-          { name: t("pages.publicQuestionBank.breadcrumbCurrent"), path: "/question-bank" },
-        ]}
-      />
+      <BreadcrumbJsonLd items={schemaItems} />
       <div className="mx-auto max-w-7xl px-4 pt-2 sm:px-6 sm:pt-3 lg:px-8">
-        <nav className="nn-marketing-caption" aria-label="Breadcrumb">
-          <Link href={withMarketingLocale(locale, "/")} className="hover:text-primary">
-            {t("nav.home")}
-          </Link>
-          <span className="mx-1.5" aria-hidden>
-            /
-          </span>
-          <span className="font-medium text-[var(--theme-heading-text)]">{t("pages.publicQuestionBank.breadcrumbCurrent")}</span>
-        </nav>
+        <BreadcrumbTrail items={crumbs} navClassName="nn-marketing-caption" />
       </div>
       <MarketingPublicStudyLanding
         h1={t("pages.publicQuestionBank.h1")}

@@ -264,6 +264,17 @@ export function examLessonsIndexBreadcrumbs(): { crumbs: BreadcrumbCrumb[]; sche
   return { crumbs, schemaItems };
 }
 
+/** Global question bank index (/question-bank — all exam tracks). */
+export function questionBankIndexBreadcrumbs(): { crumbs: BreadcrumbCrumb[]; schemaItems: BreadcrumbSchemaItem[] } {
+  const label = "Practice questions by exam";
+  const crumbs: BreadcrumbCrumb[] = [HOME, { name: label }];
+  const schemaItems: BreadcrumbSchemaItem[] = [
+    HOME_ITEM,
+    { name: label, item: toAbsoluteSiteUrl("/question-bank") },
+  ];
+  return { crumbs, schemaItems };
+}
+
 /** Blog index. */
 export function blogIndexBreadcrumbs(): { crumbs: BreadcrumbCrumb[]; schemaItems: BreadcrumbSchemaItem[] } {
   const blogKey = "breadcrumbs.blog" as const;

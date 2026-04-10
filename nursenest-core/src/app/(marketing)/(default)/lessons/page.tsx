@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
+import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { examLessonsIndexBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { MarketingPublicStudyLanding } from "@/components/marketing/marketing-public-study-landing";
 import { PublicLessonsPathwaySections } from "@/components/marketing/public-lessons-pathway-sections";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
@@ -56,18 +59,13 @@ export default async function PublicLessonsLandingPage() {
 
   const signupLessons = `${withMarketingLocale(locale, "/signup")}?callbackUrl=${encodeURIComponent("/app/lessons")}`;
 
+  const { crumbs, schemaItems } = examLessonsIndexBreadcrumbs();
+
   return (
     <>
+      <BreadcrumbJsonLd items={schemaItems} />
       <div className="mx-auto max-w-7xl px-4 pt-2 sm:px-6 sm:pt-3 lg:px-8">
-        <nav className="nn-marketing-caption" aria-label="Breadcrumb">
-          <Link href={withMarketingLocale(locale, "/")} className="hover:text-primary">
-            {t("nav.home")}
-          </Link>
-          <span className="mx-1.5" aria-hidden>
-            /
-          </span>
-          <span className="font-medium text-[var(--theme-heading-text)]">{t("pages.publicLessons.breadcrumbCurrent")}</span>
-        </nav>
+        <BreadcrumbTrail items={crumbs} navClassName="nn-marketing-caption" />
       </div>
       <MarketingPublicStudyLanding
         h1={t(h1Key)}
