@@ -1,0 +1,10 @@
+{
+  "totalQuestions": 935,
+  "duplicateStemCount": 0,
+  "duplicateStems": [],
+  "clusterNearDup": {
+    "pediatricRespInfectious": [],
+    "maternalSafetyEmergency": [],
+    "mentalHealthScreenRisk": []
+  }
+}

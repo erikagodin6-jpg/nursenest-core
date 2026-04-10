@@ -1,0 +1,1341 @@
+{
+  "version": 1,
+  "phase": 1,
+  "part": 1,
+  "label": "Phase 1 Question Sets — Topics 1 through 7",
+  "topicsIncluded": [
+    "chest-pain-differential-primary-care",
+    "dyspnea-differential-cardiac-pulmonary",
+    "abdominal-pain-differential-age",
+    "headache-differential-red-flags",
+    "fatigue-differential-endocrine-psych",
+    "fever-without-source-differential",
+    "syncope-differential-vasovagal-cardiac-neuro"
+  ],
+  "scopeFenceRef": "np-scope-fences.json",
+  "generationRules": "All questions test recognition or differential reasoning only. No management, prescribing, or dosing content. Stem anchors are unique across this file and np-phase1-questions-part2.json.",
+  "questions": [
+
+    {
+      "questionId": "np-p1-001",
+      "topicSlug": "chest-pain-differential-primary-care",
+      "lessonPart": "1A",
+      "difficulty": "expert",
+      "stemAnchor": "52yo-male-substernal-pressure-jaw-radiation-diaphoresis",
+      "stem": "A 52-year-old male with hypertension and hyperlipidemia presents to your primary care office reporting 30 minutes of substernal pressure radiating to his jaw. He is diaphoretic and pale. Vital signs: BP 152/94, HR 106, RR 18, O2 sat 96%. ECG shows 2 mm ST elevations in leads II, III, and aVF with reciprocal ST depressions in I and aVL. What is the most appropriate immediate action?",
+      "options": {
+        "A": "Administer aspirin 325 mg, call 911, and prepare for emergent transfer",
+        "B": "Obtain serial troponins every 3 hours and observe in office",
+        "C": "Order a stat D-dimer to rule out pulmonary embolism first",
+        "D": "Administer sublingual nitroglycerin and reassess in 15 minutes before deciding on transfer"
+      },
+      "correctAnswer": "A",
+      "rationale": "ST elevations in the inferior leads (II, III, aVF) with reciprocal changes in lateral leads is diagnostic of an inferior STEMI requiring emergent reperfusion therapy within 90 minutes of first medical contact. Aspirin 325 mg should be given immediately while activating EMS. Observation or waiting for troponins wastes the reperfusion window; D-dimer is not indicated with this ECG pattern."
+    },
+    {
+      "questionId": "np-p1-002",
+      "topicSlug": "chest-pain-differential-primary-care",
+      "lessonPart": "1A",
+      "difficulty": "expert",
+      "stemAnchor": "64yo-male-tearing-back-pain-unequal-BPs-HTN-history",
+      "stem": "A 64-year-old male with a 20-year history of poorly controlled hypertension presents with sudden-onset severe tearing chest pain radiating to his back, which he describes as 'the worst pain of his life' that was maximal at onset. Vital signs: BP right arm 190/100, BP left arm 158/86, HR 98. He has no diaphoresis. Physical exam reveals a faint aortic regurgitation murmur. What is the most likely diagnosis?",
+      "options": {
+        "A": "Acute coronary syndrome",
+        "B": "Aortic dissection",
+        "C": "Pulmonary embolism",
+        "D": "Esophageal rupture"
+      },
+      "correctAnswer": "B",
+      "rationale": "Aortic dissection classically presents with sudden-onset maximal tearing pain radiating to the back, with an inter-arm blood pressure differential >20 mmHg and signs of aortic valve insufficiency. The pain being maximal at onset (vs crescendo in ACS) and the blood pressure discrepancy are the key distinguishing features. CT aortogram is the definitive diagnostic test."
+    },
+    {
+      "questionId": "np-p1-003",
+      "topicSlug": "chest-pain-differential-primary-care",
+      "lessonPart": "1A",
+      "difficulty": "hard",
+      "stemAnchor": "35yo-female-pleuritic-CP-dyspnea-OCP-long-flight",
+      "stem": "A 35-year-old female taking oral contraceptives presents with acute onset sharp right-sided chest pain that worsens with inspiration, accompanied by dyspnea. She returned from a 14-hour international flight 3 days ago. Vital signs: HR 112, RR 22, O2 sat 93% on room air, BP 118/74. ECG shows sinus tachycardia. Troponin is negative. What is the most appropriate next diagnostic step?",
+      "options": {
+        "A": "Administer aspirin and repeat troponin in 3 hours",
+        "B": "Order a D-dimer; if elevated, proceed to CT pulmonary angiography",
+        "C": "Obtain chest X-ray only and discharge if normal",
+        "D": "Perform spirometry to evaluate for new obstructive lung disease"
+      },
+      "correctAnswer": "B",
+      "rationale": "This patient has a high pretest probability for pulmonary embolism given OCP use, prolonged immobilization (long-haul flight), tachycardia, pleuritic chest pain, and hypoxia — a Wells score of at least 4.5 (intermediate-high). D-dimer is appropriate for low-intermediate probability; if elevated or with high probability, CT pulmonary angiography is indicated. Spirometry and troponin alone would miss the diagnosis."
+    },
+    {
+      "questionId": "np-p1-004",
+      "topicSlug": "chest-pain-differential-primary-care",
+      "lessonPart": "1A",
+      "difficulty": "expert",
+      "stemAnchor": "55yo-male-hypotension-muffled-heart-sounds-JVD",
+      "stem": "A 55-year-old male with known metastatic lung cancer presents to your clinic with progressive dyspnea and chest discomfort over 5 days. On exam: BP 88/60, HR 128, JVD present, heart sounds are distant. Pulsus paradoxus is measured at 18 mmHg. There is no tracheal deviation. What is the most likely diagnosis?",
+      "options": {
+        "A": "Tension pneumothorax",
+        "B": "Massive pulmonary embolism",
+        "C": "Cardiac tamponade",
+        "D": "Right ventricular myocardial infarction"
+      },
+      "correctAnswer": "C",
+      "rationale": "Beck's triad of hypotension, muffled heart sounds, and JVD in the setting of malignancy (malignant pericardial effusion) with pulsus paradoxus >10 mmHg is diagnostic of cardiac tamponade. Tension pneumothorax would have absent breath sounds and tracheal deviation away from the affected side. RV MI typically presents with inferior ST changes and hypotension without distant heart sounds."
+    },
+    {
+      "questionId": "np-p1-005",
+      "topicSlug": "chest-pain-differential-primary-care",
+      "lessonPart": "1A",
+      "difficulty": "hard",
+      "stemAnchor": "22yo-male-sudden-absent-breath-sounds-left-trachea-deviation",
+      "stem": "A 22-year-old male with a history of Marfan syndrome presents to your office with sudden severe left-sided chest pain and worsening dyspnea that started 20 minutes ago. On exam: breath sounds are absent on the left, trachea is deviated to the right, HR 136, BP 82/50, RR 30. He is using accessory muscles. What is the most appropriate immediate action?",
+      "options": {
+        "A": "Order an urgent chest X-ray before any intervention",
+        "B": "Activate EMS immediately and prepare for needle decompression if trained",
+        "C": "Administer high-flow oxygen and schedule emergency thoracic surgery referral",
+        "D": "Obtain 12-lead ECG and troponin to rule out ACS first"
+      },
+      "correctAnswer": "B",
+      "rationale": "Absent breath sounds, tracheal deviation AWAY from the affected side, and hemodynamic compromise (hypotension, tachycardia) in a Marfan patient constitute tension pneumothorax — a life-threatening emergency. Waiting for imaging will lead to cardiovascular collapse. EMS activation with preparation for needle decompression (2nd intercostal space, midclavicular line) is the appropriate action; definitive treatment is chest tube insertion."
+    },
+    {
+      "questionId": "np-p1-006",
+      "topicSlug": "chest-pain-differential-primary-care",
+      "lessonPart": "1A",
+      "difficulty": "hard",
+      "stemAnchor": "48yo-female-NSTEMI-atypical-jaw-fatigue-no-pressure",
+      "stem": "A 48-year-old female with T2DM, hypertension, and dyslipidemia presents with a 2-day history of jaw pain, unusual fatigue, and mild shortness of breath. She denies classic chest pressure. Vital signs are stable. ECG shows new 1.5 mm ST depressions in V4–V6. Initial troponin is 0.08 ng/mL (upper limit of normal 0.04 ng/mL). Which of the following best explains this presentation?",
+      "options": {
+        "A": "The atypical symptoms make acute coronary syndrome unlikely in this patient",
+        "B": "Diabetic patients and women frequently present with atypical ACS symptoms without classic chest pressure",
+        "C": "Jaw pain isolated to the jaw suggests a dental etiology rather than cardiac ischemia",
+        "D": "Stable vital signs and absence of diaphoresis rule out an acute ischemic event"
+      },
+      "correctAnswer": "B",
+      "rationale": "Women and diabetic patients are well-documented to present with atypical ACS equivalents including jaw pain, fatigue, dyspnea, and nausea without classic substernal pressure. The combination of new ST depressions and elevated troponin confirms NSTEMI regardless of symptom character. Anchoring on the absence of classic symptoms is a recognized cause of missed ACS in these populations."
+    },
+
+    {
+      "questionId": "np-p1-007",
+      "topicSlug": "chest-pain-differential-primary-care",
+      "lessonPart": "1B",
+      "difficulty": "hard",
+      "stemAnchor": "28yo-male-sharp-positional-CP-pericardial-rub-viral-prodrome",
+      "stem": "A 28-year-old male presents with 3 days of sharp anterior chest pain that is worse when lying flat and is relieved when he sits up and leans forward. He had an upper respiratory illness 10 days ago. Vital signs are normal. On auscultation, a three-component scratching sound is heard. ECG shows diffuse saddle-shaped ST elevation with PR depression in multiple leads. Troponin is mildly elevated at 0.06 ng/mL. What is the most likely diagnosis?",
+      "options": {
+        "A": "ST-elevation myocardial infarction",
+        "B": "Pericarditis with myocardial involvement",
+        "C": "Esophageal spasm",
+        "D": "Pleuritis from viral pneumonia"
+      },
+      "correctAnswer": "B",
+      "rationale": "The classic triad of pericarditis is positional pleuritic chest pain (worse supine, better leaning forward), pericardial friction rub, and diffuse saddle-shaped ST elevation with PR depression on ECG. The mildly elevated troponin suggests myocardial involvement (myopericarditis), commonly seen with viral pericarditis. STEMI is excluded by the diffuse multi-lead pattern and absence of reciprocal changes."
+    },
+    {
+      "questionId": "np-p1-008",
+      "topicSlug": "chest-pain-differential-primary-care",
+      "lessonPart": "1B",
+      "difficulty": "hard",
+      "stemAnchor": "45yo-female-burning-substernal-worse-lying-postprandial",
+      "stem": "A 45-year-old female with BMI 32 presents with a 6-month history of burning substernal pain that is worse after large meals and when lying down. She denies exertional symptoms, radiation to the arm or jaw, and diaphoresis. Antacids partially relieve the pain within minutes. Vital signs and ECG are normal. Which finding would most change your management toward a cardiac workup?",
+      "options": {
+        "A": "Pain that also occurs at night when sleeping",
+        "B": "Pain that is reproducible during physical exertion",
+        "C": "Presence of heartburn after coffee",
+        "D": "Symptom improvement with a PPI trial over 4 weeks"
+      },
+      "correctAnswer": "B",
+      "rationale": "GERD causes postprandial and recumbent burning chest pain that responds to antacids and PPIs — the history here is classic for GERD. However, if pain is reproducible with physical exertion (exertional chest pain), this becomes a cardiac flag requiring stress testing regardless of other GERD features. Nocturnal pain and coffee triggers are consistent with GERD; symptom relief with PPI supports a GI etiology."
+    },
+    {
+      "questionId": "np-p1-009",
+      "topicSlug": "chest-pain-differential-primary-care",
+      "lessonPart": "1B",
+      "difficulty": "hard",
+      "stemAnchor": "30yo-male-chest-pain-point-tender-costochondral-reproducible",
+      "stem": "A 30-year-old male presents with left anterior chest pain that began after moving furniture 2 days ago. On exam, point tenderness is reproducible at the 3rd left costochondral junction with direct palpation. No radiation, no diaphoresis, normal ECG, and no shortness of breath. He is worried he is having a heart attack. Which of the following best guides further evaluation?",
+      "options": {
+        "A": "Perform serial troponins regardless, as musculoskeletal chest pain cannot coexist with ACS",
+        "B": "Reproducible point tenderness at the costochondral junction in a low-risk patient is consistent with costochondritis; no further cardiac workup is indicated",
+        "C": "Order a cardiac stress test before attributing to a musculoskeletal cause",
+        "D": "Refer immediately to cardiology given his young age and chest pain presentation"
+      },
+      "correctAnswer": "B",
+      "rationale": "Costochondritis is the most common cause of musculoskeletal chest pain, defined by reproducible point tenderness at the costochondral junction. In a 30-year-old male without cardiac risk factors, exertional symptoms, radiation, or diaphoresis, with a normal ECG and a clear precipitating mechanical event, the diagnosis is costochondritis. Cardiac workup is not indicated without additional risk factors or atypical features."
+    },
+    {
+      "questionId": "np-p1-010",
+      "topicSlug": "chest-pain-differential-primary-care",
+      "lessonPart": "1B",
+      "difficulty": "hard",
+      "stemAnchor": "55yo-male-dermatomal-chest-pain-burning-no-rash-yet",
+      "stem": "A 55-year-old immunocompromised male (on chronic low-dose prednisone for RA) presents with 3 days of intense burning and tingling pain along his left chest wall in a band-like distribution from posterior to anterior, crossing the midline on neither side. He has no visible rash, normal ECG, and normal troponin. He rates pain as 8/10. What is the most likely diagnosis?",
+      "options": {
+        "A": "Costochondritis",
+        "B": "Pre-eruptive herpes zoster",
+        "C": "Non-ST elevation myocardial infarction",
+        "D": "Intercostal muscle strain"
+      },
+      "correctAnswer": "B",
+      "rationale": "Herpes zoster (shingles) classically presents with burning dermatomal pain that precedes the vesicular rash by 1–5 days. The immunocompromised state (chronic steroids) increases susceptibility to varicella-zoster reactivation. The unilateral dermatomal distribution that does not cross the midline is the key distinguishing feature from other chest pain causes. Antiviral therapy is most effective when started within 72 hours of symptom onset."
+    },
+    {
+      "questionId": "np-p1-011",
+      "topicSlug": "chest-pain-differential-primary-care",
+      "lessonPart": "1B",
+      "difficulty": "hard",
+      "stemAnchor": "32yo-female-palpitations-chest-tightness-fear-dying-normal-ECG",
+      "stem": "A 32-year-old female presents with a third episode of sudden-onset chest tightness, palpitations, shortness of breath, numbness in her hands, and an intense fear of dying. Episodes last 15–20 minutes and resolve spontaneously. ECG during the episode shows sinus tachycardia only. Troponin and D-dimer are normal. Two prior ED visits were unremarkable. Which of the following is the most appropriate next step?",
+      "options": {
+        "A": "Perform coronary angiography to rule out vasospastic angina",
+        "B": "Screen for panic disorder using a validated tool (e.g., PHQ-PD) after completing cardiac workup",
+        "C": "Reassure the patient that anxiety alone is causing her symptoms without further evaluation",
+        "D": "Prescribe a benzodiazepine based on the recurrent episodic nature of her symptoms"
+      },
+      "correctAnswer": "B",
+      "rationale": "Panic disorder is a diagnosis of exclusion that requires completing a cardiac workup before attribution — multiple prior normal evaluations support this. Screening with a validated instrument (PHQ-Panic Disorder) is appropriate once cardiac and pulmonary causes are adequately excluded. Prescribing benzodiazepines without a formal diagnosis or reassuring without evaluation are both inappropriate approaches."
+    },
+    {
+      "questionId": "np-p1-012",
+      "topicSlug": "chest-pain-differential-primary-care",
+      "lessonPart": "1B",
+      "difficulty": "hard",
+      "stemAnchor": "42yo-male-cocaine-use-chest-pain-ECG-normal",
+      "stem": "A 42-year-old male with no known cardiac risk factors presents at 2 AM with acute substernal chest pain. He admits to cocaine use 2 hours ago. Vital signs: HR 118, BP 158/96. ECG shows diffuse ST changes but no clear STEMI pattern. Troponin is pending. Which statement best guides the diagnosis?",
+      "options": {
+        "A": "Cocaine-induced chest pain is almost always musculoskeletal and does not require cardiac workup",
+        "B": "Cocaine can cause ACS at any age through coronary vasospasm and thrombosis, requiring full cardiac evaluation",
+        "C": "The absence of traditional cardiac risk factors makes ACS highly unlikely even with cocaine use",
+        "D": "ECG changes without a STEMI pattern confirm this is a non-cardiac cause"
+      },
+      "correctAnswer": "B",
+      "rationale": "Cocaine induces coronary vasospasm, platelet aggregation, and sympathomimetic hypertension, causing ACS at any age regardless of traditional risk factors. All cocaine-associated chest pain requires troponin measurement, ECG, and full cardiac evaluation. The absence of traditional risk factors is not reassuring in cocaine-associated presentations."
+    },
+
+    {
+      "questionId": "np-p1-013",
+      "topicSlug": "dyspnea-differential-cardiac-pulmonary",
+      "lessonPart": "1A",
+      "difficulty": "hard",
+      "stemAnchor": "72yo-male-orthopnea-PND-bilateral-crackles-S3",
+      "stem": "A 72-year-old male with a history of two prior myocardial infarctions presents with progressive exertional dyspnea, orthopnea requiring 3 pillows, and awakening at night gasping for air. On exam: JVD is present, bilateral lower lobe crackles, and an S3 gallop is auscultated at the apex. CXR shows cardiomegaly and bilateral pulmonary vascular congestion. BNP is 820 pg/mL. What is the most likely diagnosis?",
+      "options": {
+        "A": "Community-acquired pneumonia",
+        "B": "Acute exacerbation of COPD",
+        "C": "Acute decompensated heart failure",
+        "D": "Pulmonary embolism with right heart strain"
+      },
+      "correctAnswer": "C",
+      "rationale": "Orthopnea, paroxysmal nocturnal dyspnea, S3 gallop, JVD, bilateral crackles, cardiomegaly on CXR, and BNP >400 pg/mL are the hallmarks of acute decompensated heart failure. The ischemic cardiomyopathy history (two prior MIs) provides the underlying etiology. BNP <100 pg/mL would effectively exclude heart failure as the cause of dyspnea."
+    },
+    {
+      "questionId": "np-p1-014",
+      "topicSlug": "dyspnea-differential-cardiac-pulmonary",
+      "lessonPart": "1A",
+      "difficulty": "hard",
+      "stemAnchor": "58yo-female-irregular-rhythm-palpitations-dyspnea-acute",
+      "stem": "A 58-year-old female with hypertension presents with sudden-onset dyspnea and palpitations that began 4 hours ago. She denies chest pain. Vital signs: HR 142, irregular, BP 102/68, RR 24, O2 sat 91%. ECG shows an irregularly irregular rhythm with absent P waves and a ventricular rate of 142 bpm. Which diagnosis best explains her hemodynamic compromise?",
+      "options": {
+        "A": "Sinus tachycardia from pulmonary embolism",
+        "B": "Atrial fibrillation with rapid ventricular response",
+        "C": "Supraventricular tachycardia with aberrant conduction",
+        "D": "Ventricular tachycardia"
+      },
+      "correctAnswer": "B",
+      "rationale": "Irregularly irregular rhythm with absent P waves on ECG defines atrial fibrillation. A rapid ventricular rate of 142 bpm in a patient with hypertension (likely diastolic dysfunction) can cause hemodynamic compromise from reduced ventricular filling time. SVT is regular; VT would typically be wide complex; sinus tachycardia in PE would be regular with P waves."
+    },
+    {
+      "questionId": "np-p1-015",
+      "topicSlug": "dyspnea-differential-cardiac-pulmonary",
+      "lessonPart": "1A",
+      "difficulty": "expert",
+      "stemAnchor": "78yo-female-dyspnea-preserved-EF-HFpEF-normal-CXR",
+      "stem": "A 78-year-old female with obesity, hypertension, and T2DM presents with a 3-month history of progressive exertional dyspnea. She cannot climb one flight of stairs without stopping. On exam: mild bibasilar crackles, no S3, mild peripheral edema. Echo shows EF of 60% with grade II diastolic dysfunction. BNP is 310 pg/mL. CXR shows mild vascular congestion but no frank pulmonary edema. What is the most accurate diagnosis?",
+      "options": {
+        "A": "Heart failure with reduced ejection fraction (HFrEF)",
+        "B": "Heart failure with preserved ejection fraction (HFpEF)",
+        "C": "Obesity hypoventilation syndrome",
+        "D": "Pulmonary arterial hypertension"
+      },
+      "correctAnswer": "B",
+      "rationale": "HFpEF (EF ≥50%) is the predominant form in elderly women with hypertension, obesity, and diabetes — the classic demographic. Diastolic dysfunction on echo, elevated BNP, and exertional dyspnea with pulmonary congestion confirm the diagnosis despite a preserved ejection fraction. HFrEF requires EF <40%; pulmonary arterial hypertension typically shows right-sided changes without pulmonary congestion."
+    },
+    {
+      "questionId": "np-p1-016",
+      "topicSlug": "dyspnea-differential-cardiac-pulmonary",
+      "lessonPart": "1A",
+      "difficulty": "expert",
+      "stemAnchor": "65yo-male-dyspnea-pericardial-effusion-cancer-history",
+      "stem": "A 65-year-old male with metastatic melanoma presents with 2 weeks of progressive dyspnea and facial swelling. On exam: BP 90/72, HR 118, JVD to the angle of the jaw, muffled heart sounds, and pulsus paradoxus of 14 mmHg. Lungs are clear. BNP is 95 pg/mL. ECG shows electrical alternans. What finding confirms the underlying cause of his dyspnea?",
+      "options": {
+        "A": "BNP <100 pg/mL rules out heart failure as the cause",
+        "B": "Electrical alternans on ECG in the context of malignancy indicates pericardial effusion with tamponade",
+        "C": "Clear lungs confirm this is a purely cardiac arrhythmic cause of dyspnea",
+        "D": "Muffled heart sounds with pulsus paradoxus indicate pulmonary embolism with right heart strain"
+      },
+      "correctAnswer": "B",
+      "rationale": "Electrical alternans — alternating QRS amplitude on ECG — is a specific finding for large pericardial effusion causing tamponade, particularly common with malignant pericardial disease. The combination of Beck's triad, pulsus paradoxus >10 mmHg, clear lungs, and malignancy history confirms tamponade physiology. BNP <100 pg/mL makes left heart failure unlikely, pointing toward the pericardial cause."
+    },
+    {
+      "questionId": "np-p1-017",
+      "topicSlug": "dyspnea-differential-cardiac-pulmonary",
+      "lessonPart": "1A",
+      "difficulty": "hard",
+      "stemAnchor": "50yo-male-dyspnea-hepatomegaly-ascites-JVD-no-crackles",
+      "stem": "A 50-year-old male presents with progressive dyspnea, abdominal distension, and bilateral leg swelling. On exam: JVD, hepatomegaly, ascites, and marked bilateral pitting edema are present. Lungs are clear. Cardiac exam reveals a right-sided S3. BNP is 680 pg/mL. ECG shows sinus tachycardia. Echo shows EF of 35% with right ventricular dilation and moderate tricuspid regurgitation. What type of heart failure pattern does this represent?",
+      "options": {
+        "A": "Isolated left ventricular failure",
+        "B": "Predominant right ventricular failure with systemic venous congestion",
+        "C": "Constrictive pericarditis",
+        "D": "Hepatic cirrhosis with secondary cardiac involvement"
+      },
+      "correctAnswer": "B",
+      "rationale": "Right ventricular failure causes systemic venous congestion (JVD, hepatomegaly, ascites, peripheral edema) with relatively clear lungs, distinguishing it from left heart failure which causes pulmonary congestion and crackles. RV dilation with tricuspid regurgitation and right-sided S3 confirm the RV failure pattern. Cirrhosis would not cause elevated BNP or cardiac dilation."
+    },
+    {
+      "questionId": "np-p1-018",
+      "topicSlug": "dyspnea-differential-cardiac-pulmonary",
+      "lessonPart": "1A",
+      "difficulty": "hard",
+      "stemAnchor": "45yo-male-dyspnea-palpitations-presyncope-ECG-WPW",
+      "stem": "A 45-year-old male presents with episodic dyspnea associated with rapid palpitations that start and stop suddenly. He has had three episodes in the past 2 months. Today's ECG in sinus rhythm shows a short PR interval and a slurred upstroke of the QRS complex (delta wave). Which arrhythmic risk does this ECG finding confer?",
+      "options": {
+        "A": "Increased risk of ventricular fibrillation via accessory pathway conduction during atrial fibrillation",
+        "B": "Increased risk of complete heart block during sinus tachycardia",
+        "C": "Increased risk of accelerated junctional rhythm during exercise",
+        "D": "Increased risk of torsades de pointes due to prolonged ventricular repolarization"
+      },
+      "correctAnswer": "A",
+      "rationale": "Wolff-Parkinson-White (WPW) pattern — short PR, delta wave — indicates an accessory atrioventricular pathway that bypasses the AV node. If atrial fibrillation develops, impulses can conduct rapidly through the accessory pathway (which lacks decremental conduction), producing ventricular rates >300 bpm and potentially degenerating to ventricular fibrillation. This makes WPW a potentially lethal rhythm abnormality."
+    },
+
+    {
+      "questionId": "np-p1-019",
+      "topicSlug": "dyspnea-differential-cardiac-pulmonary",
+      "lessonPart": "1B",
+      "difficulty": "hard",
+      "stemAnchor": "68yo-male-COPD-increased-sputum-purulent-dyspnea-fever-low",
+      "stem": "A 68-year-old male with known COPD (GOLD stage 3) presents with worsening dyspnea, increased sputum production, and change in sputum to a yellow-green color over 4 days. He has a low-grade fever of 37.9°C. On exam: barrel chest, prolonged expiration, diffuse expiratory wheezes. O2 sat 88% on room air (baseline 92%). SpO2 does not improve significantly with his albuterol MDI. Which diagnosis is most consistent with this presentation?",
+      "options": {
+        "A": "New-onset asthma",
+        "B": "Acute exacerbation of COPD",
+        "C": "Community-acquired pneumonia replacing a COPD diagnosis",
+        "D": "Pulmonary embolism superimposed on COPD"
+      },
+      "correctAnswer": "B",
+      "rationale": "Acute COPD exacerbation (AECOPD) is defined by the Anthonisen criteria: increased dyspnea + increased sputum production + purulent sputum (purulence alone is the most predictive of bacterial trigger). A known COPD diagnosis, characteristic exam findings, and worsening from his known baseline confirm AECOPD. New-onset asthma is unlikely at this age with this smoking and disease history; pneumonia typically causes focal consolidation findings on exam."
+    },
+    {
+      "questionId": "np-p1-020",
+      "topicSlug": "dyspnea-differential-cardiac-pulmonary",
+      "lessonPart": "1B",
+      "difficulty": "hard",
+      "stemAnchor": "35yo-female-episodic-dyspnea-allergen-expiratory-wheeze-atopic",
+      "stem": "A 35-year-old female with a history of eczema and seasonal allergic rhinitis presents with episodic dyspnea and chest tightness triggered by cat exposure. On exam during an episode: bilateral diffuse expiratory wheezes. She is tachycardic at 108, O2 sat 94%. Peak flow is 60% of her personal best. Between episodes, her exam is completely normal. What is the most appropriate next diagnostic step to confirm the diagnosis?",
+      "options": {
+        "A": "Chest CT to evaluate for emphysema",
+        "B": "Spirometry with pre- and post-bronchodilator testing to document reversible airflow obstruction",
+        "C": "Methacholine challenge test as the first-line test",
+        "D": "Cardiac stress test to rule out exercise-induced angina"
+      },
+      "correctAnswer": "B",
+      "rationale": "Asthma is characterized by episodic, reversible airflow obstruction with a trigger-based pattern and an atopic history. Spirometry with bronchodilator challenge is the standard diagnostic test; a ≥12% and ≥200 mL improvement in FEV1 post-bronchodilator confirms reversibility, distinguishing asthma from COPD. Methacholine challenge is reserved for cases where spirometry is normal but asthma is still suspected clinically."
+    },
+    {
+      "questionId": "np-p1-021",
+      "topicSlug": "dyspnea-differential-cardiac-pulmonary",
+      "lessonPart": "1B",
+      "difficulty": "hard",
+      "stemAnchor": "55yo-female-dyspnea-pallor-fatigue-hgb-62",
+      "stem": "A 55-year-old female with menorrhagia secondary to uterine fibroids presents with progressive exertional dyspnea and fatigue over 3 months. She denies chest pain and has no cardiac history. On exam: HR 102 at rest, conjunctival pallor, no murmurs, no crackles, no JVD. Labs: Hgb 6.2 g/dL, MCV 68 fL, ferritin 5 ng/mL. BNP is 42 pg/mL. What is the primary cause of her dyspnea?",
+      "options": {
+        "A": "Heart failure with preserved ejection fraction",
+        "B": "Severe iron-deficiency anemia causing reduced oxygen-carrying capacity",
+        "C": "COPD from chronic inflammatory burden of fibroids",
+        "D": "Pulmonary arterial hypertension from chronic hypoxia"
+      },
+      "correctAnswer": "B",
+      "rationale": "Dyspnea from severe anemia (Hgb 6.2 g/dL) is caused by reduced oxygen-carrying capacity requiring compensatory tachycardia and increased cardiac output — not cardiac or pulmonary structural disease. Microcytosis (MCV 68) and profoundly low ferritin (5 ng/mL) confirm iron-deficiency anemia from menstrual blood loss. BNP <100 pg/mL makes heart failure highly unlikely."
+    },
+    {
+      "questionId": "np-p1-022",
+      "topicSlug": "dyspnea-differential-cardiac-pulmonary",
+      "lessonPart": "1B",
+      "difficulty": "expert",
+      "stemAnchor": "62yo-male-post-op-dyspnea-tachycardia-sat-88-day3",
+      "stem": "A 62-year-old male is seen for a follow-up 3 days after elective right knee replacement surgery. He reports sudden-onset dyspnea since this morning. His O2 sat is 88% on room air, HR 118, BP 106/70, RR 28. There is no productive cough or fever. Right calf is mildly swollen. ECG shows sinus tachycardia with S1Q3T3 pattern. Which diagnostic test should be ordered first?",
+      "options": {
+        "A": "Chest X-ray to rule out pneumonia",
+        "B": "CT pulmonary angiography (CTPA) as the primary diagnostic test given high clinical probability for PE",
+        "C": "D-dimer to determine if CTPA is needed",
+      "D": "Echocardiogram to assess for new left ventricular dysfunction"
+      },
+      "correctAnswer": "B",
+      "rationale": "This is a high-probability PE scenario: post-operative immobilization, unilateral calf swelling, sudden dyspnea, hypoxia, tachycardia, and S1Q3T3 on ECG. With high pretest probability, D-dimer is not appropriate (a negative result cannot rule out PE with high pretest probability), and CTPA should be the first definitive test. Treatment-level anticoagulation should be considered empirically while testing is arranged."
+    },
+    {
+      "questionId": "np-p1-023",
+      "topicSlug": "dyspnea-differential-cardiac-pulmonary",
+      "lessonPart": "1B",
+      "difficulty": "hard",
+      "stemAnchor": "28yo-female-episodic-dyspnea-paresthesias-no-hypoxia-hyperventilation",
+      "stem": "A 28-year-old female with a history of generalized anxiety disorder presents with the third episode of sudden shortness of breath associated with numbness and tingling in her lips and fingers, and carpopedal spasm. Episodes last 10–20 minutes. O2 saturation is 99% during the episode. Arterial blood gas shows pH 7.52, pCO2 28, pO2 102. Which diagnosis is most consistent with this presentation?",
+      "options": {
+        "A": "Pulmonary embolism",
+        "B": "Hyperventilation syndrome with respiratory alkalosis",
+        "C": "Cardiac arrhythmia with intermittent low output",
+        "D": "Asthma with exercise-induced bronchospasm"
+      },
+      "correctAnswer": "B",
+      "rationale": "Hyperventilation syndrome produces respiratory alkalosis (elevated pH, low pCO2) with normal PaO2 and oxygen saturation. The resulting hypocalcemia from alkalosis causes perioral and peripheral paresthesias and carpopedal spasm (Trousseau's sign). Normal O2 saturation during dyspnea is a critical differentiator from true cardiopulmonary causes. A diagnosis of exclusion — cardiac and pulmonary causes must be ruled out before attributing to anxiety-driven hyperventilation."
+    },
+    {
+      "questionId": "np-p1-024",
+      "topicSlug": "dyspnea-differential-cardiac-pulmonary",
+      "lessonPart": "1B",
+      "difficulty": "hard",
+      "stemAnchor": "50yo-male-BMI-42-dyspnea-daytime-somnolence-polycythemia",
+      "stem": "A 50-year-old male with BMI 42 presents with worsening dyspnea on minimal exertion, excessive daytime sleepiness, loud snoring, and morning headaches. His wife reports witnessed apneas. Labs show Hgb 18.5 g/dL (polycythemia). ABG: pH 7.34, pCO2 54, pO2 58 on room air. He has no wheezing and normal spirometry. What is the most likely underlying diagnosis?",
+      "options": {
+        "A": "Obstructive sleep apnea only",
+        "B": "Obesity hypoventilation syndrome with chronic hypercapnia",
+        "C": "COPD with cor pulmonale",
+        "D": "Pulmonary arterial hypertension from OSA"
+      },
+      "correctAnswer": "B",
+      "rationale": "Obesity hypoventilation syndrome (OHS, Pickwickian syndrome) presents with daytime hypercapnia (PaCO2 >45) + hypoxemia in an obese patient without other causes of hypoventilation. Polycythemia is a compensatory response to chronic hypoxia. While OSA is commonly comorbid, OSA alone does not cause daytime hypercapnia — the presence of awake hypercapnia defines OHS and requires NIV (BiPAP) rather than CPAP alone."
+    },
+
+    {
+      "questionId": "np-p1-025",
+      "topicSlug": "abdominal-pain-differential-age",
+      "lessonPart": "1A",
+      "difficulty": "hard",
+      "stemAnchor": "24yo-male-periumbilical-to-RLQ-anorexia-low-grade-fever",
+      "stem": "A 24-year-old male presents with a 12-hour history of pain that began as periumbilical cramping and has now localized to the right lower quadrant. He has anorexia, nausea, and low-grade fever of 38.1°C. On exam: maximal tenderness at McBurney's point, positive Rovsing's sign, and voluntary guarding. WBC is 13,800 with 85% neutrophils. Which scoring tool best guides the next step?",
+      "options": {
+        "A": "Ottawa Knee Rules",
+        "B": "Alvarado score",
+        "C": "CURB-65 score",
+        "D": "Wells score"
+      },
+      "correctAnswer": "B",
+      "rationale": "The Alvarado score (MANTRELS) quantifies appendicitis probability using migration of pain, anorexia, nausea/vomiting, RLQ tenderness, rebound tenderness, elevated temperature, leukocytosis, and left shift. A score ≥7 suggests appendicitis requiring surgical consultation; 4–6 is intermediate and warrants CT imaging for further evaluation. Scores above 7 in this presentation support immediate surgical referral."
+    },
+    {
+      "questionId": "np-p1-026",
+      "topicSlug": "abdominal-pain-differential-age",
+      "lessonPart": "1A",
+      "difficulty": "expert",
+      "stemAnchor": "75yo-male-pain-out-of-proportion-AF-metabolic-acidosis",
+      "stem": "A 75-year-old male with atrial fibrillation (on warfarin, INR subtherapeutic at 1.4) presents with severe diffuse abdominal pain that began 2 hours ago. On exam, the abdomen is soft with minimal tenderness — he describes the pain as 10/10 but your exam findings do not match. HR 98, BP 108/68. Labs: lactate 4.8 mmol/L, WBC 14,200. Abdominal X-ray shows no free air. What is the most likely diagnosis?",
+      "options": {
+        "A": "Perforated gastric ulcer",
+        "B": "Acute mesenteric ischemia",
+        "C": "Acute diverticulitis with early perforation",
+        "D": "Large bowel obstruction"
+      },
+      "correctAnswer": "B",
+      "rationale": "Acute mesenteric ischemia classically presents with 'pain out of proportion to exam' — severe pain with a soft, minimally tender abdomen early in the course. Elevated lactate reflects intestinal ischemia and impending necrosis. The subtherapeutic INR in a patient with AF raises concern for arterial embolism to the superior mesenteric artery — the most common mechanism. CT angiography is the diagnostic study of choice; emergent vascular surgery consultation is required."
+    },
+    {
+      "questionId": "np-p1-027",
+      "topicSlug": "abdominal-pain-differential-age",
+      "lessonPart": "1A",
+      "difficulty": "hard",
+      "stemAnchor": "60yo-female-RUQ-pain-fever-jaundice-Murphy-positive",
+      "stem": "A 60-year-old female with obesity and T2DM presents with 8 hours of right upper quadrant pain radiating to the right shoulder, fever of 38.9°C, nausea, and anorexia. Murphy's sign is positive. Labs: WBC 16,400, total bilirubin 1.8, ALT 68, ALP 142. Which diagnosis is most consistent with this presentation?",
+      "options": {
+        "A": "Choledocholithiasis without cholecystitis",
+        "B": "Acute cholecystitis",
+        "C": "Ascending cholangitis",
+        "D": "Acute hepatitis A"
+      },
+      "correctAnswer": "B",
+      "rationale": "Acute cholecystitis presents with RUQ pain, fever, leukocytosis, and positive Murphy's sign (inspiratory arrest with deep RUQ palpation). Mild bilirubin elevation can occur from Mirizzi syndrome or hepatic inflammation, but the primary diagnosis is cholecystitis. Ascending cholangitis (Charcot's triad) requires frank jaundice + fever + RUQ pain — this patient has mild hyperbilirubinemia, not obstructive jaundice. Ultrasound of the gallbladder is the next step."
+    },
+    {
+      "questionId": "np-p1-028",
+      "topicSlug": "abdominal-pain-differential-age",
+      "lessonPart": "1A",
+      "difficulty": "expert",
+      "stemAnchor": "80yo-male-pulsatile-abdominal-mass-syncope-back-pain",
+      "stem": "An 80-year-old male with hypertension and a 40 pack-year smoking history presents with sudden-onset severe lower back and abdominal pain. He briefly lost consciousness before arrival. On exam: BP 88/58, HR 128, and a pulsatile mid-abdominal mass is palpable. Abdomen is tender. He appears pale and diaphoretic. What is the most appropriate immediate action?",
+      "options": {
+        "A": "Order emergent CT abdomen with contrast to confirm the diagnosis before intervention",
+        "B": "Activate EMS and arrange immediate vascular surgical evaluation — suspected ruptured AAA",
+        "C": "Start IV fluids aggressively to 2 liters and reassess blood pressure before further action",
+        "D": "Obtain abdominal ultrasound at bedside to confirm AAA before transfer"
+      },
+      "correctAnswer": "B",
+      "rationale": "A ruptured abdominal aortic aneurysm (AAA) presents with the classic triad of sudden severe abdominal/back pain, a pulsatile abdominal mass, and hemodynamic instability. This is a surgical emergency with >80% mortality without immediate operative intervention. Delay for imaging in a hemodynamically unstable patient is inappropriate — clinical diagnosis is sufficient to activate emergency transfer. Aggressive IV fluid resuscitation before surgical control can worsen outcomes by elevating BP and dislodging the retroperitoneal tamponade."
+    },
+    {
+      "questionId": "np-p1-029",
+      "topicSlug": "abdominal-pain-differential-age",
+      "lessonPart": "1A",
+      "difficulty": "hard",
+      "stemAnchor": "55yo-male-LLQ-pain-fever-altered-bowel-CT-diverticula",
+      "stem": "A 55-year-old male presents with 3 days of left lower quadrant pain, low-grade fever of 38.0°C, and constipation. He had a similar episode 1 year ago that resolved with antibiotics. On exam: LLQ tenderness without peritoneal signs. WBC 11,800. CT abdomen/pelvis shows colonic diverticula with pericolonic fat stranding but no free air, no abscess. What is the most appropriate diagnosis and initial management decision?",
+      "options": {
+        "A": "Uncomplicated diverticulitis; may be managed outpatient with oral antibiotics in appropriate candidates",
+        "B": "Perforated diverticulitis; emergent surgical consultation required",
+        "C": "Ischemic colitis; colonoscopy is indicated within 24 hours",
+        "D": "Colorectal cancer; urgent colonoscopy referral needed"
+      },
+      "correctAnswer": "A",
+      "rationale": "Uncomplicated acute diverticulitis (no perforation, abscess, fistula, or obstruction) in an immunocompetent patient with mild symptoms, tolerating oral intake, and no peritoneal signs can be managed outpatient with oral antibiotics (metronidazole + ciprofloxacin or amoxicillin-clavulanate) and liquid diet. CT without free air or abscess confirms uncomplicated disease. Colonoscopy is recommended 6–8 weeks after resolution (not acutely) to exclude underlying neoplasm."
+    },
+    {
+      "questionId": "np-p1-030",
+      "topicSlug": "abdominal-pain-differential-age",
+      "lessonPart": "1A",
+      "difficulty": "expert",
+      "stemAnchor": "68yo-female-RUQ-fever-jaundice-hypotension-altered-Charcot",
+      "stem": "A 68-year-old female with known choledocholithiasis presents with right upper quadrant pain, fever of 39.8°C, jaundice, hypotension (BP 84/54), and confusion. She appears septic. Labs: WBC 22,000, total bilirubin 8.6, ALP markedly elevated, blood cultures pending. Which condition does this clinical picture describe?",
+      "options": {
+        "A": "Acute cholecystitis with systemic inflammatory response",
+        "B": "Ascending cholangitis (Reynold's pentad)",
+        "C": "Acute hepatitis with hepatic encephalopathy",
+        "D": "Pancreatitis with biliary obstruction"
+      },
+      "correctAnswer": "B",
+      "rationale": "Reynold's pentad — Charcot's triad (RUQ pain + fever + jaundice) plus hypotension and altered mental status — indicates severe ascending cholangitis, a life-threatening infection of the biliary tract. Emergent ERCP (biliary decompression) is the treatment of choice. This presentation requires immediate ED transfer and broad-spectrum antibiotics covering gram-negative organisms. Cholecystitis alone does not cause jaundice or biliary obstruction features."
+    },
+    {
+      "questionId": "np-p1-031",
+      "topicSlug": "abdominal-pain-differential-age",
+      "lessonPart": "1A",
+      "difficulty": "hard",
+      "stemAnchor": "65yo-female-colicky-pain-distension-no-bowel-sounds-constipation",
+      "stem": "A 65-year-old female with a history of prior abdominal surgeries presents with 2 days of colicky abdominal pain, abdominal distension, inability to pass stool or gas, and vomiting. She has not had a bowel movement in 3 days. On exam: abdomen is distended with high-pitched tinkling bowel sounds early in the exam and now silent. Abdominal X-ray shows dilated loops of small bowel with air-fluid levels. What is the most likely diagnosis?",
+      "options": {
+        "A": "Acute diverticulitis with ileus",
+        "B": "Small bowel obstruction (SBO)",
+        "C": "Large bowel obstruction from colonic volvulus",
+        "D": "Paralytic ileus from viral gastroenteritis"
+      },
+      "correctAnswer": "B",
+      "rationale": "Small bowel obstruction typically presents in patients with prior abdominal surgery (adhesions are the most common cause) with colicky pain, distension, vomiting, obstipation, and dilated small bowel loops with air-fluid levels on plain X-ray. Absent bowel sounds indicate advanced obstruction. Distinguishing SBO from large bowel obstruction is important: SBO shows central small bowel dilation; LBO shows peripheral colonic dilation."
+    },
+
+    {
+      "questionId": "np-p1-032",
+      "topicSlug": "abdominal-pain-differential-age",
+      "lessonPart": "1B",
+      "difficulty": "expert",
+      "stemAnchor": "24yo-female-missed-period-LLQ-pain-syncope-shoulder-pain",
+      "stem": "A 24-year-old female presents with sudden severe right lower pelvic pain, one missed period, and a positive home pregnancy test. She felt faint in the bathroom. On exam: BP 88/54, HR 128, diffuse pelvic tenderness with cervical motion tenderness, and right adnexal fullness. Transvaginal ultrasound shows no intrauterine pregnancy and free fluid in the cul-de-sac. What is the most appropriate next step?",
+      "options": {
+        "A": "Administer methotrexate and arrange outpatient follow-up",
+        "B": "Activate EMS for emergent transfer — suspected ruptured ectopic pregnancy",
+        "C": "Perform serial β-hCG measurements over 48 hours to confirm ectopic location",
+        "D": "Schedule a repeat ultrasound in one week if β-hCG is below the discriminatory zone"
+      },
+      "correctAnswer": "B",
+      "rationale": "A ruptured ectopic pregnancy presents with hemodynamic instability (hypotension, tachycardia), positive pregnancy test, no intrauterine pregnancy on ultrasound, and hemoperitoneum (free fluid in cul-de-sac with referred diaphragmatic irritation causing shoulder pain). This is a surgical emergency requiring emergent laparotomy or laparoscopy — methotrexate is only appropriate for unruptured, stable ectopic pregnancies."
+    },
+    {
+      "questionId": "np-p1-033",
+      "topicSlug": "abdominal-pain-differential-age",
+      "lessonPart": "1B",
+      "difficulty": "expert",
+      "stemAnchor": "22yo-female-sudden-unilateral-pelvic-pain-vomiting-ovarian-cyst-hx",
+      "stem": "A 22-year-old female with a known right ovarian cyst (5 cm, seen on prior ultrasound) presents with sudden-onset severe right pelvic pain and vomiting that began 3 hours ago. She is afebrile. On exam: right adnexal tenderness, no CMT, no vaginal discharge. WBC is normal. Ultrasound shows an enlarged right ovary with absent Doppler flow. Pregnancy test is negative. What is the most likely diagnosis?",
+      "options": {
+        "A": "Pelvic inflammatory disease",
+        "B": "Ovarian torsion",
+        "C": "Ruptured ovarian cyst",
+        "D": "Appendicitis in a right-sided position"
+      },
+      "correctAnswer": "B",
+      "rationale": "Ovarian torsion presents with sudden severe unilateral pelvic pain, nausea/vomiting, an enlarged ovary, and absent or reduced ovarian Doppler flow on ultrasound — confirming compromised blood supply. A pre-existing ovarian cyst (>5 cm) is the strongest risk factor. Absence of fever and CMT distinguish it from PID. This is a surgical emergency requiring immediate gynecological evaluation to preserve ovarian viability."
+    },
+    {
+      "questionId": "np-p1-034",
+      "topicSlug": "abdominal-pain-differential-age",
+      "lessonPart": "1B",
+      "difficulty": "hard",
+      "stemAnchor": "25yo-female-bilateral-lower-abdominal-CMT-vaginal-discharge-fever",
+      "stem": "A 25-year-old sexually active female presents with bilateral lower abdominal pain for 5 days, fever of 38.4°C, mucopurulent vaginal discharge, and dyspareunia. On bimanual exam: cervical motion tenderness, bilateral adnexal tenderness, and uterine tenderness. WBC 13,200. Pregnancy test is negative. Gonorrhea and chlamydia NAATs are pending. What is the minimum clinical criteria required to diagnose and initiate treatment for this condition?",
+      "options": {
+        "A": "Positive gonorrhea or chlamydia NAAT result before treatment",
+        "B": "Uterine tenderness, adnexal tenderness, OR cervical motion tenderness in a sexually active woman with no other identified cause",
+        "C": "Fever + pelvic pain + vaginal discharge must all be present simultaneously",
+        "D": "Transvaginal ultrasound confirming tubo-ovarian complex"
+      },
+      "correctAnswer": "B",
+      "rationale": "The CDC minimum diagnostic criteria for PID requires at least ONE of the following in a sexually active woman with no other cause: uterine tenderness, adnexal tenderness, or cervical motion tenderness. A high index of suspicion and empiric treatment are recommended because undertreatment leads to infertility, ectopic pregnancy, and chronic pelvic pain. Treatment should not be delayed pending culture results."
+    },
+    {
+      "questionId": "np-p1-035",
+      "topicSlug": "abdominal-pain-differential-age",
+      "lessonPart": "1B",
+      "difficulty": "expert",
+      "stemAnchor": "18mo-male-episodic-severe-crying-currant-jelly-stool-RUQ-mass",
+      "stem": "An 18-month-old male is brought by his parents for episodic bouts of severe crying, during which he draws his knees to his chest. Between episodes he appears lethargic. He has vomited twice. His last stool was described as 'bloody and mucousy, like jelly.' On exam: a sausage-shaped mass is palpable in the right upper quadrant. What is the most appropriate next step?",
+      "options": {
+        "A": "Stool culture and outpatient observation for 24 hours",
+        "B": "Emergent transfer for air or barium enema reduction under fluoroscopy",
+        "C": "Oral rehydration and return if vomiting persists",
+        "D": "Abdominal X-ray to confirm the diagnosis before any intervention"
+      },
+      "correctAnswer": "B",
+      "rationale": "Intussusception — the telescoping of one bowel segment into another — is the most common cause of bowel obstruction in children under 3 years. The classic presentation includes episodic colicky pain with knee-to-chest posturing, lethargy between episodes, and currant jelly stool (blood and mucus from mucosal ischemia). A sausage-shaped RUQ mass confirms the diagnosis. Non-operative reduction with air or hydrostatic (barium) enema under fluoroscopy is first-line treatment; surgical reduction is required for failed enema or perforation."
+    },
+    {
+      "questionId": "np-p1-036",
+      "topicSlug": "abdominal-pain-differential-age",
+      "lessonPart": "1B",
+      "difficulty": "expert",
+      "stemAnchor": "neonate-bilious-vomiting-malrotation-emergency",
+      "stem": "A 4-day-old male infant is brought to the clinic with bilious (green) vomiting and feeding intolerance that began this morning. He was born full-term with an uncomplicated delivery. On exam: slightly distended abdomen, infant is irritable. Vital signs are stable. What is the most appropriate action?",
+      "options": {
+        "A": "Reassure parents that bilious vomiting in a neonate is usually from overfeeding",
+        "B": "Prescribe simethicone for colic and follow up in 2 days",
+        "C": "Immediately transfer to pediatric ED — bilious vomiting in a neonate indicates malrotation with volvulus until proven otherwise",
+        "D": "Order upper GI series on an outpatient basis within 48 hours"
+      },
+      "correctAnswer": "C",
+      "rationale": "Bilious vomiting in a neonate is a surgical emergency until proven otherwise. Malrotation with midgut volvulus can occlude the superior mesenteric artery, leading to total midgut infarction within hours. This diagnosis carries high mortality with delayed recognition. An upper GI series is the diagnostic study of choice — performed emergently in the pediatric ED setting, not scheduled outpatient."
+    },
+    {
+      "questionId": "np-p1-037",
+      "topicSlug": "abdominal-pain-differential-age",
+      "lessonPart": "1B",
+      "difficulty": "hard",
+      "stemAnchor": "10yo-female-periumbilical-pain-functional-no-weight-loss",
+      "stem": "A 10-year-old female presents with a 4-month history of recurrent periumbilical abdominal pain occurring 2–3 times per week, lasting 30–60 minutes. Pain does not awaken her from sleep. She has no vomiting, diarrhea, blood in stool, fever, weight loss, or growth failure. Family history is notable for anxiety. Physical exam including abdominal palpation is normal. Labs and urinalysis are normal. Which statement best characterizes this presentation?",
+      "options": {
+        "A": "This pattern requires colonoscopy to exclude early-onset IBD",
+        "B": "Functional abdominal pain is likely; red flag features are absent and the periumbilical recurrent pattern fits functional disorder",
+        "C": "Appendicitis must be excluded with CT scan given the recurrent nature",
+        "D": "Nocturnal symptoms must be present to diagnose functional abdominal pain"
+      },
+      "correctAnswer": "B",
+      "rationale": "Functional abdominal pain in children presents with recurrent periumbilical pain, normal growth, no alarm features (weight loss, nocturnal awakening, blood in stool, fever, family IBD history, RLQ localization), and normal labs. Absence of red flag features and the periumbilical location (not RLQ) make structural pathology unlikely. Extensive imaging is not indicated without red flags and may reinforce illness behavior."
+    },
+
+    {
+      "questionId": "np-p1-038",
+      "topicSlug": "headache-differential-red-flags",
+      "lessonPart": "1A",
+      "difficulty": "hard",
+      "stemAnchor": "29yo-female-unilateral-throbbing-photophobia-aura-visual-scotoma",
+      "stem": "A 29-year-old female presents with a 3-year history of recurrent severe headaches. Each episode begins with a 30-minute period of visual 'zigzag lines' spreading across her visual field, followed by a unilateral throbbing headache with nausea, photophobia, and phonophobia lasting 8–12 hours. She must lie down in a dark room during attacks. Between attacks she is asymptomatic. Which diagnosis does this presentation most accurately describe?",
+      "options": {
+        "A": "Tension-type headache with photosensitivity",
+        "B": "Migraine with typical aura",
+        "C": "Cluster headache with visual prodrome",
+        "D": "Transient ischemic attack with subsequent headache"
+      },
+      "correctAnswer": "B",
+      "rationale": "Migraine with typical aura meets all criteria: visual aura (fortification spectra/scotoma) spreading over 20–60 minutes, followed by unilateral throbbing headache with nausea, photophobia, and phonophobia, lasting 4–72 hours. The complete resolution between attacks distinguishes this from chronic daily headache. TIA causes focal neurological deficits without subsequent headache of this character; cluster headache features autonomic symptoms rather than nausea with phonophobia."
+    },
+    {
+      "questionId": "np-p1-039",
+      "topicSlug": "headache-differential-red-flags",
+      "lessonPart": "1A",
+      "difficulty": "hard",
+      "stemAnchor": "35yo-male-cluster-periorbital-tearing-same-time-nightly-alcohol-trigger",
+      "stem": "A 35-year-old male presents with a 3-week history of nightly severe left periorbital pain that awakens him from sleep at 1 AM each night. Each episode lasts 45–90 minutes and is associated with tearing of the left eye, left-sided nasal congestion, and left eyelid drooping. He noticed that drinking a glass of wine last weekend triggered an attack in the afternoon. On exam between episodes: completely normal. Which diagnosis does this pattern represent?",
+      "options": {
+        "A": "Migraine with autonomic features",
+        "B": "Trigeminal neuralgia",
+        "C": "Cluster headache",
+        "D": "Paroxysmal hemicrania"
+      },
+      "correctAnswer": "C",
+      "rationale": "Cluster headache is characterized by severe unilateral periorbital/temporal pain with ipsilateral autonomic features (lacrimation, rhinorrhea, ptosis/miosis, conjunctival injection) occurring at the same time daily ('alarm clock headache'), lasting 15–180 minutes. Alcohol reliably triggers attacks during active cluster periods. Male predominance (3:1) and the extreme severity with restlessness distinguish it from migraine. Paroxysmal hemicrania has similar features but responds absolutely to indomethacin and attacks are shorter (2–30 minutes)."
+    },
+    {
+      "questionId": "np-p1-040",
+      "topicSlug": "headache-differential-red-flags",
+      "lessonPart": "1A",
+      "difficulty": "hard",
+      "stemAnchor": "22yo-female-bilateral-pressure-headache-no-nausea-work-stress",
+      "stem": "A 22-year-old female presents with daily bifrontal pressure-like headaches for the past month. She describes a 'tight band around my head' rated 5–6/10. She has no nausea, no vomiting, no photophobia, and no aura. Headaches do not worsen with physical activity. She recently started a stressful job. Between headaches she is entirely normal. Neurological exam is normal. What is the most appropriate initial management?",
+      "options": {
+        "A": "Order MRI brain immediately given daily headache frequency",
+        "B": "Diagnose tension-type headache clinically; manage with NSAIDs, lifestyle modification, and stress management",
+        "C": "Prescribe a triptan as first-line abortive therapy",
+        "D": "Perform lumbar puncture to exclude low-grade meningitis"
+      },
+      "correctAnswer": "B",
+      "rationale": "Tension-type headache is bilateral, pressure/band-like, mild to moderate, without nausea/vomiting, and is neither aggravated by physical activity nor associated with both photophobia and phonophobia (one may be present). In a young patient without red flag features (SNOOP4 negative), clinical diagnosis is appropriate without imaging. Triptans are indicated for migraine, not TTH; LP and imaging are not required without red flags."
+    },
+    {
+      "questionId": "np-p1-041",
+      "topicSlug": "headache-differential-red-flags",
+      "lessonPart": "1A",
+      "difficulty": "expert",
+      "stemAnchor": "35yo-female-migraine-ocp-aura-stroke-risk",
+      "stem": "A 35-year-old female with a 5-year history of migraine with visual aura presents to establish care. She is currently using a combined oral contraceptive pill (estrogen + progestin) for contraception and reports headaches have worsened since starting OCP 6 months ago. Which statement best guides management?",
+      "options": {
+        "A": "Combined OCP use is acceptable in migraine with aura; headache worsening is unrelated",
+        "B": "Migraine with aura plus combined OCP use is an absolute contraindication due to significantly increased ischemic stroke risk",
+        "C": "Progestin-only pills are also contraindicated in migraine with aura",
+        "D": "Switching to an intrauterine device would not be appropriate given her reproductive health needs"
+      },
+      "correctAnswer": "B",
+      "rationale": "Migraine with aura combined with combined estrogen-containing contraceptives carries a synergistically increased risk of ischemic stroke (relative risk approximately 8-fold compared to neither risk factor alone). Combined OCP is an absolute contraindication (WHO Category 4) in women with migraine with aura. Progestin-only methods (POP, LNG-IUD, implant) are safe (WHO Category 1–2) alternatives. This represents a high-yield prescribing safety question embedded in a differential/diagnosis context."
+    },
+    {
+      "questionId": "np-p1-042",
+      "topicSlug": "headache-differential-red-flags",
+      "lessonPart": "1A",
+      "difficulty": "hard",
+      "stemAnchor": "40yo-female-daily-headache-ibuprofen-15-days-month",
+      "stem": "A 40-year-old female with a history of episodic migraine presents with daily headaches for the past 3 months that she rates 4–6/10. She has been taking ibuprofen almost every day to control them. She notes her headaches 'feel different' from her migraines and are no longer responding to ibuprofen. She has not started any new medications. What is the most likely diagnosis for this change in her headache pattern?",
+      "options": {
+        "A": "Conversion from migraine to tension-type headache",
+        "B": "Medication overuse headache (MOH) secondary to frequent analgesic use",
+        "C": "New secondary headache requiring brain MRI",
+        "D": "Migraine transformation to chronic migraine from hormonal changes"
+      },
+      "correctAnswer": "B",
+      "rationale": "Medication overuse headache (MOH, formerly 'rebound headache') develops when analgesics or triptans are used ≥10–15 days/month for >3 months. The hallmark is a paradoxical increase in headache frequency and a change in headache character in a patient who had episodic headache. NSAIDs, triptans, and opioids are common culprits. Treatment requires withdrawal of the overused medication — an often difficult conversation requiring patient education."
+    },
+    {
+      "questionId": "np-p1-043",
+      "topicSlug": "headache-differential-red-flags",
+      "lessonPart": "1A",
+      "difficulty": "hard",
+      "stemAnchor": "50yo-male-exertional-headache-Valsalva-coughing-no-prior-hx",
+      "stem": "A 50-year-old male presents with a new headache that develops consistently when he coughs or strains during a bowel movement. The headache peaks within seconds, is bilateral and occipital, and resolves within a few minutes. He has no prior headache history. Neurological exam is normal. Which is the most appropriate next step?",
+      "options": {
+        "A": "Reassure him this is primary cough headache and no workup is needed",
+        "B": "Order MRI brain and MRI of the posterior fossa to exclude structural causes",
+        "C": "Prescribe indomethacin empirically as the treatment for primary cough headache",
+        "D": "Order lumbar puncture to exclude subarachnoid hemorrhage"
+      },
+      "correctAnswer": "B",
+      "rationale": "Valsalva-triggered headaches in a new presentation (no prior history, age >40) require imaging to exclude secondary causes — particularly Chiari malformation, posterior fossa mass, or craniocervical junction pathology. Primary cough headache is a diagnosis of exclusion. MRI of the brain with attention to the posterior fossa is indicated before attributing this to a benign primary cough headache. This is an SNOOP4 red flag (Precipitation by Valsalva)."
+    },
+    {
+      "questionId": "np-p1-044",
+      "topicSlug": "headache-differential-red-flags",
+      "lessonPart": "1B",
+      "difficulty": "expert",
+      "stemAnchor": "45yo-male-thunderclap-worst-headache-life-SAH-workup",
+      "stem": "A 45-year-old male presents to your office with a sudden-onset severe headache he describes as 'the worst headache of my life' that reached maximum intensity within seconds while he was exercising. He has had no prior similar headaches. He vomited once. Neurological exam is normal. Vital signs are stable. Non-contrast CT head is performed and is read as normal. What is the most appropriate next step?",
+      "options": {
+        "A": "Discharge with triptan prescription for suspected migraine",
+        "B": "Order lumbar puncture to evaluate for xanthochromia",
+        "C": "Order CT angiography of the head only if neurological deficits develop",
+        "D": "Observe in office for 2 hours and discharge if no change"
+      },
+      "correctAnswer": "B",
+      "rationale": "A thunderclap headache (maximal at onset, 'worst headache of life') requires exclusion of subarachnoid hemorrhage (SAH) even with a normal CT head. Non-contrast CT is approximately 95% sensitive for SAH within 6 hours of onset but sensitivity drops significantly after 6–12 hours. Lumbar puncture to detect xanthochromia (yellow discoloration from bilirubin from hemolyzed red cells) is the next mandatory step when CT is negative. Missing a sentinel SAH leads to catastrophic rebleeding."
+    },
+    {
+      "questionId": "np-p1-045",
+      "topicSlug": "headache-differential-red-flags",
+      "lessonPart": "1B",
+      "difficulty": "expert",
+      "stemAnchor": "68yo-female-temporal-headache-jaw-claudication-ESR-elevated",
+      "stem": "A 68-year-old female presents with a 3-week history of new left temporal headache, scalp tenderness when combing her hair, and jaw pain that develops after 2–3 minutes of chewing requiring her to stop. Vision in her left eye has been transiently blurry on two occasions. ESR is 88 mm/hr. CRP is 46 mg/L. On exam: the left temporal artery is palpable, tender, and non-pulsatile. What is the most appropriate immediate action?",
+      "options": {
+        "A": "Schedule temporal artery biopsy within 2 weeks before starting any treatment",
+        "B": "Start high-dose prednisone immediately; do not delay for biopsy results",
+        "C": "Prescribe sumatriptan and follow up in 1 month",
+        "D": "Order MRI brain to exclude space-occupying lesion causing headache"
+      },
+      "correctAnswer": "B",
+      "rationale": "Giant cell arteritis (GCA) presenting with visual symptoms (amaurosis fugax) requires immediate high-dose corticosteroids (prednisone 1 mg/kg/day, typically 40–60 mg) to prevent permanent vision loss from anterior ischemic optic neuropathy — the most feared complication. Temporal artery biopsy should be performed within 1–2 weeks of starting steroids (biopsy remains diagnostic for up to 2 weeks after initiation), but treatment must not be delayed awaiting biopsy results."
+    },
+    {
+      "questionId": "np-p1-046",
+      "topicSlug": "headache-differential-red-flags",
+      "lessonPart": "1B",
+      "difficulty": "expert",
+      "stemAnchor": "32yo-male-headache-fever-neck-stiffness-Kernig-meningococcal-rash",
+      "stem": "A 32-year-old male presents with 6 hours of severe headache, fever of 40.1°C, neck stiffness, and photophobia. He is confused and difficult to arouse. Exam reveals a positive Kernig's sign and a petechial rash on his trunk and extremities. What is the most appropriate next action in this primary care office setting?",
+      "options": {
+        "A": "Perform lumbar puncture immediately to confirm the diagnosis before any treatment",
+        "B": "Administer IV ceftriaxone immediately and call 911 — do not delay for LP",
+        "C": "Order a CT head first to rule out increased ICP before LP",
+        "D": "Start acetaminophen for fever and transfer to ED non-urgently"
+      },
+      "correctAnswer": "B",
+      "rationale": "Bacterial meningitis with a purpuric/petechial rash strongly suggests meningococcemia — a rapidly fatal infection. When bacterial meningitis is suspected, antibiotics (ceftriaxone 2g IV/IM) must be given immediately before or concurrently with transfer if hospital resources are unavailable; delaying antibiotics to perform an LP in this setting is inappropriate and deadly. In the hospital setting, CT head is recommended before LP if signs of increased ICP or focal deficits are present, but antibiotics should not be delayed even then."
+    },
+    {
+      "questionId": "np-p1-047",
+      "topicSlug": "headache-differential-red-flags",
+      "lessonPart": "1B",
+      "difficulty": "expert",
+      "stemAnchor": "40yo-female-headache-vision-changes-HTN-210-120-encephalopathy",
+      "stem": "A 40-year-old female with poorly controlled hypertension presents with the worst headache of her life, blurry vision, and confusion developing over 6 hours. Vital signs: BP 218/126, HR 88, RR 16, O2 sat 98%. Neurological exam shows mild disorientation but no focal deficits. Fundoscopic exam reveals bilateral papilledema. What diagnosis does this constellation of findings represent?",
+      "options": {
+        "A": "Hypertensive urgency — not an emergency as there is no target organ damage",
+        "B": "Hypertensive emergency with hypertensive encephalopathy",
+        "C": "Primary intracranial hypertension (pseudotumor cerebri)",
+        "D": "Ischemic stroke with secondary hypertensive response"
+      },
+      "correctAnswer": "B",
+      "rationale": "Hypertensive emergency is defined by markedly elevated blood pressure with acute target organ damage — in this case, hypertensive encephalopathy (confusion, papilledema, headache) from cerebral autoregulation failure. BP >180/120 with neurological symptoms and papilledema confirms encephalopathy. This requires emergent antihypertensive therapy (aim to reduce MAP by 10–25% in the first hour) in a monitored ED setting — not oral outpatient management."
+    },
+    {
+      "questionId": "np-p1-048",
+      "topicSlug": "headache-differential-red-flags",
+      "lessonPart": "1B",
+      "difficulty": "expert",
+      "stemAnchor": "60yo-male-lung-cancer-new-progressive-morning-headache-worse-supine",
+      "stem": "A 60-year-old male with a history of stage III lung cancer (currently on chemotherapy) presents with a 3-week progressive headache that is worst in the morning, worsened when lying flat, and accompanied by projectile vomiting without preceding nausea. He denies fever. On exam: subtle right-sided pronator drift and brisk deep tendon reflexes. Fundoscopy shows blurred disc margins bilaterally. Which is the most likely cause of his headache?",
+      "options": {
+        "A": "Chemotherapy-induced headache",
+        "B": "Brain metastases with increased intracranial pressure",
+        "C": "Tension-type headache exacerbated by sleep disruption",
+        "D": "Migraine de novo in the setting of cancer treatment"
+      },
+      "correctAnswer": "B",
+      "rationale": "Morning headache worsened by lying flat, projectile vomiting, papilledema (blurred disc margins), focal neurological signs (pronator drift), and a known malignancy are the hallmarks of brain metastases with elevated intracranial pressure. Lung cancer is the most common primary tumor causing brain metastases. Urgent non-contrast CT brain followed by MRI with gadolinium is required; emergent neurosurgical consultation is indicated for signs of herniation."
+    },
+    {
+      "questionId": "np-p1-049",
+      "topicSlug": "headache-differential-red-flags",
+      "lessonPart": "1B",
+      "difficulty": "hard",
+      "stemAnchor": "35yo-obese-female-daily-headache-pulsatile-tinnitus-visual-obscurations-papilledema",
+      "stem": "A 35-year-old obese female (BMI 38) presents with daily headaches for 4 months with a pulsatile quality, bilateral transient visual obscurations (brief vision graying that lasts seconds), and intermittent pulsatile tinnitus. On neurological exam: papilledema is present. MRI brain is normal. MRV (MR venography) is normal. CSF opening pressure on LP is 32 cmH2O. What is the most likely diagnosis?",
+      "options": {
+        "A": "Migraine with aura and secondary papilledema",
+        "B": "Idiopathic intracranial hypertension (pseudotumor cerebri)",
+        "C": "Cerebral venous sinus thrombosis",
+        "D": "Cluster headache with autonomic features"
+      },
+      "correctAnswer": "B",
+      "rationale": "Idiopathic intracranial hypertension (IIH/pseudotumor cerebri) presents in obese women of childbearing age with chronic headache, pulsatile tinnitus, visual obscurations, papilledema, and elevated CSF opening pressure (>25 cmH2O) with normal brain MRI and MRV. Visual field testing and ophthalmology referral are essential to monitor for progressive vision loss — the most serious complication. Weight loss, acetazolamide, and/or serial LPs are the treatment approach."
+    },
+    {
+      "questionId": "np-p1-050",
+      "topicSlug": "headache-differential-red-flags",
+      "lessonPart": "1B",
+      "difficulty": "hard",
+      "stemAnchor": "multiple-household-members-CO-poisoning-bilateral-headache",
+      "stem": "A 45-year-old male presents with a 5-day history of bilateral frontal headaches, nausea, and fatigue. He mentions that his wife and teenage son have also had headaches and nausea over the same period. The family moved into a newly renovated home 2 weeks ago. Neurological exam is normal. Vital signs are normal. O2 saturation by pulse oximetry is 98%. What is the most critical diagnosis to exclude?",
+      "options": {
+        "A": "Viral gastroenteritis affecting the household",
+        "B": "Carbon monoxide poisoning",
+        "C": "Cluster of tension headaches from renovation stress",
+        "D": "New food allergy from dietary changes after moving"
+      },
+      "correctAnswer": "B",
+      "rationale": "Multiple household members simultaneously developing headache and nausea in a newly renovated home should immediately raise concern for carbon monoxide poisoning from a malfunctioning gas appliance (furnace, water heater, generator). Crucially, pulse oximetry reads CO-oxyhemoglobin as oxygenated hemoglobin — a falsely normal O2 sat does NOT rule out CO poisoning. Carboxyhemoglobin level (co-oximetry on ABG) is required. The family must leave the home immediately."
+    },
+
+    {
+      "questionId": "np-p1-051",
+      "topicSlug": "fatigue-differential-endocrine-psych",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "45yo-female-fatigue-cold-intolerance-hair-loss-constipation-TSH-high",
+      "stem": "A 45-year-old female presents with 6 months of progressive fatigue, difficulty tolerating cold, constipation, dry skin, hair thinning, and a 10-pound weight gain despite no dietary changes. She has no cardiac history. HR 54, BP 118/74. Physical exam reveals non-pitting periorbital edema and delayed relaxation phase of deep tendon reflexes. Which initial lab would most efficiently confirm the suspected diagnosis?",
+      "options": {
+        "A": "Free T3 level",
+        "B": "TSH (thyroid-stimulating hormone)",
+        "C": "Thyroid peroxidase antibodies",
+        "D": "24-hour urine cortisol"
+      },
+      "correctAnswer": "B",
+      "rationale": "The constellation of fatigue, cold intolerance, constipation, weight gain, dry skin, hair loss, bradycardia, periorbital edema, and delayed DTR relaxation is classic for hypothyroidism. TSH is the most sensitive and specific screening test for thyroid dysfunction — an elevated TSH confirms primary hypothyroidism. Free T4 would be ordered secondarily to quantify severity. TPO antibodies confirm Hashimoto's thyroiditis as the etiology but are not required for initial diagnosis or treatment decisions."
+    },
+    {
+      "questionId": "np-p1-052",
+      "topicSlug": "fatigue-differential-endocrine-psych",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "28yo-male-fatigue-weight-loss-heat-intolerance-tremor-palpitations",
+      "stem": "A 28-year-old male presents with 3 months of fatigue, 15-pound unintentional weight loss, heat intolerance, fine tremor, and palpitations. He reports his heart is 'racing' even at rest. On exam: HR 108, warm moist skin, fine resting tremor of outstretched hands, and a diffusely enlarged thyroid gland. Eyes appear prominent. Which lab pattern would most support the diagnosis?",
+      "options": {
+        "A": "Elevated TSH and low free T4",
+        "B": "Suppressed TSH and elevated free T4",
+        "C": "Normal TSH with elevated TPO antibodies",
+        "D": "Low TSH and normal free T4 and T3"
+      },
+      "correctAnswer": "B",
+      "rationale": "Hyperthyroidism (Graves disease in this young male with diffuse goiter and proptosis) presents with suppressed TSH and elevated free T4 (and often elevated free T3). TSH is suppressed because excess thyroid hormone exerts negative feedback on the pituitary. Graves disease is further confirmed by TSH receptor antibodies (TRAb). Elevated TSH with low T4 represents hypothyroidism — the opposite pattern."
+    },
+    {
+      "questionId": "np-p1-053",
+      "topicSlug": "fatigue-differential-endocrine-psych",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "35yo-female-fatigue-pallor-pica-menorrhagia-MCV-68",
+      "stem": "A 35-year-old female presents with progressive fatigue, pallor, and a craving for chewing ice (pagophagia). She has heavy menstrual periods requiring pad changes every 2 hours. CBC: Hgb 8.4 g/dL, MCV 68 fL, RDW elevated. Peripheral smear shows hypochromic microcytic red cells. Which additional lab finding would best confirm the underlying diagnosis?",
+      "options": {
+        "A": "Serum B12 <200 pg/mL",
+        "B": "Serum ferritin <12 ng/mL",
+        "C": "Positive direct Coombs test",
+        "D": "Elevated reticulocyte count >2.5%"
+      },
+      "correctAnswer": "B",
+      "rationale": "Iron-deficiency anemia (IDA) is confirmed by low serum ferritin (<12 ng/mL), which reflects depleted iron stores. The microcytic hypochromic anemia (MCV 68, high RDW), pica (pagophagia is pathognomonic for IDA), and menorrhagia provide the clinical context. B12 deficiency causes macrocytic anemia; positive Coombs indicates hemolytic anemia with normal or elevated MCV; elevated reticulocytes suggest hemolysis or recovery from blood loss."
+    },
+    {
+      "questionId": "np-p1-054",
+      "topicSlug": "fatigue-differential-endocrine-psych",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "52yo-male-fatigue-polyuria-polydipsia-blurred-vision-HbA1c-98",
+      "stem": "A 52-year-old male with BMI 34 presents with a 2-month history of fatigue, frequent urination, excessive thirst, and blurred vision. He has not seen a physician in 5 years. Labs: fasting glucose 284 mg/dL, HbA1c 9.8%. Urinalysis shows 3+ glucose, no ketones. What is the most likely cause of his fatigue?",
+      "options": {
+        "A": "Diabetes insipidus causing electrolyte imbalance",
+        "B": "Uncontrolled type 2 diabetes mellitus with osmotic diuresis",
+        "C": "Hyperthyroidism with secondary hyperglycemia",
+        "D": "Cushing's syndrome with adrenal-induced diabetes"
+      },
+      "correctAnswer": "B",
+      "rationale": "The classic osmotic triad of fatigue, polyuria, and polydipsia with fasting glucose >200 mg/dL and HbA1c 9.8% confirms poorly controlled T2DM. Fatigue in uncontrolled diabetes results from cellular glucose deprivation (despite hyperglycemia, insulin-resistant cells cannot utilize glucose), osmotic diuresis causing dehydration, and chronic inflammatory burden. The absence of ketones distinguishes this from DKA (T1DM presentation)."
+    },
+    {
+      "questionId": "np-p1-055",
+      "topicSlug": "fatigue-differential-endocrine-psych",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "48yo-female-fatigue-macrocytosis-peripheral-neuropathy-vegan-B12",
+      "stem": "A 48-year-old female who has followed a strict vegan diet for 8 years presents with progressive fatigue, tingling in both feet, and difficulty with balance. On exam: loss of vibration and proprioception bilaterally in the lower extremities, hyperreflexia, and a positive Romberg test. CBC: Hgb 9.8 g/dL, MCV 112 fL. Peripheral smear shows hypersegmented neutrophils. Which lab would confirm the diagnosis?",
+      "options": {
+        "A": "Serum iron and ferritin",
+        "B": "Serum vitamin B12 level",
+        "C": "Reticulocyte count",
+        "D": "TSH and free T4"
+      },
+      "correctAnswer": "B",
+      "rationale": "Macrocytic anemia (MCV >100) with hypersegmented neutrophils, peripheral neuropathy (subacute combined degeneration of the dorsal and lateral spinal columns), and a strict vegan diet for 8 years strongly suggests B12 deficiency. B12 is exclusively found in animal products; strict vegans without supplementation will develop deficiency over years. Neurological manifestations (peripheral neuropathy, posterior column signs) can precede or occur without anemia. Serum B12 <200 pg/mL confirms the diagnosis."
+    },
+    {
+      "questionId": "np-p1-056",
+      "topicSlug": "fatigue-differential-endocrine-psych",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "55yo-male-fatigue-depressed-mood-anhedonia-poor-sleep-PHQ9",
+      "stem": "A 55-year-old male presents with 4 months of fatigue, depressed mood, loss of interest in hobbies, insomnia (early morning awakening), decreased appetite with 8-pound weight loss, difficulty concentrating, and feelings of worthlessness. He was recently laid off. PHQ-9 score is 18. Thyroid function tests, CBC, CMP, and testosterone are all normal. What does this presentation most likely represent?",
+      "options": {
+        "A": "Subclinical hypothyroidism with psychiatric symptoms",
+        "B": "Adjustment disorder with depressed mood",
+        "C": "Major depressive disorder",
+        "D": "Normal grief response to job loss"
+      },
+      "correctAnswer": "C",
+      "rationale": "Major depressive disorder requires 5 or more of the 9 DSM-5 symptoms (depressed mood or anhedonia must be one) present for ≥2 weeks causing functional impairment, after excluding medical causes. This patient has 7 symptoms (depressed mood, anhedonia, weight loss, insomnia, concentration difficulty, worthlessness, fatigue) with a PHQ-9 of 18 (moderately severe) and normal medical workup. Adjustment disorder does not involve 5+ criteria or require this level of severity; grief is typically non-pervasive."
+    },
+    {
+      "questionId": "np-p1-057",
+      "topicSlug": "fatigue-differential-endocrine-psych",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "38yo-female-fatigue-pharyngitis-posterior-cervical-LAD-splenomegaly-atypical-lymphocytes",
+      "stem": "A 38-year-old female presents with 2 weeks of severe fatigue, sore throat, fever, and painful posterior cervical lymphadenopathy. On exam: tonsillar exudates, splenomegaly, and generalized lymphadenopathy. CBC shows lymphocytosis with 25% atypical lymphocytes. Which test would most efficiently confirm the diagnosis?",
+      "options": {
+        "A": "Throat culture for Group A Streptococcus",
+        "B": "Heterophile antibody test (monospot)",
+        "C": "HIV antibody test",
+        "D": "EBV viral capsid antigen (VCA) IgG"
+      },
+      "correctAnswer": "B",
+      "rationale": "The classic presentation of infectious mononucleosis (EBV) includes pharyngitis, posterior cervical lymphadenopathy, splenomegaly, and atypical lymphocytosis. The monospot (heterophile antibody) test is the rapid, point-of-care confirmatory test — sensitivity ~85% and specificity >99% in adults. False negatives occur in children under 4 and in the first week of illness. EBV VCA IgG/IgM serology is reserved for monospot-negative cases with high clinical suspicion."
+    },
+    {
+      "questionId": "np-p1-058",
+      "topicSlug": "fatigue-differential-endocrine-psych",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "65yo-male-fatigue-exertional-dyspnea-creatinine-32-pallor-normocytic",
+      "stem": "A 65-year-old male with known CKD stage 4 (eGFR 22 mL/min) presents with worsening fatigue and exertional dyspnea. Hgb 8.9 g/dL, MCV 86 fL (normocytic), reticulocyte count 0.8%, serum iron 58, TIBC 180, ferritin 320. TSH is normal. What is the most likely cause of his anemia and fatigue?",
+      "options": {
+        "A": "Iron deficiency from poor dietary intake",
+        "B": "Anemia of chronic kidney disease (EPO deficiency)",
+        "C": "Hemolytic anemia from uremic toxins",
+        "D": "B12 deficiency from dietary restriction"
+      },
+      "correctAnswer": "B",
+      "rationale": "Anemia of CKD is caused by insufficient erythropoietin (EPO) production by the diseased kidneys — a normocytic, normochromic anemia with low reticulocyte count (hypoproliferative). The iron pattern (low-normal iron, low TIBC, elevated ferritin) represents anemia of chronic disease/inflammation. With eGFR 22 and Hgb <10, this meets criteria for consideration of erythropoiesis-stimulating agent (ESA) therapy — though management decisions belong to Phase 3."
+    },
+    {
+      "questionId": "np-p1-059",
+      "topicSlug": "fatigue-differential-endocrine-psych",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "38yo-female-fatigue-BMI-36-snoring-witnessed-apneas-ESS-score-high",
+      "stem": "A 38-year-old female with BMI 36 presents with excessive daytime sleepiness, fatigue, and difficulty concentrating at work. Her partner reports loud snoring and witnessed breathing pauses during sleep. Epworth Sleepiness Scale score is 16/24. She denies mood symptoms. TSH, CBC, CMP, and fasting glucose are all normal. What is the most appropriate next diagnostic step?",
+      "options": {
+        "A": "Prescribe modafinil for idiopathic hypersomnia",
+        "B": "Refer for polysomnography (sleep study) or home sleep apnea testing",
+        "C": "Start an SSRI for suspected depression masking as fatigue",
+        "D": "Order cortisol stimulation test to evaluate for adrenal insufficiency"
+      },
+      "correctAnswer": "B",
+      "rationale": "Obstructive sleep apnea (OSA) should be strongly suspected in an obese patient with loud snoring, witnessed apneas, and excessive daytime sleepiness (ESS ≥10 indicates significant sleepiness). With normal medical labs excluding thyroid, metabolic, and hematological causes, polysomnography (gold standard) or validated home sleep apnea testing is the appropriate diagnostic step. OSA is significantly underdiagnosed in women and often presents without the classic 'sleepy truck driver' profile."
+    },
+    {
+      "questionId": "np-p1-060",
+      "topicSlug": "fatigue-differential-endocrine-psych",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "42yo-male-fatigue-weight-loss-night-sweats-lymphadenopathy-cancer-red-flag",
+      "stem": "A 42-year-old male presents with 4 months of progressive fatigue, unintentional 18-pound weight loss, drenching night sweats, and bilateral cervical and axillary lymphadenopathy. He has no fever today. On exam: multiple enlarged, rubbery, non-tender lymph nodes bilaterally. CBC: WBC 14,800 with 60% lymphocytes; absolute lymphocyte count 8,880. LDH is markedly elevated. Which is the most critical next step?",
+      "options": {
+        "A": "Repeat CBC in 3 months to monitor lymphocyte count",
+        "B": "Treat for infectious mononucleosis empirically given lymphocytosis",
+        "C": "Urgent referral for lymph node excisional biopsy and oncology evaluation",
+        "D": "Prescribe a course of antibiotics for presumed lymphadenitis"
+      },
+      "correctAnswer": "C",
+      "rationale": "B symptoms (fever + drenching night sweats + ≥10% weight loss in 6 months) with bilateral rubbery lymphadenopathy, absolute lymphocytosis, and markedly elevated LDH are highly concerning for lymphoma (Hodgkin or non-Hodgkin). Urgent excisional biopsy is required — FNA is inadequate for lymphoma diagnosis as nodal architecture is needed. Delaying referral, empiric treatment, or watchful waiting in this presentation is inappropriate and potentially life-threatening."
+    },
+
+    {
+      "questionId": "np-p1-061",
+      "topicSlug": "fever-without-source-differential",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "6week-old-infant-fever-38-5-no-source-septic-workup",
+      "stem": "A 6-week-old male infant is brought to the clinic by his parents with a rectal temperature of 38.6°C noted at home 2 hours ago. He is feeding normally and has no cough, rhinorrhea, or rash. He was born full-term with no complications. On exam: well-appearing, no source of infection identified. What is the most appropriate management?",
+      "options": {
+        "A": "Reassure parents and schedule follow-up in 48 hours",
+        "B": "Prescribe amoxicillin empirically and return if worsening",
+        "C": "Transfer to ED for full septic workup including CBC, blood culture, urinalysis/urine culture, and lumbar puncture",
+        "D": "Order outpatient CBC and urine culture; treat only if results are abnormal"
+      },
+      "correctAnswer": "C",
+      "rationale": "Any infant <60 days with fever ≥38.0°C requires a full sepsis workup (CBC, blood culture, UA/urine culture, LP for CSF) regardless of clinical appearance, as serious bacterial infection (meningitis, bacteremia, UTI) cannot be excluded on clinical grounds alone in this age group. Even a 'well-appearing' febrile neonate has a 10–12% risk of SBI. Management is guided by age-specific risk stratification protocols (Rochester, Step-by-Step, PECARN)."
+    },
+    {
+      "questionId": "np-p1-062",
+      "topicSlug": "fever-without-source-differential",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "38yo-male-returned-traveler-Africa-fever-rigors-2-weeks-malaria",
+      "stem": "A 38-year-old male presents with fever to 39.8°C, rigors, headache, and myalgias. He returned from a 3-week trip to sub-Saharan Africa 10 days ago. He took antimalarial prophylaxis but admits missing several doses. On exam: mildly enlarged spleen, conjunctival icterus. CBC: Hgb 10.2, WBC 4,800 with relative lymphocytosis, platelets 82,000. What is the most critical next diagnostic step?",
+      "options": {
+        "A": "Blood cultures and empiric broad-spectrum antibiotics",
+        "B": "Peripheral blood smear and rapid malaria antigen test",
+        "C": "Monospot test for infectious mononucleosis",
+        "D": "HIV antigen/antibody combination test"
+      },
+      "correctAnswer": "B",
+      "rationale": "Malaria must be excluded first in any febrile returned traveler from an endemic region — Plasmodium falciparum malaria can be rapidly fatal if missed or treated late. Peripheral blood thick and thin smears (gold standard for species identification and parasite density) combined with rapid malaria antigen testing provide rapid diagnosis. Thrombocytopenia and hemolytic anemia (jaundice, low Hgb) are characteristic findings. Empiric antibiotics are appropriate for bacterial infection but do not address the primary diagnostic priority."
+    },
+    {
+      "questionId": "np-p1-063",
+      "topicSlug": "fever-without-source-differential",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "32yo-IVDU-fever-new-murmur-splinter-hemorrhages-endocarditis",
+      "stem": "A 32-year-old male who injects heroin presents with 2 weeks of fever, chills, and malaise. On exam: fever 39.2°C, HR 108, new holosystolic murmur heard best at the left lower sternal border. Splinter hemorrhages are noted under his fingernails. Several petechiae are on the conjunctivae. He denies any recent dental procedures. Which diagnostic approach takes priority?",
+      "options": {
+        "A": "Throat culture and monospot test given systemic symptoms",
+        "B": "Two sets of blood cultures from different sites before antibiotics, followed by echocardiogram",
+        "C": "Empiric antibiotics for community-acquired pneumonia pending results",
+        "D": "Procalcitonin measurement to confirm bacterial vs viral infection"
+      },
+      "correctAnswer": "B",
+      "rationale": "IVDU + fever + new murmur + embolic stigmata (splinter hemorrhages, conjunctival petechiae) meets diagnostic criteria strongly suggestive of infective endocarditis (IE). Per modified Duke criteria, two positive blood cultures from separate sites are a major criterion. Blood cultures must be collected before antibiotics to maximize yield; echocardiography (transesophageal preferred) is required to identify valvular vegetations. Right-sided endocarditis (tricuspid valve) is most common in IVDU."
+    },
+    {
+      "questionId": "np-p1-064",
+      "topicSlug": "fever-without-source-differential",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "45yo-female-fever-fatigue-malar-rash-joint-pain-anti-dsDNA",
+      "stem": "A 45-year-old female presents with a 3-week history of low-grade fever, extreme fatigue, bilateral wrist and knee joint pain, and a new facial rash sparing the nasolabial folds. She also reports painless oral ulcers. Labs: ANA 1:320, anti-dsDNA elevated, complement C3 and C4 low, CBC shows leukopenia and normocytic anemia. Urinalysis shows 2+ protein. What is the most likely diagnosis?",
+      "options": {
+        "A": "Viral arthritis following recent respiratory infection",
+        "B": "Systemic lupus erythematosus (SLE) flare",
+        "C": "Rheumatoid arthritis with extra-articular manifestations",
+        "D": "Sjögren syndrome with systemic involvement"
+      },
+      "correctAnswer": "B",
+      "rationale": "This presentation meets multiple 2019 EULAR/ACR SLE classification criteria: malar rash, oral ulcers, arthritis, leukopenia, anemia, proteinuria, positive ANA, elevated anti-dsDNA, and low complement. Anti-dsDNA is highly specific for SLE (>95%) and correlates with disease activity and lupus nephritis risk. RA does not cause malar rash or complement consumption; Sjögren's primarily causes sicca symptoms (dry eyes/mouth) rather than this multi-system involvement."
+    },
+    {
+      "questionId": "np-p1-065",
+      "topicSlug": "fever-without-source-differential",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "22yo-female-fever-pharyngitis-diffuse-LAD-rash-after-amoxicillin",
+      "stem": "A 22-year-old female presents with 5 days of fever, severe pharyngitis, diffuse lymphadenopathy, and mild splenomegaly. Rapid strep test is negative. Her physician prescribed amoxicillin empirically 2 days ago. She now presents with a diffuse maculopapular rash that developed within 48 hours of starting the antibiotic. What is the most likely diagnosis for the original illness?",
+      "options": {
+        "A": "Group A Streptococcal pharyngitis with drug hypersensitivity",
+        "B": "Infectious mononucleosis (EBV); amoxicillin rash is characteristic, not a true penicillin allergy",
+        "C": "SJS triggered by amoxicillin",
+        "D": "Drug fever from amoxicillin causing fever and lymphadenopathy"
+      },
+      "correctAnswer": "B",
+      "rationale": "The amoxicillin rash in infectious mononucleosis is a well-recognized phenomenon — up to 80–100% of patients with EBV mononucleosis who receive ampicillin or amoxicillin develop a diffuse maculopapular rash. This is NOT a true penicillin allergy and is not a contraindication to future beta-lactam use. The negative strep test + pharyngitis + diffuse LAD + splenomegaly + amoxicillin rash is a classic teaching case for EBV."
+    },
+    {
+      "questionId": "np-p1-066",
+      "topicSlug": "fever-without-source-differential",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "25yo-female-tampon-use-fever-diffuse-erythroderma-hypotension-multiorgan",
+      "stem": "A 25-year-old female presents with sudden-onset fever of 40.2°C, diffuse erythroderma (sunburn-like rash over the entire body), hypotension (BP 84/52), vomiting, and confusion. She is menstruating and has used a superabsorbent tampon for the past 30 hours. On exam: she appears toxic; no rash on palms. Labs: WBC 20,000, creatinine 2.8, bilirubin elevated, CK markedly elevated. Blood cultures pending. What is the most likely diagnosis?",
+      "options": {
+        "A": "Septic shock from gram-negative bacteremia",
+        "B": "Staphylococcal toxic shock syndrome (TSS)",
+        "C": "Meningococcemia with septic shock",
+        "D": "Severe anaphylaxis from a new allergen exposure"
+      },
+      "correctAnswer": "B",
+      "rationale": "Menstrual toxic shock syndrome caused by Staphylococcus aureus exotoxin (TSST-1) presents with high fever, diffuse erythroderma (desquamation of palms/soles occurs 1–2 weeks later), hypotension, and multiorgan dysfunction (renal, hepatic, musculoskeletal). Tampon use (particularly superabsorbent) is a risk factor by creating an oxygen-rich environment for S. aureus growth. Management includes tampon removal, fluid resuscitation, and antistaphylococcal antibiotics."
+    },
+    {
+      "questionId": "np-p1-067",
+      "topicSlug": "fever-without-source-differential",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "50yo-male-FUO-3-weeks-weight-loss-night-sweats-lymphoma-B-symptoms",
+      "stem": "A 50-year-old male presents with a 4-week history of daily fever to 38.8°C, drenching night sweats, and 12-pound unintentional weight loss. He has no localizing symptoms — no cough, dysuria, or diarrhea. Exam: mild hepatosplenomegaly and bilateral inguinal lymphadenopathy (2 cm, rubbery, non-tender). WBC 9,800 (normal differential), ESR 78, LDH 520. Blood cultures ×2 are negative. ANA, ANCA, HIV, monospot, and blood cultures are all negative. Which diagnostic test is most appropriate next?",
+      "options": {
+        "A": "Bone marrow biopsy as the first diagnostic step",
+        "B": "CT chest/abdomen/pelvis with contrast and lymph node excisional biopsy",
+        "C": "Empiric prednisone for presumed autoimmune fever",
+        "D": "Repeat blood cultures and await results before further workup"
+      },
+      "correctAnswer": "B",
+      "rationale": "Fever of unknown origin (FUO) with B symptoms (fever + night sweats + weight loss ≥10%) and bilateral lymphadenopathy with elevated LDH and ESR is highly suspicious for lymphoma. CT chest/abdomen/pelvis identifies lymph node distribution and potential staging sites; excisional biopsy of the most accessible lymph node provides histological diagnosis. Bone marrow biopsy is appropriate after initial staging CT; empiric steroids can mask lymphoma diagnosis and should be avoided."
+    },
+    {
+      "questionId": "np-p1-068",
+      "topicSlug": "fever-without-source-differential",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "48yo-male-fever-eosinophilia-rash-started-allopurinol-3-weeks",
+      "stem": "A 48-year-old male presents with fever of 38.9°C, a diffuse morbilliform rash, and facial edema starting 3 weeks after initiating allopurinol for gout prophylaxis. Labs: WBC 14,000 with 18% eosinophils, elevated liver enzymes (ALT 280, AST 244), creatinine 2.1. Lymph nodes are mildly enlarged. Blood cultures are negative. What is the most likely diagnosis?",
+      "options": {
+        "A": "Gout flare with systemic inflammatory response",
+        "B": "Drug Reaction with Eosinophilia and Systemic Symptoms (DRESS syndrome)",
+        "C": "Secondary syphilis presenting atypically",
+        "D": "Bacterial sepsis from an occult source"
+      },
+      "correctAnswer": "B",
+      "rationale": "DRESS syndrome (Drug Reaction with Eosinophilia and Systemic Symptoms) is a severe, delayed drug hypersensitivity reaction that classically presents 2–8 weeks after drug initiation with fever, extensive rash, lymphadenopathy, eosinophilia, and multiorgan dysfunction (hepatitis, nephritis). Allopurinol is one of the most common culprits. The drug must be immediately discontinued; systemic corticosteroids are typically required. Mortality can reach 10% without recognition."
+    },
+    {
+      "questionId": "np-p1-069",
+      "topicSlug": "fever-without-source-differential",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "55yo-male-fever-chills-dysuria-CVA-tenderness-systemic",
+      "stem": "A 55-year-old male with T2DM presents with 3 days of fever to 39.4°C, rigors, right-sided flank pain, dysuria, and urinary frequency. He appears unwell. CVA tenderness is present on the right. UA: pyuria, bacteriuria, nitrites positive. WBC 18,200 with left shift. BP 106/68. Procalcitonin 4.8 ng/mL. What is the most appropriate disposition for this patient?",
+      "options": {
+        "A": "Prescribe oral fluoroquinolone and follow up in 48 hours",
+        "B": "Transfer to ED for IV antibiotics and evaluation for urosepsis",
+        "C": "Prescribe nitrofurantoin and ensure adequate hydration",
+        "D": "Start IV ceftriaxone in office and observe for 2 hours before deciding on admission"
+      },
+      "correctAnswer": "B",
+      "rationale": "This patient has pyelonephritis with sepsis features (high fever, tachycardia, hypotension, leukocytosis with left shift, markedly elevated procalcitonin) in the setting of diabetes (immunocompromised). Urosepsis requires IV antibiotics, IV fluids, blood cultures, and inpatient monitoring. Oral antibiotics and outpatient management are appropriate for uncomplicated pyelonephritis in non-toxic, immunocompetent patients — not here. Nitrofurantoin is inappropriate for pyelonephritis as it does not achieve adequate renal parenchymal tissue levels."
+    },
+    {
+      "questionId": "np-p1-070",
+      "topicSlug": "fever-without-source-differential",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "35yo-female-fever-cervical-LAD-pharyngitis-splenomegaly-heterophile-negative",
+      "stem": "A 35-year-old female presents with 10 days of fever, cervical lymphadenopathy, pharyngitis, and splenomegaly. Monospot (heterophile antibody) test is negative. CBC shows atypical lymphocytosis. Liver enzymes are mildly elevated (ALT 88, AST 72). Which diagnosis should be considered in a heterophile-negative mononucleosis-like syndrome?",
+      "options": {
+        "A": "Group A Strep requiring a second throat culture",
+        "B": "CMV mononucleosis or acute HIV seroconversion syndrome",
+        "C": "Bacterial lymphadenitis requiring antibiotics",
+        "D": "Autoimmune hepatitis presenting with fever"
+      },
+      "correctAnswer": "B",
+      "rationale": "A heterophile-negative mononucleosis-like syndrome (pharyngitis + LAD + splenomegaly + atypical lymphocytosis + liver enzyme elevation + negative monospot) should prompt testing for CMV (CMV IgM) and acute HIV (HIV antigen/antibody combination test). Primary HIV infection (acute retroviral syndrome) can present identically to EBV mononucleosis. Missing acute HIV infection delays diagnosis and counseling about transmission risk during the highest-viremia period."
+    },
+
+    {
+      "questionId": "np-p1-071",
+      "topicSlug": "syncope-differential-vasovagal-cardiac-neuro",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "20yo-female-syncope-prolonged-standing-nausea-diaphoresis-prodrome",
+      "stem": "A 20-year-old female collapses in a church service after standing for 40 minutes in a warm building. Before losing consciousness she felt nauseated, diaphoretic, and noticed her vision 'going gray.' She was unconscious for about 30 seconds and was fully alert immediately upon recovery. There was no seizure activity. No incontinence. She has had two similar episodes. ECG is normal. Which diagnosis is most consistent?",
+      "options": {
+        "A": "Generalized tonic-clonic seizure",
+        "B": "Cardiac arrhythmia with sudden loss of cardiac output",
+        "C": "Vasovagal (reflex) syncope",
+        "D": "Orthostatic hypotension from volume depletion"
+      },
+      "correctAnswer": "C",
+      "rationale": "Vasovagal syncope has three hallmarks: a trigger (prolonged standing, heat, emotional stress), a prodrome (nausea, diaphoresis, visual dimming, pallor), and rapid complete recovery without post-ictal confusion. This presentation fits all three criteria. Seizure involves tonic-clonic movements preceding LOC with post-ictal confusion. Cardiac arrhythmia causes abrupt LOC without prodrome. Orthostatic hypotension occurs on standing from recumbent, not after prolonged standing."
+    },
+    {
+      "questionId": "np-p1-072",
+      "topicSlug": "syncope-differential-vasovagal-cardiac-neuro",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "65yo-male-syncope-exertion-systolic-murmur-left-sternal-border",
+      "stem": "A 65-year-old male experienced sudden loss of consciousness while climbing stairs. His wife reports he had no warning symptoms. He recovered completely within 1 minute. On exam: a harsh grade 3/6 systolic ejection murmur is heard best at the right upper sternal border with radiation to the carotid arteries. Carotid upstrokes are diminished bilaterally (pulsus parvus et tardus). What is the most likely underlying cause of his syncope?",
+      "options": {
+        "A": "Vasovagal syncope from exertion-related hypotension",
+        "B": "Severe aortic stenosis causing exertional syncope",
+        "C": "Hypertrophic cardiomyopathy with dynamic outflow obstruction",
+        "D": "Vertebrobasilar insufficiency from cervical spondylosis"
+      },
+      "correctAnswer": "B",
+      "rationale": "Exertional syncope in an older adult with a harsh systolic ejection murmur at the right upper sternal border radiating to the carotids, pulsus parvus et tardus (slow-rising diminished carotid pulses), is classic for severe aortic stenosis. AS causes syncope by failing to increase cardiac output with exertion, producing cerebral hypoperfusion. Syncope is one of the classic triad of severe AS symptoms (syncope, angina, dyspnea) and carries a median survival of 3 years without valve replacement."
+    },
+    {
+      "questionId": "np-p1-073",
+      "topicSlug": "syncope-differential-vasovagal-cardiac-neuro",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "22yo-athlete-syncope-family-hx-sudden-cardiac-death-HOCM",
+      "stem": "A 22-year-old male soccer player has an episode of sudden loss of consciousness during a sprint. He had no prodrome. Family history is significant for a brother who died suddenly at age 19 during a basketball game. On exam: a systolic murmur is heard that increases with Valsalva and decreases with squatting. ECG shows LVH with deep Q waves in the lateral leads. What is the most likely diagnosis?",
+      "options": {
+        "A": "Vasovagal syncope from dehydration during exercise",
+        "B": "Hypertrophic cardiomyopathy (HOCM)",
+        "C": "Wolff-Parkinson-White syndrome with SVT",
+        "D": "Commotio cordis from a prior chest impact"
+      },
+      "correctAnswer": "B",
+      "rationale": "HOCM is the most common cause of sudden cardiac death in young athletes. The dynamic outflow tract obstruction murmur that increases with Valsalva (reduced preload worsens obstruction) and decreases with squatting (increased preload reduces obstruction) is pathognomonic. LVH with deep septal Q waves on ECG and a family history of sudden cardiac death confirm this diagnosis. All first-degree relatives require screening echocardiography."
+    },
+    {
+      "questionId": "np-p1-074",
+      "topicSlug": "syncope-differential-vasovagal-cardiac-neuro",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "55yo-female-syncope-position-change-antihypertensive-medications",
+      "stem": "A 55-year-old female with hypertension and heart failure presents after fainting when she stood up quickly from a chair. No prodrome occurred. She was alert immediately after the event. Her medications include lisinopril, carvedilol, and furosemide, all started within the past 2 months. Lying BP: 138/82, HR 78. Standing BP after 2 minutes: 106/64, HR 82. Which diagnosis does this BP response confirm?",
+      "options": {
+        "A": "Vasovagal syncope from standing",
+        "B": "Orthostatic hypotension (drop in SBP ≥20 mmHg within 3 minutes of standing)",
+        "C": "Cardiac arrhythmia producing hemodynamic compromise",
+        "D": "Hyperventilation-induced syncope"
+      },
+      "correctAnswer": "B",
+      "rationale": "Orthostatic hypotension is defined as a sustained drop in systolic BP ≥20 mmHg or diastolic BP ≥10 mmHg within 3 minutes of standing. This patient's BP dropped from 138/82 to 106/64 (SBP drop of 32 mmHg) without a compensatory rise in heart rate (HR only 78 — suggesting autonomic dysfunction or beta-blocker blunting). Multiple antihypertensives and a diuretic in a volume-sensitive heart failure patient create high risk for orthostatic hypotension. Medication adjustment is the primary intervention."
+    },
+    {
+      "questionId": "np-p1-075",
+      "topicSlug": "syncope-differential-vasovagal-cardiac-neuro",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "35yo-female-syncope-tonic-clonic-movements-post-ictal-confusion",
+      "stem": "A 35-year-old female is brought in after a witnessed episode of loss of consciousness preceded by a blank stare, followed by generalized shaking of all extremities lasting 90 seconds. She was confused and drowsy for 30 minutes afterward. She bit her tongue and had urinary incontinence. Witnesses confirm the shaking began BEFORE she lost consciousness. ECG is normal. What is the most important differentiation from true syncope?",
+      "options": {
+        "A": "Urinary incontinence cannot occur in syncope, confirming seizure",
+        "B": "Tonic-clonic movements preceding loss of consciousness, post-ictal confusion, tongue biting, and prolonged recovery identify this as a seizure, not syncope",
+        "C": "The normal ECG confirms this cannot be cardiac syncope",
+        "D": "Duration of shaking >30 seconds rules out convulsive syncope"
+      },
+      "correctAnswer": "B",
+      "rationale": "The key clinical distinction: in syncope, brief convulsive movements (convulsive syncope) occur AFTER LOC due to cerebral hypoperfusion, lasting <15 seconds, with rapid full recovery. In seizures, tonic-clonic activity precedes or coincides with LOC, lasts 1–3 minutes, and is followed by post-ictal confusion lasting minutes to hours. Tongue biting is more common in seizure; urinary incontinence can occur in both. ECG should still be performed to exclude cardiac cause for any LOC event."
+    },
+    {
+      "questionId": "np-p1-076",
+      "topicSlug": "syncope-differential-vasovagal-cardiac-neuro",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "72yo-male-syncope-no-prodrome-complete-heart-block-ECG",
+      "stem": "A 72-year-old male presents after a witnessed sudden collapse while walking to his car. No prodrome. He regained consciousness after about 1 minute. This is his second such episode in 2 months. ECG shows: P waves present, PR interval progressively prolonging before a non-conducted P wave, then the cycle resets (R-R intervals gradually shortening then a pause). HR 44. What is the most likely cause of his syncope?",
+      "options": {
+        "A": "First-degree AV block — a benign finding",
+        "B": "Mobitz type I (Wenckebach) second-degree AV block causing intermittent syncope",
+        "C": "Mobitz type II second-degree AV block requiring pacemaker",
+        "D": "Third-degree (complete) heart block"
+      },
+      "correctAnswer": "B",
+      "rationale": "Mobitz type I (Wenckebach) AV block is characterized by progressive PR prolongation before a dropped beat (non-conducted P wave), then the cycle resets — this is the ECG described. While typically considered benign, symptomatic Wenckebach causing recurrent syncope in an elderly patient requires cardiology evaluation and consideration of pacemaker placement. Mobitz type II has consistent PR intervals with sudden dropped beats and carries a higher risk of progression to complete heart block."
+    },
+    {
+      "questionId": "np-p1-077",
+      "topicSlug": "syncope-differential-vasovagal-cardiac-neuro",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "38yo-male-syncope-glucose-42-diaphoresis-insulin-diabetes",
+      "stem": "A 38-year-old male with T1DM presents after a witnessed syncopal episode at work. Coworkers reported he was pale and sweaty before collapsing. He regained consciousness after receiving juice from a colleague. Blood glucose in the office is now 68 mg/dL (was reportedly 42 mg/dL at the time of the event per emergency glucometer). He takes insulin glargine and aspart. Which mechanism caused his syncope?",
+      "options": {
+        "A": "Cardiac arrhythmia from hypoglycemia-induced QT prolongation",
+        "B": "Cerebral hypoperfusion from hypoglycemia causing loss of consciousness",
+        "C": "Vasovagal response to the pain of insulin injection",
+        "D": "Diabetic neuropathy causing autonomic orthostatic hypotension"
+      },
+      "correctAnswer": "B",
+      "rationale": "Severe hypoglycemia (<54 mg/dL with symptoms; <40 mg/dL with LOC) causes cerebral glucose deprivation — the brain's exclusive fuel — leading to progressive neurological dysfunction from confusion to seizure to coma. The adrenergic prodrome (diaphoresis, pallor, tremor, tachycardia) preceded loss of consciousness. This is not cardiac syncope but metabolic LOC. Rapid glucose restoration (oral glucose if responsive, glucagon IM if unresponsive) reverses the episode. Review of insulin regimen and hypoglycemia unawareness risk is the management priority."
+    },
+    {
+      "questionId": "np-p1-078",
+      "topicSlug": "syncope-differential-vasovagal-cardiac-neuro",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "28yo-male-syncope-palpitations-ECG-long-QT-QTc-510",
+      "stem": "A 28-year-old male presents after a sudden LOC episode while playing basketball. He had brief palpitations immediately before collapsing. ECG on arrival shows sinus rhythm with a QTc of 510 ms (normal <450 ms in men). His sister reportedly had a similar episode. Family history is notable for an uncle who died suddenly at age 32. Electrolytes are normal. What is the most likely cause and appropriate next step?",
+      "options": {
+        "A": "QT prolongation from hypokalemia; replete potassium and discharge",
+        "B": "Congenital long QT syndrome with risk of torsades de pointes; urgent cardiology referral and activity restriction",
+        "C": "Athlete's heart with physiological QT adaptation; reassure and continue sports",
+        "D": "Medication-induced QT prolongation; review medication list before further evaluation"
+      },
+      "correctAnswer": "B",
+      "rationale": "A QTc of 510 ms with exertional syncope, family history of sudden cardiac death, and a sibling with similar episodes is highly concerning for congenital long QT syndrome (LQTS). Torsades de pointes — a polymorphic VT that can degenerate to ventricular fibrillation — is precipitated by adrenergic stimulation (exercise, stress), explaining the exertional setting. Urgent cardiology referral, activity restriction pending evaluation, and avoidance of QT-prolonging medications are immediate steps. Normal electrolytes exclude acquired QT prolongation."
+    },
+    {
+      "questionId": "np-p1-079",
+      "topicSlug": "syncope-differential-vasovagal-cardiac-neuro",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "50yo-male-near-syncope-severe-headache-onset-presyncope",
+      "stem": "A 50-year-old male presents after an episode of feeling that he was about to faint, associated with the most severe headache of his life that began abruptly. He did not lose consciousness but felt extremely unwell for several minutes. The headache has persisted. Vital signs: BP 168/98, HR 94, neurological exam currently normal. What is the priority diagnosis to exclude?",
+      "options": {
+        "A": "Hypertensive urgency causing presyncope",
+        "B": "Subarachnoid hemorrhage presenting as presyncope",
+        "C": "Vasovagal syncope with associated headache",
+        "D": "Orthostatic hypotension from antihypertensive over-medication"
+      },
+      "correctAnswer": "B",
+      "rationale": "Subarachnoid hemorrhage can present as presyncope rather than frank syncope — the sudden headache of maximal intensity at onset is the critical feature that distinguishes this from benign presyncope causes. Presyncope + thunderclap headache = SAH until proven otherwise. Non-contrast CT head must be performed emergently; if negative after 6 hours of symptom onset, lumbar puncture for xanthochromia is mandatory. The associated hypertension is likely a stress/Cushing response, not the primary diagnosis."
+    },
+    {
+      "questionId": "np-p1-080",
+      "topicSlug": "syncope-differential-vasovagal-cardiac-neuro",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "25yo-female-syncope-micturition-bathroom-no-cardiac-hx",
+      "stem": "A 25-year-old healthy female reports losing consciousness while urinating in the middle of the night. Her partner reports she was out for 15–20 seconds and was immediately alert and normal afterward. She had no prodrome. ECG, echocardiogram, and Holter monitor are all normal. She denies any other symptoms. This is her first episode. What type of syncope does this represent?",
+      "options": {
+        "A": "Cardiac arrhythmia requiring further electrophysiological study",
+        "B": "Situational syncope (micturition syncope)",
+        "C": "Psychogenic pseudosyncope",
+        "D": "Seizure occurring from sleep"
+      },
+      "correctAnswer": "B",
+      "rationale": "Situational syncope encompasses reflex syncope triggered by specific activities: coughing, micturition, defecation, swallowing, or laughing. Micturition syncope occurs from a vagal response to bladder emptying, often at night when standing quickly from a warm bed. It is most common in men but occurs in women. Despite the lack of typical prodrome, complete cardiac workup (normal in this case) excludes serious causes, and the situational trigger confirms the diagnosis. Counseling includes sitting down to urinate at night."
+    },
+    {
+      "questionId": "np-p1-081",
+      "topicSlug": "syncope-differential-vasovagal-cardiac-neuro",
+      "lessonPart": "1",
+      "difficulty": "hard",
+      "stemAnchor": "22yo-female-syncope-orthostatic-venlafaxine-poor-oral-intake",
+      "stem": "A 22-year-old female started venlafaxine (SNRI) 6 weeks ago for GAD. She presents after fainting when she stood up from bed this morning. She has been nauseous (a side effect of the medication) and has had poor oral intake for 3 days. Lying HR 88, BP 118/76; Standing HR 118, BP 88/58 (after 2 minutes). She is alert, without neurological deficits. What combination of factors most likely explains this syncope?",
+      "options": {
+        "A": "SNRI-induced QT prolongation causing ventricular arrhythmia",
+        "B": "Venlafaxine-induced orthostatic hypotension plus volume depletion from reduced oral intake",
+        "C": "Serotonin syndrome causing vasodilation and hypotension",
+        "D": "Vasovagal syncope from medication anxiety"
+      },
+      "correctAnswer": "B",
+      "rationale": "SNRIs (particularly venlafaxine at higher doses) can cause orthostatic hypotension through norepinephrine reuptake inhibition affecting vascular tone regulation. Combined with volume depletion from nausea and poor oral intake (diuretic effect of reduced fluid intake), this patient's compensatory tachycardia cannot maintain blood pressure on standing — producing orthostatic syncope. The positive orthostatic vitals (SBP drop 30 mmHg with reflex tachycardia) confirm the diagnosis. Oral hydration and dose reassessment are appropriate interventions."
+    },
+    {
+      "questionId": "np-p1-082",
+      "topicSlug": "syncope-differential-vasovagal-cardiac-neuro",
+      "lessonPart": "1",
+      "difficulty": "expert",
+      "stemAnchor": "68yo-male-syncope-Brugada-pattern-ECG-otherwise-normal",
+      "stem": "A 68-year-old male presents after his second episode of sudden brief LOC, both occurring at rest without any trigger or prodrome. He has no cardiac symptoms otherwise. ECG shows a right bundle branch block pattern with coved-type ST elevation of 3 mm in V1–V2. Echo is normal. Electrolytes are normal. The pattern normalizes when leads are moved one intercostal space higher. What is the most appropriate next step?",
+      "options": {
+        "A": "Reassure him that RBBB is a benign finding; no further workup needed",
+        "B": "Prescribe metoprolol for presumed arrhythmia management",
+        "C": "Urgent electrophysiology referral for Brugada syndrome evaluation",
+        "D": "Repeat ECG in 3 months to monitor for changes"
+      },
+      "correctAnswer": "C",
+      "rationale": "Brugada syndrome is characterized by the Type 1 Brugada pattern on ECG (coved-type ST elevation ≥2 mm in V1–V2) in the absence of structural heart disease, associated with ventricular fibrillation and sudden cardiac death, predominantly at rest or during sleep. Two syncopal episodes without prodrome confirm symptomatic Brugada syndrome. Urgent referral to electrophysiology is required — ICD implantation is the definitive management for symptomatic disease. Beta-blockers are not appropriate; they can worsen arrhythmias in Brugada syndrome."
+    }
+  ]
+}
