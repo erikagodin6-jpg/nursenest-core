@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 echo "Running pre-push verification..."
-npx tsc --noEmit || exit 1
+NODE_OPTIONS="--max-old-space-size=4096" npx tsc --noEmit || exit 1
 
 # Optional full build guard for local pushes:
 # HUSKY_RUN_BUILD=1 git push
