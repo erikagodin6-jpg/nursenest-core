@@ -18,9 +18,9 @@ import {
 } from "@/lib/practice-tests/cat-practice-post-helpers";
 import { createCatPracticeTestPayload } from "@/lib/practice-tests/cat-session";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
+import { resolveCatPathwayIdForCatPost } from "@/lib/practice-tests/resolve-cat-pathway-for-post";
 import { configFromInput, pickPracticeQuestionIds } from "@/lib/practice-tests/pick-question-ids";
 import { parsePracticeTestConfigAtBoundary } from "@/lib/practice-tests/practice-test-config-boundary";
-import type { PracticeTestConfigJson } from "@/lib/practice-tests/types";
 import { captureLearnerProductEvent } from "@/lib/observability/learner-product-analytics";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -177,11 +177,23 @@ export async function POST(req: Request) {
     }
     const compatible = listPathwaysCompatibleWithSubscription(gate.entitlement);
     const catEligible = compatible.filter(pathwayAllowsCatAdaptiveStart);
-    let pathwayIdForCat = d.pathwayId?.trim() || null;
-    if (!pathwayIdForCat) {
-      pathwayIdForCat = catEligible[0]?.id ?? null;
-    }
-    if (!pathwayIdForCat) {
+    const resolvedPathway = resolveCatPathwayIdForCatPost(d.pathwayId, catEligible);
+    if (!resolvedPathway.ok) {
+      if (resolvedPathway.code === PRACTICE_TEST_CAT_CREATE_CODE.cat_pathway_ambiguous) {
+        safeServerLog("practice_tests", "CAT_PATHWAY_AMBIGUOUS", {
+          userIdPrefix: gate.userId.slice(0, 8),
+          catEligibleCount: catEligible.length,
+          compatibleCount: compatible.length,
+        });
+        return NextResponse.json(
+          {
+            error:
+              "Choose which exam pathway you want to practice and pass pathwayId, or open CAT from a pathway-specific page (your account has more than one adaptive track).",
+            code: PRACTICE_TEST_CAT_CREATE_CODE.cat_pathway_ambiguous,
+          },
+          { status: 400 },
+        );
+      }
       safeServerLog("practice_tests", "CAT_PATHWAY_REQUIRED", {
         userIdPrefix: gate.userId.slice(0, 8),
         catEligibleCount: catEligible.length,
@@ -198,6 +210,7 @@ export async function POST(req: Request) {
         { status: 400 },
       );
     }
+    const pathwayIdForCat = resolvedPathway.pathwayId;
     if (pathwayIdForCat && !getExamPathwayById(pathwayIdForCat)) {
       safeServerLog("practice_tests", "CAT_INVALID_PATHWAY", {
         pathwayIdPrefix: pathwayIdForCat.slice(0, 14),

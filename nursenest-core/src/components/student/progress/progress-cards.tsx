@@ -140,7 +140,7 @@ export function PathwayLessonCard({
       {/* Topic coverage bar */}
       {hasTopicData ? (
         <div className="mt-3 border-t border-border/40 pt-3">
-          <TopicCoverageIndicator covered={topicsCovered} total={topicsTotal} noun="topics" />
+          <TopicCoverageIndicator covered={topicsCovered} total={topicsTotal} noun={t("learner.progressPage.topicsNoun")} />
         </div>
       ) : null}
 
@@ -155,7 +155,7 @@ export function PathwayLessonCard({
         </div>
         {hasTopicData ? (
           <div className="rounded-lg bg-[var(--bg-card)] py-2">
-            <dt className="font-medium text-muted-foreground">Missing topics</dt>
+            <dt className="font-medium text-muted-foreground">{t("learner.progressPage.topicsMissing")}</dt>
             <dd className="mt-0.5 tabular-nums font-semibold text-foreground">{topicsUncovered}</dd>
           </div>
         ) : (

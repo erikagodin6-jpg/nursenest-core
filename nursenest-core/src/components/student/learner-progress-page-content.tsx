@@ -138,14 +138,14 @@ export function LearnerProgressPageContent({
             hint={t("learner.progressPage.questionsAccuracyHint")}
           />
           <StatBlock
-            label="Topics practiced"
+            label={t("learner.progressPage.topicsPracticed")}
             value={questionBank.topicsPracticed}
-            hint="Distinct topics with at least one graded question attempt"
+            hint={t("learner.progressPage.topicsPracticedHint")}
           />
         </ResponsiveStatRow>
         <div className="mt-4">
           <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-            Recent sessions
+            {t("learner.progressPage.recentSessionsLabel")}
           </p>
           <p className="text-xs text-muted-foreground">
             {questionBank.recentGraded.total > 0

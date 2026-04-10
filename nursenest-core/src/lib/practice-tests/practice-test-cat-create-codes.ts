@@ -7,8 +7,10 @@ export const PRACTICE_TEST_CAT_CREATE_CODE = {
   cat_weak_areas_empty: "cat_weak_areas_empty",
   cat_pool_invalid: "cat_pool_invalid",
   cat_pick_failed: "cat_pick_failed",
-  /** No pathway in request and no default pathway from subscription profile. */
+  /** No CAT-eligible pathway for this subscription (nothing to scope the session to). */
   cat_pathway_required: "cat_pathway_required",
+  /** More than one CAT-eligible pathway — client must send `pathwayId` (no silent default). */
+  cat_pathway_ambiguous: "cat_pathway_ambiguous",
   /** Upcoming / waitlist / info-only — CAT not offered for this track yet. */
   pathway_track_not_ready: "pathway_track_not_ready",
   cat_create_failed: "cat_create_failed",

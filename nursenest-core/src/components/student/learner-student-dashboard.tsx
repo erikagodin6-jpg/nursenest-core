@@ -319,6 +319,9 @@ export function LearnerStudentDashboard({
                 <div className="min-w-0">
                   <p className="font-semibold text-foreground">{t("learner.dashboard.student.quick.cat")}</p>
                   <p className="text-xs text-muted-foreground">{t("learner.dashboard.student.quick.catSub")}</p>
+                  <p className="mt-1 text-[10px] text-muted-foreground">
+                    Multiple tracks? You’ll choose the pathway next.
+                  </p>
                 </div>
                 <ArrowRight className="h-4 w-4 shrink-0 text-primary transition-transform group-hover:translate-x-0.5" aria-hidden />
               </Link>

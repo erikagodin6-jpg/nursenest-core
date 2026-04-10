@@ -19,10 +19,11 @@ export function PathwayCatSessionStartClient({
   pathwayOptions: PracticeTestPathwayOption[];
 }) {
   const [pathwayId, setPathwayId] = useState(() => {
-    const first = pathwayOptions[0]?.id ?? "";
     if (initialPathwayId && pathwayOptions.some((p) => p.id === initialPathwayId)) return initialPathwayId;
-    return first;
+    if (pathwayOptions.length === 1) return pathwayOptions[0]!.id;
+    return "";
   });
+  const needsPathwayChoice = pathwayOptions.length > 1 && pathwayId.length === 0;
   const [questionCap, setQuestionCap] = useState(PATHWAY_CAT_PRACTICE_DEFAULT_MAX_QUESTIONS);
   const [catBasis, setCatBasis] = useState<"random" | "weak">("random");
   const [catExamFeedbackMode, setCatExamFeedbackMode] = useState<"study" | "test">("test");
@@ -36,7 +37,7 @@ export function PathwayCatSessionStartClient({
   const examTitle = pathwayMeta?.displayName ?? "Exam pathway";
 
   useEffect(() => {
-    if (!pathwayId) {
+    if (!pathwayId.trim()) {
       setReadiness(null);
       return;
     }
@@ -69,7 +70,7 @@ export function PathwayCatSessionStartClient({
   }, [pathwayId]);
 
   const start = useCallback(async () => {
-    if (!pathwayId) return;
+    if (!pathwayId.trim()) return;
     setCreating(true);
     setError(null);
     setErrorCode(null);
@@ -133,10 +134,14 @@ export function PathwayCatSessionStartClient({
       <label className="block text-sm">
         <span className="text-muted-foreground">Pathway</span>
         <select
+          data-nn-qa-cat-pathway-select
           className="mt-1 w-full max-w-xl rounded-lg border border-border px-3 py-2 text-sm"
           value={pathwayId}
           onChange={(e) => setPathwayId(e.target.value)}
         >
+          {pathwayOptions.length > 1 ? (
+            <option value="">Choose which exam pathway you want to practice…</option>
+          ) : null}
           {pathwayOptions.map((p) => (
             <option key={p.id} value={p.id}>
               {p.label}
@@ -144,6 +149,11 @@ export function PathwayCatSessionStartClient({
           ))}
         </select>
       </label>
+      {needsPathwayChoice ? (
+        <p className="text-xs text-[var(--semantic-text-secondary)]">
+          We need your pathway before starting CAT so the adaptive pool matches the right exam.
+        </p>
+      ) : null}
 
       <label className="block text-sm">
         <span className="text-muted-foreground">Maximum questions (cap {MIN_CAT}–{MAX_CAT_PRACTICE})</span>
@@ -262,6 +272,11 @@ export function PathwayCatSessionStartClient({
         <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-sm">
           <p className="font-semibold text-destructive">Something went wrong</p>
           <p className="mt-1 text-foreground">{error}</p>
+          {errorCode === PRACTICE_TEST_CAT_CREATE_CODE.cat_pathway_ambiguous ? (
+            <p className="mt-2 text-muted-foreground">
+              Open this page with a pathway in the URL, or select a pathway above and try again.
+            </p>
+          ) : null}
           {errorCode === PRACTICE_TEST_CAT_CREATE_CODE.cat_weak_areas_empty ? (
             <p className="mt-2 text-muted-foreground">
               Tip: switch <strong>Pool basis</strong> to <strong>Balanced pool</strong>, use the question bank, then try weak
@@ -274,7 +289,10 @@ export function PathwayCatSessionStartClient({
       <div className="flex flex-wrap gap-3">
         <button
           type="button"
-          disabled={creating || !pathwayId || readinessLoading || (readiness !== null && !readiness.ok)}
+          data-nn-qa-cat-start-session
+          disabled={
+            creating || !pathwayId.trim() || needsPathwayChoice || readinessLoading || (readiness !== null && !readiness.ok)
+          }
           className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-50"
           onClick={() => void start()}
         >

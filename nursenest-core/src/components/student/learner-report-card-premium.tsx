@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import type { ReportCardData } from "@/lib/learner/load-report-card-data";
 import { remediationTopicDrillHref, remediationWeakModeTestHref } from "@/lib/learner/remediation-links";
+import { readinessBandLabel, readinessBandProgressFillClass } from "@/lib/learner/readiness-score";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 
 function pctBar(pct: number | null, label: string) {
@@ -55,6 +56,119 @@ export function LearnerReportCardPremium({
           {t("learner.reportCard.scopeLabel", { scope: scopeBits })}
         </p>
       ) : null}
+
+      {/* Readiness summary */}
+      <section className="overflow-hidden rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] shadow-[var(--semantic-shadow-soft)]">
+        <div className="nn-section-header-learner px-5 py-4">
+          <h2 className="text-lg font-semibold tracking-tight text-[var(--theme-heading-text)]">
+            {t("learner.reportCard.section.readiness")}
+          </h2>
+          <p className="mt-1 text-xs text-muted-foreground">{t("learner.reportCard.section.readinessSub")}</p>
+        </div>
+        <div className="p-5">
+          {data.readiness.band === "insufficient_data" || data.readiness.score == null ? (
+            <div className="rounded-xl border border-dashed border-border/60 bg-muted/10 px-5 py-6 text-center">
+              <p className="text-sm font-medium text-[var(--theme-heading-text)]">{t("learner.reportCard.readiness.insufficientTitle")}</p>
+              <p className="mt-1.5 text-xs text-muted-foreground">{t("learner.reportCard.readiness.insufficientBody")}</p>
+              <div className="mt-4 flex flex-wrap justify-center gap-2">
+                <Link href="/app/questions" className="inline-flex rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">
+                  {t("learner.reportCard.readiness.ctaQuestions")}
+                </Link>
+                <Link href="/app/exams" className="inline-flex rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-muted/80">
+                  {t("learner.reportCard.readiness.ctaMocks")}
+                </Link>
+              </div>
+            </div>
+          ) : (
+            <div className="grid gap-5 sm:grid-cols-2">
+              {/* Score + band */}
+              <div className="flex flex-col gap-3">
+                <div className="nn-semantic-inset flex items-center gap-4 p-4">
+                  <div
+                    className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full text-xl font-extrabold tabular-nums text-[var(--theme-heading-text)]"
+                    style={{
+                      background: `conic-gradient(var(--semantic-success) ${data.readiness.score}%, color-mix(in srgb, var(--semantic-success) 12%, var(--semantic-surface)) 0)`,
+                    }}
+                    aria-label={`Readiness score: ${data.readiness.score} out of 100`}
+                  >
+                    <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[var(--semantic-surface)] text-base font-bold">
+                      {data.readiness.score}
+                    </span>
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-[11px] font-semibold uppercase tracking-wide text-primary">
+                      {t("learner.reportCard.readiness.scoreLabel")}
+                    </p>
+                    <p className="mt-0.5 text-sm font-semibold text-[var(--theme-heading-text)]">
+                      {readinessBandLabel(data.readiness.band)}
+                    </p>
+                    <p className="mt-0.5 text-xs text-muted-foreground">
+                      {t("learner.reportCard.readiness.confidence", { level: data.readiness.confidence })}
+                    </p>
+                  </div>
+                </div>
+                <div
+                  className="nn-progress-track-semantic nn-progress-track-semantic--md"
+                  role="progressbar"
+                  aria-valuenow={data.readiness.score}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-label={t("learner.reportCard.readiness.scoreLabel")}
+                >
+                  <div
+                    className={`h-full rounded-full transition-[width] duration-700 ${readinessBandProgressFillClass(data.readiness.band)}`}
+                    style={{ width: `${data.readiness.score}%` }}
+                  />
+                </div>
+                {data.readiness.summary ? (
+                  <p className="text-xs leading-relaxed text-muted-foreground">{data.readiness.summary}</p>
+                ) : null}
+              </div>
+
+              {/* Factors */}
+              <div className="flex flex-col gap-2">
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                  {t("learner.reportCard.readiness.factorsLabel")}
+                </p>
+                {data.readiness.factors.map((f) => {
+                  const pct = f.maxPoints > 0 ? Math.round((f.points / f.maxPoints) * 100) : null;
+                  return (
+                    <div key={f.id} className="flex items-center gap-3">
+                      <span className="w-32 shrink-0 truncate text-xs text-muted-foreground">{f.label}</span>
+                      <div className="flex-1">
+                        {pct != null ? (
+                          <div
+                            className="nn-progress-track-semantic nn-progress-track-semantic--xs"
+                            role="progressbar"
+                            aria-valuenow={pct}
+                            aria-valuemin={0}
+                            aria-valuemax={100}
+                          >
+                            <div
+                              className={`h-full rounded-full transition-[width] duration-500 ${readinessBandProgressFillClass(data.readiness.band)}`}
+                              style={{ width: `${pct}%` }}
+                            />
+                          </div>
+                        ) : (
+                          <span className="text-xs text-muted-foreground">—</span>
+                        )}
+                      </div>
+                      <span className="w-8 shrink-0 text-right text-[11px] tabular-nums text-muted-foreground">
+                        {f.points}/{f.maxPoints}
+                      </span>
+                    </div>
+                  );
+                })}
+                <div className="mt-2">
+                  <Link href="/app/account/readiness" className="text-xs font-semibold text-primary underline-offset-2 hover:underline">
+                    {t("learner.reportCard.readiness.fullLink")}
+                  </Link>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
 
       {/* Overall */}
       <section className="overflow-hidden rounded-2xl border border-border/60 shadow-sm">

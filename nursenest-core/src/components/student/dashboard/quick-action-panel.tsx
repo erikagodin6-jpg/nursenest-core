@@ -114,6 +114,9 @@ export function QuickActionPanel({
           <p className="text-[11px] leading-snug text-[var(--semantic-text-secondary)]">
             {t("learner.dashboard.student.quick.catSub")}
           </p>
+          <p className="text-[10px] leading-snug text-[var(--semantic-text-secondary)]">
+            If you have more than one exam track, you’ll pick the pathway on the next screen.
+          </p>
         </Link>
 
         {/* Card 3: Weak topics (when available) or Question bank */}

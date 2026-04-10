@@ -10,6 +10,7 @@ import { answerMatches } from "@/lib/exams/score-session-answers";
 import { sanitizeSessionQuestionIds } from "@/lib/exams/exam-session-bounds";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import { loadLearnerDashboard, loadPathwayStudySummaries, type RecentMock } from "@/lib/learner/load-learner-dashboard";
+import type { ReadinessResult } from "@/lib/learner/readiness-score";
 import type { TopicTrendRow } from "@/lib/learner/topic-performance";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
@@ -68,6 +69,8 @@ export type MockWeeklyTrendPoint = {
 export type ReportCardData = {
   scopeTier: string | null;
   scopeCountry: string | null;
+  /** Computed readiness from the dashboard pipeline — null when insufficient data. */
+  readiness: ReadinessResult;
   /** Graded items from recent completed bank/exam sessions (tier-scoped). */
   bankGraded: { correct: number; total: number; sessionCount: number; accuracyPct: number | null };
   /** Weighted mock accuracy across recent attempts. */
@@ -368,6 +371,7 @@ export async function loadReportCardData(userId: string, entitlement: AccessScop
   return {
     scopeTier: dash.scope.tier,
     scopeCountry: dash.scope.country,
+    readiness: dash.readiness,
     bankGraded,
     mockAggregate,
     byQuestionTier,

@@ -2,14 +2,9 @@ import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { PathwayCatSessionStartClient } from "@/components/student/pathway-cat-session-start-client";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/db";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import {
-  defaultPracticeTestPathwayId,
-  listPathwaysCompatibleWithSubscription,
-  pathwayAllowsCatAdaptiveStart,
-} from "@/lib/exam-pathways/pathway-entitlements";
+import { listPathwaysCompatibleWithSubscription, pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import type { Metadata } from "next";
@@ -66,17 +61,13 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
   const compatiblePathways = listPathwaysCompatibleWithSubscription(entitlement);
   const catEligiblePathways = compatiblePathways.filter(pathwayAllowsCatAdaptiveStart);
   const waitlistOnlyPathways = compatiblePathways.filter((p) => !pathwayAllowsCatAdaptiveStart(p));
-  const learnerPathRow = userId
-    ? await prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } })
-    : null;
-  const defaultPathwayId =
-    catEligiblePathways.length > 0
-      ? defaultPracticeTestPathwayId(catEligiblePathways, learnerPathRow?.learnerPath, entitlement.country)
-      : null;
+  /** When several CAT-eligible tracks exist, require an explicit choice (URL or dropdown) — no silent default. */
   const initialPathwayId =
     requestedPathwayId && catEligiblePathways.some((p) => p.id === requestedPathwayId)
       ? requestedPathwayId
-      : defaultPathwayId ?? catEligiblePathways[0]?.id ?? null;
+      : catEligiblePathways.length === 1
+        ? catEligiblePathways[0]!.id
+        : null;
 
   const pathwayOptions = catEligiblePathways.map((p) => ({
     id: p.id,
@@ -93,6 +84,13 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
       <p className="mt-2 text-sm text-muted">
         Confirm the pathway and length, then start. You can switch pathways or open the full builder anytime.
       </p>
+      {catEligiblePathways.length > 1 ? (
+        <p className="mt-3 text-sm text-[var(--semantic-text-secondary)]">
+          Your plan includes more than one adaptive exam track —{" "}
+          <span className="font-medium text-[var(--semantic-text-primary)]">pick which pathway this CAT session is for</span>{" "}
+          before starting so items stay exam-scoped.
+        </p>
+      ) : null}
       {waitlistOnlyPathways.length > 0 && catEligiblePathways.length === 0 ? (
         <aside className="nn-card mt-6 border-amber-200/80 bg-amber-50/70 p-4 text-sm text-foreground dark:border-amber-900/40 dark:bg-amber-950/30">
           <p className="font-semibold">Adaptive (CAT) is not open for your current pathway yet</p>

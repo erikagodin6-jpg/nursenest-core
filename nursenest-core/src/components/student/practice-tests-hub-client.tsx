@@ -239,6 +239,11 @@ export function PracticeTestsHubClient({
               NP tracks use the NP question bank and AANP-style blueprint when you run exam simulation. RN tracks use
               the NCLEX-RN bank and NCLEX client-needs blueprint.
             </p>
+            {pathwayOptions.length > 1 && selectionMode === "cat" ? (
+              <p className="mt-2 text-xs text-[var(--semantic-text-secondary)]">
+                Multiple exam tracks on your plan — confirm this pathway matches the CAT you intend before starting.
+              </p>
+            ) : null}
           </div>
         ) : null}
 
