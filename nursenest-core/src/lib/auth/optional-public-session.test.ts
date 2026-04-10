@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
+import type { Session } from "next-auth";
 import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 
 describe("getOptionalPublicSession", () => {
@@ -15,7 +16,10 @@ describe("getOptionalPublicSession", () => {
         { pathname: "/us/rn/nclex-rn", surface: "marketing.exam_hub" },
         async () => {
           called = true;
-          return { user: { id: "user_123" } };
+          return {
+            user: { id: "user_123" },
+            expires: new Date(Date.now() + 86_400_000).toISOString(),
+          } as Session;
         },
       );
 
@@ -35,11 +39,16 @@ describe("getOptionalPublicSession", () => {
 
     const session = await getOptionalPublicSession(
       { pathname: "/us/rn/nclex-rn", surface: "marketing.exam_hub" },
-      async () => ({ user: { id: "user_123" } }),
+      async () =>
+        ({
+          user: { id: "user_123" },
+          expires: new Date(Date.now() + 86_400_000).toISOString(),
+        }) as Session,
     );
 
     try {
-      assert.deepEqual(session, { user: { id: "user_123" } });
+      assert.equal(session?.user?.id, "user_123");
+      assert.ok(session?.expires);
     } finally {
       if (previousAuthSecret === undefined) delete process.env.AUTH_SECRET;
       else process.env.AUTH_SECRET = previousAuthSecret;

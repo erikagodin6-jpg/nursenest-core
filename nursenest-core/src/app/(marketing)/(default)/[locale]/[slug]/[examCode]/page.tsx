@@ -1,32 +1,17 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ExamPathwayHub } from "@/components/exam-pathways/exam-pathway-hub";
+import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
+import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { NursingTierHubPage } from "@/components/marketing/nursing-tier-hub-page";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
-import { loadMarketingExamHubOptionalBlocks } from "@/lib/exam-pathways/marketing-hub-optional-data";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
-import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
+import { buildNursingTierHubContent } from "@/lib/marketing/nursing-tier-hub-content";
+import { pathwayOverviewBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
-import { prisma } from "@/lib/db";
-import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
-import type { HubLessonProgress } from "@/components/exam-pathways/exam-pathway-hub-study-modes";
 
 export const dynamicParams = true;
-
-async function fetchHubLessonProgress(userId: string | undefined, pathwayId: string): Promise<HubLessonProgress | null> {
-  if (!userId || !isDatabaseUrlConfigured()) return null;
-  try {
-    const prefix = `pathway:${pathwayId}:`;
-    const [completed, total] = await Promise.all([
-      prisma.progress.count({ where: { userId, lessonId: { startsWith: prefix }, completed: true } }),
-      prisma.progress.count({ where: { userId, lessonId: { startsWith: prefix } } }),
-    ]);
-    return { completed, total };
-  } catch {
-    return null;
-  }
-}
 
 type Props = { params: Promise<{ locale: string; slug: string; examCode: string }> };
 
@@ -69,41 +54,24 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
   const pathway = resolveExamPathwaySafe(locale, slug, examCode, { pathname });
   if (!pathway) notFound();
 
-  const session = await getOptionalPublicSession({
-    pathname,
-    surface: "marketing.exam_hub.overview",
-  });
-  const userId = (session?.user as { id?: string } | undefined)?.id;
-  const isSignedIn = Boolean(userId);
   const npPracticeSeo = getNpPracticeTestLandingCopy(locale, slug, examCode) ?? null;
-  const marketingHubPath = pathname;
-
-  const [{ npInventory, questionSnapshot, pathwayLessonCount }, hubProgress] = await Promise.all([
-    loadMarketingExamHubOptionalBlocks(pathway, {
-      pathname,
-      locale,
-      country: locale,
-      examCode,
-      pathwayId: pathway.id,
-      roleTrack: slug,
-    }),
-    fetchHubLessonProgress(userId, pathway.id),
-  ]);
+  const content = buildNursingTierHubContent(pathway);
+  const { crumbs, schemaItems } = pathwayOverviewBreadcrumbs(pathway, { hubBasePath: pathname });
 
   return (
-    <ExamPathwayHub
-      pathway={pathway}
-      isSignedIn={isSignedIn}
-      npInventory={npInventory}
-      questionSnapshot={questionSnapshot}
-      pathwayLessonCount={pathwayLessonCount}
-      heroTitle={npPracticeSeo?.heroTitle}
-      heroLead={npPracticeSeo?.heroLead}
-      emphasizeCatPracticeTests={Boolean(npPracticeSeo)}
-      marketingHubPath={marketingHubPath}
-      npPracticeSeo={npPracticeSeo}
-      npSeoAliasSegment={npPracticeSeo ? examCode : undefined}
-      hubProgress={hubProgress}
-    />
+    <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
+      <BreadcrumbJsonLd items={schemaItems} />
+      <div className="mb-8">
+        <BreadcrumbTrail items={crumbs} />
+      </div>
+      <NursingTierHubPage
+        pathway={pathway}
+        hubPath={pathname}
+        content={content}
+        heroTitle={npPracticeSeo?.heroTitle}
+        heroLead={npPracticeSeo?.heroLead}
+        npSeoAliasSegment={npPracticeSeo ? examCode : undefined}
+      />
+    </div>
   );
 }
