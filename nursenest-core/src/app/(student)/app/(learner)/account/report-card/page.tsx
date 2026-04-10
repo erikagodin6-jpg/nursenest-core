@@ -4,15 +4,18 @@ import { auth } from "@/lib/auth";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerReportCardPremium } from "@/components/student/learner-report-card-premium";
+import { LearnerSurfaceState } from "@/components/student/learner-surface-state";
 import { LearnerStudyQuickLinksCard } from "@/components/student/learner-study-quick-links-card";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { loadReportCardData } from "@/lib/learner/load-report-card-data";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
+import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { resolveStudySurfaceCatHref } from "@/lib/exam-pathways/pathway-cat-flow";
 import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
@@ -37,18 +40,31 @@ export default async function AccountReportCardPage() {
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
-      <main className="space-y-4">
+      <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <p className="text-sm text-muted-foreground">{t("learner.profile.signedOutHint")}</p>
+        <LearnerSurfaceState
+          headline={t("learner.account.reportCard.title")}
+          body={t("learner.profile.signedOutHint")}
+          hint={t("learner.dashboard.signedOutHint")}
+          primaryCta={{ label: "Sign in", href: loginWithCallback("/app/account/report-card"), variant: "primary" }}
+          secondaryCtas={[{ label: "Browse lessons", href: "/lessons", variant: "secondary" }]}
+        />
       </main>
     );
   }
 
   if (entitlement === "error") {
     return (
-      <main className="space-y-4">
+      <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <p className="text-sm text-muted-foreground">{t("learner.entitlement.verifyFailed")}</p>
+        <LearnerSurfaceState
+          headline="We couldn’t verify access right now"
+          body={t("learner.entitlement.verifyFailed")}
+          hint="Try your dashboard again in a moment, or open another study area while we reconnect."
+          tone="default"
+          primaryCta={{ label: "Open dashboard", href: "/app", variant: "primary" }}
+          secondaryCtas={[{ label: "Browse lessons", href: "/lessons", variant: "secondary" }]}
+        />
       </main>
     );
   }
@@ -57,10 +73,14 @@ export default async function AccountReportCardPage() {
     return (
       <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <div className="nn-learner-page-hero">
-          <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">{t("learner.account.reportCard.title")}</h1>
-          <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("learner.account.reportCard.lockedBody")}</p>
-        </div>
+        <LearnerSurfaceState
+          headline={t("learner.account.reportCard.title")}
+          body={t("learner.account.reportCard.lockedBody")}
+          hint={emptyStateCopy.entitlementLocked.body}
+          tone="locked"
+          primaryCta={{ label: t("cta.continuePlan"), href: "/pricing", variant: "primary" }}
+          secondaryCtas={[{ label: "Open study hub", href: "/app", variant: "secondary" }]}
+        />
         <SubscriptionPaywall context="exams" />
         <Link href="/pricing" className="nn-premium-action-chip inline-flex rounded-full border border-border px-4 py-2 text-sm font-semibold text-primary">
           {t("learner.profile.cta.plansPricing")}
@@ -75,10 +95,14 @@ export default async function AccountReportCardPage() {
     return (
       <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <div className="nn-learner-page-hero">
-          <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">{t("learner.account.reportCard.title")}</h1>
-          <p className="mt-2 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">{t("learner.reportCard.loadFailed")}</p>
-        </div>
+        <LearnerSurfaceState
+          headline={t("learner.account.reportCard.title")}
+          body={t("learner.reportCard.loadFailed")}
+          hint="Your plan is still in place. Head back to the dashboard or try this report again shortly."
+          tone="default"
+          primaryCta={{ label: "Open dashboard", href: "/app", variant: "primary" }}
+          secondaryCtas={[{ label: "Account overview", href: "/app/account/overview", variant: "secondary" }]}
+        />
       </main>
     );
   }

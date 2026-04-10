@@ -2,14 +2,18 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { auth } from "@/lib/auth";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerSurfaceState } from "@/components/student/learner-surface-state";
+import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { remediationTopicDrillHref } from "@/lib/learner/remediation-links";
 import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
+import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
@@ -33,18 +37,31 @@ export default async function AccountReviewQueuePage() {
 
   if (!userId || !isDatabaseUrlConfigured()) {
     return (
-      <main className="space-y-4">
+      <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <p className="text-sm text-muted-foreground">{t("learner.profile.signedOutHint")}</p>
+        <LearnerSurfaceState
+          headline={t("learner.account.reviewQueue.title")}
+          body={t("learner.profile.signedOutHint")}
+          hint={t("learner.dashboard.signedOutHint")}
+          primaryCta={{ label: "Sign in", href: loginWithCallback("/app/account/review-queue"), variant: "primary" }}
+          secondaryCtas={[{ label: "Browse lessons", href: "/lessons", variant: "secondary" }]}
+        />
       </main>
     );
   }
 
   if (entitlement === "error") {
     return (
-      <main className="space-y-4">
+      <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <p className="text-sm text-muted-foreground">{t("learner.entitlement.verifyFailed")}</p>
+        <LearnerSurfaceState
+          headline="We couldn’t verify access right now"
+          body={t("learner.entitlement.verifyFailed")}
+          hint="Try your dashboard again in a moment, or open another study area while we reconnect."
+          tone="default"
+          primaryCta={{ label: "Open dashboard", href: "/app", variant: "primary" }}
+          secondaryCtas={[{ label: "Browse lessons", href: "/lessons", variant: "secondary" }]}
+        />
       </main>
     );
   }
@@ -53,10 +70,14 @@ export default async function AccountReviewQueuePage() {
     return (
       <main className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
-        <div>
-          <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.reviewQueue.title")}</h1>
-          <p className="mt-2 text-sm text-muted-foreground">{t("learner.account.reviewQueue.lockedBody")}</p>
-        </div>
+        <LearnerSurfaceState
+          headline={t("learner.account.reviewQueue.title")}
+          body={t("learner.account.reviewQueue.lockedBody")}
+          hint={emptyStateCopy.entitlementLocked.body}
+          tone="locked"
+          primaryCta={{ label: t("cta.continuePlan"), href: "/pricing", variant: "primary" }}
+          secondaryCtas={[{ label: "Open study hub", href: "/app", variant: "secondary" }]}
+        />
         <SubscriptionPaywall context="questions" />
       </main>
     );
@@ -84,9 +105,19 @@ export default async function AccountReviewQueuePage() {
         <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">{t("learner.account.reviewQueue.topicQueueHeading")}</h2>
         <p className="mt-1 text-sm text-muted-foreground">{t("learner.account.reviewQueue.topicQueueSub")}</p>
         {reviewTopics.length === 0 ? (
-          <p className="mt-6 rounded-xl border border-dashed border-border/80 bg-muted/20 p-6 text-sm text-muted-foreground">
-            {t("learner.account.reviewQueue.emptyQueue")}
-          </p>
+          <div className="mt-6">
+            <PremiumEmptyState
+              data-nn-empty="account-review-queue"
+              tone="early"
+              density="compact"
+              visualLayout="stack"
+              headline="Nothing is queued for review yet"
+              body={t("learner.account.reviewQueue.emptyQueue")}
+              hint={emptyStateCopy.noWeakAreasYet.body}
+              primaryCta={{ label: t("learner.profile.quickLinks.questionBank"), href: "/app/questions", variant: "primary" }}
+              secondaryCtas={[{ label: t("learner.account.nav.focusAreas"), href: "/app/account/focus-areas", variant: "secondary" }]}
+            />
+          </div>
         ) : (
           <ul className="mt-4 space-y-3">
             {reviewTopics.map((w) => (
