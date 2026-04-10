@@ -11,13 +11,19 @@ import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlemen
 import { loadReadinessPagePayload } from "@/lib/learner/load-readiness-page-payload";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { t } = await getLearnerMarketingBundle();
-  return {
-    title: t("learner.account.readiness.metaTitle"),
-    robots: { index: false, follow: false },
-  };
+  return safeGenerateMetadata(
+    async () => {
+      const { t } = await getLearnerMarketingBundle();
+      return {
+        title: t("learner.account.readiness.metaTitle"),
+        robots: { index: false, follow: false },
+      };
+    },
+    { pathname: "/app/account/readiness", routeGroup: "student.learner.account_readiness" },
+  );
 }
 
 export default async function AccountReadinessPage() {

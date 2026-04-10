@@ -22,6 +22,7 @@ import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { LEARNER_APP_LESSONS_PAGE_SIZE } from "@/lib/lessons/pathway-lesson-scale";
 import { loadPathwayLessonProgressMap, type PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 import { LessonCard, LessonCardChip } from "@/components/student/product/lesson-card";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 type AppLessonListRow = {
   id: string;
@@ -65,11 +66,16 @@ function appLessonsListQuery(page: number, topic: string | null, topicSlug: stri
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { t } = await getLearnerMarketingBundle();
-  return {
-    title: t("learner.lessons.list.metaTitle"),
-    robots: { index: false, follow: false },
-  };
+  return safeGenerateMetadata(
+    async () => {
+      const { t } = await getLearnerMarketingBundle();
+      return {
+        title: t("learner.lessons.list.metaTitle"),
+        robots: { index: false, follow: false },
+      };
+    },
+    { pathname: "/app/lessons", routeGroup: "student.learner.lessons" },
+  );
 }
 
 export default async function LessonsPage({ searchParams }: Props) {

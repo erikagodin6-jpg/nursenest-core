@@ -8,13 +8,19 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { loadAccountHubBundle } from "@/lib/learner/load-account-hub-snapshot";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { t } = await getLearnerMarketingBundle();
-  return {
-    title: t("learner.account.security.metaTitle"),
-    robots: { index: false, follow: false },
-  };
+  return safeGenerateMetadata(
+    async () => {
+      const { t } = await getLearnerMarketingBundle();
+      return {
+        title: t("learner.account.security.metaTitle"),
+        robots: { index: false, follow: false },
+      };
+    },
+    { pathname: "/app/account/security", routeGroup: "student.learner.account_security" },
+  );
 }
 
 export default async function AccountSecurityPage() {

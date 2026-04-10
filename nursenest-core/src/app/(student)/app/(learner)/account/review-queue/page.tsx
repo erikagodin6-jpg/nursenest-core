@@ -9,13 +9,19 @@ import { remediationTopicDrillHref } from "@/lib/learner/remediation-links";
 import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { t } = await getLearnerMarketingBundle();
-  return {
-    title: t("learner.account.reviewQueue.metaTitle"),
-    robots: { index: false, follow: false },
-  };
+  return safeGenerateMetadata(
+    async () => {
+      const { t } = await getLearnerMarketingBundle();
+      return {
+        title: t("learner.account.reviewQueue.metaTitle"),
+        robots: { index: false, follow: false },
+      };
+    },
+    { pathname: "/app/account/review-queue", routeGroup: "student.learner.account_review_queue" },
+  );
 }
 
 export default async function AccountReviewQueuePage() {

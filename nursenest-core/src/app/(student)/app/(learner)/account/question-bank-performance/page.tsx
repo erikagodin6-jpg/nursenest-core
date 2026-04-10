@@ -10,13 +10,19 @@ import { loadPremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-sn
 import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { t } = await getLearnerMarketingBundle();
-  return {
-    title: t("learner.account.questionBankPerf.metaTitle"),
-    robots: { index: false, follow: false },
-  };
+  return safeGenerateMetadata(
+    async () => {
+      const { t } = await getLearnerMarketingBundle();
+      return {
+        title: t("learner.account.questionBankPerf.metaTitle"),
+        robots: { index: false, follow: false },
+      };
+    },
+    { pathname: "/app/account/question-bank-performance", routeGroup: "student.learner.account_question_bank_performance" },
+  );
 }
 
 export default async function AccountQuestionBankPerformancePage() {

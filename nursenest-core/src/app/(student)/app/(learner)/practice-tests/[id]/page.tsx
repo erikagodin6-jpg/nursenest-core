@@ -10,16 +10,22 @@ import { maskUserLabelForWatermark } from "@/lib/premium-protection/mask-user-la
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import type { Metadata } from "next";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 type Props = { params: Promise<{ id: string }> };
 
 /** Private learner session — do not index individual test runs. */
 export async function generateMetadata(): Promise<Metadata> {
-  const { t } = await getLearnerMarketingBundle();
-  return {
-    robots: { index: false, follow: false },
-    title: t("learner.practiceTests.run.metaTitle"),
-  };
+  return safeGenerateMetadata(
+    async () => {
+      const { t } = await getLearnerMarketingBundle();
+      return {
+        robots: { index: false, follow: false },
+        title: t("learner.practiceTests.run.metaTitle"),
+      };
+    },
+    { pathname: "/app/practice-tests/[id]", routeGroup: "student.learner.practice_test_run" },
+  );
 }
 
 export default async function PracticeTestRunPage({ params }: Props) {

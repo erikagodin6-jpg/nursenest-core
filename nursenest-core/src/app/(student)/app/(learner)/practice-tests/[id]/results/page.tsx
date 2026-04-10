@@ -16,6 +16,7 @@ import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-serve
 import { parsePracticeTestConfigAtBoundary } from "@/lib/practice-tests/practice-test-config-boundary";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
 import type { Metadata } from "next";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -31,10 +32,13 @@ const RESULTS_CRUMBS = [
 ];
 
 export async function generateMetadata(): Promise<Metadata> {
-  return {
-    robots: { index: false, follow: false },
-    title: "Practice test results | NurseNest",
-  };
+  return safeGenerateMetadata(
+    async () => ({
+      robots: { index: false, follow: false },
+      title: "Practice test results | NurseNest",
+    }),
+    { pathname: "/app/practice-tests/[id]/results", routeGroup: "student.learner.practice_test_results" },
+  );
 }
 
 export default async function PracticeTestResultsPage({ params }: Props) {

@@ -26,6 +26,7 @@ import { LearnerDashboardInsightPanels } from "@/components/student/learner-dash
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 function retentionPersonalNote(t: LearnerMarketingT, prefs: Awaited<ReturnType<typeof loadLearnerRetentionPreferences>>): string | null {
   if (!prefs) return null;
@@ -39,11 +40,16 @@ function retentionPersonalNote(t: LearnerMarketingT, prefs: Awaited<ReturnType<t
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { t } = await getLearnerMarketingBundle();
-  return {
-    title: t("learner.dashboard.metaTitle"),
-    robots: { index: false, follow: false },
-  };
+  return safeGenerateMetadata(
+    async () => {
+      const { t } = await getLearnerMarketingBundle();
+      return {
+        title: t("learner.dashboard.metaTitle"),
+        robots: { index: false, follow: false },
+      };
+    },
+    { pathname: "/app", routeGroup: "student.learner.dashboard" },
+  );
 }
 
 export default async function LearnerDashboardPage() {

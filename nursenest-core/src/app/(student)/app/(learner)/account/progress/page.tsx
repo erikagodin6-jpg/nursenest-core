@@ -10,13 +10,19 @@ import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlemen
 import { loadProgressPagePayload } from "@/lib/learner/load-progress-page-payload";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { t } = await getLearnerMarketingBundle();
-  return {
-    title: t("learner.account.progress.metaTitle"),
-    robots: { index: false, follow: false },
-  };
+  return safeGenerateMetadata(
+    async () => {
+      const { t } = await getLearnerMarketingBundle();
+      return {
+        title: t("learner.account.progress.metaTitle"),
+        robots: { index: false, follow: false },
+      };
+    },
+    { pathname: "/app/account/progress", routeGroup: "student.learner.account_progress" },
+  );
 }
 
 export default async function AccountProgressPage() {

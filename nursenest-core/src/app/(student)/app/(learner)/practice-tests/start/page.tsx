@@ -13,12 +13,16 @@ import {
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import type { Metadata } from "next";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return {
-    robots: { index: false, follow: false },
-    title: "Start CAT practice | NurseNest",
-  };
+  return safeGenerateMetadata(
+    async () => ({
+      robots: { index: false, follow: false },
+      title: "Start CAT practice | NurseNest",
+    }),
+    { pathname: "/app/practice-tests/start", routeGroup: "student.learner.practice_test_start" },
+  );
 }
 
 type Props = { searchParams: Promise<{ pathwayId?: string }> };
