@@ -1,0 +1,441 @@
+{
+  "topicSlug": "cell-structure-and-function",
+  "topicName": "Cell Structure and Function",
+  "domain": "Anatomy & Physiology",
+  "contentWeight": "heavy",
+  "batchId": "foundations-batch-02",
+  "generatedAt": "2026-04-10",
+  "status": "pilot-draft",
+  "lessons": [
+    {
+      "lessonId": "cell-structure-and-function-L01",
+      "title": "The Cell: Basic Unit of Life",
+      "sequenceOrder": 1,
+      "estimatedMinutes": 22,
+      "objectives": [
+        "Explain why the cell is considered the fundamental unit of life",
+        "Distinguish between prokaryotic and eukaryotic cells",
+        "Identify the three main regions of a generalized human (eukaryotic) cell",
+        "Describe the general function of the plasma membrane"
+      ],
+      "conceptBlocks": [
+        {
+          "heading": "Why Cells Matter in Healthcare",
+          "body": "All body processes — from breathing to healing wounds — occur at the cellular level. Understanding cell biology is the foundation for understanding tissue health, disease mechanisms, and how medications work. Cancer is uncontrolled cell division. Infections disrupt normal cellular function. IV fluids affect fluid balance across cell membranes. Cell biology is not abstract — it is the molecular basis of every clinical decision."
+        },
+        {
+          "heading": "Prokaryotes vs Eukaryotes",
+          "body": "**Prokaryotic cells** — lack a membrane-bound nucleus; DNA floats freely in the cytoplasm. Bacteria are prokaryotes. This structural difference is the basis for why antibiotics can target bacterial cells without destroying human cells.\n\n**Eukaryotic cells** — contain a membrane-bound nucleus housing DNA. All human, animal, plant, and fungal cells are eukaryotic. Human cells have highly organized internal compartments (organelles)."
+        },
+        {
+          "heading": "The Three Regions of a Human Cell",
+          "body": "1. **Plasma membrane (cell membrane)** — the outer boundary; controls what enters and exits the cell\n\n2. **Cytoplasm** — the fluid-filled interior containing organelles; mostly water with dissolved proteins, ions, and nutrients\n\n3. **Nucleus** — the control center; contains DNA (the genetic blueprint) and directs protein synthesis and cell reproduction"
+        },
+        {
+          "heading": "The Plasma Membrane",
+          "body": "The plasma membrane is a **phospholipid bilayer** — two layers of phospholipid molecules with their water-repelling (hydrophobic) tails sandwiched between their water-attracting (hydrophilic) heads.\n\nEmbedded in the bilayer:\n• Protein channels — allow specific molecules to cross\n• Receptor proteins — receive signals from hormones, drugs, and neurotransmitters\n• Recognition proteins — identify the cell as 'self' (immune function)\n\nThis selective permeability allows the cell to maintain a controlled internal environment despite changes in the external environment."
+        }
+      ],
+      "teachingNotes": "Start with the 'why': emphasize that understanding cells provides the molecular explanation for clinical concepts students will use every day. Use the antibiotic example (prokaryotes vs eukaryotes) to make the prokaryote/eukaryote distinction immediately clinically relevant."
+    },
+    {
+      "lessonId": "cell-structure-and-function-L02",
+      "title": "The Nucleus and Genetic Control",
+      "sequenceOrder": 2,
+      "estimatedMinutes": 22,
+      "objectives": [
+        "Describe the structure and function of the nucleus and nuclear envelope",
+        "Explain the roles of DNA, RNA, and ribosomes in protein synthesis",
+        "Define the terms chromatin, chromosome, and gene",
+        "Explain why mutations in DNA can lead to disease"
+      ],
+      "conceptBlocks": [
+        {
+          "heading": "Nuclear Structure",
+          "body": "The **nucleus** is enclosed in a **nuclear envelope** (double membrane) with **nuclear pores** that regulate the passage of molecules between the nucleus and cytoplasm.\n\nInside the nucleus:\n• **Chromatin** — DNA wound around proteins (histones); loosely arranged when the cell is not dividing\n• **Chromosomes** — condensed, visible chromatin structures that appear just before and during cell division; humans have 46 chromosomes (23 pairs)\n• **Nucleolus** — region within the nucleus where ribosomal RNA (rRNA) is produced"
+        },
+        {
+          "heading": "DNA: The Blueprint",
+          "body": "DNA (deoxyribonucleic acid) is a double-stranded helix containing sequences of four bases: adenine (A), thymine (T), guanine (G), and cytosine (C). A **gene** is a specific sequence of DNA that codes for a protein.\n\n**Central dogma of molecular biology:**\nDNA → (transcription) → mRNA → (translation) → Protein\n\n• Transcription: DNA template is copied into messenger RNA (mRNA) in the nucleus\n• Translation: mRNA leaves the nucleus and is read by ribosomes to build proteins"
+        },
+        {
+          "heading": "Ribosomes: Protein Factories",
+          "body": "**Ribosomes** are small organelles (not membrane-bound) composed of rRNA and proteins. They are the sites of protein synthesis (translation).\n\n• **Free ribosomes** — float in the cytoplasm; make proteins for use inside the cell\n• **Bound ribosomes** — attached to the rough endoplasmic reticulum; make proteins for export, membrane insertion, or organelle use\n\nProteins made by ribosomes include enzymes, structural proteins, hormones (e.g., insulin), and transport proteins (e.g., hemoglobin)."
+        },
+        {
+          "heading": "Mutations and Disease",
+          "body": "A **mutation** is a change in the DNA base sequence. Mutations can:\n• Be inherited (genetic disorders — e.g., sickle cell disease results from a single base pair change in the hemoglobin gene)\n• Be acquired during a lifetime from radiation, carcinogens, or DNA replication errors\n\nIf a mutation occurs in a gene controlling cell division, it can lead to uncontrolled growth — **cancer**. Understanding mutations explains the basis of genetic testing and targeted cancer therapies."
+        }
+      ],
+      "teachingNotes": "Use sickle cell disease as the clinical anchor for gene–protein–disease logic: one base pair mutation → wrong amino acid in hemoglobin → rigid sickle-shaped RBCs → vascular occlusion and pain crises. This chain connects molecular biology directly to a condition students will care for."
+    },
+    {
+      "lessonId": "cell-structure-and-function-L03",
+      "title": "Cytoplasmic Organelles and Their Functions",
+      "sequenceOrder": 3,
+      "estimatedMinutes": 25,
+      "objectives": [
+        "Identify the major cytoplasmic organelles and describe the function of each",
+        "Explain the functional relationship between the rough ER, Golgi apparatus, and secretory vesicles",
+        "Describe how mitochondria produce ATP and why this matters clinically",
+        "Explain the roles of lysosomes and peroxisomes in cellular housekeeping"
+      ],
+      "conceptBlocks": [
+        {
+          "heading": "Endoplasmic Reticulum (ER)",
+          "body": "**Rough ER** — studded with ribosomes on its outer surface; synthesizes and transports proteins destined for secretion or membrane insertion. Named 'rough' because of the ribosomes.\n\n**Smooth ER** — no ribosomes; functions:\n• Lipid and steroid hormone synthesis (e.g., cortisol, estrogen, testosterone)\n• Drug detoxification (liver smooth ER)\n• Calcium ion storage (especially in muscle cells — critical for muscle contraction)"
+        },
+        {
+          "heading": "Golgi Apparatus: The Shipping Center",
+          "body": "The **Golgi apparatus** (Golgi complex) is a stack of flattened membrane sacs. It:\n• Receives proteins from the rough ER\n• Modifies, packages, and labels proteins (adding sugar chains = glycosylation)\n• Ships proteins in **vesicles** to their final destinations:\n  - Secretory vesicles → exocytosis to outside the cell (e.g., insulin release)\n  - Lysosomes → intracellular digestion\n  - Plasma membrane → new membrane proteins"
+        },
+        {
+          "heading": "Mitochondria: The Energy Producers",
+          "body": "Mitochondria are double-membrane organelles responsible for producing **ATP** (adenosine triphosphate) — the cell's primary energy currency — through **cellular respiration**.\n\nKey steps: glucose is broken down via glycolysis → Krebs cycle → electron transport chain → ATP\n\n**Clinical relevance:**\n• Cells with high energy demands (cardiac muscle, neurons) have many mitochondria\n• Hypoxia (low oxygen) impairs ATP production → cell injury and death (MI, stroke)\n• Medications like metformin affect mitochondrial energy pathways"
+        },
+        {
+          "heading": "Lysosomes and Peroxisomes",
+          "body": "**Lysosomes** — membrane-bound sacs containing powerful digestive enzymes; break down:\n• Worn-out organelles (autophagy)\n• Bacteria engulfed by phagocytosis\n• Cellular debris\n\n**Lysosomal storage diseases** (e.g., Tay-Sachs, Gaucher) occur when a lysosomal enzyme is missing — undigested material accumulates, damaging cells.\n\n**Peroxisomes** — break down fatty acids and neutralize harmful chemicals (like hydrogen peroxide using catalase). Important in liver and kidney detoxification."
+        }
+      ],
+      "teachingNotes": "The rough ER → Golgi → secretory vesicle pathway is the 'protein highway.' Use insulin as the example: produced by ribosomes on rough ER, modified in Golgi, packaged in secretory vesicles, released (exocytosis) when blood glucose rises. This connects organelle biology directly to diabetes and insulin therapy."
+    },
+    {
+      "lessonId": "cell-structure-and-function-L04",
+      "title": "Cell Specialization and Homeostasis",
+      "sequenceOrder": 4,
+      "estimatedMinutes": 22,
+      "objectives": [
+        "Explain how cell specialization relates to tissue and organ function",
+        "Define homeostasis and describe how cells contribute to maintaining it",
+        "Describe the consequences of homeostatic imbalance at the cellular level",
+        "Identify the relationship between cellular health and the clinical concept of organ failure"
+      ],
+      "conceptBlocks": [
+        {
+          "heading": "Cell Specialization",
+          "body": "All human cells arise from a single fertilized egg yet develop into over 200 distinct cell types — each specialized to perform specific functions:\n\n• Muscle cells → contraction (abundant mitochondria, actin/myosin proteins)\n• Neurons → electrical signaling (long axons, myelin for fast conduction)\n• Erythrocytes (RBCs) → oxygen transport (packed with hemoglobin; no nucleus in mature RBCs)\n• Goblet cells → mucus secretion (abundant Golgi, secretory vesicles)\n• Osteoblasts → bone matrix production (active rough ER)\n\nSpecialization is driven by gene expression — all cells have the same DNA, but different genes are turned on or off in different cell types."
+        },
+        {
+          "heading": "Homeostasis: Cellular Level",
+          "body": "Homeostasis = the body's ability to maintain a stable internal environment despite changing conditions.\n\nAt the cellular level:\n• pH is maintained near 7.4 (enzymes function within narrow pH range)\n• Temperature is regulated (enzyme denaturation occurs above ~40°C)\n• Ion concentrations are controlled (Na⁺, K⁺, Ca²⁺ determine membrane excitability)\n• Oxygen and glucose are continuously supplied to support ATP production\n\nFeedback mechanisms (primarily negative feedback) detect deviations and initiate corrective responses."
+        },
+        {
+          "heading": "Cellular Injury and Death",
+          "body": "When cells cannot maintain homeostasis, injury occurs:\n\n**Reversible injury** — cell swelling, ion pump failure (if restored quickly, cell recovers)\n**Irreversible injury** — membrane rupture, ATP depletion, calcium influx → cell death\n\nTwo types of cell death:\n• **Apoptosis** — programmed, orderly cell death (normal development, immune cell clearance)\n• **Necrosis** — chaotic, inflammatory cell death from injury (trauma, ischemia, toxins)\n\n**Clinical connection:** Myocardial infarction → ischemia → ATP depletion → irreversible cardiomyocyte death → necrosis → elevated cardiac enzymes (troponin) in blood"
+        }
+      ],
+      "teachingNotes": "Close the loop on the clinical relevance of cell biology by tracing MI from blocked coronary artery → oxygen deprivation → mitochondria stop producing ATP → ion pumps fail → irreversible cell injury → necrosis → troponin release. This is the exact mechanism behind why troponin elevation = cardiac cell death."
+    }
+  ],
+  "questions": [
+    {
+      "questionId": "cell-structure-and-function-Q01",
+      "stem": "The fundamental unit of all living organisms is the:",
+      "options": {
+        "A": "Tissue",
+        "B": "Organ",
+        "C": "Cell",
+        "D": "Organelle"
+      },
+      "correctAnswer": "C",
+      "rationale": "The cell is the basic structural and functional unit of all living organisms. Tissues are formed by groups of similar cells. Organs are structures made of multiple tissue types. Organelles are subcellular structures within cells.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "cell as basic unit of life"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q02",
+      "stem": "Antibiotics can target bacterial cells without destroying human cells primarily because:",
+      "options": {
+        "A": "Human cells have a plasma membrane that bacterial cells lack",
+        "B": "Bacterial cells are prokaryotic and lack a membrane-bound nucleus, unlike human eukaryotic cells",
+        "C": "Human cells are larger and can expel antibiotics before they cause harm",
+        "D": "Antibiotics only affect cells that produce cell walls made of chitin"
+      },
+      "correctAnswer": "B",
+      "rationale": "Bacteria are prokaryotes with distinct structural features (no membrane-bound nucleus, different ribosomes, cell walls containing peptidoglycan) that antibiotics specifically target. Human cells are eukaryotes with fundamentally different structures, so most antibiotics spare them. This is the basis of antibiotic selectivity.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "prokaryote vs eukaryote — antibiotic relevance"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q03",
+      "stem": "The plasma membrane is best described as:",
+      "options": {
+        "A": "A rigid cell wall that provides structural support",
+        "B": "A selectively permeable phospholipid bilayer that controls substance entry and exit",
+        "C": "A solid barrier that prevents all molecules from crossing",
+        "D": "A protein-only layer that surrounds the nucleus"
+      },
+      "correctAnswer": "B",
+      "rationale": "The plasma membrane is a selectively permeable phospholipid bilayer. It regulates what enters and exits the cell through embedded protein channels, receptors, and carrier molecules. Rigid cell walls are found in plants and bacteria, not human cells. The plasma membrane surrounds the entire cell, not just the nucleus (that is the nuclear envelope).",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "plasma membrane — phospholipid bilayer; selective permeability"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q04",
+      "stem": "Which organelle is responsible for producing ATP through cellular respiration?",
+      "options": {
+        "A": "Ribosome",
+        "B": "Golgi apparatus",
+        "C": "Mitochondria",
+        "D": "Lysosome"
+      },
+      "correctAnswer": "C",
+      "rationale": "Mitochondria are the primary sites of ATP (adenosine triphosphate) production via cellular respiration, using oxygen and glucose. They are often called the 'powerhouse of the cell.' Ribosomes = protein synthesis. Golgi apparatus = modifies and packages proteins. Lysosomes = intracellular digestion.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "mitochondria — ATP production"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q05",
+      "stem": "In protein synthesis, the correct order of steps is:",
+      "options": {
+        "A": "Translation → transcription → protein",
+        "B": "DNA → transcription → mRNA → translation → protein",
+        "C": "RNA → nucleus → DNA → ribosome → protein",
+        "D": "Ribosome → Golgi → DNA → protein"
+      },
+      "correctAnswer": "B",
+      "rationale": "The central dogma: DNA is transcribed into mRNA in the nucleus → mRNA travels to ribosomes → ribosomes translate mRNA into protein. This one-directional flow (DNA → RNA → Protein) is fundamental to all cell biology. Option A reverses transcription and translation.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "central dogma: DNA → RNA → Protein"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q06",
+      "stem": "Lysosomes function primarily to:",
+      "options": {
+        "A": "Produce energy for the cell",
+        "B": "Synthesize lipids and steroid hormones",
+        "C": "Package and ship proteins to their destinations",
+        "D": "Digest worn-out organelles, bacteria, and cellular debris"
+      },
+      "correctAnswer": "D",
+      "rationale": "Lysosomes contain powerful digestive enzymes that break down cellular debris, worn-out organelles (autophagy), and engulfed bacteria (after phagocytosis). They are the cell's 'recycling and waste disposal' system. Mitochondria = energy. Smooth ER = lipid/steroid synthesis. Golgi apparatus = packages and ships proteins.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "lysosomes — intracellular digestion"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q07",
+      "stem": "The Golgi apparatus is best described as the cell's:",
+      "options": {
+        "A": "Energy producer",
+        "B": "Genetic library",
+        "C": "Protein modification and shipping center",
+        "D": "Site of DNA replication"
+      },
+      "correctAnswer": "C",
+      "rationale": "The Golgi apparatus receives proteins from the rough ER, modifies them (e.g., adds sugar chains), then packages and ships them to their final destinations (secretion, plasma membrane, or lysosomes). It is the cell's distribution and post-processing center. Mitochondria = energy. Nucleus = genetic library and site of DNA replication.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "Golgi apparatus function"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q08",
+      "stem": "A patient with myocardial ischemia (insufficient blood supply to the heart muscle) is at risk for cell death because:",
+      "options": {
+        "A": "Ischemia causes the nucleus to stop producing DNA",
+        "B": "Without oxygen, mitochondria cannot produce adequate ATP, leading to cellular energy failure",
+        "C": "Ischemia destroys the Golgi apparatus, stopping protein distribution",
+        "D": "Reduced blood flow causes the plasma membrane to become permanently rigid"
+      },
+      "correctAnswer": "B",
+      "rationale": "Ischemia = inadequate oxygen delivery. Without oxygen, mitochondria cannot complete cellular respiration, so ATP production drops rapidly. ATP-dependent ion pumps (Na⁺/K⁺ ATPase) fail → cell swelling → membrane disruption → irreversible cell death (necrosis). This is the cellular mechanism underlying myocardial infarction.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "ischemia → ATP depletion → cell death (clinical application)"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q09",
+      "stem": "The smooth endoplasmic reticulum (smooth ER) is responsible for all of the following EXCEPT:",
+      "options": {
+        "A": "Lipid and steroid hormone synthesis",
+        "B": "Drug detoxification in liver cells",
+        "C": "Calcium ion storage for muscle contraction",
+        "D": "Protein synthesis from mRNA templates"
+      },
+      "correctAnswer": "D",
+      "rationale": "Smooth ER does NOT have ribosomes and does not perform protein synthesis — that is the function of rough ER and free ribosomes. Smooth ER functions include lipid/steroid synthesis, drug detoxification (liver), and calcium storage (especially in muscle cells for contraction). Protein synthesis requires ribosomes, which are absent from smooth ER.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "smooth ER vs rough ER functions"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q10",
+      "stem": "Which cell type would you expect to have the most mitochondria?",
+      "options": {
+        "A": "Adipocytes (fat storage cells)",
+        "B": "Erythrocytes (red blood cells)",
+        "C": "Cardiomyocytes (heart muscle cells)",
+        "D": "Lymphocytes (immune cells at rest)"
+      },
+      "correctAnswer": "C",
+      "rationale": "Cardiomyocytes (heart muscle cells) contract continuously without rest, requiring massive amounts of ATP. Therefore they have a very high density of mitochondria (~30% of cell volume). Mature erythrocytes have NO mitochondria (they use glycolysis only and lack nuclei). Fat storage and resting immune cells have lower energy demands.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "mitochondria abundance correlates with energy demand"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q11",
+      "stem": "The nuclear envelope is best described as:",
+      "options": {
+        "A": "A single membrane surrounding the entire cell",
+        "B": "A double membrane containing pores that surrounds the nucleus",
+        "C": "The outer layer of the Golgi apparatus",
+        "D": "A protein scaffold that holds the nucleus in place"
+      },
+      "correctAnswer": "B",
+      "rationale": "The nuclear envelope is a double membrane (two phospholipid bilayers) that surrounds the nucleus. It contains nuclear pores that regulate the passage of materials between the nucleus and cytoplasm (e.g., mRNA leaving; proteins entering). The plasma membrane = single bilayer surrounding the cell.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "nuclear envelope — double membrane with pores"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q12",
+      "stem": "The hormone insulin is produced in pancreatic beta cells. Which organelle pathway is insulin most likely to follow before secretion?",
+      "options": {
+        "A": "Smooth ER → lysosome → exocytosis",
+        "B": "Rough ER → Golgi apparatus → secretory vesicle → exocytosis",
+        "C": "Free ribosome → nucleus → plasma membrane",
+        "D": "Mitochondria → Golgi → endocytosis"
+      },
+      "correctAnswer": "B",
+      "rationale": "Insulin is a secreted protein. Secreted proteins follow the pathway: synthesized on ribosomes of the rough ER → modified in the Golgi apparatus → packaged in secretory vesicles → released via exocytosis when blood glucose rises. Free ribosomes make proteins for internal use. Mitochondria produce energy, not proteins for secretion.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "protein secretion pathway: rough ER → Golgi → vesicle → exocytosis"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q13",
+      "stem": "The term 'apoptosis' refers to:",
+      "options": {
+        "A": "Chaotic, inflammatory cell death from injury",
+        "B": "Programmed, orderly cell death that is a normal process",
+        "C": "Uncontrolled cell division leading to tumor growth",
+        "D": "The engulfment of dead cells by phagocytes"
+      },
+      "correctAnswer": "B",
+      "rationale": "Apoptosis = programmed cell death — an orderly, genetically controlled process that eliminates unwanted cells without inflammation (e.g., removal of web-like tissue between fingers during fetal development; elimination of immune cells after an infection resolves). Necrosis = chaotic cell death from injury. Hyperplasia/malignancy = uncontrolled division. Phagocytosis = engulfment by immune cells.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "apoptosis vs necrosis"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q14",
+      "stem": "What is a gene?",
+      "options": {
+        "A": "A complete set of 46 chromosomes in a human cell",
+        "B": "A segment of DNA that codes for a specific protein",
+        "C": "The condensed form of chromatin visible during cell division",
+        "D": "A strand of mRNA produced after transcription"
+      },
+      "correctAnswer": "B",
+      "rationale": "A gene is a specific sequence of nucleotides on a DNA molecule that contains the instructions for making a specific protein. The human genome contains approximately 20,000–25,000 genes. A chromosome contains thousands of genes. Chromatin = loosely arranged DNA + proteins. mRNA = the RNA copy made from the gene during transcription.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "definition of a gene"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q15",
+      "stem": "A patient's lab results show elevated serum troponin levels. Using cellular biology knowledge, this finding indicates:",
+      "options": {
+        "A": "Lysosomes in the liver have released digestive enzymes",
+        "B": "Cardiac muscle cell membranes have ruptured, releasing intracellular proteins into the blood",
+        "C": "Mitochondria in the heart are producing excess ATP",
+        "D": "Protein synthesis has increased in response to cardiac stress"
+      },
+      "correctAnswer": "B",
+      "rationale": "Troponin is an intracellular cardiac protein. When cardiomyocytes undergo irreversible injury (necrosis), their plasma membranes rupture and intracellular proteins — including troponin — are released into the bloodstream. Elevated serum troponin = cardiac muscle cell death (as in myocardial infarction). This is a critical cardiac biomarker.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "cell membrane rupture → intracellular protein release → troponin elevation"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q16",
+      "stem": "Homeostasis at the cellular level is best described as:",
+      "options": {
+        "A": "The cell undergoing division to replace damaged cells",
+        "B": "The cell's ability to maintain a stable internal environment despite external changes",
+        "C": "The cell's ability to move toward nutrient sources",
+        "D": "The synthesis of new proteins in response to DNA mutations"
+      },
+      "correctAnswer": "B",
+      "rationale": "Cellular homeostasis = the maintenance of stable internal conditions (pH ~7.4, ion balance, temperature, oxygen supply, ATP levels) despite changes in the external environment. When homeostasis is disrupted and cannot be restored, cell injury and death occur. Division is cell reproduction, not homeostasis.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "cellular homeostasis definition"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q17",
+      "stem": "Mature red blood cells (erythrocytes) lack a nucleus. This means they:",
+      "options": {
+        "A": "Cannot produce any proteins and have a limited lifespan",
+        "B": "Divide more rapidly than nucleated cells",
+        "C": "Contain double the amount of DNA in the cytoplasm",
+        "D": "Rely on the Golgi apparatus as their control center"
+      },
+      "correctAnswer": "A",
+      "rationale": "Without a nucleus, mature RBCs cannot make new proteins or reproduce. Their hemoglobin content is fixed at maturation. This limits their lifespan to approximately 120 days, after which they are destroyed and replaced by new RBCs from bone marrow. The Golgi apparatus does not substitute as a control center.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "erythrocyte lacks nucleus → limited lifespan; cell specialization"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q18",
+      "stem": "The nucleolus within the nucleus is responsible for:",
+      "options": {
+        "A": "Storing DNA between cell divisions",
+        "B": "Producing ribosomal RNA (rRNA) used to build ribosomes",
+        "C": "Packaging proteins for transport out of the nucleus",
+        "D": "Breaking down damaged nuclear proteins"
+      },
+      "correctAnswer": "B",
+      "rationale": "The nucleolus is a distinct region within the nucleus where ribosomal RNA (rRNA) is produced and ribosome subunits are assembled. These are then exported through nuclear pores to the cytoplasm where they function in protein synthesis. The nucleolus is not involved in protein packaging (Golgi) or degradation (proteasome/lysosomes).",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "nucleolus — rRNA production"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q19",
+      "stem": "A lysosomal storage disease occurs when a patient lacks a specific lysosomal enzyme. Which consequence would most likely result?",
+      "options": {
+        "A": "The cell produces excess ATP from undigested material",
+        "B": "Undigested substrates accumulate inside lysosomes, damaging the cell",
+        "C": "The Golgi apparatus compensates by releasing extra enzymes",
+        "D": "The smooth ER absorbs the undigested material for lipid synthesis"
+      },
+      "correctAnswer": "B",
+      "rationale": "Lysosomes contain specific digestive enzymes. If an enzyme is absent (genetic deficiency), the substrate that enzyme would normally break down accumulates inside the lysosome. Over time, swollen lysosomes rupture or disrupt cell function. Examples: Tay-Sachs (GM2 ganglioside accumulation in neurons), Gaucher disease (glucocerebrosides in macrophages). No organelle can fully compensate.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "lysosomal storage disease mechanism"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q20",
+      "stem": "Which of the following best explains why sickle cell disease causes painful vascular occlusion crises?",
+      "options": {
+        "A": "A mutation in the hemoglobin gene produces an abnormal protein that causes RBCs to become rigid and sickle-shaped, obstructing small vessels",
+        "B": "Sickle cells produce excess ATP that causes vessel constriction",
+        "C": "Lysosomal enzymes in RBCs are absent, causing cell membrane rupture",
+        "D": "Abnormal ribosomal function reduces hemoglobin production overall"
+      },
+      "correctAnswer": "A",
+      "rationale": "Sickle cell disease results from a single nucleotide mutation in the beta-globin gene → the amino acid valine replaces glutamic acid → abnormal hemoglobin S polymerizes under low oxygen → rigid sickle-shaped RBCs → vascular occlusion → pain crisis and organ damage. This directly demonstrates the gene → protein → disease pathway.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "gene mutation → abnormal protein → disease (sickle cell model)"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q21",
+      "stem": "The rough endoplasmic reticulum differs from the smooth ER in that it:",
+      "options": {
+        "A": "Contains more ATP than the smooth ER",
+        "B": "Has ribosomes on its outer surface and is the site of secretory protein synthesis",
+        "C": "Is found only in muscle cells",
+        "D": "Produces lipids and detoxifies drugs"
+      },
+      "correctAnswer": "B",
+      "rationale": "The rough ER is studded with ribosomes on its outer surface, giving it a 'rough' appearance. These ribosomes synthesize proteins destined for secretion (like hormones, antibodies) or for membrane insertion. Smooth ER has no ribosomes and is involved in lipid synthesis and drug detoxification. Both types are found in most cells, though proportions vary.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "rough ER vs smooth ER — ribosomes"
+    },
+    {
+      "questionId": "cell-structure-and-function-Q22",
+      "stem": "The plasma membrane contains receptor proteins. These receptors are clinically important because they:",
+      "options": {
+        "A": "Produce ATP for signal transduction",
+        "B": "Serve as binding sites for hormones, drugs, and neurotransmitters to exert their effects on the cell",
+        "C": "Protect the cell from osmotic pressure by blocking all water entry",
+        "D": "Digest extracellular bacteria before they enter the cell"
+      },
+      "correctAnswer": "B",
+      "rationale": "Membrane receptor proteins are the binding sites (lock-and-key model) for hormones (e.g., insulin binds to insulin receptors), drugs (e.g., beta-blockers bind to beta-adrenergic receptors), and neurotransmitters (e.g., acetylcholine binds to cholinergic receptors). This is the molecular basis for pharmacology — drugs work by activating or blocking specific receptors.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "membrane receptors — basis of pharmacology"
+    }
+  ]
+}

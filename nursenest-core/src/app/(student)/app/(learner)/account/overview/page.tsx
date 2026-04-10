@@ -428,7 +428,7 @@ export default async function LearnerAccountOverviewPage() {
             hint={emptyStateCopy.entitlementLocked.body}
             tone="locked"
             primaryCta={{ label: t("cta.continuePlan"), href: "/pricing", variant: "primary" }}
-            secondaryCtas={[{ label: t("cta.improveWeakAreas"), href: "/pricing", variant: "secondary" }]}
+            secondaryCtas={[{ label: t("learner.profile.cta.plansPricing"), href: "/pricing", variant: "secondary" }]}
             visualLayout="stack"
             ctaLayout="stack"
           />

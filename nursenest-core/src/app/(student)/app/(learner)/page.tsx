@@ -112,11 +112,6 @@ export default async function LearnerDashboardPage() {
         />
         <LockedStudyNextPreview className="nn-card space-y-2 p-6" />
         <SubscriptionPaywall context="dashboard" />
-        <p className="text-center text-sm text-muted-foreground">
-          <Link href="/app/account/overview" className="font-semibold text-primary underline underline-offset-2">
-            {t("learner.dashboard.accountHubLink")}
-          </Link>
-        </p>
       </main>
     );
   }

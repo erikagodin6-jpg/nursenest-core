@@ -1,0 +1,437 @@
+{
+  "topicSlug": "cell-transport-mechanisms",
+  "topicName": "Cell Transport Mechanisms",
+  "domain": "Anatomy & Physiology",
+  "contentWeight": "heavy",
+  "batchId": "foundations-batch-03",
+  "generatedAt": "2026-04-10",
+  "status": "pilot-draft",
+  "lessons": [
+    {
+      "lessonId": "cell-transport-mechanisms-L01",
+      "title": "Passive Transport: Diffusion and Facilitated Diffusion",
+      "sequenceOrder": 1,
+      "estimatedMinutes": 22,
+      "objectives": [
+        "Define passive transport and explain why it requires no cellular energy",
+        "Describe simple diffusion and the factors that affect its rate",
+        "Explain facilitated diffusion and the role of protein channels and carrier proteins",
+        "Identify clinical examples where simple and facilitated diffusion are relevant"
+      ],
+      "conceptBlocks": [
+        {
+          "heading": "What Is Passive Transport?",
+          "body": "Passive transport moves substances across cell membranes without the expenditure of cellular energy (ATP). Movement occurs down the concentration gradient — from an area of higher concentration to an area of lower concentration — until equilibrium is reached.\n\n**Two types:**\n1. Simple diffusion\n2. Facilitated diffusion\n\nBoth are driven by concentration gradient (and for charged ions, the electrochemical gradient)."
+        },
+        {
+          "heading": "Simple Diffusion",
+          "body": "Small, nonpolar molecules dissolve directly through the phospholipid bilayer without needing a protein helper:\n• Oxygen (O₂) — diffuses from alveoli (high O₂) into pulmonary capillary blood (low O₂)\n• Carbon dioxide (CO₂) — diffuses from blood (high CO₂) into alveoli (low CO₂)\n• Lipid-soluble drugs — steroid hormones (e.g., cortisol, estrogen) diffuse freely across membranes\n\n**Rate factors:**\n• Concentration gradient steepness (greater difference = faster diffusion)\n• Surface area available\n• Temperature\n• Membrane thickness"
+        },
+        {
+          "heading": "Facilitated Diffusion",
+          "body": "Larger or polar molecules cannot dissolve through the lipid bilayer. They require membrane **protein channels** or **carrier proteins** to assist their passage — still moving down their concentration gradient (no ATP required):\n\n**Channel proteins** — form pores specific to one ion type:\n• Na⁺ channels, K⁺ channels, Cl⁻ channels (ion selectivity is key to nerve/muscle function)\n• Aquaporins — water channels in kidney tubule cells\n\n**Carrier proteins (transporters)** — bind the molecule, change shape, release on other side:\n• GLUT transporters — move glucose into most cells\n• GLUT4 in muscle/fat cells — requires insulin signaling to move to the membrane (disrupted in Type 2 diabetes)"
+        },
+        {
+          "heading": "Clinical Connections: Diffusion",
+          "body": "• **Gas exchange in the lungs** — O₂ and CO₂ move by simple diffusion across the alveolar-capillary membrane\n• **Pulmonary edema impairs O₂ diffusion** — fluid thickens the membrane, reducing diffusion rate → hypoxemia\n• **GLUT4 and insulin resistance** — in Type 2 diabetes, insulin does not effectively trigger GLUT4 insertion → glucose cannot enter muscle cells efficiently → hyperglycemia\n• **Ion channel blockers** (e.g., calcium channel blockers for hypertension) — specifically block facilitated diffusion of Ca²⁺ through membrane channels"
+        }
+      ],
+      "teachingNotes": "Gas exchange in the lungs is the most clinically immediate application of simple diffusion. Trace: high O₂ in alveoli → simple diffusion into blood → hemoglobin carries O₂ → O₂ leaves blood into tissues (again by diffusion). The entire respiratory chain is driven by simple diffusion gradients. GLUT4/insulin provides the pharmacology bridge."
+    },
+    {
+      "lessonId": "cell-transport-mechanisms-L02",
+      "title": "Osmosis and Tonicity",
+      "sequenceOrder": 2,
+      "estimatedMinutes": 25,
+      "objectives": [
+        "Define osmosis and explain how it differs from simple diffusion",
+        "Define osmotic pressure and osmolality",
+        "Distinguish isotonic, hypertonic, and hypotonic solutions",
+        "Predict the effect of each solution type on red blood cell volume and apply this to IV fluid administration"
+      ],
+      "conceptBlocks": [
+        {
+          "heading": "Osmosis: Water's Passive Movement",
+          "body": "Osmosis is the passive movement of water molecules through a selectively permeable membrane from an area of higher water concentration (lower solute concentration) to an area of lower water concentration (higher solute concentration).\n\nKey principle: water moves toward the more concentrated solution until equilibrium is reached — or until osmotic pressure is generated sufficient to stop the flow.\n\n**Osmotic pressure** — the pressure that would be required to stop osmosis; measured clinically as **serum osmolality** (~285–295 mOsm/kg in healthy adults)."
+        },
+        {
+          "heading": "Tonicity: The Clinical Framework",
+          "body": "Tonicity describes the effect of a solution on cell volume relative to normal body fluids (normal serum osmolality ~285–295 mOsm/kg):\n\n**Isotonic solution** (same osmolality as normal body fluid):\n• No net water movement across cell membrane\n• Cell volume unchanged\n• Example: 0.9% NaCl (normal saline), Lactated Ringer's\n\n**Hypertonic solution** (higher osmolality than body fluid):\n• Water moves OUT of cells → cells shrink (crenation in RBCs)\n• Example: 3% NaCl (used to treat severe hyponatremia)\n\n**Hypotonic solution** (lower osmolality than body fluid):\n• Water moves INTO cells → cells swell (lysis in RBCs)\n• Example: 0.45% NaCl (half-normal saline)"
+        },
+        {
+          "heading": "Tonicity and IV Fluid Selection",
+          "body": "Choosing the wrong IV fluid for a patient's condition can cause serious harm:\n\n• **Dehydrated patient (hypertonic body fluid)** → give isotonic or hypotonic fluid to restore water balance\n• **Hyponatremia (low sodium)** → careful use of isotonic or hypertonic saline (correcting too fast → cerebral osmotic demyelination syndrome)\n• **Fluid resuscitation in shock** → isotonic crystalloids (NS, LR) expand intravascular volume without lysing cells\n\nUnderstanding osmosis is why nurses must understand the rationale for each IV solution ordered — the wrong choice can cause cell damage at a molecular level."
+        }
+      ],
+      "teachingNotes": "Use the RBC crenation/lysis visual as the teaching anchor — it makes the abstract concept of tonicity concrete and memorable. Then bridge: 'This is why we don't infuse plain water IV — it would lyse RBCs.' Then reinforce with the IV fluid chart (NS = isotonic, half-NS = hypotonic, 3% NaCl = hypertonic) and their clinical uses."
+    },
+    {
+      "lessonId": "cell-transport-mechanisms-L03",
+      "title": "Active Transport",
+      "sequenceOrder": 3,
+      "estimatedMinutes": 22,
+      "objectives": [
+        "Define active transport and explain why it requires ATP",
+        "Describe the sodium-potassium (Na⁺/K⁺) pump and its physiological importance",
+        "Explain secondary active transport using cotransporters",
+        "Identify clinical consequences of impaired Na⁺/K⁺ pump function"
+      ],
+      "conceptBlocks": [
+        {
+          "heading": "What Is Active Transport?",
+          "body": "Active transport moves substances against their concentration gradient — from low to high concentration — requiring cellular energy (ATP). This is essential for maintaining cellular ion concentrations that differ significantly from the extracellular environment.\n\nFor example: intracellular K⁺ is high (~140 mEq/L) while extracellular K⁺ is low (~4 mEq/L). Active transport maintains this gradient, which is critical for membrane excitability in nerves and muscles."
+        },
+        {
+          "heading": "The Sodium-Potassium (Na⁺/K⁺) ATPase Pump",
+          "body": "The Na⁺/K⁺ pump is the most important active transporter in the human body:\n\nFor each cycle (using 1 ATP):\n• Pumps **3 Na⁺ OUT** of the cell (against Na⁺ gradient)\n• Pumps **2 K⁺ IN** to the cell (against K⁺ gradient)\n\nResults:\n• Maintains low intracellular Na⁺ → drives secondary active transport\n• Maintains high intracellular K⁺ → essential for resting membrane potential\n• Creates the electrochemical gradient used by nerve impulses and muscle contractions\n\n**Up to 30% of the body's basal ATP expenditure powers this pump.**"
+        },
+        {
+          "heading": "Secondary Active Transport",
+          "body": "Secondary active transport uses the ion gradient created by the Na⁺/K⁺ pump as an energy source — no additional ATP needed:\n\n**Cotransporters (symporters)** — move Na⁺ and another substance in the same direction:\n• SGLT transporters in the gut and kidney tubules — move Na⁺ and glucose together into the cell\n• Clinical application: SGLT2 inhibitors (e.g., empagliflozin, dapagliflozin) block glucose reabsorption in the kidney → glucose excreted in urine → lower blood glucose in Type 2 diabetes\n\n**Antiporters (exchangers)** — move Na⁺ in one direction and another substance in the opposite direction:\n• Na⁺/Ca²⁺ exchanger in cardiac muscle — affects calcium levels and therefore contractility"
+        },
+        {
+          "heading": "Clinical Consequences of Na⁺/K⁺ Pump Failure",
+          "body": "Any condition that depletes ATP impairs the Na⁺/K⁺ pump:\n• **Ischemia → ATP depletion → pump failure** → Na⁺ accumulates inside cell → water follows (osmosis) → cell swells → membrane rupture → cell death\n\nDigoxin (cardiac glycoside) inhibits the Na⁺/K⁺ pump, indirectly increasing intracellular Ca²⁺ → stronger cardiac contraction (used in heart failure/atrial fibrillation). However, toxicity causes dangerous dysrhythmias by disrupting membrane potentials."
+        }
+      ],
+      "teachingNotes": "SGLT2 inhibitors are among the most clinically significant new drug classes in endocrinology and cardiology. Tracing them back to secondary active transport of glucose in the kidney gives students a molecular explanation for a drug mechanism they will see constantly. Digoxin's mechanism (Na⁺/K⁺ pump inhibition) connects pharmacology directly to cell biology."
+    },
+    {
+      "lessonId": "cell-transport-mechanisms-L04",
+      "title": "Bulk Transport: Endocytosis and Exocytosis",
+      "sequenceOrder": 4,
+      "estimatedMinutes": 20,
+      "objectives": [
+        "Describe endocytosis and distinguish its three forms: phagocytosis, pinocytosis, and receptor-mediated endocytosis",
+        "Explain exocytosis and its role in secretion of hormones and neurotransmitters",
+        "Identify clinical applications of endocytosis and exocytosis",
+        "Summarize all membrane transport mechanisms and classify them correctly"
+      ],
+      "conceptBlocks": [
+        {
+          "heading": "Endocytosis: Bringing Material In",
+          "body": "Endocytosis involves the cell membrane engulfing material and bringing it inside in a vesicle. It requires energy (ATP) and is used for large particles or molecules:\n\n**Phagocytosis** ('cell eating') — engulfment of large particles:\n• Neutrophils and macrophages phagocytose bacteria → vesicle fuses with lysosome → digestive enzymes destroy bacteria\n• Basis of the innate immune defense\n\n**Pinocytosis** ('cell drinking') — engulfment of extracellular fluid droplets:\n• Non-specific sampling of extracellular materials\n\n**Receptor-mediated endocytosis** — highly selective:\n• Ligand binds specific membrane receptor → clathrin-coated pit forms → vesicle brought inside\n• Example: LDL cholesterol uptake by liver cells via LDL receptors (defective in familial hypercholesterolemia)"
+        },
+        {
+          "heading": "Exocytosis: Sending Material Out",
+          "body": "Exocytosis is the reverse of endocytosis — secretory vesicles inside the cell fuse with the plasma membrane and release their contents to the extracellular environment:\n\n• **Hormone secretion**: insulin packaged in vesicles by the Golgi apparatus → exocytosis triggered by elevated blood glucose\n• **Neurotransmitter release**: synaptic vesicles containing acetylcholine or dopamine → released into synapse\n• **Mucus secretion**: goblet cells release mucus via exocytosis to protect respiratory and GI mucosa"
+        },
+        {
+          "heading": "Transport Mechanism Summary",
+          "body": "| Mechanism | Energy? | Direction | Example |\n|---|---|---|---|\n| Simple diffusion | No | High → Low | O₂, CO₂ gas exchange |\n| Facilitated diffusion | No | High → Low | Glucose (GLUT), ions (Na⁺ channels) |\n| Osmosis | No | High water → Low water | IV fluid effects on cells |\n| Active transport | Yes (ATP) | Low → High | Na⁺/K⁺ pump |\n| Secondary active transport | Indirect | Co-transported | SGLT (glucose + Na⁺ reabsorption) |\n| Phagocytosis | Yes | Large particles IN | Macrophage ingests bacteria |\n| Exocytosis | Yes | Vesicles OUT | Insulin, neurotransmitters released |"
+        }
+      ],
+      "teachingNotes": "The LDL/familial hypercholesterolemia example for receptor-mediated endocytosis directly connects cell biology to cardiovascular risk and statin therapy. Statins increase the expression of LDL receptors on liver cells → more LDL cleared from blood → lower cardiovascular risk. Use this to close the lesson — students immediately see the clinical relevance of membrane receptor biology."
+    }
+  ],
+  "questions": [
+    {
+      "questionId": "cell-transport-mechanisms-Q01",
+      "stem": "Simple diffusion across a cell membrane moves substances:",
+      "options": {
+        "A": "Against the concentration gradient, requiring ATP",
+        "B": "Down the concentration gradient, requiring no energy",
+        "C": "Through protein channels, requiring carrier proteins",
+        "D": "Only when triggered by hormonal signals"
+      },
+      "correctAnswer": "B",
+      "rationale": "Simple diffusion is a form of passive transport — substances move from high to low concentration (down the gradient) without any energy (ATP) expenditure. Protein channels are used in facilitated diffusion, not simple diffusion. Active transport requires ATP and moves substances against the gradient.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "simple diffusion — passive, down gradient"
+    },
+    {
+      "questionId": "cell-transport-mechanisms-Q02",
+      "stem": "Oxygen (O₂) moves from the alveoli into the pulmonary capillary blood by:",
+      "options": {
+        "A": "Active transport using the Na⁺/K⁺ pump",
+        "B": "Facilitated diffusion through aquaporin channels",
+        "C": "Simple diffusion down its concentration gradient",
+        "D": "Receptor-mediated endocytosis"
+      },
+      "correctAnswer": "C",
+      "rationale": "O₂ is a small, nonpolar molecule that freely dissolves through the phospholipid bilayer by simple diffusion, moving from the high O₂ concentration in the alveoli to the lower O₂ concentration in the capillary blood. No energy, no protein channels needed. This is the fundamental mechanism of pulmonary gas exchange.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "gas exchange — simple diffusion"
+    },
+    {
+      "questionId": "cell-transport-mechanisms-Q03",
+      "stem": "Aquaporins are membrane channel proteins that specifically allow the rapid passage of:",
+      "options": {
+        "A": "Glucose molecules",
+        "B": "Sodium ions",
+        "C": "Water molecules",
+        "D": "Oxygen molecules"
+      },
+      "correctAnswer": "C",
+      "rationale": "Aquaporins are specialized channel proteins that facilitate rapid water movement across cell membranes by osmosis. They are highly abundant in kidney tubule cells, regulating water reabsorption under antidiuretic hormone (ADH) control. Glucose uses GLUT transporters. Na⁺ uses specific Na⁺ channels. O₂ crosses by simple diffusion.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "aquaporins — water channels"
+    },
+    {
+      "questionId": "cell-transport-mechanisms-Q04",
+      "stem": "An isotonic IV solution is chosen because it:",
+      "options": {
+        "A": "Causes cells to shrink by drawing water out",
+        "B": "Causes cells to swell by pushing water in",
+        "C": "Has the same osmolality as body fluids, causing no net water movement into or out of cells",
+        "D": "Contains hypertonic electrolytes that correct sodium deficits"
+      },
+      "correctAnswer": "C",
+      "rationale": "An isotonic solution has the same osmolality (~285–295 mOsm/kg) as normal body fluids. When an isotonic solution is infused, there is no net osmotic movement of water across cell membranes — cells maintain their normal volume. 0.9% NaCl (normal saline) and Lactated Ringer's are isotonic. Hypertonic solutions cause cell shrinkage; hypotonic solutions cause swelling.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "isotonic solution — no net water movement"
+    },
+    {
+      "questionId": "cell-transport-mechanisms-Q05",
+      "stem": "If red blood cells are placed in a hypotonic solution, what will occur?",
+      "options": {
+        "A": "The cells will shrink due to water leaving by osmosis",
+        "B": "The cells will remain unchanged because the solution matches body fluids",
+        "C": "The cells will swell and may lyse as water enters by osmosis",
+        "D": "The cells will undergo active transport to expel the excess fluid"
+      },
+      "correctAnswer": "C",
+      "rationale": "A hypotonic solution has lower osmolality (fewer solutes) than intracellular fluid. Water moves by osmosis from the hypotonic solution (higher water concentration) into the RBCs (lower water concentration), causing cells to swell and potentially lyse (burst). This is why pure water is never given intravenously — it would hemolyze RBCs.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "hypotonic solution → cell lysis by osmosis"
+    },
+    {
+      "questionId": "cell-transport-mechanisms-Q06",
+      "stem": "The Na⁺/K⁺ ATPase pump moves which ions and in which directions?",
+      "options": {
+        "A": "3 Na⁺ into the cell and 2 K⁺ out of the cell",
+        "B": "3 Na⁺ out of the cell and 2 K⁺ into the cell",
+        "C": "2 Na⁺ out of the cell and 3 K⁺ into the cell",
+        "D": "Equal amounts of Na⁺ and K⁺ in both directions"
+      },
+      "correctAnswer": "B",
+      "rationale": "The Na⁺/K⁺ ATPase pump, for each molecule of ATP consumed, pumps 3 Na⁺ OUT of the cell and 2 K⁺ INTO the cell. This maintains the high intracellular K⁺ and low intracellular Na⁺ essential for resting membrane potential and nerve/muscle function. The asymmetric ratio also makes the pump electrogenic (contributes slightly to membrane potential).",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "Na⁺/K⁺ pump — 3 Na⁺ out / 2 K⁺ in"
+    },
+    {
+      "questionId": "cell-transport-mechanisms-Q07",
+      "stem": "SGLT2 inhibitors (e.g., empagliflozin) lower blood glucose in Type 2 diabetes by:",
+      "options": {
+        "A": "Stimulating insulin secretion from pancreatic beta cells",
+        "B": "Blocking secondary active transport of glucose in the kidney tubule, causing glycosuria",
+        "C": "Increasing the number of GLUT4 transporters on muscle cell membranes",
+        "D": "Inhibiting the Na⁺/K⁺ pump to reduce glucose uptake in liver cells"
+      },
+      "correctAnswer": "B",
+      "rationale": "SGLT2 (sodium-glucose co-transporter 2) in the proximal renal tubule uses secondary active transport to reabsorb glucose along with Na⁺. SGLT2 inhibitors block this transporter → glucose cannot be reabsorbed → excreted in urine (glycosuria) → blood glucose decreases. This is a mechanism independent of insulin signaling.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "SGLT2 inhibitors — secondary active transport mechanism"
+    },
+    {
+      "questionId": "cell-transport-mechanisms-Q08",
+      "stem": "Active transport differs from passive transport in that it:",
+      "options": {
+        "A": "Moves substances from high to low concentration without protein carriers",
+        "B": "Requires ATP to move substances against their concentration gradient",
+        "C": "Relies on osmotic pressure to drive substance movement",
+        "D": "Only functions in membrane-bound organelles"
+      },
+      "correctAnswer": "B",
+      "rationale": "Active transport uses cellular energy (ATP) to move substances against their concentration gradient — from low to high concentration. This distinguishes it from passive transport (diffusion, osmosis, facilitated diffusion), which moves substances down their gradient without energy expenditure.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "active transport definition — ATP, against gradient"
+    },
+    {
+      "questionId": "cell-transport-mechanisms-Q09",
+      "stem": "Neutrophils destroy bacteria by phagocytosis. In this process, the neutrophil:",
+      "options": {
+        "A": "Secretes antibodies into the bloodstream to bind bacteria",
+        "B": "Engulfs bacteria in a membrane vesicle, which then fuses with lysosomes for destruction",
+        "C": "Uses receptor-mediated exocytosis to remove bacteria from the cell",
+        "D": "Releases histamine to neutralize bacterial toxins"
+      },
+      "correctAnswer": "B",
+      "rationale": "Phagocytosis = 'cell eating.' Neutrophils (and macrophages) extend pseudopods to engulf bacteria, forming a phagosome vesicle. The phagosome fuses with lysosomes → lysozymes and reactive oxygen species destroy the bacteria. This is the foundational mechanism of innate immune defense against bacterial infection.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "phagocytosis — innate immunity mechanism"
+    },
+    {
+      "questionId": "cell-transport-mechanisms-Q10",
+      "stem": "Exocytosis is the mechanism by which:",
+      "options": {
+        "A": "Large particles are brought into the cell in vesicles",
+        "B": "Water moves across the cell membrane by osmosis",
+        "C": "Intracellular vesicles fuse with the plasma membrane to release their contents outside the cell",
+        "D": "Ions are pumped across the membrane against their gradient"
+      },
+      "correctAnswer": "C",
+      "rationale": "Exocytosis = vesicles inside the cell fuse with the plasma membrane, releasing their contents extracellularly. This is the mechanism for hormone secretion (insulin, hormones), neurotransmitter release at synapses, and mucus secretion. Endocytosis = bringing material in. Osmosis = water movement. Ion pumping = active transport.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "exocytosis definition"
+    },
+    {
+      "questionId": "cell-transport-mechanisms-Q11",
+      "stem": "Which of the following substances crosses the cell membrane by facilitated diffusion?",
+      "options": {
+        "A": "Oxygen (O₂)",
+        "B": "Carbon dioxide (CO₂)",
+        "C": "Glucose into most body cells via GLUT transporters",
+        "D": "Cortisol (a lipid-soluble steroid hormone)"
+      },
+      "correctAnswer": "C",
+      "rationale": "Glucose is a large, polar molecule that cannot cross the lipid bilayer by simple diffusion. It uses GLUT carrier proteins (facilitated diffusion) to enter most cells, moving down its concentration gradient without ATP. O₂, CO₂, and lipid-soluble molecules like cortisol cross by simple diffusion due to their size and solubility properties.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "facilitated diffusion — GLUT transporters for glucose"
+    },
+    {
+      "questionId": "cell-transport-mechanisms-Q12",
+      "stem": "A patient in myocardial ischemia develops cellular edema (cell swelling). The primary cellular mechanism causing this swelling is:",
+      "options": {
+        "A": "Increased lysosomal enzyme activity breaking down cell structures",
+        "B": "Failure of the Na⁺/K⁺ pump due to ATP depletion, causing Na⁺ accumulation inside the cell, followed by osmotic water entry",
+        "C": "Receptor-mediated endocytosis of extracellular fluid into the ischemic cells",
+        "D": "Increased exocytosis of intracellular contents expanding the cell volume"
+      },
+      "correctAnswer": "B",
+      "rationale": "ATP depletion (from ischemia) → Na⁺/K⁺ pump failure → Na⁺ accumulates inside the cell (cannot be pumped out) → osmotic gradient draws water into the cell → cell swells. If perfusion is restored quickly, the pump resumes and the cell recovers. If depletion is prolonged → irreversible membrane damage → cell death (necrosis).",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "ischemia → ATP depletion → Na⁺/K⁺ pump failure → cell swelling"
+    },
+    {
+      "questionId": "cell-transport-mechanisms-Q13",
+      "stem": "Familial hypercholesterolemia results from defective LDL receptors on liver cells. This causes elevated blood LDL because:",
+      "options": {
+        "A": "Liver cells cannot perform exocytosis of LDL particles",
+        "B": "LDL cannot enter liver cells by receptor-mediated endocytosis, so it remains in the blood",
+        "C": "LDL diffuses across liver cells and accumulates in lysosomes",
+        "D": "Active transport of LDL is blocked by a defective Na⁺/K⁺ pump"
+      },
+      "correctAnswer": "B",
+      "rationale": "Normally, LDL binds to LDL receptors on liver cells → receptor-mediated endocytosis → LDL enters cell → cholesterol is processed. When LDL receptors are absent or dysfunctional (familial hypercholesterolemia), LDL cannot enter liver cells and accumulates in the bloodstream → severe hypercholesterolemia → premature cardiovascular disease. Statins increase LDL receptor expression, improving clearance.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "receptor-mediated endocytosis — LDL/familial hypercholesterolemia"
+    },
+    {
+      "questionId": "cell-transport-mechanisms-Q14",
+      "stem": "The medication digoxin inhibits the Na⁺/K⁺ ATPase pump in cardiac cells. What is the clinical effect of this mechanism?",
+      "options": {
+        "A": "Decreased heart rate and weaker cardiac contractions",
+        "B": "Indirectly increases intracellular Ca²⁺, strengthening cardiac contraction",
+        "C": "Increases K⁺ efflux from cardiac cells, relaxing the muscle",
+        "D": "Blocks Na⁺ channels, causing cardiac arrest"
+      },
+      "correctAnswer": "B",
+      "rationale": "Digoxin inhibits the Na⁺/K⁺ pump → Na⁺ accumulates inside cardiac cells → the Na⁺/Ca²⁺ exchanger compensates by bringing less Ca²⁺ out (or more Ca²⁺ in) → intracellular Ca²⁺ rises → stronger myocardial contraction (positive inotropy). This is used in heart failure and atrial fibrillation, though the narrow therapeutic index means toxicity is a significant concern.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "digoxin mechanism — Na⁺/K⁺ pump inhibition → ↑ Ca²⁺ → stronger contraction"
+    },
+    {
+      "questionId": "cell-transport-mechanisms-Q15",
+      "stem": "Osmotic pressure is best defined as:",
+      "options": {
+        "A": "The pressure required to prevent osmotic movement of water across a membrane",
+        "B": "The force exerted by solute molecules diffusing down their gradient",
+        "C": "The energy released when ATP drives active transport",
+        "D": "The pressure created by protein channels opening and closing"
+      },
+      "correctAnswer": "A",
+      "rationale": "Osmotic pressure is the pressure required to exactly oppose (stop) osmotic water movement. Solutions with higher solute concentrations have higher osmotic pressure — they 'pull' water toward them. This concept is clinically important in understanding plasma oncotic pressure (protein-generated osmotic pressure that keeps fluid in vessels) and IV tonicity calculations.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "osmotic pressure definition"
+    },
+    {
+      "questionId": "cell-transport-mechanisms-Q16",
+      "stem": "A nurse is preparing to administer 0.45% NaCl (half-normal saline) via IV. Based on tonicity principles, this solution will:",
+      "options": {
+        "A": "Expand extracellular fluid volume without affecting cells",
+        "B": "Cause cells to shrink as water is pulled out osmotically",
+        "C": "Move water into cells because it is hypotonic relative to body fluids",
+        "D": "Have no effect on fluid distribution because it contains electrolytes"
+      },
+      "correctAnswer": "C",
+      "rationale": "0.45% NaCl is hypotonic (approximately 154 mOsm/L, versus body fluid ~285–295 mOsm/kg). When infused, water moves by osmosis from the hypotonic solution into cells (which have higher solute concentration). This is useful for cellular rehydration but can cause cerebral edema if given too rapidly in head injury patients. Isotonic solutions (0.9% NaCl) do not cause this fluid shift.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "0.45% NaCl hypotonic — water moves into cells"
+    },
+    {
+      "questionId": "cell-transport-mechanisms-Q17",
+      "stem": "During pulmonary edema, oxygen transfer from alveoli to blood is impaired because:",
+      "options": {
+        "A": "Active transport of O₂ across the membrane is blocked by fluid",
+        "B": "The alveoli collapse and prevent airflow entirely",
+        "C": "Fluid accumulation increases the diffusion distance across the alveolar-capillary membrane",
+        "D": "The concentration gradient for O₂ is reversed by the extra fluid"
+      },
+      "correctAnswer": "C",
+      "rationale": "Simple diffusion rate is inversely related to membrane thickness. In pulmonary edema, fluid accumulates in the alveolar walls and alveolar spaces, increasing the distance O₂ must diffuse from alveolus to capillary. Greater diffusion distance → slower gas exchange → hypoxemia. Active transport does not transport O₂; it crosses only by simple diffusion.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "pulmonary edema impairs diffusion — membrane thickness effect"
+    },
+    {
+      "questionId": "cell-transport-mechanisms-Q18",
+      "stem": "The Na⁺/K⁺ pump is described as electrogenic. This means that:",
+      "options": {
+        "A": "It generates heat as a byproduct of ATP hydrolysis",
+        "B": "Pumping 3 Na⁺ out and 2 K⁺ in creates a net negative charge inside the cell, contributing to the resting membrane potential",
+        "C": "It requires electrical stimulation to become activated",
+        "D": "It only functions in electrically excitable cells such as neurons"
+      },
+      "correctAnswer": "B",
+      "rationale": "Because the pump moves 3 positive charges (Na⁺) out for every 2 positive charges (K⁺) it brings in, it creates a net outward movement of positive charge, contributing to the negative resting membrane potential (approximately -70 mV in neurons). This electrogenicity is a small but meaningful contributor to membrane excitability.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "Na⁺/K⁺ pump electrogenic — contributes to membrane potential"
+    },
+    {
+      "questionId": "cell-transport-mechanisms-Q19",
+      "stem": "Which of the following correctly describes secondary active transport?",
+      "options": {
+        "A": "Transport driven directly by ATP hydrolysis against the concentration gradient",
+        "B": "Transport of a substance against its gradient, powered by the ion gradient created by the Na⁺/K⁺ pump",
+        "C": "The movement of water through aquaporin channels by osmosis",
+        "D": "Transport of large molecules via receptor-mediated endocytosis"
+      },
+      "correctAnswer": "B",
+      "rationale": "Secondary active transport does not use ATP directly. Instead, it couples the downhill movement of Na⁺ (into the cell, driven by the gradient maintained by the Na⁺/K⁺ pump) to the uphill movement of another substance (e.g., glucose, amino acids). The SGLT transporter is a prime example: Na⁺ flowing in pulls glucose along with it.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "secondary active transport — piggybacks on Na⁺ gradient"
+    },
+    {
+      "questionId": "cell-transport-mechanisms-Q20",
+      "stem": "Why is plain sterile water never administered intravenously?",
+      "options": {
+        "A": "It would lower blood pressure by diluting electrolytes",
+        "B": "It would cause RBCs to shrink due to its hypertonic nature",
+        "C": "It is hypotonic and would lyse red blood cells by osmosis",
+        "D": "It would activate the Na⁺/K⁺ pump and deplete cellular ATP"
+      },
+      "correctAnswer": "C",
+      "rationale": "Pure water has zero osmolality — it is maximally hypotonic relative to blood. When infused IV, water would move by osmosis into RBCs (which have a much higher solute concentration), causing them to rapidly swell and lyse (hemolysis). This would be immediately life-threatening. Sterile water can be used in small amounts to dilute medications but must always be diluted with saline before any significant IV volume is administered.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "pure water IV → hypotonic hemolysis — clinical safety"
+    },
+    {
+      "questionId": "cell-transport-mechanisms-Q21",
+      "stem": "Pinocytosis differs from phagocytosis in that pinocytosis involves the uptake of:",
+      "options": {
+        "A": "Large solid particles such as bacteria",
+        "B": "Small droplets of extracellular fluid",
+        "C": "Specific molecules bound to cell surface receptors",
+        "D": "Lipid-soluble hormones"
+      },
+      "correctAnswer": "B",
+      "rationale": "Pinocytosis ('cell drinking') involves the non-specific uptake of small extracellular fluid droplets and their dissolved contents. Phagocytosis ('cell eating') = ingestion of large particles (bacteria, debris). Receptor-mediated endocytosis = specific molecules bound to receptors. Lipid-soluble hormones cross by simple diffusion.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "pinocytosis vs phagocytosis distinction"
+    },
+    {
+      "questionId": "cell-transport-mechanisms-Q22",
+      "stem": "In GLUT4-mediated glucose uptake in muscle cells, insulin is required because:",
+      "options": {
+        "A": "Insulin provides the ATP needed for glucose transport",
+        "B": "Insulin signals GLUT4 transporters to move to the plasma membrane, enabling glucose entry by facilitated diffusion",
+        "C": "Insulin opens Na⁺ channels to facilitate secondary active transport of glucose",
+        "D": "Insulin converts glucose to a form small enough to cross by simple diffusion"
+      },
+      "correctAnswer": "B",
+      "rationale": "GLUT4 transporters are stored in intracellular vesicles in muscle and fat cells. Insulin binding to its receptor triggers a signaling cascade that causes GLUT4-containing vesicles to fuse with the plasma membrane, inserting GLUT4 transporters. Glucose then enters by facilitated diffusion down its concentration gradient. In Type 2 diabetes, this insulin-signaling pathway is impaired (insulin resistance), so GLUT4 doesn't translocate properly.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "GLUT4/insulin signaling — insulin resistance mechanism"
+    }
+  ]
+}

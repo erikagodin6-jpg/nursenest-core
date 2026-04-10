@@ -1,4 +1,3 @@
-import Link from "next/link";
 import type { Metadata } from "next";
 import { auth } from "@/lib/auth";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
@@ -87,9 +86,6 @@ export default async function AccountReportCardPage() {
           ctaLayout="stack"
         />
         <SubscriptionPaywall context="exams" />
-        <Link href="/pricing" className="nn-premium-action-chip inline-flex rounded-full border border-border px-4 py-2 text-sm font-semibold text-primary">
-          {t("learner.profile.cta.plansPricing")}
-        </Link>
       </main>
     );
   }

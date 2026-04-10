@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import type { LearnerDashboardModel } from "@/lib/learner/load-learner-dashboard";
+import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { remediationTopicDrillHref, remediationWeakModeTestHref } from "@/lib/learner/remediation-links";
 import { readinessBandLabel } from "@/lib/learner/readiness-score";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
@@ -22,7 +23,8 @@ function pctLine(current: number, total: number): string {
   return `${Math.min(100, Math.round((current / total) * 100))}%`;
 }
 
-export function LearnerDashboardView({ data }: { data: LearnerDashboardModel }) {
+export async function LearnerDashboardView({ data }: { data: LearnerDashboardModel }) {
+  const { t } = await getLearnerMarketingBundle();
   const lessonPct = pctLine(data.lessonsCompleted, data.lessonsAvailable);
   const topWeak = data.weakTopics.slice(0, 3);
   const r = data.readiness;
@@ -356,10 +358,10 @@ export function LearnerDashboardView({ data }: { data: LearnerDashboardModel }) 
                 tone="early"
                 density="compact"
                 visualLayout="stack"
-                headline={emptyStateCopy.noWeakAreasYet.headline}
-                body="No topic signals yet. Complete a practice exam to populate weak-area hints."
+                headline={t("learner.dashboard.empty.weakSignalsTitle")}
+                body={t("learner.dashboard.empty.weakSignalsBody")}
                 hint={emptyStateCopy.noWeakAreasYet.body}
-                primaryCta={{ label: "Practice exams", href: "/app/exams", variant: "primary" }}
+                primaryCta={{ label: t("learner.dashboard.empty.openPracticeExams"), href: "/app/exams", variant: "primary" }}
               />
             </div>
           )}
@@ -389,10 +391,10 @@ export function LearnerDashboardView({ data }: { data: LearnerDashboardModel }) 
                 tone="early"
                 density="compact"
                 visualLayout="stack"
-                headline={emptyStateCopy.noExamHistory.headline}
-                body="No mock attempts yet. Start from Practice exams."
+                headline={t("learner.dashboard.empty.recentMocksTitle")}
+                body={t("learner.dashboard.empty.recentMocksBody")}
                 hint={emptyStateCopy.noExamHistory.body}
-                primaryCta={{ label: "Practice exams", href: "/app/exams", variant: "primary" }}
+                primaryCta={{ label: t("learner.dashboard.empty.openPracticeExams"), href: "/app/exams", variant: "primary" }}
               />
             </div>
           )}

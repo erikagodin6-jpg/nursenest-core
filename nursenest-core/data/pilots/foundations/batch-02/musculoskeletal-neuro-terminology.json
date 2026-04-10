@@ -1,0 +1,375 @@
+{
+  "topicSlug": "musculoskeletal-neuro-terminology",
+  "topicName": "Musculoskeletal and Neurological Terminology",
+  "domain": "Medical Terminology",
+  "contentWeight": "light",
+  "batchId": "foundations-batch-02",
+  "generatedAt": "2026-04-10",
+  "status": "pilot-draft",
+  "lessons": [
+    {
+      "lessonId": "musculoskeletal-neuro-terminology-L01",
+      "title": "Musculoskeletal Root Words and Key Terms",
+      "sequenceOrder": 1,
+      "estimatedMinutes": 20,
+      "objectives": [
+        "Identify root words for bone, muscle, cartilage, and joint structures",
+        "Decode common musculoskeletal conditions, procedures, and assessment terms",
+        "Distinguish between terms for inflammation, disease, and structural changes of the musculoskeletal system",
+        "Use musculoskeletal terminology accurately in documentation"
+      ],
+      "conceptBlocks": [
+        {
+          "heading": "Bone and Joint Root Words",
+          "body": "oste/o = bone (osteoporosis, osteomyelitis, osteoblast)\narth/r/o = joint (arthritis, arthroscopy, arthroplasty)\nchondr/o = cartilage (chondritis, chondromalacia)\ncostal/o = rib (intercostal = between ribs)\nvertebr/o / spondyl/o = vertebra (vertebral, spondylosis)\nmyeloma = tumor of bone marrow (myel/o = bone marrow/spinal cord — context-dependent!)\ncranio = skull (craniotomy, cranioplasty)\nsynovi/o = synovial membrane lining joints (synovitis, synovial fluid)"
+        },
+        {
+          "heading": "Muscle Root Words",
+          "body": "my/o / muscul/o = muscle (myalgia, myopathy, muscular dystrophy)\ntend/o / tendin/o = tendon (tendinitis, tendon rupture)\nfasci/o = fascia (fasciitis — as in plantar fasciitis)\nligament/o = ligament (ligamentous laxity)\n\nKey conditions:\nmyalgia = muscle pain (-algia = pain)\nmyositis = inflammation of muscle (-itis)\nmyopathy = disease of muscle (-pathy)\nrhabdomyolysis = breakdown of muscle tissue (rhabdo = striated muscle; lysis = destruction)"
+        },
+        {
+          "heading": "Common Musculoskeletal Conditions",
+          "body": "osteoporosis = decreased bone density (osteo + por/o = pore + -osis = condition)\nosteoarthritis = degenerative joint disease (bone + joint + inflammation)\nrheumatoid arthritis = autoimmune joint inflammation (rheumato = flowing; immune-mediated)\nfracture = break in a bone (not a word-part term but clinically essential)\ndislocation = joint bones displaced out of alignment\nsubluxation = partial dislocation (sub- = partial; lux = to displace)\ntendinitis / tendinopathy = tendon inflammation or degeneration"
+        }
+      ],
+      "teachingNotes": "Note that myel/o is context-dependent — in neurology it refers to the spinal cord; in hematology/oncology it refers to bone marrow. Students must use context (what system is being discussed?) to determine meaning. This is a good critical-thinking teaching moment."
+    },
+    {
+      "lessonId": "musculoskeletal-neuro-terminology-L02",
+      "title": "Neurological Root Words and Common Terms",
+      "sequenceOrder": 2,
+      "estimatedMinutes": 20,
+      "objectives": [
+        "Identify root words for brain, spinal cord, nerve, and associated neurological structures",
+        "Decode common neurological conditions, procedures, and assessment terms",
+        "Distinguish between motor, sensory, and structural neurological terms",
+        "Recognize high-alert neurological terms in clinical documentation"
+      ],
+      "conceptBlocks": [
+        {
+          "heading": "Neurological Structure Roots",
+          "body": "neur/o = nerve (neurology, neuropathy, neuritis)\nencephal/o = brain (encephalitis, encephalopathy, electroencephalogram = EEG)\ncerebell/o = cerebellum (cerebellar ataxia)\ncerebr/o = cerebrum / brain (cerebrovascular, cerebral palsy)\nmyel/o = spinal cord (myelopathy, myelogram — in neuro context)\nmeningo = meninges (meningitis, meningocele)\nradicul/o = nerve root (radiculopathy)\ngangli/o = ganglion (ganglionitis)"
+        },
+        {
+          "heading": "Neurological Function Terms",
+          "body": "Motor system terms:\n-plegia = paralysis (hemiplegia, quadriplegia, paraplegia)\n-paresis = partial weakness (hemiparesis = weakness on one side)\n-kinesia = movement (bradykinesia = slow movement; dyskinesia = impaired movement)\n\nSensory system terms:\n-esthesia = sensation (anesthesia = without sensation; paresthesia = abnormal sensation such as tingling)\nneuralgia = nerve pain\nhyperalgia = increased pain sensitivity\n\nMind/cognition terms:\n-phasia = speech (aphasia = without speech; dysphasia = impaired speech)\n-praxia = purposeful movement (apraxia = inability to perform learned movements)"
+        },
+        {
+          "heading": "Common Neurological Conditions and Procedures",
+          "body": "meningitis = inflammation of the meninges (brain/spinal cord coverings)\nencephalitis = inflammation of brain tissue\nmyelopathy = disease of the spinal cord\nneuropathy = disease of peripheral nerves\ncerebrovascular accident (CVA) = stroke (disruption of blood flow to the brain)\nlumbar puncture (LP) = spinal tap to obtain cerebrospinal fluid (CSF)\nEEG (electroencephalogram) = recording of brain electrical activity\nMRI of the brain = magnetic resonance imaging — standard for CNS evaluation\ncraniotomy = surgical opening of the skull (cranio + -otomy)"
+        }
+      ],
+      "teachingNotes": "The plegia vs paresis distinction is high-yield: plegia = complete paralysis; paresis = partial/incomplete weakness. Also emphasize aphasia (no speech) vs dysphasia (impaired speech) — this distinction matters when documenting post-stroke communication deficits. CVA (cerebrovascular accident) is the formal term for stroke and appears throughout clinical documentation."
+    }
+  ],
+  "questions": [
+    {
+      "questionId": "musculoskeletal-neuro-terminology-Q01",
+      "stem": "The suffix '-plegia' in the term 'hemiplegia' refers to:",
+      "options": {
+        "A": "Partial weakness",
+        "B": "Complete paralysis",
+        "C": "Abnormal muscle sensation",
+        "D": "Degenerative muscle disease"
+      },
+      "correctAnswer": "B",
+      "rationale": "-Plegia = complete paralysis. Hemiplegia (hemi- = half/one side) = complete paralysis of one side of the body. -Paresis = partial weakness (hemiparesis = one-sided weakness). -Esthesia = sensation. -Pathy = disease (-myopathy).",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "suffix -plegia = paralysis"
+    },
+    {
+      "questionId": "musculoskeletal-neuro-terminology-Q02",
+      "stem": "The root word 'oste/o' refers to:",
+      "options": {
+        "A": "Muscle",
+        "B": "Cartilage",
+        "C": "Bone",
+        "D": "Joint"
+      },
+      "correctAnswer": "C",
+      "rationale": "Oste/o = bone. Osteoporosis = porous (decreased density) bone condition. Osteoarthritis = degenerative disease of bone and joints. My/o = muscle. Chondr/o = cartilage. Arth/r/o = joint.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "root oste/o = bone"
+    },
+    {
+      "questionId": "musculoskeletal-neuro-terminology-Q03",
+      "stem": "A patient is diagnosed with 'aphasia' after a stroke. This means the patient:",
+      "options": {
+        "A": "Has complete loss of vision",
+        "B": "Is unable to speak or has severely impaired language",
+        "C": "Has weakness on one side of the body",
+        "D": "Is experiencing tingling sensations in the extremities"
+      },
+      "correctAnswer": "B",
+      "rationale": "A- = without; -phasia = speech/language. Aphasia = loss of ability to speak or understand language. Blindness = amaurosis or visual field defect. Hemiplegia = one-sided paralysis. Paresthesia = abnormal sensations like tingling (par- = abnormal; -esthesia = sensation).",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "aphasia — a- + -phasia"
+    },
+    {
+      "questionId": "musculoskeletal-neuro-terminology-Q04",
+      "stem": "The term 'meningitis' refers to inflammation of the:",
+      "options": {
+        "A": "Brain tissue",
+        "B": "Spinal cord",
+        "C": "Membranes covering the brain and spinal cord",
+        "D": "Peripheral nerves"
+      },
+      "correctAnswer": "C",
+      "rationale": "Meningo = meninges (the three-layered membranes covering the brain and spinal cord); -itis = inflammation. Meningitis = inflammation of the meninges. Encephalitis = brain tissue inflammation. Myelitis = spinal cord inflammation. Neuritis or neuropathy = peripheral nerve disease.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "meningitis — root meningo"
+    },
+    {
+      "questionId": "musculoskeletal-neuro-terminology-Q05",
+      "stem": "A nursing note states the patient has 'paresthesia in the right hand.' This symptom is best described as:",
+      "options": {
+        "A": "Complete loss of sensation",
+        "B": "Painful muscle spasms",
+        "C": "Abnormal sensations such as tingling or numbness",
+        "D": "Weakness and reduced grip strength"
+      },
+      "correctAnswer": "C",
+      "rationale": "Par- = abnormal, beside; -esthesia = sensation. Paresthesia = abnormal sensation, typically described as tingling, 'pins and needles,' numbness, or burning. Anesthesia (an- = without) = complete loss of sensation. Myospasm = muscle cramps. Paresis = weakness.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "paresthesia — par- + -esthesia"
+    },
+    {
+      "questionId": "musculoskeletal-neuro-terminology-Q06",
+      "stem": "In neurological terminology, 'myel/o' specifically refers to the spinal cord when used in which context?",
+      "options": {
+        "A": "When describing bone marrow disorders",
+        "B": "When describing conditions of the nervous system such as myelopathy",
+        "C": "When the term is used in hematology lab reports",
+        "D": "When describing muscle wasting conditions"
+      },
+      "correctAnswer": "B",
+      "rationale": "Myel/o is context-dependent: in neurology, it refers to the spinal cord (myelopathy = spinal cord disease; myelogram = imaging of the spinal cord). In hematology/oncology, myel/o refers to bone marrow (myeloma = bone marrow tumor). Always use the clinical context to determine which meaning applies.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "myel/o context-dependency — spinal cord vs bone marrow"
+    },
+    {
+      "questionId": "musculoskeletal-neuro-terminology-Q07",
+      "stem": "Arthroscopy is a procedure that involves:",
+      "options": {
+        "A": "Surgical removal of a joint",
+        "B": "X-ray imaging of a joint",
+        "C": "Visual examination of the inside of a joint using a small camera",
+        "D": "Surgical reconstruction of a joint"
+      },
+      "correctAnswer": "C",
+      "rationale": "Arth/r/o = joint; -scopy = visual examination using a scope. Arthroscopy = direct visualization inside a joint (commonly the knee) using a small camera inserted through a small incision. Arthrectomy = joint removal. Arthrography = X-ray of joint. Arthroplasty (-plasty) = surgical reconstruction or joint replacement.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "arthroscopy — root arth/r/o + suffix -scopy"
+    },
+    {
+      "questionId": "musculoskeletal-neuro-terminology-Q08",
+      "stem": "The term 'osteoporosis' is best decoded as:",
+      "options": {
+        "A": "Inflammation of the bone",
+        "B": "Abnormal condition of porous, decreased-density bone",
+        "C": "Bone tumor or malignant bone growth",
+        "D": "Infection of the bone and bone marrow"
+      },
+      "correctAnswer": "B",
+      "rationale": "Oste/o = bone; por/o = pore (porous); -osis = abnormal condition. Osteoporosis = condition of abnormally porous bone with decreased mineral density, increasing fracture risk. Osteitis = bone inflammation. Osteosarcoma = bone tumor. Osteomyelitis = infection of bone and marrow (myel/o in bone context).",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "osteoporosis — oste/o + por/o + -osis"
+    },
+    {
+      "questionId": "musculoskeletal-neuro-terminology-Q09",
+      "stem": "A patient's chart notes 'hemiparesis of the left side.' This means the patient has:",
+      "options": {
+        "A": "Complete paralysis of the left side of the body",
+        "B": "Partial weakness on the left side of the body",
+        "C": "Tingling and numbness on the left side",
+        "D": "Loss of sensation on the left side"
+      },
+      "correctAnswer": "B",
+      "rationale": "Hemi- = half (one side); -paresis = partial or incomplete weakness. Hemiparesis = partial weakness affecting one side of the body. Hemiplegia (-plegia) = complete paralysis of one side. Paresthesia = abnormal sensations. Anesthesia = loss of sensation.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "-paresis vs -plegia distinction"
+    },
+    {
+      "questionId": "musculoskeletal-neuro-terminology-Q10",
+      "stem": "The root word 'arth/r/o' in medical terminology refers to:",
+      "options": {
+        "A": "Muscle",
+        "B": "Bone",
+        "C": "Joint",
+        "D": "Tendon"
+      },
+      "correctAnswer": "C",
+      "rationale": "Arth/r/o = joint. Arthritis = joint inflammation. Arthroplasty = joint replacement surgery. My/o = muscle. Oste/o = bone. Tend/o / tendin/o = tendon.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "root arth/r/o = joint"
+    },
+    {
+      "questionId": "musculoskeletal-neuro-terminology-Q11",
+      "stem": "A cerebrovascular accident (CVA) is the formal medical term for a:",
+      "options": {
+        "A": "Heart attack",
+        "B": "Stroke",
+        "C": "Brain tumor",
+        "D": "Seizure"
+      },
+      "correctAnswer": "B",
+      "rationale": "Cerebrovascular = pertaining to the cerebral blood vessels (cerebr/o = brain; vascular = blood vessels); accident = sudden unplanned event. A CVA (stroke) is the sudden disruption of blood supply to part of the brain, causing neurological deficits. Myocardial infarction = heart attack. Neoplasm = tumor. Seizure uses different terminology.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "CVA = stroke; cerebrovascular"
+    },
+    {
+      "questionId": "musculoskeletal-neuro-terminology-Q12",
+      "stem": "Which term describes a surgical procedure involving an opening into the skull?",
+      "options": {
+        "A": "Craniotomy",
+        "B": "Cranioplasty",
+        "C": "Encephaloscopy",
+        "D": "Meningectomy"
+      },
+      "correctAnswer": "A",
+      "rationale": "Cranio = skull; -otomy = cutting into. Craniotomy = surgical incision into the skull, typically to access the brain. Cranioplasty (-plasty) = surgical repair/reconstruction of the skull. Encephaloscopy would mean visual examination of the brain. Meningectomy = removal of the meninges.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "craniotomy — cranio + -otomy"
+    },
+    {
+      "questionId": "musculoskeletal-neuro-terminology-Q13",
+      "stem": "The medical term for muscle pain is:",
+      "options": {
+        "A": "Myopathy",
+        "B": "Myositis",
+        "C": "Myalgia",
+        "D": "Myomalacia"
+      },
+      "correctAnswer": "C",
+      "rationale": "My/o = muscle; -algia = pain. Myalgia = muscle pain. Myopathy (-pathy) = muscle disease. Myositis (-itis) = muscle inflammation. Myomalacia = softening of muscle tissue (-malacia = softening).",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "myalgia — my/o + -algia"
+    },
+    {
+      "questionId": "musculoskeletal-neuro-terminology-Q14",
+      "stem": "Which of the following is the correct suffix for a condition meaning 'disease of' a structure?",
+      "options": {
+        "A": "-itis",
+        "B": "-pathy",
+        "C": "-osis",
+        "D": "-ectomy"
+      },
+      "correctAnswer": "B",
+      "rationale": "-Pathy means disease of. Neuropathy = disease of nerves. Cardiomyopathy = disease of heart muscle. -Itis = inflammation. -Osis = abnormal condition or process. -Ectomy = surgical removal.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "suffix -pathy = disease of"
+    },
+    {
+      "questionId": "musculoskeletal-neuro-terminology-Q15",
+      "stem": "The term 'arthroplasty' refers to:",
+      "options": {
+        "A": "Removal of a joint",
+        "B": "Inflammation of a joint",
+        "C": "Surgical repair or reconstruction of a joint",
+        "D": "Visual examination of a joint"
+      },
+      "correctAnswer": "C",
+      "rationale": "Arth/r/o = joint; -plasty = surgical repair or reconstruction. Arthroplasty includes joint replacement (e.g., total knee arthroplasty = TKA; total hip arthroplasty = THA). Arthrectomy = joint removal. Arthritis = inflammation. Arthroscopy = visual examination.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "arthroplasty — arth/r/o + -plasty"
+    },
+    {
+      "questionId": "musculoskeletal-neuro-terminology-Q16",
+      "stem": "Which term is correctly defined as 'inflammation of the nerves'?",
+      "options": {
+        "A": "Neuropathy",
+        "B": "Neuralgia",
+        "C": "Neuritis",
+        "D": "Neurosis"
+      },
+      "correctAnswer": "C",
+      "rationale": "Neur/o = nerve; -itis = inflammation. Neuritis = inflammation of a nerve or nerves. Neuropathy (-pathy) = disease of nerves. Neuralgia (-algia) = nerve pain. Neurosis = an older psychiatric term not specifically about nerve inflammation.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "neuritis — neur/o + -itis"
+    },
+    {
+      "questionId": "musculoskeletal-neuro-terminology-Q17",
+      "stem": "A nurse reads that a patient has 'bradykinesia' on their neurology assessment. This finding describes:",
+      "options": {
+        "A": "Rapid, involuntary movement",
+        "B": "Abnormally slow movement",
+        "C": "Complete inability to move",
+        "D": "Uncoordinated movements"
+      },
+      "correctAnswer": "B",
+      "rationale": "Brady- = slow; -kinesia = movement. Bradykinesia = abnormally slow movement, a characteristic feature of Parkinson's disease. Tachykinesia = rapid movement. Akinesia (a- = without) = complete absence of movement. Ataxia or dyskinesia = incoordination.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "bradykinesia — brady- + -kinesia"
+    },
+    {
+      "questionId": "musculoskeletal-neuro-terminology-Q18",
+      "stem": "Which root word is specifically associated with cartilage?",
+      "options": {
+        "A": "oste/o",
+        "B": "chondr/o",
+        "C": "synovi/o",
+        "D": "tend/o"
+      },
+      "correctAnswer": "B",
+      "rationale": "Chondr/o = cartilage. Chondritis = cartilage inflammation. Chondromalacia = cartilage softening (e.g., chondromalacia patellae). Oste/o = bone. Synovi/o = synovial membrane. Tend/o = tendon.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "root chondr/o = cartilage"
+    },
+    {
+      "questionId": "musculoskeletal-neuro-terminology-Q19",
+      "stem": "The term 'encephalopathy' is best defined as:",
+      "options": {
+        "A": "Inflammation of the brain",
+        "B": "Disease or dysfunction of the brain",
+        "C": "Surgical incision into the brain",
+        "D": "Tumor of the brain"
+      },
+      "correctAnswer": "B",
+      "rationale": "Encephal/o = brain; -pathy = disease/dysfunction. Encephalopathy = any disease or dysfunction of the brain (e.g., hepatic encephalopathy from liver failure; Wernicke's encephalopathy from thiamine deficiency). Encephalitis (-itis) = inflammation. Craniotomy = surgical incision. Glioma/meningioma = brain tumors.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "encephalopathy — encephal/o + -pathy"
+    },
+    {
+      "questionId": "musculoskeletal-neuro-terminology-Q20",
+      "stem": "A patient is described as having 'quadriplegia.' This means the patient has:",
+      "options": {
+        "A": "Weakness in two limbs",
+        "B": "Paralysis of one side of the body",
+        "C": "Paralysis of all four limbs",
+        "D": "Paralysis of only the lower body"
+      },
+      "correctAnswer": "C",
+      "rationale": "Quadri- = four; -plegia = complete paralysis. Quadriplegia = paralysis of all four limbs, typically from cervical spinal cord injury. Hemiplegia (hemi- = half) = one-sided paralysis. Paraplegia (para- = beside/both legs) = lower body paralysis. -Paresis = partial weakness.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "quadriplegia — quadri- + -plegia"
+    },
+    {
+      "questionId": "musculoskeletal-neuro-terminology-Q21",
+      "stem": "Which of the following terms correctly uses a root word to refer to a tendon?",
+      "options": {
+        "A": "Myalgia",
+        "B": "Tendinitis",
+        "C": "Arthropathy",
+        "D": "Chondrectomy"
+      },
+      "correctAnswer": "B",
+      "rationale": "Tendin/o (also tend/o) = tendon. Tendinitis = inflammation of a tendon. Myalgia = muscle pain (my/o = muscle). Arthropathy = joint disease (arth/r/o = joint). Chondrectomy = surgical removal of cartilage (chondr/o = cartilage).",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "root tendin/o = tendon"
+    },
+    {
+      "questionId": "musculoskeletal-neuro-terminology-Q22",
+      "stem": "A lumbar puncture (spinal tap) is performed to obtain cerebrospinal fluid. The root 'cerebro-spinal' refers to the:",
+      "options": {
+        "A": "Heart and aorta",
+        "B": "Brain and spinal cord",
+        "C": "Peripheral nerves and their roots",
+        "D": "Meninges and cerebellum only"
+      },
+      "correctAnswer": "B",
+      "rationale": "Cerebro- = cerebrum/brain; spinal = pertaining to the spine/spinal cord. Cerebrospinal fluid (CSF) bathes and cushions the brain and spinal cord. A lumbar puncture samples this fluid from the lumbar subarachnoid space. This is not related to the heart, peripheral nerves alone, or meninges alone.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "cerebrospinal — cerebro + spinal; clinical application"
+    }
+  ]
+}

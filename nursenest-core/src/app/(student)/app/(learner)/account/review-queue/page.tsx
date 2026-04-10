@@ -115,7 +115,7 @@ export default async function AccountReviewQueuePage() {
               tone="early"
               density="compact"
               visualLayout="stack"
-              headline="Nothing is queued for review yet"
+              headline={t("learner.account.reviewQueue.emptyTitle")}
               body={t("learner.account.reviewQueue.emptyQueue")}
               hint={emptyStateCopy.noWeakAreasYet.body}
               primaryCta={{ label: t("learner.profile.quickLinks.questionBank"), href: "/app/questions", variant: "primary" }}

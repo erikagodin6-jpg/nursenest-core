@@ -1,0 +1,1754 @@
+{
+  "version": 1,
+  "label": "NP Lesson Expansion: ~135 Topics → ~500 Lessons",
+  "generatedDate": "2026-04-10",
+  "sourceBlueprint": "np-advanced-practice-blueprint.json",
+  "scopeFenceRef": "np-scope-fences.json",
+  "tierDefinitions": {
+    "A": { "lessonCount": 5, "rationale": "High complexity, heavy exam weight, distinct 5-phase clinical arc (Recognition → Workup → Initial Mgmt → Ongoing Mgmt/Follow-up → Complications/Edge Cases)" },
+    "B": { "lessonCount": 4, "rationale": "Standard clinical management topic with Recognition, Workup, Management, and Follow-up phases — no standalone Complications lesson needed" },
+    "C": { "lessonCount": 3, "rationale": "Narrow scope: single drug class, recognition-only, screening criteria, coordinator/referral role, or one-decision clinical algorithm" }
+  },
+  "lessonComponentSchema": {
+    "A": ["L1: Recognition / Differential", "L2: Diagnostic Workup & Risk Stratification", "L3: Initial Management", "L4: Ongoing Management & Follow-up", "L5: Complications, Edge Cases & Special Populations"],
+    "B": ["L1: Recognition & Clinical Presentation", "L2: Diagnostic Workup & Decision Points", "L3: Management & Prescribing", "L4: Follow-up, Monitoring & Step Therapy"],
+    "C": ["L1: Recognition, Criteria & Red Flags", "L2: Diagnostic Workup & Risk Stratification", "L3: Management Decision & Referral"]
+  },
+  "topics": [
+
+    {
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "topicSlug": "chest-pain-differential-primary-care",
+      "tier": "A",
+      "lessonCount": 5,
+      "lessons": [
+        "Life-Threatening Chest Pain: ACS, Aortic Dissection, PE, Tension PTX, and Tamponade",
+        "Diagnostic Workup: ECG Interpretation, Biomarker Sequencing, and Imaging Algorithms",
+        "Non-Cardiac Chest Pain: Pericarditis, GERD, Musculoskeletal, and Panic Disorder",
+        "Risk Stratification and Disposition: HEART Score, TIMI, and Transfer vs Treat Decisions",
+        "High-Risk Populations and Edge Cases: Atypical ACS in Women, Diabetics, and the Elderly"
+      ]
+    },
+    {
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "topicSlug": "dyspnea-differential-cardiac-pulmonary",
+      "tier": "A",
+      "lessonCount": 5,
+      "lessons": [
+        "Acute Dyspnea: Cardiac vs Pulmonary vs Non-Cardiopulmonary Framework",
+        "Diagnostic Workup: BNP, Echocardiography, Spirometry, and CT Pulmonary Angiography",
+        "Heart Failure-Driven Dyspnea: HFrEF vs HFpEF Recognition and Phenotyping",
+        "Pulmonary Causes: COPD Exacerbation, Asthma, PE, and Pleural Effusion",
+        "Edge Cases: Anemia, Obesity Hypoventilation, Hyperventilation Syndrome, and Arrhythmia"
+      ]
+    },
+    {
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "topicSlug": "headache-differential-red-flags",
+      "tier": "A",
+      "lessonCount": 5,
+      "lessons": [
+        "SNOOP4: Identifying the Dangerous Headache — SAH, Meningitis, Mass, Hypertensive Crisis",
+        "Diagnostic Workup: When to CT, When to LP, and When Imaging is Not Indicated",
+        "Primary Headache Disorders: Migraine, Cluster, and Tension-Type Clinical Criteria",
+        "Secondary Headache Causes: GCA, IIH, Carbon Monoxide, Medication Overuse",
+        "Special Populations and Edge Cases: Thunderclap, Exertional, Postural, and Cough Headaches"
+      ]
+    },
+    {
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "topicSlug": "abdominal-pain-differential-age",
+      "tier": "A",
+      "lessonCount": 5,
+      "lessons": [
+        "Surgical Emergencies: Appendicitis, Bowel Obstruction, Ruptured AAA, and Mesenteric Ischemia",
+        "GI and Hepatobiliary Causes: Biliary Colic, Cholecystitis, Pancreatitis, and Ascending Cholangitis",
+        "Gynecological Emergencies: Ectopic Pregnancy, Ovarian Torsion, PID, and TOA",
+        "Age-Stratified Differential: Pediatric Causes vs Adult vs Geriatric Abdominal Presentations",
+        "Workup Algorithms: When to CT, Ultrasound, CRP/WBC, and Surgical vs Medical Triage"
+      ]
+    },
+    {
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "topicSlug": "syncope-differential-vasovagal-cardiac-neuro",
+      "tier": "A",
+      "lessonCount": 5,
+      "lessons": [
+        "Syncope vs Seizure vs Pseudosyncope: Clinical Differentiation Framework",
+        "Cardiac Syncope: Arrhythmias, Structural Disease, and High-Risk ECG Findings",
+        "Vasovagal and Situational Syncope: Triggers, Prodrome, and Benign Patterns",
+        "Orthostatic Hypotension and Medication-Induced Syncope: Workup and Risk Factors",
+        "High-Risk Features Mandating Admission: San Francisco Syncope Rule and ROSE Score"
+      ]
+    },
+    {
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "topicSlug": "knee-pain-differential",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Acute Traumatic Knee Injuries: ACL, Meniscus, Collateral Ligament, and Patellar Fracture",
+        "Inflammatory Arthropathies: Septic Arthritis, Gout, Pseudogout — Arthrocentesis Decision",
+        "Chronic and Overuse Knee Conditions: OA, Patellofemoral Pain, Baker's Cyst, Osgood-Schlatter",
+        "Diagnostic Workup and Referral Criteria: Ottawa Rules, MRI Indications, and Orthopedics Referral"
+      ]
+    },
+    {
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "topicSlug": "fatigue-differential-endocrine-psych",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Endocrine Causes of Fatigue: Hypothyroidism, Hyperthyroidism, Adrenal Insufficiency, and T2DM",
+        "Hematological and Nutritional Causes: IDA, B12/Folate Deficiency, and Anemia of Chronic Disease",
+        "Psychosocial and Sleep-Related Fatigue: MDD, OSA, and Chronic Fatigue Syndrome",
+        "Workup Algorithm: Screening Labs, PHQ-9, TSH, CBC, and When to Expand the Differential"
+      ]
+    },
+    {
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "topicSlug": "fever-without-source-differential",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Age-Based Fever Frameworks: Neonates, Infants, Toddlers, Adults, and Immunocompromised",
+        "Infectious Differential: Bacterial vs Viral vs Tick-Borne vs Travel-Related",
+        "Non-Infectious Fever: Drug Fever, Autoimmune Flares, Malignancy, and Endocarditis",
+        "Fever of Unknown Origin (FUO): Diagnostic Algorithm and Ordered Workup"
+      ]
+    },
+    {
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "topicSlug": "rash-differential-primary-care",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Emergent Rashes: Meningococcemia, SJS/TEN, DRESS, and Purpura Fulminans",
+        "Infectious Rashes: Viral Exanthems, Lyme EM, Secondary Syphilis, RMSF, and Herpes Zoster",
+        "Inflammatory and Autoimmune Rashes: Psoriasis, Eczema, Contact Dermatitis, and SLE",
+        "Workup Algorithm: Morphology-Based Approach, KOH Prep, Biopsy Indications, and Referral"
+      ]
+    },
+    {
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "topicSlug": "flank-pain-differential-uti-stones-pyelo",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Nephrolithiasis: Classic Presentation, Stone Types, CT vs Ultrasound, and Spontaneous Passage Criteria",
+        "Upper vs Lower UTI: Distinguishing Cystitis from Pyelonephritis — Clinical and Lab Criteria",
+        "Dangerous Mimics: Ruptured AAA, Infected Obstructing Stone, Retroperitoneal Pathology",
+        "Workup Decisions and Disposition: UA, Urine Culture, Imaging, and When to Admit"
+      ]
+    },
+    {
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "topicSlug": "red-eye-differential-conjunctivitis-glaucoma",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Vision-Threatening Red Eye: Acute Angle-Closure Glaucoma, Scleritis, Corneal Ulcer, and Anterior Uveitis",
+        "Infectious and Allergic Conjunctivitis: Bacterial vs Viral vs Allergic — Clinical Criteria and Contagion",
+        "Triage and Referral Decisions: Exam Findings That Demand Same-Day Ophthalmology"
+      ]
+    },
+    {
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "topicSlug": "adrenal-insufficiency-thyroid-storm-recognition",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Adrenal Crisis Recognition: Clinical Features, Cortisol Testing, and Immediate Actions",
+        "Thyroid Storm vs Myxedema Coma: Recognition Criteria and Burch-Wartofsky Score",
+        "Office-Based Triage: When to Call 911, What to Do Before Transfer, and Sick Day Counseling"
+      ]
+    },
+    {
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "topicSlug": "lymphadenopathy-reactive-malignant-workup",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Benign Lymphadenopathy: Reactive, Infectious, and Medication-Induced Causes",
+        "Malignant Red Flags: Location, Size, Consistency, and B Symptoms That Mandate Biopsy",
+        "Workup Algorithm: CBC, LDH, CT Imaging, and Excisional vs Core Needle Biopsy Decisions",
+        "Special Presentations: Virchow's Node, Hilar Adenopathy, PGL-HIV, and Pediatric LAD"
+      ]
+    },
+    {
+      "domain": "Differential Diagnosis & Diagnostic Reasoning",
+      "topicSlug": "hemoptysis-differential-risk-workup",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Massive vs Non-Massive Hemoptysis: Definition, Etiology, and Emergent Transfer Criteria",
+        "Common Causes: Lung Cancer, TB, Bronchiectasis, PE, and Mitral Stenosis",
+        "Workup Algorithm: CXR, CT Chest with Contrast, Bronchoscopy, and Pulmonology Referral",
+        "Special Populations: Anticoagulated Patients, Immunocompromised, and Pulmonary-Renal Syndromes"
+      ]
+    },
+
+    {
+      "domain": "Red Flags & Safety",
+      "topicSlug": "hypertension-red-flags-referral",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Hypertensive Emergency vs Urgency: Defining Target Organ Damage and Clinical Thresholds",
+        "End-Organ Manifestations: Hypertensive Encephalopathy, Renal Crisis, ACS, and Aortic Dissection",
+        "Office-Based Triage and Transfer Criteria: When to Call 911 vs Urgent Referral vs Same-Day ED"
+      ]
+    },
+    {
+      "domain": "Red Flags & Safety",
+      "topicSlug": "neurological-red-flags-emergency",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Stroke Recognition: FAST-BE, Time-Sensitive Criteria, and Stroke Mimics",
+        "Acute Spinal Cord Syndromes: Cauda Equina, Cord Compression, and Myelopathy Red Flags",
+        "Headache Emergencies, Meningitis, and Altered Mental Status Red Flags",
+        "Office-Based Neurological Exam and Triage: What to Do Before the Ambulance Arrives"
+      ]
+    },
+    {
+      "domain": "Red Flags & Safety",
+      "topicSlug": "cancer-red-flags-primary-care",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Constitutional Red Flags: B Symptoms, Unexplained Weight Loss, Night Sweats, and Fatigue",
+        "Site-Specific Red Flags: GI, Pulmonary, Hematological, Urological, and Dermatological Alarm Features",
+        "Expedited Workup Decision-Making: 2-Week Wait Criteria, Urgent Referral Thresholds, and Lab Red Flags"
+      ]
+    },
+    {
+      "domain": "Red Flags & Safety",
+      "topicSlug": "pediatric-red-flags-dont-miss",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Life-Threatening Pediatric Presentations: Meningitis, Intussusception, Bilious Vomiting, and Malrotation",
+        "Non-Accidental Trauma Indicators and Kawasaki Disease Recognition",
+        "Office Triage Framework: Age-Based Red Flag Checklists and Safe Discharge Criteria"
+      ]
+    },
+    {
+      "domain": "Red Flags & Safety",
+      "topicSlug": "psychiatric-red-flags-safety",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Suicide Risk Assessment: Columbia Scale, Static vs Dynamic Factors, and Safe Messaging",
+        "Psychosis and Acute Mania: Recognition, Safety Risk, and Involuntary Hold Criteria",
+        "Violence Risk Assessment and Duty to Warn: Tarasoff Principles in Primary Care"
+      ]
+    },
+
+    {
+      "domain": "Chronic Disease Management",
+      "topicSlug": "heart-failure-gdmt-primary-care",
+      "tier": "A",
+      "lessonCount": 5,
+      "lessons": [
+        "Heart Failure Classification: HFrEF vs HFpEF vs HFmrEF — Diagnosis, Staging, and Phenotyping",
+        "GDMT Initiation: ACEi/ARB/ARNi, Beta-Blocker, MRA, and SGLT-2 — Evidence, Sequencing, and Monitoring",
+        "Diuretic Management and Volume Status Optimization",
+        "Heart Failure Follow-up: BNP Trending, Functional Assessment, Device Referral, and Decompensation Prevention",
+        "Acute Decompensation in Primary Care: Recognition, Stabilization, and Transfer Criteria"
+      ]
+    },
+    {
+      "domain": "Chronic Disease Management",
+      "topicSlug": "hypertension-step-therapy-guideline",
+      "tier": "A",
+      "lessonCount": 5,
+      "lessons": [
+        "Hypertension Classification, ABPM, and White Coat vs Masked Hypertension",
+        "First-Line Drug Selection: ACEi/ARB, CCB, and Thiazide — ACC/AHA Guideline-Based Reasoning",
+        "Resistant Hypertension: Step-Up Therapy, Spironolactone, and Secondary Hypertension Workup",
+        "BP Targets by Comorbidity: CKD, Diabetes, HF, and Post-Stroke — Competing Goals",
+        "Special Populations: Hypertension in Pregnancy, Older Adults, and Renovascular Hypertension"
+      ]
+    },
+    {
+      "domain": "Chronic Disease Management",
+      "topicSlug": "afib-rate-rhythm-stroke-risk",
+      "tier": "A",
+      "lessonCount": 5,
+      "lessons": [
+        "Atrial Fibrillation Classification: Paroxysmal vs Persistent vs Permanent and ECG Criteria",
+        "Stroke Risk Stratification: CHA₂DS₂-VASc Scoring and Anticoagulation Decision-Making",
+        "Rate Control: Beta-Blockers vs CCBs — Targets and Monitoring",
+        "Rhythm Control Strategy: Cardioversion Criteria, Antiarrhythmic Selection, and Referral for Ablation",
+        "Anticoagulation Management: DOAC Selection, Drug Interactions, Periprocedural Bridging, and Reversal"
+      ]
+    },
+    {
+      "domain": "Chronic Disease Management",
+      "topicSlug": "t2dm-intensification-beyond-metformin",
+      "tier": "A",
+      "lessonCount": 5,
+      "lessons": [
+        "When Metformin Is Not Enough: A1c Target Setting by Patient Profile and Comorbidity",
+        "Step Therapy Map: Sulfonylureas, DPP-4 Inhibitors, TZDs, and Insulin Initiation Decision Tree",
+        "Hypoglycemia Risk Stratification: Agent Profiles, Patient Factors, and Safety Monitoring",
+        "Insulin Initiation and Titration: Basal vs Basal-Bolus — When and How to Start",
+        "Cost, Adherence, and Formulary Navigation in T2DM Intensification"
+      ],
+      "scopeFence": "SF-01 — does not include GLP-1 or SGLT-2 mechanism/adverse effects/trial data"
+    },
+    {
+      "domain": "Chronic Disease Management",
+      "topicSlug": "thyroid-disease-diagnosis-management",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Hypothyroidism: TSH Interpretation, Hashimoto's Diagnosis, and Symptom-Based Recognition",
+        "Hyperthyroidism: Graves Disease, Toxic Nodular Goiter, and Thyroiditis Differential",
+        "Thyroid Nodule Evaluation: Ultrasound Criteria, TI-RADS, and Biopsy Referral",
+        "Monitoring and Dose Adjustment: TSH Goals by Age and Comorbidity, Pregnancy Considerations"
+      ],
+      "scopeFence": "SF-02 — levothyroxine dosing/monitoring/interactions covered in levothyroxine-dosing-monitoring-interactions"
+    },
+    {
+      "domain": "Chronic Disease Management",
+      "topicSlug": "copd-gold-staging-inhaler-selection",
+      "tier": "A",
+      "lessonCount": 5,
+      "lessons": [
+        "GOLD Staging and Spirometric Criteria: Diagnosis, Severity, and Symptom Burden Assessment",
+        "Inhaler Selection by GOLD Phenotype: LAMA, LABA, ICS — When to Add Each",
+        "Acute COPD Exacerbation: Severity Classification, Antibiotic and Steroid Use, Admission Criteria",
+        "Long-Term Follow-up: Pulmonary Rehab, Oxygen Threshold, Vaccinations, and Smoking Cessation",
+        "Comorbidity Management in COPD: CV Disease, Anxiety, Osteoporosis, and Lung Cancer Screening"
+      ]
+    },
+    {
+      "domain": "Chronic Disease Management",
+      "topicSlug": "asthma-stepwise-controller-rescue",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Asthma Classification: Intermittent vs Persistent, Severity Assessment, and Spirometry in Diagnosis",
+        "Step Therapy: SABA-Only → ICS → ICS/LABA → Add-On Biologics — GINA Guidelines",
+        "Acute Asthma in Office: Peak Flow Thresholds, Nebulization, Systemic Steroids, and Transfer Criteria",
+        "Long-Term Control: Trigger Avoidance, Asthma Action Plans, Monitoring Intervals, and Step-Down"
+      ]
+    },
+    {
+      "domain": "Chronic Disease Management",
+      "topicSlug": "ckd-progression-monitoring-medication",
+      "tier": "A",
+      "lessonCount": 5,
+      "lessons": [
+        "CKD Staging: eGFR and Albuminuria Classification, Etiology Identification, and Prognosis",
+        "Slowing Progression: ACEi/ARB Use, BP Targets, SGLT-2 in CKD, and Dietary Modification",
+        "CKD Monitoring Protocol: Labs, Frequency, Complication Surveillance, and Nephrology Referral Thresholds",
+        "CKD Complications: Anemia (EPO/iron), Hyperphosphatemia, Secondary Hyperparathyroidism, and Acidosis",
+        "Medication Safety in CKD: High-Risk Drug Classes, Dose Adjustment Principles, and NSAIDs Avoidance"
+      ],
+      "scopeFence": "SF-03 — specific per-drug dose adjustment tables covered in medication-dose-adjustment-ckd"
+    },
+    {
+      "domain": "Chronic Disease Management",
+      "topicSlug": "hyperlipidemia-risk-statin-therapy",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Cardiovascular Risk Calculation: Pooled Cohort Equations, Risk Enhancers, and Calcium Scoring",
+        "Statin Intensity Selection: Low/Moderate/High — Evidence and ACC/AHA Guidelines",
+        "Non-Statin Add-On Therapy: Ezetimibe, PCSK9 Inhibitors, and Bempedoic Acid",
+        "Statin Adverse Effects, Myopathy Monitoring, and Statin Intolerance Management"
+      ]
+    },
+    {
+      "domain": "Chronic Disease Management",
+      "topicSlug": "oa-vs-ra-management-referral",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "OA vs RA Differential: Morning Stiffness Duration, Joint Distribution, and Serology",
+        "Osteoarthritis Management: Analgesic Ladder, Topical NSAIDs, Intra-Articular Injections, and Referral",
+        "Rheumatoid Arthritis in Primary Care: DMARD Initiation, Monitoring, and Infection Risk",
+        "Referral Criteria and Co-Management: When Rheumatology Must Be Involved"
+      ]
+    },
+    {
+      "domain": "Chronic Disease Management",
+      "topicSlug": "anemia-workup-treatment-types",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Anemia Workup Algorithm: MCV-Based Classification and Initial Lab Panel",
+        "Iron-Deficiency Anemia: Diagnosis, Oral vs IV Iron, and Underlying Cause Identification",
+        "B12 and Folate Deficiency: Diagnosis, Repletion, and Neurological Monitoring",
+        "Anemia of Chronic Disease vs Mixed Anemias: Interpretation and Management in Complex Patients"
+      ]
+    },
+    {
+      "domain": "Chronic Disease Management",
+      "topicSlug": "hiv-primary-care-monitoring-art",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "HIV Monitoring in Primary Care: CD4, Viral Load Frequency, and Undetectable = Untransmittable",
+        "ART Adherence: Regimen Literacy, Side Effect Management, and Switching Indications",
+        "OI Screening and Prophylaxis by CD4 Level: PCP, MAC, CMV, and Toxoplasmosis",
+        "Comorbidity Screening in HIV: Cardiovascular, Renal, Bone, and Cancer Surveillance"
+      ]
+    },
+    {
+      "domain": "Chronic Disease Management",
+      "topicSlug": "nafld-diagnosis-monitoring-management",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "NAFLD/MASLD Diagnosis: Imaging, Biomarkers, and When to Obtain Liver Biopsy",
+        "Fibrosis Risk Stratification: FIB-4 Score, ELF Test, and Fibroscan — Referral Thresholds",
+        "Lifestyle and Pharmacological Management: Weight Loss Targets, GLP-1 Evidence, Vitamin E Indication",
+        "Monitoring Protocol and Hepatocellular Carcinoma Surveillance in Advanced Fibrosis"
+      ]
+    },
+    {
+      "domain": "Chronic Disease Management",
+      "topicSlug": "psoriasis-atopic-dermatitis-stepwise-biologic",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Psoriasis Classification: Plaque, Guttate, Inverse, and Psoriatic Arthritis Recognition",
+        "Psoriasis Stepwise Treatment: Topical → Phototherapy → Conventional Systemic → Biologics",
+        "Atopic Dermatitis: Diagnosis, Trigger Identification, and Topical Corticosteroid/Calcineurin Use",
+        "Biologics and Newer Agents in Dermatology: Biologic Referral Criteria, Infection Screening, and Monitoring"
+      ]
+    },
+    {
+      "domain": "Chronic Disease Management",
+      "topicSlug": "multiple-sclerosis-primary-care-monitoring",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "MS Recognition in Primary Care: Presenting Symptoms, CIS, and When to Suspect Demyelinating Disease",
+        "Primary Care Role in MS Management: DMT Side Effect Monitoring, Fatigue, and Bladder Co-Management",
+        "Neurological Referral Coordination: Relapse Recognition, Symptom Escalation Criteria, and Vaccinations"
+      ]
+    },
+
+    {
+      "domain": "Acute Primary Care Presentations",
+      "topicSlug": "cap-risk-stratification-antibiotic-admission",
+      "tier": "A",
+      "lessonCount": 5,
+      "lessons": [
+        "CAP Diagnosis: Clinical Criteria, CXR Interpretation, and Distinguishing from Bronchitis and COVID",
+        "Risk Stratification: CURB-65, PSI/PORT Score, and Outpatient vs Inpatient vs ICU Triage",
+        "Antibiotic Selection: Outpatient Monotherapy vs Combination, Atypical Coverage, and Allergy Management",
+        "Inpatient CAP Management: Antibiotic Duration, IV-to-PO Switch, and Discharge Criteria",
+        "Special Populations: Aspiration Pneumonia, Healthcare-Associated PNA, Immunocompromised, and Influenza"
+      ]
+    },
+    {
+      "domain": "Acute Primary Care Presentations",
+      "topicSlug": "uti-uncomplicated-complicated-stewardship",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Uncomplicated UTI: Diagnosis, Antibiotic Stewardship, and First-Line vs Second-Line Selection",
+        "Complicated UTI Criteria: Pyelonephritis, Male UTI, Pregnancy, Catheter-Associated, and Immunocompromised",
+        "Recurrent UTI: Risk Factor Modification, Prophylaxis Options, and Self-Start Protocols",
+        "Antibiotic Stewardship in UTI: Asymptomatic Bacteriuria, Culture-Guided Therapy, and Resistance Trends"
+      ]
+    },
+    {
+      "domain": "Acute Primary Care Presentations",
+      "topicSlug": "ssti-cellulitis-abscess-antibiotics",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Cellulitis vs Abscess Differentiation: Clinical Criteria, Point-of-Care Ultrasound, and Systemic Features",
+        "CA-MRSA Recognition and Empiric Treatment: TMP-SMX, Doxycycline, and Wound Culture Guidance",
+        "Necrotizing Fasciitis Red Flags: LRINEC Score, Pain Out of Proportion, and Emergency Transfer",
+        "Antibiotic Failure: When to Change Coverage, Imaging for Deep Infection, and ID Referral Criteria"
+      ]
+    },
+    {
+      "domain": "Acute Primary Care Presentations",
+      "topicSlug": "hypertensive-emergency-urgency-np",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Emergency vs Urgency Classification: Target Organ Damage Criteria and BP Thresholds",
+        "Hypertensive Emergency Manifestations: Encephalopathy, ACS, Aortic Dissection, and Eclampsia",
+        "Office-Based Initial Management: Oral Agents for Urgency, IV Agents — What NPs Can Initiate",
+        "Safe Transfer and Handoff: Documentation, Blood Pressure Goals, and Speed of Reduction Principles"
+      ]
+    },
+    {
+      "domain": "Acute Primary Care Presentations",
+      "topicSlug": "acute-bronchitis-pneumonia-covid-differentiation",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Clinical Differentiation: Acute Bronchitis vs CAP vs COVID — History, Exam, and SpO₂",
+        "Diagnostic Workup: When CXR Is Needed, COVID Testing Algorithms, and Procalcitonin Use",
+        "Management Decisions: Antibiotic Avoidance in Bronchitis, COVID Antivirals, and Return Precautions"
+      ]
+    },
+    {
+      "domain": "Acute Primary Care Presentations",
+      "topicSlug": "acute-diarrhea-infectious-non-infectious",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Infectious Diarrhea Workup: Bloody vs Non-Bloody, Traveler's Diarrhea, C. diff, and Foodborne Illness",
+        "Non-Infectious Causes: Medication-Induced, IBS Flare, IBD, and Osmotic vs Secretory",
+        "When to Test and Treat: Stool Culture Criteria, Antibiotic Stewardship, and Hydration Assessment"
+      ]
+    },
+    {
+      "domain": "Acute Primary Care Presentations",
+      "topicSlug": "pharyngitis-strep-centor-antibiotic",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Centor/McIsaac Score and RADT Testing Criteria: When to Test vs Treat Empirically",
+        "Antibiotic Selection for GAS: Penicillin First-Line, Alternatives, and Duration",
+        "Mono vs Strep Distinction and Complications: Peritonsillar Abscess, Rheumatic Fever Prevention"
+      ]
+    },
+    {
+      "domain": "Acute Primary Care Presentations",
+      "topicSlug": "aom-vs-ome-management",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "AOM Diagnosis Criteria: Tympanic Membrane Findings, Bulging vs Dull, and Effusion vs Infection",
+        "Wait-and-See vs Immediate Antibiotic: Age-Based Decision Algorithm and AAP Guidelines",
+        "OME Management: Watchful Waiting, Developmental Surveillance, and ENT Referral Thresholds"
+      ]
+    },
+
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "topicSlug": "antibiotic-stewardship-outpatient",
+      "tier": "A",
+      "lessonCount": 5,
+      "lessons": [
+        "Antibiotic Stewardship Principles: Appropriateness, Spectrum, Duration, and Resistance Prevention",
+        "Common Outpatient Antibiotic Classes: Beta-Lactams, Macrolides, Fluoroquinolones, and TMP-SMX",
+        "Antibiotic Allergy Assessment: Penicillin Allergy Cross-Reactivity and Safe Delabeling",
+        "High-Risk Antibiotic Prescribing: C. diff Risk, QT Prolongation, and Drug Interactions by Class",
+        "Antibiotic Prescribing in Special Populations: Pregnancy, CKD, Elderly, and Pediatrics"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "topicSlug": "ace-arb-arni-indications-monitoring",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "ACEi vs ARB: Indications, Mechanism Differences, Cough, Angioedema, and When to Switch",
+        "ARNi (Sacubitril/Valsartan): HFrEF Indications, Washout Requirements, and Initiation",
+        "Monitoring Protocol: Creatinine, Potassium, BP — Acceptable Rises and When to Hold",
+        "Contraindications and Special Populations: Pregnancy, Bilateral Renal Artery Stenosis, and CKD"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "topicSlug": "glp1-sglt2-comorbidity-selection",
+      "tier": "A",
+      "lessonCount": 5,
+      "lessons": [
+        "GLP-1 Receptor Agonist Mechanism, Class Effects, and Adverse Effect Profile",
+        "SGLT-2 Inhibitor Mechanism, Class Effects, and Adverse Effect Profile",
+        "Cardiorenal Indication-Driven Selection: T2DM + ASCVD, T2DM + HFrEF, T2DM + CKD",
+        "Agent-Level Differences: Intraclass Selection Within GLP-1 and SGLT-2 Based on Outcomes Data",
+        "Euglycemic DKA, Fournier Gangrene, and Other High-Risk Adverse Effects — Recognition and Prevention"
+      ],
+      "scopeFence": "SF-01 — does not cover general T2DM step therapy, A1c targets, or sulfonylurea/insulin initiation"
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "topicSlug": "antidepressant-selection-ssri-snri-primary-care",
+      "tier": "A",
+      "lessonCount": 5,
+      "lessons": [
+        "SSRI Pharmacology: Mechanism, Therapeutic Targets, Class Adverse Effects, and CYP Interactions",
+        "SNRI Pharmacology: Mechanism vs SSRI, Additional Indications, and BP Monitoring",
+        "Agent-Level Selection: Fluoxetine, Sertraline, Escitalopram, Duloxetine, Venlafaxine — Choosing by Comorbidity",
+        "Initiation, Titration, and Adequate Trial: Dose Escalation Timelines and Response Assessment",
+        "Special Populations and Prescribing Pitfalls: Serotonin Syndrome, Pregnancy Safety, QT Prolongation, and Discontinuation Syndrome"
+      ],
+      "scopeFence": "SF-04 — does not cover MDD diagnosis or PHQ-9 interpretation"
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "topicSlug": "anxiolytics-benzos-deprescribing",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Benzodiazepine Pharmacology: Mechanism, Indication vs Overuse, Tolerance, and Dependence",
+        "Appropriate Short-Term Use: Seizures, Alcohol Withdrawal, Acute Anxiety — Duration Limits",
+        "Deprescribing Protocols: Taper Schedules, Switching to Long-Acting, and Patient Counseling",
+        "Non-Benzodiazepine Anxiolytics: Buspirone, Hydroxyzine, Propranolol, and SSRI First-Line"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "topicSlug": "chronic-pain-non-opioid-safe-opioid",
+      "tier": "A",
+      "lessonCount": 5,
+      "lessons": [
+        "Chronic Pain Classification: Nociceptive, Neuropathic, and Central Sensitization — Prescribing Implications",
+        "Non-Opioid First-Line Therapies: NSAIDs, SNRIs, TCAs, Gabapentinoids, and Topical Agents",
+        "Safe Opioid Prescribing: CDC Guidelines, Initial Dose Selection, MME Limits, and Risk Tools (ORT, DIRE)",
+        "Opioid Monitoring: UDS Interpretation, Prescription Drug Monitoring Program, and Aberrant Behavior",
+        "Opioid Tapering and Transitioning: Reducing Dose Safely and Managing Withdrawal Symptoms"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "topicSlug": "medication-dose-adjustment-ckd",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "eGFR-Based Dose Adjustment Principles: Renal Clearance, Drug Accumulation, and Nephrotoxin Avoidance",
+        "High-Risk Drug Classes in CKD: Metformin, NSAIDs, ACEi/ARB, Gabapentin, and Digoxin",
+        "Antibiotics and Antimicrobials in CKD: Dosing Tables for Fluoroquinolones, Beta-Lactams, and Nitrofurantoin",
+        "Dialysis Considerations: Supplemental Dosing, Dialyzability, and Pharmacist Collaboration"
+      ],
+      "scopeFence": "SF-03 — CKD progression and monitoring belong to ckd-progression-monitoring-medication"
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "topicSlug": "drug-interactions-primary-care-significant",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "CYP450 Drug Interactions: Inducers, Inhibitors, and High-Risk Drug Pairs in Primary Care",
+        "Pharmacodynamic Interactions: QT Prolongation, Serotonin Syndrome, and Bleeding Risk Combinations",
+        "Warfarin and DOAC Interactions: Common Interacting Drugs and Management Strategies",
+        "High-Risk Polypharmacy Patterns: Anticoagulant + NSAID, SSRI + Opioid, and ACEi + Potassium"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "topicSlug": "doac-selection-monitoring-reversal",
+      "tier": "A",
+      "lessonCount": 5,
+      "lessons": [
+        "DOAC Pharmacology: Mechanism, Onset, and Half-Life Differences Among Apixaban, Rivaroxaban, Edoxaban, Dabigatran",
+        "DOAC Selection by Indication: AF Stroke Prevention, DVT/PE Treatment, and Special Populations",
+        "DOAC vs Warfarin: When to Choose Warfarin — Mechanical Valves, Antiphospholipid Syndrome, CKD",
+        "Monitoring, Adherence, and Missed Dose Guidance — No Routine Lab Monitoring Misconception",
+        "Reversal Agents, Bleeding Management, and Periprocedural Hold Protocols"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "topicSlug": "pediatric-weight-based-dosing-age",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Weight-Based Dosing Principles: mg/kg Calculations, Maximum Dose Caps, and BSA-Based Dosing",
+        "Age-Restricted Medications: Fluoroquinolones, Tetracyclines, Aspirin, Codeine — Contraindications by Age",
+        "Liquid Formulation Calculations: Concentration vs Dose, OTC Product Safety, and Caregiver Counseling",
+        "Neonatal and Infant Pharmacokinetics: Altered Absorption, Hepatic Immaturity, and Renal Clearance"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "topicSlug": "levothyroxine-dosing-monitoring-interactions",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Levothyroxine Dosing: Weight-Based Starting Dose, Age Adjustments, and Cardiac Comorbidity",
+        "Monitoring Protocol: TSH Recheck Intervals, Goal TSH by Clinical Context, and Dose Titration",
+        "Drug and Food Interactions: Calcium, Iron, PPI Timing — Administration Separation Rules"
+      ],
+      "scopeFence": "SF-02 — thyroid disease diagnosis covered in thyroid-disease-diagnosis-management"
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "topicSlug": "topical-corticosteroids-potency-use",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Potency Classification: Class I–VII, Vehicle Types, and Choosing Appropriate Potency by Site",
+        "Application Technique, Duration Limits, and Finger-Tip Unit Calculations",
+        "Adverse Effects of Overuse: Skin Atrophy, Striae, HPA Axis Suppression — Prevention and Counseling"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "topicSlug": "inhaler-device-technique-patient-matching",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Inhaler Device Types: MDI, DPI, SMI, Nebulizer — Mechanism, Particle Size, and Drug Delivery",
+        "Matching Device to Patient: Inspiratory Flow Rate, Coordination Ability, Age, and Preference",
+        "Inhaler Technique Assessment and Counseling: Common Errors, Spacer Indications, and Adherence"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "topicSlug": "mrsa-primary-care-recognition-treatment",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "CA-MRSA vs HA-MRSA: Risk Factors, Clinical Patterns, and When to Culture",
+        "Outpatient Treatment: TMP-SMX vs Doxycycline — Dosing, Duration, and I&D Decision",
+        "Decolonization, Household Contacts, and Criteria for ID or Inpatient Referral"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "topicSlug": "systemic-corticosteroids-tapering-adverse-effects",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Systemic Corticosteroid Indications: Acute vs Chronic Use, Equivalency Table, and Route Selection",
+        "Short-Course Tapering: When Taper Is Needed vs Not, Adrenal Suppression Threshold",
+        "Long-Term Corticosteroid Adverse Effects: Hyperglycemia, Osteoporosis, Cataracts, and Immunosuppression",
+        "Steroid-Sparing Strategies and Patient Monitoring Protocol for Chronic Users"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "topicSlug": "seizure-medications-monitoring-interactions",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "AED Classes in Primary Care: Levetiracetam, Lamotrigine, Valproate, Phenytoin — Basic Pharmacology",
+        "Drug Interactions of AEDs: CYP Induction/Inhibition and Clinical Impact on Common Medications",
+        "Monitoring Requirements: Therapeutic Drug Levels, CBC, LFTs, and Bone Density",
+        "Special Situations: Seizure in Pregnancy (folate, valproate avoidance), Contraception Interactions"
+      ]
+    },
+    {
+      "domain": "Prescribing & Advanced Pharmacology",
+      "topicSlug": "teratogenic-medications-pregnancy-category",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "FDA Pregnancy Labeling System: Old A/B/C/D/X vs PLLR Framework — How to Interpret",
+        "High-Risk Teratogens: ACEi/ARB, Valproate, Isotretinoin, Methotrexate, and REMS Programs",
+        "Safe Medications in Pregnancy: Antibiotics, Antihypertensives, Analgesics, and Mental Health Drugs",
+        "Counseling Framework: Preconception Medication Review and Managing Chronic Disease in Pregnancy"
+      ]
+    },
+
+    {
+      "domain": "Health Promotion & Screening",
+      "topicSlug": "breast-cancer-screening-guidelines-sdm",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Screening Guidelines Compared: USPSTF vs ACS vs ACR — Age, Interval, and Modality Differences",
+        "High-Risk Breast Cancer Screening: BRCA Carriers, Dense Breasts, and Supplemental MRI",
+        "Shared Decision-Making Framework: Benefits vs Harms of Screening and Patient Communication Tools"
+      ]
+    },
+    {
+      "domain": "Health Promotion & Screening",
+      "topicSlug": "colorectal-cancer-screening-modality",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Screening Modality Comparison: Colonoscopy, FIT, Cologuard, CT Colonography — Intervals and Accuracy",
+        "Risk Stratification: Average Risk vs High Risk (personal/family hx, IBD, adenoma history)",
+        "Positive Non-Invasive Screen Management: FIT-Positive and Cologuard-Positive Next Steps"
+      ]
+    },
+    {
+      "domain": "Health Promotion & Screening",
+      "topicSlug": "cervical-cancer-screening-pap-hpv",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Screening Intervals by Age: Cytology Alone vs Co-Testing vs Primary HPV — Age 21 to 65",
+        "Abnormal Pap Result Management: ASC-US, LSIL, HSIL, and ASCCP Guidelines",
+        "Post-Hysterectomy, DES Exposure, and Immunocompromised — Modified Screening Criteria"
+      ]
+    },
+    {
+      "domain": "Health Promotion & Screening",
+      "topicSlug": "cardiovascular-risk-pooled-cohort-prevention",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Pooled Cohort Equations: Inputs, Interpretation, Race/Ethnicity Limitations, and Risk Enhancers",
+        "Coronary Artery Calcium Scoring: Who Benefits, CAC Score Interpretation, and Treatment Reclassification",
+        "Primary Prevention Interventions: Aspirin Decision (USPSTF 2022), Statin Threshold, and Lifestyle Counseling",
+        "Special Populations: South Asian, Women, Young Adults, and Discordant Risk — Assessment Challenges"
+      ]
+    },
+    {
+      "domain": "Health Promotion & Screening",
+      "topicSlug": "depression-anxiety-screening-phq9-gad7",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "PHQ-9 and GAD-7 Administration: Scoring, Cutoffs, and Severity Classification",
+        "Screening Frequency and High-Risk Populations: Postpartum, Adolescent, Chronic Disease, and Elderly",
+        "Positive Screen Management: Immediate Safety Assessment, Treatment Initiation vs Referral"
+      ]
+    },
+    {
+      "domain": "Health Promotion & Screening",
+      "topicSlug": "prediabetes-screening-lifestyle-counseling",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Prediabetes Screening Criteria: USPSTF Recommendations, ADA Risk Score, and Diagnostic Thresholds",
+        "Lifestyle Intervention: DPP Program Intensity, Weight Loss Targets, and Physical Activity Goals",
+        "Metformin for Prevention: Evidence, Who Qualifies, and Monitoring Considerations"
+      ]
+    },
+    {
+      "domain": "Health Promotion & Screening",
+      "topicSlug": "adult-immunization-schedule-high-risk",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Annual and Universal Vaccines: Influenza, COVID-19, Tdap/Td, and Pneumococcal in Average Adults",
+        "High-Risk and Indication-Based Vaccines: Asplenia, Immunocompromised, HIV, and Chronic Disease",
+        "Catch-Up Immunization and Documentation: ACIP Guidance, VFC Programs, and Missed Childhood Vaccines"
+      ]
+    },
+    {
+      "domain": "Health Promotion & Screening",
+      "topicSlug": "osteoporosis-screening-frax-treatment",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "DEXA Screening Criteria: USPSTF, Age Thresholds, and Secondary Osteoporosis Risk Factors",
+        "FRAX Score Interpretation: 10-Year Fracture Risk and Treatment Decision Thresholds",
+        "Calcium, Vitamin D, and Bisphosphonate Therapy: Evidence, Dosing, and Adherence",
+        "Monitoring, Drug Holidays, and Atypical Femur Fracture Risk — Long-Term Bisphosphonate Management"
+      ]
+    },
+    {
+      "domain": "Health Promotion & Screening",
+      "topicSlug": "sti-screening-risk-group-age",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Gonorrhea and Chlamydia Screening: USPSTF Recommendations by Age, Gender, and Sexual Behavior",
+        "Syphilis, HIV, Hepatitis B/C, and HPV Screening: Risk-Based and Universal Recommendations",
+        "Screening Result Management: Positive NAAT, Reactive Serology — Reporting and Partner Notification"
+      ]
+    },
+    {
+      "domain": "Health Promotion & Screening",
+      "topicSlug": "prep-hiv-prevention-prescribing-monitoring",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "PrEP Eligibility: Indication Criteria, USPSTF Grade A Recommendation, and Risk Screening Tools",
+        "PrEP Regimens: Daily TDF/FTC, TAF/FTC, and Injectable Cabotegravir — Selection and Comparison",
+        "Pre-PrEP Testing: HIV, Renal Function, Hepatitis B, STI Screen — Baseline and Monitoring Protocol",
+        "Adherence Counseling, Follow-Up Schedule, and Addressing Barriers to PrEP Access"
+      ]
+    },
+    {
+      "domain": "Health Promotion & Screening",
+      "topicSlug": "hearing-vision-loss-screening-referral",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Age-Related Hearing Loss: Screening Tools, Audiometry Referral Criteria, and Hearing Aid Counseling",
+        "Age-Related Vision Loss: AMD, Glaucoma Screening Recommendations, and Ophthalmology Referral",
+        "Office-Based Screening: HHIE-S, Vision Charts, Functional Assessment, and Patient Communication"
+      ]
+    },
+
+    {
+      "domain": "Follow-Up Management",
+      "topicSlug": "diabetes-follow-up-monitoring-labs",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Diabetes Monitoring Intervals: HbA1c Frequency, SMBG Goals, and CGM Interpretation",
+        "Annual Diabetes Surveillance: Urine Albumin, eGFR, Foot Exam, Eye Referral, and Lipids",
+        "Recognizing Complications During Follow-Up: Early Neuropathy, Nephropathy, and Retinopathy",
+        "Complication-Driven Treatment Escalation: When Follow-Up Findings Change the Management Plan"
+      ]
+    },
+    {
+      "domain": "Follow-Up Management",
+      "topicSlug": "hypertension-follow-up-monitoring-labs",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "BP Monitoring: In-Office Techniques, Home BP Monitoring, and ABPM Indications",
+        "Follow-Up Lab Surveillance: Electrolytes, Creatinine, Lipids — Frequency by Agent",
+        "Treatment Response Assessment: Uncontrolled HTN Algorithm and Step-Up Decision Points",
+        "Lifestyle Reassessment and Long-Term Complication Screening: LVH, CKD, and Retinopathy"
+      ]
+    },
+    {
+      "domain": "Follow-Up Management",
+      "topicSlug": "post-hospitalization-follow-up-med-rec",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Medication Reconciliation at Discharge: Identifying New Medications, Dose Changes, and Gaps",
+        "Transition of Care Visit: High-Risk Diagnoses Requiring Early Follow-Up Within 7 Days",
+        "30-Day Readmission Prevention: Functional Status Assessment, Red Flag Education, and Care Coordination",
+        "Advance Directives and Goals of Care Review After Hospitalization"
+      ]
+    },
+    {
+      "domain": "Follow-Up Management",
+      "topicSlug": "antidepressant-follow-up-response-side-effects",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Response Assessment Timeline: Partial vs Full vs Non-Response at 4 and 8 Weeks",
+        "Side Effect Management: GI, Sexual Dysfunction, Insomnia, Weight — When to Adjust vs Switch",
+        "Switching Antidepressants: Direct vs Cross-Taper vs Washout — Serotonin Syndrome Prevention",
+        "Maintenance and Discontinuation: Duration of Treatment, Tapering Protocol, and Relapse Recognition"
+      ],
+      "scopeFence": "SF-04 — antidepressant selection covered in antidepressant-selection-ssri-snri-primary-care"
+    },
+    {
+      "domain": "Follow-Up Management",
+      "topicSlug": "abnormal-labs-interpretation-action",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Abnormal CBC: Interpreting Anemia, Thrombocytopenia, Leukocytosis, and Pancytopenia in Follow-Up",
+        "Abnormal CMP: Hyperkalemia, Hyponatremia, Elevated Creatinine, and Transaminase Patterns",
+        "Thyroid, Lipids, and A1c: Follow-Up Action Thresholds and Lab Trending Over Time",
+        "Communicating Abnormal Results: Patient Notification Protocol, Documentation, and Safety Nets"
+      ]
+    },
+
+    {
+      "domain": "Women's Health",
+      "topicSlug": "contraception-counseling-efficacy-safety",
+      "tier": "A",
+      "lessonCount": 5,
+      "lessons": [
+        "Contraceptive Efficacy: Perfect vs Typical Use, LARC Superiority, and Failure Rate Counseling",
+        "Combined Hormonal Methods: COC, Patch, Ring — Risks, WHO MEC Contraindications, and Benefits",
+        "Progestin-Only and Non-Hormonal Options: POP, Implant, LNG-IUD, Copper IUD — Selection Criteria",
+        "Special Populations: Contraception in Migraine with Aura, VTE History, Hypertension, and Perimenopause",
+        "Emergency Contraception and Pregnancy Options Counseling: Ella, Plan B, Copper IUD"
+      ]
+    },
+    {
+      "domain": "Women's Health",
+      "topicSlug": "pcos-diagnosis-management",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "PCOS Diagnosis: Rotterdam Criteria, Androgen Testing, Ultrasound, and Differential Diagnosis",
+        "Metabolic and Endocrine Management: Insulin Resistance, Metformin, and Screening for T2DM/Lipids",
+        "Menstrual and Hormonal Management: COC for Cycle Regulation, Letrozole for Ovulation Induction",
+        "Long-Term Surveillance: Endometrial Protection, Cardiovascular Risk, and Mental Health Comorbidities"
+      ]
+    },
+    {
+      "domain": "Women's Health",
+      "topicSlug": "menopause-hormone-therapy-risk-benefit",
+      "tier": "A",
+      "lessonCount": 5,
+      "lessons": [
+        "Menopause Diagnosis: Clinical vs Lab Criteria, Perimenopause Definition, and Symptom Burden Assessment",
+        "Systemic Hormone Therapy: Estrogen-Progestin vs Estrogen-Only — Indications and WHI Reinterpretation",
+        "Contraindications to Systemic HT: VTE, Breast Cancer, CAD — Absolute vs Relative",
+        "Non-Hormonal Options: SSRIs/SNRIs, Gabapentin, Fezolinetant, and GSM Treatment",
+        "Shared Decision-Making: Individualizing HT Duration, Lowest Effective Dose, and Discontinuation"
+      ]
+    },
+    {
+      "domain": "Women's Health",
+      "topicSlug": "preconception-counseling-medication-safety",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Preconception Risk Assessment: Chronic Disease Optimization, Genetic Screening, and Infection Workup",
+        "Medication Review and Safety: Teratogens to Stop, Safe Alternatives, and Folic Acid Supplementation",
+        "Lifestyle Counseling: Alcohol, Tobacco, BMI, Exercise, and Prenatal Vitamin Timing"
+      ]
+    },
+    {
+      "domain": "Women's Health",
+      "topicSlug": "abnormal-uterine-bleeding-differential-management",
+      "tier": "A",
+      "lessonCount": 5,
+      "lessons": [
+        "AUB Classification: PALM-COEIN Framework — Structural vs Non-Structural Causes",
+        "Reproductive-Age AUB: Anovulatory Bleeding, Fibroids, Polyps, and Pregnancy Exclusion",
+        "Perimenopausal and Postmenopausal Bleeding: Endometrial Hyperplasia, Cancer — Workup Algorithm",
+        "Initial Management: Hormonal Regulation, NSAIDs, Tranexamic Acid, and IUD Insertion",
+        "Refractory AUB and Surgical Referral: Endometrial Ablation, Hysteroscopy, and Hysterectomy Criteria"
+      ]
+    },
+    {
+      "domain": "Women's Health",
+      "topicSlug": "vaginitis-bv-candida-trich-differentiation",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Clinical Differentiation: Discharge Characteristics, pH, Amine Test, and Microscopy Findings",
+        "Treatment by Etiology: BV (Metronidazole), Vulvovaginal Candidiasis (Azole), Trichomoniasis (5-Day Metro)",
+        "Recurrent Vaginitis: Suppressive Therapy, Partner Treatment for Trich, and Evaluation for GSM"
+      ]
+    },
+    {
+      "domain": "Women's Health",
+      "topicSlug": "breast-mass-evaluation-imaging-referral",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Clinical Breast Examination: Mass Characteristics, Nipple Discharge, and Lymph Node Assessment",
+        "Imaging Algorithm by Age: Ultrasound vs Mammogram — BI-RADS Categories and Next Steps",
+        "High-Risk Referral Criteria: Rapid Growth, Bloody Discharge, Skin Changes, and Axillary LAD",
+        "Benign Breast Conditions: Fibroadenoma, Fibrocystic Change, Mastitis — Reassurance vs Biopsy"
+      ]
+    },
+    {
+      "domain": "Women's Health",
+      "topicSlug": "gestational-dm-htn-recognition-referral",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Gestational Diabetes: Screening at 24–28 Weeks, GCT vs OGTT, and Diagnosis Thresholds",
+        "Hypertensive Disorders of Pregnancy: Gestational HTN vs Preeclampsia vs Eclampsia — Recognition",
+        "Primary Care Response: Referral Timing, Surveillance Frequency, and Postpartum Follow-Up Planning"
+      ]
+    },
+    {
+      "domain": "Women's Health",
+      "topicSlug": "prenatal-lab-interpretation-trimester",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "First Trimester Labs: Blood Type, Rubella, HIV, HBsAg, VDRL, CBC, and Cell-Free DNA Screening",
+        "Second Trimester Screening: Quad Screen Interpretation, NIPT vs Diagnostic Testing, and Anomaly Scan",
+        "Abnormal Prenatal Lab Management: Low PAPP-A, Elevated AFP, and Referral Decision Algorithm"
+      ]
+    },
+    {
+      "domain": "Women's Health",
+      "topicSlug": "postpartum-depression-screening-management",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "PPD Screening: Edinburgh Scale Administration, Timing, and Baby Blues vs PPD vs Postpartum Psychosis",
+        "PPD Risk Factors and Diagnosis: DSM-5 Criteria and Severity Assessment",
+        "Management: SSRIs in Breastfeeding, Brexanolone Indications, and Mental Health Referral Criteria"
+      ]
+    },
+
+    {
+      "domain": "Pediatric Primary Care",
+      "topicSlug": "pediatric-well-child-milestones-guidance",
+      "tier": "A",
+      "lessonCount": 5,
+      "lessons": [
+        "Newborn to 6 Months: Developmental Milestones, Feeding, SIDS Prevention, and Newborn Screening",
+        "6 to 24 Months: Motor/Language Milestones, Autism Screening (M-CHAT), Lead Testing, and Iron",
+        "2 to 5 Years: Developmental Surveillance, Vision/Hearing Screening, and School Readiness",
+        "6 to 11 Years: ADHD Screening, Obesity Assessment, Dental Health, and Social-Emotional Development",
+        "Anticipatory Guidance by Visit: Safety Counseling, Nutrition, Screen Time, and Sleep at Each Stage"
+      ]
+    },
+    {
+      "domain": "Pediatric Primary Care",
+      "topicSlug": "childhood-immunization-schedule-np",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Birth to 18 Months Schedule: HepB, DTaP, Hib, PCV15, IPV, MMR, Varicella, and Rotavirus",
+        "School-Age and Adolescent Schedule: Tdap, MenACWY, MenB, HPV, and Annual Influenza",
+        "Catch-Up Schedules, Vaccine Contraindications, and Managing Vaccine-Hesitant Families"
+      ]
+    },
+    {
+      "domain": "Pediatric Primary Care",
+      "topicSlug": "febrile-infant-risk-stratification",
+      "tier": "A",
+      "lessonCount": 5,
+      "lessons": [
+        "Febrile Neonate < 28 Days: Full Septic Workup Mandate, LP Necessity, and Empiric Antibiotics",
+        "Febrile Infant 29–60 Days: Rochester Criteria, Step-by-Step Algorithm, and PECARN",
+        "Febrile Infant 2–3 Months: Risk Stratification, Selective Testing, and Observation Protocols",
+        "Serious Bacterial Infection Identification: Blood Culture, CSF, and Urine — Sensitivity and Specificity",
+        "Empiric Antibiotic Selection by Age, Clinical Status, and Ability to Follow Up"
+      ]
+    },
+    {
+      "domain": "Pediatric Primary Care",
+      "topicSlug": "pediatric-asthma-stepwise-acute",
+      "tier": "A",
+      "lessonCount": 5,
+      "lessons": [
+        "Pediatric Asthma Diagnosis: Clinical Criteria, Spirometry Age Limitations, and Asthma vs Viral Wheeze",
+        "NAEPP/GINA Step Therapy by Age: ICS Selection, LABA Safety (<5 years), and Biologics",
+        "Acute Asthma Exacerbation in Office: Severity Classification, SABA Dosing, and Discharge Criteria",
+        "Asthma Control Assessment: ACT/CACT Scores, Trigger Identification, and Controller Adjustment",
+        "School and Exercise-Induced Asthma: Management Plans, EIB Protocol, and Coordinator Role"
+      ]
+    },
+    {
+      "domain": "Pediatric Primary Care",
+      "topicSlug": "croup-epiglottitis-foreign-body-differentiation",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Clinical Differentiation: Steeple Sign vs Thumb Sign vs Subglottic Narrowing — Radiographic and Exam Clues",
+        "Croup Management: Dexamethasone Dosing, Racemic Epinephrine Criteria, and Discharge Safety",
+        "Epiglottitis and Foreign Body Aspiration: Do-Not-Touch Protocol, Immediate Transfer, and Office Preparation"
+      ]
+    },
+    {
+      "domain": "Pediatric Primary Care",
+      "topicSlug": "adhd-pediatric-diagnosis-management",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "ADHD Diagnosis: DSM-5 Criteria, Rating Scales (Vanderbilt, Conners), School Input, and Differential",
+        "Non-Pharmacological Management: Behavioral Therapy, Parent Training, and School Accommodations (IEP/504)",
+        "Stimulant Prescribing: Methylphenidate vs Amphetamine — Dose Titration, CV Monitoring, and DEA Rules",
+        "Non-Stimulant Options and Monitoring: Atomoxetine, Alpha-Agonists, and Treatment-Resistant ADHD"
+      ]
+    },
+    {
+      "domain": "Pediatric Primary Care",
+      "topicSlug": "pediatric-obesity-screening-counseling",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "BMI Percentile Classification: Overweight vs Obese vs Severe Obesity — Plotting and Diagnosis",
+        "Complication Screening: Hypertension, Prediabetes, Dyslipidemia, Sleep Apnea, and Fatty Liver",
+        "Intensive Health Behavior Counseling: Family-Based Approach, Motivational Interviewing, and Referral Criteria"
+      ]
+    },
+    {
+      "domain": "Pediatric Primary Care",
+      "topicSlug": "failure-to-thrive-assessment-workup",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "FTT Definition: Weight-for-Age Criteria, Growth Curve Interpretation, and Distinguishing Normal Variants",
+        "Organic vs Non-Organic FTT: Red Flags for Malabsorption, Cardiac, Endocrine, and Social Causes",
+        "Workup Algorithm: Targeted Labs, Caloric Intake Diary, Feeding Observation, and Social Assessment",
+        "Management and Referral: Caloric Goals, GI/Nutrition Referral, and Child Protective Services Triggers"
+      ]
+    },
+    {
+      "domain": "Pediatric Primary Care",
+      "topicSlug": "child-abuse-recognition-reporting",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Physical Abuse Recognition: Sentinel Injuries, Inconsistent History, Bruising Patterns, and Fracture Red Flags",
+        "Sexual Abuse Recognition: Behavioral Indicators, Exam Findings, and Forensic Examination Referral",
+        "Mandatory Reporting: Documentation Standards, CPS Notification Process, and Immunity Provisions",
+        "Neglect and Medical Child Abuse: Caregiver-Fabricated Illness, Nutritional Neglect, and Safety Planning"
+      ]
+    },
+    {
+      "domain": "Pediatric Primary Care",
+      "topicSlug": "adolescent-heeadsss-confidentiality",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "HEEADSSS Framework: Home, Education, Eating, Activities, Drugs, Sexuality, Suicide/Safety, Sleep",
+        "Adolescent Confidentiality: Minor Consent Laws, HIPAA Limitations, and Mandatory Disclosure",
+        "Screening Results Action: Positive Screens for Substance Use, Depression, STI, and Pregnancy"
+      ]
+    },
+    {
+      "domain": "Pediatric Primary Care",
+      "topicSlug": "kawasaki-disease-recognition-criteria-referral",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Classic KD Criteria: Fever ≥5 Days Plus 4 of 5 Principal Features — Mnemonic and Mimics",
+        "Incomplete KD: Diagnostic Algorithm for Infants and Abnormal Echo or Lab Criteria",
+        "Urgency of Referral: Cardiology Consultation, Coronary Aneurysm Risk, and IVIG Window"
+      ]
+    },
+
+    {
+      "domain": "Adult Primary Care",
+      "topicSlug": "geriatric-assessment-falls-polypharmacy-frailty",
+      "tier": "A",
+      "lessonCount": 5,
+      "lessons": [
+        "Comprehensive Geriatric Assessment: Functional Status, ADLs/IADLs, Cognitive Screening, and Frailty Index",
+        "Falls Risk Assessment: Multifactorial Evaluation, Timed Up-and-Go, and STEADI Framework",
+        "Polypharmacy Review: Medication Burden, Drug-Disease Interactions, and Deprescribing Triggers",
+        "Cognitive Impairment Detection: MoCA, Mini-Cog, MMSE — When to Diagnose vs Screen",
+        "Advance Care Planning and Goals of Care in Frail Older Adults"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "topicSlug": "dementia-delirium-depression-older-adult",
+      "tier": "A",
+      "lessonCount": 5,
+      "lessons": [
+        "Distinguishing the Three Ds: Onset, Course, Reversibility, and Clinical Clues — Differential Framework",
+        "Dementia Workup: Reversible Causes, Neuroimaging, and Specialist Referral Criteria",
+        "Dementia Management in Primary Care: BPSD, Caregiver Support, Safety Planning, and Driving",
+        "Delirium Recognition and Prevention: CAM Tool, Hyperactive vs Hypoactive, and Hospital-Acquired",
+        "Late-Life Depression: Distinguishing from Dementia, SSRIs in Older Adults, and Suicide Risk"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "topicSlug": "deprescribing-beers-criteria-older-adults",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Beers Criteria Categories: CNS, Anticholinergics, NSAIDs, and High-Risk Prescribing in Older Adults",
+        "Deprescribing Framework: STOPP/START Criteria, Patient-Centered Approach, and Shared Decision-Making",
+        "Tapering High-Risk Medications: Benzos, Opioids, PPIs, and Antipsychotics in Older Adults",
+        "Monitoring After Deprescribing: Withdrawal Symptoms, Condition Relapse, and Follow-Up Protocol"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "topicSlug": "obesity-management-pharmacotherapy-surgical",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Obesity Classification and Complication Screening: BMI, Waist Circumference, and Metabolic Syndrome",
+        "Lifestyle Intervention: Dietary Counseling, Physical Activity Targets, and Behavioral Support",
+        "Anti-Obesity Medications: GLP-1 Agonists, Bupropion/Naltrexone, Phentermine — Indications and Monitoring",
+        "Bariatric Surgery Referral: BMI Thresholds, Preoperative Evaluation, and Post-Surgery Nutrition Monitoring"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "topicSlug": "aud-sbirt-pharmacotherapy",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "AUDIT-C Screening and SBIRT Framework: Identifying Hazardous, Harmful, and Dependent Use",
+        "Brief Intervention Techniques: 5 A's, Motivational Interviewing, and FRAMES Model",
+        "Pharmacotherapy: Naltrexone, Acamprosate, Disulfiram — Indications, Contraindications, and Monitoring",
+        "Alcohol Withdrawal Management: CIWA Protocol, Benzodiazepine Use, and Inpatient vs Outpatient Detox"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "topicSlug": "smoking-cessation-pharmacotherapy-counseling",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Nicotine Dependence Assessment: Fagerström Scale, 5 A's Framework, and Readiness to Change",
+        "NRT Options: Patch, Gum, Lozenge, Inhaler — Combination NRT and Dosing",
+        "Prescription Pharmacotherapy: Varenicline and Bupropion — Efficacy, Contraindications, and Monitoring",
+        "Long-Term Support: Relapse Prevention, Withdrawal Management, and E-Cigarette Counseling"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "topicSlug": "skin-cancer-recognition-abcde-referral",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "ABCDE Rule Application: Melanoma vs Dysplastic Nevus vs Seborrheic Keratosis vs BCC/SCC",
+        "Non-Melanoma Skin Cancer: Basal Cell, Squamous Cell, and Actinic Keratosis — Clinical Recognition",
+        "Dermoscopy-Assisted Decision Making and Urgent Dermatology Referral Criteria"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "topicSlug": "mens-health-screening-prostate-testosterone",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Prostate Cancer Screening: PSA Shared Decision-Making, USPSTF Recommendations, and Risk Stratification",
+        "Testosterone Deficiency: Symptoms, Diagnostic Criteria, and Referral vs Prescribe Decision",
+        "Men's Preventive Health Bundle: Testicular Exam, Aortic Aneurysm Screening, and Lifestyle Risk Factors"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "topicSlug": "migraine-prophylaxis-abortive-therapy",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Migraine Prophylaxis Indications: Frequency Threshold, Patient Selection, and Setting Expectations",
+        "Prophylactic Agent Selection: Topiramate, Valproate, Beta-Blockers, TCAs, and CGRP Antagonists",
+        "Abortive Therapy: Triptan Selection, Timing, and Contraindications — NSAIDs and Anti-Emetics",
+        "Refractory Migraine and Medication Overuse Headache: Identification and Withdrawal Protocol"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "topicSlug": "osa-screening-diagnosis-management",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "OSA Screening: STOP-BANG Score, Epworth Scale, and Clinical Prediction in High-Risk Populations",
+        "Diagnostic Pathways: In-Lab PSG vs Home Sleep Testing — Indications and Interpretation",
+        "CPAP Therapy: Initiation, Adherence Monitoring, Residual AHI, and Mask Fitting",
+        "Non-CPAP Options: Positional Therapy, Weight Loss, Mandibular Advancement, and Surgery Referral"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "topicSlug": "gerd-stepup-ppi-safety-referral",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "GERD Diagnosis: Clinical Diagnosis vs pH Testing, Alarm Symptoms, and Barrett's Esophagus Risk",
+        "Step-Up Therapy: Lifestyle → H2RA → PPI — Appropriate Dosing and Trial Duration",
+        "Long-Term PPI Use: Magnesium, Calcium, B12, and C. diff Risk — Monitoring and De-escalation",
+        "Endoscopy Referral Criteria: Barrett's Surveillance, PPI-Refractory GERD, and Alarm Features"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "topicSlug": "ibs-vs-ibd-distinguishing-features",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Diagnostic Criteria: Rome IV for IBS, IBD Red Flags, and Calprotectin as a Differentiating Biomarker",
+        "IBS Management: Low-FODMAP Diet, Antispasmodics, and IBS-C vs IBS-D Pharmacotherapy",
+        "IBD in Primary Care: Crohn's vs Ulcerative Colitis Features, Initial Labs, and Gastroenterology Referral",
+        "Extraintestinal Manifestations of IBD and Long-Term Cancer Surveillance Protocol"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "topicSlug": "nephrolithiasis-evaluation-management-prevention",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Nephrolithiasis Workup: CT vs Ultrasound, Stone Size and Passage Likelihood, and Urinalysis",
+        "Acute Stone Management: Pain Control, Tamsulosin for Alpha-Blocker Facilitation, and Urology Referral",
+        "Stone Type Identification: Calcium Oxalate, Uric Acid, Struvite — Metabolic Workup for Recurrence",
+        "Prevention Counseling: Hydration Goals, Dietary Modifications by Stone Type, and Pharmacological Prevention"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "topicSlug": "gout-diagnosis-acute-urate-lowering",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Gout Diagnosis: Clinical Criteria, Arthrocentesis for Crystals, and Differential from Septic Arthritis",
+        "Acute Gout Management: Colchicine, NSAIDs, and Systemic Steroids — Agent Selection by Comorbidity",
+        "Urate-Lowering Therapy: Allopurinol Initiation, Febuxostat, and Serum Urate Target",
+        "Prophylaxis During ULT Initiation, Dietary Modification, and Diuretic/Medication Review"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "topicSlug": "adrenal-insufficiency-stress-dosing-management",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Primary vs Secondary Adrenal Insufficiency: Clinical Features, ACTH Stimulation Test, and Causes",
+        "Replacement Therapy: Hydrocortisone Dosing Schedule, Fludrocortisone for Primary AI, and Monitoring",
+        "Sick Day Rules and Stress Dosing: Illness Doubling, Surgery, Procedure — Action Plan Counseling",
+        "Adrenal Crisis Prevention: Emergency Injection Kits, Medical Alert ID, and Patient/Caregiver Education"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "topicSlug": "hyperparathyroidism-hypercalcemia-workup",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Hypercalcemia Differential: Primary HPT vs Malignancy vs Other — PTH-Based Algorithm",
+        "Asymptomatic Primary HPT: Surgical Indications (Age, Ca, Bone Density, Renal) vs Observation",
+        "Endocrinology Referral Criteria and Monitoring Protocol for Managed Hypercalcemia"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "topicSlug": "diabetic-eye-glaucoma-screening-referral",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Diabetic Retinopathy Screening: Annual Dilated Exam, NPDR vs PDR vs DME Classification",
+        "Glaucoma Screening: IOP, Optic Disc Assessment, and USPSTF — Who to Screen",
+        "Referral Thresholds: Urgent vs Routine Ophthalmology for Diabetic Eye Disease and Glaucoma"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "topicSlug": "pad-venous-insufficiency-diagnosis-management",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "PAD vs CVI Differentiation: ABI Interpretation, Wound Characteristics, and Symptom Profiles",
+        "PAD Management in Primary Care: Antiplatelet Therapy, Statin, Exercise Rehabilitation, and Smoking Cessation",
+        "Venous Insufficiency: Compression Stockings, Wound Care, and DVT Prophylaxis in High-Risk Periods",
+        "Critical Limb Ischemia and Deep Vein Thrombosis: Urgent Vascular Referral Criteria"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "topicSlug": "bph-symptom-scoring-management-referral",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "BPH Diagnosis: IPSS Symptom Score, Digital Rectal Exam, PSA, and Post-Void Residual Assessment",
+        "Alpha-Blocker Therapy: Tamsulosin, Silodosin — Onset, Efficacy, and Orthostatic Hypotension",
+        "5-Alpha Reductase Inhibitors: Finasteride, Dutasteride — Indications, PSA Effect, and Sexual Side Effects",
+        "Combination Therapy, Phosphodiesterase Inhibitors (Tadalafil), and Urology Referral Criteria"
+      ]
+    },
+    {
+      "domain": "Adult Primary Care",
+      "topicSlug": "goals-of-care-framework-np-role",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Goals of Care Conversation Framework: SPIKES, REMAP, and The Serious Illness Conversation Guide",
+        "Advance Directives in Primary Care: HCP, POLST/MOLST, Living Will — Completion and Documentation",
+        "Hospice and Palliative Care Referral: Eligibility Criteria, Six-Month Prognosis, and NP Certification Role"
+      ]
+    },
+
+    {
+      "domain": "Mental Health Presentations",
+      "topicSlug": "mdd-diagnosis-risk-initial-management",
+      "tier": "A",
+      "lessonCount": 5,
+      "lessons": [
+        "MDD Diagnosis: DSM-5 Criteria, PHQ-9 Interpretation, and Ruling Out Medical and Bipolar Causes",
+        "Suicide Risk Assessment and Safety Planning: Columbia Scale, Static vs Dynamic Factors, and Documentation",
+        "Treatment Initiation: Medication vs Psychotherapy vs Combined — Setting Expectations and First Visit",
+        "Moderate-to-Severe MDD: When to Refer to Psychiatry, Hospital Criteria, and Collaborative Care",
+        "Treatment-Resistant Depression: Augmentation Strategies, Ketamine, and ECT Referral Criteria"
+      ],
+      "scopeFence": "SF-04 — antidepressant agent selection covered in antidepressant-selection-ssri-snri-primary-care"
+    },
+    {
+      "domain": "Mental Health Presentations",
+      "topicSlug": "bipolar-recognition-safety-prescribing",
+      "tier": "A",
+      "lessonCount": 5,
+      "lessons": [
+        "Bipolar I vs II Recognition: Manic and Hypomanic Episode Criteria, Cyclothymia, and Misdiagnosis as MDD",
+        "Bipolar Safety: Suicide Risk in Bipolar, Violence Risk, and Acute Manic Episode — When to Hospitalize",
+        "Mood Stabilizer Prescribing Pitfalls: SSRIs Triggering Mania, Lithium Toxicity Signs, and Valproate Risks",
+        "Lithium Monitoring Protocol: Levels, Renal Function, Thyroid, and Drug Interactions",
+        "Long-Term Bipolar Management in Primary Care: Stability Monitoring, Teratogenicity Counseling, and Referral Coordination"
+      ]
+    },
+    {
+      "domain": "Mental Health Presentations",
+      "topicSlug": "gad-panic-disorder-diagnosis-management",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "GAD Diagnosis: DSM-5 Criteria, GAD-7, and Medical Causes to Exclude (Thyroid, Cardiac, Caffeine)",
+        "Panic Disorder: Recognizing Panic Attacks, Agoraphobia, and Distinguishing from Medical Presentations",
+        "First-Line Pharmacotherapy: SSRIs/SNRIs for Both GAD and PD — Initiation, Titration, and Duration",
+        "Psychotherapy Referral: CBT Evidence, Combined Treatment Advantage, and When Medication Alone Is Insufficient"
+      ]
+    },
+    {
+      "domain": "Mental Health Presentations",
+      "topicSlug": "first-episode-psychosis-recognition-referral",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Psychosis Recognition: Positive Symptoms, Negative Symptoms, and Medical vs Substance-Induced Differential",
+        "Safety Assessment and Acute Stabilization: Violence and Self-Harm Risk, Involuntary Hold Criteria",
+        "Urgent Psychiatry Referral: Early Psychosis Intervention Programs, Family Psychoeducation, and NP Role"
+      ]
+    },
+    {
+      "domain": "Mental Health Presentations",
+      "topicSlug": "ptsd-primary-care-screening-management",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "PTSD Screening: PC-PTSD-5 Tool, DSM-5 Criteria, and High-Risk Populations in Primary Care",
+        "Trauma-Informed Care Principles: Safety, Trustworthiness, and Avoiding Re-Traumatization",
+        "First-Line Treatment: SSRIs/SNRIs for PTSD — Sertraline and Paroxetine FDA Approval, Prazosin for Nightmares",
+        "Referral for Trauma-Focused Psychotherapy: EMDR, CPT, Prolonged Exposure — Indications and Access"
+      ]
+    },
+    {
+      "domain": "Mental Health Presentations",
+      "topicSlug": "oud-moud-buprenorphine-naltrexone-primary-care",
+      "tier": "A",
+      "lessonCount": 5,
+      "lessons": [
+        "OUD Diagnosis: DSM-5 Criteria, DAST Screening, Severity Classification, and Overdose Risk Assessment",
+        "Buprenorphine/Naloxone: Mechanism, Induction Protocol, COWS Assessment, and First-Dose Timing",
+        "Buprenorphine Maintenance: Dose Titration, Monitoring, Urine Drug Screens, and Federal Regulations",
+        "Naltrexone (Vivitrol): Indication, Induction Requirements, IM Formulation, and Adherence Challenges",
+        "Harm Reduction in Primary Care: Naloxone Prescribing, Syringe Services, and Co-occurring SUD"
+      ]
+    },
+    {
+      "domain": "Mental Health Presentations",
+      "topicSlug": "eating-disorder-screening-referral-primary-care",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Eating Disorder Recognition: SCOFF Tool, Anorexia vs Bulimia vs BED Clinical Features",
+        "Medical Complications: Electrolyte Abnormalities, Bradycardia, Amenorrhea, and Dental Erosion",
+        "Referral Criteria and Level of Care: Medical Stabilization Thresholds vs Outpatient Eating Disorder Program"
+      ]
+    },
+    {
+      "domain": "Mental Health Presentations",
+      "topicSlug": "pediatric-anxiety-depression-recognition-prescribing",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Pediatric Anxiety Disorders: GAD, Separation Anxiety, Social Anxiety — DSM Criteria by Age",
+        "Pediatric Depression Recognition: PHQ-A Scoring, Somatic Presentation in Children, and School Impact",
+        "Safe Prescribing: SSRIs in Pediatrics — FDA Black Box Warning, Monitoring Frequency, and Dose Starting",
+        "Psychotherapy-First Approach: CBT Evidence in Pediatrics, Parent Involvement, and Prescribe vs Refer Decision"
+      ]
+    },
+    {
+      "domain": "Mental Health Presentations",
+      "topicSlug": "adhd-adults-diagnosis-prescribing",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Adult ADHD Diagnosis: DSM-5 Criteria, ASRS Screening, Childhood History Requirement, and Differential",
+        "Stimulant Prescribing in Adults: Amphetamine vs Methylphenidate, DEA Schedule II Protocol, and PDMP",
+        "Non-Stimulant Options: Atomoxetine, Viloxazine, Bupropion, and Guanfacine — Indications",
+        "Monitoring and Diversion Risk: CV Assessment, Blood Pressure Monitoring, and Aberrant Behavior Screening"
+      ]
+    },
+    {
+      "domain": "Mental Health Presentations",
+      "topicSlug": "somatic-symptom-disorder-recognition-management",
+      "tier": "B",
+      "lessonCount": 4,
+      "lessons": [
+        "Somatic Symptom Disorder Diagnosis: DSM-5 Criteria vs Illness Anxiety vs Conversion Disorder",
+        "Workup Limit-Setting: Avoiding Unnecessary Testing While Maintaining Therapeutic Alliance",
+        "Management Framework: Scheduled Visits, CBT Referral, and Low-Dose TCA/SNRI Evidence",
+        "Comorbid Mental Health Treatment: Depression and Anxiety Co-Occurring with Somatic Symptoms"
+      ]
+    },
+
+    {
+      "domain": "Urgent Care Decision-Making",
+      "topicSlug": "acs-ruleout-heart-score-disposition",
+      "tier": "A",
+      "lessonCount": 5,
+      "lessons": [
+        "ACS Recognition in Outpatient: STEMI vs NSTEMI vs UA — ECG and Troponin Interpretation",
+        "HEART Score Application: Component Scoring, Risk Tiers, and Disposition Decision",
+        "Office-Based STEMI Protocol: Aspirin, EMS Activation, and What to Do While Awaiting Transfer",
+        "High-Risk NSTEMI Features Requiring Emergent vs Urgent ED Transfer",
+        "Atypical ACS: Women, Diabetics, Elderly — Recognizing Non-Classic Presentations and Avoiding Anchoring"
+      ]
+    },
+    {
+      "domain": "Urgent Care Decision-Making",
+      "topicSlug": "acute-respiratory-distress-transfer-decision",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "SpO₂ and Respiratory Rate Red Lines: Thresholds Requiring Immediate Intervention or Transfer",
+        "Etiological Differentiation at the Bedside: Asthma Exacerbation vs AECOPD vs CHF vs PNA vs PE",
+        "Office-Based Stabilization: Oxygen Administration, Bronchodilators, and 911 Call Decision Points"
+      ]
+    },
+    {
+      "domain": "Urgent Care Decision-Making",
+      "topicSlug": "anaphylaxis-recognition-office-management",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Anaphylaxis Diagnostic Criteria: NIAID/FAAN Criteria and Clinical Scenarios That Qualify",
+        "Epinephrine First: IM Dose, Site, Repeat Dosing — Common Errors in Office Anaphylaxis Management",
+        "Biphasic Anaphylaxis Risk, Observation Duration, and Discharge with Epinephrine Auto-Injector Prescription"
+      ]
+    },
+    {
+      "domain": "Urgent Care Decision-Making",
+      "topicSlug": "acute-musculoskeletal-injury-ottawa-rules",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Ottawa Ankle and Knee Rules: Bony Tenderness Criteria, Weight-Bearing Assessment, and Radiograph Indications",
+        "Common Acute MSK Injuries: Ankle Sprain Grading, Knee Ligament Injury, and Shoulder Dislocation",
+        "Splinting, Return-to-Activity Guidance, and Orthopedic Referral Criteria"
+      ]
+    },
+    {
+      "domain": "Urgent Care Decision-Making",
+      "topicSlug": "dka-hhs-recognition-outpatient-stabilize",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "DKA vs HHS Recognition: Glucose, Anion Gap, Ketones, and Osmolality — Bedside Differentiation",
+        "Office-Based Initial Stabilization: IV Access, Normal Saline, Hold Metformin/SGLT-2, and Call 911",
+        "Transfer Communication: What to Tell the Receiving Team and How to Document the Handoff"
+      ]
+    },
+    {
+      "domain": "Urgent Care Decision-Making",
+      "topicSlug": "aki-outpatient-prerenal-intrinsic-referral",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "AKI Staging: KDIGO Criteria, Baseline Creatinine Identification, and BUN/Creatinine Ratio",
+        "Pre-Renal vs Intrinsic vs Post-Renal Differentiation: Clinical Clues and FeNa Limitations",
+        "Outpatient Management vs Urgent Nephrology Referral vs Hospital Admission Decision"
+      ]
+    },
+    {
+      "domain": "Urgent Care Decision-Making",
+      "topicSlug": "pediatric-dehydration-severity-rehydration",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Dehydration Severity Classification: Mild/Moderate/Severe — Clinical Signs by Age and Weight",
+        "Oral Rehydration Therapy: ORS Protocol, Feeding During Illness, and Anti-Emetic Use in ORT",
+        "Intravenous Rehydration Indications and Failure Criteria for Outpatient ORT"
+      ]
+    },
+    {
+      "domain": "Urgent Care Decision-Making",
+      "topicSlug": "wound-assessment-closure-decisions",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "Wound Assessment: Time Since Injury, Contamination Level, Tissue Viability, and Tension Classification",
+        "Primary vs Secondary vs Delayed Primary Closure: Decision Framework by Wound Type and Location",
+        "Suture Selection, Wound Care Counseling, and Tetanus Prophylaxis Decision"
+      ]
+    },
+    {
+      "domain": "Urgent Care Decision-Making",
+      "topicSlug": "sepsis-recognition-outpatient-qsofa-transfer",
+      "tier": "C",
+      "lessonCount": 3,
+      "lessons": [
+        "qSOFA Criteria: Altered Mental Status, RR ≥22, SBP ≤100 — Application in Outpatient Setting",
+        "Sepsis Source Identification: Pneumonia, UTI, SSTI, Intra-Abdominal — Clinical Clues",
+        "Pre-Transfer Bundle: IV Access, Blood Cultures, IV Fluid Initiation, Antibiotic Timing, and EMS Activation"
+      ]
+    }
+  ],
+
+  "summary": {
+    "tierBreakdown": {
+      "A": { "topics": 28, "lessonsEach": 5, "totalLessons": 140 },
+      "B": { "topics": 57, "lessonsEach": 4, "totalLessons": 228 },
+      "C": { "topics": 50, "lessonsEach": 3, "totalLessons": 150 }
+    },
+    "totalTopics": 135,
+    "totalLessons": 518,
+    "targetLessons": 500,
+    "varianceFromTarget": "+18 (+3.6%)",
+    "priorLessonCount": 137,
+    "absoluteIncrease": 381,
+    "lessonMultiplier": "3.8×"
+  },
+
+  "tierATopics": [
+    "chest-pain-differential-primary-care",
+    "dyspnea-differential-cardiac-pulmonary",
+    "headache-differential-red-flags",
+    "abdominal-pain-differential-age",
+    "syncope-differential-vasovagal-cardiac-neuro",
+    "heart-failure-gdmt-primary-care",
+    "hypertension-step-therapy-guideline",
+    "afib-rate-rhythm-stroke-risk",
+    "t2dm-intensification-beyond-metformin",
+    "ckd-progression-monitoring-medication",
+    "copd-gold-staging-inhaler-selection",
+    "cap-risk-stratification-antibiotic-admission",
+    "antibiotic-stewardship-outpatient",
+    "glp1-sglt2-comorbidity-selection",
+    "antidepressant-selection-ssri-snri-primary-care",
+    "chronic-pain-non-opioid-safe-opioid",
+    "doac-selection-monitoring-reversal",
+    "contraception-counseling-efficacy-safety",
+    "menopause-hormone-therapy-risk-benefit",
+    "abnormal-uterine-bleeding-differential-management",
+    "geriatric-assessment-falls-polypharmacy-frailty",
+    "dementia-delirium-depression-older-adult",
+    "mdd-diagnosis-risk-initial-management",
+    "bipolar-recognition-safety-prescribing",
+    "oud-moud-buprenorphine-naltrexone-primary-care",
+    "acs-ruleout-heart-score-disposition",
+    "febrile-infant-risk-stratification",
+    "pediatric-asthma-stepwise-acute"
+  ],
+
+  "tierCTopics": [
+    "red-eye-differential-conjunctivitis-glaucoma",
+    "adrenal-insufficiency-thyroid-storm-recognition",
+    "hypertension-red-flags-referral",
+    "cancer-red-flags-primary-care",
+    "pediatric-red-flags-dont-miss",
+    "psychiatric-red-flags-safety",
+    "multiple-sclerosis-primary-care-monitoring",
+    "pharyngitis-strep-centor-antibiotic",
+    "aom-vs-ome-management",
+    "acute-bronchitis-pneumonia-covid-differentiation",
+    "acute-diarrhea-infectious-non-infectious",
+    "levothyroxine-dosing-monitoring-interactions",
+    "topical-corticosteroids-potency-use",
+    "inhaler-device-technique-patient-matching",
+    "mrsa-primary-care-recognition-treatment",
+    "breast-cancer-screening-guidelines-sdm",
+    "colorectal-cancer-screening-modality",
+    "cervical-cancer-screening-pap-hpv",
+    "depression-anxiety-screening-phq9-gad7",
+    "prediabetes-screening-lifestyle-counseling",
+    "adult-immunization-schedule-high-risk",
+    "sti-screening-risk-group-age",
+    "hearing-vision-loss-screening-referral",
+    "childhood-immunization-schedule-np",
+    "pediatric-obesity-screening-counseling",
+    "croup-epiglottitis-foreign-body-differentiation",
+    "kawasaki-disease-recognition-criteria-referral",
+    "adolescent-heeadsss-confidentiality",
+    "preconception-counseling-medication-safety",
+    "vaginitis-bv-candida-trich-differentiation",
+    "gestational-dm-htn-recognition-referral",
+    "prenatal-lab-interpretation-trimester",
+    "postpartum-depression-screening-management",
+    "skin-cancer-recognition-abcde-referral",
+    "mens-health-screening-prostate-testosterone",
+    "hyperparathyroidism-hypercalcemia-workup",
+    "diabetic-eye-glaucoma-screening-referral",
+    "goals-of-care-framework-np-role",
+    "first-episode-psychosis-recognition-referral",
+    "eating-disorder-screening-referral-primary-care",
+    "acute-respiratory-distress-transfer-decision",
+    "anaphylaxis-recognition-office-management",
+    "acute-musculoskeletal-injury-ottawa-rules",
+    "dka-hhs-recognition-outpatient-stabilize",
+    "aki-outpatient-prerenal-intrinsic-referral",
+    "pediatric-dehydration-severity-rehydration",
+    "wound-assessment-closure-decisions",
+    "sepsis-recognition-outpatient-qsofa-transfer",
+    "kawasaki-disease-recognition-criteria-referral",
+    "postpartum-depression-screening-management"
+  ],
+
+  "scopeFenceCompliance": {
+    "SF-01": "t2dm-intensification (Tier A) and glp1-sglt2 (Tier A) have separate lesson sets with no shared lesson titles",
+    "SF-02": "thyroid-disease-diagnosis-management (Tier B) lesson 4 ends at dose adjustment; levothyroxine-dosing (Tier C) handles monitoring/interactions exclusively",
+    "SF-03": "ckd-progression-monitoring-medication (Tier A) lesson 5 references drug safety principles; medication-dose-adjustment-ckd (Tier B) handles specific dose tables",
+    "SF-04": "mdd-diagnosis-risk-initial-management (Tier A) lesson 1 ends at treatment initiation decision; antidepressant-selection (Tier A) handles all agent-level decisions"
+  },
+
+  "lessonNamingConventions": {
+    "rule1": "Every lesson title is topic-specific — no generic 'Introduction' or 'Overview' labels",
+    "rule2": "Lesson titles encode the clinical content so learners can predict scope before opening",
+    "rule3": "Tier A L5 titles always specify the edge case or special population being covered",
+    "rule4": "Tier C lesson titles are complete standalone clinical decisions, not fragments"
+  }
+}

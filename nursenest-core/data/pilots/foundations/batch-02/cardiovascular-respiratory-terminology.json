@@ -1,0 +1,429 @@
+{
+  "topicSlug": "cardiovascular-respiratory-terminology",
+  "topicName": "Cardiovascular and Respiratory Terminology",
+  "domain": "Medical Terminology",
+  "contentWeight": "heavy",
+  "batchId": "foundations-batch-02",
+  "generatedAt": "2026-04-10",
+  "status": "pilot-draft",
+  "lessons": [
+    {
+      "lessonId": "cardiovascular-respiratory-terminology-L01",
+      "title": "Cardiac Root Words and Prefixes",
+      "sequenceOrder": 1,
+      "estimatedMinutes": 22,
+      "objectives": [
+        "Identify the most common root words and prefixes related to the heart and blood vessels",
+        "Decode cardiovascular terms using word-part analysis",
+        "Distinguish between terms describing rate, rhythm, and structural changes of the heart",
+        "Recognize cardiovascular word parts in clinical documentation"
+      ],
+      "conceptBlocks": [
+        {
+          "heading": "Core Cardiac Roots",
+          "body": "cardi/o = heart (cardiology, myocardium, cardiomegaly)\nmyo/cardi/o = heart muscle (myocarditis, myocardial infarction)\ncoronary = crown-shaped vessels encircling the heart (coronary artery)\narteri/o = artery (arteriosclerosis, arteriectomy)\nangi/o / vas/o = vessel (angioplasty, vasoconstriction, vasodilator)\naort/o = aorta (aortic stenosis)\nphleb/o / ven/o = vein (phlebitis, venous insufficiency)"
+        },
+        {
+          "heading": "Rate and Rhythm Prefixes",
+          "body": "brady- = slow → bradycardia = slow heart rate (< 60 bpm at rest)\ntachy- = fast → tachycardia = fast heart rate (> 100 bpm at rest)\narrhythmia = without normal rhythm (a- = without; -rrhythmia = rhythm)\ndys- = abnormal → dysrhythmia = abnormal heart rhythm\n\nClinical note: The terms arrhythmia and dysrhythmia are often used interchangeably; arrhythmia is the more traditional term in cardiology."
+        },
+        {
+          "heading": "Structural and Pathological Terms",
+          "body": "cardio-megaly = enlarged heart\nmyo-card-itis = inflammation of the heart muscle\nperi-card-itis = inflammation of the pericardium (surrounding sac)\nendo-card-itis = inflammation of the endocardium (inner lining)\nstenosis = narrowing (aortic stenosis, mitral stenosis)\nregurgitation = backward flow through an incompetent valve\nischemia = insufficient blood supply (isch = to hold back; -emia = blood condition)"
+        }
+      ],
+      "teachingNotes": "Myocardial infarction (MI) is a term students hear early in clinical contexts. Use it as the anchor: myo = muscle, cardial = heart, infarction = area of tissue death from ischemia. This demonstrates how knowing roots leads directly to understanding high-stakes clinical conditions."
+    },
+    {
+      "lessonId": "cardiovascular-respiratory-terminology-L02",
+      "title": "Blood, Vessels, and Circulatory Terms",
+      "sequenceOrder": 2,
+      "estimatedMinutes": 22,
+      "objectives": [
+        "Recall hematological root words and their meanings",
+        "Identify terms related to blood pressure, fluid volume, and vascular conditions",
+        "Distinguish between terms describing blood cell abnormalities",
+        "Apply hematological and vascular terminology to clinical documentation"
+      ],
+      "conceptBlocks": [
+        {
+          "heading": "Blood Cell Terminology",
+          "body": "hem/o / hemat/o = blood\nerythr/o = red (erythrocyte = red blood cell; erythropoiesis = production of RBCs)\nleuk/o = white (leukocyte = white blood cell; leukocytosis = elevated WBC count)\nthromb/o = clot (thrombocyte = platelet; thrombosis = clot formation)\ncyt/o = cell (applies to all cell types)"
+        },
+        {
+          "heading": "Blood Condition Suffixes: -emia",
+          "body": "-emia = blood condition\nanemia = without normal red cell mass (an- = without)\nhyperglycemia = high blood glucose (hyper- + glyc/o = sugar)\nhypoglycemia = low blood glucose\nsepticemia = bacteria in the bloodstream (septic/o = infected)\npolycythemia = excess red blood cells (poly- = many; cyt/o = cell)\nthrombocytopenia = low platelet count (-penia = deficiency)"
+        },
+        {
+          "heading": "Vascular and Pressure Terms",
+          "body": "hypertension = persistently elevated blood pressure (hyper- + tension)\nhypotension = abnormally low blood pressure\nvasoconstriction = narrowing of a blood vessel (vasc/o + constriction)\nvasodilation = widening of a blood vessel\nischemia = inadequate blood supply to a tissue\nthrombus = a fixed blood clot; embolus = a clot that has broken free and travels\ninfarction = tissue death resulting from ischemia (myocardial infarction)"
+        }
+      ],
+      "teachingNotes": "Distinguish thrombus vs embolus carefully — thrombus is stationary; embolus moves. Use the analogy of a parked car (thrombus) vs a car driving away (embolus). This concept recurs in DVT, pulmonary embolism, and stroke discussions."
+    },
+    {
+      "lessonId": "cardiovascular-respiratory-terminology-L03",
+      "title": "Respiratory Root Words and Prefixes",
+      "sequenceOrder": 3,
+      "estimatedMinutes": 22,
+      "objectives": [
+        "Identify the root words for each major structure of the respiratory tract",
+        "Decode respiratory terms using word-part analysis",
+        "Distinguish between terms describing breathing patterns and respiratory conditions",
+        "Recognize respiratory word parts in clinical charting and orders"
+      ],
+      "conceptBlocks": [
+        {
+          "heading": "Respiratory Tract Roots",
+          "body": "nas/o / rhin/o = nose (nasal, rhinitis, rhinorrhea)\npharyngo = pharynx (pharyngitis, nasopharynx)\nlaryng/o = larynx (laryngitis, laryngoscopy)\ntracheo = trachea (tracheotomy, tracheostomy)\nbronch/o = bronchus (bronchitis, bronchodilator, bronchoscopy)\nalveol/o = alveolus (alveolar, alveolocapillary)\npneum/o / pulmon/o = lung (pneumonia, pulmonary embolism)\npleur/o = pleura (pleuritis, pleural effusion)"
+        },
+        {
+          "heading": "Breathing Pattern Terms",
+          "body": "-pnea = breathing (root for all breathing-related terms)\neupnea = normal breathing rate and depth (eu- = good, normal)\napnea = absence of breathing (a- = without)\ndyspnea = difficult or painful breathing (dys- = difficult)\ntachypnea = rapid breathing (tachy- = fast)\nbradypnea = slow breathing (brady- = slow)\nhyperpnea = deep breathing (increased tidal volume)\nhyperventilation = increased rate AND depth, causing CO2 loss\northopnea = difficulty breathing when lying flat (ortho- = straight/upright)"
+        },
+        {
+          "heading": "Key Respiratory Conditions",
+          "body": "pneumonia = inflammation/infection of the lung parenchyma (pneum/o + -ia)\nbronchitis = inflammation of the bronchi\npleuritis / pleurisy = inflammation of the pleural membranes\natelectasis = incomplete lung expansion or collapse (atel- = imperfect; ectasis = expansion)\npneumothorax = air in the pleural space (pneumo = air/lung; thorax = chest)\nhemothorax = blood in the pleural space (hemo = blood)\npneumonia vs emphysema: pneumonia = infection/inflammation; emphysema = destruction of alveolar walls"
+        }
+      ],
+      "teachingNotes": "The '-pnea' family is high-yield. Students often confuse dyspnea (difficulty breathing, a symptom) with apnea (absent breathing). Distinguish by prefix: dys- = difficult; a- = without. Orthopnea is worth flagging because it appears directly in nursing assessments as a position-dependent symptom."
+    },
+    {
+      "lessonId": "cardiovascular-respiratory-terminology-L04",
+      "title": "Reading Cardiovascular and Respiratory Documentation",
+      "sequenceOrder": 4,
+      "estimatedMinutes": 25,
+      "objectives": [
+        "Parse multi-component cardiovascular and respiratory terms in clinical notes",
+        "Accurately interpret meaning from combined terminology without a dictionary",
+        "Identify high-risk terminology that signals emergent conditions",
+        "Apply correct terminology when documenting cardiovascular and respiratory findings"
+      ],
+      "conceptBlocks": [
+        {
+          "heading": "Decoding Complex Clinical Phrases",
+          "body": "Practice decoding these phrases term by term:\n\n'Acute myocardial ischemia' → acute (sudden onset); myocardial (heart muscle); ischemia (inadequate blood supply) → sudden onset of inadequate blood supply to the heart muscle\n\n'Bilateral pleural effusions' → bilateral (both sides); pleural (pertaining to the pleura); effusions (fluid accumulation) → fluid in both pleural spaces\n\n'Bronchospasm with expiratory wheezes' → bronchospasm (sudden constriction of bronchial smooth muscle); expiratory (during exhalation); wheezes (high-pitched airway sounds)"
+        },
+        {
+          "heading": "High-Alert Cardiovascular Terms",
+          "body": "These terms in documentation should prompt immediate assessment:\n\n• Ventricular fibrillation (V-fib): chaotic, fatal rhythm\n• Tachyarrhythmia: fast + abnormal rhythm\n• Acute coronary syndrome (ACS): umbrella term for unstable angina, NSTEMI, STEMI\n• Cardiopulmonary arrest: cessation of heart and breathing (both systems)\n• Hemodynamic instability: inability to maintain adequate blood pressure/circulation\n\nBeing able to read these terms quickly is a foundational safety skill."
+        },
+        {
+          "heading": "Charting Respiratory Assessment Findings",
+          "body": "When documenting respiratory findings, use precise terminology:\n\n✓ 'Patient reports dyspnea on exertion with 2-pillow orthopnea'\n✗ 'Patient has trouble breathing and can't lie down flat'\n\nPrecise terminology communicates to the care team exactly what was assessed and is legally defensible. The first example tells the team: symptomatic on exertion, needs head of bed elevated — information that directs care."
+        }
+      ],
+      "teachingNotes": "Use realistic chart excerpt exercises. Present students with 3–4 sentences from a simulated nursing note containing cardiovascular/respiratory terms and have them decode each term before discussing the clinical picture. This bridges vocabulary to clinical thinking."
+    }
+  ],
+  "questions": [
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q01",
+      "stem": "A patient is documented as having 'tachycardia.' What does this term indicate?",
+      "options": {
+        "A": "An abnormally slow heart rate",
+        "B": "An abnormally fast heart rate",
+        "C": "An irregular heart rhythm",
+        "D": "Absence of a heartbeat"
+      },
+      "correctAnswer": "B",
+      "rationale": "Tachy- = fast; cardi/o = heart; -ia = condition. Tachycardia = abnormally fast heart rate (typically > 100 bpm at rest in adults). Bradycardia = slow rate (brady- = slow). Arrhythmia = irregular rhythm. Asystole = no heartbeat (a- = without).",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "prefix tachy-; cardiovascular terminology"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q02",
+      "stem": "The medical term for inflammation of the inner lining of the heart is:",
+      "options": {
+        "A": "Pericarditis",
+        "B": "Myocarditis",
+        "C": "Endocarditis",
+        "D": "Cardiomegaly"
+      },
+      "correctAnswer": "C",
+      "rationale": "Endo- = inner/within; card/o = heart; -itis = inflammation. Endocarditis = inflammation of the endocardium (inner lining). Pericarditis (peri- = around) = inflammation of the pericardium. Myocarditis (myo- = muscle) = inflammation of the heart muscle. Cardiomegaly (-megaly = enlargement) = enlarged heart.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "prefix endo- vs peri- vs myo-; suffix -itis"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q03",
+      "stem": "A patient's chart documents 'dyspnea on exertion.' This term means the patient experiences:",
+      "options": {
+        "A": "Absence of breathing during activity",
+        "B": "Rapid breathing while resting",
+        "C": "Difficulty breathing during physical activity",
+        "D": "Painful breathing only when lying flat"
+      },
+      "correctAnswer": "C",
+      "rationale": "Dys- = difficult; -pnea = breathing. Dyspnea = difficulty breathing. 'On exertion' specifies this occurs during physical activity. Apnea = absence of breathing. Tachypnea = rapid breathing. Orthopnea = difficulty breathing when lying flat (ortho- = straight, referring to needing to sit upright).",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "prefix dys-; suffix -pnea"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q04",
+      "stem": "Which term correctly describes a blood clot that has broken free from its origin and is traveling through the bloodstream?",
+      "options": {
+        "A": "Thrombus",
+        "B": "Embolus",
+        "C": "Infarction",
+        "D": "Ischemia"
+      },
+      "correctAnswer": "B",
+      "rationale": "An embolus is a clot (or other material) that has broken free and travels through the bloodstream, potentially lodging in a distant vessel. A thrombus is a fixed, stationary clot attached to a vessel wall. Infarction = tissue death from blocked blood supply. Ischemia = inadequate blood supply without necessarily complete obstruction.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "thrombus vs embolus distinction"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q05",
+      "stem": "The suffix '-stenosis' in the term 'aortic stenosis' means:",
+      "options": {
+        "A": "Inflammation",
+        "B": "Abnormal widening",
+        "C": "Abnormal narrowing",
+        "D": "Surgical removal"
+      },
+      "correctAnswer": "C",
+      "rationale": "-Stenosis means abnormal narrowing of a passage or vessel. Aortic stenosis = narrowing of the aortic valve opening, impeding blood flow. -Itis = inflammation. -Ectasia or dilation implies widening. -Ectomy = surgical removal.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "suffix -stenosis"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q06",
+      "stem": "Orthopnea is best defined as:",
+      "options": {
+        "A": "Rapid and shallow breathing during sleep",
+        "B": "Difficult breathing that is relieved by sitting upright",
+        "C": "Complete cessation of breathing for more than 10 seconds",
+        "D": "Painful breathing due to rib cage injury"
+      },
+      "correctAnswer": "B",
+      "rationale": "Ortho- = straight/upright; -pnea = breathing. Orthopnea = difficulty breathing that is relieved when the patient sits or stands upright. It is commonly associated with heart failure, where lying flat increases venous return and worsens pulmonary congestion. Apnea = cessation. Tachypnea = rapid breathing. Pleuritis causes pain on breathing.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "orthopnea — prefix ortho-"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q07",
+      "stem": "A patient is diagnosed with 'pneumothorax.' Using word-part analysis, this condition involves:",
+      "options": {
+        "A": "Fluid accumulation in both lungs",
+        "B": "Air in the pleural space surrounding the lung",
+        "C": "Inflammation of the lung tissue from infection",
+        "D": "Collapse of small airways in the lower lobes"
+      },
+      "correctAnswer": "B",
+      "rationale": "Pneumo- = air or lung; thorax = chest. Pneumothorax = air in the thoracic/pleural space (not inside the lung). This can cause lung collapse. Pleural effusion = fluid in the pleural space. Pneumonia = lung infection/inflammation. Atelectasis = airway/alveolar collapse.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "root pneumo-; thorax; pneumothorax"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q08",
+      "stem": "The term 'vasodilation' describes:",
+      "options": {
+        "A": "Narrowing of blood vessels to raise blood pressure",
+        "B": "Widening of blood vessels to lower blood pressure",
+        "C": "Inflammation of blood vessel walls",
+        "D": "Formation of a clot within a vessel"
+      },
+      "correctAnswer": "B",
+      "rationale": "Vas/o = vessel; dilation = widening. Vasodilation = widening of blood vessels, which reduces peripheral resistance and can lower blood pressure. Vasoconstriction = narrowing. Vasculitis / angiitis = inflammation of vessel walls. Thrombosis = clot formation.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "vasodilation vs vasoconstriction"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q09",
+      "stem": "Which root word is specifically associated with the bronchi of the respiratory system?",
+      "options": {
+        "A": "pneum/o",
+        "B": "pleur/o",
+        "C": "bronch/o",
+        "D": "pulmon/o"
+      },
+      "correctAnswer": "C",
+      "rationale": "Bronch/o specifically refers to the bronchi (main air passages branching from the trachea into the lungs). Pneum/o refers to the lung or air. Pleur/o refers to the pleura (membrane lining the lungs and thoracic wall). Pulmon/o also refers to the lung (used in pulmonary).",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "root bronch/o"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q10",
+      "stem": "Thrombocytopenia is characterized by a:",
+      "options": {
+        "A": "High white blood cell count",
+        "B": "Low red blood cell count",
+        "C": "Deficiency of platelets",
+        "D": "Excess of plasma proteins"
+      },
+      "correctAnswer": "C",
+      "rationale": "Thromb/o = clot; cyt/o = cell; -penia = deficiency. Thrombocytes are platelets. Thrombocytopenia = abnormally low platelet count, increasing bleeding risk. Leukocytosis = high WBC count. Anemia = low RBC count or hemoglobin. Hyperproteinemia would be excess plasma proteins.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "root thromb/o; suffix -penia; thrombocytes = platelets"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q11",
+      "stem": "A nurse reads 'bilateral pleural effusions' in a patient's radiology report. What does this finding indicate?",
+      "options": {
+        "A": "Air trapped in both lungs",
+        "B": "Fluid accumulated in the pleural spaces on both sides",
+        "C": "Inflammation of the lungs bilaterally",
+        "D": "Collapse of lung tissue on both sides"
+      },
+      "correctAnswer": "B",
+      "rationale": "Pleural effusion = fluid accumulation in the pleural space (between the lung and chest wall). Bilateral = both sides. This is common in heart failure, kidney disease, and liver disease. Air in lungs = pneumothorax. Bilateral lung inflammation = bilateral pneumonia. Collapse = atelectasis.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "pleural effusion; bilateral"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q12",
+      "stem": "The combining form 'erythr/o' refers specifically to the color:",
+      "options": {
+        "A": "White",
+        "B": "Blue",
+        "C": "Red",
+        "D": "Yellow"
+      },
+      "correctAnswer": "C",
+      "rationale": "Erythr/o = red. Erythrocyte = red blood cell. Erythropoiesis = production of red blood cells. Leuk/o = white (leukocyte). Cyan/o = blue (cyanosis). Xanth/o = yellow (xanthoma).",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "root erythr/o = red"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q13",
+      "stem": "What does 'eupnea' mean?",
+      "options": {
+        "A": "Difficult breathing",
+        "B": "Normal, unlabored breathing",
+        "C": "Rapid breathing",
+        "D": "Absence of breathing"
+      },
+      "correctAnswer": "B",
+      "rationale": "Eu- = good, normal; -pnea = breathing. Eupnea = normal, unlabored breathing at a normal rate and depth. Dyspnea = difficult breathing. Tachypnea = rapid. Apnea = absence of breathing.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "prefix eu- = normal; eupnea"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q14",
+      "stem": "The term 'myocardial infarction' (MI) is best decoded as:",
+      "options": {
+        "A": "Inflammation of the outer heart sac",
+        "B": "Area of heart muscle death due to blocked blood supply",
+        "C": "Rapid heart rate caused by electrical instability",
+        "D": "Enlargement of the heart muscle over time"
+      },
+      "correctAnswer": "B",
+      "rationale": "Myo = muscle; cardial = heart; infarction = area of tissue death (from ischemia/blocked blood supply). An MI = dead heart muscle due to coronary artery obstruction. Pericarditis = outer sac inflammation. Tachyarrhythmia = rapid abnormal rhythm. Cardiomegaly = heart enlargement.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "myocardial infarction — word-part decoding"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q15",
+      "stem": "A nurse prepares to administer a 'bronchodilator.' Based on word-part analysis, this medication:",
+      "options": {
+        "A": "Reduces inflammation of the bronchial lining",
+        "B": "Widens (opens) the bronchi to improve airflow",
+        "C": "Removes mucus from the bronchi by thinning secretions",
+        "D": "Narrows the bronchi to reduce airway hyperresponsiveness"
+      },
+      "correctAnswer": "B",
+      "rationale": "Bronch/o = bronchus; dilat/o = to widen; -or = agent that does something. A bronchodilator widens the bronchi/airways, improving airflow and relieving bronchospasm. Anti-inflammatory medications (e.g., corticosteroids) reduce inflammation. Mucolytics thin secretions. Bronchoconstriction = narrowing.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "bronchodilator — root bronch/o + dilat/o"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q16",
+      "stem": "The term 'atelectasis' refers to:",
+      "options": {
+        "A": "Air accumulation in the pleural space",
+        "B": "Incomplete expansion or collapse of lung tissue",
+        "C": "Inflammation of the alveoli from infection",
+        "D": "Excessive fluid in the lung interstitium"
+      },
+      "correctAnswer": "B",
+      "rationale": "Atel- = imperfect/incomplete; -ectasis = expansion. Atelectasis = incomplete expansion or collapse of lung tissue (alveoli that fail to open or have collapsed). Pneumothorax = air in pleural space. Pneumonia = alveolar infection. Pulmonary edema = fluid in the lung interstitium.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "atelectasis — atel- + -ectasis"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q17",
+      "stem": "Ischemia of the myocardium is defined as:",
+      "options": {
+        "A": "Enlargement of the heart muscle",
+        "B": "Inadequate blood supply to the heart muscle",
+        "C": "Inflammation of the heart muscle",
+        "D": "Rapid heart muscle contractions"
+      },
+      "correctAnswer": "B",
+      "rationale": "Ischemia = inadequate blood supply/oxygenation to a tissue (from Greek 'to hold back blood'). Myocardial ischemia = heart muscle not receiving enough blood. This is the reversible phase before infarction (tissue death). Cardiomegaly = enlargement. Myocarditis = inflammation. Tachyarrhythmia = rapid contractions.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "ischemia definition"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q18",
+      "stem": "A patient is noted to have 'rhinorrhea.' This term means:",
+      "options": {
+        "A": "Painful or swollen nose",
+        "B": "Runny nose (nasal discharge)",
+        "C": "Absence of nasal breathing",
+        "D": "Nosebleed"
+      },
+      "correctAnswer": "B",
+      "rationale": "Rhin/o = nose; -rrhea = flow or discharge. Rhinorrhea = nasal discharge (runny nose). Rhinitis = inflammation of the nasal passages. Epistaxis = nosebleed (epi- = upon; -staxis = dripping). Apnea (nasal) = absence of breathing through the nose.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "root rhin/o; suffix -rrhea"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q19",
+      "stem": "What does the prefix 'brady-' indicate when applied to a respiratory rate?",
+      "options": {
+        "A": "Normal breathing depth",
+        "B": "Absent breathing",
+        "C": "Slow breathing rate",
+        "D": "Painful breathing"
+      },
+      "correctAnswer": "C",
+      "rationale": "Brady- = slow. Bradypnea = abnormally slow respiratory rate. A normal adult resting rate is 12–20 breaths/min; bradypnea is typically < 12 breaths/min. Apnea = absent breathing. Dyspnea = difficult/painful breathing. Eupnea = normal breathing.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "prefix brady- applied to respiratory rate"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q20",
+      "stem": "Pulmonary edema is best described as:",
+      "options": {
+        "A": "Air trapped in the lung's pleural space",
+        "B": "Fluid accumulation in the lung tissue and alveoli",
+        "C": "Bacterial infection of the lung parenchyma",
+        "D": "Chronic destruction of alveolar walls"
+      },
+      "correctAnswer": "B",
+      "rationale": "Pulmon/o = lung; edema = swelling from fluid accumulation. Pulmonary edema = excess fluid in the lung tissue and alveoli, impairing gas exchange. Common cause: left heart failure (elevated back-pressure floods lungs). Pneumothorax = air in pleural space. Pneumonia = infection. Emphysema = alveolar wall destruction.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "pulmonary edema — root pulmon/o + edema"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q21",
+      "stem": "The term 'phleb/o' or 'ven/o' in clinical terminology refers to:",
+      "options": {
+        "A": "Artery",
+        "B": "Vein",
+        "C": "Capillary",
+        "D": "Lymph vessel"
+      },
+      "correctAnswer": "B",
+      "rationale": "Phleb/o and ven/o both refer to veins. Phlebitis = inflammation of a vein. Venipuncture = puncturing a vein to draw blood. Arteri/o = artery. Capillar/o = capillary. Lymphangi/o = lymphatic vessel.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "root phleb/o / ven/o = vein"
+    },
+    {
+      "questionId": "cardiovascular-respiratory-terminology-Q22",
+      "stem": "A patient develops a pulmonary embolism (PE). Which of the following best describes this condition using word-part knowledge?",
+      "options": {
+        "A": "Air entering the pleural space of the lungs",
+        "B": "Inflammation of the lung tissue caused by bacteria",
+        "C": "A blood clot that has traveled and lodged in a pulmonary (lung) artery",
+        "D": "Chronic narrowing of the pulmonary airways"
+      },
+      "correctAnswer": "C",
+      "rationale": "Pulmonary = pertaining to the lungs; embolism = obstruction by an embolus (traveling clot or other material). A PE occurs when a clot (usually from a DVT) breaks free and lodges in a pulmonary artery, blocking blood flow to part of the lung. Pneumothorax = air in pleural space. Pneumonia = bacterial infection. Asthma = airway narrowing.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "pulmonary embolism — embolus definition"
+    }
+  ]
+}
