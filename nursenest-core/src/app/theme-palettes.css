@@ -477,7 +477,8 @@
   --theme-input-border: color-mix(in srgb, var(--theme-border) 70%, #e5e7eb);
   --theme-heading-text: #111827;
   --theme-body-text: color-mix(in srgb, #4b5563 88%, var(--theme-primary));
-  --theme-muted-text: color-mix(in srgb, #9ca3af 82%, var(--theme-primary));
+  /* gray-500 (#6b7280) base instead of gray-400 (#9ca3af) — raises muted contrast to ≥4:1 on pastel pages */
+  --theme-muted-text: color-mix(in srgb, #6b7280 82%, var(--theme-primary));
   --theme-focus-ring: var(--theme-primary);
   --theme-separator: color-mix(in srgb, var(--theme-border) 30%, #f3f4f6);
   --color-warmwhite: color-mix(in srgb, #ffffff 95%, var(--theme-primary));

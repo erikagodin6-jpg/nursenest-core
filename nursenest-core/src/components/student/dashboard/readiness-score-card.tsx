@@ -4,6 +4,93 @@ import { readinessBandLabel, readinessBandProgressFillClass } from "@/lib/learne
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import { ProgressBarSemantic } from "@/components/student/product/progress-bar-semantic";
 
+const RING_SIZE = 108;
+const RING_STROKE = 9;
+const RING_R = (RING_SIZE - RING_STROKE) / 2;
+const RING_CIRC = 2 * Math.PI * RING_R;
+
+function ringColorForBand(band: ReadinessBand): string {
+  switch (band) {
+    case "ready":
+      return "var(--semantic-success)";
+    case "near_ready":
+      return "var(--semantic-brand)";
+    case "improving":
+      return "var(--semantic-info)";
+    case "not_ready":
+      return "var(--semantic-warning)";
+    case "insufficient_data":
+    default:
+      return "var(--semantic-border-soft)";
+  }
+}
+
+/**
+ * Circular SVG progress ring for the readiness KPI.
+ * Rotated -90deg so the arc starts at 12 o'clock.
+ */
+function ReadinessRing({ pct, band }: { pct: number | null; band: ReadinessBand }) {
+  const offset = pct != null ? RING_CIRC - (Math.min(100, Math.max(0, pct)) / 100) * RING_CIRC : RING_CIRC;
+  const color = ringColorForBand(band);
+  const cx = RING_SIZE / 2;
+  const cy = RING_SIZE / 2;
+
+  return (
+    <div className="relative shrink-0" style={{ width: RING_SIZE, height: RING_SIZE }}>
+      <svg
+        width={RING_SIZE}
+        height={RING_SIZE}
+        className="-rotate-90"
+        aria-hidden
+      >
+        {/* Track */}
+        <circle
+          cx={cx}
+          cy={cy}
+          r={RING_R}
+          fill="none"
+          stroke="var(--semantic-border-soft)"
+          strokeWidth={RING_STROKE}
+          opacity={0.4}
+        />
+        {/* Progress arc */}
+        {pct != null && (
+          <circle
+            cx={cx}
+            cy={cy}
+            r={RING_R}
+            fill="none"
+            stroke={color}
+            strokeWidth={RING_STROKE}
+            strokeDasharray={RING_CIRC}
+            strokeDashoffset={offset}
+            strokeLinecap="round"
+            style={{ transition: "stroke-dashoffset 0.8s cubic-bezier(0.4,0,0.2,1)" }}
+          />
+        )}
+      </svg>
+      {/* Score number centred inside ring */}
+      <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+        {pct != null ? (
+          <>
+            <span
+              className="text-2xl font-bold tabular-nums leading-none"
+              style={{ color }}
+            >
+              {pct}
+            </span>
+            <span className="mt-0.5 text-[10px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
+              / 100
+            </span>
+          </>
+        ) : (
+          <Target className="h-6 w-6 text-[var(--semantic-text-muted)]" aria-hidden />
+        )}
+      </div>
+    </div>
+  );
+}
+
 function readinessBandTopBorderClass(band: ReadinessBand): string {
   switch (band) {
     case "ready":

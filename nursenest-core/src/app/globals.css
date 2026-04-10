@@ -80,10 +80,10 @@ body {
 :where([data-theme]) {
   /* Surfaces: one cohesive hue per theme, multiple depths */
   --bg-page: var(--theme-page-bg);
-  /* Bumped to 8% so section bands read distinctly against the tinted page bg */
-  --bg-section: color-mix(in srgb, var(--theme-primary) 8%, var(--theme-page-bg));
-  /* Lighter alternating strip — halfway between page and section */
-  --bg-section-alt: color-mix(in srgb, var(--theme-primary) 4.5%, var(--theme-page-bg));
+  /* 10% tint: visible section bands on pastel primaries (strawberry/blush barely showed at 8%) */
+  --bg-section: color-mix(in srgb, var(--theme-primary) 10%, var(--theme-page-bg));
+  /* 6% alternating strip — clear rhythm without competing with section */
+  --bg-section-alt: color-mix(in srgb, var(--theme-primary) 6%, var(--theme-page-bg));
   --bg-card: color-mix(in srgb, var(--theme-primary) 3.25%, var(--theme-card-bg));
   --bg-elevated: color-mix(in srgb, var(--theme-card-bg) 90%, var(--theme-heading-text));
   /* Slightly recessed / table header bands */
@@ -285,8 +285,8 @@ html[data-theme="dark-mode"] {
   --color-accent-foreground: var(--theme-accent-foreground);
   --color-border: var(--border-subtle, var(--theme-border));
   --color-ring: var(--theme-ring);
-  /* Muted row/chip surfaces — slightly richer than page, still low contrast */
-  --color-muted: color-mix(in srgb, var(--theme-body-text) 7%, var(--bg-page, var(--theme-page-bg)));
+  /* Muted row/chip surfaces — 9% body text gives perceptible separation on near-white pastel pages */
+  --color-muted: color-mix(in srgb, var(--theme-body-text) 9%, var(--bg-page, var(--theme-page-bg)));
   --color-muted-foreground: var(--theme-muted-text);
   /* Form fields track input surface token when theme is active */
   --color-input: var(--surface-input, var(--theme-input-bg));

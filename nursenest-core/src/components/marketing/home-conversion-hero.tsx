@@ -128,7 +128,7 @@ export function HomeConversionHero() {
               <p className="nn-marketing-caption mb-3 font-medium text-[var(--theme-muted-text)]">
                 Jump straight into your exam:
               </p>
-              <div className="flex flex-wrap gap-2" role="list" aria-label="Choose your nursing exam pathway">
+              <nav className="flex flex-wrap gap-2" aria-label="Choose your nursing exam pathway">
                 {TIERS.map((tier) => {
                   const Icon = tier.icon;
                   const label = region === "CA" ? tier.caLabel : tier.usLabel;
@@ -138,7 +138,6 @@ export function HomeConversionHero() {
                       href={tier.href(loc)}
                       event={PH.marketingHomeHeroPrimaryCta}
                       eventProps={{ region, destination: tier.id, surface: "hero_tier_pill" }}
-                      role="listitem"
                       className="inline-flex items-center gap-1.5 rounded-full border border-[color-mix(in_srgb,var(--theme-primary)_30%,var(--border-subtle))] bg-[var(--theme-card-bg)] px-3.5 py-2 text-sm font-semibold text-[var(--theme-heading-text)] shadow-sm transition hover:border-[color-mix(in_srgb,var(--theme-primary)_60%,var(--border-subtle))] hover:bg-[color-mix(in_srgb,var(--theme-primary)_8%,var(--theme-card-bg))] hover:shadow focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--theme-primary)]"
                       data-testid={`button-hero-tier-${tier.id}`}
                     >
@@ -147,7 +146,7 @@ export function HomeConversionHero() {
                     </MarketingTrackedLink>
                   );
                 })}
-              </div>
+              </nav>
 
               {/* Region toggle inline with the tier pills */}
               <div
