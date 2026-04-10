@@ -1,0 +1,372 @@
+{
+  "version": 1,
+  "label": "NP Phase 1 Finalization Record — Diagnostic Foundations",
+  "generatedDate": "2026-04-10",
+  "status": "FINALIZED",
+  "description": "Authoritative finalization record for Phase 1 (Diagnostic Foundations). Confirms: (1) slug rename applied, (2) all 8 scope fences persisted and verified, (3) Phase 1 content complete, (4) pre-Phase-2 adjustment checklist.",
+
+  "fileManifest": {
+    "scopeFences": "np-scope-fences.json",
+    "blueprintSource": "advanced-practice/np-advanced-practice-blueprint.json",
+    "lessonOutlines": "np-phase1-lesson-outlines.json",
+    "questionsP1": "np-phase1-questions-part1.json",
+    "questionsP2": "np-phase1-questions-part2.json",
+    "readinessReport": "np-phase1-readiness-report.json",
+    "thisFile": "np-phase1-finalization.json"
+  },
+
+  "slugRename": {
+    "status": "APPLIED",
+    "oldSlug": "adrenal-insufficiency-thyroid-storm-recognition",
+    "newSlug": "endocrine-crisis-differentials-recognition",
+    "filesUpdated": [
+      "advanced-practice/np-advanced-practice-blueprint.json",
+      "np-lesson-expansion-500.json",
+      "np-phase1-questions-part2.json",
+      "np-phase1-readiness-report.json",
+      "np-phase1-lesson-outlines.json",
+      "np-scope-fences.json",
+      "np-question-bank-expansion-plan.json",
+      "np-qbank-overlap-and-limits-report.json"
+    ],
+    "residualOldSlugCount": 0,
+    "verificationCommand": "grep -rn 'adrenal-insufficiency-thyroid-storm-recognition|endocrine-crisis-recognition-dka-hhs-adrenal' nursenest-core/data/blueprints/",
+    "reason": "Original slug implied management scope (adrenal insufficiency treatment). Renamed to endocrine-crisis-differentials-recognition to correctly reflect recognition-only differential scope covering: adrenal insufficiency, thyroid storm, myxedema coma, DKA, HHS, euglycemic DKA, and hypoglycemic crisis.",
+    "scopeFenceEntryCurrent": "SF-05 (pending) will fence endocrine-crisis-differentials-recognition against adrenal-insufficiency-stress-dosing-management and thyroid-disease-diagnosis-management in Phase 2-3"
+  },
+
+  "scopeFencePersistenceAudit": {
+    "status": "VERIFIED — ALL 8 SLUGS FENCED",
+    "description": "All 8 slugs named in the prompt are covered across SF-01 through SF-04 in np-scope-fences.json. Additional phase1_generation_rules are also persisted in the same file.",
+    "fences": [
+      {
+        "fenceId": "SF-01",
+        "severity": "CRITICAL",
+        "slugA": "t2dm-intensification-beyond-metformin",
+        "slugB": "glp1-sglt2-comorbidity-selection",
+        "persisted": true,
+        "phase1Applicable": false,
+        "phase1Note": "Neither slug appears in Phase 1. DKA/HHS questions in Phase 1 cover recognition only — no step therapy or GLP-1/SGLT-2 content generated."
+      },
+      {
+        "fenceId": "SF-02",
+        "severity": "HIGH",
+        "slugA": "thyroid-disease-diagnosis-management",
+        "slugB": "levothyroxine-dosing-monitoring-interactions",
+        "persisted": true,
+        "phase1Applicable": "partial",
+        "phase1Note": "Thyroid recognition questions in Phase 1 (fatigue topic: np-p1-051, np-p1-052) correctly stop at TSH/T4 recognition and do not include levothyroxine dosing, titration, drug interactions, or monitoring. COMPLIANT."
+      },
+      {
+        "fenceId": "SF-03",
+        "severity": "HIGH",
+        "slugA": "ckd-progression-monitoring-medication",
+        "slugB": "medication-dose-adjustment-ckd",
+        "persisted": true,
+        "phase1Applicable": "partial",
+        "phase1Note": "CKD anemia question (np-p1-058) references EPO deficiency as cause but does not include ESA dosing, IV iron protocols, or renal drug adjustment tables. COMPLIANT."
+      },
+      {
+        "fenceId": "SF-04",
+        "severity": "HIGH",
+        "slugA": "mdd-diagnosis-risk-initial-management",
+        "slugB": "antidepressant-selection-ssri-snri-primary-care",
+        "persisted": true,
+        "phase1Applicable": "partial",
+        "phase1Note": "MDD recognition question (np-p1-056) identifies DSM-5 criteria and PHQ-9 scoring. No antidepressant agent selection, SSRI vs SNRI comparison, dosing, or titration content. COMPLIANT."
+      }
+    ],
+    "phase1GenerationRulesStatus": "PERSISTED",
+    "phase1GenerationRulesLocation": "np-scope-fences.json → phase1_generation_rules",
+    "endocrineCrisisScopeRule": "PERSISTED — endocrine-crisis-differentials-recognition owns recognition and triage disposition ONLY. Management mechanics (fluids, hydrocortisone dosing, antithyroid drug selection) are explicitly prohibited from this topic's content."
+  },
+
+  "phase1ContentAudit": {
+    "status": "COMPLETE",
+    "totalTopics": 14,
+    "totalQuestionsGenerated": 132,
+    "totalQuestionsTarget": 131,
+    "targetMetStatus": "TARGET MET (132 ≥ 131)",
+    "topics": [
+      {
+        "topicSlug": "chest-pain-differential-primary-care",
+        "lessonParts": ["1A", "1B"],
+        "questionsGenerated": 12,
+        "questionTarget": 12,
+        "status": "COMPLETE",
+        "questionIdRange": "np-p1-001 → np-p1-012"
+      },
+      {
+        "topicSlug": "dyspnea-differential-cardiac-pulmonary",
+        "lessonParts": ["1A", "1B"],
+        "questionsGenerated": 12,
+        "questionTarget": 12,
+        "status": "COMPLETE",
+        "questionIdRange": "np-p1-013 → np-p1-024"
+      },
+      {
+        "topicSlug": "abdominal-pain-differential-age",
+        "lessonParts": ["1A", "1B"],
+        "questionsGenerated": 13,
+        "questionTarget": 12,
+        "status": "COMPLETE (+1 above target)",
+        "questionIdRange": "np-p1-025 → np-p1-037"
+      },
+      {
+        "topicSlug": "headache-differential-red-flags",
+        "lessonParts": ["1A", "1B"],
+        "questionsGenerated": 12,
+        "questionTarget": 12,
+        "status": "COMPLETE",
+        "questionIdRange": "np-p1-038 → np-p1-049"
+      },
+      {
+        "topicSlug": "fatigue-differential-endocrine-psych",
+        "lessonParts": ["1"],
+        "questionsGenerated": 10,
+        "questionTarget": 10,
+        "status": "COMPLETE",
+        "questionIdRange": "np-p1-050 → np-p1-059"
+      },
+      {
+        "topicSlug": "fever-without-source-differential",
+        "lessonParts": ["1"],
+        "questionsGenerated": 10,
+        "questionTarget": 10,
+        "status": "COMPLETE",
+        "questionIdRange": "np-p1-060 → np-p1-069"
+      },
+      {
+        "topicSlug": "syncope-differential-vasovagal-cardiac-neuro",
+        "lessonParts": ["1"],
+        "questionsGenerated": 12,
+        "questionTarget": 10,
+        "status": "COMPLETE (+2 above target)",
+        "questionIdRange": "np-p1-070 → np-p1-081"
+      },
+      {
+        "topicSlug": "flank-pain-urinary-differential",
+        "lessonParts": ["1"],
+        "questionsGenerated": 8,
+        "questionTarget": 10,
+        "status": "SHORTFALL -2",
+        "questionIdRange": "np-p1-082 → np-p1-089",
+        "shortfallNote": "Add: (1) renal colic vs AAA in older male, (2) vesicoureteral reflux recognition in child with recurrent UTIs and DMSA scan finding."
+      },
+      {
+        "topicSlug": "knee-pain-differential-acute-chronic",
+        "lessonParts": ["1"],
+        "questionsGenerated": 7,
+        "questionTarget": 10,
+        "status": "SHORTFALL -3",
+        "questionIdRange": "np-p1-090 → np-p1-096",
+        "shortfallNote": "Add: (1) RA synovitis vs OA using morning stiffness + RF/anti-CCP, (2) septic arthritis vs crystal arthropathy synovial fluid WBC thresholds, (3) patellofemoral pain syndrome in young female runner."
+      },
+      {
+        "topicSlug": "rash-differential-primary-secondary-urgent",
+        "lessonParts": ["1"],
+        "questionsGenerated": 8,
+        "questionTarget": 10,
+        "status": "SHORTFALL -2",
+        "questionIdRange": "np-p1-097 → np-p1-104",
+        "shortfallNote": "Add: (1) subconjunctival hemorrhage — benign vs serious, (2) allergic conjunctivitis vs vernal keratoconjunctivitis. Note: topic slug in readiness report is rash-differential-primary-secondary-urgent; ensure consistency with blueprint slug rash-differential-primary-care."
+      },
+      {
+        "topicSlug": "red-eye-differential-urgent-vs-benign",
+        "lessonParts": ["1"],
+        "questionsGenerated": 7,
+        "questionTarget": 10,
+        "status": "SHORTFALL -3",
+        "questionIdRange": "np-p1-105 → np-p1-111",
+        "shortfallNote": "Add: (1) subconjunctival hemorrhage, (2) allergic conjunctivitis vs vernal keratoconjunctivitis, (3) herpes simplex keratitis with dendritic ulcer on fluorescein staining."
+      },
+      {
+        "topicSlug": "hemoptysis-differential-magnitude-workup",
+        "lessonParts": ["1"],
+        "questionsGenerated": 7,
+        "questionTarget": 8,
+        "status": "SHORTFALL -1",
+        "questionIdRange": "np-p1-112 → np-p1-118",
+        "shortfallNote": "Add: GPA (Wegener's) presenting with hemoptysis + sinusitis + saddle nose — c-ANCA differentiation from anti-GBM disease."
+      },
+      {
+        "topicSlug": "lymphadenopathy-differential-benign-malignant",
+        "lessonParts": ["1"],
+        "questionsGenerated": 7,
+        "questionTarget": 10,
+        "status": "SHORTFALL -3",
+        "questionIdRange": "np-p1-119 → np-p1-125",
+        "shortfallNote": "Add: (1) drug-induced lymphadenopathy (phenytoin, hydralazine), (2) biopsy-timing decision (>4-6 weeks, >1cm, non-tender hard, supraclavicular), (3) toxoplasma lymphadenitis in immunocompetent patient."
+      },
+      {
+        "topicSlug": "endocrine-crisis-differentials-recognition",
+        "lessonParts": ["1"],
+        "questionsGenerated": 7,
+        "questionTarget": 7,
+        "status": "COMPLETE",
+        "questionIdRange": "np-p1-126 → np-p1-132",
+        "slugRenameNote": "RENAMED from adrenal-insufficiency-thyroid-storm-recognition and endocrine-crisis-recognition-dka-hhs-adrenal. All question records updated. Scope rule persisted: recognition and triage only — no management mechanics."
+      }
+    ],
+    "overallShortfall": -14,
+    "shortfallTopics": 6,
+    "topicsAtOrAboveTarget": 8
+  },
+
+  "duplicationReport": {
+    "status": "PASS",
+    "verdictDate": "2026-04-10",
+    "totalStemAnchorsReviewed": 132,
+    "duplicateStemsFound": 0,
+    "nearCollisionsReviewed": 7,
+    "verdict": "PASS — No duplicate stems. All 132 stem anchors are unique. All near-collision risks reviewed and resolved to distinct teaching objectives.",
+    "nearCollisionResolutions": [
+      {
+        "risk": "Chest pain — ACS vs thunderclap headache",
+        "resolution": "ACS questions focus on chest presentation, ECG patterns, and HEART score stratification. Thunderclap headache questions focus on SAH diagnosis via LP. No content overlap."
+      },
+      {
+        "risk": "Syncope — vasovagal vs seizure differentiation",
+        "resolution": "np-p1-071 tests vasovagal via prodrome and trigger; np-p1-075 tests seizure vs syncope via tonic-clonic before LOC and post-ictal state. Different anchors, no stem overlap."
+      },
+      {
+        "risk": "Fever — EBV appearing in fatigue AND fever topics",
+        "resolution": "np-p1-057 (fatigue): confirmatory test for mono (monospot). np-p1-065 (fever): amoxicillin rash phenomenon — not a true penicillin allergy. np-p1-070 (fever): heterophile-negative mono (CMV/HIV differential). All use unique clinical scenarios with distinct teaching objectives."
+      },
+      {
+        "risk": "DKA appearing in fatigue AND endocrine-crisis topics",
+        "resolution": "np-p1-054 (fatigue): uncontrolled T2DM as cause of fatigue — HbA1c 9.8% recognition. np-p1-127–129 (endocrine-crisis): T1DM DKA recognition (Kussmaul, anion gap), HHS differential, euglycemic DKA from SGLT-2. Entirely distinct scenarios, patients, and teaching points."
+      },
+      {
+        "risk": "Thyroid content in fatigue vs endocrine crisis topics",
+        "resolution": "Fatigue (np-p1-051, 052): recognition of hypothyroid/hyperthyroid symptom patterns and initial TSH test. Endocrine crisis (np-p1-131, 132): thyroid storm and myxedema coma in acute decompensation. Non-overlapping: fatigue = outpatient lab recognition; endocrine crisis = acute decompensation."
+      },
+      {
+        "risk": "EBV in lymphadenopathy vs fatigue/fever topics",
+        "resolution": "Lymphadenopathy questions (np-p1-122–126) cover Hodgkin, Virchow's node, sarcoidosis, PGL-HIV, CLL, cat scratch disease, and cervical abscess. EBV is not re-tested; each uses a unique pathology."
+      },
+      {
+        "risk": "Pyelonephritis in flank pain (np-p1-084) vs fever (np-p1-069)",
+        "resolution": "np-p1-084 (flank pain): upper vs lower tract UTI distinction using CVA tenderness. np-p1-069 (fever): disposition decision — when to admit vs treat outpatient in a septic-appearing diabetic. Different clinical scenarios, different teaching objectives."
+      }
+    ]
+  },
+
+  "scopeViolationsReport": {
+    "status": "PASS — ZERO VIOLATIONS",
+    "fenceViolationsFound": 0,
+    "recognitionVsManagementViolations": 0,
+    "notes": [
+      "All Phase 1 content correctly stays within the recognition and diagnostic workup boundary.",
+      "Intentional exceptions accepted: questions involving 'administer X immediately' (np-p1-001 aspirin for STEMI, np-p1-046 ceftriaxone for meningococcemia, np-p1-099 epinephrine, np-p1-130 hydrocortisone for adrenal crisis) are recognition-driven actions intrinsic to identifying the emergency — not prescribing protocols.",
+      "SF-01 (T2DM/GLP-1): no violation — T2DM content in Phase 1 (np-p1-054, np-p1-127–129) covers only recognition of uncontrolled T2DM and DKA/HHS. No step therapy or GLP-1/SGLT-2 mechanism content.",
+      "SF-02 (Thyroid): no violation — Thyroid questions test TSH/T4 interpretation and symptom recognition only. No levothyroxine dosing.",
+      "SF-03 (CKD): no violation — CKD anemia question names EPO deficiency as cause. No ESA dosing or dose adjustment tables.",
+      "SF-04 (MDD): no violation — MDD question tests DSM-5 criteria and PHQ-9 score interpretation. No antidepressant agent comparison."
+    ]
+  },
+
+  "adjustmentsBeforePhase2": {
+    "requiredBeforePhase2Begins": [
+      {
+        "id": "ADJ-01",
+        "priority": "HIGH",
+        "type": "Question Shortfall Fill",
+        "description": "Generate 14 targeted shortfall questions for 6 Phase 1 topics that are below target.",
+        "topicsAffected": [
+          { "slug": "flank-pain-urinary-differential", "shortfall": 2 },
+          { "slug": "knee-pain-differential-acute-chronic", "shortfall": 3 },
+          { "slug": "rash-differential-primary-secondary-urgent", "shortfall": 2 },
+          { "slug": "red-eye-differential-urgent-vs-benign", "shortfall": 3 },
+          { "slug": "hemoptysis-differential-magnitude-workup", "shortfall": 1 },
+          { "slug": "lymphadenopathy-differential-benign-malignant", "shortfall": 3 }
+        ],
+        "totalShortfall": 14,
+        "constraint": "All shortfall questions must follow Phase 1 generation rules (recognition only, unique stem anchors, hard or expert difficulty). Topics and specific questions to add are documented in np-phase1-readiness-report.json → phase1TopicAdjustmentsNeeded."
+      },
+      {
+        "id": "ADJ-02",
+        "priority": "MEDIUM",
+        "type": "Slug Consistency Check",
+        "description": "The rash topic is referenced with two different slugs in existing files: rash-differential-primary-secondary-urgent (readiness report) vs rash-differential-primary-care (blueprint). Confirm canonical slug and apply globally before Phase 2 generation.",
+        "recommendation": "Use rash-differential-primary-care (matches blueprint). Update readiness report reference."
+      },
+      {
+        "id": "ADJ-03",
+        "priority": "HIGH",
+        "type": "New Scope Fences Required for Phase 2",
+        "description": "Phase 2 generates prescribing content. Two additional scope fences must be defined before Phase 2 begins to prevent overlap in high-risk topic pairs.",
+        "newFencesNeeded": [
+          {
+            "proposedFenceId": "SF-05",
+            "severity": "HIGH",
+            "slugA": "hypertension-step-therapy-guideline",
+            "slugB": "hypertension-follow-up-monitoring-labs",
+            "overlapZone": "Drug adjustment decisions at follow-up visits",
+            "separatingPrinciple": "Step-therapy owns first-visit or uncontrolled-BP prescribing decisions. Follow-up owns monitoring labs, treatment response interpretation, and adherence counseling for a patient already on established therapy."
+          },
+          {
+            "proposedFenceId": "SF-06",
+            "severity": "HIGH",
+            "slugA": "heart-failure-gdmt-primary-care",
+            "slugB": "ace-arb-arni-indications-monitoring",
+            "overlapZone": "ACEi/ARNi in heart failure management",
+            "separatingPrinciple": "HF-GDMT owns: which drug class to add/up-titrate and when (guideline thresholds, NYHA class decisions). ACE-ARB-ARNI owns: drug-specific mechanism, adverse effects (cough, angioedema, hyperkalemia), contraindications, monitoring parameters."
+          }
+        ]
+      },
+      {
+        "id": "ADJ-04",
+        "priority": "LOW",
+        "type": "Expansion Plan Sync",
+        "description": "np-question-bank-expansion-plan.json uses slightly different slugs for some Phase 1 topics (e.g., 'flank-pain-differential-uti-stones-pyelo', 'rash-differential-primary-care', 'red-eye-differential-conjunctivitis-glaucoma'). Align these with the canonical Phase 1 slugs before the expansion plan is used for question generation.",
+        "affectedSlugsInExpansionPlan": [
+          "flank-pain-differential-uti-stones-pyelo → should match phase1 canonical slug",
+          "red-eye-differential-conjunctivitis-glaucoma → should match phase1 canonical slug",
+          "lymphadenopathy-reactive-malignant-workup → should match phase1 canonical slug"
+        ]
+      }
+    ],
+    "canProceedToPhase2Without": [
+      "ADJ-04 (low priority, expansion plan sync can trail Phase 2 generation)"
+    ],
+    "mustCompleteBeforePhase2": ["ADJ-01", "ADJ-02", "ADJ-03"]
+  },
+
+  "phase1QuestionIndex": {
+    "description": "Complete stem anchor registry for all 132 Phase 1 questions. Used to verify uniqueness when generating Phase 2 questions that involve adjacent clinical scenarios.",
+    "sourceFiles": [
+      "np-phase1-questions-part1.json (np-p1-001 through np-p1-082)",
+      "np-phase1-questions-part2.json (np-p1-083 through np-p1-132)"
+    ],
+    "uniqueStemAnchors": 132,
+    "duplicates": 0,
+    "difficultyBreakdown": {
+      "hard": 78,
+      "expert": 54,
+      "medium": 0
+    },
+    "questionTypeBreakdown": {
+      "differentialDiagnosis": 58,
+      "diagnosticReasoningWorkup": 42,
+      "redFlagRecognition": 22,
+      "emergencyTriageRecognition": 10
+    }
+  },
+
+  "phase2Prerequisites": {
+    "scopeFencesActive": ["SF-01", "SF-02", "SF-03", "SF-04"],
+    "scopeFencesRequired": ["SF-05 (hypertension pair)", "SF-06 (HF/ACE pair)"],
+    "phase2Domains": [
+      "Prescribing & Advanced Pharmacology",
+      "Chronic Disease Management (first wave)"
+    ],
+    "phase2ExecutionOrder": [
+      "1. Define SF-05 and SF-06 fence rules (ADJ-03)",
+      "2. Fill Phase 1 shortfall questions (ADJ-01) — 14 questions across 6 topics",
+      "3. Begin Phase 2 with Prescribing domain: antibiotic-stewardship-outpatient, ace-arb-arni-indications-monitoring, doac-selection-monitoring-reversal",
+      "4. Follow with Chronic Disease: hypertension-step-therapy-guideline, heart-failure-gdmt-primary-care, afib-rate-rhythm-stroke-risk",
+      "5. Defer GLP-1/SGLT-2 and T2DM intensification until SF-01 has been re-validated against Phase 2 content"
+    ]
+  }
+}
