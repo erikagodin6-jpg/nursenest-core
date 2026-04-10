@@ -1,4 +1,4 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
-echo "Skipping pre-push checks"
+echo "Skipping pre-push checks to avoid duplicate build/typecheck pressure on the small build VM."
 exit 0
