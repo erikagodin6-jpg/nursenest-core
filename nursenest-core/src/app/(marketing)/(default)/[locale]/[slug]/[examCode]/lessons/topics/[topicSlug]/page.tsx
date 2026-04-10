@@ -31,12 +31,7 @@ import { recordRouteRenderFallback } from "@/lib/observability/route-fallback-tr
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export const dynamicParams = true;
-export const revalidate = 86400;
 export const maxDuration = 60;
-
-export function generateStaticParams() {
-  return [];
-}
 
 type Props = {
   params: Promise<{ locale: string; slug: string; examCode: string; topicSlug: string }>;

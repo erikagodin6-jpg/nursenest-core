@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ExamFamily } from "@prisma/client";
 import { notFound, redirect } from "next/navigation";
-import { auth } from "@/lib/auth";
+import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { PathwayLessonContentLocaleBanner } from "@/components/lessons/pathway-lesson-content-locale-banner";
 import { FnpLessonsHub } from "@/components/pathway-lessons/fnp-lessons-hub";
 import { NclexPnLessonsHub } from "@/components/pathway-lessons/nclex-pn-lessons-hub";
@@ -46,13 +46,8 @@ import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 
 export const dynamicParams = true;
-export const revalidate = 86400;
 /** Aggregates + paginated hub queries can run long on cold DB; avoid hard serverless timeouts under spike load. */
 export const maxDuration = 60;
-
-export function generateStaticParams() {
-  return [];
-}
 
 type Props = {
   params: Promise<{ locale: string; slug: string; examCode: string }>;
@@ -231,7 +226,10 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     );
   }
 
-  const session = await auth();
+  const session = await getOptionalPublicSession({
+    pathname: `${pathname}/lessons`,
+    surface: "marketing.exam_hub.lessons",
+  });
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
   let learnerPath: string | null = null;

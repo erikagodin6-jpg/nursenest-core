@@ -25,7 +25,7 @@ export function HomeFinalStudyCta() {
 
   return (
     <section
-      className="border-t border-[var(--border-subtle)] bg-[color-mix(in_srgb,var(--theme-primary)_6%,var(--nn-presentation-panel))] py-12 md:py-16"
+      className="border-t border-[var(--header-nav-border)] bg-[var(--hero-branded-wash)] py-12 md:py-16"
       aria-labelledby="home-final-cta-heading"
       data-testid="section-final-study-cta"
     >

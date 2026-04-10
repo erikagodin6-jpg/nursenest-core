@@ -5,7 +5,7 @@ import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry"
 import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
 import { loadMarketingExamHubOptionalBlocks } from "@/lib/exam-pathways/marketing-hub-optional-data";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
-import { auth } from "@/lib/auth";
+import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { prisma } from "@/lib/db";
@@ -13,7 +13,6 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import type { HubLessonProgress } from "@/components/exam-pathways/exam-pathway-hub-study-modes";
 
 export const dynamicParams = true;
-export const revalidate = 86400;
 
 async function fetchHubLessonProgress(userId: string | undefined, pathwayId: string): Promise<HubLessonProgress | null> {
   if (!userId || !isDatabaseUrlConfigured()) return null;
@@ -27,10 +26,6 @@ async function fetchHubLessonProgress(userId: string | undefined, pathwayId: str
   } catch {
     return null;
   }
-}
-
-export function generateStaticParams() {
-  return [];
 }
 
 type Props = { params: Promise<{ locale: string; slug: string; examCode: string }> };
@@ -74,7 +69,10 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
   const pathway = resolveExamPathwaySafe(locale, slug, examCode, { pathname });
   if (!pathway) notFound();
 
-  const session = await auth();
+  const session = await getOptionalPublicSession({
+    pathname,
+    surface: "marketing.exam_hub.overview",
+  });
   const userId = (session?.user as { id?: string } | undefined)?.id;
   const isSignedIn = Boolean(userId);
   const npPracticeSeo = getNpPracticeTestLandingCopy(locale, slug, examCode) ?? null;

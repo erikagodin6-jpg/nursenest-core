@@ -36,11 +36,6 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { ContentEmptyState } from "@/components/ui/content-empty-state";
 
 export const dynamicParams = true;
-export const revalidate = 86400;
-
-export function generateStaticParams() {
-  return [];
-}
 
 type Props = {
   params: Promise<{ locale: string; slug: string; examCode: string }>;

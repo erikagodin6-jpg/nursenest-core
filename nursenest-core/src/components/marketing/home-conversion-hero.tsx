@@ -102,7 +102,8 @@ export function HomeConversionHero() {
       <div className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6 md:py-16 lg:px-8">
         <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:gap-12">
           <div className="min-w-0 space-y-6">
-            <p className="nn-marketing-caption mb-2 font-semibold uppercase tracking-[0.12em] text-[var(--accent-surface-a-text)]">
+            {/* One focused branded moment at the top — badge capsule, not competing accents */}
+            <p className="mb-2 inline-flex items-center rounded-full border border-[var(--accent-surface-a-border)] bg-[var(--accent-surface-a)] px-3 py-0.5 nn-marketing-caption font-bold uppercase tracking-[0.12em] text-[var(--accent-surface-a-text)]">
               {t("home.conversion.heroEyebrow")}
             </p>
             <h1
@@ -125,7 +126,7 @@ export function HomeConversionHero() {
               className="nn-accent-surface-b rounded-2xl px-4 py-4"
               data-testid="hero-tier-quick-entry"
             >
-              <p className="nn-marketing-caption mb-3 font-semibold text-[var(--accent-surface-b-text)]">
+              <p className="nn-marketing-caption mb-3 font-semibold text-[var(--theme-body-text)]">
                 Jump straight into your exam:
               </p>
               <nav className="flex flex-wrap gap-2" aria-label="Choose your nursing exam pathway">
@@ -138,7 +139,7 @@ export function HomeConversionHero() {
                       href={tier.href(loc)}
                       event={PH.marketingHomeHeroPrimaryCta}
                       eventProps={{ region, destination: tier.id, surface: "hero_tier_pill" }}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-[var(--accent-surface-a-border)] bg-[var(--accent-surface-a)] px-3.5 py-2 text-sm font-semibold text-[var(--theme-heading-text)] shadow-sm transition hover:bg-[var(--surface-bubble)] hover:border-[var(--surface-bubble-border)] hover:shadow focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring-accent)]"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-[var(--accent-surface-a-border)] bg-[var(--accent-surface-a)] px-3.5 py-2 text-sm font-semibold text-[var(--theme-heading-text)] shadow-sm transition hover:border-[var(--accent-surface-a-border)] hover:bg-[var(--surface-bubble)] hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring-accent)]"
                       data-testid={`button-hero-tier-${tier.id}`}
                     >
                       <Icon className="h-3.5 w-3.5 shrink-0 text-[var(--text-accent)]" aria-hidden />

@@ -1,6 +1,13 @@
 import { notFound } from "next/navigation";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 
+/**
+ * This segment and the marketing `(default)` layout read cookies (locale, region, optional session).
+ * Without `force-dynamic`, Next can treat the route as static/ISR and throw at runtime:
+ * "Page changed from static to dynamic … reason: cookies" → 500 on public exam landings.
+ */
+export const dynamic = "force-dynamic";
+
 type Props = {
   children: React.ReactNode;
   /** `locale` = pathway countrySlug (`us` / `canada`); `slug` = roleTrack; `examCode` = exam segment. */

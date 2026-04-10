@@ -10,7 +10,7 @@ export function HomeConversionFreeAccessBand() {
 
   return (
     <section
-      className="border-b border-[var(--border-subtle)] bg-[color-mix(in_srgb,var(--theme-primary)_4%,var(--nn-presentation-wash))] py-8 md:py-10"
+      className="border-b border-[var(--accent-surface-b-border)] bg-[var(--accent-surface-b)] py-8 md:py-10"
       aria-labelledby="home-free-access-heading"
       data-testid="section-home-free-access"
     >

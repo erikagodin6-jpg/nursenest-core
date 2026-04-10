@@ -94,7 +94,7 @@ export function HomeExamSelectionSection() {
   return (
     <section
       id="home-exam-paths"
-      className="nn-section-soft scroll-mt-20 border-b border-[var(--border-subtle)] py-12 md:py-16"
+      className="scroll-mt-20 border-b border-[var(--trust-surface-border)] bg-[var(--trust-surface)] py-12 md:py-16"
       aria-labelledby="home-exam-selection-heading"
       data-testid="section-exam-selection"
     >

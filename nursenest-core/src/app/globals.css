@@ -181,14 +181,25 @@ body {
   --accent-surface-a: color-mix(in srgb, var(--theme-primary) 13%, var(--theme-card-bg));
   --accent-surface-a-border: color-mix(in srgb, var(--theme-primary) 34%, var(--theme-border));
   --accent-surface-a-text: var(--theme-primary);
-  --accent-surface-b: color-mix(in srgb, var(--theme-secondary) 35%, var(--theme-card-bg));
-  --accent-surface-b-border: color-mix(in srgb, var(--theme-secondary) 55%, var(--theme-border));
+  /*
+   * accent-surface-b: uses --theme-border at 28% — the saturated hue axis of each light theme
+   * (e.g., ocean #7fcdff, mint #b2d8d8, forest #a7f3d0). 28% gives clearly visible tinting on
+   * saturated themes while staying appropriately soft on pastel themes by design.
+   * Distinct from accent-surface-a (primary-family) and accent-surface-c (whisper).
+   * Role: component containers, chip surfaces, info panels — denser than trust-surface.
+   */
+  --accent-surface-b: color-mix(in srgb, var(--theme-border) 28%, var(--theme-card-bg));
+  --accent-surface-b-border: color-mix(in srgb, var(--theme-border) 58%, transparent);
   --accent-surface-b-text: var(--theme-secondary-foreground);
   --accent-surface-c: color-mix(in srgb, var(--theme-primary) 5%, var(--theme-page-bg));
   --accent-surface-c-border: color-mix(in srgb, var(--theme-primary) 14%, var(--theme-border));
-  /* Trust / proof surface (slightly warm relative to accent-a) */
-  --trust-surface: color-mix(in srgb, var(--theme-secondary) 20%, var(--theme-page-bg));
-  --trust-surface-border: color-mix(in srgb, var(--theme-secondary) 42%, var(--theme-border));
+  /*
+   * trust-surface: border-derived at 18%, mixed into page-bg (not card-bg) for a lighter base.
+   * Softer than accent-b (18% vs 28%, and page-bg vs card-bg base) — for whole-section backgrounds.
+   * The distinction: accent-b is a denser chip/panel surface; trust is a broad, airy section wash.
+   */
+  --trust-surface: color-mix(in srgb, var(--theme-border) 18%, var(--theme-page-bg));
+  --trust-surface-border: color-mix(in srgb, var(--theme-border) 45%, transparent);
 
   /* Borders / dividers */
   --border-subtle: color-mix(in srgb, var(--theme-border) 52%, var(--theme-page-bg));
@@ -319,13 +330,22 @@ html[data-theme="dark-mode"] {
   --accent-surface-a: color-mix(in srgb, var(--theme-primary) 18%, var(--theme-card-bg));
   --accent-surface-a-border: color-mix(in srgb, var(--theme-primary) 40%, var(--theme-border));
   --accent-surface-a-text: color-mix(in srgb, var(--theme-primary) 85%, #ffffff);
-  --accent-surface-b: color-mix(in srgb, var(--theme-secondary) 28%, var(--theme-card-bg));
-  --accent-surface-b-border: color-mix(in srgb, var(--theme-secondary) 45%, var(--theme-border));
-  --accent-surface-b-text: var(--theme-secondary-foreground);
+  /*
+   * Dark mode: --theme-border is a low-saturation neutral (dark-clinical: #334155 slate gray,
+   * dark-academia: #3d3228 dark brown). Mixing 18% of a near-neutral into a dark card produces
+   * surfaces visually identical to card-bg — essentially invisible.
+   * Fix: use --theme-primary (the vivid accent hue) for hue-distinct surfaces in dark mode.
+   * accent-b (13% primary) > trust (8% primary) maintains a clear density hierarchy.
+   */
+  --accent-surface-b: color-mix(in srgb, var(--theme-primary) 13%, var(--theme-card-bg));
+  --accent-surface-b-border: color-mix(in srgb, var(--theme-primary) 30%, var(--theme-border));
+  --accent-surface-b-text: var(--theme-heading-text);
+  /* accent-c: softest whisper (8%) — distinct from trust (10%) by both % and role */
   --accent-surface-c: color-mix(in srgb, var(--theme-primary) 8%, var(--theme-page-bg));
   --accent-surface-c-border: color-mix(in srgb, var(--theme-primary) 20%, var(--theme-border));
-  --trust-surface: color-mix(in srgb, var(--theme-primary) 10%, var(--theme-card-bg));
-  --trust-surface-border: color-mix(in srgb, var(--theme-primary) 28%, var(--theme-border));
+  /* trust-surface: 10% for section-level use — more perceptible than c (8%), less dense than b (13%) */
+  --trust-surface: color-mix(in srgb, var(--theme-primary) 10%, var(--theme-page-bg));
+  --trust-surface-border: color-mix(in srgb, var(--theme-primary) 24%, var(--theme-border));
   /* Dark bubble/accent overrides — stronger so bubbles read against dark navy surfaces */
   --surface-bubble: color-mix(in srgb, var(--theme-primary) 20%, var(--theme-card-bg));
   --surface-bubble-border: color-mix(in srgb, var(--theme-primary) 38%, var(--theme-border));
@@ -1111,13 +1131,29 @@ html[data-theme="dark-mode"] .nn-brand-header-logo-slot .nn-brand-header-logo {
     color 0.15s ease;
 }
 
-/* Selected/active chip → accent-soft surface with themed text */
-.nn-chip[data-selected="true"],
-.nn-chip[aria-pressed="true"] {
-  background: var(--surface-accent-soft);
+/* Hover: step up to bubble (14%) — clearly different from resting 9% */
+.nn-chip:hover:not([data-selected="true"]):not([aria-pressed="true"]) {
+  background: var(--surface-bubble);
   border-color: var(--surface-bubble-border);
   color: var(--text-accent);
+}
+
+/*
+ * Selected chip: full primary fill — explicitly STRONGER than hover (14% → 100%).
+ * Consistent with nn-tab-pill[data-active] so both interactive surfaces share
+ * the same visual language for "committed" vs "exploratory" states.
+ */
+.nn-chip[data-selected="true"],
+.nn-chip[aria-pressed="true"] {
+  background: var(--surface-bubble-strong);
+  border-color: var(--surface-bubble-border);
+  color: var(--text-on-accent);
   font-weight: 600;
+}
+
+.nn-chip:focus-visible {
+  outline: 2px solid var(--ring-accent);
+  outline-offset: 2px;
 }
 
 /* Tab-style pills (segmented controls) */
@@ -1132,19 +1168,25 @@ html[data-theme="dark-mode"] .nn-brand-header-logo-slot .nn-brand-header-logo {
     color 0.15s ease;
 }
 
+/* Hover: surface-bubble (14%) — clearly lifted from resting 9% */
 .nn-tab-pill:hover {
-  background: var(--surface-accent-soft);
+  background: var(--surface-bubble);
   border-color: var(--surface-bubble-border);
   color: var(--text-accent);
 }
 
-/* Active tab → strong accent fill so switching themes produces visibly different pill colors */
+/* Active tab → strong accent fill — same full-primary treatment as nn-chip selected */
 .nn-tab-pill[data-active="true"],
 .nn-tab-pill[aria-selected="true"] {
   background: var(--surface-bubble-strong);
   border-color: var(--surface-bubble-border);
   color: var(--text-on-accent);
   font-weight: 600;
+}
+
+.nn-tab-pill:focus-visible {
+  outline: 2px solid var(--ring-accent);
+  outline-offset: 2px;
 }
 
 /* Accent surfaces — use instead of scattered bg-*-50 / text-*-600 Tailwind palettes */

@@ -57,13 +57,8 @@ import { PathwayLessonRecordChips } from "@/components/pathway-lessons/pathway-l
 
 /** Avoid enumerating every lesson at build (large `.next` output + ENOSPC on small disks). */
 export const dynamicParams = true;
-export const revalidate = 3600;
 /** Room for lesson body + related queries on cold DB under traffic spikes (Vercel Fluid / Node). */
 export const maxDuration = 60;
-
-export function generateStaticParams() {
-  return [];
-}
 
 type Props = {
   /** `locale` is pathway countrySlug (`us` / `canada`), not BCP-47 lesson content. */

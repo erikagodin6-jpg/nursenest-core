@@ -18,17 +18,12 @@ import { HUB, loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { PathwayLiveInventoryStrip } from "@/components/exam-pathways/pathway-live-inventory-strip";
 import { pathwayCatPracticeBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
-import { auth } from "@/lib/auth";
+import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { ContentEmptyState } from "@/components/ui/content-empty-state";
 
 export const dynamicParams = true;
-export const revalidate = 86400;
-
-export function generateStaticParams() {
-  return [];
-}
 
 type Props = { params: Promise<{ locale: string; slug: string; examCode: string }> };
 
@@ -68,7 +63,10 @@ export default async function PathwayCatEntryPage({ params }: Props) {
     roleTrack,
   });
 
-  const session = await auth();
+  const session = await getOptionalPublicSession({
+    pathname: `${pathname}/cat`,
+    surface: "marketing.exam_hub.cat",
+  });
   const userId = (session?.user as { id?: string })?.id ?? "";
   const isSignedIn = Boolean(userId);
 

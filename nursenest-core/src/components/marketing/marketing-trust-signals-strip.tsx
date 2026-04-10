@@ -26,11 +26,11 @@ export function MarketingTrustSignalsStrip({
   const gap = variant === "compact" ? "gap-2" : "gap-2.5";
 
   return (
-    {/* nn-trust-surface: secondary-family tint that clearly differs from primary-tinted surfaces */}
     <div
       className={`nn-trust-surface rounded-xl ${pad}`}
       data-testid="marketing-trust-signals-strip"
     >
+      {/* nn-trust-surface: secondary-family tint that clearly differs from primary-tinted surfaces */}
       {examHub ? (
         <p className="nn-marketing-body-sm mb-3 text-pretty text-[var(--theme-body-text)]">{t("components.trustSignals.examHubIntro")}</p>
       ) : null}

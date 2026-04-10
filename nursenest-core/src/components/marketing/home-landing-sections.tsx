@@ -38,13 +38,14 @@ export function HomeLandingSections({ questionCount }: Props) {
 
   return (
     <>
-      {/* "Why" band — secondary-family tint (trust-surface) for visual contrast vs primary-tinted hero */}
+      {/* "Why" band — border-derived trust-surface (hue-distinct from primary-tinted hero) */}
       <section className={`border-t border-[var(--trust-surface-border)] bg-[var(--trust-surface)] ${SECTION_Y}`} data-testid="section-why-nursenest">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <h2 className="nn-marketing-h2 mb-6">{t("home.landing.why.title")}</h2>
+          {/* Heading in accent text to give the section palette identity without adding visual noise */}
+          <h2 className="nn-marketing-h2 mb-6 text-[var(--text-accent)]">{t("home.landing.why.title")}</h2>
           <ul className="grid gap-4 sm:grid-cols-3">
             {whyKeys.map((key) => (
-              <li key={key} className="nn-marketing-card nn-marketing-card-pad border-[var(--accent-surface-b-border)]">
+              <li key={key} className="nn-marketing-card nn-marketing-card-pad">
                 <h3 className="nn-marketing-h3">{t(`home.landing.why.${key}Title`)}</h3>
                 <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">{t(`home.landing.why.${key}Body`)}</p>
               </li>
@@ -89,7 +90,8 @@ export function HomeLandingSections({ questionCount }: Props) {
         </div>
       </section>
 
-      <section className={`border-t border-[var(--border-subtle)] bg-[var(--nn-presentation-panel)] ${SECTION_Y}`} data-testid="section-final-cta">
+      {/* Final CTA — mirrors hero branded wash for intentional bookend rhythm */}
+      <section className={`border-t border-[var(--header-nav-border)] bg-[var(--hero-branded-wash)] ${SECTION_Y}`} data-testid="section-final-cta">
         <div className="mx-auto max-w-6xl px-4 text-center sm:px-6 lg:px-8">
           <h2 className="nn-marketing-h2 text-balance">{t("home.landing.final.closingTitle")}</h2>
           <p className="nn-marketing-body-sm mx-auto mt-2 max-w-lg text-[var(--theme-muted-text)]">{t("home.landing.final.closingSub")}</p>
