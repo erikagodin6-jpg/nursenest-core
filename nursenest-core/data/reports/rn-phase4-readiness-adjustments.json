@@ -1,0 +1,8 @@
+{
+  "phase": "Phase 3 complete",
+  "adjustmentsNeededBeforePhase4": [
+    "No blocker-level adjustments required before Phase 4; continue guardrails unchanged.",
+    "For Phase 4 specialty populations, keep domain-scoped stem prefixes to avoid cross-topic collisions.",
+    "Continue MI/PE boundary tags unchanged in all downstream generation prompts."
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "phase": "Phase 2 complete",
+  "adjustmentsNeededBeforePhase3": [
+    "No blocker-level adjustments required before Phase 3; continue guardrails unchanged.",
+    "For Phase 3 clinical systems, apply same stem uniqueness key: (topicSlug + Q-index + fixed stem prefix).",
+    "Preserve MI/PE boundary tags unchanged during generation prompts."
+  ]
+}
