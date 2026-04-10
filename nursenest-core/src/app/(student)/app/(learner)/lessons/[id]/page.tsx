@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LearnerNoteScope } from "@prisma/client";
+import { LearnerNoteScope, type TierCode } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { PathwayLessonBody } from "@/components/lessons/pathway-lesson-body";
 import { PremiumLessonShell } from "@/components/student/premium-lesson-shell";
@@ -29,6 +29,8 @@ import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { loadLessonContinueStudyNext } from "@/lib/learner/lesson-context-study-next";
 import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { contentTierForPathwayLessonRender } from "@/lib/lessons/global-lesson-architecture";
+import { getMeasurementSystemForCountry } from "@/lib/measurements/measurement-system";
 import { getLearnerExamFraming } from "@/lib/learner/learner-exam-framing";
 import { loadRelatedExamQuestionStemsForPathwayLesson } from "@/lib/lessons/lesson-question-cross-links";
 import { PathwayLessonRelatedQuestions } from "@/components/lessons/pathway-lesson-related-questions";
@@ -293,6 +295,10 @@ export default async function LessonDetailPage({ params }: Props) {
           })
         : [];
     const pathwayQuality = classifyPathwayLesson(record);
+    const tier = entitlement.tier as TierCode | null;
+    const lessonViewerTier =
+      pathway != null ? contentTierForPathwayLessonRender(pathway, tier) : (tier ?? undefined);
+    const lessonMeasurementSystem = pathway != null ? getMeasurementSystemForCountry(pathway.countryCode) : null;
     let pathwayContinue = null;
     if (userId && pathwayId) {
       try {
@@ -337,7 +343,11 @@ export default async function LessonDetailPage({ params }: Props) {
                     {section.heading?.trim() || t("learner.lessons.detail.sectionFallback")}
                   </h2>
                   <div className="mt-3">
-                    <PathwayLessonBody text={typeof section.body === "string" ? section.body : ""} />
+                    <PathwayLessonBody
+                      text={typeof section.body === "string" ? section.body : ""}
+                      viewerTier={lessonViewerTier}
+                      measurementSystem={lessonMeasurementSystem ?? undefined}
+                    />
                   </div>
                 </section>
               ))}

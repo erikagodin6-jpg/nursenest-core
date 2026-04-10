@@ -168,3 +168,24 @@ export function throwIfUrlNotAllowedForPathway(fullUrl: string, config: LessonFl
   const r = assertUrlAllowedForPathway(fullUrl, config);
   if (!r.ok) throw new Error(r.reason);
 }
+
+/**
+ * Client-safe check before following an in-app href from a pathway hub (relative paths only).
+ * Uses QA rules when the pathway is in {@link LESSON_FLOW_PATHWAY_QA}; otherwise requires href under the hub root.
+ */
+export function isMarketingHubNavigationHrefAllowed(href: string, pathway: ExamPathwayDefinition): boolean {
+  if (typeof href !== "string" || !href.startsWith("/")) return false;
+  let url: URL;
+  try {
+    url = new URL(href, "https://nursenest.internal");
+  } catch {
+    return false;
+  }
+  const synthetic = `https://nursenest.internal${url.pathname}${url.search}`;
+  const cfg = LESSON_FLOW_PATHWAY_QA.find((x) => x.pathwayId === pathway.id);
+  if (cfg) {
+    return assertUrlAllowedForPathway(synthetic, cfg).ok;
+  }
+  const prefix = buildExamPathwayPath(pathway).replace(/\/$/, "");
+  return url.pathname === prefix || url.pathname.startsWith(`${prefix}/`);
+}

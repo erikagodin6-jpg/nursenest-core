@@ -7,6 +7,7 @@ import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry"
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import { pathwayPricingBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 export const dynamicParams = true;
 export const revalidate = 86400;
@@ -20,18 +21,24 @@ type Props = { params: Promise<{ locale: string; slug: string; examCode: string 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug, examCode } = await params;
   const pathname = `/${locale}/${slug}/${examCode}`;
-  const pathway = resolveExamPathwaySafe(locale, slug, examCode, { pathname: `${pathname}/pricing` });
-  if (!pathway) return {};
-  const canonicalPath = buildExamPathwayPath(pathway, "pricing");
-  const canonical = absoluteUrl(canonicalPath);
-  const title = `Pricing · ${pathway.displayName} | NurseNest`;
-  const description = `Plans for ${pathway.shortName} on NurseNest (${pathway.countryCode}). Checkout uses tier ${pathway.stripeTier} with content scoped to this pathway.`;
-  return {
-    title,
-    description,
-    alternates: { canonical },
-    openGraph: { title, description, url: canonical, type: "website" },
-  };
+  const pricingPath = `${pathname}/pricing`;
+  return safeGenerateMetadata(
+    async () => {
+      const pathway = resolveExamPathwaySafe(locale, slug, examCode, { pathname: pricingPath });
+      if (!pathway) return {};
+      const canonicalPath = buildExamPathwayPath(pathway, "pricing");
+      const canonical = absoluteUrl(canonicalPath);
+      const title = `Pricing · ${pathway.displayName} | NurseNest`;
+      const description = `Plans for ${pathway.shortName} on NurseNest (${pathway.countryCode}). Checkout uses tier ${pathway.stripeTier} with content scoped to this pathway.`;
+      return {
+        title,
+        description,
+        alternates: { canonical },
+        openGraph: { title, description, url: canonical, type: "website" },
+      };
+    },
+    { pathname: pricingPath, locale, routeGroup: "marketing.exam_hub.pricing" },
+  );
 }
 
 export default async function ExamPathwayPricingPage({ params }: Props) {

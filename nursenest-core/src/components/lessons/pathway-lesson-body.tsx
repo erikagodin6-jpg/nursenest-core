@@ -1,7 +1,11 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
+import type { TierCode } from "@prisma/client";
 import type { PathwayLessonFigure } from "@/lib/lessons/pathway-lesson-types";
 import { PathwayLessonFigures } from "@/components/lessons/pathway-lesson-figures";
+import { resolveTierBlocksForViewer } from "@/lib/lessons/tier-block-content";
+import type { MeasurementSystem } from "@/lib/measurements/measurement-system";
+import { resolveMeasurementTokens } from "@/lib/measurements/measurement-tokens";
 
 /** Markdown-style internal links: `LESSON:slug` wiki or root-relative `/path`. */
 const MD_INTERNAL_LINK = /(\[[^\]]+\]\((?:LESSON:[^)]+|\/[^)]+)\))/g;
@@ -61,12 +65,28 @@ function renderParagraphWithLinks(
 export function PathwayLessonBody({
   text,
   lessonWikiBasePath,
+  /**
+   * When set, `<TierBlock tier="PN|RN|NP|ALL">` regions are filtered for that ladder.
+   * When omitted, all tier blocks are unwrapped (legacy / unspecified context).
+   */
+  viewerTier,
+  /** When set, `{{measurement_token}}` placeholders resolve to region-aware units. */
+  measurementSystem,
+  /** Show secondary unit in parentheses (e.g. dual US/SI). */
+  measurementDual,
 }: {
   text: string;
   /** Base URL for `[label](LESSON:slug)` → `{base}/{slug}` (same hub as this lesson). */
   lessonWikiBasePath?: string | null;
+  viewerTier?: TierCode | null;
+  measurementSystem?: MeasurementSystem | null;
+  measurementDual?: boolean;
 }) {
-  const safe = typeof text === "string" ? text : "";
+  const raw = typeof text === "string" ? text : "";
+  let safe = resolveTierBlocksForViewer(raw, viewerTier);
+  if (measurementSystem != null) {
+    safe = resolveMeasurementTokens(safe, measurementSystem, { dual: measurementDual === true });
+  }
   const paragraphs = safe.split(/\n\n/).filter((p) => p.trim().length > 0);
   if (paragraphs.length === 0) {
     return (
@@ -91,14 +111,26 @@ export function PathwayLessonSectionContent({
   text,
   figures,
   lessonWikiBasePath,
+  viewerTier,
+  measurementSystem,
+  measurementDual,
 }: {
   text: string;
   figures?: PathwayLessonFigure[] | undefined;
   lessonWikiBasePath?: string | null;
+  viewerTier?: TierCode | null;
+  measurementSystem?: MeasurementSystem | null;
+  measurementDual?: boolean;
 }) {
   return (
     <div>
-      <PathwayLessonBody text={text} lessonWikiBasePath={lessonWikiBasePath} />
+      <PathwayLessonBody
+        text={text}
+        lessonWikiBasePath={lessonWikiBasePath}
+        viewerTier={viewerTier}
+        measurementSystem={measurementSystem}
+        measurementDual={measurementDual}
+      />
       {figures && figures.length > 0 ? <PathwayLessonFigures figures={figures} /> : null}
     </div>
   );

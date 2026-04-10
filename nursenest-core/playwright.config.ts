@@ -15,5 +15,16 @@ export default defineConfig({
     baseURL,
     trace: "on-first-retry",
   },
-  projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
+  projects: [
+    {
+      name: "chromium",
+      testIgnore: /lesson-flows\.mobile\.spec\.ts$/,
+      use: { ...devices["Desktop Chrome"] },
+    },
+    {
+      name: "mobile",
+      testMatch: /lesson-flows\.mobile\.spec\.ts$/,
+      use: { ...devices["iPhone 12"] },
+    },
+  ],
 });

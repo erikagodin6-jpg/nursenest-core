@@ -37,6 +37,7 @@ export default async function QuestionBankPage() {
 
   let pathwayOptions: { id: string; label: string }[] = [];
   let pathwayExamKeysByPathwayId: Record<string, string[]> = {};
+  let pathwayCountryByPathwayId: Record<string, string> = {};
   let defaultPathwayId: string | null = null;
   if (userId && entitlement.hasAccess && isDatabaseUrlConfigured()) {
     try {
@@ -46,6 +47,7 @@ export default async function QuestionBankPage() {
         label: p.displayName,
       }));
       pathwayExamKeysByPathwayId = Object.fromEntries(compatible.map((p) => [p.id, p.contentExamKeys]));
+      pathwayCountryByPathwayId = Object.fromEntries(compatible.map((p) => [p.id, p.countryCode]));
       const u = await prisma.user.findUnique({
         where: { id: userId },
         select: { learnerPath: true },
@@ -118,6 +120,7 @@ export default async function QuestionBankPage() {
             pathwayOptions={pathwayOptions}
             defaultPathwayId={defaultPathwayId}
             pathwayExamKeysByPathwayId={pathwayExamKeysByPathwayId}
+            pathwayCountryByPathwayId={pathwayCountryByPathwayId}
           />
         </Suspense>
       ) : null}

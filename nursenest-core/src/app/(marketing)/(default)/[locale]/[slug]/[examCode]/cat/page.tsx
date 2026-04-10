@@ -17,6 +17,7 @@ import {
 import { HUB, loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { PathwayLiveInventoryStrip } from "@/components/exam-pathways/pathway-live-inventory-strip";
 import { pathwayCatPracticeBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { auth } from "@/lib/auth";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -33,16 +34,22 @@ type Props = { params: Promise<{ locale: string; slug: string; examCode: string 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale: countrySlug, slug: roleTrack, examCode } = await params;
   const pathname = `/${countrySlug}/${roleTrack}/${examCode}`;
-  const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname: `${pathname}/cat` });
-  if (!pathway) {
-    return { robots: { index: false, follow: true } };
-  }
-  const country = pathway.countrySlug === "canada" ? "Canada" : "United States";
-  return {
-    title: `CAT practice · ${pathway.shortName} (${country}) | NurseNest`,
-    description: `Pathway-scoped adaptive (CAT) practice for ${pathway.displayName}. One question at a time; sign in to run a session matched to your plan.`,
-    robots: { index: false, follow: true },
-  };
+  const catPath = `${pathname}/cat`;
+  return safeGenerateMetadata(
+    async () => {
+      const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname: catPath });
+      if (!pathway) {
+        return { robots: { index: false, follow: true } };
+      }
+      const country = pathway.countrySlug === "canada" ? "Canada" : "United States";
+      return {
+        title: `CAT practice · ${pathway.shortName} (${country}) | NurseNest`,
+        description: `Pathway-scoped adaptive (CAT) practice for ${pathway.displayName}. One question at a time; sign in to run a session matched to your plan.`,
+        robots: { index: false, follow: true },
+      };
+    },
+    { pathname: catPath, locale: countrySlug, routeGroup: "marketing.exam_hub.cat" },
+  );
 }
 
 export default async function PathwayCatEntryPage({ params }: Props) {

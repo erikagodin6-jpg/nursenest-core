@@ -11,6 +11,7 @@ import {
 import { resolveRationaleLessonLinksForQuestion } from "@/lib/learner/rationale-lesson-link-resolve";
 import { getLearnerExamFraming } from "@/lib/learner/learner-exam-framing";
 import type { CatStudyFeedbackPayload, CatStudyFeedbackSection } from "@/lib/practice-tests/types";
+import { recordRouteRenderFallback } from "@/lib/observability/route-fallback-tracker";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import {
   SAFE_EMPTY_LESSON_LINKS,
@@ -154,8 +155,17 @@ export async function buildCatStudyFeedback(
       tags: q.tags ?? [],
       stem: typeof q.stem === "string" ? q.stem.slice(0, 520) : null,
     });
-    relatedLessons = related
-      .filter((r) => r && typeof r.title === "string" && typeof r.href === "string" && r.href.trim().startsWith("/"))
+    const filtered = related.filter(
+      (r) => r && typeof r.title === "string" && typeof r.href === "string" && r.href.trim().startsWith("/"),
+    );
+    if (related.length > filtered.length) {
+      recordRouteRenderFallback({
+        fallbackType: "lesson_link_mismatch_suppressed",
+        pathwayId: pathwayId ?? undefined,
+        count: related.length - filtered.length,
+      });
+    }
+    relatedLessons = filtered
       .slice(0, 3)
       .map((r) => ({ title: r.title, href: r.href }));
   } catch (e) {
@@ -164,6 +174,10 @@ export async function buildCatStudyFeedback(
       event: "cat_lesson_link_suppressed",
       questionId: questionId.slice(0, 24),
       error_message: message.slice(0, 300),
+    });
+    recordRouteRenderFallback({
+      fallbackType: "lesson_link_resolution_failed",
+      pathwayId: pathwayId ?? undefined,
     });
     relatedLessons = SAFE_EMPTY_LESSON_LINKS;
   }

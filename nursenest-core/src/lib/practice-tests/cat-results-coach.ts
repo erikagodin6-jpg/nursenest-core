@@ -3,9 +3,12 @@
  * Does not modify theta, SE, stopping rules, or item selection.
  */
 import type { CatConfidenceLevel, CatExamReport, CatPresentationMode } from "@/lib/exams/cat-types";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { validateLearnerCopyForExamContext } from "@/lib/learner/validate-learner-copy-context";
 import { getLearnerExamFraming } from "@/lib/learner/learner-exam-framing";
 import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
 import { remediationLessonsTopicHref, remediationTopicDrillHref } from "@/lib/learner/remediation-links";
+import { recordRouteRenderFallback } from "@/lib/observability/route-fallback-tracker";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export type CatCoachStudyLinkKind = "lesson" | "flashcards" | "drill";
@@ -676,6 +679,10 @@ export function buildCatResultsCoach(args: {
     const report = sanitizeCatExamReportForCoach(args.report);
     if (!report) {
       safeServerLog("cat_results", "cat_results_coach_fallback_used", { reason: "invalid_report_shape" });
+      recordRouteRenderFallback({
+        fallbackType: "cat_coach_fallback",
+        pathwayId: args.pathwayId ?? undefined,
+      });
       return buildFallbackCatResultsCoachSnapshot();
     }
 
@@ -725,6 +732,13 @@ export function buildCatResultsCoach(args: {
     const weakestLabel = weakestDomains[0] ?? null;
     const specificStudyActionsList = specificStudyActions(report, patterns, weakestLabel, pathwayId);
 
+    const headline = plainHeadline({ report, presentationMode });
+    const pathwayDef = pathwayId ? getExamPathwayById(pathwayId) : undefined;
+    if (pathwayDef) {
+      validateLearnerCopyForExamContext(pathwayDef, narrative, "cat_coach");
+      validateLearnerCopyForExamContext(pathwayDef, headline, "cat_coach");
+    }
+
     return {
       generatedAt: new Date().toISOString(),
       passOutlookPercent: report.readinessScore,
@@ -733,7 +747,7 @@ export function buildCatResultsCoach(args: {
         : "Practice CAT uses the same adaptive engine as test mode, but no home platform can guarantee your licensure result.",
       confidenceLevel: report.confidenceLevel,
       confidenceSummary: report.confidenceText,
-      readinessHeadline: plainHeadline({ report, presentationMode }),
+      readinessHeadline: headline,
       readinessNarrative: narrative,
       strongestDomains,
       weakestDomains,
@@ -759,6 +773,10 @@ export function buildCatResultsCoach(args: {
     const message = e instanceof Error ? e.message : String(e);
     safeServerLog("cat_results", "cat_results_coach_fallback_used", {
       error_message: message.slice(0, 400),
+    });
+    recordRouteRenderFallback({
+      fallbackType: "cat_coach_fallback",
+      pathwayId: args.pathwayId ?? undefined,
     });
     return buildFallbackCatResultsCoachSnapshot();
   }

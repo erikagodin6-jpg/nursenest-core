@@ -46,6 +46,8 @@ import {
 } from "@/lib/questions/question-bank-client-types";
 import { mergeRationaleLessonLinksWithTopicFallback } from "@/lib/questions/merge-rationale-lesson-links";
 import { parseCommaSeparatedQuestionIds } from "@/lib/questions/question-id-list-param";
+import { resolveMeasurementSystemForLearnerPathway } from "@/lib/measurements/measurement-system";
+import { resolveMeasurementTokens } from "@/lib/measurements/measurement-tokens";
 
 export type { QuestionBankDifficultyBand, QuestionBankPreset, SavedQuestionBankPreset } from "@/lib/questions/question-bank-client-types";
 
@@ -182,6 +184,7 @@ export function QuestionBankPracticeClient({
   pathwayOptions = [],
   defaultPathwayId = null,
   pathwayExamKeysByPathwayId = {},
+  pathwayCountryByPathwayId = {},
 }: {
   userId: string;
   userLabel: string;
@@ -190,6 +193,8 @@ export function QuestionBankPracticeClient({
   defaultPathwayId?: string | null;
   /** Maps pathway id → content exam keys (RN vs PN vs NP scope for exam-family filter). */
   pathwayExamKeysByPathwayId?: Record<string, string[]>;
+  /** Maps pathway id → country code (US/CA/…) for region-aware clinical units in stems and rationales. */
+  pathwayCountryByPathwayId?: Record<string, string>;
 }) {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -256,6 +261,11 @@ export function QuestionBankPracticeClient({
     if (!pathwayExamKeySet || pathwayExamKeySet.size === 0) return examBuckets;
     return examBuckets.filter((b) => b.exam != null && pathwayExamKeySet.has(b.exam));
   }, [examBuckets, pathwayExamKeySet]);
+
+  const measurementSystem = useMemo(
+    () => resolveMeasurementSystemForLearnerPathway(pathwayIdFilter ?? defaultPathwayId, pathwayCountryByPathwayId),
+    [pathwayIdFilter, defaultPathwayId, pathwayCountryByPathwayId],
+  );
 
   const current = questions[idx];
   const total = questions.length;
@@ -628,7 +638,29 @@ export function QuestionBankPracticeClient({
     return optsCanonical;
   }, [current, optsCanonical]);
 
+  const stemDisplay = useMemo(
+    () => (current ? resolveMeasurementTokens(current.stem, measurementSystem) : ""),
+    [current, measurementSystem],
+  );
+  const optsDisplayClinical = useMemo(
+    () => optsDisplay.map((o) => resolveMeasurementTokens(String(o), measurementSystem)),
+    [optsDisplay, measurementSystem],
+  );
+
   const g = current ? graded[current.id] : undefined;
+  const gradedRationaleForPanel = useMemo(() => {
+    if (!g) return null;
+    return {
+      rationale: g.rationale ? resolveMeasurementTokens(g.rationale, measurementSystem) : null,
+      rationaleSections: g.rationaleSections
+        ? g.rationaleSections.map((s) => ({
+            ...s,
+            heading: resolveMeasurementTokens(s.heading, measurementSystem),
+            body: resolveMeasurementTokens(s.body, measurementSystem),
+          }))
+        : null,
+    };
+  }, [g, measurementSystem]);
   const rationaleLessonLinksMerged = useMemo(
     () => mergeRationaleLessonLinksWithTopicFallback(g?.rationaleLessonLinks, current?.topic ?? null),
     [g?.rationaleLessonLinks, current?.topic],
@@ -1113,7 +1145,7 @@ export function QuestionBankPracticeClient({
                 <p className="mb-2 nn-marketing-caption font-medium text-[var(--semantic-text-muted)]">{current.subtopic}</p>
               ) : null}
               <div className="nn-question-stem-wrap">
-                <p className="nn-question-stem">{current.stem}</p>
+                <p className="nn-question-stem">{stemDisplay}</p>
               </div>
             </div>
 
@@ -1126,7 +1158,7 @@ export function QuestionBankPracticeClient({
               {isSata ? (
                 <ul className="nn-qopt-list" role="group" aria-label={t("learner.qbank.examUi.answersHeading")}>
                   {optsCanonical.map((canonical, i) => {
-                    const label = optsDisplay[i] ?? canonical;
+                    const label = optsDisplayClinical[i] ?? optsDisplay[i] ?? canonical;
                     const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
                     const struck = Boolean(strikeOut[canonical]);
                     const hi = Boolean(highlightOn[canonical]);
@@ -1187,7 +1219,7 @@ export function QuestionBankPracticeClient({
               ) : (
                 <ul className="nn-qopt-list" role="radiogroup" aria-label={t("learner.qbank.examUi.answersHeading")}>
                   {optsCanonical.map((canonical, i) => {
-                    const label = optsDisplay[i] ?? canonical;
+                    const label = optsDisplayClinical[i] ?? optsDisplay[i] ?? canonical;
                     const struck = Boolean(strikeOut[canonical]);
                     const hi = Boolean(highlightOn[canonical]);
                     const picked = raw === canonical;

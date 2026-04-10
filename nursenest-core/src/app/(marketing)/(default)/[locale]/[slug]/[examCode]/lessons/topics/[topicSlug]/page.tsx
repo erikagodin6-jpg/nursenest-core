@@ -26,6 +26,8 @@ import {
 import { pathwayTopicClusterBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { PathwayTopicClusterSiblingNav } from "@/components/pathway-lessons/pathway-topic-cluster-sibling-nav";
 import { absoluteUrl } from "@/lib/seo/site-origin";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { recordRouteRenderFallback } from "@/lib/observability/route-fallback-tracker";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export const dynamicParams = true;
@@ -73,43 +75,56 @@ function TopicClusterLoadFailed({ pathway, base }: { pathway: ExamPathwayDefinit
 export async function generateMetadata({ params }: Pick<Props, "params">): Promise<Metadata> {
   const { locale: countrySlug, slug: roleTrack, examCode, topicSlug } = await params;
   const pathname = `/${countrySlug}/${roleTrack}/${examCode}/lessons/topics/${topicSlug}`;
-  const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
-  if (!pathway) return {};
-  const canonicalPath = marketingPathwayLessonTopicClusterPath(pathway, topicSlug);
-  const canonical = absoluteUrl(canonicalPath);
-  const loc = defaultPathwayLessonContentLocaleForExamHubRoute();
-  try {
-    const topicClusters = await listTopicClusters(pathway.id, loc);
-    const label =
-      topicClusters.find((t) => t.topicSlug === topicSlug)?.label ?? topicSlug.replace(/-/g, " ");
-    const title = pathwayLessonTopicClusterMetaTitle(pathway, label);
-    const description = pathwayLessonTopicClusterMetaDescription(pathway, label);
-    return {
-      title,
-      description,
-      alternates: { canonical },
-      openGraph: { title, description, url: canonical, type: "website" },
-      twitter: { card: "summary_large_image", title, description },
-    };
-  } catch (e) {
-    const message = e instanceof Error ? e.message : String(e);
-    safeServerLog("exam_pathway_hub", "hub_data_load_failed", {
-      event: "hub_data_load_failed",
-      pathname,
-      locale: countrySlug,
-      country: countrySlug,
-      examCode,
-      dependency: "listTopicClusters_metadata",
-      error_message: message.slice(0, 500),
-    });
-    const fallbackLabel = topicSlug.replace(/-/g, " ");
-    return {
-      title: `${fallbackLabel} · ${pathway.shortName} | NurseNest`,
-      robots: { index: false, follow: true },
-      alternates: { canonical },
-      openGraph: { url: canonical, type: "website" },
-    };
-  }
+  return safeGenerateMetadata(
+    async () => {
+      const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
+      if (!pathway) return {};
+      const canonicalPath = marketingPathwayLessonTopicClusterPath(pathway, topicSlug);
+      const canonical = absoluteUrl(canonicalPath);
+      const loc = defaultPathwayLessonContentLocaleForExamHubRoute();
+      try {
+        const topicClusters = await listTopicClusters(pathway.id, loc);
+        const label =
+          topicClusters.find((t) => t.topicSlug === topicSlug)?.label ?? topicSlug.replace(/-/g, " ");
+        const title = pathwayLessonTopicClusterMetaTitle(pathway, label);
+        const description = pathwayLessonTopicClusterMetaDescription(pathway, label);
+        return {
+          title,
+          description,
+          alternates: { canonical },
+          openGraph: { title, description, url: canonical, type: "website" },
+          twitter: { card: "summary_large_image", title, description },
+        };
+      } catch (e) {
+        const message = e instanceof Error ? e.message : String(e);
+        safeServerLog("exam_pathway_hub", "hub_data_load_failed", {
+          event: "hub_data_load_failed",
+          pathname,
+          locale: countrySlug,
+          country: countrySlug,
+          examCode,
+          dependency: "listTopicClusters_metadata",
+          error_message: message.slice(0, 500),
+        });
+        recordRouteRenderFallback({
+          fallbackType: "hub_data_load_failed",
+          pathname,
+          pathwayId: pathway.id,
+          examCode,
+          country: countrySlug,
+          dependencyName: "listTopicClusters_metadata",
+        });
+        const fallbackLabel = topicSlug.replace(/-/g, " ");
+        return {
+          title: `${fallbackLabel} · ${pathway.shortName} | NurseNest`,
+          robots: { index: false, follow: true },
+          alternates: { canonical },
+          openGraph: { url: canonical, type: "website" },
+        };
+      }
+    },
+    { pathname, locale: countrySlug, routeGroup: "marketing.exam_hub.lessons_topic" },
+  );
 }
 
 export default async function PathwayLessonTopicClusterPage({ params, searchParams }: Props) {
@@ -146,6 +161,14 @@ export default async function PathwayLessonTopicClusterPage({ params, searchPara
       dependency: "getLessonsForTopicPage",
       error_message: message.slice(0, 500),
     });
+    recordRouteRenderFallback({
+      fallbackType: "hub_data_load_failed",
+      pathname,
+      pathwayId: pathway.id,
+      examCode,
+      country: countrySlug,
+      dependencyName: "getLessonsForTopicPage",
+    });
     return <TopicClusterLoadFailed pathway={pathway} base={base} />;
   }
 
@@ -167,6 +190,14 @@ export default async function PathwayLessonTopicClusterPage({ params, searchPara
       examCode,
       dependency: "listTopicClusters",
       error_message: message.slice(0, 500),
+    });
+    recordRouteRenderFallback({
+      fallbackType: "hub_data_load_failed",
+      pathname,
+      pathwayId: pathway.id,
+      examCode,
+      country: countrySlug,
+      dependencyName: "listTopicClusters",
     });
   }
 

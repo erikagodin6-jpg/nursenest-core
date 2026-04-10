@@ -16,6 +16,7 @@ import {
   type TopicCluster,
 } from "@/lib/lessons/pathway-lesson-loader";
 import { loadNpCanadaInventoryGate } from "@/lib/np/np-pathway-inventory-gate";
+import { recordRouteRenderFallback } from "@/lib/observability/route-fallback-tracker";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export type MarketingHubDataLoadContext = {
@@ -46,6 +47,16 @@ function logHubDataLoadFailed(
     dependency_name: dependencyName,
     error_message: message.slice(0, 500),
   });
+  if (!isTimeout) {
+    recordRouteRenderFallback({
+      fallbackType: "hub_data_load_failed",
+      pathname: ctx.pathname,
+      pathwayId: ctx.pathwayId,
+      examCode: ctx.examCode,
+      country: ctx.country,
+      dependencyName: dependencyName,
+    });
+  }
 }
 
 const HUB_OPTIONAL_TASK_TIMEOUT_MS = 14_000;
@@ -110,6 +121,31 @@ export async function loadMarketingExamHubOptionalBlocks(
       pathwayLessonCount = typeof val === "number" && Number.isFinite(val) ? val : ZERO_LESSON_COUNT;
     }
   });
+
+  const questionSnapRejected = settled.some(
+    (result, i) => tasks[i]!.name === "question_snapshot" && result.status === "rejected",
+  );
+  if (questionSnapRejected || questionSnapshot.status === "unavailable") {
+    recordRouteRenderFallback({
+      fallbackType: "empty_question_snapshot",
+      pathname: ctx.pathname,
+      pathwayId: ctx.pathwayId,
+      examCode: ctx.examCode,
+      country: ctx.country,
+    });
+  }
+  const lessonCountRejected = settled.some(
+    (result, i) => tasks[i]!.name === "lesson_count" && result.status === "rejected",
+  );
+  if (lessonCountRejected) {
+    recordRouteRenderFallback({
+      fallbackType: "zero_lesson_count_fallback",
+      pathname: ctx.pathname,
+      pathwayId: ctx.pathwayId,
+      examCode: ctx.examCode,
+      country: ctx.country,
+    });
+  }
 
   return { npInventory, questionSnapshot, pathwayLessonCount };
 }
@@ -187,6 +223,43 @@ export async function loadPathwayLessonsHubAggregates(
       topics = Array.isArray(val) ? (val as TopicCluster[]) : [];
     }
   });
+
+  const questionSnapRejected = settled.some(
+    (result, i) => tasks[i]!.name === "question_snapshot" && result.status === "rejected",
+  );
+  if (questionSnapRejected || questionSnapshot.status === "unavailable") {
+    recordRouteRenderFallback({
+      fallbackType: "empty_question_snapshot",
+      pathname: ctx.pathname,
+      pathwayId: ctx.pathwayId,
+      examCode: ctx.examCode,
+      country: ctx.country,
+    });
+  }
+  const lessonCountRejected = settled.some(
+    (result, i) => tasks[i]!.name === "lesson_count" && result.status === "rejected",
+  );
+  if (lessonCountRejected) {
+    recordRouteRenderFallback({
+      fallbackType: "zero_lesson_count_fallback",
+      pathname: ctx.pathname,
+      pathwayId: ctx.pathwayId,
+      examCode: ctx.examCode,
+      country: ctx.country,
+    });
+  }
+  const topicClusterRejected = settled.some(
+    (result, i) => tasks[i]!.name === "topic_clusters" && result.status === "rejected",
+  );
+  if (topicClusterRejected) {
+    recordRouteRenderFallback({
+      fallbackType: "topic_cluster_ui_degraded",
+      pathname: ctx.pathname,
+      pathwayId: ctx.pathwayId,
+      examCode: ctx.examCode,
+      country: ctx.country,
+    });
+  }
 
   return { pageResult, questionSnapshot, pathwayLessonTotal, launchBundle, topics };
 }

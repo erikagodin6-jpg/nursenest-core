@@ -5,6 +5,7 @@
 export type {
   ExamCountryCode,
   ExamLanguageCode,
+  ExamMeasurementSystem,
   ExamProductKey,
   ExamRegistryKey,
   ExamTierLabel,

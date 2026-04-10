@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { ExamFamily } from "@prisma/client";
+import { ExamFamily, type TierCode } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { PathwayLessonSectionContent } from "@/components/lessons/pathway-lesson-body";
+import { contentTierForPathwayLessonRender } from "@/lib/lessons/global-lesson-architecture";
+import { getMeasurementSystemForCountry } from "@/lib/measurements/measurement-system";
 import { PremiumLessonPublishNotice } from "@/components/lessons/premium-lesson-publish-notice";
 import { PathwayLessonQuizzes } from "@/components/lessons/pathway-lesson-quizzes";
 import { PathwayLessonLockedSectionsPreview } from "@/components/lessons/pathway-lesson-locked-sections-preview";
@@ -32,6 +34,7 @@ import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { pathwayLessonDetailBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
 import { LessonQualityNotice } from "@/components/lessons/lesson-quality-notice";
 import { PathwayLessonQuickReview } from "@/components/lessons/pathway-lesson-quick-review";
@@ -51,11 +54,10 @@ import {
   PathwayLessonDetailDeferredSkeleton,
 } from "@/components/lessons/pathway-lesson-detail-deferred";
 import { PathwayLessonRecordChips } from "@/components/pathway-lessons/pathway-lesson-record-chips";
-import { PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS } from "@/lib/lessons/pathway-lesson-loader";
 
 /** Avoid enumerating every lesson at build (large `.next` output + ENOSPC on small disks). */
 export const dynamicParams = true;
-export const revalidate = PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS;
+export const revalidate = 3600;
 /** Room for lesson body + related queries on cold DB under traffic spikes (Vercel Fluid / Node). */
 export const maxDuration = 60;
 
@@ -70,52 +72,59 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale: countrySlug, slug: roleTrack, examCode, lessonSlug } = await params;
-  const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, {
-    pathname: `/${countrySlug}/${roleTrack}/${examCode}/lessons/${lessonSlug}`,
-  });
-  const contentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
-  const lesson = pathway ? await loadPathwayLessonWithLegacySlugRedirect(pathway, lessonSlug, contentLocale) : undefined;
-  if (!pathway || !lesson) return {};
-  const path = pathwayLessonPublicDetailPath(pathway, lesson.slug);
-  if (!path) return {};
-  const canonical = absoluteUrl(path);
-  const keywords = [
-    pathway.shortName,
-    pathway.displayName,
-    lesson.topic,
-    lesson.bodySystem,
-    "nurse practitioner",
-    pathway.countrySlug === "canada" ? "Canada NP" : "NP exam",
-    "clinical reasoning",
-  ]
-    .filter(Boolean)
-    .join(", ");
-  const strictPublic = process.env.PATHWAY_LESSON_STRICT_PUBLIC_QUALITY === "1";
-  const gate = lesson.structuralQuality;
-  const incomplete = Boolean(gate && !gate.publicComplete);
-  const robots =
-    incomplete && (strictPublic || gate?.structureMode === "premium")
-      ? ({ index: false, follow: true } as const)
-      : ({ index: true, follow: true } as const);
-  return {
-    title: lesson.seoTitle,
-    description: lesson.seoDescription,
-    keywords: keywords.split(", ").slice(0, 24),
-    alternates: { canonical },
-    openGraph: {
-      title: lesson.seoTitle,
-      description: lesson.seoDescription,
-      url: canonical,
-      type: "article",
-      siteName: "NurseNest",
+  const pathname = `/${countrySlug}/${roleTrack}/${examCode}/lessons/${lessonSlug}`;
+  return safeGenerateMetadata(
+    async () => {
+      const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, {
+        pathname,
+      });
+      const contentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
+      const lesson = pathway ? await loadPathwayLessonWithLegacySlugRedirect(pathway, lessonSlug, contentLocale) : undefined;
+      if (!pathway || !lesson) return {};
+      const path = pathwayLessonPublicDetailPath(pathway, lesson.slug);
+      if (!path) return {};
+      const canonical = absoluteUrl(path);
+      const keywords = [
+        pathway.shortName,
+        pathway.displayName,
+        lesson.topic,
+        lesson.bodySystem,
+        "nurse practitioner",
+        pathway.countrySlug === "canada" ? "Canada NP" : "NP exam",
+        "clinical reasoning",
+      ]
+        .filter(Boolean)
+        .join(", ");
+      const strictPublic = process.env.PATHWAY_LESSON_STRICT_PUBLIC_QUALITY === "1";
+      const gate = lesson.structuralQuality;
+      const incomplete = Boolean(gate && !gate.publicComplete);
+      const robots =
+        incomplete && (strictPublic || gate?.structureMode === "premium")
+          ? ({ index: false, follow: true } as const)
+          : ({ index: true, follow: true } as const);
+      return {
+        title: lesson.seoTitle,
+        description: lesson.seoDescription,
+        keywords: keywords.split(", ").slice(0, 24),
+        alternates: { canonical },
+        openGraph: {
+          title: lesson.seoTitle,
+          description: lesson.seoDescription,
+          url: canonical,
+          type: "article",
+          siteName: "NurseNest",
+        },
+        twitter: {
+          card: "summary_large_image",
+          title: lesson.seoTitle,
+          description:
+            lesson.seoDescription.length > 160 ? `${lesson.seoDescription.slice(0, 157)}…` : lesson.seoDescription,
+        },
+        robots,
+      };
     },
-    twitter: {
-      card: "summary_large_image",
-      title: lesson.seoTitle,
-      description: lesson.seoDescription.length > 160 ? `${lesson.seoDescription.slice(0, 157)}…` : lesson.seoDescription,
-    },
-    robots,
-  };
+    { pathname, locale: countrySlug, routeGroup: "marketing.exam_hub.lesson_detail" },
+  );
 }
 
 export default async function PathwayLessonDetailPage({ params }: Props) {
@@ -159,6 +168,12 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
 
   const fullAccess = canViewFullPathwayLesson(scope, pathway, learnerPathResolved);
   const visible = visibleSectionsForLesson(lesson, fullAccess);
+
+  const lessonContentTier = contentTierForPathwayLessonRender(
+    pathway,
+    entitlement === "error" ? null : (entitlement.tier as TierCode | null),
+  );
+  const lessonMeasurementSystem = getMeasurementSystemForCountry(pathway.countryCode);
 
   const hubBase = marketingExamHubBasePath(pathway);
   const base = marketingPathwayLessonsIndexPath(pathway);
@@ -307,6 +322,8 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
                     text={typeof section.body === "string" ? section.body : ""}
                     figures={section.figures}
                     lessonWikiBasePath={base}
+                    viewerTier={lessonContentTier}
+                    measurementSystem={lessonMeasurementSystem}
                   />
                 </div>
               </section>

@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { ClipboardList, LineChart } from "lucide-react";
+import { SafePathwayHubLink } from "@/components/marketing/safe-pathway-hub-link";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 
@@ -31,7 +31,8 @@ export function PathwayLessonsNextStepCtas({ pathway, emphasizeStudyLoop }: Prop
       </p>
       {/* nn-study-card + nn-card-interactive: same recipe as exam hub study tiles (drift fix). */}
       <div className="mt-6 grid gap-4 sm:grid-cols-2">
-        <Link
+        <SafePathwayHubLink
+          pathway={pathway}
           href={questionsHref}
           className="nn-study-card nn-card-interactive group flex min-h-[5.5rem] gap-4 p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)] sm:p-5"
         >
@@ -46,8 +47,9 @@ export function PathwayLessonsNextStepCtas({ pathway, emphasizeStudyLoop }: Prop
               Filtered stems and rationales for {pathway.shortName}—same scope as this hub.
             </span>
           </span>
-        </Link>
-        <Link
+        </SafePathwayHubLink>
+        <SafePathwayHubLink
+          pathway={pathway}
           href={catHref}
           className="nn-study-card nn-study-card--wash nn-card-interactive group flex min-h-[5.5rem] gap-4 p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)] sm:p-5"
         >
@@ -62,7 +64,7 @@ export function PathwayLessonsNextStepCtas({ pathway, emphasizeStudyLoop }: Prop
               Adaptive difficulty—sign in to run a session matched to your plan when eligible.
             </span>
           </span>
-        </Link>
+        </SafePathwayHubLink>
       </div>
     </section>
   );

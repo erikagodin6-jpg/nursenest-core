@@ -32,6 +32,7 @@ import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { pathwayLessonsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { canViewFullPathwayLesson } from "@/lib/lessons/pathway-lesson-access";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
@@ -65,7 +66,7 @@ function PathwayLessonsZeroCatalogPanel({ pathway }: { pathway: ExamPathwayDefin
   const upcoming = pathway.status === "upcoming" || pathway.acquisitionMode === "waitlist";
 
   return (
-    <div className="nn-study-card nn-study-card--wash mt-10 p-6 sm:p-8">
+    <div className="nn-study-card nn-study-card--wash mt-10 p-6 sm:p-8" data-nn-hub-zero-lesson-catalog="true">
       <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Lesson library · building for this pathway</h2>
       <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[var(--theme-muted-text)]">
         {upcoming
@@ -125,21 +126,27 @@ function PathwayLessonsZeroCatalogPanel({ pathway }: { pathway: ExamPathwayDefin
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const { locale: countrySlug, slug: roleTrack, examCode } = await params;
   const pathname = `/${countrySlug}/${roleTrack}/${examCode}`;
+  const hubPath = `${pathname}/lessons`;
   const sp = await searchParams;
   const q = normalizePathwayHubSearchQuery(sp.q);
-  const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
-  if (!pathway) return {};
-  const path = buildExamPathwayPath(pathway, "lessons");
-  const canonical = absoluteUrl(path);
-  const title = pathwayLessonHubMetaTitle(pathway);
-  const description = pathwayLessonHubMetaDescription(pathway);
-  return {
-    title,
-    description,
-    alternates: { canonical },
-    openGraph: { title, description, url: canonical, type: "website" },
-    ...(q ? { robots: { index: false, follow: true } } : {}),
-  };
+  return safeGenerateMetadata(
+    async () => {
+      const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
+      if (!pathway) return {};
+      const path = buildExamPathwayPath(pathway, "lessons");
+      const canonical = absoluteUrl(path);
+      const title = pathwayLessonHubMetaTitle(pathway);
+      const description = pathwayLessonHubMetaDescription(pathway);
+      return {
+        title,
+        description,
+        alternates: { canonical },
+        openGraph: { title, description, url: canonical, type: "website" },
+        ...(q ? { robots: { index: false, follow: true } } : {}),
+      };
+    },
+    { pathname: hubPath, locale: countrySlug, routeGroup: "marketing.exam_hub.lessons" },
+  );
 }
 
 export default async function PathwayLessonsHubPage({ params, searchParams }: Props) {

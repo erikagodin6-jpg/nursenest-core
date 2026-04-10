@@ -3,6 +3,7 @@ import { ExamFamily } from "@prisma/client";
 import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { ExamRegistryKey, GlobalExamContext } from "@/lib/exam-context/global-exam-context";
+import { getMeasurementSystemForCountry } from "@/lib/measurements/measurement-system";
 
 /** Maps pathway → terminology pack — extend for UK_NMC, AU_NMBA, etc. */
 export type TerminologyProfileId =
@@ -26,6 +27,11 @@ export type ExamRegistryEntry = {
   /** Stable blueprint handle for content mapping / future CMS */
   blueprintId: string;
 };
+
+/** Compile-time exhaustiveness guard — `value` is only `never` when all union members are handled. */
+function assertNever(value: never): never {
+  throw new Error(`Unexpected roleTrack: ${String(value)}`);
+}
 
 function terminologyProfileForPathway(p: ExamPathwayDefinition): TerminologyProfileId {
   if (p.examFamily === ExamFamily.ALLIED) return "ALLIED";
@@ -52,7 +58,7 @@ function tierLabelFromPathway(p: ExamPathwayDefinition): string {
     case "allied":
       return "ALLIED";
     default:
-      return String(p.roleTrack).toUpperCase();
+      return assertNever(p.roleTrack);
   }
 }
 
@@ -110,5 +116,6 @@ export function buildGlobalExamContext(pathwayId: string | null | undefined, lan
     registryKey: row.registryKey,
     terminologyProfile: row.terminologyProfile,
     blueprintId: row.blueprintId,
+    measurementSystem: getMeasurementSystemForCountry(row.country),
   };
 }

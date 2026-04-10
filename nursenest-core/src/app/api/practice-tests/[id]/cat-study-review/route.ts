@@ -10,8 +10,6 @@ import { buildMinimalCatStudyFeedbackPayload } from "@/lib/practice-tests/cat-pr
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { enforcePracticeTestDetailProtection } from "@/lib/http/api-protection";
 import { parsePracticeTestConfigAtBoundary } from "@/lib/practice-tests/practice-test-config-boundary";
-import type { PracticeTestConfigJson } from "@/lib/practice-tests/types";
-
 function asIdList(raw: unknown): string[] {
   if (!Array.isArray(raw)) return [];
   return raw.filter((x): x is string => typeof x === "string" && x.length > 4);

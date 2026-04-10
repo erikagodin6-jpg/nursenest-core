@@ -1,0 +1,40 @@
+import assert from "node:assert/strict";
+import { describe, it } from "node:test";
+import {
+  EMPTY_QUESTION_SNAPSHOT,
+  ZERO_LESSON_COUNT,
+  emptyPathwayLessonsPageResult,
+} from "@/lib/exam-pathways/marketing-hub-fallbacks";
+import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
+
+describe("marketing hub degraded defaults", () => {
+  it("EMPTY_QUESTION_SNAPSHOT is a stable unavailable marker", () => {
+    assert.equal(EMPTY_QUESTION_SNAPSHOT.status, "unavailable");
+  });
+
+  it("ZERO_LESSON_COUNT stays numeric zero", () => {
+    assert.equal(ZERO_LESSON_COUNT, 0);
+  });
+
+  it("emptyPathwayLessonsPageResult yields safe pagination shape", () => {
+    const p = emptyPathwayLessonsPageResult(2, 12);
+    assert.equal(p.page, 2);
+    assert.equal(p.pageSize, 12);
+    assert.equal(p.total, 0);
+    assert.deepEqual(p.items, []);
+  });
+});
+
+describe("formatMarketingMessage missing keys", () => {
+  it("returns humanized fallback in production mode for missing keys", () => {
+    const prev = process.env.NODE_ENV;
+    Object.assign(process.env, { NODE_ENV: "production" });
+    try {
+      const s = formatMarketingMessage({}, "nav.examStrip.rn", undefined, undefined);
+      assert.ok(!s.startsWith("[missing:"));
+      assert.ok(s.length > 0);
+    } finally {
+      Object.assign(process.env, { NODE_ENV: prev });
+    }
+  });
+});

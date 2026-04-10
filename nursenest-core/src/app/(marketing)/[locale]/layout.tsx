@@ -7,6 +7,7 @@ import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/seo-json-ld"
 import { DEFAULT_MARKETING_LOCALE, isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
+import { MarketingMainErrorBoundary } from "@/components/marketing/marketing-main-error-boundary";
 import { NursenestRegionRoot } from "@/lib/region/use-nursenest-region";
 
 export default async function MarketingLocaleLayout({
@@ -31,7 +32,9 @@ export default async function MarketingLocaleLayout({
         <WebSiteJsonLd />
         <div className="nn-marketing-surface flex min-h-screen flex-col">
           <SiteHeader />
-          <main className="flex-1">{children}</main>
+          <main className="flex-1">
+            <MarketingMainErrorBoundary name="marketing_locale_main">{children}</MarketingMainErrorBoundary>
+          </main>
           <SiteFooter />
         </div>
       </NursenestRegionRoot>

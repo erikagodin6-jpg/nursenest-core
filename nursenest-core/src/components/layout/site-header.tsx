@@ -19,9 +19,9 @@ import {
   marketingRegionToggleSegment,
   marketingRegionToggleShellMobileRow,
 } from "@/lib/theme/marketing-region-toggle";
-import { defaultNursingExamMarketingHub } from "@/lib/marketing/marketing-exam-navigation";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
+import { TierGatewayDropdown } from "@/components/layout/tier-gateway-dropdown";
 
 const NAV_LINK_CLASS =
   "nn-marketing-body-sm nn-marketing-nav-link font-medium tracking-tight text-[var(--theme-menu-text)]";
@@ -53,7 +53,6 @@ export function SiteHeader() {
   }, []);
 
   const marketingNav = [
-    { href: defaultNursingExamMarketingHub(region), labelKey: "nav.exams" as const },
     { href: "/lessons", labelKey: "nav.lessons" as const },
     { href: "/pricing", labelKey: "nav.pricing" as const },
     { href: "/faq", labelKey: "footer.faq" as const },
@@ -77,6 +76,7 @@ export function SiteHeader() {
             aria-label={t("nav.marketingExplore")}
             className="hidden min-w-0 flex-1 items-center justify-center md:flex md:gap-5 lg:gap-8"
           >
+            <TierGatewayDropdown navLinkClass={`${NAV_LINK_CLASS} flex items-center gap-1`} />
             {marketingNav.map((item) => (
               <Link
                 key={item.href}
@@ -135,6 +135,9 @@ export function SiteHeader() {
             </div>
             <div className="min-h-0 flex-1 space-y-1 overflow-y-auto overscroll-y-contain px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3">
               <div className="mb-3 flex flex-col gap-1">
+                <p className="mb-1 px-3 text-[11px] font-semibold uppercase tracking-widest text-[var(--theme-muted-text)]">
+                  {t("nav.tierDrop.heading")}
+                </p>
                 {marketingNav.map((item) => (
                   <Link
                     key={item.href}

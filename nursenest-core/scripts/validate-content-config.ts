@@ -42,8 +42,8 @@ function main(): void {
   for (const p of EXAM_PATHWAYS) {
     ids.set(p.id, (ids.get(p.id) ?? 0) + 1);
     const rk = `${p.countrySlug}/${p.roleTrack}/${p.examCode}`;
-    if (routes.has(rk) && routes.get(rk) !== p.id) {
-      errors.push(`Duplicate route key ${rk} for pathway ids ${routes.get(rk)} vs ${p.id}`);
+    if (routes.has(rk)) {
+      errors.push(`Duplicate registry route ${rk}: ${routes.get(rk)} vs ${p.id}`);
     }
     routes.set(rk, p.id);
   }

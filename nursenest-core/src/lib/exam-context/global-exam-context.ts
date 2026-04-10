@@ -2,6 +2,7 @@
  * First-class exam context for NurseNest — use in APIs, UI, analytics, and content scoping.
  * @see exam-registry.ts — expands without assuming only US/Canada exist.
  */
+import { getMeasurementSystemForCountry } from "@/lib/measurements/measurement-system";
 
 /** ISO 3166-1 alpha-2 country code (extend as markets open: GB, AU, IN, …). */
 export type ExamCountryCode = string;
@@ -27,6 +28,9 @@ export type ExamLanguageCode = string;
  */
 export type ExamRegistryKey = `${string}:${string}`;
 
+/** Clinical unit system for labs/vitals display (US customary vs SI / international). */
+export type ExamMeasurementSystem = "US" | "SI";
+
 export type GlobalExamContext = {
   /** ISO country */
   country: ExamCountryCode;
@@ -44,6 +48,8 @@ export type GlobalExamContext = {
   terminologyProfile: string;
   /** Blueprint / blueprint id for future CMS mapping */
   blueprintId: string;
+  /** Labs/vitals formatting: US vs SI (derived from country; UK/AU → SI). */
+  measurementSystem: ExamMeasurementSystem;
 };
 
 export class ExamContextError extends Error {
@@ -64,7 +70,15 @@ export function requireGlobalExamContext(
   if (!ctx || typeof ctx !== "object") {
     throw new ExamContextError(`${label} is required`);
   }
-  const { country, exam, tier, language, pathwayId, registryKey, terminologyProfile, blueprintId } = ctx;
+  const measurementSystem: ExamMeasurementSystem =
+    ctx.measurementSystem === "US" || ctx.measurementSystem === "SI"
+      ? ctx.measurementSystem
+      : getMeasurementSystemForCountry(ctx.country);
+  const merged: GlobalExamContext = {
+    ...(ctx as GlobalExamContext),
+    measurementSystem,
+  };
+  const { country, exam, tier, language, pathwayId, registryKey, terminologyProfile, blueprintId } = merged;
   if (!country?.trim()) throw new ExamContextError(`${label}.country is required`);
   if (!exam?.trim()) throw new ExamContextError(`${label}.exam is required`);
   if (!tier?.trim()) throw new ExamContextError(`${label}.tier is required`);
@@ -73,7 +87,7 @@ export function requireGlobalExamContext(
   if (!registryKey?.trim()) throw new ExamContextError(`${label}.registryKey is required`);
   if (!terminologyProfile?.trim()) throw new ExamContextError(`${label}.terminologyProfile is required`);
   if (!blueprintId?.trim()) throw new ExamContextError(`${label}.blueprintId is required`);
-  return ctx as GlobalExamContext;
+  return merged;
 }
 
 /** Safe merge for analytics — omits event if context incomplete (never guess country). */
@@ -83,6 +97,10 @@ export function examContextAnalyticsProps(
   if (!ctx?.pathwayId?.trim() || !ctx.country?.trim() || !ctx.exam?.trim()) {
     return {};
   }
+  const ms =
+    ctx.measurementSystem === "US" || ctx.measurementSystem === "SI"
+      ? ctx.measurementSystem
+      : getMeasurementSystemForCountry(ctx.country);
   return {
     exam_country: ctx.country,
     exam_product: ctx.exam,
@@ -91,5 +109,6 @@ export function examContextAnalyticsProps(
     pathway_id: ctx.pathwayId,
     exam_registry_key: ctx.registryKey,
     terminology_profile: ctx.terminologyProfile,
+    measurement_system: ms,
   };
 }

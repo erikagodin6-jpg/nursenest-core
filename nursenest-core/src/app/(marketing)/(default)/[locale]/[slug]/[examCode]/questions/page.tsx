@@ -30,6 +30,8 @@ import {
 import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
 import { pathwayQuestionsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { recordRouteRenderFallback } from "@/lib/observability/route-fallback-tracker";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export const dynamicParams = true;
@@ -47,27 +49,33 @@ type Props = {
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const { locale, slug, examCode } = await params;
   const pathname = `/${locale}/${slug}/${examCode}`;
+  const questionsPath = `${pathname}/questions`;
   const sp = searchParams ? await searchParams : {};
   const topicFilter = sp.topic?.trim() ?? "";
   const topicSlugParam = sp.topicSlug?.trim().toLowerCase() ?? "";
-  const pathway = resolveExamPathwaySafe(locale, slug, examCode, { pathname: `${pathname}/questions` });
-  if (!pathway) return {};
-  const canonicalPath = buildExamPathwayPath(pathway, "questions");
-  const canonical = absoluteUrl(canonicalPath);
-  const narrowedLabel = topicFilter || (topicSlugParam ? humanizeTopicSlug(topicSlugParam) : "");
-  const title = narrowedLabel
-    ? `${narrowedLabel} · Practice questions · ${pathway.displayName} | NurseNest`
-    : `Practice questions · ${pathway.displayName} | NurseNest`;
-  const description = narrowedLabel
-    ? `Board-style items for ${pathway.shortName} focused on ${narrowedLabel}. Sign in to run sets that stay inside this exam’s scope.`
-    : `Clinical vignettes and rationales scoped to ${pathway.shortName} (${pathway.countrySlug === "canada" ? "Canada" : "US"}). Sign in to practice with your plan.`;
-  return {
-    title,
-    description,
-    alternates: { canonical },
-    openGraph: { title, description, url: canonical, type: "website" },
-    ...(narrowedLabel ? { robots: { index: false, follow: true } } : {}),
-  };
+  return safeGenerateMetadata(
+    async () => {
+      const pathway = resolveExamPathwaySafe(locale, slug, examCode, { pathname: questionsPath });
+      if (!pathway) return {};
+      const canonicalPath = buildExamPathwayPath(pathway, "questions");
+      const canonical = absoluteUrl(canonicalPath);
+      const narrowedLabel = topicFilter || (topicSlugParam ? humanizeTopicSlug(topicSlugParam) : "");
+      const title = narrowedLabel
+        ? `${narrowedLabel} · Practice questions · ${pathway.displayName} | NurseNest`
+        : `Practice questions · ${pathway.displayName} | NurseNest`;
+      const description = narrowedLabel
+        ? `Board-style items for ${pathway.shortName} focused on ${narrowedLabel}. Sign in to run sets that stay inside this exam’s scope.`
+        : `Clinical vignettes and rationales scoped to ${pathway.shortName} (${pathway.countrySlug === "canada" ? "Canada" : "US"}). Sign in to practice with your plan.`;
+      return {
+        title,
+        description,
+        alternates: { canonical },
+        openGraph: { title, description, url: canonical, type: "website" },
+        ...(narrowedLabel ? { robots: { index: false, follow: true } } : {}),
+      };
+    },
+    { pathname: questionsPath, locale, routeGroup: "marketing.exam_hub.questions" },
+  );
 }
 
 export default async function ExamPathwayQuestionsHubPage({ params, searchParams }: Props) {
@@ -107,6 +115,14 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
         dependency: "resolveTopicSlugForPathwayTopicLabel",
         error_message: message.slice(0, 500),
       });
+      recordRouteRenderFallback({
+        fallbackType: "hub_data_load_failed",
+        pathname: `${pathname}/questions`,
+        pathwayId: pathway.id,
+        examCode,
+        country: locale,
+        dependencyName: "resolveTopicSlugForPathwayTopicLabel",
+      });
       clusterSlugForLessons = null;
     }
   }
@@ -132,6 +148,14 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
         examCode,
         dependency: "getRelatedPathwayLessons",
         error_message: message.slice(0, 500),
+      });
+      recordRouteRenderFallback({
+        fallbackType: "hub_data_load_failed",
+        pathname: `${pathname}/questions`,
+        pathwayId: pathway.id,
+        examCode,
+        country: locale,
+        dependencyName: "getRelatedPathwayLessons",
       });
       relatedLessonsForTopic = [];
     }

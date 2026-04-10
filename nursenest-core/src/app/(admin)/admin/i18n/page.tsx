@@ -2,6 +2,8 @@ import Link from "next/link";
 import { requireAdmin } from "@/lib/auth/guards";
 import { I18nDiagnosticsDashboard } from "@/components/admin/i18n-diagnostics-dashboard";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "i18n diagnostics | Admin",
   robots: { index: false, follow: false },

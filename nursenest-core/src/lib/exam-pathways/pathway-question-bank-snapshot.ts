@@ -5,6 +5,7 @@ import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { questionBankWhereForProfile } from "@/lib/entitlements/content-access-scope";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { recordRouteRenderFallback } from "@/lib/observability/route-fallback-tracker";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 const SNAPSHOT_TIMEOUT_MS = 10_000;
@@ -59,6 +60,11 @@ async function computePathwayQuestionBankSnapshot(pathway: ExamPathwayDefinition
                 : "",
           ).slice(0, 500),
         });
+        recordRouteRenderFallback({
+          fallbackType: "hub_data_load_failed",
+          pathwayId: pathway.id,
+          dependencyName: "question_snapshot_prisma_count",
+        });
       }
       return {
         status: "ok",
@@ -93,6 +99,11 @@ export async function loadPathwayQuestionBankSnapshot(pathwayId: string): Promis
       dependency_name: "pathway_question_bank_snapshot_cache",
       pathway_id: pathwayId,
       error_message: message.slice(0, 500),
+    });
+    recordRouteRenderFallback({
+      fallbackType: "hub_data_load_failed",
+      pathwayId,
+      dependencyName: "pathway_question_bank_snapshot_cache",
     });
     return { status: "unavailable" };
   }

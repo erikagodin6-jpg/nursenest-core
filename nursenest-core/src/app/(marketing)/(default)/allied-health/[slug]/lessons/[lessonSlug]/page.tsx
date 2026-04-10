@@ -60,6 +60,7 @@ import {
 import { loadRelatedExamQuestionStemsForPathwayLesson } from "@/lib/lessons/lesson-question-cross-links";
 import { PathwayLessonRelatedQuestions } from "@/components/lessons/pathway-lesson-related-questions";
 import { PathwayLessonStudyLoopCta } from "@/components/lessons/pathway-lesson-study-loop-cta";
+import { getMeasurementSystemForCountry } from "@/lib/measurements/measurement-system";
 
 export const revalidate = 86400;
 export const dynamicParams = true;
@@ -144,6 +145,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
       : entitlement;
 
   const fullAccess = canViewFullPathwayLesson(scope, pathway, learnerPath);
+  const lessonMeasurementSystem = getMeasurementSystemForCountry(pathway.countryCode);
   const visible = visibleSectionsForLesson(lesson, fullAccess);
   const lockedSections =
     !fullAccess && lesson.sections.length > visible.length ? lesson.sections.slice(visible.length) : [];
@@ -275,7 +277,11 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
               {section.heading?.trim() || "Section"}
             </h2>
             <div className="mt-3">
-              <PathwayLessonBody text={typeof section.body === "string" ? section.body : ""} lessonWikiBasePath={base} />
+              <PathwayLessonBody
+                text={typeof section.body === "string" ? section.body : ""}
+                lessonWikiBasePath={base}
+                measurementSystem={lessonMeasurementSystem}
+              />
             </div>
           </section>
         ))}

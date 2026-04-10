@@ -1,14 +1,22 @@
+import type { TierCode } from "@prisma/client";
 import { PathwayLessonBody } from "@/components/lessons/pathway-lesson-body";
 import type { PathwayLessonExamFocus } from "@/lib/lessons/pathway-lesson-types";
+import type { MeasurementSystem } from "@/lib/measurements/measurement-system";
 
 export function PathwayLessonExamFocusPanel({
   heading,
   examFocus,
   fallbackBody,
+  viewerTier,
+  measurementSystem,
+  measurementDual,
 }: {
   heading: string;
   examFocus?: PathwayLessonExamFocus;
   fallbackBody?: string;
+  viewerTier?: TierCode | null;
+  measurementSystem?: MeasurementSystem | null;
+  measurementDual?: boolean;
 }) {
   const hasStructured =
     examFocus &&
@@ -21,7 +29,12 @@ export function PathwayLessonExamFocusPanel({
       <section className="rounded-xl border border-primary/20 bg-primary/[0.04] p-5">
         <h2 className="nn-marketing-h3">{heading}</h2>
         <div className="mt-3">
-          <PathwayLessonBody text={fallbackBody} />
+          <PathwayLessonBody
+            text={fallbackBody}
+            viewerTier={viewerTier}
+            measurementSystem={measurementSystem ?? undefined}
+            measurementDual={measurementDual}
+          />
         </div>
       </section>
     );
@@ -48,7 +61,12 @@ export function PathwayLessonExamFocusPanel({
           <div key={b.title}>
             <h3 className="nn-marketing-label nn-marketing-label--accent">{b.title}</h3>
             <div className="mt-2">
-              <PathwayLessonBody text={b.text} />
+              <PathwayLessonBody
+                text={b.text}
+                viewerTier={viewerTier}
+                measurementSystem={measurementSystem ?? undefined}
+                measurementDual={measurementDual}
+              />
             </div>
           </div>
         ))}

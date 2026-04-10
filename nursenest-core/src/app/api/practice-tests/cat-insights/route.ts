@@ -6,7 +6,7 @@ import { prisma } from "@/lib/db";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { isSkipBeyondLimit, listSkipRows, parseListPage } from "@/lib/api/api-pagination-limits";
 import { parsePracticeTestConfigAtBoundary } from "@/lib/practice-tests/practice-test-config-boundary";
-import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
+import type { PracticeTestResultsJson } from "@/lib/practice-tests/types";
 
 const PAGE_SIZE = 12;
 

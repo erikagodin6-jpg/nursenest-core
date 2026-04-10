@@ -1,4 +1,4 @@
-import { SubscriptionStatus, UserRole } from "@prisma/client";
+import { SubscriptionStatus, type CountryCode, type TierCode } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { isLearnerEntitlementAdminOverrideRole } from "@/lib/auth/staff-roles";
@@ -10,8 +10,8 @@ import { withRetry } from "@/lib/resilience/with-retry";
 export type AccessScope = {
   hasAccess: boolean;
   reason: "active_subscription" | "admin_override" | "grace_period" | "no_access";
-  tier: string | null;
-  country: string | null;
+  tier: TierCode | null;
+  country: CountryCode | null;
 };
 
 export async function resolveEntitlement(userId: string): Promise<AccessScope> {
@@ -61,7 +61,7 @@ export async function resolveEntitlement(userId: string): Promise<AccessScope> {
     return {
       hasAccess: true,
       reason: "active_subscription",
-      tier: effectiveTier as string,
+      tier: effectiveTier,
       country: effectiveCountry,
     };
   }
@@ -70,10 +70,10 @@ export async function resolveEntitlement(userId: string): Promise<AccessScope> {
     return {
       hasAccess: true,
       reason: "grace_period",
-      tier: effectiveTier as string,
+      tier: effectiveTier,
       country: effectiveCountry,
     };
   }
 
-  return { hasAccess: false, reason: "no_access", tier: user.tier as string, country: baseCountry };
+  return { hasAccess: false, reason: "no_access", tier: user.tier, country: baseCountry };
 }

@@ -3,6 +3,8 @@ import { requireAdmin } from "@/lib/auth/guards";
 import { getStaffSession } from "@/lib/auth/staff-session";
 import type { StaffTier } from "@/lib/auth/staff-roles";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminSubLayout({ children }: { children: React.ReactNode }) {
   await requireAdmin();
   const staff = await getStaffSession();

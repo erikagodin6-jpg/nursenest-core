@@ -7,7 +7,7 @@ import { loadMarketingExamHubOptionalBlocks } from "@/lib/exam-pathways/marketin
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import { auth } from "@/lib/auth";
 import { absoluteUrl } from "@/lib/seo/site-origin";
-import { safeExamHubMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 export const dynamicParams = true;
 export const revalidate = 86400;
@@ -21,7 +21,7 @@ type Props = { params: Promise<{ locale: string; slug: string; examCode: string 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug, examCode } = await params;
   const pathname = `/${locale}/${slug}/${examCode}`;
-  return safeExamHubMetadata(async () => {
+  return safeGenerateMetadata(async () => {
     const pathway = resolveExamPathwaySafe(locale, slug, examCode, { pathname });
     if (!pathway) return {};
     const seo = getNpPracticeTestLandingCopy(locale, slug, examCode);
@@ -48,7 +48,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         type: "website",
       },
     };
-  }, { pathname, locale });
+  }, { pathname, locale, routeGroup: "marketing.exam_hub" });
 }
 
 export default async function ExamPathwayOverviewPage({ params }: Props) {

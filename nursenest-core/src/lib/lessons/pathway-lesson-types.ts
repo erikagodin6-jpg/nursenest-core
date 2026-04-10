@@ -1,6 +1,11 @@
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { marketingLessonDetailHref, marketingPathwayLessonDetailPath } from "@/lib/lessons/lesson-routes";
 
+/**
+ * Section bodies may include tier-scoped segments via `<TierBlock tier="PN|RN|NP|ALL">…</TierBlock>`
+ * (see {@link resolveTierBlocksForViewer}).
+ */
+
 /** Structured “exam focus” block for pathway lessons (how tested, traps, prioritization). */
 export type PathwayLessonExamFocus = {
   howTested?: string;

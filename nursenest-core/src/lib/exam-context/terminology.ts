@@ -1,4 +1,5 @@
 import type { GlobalExamContext } from "@/lib/exam-context/global-exam-context";
+import { getMeasurementSystemForCountry } from "@/lib/measurements/measurement-system";
 import type { TerminologyProfileId } from "@/lib/exam-context/exam-registry";
 import { getExamRegistryEntryByPathwayId } from "@/lib/exam-context/exam-registry";
 
@@ -81,6 +82,7 @@ export function getTerminologyForPathway(key: TerminologyKey, pathwayId: string 
     registryKey: row.registryKey,
     terminologyProfile: row.terminologyProfile,
     blueprintId: row.blueprintId,
+    measurementSystem: getMeasurementSystemForCountry(row.country),
   };
   return getTerminology(key, ctx);
 }

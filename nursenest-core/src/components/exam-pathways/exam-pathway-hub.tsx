@@ -13,6 +13,7 @@ import { FunnelExamHubViewBeacon } from "@/components/marketing/funnel-analytics
 import { ExamPathwayHubBody } from "@/components/exam-pathways/exam-pathway-hub-body";
 import { PathwayLiveInventoryStrip } from "@/components/exam-pathways/pathway-live-inventory-strip";
 import { NpSeoAliasHubAnalytics } from "@/components/marketing/np-seo-alias-hub-analytics";
+import { validateLearnerCopyForExamContext } from "@/lib/learner/validate-learner-copy-context";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import type { PathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import { EMPTY_QUESTION_SNAPSHOT, ZERO_LESSON_COUNT } from "@/lib/exam-pathways/marketing-hub-fallbacks";
@@ -52,6 +53,8 @@ export function ExamPathwayHub({
 }) {
   const questionSnapshot = questionSnapshotProp ?? EMPTY_QUESTION_SNAPSHOT;
   const pathwayLessonCount = pathwayLessonCountProp ?? ZERO_LESSON_COUNT;
+  validateLearnerCopyForExamContext(pathway, heroTitle ?? pathway.displayName, "hub_hero");
+  validateLearnerCopyForExamContext(pathway, heroLead ?? pathway.seoDescription, "hub_hero");
   const hubOpts = { hubBasePath: marketingHubPath };
   const { crumbs, schemaItems } = pathwayOverviewBreadcrumbs(pathway, hubOpts);
   const countryLine = pathway.countrySlug === "canada" ? "Canada" : "United States";

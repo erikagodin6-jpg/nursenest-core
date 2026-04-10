@@ -2,6 +2,7 @@ import { parseAdaptiveState } from "@/lib/exams/cat-engine";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { prisma } from "@/lib/db";
+import { recordRouteRenderFallback } from "@/lib/observability/route-fallback-tracker";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import {
   buildCatResultsCoach,
@@ -97,6 +98,10 @@ export async function enrichPracticeTestResultsWithCatCoach(
     safeServerLog("cat_results", "cat_results_coach_fallback_used", {
       event: "cat_results_coach_fallback_used",
       error_message: message.slice(0, 400),
+    });
+    recordRouteRenderFallback({
+      fallbackType: "cat_coach_enrich_failed",
+      pathwayId: config.pathwayId ?? undefined,
     });
     return { ...results, catCoach: buildFallbackCatResultsCoachSnapshot() };
   }
