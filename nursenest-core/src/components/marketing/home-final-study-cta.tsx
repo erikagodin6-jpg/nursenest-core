@@ -9,8 +9,14 @@ import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-l
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { MARKETING_PRIMARY_CTA_CLASS, MARKETING_TERTIARY_LINK_CLASS } from "@/lib/theme/marketing-hero-pattern";
 
+const STEPS = [
+  { n: "1", label: "Pick your exam", sub: "RN, LPN/RPN, NP, or Allied" },
+  { n: "2", label: "Try free questions", sub: "No credit card needed" },
+  { n: "3", label: "Build your plan", sub: "Lessons + test bank + CAT" },
+] as const;
+
 /**
- * Closing conversion block: exam prep headline — signup primary, pathway + resource links.
+ * Closing conversion block: "30 seconds" framing with three-step onboarding indicators.
  */
 export function HomeFinalStudyCta() {
   const { t, locale } = useMarketingI18n();
@@ -23,13 +29,41 @@ export function HomeFinalStudyCta() {
       aria-labelledby="home-final-cta-heading"
       data-testid="section-final-study-cta"
     >
-      <div className="mx-auto max-w-6xl px-4 text-center sm:px-6 lg:px-8">
-        <h2 id="home-final-cta-heading" className="nn-marketing-h2 text-balance">
-          {t("home.conversion.final.title")}
-        </h2>
-        <p className="nn-marketing-body-sm mx-auto mt-2 max-w-lg text-pretty text-[var(--theme-muted-text)]">
-          {t("home.conversion.final.sub")}
-        </p>
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div className="text-center">
+          <p className="nn-marketing-caption mb-3 font-semibold uppercase tracking-widest text-[color-mix(in_srgb,var(--theme-primary)_78%,var(--theme-heading-text))]">
+            Get started in 30 seconds
+          </p>
+          <h2 id="home-final-cta-heading" className="nn-marketing-h2 text-balance">
+            {t("home.conversion.final.title")}
+          </h2>
+          <p className="nn-marketing-body-sm mx-auto mt-2 max-w-lg text-pretty text-[var(--theme-muted-text)]">
+            {t("home.conversion.final.sub")}
+          </p>
+        </div>
+
+        {/* 3-step onboarding flow */}
+        <ol
+          className="mx-auto mt-10 grid max-w-3xl gap-4 sm:grid-cols-3"
+          aria-label="How to get started"
+        >
+          {STEPS.map((step) => (
+            <li
+              key={step.n}
+              className="flex flex-col items-center gap-2 rounded-2xl border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] px-4 py-5 text-center"
+            >
+              <span
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--theme-primary)_15%,var(--theme-card-bg))] text-sm font-bold text-[var(--theme-primary)]"
+                aria-hidden
+              >
+                {step.n}
+              </span>
+              <span className="nn-marketing-body-sm font-semibold text-[var(--theme-heading-text)]">{step.label}</span>
+              <span className="nn-marketing-caption text-[var(--theme-muted-text)]">{step.sub}</span>
+            </li>
+          ))}
+        </ol>
+
         <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row sm:flex-wrap">
           <MarketingTrackedLink
             href={loc(HUB.signup)}
@@ -51,6 +85,7 @@ export function HomeFinalStudyCta() {
             {t("home.conversion.final.ctaSecondary")}
           </MarketingTrackedLink>
         </div>
+
         <p className="nn-marketing-body-sm mx-auto mt-6 flex max-w-xl flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[var(--theme-muted-text)]">
           <MarketingTrackedLink
             href={loc(HUB.practiceExams)}

@@ -1,5 +1,6 @@
 "use client";
 
+import { Star } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 
 const CARD_KEYS = [
@@ -11,8 +12,23 @@ const CARD_KEYS = [
   { quote: "home.landing.reviews.card6.quote", meta: "home.landing.reviews.card6.meta" },
 ] as const;
 
+function StarRow({ count = 5 }: { count?: number }) {
+  return (
+    <div className="mb-2 flex gap-0.5" aria-label={`${count} out of 5 stars`} role="img">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <Star
+          key={i}
+          className={`h-3.5 w-3.5 ${i < count ? "fill-[var(--semantic-warning)] text-[var(--semantic-warning)]" : "text-[var(--border-subtle)]"}`}
+          aria-hidden
+        />
+      ))}
+    </div>
+  );
+}
+
 /**
- * Testimonials directly under the platform carousel. Copy is static scenarios, not a live feed.
+ * Testimonials with star ratings, directly under the platform carousel.
+ * Copy is static scenarios, not a live feed.
  */
 export function HomeReviewsSection() {
   const { t } = useMarketingI18n();
@@ -25,6 +41,21 @@ export function HomeReviewsSection() {
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <header className="mx-auto mb-6 max-w-3xl text-center md:mb-8">
+          {/* Aggregate star display */}
+          <div className="mb-3 flex items-center justify-center gap-1.5">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <Star
+                key={i}
+                className="h-5 w-5 fill-[var(--semantic-warning)] text-[var(--semantic-warning)]"
+                aria-hidden
+              />
+            ))}
+            <span className="nn-marketing-body-sm ml-1.5 font-semibold tabular-nums text-[var(--theme-body-text)]">
+              4.8 / 5
+            </span>
+            <span className="nn-marketing-caption text-[var(--theme-muted-text)]">from nursing students</span>
+          </div>
+
           <h2 id="home-reviews-heading" className="nn-marketing-h2 text-balance">
             {t("home.landing.reviews.title")}
           </h2>
@@ -39,6 +70,7 @@ export function HomeReviewsSection() {
               key={c.quote}
               className="nn-card-soft nn-marketing-card-pad flex flex-col border-t-2 border-t-[color-mix(in_srgb,var(--theme-primary)_45%,transparent)]"
             >
+              <StarRow />
               <blockquote className="nn-marketing-body-sm flex-1 text-pretty text-[var(--theme-body-text)]">
                 &ldquo;{t(c.quote)}&rdquo;
               </blockquote>
