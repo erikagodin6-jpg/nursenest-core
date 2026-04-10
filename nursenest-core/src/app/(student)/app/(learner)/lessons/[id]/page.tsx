@@ -391,6 +391,7 @@ export default async function LessonDetailPage({ params }: Props) {
             topicSlug={record.topicSlug}
             relatedLessons={relatedLessonsDisplay}
             currentSlug={record.slug}
+            catAuthState="signed_in"
           />
         ) : null}
         <div className="mt-10 flex flex-wrap gap-2 border-t border-border pt-6">

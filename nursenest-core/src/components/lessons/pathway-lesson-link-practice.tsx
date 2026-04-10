@@ -2,7 +2,10 @@ import Link from "next/link";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath, getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements";
+import type { StudyLoopCatAuthState } from "@/lib/exam-pathways/study-loop-cat-routing";
+import { resolveStudyLoopCatDestination } from "@/lib/exam-pathways/study-loop-cat-routing";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { marketingLessonsTopicClusterPath } from "@/lib/lessons/lesson-routes";
 
 /** Marketing question hub with optional topic filter (pathway-scoped). */
@@ -100,17 +103,27 @@ export function lessonStudyLoopRelatedLessonsHubHref(lessonsBasePath: string, to
 }
 
 export type LessonStudyLoopCatHrefs = {
-  marketing: string;
-  appSession: string | null;
+  primaryHref: string;
+  secondaryHref: string | null;
+  primaryKind: "public" | "app_start";
   showAdaptiveShortcut: boolean;
 };
 
-export function lessonStudyLoopCatHrefs(pathway: ExamPathwayDefinition): LessonStudyLoopCatHrefs {
+export function lessonStudyLoopCatHrefs(
+  pathway: ExamPathwayDefinition,
+  authState: StudyLoopCatAuthState = "public",
+): LessonStudyLoopCatHrefs {
   const show = pathwayAllowsCatAdaptiveStart(pathway);
   const marketingCatPath = buildExamPathwayPath(pathway, "cat");
+  const signedInDestination = resolveStudyLoopCatDestination({
+    authState: "signed_in",
+    pathwayId: pathway.id,
+    intent: "start",
+  });
   return {
-    marketing: marketingCatPath,
-    appSession: show ? loginWithCallback(marketingCatPath) : null,
+    primaryHref: authState === "signed_in" ? signedInDestination.href : marketingCatPath,
+    secondaryHref: authState === "public" && show ? loginWithCallback(marketingCatPath) : null,
+    primaryKind: authState === "signed_in" ? "app_start" : "public",
     showAdaptiveShortcut: show,
   };
 }
@@ -195,8 +208,8 @@ export function PathwayLessonLinkToPractice({
   const pathwayForCat = pathwayId?.trim() ? getExamPathwayById(pathwayId.trim()) : undefined;
   /** Never fall back to `/app/exams` without pathway context — that page is cross-exam history / timed mocks, not CAT prep. */
   const catHref = pathwayForCat
-    ? buildExamPathwayPath(pathwayForCat, "cat")
-    : loginWithCallback("/app/practice-tests/start");
+    ? resolveStudyLoopCatDestination({ authState: "signed_in", pathwayId: pathwayForCat.id, intent: "start" }).href
+    : resolveStudyLoopCatDestination({ authState: "signed_in", intent: "start" }).href;
 
   const lessonsForTopicHref = topicSlug?.trim()
     ? `/app/lessons?topicSlug=${encodeURIComponent(topicSlug.trim())}`
@@ -227,7 +240,7 @@ export function PathwayLessonLinkToPractice({
           href={catHref}
           className="inline-flex rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-muted"
         >
-          {pathwayForCat ? "CAT prep" : "Practice tests"}
+          {pathwayForCat ? "Start CAT" : "Choose CAT pathway"}
         </Link>
       </div>
     </section>

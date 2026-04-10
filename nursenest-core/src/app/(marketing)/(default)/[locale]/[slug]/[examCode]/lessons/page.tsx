@@ -1,17 +1,10 @@
 import type { Metadata } from "next";
-import { ExamFamily } from "@prisma/client";
 import { notFound, redirect } from "next/navigation";
 import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { PathwayLessonContentLocaleBanner } from "@/components/lessons/pathway-lesson-content-locale-banner";
-import { FnpLessonsHub } from "@/components/pathway-lessons/fnp-lessons-hub";
-import { NclexPnLessonsHub } from "@/components/pathway-lessons/nclex-pn-lessons-hub";
-import { NclexRnLessonsHub } from "@/components/pathway-lessons/nclex-rn-lessons-hub";
-import { PathwayLiveInventoryStrip } from "@/components/exam-pathways/pathway-live-inventory-strip";
 import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-lesson-pagination";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
-import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
-import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import { loadPathwayLessonsHubAggregates } from "@/lib/exam-pathways/marketing-hub-optional-data";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
@@ -20,18 +13,10 @@ import {
   PATHWAY_HUB_PAGE_SIZE_DEFAULT,
   normalizePathwayHubSearchQuery,
 } from "@/lib/lessons/pathway-lesson-loader";
-import { PathwayLaunchEssentials } from "@/components/pathway-lessons/pathway-launch-essentials";
-import { PathwayLessonsNextStepCtas } from "@/components/pathway-lessons/pathway-lessons-next-step-ctas";
-import { PathwayLessonsStudyHero } from "@/components/pathway-lessons/pathway-lessons-study-hero";
-import { PathwayLessonsResumeHub } from "@/components/pathway-lessons/pathway-lessons-resume-hub";
-import { PathwayLessonsGroupedHub } from "@/components/pathway-lessons/pathway-lessons-grouped-hub";
+import { PathwayLessonsCurriculumHub } from "@/components/pathway-lessons/pathway-lessons-curriculum-hub";
 import { pathwayLessonHubMetaDescription, pathwayLessonHubMetaTitle } from "@/lib/lessons/pathway-lesson-hub-seo";
 import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
-import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { ContentEmptyState } from "@/components/ui/content-empty-state";
-import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
-import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 import { Search } from "lucide-react";
 import { pathwayLessonsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
@@ -55,37 +40,6 @@ type Props = {
   params: Promise<{ locale: string; slug: string; examCode: string }>;
   searchParams: Promise<{ page?: string; pageSize?: string; q?: string }>;
 };
-
-/** When the catalog has no rows yet: still a complete "study hub" with bank, CAT, and account entry points. */
-function PathwayLessonsZeroCatalogPanel({ pathway }: { pathway: ExamPathwayDefinition }) {
-  const questionsHref = buildExamPathwayPath(pathway, "questions");
-  const catHref = buildExamPathwayPath(pathway, "cat");
-  const upcoming = pathway.status === "upcoming" || pathway.acquisitionMode === "waitlist";
-  const thinInventoryCopy = emptyStateCopy.thinInventory({
-    pathwayLine: pathway.shortName,
-    exam: pathway.displayName,
-  });
-
-  return (
-    <ContentEmptyState
-      variant="lessons"
-      tone="growth"
-      headline={thinInventoryCopy.headline}
-      body={
-        upcoming
-          ? `${thinInventoryCopy.body} Structured lessons will appear here as this track ships, and pathway-scoped practice is already available.`
-          : `${thinInventoryCopy.body} Start with the question bank and CAT sessions while the lesson library expands.`
-      }
-      hint={thinInventoryCopy.hint}
-      primaryCta={{ label: "Start available topics", href: questionsHref }}
-      secondaryCtas={[
-        { label: "Try CAT exam", href: catHref },
-        { label: "Practice exams", href: HUB.practiceExams, variant: "ghost" },
-        { label: "Create account", href: "/signup", variant: "ghost" },
-      ]}
-    />
-  );
-}
 
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const { locale: countrySlug, slug: roleTrack, examCode } = await params;
@@ -127,7 +81,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const qEffective = normalizePathwayHubSearchQuery(sp.q);
   const listOpts = typeof sp.q === "string" && sp.q.trim().length > 0 ? { q: sp.q } : undefined;
 
-  const { pageResult, questionSnapshot, pathwayLessonTotal, launchBundle, topics } = await loadPathwayLessonsHubAggregates(
+  const { pageResult } = await loadPathwayLessonsHubAggregates(
     pathway,
     {
       pageRequested,
@@ -163,82 +117,46 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
 
   const lessons = pageResult.items.filter(pathwayLessonHasRenderableHubSlug);
   const { crumbs, schemaItems } = pathwayLessonsHubBreadcrumbs(pathway);
-  const isNclexRnHub = pathway.id === "us-rn-nclex-rn" || pathway.id === "ca-rn-nclex-rn";
-  const nclexRnRegion = pathway.id === "ca-rn-nclex-rn" ? "ca" : "us";
-  const isUsNclexPnHub = pathway.id === "us-lpn-nclex-pn";
-  /** Rich primary-care NP hub (FNP-style explorer). PMHNP keeps topic-grouped hub — lifespan lanes fit psychiatry less well. */
-  const isNpPrimaryCareLessonsHub =
-    pathway.examFamily === ExamFamily.NP && pathway.id !== "us-np-pmhnp";
-  const isCaRexPnHub = pathway.id === "ca-rpn-rex-pn";
-  /** Shared practical-nursing hub (US NCLEX-PN + Canada REx-PN). */
-  const isPnLessonsHub = isUsNclexPnHub || isCaRexPnHub;
 
   if (pageResult.total === 0) {
-    const { crumbs, schemaItems } = pathwayLessonsHubBreadcrumbs(pathway);
-    if (qEffective) {
-      const noResultsCopy = emptyStateCopy.noSearchResults({
-        query: qEffective,
-        pathwayLine: pathway.shortName,
-      });
-      return (
-        <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
-          <BreadcrumbJsonLd items={schemaItems} />
-          <div className="mb-6">
-            <BreadcrumbTrail items={crumbs} />
-          </div>
-          <PathwayLessonsStudyHero
-            pathway={pathway}
-            lessonsBasePath={base}
-            initialQuery={qEffective}
-            heroAccent={pathway.examFamily === ExamFamily.NP ? "np" : "default"}
-          />
-          <PremiumEmptyState
-            data-nn-empty="pathway-lessons-search"
-            className="mt-6"
-            tone="default"
-            visualLayout="split"
-            Icon={Search}
-            headline={noResultsCopy.headline}
-            body={noResultsCopy.body}
-            hint="Try a broader term, return to the full hub, or switch to pathway-scoped questions while you explore."
-            primaryCta={{ label: "View all lessons", href: base, variant: "primary" }}
-            secondaryCtas={[
-              { label: "Pathway questions", href: buildExamPathwayPath(pathway, "questions"), variant: "secondary" },
-            ]}
-          />
-          <PathwayLiveInventoryStrip
-            pathway={pathway}
-            questionSnapshot={questionSnapshot}
-            lessonCount={pathwayLessonTotal}
-            variant="lessons"
-          />
-          <PathwayLessonsNextStepCtas pathway={pathway} />
-          <MarketingStudyCrossLinks className="mt-14" />
-        </div>
-      );
-    }
     return (
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
         <BreadcrumbJsonLd items={schemaItems} />
         <div className="mb-6">
           <BreadcrumbTrail items={crumbs} />
         </div>
-        <PathwayLessonsStudyHero
-          pathway={pathway}
-          lessonsBasePath={base}
-          showSearch={false}
-          heroAccent={pathway.examFamily === ExamFamily.NP ? "np" : "default"}
-        />
-        <PathwayLessonsNextStepCtas pathway={pathway} emphasizeStudyLoop />
-        <PathwayLiveInventoryStrip
-          pathway={pathway}
-          questionSnapshot={questionSnapshot}
-          lessonCount={pathwayLessonTotal}
-          variant="lessons"
-        />
+        <header className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6">
+          <p className="text-sm font-medium text-[var(--theme-muted-text)]">{pathway.displayName}</p>
+          <h1 className="mt-1 text-3xl font-semibold tracking-tight text-[var(--theme-heading-text)]">Lessons</h1>
+          <p className="mt-2 text-sm text-[var(--theme-muted-text)]">Browse {pathway.shortName} lessons by body system.</p>
+          <form action={base} method="get" className="mt-4 flex flex-col gap-3 sm:flex-row">
+            <label htmlFor="pathway-lessons-search" className="sr-only">
+              Search lessons
+            </label>
+            <div className="relative max-w-xl flex-1">
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--theme-muted-text)]" />
+              <input
+                id="pathway-lessons-search"
+                name="q"
+                defaultValue={qEffective ?? ""}
+                placeholder="Search lessons"
+                className="min-h-11 w-full rounded-full border border-[var(--semantic-border-soft)] bg-[var(--theme-page-bg)] py-2.5 pl-10 pr-4 text-sm text-[var(--theme-heading-text)] outline-none transition focus:border-[var(--semantic-brand)] focus:ring-2 focus:ring-[color-mix(in_srgb,var(--semantic-brand)_16%,transparent)]"
+              />
+            </div>
+            <button type="submit" className="inline-flex min-h-11 items-center justify-center rounded-full nn-btn-secondary px-4 py-2 text-sm font-semibold">
+              Search
+            </button>
+          </form>
+        </header>
         {pageResult.locale ? <PathwayLessonContentLocaleBanner listLocale={pageResult.locale} /> : null}
-        <PathwayLessonsZeroCatalogPanel pathway={pathway} />
-        <MarketingStudyCrossLinks className="mt-14" />
+        <div className="mt-6 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6">
+          <p className="text-sm font-medium text-[var(--theme-heading-text)]">
+            {qEffective ? `No lessons match "${qEffective}".` : `No lessons are published for ${pathway.shortName} yet.`}
+          </p>
+          <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
+            {qEffective ? "Try a broader search or clear the search to view the full lesson library." : "Check back here for structured lessons as this pathway library grows."}
+          </p>
+        </div>
       </div>
     );
   }
@@ -264,12 +182,6 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       : entitlement;
 
   let progressMap: Record<string, PathwayLessonProgressStatus> = {};
-  let resumePayload: PathwayHubResumePayload = {
-    lastTouched: null,
-    nextRecommended: null,
-    lessonsCompleted: 0,
-    lessonsInProgress: 0,
-  };
 
   const canShowResume =
     Boolean(userId) && scope.hasAccess && canViewFullPathwayLesson(scope, pathway, learnerPath);
@@ -277,7 +189,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
 
   if (canShowResume) {
     const hubSlugs = canShowProgressMap ? lessons.map((l) => l.slug).filter(Boolean) : [];
-    const { resume, progressMap: map } = await loadPathwayHubSubscriberData(
+    const { progressMap: map } = await loadPathwayHubSubscriberData(
       userId,
       scope,
       learnerPath,
@@ -285,7 +197,6 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       base,
       hubSlugs,
     );
-    resumePayload = resume;
     progressMap = map;
   }
 
@@ -295,75 +206,48 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       <div className="mb-6">
         <BreadcrumbTrail items={crumbs} />
       </div>
-
-      <PathwayLessonsStudyHero
-        pathway={pathway}
-        lessonsBasePath={base}
-        initialQuery={qEffective}
-        heroAccent={pathway.examFamily === ExamFamily.NP ? "np" : "default"}
-      />
-
-      <PathwayLiveInventoryStrip
-        pathway={pathway}
-        questionSnapshot={questionSnapshot}
-        lessonCount={pathwayLessonTotal}
-        variant="lessons"
-        topicCount={topics.length > 0 ? topics.length : undefined}
-      />
-
-      {pageResult.locale ? <PathwayLessonContentLocaleBanner listLocale={pageResult.locale} /> : null}
-
-      <PathwayLessonsNextStepCtas pathway={pathway} />
-
-      {launchBundle && launchBundle.resolved.length > 0 ? (
-        <div className="mt-8">
-          <PathwayLaunchEssentials bundle={launchBundle} lessonsBasePath={base} />
-        </div>
-      ) : null}
-
-      {canShowResume && pathwayHubResumeHasContent(resumePayload) ? (
-        <div className="mt-6">
-          <PathwayLessonsResumeHub pathwayShortName={pathway.shortName} resume={resumePayload} />
-        </div>
-      ) : null}
-
-      <div id="pathway-lesson-library" className="scroll-mt-24">
-        {isPnLessonsHub ? (
-          <NclexPnLessonsHub
-            pathway={pathway}
-            lessons={lessons}
-            lessonsBasePath={base}
-            topicClusters={topics}
-            progressMap={progressMap}
-            framing={isCaRexPnHub ? "rex-pn-ca" : "nclex-pn-us"}
-          />
-        ) : isNpPrimaryCareLessonsHub ? (
-          <FnpLessonsHub pathway={pathway} lessons={lessons} lessonsBasePath={base} topicClusters={topics} progressMap={progressMap} />
-        ) : isNclexRnHub ? (
-          <NclexRnLessonsHub
-            pathway={pathway}
-            lessons={lessons}
-            lessonsBasePath={base}
-            topicClusters={topics}
-            region={nclexRnRegion}
-            progressMap={progressMap}
-          />
-        ) : (
-          <div className="mt-10">
-            <PathwayLessonsGroupedHub
-              pathway={pathway}
-              lessons={lessons}
-              lessonsBasePath={base}
-              topicClusters={topics}
-              progressMap={progressMap}
-              canShowProgressMap={canShowProgressMap}
-              visualTone={pathway.examFamily === ExamFamily.NP ? "np" : "default"}
+      <header className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6">
+        <p className="text-sm font-medium text-[var(--theme-muted-text)]">{pathway.displayName}</p>
+        <h1 className="mt-1 text-3xl font-semibold tracking-tight text-[var(--theme-heading-text)]">Lessons</h1>
+        <p className="mt-2 text-sm text-[var(--theme-muted-text)]">Browse {pathway.shortName} lessons by body system.</p>
+        <form action={base} method="get" className="mt-4 flex flex-col gap-3 sm:flex-row">
+          <label htmlFor="pathway-lessons-search" className="sr-only">
+            Search lessons
+          </label>
+          <div className="relative max-w-xl flex-1">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--theme-muted-text)]" />
+            <input
+              id="pathway-lessons-search"
+              name="q"
+              defaultValue={qEffective ?? ""}
+              placeholder="Search lessons"
+              className="min-h-11 w-full rounded-full border border-[var(--semantic-border-soft)] bg-[var(--theme-page-bg)] py-2.5 pl-10 pr-4 text-sm text-[var(--theme-heading-text)] outline-none transition focus:border-[var(--semantic-brand)] focus:ring-2 focus:ring-[color-mix(in_srgb,var(--semantic-brand)_16%,transparent)]"
             />
           </div>
-        )}
-      </div>
+          <button type="submit" className="inline-flex min-h-11 items-center justify-center rounded-full nn-btn-secondary px-4 py-2 text-sm font-semibold">
+            Search
+          </button>
+          {qEffective ? (
+            <a
+              href={base}
+              className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-semibold text-[var(--theme-heading-text)] transition hover:bg-[var(--semantic-panel-muted)]"
+            >
+              Clear
+            </a>
+          ) : null}
+        </form>
+      </header>
+      {pageResult.locale ? <PathwayLessonContentLocaleBanner listLocale={pageResult.locale} /> : null}
 
-      <MarketingStudyCrossLinks className="mt-14" />
+      <div id="pathway-lesson-library" className="mt-8 scroll-mt-24">
+        <PathwayLessonsCurriculumHub
+          lessons={lessons}
+          lessonsBasePath={base}
+          progressMap={progressMap}
+          canShowProgressMap={canShowProgressMap}
+          showLockedState={!canShowResume}
+        />
+      </div>
 
       <PathwayLessonPagination
         basePath={base}

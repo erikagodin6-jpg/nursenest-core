@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { BookOpen, ClipboardList, LineChart } from "lucide-react";
 import { catPathwayRegionalExamLine, catPathwayShortCatLabel } from "@/lib/exam-pathways/cat-pathway-labels";
+import type { StudyLoopCatAuthState } from "@/lib/exam-pathways/study-loop-cat-routing";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import {
   lessonStudyLoopCatHrefs,
@@ -25,6 +26,7 @@ export function PathwayLessonStudyLoopCta({
   topicSlug,
   relatedLessons,
   currentSlug,
+  catAuthState = "public",
 }: {
   pathway: ExamPathwayDefinition;
   lessonsBasePath: string;
@@ -32,11 +34,12 @@ export function PathwayLessonStudyLoopCta({
   topicSlug: string;
   relatedLessons: RelatedRow[];
   currentSlug: string;
+  catAuthState?: StudyLoopCatAuthState;
 }) {
   const { effectiveLabel, hasTopicFilter } = normalizeLessonTopicContext(topicLabel, topicSlug);
   const practice = lessonStudyLoopPracticeHrefs(pathway, topicLabel, topicSlug);
   const relatedHub = lessonStudyLoopRelatedLessonsHubHref(lessonsBasePath, topicSlug);
-  const cat = lessonStudyLoopCatHrefs(pathway);
+  const cat = lessonStudyLoopCatHrefs(pathway, catAuthState);
   const catLine = catPathwayRegionalExamLine(pathway);
   const catShort = catPathwayShortCatLabel(pathway);
 
@@ -150,18 +153,20 @@ export function PathwayLessonStudyLoopCta({
               <h3 className="text-base font-semibold tracking-tight">{catShort}</h3>
             </div>
             <p className="nn-marketing-body-sm mt-3 text-[var(--theme-muted-text)]">
-              Open the public landing for {catShort} to see how sessions work, then sign in when you are ready.
+              {cat.primaryKind === "app_start"
+                ? `Start ${catShort} directly in the app for ${pathway.shortName}.`
+                : `Open the public landing for ${catShort} to see how sessions work, then sign in when you are ready.`}
             </p>
             <div className="mt-4 flex flex-col gap-2">
               <Link
-                href={cat.marketing}
+                href={cat.primaryHref}
                 className="inline-flex min-h-11 items-center justify-center rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)]"
               >
-                View {catShort} landing
+                {cat.primaryKind === "app_start" ? `Start ${catShort}` : `View ${catShort} landing`}
               </Link>
-              {cat.showAdaptiveShortcut && cat.appSession ? (
+              {cat.showAdaptiveShortcut && cat.secondaryHref ? (
                 <Link
-                  href={cat.appSession}
+                  href={cat.secondaryHref}
                   className="nn-study-pill-secondary inline-flex min-h-11 items-center justify-center px-4 py-2.5"
                 >
                   Start {catShort}
