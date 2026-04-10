@@ -1,0 +1,235 @@
+{
+  "topicSlug": "cell-division-mitosis-meiosis",
+  "topicName": "Cell Division: Mitosis and Meiosis",
+  "domain": "Anatomy & Physiology",
+  "contentWeight": "light",
+  "batchId": "foundations-batch-03",
+  "generatedAt": "2026-04-10",
+  "status": "pilot-draft",
+  "lessons": [
+    {
+      "lessonId": "cell-division-mitosis-meiosis-L01",
+      "title": "The Cell Cycle and Mitosis",
+      "sequenceOrder": 1,
+      "estimatedMinutes": 22,
+      "objectives": [
+        "Describe the phases of the cell cycle: interphase (G1, S, G2) and M phase",
+        "Explain the purpose of DNA replication in the S phase",
+        "Describe the stages of mitosis and their outcomes",
+        "Explain the clinical relevance of uncontrolled cell division (cancer)"
+      ],
+      "conceptBlocks": [
+        {
+          "heading": "The Cell Cycle",
+          "body": "The cell cycle is the sequence of events a cell passes through from formation to division:\n\n**Interphase** (90% of cycle time):\n• **G1 phase** — cell grows, synthesizes proteins and organelles; prepares for DNA replication\n• **S phase** — DNA is replicated (each chromosome is duplicated to form two identical sister chromatids)\n• **G2 phase** — cell continues growing; checks DNA replication accuracy; prepares for division\n\n**M phase** — mitosis + cytokinesis (actual cell division)\n\n**G0 phase** — non-dividing state; many mature specialized cells (neurons, cardiac muscle) remain permanently in G0."
+        },
+        {
+          "heading": "Mitosis: Producing Identical Daughter Cells",
+          "body": "Mitosis produces two genetically identical daughter cells, each with the same chromosome number as the parent (diploid, 46 chromosomes in humans).\n\nStages of mitosis (PMAT — Prophase, Metaphase, Anaphase, Telophase):\n\n• **Prophase** — chromosomes condense and become visible; spindle fibers form\n• **Metaphase** — chromosomes align at the center (metaphase plate); spindle fibers attach to each chromatid\n• **Anaphase** — sister chromatids are pulled apart to opposite poles of the cell\n• **Telophase + Cytokinesis** — nuclear envelopes re-form; cell pinches in two → two identical daughter cells\n\nMitosis is used for: growth, tissue repair, and replacement of short-lived cells (RBCs, skin cells, GI lining)."
+        },
+        {
+          "heading": "Cancer: Uncontrolled Mitosis",
+          "body": "Cell cycle progression is controlled by checkpoints:\n• G1 checkpoint — is the cell large enough? Is DNA undamaged?\n• G2 checkpoint — was DNA replicated accurately?\n• Spindle checkpoint (M) — are chromosomes properly attached?\n\n**Proto-oncogenes** — normal genes that promote cell division. When mutated → **oncogenes** → drive uncontrolled division.\n**Tumor suppressor genes** (e.g., p53, BRCA1) — normally apply the brakes. When mutated/deleted → no brake → cancer.\n\nMany chemotherapy drugs target rapidly dividing cells at specific cell cycle phases (e.g., taxanes block the spindle checkpoint in M phase; antimetabolites block DNA replication in S phase). This explains why chemo also affects rapidly dividing normal cells (hair follicles, GI mucosa, bone marrow)."
+        }
+      ],
+      "teachingNotes": "PMAT mnemonic is standard. Focus clinical teaching on the cancer connection — why chemo causes hair loss and bone marrow suppression. Trace: chemo targets any rapidly dividing cell → cancer cells + hair follicle cells + GI cells + bone marrow progenitors → side effects of nausea, alopecia, and neutropenia."
+    },
+    {
+      "lessonId": "cell-division-mitosis-meiosis-L02",
+      "title": "Meiosis and Clinical Relevance",
+      "sequenceOrder": 2,
+      "estimatedMinutes": 20,
+      "objectives": [
+        "Distinguish meiosis from mitosis in purpose, process, and outcome",
+        "Explain how meiosis produces haploid gametes",
+        "Describe nondisjunction and its consequences (e.g., Down syndrome, Turner syndrome)",
+        "Identify the clinical relevance of meiotic errors in reproductive health"
+      ],
+      "conceptBlocks": [
+        {
+          "heading": "Meiosis: Producing Gametes",
+          "body": "Meiosis occurs only in gonads (ovaries and testes) to produce sex cells (gametes: egg and sperm).\n\nKey differences from mitosis:\n• **Two rounds of division** (Meiosis I and Meiosis II) from one parent cell\n• **Four daughter cells** produced (vs two in mitosis)\n• **Haploid outcome** — each daughter cell has 23 chromosomes (vs 46 in mitosis)\n• **Genetic recombination** — crossing over during Prophase I shuffles genetic material, creating unique combinations\n\n**Why haploid?** When sperm (23 chromosomes) fertilizes egg (23 chromosomes) → zygote (46 chromosomes). If gametes were diploid, each generation would double the chromosome count."
+        },
+        {
+          "heading": "Nondisjunction: Chromosomal Errors",
+          "body": "**Nondisjunction** = failure of chromosomes to separate properly during meiosis I or II → daughter cells receive too many or too few chromosomes.\n\nConsequences:\n\n**Trisomy 21 (Down syndrome)** — extra chromosome 21 (47 chromosomes total); caused by nondisjunction in meiosis I of egg formation, more common with advanced maternal age\n\n**Turner syndrome (45, X)** — missing one X chromosome in females; nondisjunction produces an egg or sperm with no sex chromosome\n\n**Klinefelter syndrome (47, XXY)** — males with an extra X; usually nondisjunction of X chromosomes in egg formation\n\nRisk of nondisjunction increases with maternal age — basis for genetic counseling and prenatal screening (amniocentesis, chorionic villus sampling)."
+        },
+        {
+          "heading": "Mitosis vs Meiosis: Quick Comparison",
+          "body": "| Feature | Mitosis | Meiosis |\n|---|---|---|\n| Location | All dividing body cells | Gonads (ovaries, testes) |\n| Purpose | Growth, repair, replacement | Gamete production |\n| Divisions | 1 | 2 |\n| Daughter cells | 2 | 4 |\n| Chromosome # | 46 (diploid) | 23 (haploid) |\n| Genetic outcome | Identical to parent | Genetically unique |"
+        }
+      ],
+      "teachingNotes": "Down syndrome (trisomy 21) is a universally familiar example that makes nondisjunction concrete and human. Include that maternal age is the primary risk factor — the basis for recommending prenatal genetic screening for mothers over 35. Connect nondisjunction to clinical practice: genetic counselors explain these risks, and nurses must understand the basics to support patients receiving these conversations."
+    }
+  ],
+  "questions": [
+    {
+      "questionId": "cell-division-mitosis-meiosis-Q01",
+      "stem": "During which phase of the cell cycle is DNA replicated?",
+      "options": {
+        "A": "G1 phase",
+        "B": "S phase (synthesis phase)",
+        "C": "G2 phase",
+        "D": "M phase (mitosis)"
+      },
+      "correctAnswer": "B",
+      "rationale": "DNA replication occurs during the S (synthesis) phase of interphase. The G1 phase prepares the cell for replication (growth, protein synthesis). The G2 phase follows replication and prepares for division. The M phase (mitosis) is when the replicated chromosomes are separated and the cell physically divides.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "S phase = DNA replication"
+    },
+    {
+      "questionId": "cell-division-mitosis-meiosis-Q02",
+      "stem": "Mitosis produces:",
+      "options": {
+        "A": "Four haploid daughter cells genetically unique from the parent",
+        "B": "Two diploid daughter cells genetically identical to the parent",
+        "C": "Two haploid daughter cells for sexual reproduction",
+        "D": "Four diploid daughter cells for tissue repair"
+      },
+      "correctAnswer": "B",
+      "rationale": "Mitosis produces two genetically identical daughter cells, each with the full diploid complement of chromosomes (46 in humans). This is used for growth, tissue repair, and cell replacement. Meiosis (not mitosis) produces four haploid (23 chromosomes) genetically unique daughter cells for sexual reproduction.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "mitosis outcome — 2 diploid identical daughters"
+    },
+    {
+      "questionId": "cell-division-mitosis-meiosis-Q03",
+      "stem": "Why must gametes (eggs and sperm) be haploid (23 chromosomes) rather than diploid?",
+      "options": {
+        "A": "Haploid cells are smaller and can move more quickly through reproductive tracts",
+        "B": "Fertilization combines two gametes, so each must contribute half the chromosome complement to produce a normal diploid zygote",
+        "C": "Haploid cells do not require energy to divide, making reproduction more efficient",
+        "D": "Haploid gametes contain only maternal or paternal genes, ensuring genetic purity"
+      },
+      "correctAnswer": "B",
+      "rationale": "If gametes were diploid (46 chromosomes), fertilization would produce an offspring with 92 chromosomes — incompatible with normal development. Meiosis halves the chromosome number to 23 (haploid), so when sperm (23) + egg (23) unite, the zygote has the correct 46 chromosomes (diploid). This mechanism maintains chromosomal stability across generations.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "reason for meiosis producing haploid cells"
+    },
+    {
+      "questionId": "cell-division-mitosis-meiosis-Q04",
+      "stem": "Down syndrome (trisomy 21) results from:",
+      "options": {
+        "A": "A mutation in a single gene on chromosome 21",
+        "B": "Deletion of part of chromosome 21",
+        "C": "Nondisjunction during meiosis, resulting in an egg or sperm with an extra copy of chromosome 21",
+        "D": "A viral infection that inserts extra DNA into chromosome 21 during fetal development"
+      },
+      "correctAnswer": "C",
+      "rationale": "Trisomy 21 most commonly results from nondisjunction — failure of chromosome 21 pairs to separate properly during meiosis I. The resulting gamete has 24 chromosomes instead of 23. When fertilized, the zygote has 47 chromosomes (three copies of chromosome 21). Risk increases significantly with advanced maternal age.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "nondisjunction → trisomy 21 (Down syndrome)"
+    },
+    {
+      "questionId": "cell-division-mitosis-meiosis-Q05",
+      "stem": "During which stage of mitosis do chromosomes align at the center (metaphase plate) of the cell?",
+      "options": {
+        "A": "Prophase",
+        "B": "Metaphase",
+        "C": "Anaphase",
+        "D": "Telophase"
+      },
+      "correctAnswer": "B",
+      "rationale": "During metaphase, chromosomes align at the metaphase plate (center of the cell) and spindle fibers attach to each sister chromatid. Prophase = chromosomes condense. Anaphase = sister chromatids pulled apart. Telophase = nuclear envelopes re-form and the cell divides. PMAT helps recall the order.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "metaphase — chromosome alignment"
+    },
+    {
+      "questionId": "cell-division-mitosis-meiosis-Q06",
+      "stem": "Chemotherapy drugs that target the spindle checkpoint (e.g., taxanes) cause side effects in hair follicles and bone marrow because:",
+      "options": {
+        "A": "These drugs accumulate in hair and bone marrow due to poor liver metabolism",
+        "B": "Hair follicle and bone marrow cells are rapidly dividing, making them susceptible to cell cycle inhibition alongside cancer cells",
+        "C": "These drugs specifically target keratin proteins found in hair and bone marrow",
+        "D": "Taxanes block the G0 phase, forcing hair and bone marrow cells to divide uncontrollably"
+      },
+      "correctAnswer": "B",
+      "rationale": "Many chemotherapy agents target rapidly dividing cells. Cancer cells are rapidly dividing — but so are normal hair follicle cells, GI mucosal cells, and bone marrow progenitor cells. Spindle inhibitors (e.g., taxanes) disrupt the mitotic spindle in ANY rapidly dividing cell → hair loss (alopecia), mucositis, and bone marrow suppression (neutropenia, thrombocytopenia, anemia) as collateral effects.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "chemotherapy side effects — targeting rapidly dividing cells"
+    },
+    {
+      "questionId": "cell-division-mitosis-meiosis-Q07",
+      "stem": "Which of the following best describes the purpose of the G2 checkpoint in the cell cycle?",
+      "options": {
+        "A": "To verify that the cell has enough nutrients to proceed with protein synthesis",
+        "B": "To ensure that DNA replication was completed accurately before the cell enters mitosis",
+        "C": "To confirm that gametes have been successfully formed",
+        "D": "To initiate the G0 non-dividing phase in differentiated cells"
+      },
+      "correctAnswer": "B",
+      "rationale": "The G2 checkpoint verifies that DNA replication (S phase) was completed accurately and that any DNA damage has been repaired before the cell proceeds into mitosis. If errors are detected, cell cycle arrest occurs to allow repair or trigger apoptosis. This checkpoint prevents cells with damaged DNA from dividing — a key cancer prevention mechanism.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "G2 checkpoint — DNA accuracy check before mitosis"
+    },
+    {
+      "questionId": "cell-division-mitosis-meiosis-Q08",
+      "stem": "Turner syndrome (45, X) occurs in females with only one sex chromosome. This chromosomal abnormality most commonly results from:",
+      "options": {
+        "A": "A mutation in a gene controlling sex hormone production",
+        "B": "Nondisjunction producing a gamete with no sex chromosome",
+        "C": "Deletion of a gene on the X chromosome",
+        "D": "Trisomy of the X chromosome"
+      },
+      "correctAnswer": "B",
+      "rationale": "Turner syndrome (karyotype 45, X) occurs when an egg or sperm fails to contribute a sex chromosome due to nondisjunction. The resulting individual has only 45 total chromosomes (one X, no second sex chromosome). Features include short stature, gonadal dysgenesis, and infertility. This is distinct from a gene mutation or deletion.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "Turner syndrome — nondisjunction; monosomy X"
+    },
+    {
+      "questionId": "cell-division-mitosis-meiosis-Q09",
+      "stem": "How does genetic recombination (crossing over) during Prophase I of meiosis contribute to genetic diversity?",
+      "options": {
+        "A": "It doubles the number of chromosomes in each gamete",
+        "B": "It deletes harmful genes from the germline",
+        "C": "It exchanges segments of DNA between homologous chromosomes, creating new combinations of alleles",
+        "D": "It produces identical copies of chromosomes to ensure consistent genetic transmission"
+      },
+      "correctAnswer": "C",
+      "rationale": "During Prophase I, homologous chromosomes pair up and exchange segments of DNA (crossing over). This shuffles alleles between chromosomes, producing genetically unique combinations not present in either parent's original chromosomes. This is the primary source of genetic variation in sexually reproducing organisms — each gamete is genetically unique.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "crossing over — genetic recombination during meiosis I"
+    },
+    {
+      "questionId": "cell-division-mitosis-meiosis-Q10",
+      "stem": "Neurons in the adult brain are generally considered to be in the G0 phase. This means they:",
+      "options": {
+        "A": "Divide very rapidly to replace damaged neurons",
+        "B": "Are in a non-dividing state and have limited regenerative capacity after injury",
+        "C": "Undergo meiosis to produce neural stem cells",
+        "D": "Continuously replicate their DNA without dividing"
+      },
+      "correctAnswer": "B",
+      "rationale": "Most adult neurons are in G0 — a non-dividing, terminally differentiated state. This is why brain injury (stroke, trauma) causes permanent neurological deficits — lost neurons are generally not replaced. This contrasts with rapidly dividing cells (skin, GI lining, bone marrow) which can regenerate. It is also why neurodegenerative diseases are difficult to treat — neurons lost to Alzheimer's or Parkinson's disease cannot be replaced by cell division.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "G0 phase — non-dividing neurons; clinical implication"
+    },
+    {
+      "questionId": "cell-division-mitosis-meiosis-Q11",
+      "stem": "A tumor suppressor gene such as p53 normally functions to:",
+      "options": {
+        "A": "Promote rapid cell division to maintain organ size",
+        "B": "Stimulate oncogene expression when growth is needed",
+        "C": "Stop the cell cycle when DNA damage is detected, allowing repair or triggering apoptosis",
+        "D": "Produce structural proteins for the mitotic spindle"
+      },
+      "correctAnswer": "C",
+      "rationale": "Tumor suppressor genes (e.g., p53, BRCA1) act as brakes on the cell cycle. p53, activated by DNA damage, halts the cell cycle at the G1 checkpoint to allow DNA repair. If repair is impossible, p53 triggers apoptosis (programmed cell death). Loss or mutation of both copies of a tumor suppressor gene removes these brakes, enabling uncontrolled cell division (cancer).",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "tumor suppressor gene function — p53"
+    },
+    {
+      "questionId": "cell-division-mitosis-meiosis-Q12",
+      "stem": "Which of the following correctly differentiates meiosis from mitosis?",
+      "options": {
+        "A": "Meiosis produces 2 diploid cells; mitosis produces 4 haploid cells",
+        "B": "Meiosis involves 2 rounds of division producing 4 haploid cells; mitosis involves 1 division producing 2 diploid cells",
+        "C": "Both mitosis and meiosis produce genetically identical daughter cells",
+        "D": "Mitosis occurs only in the gonads; meiosis occurs in all dividing body cells"
+      },
+      "correctAnswer": "B",
+      "rationale": "Meiosis = 2 consecutive divisions → 4 haploid (23 chromosome) daughter cells that are genetically unique (crossing over). Mitosis = 1 division → 2 diploid (46 chromosome) daughter cells genetically identical to the parent. Mitosis occurs throughout the body; meiosis occurs only in gonads.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "mitosis vs meiosis — complete comparison"
+    }
+  ]
+}

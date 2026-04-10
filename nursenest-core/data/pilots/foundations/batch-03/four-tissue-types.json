@@ -1,0 +1,437 @@
+{
+  "topicSlug": "four-tissue-types",
+  "topicName": "The Four Tissue Types",
+  "domain": "Anatomy & Physiology",
+  "contentWeight": "heavy",
+  "batchId": "foundations-batch-03",
+  "generatedAt": "2026-04-10",
+  "status": "pilot-draft",
+  "lessons": [
+    {
+      "lessonId": "four-tissue-types-L01",
+      "title": "Epithelial Tissue: Form and Function",
+      "sequenceOrder": 1,
+      "estimatedMinutes": 25,
+      "objectives": [
+        "Define epithelial tissue and describe its four defining characteristics",
+        "Classify epithelial tissue by cell shape and number of layers",
+        "Identify the location and function of key epithelial tissue subtypes",
+        "Explain the clinical relevance of epithelial tissue in wound healing, cancer, and barrier function"
+      ],
+      "conceptBlocks": [
+        {
+          "heading": "Defining Characteristics of Epithelial Tissue",
+          "body": "Epithelial tissue lines all body surfaces, cavities, and tubes. Its four defining characteristics:\n\n1. **Cellularity** — tightly packed cells with little to no extracellular matrix between them\n2. **Polarity** — distinct apical (free) surface facing a cavity/exterior, and basal surface anchored to a basement membrane\n3. **Avascular** — no blood vessels; receives nutrients by diffusion from underlying connective tissue\n4. **Basement membrane** — thin, noncellular layer anchoring epithelium to underlying tissue; provides structural support"
+        },
+        {
+          "heading": "Classification System",
+          "body": "Epithelial tissue is classified by:\n\n**Number of layers:**\n• Simple — one cell layer thick (suited for diffusion and filtration)\n• Stratified — multiple cell layers (suited for protection)\n• Pseudostratified — appears layered but all cells touch the basement membrane\n\n**Cell shape:**\n• Squamous — flat, scale-like\n• Cuboidal — cube-shaped, about as wide as tall\n• Columnar — taller than wide, column-shaped"
+        },
+        {
+          "heading": "Key Epithelial Subtypes and Locations",
+          "body": "**Simple squamous** — single flat layer; location: alveoli of lungs (gas exchange), kidney glomeruli, lining of blood/lymph vessels (endothelium), serous membranes (mesothelium)\n\n**Simple cuboidal** — kidney tubules, thyroid follicles, small gland ducts; function: secretion and absorption\n\n**Simple columnar** — GI tract lining; function: absorption and secretion (some cells have cilia or microvilli to increase surface area)\n\n**Pseudostratified ciliated columnar** — trachea and upper airways; function: mucus secretion and ciliary clearance (mucociliary escalator)\n\n**Stratified squamous** — skin (keratinized = dry, tough surface), oral cavity/esophagus/vagina (non-keratinized = moist, flexible); function: PROTECTION\n\n**Transitional epithelium (urothelium)** — urinary bladder, ureters; can stretch as bladder fills"
+        },
+        {
+          "heading": "Clinical Relevance of Epithelial Tissue",
+          "body": "• **Wound healing** — re-epithelialization is the final stage; epithelial cells migrate to cover the wound from edges\n• **Carcinomas** — cancers of epithelial origin (the majority of human cancers are carcinomas: adenocarcinoma = glandular; squamous cell carcinoma = stratified squamous origin)\n• **Mucociliary escalator** — pseudostratified ciliated epithelium in airways traps and clears debris; damaged by smoking → chronic bronchitis, increased infection risk\n• **Skin as a barrier** — keratinized stratified squamous prevents water loss and pathogen entry; disrupted in burns → infection risk, fluid loss"
+        }
+      ],
+      "teachingNotes": "The mucociliary escalator in the airways is a high-yield clinical connection: pseudostratified ciliated columnar epithelium traps inhaled particles in mucus, then cilia sweep them upward for expectoration or swallowing. Smoking paralyzes and destroys cilia → cough mechanism compensates → 'smoker's cough.' This links tissue anatomy to a universal clinical scenario."
+    },
+    {
+      "lessonId": "four-tissue-types-L02",
+      "title": "Connective Tissue: The Supporting Framework",
+      "sequenceOrder": 2,
+      "estimatedMinutes": 25,
+      "objectives": [
+        "Describe the defining features of connective tissue, including the extracellular matrix",
+        "Identify the key components of connective tissue: cells, ground substance, and fibers",
+        "Classify the main subtypes of connective tissue and their primary functions",
+        "Explain the clinical relevance of connective tissue in wound healing, inflammation, and disease"
+      ],
+      "conceptBlocks": [
+        {
+          "heading": "Characteristics of Connective Tissue",
+          "body": "Connective tissue is the most widespread tissue type in the body. Its defining features:\n\n• **Abundant extracellular matrix (ECM)** — unlike epithelium, connective tissue has more matrix than cells; the ECM gives connective tissue its unique mechanical properties\n• **ECM composition:** ground substance (proteoglycans + glycoproteins + interstitial fluid) + protein fibers (collagen, elastic, reticular)\n• **Vascularized** (most types) — receives blood supply (exception: cartilage is avascular)\n• **Varied cell types** — fibroblasts, macrophages, mast cells, adipocytes, plasma cells, white blood cells"
+        },
+        {
+          "heading": "Connective Tissue Fibers",
+          "body": "**Collagen fibers** — most abundant protein in the body (~25-30% of total body protein)\n• Provide tensile strength (resist pulling forces)\n• Found in tendons, ligaments, skin dermis, bone matrix, scar tissue\n\n**Elastic fibers** — contain elastin protein; can stretch and recoil\n• Found in walls of large arteries, lung tissue, skin; allow structures to expand and return to shape\n\n**Reticular fibers** — thin collagen fibers forming a supportive mesh (stroma)\n• Framework for lymph nodes, spleen, bone marrow, liver"
+        },
+        {
+          "heading": "Connective Tissue Subtypes",
+          "body": "**Connective tissue proper:**\n• Loose areolar CT — most common; fills spaces around organs and blood vessels; site of inflammation\n• Dense regular CT — tendons (bone-to-muscle) and ligaments (bone-to-bone); parallel collagen bundles\n• Dense irregular CT — skin dermis; collagen in multiple directions → resistance to tearing\n• Adipose tissue — fat storage, insulation, energy reserve; white vs brown adipose\n\n**Specialized connective tissues:**\n• Cartilage — avascular, flexible support (hyaline, fibrocartilage, elastic cartilage)\n• Bone — rigid support, mineral storage, blood cell production (hematopoiesis in red marrow)\n• Blood — liquid CT; ECM = plasma; cells = RBCs, WBCs, platelets"
+        },
+        {
+          "heading": "Clinical Relevance of Connective Tissue",
+          "body": "• **Wound healing/scar formation** — fibroblasts produce collagen during healing; excess collagen → hypertrophic scar or keloid\n• **Connective tissue disorders** — e.g., Marfan syndrome (FBN1 gene mutation → abnormal fibrillin in elastic fibers → aortic aneurysm, long limbs, lens dislocation); Ehlers-Danlos syndrome (collagen gene defects → joint hypermobility, fragile skin, vascular complications)\n• **Tendon and ligament injuries** — avascular cartilage heals slowly; tendons/ligaments with poor vascular supply also heal slowly\n• **Inflammation** — occurs in loose areolar CT; mast cells release histamine → vasodilation, increased permeability"
+        }
+      ],
+      "teachingNotes": "Blood as connective tissue surprises students but is internally consistent: cells suspended in ECM (plasma). Use this to reinforce the definition of connective tissue (cells + ECM) rather than anatomy location. Marfan syndrome ties genetic mutation to connective tissue protein defect to aortic aneurysm risk — a compelling clinical story for elastic fiber function."
+    },
+    {
+      "lessonId": "four-tissue-types-L03",
+      "title": "Muscle Tissue: Contraction and Control",
+      "sequenceOrder": 3,
+      "estimatedMinutes": 22,
+      "objectives": [
+        "Describe the three types of muscle tissue and distinguish their structure, location, and control",
+        "Explain the functional properties of muscle tissue: excitability, contractility, extensibility, and elasticity",
+        "Identify the clinical relevance of each muscle tissue type",
+        "Distinguish between voluntary and involuntary muscle control"
+      ],
+      "conceptBlocks": [
+        {
+          "heading": "Skeletal Muscle",
+          "body": "**Structure:** Long, cylindrical multinucleated cells (muscle fibers); striated (visible striations under microscope from organized actin/myosin arrangements)\n\n**Control:** Voluntary (somatic motor neurons); also activated involuntarily by reflexes\n\n**Location:** Attached to bones via tendons; also found in tongue, pharynx, external sphincters\n\n**Function:** Locomotion, facial expression, posture, breathing (diaphragm, intercostals), swallowing\n\n**Clinical relevance:**\n• Muscular dystrophies — genetic defects in structural muscle proteins (e.g., dystrophin in Duchenne MD)\n• Muscle atrophy — loss of mass from disuse (immobilization), aging (sarcopenia), or denervation\n• Rhabdomyolysis — skeletal muscle breakdown releasing myoglobin into blood → can cause acute kidney injury"
+        },
+        {
+          "heading": "Cardiac Muscle",
+          "body": "**Structure:** Branching, striated fibers; uninucleate (one nucleus per cell); connected by intercalated discs containing gap junctions\n\n**Control:** Involuntary; intrinsic pacemaker (sinoatrial node) sets rhythm; modulated by autonomic nervous system\n\n**Location:** Heart wall (myocardium) only\n\n**Function:** Continuous pumping of blood; contracts ~100,000 times/day without fatigue\n\n**Gap junctions in intercalated discs** — allow rapid electrical coupling between cardiac cells, enabling synchronized contraction of the entire heart (functional syncytium)\n\n**Clinical relevance:**\n• Myocardial infarction — ischemia → cardiac muscle necrosis → decreased pump function\n• Cardiomyopathy — disease of cardiac muscle (dilated, hypertrophic, restrictive)\n• Dysrhythmias — abnormal pacemaker activity or gap junction dysfunction disrupts coordinated contraction"
+        },
+        {
+          "heading": "Smooth Muscle",
+          "body": "**Structure:** Short, spindle-shaped cells; single, centrally located nucleus; non-striated (actin/myosin present but not in organized sarcomeres)\n\n**Control:** Involuntary; autonomic nervous system, hormones, local factors\n\n**Location:** Walls of hollow organs (blood vessels, GI tract, urinary bladder, respiratory airways, uterus, uterine tubes)\n\n**Function:** Peristalsis, vasoconstriction/vasodilation, bladder emptying, bronchospasm/bronchodilation, uterine contractions during labor\n\n**Clinical relevance:**\n• Asthma — bronchospasm (smooth muscle in airway walls contracts excessively) → bronchodilators (beta-2 agonists) relax smooth muscle\n• Hypertension — excessive smooth muscle tone in vessel walls → vasodilation medications target smooth muscle\n• Labor — oxytocin stimulates uterine smooth muscle contraction"
+        }
+      ],
+      "teachingNotes": "Use the asthma → bronchospasm → bronchodilator connection for smooth muscle: smooth muscle in bronchial walls → normally relaxed → during asthma attack, smooth muscle contracts (bronchospasm) → airway narrows → albuterol (beta-2 agonist) relaxes bronchial smooth muscle → airways open. This traces tissue type → disease mechanism → drug mechanism."
+    },
+    {
+      "lessonId": "four-tissue-types-L04",
+      "title": "Nervous Tissue and Tissue Integration",
+      "sequenceOrder": 4,
+      "estimatedMinutes": 20,
+      "objectives": [
+        "Describe the two cell types of nervous tissue: neurons and neuroglia",
+        "Explain the functional properties of neurons (excitability, conductivity)",
+        "Identify the roles of the major types of neuroglia",
+        "Summarize how the four tissue types work together to form organs and systems"
+      ],
+      "conceptBlocks": [
+        {
+          "heading": "Neurons: The Excitable Signaling Cells",
+          "body": "Neurons are highly specialized cells capable of:\n• **Excitability** — generating electrical signals (action potentials) in response to stimuli\n• **Conductivity** — transmitting action potentials over long distances along axons\n\nNeuron structure:\n• **Cell body (soma)** — contains nucleus; metabolic center\n• **Dendrites** — short, branching processes that receive incoming signals\n• **Axon** — single, long process that transmits signals away from the cell body to target cells\n\nMost mature neurons are in G0 — they do not divide. Loss is permanent (basis for irreversible neurological deficits after stroke or trauma)."
+        },
+        {
+          "heading": "Neuroglia: The Supportive Cells",
+          "body": "Neuroglia outnumber neurons ~10:1 and maintain the environment for neuronal function:\n\n**CNS neuroglia:**\n• **Astrocytes** — most abundant; form the blood-brain barrier (BBB), regulate neurotransmitter levels, support neuron metabolism\n• **Microglia** — CNS immune cells (macrophages of the brain); proliferate and phagocytose debris after injury\n• **Oligodendrocytes** — produce myelin sheaths in the CNS (myelinate multiple axons)\n• **Ependymal cells** — line ventricles; produce and circulate cerebrospinal fluid (CSF)\n\n**PNS neuroglia:**\n• **Schwann cells** — produce myelin sheaths in the PNS (one Schwann cell per axon segment)\n• **Satellite cells** — support ganglionic neurons\n\n**Multiple sclerosis** — autoimmune destruction of myelin (oligodendrocytes in CNS); demyelination → slowed or blocked nerve conduction → motor, sensory, visual deficits."
+        },
+        {
+          "heading": "Organs: Four Tissue Types Working Together",
+          "body": "An organ is a structure composed of at least two tissue types (usually all four) working together:\n\n**Example — The stomach:**\n• Epithelial tissue — inner lining (simple columnar); secretes acid (parietal cells), pepsinogen (chief cells), mucus (goblet cells)\n• Connective tissue — submucosa; provides support, contains blood vessels and lymphatics\n• Muscle tissue — three layers of smooth muscle (circular, longitudinal, oblique); produce churning movements\n• Nervous tissue — myenteric and submucosal plexuses (enteric nervous system); coordinate GI motility\n\nMost pathology involves disruption of tissue integration: e.g., peptic ulcer = erosion of epithelium + submucosa; GI cancer = malignant transformation of epithelial cells."
+        }
+      ],
+      "teachingNotes": "Multiple sclerosis is a compelling clinical example for myelin and oligodendrocytes: demyelination interrupts rapid saltatory conduction → symptoms depend on which white matter tracts are affected → relapsing-remitting course reflects incomplete repair by oligodendrocytes and subsequent relapses as more myelin is lost. Connect myelin loss → nerve signal slowing → diverse symptoms (blurred vision, weakness, paresthesias, fatigue) — all explained by one tissue-level mechanism."
+    }
+  ],
+  "questions": [
+    {
+      "questionId": "four-tissue-types-Q01",
+      "stem": "Which characteristic is unique to epithelial tissue compared to other tissue types?",
+      "options": {
+        "A": "It contains an abundant extracellular matrix",
+        "B": "It is avascular (lacks its own blood supply) and depends on diffusion from adjacent connective tissue",
+        "C": "It contains cells capable of generating electrical impulses",
+        "D": "It contracts in response to nerve stimulation"
+      },
+      "correctAnswer": "B",
+      "rationale": "A defining characteristic of epithelial tissue is that it is avascular — it contains no blood vessels. Nutrients and oxygen diffuse through the basement membrane from underlying connective tissue. Abundant ECM is a feature of connective tissue. Electrical impulse generation = nervous tissue. Contraction = muscle tissue.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "epithelial tissue — avascular"
+    },
+    {
+      "questionId": "four-tissue-types-Q02",
+      "stem": "Pseudostratified ciliated columnar epithelium is found in the trachea and upper airways. Its clinical function is to:",
+      "options": {
+        "A": "Perform gas exchange between air and blood",
+        "B": "Filter blood before it enters the lungs",
+        "C": "Trap inhaled particles in mucus and sweep them upward via cilia (mucociliary escalator)",
+        "D": "Absorb oxygen directly into the bloodstream"
+      },
+      "correctAnswer": "C",
+      "rationale": "Pseudostratified ciliated columnar epithelium in the airways has goblet cells that secrete mucus to trap particles, and cilia that beat rhythmically to move the mucus (with trapped debris and pathogens) upward toward the pharynx for swallowing or expectoration. This mucociliary escalator is the first line of airway defense. Gas exchange occurs in simple squamous alveolar epithelium.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "pseudostratified ciliated columnar — mucociliary escalator"
+    },
+    {
+      "questionId": "four-tissue-types-Q03",
+      "stem": "The majority of human cancers are classified as carcinomas because they arise from:",
+      "options": {
+        "A": "Connective tissue cells such as fibroblasts",
+        "B": "Epithelial cells that line body surfaces and cavities",
+        "C": "Skeletal muscle fibers",
+        "D": "Neurons in the central nervous system"
+      },
+      "correctAnswer": "B",
+      "rationale": "Carcinomas are cancers of epithelial origin. Because epithelial tissue covers body surfaces, lines cavities, and forms glands — accounting for the majority of the body's cell surface area — most cancers (breast, lung, colon, prostate, cervical) are carcinomas. Sarcomas = connective tissue or muscle origin. Lymphomas/leukemias = blood/lymphoid origin. Neurological cancers include gliomas (glial cells) or rarely, neuronal tumors.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "carcinoma = epithelial cancer origin"
+    },
+    {
+      "questionId": "four-tissue-types-Q04",
+      "stem": "Which type of connective tissue fiber provides the greatest tensile strength (resistance to pulling forces)?",
+      "options": {
+        "A": "Elastic fibers",
+        "B": "Reticular fibers",
+        "C": "Collagen fibers",
+        "D": "Ground substance proteoglycans"
+      },
+      "correctAnswer": "C",
+      "rationale": "Collagen fibers provide tensile strength — they resist stretching forces. Collagen is the most abundant protein in the body and is the primary structural component of tendons, ligaments, bone matrix, and scar tissue. Elastic fibers allow stretch and recoil. Reticular fibers provide a fine supportive mesh. Ground substance is gelatinous, not fibrous.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "collagen fibers — tensile strength"
+    },
+    {
+      "questionId": "four-tissue-types-Q05",
+      "stem": "Cardiac muscle cells are connected by intercalated discs containing gap junctions. The clinical importance of gap junctions in the heart is that they:",
+      "options": {
+        "A": "Provide physical anchorage to prevent cell separation during contraction",
+        "B": "Allow rapid electrical communication between cardiac cells, enabling synchronized contraction",
+        "C": "Regulate the exchange of nutrients and oxygen between cardiac cells",
+        "D": "Produce action potentials independently in each cell"
+      },
+      "correctAnswer": "B",
+      "rationale": "Gap junctions in intercalated discs are low-resistance channels that allow direct electrical coupling between adjacent cardiac muscle cells. An action potential initiated in one cell rapidly spreads to adjacent cells, enabling the entire heart to contract as a functional unit (syncytium). This coordinated contraction produces an effective pumping action. Desmosomal junctions in intercalated discs provide mechanical adhesion.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "intercalated discs — gap junctions → synchronized cardiac contraction"
+    },
+    {
+      "questionId": "four-tissue-types-Q06",
+      "stem": "Which muscle type is found only in the heart and is both striated and involuntary?",
+      "options": {
+        "A": "Skeletal muscle",
+        "B": "Smooth muscle",
+        "C": "Cardiac muscle",
+        "D": "Visceral muscle"
+      },
+      "correctAnswer": "C",
+      "rationale": "Cardiac muscle is unique: it is striated (organized actin/myosin) like skeletal muscle, but involuntary (controlled by the intrinsic pacemaker and autonomic nervous system) like smooth muscle. It is found exclusively in the myocardium. Skeletal = striated + voluntary. Smooth = non-striated + involuntary (hollow organs). Visceral is another term for smooth muscle.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "cardiac muscle — striated + involuntary; heart only"
+    },
+    {
+      "questionId": "four-tissue-types-Q07",
+      "stem": "Asthma produces bronchoconstriction. At the tissue level, this occurs because:",
+      "options": {
+        "A": "Cartilage in the trachea collapses under increased inspiratory pressure",
+        "B": "Smooth muscle in the bronchial walls contracts excessively",
+        "C": "Cardiac muscle in the pulmonary circulation reduces blood flow",
+        "D": "Skeletal muscle of the intercostal space goes into spasm"
+      },
+      "correctAnswer": "B",
+      "rationale": "The walls of bronchi and bronchioles contain a layer of smooth muscle. In asthma, inflammatory mediators and triggers cause this smooth muscle to contract excessively (bronchospasm), narrowing the airway lumen and impeding airflow. Bronchodilators (beta-2 agonists like albuterol) relax bronchial smooth muscle to relieve bronchoconstriction.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "bronchospasm = smooth muscle in airway walls"
+    },
+    {
+      "questionId": "four-tissue-types-Q08",
+      "stem": "In multiple sclerosis, the primary cell type that is destroyed is:",
+      "options": {
+        "A": "Astrocytes",
+        "B": "Neurons",
+        "C": "Oligodendrocytes (and their myelin sheaths in the CNS)",
+        "D": "Microglia"
+      },
+      "correctAnswer": "C",
+      "rationale": "Multiple sclerosis is an autoimmune disease in which the immune system attacks oligodendrocytes and/or the myelin sheaths they produce in the central nervous system. Loss of myelin disrupts saltatory conduction (rapid nerve signal propagation), causing varied neurological deficits depending on which CNS tracts are demyelinated. Schwann cells produce myelin in the PNS but are not the target in MS.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "MS — oligodendrocyte/myelin destruction"
+    },
+    {
+      "questionId": "four-tissue-types-Q09",
+      "stem": "Blood is classified as a connective tissue because:",
+      "options": {
+        "A": "It contains cells that generate electrical impulses",
+        "B": "It flows through vessels and transports oxygen like epithelial cells",
+        "C": "Its cells are suspended in an extracellular matrix (plasma)",
+        "D": "It is derived from epithelial stem cells in the bone marrow"
+      },
+      "correctAnswer": "C",
+      "rationale": "Connective tissue is defined by cells suspended in or surrounded by an extracellular matrix (ECM). In blood, the cells (RBCs, WBCs, platelets) are suspended in plasma, which is the ECM (liquid). This meets the definition of connective tissue. Blood cells are derived from hematopoietic stem cells in bone marrow, another connective tissue.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "blood as connective tissue — cells in plasma (ECM)"
+    },
+    {
+      "questionId": "four-tissue-types-Q10",
+      "stem": "Simple squamous epithelium is well-suited for its function in the alveoli because:",
+      "options": {
+        "A": "Its multiple layers provide protection against inhaled particles",
+        "B": "Its single flat cell layer minimizes diffusion distance for gas exchange",
+        "C": "It secretes surfactant, reducing alveolar surface tension",
+        "D": "It contains ciliated cells that move mucus upward from the alveoli"
+      },
+      "correctAnswer": "B",
+      "rationale": "Simple squamous epithelium is one cell layer thick with flat cells. This extremely thin barrier minimizes the diffusion distance for O₂ (entering blood) and CO₂ (leaving blood), maximizing the rate of gas exchange. Protection is a function of stratified epithelium. Surfactant is secreted by type II pneumocytes (cuboidal alveolar cells). Ciliated cells are in the upper airways (pseudostratified).",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "simple squamous — thin layer for gas exchange"
+    },
+    {
+      "questionId": "four-tissue-types-Q11",
+      "stem": "Rhabdomyolysis involves breakdown of skeletal muscle. A life-threatening complication of this condition is:",
+      "options": {
+        "A": "Pulmonary embolism from fat emboli released from muscle",
+        "B": "Acute kidney injury from myoglobin obstructing renal tubules",
+        "C": "Cardiac arrest from excessive acetylcholine release",
+        "D": "Respiratory failure from diaphragm paralysis"
+      },
+      "correctAnswer": "B",
+      "rationale": "Rhabdomyolysis = breakdown of skeletal muscle releasing myoglobin (an intracellular protein) into the bloodstream. Myoglobin is filtered by the glomeruli but can obstruct renal tubules and is directly nephrotoxic, causing acute kidney injury (renal failure). Aggressive IV fluid hydration is the primary treatment to flush myoglobin through the kidneys. This directly connects skeletal muscle pathology to a renal complication.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "rhabdomyolysis → myoglobin → AKI"
+    },
+    {
+      "questionId": "four-tissue-types-Q12",
+      "stem": "The blood-brain barrier (BBB) is formed primarily by:",
+      "options": {
+        "A": "Microglia surrounding neurons to block toxin entry",
+        "B": "Astrocyte processes that reinforce tight junctions between brain capillary endothelial cells",
+        "C": "Ependymal cells lining the ventricles filtering CSF",
+        "D": "Oligodendrocytes wrapping around blood vessels to prevent permeability"
+      },
+      "correctAnswer": "B",
+      "rationale": "The BBB is formed by specialized endothelial cells with tight junctions in brain capillaries, reinforced by astrocyte end-feet (processes) that surround the capillaries and promote the tight junction phenotype. The BBB restricts passage of most substances into the CNS, protecting neurons from toxins and pathogens. This also explains why many drugs cannot reach the brain — they cannot cross the BBB.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "BBB — astrocytes + endothelial tight junctions"
+    },
+    {
+      "questionId": "four-tissue-types-Q13",
+      "stem": "Transitional epithelium (urothelium) is uniquely suited to line the urinary bladder because:",
+      "options": {
+        "A": "It secretes urine and filters waste from the blood",
+        "B": "Its cells can stretch and flatten when the bladder fills, then return to a rounded shape when empty",
+        "C": "It has a thick keratinized surface that prevents urine from irritating underlying tissues",
+        "D": "It produces mucus to lubricate urine flow through the ureter"
+      },
+      "correctAnswer": "B",
+      "rationale": "Transitional epithelium is specialized to accommodate the dramatic volume changes of the urinary bladder. When the bladder is empty, the cells are cuboidal and several layers thick. As the bladder fills, cells flatten and slide over each other, reducing apparent layers. This ability to accommodate stretch without tearing is unique to transitional epithelium. It is not keratinized and does not secrete mucus.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "transitional epithelium — bladder stretching"
+    },
+    {
+      "questionId": "four-tissue-types-Q14",
+      "stem": "Which feature of dense regular connective tissue makes it ideal for tendons?",
+      "options": {
+        "A": "Abundant elastic fibers allow tendons to stretch and recoil",
+        "B": "Parallel bundles of collagen fibers resist pulling (tensile) forces in one direction",
+        "C": "Reticular fiber mesh provides flexibility in multiple directions",
+        "D": "Large numbers of fibroblasts allow rapid regeneration after injury"
+      },
+      "correctAnswer": "B",
+      "rationale": "Dense regular connective tissue contains densely packed collagen fibers arranged in parallel bundles, all aligned along the axis of mechanical stress. This organization provides maximum resistance to tension (pulling force) in a single direction — ideal for tendons (muscle to bone) and ligaments (bone to bone). Elastic fibers allow recoil, present in elastic ligaments but not the defining feature of tendons.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "dense regular CT — parallel collagen for tendons"
+    },
+    {
+      "questionId": "four-tissue-types-Q15",
+      "stem": "Marfan syndrome is caused by a mutation in the FBN1 gene (fibrillin), a component of elastic fibers. What cardiovascular complication is directly caused by this connective tissue defect?",
+      "options": {
+        "A": "Hypertrophic cardiomyopathy from thickened cardiac muscle",
+        "B": "Aortic aneurysm or dissection due to weakened elastic fibers in the aortic wall",
+        "C": "Valvular stenosis from calcium deposition in connective tissue",
+        "D": "Coronary artery disease from collagen plaque accumulation"
+      },
+      "correctAnswer": "B",
+      "rationale": "The aorta's wall contains large amounts of elastic tissue (for Windkessel effect — stretching to accommodate systolic blood pressure then recoiling). Fibrillin is essential for elastic fiber integrity. In Marfan syndrome, defective fibrillin weakens elastic fibers in the aortic wall → the aorta dilates under systolic pressure → aortic aneurysm (risk of rupture) or dissection (tearing of aortic wall layers). This is a leading cause of premature death in Marfan syndrome.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "Marfan syndrome — elastic fiber defect → aortic aneurysm"
+    },
+    {
+      "questionId": "four-tissue-types-Q16",
+      "stem": "Which type of neuroglia functions as the resident macrophage of the central nervous system?",
+      "options": {
+        "A": "Astrocytes",
+        "B": "Oligodendrocytes",
+        "C": "Microglia",
+        "D": "Schwann cells"
+      },
+      "correctAnswer": "C",
+      "rationale": "Microglia are the CNS's resident immune cells — they phagocytose cellular debris, dead neurons, and pathogens. They are the macrophages of the brain. Astrocytes support neuronal function and form the BBB. Oligodendrocytes produce CNS myelin. Schwann cells produce PNS myelin.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "microglia = CNS macrophages"
+    },
+    {
+      "questionId": "four-tissue-types-Q17",
+      "stem": "Skeletal muscle atrophy from prolonged bedrest is clinically important because it:",
+      "options": {
+        "A": "Reduces the number of motor neurons in the spinal cord",
+        "B": "Leads to decreased muscle mass, strength, and functional capacity, increasing fall risk during rehabilitation",
+        "C": "Converts skeletal muscle fibers to cardiac muscle fibers",
+        "D": "Causes permanent nerve damage at the neuromuscular junction"
+      },
+      "correctAnswer": "B",
+      "rationale": "Disuse atrophy (from immobilization, bedrest, or denervation) causes skeletal muscle fibers to decrease in size and number. This reduces muscle mass and strength. In hospitalized patients, even brief periods of bedrest cause measurable muscle loss — contributing to weakness, functional decline, and fall risk during recovery. Early mobilization is a key nursing intervention to prevent disuse atrophy.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "skeletal muscle atrophy — bedrest; fall risk; mobility intervention"
+    },
+    {
+      "questionId": "four-tissue-types-Q18",
+      "stem": "Smooth muscle in the walls of blood vessels responds to the autonomic nervous system. When the sympathetic nervous system activates these smooth muscle fibers, what vascular response occurs?",
+      "options": {
+        "A": "Vasodilation → decreased blood pressure",
+        "B": "Vasoconstriction → increased blood pressure and redirected blood flow",
+        "C": "Cardiac muscle hypertrophy → increased stroke volume",
+        "D": "Endothelial cell proliferation → vessel wall thickening"
+      },
+      "correctAnswer": "B",
+      "rationale": "Sympathetic activation of alpha-1 adrenergic receptors on vascular smooth muscle causes vasoconstriction (smooth muscle contracts → vessel lumen narrows). This increases peripheral vascular resistance → raises blood pressure. During the 'fight-or-flight' response, this redirects blood from non-essential organs (GI, skin) to skeletal muscle and brain. Alpha-1 blockers (e.g., prazosin) cause vasodilation by relaxing this smooth muscle.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "sympathetic → vascular smooth muscle → vasoconstriction"
+    },
+    {
+      "questionId": "four-tissue-types-Q19",
+      "stem": "Cartilage heals slowly after injury primarily because:",
+      "options": {
+        "A": "Cartilage cells (chondrocytes) divide too rapidly after injury, producing disorganized tissue",
+        "B": "Cartilage is avascular, so repair cells and nutrients cannot easily reach the site of damage",
+        "C": "Cartilage contains too many elastic fibers, which prevent new collagen deposition",
+        "D": "Cartilage is protected by periosteum, which blocks inflammatory cells from reaching it"
+        },
+      "correctAnswer": "B",
+      "rationale": "Cartilage is avascular — it has no blood supply. Nutrients and repair cells (fibroblasts, progenitor cells) that normally reach injury sites via blood vessels cannot easily access cartilage. Repair depends on diffusion from surrounding tissues or synovial fluid (for articular cartilage). This avascular nature explains the notoriously slow and often incomplete healing of cartilage injuries (e.g., meniscus tears, articular cartilage defects).",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "cartilage avascular → slow healing"
+    },
+    {
+      "questionId": "four-tissue-types-Q20",
+      "stem": "The enteric nervous system in the GI tract walls is composed of nervous tissue embedded in connective tissue layers. What role does this enteric nervous system play?",
+      "options": {
+        "A": "It generates the action potentials responsible for cardiac rhythm in the GI tract",
+        "B": "It controls peristalsis and GI secretion, often called the 'second brain'",
+        "C": "It detects blood glucose levels and signals the pancreas directly",
+        "D": "It forms the myelin sheaths of the vagus nerve"
+      },
+      "correctAnswer": "B",
+      "rationale": "The enteric nervous system (ENS), contained in the myenteric (Auerbach's) and submucosal (Meissner's) plexuses, is the intrinsic nervous system of the GI tract. It regulates peristalsis, secretion, and blood flow independent of the brain and spinal cord — hence its informal name 'the second brain.' It can function autonomously but is modulated by the autonomic nervous system (vagus nerve, sympathetic fibers).",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "ENS — nervous tissue in GI tract; controls peristalsis"
+    },
+    {
+      "questionId": "four-tissue-types-Q21",
+      "stem": "Which of the following best describes the organization of an organ?",
+      "options": {
+        "A": "A single tissue type arranged in layers",
+        "B": "A group of cells performing identical functions",
+        "C": "A structure composed of at least two tissue types working together to perform a common function",
+        "D": "A system of organs communicating via hormones"
+      },
+      "correctAnswer": "C",
+      "rationale": "An organ is defined as a structure composed of at least two (and typically all four) tissue types working together to perform a common function. For example, the stomach contains epithelial tissue (lining/secretion), connective tissue (support/vasculature), smooth muscle (churning), and nervous tissue (motility control). A group of organs with related functions = an organ system.",
+      "difficultyLevel": "foundational",
+      "keyConceptTested": "organ definition — multiple tissue types"
+    },
+    {
+      "questionId": "four-tissue-types-Q22",
+      "stem": "Smoking damages the cilia of pseudostratified ciliated columnar epithelium in the airways. The direct consequence of this injury is:",
+      "options": {
+        "A": "Alveolar surfactant deficiency, causing atelectasis",
+        "B": "Inability to clear mucus and inhaled particles effectively, leading to chronic bronchitis and infection risk",
+        "C": "Excessive smooth muscle contraction, causing bronchospasm",
+        "D": "Loss of transitional epithelium in the bronchi, reducing airway flexibility"
+      },
+      "correctAnswer": "B",
+      "rationale": "Smoking paralyzes and eventually destroys cilia in the pseudostratified ciliated columnar epithelium of the airways. Without functioning cilia, mucus (loaded with inhaled particles and bacteria) cannot be cleared — it accumulates, causing chronic productive cough (chronic bronchitis) and creating an environment favorable for respiratory infections. The cough reflex partially compensates but is inefficient compared to intact mucociliary clearance.",
+      "difficultyLevel": "applied",
+      "keyConceptTested": "smoking destroys cilia → mucociliary escalator failure → chronic bronchitis"
+    }
+  ]
+}
